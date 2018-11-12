@@ -89,7 +89,7 @@ var/list/factions_with_hud_icons = list()
 		R.Drop()
 		return 0
 	R.OnPostSetup()
-	return 1
+	return R
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
 	ticker.mode.orphaned_roles.Remove(R)

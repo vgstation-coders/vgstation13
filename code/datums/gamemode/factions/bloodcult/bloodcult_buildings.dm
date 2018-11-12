@@ -90,7 +90,7 @@
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
 			returnToPool(W)
-	else if (istype(W, /obj/item/weapon))
+	else if (istype(W))
 		if(user.a_intent == I_HURT)
 			user.delayNextAttack(8)
 			if (sound_damaged)
@@ -108,8 +108,8 @@
 /obj/structure/cult/attack_hand(var/mob/living/user)
 	if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
-		user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", \
-							"<span class='danger'>You kick \the [src]!</span>", \
+		user.visible_message("<span class='danger'>[user.name] [pick("kicks","punches")] \the [src]!</span>", \
+							"<span class='danger'>You strike at \the [src]!</span>", \
 							"You hear stone cracking.")
 		takeDamage(user.get_unarmed_damage(src))
 		if (sound_damaged)
@@ -120,13 +120,10 @@
 		noncultist_act(user)
 
 /obj/structure/cult/proc/cultist_act(var/mob/user)
-	if(!iscultist(user))//just to be extra safe
-		return 0
+
 	return 1
 
 /obj/structure/cult/proc/noncultist_act(var/mob/user)
-	if(iscultist(user))//just to be extra safe
-		return 0
 	to_chat(user,"<span class='sinister'>You feel madness taking its toll, trying to figure out \the [name]'s purpose</span>")
 	//might add some hallucinations or brain damage later, checks for cultist chaplains, etc
 	return 1
@@ -188,7 +185,7 @@
 		return ..()
 	if(istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
 		if (blade)
-			to_chat(user,"<span class='warning'>You must remove the blade planted on \the [src] first.</span>")
+			to_chat(user,"<span class='warning'>You must remove \the [blade] planted into \the [src] first.</span>")
 			return 1
 		var/turf/T = get_turf(user)
 		playsound(T, 'sound/weapons/bloodyslice.ogg', 50, 1)
@@ -203,9 +200,9 @@
 			lock_atom(C, lock_type)
 			C.apply_damage(blade.force, BRUTE, LIMB_CHEST)
 			if (C == user)
-				user.visible_message("<span class='danger'>\The [user] holds \the [I] above their stomach and impale themselves on \the [src]! That's fucking brutal!</span>","<span class='danger'>You hold \the [I] above your stomach and impale yourself on \the [src]! That's fucking brutal!</span>")
+				user.visible_message("<span class='danger'>\The [user] holds \the [I] above their stomach and impales themselves on \the [src]!</span>","<span class='danger'>You hold \the [I] above your stomach and impale yourself on \the [src]!</span>")
 			else
-				user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [C]'s stomach and impale them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [C]'s stomach and impale them on \the [src]!</span>")
+				user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [C]'s stomach and impales them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [C]'s stomach and impale them on \the [src]!</span>")
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
 		if (istype(blade))
@@ -217,7 +214,7 @@
 		return 1
 	if (istype(I, /obj/item/weapon/grab))
 		if (blade)
-			to_chat(user,"<span class='warning'>You must remove the blade planted on \the [src] first.</span>")
+			to_chat(user,"<span class='warning'>You must remove \the [blade] planted on \the [src] first.</span>")
 			return 1
 		var/obj/item/weapon/grab/G = I
 		if(iscarbon(G.affecting))
@@ -303,7 +300,7 @@
 		if(!istype(L) || L.locked_to || L == user)
 			return
 		if (blade)
-			to_chat(user,"<span class='warning'>You must remove the blade planted on \the [src] first.</span>")
+			to_chat(user,"<span class='warning'>You must remove \the [blade] planted on \the [src] first.</span>")
 			return 1
 		var/mob/living/carbon/C = O
 
@@ -524,7 +521,7 @@
 		update_icon()
 		return
 	else
-		to_chat(user,"<span class='sinister'>You feel madness taking its toll, trying to figure out \the [name]'s purpose</span>")
+		to_chat(user,"<span class='sinister'>You feel madness taking its toll, trying to figure out \the [name]'s purpose.</span>")
 	return 1
 
 
@@ -532,14 +529,14 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
-		if(!M || !isobserver(M))
+		if(!isobserver(M))
 			return
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
-		if (!blade || !istype(blade))
-			to_chat(usr, "<span class='warning'>The Soul Blade was pulled off from \the [src]</span>")
+		if (!istype(blade))
+			to_chat(usr, "<span class='warning'>\The [blade] was removed from \the [src]</span>")
 			return
 		if (blade.shade)
-			to_chat(usr, "<span class='warning'>Another shade was faster, and is currently possessing the blade.</span>")
+			to_chat(usr, "<span class='warning'>Another shade was faster, and is currently possessing \the [blade].</span>")
 			return
 		var/mob/living/simple_animal/shade/shadeMob = new(blade)
 		shadeMob.status_flags |= GODMODE
@@ -558,13 +555,10 @@
 		blade.update_icon()
 		update_icon()
 		//Automatically makes them cultists
-		var/datum/role/cultist/newCultist = new
-		newCultist.AssignToRole(shadeMob.mind,1)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (!cult)
 			cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-		cult.HandleRecruitedRole(newCultist)
-		newCultist.OnPostSetup()
+		var/datum/role/cultist/newCultist = cult.HandleRecruitedMind(shadeMob.mind, TRUE)
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
 
@@ -709,7 +703,7 @@ var/list/cult_spires = list()
 		return
 
 	if (!ishuman(user))
-		to_chat(user,"<span class='warning'>Only humans can bear the arcane markings granted by this [src]</span>")
+		to_chat(user,"<span class='warning'>Only humans can bear the arcane markings granted by this [name].</span>")
 		return
 
 	var/mob/living/carbon/human/H = user
@@ -1064,8 +1058,9 @@ var/list/cult_spires = list()
 	..()
 	var/turf/T = loc
 	for (var/obj/O in loc)
-		if (O != src)
-			O.ex_act(2)
+		if(O == src)
+			continue
+		O.ex_act(2)
 		if(!O.gcDestroyed && (istype(O, /obj/structure) || istype(O, /obj/machinery)))
 			qdel(O)
 	T.ChangeTurf(/turf/simulated/floor/engine/cult)
