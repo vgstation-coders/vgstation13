@@ -169,7 +169,7 @@
 
 /obj/effect/overlay/wraithnail
 	name = "red bolt"
-	desc = "A pointy red nail, lodged into the ground."
+	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "wraithnail"
 	anchored = 1

@@ -42,7 +42,7 @@
 
 /obj/effect/cult_shortcut/attack_hand(var/mob/living/user)
 	if (!iscultist(user))
-		to_chat(user, "<span class='warning'>Strange markings on this wall. You don't feel comfortable staring at them.</span>")
+		to_chat(user, "<span class='warning'>The markings on this wall are peculiar. You don't feel comfortable staring at them.</span>")
 		return
 	var/turf/T = get_turf(user)
 	if (T == loc)
