@@ -178,6 +178,7 @@ var/list/factions_with_hud_icons = list()
 	else
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
+			dat += "<br>"
 	return dat
 
 /datum/faction/proc/process()
