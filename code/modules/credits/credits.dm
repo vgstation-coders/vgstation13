@@ -104,7 +104,7 @@ var/global/datum/credits/end_credits = new
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"
 	cast_string += "<table class='crewtable'>"
 	for(var/mob/living/carbon/human/H in living_mob_list|dead_mob_list)
-		if(H.timeofdeath && H.timeofdeath < 5 MINUTES) //don't mention these losers (prespawned corpses mostly)
+		if(H.iscorpse || (H.timeofdeath && H.timeofdeath < 5 MINUTES)) //don't mention these losers (prespawned corpses mostly)
 			continue
 		if(!star || H.talkcount > star.talkcount)
 			star = H
@@ -115,7 +115,7 @@ var/global/datum/credits/end_credits = new
 	cast_string += "<div class='disclaimers'>"
 	var/list/corpses = list()
 	for(var/mob/living/carbon/human/H in dead_mob_list)
-		if(H.timeofdeath < 5 MINUTES) //no prespawned corpses
+		if(H.iscorpse || (H.timeofdeath && H.timeofdeath < 5 MINUTES)) //no prespawned corpses
 			continue
 		else if(H.real_name)
 			corpses += H.real_name
