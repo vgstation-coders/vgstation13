@@ -6,7 +6,7 @@
 	icon_dead = "juggernaut2"
 	construct_spells = list(
 		/spell/aoe_turf/conjure/forcewall/greater,
-		//spell/juggerdash,
+		/spell/juggerdash,
 		)
 	see_in_dark = 7
 	var/dash_dir = null
