@@ -36,7 +36,7 @@ var/veil_thickness = CULT_PROLOGUE
 				places_to_spawn += T
 				break
 	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space
-	if (source && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
+	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
 		places_to_spawn.Add(source)
 	for (var/T in places_to_spawn)
 		new /obj/structure/cult/bloodstone(T)
@@ -193,10 +193,10 @@ var/veil_thickness = CULT_PROLOGUE
 				veil_thickness = CULT_ACT_III
 				emergency_shuttle.force_shutdown()//No shuttle calls until the cult either wins or fails.
 				spawn_bloodstones(A)
-				spawn(50)
+				spawn(5 SECONDS)
 					command_alert(/datum/command_alert/bloodstones_raised)
 					ticker.StartThematic("endgame")
-					sleep(20)
+					sleep(2 SECONDS)
 					set_security_level("red")
 				new_obj = new /datum/objective/bloodcult_bloodbath
 		if (CULT_ACT_IV)
