@@ -47,6 +47,13 @@
 	var/nearest_beacon			// the nearest beacon's tag
 	var/turf/nearest_beacon_loc	// the nearest beacon's location
 
+
+
+	var/list/unsafe_weapons = list( //things that the secbot will check for
+		/obj/item/weapon/gun,
+		/obj/item/weapon/melee
+		)
+
 	//List of weapons that secbots will not arrest for, also copypasted in ed209.dm and metaldetector.dm
 	var/list/safe_weapons = list(
 		/obj/item/weapon/gun/energy/tag,
@@ -880,7 +887,7 @@ Auto Patrol: []"},
 	..()
 
 /obj/machinery/bot/secbot/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in ed209bot.dm
-	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
+	if(is_type_in_list(slot_item, unsafe_weapons))
 		if(!(slot_item.type in safe_weapons))
 			return 1
 	return 0
@@ -1115,6 +1122,32 @@ Auto Patrol: []"},
 	icon_state = "bsecbot0"
 	icon_initial = "bsecbot"
 
+	unsafe_weapons =list(
+		/obj/item/weapon/gun,
+		/obj/item/weapon/melee,
+		/obj/item/toy/,
+		/obj/item/ashtray,
+		/obj/item/candle,
+		/obj/item/weapon/bananapeel,
+		/obj/item/weapon/soap,
+		/obj/item/weapon/bikehorn,
+		/obj/item/weapon/wrench,
+		/obj/item/weapon/wrench/socket,
+		/obj/item/weapon/screwdriver,
+		/obj/item/weapon/wirecutters,
+		/obj/item/weapon/weldingtool,
+		/obj/item/weapon/crowbar,
+		/obj/item/weapon/solder,
+		/obj/item/weapon/scalpel,
+		/obj/item/weapon/surgicaldrill,
+		/obj/item/weapon/circular_saw,
+		/obj/item/weapon/bonesetter,
+		/obj/item/weapon/match,
+		/obj/item/weapon/lighter,
+		/obj/item/weapon/kitchen
+		)
+	safe_weapons = null //no safe weapons for britsky
+
 //Britsky Construction
 
 /obj/item/weapon/secbot_assembly/britsky
@@ -1124,6 +1157,8 @@ Auto Patrol: []"},
 	icon_state = "bhelmet_signaler"
 	build_step = 0
 	created_name = "Officer Britsky of the Yard"
+
+
 
 /obj/item/clothing/head/helmet/police/attackby(var/obj/item/device/assembly/signaler/S, mob/user)
 	..()
