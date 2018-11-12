@@ -148,7 +148,7 @@ var/veil_thickness = CULT_PROLOGUE
 		emergency_shuttle.shutdown = 0//The shuttle can be called once again.
 		ticker.StopThematic()
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
-			B.takeDamage(1500)
+			B.takeDamage(B.maxHealth+1)
 		for (var/datum/role/cultist/C in members)
 			//TODO: blood curse
 			C.update_cult_hud()
@@ -194,7 +194,7 @@ var/veil_thickness = CULT_PROLOGUE
 				veil_thickness = CULT_EPILOGUE
 				new_obj = new /datum/objective/bloodcult_feast
 
-	if (new_obj)
+	if (new_obj) //If not null, then we have likely advanced a stage
 		AppendObjective(new_obj)
 		for(var/datum/role/cultist/C in members)
 			var/mob/M = C.antag.current
@@ -224,7 +224,6 @@ var/veil_thickness = CULT_PROLOGUE
 		return
 	if(T && (T.z == map.zMainStation))//F I V E   T I L E S
 		if(!(locate("\ref[T]") in bloody_floors))
-			bloody_floors += T
 			bloody_floors[T] = T
 			for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 				B.update_icon()
@@ -318,13 +317,14 @@ var/veil_thickness = CULT_PROLOGUE
 	if (Grab)
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
-			for(var/datum/organ/external/org in H.organs)
-				if(org.status & ORGAN_BLEEDING)
-					var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
-					var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-					data[BLOODCOST_TARGET_GRAB] = H
-					data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
-					amount_gathered += blood_gathered
+			if(!(H.species.flags & NO_BLOOD))
+				for(var/datum/organ/external/org in H.organs)
+					if(org.status & ORGAN_BLEEDING)
+						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_TARGET_GRAB] = H
+						data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
+						amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_GRAB
@@ -332,6 +332,8 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Is there a bleeding mob/corpse on the turf that still has blood in it?
 	for (var/mob/living/carbon/human/H in T)
+		if(H.species.flags & NO_BLOOD)
+			continue
 		if(user != H)
 			for(var/datum/organ/external/org in H.organs)
 				if(org.status & ORGAN_BLEEDING)
@@ -348,44 +350,38 @@ var/veil_thickness = CULT_PROLOGUE
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLEEDER
 		return data
 
+	for(var/obj/item/weapon/reagent_containers/G_held in H_user.held_items) //Accounts for if the person has multiple grasping organs
+		if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
+			continue
+		if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
+			var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
+			var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
+			if (blood_volume)
+				data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
+				if (blood_pack.holes)
+					var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+					data[BLOODCOST_AMOUNT_BLOODPACK] = blood_gathered
+					amount_gathered += blood_gathered
+				else
+					data[BLOODCOST_HOLES_BLOODPACK] = 1
+			if (amount_gathered >= amount_needed)
+				data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLOODPACK
+				return data
 
-	var/obj/item/weapon/reagent_containers/G_held = H_user.get_active_hand()
-	if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
-		G_held = H_user.get_inactive_hand()
+		else
+			var/blood_volume = round(G_held.reagents.get_reagent_amount(BLOOD))
+			if (blood_volume)
+				data[BLOODCOST_TARGET_HELD] = G_held
+				if (G_held.is_open_container())
+					var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+					data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+					amount_gathered += blood_gathered
+				else
+					data[BLOODCOST_LID_HELD] = 1
 
-	if (istype(G_held))
-		var/blood_volume = round(G_held.reagents.get_reagent_amount(BLOOD))
-		if (blood_volume)
-			data[BLOODCOST_TARGET_HELD] = G_held
-			if (G_held.is_open_container())
-				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data[BLOODCOST_AMOUNT_HELD] = blood_gathered
-				amount_gathered += blood_gathered
-			else
-				data[BLOODCOST_LID_HELD] = 1
-
-	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
-		return data
-
-	var/obj/item/weapon/reagent_containers/blood/blood_pack = H_user.get_active_hand()
-	if (!istype(blood_pack) || !round(blood_pack.reagents.get_reagent_amount(BLOOD)))
-		blood_pack = H_user.get_inactive_hand()
-
-	if (istype(blood_pack))
-		var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
-		if (blood_volume)
-			data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
-			if (blood_pack.holes)
-				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data[BLOODCOST_AMOUNT_BLOODPACK] = blood_gathered
-				amount_gathered += blood_gathered
-			else
-				data[BLOODCOST_HOLES_BLOODPACK] = 1
-
-	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLOODPACK
-		return data
+			if (amount_gathered >= amount_needed)
+				data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+				return data
 
 
 	//Is there a reagent container on the turf that has blood in it?
@@ -406,11 +402,10 @@ var/veil_thickness = CULT_PROLOGUE
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	var/mob/living/carbon/human/H = user
-	if (istype (H))
-		var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
+	if(!(H_user.species.flags & NO_BLOOD))
+		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-		data[BLOODCOST_TARGET_USER] = H
+		data[BLOODCOST_TARGET_USER] = H_user
 		data[BLOODCOST_AMOUNT_USER] = blood_gathered
 		amount_gathered += blood_gathered
 
@@ -472,7 +467,7 @@ var/veil_thickness = CULT_PROLOGUE
 			blood.data["blood_DNA"] = B.blood_DNA
 			blood.data["virus2"] = B.virus2
 			if (!tribute && previous_result != BLOODCOST_TARGET_SPLATTER)
-				user.visible_message("<span class='warning'>The blood on the floor bellow \the [user] starts moving!</span>",
+				user.visible_message("<span class='warning'>The blood on the floor below \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_GRAB)
