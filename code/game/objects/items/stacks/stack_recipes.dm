@@ -105,6 +105,12 @@
 	I.name = "unforged [R.name]"
 	return 0
 
+var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
+	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,		4, time = 5 SECONDS, required_strikes = 8),
+	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/weapon/metal_blade,				8, time = 8 SECONDS, required_strikes = 13),
+	))
+
 
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
@@ -225,10 +231,9 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
-	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
-	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,		4, time = 5 SECONDS, required_strikes = 8),
-	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/weapon/metal_blade,				8, time = 8 SECONDS, required_strikes = 13),
+	blacksmithing_recipes,
 	)
 
 /* ========================================================================
@@ -283,7 +288,9 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE)
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	blacksmithing_recipes,
 	)
 
 /* =========================================================================
