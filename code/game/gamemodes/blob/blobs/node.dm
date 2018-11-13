@@ -14,7 +14,7 @@
 	icon_classic = "blob_node"
 
 //obj/effect/blob/node/New(loc,newlook = "new",no_morph = 0) HALLOWEEN
-/obj/effect/blob/node/New(loc,newlook = "skelleton",no_morph = 0)
+/obj/effect/blob/node/New(loc,newlook = null,no_morph = 0)
 	blob_nodes += src
 	processing_objects.Add(src)
 	..(loc, newlook)

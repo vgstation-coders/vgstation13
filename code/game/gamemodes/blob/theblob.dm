@@ -68,7 +68,7 @@ var/list/blob_overminds = list()
 	var/destroy_sound = "sound/effects/blobsplat.ogg"
 
 	//var/looks = "new" HALLOWEEN
-	var/looks = "skelleton"
+	var/looks = "new"
 
 	// A note to the beam processing shit.
 	var/custom_process=0
@@ -86,8 +86,9 @@ var/list/blob_overminds = list()
 
 
 //obj/effect/blob/New(turf/loc,newlook = "new",no_morph = 0) HALLOWEEN
-/obj/effect/blob/New(turf/loc,newlook = "skelleton",no_morph = 0)
-	looks = newlook
+/obj/effect/blob/New(turf/loc,newlook = null,no_morph = 0)
+	if(newlook)
+		looks = newlook
 	update_looks()
 	blobs += src
 	src.dir = pick(cardinal)
