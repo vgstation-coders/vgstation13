@@ -91,14 +91,16 @@
 			MouseDropTo(G.affecting,user)
 			returnToPool(W)
 	else if (istype(W))
-		if(user.a_intent == I_HURT)
+		if(user.a_intent == I_HELP || W.force == 0)
+			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
+			MouseDropTo(W,user)
+		else
 			user.delayNextAttack(8)
 			if (sound_damaged)
 				playsound(get_turf(src), sound_damaged, 75, 1)
 			takeDamage(W.force)
+			visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 			..()
-		else
-			MouseDropTo(W,user)
 
 
 /obj/structure/cult/attack_paw(var/mob/user)
