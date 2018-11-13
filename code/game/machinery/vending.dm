@@ -22,7 +22,6 @@ var/global/num_vending_terminals = 1
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
 	var/shoot_chance = 2 //How often do we throw items?
-	var/ads_chance = 50 // Chance of an ad appearing on screen
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	// To be filled out at compile time
 	var/list/accepted_coins = list(
@@ -749,7 +748,7 @@ var/global/num_vending_terminals = 1
 		return
 
 	var/dat = "<TT><center><b>[vendorname]</b></center><hr/>" //display the name, and added a horizontal rule
-	if(product_ads.len && prob(ads_chance))
+	if(product_ads.len)
 		dat += "<marquee>[pick(product_ads)]</marquee><hr/>"
 	dat += "<br><b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
 
@@ -919,7 +918,7 @@ var/global/num_vending_terminals = 1
 		if(new_price == null || new_price < 0)
 			new_price = R.price
 		new_price = min(new_price, MAX_ITEM_PRICE)
-		
+
 		R.price = new_price
 
 	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
