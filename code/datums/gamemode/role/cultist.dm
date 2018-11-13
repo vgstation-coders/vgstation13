@@ -34,6 +34,15 @@
 
 /datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
 	. = ..()
+	if (issilicon(new_character))
+		antag.antag_roles -= CULTIST
+		antag.current.remove_language(LANGUAGE_CULT)
+		for(var/spell/cult/spell_to_remove in antag.current.spell_list)
+			antag.current.remove_spell(spell_to_remove)
+		if (src in blood_communion)
+			blood_communion.Remove(src)
+		update_faction_icons()
+		return
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
