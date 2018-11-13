@@ -512,6 +512,7 @@ var/list/arcane_tomes = list()
 		for(var/mob/living/simple_animal/shade/A in I)
 			A.forceMove(SB)
 			SB.shade = A
+			A.give_blade_powers()
 			break
 		SB.update_icon()
 		qdel(I)
