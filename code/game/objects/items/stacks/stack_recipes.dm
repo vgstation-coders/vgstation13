@@ -108,7 +108,7 @@
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
 	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,		4, time = 5 SECONDS, required_strikes = 8),
-	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/weapon/metal_blade,				8, time = 8 SECONDS, required_strikes = 13),
+	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/item_head/sword,				8, time = 8 SECONDS, required_strikes = 13),
 	))
 
 

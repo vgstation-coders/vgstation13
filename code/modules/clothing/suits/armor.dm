@@ -97,6 +97,10 @@
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
 
+/obj/item/clothing/suit/armor/knight/plain
+	icon_state = "knight_grey"
+	item_state = "knight_grey"
+
 /obj/item/clothing/suit/armor/xcomsquaddie
 	name = "Squaddie Armor"
 	desc = "A suit of armor with heavy padding to protect against projectile attacks. Distributed to shadow organization squaddies."
