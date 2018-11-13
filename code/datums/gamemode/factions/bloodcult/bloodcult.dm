@@ -157,7 +157,10 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
-		emergency_shuttle.shutdown = 0//The shuttle can be called once again.
+		spawn (5 SECONDS)
+			emergency_shuttle.shutdown = 0//The shuttle docks to the station immediately afterwards.
+			emergency_shuttle.online = 1
+			emergency_shuttle.shuttle_phase("station",0)
 		set_security_level("blue")
 		ticker.StopThematic()
 		command_alert(/datum/command_alert/bloodstones_broken)

@@ -154,7 +154,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
-	weight = 4
+	weight = 3
 	cost = 25
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
