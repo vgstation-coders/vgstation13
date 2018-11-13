@@ -58,7 +58,7 @@
 		return PostAppend()
 
 /datum/objective/bloodcult_sacrifice/proc/replace_target()
-	find_target()
+	sacrifice_target = find_target()
 	if (sacrifice_target)
 		var/target_role = ""
 		if (sacrifice_target.mind)
