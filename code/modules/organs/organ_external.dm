@@ -872,19 +872,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return (species.default_mutations.Find(mutation))
 
 
-/datum/organ/external/proc/release_restraints()
-	if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
-		owner.visible_message(\
-			"\The [owner.handcuffed.name] falls off of [owner.name].",\
-			"\The [owner.handcuffed.name] falls off you.")
+/datum/organ/external/proc/release_restraints(var/toporbottom = 0)// 0:both, -1: legcuffs, 1: handcuffs
+	if(toporbottom >= 0)
+		if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
+			owner.visible_message(\
+				"\The [owner.handcuffed.name] falls off of [owner.name].",\
+				"\The [owner.handcuffed.name] falls off you.")
 
-		owner.drop_from_inventory(owner.handcuffed)
+			owner.drop_from_inventory(owner.handcuffed)
 
-	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
-		owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
-		"\The [owner.legcuffed.name] falls off you.")
+	if(toporbottom <= 0)
+		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
+			"\The [owner.legcuffed.name] falls off you.")
 
-		owner.drop_from_inventory(owner.legcuffed)
+			owner.drop_from_inventory(owner.legcuffed)
 
 /datum/organ/external/proc/bandage()
 	var/rval = 0
@@ -941,9 +943,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 	broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
 
-	//Fractures have a chance of getting you out of restraints
-	if(prob(25))
-		release_restraints()
+	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
+	if(owner.handcuffed && body_part in list(HAND_LEFT, HAND_RIGHT))
+		if(prob(25))
+			release_restraints(1)//Handcuffs only.
+	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
+		if(prob(25))
+			release_restraints(-1)//Legcuffs only.
+
 
 	if(isgolem(owner))
 		droplimb(1)
