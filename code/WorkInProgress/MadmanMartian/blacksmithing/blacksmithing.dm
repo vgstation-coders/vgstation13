@@ -59,7 +59,7 @@
 			if(1)
 				temperature = MELTPOINT_STEEL
 			if(2)
-				temperature = MELTPOINT_MITHRIL
+				temperature = MELTPOINT_MYTHRIL
 		heat(temperature, M, user)
 
 /obj/item/smithing_placeholder/attackby(obj/item/I, mob/user)

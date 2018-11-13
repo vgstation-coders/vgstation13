@@ -149,6 +149,8 @@
 	name = "chain"
 	desc = "link by link, my chain got longer."
 	icon_state = "chains"
+	singular_name = "chain"
+	irregular_plural = "chains"
 	max_amount = 20
 
 /obj/item/stack/chains/can_stack_with(var/obj/item/other_stack)

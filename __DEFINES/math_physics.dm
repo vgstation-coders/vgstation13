@@ -47,7 +47,7 @@
 #define MELTPOINT_URANIUM (T0C+1132)
 #define MELTPOINT_POTASSIUM (T0C+63.5)
 #define MELTPOINT_BRASS (T0C+940)
-#define MELTPOINT_MITHRIL (T0C+893) //Using sterling silver (because silver steel) as base
+#define MELTPOINT_MYTHRIL (T0C+893) //Using sterling silver (because silver steel) as base
 
 // The highest number supported is a signed 32-bit floating point number.
 // Integers beyond the 24 bit range are represented as single-precision floating points, and thus will lose accuracy beyond the range of +/- 16777216
