@@ -106,6 +106,8 @@
 		var/image/matter_bin_overlay
 		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
 		switch(M.type)
+			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
+				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_bluespacematterbin_overlay")
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_supermatterbin_overlay")
 			if(/obj/item/weapon/stock_parts/matter_bin/adv)
@@ -299,6 +301,8 @@
 			mass = 5
 		var/multiplication = 1
 		switch(M.type)
+			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
+				multiplication = 4
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
 				multiplication = 3
 			if(/obj/item/weapon/stock_parts/matter_bin/adv)
