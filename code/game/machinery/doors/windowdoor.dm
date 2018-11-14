@@ -225,7 +225,7 @@
 /obj/machinery/door/window/attackby(obj/item/weapon/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
-		user.visible_message("[user] removes \the [electronics.name] from \the [name].", "You start to remove [electronics] from \the [name].")
+		user.visible_message("[user] is removing \the [electronics ? electronics.name : "electronics"] from \the [name].", "You start to remove \the [electronics ? electronics.name : "electronics"] from \the [name].")
 		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
@@ -248,11 +248,11 @@
 	if(istype(I, /obj/item/stack/light_w) && !operating)
 		var/obj/item/stack/light_w/LT = I
 		if(smartwindow)
-			to_chat(user, "<span class='notice'>This [name] already has electronics in it.</span>")
+			to_chat(user, "<span class='notice'>This [name] already has [smartwindow.name] in it.</span>")
 			return FALSE
 		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to \the [name].</span>")
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
+		to_chat(user, "<span class='notice'>You add [smartwindow.name] to \the [name].</span>")
 		return smartwindow
 
 	//If its a multitool and our windoor is smart, open the menu
