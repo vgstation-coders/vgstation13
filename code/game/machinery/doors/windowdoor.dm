@@ -230,7 +230,7 @@
 		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
-			make_assembly(user)
+			make_assembly()
 			if(smartwindow)
 				qdel(smartwindow)
 				smartwindow = null
@@ -313,28 +313,26 @@
  * the windoor after calling this.
  * @return The new /obj/structure/windoor_assembly created.
  */
-/obj/machinery/door/window/proc/make_assembly(mob/user)
+/obj/machinery/door/window/proc/make_assembly()
 	// Windoor assembly
 	var/obj/structure/windoor_assembly/WA = new assembly_type(loc)
-	set_assembly(user, WA)
+	transfer_fingerprints_to(WA)
+	set_assembly(WA)
 	return WA
 
-/obj/machinery/door/window/proc/set_assembly(mob/user, var/obj/structure/windoor_assembly/WA)
+/obj/machinery/door/window/proc/set_assembly(var/obj/structure/windoor_assembly/WA)
 	WA.dir = dir
 	WA.anchored = TRUE
 	WA.wired = TRUE
 	WA.facing = (is_left_opening() ? "l" : "r")
 	WA.update_name()
 	WA.update_icon()
-
-	transfer_fingerprints_to(WA)
-
-	// Pop out electronics
-	eject_electronics()
+	eject_electronics() // Pop out electronics
 
 /obj/machinery/door/window/proc/set_electronics()
-	electronics = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(src))
-	electronics.installed = TRUE
+	if(!electronics)
+		electronics = new /obj/item/weapon/circuitboard/airlock(src)
+		electronics.installed = TRUE
 	if(req_access && req_access.len > 0)
 		electronics.conf_access = req_access
 	else if(req_one_access && req_one_access.len > 0)
@@ -342,11 +340,10 @@
 		electronics.one_access = 1
 
 /obj/machinery/door/window/proc/eject_electronics()
-	if(!electronics)
-		set_electronics()
-	electronics.installed = FALSE
-	electronics.forceMove(loc)
-	electronics = null
+	if(electronics)
+		electronics.installed = FALSE
+		electronics.forceMove(loc)
+		electronics = null
 
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)
