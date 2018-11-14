@@ -287,8 +287,8 @@
 	name = "Revolution"
 	role_category = ROLE_REV
 	protected_from_jobs = list("Merchant")
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
 	weight = 3
@@ -300,7 +300,7 @@
 	if (!R)
 		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
 	
-	for(var/cultists_number = 1 to required_candidates)
+	for(var/i = 1 to required_candidates)
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
