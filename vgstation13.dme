@@ -2153,6 +2153,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_badfeeling.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_cellcharge.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_celldrain.dm"
+#include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_clockworkify.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_cultify.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_darkness.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_darkrevive.dm"
