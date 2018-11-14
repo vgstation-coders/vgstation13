@@ -333,7 +333,7 @@
 	eject_electronics()
 
 /obj/machinery/door/window/proc/set_electronics()
-	electronics = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(loc))
+	electronics = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(src))
 	electronics.installed = TRUE
 	if(req_access && req_access.len > 0)
 		electronics.conf_access = req_access
