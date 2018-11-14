@@ -107,9 +107,9 @@
 		var/cooldowncalculated = (teleportcooldown - world.time)/10
 		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
 	if(active)
-		message += " alt-click to enable your teleport power!</span>"
+		message += " alt-click it to disable your teleport power!</span>"
 	else
-		message += " alt-click to disable your teleport power level from those who wish to Kill la Kill you!</span>"
+		message += " alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/AltClick(mob/user)
@@ -123,7 +123,7 @@
 		active = FALSE
 
 /obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
-	if(!(active || isweeaboo(user) || isliving(A))) //sword not active, user not a weeb, or target not a mob
+	if(!(active || isweeaboo(user) || ismob(A))) //sword not active, user not a weeb, or target not a mob
 		return
 	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
 		return
@@ -132,10 +132,16 @@
 	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm, if they teleport behind someone whose back is to the end of the z-level
 		return
 	teleportcooldown = initial(teleportcooldown) + world.time
+	playsound(src, "sound/weapons/shing.ogg",50,1)
 	user.forceMove(SHHHHIIIING)
 	user.dir = L.dir
+	user.say("Pshh... nothing personnel... kid...")
 	..()
 
+/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
+	
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
