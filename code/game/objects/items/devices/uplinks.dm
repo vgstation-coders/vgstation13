@@ -111,6 +111,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/Topic(href, href_list)
 	..()
+
+	if (!is_holder_of(usr, src))
+		message_admins("[usr] tried to access [src], an unlocked PDA, despite not being its holder.")
+		return FALSE
+
 	if(!active)
 		return
 
@@ -214,6 +219,10 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/radio/uplink/attack_self(mob/user as mob)
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
+
+/obj/item/device/radio/uplink/nukeops/New()
+	..()
+	hidden_uplink.uses = 80
 
 /obj/item/device/multitool/uplink/New()
 	hidden_uplink = new(src)

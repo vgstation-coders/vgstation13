@@ -1,8 +1,11 @@
 #define CLOCKWORK_GENERIC_GLOW "clockwork_generic_glow"
+#define CLOCKWORK_DOOR_GLOW "clockwork_door_glow"
+#define BRASS_WINDOOR_GLOW "clockwork_windoor_glow"
 #define BRASS_WINDOW_GLOW "clockwork_window_glow_s"
 #define BRASS_FULL_WINDOW_GLOW "clockwork_window_glow"
 #define REPLICANT_GRILLE_GLOW "clockwork_grille_glow"
 #define BROKEN_REPLICANT_GRILLE_GLOW "clockwork_broken_grille_glow"
+
 
 #define GENERIC_CLOCKWORK_CONVERSION(A, B, C)\
 	if(A.invisibility != INVISIBILITY_MAXIMUM){\

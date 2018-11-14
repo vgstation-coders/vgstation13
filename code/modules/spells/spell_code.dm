@@ -97,6 +97,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
 	var/block = 0//prevents some spells from being spamed
+	var/obj/delay_animation = null
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -158,8 +159,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		block = 0
+		if (delay_animation)
+			qdel(delay_animation)
+		delay_animation = null
 		return
 	block = 0
+	if (delay_animation)
+		qdel(delay_animation)
+	delay_animation = null
 	if(before_target(user))
 		return
 
@@ -194,12 +201,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
 		user.spell_channeling = user.on_uattack.Add(src, "channeled_spell")
+		if(spell_flags & CAN_CHANNEL_RESTRAINED)
+			user.spell_channeling = user.on_ruattack.Add(src, "channeled_spell")
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
 		var/event/E = user.on_uattack
 		E.handlers.Remove(user.spell_channeling)
+		var/event/ER = user.on_ruattack
+		if(ER)
+			ER.handlers.Remove(user.spell_channeling)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()

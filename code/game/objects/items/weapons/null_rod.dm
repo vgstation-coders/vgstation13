@@ -18,7 +18,7 @@
 
 /obj/item/weapon/nullrod/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS|FIRELOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
 
@@ -49,7 +49,7 @@
 		var/datum/role/vampire/V = isvampire(H)
 
 		if(V && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
-			if(!(VAMP_MATURE in V.powers))
+			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 					V.nullified = max(5, V.nullified + 2)

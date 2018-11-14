@@ -104,6 +104,21 @@
 /obj/item/weapon/gun/proc/isHandgun()
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
+/obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
+	if(silenced)
+		if(fire_sound)
+			playsound(user, fire_sound, fire_volume/5, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+	else
+		if(fire_sound)
+			playsound(user, fire_sound, fire_volume, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume, 1)
+		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
+		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
 	if(advanced_tool_user_check)
@@ -208,10 +223,11 @@
 		in_chamber.def_zone = LIMB_CHEST
 
 	if(targloc == curloc)
-		user.bullet_act(in_chamber)
+		target.bullet_act(in_chamber)
 		qdel(in_chamber)
 		in_chamber = null
 		update_icon()
+		play_firesound(user, reflex)
 		return
 
 	if(recoil)
@@ -242,19 +258,7 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	if(silenced)
-		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/5, 1)
-		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
-	else
-		if(fire_sound)
-			playsound(user, fire_sound, fire_volume, 1)
-		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume, 1)
-		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
-		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+	play_firesound(user, reflex)
 
 	in_chamber.original = target
 	in_chamber.forceMove(get_turf(user))

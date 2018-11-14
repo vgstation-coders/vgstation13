@@ -11,10 +11,12 @@
 */
 
 proc/initialize_materials()
-	for(var/matdata in typesof(/datum/material) - /datum/material)
+	for(var/matdata in subtypesof(/datum/material))
 		var/datum/material/mat = new matdata
 		material_list += list(mat.id = mat)
-		initial_materials += list(mat.id = 0)
+		if (!mat.sheettype)
+			continue
+		initial_materials += list(mat.id = 0) // This is for machines in r&d who have a material holder. If you can't make sheets of the material, you can't put in an r_n_d machine to begin with.
 
 var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
 var/global/list/initial_materials	//Stores all the matids = 0 in helping New
@@ -134,6 +136,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/brunt_damage_mod = 1
 	var/sharpness_mod = 1
 	var/quality_mod = 1
+	var/melt_temperature
 
 /datum/material/New()
 	if(processed_name=="")
@@ -157,6 +160,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.1
 	sharpness_mod = 0.8
 	quality_mod = 1.1
+	melt_temperature = MELTPOINT_STEEL
 
 /datum/material/glass
 	name="Sand"
@@ -170,6 +174,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	alpha = 122
 	brunt_damage_mod = 0.7
 	sharpness_mod = 1.4
+	melt_temperature = MELTPOINT_GLASS
 
 /datum/material/glass/on_use(obj/source)
 	if(!..())
@@ -193,6 +198,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.6
 	quality_mod = 2
+	melt_temperature = MELTPOINT_CARBON
 
 /datum/material/plasma
 	name="Plasma"
@@ -224,6 +230,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 0.5
 	sharpness_mod = 0.5
 	quality_mod = 1.7
+	melt_temperature = MELTPOINT_GOLD
 
 /datum/material/silver
 	name="Silver"
@@ -236,6 +243,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 0.7
 	sharpness_mod = 0.7
 	quality_mod = 1.5
+	melt_temperature = MELTPOINT_SILVER
 
 
 /datum/material/uranium
@@ -249,6 +257,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.8
 	sharpness_mod = 0.2
 	quality_mod = 1.4
+	melt_temperature = MELTPOINT_URANIUM
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
@@ -265,6 +274,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
+	melt_temperature = MELTPOINT_POTASSIUM
 
 /datum/material/clown/New()
 	if(!..())
@@ -350,6 +360,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype = null
 	cc_per_sheet = CC_PER_SHEET_METAL
 	color = "#A97F1B"
+	melt_temperature = MELTPOINT_BRASS
 
 /datum/material/ralloy
 	name = "Replicant Alloy"
@@ -361,6 +372,20 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet = CC_PER_SHEET_METAL
 	color = "#363636"
 
+/datum/material/ice
+	name = "Ice"
+	id = MAT_ICE
+	value = 0
+	oretype = /obj/item/ice_crystal
+
+/datum/material/telecrystal
+	name="Telecrystal"
+	id="telecrystal"
+	value=30
+	oretype=/obj/item/weapon/ore/telecrystal
+	sheettype=null
+	cointype=null
+
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"
@@ -369,7 +394,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	cointype=null
-
 
 /datum/material/char
 	name="Char"

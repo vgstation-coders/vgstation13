@@ -160,7 +160,7 @@
 			updateUsrDialog()
 		return
 	. = ..()
-	if(. && !emagged) //Retreat if we're not hostile and we're under attack
+	if(. && !emagged && isturf(loc)) //Retreat if we're not hostile and we're under attack
 		step_away(src,user)
 
 /obj/machinery/bot/bloodbot/Emag(mob/user as mob)
@@ -179,7 +179,7 @@
 	if(!emagged) //In a normal situation, the bloodbot just loiters around instead of seeking out targets
 		if(!quiet && prob(5))
 			speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C'mon! We know you've got it in you!","Hey -- you're somebody's type!"))
-		if(!currently_drawing_blood && prob(5)) //Wander
+		if(!currently_drawing_blood && prob(5) && isturf(loc)) //Wander
 			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 			Move(get_step(src, pick(cardinal)))
 	else //First priority: drink an adjacent target. Otherwise, pick a target and move toward it if we have none.

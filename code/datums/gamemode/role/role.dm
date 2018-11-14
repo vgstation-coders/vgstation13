@@ -27,7 +27,10 @@
 		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
 	@CanBeAssigned(Mind)
 		General sanity checks before assigning the person to the role, such as checking if they're part of the protected jobs or antags.
-
+	@PreMindTransfer(Old_character, Mob/Living)
+		Things to do to the *old* body prior to the mind transfer.
+	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
+		Things to do to the *new* body after the mind transfer is completed.
 */
 
 #define ROLE_MIXABLE   1 // Can be used in mixed mode
@@ -208,6 +211,9 @@
 /datum/role/proc/OnPostSetup()
 	return 1
 
+/datum/role/proc/update_antag_hud()
+	return
+
 /datum/role/proc/process()
 	return
 
@@ -242,12 +248,12 @@
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
-	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 	else
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 	[name] [antag.name]/[antag.key]<b><font color=red> - (DESTROYED)</font></b>
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
-	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 
 
 /datum/role/proc/Greet(var/greeting,var/custom)
@@ -261,10 +267,10 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 
-/datum/role/proc/PreMindTransfer(var/datum/mind/M)
+/datum/role/proc/PreMindTransfer(var/mob/living/old_character)
 	return
 
-/datum/role/proc/PostMindTransfer(var/datum/mind/M)
+/datum/role/proc/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	return
 
 /datum/role/proc/GetFaction()
@@ -343,7 +349,7 @@
 	if (faction)
 		text += faction.name
 	else
-		text += "<i>none</i>"
+		text += "<i>none</i> <br/>"
 	if (admin_edit)
 		text += " - "
 		if (faction)
@@ -352,7 +358,7 @@
 			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
 	text += "<br>"
 	if (objectives.objectives.len)
-		text += "<b>personnal objectives</b><ul>"
+		text += "<b>personal objectives</b><br><ul>"
 	text += objectives.GetObjectiveString(0,admin_edit,M, src)
 	if (objectives.objectives.len)
 		text += "</ul>"
@@ -361,6 +367,7 @@
 			if (objectives.objectives.len)
 				text += "<br>"
 			text += "<b>faction objectives</b><ul>"
+			text += "<br/>"
 		text += faction.objective_holder.GetObjectiveString(0,admin_edit,M)
 		if (faction.objective_holder.objectives.len)
 			text += "</ul>"
@@ -412,6 +419,7 @@
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
+		to_chat(usr, "You are not an admin.")
 		return 0
 
 	if(!href_list["mind"])
@@ -447,9 +455,6 @@
 
 /datum/role/proc/GetMemoryHeader()
 	return name
-
-/datum/role/proc/handle_mind_transfer(var/mob/living/new_character)
-	return TRUE
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
@@ -502,7 +507,7 @@
 	name = RESPONDER
 	id = RESPONDER
 	special_role = RESPONDER
-	logo_state = "ert-logo"
+	logo_state = "ERT_empty-logo"
 
 //________________________________________________
 
@@ -518,6 +523,77 @@
 	name = BLOBOVERMIND
 	id = BLOBOVERMIND
 	logo_state = "blob-logo"
+	greets = list(GREET_DEFAULT,GREET_CUSTOM)
+	var/countdown = 60
+
+/datum/role/blob_overmind/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+	..()
+	wikiroute = role_wiki[BLOBOVERMIND]
+
+/datum/role/blob_overmind/process()
+	if(!antag || istype(antag.current,/mob/camera/blob))
+		return
+	if (countdown > 0)
+		countdown--
+		if (countdown == 59)
+			to_chat(antag.current, "<span class='alert'>You feel tired and bloated.</span>")
+		else if (countdown == 30)
+			to_chat(antag.current, "<span class='alert'>You feel like you are about to burst.</span>")
+		else if (countdown <= 0)
+			burst()
+	if (antag.current.hud_used)
+		if(antag.current.hud_used.blob_countdown_display)
+			antag.current.hud_used.blob_countdown_display.overlays.len = 0
+			var/first = round(countdown/10)
+			var/second = countdown%10
+			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
+			var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
+			I1.pixel_x += 10 * PIXEL_MULTIPLIER
+			I2.pixel_x += 17 * PIXEL_MULTIPLIER
+			I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+			I2.pixel_y -= 11 * PIXEL_MULTIPLIER
+			antag.current.hud_used.blob_countdown_display.overlays += I1
+			antag.current.hud_used.blob_countdown_display.overlays += I2
+		else
+			antag.current.hud_used.blob_infected_hud()
+
+/datum/role/blob_overmind/proc/burst()
+	if(!antag || istype(antag.current,/mob/camera/blob))
+		return
+
+	var/client/blob_client = null
+	var/turf/location = null
+
+	if(iscarbon(antag.current))
+		var/mob/living/carbon/C = antag.current
+		if(directory[ckey(antag.key)])
+			blob_client = directory[ckey(antag.key)]
+			location = get_turf(C)
+			if(location.z != map.zMainStation || istype(location, /turf/space))
+				location = null
+			C.gib()
+
+	if(blob_client && location)
+		new /obj/effect/blob/core(location, 200, blob_client, 3)
+	Drop()
+
+/datum/role/blob_overmind/Greet(var/greeting,var/custom)
+	if(!greeting || !antag || istype(antag.current,/mob/camera/blob))
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_CUSTOM)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are infected by the Blob!</br></span>")
+			to_chat(antag.current, "<span class='warning'>Your body is ready to give spawn to a new blob core which will eat this station.</span>")
+			to_chat(antag.current, "<span class='warning'>Find a good location to spawn the core and then take control and overwhelm the station!</span>")
+			to_chat(antag.current, "<span class='warning'>When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.</span>")
+			to_chat(antag.current, "<span class='warning'>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</span>")
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+
 
 //________________________________________________
 
@@ -529,6 +605,9 @@
 	logo_state = "wizard-logo"
 
 /datum/role/wizard/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/wizard)
+		return
 	switch(rand(1,100))
 		if(1 to 30)
 			AppendObjective(/datum/objective/target/assassinate)
@@ -567,9 +646,16 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 
+/datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
+	. = ..()
+	for (var/spell/S in old_character.spell_list)
+		if (S.user_type == USER_TYPE_WIZARD)
+			new_character.add_spell(S)
+
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
 	id = MAGICIAN
+	logo_state = "magik-logo"
 
 /datum/role/wizard/summon_magic/ForgeObjectives()
 	var/datum/objective/survive/S = new
@@ -579,51 +665,7 @@
 	to_chat(antag.current, "<B>You are a Magician! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
 
 /datum/role/wizard/summon_magic/OnPostSetup()
-	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
-	var/mob/living/carbon/human/H = antag.current
-	switch (randomizemagic)
-		if("fireball")
-			new /obj/item/weapon/spellbook/oneuse/fireball(get_turf(H))
-		if("smoke")
-			new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(H))
-		if("blind")
-			new /obj/item/weapon/spellbook/oneuse/blind(get_turf(H))
-		if("mindswap")
-			new /obj/item/weapon/spellbook/oneuse/mindswap(get_turf(H))
-		if("forcewall")
-			new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(H))
-		if("knock")
-			new /obj/item/weapon/spellbook/oneuse/knock(get_turf(H))
-		if("horsemask")
-			new /obj/item/weapon/spellbook/oneuse/horsemask(get_turf(H))
-		if("blink")
-			new /obj/item/weapon/spellbook/oneuse/teleport/blink(get_turf(H))
-		if("disorient")
-			new /obj/item/weapon/spellbook/oneuse/disorient(get_turf(H))
-		if("clowncurse")
-			new /obj/item/weapon/spellbook/oneuse/clown(get_turf(H))
-		if("mimecurse")
-			new /obj/item/weapon/spellbook/oneuse/mime(get_turf(H))
-		if("shoesnatch")
-			new /obj/item/weapon/spellbook/oneuse/shoesnatch(get_turf(H))
-		if("robesummon")
-			new /obj/item/weapon/spellbook/oneuse/robesummon(get_turf(H))
-		if("staffchange")
-			new /obj/item/weapon/gun/energy/staff(get_turf(H))
-		if("armor")
-			new /obj/item/clothing/suit/space/rig/wizard(get_turf(H))
-			new /obj/item/clothing/head/helmet/space/rig/wizard(get_turf(H))
-		if("scrying")
-			if (!istype(H))
-				return
-			new /obj/item/weapon/scrying(get_turf(H))
-			if (!(M_XRAY in H.mutations))
-				H.mutations.Add(M_XRAY)
-				H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
-				H.see_in_dark = 8
-				H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-				to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
-
+	return TRUE
 //________________________________________________
 
 /datum/role/wish_granter_avatar

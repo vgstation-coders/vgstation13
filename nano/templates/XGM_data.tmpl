@@ -1,0 +1,49 @@
+<div class="statusDisplay">
+	<div class="line">
+		After editing a gas, press its update button to apply the changes.
+	</div>
+	<br>
+	<div class="line">
+		<span class="bad">DO NOT</span> change the <span class="blue">id</span> var on any gas. It will fuck everything up.
+	</div>
+	<br>
+	<div class="line">
+		When you create a new gas, it will be initialized with default values for all vars except <span class="blue">id</span>. Edit and update it as usual to set the values you want.
+	</div>
+	<br>
+	<div class="line">
+		To add your new gas (or any other gas, for that matter) to a gas_mixture:
+	</div>
+	<div class="line">
+		<div class="statusLabel">
+			1.
+		</div>
+		<div class="statusValue">
+			VV the gas_mixture.
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">
+			2.
+		</div>
+		<div class="statusValue">
+			Add a string equal to the gas's <span class="blue">id</span> to the gas_mixture's <span class="blue">gas</span> list, and associate it with the desired number of moles.
+		</div>
+	</div>
+</div>
+<div class="itemGroup">
+	{{for data.gases}}
+		<div class="item">
+			<div class="itemLabel">
+				{{>value.name}}
+			</div>
+			<div class="itemContent">
+				{{:helper.link('Edit', 'pencil', {'edit' : value.id})}}
+				{{:helper.link('Update', 'refresh', {'update' : value.id})}}
+			</div>
+		</div>
+	{{/for}}
+	<div class="item">
+		{{:helper.link('Create New', 'plus', {'create' : 1})}}
+	</div>
+</div>

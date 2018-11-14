@@ -265,14 +265,11 @@ var/runedec = 0 // Rune cap ?
 /obj/item/weapon/tome_legacy/New(var/datum/faction/cult/narsie/our_cult) // Multiple cults with multiple words ? Why not
 	if (!istype(our_cult))
 		our_cult = find_active_faction_by_type(/datum/faction/cult/narsie) // No cult given, let's find ours
-	if (!istype(our_cult))
-		message_admins("Error: trying to spawn a cult tome without an active cult! Create one first.")
-		visible_message("<span class='warning'>The tome suddendly catches fire and fades out in a dark puff of smoke.</span>")
-		qdel(src)
-		return FALSE
-	my_cult = our_cult
-	cultwords = my_cult.cult_words
-	return ..()
+	if (istype(our_cult))
+		my_cult = our_cult
+		cultwords = my_cult.cult_words
+		return ..()
+	return FALSE
 
 /obj/item/weapon/tome_legacy/Topic(href,href_list[])
 	if (src.loc == usr)
@@ -358,6 +355,9 @@ var/runedec = 0 // Rune cap ?
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
+	if (!my_cult) // Has been spawned without a cult ; likely an emagged library console
+		return
+
 	if(!cultwords["travel"])
 		my_cult.randomiseWords()
 	if(islegacycultist(user))
@@ -432,42 +432,10 @@ var/runedec = 0 // Rune cap ?
 
 		if(user.get_active_hand() != src)
 			return
-		if(ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(!H.held_items.len)
-				to_chat(user, "<span class='notice'>You have no hands to draw with!</span>")
-				return
-			if(H.species.anatomy_flags & NO_BLOOD) //No blood, going to have to improvise
-				if(H.bloody_hands) //Blood on hand to use, and hands on hand to use
-					user.visible_message("<span class='warning'>[user] starts to paint drawings on the floor with the blood on their hands, whilst chanting.</span>",\
-					"<span class='warning'>You use the blood smeared on your hands to begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
-					"<span class='warning'>You hear chanting.</span>")
-					H.bloody_hands = max(0, H.bloody_hands - 1)
-				else //We'll have to search around for blood
-					var/turf/T = get_turf(user)
-					var/found = 0
-					for (var/obj/effect/decal/cleanable/blood/B in T)
-						if(B.amount && B.counts_as_blood)
-							user.visible_message("<span class='warning'>[user] paws at the blood puddles splattered on \the [T], and begins to chant and paint symbols on the floor.</span>",\
-							"<span class='warning'>You use the blood splattered across \the [T], and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
-							"<span class='warning'>You hear chanting.</span>")
-							B.amount--
-							found = 1
-							break
-					if(!found)
-						to_chat(user, "<span class='notice'>You have no blood in, on, or around you that you can use to draw a rune!</span>")
-						return
-			else
-				user.visible_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>",\
-				"<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
-				"<span class='warning'>You hear chanting.</span>")
-				H.vessel.remove_reagent(BLOOD, rand(9)+2)
-				user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
-		else //Monkeys, diona, let's just assume it's normal apefoolery
-			user.visible_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>",\
-			"<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
-			"<span class='warning'>You hear chanting.</span>")
-			user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
+		for (var/mob/V in viewers(src))
+			V.show_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>", 1, "<span class='warning'>You hear chanting.</span>", 2)
+		to_chat(user, "<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>")
+		user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
 		if(do_after(user, user.loc, 50))
 			if(user.get_active_hand() != src)
 				return
@@ -481,7 +449,6 @@ var/runedec = 0 // Rune cap ?
 			R.blood_DNA = list()
 			R.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 			R.blood_color = H.species.blood_color
-		return
 	else
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
 		return

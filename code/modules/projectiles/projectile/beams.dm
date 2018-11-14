@@ -572,7 +572,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/heavylaser
 	name = "heavy laser"
 	icon_state = "heavylaser"
-	damage = 40
+	damage = 60
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
 
 /obj/item/projectile/beam/xray
@@ -715,7 +715,8 @@ var/list/beam_master = list()
 				error -= dist_y
 
 			if(isnull(loc))
-				draw_ray(lastposition)
+				if(!isnull(lastposition))
+					draw_ray(lastposition)
 				return
 			if(lastposition == loc)
 				kill_count = 0
@@ -751,7 +752,8 @@ var/list/beam_master = list()
 				error -= dist_x
 
 			if(isnull(loc))
-				draw_ray(lastposition)
+				if(!isnull(lastposition))
+					draw_ray(lastposition)
 				return
 			if(lastposition == loc)
 				kill_count = 0

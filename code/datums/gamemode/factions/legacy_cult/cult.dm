@@ -7,7 +7,7 @@
 
 /datum/faction/cult/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<br/><a href='?src=\ref[src];cult_mindspeak_global=\ref[src]'>Voice of [eldergod]</a>"
+	dat += "<br/><a href='?src=\ref[src];cult_mindspeak_global=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
 
 /datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
@@ -25,7 +25,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	desc = "A group of shady blood-obsessed individuals whose souls are devoted to Nar-Sie, the Geometer of Blood.\
 	From his teachings, they were granted the ability to perform blood magic rituals allowing them to fight and grow their ranks, and given the goal of pushing his agenda.\
 	Nar-Sie's ultimate goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
-	deity_name = "Geometer of Blood"
+	deity_name = "Nar-Sie"
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
 	var/list/startwords = list("blood","join","self","hell")
 	var/list/bloody_floors = list()
@@ -62,6 +62,18 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	for (var/word in engwords)
 		cult_words[word] = pick(runewords)
 		runewords -= cult_words[word]
+
+/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
+	if (!..())
+		return
+	if (has_enough_adepts())
+		getNewObjective()
+
+/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
+	if (!..())
+		return
+	if (has_enough_adepts())
+		getNewObjective()
 
 // Urist-runes naming & recognition procs.
 // Those procs are a mess
@@ -255,7 +267,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/text = current_objective.feedbackText()
 	if (text)
 		for (var/datum/role/R in members)
-			to_chat(R.antag.current, text)
+			if (R.antag.current)
+				to_chat(R.antag.current, text)
 
 /datum/faction/cult/narsie/handleNewObjective(var/datum/objective/O)
 	if (current_objective)
@@ -287,6 +300,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		message_admins("Trying to force completion of objective [O] to [src], but the faction has no current objective.")
 		return FALSE
 	if (!(O in objective_holder.objectives) || current_objective != O) // Same as previous
+		message_admins("Trying to force completion of objective [O] to [src], but this isn't the faction's current objective.")
 		return FALSE
 	getNewObjective()
 
@@ -300,7 +314,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
                     "")
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
-			to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
+			if (M)
+				to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
 
 	if (href_list["cult_mindspeak"])
 		if (!usr.client.holder)
@@ -310,7 +325,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
                     "")
 		var/datum/role/R = locate(href_list["cult_mindspeak"])
 		var/mob/M = R.antag.current
-		to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
+		if (M)
+			to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
 
 	if (href_list["check_words"])
 		if (!usr.client.holder)
@@ -337,11 +353,14 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 
 /datum/faction/cult/narsie/proc/reroll_sac(var/datum/objective/target/assassinate/sacrifice/S)
+	log_admin("LEGACY CULT: rerolling sacrifice.")
 	var/list/possible_targets = S.get_targets()
 	S.target = pick(possible_targets)
 	if (!S.target) // No targets still ? Time to reroll the objective.
+		log_admin("LEGACY CULT: qdeling the objective...")
 		objective_holder.objectives -= current_objective
 		qdel(current_objective)
+		current_objective = null
 		getNewObjective(debug = TRUE) // This objective never happened.
 		return
 	for (var/datum/role/R in members)

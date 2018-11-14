@@ -631,8 +631,6 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
-	for(var/obj/item/embedded  in src.ingredient.contents)
-		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
 

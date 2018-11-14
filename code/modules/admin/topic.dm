@@ -543,6 +543,17 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("soulblade")
+				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+				var/obj/item/weapon/melee/soulblade/blade = new(get_turf(M))
+				blade.blood = blade.maxblood
+				new_shade.forceMove(blade)
+				blade.update_icon()
+				new_shade.status_flags |= GODMODE
+				new_shade.canmove = 0
+				new_shade.name = "[M.real_name] the Shade"
+				new_shade.real_name = "[M.real_name]"
+				new_shade.give_blade_powers()
 			if("blob")
 				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)
 				new_mob = core.overmind
@@ -2874,20 +2885,6 @@
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
 
-				/*why were there two of those anyway? meteor blobs are an improvement either way.
-			if("goblob")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","Blob")
-				log_admin("[key_name(usr)] spawned a blob", 1)
-				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a blob.</span>", 1)
-				new /datum/event/blob
-
-			if("goblob")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","BL")
-				mini_blob_event()
-				message_admins("[key_name_admin(usr)] has spawned blob", 1)
-				*/
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
@@ -3879,7 +3876,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_name"])
-		src.admincaster_feed_channel.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+		src.admincaster_feed_channel.channel_name = utf8_sanitize(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
 			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
@@ -4098,6 +4095,9 @@
 				zas_settings.ChangeSettingsDialog(usr,zas_settings.settings)
 			if(href_list["vsc"] == "default")
 				zas_settings.SetDefault(usr)
+
+	else if(href_list["xgm_panel"])
+		XGM.ui_interact(usr)
 
 	else if(href_list["toglang"])
 		if(check_rights(R_SPAWN))
@@ -4400,8 +4400,6 @@
 						locations += list("Vox home (MOVING TO IT WILL END THE ROUND)" = "dock_home")
 					if(/datum/shuttle/escape)
 						locations += list("Escape shuttle home" = "dock_station","Escape shuttle centcom" = "dock_centcom")
-					if(/datum/shuttle/taxi)
-						locations += list("Taxi medbay silicon" = "dock_medical_silicon","Taxi engineering cargo" = "dock_engineering_cargo","Taxi security science" = "dock_security_science","Taxi abandoned station" = "dock_abandoned")
 					if(/datum/shuttle/supply)
 						locations += list("Centcom loading bay" = "dock_centcom", "Station cargo bay" = "dock_station")
 
@@ -4822,6 +4820,15 @@
 			error_viewer.show_to(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
 		else
 			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])
+
+	else if (href_list["role_panel"])
+		var/mob/M = locate(href_list["role_panel"])
+		if (!istype(M))
+			return
+		var/datum/mind/mind = M.mind
+		if (!istype(mind))
+			return
+		mind.role_panel()
 
 	// ----- Religion and stuff
 	if (href_list["religions"])

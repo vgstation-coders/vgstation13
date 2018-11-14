@@ -64,7 +64,7 @@
 /datum/disease2/effect/proc/minormutate()
 	switch(pick(1,2,3,4,5))
 		if(1)
-			chance = rand(0, max_chance)
+			chance = rand(initial(chance), max_chance)
 		if(2)
 			multiplier = rand(1, max_multiplier)
 
@@ -1190,6 +1190,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 
 /datum/disease2/effect/organs/vampire
 	stage = 1 //For use with vampires?
+	badness = 3
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))

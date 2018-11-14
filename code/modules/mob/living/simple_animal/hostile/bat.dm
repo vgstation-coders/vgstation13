@@ -50,7 +50,7 @@
 	if (!istype(the_target, /mob/living))
 		return ..()
 	var/mob/living/L = the_target
-	if (L.mind)
+	if (L.mind && vamp_fac)
 		for (var/R in L.mind.antag_roles)
 			if (L.mind.antag_roles[R] in vamp_fac.members)
 				return FALSE
@@ -65,7 +65,7 @@
 	if(!istype(A, /mob/living))
 		return FALSE
 	var/mob/living/L = A
-	if (L.mind)
+	if (L.mind && vamp_fac)
 		for (var/R in L.mind.antag_roles)
 			if (L.mind.antag_roles[R] in vamp_fac.members)
 				return FALSE

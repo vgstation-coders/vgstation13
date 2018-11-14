@@ -11,7 +11,6 @@ var/global/list/disease2_list = list()
 	var/list/datum/disease2/effect/effects = list()
 	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
 	var/max_stage = 4
-	var/patient_zero = FALSE // Bypasses the roll for natural antibodies if true
 
 	var/log = ""
 	var/logged_virusfood=0
@@ -23,9 +22,12 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	..()
 
-/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0)
+/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0, var/old_effect)
 	var/list/datum/disease2/effect/list = list()
-	for(var/e in typesof(/datum/disease2/effect))
+	var/list/to_choose = subtypesof(/datum/disease2/effect)
+	if(old_effect) //So it doesn't just evolve right back into the previous virus type
+		to_choose.Remove(old_effect)
+	for(var/e in to_choose)
 		var/datum/disease2/effect/f = new e
 		if(f.stage == stage && f.badness <= max_badness)
 			list += f
@@ -33,7 +35,7 @@ var/global/list/disease2_list = list()
 	e.chance = rand(1, e.max_chance)
 	return e
 
-/datum/disease2/disease/proc/makerandom(var/greater = FALSE, var/pz)
+/datum/disease2/disease/proc/makerandom(var/greater = FALSE)
 	log_debug("Randomizing virus [uniqueID] with greater=[greater]")
 	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
@@ -50,7 +52,6 @@ var/global/list/disease2_list = list()
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
 	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
-	patient_zero = pz
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -62,12 +63,14 @@ var/global/list/disease2_list = list()
 		return // return if isn't proper mob type
 	var/datum/disease2/disease/D = new /datum/disease2/disease("custom_disease") //set base name
 	for(var/i = 1; i <= D.max_stage; i++)  // run through this loop until everything is set
-		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
+		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") as null | anything in (typesof(/datum/disease2/effect))
+		if (!symptom)
+			return 0
 			// choose a symptom from the list of them
 		var/datum/disease2/effect/e = new symptom(D)
-		e.chance = input(C, "Choose chance", "Chance") as num
+		e.chance = input(C, "Choose chance", "Chance") as null | num
 			// set the chance of the symptom that can occur
-		if(e.chance > 100 || e.chance < 0)
+		if(!e.chance || e.chance > 100 || e.chance < 0)
 			return 0
 		D.log += "Added [e.name] at [e.chance]% chance<br>"
 		D.effects += e
@@ -75,15 +78,15 @@ var/global/list/disease2_list = list()
 	disease2_list -= D.uniqueID
 	D.uniqueID = rand(0, 10000)
 	disease2_list["[D.uniqueID]"] = D
-	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as num
-	if(D.infectionchance > 100 || D.infectionchance < 0)
+	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as null | num
+	if(!D.infectionchance || D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
 	//pick random antigens for the disease to have
 	D.antigen |= text2num(pick(ANTIGENS))
 	D.antigen |= text2num(pick(ANTIGENS))
-	D.patient_zero = TRUE
-
-	D.spreadtype = input(C, "Select spread type", "Spread Type") in list("Airborne", "Contact", "Blood") // select how the disease is spread
+	D.spreadtype = input(C, "Select spread type", "Spread Type") as null | anything in list("Airborne", "Contact", "Blood") // select how the disease is spread
+	if (!D.spreadtype)
+		return 0
 	infectedMob.virus2["[D.uniqueID]"] = D // assign the disease datum to the infectedMob/ selected user.
 	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
 	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
@@ -95,12 +98,8 @@ var/global/list/disease2_list = list()
 		return
 
 
-	if(mob.stat == 2)
+	if(mob.stat == 2) //Dead, brown bread
 		return
-	if(stage <= 1 && clicks == 0 && !patient_zero) 	// with a certain chance, the mob may become immune to the disease before it starts properly. Not if they're patient zero though.
-		if(prob(5))
-			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigens2string(antigen)].")
-			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
 /*
 	if(mob.radiation > 50)
 		if(prob(1))
@@ -123,17 +122,10 @@ var/global/list/disease2_list = list()
 		logged_virusfood=0
 
 	//Moving to the next stage
-	if(clicks > stage*100 && prob(stageprob))
-		if(stage == max_stage)
-			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antigens [antigens2string(antigen)].")
-			src.cure(mob)
-			mob.antibodies |= src.antigen
-			log += "<br />[timestamp()] STAGEMAX ([stage])"
-			return
-		else
-			stage++
-			log += "<br />[timestamp()] NEXT STAGE ([stage])"
-			clicks = 0
+	if(clicks > stage*100 && prob(stageprob) && stage < max_stage)
+		stage++
+		log += "<br />[timestamp()] NEXT STAGE ([stage])"
+		clicks = 0
 
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(prob(100 - (100 / mob.virus2.len)))
@@ -174,7 +166,7 @@ var/global/list/disease2_list = list()
 	uniqueID = rand(0,10000)
 	var/i = rand(1, effects.len)
 	var/datum/disease2/effect/e = effects[i]
-	var/datum/disease2/effect/f = new_random_effect(2, e.stage)
+	var/datum/disease2/effect/f = new_random_effect(2, e.stage, e.type)
 	effects[i] = f
 	log_debug("Virus [uniqueID] has major mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."

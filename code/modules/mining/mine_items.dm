@@ -596,7 +596,7 @@ proc/move_mining_shuttle()
 		if(!P.pai)
 			to_chat(user, "<span class = 'warning'>\The [P] has no intelligence within it.</span>")
 			return
-		var/response = alert(user, "Are you sure you want to put \the [P] into \the [src]? This can not be undone.","Yes","No")
+		var/response = alert(user, "Are you sure you want to put \the [P] into \the [src]? This can not be undone.","Insert \the [P]?","Yes","No")
 		if(response != "Yes")
 			return
 		if(do_after(user, src, 30))

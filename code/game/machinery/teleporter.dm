@@ -268,7 +268,8 @@
 	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(l.x - 2, l.y, l.z))
 	if (!com)
 		return
-	if (!com.locked)
+	if (!com.locked || com.locked.gcDestroyed)
+		com.locked = null
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
 		return

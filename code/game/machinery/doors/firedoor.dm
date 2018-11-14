@@ -229,6 +229,18 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
 
+/obj/machinery/door/firedoor/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(user, 'sound/weapons/heavysmash.ogg', 75, 1)
+		to_chat(user, "<span class = 'warning'>You smash with all your strength but \the [src] doesn't budge. If only your arms were sharp enough to pry the door open.</span>")
+	if(istype(user,/mob/living/simple_animal/construct/wraith))
+		force_open(user)
+		return 1
+	return 0
+
 /obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
 	if(operating)
@@ -547,8 +559,6 @@ var/global/list/alert_overlays_global = list()
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 
-	if(!user.is_holding_item(src))
-		return 1
 	var/current_turf = get_turf(src)
 	var/turf_face = get_step(current_turf,user.dir)
 	if(SSair.air_blocked(current_turf, turf_face))
@@ -558,7 +568,7 @@ var/global/list/alert_overlays_global = list()
 	if(F && F.dir == user.dir)
 		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
 		return 1
-	if(do_after(user, src, 5 SECONDS))
+	if(do_after(user, user, 5 SECONDS))
 		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
 		B.change_dir(user.dir)
 		qdel(src)

@@ -124,8 +124,6 @@
 					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
 					return 1
 				var/obj/structure/windoor_assembly/WD = new windoor(user.loc, 0 )
-				WD.state = "01"
-				WD.anchored = 0
 				WD.dir = user.dir
 				WD.ini_dir = WD.dir
 				src.use(5)

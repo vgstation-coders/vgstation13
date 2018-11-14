@@ -207,7 +207,7 @@ obj/item/proc/get_clamped_volume()
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 
-
+	I.on_attack(M,user)
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
 		if(originator)
@@ -239,12 +239,12 @@ obj/item/proc/get_clamped_volume()
 		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
-	I.on_attack(M,user)
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
-	user.do_attack_animation(attacked, src)
-	user.delayNextAttack(attack_delay)
+	if (!user.gcDestroyed)
+		user.do_attack_animation(attacked, src)
+		user.delayNextAttack(attack_delay)
 	if(hitsound)
 		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)

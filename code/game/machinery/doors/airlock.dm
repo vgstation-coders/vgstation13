@@ -353,6 +353,8 @@ About the new airlock wires panel:
 		..()
 
 /obj/machinery/door/airlock/bump_open(mob/living/user as mob) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
+	if(user.loc == loc)	//no bumping an airlock from within the airlock
+		return
 	if(!istype(user))
 		return
 	if(!issilicon(usr))
@@ -395,7 +397,7 @@ About the new airlock wires panel:
 	return ((src.aiControlDisabled!=1) && (!src.isAllPowerCut()));
 
 /obj/machinery/door/airlock/proc/canAIHack()
-	return ((src.aiControlDisabled==1) && (!hackProof) && (!src.isAllPowerCut()));
+	return ((src.aiControlDisabled==1) && (!hackProof) && (!src.isAllPowerCut()))
 
 /obj/machinery/door/airlock/proc/arePowerSystemsOn()
 	return (src.secondsMainPowerLost==0 || src.secondsBackupPowerLost==0)
@@ -520,7 +522,7 @@ About the new airlock wires panel:
 	if(isAI(user))
 		if(!src.canAIControl())
 			if(src.canAIHack())
-				src.hack(user)
+				src.attempt_hack(user)
 				return
 			else
 				to_chat(user, "Airlock AI control has been blocked with a firewall. Unable to hack.")
@@ -627,12 +629,25 @@ About the new airlock wires panel:
 //aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door
 
 
+/obj/machinery/door/airlock/proc/attempt_hack(mob/user)
+	if (!isAI(user))
+		return FALSE
+	if (user.mind && !(user.mind.GetRole(TRAITOR) || user.mind.GetRole(MALF)))
+		to_chat(user, "Airlock AI control has been blocked. Dispatch a cyborg, or a carbon engineer, for maintenance.")
+		return FALSE
+	if (aiHacking)
+		return FALSE
+	else
+		to_chat(user, "Airlock AI control has been blocked. <a href='?src=\ref[src]&hack=1'>Hack it.</a>")
+
+
 /obj/machinery/door/airlock/proc/hack(mob/user as mob)
+
 	if(src.aiHacking==0)
 		src.aiHacking=1
 		spawn(20)
 			//TODO: Make this take a minute
-			to_chat(user, "Airlock AI control has been blocked. Beginning fault-detection.")
+			to_chat(user, "Beginning fault-detection.")
 			sleep(50)
 			if(src.canAIControl())
 				to_chat(user, "Alert cancelled. Airlock control has been restored without our assistance.")
@@ -696,6 +711,11 @@ About the new airlock wires panel:
 			//testing("Returning: Not adminghost, stat=[usr.stat], restrained=[usr.restrained()], small=[usr.small]")
 			return
 	add_fingerprint(usr)
+
+	if(href_list["hack"])
+		hack(usr)
+		return
+
 	if(href_list["close"])
 		usr << browse(null, "window=airlock")
 		if(usr.machine==src)
@@ -1035,6 +1055,37 @@ About the new airlock wires panel:
 		visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
 		density ? open(1) : close(1)
 
+/obj/machinery/door/airlock/attack_animal(var/mob/living/simple_animal/M)
+	if(isElectrified())
+		shock(M, 100)
+
+	if(operating)
+		return
+	var/level_of_door_opening = M.environment_smash_flags & OPEN_DOOR_WEAK
+	if(M.environment_smash_flags & OPEN_DOOR_STRONG)
+		level_of_door_opening = 2
+	if(!level_of_door_opening)
+		return
+	if((locked || welded || jammed) && level_of_door_opening < 2)
+		return //Not strong enough
+	else
+		shake(1,8)
+		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
+		if(arePowerSystemsOn() && !(stat & NOPOWER))
+			if(level_of_door_opening < 2)
+				return
+			if(M.client)
+				density ? open(1):close(1)
+			else if(density)
+				open(1)
+		else
+			if(M.client)
+				density ? open(1):close(1)
+			else if(density)
+				open(1)
+		visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
+
+
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
@@ -1223,6 +1274,12 @@ About the new airlock wires panel:
 	// </worry>
 	return ..()
 
+/obj/machinery/door/airlock/Uncross(atom/movable/mover)
+	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)))
+		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
+		return 0
+	return ..()
+
 /obj/machinery/door/airlock/close(var/forced = 0 as num)
 	if (operating || locked || welded)
 		return
@@ -1258,13 +1315,6 @@ About the new airlock wires panel:
 
 				L.SetStunned(5)
 				L.SetKnockdown(5)
-				var/obj/effect/stop/S = new()
-				S.forceMove(loc)
-				S.victim = L
-
-				spawn (20)
-					qdel(S)
-					S = null
 
 				L.audible_scream()
 

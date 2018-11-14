@@ -138,30 +138,30 @@
 		mind.transfer_to(C)
 		to_chat(C, "<span class='sinister'>The Geometer of Blood is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the shell of an Harvester.<br>Your tendrils can use and draw runes without need for a tome, your eyes can see beings through walls, and your mind can open any door. Use these assets to serve Nar-Sie and bring him any remaining living human in the world.<br>You can teleport yourself back to Nar-Sie along with any being under yourself at any time using your \"Harvest\" spell.</span>")
 		dust()
-	else if(client)
-		var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if (cult_fact)
-			cult_fact.harvested++
-		var/mob/dead/G = (ghostize())
-		G.icon = 'icons/mob/mob.dmi'
-		G.icon_state = "ghost-narsie"
-		G.overlays = 0
-		if(istype(G.mind.current, /mob/living/carbon/human/))
-			var/mob/living/carbon/human/H = G.mind.current
-			G.overlays += H.obj_overlays[ID_LAYER]
-			G.overlays += H.obj_overlays[EARS_LAYER]
-			G.overlays += H.obj_overlays[SUIT_LAYER]
-			G.overlays += H.obj_overlays[GLASSES_LAYER]
-			G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-			G.overlays += H.obj_overlays[BELT_LAYER]
-			G.overlays += H.obj_overlays[BACK_LAYER]
-			G.overlays += H.obj_overlays[HEAD_LAYER]
-			G.overlays += H.obj_overlays[HANDCUFF_LAYER]
-		G.invisibility = 0
-		to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
-
-	else
-		dust()
+	else if(!iscultist(src))
+		if(client)
+			var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
+			if (cult_fact)
+				cult_fact.harvested++
+			var/mob/dead/G = (ghostize())
+			G.icon = 'icons/mob/mob.dmi'
+			G.icon_state = "ghost-narsie"
+			G.overlays = 0
+			if(istype(G.mind.current, /mob/living/carbon/human/))
+				var/mob/living/carbon/human/H = G.mind.current
+				G.overlays += H.obj_overlays[ID_LAYER]
+				G.overlays += H.obj_overlays[EARS_LAYER]
+				G.overlays += H.obj_overlays[SUIT_LAYER]
+				G.overlays += H.obj_overlays[GLASSES_LAYER]
+				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.obj_overlays[BELT_LAYER]
+				G.overlays += H.obj_overlays[BACK_LAYER]
+				G.overlays += H.obj_overlays[HEAD_LAYER]
+				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+			G.invisibility = 0
+			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
+		spawn(1)
+			dust()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -559,6 +559,7 @@ Thanks.
 	ear_deaf = 0
 	ear_damage = 0
 	say_mute = 0
+	mutations &= ~M_HUSK
 	if(!reagents)
 		create_reagents(1000)
 	else
@@ -1065,7 +1066,7 @@ Thanks.
 	else if(iscarbon(L))
 		var/mob/living/carbon/CM = L
 	//putting out a fire
-		if(CM.on_fire && CM.canmove)
+		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
 			CM.fire_stacks -= 5
 			CM.SetKnockdown(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
@@ -1320,7 +1321,7 @@ Thanks.
 			if (!now_pushing)
 				now_pushing = 1
 
-				if (!AM.anchored)
+				if (!AM.anchored && AM.can_be_pushed(src))
 					var/t = get_dir(src, AM)
 					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
@@ -1657,11 +1658,13 @@ Thanks.
 				returnToPool(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
+	if(isitem(item))
+		var/obj/item/I = item
+		if(I.cant_drop > 0)
+			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
+			return FAILED_THROW
 
-	var/obj/item/I = item
-	if(istype(I) && I.cant_drop > 0)
-		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
-		return FAILED_THROW
+		I.pre_throw()
 
 	remove_from_mob(item)
 
@@ -1686,7 +1689,7 @@ Thanks.
 		if(istype(src,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H=src
 			throw_mult = H.species.throw_mult
-			if(M_HULK in H.mutations || M_STRONG in H.mutations)
+			if((M_HULK in H.mutations) || (M_STRONG in H.mutations))
 				throw_mult+=0.5
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
 		return THREW_SOMETHING

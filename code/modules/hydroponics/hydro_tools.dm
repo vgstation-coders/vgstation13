@@ -89,6 +89,8 @@
 
 	if(grown_seed.harvest_repeat)
 		dat += "This plant can be harvested repeatedly.<br>"
+		if(grown_seed.harvest_repeat > 1)
+			dat += "This plant harvests itself when ready.<br>"
 
 	if(grown_seed.immutable == -1)
 		dat += "This plant is highly mutable.<br>"
@@ -495,6 +497,7 @@
 	throw_speed = 1
 	throw_range = 3
 	flags = FPRINT
+	var/being_potted = FALSE
 
 /obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
 	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))

@@ -1,8 +1,8 @@
-#define MIN_FIELD_RADIUS 0
-#define MAX_FIELD_RADIUS 200
+#define MIN_FIELD_RADIUS 1
+#define MAX_FIELD_RADIUS 100
 
 #define MIN_STRENGTHEN_RATE 0
-#define MAX_STRENGTHEN_RATE 1
+#define MAX_STRENGTHEN_RATE 3
 
 #define MIN_FIELD_STRENGTH_CAP 0
 #define MAX_FIELD_STRENGTH_CAP 1000
@@ -34,9 +34,9 @@
 	var/locked = FALSE
 	var/average_field_strength = 0
 	var/strengthen_rate = 0.2
-	var/max_strengthen_rate = 0.2
+	var/max_strengthen_rate = 1
 	var/obj/machinery/shield_capacitor/owned_capacitor
-	var/field_strength_cap = 10
+	var/field_strength_cap = 100
 	var/time_since_fail = 100
 	var/energy_conversion_rate = 0.01	//how many renwicks per watt?
 	var/board_path = /obj/item/weapon/circuitboard/shield_gen // overridden by subtype
@@ -49,8 +49,8 @@
 
 	component_parts = newlist(
 		board_path,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/subspace/transmitter,
 		/obj/item/weapon/stock_parts/subspace/crystal,
 		/obj/item/weapon/stock_parts/subspace/amplifier,
@@ -59,6 +59,13 @@
 
 	RefreshParts()
 
+/obj/machinery/shield_gen/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+		T += Ma.rating - 1
+		energy_conversion_rate = (initial(energy_conversion_rate)+(T * 0.01))	
+		max_strengthen_rate = (initial(max_strengthen_rate)+(T))	
+	
 /obj/machinery/shield_gen/Destroy()
 	..()
 	owned_capacitor = null
@@ -117,7 +124,7 @@
 	data["capacitor"] = !!owned_capacitor
 	data["active"] = active
 	data["stability"] = time_since_fail > 2
-	data["field_radius"] = field_radius * 2
+	data["field_radius"] = field_radius
 	data["average_field_strength"] = average_field_strength
 	data["field_strength_cap"] = field_strength_cap
 	data["percentage_strength"] = field_strength_cap ? 100 * average_field_strength / field_strength_cap : "NA"
@@ -198,6 +205,12 @@
 
 /obj/machinery/shield_gen/ex_act(var/severity)
 	stop()
+	if (prob(severity))
+		field_radius = rand(MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
+	if (prob(severity))
+		strengthen_rate = rand(MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
+	if (prob(severity))
+		field_strength_cap = rand(MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
 	return ..()
 
 /obj/machinery/shield_gen/proc/start()
@@ -245,6 +258,14 @@
 			out.Add(T)
 	return out
 
+/obj/machinery/shield_gen/kick_act()
+	..()
+	if(stat & (NOPOWER|BROKEN))
+		active = FALSE
+		return
+	if(prob(50))
+		active = !active
+	
 /obj/machinery/shield_gen/npc_tamper_act(var/mob/living/L)
 	field_radius = rand(MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	strengthen_rate = rand(MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)

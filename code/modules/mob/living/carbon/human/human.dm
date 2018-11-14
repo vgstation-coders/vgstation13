@@ -145,6 +145,7 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -597,7 +598,7 @@
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
 			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
-			popup.set_content(strip_html(flavor_text))
+			popup.set_content(utf8_sanitize(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
@@ -1844,3 +1845,8 @@ mob/living/carbon/human/isincrit()
 			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
 		return INJECTION_RESULT_FAIL
 	return ..()
+
+/mob/living/carbon/human/get_cell()
+	var/datum/organ/internal/heart/cell/C = get_heart()
+	if(istype(C))
+		return C.cell

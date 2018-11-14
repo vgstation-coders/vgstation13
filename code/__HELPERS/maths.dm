@@ -259,3 +259,25 @@ proc/arctan(x)
 	var/mult = input/scale
 	var/trinum = (sqrt(8 * mult + 1) - 1 ) / 2
 	return trinum * scale
+
+// Input: a number
+// Returns: the number of bits set
+/proc/count_set_bitflags(var/input)
+	. = 0
+	while(input)
+		input &= (input - 1)
+		.++
+
+#if UNIT_TESTS_ENABLED
+/datum/unit_test/count_set_bitflags/start()
+	assert_eq(count_set_bitflags(0), 0)
+	assert_eq(count_set_bitflags(1|2|4|8|16|32|64|128|256|512|1024|2048|4096|8192|16384|32768|65535|131072|262144|524288|1048576|2097152|4194304|8388608), 23)
+	assert_eq(count_set_bitflags(1), 1)
+	assert_eq(count_set_bitflags(2), 1)
+	assert_eq(count_set_bitflags(3), 2)
+	assert_eq(count_set_bitflags(1|2), 2)
+	assert_eq(count_set_bitflags(1|4), 2)
+	assert_eq(count_set_bitflags(1|65536), 2)
+	assert_eq(count_set_bitflags(65536|32768), 2)
+	assert_eq(count_set_bitflags(1|4|16), 3)
+#endif

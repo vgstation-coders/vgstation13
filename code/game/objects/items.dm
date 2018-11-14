@@ -145,10 +145,10 @@
 
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
-//BRUTELOSS = 1
-//FIRELOSS = 2
-//TOXLOSS = 4
-//OXYLOSS = 8
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
@@ -1249,6 +1249,9 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
 
+/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
+	return TRUE
+
 /obj/item/MouseDropFrom(var/obj/over_object)
 	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
 		if(loc == over_object.loc) //Swapping to another object in the same storage item
@@ -1291,3 +1294,20 @@ var/global/list/image/blood_overlays = list()
 		usr.u_equip(src, TRUE)
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
+
+/obj/item/proc/pre_throw()
+	return
+
+/**
+	Attempt to heat this object from a presumed heat source.
+	@args:
+		A: Atom: The source of the heat
+		user: mob: Whomever may be trying to heat this object
+
+	@return:
+		TRUE if succesful
+		FALSE if not succesful
+		NULL if override not defined
+**/
+/obj/item/proc/attempt_heating(atom/A, mob/user)
+	return

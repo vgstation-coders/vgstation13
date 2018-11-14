@@ -146,7 +146,7 @@ var/global/list/moneytypes = list(
 	worth = 1000
 	stack_color = "#333333"
 
-/obj/structure/closet/cash_closet/New()
+/obj/structure/closet/cash_closet/spawn_contents()
 	var/list/types = typesof(/obj/item/weapon/spacecash)
 	for(var/i = 1 to rand(3,10))
 		var/typepath = pick(types)

@@ -97,6 +97,8 @@
 	head = null
 	w_uniform = null
 	wear_suit = null
+	for (var/obj/item/O in held_items)
+		O.dropped(src)
 	if(connected_holoconsole)
 		connected_holoconsole.connected_holopeople.Remove(src)
 		connected_holoconsole = null
@@ -118,7 +120,6 @@
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()
-	transmogrify()
 	qdel(src)
 
 /mob/living/simple_animal/hologram/advanced/can_wield()

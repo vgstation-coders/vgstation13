@@ -35,6 +35,7 @@ var/list/camera_names=list()
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 
+
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
 	var/deactivated = !status
@@ -88,6 +89,8 @@ var/list/camera_names=list()
 	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
 		adv_camera.update(z, TRUE, list(src))
 	update_hear()
+	cameranet.cameras += src // This is different from addCamera. addCamera() cares about visibility.
+	cameranet.addCamera(src)
 
 /obj/machinery/camera/proc/name_camera()
 	var/area/A=get_area(src)
@@ -116,6 +119,7 @@ var/list/camera_names=list()
 		qdel(assembly)
 		assembly = null
 	wires = null
+	cameranet.cameras -= src
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
 	if(adv_camera)
 		for(var/key in adv_camera.camerasbyzlevel)
@@ -421,27 +425,26 @@ var/list/camera_messages = list()
 		return 1
 	return 0
 
-/obj/machinery/camera/proc/tv_message(var/atom/movable/hearer, var/datum/speech/speech)
+/obj/machinery/camera/proc/tv_message(var/datum/speech/speech)
 	speech.wrapper_classes.Add("tv")
-	hearer.Hear(speech)
-
+	return speech
 	/*
 	var/namepart =  "[speaker.GetVoice()][speaker.get_alt_name()] "
 	var/messagepart = "<span class='message'>[hearer.lang_treat(speaker, speaking, raw_message)]</span>"
-
 	return "<span class='game say'><span class='name'>[namepart]</span>[messagepart]</span>"
 	*/
 
 /obj/machinery/camera/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(isHearing())
+		var/datum/speech/copy = speech.clone()
+		tv_message(copy)
 		for(var/obj/machinery/computer/security/S in tv_monitors)
 			if(S.current == src)
-				if(istype(S, /obj/machinery/computer/security/telescreen))
-					for(var/mob/M in viewers(world.view,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
-				else
-					for(var/mob/M in viewers(1,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
+				var/range = (istype(S, /obj/machinery/computer/security/telescreen) ? world.view : 1)
+				for (var/mob/virtualhearer/VH in viewers(range, S))
+					if (!ismob(VH.attached))
+						continue
+					VH.Hear(copy, "[bicon(S)] [rendered_speech]")
 
 /obj/machinery/camera/arena
 	name = "arena camera"

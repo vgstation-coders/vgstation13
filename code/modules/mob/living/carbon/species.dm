@@ -144,7 +144,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/species_intro //What intro you're given when you become this species.
 
-
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -253,6 +252,8 @@ var/global/list/whitelisted_species = list("Human")
 		H.oxygen_alert = 1
 		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
 
+/datum/species/proc/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
+
 // Used for species-specific names (Vox, etc)
 /datum/species/proc/makeName(var/gender,var/mob/living/carbon/C=null)
 	if(gender==FEMALE)
@@ -303,6 +304,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
+	darksight = 3
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -312,6 +314,8 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 		)
+
+	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)

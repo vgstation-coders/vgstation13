@@ -5,6 +5,9 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
+// If set to 0, replaces solo antags' objectives with an always-pass freeform
+#define SOLO_ANTAG_OBJECTIVES 1
+
 // Defines for the shuttle
 #define SHUTTLE_ON_STANDBY 0
 #define SHUTTLE_ON_STATION 1
@@ -215,14 +218,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
 #define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
 #define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
-
-//clothing flags
-#define MASKINTERNALS		1 // mask allows internals
-#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
-#define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
-#define ONESIZEFITSALL		8
-#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
-#define BLOCK_BREATHING 	32 //When worn, prevents breathing!
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -567,10 +562,11 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define I_HURT		"hurt"
 
 //I hate adding defines like this but I'd much rather deal with bitflags than lists and string searches
-#define BRUTELOSS 1
-#define FIRELOSS 2
-#define TOXLOSS 4
-#define OXYLOSS 8
+#define SUICIDE_ACT_BRUTELOSS 1
+#define SUICIDE_ACT_FIRELOSS 2
+#define SUICIDE_ACT_TOXLOSS 4
+#define SUICIDE_ACT_OXYLOSS 8
+#define SUICIDE_ACT_CUSTOM 16
 
 //Bitflags defining which status effects could be or are inflicted on a mob
 #define CANSTUN		1
@@ -785,6 +781,7 @@ SEE_PIXELS	256
 #define MAT_WOOD		"$wood"
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
+#define MAT_ICE			"$ice"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -893,6 +890,7 @@ SEE_PIXELS	256
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define RECORD_HUD			"record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
@@ -902,6 +900,7 @@ SEE_PIXELS	256
 #define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
 #define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
 #define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
+#define CONSTRUCT_HUD		"const_health" // Artificer HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -1493,6 +1492,7 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_VOX						16
 #define HOLOMAP_FILTER_STATIONMAP				32
 #define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
+#define HOLOMAP_FILTER_CULT						128//bloodstone locators
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1511,11 +1511,16 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
+#define HOLOMAP_EXTRA_CULTMAP					"cultmap"
 
 #define HOLOMAP_MARKER_SMES				"smes"
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
+#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
+#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+
 
 #define DEFAULT_BLOOD "#A10808"
 

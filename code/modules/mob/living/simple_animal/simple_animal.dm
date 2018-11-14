@@ -726,6 +726,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	src.resurrect()
 	src.revive()
 	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+	isRegenerating = 0
 
 /mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
 	return

@@ -39,10 +39,6 @@
 					var/obj/location_as_object = loc
 					location_as_object.handle_internal_lifeform(src, 0)
 
-
-		//Updates the number of stored chemicals for powers
-		//handle_changeling()
-
 		//Mutations and radiation
 		handle_mutations_and_radiation()
 
@@ -754,11 +750,6 @@
 			emote("scratch")
 			return
 
-
-/*/mob/living/carbon/monkey/proc/handle_changeling()
-	if(mind && mind.changeling)
-		mind.changeling.regenerate()
-*/
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()
 	if(..())

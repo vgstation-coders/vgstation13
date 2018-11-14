@@ -6,15 +6,15 @@
 	icon_state = "shade"
 	icon_living = "shade"
 	icon_dead = "shade_dead"
-	maxHealth = 50
-	health = 50
+	maxHealth = 40
+	health = 40
 	speak_emote = list("hisses")
 	emote_hear = list("wails","screeches")
 	response_help  = "puts their hand through"
 	response_disarm = "flails at"
 	response_harm   = "punches"
-	melee_damage_lower = 5
-	melee_damage_upper = 15
+	melee_damage_lower = 8
+	melee_damage_upper = 8
 	attacktext = "torments"
 	minbodytemp = 0
 	maxbodytemp = 4000
@@ -31,9 +31,20 @@
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 
+/mob/living/simple_animal/construct/New()
+	..()
+	add_language(LANGUAGE_CULT)
+
 /mob/living/simple_animal/shade/Login()
 	..()
 	hud_used.shade_hud()
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		client.CAN_MOVE_DIAGONALLY = 1
+		client.screen += list(
+			gui_icons.soulblade_bgLEFT,
+			gui_icons.soulblade_coverLEFT,
+			gui_icons.soulblade_bloodbar,
+			)
 
 /mob/living/simple_animal/shade/say(var/message)
 	. = ..(message, "C")
@@ -93,14 +104,10 @@
 				purge = 3
 			adjustBruteLoss(damage)
 			O.on_attack(src, user)
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")
+			visible_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")
 		else
 			to_chat(usr, "<span class='warning'> This weapon is ineffective, it does no damage.</span>")
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='warning'> [user] gently taps [src] with [O].</span>")
+			visible_message("<span class='warning'> [user] gently taps [src] with [O].</span>")
 	return
 
 /mob/living/simple_animal/shade/shuttle_act()
@@ -125,7 +132,7 @@
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
-	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used)
+	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used && gui_icons && gui_icons.soulblade_bloodbar)
 		var/obj/item/weapon/melee/soulblade/SB = loc
 		if(fire)
 			switch(SB.health)
@@ -148,7 +155,7 @@
 		else
 			purged.icon_state = "purge0"
 
-	if(client)
+	if(client && hud_used && healths)
 		switch(health)
 			if(50 to INFINITY)
 				healths.icon_state = "shade_health0"

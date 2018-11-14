@@ -183,6 +183,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/obj/structure/bed/chair/vehicle/gigadrill/G = AM
 		G.drill(src)
 
+	else if(istype(AM,/mob/living/simple_animal/construct/armoured))
+		attack_construct(AM)
+
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
 		for(var/trydir in cardinal)
@@ -399,11 +402,23 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(M.environment_smash_flags & SMASH_ASTEROID && prob(30))
 		GetDrilled(0)
 
+/turf/unsimulated/mineral/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		if(do_after(user, src, 40))
+			GetDrilled(0)
+		return 1
+	return 0
+
 /turf/unsimulated/mineral/proc/DropMineral()
 	if(!mineral)
 		return
 
 	var/obj/item/weapon/ore/O = new mineral.ore (src)
+	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
+	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O))
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
@@ -411,7 +426,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		O.geologic_data = geologic_data
 	return O
 
-/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = 0)
+/**
+* artifact_fail: If true, negative effects will be applied to mobs in range when artifacts inside
+*                this turf are destroyed.
+* safety_override: If true, dangerous side effects of the turf being drilled will be immediately
+*                  disabled after drilling (ie. gibtonite will be immediately disarmed).
+* driller: Whatever is doing the drilling.  Used for some messages.
+*/
+/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if (mineral && mineral.result_amount)
 		for (var/i = 1 to mineral.result_amount - mined_ore)
 			DropMineral()
@@ -454,7 +476,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(mineral)
 		var/mineral_name = mineral.display_name
 		if(rockernaut)
-			return "embed_[mineral_name]"
+			return "[has_icon('icons/turf/mine_overlays.dmi',"embed_[mineral_name]")?"embed_[mineral_name]":"embed_Iron"]"
 		return mineral_name
 	return null
 
@@ -730,6 +752,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/mineralSpawnChanceList = list(
 		"Iron"      = 50,
 		"Plasma"    = 25,
+		"Ice"		= 10,
 		"Uranium"   = 5,
 		"Gold"      = 5,
 		"Silver"    = 5,
@@ -978,12 +1001,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		else if(istype(R.module_active, /obj/item/device/mining_scanner))
 			attackby(R.module_active, R) //let's bump to disable. This is kinder, because borgs need some love
 
-	else if(istype(AM,/obj/mecha))
-		var/obj/mecha/M = AM
-		if(istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
-			M.occupant_message("<span class='warning'>Safety features prevent this action.</span>")
-			bump_reject = 1
-
 	if(!bump_reject) //if we haven't been pushed off, we do the drilling bit
 		return ..()
 
@@ -1030,10 +1047,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
-/turf/unsimulated/mineral/gibtonite/GetDrilled()
+/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
+		if (safety_override)
+			if (driller && istype(driller))
+				driller.visible_message("<span class='notice'>\The [driller] safely defuses the [src].</span>")
+			defuse()
 		return
 	if(stage == 1 && mineral.result_amount >= 1) //Gibtonite deposit goes kaboom
 		var/turf/bombturf = get_turf(src)

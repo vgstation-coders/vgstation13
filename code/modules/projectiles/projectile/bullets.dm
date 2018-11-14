@@ -850,3 +850,62 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "faggot"
 	damage = 10
+
+/obj/item/projectile/bullet/syringe
+	name = "syringe"
+	icon_state = "syringe"
+	damage = 0
+	nodamage = 1
+	phase_type = null
+	penetration = 0
+	fire_sound = 'sound/items/syringeproj.ogg'
+	travel_range = 6
+	custom_impact = TRUE
+	var/capacity = 15
+	var/stealthy = FALSE
+
+/obj/item/projectile/bullet/syringe/New(atom/A, var/obj/item/weapon/reagent_containers/syringe/source_syringe)
+	..()
+	if(source_syringe)
+		create_reagents(source_syringe.reagents.total_volume)
+		source_syringe.reagents.trans_to(src, source_syringe.reagents.total_volume)
+	else
+		create_reagents(capacity)
+
+/obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
+	if(!A)
+		return
+	..()
+	if(ismob(A))
+		var/mob/M = A
+		var/blocked
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species && (H.species.chem_flags & NO_INJECT))
+				H.visible_message("<span class='warning'>\The [src] bounces harmlessly off of \the [H].</span>", "<span class='notice'>\The [src] bounces off you harmlessly and breaks as it hits the ground.</span>")
+				return
+
+			blocked = istype(H.wear_suit, /obj/item/clothing/suit/space)
+		//Syringe gun attack logging by Yvarov
+		var/R
+		if(reagents.total_volume)
+			for(var/datum/reagent/E in reagents.reagent_list)
+				R += E.id + " ("
+				R += num2text(E.volume) + "),"
+			M.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with \a <b>[src]</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+			firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with \a <b>[src]</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+			msg_admin_attack("[firer] ([firer.ckey]) shot [M] ([M.ckey]) with \a [src] ([R]) [blocked ? "\[BLOCKED\]" : ""] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
+
+		if(!blocked || stealthy)
+			reagents.trans_to(M, reagents.total_volume)
+			if(!stealthy)
+				M.visible_message("<span class='danger'>\The [M] is hit by \the [src]!</span>")
+			else
+				to_chat(M, "<span class='danger'>You feel a slight prick.</span>")
+
+		else
+			var/mob/living/carbon/human/H = M
+			H.visible_message("<span class='danger'>\The [H] is hit by \the [src], but \his [H.wear_suit] blocked it!</span>") // Fuck you validhunters.
+
+/obj/item/projectile/bullet/syringe/dart
+	stealthy = TRUE

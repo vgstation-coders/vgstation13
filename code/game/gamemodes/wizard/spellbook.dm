@@ -91,7 +91,7 @@
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
-/obj/item/weapon/spellbook/attack_self(mob/user = usr)
+/obj/item/weapon/spellbook/attack_self(var/mob/user)
 	if(!user)
 		return
 
@@ -182,7 +182,7 @@
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy())
+		if(!A.can_buy(user))
 			continue
 
 		var/artifact_name = A.name
@@ -313,8 +313,10 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price))
+				if(SA.can_buy(usr) && use(SA.price))
 					SA.purchased(usr)
+					if(SA.one_use)
+						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
 		attack_self(usr)
@@ -803,8 +805,17 @@
 	desc = "This book seems like it moves away as you get closer to it."
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
+	user.drop_item(src, force_drop = 1)	//no taking the transportation device with you
 	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
-	var/area/thearea = pick(areas)
+	var/area/thearea
+	var/area/prospective = pick(areas)
+	while(!thearea)
+		if(prospective.type != /area)
+			var/turf/T = pick(get_area_turfs(prospective.type))
+			if(T.z != 2)
+				thearea = prospective
+				break
+		prospective = pick(areas)
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)

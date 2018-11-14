@@ -50,6 +50,9 @@
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/changeling)
+		return
 	AppendObjective(/datum/objective/absorb)
 	AppendObjective(/datum/objective/target/assassinate)
 	AppendObjective(/datum/objective/target/steal)
@@ -215,12 +218,6 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 3
 	verbpath = /obj/item/verbs/changeling/proc/changeling_lsdsting
 
-/datum/power/changeling/DeathSting
-	name = "Death Sting"
-	desc = "We silently sting a human, filling him with potent chemicals. His rapid death is all but assured."
-	genomecost = 8
-	verbpath = /obj/item/verbs/changeling/proc/changeling_DEATHsting
-
 /datum/power/changeling/unfat_sting
 	name = "Unfat Sting"
 	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
@@ -276,7 +273,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/power/changeling/DigitalCamoflague
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
-	helptext = "We cannot be tracked by camera while using this skill.  However, humans looking at us will find us... uncanny.  We must constantly expend chemicals to maintain our form like this."
+	helptext = "We cannot be tracked by camera while using this skill. We must constantly expend chemicals to maintain our form like this."
 	genomecost = 3
 	allowduringlesserform = 1
 	verbpath = /obj/item/verbs/changeling/proc/changeling_digitalcamo
@@ -621,3 +618,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		call(M.current, Thepower.verbpath)()
 	else if(remake_verbs)
 		M.current.make_changeling()
+
+/datum/role/changeling/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
+	if (!power_holder) // This is for when you spawn as a new_player
+		return
+	new_character.make_changeling() // Will also restore any & all genomes/powers we have

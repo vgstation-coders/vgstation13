@@ -78,8 +78,8 @@
 
 	var/killswitch = FALSE
 	var/killswitch_time = 60
-	var/weapon_lock = FALSE
-	var/weaponlock_time = 120
+	var/modulelock = FALSE
+	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
@@ -98,6 +98,9 @@
 //Access
 	var/list/req_access = list(access_robotics) //Access needed to open cover
 	var/list/robot_access = list(access_ai_upload, access_robotics, access_maint_tunnels, access_external_airlocks) //Our current access
+
+	var/last_tase_timeofday
+	var/last_high_damage_taken_timeofday
 
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
@@ -125,6 +128,7 @@
 		camera.c_tag = real_name
 		if(!scrambledcodes)
 			camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
+			cyborg_cams[CAMERANET_ROBOTS] += camera
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -458,10 +462,21 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
+	if(istype(Proj, /obj/item/projectile/energy/electrode))
+		last_tase_timeofday = world.timeofday
+		if(can_diagnose())
+			to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
+	if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
+		last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	return 2
 
+/mob/living/silicon/robot/emp_act(severity)
+	..()
+	if(prob(50/severity))
+		modulelock_time = rand(10,60)
+		modulelock = TRUE
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -985,10 +1000,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return
@@ -1307,3 +1318,7 @@
 
 /mob/living/silicon/robot/get_cell()
 	return cell
+
+/mob/living/silicon/robot/proc/toggle_modulelock()
+	modulelock = !modulelock
+	return modulelock

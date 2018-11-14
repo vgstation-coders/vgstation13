@@ -202,6 +202,81 @@
 		holder.reagent_list -= src
 		holder = null
 
+/datum/reagent/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	description = "Prescribed daily."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#00FF00"
+	custom_metabolism = 0.01
+
+/datum/reagent/piccolyn/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+		return 1
+
+	var/list/nearest_doctor = null
+	for(var/mob/living/L in view(M))
+		if(L == M)
+			continue
+		if(L.stat)
+			continue
+		if(nearest_doctor && get_dist(L,M)>=get_dist(nearest_doctor,M))
+			continue //We already have a closer living target
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			var/list/medical_uniforms_list = list(/obj/item/clothing/under/rank/chief_medical_officer,
+													/obj/item/clothing/under/rank/medical,
+													/obj/item/clothing/under/rank/nursesuit,
+													/obj/item/clothing/under/rank/nurse,
+													/obj/item/clothing/under/rank/chemist,
+													/obj/item/clothing/under/rank/pharma,
+													/obj/item/clothing/under/rank/geneticist,
+													/obj/item/clothing/under/rank/virologist)
+			if(H.is_wearing_any(medical_uniforms_list,slot_w_uniform))
+				//Check to see if it's wearing the right stuff
+				nearest_doctor = H
+		else if(isrobot(L))
+			var/mob/living/silicon/robot/R = L
+			if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_MEDICAL))
+				nearest_doctor = R
+	if(!nearest_doctor)
+		return 1
+	var/D = "doctor"
+	if(ishuman(nearest_doctor))
+		var/mob/living/carbon/human/H = nearest_doctor
+		D = get_first_word(H.name)
+	else
+		D = pick("bot","borg","borgo","autodoc","roboticist","cyborg","robot")
+	var/list/thanks = list("Thanks, doc.",
+							"You're alright, doc.",
+							"'Preciate it, doc.",
+							"Cheers, doctor.",
+							"Thank you, doctor.",
+							"Much appreciated, doctor.",
+							"Thanks, mate!",
+							"Thanks, doc!",
+							"Zank you, Herr Doktor!",
+							"Danke, Herr Doktor!",
+							"Thank you doctor!",
+							"You are great doctor!",
+							"I love this doctor!",
+							"Aye, thanks doc!",
+							"Thank ye, doctor!",
+							"You deserve a medal, doc.",
+							"Thanks for the aid.",
+							"Yeah, thanks doc!",
+							"All right, [D], I feel good!",
+							"Thanks, [D].",
+							"Thank you, [D].",
+							"'Preciate it, [D].",
+							"Thanks for the aid, [D]."
+							)
+	M.say(pick(thanks))
+	holder.del_reagent(PICCOLYN)
+
 /datum/reagent/muhhardcores
 	name = "Hardcores"
 	id = BUSTANUT
@@ -602,6 +677,8 @@
 		holder.remove_reagent(PLASMA, REM)
 	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
 		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
+	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
+		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
 	if(holder.has_reagent(CYANIDE))
 		holder.remove_reagent(CYANIDE, REM)
 	if(holder.has_reagent(AMATOXIN))
@@ -690,6 +767,24 @@
 	M.adjustToxLoss(4)
 	M.adjustOxyLoss(4)
 	M.sleeping += 1
+
+/datum/reagent/potassium_hydroxide
+	name = "Potassium Hydroxide"
+	id = POTASSIUM_HYDROXIDE
+	description = "A corrosive chemical used in making soap and batteries."
+	reagent_state = REAGENT_STATE_SOLID
+	overdose_am = REAGENTS_OVERDOSE
+	custom_metabolism = 0.1
+	color = "#ffffff" //rgb: 255, 255, 255
+	density = 2.12
+	specheatcap = 65.87 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
+
+/datum/reagent/potassium_hydroxide/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustFireLoss(REM)
 
 //Quiet and lethal, needs at least 4 units in the person before they'll die
 /datum/reagent/chefspecial
@@ -915,7 +1010,7 @@
 	description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#0064C8" //rgb: 0, 100, 200
-	custom_metabolism = 5 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
+	custom_metabolism = 2 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
 	specheatcap = 4.183
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
@@ -934,13 +1029,83 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if (iscultist(H))
-			H.Dizzy(6)
-			H.Jitter(12)
-			if (prob(20))
-				H.Knockdown(1)
-			else if (prob(30))
-				H.confused = 2
-			H.eye_blurry = max(H.eye_blurry, 3)
+			var/unholy = H.checkTattoo(TATTOO_HOLY)
+			var/current_act = max(-1,min(5,veil_thickness))
+			var/datum/role/cultist/cult = H.mind.GetRole(CULTIST)
+			if (cult.holywarning_cooldown <= 0)
+				cult.holywarning_cooldown = 5
+				if (unholy)
+					to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
+				else
+					switch (current_act)
+						if (CULT_MENDED)
+							to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
+						if (CULT_PROLOGUE)
+							to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
+						if (CULT_ACT_I)
+							to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
+						if (CULT_ACT_II)
+							to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
+						if (CULT_ACT_III)
+							to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
+						if (CULT_ACT_IV)
+							to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
+						if (CULT_EPILOGUE)
+							to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
+
+			if (unholy)
+				H.eye_blurry = max(H.eye_blurry, 3)
+				return
+			else
+				switch (current_act)
+					if (CULT_MENDED)
+						H.dust()
+						return
+					if (CULT_PROLOGUE)
+						H.eye_blurry = max(H.eye_blurry, 3)
+						H.Dizzy(3)
+					if (CULT_ACT_I)
+						H.eye_blurry = max(H.eye_blurry, 6)
+						H.Dizzy(6)
+						H.stuttering = max(H.stuttering, 6)
+					if (CULT_ACT_II)
+						H.eye_blurry = max(H.eye_blurry, 12)
+						H.Dizzy(12)
+						H.stuttering = max(H.stuttering, 12)
+						H.Jitter(12)
+					if (CULT_ACT_III)
+						H.eye_blurry = max(H.eye_blurry, 16)
+						H.Dizzy(16)
+						H.stuttering = max(H.stuttering, 16)
+						H.Jitter(16)
+						if (prob(50))
+							H.Knockdown(1)
+						else if (prob(50))
+							H.confused = 2
+						H.adjustOxyLoss(5)
+					if (CULT_ACT_IV)
+						H.eye_blurry = max(H.eye_blurry, 20)
+						H.Dizzy(20)
+						H.stuttering = max(H.stuttering, 20)
+						H.Jitter(20)
+						if (prob(60))
+							H.Knockdown(2)
+						else if (prob(60))
+							H.confused = 4
+						H.adjustOxyLoss(10)
+						M.adjustToxLoss(5)
+					if (CULT_EPILOGUE)
+						H.eye_blurry = max(H.eye_blurry, 30)
+						H.Dizzy(30)
+						H.stuttering = max(H.stuttering, 30)
+						H.Jitter(30)
+						if (prob(70))
+							H.Knockdown(4)
+						else if (prob(70))
+							H.confused = 6
+						H.adjustOxyLoss(20)
+						M.adjustToxLoss(10)
+
 		if (islegacycultist(H))
 			if (prob(10))
 				var/datum/role/legacy_cultist/LC = H.mind.GetRole(LEGACY_CULTIST)
@@ -950,17 +1115,17 @@
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)
-			if(!(VAMP_MATURE in V.powers))
+			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
-				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
+				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
 				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 		var/datum/role/thrall/T = isthrall(H)
 		if(T)
 			if (prob(35)) // 35% chance of dethralling
-				T.Drop()
+				T.Drop(TRUE)
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
@@ -975,7 +1140,6 @@
 			H.Knockdown(3)
 			H.confused = 3
 			H.eye_blurry = max(H.eye_blurry, 6)
-
 
 	/*
 	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
@@ -1559,12 +1723,12 @@
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
 	else if(istype(O,/obj/effect/plantsegment))
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
 		I.desc = "Looks like these were some [O.name] some time ago."
 		var/obj/effect/plantsegment/K = O
 		K.die_off()
@@ -2486,6 +2650,11 @@
 		D.stage--
 		if(D.stage < 1)
 			D.cure()
+	for(var/A in M.virus2)
+		var/datum/disease2/disease/D2 = M.virus2[A]
+		D2.stage--
+		if(D2.stage < 1)
+			D2.cure(M)
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
@@ -3262,15 +3431,19 @@
 		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
+				for(var/datum/organ/external/E in H.organs)
+					for(var/datum/wound/internal_bleeding/W in E.wounds)
+						W.heal_damage(0.8, TRUE)
+						holder.remove_reagent(MEDNANOBOTS, 1/4)
 			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
 					M.adjustOxyLoss(-5)
 					M.heal_organ_damage(5, 5)
 					M.adjustToxLoss(-5)
 					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+					holder.remove_reagent("mednanobots", 1/4)  //This line of code will remove 1/4 of 1u whenever the nanobots heal any of the 5 different damage types along with internal bleeding. In short whenever you are healed it will remove 0.25u making each unit capable of healing a maximum of 20 per damage type.
 			if(percent_machine>5)
 				if(holder.has_reagent("mednanobots"))
 					percent_machine-=1
@@ -3285,10 +3458,17 @@
 				D.stage--
 				if(D.stage < 1)
 					D.cure()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				for(var/A in C.virus2)
+					var/datum/disease2/disease/D2 = C.virus2[A]
+					D2.stage--
+					if(D2.stage < 1)
+						D2.cure(M)
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
 			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
@@ -3310,6 +3490,13 @@
 				D.stage--
 				if(D.stage < 1)
 					D.cure()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				for(var/A in C.virus2)
+					var/datum/disease2/disease/D2 = C.virus2[A]
+					D2.stage--
+					if(D2.stage < 1)
+						D2.cure(M)
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
@@ -5332,10 +5519,10 @@
 				if(istype(M.current.loc,/obj/mecha))
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
-				var/image/I = image('icons/logos.dmi', loc = imageloc, icon_state = "metaclub")
+				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
 				I.plane = METABUDDY_HUD_PLANE
 				M.current.client.images += I
-				var/image/J = image('icons/logos.dmi', loc = imagelocB, icon_state = "metaclub")
+				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
 				J.plane = METABUDDY_HUD_PLANE
 				new_buddy.current.client.images += J
 
@@ -6942,3 +7129,49 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(T)
 		T.color = pick(random_color_list)
 	..()
+
+/datum/reagent/degeneratecalcium
+	name = "Degenerate calcium"
+	id = DEGENERATECALCIUM
+	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#ccffb3" //rgb: 204, 255, 179
+	density = 3.9
+	specheatcap = 128.12
+	custom_metabolism = 0.1
+
+/datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		//if you have 30 or more brute damage: rapidly heals, makes your bones stronk
+		//if you have less than 30 brute damage: rapidly heals, breaks all your bones one by one
+		//(the rapid healing is likely to land you in that "less than 30" club real quick if you're not careful...)
+		H.heal_organ_damage(3 * REM, 0)
+
+		if(H.getBruteLoss() >= 30)
+			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
+				if((E.status & ORGAN_BROKEN) || (E.min_broken_damage >= E.max_damage))
+					continue
+				E.min_broken_damage += rand(4,8) * REM
+				if(E.min_broken_damage >= E.max_damage)
+					E.min_broken_damage = E.max_damage
+					to_chat(H, "Your [E.display_name] feels [pick("sturdy", "hardy")] as it can be!") //todo unfunny skeleton jokes (someone will probably comment them in the PR)
+		else if(prob((100 - H.getBruteLoss() * 100 / 30)/3)) //33% at 0 damage, 16.6% at 15 damage, 1.1% at 29 damage etc
+			var/datum/organ/external/E = pick(H.organs) //"organs" list only contains external organs aka limbs
+			E.fracture()
+
+/datum/reagent/aminomicin
+	name = "Aminomicin"
+	id = AMINOMICIN
+	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with pure nutriment."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 13.49 //our ingredients are pretty dense
+	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin

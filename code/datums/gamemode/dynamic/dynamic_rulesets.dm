@@ -1,5 +1,3 @@
-
-
 /datum/dynamic_ruleset
 	var/name = ""//For admin logging, and round end scoreboard
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
@@ -7,6 +5,7 @@
 	var/list/candidates = list()//list of players that are being drafted for this rule
 	var/list/assigned = list()//list of players that were selected for this rule
 	var/role_category = ROLE_TRAITOR//rule will only accept candidates with "Yes" or "Always" in the preferences for this role
+	var/list/protected_from_jobs = list() // if set, and config.protect_roles_from_antagonist = 0, then the rule will have a much lower chance than usual to pick those roles.
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
 	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
@@ -28,8 +27,12 @@
 
 	var/datum/gamemode/dynamic/mode = null
 
+	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
+
 /datum/dynamic_ruleset/New()
 	..()
+	if (config.protect_roles_from_antagonist)
+		restricted_from_jobs += protected_from_jobs
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		mode = ticker.mode
 	else
@@ -78,7 +81,8 @@
 	searching = 1
 	var/icon/logo_icon = icon('icons/logos.dmi', logo)
 	for(var/mob/M in possible_volunteers)
-		if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
+		var/banned_factor = (jobban_isbanned(M, role_category) || (role_category_override && jobban_isbanned(M, role_category_override)))
+		if(!M.client || banned_factor || M.client.is_afk())
 			continue
 
 		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [role_category]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
@@ -134,8 +138,12 @@
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category))//are they willing and not antag-banned?
+		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
+			continue
+		if (P.mind.assigned_role in protected_from_jobs)
+			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
+				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 			candidates.Remove(P)
@@ -168,8 +176,12 @@
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category))//are they willing and not antag-banned?
+		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category)|| (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
+			continue
+		if (P.mind.assigned_role in protected_from_jobs)
+			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
+				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 			candidates.Remove(P)

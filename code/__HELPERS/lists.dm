@@ -130,6 +130,8 @@
 
 //Pretends to pick an element based on its weight but really just seems to pick a random element.
 /proc/pickweight(list/L)
+	if(!L || !L.len)
+		return
 	var/total = 0
 	var/item
 	for (item in L)
@@ -137,13 +139,13 @@
 			L[item] = 1
 		total += L[item]
 
-	total = rand(1, total)
+	total = rand()*total
 	for (item in L)
 		total -=L [item]
 		if (total <= 0)
 			return item
 
-	return null
+	return L[L.len]
 
 //Pick a random element from the list and remove it from the list.
 /proc/pick_n_take(list/L)

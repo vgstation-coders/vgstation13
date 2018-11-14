@@ -140,7 +140,7 @@ forLineInText(text)
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
-	return strip_html_simple(name, max_length)
+	return utf8_sanitize(name, user, max_length)
 
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
@@ -312,6 +312,13 @@ proc/checkhtml(var/t)
 //Returns a string with reserved characters and spaces before the first word and after the last word removed.
 /proc/trim(text)
 	return trim_left(trim_right(text))
+
+//Returns the first word in a string.
+/proc/get_first_word(text)
+	for(var/i = 1 to length(text))
+		if(text2ascii(text, i) == 32)
+			return copytext(text, 1, i)
+	return text
 
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
@@ -503,6 +510,8 @@ var/quote = ascii2text(34)
 		if(hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
+			if(number == 0)
+				return out
 
 	if(number < 100)
 		// Teens

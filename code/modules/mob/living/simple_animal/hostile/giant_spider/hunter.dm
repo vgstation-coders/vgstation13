@@ -10,9 +10,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 20
 	poison_per_bite = 5
-	// Hunters attack doors (jam them open)
 	wanted_objects = list(
-		/obj/machinery/door/airlock,
 		/obj/machinery/bot,          // Beepsky and friends
 		/obj/machinery/light,        // Bust out lights
 	)

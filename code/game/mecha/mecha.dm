@@ -432,10 +432,7 @@
 		else if(istype(obstacle, /obj/structure/grille/))
 			var/obj/structure/grille/G = obstacle
 			G.health = (0.25*initial(G.health))
-			G.broken = 1
-			G.icon_state = "[initial(G.icon_state)]-b"
-			G.setDensity(FALSE)
-			getFromPool(/obj/item/stack/rods, get_turf(G.loc))
+			G.healthcheck()
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/table))
@@ -575,8 +572,11 @@
 		src.destroy()
 	return
 
-/obj/mecha/attack_hand(mob/living/user as mob)
-	src.log_message("Attack by hand/paw. Attacker - [user].",1)
+/obj/mecha/attack_hand(mob/living/user as mob, monkey = FALSE)
+	if(monkey)
+		src.log_message("Attack by paw. Attacker - [user].",1)
+	else
+		src.log_message("Attack by hand. Attacker - [user].",1)
 	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
@@ -589,7 +589,7 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return src.attack_hand(user, TRUE)
 
 
 /obj/mecha/attack_alien(mob/living/user as mob)
@@ -1487,17 +1487,19 @@
 /////////////////////////
 
 /obj/mecha/proc/operation_allowed(mob/living/carbon/human/H)
-	for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-		if(src.check_access(ID,src.operation_req_access))
-			return 1
-	return 0
+	if(istype(H))
+		for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
+			if(src.check_access(ID,src.operation_req_access))
+				return 1
+		return 0
 
 
 /obj/mecha/proc/internals_access_allowed(mob/living/carbon/human/H)
-	for(var/atom/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-		if(src.check_access(ID,src.internals_req_access))
-			return 1
-	return 0
+	if(istype(H))
+		for(var/atom/ID in list(H.get_active_hand(), H.wear_id, H.belt))
+			if(src.check_access(ID,src.internals_req_access))
+				return 1
+		return 0
 
 
 /obj/mecha/check_access(obj/item/weapon/card/id/I, list/access_list)
@@ -1857,7 +1859,7 @@
 	if (href_list["change_name"])
 		if(usr != src.occupant)
 			return
-		var/newname = strip_html_simple(input(occupant,"Choose new exosuit name","Rename exosuit",initial(name)) as text, MAX_NAME_LEN)
+		var/newname = stripped_input(occupant,"Choose new exosuit name","Rename exosuit",initial(name),MAX_NAME_LEN)
 		if(newname && trim(newname))
 			name = newname
 		else

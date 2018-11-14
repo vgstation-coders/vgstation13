@@ -19,6 +19,7 @@
 	var/nullified = 0
 	var/smitecounter = 0
 
+	var/reviving = FALSE
 	var/draining = FALSE
 	var/blood_usable = STARTING_BLOOD
 	var/blood_total = STARTING_BLOOD
@@ -58,7 +59,6 @@
 
 /datum/role/vampire/OnPostSetup()
 	. = ..()
-
 	update_vamp_hud()
 	ForgeObjectives()
 	for(var/type_VP in roundstart_powers)
@@ -81,7 +81,7 @@
 	var/text = {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a> <br/>"}
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"}
 	return text
 
 /datum/role/vampire/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
@@ -102,13 +102,13 @@
 // -- Not sure if this is meant to work like that.
 // I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
-	. = ..() // Who he was, his objectives...
-	. += "Total blood collected: <b>[blood_total]</b><br/>"
-	for (var/datum/role/thrall/T in faction.members)
-		. += T.GetScoreboard()
-		. += "<br/>"
+	. = "Total blood collected: <b>[blood_total]</b><br/>"
+	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/vampire)
+		return
 
 	AppendObjective(/datum/objective/acquire_blood)
 
@@ -160,7 +160,7 @@
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
 
 	to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
-	to_chat(target, "<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
 
 	if(!iscarbon(assailant))
 		target.LAssailant = null
@@ -223,10 +223,10 @@
 		H.change_sight(adding = SEE_MOBS)
 
 
-/datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
-	if (!istype(M))
+/datum/role/vampire/proc/handle_enthrall(var/datum/mind/enthralled)
+	if (!istype(enthralled))
 		return FALSE
-	return new/datum/role/thrall(thrall = M, master = src) // Creating a new thrall
+	return new/datum/role/thrall(M = enthralled, fac = src.faction, master = src) // Creating a new thrall
 /*
 -- Life() related procs --
 */
@@ -306,7 +306,7 @@
 		if(prob(35))
 			to_chat(H, "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>")
 
-	if(!(VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
+	if((VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
 		nullified = max(5, nullified + 2)
 		if(prob(35))
 			to_chat(H, "<span class='sinister'>You feel yourself growing weaker.</span>")
@@ -316,14 +316,14 @@
 		*/
 
 	if(!nullified) //Checks to see if you can benefit from your vamp powers here
-		if(VAMP_MATURE in powers)
+		if(!(VAMP_MATURE in powers))
 			smitetemp -= 1
-		if(VAMP_SHADOW in powers)
+		if(!(VAMP_SHADOW in powers))
 			var/turf/T = get_turf(H)
 			if((T.get_lumcount() * 10) < 2)
 				smitetemp -= 1
 
-		if(VAMP_UNDYING in powers)
+		if(!(VAMP_UNDYING in powers))
 			smitetemp -= 1
 
 	if(smitetemp <= 0) //if you weren't smote by the tile you're on, remove a little holy
@@ -375,7 +375,7 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
-/datum/role/vampire/handle_mind_transfer(var/mob/living/new_character)
+/datum/role/vampire/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
 	powers.Cut()
 	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
@@ -389,9 +389,12 @@
 -- Helpers --
 */
 
+/datum/role/vampire/update_antag_hud()
+	update_vamp_hud()
+
 /datum/role/vampire/proc/update_vamp_hud()
 	var/mob/M = antag.current
-	if(M.hud_used)
+	if(M && M.client && M.hud_used)
 		if(!M.hud_used.vampire_blood_display)
 			M.hud_used.vampire_hud()
 			//hud_used.human_hud(hud_used.ui_style)
@@ -452,14 +455,11 @@
 
 	var/datum/role/vampire/master
 
-/datum/role/thrall/New(var/datum/mind/thrall, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
+/datum/role/thrall/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
 	. = ..()
 	if(!istype(master))
 		return FALSE
 	src.master = master
-	master.faction.members += src
-	faction = master.faction
-	antag = thrall
 	update_faction_icons()
 	Greet(TRUE)
 	ForgeObjectives()
@@ -480,10 +480,10 @@
 	P.set_target(master.antag)
 	AppendObjective(P)
 
-
 /datum/role/thrall/Drop(var/deconverted = FALSE)
 	var/mob/M = antag.current
-	M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-	"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+	if (deconverted)
+		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 	update_faction_icons()
 	return ..()

@@ -68,6 +68,7 @@
 	required_reagents = list(WATER = 1, POTASSIUM = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
+	secondary = 1
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
@@ -82,8 +83,25 @@
 	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		holder.del_reagent(POTASSIUM)
 		holder.del_reagent(WATER)
+		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+		holder.add_reagent(HYDROGEN, created_volume * REM)
 	else
 		holder.clear_reagents()
+		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+		holder.add_reagent(HYDROGEN, created_volume * REM)
+
+/datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
+	name = "Soap"
+	id = "soap"
+	result = null
+	required_reagents = list(POTASSIUM_HYDROXIDE = 20, NUTRIMENT = 5)
+	required_temp = T0C + 50
+	result_amount = 1
+
+/datum/chemical_reaction/soap/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/soap(location)
 
 /datum/chemical_reaction/creatine
 	name = "Creatine"
@@ -478,7 +496,7 @@
 	name = "Nitroglycerin Explosion"
 	id = NITROGLYCERIN
 	result = NITROGLYCERIN
-	required_reagents = list(GLYCEROL = 1, PACID = 1, SACID = 1)
+	required_reagents = list(GLYCEROL = 1, PHENOL = 1, FORMIC_ACID = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
 
@@ -701,7 +719,7 @@
 	id = "metalsolid"
 	result = null
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
-	result_amount = 1
+	result_amount = 1 //amount of sheets created per the above reagents ^
 
 /datum/chemical_reaction/solidification/proc/product_to_spawn()
 	return /obj/item/stack/sheet/metal
@@ -709,7 +727,7 @@
 /datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	var/to_spawn = product_to_spawn()
-	new to_spawn(location, result_amount)
+	new to_spawn(location, created_volume)
 
 /datum/chemical_reaction/solidification/plasma
 	name = "Solid Plasma"
@@ -771,6 +789,16 @@
 /datum/chemical_reaction/solidification/plastic/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/plastic
 
+/datum/chemical_reaction/solidification/plasticphenol
+	name = "Plastic"
+	id = "solidplastic"
+	result = null
+	required_reagents = list(PHENOL = 10, PLASTICIDE = 20)
+	result_amount = 10
+
+/datum/chemical_reaction/solidification/plastic/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/plastic
+
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"
 	id = CONDENSEDCAPSAICIN
@@ -784,6 +812,13 @@
 	result = METHYLIN
 	required_reagents = list(HYDROGEN = 1, CHLORINE = 1, ETHANOL = 1)
 	required_catalysts = list(FLUORINE = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	result = PICCOLYN
+	required_reagents = list(COPPER = 1, TUNGSTEN = 1, FLUORINE = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/explosion_bicarodyne
@@ -1358,7 +1393,14 @@
 		else if(ismob(location)) //Copy the mob! Owwwwwwwwwww this is going to be fun
 			var/mob/M = location
 
-			var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), location)
+			var/mimictype = /obj/item/stack/sheet/wood/bigstack
+			if(ishuman(M))
+				mimictype = /obj/structure/mannequin/wood
+				if(isvox(M))
+					mimictype = /obj/structure/mannequin/wood/vox
+			else if(ismonkey(M))
+				mimictype = /obj/structure/mannequin/wood/monkey
+			var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), mimictype)
 			mimic.appearance = M.appearance //Because mimics copy appearances from paths, not actual existing objects.
 			to_chat(M, "<span class='sinister'>You feel something thoroughly analyzing you from inside...</span>")
 
@@ -2237,7 +2279,8 @@
 
 /datum/chemical_reaction/cheesewheel/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
 
 /datum/chemical_reaction/butter
 	name = "Butter"
@@ -2249,7 +2292,8 @@
 
 /datum/chemical_reaction/butter/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
 
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
@@ -2268,7 +2312,8 @@
 
 /datum/chemical_reaction/syntiflesh/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
 
 /datum/chemical_reaction/hot_ramen
 	name = "Hot Ramen"
@@ -3232,92 +3277,50 @@
 	id = COLORFUL_REAGENT
 	result = COLORFUL_REAGENT
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
-
-//Karmotrine Drinks
-
-/datum/chemical_reaction/smokyroom
-	name = "Smoky Room"
-	id = SMOKYROOM
-	result = SMOKYROOM
-	required_reagents = list(MANHATTAN = 1, ICE = 1, KARMOTRINE = 2)
-	result_amount = 4
-
-/datum/chemical_reaction/ragstoriches
-	name = "Rags to Riches"
-	id = RAGSTORICHES
-	result = RAGSTORICHES
-	required_reagents = list(VODKA = 1, COGNAC = 1, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/badtouch
-	name = "Bad Touch"
-	id = BAD_TOUCH
-	result = BAD_TOUCH
-	required_reagents = list(RUM = 2, KAHLUA = 1, ICE = 1, KARMOTRINE = 1)
-	result_amount = 5
-
-/datum/chemical_reaction/electricsheep
-	name = "Electric Sheep"
-	id = ELECTRIC_SHEEP
-	result = ELECTRIC_SHEEP
-	required_reagents = list(WINE = 1, SILICON = 1, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/suicide
-	name = "Suicide"
-	id = SUICIDE
-	result = SUICIDE
-	required_reagents = list(SPACEMOUNTAINWIND = 1, DR_GIBB = 1, COLA = 1, LEMON_LIME = 1, KARMOTRINE = 1)
-	result_amount = 5
-
-/datum/chemical_reaction/scientistsserendipity
-	name = "Scientist's Serendipity"
-	id = SCIENTISTS_SERENDIPITY
-	result = SCIENTISTS_SERENDIPITY
-	required_reagents = list(MOONROCKS = 1, KARMOTRINE = 1)
-	result_amount = 2
-
-/datum/chemical_reaction/metabuddy
-	name = "Metabuddy"
-	id = METABUDDY
-	result = METABUDDY
-	required_reagents = list(TONIC = 2, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/waifu
-	name = "Waifu"
-	id = WAIFU
-	result = WAIFU
-	required_reagents = list(SAKE = 1, KARMOTRINE = 4)
-	result_amount = 5
-
-/datum/chemical_reaction/beepskyclassic
-	name = "Beepsky Classic"
-	id = BEEPSKY_CLASSIC
-	result = BEEPSKY_CLASSIC
-	required_reagents = list(BEEPSKY_SMASH = 2, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/spider
-	name = "Spiders"
-	id = SPIDERS
-	result = SPIDERS
-	required_reagents = list(CLONEXADONE = 3, KARMOTRINE = 2)
-	result_amount = 5
-
-/datum/chemical_reaction/weedeater
-	name = "Weed Eater"
-	id = WEED_EATER
-	result = WEED_EATER
-	required_reagents = list(SPACE_DRUGS = 1, AMATOXIN = 1, PSILOCYBIN = 1, KARMOTRINE = 2)
-	result_amount = 5
-
-/datum/chemical_reaction/lemonlime
-	name = "Lemon Lime"
-	id = LEMON_LIME
-	result = LEMON_LIME
-	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/degeneratecalcium
+	name = "Degenerate Calcium"
+	id = DEGENERATECALCIUM
+	result = DEGENERATECALCIUM
+	required_reagents = list(MILK = 1, MUTAGEN = 1)
+	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
+	result_amount = 1
+
+/datum/chemical_reaction/aminomicin
+	name = "Aminomicin"
+	id = AMINOMICIN
+	result = AMINOMICIN
+	required_reagents = list(CLONEXADONE = 1, MUTAGEN = 1, ENZYME = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmouse
+	name = "Synthmouse"
+	id = "synthmouse"
+	result = null
+	required_reagents = list(NUTRIMENT = 5, AMINOMICIN = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	if(ishuman(holder.my_atom))
+		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
+		var/mob/living/carbon/human/H = holder.my_atom
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
+		H.emote("me",1,"winces slightly.")
+		sleep(rand(10 SECONDS, 20 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
+		H.emote("me",1,"winces painfully.")
+		H.adjustToxLoss(1)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
+		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		H.vomit(instant = TRUE) //mouse spawning continues below
+	var/location = get_turf(holder.my_atom)
+	for(var/i=1 to created_volume)
+		new /mob/living/simple_animal/mouse(location)
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

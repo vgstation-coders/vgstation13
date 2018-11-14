@@ -445,12 +445,22 @@
 	if(!istype(M))
 		return
 
+	if(!M.changeling_can_lesser_form())
+		to_chat(M, "<span class='warning'>We cannot perform this ability in this location!</span>")
+		return
 	if(ishuman(M))
 		M.changeling_lesser_form()
 	else if(ismonkey(M))
 		M.changeling_lesser_transform()
 	else
 		to_chat(M, "<span class='warning'>We cannot perform this ability in this form!</span>")
+
+/mob/proc/changeling_can_lesser_form()
+	if(istype(loc, /obj/mecha))
+		return FALSE
+	if(istype(loc, /obj/machinery/atmospherics))
+		return FALSE
+	return TRUE
 
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()
@@ -745,7 +755,7 @@
 /obj/item/verbs/changeling/proc/changeling_digitalcamo()
 	set category = "Changeling"
 	set name = "Toggle Digital Camouflage"
-	set desc = "The AI can no longer track us, but we will look different if examined. Has a constant cost while active."
+	set desc = "The AI can no longer track us. Has a constant cost while active."
 
 	var/mob/M = loc
 	if(!istype(M))
@@ -1193,31 +1203,6 @@ var/list/datum/dna/hivemind_bank = list()
 	feedback_add_details("changeling_powers", "FS")
 	return 1
 
-
-
-/obj/item/verbs/changeling/proc/changeling_DEATHsting()
-	set category = "Changeling"
-	set name = "Death Sting (40)"
-	set desc = "Causes spasms onto death."
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	var/mob/living/carbon/target = M.changeling_sting(40, /obj/item/verbs/changeling/proc/changeling_DEATHsting)
-	if(!target)
-		return
-
-	to_chat(target, "<span class='userdanger'>You feel a tiny prick. Your chest starts tightening.</span>")
-	target.silent = 10
-	target.Paralyse(10)
-	target.Jitter(1000)
-	if(target.reagents)
-		target.reagents.add_reagent(CYANIDE, 20)
-
-	feedback_add_details("changeling_powers", "DTHS")
-	return 1
-
 /obj/item/verbs/changeling/proc/changeling_extract_dna_sting()
 	set category = "Changeling"
 	set name = "Extract DNA Sting (40)"
@@ -1281,6 +1266,7 @@ var/list/datum/dna/hivemind_bank = list()
 		for(var/i = 1 to held_items.len)
 			if(H.can_use_hand(i))
 				good_hand = i
+				break
 	if(good_hand)
 		drop_item(held_items[good_hand], force_drop = 1)
 		var/obj/item/weapon/armblade/A = new (src)

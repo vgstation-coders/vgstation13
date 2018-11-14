@@ -105,6 +105,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/simple_animal/hostile/necromorph/leaper/can_ventcrawl()
 	return TRUE
 
+/mob/living/simple_animal/shade/can_ventcrawl()
+	return TRUE
+
 /mob/living/carbon/alien/can_ventcrawl()
 	if(handcuffed)
 		to_chat(src, "<span class='warning'>You can't vent crawl while you're restrained!</span>")
@@ -208,8 +211,8 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	for(var/datum/pipeline/pipeline in network.line_members)
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
 			if(!A.pipe_image)
-				A.pipe_image = image(A, A.loc, layer = BELOW_PROJECTILE_LAYER, dir = A.dir) //the 20 puts it above Byond's darkness (not its opacity view)
-				A.pipe_image.plane = EFFECTS_PLANE
+				A.pipe_image = image(A, A.loc, layer = ABOVE_LIGHTING_LAYER, dir = A.dir)
+				A.pipe_image.plane = LIGHTING_PLANE
 			pipes_shown += A.pipe_image
 			client.images += A.pipe_image
 

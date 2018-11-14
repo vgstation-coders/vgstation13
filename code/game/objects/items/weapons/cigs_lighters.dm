@@ -272,31 +272,31 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
 	return
 
-/obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob)
+/obj/item/clothing/mask/cigarette/afterattack(obj/reagentholder, mob/user as mob)
 	..()
-	if(istype(glass))	//You can dip cigarettes into beakers and beaker subtypes
-		if(glass.reagents.has_reagent(SACID) || glass.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
-			var/atom/new_butt = new type_butt(get_turf(glass))
+	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+		if(reagentholder.reagents.has_reagent(SACID) || reagentholder.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
+			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
 			processing_objects.Remove(src)
-			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [glass].</span>")
+			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [reagentholder].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		if(glass.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
-			var/atom/new_butt = new type_butt(get_turf(glass))
+		if(reagentholder.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
+			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
 			processing_objects.Remove(src)
-			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [glass].</span>")
+			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [reagentholder].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		var/transfered = glass.reagents.trans_to(src, chem_volume)
+		var/transfered = reagentholder.reagents.trans_to(src, chem_volume)
 		if(transfered)	//If reagents were transfered, show the message
-			to_chat(user, "<span class='notice'>You dip \the [src] into \the [glass].</span>")
+			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder].</span>")
 		else	//If not, either the beaker was empty, or the cigarette was full
-			if(!glass.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell a cigarette is "full"
-				to_chat(user, "<span class='warning'>\The [glass] is empty.</span>")
+			if(!reagentholder.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell a cigarette is "full"
+				to_chat(user, "<span class='warning'>\The [reagentholder] is empty.</span>")
 				return
 
 /obj/item/clothing/mask/cigarette/proc/light(var/flavor_text = "[usr] lights \the [src].")
@@ -614,6 +614,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter
 	name = "cheap lighter"
+	var/initial_name	//a lighter that gets renamed for flavor needs to keep its name
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter"
@@ -666,13 +667,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/update_icon()
 	switch(lit)
 		if(1)
-			name = "lit [initial(name)]"
+			initial_name = name
+			name = "lit [initial_name]"
 			item_state = "[initial(item_state)][color_suffix]on"
 			icon_state = "[initial(icon_state)][color_suffix]-on"
 			damtype = BURN
 			attack_verb = lit_attack_verb
 		if(0)
-			name = "[initial(name)]"
+			if(!initial_name)
+				initial_name = name
+			name = "[initial_name]"
 			item_state = "[initial(item_state)][color_suffix]off"
 			icon_state = "[initial(icon_state)][color_suffix]"
 			damtype = BRUTE

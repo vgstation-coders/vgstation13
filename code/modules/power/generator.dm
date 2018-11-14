@@ -215,16 +215,16 @@
 		return
 
 	if(src.dir & (EAST|WEST))
-		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
+		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
 		if(circ1 && !circ1.anchored)
 			circ1 = null
 
-		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
+		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
 		if(circ2 && !circ2.anchored)
 			circ2 = null
 
 		if(circ1 && circ2)
-			if(circ1.dir != SOUTH || circ2.dir != NORTH)
+			if(circ1.dir != NORTH || circ2.dir != SOUTH)
 				circ1 = null
 				circ2 = null
 
@@ -344,8 +344,8 @@
 	if(dir & (NORTH | SOUTH))
 		vertical = 1
 
-	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "right"])")
-	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "left"])")
+	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "left"])")
+	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "right"])")
 
 	interface.updateContent("total_out", format_watts(last_gen))
 

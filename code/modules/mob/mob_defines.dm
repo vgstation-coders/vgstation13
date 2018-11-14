@@ -97,13 +97,13 @@
 	var/obj/effect/rune/ajourn
 	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
-	var/antitoxs = null
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
 	var/lying = 0
 	var/lying_prev = 0
 	var/canmove = 1
 	var/candrop = 1
+	var/tazed = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -277,6 +277,7 @@
 	var/list/languages[0]
 	var/event/on_spellcast
 	var/event/on_uattack
+	var/event/on_ruattack	//on restrained unarmed attack
 	var/event/on_logout
 	var/event/on_damaged
 	var/event/on_irradiate

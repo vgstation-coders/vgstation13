@@ -69,9 +69,7 @@
 
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
-			stat(null, "Station Time: [worldtime2text()]")
-	statpanel("Lobby")
-	if(statpanel("Lobby") && ticker)
+			stat("Station Time:", "[worldtime2text()]")
 		if(ticker.hide_mode)
 			stat("Game Mode:", "Secret")
 		else
@@ -336,6 +334,9 @@
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
@@ -350,15 +351,16 @@
 		qdel(src)
 		return
 
-	job_master.EquipRank(character, rank, 1)					//equips the human
+
 	EquipCustomItems(character)
 
+	var/atom/movable/what_to_move = character.locked_to || character
+
 	if(J.spawns_from_edge)
-		character.Meteortype_Latejoin(rank)
+		Meteortype_Latejoin(what_to_move, rank)
 	else
 		// TODO:  Job-specific latejoin overrides.
-		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
-
+		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
 	character.store_position()
 
@@ -393,33 +395,18 @@
 					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 						var/mob/living/L = get_holder_of_type(P,/mob/living)
 						if(L)
-							L.show_message("[bicon(P)] <b>Message from U���8�E1��Ћ (T�u1B��), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+							L.show_message("[bicon(P)] <b>Message from U¦ŸÉ8¥E1ÀÓÐ‹ (T¥u1B¤Õ), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
 				for(var/mob/dead/observer/M in player_list)
 					if(M.stat == DEAD && M.client)
 						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
-
-	if(character.mind.assigned_role != "Cyborg")
-		data_core.manifest_inject(character)
-		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-		if(character.mind.assigned_role == "Trader")
-			//If we're a trader, instead send a message to PDAs with the trader cartridge
-			for (var/obj/item/device/pda/P in PDAs)
-				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
-					var/mob/living/L = get_holder_of_type(P,/mob/living)
-					if(L)
-						L.show_message("[bicon(P)] <b>Message from U¦É8¥E1ÀÓÐ (T¥u1B¤Õ), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
-			for(var/mob/dead/observer/M in player_list)
-				if(M.stat == DEAD && M.client)
-					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
-
+			else
+				AnnounceArrival(character, rank)
+			FuckUpGenes(character)
 		else
-			AnnounceArrival(character, rank)
-		FuckUpGenes(character)
-	else
-		character.Robotize()
+			character.Robotize()
 	qdel(src)
 
-/mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
+/proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
 	var/obj/effect/landmark/start/endpoint = null
 	for(var/obj/effect/landmark/start/S in landmarks_list)
 		if(S.name == rank)
@@ -430,8 +417,8 @@
 		//Error! We have no targetable spawn!
 		return
 	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
-	forceMove(start_point)
-	throw_at(endpoint)
+	target.forceMove(start_point)
+	target.throw_at(endpoint)
 
 
 /proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)

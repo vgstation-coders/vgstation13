@@ -153,10 +153,13 @@
 /obj/structure/bed/chair/vehicle/wheelchair/emp_act(severity)
 	return
 
-/obj/structure/bed/chair/vehicle/wheelchair/update_mob()
-	if(occupant)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/wheelchair/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
@@ -217,7 +220,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(internal_battery)
-		internal_battery.use(2) //Example use: 100 charge to get from the cargo desk to medbay side entrance
+		internal_battery.use(min(2, internal_battery.charge)) //Example use: 100 charge to get from the cargo desk to medbay side entrance
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/getMovementDelay()
 	if(internal_battery && internal_battery.charge)

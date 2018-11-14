@@ -12,7 +12,7 @@
 #define AUDIO_WARNING_DELAY 30
 
 /obj/machinery/power/supermatter
-	name = "Supermatter Crystal"
+	name = "\improper Supermatter Crystal"
 	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
@@ -67,11 +67,11 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/effect/sparks)
+	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
-	name = "Supermatter Shard"
+	name = "\improper Supermatter Shard"
 	short_name = "Shard"
 	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon_state = "darkmatter_shard"
@@ -393,8 +393,15 @@
 		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		explode()
 		return
+	if(istype(AM, /obj/item/supermatter_splinter))
+		AM.visible_message("<span class='sinister'>As \the [AM] collides with \the [src], </span><span class = 'warning'>rather than exploding, \the [AM] fuses to \the [src].</span>")
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		power_loss_modifier *= 1.5
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		qdel(AM)
+		return
 	if(istype(AM, /mob/living))
-		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
+		AM.visible_message("<span class=\"warning\">\The [src] is slammed into by \the [AM], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 	else if(!is_type_in_list(AM, message_exclusions))
@@ -406,6 +413,19 @@
 	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(AM)
+
+/obj/machinery/power/supermatter/shard/Bumped(atom/AM)
+	..()
+	if(istype(AM, /obj/item/supermatter_splinter))
+		if(power_loss_modifier >= 2500)
+			visible_message("<span class = 'sinister'>As \the [AM] fuses to \the [src], \the [src] begins to glow an overworldly shimmer as it begins to pull additional mass from the environment around itself...</span>")
+			new/obj/effect/overlay/gravitywell(loc)
+			spawn(6 SECONDS)
+				if(gcDestroyed)
+					return //Something went wrong, oh no
+				var/turf/T = get_turf(src)
+				qdel(src)
+				new /obj/machinery/power/supermatter(T)
 
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)

@@ -13,6 +13,7 @@
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
 #define CYANIDE "cyanide"
+#define POTASSIUM_HYDROXIDE 			"potassium_hydroxide"
 #define CHEFSPECIAL 			"chefspecial"
 #define MINTTOXIN 			"minttoxin"
 #define MUTATIONTOXIN 			"mutationtoxin"
@@ -110,6 +111,7 @@
 #define MEDNANOBOTS 			"mednanobots"
 #define COMNANOBOTS 			"comnanobots"
 #define FLUOROSURFACTANT 			"fluorosurfactant"
+#define PICCOLYN			"piccolyn"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
 #define SALINE				"saline"
@@ -353,6 +355,7 @@
 #define BAD_TOUCH		"bad_touch"
 #define SUICIDE			"suicide"
 #define KARMOTRINE		"karmotrine"
+#define DEGENERATECALCIUM "degeneratecalcium"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -386,6 +389,7 @@
 #define APETRINE		"apetrine"
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
+#define AMINOMICIN		"aminomicin"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -396,6 +400,7 @@
 #define TEMPERATURE_FLAME 700
 #define TEMPERATURE_WELDER 3480
 #define TEMPERATURE_PLASMA 4500
+#define TEMPERATURE_ETHANOL (T0C+1560)
 #define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
 
 // By defining the effect multiplier this way, it'll exactly adjust

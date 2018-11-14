@@ -55,6 +55,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 			continue
 
 		holder = patient.hud_list[HEALTH_HUD]
+
 		if(holder)
 			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
@@ -72,6 +73,26 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "hudill"
 			else
 				holder.icon_state = "hudhealthy"
+			C.images += holder
+
+		holder = patient.hud_list[RECORD_HUD]
+		if(holder)
+			var/targetname = patient.get_identification_name(patient.get_face_name())
+			var/medical = null
+			var/datum/data/record/gen_record = data_core.find_general_record_by_name(targetname)
+			if(gen_record)
+				medical = gen_record.fields["p_stat"]
+			switch(medical)
+				if("*SSD*")
+					holder.icon_state = "hudssd"
+				if("*Deceased*")
+					holder.icon_state = "huddeceased"
+				if("Physically Unfit")
+					holder.icon_state = "hudunfit"
+				if("Active")
+					holder.icon_state = "hudactive"
+				if("Disabled")
+					holder.icon_state = "huddisabled"
 			C.images += holder
 
 
@@ -221,3 +242,28 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		O.process_hud(src)
 		if(!druggy)
 			see_invisible = SEE_INVISIBLE_LIVING
+
+//Artificer HUD
+proc/process_construct_hud(var/mob/M, var/mob/eye)
+	if(!M)
+		return
+	if(!M.client)
+		return
+	var/client/C = M.client
+	var/image/holder
+	var/turf/T
+	if(eye)
+		T = get_turf(eye)
+	else
+		T = get_turf(M)
+	for(var/mob/living/simple_animal/construct/construct in range(T))
+		if(!check_HUD_visibility(construct, M))
+			continue
+
+		holder = construct.hud_list[CONSTRUCT_HUD]
+		if(holder)
+			if(construct.isDead())
+				holder.icon_state = "consthealth0"
+			else
+				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
+			C.images += holder

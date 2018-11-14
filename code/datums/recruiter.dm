@@ -63,11 +63,13 @@
 		O = pick(currently_querying)
 		while(currently_querying.len && !check_observer(O)) //While we the list has something and
 			currently_querying -= O				//Remove them from the list if they don't get checked properly
-			O = pick(currently_querying)
+			if(currently_querying.len)
+				O = pick(currently_querying)
 
 		if(!check_observer(O))
 			INVOKE_EVENT(recruited, list("player"=null))
 		else
+			paiController.was_recruited(O)
 			INVOKE_EVENT(recruited, list("player"=O))
 
 /datum/recruiter/Topic(var/href, var/list/href_list)

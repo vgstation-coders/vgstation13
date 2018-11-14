@@ -135,7 +135,6 @@ var/global/ports_open = TRUE
 								feedback_inc("alert_comms_blue",1)
 					tmp_alertlevel = 0
 				else
-					:
 					to_chat(usr, "You are not authorized to do this.")
 					tmp_alertlevel = 0
 				setMenuState(usr,COMM_SCREEN_MAIN)
@@ -545,7 +544,7 @@ var/global/ports_open = TRUE
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
-	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'. You are encouraged to act if that justification is shit", 1)
+	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
 	world << sound('sound/AI/shuttlecalled.ogg')
 

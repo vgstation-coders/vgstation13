@@ -13,10 +13,11 @@
 			break
 	if(!server)
 		return
-	for(var/datum/tech/T in tech_list)
+	for(var/ID in tech_list)
+		var/datum/tech/T = tech_list[ID]
 		if(T.goal_level==0) // Ignore illegal tech, etc
 			continue
-		var/datum/tech/KT  = locate(T.type, server.files.known_tech)
+		var/datum/tech/KT = server.files.GetKTechByID(ID)
 		tech_level_total += KT.level
 	return tech_level_total
 
@@ -158,17 +159,12 @@
 	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
 	stationname = station_name()
-	// if(istype(ticker.mode, /datum/game_mode/mixed))
-	// 	var/datum/game_mode/mixed/mixy = ticker.mode
-	// 	for(var/datum/game_mode/GM in mixy.modes)
-	// 		mixed_gamemodes.Add(GM.name)
 
 	for(var/datum/mind/M in ticker.minds)
 		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
-			if(M.special_role == "Cultist")
-				cult_surviving_cultists++
+
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")

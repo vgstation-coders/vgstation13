@@ -134,7 +134,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/camera_view 				//-errorage
 	src.verbs += /client/proc/sec_camera_report 		//-errorage
 	src.verbs += /client/proc/intercom_view 			//-errorage
-	src.verbs += /client/proc/air_status //Air things
 	src.verbs += /client/proc/Cell //More air things
 	src.verbs += /client/proc/pdiff //Antigriff testing - N3X
 	src.verbs += /client/proc/atmosscan //check plumbing
@@ -142,7 +141,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/count_objects_on_z_level
 	src.verbs += /client/proc/count_objects_all
 	src.verbs += /client/proc/cmd_assume_direct_control	//-errorage
-	src.verbs += /client/proc/jump_to_dead_group
 	src.verbs += /client/proc/startSinglo
 	src.verbs += /client/proc/cheat_power // Because the above doesn't work off-station.  Or at all, occasionally - N3X
 	src.verbs += /client/proc/setup_atmos // Laziness during atmos testing - N3X
@@ -172,6 +170,9 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/start_line_profiling
 	src.verbs += /client/proc/stop_line_profiling
 	src.verbs += /client/proc/show_line_profiling
+	#if UNIT_TESTS_ENABLED
+	src.verbs += /client/proc/unit_test_panel
+	#endif
 	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_on_z_level()

@@ -74,10 +74,9 @@ var/list/factions_with_hud_icons = list()
 	if(!newRole.AssignToRole(M))
 		newRole.Drop()
 		return 0
-	members.Add(newRole)
 	return 1
 
-/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
+/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
 			WARNING("Mind was already a role in this faction")
@@ -85,13 +84,12 @@ var/list/factions_with_hud_icons = list()
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
 		return 0
-	var/datum/role/R = new roletype(null,src, initial_role)
-	if(!R.AssignToRole(M))
+	var/datum/role/R = new roletype(null,src,initial_role) // Add him to our roles
+	if(!R.AssignToRole(M, override))
 		R.Drop()
 		return 0
-	members.Add(R)
 	R.OnPostSetup()
-	return 1
+	return R
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
 	ticker.mode.orphaned_roles.Remove(R)
@@ -139,7 +137,7 @@ var/list/factions_with_hud_icons = list()
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			count++
-			if (count < objective_holder.objectives.len)
+			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
 		if (win)
@@ -180,6 +178,7 @@ var/list/factions_with_hud_icons = list()
 	else
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
+			dat += "<br>"
 	return dat
 
 /datum/faction/proc/process()
@@ -285,7 +284,7 @@ var/list/factions_with_hud_icons = list()
 	if (!(O in objective_holder.objectives))
 		WARNING("Trying to force completion of an objective ([O]) to faction ([src]) who never had it.")
 		return FALSE
-	O.force_success = TRUE
+	O.force_success = !O.force_success
 
 /datum/faction/proc/Declare()
 	var/dat = GetObjectivesMenuHeader()
@@ -428,20 +427,28 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/strike_team/ert
 	name = "Emergency Response Team"
 	ID = ERT
+	initroletype = /datum/role/emergency_responder
+	roletype = /datum/role/emergency_responder
 	logo_state = "ert-logo"
+	hud_icons = list("ert-logo")
 
 //________________________________________________
 
 /datum/faction/strike_team/deathsquad
 	name = "Nanotrasen Deathsquad"
 	ID = DEATHSQUAD
+	initroletype = /datum/role/death_commando
+	roletype = /datum/role/death_commando
 	logo_state = "death-logo"
+	hud_icons = list("death-logo","creed-logo")
 
 //________________________________________________
 
 /datum/faction/strike_team/syndiesquad
 	name = "Syndicate Deep-Strike squad"
 	ID = SYNDIESQUAD
+	initroletype = /datum/role/syndicate_elite_commando
+	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
 
 /datum/faction/strike_team/custom
@@ -450,3 +457,14 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/strike_team/custom/New()
 	..()
 	ID = rand(1,999)
+
+//________________________________________________
+
+/datum/faction/blob_conglomerate
+	name = BLOBCONGLOMERATE
+	ID = BLOBCONGLOMERATE
+	logo_state = "blob-logo"
+	roletype = /datum/role/blob_overmind
+	initroletype = /datum/role/blob_overmind
+
+//________________________________________________

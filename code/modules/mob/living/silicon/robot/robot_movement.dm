@@ -22,6 +22,11 @@
 /mob/living/silicon/robot/movement_tally_multiplier()
 	. = ..()
 	if(is_component_functioning("power cell") && cell)
+		var/timeofday = world.timeofday
+		if((timeofday - last_tase_timeofday) < SILICON_TASER_SLOWDOWN_DURATION)
+			. *= SILICON_TASER_SLOWDOWN_MULTIPLIER
+		if((timeofday - last_high_damage_taken_timeofday) < SILICON_HIGH_DAMAGE_SLOWDOWN_DURATION)
+			. *= SILICON_HIGH_DAMAGE_SLOWDOWN_MULTIPLIER
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
 			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
 		if(cell.charge <= 0)

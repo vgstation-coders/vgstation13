@@ -205,6 +205,8 @@
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0,mob/M, slot)
 	if(!istype(W))
 		return //Not an item
+	if(!W.can_be_stored(src)) //Snowflake item-side whether this item can be stored within our item.
+		return 0
 	if(isliving(loc))
 		var/mob/living/L = loc
 		for (var/i in no_storage_slot)
@@ -317,14 +319,14 @@
 	if(!istype(W))
 		return 0
 	if(usr)
-		usr.u_equip(W,1)
-		usr.update_icons()	//update our overlays
+		usr.u_equip(W,0)
+		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
+		usr.update_icons()
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
 		if (usr.client && usr.s_active != src)
 			usr.client.screen -= W
-		//W.dropped(usr)
 		add_fingerprint(usr)
 
 		if(!prevent_warning && !istype(W, /obj/item/weapon/gun/energy/crossbow))

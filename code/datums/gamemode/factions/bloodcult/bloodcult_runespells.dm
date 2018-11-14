@@ -63,6 +63,14 @@
 	activator = null
 	..()
 
+/datum/rune_spell/proc/invoke(var/mob/user, var/text="", var/whisper=0)
+	if (user.checkTattoo(TATTOO_SILENT))
+		return
+	if (!whisper)
+		user.say(text,"C")
+	else
+		user.whisper(text)
+
 /datum/rune_spell/proc/pre_cast()
 	var/mob/living/user = activator
 	//checking whether we're casting from a rune or a talisman.
@@ -70,10 +78,10 @@
 		if ((rune_flags & RUNE_STAND) && (user.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else
-			user.say(invocation,"C")
+			invoke(user,invocation)
 			cast()
 	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		user.whisper(invocation)//talisman incantations are whispered
+		invoke(user,invocation,1)//talisman incantations are whispered
 		cast_talisman()
 
 /datum/rune_spell/proc/midcast(var/mob/add_cultist)
@@ -236,8 +244,12 @@
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	if (locate(/obj/structure/cult) in R.loc)
+	if (locate(/obj/structure/cult) in range(R.loc,1))
 		abort(RITUALABORT_BLOCKED)
+		return
+
+	if (locate(/obj/machinery/door/mineral/cult) in range(R.loc,1))
+		abort(RITUALABORT_NEAR)
 		return
 
 	var/mob/living/user = activator
@@ -268,7 +280,7 @@
 /datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -339,6 +351,12 @@
 
 /datum/rune_spell/raisestructure/proc/success()
 	new spawntype(spell_holder.loc)
+	if (spawntype == /obj/structure/cult/altar)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.progress(CULT_ACT_I)
+		else
+			message_admins("Blood Cult: An altar was raised...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 	qdel(spell_holder)//this will cause this datum to del as well
 
 //RUNE II
@@ -369,7 +387,7 @@
 	if(!message)
 		return
 
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(BLOODCULT))
+	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
@@ -382,10 +400,9 @@
 	qdel(src)
 
 /datum/rune_spell/communication/Destroy()
-	if (destroying_self)
-		return
 	destroying_self = 1
-	qdel(comms)
+	if (comms)
+		qdel(comms)
 	comms = null
 	..()
 
@@ -426,7 +443,7 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
-		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(BLOODCULT))
+		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(CULTIST))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
@@ -699,7 +716,6 @@
 	//first lets check for a victim above
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
-			//TODO: MOB NEEDS A MIND, leaving as is for now, so I can convert dummies to test stuff
 			targets.Add(C)
 	if (targets.len > 0)
 		victim = pick(targets)
@@ -724,6 +740,10 @@
 	conversion = new(T)
 	flick("rune_convert_start",conversion)
 	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
+
+	var/obj/item/device/gps/secure/SPS = locate() in victim
+	if (SPS)//Think carefully before converting a sec officer
+		SPS.OnMobDeath(victim)
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
@@ -779,7 +799,7 @@
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					if(I.implanted)
 						delay = 1
-						progress = progress/3
+						progress = progress/4
 						break
 				if (victim.mind)
 					if (victim.mind.assigned_role in impede_medium)
@@ -874,6 +894,14 @@
 			abort(RITUALABORT_REMOVED)
 			return
 
+		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
+		if (victim.mind)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult)
+				cult.progress(CULT_ACT_II)
+			else
+				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
+
 		switch (success)
 			if (1)
 				conversion.layer = BELOW_OBJ_LAYER
@@ -939,6 +967,7 @@
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
+	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim==M)
@@ -988,10 +1017,10 @@
 	var/mob/living/user = activator
 
 	if (istype (spell_holder,/obj/effect/rune))
-		user.say(invocation,"C")
+		invoke(user,invocation)
 		cast()
 	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		user.whisper(invocation)
+		invoke(user,invocation,1)
 		cast_talisman()
 
 /datum/rune_spell/stun/cast()
@@ -1011,10 +1040,10 @@
 	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
-	if (prob(5))//for old times' sake
-		activator.whisper("Dream sign ''Evil sealing talisman'[pick("'","`")]!")
+	if (prob(15))//for old times' sake
+		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
-		activator.whisper(invocation)
+		invoke(activator,invocation,1)
 
 	if(issilicon(M))
 		to_chat(M, "<span class='danger'>WARNING: Short-circuits detected, Rebooting...</span>")
@@ -1459,10 +1488,9 @@ var/list/blind_victims = list()
 	var/talisman_duration = 80 //tenths of a second
 
 /datum/rune_spell/seer/Destroy()
-	if (destroying_self)
-		return
 	destroying_self = 1
-	qdel(seer_ritual)
+	if (seer_ritual)
+		qdel(seer_ritual)
 	seer_ritual = null
 	..()
 
@@ -1520,13 +1548,13 @@ var/list/blind_victims = list()
 		caster.apply_vision_overrides()
 		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
+	if (source)
+		source.abort()
 	source = null
 	..()
 
 /obj/effect/cult_ritual/seer/HasProximity(var/atom/movable/AM)
 	if (!caster || caster.loc != loc)
-		if (source)
-			source.abort(RITUALABORT_GONE)
 		qdel(src)
 
 
@@ -1721,7 +1749,7 @@ var/list/blind_victims = list()
 	rejoin = alert(activator, "Will you pull them toward you, or pull yourself toward them?","Blood Magnetism","Summon Cultist","Rejoin Cultist") == "Rejoin Cultist"
 
 	var/list/possible_targets = list()
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(BLOODCULT))
+	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		possible_targets.Add(M.current)
@@ -1773,7 +1801,7 @@ var/list/blind_victims = list()
 /datum/rune_spell/summoncultist/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -1944,7 +1972,7 @@ var/list/blind_victims = list()
 
 	var/datum/cultword/W = cultwords[network]
 
-	activator.say("[W.rune]","C")
+	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_pad")
 	I_crystals.plane = OBJ_PLANE
 	I_crystals.layer = BELOW_TABLE_LAYER
@@ -1979,9 +2007,9 @@ var/list/blind_victims = list()
 
 /datum/rune_spell/portalentrance/midcast(var/mob/add_cultist)
 	if (istype(spell_holder, /obj/item/weapon/talisman))
-		add_cultist.whisper(invocation)
+		invoke(add_cultist,invocation,1)
 	else
-		add_cultist.say(invocation,"C")
+		invoke(add_cultist,invocation)
 
 	var/turf/destination = null
 	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
@@ -2050,7 +2078,7 @@ var/list/bloodcult_exitportals = list()
 
 	var/datum/cultword/W = cultwords[network]
 
-	activator.say("[W.rune]","C")
+	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
 	I_crystals.plane = OBJ_PLANE
 	I_crystals.layer = BELOW_TABLE_LAYER
@@ -2087,9 +2115,10 @@ var/list/bloodcult_exitportals = list()
 	to_chat(add_cultist, "<span class='notice'>You may teleport to this rune by using a Path Entrance, or a talisman attuned to it.</span>")
 
 /datum/rune_spell/portalexit/midcast_talisman(var/mob/add_cultist)
-	add_cultist.whisper(invocation)
-	anim(target = get_turf(add_cultist), a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
-	new /obj/effect/bloodcult_jaunt (get_turf(add_cultist), add_cultist, get_turf(spell_holder))
+	var/turf/T = get_turf(add_cultist)
+	invoke(add_cultist,invocation,1)
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
+	new /obj/effect/bloodcult_jaunt (T, add_cultist, get_turf(spell_holder))
 
 /datum/rune_spell/portalexit/cast_talisman()
 	var/obj/item/weapon/talisman/T = spell_holder
@@ -2108,7 +2137,7 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	activator.whisper("[cultwords_rune[cultwords_english.Find(network)]]!")
+	invoke(activator,"[cultwords_rune[cultwords_english.Find(network)]]!",1)
 
 	to_chat(activator, "<span class='notice'>This talisman will now serve as a key to the \"[network]\" Path.</span>")
 
@@ -2139,7 +2168,8 @@ var/list/bloodcult_exitportals = list()
 //RUNE XIX
 /datum/rune_spell/astraljourney
 	name = "Astral Journey"
-	desc = "Leave your body so you can converse with the dead and observe your targets."
+	desc = "Leave your body so you can go spy on your enemies."
+	desc_talisman = "Leave your body so you can go spy on your enemies."
 	Act_restriction = CULT_ACT_II
 	invocation = "Fwe'sh mah erl nyag r'ya!"
 	word1 = /datum/cultword/hell
@@ -2232,6 +2262,7 @@ var/list/bloodcult_exitportals = list()
 /datum/rune_spell/resurrect
 	name = "Resurrect"
 	desc = "Create a strong body for your fallen allies to inhabit."
+	desc_talisman = "Create a strong body for your fallen allies to inhabit."
 	Act_restriction = CULT_ACT_III
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
 	word1 = /datum/cultword/blood
@@ -2258,6 +2289,10 @@ var/list/bloodcult_exitportals = list()
 	ghost = locate(/mob/dead) in R.loc
 	if (!ghost)
 		to_chat(activator, "<span class='warning'>You have the ingredients, now there needs to be a ghost made visible standing above the rune.</span>")
+		qdel(src)
+		return
+	if (ghost.mind && ghost.mind.current && ghost.mind.current.ajourn && (ghost.mind.current.stat != DEAD))
+		to_chat(activator, "<span class='warning'>This ghost still has a breathing body where to return to.</span>")
 		qdel(src)
 		return
 	if (ghost.invisibility != 0)
@@ -2291,7 +2326,7 @@ var/list/bloodcult_exitportals = list()
 /datum/rune_spell/resurrect/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -2357,6 +2392,28 @@ var/list/bloodcult_exitportals = list()
 		vessel.real_name = ghost.real_name
 		vessel.ckey = ghost.ckey
 		qdel(husk)
+
+		vessel.r_hair = 90
+		vessel.g_hair = 90
+		vessel.b_hair = 90
+		vessel.r_facial = 90
+		vessel.g_facial = 90
+		vessel.b_facial = 90
+		vessel.r_eyes = 255
+		vessel.g_eyes = 0
+		vessel.b_eyes = 0
+		vessel.status_flags &= ~GODMODE
+		vessel.regenerate_icons()
+		//Let's not forget to make them cultists as well
+		var/datum/role/cultist/newCultist = new
+		newCultist.AssignToRole(vessel.mind,1)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (!cult)
+			cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.HandleRecruitedRole(newCultist)
+		newCultist.OnPostSetup()
+		newCultist.Greet(GREET_RESURRECT)
+		newCultist.conversion["resurrected"] = activator
 	else
 		for(var/mob/living/L in contributors)
 			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the soul of the ghost appears to have vanished.</span>")
