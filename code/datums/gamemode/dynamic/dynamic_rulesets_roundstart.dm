@@ -142,10 +142,51 @@
 
 //////////////////////////////////////////////
 //                                          //
-//               CULT (LEGACY)              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                BLOOD CULT                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
 
+/datum/dynamic_ruleset/roundstart/bloodcult
+	name = "Blood Cult"
+	role_category = ROLE_CULTIST
+	protected_from_jobs = list("Merchant")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Warden", "Detective","Head of Security", "Captain", "Chaplain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 4
+	weight = 3
+	cost = 25
+	requirements = list(90,80,60,30,20,10,10,10,10,10)
+	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+
+/datum/dynamic_ruleset/roundstart/bloodcult/execute()
+	//if ready() did its job, candidates should have 4 or more members in it
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	var/cultists = cultist_cap[indice_pop]
+
+	for(var/cultists_number = 1 to cultists)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/cultist/newCultist = new
+		newCultist.AssignToRole(M.mind,1)
+		cult.HandleRecruitedRole(newCultist)
+		newCultist.Greet(GREET_ROUNDSTART)
+	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//               CULT (LEGACY)              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+/*
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
 	role_category = ROLE_LEGACY_CULTIST
@@ -176,7 +217,7 @@
 		legacy.HandleRecruitedRole(newCultist)
 		newCultist.Greet(GREET_ROUNDSTART)
 	return 1
-
+*/
 
 //////////////////////////////////////////////
 //                                          //
@@ -197,7 +238,7 @@
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
-	//if ready() did its job, candidates should have 4 or more members in it
+	//if ready() did its job, candidates should have 5 or more members in it
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if (!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)

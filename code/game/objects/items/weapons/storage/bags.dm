@@ -506,3 +506,23 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	..()
 	for(var/i=1 to 10)
 		new /obj/item/potion/random(src)
+
+/obj/item/weapon/storage/bag/potion/predicted_potion_bundle
+	name = "Predicted potion bundle"
+	desc = "What could potionly go right?"
+
+/obj/item/weapon/storage/bag/potion/predicted_potion_bundle/New()
+	..()
+	for(var/i = 1 to 40)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)
+
+/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle
+	name = "Lesser predicted potion bundle"
+	desc = "What could potionly go slightly more right?"
+
+/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
+	..()
+	for(var/i = 1 to 8)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)

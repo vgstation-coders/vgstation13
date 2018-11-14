@@ -337,6 +337,7 @@
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.OnPostSetup()
 		newCultist.Greet(GREET_SOULSTONE)
+		newCultist.conversion["soulstone"] = user
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
@@ -405,6 +406,7 @@
 						cult.HandleRecruitedRole(newCultist)
 						newCultist.OnPostSetup()
 						newCultist.Greet(GREET_SOULSTONE)
+						newCultist.conversion["soulstone"] = U
 		if("CONSTRUCT")
 			var/obj/structure/constructshell/T = target
 			var/obj/item/device/soulstone/C = src

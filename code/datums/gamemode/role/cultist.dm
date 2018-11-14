@@ -6,6 +6,7 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
+	var/list/conversion = list()
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -31,9 +32,62 @@
 		blood_communion.Remove(src)
 	..()
 
+/datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
+	. = ..()
+	if (issilicon(new_character))
+		antag.antag_roles -= CULTIST
+		antag.current.remove_language(LANGUAGE_CULT)
+		for(var/spell/cult/spell_to_remove in antag.current.spell_list)
+			antag.current.remove_spell(spell_to_remove)
+		if (src in blood_communion)
+			blood_communion.Remove(src)
+		update_faction_icons()
+		return
+	update_cult_hud()
+	antag.current.add_language(LANGUAGE_CULT)
+	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
 /datum/role/cultist/process()
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
+
+	if (veil_thickness == CULT_MENDED && antag.current)
+		if (ishuman(antag.current))
+			var/mob/living/carbon/human/H = antag.current
+			if(H.get_heart() && prob(10))
+				H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
+				var/obj/item/organ/internal/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
+				var/list/spawn_turfs = list()
+				for(var/turf/T in orange(1, H))
+					if(!T.density)
+						spawn_turfs.Add(T)
+				if(!spawn_turfs.len)
+					spawn_turfs.Add(get_turf(H))
+				var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
+				heart_attack.appearance = blown_heart.appearance
+				heart_attack.icon_dead = "heart-off"
+				heart_attack.environment_smash_flags = 0
+				heart_attack.melee_damage_lower = 15
+				heart_attack.melee_damage_upper = 15
+				heart_attack.health = 50
+				heart_attack.maxHealth = 50
+				heart_attack.stat_attack = 1
+				qdel(blown_heart)
+			else
+				H.eye_blurry = max(H.eye_blurry, 30)
+				H.Dizzy(30)
+				H.stuttering = max(H.stuttering, 30)
+				H.Jitter(30)
+				if (prob(70))
+					H.Knockdown(4)
+				else if (prob(70))
+					H.confused = 6
+				H.adjustOxyLoss(20)
+				H.adjustToxLoss(10)
+		else
+			antag.current.adjustBruteLoss(rand(20,50))
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -62,6 +116,8 @@
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		if (GREET_SOULSTONE)
 			to_chat(antag.current, "<span class='sinister'>Dark energies corrupt your soul, as the blood stone grants you a window to peer through the veil, you have become a cultist!</span>")
+		if (GREET_SOULBLADE)
+			to_chat(antag.current, "<span class='sinister'>Your soul has made its way into the blade's soul gem! The dark energies of the altar forge your mind into an instrument of the cult of Nar-Sie, be of assistance to your fellow cultists.</span>")
 		if (GREET_RESURRECT)
 			to_chat(antag.current, "<span class='sinister'>You were resurrected from beyond the veil by the followers of Nar-Sie, and are already familiar with their rituals! You have now joined their ranks as a cultist.</span>")
 		else
@@ -73,6 +129,11 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 
+	spawn(1)
+		if (faction)
+			var/datum/objective_holder/OH = faction.objective_holder
+			var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
+			to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 
@@ -143,7 +204,7 @@
 
 /datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/dat = ..()
-	dat += " - <a href='?src=\ref[A];cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
+	dat += " - <a href='?src=\ref[src]&mind=\ref[antag]&cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
 	return dat
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
@@ -239,3 +300,12 @@
 			H.Knockdown(3)
 			H.confused = 3
 			H.eye_blurry = max(H.eye_blurry, 6)
+
+/datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	if (href_list["cult_privatespeak"])
+		var/message = input("What message shall we send?",
+                    "Voice of Nar-Sie",
+                    "")
+		var/mob/mob = M.current
+		if (mob)
+			to_chat(mob, "<span class='danger'>Nar-Sie</span> murmurs to you... <span class='sinister'>[message]</span>")

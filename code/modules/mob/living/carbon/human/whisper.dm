@@ -69,7 +69,7 @@
 
 	var/eavesdroppers = get_hearers_in_view(2, src) - listeners
 
-	var/watchers = hearers(5, src) - listeners - eavesdroppers
+	var/watchers = hearers(3, src) - listeners - eavesdroppers
 
 
 	//"<span class='game say'><span class='name'>[GetVoice()]</span> (as [alt_name]) [whispers], <span class='message'>\"<i>[message]</i>\"</span></span>"

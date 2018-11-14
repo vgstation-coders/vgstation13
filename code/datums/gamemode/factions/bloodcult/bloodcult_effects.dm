@@ -42,7 +42,7 @@
 
 /obj/effect/cult_shortcut/attack_hand(var/mob/living/user)
 	if (!iscultist(user))
-		to_chat(user, "<span class='warning'>Strange markings on this wall. You don't feel comfortable staring at them.</span>")
+		to_chat(user, "<span class='warning'>The markings on this wall are peculiar. You don't feel comfortable staring at them.</span>")
 		return
 	var/turf/T = get_turf(user)
 	if (T == loc)
@@ -376,4 +376,25 @@
 
 		if (landing_animation)
 			flick("cult_jaunt_land",landing_animation)
+		qdel(src)
+
+///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
+
+/obj/effect/cult_ritual/backup_spawn
+	name = "gateway"
+	desc = "Something is coming through!"
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "runetrigger-build"
+	anchored = 1
+	mouse_opacity = 1
+
+/obj/effect/cult_ritual/backup_spawn/New()
+	..()
+	spawn (30)
+		var/mobtype = pick(
+			1;/mob/living/simple_animal/hostile/creature/cult,
+			2;/mob/living/simple_animal/hostile/faithless/cult,
+			3;/mob/living/simple_animal/hostile/scarybat/cult,
+			)
+		new mobtype(get_turf(src))
 		qdel(src)

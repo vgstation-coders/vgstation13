@@ -280,7 +280,7 @@
 /datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -351,6 +351,12 @@
 
 /datum/rune_spell/raisestructure/proc/success()
 	new spawntype(spell_holder.loc)
+	if (spawntype == /obj/structure/cult/altar)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.progress(CULT_ACT_I)
+		else
+			message_admins("Blood Cult: An altar was raised...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 	qdel(spell_holder)//this will cause this datum to del as well
 
 //RUNE II
@@ -710,7 +716,6 @@
 	//first lets check for a victim above
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
-			//TODO: MOB NEEDS A MIND, leaving as is for now, so I can convert dummies to test stuff
 			targets.Add(C)
 	if (targets.len > 0)
 		victim = pick(targets)
@@ -735,6 +740,10 @@
 	conversion = new(T)
 	flick("rune_convert_start",conversion)
 	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
+
+	var/obj/item/device/gps/secure/SPS = locate() in victim
+	if (SPS)//Think carefully before converting a sec officer
+		SPS.OnMobDeath(victim)
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
@@ -790,7 +799,7 @@
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					if(I.implanted)
 						delay = 1
-						progress = progress/3
+						progress = progress/4
 						break
 				if (victim.mind)
 					if (victim.mind.assigned_role in impede_medium)
@@ -885,6 +894,14 @@
 			abort(RITUALABORT_REMOVED)
 			return
 
+		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
+		if (victim.mind)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult)
+				cult.progress(CULT_ACT_II)
+			else
+				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
+
 		switch (success)
 			if (1)
 				conversion.layer = BELOW_OBJ_LAYER
@@ -950,6 +967,7 @@
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
+	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim==M)
@@ -1023,7 +1041,7 @@
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
 	if (prob(15))//for old times' sake
-		invoke(activator,"Dream sign ''Evil sealing talisman'[pick("'","`")]!",1)
+		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
 		invoke(activator,invocation,1)
 
@@ -1783,7 +1801,7 @@ var/list/blind_victims = list()
 /datum/rune_spell/summoncultist/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -1954,7 +1972,7 @@ var/list/blind_victims = list()
 
 	var/datum/cultword/W = cultwords[network]
 
-	activator.say("[W.rune]","C")
+	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_pad")
 	I_crystals.plane = OBJ_PLANE
 	I_crystals.layer = BELOW_TABLE_LAYER
@@ -2060,7 +2078,7 @@ var/list/bloodcult_exitportals = list()
 
 	var/datum/cultword/W = cultwords[network]
 
-	activator.say("[W.rune]","C")
+	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
 	I_crystals.plane = OBJ_PLANE
 	I_crystals.layer = BELOW_TABLE_LAYER
@@ -2150,7 +2168,8 @@ var/list/bloodcult_exitportals = list()
 //RUNE XIX
 /datum/rune_spell/astraljourney
 	name = "Astral Journey"
-	desc = "Leave your body so you can converse with the dead and observe your targets."
+	desc = "Leave your body so you can go spy on your enemies."
+	desc_talisman = "Leave your body so you can go spy on your enemies."
 	Act_restriction = CULT_ACT_II
 	invocation = "Fwe'sh mah erl nyag r'ya!"
 	word1 = /datum/cultword/hell
@@ -2243,6 +2262,7 @@ var/list/bloodcult_exitportals = list()
 /datum/rune_spell/resurrect
 	name = "Resurrect"
 	desc = "Create a strong body for your fallen allies to inhabit."
+	desc_talisman = "Create a strong body for your fallen allies to inhabit."
 	Act_restriction = CULT_ACT_III
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
 	word1 = /datum/cultword/blood
@@ -2306,7 +2326,7 @@ var/list/bloodcult_exitportals = list()
 /datum/rune_spell/resurrect/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -2393,6 +2413,7 @@ var/list/bloodcult_exitportals = list()
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.OnPostSetup()
 		newCultist.Greet(GREET_RESURRECT)
+		newCultist.conversion["resurrected"] = activator
 	else
 		for(var/mob/living/L in contributors)
 			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the soul of the ghost appears to have vanished.</span>")

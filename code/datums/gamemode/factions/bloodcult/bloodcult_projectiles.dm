@@ -264,7 +264,7 @@
 		else if (ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/datum/reagent/blood/B = get_blood(H.vessel)
-			if (B)
+			if (B && !(H.species.flags & NO_BLOOD))
 				H.vessel.add_reagent(BLOOD, 5 + stacks * 5)
 				H.vessel.update_total()
 				to_chat(H, "<span class='notice'>[firer ? "\The [firer]'s" : "The"] [src] enters your body painlessly, irrigating your vessels with some fresh blood.</span>")

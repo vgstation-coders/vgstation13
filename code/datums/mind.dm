@@ -93,12 +93,13 @@
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
 
-	for (var/role in antag_roles)
-		var/datum/role/R = antag_roles[role]
-		R.PostMindTransfer(new_character, current)
-
+	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
+	
+	for (var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		R.PostMindTransfer(new_character, old_character)
 
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)
@@ -343,9 +344,11 @@
 
 		if (objective.faction)
 			objective.faction.handleForcedCompletedObjective(objective)
-
-		objective.force_success = !objective.force_success
+		else
+			objective.force_success = !objective.force_success
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+		message_admins("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
 
 	else if(href_list["obj_gen"])
 		var/owner = locate(href_list["obj_owner"])

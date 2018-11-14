@@ -89,7 +89,7 @@ var/list/factions_with_hud_icons = list()
 		R.Drop()
 		return 0
 	R.OnPostSetup()
-	return 1
+	return R
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
 	ticker.mode.orphaned_roles.Remove(R)
@@ -137,7 +137,7 @@ var/list/factions_with_hud_icons = list()
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			count++
-			if (count < objective_holder.objectives.len)
+			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
 		if (win)
@@ -178,6 +178,7 @@ var/list/factions_with_hud_icons = list()
 	else
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
+			dat += "<br>"
 	return dat
 
 /datum/faction/proc/process()
@@ -283,7 +284,7 @@ var/list/factions_with_hud_icons = list()
 	if (!(O in objective_holder.objectives))
 		WARNING("Trying to force completion of an objective ([O]) to faction ([src]) who never had it.")
 		return FALSE
-	O.force_success = TRUE
+	O.force_success = !O.force_success
 
 /datum/faction/proc/Declare()
 	var/dat = GetObjectivesMenuHeader()

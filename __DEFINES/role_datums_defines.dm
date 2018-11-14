@@ -63,6 +63,7 @@
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
 #define GREET_SOULSTONE		"soulstone"
+#define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
 
 
@@ -130,6 +131,8 @@
 #define	RUNE_CANNOT		2
 
 #define	MAX_TALISMAN_PER_TOME	5
+
+#define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
 
 ////////////////////////////////////////////////////////////////////////////////
 

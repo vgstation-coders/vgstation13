@@ -1,5 +1,5 @@
 /spell/rejuvenate
-	name = "Rejuvenate"
+	name = "Rejuvenate (1)"
 	desc = "Flush your system with spare blood to remove any incapacitating effects."
 	abbreviation = "RJ"
 
@@ -22,7 +22,7 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
-	if (!user.vampire_power(blood_cost, CONSCIOUS))
+	if (!user.vampire_power(blood_cost, UNCONSCIOUS))
 		return FALSE
 
 /spell/rejuvenate/choose_targets(var/mob/user = usr)

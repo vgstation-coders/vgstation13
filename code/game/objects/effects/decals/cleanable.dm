@@ -35,11 +35,14 @@
 		D.holder = null
 
 	if(counts_as_blood)
-		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if(blood_cult)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.remove_bloody_floor(get_turf(src))
+		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(legacy_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))
-				blood_cult.bloody_floors -= T
+				legacy_cult.bloody_floors -= T
 	..()
 
 /obj/effect/decal/cleanable/proc/dry()
@@ -92,15 +95,18 @@
 	update_icon()
 
 	if(counts_as_blood)
-		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if(blood_cult)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.add_bloody_floor(get_turf(src))
+		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(legacy_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in blood_cult.bloody_floors))
-					blood_cult.bloody_floors += T
-					blood_cult.bloody_floors[T] = T
-					if (blood_cult.has_enough_bloody_floors())
-						blood_cult.getNewObjective()
+				if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
+					legacy_cult.bloody_floors += T
+					legacy_cult.bloody_floors[T] = T
+					if (legacy_cult.has_enough_bloody_floors())
+						legacy_cult.getNewObjective()
 		if(src.loc && isturf(src.loc))
 			for(var/obj/effect/decal/cleanable/C in src.loc)
 				if(C.type in absorbs_types && C != src)

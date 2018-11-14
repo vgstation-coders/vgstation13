@@ -5,6 +5,9 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
+// If set to 0, replaces solo antags' objectives with an always-pass freeform
+#define SOLO_ANTAG_OBJECTIVES 1
+
 // Defines for the shuttle
 #define SHUTTLE_ON_STANDBY 0
 #define SHUTTLE_ON_STATION 1
@@ -1488,6 +1491,7 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_VOX						16
 #define HOLOMAP_FILTER_STATIONMAP				32
 #define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
+#define HOLOMAP_FILTER_CULT						128//bloodstone locators
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1506,11 +1510,16 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
+#define HOLOMAP_EXTRA_CULTMAP					"cultmap"
 
 #define HOLOMAP_MARKER_SMES				"smes"
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
+#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
+#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+
 
 #define DEFAULT_BLOOD "#A10808"
 
