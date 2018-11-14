@@ -238,7 +238,7 @@
 
 /obj/item/weapon/ore/mythril
 	name = "mythril ore"
-	desc = "a naturally-occuring silver steel alloy."
+	desc = "A naturally-occuring silver steel alloy."
 	icon_state = "cobryl"
 	material=MAT_MYTHRIL
 
