@@ -30,6 +30,7 @@
 	if((istype(req_access) && req_access.len) || istext(req_access))
 		icon_state = "[icon_state]"
 		base_state = icon_state
+	set_electronics()
 
 /obj/machinery/door/window/Destroy()
 	setDensity(FALSE)
@@ -225,7 +226,7 @@
 /obj/machinery/door/window/attackby(obj/item/weapon/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
-		user.visible_message("[user] is removing \the [electronics ? electronics.name : "electronics"] from \the [name].", "You start to remove \the [electronics ? electronics.name : "electronics"] from \the [name].")
+		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")
 		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
@@ -331,21 +332,21 @@
 	// Pop out electronics
 	eject_electronics()
 
+/obj/machinery/door/window/proc/set_electronics()
+	electronics = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(loc))
+	electronics.installed = TRUE
+	if(req_access && req_access.len > 0)
+		electronics.conf_access = req_access
+	else if(req_one_access && req_one_access.len > 0)
+		electronics.conf_access = req_one_access
+		electronics.one_access = 1
+
 /obj/machinery/door/window/proc/eject_electronics()
-	var/obj/item/weapon/circuitboard/airlock/AE = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(loc))
-	if(electronics)
-		electronics = null
-		AE.installed = FALSE
-	else
-		if(operating == -1)
-			AE.icon_state = "door_electronics_smoked"
-		// Straight from /obj/machinery/door/airlock/attackby()
-		if(req_access && req_access.len > 0)
-			AE.conf_access = req_access
-		else if(req_one_access && req_one_access.len > 0)
-			AE.conf_access = req_one_access
-			AE.one_access = 1
-	AE.forceMove(loc)
+	if(!electronics)
+		set_electronics()
+	electronics.installed = FALSE
+	electronics.forceMove(loc)
+	electronics = null
 
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)
