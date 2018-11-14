@@ -674,7 +674,7 @@ a {
 
 /obj/proc/dorfify(var/datum/material/mat)
 	if(mat)
-		var/icon/original = icon(icon, icon_state)
+		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
 		if(mat.color)
 			original.ColorTone(mat.color)
 			var/obj/item/I = src
@@ -686,7 +686,7 @@ a {
 					I.inhand_states[hand] = t_state
 		else if(mat.color_matrix)
 			color = mat.color_matrix
-		icon = original
+		icon = original*/
 		alpha = mat.alpha
 		material_type = mat
 		sheet_type = mat.sheettype
