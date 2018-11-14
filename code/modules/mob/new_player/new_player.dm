@@ -401,6 +401,7 @@
 						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
 			else
 				AnnounceArrival(character, rank)
+				CallHook("OnArrival", list("character" = character, "rank" = rank))
 			FuckUpGenes(character)
 		else
 			character.Robotize()

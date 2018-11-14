@@ -332,6 +332,7 @@
 #include "code\datums\gamemode\factions\legacy_cult\talisman.dm"
 #include "code\datums\gamemode\factions\legacy_cult\trash_machinery.dm"
 #include "code\datums\gamemode\factions\syndicate\nukeops.dm"
+#include "code\datums\gamemode\factions\syndicate\rev.dm"
 #include "code\datums\gamemode\factions\syndicate\traitor.dm"
 #include "code\datums\gamemode\objectives\absorb.dm"
 #include "code\datums\gamemode\objectives\acquire_blood.dm"

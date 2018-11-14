@@ -276,3 +276,38 @@
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//               REVS		                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/revs
+	name = "Revolution"
+	role_category = ROLE_REV
+	protected_from_jobs = list("Merchant")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 4
+	weight = 3
+	cost = 25
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+
+/datum/dynamic_ruleset/roundstart/revs/execute()
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+	
+	for(var/cultists_number = 1 to required_candidates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/revolutionary/leader/lenin = new
+		lenin.AssignToRole(M.mind,1)
+		R.HandleRecruitedRole(lenin)
+		lenin.Greet(GREET_ROUNDSTART)
+	return 1
