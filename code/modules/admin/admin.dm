@@ -1233,6 +1233,9 @@ var/global/floorIsLava = 0
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
 /proc/is_special_character(mob/M) // returns 1 for special characters
+	var/mob/living/silicon/robot/R = M
+	if (istype(R) && R.emagged)
+		return TRUE
 	return (M.mind ? M.mind.antag_roles.len : null)
 /*
 /datum/admins/proc/get_sab_desc(var/target)
