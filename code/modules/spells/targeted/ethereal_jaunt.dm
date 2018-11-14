@@ -152,9 +152,10 @@
 	desc = "This spell allows you to pass through walls and other dense objects."
 	user_type = USER_TYPE_VAMPIRE
 
-	spell_flags = Z2NOCAST | INCLUDEUSER
+	spell_flags = INCLUDEUSER
 
 	charge_max = 1 MINUTES
+	cooldown_min = 1 MINUTES
 	invocation_type = SpI_NONE
 	range = SELFCAST
 	duration = 50 //in deciseconds
