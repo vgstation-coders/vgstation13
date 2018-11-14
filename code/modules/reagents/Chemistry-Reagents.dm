@@ -2020,9 +2020,9 @@
 		//We don't need to start up the system because we only want to smoke one tile.
 
 /datum/reagent/iron
-	name = "Iron powder"
+	name = "Iron"
 	id = IRON
-	description = "Pure iron is a metal."
+	description = "Pure iron in powdered form, a metal."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#666666" //rgb: 102, 102, 102
 	specheatcap = 0.45
