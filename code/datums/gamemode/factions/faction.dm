@@ -115,7 +115,6 @@ var/list/factions_with_hud_icons = list()
 	else
 		O = new objective_type
 	if(objective_holder.AddObjective(O, null, src))
-		to_chat(world, "We added [O.type].")
 		return TRUE
 	return FALSE
 
