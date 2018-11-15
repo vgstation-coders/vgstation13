@@ -119,6 +119,8 @@
 	if(!flashfail)
 		M.flash_eyes(affect_silicon = 1)
 
+	return !flashfail
+
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
 		return

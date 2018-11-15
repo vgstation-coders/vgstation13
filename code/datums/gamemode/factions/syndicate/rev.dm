@@ -8,6 +8,7 @@
 	late_role = REV
 	desc = "Viva!"
 	logo_state = "rev-logo"
+	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
 	var/win_shuttle = FALSE
@@ -28,38 +29,41 @@
 	if(isrev(H)) //HOW DO YOU FUCK UP THIS BADLY.
 		return ADD_REVOLUTIONARY_FAIL_IS_REV
 
-	return ..()
+	. = ..()
+	update_faction_icons()
 
 /datum/faction/revolution/forgeObjectives()
 	var/list/heads = get_living_heads()
+	if (!heads.len)
+		to_chat(world, "No heads !")
 	for(var/datum/mind/head_mind in heads)
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
-			AppendObjective(A)
+			to_chat(world, "We want to kill [head_mind]")
+			AppendObjective(A, TRUE) // We will have more than one kill objective
+
+/datum/faction/revolution/OnPostSetup()
+	. = ..()
+	forgeObjectives()
 
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2
 #define SHUTTLE_LEFT 3
 
 /datum/faction/revolution/check_win()
-	// -- 1. Did the shuttle left ?
+	// -- 1. Did the shuttle leave ?
 	if (win_shuttle)
 		return end(SHUTTLE_LEFT)
 
 	// -- 2. Are all the heads dead ?
-	var/total_heads = 0
+	var/list/total_heads = get_living_heads()
 	var/incapacitated_heads = 0
 
-	for (var/mob/living/carbon/human/H in player_list)
-		var/datum/mind/M = H.mind
-		if (!M)
-			continue
-		if (M.assigned_role in command_positions)
-			total_heads++
-			if (H.isDead() || H.z != map.zMainStation)
-				incapacitated_heads++
+	for (var/datum/mind/M in total_heads)
+		if (M.current.isDead() || M.current.z != map.zMainStation)
+			incapacitated_heads++
 
-	if (incapacitated_heads >= total_heads)
+	if (incapacitated_heads >= total_heads.len)
 		return end(ALL_HEADS_DEAD)
 
 	// -- 3. Are all the revs deads ?
@@ -76,8 +80,16 @@
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
 	if (!istype(R))
 		return FALSE
-	R.win_shuttle = TRUE
-	return TRUE
+	for(var/datum/mind/M in get_living_heads())
+		var/mob/living/L = M.current 
+		var/turf/T = get_turf(L)
+		if(istype(T.loc, /area/shuttle/escape/centcom))
+			R.win_shuttle = TRUE
+			return TRUE
+		else if(istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
+			R.win_shuttle = TRUE
+			return TRUE
+	return FALSE
 
 /hook_handler/revs/proc/OnArrival(var/list/args)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
@@ -85,18 +97,20 @@
 		return FALSE			
 	ASSERT(args["character"])
 	ASSERT(args["rank"])
+	to_chat(world, "OnArrival called.")
+	to_chat(world, "[args["rank"]]")
 	var/mob/living/L = args["character"]
 	if (args["rank"] in command_positions)
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
 		if(A.set_target(L.mind))
-			R.AppendObjective(A)
+			R.AppendObjective(A, TRUE) // We will have more than one kill objective
 
 /datum/faction/revolution/proc/end(var/result)
 	. = TRUE
 	switch (result)
 		if (ALL_HEADS_DEAD)
-			to_chat(world, "<b>The revolution has won!</b><br/>All heads are either dead or have fled the station!")
+			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
 		if (ALL_REVS_DEAD)
-			to_chat(world, "<b>The crew has won!</b><br/>All revolutionaries are either dead or have fled the station!")
+			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
 		if (SHUTTLE_LEFT)
-			to_chat(world, "<b>Revolution minor victory!</b><br/>The heads called the shuttle to leave the station!")
+			to_chat(world, "<font size = 3><b>Revolution minor victory!</b></font><br/><font size = 2>The heads called the shuttle to leave the station!</font>")
