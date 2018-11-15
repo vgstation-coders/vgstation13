@@ -34,12 +34,9 @@
 
 /datum/faction/revolution/forgeObjectives()
 	var/list/heads = get_living_heads()
-	if (!heads.len)
-		to_chat(world, "No heads !")
 	for(var/datum/mind/head_mind in heads)
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
-			to_chat(world, "We want to kill [head_mind]")
 			AppendObjective(A, TRUE) // We will have more than one kill objective
 
 /datum/faction/revolution/OnPostSetup()
@@ -97,8 +94,6 @@
 		return FALSE			
 	ASSERT(args["character"])
 	ASSERT(args["rank"])
-	to_chat(world, "OnArrival called.")
-	to_chat(world, "[args["rank"]]")
 	var/mob/living/L = args["character"]
 	if (args["rank"] in command_positions)
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
