@@ -1578,3 +1578,6 @@ var/proccalls = 1
 #define GET_RANDOM_JOB 0
 #define BE_ASSISTANT 1
 #define RETURN_TO_LOBBY 2
+
+// How many times to retry winset()ing window parameters before giving up
+#define WINSET_MAX_ATTEMPTS 10

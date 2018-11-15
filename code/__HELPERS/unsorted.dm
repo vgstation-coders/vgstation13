@@ -538,42 +538,15 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // Otherwise, the user mob's machine var will be reset directly.
 //
 /proc/onclose(mob/user, windowid, var/atom/ref=null)
-	if(!user.client)
-		return
-	var/param = "null"
-	if(ref)
-		param = "\ref[ref]"
-
-	winset(user, windowid, "on-close=\".windowclose [param]\"")
+	set waitfor = FALSE // winexists sleeps
+	for(var/i in 1 to WINSET_MAX_ATTEMPTS)
+		if(user && winexists(user, windowid))
+			var/param = ref ? "\ref[ref]" : "null"
+			winset(user, windowid, "on-close=\".windowclose [param]\"")
+			world.log << url_decode(winget(user, windowid, "*"))
+			break
 
 //	to_chat(world, "OnClose [user]: [windowid] : ["on-close=\".windowclose [param]\""]")
-
-
-// the on-close client verb
-// called when a browser popup window is closed after registering with proc/onclose()
-// if a valid atom reference is supplied, call the atom's Topic() with "close=1"
-// otherwise, just reset the client mob's machine var.
-//
-/client/verb/windowclose(var/atomref as text)
-	set hidden = 1						// hide this verb from the user's panel
-	set name = ".windowclose"			// no autocomplete on cmd line
-
-//	to_chat(world, "windowclose: [atomref]")
-	if(atomref!="null")				// if passed a real atomref
-		var/hsrc = locate(atomref)	// find the reffed atom
-		var/href = "close=1"
-		if(hsrc)
-//			to_chat(world, "[src] Topic [href] [hsrc]")
-			usr = src.mob
-			src.Topic(href, params2list(href), hsrc)	// this will direct to the atom's
-			return										// Topic() proc via client.Topic()
-
-	// no atomref specified (or not found)
-	// so just reset the user mob's machine var
-	if(src && src.mob)
-//		to_chat(world, "[src] was [src.mob.machine], setting to null")
-		src.mob.unset_machine()
-	return
 
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
