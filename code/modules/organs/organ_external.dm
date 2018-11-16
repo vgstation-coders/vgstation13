@@ -872,8 +872,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return (species.default_mutations.Find(mutation))
 
 
-/datum/organ/external/proc/release_restraints(var/toporbottom = 0)// 0:both, -1: legcuffs, 1: handcuffs
-	if(toporbottom >= 0)
+/datum/organ/external/proc/release_restraints(var/uncuff = UNCUFF_BOTH)
+	if(uncuff >= UNCUFF_BOTH)
 		if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
 			owner.visible_message(\
 				"\The [owner.handcuffed.name] falls off of [owner.name].",\
@@ -881,7 +881,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			owner.drop_from_inventory(owner.handcuffed)
 
-	if(toporbottom <= 0)
+	if(uncuff <= UNCUFF_BOTH)
 		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
 			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
 			"\The [owner.legcuffed.name] falls off you.")
@@ -946,10 +946,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
 	if(owner.handcuffed && body_part in list(HAND_LEFT, HAND_RIGHT))
 		if(prob(25))
-			release_restraints(1)//Handcuffs only.
+			release_restraints(UNCUFF_HANDS)//Handcuffs only.
 	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
 		if(prob(25))
-			release_restraints(-1)//Legcuffs only.
+			release_restraints(UNCUFF_LEGS)//Legcuffs only.
 
 
 	if(isgolem(owner))
