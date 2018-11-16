@@ -11,7 +11,7 @@
 			result = new result
 			var/datum/material/mat = material_type
 			if(mat)
-				result.dorfify(mat)
+				result.dorfify(mat, 0, quality)
 			qdel(I)
 			qdel(src)
 			user.put_in_hands(result)
