@@ -1294,8 +1294,8 @@ var/list/blind_victims = list()
 //RUNE IX
 /datum/rune_spell/hide
 	name = "Conceal"
-	desc = "Hide runes, blood stains, corpses, structures, and other compromising items."
-	desc_talisman = "Hide runes, blood stains, corpses, structures, and other compromising items. Covers a smaller range than when used from a rune."
+	desc = "Hide runes and cult structures. Some runes can still be used when concealed, but using them might reveal them."
+	desc_talisman = "Hide runes and cult structures. Covers a smaller range than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Kla'atu barada nikt'o!"
 	word1 = /datum/cultword/hide
