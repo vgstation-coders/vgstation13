@@ -543,7 +543,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if(user && winexists(user, windowid))
 			var/param = ref ? "\ref[ref]" : "null"
 			winset(user, windowid, "on-close=\".windowclose [param]\"")
-			world.log << url_decode(winget(user, windowid, "*"))
 			break
 
 //	to_chat(world, "OnClose [user]: [windowid] : ["on-close=\".windowclose [param]\""]")
