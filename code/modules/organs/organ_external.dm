@@ -1045,6 +1045,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	qdel(I)
 
+	owner.handle_organs(1)
 	owner.update_body()
 	owner.updatehealth()
 	owner.UpdateDamageIcon()
