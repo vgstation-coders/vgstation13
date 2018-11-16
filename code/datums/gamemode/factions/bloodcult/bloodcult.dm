@@ -132,7 +132,7 @@ var/veil_thickness = CULT_PROLOGUE
 /datum/faction/bloodcult/process()
 	..()
 	if (change_cooldown > 0)
-		change_cooldown -= 1 SECOND
+		change_cooldown -= 1 SECONDS
 		if (change_cooldown <= 0)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O && !O.IsFulfilled())
