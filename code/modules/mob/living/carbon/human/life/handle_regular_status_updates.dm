@@ -71,9 +71,6 @@
 			if(prob(2) && health && !hal_crit)
 				spawn(0)
 					emote("snore")
-		else if(resting)
-			if(halloss > 0)
-				adjustHalLoss(-3)
 		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
 			blinded = 1
 			stat = UNCONSCIOUS
@@ -82,6 +79,9 @@
 			stat = CONSCIOUS
 			if(halloss > 0)
 				adjustHalLoss(-1)
+
+		if(resting && halloss > 0)
+			adjustHalLoss(-3)
 
 		//Eyes
 		if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
