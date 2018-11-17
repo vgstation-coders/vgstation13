@@ -197,7 +197,7 @@ var/veil_thickness = CULT_PROLOGUE
 						for(var/obj/item/weapon/implant/loyalty/I in M)
 							I.forceMove(get_turf(M))
 							I.implanted = 0
-							spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
+							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O)

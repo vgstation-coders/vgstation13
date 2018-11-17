@@ -414,7 +414,7 @@ var/list/bloodstone_backup = 0
 					1;/mob/living/simple_animal/hostile/scarybat/cult,
 					)
 			if (7 to INFINITY)
-				var/mobtype = pick(
+				mobtype = pick(
 					2;/mob/living/simple_animal/hostile/creature/cult,
 					1;/mob/living/simple_animal/hostile/faithless/cult,
 					)

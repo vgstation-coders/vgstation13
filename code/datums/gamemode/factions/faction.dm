@@ -219,7 +219,7 @@ var/list/factions_with_hud_icons = list()
 
 	//then re-add them
 	for(var/datum/role/R in members)
-		if(R.antag && R.antag.current && R.antag.current.client && antag.GetRole(R.id))//if the mind doesn't have access to the role, they shouldn't see the icons
+		if(R.antag && R.antag.current && R.antag.current.client && R.antag.GetRole(R.id))//if the mind doesn't have access to the role, they shouldn't see the icons
 			for(var/datum/role/R_target in members)
 				if(R_target.antag && R_target.antag.current)
 					var/imageloc = R_target.antag.current
