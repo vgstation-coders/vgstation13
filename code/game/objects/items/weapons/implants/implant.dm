@@ -294,7 +294,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
-	if(isrevhead(H) || iscultist(H))
+	if(isrevhead(H))
+		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
+		return 0
+	if(iscultist(H) && veil_thickness >= CULT_ACT_II)
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		return 0
 	else if(isrevnothead(H))
