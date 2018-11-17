@@ -88,7 +88,7 @@
 		found = 0
 		for(var/obj/structure/cult/S in range(1,A))
 			found = 1
-			S.reveal
+			S.reveal()
 		if (found)
 			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
 		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
