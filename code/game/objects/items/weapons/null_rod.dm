@@ -85,7 +85,13 @@
 			R.reveal()
 		if (found)
 			to_chat(user, "<span class='warning'>Arcane markings suddenly glow from underneath a thin layer of dust!</span>")
-		call(/obj/effect/rune/proc/revealrunes)(src)//revealing legacy runes as well because why not
+		found = 0
+		for(var/obj/structure/cult/S in range(1,A))
+			found = 1
+			S.reveal
+		if (found)
+			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
+		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
