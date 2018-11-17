@@ -296,8 +296,9 @@
 
 /obj/item/weapon/reagent_containers/syringe/giant/New()
 	..()
+	appearance_flags |= PIXEL_SCALE
 	var/matrix/gisy = matrix()
-	gisy.Scale(1.5,1.5)
+	gisy.Scale(1.2,1.2)
 	transform = gisy
 
 /obj/item/weapon/reagent_containers/syringe/giant/get_injection_time(var/mob/target)
