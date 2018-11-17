@@ -24,6 +24,9 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/spire/S in cult_spires)
 		S.upgrade()
 
+	for (var/obj/effect/rune/R in rune_list)
+		R.update_icon()
+
 /proc/spawn_bloodstones(var/turf/source = null)
 	//Called at the beginning of ACT III, this is basically the cult's declaration of war on the crew
 	//Spawns 4 structures, one in each quarters of the station
@@ -233,6 +236,9 @@ var/veil_thickness = CULT_PROLOGUE
 
 		for (var/obj/structure/cult/spire/S in cult_spires)
 			S.upgrade()
+
+		for (var/obj/effect/rune/R in rune_list)
+			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))
 			var/datum/objective/bloodcult_bloodbath/O = new_obj

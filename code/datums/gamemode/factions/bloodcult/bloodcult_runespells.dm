@@ -72,16 +72,19 @@
 		user.whisper(text)
 
 /datum/rune_spell/proc/pre_cast()
-	var/mob/living/user = activator
+	//checking whether we're in the proper Act
+	if (Act_restriction > veil_thickness)
+		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+		return
 	//checking whether we're casting from a rune or a talisman.
 	if (istype (spell_holder,/obj/effect/rune))
-		if ((rune_flags & RUNE_STAND) && (user.loc != spell_holder.loc))
+		if ((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else
-			invoke(user,invocation)
+			invoke(activator,invocation)
 			cast()
 	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		invoke(user,invocation,1)//talisman incantations are whispered
+		invoke(activator,invocation,1)//talisman incantations are whispered
 		cast_talisman()
 
 /datum/rune_spell/proc/midcast(var/mob/add_cultist)
