@@ -1,6 +1,7 @@
 /datum/role/traitor
 	name = TRAITOR
 	id = TRAITOR
+	required_pref = ROLE_TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
 

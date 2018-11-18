@@ -32,7 +32,7 @@
 				to_chat(usr, "<span class='notice'>[success] number of revolutionaries made.</span>")
 			if("4")
 				message_admins("[key_name(usr)] has attempted to spawn [count] cultists.")
-				var/success = makeAntag(null, /datum/faction/cult, count , FROM_PLAYERS)
+				var/success = makeAntag(null, /datum/faction/bloodcult, count , FROM_PLAYERS)
 				message_admins("[success] number of cultists made.")
 				to_chat(usr, "<span class='notice'>[success] number of cultists made..</span>")
 			if("5")
