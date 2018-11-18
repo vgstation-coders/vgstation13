@@ -437,6 +437,7 @@
 		var/internal_bleeding = ""
 		var/lung_ruptured = ""
 		var/e_cancer = ""
+		var/bone_strengthened = ""
 
 		dat += "<tr>"
 
@@ -456,6 +457,11 @@
 			robot = "Prosthetic:"
 		if(e.open)
 			open = "Open:"
+		if(e.min_broken_damage != initial(e.min_broken_damage))
+			var/increase = e.min_broken_damage - initial(e.min_broken_damage)
+			var/percent_increase = round(increase / initial(e.min_broken_damage) * 100)
+			var/sign = percent_increase > 0 ? "+" : ""
+			bone_strengthened = "Altered bone strength ([sign][percent_increase]%):"
 
 		switch (e.germ_level)
 			if (INFECTION_LEVEL_ONE to INFECTION_LEVEL_ONE + 200)
@@ -496,7 +502,7 @@
 		if(!AN && !open && !infected && !e_cancer & !imp)
 			AN = "None:"
 		if(!(e.status & ORGAN_DESTROYED))
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured]</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 		dat += "</tr>"
