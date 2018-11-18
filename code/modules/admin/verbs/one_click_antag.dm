@@ -90,6 +90,7 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
+			log_admin("polling if [key_name(H)] wants to become a member of [FF.name]")
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.ForgeObjectives()
@@ -110,7 +111,7 @@ client/proc/one_click_antag()
 			var/datum/mind/M = H.mind
 
 			var/datum/role/newRole = new R
-
+			log_admin("polling if [key_name(H)] wants to become a [newRole.name]")
 			if(!newRole)
 				continue
 
@@ -141,6 +142,7 @@ client/proc/one_click_antag()
 			candidates.Remove(M)
 		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
 			candidates.Remove(M)
+	log_admin("[candidates.len] potential candidates.")
 	return candidates
 
 
