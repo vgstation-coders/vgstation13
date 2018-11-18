@@ -60,7 +60,6 @@ client/proc/one_click_antag()
 	var/list/candidates = get_candidates(role_req, recruitment_source, role_name)
 	var/recruit_count = 0
 	if(!candidates.len)
-		to_chat(usr, "No candidates")
 		return 0
 
 	candidates = shuffle(candidates)
@@ -79,7 +78,7 @@ client/proc/one_click_antag()
 			if(FF.HandleNewMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.ForgeObjectives()
-				log_admin("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
+				message_admins("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
 				recruit_count++
 				count--
 
@@ -90,11 +89,11 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-			log_admin("polling if [key_name(H)] wants to become a member of [FF.name]")
+			message_admins("polling if [key_name(H)] wants to become a member of [FF.name]")
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.ForgeObjectives()
-				log_admin("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
+				message_admins("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
 				recruit_count++
 
 		FF.OnPostSetup()
@@ -111,7 +110,7 @@ client/proc/one_click_antag()
 			var/datum/mind/M = H.mind
 
 			var/datum/role/newRole = new R
-			log_admin("polling if [key_name(H)] wants to become a [newRole.name]")
+			message_admins("polling if [key_name(H)] wants to become a [newRole.name]")
 			if(!newRole)
 				continue
 
@@ -120,7 +119,7 @@ client/proc/one_click_antag()
 				continue
 			newRole.OnPostSetup()
 			newRole.ForgeObjectives()
-			log_admin("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
+			message_admins("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
 
 	return recruit_count
@@ -142,7 +141,7 @@ client/proc/one_click_antag()
 			candidates.Remove(M)
 		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
 			candidates.Remove(M)
-	log_admin("[candidates.len] potential candidates.")
+	message_admins("[candidates.len] potential candidates.")
 	return candidates
 
 
