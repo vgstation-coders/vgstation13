@@ -458,10 +458,10 @@
 		if(e.open)
 			open = "Open:"
 		if(e.min_broken_damage != initial(e.min_broken_damage))
-			var/increase = e.min_broken_damage - initial(e.min_broken_damage)
-			var/percent_increase = round(increase / initial(e.min_broken_damage) * 100)
-			var/sign = percent_increase > 0 ? "+" : ""
-			bone_strengthened = "Altered bone strength ([sign][percent_increase]%):"
+			var/difference = e.min_broken_damage - initial(e.min_broken_damage)
+			if(difference > 0)
+				difference = "+[difference]"
+			bone_strengthened = "Altered bone strength ([difference]g/cm<sup>2</sup>)"
 
 		switch (e.germ_level)
 			if (INFECTION_LEVEL_ONE to INFECTION_LEVEL_ONE + 200)
