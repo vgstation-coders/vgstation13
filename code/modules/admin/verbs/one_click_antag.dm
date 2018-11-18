@@ -77,8 +77,9 @@ client/proc/one_click_antag()
 			var/datum/mind/M = H.mind
 			if(FF.HandleNewMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
-				RR.ForgeObjectives()
-				message_admins("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
+				RR.OnPostSetup()
+				RR.Greet(GREET_LATEJOIN)
+				message_admins("[key_name(H)] has been recruited as leader of [FF.name] via create antagonist verb.")
 				recruit_count++
 				count--
 
@@ -92,7 +93,8 @@ client/proc/one_click_antag()
 			message_admins("polling if [key_name(H)] wants to become a member of [FF.name]")
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
-				RR.ForgeObjectives()
+				RR.OnPostSetup()
+				RR.Greet(GREET_LATEJOIN)
 				message_admins("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
 				recruit_count++
 
@@ -118,7 +120,7 @@ client/proc/one_click_antag()
 				newRole.Drop()
 				continue
 			newRole.OnPostSetup()
-			newRole.ForgeObjectives()
+			newRole.Greet(GREET_LATEJOIN)
 			message_admins("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
 
