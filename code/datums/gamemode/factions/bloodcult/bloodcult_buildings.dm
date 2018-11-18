@@ -1311,9 +1311,8 @@ var/list/bloodstone_list = list()
 
 /obj/structure/cult/bloodstone/proc/summon_backup()
 	var/list/possible_floors = list()
-	for (var/turf/simulated/floor/F in range(1,src))
-		if (F != loc)//orange ain't working for some reason
-			possible_floors.Add(F)
+	for (var/turf/simulated/floor/F in orange(1,get_turf(src)))
+		possible_floors.Add(F)
 	var/monsters_to_spawn = 1
 	if (health < (maxHealth / 2))
 		monsters_to_spawn++
