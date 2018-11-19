@@ -1,4 +1,5 @@
-/datum/role/clockwork_gravekeeper
-	name = "Clockwork GraveKEEPER"
+/datum/role/clockwork/gravekeeper
+	name = "clockwork gravekeeper"
 	id = CLOCKWORK_GRAVEKEEPER
-	logo-state = "clockwork-logo"
+	logo_state = "clockwork-logo"
+	required_jobs = list("Mobile MMI")
