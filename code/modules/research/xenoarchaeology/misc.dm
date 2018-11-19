@@ -2,15 +2,19 @@
 #define XENOARCH_SPREAD_CHANCE 15
 #define ARTIFACT_SPAWN_CHANCE 20
 
-proc/SetupXenoarch()
-	for(var/datum/digsite/D in subtypesof(/datum/digsite))
-		D = new D
+/proc/SetupXenoarch()
+	world.log << "initializing digsites"
+	for(var/i in subtypesof(/datum/digsite))
+		var/datum/digsite/D = new i
+		world.log << "Digsite [D.digsite_ID]"
 		digsite_types[D.digsite_ID] = D
+	world.log << "[digsite_types.len] digsite types"
 
-	for(var/datum/find/F in subtypesof(/datum/find))
-		F = new F
+	world.log << "initializing finds"
+	for(var/i in subtypesof(/datum/find))
+		var/datum/find/F = new i
 		archaeo_types[F.find_ID] = F
-
+	world.log << "[archaeo_types.len] find types"
 	for(var/turf/unsimulated/mineral/M in mineral_turfs)
 		if(M.no_finds || !prob(XENOARCH_SPAWN_CHANCE))
 			continue

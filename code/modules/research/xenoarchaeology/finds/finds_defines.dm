@@ -1,5 +1,5 @@
-var/static/list/digsite_types = list()
-var/static/list/archaeo_types = list()
+var/list/digsite_types = list()
+var/list/archaeo_types = list()
 
 /proc/get_responsive_reagent(var/find_type)
 	var/datum/find/F = archaeo_types[find_type]
@@ -7,9 +7,9 @@ var/static/list/archaeo_types = list()
 		return F.responsive_reagent
 	return PLASMA
 
-//see /turf/unsimulated/mineral/New() in code/modules/mining/mine_turfs.dm
 /proc/get_random_digsite_type()
-	return pick(100;DIGSITE_GARDEN,95;DIGSITE_ANIMAL,90;DIGSITE_HOUSE,85;DIGSITE_TECHNICAL,80;DIGSITE_TEMPLE,75;DIGSITE_WAR)
+	var/value = pick(100;DIGSITE_GARDEN,95;DIGSITE_ANIMAL,90;DIGSITE_HOUSE,85;DIGSITE_TECHNICAL,80;DIGSITE_TEMPLE,75;DIGSITE_WAR)
+	return digsite_types[value]
 
 /proc/get_random_find_type(var/digsite)
 	var/datum/digsite/D = digsite_types[digsite]
