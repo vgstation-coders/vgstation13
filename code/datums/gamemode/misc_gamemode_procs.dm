@@ -293,5 +293,6 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 		
 	if(agent)
 		to_chat(agent,words)
+		return 1
 		
-	return(words)
+	return 0
