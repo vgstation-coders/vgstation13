@@ -47,6 +47,8 @@
 	var/nearest_beacon			// the nearest beacon's tag
 	var/turf/nearest_beacon_loc	// the nearest beacon's location
 
+	var/arrest_message = null //unique arrest message for beepsky variants
+
 
 
 	var/list/unsafe_weapons = list( //things that the secbot will check for
@@ -700,7 +702,10 @@ Auto Patrol: []"},
 		else if(src.threatlevel >= PERP_LEVEL_ARREST)
 			src.target = M
 			src.oldtarget_name = M.name
-			src.speak("Level [src.threatlevel] infraction alert!")
+			if(src.arrest_message == null)
+				src.speak("Level [src.threatlevel] infraction alert!")
+			else
+				src.speak("[src.arrest_message]")
 			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			src.visible_message("<b>[src]</b> points at [M.name]!")
 			mode = SECBOT_HUNT
@@ -1122,6 +1127,10 @@ Auto Patrol: []"},
 	icon_state = "bsecbot0"
 	icon_initial = "bsecbot"
 
+	arrest_message = "Oi mate! You need a license for that!"
+
+	weaponscheck = 1
+
 	unsafe_weapons =list(
 		/obj/item/weapon/gun,
 		/obj/item/weapon/melee,
@@ -1144,9 +1153,37 @@ Auto Patrol: []"},
 		/obj/item/weapon/bonesetter,
 		/obj/item/weapon/match,
 		/obj/item/weapon/lighter,
-		/obj/item/weapon/kitchen
+		/obj/item/weapon/kitchen,
+		/obj/item/weapon/reagent_containers/pill
 		)
 	safe_weapons = null //no safe weapons for britsky
+
+
+/obj/machinery/bot/secbot/beepsky/britsky/explode()
+	start_walk_to(0)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	var/turf/Tsec = get_turf(src)
+
+	var/obj/item/weapon/secbot_assembly/britsky/Sa = new /obj/item/weapon/secbot_assembly/britsky(Tsec)
+	Sa.build_step = 1
+	Sa.overlays += image('icons/obj/aibots.dmi', "bhs_hole")
+	Sa.created_name = src.name
+	new /obj/item/device/assembly/prox_sensor(Tsec)
+	if(baton)
+		if(is_holder_of(src, baton))
+			baton.forceMove(Tsec)
+	else
+		new /obj/item/weapon/melee/classic_baton(Tsec)
+
+	if(prob(50))
+		new /obj/item/robot_parts/l_arm(Tsec)
+
+	spark(src)
+
+	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+	O.New(O.loc)
+	qdel(src)
+
 
 //Britsky Construction
 
@@ -1156,8 +1193,7 @@ Auto Patrol: []"},
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bhelmet_signaler"
 	build_step = 0
-	created_name = "Officer Britsky of the Yard"
-
+	created_name = "Officer Britsky"
 
 
 /obj/item/clothing/head/helmet/police/attackby(var/obj/item/device/assembly/signaler/S, mob/user)
