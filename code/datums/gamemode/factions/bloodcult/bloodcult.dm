@@ -192,6 +192,12 @@ var/veil_thickness = CULT_PROLOGUE
 				if (O.conversions >= O.convert_target)
 					veil_thickness = CULT_ACT_II
 					new_obj = new /datum/objective/bloodcult_sacrifice
+					for(var/datum/role/cultist/C in members)
+						var/mob/M = C.antag.current
+						for(var/obj/item/weapon/implant/loyalty/I in M)
+							I.forceMove(get_turf(M))
+							I.implanted = 0
+							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O)

@@ -207,12 +207,12 @@
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [C]'s stomach and impales them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [C]'s stomach and impale them on \the [src]!</span>")
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
-		if (istype(blade))
-			var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
-			for(var/mob/M in observers)
-				if(!M.client || jobban_isbanned(M, ROLE_CULTIST) || M.client.is_afk())
-					continue
-				to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
+			if (istype(blade) && !blade.shade)
+				var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
+				for(var/mob/M in observers)
+					if(!M.client || jobban_isbanned(M, ROLE_CULTIST) || M.client.is_afk())
+						continue
+					to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
 	if (istype(I, /obj/item/weapon/grab))
 		if (blade)
@@ -1311,12 +1311,14 @@ var/list/bloodstone_list = list()
 
 /obj/structure/cult/bloodstone/proc/summon_backup()
 	var/list/possible_floors = list()
-	for (var/turf/simulated/floor/F in orange(1,src))
+	for (var/turf/simulated/floor/F in orange(1,get_turf(src)))
 		possible_floors.Add(F)
 	var/monsters_to_spawn = 1
 	if (health < (maxHealth / 2))
 		monsters_to_spawn++
 	for (var/i = 1 to monsters_to_spawn)
+		if (possible_floors.len <= 0)
+			break
 		var/turf/T = pick(possible_floors)
 		if (T)
 			possible_floors.Remove(T)
