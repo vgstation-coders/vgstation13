@@ -271,3 +271,27 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	to_chat(killer, "New law: 0. [law]")
 
 
+/proc/share_syndicate_codephrase(var/mob/living/agent)
+	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
+	if (syndicate_code_phrase)
+		words += "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]<br>"
+		if(agent.mind)
+			agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
+	else
+		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
+	if (syndicate_code_response)
+		words += "<span class='warning'>Code Response: </span>[syndicate_code_response]<br>"
+		if(agent.mind)
+			agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
+	else
+		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
+		
+	if(syndicate_code_phrase || syndicate_code_response)
+		words += "Use the code words in the order provided, during regular conversation, to identify other agents. Proceed with caution, however, as everyone is a potential foe.<br>"
+	else
+		words += "Trust nobody.<br>"
+		
+	if(agent)
+		to_chat(agent,words)
+		
+	return(words)
