@@ -1,3 +1,7 @@
+#define CAMERA_MAX_HEALTH 120
+#define CAMERA_DEACTIVATE_HEALTH 45
+#define CAMERA_MIN_WEAPON_DAMAGE 5
+
 var/list/camera_names=list()
 /obj/machinery/camera
 	name = "security camera"
@@ -34,7 +38,7 @@ var/list/camera_names=list()
 	var/hear_voice = 0
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
-
+	var/health = CAMERA_MAX_HEALTH
 
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
@@ -291,7 +295,27 @@ var/list/camera_messages = list()
 					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
-	return
+		user.delayNextAttack(8)
+		if(user.a_intent == I_HELP)
+			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
+		else
+			take_damage(user, W)
+
+/obj/machinery/camera/proc/take_damage(var/mob/user, var/obj/item/thing)
+	thing.on_attack(src, user)
+	if(thing.force < CAMERA_MIN_WEAPON_DAMAGE)
+		to_chat(user, "<span class='danger'>\The [thing] does no damage to [src].</span>")
+		visible_message("<span class='warning'>[user] hits [src] with [thing]. It's not very effective.</span>")
+		return
+
+	visible_message("<span class='danger'>[user] hits [src] with [thing].</span>")
+	health -= thing.force
+	if(status && health <= CAMERA_DEACTIVATE_HEALTH)
+		deactivate()
+	if(health <= 0)
+		spark(src)
+		new /obj/item/weapon/camera_assembly(get_turf(src))
+		qdel(src)
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())
@@ -507,3 +531,7 @@ var/list/camera_messages = list()
 		togglePanelOpen(null, L)
 	if(wires)
 		wires.npc_tamper(L)
+
+#undef CAMERA_MAX_HEALTH
+#undef CAMERA_DEACTIVATE_HEALTH
+#undef CAMERA_MIN_WEAPON_DAMAGE
