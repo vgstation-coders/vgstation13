@@ -108,6 +108,7 @@
 	apply_image_decorations = TRUE
 	anomaly_factor = 0
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 	item_type = "bowl"
 
 /datum/find/bowl/spawn_item()
@@ -127,6 +128,7 @@
 	item_type = "urn"
 	apply_image_decorations = TRUE
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 	anomaly_factor = 0
 
 /datum/find/urn/spawn_item()
@@ -144,6 +146,7 @@
 /datum/find/cutlery
 	find_ID = ARCHAEO_CUTLERY
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/cutlery/spawn_item()
 	item_type = "[pick("fork","spoon","knife")]"
@@ -163,6 +166,7 @@
 	find_ID = ARCHAEO_STATUETTE
 	item_type = "statuette"
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/statuette/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	new_item.icon_state = "statuette"
@@ -179,6 +183,7 @@
 	find_ID = ARCHAEO_INSTRUMENT
 	item_type = "instrument"
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/instrument/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	new_item.icon_state = "instrument"
@@ -197,6 +202,7 @@
 /datum/find/knife
 	find_ID = ARCHAEO_KNIFE
 	additional_desc = TRUE
+	responsive_reagent = IRON
 
 /datum/find/knife/spawn_item()
 	var/obj/item/new_item = new /obj/item/weapon/kitchen/utensil/knife/large
@@ -213,6 +219,7 @@
 	apply_prefix = FALSE
 	apply_material_decorations = FALSE
 	apply_image_decorations = TRUE
+	responsive_reagent = IRON
 	anomaly_factor = 0
 
 /datum/find/coin/spawn_item()
@@ -225,6 +232,7 @@
 	find_ID = ARCHAEO_HANDCUFFS
 	item_type = "handcuffs"
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/handcuffs/spawn_item()
 	return new /obj/item/weapon/handcuffs
@@ -236,6 +244,7 @@
 	find_ID = ARCHAEO_BEARTRAP
 	apply_prefix = FALSE
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/beartrap/spawn_item()
 	item_type = "[pick("wicked","evil","byzantine","dangerous")] looking [pick("device","contraption","thing","trap")]"
@@ -246,10 +255,10 @@
 			"Could be some kind of animal trap",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along part of it")]."
 
-
 /datum/find/lighter
 	find_ID = ARCHAEO_LIGHTER
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/lighter/spawn_item()
 	item_type = "[pick("cylinder","tank","chamber")]"
@@ -264,6 +273,7 @@
 /datum/find/box
 	find_ID = ARCHAEO_BOX
 	item_type = "box"
+	responsive_reagent = MERCURY
 
 /datum/find/box/spawn_item()
 	var/obj/item/new_item = new /obj/item/weapon/storage/box
@@ -276,6 +286,7 @@
 /datum/find/gastank
 	find_ID = ARCHAEO_GASTANK
 	additional_desc = TRUE
+	responsive_reagent = MERCURY
 
 /datum/find/gastank/spawn_item()
 	var/obj/item/new_item
@@ -296,6 +307,7 @@
 	find_ID = ARCHAEO_TOOL
 	item_type = "tool"
 	additional_desc = TRUE
+	responsive_reagent = IRON
 
 /datum/find/tool/spawn_item()
 	if(prob(25))
@@ -313,6 +325,7 @@
 /datum/find/metal
 	find_ID = ARCHAEO_METAL
 	apply_material_decorations = FALSE
+	responsive_reagent = IRON
 
 /datum/find/metal/spawn_item()
 	var/obj/item/stack/sheet/new_item
@@ -339,6 +352,7 @@
 
 /datum/find/pen
 	find_ID = ARCHAEO_PEN
+	responsive_reagent = MERCURY
 
 /datum/find/pen/spawn_item()
 	if(prob(30))
@@ -357,6 +371,7 @@
 	apply_material_decorations = FALSE
 	additional_desc = TRUE
 	anomaly_factor = 3
+	responsive_reagent = NITROGEN
 
 /datum/find/crystal/spawn_item(var/obj/item/weapon/archaeological_find/new_find)
 	if(prob(25))
@@ -386,6 +401,7 @@
 	apply_image_decorations = FALSE
 	anomaly_factor = 2
 	apply_prefix = FALSE
+	responsive_reagent = POTASSIUM
 
 /datum/find/cultblade/spawn_item()
 	return new /obj/item/weapon/melee/cultblade/nocult
@@ -393,6 +409,7 @@
 /datum/find/telebeacon
 	find_ID = ARCHAEO_TELEBEACON
 	anomaly_factor = 3
+	responsive_reagent = POTASSIUM
 
 /datum/find/telebeacon/spawn_item()
 	var/obj/item/new_item = new /obj/item/beacon
@@ -406,6 +423,7 @@
 	find_ID = ARCHAEO_CLAYMORE
 	apply_material_decorations = FALSE
 	apply_prefix = FALSE
+	responsive_reagent = IRON
 
 /datum/find/claymore/spawn_item()
 	var/list/possible_spawns=list(/obj/item/weapon/claymore, /obj/item/weapon/melee/morningstar, /obj/item/weapon/spear/wooden)
@@ -430,6 +448,7 @@
 	find_ID = ARCHAEO_CULTROBES
 	apply_prefix = FALSE
 	anomaly_factor = 2
+	responsive_reagent = POTASSIUM
 
 /datum/find/cultrobes/spawn_item()
 	var/list/possible_spawns = list()
@@ -453,6 +472,7 @@
 	apply_prefix = FALSE
 	apply_material_decorations = FALSE
 	item_type = "soulstone"
+	responsive_reagent = NITROGEN
 
 /datum/find/soulstone/spawn_item()
 	return new /obj/item/device/soulstone
@@ -462,6 +482,7 @@
 	apply_prefix = FALSE
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
+	responsive_reagent = NITROGEN
 
 /datum/find/shard/spawn_item()
 	if(prob(50))
@@ -474,6 +495,7 @@
 	apply_prefix = FALSE
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
+	responsive_reagent = IRON
 
 /datum/find/rods/spawn_item()
 	return new /obj/item/stack/rods
@@ -493,6 +515,7 @@
 /datum/find/katana
 	find_ID = ARCHAEO_KATANA
 	apply_prefix = FALSE
+	responsive_reagent = IRON
 
 /datum/find/katana/spawn_item()
 	var/obj/item/weapon/new_item = new /obj/item/weapon/katana
@@ -513,6 +536,7 @@
 	anomaly_factor = 2
 	item_type = "gun"
 	additional_desc = TRUE
+	responsive_reagent = IRON
 
 /datum/find/laser/spawn_item()
 	var/spawn_type = pick(
@@ -556,6 +580,7 @@
 	find_ID = ARCHAEO_GUN
 	anomaly_factor = 2
 	item_type = "gun"
+	responsive_reagent = IRON
 
 /datum/find/gun/spawn_item()
 	var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile
@@ -605,6 +630,7 @@
 /datum/find/unknown
 	find_ID = ARCHAEO_UNKNOWN
 	anomaly_factor = 2
+	responsive_reagent = MERCURY
 
 /datum/find/unknown/spawn_item()
 	var/obj/item/weapon/archaeological_find/new_item = new
@@ -620,6 +646,7 @@
 	apply_material_decorations = FALSE
 	apply_prefix = FALSE
 	additional_desc = TRUE
+	responsive_reagent = CARBON
 
 
 /datum/find/fossil/spawn_item()
@@ -636,6 +663,7 @@
 	apply_prefix = FALSE
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
+	responsive_reagent = CARBON
 
 /datum/find/shell/spawn_item()
 	var/obj/item/new_item = new /obj/item/weapon/fossil/shell
@@ -651,6 +679,7 @@
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
 	apply_prefix = FALSE
+	responsive_reagent = CARBON
 
 /datum/find/plant/spawn_item()
 	var/obj/item/new_item = new /obj/item/weapon/fossil/plant
@@ -666,6 +695,7 @@
 	apply_prefix = FALSE
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
+	responsive_reagent = CARBON
 
 /datum/find/remains_human/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	item_type = "humanoid [pick("remains","skeleton")]"
@@ -688,6 +718,7 @@
 	apply_prefix = FALSE
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
+	responsive_reagent = IRON
 
 /datum/find/remains_robot/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
@@ -711,6 +742,7 @@
 	apply_prefix = FALSE
 	apply_image_decorations = FALSE
 	apply_material_decorations = FALSE
+	responsive_reagent = CARBON
 
 /datum/find/remains_xeno/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	item_type = "alien [pick("remains","skeleton")]"
@@ -732,6 +764,7 @@
 	find_ID = ARCHAEO_MASK
 	anomaly_factor = 4
 	apply_material_decorations = FALSE
+	responsive_reagent = MERCURY
 
 /datum/find/mask/spawn_item()
 	var/list/possible_spawns = list()
@@ -745,6 +778,7 @@
 	find_ID =ARCHAEO_DICE
 	anomaly_factor = 4
 	apply_material_decorations = FALSE
+	responsive_reagent = MERCURY
 
 /datum/find/dice/spawn_item()
 	return new /obj/item/weapon/dice/d20/cursed
@@ -753,6 +787,7 @@
 	find_ID = ARCHAEO_SPACESUIT
 	anomaly_factor = 2
 	apply_material_decorations = FALSE
+	responsive_reagent = POTASSIUM
 
 /datum/find/spacesuit/spawn_item()
 	var/result = pick(/obj/item/clothing/suit/space/ancient,  /obj/item/clothing/head/helmet/space/ancient)
@@ -763,6 +798,7 @@
 	anomaly_factor = 0
 	apply_material_decorations = TRUE
 	apply_image_decorations = TRUE
+	responsive_reagent = IRON
 
 /datum/find/lance/spawn_item()
 	return new /obj/item/weapon/melee/lance
@@ -771,6 +807,7 @@
 	find_ID = ARCHAEO_ROULETTE
 	anomaly_factor = 2
 	apply_material_decorations = FALSE
+	responsive_reagent =  IRON
 
 /datum/find/roulette/spawn_item()
 	return new /obj/item/weapon/gun/projectile/roulette_revolver
@@ -783,6 +820,7 @@
 	apply_prefix = FALSE
 	apply_material_decorations = FALSE
 	apply_image_decorations = FALSE
+	responsive_reagent = IRON
 
 /datum/find/robot/spawn_item()
 	var/result = pick(/obj/item/weapon/robot_spawner/strange/ball, /obj/item/weapon/robot_spawner/strange/egg)
@@ -792,6 +830,7 @@
 	find_ID = ARCHAEO_SASH
 	anomaly_factor = 2
 	apply_material_decorations = FALSE
+	responsive_reagent = POTASSIUM
 
 /datum/find/sash/spawn_item()
 	return new /obj/item/red_ribbon_arm
@@ -801,6 +840,7 @@
 	apply_material_decorations = TRUE
 	apply_image_decorations = FALSE
 	apply_prefix = TRUE
+	responsive_reagent = POTASSIUM
 
 /datum/find/toy/spawn_item()
 	if(prob(50))
@@ -815,6 +855,7 @@
 	find_ID = ARCHAEO_LARGE_CRYSTAL
 	apply_material_decorations = FALSE
 	apply_image_decorations = TRUE
+	responsive_reagent = NITROGEN
 
 /datum/find/largecrystal/spawn_item()
 	return new/obj/structure/crystal
@@ -826,6 +867,7 @@
 	apply_material_decorations = FALSE
 	apply_image_decorations = FALSE
 	anomaly_factor = 4
+	responsive_reagent = IRON
 
 /datum/find/chaosblade/spawn_item()
 	return new /obj/item/weapon/nullrod/sword/chaos
@@ -837,6 +879,7 @@
 	apply_material_decorations = FALSE
 	apply_image_decorations = FALSE
 	anomaly_factor = 3
+	responsive_reagent = PLASMA
 
 /datum/find/guitar/spawn_item()
 	return new /obj/item/device/instrument/guitar/magical
@@ -848,6 +891,7 @@
 	apply_material_decorations = FALSE
 	apply_image_decorations = FALSE
 	anomaly_factor = 0
+	responsive_reagent = PLASMA
 
 /datum/find/supershard/spawn_item()
 	return new /obj/item/supermatter_splinter
@@ -924,7 +968,7 @@
 
 	var/turf/T = get_turf(src)
 	if(new_item != src)
-		new_item.forceMove(T)
+		new_item.forceMove(src.loc)
 		qdel(src)
 
 	if(istype(T, /turf/unsimulated/mineral))

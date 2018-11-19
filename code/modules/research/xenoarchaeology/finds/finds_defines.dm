@@ -4,7 +4,7 @@ var/list/archaeo_types = list()
 /proc/get_responsive_reagent(var/find_type)
 	var/datum/find/F = archaeo_types[find_type]
 	if(F)
-		return F.responsive_reagent
+		return initial(F.responsive_reagent)
 	return PLASMA
 
 /proc/get_random_digsite_type()
@@ -13,13 +13,13 @@ var/list/archaeo_types = list()
 
 /proc/get_random_find_type(var/digsite)
 	var/datum/digsite/D = digsite_types[digsite]
-	var/datum/find/F = archaeo_types[pick(D.find_types)]
+	var/datum/find/F = new archaeo_types[pick(D.find_types)]
 	return F
 
 /proc/get_random_find()
 	return get_random_find_type(get_random_digsite_type())
 
-var/list/responsive_carriers = list( \
+var/list/responsive_carriers = list(
 	"carbon", \
 	"potassium", \
 	"hydrogen", \
@@ -30,13 +30,13 @@ var/list/responsive_carriers = list( \
 	"phosphorus", \
 	"plasma")
 
-var/list/finds_as_strings = list( \
-	"Trace organic cells", \
-	"Long exposure particles", \
-	"Trace water particles", \
-	"Crystalline structures", \
-	"Metallic derivative", \
-	"Metallic composite", \
-	"Metamorphic/igneous rock composite", \
-	"Metamorphic/sedimentary rock composite", \
-	"Anomalous material" )
+var/list/finds_as_strings = list(
+	CARBON = "Trace organic cells",
+	POTASSIUM = "Long exposure particles",
+	HYDROGEN = "Trace water particles",
+	NITROGEN = "Crystalline structures",
+	MERCURY = "Metallic derivative",
+	IRON = "Metallic composite",
+	CHLORINE = "Metamorphic/igneous rock composite",
+	PHOSPHORUS = "Metamorphic/sedimentary rock composite",
+	PLASMA = "Anomalous material" )

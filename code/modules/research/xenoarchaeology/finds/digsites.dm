@@ -3,8 +3,10 @@
 	var/list/find_types = list() //List of IDs, as a weighted list.
 	var/gen_large_artifacts = TRUE
 
-/datum/digsite/proc/gen_find()
-	return archaeo_types[pickweight(find_types)]
+/datum/digsite/proc/gen_find(var/exc_req)
+	var/choice = archaeo_types[pickweight(find_types)]
+	var/datum/find/F = new choice(exc_req)
+	return F
 
 /datum/digsite/garden
 	digsite_ID = DIGSITE_GARDEN

@@ -12,8 +12,8 @@
 
 	world.log << "initializing finds"
 	for(var/i in subtypesof(/datum/find))
-		var/datum/find/F = new i
-		archaeo_types[F.find_ID] = F
+		var/datum/find/F = i
+		archaeo_types[initial(F.find_ID)] = i
 	world.log << "[archaeo_types.len] find types"
 	for(var/turf/unsimulated/mineral/M in mineral_turfs)
 		if(M.no_finds || !prob(XENOARCH_SPAWN_CHANCE))
