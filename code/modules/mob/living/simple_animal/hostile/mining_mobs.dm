@@ -765,7 +765,7 @@ obj/item/asteroid/basilisk_hide/New()
 		new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
 
 	for(var/i = 0 to rand(0,3))
-		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+		new /obj/item/weapon/strangerock(src.loc, get_random_find())
 	new /obj/structure/boulder(src.loc)
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/attack_icon()
@@ -798,7 +798,7 @@ obj/item/asteroid/basilisk_hide/New()
 	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
 
 	for(var/i = 0 to rand(5,13))
-		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+		new /obj/item/weapon/strangerock(src.loc, get_random_find())
 	new /obj/item/clothing/gloves/mining(src.loc)
 	new /obj/structure/boulder(src.loc)
 
