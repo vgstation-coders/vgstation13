@@ -196,7 +196,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/anvil
 	name = "Anvil"
-	contains = list(/obj/item/anvil)
+	contains = list(/obj/item/anvil,/obj/item/clothing/suit/leather_apron)
 	cost = 150
 	containertype = /obj/structure/largecrate
 	containername = "anvil crate"

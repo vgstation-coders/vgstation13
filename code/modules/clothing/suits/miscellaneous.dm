@@ -600,3 +600,15 @@
 	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 40, bullet = 25, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
 	wizard_garb = TRUE
+
+
+/obj/item/clothing/suit/leather_apron
+	name = "leather apron"
+	desc = "A rough apron made out of leather. It is commonly used by blacksmiths to shield them from the forge's embers."
+	icon_state = "apronleather"
+	item_state = "apronleather"
+	flags = FPRINT
+	body_parts_covered = FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/hammer)
+	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
+	max_heat_protection_temperature = 800
