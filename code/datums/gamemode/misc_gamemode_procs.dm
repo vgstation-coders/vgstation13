@@ -272,17 +272,20 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 
 
 /proc/share_syndicate_codephrase(var/mob/living/agent)
+	if(!agent)
+		return 0
+	if(!agent.mind)
+		message_admins("tried to call share_syndicate_codephrase() on [agent] but it had no mind!")
+		return 0
 	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
 	if (syndicate_code_phrase)
 		words += "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]<br>"
-		if(agent.mind)
-			agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
+		agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
 		words += "<span class='warning'>Code Response: </span>[syndicate_code_response]<br>"
-		if(agent.mind)
-			agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
+		agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 		
@@ -291,8 +294,5 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	else
 		words += "Trust nobody.<br>"
 		
-	if(agent)
-		to_chat(agent,words)
-		return 1
-		
-	return 0
+	to_chat(agent,words)
+	return 1
