@@ -54,7 +54,7 @@
 /datum/find/proc/spawn_item(var/obj/item/weapon/archaeological_find/new_item) //Makes the item. Returns item.
 
 /datum/find/proc/apply_prefix(var/obj/item/I)
-	I.name = "[pick("strange","ancient","alien","")] [item_type]"
+	I.name = "[pick("strange","ancient","alien","")] [item_type?"[item_type]":"[initial(I.name)]"]"
 
 /datum/find/proc/apply_image_decorations(var/obj/item/I) //Applies murals to the object
 	var/engravings = "[pick("Engraved","Carved","Etched")] on the item is [pick("an image of","a frieze of","a depiction of")] \
@@ -799,6 +799,7 @@
 	apply_material_decorations = TRUE
 	apply_image_decorations = TRUE
 	responsive_reagent = IRON
+	item_type = "lance"
 
 /datum/find/lance/spawn_item()
 	return new /obj/item/weapon/melee/lance
