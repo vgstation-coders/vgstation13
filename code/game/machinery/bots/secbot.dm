@@ -1141,7 +1141,6 @@ Auto Patrol: []"},
 		/obj/item/weapon/soap,
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/wrench,
-		/obj/item/weapon/wrench/socket,
 		/obj/item/weapon/screwdriver,
 		/obj/item/weapon/wirecutters,
 		/obj/item/weapon/weldingtool,
@@ -1180,9 +1179,8 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
-	qdel(src)
+	getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+
 
 
 //Britsky Construction
