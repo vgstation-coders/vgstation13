@@ -32,7 +32,7 @@
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
-				if(!locate(/datum/objective/die) in objectives.GetObjectives() && !locate(/datum/objective/target/steal) in objectives.GetObjectives())
+				if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
 					AppendObjective(/datum/objective/die)
 				else
 					if(prob(85))
