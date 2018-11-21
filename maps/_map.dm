@@ -206,6 +206,29 @@ proc/get_base_turf(var/z)
 
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	if(update_old_base)
+		var/old_base_turf = get_base_turf(choice)
+		for(var/area/A in areas)
+			if(!A.area_turfs.len) //No turfs
+				continue
+			for(var/turf/T in A.area_turfs)
+				if(T.z != choice) //Wrong z level
+					if(A.name != "Space")
+						break
+					else
+						continue
+				CHECK_TICK //Does not necessarily make the proc cheaper, it just means players can actually move for the ~2 minutes it takes to convert an entire z level
+				if(T.type == old_base_turf)
+					T.ChangeTurf(new_base_path)
+
+	var/datum/zLevel/L = map.zLevels[choice]
+	L.base_turf = new_base_path
+
+	for(var/obj/docking_port/destination/D in all_docking_ports)
+		if(D.z == choice)
+			D.base_turf_type = new_base_path
+
+/proc/change_base_turf_old(var/choice,var/new_base_path,var/update_old_base = 0)
+	if(update_old_base)
 		var/count = 0
 		for(var/turf/T in world)
 			count++
@@ -218,6 +241,7 @@ proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	for(var/obj/docking_port/destination/D in all_docking_ports)
 		if(D.z == choice)
 			D.base_turf_type = new_base_path
+
 
 /client/proc/set_base_turf()
 
