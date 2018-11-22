@@ -1,5 +1,5 @@
 /obj/machinery/mommi_spawner
-	name = "\the MoMMI fabricator"
+	name = "\improper MoMMI fabricator"
 	desc = "A large pad sunk into the ground."
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "mommispawner-idle"
