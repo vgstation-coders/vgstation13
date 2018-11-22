@@ -53,7 +53,7 @@
 			return I.registered_name
 		else
 			return "UNKNOWN" // Shouldn't happen but eh
-	
+
 	else if (issilicon(user)) // Currently, borgos cannot open lockboxes, but if you want to make a module who can, this will work.
 		return "[user]"
 
@@ -73,7 +73,7 @@
 			return
 		return toggle(user, I.registered_name)
 	if (isPDA(W))
-		var/obj/item/device/pda/P = W 
+		var/obj/item/device/pda/P = W
 		var/obj/item/weapon/card/id/I = P.id
 		if (!I)
 			return

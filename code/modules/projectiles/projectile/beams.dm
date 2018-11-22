@@ -8,14 +8,12 @@
  *     references for fired beams
  *         icon_states/dirs for each placed beam image
  *             turfs that have that icon_state/dir
- */
+ *
 var/list/beam_master = list()
-
+*/
 /obj/item/projectile/beam
 	name = "laser"
 	icon_state = "laser"
-	invisibility = 101
-	animate_movement = 2
 	linear_movement = 1
 	layer = PROJECTILE_LAYER
 	plane = LIGHTING_PLANE
@@ -25,11 +23,12 @@ var/list/beam_master = list()
 	flag = "laser"
 	eyeblur = 4
 	fire_sound = 'sound/weapons/Laser.ogg'
+	projectile_speed = 0.66
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color= null
 
-
+/*
 /obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(original)
 	dist_x = abs(target.x - starting.x)
@@ -290,7 +289,7 @@ var/list/beam_master = list()
 			T.overlays.Remove(beam_master[laser_state])
 
 		turfs.len = 0
-
+*/
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
 	name = "captain laser"
@@ -332,6 +331,7 @@ var/list/beam_master = list()
 		angle = round(angle) + 45*/
 	return angle
 
+/*
 /obj/item/projectile/beam/lightning/process()
 	icon_state = "lightning"
 	var/first = 1 //So we don't make the overlay in the same tile as the firer
@@ -516,7 +516,7 @@ var/list/beam_master = list()
 
 		//del(src)
 		returnToPool(src)
-
+*/
 /*cleanup(reference) //Waits .3 seconds then removes the overlay.
 //	to_chat(world, "setting invisibility")
 	sleep(50)
