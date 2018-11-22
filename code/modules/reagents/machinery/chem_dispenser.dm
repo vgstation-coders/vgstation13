@@ -311,6 +311,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(stat & BROKEN)
 		return
 
+	if(isrobot(user))
+		if(!can_use(user))
+			return
+
 	ui_interact(user)
 //Cafe stuff
 
