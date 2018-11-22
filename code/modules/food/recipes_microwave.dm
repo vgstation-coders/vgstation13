@@ -1351,7 +1351,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/aesirsalad
-	reagents_forbidden = list(SYNAPTIZINE)
+	reagents_forbidden = SYNAPTIZINES
 
 /datum/recipe/validsalad
 	items = list(
@@ -2256,11 +2256,7 @@
 	return ..()
 
 /datum/recipe/reclaimed
-	reagents = list(VOMIT = 5, ANTI_TOXIN = 1)
-	result = /obj/item/weapon/reagent_containers/food/snacks/reclaimed
-
-/datum/recipe/reclaimedallicin
-	reagents = list(VOMIT = 5, ALLICIN = 1)
+	reagents = list(VOMIT = 5, ANTI_TOXINS = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/reclaimed
 
 /datum/recipe/bruisepack
@@ -2268,11 +2264,7 @@
 	result = /obj/item/stack/medical/bruise_pack
 
 /datum/recipe/ointment
-	reagents = list(DERMALINE = 5)
-	result = /obj/item/stack/medical/ointment
-
-/datum/recipe/ointmentkathalai
-	reagents = list(KATHALAI = 5)
+	reagents = list(DERMALINES = 5)
 	result = /obj/item/stack/medical/ointment
 
 /datum/recipe/poachedaloe
