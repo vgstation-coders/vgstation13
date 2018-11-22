@@ -485,7 +485,8 @@ nanoui is used to open and update nano browser uis
 		if(user && winexists(user, window_id))
 			var/params = "\ref[src]"
 			winset(user, window_id, "on-close=\"nanoclose [params]\"")
-			break
+			return
+	close()
 
  /**
   * Push data to an already open UI window
