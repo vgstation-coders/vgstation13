@@ -333,11 +333,10 @@
 	return TRUE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
+	if(..())
+		return 1
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
-		return 1
-
-	if(..())
 		return 1
 	if(contents.len >= MAX_N_OF_ITEMS)
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
