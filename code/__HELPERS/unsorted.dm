@@ -1631,27 +1631,29 @@ Game Mode config tags:
 	var/turf/U = get_turf(target)
 	if (!T || !U)
 		return
-	var/obj/item/projectile/A
-	A = new projectile(T)
+	if(ispath(projectile))
+		projectile = new(T)
+	else
+		projectile.forceMove(T)
 	var/fire_sound
 	if(shot_sound)
 		fire_sound = shot_sound
 	else
-		fire_sound = A.fire_sound
+		fire_sound = projectile.fire_sound
 
-	A.original = target
-	A.target = U
-	A.shot_from = source
+	projectile.original = target
+	projectile.target = U
+	projectile.shot_from = source
 	if(istype(source, /mob))
-		A.firer = source
-	A.current = T
-	A.starting = T
-	A.yo = U.y - T.y
-	A.xo = U.x - T.x
+		projectile.firer = source
+	projectile.current = T
+	projectile.starting = T
+	projectile.yo = U.y - T.y
+	projectile.xo = U.x - T.x
 	playsound(T, fire_sound, 75, 1)
 	spawn()
-		A.OnFired()
-		A.process()
+		projectile.OnFired()
+		projectile.process()
 
 
 //Increases delay as the server gets more overloaded,

@@ -1000,122 +1000,66 @@ var/list/datum/dna/hivemind_bank = list()
 	spawn(10)
 		add_changeling_verb(verb_path)
 
-	to_chat(src, "<span class='notice'>We stealthily sting [T].</span>")
+	to_chat(src, "<span class='notice'>We stealthily sting [T==src?"ourselves":"\the [T]"].</span>")
 	if(!T.mind || !T.mind.GetRole(CHANGELING) || (allow_self && T == src))
 		return T	//T will be affected by the sting
 	to_chat(T, "<span class='warning'>You feel a tiny prick.</span>")
-	return
 
-/obj/item/verbs/changeling/proc/changeling_lsdsting()
+/obj/item/verbs/changeling/proc/changeling_chemsting()
 	set category = "Changeling"
-	set name = "Hallucination Sting (15)"
-	set desc = "After roughly 45 seconds, the victim will start hallucinating."
-	set waitfor = 0
+	set name = "Chemical sting (misc)"
+	set desc = "Injects our victim with some chemicals, that we have sampled previously."
 
 	var/mob/M = loc
 	if(!istype(M))
 		return
 
-	var/mob/living/carbon/target = M.changeling_sting(15, /obj/item/verbs/changeling/proc/changeling_lsdsting)
-	if(!target)
+	var/datum/role/changeling/changeling = M.changeling_power(0)
+	if(!changeling)
+		return 0
+
+	var/S = input(M, "Select the chemical: ", "Chemical IDs", null) as null|anything in changeling.absorbed_chems
+	if(!S)
 		return
 
-	feedback_add_details("changeling_powers", "HS")
+	var/bool = alert(M, "Do we wish to target ourselves?", "Yes or no, we may not know", "Yes", "No")
 
-	sleep(rand(300,600))
-	if(target)
-		target.hallucination += 400
+	var/amount = input(M, "Select how much you wish to inject. This will be how much chems we will have to muster from ourselves: ", "Chemical amount", null) as num
+	if(amount == 0)
+		return
 
-	return 1
+	var/mob/living/carbon/target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = bool=="Yes"?TRUE:FALSE)
+	if(!target || !target.reagents)
+		return
 
-/obj/item/verbs/changeling/proc/changeling_silence_sting()
+	target.reagents.add_reagent(S, amount)
+
+/obj/item/verbs/changeling/proc/changeling_chemspit()
 	set category = "Changeling"
-	set name = "Silence Sting (15)"
-	set desc = "Makes our victim silent and unable to cry for help."
+	set name = "Chemical spit (misc)"
+	set desc = "Fires a globule of chemicals in the direction we are facing."
 
 	var/mob/M = loc
 	if(!istype(M))
 		return
 
-	var/mob/living/carbon/target = M.changeling_sting(15, /obj/item/verbs/changeling/proc/changeling_silence_sting)
-	if(!target)
+	var/datum/role/changeling/changeling = M.changeling_power(0)
+	if(!changeling)
+		return 0
+
+	var/S = input(M, "Select the chemical: ", "Chemical IDs", null) as null|anything in changeling.absorbed_chems
+	if(!S)
 		return
 
-	feedback_add_details("changeling_powers", "SS")
-	target.silent += 30
-
-	return 1
-
-/obj/item/verbs/changeling/proc/changeling_blind_sting()
-	set category = "Changeling"
-	set name = "Blind Sting (20)"
-	set desc = "Makes our victim blind for 30 seconds."
-
-	var/mob/M = loc
-	if(!istype(M))
+	var/amount = input(M, "Select how much you wish to spit. This will be how much chems we will have to muster from ourselves: ", "Chemical amount", null) as num
+	if(amount == 0)
 		return
 
-	var/mob/living/carbon/target = M.changeling_sting(20, /obj/item/verbs/changeling/proc/changeling_blind_sting)
-	if(!target)
-		return
-
-	if(target.disabilities & NEARSIGHTED)
-		to_chat(target, "<span class='userdanger'>Your eyes burn terribly!</span>")
-		return
-
-	to_chat(target, "<span class='userdanger'>Your eyes burn terribly and you lose the ability to see!</span>")
-	target.disabilities |= NEARSIGHTED
-	spawn(300)
-		target.disabilities &= ~NEARSIGHTED
-
-	target.eye_blind = 10
-	target.eye_blurry = 20
-	feedback_add_details("changeling_powers", "BS")
-
-	return 1
-
-/obj/item/verbs/changeling/proc/changeling_deaf_sting()
-	set category = "Changeling"
-	set name = "Deaf Sting (5)"
-	set desc = "Makes our victim deaf for 30 seconds."
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	var/mob/living/carbon/target = M.changeling_sting(5, /obj/item/verbs/changeling/proc/changeling_deaf_sting)
-	if(!target)
-		return
-
-	if(target.disabilities & DEAF)
-		to_chat(target, "<span class='info'>You feel a weird sensation in your ears.</span>")
-		return
-
-	to_chat(target, "<span class='notice'>The world around you suddenly becomes quiet.</span>")
-	target.sdisabilities |= DEAF
-	spawn(300)
-		target.sdisabilities &= ~DEAF
-
-	feedback_add_details("changeling_powers", "DS")
-	return 1
-
-/obj/item/verbs/changeling/proc/changeling_paralysis_sting()
-	set category = "Changeling"
-	set name = "Paralysis Sting (30)"
-	set desc = "Makes our victim temporarily paralyzed below the neck. They'll still be able to talk and yell for help."
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	var/mob/living/carbon/target = M.changeling_sting(30, /obj/item/verbs/changeling/proc/changeling_paralysis_sting)
-	if(!target)
-		return
-
-	to_chat(target, "<span class='userdanger'>Your muscles begin to painfully tighten.</span>")
-	target.Knockdown(20)
-	feedback_add_details("changeling_powers", "PS")
-	return 1
+	if(M.changeling_power(amount) && (changeling.chem_charges -= amount < 0))
+		var/obj/item/projectile/puke/P = new /obj/item/projectile/puke/clear
+		P.reagents.add_reagent(S, amount)
+		M.visible_message("<span class = 'warning'>\The [M] spits a globule of chemicals!</span>")
+		generic_projectile_fire(get_ranged_target_turf(M, M.dir, 10), M, P, 'sound/weapons/pierce.ogg')
 
 /obj/item/verbs/changeling/proc/changeling_transformation_sting()
 	set category = "Changeling"
@@ -1156,51 +1100,6 @@ var/list/datum/dna/hivemind_bank = list()
 	domutcheck(target, null)
 	feedback_add_details("changeling_powers","TS")
 
-	return 1
-
-/obj/item/verbs/changeling/proc/changeling_unfat_sting()
-	set category = "Changeling"
-	set name = "Unfat Sting"
-	set desc = "A rapid weightloss plan that actually works!"
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting, allow_self=TRUE)
-	if(!target)
-		return
-
-	if(target.overeatduration > 100)
-		to_chat(target, "<span class='danger'>You feel a tiny prick as your stomach churns violently. You begin to feel skinnier.</span>")
-		target.overeatduration = 0
-		target.nutrition = max(target.nutrition - 200, 0)
-	else
-		to_chat(target, "<span class='notice'>You feel a tiny prick. Nothing happens.</span>")
-
-	feedback_add_details("changeling_powers", "US")
-	return 1
-
-/obj/item/verbs/changeling/proc/changeling_fat_sting()
-	set category = "Changeling"
-	set name = "Fat Sting"
-	set desc = "Adds fat quickly."
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting, allow_self=TRUE)
-	if(!target)
-		return
-
-	if(target.overeatduration < 100)
-		to_chat(target, "<span class='danger'>You feel a tiny prick as your stomach churns violently. You begin to feel bloated.</span>")
-		target.overeatduration += 600 // 500 is minimum fat threshold.
-	else
-		to_chat(target, "<span class='notice'>You feel a tiny prick. Nothing happens.</span>")
-
-	feedback_add_details("changeling_powers", "FS")
 	return 1
 
 /obj/item/verbs/changeling/proc/changeling_extract_dna_sting()
