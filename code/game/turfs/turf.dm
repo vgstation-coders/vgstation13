@@ -333,27 +333,6 @@
 	if (!N || !allow)
 		return
 
-#ifdef ENABLE_TRI_LEVEL
-// Fuck this, for now - N3X
-///// Z-Level Stuff ///// This makes sure that turfs are not changed to space when one side is part of a zone
-	if(N == /turf/space)
-		var/turf/controller = locate(1, 1, src.z)
-		for(var/obj/effect/landmark/zcontroller/c in controller)
-			if(c.down)
-				var/turf/below = locate(src.x, src.y, c.down_target)
-				if((SSair.has_valid_zone(below) || SSair.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
-					var/turf/W = src.ChangeTurf(/turf/simulated/floor/open)
-					var/list/temp = list()
-					temp += W
-					c.add(temp,3,1) // report the new open space to the zcontroller
-
-					if(opacity != initialOpacity)
-						UpdateAffectingLights()
-
-					return W
-///// Z-Level Stuff
-#endif
-
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
