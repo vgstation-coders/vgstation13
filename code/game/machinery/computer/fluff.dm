@@ -16,13 +16,19 @@
 /obj/machinery/computer/fluff/attack_ai(mob/user)
 	if(isAdminGhost(user))
 
+		//Some shitty-ass documentation here
+		to_chat(user, "The following Topic() tags are handled: <b>notify_admin</b> (sends a notification to all admins), <b>notify_user</b> (displays a message to the user), <b>shutoff</b> (turns off the computer and erases all HTML). \ref\[src\] is added automatically to links. Keep HTML tags lowercase unless you don't want your links processed.")
+		to_chat(user, "Link format: \<a href='notify_admin=Button pressed;shutoff=1'\>Button!\</a\>")
+
 		var/new_window_data = input("Input new data to be displayed on this computer.", "Custom computer crafting", window_data) as null|message
 		if(isnull(new_window_data))
 			return
 		var/new_window_width = input("Input new window width", "Custom computer crafting", window_width) as null|num
 		var/new_window_height = input("Input new window height", "Custom computer crafting", window_height) as null|num
 
-		window_data = replacetext(new_window_data, "<a href='", "<a href='?src=\ref[src];") //Make all links actually call Topic() on this computer
+		//Fix all links so that they actually call Topic() on this computer
+		//To prevent this replacetext from fucking up already fixed links, the 'a' tag is replaced with an uppercase 'A'. The case-sensitive replacetext will not touch it afterwards
+		window_data = replacetextEx(new_window_data, "<a href='", "<A href='?src=\ref[src];")
 
 		window_width = new_window_width
 		window_height = new_window_height
@@ -39,8 +45,6 @@
 		popup.remove_stylesheets()
 		popup.set_content(window_data)
 		popup.open()
-
-		onclose(user, "customcomp")
 		return
 
 	switch(deny_type)
@@ -60,11 +64,11 @@
 	if(href_list["notify_admin"])
 		message_admins("Incoming notification from the custom computer '[src]' [formatJumpTo(src)] (sent by [key_name(usr)]): [href_list["notify_admin"]]")
 
-	if(href_list["set_data"])
-		window_data = href_list["set_data"]
+	if(href_list["notify_user"])
+		to_chat(usr, "[bicon(src)][href_list["notify_user"]]")
 
 	if(href_list["shutoff"])
-		window_data = ""
+		window_data = " "
 
 	src.updateUsrDialog()
 
