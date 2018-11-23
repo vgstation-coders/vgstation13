@@ -15,6 +15,15 @@
 		equip_traitor(antag.current, 20)
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
 
+/datum/role/traitor/Drop()
+	if(isrobot(antag.current) || isAI(antag.current))
+		var/mob/living/silicon/robot/S = antag.current
+		to_chat(S, "<b>Your laws have been changed!</b>")
+		S.set_zeroth_law("","")
+		to_chat(S, "Law 0 has been purged.")
+
+	.=..()
+
 /datum/role/traitor/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/syndicate)
