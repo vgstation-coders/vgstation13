@@ -144,9 +144,8 @@ var/list/ai_list = list()
 
 			job = "AI"
 	ai_list += src
-	playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 	..()
-	return
+	playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"
@@ -273,14 +272,14 @@ var/list/ai_list = list()
 	ASSERT(chosen_state)
 	chosen_core_icon_state = chosen_state
 	update_icon()
-	
+
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()
 	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
 	if(malf && malf.apcs >= 3)
 		stat(null, "Amount of APCS hacked: [malf.apcs]")
 		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-	
+
 
 /mob/proc/remove_malf_spells()
 	for(var/spell/S in spell_list)
