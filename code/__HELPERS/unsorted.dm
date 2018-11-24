@@ -1383,6 +1383,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	B.fingerprints = A.fingerprints
 	B.fingerprintshidden = A.fingerprintshidden
 	B.fingerprintslast = A.fingerprintslast
+	B.suit_fibers = A.suit_fibers
 
 //Checks if any of the atoms in the turf are dense
 //Returns 1 is anything is dense, 0 otherwise
