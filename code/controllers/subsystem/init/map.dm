@@ -2,21 +2,33 @@
 
 var/datum/subsystem/map/SSmap
 
+/**
+List of players by z level
+	list(1 = list(mind1, mind2, mind3...)
+		2 = list())
+
+fleshed out in map init
+populated during player spawning.
+
+**/
+var/list/players_by_z_level = list()
+
+
+
+proc/handle_z_level_transition(var/datum/mind/M, var/from_z, var/to_z)
+	if(players_by_z_level.len && from_z && to_z && M) //If it's initialized
+		for(var/i = 1 to players_by_z_level.len) //Find them in the list currently
+			if(islist(players_by_z_level[i]))
+				var/list/L = players_by_z_level[i]
+				if(i != to_z && L.Find(M)) //They are in this list, and shouldn't be
+					L.Remove(M)
+				if(i == to_z && !L.Find(M)) //They aren't in this list and should be
+					L.Add(M)
 
 /datum/subsystem/map
 	name       = "Map"
 	init_order = SS_INIT_MAP
 	flags      = SS_NO_FIRE
-	/**
-	List of players by z level
-		list(1 = list(mind1, mind2, mind3...)
-			2 = list())
-
-	fleshed out in map init
-	populated during player spawning.
-
-	**/
-	var/list/players_by_z_level = list()
 
 
 /datum/subsystem/map/New()
@@ -47,13 +59,3 @@ var/datum/subsystem/map/SSmap
 			players_by_z_level[Z.z] = list()
 		log_startup_progress("List initialized. number of zLevels [players_by_z_level.len].")
 	..()
-
-/datum/subsystem/map/proc/handle_z_level_transition(var/datum/mind/M, var/from_z, var/to_z)
-	if(players_by_z_level.len) //If it's initialized
-		for(var/i = 1 to players_by_z_level.len) //Find them in the list currently
-			if(islist(players_by_z_level[i]))
-				var/list/L = players_by_z_level[i]
-				if(i != to_z && L.Find(M)) //They are in this list, and shouldn't be
-					L.Remove(M)
-				if(i == to_z && !L.Find(M)) //They aren't in this list and should be
-					L.Add(M)

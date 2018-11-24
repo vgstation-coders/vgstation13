@@ -40,9 +40,9 @@ var/list/machines = list()
 		if (!M || M.gcDestroyed || M.disposed || M.timestopped)
 			continue
 
-		if(SSmap.players_by_z_level.len && M.z)
-			var/list/L = SSmap.players_by_z_level[M.z]
-			if(!L.len) //Nobody here
+		if(players_by_z_level.len && M.z)
+			var/list/L = players_by_z_level[M.z]
+			if(!L.len)
 				continue
 
 		if (M.process() == PROCESS_KILL)

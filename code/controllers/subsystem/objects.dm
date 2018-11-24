@@ -43,8 +43,8 @@ var/list/processing_objects = list()
 		if (!o || o.gcDestroyed || o.disposed || o.timestopped)
 			continue
 
-		if(SSmap.players_by_z_level.len && o.z)
-			var/list/L = SSmap.players_by_z_level[o.z]
+		if(players_by_z_level.len && o.z)
+			var/list/L = players_by_z_level[o.z]
 			if(!L.len) //Nobody here
 				continue
 

@@ -97,7 +97,7 @@
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
 
-	SSmap.handle_z_level_transition(src, old_character.z, current.z)
+	handle_z_level_transition(src, old_character.z, current.z)
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
@@ -464,7 +464,7 @@
 	if(!mind.name)
 		mind.name = real_name
 	mind.current = src
-	SSmap.handle_z_level_transition(mind, z, z) //Puts them on the players_in_zlevel list
+	handle_z_level_transition(mind, z, z) //Puts them on the players_in_zlevel list
 
 //HUMAN
 /mob/living/carbon/human/mind_initialize()
