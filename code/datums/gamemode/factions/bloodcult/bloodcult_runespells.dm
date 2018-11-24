@@ -930,6 +930,12 @@
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
 			if (-1)
 				to_chat(victim, "<span class='danger'>Your mind was impervious to the teachings of Nar-Sie. Being of no use for the cult, your body was be devoured when the ritual ended. Your blood and equipment now belong to the cult.</span>")
+				switch(acceptance)
+					if ("Never")
+						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
+					if ("Banned")
+						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
+
 
 
 		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
