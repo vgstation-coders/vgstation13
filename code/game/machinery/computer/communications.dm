@@ -524,6 +524,10 @@ var/global/ports_open = TRUE
 	//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
 	//	return
 
+	if(emergency_shuttle.shutdown)
+		to_chat(user, "The emergency shuttle has been disabled.")
+		return
+
 	if(world.time < 6000) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
 		to_chat(user, "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minute\s before trying again.")
 		return
