@@ -119,10 +119,12 @@
 		level.base_turf = /turf/space
 	if(z_to_use > zLevels.len)
 		zLevels.len = z_to_use
+		if(SSmap.players_by_z_level.len && z_to_use > SSmap.players_by_z_level.len)
+			SSmap.players_by_z_level.Add(z_to_use)
+			SSmap.players_by_z_level[z_to_use] = list()
 	zLevels[z_to_use] = level
 	if(!level.movementJammed)
 		accessable_z_levels += list("[z_to_use]" = level.movementChance)
-
 	level.z = z_to_use
 
 var/global/list/accessable_z_levels = list()

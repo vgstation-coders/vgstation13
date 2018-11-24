@@ -183,6 +183,8 @@
 
 	// Weighted Votes
 	var/weighted_votes = 0
+	//If there are no players on a zlevel, things will stop processing on it
+	var/disable_zlevel_processing_if_no_players
 
 /datum/configuration/New()
 	. = ..()
@@ -577,6 +579,8 @@
 					discord_password = value
 				if("weighted_votes")
 					weighted_votes = TRUE
+				if("disable_zlevel_processing_if_no_players")
+					disable_zlevel_processing_if_no_players = TRUE
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"

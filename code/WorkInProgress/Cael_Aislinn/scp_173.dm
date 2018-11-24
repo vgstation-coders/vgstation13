@@ -228,7 +228,7 @@
 			var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
 			spawn()
 				visible_message("<span class='danger'>\The [src] suddenly disappears into the vent!</span>")
-				loc = exit_vent
+				forceMove(exit_vent)
 				var/travel_time = round(get_dist(loc, exit_vent.loc)/2)
 				spawn(travel_time)
 					if(!exit_vent || exit_vent.welded)

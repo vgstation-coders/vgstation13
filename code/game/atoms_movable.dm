@@ -256,6 +256,8 @@
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+	if(oldloc.z != z)
+		on_z_transition(oldloc.z, z)
 
 /atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
 	var/list/found = ..()
@@ -449,7 +451,7 @@
 	INVOKE_EVENT(on_moved,list("loc"=loc))
 	var/turf/T = get_turf(destination)
 	if(old_loc && T && old_loc.z != T.z)
-		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
+		on_z_transition(old_loc.z, T.z)
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)

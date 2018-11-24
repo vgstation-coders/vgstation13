@@ -51,6 +51,11 @@ var/event/on_pipenet_tick = new
 		if (!atmosmachinery || atmosmachinery.gcDestroyed || atmosmachinery.disposed || atmosmachinery.timestopped)
 			continue
 
+		if(SSmap.players_by_z_level.len && atmosmachinery.z)
+			var/list/L = SSmap.players_by_z_level[atmosmachinery.z]
+			if(!L.len) //Nobody here
+				continue
+
 		if (atmosmachinery.process() && MC_TICK_CHECK)
 			return
 

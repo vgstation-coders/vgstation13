@@ -121,3 +121,6 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
+	if(mind)
+		SSmap.handle_z_level_transition(mind, z, z)

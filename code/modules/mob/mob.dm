@@ -2195,5 +2195,10 @@ mob/proc/on_foot()
 			var/datum/role/R = mind.antag_roles[role]
 			R.update_antag_hud()
 
+/mob/on_z_transition(var/old_z, var/new_z)
+	..()
+	if(mind)
+		SSmap.handle_z_level_transition(mind, old_z, new_z)
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

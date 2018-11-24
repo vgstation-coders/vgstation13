@@ -944,3 +944,8 @@ its easier to just keep the beam vertical.
 
 /atom/proc/thermal_energy_transfer()
 	return
+
+/atom/proc/on_z_transition(var/old_z, var/new_z)
+	INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_z, "to_z" = new_z))
+	for(var/atom/AA in recursive_type_check(src))
+		INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = old_z, "to_z" = new_z))

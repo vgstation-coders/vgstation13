@@ -43,6 +43,11 @@ var/list/processing_objects = list()
 		if (!o || o.gcDestroyed || o.disposed || o.timestopped)
 			continue
 
+		if(SSmap.players_by_z_level.len && o.z)
+			var/list/L = SSmap.players_by_z_level[o.z]
+			if(!L.len) //Nobody here
+				continue
+
 		// > this fucking proc isn't defined on a global level.
 		// > Which means I can't fucking set waitfor on all of them.
 		o:process()
