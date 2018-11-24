@@ -79,12 +79,29 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		if (rune_name)
 			if (initial(rune_name.Act_restriction) <= veil_thickness)
 				to_chat(user, initial(rune_name.desc))
+				if (istype(active_spell,/datum/rune_spell/portalentrance))
+					var/datum/rune_spell/portalentrance/PE = active_spell
+					if (PE.network)
+						to_chat(user, "<span class='info'>This entrance was attuned to the <b>[network]</b> path.</span>")
+				if (istype(active_spell,/datum/rune_spell/portalexit))
+					var/datum/rune_spell/portalexit/PE = active_spell
+					if (PE.network)
+						to_chat(user, "<span class='info'>This exit was attuned to the <b>[network]</b> path.</span>")
 			else
 				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 
 	//so do observers
 	else if (isobserver(user))
 		to_chat(user, "<span class='info'>[rune_name ? "That's \a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spell."]</span>")
+		if (rune_name)
+			if (istype(active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[network]</b> path.</span>")
+			if (istype(active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalexit/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This exit was attuned to the <b>[network]</b> path.</span>")
 
 	//"cult" chaplains can read the words, but not understand the meaning (though they can always check it up). Also has a chance to trigger a taunt from Nar-Sie.
 	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))

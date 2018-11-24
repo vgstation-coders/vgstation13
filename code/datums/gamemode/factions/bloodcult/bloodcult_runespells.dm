@@ -1304,7 +1304,7 @@ var/list/blind_victims = list()
 	word1 = /datum/cultword/hide
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/blood
-	page = ""
+	page = "This rune allows you to hide every rune and structures in a circular 7 tile range around it. You cannot hide a rune or structure that got revealed less than 10 seconds ago. Affects through walls. The talisman version has a 5 tile radius. "
 	var/rune_effect_range=7
 	var/talisman_effect_range=5
 
@@ -1355,7 +1355,7 @@ var/list/blind_victims = list()
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/hide
-	page = ""
+	page = "This rune (whose words are the same as the Conceal rune in reverse) lets you reveal every rune and structures in a circular 7 tile range around it. Each revealed rune will stun non-cultists in a 3 tile range around them, stunning and muting them for 2 seconds, up to a total of 10 seconds. Affects through walls. The stun ends if the victims are moved away from where they stand, unless they get knockdown first, so you might want to follow up with a Stun talisman. "
 	var/effect_range=7
 	var/shock_range=3
 	var/shock_per_obj=2
@@ -1485,7 +1485,7 @@ var/list/blind_victims = list()
 	word1 = /datum/cultword/see
 	word2 = /datum/cultword/hell
 	word3 = /datum/cultword/join
-	page = ""
+	page = "This rune grants you the ability to see the invisible, including observers and concealed runes and structures. The talisman version has 5 uses, which grant you the ability for 8 seconds each. Remember that runes can still be activated while they are concealed! "
 	cost_invoke = 5
 	var/obj/effect/cult_ritual/seer/seer_ritual = null
 	var/talisman_duration = 80 //tenths of a second
@@ -1573,7 +1573,7 @@ var/list/blind_victims = list()
 	word3 = /datum/cultword/other
 	rune_flags = RUNE_STAND
 	talisman_uses = 3
-	page = ""
+	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section bellow) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
 	var/list/slots_to_store = list(
 		slot_shoes,
 		slot_head,
@@ -1644,7 +1644,7 @@ var/list/blind_victims = list()
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
 	talisman_absorb = RUNE_CAN_ATTUNE
-	page = ""
+	page = "This rune spawns a Cult Door immediately upon use, for a cost of 10u of blood. This rune cannot be activated if there's another cult door currently adjacent to it. Cult doors can be broken down relatively quickly with weapons, but let cultist move through them with barely any slowdown, making them great to retreat. Spawning them in maintenance will exasperate the crew. Lastly, they can be remotely activated using a talisman. "
 	cost_invoke = 10
 
 /datum/rune_spell/door/cast()
@@ -1670,7 +1670,7 @@ var/list/blind_victims = list()
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/technology
 	word3 = /datum/cultword/other
-	page = ""
+	page = "For a 20u blood cost, this rune immediately buffs all cultists in a 7 tile range by immediately removing any stuns, oxygen loss damage, holy water, and various other bad conditions. Additionally, it injects them with 1u of hyperzine, negating slowdown from low health or clothing. This makes it a very potent rune in a fight, especially as a follow up to a flash bang, or prior to a fight. Best used as a talisman. "
 	cost_invoke = 20
 	var/effect_range = 7
 
@@ -1718,7 +1718,7 @@ var/list/blind_victims = list()
 	word1 = /datum/cultword/join
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/self
-	page = ""
+	page = "This rune actually has two different rituals, which you can choose between upon casting, both rituals have a 10 seconds base cast time. The first one, Summon Cultist, lets you summon a cultist from anywhere in the world whether they're alive or dead, for a cost of 50u of blood, which can be split by having other cultists participate in the ritual. The second ritual, Rejoin Cultist, lets you summon yourself next to the target cultist instead for a cost of 15u of blood. Other cultists can participate in the second ritual to accompany you, but the cost will remain 15u for every participating cultist."
 	remaining_cost = 10
 	cost_upkeep = 1
 	var/rejoin = 0
@@ -1959,7 +1959,7 @@ var/list/blind_victims = list()
 	word3 = /datum/cultword/other
 	talisman_absorb = RUNE_CAN_ATTUNE
 	can_conceal = 1
-	page = ""
+	page = "This rune lets you set free teleports between any two tiles in the worlds, when used in combination with the Path Exit rune. Upon its first use, the rune asks you to set a path for it to attune to. There are 10 possible paths, each corresponding to a cult word. Upon subsequent uses the rune will, after a 1 second delay, teleport everything not anchored above it to the Path Exit attuned to the same word (if there aren't any, no teleportation will occur). Talismans will remotely activate this rune. You can deactivate a Path Entrance by simply using the Erase Word spell on it, and rewriting it afterwards. "
 	var/network = ""
 
 /datum/rune_spell/portalentrance/cast()
@@ -2049,7 +2049,7 @@ var/list/bloodcult_exitportals = list()
 	word3 = /datum/cultword/self
 	talisman_absorb = RUNE_CAN_IMBUE
 	can_conceal = 1
-	page = ""
+	page = "This rune lets you set free teleports between any two tiles in the worlds, when used in combination with the Path Entrance rune. Upon its first use, the rune asks you to set a path for it to attune to. There are 10 possible paths, each corresponding to a cult word. Unlike for entrances, there may only exist 1 exit for each path. By using a talisman on an attuned rune, the talisman will teleport you to that rune immediately upon use. By using a talisman on a non-attuned rune, the rune will be absorbed instead, and you'll be able to set a destination path on the talisman, allowing you to check which path exits currently exist. You can deactivate a Path Exit by simply using the Erase Word spell on it, and rewriting it afterwards. "
 	var/network = ""
 
 /datum/rune_spell/portalexit/New()
@@ -2159,7 +2159,7 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
-	page = ""
+	page = "This rune triggers a short-range EMP that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
@@ -2178,7 +2178,7 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/hell
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
-	page = ""
+	page = "Upon use, you will fall asleep, and your soul will float above your body, allowing you to freely move around the Z-Level like a ghost would. However, you cannot talk with other ghosts, or listen to them, or use any of the usual ghost verbs beside re-entering your body. Re-entering your body, or it being moved away from the rune will end the ritual, and you'll wake up after a second or so. You might have to use the rest verb to get back up. As it can be used for any period of time, it's a great, though limited, spying tool. Should your body be destroyed while you were using the rune, attempting to re-enter it will grant you the rest of the ghost verbs and abilities back. "
 	rune_flags = RUNE_STAND
 	var/mob/dead/observer/deafmute/astral = null
 	var/cultist_key = ""
@@ -2271,7 +2271,12 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/join
 	word3 = /datum/cultword/hell
-	page = ""
+	page = "This final rune lets you bring back any dead player into the cult, by creating them a new body. Unlike other runes, this one requires a few ingredients:\
+	    a Skull (obtainable from failed Conversions and Soul Stone victims)\
+	    some Ashes (obtainable by burning some paper or talisman, which you can do by using them on a cult blade)\
+	    any piece of Meat (obtainable in many ways)\
+	    a Ghost made visible (which can be done by hitting one with your Arcane Tome, after using the Seer rune)\
+		It is recommended that multiple cultists participate in this ritual, or that a stockpile of blood be used, since each participating cultists will pay 5u of blood per second, until 300u of blood is paid in total. The resurrected's cultist body has the properties of the Manifested Ghost tattoo by default."
 	ingredients = list(
 		/obj/item/weapon/skull,
 		/obj/effect/decal/cleanable/ash,
