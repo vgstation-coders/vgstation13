@@ -12,6 +12,7 @@ var/list/camera_names=list()
 	idle_power_usage = 5
 	active_power_usage = 10
 	plane = ABOVE_HUMAN_PLANE
+	flags = FPRINT
 
 	var/datum/wires/camera/wires = null // Wires datum
 	var/list/network = list(CAMERANET_SS13)
@@ -190,7 +191,23 @@ var/list/camera_names=list()
 #define MAX_CAMERA_MESSAGES 15
 var/list/camera_messages = list()
 
-/obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
+/obj/machinery/camera/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damtype == HALLOSS)
+		return
+
+	take_damage(Proj.damage)
+
+/obj/machinery/camera/proc/dismantle()
+	if(assembly)
+		assembly.anchored = TRUE
+		assembly.state = 1
+		assembly.forceMove(loc)
+		transfer_fingerprints(src, assembly)
+		assembly.update_icon()
+		assembly = null
+	qdel(src)
+
+/obj/machinery/camera/attackby(obj/item/W, mob/living/user)
 
 	// DECONSTRUCTION
 	if(isscrewdriver(W))
@@ -203,12 +220,7 @@ var/list/camera_messages = list()
 
 	else if(iswelder(W) && wires.CanDeconstruct())
 		if(weld(W, user))
-			if(assembly)
-				assembly.state = 1
-				assembly.forceMove(src.loc)
-				assembly = null
-
-			qdel(src)
+			dismantle()
 
 	// Upgrades!
 	else if(is_type_in_list(W, assembly.possible_upgrades)) // Is a possible upgrade
@@ -295,27 +307,27 @@ var/list/camera_messages = list()
 					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
+		add_fingerprint(user)
 		user.delayNextAttack(8)
 		if(user.a_intent == I_HELP)
 			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
-		else
-			take_damage(user, W)
+			return
+		triggerCameraAlarm()
+		W.on_attack(src, user)
+		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
+			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
+			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
+			return
+		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		take_damage(W.force)
 
-/obj/machinery/camera/proc/take_damage(var/mob/user, var/obj/item/thing)
-	thing.on_attack(src, user)
-	if(thing.force < CAMERA_MIN_WEAPON_DAMAGE)
-		to_chat(user, "<span class='danger'>\The [thing] does no damage to [src].</span>")
-		visible_message("<span class='warning'>[user] hits [src] with [thing]. It's not very effective.</span>")
-		return
-
-	visible_message("<span class='danger'>[user] hits [src] with [thing].</span>")
-	health -= thing.force
+/obj/machinery/camera/proc/take_damage(var/amount)
+	health -= amount
 	if(status && health <= CAMERA_DEACTIVATE_HEALTH)
 		deactivate()
 	if(health <= 0)
 		spark(src)
-		new /obj/item/weapon/camera_assembly(get_turf(src))
-		qdel(src)
+		dismantle()
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())
@@ -517,6 +529,9 @@ var/list/camera_messages = list()
 	return
 
 /obj/machinery/camera/arena/attack_pai(mob/user as mob)
+	return
+
+/obj/machinery/camera/arena/bullet_act(var/obj/item/projectile/Proj)
 	return
 
 /obj/machinery/camera/kick_act(mob/living/carbon/human/H)

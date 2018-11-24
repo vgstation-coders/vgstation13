@@ -5,7 +5,7 @@
 	icon_state = "cameracase"
 	w_class = W_CLASS_SMALL
 	anchored = 0
-
+	flags = FPRINT
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 300)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
