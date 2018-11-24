@@ -7161,7 +7161,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 		if(H.getBruteLoss() >= 30)
 			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
-				if((E.status & ORGAN_BROKEN) || (E.min_broken_damage >= E.max_damage))
+				if((E.status & ORGAN_BROKEN) || !E.is_organic() || (E.min_broken_damage >= E.max_damage))
 					continue
 				E.min_broken_damage += rand(4,8) * REM
 				if(E.min_broken_damage >= E.max_damage)
