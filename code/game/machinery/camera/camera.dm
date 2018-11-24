@@ -312,7 +312,6 @@ var/list/camera_messages = list()
 		if(user.a_intent == I_HELP)
 			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
 			return
-		triggerCameraAlarm()
 		W.on_attack(src, user)
 		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
 			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
@@ -322,9 +321,13 @@ var/list/camera_messages = list()
 		take_damage(W.force)
 
 /obj/machinery/camera/proc/take_damage(var/amount)
+	if(amount <= 0)
+		return
 	health -= amount
-	if(status && health <= CAMERA_DEACTIVATE_HEALTH)
-		deactivate()
+	if(health <= CAMERA_DEACTIVATE_HEALTH)
+		triggerCameraAlarm()
+		if(status)
+			deactivate()
 	if(health <= 0)
 		spark(src)
 		dismantle()
