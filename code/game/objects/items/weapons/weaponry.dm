@@ -475,3 +475,64 @@ obj/item/weapon/banhammer/admin
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
+
+
+
+/obj/item/weapon/rapier
+	name = "rapier"
+	desc = "It is currently held high. In this stance you strike harder. En Garde!"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "rapier"
+	item_state = "rapier"
+	hitsound = "sound/weapons/bladeslice.ogg"
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BELT
+	force = 20
+	throwforce = 5
+	w_class = W_CLASS_MEDIUM
+	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	attack_verb = list("pokes", "stabs", "impales","attacks","flicks","jabs")
+	var/stance = "high"
+	var/cooldown = 0 //cooldown for swapping stances
+
+/obj/item/weapon/rapier/proc/set_low_stance()
+	desc = "It is currently held low. In this stance you can parry attacks. Allez !"
+	icon_state = "rapier_d"
+	item_state = "rapier_d"
+	stance = "low"
+	force = 13
+
+/obj/item/weapon/rapier/proc/set_high_stance()
+	desc = "It is currently held high. In this stance you strike harder. En Garde!"
+	icon_state = "rapier"
+	item_state = "rapier"
+	stance = "high"
+	force = 20
+
+/obj/item/weapon/rapier/IsShield()
+	if (stance == "low")
+		return 1
+
+
+/obj/item/weapon/rapier/proc/swap_stance()
+	if(stance == "high")
+		set_low_stance()
+	else
+		set_high_stance()
+	usr.update_inv_hands()
+	playsound(src, 'sound/weapons/swish.ogg', 25, 1)
+
+
+/obj/item/weapon/rapier/attack_self(mob/living/user as mob)
+	if(cooldown < world.time - 2)
+		swap_stance()
+		user.visible_message("<span class='warning'>You switch your stance with the [src] to [stance]!</span>")
+		cooldown = world.time
+	else
+		..()
+
+/obj/item/weapon/rapier/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
