@@ -969,9 +969,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	if(perfectcopy)
 		if((O) && (original))
-			for(var/V in original.vars)
-				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","group")))
-					O.vars[V] = original.vars[V]
+			for(var/V in original.vars - variables_not_to_be_copied)
+				O.vars[V] = original.vars[V]
 	return O
 
 
@@ -1081,9 +1080,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 
-					for(var/V in T.vars)
-						if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")))
-							X.vars[V] = T.vars[V]
+					for(var/V in T.vars - variables_not_to_be_copied)
+						X.vars[V] = T.vars[V]
 
 //					var/area/AR = X.loc
 
