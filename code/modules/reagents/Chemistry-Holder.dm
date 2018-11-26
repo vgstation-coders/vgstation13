@@ -635,13 +635,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 /datum/reagents/proc/remove_any_reagents(var/list/reagent_list, var/amount, var/safety)
 	if(!isnum(amount))
-		return 0
+		return 1
 	for(var/id in reagent_list)
 		if(has_reagent(id))
 			amount -= remove_reagent(id, amount, safety)
 			if(amount <= 0)
-				return 1
-	return 0
+				return 0
+	return 1
 
 /datum/reagents/proc/remove_reagent_by_type(var/reagent_type, var/amount, var/safety)
 	if(!isnum(amount))
