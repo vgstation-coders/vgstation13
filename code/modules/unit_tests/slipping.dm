@@ -8,7 +8,12 @@
 
 /datum/unit_test/slipping
 
-	/* item = list(RESULT_RUN, RESULT_WALK, RESULT_NOSLIP, RESULT_MAGBOOTS) */
+
+	/*  
+		We spawn an item, make an human run on it, and check if he slipped or not
+		The list is of the form :
+		item_to_spawn = list(RESULT_RUN, RESULT_WALK, RESULT_NOSLIP, RESULT_MAGBOOTS) 
+	*/
 
 	var/list/items_and_result_humans = list(
 		/obj/item/weapon/reagent_containers/food/snacks/butter = list(TRUE, FALSE, FALSE, FALSE),
@@ -16,6 +21,8 @@
 		/obj/item/weapon/soap/ = list(TRUE, TRUE, FALSE, FALSE),
 		/obj/item/device/pda/clown = list(TRUE, FALSE, FALSE, FALSE),
 		)
+
+	/* overlay_to_spawn = list(RESULT_RUN, RESULT_WALK, RESULT_NOSLIP, RESULT_MAGBOOTS) */
 
 	var/list/overlays_and_results = list(
 		TURF_WET_WATER_STR = list(TRUE, FALSE, FALSE, FALSE),
