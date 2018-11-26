@@ -86,6 +86,11 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
+	
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_splashed_reagent(self.id)
 
 /datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	set waitfor = 0
@@ -151,6 +156,11 @@
 
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
+	
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_reagent(id)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -1025,170 +1035,6 @@
 
 	if(volume >= 1)
 		O.bless()
-
-/datum/reagent/holywater/on_mob_life(var/mob/living/M, var/alien)
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if (iscultist(H))
-			var/unholy = H.checkTattoo(TATTOO_HOLY)
-			var/current_act = max(-1,min(5,veil_thickness))
-			var/datum/role/cultist/cult = H.mind.GetRole(CULTIST)
-			if (cult.holywarning_cooldown <= 0)
-				cult.holywarning_cooldown = 5
-				if (unholy)
-					to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
-				else
-					switch (current_act)
-						if (CULT_MENDED)
-							to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
-						if (CULT_PROLOGUE)
-							to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
-						if (CULT_ACT_I)
-							to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
-						if (CULT_ACT_II)
-							to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
-						if (CULT_ACT_III)
-							to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
-						if (CULT_ACT_IV)
-							to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
-						if (CULT_EPILOGUE)
-							to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
-
-			if (unholy)
-				H.eye_blurry = max(H.eye_blurry, 3)
-				return
-			else
-				switch (current_act)
-					if (CULT_MENDED)
-						H.dust()
-						return
-					if (CULT_PROLOGUE)
-						H.eye_blurry = max(H.eye_blurry, 3)
-						H.Dizzy(3)
-					if (CULT_ACT_I)
-						H.eye_blurry = max(H.eye_blurry, 6)
-						H.Dizzy(6)
-						H.stuttering = max(H.stuttering, 6)
-					if (CULT_ACT_II)
-						H.eye_blurry = max(H.eye_blurry, 12)
-						H.Dizzy(12)
-						H.stuttering = max(H.stuttering, 12)
-						H.Jitter(12)
-					if (CULT_ACT_III)
-						H.eye_blurry = max(H.eye_blurry, 16)
-						H.Dizzy(16)
-						H.stuttering = max(H.stuttering, 16)
-						H.Jitter(16)
-						if (prob(50))
-							H.Knockdown(1)
-						else if (prob(50))
-							H.confused = 2
-						H.adjustOxyLoss(5)
-					if (CULT_ACT_IV)
-						H.eye_blurry = max(H.eye_blurry, 20)
-						H.Dizzy(20)
-						H.stuttering = max(H.stuttering, 20)
-						H.Jitter(20)
-						if (prob(60))
-							H.Knockdown(2)
-						else if (prob(60))
-							H.confused = 4
-						H.adjustOxyLoss(10)
-						M.adjustToxLoss(5)
-					if (CULT_EPILOGUE)
-						H.eye_blurry = max(H.eye_blurry, 30)
-						H.Dizzy(30)
-						H.stuttering = max(H.stuttering, 30)
-						H.Jitter(30)
-						if (prob(70))
-							H.Knockdown(4)
-						else if (prob(70))
-							H.confused = 6
-						H.adjustOxyLoss(20)
-						M.adjustToxLoss(10)
-
-		if (islegacycultist(H))
-			if (prob(10))
-				var/datum/role/legacy_cultist/LC = H.mind.GetRole(LEGACY_CULTIST)
-				LC.Drop()
-			else
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
-		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		var/datum/role/vampire/V = isvampire(H)
-		if(V)
-			if(VAMP_MATURE in V.powers)
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
-				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
-				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
-			else
-				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
-				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		var/datum/role/thrall/T = isthrall(H)
-		if(T)
-			if (prob(35)) // 35% chance of dethralling
-				T.Drop(TRUE)
-
-/datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if (iscultist(H))
-			H.Dizzy(12)
-			H.Jitter(24)
-			H.Knockdown(3)
-			H.confused = 3
-			H.eye_blurry = max(H.eye_blurry, 6)
-
-	/*
-	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		var/datum/role/vampire/V = isvampire(H)
-		if(V)
-			if(!(VAMP_UNDYING in V.powers))
-				if(method == TOUCH)
-
-					if(H.wear_mask)
-						to_chat(H, "<span class='warning'>Your mask protects you from the holy water!</span>")
-						return
-
-					if(H.head)
-						to_chat(H, "<span class='warning'>Your helmet protects you from the holy water!</span>")
-						return
-
-					if(H.acidable())
-						if(prob(15) && volume >= 30)
-							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-							if(head_organ)
-								if(!(VAMP_MATURE in V.powers))
-									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
-									V.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
-									if(head_organ.take_damage(30, 0))
-										H.UpdateDamageIcon(1)
-									head_organ.disfigure("burn")
-									H.audible_scream()
-								else
-									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
-									V.smitecounter += 12 //Ditto above
-
-						else
-							if(!(VAMP_MATURE in V.powers))
-								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
-								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-								V.smitecounter += volume * 2
-							else
-								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
-								V.smitecounter += volume * 0.4
-				else
-					if(H.acidable())
-						H.take_organ_damage(min(15, volume * 2))
-						H.mind.vampire.smitecounter += 5
-	*/
 
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 

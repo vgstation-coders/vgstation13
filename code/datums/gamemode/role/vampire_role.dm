@@ -384,6 +384,68 @@
 		logo_state = initial(logo_state)
 		check_vampire_upgrade()
 
+/datum/role/vampire/handle_reagent(var/reagent_id)
+	switch (reagent_id)
+		if (HOLYWATER)
+			var/mob/living/carbon/human/H = antag.current
+			if (!istype(H))
+				return
+			if(VAMP_MATURE in powers)
+				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
+				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
+				smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
+			else
+				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
+				smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
+
+/*
+	Commented out for now.
+
+/datum/role/vampire/handle_splashed_reagent(var/reagent_id)
+	switch (reagent_id)
+		if (HOLYWATER)
+			var/mob/living/carbon/human/H = antag.current
+			if (!istype(H))
+				return
+			if(!(VAMP_UNDYING in powers))
+				if(method == TOUCH)
+					if(H.wear_mask)
+						to_chat(H, "<span class='warning'>Your mask protects you from the holy water!</span>")
+						return
+
+					if(H.head)
+						to_chat(H, "<span class='warning'>Your helmet protects you from the holy water!</span>")
+						return
+
+					if(H.acidable())
+						if(prob(15) && volume >= 30)
+							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+							if(head_organ)
+								if(!(VAMP_MATURE in powers))
+									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
+									smitecounter += 60 //Equivalent from metabolizing all this holy water normally
+									if(head_organ.take_damage(30, 0))
+										H.UpdateDamageIcon(1)
+									head_organ.disfigure("burn")
+									H.audible_scream()
+								else
+									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
+									smitecounter += 12 //Ditto above
+
+						else
+							if(!(VAMP_MATURE in powers))
+								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
+								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+								smitecounter += volume * 2
+							else
+								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
+								smitecounter += volume * 0.4
+				else
+					if(H.acidable())
+						H.take_organ_damage(min(15, volume * 2))
+						smitecounter += 5
+
+*/
 
 /*
 -- Helpers --
@@ -487,3 +549,12 @@
 		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 	update_faction_icons()
 	return ..()
+
+/datum/role/thrall/handle_reagent(var/reagent_id)
+	switch (reagent_id)
+		if (HOLYWATER)
+			var/mob/living/carbon/human/H = antag.current
+			if (!istype(H))
+				return
+			if (prob(35)) // 35% chance of dethralling
+				Drop()
