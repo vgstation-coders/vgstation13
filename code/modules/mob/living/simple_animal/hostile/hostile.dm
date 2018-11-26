@@ -35,6 +35,9 @@
 	wanted_objects = list()
 	friends = list()
 
+/mob/living/simple_animal/hostile/whisper()
+	return FALSE
+
 /mob/living/simple_animal/hostile/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
