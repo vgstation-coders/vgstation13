@@ -89,6 +89,8 @@
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
 	var/snow_theme = 0
+	var/center_x = 226
+	var/center_y = 254
 
 /datum/map/New()
 	. = ..()
@@ -203,15 +205,13 @@ proc/get_base_turf(var/z)
 	return L.base_turf
 
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
-	if(update_old_base)
-		var/count = 0
-		for(var/turf/T in world)
-			count++
-			if(!(count % 50000))
-				sleep(world.tick_lag)
-			if(T.type == get_base_turf(choice) && T.z == choice)
-				T.ChangeTurf(new_base_path)
 	var/datum/zLevel/L = map.zLevels[choice]
+	if(update_old_base)
+		var/previous_base_turf = L.base_turf
+		for(var/turf/T in world)
+			CHECK_TICK
+			if(T.type == previous_base_turf && T.z == choice)
+				T.ChangeTurf(new_base_path)
 	L.base_turf = new_base_path
 	for(var/obj/docking_port/destination/D in all_docking_ports)
 		if(D.z == choice)

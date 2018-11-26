@@ -96,6 +96,9 @@
 			blade.forceMove(A.loc)
 			A.blade = null
 			playsound(A.loc, 'sound/weapons/blade1.ogg', 50, 1)
+			if (A.is_locking(A.lock_type))
+				var/mob/M = A.get_locked(A.lock_type)[1]
+				A.unlock_atom(M)
 			A.update_icon()
 		else
 			return 0

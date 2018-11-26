@@ -1845,3 +1845,8 @@ mob/living/carbon/human/isincrit()
 			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
 		return INJECTION_RESULT_FAIL
 	return ..()
+
+/mob/living/carbon/human/get_cell()
+	var/datum/organ/internal/heart/cell/C = get_heart()
+	if(istype(C))
+		return C.cell

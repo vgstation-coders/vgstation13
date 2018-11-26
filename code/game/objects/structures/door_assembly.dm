@@ -109,6 +109,18 @@
 	airlock_type = "/vault"
 	glass = -1
 
+/obj/structure/door_assembly/clockwork
+	base_icon_state = "clockwork"
+	base_name = "Clockwork Airlock"
+	airlock_type = "/clockwork"
+	glass = -1
+
+/obj/structure/door_assembly/clockwork/cultify()
+	return
+
+/obj/structure/door_assembly/clockwork/clockworkify()
+	return
+
 /obj/structure/door_assembly/multi_tile/
 	icon = 'icons/obj/doors/door_assembly2x1.dmi'
 	dir = EAST
@@ -362,3 +374,6 @@
 		if(2)
 			name = "Near Finished "
 	name += "[glass == 1 ? "Window " : ""][istext(glass) ? "[glass] Airlock" : base_name] Assembly"
+
+/obj/structure/door_assembly/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/door_assembly/clockwork, CLOCKWORK_DOOR_GLOW)

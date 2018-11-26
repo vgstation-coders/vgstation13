@@ -105,6 +105,12 @@
 	I.name = "unforged [R.name]"
 	return 0
 
+var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
+	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,		4, time = 5 SECONDS, required_strikes = 8),
+	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/weapon/metal_blade,				8, time = 8 SECONDS, required_strikes = 13),
+	))
+
 
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
@@ -225,10 +231,9 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
-	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
-	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,		4, time = 5 SECONDS, required_strikes = 8),
-	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/weapon/metal_blade,				8, time = 8 SECONDS, required_strikes = 13),
+	blacksmithing_recipes,
 	)
 
 /* ========================================================================
@@ -283,7 +288,9 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE)
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	blacksmithing_recipes,
 	)
 
 /* =========================================================================
@@ -336,10 +343,14 @@ var/list/datum/stack_recipe/leather_recipes = list (
 ======================================================================== */
 
 var/list/datum/stack_recipe/brass_recipes = list (
+	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
+	null,
+	new/datum/stack_recipe("clockwork airlock", /obj/structure/door_assembly/clockwork, 4, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 4)),
+	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 3)),
+	new/datum/stack_recipe("brass window door", /obj/structure/windoor_assembly/clockwork, 5, time = 10, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	new/datum/stack_recipe("brass window", /obj/structure/window/reinforced/clockwork, 2, time = 10, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	new/datum/stack_recipe("brass full window", /obj/structure/window/full/reinforced/clockwork, 4, time = 20, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
-	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
-	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 3)),
+	null,
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)
@@ -350,6 +361,10 @@ var/list/datum/stack_recipe/brass_recipes = list (
 
 var/list/datum/stack_recipe/ralloy_recipes = list (
 	new/datum/stack_recipe("replicant grille", /obj/structure/grille/replicant, 2, time = 10, one_per_turf = TRUE, on_floor = TRUE),
+	null,
+	new/datum/stack_recipe("clockwork airlock", /obj/structure/door_assembly/clockwork, 4, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/brass = 4)),
+	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/brass = 3)),
+	null,
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)

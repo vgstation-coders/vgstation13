@@ -646,14 +646,14 @@
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
 
-		if(. > 1 && reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown

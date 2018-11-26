@@ -119,7 +119,7 @@
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
 		if(T && isChaplain(user))
-			T.Drop() // Remove the thrall using the Drop() function to leave the role.
+			T.Drop(TRUE) // Remove the thrall using the Drop() function to leave the role.
 			return 1 //That's it, game over
 
 		bless_mob(user, H) //Let's outsource the healing code, because we can

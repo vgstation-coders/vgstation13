@@ -59,6 +59,9 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
+	center_x = 231
+	center_y = 249
+
 //The central shuttle leads to both outposts
 /datum/map/active/New()
 	. = ..()

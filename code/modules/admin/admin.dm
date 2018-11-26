@@ -1232,47 +1232,11 @@ var/global/floorIsLava = 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
-/proc/is_special_character(mob/M as mob) // returns 1 for special characters
-	if(!ticker || !ticker.mode)
-		return 0
-	if (!istype(M))
-		return 0
-	if(isrev(M) || isrevhead(M))
-		return 1
-	if(isanycultist(M))
-		return 1
-	if(ismalf(M))
-		return 1
-	if(isnukeop(M))
-		return 1
-	if(iswizard(M) || isapprentice(M))
-		return 1
-	if(ischangeling(M))
-		return 1
-	/*if(isborer(M)) //They ain't antags anymore
-		if (ticker.mode.config_tag == "borer")
-			return 2
-		return 1*/
-	if(isbadmonkey(M))
-		return 1
-	if(isrobot(M))
-		var/mob/living/silicon/robot/R = M
-		if(R.emagged)
-			return 1
-	if(isdeathsquad(M))
-		return 1
-	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
-		return 1
-	if (M.mind && M.mind.GetRole(CRUSADER))
-		return 1
-	if (M.mind && M.mind.GetRole(SURVIVOR))
-		return 1
-	if (M.mind && M.mind.GetRole(MAGICIAN))
-		return 1
-
-
-	return 0
-
+/proc/is_special_character(mob/M) // returns 1 for special characters
+	var/mob/living/silicon/robot/R = M
+	if (istype(R) && R.emagged)
+		return TRUE
+	return (M.mind ? M.mind.antag_roles.len : null)
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)

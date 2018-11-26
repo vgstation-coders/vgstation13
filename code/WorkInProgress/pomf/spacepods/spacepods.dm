@@ -508,6 +508,7 @@
 			moveship = 0
 
 		if(moveship)
+			set_glide_size(DELAY2GLIDESIZE(movement_delay))
 			Move(get_step(src,direction), direction)
 			if(istype(src.loc, /turf/space))
 				inertia_dir = direction
@@ -531,12 +532,12 @@
 		inertia_dir = 0
 		return
 
-	sleep(5)
+	sleep(INERTIA_MOVEDELAY)
 
 	if(loc == start)
 		if(inertia_dir)
-			Move(get_step(src, inertia_dir), inertia_dir)
-			return
+			set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
+			step(src, inertia_dir)
 
 
 /obj/effect/landmark/spacepod/random //One of these will be chosen from across all Z levels to receive a pod in gameticker.dm

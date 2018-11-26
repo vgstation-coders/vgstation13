@@ -89,7 +89,7 @@ var/list/factions_with_hud_icons = list()
 		R.Drop()
 		return 0
 	R.OnPostSetup()
-	return 1
+	return R
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
 	ticker.mode.orphaned_roles.Remove(R)
@@ -137,7 +137,7 @@ var/list/factions_with_hud_icons = list()
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			count++
-			if (count < objective_holder.objectives.len)
+			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
 		if (win)
@@ -178,6 +178,7 @@ var/list/factions_with_hud_icons = list()
 	else
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
+			dat += "<br>"
 	return dat
 
 /datum/faction/proc/process()
@@ -218,7 +219,7 @@ var/list/factions_with_hud_icons = list()
 
 	//then re-add them
 	for(var/datum/role/R in members)
-		if(R.antag && R.antag.current && R.antag.current.client)
+		if(R.antag && R.antag.current && R.antag.current.client && R.antag.GetRole(R.id))//if the mind doesn't have access to the role, they shouldn't see the icons
 			for(var/datum/role/R_target in members)
 				if(R_target.antag && R_target.antag.current)
 					var/imageloc = R_target.antag.current

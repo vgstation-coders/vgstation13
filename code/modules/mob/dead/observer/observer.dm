@@ -811,6 +811,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = 1
 
+	if (veil_thickness >= CULT_ACT_III)
+		ghosts_can_write = 1
+
 	if(!ghosts_can_write)
 		to_chat(src, "<span class='warning'>The veil is not thin enough for you to do that.</span>")
 		return

@@ -8,6 +8,7 @@
 	processing_objects.Add(src)
 
 /obj/structure/closet/secure_closet/freezer/process()
+	..()
 	if(exploded)
 		processing_objects.Remove(src)
 		return

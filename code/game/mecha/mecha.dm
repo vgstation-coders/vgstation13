@@ -432,10 +432,7 @@
 		else if(istype(obstacle, /obj/structure/grille/))
 			var/obj/structure/grille/G = obstacle
 			G.health = (0.25*initial(G.health))
-			G.broken = 1
-			G.icon_state = "[initial(G.icon_state)]-b"
-			G.setDensity(FALSE)
-			getFromPool(/obj/item/stack/rods, get_turf(G.loc))
+			G.healthcheck()
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/table))

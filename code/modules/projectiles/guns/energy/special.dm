@@ -191,7 +191,8 @@
 	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
 		return 0
 	var/mob/living/carbon/human/H = target
-	if(!H.stat || H.health > config.health_threshold_crit)
+	if(!H.stat || (H.stat < DEAD && H.health > config.health_threshold_crit))
+		to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
 		return 0
 
 	//Pretty particles

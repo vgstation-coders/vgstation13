@@ -40,6 +40,27 @@
 	build_path = /obj/item/weapon/cell/hyper/empty
 	category = "Engineering"
 
+/datum/design/ultra_cell
+	name = "Ultra-Capacity Power Cell"
+	desc = "A power cell that holds 50000 units of energy"
+	id = "ultra_cell"
+	req_tech = list(Tc_POWERSTORAGE = 8, Tc_MATERIALS = 6)
+	reliability_base = 70
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100)
+	build_path = /obj/item/weapon/cell/ultra/empty
+	category = "Engineering"
+
+/datum/design/rad_cell
+	name = "Radio-isotope thermoelectric cell"
+	desc = "A power cell that does not hold much charge, but recharges over time."
+	req_tech = list(Tc_POWERSTORAGE = 7, Tc_MATERIALS = 5)
+	reliability_base = 70
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_URANIUM = 150)
+	build_path = /obj/item/weapon/cell/rad/empty
+	category = "Engineering"
+
 /datum/design/light_replacer
 	name = "Light Replacer"
 	desc = "A device to automatically replace lights. Refill with working lightbulbs."

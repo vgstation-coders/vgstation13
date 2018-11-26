@@ -1,6 +1,7 @@
 /datum/role/traitor
 	name = TRAITOR
 	id = TRAITOR
+	required_pref = ROLE_TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
 
@@ -13,6 +14,15 @@
 	else
 		equip_traitor(antag.current, 20)
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
+
+/datum/role/traitor/Drop()
+	if(isrobot(antag.current) || isAI(antag.current))
+		var/mob/living/silicon/robot/S = antag.current
+		to_chat(S, "<b>Your laws have been changed!</b>")
+		S.set_zeroth_law("","")
+		to_chat(S, "Law 0 has been purged.")
+
+	.=..()
 
 /datum/role/traitor/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
@@ -31,7 +41,7 @@
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
-				if(!locate(/datum/objective/die) in objectives.GetObjectives() && !locate(/datum/objective/target/steal) in objectives.GetObjectives())
+				if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
 					AppendObjective(/datum/objective/die)
 				else
 					if(prob(85))

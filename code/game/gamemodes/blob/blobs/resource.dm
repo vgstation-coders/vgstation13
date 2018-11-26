@@ -14,7 +14,7 @@
 	icon_classic = "blob_resource"
 
 //obj/effect/blob/resource/New(loc,newlook = "new")
-/obj/effect/blob/resource/New(loc,newlook = "skelleton")
+/obj/effect/blob/resource/New(loc,newlook = null)
 	..()
 	blob_resources += src
 

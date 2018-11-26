@@ -389,6 +389,7 @@
 #define APETRINE		"apetrine"
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
+#define AMINOMICIN		"aminomicin"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -411,3 +412,24 @@ var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLY
 var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
 var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional
+
+//Lists of defines
+//Preferably have the synthetic (chemist-made) versions first, and alternatives after that. This helps with electrolyzing.
+
+#define ANTI_TOXINS list(ANTI_TOXIN, ALLICIN)
+#define KELOTANES list(KELOTANE, TANNIC_ACID)
+#define DERMALINES list(DERMALINE, KATHALAI)
+#define BICARIDINES list(BICARIDINE, OPIUM)
+#define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
+#define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
+#define HYPERZINES list(HYPERZINE, COCAINE)
+#define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
+#define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
+#define SACIDS list(SACID, FORMIC_ACID)
+#define PACIDS list(PACID, PHENOL)
+#define NEUROTOXINS list(NEUROTOXIN, CURARE)
+#define TOXINS list(TOXIN, SOLANINE)
+#define CRYPTOBIOLINS list(CRYPTOBIOLIN, PHYSOSTIGMINE)
+#define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
+#define LEXORINS list(LEXORIN, CORIAMYRTIN)
+#define DEXALINS list(DEXALIN, THYMOL)

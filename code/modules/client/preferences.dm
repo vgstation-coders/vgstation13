@@ -1718,7 +1718,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	var/updated = 0
 	for(var/role_id in special_roles)
 		if(!(role_id in href_list))
-			to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
 			continue
 		var/oldval=text2num(roles[role_id])
 		roles[role_id] = text2num(href_list[role_id])

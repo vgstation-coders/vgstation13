@@ -92,9 +92,8 @@
 
 
 	proc/breathe()
-		if(reagents)
-			if(reagents.has_reagent(LEXORIN))
-				return
+		if(reagents && reagents.has_any_reagents(LEXORINS))
+			return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 			return
 
