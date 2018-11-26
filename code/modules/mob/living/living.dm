@@ -1211,9 +1211,11 @@ Thanks.
 	if(!..())
 		return 0
 	var/turf/T = get_turf(src)
-	T.visible_message("<b>[src]</b> points to [A].")
+	T.visible_message("[pointToMessage(src, A)]")
 	return 1
 
+/mob/living/proc/pointToMessage(var/pointer, var/pointed_at)
+	return "<b>\The [pointer]</b> points at <b>\the [pointed_at]</b>."
 
 /mob/living/proc/generate_static_overlay()
 	if(!istype(static_overlays,/list))
