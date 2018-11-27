@@ -1796,6 +1796,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\creature.dm"
 #include "code\modules\mob\living\simple_animal\hostile\decoy.dm"
 #include "code\modules\mob\living\simple_animal\hostile\deer.dm"
+#include "code\modules\mob\living\simple_animal\hostile\duck.dm"
 #include "code\modules\mob\living\simple_animal\hostile\faithless.dm"
 #include "code\modules\mob\living\simple_animal\hostile\frog.dm"
 #include "code\modules\mob\living\simple_animal\hostile\gingerbreadman.dm"
