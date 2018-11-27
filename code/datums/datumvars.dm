@@ -772,14 +772,16 @@ function loadPage(list) {
 		if(!istype(A))
 			to_chat(usr, "This can only be done to instances of movable atoms.")
 			return
-
+		
+		var/turf/origin = get_turf(A)
 		var/turf/T = get_turf(usr)
+		
 		if(istype(A,/mob))
 			var/mob/M = A
 			M.teleport_to(T)
 		else
 			A.forceMove(T)
-		log_admin("[key_name(usr)] has teleported [A] from [formatLocation(AT)] to [formatLocation(T)].")
+		log_admin("[key_name(usr)] has teleported [A] from [formatLocation(origin)] to [formatLocation(T)].")
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
