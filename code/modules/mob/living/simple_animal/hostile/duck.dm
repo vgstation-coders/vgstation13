@@ -44,19 +44,19 @@
 /mob/living/simple_animal/hostile/roboduck/Aggro()
 	..()
 	if(!angered && do_flick(src, "[initial(icon_state)]_angered"))
-		playsound(src, 'sound/items/quacktivated.ogg', 40, 5)
+		playsound(src, 'sound/misc/quacktivated.ogg', 40, 5)
 		angered = TRUE
 		update_icon()
 
 /mob/living/simple_animal/hostile/roboduck/LoseAggro()
 	..()
 	if(angered && do_flick(src, "[initial(icon_state)]_calming"))
-		playsound(src, 'sound/items/roboquack.ogg', 40, 5)
+		playsound(src, 'sound/misc/roboquack.ogg', 40, 5)
 		angered = FALSE
 		update_icon()
 
 /mob/living/simple_animal/hostile/roboduck/bullet_act(var/obj/item/projectile/Proj)
-	do_teleport(src, get_turf(src), 3, asoundout = 'sound/items/roboquack.ogg')
+	do_teleport(src, get_turf(src), 3, asoundout = 'sound/misc/roboquack.ogg')
 	.=..()
 	if(Proj.firer)
 		enemies.Add(Proj.firer)
@@ -96,12 +96,12 @@
 				LL.Add(T)
 			if(LL.len)
 				var/turf/T = get_turf(pick(LL)) //Gets a turf in view of the target, that does not have dense structures on it that could impede movement
-				do_teleport(src, T, 1, asoundout = 'sound/items/roboquack.ogg')
+				do_teleport(src, T, 1, asoundout = 'sound/misc/roboquack.ogg')
 	..()
 
 /mob/living/simple_animal/hostile/roboduck/OpenFire()
 	set waitfor = 0
-	playsound(src, 'sound/items/quacktivated.ogg', 40, 5, 4)
+	playsound(src, 'sound/misc/quacktivated.ogg', 40, 5, 4)
 	do_flick(src, "[initial(icon_state)]_gunfetti_start", 5)
 	icon_state = "[initial(icon_state)]_gunfetti_loop"
 	canmove = 0
@@ -142,3 +142,21 @@
 		do_flick(src, "[initial(icon_state)]_dinnertime_end", 6)
 		return
 	..()
+
+/mob/living/simple_animal/hostile/roboduck/death(var/gibbed = 0)
+	visible_message("<span class = 'warning'>Something cracks and breaks within \the [src], as it begins to implode!</span>")
+	for(var/mob/living/M in view(src))
+		M.playsound_local(get_turf(src), get_sfx("explosion"), 100, 1, get_rand_frequency(), falloff = 5)
+		if(!M.client)
+			continue
+		var/int_distance = get_dist(M, src)
+		shake_camera(M, 5, 2/int_distance)
+	playsound(src, 'sound/misc/roboquack_death.ogg', 40, 15, 10, 5)
+	var/matrix/death_animation = matrix()
+	death_animation.Scale(0,0)
+	death_animation.Turn(120)
+	animate(src, transform = death_animation, time = 5 SECONDS, easing = QUAD_EASING)
+	spawn(5 SECONDS)
+		..(TRUE)
+		robogibs(get_turf(src))
+		qdel(src)
