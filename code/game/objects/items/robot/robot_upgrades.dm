@@ -32,7 +32,7 @@
 		return FAILED_TO_ADD
 
 	if(required_module.len)
-		if(!(all_robot_modules[R.module.type] in required_module))
+		if(!(R.modtype in required_module))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
 
@@ -184,10 +184,14 @@
 	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 		R.internals = src
 
-/obj/item/borg/upgrade/syndicate/
+/obj/item/borg/upgrade/syndicate
 	name = "cyborg illegal equipment board"
 	desc = "Unlocks the hidden, deadlier functions of a robot."
 	icon_state = "cyborg_upgrade3"
+
+/obj/item/borg/upgrade/syndicate/New()
+	..()
+	required_module = all_robot_modules //No MoMMI, i like it the way it is.
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(R.illegal_weapons == TRUE)
@@ -196,7 +200,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.type]).")
+	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.modtype] [R.braintype]).")
 
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
