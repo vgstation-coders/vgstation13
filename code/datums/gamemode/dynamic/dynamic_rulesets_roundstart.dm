@@ -290,10 +290,11 @@
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
-	required_candidates = 1
+	required_candidates = 3
 	weight = 3
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	var/required_heads = 3
 
 /datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
 	if (!..())
@@ -302,8 +303,7 @@
 	for (var/mob/new_player/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
-			break
-	return head_check
+	return (head_check >= required_heads)
 
 /datum/dynamic_ruleset/roundstart/revs/execute()
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
