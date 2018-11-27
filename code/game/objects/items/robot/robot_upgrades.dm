@@ -191,7 +191,7 @@
 
 /obj/item/borg/upgrade/syndicate/New()
 	..()
-	required_module = all_robot_modules //No MoMMI, i like it the way it is.
+	required_module = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules + special_robot_modules //No MoMMI, i like it the way it is.
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(R.illegal_weapons == TRUE)
