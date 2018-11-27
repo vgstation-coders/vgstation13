@@ -399,5 +399,4 @@
 	required_module = list(SUPPLY_MODULE, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
 
-
 #undef FAILED_TO_ADD
