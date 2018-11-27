@@ -21,14 +21,14 @@
 	var/obj/item/I = R.installed_module(C)
 
 	if(!I)
-		to_chat(user, "[R.name] is missing one of the needed components!")
+		to_chat(user, "[R] is missing one of the needed components!")
 		return null
 
 	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user, var/ignore_cover = FALSE)
 	if(!R.module)
-		to_chat(user, "<span class='warning'>[R.name] must choose a module before it can be upgraded!</span>")
+		to_chat(user, "<span class='warning'>[R] must choose a module before it can be upgraded!</span>")
 		return FAILED_TO_ADD
 
 	if(required_module.len)
