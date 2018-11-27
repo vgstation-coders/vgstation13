@@ -26,7 +26,7 @@
 				if(mat)
 					result.dorfify(mat, 0, quality)
 				user.put_in_hands(result)
-				qdel(src)	
+				qdel(src)
 		return
 	..()
 
@@ -48,8 +48,41 @@
 	icon_state = "item_handle"
 	desc = "a generic handle, with no purpose."
 
+/obj/item/sword_handle
+	name = "sword handle"
+	icon = 'icons/obj/misc_components.dmi'
+	icon_state = "sword_handle"
+	desc = "A generic sword handle."
+
+/obj/item/cross_guard
+	name = "sword crossguard"
+	icon = 'icons/obj/misc_components.dmi'
+	icon_state = "crossguard"
+	desc = "Used to make sure what you're stabbing doesn't slide all the way to your hand, or your hand slide to the stabby bit."
+
 /obj/item/item_head/sword
 	name = "sword blade"
 	icon_state = "large_metal_blade"
-	desc = "Rather unweildy without a hilt."
+	desc = "Rather unwieldy without a hilt."
+	finishing_requirements = list(/obj/item/sword_handle, /obj/item/cross_guard)
 	result = /obj/item/weapon/sword
+
+/obj/item/item_head/sword/scimitar
+	name = "scimitar blade"
+	icon_state = "large_curved_blade"
+	desc = "Curved. Swords."
+	result = /obj/item/weapon/sword/scimitar
+
+/obj/item/item_head/sword/shortsword
+	name = "shortsword blade"
+	result = /obj/item/weapon/sword/shortsword
+
+/obj/item/item_head/sword/gladius
+	name = "gladius blade"
+	result = /obj/item/weapon/sword/gladius
+	finishing_requirements = list(/obj/item/sword_handle)
+
+/obj/item/item_head/sword/sabre
+	name = "sabre blade"
+	icon_state = "large_curved_blade"
+	result = /obj/item/weapon/sword/sabre

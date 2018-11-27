@@ -107,8 +107,14 @@
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
-	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,		4, time = 5 SECONDS, required_strikes = 8),
-	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/item_head/sword,				8, time = 8 SECONDS, required_strikes = 13),
+	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,			4, time = 5 SECONDS, required_strikes = 8),
+	new/datum/stack_recipe/blacksmithing("sword crossguard", /obj/item/cross_guard,					4, time = 5 SECONDS, required_strikes = 4),
+	null,
+	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/item_head/sword,					8, time = 8 SECONDS, required_strikes = 13),
+	new/datum/stack_recipe/blacksmithing("scimitar blade", /obj/item/item_head/sword/scimitar,		8, time = 8 SECONDS, required_strikes = 13),
+	new/datum/stack_recipe/blacksmithing("shortsword blade", /obj/item/item_head/sword/shortsword,	8, time = 8 SECONDS, required_strikes = 13),
+	new/datum/stack_recipe/blacksmithing("gladius blade", /obj/item/item_head/sword/gladius,		8, time = 8 SECONDS, required_strikes = 13),
+	new/datum/stack_recipe/blacksmithing("sabre blade", /obj/item/item_head/sword/sabre,			8, time = 8 SECONDS, required_strikes = 13),
 	))
 
 
@@ -287,6 +293,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
+	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	null,
