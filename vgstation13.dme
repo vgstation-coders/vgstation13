@@ -836,6 +836,7 @@
 #include "code\game\objects\items\robot\robot_items\robot_binoculars.dm"
 #include "code\game\objects\items\robot\robot_items\robot_elec_arm.dm"
 #include "code\game\objects\items\robot\robot_items\robot_fire_shield.dm"
+#include "code\game\objects\items\robot\robot_items\robot_furnace.dm"
 #include "code\game\objects\items\robot\robot_items\robot_gripper.dm"
 #include "code\game\objects\items\robot\robot_items\robot_harm_alarm.dm"
 #include "code\game\objects\items\robot\robot_items\robot_holochip.dm"
