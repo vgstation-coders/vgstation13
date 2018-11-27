@@ -779,7 +779,7 @@ function loadPage(list) {
 			M.teleport_to(T)
 		else
 			A.forceMove(T)
-		log_admin("[key_name(usr)] has teleported [A] at ([T.x], [T.y], [T.z]).")
+		log_admin("[key_name(usr)] has teleported [A] from [formatLocation(AT)] to [formatLocation(T)].")
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
