@@ -137,6 +137,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/sharpness_mod = 1
 	var/quality_mod = 1
 	var/melt_temperature
+	var/armor_mod = 1
 
 /datum/material/New()
 	if(processed_name=="")
@@ -385,6 +386,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/telecrystal
 	sheettype=null
 	cointype=null
+
+/datum/material/mythril
+	name="mythril"
+	id=MAT_MYTHRIL
+	value=50
+	oretype=/obj/item/weapon/ore/mythril
+	sheettype=/obj/item/stack/sheet/mineral/mythril
+	cointype=/obj/item/weapon/coin/mythril
+	color = "#FFEDD2" //rgb: 255,237,238
+	brunt_damage_mod = 1.4
+	sharpness_mod = 0.6
+	quality_mod = 1.5
+	armor_mod = 1.75
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
