@@ -459,12 +459,3 @@ var/list/factions_with_hud_icons = list()
 	ID = rand(1,999)
 
 //________________________________________________
-
-/datum/faction/blob_conglomerate
-	name = BLOBCONGLOMERATE
-	ID = BLOBCONGLOMERATE
-	logo_state = "blob-logo"
-	roletype = /datum/role/blob_overmind
-	initroletype = /datum/role/blob_overmind
-
-//________________________________________________

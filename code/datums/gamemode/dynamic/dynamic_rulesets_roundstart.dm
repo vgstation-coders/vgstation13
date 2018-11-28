@@ -298,6 +298,33 @@
 
 //////////////////////////////////////////////
 //                                          //
+//         BLOB					            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/blob
+	name = "Blob conglomerate"
+	role_category = ROLE_BLOB
+	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 30
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+
+/datum/dynamic_ruleset/roundstart/blob/ready(var/forced = 0)
+	if (!..())
+		return FALSE
+	var/AI_found = 0
+	for (var/mob/new_player/player in player_list)
+		if (player.mind.assigned_role == "AI")
+			AI_found = 1
+			break
+	return AI_found
+
+//////////////////////////////////////////////
+//                                          //
 //               EXTENDED                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
