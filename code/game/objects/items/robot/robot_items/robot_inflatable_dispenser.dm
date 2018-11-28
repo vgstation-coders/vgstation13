@@ -20,7 +20,7 @@
 
 /obj/item/weapon/inflatable_dispenser/New()
 	..()
-	for(var/i = 0 to max(max_walls,max_doors, max_shelters)
+	for(var/i = 0 to max(max_walls,max_doors,max_shelters))
 		if(stored_walls.len < max_walls)
 			stored_walls += new /obj/item/inflatable/wall(src)
 		if(stored_doors.len < max_doors)
