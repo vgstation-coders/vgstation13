@@ -4491,9 +4491,9 @@
 		M.drowsyness = max(0,M.drowsyness + adj_drowsy)
 	if(adj_sleepy)
 		M.sleeping = max(0,M.sleeping + adj_sleepy)
-	if(adj_temp > 0)
-		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT)) //310 is the normal bodytemp. 310.055
-	else if(adj_temp < 0)
+	if(adj_temp > 0 && M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
+	else if(adj_temp < 0 && M.bodytemperature > 310)
 		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
