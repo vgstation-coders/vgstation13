@@ -1,6 +1,6 @@
 var/datum/subsystem/ambientsound/SSambience
-//ambient sound subsystem. made by Pacmandevil. Code is GPL.
-//can't be worse than the fucking switch, can it? can it?
+//ambient sound subsystem.
+//at the very least it's not a switch right
 
 
 /datum/subsystem/ambientsound
