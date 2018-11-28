@@ -32,7 +32,8 @@
 		/datum/job/detective,
 		/datum/job/officer,
 		/datum/job/ai,
-		/datum/job/cyborg)
+		/datum/job/cyborg,
+		/datum/job/mommi)
 
 	default_tagger_locations = list(
 		DISP_DISPOSALS,
