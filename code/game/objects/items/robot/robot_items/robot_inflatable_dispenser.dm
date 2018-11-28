@@ -26,7 +26,7 @@
 		if(stored_doors.len < max_doors)
 			stored_doors += new /obj/item/inflatable/door(src)
 		if(stored_shelters.len < max_shelters)
-			stored_doors += new /obj/item/inflatable/shelter(src)
+			stored_shelters += new /obj/item/inflatable/shelter(src)
 
 /obj/item/weapon/inflatable_dispenser/Destroy()
 	stored_walls = null
