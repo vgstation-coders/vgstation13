@@ -209,6 +209,8 @@
 #include "code\controllers\subsystem\supply_shuttle.dm"
 #include "code\controllers\subsystem\ticker.dm"
 #include "code\controllers\subsystem\vote.dm"
+#include "code\controllers\subsystem\ambience\ambient_sound.dm"
+#include "code\controllers\subsystem\ambience\area_ambience.dm"
 #include "code\controllers\subsystem\init\assets.dm"
 #include "code\controllers\subsystem\init\finishing.dm"
 #include "code\controllers\subsystem\init\humans.dm"
