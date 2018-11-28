@@ -1,12 +1,13 @@
 #ifndef MAP_OVERRIDE
 //**************************************************************
-// Map Datum -- Boxstation
+// Map Datum -- Castle station
+// Literally just Box Station (as of 28/11/2018) without security elements
 //**************************************************************
 
 /datum/map/active
-	nameShort = "boxy"
-	nameLong = "Box Station without security"
-	map_dir = "boxstation"
+	nameShort = "castle"
+	nameLong = "Castle Station"
+	map_dir = "castlestation"
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
