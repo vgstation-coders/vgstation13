@@ -249,8 +249,8 @@ obj/machinery/gibber/New()
 			else
 				no_more_gibs = TRUE
 				if(i == 1)
-					var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, locate(src.x, src.y, src.z))
-					O.New(locate(src),i)
+					var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, get_turf(src))
+					O.New(get_turf(src),i)
 		src.operating = 0
 		update_icon()
 
