@@ -244,13 +244,11 @@ obj/machinery/gibber/New()
 			meatslab.throw_at(Tx,i,3)
 			if (!Tx.density)
 				if(!no_more_gibs)
-					var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
-					O.New(Tx,i)
+					getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx, i)
 			else
 				no_more_gibs = TRUE
 				if(i == 1)
-					var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, get_turf(src))
-					O.New(get_turf(src),i)
+					getFromPool(/obj/effect/decal/cleanable/blood/gibs, get_turf(src), i)
 		src.operating = 0
 		update_icon()
 
