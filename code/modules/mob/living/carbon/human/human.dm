@@ -120,9 +120,7 @@
 	static_overlays["letter"] = static_overlay
 
 	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
-
 	static_overlay.override = 1
-
 	static_overlays["cult"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
