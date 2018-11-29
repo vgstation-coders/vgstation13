@@ -10,6 +10,10 @@
 
 	var/flags = 0
 
+//This should probably be in a different file, but currently it's only used here.
+/image/effect
+	plane = EFFECTS_PLANE
+
 /datum/gas/proc/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
 	return TRUE
 
@@ -60,13 +64,9 @@
 	//and following a N/Z ratio of 1.5, the molar mass of a monatomic gas is:
 	molar_mass = 0.405	// kg/mol
 
+	tile_overlay = new /image/effect('icons/effects/tile_effects.dmi', "plasma", FLY_LAYER)
 	overlay_limit = MOLES_PLASMA_VISIBLE / CELL_VOLUME
 	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
-
-/datum/gas/plasma/New()
-	var/image/I = image('icons/effects/tile_effects.dmi', "plasma", FLY_LAYER)
-	I.plane = EFFECTS_PLANE //image() lets you override layer, but not plane. Thanks BYOND
-	tile_overlay = I
 
 /datum/gas/plasma/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
@@ -78,13 +78,9 @@
 	specific_heat = 40	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol. N₂O
 
+	tile_overlay = new /image/effect('icons/effects/tile_effects.dmi', "sleeping_agent", FLY_LAYER)
 	overlay_limit = 1 / CELL_VOLUME
 	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED // N₂O is a powerful oxidizer
-
-/datum/gas/sleeping_agent/New()
-	var/image/I = image('icons/effects/tile_effects.dmi', "sleeping_agent", FLY_LAYER)
-	I.plane = EFFECTS_PLANE //image() lets you override layer, but not plane. Thanks BYOND
-	tile_overlay = I
 
 /datum/gas/sleeping_agent/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
