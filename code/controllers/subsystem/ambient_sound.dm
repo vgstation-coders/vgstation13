@@ -1,11 +1,29 @@
+var/datum/subsystem/ambientsound/SSambience
+//ambient sound subsystem.
+//at the very least it's not a switch right
+
+
+/datum/subsystem/ambientsound
+	name = "Ambient Sound"
+	wait = 5 SECONDS
+	flags = SS_NO_INIT | SS_BACKGROUND | SS_NO_TICK_CHECK
+	priority = SS_PRIORITY_AMBIENCE
+
+
+/datum/subsystem/ambientsound/New()
+	NEW_SS_GLOBAL(SSambience)
+
+
+/datum/subsystem/ambientsound/fire(resumed = FALSE)
+	for (var/client/C in clients)
+		if(C && (C.prefs.toggles & SOUND_AMBIENCE))
+			C.handle_ambience()
+
 /* 
 Ambience system.
 	var/last_ambient_noise //no repeats.
 	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
 */
-
-/area/
-	var/list/ambient_sounds = list()
 
 client/proc/handle_ambience()
 	if(!mob)//I have no trust for Byond.

@@ -85,5 +85,9 @@
 	var/list/ViewFilter = list()
 	var/list/ObscuredTurfs = list()
 
+	//ambience
+	var/last_ambient_noise //no repeats.
+	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
+
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

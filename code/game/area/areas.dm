@@ -433,7 +433,7 @@ var/area/space_area
 
 	var/mob/M = Obj
 	if(istype(M))
-		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
+		//CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS! // this breaks on new vg code but I've got no fuckin clue what the hell it's supposed to be because my main development fork is like 6 months old at this point lmao
 		if(narrator)
 			narrator.Crossed(M)
 

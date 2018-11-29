@@ -43,9 +43,11 @@
 #define SS_PRIORITY_PLANT          40
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
+#define SS_PRIORITY_AMBIENCE	   19
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
+
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
