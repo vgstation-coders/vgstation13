@@ -13,7 +13,7 @@
 	var/list/molar_mass = list()
 	// Tile overlays.
 	var/list/tile_overlay = list()
-	// Overlay limits. There must strictly more than this many moles per liter for the overlay to appear.
+	// Overlay limits. There must be strictly more than this many moles per liter for the overlay to appear.
 	var/list/overlay_limit = list()
 	// Flags.
 	var/list/flags = list()

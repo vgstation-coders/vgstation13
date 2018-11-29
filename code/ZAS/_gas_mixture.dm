@@ -233,7 +233,8 @@
 /datum/gas_mixture/proc/remove(moles, update = TRUE, update_removed = TRUE)
 	var/sum = total_moles
 	moles = min(moles, sum) //Cannot take more air than tile has!
-	return remove_ratio(moles / sum, update, update_removed)
+	var/ratio = sum && (moles / sum) //Don't divide by zero
+	return remove_ratio(ratio, update, update_removed)
 
 
 //Removes the given proportion of the gas in src, and returns a new gas_mixture containing the removed gas.
