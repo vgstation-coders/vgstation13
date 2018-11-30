@@ -66,8 +66,9 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define MODULE_IS_THE_LAW 128			//Module can use *law and *halt
 #define MODULE_CAN_LIFT_SECTAPE 256		//Can lift security tape
 #define MODULE_CAN_LIFT_ENGITAPE 512	//Can lift atmos/engi tape
-#define MODULE_IS_A_CLOWN 1024			//Can handle clown-only items/machinery.
+#define MODULE_IS_A_CLOWN 1024			//Can handle clown-only items/machinery
 #define MODULE_IS_DEFINITIVE 2048		//Can't get a module reset
+#define MODULE_HAS_PROJ_RES 4096		//Doesn't slow down from being hit by boolets
 
 #define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 
