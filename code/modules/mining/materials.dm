@@ -136,8 +136,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/brunt_damage_mod = 1
 	var/sharpness_mod = 1
 	var/quality_mod = 1
-	var/melt_temperature
+	var/melt_temperature = MELTPOINT_STEEL
 	var/armor_mod = 1
+
 
 /datum/material/New()
 	if(processed_name=="")
@@ -308,6 +309,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.8
 	quality_mod = 2.2
+	melt_temperature = MELTPOINT_PLASMA
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
