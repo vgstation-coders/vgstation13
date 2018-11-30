@@ -1311,3 +1311,6 @@ var/global/list/image/blood_overlays = list()
 **/
 /obj/item/proc/attempt_heating(atom/A, mob/user)
 	return
+
+/obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
+	return

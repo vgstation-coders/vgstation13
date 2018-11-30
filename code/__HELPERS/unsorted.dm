@@ -1631,7 +1631,7 @@ Game Mode config tags:
 	if (!T || !U)
 		return
 	if(ispath(projectile))
-		projectile = new(T)
+		projectile = new projectile(T)
 	else
 		projectile.forceMove(T)
 	var/fire_sound

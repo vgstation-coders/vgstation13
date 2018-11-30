@@ -190,3 +190,10 @@ mineral/cave
 			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
 		else
 			..()
+
+mineral/mythril
+	display_name = "Silver"
+	name = "Mythril"
+	result_amount = 4
+	spread = 2
+	ore = /obj/item/weapon/ore/mythril

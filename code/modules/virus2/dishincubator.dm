@@ -208,7 +208,7 @@
 	if(beaker)
 		if(!beaker.reagents.remove_reagent(VIRUSFOOD,5))
 			foodsupply += 10
-		if(!beaker.reagents.remove_any_reagents(TOXINS,1))
+		if(beaker.reagents.remove_any_reagents(TOXINS,1))
 			toxins += 1
 
 	src.updateUsrDialog()

@@ -236,6 +236,12 @@
 	icon_state = "telecrystal"
 	material="telecrystal"
 
+/obj/item/weapon/ore/mythril
+	name = "mythril ore"
+	desc = "A naturally-occuring silver steel alloy."
+	icon_state = "cobryl"
+	material=MAT_MYTHRIL
+
 /obj/item/weapon/gibtonite
 	name = "Gibtonite ore"
 	desc = "Extremely explosive if struck with mining equipment, Gibtonite is often used by miners to speed up their work by using it as a mining charge. This material is illegal to possess by unauthorized personnel under space law."

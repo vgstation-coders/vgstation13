@@ -782,6 +782,7 @@ SEE_PIXELS	256
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
+#define MAT_MYTHRIL		"$mythril"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
