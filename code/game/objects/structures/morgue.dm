@@ -162,6 +162,8 @@
 	update()
 
 /obj/structure/morgue/Destroy()
+	if(connected)
+		qdel(connected)
 	. = ..()
 
 /*
