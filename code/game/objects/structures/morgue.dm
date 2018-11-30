@@ -163,8 +163,6 @@
 
 /obj/structure/morgue/Destroy()
 	. = ..()
-	if(connected)
-		qdel(connected) //references get cleared in the tray's Destroy()
 
 /*
  * Morgue tray
@@ -236,6 +234,7 @@
 
 /obj/structure/crematorium/Destroy()
 	crematorium_list.Remove(src)
+	..()
 
 /obj/structure/crematorium/proc/update()
 	if (cremating)
