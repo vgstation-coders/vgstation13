@@ -94,6 +94,7 @@
 		new /obj/item/ammo_casing/shotgun/blank(), \
 		new /obj/item/ammo_casing/shotgun/beanbag(), \
 		new /obj/item/ammo_casing/shotgun/flare(), \
+		new /obj/item/ammo_storage/speedloader/shotgun(),
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/toy/ammo/gun(), \
