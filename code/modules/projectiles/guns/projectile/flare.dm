@@ -17,7 +17,7 @@
 	fire_delay = 10
 	flags = FPRINT
 	siemens_coefficient = 1
-	caliber = list("flare" = 1)
+	caliber = list(GAUGEFLARE = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	gun_flags = 0
@@ -26,5 +26,5 @@
 	desc = "An illegal flare gun with a modified hammer, allowing it to fire shotgun shells and flares at dangerous velocities."
 	recoil = 3
 	fire_delay = 5 //faster, because it's also meant to be a weapon
-	caliber = list("flare" = 1, "shotgun" = 1)
+	caliber = list(GAUGEFLARE = 1, GAUGE12 = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"

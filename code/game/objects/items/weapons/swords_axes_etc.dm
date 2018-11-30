@@ -238,7 +238,7 @@
 
 /obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
 	..(A)
@@ -272,3 +272,11 @@
 	else
 		parent_borer.chemicals -= 5
 		sleep(10)
+
+/obj/item/weapon/melee/training_sword
+	name = "training sword"
+	desc = "A blunt object in the shape of a one handed sword."
+	icon_state = "grey_sword"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	item_state = "grey_sword"
+	force = 4

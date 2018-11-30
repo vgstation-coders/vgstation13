@@ -4,6 +4,8 @@
 	var/melee_can_hit = 1
 	var/list/destroyable_obj = list(/obj/mecha, /obj/structure/window, /obj/structure/grille, /turf/simulated/wall)
 	internal_damage_threshold = 50
+	light_range_off = 0 //combat mechs leak no cabin light for stealth operation
+	cursor_enabled = 1 //cursor is enabled by default for combat mechs
 	maint_access = 0
 	//add_req_access = 0
 	//operation_req_access = list(access_hos)
@@ -249,28 +251,6 @@
 		onclose(occupant, "sam", src)
 	return
 */
-/obj/mecha/combat/moved_inside(var/mob/living/carbon/human/H as mob)
-	if(..())
-		if(H.client)
-			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-		return 1
-	else
-		return 0
-
-/obj/mecha/combat/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
-	if(..())
-		if(occupant.client)
-			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-		return 1
-	else
-		return 0
-
-
-/obj/mecha/combat/go_out()
-	if(src.occupant && src.occupant.client)
-		src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
-	..()
-	return
 
 /obj/mecha/combat/Topic(href,href_list)
 	..()

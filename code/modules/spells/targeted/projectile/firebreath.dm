@@ -10,6 +10,7 @@
 	invocation = "SPY'SI MEAT'A'BAL"
 
 	spell_flags = WAIT_FOR_CLICK
+	spell_aspect_flags = SPELL_FIRE
 	dumbfire = 0
 
 	amt_dam_brute = 0

@@ -71,9 +71,6 @@
 			if(prob(2) && health && !hal_crit)
 				spawn(0)
 					emote("snore")
-		else if(resting)
-			if(halloss > 0)
-				adjustHalLoss(-3)
 		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
 			blinded = 1
 			stat = UNCONSCIOUS
@@ -82,6 +79,9 @@
 			stat = CONSCIOUS
 			if(halloss > 0)
 				adjustHalLoss(-1)
+
+		if(resting && halloss > 0)
+			adjustHalLoss(-3)
 
 		//Eyes
 		if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
@@ -114,57 +114,9 @@
 		else if(ear_damage < 25) //Ear damage heals slowly under this threshold. otherwise you'll need earmuffs
 			ear_damage = max(ear_damage - 0.05, 0)
 
-		//Dizziness
-		if(dizziness || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
-			var/wasdizzy = 1
-			if(undergoing_hypothermia() == MODERATE_HYPOTHERMIA && !dizziness && prob(50))
-				dizziness = 120
-				wasdizzy = 0
-			var/client/C = client
-			dizziness = max(dizziness - 1, 0)
-			if(!dizzy_effect_in_loop)
-				spawn()
-					while(dizziness)
-						C = client
-						dizzy_effect_in_loop = TRUE
-						if(C && (dizziness >= 120))
-							//https://en.wikipedia.org/wiki/Rose_(mathematics) with 3 petals
-							for(var/i=30; i <= 390; i+=(360/100))
-								C = client
-								if(!C)
-									break
-								var/r = cos(3*i) * min(dizziness/5, 50)
-								var/x = r * cos(i)
-								var/y = r * sin(i)
-								var/offset = round(dizziness/50, 1) // offset starts applying after the player has a high dizziness value
-								C.pixel_x = rand(x - offset, x + offset)
-								C.pixel_y = rand(y - offset, y + offset)
-								sleep(1)
-						else
-							break
-					dizzy_effect_in_loop = FALSE
+		handle_dizziness()
+		handle_jitteriness()
 
-			if(!wasdizzy)
-				dizziness = 0
-
-		//Jitteryness
-		if(jitteriness)
-			var/amplitude = min(8, (jitteriness/70) + 1)
-			var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-			var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-			spawn()
-				animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
-				animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-
-				pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-				pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-				animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
-				animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-
-				pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-				pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-				animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
-				animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 		//Flying
 		if(flying)
 			spawn()
@@ -179,6 +131,9 @@
 
 		if(knockdown)
 			knockdown = max(knockdown - 1,0) //Before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
 
 		if(stuttering)
 			stuttering = max(stuttering - 1, 0)

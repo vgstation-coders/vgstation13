@@ -120,33 +120,14 @@
 			return
 
 	// Handle gas consumption.
-	if(seed.consume_gasses && seed.consume_gasses.len)
+	if(seed.consume_gasses && seed.consume_gasses.len && environment)
 		missing_gas = 0
 		for(var/gas in seed.consume_gasses)
-			if(environment)
-				switch(gas)
-					if("oxygen")
-						if(environment.oxygen < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.oxygen),1)
-					if("plasma")
-						if(environment.toxins < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.toxins),1)
-					if("nitrogen")
-						if(environment.nitrogen < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.nitrogen),1)
-					if("carbon_dioxide")
-						if(environment.carbon_dioxide < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.carbon_dioxide),1)
-			else
+			if(environment[gas] < seed.consume_gasses[gas])
 				missing_gas++
+				continue
+			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)
+		environment.update_values()
 
 		if(missing_gas > 0)
 			health -= missing_gas * HYDRO_SPEED_MULTIPLIER
@@ -176,17 +157,11 @@
 		for(var/gas in seed.exude_gasses)
 			environment.adjust_gas(gas, max(1,round((seed.exude_gasses[gas]*round(seed.potency))/seed.exude_gasses.len)))
 
-	// This was adapted from the air alarm code
-	// I've never done atmos or touched atmos code before so there's a chance I've fucked this up
 	if(seed.alter_temp)
-		if(istype(T, /turf/simulated/))
-			var/datum/gas_mixture/room = T.remove_air(environment.total_moles)
-			if(room.temperature < seed.ideal_heat-seed.heat_tolerance)
-				room.temperature += (seed.potency*3)
-			else if (room.temperature > seed.ideal_heat+seed.heat_tolerance)
-				room.temperature -= (seed.potency*3)
-			room.react()
-			T.assume_air(room)
+		if((environment.temperature < seed.ideal_heat - seed.heat_tolerance) || (environment.temperature > seed.ideal_heat + seed.heat_tolerance))
+			var/energy_cap = seed.potency * 60 * MOLES_CELLSTANDARD //This is totally arbitrary. It just serves to approximate the behavior from when this modified temperature rather than thermal energy.
+			var/energy_change = Clamp(environment.get_thermal_energy_change(seed.ideal_heat), -energy_cap, energy_cap)
+			environment.add_thermal_energy(energy_change)
 
 	// If we're attached to a pipenet, then we should let the pipenet know we might have modified some gasses
 	//if (closed_system && connected_port)
@@ -253,6 +228,9 @@
 		process()
 
 	check_health()
+
+	if(harvest && seed.harvest_repeat == 2)
+		autoharvest()
 
 	// If enough time (in cycles, not ticks) has passed since the plant was harvested, we're ready to harvest again.
 	if(!dead && seed.products && seed.products.len)
@@ -336,7 +314,7 @@
 		overlays += image(icon = icon, icon_state = "hydrocover")
 
 	//Updated the various alert icons.
-	if(draw_warnings)
+	if(draw_warnings&& !reagents.has_reagent(SPORTDRINK))
 		if(waterlevel <= 10)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(nutrilevel <= 2)

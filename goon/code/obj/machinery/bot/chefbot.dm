@@ -24,6 +24,7 @@
 		return
 	if(prob(60) && src.on == 1)
 		spawn(0)
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 			do_step()
 			if(prob(30 + src.emagged * 30))
 				yell()
@@ -84,7 +85,7 @@
 							dork = M
 			if(thechef)
 				point(shitfood)
-				walk_to(src, shitfood, 1, 5)
+				start_walk_to(shitfood, 1, 5)
 				if(prob(50))
 					say(pick("ALRIGHT, EVERYBODY STOP!" , "THAT'S ENOUGH!"))
 				sleep(2 SECONDS)
@@ -124,7 +125,7 @@
 		update_icon()
 		var/mob/living/T = locate() in view(7, src) // Search for a shittalk target.
 		point(T)
-		walk_to(src, T, 1, 5)
+		start_walk_to(T, 1, 5)
 		say("[pick("WHAT IS THIS?", "OH MY GOD.", "WHAT IN THE FUCK IS GOING ON?")]")
 		drama()
 		sleep(2 SECONDS)

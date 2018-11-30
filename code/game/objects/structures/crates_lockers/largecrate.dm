@@ -30,10 +30,8 @@
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/porcelain
-	..()
 
 /obj/structure/largecrate/showers
-	..()
 
 /obj/structure/largecrate/lisa/attackby(obj/item/weapon/W as obj, mob/user as mob)	//ugly but oh well
 	if(iscrowbar(W))
@@ -67,6 +65,13 @@
 		var/num = rand(4, 6)
 		for(var/i = 0, i < num, i++)
 			new /mob/living/simple_animal/chick(loc)
+	..()
+
+/obj/structure/largecrate/hissing/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		var/num = rand(2, 4)
+		for(var/i = 1 to num)
+			new /mob/living/simple_animal/hostile/lizard(loc)
 	..()
 
 /obj/structure/largecrate/porcelain/attackby(obj/item/weapon/W as obj, mob/user as mob)

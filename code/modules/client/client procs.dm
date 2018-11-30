@@ -127,8 +127,7 @@
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
 	if(config)
-		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
-		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
+		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
 		to_chat(src, "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>")
 
@@ -460,7 +459,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
-	if(!istype(mob, /mob/dead/observer))	//If they are neither an observer nor someone with X-ray vision
+	if(!istype(mob, /mob/dead/observer) && !(M_XRAY in mob.mutations))	//If they are neither an observer nor someone with X-ray vision
 		for(var/obj/structure/window/W in one_way_windows)
 			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
 				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.

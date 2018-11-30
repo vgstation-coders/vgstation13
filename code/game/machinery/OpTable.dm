@@ -66,35 +66,32 @@
 		return 0
 
 
-/obj/machinery/optable/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-
-	if ((( istype(O, /obj/item/weapon) ) || user.get_active_hand() == O))
-
-		if(user.drop_item(O))
-			if (O.loc != src.loc)
-				step(O, get_dir(O, src))
+/obj/machinery/optable/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(!ismob(O)) //humans only
 		return
-	else
-		if(!ismob(O)) //humans only
-			return
-		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
-			return
-		if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
-			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-			return
-		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
-			return
-		if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
-			return
-		if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
-			return
-		var/mob/living/L = O
-		if(!istype(L) || L.locked_to || L == user)
-			return
-
-		take_victim(L, user)
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if(!Adjacent(user) || !user.Adjacent(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
+		return
+	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
+		return
+	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+		return
+	var/mob/living/L = O
+	if(!istype(L)|| L == user)
+		return
+
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
+	take_victim(L, user)
+	return
 
 /obj/machinery/optable/proc/check_victim()
 	if (victim)

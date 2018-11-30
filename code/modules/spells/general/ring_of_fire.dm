@@ -10,10 +10,12 @@
 	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_MOVE = 1)
 
 	spell_flags = NEEDSCLOTHES
+	spell_aspect_flags = SPELL_FIRE
 	charge_type = Sp_RECHARGE
 	invocation = "E ROHA"
 	invocation_type = SpI_SHOUT
 	hud_state = "wiz_firering"
+	price = Sp_BASE_PRICE / 2
 
 	duration = 100
 	range = 3
@@ -24,6 +26,9 @@
 	return trange(range, get_turf(user)) - trange(range - 1, get_turf(user))
 
 /spell/aoe_turf/ring_of_fire/cast(list/targets, mob/user)
+
+	if (user.is_pacified())
+		return
 
 	var/obj/effect/ring = new /obj/effect/ring_of_fire(get_turf(user), targets, duration)
 

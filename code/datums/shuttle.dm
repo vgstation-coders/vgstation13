@@ -226,6 +226,9 @@
 	var/atom/A = linked_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
 	if(A)
 		return A
+	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
+		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+			return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
@@ -303,8 +306,8 @@
 			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 				spawn()
 					P.shoot_exhaust()
-
-	current_port.start_warning_lights()
+	if(current_port)
+		current_port.start_warning_lights()
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
@@ -329,6 +332,8 @@
 				moving = 0
 				destination_port = null
 				return 0
+			for(var/atom/AA in linked_area)
+				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -524,6 +529,17 @@
 	var/obj/docking_port/destination/target = pick(possible_locations)
 
 	travel_to(target,,user)
+
+/datum/shuttle/proc/get_occupants(var/find_stowaways)
+	var/list/occupants = list()
+	if(!find_stowaways)
+		for(var/mob/living/L in linked_area) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
+			occupants.Add(L)
+	else
+		for(var/mob/living/L in mob_list)
+			if(get_area(src) == linked_area)
+				occupants.Add(L)
+	return occupants
 
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad

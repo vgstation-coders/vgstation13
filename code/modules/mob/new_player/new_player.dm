@@ -26,11 +26,11 @@
 
 	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+		output += "<a href='byond://?src=\ref[src];predict=1'>Manifest Prediction (Unreliable)</A><br>"
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
 		else
 			output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
-
 	else
 		ready = 0 // prevent setup character issues
 		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>
@@ -69,9 +69,7 @@
 
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
-			stat(null, "Station Time: [worldtime2text()]")
-	statpanel("Lobby")
-	if(statpanel("Lobby") && ticker)
+			stat("Station Time:", "[worldtime2text()]")
 		if(ticker.hide_mode)
 			stat("Game Mode:", "Secret")
 		else
@@ -181,7 +179,13 @@
 				return 0
 
 		LateChoices()
+	if(href_list["predict"])
+		var/dat = {"<html><body>
+		<h4>High Job Preferences</h4>"}
+		dat += job_master.display_prediction()
 
+		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+		return 1
 	if(href_list["manifest"])
 		ViewManifest()
 
@@ -324,24 +328,44 @@
 
 	job_master.AssignRole(src, rank, 1)
 
+	ticker.mode.latespawn(src)//can we make them a latejoin antag?
+
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
-	job_master.EquipRank(character, rank, 1)					//equips the human
-	EquipCustomItems(character)
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
+	var/turf/T = character.loc
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup()
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
 
 	var/datum/job/J = job_master.GetJob(rank)
-	if(J.spawns_from_edge)
-		character.Meteortype_Latejoin(rank)
-	else
-		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
+		J.current_positions--
+		character.store_position()
+		qdel(src)
+		return
 
+
+	EquipCustomItems(character)
+
+	var/atom/movable/what_to_move = character.locked_to || character
+
+	if(J.spawns_from_edge)
+		Meteortype_Latejoin(what_to_move, rank)
+	else
+		// TODO:  Job-specific latejoin overrides.
+		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS
+	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
@@ -361,30 +385,28 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-	ticker.mode.latespawn(character)
-
-	if(character.mind.assigned_role != "Cyborg")
-		data_core.manifest_inject(character)
-		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-		if(character.mind.assigned_role == "Trader")
-			//If we're a trader, instead send a message to PDAs with the trader cartridge
-			for (var/obj/item/device/pda/P in PDAs)
-				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
-					var/mob/living/L = get_holder_of_type(P,/mob/living)
-					if(L)
-						L.show_message("[bicon(P)] <b>Message from U¶ü…8•E1¿”–ã (T•u1B§’), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
-			for(var/mob/dead/observer/M in player_list)
-				if(M.stat == DEAD && M.client)
-					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
-
+	if(character.mind.assigned_role != "MODE")
+		if(character.mind.assigned_role != "Cyborg")
+			data_core.manifest_inject(character)
+			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
+			if(character.mind.assigned_role == "Trader")
+				//If we're a trader, instead send a message to PDAs with the trader cartridge
+				for (var/obj/item/device/pda/P in PDAs)
+					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+						var/mob/living/L = get_holder_of_type(P,/mob/living)
+						if(L)
+							L.show_message("[bicon(P)] <b>Message from U¬¶≈∏√â8¬•E1√Ä√ì√ê‚Äπ (T¬•u1B¬§√ï), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+				for(var/mob/dead/observer/M in player_list)
+					if(M.stat == DEAD && M.client)
+						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
+			else
+				AnnounceArrival(character, rank)
+			FuckUpGenes(character)
 		else
-			AnnounceArrival(character, rank)
-		FuckUpGenes(character)
-	else
-		character.Robotize()
+			character.Robotize()
 	qdel(src)
 
-/mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
+/proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
 	var/obj/effect/landmark/start/endpoint = null
 	for(var/obj/effect/landmark/start/S in landmarks_list)
 		if(S.name == rank)
@@ -395,8 +417,8 @@
 		//Error! We have no targetable spawn!
 		return
 	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
-	forceMove(start_point)
-	throw_at(endpoint)
+	target.forceMove(start_point)
+	target.throw_at(endpoint)
 
 
 /proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)

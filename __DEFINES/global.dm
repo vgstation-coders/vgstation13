@@ -10,6 +10,8 @@
 
 #define GREY_SHAPED "Grey"
 
+#define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
@@ -236,6 +238,7 @@ var/list/score=list(
 	"deadaipenalty" = 0, //AIs who died during the round
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
+	"slips"			= 0, //How many people have slipped during this round
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -301,7 +304,6 @@ var/global/list/minesweeper_best_players = list()
 var/nanocoins_rates = 1
 var/nanocoins_lastchange = 0
 
-var/speciesinit = 0
 var/minimapinit = 0
 
 var/bees_species = list()
@@ -363,41 +365,85 @@ var/list/available_staff_transforms = list(
 
 //Broken mob list
 var/list/blacklisted_mobs = list(
-		/mob/living/simple_animal/space_worm, // Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
-		/mob/living/simple_animal/hostile/humanoid, // JUST DON'T DO IT, OK?
-		/mob/living/simple_animal/hostile/retaliate/cockatrice, // I'm just copying this from transmog.
-		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
-		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
-		/mob/living/slime_pile, // They are dead.
-		/mob/living/adamantine_dust // Ditto
+		/mob/living/simple_animal/space_worm,							// Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
+		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
+		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
+		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
+		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
+		/mob/living/slime_pile,											// They are dead.
+		/mob/living/adamantine_dust, 									// Ditto
+		/mob/living/simple_animal/hostile/viscerator,					// Nope.
+		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/bee,									// Aren't set up to be playable
+		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		)
 
 //Boss monster list
-var/list/boss_mobs = existing_typesof(
-	/mob/living/simple_animal/scp_173,						// Just a statue.
-	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
-	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
-	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
-	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
+var/list/boss_mobs = list(
+	/mob/living/simple_animal/scp_173,								// Just a statue.
+	/mob/living/simple_animal/hostile/hivebot/tele,					// Hivebot spawner WIP thing
+	/mob/living/simple_animal/hostile/wendigo,						// Stupid strong evolving creature things that scream for help
+	/mob/living/simple_animal/hostile/mechahitler,					// Sieg heil!
+	/mob/living/simple_animal/hostile/alien/queen/large,			// The bigger and beefier version of queens.
+	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
+	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	)
 
-//Global list of all Cyborg/MoMMI modules.
-var/global/list/robot_modules = list(
-	"Standard"		= /obj/item/weapon/robot_module/standard,
-	"Service" 		= /obj/item/weapon/robot_module/butler,
-	"Supply" 		= /obj/item/weapon/robot_module/miner,
-	"Medical" 		= /obj/item/weapon/robot_module/medical,
-	"Security" 		= /obj/item/weapon/robot_module/security,
-	"Engineering"	= /obj/item/weapon/robot_module/engineering,
-	"Janitor" 		= /obj/item/weapon/robot_module/janitor,
-	"Combat" 		= /obj/item/weapon/robot_module/combat,
-	"Syndicate"		= /obj/item/weapon/robot_module/syndicate,
-	"TG17355"		= /obj/item/weapon/robot_module/tg17355
-    )
+// Set by traitor item, affects cargo supplies
+var/station_does_not_tip = FALSE
 
-var/global/list/mommi_modules = list(
-	"Nanotrasen"    = /obj/item/weapon/robot_module/mommi/nt,
-	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet,
-	"Gravekeeper"	= /obj/item/weapon/robot_module/mommi/cogspider
-	)
+#define CARD_CAPTURE_SUCCESS 0 // Successful charge
+#define CARD_CAPTURE_FAILURE_GENERAL 1 // General error
+#define CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
+#define CARD_CAPTURE_ACCOUNT_DISABLED 3 // Account locked.
+#define CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT 4 // Destination account disabled.
+#define CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO 5 // Bad account/pin combo
+#define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 6 // Security level didn't allow current authorization or another exception occurred
+#define CARD_CAPTURE_FAILURE_USER_CANCELED 7 // The user canceled the transaction
+#define CARD_CAPTURE_FAILURE_NO_DESTINATION 8 // There was no linked account to send funds to.
+#define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
+
+#define BANK_SECURITY_EXPLANATION {"Choose your bank account security level.
+Vendors will try to subtract from your virtual wallet if possible.
+If you're too broke, they'll try to access your bank account directly.
+This setting decides how much info you have to enter to allow for that.
+Zero; Only your account number is required to deduct funds.
+One; Your account number and PIN are required.
+Two; Your ID card, account number and PIN are required.
+You can change this mid-game at an ATM."}
+
+proc/bank_security_num2text(var/num)
+	switch(num)
+		if(0)
+			return "Zero"
+		if(1)
+			return "One"
+		if(2)
+			return "Two"
+		else
+			return "OUT OF RANGE"
+
+var/list/bank_security_text2num_associative = list(
+	"Zero" = 0,
+	"One" = 1,
+	"Two" = 2
+) // Can't use a zero. Throws a fit about out of bounds indices if you do.
+// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
+//Radial menus currently existing in the world.
+var/global/list/radial_menus = list()
+
+// Copying atoms is stupid and this is a stupid solution
+var/list/variables_not_to_be_copied = list(
+	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
+	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
+	"on_item_removed","on_moved","on_destroyed","on_density_change",
+	"on_z_transition","on_use","on_emote","on_life","on_resist",
+	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
+	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
+	"on_explode","on_projectile","in_chamber","power_supply","contents",
+	"x","y","z"
+)

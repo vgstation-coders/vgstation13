@@ -25,9 +25,6 @@
 /mob/camera/blob/New()
 	blob_overminds += src
 	..()
-	spawn(10)
-		if(src.mind)
-			src.mind.special_role = "Blob"
 
 /mob/camera/blob/Destroy()
 	blob_overminds -= src

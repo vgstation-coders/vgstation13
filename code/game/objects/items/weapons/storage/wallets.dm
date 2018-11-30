@@ -90,3 +90,7 @@
 			new item2_type(src)
 		if(item3_type)
 			new item3_type(src)
+
+/obj/item/weapon/storage/wallet/trader/New()
+	..()
+	dispense_cash(rand(150,250),src)

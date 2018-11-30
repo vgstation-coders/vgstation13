@@ -47,7 +47,7 @@ var/const/RND_WIRE_JOBFINISHED = 16
 		if(RND_WIRE_AUTOMAKE)
 			rnd.auto_make = !rnd.auto_make
 
-/datum/wires/rnd/UpdateCut(var/index, var/mended)
+/datum/wires/rnd/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/r_n_d/rnd = holder
 	switch(index)
 		if(RND_WIRE_DISABLE)

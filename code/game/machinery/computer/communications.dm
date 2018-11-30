@@ -135,7 +135,6 @@ var/global/ports_open = TRUE
 								feedback_inc("alert_comms_blue",1)
 					tmp_alertlevel = 0
 				else
-					:
 					to_chat(usr, "You are not authorized to do this.")
 					tmp_alertlevel = 0
 				setMenuState(usr,COMM_SCREEN_MAIN)
@@ -423,6 +422,7 @@ var/global/ports_open = TRUE
 		list("id"=SEC_LEVEL_BLUE,  "name"="Blue"),
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
+	data["portopen"] = ports_open
 	data["ert_sent"] = sentStrikeTeams(TEAM_ERT)
 
 	var/msg_data[0]
@@ -524,6 +524,10 @@ var/global/ports_open = TRUE
 	//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
 	//	return
 
+	if(emergency_shuttle.shutdown)
+		to_chat(user, "The emergency shuttle has been disabled.")
+		return
+
 	if(world.time < 6000) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
 		to_chat(user, "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minute\s before trying again.")
 		return
@@ -544,7 +548,7 @@ var/global/ports_open = TRUE
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
-	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'. You are encouraged to act if that justification is shit", 1)
+	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
 	world << sound('sound/AI/shuttlecalled.ogg')
 
@@ -655,7 +659,7 @@ var/global/ports_open = TRUE
 		if(istype(commconsole.loc,/turf) && commconsole != src && commconsole.z != map.zCentcomm)
 			return ..()
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
+	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
 		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard.z != map.zCentcomm)
 			return ..()
 
@@ -666,21 +670,20 @@ var/global/ports_open = TRUE
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	emergency_shuttle.incall(2)
-	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
-	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	world << sound('sound/AI/shuttlecalled.ogg')
-
+	shuttle_autocall()
 	..()
 
-/obj/item/weapon/circuitboard/communications/Destroy()
+/obj/item/weapon/circuitboard/communications/New()
+	..()
+	communications_circuitboards.Add(src)
 
+/obj/item/weapon/circuitboard/communications/Destroy()
+	communications_circuitboards.Remove(src)
 	for(var/obj/machinery/computer/communications/commconsole in machines)
 		if(istype(commconsole.loc,/turf) && commconsole.z != map.zCentcomm)
 			return ..()
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
+	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
 		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard != src && commboard.z != map.zCentcomm)
 			return ..()
 
@@ -691,10 +694,6 @@ var/global/ports_open = TRUE
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	emergency_shuttle.incall(2)
-	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
-	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	world << sound('sound/AI/shuttlecalled.ogg')
+	shuttle_autocall()
 
 	..()

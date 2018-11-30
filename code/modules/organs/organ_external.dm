@@ -120,6 +120,15 @@
 	owner.visible_message("<span class='danger'>[msg]</span>")
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
+/datum/organ/external/proc/dust()
+	if(is_peg())
+		return droplimb(1)
+	var/obj/O = generate_dropped_organ()
+	var/obj/I = O.ashtype()
+	qdel(O)
+	new I(owner.loc)
+	droplimb(1, spawn_limb = 0, display_message = FALSE)
+
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	if((brute <= 0) && (burn <= 0))
 		return 0
@@ -179,7 +188,7 @@
 				brute -= brute / 2
 
 	if(is_broken() && prob(40) && brute)
-		owner.emote("scream", , , 1) //Getting hit on broken and unsplinted limbs hurts
+		owner.audible_scream() //Getting hit on broken and unsplinted limbs hurts
 
 	if(used_weapon)
 		add_autopsy_data("[used_weapon]", brute + burn)
@@ -863,19 +872,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return (species.default_mutations.Find(mutation))
 
 
-/datum/organ/external/proc/release_restraints()
-	if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
-		owner.visible_message(\
-			"\The [owner.handcuffed.name] falls off of [owner.name].",\
-			"\The [owner.handcuffed.name] falls off you.")
+/datum/organ/external/proc/release_restraints(var/uncuff = UNCUFF_BOTH)
+	if(uncuff >= UNCUFF_BOTH)
+		if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
+			owner.visible_message(\
+				"\The [owner.handcuffed.name] falls off of [owner.name].",\
+				"\The [owner.handcuffed.name] falls off you.")
 
-		owner.drop_from_inventory(owner.handcuffed)
+			owner.drop_from_inventory(owner.handcuffed)
 
-	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
-		owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
-		"\The [owner.legcuffed.name] falls off you.")
+	if(uncuff <= UNCUFF_BOTH)
+		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
+			"\The [owner.legcuffed.name] falls off you.")
 
-		owner.drop_from_inventory(owner.legcuffed)
+			owner.drop_from_inventory(owner.legcuffed)
 
 /datum/organ/external/proc/bandage()
 	var/rval = 0
@@ -925,16 +936,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 	"<span class='danger'>You hear a sickening crack.</span>")
 
 	if(owner.feels_pain())
-		owner.emote("scream", , , 1)
+		owner.audible_scream()
 
 	playsound(owner.loc, "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN
 	broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
 
-	//Fractures have a chance of getting you out of restraints
-	if(prob(25))
-		release_restraints()
+	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
+	if(owner.handcuffed && body_part in list(HAND_LEFT, HAND_RIGHT))
+		if(prob(25))
+			release_restraints(UNCUFF_HANDS)//Handcuffs only.
+	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
+		if(prob(25))
+			release_restraints(UNCUFF_LEGS)//Legcuffs only.
+
 
 	if(isgolem(owner))
 		droplimb(1)
@@ -1036,6 +1052,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	qdel(I)
 
+	owner.handle_organs(1)
 	owner.update_body()
 	owner.updatehealth()
 	owner.UpdateDamageIcon()
@@ -1289,6 +1306,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_arm"
 	max_damage = 75
 	min_broken_damage = 30
+	w_class = W_CLASS_SMALL
 	body_part = ARM_RIGHT
 
 	grasp_id = GRASP_RIGHT_HAND
@@ -1424,8 +1442,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
-
 	.=..()
+	owner.update_hair()
 
 /datum/organ/external/head/get_icon()
 	if(!owner)

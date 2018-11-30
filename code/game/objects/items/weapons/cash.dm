@@ -1,3 +1,5 @@
+// Remember to update the LOWEST_DENOMINATION define if you add a smaller denomination
+// WARNING: Update cash.dm's dispense_cash proc to permit denominations below $1, else it'll runtime. - CW
 var/global/list/moneytypes = list(
 	/obj/item/weapon/spacecash/c1000 = 1000,
 	/obj/item/weapon/spacecash/c100  = 100,
@@ -144,13 +146,14 @@ var/global/list/moneytypes = list(
 	worth = 1000
 	stack_color = "#333333"
 
-/obj/structure/closet/cash_closet/New()
+/obj/structure/closet/cash_closet/spawn_contents()
 	var/list/types = typesof(/obj/item/weapon/spacecash)
 	for(var/i = 1 to rand(3,10))
 		var/typepath = pick(types)
 		new typepath(src)
 	..()
 
+// TODO: Allow denominations below $1
 /proc/dispense_cash(var/amount, var/loc)
 	for(var/cashtype in moneytypes)
 		var/slice = moneytypes[cashtype]

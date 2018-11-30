@@ -40,7 +40,7 @@
 	while(1)
 		sanity++
 		if(sanity > 100)
-			testing("Tried to place complex too many times.  Aborting.")
+			//testing("Tried to place complex too many times.  Aborting.")
 			return 0
 
 		T=pick(turfs)

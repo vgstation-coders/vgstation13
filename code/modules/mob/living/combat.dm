@@ -52,7 +52,7 @@
 		target.stop_pulling()
 		return TRUE
 
-/mob/living/proc/get_unarmed_damage(mob/living/victim)
+/mob/living/proc/get_unarmed_damage(var/atom/victim)
 	return rand(0,10)
 
 /mob/living/proc/get_unarmed_sharpness(mob/living/victim)
@@ -122,6 +122,9 @@
 	else
 		damage += sharpness
 		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+
+	if(target.BrainContainer)
+		target.BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=src,"damage"=damage_done))
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 

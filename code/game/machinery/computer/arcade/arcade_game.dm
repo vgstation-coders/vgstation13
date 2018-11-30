@@ -10,6 +10,12 @@
 	holder = null
 	..()
 
+/datum/arcade_game/Topic(href, href_list)
+	if(..())
+		return TRUE
+	if(isobserver(usr) && !isAdminGhost(usr) && !holder.haunted)
+		return TRUE
+
 /datum/arcade_game/proc/import_data(var/list/args)
 	if(!args || !args["arcade_type"])
 		return 0

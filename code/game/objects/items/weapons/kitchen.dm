@@ -168,7 +168,7 @@
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
@@ -231,7 +231,7 @@
 	..()
 	if(user.is_in_modules(src))
 		return
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			to_chat(user, "You slice the handle off of \the [src].")
@@ -250,7 +250,7 @@
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"
@@ -557,13 +557,7 @@
 	if(user.drop_item(W, user.loc))
 		W.forceMove(src)
 		carrying.Add(W)
-		var/list/params_list = params2list(params)
-		if(params_list.len)
-			var/icon/clicked = new/icon(icon, icon_state, dir)
-			var/clamp_x = clicked.Width() / 2
-			var/clamp_y = clicked.Height() / 2
-			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
-			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+		W.setPixelOffsetsFromParams(params, user)
 		var/image/image = image(icon = null)
 		image.appearance = W.appearance
 		image.layer = W.layer + 30

@@ -214,7 +214,7 @@ var/LACTOSEBLOCK = 0
 					warning("DNA2: Gene [gene.name] trying to add to already assigned gene block list (used by [english_list(assigned_gene_blocks[block])])")
 				assigned_gene_blocks[block] = gene
 
-	testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
+	//testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
 
 // Run AFTER genetics setup and AFTER species setup.
 /proc/setup_species()
@@ -223,31 +223,13 @@ var/LACTOSEBLOCK = 0
 		// I hate BYOND.  Can't just call while it's in the list.
 		var/datum/species/species = all_species[name]
 		if(species.default_block_names.len>0)
-			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
+//			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
 			species.default_blocks.len = 0
 
 			for(var/block=1;block<DNA_SE_LENGTH;block++)
 				if(assigned_blocks[block] in species.default_block_names)
-					testing("  Found [assigned_blocks[block]] ([block])")
+//					testing("  Found [assigned_blocks[block]] ([block])")
 					species.default_blocks.Add(block)
 
 			if(species.default_blocks.len)
 				all_species[name]=species
-
-	speciesinit = 1
-
-
-/proc/setupfactions()
-	// Populate the factions list:
-	for(var/x in typesof(/datum/faction))
-		var/datum/faction/F = new x
-		if(!F.name)
-			del(F)
-			continue
-		else
-			ticker.factions.Add(F)
-			ticker.availablefactions.Add(F)
-
-	// Populate the syndicate coalition:
-	for(var/datum/faction/syndicate/S in ticker.factions)
-		ticker.syndicate_coalition.Add(S)

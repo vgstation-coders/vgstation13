@@ -610,6 +610,7 @@
 		flags |= OPENCONTAINER
 		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 		playsound(user, pick(open_sounds), 50, 1)
+		overlays += image(icon = icon, icon_state = "soda_open")
 		return
 	return ..()
 
@@ -679,6 +680,10 @@
 	icon_state = "starkist"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist/New()
 	..()
+	if(prob(30))
+		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lemon_lime(get_turf(src))
+		qdel(src) //You wanted ORANGE. It gave you lemon lime!
+		return
 	reagents.add_reagent(COLA, 15)
 	reagents.add_reagent(ORANGEJUICE, 15)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
@@ -1132,6 +1137,19 @@
 	..()
 	reagents.add_reagent(WINE, 100)
 
+/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine
+	name = "Vintage 2018 Special Reserve"
+	desc = "Fermented during tumultuous years, and aged to perfection over several centuries."
+	icon_state = "pwinebottle"
+	vending_cat = "fermented" //doesn't actually matter, will appear under premium
+	bottleheight = 30
+	molotov = -1
+	isGlass = 1
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine/New()
+	..()
+	reagents.add_reagent(PWINE, 100)
+
 /obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe
 	name = "Jailbreaker Verte"
 	desc = "One sip of this and you just know you're gonna have a good time."
@@ -1247,8 +1265,8 @@
 		src.visible_message("<span  class='warning'>The [smashtext][src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		if(reagents.total_volume)
-			if(molotov || reagents.has_reagent(FUEL))
-				user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
+			if(molotov == 1 || reagents.has_reagent(FUEL))
+				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
 				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
 			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor

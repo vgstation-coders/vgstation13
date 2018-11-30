@@ -7,9 +7,9 @@
 	var/obj/structure/bed/chair/vehicle/paired_to = null
 	var/vin = null
 
-/obj/item/key/New()
+/obj/item/key/initialize()
 	if(vin)
-		for(var/obj/structure/bed/chair/vehicle/V in world)
+		for(var/obj/structure/bed/chair/vehicle/V in vehicle_list)
 			if(V.vin == vin)
 				paired_to = V
 				V.mykey = src
@@ -49,6 +49,9 @@
 	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
 	var/last_warn
 
+	var/list/offsets = list()
+	var/last_dir
+
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
 
@@ -68,10 +71,15 @@
 /obj/structure/bed/chair/vehicle/New()
 	..()
 	processing_objects |= src
-
+	vehicle_list.Add(src)
 	if(!nick)
 		nick=name
 	set_keys()
+	make_offsets()
+
+/obj/structure/bed/chair/vehicle/Destroy()
+	vehicle_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
@@ -85,7 +93,7 @@
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -97,7 +105,10 @@
 			return
 	else if(istype(W, /obj/item/key))
 		if(!heldkey)
-			if(keytype && mykey == W)
+			if(keytype)
+				if(mykey && mykey != W)
+					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+					return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
@@ -137,10 +148,9 @@
 	if(!keytype)
 		return 1
 	if(mykey)
-		if(heldkey)
-			return 1
-		else
-			return user.is_holding_item(mykey)
+		return heldkey == mykey || user.is_holding_item(mykey)
+	return istype(heldkey, keytype) || user.find_held_item_by_type(keytype)
+
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated())
@@ -148,7 +158,7 @@
 		return
 	if(!check_key(user))
 		if(can_warn())
-			to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
+			to_chat(user, "<span class='notice'>You'll need the key in one of your hands or inside the ignition slot to drive \the [src].</span>")
 		return 0
 	if(empstun > 0)
 		if(user && can_warn(user))
@@ -233,15 +243,19 @@
 		plane = OBJ_PLANE
 		layer = ABOVE_OBJ_LAYER
 
-/obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/structure/bed/chair/vehicle/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 
-	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+	if (user.incapacitated() || !in_range(user, src) || !in_range(src, C) || !can_have_carts)
 		return
 
 	if (istype(C, /obj/machinery/cart))
 
 		if (!next_cart)
+			var/obj/machinery/cart/connecting = C
+			if(connecting.previous_cart)
+				to_chat(user, "\The [connecting] already has a cart connected to it!", "red")
+				return
 			next_cart = C
 			next_cart.previous_cart = src
 			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
@@ -260,23 +274,26 @@
 
 	update_mob()
 
+/obj/structure/bed/chair/vehicle/proc/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 13 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 4 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = -13 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER)
+		)
+
 /obj/structure/bed/chair/vehicle/proc/update_mob()
 	if(!occupant)
 		return
 
-	switch(dir)
-		if(SOUTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
-			occupant.pixel_x = 13 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
-			occupant.pixel_x = -13 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+	if(last_dir)
+		occupant.pixel_x -= offsets["[last_dir]"]["x"]
+		occupant.pixel_y -= offsets["[last_dir]"]["y"]
+
+	occupant.pixel_x += offsets["[dir]"]["x"]
+	occupant.pixel_y += offsets["[dir]"]["y"]
+
+	last_dir = dir
 
 /obj/structure/bed/chair/vehicle/emp_act(severity)
 	switch(severity)
@@ -363,8 +380,10 @@
 	if(!.)
 		return
 
-	AM.pixel_x = 0
-	AM.pixel_y = 0
+	AM.pixel_x -= offsets["[dir]"]["x"]
+	AM.pixel_y -= offsets["[dir]"]["y"]
+
+	last_dir = null
 
 	if(occupant == AM)
 		occupant = null
@@ -385,5 +404,8 @@
 		return
 	if(next_cart)
 		next_cart.Move(oldloc)
+
+/obj/structure/bed/chair/vehicle/proc/disconnected() //proc that carts call, we have no use for it
+	return
 
 /datum/locking_category/buckle/chair/vehicle

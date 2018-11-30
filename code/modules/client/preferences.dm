@@ -6,40 +6,42 @@
 var/list/preferences_datums = list()
 
 var/global/list/special_roles = list(
-	ROLE_ALIEN        = 1, //always show
-	ROLE_BLOB         = 1,
-	ROLE_BORER        = 1,
-	ROLE_CHANGELING   = IS_MODE_COMPILED("changeling"),
-	ROLE_CULTIST      = IS_MODE_COMPILED("cult"),
-	ROLE_PLANT        = 1,
-//	"infested monkey" = IS_MODE_COMPILED("monkey"),
-	ROLE_MALF         = IS_MODE_COMPILED("malfunction"),
+	ROLE_ALIEN        	= 1, //always show
+	ROLE_BLOB         	= 1,
+	ROLE_BORER        	= 1,
+	ROLE_CHANGELING   	= 1,
+	ROLE_CULTIST      	= 1,
+	ROLE_LEGACY_CULTIST = 1,
+	ROLE_PLANT        	= 1,
+//	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
+	ROLE_MALF         	= 1,
 	//ROLE_NINJA        = 1,
-	ROLE_OPERATIVE    = IS_MODE_COMPILED("nuclear"),
-	ROLE_PAI          = 1, // -- TLE
-	ROLE_POSIBRAIN    = 1,
-	ROLE_REV          = IS_MODE_COMPILED("revolution"),
-	ROLE_TRAITOR      = IS_MODE_COMPILED("traitor"),
-	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
-	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
-	ROLE_WIZARD       = 1,
-	ROLE_COMMANDO	  = 1,
+	ROLE_OPERATIVE    	= 1,
+	ROLE_PAI          	= 1, // -- TLE
+	ROLE_POSIBRAIN    	= 1,
+	ROLE_REV          	= 1,
+	ROLE_TRAITOR      	= 1,
+	ROLE_VAMPIRE      	= 1,
+	ROLE_VOXRAIDER    	= 1,
+	ROLE_WIZARD       	= 1,
+	ROLE_COMMANDO	  	= 1,
 )
 
 var/list/antag_roles = list(
-	ROLE_ALIEN        = 1,
-	ROLE_BLOB         = 1,
-	ROLE_CHANGELING   = IS_MODE_COMPILED("changeling"),
-	ROLE_CULTIST      = IS_MODE_COMPILED("cult"),
-	ROLE_MALF         = IS_MODE_COMPILED("malfunction"),
-	ROLE_OPERATIVE    = IS_MODE_COMPILED("nuclear"),
-	ROLE_REV          = IS_MODE_COMPILED("revolution"),
-	ROLE_TRAITOR      = IS_MODE_COMPILED("traitor"),
-	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
-	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
-	ROLE_WIZARD       = 1,
-	ROLE_COMMANDO	  = 1,
-//	"infested monkey" = IS_MODE_COMPILED("monkey"),
+	ROLE_ALIEN        	= 1,
+	ROLE_BLOB         	= 1,
+	ROLE_CHANGELING   	= 1,
+	ROLE_CULTIST      	= 1,
+	ROLE_LEGACY_CULTIST = 1,
+	ROLE_MALF         	= 1,
+	ROLE_OPERATIVE    	= 1,
+	ROLE_REV          	= 1,
+	ROLE_TRAITOR      	= 1,
+	ROLE_VAMPIRE      	= 1,
+	ROLE_VOXRAIDER    	= 1,
+	ROLE_WIZARD       	= 1,
+	ROLE_COMMANDO	  	= 1,
+//	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
 )
 
 var/list/nonantag_roles = list(
@@ -50,32 +52,30 @@ var/list/nonantag_roles = list(
 )
 
 var/list/role_wiki=list(
-	ROLE_ALIEN		= "Xenomorph",
-	ROLE_BLOB		= "Blob",
-	ROLE_BORER		= "Cortical_Borer",
-	ROLE_CHANGELING	= "Changeling",
-	ROLE_CULTIST	= "Cult",
-	ROLE_PLANT		= "Dionaea",
-	ROLE_MALF		= "Guide_to_Malfunction",
-	ROLE_OPERATIVE	= "Nuclear_Agent",
-	ROLE_PAI		= "Personal_AI",
-	ROLE_POSIBRAIN	= "Guide_to_Silicon_Laws",
-	ROLE_REV		= "Revolution",
-	ROLE_TRAITOR	= "Traitor",
-	ROLE_VAMPIRE	= "Vampire",
-	ROLE_VOXRAIDER	= "Vox_Raider",
-	ROLE_WIZARD		= "Wizard",
+	ROLE_ALIEN			= "Xenomorph",
+	ROLE_BLOB			= "Blob",
+	ROLE_BORER			= "Cortical_Borer",
+	ROLE_CHANGELING		= "Changeling",
+	ROLE_CULTIST		= "Cult 3.0",
+	ROLE_LEGACY_CULTIST = "Cult", // To change ! In the future we'll have a new page for Cult 3, and this one will go down in history
+	ROLE_PLANT			= "Dionaea",
+	ROLE_MALF			= "Guide_to_Malfunction",
+	ROLE_OPERATIVE		= "Nuclear_Agent",
+	ROLE_PAI			= "Personal_AI",
+	ROLE_POSIBRAIN		= "Guide_to_Silicon_Laws",
+	ROLE_REV			= "Revolution",
+	ROLE_TRAITOR		= "Traitor",
+	ROLE_VAMPIRE		= "Vampire",
+	ROLE_VOXRAIDER		= "Vox_Raider",
+	ROLE_WIZARD			= "Wizard",
 )
 
 var/const/MAX_SAVE_SLOTS = 8
 
-//used for alternate_option
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
 #define POLLED_LIMIT	300
 
 /datum/preferences
+	var/list/subsections
 	//doohickeys for savefiles
 	var/database/db = ("players2.sqlite")
 	var/path
@@ -167,6 +167,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/disabilities = 0 // NOW A BITFIELD, SEE ABOVE
 
 	var/nanotrasen_relation = "Neutral"
+	var/bank_security = 1			//for bank accounts, 0-2, no-pin,pin,pin&card
+
 
 	// 0 = character settings, 1 = game preferences
 	var/current_tab = 0
@@ -190,29 +192,40 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
+
+	var/pulltoggle = 1 //If 1, the "pull" verb toggles between pulling/not pulling. If 0, the "pull" verb will always try to pull, and do nothing if already pulling.
 	var/client/client
 	var/saveloaded = 0
 
 /datum/preferences/New(client/C)
 	client=C
 	if(istype(C))
+		init_subsections()
 		var/theckey = C.ckey
 		var/thekey = C.key
 		spawn()
 			if(!IsGuestKey(thekey))
 				var/load_pref = load_preferences_sqlite(theckey)
 				if(load_pref)
-					while(!speciesinit)
+					while(!SS_READY(SShumans))
 						sleep(1)
 					try_load_save_sqlite(theckey, C, default_slot)
 					return
 
-			while(!speciesinit)
+			while(!SS_READY(SShumans))
 				sleep(1)
 			randomize_appearance_for()
 			real_name = random_name(gender, species)
 			save_character_sqlite(theckey, C, default_slot)
 			saveloaded = 1
+
+/datum/preferences/Destroy()
+	for(var/entry in subsections)
+		var/datum/preferences_subsection/prefs_ss = subsections[entry]
+		if(prefs_ss && !prefs_ss.gcDestroyed)
+			qdel(prefs_ss)
+	subsections = null
+	..()
 
 /datum/preferences/proc/try_load_save_sqlite(var/theckey, var/theclient, var/theslot)
 	var/attempts = 0
@@ -251,13 +264,16 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
 	<b>Secondary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
 	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
-	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'><b>Set</a></b><br>
-	<b>Limbs:</b> <a href='byond://?src=\ref[user];preference=limbs;task=input'>Set</a><br>
-	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
-	<b>Underwear:</b> [gender == MALE ? "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</a>" : "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_f[underwear]]</a>"]<br>
-	<b>Backpack:</b> <a href ='?_src_=prefs;preference=bag;task=input'><b>[backbaglist[backbag]]</a><br>
-	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a><br>
+	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'>Set</a><br>
+	<b>Limbs:</b> <a href='byond://?_src_=prefs;subsection=limbs;task=menu'>Set</a><br>
+	<b>Organs:</b> <a href='byond://?_src_=prefs;subsection=organs;task=menu'>Set</a><br>
+	<b>Underwear:</b> [gender == MALE ? "<a href ='?_src_=prefs;preference=underwear;task=input'>[underwear_m[underwear]]</a>" : "<a href ='?_src_=prefs;preference=underwear;task=input'>[underwear_f[underwear]]</a>"]<br>
+	<b>Backpack:</b> <a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><br>
+	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'>[nanotrasen_relation]</a><br>
 	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
+	<b>Character records:</b>
+	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a>"]<br>
+	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security_num2text(bank_security)]</a> <br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -333,6 +349,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
 	<a href='?_src_=prefs;preference=stumble'><b>[(stumble) ? "Yes" : "No"]</b></a><br>
+	<b>Pulling action:</b>
+	<a href='?_src_=prefs;preference=pulltoggle'><b>[(pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -355,8 +373,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
 	<b>Adminhelp Special Tab:</b>
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
-	<b>Character Records:<b>
-	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
 	<b>Attack Animations:<b>
 	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
   </div>
@@ -943,6 +959,11 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
 		return
+	var/datum/preferences_subsection/subsection = subsections[href_list["subsection"]]
+	if(subsection)
+		var/result = subsection.process_link(user, href_list)
+		if(result)
+			return result
 	//testing("preference=[href_list["preference"]]")
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
@@ -1164,7 +1185,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("hair")
 					if(species == "Human" || species == "Unathi")
-						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
+						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(new_hair)
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
@@ -1177,7 +1198,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("facial")
 					if(species == "Human" || species == "Unathi")
-						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference") as color|null
+						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference", rgb(r_facial, g_facial, b_facial)) as color|null
 						if(new_facial)
 							r_facial = hex2num(copytext(new_facial, 2, 4))
 							g_facial = hex2num(copytext(new_facial, 4, 6))
@@ -1201,7 +1222,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					ShowChoices(user)
 
 				if("eyes")
-					var/new_eyes = input(user, "Choose your character's eye colour:", "Character Preference") as color|null
+					var/new_eyes = input(user, "Choose your character's eye colour:", "Character Preference", rgb(r_eyes, g_eyes, b_eyes)) as color|null
 					if(new_eyes)
 						r_eyes = hex2num(copytext(new_eyes, 2, 4))
 						g_eyes = hex2num(copytext(new_eyes, 4, 6))
@@ -1248,115 +1269,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_relation)
 						nanotrasen_relation = new_relation
 
+				if("bank_security")
+					var/new_bank_security = input(user, BANK_SECURITY_EXPLANATION, "Character Preference")  as null|anything in bank_security_text2num_associative
+					if(!isnull(new_bank_security))
+						bank_security = bank_security_text2num_associative[new_bank_security]
+
 				if("flavor_text")
 					flavor_text = input(user,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
-
-				if("limbs")
-					var/list/limb_input = list(
-						"Left Leg [organ_data[LIMB_LEFT_LEG]]" = LIMB_LEFT_LEG,
-						"Right Leg [organ_data[LIMB_RIGHT_LEG]]" = LIMB_RIGHT_LEG,
-						"Left Arm [organ_data[LIMB_LEFT_ARM]]" = LIMB_LEFT_ARM,
-						"Right Arm [organ_data[LIMB_RIGHT_ARM]]" = LIMB_RIGHT_ARM,
-						"Left Foot [organ_data[LIMB_LEFT_FOOT]]" = LIMB_LEFT_FOOT,
-						"Right Foot [organ_data[LIMB_RIGHT_FOOT]]" = LIMB_RIGHT_FOOT,
-						"Left Hand [organ_data[LIMB_LEFT_HAND]]" = LIMB_LEFT_HAND,
-						"Right Hand [organ_data[LIMB_RIGHT_HAND]]" = LIMB_RIGHT_HAND
-						)
-
-					var/limb_name = input(user, "Which limb do you want to change?") as null|anything in limb_input
-					if(!limb_name)
-						return
-
-					var/limb = null
-					var/second_limb = null // if you try to change the arm, the hand should also change
-					var/third_limb = null  // if you try to unchange the hand, the arm should also change
-					var/valid_limb_states=list("Normal","Amputated","Prothesis")
-					switch(limb_input[limb_name])
-						if(LIMB_LEFT_LEG)
-							limb = LIMB_LEFT_LEG
-							second_limb = LIMB_LEFT_FOOT
-							valid_limb_states += "Peg Leg"
-						if(LIMB_RIGHT_LEG)
-							limb = LIMB_RIGHT_LEG
-							second_limb = LIMB_RIGHT_FOOT
-							valid_limb_states += "Peg Leg"
-						if(LIMB_LEFT_ARM)
-							limb = LIMB_LEFT_ARM
-							second_limb = LIMB_LEFT_HAND
-							valid_limb_states += "Wooden Prosthesis"
-						if(LIMB_RIGHT_ARM)
-							limb = LIMB_RIGHT_ARM
-							second_limb = LIMB_RIGHT_HAND
-							valid_limb_states += "Wooden Prosthesis"
-						if(LIMB_LEFT_FOOT)
-							limb = LIMB_LEFT_FOOT
-							third_limb = LIMB_LEFT_LEG
-						if(LIMB_RIGHT_FOOT)
-							limb = LIMB_RIGHT_FOOT
-							third_limb = LIMB_RIGHT_LEG
-						if(LIMB_LEFT_HAND)
-							limb = LIMB_LEFT_HAND
-							third_limb = LIMB_LEFT_ARM
-							valid_limb_states += "Hook Prosthesis"
-						if(LIMB_RIGHT_HAND)
-							limb = LIMB_RIGHT_HAND
-							third_limb = LIMB_RIGHT_ARM
-							valid_limb_states += "Hook Prosthesis"
-
-					var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in valid_limb_states
-					if(!new_state)
-						return
-
-					switch(new_state)
-						if("Normal")
-							organ_data[limb] = null
-							if(third_limb)
-								organ_data[third_limb] = null
-						if("Amputated")
-							organ_data[limb] = "amputated"
-							if(second_limb)
-								organ_data[second_limb] = "amputated"
-						if("Prothesis")
-							organ_data[limb] = "cyborg"
-							if(second_limb)
-								organ_data[second_limb] = "cyborg"
-						if("Peg Leg","Wooden Prosthesis","Hook Prosthesis")
-							organ_data[limb] = "peg"
-							if(second_limb)
-								if(limb == LIMB_LEFT_ARM || limb == LIMB_RIGHT_ARM)
-									organ_data[second_limb] = "peg"
-								else
-									organ_data[second_limb] = "amputated"
-
-				if("organs")
-					var/organ_name = input(user, "Which internal function do you want to change?") as null|anything in list("Heart", "Eyes", "Lungs", "Liver", "Kidneys")
-					if(!organ_name)
-						return
-
-					var/organ = null
-					switch(organ_name)
-						if("Heart")
-							organ = "heart"
-						if("Eyes")
-							organ = "eyes"
-						if("Lungs")
-							organ = "lungs"
-						if("Liver")
-							organ = "liver"
-						if("Kidneys")
-							organ = "kidneys"
-
-					var/new_state = input(user, "What state do you wish the organ to be in?") as null|anything in list("Normal","Assisted","Mechanical")
-					if(!new_state)
-						return
-
-					switch(new_state)
-						if("Normal")
-							organ_data[organ] = null
-						if("Assisted")
-							organ_data[organ] = "assisted"
-						if("Mechanical")
-							organ_data[organ] = "mechanical"
 
 				if("skin_style")
 					var/skin_style_name = input(user, "Select a new skin style") as null|anything in list("default1", "default2", "default3")
@@ -1370,8 +1289,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						gender = FEMALE
 					else
 						gender = MALE
-					f_style = random_facial_hair_style(gender)
-					h_style = random_hair_style(gender)
+					f_style = random_facial_hair_style(gender, species)
+					h_style = random_hair_style(gender, species)
 
 				if("hear_adminhelps")
 					toggles ^= SOUND_ADMINHELP
@@ -1464,6 +1383,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					progress_bars = !progress_bars
 				if("stumble")
 					stumble = !stumble
+				if("pulltoggle")
+					pulltoggle = !pulltoggle
 
 				if("ghost_deadchat")
 					toggles ^= CHAT_DEAD
@@ -1797,7 +1718,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	var/updated = 0
 	for(var/role_id in special_roles)
 		if(!(role_id in href_list))
-			to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
 			continue
 		var/oldval=text2num(roles[role_id])
 		roles[role_id] = text2num(href_list[role_id])

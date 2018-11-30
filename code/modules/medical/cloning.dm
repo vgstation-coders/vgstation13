@@ -258,9 +258,8 @@
 
 	H.ckey = R.ckey
 	to_chat(H, "<span class='notice'><b>Consciousness slowly creeps over you as your body regenerates.</b><br><i>So this is what cloning feels like?</i></span>")
-
 	// -- Mode/mind specific stuff goes here
-
+	/*
 	if(isrev(H) || isrevhead(H))
 		ticker.mode.update_all_rev_icons() //So the icon actually appears
 	if(isnukeop(H))
@@ -281,6 +280,11 @@
 			H.add_spell(spell_to_add)
 
 	// -- End mode specific stuff
+	*/
+	if (H.mind.miming)
+		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
+		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
+			H.add_spell(new /spell/targeted/oathbreak/)
 
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
@@ -456,7 +460,7 @@
 
 	return TRUE
 
-/obj/machinery/cloning/clonepod/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/cloning/clonepod/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!occupant || occupant == usr || (!ishigherbeing(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
 		return
 	if(!istype(over_location) || over_location.density)
@@ -470,7 +474,7 @@
 			return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 
@@ -525,7 +529,7 @@
 		else
 	return
 
-/obj/machinery/cloning/clonepod/MouseDrop_T(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
+/obj/machinery/cloning/clonepod/MouseDropTo(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
 	var/busy = FALSE
 	var/visible_message = FALSE
 
@@ -535,7 +539,7 @@
 	if(issilicon(user))
 		return //*buzz
 
-	if(!Adjacent(user) || !user.Adjacent(src) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
+	if(!Adjacent(user) || !user.Adjacent(src) || !user.Adjacent(M) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
 		return
 
 	if(user.incapacitated() || user.lying)

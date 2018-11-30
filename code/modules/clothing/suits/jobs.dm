@@ -75,7 +75,7 @@
 
 //Chef
 /obj/item/clothing/suit/chef/classic
-	name = "A classic chef's apron."
+	name = "classic chef's apron"
 	desc = "A basic, dull, white chef's apron."
 	icon_state = "apronchef"
 	item_state = "apronchef"
@@ -270,4 +270,4 @@
 		else
 			to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
 			return
-		usr.update_inv_wear_suit()	//so our overlays update
+	usr.update_inv_wear_suit()	//so our overlays update

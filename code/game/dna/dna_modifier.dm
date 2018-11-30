@@ -38,6 +38,21 @@
 			ser["type"] = "se"
 	return ser
 
+/datum/dna2/record/proc/Clone()
+	var/datum/dna2/record/new_copy = new
+	if(dna)
+		new_copy.dna = dna.Clone()
+	new_copy.types = types
+	new_copy.name = name
+	new_copy.id = id
+	new_copy.implant = implant
+	new_copy.ckey = ckey
+	new_copy.mind = mind
+	new_copy.languages = languages.Copy()
+	new_copy.times_cloned = times_cloned
+
+	return new_copy
+
 /////////////////////////// DNA MACHINES
 /obj/machinery/dna_scannernew
 	name = "\improper DNA modifier"
@@ -84,9 +99,9 @@
 	return 0
 
 /obj/machinery/dna_scannernew/relaymove(mob/user as mob)
-	if (user.stat)
+	if(user.stat)
 		return
-	src.go_out()
+	src.go_out(ejector = user)
 	return
 
 
@@ -98,7 +113,7 @@
 	if(usr.isUnconscious() || istype(usr, /mob/living/simple_animal))
 		return
 
-	eject_occupant()
+	go_out(ejector = usr)
 
 	add_fingerprint(usr)
 	return
@@ -124,14 +139,6 @@
 
 	. = ..()
 
-/obj/machinery/dna_scannernew/proc/eject_occupant(var/exit = loc)
-	src.go_out(exit)
-
-	if(!occupant)
-		for(var/mob/M in src)//Failsafe so you can get mobs out
-			if(!M.gcDestroyed)
-				M.forceMove(get_turf(src))
-
 /obj/machinery/dna_scannernew/verb/move_inside()
 	set src in oview(1)
 	set category = "Object"
@@ -149,9 +156,6 @@
 	if (src.occupant)
 		to_chat(usr, "<span class='notice'> <B>The scanner is already occupied!</B></span>")
 		return
-	/*if (usr.abiotic())
-		to_chat(usr, "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>")
-		return*/
 	usr.stop_pulling()
 	usr.forceMove(src)
 	usr.reset_view()
@@ -159,20 +163,24 @@
 	src.icon_state = "scanner_1"
 	src.add_fingerprint(usr)
 
-/obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/dna_scannernew/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
-		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
@@ -183,30 +191,27 @@
 		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.locked_to)
+	if(!istype(L))
 		return
-	/*if(L.abiotic())
-		to_chat(user, "<span class='danger'>Subject cannot have abiotic items on.</span>")
-		return*/
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
 			to_chat(usr, "[L.name] will not fit into the DNA Scanner because they have a slime latched onto their head.")
 			return
+
 	if(L == user)
 		visible_message("[user] climbs into \the [src].")
 	else
 		visible_message("[user] places [L] into \the [src].")
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	if(user.pulling == L)
 		user.stop_pulling()
 	put_in(L)
-	if(user.pulling == L)
-		user.pulling = null
 
-/obj/machinery/dna_scannernew/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/dna_scannernew/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
@@ -214,9 +219,10 @@
 		return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
+	over_location = get_turf(over_location)
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
@@ -232,7 +238,7 @@
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
-	eject_occupant(over_location)
+	go_out(over_location, ejector = usr)
 
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if(istype(item, /obj/item/weapon/reagent_containers/glass))
@@ -280,6 +286,7 @@
 		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
 		if(C)
 			C.update_icon()
+			C.updateUsrDialog()
 			if(!M.client && M.mind)
 				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
 				if(ghost)
@@ -294,8 +301,11 @@
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
-/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
-	if (!occupant)
+/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/mob/ejector)
+	if(!occupant)
+		for(var/mob/M in src)//Failsafe so you can get mobs out
+			if(!M.gcDestroyed)
+				M.forceMove(get_turf(src))
 		return 0
 	if(locked)
 		if(world.time - last_message > DNASCANNER_MESSAGE_INTERVAL)
@@ -305,10 +315,15 @@
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
+		if(istype(ejector) && ejector != occupant)
+			var/obj/structure/bed/roller/B = locate() in exit
+			if(B)
+				B.buckle_mob(occupant, ejector)
+				ejector.start_pulling(B)
 	occupant = null
 	icon_state = "scanner_0"
 
-	for (var/atom/movable/x in src.contents)//Ejects items that manage to get in there (exluding the components and beaker)
+	for(var/atom/movable/x in src.contents) //Ejects items that manage to get in there (exluding the components and beaker)
 		if((x in component_parts) || (x == src.beaker))
 			continue
 		x.forceMove(src.loc)
@@ -317,6 +332,7 @@
 		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
 		if(C)
 			C.update_icon()
+			C.updateUsrDialog()
 
 	if(connected)
 		nanomanager.update_uis(connected)
@@ -472,10 +488,8 @@
 		qdel(src)
 
 /obj/machinery/computer/scan_consolenew/proc/findScanner()
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
-		var/foundmachine = locate(/obj/machinery/dna_scannernew, get_step(src, dir))
-		if(foundmachine)
-			return foundmachine
+	for(var/obj/machinery/dna_scannernew/DN in oview(1, src)) // All 8 directions.
+		return DN
 
 /obj/machinery/computer/scan_consolenew/proc/all_dna_blocks(var/list/buffer)
 	var/list/arr = list()
@@ -917,7 +931,7 @@
 		return 1
 
 	if(href_list["ejectOccupant"])
-		connected.eject_occupant()
+		connected.go_out()
 		return 1
 
 	// Transfer Buffer Management
@@ -956,7 +970,11 @@
 				databuf.types = DNA2_BUF_UI // DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier"
 				src.buffers[bufferId] = databuf
@@ -971,7 +989,11 @@
 				databuf.types = DNA2_BUF_UI|DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier + Unique Enzymes"
 				src.buffers[bufferId] = databuf
@@ -986,7 +1008,11 @@
 				databuf.types = DNA2_BUF_SE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 				databuf.name = "Structural Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1

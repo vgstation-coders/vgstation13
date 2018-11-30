@@ -114,30 +114,24 @@
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
-		else if(istype(I,/obj/item/weapon/weldingtool) && mode==-1)
+		else if(iswelder(I) && mode==-1)
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
 			var/obj/item/weapon/weldingtool/W = I
-			if(W.remove_fuel(0,user))
-				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-				to_chat(user, "You start slicing the floorweld off the disposal unit.")
-
-				if(do_after(user, src,20))
-					if(gcDestroyed || !W.isOn())
-						return
-					to_chat(user, "You sliced the floorweld off the disposal unit.")
-					var/obj/structure/disposalconstruct/C = new (src.loc)
-					src.transfer_fingerprints_to(C)
-					C.ptype = 6 // 6 = disposal unit
-					C.anchored = 1
-					C.setDensity(TRUE)
-					C.update()
-					qdel(src)
-				return
-			else
-				to_chat(user, "You need more welding fuel to complete this task.")
-				return
+			to_chat(user, "You start slicing the floorweld off the disposal unit.")
+			if(W.do_weld(user, src,20, 0))
+				if(gcDestroyed)
+					return
+				to_chat(user, "You sliced the floorweld off the disposal unit.")
+				var/obj/structure/disposalconstruct/C = new (src.loc)
+				src.transfer_fingerprints_to(C)
+				C.ptype = 6 // 6 = disposal unit
+				C.anchored = 1
+				C.setDensity(TRUE)
+				C.update()
+				qdel(src)
+			return
 
 	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
@@ -368,7 +362,7 @@
 	var/pressure_delta = (SEND_PRESSURE*1.01) - air_contents.return_pressure()
 
 	if(env.temperature > 0)
-		var/transfer_moles = 0.1 * pressure_delta*air_contents.volume/(env.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = 0.1 * pressure_delta * air_contents.volume / (env.temperature * R_IDEAL_GAS_EQUATION)
 
 		//Actually transfer the gas
 		var/datum/gas_mixture/removed = env.remove(transfer_moles)
@@ -470,13 +464,15 @@
 /obj/machinery/disposal/proc/can_load_crates()
 	return TRUE
 
-/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+/obj/machinery/disposal/MouseDropTo(atom/movable/dropping, mob/user)
 
 	if(isAI(user))
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
 	if(user.restrained() || !user.canmove)
+		return
+	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
@@ -554,14 +550,27 @@
 	var/active = 0	// true if the holder is moving, otherwise inactive
 	dir = 0
 	var/count = 1000	//*** can travel 1000 steps before going inactive (in case of loops)
-	var/destinationTag = "DISPOSALS"// changes if contains a delivery container
+	var/destinationTag = DISP_DISPOSALS // changes if contains a delivery container
 	var/tomail = 0 //changes if contains wrapped package
 	var/hasmob = 0 //If it contains a mob
 
 /obj/structure/disposalholder/proc/has_fat_guy()
 	for(var/mob/living/carbon/human/H in src)
-		if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)
+		if(H.is_fat() || H.is_bulky())
 			return TRUE
+	
+// Dislodge players whenever they're no longer fat or the holder is active for some reason.
+/obj/structure/disposalholder/proc/until_skinny()
+	spawn while(1) // Checking this is not a priority. Check whenever the server has a moment.
+		if(!has_fat_guy() || active) // If the person is no longer fat or something made the holder active again.
+			for(var/mob/living/carbon/human/H in src)
+				to_chat(H, "You become dislodged from the grip of the pipe!")
+			active = 1
+			move()
+			break
+		else
+			sleep(10) // Probably unwise to keep constantly checking, so just wait some time before doing it again.
+	return
 
 	// initialize a holder from the contents of a disposal unit
 /obj/structure/disposalholder/proc/init(var/obj/machinery/disposal/D)
@@ -623,7 +632,13 @@
 				active = 0
 			// find the fat guys
 				for(var/mob/living/carbon/human/H in src)
-
+					if(H.is_fat())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own fat holding onto the pipe!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else if(H.is_bulky())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own bulky anatomy!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else
+						to_chat(H, "<span class='danger'>You suddenly stop by the fatass with you!</span> <span class='warning'>You hope something knocks you free.</span>")
+				until_skinny()
 				break
 		sleep(1)		// was 1
 		if(!loc || isnull(loc))
@@ -660,12 +675,18 @@
 // merge two holder objects
 // used when a a holder meets a stuck holder
 /obj/structure/disposalholder/proc/merge(var/obj/structure/disposalholder/other)
+	if(src.destinationTag == DISP_DISPOSALS && other.destinationTag != DISP_DISPOSALS)
+		// Lets make sure we don't accidentally dispose of stuff.
+		// Of course, if this happened before the cargo office this is a non-issue but if someone jammed the pipe after the office, then it's a problem.
+		src.destinationTag = other.destinationTag
 	for(var/atom/movable/AM in other)
 		AM.forceMove(src)		// move everything in other holder to this one
 		if(ismob(AM))
 			var/mob/M = AM
 			if(M.client)	// if a client mob, update eye to follow this holder
 				M.client.eye = src
+				if(!other.active)
+					to_chat(M, "Something hits and dislodges you from the pipe!")
 
 	qdel(other)
 
@@ -938,19 +959,13 @@
 	if(!deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
-
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the disposal pipe.")
-			if(do_after(user, src, 3 SECONDS))
-				if(gcDestroyed || !W.isOn())
-					return
-				welded()
-		else
-			to_chat(user, "You need more welding fuel to cut the pipe.")
-			return
+		to_chat(user, "You start slicing the disposal pipe.")
+		if(W.do_weld(user, src, 3 SECONDS, 0))
+			if(gcDestroyed)
+				return
+			welded()
 
 // called when pipe is cut with welder
 /obj/structure/disposalpipe/proc/welded()
@@ -1443,19 +1458,13 @@
 	if(!deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
-
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the disposal pipe.")
-			if(do_after(user, src, 3 SECONDS))
-				if(gcDestroyed || !W.isOn())
-					return
-				welded()
-		else
-			to_chat(user, "You need more welding fuel to cut the pipe.")
-			return
+		to_chat(user, "You start slicing the disposal pipe.")
+		if(W.do_weld(user, src, 3 SECONDS))
+			if(gcDestroyed)
+				return
+			welded()
 
 	// would transfer to next pipe segment, but we are in a trunk
 	// if not entering from disposal bin,
@@ -1596,26 +1605,20 @@
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
-	else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
+	else if(iswelder(I) && mode==1)
 		var/obj/item/weapon/weldingtool/W = I
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
-			if(do_after(user, src, 20))
-				if(gcDestroyed || !W.isOn())
-					return
-				to_chat(user, "You sliced the floorweld off the disposal outlet.")
-				var/obj/structure/disposalconstruct/C = new (src.loc)
-				src.transfer_fingerprints_to(C)
-				C.ptype = 7 // 7 =  outlet
-				C.update()
-				C.anchored = 1
-				C.setDensity(TRUE)
-				qdel(src)
-			return
-		else
-			to_chat(user, "You need more welding fuel to complete this task.")
-			return
+		to_chat(user, "You start slicing the floorweld off the disposal outlet.")
+		if(W.do_weld(user, src, 20, 0))
+			if(gcDestroyed)
+				return
+			to_chat(user, "You sliced the floorweld off the disposal outlet.")
+			var/obj/structure/disposalconstruct/C = new (src.loc)
+			src.transfer_fingerprints_to(C)
+			C.ptype = 7 // 7 =  outlet
+			C.update()
+			C.anchored = 1
+			C.setDensity(TRUE)
+			qdel(src)
 
 
 

@@ -145,7 +145,7 @@
 	set desc = "Take a blood sample from a suitable donor to help understand those around you and evolve."
 
 	var/list/choices = list()
-	for(var/mob/living/carbon/C in view(1,src))
+	for(var/mob/living/carbon/human/C in view(1,src))
 		if(C.real_name != real_name)
 			choices += C
 
@@ -155,6 +155,11 @@
 		return
 	if(!Adjacent(M))
 		return
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species && H.species.anatomy_flags & NO_BLOOD)
+			to_chat(src, "<span class='warning'>That donor has no blood!</span>")
+			return
 	if(donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
 		return

@@ -61,7 +61,8 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/restraint_apply_sound = null
-
+	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/hides_identity = HIDES_IDENTITY_DEFAULT
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -93,7 +94,11 @@
 	icon = 'icons/obj/device.dmi'
 
 /obj/item/proc/is_hidden_identity()
-	return is_slot_hidden(body_parts_covered,HIDEFACE)
+	switch(hides_identity)
+		if(HIDES_IDENTITY_ALWAYS)
+			return TRUE
+		if(HIDES_IDENTITY_DEFAULT)
+			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
 /obj/item/ex_act(severity)
 	switch(severity)
@@ -140,10 +145,10 @@
 
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
-//BRUTELOSS = 1
-//FIRELOSS = 2
-//TOXLOSS = 4
-//OXYLOSS = 8
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
@@ -231,7 +236,7 @@
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	if(!user.put_in_active_hand(src))
+	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	return
@@ -280,6 +285,7 @@
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
@@ -306,7 +312,7 @@
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
-/obj/item/proc/on_found(mob/finder as mob)
+/obj/item/proc/on_found(mob/wearer, mob/finder)
 	return
 
 // called after an item is placed in an equipment slot
@@ -806,12 +812,13 @@
 		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
-	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
+	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
 		to_chat(user, "You can't pick things up!")
+		return FALSE
 	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
-	if(!istype(loc, /turf)) //Object is not on a turf
+	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
 	return TRUE
@@ -1035,6 +1042,9 @@ var/global/list/image/blood_overlays = list()
 
 
 /obj/item/proc/showoff(mob/user)
+	if(abstract)
+		return
+
 	for (var/mob/M in view(user))
 		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
 
@@ -1042,8 +1052,12 @@ var/global/list/image/blood_overlays = list()
 	set name = "Show Held Item"
 	set category = "Object"
 
+	if(attack_delayer.blocked())
+		return
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
 	var/obj/item/I = get_active_hand()
-	if(I && !I.abstract)
+	if(I)
 		I.showoff(src)
 
 // /vg/ Affects wearers.
@@ -1231,3 +1245,72 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
 	return TRUE
+
+/obj/item/proc/on_mousedrop_to_inventory_slot()
+	return
+
+/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
+	return TRUE
+
+/obj/item/MouseDropFrom(var/obj/over_object)
+	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
+		if(loc == over_object.loc) //Swapping to another object in the same storage item
+			var/obj/item/weapon/storage/storageobj = loc
+			if(usr in storageobj.is_seeing)
+				//Almost none of BYOND's list procs work with contents because contents is a snowflake list and BYOND hates you, so enter the kludge.
+				//And yes, this is Lummox-sanctioned kludge: http://www.byond.com/forum/?post=271125
+				var/temp_index = storageobj.contents.Find(over_object)
+				var/list/temp_contents = storageobj.contents.Copy()
+				temp_contents -= src
+				temp_contents.Insert(temp_index, src)
+				storageobj.contents = temp_contents
+
+				storageobj.orient2hud(usr)
+				return
+		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
+			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
+			var/obj/abstract/screen/storage/screenobj = over_object
+			var/obj/item/weapon/storage/storageobj = screenobj.master
+			if(storageobj == loc && usr in storageobj.is_seeing)
+				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
+				storageobj.contents -= src
+				storageobj.contents += src
+
+				storageobj.orient2hud(usr)
+				return
+	if(!istype(over_object, /obj/abstract/screen/inventory))
+		return ..()
+	if(!ishuman(usr) && !ismonkey(usr))
+		return ..()
+	if(!usr.is_wearing_item(src) || !canremove)
+		return ..()
+	if(usr.incapacitated())
+		return ..()
+
+	var/obj/abstract/screen/inventory/OI = over_object
+	on_mousedrop_to_inventory_slot()
+
+	if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index) && !src.prepickup(usr))
+		usr.u_equip(src, TRUE)
+		usr.put_in_hand(OI.hand_index, src)
+		add_fingerprint(usr)
+
+/obj/item/proc/pre_throw()
+	return
+
+/**
+	Attempt to heat this object from a presumed heat source.
+	@args:
+		A: Atom: The source of the heat
+		user: mob: Whomever may be trying to heat this object
+
+	@return:
+		TRUE if succesful
+		FALSE if not succesful
+		NULL if override not defined
+**/
+/obj/item/proc/attempt_heating(atom/A, mob/user)
+	return
+
+/obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
+	return

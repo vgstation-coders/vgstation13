@@ -1,18 +1,14 @@
 /mob/proc/isUnconscious() //Returns 1 if unconscious, dead or faking death
-	if(stat || (status_flags & FAKEDEATH))
-		return 1
+	return stat == UNCONSCIOUS || isDead()
 
 /mob/proc/isDead() //Returns 1 if dead or faking death
-	if(stat == DEAD || (status_flags & FAKEDEATH))
-		return 1
+	return stat == DEAD || (status_flags & FAKEDEATH)
 
 /mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
-	if(isUnconscious() || paralysis || stunned || knockdown)
-		return 1
+	return isUnconscious() || paralysis > 0 || stunned > 0 || knockdown > 0
 
 /mob/proc/incapacitated()
-	if(isStunned() || restrained())
-		return 1
+	return isStunned() || restrained()
 
 /mob/proc/get_screen_colour()
 	if(!client)
@@ -73,6 +69,9 @@ mob/proc/remove_internal_organ()
 		return .
 	else if(has_reagent_in_blood(DETCOFFEE))
 		return NOIRMATRIX
+	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(/obj/item/clothing/glasses/scanner, slot_glasses)
+	if(S && S.on && S.color_matrix)
+		return S.color_matrix
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix
@@ -87,7 +86,9 @@ mob/proc/remove_internal_organ()
 	var/list/difference = list()
 	if(client.color)
 		difference = difflist(client.color,colour_to_apply)
-	if(!difference.len || difference || !istype(difference))
+	if(!difference) // otherwise !difference.len throws a runtime since null.len isn't a thing
+		return
+	else if(!difference.len)
 		client.updating_colour = 1
 		var/cached_ckey = client.ckey
 		if(forceupdate)
@@ -107,7 +108,7 @@ mob/proc/remove_internal_organ()
 					src.update_colour(0,1,colour_to_apply)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
-
+/*
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
 	ticker.mode.update_rev_icons_removed(M)
@@ -115,7 +116,7 @@ mob/proc/remove_internal_organ()
 
 /proc/ClearRoles(var/datum/mind/M)
 	ticker.mode.remove_revolutionary(M)
-
+*/
 /proc/isAdminGhost(A)
 	if(isobserver(A))
 		var/mob/dead/observer/O = A

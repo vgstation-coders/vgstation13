@@ -13,6 +13,11 @@
 /obj/structure/mopbucket/New()
 	..()
 	create_reagents(100)
+	mopbucket_list.Add(src)
+
+/obj/structure/mopbucket/Destroy()
+	mopbucket_list.Remove(src)
+	..()
 
 /obj/structure/mopbucket/attack_hand(mob/user as mob)
 	..()

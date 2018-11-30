@@ -388,6 +388,36 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	message = "Due to timespace anomalies of unknown origin, [station_name] is now host to several [mob_name]\s more than there were a moment ago."
 
+
+//////////////BLOOD CULT
+
+/datum/command_alert/bloodstones_raised
+	name = "Occult Activity Detected - Station Locked Down"
+	alert_title = "Occult Assault"
+	force_report = 1
+
+/datum/command_alert/bloodstones_raised/announce()
+	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
+	..()
+
+/datum/command_alert/bloodstones_anchor
+	name = "Occult Activity Critical - Breach Detected"
+	alert_title = "Occult Assault"
+	force_report = 1
+
+/datum/command_alert/bloodstones_anchor/announce()
+	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. Destroy it at all costs, do not let any cultist near it."
+	..()
+
+/datum/command_alert/bloodstones_broken
+	name = "Occult Activity Ceased - Lock Down Removed"
+	alert_title = "Occult Assault"
+	force_report = 1
+
+/datum/command_alert/bloodstones_broken/announce()
+	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
+	..()
+
 ////////MISC STUFF
 
 /datum/command_alert/eagles

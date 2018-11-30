@@ -15,6 +15,10 @@
 /obj/item/weapon/mop/New()
 	. = ..()
 	create_reagents(50)
+	mop_list.Add(src)
+
+/obj/item/weapon/mop/Destroy()
+	mop_list.Remove(src)
 
 /obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
 	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using

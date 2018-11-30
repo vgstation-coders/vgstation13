@@ -18,8 +18,6 @@
 			return 0
 		if (affected.status & ORGAN_DESTROYED)
 			return 0
-		if (affected.status & ORGAN_ROBOT)
-			return 0
 		if (affected.status & ORGAN_PEG)
 			return 0
 		// N3X:  Patient must be sleeping, dead, or unconscious.

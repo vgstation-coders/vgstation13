@@ -230,7 +230,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 					search_pda = FALSE
 
-		for (var/datum/mind/themind in ticker.minds)
+		/*for (var/datum/mind/themind in ticker.minds)
 			if (themind)
 				var/found = 0
 				for (var/datum/objective/objective in themind.objectives)
@@ -244,7 +244,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					to_chat(themind.current, "<span class='notice'>Your current objectives:</span>")
 					for(var/datum/objective/objective in themind.objectives)
 						to_chat(themind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-						obj_count++
+						obj_count++*/
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
@@ -253,13 +253,10 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	spawn(0)
 		var/oldname = real_name
 
-		var/time_passed = world.time
 		var/newname
 
 		for(var/i=1,i<=3,i++)	//we get 3 attempts to pick a suitable name.
 			newname = input(src,"You are a [role]. Would you like to change your name to something else?", "Name change",oldname) as text
-			if((world.time-time_passed)>300)
-				return	//took too long
 			newname = reject_bad_name(newname,allow_numbers)	//returns null if the name doesn't meet some basic requirements. Tidies up a few other things like bad-characters.
 
 			for(var/mob/living/M in player_list)
@@ -541,42 +538,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // Otherwise, the user mob's machine var will be reset directly.
 //
 /proc/onclose(mob/user, windowid, var/atom/ref=null)
-	if(!user.client)
-		return
-	var/param = "null"
-	if(ref)
-		param = "\ref[ref]"
-
-	winset(user, windowid, "on-close=\".windowclose [param]\"")
+	set waitfor = FALSE // winexists sleeps
+	for(var/i in 1 to WINSET_MAX_ATTEMPTS)
+		if(user && winexists(user, windowid))
+			var/param = ref ? "\ref[ref]" : "null"
+			winset(user, windowid, "on-close=\".windowclose [param]\"")
+			break
 
 //	to_chat(world, "OnClose [user]: [windowid] : ["on-close=\".windowclose [param]\""]")
-
-
-// the on-close client verb
-// called when a browser popup window is closed after registering with proc/onclose()
-// if a valid atom reference is supplied, call the atom's Topic() with "close=1"
-// otherwise, just reset the client mob's machine var.
-//
-/client/verb/windowclose(var/atomref as text)
-	set hidden = 1						// hide this verb from the user's panel
-	set name = ".windowclose"			// no autocomplete on cmd line
-
-//	to_chat(world, "windowclose: [atomref]")
-	if(atomref!="null")				// if passed a real atomref
-		var/hsrc = locate(atomref)	// find the reffed atom
-		var/href = "close=1"
-		if(hsrc)
-//			to_chat(world, "[src] Topic [href] [hsrc]")
-			usr = src.mob
-			src.Topic(href, params2list(href), hsrc)	// this will direct to the atom's
-			return										// Topic() proc via client.Topic()
-
-	// no atomref specified (or not found)
-	// so just reset the user mob's machine var
-	if(src && src.mob)
-//		to_chat(world, "[src] was [src.mob.machine], setting to null")
-		src.mob.unset_machine()
-	return
 
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
@@ -883,6 +852,11 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		progbar.loc = null
 	return 1
 
+/proc/do_flick(var/atom/A, var/icon_state, var/time)
+	flick(icon_state, A)
+	sleep(time)
+	return 1
+
 //Takes: Anything that could possibly have variables and a varname to check.
 //Returns: 1 if found, 0 if not.
 /proc/hasvar(var/datum/A, var/varname)
@@ -995,9 +969,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	if(perfectcopy)
 		if((O) && (original))
-			for(var/V in original.vars)
-				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","group")))
-					O.vars[V] = original.vars[V]
+			for(var/V in original.vars - variables_not_to_be_copied)
+				O.vars[V] = original.vars[V]
 	return O
 
 
@@ -1107,9 +1080,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 
-					for(var/V in T.vars)
-						if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")))
-							X.vars[V] = T.vars[V]
+					for(var/V in T.vars - variables_not_to_be_copied)
+						X.vars[V] = T.vars[V]
 
 //					var/area/AR = X.loc
 
@@ -1409,6 +1381,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	B.fingerprints = A.fingerprints
 	B.fingerprintshidden = A.fingerprintshidden
 	B.fingerprintslast = A.fingerprintslast
+	B.suit_fibers = A.suit_fibers
 
 //Checks if any of the atoms in the turf are dense
 //Returns 1 is anything is dense, 0 otherwise
@@ -1600,18 +1573,41 @@ Game Mode config tags:
 "raginmages""
 */
 
-/proc/find_active_mode(var/mode_ctag)
-	var/found_mode = null
-	if(ticker && ticker.mode)
-		if(ticker.mode.config_tag == mode_ctag)
-			found_mode = ticker.mode
-		else if(ticker.mode.name == "mixed")
-			var/datum/game_mode/mixed/mixed_mode = ticker.mode
-			for(var/datum/game_mode/GM in mixed_mode.modes)
-				if(GM.config_tag == mode_ctag)
-					found_mode = GM
+/proc/find_active_faction_by_type(var/faction_type)
+	if(!ticker || !ticker.mode)
+		return null
+	return locate(faction_type) in ticker.mode.factions
+
+/proc/find_active_faction_by_member(var/datum/role/R, var/datum/mind/M)
+	if(!R)
+		return null
+	var/found_faction = null
+	if(R.GetFaction())
+		return R.GetFaction()
+	if(ticker && ticker.mode && ticker.mode.factions.len)
+		var/success = FALSE
+		for(var/datum/faction/F in ticker.mode.factions)
+			for(var/datum/role/RR in F.members)
+				if(RR == R || RR.antag == M)
+					found_faction = F
+					success = TRUE
 					break
-	return found_mode
+			if(success)
+				break
+	return found_faction
+
+/proc/find_active_factions_by_member(var/datum/role/R, var/datum/mind/M)
+	var/list/found_factions = list()
+	for(var/datum/faction/F in ticker.mode.factions)
+		for(var/datum/role/RR in F.members)
+			if(RR == R || RR.antag == M)
+				found_factions.Add(F)
+				break
+	return found_factions
+
+/proc/find_active_faction_by_typeandmember(var/fac_type, var/datum/role/R, var/datum/mind/M)
+	var/list/found_factions = find_active_factions_by_member(R, M)
+	return locate(fac_type) in found_factions
 
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()
@@ -1634,27 +1630,29 @@ Game Mode config tags:
 	var/turf/U = get_turf(target)
 	if (!T || !U)
 		return
-	var/obj/item/projectile/A
-	A = new projectile(T)
+	if(ispath(projectile))
+		projectile = new projectile(T)
+	else
+		projectile.forceMove(T)
 	var/fire_sound
 	if(shot_sound)
 		fire_sound = shot_sound
 	else
-		fire_sound = A.fire_sound
+		fire_sound = projectile.fire_sound
 
-	A.original = target
-	A.target = U
-	A.shot_from = source
+	projectile.original = target
+	projectile.target = U
+	projectile.shot_from = source
 	if(istype(source, /mob))
-		A.firer = source
-	A.current = T
-	A.starting = T
-	A.yo = U.y - T.y
-	A.xo = U.x - T.x
-	playsound(T, fire_sound, 50, 1)
-	A.OnFired()
+		projectile.firer = source
+	projectile.current = T
+	projectile.starting = T
+	projectile.yo = U.y - T.y
+	projectile.xo = U.x - T.x
+	playsound(T, fire_sound, 75, 1)
 	spawn()
-		A.process()
+		projectile.OnFired()
+		projectile.process()
 
 
 //Increases delay as the server gets more overloaded,
@@ -1710,18 +1708,20 @@ Game Mode config tags:
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
-			new_seed_type = plant_controller.seeds[F.plantname]
+			new_seed_type = SSplant.seeds[F.plantname]
 	else
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
-				new_seed_type = plant_controller.seeds[F.plantname]
+				new_seed_type = SSplant.seeds[F.plantname]
 		else
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
 				while(min_seeds <= produce)
 					new F.nonplant_seed_type(seedloc)
 					min_seeds++
+				if(user)
+					user.drop_item(F, force_drop = TRUE)
 				qdel(F)
 				return TRUE
 
@@ -1734,6 +1734,8 @@ Game Mode config tags:
 	else
 		return FALSE
 
+	if(user)
+		user.drop_item(O, force_drop = TRUE)
 	qdel(O)
 	return TRUE
 
@@ -1767,3 +1769,9 @@ Game Mode config tags:
 			continue
 		turfs += T
 	return pick(turfs)
+
+/proc/get_key(mob/M)
+	if(M.mind)
+		return M.mind.key
+	else
+		return null

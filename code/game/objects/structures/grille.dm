@@ -12,6 +12,7 @@
 	explosion_resistance = 5
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
+	var/grille_material = /obj/item/stack/rods
 
 /obj/structure/grille/examine(mob/user)
 
@@ -24,7 +25,6 @@
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
 	returnToPool(src)
-	..()
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
@@ -33,13 +33,13 @@
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
-		new /obj/item/stack/rods(get_turf(src)) //One rod set
-	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
+		new grille_material(get_turf(src)) //One rod set
+	else if(health > (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
 	if(health <= 0) //Dead
-		new /obj/item/stack/rods(get_turf(src)) //Drop the second set of rods
+		new grille_material(get_turf(src)) //Drop the second set of rods
 		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
@@ -146,7 +146,7 @@
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
-			drop_stack(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
@@ -157,51 +157,6 @@
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
 			"<span class='notice'>You [anchored ? "fasten" : "unfasten"] the grille [anchored ? "to" : "from"] the floor.</span>")
 			return
-
-//Window placement
-	else if(istype(W, /obj/item/stack/sheet/glass))
-		var/dir_to_set
-		if(loc == user.loc)
-			dir_to_set = user.dir //Whatever the user is doing, return the "normal" window placement output
-		else
-			if((x == user.x) || (y == user.y)) //Only supposed to work for cardinal directions, aka can't lay windows in diagonal directions
-				if(x == user.x) //User is on the same vertical plane
-					if(y > user.y)
-						dir_to_set = 2 //User is laying from the bottom
-					else
-						dir_to_set = 1 //User is laying from the top
-				else if(y == user.y) //User is on the same horizontal plane
-					if (x > user.x)
-						dir_to_set = 8 //User is laying from the left
-					else
-						dir_to_set = 4 //User is laying from the right
-			else
-				to_chat(user, "<span class='warning'>You can't reach far enough.</span>")
-				return
-		for(var/obj/structure/window/P in loc)
-			if(P.dir == dir_to_set)
-				to_chat(user, "<span class='warning'>There's already a window here.</span>")//You idiot
-
-				return
-		user.visible_message("<span class='notice'>[user] starts placing a window on \the [src].</span>", \
-		"<span class='notice'>You start placing a window on \the [src].</span>")
-		if(do_after(user, src, 20))
-			for(var/obj/structure/window/P in loc)
-				if(P.dir == dir_to_set)//checking this for a 2nd time to check if a window was made while we were waiting.
-					to_chat(user, "<span class='warning'>There's already a window here.</span>")
-					return
-			var/obj/item/stack/sheet/glass/glass/G = W //This fucking stacks code holy shit
-			var/obj/structure/window/WD = new G.created_window(loc, 0)
-			WD.dir = dir_to_set
-			WD.ini_dir = dir_to_set
-			WD.anchored = 0
-			WD.d_state = 0
-			var/obj/item/stack/ST = W //HOLY FUCKING SHIT !
-			ST.use(1)
-			user.visible_message("<span class='notice'>[user] places \a [WD] on \the [src].</span>", \
-			"<span class='notice'>You place \a [WD] on \the [src].</span>")
-		return
-
 	var/dam = 0
 	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
 		dam = health
@@ -219,6 +174,7 @@
 
 	if(dam)
 		user.do_attack_animation(src, W)
+		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	health -= dam
 	healthcheck(hitsound = 1)
 	..()
@@ -251,6 +207,10 @@
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
 
+/obj/structure/grille/clockworkify()
+	var/our_glow = broken ? BROKEN_REPLICANT_GRILLE_GLOW : REPLICANT_GRILLE_GLOW
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/grille/replicant, our_glow)
+
 /obj/structure/grille/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
@@ -269,6 +229,7 @@
 	density = 0 //Not blocking anything anymore
 
 /obj/structure/grille/broken/New()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 
@@ -289,7 +250,7 @@
 /obj/structure/grille/cult/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || !broken)
 		return 0 //Make sure air doesn't drain
-	..()
+	return ..()
 
 
 /obj/structure/grille/invulnerable
@@ -302,4 +263,17 @@
 	return
 
 /obj/structure/grille/invulnerable/attackby()
+	return
+
+/obj/structure/grille/replicant
+	name = "replicant grille"
+	desc = "A strangely-shaped grille."
+	icon_state = "replicantgrille"
+	health = 30
+	grille_material = /obj/item/stack/sheet/ralloy
+
+/obj/structure/grille/replicant/cultify()
+	return
+
+/obj/structure/grille/replicant/clockworkify()
 	return

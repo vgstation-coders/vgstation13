@@ -104,6 +104,21 @@
 /obj/item/weapon/gun/proc/isHandgun()
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
+/obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
+	if(silenced)
+		if(fire_sound)
+			playsound(user, fire_sound, fire_volume/5, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+	else
+		if(fire_sound)
+			playsound(user, fire_sound, fire_volume, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume, 1)
+		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
+		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
 	if(advanced_tool_user_check)
@@ -208,10 +223,11 @@
 		in_chamber.def_zone = LIMB_CHEST
 
 	if(targloc == curloc)
-		user.bullet_act(in_chamber)
+		target.bullet_act(in_chamber)
 		qdel(in_chamber)
 		in_chamber = null
 		update_icon()
+		play_firesound(user, reflex)
 		return
 
 	if(recoil)
@@ -242,19 +258,7 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	if(silenced)
-		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/5, 1)
-		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
-	else
-		if(fire_sound)
-			playsound(user, fire_sound, fire_volume, 1)
-		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume, 1)
-		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
-		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+	play_firesound(user, reflex)
 
 	in_chamber.original = target
 	in_chamber.forceMove(get_turf(user))
@@ -338,7 +342,6 @@
 			in_chamber.on_hit(M)
 			if (!in_chamber.nodamage)
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
-				user.stat=2 // Just to be sure
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')
 				playsound(src, pick(suicidesound), 10, channel = 125)
@@ -403,3 +406,16 @@
 		return FALSE
 	else
 		return TRUE
+
+/obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
+	if(istype(A, /obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = A
+		if(isHandgun() && G.isHandgun())
+			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
+			if(user.drop_item(G, AA) && user.drop_item(src, AA))
+				user.put_in_hands(AA)
+				AA.update_icon(user)
+			else
+				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
+				qdel(AA)
+	..()

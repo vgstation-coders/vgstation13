@@ -29,7 +29,7 @@
 		return FALSE	//Sanity, this should never happen.
 
  	//Bad mobs! - Remember to add a comment explaining what's wrong with the mob
-	if(is_type_in_list(MP, blacklisted_mobs))
+	if(is_type_in_list(MP, existing_typesof_list(blacklisted_mobs)))
 		return FALSE
 
 	//Not in here? Must be untested, but WHO CARES!

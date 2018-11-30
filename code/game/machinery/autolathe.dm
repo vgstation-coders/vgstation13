@@ -43,6 +43,8 @@
 		new /obj/item/weapon/wirecutters(), \
 		new /obj/item/weapon/wrench(), \
 		new /obj/item/weapon/solder(),\
+		new /obj/item/weapon/wirecutters/clippers(),\
+		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
@@ -108,9 +110,10 @@
 		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
-		new /obj/item/device/destTagger, \
-		new /obj/item/device/priceTagger, \
-		new /obj/item/device/breathalyzer, \
+		new /obj/item/device/destTagger(), \
+		new /obj/item/device/priceTagger(), \
+		new /obj/item/weapon/hand_labeler(), \
+		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/weapon/rcd_ammo(), \
@@ -136,6 +139,7 @@
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
+		new /obj/item/weapon/legcuffs/beartrap(),\
 		)
 	)
 
@@ -195,6 +199,6 @@
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
-								"You put \the [I] in \the [src]'s reycling unit.")
+								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
 		return 1

@@ -86,7 +86,7 @@
 	add_fingerprint(user)
 
 	if(normaldoorcontrol)
-		for(var/obj/machinery/door/airlock/D in range(range))
+		for(var/obj/machinery/door/airlock/D in range(range, src))
 			if(D.id_tag == src.id_tag)
 				spawn(0)
 				if(D)
@@ -203,3 +203,18 @@
 
 	icon_state = "launcherbtt"
 	active = 0
+
+/obj/machinery/door_control/mapped/interogation_room
+	name = "smartglass control"
+	desc = "Toogle smartglass"
+	id_tag = "InterogationRoomIDTag"
+
+
+/obj/machinery/door_control/mapped/interogation_room/attack_hand(var/mob/user)
+	..() // Sanity
+	for (var/obj/structure/window/reinforced/plasma/interogation_room/W in range(range))
+		if (W.smartwindow && src.id_tag == W.smartwindow.id_tag)
+			W.smartwindow.toggle_smart_transparency()
+	for (var/obj/machinery/door/window/plasma/secure/interogation_room/W in range(range))
+		if (W.smartwindow && src.id_tag == W.smartwindow.id_tag)
+			W.smartwindow.toggle_smart_transparency()

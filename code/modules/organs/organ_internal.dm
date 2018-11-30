@@ -194,18 +194,6 @@
 //All the internal organs without specific code to them are below
 //Hopefully this will be filled in soon ?
 
-/datum/organ/internal/heart //This is not set to vital because death immediately occurs in blood.dm if it is removed.
-	name = "heart"
-	parent_organ = LIMB_CHEST
-	organ_type = "heart"
-	removed_type = /obj/item/organ/internal/heart
-
-/datum/organ/internal/kidney
-	name = "kidneys"
-	parent_organ = LIMB_GROIN
-	organ_type = "kidneys"
-	removed_type = /obj/item/organ/internal/kidneys
-
 /datum/organ/internal/brain
 	name = "brain"
 	parent_organ = LIMB_HEAD
@@ -229,8 +217,6 @@
 	removed_type = /obj/item/organ/internal/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
-
-
 	if(!removed_type)
 		return 0
 	var/obj/item/organ/internal/removed_organ

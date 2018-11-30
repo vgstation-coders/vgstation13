@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/storage/lockbox
 	name = "lockbox"
 	desc = "A locked box."
@@ -17,54 +15,93 @@
 	var/icon_broken = "lockbox+b"
 	var/tracked_access = "It doesn't look like it's ever been used."
 	health = 50
-	var/oneuse = 0
 
 /obj/item/weapon/storage/lockbox/can_use()
 	return broken || !locked
 
-/obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/ID = W
-		if(src.broken)
+/obj/item/weapon/storage/lockbox/attack_robot(var/mob/user)
+	to_chat(user, "<span class='rose'>This box was not designed for use by non-organics.</span>")
+	return
+
+/obj/item/weapon/storage/lockbox/proc/toggle(var/mob/user, var/id_name)
+	if(allowed(user))
+		. = TRUE
+		locked = !locked
+		user.visible_message("<span class='notice'>The lockbox has been [locked ? null : "un"]locked by [user].</span>", "<span class='rose'>You [locked ? null : "un"]lock the box.</span>")
+		tracked_access = "The tracker reads: 'Last locked by [id_name || get_id_name(user)].'"
+		if(locked)
+			icon_state = icon_locked
+		else
+			icon_state = icon_closed
+	else
+		to_chat(user, "<span class='notice'>Access Denied.</span>")
+		return FALSE
+
+/proc/get_id_name(var/mob/user)
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/O = H.get_item_by_slot(slot_wear_id)
+		var/obj/item/weapon/card/id/I = null
+		if (isPDA(O))
+			var/obj/item/device/pda/P = O
+			I = P.id
+		if (isID(O))
+			I = O
+		if (!I)
+			I = locate() in H.held_items
+		if (I)
+			return I.registered_name
+		else
+			return "UNKNOWN" // Shouldn't happen but eh
+	
+	else if (issilicon(user)) // Currently, borgos cannot open lockboxes, but if you want to make a module who can, this will work.
+		return "[user]"
+
+
+/obj/item/weapon/storage/lockbox/oneuse/toggle(var/mob/user, var/id_name)
+	. = ..()
+	if (.)
+		for(var/atom/movable/A in src)
+			remove_from_storage(A, get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W, mob/user)
+	if (isID(W))
+		var/obj/item/weapon/card/id/I = W
+		if(broken)
 			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
 			return
-		if(check_access(ID))
-			src.locked = !( src.locked )
-			if(src.locked)
-				src.icon_state = src.icon_locked
-				to_chat(user, "<span class='rose'>You lock the [src.name]!</span>")
-				tracked_access = "The tracker reads: 'Last locked by [ID.registered_name].'"
-				return
-			else
-				src.icon_state = src.icon_closed
-				to_chat(user, "<span class='rose'>You unlock the [src.name]!</span>")
-				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
-				if(oneuse)
-					for(var/atom/movable/A in src)
-						remove_from_storage(A, get_turf(src))
-
-					qdel(src)
-				return
-		else
-			to_chat(user, "<span class='warning'>Access Denied.</span>")
-	else if(istype(W, /obj/item/weapon/card/emag) && !src.broken)
-		broken = 1
-		locked = 0
-		desc = "It appears to be broken."
-		icon_state = src.icon_broken
-		for(var/mob/O in viewers(user, 3))
-			O.show_message(text("<span class='notice'>The lockbox has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
-		if(oneuse)
-			for(var/atom/movable/A in src)
-				remove_from_storage(A, get_turf(src))
-
-			qdel(src)
-
+		return toggle(user, I.registered_name)
+	if (isPDA(W))
+		var/obj/item/device/pda/P = W 
+		var/obj/item/weapon/card/id/I = P.id
+		if (!I)
+			return
+		if(broken)
+			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
+			return
+		return toggle(user, I.registered_name)
 	if(!locked)
 		. = ..()
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
-	return
+
+/obj/item/weapon/storage/lockbox/emag_act(var/mob/user)
+	if (broken)
+		return FALSE
+	broken = 1
+	locked = 0
+	desc = "It appears to be broken."
+	icon_state = src.icon_broken
+	user.visible_message("<span class='danger'>\The [src] has been broken by \the [user] with an electromagnetic card!</span>", "<span class='notice'>You break open \the [src].</span>", "<span class='notice'>You hear a faint click sound.</span>", range = 3)
+	return TRUE
+
+/obj/item/weapon/storage/lockbox/oneuse/emag_act(var/mob/user)
+	. = ..()
+	if (.)
+		for(var/atom/movable/A in src)
+			remove_from_storage(A, get_turf(src))
+		qdel(src)
 
 
 /obj/item/weapon/storage/lockbox/show_to(mob/user as mob)
@@ -114,15 +151,18 @@
 			if(2)
 				probab = 50
 		if(prob(probab))
+			. = TRUE
 			locked = !locked
 			src.update_icon()
 			if(!locked)
 				for(var/atom/movable/A in src)
 					remove_from_storage(A, get_turf(src))
-				if(oneuse)
-					qdel(src)
 
 
+/obj/item/weapon/storage/lockbox/oneuse/emp_act(severity)
+	. = ..()
+	if (.)
+		qdel(src)
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()
@@ -247,6 +287,35 @@
 	..()
 	new /obj/item/weapon/gun/lawgiver(src)
 
+/obj/item/weapon/storage/lockbox/lawgiver/with_magazine/New()
+	..()
+	new /obj/item/ammo_storage/magazine/lawgiver(src)
+
 /obj/item/weapon/storage/lockbox/oneuse
 	desc = "A locked box. When unlocked, the case will fall apart."
-	oneuse = 1
+
+/obj/item/weapon/storage/lockbox/AltClick()
+	if(verb_togglelock())
+		return
+	return ..()
+
+/obj/item/weapon/storage/lockbox/verb/verb_togglelock()
+	set src in oview(1) // One square distance
+	set category = "Object"
+	set name = "Toggle Lock"
+
+	if(usr.incapacitated()) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
+		return
+
+	if(!Adjacent(usr) || usr.loc == src)
+		return
+
+	if(src.broken)
+		return
+
+	if (ishuman(usr))
+		if (locked)
+			toggle(usr)
+			return 1
+	else
+		to_chat(usr, "<span class='warning'>You lack the dexterity to do this.</span>")

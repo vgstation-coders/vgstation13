@@ -574,7 +574,7 @@ proc/move_mining_shuttle()
 	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.welding && !stat)
 			if(stance != HOSTILE_STANCE_IDLE)
@@ -591,6 +591,20 @@ proc/move_mining_shuttle()
 		to_chat(user, "<span class='notice'>You instruct \the [src] to drop any collected ore.</span>")
 		DropOre()
 		return
+	if(!client && istype(I, /obj/item/device/paicard))
+		var/obj/item/device/paicard/P = I
+		if(!P.pai)
+			to_chat(user, "<span class = 'warning'>\The [P] has no intelligence within it.</span>")
+			return
+		var/response = alert(user, "Are you sure you want to put \the [P] into \the [src]? This can not be undone.","Insert \the [P]?","Yes","No")
+		if(response != "Yes")
+			return
+		if(do_after(user, src, 30))
+			user.drop_item(P, force_drop = TRUE)
+			P.pai.mind.transfer_to(src)
+			projectiletype = /obj/item/projectile/kinetic
+			qdel(P)
+
 	..()
 
 /mob/living/simple_animal/hostile/mining_drone/death(var/gibbed = FALSE)
@@ -606,15 +620,20 @@ proc/move_mining_shuttle()
 
 /mob/living/simple_animal/hostile/mining_drone/attack_hand(mob/living/carbon/human/M)
 	if(M.a_intent == I_HELP)
-		switch(search_objects)
-			if(0)
-				SetCollectBehavior()
-				to_chat(M, "<span class='info'>\The [src] will now search and store loose ore.</span>")
-			if(2)
-				SetOffenseBehavior()
-				to_chat(M, "<span class='info'>\The [src] will now attack hostile wildlife.</span>")
+		ToggleModes(M)
 		return
 	..()
+
+/mob/living/simple_animal/hostile/mining_drone/proc/ToggleModes(mob/user)
+	switch(search_objects)
+		if(0)
+			SetCollectBehavior()
+			if(user != src)
+				to_chat(user, "<span class='info'>\The [src] will now search and store loose ore.</span>")
+		if(2)
+			SetOffenseBehavior()
+			if(user != src)
+				to_chat(user, "<span class='info'>\The [src] will now attack hostile wildlife.</span>")
 
 /mob/living/simple_animal/hostile/mining_drone/proc/SetCollectBehavior()
 	stop_automated_movement_when_pulled = 1
@@ -625,6 +644,8 @@ proc/move_mining_shuttle()
 	minimum_distance = 1
 	retreat_distance = null
 	icon_state = "mining_drone"
+	if(client)
+		to_chat(src, "<span class='info' style=\"font-family:Courier\">Ore collection mode active.</span>")
 
 /mob/living/simple_animal/hostile/mining_drone/proc/SetOffenseBehavior()
 	stop_automated_movement_when_pulled = 0
@@ -635,6 +656,8 @@ proc/move_mining_shuttle()
 	retreat_distance = 1
 	minimum_distance = 2
 	icon_state = "mining_drone_offense"
+	if(client)
+		to_chat(src, "<span class='info' style=\"font-family:Courier\">Combat mode active.</span>")
 
 /mob/living/simple_animal/hostile/mining_drone/AttackingTarget()
 	if(istype(target, /obj/item/weapon/ore))
@@ -658,6 +681,8 @@ proc/move_mining_shuttle()
 	for(var/obj/item/weapon/ore/O in contents)
 		contents -= O
 		O.forceMove(src.loc)
+	if(client)
+		to_chat(src, "<span class='info' style=\"font-family:Courier\">Unloading collected ore.</span>")
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/adjustBruteLoss()
@@ -668,6 +693,28 @@ proc/move_mining_shuttle()
 /mob/living/simple_animal/hostile/mining_drone/LoseAggro()
 	stop_automated_movement = 0
 	vision_range = idle_vision_range
+
+/mob/living/simple_animal/hostile/mining_drone/Login()
+	..()
+	to_chat(src, "<b>You are a minebot. Click on yourself to toggle between modes.</b>")
+
+/mob/living/simple_animal/hostile/mining_drone/attack_animal(mob/living/simple_animal/M)
+	if(client && M == src)
+		ToggleModes(M)
+	else
+		return ..()
+
+/mob/living/simple_animal/hostile/mining_drone/UnarmedAttack(atom/A)
+	. = ..()
+	if(client && search_objects == 2 && (istype(A, /obj/item/weapon/ore) || isturf(A)) && !attack_delayer.blocked())
+		delayNextAttack(8)
+		CollectOre()
+
+/mob/living/simple_animal/hostile/mining_drone/verb/UnloadOre()
+	set category = "Minebot"
+	set name = "Unload Ore"
+
+	DropOre()
 
 /**********************Lazarus Injector**********************/
 
@@ -881,7 +928,7 @@ proc/move_mining_shuttle()
 		var/list/L = list()
 		var/turf/unsimulated/mineral/M
 		for(M in range(7, user))
-			if(M.scan_state)
+			if(M.GetScanState())
 				L += M
 		if(!L.len)
 			to_chat(user, "<span class='notice'>\The [src] reports that nothing was detected nearby.</span>")
@@ -889,7 +936,7 @@ proc/move_mining_shuttle()
 		else
 			for(M in L)
 				var/turf/T = get_turf(M)
-				var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = UNDER_HUD_LAYER)
+				var/image/I = image('icons/turf/mine_overlays.dmi', loc = T, icon_state = M.GetScanState(), layer = UNDER_HUD_LAYER)
 				I.plane = HUD_PLANE
 				C.images += I
 				spawn(30)

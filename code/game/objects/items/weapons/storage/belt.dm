@@ -40,7 +40,9 @@
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
 		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/syndie/engineering",
 		"/obj/item/taperoll/atmos",
+		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
@@ -98,7 +100,9 @@
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
 		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/syndie/engineering",
 		"/obj/item/taperoll/atmos",
+		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/device/rcd/matter/engineering",
 		"/obj/item/device/rcd/rpd",
@@ -138,6 +142,11 @@
 	desc = "Can hold various medical equipment."
 	icon_state = "medicalbelt"
 	item_state = "medical"
+	storage_slots = 21
+	max_combined_w_class = 21
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	use_to_pickup = TRUE
 	can_only_hold = list(
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
@@ -158,7 +167,9 @@
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
-		"/obj/item/weapon/switchtool/surgery"
+		"/obj/item/weapon/switchtool/surgery",
+		"/obj/item/weapon/grenade/chem_grenade",
+		"/obj/item/weapon/electrolyzer"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -196,6 +207,7 @@
 		"/obj/item/device/radio/headset",
 		"/obj/item/weapon/melee/baton",
 		"/obj/item/taperoll/police",
+		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
 		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
@@ -327,18 +339,17 @@
 	icon_state = "lazarusbelt"
 
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
-	var/blocked = list(
-	/mob/living/simple_animal/hostile/hivebot/tele,
-	/mob/living/simple_animal/hostile/wendigo/evolved,
-	/mob/living/simple_animal/hostile/wendigo/alpha,
-	)
-	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
+
+	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)) // list of possible hostile mobs
 	critters = shuffle(critters)
 	while(contents.len < 6)
 		var/obj/item/device/mobcapsule/MC = new /obj/item/device/mobcapsule(src)
 		var/chosen = pick(critters)
 		critters -= chosen
 		var/mob/living/simple_animal/hostile/NM = new chosen(MC)
+		if(istype(NM, /mob/living/simple_animal/hostile/humanoid))
+			var/mob/living/simple_animal/hostile/humanoid/H = NM
+			H.items_to_drop = list()
 		NM.faction = "lazarus \ref[user]"
 		NM.friends += user
 		MC.contained_mob = NM

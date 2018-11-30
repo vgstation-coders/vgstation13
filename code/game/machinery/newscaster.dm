@@ -81,7 +81,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	ghost_write = 1 // Allow ghosts to send Topic()s.
 	custom_aghost_alerts = 1 // We handle our own logging.
 
-	var/screen = 0                  
+	var/screen = 0
 		//Or maybe I'll make it into a list within a list afterwards... whichever I prefer, go fuck yourselves :3
 		// 0 = welcome screen - main menu
 		// 1 = view feed channels
@@ -495,7 +495,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set a channel's name"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+			channel_name = stripped_input(usr, "Provide a Feed Channel Name", "Network Channel Handler", "")
 			while (findtext(channel_name," ") == 1)
 				channel_name = copytext(channel_name,2,length(channel_name)+1)
 			updateUsrDialog()
@@ -545,7 +545,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			for(var/datum/feed_channel/F in news_network.network_channels)
 				if( (!F.locked || F.author == scanned_user) && !F.censored)
 					available_channels += F.channel_name
-			channel_name = strip_html_simple(input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels )
+			channel_name = utf8_sanitize(input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels )
 			updateUsrDialog()
 
 		else if(href_list["set_new_message"])
@@ -554,7 +554,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(msg))
 				msg = ""
-			msg = strip_html(input(usr, "Write your Feed story", "Network Channel Handler", msg))
+			msg = stripped_input(usr, "Write your Feed story", "Network Channel Handler", msg)
 			while (findtext(msg," ") == 1)
 				msg = copytext(msg,2,length(msg)+1)
 			updateUsrDialog()
@@ -697,7 +697,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set the name of a wanted person"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			channel_name = strip_html(input(usr, "Provide the name of the Wanted person", "Network Security Handler", ""))
+			channel_name = stripped_input(usr, "Provide the name of the Wanted person", "Network Security Handler", "")
 			while (findtext(channel_name," ") == 1)
 				channel_name = copytext(channel_name,2,length(channel_name)+1)
 			updateUsrDialog()
@@ -706,7 +706,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set the description of a wanted person"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			msg = strip_html(input(usr, "Provide the a description of the Wanted person and any other details you deem important", "Network Security Handler", ""))
+			msg = stripped_input(usr, "Provide the a description of the Wanted person and any other details you deem important", "Network Security Handler", "")
 			while (findtext(msg," ") == 1)
 				msg = copytext(msg,2,length(msg)+1)
 			updateUsrDialog()
@@ -1138,7 +1138,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(scribble_page == curr_page)
 			to_chat(user, "<FONT COLOR='blue'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</FONT>")
 		else
-			var/s = strip_html( input(user, "Write something", "Newspaper", "") )
+			var/s = stripped_input(user, "Write something", "Newspaper", "")
 			s = copytext(sanitize(s), 1, MAX_MESSAGE_LEN)
 			if (!s)
 				return

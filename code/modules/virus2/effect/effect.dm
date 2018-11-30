@@ -64,7 +64,7 @@
 /datum/disease2/effect/proc/minormutate()
 	switch(pick(1,2,3,4,5))
 		if(1)
-			chance = rand(0, max_chance)
+			chance = rand(initial(chance), max_chance)
 		if(2)
 			multiplier = rand(1, max_multiplier)
 
@@ -218,7 +218,7 @@
 	stage = 2
 
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
-	mob.emote("scream",,, 1)
+	mob.audible_scream()
 
 
 /datum/disease2/effect/drowsness
@@ -558,6 +558,44 @@
 	mob.dna.check_integrity()
 	mob.dna.SetSEState(VEGANBLOCK,1)
 	domutcheck(mob, null)
+
+/datum/disease2/effect/famine
+	name = "Faminous Potation"
+	stage = 2
+	max_multiplier = 3
+
+/datum/disease2/effect/famine/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.dna)
+			if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage
+				H.adjustCloneLoss(5 * multiplier)
+
+	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(3*multiplier,mob))
+		if(H.seed && !H.dead) // Get your xenobotanist/vox trader/hydroponist mad with you in less than 1 minute with this simple trick.
+			switch(rand(1,3))
+				if(1)
+					if(H.waterlevel >= 10)
+						H.waterlevel -= rand(1,10)
+					if(H.nutrilevel >= 5)
+						H.nutrilevel -= rand(1,5)
+				if(2)
+					if(H.toxins <= 50)
+						H.toxins += rand(1,50)
+				if(3)
+					H.weed_coefficient++
+					H.weedlevel++
+					H.pestlevel++
+					if(prob(5))
+						H.dead = 1
+
+
+	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in range(2*multiplier,mob))
+		G.visible_message("<span class = 'warning'>\The [G] rots at an alarming rate!</span>")
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(G))
+		qdel(G)
+		if(prob(30/multiplier))
+			break
 
 ////////////////////////STAGE 3/////////////////////////////////
 
@@ -1151,7 +1189,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		H.adjustToxLoss(15*multiplier)
 
 /datum/disease2/effect/organs/vampire
-	stage = 3 //For use with vampires?
+	stage = 1 //For use with vampires?
+	badness = 3
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -1340,12 +1379,12 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
+		GM.adjust_gas(GAS_PLASMA, 100)
 		//GM.temperature = 1500+T0C //should be enough to start a fire
 		to_chat(mob, "<span class='warning'>You exhale a large plume of toxic gas!</span>")
 	else
-		GM.toxins += 10
 		GM.temperature = istype(T) ? T.air.temperature : T20C
+		GM.adjust_gas(GAS_PLASMA, 100)
 		to_chat(mob, "<span class = 'warning'> A toxic gas emanates from your pores!</span>")
 	T.assume_air(GM)
 	return

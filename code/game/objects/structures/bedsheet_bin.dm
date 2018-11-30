@@ -24,14 +24,8 @@ LINEN BINS
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
 	var/cut_time=0
-	if(istype(I, /obj/item/weapon/scalpel))
-		cut_time=20
-	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large) || istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch))
-		cut_time=40
-	else if(istype(I, /obj/item/weapon/shard))
-		cut_time=80
-	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/plastic))
-		cut_time=160
+	if(I.is_sharp())
+		cut_time = 60 / I.sharpness
 	if(cut_time)
 		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
 		if(do_after(user, src, cut_time))
@@ -77,7 +71,7 @@ LINEN BINS
 	_color = "red"
 
 /obj/item/weapon/bedsheet/red/redcoat
-		_color = "redcoat" //for denied stamp
+	_color = "redcoat" //for denied stamp
 
 /obj/item/weapon/bedsheet/yellow
 	icon_state = "sheetyellow"

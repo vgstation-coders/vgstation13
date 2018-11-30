@@ -2,7 +2,7 @@
 
 /*
 
-A list of items and costs is stored under the datum of every game mode, alongside the number of crystals, and the welcoming message.
+A list of items and costs is stored under the datum of every game mode, alongside the number of crystals, and the welcoming message. //WHY
 
 */
 
@@ -23,11 +23,25 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/initialize()
 	if(ticker.mode)
-		welcome = ticker.mode.uplink_welcome
-		uses = ticker.mode.uplink_uses
+		welcome = "Syndicate Uplink Console"
+		uses = 20
 	else
 		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
 		uses = 90 // Because this is only happening on centcomm's snowflake uplink
+
+/obj/item/device/uplink/proc/refund(mob/user)
+	if(!user)
+		return
+	var/obj/item/I = user.get_active_hand()
+	if(I) // Make sure there's actually something in the hand before even bothering to check
+		for(var/item in typesof(/datum/uplink_item))
+			var/datum/uplink_item/UI = item
+			var/cost = UI.refund_amount ? UI.refund_amount : UI.cost
+			var/refundable = initial(UI.refundable)
+			if(refundable && I.check_uplink_validity())
+				uses += cost
+				to_chat(user, "<span class='notice'>[I] refunded.</span>")
+				qdel(I)
 
 //Let's build a menu!
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
@@ -97,6 +111,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/Topic(href, href_list)
 	..()
+
+	if (!is_holder_of(usr, src))
+		message_admins("[usr] tried to access [src], an unlocked PDA, despite not being its holder.")
+		return FALSE
+
 	if(!active)
 		return
 
@@ -200,6 +219,10 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/radio/uplink/attack_self(mob/user as mob)
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
+
+/obj/item/device/radio/uplink/nukeops/New()
+	..()
+	hidden_uplink.uses = 80
 
 /obj/item/device/multitool/uplink/New()
 	hidden_uplink = new(src)

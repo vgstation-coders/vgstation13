@@ -103,11 +103,9 @@
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	color_matrix = list(0.33,0.33,0.33,0,
-						0.33,0.33,0.33,0,
-				 		0.33,0.33,0.33,0,
-				 		0,0,0,1,
-				 		-0.2,0,-0.2,0)
+	color_matrix = list(0.8, 0, 0  ,\
+						0  , 1, 0  ,\
+						0  , 0, 0.8) //equivalent to #CCFFCC
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_invisible = initial(see_invisible)

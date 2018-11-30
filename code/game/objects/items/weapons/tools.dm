@@ -97,7 +97,7 @@
 /obj/item/weapon/screwdriver/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/screwdriver/New()
 	. = ..()
@@ -240,10 +240,11 @@
 	var/max_fuel = 20 	//The max amount of fuel the welder can hold
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
+	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (FIRELOSS|OXYLOSS)
+	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/weldingtool/New()
 	. = ..()
@@ -294,26 +295,40 @@
 
 	..()
 
+/obj/item/weapon/weldingtool/proc/do_weld(var/mob/user, var/atom/thing, var/time, var/fuel_cost)
+	if(!remove_fuel(fuel_cost, user))
+		return 0
+
+	playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+	return isOn() && do_after(user, thing, time/weld_speed) && isOn() //Checks if it's on, then does the do_after, then checks if it's still on after.
 
 /obj/item/weapon/weldingtool/process()
 	switch(welding)
 		//If off
 		if(0)
-			if(src.icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				src.force = 3
-				src.damtype = "brute"
+			if(icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
+				force = 3
+				sharpness = 0
+				sharpness_flags = 0
+				damtype = "brute"
+				heat_production = 0
+				source_temperature = 0
 				update_icon()
-				src.hitsound = "sound/weapons/toolhit.ogg"
-				src.welding = 0
+				hitsound = "sound/weapons/toolhit.ogg"
+				welding = 0
 			processing_objects.Remove(src)
 			return
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
-			if(src.icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				src.force = 15
-				src.damtype = "fire"
+			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
+				force = 15
+				sharpness = 0.8
+				sharpness_flags = INSULATED_EDGE | HOT_EDGE
+				damtype = "fire"
+				heat_production = 3800
+				source_temperature = TEMPERATURE_WELDER
 				update_icon()
-				src.hitsound = "sound/weapons/welderattack.ogg"
+				hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
 				remove_fuel(1)
 
@@ -615,7 +630,7 @@
 
 /obj/item/weapon/crowbar/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
 	desc = "Rise and shine."
@@ -625,7 +640,7 @@
 
 /obj/item/weapon/crowbar/red/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
@@ -731,7 +746,7 @@
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")
 			return
-		if(!G.reagents.has_any_reagents(list(SACID, FORMIC_ACID), 1))
+		if(!G.reagents.has_any_reagents(SACIDS, 1))
 			user.simple_message("<span class='warning'>The tool is not compatible with that.</span>",
 				"<span class='warning'>The tool won't drink that.</span>")
 			return

@@ -7,14 +7,11 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 511
+#define RECOMMENDED_VERSION 512
 
 
 var/savefile/panicfile
 /world/New()
-	//populate_seed_list()
-	plant_controller = new()
-
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -63,11 +60,8 @@ var/savefile/panicfile
  * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
  */
 #ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < 510)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
-#elif
 	if(byond_version < RECOMMENDED_VERSION)
-		world.log << "Your server's byond version does not meet the recommended requirements for this code. Please update BYOND"
+		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 512.1426")
 #endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
@@ -102,6 +96,8 @@ var/savefile/panicfile
 	src.update_status()
 
 	paperwork_setup()
+
+	initialize_cultwords()
 
 	for(var/x in typesof(/datum/bee_species))
 		var/datum/bee_species/species = new x
@@ -140,13 +136,12 @@ var/savefile/panicfile
 
 	src.update_status()
 
-	sleep_offline = 1
+	sleep_offline = 0
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	spawn(10)
-		Master.Setup()
+	Master.Setup()
 
 	process_teleport_locs()				//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
@@ -160,7 +155,6 @@ var/savefile/panicfile
 			KickInactiveClients()*/
 
 #undef RECOMMENDED_VERSION
-
 	return ..()
 
 //world/Topic(href, href_list[])

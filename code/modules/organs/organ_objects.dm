@@ -48,7 +48,7 @@
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
-		user.simple_message("<span class='info'>The organ seems to be full of life!</span>","<span class='info'>It's making happy little cooing noises at you. Aw.</span>")
+		user.simple_message("<span class='info'>The organ seems [health ? "to be full of life!" : "like it was full of life once."]</span>","<span class='info'>It's making [health ? "happy" : "spooky"] little cooing noises at you. Aw.</span>")
 
 /obj/item/organ/internal/process()
 
@@ -84,10 +84,19 @@
 	name = "dead [initial(name)]"
 	if(dead_icon)
 		icon_state = dead_icon
+	var/icon/original = icon(icon, icon_state)
+	original.GrayScale()
+	icon = original
 	health = 0
 	processing_objects -= src
-	//TODO: Grey out the icon state.
 	//TODO: Inject an organ with peridaxon to make it alive again.
+
+/obj/item/organ/internal/proc/revive()
+	name = initial(name)
+	icon_state = initial(icon_state)
+	icon = initial(icon)
+	health = 1
+	processing_objects += src
 
 /obj/item/organ/internal/proc/roboticize()
 
@@ -127,6 +136,34 @@
 	fresh = 6 // Juicy.
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
+
+/obj/item/organ/internal/heart/cell
+	name = "biocharger"
+	icon_state = "heart-cell"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/heart/cell
+	robotic=2
+
+/obj/item/organ/internal/heart/cell/get_cell()
+	if(organ_data)
+		var/datum/organ/internal/heart/cell/C = organ_data
+		return C.cell
+
+/obj/item/organ/internal/heart/cell/attack_self(mob/user)
+	if(get_cell())
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You remove \the [C.cell] from \the [src].</span>")
+		user.put_in_hands(C.cell)
+		C.cell = null
+
+/obj/item/organ/internal/heart/cell/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/cell) && !get_cell() && organ_data && user.drop_item(I, src))
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
+		C.cell = I
+		return
+	..()
 
 /obj/item/organ/internal/lungs
 	name = "human lungs"

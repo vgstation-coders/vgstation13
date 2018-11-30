@@ -35,7 +35,7 @@ var/list/special_fruits = list()
 	spawn(1)
 		//Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
-			seed = plant_controller.seeds[plantname]
+			seed = SSplant.seeds[plantname]
 			if(!seed || !seed.chems)
 				return
 
@@ -236,14 +236,13 @@ var/list/special_fruits = list()
 	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
-	var/list/mobs = new/list()
 	var/turf/hit_turf = get_turf(hit_atom)
-	for(var/mob/turfMobs in hit_turf)
-		mobs += M
-	if(prob(50) && (mobs.len > 0)) //50% chance to teleport the person who was hit by the fruit
+	var/turf_has_mobs = locate(/mob) in hit_turf
+	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
 		spark(hit_atom)
 		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
 		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...
+			A.unlock_from()
 			A.forceMove(picked) //And teleport them to the chosen location.
 			spawn()
 				spark(A)
@@ -614,6 +613,9 @@ var/list/special_fruits = list()
 	origin_tech = Tc_BLUESPACE + "=3"
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/testing
+	potency = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
 	name = "killer-tomato"

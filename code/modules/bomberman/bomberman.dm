@@ -666,7 +666,7 @@ obj/structure/bomberflame/Destroy()
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
-	clothing_flags = ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL|CONTAINPLASMAMAN
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -695,7 +695,16 @@ obj/structure/bomberflame/Destroy()
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	species_restricted = list("exclude")
+	clothing_flags = CONTAINPLASMAMAN
 	var/never_removed = 1
+
+/obj/item/clothing/head/helmet/space/bomberman/equipped(mob/living/carbon/human/H, head)
+	if(istype(H) && H.get_item_by_slot(head) == src)
+		H.mutations.Add(M_NO_BREATH)
+
+/obj/item/clothing/head/helmet/space/bomberman/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	if(from_slot == slot_head && istype(user))
+		user.mutations.Remove(M_NO_BREATH)
 
 /obj/item/clothing/head/helmet/space/bomberman/New()
 	..()
@@ -955,11 +964,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 		spawn(0)
 			A.contents.Add(turfs)
-			for(var/turf/F in turfs)
-				for(var/atom/movable/AM in F)
-					AM.areaMaster = get_area_master(F)
-
-
 
 		message_admins("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[center.x];Y=[center.y];Z=[center.z]'>JMP</A>)")
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
@@ -1251,8 +1255,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	under.contents.Add(turfs)
 	for(var/turf/T in turfs)
-		for(var/atom/movable/AM in T)
-			AM.areaMaster = get_area_master(T)
 		if(open_space && (under.name == "Space"))
 			T.ChangeTurf(T.get_underlying_turf())
 		else

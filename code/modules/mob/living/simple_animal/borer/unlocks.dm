@@ -259,7 +259,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,activate)
@@ -273,7 +273,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,!activate)
@@ -301,7 +301,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,activate)
@@ -315,7 +315,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,!activate)
@@ -361,7 +361,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,activate)
@@ -375,7 +375,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,!activate)
@@ -421,7 +421,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,activate)
@@ -435,7 +435,7 @@
 	// This is inefficient, but OK because it doesn't happen often.
 	for(var/block=1;block<DNA_SE_LENGTH;block++)
 		if(assigned_blocks[block] == gene_name)
-			testing("  Found [assigned_blocks[block]] ([block])")
+//			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
 			if(host && host.dna)
 				host.dna.SetSEState(block,!activate)

@@ -9,41 +9,53 @@
 	plane = SPACE_BACKGROUND_PLANE
 	dynamic_lighting = 0
 	luminosity = 1
+	intact = 0 // make pipes appear above space
 
 	var/health=40 // same as rwindow.
 	var/sheetamount = 1 //Number of sheets needed to build this floor (determines how much shit is spawned via Destroy())
-	var/image/damage_overlay
 	var/cracked_base = "fcrack"
 	var/shardtype = /obj/item/weapon/shard
 	var/sheettype = /obj/item/stack/sheet/glass/rglass //Used for deconstruction
 	var/glass_state = "glass_floor" // State of the glass itself.
 	var/reinforced = 0
 	var/construction_state = 2 // Fully constructed.
+	var/static/list/floor_overlays = list()
+	var/static/list/damage_overlays = list()
+	var/image/current_damage_overlay
 
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
-	update_icon()
-
-
-/turf/simulated/floor/glass/update_icon()
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-	overlays.Cut()
-	if(!floor_overlay)
-		floor_overlay = image('icons/turf/overlays.dmi', glass_state)
-		//floor_overlay.plane = SPACE_DUST_PLANE
+	if(!floor_overlays[icon_state])
+		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
 		floor_overlay.plane = TURF_PLANE
 		floor_overlay.layer = TURF_LAYER
-	overlays += floor_overlay
+		floor_overlays[icon_state] = floor_overlay
+	overlays += floor_overlays[icon_state]
+	update_icon()
 
-	if(!damage_overlay)
-		damage_overlay = image('icons/obj/structures.dmi', "")
-		damage_overlay.plane = TURF_PLANE
-		damage_overlay.layer = TURF_LAYER
+/turf/simulated/floor/glass/update_icon()
+	var/current_health = health
+	var/max_health = initial(health)
+	if(current_health >= max_health)
+		if(current_damage_overlay)
+			overlays -= current_damage_overlay
+			current_damage_overlay = null
+		return
+	var/damage_fraction = Clamp(round((max_health - current_health) / max_health * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
+	var/icon_state = "[cracked_base][damage_fraction]"
+	if(!damage_overlays[icon_state])
+		var/image/_damage_overlay = image('icons/obj/structures.dmi', icon_state)
+		_damage_overlay.plane = TURF_PLANE
+		_damage_overlay.layer = TURF_LAYER
+		damage_overlays[icon_state] = _damage_overlay
+	var/damage_overlay = damage_overlays[icon_state]
+	if(current_damage_overlay == damage_overlay)
+		return
+	overlays -= current_damage_overlay
+	current_damage_overlay = damage_overlay
+	overlays += damage_overlay
 
-	if(health < initial(health))
-		var/damage_fraction = Clamp(round((initial(health) - health) / initial(health) * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
-		damage_overlay.icon_state = "[cracked_base][damage_fraction]"
-		overlays += damage_overlay
 
 /turf/simulated/floor/glass/examine(var/mob/user)
 	..()
@@ -297,29 +309,23 @@
 
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.remove_fuel(0, user))
-					user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
-					"<span class='notice'>You begin removing \the [src].</span>", \
+				user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
+				"<span class='notice'>You begin removing \the [src].</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+				if(WT.do_weld(user, src, 40, 0) && construction_state == 0)
+					user.visible_message("<span class='notice'>[user] removes \the [src].</span>", \
+					"<span class='notice'>You remove \the [src].</span>", \
 					"<span class='warning'>You hear welding noises.</span>")
-					playsound(src, 'sound/items/Welder.ogg', 100, 1)
-					if(do_after(user, src, 40) && construction_state == 0)
-						playsound(src, 'sound/items/Welder.ogg', 100, 1)
-						user.visible_message("<span class='notice'>[user] removes \the [src].</span>", \
-						"<span class='notice'>You remove \the [src].</span>", \
-						"<span class='warning'>You hear welding noises.</span>")
-						var/pressure = 0
-						if(src.zone)
-							var/datum/gas_mixture/environment = src.return_air()
-							pressure = environment.return_pressure()
-						if (pressure > 0)
-							message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
-							log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")
+					var/pressure = 0
+					if(src.zone)
+						var/datum/gas_mixture/environment = src.return_air()
+						pressure = environment.return_pressure()
+					if (pressure > 0)
+						message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
+						log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")
 
-						getFromPool(sheettype, src, sheetamount)
-						src.ReplaceWithLattice()
-				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-				return
+					getFromPool(sheettype, src, sheetamount)
+					src.ReplaceWithLattice()
 	unhandled_attackby(W, user)
 
 /turf/simulated/floor/glass/proc/unhandled_attackby(var/obj/item/W, var/mob/user)

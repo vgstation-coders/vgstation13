@@ -15,6 +15,8 @@
 	var/range = MELEE //bitflags
 	reliability = 1000
 	var/salvageable = 1
+	var/is_activateable = 1
+	var/spell/mech/linked_spell //Default action is to make the make it the active equipment
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/do_after_cooldown(target=1, delay_mult=1)
@@ -75,7 +77,6 @@
 /obj/item/mecha_parts/mecha_equipment/proc/is_melee()
 	return (range&MELEE)
 
-
 /obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
 	if(!target)
 		return 0
@@ -106,6 +107,9 @@
 	if(!M.selected)
 		M.selected = src
 	src.update_chassis_page()
+	if(is_activateable)
+		linked_spell = new /spell/mech(M, src)
+	M.refresh_spells()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
@@ -117,7 +121,9 @@
 		chassis.selected = null
 	update_chassis_page()
 	chassis.log_message("[src] removed from equipment.")
+	chassis.refresh_spells()
 	chassis = null
+	linked_spell = null
 	set_ready_state(1)
 	return
 
@@ -125,7 +131,7 @@
 /obj/item/mecha_parts/mecha_equipment/Topic(href,href_list)
 	if(usr.incapacitated() || usr != chassis.occupant)
 		return TRUE
-	testing("[src] topic")
+//	testing("[src] topic")
 	if(href_list["detach"])
 		detach()
 	return
@@ -150,4 +156,10 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/on_mech_turn()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/activate()
+	chassis.equip_module(src)
+
+/obj/item/mecha_parts/mecha_equipment/proc/alt_action()
 	return

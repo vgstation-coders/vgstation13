@@ -106,7 +106,7 @@
 
 		throw_range = 6 - w_class
 
-		if(w_class > W_CLASS_TINY)
+		if(w_class > W_CLASS_SMALL)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
 //MICE
@@ -158,6 +158,16 @@
 	item_state = "cat1"
 
 	update_itemstate_on_twohand = TRUE
+
+//SALEM
+
+/obj/item/weapon/holder/animal/salem
+	name = "salem holder"
+	desc = "Esp!"
+	item_state = "salem"
+
+	update_itemstate_on_twohand = TRUE
+
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime

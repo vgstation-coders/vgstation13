@@ -20,7 +20,7 @@ window.onerror = function(msg, url, line, col, error) {
 
 //Globals
 window.status = 'Output';
-var $messages, $subOptions, $contextMenu, $filterMessages, $last_message;
+var $messages, $subOptions, $last_message;
 var opts = {
 	//General
 	'messageCount': 0, //A count...of messages...
@@ -53,9 +53,6 @@ var opts = {
 	'mouseDownX': null,
 	'mouseDownY': null,
 	'preventFocus': false, //Prevents switching focus to the game window
-
-	//Admin stuff
-	'adminLoaded': false, //Has the admin loaded his shit?
 
 	//Client Connection Data
 	'clientDataLimit': 5,
@@ -184,86 +181,30 @@ function output(message, flag) {
 	message = message.replace(/\+/g, "%20")
 	message = decoder(message)
 
-	//The behemoth of filter-code (for Admin message filters)
-	//Note: This is proooobably hella inefficient
-	var filteredOut = false;
-	if (opts.hasOwnProperty('showMessagesFilters') && !opts.showMessagesFilters['All'].show) {
-		//Get this filter type (defined by class on message)
-		var messageHtml = $.parseHTML(message),
-			messageClasses;
-		if (opts.hasOwnProperty('filterHideAll') && opts.filterHideAll) {
-			var internal = false;
-			messageClasses = (!!$(messageHtml).attr('class') ? $(messageHtml).attr('class').split(/\s+/) : false);
-			if (messageClasses) {
-				for (var i = 0; i < messageClasses.length; i++) { //Every class
-					if (messageClasses[i] == 'internal') {
-						internal = true;
-						break;
-					}
-				}
-			}
-			if (!internal) {
-				filteredOut = 'All';
-			}
-		} else {
-			//If the element or it's child have any classes
-			if (!!$(messageHtml).attr('class') || !!$(messageHtml).children().attr('class')) {
-				messageClasses = $(messageHtml).attr('class').split(/\s+/);
-				if (!!$(messageHtml).children().attr('class')) {
-					messageClasses = messageClasses.concat($(messageHtml).children().attr('class').split(/\s+/));
-				}
-				var tempCount = 0;
-				for (var i = 0; i < messageClasses.length; i++) { //Every class
-					var thisClass = messageClasses[i];
-					$.each(opts.showMessagesFilters, function(key, val) { //Every filter
-						if (key !== 'All' && val.show === false && typeof val.match != 'undefined') {
-							for (var i = 0; i < val.match.length; i++) {
-								var matchClass = val.match[i];
-								if (matchClass == thisClass) {
-									filteredOut = key;
-									break;
-								}
-							}
-						}
-						if (filteredOut) return false;
-					});
-					if (filteredOut) break;
-					tempCount++;
-				}
-			} else {
-				if (!opts.showMessagesFilters['Misc'].show) {
-					filteredOut = 'Misc';
-				}
-			}
-		}
-	}
-
 	//Stuff we do along with appending a message
 	var atBottom = false;
-	if (!filteredOut) {
-		var bodyHeight = $('body').height();
-		var messagesHeight = $messages.outerHeight();
-		var scrollPos = $('body,html').scrollTop();
+	var bodyHeight = $('body').height();
+	var messagesHeight = $messages.outerHeight();
+	var scrollPos = $('body,html').scrollTop();
 
-		//Should we snap the output to the bottom?
-		if (bodyHeight + scrollPos >= messagesHeight - opts.scrollSnapTolerance) {
-			atBottom = true;
-			if ($('#newMessages').length) {
-				$('#newMessages').remove();
+	//Should we snap the output to the bottom?
+	if (bodyHeight + scrollPos >= messagesHeight - opts.scrollSnapTolerance) {
+		atBottom = true;
+		if ($('#newMessages').length) {
+			$('#newMessages').remove();
+		}
+	//If not, put the new messages box in
+	} else {
+		if ($('#newMessages').length) {
+			var messages = $('#newMessages .number').text();
+			messages = parseInt(messages);
+			messages++;
+			$('#newMessages .number').text(messages);
+			if (messages == 2) {
+				$('#newMessages .messageWord').append('s');
 			}
-		//If not, put the new messages box in
 		} else {
-			if ($('#newMessages').length) {
-				var messages = $('#newMessages .number').text();
-				messages = parseInt(messages);
-				messages++;
-				$('#newMessages .number').text(messages);
-				if (messages == 2) {
-					$('#newMessages .messageWord').append('s');
-				}
-			} else {
-				$messages.after('<a href="#" id="newMessages"><span class="number">1</span> new <span class="messageWord">message</span> <i class="icon-double-angle-down"></i></a>');
-			}
+			$messages.after('<a href="#" id="newMessages"><span class="number">1</span> new <span class="messageWord">message</span> <i class="icon-double-angle-down"></i></a>');
 		}
 	}
 
@@ -314,11 +255,6 @@ function output(message, flag) {
 		var entry = document.createElement('div');
 		entry.className = 'entry';
 
-		if(filteredOut) {
-			entry.className += ' hidden';
-			entry.setAttribute('data-filter', filteredOut);
-		}
-
 		$last_message = trimmed_message;
 		entry.innerHTML = trimmed_message;
 		$messages[0].appendChild(entry);
@@ -330,7 +266,7 @@ function output(message, flag) {
 	}
 
 	//Actually do the snap
-	if (!filteredOut && atBottom) {
+	if (atBottom) {
 		$('body,html').scrollTop($messages.outerHeight());
 	}
 }
@@ -350,7 +286,7 @@ function setCookie(cname, cvalue, exdays) {
 	var d = new Date();
 	d.setTime(d.getTime() + (exdays*24*60*60*1000));
 	var expires = 'expires='+d.toUTCString();
-	document.cookie = cname + '=' + cvalue + '; ' + expires;
+	document.cookie = cname + '=' + cvalue + '; ' + expires + '; path=/';
 }
 
 function getCookie(cname) {
@@ -467,11 +403,6 @@ function ehjaxCallback(data) {
 			} else {
 				handleClientData(data.clientData.ckey, data.clientData.ip, data.clientData.compid);
 			}
-		} else if (data.loadAdminCode) {
-			if (opts.adminLoaded) {return;}
-			var adminCode = data.loadAdminCode;
-			$('body').append(adminCode);
-			opts.adminLoaded = true;
 		} else if (data.modeChange) {
 			changeMode(data.modeChange);
 		} else if (data.firebug) {
@@ -658,11 +589,6 @@ $(function() {
 
 	$('body').on('mousedown', function(e) {
 		var $target = $(e.target);
-
-		if ($contextMenu && opts.hasOwnProperty('contextMenuTarget') && opts.contextMenuTarget) {
-			hideContextMenu();
-			return false;
-		}
 
 		if ($target.is('a') || $target.parent('a').length || $target.is('input') || $target.is('textarea')) {
 			opts.preventFocus = true;
@@ -902,31 +828,25 @@ $(function() {
 	});
 
 	$('#saveLog').click(function(e) {
-		var saved = '';
+		$.ajax({
+			type: 'GET',
+			url: 'browserOutput.css',
+			success: function(styleData) {
+				var win;
 
-		if (window.XMLHtpRequest) {
-			xmlHttp = new XMLHttpRequest();
-		} else {
-			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlHttp.open('GET', 'browserOutput.css', false);
-		xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xmlHttp.send();
-		saved += '<style>'+xmlHttp.responseText+'</style>';
+				try {
+					win = window.open('', 'Chat Log', 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=yes, width=780, height=600, top=' + (screen.height/2 - 635/2) + ', left=' + (screen.width/2 - 780/2));
+				} catch (e) {
+					return;
+				}
 
-		saved += $messages.html();
-		saved = saved.replace(/&/g, '&amp;');
-		saved = saved.replace(/</g, '&lt;');
-
-		var win;
-		try {
-			win = window.open('', 'Chat Log', 'toolbar=no, location=no, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=yes, width=780, height=200, top='+(screen.height-400)+', left='+(screen.width-840));
-		} catch (e) {
-			return;
-		}
-		if (win && win.document && window.document.body) {
-			win.document.body.innerHTML = saved;
-		}
+				if (win) {
+					win.document.head.innerHTML = '<title>Chat Log</title>';
+					win.document.head.innerHTML += '<style>' + styleData + '</style>';
+					win.document.body.innerHTML = $messages.html();
+				}
+			}
+		});
 	});
 
 	$('#highlightTerm').click(function(e) {

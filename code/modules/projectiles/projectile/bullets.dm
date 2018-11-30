@@ -101,7 +101,7 @@
 	damage = 10
 	stun = 0
 	weaken = 0
-	superspeed = 1
+	projectile_speed = 0.66
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -342,8 +342,8 @@
 	weaken = 5
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
-	penetration = 20//can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	superspeed = 1
+	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
+	projectile_speed = 0.66
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -376,6 +376,17 @@
 	damage = 5
 	damage_type = TOX
 	flag = "bio"
+	var/bug_species = BEESPECIES_NORMAL
+	var/tox = 50
+	var/dam = 2
+
+/obj/item/projectile/bullet/beegun/hornet
+	name = "hornet"
+	icon_state = "hornetgun"
+	damage = 7
+	bug_species = BEESPECIES_HORNET
+	tox = 25
+	dam = 4
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
@@ -392,7 +403,7 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new(T)
+	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
@@ -423,8 +434,7 @@
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
 	if(damage >= 100)
-		superspeed = 1
-		super_speed = 1
+		projectile_speed = 0.66
 		for (var/mob/M in player_list)
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
@@ -600,20 +610,15 @@
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
-		if(gas_jet.total_moles())
-			var/total_moles = gas_jet.total_moles()
-			var/o2_concentration = gas_jet.oxygen/total_moles
-			var/n2_concentration = gas_jet.nitrogen/total_moles
-			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
-			var/plasma_concentration = gas_jet.toxins/total_moles
-			var/n2o_concentration = null
+		var/total_moles = gas_jet.total_moles
+		if(total_moles)
+			var/o2_concentration = gas_jet[GAS_OXYGEN] / total_moles
+			var/n2_concentration = gas_jet[GAS_NITROGEN] / total_moles
+			var/co2_concentration = gas_jet[GAS_CARBON] / total_moles
+			var/plasma_concentration = gas_jet[GAS_PLASMA] / total_moles
+			var/n2o_concentration = gas_jet[GAS_SLEEPING] / total_moles
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
-
-			if(gas_jet.trace_gases.len)
-				for(var/datum/gas/G in gas_jet.trace_gases)
-					if(istype(G, /datum/gas/sleeping_agent))
-						n2o_concentration = G.moles/total_moles
 
 			var/gas_type = null
 
@@ -634,9 +639,9 @@
 	if(!gas_jet)
 		return
 
-	if(gas_jet.total_moles())
-		var/jet_total_moles = gas_jet.total_moles()
-		var/toxin_concentration = gas_jet.toxins/jet_total_moles
+	var/jet_total_moles = gas_jet.total_moles
+	if(jet_total_moles)
+		var/toxin_concentration = gas_jet[GAS_PLASMA] / jet_total_moles
 		if(!(toxin_concentration > 0.01))
 			create_puff()
 			return
@@ -646,9 +651,9 @@
 	if(!has_O2_in_mix && T)
 		var/turf/location = get_turf(src)
 		var/datum/gas_mixture/turf_gases = location.return_air()
-		var/turf_total_moles = turf_gases.total_moles()
+		var/turf_total_moles = turf_gases.total_moles
 		if(turf_total_moles)
-			var/o2_concentration = turf_gases.oxygen/turf_total_moles
+			var/o2_concentration = turf_gases[GAS_OXYGEN] / turf_total_moles
 			if(!(o2_concentration > 0.01))
 				create_puff()
 				return
@@ -708,7 +713,7 @@
 	bounces = 1
 	fire_sound = 'sound/weapons/gunshot_1.ogg'
 	bounce_sound = null
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 	kill_count = 100
 	embed = 0
 	rotate = 0
@@ -747,7 +752,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()
@@ -779,6 +784,7 @@
 	damage = 10
 	penetration = 0
 	rotate = 0
+	var/variance_angle = 20
 	var/total_amount_to_fire = 9
 	var/type_to_fire = /obj/item/projectile/bullet/buckshot
 	var/is_child = 0
@@ -787,19 +793,12 @@
 	..(T)
 	is_child = C
 
-/obj/item/projectile/bullet/buckshot/proc/get_radius_turfs(turf/T)
-	return orange(T,1)
-
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
-		var/list/turf/possible_turfs = list()
-		for(var/turf/T in get_radius_turfs(original))
-			possible_turfs += T
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			var/turf/targloc = pick(possible_turfs)
-			B.forceMove(get_turf(src))
-			B.launch_at(targloc,from = shot_from)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
 /obj/item/projectile/bullet/invisible
@@ -844,12 +843,69 @@
 	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
 	custom_impact = 1
 	embed_message = FALSE
-
-/obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
-	return circlerangeturfs(original,5)
+	variance_angle = 50
 
 /obj/item/projectile/bullet/faggot
 	name = "high-speed faggot"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "faggot"
 	damage = 10
+
+/obj/item/projectile/bullet/syringe
+	name = "syringe"
+	icon_state = "syringe"
+	damage = 0
+	nodamage = 1
+	phase_type = null
+	penetration = 0
+	fire_sound = 'sound/items/syringeproj.ogg'
+	travel_range = 6
+	custom_impact = TRUE
+	var/capacity = 15
+	var/stealthy = FALSE
+
+/obj/item/projectile/bullet/syringe/New(atom/A, var/obj/item/weapon/reagent_containers/syringe/source_syringe)
+	..()
+	if(source_syringe)
+		create_reagents(source_syringe.reagents.total_volume)
+		source_syringe.reagents.trans_to(src, source_syringe.reagents.total_volume)
+	else
+		create_reagents(capacity)
+
+/obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
+	if(!A)
+		return
+	..()
+	if(ismob(A))
+		var/mob/M = A
+		var/blocked
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species && (H.species.chem_flags & NO_INJECT))
+				H.visible_message("<span class='warning'>\The [src] bounces harmlessly off of \the [H].</span>", "<span class='notice'>\The [src] bounces off you harmlessly and breaks as it hits the ground.</span>")
+				return
+
+			blocked = istype(H.wear_suit, /obj/item/clothing/suit/space)
+		//Syringe gun attack logging by Yvarov
+		var/R
+		if(reagents.total_volume)
+			for(var/datum/reagent/E in reagents.reagent_list)
+				R += E.id + " ("
+				R += num2text(E.volume) + "),"
+			M.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with \a <b>[src]</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+			firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with \a <b>[src]</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+			msg_admin_attack("[firer] ([firer.ckey]) shot [M] ([M.ckey]) with \a [src] ([R]) [blocked ? "\[BLOCKED\]" : ""] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
+
+		if(!blocked || stealthy)
+			reagents.trans_to(M, reagents.total_volume)
+			if(!stealthy)
+				M.visible_message("<span class='danger'>\The [M] is hit by \the [src]!</span>")
+			else
+				to_chat(M, "<span class='danger'>You feel a slight prick.</span>")
+
+		else
+			var/mob/living/carbon/human/H = M
+			H.visible_message("<span class='danger'>\The [H] is hit by \the [src], but \his [H.wear_suit] blocked it!</span>") // Fuck you validhunters.
+
+/obj/item/projectile/bullet/syringe/dart
+	stealthy = TRUE

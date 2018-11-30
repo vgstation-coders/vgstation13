@@ -22,6 +22,7 @@ var/datum/subsystem/map/SSmap
 		var/watch = start_watch()
 		log_startup_progress("Placing random space structures...")
 		generate_vaults()
+		generate_asteroid_secrets()
 		log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
 	else
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")

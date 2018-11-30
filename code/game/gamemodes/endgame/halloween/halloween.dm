@@ -112,7 +112,8 @@
 
 /datum/universal_state/halloween/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in power_machines)
-		if (!(APC.stat & BROKEN) && !(istype(APC.areaMaster,/area/turret_protected/ai) || istype(APC.areaMaster, /area/engineering/engine)))
+		var/area/APC_area = get_area(APC)
+		if (!(APC.stat & BROKEN) && !(istype(APC_area, /area/turret_protected/ai) || istype(APC_area, /area/engineering/engine)))
 			APC.chargemode = 0
 			if(APC.cell)
 				APC.cell.charge = 0

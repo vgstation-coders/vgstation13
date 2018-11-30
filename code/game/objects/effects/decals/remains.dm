@@ -40,3 +40,10 @@
 	gender = PLURAL
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "remainsrobot"
+
+/obj/effect/decal/remains/skelesurgeon //remains for research vault miniboss
+	name = "remains"
+	desc = "All that remains of a mad scientist and his crazy schemes."
+	gender = PLURAL
+	icon = 'icons/mob/surgeon.dmi'
+	icon_state = "skelesurgeon_corpse"

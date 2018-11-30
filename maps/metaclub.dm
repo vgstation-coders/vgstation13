@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Metaclub
 //**************************************************************
@@ -31,6 +31,10 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
+/datum/map/active/New()
+	. = ..()
+	security_shuttle.req_access = list(access_sec_doors)
+
 // Metaclub areas
 /area/science/xenobiology/specimen_7
 	name = "\improper Xenobiology Specimen Cage 7"
@@ -42,7 +46,6 @@
 	add_dock(/obj/docking_port/destination/trade/station)
 	add_dock(/obj/docking_port/destination/trade/extra)
 
-/area/shuttle/trade/start
-	requires_power = 1
 ////////////////////////////////////////////////////////////////
 #include "metaclub.dmm"
+#endif

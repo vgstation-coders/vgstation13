@@ -65,9 +65,18 @@
 	var/maxbodytemp = 360
 	var/corpse = /obj/effect/decal/cleanable/bee
 
-//////////////////////////////////////
-//             VOX BEES             //
-//////////////////////////////////////
+	var/slow = 1
+	var/damage_coef = 1
+	var/toxic_coef = 1
+
+	var/pierce_chance = 0//100 = always pierce through protection
+	var/pierce_damage = 0//100 = deals 100 of the damage if pierce procs
+
+	var/aggressiveness = 0//100 = always aggressive when coming out of hive
+
+//////////////////////////////////////==================================================================================================================================
+//             VOX BEES             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////==================================================================================================================================
 
 /datum/bee_species/chill
 	name = "apis chiliverax"
@@ -93,6 +102,9 @@
 	min_n2 = 5
 	maxbodytemp = 400
 	corpse = /obj/effect/decal/cleanable/bee/chill
+
+	damage_coef = 0
+	toxic_coef = 0
 
 /////////////////BUG DATUM
 /datum/bee/chill
@@ -152,6 +164,99 @@
 
 /mob/living/simple_animal/bee/adminSpawnedQueen_chill/initialize()
 	var/datum/bee/queen_bee/chill/B = new()
+	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
+	addBee(B)
+	update_icon()
+
+
+//////////////////////////////////////==================================================================================================================================
+//              HORNETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////==================================================================================================================================
+
+/datum/bee_species/hornet
+	name = "vespa crabro"
+	common_name = BEESPECIES_HORNET
+	prefix = "hornet_"
+	worker_product = null
+	queen_product = ROYALJELLY
+	toxic_reagents = list()
+
+	angery = 1
+	toxic_threshold_anger = 90//unless you're really pushing it
+	max_queen_inside = 1
+	queen_wanders = 0
+	bee_type = /datum/bee/hornet
+	queen_type = /datum/bee/queen_bee/hornet
+
+	corpse = /obj/effect/decal/cleanable/bee/hornet
+
+	slow = 0
+	damage_coef = 3
+	toxic_coef = 0.75
+
+	pierce_chance = 20
+	pierce_damage = 40
+
+	aggressiveness = 100
+
+/////////////////BUG DATUM
+/datum/bee/hornet
+	corpse = /obj/effect/decal/cleanable/bee/hornet
+
+/datum/bee/hornet/New()
+	..()
+	species = bees_species[BEESPECIES_HORNET]
+
+/////////////////QUEEN BUG DATUM
+/datum/bee/queen_bee/hornet
+	corpse = /obj/effect/decal/cleanable/bee/queen_bee/hornet
+
+/datum/bee/queen_bee/hornet/New()
+	..()
+	species = bees_species[BEESPECIES_HORNET]
+
+/////////////////QUEEN BUG PACKET
+/obj/item/queen_bee/hornet
+	name = "hornet queen packet"
+	desc = "Place her into an apiary so she can get busy. Why would you do that though? It's a terrible idea!"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "hornet_queen_larvae"
+	w_class = W_CLASS_TINY
+	species = null
+
+/obj/item/queen_bee/hornet/New()
+	..()
+	initialize()
+
+/obj/item/queen_bee/hornet/initialize()
+	species = bees_species[BEESPECIES_HORNET]
+
+/////////////////BUG CORPSES
+/obj/effect/decal/cleanable/bee/hornet
+	name = "dead hornet"
+	desc = "This one stung for the last time."
+	icon_state = "hornet_bee_dead"
+
+/obj/effect/decal/cleanable/bee/queen_bee/hornet
+	name = "dead hornet queen"
+	icon_state = "hornet_queen_bee_dead"
+
+/////////////////TYPES FOR CASUAL SPAWNS
+/mob/living/simple_animal/bee/adminSpawned_hornet/New(loc, var/obj/machinery/apiary/new_home)
+	..()
+	initialize()
+
+/mob/living/simple_animal/bee/adminSpawned_hornet/initialize()
+	var/datum/bee/hornet/B = new()
+	addBee(B)
+	update_icon()
+
+/mob/living/simple_animal/bee/adminSpawnedQueen_hornet/New(loc, var/obj/machinery/apiary/new_home)
+	..()
+	initialize()
+
+/mob/living/simple_animal/bee/adminSpawnedQueen_hornet/initialize()
+	var/datum/bee/queen_bee/hornet/B = new()
 	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
 	addBee(B)
 	update_icon()

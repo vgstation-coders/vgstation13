@@ -6,6 +6,7 @@
 	desc = "A fuel-consuming device designed for bringing chemical mixtures to boil."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "bunsen0"
+	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	var/list/possible_fuels = list(
@@ -42,7 +43,7 @@
 /obj/machinery/bunsen_burner/New()
 	..()
 	processing_objects.Remove(src)
-	create_reagents(50)
+	create_reagents(250)
 
 /obj/machinery/bunsen_burner/Destroy()
 	if(held_container)
@@ -77,30 +78,32 @@
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
 					if(reagent_transfer)
 						to_chat(user, "<span class='notice'>You transfer [reagent_transfer]u of [possible_fuel] from \the [R] to \the [src]</span>")
+						add_fingerprint(user)
 						return
 		else
 			if(!held_container && user.drop_item(W, src))
 				held_container = W
 				to_chat(user, "<span class='notice'>You put \the [held_container] onto \the [src].</span>")
 				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
-				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER, "pixel_y" = src.pixel_y, "pixel_x" = src.pixel_x)
+				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 				overlays += I
 				overlays += I2
+				add_fingerprint(user)
 				return 1 // avoid afterattack() being called
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			drop_stack(/obj/item/stack/sheet/metal, loc, rand(3,4), user)
+			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else
 		..()
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container && heating == BUNSEN_ON)
+	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
-		if(!G || G.oxygen / G.volume * CELL_VOLUME < 0.1)
+		if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 			return
@@ -123,8 +126,11 @@
 				co2_consumption = fuel_stats["co2_cons"]
 
 				reagents.remove_reagent(possible_fuel, consumption_rate)
-				held_container.reagents.heating(thermal_energy_transfer, max_temperature)
-				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
+				if(held_container)
+					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+				G.adjust_multi(
+					GAS_OXYGEN, -o2_consumption,
+					GAS_CARBON, -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
 				break
@@ -149,6 +155,7 @@
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
+		add_fingerprint(user)
 	else
 		toggle()
 
@@ -157,7 +164,7 @@
 	set name = "Toggle bunsen burner"
 	set category = "Object"
 
-	if (!usr.Adjacent(src) || usr.incapacitated())
+	if ((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle()
@@ -176,16 +183,46 @@
 
 
 /obj/machinery/bunsen_burner/AltClick()
-	toggle()
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
+		return ..()
+
+	var/list/choices = list(
+		list("Turn On/Off", (heating == BUNSEN_ON ? "radial_off" : "radial_on")),
+		list("Toggle Fuelport", (heating == BUNSEN_OPEN ? "radial_lock" : "radial_unlock")),
+		list("Examine", "radial_examine")
+	)
+	var/event/menu_event = new(owner = usr)
+	menu_event.Add(src, "radial_check_handler")
+
+	var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+	if(!radial_check(usr))
+		return
+
+	switch(task)
+		if("Turn On/Off")
+			verb_toggle()
+		if("Toggle Fuelport")
+			verb_toggle_fuelport()
+		if("Examine")
+			usr.examination(src)
+
+/obj/machinery/bunsen_burner/proc/radial_check_handler(list/arguments)
+	var/event/E = arguments["event"]
+	return radial_check(E.holder)
+
+/obj/machinery/bunsen_burner/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
 	set src in view(1)
 	set name = "Toggle Bunsen burner fuelport"
 	set category = "Object"
 
-	if(isjustobserver(usr))
-		return
-	if(!usr.Adjacent(src) || usr.incapacitated())
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle_fuelport(usr)
@@ -203,6 +240,22 @@
 			to_chat(user, "<span class = 'warning'>You close the fuel port on \the [src].</span>")
 
 
+/obj/machinery/bunsen_burner/mapped //for the sci break room
+
+
+obj/machinery/bunsen_burner/mapped/New()
+	..()
+	desc = "[initial(desc)] Perfect for keeping your coffee hot."
+	var/obj/item/weapon/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/weapon/reagent_containers/food/drinks/mug
+	coffeemug.reagents.add_reagent(COFFEE, 30)
+	held_container = coffeemug
+	var/image/I = image("icon"=coffeemug, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
+	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
+	overlays += I
+	overlays += I2
+
+
 #undef BUNSEN_OPEN
 #undef BUNSEN_OFF
 #undef BUNSEN_ON
+

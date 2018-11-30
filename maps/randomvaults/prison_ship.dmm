@@ -1,5 +1,5 @@
 "a" = (/turf/space,/area)
-"b" = (/turf/unsimulated/mineral,/area)
+"b" = (/turf/unsimulated/mineral,/area/vault/prison_ship)
 "c" = (/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/vault/prison_ship)
 "d" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/vault/prison_ship)
 "e" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/prison_ship)
@@ -39,4 +39,3 @@ aaijtttotwxbaa
 aaijtotytzxaaa
 aaABeCCeeeDaaa
 "}
-

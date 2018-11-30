@@ -107,19 +107,21 @@
 					if(ispath(user.get_inactive_hand(), looking_for))
 						if(req_amount)
 							var/obj/item/stack/S = user.get_inactive_hand()
-							if(S.amount > req_amount)
+							if(S.amount >= req_amount)
 								can_build = 1
+								continue
 					if(!can_build)
 						for(var/obj/I in range(get_turf(src),1))
 							if(ispath(looking_for, I))
 								if(req_amount) //It's of a stack/sheet subtype
 									var/obj/item/stack/S = I
-									if(S.amount > req_amount)
+									if(S.amount >= req_amount)
 										can_build = 1
+										continue
 								else
 									can_build = 1
-							if(can_build)
-								break
+									continue
+					break
 			if (can_build)
 				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
 			else
@@ -160,15 +162,14 @@
 		if (!multiplier)
 			multiplier = 1
 		if (src.amount < R.req_amount*multiplier)
-			if (R.req_amount*multiplier>1)
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.req_amount*multiplier] [R.title]\s!</span>")
+			if (R.res_amount*multiplier>1)
+				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build [R.res_amount*multiplier] [R.title]\s!</span>")
 			else
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.title]!</span>")
+				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build \the [R.title]!</span>")
 			return
 		if (!R.can_build_here(usr, usr.loc))
 			return
 		if (R.time)
-			to_chat(usr, "<span class='notice'>Building [R.title] ...</span>")
 			if (!do_after(usr, get_turf(src), R.time))
 				return
 		if (src.amount < R.req_amount*multiplier)
@@ -209,13 +210,14 @@
 			var/obj/item/stack/S = O
 			S.update_materials()
 		else
-			O = new R.result_type( usr.loc )
+			for(var/i = 1 to (R.max_res_amount>1 ? R.res_amount*multiplier : 1))
+				O = new R.result_type( usr.loc )
 
 		O.dir = usr.dir
 		if(R.start_unanchored)
 			var/obj/A = O
 			A.anchored = 0
-		R.finish_building(usr, src, O)
+		var/put_in_hand = R.finish_building(usr, src, O)
 
 		//if (R.max_res_amount>1)
 		//	var/obj/item/stack/new_item = O
@@ -223,14 +225,14 @@
 		//	//new_item.add_to_stacks(usr)
 
 		src.use(R.req_amount*multiplier)
-		for(var/obj/item/stack/sheet/S in stacks_to_consume)
+		for(var/obj/item/stack/S in stacks_to_consume)
 			S.use(stacks_to_consume[S])
 		if (src.amount<=0)
 			var/oldsrc = src
 			//src = null //dont kill proc after del()
 			usr.before_take_item(oldsrc)
 			returnToPool(oldsrc)
-			if (istype(O,/obj/item))
+			if (put_in_hand && istype(O,/obj/item))
 				usr.put_in_hands(O)
 		O.add_fingerprint(usr)
 		//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
@@ -394,8 +396,8 @@
 		if(S.can_stack_with(new_stack_type))
 			if(S.max_amount >= S.amount + add_amount)
 				S.add(add_amount)
-
-				to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
+				if(user)
+					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
 				return S
 
 	var/obj/item/stack/S = new new_stack_type(loc)

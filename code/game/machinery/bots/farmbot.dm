@@ -299,7 +299,7 @@
 /obj/machinery/bot/farmbot/proc/find_target()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
-			if (human.stat == 2)
+			if (human.isDead())
 				continue
 
 			var list/options = list(FARMBOT_MODE_WEED)
@@ -376,7 +376,7 @@
 					mode = 0
 		return
 
-	if(src.path.len > 0 && src.target)
+	if(src.path.len > 0 && src.target && isturf(loc))
 		step_to(src, src.path[1])
 		src.path -= src.path[1]
 		spawn(3)

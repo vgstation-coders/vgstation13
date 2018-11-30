@@ -600,7 +600,7 @@ var/list/hive_pylons = list()
 
 		emit_radiation(radiation_range, radiation_power)
 		radiation_range = rand(10,15)
-		radiation_power = rand(10,30) * radiation_multiplier
+		radiation_power = rand(6,20) * radiation_multiplier
 
 /obj/structure/hive/pylon/proc/emit_radiation(rad_range, rad_power )
 	// Radiation

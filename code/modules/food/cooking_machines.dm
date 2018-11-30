@@ -68,7 +68,6 @@ var/global/ingredientLimit = 10
 	icon_state = "oven_off"
 	var/icon_state_on = "oven_on"
 	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -87,7 +86,7 @@ var/global/ingredientLimit = 10
 	var/cks_max_volume = 50
 
 /obj/machinery/cooking/cultify()
-	new /obj/structure/cult/talisman(loc)
+	new /obj/structure/cult_legacy/talisman(loc)
 	..()
 
 /obj/machinery/cooking/New()
@@ -632,8 +631,6 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
-	for(var/obj/item/embedded  in src.ingredient.contents)
-		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
 

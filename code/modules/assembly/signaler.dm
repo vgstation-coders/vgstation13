@@ -284,6 +284,6 @@
 
 /obj/item/device/assembly/signaler/set_value(var/var_name, var/new_value)
 	if(var_name == "frequency")
-		new_value = sanitize_frequency(new_value)
-
-	return ..(var_name, new_value)
+		set_frequency(sanitize_frequency(new_value))
+	else
+		return ..()

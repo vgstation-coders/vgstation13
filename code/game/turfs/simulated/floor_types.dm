@@ -158,11 +158,7 @@
 /turf/simulated/floor/engine/n20/New()
 	..()
 	if(src.air)
-		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air.trace_gases += trace_gas
-		trace_gas.moles = 9*4000
-		air.update_values()
+		air.adjust_gas(GAS_SLEEPING, 9 * 4000) //NO goddamn idea what those numbers mean, but it's what they were before
 
 /turf/simulated/floor/engine/nitrogen
 	name = "nitrogen floor"
@@ -362,6 +358,8 @@
 	name = "Iron Sand"
 	icon_state = "ironsand[rand(1,15)]"
 
+//snow moved to seperate file pending testing
+/*
 /turf/simulated/floor/plating/snow
 	name = "snow"
 	icon = 'icons/turf/snow.dmi'
@@ -381,7 +379,7 @@
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"
 	icon_state = "ice"
-
+*/
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"
 

@@ -37,6 +37,7 @@ var/global/datum/controller/vote/vote = new()
 	var/list/voted     = list()
 	var/list/voting    = list()
 	var/list/current_votes = list()
+	var/list/discarded_choices = list()
 	var/list/ismapvote
 	var/chosen_map
 	name               = "datum"
@@ -47,6 +48,8 @@ var/global/datum/controller/vote/vote = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 	var/total_votes    = 0
+	var/vote_threshold = 0.15
+	var/discarded_votes = 0
 	var/weighted        = FALSE // Whether to use weighted voting.
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
@@ -106,6 +109,8 @@ var/global/datum/controller/vote/vote = new()
 	voted.len = 0
 	voting.len = 0
 	total_votes = 0
+	discarded_votes = 0
+	discarded_choices.len = 0
 	current_votes.len = 0
 	weighted = FALSE
 	update(1)
@@ -156,6 +161,11 @@ var/global/datum/controller/vote/vote = new()
 		for(var/a in filteredchoices)
 			if(!filteredchoices[a])
 				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+				continue
+			if(filteredchoices[a] / total_votes < vote_threshold)
+				discarded_votes += filteredchoices[a]
+				filteredchoices -= a
+				discarded_choices += a
 		if(filteredchoices.len)
 			. += pickweight(filteredchoices.Copy())
 	else
@@ -171,6 +181,7 @@ var/global/datum/controller/vote/vote = new()
 	var/list/winners = get_result()
 	var/text
 	var/feedbackanswer
+	var/qualified_votes = total_votes - discarded_votes
 	if(winners.len > 0)
 		if(winners.len > 1)
 			text = "<b>Vote Tied Between:</b><br>"
@@ -185,11 +196,11 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 
-		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null].</b>"
+		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/qualified_votes)]% chance of winning" : null].</b>"
 		for(var/choice in choices)
 			if(. == choice)
 				continue
-			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]."
+			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	log_vote(text)

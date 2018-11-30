@@ -480,11 +480,13 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/on_close_winset()
-	if(!user)
-		return
-	var/params = "\ref[src]"
-
-	winset(user, window_id, "on-close=\"nanoclose [params]\"")
+	set waitfor = FALSE // winexists sleeps
+	for(var/i in 1 to WINSET_MAX_ATTEMPTS)
+		if(user && winexists(user, window_id))
+			var/params = "\ref[src]"
+			winset(user, window_id, "on-close=\"nanoclose [params]\"")
+			return
+	close()
 
  /**
   * Push data to an already open UI window
@@ -498,7 +500,7 @@ nanoui is used to open and update nano browser uis
 
 	var/list/send_data = get_send_data(data)
 
-//	to_chat(user, list2json(data))// used for debugging
+//	to_chat(user, data ? list2json(data) : "null")// used for debugging
 
 	user << output(list2params(list(list2json(send_data))),"[window_id].browser:receiveUpdateData")
 

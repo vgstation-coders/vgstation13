@@ -20,7 +20,7 @@
 	var/datum/wires/transmitter/wires = null
 	var/datum/power_connection/consumer/cable/power_connection = null
 
-	var/const/RADS_PER_TICK=150
+	var/const/RADS_PER_TICK=75
 	var/const/MAX_TEMP=70 // Celsius
 	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
@@ -54,7 +54,7 @@
 		for(var/obj/machinery/media/source in orange(20, src))
 			if(source.id_tag in autolink)
 				sources.Add(source)
-				testing("Autolinked [source] -> [src]")
+				//testing("Autolinked [source] -> [src]")
 		hook_media_sources()
 	if(on)
 		update_on()
@@ -221,36 +221,22 @@
 
 		// Radiation
 		for(var/mob/living/carbon/M in view(src,3))
-			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) )
-			M.apply_radiation((rads*count_rad_wires()),RAD_EXTERNAL)
+			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) ) //Distance/rads: 1 = 27, 2 = 21, 3 = 19
+			M.apply_radiation(round(rads*count_rad_wires()/2),RAD_EXTERNAL)
 
 		// Heat output
 		var/turf/simulated/L = loc
 		if(istype(L) && heating_power)
 			var/datum/gas_mixture/env = L.return_air()
 			if(env.temperature != MAX_TEMP + T0C)
+				var/energy_to_add
 
-				var/transfer_moles = 0.25 * env.total_moles() / env.volume * CELL_VOLUME
+				if(env.temperature < MAX_TEMP + T0C)
+					energy_to_add = min(heating_power, env.get_thermal_energy_change(1000)) //Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
+				else
+					energy_to_add = -heating_power //add_thermal_energy() automatically prevents the temperature from falling below TCMB, so a similar check here is unnecessary.
 
-				var/datum/gas_mixture/removed = env.remove(transfer_moles)
-
-//				to_chat(world, "got [transfer_moles] moles at [removed.temperature]")
-
-				if(removed)
-
-					var/heat_capacity = removed.heat_capacity()
-//					to_chat(world, "heating ([heat_capacity])")
-					if(heat_capacity) // Added check to avoid divide by zero (oshi-) runtime errors -- TLE
-						if(removed.temperature < MAX_TEMP + T0C)
-							removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
-						else
-							removed.temperature = max(removed.temperature - heating_power/heat_capacity, TCMB)
-
-//					to_chat(world, "now at [removed.temperature]")
-
-				env.merge(removed)
-
-//				to_chat(world, "turf now at [env.temperature]")
+				env.add_thermal_energy(energy_to_add)
 
 		// Checks heat from the environment and applies any integrity damage
 		var/datum/gas_mixture/environment = loc.return_air()

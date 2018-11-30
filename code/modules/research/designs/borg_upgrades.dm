@@ -90,12 +90,12 @@
 
 /datum/design/medical_module_surgery
 	name = "Medical cyborg MK-2 upgrade"
-	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
+	desc = "Used to give a medical cyborg advanced care tools."
 	id = "medical_module_surgery"
-	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3, Tc_ANOMALY = 2)
+	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=80000, MAT_GLASS=20000, MAT_SILVER=5000)
-	build_path = /obj/item/borg/upgrade/medical/surgery
+	build_path = /obj/item/borg/upgrade/medical
 	category = "Robotic_Upgrade_Modules"
 
 /datum/design/borg_organ_gripper_board
@@ -104,7 +104,7 @@
 	id = "borg_organ_gripper_board"
 	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_ANOMALY = 3)
 	build_type = MECHFAB
-	build_path = /obj/item/borg/upgrade/organ_gripper
+	build_path = /obj/item/borg/upgrade/medical/organ_gripper
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=80000, MAT_PLASMA=50000, MAT_SILVER=5000, MAT_GOLD=5000, MAT_PLASTIC=5000)
 
@@ -115,7 +115,7 @@
 	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2, Tc_ANOMALY = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_GOLD=2500)
-	build_path = /obj/item/borg/upgrade/service
+	build_path = /obj/item/borg/upgrade/cook
 	category = "Robotic_Upgrade_Modules"
 
 /datum/design/borg_service_upgrade_hydro

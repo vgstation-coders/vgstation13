@@ -642,11 +642,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/get_owner_name_from_ID()
 	return owner
 
-/obj/item/device/pda/MouseDrop(obj/over_object as obj, src_location, over_location)
+/obj/item/device/pda/MouseDropFrom(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
 	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)
-	return
+	return ..()
 
 //NOTE: graphic resources are loaded on client login
 /obj/item/device/pda/attack_self(mob/user as mob)
@@ -851,31 +851,34 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (3)
 				dat += "<h4><span class='pda_icon pda_atmos'></span> Atmospheric Readings</h4>"
 
-				var/turf/T = get_turf(user.loc)
-				if (isnull(T))
+				if (isnull(user.loc))
 					dat += "Unable to obtain a reading.<br>"
 				else
-					var/datum/gas_mixture/environment = T.return_air()
+					var/datum/gas_mixture/environment = user.loc.return_air()
 
-					var/pressure = environment.return_pressure()
-					var/total_moles = environment.total_moles()
+					if(!environment)
+						dat += "No gasses detected.<br>"
 
-					dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
+					else
+						var/pressure = environment.return_pressure()
+						var/total_moles = environment.total_moles()
 
-					if (total_moles)
-						var/o2_level = environment.oxygen/total_moles
-						var/n2_level = environment.nitrogen/total_moles
-						var/co2_level = environment.carbon_dioxide/total_moles
-						var/plasma_level = environment.toxins/total_moles
-						var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
+						dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
-						dat += {"Nitrogen: [round(n2_level*100)]%<br>
-							Oxygen: [round(o2_level*100)]%<br>
-							Carbon Dioxide: [round(co2_level*100)]%<br>
-							Plasma: [round(plasma_level*100)]%<br>"}
-						if(unknown_level > 0.01)
-							dat += "OTHER: [round(unknown_level)]%<br>"
-					dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
+						if (total_moles)
+							var/o2_level = environment[GAS_OXYGEN]/total_moles
+							var/n2_level = environment[GAS_NITROGEN]/total_moles
+							var/co2_level = environment[GAS_CARBON]/total_moles
+							var/plasma_level = environment[GAS_PLASMA]/total_moles
+							var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
+
+							dat += {"Nitrogen: [round(n2_level*100)]%<br>
+								Oxygen: [round(o2_level*100)]%<br>
+								Carbon Dioxide: [round(co2_level*100)]%<br>
+								Plasma: [round(plasma_level*100)]%<br>"}
+							if(unknown_level > 0.01)
+								dat += "OTHER: [round(unknown_level)]%<br>"
+						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
 
 			if (5)
@@ -1477,21 +1480,21 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					to_chat(user, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
 					amount = 10000
 
-				id.virtual_wallet.money -= amount
-				withdraw_arbitrary_sum(user,amount)
-				if(prob(50))
-					playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
-				else
-					playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
+				if(withdraw_arbitrary_sum(user,amount))
+					id.virtual_wallet.money -= amount
+					if(prob(50))
+						playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
+					else
+						playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
 
-				var/datum/transaction/T = new()
-				T.target_name = user.name
-				T.purpose = "Currency printed"
-				T.amount = "-[amount]"
-				T.source_terminal = src.name
-				T.date = current_date_string
-				T.time = worldtime2text()
-				id.virtual_wallet.transaction_log.Add(T)
+					var/datum/transaction/T = new()
+					T.target_name = user.name
+					T.purpose = "Currency printed"
+					T.amount = "-[amount]"
+					T.source_terminal = src.name
+					T.date = current_date_string
+					T.time = worldtime2text()
+					id.virtual_wallet.transaction_log.Add(T)
 
 			if(PDA_APP_STATIONMAP)
 				mode = PDA_APP_STATIONMAP
@@ -2012,16 +2015,28 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //Convert money from the virtual wallet into physical bills
 /obj/item/device/pda/proc/withdraw_arbitrary_sum(var/mob/user,var/arbitrary_sum)
+	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
+	if(!app.linked_db)
+		app.reconnect_database() //Make one attempt to reconnect
+	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
+		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
+		return 0
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
 		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
-			return
+			return 1
 	dispense_cash(arbitrary_sum,get_turf(src))
+	return 1
 
 //Receive money transferred from another PDA
 /obj/item/device/pda/proc/receive_funds(var/creditor_name,var/arbitrary_sum,var/other_pda)
+	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
+	if(!app.linked_db)
+		app.reconnect_database()
+	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
+		return 0 //This sends its own error message
 	var/turf/U = get_turf(src)
 	if(!silent)
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
@@ -2137,7 +2152,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
+					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
@@ -2441,8 +2457,6 @@ obj/item/device/pda/AltClick()
 	for(var/A in applications)
 		qdel(A)
 
-	for(var/obj/A in src) //Clear out any items that may still be left inside ie pens
-		qdel(A)
 	..()
 
 /obj/item/device/pda/Del()

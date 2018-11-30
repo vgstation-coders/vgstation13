@@ -117,6 +117,14 @@
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
+			if(MUSTARD)
+				name = "mustard"
+				desc = "A spicy yellow paste."
+				icon_state = MUSTARD
+			if(RELISH)
+				name = "relish"
+				desc = "A pickled cucumber jam. Tasty!"
+				icon_state = RELISH
 			if(CAPSAICIN)
 				name = "hotsauce"
 				desc = "You can almost TASTE the stomach ulcers now!"
@@ -165,6 +173,10 @@
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
+			if(CARAMEL)
+				name = CARAMEL
+				desc = "Tasty caramel cubes!"
+				icon_state = CARAMEL
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
@@ -232,6 +244,22 @@
 /obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
 	..()
 	reagents.add_reagent(KETCHUP, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/mustard
+	name = "mustard"
+	desc = "A spicy yellow paste."
+
+/obj/item/weapon/reagent_containers/food/condiment/mustard/New()
+	..()
+	reagents.add_reagent(MUSTARD, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/relish
+	name = "relish"
+	desc = "A pickled cucumber jam. Tasty!"
+
+/obj/item/weapon/reagent_containers/food/condiment/relish/New()
+	..()
+	reagents.add_reagent(RELISH, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/hotsauce
 	name = "hotsauce"
@@ -304,6 +332,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/sugar/New()
 	..()
 	reagents.add_reagent(SUGAR, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/caramel
+	name = "caramel"
+	desc = "Tasty caramel cubes!"
+
+/obj/item/weapon/reagent_containers/food/condiment/caramel/New()
+	..()
+	reagents.add_reagent(CARAMEL, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/honey
 	name = "honey pot"
@@ -390,7 +426,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()

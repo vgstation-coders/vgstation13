@@ -167,7 +167,7 @@
 
 /mob/living/carbon/monkey/base_movement_tally()
 	. = ..()
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
@@ -290,12 +290,13 @@
 	if(statpanel("Status"))
 		stat(null, text("Intent: []", a_intent))
 		stat(null, text("Move Mode: []", m_intent))
-		if(client && mind)
+		/*if(client && mind)
 			if (client.statpanel == "Status")
 				if(mind.changeling)
 					stat("Chemical Storage", mind.changeling.chem_charges)
 					stat("Genetic Damage Time", mind.changeling.geneticdamage)
 	return
+	*/
 
 
 /mob/living/carbon/monkey/verb/removeinternal()

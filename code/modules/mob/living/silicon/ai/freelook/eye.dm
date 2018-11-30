@@ -16,7 +16,7 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(var/atom/destination)
+/mob/camera/aiEye/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	if(ai)
 		if(!isturf(ai.loc))
 			return
@@ -35,6 +35,9 @@
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/H = ai.current
 			H.move_hologram()
+
+		if(ai.camera_light_on)
+			ai.light_cameras()
 
 /mob/camera/aiEye/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
@@ -65,9 +68,10 @@
 
 
 /mob/living/silicon/ai/Destroy()
-	eyeobj.ai = null
-	qdel(eyeobj) // No AI, no Eye
-	eyeobj = null
+	if(eyeobj)
+		eyeobj.ai = null
+		qdel(eyeobj) // No AI, no Eye
+		eyeobj = null
 	..()
 
 /atom/proc/move_camera_by_click()
@@ -109,8 +113,6 @@
 
 	//user.unset_machine() //Uncomment this if it causes problems.
 	//user.lightNearbyCamera()
-	if (user.camera_light_on)
-		user.light_cameras()
 
 /mob/living/silicon/ai/proc/view_core()
 

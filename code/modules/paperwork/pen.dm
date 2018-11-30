@@ -245,7 +245,7 @@ var/paperwork_library
 
 /obj/item/weapon/pen/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/pen/blue
 	desc = "It's a normal blue ink pen."

@@ -374,12 +374,11 @@
 	if(isliving(the_target))
 		var/mob/living/M = the_target
 		M.apply_radiation(rand(melee_damage_lower,melee_damage_upper), RAD_EXTERNAL)
-	..(the_target)
+	return ..(the_target)
 
-/mob/living/simple_animal/hostile/humanoid/supermatter/UnarmedAttack(atom/A)
-	if(isliving(A))
-		visible_message("<span class = 'warning'>\The [src] [attacktext] \the [A]</span>")
-		var/mob/living/M = A
+/mob/living/simple_animal/hostile/humanoid/supermatter/UnarmedAttack(var/atom/the_target)
+	if(isliving(the_target))
+		var/mob/living/M = the_target
 		M.apply_radiation(rand(melee_damage_lower*2,melee_damage_upper*3), RAD_EXTERNAL)
 		switch(M.radiation)
 			if(0 to 90)
@@ -401,6 +400,8 @@
 								empulse(T, 2, 4, 1)
 								new /turf/unsimulated/wall/supermatter/no_spread/lake(T)
 								M.supermatter_act(src, SUPERMATTER_DUST)
+	else
+		..()
 
 
 /mob/living/simple_animal/hostile/humanoid/supermatter/to_bump(atom/Obstacle)
@@ -438,6 +439,9 @@
 	search_objects = 1
 	var/obj/item/weapon/cell/cell = null
 	var/latched = 0
+
+/mob/living/simple_animal/hostile/syphoner/get_cell()
+	return cell
 
 /mob/living/simple_animal/hostile/syphoner/New()
 	..()
@@ -586,7 +590,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/skellington/lich/Shoot(atom/a, params)
 	var/spell = rand(1,5)
-	var/diceroll = roll("1d20")
+	var/diceroll = rand(1,20)
 	var/list/victims = list()
 	for(var/mob/living/carbon/human/H in view(src, magic_range))
 		victims.Add(H)
@@ -615,7 +619,9 @@
 					to_chat(H, "<span class = 'warning'>\The [I] is pulled from your grasp!</span>")
 					I.throw_at(get_edge_target_turf(target, pick(alldirs)),15,1)
 				victims.Remove(H)
-		/*if(3) //Soul Swarm
+				if(!victims.len)
+					break
+		if(3) //Soul Swarm
 			visible_message("<span class = 'warning'>\The [src] starts to float above the ground!</span>")
 			animate(src, pixel_y = 8, time = 1 SECONDS, easing = ELASTIC_EASING)
 			animate(pixel_y = rand(8,19), pixel_x = rand(-8,8), time = 3 SECONDS, easing = SINE_EASING, loop = 5)
@@ -624,10 +630,12 @@
 				if(mtarget.isDead())
 					continue
 				to_chat(mtarget, "<span class = 'warning'>\The [src] sets its gaze upon you, and fires a soul swarm at you!</span>")
-				new /obj/item/projectile/soul_swarm(get_turf(src), targetmob = mtarget)
-			animate(src, pixel_y = 0, pixel_x = 0, time = 3 SECONDS, easing = SINE_EASING)*/
+				var/obj/item/projectile/P = new /obj/item/projectile/soul_swarm(get_turf(src), targetmob = mtarget)
+				spawn()
+					P.OnFired()
+					P.process()
+			animate(src, pixel_y = 0, pixel_x = 0, time = 3 SECONDS, easing = SINE_EASING)
 		if(4) //Raise undead
-			visible_message("<span class = 'warning'>\The [src] raises both hands, and clasps them togheter.</span>")
 			var/number_of_raised = round(diceroll/3)
 			for(var/mob/living/carbon/human/H in victims)
 				if(!H.isDead())
@@ -640,20 +648,19 @@
 				if(!isskellington(H))
 					new /obj/effect/gibspawner/generic(get_turf(H))
 				H.drop_all()
+				visible_message("<span class = 'warning'>\The [src] points towards \the [H].</span>")
 				H.visible_message("<span class = 'warning'>\The [H] raises from the dead!</span>")
 				new /mob/living/simple_animal/hostile/humanoid/skellington(H.loc)
 				qdel(H)
 		if(5) //Fall
-			var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
-			fall.spell_flags = 0
-			fall.invocation_type = SpI_NONE
-			fall.the_world_chance = 0
-			fall.range = magic_range
-			fall.sleeptime = 8*diceroll
-			fall.perform(src, skipcharge = 1)
-			qdel(fall)
+			flags |= TIMELESS
+			var/duration = 8*diceroll
+			timestop(src, duration, magic_range, TRUE)
+			spawn(duration)
+				flags &= ~TIMELESS
 
-/*/obj/item/projectile/soul_swarm
+
+/obj/item/projectile/soul_swarm
 	name = "soul swarm"
 	desc = "It flickers with some rudimentary form of intelligence, but conversation doesn't seem to be the strong point of a magical projectile."
 	icon_state = "soul"
@@ -661,6 +668,10 @@
 	travel_range = 30
 
 	var/mob/mobtarget = null
+
+/obj/item/projectile/soul_swarm/Destroy()
+	mobtarget = null
+	..()
 
 /obj/item/projectile/soul_swarm/New(var/mob/targetmob)
 	..()
@@ -673,4 +684,8 @@
 	drowsy = rand(0,25)
 	agony = rand(0,25)
 	jittery = rand(0,25)
-	mobtarget = targetmob*/
+	mobtarget = targetmob
+
+/obj/item/projectile/soul_swarm/process_step()
+	..()
+	original = mobtarget.loc //update the target

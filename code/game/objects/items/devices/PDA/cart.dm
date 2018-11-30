@@ -146,7 +146,6 @@
 	name = "\improper Signal Ace 2"
 	desc = "Complete with integrated radio signaler!"
 	icon_state = "cart-tox"
-	access_reagent_scanner = 1
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/signal/New()
@@ -219,7 +218,6 @@
 	icon_state = "cart-rd"
 	access_manifest = 1
 	access_status_display = 1
-	access_reagent_scanner = 1
 	access_robotics = 1
 	access_atmos = 1
 
@@ -393,7 +391,8 @@ Code:
 					var/list/chg = list("N","C","F")
 
 					for(var/obj/machinery/power/apc/A in L)
-						menu += copytext(add_tspace(A.areaMaster.name, 30), 1, 30)
+						var/area/APC_area = get_area(A)
+						menu += copytext(add_tspace(APC_area.name, 30), 1, 30)
 						menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
 
 				menu += "</FONT></PRE>"
@@ -582,15 +581,15 @@ Code:
 
 			menu = {"<h4><img src=pda_crate.png> Supply Record Interlink</h4>
 				<BR><B>Supply shuttle</B><BR>
-				Location: [supply_shuttle.moving ? "Moving to station ([supply_shuttle.eta] Mins.)":supply_shuttle.at_station ? "Station":"Dock"]<BR>
+				Location: [SSsupply_shuttle.moving ? "Moving to station ([SSsupply_shuttle.eta] Mins.)":SSsupply_shuttle.at_station ? "Station":"Dock"]<BR>
 				Current approved orders: <BR><ol>"}
-			for(var/S in supply_shuttle.shoppinglist)
+			for(var/S in SSsupply_shuttle.shoppinglist)
 				var/datum/supply_order/SO = S
 				menu += "<li>#[SO.ordernum] - [SO.object.name] approved by [SO.orderedby] [SO.comment ? "([SO.comment])":""]</li>"
 
 			menu += {"</ol>
 				Current requests: <BR><ol>"}
-			for(var/S in supply_shuttle.requestlist)
+			for(var/S in SSsupply_shuttle.requestlist)
 				var/datum/supply_order/SO = S
 				menu += "<li>#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]</li>"
 			menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."
@@ -660,7 +659,7 @@ Code:
 				menu += {"Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>
 					<h4>Located Mops:</h4>"}
 				var/ldat
-				for (var/obj/item/weapon/mop/M in world)
+				for (var/obj/item/weapon/mop/M in mop_list)
 					var/turf/ml = get_turf(M)
 
 					if(ml)
@@ -677,7 +676,7 @@ Code:
 				menu += "<h4>Located Mop Buckets:</h4>"
 
 				ldat = null
-				for (var/obj/structure/mopbucket/B in world)
+				for (var/obj/structure/mopbucket/B in mopbucket_list)
 					var/turf/bl = get_turf(B)
 
 					if(bl)
@@ -694,7 +693,7 @@ Code:
 				menu += "<h4>Located Cleanbots:</h4>"
 
 				ldat = null
-				for (var/obj/machinery/bot/cleanbot/B in world)
+				for (var/obj/machinery/bot/cleanbot/B in cleanbot_list)
 					var/turf/bl = get_turf(B)
 
 					if(bl)

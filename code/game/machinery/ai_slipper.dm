@@ -30,7 +30,7 @@
 /obj/machinery/ai_slipper/attackby(obj/item/weapon/W, mob/user)
 	if(stat & (NOPOWER|BROKEN))
 		return
-	if(istype(user, /mob/living/silicon))
+	if(istype(user, /mob/living/silicon) || isAdminGhost(user))
 		src.add_hiddenprint(user)
 		return src.attack_hand(user)
 	else // trying to unlock the interface
@@ -55,9 +55,10 @@
 		return
 
 	user.set_machine(src)
-	var/t = "<TT><B>Foam Dispenser</B> ([areaMaster.name])<HR>"
+	var/area/this_area = get_area(src)
+	var/t = "<TT><B>Foam Dispenser</B> ([this_area.name])<HR>"
 
-	if(src.locked && (!istype(user, /mob/living/silicon)))
+	if(src.locked && !istype(user, /mob/living/silicon) && !isAdminGhost(user))
 		t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"
 	else
 		t += text("Dispenser [src.disabled ? "unactive":"active"] - <A href='?src=\ref[src];toggleOn=1'>[src.disabled?"Enable":"Disable"]?</a><br>\n")
@@ -71,7 +72,7 @@
 	if(..())
 		return 1
 	if(src.locked)
-		if(!istype(usr, /mob/living/silicon))
+		if(!istype(usr, /mob/living/silicon) && !isAdminGhost(usr))
 			to_chat(usr, "<span class='warning'>Control panel is locked!</span>")
 			return
 	if(href_list["toggleOn"])

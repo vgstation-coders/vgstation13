@@ -6,7 +6,6 @@
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -40,7 +39,7 @@
 	var/name = ""
 	var/obj/machinery/smartfridge/fridge
 	var/amount = 1
-	var/shelf = 1
+	var/shelf = 2
 	var/mini_icon
 
 /datum/fridge_pile/New(var/name, var/fridge, var/amount, var/mini_icon)
@@ -300,16 +299,19 @@
 		insert_item(O)
 		user.visible_message(	"<span class='notice'>[user] has added \the [O] to \the [src].", \
 								"<span class='notice'>You add \the [O] to \the [src].")
+		updateUsrDialog()
 		return TRUE
 	else
 		return dump_bag(O, user)
 
 /obj/machinery/smartfridge/proc/insert_item(var/obj/item/O)
-	var/datum/fridge_pile/thisPile = piles[O.name]
+	var/formatted_name = format_text(O.name)
+	var/datum/fridge_pile/thisPile = piles[formatted_name]
 	if(istype(thisPile))
 		thisPile.addAmount(1)
 	else
-		piles[O.name] = new/datum/fridge_pile(O.name, src, 1, costly_bicon(O))
+		piles[formatted_name] = new/datum/fridge_pile(formatted_name, src, 1, costly_bicon(O))
+
 
 /obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
 	if(!istype(B))
@@ -327,14 +329,14 @@
 							"<span class='notice'>You load \the [src] with \the [B].</span>")
 		if(B.contents.len > 0)
 			to_chat(user, "<span class='notice'>Some items are refused.</span>")
+	updateUsrDialog()
 	return TRUE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
+	if(..())
+		return 1
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
-		return 1
-
-	if(..())
 		return 1
 	if(contents.len >= MAX_N_OF_ITEMS)
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
@@ -343,24 +345,15 @@
 		piles = sortList(piles)
 		return 1
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
-		var/list/params_list = params2list(params)
-		if(O.loc == src.loc && params_list.len)
-			var/clamp_x = clicked.Width() / 2
-			var/clamp_y = clicked.Height() / 2
-			O.layer = BELOW_OBJ_LAYER //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
-			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
-			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+		if(O.loc == src.loc && params)
+			O.setPixelOffsetsFromParams(params)
+			O.layer = MACHINERY_LAYER + 0.1 //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
 			to_chat(user, "<span class='notice'>You hang \the [O.name] on the fridge.</span>")
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
 		return 1
 	updateUsrDialog()
 	return 1
-
-/obj/machinery/smartfridge/var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
-/obj/machinery/smartfridge/New()
-	. = ..()
-	clicked = new/icon(src.icon, src.icon_state, src.dir)
 
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -461,10 +454,10 @@
 
 	usr.set_machine(src)
 
-	var/N = href_list["pile"]
+	var/formatted_name = format_text(href_list["pile"])
 	if(href_list["amount"])
 		var/amount = text2num(href_list["amount"])
-		var/datum/fridge_pile/thisPile = piles[N]
+		var/datum/fridge_pile/thisPile = piles[formatted_name]
 		if(!istype(thisPile)) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
 			return
 
@@ -472,14 +465,14 @@
 
 		var/i = amount
 		for(var/obj/O in contents)
-			if(O.name == N)
+			if(format_text(O.name) == formatted_name)
 				O.forceMove(src.loc)
 				i--
 				if(i <= 0)
 					break
 
 	else if(href_list["shelf"])
-		var/datum/fridge_pile/thisPile = piles[N]
+		var/datum/fridge_pile/thisPile = piles[formatted_name]
 		if(href_list["shelf"] == "up" && thisPile.shelf > 1)
 			thisPile.shelf -= 1
 		else if(href_list["shelf"] == "down" && thisPile.shelf < MAX_SHELVES)

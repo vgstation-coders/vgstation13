@@ -6,7 +6,7 @@
 	desc = "A classic revolver. Uses .357 ammo."
 	name = "revolver"
 	icon_state = "revolver"
-	caliber = list("357" = 1)
+	caliber = list(POINT357 = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
@@ -200,7 +200,7 @@
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")
 	A.update_icon()
 	update_icon()
-	return
+	..()
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (target)
@@ -241,7 +241,7 @@
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
 		spawn(automagdrop_delay_time)
-			if(stored_magazine == drop_me)
+			if((stored_magazine == drop_me) && (loc == user))	//prevent dropping the magazine if we're no longer holding the gun
 				RemoveMag(user)
 				if(mag_drop_sound)
 					playsound(user, mag_drop_sound, 40, 1)

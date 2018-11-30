@@ -28,12 +28,14 @@
 		"heart",
 		"kidneys",
 		"liver",
-		"lungs"
+		"lungs",
+		"appendix"
 	)
 	var/target_type="eyes"
 
-/obj/item/weapon/organ_remover/examine(var/mob/user)
-	// Only vox know what these are.
+/obj/item/weapon/organ_remover/examine(var/mob/user, var/override = FALSE)
+	if(override)
+		return ..(user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H
 		if(isvox(H))
@@ -115,4 +117,19 @@
 	to_chat(user, "<span class='info'>[target_type] selected.</span>")
 
 /obj/item/weapon/organ_remover/adminbus_edition
-	vox_only=FALSE
+	vox_only = FALSE
+
+/obj/item/weapon/organ_remover/traitor
+	desc = "A knock-off of the vox-only organ extractor, this one has been modified to be able to be used by anyone, and works twice as fast as the real deal. However, it can no longer extract hearts."
+	vox_only = FALSE
+	delay=7.5 SECONDS
+	valid_targets=list(
+		"eyes",
+		"kidneys",
+		"liver",
+		"lungs",
+		"appendix"
+	)
+
+/obj/item/weapon/organ_remover/traitor/examine(var/mob/user)
+    ..(user, TRUE)

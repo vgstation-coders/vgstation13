@@ -41,7 +41,12 @@ var/const/INGEST = 2
 
 			if(D.required_reagents && D.required_reagents.len)
 				for(var/reaction in D.required_reagents)
-					reaction_ids += reaction
+					if(islist(reaction))
+						var/list/L = reaction
+						for(var/content in L)
+							reaction_ids += content
+					else
+						reaction_ids += reaction
 
 			// Create filters based on each reagent id in the required reagents list
 			for(var/id in reaction_ids)
@@ -49,6 +54,7 @@ var/const/INGEST = 2
 					chemical_reactions_list[id] = list()
 				chemical_reactions_list[id] += D
 				break // Don't bother adding ourselves to other reagent ids, it is redundant.
+
 
 /datum/reagents/proc/remove_any(var/amount=1)
 	var/total_transfered = 0
@@ -354,7 +360,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		reaction_occured = 0
 		for(var/datum/reagent/R in reagent_list) // Usually a small list
 			for(var/reaction in chemical_reactions_list[R.id]) // Was a big list but now it should be smaller since we filtered it with our reagent id
-
 				if(!reaction)
 					continue
 
@@ -375,10 +380,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					multipliers += 1 //Only once
 
 				for(var/B in C.required_reagents)
-					if(!has_reagent(B, C.required_reagents[B]))
-						break
-					total_matching_reagents++
-					multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
+					if(islist(B))
+						var/list/L = B
+						for(var/D in L)
+							if(!has_reagent(D, C.required_reagents[B]))
+								continue
+							total_matching_reagents++
+							multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
+					else
+						if(!has_reagent(B, C.required_reagents[B]))
+							break
+						total_matching_reagents++
+						multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
 				for(var/B in C.required_catalysts)
 					if(!has_reagent(B, C.required_catalysts[B]))
 						break
@@ -388,7 +401,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					matching_container = 1
 
 				else
-					if(my_atom.type in typesof(C.required_container))
+					if(istype(my_atom, C.required_container))
 						matching_container = 1
 
 				if(!C.required_other)
@@ -413,9 +426,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					var/multiplier = min(multipliers)
 					var/preserved_data = null
 					for(var/B in C.required_reagents)
-						if(!preserved_data)
-							preserved_data = get_data(B)
-						remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
+						if(islist(B))
+							var/list/L = B
+							for(var/D in L)
+								if(!preserved_data)
+									preserved_data = get_data(D)
+								remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
+						else
+							if(!preserved_data)
+								preserved_data = get_data(B)
+							remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
 					chem_temp += C.reaction_temp_change
 
@@ -521,7 +541,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
-				if(isobj(A))
+				if(istype(A, /obj))
 					R.reaction_obj(A, R.volume+volume_modifier)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
@@ -532,12 +552,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						R.reaction_mob(A, INGEST, R.volume+volume_modifier)
 				if(isturf(A) && R)
 					R.reaction_turf(A, R.volume+volume_modifier)
-				if(isobj(A) && R)
+				if(istype(A, /obj) && R)
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
 
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
+		return 0
+	if(!amount)
 		return 0
 	if(!isnum(amount))
 		return 1
@@ -607,9 +629,19 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return 1
 
 	for(var/id in reagent_list)
-		if(has_reagent(id, amount))
+		if(has_reagent(id))
 			remove_reagent(id, amount, safety)
 	return 1
+
+/datum/reagents/proc/remove_any_reagents(var/list/reagent_list, var/amount, var/safety)
+	if(!isnum(amount))
+		return 0
+	for(var/id in reagent_list)
+		if(has_reagent(id))
+			amount -= remove_reagent(id, amount, safety)
+			if(amount <= 0)
+				return 1
+	return 0
 
 /datum/reagents/proc/remove_reagent_by_type(var/reagent_type, var/amount, var/safety)
 	if(!isnum(amount))

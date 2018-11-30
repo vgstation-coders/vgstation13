@@ -65,7 +65,11 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 				{{:helper.link('Message List','comment',{'operation':'messagelist'})}}
 			</div>
 			<div class="line">
-				{{:helper.link('Toggle Port Status','key',{'operation':'SetPortRestriction'})}}
+				{{if data.portopen}}
+					{{:helper.link('Close Trader Port','key',{'operation':'SetPortRestriction'},null,'redBackground')}}
+				{{else}}
+					{{:helper.link('Open Trader Port','key',{'operation':'SetPortRestriction'},null,'linkOn')}}
+				{{/if}}
 			</div>
 			{{if data.str_security_level == "red" || data.str_security_level == "delta"}}
 				<div class="line">

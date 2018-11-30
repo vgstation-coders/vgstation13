@@ -1,9 +1,9 @@
 /datum/dna/gene/monkey
-	name="Monkey"
+	name = "Monkey"
 	flags = GENE_UNNATURAL
 
 /datum/dna/gene/monkey/New()
-	block=MONKEYBLOCK
+	block = MONKEYBLOCK
 
 /datum/dna/gene/monkey/can_activate(var/mob/M,var/flags)
 	return istype(M, /mob/living/carbon/human) || istype(M,/mob/living/carbon/monkey)
@@ -27,7 +27,7 @@
 //Monkey to human
 /datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected, var/flags)
 	if(!istype(M,/mob/living/carbon/monkey))
-		testing("Cannot humanize [M], type is [M.type].")
+//		testing("Cannot humanize [M], type is [M.type].")
 		return
 	var/mob/living/carbon/monkey/Mo = M
 	Mo.monkeyizing = 1
@@ -46,7 +46,7 @@
 		animation.master = null
 		qdel(animation)
 
-	var/mob/living/carbon/human/O = new( src )
+	var/mob/living/carbon/human/O = new(src)
 	if(Mo.greaterform)
 		O.set_species(Mo.greaterform)
 	Mo.transferImplantsTo(O)
@@ -58,7 +58,7 @@
 
 	if (M)
 		if (M.dna)
-			O.dna = M.dna.Clone()
+			O.dna = M.dna
 			M.dna = null
 
 		if (M.suiciding)

@@ -108,6 +108,8 @@ var/list/all_doors = list()
 		user = null
 
 	if(allowed(user))
+		if (isshade(user))
+			user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
 		open()
 	else if(!operating)
 		denied()
@@ -124,46 +126,20 @@ var/list/all_doors = list()
 		var/mob/living/carbon/human/H = user
 
 		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
-			// TODO: analyze the called proc
 			playsound(src, 'sound/effects/bang.ogg', 25, 1)
-
+			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 				H.Stun(8)
 				H.Knockdown(5)
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-
-				// TODO: analyze the called proc
-				if(O.take_damage(10, 0))
-					H.UpdateDamageIcon()
-					O = null
-			else
-				// TODO: fix sentence
-				visible_message("<span class='warning'>[user] headbutts the airlock. Good thing they're wearing a helmet.</span>")
-
-			H = null
+				O.take_damage(10, 0)
 			return
 
-		H = null
-
-	add_fingerprint(user)
-	attackby(null, user)
-
-
-/obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob)
-	if(..())
-		return 1
-
-	if (istype(I, /obj/item/device/detective_scanner))
-		return
 
 	if(isobserver(user) && !isAdminGhost(user))
 		return
 
-	// borgs can't attack doors open
-	// because it conflicts with their AI-like interaction with them
-	if (isrobot(user))
-		return
+	add_fingerprint(user)
 
 	if (!requiresID())
 		user = null
@@ -173,6 +149,25 @@ var/list/all_doors = list()
 			return close()
 		else
 			return open()
+
+	if(horror_force(user))
+		return
+
+	denied()
+
+/obj/machinery/door/attackby(obj/item/I, mob/user)
+	if(..())
+		return
+
+	if(istype(I, /obj/item/device/detective_scanner))
+		return //It does its own thing on attack
+
+	if (allowed(user))
+		if (!density)
+			return close()
+		else
+			return open()
+
 
 	if(horror_force(user))
 		return
@@ -378,7 +373,7 @@ var/list/all_doors = list()
 	update_freelok_sight()
 	return 1
 
-/obj/machinery/door/forceMove(var/atom/A)
+/obj/machinery/door/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_tiles(T)

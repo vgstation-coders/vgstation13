@@ -35,7 +35,10 @@
 		scanner.connected = null
 		scanner = null
 	if(diskette)
-		qdel(diskette)
+		if(loc)
+			diskette.forceMove(loc)
+		else
+			qdel(diskette)
 		diskette = null
 	records.Cut()
 	active_record = null
@@ -321,7 +324,7 @@
 			return
 
 		// DNA2 makes things a little simpler.
-		src.diskette.buf=src.active_record
+		src.diskette.buf=src.active_record.Clone() //Copy the record, not just the reference to it
 		src.diskette.buf.types=0
 		switch(href_list["save_disk"]) //Save as Ui/Ui+Ue/Se
 			if("ui")
@@ -483,9 +486,9 @@
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
 	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
-		R.dna = Brain.owner_dna
+		R.dna = Brain.owner_dna.Clone()
 	else
-		R.dna=subject.dna
+		R.dna=subject.dna.Clone()
 	R.ckey = subject.ckey
 	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name

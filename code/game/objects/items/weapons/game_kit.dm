@@ -10,7 +10,7 @@ THAT STUPID GAME KIT
 /obj/item/weapon/game_kit/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/item/weapon/game_kit/MouseDrop(mob/user as mob)
+/obj/item/weapon/game_kit/MouseDropFrom(mob/user as mob)
 	if (user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
 		if (usr.hand)
 			if (!usr.l_hand)

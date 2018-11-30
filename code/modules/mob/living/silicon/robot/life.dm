@@ -12,7 +12,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
-		update_action_buttons()
+		update_action_buttons_icon()
 		update_items()
 	if(!isDead()) //still using power
 		use_power()
@@ -52,10 +52,13 @@
 			if(!is_component_functioning("actuator"))
 				Paralyse(3)
 
-			stat = 0
+			stat = CONSCIOUS
 	else
 		uneq_all()
-		stat = 1
+		if(station_holomap)
+			if(station_holomap.watching_mob)
+				station_holomap.stopWatching()
+		stat = UNCONSCIOUS
 
 
 /mob/living/silicon/robot/proc/handle_regular_status_updates()
@@ -86,9 +89,9 @@
 				AdjustKnockdown(-1)
 			if(paralysis > 0)
 				AdjustParalysis(-1)
-				blinded = 1
+				blinded = TRUE
 			else
-				blinded = 0
+				blinded = FALSE
 
 		else	//Not stunned.
 			stat = CONSCIOUS
@@ -124,6 +127,9 @@
 	if(druggy)
 		druggy--
 		druggy = max(0, druggy)
+
+	handle_dizziness()
+	handle_jitteriness()
 
 	if(!is_component_functioning("radio"))
 		radio.on = FALSE
@@ -171,7 +177,7 @@
 			see_invisible = SEE_INVISIBLE_MINIMUM
 
 
-/mob/living/silicon/robot/proc/handle_regular_hud_updates()
+/mob/living/silicon/robot/handle_regular_hud_updates()
 	handle_sensor_modes()
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.
@@ -201,19 +207,20 @@
 		else
 			healths.icon_state = "health7"
 
-	if(syndicate && client)
+	/*if(syndicate && client)
 		if(ticker.mode.name == "traitor")
 			for(var/datum/mind/tra in ticker.mode.traitors)
 				if(tra.current)
 					var/I = image('icons/mob/mob.dmi', loc = tra.current, icon_state = "traitor")
-					client.images += I
-		if(connected_ai)
-			connected_ai.connected_robots -= src
-			connected_ai = null
-		if(mind)
-			if(!mind.special_role)
-				mind.special_role = "traitor"
-				ticker.mode.traitors += mind
+					src.client.images += I
+		if(src.connected_ai)
+			src.connected_ai.connected_robots -= src
+			src.connected_ai = null
+		if(src.mind)
+			if(!src.mind.special_role)
+				src.mind.special_role = "traitor"
+				ticker.mode.traitors += src.mind
+	*/
 
 	if(cells)
 		if(cell)
@@ -295,14 +302,15 @@
 				gib()
 
 /mob/living/silicon/robot/proc/process_locks()
-	if(weapon_lock)
-		uneq_all()
-		weaponlock_time --
-		if(weaponlock_time <= 0)
+	if(modulelock)
+		if(uneq_all())
+			to_chat(src, "<span class='alert' style=\"font-family:Courier\">Module unequipped.</span>")
+		modulelock_time --
+		if(modulelock_time <= 0)
 			if(client)
-				to_chat(src, "<span class='warning'><B>Weapon Lock Timed Out!</span>")
-			weapon_lock = 0
-			weaponlock_time = 120
+				to_chat(src, "<span class='info' style=\"font-family:Courier\"><B>Module lock timed out!</span>")
+			modulelock = FALSE
+			modulelock_time = 120
 
 /mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!module)

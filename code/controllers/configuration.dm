@@ -180,29 +180,27 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
-	
+
 	// Weighted Votes
 	var/weighted_votes = 0
 
 /datum/configuration/New()
 	. = ..()
-	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
+	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult
 
 	for (var/T in L)
 		// I wish I didn't have to instance the game modes in order to look up
 		// their information, but it is the only way (at least that I know of).
-		var/datum/game_mode/M = new T()
+		var/datum/gamemode/M = T
 
-		if (M.config_tag)
-			if (!(M.config_tag in modes)) // Ensure each mode is added only once.
-				diary << "Adding game mode [M.name] ([M.config_tag]) to configuration."
-				src.modes += M.config_tag
-				src.mode_names[M.config_tag] = M.name
-				src.probabilities[M.config_tag] = M.probability
+		if (initial(M.name))
+			if (!(initial(M.name) in modes)) // Ensure each mode is added only once.
+				src.modes += initial(M.name)
+				src.mode_names[initial(M.name)] = initial(M.name)
+				src.probabilities[initial(M.name)] = initial(M.probability)
 
-				if (M.votable)
-					votable_modes += M.config_tag
-		qdel(M)
+				if (initial(M.votable))
+					votable_modes += initial(M.name)
 
 	votable_modes += "secret"
 
@@ -308,7 +306,7 @@
 
 				if ("log_pda")
 					config.log_pda = 1
-				
+
 				if ("log_rc")
 					config.log_rc = 1
 
@@ -566,13 +564,13 @@
 				if("enable_wages")
 					roundstart_enable_wages = 1
 				if("error_cooldown")
-					error_cooldown = value
+					error_cooldown = text2num(value)
 				if("error_limit")
-					error_limit = value
+					error_limit = text2num(value)
 				if("error_silence_time")
-					error_silence_time = value
+					error_silence_time = text2num(value)
 				if("error_msg_delay")
-					error_msg_delay = value
+					error_msg_delay = text2num(value)
 				if("discord_url")
 					discord_url = value
 				if("discord_password")
@@ -727,27 +725,24 @@
 				diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/pick_mode(mode_name)
-	// I wish I didn't have to instance the game modes in order to look up
-	// their information, but it is the only way (at least that I know of).
-	for (var/T in (typesof(/datum/game_mode) - /datum/game_mode))
-		var/datum/game_mode/M = new T()
-		if (M.config_tag && M.config_tag == mode_name)
-			return M
-		del(M)
-	return new /datum/game_mode/extended()
+	for (var/t in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
+		var/datum/gamemode/T = t
+		if (initial(T.name) && initial(T.name) == mode_name)
+			return new T
+	return new /datum/gamemode/extended()
 
 /datum/configuration/proc/get_runnable_modes()
-	var/list/datum/game_mode/runnable_modes = new
-	for (var/T in (typesof(/datum/game_mode) - /datum/game_mode))
-		var/datum/game_mode/M = new T()
-//		to_chat(world, "DEBUG: [T], tag=[M.config_tag], prob=[probabilities[M.config_tag]]")
-		if (!(M.config_tag in modes))
+	var/list/datum/gamemode/runnable_modes = new
+	for (var/T in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
+		var/datum/gamemode/M = new T()
+//		log_startup_progress("DEBUG: [T], tag=[M.name], prob=[probabilities[M.name]]")
+		if (!(M.name in modes))
 			del(M)
 			continue
-		if (probabilities[M.config_tag]<=0)
+		if (probabilities[M.name]<=0)
 			del(M)
 			continue
 		if (M.can_start())
-			runnable_modes[M] = probabilities[M.config_tag]
-//			to_chat(world, "DEBUG: runnable_mode\[[runnable_modes.len]\] = [M.config_tag]")
+			runnable_modes[M] = probabilities[M.name]
+//			log_startup_progress("DEBUG: runnable_mode\[[runnable_modes.len]\] = [M.name]")
 	return runnable_modes

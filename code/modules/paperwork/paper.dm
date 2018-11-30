@@ -26,6 +26,8 @@
 	var/list/stamped
 	var/rigged = 0
 	var/spam_flag = 0
+	var/display_x = 400
+	var/display_y = 400
 
 	var/log=""
 	var/obj/item/weapon/photo/img
@@ -54,7 +56,7 @@
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
 		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name]")
+	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
 /obj/item/weapon/paper/update_icon()
@@ -251,8 +253,8 @@
 
 	if(href_list["write"])
 		var/id = href_list["write"]
-		//var/t = strip_html_simple(input(usr, "What text do you wish to add to " + (id=="end" ? "the end of the paper" : "field "+id) + "?", "[name]", null),8192) as message
-		//var/t =  strip_html_simple(input("Enter what you want to write:", "Write", null, null)  as message, MAX_MESSAGE_LEN)
+		//var/t = utf8_sanitize(input(usr, "What text do you wish to add to " + (id=="end" ? "the end of the paper" : "field "+id) + "?", "[name]", null),8192) as message
+		//var/t =  utf8_sanitize(input("Enter what you want to write:", "Write", null, null)  as message, MAX_MESSAGE_LEN)
 		var/new_text
 
 		//Wrap this part in a loop to prevent text from getting lost
@@ -312,9 +314,6 @@
 
 /obj/item/weapon/paper/attackby(obj/item/weapon/P as obj, mob/user as mob)
 	..()
-	var/clown = 0
-	if(user.mind && (user.mind.assigned_role == "Clown"))
-		clown = 1
 
 	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
 		if ( istype(P, /obj/item/weapon/pen/robopen) && P:mode == 2 )
@@ -326,9 +325,17 @@
 
 	else if(istype(P, /obj/item/weapon/stamp))
 
-		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
-			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
-			return
+		if(istype(P, /obj/item/weapon/stamp/clown))
+			var/clown = FALSE
+			if(user.mind && (user.mind.assigned_role == "Clown"))
+				clown = TRUE
+			if(isrobot(user))
+				var/mob/living/silicon/robot/R = user
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
+					clown = TRUE
+			if(!clown)
+				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
+				return
 
 		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
 
@@ -393,9 +400,9 @@
 	return
 
 var/global/list/paper_folding_results = list ( \
+	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"paper plane" = /obj/item/weapon/p_folded/plane,
 	"paper hat" = /obj/item/weapon/p_folded/hat,
-	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"folded note" = /obj/item/weapon/p_folded/note_small,
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
@@ -445,6 +452,12 @@ var/global/list/paper_folding_results = list ( \
 		to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return 0
 	return 1
+
+/obj/item/weapon/paper/AltClick()
+	if(is_holder_of(usr, src) && canfold(usr))
+		fold()
+	else
+		return ..()
 
 /*
  * Premade paper
@@ -532,3 +545,40 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
+
+/obj/item/weapon/paper/merchantreport
+	var/identity
+	var/list/mugshots = list()
+
+/obj/item/weapon/paper/merchantreport/New(loc,mob/living/carbon/human/merchant)
+	if(merchant)
+		identity = merchant.client.prefs.real_name
+		name = "Licensed Merchant Report - [identity]"
+		merchant.client.prefs.update_preview_icon(0) //This is necessary because if they don't check their character sheet it never generates!
+		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_front)
+		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_side)
+		info = {"<html><style>
+						body {color: #000000; background: #ccffff;}
+						h1 {color: #000000; font-size:30px;}
+						fieldset {width:140px;}
+						</style>
+						<body>
+						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+						<fieldset>
+	  					<legend>Picture</legend>
+						<center><img src="previewicon.png" width="64" height="64"><img src="previewicon2.png" width="64" height="64"></center>
+						</fieldset><BR>
+						Name: [identity]<BR>
+						Blood Type: [merchant.dna.b_type]<BR>
+						Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+		display_y = 700
+		CentcommStamp(src)
+	..()
+
+/obj/item/weapon/paper/merchantreport/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
+	var/index = 1
+	for(var/image in mugshots)
+		user << browse_rsc(image, "previewicon-[identity][index].png")
+		index++
+	..()

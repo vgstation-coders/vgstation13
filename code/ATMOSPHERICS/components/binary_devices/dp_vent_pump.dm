@@ -86,7 +86,7 @@
 
 		if(pressure_delta > 0)
 			if(air1.temperature > 0)
-				var/transfer_moles = pressure_delta*environment.volume/(air1.temperature * R_IDEAL_GAS_EQUATION)
+				var/transfer_moles = pressure_delta * CELL_VOLUME / (air1.temperature * R_IDEAL_GAS_EQUATION)
 
 				var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 
@@ -105,7 +105,7 @@
 
 		if(pressure_delta > 0)
 			if(environment.temperature > 0)
-				var/transfer_moles = pressure_delta*air2.volume/(environment.temperature * R_IDEAL_GAS_EQUATION)
+				var/transfer_moles = pressure_delta * air2.volume / (environment.temperature * R_IDEAL_GAS_EQUATION)
 
 				var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
 
@@ -157,51 +157,39 @@
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
 		return 0
 
-	var/handled=0
 	if("power" in signal.data)
 		on = text2num(signal.data["power"])
-		handled=1
 
 	if("power_toggle" in signal.data)
 		on = !on
-		handled=1
 
 	if("direction" in signal.data)
 		pump_direction = text2num(signal.data["direction"])
-		handled=1
 
 	if("checks" in signal.data)
 		pressure_checks = text2num(signal.data["checks"])
-		handled=1
 
 	if("purge" in signal.data)
 		pressure_checks &= ~1
 		pump_direction = 0
-		handled=1
 
 	if("stabilize" in signal.data)
 		pressure_checks |= 1
 		pump_direction = 1
-		handled=1
 
 	if("set_input_pressure" in signal.data)
 		input_pressure_min = Clamp(text2num(signal.data["set_input_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled = 1
 
 	if("set_output_pressure" in signal.data)
 		output_pressure_max = Clamp(text2num(signal.data["set_output_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled = 1
 
 	if("set_external_pressure" in signal.data)
 		external_pressure_bound = Clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled = 1
 
 	if("status" in signal.data)
 		spawn(2)
 			broadcast_status()
 		return //do not update_icon
-	if(!handled)
-		testing("\[[world.timeofday]\]: dp_vent_pump/receive_signal: unknown command \n[signal.debug_print()]")
 	spawn(2)
 		broadcast_status()
 	update_icon()

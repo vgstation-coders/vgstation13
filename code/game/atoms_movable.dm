@@ -18,8 +18,6 @@
 	var/mob/pulledby = null
 	var/pass_flags = 0
 
-	var/area/areaMaster
-
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
 	var/pressure_resistance = ONE_ATMOSPHERE
@@ -43,7 +41,7 @@
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
 	var/inertia_dir = null
-
+	var/kinetic_acceleration = 0
 	var/throwpass = 0
 	var/level = 2
 
@@ -57,7 +55,6 @@
 
 /atom/movable/New()
 	. = ..()
-	areaMaster = get_area_master(src)
 	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
@@ -107,6 +104,9 @@
 			if(VH.attached == src)
 				returnToPool(VH)
 
+	for(var/atom/movable/AM in src)
+		qdel(AM)
+
 	..()
 
 /proc/delete_profile(var/type, code = 0)
@@ -144,8 +144,13 @@
 	..()
 
 //TODO move this somewhere else
-/atom/movable/proc/set_glide_size(glide_size_override = 0)
-	glide_size = glide_size_override
+/atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
+	if(!glide_size_override || glide_size_override > max)
+		glide_size = 0
+	else
+		glide_size = max(min, glide_size_override)
+	for(var/atom/movable/AM in contents)
+		AM.set_glide_size(glide_size, min, max)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -286,6 +291,12 @@
 	if (!category) // String category which didn't exist.
 		return 0
 
+	if (istype(AM, /mob/living)) //checks if the atom is a mob, and removes any grabs from the mob to prevent !!FUN!!
+		var/mob/living/M = AM
+		for(var/obj/item/weapon/grab/G in M.grabbed_by)
+			if (istype(G, /obj/item/weapon/grab))
+				returnToPool(G)
+
 	AM.locked_to = src
 
 	locked_atoms[AM] = category
@@ -421,7 +432,7 @@
 
 		loc.Entered(src, old_loc)
 		if(isturf(loc))
-			var/area/A = get_area_master(loc)
+			var/area/A = get_area(loc)
 			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
@@ -436,6 +447,9 @@
 
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
+	var/turf/T = get_turf(destination)
+	if(old_loc && T && old_loc.z != T.z)
+		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
@@ -460,7 +474,7 @@
 		loc = destination
 		loc.Entered(src)
 		if(isturf(destination))
-			var/area/A = get_area_master(destination)
+			var/area/A = get_area(destination)
 			A.Entered(src)
 
 		for(var/atom/movable/AM in locked_atoms)
@@ -496,12 +510,13 @@
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+	set waitfor = FALSE
 	if(!target || !src)
 		return 0
 	if(override)
 		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
-
+	var/kinetic_sum = 0
 	throwing = 1
 	if(!speed)
 		speed = throw_speed
@@ -518,6 +533,13 @@
 		var/obj/mecha/M = src
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
+
+	var/afterimage = 0
+	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
+		var/mob/living/simple_animal/construct/armoured/perfect/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+		afterimage = 1
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -554,6 +576,11 @@
 				tS = 1
 			while((loc.timestopped || timestopped) && dist_travelled)
 				sleep(3)
+			if(kinetic_acceleration>kinetic_sum)
+				fly_speed += kinetic_acceleration-kinetic_sum
+				kinetic_sum = kinetic_acceleration
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -590,6 +617,11 @@
 			if(timestopped)
 				sleep(1)
 				continue
+			if(kinetic_acceleration>0)
+				fly_speed += kinetic_acceleration
+				kinetic_acceleration = 0
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -623,12 +655,9 @@
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
+	kinetic_acceleration = 0
 	if(isobj(src))
 		src.throw_impact(get_turf(src), speed, user)
-
-/atom/movable/change_area(oldarea, newarea)
-	areaMaster = newarea
-	..()
 
 //Overlays
 /atom/movable/overlay
@@ -696,7 +725,7 @@
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
-	for(var/turf/turf in oview(1,src))
+	for(var/turf/turf in orange(1,src))
 		if(!turf.has_gravity(src))
 			continue
 
@@ -969,3 +998,28 @@
 
 /atom/movable/proc/area_entered(var/area/A)
 	return
+
+/atom/movable/proc/can_be_pulled(var/mob/user)
+	return TRUE
+
+/atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
+	if(anchored)
+		return
+	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
+		return
+	var/list/params_list = params2list(params)
+	if(clamp)
+		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+		pixel_y = Clamp(base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+	else
+		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
+		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+
+//Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
+/atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
+	if(Lag > 0)
+		set_glide_size(DELAY2GLIDESIZE(Lag))
+	walk_to(src,Trg,Min,Lag,Speed)
+
+/atom/movable/proc/can_be_pushed(mob/user)
+	return 1

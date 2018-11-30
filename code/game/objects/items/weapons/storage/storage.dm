@@ -34,37 +34,25 @@
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
 
-/obj/item/weapon/storage/MouseDrop(obj/over_object as obj)
-	if (ishuman(usr) || ismonkey(usr)) //so monkeys can take off their backpacks -- Urist
-		var/mob/M = usr
-		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object) && Adjacent(M))
+/obj/item/weapon/storage/on_mousedrop_to_inventory_slot()
+	playsound(src, "rustle", 50, 1, -5)
+
+/obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
+	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
+		orient2hud(usr)
+		if(usr.s_active)
+			usr.s_active.close(usr)
+		src.show_to(usr)
+		return
+	if(ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src))
+		if(istype(over_object, /obj/structure/table) && usr.Adjacent(over_object) && Adjacent(usr))
 			var/mob/living/L = usr
 			if(istype(L) && !(L.incapacitated() || L.lying))
 				if(can_use())
 					empty_contents_to(over_object)
+					return
 
-		if(!( istype(over_object, /obj/abstract/screen/inventory) ))
-			return ..()
-
-		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
-			return
-
-		playsound(src, "rustle", 50, 1, -5)
-		if(!( M.restrained() ) && !( M.stat ))
-			var/obj/abstract/screen/inventory/OI = over_object
-
-			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
-				M.u_equip(src, 1)
-				M.put_in_hand(OI.hand_index, src)
-				src.add_fingerprint(usr)
-
-			return
-		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
-			if (usr.s_active)
-				usr.s_active.close(usr)
-			src.show_to(usr)
-			return
-	return
+	return ..()
 
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
@@ -92,7 +80,7 @@
 	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
-				if(I.on_found(user))
+				if(I.on_found(null, user))
 					return
 	if(user.s_active)
 		user.s_active.hide_from(user)
@@ -217,6 +205,8 @@
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0,mob/M, slot)
 	if(!istype(W))
 		return //Not an item
+	if(!W.can_be_stored(src)) //Snowflake item-side whether this item can be stored within our item.
+		return 0
 	if(isliving(loc))
 		var/mob/living/L = loc
 		for (var/i in no_storage_slot)
@@ -329,14 +319,14 @@
 	if(!istype(W))
 		return 0
 	if(usr)
-		usr.u_equip(W,1)
-		usr.update_icons()	//update our overlays
+		usr.u_equip(W,0)
+		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
+		usr.update_icons()
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
 		if (usr.client && usr.s_active != src)
 			usr.client.screen -= W
-		//W.dropped(usr)
 		add_fingerprint(usr)
 
 		if(!prevent_warning && !istype(W, /obj/item/weapon/gun/energy/crossbow))
@@ -445,15 +435,6 @@
 
 /obj/item/weapon/storage/dropped(mob/user as mob)
 	..()
-
-/obj/item/weapon/storage/MouseDrop(over_object, src_location, over_location)
-	..()
-	orient2hud(usr)
-	if (over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
-		if (usr.s_active)
-			usr.s_active.close(usr)
-		src.show_to(usr)
-	return
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
 	playsound(src, "rustle", 50, 1, -5)
@@ -666,7 +647,7 @@
 
 /obj/item/weapon/storage/stripped(mob/wearer as mob, mob/stripper as mob)
 	for(var/obj/item/I in contents)
-		I.stripped(wearer,stripper)
+		I.stripped(wearer, stripper)
 
 /obj/item/weapon/storage/proc/mass_remove(var/atom/A)
 	for(var/obj/item/O in contents)

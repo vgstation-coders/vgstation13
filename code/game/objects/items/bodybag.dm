@@ -63,9 +63,9 @@
 	..()
 	src.overlays.len = 0
 
-/obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
+/obj/structure/closet/body_bag/MouseDropFrom(over_object, src_location, over_location)
 	..()
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+	if(!usr.incapacitated() && over_object == usr && (in_range(src, usr) || usr.contents.Find(src)))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 		if(opened)
@@ -118,8 +118,8 @@
 		O.desc = "Pretty useless now.."
 		qdel(src)
 
-/obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+/obj/structure/closet/body_bag/cryobag/MouseDropFrom(over_object, src_location, over_location)
+	if(!usr.incapacitated() && over_object == usr && (in_range(src, usr) || usr.contents.Find(src)))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")

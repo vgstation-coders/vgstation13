@@ -2,10 +2,10 @@
 "ab" = (/obj/structure/catwalk,/obj/machinery/porta_turret/AIvault,/turf/space,/area/vault/AIsat)
 "ac" = (/obj/structure/lattice,/turf/space,/area/vault/AIsat)
 "ad" = (/obj/structure/lattice,/turf/space,/area)
-"ae" = (/obj/structure/grille,/obj/structure/lattice,/turf/space,/area)
+"ae" = (/obj/structure/grille,/obj/structure/lattice,/turf/space,/area/vault/AIsat)
 "af" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area)
-"ag" = (/obj/structure/grille,/turf/space,/area)
-"ah" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 0},/obj/structure/catwalk,/obj/machinery/power/solar/panel/tracker,/turf/space,/area)
+"ag" = (/obj/structure/grille,/turf/space,/area/vault/AIsat)
+"ah" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 0},/obj/structure/catwalk,/obj/machinery/power/solar/panel/tracker,/turf/space,/area/vault/AIsat)
 "ai" = (/turf/simulated/wall/r_wall,/area/vault/AIsat)
 "aj" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/AIsat)
 "ak" = (/obj/machinery/computer/aifixer,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
@@ -77,11 +77,12 @@
 "by" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'LETHAL TURRETS'. Enter at your own risk!"; name = "LETHAL TURRETS"; pixel_x = -32},/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1; name = "AI Satellite Access"; req_access_txt = "15"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
 "bz" = (/obj/machinery/ai_status_display,/turf/simulated/wall/r_wall,/area/vault/AIsat)
 "bA" = (/obj/structure/lattice,/obj/structure/lattice,/turf/space,/area/vault/AIsat)
-"bB" = (/obj/structure/catwalk,/turf/space,/area)
+"bB" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area/vault/AIsat)
+"bC" = (/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
 
 (1,1,1) = {"
 aaaaaaaaaaaaabacacaaaaaaaaaaaaaaaaadacacabaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaacaeafaeagahafafaeaeacaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaacaeafaeagahbBbBaeaeacaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaacaiaiaiaiajaiaiaiaiacaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaiaiakalamanaoapaqaiaiaaaaaaaaaaaaaaaa
 arararararaaaaaaaiasatauatavawataxasaiaaaaaaararararar
@@ -93,6 +94,6 @@ aaaaaaaaadadbeaaacaFaFatbqbrbsatataIaiaabtaBaKaKaKaKaL
 aaaaaVaaaaaaaaaabubvaFbwatavataFatasaiaaaaaaaMaMaMaMaM
 aaaaaaaaaaaaaabhaiaiaGaHatatatbxataiaiaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaadacaiaiaiaibybzaiaiaibAaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaacbBbBbBbBbBbBbBbBbBacaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaacbCbCbCbCbCbCbCbCbCacaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaabacacaaaaaaaaaaaaaaaaaaacacabaaaaaaaaaaaa
 "}

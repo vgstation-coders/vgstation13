@@ -125,7 +125,7 @@ proc/sql_commit_feedback()
 		return
 
 	//content is a list of lists. Each item in the list is a list with two fields, a variable name and a value. Items MUST only have these two values.
-	var/list/datum/feedback_variable/content = blackbox.get_round_feedback()
+	var/list/datum/feedback_variable/content = blackbox.feedback
 
 	if(!content)
 		log_game("Round ended without any feedback being generated. No feedback was sent to the database.")

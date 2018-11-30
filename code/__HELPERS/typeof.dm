@@ -96,3 +96,15 @@ var/global/list/existing_typesof_cache = list()
 	existing_typesof_cache[path] = L.Copy()
 
 	return L
+
+//existing_typesof does not like lists, so...
+/proc/existing_typesof_list(var/list/L)
+	if(!islist(L))
+		return
+
+	var/list/existing_types = list()
+
+	for(var/types in L)
+		existing_types += existing_typesof(types)
+
+	return existing_types

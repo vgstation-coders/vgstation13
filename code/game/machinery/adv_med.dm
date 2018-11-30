@@ -7,7 +7,7 @@
 	idle_power_usage = 125
 	active_power_usage = 250
 	var/scanning = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/fullbodyscanner,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -50,45 +50,48 @@
 	else
 		set_light(0)
 
-/obj/machinery/bodyscanner/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/bodyscanner/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //humans only
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
-		return
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.locked_to)
+	if(!istype(L))
 		return
-	/*if(L.abiotic())
-		to_chat(user, "<span class='notice'>Subject cannot have abiotic items on.</span>")
-		return*/
 	for(var/mob/living/carbon/slime/M in range(1, L))
 		if(M.Victim == L)
 			to_chat(usr, "<span class='notice'>[L] will not fit into \the [src] because they have a slime latched onto their head.</span>")
 			return
+
 	if(L == user)
 		visible_message("[user] climbs into \the [src].")
 	else
 		visible_message("[user] places [L] into \the [src].")
 
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	L.forceMove(src)
 	L.reset_view()
 	occupant = L
@@ -100,7 +103,7 @@
 		set_light(light_range_on, light_power_on)
 	return
 
-/obj/machinery/bodyscanner/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/bodyscanner/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
@@ -108,9 +111,10 @@
 		return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
+	over_location = get_turf(over_location)
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
@@ -126,12 +130,12 @@
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
-	go_out(over_location)
+	go_out(over_location, ejector = usr)
 
 /obj/machinery/bodyscanner/relaymove(mob/user as mob)
 	if(user.stat)
 		return
-	go_out()
+	go_out(ejector = user)
 	return
 
 /obj/machinery/bodyscanner/verb/eject()
@@ -141,7 +145,7 @@
 
 	if(usr.isUnconscious())
 		return
-	go_out()
+	go_out(ejector = usr)
 	add_fingerprint(usr)
 	return
 
@@ -155,9 +159,6 @@
 	if(src.occupant)
 		to_chat(usr, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
-	/*if(usr.abiotic())
-		to_chat(usr, "<span class='notice'>Subject cannot have abiotic items on.</span>")
-		return*/
 	if(usr.locked_to)
 		return
 	usr.pulling = null
@@ -172,7 +173,7 @@
 		set_light(light_range_on, light_power_on)
 	return
 
-/obj/machinery/bodyscanner/proc/go_out(var/exit = loc)
+/obj/machinery/bodyscanner/proc/go_out(var/exit = loc, var/mob/ejector)
 	if(!src.occupant)
 		return
 	for (var/atom/movable/x in src.contents)
@@ -183,6 +184,11 @@
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
+		if(istype(ejector) && ejector != occupant)
+			var/obj/structure/bed/roller/B = locate() in exit
+			if(B)
+				B.buckle_mob(occupant, ejector)
+				ejector.start_pulling(B)
 	occupant = null
 	update_icon()
 	set_light(0)
@@ -324,6 +330,8 @@
 		"oxyloss" = H.getOxyLoss(),
 		"toxloss" = H.getToxLoss(),
 		"rads" = H.radiation,
+		"radtick" = H.rad_tick,
+		"radstage" = H.get_rad_stage(),
 		"cloneloss" = H.getCloneLoss(),
 		"brainloss" = H.getBrainLoss(),
 		"paralysis" = H.paralysis,
@@ -371,6 +379,8 @@
 	dat += text("[]\t-Burn Severity %: []</font><br><br>", (occ["fireloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["fireloss"])
 
 	dat += text("[]\tRadiation Level %: []</font><br>", (occ["rads"] < 10 ?"<font color='blue'>" : "<font color='red'>"), occ["rads"])
+	if(occ["radtick"] > 0)
+		dat += text("<font color='red'>Radiation sickness progression: <b>[occ["radtick"]]</b> Stage: <b>[occ["radstage"]]</b></font><br>")
 	dat += text("[]\tGenetic Tissue Damage %: []</font><br>", (occ["cloneloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["cloneloss"])
 	dat += text("[]\tApprox. Brain Damage %: []</font><br>", (occ["brainloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["brainloss"])
 	dat += text("Paralysis Summary %: [] ([] seconds left!)<br>", occ["paralysis"], round(occ["paralysis"] / 4))
@@ -427,6 +437,7 @@
 		var/internal_bleeding = ""
 		var/lung_ruptured = ""
 		var/e_cancer = ""
+		var/bone_strengthened = ""
 
 		dat += "<tr>"
 
@@ -446,6 +457,11 @@
 			robot = "Prosthetic:"
 		if(e.open)
 			open = "Open:"
+		if(e.min_broken_damage != initial(e.min_broken_damage))
+			var/difference = e.min_broken_damage - initial(e.min_broken_damage)
+			if(difference > 0)
+				difference = "+[difference]"
+			bone_strengthened = "Altered bone strength ([difference]g/cm<sup>2</sup>)"
 
 		switch (e.germ_level)
 			if (INFECTION_LEVEL_ONE to INFECTION_LEVEL_ONE + 200)
@@ -486,7 +502,7 @@
 		if(!AN && !open && !infected && !e_cancer & !imp)
 			AN = "None:"
 		if(!(e.status & ORGAN_DESTROYED))
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured]</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 		dat += "</tr>"

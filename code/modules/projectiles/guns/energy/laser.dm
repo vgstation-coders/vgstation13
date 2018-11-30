@@ -275,7 +275,7 @@
 		return 1
 	if(prob(5))
 		M.drop_item()
-		M.emote("scream",,, 1)
+		M.audible_scream()
 		M.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
 		M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 		to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")

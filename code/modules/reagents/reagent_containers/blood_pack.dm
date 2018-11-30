@@ -234,3 +234,9 @@
 /obj/item/weapon/reagent_containers/blood/Destroy()
 	processing_objects.Remove(src)
 	..()
+
+/obj/item/weapon/reagent_containers/blood/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(mode == BLOODPACK_CUT)
+		to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
+		return INJECTION_RESULT_FAIL
+	return ..()

@@ -22,11 +22,13 @@
 	var/excav_overlay = ""
 	var/obj/item/weapon/last_find
 	var/datum/artifact_find/artifact_find
-	var/scan_state = null //Holder for the image we display when we're pinged by a mining scanner
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mineral_overlay
 	var/mined_type = /turf/unsimulated/floor/asteroid
 	var/overlay_state = "rock_overlay"
+	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
+	var/rockernaut = NONE
+	var/minimum_mine_time = 0
 
 
 /turf/unsimulated/mineral/snow
@@ -49,6 +51,59 @@
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
 	mined_type = /turf/unsimulated/floor/asteroid/air
+
+//These walls produce a simulated floor tile for easy interior area expansion (Roidstation)
+//they also can't contain xenoarch sites
+/turf/unsimulated/mineral/internal
+	no_finds = 1
+	mined_type = /turf/simulated/floor/asteroid
+
+/turf/simulated/wall/r_rock
+	name = "reinforced rock"
+	desc = "It has metal struts that need to be welded away before it can be mined."
+	icon_state = "rock_rf0"
+	dismantle_type = /turf/unsimulated/mineral
+	girder_type = null
+	walltype = "rock_rf"
+
+/*turf/simulated/wall/r_rock/New()
+	..()
+	add_rock_overlay()
+
+/turf/simulated/wall/r_rock/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', "rock_overlay",layer = SIDE_LAYER),var/offset=-4)
+	img.pixel_x = offset*PIXEL_MULTIPLIER
+	img.pixel_y = offset*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img*/
+
+/turf/simulated/wall/r_rock/porous
+	name = "reinforced porous rock"
+	desc = "This rock is filled with pockets of breathable air. It has metal struts to protect it from mining."
+	dismantle_type = /turf/unsimulated/mineral/internal/air
+
+/turf/unsimulated/mineral/internal/air
+	name = "porous rock"
+	desc = "This rock is filled with pockets of breathable air, which interfere with the efficiency of some high speed mining equipment."
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+	mined_type = /turf/simulated/floor/asteroid/air
+	minimum_mine_time = 30 //3 seconds
+
+//this one's for the snowmaps
+/turf/unsimulated/mineral/internal/ice
+	icon_state = "snow_rock"
+	base_icon_state = "snow_rock"
+	overlay_state = "snow_rock_overlay"
+	no_finds = 1
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T0C
+	mined_type = /turf/simulated/floor/plating/snow/cold
+
+/turf/unsimulated/mineral/internal/ice/New()
+	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+	..()
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
@@ -128,20 +183,24 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/obj/structure/bed/chair/vehicle/gigadrill/G = AM
 		G.drill(src)
 
+	else if(istype(AM,/mob/living/simple_animal/construct/armoured))
+		attack_construct(AM)
+
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
 		for(var/trydir in cardinal)
 			if(prob(mineral.spread_chance))
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
+					if(prob(1) && prob(25)) //People wanted them rarer
+						rockernaut = TURF_CONTAINS_REGULAR_ROCKERNAUT
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
 
 /turf/unsimulated/mineral/proc/UpdateMineral()
-	icon_state = "rock"
 	if(!mineral)
-		name = "\improper Rock"
+		name = "rock"
 		return
 	name = "\improper [mineral.display_name] deposit"
 	update_icon()
@@ -173,6 +232,27 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
 		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
 		return
+
+	if(istype(W,/obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/S = W
+		if(S.amount < 2)
+			to_chat(user,"<span class='warning>You don't have enough material.</span>")
+			return
+		user.visible_message("<span class='notice'>[user] starts installing reinforcements to \the [src].</span>", \
+			"<span class='notice'>You start installing reinforcements to \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			if(!S.use(2))
+				to_chat(user,"<span class='warning>You don't have enough material.</span>")
+				return
+			user.visible_message("<span class='notice'>[user] finishes installing reinforcements to \the [src].</span>", \
+				"<span class='notice'>You finish installing reinforcements to \the [src].</span>")
+			var/old_type = type
+			var/old_name = name
+			var/turf/simulated/wall/X = ChangeTurf(/turf/simulated/wall/r_rock)
+			if(X)
+				X.name = "reinforced [old_name]"
+				X.dismantle_type = old_type
+				X.add_fingerprint(user)
 
 	if (istype(W, /obj/item/weapon/pickaxe))
 		if(user.loc != get_turf(user))
@@ -212,7 +292,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 		busy = 1
 
-		if(do_after(user, src, P.digspeed) && user)
+		if(do_after(user, src, max(P.digspeed,minimum_mine_time)) && user)
 			busy = 0
 
 			if(finds && finds.len)
@@ -317,11 +397,28 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	else
 		return attack_hand(user)
 
+/turf/unsimulated/mineral/attack_animal(var/mob/living/simple_animal/M)
+	M.delayNextAttack(8)
+	if(M.environment_smash_flags & SMASH_ASTEROID && prob(30))
+		GetDrilled(0)
+
+/turf/unsimulated/mineral/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		if(do_after(user, src, 40))
+			GetDrilled(0)
+		return 1
+	return 0
+
 /turf/unsimulated/mineral/proc/DropMineral()
 	if(!mineral)
 		return
 
 	var/obj/item/weapon/ore/O = new mineral.ore (src)
+	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
+	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O))
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
@@ -329,11 +426,26 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		O.geologic_data = geologic_data
 	return O
 
-/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = 0)
+/**
+* artifact_fail: If true, negative effects will be applied to mobs in range when artifacts inside
+*                this turf are destroyed.
+* safety_override: If true, dangerous side effects of the turf being drilled will be immediately
+*                  disabled after drilling (ie. gibtonite will be immediately disarmed).
+* driller: Whatever is doing the drilling.  Used for some messages.
+*/
+/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if (mineral && mineral.result_amount)
 		for (var/i = 1 to mineral.result_amount - mined_ore)
 			DropMineral()
-
+	switch(rockernaut)
+		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
+			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
+			if(mineral)
+				R.possessed_ore = mineral.ore
+		if(TURF_CONTAINS_BOSS_ROCKERNAUT)
+			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
+			if(mineral)
+				R.possessed_ore = mineral.ore
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
@@ -360,14 +472,22 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/crate_type = pick(valid_abandoned_crate_types)
 	new crate_type(src)
 
+/turf/unsimulated/mineral/proc/GetScanState()
+	if(mineral)
+		var/mineral_name = mineral.display_name
+		if(rockernaut)
+			return "[has_icon('icons/turf/mine_overlays.dmi',"embed_[mineral_name]")?"embed_[mineral_name]":"embed_Iron"]"
+		return mineral_name
+	return null
+
 /turf/unsimulated/mineral/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
 	//with skill and luck, players can cleanly extract finds
 	//otherwise, they come out inside a chunk of rock
 	var/obj/item/weapon/X
 	if(prob_clean)
-		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F.find_type)
+		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F)
 	else
-		X = new /obj/item/weapon/strangerock(src, inside_item_type = F.find_type)
+		X = new /obj/item/weapon/strangerock(src, inside_item_type = F)
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
@@ -384,7 +504,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
 	if(prob(F.prob_delicate))
 		var/obj/effect/suspension_field/S = locate() in src
-		if(!S || S.field_type != get_responsive_reagent(F.find_type))
+		if(!S || S.field_type != get_responsive_reagent(F.find_ID))
 			if(X)
 				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
 				qdel(X)
@@ -442,6 +562,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 	var/sand_type = /obj/item/weapon/ore/glass
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
@@ -512,7 +633,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return
 
 /turf/unsimulated/floor/asteroid/update_icon()
-	if(dug && istype(sand_type,/obj/item/weapon/ore/glass))
+	if(dug && ispath(sand_type, /obj/item/weapon/ore/glass))
 		icon_state = "asteroid_dug"
 
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
@@ -524,11 +645,114 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//icon_plating = "asteroid_dug"
 	update_icon()
 
+//***Simulated version of asteroid floors for use inside of stations (roidstation)***
+
+/turf/simulated/floor/asteroid
+	name = "Asteroid"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "asteroid"
+	intact = 0
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+	plane = PLATING_PLANE
+	var/dug
+	var/sand_type = /obj/item/weapon/ore/glass
+
+/turf/simulated/floor/asteroid/air
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/simulated/floor/asteroid/New()
+	..()
+	qdel(floor_tile)
+	floor_tile = null
+	name = initial(name)
+	if(prob(20))
+		icon_state = "asteroid[rand(0,12)]"
+	icon_regular_floor = initial(icon_state)
+
+/turf/simulated/floor/asteroid/is_plating()
+	return 0
+
+/turf/simulated/floor/asteroid/canBuildCatwalk()
+	return BUILD_FAILURE
+
+/turf/simulated/floor/asteroid/canBuildLattice()
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/simulated/floor/asteroid/canBuildPlating()
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if(!dug)
+		return BUILD_IGNORE
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/simulated/floor/asteroid/ex_act(severity)
+	switch(severity)
+		if(3.0)
+			return
+		if(2.0)
+			if (prob(70))
+				gets_dug()
+		if(1.0)
+			gets_dug()
+
+/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!W || !user)
+		return 0
+	if (istype(W, /obj/item/weapon/pickaxe))
+		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
+		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
+			return
+		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
+			to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
+			return
+		if (dug)
+			to_chat(user, "<span class='rose'>This area has already been dug.</span>")
+			return
+		to_chat(user, "<span class='rose'>You start digging.<span>")
+		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
+		if(do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
+			playsound(src, 'sound/items/shovel.ogg', 50, 1)
+			to_chat(user, "<span class='notice'>You dug a hole.</span>")
+			gets_dug()
+	else
+		..(W,user)
+	return
+
+/turf/simulated/floor/asteroid/update_icon()
+	if(dug && ispath(sand_type, /obj/item/weapon/ore/glass))
+		icon_state = "asteroid_dug"
+
+/turf/simulated/floor/asteroid/proc/gets_dug()
+	if(dug)
+		return
+	for(var/i = 1 to 5)
+		new sand_type(src)
+	dug = 1
+	//icon_plating = "asteroid_dug"
+	update_icon()
+
+
+
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
 	var/mineralSpawnChanceList = list(
 		"Iron"      = 50,
 		"Plasma"    = 25,
+		"Ice"		= 10,
 		"Uranium"   = 5,
 		"Gold"      = 5,
 		"Silver"    = 5,
@@ -634,7 +858,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "Uranium deposit"
 	icon_state = "rock_Uranium"
 	mineral = new /mineral/uranium
-	scan_state = "rock_Uranium"
 
 
 /turf/unsimulated/mineral/iron
@@ -647,42 +870,36 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "Diamond deposit"
 	icon_state = "rock_Diamond"
 	mineral = new /mineral/diamond
-	scan_state = "rock_Diamond"
 
 
 /turf/unsimulated/mineral/gold
 	name = "Gold deposit"
 	icon_state = "rock_Gold"
 	mineral = new /mineral/gold
-	scan_state = "rock_Gold"
 
 
 /turf/unsimulated/mineral/silver
 	name = "Silver deposit"
 	icon_state = "rock_Silver"
 	mineral = new /mineral/silver
-	scan_state = "rock_Silver"
 
 
 /turf/unsimulated/mineral/plasma
 	name = "Plasma deposit"
 	icon_state = "rock_Plasma"
 	mineral = new /mineral/plasma
-	scan_state = "rock_Plasma"
 
 
 /turf/unsimulated/mineral/clown
 	name = "Bananium deposit"
 	icon_state = "rock_Clown"
 	mineral = new /mineral/clown
-	scan_state = "rock_Clown"
 
 
 /turf/unsimulated/mineral/phazon
 	name = "Phazite deposit"
 	icon_state = "rock_Phazon"
 	mineral = new /mineral/phazon
-	scan_state = "rock_Phazon"
 
 /turf/unsimulated/mineral/pharosium
 	name = "Pharosium deposit"
@@ -749,12 +966,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = "rock_Molitz"
 	mineral = new /mineral/molitz
 
+/turf/unsimulated/mineral/mythril
+	name = "Silver deposit"
+	icon_state = "rock_Silver"
+	mineral = new /mineral/mythril
+
 ////////////////////////////////Gibtonite
 /turf/unsimulated/mineral/gibtonite
 	name = "Diamond deposit" //honk
 	icon_state = "rock_Gibtonite"
 	mineral = new /mineral/gibtonite
-	scan_state = "rock_Gibtonite"
 	var/det_time = 8 //Countdown till explosion, but also rewards the player for how close you were to detonation when you defuse it
 	var/stage = 0 //How far into the lifecycle of gibtonite we are, 0 is untouched, 1 is active and attempting to detonate, 2 is benign and ready for extraction
 	var/activated_ckey = null //These are to track who triggered the gibtonite deposit for logging purposes
@@ -784,12 +1005,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			bump_reject = 1
 		else if(istype(R.module_active, /obj/item/device/mining_scanner))
 			attackby(R.module_active, R) //let's bump to disable. This is kinder, because borgs need some love
-
-	else if(istype(AM,/obj/mecha))
-		var/obj/mecha/M = AM
-		if(istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
-			M.occupant_message("<span class='warning'>Safety features prevent this action.</span>")
-			bump_reject = 1
 
 	if(!bump_reject) //if we haven't been pushed off, we do the drilling bit
 		return ..()
@@ -837,10 +1052,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
-/turf/unsimulated/mineral/gibtonite/GetDrilled()
+/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
+		if (safety_override)
+			if (driller && istype(driller))
+				driller.visible_message("<span class='notice'>\The [driller] safely defuses the [src].</span>")
+			defuse()
 		return
 	if(stage == 1 && mineral.result_amount >= 1) //Gibtonite deposit goes kaboom
 		var/turf/bombturf = get_turf(src)
@@ -849,10 +1068,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
 		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
 		if(det_time <= 0)
-			G.quality = 3
+			G.det_quality = 3
 			G.icon_state = "Gibtonite ore 3"
 		if(det_time >= 1 && det_time <= 2)
-			G.quality = 2
+			G.det_quality = 2
 			G.icon_state = "Gibtonite ore 2"
 	ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
 
@@ -868,7 +1087,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		/mob/living/simple_animal/hostile/asteroid/goliath  = 5,
 		/mob/living/simple_animal/hostile/asteroid/goldgrub = 1,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 3,
-		/mob/living/simple_animal/hostile/asteroid/hivelord = 5
+		/mob/living/simple_animal/hostile/asteroid/hivelord = 5,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 4
 	)
 	var/sanity = 1
 

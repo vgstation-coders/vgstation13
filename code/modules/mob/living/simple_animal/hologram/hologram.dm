@@ -5,6 +5,7 @@
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
+	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
 
 
@@ -96,6 +97,8 @@
 	head = null
 	w_uniform = null
 	wear_suit = null
+	for (var/obj/item/O in held_items)
+		O.dropped(src)
 	if(connected_holoconsole)
 		connected_holoconsole.connected_holopeople.Remove(src)
 		connected_holoconsole = null
@@ -117,7 +120,6 @@
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()
-	transmogrify()
 	qdel(src)
 
 /mob/living/simple_animal/hologram/advanced/can_wield()

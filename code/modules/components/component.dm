@@ -22,3 +22,7 @@
 // Returns ALL /datum/components in parent container that are subtypes of c_type.
 /datum/component/proc/GetComponents(var/c_type)
 	return container.GetComponents(c_type)
+
+// Returns a value depending on what the signal and args were.
+/datum/component/proc/RecieveAndReturnSignal(var/sigtype, var/list/args)
+	return 0

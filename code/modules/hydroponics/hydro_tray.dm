@@ -121,8 +121,6 @@
 
 //Harvests the product of a plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/harvest(var/mob/user)
-
-
 	//Harvest the product of the plant,
 	if(!seed || !harvest || !user)
 		return
@@ -135,6 +133,17 @@
 		return
 
 	seed.harvest(user,yield_mod)
+	after_harvest()
+	return
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/autoharvest()
+	if(!seed || !harvest)
+		return
+
+	seed.autoharvest(get_turf(src))
+	after_harvest()
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
 	// Reset values.
 	harvest = 0
@@ -170,7 +179,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -245,7 +254,11 @@
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
 			return
+		if(C.being_potted)
+			to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
+			return
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		C.being_potted = TRUE
 		if(do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
@@ -280,7 +293,8 @@
 
 			check_level_sanity()
 			update_icon()
-
+		else
+			C.being_potted = FALSE
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
@@ -307,6 +321,7 @@
 
 		// Bookkeeping.
 		check_level_sanity()
+		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
 

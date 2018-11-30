@@ -42,7 +42,7 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is "
 
-	if( slot_w_uniform in obscured && skipface )
+	if((slot_w_uniform in obscured) && skipface)
 		t_He = "They"
 		t_his = "their"
 		t_him = "them"
@@ -410,8 +410,6 @@
 
 	for(var/implant in get_visible_implants(1))
 		msg += "<span class='warning'><b>[src] has \a [implant] sticking out of [t_his] flesh!</span>\n"
-	if(digitalcamo)
-		msg += "[t_He] [t_is] repulsively uncanny!\n"
 
 	if(!is_destroyed["head"])
 		if(getBrainLoss() >= 60)
@@ -464,5 +462,5 @@
 	if(istype(user))
 		user.heard(src)
 
-#undef Jitter_Medium
-#undef Jitter_High
+#undef JITTER_MEDIUM
+#undef JITTER_HIGH

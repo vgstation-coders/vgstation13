@@ -341,9 +341,9 @@
 	src << browse(dat, "window=checklanguage")
 
 /mob/living/Topic(href, href_list)
-	if(usr != src)
-		return
 	if(href_list["default_lang"])
+		if(usr != src)
+			return
 		if(href_list["default_lang"] == "reset")
 			set_default_language(null)
 		else

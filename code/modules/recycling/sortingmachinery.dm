@@ -210,25 +210,21 @@
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
-	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
+	else if(iswelder(I) && c_mode==1)
 		var/obj/item/weapon/weldingtool/W = I
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the floorweld off the delivery chute.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
-					return
-				to_chat(user, "You sliced the floorweld off the delivery chute.")
-				var/obj/structure/disposalconstruct/C = new (src.loc)
-				C.ptype = 8 // 8 =  Delivery chute
-				C.update()
-				C.anchored = 1
-				C.setDensity(TRUE)
-				qdel(src)
-			return
-		else
-			to_chat(user, "You need more welding fuel to complete this task.")
-			return
+		to_chat(user, "You start slicing the floorweld off the delivery chute.")
+		if(W.do_weld(user, src,20, 0))
+			if(gcDestroyed)
+				return
+			to_chat(user, "You sliced the floorweld off the delivery chute.")
+			var/obj/structure/disposalconstruct/C = new (src.loc)
+			C.ptype = 8 // 8 =  Delivery chute
+			C.update()
+			C.anchored = 1
+			C.setDensity(TRUE)
+			qdel(src)
+
+
 
 /obj/machinery/disposal/deliveryChute/process()
 	if(doFlushIn>0)
@@ -539,41 +535,3 @@
 
 /obj/machinery/sorting_machine/destination/unwrapped
 	unwrapped = 1
-
-/obj/machinery/sorting_machine/destination/taxi_engi
-	sorting = list(
-		"QM OFFICE",
-		"CARGO BAY",
-		"JANITOR CLOSET",
-		"HOP OFFICE",
-		"HYDROPONICS",
-		"KITCHEN",
-		"THEATRE",
-		"BAR",
-		"ATMOSPHERICS",
-		"CE OFFICE",
-		"ENGINEERING"
-	)
-
-/obj/machinery/sorting_machine/destination/taxi_engi/unwrapped
-	unwrapped = 1
-
-/obj/machinery/sorting_machine/destination/taxi_med
-	sorting = list(
-		"MEDBAY",
-		"CMO OFFICE",
-		"CHEMISTRY",
-		"GENETICS",
-		"RESEARCH",
-		"RD OFFICE",
-		"TELECOMMS",
-		"ROBOTICS"
-	)
-
-/obj/machinery/sorting_machine/destination/taxi_secsci
-	sorting = list(
-		"SECURITY",
-		"HOS OFFICE",
-		"CHAPEL",
-		"LIBRARY"
-	)
