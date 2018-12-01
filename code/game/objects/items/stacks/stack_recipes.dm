@@ -35,7 +35,86 @@
 	return 1
 
 /datum/stack_recipe/proc/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
-	return 1
+	return R
+
+/datum/stack_recipe/proc/build(var/mob/usr, var/obj/item/stack/S, var/multiplier = 1)
+	if (S.amount < req_amount*multiplier)
+		if (res_amount*multiplier>1)
+			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build [res_amount*multiplier] [title]\s!</span>")
+		else
+			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build \the [title]!</span>")
+		return
+	if (!can_build_here(usr, usr.loc))
+		return
+	if (time)
+		if (!do_after(usr, get_turf(S), time))
+			return
+	if (S.amount < req_amount*multiplier)
+		return
+	var/list/stacks_to_consume = list()
+	if(other_reqs.len)
+		for(var/i=1 to other_reqs.len)
+			var/looking_for = other_reqs[i]
+			var/req_amount
+			var/found = FALSE
+			if(ispath(looking_for, /obj/item/stack))
+				req_amount = other_reqs[looking_for]
+			if(ispath(usr.get_inactive_hand(), looking_for))
+				found = TRUE
+				if(req_amount) //It's of a stack/sheet subtype
+					var/obj/item/stack/SS = usr.get_inactive_hand()
+					if(SS.amount < req_amount)
+						found = FALSE
+					else
+						stacks_to_consume.Add(SS)
+						stacks_to_consume[S] = req_amount
+					continue
+			for(var/obj/I in range(get_turf(usr),1))
+				if(ispath(looking_for, I))
+					found = TRUE
+					if(req_amount) //It's of a stack/sheet subtype
+						var/obj/item/stack/SS = I
+						if(SS.amount < req_amount)
+							found = FALSE
+						else
+							stacks_to_consume.Add(SS)
+							stacks_to_consume[S] = req_amount
+			if(!found)
+				return
+	var/atom/O
+	if(ispath(result_type, /obj/item/stack))
+		O = drop_stack(result_type, usr.loc, (max_res_amount>1 ? res_amount*multiplier : 1), usr)
+		var/obj/item/stack/SS = O
+		SS.update_materials()
+	else
+		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
+			O = new result_type(usr.loc)
+
+	O.dir = usr.dir
+	if(start_unanchored)
+		var/obj/A = O
+		A.anchored = 0
+	var/put_in_hand = finish_building(usr, S, O)
+
+	//if (R.max_res_amount>1)
+	//	var/obj/item/stack/new_item = O
+	//	new_item.amount = R.res_amount*multiplier
+	//	//new_item.add_to_stacks(usr)
+
+	S.use(req_amount*multiplier)
+	for(var/obj/item/stack/SS in stacks_to_consume)
+		SS.use(stacks_to_consume[SS])
+	if (S.amount<=0)
+		usr.before_take_item(S)
+		if(put_in_hand && istype(O,/obj/item))
+			usr.put_in_hands(O)
+	O.add_fingerprint(usr)
+	//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
+	if (istype(O, /obj/item/weapon/storage) )
+		for(var/obj/item/I in O)
+			qdel(I)
+
+	return put_in_hand
 
 //Recipe list datum
 /datum/stack_recipe_list
