@@ -13,6 +13,7 @@
 	var/list/contributors = list()//list of cultists currently participating in the ritual
 	var/image/progbar = null//progress bar
 	var/cancelling = 3//check to abort the ritual if interrupted
+	var/custom_process = 0
 
 /obj/structure/cult/proc/conceal()
 	var/obj/structure/cult/concealed/C = new(loc)
@@ -62,6 +63,8 @@
 //duh
 /obj/structure/cult/cultify()
 	return
+/obj/structure/cult/clockworkify()
+	return
 
 //nuh-uh
 /obj/structure/cult/acidable()
@@ -99,7 +102,10 @@
 			if (sound_damaged)
 				playsound(get_turf(src), sound_damaged, 75, 1)
 			takeDamage(W.force)
-			visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
+			if (W.attack_verb)
+				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
+			else
+				visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
 			..()
 
 
@@ -137,6 +143,43 @@
 		cultist_act(user)
 		return 1
 	return 0
+
+
+/obj/structure/cult/beam_connect(var/obj/effect/beam/B)
+	..()
+	last_beamchecks["\ref[B]"]=world.time+1
+	apply_beam_damage(B) // Contact damage for larger beams (deals 1/10th second of damage)
+	if(!custom_process && !(src in processing_objects))
+		processing_objects.Add(src)
+
+
+/obj/structure/cult/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+	last_beamchecks.Remove("\ref[B]") // RIP
+	if(beams.len == 0)
+		if(!custom_process && src in processing_objects)
+			processing_objects.Remove(src)
+
+/obj/structure/cult/apply_beam_damage(var/obj/effect/beam/B)
+	var/lastcheck=last_beamchecks["\ref[B]"]
+
+	// Standard damage formula / 2
+	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage() / 20)
+
+	// Actually apply damage
+	takeDamage(damage)
+
+	// Update check time.
+	last_beamchecks["\ref[B]"]=world.time
+
+/obj/structure/cult/handle_beams()
+	// New beam damage code (per-tick)
+	for(var/obj/effect/beam/B in beams)
+		apply_beam_damage(B)
+
+/obj/structure/cult/process()
+	handle_beams()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawned from the Raise Structure rune. Available from the beginning. Trigger progress to ACT I
@@ -563,6 +606,7 @@
 		var/datum/role/cultist/newCultist = cult.HandleRecruitedMind(shadeMob.mind, TRUE)
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
+		cult_risk()//risk of exposing the cult early if too many soul blades created
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
@@ -793,6 +837,7 @@ var/list/cult_spires = list()
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
 	light_color = LIGHT_COLOR_ORANGE
+	custom_process = 1
 	var/heating_power = 40000
 	var/set_temperature = 50
 	var/mob/forger = null
@@ -846,6 +891,7 @@ var/list/cult_spires = list()
 	overlays += I_lave
 
 /obj/structure/cult/forge/process()
+	..()
 	if (isturf(loc))
 		var/turf/simulated/L = loc
 		if(istype(L))
@@ -888,6 +934,7 @@ var/list/cult_spires = list()
 						forger = null
 						template = null
 					else
+						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")

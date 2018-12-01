@@ -86,7 +86,7 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-	
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -156,7 +156,7 @@
 
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
-	
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -1042,6 +1042,16 @@
 		return 1
 	if(volume >= 5)
 		T.bless()
+
+/datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+
+	if(volume >= 5)
+		if(istype(M,/mob/living/simple_animal/construct))
+			var/mob/living/simple_animal/construct/C = M
+			C.purge = 3
+			C.adjustBruteLoss(5)
+			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"

@@ -1028,7 +1028,11 @@ var/list/datum/dna/hivemind_bank = list()
 	if(amount == 0)
 		return
 
-	var/mob/living/carbon/target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = bool=="Yes"?TRUE:FALSE)
+	var/mob/living/carbon/target
+	if (bool=="Yes")
+		target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = TRUE)
+	else
+		target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = FALSE)
 	if(!target || !target.reagents)
 		return
 
