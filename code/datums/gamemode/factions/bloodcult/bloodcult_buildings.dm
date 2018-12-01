@@ -825,7 +825,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/forge
 	name = "forge"
-	desc = "A ."
+	desc = "Molten rocks flow down its cracks producing a searing heat, better not stand too close for long."
 	icon = 'icons/obj/cult_64x64.dmi'
 	icon_state = ""
 	health = 100
