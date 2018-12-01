@@ -635,7 +635,7 @@ var/list/one_way_windows
 
 /obj/structure/window/loose
 	anchored = 0
-	d_state = WINDOWLOOSE
+	d_state = 0
 
 /obj/structure/window/reinforced
 	name = "reinforced window"
@@ -649,7 +649,7 @@ var/list/one_way_windows
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
-	d_state = WINDOWLOOSE
+	d_state = 0
 
 /obj/structure/window/plasma
 
@@ -666,7 +666,7 @@ var/list/one_way_windows
 
 /obj/structure/window/plasma/loose
 	anchored = 0
-	d_state = WINDOWLOOSE
+	d_state = 0
 
 /obj/structure/window/reinforced/plasma
 
@@ -680,7 +680,7 @@ var/list/one_way_windows
 
 /obj/structure/window/reinforced/plasma/loose
 	anchored = 0
-	d_state = WINDOWLOOSE
+	d_state = 0
 
 
 // Used on Packed ; smartglassified roundstart
@@ -722,6 +722,10 @@ var/list/one_way_windows
 
 /obj/structure/window/reinforced/clockwork/clockworkify()
 	return
+
+/obj/structure/window/reinforced/clockwork/loose
+	anchored = 0
+	d_state = 0
 
 /obj/structure/window/send_to_past(var/duration)
 	..()
