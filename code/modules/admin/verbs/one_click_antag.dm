@@ -99,6 +99,7 @@ client/proc/one_click_antag()
 				recruit_count++
 
 		FF.OnPostSetup()
+		FF.forgeObjectives()
 
 		return recruit_count
 
@@ -120,6 +121,7 @@ client/proc/one_click_antag()
 				newRole.Drop()
 				continue
 			newRole.OnPostSetup()
+			newRole.ForgeObjectives()
 			newRole.Greet(GREET_LATEJOIN)
 			message_admins("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
