@@ -226,7 +226,7 @@
 
 	var/static/list/allowed_types = list(
 		/obj/item,
-		/obj/structure/bed/chair,
+		/obj/structure/bed,
 	)
 	if(!is_type_in_list(target, allowed_types))
 		to_chat(user,"<span class='warning'>That would be such a waste of glue.</span>")
@@ -261,7 +261,7 @@
 		spawn(GLUE_WEAROFF_TIME)
 			canremove++
 
-/obj/structure/bed/chair/glue_act()
+/obj/structure/bed/glue_act()
 	glued = TRUE
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
