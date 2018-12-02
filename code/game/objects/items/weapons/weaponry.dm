@@ -480,7 +480,9 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/rapier
 	name = "rapier"
-	desc = "It is currently held high. In this stance you strike harder. En Garde!"
+	var/high_stance_desc = "It is currently held high. In this stance you strike harder. En Garde!"
+	var/low_stance_desc = "It is currently held low. In this stance you can parry attacks. Allez !"
+	desc = high_stance_desc //blade starts with high stance by default.
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "rapier"
 	item_state = "rapier"
@@ -492,24 +494,27 @@ obj/item/weapon/banhammer/admin
 	throwforce = 5
 	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
-	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	sharpness_flags = SHARP_TIP
 	attack_verb = list("pokes", "stabs", "impales","attacks","flicks","jabs")
 	var/stance = "high"
+	var/base_icon = "rapier"
 	var/cooldown = 0 //cooldown for swapping stances
+	var/high_stance_force =20
+	var/low_stance_force =13
 
 /obj/item/weapon/rapier/proc/set_low_stance()
-	desc = "It is currently held low. In this stance you can parry attacks. Allez !"
-	icon_state = "rapier_d"
-	item_state = "rapier_d"
+	desc = low_stance_desc
+	icon_state = icon_state + "_d" //icon var + "_d"
+	item_state = item_state + "_d"
 	stance = "low"
-	force = 13
+	force = low_stance_force
 
 /obj/item/weapon/rapier/proc/set_high_stance()
-	desc = "It is currently held high. In this stance you strike harder. En Garde!"
-	icon_state = "rapier"
-	item_state = "rapier"
+	desc = high_stance_desc
+	icon_state = base_icon
+	item_state = base_icon
 	stance = "high"
-	force = 20
+	force = high_stance_force
 
 /obj/item/weapon/rapier/IsShield()
 	if (stance == "low")
@@ -528,11 +533,112 @@ obj/item/weapon/banhammer/admin
 /obj/item/weapon/rapier/attack_self(mob/living/user as mob)
 	if(cooldown < world.time - 2)
 		swap_stance()
-		user.visible_message("<span class='warning'>You switch your stance with the [src] to [stance]!</span>")
+		user.visible_message("<span class='warning'>You switch your stance with /the [src] to [stance]!</span>")
 		cooldown = world.time
 	else
 		..()
 
 /obj/item/weapon/rapier/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with /the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
+
+
+
+/obj/item/weapon/rapier/cane-sword
+	var/swordmode_name = "cane-sword"
+	name = swordmode_name
+	high_stance_desc = "A walking stick revealing a hidden masterfully crafted myhtril blade. It is currently being held high. In this stance you strike harder. "
+	low_stance_desc = "A walking stick revealing a hidden masterfully crafted mythril blade. It is currently being held low. In this stance you can parry attacks."
+	desc = high_stance_desc
+
+
+	high_stance_force = 35
+	low_stance_force =20
+
+	base_icon = "cane-sword"
+	var/swordmode_attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
+	var/swordmode_sharpness = 1.2
+	var/swordmode_sharpness_flags = SHARP_TIP
+	var/swordmode_hitsound = "sound/weapons/bladeslice.ogg"
+
+	sharpness = swordmode_sharpness
+	sharpness_flags = SHARP_TIP
+	force = high_stance_force
+	stance = "high"
+
+
+/obj/item/weapon/rapier/cane-sword/verb/conceal()
+	name = "cane"
+	desc = "A cane used by a true gentlemen. Or a clown."
+	icon = 'icons/obj/weapons.dmi'
+	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
+	icon_state = "cane"
+	item_state = "stick"
+	hitsound = "sound/weapons/bladeslice.ogg"//change to cane hit
+	stance = 0//might break compiling //no stance, blade is concealed
+	sharpness = 0
+	sharpness_flags = !SHARP_TIP
+
+
+/obj/item/weapon/rapier/cane-sword/proc/unsheathe()
+	name = swordmode_name
+	hitsound = swordmode_hitsound
+	swordmode_sharpness_flags
+
+
+	//playsound shiiiiing
+	user.visible_message("<span class='warning'>You reveal the concealed blade from /the [src]!</span>")
+/*
+/obj/item/weapon/rapier/proc/set_low_stance()
+	desc = low_stance_desc
+	icon_state = icon_state + "_d" //icon var + "_d"
+	item_state = item_state + "_d"
+	stance = "low"
+	force = low_stance_force
+
+/obj/item/weapon/rapier/proc/set_high_stance()
+	desc = high_stance_desc
+	icon_state = base_icon
+	item_state = base_icon
+	stance = "high"
+	force = high_stance_force
+*/
+
+/obj/item/weapon/rapier/cane-sword/attack_self(mob/living/user as mob)
+	if (stance == 0)
+		unsheathe()
+
+	if(cooldown < world.time - 2)
+		swap_stance()
+		if (stance == 0)
+			unsheathe()
+		else
+			user.visible_message("<span class='warning'>You switch your stance with /the [src] to [stance]!</span>")
+		cooldown = world.time
+	else
+		..()
+
+
+
+
+
+
+/*
+/obj/item/weapon/cane
+	name = "cane"
+	desc = "A cane used by a true gentlemen. Or a clown."
+	icon = 'icons/obj/weapons.dmi'
+	origin_tech = Tc_MATERIALS + "=1"
+	icon_state = "cane"
+	item_state = "stick"
+	flags = FPRINT
+	siemens_coefficient = 1
+	force = 5.0
+	throwforce = 7.0
+	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_MISC
+	melt_temperature = MELTPOINT_STEEL
+	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
+
+*/
