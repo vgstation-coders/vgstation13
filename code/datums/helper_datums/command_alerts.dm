@@ -419,7 +419,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	..()
 
 /datum/command_alert/bloodstones_broken
-	name = "Occult Activity Ceased - Lock Down Lifed"
+	name = "Occult Activity Ceased - Lock Down Lifted"
 	alert_title = "Occult Gone"
 	force_report = 1
 
