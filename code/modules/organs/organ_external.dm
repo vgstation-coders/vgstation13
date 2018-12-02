@@ -78,7 +78,7 @@
 		probability = 1
 		damage = 3
 	if(prob(probability))
-		if(status & ORGAN_MALFUNCTIONING)
+		if(is_malfunctioning())
 			explode()
 		else
 			status |= ORGAN_MALFUNCTIONING
