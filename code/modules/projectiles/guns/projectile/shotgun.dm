@@ -164,3 +164,39 @@
 	if(..())
 		..()
 		attack_self(user)
+
+/obj/item/weapon/gun/projectile/shotgun/nt12
+	name = "\improper NT-12"
+	desc = "The NT-12 is a new development in shotgun technology, produced by a NanoTrasen subsidiary. It is a 12-gauge semi-automatic bullpup shotgun fed with box or drum magazines."
+	icon_state = "nt12"
+	item_state = "nt12"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	fire_sound = 'sound/weapons/shotgun.ogg'
+	origin_tech = Tc_COMBAT + "=6;" + Tc_MATERIALS + "=3"
+	ammo_type = "/obj/item/ammo_casing/shotgun"
+	mag_type = "/obj/item/ammo_storage/magazine/a12ga"
+	load_method = 2
+	gun_flags = EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/shotgun/nt12/New()
+	..()       // I was told to do sanity
+	update_icon()
+
+/obj/item/weapon/gun/projectile/shotgun/nt12/update_icon()
+	..()
+	var/MT = FALSE
+	if(stored_magazine)
+		if (stored_magazine.max_ammo > 4)
+			MT = "drum-20"
+		else
+			MT = "mag-4"
+		icon_state = "[initial(icon_state)][stored_magazine ? "-[MT]" : ""][chambered ? "" : "-e"]"
+		item_state = "[initial(icon_state)][stored_magazine ? "-[MT]" : ""][chambered ? "" : "-e"]"
+	else
+		icon_state = "nt12-e"
+		item_state = "nt12-e"
+
+	if(istype(loc, /mob))
+		var/mob/M = loc
+		M.update_inv_hands() // Fuck you sanity
+	return
