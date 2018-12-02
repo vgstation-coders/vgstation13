@@ -111,7 +111,8 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-
+			if(M.GetRole(initial(R.id)))
+				continue
 			var/datum/role/newRole = new R
 			message_admins("polling if [key_name(H)] wants to become a [newRole.name]")
 			if(!newRole)
