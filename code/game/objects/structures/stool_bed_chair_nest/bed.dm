@@ -146,13 +146,10 @@
 	if(glued && is_locking(lock_type))
 		glued = FALSE // So that unlock_atom called in /atom/movable/Destroy can succeed
 		var/mob/living/carbon/human/locked = get_locked(lock_type)[1]
-		if(istype(locked) && locked.op_stage.butt != 4) // does the target have an ass
-			var/obj/item/clothing/head/butt/ass = new(locked.loc)
-			ass.transfer_buttdentity(locked)
-			locked.op_stage.butt = 4 //No having two butts.
+		if(istype(locked) && locked.remove_butt())
 			playsound(src, 'sound/items/poster_ripped.ogg', 100, TRUE)
-			visible_message("<span class='warning'>[locked]'s butt is ripped from their body as \the [src] gets dismantled!</span>")
-			locked.apply_damage(40, BRUTE, LIMB_GROIN)
+			visible_message("<span class='danger'>[locked]'s butt is ripped from their body as \the [src] gets dismantled!</span>")
+			locked.apply_damage(10, BRUTE, LIMB_GROIN)
 			locked.apply_damage(10, BURN, LIMB_GROIN)
 			locked.audible_scream()
 	..()
