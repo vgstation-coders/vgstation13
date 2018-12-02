@@ -28,6 +28,8 @@
 		for(var/datum/organ/external/organ in M.organs)
 			if (!organ)
 				continue
+			if(!organ.is_organic())
+				continue
 			if((organ.status & ORGAN_DESTROYED) && !organ.amputated)
 				pain_level += 45
 			else if(organ.status & ORGAN_BROKEN || organ.open)
