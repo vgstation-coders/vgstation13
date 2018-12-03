@@ -83,10 +83,6 @@
 		else
 			status |= ORGAN_MALFUNCTIONING
 			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
-			spawn((probability*2) SECONDS)
-				if(is_existing())
-					to_chat(owner, "<span class = 'notice'>Your [display_name] seems to stop malfunctioning.</span>")
-					status &= ~ORGAN_MALFUNCTIONING
 	take_damage(damage, 0, 1, used_weapon = "EMP")
 
 /datum/organ/external/proc/get_health()
