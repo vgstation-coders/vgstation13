@@ -5,6 +5,11 @@
 	var/auto_target = TRUE //Whether we pick a target automatically on PostAppend()
 	name = ""
 
+/datum/objective/target/New(var/text,var/auto_target = TRUE, var/mob/user = null)
+	src.auto_target = auto_target
+	if(text)
+		explanation_text = text
+
 /datum/objective/target/PostAppend()
 	if(auto_target)
 		return find_target()
