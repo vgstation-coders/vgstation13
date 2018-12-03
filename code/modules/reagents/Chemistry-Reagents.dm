@@ -1043,6 +1043,16 @@
 	if(volume >= 5)
 		T.bless()
 
+/datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+
+	if(volume >= 5)
+		if(istype(M,/mob/living/simple_animal/construct))
+			var/mob/living/simple_animal/construct/C = M
+			C.purge = 3
+			C.adjustBruteLoss(5)
+			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
+
 /datum/reagent/serotrotium
 	name = "Serotrotium"
 	id = SEROTROTIUM

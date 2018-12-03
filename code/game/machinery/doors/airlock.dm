@@ -1289,7 +1289,7 @@ About the new airlock wires panel:
 	return ..()
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)
-	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)))
+	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE
 		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
 		return 0
 	return ..()

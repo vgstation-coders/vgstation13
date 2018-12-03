@@ -37,7 +37,7 @@
 	var/cancelling = 3//check to abort the ritual due to blood flow being interrupted
 	var/list/ingredients = list()//items that should be on the rune for it to work
 	var/list/ingredients_found = list()//items that should be on the rune for it to work
-
+	var/constructs_can_use = 1
 
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
@@ -488,6 +488,8 @@
 		var/obj/item/weapon/tome/AT = new (T)
 		anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "tome_spawn")
 		qdel(spell_holder)
+	else
+		qdel(src)
 
 /datum/rune_spell/summontome/cast_talisman()//The talisman simply turns into a tome.
 	var/turf/T = get_turf(spell_holder)
@@ -582,7 +584,7 @@
 			var/turf/T = get_turf(spell_holder)
 			AT = new (T)
 			anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
-			qdel(src)
+		qdel(src)
 
 /datum/rune_spell/conjuretalisman/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
@@ -904,6 +906,7 @@
 				cult.progress(CULT_ACT_II)
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
+			cult_risk(activator)//risk of exposing the cult early if too many conversions
 
 		switch (success)
 			if (1)
@@ -1509,6 +1512,8 @@ var/list/blind_victims = list()
 
 	if (blood_pay())
 		seer_ritual = new /obj/effect/cult_ritual/seer(R.loc,activator,src)
+	else
+		qdel(src)
 
 /datum/rune_spell/seer/cast_talisman()
 	var/mob/living/M = activator
@@ -1593,6 +1598,10 @@ var/list/blind_victims = list()
 	if (istype(R))
 		R.one_pulse()
 
+	if (!ishuman(activator) || !ismonkey(activator))
+		qdel(src)
+		return
+
 	anim(target = activator, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
@@ -1620,9 +1629,13 @@ var/list/blind_victims = list()
 		activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(activator), slot_wear_suit)
 	else
 		activator.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(activator), slot_head)
-		activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(activator), slot_wear_suit)
+		if (ismonkey(activator))
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(activator), slot_w_uniform)
+		else
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(activator), slot_wear_suit)
 
-	activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(activator), slot_shoes)
+	if (!ismonkey(activator))
+		activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(activator), slot_shoes)
 
 	//transferring backpack items
 	var/obj/item/weapon/storage/backpack/cultpack/new_pack = new (activator)
@@ -2195,9 +2208,10 @@ var/list/bloodcult_exitportals = list()
 	R.one_pulse()
 
 	cultist_key = activator.key
-	activator.sleeping = max(activator.sleeping,2)
-	activator.stat = UNCONSCIOUS
-	activator.resting = 1
+	if (ishuman(activator))
+		activator.sleeping = max(activator.sleeping,2)
+		activator.stat = UNCONSCIOUS
+		activator.resting = 1
 	activator.ajourn = spell_holder
 
 	var/list/antag_icons = list()
@@ -2212,7 +2226,7 @@ var/list/bloodcult_exitportals = list()
 	astral.icon = 'icons/mob/mob.dmi'
 	astral.icon_state = "ghost-narsie"
 	astral.overlays.len = 0
-	if (istype(activator, /mob/living/carbon/human))
+	if (ishuman(activator))
 		var/mob/living/carbon/human/H = activator
 		astral.overlays += H.obj_overlays[ID_LAYER]
 		astral.overlays += H.obj_overlays[EARS_LAYER]
