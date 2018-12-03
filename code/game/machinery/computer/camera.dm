@@ -169,13 +169,13 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/obj/machinery/camera/D
 
 	while (!found && (place != place_0))
-		if (place > net.len)
-			place = 1
 		D = net[place]
 		var/list/tempnetwork = (D.network & network)
 		if (tempnetwork.len && D.can_use()) // D.can_use() is false if the camera is EMP or whatever
 			found = TRUE
 		++place
+		if (place > net.len)
+			place = 1
 	set_camera(user, D)
 
 /obj/machinery/computer/security/proc/previous(var/mob/living/user)
