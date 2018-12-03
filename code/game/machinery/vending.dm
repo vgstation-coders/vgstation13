@@ -1526,6 +1526,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/weapon/storage/fancy/matchbox/strike_anywhere = 10,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 2,
+		/obj/item/clothing/mask/holopipe = 1,
 		)
 	prices = list(
 		/obj/item/weapon/storage/fancy/cigarettes = 20,
