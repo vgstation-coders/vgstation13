@@ -578,7 +578,7 @@
 			return
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
-			to_chat(usr, "<span class='warning'>\The [blade] was removed from \the [src]</span>")
+			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
 			return
 		if (blade.shade)
 			to_chat(usr, "<span class='warning'>Another shade was faster, and is currently possessing \the [blade].</span>")
