@@ -185,6 +185,7 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
+
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
@@ -214,6 +215,8 @@
 
 	//Set map label to correct map name
 	winset(src, "rpane.map", "text=\"[map.nameLong]\"")
+
+	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	// Notify scanners.
 	INVOKE_EVENT(on_login,list(

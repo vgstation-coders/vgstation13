@@ -495,6 +495,7 @@
 	R.types=DNA2_BUF_UI|DNA2_BUF_UE|DNA2_BUF_SE
 	R.languages = subject.languages.Copy()
 	R.times_cloned = subject.times_cloned
+	R.talkcount = subject.talkcount
 
 	//Add an implant if needed
 	var/obj/item/weapon/implant/health/imp = locate(/obj/item/weapon/implant/health, subject)

@@ -1501,3 +1501,52 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	tomob.ckey = frommob.ckey
 	qdel(frommob)
 	return 1
+
+/datum/admins/proc/CreditsPanel()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>Credits Panel</B></center><hr>"
+	dat += "<center><B>Episode Name:</B></center>"
+	dat += "Chosen Name: [end_credits.episode_name == "" ? "(Will Generate Automatically)" : end_credits.episode_name] <A href='?src=\ref[src];credits=setname'>(Set) </A>"
+	if(end_credits.episode_name != "" && !end_credits.generated)
+		dat += "<A href='?src=\ref[src];credits=resetname'>(Reset)</A>"
+	else if(end_credits.generated)
+		dat += "<A href='?src=\ref[src];credits=rerollname'>(Reroll!)</A>"
+	dat += "<br>"
+	if(!end_credits.generated)
+		dat += "<span style='color:red'>The round isn't over, so the name possibilities haven't been drafted yet.<br>You can manually write down a set name now, or come back when the round ends.</span>"
+	else
+		dat += "Drafted Name Possibilities: "
+		dat += "<div id='draftednames'>"
+		for(var/datum/episode_name/N in end_credits.episode_names)
+			dat += "[N.make_div(src)]<br>"
+		dat += "</div>"
+	dat += "<hr>"
+	dat += "<center><B>Disclaimers:</B></center>"
+	if(!end_credits.generated)
+		dat += "<span style='color:red'>The round isn't over, so the disclaimers haven't been generated yet.<br>You can add some now (they will show up at the top), or come back when the round ends.</span>"
+	dat += "<br>Generated Disclaimers: "
+	dat += "<div id='disclaimers'>"
+	dat += "<a href='?src=\ref[src];credits=newdisclaimer'>(Add New)</a></br>"
+	for(var/i = 1; i <= end_credits.disclaimers.len; i++)
+		var/disclaimer = end_credits.disclaimers[i]
+		if(i > 1)
+			dat += "<a href='?src=\ref[src];credits=disclaimerup;disclaimerindex=[i]'>&#8743;</a>"
+		else
+			dat += "&nbsp"
+		if(i < end_credits.disclaimers.len)
+			dat += "<a href='?src=\ref[src];credits=disclaimerdown;disclaimerindex=[i]'>&#8744;</a>"
+		else
+			dat += "&nbsp"
+		dat += "<a href='?src=\ref[src];credits=editdisclaimer;disclaimerindex=[i]'> (Edit) </a>"
+		if(findtext(disclaimer, "<img"))
+			dat += "[disclaimer]"
+		else
+			dat += "[html_encode(disclaimer)]"
+		dat += "<br>"
+	dat += "</div>"
+
+	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
+
+	usr << browse(dat, "window=creditspanel;size=600x800")

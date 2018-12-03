@@ -2,7 +2,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker
 	var/remaining_time = 0
-	var/const/restart_timeout = 600
+	var/const/restart_timeout = 60 SECONDS
 	var/current_state = GAME_STATE_PREGAME
 
 	var/hide_mode = 0
@@ -425,6 +425,7 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
+			end_credits.on_roundend()
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
@@ -465,14 +466,14 @@ var/datum/controller/gameticker/ticker
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
 				if(config.map_voting)
-					sleep(restart_timeout) //waiting for a mapvote to end
+					sleep(restart_timeout - end_credits.starting_delay) //waiting for a mapvote to end
 				if(!delay_end)
 					watchdog.signal_ready()
 				else
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 					delay_end = 2
 			else if(!delay_end)
-				sleep(restart_timeout)
+				sleep(restart_timeout - end_credits.starting_delay)
 				if(!delay_end)
 					CallHook("Reboot",list())
 					world.Reboot()

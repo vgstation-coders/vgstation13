@@ -21,6 +21,7 @@
 	var/mind=null
 	var/list/languages = list()
 	var/times_cloned=0
+	var/talkcount
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
