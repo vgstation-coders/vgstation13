@@ -106,7 +106,7 @@
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter"))
+	static_overlays.Add(list("static", "blank", "letter", "cult"))
 	var/image/static_overlay = image(icon('icons/effects/effects.dmi', "static"), loc = src)
 	static_overlay.override = 1
 	static_overlays["static"] = static_overlay
@@ -118,6 +118,10 @@
 	static_overlay = getLetterImage(src, "H", 1)
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
+
+	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	if(new_species_name)
