@@ -1598,7 +1598,7 @@ var/list/blind_victims = list()
 	if (istype(R))
 		R.one_pulse()
 
-	if (!ishuman(activator) || !ismonkey(activator))
+	if (!ishuman(activator) && !ismonkey(activator))
 		qdel(src)
 		return
 
