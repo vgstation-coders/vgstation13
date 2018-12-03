@@ -21,7 +21,7 @@ var/list/forbidden_varedit_object_types = list(
 	if(!C || !C.holder)
 		return
 
-	if(!C.can_edit_var(edited_variable))
+	if(!C.can_edit_var(edited_variable, edited_datum?.type))
 		return
 
 	//Special case for "appearance", because appearance values can't be stored anywhere.
@@ -339,10 +339,15 @@ var/list/forbidden_varedit_object_types = list(
 
 	return M
 
-/client/proc/can_edit_var(var/tocheck)
+/client/proc/can_edit_var(var/tocheck, var/type_to_check)
 	if(tocheck in nevervars)
 		to_chat(usr, "Editing this variable is forbidden.")
 		return FALSE
+
+	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
+		to_chat(usr, "Editing this variable is forbidden.")
+		return FALSE
+
 	if(tocheck == "bounds")
 		to_chat(usr, "Editing this variable is forbidden. Edit bound_width or bound_height instead.")
 		return FALSE
