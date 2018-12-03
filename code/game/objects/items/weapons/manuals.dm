@@ -532,6 +532,13 @@
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
 
+/obj/item/weapon/book/manual/ship_building
+	name = "Dummies guide to Interstellar Flight"
+	title = "Dummies guide to Interstellar Flight"
+	icon_state = "bookDummy"
+	author = "David Alcubierre"
+	wiki_page = "Ship_Building"
+
 /obj/item/weapon/book/manual/mailing_guide
 	name = "Guide to disposal mailing system"
 	icon_state ="book"     // a proper icon would be nice

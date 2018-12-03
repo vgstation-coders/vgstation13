@@ -666,7 +666,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/russobluecamohat,
 					/obj/item/clothing/under/russobluecamooutfit,
 					/obj/item/clothing/head/russofurhat,
-					/obj/item/clothing/suit/russofurcoat)
+					/obj/item/clothing/suit/russofurcoat,
+					/obj/item/weapon/disk/shuttle_coords/disk_jockey)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "russian clothing crate"
@@ -1523,6 +1524,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "radiation suit crate"
 	group = "Engineering"
 
+/datum/supply_packs/engine_parts
+	name = "DIY Shuttle Engine kit"
+	contains = list(/obj/structure/shuttle/engine/propulsion/DIY,
+					/obj/structure/shuttle/engine/heater/DIY)
+	cost = 650
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "\improper Shuttle engines crate"
+	group = "Engineering"
+
+/datum/supply_packs/shuttle_permit
+	name = "DIY Shuttle permit"
+	contains = list(/obj/item/shuttle_license,
+					/obj/item/weapon/book/manual/ship_building)
+
+	cost = 3000
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "secure shuttle permit crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
@@ -2209,3 +2229,5 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Mining stack of packs"
 	group = "Vending Machine packs"
+
+
