@@ -26,7 +26,7 @@ var/global/datum/credits/end_credits = new
 	generated = TRUE
 
 /datum/credits/proc/rollem()
-	world << sound('sound/music/Frolic_Luciano_Michelini.ogg')
+	world << sound('sound/music/Frolic_Luciano_Michelini_Short.ogg')
 
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
 	if(episode_name == "") //admin might've already set one
