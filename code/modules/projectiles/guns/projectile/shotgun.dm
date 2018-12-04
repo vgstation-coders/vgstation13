@@ -1,3 +1,17 @@
+/obj/item/weapon/gun/projectile/shotgun
+	reloadsound = 'sound/weapons/shotgun_shell_insert.ogg'
+	casingsound = 'sound/weapons/shotgun_shell_bounce.ogg'
+	w_class = W_CLASS_LARGE
+	force = 10
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BACK
+	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
+
+/obj/item/weapon/gun/projectile/shotgun/isHandgun()
+	return FALSE
+
 /obj/item/weapon/gun/projectile/shotgun/pump
 	name = "shotgun"
 	desc = "Useful for sweeping alleys."
@@ -6,23 +20,12 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 4
-	w_class = W_CLASS_LARGE
-	force = 10
-	flags = FPRINT
-	siemens_coefficient = 1
-	slot_flags = SLOT_BACK
-	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1) //flare shells are still shells
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
-
-
 	gun_flags = 0
-
-/obj/item/weapon/gun/projectile/shotgun/isHandgun()
-	return FALSE
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)
@@ -49,6 +52,7 @@
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
+		playsound(current_shell, casingsound, 25, 0.2, 1)
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null
@@ -77,14 +81,8 @@
 	item_state = "shotgun"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 2
-	w_class = W_CLASS_LARGE
-	force = 10
-	flags = FPRINT
-	siemens_coefficient = 1
-	slot_flags = SLOT_BACK
-	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
-	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+	fire_sound = 'sound/weapons/shotgun_small.ogg'
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
@@ -107,11 +105,13 @@
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
+	playsound(src, 'sound/weapons/shotgun_open.ogg', 25, 0)
 	var/i = 0
 	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
 		loaded_shell.forceMove(get_turf(src))
 		loaded_shell.pixel_x = min(-3 + (i*4),15) * PIXEL_MULTIPLIER
 		loaded_shell.pixel_y = min( 3 - (i*4),15) * PIXEL_MULTIPLIER
+		playsound(loaded_shell, casingsound, 25, 0.2, 1)
 		if(loaded_shell in loaded)
 			loaded -= loaded_shell
 		i++
@@ -171,32 +171,16 @@
 	icon_state = "nt12"
 	item_state = "nt12"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/weapons/shotgun.ogg'
+	fire_sound = 'sound/weapons/shotgun_nt12.ogg'
 	origin_tech = Tc_COMBAT + "=6;" + Tc_MATERIALS + "=3"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 	mag_type = "/obj/item/ammo_storage/magazine/a12ga"
+	max_shells = 4
 	load_method = 2
 	gun_flags = EMPTYCASINGS
 
-/obj/item/weapon/gun/projectile/shotgun/nt12/New()
-	..()       // I was told to do sanity
-	update_icon()
-
 /obj/item/weapon/gun/projectile/shotgun/nt12/update_icon()
 	..()
-	var/MT = FALSE
-	if(stored_magazine)
-		if (stored_magazine.max_ammo > 4)
-			MT = "drum-20"
-		else
-			MT = "mag-4"
-		icon_state = "[initial(icon_state)][stored_magazine ? "-[MT]" : ""][chambered ? "" : "-e"]"
-		item_state = "[initial(icon_state)][stored_magazine ? "-[MT]" : ""][chambered ? "" : "-e"]"
-	else
-		icon_state = "nt12-e"
-		item_state = "nt12-e"
-
-	if(istype(loc, /mob))
-		var/mob/M = loc
-		M.update_inv_hands() // Fuck you sanity
-	return
+	var/MT = stored_magazine ? "[stored_magazine.max_ammo > 4 ? "-drum-20" : "-mag-4"]" : ""
+	icon_state = "[initial(icon_state)]["[MT]"][stored_magazine ? "" : "-m"][chambered ? "" : "-e"]"
+	item_state = icon_state

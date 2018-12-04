@@ -22,6 +22,8 @@
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
+	var/reloadsound = 'sound/items/Deconstruct.ogg'
+	var/casingsound = null
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
@@ -135,6 +137,7 @@
 		loaded -= AC //Remove casing from loaded list.
 	if(gun_flags &EMPTYCASINGS)
 		AC.forceMove(get_turf(src)) //Eject casing onto ground.
+		playsound(AC, casingsound, 25, 0.2, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.forceMove(src) //Set projectile loc to gun.
@@ -189,12 +192,12 @@
 				if(user.drop_item(AC, src))
 					chambered = AC
 					num_loaded++
-					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, reloadsound, 25, 1)
 			else if(getAmmo() < max_shells && load_method != MAGAZINE)
 				if(user.drop_item(AC, src))
 					loaded += AC
 					num_loaded++
-					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, reloadsound, 25, 1)
 
 	if(num_loaded)
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")
