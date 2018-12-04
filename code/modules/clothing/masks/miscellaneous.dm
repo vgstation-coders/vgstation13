@@ -242,18 +242,19 @@ obj/item/clothing/mask/joy
 			icon_state = "holopipe_on"
 			item_state = "holopipe_on"
 			to_chat(user, "You activate the holo pipe.")
-			user.regenerate_icons() //update sprites if toggled whilst the holo pipe is being worn
+			user.update_inv_wear_mask()
 		else
 			icon_state = "holopipe_off"
 			item_state = "holopipe_off"
 			to_chat(user, "You deactivate the holo pipe.")
-			user.regenerate_icons()
+			user.update_inv_wear_mask()
 
-/obj/item/clothing/mask/holopipe/attack_self(var/mob/user as mob)
+/obj/item/clothing/mask/holopipe/attack_self(var/mob/user)
 	activate(user)
 
 /obj/item/clothing/mask/holopipe/verb/activate_pipe()
 	set category = "Object"
 	set name = "Toggle pipe"
 	set src in usr
-	activate(usr)
+	if(!usr.incapacitated())
+		activate(usr)
