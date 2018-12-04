@@ -62,7 +62,7 @@ DEBUG
 			return
 
 		//appearance bans
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = 'APPEARANCE_PERMABAN' AND isnull(unbanned)")
+		var/datum/DBQuery/query = SSdatabase.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = 'APPEARANCE_PERMABAN' AND isnull(unbanned)")
 		query.Execute()
 
 		while(query.NextRow())
@@ -100,12 +100,12 @@ DEBUG
 /*
 proc/DB_ban_isappearancebanned(var/playerckey)
 	establish_db_connection()
-	if(!dbcon.IsConnected())
+	if(!SSdatabase.IsConnected())
 		return
 
 	var/sqlplayerckey = sql_sanitize_text(ckey(playerckey))
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_ban WHERE CKEY = '[sqlplayerckey]' AND ((bantype = 'APPEARANCE_PERMABAN') OR (bantype = 'APPEARANCE_TEMPBAN' AND expiration_time > Now())) AND unbanned != 1")
+	var/datum/DBQuery/query = SSdatabase.NewQuery("SELECT id FROM erro_ban WHERE CKEY = '[sqlplayerckey]' AND ((bantype = 'APPEARANCE_PERMABAN') OR (bantype = 'APPEARANCE_TEMPBAN' AND expiration_time > Now())) AND unbanned != 1")
 	query.Execute()
 	while(query.NextRow())
 		return 1

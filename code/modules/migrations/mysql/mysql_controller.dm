@@ -2,19 +2,19 @@ var/global/datum/migration_controller/mysql/migration_controller_mysql = null
 
 /datum/migration_controller/mysql
 	id="mysql"
-	var/DBConnection/db
+	var/datum/subsystem/database/db
 
 /datum/migration_controller/mysql/setup()
-	if(!dbcon || !istype(dbcon) || !dbcon.IsConnected())
-		warning("Something wrong with dbcon.")
+	if(!SSdatabase || !istype(SSdatabase) || !SSdatabase.IsConnected())
+		warning("Something wrong with SSdatabase.")
 		return FALSE
-	var/DBQuery/Q = dbcon.NewQuery()
+	var/datum/DBQuery/Q = SSdatabase.NewQuery()
 	if(!Q)
-		warning("Something wrong with dbcon.NewQuery()")
+		warning("Something wrong with SSdatabase.NewQuery()")
 		return FALSE
 	Q.Close()
 	//testing("MySQL is okay")
-	db = dbcon
+	db = SSdatabase
 	return TRUE
 
 /datum/migration_controller/mysql/createMigrationTable()
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	execute(tableSQL)
 
 /datum/migration_controller/mysql/query(var/sql)
-	var/DBQuery/query = execute(sql)
+	var/datum/DBQuery/query = execute(sql)
 
 	var/list/rows=list()
 	while(query.NextRow())
@@ -36,14 +36,14 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	return rows
 
 /datum/migration_controller/mysql/hasResult(var/sql)
-	var/DBQuery/query = execute(sql)
+	var/datum/DBQuery/query = execute(sql)
 
 	if (query.NextRow())
 		return TRUE
 	return FALSE
 
 /datum/migration_controller/mysql/execute(var/sql)
-	var/DBQuery/query = db.NewQuery(sql)
+	var/datum/DBQuery/query = db.NewQuery(sql)
 	query.Execute()
 	return query
 

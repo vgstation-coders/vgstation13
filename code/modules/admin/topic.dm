@@ -4895,7 +4895,7 @@
 
 
 	// ----- Religion and stuff
-	if (href_list["religions"])
+	else if (href_list["religions"])
 		#define MAX_MSG_LENGTH 200
 		#define NUMBER_MAX_REL 4
 		if (href_list["display"])
@@ -5057,6 +5057,18 @@
 				message_admins(msg)
 				updateRelWindow()
 
+	else if(href_list["slowquery"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/answer = href_list["slowquery"]
+		if(answer == "yes")
+			log_query_debug("[usr.key] | Reported a server hang")
+			if(alert(usr, "Did you just press any admin buttons?", "Query server hang report", "Yes", "No") == "Yes")
+				var/response = input(usr,"What were you just doing?","Query server hang report") as null|text
+				if(response)
+					log_query_debug("[usr.key] | [response]")
+		else if(answer == "no")
+			log_query_debug("[usr.key] | Reported no server hang")
 /datum/admins/proc/updateRelWindow()
 	var/text = list()
 	text += "<h3>Religions in game</h3>"

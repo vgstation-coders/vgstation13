@@ -131,19 +131,19 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 	if(recurse==5)
 		return "\[BROKEN\]";
 	recurse++
-	var/DBQuery/query = dbcon.NewQuery("DELETE FROM admin_sessions WHERE expires < Now()")
+	var/datum/DBQuery/query = SSdatabase.NewQuery("DELETE FROM admin_sessions WHERE expires < Now()")
 	query.Execute()
 
-	query = dbcon.NewQuery("SELECT sessID FROM admin_sessions WHERE ckey = '[owner.ckey]' AND expires > Now()")
+	query = SSdatabase.NewQuery("SELECT sessID FROM admin_sessions WHERE ckey = '[owner.ckey]' AND expires > Now()")
 	query.Execute()
 
 	sessKey=0
 	while(query.NextRow())
 		sessKey = query.item[1]
-		query=dbcon.NewQuery("UPDATE admin_sessions SET expires=DATE_ADD(NOW(), INTERVAL 24 HOUR), IP='[owner.address]' WHERE ckey = '[owner.ckey]")
+		query=SSdatabase.NewQuery("UPDATE admin_sessions SET expires=DATE_ADD(NOW(), INTERVAL 24 HOUR), IP='[owner.address]' WHERE ckey = '[owner.ckey]")
 		query.Execute()
 		return sessKey
 
-	query=dbcon.NewQuery("INSERT INTO admin_sessions (sessID,ckey,expires, IP) VALUES (UUID(), '[owner.ckey]', DATE_ADD(NOW(), INTERVAL 24 HOUR), '[owner.address]')")
+	query=SSdatabase.NewQuery("INSERT INTO admin_sessions (sessID,ckey,expires, IP) VALUES (UUID(), '[owner.ckey]', DATE_ADD(NOW(), INTERVAL 24 HOUR), '[owner.address]')")
 	query.Execute()
 	return checkSessionKey(recurse)

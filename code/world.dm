@@ -66,6 +66,14 @@ var/savefile/panicfile
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
+
+	if(!setup_database_connection())
+		world.log << "Your server failed to establish a connection with the feedback database."
+	else
+		world.log << "Feedback database connection established."
+	migration_controller_mysql = new
+	migration_controller_sqlite = new ("players2.sqlite", "players2_empty.sqlite")
+
 	load_mode()
 	load_motd()
 	load_admins()
@@ -107,18 +115,6 @@ var/savefile/panicfile
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
-
-	if(!setup_database_connection())
-		world.log << "Your server failed to establish a connection with the feedback database."
-	else
-		world.log << "Feedback database connection established."
-	migration_controller_mysql = new
-	migration_controller_sqlite = new ("players2.sqlite", "players2_empty.sqlite")
-
-	if(!setup_old_database_connection())
-		world.log << "Your server failed to establish a connection with the tgstation database."
-	else
-		world.log << "Tgstation database connection established."
 
 	plmaster = new /obj/effect/overlay()
 	plmaster.icon = 'icons/effects/tile_effects.dmi'
@@ -408,14 +404,12 @@ var/savefile/panicfile
 var/failed_db_connections = 0
 var/failed_old_db_connections = 0
 
-proc/setup_database_connection()
-
-
+/proc/setup_database_connection()
 	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
 		return 0
 
-	if(!dbcon)
-		dbcon = new()
+	if(!SSdatabase)
+		SSdatabase = new()
 
 	var/user = sqlfdbklogin
 	var/pass = sqlfdbkpass
@@ -423,68 +417,31 @@ proc/setup_database_connection()
 	var/address = sqladdress
 	var/port = sqlport
 
-	dbcon.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
-	. = dbcon.IsConnected()
+	SSdatabase.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
+	. = SSdatabase.IsConnected()
 	if ( . )
 		failed_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
 	else
-		world.log << "Database Error: [dbcon.ErrorMsg()]"
+		world.log << "Database Error: [SSdatabase.ErrorMsg()]"
 		failed_db_connections++		//If it failed, increase the failed connections counter.
 
 	return .
 
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
-proc/establish_db_connection()
+//This proc ensures that the connection to the feedback database (global variable SSdatabase) is established
+/proc/establish_db_connection()
 	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
 		return 0
+	if(!SSdatabase || !SSdatabase.IsConnected())
+		. = setup_database_connection()
+		if(!.)
+			return
 
-	var/DBQuery/q
-	if(dbcon)
-		q = dbcon.NewQuery("show global variables like 'wait_timeout'")
+	var/datum/DBQuery/q
+	if(SSdatabase)
+		q = SSdatabase.NewQuery("show global variables like 'wait_timeout'")
 		q.Execute()
 		if(q && q.ErrorMsg())
-			dbcon.Disconnect()
-	if(!dbcon || !dbcon.IsConnected())
-		return setup_database_connection()
-	else
-		return 1
-
-
-
-
-//These two procs are for the old database, while it's being phased out. See the tgstation.sql file in the SQL folder for more information.
-proc/setup_old_database_connection()
-
-
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
-		return 0
-
-	if(!dbcon_old)
-		dbcon_old = new()
-
-	var/user = sqllogin
-	var/pass = sqlpass
-	var/db = sqldb
-	var/address = sqladdress
-	var/port = sqlport
-
-	dbcon_old.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
-	. = dbcon_old.IsConnected()
-	if ( . )
-		failed_old_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
-	else
-		failed_old_db_connections++		//If it failed, increase the failed connections counter.
-		world.log << dbcon_old.ErrorMsg()
-
-	return .
-
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
-proc/establish_old_db_connection()
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)
-		return 0
-
-	if(!dbcon_old || !dbcon_old.IsConnected())
-		return setup_old_database_connection()
+			SSdatabase.Disconnect()
 	else
 		return 1
 

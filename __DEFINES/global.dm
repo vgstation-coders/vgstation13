@@ -185,7 +185,10 @@ var/sqlfdbkpass = ""
 
 var/sqllogging = 0 // Should we log deaths, population stats, etc?
 
-
+var/async_query_timeout = 10
+var/blocking_query_timeout = 5
+var/bsql_thread_limit = 50
+var/bsql_debug = FALSE
 
 	// Forum MySQL configuration (for use with forum account/key authentication)
 	// These are all default values that will load should the forumdbconfig.txt
@@ -203,13 +206,6 @@ var/forum_authenticated_group = "10"
 	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
 var/fileaccess_timer = 0
 var/custom_event_msg = null
-
-//Database connections
-//A connection is established on world creation. Ideally, the connection dies when the server restarts (After feedback logging.).
-var/DBConnection/dbcon	//Feedback database (New database)
-var/DBConnection/dbcon_old	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
-
-#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
 
 //Recall time limit:  2 hours
 var/recall_time_limit = 72000

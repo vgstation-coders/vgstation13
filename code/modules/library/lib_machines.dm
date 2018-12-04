@@ -91,7 +91,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE id=[sqlid]")
+	var/datum/DBQuery/query = SSdatabase.NewQuery("DELETE FROM library WHERE id=[sqlid]")
 	query.Execute()
 
 /datum/library_catalog/proc/getBookByID(var/id as text)
@@ -101,7 +101,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/DBQuery/query = dbcon_old.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
+	var/datum/DBQuery/query = SSdatabase.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
 	query.Execute()
 
 	var/list/results=list()

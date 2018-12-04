@@ -1,3 +1,14 @@
+#define MIDNIGHT_ROLLOVER 864000 //number of deciseconds in a day
+#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
+#define MIDNIGHT_ROLLOVER_CHECK (global.rollovercheck_last_timeofday != world.timeofday ? update_midnight_rollover() : global.midnight_rollovers)
+
+var/midnight_rollovers = 0
+var/rollovercheck_last_timeofday = 0
+/proc/update_midnight_rollover()
+	if (world.timeofday < global.rollovercheck_last_timeofday) //TIME IS GOING BACKWARDS!
+		return global.midnight_rollovers++
+	return global.midnight_rollovers
+
 // So you can be all 10 SECONDS
 #define SECONDS * 10
 #define MINUTES * 600

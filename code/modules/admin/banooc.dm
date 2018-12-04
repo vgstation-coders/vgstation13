@@ -17,7 +17,7 @@ var/oocban_keylist[0]
 		return
 
 	//OOC permabans
-	var/DBQuery/query = dbcon.NewQuery("SELECT ckey FROM erro_ban WHERE (bantype = 'OOC_PERMABAN'  OR (bantype = 'OOC_TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
+	var/datum/DBQuery/query = SSdatabase.NewQuery("SELECT ckey FROM erro_ban WHERE (bantype = 'OOC_PERMABAN'  OR (bantype = 'OOC_TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
 	query.Execute()
 
 	while(query.NextRow())

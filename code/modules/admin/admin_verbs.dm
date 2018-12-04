@@ -867,7 +867,7 @@ var/list/admin_verbs_mod = list(
 		to_chat(src, "<span class='notice'>Legacy admins is not supported yet</span>")
 		return
 	else
-		if(!dbcon.IsConnected())
+		if(!SSdatabase.IsConnected())
 			message_admins("Warning, mysql database is not connected.")
 			to_chat(src, "Warning, mysql database is not connected.")
 			return
@@ -876,7 +876,7 @@ var/list/admin_verbs_mod = list(
 			verbs -= /client/proc/readmin
 			return
 		var/sql_ckey = sanitizeSQL(ckey(ckey))
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
+		var/datum/DBQuery/query = SSdatabase.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
 		query.Execute()
 		while(query.NextRow())
 			var/dckey = query.item[1]

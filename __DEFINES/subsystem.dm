@@ -6,6 +6,7 @@
 #define SS_INIT_SUPPLY_SHUTTLE     25
 #define SS_INIT_SUN                24
 #define SS_INIT_GARBAGE            23
+#define SS_INIT_DATABSE			   22.5
 #define SS_INIT_JOB                22
 #define SS_INIT_PLANT              21.5
 #define SS_INIT_HUMANS             21
@@ -63,5 +64,6 @@
 #define SS_DISPLAY_PLANT          -25
 #define SS_DISPLAY_POWER          -20
 #define SS_DISPLAY_TICKER         -10
+#define SS_DISPLAY_DATABASE		  -5
 #define SS_DISPLAY_UNSPECIFIED     0
 #define SS_DISPLAY_SUN             10

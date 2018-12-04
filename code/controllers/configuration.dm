@@ -681,6 +681,14 @@
 				sqlfdbkpass = value
 			if ("enable_stat_tracking")
 				sqllogging = 1
+			if ("async_query_timeout")
+				async_query_timeout = value
+			if ("blocking_query_timeout")
+				blocking_query_timeout = value
+			if ("bsql_thread_limit")
+				bsql_thread_limit = value
+			if ("bsql_debug")
+				bsql_debug = TRUE
 			else
 				diary << "Unknown setting in configuration: '[name]'"
 

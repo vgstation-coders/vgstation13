@@ -20,8 +20,7 @@
 				<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
 				<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 		if(1)
-			establish_old_db_connection()
-			if(!dbcon_old.IsConnected())
+			if(!SSdatabase.IsConnected())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font><br />"
 			else if(num_results == 0)
 				dat += "<em>No results found.</em>"
