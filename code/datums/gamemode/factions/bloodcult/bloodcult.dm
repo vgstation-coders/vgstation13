@@ -526,7 +526,7 @@ var/veil_thickness = CULT_PROLOGUE
 			var/mob/living/carbon/human/H = user
 			blood = new()
 			blood.data["blood_colour"] = H.hand_blood_color
-			if (H.blood_DNA.len)
+			if (H.blood_DNA && H.blood_DNA.len)
 				var/blood_DNA = pick(H.blood_DNA)
 				blood.data["blood_DNA"] = blood_DNA
 				blood.data["blood_type"] = H.blood_DNA[blood_DNA]
