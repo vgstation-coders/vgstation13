@@ -177,6 +177,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a12ga"
 	max_shells = 4
 	load_method = 2
+	slot_flags = 0
 	gun_flags = EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/shotgun/nt12/update_icon()
