@@ -1021,3 +1021,17 @@
 	H.h_style = "Big Afro"
 	H.f_style = "Full Beard"
 	H.update_hair()
+
+/datum/religion/clean
+	name = "Cleanliness"
+	deity_name = "Mr. Clean"
+	bible_name = "Cleanliness - Next to Godliness"
+	male_adept = "Janitor"
+	female_adept = "Janitor"
+	keys = list("clean","cleaning","Mr. Clean","janitor")
+
+/datum/religion/clean/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/mop)
+	H.h_style = "Bald"
+	H.f_style = "Shaved"
+	H.update_hair()

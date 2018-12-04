@@ -158,6 +158,8 @@
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
+#define isglasssheet(A) istype(A, /obj/item/stack/sheet/glass)
+
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))

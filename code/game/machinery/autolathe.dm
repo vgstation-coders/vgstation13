@@ -127,6 +127,7 @@
 		new /obj/item/stack/rods(), \
 		new /obj/item/weapon/storage/box/ornaments(), \
 		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
+		new /obj/item/weapon/disk/shuttle_coords/station_auxillary(),\
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/gun/projectile/flamethrower/full(), \

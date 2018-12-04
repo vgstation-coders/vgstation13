@@ -9,10 +9,6 @@
 /mob/living/silicon/robot/mommi/proc/can_see_static()
 	return (keeper && !emagged && !syndicate && (config && config.mommi_static))
 
-/mob/living/silicon/robot/mommi/generate_static_overlay()
-	if(!islist(static_overlays))
-		static_overlays = list()
-
 /mob/living/silicon/robot/mommi/proc/add_static_overlays()
 	remove_static_overlays()
 	for(var/mob/living/living in mob_list)

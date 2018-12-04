@@ -8,6 +8,7 @@
 	penetration = 5 //bullets can now by default move through up to 5 windows, or 2 reinforced windows, or 1 plasma window. (reinforced plasma windows still have enough dampening to completely block them)
 	flag = "bullet"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	projectile_speed = 0.5
 	var/embed = 1
 	var/embed_message = TRUE
 

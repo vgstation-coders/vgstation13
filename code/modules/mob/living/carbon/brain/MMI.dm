@@ -151,6 +151,10 @@ obj/item/device/mmi/Destroy()
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
 
+		if (isrev(brainmob))
+			var/datum/role/revolutionary/R = brainmob.mind.GetRole(ROLE_REV)
+			R.Drop(TRUE)
+
 		locked = 1
 
 		feedback_inc("cyborg_mmis_filled",1)

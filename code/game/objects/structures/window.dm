@@ -579,7 +579,6 @@ var/list/one_way_windows
 
 	update_nearby_tiles()
 	..()
-	dir = ini_dir
 	update_nearby_tiles()
 
 //This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_icons().
@@ -634,6 +633,10 @@ var/list/one_way_windows
 /obj/structure/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/reinforced/clockwork, BRASS_WINDOW_GLOW)
 
+/obj/structure/window/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -646,7 +649,7 @@ var/list/one_way_windows
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
-	d_state = WINDOWLOOSE
+	d_state = 0
 
 /obj/structure/window/plasma
 
@@ -661,6 +664,10 @@ var/list/one_way_windows
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
 
+/obj/structure/window/plasma/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/reinforced/plasma
 
 	name = "reinforced plasma window"
@@ -670,6 +677,10 @@ var/list/one_way_windows
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+
+/obj/structure/window/reinforced/plasma/loose
+	anchored = 0
+	d_state = 0
 
 
 // Used on Packed ; smartglassified roundstart
@@ -712,6 +723,10 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/clockwork/clockworkify()
 	return
 
+/obj/structure/window/reinforced/clockwork/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
@@ -719,6 +734,7 @@ var/list/one_way_windows
 		"d_state")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

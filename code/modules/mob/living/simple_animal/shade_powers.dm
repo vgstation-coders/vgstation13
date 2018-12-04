@@ -250,12 +250,13 @@
 /client/MouseDrop(src_object,over_object,src_location,over_location,src_control,over_control,params)
 	if(!mob || !isshade(mob) || !istype(mob.loc,/obj/item/weapon/melee/soulblade))
 		return ..()
+	var/obj/item/weapon/melee/soulblade/SB = mob.loc
 	if(!isturf(src_location) || !isturf(over_location))
 		return ..()
 	if(src_location == over_location)
 		return ..()
 	var/spell/soulblade/blade_perforate/BP = locate() in mob.spell_list
-	if (BP)
+	if (BP && isturf(SB.loc))
 		BP.perform(mob,0,list(src_location,over_location))
 
 

@@ -143,6 +143,17 @@
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
+	if(isglasssheet(W))
+		var/obj/item/stack/sheet/glass/G = W
+		for(var/datum/stack_recipe/SR in G.recipes)
+			if(ispath(SR.result_type, /obj/structure/window))
+				var/obj/structure/window/S = SR.build(user,G)
+				if(S)
+					S.forceMove(get_turf(src))
+					S.dir = get_dir(src, user)
+					S.ini_dir = S.dir
+					return
+		return
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
@@ -178,8 +189,6 @@
 	health -= dam
 	healthcheck(hitsound = 1)
 	..()
-	return
-
 //Shock user with probability prb (if all connections & power are working)
 //Returns 1 if shocked, 0 otherwise
 

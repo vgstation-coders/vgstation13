@@ -99,6 +99,7 @@ client/proc/one_click_antag()
 				recruit_count++
 
 		FF.OnPostSetup()
+		FF.forgeObjectives()
 
 		return recruit_count
 
@@ -110,7 +111,8 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-
+			if(M.GetRole(initial(R.id)))
+				continue
 			var/datum/role/newRole = new R
 			message_admins("polling if [key_name(H)] wants to become a [newRole.name]")
 			if(!newRole)
@@ -120,6 +122,7 @@ client/proc/one_click_antag()
 				newRole.Drop()
 				continue
 			newRole.OnPostSetup()
+			newRole.ForgeObjectives()
 			newRole.Greet(GREET_LATEJOIN)
 			message_admins("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++

@@ -225,3 +225,36 @@ obj/item/clothing/mask/joy
 
 /obj/item/clothing/mask/goldface/update_icon()
 	icon_state = pick("goldenmask","goldenmask_anger","goldenmask_joy","goldenmask_despair")
+
+
+/obj/item/clothing/mask/holopipe
+	name = "holo pipe"
+	desc = "It is not a pipe."
+	icon_state = "holopipe_off"
+	item_state = "holopipe_off"
+	var/activated = 0
+
+
+/obj/item/clothing/mask/holopipe/proc/activate(var/mob/user as mob)
+	if(!user.incapacitated())
+		src.activated = !src.activated
+		if(src.activated)
+			icon_state = "holopipe_on"
+			item_state = "holopipe_on"
+			to_chat(user, "You activate the holo pipe.")
+			user.update_inv_wear_mask()
+		else
+			icon_state = "holopipe_off"
+			item_state = "holopipe_off"
+			to_chat(user, "You deactivate the holo pipe.")
+			user.update_inv_wear_mask()
+
+/obj/item/clothing/mask/holopipe/attack_self(var/mob/user)
+	activate(user)
+
+/obj/item/clothing/mask/holopipe/verb/activate_pipe()
+	set category = "Object"
+	set name = "Toggle pipe"
+	set src in usr
+	if(!usr.incapacitated())
+		activate(usr)
