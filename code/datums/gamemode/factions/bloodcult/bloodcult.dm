@@ -72,8 +72,12 @@ var/veil_thickness = CULT_PROLOGUE
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
 
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		B.holomap_datum = new /datum/station_holomap/cult()
-		B.holomap_datum.initialize_holomap(B.loc)
+		if (B.loc)
+			B.holomap_datum = new /datum/station_holomap/cult()
+			B.holomap_datum.initialize_holomap(B.loc)
+		else
+			qdel(B)
+			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
 
 /proc/cult_risk(var/mob/M)//too many conversions/soul-stoning might bring the cult to the attention of Nanotrasen prematurely
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
