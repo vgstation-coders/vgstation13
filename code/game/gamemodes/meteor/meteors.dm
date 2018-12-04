@@ -110,7 +110,7 @@
 	while(!istype(pickedstart, /turf/space))
 
 	if(meteorpath)
-		new meteorpath(pickedstart, pickedgoal)
+		return new meteorpath(pickedstart, pickedgoal)
 	else
 		var/list/possible_meteors = list()
 		if(!max_meteor_size || max_meteor_size >= 1) //Small waves
@@ -123,7 +123,7 @@
 			possible_meteors[/obj/item/projectile/meteor/big] = 10
 			possible_meteors[/obj/item/projectile/meteor/big/cluster] = 1
 		var/chosen = pick(possible_meteors)
-		new chosen(pickedstart, pickedgoal)
+		return new chosen(pickedstart, pickedgoal)
 
 /*
  * Below are all meteor types
@@ -410,20 +410,8 @@ var/list/blob_candidates = list()
 	icon_state = "meteorcore"
 	var/client/blob_candidate = null
 
-/obj/item/projectile/meteor/blob/core/New()
-	..()
-	var/list/candidates = list()
-
-	candidates = get_candidates(ROLE_BLOB)
-
-	for(var/client/C in candidates)
-		if(istype(C.eye,/obj/item/projectile/meteor/blob/core))
-			candidates -= C
-
-	if(candidates.len)
-		blob_candidate = pick(candidates)
-		blob_candidates += blob_candidate
-
+/obj/item/projectile/meteor/blob/core/proc/AssignMind(var/datum/mind/M)
+	blob_candidate = M.current.client
 	if(blob_candidate)
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src

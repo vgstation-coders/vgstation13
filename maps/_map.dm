@@ -92,6 +92,9 @@
 	var/center_x = 226
 	var/center_y = 254
 
+	// Blob
+	var/blobwincount = 750
+
 /datum/map/New()
 	. = ..()
 

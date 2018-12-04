@@ -574,6 +574,10 @@
 	var/client/blob_client = null
 	var/turf/location = null
 
+	if (faction)
+		var/datum/faction/blob_conglomerate/the_bleb = faction
+		the_bleb.declared = TRUE
+
 	if(iscarbon(antag.current))
 		var/mob/living/carbon/C = antag.current
 		if(directory[ckey(antag.key)])
@@ -604,6 +608,8 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
+/datum/role/blob_overmind/ForgeObjectives()
+	AppendObjective(/datum/objective/invade)
 
 //________________________________________________
 

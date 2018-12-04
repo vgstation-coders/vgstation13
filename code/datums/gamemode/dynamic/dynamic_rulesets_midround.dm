@@ -194,3 +194,48 @@
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_MIDROUND)
 	nuclear.OnPostSetup()
+
+//////////////////////////////////////////////
+//                                          //
+//          BLOB STORM			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/blob_storm
+	name = "Blob Overmind Storm"
+	role_category = ROLE_BLOB
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 35
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	logo = "nuke-logo"
+
+/datum/dynamic_ruleset/midround/blob_storm/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/blob_storm/review_applications()
+	var/datum/faction/blob_conglomerate/bleb = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if (!bleb)
+		bleb = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
+	
+	var/living = 0
+	var/cores_spawned = 0
+	for(var/mob/living/M in player_list)
+		if(M.stat == CONSCIOUS)
+			living++
+	cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
+
+	for (var/i = 1 to cores_spawned)
+		if (!applicants.len)
+			return
+		var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"])
+		var/mob/applicant = pick(applicants)
+		applicants -= applicant
+		var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+		meteor.AssignMind(applicant.mind)

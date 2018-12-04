@@ -305,7 +305,7 @@
 /datum/dynamic_ruleset/roundstart/blob
 	name = "Blob conglomerate"
 	role_category = ROLE_BLOB
-	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
+	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 1
@@ -313,15 +313,22 @@
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 
-/datum/dynamic_ruleset/roundstart/blob/ready(var/forced = 0)
-	if (!..())
-		return FALSE
-	var/AI_found = 0
-	for (var/mob/new_player/player in player_list)
-		if (player.mind.assigned_role == "AI")
-			AI_found = 1
-			break
-	return AI_found
+/datum/dynamic_ruleset/roundstart/blob/execute()
+	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if (!blob_fac)
+		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
+	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
+	for (var/i = 1 to min(blob_number, candidates.len))
+		var/mob/M = pick(candidates)
+		var/datum/role/blob_overmind/blob = new
+		blob.AssignToRole(M.mind, 1)
+		blob_fac.HandleRecruitedRole(blob)
+		blob.Greet(GREET_ROUNDSTART)
+		blob.ForgeObjectives()
+		blob.AnnounceObjectives()
+		blob.OnPostSetup()
+	blob_fac.OnPostSetup()
+	return 1
 
 //////////////////////////////////////////////
 //                                          //
