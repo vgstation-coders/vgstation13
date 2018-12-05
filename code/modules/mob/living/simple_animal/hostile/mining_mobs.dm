@@ -864,6 +864,7 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_living = "pillow"
 	icon_dead = "pillow_dead"
 	holder_type = /obj/item/weapon/holder/animal/pillow
+	size = SIZE_SMALL
 	var/image/eyes
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
