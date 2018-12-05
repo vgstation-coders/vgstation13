@@ -149,7 +149,9 @@
 		if (RITUALABORT_NEAR)
 			if (activator)
 				to_chat(activator, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
-
+		if (RITUALABORT_OUTPOST)
+			if (activator)
+				to_chat(activator, "<span class='sinister'>This place is too remote to interest the Geometer of Blood. We must raise our structure in the heart of the station.</span>")
 
 
 	for(var/mob/living/L in contributors)
@@ -256,6 +258,11 @@
 		return
 
 	var/mob/living/user = activator
+
+	if (user.z != map.zMainStation)
+		abort(RITUALABORT_OUTPOST)
+		return FALSE
+
 	if (veil_thickness >= CULT_ACT_II)
 		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Forge","Spire")
 		switch (spawnchoice)
