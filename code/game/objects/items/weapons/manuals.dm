@@ -156,7 +156,7 @@
 	icon_state ="bookChemistry"
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
-	wiki_page = "Chemistry_101"
+	wiki_page = "Guide_to_Chemistry"
 
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
