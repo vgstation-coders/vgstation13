@@ -185,6 +185,12 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
+	if(prefs.toggles & AUTO_DEADMIN)
+		message_admins("[src] got automatically deadminned.")
+		deadmin()
+		verbs += /client/proc/readmin
+		deadmins += ckey
+		to_chat(src, "<span class='interface'>You are now a normal player.</span>")
 
 	. = ..()	//calls mob.Login()
 	chatOutput.start()

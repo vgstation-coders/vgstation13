@@ -320,6 +320,8 @@ var/const/MAX_SAVE_SLOTS = 8
 		<a href='?_src_=prefs;preference=hear_attack'><b>[toggles & CHAT_ATTACKLOGS ? "Enabled" : "Disabled"]</b></a><br>
 		<b>Toggle Debug Logs</b>
 		<a href='?_src_=prefs;preference=hear_debug'><b>[toggles & CHAT_DEBUGLOGS ? "Enabled" : "Disabled"]</b></a><br>
+		<b>De-admin on login</b>
+		<a href='?_src_=prefs;preference=auto_deadmin'><b>[toggles & AUTO_DEADMIN ? "Enabled" : "Disabled"]</b></a><br>
 	  </div>
 	</div>"}
 
@@ -1470,6 +1472,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					if("hear_debug")
 						toggles ^= CHAT_DEBUGLOGS
+					
+					if("auto_deadmin")
+						toggles ^= AUTO_DEADMIN
 
 	ShowChoices(user)
 	return 1
