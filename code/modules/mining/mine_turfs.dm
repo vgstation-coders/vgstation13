@@ -1088,7 +1088,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		/mob/living/simple_animal/hostile/asteroid/goldgrub = 1,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 3,
 		/mob/living/simple_animal/hostile/asteroid/hivelord = 5,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 4
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 4,
+		/mob/living/simple_animal/hostile/asteroid/pillow = 2
 	)
 	var/sanity = 1
 

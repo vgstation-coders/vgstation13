@@ -22,6 +22,7 @@
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
 	held_items = list()
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|PACIFIABLE
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()
@@ -781,6 +782,7 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_lower = 35
 	melee_damage_upper = 50
 	ranged = 1
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/charging = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
@@ -849,3 +851,34 @@ obj/item/asteroid/basilisk_hide/New()
 		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
 			T = get_edge_target_turf(M, dir)
 		M.throw_at(T,100,move_to_delay)
+
+
+/mob/living/simple_animal/hostile/asteroid/pillow
+	name = "pillow bug"
+	desc = "An odd creature, bearing a resemblance to the common earth tick, but with flicks of light blue fur."
+	health = 20
+	maxHealth = 20
+	melee_damage_lower = 0
+	melee_damage_upper = 0
+	icon_state = "pillow"
+	icon_aggro = "pillow"
+	icon_living = "pillow"
+	icon_dead = "pillow_dead"
+	holder_type = /obj/item/weapon/holder/animal/pillow
+	size = SIZE_SMALL
+	var/image/eyes
+
+/mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
+	..()
+	if(!isDead())
+		to_chat(user, "<span class = 'notice'>It looks so comforting, you feel like the world, at least in the general vicinity, is at peace.</span>")
+
+/mob/living/simple_animal/hostile/asteroid/pillow/New()
+	..()
+	eyes = image(icon,"pillow_eyes", ABOVE_LIGHTING_LAYER)
+	eyes.plane = ABOVE_LIGHTING_PLANE
+	overlays += eyes
+
+/mob/living/simple_animal/hostile/asteroid/pillow/death()
+	overlays.Cut()
+	..()

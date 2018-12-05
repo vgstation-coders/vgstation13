@@ -2170,6 +2170,8 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(!(status_flags & PACIFIABLE))
+		return 0
 	if (reagents && reagents.has_reagent(CHILLWAX))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
@@ -2183,6 +2185,13 @@ mob/proc/on_foot()
 			if (message != VIOLENCE_SILENT)
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return 1
+
+	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
+		if(P.isDead())
+			continue
+		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
+		return 1
+
 
 	return 0
 
