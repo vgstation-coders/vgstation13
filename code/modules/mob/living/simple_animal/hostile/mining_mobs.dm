@@ -782,6 +782,7 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_lower = 35
 	melee_damage_upper = 50
 	ranged = 1
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/charging = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
