@@ -853,8 +853,8 @@ obj/item/asteroid/basilisk_hide/New()
 
 
 /mob/living/simple_animal/hostile/asteroid/pillow
-	name = "pillow tick"
-	desc = "An odd creature, bearing a resemblance to the common earth tick."
+	name = "pillow bug"
+	desc = "An odd creature, bearing a resemblance to the common earth tick, but with flicks of light blue fur."
 	health = 20
 	maxHealth = 20
 	melee_damage_lower = 0
@@ -863,6 +863,7 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_aggro = "pillow"
 	icon_living = "pillow"
 	icon_dead = "pillow_dead"
+	holder_type = /obj/item/weapon/holder/animal/pillow
 	var/image/eyes
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)

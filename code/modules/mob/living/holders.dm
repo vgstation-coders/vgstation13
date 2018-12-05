@@ -192,5 +192,5 @@
 	name = "pillow holder"
 	desc = "Comforbable"
 	item_state = "pillow"
-
+	slot_flags = SLOT_HEAD
 	update_itemstate_on_twohand = TRUE
