@@ -102,8 +102,7 @@ function SetMusic(url, time, volume) {
 /hook_handler/shuttlejukes
 	proc/OnEmergencyShuttleDeparture(var/list/args)
 		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
-			SJ.playing=1
-			SJ.update_music()
+			SJ.stop_playing()
 			SJ.update_icon()
 
 /mob/proc/update_music()
