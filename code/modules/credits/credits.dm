@@ -3,6 +3,7 @@ var/global/datum/credits/end_credits = new
 /datum/credits
 	var/generated = FALSE
 	var/starting_delay = 8 SECONDS
+	var/post_delay = 5 SECONDS //time that the server stays up after the credits start rolling (to prevent serb shutting down before all the clients receive the credits, or that's the idea at least)
 	var/control = "mapwindow.credits"
 	var/file = 'code/modules/credits/credits.html'
 
@@ -26,6 +27,7 @@ var/global/datum/credits/end_credits = new
 	generated = TRUE
 
 /datum/credits/proc/rollem()
+	log_debug("Playing credits song...")
 	world << sound('sound/music/Frolic_Luciano_Michelini_Short.ogg')
 
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
@@ -35,8 +37,9 @@ var/global/datum/credits/end_credits = new
 
 	var/scrollytext = episode_string + cast_string + disclaimers_string
 
-	var/list/js_args = list(scrollytext, producers_string, 25, 2000)
+	var/list/js_args = list(scrollytext, producers_string, 20, 2000) //arguments for the makeCredits function back in the javascript
 
+	log_debug("Sending credit info to all clients...")
 	for(var/client/C in clients)
 		C.show_credits(js_args)
 
@@ -46,9 +49,11 @@ var/global/datum/credits/end_credits = new
  	verbs += /client/proc/clear_credits
 
 	src << output(end_credits.file, end_credits.control)
+	log_debug("[src] received credits info correctly.")
 	sleep(end_credits.starting_delay)
 	src << output(list2params(js_args), "[end_credits.control]:makeCredits")
 	winset(src, end_credits.control, "is-visible=true")
+	log_debug("[src] is showing credits correctly.")
 
 /client/proc/clear_credits()
 	set name = "Skip Credits"

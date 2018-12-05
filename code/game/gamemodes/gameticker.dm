@@ -466,14 +466,14 @@ var/datum/controller/gameticker/ticker
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
 				if(config.map_voting)
-					sleep(restart_timeout + end_credits.starting_delay) //waiting for a mapvote to end
+					sleep(restart_timeout) //waiting for a mapvote to end
 				if(!delay_end)
 					watchdog.signal_ready()
 				else
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 					delay_end = 2
 			else if(!delay_end)
-				sleep(restart_timeout + end_credits.starting_delay)
+				sleep(restart_timeout)
 				if(!delay_end)
 					CallHook("Reboot",list())
 					world.Reboot()
