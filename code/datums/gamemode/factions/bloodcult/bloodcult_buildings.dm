@@ -1106,6 +1106,9 @@ var/list/cult_spires = list()
 /obj/structure/cult/pillar/New()
 	..()
 	var/turf/T = loc
+	if (!T)
+		qdel(src)
+		return
 	for (var/obj/O in loc)
 		if(O == src)
 			continue
@@ -1232,7 +1235,11 @@ var/list/bloodstone_list = list()
 			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = updated_map
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		B.holomap_datum.initialize_holomap(B.loc)
+		if (B.loc)
+			B.holomap_datum.initialize_holomap(B.loc)
+		else
+			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			qdel(B)
 	if (bloodstone_list.len <= 0 || anchor)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
