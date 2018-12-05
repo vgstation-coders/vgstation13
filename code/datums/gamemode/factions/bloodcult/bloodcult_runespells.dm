@@ -806,11 +806,11 @@
 						break
 				if (victim.mind)
 					if (victim.mind.assigned_role in impede_medium)
-						progress = progress/2
+						progress = progress/1.5
 
 					if (victim.mind.assigned_role in impede_hard)
 						delay = 1
-						progress = progress/4
+						progress = progress/3
 
 				if (delay)
 					progress = Clamp(progress,1,10)
@@ -917,11 +917,14 @@
 				victim.SetStunned(0)
 				victim.SetSilent(0)
 				//and their loyalty implants are removed, so they can't mislead security
+				convert(victim)
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					I.forceMove(T)
 					I.implanted = 0
 					spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [victim]'s head.</span>")
-				convert(victim)
+					spell_holder.visible_message("<span class='danger'>\The [I] causes heavy damage to \the [victim]'s nervous systems and body!</span>")
+					victim.adjustBruteLoss(75)
+					victim.adjustFireLoss(50)
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
