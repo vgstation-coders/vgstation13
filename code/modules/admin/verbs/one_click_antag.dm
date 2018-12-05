@@ -87,6 +87,9 @@ client/proc/one_click_antag()
 			count--
 			var/mob/living/carbon/human/H = pick(candidates)
 			candidates.Remove(H)
+			var/initRoleID = initial(F.initroletype.id)
+			if (locate(initRoleID) in H.mind.antag_roles) // Ex: a head rev being made a revolutionary.
+				return FALSE
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
