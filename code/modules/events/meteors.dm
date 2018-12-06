@@ -213,7 +213,7 @@ var/global/list/thing_storm_types = list(
 		var/obj/item/projectile/meteor/blob/core/C = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
 		var/client/candidate = pick(candidates)
 		candidates =- candidate
-		C.AssignMind(candidate.mob.mind)
+		C.AssignMob(candidate.mob)
 
 /datum/event/thing_storm/blob_storm/announce()
 	command_alert(/datum/command_alert/blob_storm/overminds)

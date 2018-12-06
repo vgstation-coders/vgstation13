@@ -97,15 +97,11 @@
 	for (var/i = required_candidates, i > 0, i--)
 		if(applicants.len <= 0)
 			break
-		var/mob/applicant = null
-		var/selected_key = pick(applicants)
-		for(var/mob/M in player_list)
-			if(M.key == selected_key)
-				applicant = M
+		var/mob/applicant = pick(applicants)
 		if(!applicant || !applicant.key)
 			i++
 			continue
-		applicants -= applicant.key
+		applicants -= applicant
 		if(!isobserver(applicant))
 			//Making sure we don't recruit people who got back into the game since they applied
 			i++
@@ -122,6 +118,7 @@
 		newWizard.Greet(GREET_MIDROUND)
 		newWizard.ForgeObjectives()
 		newWizard.AnnounceObjectives()
+		applicants.Cut() // To clear references.
 
 
 //////////////////////////////////////////////
@@ -165,15 +162,11 @@
 	for (var/i = required_candidates, i > 0, i--)
 		if(applicants.len <= 0)
 			break
-		var/mob/applicant = null
-		var/selected_key = pick(applicants)
-		for(var/mob/M in player_list)
-			if(M.key == selected_key)
-				applicant = M
+		var/mob/applicant = pick(applicants)
 		if(!applicant || !applicant.key)
 			i++
 			continue
-		applicants -= applicant.key
+		applicants -= applicant
 		if(!isobserver(applicant))
 			//Making sure we don't recruit people who got back into the game since they applied
 			i++
@@ -194,6 +187,7 @@
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_MIDROUND)
 	nuclear.OnPostSetup()
+	applicants.Cut() // To clear references.
 
 //////////////////////////////////////////////
 //                                          //
@@ -223,19 +217,29 @@
 	var/datum/faction/blob_conglomerate/bleb = find_active_faction_by_type(/datum/faction/blob_conglomerate)
 	if (!bleb)
 		bleb = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
-	
+		bleb.CountFloors()
+		bleb.ForgeObjectives()
+
 	var/living = 0
 	var/cores_spawned = 0
 	for(var/mob/living/M in player_list)
 		if(M.stat == CONSCIOUS)
 			living++
-	cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
+	cores_spawned = 1 + round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
+
+	if (cores_spawned && applicants.len)
+		command_alert(/datum/command_alert/blob_storm/overminds)
 
 	for (var/i = 1 to cores_spawned)
 		if (!applicants.len)
 			return
-		var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"])
 		var/mob/applicant = pick(applicants)
-		applicants -= applicant
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			continue
+		var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"])
 		var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
-		meteor.AssignMind(applicant.mind)
+		meteor.AssignMob(applicant, bleb)
+
+	applicants.Cut() // To clear references.
+

@@ -541,7 +541,7 @@
 	wikiroute = role_wiki[BLOBOVERMIND]
 
 /datum/role/blob_overmind/process()
-	if(!antag || istype(antag.current,/mob/camera/blob))
+	if(!antag || istype(antag.current,/mob/camera/blob) || !antag.current || isobserver(antag.current))
 		return
 	if (countdown > 0)
 		countdown--
@@ -607,9 +607,6 @@
 			to_chat(antag.current, "<span class='warning'>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-
-/datum/role/blob_overmind/ForgeObjectives()
-	AppendObjective(/datum/objective/invade)
 
 //________________________________________________
 

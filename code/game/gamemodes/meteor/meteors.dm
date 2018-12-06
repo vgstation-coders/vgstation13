@@ -410,8 +410,8 @@ var/list/blob_candidates = list()
 	icon_state = "meteorcore"
 	var/client/blob_candidate = null
 
-/obj/item/projectile/meteor/blob/core/proc/AssignMind(var/datum/mind/M)
-	blob_candidate = M.current.client
+/obj/item/projectile/meteor/blob/core/proc/AssignMob(var/mob/M)
+	blob_candidate = M.client
 	if(blob_candidate)
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src

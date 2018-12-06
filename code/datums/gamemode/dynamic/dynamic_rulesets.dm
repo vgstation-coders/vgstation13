@@ -118,13 +118,13 @@
 		to_chat(M, "<span class='danger'>Banned from [role_category].</span>")
 		to_chat(M, "<span class='warning'>Your application has been discarded due to past conduct..</span>")
 		return
-	if(M.key in applicants)
+	if(M in applicants)
 		to_chat(M, "<span class='notice'>Removed from the [role_category] registration list.</span>")
-		applicants -= M.key
+		applicants -= M
 		return
 	else
 		to_chat(M, "<span class='notice'>Added to the [role_category] registration list.</span>")
-		applicants |= M.key
+		applicants |= M
 		return
 
 //////////////////////////////////////////////

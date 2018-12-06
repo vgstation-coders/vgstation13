@@ -26,28 +26,35 @@
 
 	var/list/pre_escapees = list()
 	var/declared = FALSE
+	var/delta = FALSE
 	var/win = FALSE
+	var/blobwincount = 0
 
 // -- Victory procs --
 
 /datum/faction/blob_conglomerate/check_win()
 	if (!declared)//No blobs have been spawned yet
 		return 0
-	if (map.blobwincount <= blobs.len)//Blob took over
+	if (blobwincount <= blobs.len)//Blob took over
 		return win(STATION_TAKEOVER)
 	if(ticker.station_was_nuked)//Nuke went off
 		return win(STATION_WAS_NUKED)
 	for (var/datum/role/R in members)
-		if (!(R.antag.current.isDead()))
+		if (R.antag && !(R.antag.current.isDead()))
 			return 0
 	return win(BLOB_IS_DED)
 
 /datum/faction/blob_conglomerate/process()
 	. = ..()
-	if (0.66*map.blobwincount <= blobs.len) // Blob almost won !
+	if (0.66*blobwincount <= blobs.len && !delta) // Blob almost won !
+		delta = TRUE
 		stage(BLOB_DELTA)
 
 /datum/faction/blob_conglomerate/OnPostSetup()
+	CountFloors()
+	ForgeObjectives()
+	AnnounceObjectives()
+
 	spawn()
 		start = new()
 		start.count()
@@ -58,13 +65,34 @@
 		sleep(rand(WAIT_TIME_PHASE2,2*WAIT_TIME_PHASE2))
 		stage(BLOB_OUTBREAK)
 
+/datum/faction/blob_conglomerate/proc/CountFloors()
+	/*
+	var/floor_count = 0
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			var/turf/tile = locate(i, r, map.zMainStation)
+			if(tile && istype(tile, /turf/simulated/floor) && !isspace(tile.loc) && !istype(tile.loc, /area/asteroid) && !istype(tile.loc, /area/mine) && !istype(tile.loc, /area/vault) && !istype(tile.loc, /area/prison) && !istype(tile.loc, /area/vox_trading_post))
+				floor_count++
+	blobwincount = round(floor_count *  0.5) // Must take over half of the station.
+	blobwincount += rand(-50,50)
+	*/
+	blobwincount = 300
+
+/datum/faction/blob_conglomerate/proc/ForgeObjectives()
+	var/datum/objective/invade/I = new
+	AppendObjective(I)
+
+/datum/faction/blob_conglomerate/proc/AnnounceObjectives()
+	for (var/datum/role/R in members)
+		R.AnnounceObjectives()
+
 /datum/faction/blob_conglomerate/proc/win(var/result)
 	. = 1
 	win = result
 	switch (result)
 		if (STATION_TAKEOVER)
-			to_chat(world, {"<FONT size = 5><B>Blob victory victory!</B></FONT><br>
-<B>The station was nuked before the blob could completly take over.</B>"})
+			to_chat(world, {"<FONT size = 5><B>Blob major victory!</B></FONT><br>
+<B>The blob managed to take complete conrol of the station.</B>"})
 		if (STATION_WAS_NUKED)
 			to_chat(world, {"<FONT size = 5><B>Crew minor victory!</B></FONT><br>
 <B>The station was nuked before the blob could completly take over.</B>"})
@@ -74,11 +102,17 @@
 
 // -- Fluff & warnings --
 
+/datum/faction/blob_conglomerate/AdminPanelEntry()
+	. = ..()
+	. += "<br/>Station takeover: [blobs.len]/[blobwincount]."
+
 /datum/faction/blob_conglomerate/proc/stage(var/stage)
 	switch(stage)
 		if (BLOB_PRELUDE)
-			biohazard_alert()
-			return
+			if (!declared)
+				declared = TRUE
+				biohazard_alert()
+				return
 
 		if (BLOB_OUTBREAK)
 			command_alert(/datum/command_alert/biohazard_station_lockdown)
@@ -273,9 +307,3 @@ Message ends."}
 	output += (result.grille / max(grille,1))
 	output += (result.mach / max(mach,1))
 	return (output/7)
-
-/proc/getBlobs()
-	to_chat(world, "Blobs are : [blobs.len]")
-
-/proc/getBlobWinCount()
-	to_chat(world, "Blobwin is : [map.blobwincount]")

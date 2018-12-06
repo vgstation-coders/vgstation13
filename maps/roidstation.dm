@@ -36,8 +36,6 @@
 	center_x = 177
 	center_y = 193
 
-	blobwincount = 1000
-
 ////////////////////////////////////////////////////////////////
 #include "roidstation/areas.dm"
 #include "roidstation.dmm"
