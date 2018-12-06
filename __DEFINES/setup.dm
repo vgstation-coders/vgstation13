@@ -764,6 +764,7 @@ SEE_PIXELS	256
 #define ORGAN_DEAD			1024
 #define ORGAN_MUTATED		2048
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
+#define ORGAN_MALFUNCTIONING 8192
 
 //////////////////MATERIAL DEFINES/////////////////
 
