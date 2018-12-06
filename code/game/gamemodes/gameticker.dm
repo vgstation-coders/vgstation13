@@ -425,7 +425,6 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
-			/*
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
@@ -441,7 +440,6 @@ var/datum/controller/gameticker/ticker
 				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
 				watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
 				log_game("Server chose [watchdog.chosen_map]!")
-			*/
 
 
 		spawn(50)
