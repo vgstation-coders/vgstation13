@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			overflow: hidden;
+			background-color: black;
+			color: white;
+			font-family: Georgia, serif
+		}
+		#container {
+			position: relative;
+			width: 100vw;
+			text-align: center;
+		}
+		#splash {
+			display: table-cell;
+			height: 100vh;
+		}
+		.crewtable{
+			width: 100%;
+			table-layout: fixed;
+			white-space: nowrap;
+		}
+		.crewtable td{
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-size: 1.17em;
+		}
+		.actorname {
+			text-align: right;
+			float: right;
+		}
+		.actorsegue {
+			text-align: center;
+			width: 40px;
+		}
+		.actorrole {
+			float: left;
+			text-align: left;
+		}
+		.letterboxer {
+			width: 10%;
+		}
+		.disclaimers {
+			font-family: Arial, Helvetica, sans-serif
+		}
+		h1, h2, h3 {
+			display: inline;
+			font-weight:normal;
+		}
+		
+
+	</style>
+</head>
+<body>
+	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
+		<tr>
+			<td class="letterboxer"></td>
+			<td id="splash">
+				IF YOU CAN SEE THIS, TELL A CODER WHAT HAPPENED!
+			</td>
+			<td class="letterboxer"></td>
+		</tr>
+		<tr>
+			<td class="letterboxer"></td>
+			<td id="marquee">
+				IF YOU CAN SEE THIS, REALLY TELL A CODER WHAT HAPPENED!
+			</td>
+			<td class="letterboxer"></td>
+		</tr>
+	</table>
+
+	<script type="text/javascript">
+	var producers = [];
+	var lastinterval;
+	
+	function setScrollingText(text){
+		document.getElementById("marquee").innerHTML = text;
+	}
+	function setProducers(text){
+		producers = text.split("%n");
+		producers = producers.slice(0, -1); //get rid of the last %n
+	}
+	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime){
+		if (splashTime === undefined) {
+			splashTime = 2000;
+		}
+		splashTime = parseInt(splashTime); //Just in case
+		
+		if (scrollSpeed === undefined) {
+			scrollSpeed = 25;
+		}
+		scrollSpeed = parseInt(scrollSpeed); //Just in case
+		
+		setScrollingText(scrollyString);
+		setProducers(producersString);
+		
+		splashLoop(producers, 0, splashTime);
+		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
+	}
+	
+	function splashLoop(arr, index, time) {
+		if (index === arr.length){
+			return;
+		}
+		document.getElementById("splash").innerHTML = arr[index];
+		setTimeout(splashLoop, time, arr, index+1, time)
+	}
+
+	function rollMarquee(speed){
+		var div = document.getElementById("container");
+		var bottom = 0;
+		lastinterval = setInterval(function () {
+			bottom = bottom + 1;
+			div.style.bottom = bottom + "px";
+			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
+				//document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</textarea>"; clearInterval(lastinterval); return; //debugging
+				clearInterval(lastinterval);
+				window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
+				return;
+			}
+		}, speed);
+	};
+	</script>
+</body>
+</html>

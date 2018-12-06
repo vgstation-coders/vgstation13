@@ -57,6 +57,7 @@
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
 #define GREET_MIDROUND		"midround"
+#define GREET_MASTER		"master"
 
 #define GREET_AUTOTATOR		"autotator"
 
@@ -155,3 +156,8 @@
 #define FROM_PLAYERS 2
 
 #define PROTECTED_TRAITOR_PROB 66 // Probability than a protected role is rejected from the candidate list
+
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
+#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
+#define ADD_REVOLUTIONARY_FAIL_IS_REV -4

@@ -86,8 +86,9 @@
 	return 1
 
 /obj/machinery/portable_atmospherics/proc/eject_holding()
-	holding.forceMove(loc)
-	holding = null
+	if(holding)
+		holding.forceMove(loc)
+		holding = null
 
 /obj/machinery/portable_atmospherics/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 

@@ -9,7 +9,7 @@
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
-	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE)
+	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = ROLE_VAMPIRE
 
 	var/list/powers = list()
@@ -53,7 +53,6 @@
 			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
 			to_chat(antag.current, "You are weak to holy things and starlight.")
 			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
-
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
@@ -64,6 +63,9 @@
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
 		VP.Give(src)
+	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
+		var/datum/faction/vampire/V = faction
+		V.name_clan(src)
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
@@ -531,7 +533,7 @@
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
 	if (you_are)
-		dat = "<span class='danger'>You are a Thrall!</br> You are slaved to <b>[master.antag.current]</b>!</span>"
+		dat = "<span class='danger'>You are a Thrall!</br> You are slaved to <b>[master.antag.current]</b>[faction?"under the [faction.name] clan!":"."]</span>"
 	dat += {""}
 	to_chat(antag.current, dat)
 	to_chat(antag.current, "<B>You must complete the following tasks:</B>")

@@ -456,7 +456,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 								  0.33,0.33,0.33,0,\
 								  0.00,0.00,0.00,1,\
 								  0.00,0.00,0.00,0)
-var/global/list/bad_changing_colour_ckeys = list()
 
 // Bustanuts
 #define M_HARDCORE      300
@@ -573,6 +572,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
+#define PACIFIABLE 16		//Should a mob have this flag in their status_flags, they will be able to run is_pacified(), not all mobs call is_pacified however.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
@@ -764,6 +764,7 @@ SEE_PIXELS	256
 #define ORGAN_DEAD			1024
 #define ORGAN_MUTATED		2048
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
+#define ORGAN_MALFUNCTIONING 8192
 
 //////////////////MATERIAL DEFINES/////////////////
 

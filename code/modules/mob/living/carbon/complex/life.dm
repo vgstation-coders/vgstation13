@@ -1,5 +1,4 @@
 /mob/living/carbon/complex/Life()
-	set invisibility = 0
 
 	if(timestopped)
 		return 0 //under effects of time magick

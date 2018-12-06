@@ -686,9 +686,10 @@
 		return FALSE
 
 	var/area/old_area = loc
-
+	old_area.contents.Remove(src)
+	old_area.area_turfs.Remove(src)
 	A.contents.Add(src)
-
+	A.area_turfs.Add(src)
 	if(old_area)
 		change_area(old_area, A)
 		for(var/atom/AM in contents)

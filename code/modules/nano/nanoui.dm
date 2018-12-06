@@ -563,3 +563,14 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/update(var/force_open = 0)
 	src_object.ui_interact(user, ui_key, src, force_open)
+
+/mob/verb/fix_nanoui()
+	set name = "Fix NanoUI"
+	set category = "OOC"
+
+	world.log << "[key_name(src)] used the Fix NanoUI verb. Open UIs: [length(open_uis)]"
+	for(var/datum/nanoui/ui in open_uis)
+		CHECK_TICK
+		world.log << url_decode(winget(ui.user, ui.window_id, "*"))
+		ui.close()
+	to_chat(src, "<span class='notice'>All Nano UIs should be closed now.</span>")

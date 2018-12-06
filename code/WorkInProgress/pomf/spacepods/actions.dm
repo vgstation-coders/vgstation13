@@ -79,3 +79,12 @@
 			qdel(src)
 	else
 		to_chat(owner, "<span class = 'warning'>[S.occupant] is the pilot of \the [S] currently.</span>")
+
+/datum/action/spacepod/pilot/change_speed
+	name = "Change speed"
+	button_icon_state = "change_speed"
+
+/datum/action/spacepod/pilot/change_speed/Trigger()
+	..()
+	var/obj/spacepod/S = target
+	S.change_speed()

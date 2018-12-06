@@ -338,6 +338,7 @@
 		newCultist.OnPostSetup()
 		newCultist.Greet(GREET_SOULSTONE)
 		newCultist.conversion["soulstone"] = user
+		cult_risk(user)//risk of exposing the cult early if too many soul trappings
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)

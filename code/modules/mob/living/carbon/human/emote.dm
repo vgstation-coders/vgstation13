@@ -72,7 +72,9 @@
 	key = "fart"
 	key_third_person = "farts"
 
-/datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override)
+/datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
+		return FALSE
 	var/mob/living/carbon/human/H = user
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
@@ -84,7 +86,7 @@
 
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
-			if(!H.mind.miming)
+			if(H.mind && !H.mind.miming)
 				H.visible_message("<span class = 'warning'><b>[H]</b> farts in <b>[M]</b>'s face!</span>")
 			else
 				H.visible_message("<span class = 'warning'><b>[H]</b> silently farts in <b>[M]</b>'s face!</span>")

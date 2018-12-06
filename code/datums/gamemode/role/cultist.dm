@@ -20,7 +20,7 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
-	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -45,7 +45,7 @@
 		return
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
-	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -309,3 +309,9 @@
 		var/mob/mob = M.current
 		if (mob)
 			to_chat(mob, "<span class='danger'>Nar-Sie</span> murmurs to you... <span class='sinister'>[message]</span>")
+
+			for(var/mob/dead/observer/O in player_list)
+				to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [mob.real_name], <span class='sinister'>[message]</span></span>")
+
+			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
+			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")

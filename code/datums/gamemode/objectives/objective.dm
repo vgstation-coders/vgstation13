@@ -7,10 +7,6 @@
 
 	var/flags = 0 // Objective flags.
 
-/datum/objective/target/New(var/text,var/auto_target = TRUE, var/mob/user = null)
-	if(text)
-		explanation_text = text
-
 /datum/objective/target/Destroy()
 	owner = null
 	faction = null

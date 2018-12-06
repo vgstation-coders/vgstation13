@@ -17,6 +17,7 @@
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
+	reloadsound = 'sound/weapons/shotgun_shell_insert.ogg'
 
 
 	gun_flags = 0
@@ -49,6 +50,7 @@
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
+		playsound(current_shell, 'sound/weapons/shotgun_shell_bounce.ogg', 25, 0.2, 1)
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null
@@ -85,6 +87,8 @@
 	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+	reloadsound = 'sound/weapons/shotgun_shell_insert.ogg'
+	fire_sound = 'sound/weapons/shotgun_small.ogg'
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
@@ -107,11 +111,13 @@
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
+	playsound(src, 'sound/weapons/shotgun_open.ogg', 25, 0)
 	var/i = 0
 	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
 		loaded_shell.forceMove(get_turf(src))
 		loaded_shell.pixel_x = min(-3 + (i*4),15) * PIXEL_MULTIPLIER
 		loaded_shell.pixel_y = min( 3 - (i*4),15) * PIXEL_MULTIPLIER
+		playsound(loaded_shell, 'sound/weapons/shotgun_shell_bounce.ogg', 25, 0.2, 1)
 		if(loaded_shell in loaded)
 			loaded -= loaded_shell
 		i++

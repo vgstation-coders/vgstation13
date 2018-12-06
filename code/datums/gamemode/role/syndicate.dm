@@ -8,6 +8,7 @@
 
 /datum/role/traitor/OnPostSetup()
 	..()
+	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')

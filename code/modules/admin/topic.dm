@@ -4830,6 +4830,68 @@
 			return
 		mind.role_panel()
 
+	else if(href_list["credits"])
+		switch(href_list["credits"])
+			if("resetname")
+				if(!end_credits.generated) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.episode_name = ""
+					log_admin("[key_name(usr)] reset the current round's episode name. A new one will automatically generate later.")
+					message_admins("[key_name_admin(usr)] reset the current round's episode name. A new one will automatically generate later.")
+			if("rerollname")
+				end_credits.pick_name()
+				log_admin("[key_name(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
+				message_admins("[key_name_admin(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
+			if("setname")
+				var/newname = input(usr,"Write the name of this latest rerun...","New Episode Name") as text|null
+				if(newname)
+					end_credits.episode_name = newname
+					log_admin("[key_name(usr)] forced the current round's episode name to '[newname]'")
+					message_admins("[key_name_admin(usr)] forced the current round's episode name to '[newname]'")
+
+			if("namedatumedit")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N)
+					var/newname = input(usr,"Write a new possible episode name. This is NOT guaranteed to be picked as the final name, unless you modified the weight to 99999% or something.","Edit Name",N.thename) as text|null
+					if(newname)
+						N.thename = newname
+			if("namedatumweight")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N)
+					var/newweight = input(usr,"Write the new possibility that '[N.thename]' will be selected as the final episode name. Default is 100.","Edit Weight",N.weight) as num|null
+					if(newweight)
+						N.weight = newweight
+			if("namedatumremove")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N && alert("Are you sure you want to remove the name '[N.thename]' from the possible episode names to be picked?", "Removing possible name", "Yes", "No") == "Yes")
+					end_credits.episode_names -= N
+					qdel(N)
+
+			if("newdisclaimer")
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
+				if(newdisclaimer)
+					end_credits.disclaimers.Insert(1,newdisclaimer)
+					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+			if("editdisclaimer")
+				var/i = text2num(href_list["disclaimerindex"])
+				var/olddisclaimer = end_credits.disclaimers[i]
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer.","Edit Disclaimer",olddisclaimer) as message|null
+				if(newdisclaimer)
+					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					end_credits.disclaimers[i] = newdisclaimer
+			if("disclaimerup")
+				var/i = text2num(href_list["disclaimerindex"])
+				if(i > 1)
+					end_credits.disclaimers.Swap(i,i-1)
+			if("disclaimerdown")
+				var/i = text2num(href_list["disclaimerindex"])
+				if(i < end_credits.disclaimers.len)
+					end_credits.disclaimers.Swap(i,i+1)
+
+		CreditsPanel() //refresh!
+
+
 	// ----- Religion and stuff
 	if (href_list["religions"])
 		#define MAX_MSG_LENGTH 200
