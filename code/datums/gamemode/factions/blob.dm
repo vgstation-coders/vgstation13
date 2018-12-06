@@ -66,7 +66,6 @@
 		stage(BLOB_OUTBREAK)
 
 /datum/faction/blob_conglomerate/proc/CountFloors()
-	/*
 	var/floor_count = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
@@ -75,8 +74,7 @@
 				floor_count++
 	blobwincount = round(floor_count *  0.5) // Must take over half of the station.
 	blobwincount += rand(-50,50)
-	*/
-	blobwincount = 300
+
 
 /datum/faction/blob_conglomerate/proc/ForgeObjectives()
 	var/datum/objective/invade/I = new
