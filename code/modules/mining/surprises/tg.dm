@@ -13,7 +13,7 @@
 		/turf/simulated/floor/engine=1
 	)
 	spawntypes = list(
-		/obj/item/device/mass_spectrometer/adv=1,
+		/obj/item/device/reagent_scanner/adv=1,
 		/obj/item/clothing/glasses/hud/health=1,
 		/obj/machinery/bot/medbot/mysterious=1
 	)

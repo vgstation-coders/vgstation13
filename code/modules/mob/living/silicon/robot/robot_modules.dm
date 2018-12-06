@@ -561,7 +561,7 @@
 	modules += new /obj/item/device/chameleon(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/device/healthanalyzer(src)
-	modules += new /obj/item/device/mass_spectrometer/adv(src)
+	modules += new /obj/item/device/reagent_scanner/adv(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/revivalprod(src)
