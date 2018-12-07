@@ -522,7 +522,7 @@
 
 /obj/item/weapon/batteringram/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I,/obj/item/weapon/ram_kit))
-		flags = FPRINT | TWOHANDABLE //Loses MUSTTWOHAND
+		flags &= ~MUSTTWOHAND //Retains FPRINT and TWOHANDABLE
 		qdel(I)
 	else
 		..()

@@ -195,14 +195,9 @@
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
 	new /obj/item/clothing/head/helmet/donutgiver(src)
-	new /obj/item/weapon/ram_kit(src)
 	new /obj/item/clothing/under/securityskirt/elite(src)
-	new /obj/item/device/law_planner(src)
 	new /obj/item/clothing/accessory/bangerboy(src)
 	new /obj/item/weapon/autocuffer(src)
-	new /obj/item/device/vampirehead(src)
-	new /obj/item/key/security/spare(src)
-	new /obj/item/weapon/depocket_wand(src)
 
 /obj/item/clothing/accessory/bangerboy
 	name = "Banger Boy Advance"
@@ -347,6 +342,7 @@
 	icon_state = "secskirt"
 	item_state = "r_suit"
 	_color = "secskirt"
+	origin_tech = Tc_COMBAT + "=2"
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
@@ -362,14 +358,13 @@
 	..()
 
 /obj/item/clothing/under/securityskirt/elite/process()
-	if(prob(1))
-		if(ishuman(loc))
-			var/mob/living/carbon/human/H = loc
-			if(!(H.wear_suit && H.wear_suit.body_parts_covered & LEGS)) //It doesn't make sense to swish about if it's covered under something
-				H.visible_message("<span class='warning'>[H]'s [src] swishes threateningly.</span>",
-				"Your [src] fills you with confidence.",
+	if(prob(1) && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(!(H.wear_suit && H.wear_suit.body_parts_covered & LEGS)) //It doesn't make sense to swish about if it's covered under something
+			H.visible_message("<span class='warning'>[H]'s [src] swishes threateningly.</span>",
+				"\The [src] fills you with confidence.",
 				"Something cracks like a whip.")
-				H.reagents.add_reagent(PARACETAMOL,1)
+			H.reagents.add_reagent(PARACETAMOL,1)
 
 /obj/item/weapon/ram_kit
 	name = "battering ram drop-leaf kit"
@@ -512,7 +507,7 @@
 	var/turf/center = get_turf(loc)
 	for(var/i = 1 to rand(8,24))
 		new /obj/item/stack/sheet/snow(center)
-	for(var/turf/simulated/T in circleview(5))
+	for(var/turf/simulated/T in circleview(user,5))
 		if(istype(T,/turf/simulated/floor))
 			new /obj/structure/snow(T) //Floors get snow
 		if(istype(T,/turf/simulated/wall))
@@ -521,6 +516,7 @@
 		new /mob/living/simple_animal/hostile/retaliate/snowman(center)
 	else
 		new /mob/living/simple_animal/corgi/saint(center)
+	visible_message("<span class='danger'>[user] lets loose the [src]!</span>")
 	qdel(src)
 
 /obj/item/key/security/spare
@@ -541,17 +537,23 @@
 /obj/item/weapon/depocket_wand
 	name = "depocket wand"
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
+	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 
 /obj/item/weapon/depocket_wand/attack(mob/living/M as mob, mob/living/user as mob)
-	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+		if(H.handcuffed)
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+			to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+		else
+			to_chat(user,"<span class='warning'>The subject must be handcuffed.</span>")
 	else
 		..()
 
-//It's like a ghetto scanner
+#define VAMP_FLASH_CD 50
+
 /obj/item/device/vampirehead
 	name = "shrunken vampire head"
 	desc = "The head of an immortal lord of the night. If only he had the right straight man partner, he'd make a good half of a crime fighting duo."
@@ -570,13 +572,11 @@
 	..()
 
 /obj/item/device/vampirehead/process()
-	if(located_blood && get_dist(located_blood,src)<5)
+	if(located_blood && get_dist(located_blood,get_turf(src))<=5)
 		return //Don't process further, we still smell our old blood
-	if(ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		if(genecheck(H,prob(97))) //Annoy unqualified bearers with messages about 3% of the time
-			find_blood()
 	located_blood = null
+	if(genecheck(loc,prob(97))) //Annoy unqualified bearers with messages about 3% of the time, contains sanity in proc
+		find_blood()
 	update_icon()
 
 /obj/item/device/vampirehead/dropped()
@@ -587,8 +587,20 @@
 	icon_state = "vamphead[located_blood ? "1" : "0"]"
 
 /obj/item/device/vampirehead/proc/find_blood()
-
-
+	if(!ishuman(loc))
+		return
+	for(var/obj/effect/decal/cleanable/C in range(5,loc))
+		if(C.counts_as_blood)
+			located_blood = C
+			/*var/list/blood_phrases = list("Can you smell it?",
+											"Ah, sweet blood...",
+											"So close, yet so far...",
+											"Sanquine. Delicious.",
+											"There. The blood is close...",
+											"Do you hear its call?")
+			to_chat(loc,"<B>[src]</B> [pick("murmurs","shrieks","hisses","groans","complains")], \"<span class='sinister'>[pick(blood_phrases)]</span>\"")*/
+			update_icon()
+			return
 	update_icon()
 
 /obj/item/device/vampirehead/on_enter_storage(obj/item/weapon/storage/S)
@@ -596,12 +608,12 @@
 	var/mob/living/carbon/human/H = get_holder_of_type(src, /mob/living/carbon/human)
 	if(H && genecheck(H,TRUE)) //If we've been stashed by a valid user. Don't send normal reject messages.
 		var/list/reject_phrases = list("Don't put me in there, I can't see!",
-								"Miserable cur! Un[S] me at once!",
+								"Miserable churl! Un[S.name] me at once!",
 								"I hope you realize the view inside here is terribly boring.",
-								"What do you want of me? To curate the inside of this [S]?",
-								"Miserable. Sealed inside a [S].",
-								"Can't make it! Can't make it! [capitalize(S)] stuck! Please, I beg you!",
-								"This is really no substitute from a coffin.",
+								"What do you want of me? To curate the inside of this [S.name]?",
+								"Miserable. Sealed inside \a [S].",
+								"Can't make it! Can't make it! [capitalize(S.name)] stuck! Please, I beg you!",
+								"This is really no substitute for a coffin.",
 								"What, pray tell, am I supposed to be doing inside here?")
 		to_chat(H,"<B>[src]</B> [pick("murmurs","shrieks","hisses","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
 
@@ -631,6 +643,16 @@
 	if(!genecheck(user))
 		return
 
+	if(last_used + VAMP_FLASH_CD > world.timeofday)
+		var/list/reject_phrases = list("Bah. You can't be serious.",
+										"Again? You work me harder than I beat my slaves.",
+										"Enough. I must recover, first.",
+										"Cease your incessant squeezing, mortal.",
+										"I am not a flash, you blithering idiot."
+										)
+		to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
+		return
+
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [name] by [key_name(user)]</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to flash [key_name(M)]</font>")
 
@@ -649,8 +671,18 @@
 		return
 	Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
 
-	visible_message("<span class='danger'>\The eyes of [user]'s [name] emit a blinding flash toward [M]!</span>")
+	visible_message("<span class='danger'>The eyes of [user]'s [name] emit a blinding flash toward [M]!</span>")
 	last_used = world.timeofday
+
+/obj/item/device/vampirehead/afterattack(atom/A, mob/user)
+	..()
+	if(isobj(A))
+		var/list/impact_phrases =  list("Oof.",
+										"Ow.",
+										"Ack.",
+										"JUST.",
+										"Eugh.")
+		to_chat(user,"<B>[src]</B> [pick("moans","chokes","groans","complains")], \"<span class='sinister'>[pick(impact_phrases)]</span>\"")
 
 //Autocuffer is like a cyborg handcuff dispenser for carbons
 /obj/item/weapon/autocuffer
