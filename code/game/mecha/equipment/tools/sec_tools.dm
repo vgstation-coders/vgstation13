@@ -26,7 +26,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/jail/allow_drop()
 	return 0
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/jail/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
 	for(var/cell in cells) //safety nets
