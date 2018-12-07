@@ -1854,3 +1854,12 @@ mob/living/carbon/human/isincrit()
 	var/datum/organ/internal/heart/cell/C = get_heart()
 	if(istype(C))
 		return C.cell
+
+// Returns null on failure, the butt on success.
+/mob/living/carbon/human/proc/remove_butt(var/where = loc)
+	if(op_stage.butt == SURGERY_NO_BUTT)
+		return
+	var/obj/item/clothing/head/butt/donkey = new(where)
+	donkey.transfer_buttdentity(src)
+	op_stage.butt = SURGERY_NO_BUTT
+	return donkey
