@@ -282,11 +282,12 @@
 				if (isvox(H) || isskelevox(H))
 					sound = pick(birb_sounds)
 
-				else switch(H.gender)
-					if (MALE)
-						sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-					if (FEMALE)
-						sound = pick(female_sounds)
+				else
+					switch(H.gender)
+						if (MALE)
+							sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+						if (FEMALE)
+							sound = pick(female_sounds)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
 
