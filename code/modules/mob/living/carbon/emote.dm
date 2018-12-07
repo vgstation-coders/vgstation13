@@ -244,7 +244,7 @@
 	male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 	female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 	sound_message = "screams in agony!"
-	mob_type_blacklist_typelist = list(/mob/living/carbon/human/vox, /mob/living/carbon/human/skelevox)
+	voxemote = FALSE
 
 /datum/emote/living/carbon/sound/shriek
 	key = "shriek"
@@ -255,8 +255,8 @@
 	stat_allowed = UNCONSCIOUS
 	birb_sounds = list('sound/misc/shriek1.ogg')
 	sound_message = "shrieks in agony!"
-	mob_type_allowed_typelist = list(/mob/living/carbon/human/vox, /mob/living/carbon/human/skelevox)
-
+	voxemote = TRUE
+	voxrestrictedemote = TRUE
 
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
@@ -289,6 +289,7 @@
 						sound = pick(female_sounds)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
+
 	else
 		message = "makes a very loud noise."
 
