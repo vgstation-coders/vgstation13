@@ -268,6 +268,7 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	var/law_borg = "Accomplish your AI's objectives at all costs."
 	to_chat(killer, "<b>Your laws have been changed!</b>")
 	killer.set_zeroth_law(law, law_borg)
+	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
 
@@ -288,11 +289,11 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 		agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
-		
+
 	if(syndicate_code_phrase || syndicate_code_response)
 		words += "Use the code words in the order provided, during regular conversation, to identify other agents. Proceed with caution, however, as everyone is a potential foe.<br>"
 	else
 		words += "Trust nobody.<br>"
-		
+
 	to_chat(agent,words)
 	return 1
