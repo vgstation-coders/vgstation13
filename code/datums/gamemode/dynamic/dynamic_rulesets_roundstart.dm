@@ -332,9 +332,9 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 3
-	weight = 3
-	cost = 25
-	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	weight = 2
+	cost = 45
+	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	var/required_heads = 3
 
 /datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
