@@ -135,6 +135,10 @@
 
 #define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
 
+#define CONVERSION_REFUSE	-1
+#define CONVERSION_NOCHOICE	0
+#define CONVERSION_ACCEPT	1
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags

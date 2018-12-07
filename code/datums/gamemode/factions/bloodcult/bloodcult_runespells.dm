@@ -681,7 +681,7 @@
 	var/remaining = 100
 	var/mob/living/carbon/victim = null
 	var/flavor_text = 0
-	var/success = 0
+	var/success = CONVERSION_NOCHOICE
 	var/list/impede_medium = list(
 		"Security Officer",
 		"Warden",
@@ -855,24 +855,24 @@
 				conversion.icon_state = "rune_convert_good"
 				to_chat(activator, "<span class='sinister'>\The [victim] effortlessly opens himself to the teachings of Nar-Sie. They will undoubtedly become one of us when the ritual concludes.</span>")
 				to_chat(victim, "<span class='sinister'>Your begin hearing strange words, straight into your mind. Somehow you think you can understand their meaning. A sense of dread and fascination comes over you.</span>")
-				success = 1
+				success = CONVERSION_ACCEPT
 			if ("No","???")
 				to_chat(activator, "<span class='sinister'>The ritual arrives in its final phase. How it ends depends now of \the [victim].</span>")
 				spawn()
 					if (alert(victim, "You feel the gaze of an alien entity, it speaks into your mind. It has much to share with you, but time is of the essence. Will you open your mind to it? Or will you become its sustenance? Decide now!","You have 10 seconds","Join the Cult","Be Devoured") == "Join the Cult")
 						conversion.icon_state = "rune_convert_good"
-						success = 1
+						success = CONVERSION_ACCEPT
 						to_chat(victim, "<span class='sinister'>As you let the strange words into your mind, you find yourself suddenly understanding their meaning. A sense of dread and fascination comes over you.</span>")
 					else
 						conversion.icon_state = "rune_convert_bad"
 						to_chat(victim, "<span class='danger'>You won't let it have its way with you! Better die now as a human, than serve them.</span>")
-						success = -1
+						success = CONVERSION_REFUSE
 
 			if ("Never","Banned")
 				conversion.icon_state = "rune_convert_bad"
 				to_chat(activator, "<span class='sinister'>\The [victim]'s mind appears to be completely impervious to the Geometer of Blood's words of power. If they won't become one of us, they won't need their body any longer.</span>")
 				to_chat(victim, "<span class='danger'>A sense of dread comes over you, as you feel under the gaze of a cosmic being. You cannot hear its voice, but you can feel its thirst...for your blood!</span>")
-				success = -1
+				success = CONVERSION_REFUSE
 				if(victim.mind && victim.mind.assigned_role == "Chaplain")
 					var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 					var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
@@ -909,7 +909,7 @@
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
 
 		switch (success)
-			if (1)
+			if (CONVERSION_ACCEPT)
 				conversion.layer = BELOW_OBJ_LAYER
 				conversion.plane = OBJ_PLANE
 				victim.clear_fullscreen("conversionred", 10)
@@ -929,9 +929,9 @@
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
 				return
-			if (0)
+			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
-			if (-1)
+			if (CONVERSION_REFUSE)
 				to_chat(victim, "<span class='danger'>Your mind was impervious to the teachings of Nar-Sie. Being of no use for the cult, your body was be devoured when the ritual ended. Your blood and equipment now belong to the cult.</span>")
 				switch(acceptance)
 					if ("Never")
