@@ -689,7 +689,7 @@ var/global/num_vending_terminals = 1
 		src.TurnOff(600) //A whole minute
 	/*if(prob(1))
 		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
-		user.emote("scream",,, 1)
+		user.audible_scream()
 		shake_camera(user, 2, 1)*/
 
 /obj/machinery/vending/kick_act(mob/living/carbon/human/user)

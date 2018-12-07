@@ -162,4 +162,7 @@
 	emote("coughs", message = TRUE, ignore_status = TRUE)
 
 /mob/proc/audible_scream()
-	emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+	if(isvox(src) || isskelevox(src))
+		emote("shrieks", message = TRUE, ignore_status = TRUE)
+		return
+	else emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced

@@ -262,7 +262,7 @@
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
 
-					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.audible_scream()
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
 					spark(H, 3, FALSE)
