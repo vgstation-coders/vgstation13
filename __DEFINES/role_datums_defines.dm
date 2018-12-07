@@ -16,6 +16,7 @@
 #define CUSTOMSQUAD "custom squad"
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
+#define CLOCKWORK "clockwork"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -50,6 +51,7 @@
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
 #define IMPLANTLEADER "Grey Leader"
+#define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
