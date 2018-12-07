@@ -165,4 +165,5 @@
 	if(isvox(src) || isskelevox(src))
 		emote("shrieks", message = TRUE, ignore_status = TRUE)
 		return
+
 	else emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced

@@ -281,6 +281,7 @@
 				var/sound
 				if (isvox(H) || isskelevox(H))
 					sound = pick(birb_sounds)
+
 				else switch(H.gender)
 					if (MALE)
 						sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
