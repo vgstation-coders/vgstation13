@@ -23,6 +23,7 @@
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
 	var/reloadsound = 'sound/items/Deconstruct.ogg'
+	var/casingsound = null
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
@@ -136,6 +137,7 @@
 		loaded -= AC //Remove casing from loaded list.
 	if(gun_flags &EMPTYCASINGS)
 		AC.forceMove(get_turf(src)) //Eject casing onto ground.
+		playsound(AC, casingsound, 25, 0.2, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.forceMove(src) //Set projectile loc to gun.

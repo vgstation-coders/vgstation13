@@ -33,6 +33,36 @@
 /obj/item/ammo_storage/magazine/beretta/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/a12ga
+	name = "NT-12 box magazine (12ga)"
+	desc = "A box magazine designed for the NT-12. Holds 4 rounds."
+	icon_state = "nt12-mag"
+	origin_tech = Tc_COMBAT + "=2"
+	caliber = GAUGE12
+	ammo_type = "/obj/item/ammo_casing/shotgun"
+	exact = 0
+	max_ammo = 4
+	multiple_sprites = 1
+	sprite_modulo = 4
+
+/obj/item/ammo_storage/magazine/a12ga/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/a12ga/drum
+	name = "NT-12 drum magazine (12ga)"
+	desc = "A drum magazine designed for the NT-12. Holds 20 rounds."
+	icon_state = "nt12-drum"
+	origin_tech = Tc_COMBAT + "=2"
+	caliber = GAUGE12
+	ammo_type = "/obj/item/ammo_casing/shotgun"
+	exact = 0
+	max_ammo = 20
+	multiple_sprites = 1
+	sprite_modulo = 20
+
+/obj/item/ammo_storage/magazine/a12ga/drum/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/a12mm
 	name = "magazine (12mm)"
 	icon_state = "12mm"
