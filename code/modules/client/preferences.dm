@@ -1094,9 +1094,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					else
 						to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
 				if("next_hair_style")
-					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
+					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("previous_hair_style")
-					h_style = previous_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
+					h_style = previous_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("next_facehair_style")
 					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
