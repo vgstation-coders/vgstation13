@@ -479,12 +479,15 @@ obj/item/weapon/banhammer/admin
 
 
 /obj/item/weapon/rapier
-	name = "rapier"
+
 	var/high_stance_desc = "It is currently held high. In this stance you strike harder. En Garde!"
 	var/low_stance_desc = "It is currently held low. In this stance you can parry attacks. Allez !"
+
+
+	name = "rapier"
 	desc = high_stance_desc //blade starts with high stance by default.
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	icon_state = "rapier"
+	icon_state = "rapier2"
 	item_state = "rapier"
 	hitsound = "sound/weapons/bladeslice.ogg"
 	flags = FPRINT
@@ -528,12 +531,12 @@ obj/item/weapon/banhammer/admin
 		set_high_stance()
 	usr.update_inv_hands()
 	playsound(src, 'sound/weapons/swish.ogg', 25, 1)
+	user.visible_message("<span class='warning'>You switch your stance with /the [src] to [stance]!</span>")
 
 
 /obj/item/weapon/rapier/attack_self(mob/living/user as mob)
 	if(cooldown < world.time - 2)
 		swap_stance()
-		user.visible_message("<span class='warning'>You switch your stance with /the [src] to [stance]!</span>")
 		cooldown = world.time
 	else
 		..()
@@ -556,7 +559,7 @@ obj/item/weapon/banhammer/admin
 	low_stance_force =20
 
 	base_icon = "cane-sword"
-	var/swordmode_attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
+	var/swordmode_attack_verb = list("pokes", "stabs", "impales","attacks","flicks","jabs")
 	var/swordmode_sharpness = 1.2
 	var/swordmode_sharpness_flags = SHARP_TIP
 	var/swordmode_hitsound = "sound/weapons/bladeslice.ogg"
@@ -565,7 +568,7 @@ obj/item/weapon/banhammer/admin
 	sharpness_flags = SHARP_TIP
 	force = high_stance_force
 	stance = "high"
-
+	attack_verb  = swordmode_attack_verb
 
 /obj/item/weapon/rapier/cane-sword/verb/conceal()
 	name = "cane"
@@ -582,8 +585,10 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/rapier/cane-sword/proc/unsheathe()
 	name = swordmode_name
+	attack_verb = swordmode_attack_verb
 	hitsound = swordmode_hitsound
-	swordmode_sharpness_flags
+	sharpness = swordmode_sharpness
+	sharpness_flags = swordmode_sharpness_flags
 
 
 	//playsound shiiiiing
@@ -601,27 +606,15 @@ obj/item/weapon/banhammer/admin
 	icon_state = base_icon
 	item_state = base_icon
 	stance = "high"
-	force = high_stance_force
+	force = high_stance_forcea
 */
 
 /obj/item/weapon/rapier/cane-sword/attack_self(mob/living/user as mob)
 	if (stance == 0)
 		unsheathe()
-
-	if(cooldown < world.time - 2)
 		swap_stance()
-		if (stance == 0)
-			unsheathe()
-		else
-			user.visible_message("<span class='warning'>You switch your stance with /the [src] to [stance]!</span>")
-		cooldown = world.time
 	else
-		..()
-
-
-
-
-
+		swap_stance
 
 /*
 /obj/item/weapon/cane
