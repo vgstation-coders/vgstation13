@@ -28,6 +28,7 @@
 	vision_range = 12
 	var/angered
 	var/list/enemies = list()
+	var/dying
 
 /mob/living/simple_animal/hostile/roboduck/examine(mob/user)
 	..()
@@ -58,6 +59,8 @@
 		update_icon()
 
 /mob/living/simple_animal/hostile/roboduck/bullet_act(var/obj/item/projectile/Proj)
+	if(dying)
+		return
 	do_teleport(src, get_turf(src), 3, asoundout = 'sound/misc/roboquack.ogg')
 	.=..()
 	if(Proj.firer)
@@ -88,6 +91,8 @@
 		enemies.Remove(the_target)
 
 /mob/living/simple_animal/hostile/roboduck/MoveToTarget()
+	if(dying)
+		return
 	if(isturf(loc))
 		if(get_dist(src, target) >= vision_range)
 			var/list/L = view(get_turf(target), 4)
@@ -103,20 +108,20 @@
 
 /mob/living/simple_animal/hostile/roboduck/OpenFire()
 	set waitfor = 0
+	if(dying)
+		return
 	playsound(src, 'sound/misc/quacktivated.ogg', 40, 5, 4)
 	do_flick(src, "[initial(icon_state)]_gunfetti_start", 5)
 	icon_state = "[initial(icon_state)]_gunfetti_loop"
-	canmove = 0
 	var/volleys = rand(2,5)
 	for(var/i = 0,i < volleys, i++)
 		for(var/direction in alldirs)
 			sleep(1)
-			if(gcDestroyed)
+			if(gcDestroyed || dying)
 				return
 			var/turf/destination = get_ranged_target_turf(get_turf(src), direction, 10)
 			TryToShoot(destination)
 	do_flick(src, "[initial(icon_state)]_gunfetti_end", 5)
-	canmove = 1
 	update_icon()
 
 /mob/living/simple_animal/hostile/roboduck/AttackingTarget()
@@ -146,19 +151,23 @@
 	..()
 
 /mob/living/simple_animal/hostile/roboduck/death(var/gibbed = 0)
-	visible_message("<span class = 'warning'>Something cracks and breaks within \the [src], as it begins to implode!</span>")
-	for(var/mob/living/M in view(src))
-		M.playsound_local(get_turf(src), get_sfx("explosion"), 100, 1, get_rand_frequency(), falloff = 5)
-		if(!M.client)
-			continue
-		var/int_distance = get_dist(M, src)
-		shake_camera(M, 5, 2/int_distance)
-	playsound(src, 'sound/misc/roboquack_death.ogg', 40, 15, 10, 5)
-	var/matrix/death_animation = matrix()
-	death_animation.Scale(0,0)
-	death_animation.Turn(120)
-	animate(src, transform = death_animation, time = 5 SECONDS, easing = QUAD_EASING)
-	spawn(5 SECONDS)
-		..(TRUE)
-		robogibs(get_turf(src))
-		qdel(src)
+	if(!dying)
+		canmove = 0
+		walk(src,0)
+		dying = TRUE
+		visible_message("<span class = 'warning'>Something cracks and breaks within \the [src], as it begins to implode!</span>")
+		for(var/mob/living/M in view(src))
+			M.playsound_local(get_turf(src), get_sfx("explosion"), 100, 1, get_rand_frequency(), falloff = 5)
+			if(!M.client)
+				continue
+			var/int_distance = get_dist(M, src)
+			shake_camera(M, 5, 2/int_distance)
+		playsound(src, 'sound/misc/roboquack_death.ogg', 40, TRUE, falloff = 5)
+		var/matrix/death_animation = matrix()
+		death_animation.Scale(0,0)
+		death_animation.Turn(120)
+		animate(src, transform = death_animation, time = 5 SECONDS, easing = QUAD_EASING)
+		spawn(5 SECONDS)
+			..(TRUE)
+			robogibs(get_turf(src))
+			qdel(src)
