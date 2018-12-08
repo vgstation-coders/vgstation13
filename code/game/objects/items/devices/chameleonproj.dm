@@ -143,7 +143,9 @@
 /obj/effect/dummy/chameleon/attack_hand()
 	disrupt()
 
-/obj/effect/dummy/chameleon/ex_act()
+/obj/effect/dummy/chameleon/ex_act(severity)
+	for(var/mob/M in src)
+		ex_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/bullet_act()
