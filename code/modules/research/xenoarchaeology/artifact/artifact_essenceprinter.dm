@@ -1,6 +1,6 @@
 /obj/structure/essence_printer
-	name = "strange human-shaped stone"
-	desc = "A strange stone, with a hole shaped oddly like yourself. It lets off an eerie red glow."
+	name = "strange stone"
+	desc = "A strange stone. It lets off an eerie red glow."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "Essence_imprinter_idle"
 	var/datum/dna2/record/R
@@ -8,10 +8,14 @@
 	var/mob/bound_soul
 	var/ready
 
+/obj/structure/essence_printer/New()
+	..()
+	set_light(3,5,LIGHT_COLOR_RED)
+
 /obj/structure/essence_printer/Destroy()
 	if(bound_soul && bound_soul.on_death)
 		bound_soul.on_death.Remove(soulbound)
-	bould_soul = null
+	bound_soul = null
 	soulbound = null
 	..()
 
