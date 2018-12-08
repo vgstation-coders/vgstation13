@@ -103,6 +103,7 @@
 
 /obj/docking_port/destination/vault/listening
 	areaname = "outpost V-24"
+
 /area/vault/biodome
 	requires_power = 1
 
@@ -939,3 +940,9 @@
 		/obj/item/weapon/stock_parts/console_screen\
 	)
 
+// Minisat
+/obj/docking_port/destination/vault/minisat
+	name = "NT Microstation 1"
+
+/area/vault/mini_station
+	name = "NT Microstation 1"
