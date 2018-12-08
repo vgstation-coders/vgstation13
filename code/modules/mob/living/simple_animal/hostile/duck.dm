@@ -25,6 +25,7 @@
 	melee_damage_upper = 20
 	attack_sound = 'sound/weapons/circsawhit.ogg'
 	stat_attack = DEAD
+	vision_range = 12
 	var/angered
 	var/list/enemies = list()
 
