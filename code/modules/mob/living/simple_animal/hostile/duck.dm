@@ -3,6 +3,7 @@
 	desc = "A strange automaton in the shape of a rubber duck."
 	icon_state = "Duck_lord"
 	icon_living = "Duck_lord_friendly"
+	response_help = "hugs"
 	icon_dead = null //Explodes on death
 	health = 1000
 	maxHealth = 1000
@@ -68,7 +69,7 @@
 
 /mob/living/simple_animal/hostile/roboduck/attack_hand(mob/user)
 	.=..()
-	if(user)
+	if(user && user.a_intent != I_HELP)
 		enemies.Add(user)
 
 /mob/living/simple_animal/hostile/roboduck/ex_act()
