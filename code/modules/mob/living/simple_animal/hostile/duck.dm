@@ -45,14 +45,14 @@
 /mob/living/simple_animal/hostile/roboduck/Aggro()
 	..()
 	if(!angered && do_flick(src, "[initial(icon_state)]_angered"))
-		playsound(src, 'sound/misc/quacktivated.ogg', 40, 5)
+		playsound(src, 'sound/misc/quacktivated.ogg', 40, TRUE)
 		angered = TRUE
 		update_icon()
 
 /mob/living/simple_animal/hostile/roboduck/LoseAggro()
 	..()
 	if(angered && do_flick(src, "[initial(icon_state)]_calming"))
-		playsound(src, 'sound/misc/roboquack.ogg', 40, 5)
+		playsound(src, 'sound/misc/roboquack.ogg', 40, TRUE)
 		angered = FALSE
 		update_icon()
 
@@ -109,9 +109,9 @@
 	var/volleys = rand(2,5)
 	for(var/i = 0,i < volleys, i++)
 		for(var/direction in alldirs)
+			sleep(1)
 			if(gcDestroyed)
 				return
-			sleep(1)
 			var/turf/destination = get_ranged_target_turf(get_turf(src), direction, 10)
 			TryToShoot(destination)
 	do_flick(src, "[initial(icon_state)]_gunfetti_end", 5)
