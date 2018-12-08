@@ -864,17 +864,20 @@
 				return
 			switch(remove)
 				if ("power cell")
-					if(cell)
-						cell.forceMove(src.loc)
-						cell = null
+					if(!cell)
+						return
+					cell.forceMove(src.loc)
+					cell = null
 				if ("exosuit tracking beacon")
-					if(tracking)
-						tracking.forceMove(src.loc)
-						tracking = null
+					if(!tracking)
+						return
+					tracking.forceMove(src.loc)
+					tracking = null
 				if ("electropack")
-					if(electropack)
-						electropack.forceMove(src.loc)
-						electropack = null
+					if(!electropack)
+						return
+					electropack.forceMove(src.loc)
+					electropack = null
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [remove] from \the [src].</span>")
 			src.log_message("Internal component removed - [remove]")
