@@ -95,7 +95,7 @@ var/global/no_pin_for_debit = TRUE
 		transaction_log.Add(T)
 		return 1
 	else
-		to_chat(usr, "[bicon(src)] <span class='warning'>Not enough funds in account.</span>")
+		to_chat(usr, "<span class='warning'>Not enough funds in account.</span>")
 		return 0
 
 // Charging cards is an absolute mess so let's make it consistent.
@@ -309,8 +309,12 @@ var/global/no_pin_for_debit = TRUE
 		if(security_check != CARD_CAPTURE_SUCCESS)
 			return security_check
 
-	if( !PRIMARY_SAME_AS_DEST && SECONDARY_NO_FUNDS || secondary_money_account && !SECONDARY_SAME_AS_DEST && PRIMARY_NO_FUNDS )
-		// Verify that all applicable payment methods still have the required amount of money in case a race condition happened while getting information, otherwise fail.
+	if(!secondary_money_account && PRIMARY_NO_FUNDS && !PRIMARY_SAME_AS_DEST)
+		//If we aren't using a secondary account, make sure we've got enough money in the primary (assuming it's not our destination)
+		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+	if(secondary_money_account && SECONDARY_NO_FUNDS && !SECONDARY_SAME_AS_DEST)
+		//Secondary only exists if partially paying with both. If that's the case, make sure they can cover the remaining balance there.
 		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 
