@@ -1802,7 +1802,7 @@ Thanks.
 	user.visible_message("<span class='warning'>[user] injects [src] with the \the [tool]!</span>",
 						 "<span class='warning'>You inject [src] with \the [tool]!</span>")
 	var/reagent_names = english_list(tool.get_reagent_names())
-	add_attacklogs(user, src, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
+	add_attacklogs(user, src, "injected", object = tool, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
 
 	// TODO Every reagent reacts with the full volume instead of being scaled accordingly
 	// TODO which is pretty irrelevant now but should be fixed
