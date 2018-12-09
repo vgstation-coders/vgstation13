@@ -21,14 +21,14 @@
 	var/obj/item/I = R.installed_module(C)
 
 	if(!I)
-		to_chat(user, "[R] is missing one of the needed components!")
+		to_chat(user, "\The [R] is missing one of the needed components!")
 		return null
 
 	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user, var/ignore_cover = FALSE)
 	if(!R.module)
-		to_chat(user, "<span class='warning'>[R] must choose a module before it can be upgraded!</span>")
+		to_chat(user, "<span class='warning'>\The [R] must choose a module before it can be upgraded!</span>")
 		return FAILED_TO_ADD
 
 	if(required_module.len)
@@ -41,11 +41,11 @@
 		return FAILED_TO_ADD
 
 	if(!R.opened && !ignore_cover)
-		to_chat(user, "<span class='warning'>You must first open [R]'s cover!</span>")
+		to_chat(user, "<span class='warning'>You must first open \the [R]'s cover!</span>")
 		return FAILED_TO_ADD
 
 	if(!multi_upgrades && (type in R.module.upgrades))
-		to_chat(user, "<span class='warning'>There is already \a [src] in [R].</span>")
+		to_chat(user, "<span class='warning'>There is already \a [src] in \the [R].</span>")
 		return FAILED_TO_ADD
 
 	R.module.upgrades += type
@@ -54,8 +54,21 @@
 		for(var/module_to_add in modules_to_add)
 			R.module.modules += new module_to_add(R.module)
 
-	to_chat(user, "<span class='notice'>You successfully apply \the [src] to [R].</span>")
+	to_chat(user, "<span class='notice'>You successfully apply \the [src] to \the [R].</span>")
 	user.drop_item(src, R)
+
+/obj/item/borg/upgrade/proc/securify_module(var/mob/living/silicon/robot/R)
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
+		R.module.ResetEncryptionKey(R)
+		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
+		R.module.AddEncryptionKey(R)
+
+	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
+		pop(R.module.sensor_augs)
+		R.module.sensor_augs.Add("Security", "Disable")
+	
+	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
+		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
 /obj/item/borg/upgrade/reset
 	name = "cyborg reset board"
@@ -67,7 +80,7 @@
 		return FAILED_TO_ADD
 	
 	if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE))
-		visible_message("<span class='notice'>[R] buzzes oddly, and ejects \the [src].</span>")
+		visible_message("<span class='notice'>\The [R] buzzes oddly, and ejects \the [src].</span>")
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 		R.module.upgrades -= type
 		src.forceMove(R.loc)
@@ -88,52 +101,42 @@
 
 /obj/item/borg/upgrade/rename/attack_self(mob/user as mob)
 	heldname = reject_bad_name(stripped_input(user, "Enter new robot name to force, or leave clear to let the robot pick a name", "Robot Rename", heldname, MAX_NAME_LEN),1)
-	if (heldname)
-		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves. Current selected name is \"[heldname]\"."
-	else
-		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
+	desc = "[initial(desc)][heldname ? " Current selected name is \"[heldname]\".":""]"
 
 /obj/item/borg/upgrade/rename/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	if (!heldname)
+	if(!heldname)
 		R.custom_name = null
 		R.updatename()
 		if(R.can_diagnose()) //Few know this verb exists, hence a message
 			to_chat(R, "<span class='info' style=\"font-family:Courier\">You may now change your name through the Namepick verb, under Robot Commands.</span>")
 		R.namepick_uses ++
-		R.module.upgrades -= /obj/item/borg/upgrade/rename //So you can rename more than once
 	else
 		R.name = heldname
 		R.custom_name = heldname
 		R.real_name = heldname
 		R.updatename()
-		R.updateicon()
 		if(R.can_diagnose())
 			to_chat(R, "<span class='info' style=\"font-family:Courier\">Your name has been changed to \"[heldname]\".</span>")
-		R.module.upgrades -= /obj/item/borg/upgrade/rename
+	R.module.upgrades -= /obj/item/borg/upgrade/rename //So you can rename more than once
 
 /obj/item/borg/upgrade/restart
 	name = "cyborg emergency restart board"
 	desc = "Used to force a restart of a disabled-but-repaired robot, bringing it back online."
 	icon_state = "cyborg_upgrade1"
 
-
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	playsound(R, "sound/machines/click.ogg", 20, 1)
-	to_chat(user, "You plug the board into the robot's core circuitry.")
-
-	sleep(5)
-
 	if(R.health < 0)
 		playsound(R, "sound/machines/buzz-two.ogg", 50, 0)
-		to_chat(user, "You have to repair the robot before using this module!")
+		to_chat(user, "You have to repair \the [R] before using this module!")
 		return FALSE
 
+	playsound(R, "sound/machines/click.ogg", 20, 1)
+	to_chat(user, "You plug \the [src] into \the [R]'s core circuitry.")
+	sleep(5)
 	playsound(R, "sound/machines/paistartup.ogg", 50, 1)
-	to_chat(user, "<span style=\"font-family:Courier\">Systems reboot initialized successfully.</span>")
-
 	sleep(5)
 
 	if(!R.key)
@@ -144,19 +147,8 @@
 	playsound(R, "sound/voice/liveagain.ogg", 75, 1)
 	R.stat = CONSCIOUS
 	R.resurrect()
-
-/obj/item/borg/upgrade/proc/securify_module(var/mob/living/silicon/robot/R)
-	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
-		R.module.ResetEncryptionKey(R)
-		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
-		R.module.AddEncryptionKey(R)
-
-	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
-		pop(R.module.sensor_augs)
-		R.module.sensor_augs.Add("Security", "Disable")
-	
-	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
-		R.module.quirk_flags |= MODULE_IS_THE_LAW
+	if(R.can_diagnose())
+		to_chat(R, "<span style=\"font-family:Courier\">System reboot finished successfully.</span>")
 
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
@@ -194,13 +186,16 @@
 	required_module = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules + special_robot_modules //No MoMMI, i like it the way it is.
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(R.illegal_weapons == TRUE)
+	if(R.emagged || R.illegal_weapons) //Dum Dum
 		return FAILED_TO_ADD
 
 	if(..())
 		return FAILED_TO_ADD
 
-	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.modtype] [R.braintype]).")
+	if(R.can_diagnose())
+		to_chat(R, "<span class='danger'>ALERT: Malicious code detected in \the [name].</span>")
+
+	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on \the [R](\a [R.modtype] [R.braintype]).")
 
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
@@ -323,7 +318,8 @@
 		return FAILED_TO_ADD
 
 	if(T.recharge_time <= 2)
-		to_chat(R, "Maximum cooling achieved for this hardpoint!")
+		if(R.can_diagnose())
+			to_chat(R, "<span style=\"font-family:Courier\">Maximum cooling achieved for \the [T] hardpoint.</span>")
 		to_chat(user, "There's no room for another cooling unit!")
 		return FAILED_TO_ADD
 
