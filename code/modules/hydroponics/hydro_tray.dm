@@ -249,7 +249,7 @@
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && istype(O, /obj/item/weapon/pickaxe/shovel))
+	else if(seed && isshovel(O))
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
