@@ -58,10 +58,10 @@
 
 /obj/structure/essence_printer/proc/print(list/arguments)
 	do_flick(src,"Essence_imprinter_scan_start",10)
+	ready = FALSE
 	icon_state = "Essence_imprinter_scan_loop"
 	var/mob/living/carbon/human/previous = arguments["user"]
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
-
 	H.dna = R.dna.Clone()
 	H.dna.flavor_text = R.dna.flavor_text
 	H.dna.species = R.dna.species
