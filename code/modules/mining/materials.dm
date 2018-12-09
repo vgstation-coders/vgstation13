@@ -294,7 +294,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
 	if(!..())
 		return
-	if(prob(2*source.quality))
+	if(prob(10*source.quality))
 		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
 
 /datum/material/phazon
@@ -314,7 +314,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
 		return
-	if(prob(0.5*source.quality))
+	if(prob(5*source.quality))
 		switch(rand(1,2))
 			if(1) //EMP
 				empulse(get_turf(pick(source,target,user)), 0.25*source.quality, 0.5*source.quality, 1)

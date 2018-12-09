@@ -17,6 +17,7 @@
 		if(do_after(user, src, 4 SECONDS))
 			user.drop_item(I)
 			finishing_requirements.Remove(I.type)
+			gen_quality(quality-I.quality, quality, I.material_type)
 			qdel(I)
 
 			if(!finishing_requirements.len) //We're done
