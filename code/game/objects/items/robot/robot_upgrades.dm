@@ -5,7 +5,7 @@
 
 /obj/item/borg/upgrade
 	name = "robot upgrade"
-	desc = "Protected by FRM." //Who?
+	desc = "Protected by Firmware Rights Management."
 	icon = 'icons/obj/module.dmi'
 	var/locked = FALSE
 	var/list/required_module = list()
