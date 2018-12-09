@@ -532,18 +532,24 @@
 
 /obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)
-		to_chat(usr, "<span class='info'>\The [src] is unresponsive.</span>")
+		to_chat(user, "<span class='info'>\The [src] is unresponsive.</span>")
 		return
 
 	if(!istype(SC))
 		if(istype(SC, /obj/item/weapon/disk)) //It's a disk, but not a compactible one
-			to_chat(usr, "<span class='info'>The disk is rejected by \the [src].</span>")
+			to_chat(user, "<span class='info'>The disk is rejected by \the [src].</span>")
 
 		return
 
+	if(disk)
+		//An old disk is already inserted.
+		to_chat(user, "<span class='warning'>The old [disk.name] pops out of the disk slot!</span>")
+		disk.forceMove(src.loc)
+		disk = null
+
 	if(user.drop_item(SC, src))
 		disk = SC
-		to_chat(usr, "<span class='info'>You insert \the [SC] into \the [src].</span>")
+		to_chat(user, "<span class='info'>You insert \the [SC] into \the [src].</span>")
 		src.updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/weapon/card/shuttle_pass/P, mob/user)
