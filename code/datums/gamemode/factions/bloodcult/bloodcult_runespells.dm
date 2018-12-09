@@ -746,9 +746,8 @@
 	flick("rune_convert_start",conversion)
 	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
 
-	var/obj/item/device/gps/secure/SPS = locate() in victim
-	if (SPS)//Think carefully before converting a sec officer
-		SPS.OnMobDeath(victim)
+	for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(victim))
+		SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
