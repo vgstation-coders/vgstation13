@@ -231,6 +231,7 @@
 /datum/emote/living/carbon/sound
 	var/list/male_sounds = null
 	var/list/female_sounds = null
+	var/list/birb_sounds = null
 	var/sound_message = null
 
 /datum/emote/living/carbon/sound/scream
@@ -243,6 +244,19 @@
 	male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 	female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 	sound_message = "screams in agony!"
+	voxemote = FALSE
+
+/datum/emote/living/carbon/sound/shriek
+	key = "shriek"
+	key_third_person = "shrieks"
+	message = "shrieks!"
+	message_mime = "acts out a shriek!"
+	emote_type = EMOTE_AUDIBLE
+	stat_allowed = UNCONSCIOUS
+	birb_sounds = list('sound/misc/shriek1.ogg')
+	sound_message = "shrieks in agony!"
+	voxemote = TRUE
+	voxrestrictedemote = TRUE
 
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
@@ -265,13 +279,18 @@
 				if(sound_message)
 					message = sound_message
 				var/sound
-				switch(H.gender)
-					if (MALE)
-						sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-					if (FEMALE)
-						sound = pick(female_sounds)
+				if (isvox(H) || isskelevox(H))
+					sound = pick(birb_sounds)
+
+				else
+					switch(H.gender)
+						if (MALE)
+							sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+						if (FEMALE)
+							sound = pick(female_sounds)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
+
 	else
 		message = "makes a very loud noise."
 
