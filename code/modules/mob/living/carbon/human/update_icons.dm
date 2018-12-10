@@ -311,6 +311,11 @@ var/global/list/damage_icon_parts = list()
 			update_icons()
 		return
 
+	if(src.head && (src.head.flags & HIDEHAIRCOMPLETELY))
+		if(update_icons)
+			update_icons()
+		return
+
 	//base icons
 	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
 	var/hair_suffix = check_hidden_head_flags(HIDEHEADHAIR) ? "s2" : "s" // s2 = cropped icon
