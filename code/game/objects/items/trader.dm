@@ -200,7 +200,7 @@
 	new /obj/item/weapon/autocuffer(src)
 
 /obj/item/clothing/accessory/bangerboy
-	name = "Banger Boy Advance"
+	name = "\improper Banger Boy Advance"
 	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to easily configure their onboard timers. Straps nicely onto security armor."
 	icon_state = "bangerboy"
 	origin_tech = Tc_COMBAT + "=2"
@@ -258,6 +258,8 @@
 	set category = "Object"
 	set src in usr
 
+	if(!ishuman(loc))
+		return
 	var/mob/living/carbon/human/H = loc
 
 	if(!isjusthuman(H))
@@ -267,8 +269,8 @@
 	if(!dna_profile)
 		dna_profile = H.dna.unique_enzymes
 		to_chat(usr, "<span class='notice'>You submit a DNA sample to \the [src].</span>")
-		verbs += /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
-		verbs -= /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
+		verbs += /obj/item/clothing/head/helmet/donutgiver/verb/erase_DNA_sample
+		verbs -= /obj/item/clothing/head/helmet/donutgiver/verb/submit_DNA_sample
 		update_icon()
 		return 1
 
@@ -282,14 +284,16 @@
 	set category = "Object"
 	set src in usr
 
+	if(!ishuman(loc))
+		return
 	var/mob/living/carbon/human/H = loc
 
 	if(dna_profile)
 		if(dna_profile == H.dna.unique_enzymes)
 			dna_profile = null
 			to_chat(usr, "<span class='notice'>You erase the DNA profile from \the [src].</span>")
-			verbs += /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
-			verbs -= /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
+			verbs += /obj/item/clothing/head/helmet/donutgiver/verb/submit_DNA_sample
+			verbs -= /obj/item/clothing/head/helmet/donutgiver/verb/erase_DNA_sample
 			update_icon()
 		else
 			self_destruct(H)
@@ -309,6 +313,8 @@
 /obj/item/clothing/head/helmet/donutgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = FALSE // speak AFTER the user
 	if(world.timeofday < last_donut+300)
+		return
+	if(!ishuman(speech.speaker))
 		return
 	var/dispense_path
 	if(speech.speaker == loc && !speech.frequency && dna_profile)
@@ -335,7 +341,7 @@
 			H.put_in_hands(I)
 			last_donut = world.timeofday
 
-//Security Skirt spritework is coutesy of TG, AGPL license
+//Security Skirt spritework is coutesy of TG, CC BY-SA 3.0 license
 /obj/item/clothing/under/securityskirt/elite
 	name = "elite security skirt"
 	desc = "For demonstrating who is in charge."
@@ -358,10 +364,10 @@
 	..()
 
 /obj/item/clothing/under/securityskirt/elite/process()
-	if(prob(1) && ishuman(loc))
+	if(ishuman(loc) && prob(1)) //Processing only happens when equipped anyway
 		var/mob/living/carbon/human/H = loc
 		if(!(H.wear_suit && H.wear_suit.body_parts_covered & LEGS)) //It doesn't make sense to swish about if it's covered under something
-			H.visible_message("<span class='warning'>[H]'s [src] swishes threateningly.</span>",
+			H.visible_message("<span class='warning'>[H]'s [src.name] swishes threateningly.</span>",
 				"\The [src] fills you with confidence.",
 				"Something cracks like a whip.")
 			H.reagents.add_reagent(PARACETAMOL,1)
@@ -516,7 +522,7 @@
 		new /mob/living/simple_animal/hostile/retaliate/snowman(center)
 	else
 		new /mob/living/simple_animal/corgi/saint(center)
-	visible_message("<span class='danger'>[user] lets loose the [src]!</span>")
+	visible_message("<span class='danger'>[user] lets loose \the [src]!</span>")
 	qdel(src)
 
 /obj/item/key/security/spare
@@ -653,8 +659,8 @@
 		to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
 		return
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [name] by [key_name(user)]</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to flash [key_name(M)]</font>")
+	M.attack_log += "\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [name] by [key_name(user)]</font>"
+	user.attack_log += "\[[time_stamp()]\] <font color='red'>Used the [name] to flash [key_name(M)]</font>"
 
 	log_attack("<font color='red'>[key_name(user)] Used the [name] to flash [key_name(M)]</font>")
 
