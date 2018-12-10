@@ -113,7 +113,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	..()
 
 	if (!is_holder_of(usr, src))
-		message_admins("[usr] tried to access [src], an unlocked PDA, despite not being its holder.")
+		message_admins("[key_name(usr)] tried to access [src], an unlocked PDA, despite not being its holder. ([formatJumpTo(get_turf(src))])")
 		return FALSE
 
 	if(!active)
