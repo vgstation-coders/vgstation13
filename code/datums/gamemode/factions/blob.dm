@@ -212,6 +212,7 @@ Message ends."}
 		results += "<span class='danger'>The AI has failed to enforce the quarantaine.</span>"
 	else
 		results += "<span class='notice'>The AI has managed to enforce the quarantaine.</span>"
+	return jointext(result, "")
 
 /datum/faction/blob_conglomerate/proc/check_quarantaine()
 	var/list/result = list()
