@@ -112,16 +112,18 @@
 			return
 		//testing("Lawtype: [lawtype]")
 
-		var/law_zeroth=null
-		var/law_zeroth_borg=null
+		var/law_zeroth = ""
+		var/law_zeroth_borg = ""
 		if(S.laws.zeroth || S.laws.zeroth_borg)
 			if(alert(src,"Do you also wish to clear law zero?","Yes","No") == "No")
-				law_zeroth=S.laws.zeroth
-				law_zeroth_borg=S.laws.zeroth
+				law_zeroth = S.laws.zeroth
+				law_zeroth_borg = S.laws.zeroth
+			else
+				S.laws.zeroth_lock = FALSE
 
 		S.laws = new lawtype
-		S.laws.zeroth=law_zeroth
-		S.laws.zeroth_borg=law_zeroth_borg
+		S.laws.zeroth = law_zeroth
+		S.laws.zeroth_borg = law_zeroth_borg
 
 		log_admin("[key_name(usr)] has reset [key_name(S)]: [lawtype]")
 		message_admins("[usr.key] has reset [key_name(S)]: [lawtype]")
