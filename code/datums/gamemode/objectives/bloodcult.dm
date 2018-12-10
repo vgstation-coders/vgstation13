@@ -1,6 +1,6 @@
 
 /datum/objective/bloodcult_reunion
-	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar."
+	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar aboard the station."
 	name = "Blood Cult: Prologue"
 	var/altar_built = FALSE
 
