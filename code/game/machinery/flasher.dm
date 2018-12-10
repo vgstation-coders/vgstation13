@@ -103,7 +103,7 @@ var/list/obj/machinery/flasher/flashers = list()
 				C.Stun(strength)
 		else
 			O.Knockdown(strength)
-			C.Stun(strength)
+			O.Stun(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)
