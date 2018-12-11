@@ -8,6 +8,7 @@
 
 /datum/role/traitor/OnPostSetup()
 	..()
+	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
@@ -20,6 +21,7 @@
 		var/mob/living/silicon/robot/S = antag.current
 		to_chat(S, "<b>Your laws have been changed!</b>")
 		S.set_zeroth_law("","")
+		S.laws.zeroth_lock = FALSE
 		to_chat(S, "Law 0 has been purged.")
 
 	.=..()

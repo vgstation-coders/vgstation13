@@ -34,7 +34,7 @@
 
 	..()
 
-	if(istype(W, /obj/item/weapon/pickaxe/shovel))
+	if(isshovel(W))
 		user.visible_message("<span class='notice'>[user] starts digging out some snow with \the [W].</span>", \
 		"<span class='notice'>You start digging out some snow with \the [W].</span>")
 		user.delayNextAttack(20)

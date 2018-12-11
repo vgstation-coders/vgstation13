@@ -68,8 +68,8 @@
 				L.take_overall_damage(5,0)
 				if(L.locked_to)
 					L.locked_to.unlock_atom(L)
-				L.Stun(5)
-				L.Knockdown(5)
+				L.Stun(2)
+				L.Knockdown(2)
 				L.apply_effect(STUTTER, 5)
 				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
 				breakthrough = 1

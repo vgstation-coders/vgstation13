@@ -5,12 +5,13 @@
 "e" = (/turf/unsimulated/mineral/random,/area/mine/explored)
 "f" = (/turf/unsimulated/mineral/gibtonite,/area/mine/explored)
 "g" = (/turf/unsimulated/mineral/random/high_chance_clown{rockernaut = 2},/area/mine/explored)
+"h" = (/turf/unsimulated/mineral/mythril,/area/mine/explored)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaa
 abbbbbbbbbbbbbbbbbbbbbbba
-aabbbbbbbbbbbbbbbccbbbbaa
-aabbbbddbbbbbbbbbddcbbbaa
+aabbbhhhbbbbbbbbbccbbbbaa
+aabbbhddbbbbbbbbbddcbbbaa
 aabbbbddddbbbbbddddbbbbaa
 abbbbddddddbbbddddddbbbba
 abbbbdddddddbdddddddbbbba

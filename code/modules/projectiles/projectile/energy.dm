@@ -199,3 +199,8 @@
 	spark(T, 4, FALSE)
 	T.turf_animation('icons/obj/projectiles_impacts.dmi',"dark_explosion",0, 0, 13, 'sound/weapons/osipr_altexplosion.ogg')
 	..()
+
+/obj/item/projectile/energy/whammy
+	name = "double whammy shot"
+	icon_state = "bluelaser_old"
+	damage = 30

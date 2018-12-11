@@ -563,8 +563,8 @@ var/list/arcane_tomes = list()
 	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
-	health = 50
-	var/maxHealth = 50
+	health = 40
+	var/maxHealth = 40
 
 /obj/item/weapon/melee/soulblade/Destroy()
 	var/turf/T = get_turf(src)

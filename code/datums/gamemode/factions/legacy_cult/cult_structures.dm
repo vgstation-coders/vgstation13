@@ -3,6 +3,10 @@
 	density = TRUE
 	anchored = TRUE
 
+/obj/structure/cult_legacy/cultify()
+	return
+/obj/structure/cult_legacy/clockworkify()
+	return
 
 /obj/structure/cult_legacy/talisman
 	name = "Altar"

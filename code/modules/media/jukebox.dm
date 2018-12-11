@@ -728,8 +728,6 @@ var/global/list/loopModeNames=list(
 	//current_song=0
 	playing=0
 	update_music()
-	return
-
 
 /obj/machinery/media/jukebox/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -945,8 +943,10 @@ var/global/list/loopModeNames=list(
 
 /obj/item/weapon/vinyl/New(loc,U,F)
 	..(loc)
-	unformatted = U
-	formatted = F
+	if(U)
+		unformatted = U
+	if(F)
+		formatted = F
 	name = "nanovinyl - [formatted]"
 
 //Premades

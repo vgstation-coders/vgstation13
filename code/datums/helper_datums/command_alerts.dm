@@ -391,6 +391,15 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 //////////////BLOOD CULT
 
+/datum/command_alert/cult_detected
+	name = "Occult Activity Detected - Please Investigate"
+	alert_title = "Occult Activity"
+	force_report = 1
+
+/datum/command_alert/cult_detected/announce()
+	message = "Irregularities in the fabric of space-time around [station_name()] appear to correlate with the propagation of occult activities. Remember that cult membership is strictly prohibited by Nanotrasen and exposes you to the death penalty, applicable immediately if evidence is made. We encourage the station's security department to investigate, and the rest of the crew to cooperate with them."
+	..()
+
 /datum/command_alert/bloodstones_raised
 	name = "Occult Activity Detected - Station Locked Down"
 	alert_title = "Occult Assault"
@@ -401,8 +410,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	..()
 
 /datum/command_alert/bloodstones_anchor
-	name = "Occult Activity Critical - Breach Detected"
-	alert_title = "Occult Assault"
+	name = "Occult Activity Critical - Breach of Space-Time Detected"
+	alert_title = "Occult Assault Critical"
 	force_report = 1
 
 /datum/command_alert/bloodstones_anchor/announce()
@@ -410,8 +419,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	..()
 
 /datum/command_alert/bloodstones_broken
-	name = "Occult Activity Ceased - Lock Down Removed"
-	alert_title = "Occult Assault"
+	name = "Occult Activity Ceased - Lock Down Lifted"
+	alert_title = "Occult Gone"
 	force_report = 1
 
 /datum/command_alert/bloodstones_broken/announce()

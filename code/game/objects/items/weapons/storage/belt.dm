@@ -163,8 +163,9 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-        "/obj/item/weapon/reagent_containers/hypospray/autoinjector",
+		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
+		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
 		"/obj/item/weapon/switchtool/surgery",
@@ -214,7 +215,9 @@
 		"/obj/item/device/hailer",
 		"obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
-		"/obj/item/clothing/accessory/holobadge"
+		"/obj/item/clothing/accessory/holobadge",
+		"/obj/item/weapon/autocuffer",
+		"/obj/item/weapon/depocket_wand"
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"

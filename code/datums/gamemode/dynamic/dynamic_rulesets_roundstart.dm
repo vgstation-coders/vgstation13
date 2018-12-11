@@ -93,7 +93,7 @@
 		candidates -= M
 		var/datum/faction/vampire/fac = ticker.mode.CreateFaction(/datum/faction/vampire, null, 1)
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
-		newVampire.Greet(GREET_ROUNDSTART)
+		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
 	update_faction_icons()
 	return 1
@@ -351,3 +351,53 @@
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//               REVS		                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/revs
+	name = "Revolution"
+	role_category = ROLE_REV
+	protected_from_jobs = list("Merchant")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 3
+	weight = 2
+	cost = 45
+	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	var/required_heads = 3
+
+/datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
+	if (!..())
+		return FALSE
+	var/head_check = 0
+	for (var/mob/new_player/player in player_list)
+		if (player.mind.assigned_role in command_positions)
+			head_check++
+	return (head_check >= required_heads)
+
+/datum/dynamic_ruleset/roundstart/revs/execute()
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+	
+	R.OnPostSetup() // Forge our jecties
+
+	var/max_canditates = 4
+	for(var/i = 1 to max_canditates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/revolutionary/leader/lenin = new
+		lenin.AssignToRole(M.mind,1)
+		R.HandleRecruitedRole(lenin)
+		lenin.Greet(GREET_ROUNDSTART)
+		lenin.OnPostSetup()
+	update_faction_icons()
+	return 1

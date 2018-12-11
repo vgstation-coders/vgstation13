@@ -232,20 +232,19 @@
 //Removes the given number of moles from src, and returns a new gas_mixture containing the removed gas.
 /datum/gas_mixture/proc/remove(moles, update = TRUE, update_removed = TRUE)
 	var/sum = total_moles
-	if(!sum)
-		return
 	moles = min(moles, sum) //Cannot take more air than tile has!
-	return remove_ratio(moles / sum, update, update_removed)
+	var/ratio = sum && (moles / sum) //Don't divide by zero
+	return remove_ratio(ratio, update, update_removed)
 
 
 //Removes the given proportion of the gas in src, and returns a new gas_mixture containing the removed gas.
 /datum/gas_mixture/proc/remove_ratio(ratio, update = TRUE, update_removed = TRUE)
+	var/datum/gas_mixture/removed = new()
+
 	if(ratio <= 0 || total_moles <= 0)
-		return
+		return removed
 
 	ratio = min(ratio, 1)
-
-	var/datum/gas_mixture/removed = new()
 
 	for(var/g in gas)
 		var/moles = gas[g] * ratio
@@ -265,10 +264,9 @@
 //Removes the given volume of gas from src, and returns a new gas_mixture containing the removed gas, with the given volume.
 /datum/gas_mixture/proc/remove_volume(removed_volume, update = TRUE, update_removed = TRUE)
 	var/datum/gas_mixture/removed = remove_ratio(removed_volume / volume, update, FALSE)
-	if(removed)
-		removed.volume = removed_volume
-		if(update_removed)
-			removed.update_values()
+	removed.volume = removed_volume
+	if(update_removed)
+		removed.update_values()
 	return removed
 
 
@@ -481,12 +479,12 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 
 /datum/gas_mixture/unsimulated/remove_ratio(ratio, update, update_removed = TRUE)
+	var/datum/gas_mixture/removed = new()
+
 	if(ratio <= 0 || total_moles <= 0)
-		return null
+		return removed
 
 	ratio = min(ratio, 1)
-
-	var/datum/gas_mixture/removed = new()
 
 	for(var/g in gas)
 		removed[g] += gas[g] * ratio

@@ -72,8 +72,44 @@ var/veil_thickness = CULT_PROLOGUE
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
 
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		B.holomap_datum = new /datum/station_holomap/cult()
-		B.holomap_datum.initialize_holomap(B.loc)
+		if (B.loc)
+			B.holomap_datum = new /datum/station_holomap/cult()
+			B.holomap_datum.initialize_holomap(B.loc)
+		else
+			qdel(B)
+			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+
+/proc/cult_risk(var/mob/M)//too many conversions/soul-stoning might bring the cult to the attention of Nanotrasen prematurely
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		return
+	if (cult.warning)
+		return
+	if (veil_thickness == CULT_MENDED || veil_thickness >= CULT_ACT_III)
+		return
+
+	var/living_cultists = 0
+	var/living_noncultists = 0
+	for (var/mob/living/L in player_list)
+		if (L.stat != DEAD)
+			if (iscultist(L))
+				living_cultists++
+			else
+				living_noncultists++
+
+	var/rate = 40//the percent of living cultist at which the risk starts appearing
+	var/risk = min((living_cultists*((100-rate)/50) - living_noncultists*(rate/50)) * 25, 100)//the risk increases very rapidly. at 2-3 cultists over the limit, the exposure is guarranted
+
+	if (risk > 0)
+		if(prob(risk))
+			message_admins("With a chance of [risk]%, the cult's activities have been prematurely exposed.")
+			cult.warning = TRUE
+			command_alert(/datum/command_alert/cult_detected)
+		else
+			message_admins("With a chance of [risk]%, the cult's activities have avoided raising suspicion for now...")
+			if (M)
+				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring attention to us unwanted attention. You should focus on the objective with your current force.</span>")
+
 
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
 //CULT_ACT_I		Altar raised. cultists can now convert.
@@ -98,6 +134,7 @@ var/veil_thickness = CULT_PROLOGUE
 	var/target_change = FALSE
 	var/change_cooldown = 0
 	var/cult_win = FALSE
+	var/warning = FALSE
 
 /datum/faction/bloodcult/check_win()
 	return cult_win
@@ -123,6 +160,11 @@ var/veil_thickness = CULT_PROLOGUE
 			if (M)
 				to_chat(M, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
 
+		for(var/mob/dead/observer/O in player_list)
+			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[message]</span></span>")
+
+		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
+		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
@@ -137,6 +179,7 @@ var/veil_thickness = CULT_PROLOGUE
 	if (change_cooldown > 0)
 		change_cooldown -= 1 SECONDS
 		if (change_cooldown <= 0)
+			target_change = FALSE
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O && !O.IsFulfilled())
 				O.failed_targets += O.sacrifice_target
@@ -435,7 +478,7 @@ var/veil_thickness = CULT_PROLOGUE
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(!(H_user.species.flags & NO_BLOOD))
+	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user
@@ -488,7 +531,10 @@ var/veil_thickness = CULT_PROLOGUE
 			var/mob/living/carbon/human/H = user
 			blood = new()
 			blood.data["blood_colour"] = H.hand_blood_color
-			blood.data["blood_DNA"] = H.blood_DNA
+			if (H.blood_DNA && H.blood_DNA.len)
+				var/blood_DNA = pick(H.blood_DNA)
+				blood.data["blood_DNA"] = blood_DNA
+				blood.data["blood_type"] = H.blood_DNA[blood_DNA]
 			if (!tribute && previous_result != BLOODCOST_TARGET_HANDS)
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
@@ -497,7 +543,10 @@ var/veil_thickness = CULT_PROLOGUE
 			var/obj/effect/decal/cleanable/blood/B = data[BLOODCOST_TARGET_SPLATTER]
 			blood = new()
 			blood.data["blood_colour"] = B.basecolor
-			blood.data["blood_DNA"] = B.blood_DNA
+			if (B.blood_DNA.len)
+				var/blood_DNA = pick(B.blood_DNA)
+				blood.data["blood_DNA"] = blood_DNA
+				blood.data["blood_type"] = B.blood_DNA[blood_DNA]
 			blood.data["virus2"] = B.virus2
 			if (!tribute && previous_result != BLOODCOST_TARGET_SPLATTER)
 				user.visible_message("<span class='warning'>The blood on the floor below \the [user] starts moving!</span>",

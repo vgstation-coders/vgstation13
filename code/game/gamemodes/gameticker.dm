@@ -2,7 +2,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker
 	var/remaining_time = 0
-	var/const/restart_timeout = 600
+	var/const/restart_timeout = 60 SECONDS
 	var/current_state = GAME_STATE_PREGAME
 
 	var/hide_mode = 0
@@ -425,6 +425,7 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
+			end_credits.on_roundend()
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)

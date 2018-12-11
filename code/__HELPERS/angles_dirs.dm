@@ -94,6 +94,25 @@ proc/get_cardinal_dir(atom/A, atom/B)
 			return SOUTHEAST
 
 
+/proc/counter_clockwise_perpendicular_direction(var/dir)
+	switch(dir)
+		if(NORTH)
+			return EAST
+		if(SOUTH)
+			return WEST
+		if(EAST)
+			return SOUTH
+		if(WEST)
+			return NORTH
+		if(NORTHEAST)
+			return NORTHWEST
+		if(SOUTHEAST)
+			return NORTHEAST
+		if(SOUTHWEST)
+			return SOUTHEAST
+		if(NORTHWEST)
+			return SOUTHWEST
+
 /proc/widen_dir(var/dir, var/angle = 45)
 	var/list/dirs = list()
 	dirs += dir

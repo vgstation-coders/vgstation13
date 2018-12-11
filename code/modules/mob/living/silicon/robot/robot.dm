@@ -462,12 +462,13 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
-	if(istype(Proj, /obj/item/projectile/energy/electrode))
-		last_tase_timeofday = world.timeofday
-		if(can_diagnose())
-			to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
-	if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
-		last_high_damage_taken_timeofday = world.timeofday
+	if(!HAS_MODULE_QUIRK(src, MODULE_HAS_PROJ_RES))
+		if(istype(Proj, /obj/item/projectile/energy/electrode))
+			last_tase_timeofday = world.timeofday
+			if(can_diagnose())
+				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
+		if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
+			last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	return 2
