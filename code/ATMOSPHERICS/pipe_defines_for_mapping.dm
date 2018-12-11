@@ -34,6 +34,8 @@
 	piping_layer=DEF_PIPELAYER_SCRUBBERS
 	pixel_x=DEF_PIXELX_SCRUBBERS
 	pixel_y=DEF_PIXELY_SCRUBBERS
+/obj/machinery/atmospherics/unary/vent_scrubber/layered/on
+	on					= 1
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers
 	piping_layer=DEF_PIPELAYER_SCRUBBERS
 	icon_state="adapter_4"
