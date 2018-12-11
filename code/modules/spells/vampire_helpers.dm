@@ -87,6 +87,11 @@
 		if(mind && mind.assigned_role == "Chaplain")
 			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			return 0
+		// Null rod nullifies vampire powers
+		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
+		if (N)
+			to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+			return 0
 		return 1
 
 // If the target is weakened, the spells take less time to complete.
