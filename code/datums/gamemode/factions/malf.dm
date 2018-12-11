@@ -45,6 +45,10 @@
 	return FALSE
 
 /datum/faction/malf/check_win()
+	if (malf_mode_declared)
+		for (var/datum/role/R in members)
+			if (isAI(R.antag.current) && R.antag.current.isDead())
+				return 1
 	if(malf_win)
 		return 1
 	else
