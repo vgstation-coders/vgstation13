@@ -239,6 +239,7 @@
 	if (user.get_inactive_hand() == src)
 		var/obj/item/stack/F = new src.type( user, amount=1)
 		F.copy_evidences(src)
+		F.material_type = material_type
 		user.put_in_hands(F)
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)
