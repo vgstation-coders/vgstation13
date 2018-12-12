@@ -383,6 +383,7 @@
 					 /obj/structure/table,
 					 /obj/structure/grille,
 					 /obj/structure/rack,
+					 /obj/structure/girder,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,

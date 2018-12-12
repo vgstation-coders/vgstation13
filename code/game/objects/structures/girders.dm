@@ -311,6 +311,15 @@
 	..()
 	return 0
 
+
+/obj/structure/girder/attack_animal(var/mob/living/simple_animal/M)
+	M.delayNextAttack(8)
+	if(M.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+		M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
+		"<span class='attack'>You smash through \the [src].</span>")
+		qdel(src)
+
+
 /obj/structure/girder/ex_act(severity)
 	switch(severity)
 		if(1.0)
