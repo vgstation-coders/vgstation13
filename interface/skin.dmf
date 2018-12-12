@@ -139,7 +139,7 @@ macro "macro"
 		command = ".screenshot"
 	elem "F3"
 		name = "F3"
-		command = ".say_window_open"
+		command = "say"
 	elem "F4"
 		name = "F4"
 		command = "me"
@@ -315,7 +315,7 @@ macro "hotkeymode"
 		command = "MoveKey 2 0"
 	elem "T"
 		name = "T"
-		command = ".say_window_open"
+		command = "say"
 	elem "W"
 		name = "W"
 		command = "MoveKey 1 1"
@@ -354,7 +354,7 @@ macro "hotkeymode"
 		command = ".screenshot"
 	elem "F3"
 		name = "F3"
-		command = ".say_window_open"
+		command = "say"
 	elem "F4"
 		name = "F4"
 		command = "me"
@@ -1032,7 +1032,6 @@ window "infowindow"
 		size = 640x480
 		anchor1 = none
 		anchor2 = none
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		title = "Info"
 		is-pane = true
@@ -1045,48 +1044,9 @@ window "infowindow"
 		is-default = true
 		saved-params = ""
 		highlight-color = #00aa00
-		tab-background-color = none
 		allow-html = false
 		on-show = ".winset\"rpane.infob.is-visible=true;rpane.browseb.is-visible=true?rpane.infob.pos=130,0:rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.browseb.is-visible=true?rpane.browseb.is-checked=true rpane.rpanewindow.left=browserwindow:rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
-
-window "say_window"
-	elem "say_window"
-		type = MAIN
-		pos = 800,600
-		size = 303x80
-		background-color = none
-		is-visible = false
-		saved-params = "pos;size;is-minimized;is-maximized"
-		title = "say"
-		statusbar = false
-		can-minimize = false
-		can-resize = false
-	elem "say_cancel"
-		type = BUTTON
-		pos = 180,48
-		size = 60x20
-		anchor1 = none
-		anchor2 = none
-		background-color = none
-		border = line
-		text = "Cancel"
-		command = ".say_window_close"
-	elem "say_ok"
-		type = BUTTON
-		pos = 48,48
-		size = 60x20
-		background-color = none
-		border = line
-		text = "OK"
-		command = ".say_window_ok"
-	elem "say_input"
-		type = INPUT
-		pos = 8,16
-		size = 288x20
-		border = line
-		focus = true
-		command = "say"
 
 window "window1"
 	elem "window1"
@@ -1095,7 +1055,6 @@ window "window1"
 		size = 640x480
 		anchor1 = none
 		anchor2 = none
-		background-color = none
 		is-visible = false
 		border = sunken
 		saved-params = "pos;size;is-minimized;is-maximized"
