@@ -721,7 +721,7 @@
 	if(!ishigherbeing(user))
 		to_chat(user, "<span class = 'warning'>You don't know how to use this!</span>")
 		return
-	if(issilent(user))
+	if(issilent(user) || user.is_mute())
 		to_chat(user, "<span class = 'warning'>You find yourself unable to speak at all.</span>")
 		return
 	if(spamcheck)
