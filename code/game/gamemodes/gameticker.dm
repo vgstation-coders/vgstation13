@@ -182,7 +182,6 @@ var/datum/controller/gameticker/ticker
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	equip_characters()
-	//data_core.manifest() Now handled in create_characters()
 	current_state = GAME_STATE_PLAYING
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
@@ -375,7 +374,7 @@ var/datum/controller/gameticker/ticker
 			else
 
 				var/mob/living/carbon/human/new_character = player.create_character()
-				if(new_character.mind.assigned_role!="MODE"&&new_character.mind.assigned_role!="Cyborg")//MODE is something like a wizard, not announced.
+				if(new_character.mind.assigned_role!="MODE"&&new_character.mind.assigned_role!="Cyborg"&&new_character.mind.assigned_role!="Mobile MMI")//MODE is something like a wizard, not announced.
 					data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
 				qdel(player)
