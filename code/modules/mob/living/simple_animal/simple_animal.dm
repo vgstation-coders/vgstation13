@@ -487,7 +487,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				return 1
 	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
 		return
-	if(supernatural && istype(O,/obj/item/weapon/nullrod))
+	if(supernatural && isholyweapon(O))
 		purge = 3
 	..()
 
