@@ -559,4 +559,4 @@
 			if (!istype(H))
 				return
 			if (prob(35)) // 35% chance of dethralling
-				Drop()
+				Drop(TRUE)
