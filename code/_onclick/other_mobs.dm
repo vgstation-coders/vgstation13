@@ -52,11 +52,6 @@
 	else
 		A.attack_stump(src, params)
 
-	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
-		Move(A, get_dir(src,A), glide_size_override = crawldelay)
-		delayNextMove(crawldelay, additive=1)
-
 	if(proximity && isobj(A))
 		var/obj/O = A
 		if(O.material_type)
