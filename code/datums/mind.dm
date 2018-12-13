@@ -101,6 +101,9 @@
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
 
+	if (hasFactionsWithHUDIcons())
+		update_faction_icons()
+
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)
 		memory += "[new_text]<BR>"
