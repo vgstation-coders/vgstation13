@@ -8,7 +8,7 @@
 	desc = "Protected by Firmware Rights Management."
 	icon = 'icons/obj/module.dmi'
 	var/locked = FALSE
-	var/list/required_module = list()
+	var/list/required_modules = list()
 	var/list/modules_to_add = list()
 	var/multi_upgrades = FALSE
 	w_type = RECYK_ELECTRONIC
@@ -31,8 +31,8 @@
 		to_chat(user, "<span class='warning'>\The [R] must choose a module before it can be upgraded!</span>")
 		return FAILED_TO_ADD
 
-	if(required_module.len)
-		if(!(R.modtype in required_module))
+	if(required_modules.len)
+		if(!(R.modtype in required_modules))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
 
@@ -167,7 +167,7 @@
 	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(SUPPLY_MODULE, ENGINEERING_MODULE, COMBAT_MODULE, SYNDIE_BLITZ_MODULE, SYNDIE_CRISIS_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
+	required_modules = list(SUPPLY_MODULE, ENGINEERING_MODULE, COMBAT_MODULE, SYNDIE_BLITZ_MODULE, SYNDIE_CRISIS_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 
 /obj/item/borg/upgrade/jetpack/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -184,7 +184,7 @@
 
 /obj/item/borg/upgrade/syndicate/New()
 	..()
-	required_module = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules + special_robot_modules //No MoMMI, i like it the way it is.
+	required_modules = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules + special_robot_modules //No MoMMI, i like it the way it is.
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(R.emagged || R.illegal_weapons) //Dum Dum
@@ -206,7 +206,7 @@
 	name = "medical cyborg MK-2 upgrade board"
 	desc = "Used to give a medical cyborg advanced care tools."
 	icon_state = "cyborg_upgrade"
-	required_module = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
 
 /obj/item/borg/upgrade/medical/organ_gripper
@@ -221,7 +221,7 @@
 	name = "engineering cyborg MK-2 upgrade board"
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(ENGINEERING_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
+	required_modules = list(ENGINEERING_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/wrench/socket)
 
 /obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -241,7 +241,7 @@
 	desc = "Used to give a engineering cyborg a magnetic gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
-	required_module = list(/obj/item/weapon/robot_module/engineering)
+	required_modules = list(/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
 
 //Service Stuff
@@ -249,7 +249,7 @@
 	name = "service cyborg cooking upgrade board"
 	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
 	icon_state = "cyborg_upgrade2"
-	required_module = list(SERVICE_MODULE)
+	required_modules = list(SERVICE_MODULE)
 	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
 
 /obj/item/borg/upgrade/cook/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -266,7 +266,7 @@
 	name = "service cyborg H.U.E.Y. upgrade board"
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
 	icon_state = "mainboard"
-	required_module = list(SERVICE_MODULE)
+	required_modules = list(SERVICE_MODULE)
 	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -283,7 +283,7 @@
 	name = "service cyborg H.O.N.K. upgrade board"
 	desc = "Used to give a service cyborg fun toys, Honk!"
 	icon_state = "gooncode"
-	required_module = list(SERVICE_MODULE, HUG_MODULE)
+	required_modules = list(SERVICE_MODULE, HUG_MODULE)
 	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
 
 /obj/item/borg/upgrade/honk/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -309,7 +309,7 @@
 	name = "security cyborg rapid taser cooling upgrade board"
 	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(SECURITY_MODULE)
+	required_modules = list(SECURITY_MODULE)
 	multi_upgrades = TRUE
 
 
@@ -333,7 +333,7 @@
 	name = "security cyborg N.O.I.R. upgrade board"
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
 	icon_state = "mainboard"
-	required_module = list(SECURITY_MODULE, HUG_MODULE)
+	required_modules = list(SECURITY_MODULE, HUG_MODULE)
 	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/weapon/evidencebag, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
 
 /obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -358,7 +358,7 @@
 	name = "security cyborg W.A.T.C.H. upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
-	required_module = list(SECURITY_MODULE, HUG_MODULE)
+	required_modules = list(SECURITY_MODULE, HUG_MODULE)
 	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench)
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -389,7 +389,7 @@
 	desc = "Used to give a supply cyborg a hookshot."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "hookshot"
-	required_module = list(SUPPLY_MODULE)
+	required_modules = list(SUPPLY_MODULE)
 	modules_to_add = list(/obj/item/weapon/gun/hookshot)
 
 /obj/item/borg/upgrade/portosmelter
@@ -397,7 +397,7 @@
 	desc = "Used to give a supply cyborg a portable ore processor."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "portsmelter0"
-	required_module = list(SUPPLY_MODULE, SOVIET_MOMMI)
+	required_modules = list(SUPPLY_MODULE, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
 
 #undef FAILED_TO_ADD
