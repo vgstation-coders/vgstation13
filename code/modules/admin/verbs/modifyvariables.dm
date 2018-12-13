@@ -287,7 +287,7 @@ var/list/forbidden_varedit_object_types = list(
 		mod_list_add(L)
 		return L
 	else
-		L.Remove(variable)
+		L[variable] = variable_set(src, L)
 
 	return L
 
