@@ -63,5 +63,3 @@
 	else
 		antag.current.visible_message("<span class='big danger'>It looks like [antag.current] just remembered their real allegiance!</span>",
 			"<span class='big danger'>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</span>")
-	update_faction_icons()
-	return ..()
