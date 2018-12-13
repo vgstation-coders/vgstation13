@@ -176,6 +176,10 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+
+#define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
+
 #define isAPC(A) istype(A, /obj/machinery/power/apc)
 
 #define isimage(A) (istype(A, /image))

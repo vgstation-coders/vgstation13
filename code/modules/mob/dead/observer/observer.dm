@@ -190,7 +190,7 @@
 					if(!(M.dna.unique_enzymes in W.blood_DNA))
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
-	if(istype(W,/obj/item/weapon/storage/bible) || istype(W,/obj/item/weapon/nullrod))
+	if(istype(W,/obj/item/weapon/storage/bible) || isholyweapon(W))
 		var/mob/dead/M = src
 		if(src.invisibility == 0)
 			M.invisibility = 60
