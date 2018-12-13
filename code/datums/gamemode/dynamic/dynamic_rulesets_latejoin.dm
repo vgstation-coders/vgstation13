@@ -101,5 +101,6 @@
 	var/datum/role/malfAI/AI = new
 	AI.AssignToRole(M.mind, override=TRUE)
 	unction.HandleRecruitedRole(AI)
+	AI.OnPostSetup()
 	AI.Greet(GREET_ROUNDSTART)
 	return 1
