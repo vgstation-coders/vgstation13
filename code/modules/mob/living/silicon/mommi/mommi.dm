@@ -313,3 +313,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/radio_menu()
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
+
+/mob/living/silicon/robot/mommi/Greet()
+	to_chat(src, "<span class='big warning'>MoMMIs are not standard cyborgs, and have different laws.  Review your laws carefully.</span>")
+	to_chat(src, "<b>For newer players, a simple FAQ is <a href=\"http://ss13.moe/wiki/index.php/MoMMI\">here</a>.  Further questions should be directed to adminhelps (F1).</b>")
+	to_chat(src, "<span class='info'>For cuteness' sake, using the various emotes MoMMIs have such as *beep, *ping, *buzz or *aflap isn't considered interacting. Don't use that as an excuse to get involved though, always remain neutral.</span>")
