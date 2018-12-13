@@ -104,7 +104,7 @@
 	if(teleportcooldown < world.time)
 		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
 	else
-		var/cooldowncalculated = (teleportcooldown - world.time)/10
+		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
 		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
 	if(active)
 		message += " alt-click it to disable your teleport power!</span>"
@@ -123,15 +123,13 @@
 		active = FALSE
 
 /obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
-	if(!ismob(A)) // can't teleport behind tables
-		return
-	if(!(active || isweeaboo(user) || ismob(A))) //sword not active, user not a weeb, or target not a mob
+	if(!active || !isweeaboo(user) || !ismob(A) || (A == user)) //sanity
 		return
 	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
 		return
 	var/mob/living/L = A
 	var/turf/SHHHHIIIING = get_step(L.loc, turn(L.dir, 180))
-	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm, if they teleport behind someone whose back is to the end of the z-level
+	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm
 		return
 	teleportcooldown = initial(teleportcooldown) + world.time
 	playsound(src, "sound/weapons/shing.ogg",50,1)
