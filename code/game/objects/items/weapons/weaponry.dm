@@ -123,6 +123,8 @@
 		active = FALSE
 
 /obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
+	if(!ismob(A)) // can't teleport behind tables
+		return
 	if(!(active || isweeaboo(user) || ismob(A))) //sword not active, user not a weeb, or target not a mob
 		return
 	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
