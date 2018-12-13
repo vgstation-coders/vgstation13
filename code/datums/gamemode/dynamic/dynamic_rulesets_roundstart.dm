@@ -72,7 +72,7 @@
 //               VAMPIRES                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-
+/*
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
 	role_category = ROLE_VAMPIRE
@@ -97,7 +97,7 @@
 		newVampire.AnnounceObjectives()
 	update_faction_icons()
 	return 1
-
+*/
 
 //////////////////////////////////////////////
 //                                          //
@@ -350,7 +350,7 @@
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
 	if (!R)
 		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
-	
+
 	R.OnPostSetup() // Forge our jecties
 
 	var/max_canditates = 4
