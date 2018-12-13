@@ -871,18 +871,6 @@ SEE_PIXELS	256
 #define ROLE_VOXRAIDER  	"vox raider"
 #define ROLE_WIZARD     	"wizard"
 
-// Role typepaths.
-
-#define ROLE_CULTIST_TYPE /datum/role/cultist
-#define ROLE_LEGACY_CULTIST_TYPE /datum/role/legacy_cultist
-#define ROLE_TRAITOR_TYPE /datum/role/traitor
-#define ROLE_MALF_TYPE /datum/role/malfAI
-#define ROLE_REV_TYPE /datum/role/revolutionary
-#define ROLE_VAMPIRE_TYPE /datum/role/vampire
-#define ROLE_CHANGELING_TYPE /datum/role/changeling
-#define ROLE_WIZARD_TYPE /datum/role/wizard
-#define ROLE_OPERATIVE_TYPE /datum/role/nuclear_operative
-
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
 
