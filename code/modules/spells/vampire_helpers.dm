@@ -78,10 +78,10 @@
 	if(mind && mind.GetRole(VAMPIRE))
 		return 0
 
-	//Vampires who have reached their full potential can affect nearly everything
+	// Non-mature vampires are not stopped by holy things.
 	if(M)
 		var/datum/role/vampire/vamp = M.GetRole(VAMPIRE)
-		if (vamp && (VAMP_MATURE in vamp.powers))
+		if (vamp && !(VAMP_MATURE in vamp.powers))
 			return 1
 		//Chaplains are resistant to vampire powers
 		if(mind && mind.assigned_role == "Chaplain")
