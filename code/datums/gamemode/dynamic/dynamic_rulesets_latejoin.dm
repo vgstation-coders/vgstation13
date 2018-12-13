@@ -73,3 +73,33 @@
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//            AI MALFUNCTION                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/malfunction
+	name = "Malfunctioning AI"
+	role_category = ROLE_MALF
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	exclusive_to_jobs = list("AI")
+	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
+	required_candidates = 1
+	weight = 3
+	cost = 35
+	requirements = list(90,90,90,90,80,70,50,30,20,10)
+
+/datum/dynamic_ruleset/latejoin/malfunction/execute()
+	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
+	if (!unction)
+		unction = ticker.mode.CreateFaction(/datum/faction/malf, override=TRUE)
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/malfAI/AI = new
+	AI.AssignToRole(M.mind, override=TRUE)
+	unction.HandleRecruitedRole(AI)
+	AI.Greet(GREET_ROUNDSTART)
+	return 1

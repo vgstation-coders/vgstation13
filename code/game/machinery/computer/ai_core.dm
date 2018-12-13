@@ -139,6 +139,7 @@
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
 					A.rename_self("ai", 1)
+					ticker.mode.latespawn(A)
 				feedback_inc("cyborg_ais_created",1)
 				qdel(src)
 				return // To avoid running update_icon
