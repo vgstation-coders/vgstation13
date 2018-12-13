@@ -78,9 +78,12 @@
 		probability = 1
 		damage = 3
 	if(prob(probability))
-		droplimb(1)
-	else
-		take_damage(damage, 0, 1, used_weapon = "EMP")
+		if(is_malfunctioning())
+			explode()
+		else
+			status |= ORGAN_MALFUNCTIONING
+			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
+	take_damage(damage, 0, 1, used_weapon = "EMP")
 
 /datum/organ/external/proc/get_health()
 	return (burn_dam + brute_dam)
@@ -406,7 +409,7 @@
 
 	//Bone fracurtes
 	var/datum/species/species = src.species || owner.species
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(species.anatomy_flags & NO_BONES))
+	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -1111,7 +1114,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Can we use the limb at all in any manner
 /datum/organ/external/proc/is_usable()
-	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_CUT_AWAY))
+	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_CUT_AWAY|ORGAN_MALFUNCTIONING))
 
 //Is the limb broken and not splinted
 /datum/organ/external/proc/is_broken()
@@ -1122,7 +1125,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
-	return ((status & ORGAN_ROBOT) && prob(brute_dam + burn_dam))
+	return (is_robotic() && ((status & ORGAN_MALFUNCTIONING) || prob(brute_dam + burn_dam)))
 
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
@@ -1140,7 +1143,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(c_hand.cant_drop)
 		return
 
-	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
+	if(is_organic() && is_broken() && !istype(c_hand,/obj/item/tk_grab))
 		owner.drop_item(c_hand)
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
 		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")

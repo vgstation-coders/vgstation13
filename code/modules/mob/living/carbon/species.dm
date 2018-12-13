@@ -1163,7 +1163,7 @@ var/list/has_died_as_golem = list()
 
 	gender = NEUTER
 
-	darksight = 5
+	darksight = 8
 	tox_mod = 0.8
 	brute_mod = 1.8
 	burn_mod = 0.6

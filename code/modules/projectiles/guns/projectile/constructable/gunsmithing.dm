@@ -149,10 +149,10 @@
 			to_chat(user, "You wrap cable around the base of \the [src], creating a grip.")
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/sword/I = new (get_turf(user))
+				var/obj/item/weapon/sword/weaponcraft/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/sword(get_turf(src.loc))
+				new /obj/item/weapon/sword/weaponcraft(get_turf(src.loc))
 			C.use(5)
 			qdel(src)
 	if(iswelder(W))

@@ -634,8 +634,8 @@ a {
 				var/mob/M = loc
 				M.regenerate_icons()
 
-/obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0)
-	var/material_mod = material_type ? material_type.quality_mod : 1
+/obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1
 	var/surrounding_mod = 1
 	/* - Probably better we find a better way of checking the quality of a room, like an area-level variable for room quality, and cleanliness
 	var/turf/T = get_turf(src)

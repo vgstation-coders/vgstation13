@@ -12,8 +12,14 @@ var/list/archaeo_types = list()
 	return digsite_types[value]
 
 /proc/get_random_find_type(var/digsite)
-	var/datum/digsite/D = digsite_types[digsite]
-	var/datum/find/F = new archaeo_types[pick(D.find_types)]
+
+	var/datum/digsite/D
+	if(istype(digsite, /datum/digsite))
+		D = digsite
+	else
+		D = digsite_types[digsite]
+	var/find = archaeo_types[pick(D.find_types)]
+	var/datum/find/F = new find
 	return F
 
 /proc/get_random_find()

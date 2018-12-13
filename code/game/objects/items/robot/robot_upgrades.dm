@@ -78,7 +78,7 @@
 /obj/item/borg/upgrade/reset/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
-	
+
 	if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE))
 		visible_message("<span class='notice'>\The [R] buzzes oddly, and ejects \the [src].</span>")
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
@@ -147,6 +147,7 @@
 	playsound(R, "sound/voice/liveagain.ogg", 75, 1)
 	R.stat = CONSCIOUS
 	R.resurrect()
+ 
 	if(R.can_diagnose())
 		to_chat(R, "<span style=\"font-family:Courier\">System reboot finished successfully.</span>")
 
@@ -354,7 +355,7 @@
 		C.Noirize()
 
 /obj/item/borg/upgrade/warden
-	name = "security cyborg warden upgrade board"
+	name = "security cyborg W.A.T.C.H. upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_module = list(SECURITY_MODULE, HUG_MODULE)

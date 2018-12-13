@@ -20,10 +20,15 @@ var/datum/subsystem/more_init/SSmore_init
 	create_global_parallax_icons()
 	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
 
-	watch=start_watch()
-	log_startup_progress("Generating holominimaps...")
-	generateHoloMinimaps()
-	log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
+	if (!config.skip_minimap_generation)
+		watch=start_watch()
+		log_startup_progress("Generating holominimaps...")
+		generateHoloMinimaps()
+		log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
+	else
+		holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap
+		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
+	..()
 
 	buildcamlist()
 

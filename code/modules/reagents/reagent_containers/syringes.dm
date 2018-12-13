@@ -294,6 +294,13 @@
 	can_draw_blood = FALSE
 	can_stab = FALSE
 
+/obj/item/weapon/reagent_containers/syringe/giant/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/gisy = matrix()
+	gisy.Scale(1.2,1.2)
+	transform = gisy
+
 /obj/item/weapon/reagent_containers/syringe/giant/get_injection_time(var/mob/target)
 	if (istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = target

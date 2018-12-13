@@ -689,7 +689,7 @@ var/global/num_vending_terminals = 1
 		src.TurnOff(600) //A whole minute
 	/*if(prob(1))
 		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
-		user.emote("scream",,, 1)
+		user.audible_scream()
 		shake_camera(user, 2, 1)*/
 
 /obj/machinery/vending/kick_act(mob/living/carbon/human/user)
@@ -1526,6 +1526,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/weapon/storage/fancy/matchbox/strike_anywhere = 10,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 2,
+		/obj/item/clothing/mask/holopipe = 1,
 		)
 	prices = list(
 		/obj/item/weapon/storage/fancy/cigarettes = 20,
@@ -2957,6 +2958,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Trader Supply"
 	desc = "Its wiring has been modified to prevent hacking."
 	unhackable = 1
+	desc = "Make much coin."
+	req_access = list(access_trade)
 	product_slogans = list(
 		"Profits."
 	)
@@ -2982,6 +2985,18 @@ var/global/num_vending_terminals = 1
 		/obj/item/fish_eggs/seadevil = 1,
 		/obj/machinery/power/antiquesynth = 1,
 		/obj/item/crackerbox = 1,
+		/obj/structure/closet/crate/chest/alcatraz = 1,
+		/obj/structure/largecrate/secure = 1,
+		/obj/structure/largecrate/secure/magmaw = 1,
+		/obj/structure/largecrate/secure/frankenstein = 1,
+		/obj/item/weapon/boxofsnow = 3,
+		/obj/item/weapon/vinyl/clockwork = 1,
+		/obj/item/stack/sheet/brass = 3,
+		/obj/item/stack/sheet/ralloy = 3,
+		/obj/item/device/vampirehead = 1,
+		/obj/item/key/security/spare = 1,
+		/obj/item/weapon/depocket_wand = 4,
+		/obj/item/weapon/ram_kit = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -2998,7 +3013,19 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
 		/obj/item/fish_eggs/seadevil = 50,
 		/obj/machinery/power/antiquesynth = 350,
+		/obj/structure/closet/crate/chest/alcatraz = 300,
+		/obj/structure/largecrate/secure = 100,
+		/obj/structure/largecrate/secure/magmaw = 100,
+		/obj/structure/largecrate/secure/frankenstein = 100,
+		/obj/item/weapon/boxofsnow = 50,
 		/obj/item/crackerbox = 200,
+		/obj/item/weapon/vinyl/clockwork = 50,
+		/obj/item/stack/sheet/brass/bigstack = 50,
+		/obj/item/stack/sheet/ralloy/bigstack = 50,
+		/obj/item/device/vampirehead = 150,
+		/obj/item/key/security/spare = 50,
+		/obj/item/weapon/depocket_wand = 100,
+		/obj/item/weapon/ram_kit = 200,
 		)
 
 	accepted_coins = list(/obj/item/weapon/coin/trader)

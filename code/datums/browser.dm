@@ -41,6 +41,9 @@
 /datum/browser/proc/add_stylesheet(name, file)
 	stylesheets[name] = file
 
+/datum/browser/proc/remove_stylesheets()
+	stylesheets = list()
+
 /datum/browser/proc/add_script(name, file)
 	scripts[name] = file
 

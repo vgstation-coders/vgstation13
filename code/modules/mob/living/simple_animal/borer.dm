@@ -280,7 +280,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			if(isnull(chemID))
 				return
 			var/datum/borer_chem/C = new /datum/borer_chem()
-			C.name=chemID
+			C.id=chemID
+			var/datum/reagent/chem = chemical_reagents_list[C.id]
+			C.name = chem.name
 			C.cost=0
 			avail_chems[C.name]=C
 			to_chat(usr, "ADDED!")
@@ -502,11 +504,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!check_can_do())
 		return
 
-	var/chemID = input("Select a chemical to secrete.", "Chemicals") as null|anything in avail_chems
-	if(!chemID)
+	var/chem_name = input("Select a chemical to secrete.", "Chemicals") as null|anything in avail_chems
+	if(!chem_name)
 		return
 
-	var/datum/borer_chem/chem = avail_chems[chemID]
+	var/datum/borer_chem/chem = avail_chems[chem_name]
 
 	var/max_amount = 50
 	if(chem.cost>0)
@@ -528,26 +530,26 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "<span class='warning'>You don't have enough energy to synthesize this much!</span>")
 		return
 
-	var/datum/reagent/C = chemical_reagents_list[chemID] //we need to get the datum for this reagent to read the overdose threshold
-	if(units >= C.overdose_am - host.reagents.get_reagent_amount(chemID) && C.overdose_am > 0)
-		if(alert("Secreting that much [chemID] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
+	var/datum/reagent/C = chemical_reagents_list[chem.id] //we need to get the datum for this reagent to read the overdose threshold
+	if(units >= C.overdose_am - host.reagents.get_reagent_amount(chem.id) && C.overdose_am > 0)
+		if(alert("Secreting that much [chem.name] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
 			return
-		add_gamelogs(src, "intentionally overdosed \the [host] with '[chemID]'", admin = TRUE, tp_link = TRUE, span_class = "danger")
+		add_gamelogs(src, "intentionally overdosed \the [host] with '[chem.id]' ([chem.name])", admin = TRUE, tp_link = TRUE, span_class = "danger")
 
 	if(!host || controlling || !src || stat) //Sanity check.
 		return
 
-	if(chem.name == BLOOD)
+	if(chem.id == BLOOD)
 		if(istype(host, /mob/living/carbon/human) && !(host.species.anatomy_flags & NO_BLOOD))
-			host.vessel.add_reagent(chem.name, units)
+			host.vessel.add_reagent(chem.id, units)
 		else
 			to_chat(src, "<span class='notice'>Your host seems to be a species that doesn't use blood.<span>")
 			return
 	else
-		host.reagents.add_reagent(chem.name, units)
+		host.reagents.add_reagent(chem.id, units)
 
 	to_chat(src, "<span class='info'>You squirt a measure of [chem.name] from your reservoirs into [host]'s bloodstream.</span>")
-	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
+	add_gamelogs(src, "secreted [units]U of '[chem.id]' ([chem.name]) into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
 
 	chemicals -= chem.cost*units
 

@@ -1,6 +1,6 @@
 
 /datum/objective/bloodcult_reunion
-	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar."
+	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar aboard the station."
 	name = "Blood Cult: Prologue"
 	var/altar_built = FALSE
 
@@ -161,7 +161,11 @@
 			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = updated_map
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		B.holomap_datum.initialize_holomap(B.loc)
+		if (B.loc)
+			B.holomap_datum.initialize_holomap(B.loc)
+		else
+			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			qdel(B)
 
 	spawn()
 		anchor.dance_start()

@@ -9,7 +9,6 @@
 
 
 /mob/living/carbon/alien/larva/Life()
-	set invisibility = 0
 	//set background = 1
 	if (!loc)
 		return

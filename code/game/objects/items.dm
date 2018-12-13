@@ -1203,7 +1203,7 @@ var/global/list/image/blood_overlays = list()
 		var/mob/living/carbon/human/H = C
 		if (!H.has_organ_for_slot(slot_handcuffed))
 			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
-			return
+			return FALSE
 
 	if(restraint_apply_sound)
 		playsound(src, restraint_apply_sound, 30, 1, -2)
@@ -1213,7 +1213,7 @@ var/global/list/image/blood_overlays = list()
 	if(do_after(user, C, restraint_apply_time))
 		if(C.handcuffed)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
-			return
+			return FALSE
 		feedback_add_details("handcuffs", "[name]")
 
 		if(clumsy_check(user) && prob(50))
@@ -1232,6 +1232,7 @@ var/global/list/image/blood_overlays = list()
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
 		cuffs.on_restraint_apply(C)
+		return TRUE
 
 /obj/item/proc/on_restraint_removal(var/mob/living/carbon/C) //Needed for syndicuffs
 	return
@@ -1310,4 +1311,7 @@ var/global/list/image/blood_overlays = list()
 		NULL if override not defined
 **/
 /obj/item/proc/attempt_heating(atom/A, mob/user)
+	return
+
+/obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return

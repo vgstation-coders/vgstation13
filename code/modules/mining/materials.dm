@@ -136,7 +136,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/brunt_damage_mod = 1
 	var/sharpness_mod = 1
 	var/quality_mod = 1
-	var/melt_temperature
+	var/melt_temperature = MELTPOINT_STEEL
+	var/armor_mod = 1
+
 
 /datum/material/New()
 	if(processed_name=="")
@@ -292,7 +294,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
 	if(!..())
 		return
-	if(prob(2*source.quality))
+	if(prob(10*source.quality))
 		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
 
 /datum/material/phazon
@@ -307,11 +309,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.8
 	quality_mod = 2.2
+	melt_temperature = MELTPOINT_PLASMA
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
 		return
-	if(prob(0.5*source.quality))
+	if(prob(5*source.quality))
 		switch(rand(1,2))
 			if(1) //EMP
 				empulse(get_turf(pick(source,target,user)), 0.25*source.quality, 0.5*source.quality, 1)
@@ -385,6 +388,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/telecrystal
 	sheettype=null
 	cointype=null
+
+/datum/material/mythril
+	name="mythril"
+	id=MAT_MYTHRIL
+	value=50
+	oretype=/obj/item/weapon/ore/mythril
+	sheettype=/obj/item/stack/sheet/mineral/mythril
+	cointype=/obj/item/weapon/coin/mythril
+	color = "#FFEDD2" //rgb: 255,237,238
+	brunt_damage_mod = 1.4
+	sharpness_mod = 0.6
+	quality_mod = 1.5
+	armor_mod = 1.75
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium

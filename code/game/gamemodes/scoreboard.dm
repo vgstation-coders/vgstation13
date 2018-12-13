@@ -221,6 +221,10 @@
 			continue
 		score["litter"]++
 
+	for(var/mob/living/simple_animal/SA in dead_mob_list)
+		if(SA.is_pet)
+			score["deadpets"]++
+
 	//Bonus Modifiers
 	//var/traitorwins = score["traitorswon"]
 	var/deathpoints = score["deadcrew"] * 250 //Human beans aren't free

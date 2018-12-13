@@ -13,11 +13,23 @@
 	var/header = "SDC Data Disk" //Name of the disk, shown on the console. SDC stands Shuttle Destination Coordinates
 
 	var/list/allowed_shuttles = list() //List of allowed shuttles. Accepts paths (for example /datum/shuttle/arrival). If empty, all shuttles are allowed
-
+	starting_materials = list(MAT_GLASS = 1250)
 //Example:
 /obj/item/weapon/disk/shuttle_coords/station_arrivals
 	destination = /obj/docking_port/destination/transport/station
 	header = "station arrivals"
+
+/obj/item/weapon/disk/shuttle_coords/station_auxillary
+	name = "auxillary docking disk"
+	header = "station auxillary docking"
+	destination = /obj/docking_port/destination/salvage/arrivals
+	allowed_shuttles = list(/datum/shuttle/custom)
+
+/obj/item/weapon/disk/shuttle_coords/disk_jockey
+	name = "Russian propaganda station destination disk"
+	header = "DJ station"
+	destination = /obj/docking_port/destination/salvage/dj
+	starting_materials = list(MAT_GLASS = 1250, MAT_GOLD = 1250)
 
 /obj/item/weapon/disk/shuttle_coords/vault
 	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research, /datum/shuttle/security)
@@ -520,18 +532,24 @@
 
 /obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)
-		to_chat(usr, "<span class='info'>\The [src] is unresponsive.</span>")
+		to_chat(user, "<span class='info'>\The [src] is unresponsive.</span>")
 		return
 
 	if(!istype(SC))
 		if(istype(SC, /obj/item/weapon/disk)) //It's a disk, but not a compactible one
-			to_chat(usr, "<span class='info'>The disk is rejected by \the [src].</span>")
+			to_chat(user, "<span class='info'>The disk is rejected by \the [src].</span>")
 
 		return
 
+	if(disk)
+		//An old disk is already inserted.
+		to_chat(user, "<span class='warning'>The old [disk.name] pops out of the disk slot!</span>")
+		disk.forceMove(src.loc)
+		disk = null
+
 	if(user.drop_item(SC, src))
 		disk = SC
-		to_chat(usr, "<span class='info'>You insert \the [SC] into \the [src].</span>")
+		to_chat(user, "<span class='info'>You insert \the [SC] into \the [src].</span>")
 		src.updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/weapon/card/shuttle_pass/P, mob/user)

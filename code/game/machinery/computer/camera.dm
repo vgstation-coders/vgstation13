@@ -160,19 +160,22 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/net = cameranet.cameras
 
 	var/place = net.Find(current)
+	if (!place) // Couldn't find the camera in the net ; it may have been destroyed
+		user.cancel_camera()
+		return FALSE
 	var/place_0 = place // Prevent infinite loops if there is litteraly no next camera usuable.
 	++place
 	var/found = FALSE
 	var/obj/machinery/camera/D
 
 	while (!found && (place != place_0))
-		if (place > net.len)
-			place = 1
 		D = net[place]
 		var/list/tempnetwork = (D.network & network)
 		if (tempnetwork.len && D.can_use()) // D.can_use() is false if the camera is EMP or whatever
 			found = TRUE
 		++place
+		if (place > net.len)
+			place = 1
 	set_camera(user, D)
 
 /obj/machinery/computer/security/proc/previous(var/mob/living/user)
@@ -180,19 +183,22 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/net = cameranet.cameras
 
 	var/place = net.Find(current)
+	if (!place) // Couldn't find the camera in the net ; it may have been destroyed
+		user.cancel_camera()
+		return FALSE
 	var/place_0 = place // Prevent infinite loops if there is litteraly no next camera usuable.
 	place--
 	var/found = FALSE
 	var/obj/machinery/camera/D
 
 	while (!found  && (place != place_0))
-		if (place <= 0)
-			place = net.len
 		D = net[place]
 		var/list/tempnetwork = (D.network & network)
 		if (tempnetwork.len && D.can_use())
 			found = TRUE
 		place--
+		if (place <= 0)
+			place = net.len
 	set_camera(user, D)
 
 

@@ -19,6 +19,8 @@
 	density = 1
 	anchored = 0
 
+	mech_flags = MECH_SCAN_FAIL
+
 	var/max_luminosity = 8 // Now varies based on power.
 
 	light_color = LIGHT_COLOR_YELLOW

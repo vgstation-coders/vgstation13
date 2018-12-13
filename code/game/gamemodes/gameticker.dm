@@ -2,7 +2,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker
 	var/remaining_time = 0
-	var/const/restart_timeout = 600
+	var/const/restart_timeout = 60 SECONDS
 	var/current_state = GAME_STATE_PREGAME
 
 	var/hide_mode = 0
@@ -182,7 +182,6 @@ var/datum/controller/gameticker/ticker
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	equip_characters()
-	data_core.manifest()
 	current_state = GAME_STATE_PLAYING
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
@@ -373,7 +372,11 @@ var/datum/controller/gameticker/ticker
 			else if(!player.mind.assigned_role)
 				continue
 			else
-				player.FuckUpGenes(player.create_character())
+
+				var/mob/living/carbon/human/new_character = player.create_character()
+				if(new_character.mind.assigned_role!="MODE"&&new_character.mind.assigned_role!="Cyborg"&&new_character.mind.assigned_role!="Mobile MMI")//MODE is something like a wizard, not announced.
+					data_core.manifest_inject(new_character)
+				player.FuckUpGenes(new_character)
 				qdel(player)
 
 
@@ -425,6 +428,7 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
+			end_credits.on_roundend()
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)

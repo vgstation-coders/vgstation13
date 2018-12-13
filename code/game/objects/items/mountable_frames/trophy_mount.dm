@@ -51,6 +51,9 @@
 		held_item.examine(user, "", FALSE)
 
 /obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user, params)
+	if(iswrench(W) && held_item)
+		to_chat(user, "<span class='notice'>\The [held_item] is in the way!</span>")
+		return
 	if(..())
 		return
 	params_list = params2list(params)

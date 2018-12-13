@@ -106,7 +106,7 @@
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter"))
+	static_overlays.Add(list("static", "blank", "letter", "cult"))
 	var/image/static_overlay = image(icon('icons/effects/effects.dmi', "static"), loc = src)
 	static_overlay.override = 1
 	static_overlays["static"] = static_overlay
@@ -118,6 +118,10 @@
 	static_overlay = getLetterImage(src, "H", 1)
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
+
+	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	if(new_species_name)
@@ -201,7 +205,7 @@
 				to_chat(src, "<b>You must eat to survive. Starvation for extended periods of time will kill you!</b>")
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
-	update_colour(0,1)
+	update_colour(0)
 
 	spawn()
 		update_mutantrace()
@@ -1850,3 +1854,23 @@ mob/living/carbon/human/isincrit()
 	var/datum/organ/internal/heart/cell/C = get_heart()
 	if(istype(C))
 		return C.cell
+
+// Returns null on failure, the butt on success.
+/mob/living/carbon/human/proc/remove_butt(var/where = loc)
+	if(op_stage.butt == SURGERY_NO_BUTT)
+		return
+	var/obj/item/clothing/head/butt/donkey = new(where)
+	donkey.transfer_buttdentity(src)
+	op_stage.butt = SURGERY_NO_BUTT
+	return donkey
+
+/mob/living/carbon/human/attempt_crawling(var/turf/target)
+	if(!lying)
+		return FALSE
+	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
+		return FALSE
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
+		return FALSE
+	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
+	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
+	delayNextMove(crawldelay, additive=1)

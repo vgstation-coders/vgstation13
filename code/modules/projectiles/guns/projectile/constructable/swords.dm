@@ -14,13 +14,15 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+
+/obj/item/weapon/sword/weaponcraft
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
 /obj/item/weapon/sword/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/sword/attack_self(mob/user as mob)
+/obj/item/weapon/sword/weaponcraft/attack_self(mob/user as mob)
 	if(!hypo)
 		return
 	to_chat(user, "You remove \the [hypo] from \the [src].")
@@ -29,13 +31,13 @@
 	hypo = null
 	overlays.len = 0
 
-/obj/item/weapon/sword/update_icon()
+/obj/item/weapon/sword/weaponcraft/update_icon()
 	overlays.len = 0
 	if(hypo)
 		var/image/hypo_icon = image('icons/obj/weaponsmithing.dmi', src, "sword_hypo_overlay")
 		overlays += hypo_icon
 
-/obj/item/weapon/sword/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/sword/weaponcraft/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You attach \the [W] to \the [src].")
 		if(src.loc == user)
@@ -67,7 +69,7 @@
 		qdel(src)
 		qdel(W)
 
-/obj/item/weapon/sword/Destroy()
+/obj/item/weapon/sword/weaponcraft/Destroy()
 	if(hypo)
 		qdel(hypo)
 		hypo = null
@@ -190,7 +192,7 @@
 		update_color()
 	if(iscrowbar(W))
 		to_chat(user, "You pry the aluminum cylinder off of \the [src].")
-		var/obj/item/weapon/sword/I = new (get_turf(src))
+		var/obj/item/weapon/sword/weaponcraft/I = new (get_turf(src))
 		if(HY)
 			I.hypo = HY
 			HY.forceMove(I)
@@ -281,3 +283,27 @@
 				var/mob/living/carbon/human/H = loc
 				H.update_inv_hands()
 				H.update_inv_back()
+
+/obj/item/weapon/sword/shortsword
+	name = "shortsword"
+	desc = "A short-bladed sword, used for close combat agility, over overpowering your foes."
+	icon_state = "shortsword"
+	item_state = "sword"
+
+/obj/item/weapon/sword/gladius
+	name = "gladius"
+	desc = "An ancient sword design employed by the romans, used for its simple design for mass manufacture. It lacks a cross-guard."
+	icon_state = "gladius"
+	item_state = "sword"
+
+/obj/item/weapon/sword/sabre
+	name = "sabre"
+	desc = "A sword with a slight-curved blade, associated with cavalry usage. Commonly used for duelling in academic fencing."
+	icon_state = "sabre"
+	item_state = "sword"
+
+/obj/item/weapon/sword/scimitar
+	name = "scimitar"
+	desc = "A sword with a curved blade. The curved blade made it easier for use from horseback."
+	icon_state = "scimitar"
+	item_state = "sword"

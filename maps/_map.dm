@@ -84,7 +84,8 @@
 		DISP_TELESCIENCE
 	)
 
-	var/list/enabled_jobs = list()
+	var/list/enabled_jobs = list() //Jobs that require enabling that are enabled on this map
+	var/list/disabled_jobs = list() //Jobs that are disabled on this map
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()

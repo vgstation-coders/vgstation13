@@ -99,6 +99,13 @@ Class Procs:
 		T.dbg(merged)
 		#endif
 
+	//Rebuild the old zone's edges so that they will be possessed by the new zone
+	for(var/connection_edge/E in edges)
+		if(E.contains_zone(into))
+			E.erase() //Don't need to connect the new zone to itself
+		for(var/turf/T in E.connecting_turfs)
+			SSair.mark_for_update(T)
+
 /zone/proc/c_invalidate()
 	invalid = 1
 	SSair.remove_zone(src)

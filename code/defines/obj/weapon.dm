@@ -520,6 +520,13 @@
 	throw_speed = 1
 	throw_range = 3
 
+/obj/item/weapon/batteringram/attackby(var/obj/item/I, mob/user as mob)
+	if(istype(I,/obj/item/weapon/ram_kit))
+		flags &= ~MUSTTWOHAND //Retains FPRINT and TWOHANDABLE
+		qdel(I)
+	else
+		..()
+
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
 	name = "wet floor sign"

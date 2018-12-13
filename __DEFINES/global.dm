@@ -239,6 +239,7 @@ var/list/score=list(
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
 	"slips"			= 0, //How many people have slipped during this round
+	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -248,6 +249,7 @@ var/list/score=list(
 	"dmgestdamage"  = 0,
 	"dmgestkey"     = null,
 	"explosions"	= 0, //How many explosions happened total
+	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
@@ -390,6 +392,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
 	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	)
 
 // Set by traitor item, affects cargo supplies
@@ -435,3 +438,15 @@ var/list/bank_security_text2num_associative = list(
 
 //Radial menus currently existing in the world.
 var/global/list/radial_menus = list()
+
+// Copying atoms is stupid and this is a stupid solution
+var/list/variables_not_to_be_copied = list(
+	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
+	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
+	"on_item_removed","on_moved","on_destroyed","on_density_change",
+	"on_z_transition","on_use","on_emote","on_life","on_resist",
+	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
+	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
+	"on_explode","on_projectile","in_chamber","power_supply","contents",
+	"x","y","z"
+)

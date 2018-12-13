@@ -132,6 +132,8 @@
 
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
+#define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
+
 #define ishammer(A) is_type_in_list(A, list(/obj/item/weapon/hammer, /obj/item/weapon/storage/toolbox))
 
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
@@ -158,6 +160,8 @@
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
+#define isglasssheet(A) istype(A, /obj/item/stack/sheet/glass)
+
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
@@ -171,6 +175,10 @@
 #define iswindow(A) (istype(A, /obj/structure/window))
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
+
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+
+#define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
 #define isAPC(A) istype(A, /obj/machinery/power/apc)
 

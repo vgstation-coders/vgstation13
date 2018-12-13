@@ -502,7 +502,7 @@
 /obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
 	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
 		to_chat(user, "<span class='warning'>You have to transplant the plant into the pot directly from the hydroponic tray, using a spade.</span>")
-	else if(istype(O,/obj/item/weapon/pickaxe/shovel))
+	else if(isshovel(O))
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")
 	else
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")

@@ -632,13 +632,13 @@
 	anomaly_factor = 2
 	responsive_reagent = MERCURY
 
-/datum/find/unknown/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = new
+/datum/find/unknown/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	if(prob(50))
 		qdel(new_item)
 		new_item = new /obj/item/weapon/glow_orb
 	if(prob(50))
 		apply_image_decorations = FALSE
+	return new_item
 
 /datum/find/fossil
 	find_ID = ARCHAEO_FOSSIL
@@ -953,16 +953,18 @@
 
 /obj/item/weapon/archaeological_find
 	name = "object"
+	desc = "This object is completely alien."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "ano01"
 	var/datum/find/find_type
 
 /obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
+	..()
 	AddToProfiler()
 	if(new_item_type)
 		find_type = new_item_type
 	else
-		find_type = pick(archaeo_types)
+		find_type = get_random_find()
 
 	icon_state = "unknown[rand(1,4)]"
 	var/obj/item/weapon/new_item = find_type.create_find(src)
