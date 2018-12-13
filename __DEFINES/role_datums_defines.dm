@@ -162,7 +162,7 @@
 #define FROM_GHOSTS 1
 #define FROM_PLAYERS 2
 
-#define PROTECTED_TRAITOR_PROB 66 // Probability than a protected role is rejected from the candidate list
+#define PROTECTED_TRAITOR_PROB 80 // Probability than a protected role is rejected from the candidate list
 
 #define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
 #define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
