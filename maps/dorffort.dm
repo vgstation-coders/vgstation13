@@ -93,7 +93,7 @@
 		/obj/structure/closet/secure_closet/medical3	= 2,
 		/obj/structure/closet/secure_closet/medical2	= 2,
 		/obj/structure/bed/roller					= 3,
-		/obj/item/device/mass_spectrometer/adv			= 1,
+		/obj/item/device/reagent_scanner/adv			= 1,
 		/obj/item/clothing/glasses/hud/health			= 1,
 	)
 

@@ -94,7 +94,7 @@
 	return choice == "Yes"
 
 // Here is the proc to welcome a new soul in our religion.
-/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)
+/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher, var/can_renounce = TRUE)
 	// If he already had one
 	if (subject.mind.faith)
 		subject.mind.faith.renounce(subject) // We remove him from that one
@@ -102,7 +102,8 @@
 	subject.mind.faith = src
 	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
 	adepts += subject.mind
-	action_renounce.Grant(subject)
+	if(can_renounce)
+		action_renounce.Grant(subject)
 	if (!preacher)
 		var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
 		message_admins(msg)
@@ -1020,4 +1021,18 @@
 	H.put_in_hands(new /obj/item/mounted/frame/painting)
 	H.h_style = "Big Afro"
 	H.f_style = "Full Beard"
+	H.update_hair()
+
+/datum/religion/clean
+	name = "Cleanliness"
+	deity_name = "Mr. Clean"
+	bible_name = "Cleanliness - Next to Godliness"
+	male_adept = "Janitor"
+	female_adept = "Janitor"
+	keys = list("clean","cleaning","Mr. Clean","janitor")
+
+/datum/religion/clean/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/mop)
+	H.h_style = "Bald"
+	H.f_style = "Shaved"
 	H.update_hair()

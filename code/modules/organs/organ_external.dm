@@ -78,9 +78,12 @@
 		probability = 1
 		damage = 3
 	if(prob(probability))
-		droplimb(1)
-	else
-		take_damage(damage, 0, 1, used_weapon = "EMP")
+		if(is_malfunctioning())
+			explode()
+		else
+			status |= ORGAN_MALFUNCTIONING
+			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
+	take_damage(damage, 0, 1, used_weapon = "EMP")
 
 /datum/organ/external/proc/get_health()
 	return (burn_dam + brute_dam)
@@ -406,7 +409,7 @@
 
 	//Bone fracurtes
 	var/datum/species/species = src.species || owner.species
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(species.anatomy_flags & NO_BONES))
+	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -872,19 +875,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return (species.default_mutations.Find(mutation))
 
 
-/datum/organ/external/proc/release_restraints()
-	if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
-		owner.visible_message(\
-			"\The [owner.handcuffed.name] falls off of [owner.name].",\
-			"\The [owner.handcuffed.name] falls off you.")
+/datum/organ/external/proc/release_restraints(var/uncuff = UNCUFF_BOTH)
+	if(uncuff >= UNCUFF_BOTH)
+		if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
+			owner.visible_message(\
+				"\The [owner.handcuffed.name] falls off of [owner.name].",\
+				"\The [owner.handcuffed.name] falls off you.")
 
-		owner.drop_from_inventory(owner.handcuffed)
+			owner.drop_from_inventory(owner.handcuffed)
 
-	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
-		owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
-		"\The [owner.legcuffed.name] falls off you.")
+	if(uncuff <= UNCUFF_BOTH)
+		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
+			"\The [owner.legcuffed.name] falls off you.")
 
-		owner.drop_from_inventory(owner.legcuffed)
+			owner.drop_from_inventory(owner.legcuffed)
 
 /datum/organ/external/proc/bandage()
 	var/rval = 0
@@ -941,9 +946,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 	broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
 
-	//Fractures have a chance of getting you out of restraints
-	if(prob(25))
-		release_restraints()
+	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
+	if(owner.handcuffed && body_part in list(HAND_LEFT, HAND_RIGHT))
+		if(prob(25))
+			release_restraints(UNCUFF_HANDS)//Handcuffs only.
+	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
+		if(prob(25))
+			release_restraints(UNCUFF_LEGS)//Legcuffs only.
+
 
 	if(isgolem(owner))
 		droplimb(1)
@@ -1045,6 +1055,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	qdel(I)
 
+	owner.handle_organs(1)
 	owner.update_body()
 	owner.updatehealth()
 	owner.UpdateDamageIcon()
@@ -1103,7 +1114,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Can we use the limb at all in any manner
 /datum/organ/external/proc/is_usable()
-	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_CUT_AWAY))
+	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_CUT_AWAY|ORGAN_MALFUNCTIONING))
 
 //Is the limb broken and not splinted
 /datum/organ/external/proc/is_broken()
@@ -1114,7 +1125,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
-	return ((status & ORGAN_ROBOT) && prob(brute_dam + burn_dam))
+	return (is_robotic() && ((status & ORGAN_MALFUNCTIONING) || prob(brute_dam + burn_dam)))
 
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
@@ -1132,7 +1143,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(c_hand.cant_drop)
 		return
 
-	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
+	if(is_organic() && is_broken() && !istype(c_hand,/obj/item/tk_grab))
 		owner.drop_item(c_hand)
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
 		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")

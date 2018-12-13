@@ -394,6 +394,9 @@
 	anchored = 1
 	density = 1
 
+/obj/structure/cultgirder/clockworkify()
+	return
+
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswrench(W))
 		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)

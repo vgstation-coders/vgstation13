@@ -101,6 +101,9 @@
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
 
+	if (hasFactionsWithHUDIcons())
+		update_faction_icons()
+
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)
 		memory += "[new_text]<BR>"
@@ -234,6 +237,7 @@
 
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
+			return
 
 		if (joined_faction && joined_faction != "-----")
 			if (joined_faction == "NEW CUSTOM FACTION")

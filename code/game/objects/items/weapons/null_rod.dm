@@ -68,15 +68,31 @@
 	*/
 
 	..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
-/*
-/obj/item/weapon/nullrod/afterattack(atom/A, mob/user as mob, prox_flag, params)
+
+/obj/item/weapon/nullrod/afterattack(var/atom/A, var/mob/user, var/prox_flag, var/params)
 	if(!prox_flag)
 		return
-	user.delayNextAttack(8)
 	if(istype(A, /turf/simulated/floor))
-		to_chat(user, "<span class='notice'>You hit the floor with the [src].</span>")
-		call(/obj/effect/rune/proc/revealrunes)(src)
-*/
+		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)
+		animation.alpha = 0
+		animate(animation, alpha = 255, time = 2)
+		animate(alpha = 0, time = 3)
+		user.delayNextAttack(8)
+		to_chat(user, "<span class='notice'>You hit \the [A] with \the [src].</span>")
+		var/found = 0
+		for(var/obj/effect/rune/R in range(1,A))
+			found = 1
+			R.reveal()
+		if (found)
+			to_chat(user, "<span class='warning'>Arcane markings suddenly glow from underneath a thin layer of dust!</span>")
+		found = 0
+		for(var/obj/structure/cult/S in range(1,A))
+			found = 1
+			S.reveal()
+		if (found)
+			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
+		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
+
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")

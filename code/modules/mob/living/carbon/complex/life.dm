@@ -1,5 +1,4 @@
 /mob/living/carbon/complex/Life()
-	set invisibility = 0
 
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -54,9 +53,8 @@
 	if(flags & INVULNERABLE)
 		return
 
-	if(reagents)
-		if(reagents.has_reagent(LEXORIN))
-			return
+	if(reagents &&reagents.has_any_reagents(LEXORINS))
+		return
 
 	if(!loc)
 		return //probably ought to make a proper fix for this, but :effort: --NeoFite

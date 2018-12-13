@@ -175,6 +175,7 @@
 		"Taser" = 'sound/weapons/Taser.ogg',
 		"Male scream" = "malescream",
 		"Female scream" = "femalescream",
+		"Vox shriek" = 'sound/misc/shriek1.ogg',
 		"Male cough" = "malecough",
 		"Female cough" = "femalecough",
 		"Sad trombone" = 'sound/misc/sadtrombone.ogg',

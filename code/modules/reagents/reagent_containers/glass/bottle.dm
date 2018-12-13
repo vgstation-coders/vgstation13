@@ -407,9 +407,9 @@
 	New()
 		..()
 		reagents.add_reagent(BICARODYNE, 30)
-		
+
 /obj/item/weapon/reagent_containers/glass/bottle/hypozine
-	
+
 
 /obj/item/weapon/reagent_containers/glass/bottle/hypozine/New()
 	..()
@@ -487,3 +487,31 @@
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/New()
 	..()
 	reagents.add_reagent(BLEACH, 15)
+
+/obj/item/weapon/reagent_containers/glass/bottle/carbon/New()
+	..()
+	reagents.add_reagent(CARBON, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/silicon/New()
+	..()
+	reagents.add_reagent(SILICON, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/sugar/New()
+	..()
+	reagents.add_reagent(SUGAR, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/oxygen/New()
+	..()
+	reagents.add_reagent(OXYGEN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/hydrogen/New()
+	..()
+	reagents.add_reagent(HYDROGEN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/nitrogen/New()
+	..()
+	reagents.add_reagent(NITROGEN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/potassium/New()
+	..()
+	reagents.add_reagent(POTASSIUM, 30)

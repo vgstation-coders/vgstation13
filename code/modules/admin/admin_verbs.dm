@@ -77,7 +77,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/allow_character_respawn,    /* Allows a ghost to respawn */
 	/client/proc/watchdog_force_restart,	/*forces restart using watchdog feature*/
 	/client/proc/manage_religions,
-	/client/proc/set_veil_thickness
+	/client/proc/set_veil_thickness,
+	/client/proc/credits_panel			/*allows you to customize the roundend credits before they happen*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -1210,3 +1211,11 @@ var/list/admin_verbs_mod = list(
 	else
 		alert(src, "An external server error has occurred. Please report this.")
 		return 0
+
+/client/proc/credits_panel()
+	set name = "Credits Panel"
+	set category = "Admin"
+	if(holder)
+		holder.CreditsPanel()
+	feedback_add_details("admin_verb","CP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return

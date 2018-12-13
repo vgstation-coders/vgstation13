@@ -196,7 +196,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/anvil
 	name = "Anvil"
-	contains = list(/obj/item/anvil)
+	contains = list(/obj/item/anvil,/obj/item/clothing/suit/leather_apron)
 	cost = 150
 	containertype = /obj/structure/largecrate
 	containername = "anvil crate"
@@ -666,7 +666,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/russobluecamohat,
 					/obj/item/clothing/under/russobluecamooutfit,
 					/obj/item/clothing/head/russofurhat,
-					/obj/item/clothing/suit/russofurcoat)
+					/obj/item/clothing/suit/russofurcoat,
+					/obj/item/weapon/disk/shuttle_coords/disk_jockey)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "russian clothing crate"
@@ -1523,6 +1524,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "radiation suit crate"
 	group = "Engineering"
 
+/datum/supply_packs/engine_parts
+	name = "DIY Shuttle Engine kit"
+	contains = list(/obj/structure/shuttle/engine/propulsion/DIY,
+					/obj/structure/shuttle/engine/heater/DIY)
+	cost = 650
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "\improper Shuttle engines crate"
+	group = "Engineering"
+
+/datum/supply_packs/shuttle_permit
+	name = "DIY Shuttle permit"
+	contains = list(/obj/item/shuttle_license,
+					/obj/item/weapon/book/manual/ship_building)
+
+	cost = 3000
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "secure shuttle permit crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
@@ -1611,6 +1631,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/largecrate
 	containername = "blood donation drive crate"
 	group = "Medical"
+
+/datum/supply_packs/chemkit
+	name = "Basic chemistry kit"
+	contains = list(/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/glass/bottle/carbon,
+					/obj/item/weapon/reagent_containers/glass/bottle/silicon,
+					/obj/item/weapon/reagent_containers/glass/bottle/sugar,
+					/obj/item/weapon/reagent_containers/glass/bottle/oxygen,
+					/obj/item/weapon/reagent_containers/glass/bottle/hydrogen,
+					/obj/item/weapon/reagent_containers/glass/bottle/nitrogen,
+					/obj/item/weapon/reagent_containers/glass/bottle/potassium,
+					/obj/item/weapon/reagent_containers/dropper)
+	cost = 80
+	containertype = /obj/structure/closet/crate/medical
+	containername = "basic chemistry kit"
+	group = "Medical"
+
 
 /datum/supply_packs/wheelchair
 	name = "Wheelchair"
@@ -2191,3 +2229,5 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Mining stack of packs"
 	group = "Vending Machine packs"
+
+

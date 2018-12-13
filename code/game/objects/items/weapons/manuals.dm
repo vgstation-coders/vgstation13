@@ -156,7 +156,7 @@
 	icon_state ="bookChemistry"
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
-	wiki_page = "Chemistry_101"
+	wiki_page = "Guide_to_Chemistry"
 
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
@@ -531,6 +531,13 @@
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
+
+/obj/item/weapon/book/manual/ship_building
+	name = "Dummies guide to Interstellar Flight"
+	title = "Dummies guide to Interstellar Flight"
+	icon_state = "bookDummy"
+	author = "David Alcubierre"
+	wiki_page = "Ship_Building"
 
 /obj/item/weapon/book/manual/mailing_guide
 	name = "Guide to disposal mailing system"

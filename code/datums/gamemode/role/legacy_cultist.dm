@@ -83,3 +83,14 @@
 	var/datum/faction/cult/narsie/C = faction
 	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [C.deity_name]</a><br/>"
 	return dat
+
+/datum/role/legacy_cultist/handle_reagent(var/reagent_id)
+	switch (reagent_id)
+		if (HOLYWATER)
+			var/mob/living/carbon/human/H = antag.current
+			if (!istype(H))
+				return
+			if (prob(10))
+				Drop()
+			else
+				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")

@@ -159,86 +159,7 @@
 			recipes_list = srl.recipes
 		var/datum/stack_recipe/R = recipes_list[text2num(href_list["make"])]
 		var/multiplier = text2num(href_list["multiplier"])
-		if (!multiplier)
-			multiplier = 1
-		if (src.amount < R.req_amount*multiplier)
-			if (R.res_amount*multiplier>1)
-				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build [R.res_amount*multiplier] [R.title]\s!</span>")
-			else
-				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build \the [R.title]!</span>")
-			return
-		if (!R.can_build_here(usr, usr.loc))
-			return
-		if (R.time)
-			if (!do_after(usr, get_turf(src), R.time))
-				return
-		if (src.amount < R.req_amount*multiplier)
-			return
-		var/list/stacks_to_consume = list()
-		if(R.other_reqs.len)
-			for(var/i=1 to R.other_reqs.len)
-				var/looking_for = R.other_reqs[i]
-				var/req_amount
-				var/found = FALSE
-				if(ispath(looking_for, /obj/item/stack))
-					req_amount = R.other_reqs[looking_for]
-				if(ispath(usr.get_inactive_hand(), looking_for))
-					found = TRUE
-					if(req_amount) //It's of a stack/sheet subtype
-						var/obj/item/stack/S = usr.get_inactive_hand()
-						if(S.amount < req_amount)
-							found = FALSE
-						else
-							stacks_to_consume.Add(S)
-							stacks_to_consume[S] = req_amount
-						continue
-				for(var/obj/I in range(get_turf(src),1))
-					if(ispath(looking_for, I))
-						found = TRUE
-						if(req_amount) //It's of a stack/sheet subtype
-							var/obj/item/stack/S = I
-							if(S.amount < req_amount)
-								found = FALSE
-							else
-								stacks_to_consume.Add(S)
-								stacks_to_consume[S] = req_amount
-				if(!found)
-					return
-		var/atom/O
-		if(ispath(R.result_type, /obj/item/stack))
-			O = drop_stack(R.result_type, usr.loc, (R.max_res_amount>1 ? R.res_amount*multiplier : 1), usr)
-			var/obj/item/stack/S = O
-			S.update_materials()
-		else
-			for(var/i = 1 to (R.max_res_amount>1 ? R.res_amount*multiplier : 1))
-				O = new R.result_type( usr.loc )
-
-		O.dir = usr.dir
-		if(R.start_unanchored)
-			var/obj/A = O
-			A.anchored = 0
-		var/put_in_hand = R.finish_building(usr, src, O)
-
-		//if (R.max_res_amount>1)
-		//	var/obj/item/stack/new_item = O
-		//	new_item.amount = R.res_amount*multiplier
-		//	//new_item.add_to_stacks(usr)
-
-		src.use(R.req_amount*multiplier)
-		for(var/obj/item/stack/S in stacks_to_consume)
-			S.use(stacks_to_consume[S])
-		if (src.amount<=0)
-			var/oldsrc = src
-			//src = null //dont kill proc after del()
-			usr.before_take_item(oldsrc)
-			returnToPool(oldsrc)
-			if (put_in_hand && istype(O,/obj/item))
-				usr.put_in_hands(O)
-		O.add_fingerprint(usr)
-		//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
-		if ( istype(O, /obj/item/weapon/storage) )
-			for (var/obj/item/I in O)
-				qdel(I)
+		R.build(usr, src, multiplier)
 	if (src && usr.machine==src) //do not reopen closed window
 		spawn( 0 )
 			src.interact(usr)
@@ -318,6 +239,7 @@
 	if (user.get_inactive_hand() == src)
 		var/obj/item/stack/F = new src.type( user, amount=1)
 		F.copy_evidences(src)
+		F.material_type = material_type
 		user.put_in_hands(F)
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)

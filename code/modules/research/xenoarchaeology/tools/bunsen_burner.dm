@@ -43,7 +43,7 @@
 /obj/machinery/bunsen_burner/New()
 	..()
 	processing_objects.Remove(src)
-	create_reagents(50)
+	create_reagents(250)
 
 /obj/machinery/bunsen_burner/Destroy()
 	if(held_container)
@@ -241,20 +241,20 @@
 
 
 /obj/machinery/bunsen_burner/mapped //for the sci break room
-	
-	
+
+
 obj/machinery/bunsen_burner/mapped/New()
 	..()
 	desc = "[initial(desc)] Perfect for keeping your coffee hot."
-	var/obj/item/weapon/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/weapon/reagent_containers/food/drinks/mug 
+	var/obj/item/weapon/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/weapon/reagent_containers/food/drinks/mug
 	coffeemug.reagents.add_reagent(COFFEE, 30)
 	held_container = coffeemug
 	var/image/I = image("icon"=coffeemug, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
 	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 	overlays += I
 	overlays += I2
-			
-			
+
+
 #undef BUNSEN_OPEN
 #undef BUNSEN_OFF
 #undef BUNSEN_ON

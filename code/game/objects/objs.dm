@@ -634,8 +634,8 @@ a {
 				var/mob/M = loc
 				M.regenerate_icons()
 
-/obj/proc/gen_quality(var/modifier = 0)
-	var/material_mod = material_type ? material_type.quality_mod : 1
+/obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1
 	var/surrounding_mod = 1
 	/* - Probably better we find a better way of checking the quality of a room, like an area-level variable for room quality, and cleanliness
 	var/turf/T = get_turf(src)
@@ -645,7 +645,7 @@ a {
 				surrounding_mod *= I.quality/rand(1,3)
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
-	quality = Clamp(initial_quality, AWFUL, LEGENDARY)
+	quality = Clamp(initial_quality, AWFUL>min_quality?AWFUL:min_quality, LEGENDARY)
 
 /obj/proc/gen_description(mob/user)
 	var/material_mod = quality-GOOD>1 ? quality-GOOD : 0
@@ -672,9 +672,9 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
-/obj/proc/dorfify(var/datum/material/mat)
+/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
 	if(mat)
-		var/icon/original = icon(icon, icon_state)
+		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
 		if(mat.color)
 			original.ColorTone(mat.color)
 			var/obj/item/I = src
@@ -686,11 +686,11 @@ a {
 					I.inhand_states[hand] = t_state
 		else if(mat.color_matrix)
 			color = mat.color_matrix
-		icon = original
+		icon = original*/
 		alpha = mat.alpha
 		material_type = mat
 		sheet_type = mat.sheettype
-	gen_quality()
+	gen_quality(additional_quality, min_quality)
 	if(quality > SUPERIOR)
 		gen_description()
 	if(!findtext(lowertext(name), lowertext(mat.name)))

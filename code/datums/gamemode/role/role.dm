@@ -299,7 +299,9 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag.key]</b> was <b>[antag.name]</b> ("
 	if(M)
-		if(M.stat == DEAD)
+		if(!antag.GetRole(id))
+			text += "removed"
+		else if(M.stat == DEAD)
 			text += "died"
 		else
 			text += "survived"
@@ -455,6 +457,14 @@
 
 /datum/role/proc/GetMemoryHeader()
 	return name
+
+// -- Custom reagent reaction for your antag - now in a (somewhat) maintable fashion
+
+/datum/role/proc/handle_reagent(var/reagent_id)
+	return
+
+/datum/role/proc/handle_splashed_reagent(var/reagent_id)
+	return
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

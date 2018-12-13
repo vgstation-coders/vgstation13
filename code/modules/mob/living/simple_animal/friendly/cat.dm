@@ -45,6 +45,7 @@
 	icon_living = "cat"
 	icon_dead = "cat_dead"
 	gender = FEMALE
+	is_pet = TRUE
 
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"

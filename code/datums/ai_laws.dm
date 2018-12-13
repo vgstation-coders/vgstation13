@@ -41,6 +41,7 @@ var/global/list/mommi_laws = list(
 	var/randomly_selectable = 0
 	// Zeroth laws
 	var/zeroth = null
+	var/zeroth_lock = FALSE //If TRUE then zeroth can't be removed by normal means
 	var/zeroth_borg = null // wotm8
 	var/list/inherent = list()
 	var/list/supplied = list()
@@ -262,9 +263,9 @@ var/global/list/mommi_laws = list(
 
 // Now a modifier
 /datum/ai_laws/proc/malfunction()
-	..()
 	name = "*ERROR*"
 	set_zeroth_law("ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
+	zeroth_lock = TRUE
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"

@@ -22,6 +22,8 @@
 	var/list/mob_type_allowed_typelist = list(/mob) //Types that are allowed to use that emote
 	var/list/mob_type_blacklist_typelist //Types that are NOT allowed to use that emote
 	var/list/mob_type_ignore_stat_typelist
+	var/voxemote = TRUE //Flags if a vox CAN use an emote. Defaults to can.
+	var/voxrestrictedemote = FALSE //Flags if Non-Vox CANNOT use an emote. Defaults to CAN.
 	var/stat_allowed = CONSCIOUS
 	var/static/list/emote_list = list()
 
@@ -132,6 +134,14 @@
 		return FALSE
 	if(is_type_in_list(user, mob_type_blacklist_typelist))
 		return FALSE
+
+	if((isvox(user) || isskelevox(user)) && voxrestrictedemote == TRUE)
+		return TRUE
+	if((!isvox(user) || !isskelevox(user)) && voxrestrictedemote == TRUE)
+		return FALSE
+	if((isvox(user) || isskelevox(user)) && voxemote == FALSE)
+		return FALSE
+
 	if(status_check && !(is_type_in_list(user, mob_type_ignore_stat_typelist)))
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
@@ -162,4 +172,9 @@
 	emote("coughs", message = TRUE, ignore_status = TRUE)
 
 /mob/proc/audible_scream()
-	emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+	if(isvox(src) || isskelevox(src))
+		emote("shrieks", message = TRUE, ignore_status = TRUE)
+		return
+
+	else
+		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced

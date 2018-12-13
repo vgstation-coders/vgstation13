@@ -11,8 +11,8 @@
 	pain_level = 					\
 	1	* src.getOxyLoss() + 		\
 	0.7	* src.getToxLoss() + 		\
-	1.5	* src.getFireLoss() + 		\
-	1.2	* src.getBruteLoss() + 		\
+	1.5	* src.getFireLoss(TRUE) + 		\
+	1.2	* src.getBruteLoss(TRUE) + 		\
 	1.7	* src.getCloneLoss() + 		\
 	2	* src.halloss
 
@@ -27,6 +27,8 @@
 		var/mob/living/carbon/human/M = src
 		for(var/datum/organ/external/organ in M.organs)
 			if (!organ)
+				continue
+			if(!organ.is_organic())
 				continue
 			if((organ.status & ORGAN_DESTROYED) && !organ.amputated)
 				pain_level += 45

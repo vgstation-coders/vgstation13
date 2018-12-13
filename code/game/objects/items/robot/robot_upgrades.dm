@@ -69,7 +69,7 @@
 /obj/item/borg/upgrade/reset/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
-	
+
 	if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE))
 		visible_message("<span class='notice'>[R] buzzes oddly, and ejects \the [src].</span>")
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
@@ -158,7 +158,7 @@
 	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
-	
+
 	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
@@ -360,7 +360,7 @@
 		C.Noirize()
 
 /obj/item/borg/upgrade/warden
-	name = "security cyborg warden upgrade board"
+	name = "security cyborg W.A.T.C.H. upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)

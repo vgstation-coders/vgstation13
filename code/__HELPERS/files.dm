@@ -33,7 +33,7 @@
 		var/skipping = 0
 		for(var/binaries in flist(path))
 			testing("Checking file [binaries]")
-			if(copytext(binaries,-15,0 == "playercount.txt"))
+			if(copytext(binaries,-15,0) == "playercount.txt")
 				var/list/lines = file2list(path+binaries)
 				for(var/line in lines)
 					if(findtext(line,"max"))

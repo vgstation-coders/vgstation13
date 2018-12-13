@@ -2,6 +2,10 @@
 #define DAMAGE			1
 #define FIRE			2
 
+#define SPACEPOD_MOVEDELAY_FAST 0.4
+#define SPACEPOD_MOVEDELAY_SLOW 3
+#define SPACEPOD_MOVEDELAY_DEFAULT SPACEPOD_MOVEDELAY_FAST
+
 /obj/spacepod
 	name = "\improper space pod"
 	desc = "A space pod meant for space travel."
@@ -33,10 +37,12 @@
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/passenger_fire = 0 //Whether or not a passenger can fire weapons attached to this pod
-	var/movement_delay = 0.4 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
-	var/list/actions_types = list(
-		/datum/action/spacepod/pilot/toggle_passengers,\
-		/datum/action/spacepod/pilot/toggle_passenger_weaponry) //Actions to create and hold for the pilot
+	var/movement_delay = SPACEPOD_MOVEDELAY_DEFAULT //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
+	var/list/actions_types = list( //Actions to create and hold for the pilot
+		/datum/action/spacepod/pilot/toggle_passengers,
+		/datum/action/spacepod/pilot/toggle_passenger_weaponry,
+		/datum/action/spacepod/pilot/change_speed,
+		)
 	var/list/actions_types_pilot = list(/datum/action/spacepod/fire_weapons) //Actions to create when a pilot boards, deleted upon leaving
 	var/list/actions_types_passenger = list(
 		/datum/action/spacepod/fire_weapons,\
@@ -508,6 +514,7 @@
 			moveship = 0
 
 		if(moveship)
+			set_glide_size(DELAY2GLIDESIZE(movement_delay))
 			Move(get_step(src,direction), direction)
 			if(istype(src.loc, /turf/space))
 				inertia_dir = direction
@@ -531,12 +538,12 @@
 		inertia_dir = 0
 		return
 
-	sleep(5)
+	sleep(INERTIA_MOVEDELAY)
 
 	if(loc == start)
 		if(inertia_dir)
-			Move(get_step(src, inertia_dir), inertia_dir)
-			return
+			set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
+			step(src, inertia_dir)
 
 
 /obj/effect/landmark/spacepod/random //One of these will be chosen from across all Z levels to receive a pod in gameticker.dm
@@ -648,6 +655,16 @@
 					target_turf = get_edge_target_turf(T, WEST)
 					L.throw_at(target_turf,100,3)
 
+/obj/spacepod/proc/change_speed()
+	if(usr != occupant)
+		return
+	if(movement_delay == SPACEPOD_MOVEDELAY_FAST)
+		movement_delay = SPACEPOD_MOVEDELAY_SLOW
+		to_chat(usr, "<span class='notice'>Thrusters strength: low.</span>")
+	else
+		movement_delay = SPACEPOD_MOVEDELAY_FAST
+		to_chat(usr, "<span class='notice'>Thrusters strength: high.</span>")
+
 /obj/spacepod/proc/toggle_passenger_guns()
 	if(usr!=src.occupant)
 		return
@@ -670,3 +687,7 @@
 
 #undef DAMAGE
 #undef FIRE
+
+#undef SPACEPOD_MOVEDELAY_FAST
+#undef SPACEPOD_MOVEDELAY_SLOW
+#undef SPACEPOD_MOVEDELAY_DEFAULT

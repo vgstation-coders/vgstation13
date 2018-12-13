@@ -92,9 +92,9 @@
 		dat += "<br>"
 	dat = jointext(dat, null)
 
-	var/datum/browser/popup = new(user, "\ref[src]-limbs", "Limbs", 500, 220)
+	var/datum/browser/popup = new(user, "\ref[src]-limbs", "Limbs", 500, 220, src)
 	popup.set_content(dat)
-	popup.open(use_onclose = FALSE)
+	popup.open()
 	return TRUE
 
 /datum/preferences_subsection/limbs/proc/handle_input(var/mob/user, var/list/href_list)
@@ -142,12 +142,19 @@
 	var/task = href_list["task"]
 	switch(task)
 		if("menu")
+			user << browse(null, "window=preferences")
 			return show_menu(arglist(args))
 		if("input")
 			. = handle_input(arglist(args))
 			show_menu(arglist(args))
 		else
 			CRASH("Unknown task: [task]")
+
+/datum/preferences_subsection/limbs/Topic(href, list/href_list)
+	. = ..()
+	if(href_list["close"])
+		usr << browse(null, "window=\ref[src]-limbs")
+		prefs.ShowChoices(usr)
 
 #undef LIMB_MODE_AFFECT_CHILD
 #undef LIMB_MODE_AFFECT_PARENT

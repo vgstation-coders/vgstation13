@@ -60,7 +60,6 @@ client/proc/one_click_antag()
 	var/list/candidates = get_candidates(role_req, recruitment_source, role_name)
 	var/recruit_count = 0
 	if(!candidates.len)
-		to_chat(usr, "No candidates")
 		return 0
 
 	candidates = shuffle(candidates)
@@ -78,8 +77,9 @@ client/proc/one_click_antag()
 			var/datum/mind/M = H.mind
 			if(FF.HandleNewMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
-				RR.ForgeObjectives()
-				log_admin("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
+				RR.OnPostSetup()
+				RR.Greet(GREET_LATEJOIN)
+				message_admins("[key_name(H)] has been recruited as leader of [FF.name] via create antagonist verb.")
 				recruit_count++
 				count--
 
@@ -87,16 +87,21 @@ client/proc/one_click_antag()
 			count--
 			var/mob/living/carbon/human/H = pick(candidates)
 			candidates.Remove(H)
+			if (initial(F.initial_role) in H.mind.antag_roles) // Ex: a head rev being made a revolutionary.
+				continue
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
+			message_admins("polling if [key_name(H)] wants to become a member of [FF.name]")
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
-				RR.ForgeObjectives()
-				log_admin("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
+				RR.OnPostSetup()
+				RR.Greet(GREET_LATEJOIN)
+				message_admins("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
 				recruit_count++
 
 		FF.OnPostSetup()
+		FF.forgeObjectives()
 
 		return recruit_count
 
@@ -108,9 +113,10 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-
+			if(M.GetRole(initial(R.id)))
+				continue
 			var/datum/role/newRole = new R
-
+			message_admins("polling if [key_name(H)] wants to become a [newRole.name]")
 			if(!newRole)
 				continue
 
@@ -119,7 +125,8 @@ client/proc/one_click_antag()
 				continue
 			newRole.OnPostSetup()
 			newRole.ForgeObjectives()
-			log_admin("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
+			newRole.Greet(GREET_LATEJOIN)
+			message_admins("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
 
 	return recruit_count
@@ -141,6 +148,7 @@ client/proc/one_click_antag()
 			candidates.Remove(M)
 		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
 			candidates.Remove(M)
+	message_admins("[candidates.len] potential candidates.")
 	return candidates
 
 

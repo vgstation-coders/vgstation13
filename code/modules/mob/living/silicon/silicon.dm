@@ -122,7 +122,13 @@
 	return 1
 
 /mob/living/silicon/generate_static_overlay()
-	return
+	if(!istype(static_overlays,/list))
+		static_overlays = list()
+	static_overlays.Add(list("cult"))
+
+	var/image/static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/silicon/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)

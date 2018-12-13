@@ -2,8 +2,8 @@
 
 /obj/machinery/chem_dispenser
 	name = "\improper Chem Dispenser"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "dispenser"
 	use_power = 1
@@ -16,9 +16,31 @@
 	var/recharged = 0
 	var/custom = 0
 	var/useramount = 30 // Last used amount
-	var/list/dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,
-	SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,CHLORINE,POTASSIUM,IRON,
-	COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN)
+	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
+	var/list/dispensable_reagents = list(
+		HYDROGEN,
+		LITHIUM,
+		CARBON,
+		NITROGEN,
+		OXYGEN,
+		FLUORINE,
+		SODIUM,
+		ALUMINUM,
+		SILICON,
+		PHOSPHORUS,
+		SULFUR,
+		CHLORINE,
+		POTASSIUM,
+		IRON,
+		COPPER,
+		MERCURY,
+		RADIUM,
+		WATER,
+		ETHANOL,
+		SUGAR,
+		SACID,
+		TUNGSTEN
+		)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -87,10 +109,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
-	if(!HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_CHEMS))
+	if(!R)
 		return FALSE
-	else
+
+	if(HAS_MODULE_QUIRK(R, required_quirk))
 		return TRUE
+
+	to_chat(R, "Your programming forbids interaction with this device.")
+	return FALSE
 
 /obj/machinery/chem_dispenser/process()
 	if(recharged < 0)
@@ -251,7 +277,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(isrobot(user))
 		if(!can_use(user))
-			to_chat(user, "Your programming forbids interaction with this device.")
 			return
 
 	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
@@ -286,13 +311,29 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(stat & BROKEN)
 		return
 
+	if(isrobot(user))
+		if(!can_use(user))
+			return
+
 	ui_interact(user)
 //Cafe stuff
 
 /obj/machinery/chem_dispenser/brewer/
 	name = "Space-Brewery"
 	icon_state = "brewer"
-	dispensable_reagents = list(TEA,GREENTEA,REDTEA, COFFEE,MILK,CREAM,WATER,HOT_COCO, SOYMILK)
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	dispensable_reagents = list(
+		TEA,
+		GREENTEA,
+		REDTEA,
+		COFFEE,
+		MILK,
+		CREAM,
+		WATER,
+		HOT_COCO,
+		SOYMILK
+		)
+
 /obj/machinery/chem_dispenser/brewer/New()
 	. = ..()
 	component_parts = newlist(
@@ -312,18 +353,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	max_energy = 100
 	energy = 100
 
-/obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
-	if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
-		return TRUE
-	else
-		return FALSE
-
 //Soda/booze dispensers.
 
 /obj/machinery/chem_dispenser/soda_dispenser/
 	name = "Soda Dispenser"
 	icon_state = "soda_dispenser"
+	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
+
 /obj/machinery/chem_dispenser/soda_dispenser/New()
 	. = ..()
 	component_parts = newlist(
@@ -343,16 +380,33 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	max_energy = 100
 	energy = 100
 
-/obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
-		return TRUE
-	else
-		return FALSE
-
 /obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
 	icon_state = "booze_dispenser"
-	dispensable_reagents = list(BEER, WHISKEY, TEQUILA, VODKA, VERMOUTH, RUM, COGNAC, WINE, KAHLUA, ALE, ICE = T0C, WATER, GIN, SODAWATER, COLA, CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC)
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	dispensable_reagents = list(
+		BEER,
+		WHISKEY,
+		TEQUILA,
+		VODKA,
+		VERMOUTH,
+		RUM,
+		COGNAC,
+		WINE,
+		KAHLUA,
+		ALE,
+		ICE = T0C,
+		WATER,
+		GIN,
+		SODAWATER,
+		COLA,
+		CREAM,
+		TOMATOJUICE,
+		ORANGEJUICE,
+		LIMEJUICE,
+		TONIC
+		)
+
 /obj/machinery/chem_dispenser/booze_dispenser/New()
 	. = ..()
 	component_parts = newlist(
@@ -371,12 +425,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/mapping
 	max_energy = 100
 	energy = 100
-
-/obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
-		return TRUE
-	else
-		return FALSE
 
 #undef FORMAT_DISPENSER_NAME
 

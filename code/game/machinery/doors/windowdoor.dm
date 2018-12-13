@@ -30,6 +30,7 @@
 	if((istype(req_access) && req_access.len) || istext(req_access))
 		icon_state = "[icon_state]"
 		base_state = icon_state
+	set_electronics()
 
 /obj/machinery/door/window/Destroy()
 	setDensity(FALSE)
@@ -225,11 +226,11 @@
 /obj/machinery/door/window/attackby(obj/item/weapon/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
-		user.visible_message("[user] removes \the [electronics.name] from \the [name].", "You start to remove [electronics] from \the [name].")
+		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")
 		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
-			make_assembly(user)
+			make_assembly()
 			if(smartwindow)
 				qdel(smartwindow)
 				smartwindow = null
@@ -248,11 +249,11 @@
 	if(istype(I, /obj/item/stack/light_w) && !operating)
 		var/obj/item/stack/light_w/LT = I
 		if(smartwindow)
-			to_chat(user, "<span class='notice'>This [name] already has electronics in it.</span>")
+			to_chat(user, "<span class='notice'>This [name] already has [smartwindow.name] in it.</span>")
 			return FALSE
 		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to \the [name].</span>")
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
+		to_chat(user, "<span class='notice'>You add [smartwindow.name] to \the [name].</span>")
 		return smartwindow
 
 	//If its a multitool and our windoor is smart, open the menu
@@ -312,40 +313,37 @@
  * the windoor after calling this.
  * @return The new /obj/structure/windoor_assembly created.
  */
-/obj/machinery/door/window/proc/make_assembly(mob/user)
+/obj/machinery/door/window/proc/make_assembly()
 	// Windoor assembly
 	var/obj/structure/windoor_assembly/WA = new assembly_type(loc)
-	set_assembly(user, WA)
+	transfer_fingerprints_to(WA)
+	set_assembly(WA)
 	return WA
 
-/obj/machinery/door/window/proc/set_assembly(mob/user, var/obj/structure/windoor_assembly/WA)
+/obj/machinery/door/window/proc/set_assembly(var/obj/structure/windoor_assembly/WA)
 	WA.dir = dir
 	WA.anchored = TRUE
 	WA.wired = TRUE
 	WA.facing = (is_left_opening() ? "l" : "r")
 	WA.update_name()
 	WA.update_icon()
+	eject_electronics() // Pop out electronics
 
-	transfer_fingerprints_to(WA)
-
-	// Pop out electronics
-	eject_electronics()
+/obj/machinery/door/window/proc/set_electronics()
+	if(!electronics)
+		electronics = new /obj/item/weapon/circuitboard/airlock(src)
+		electronics.installed = TRUE
+	if(req_access && req_access.len > 0)
+		electronics.conf_access = req_access
+	else if(req_one_access && req_one_access.len > 0)
+		electronics.conf_access = req_one_access
+		electronics.one_access = 1
 
 /obj/machinery/door/window/proc/eject_electronics()
-	var/obj/item/weapon/circuitboard/airlock/AE = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(loc))
 	if(electronics)
+		electronics.installed = FALSE
+		electronics.forceMove(loc)
 		electronics = null
-		AE.installed = FALSE
-	else
-		if(operating == -1)
-			AE.icon_state = "door_electronics_smoked"
-		// Straight from /obj/machinery/door/airlock/attackby()
-		if(req_access && req_access.len > 0)
-			AE.conf_access = req_access
-		else if(req_one_access && req_one_access.len > 0)
-			AE.conf_access = req_one_access
-			AE.one_access = 1
-	AE.forceMove(loc)
 
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)

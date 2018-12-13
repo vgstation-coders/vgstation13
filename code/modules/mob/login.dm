@@ -114,9 +114,6 @@
 		client.changeView()
 		client.haszoomed = 0
 
-	if(bad_changing_colour_ckeys["[client.ckey]"] == 1)
-		client.updating_colour = 0
-		bad_changing_colour_ckeys["[client.ckey]"] = 0
 	update_colour()
 
 	if(client)

@@ -159,6 +159,7 @@
 /obj/structure/closet/secure_closet/chemical/atoms_to_spawn()
 	return list(
 		/obj/item/weapon/storage/box/pillbottles = 2,
+		/obj/item/weapon/book/manual/chemistry_manual,
 	)
 
 /obj/structure/closet/secure_closet/medical_wall

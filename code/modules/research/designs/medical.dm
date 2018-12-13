@@ -38,17 +38,16 @@
 	category = "Medical"
 	build_path = /obj/item/stack/medical/advanced/ointment
 
-/datum/design/mass_spectrometer
-	name = "Mass-Spectrometer"
-	desc = "A device for analyzing chemicals in the blood."
-	id = "mass_spectrometer"
-	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 2)
+/datum/design/adv_reagent_scanner
+	name = "Advanced Reagent Scanner"
+	desc = "A hand-held reagent scanner which identifies chemical agents."
+	id = "adv_mass_spectrometer"
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 20)
-	reliability_base = 76
 	category = "Medical"
-	build_path = /obj/item/device/mass_spectrometer
-
+	build_path = /obj/item/device/reagent_scanner/adv
+/*
 /datum/design/adv_mass_spectrometer
 	name = "Advanced Mass-Spectrometer"
 	desc = "A device for analyzing chemicals in the blood and their quantities."
@@ -59,7 +58,7 @@
 	reliability_base = 74
 	category = "Medical"
 	build_path = /obj/item/device/mass_spectrometer/adv
-
+*/
 /datum/design/defibrillator
 	name = "Defibrillator"
 	desc = "A handheld emergency defibrillator, used to bring people back from the brink of death or put them there."

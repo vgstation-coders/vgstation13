@@ -9,7 +9,6 @@
 
 
 /mob/living/carbon/alien/larva/Life()
-	set invisibility = 0
 	//set background = 1
 	if (!loc)
 		return
@@ -73,7 +72,7 @@
 /mob/living/carbon/alien/larva/proc/breathe()
 
 
-	if(reagents.has_reagent(LEXORIN))
+	if(reagents.has_any_reagents(LEXORINS))
 		return
 	if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 		return

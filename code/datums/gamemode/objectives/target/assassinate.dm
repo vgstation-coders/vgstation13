@@ -32,8 +32,11 @@
 
 /datum/objective/target/assassinate/get_targets()
 	var/list/possible_targets = list()
-	for(var/datum/mind/possible_target in ticker.minds)
-		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
+	for(var/mob/living/carbon/human/H in player_list)
+		if(!H.mind || H.gcDestroyed)
+			continue
+		var/datum/mind/possible_target = H.mind
+		if(possible_target != owner && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
 			possible_targets += possible_target
 	return possible_targets
 

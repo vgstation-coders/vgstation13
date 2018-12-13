@@ -142,8 +142,18 @@
 	return 0
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	user.delayNextAttack(8)
+	if(isglasssheet(W))
+		var/obj/item/stack/sheet/glass/G = W
+		for(var/datum/stack_recipe/SR in G.recipes)
+			if(ispath(SR.result_type, /obj/structure/window))
+				var/obj/structure/window/S = SR.build(user,G)
+				if(S)
+					S.forceMove(get_turf(src))
+					S.dir = get_dir(src, user)
+					S.ini_dir = S.dir
+					return
+		return
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
@@ -158,51 +168,6 @@
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
 			"<span class='notice'>You [anchored ? "fasten" : "unfasten"] the grille [anchored ? "to" : "from"] the floor.</span>")
 			return
-
-//Window placement
-	else if(istype(W, /obj/item/stack/sheet/glass))
-		var/dir_to_set
-		if(loc == user.loc)
-			dir_to_set = user.dir //Whatever the user is doing, return the "normal" window placement output
-		else
-			if((x == user.x) || (y == user.y)) //Only supposed to work for cardinal directions, aka can't lay windows in diagonal directions
-				if(x == user.x) //User is on the same vertical plane
-					if(y > user.y)
-						dir_to_set = 2 //User is laying from the bottom
-					else
-						dir_to_set = 1 //User is laying from the top
-				else if(y == user.y) //User is on the same horizontal plane
-					if (x > user.x)
-						dir_to_set = 8 //User is laying from the left
-					else
-						dir_to_set = 4 //User is laying from the right
-			else
-				to_chat(user, "<span class='warning'>You can't reach far enough.</span>")
-				return
-		for(var/obj/structure/window/P in loc)
-			if(P.dir == dir_to_set)
-				to_chat(user, "<span class='warning'>There's already a window here.</span>")//You idiot
-
-				return
-		user.visible_message("<span class='notice'>[user] starts placing a window on \the [src].</span>", \
-		"<span class='notice'>You start placing a window on \the [src].</span>")
-		if(do_after(user, src, 20))
-			for(var/obj/structure/window/P in loc)
-				if(P.dir == dir_to_set)//checking this for a 2nd time to check if a window was made while we were waiting.
-					to_chat(user, "<span class='warning'>There's already a window here.</span>")
-					return
-			var/obj/item/stack/sheet/glass/glass/G = W //This fucking stacks code holy shit
-			var/obj/structure/window/WD = new G.created_window(loc, 0)
-			WD.dir = dir_to_set
-			WD.ini_dir = dir_to_set
-			WD.anchored = 0
-			WD.d_state = 0
-			var/obj/item/stack/ST = W //HOLY FUCKING SHIT !
-			ST.use(1)
-			user.visible_message("<span class='notice'>[user] places \a [WD] on \the [src].</span>", \
-			"<span class='notice'>You place \a [WD] on \the [src].</span>")
-		return
-
 	var/dam = 0
 	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
 		dam = health
@@ -220,11 +185,10 @@
 
 	if(dam)
 		user.do_attack_animation(src, W)
+		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	health -= dam
 	healthcheck(hitsound = 1)
 	..()
-	return
-
 //Shock user with probability prb (if all connections & power are working)
 //Returns 1 if shocked, 0 otherwise
 

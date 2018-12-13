@@ -79,12 +79,29 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		if (rune_name)
 			if (initial(rune_name.Act_restriction) <= veil_thickness)
 				to_chat(user, initial(rune_name.desc))
+				if (istype(active_spell,/datum/rune_spell/portalentrance))
+					var/datum/rune_spell/portalentrance/PE = active_spell
+					if (PE.network)
+						to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
+				if (istype(active_spell,/datum/rune_spell/portalexit))
+					var/datum/rune_spell/portalexit/PE = active_spell
+					if (PE.network)
+						to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 			else
 				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 
 	//so do observers
 	else if (isobserver(user))
 		to_chat(user, "<span class='info'>[rune_name ? "That's \a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spell."]</span>")
+		if (rune_name)
+			if (istype(active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
+			if (istype(active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalexit/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 
 	//"cult" chaplains can read the words, but not understand the meaning (though they can always check it up). Also has a chance to trigger a taunt from Nar-Sie.
 	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
@@ -256,7 +273,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 
 /obj/effect/rune/attackby(obj/I, mob/user)
-	if(istype(I, /obj/item/weapon/nullrod))
+	if(isholyweapon(I))
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
@@ -292,7 +309,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		else
 			rune.blood1.data["blood_colour"] = DEFAULT_BLOOD
 		if (source.data["blood_type"])
-			rune.blood1.data["blood_DNA"] = source.data["blood_type"]
+			rune.blood1.data["blood_type"] = source.data["blood_type"]
+		else
+			rune.blood1.data["blood_type"] = "O+"
+		if (source.data["blood_DNA"])
+			rune.blood1.data["blood_DNA"] = source.data["blood_DNA"]
 		else
 			rune.blood1.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
@@ -306,7 +327,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		else
 			rune.blood1.data["blood_colour"] = DEFAULT_BLOOD
 		if (source.data["blood_type"])
-			rune.blood2.data["blood_DNA"] = source.data["blood_type"]
+			rune.blood2.data["blood_type"] = source.data["blood_type"]
+		else
+			rune.blood2.data["blood_type"] = "O+"
+		if (source.data["blood_DNA"])
+			rune.blood2.data["blood_DNA"] = source.data["blood_DNA"]
 		else
 			rune.blood2.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
@@ -320,7 +345,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		else
 			rune.blood1.data["blood_colour"] = DEFAULT_BLOOD
 		if (source.data["blood_type"])
-			rune.blood3.data["blood_DNA"] = source.data["blood_type"]
+			rune.blood3.data["blood_type"] = source.data["blood_type"]
+		else
+			rune.blood3.data["blood_type"] = "O+"
+		if (source.data["blood_DNA"])
+			rune.blood3.data["blood_DNA"] = source.data["blood_DNA"]
 		else
 			rune.blood3.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
@@ -374,7 +403,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 
 /obj/effect/rune/attack_animal(var/mob/living/simple_animal/user)
-	if(istype(user, /mob/living/simple_animal/construct/harvester))
+	if(istype(user, /mob/living/simple_animal/construct))
 		trigger(user)
 
 /obj/effect/rune/attack_paw(var/mob/living/user)

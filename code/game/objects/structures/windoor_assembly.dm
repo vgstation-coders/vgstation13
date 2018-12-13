@@ -69,6 +69,27 @@ obj/structure/windoor_assembly/Destroy()
 			return !density
 	return TRUE
 
+/obj/structure/windoor_assembly/proc/make_windoor(var/mob/user)
+	var/spawn_type = secure ? secure_type : windoor_type
+	var/obj/machinery/door/window/windoor = new spawn_type(loc)
+	windoor.dir = dir
+	windoor.base_state = (facing == "l" ? "left" : "right")
+	windoor.icon_state = windoor.base_state
+	transfer_fingerprints_to(windoor)
+	set_windoor_electronics(windoor)
+	return windoor
+
+/obj/structure/windoor_assembly/proc/set_windoor_electronics(var/obj/machinery/door/window/windoor)
+	if(electronics)
+		if(electronics.one_access)
+			windoor.req_access = null
+			windoor.req_one_access = electronics.conf_access
+		else
+			windoor.req_access = electronics.conf_access
+		windoor.set_electronics()
+		qdel(electronics)
+		electronics = null
+
 
 /obj/structure/windoor_assembly/attackby(obj/item/W, mob/user)
 	if(iswelder(W) && (!anchored && !wired && !electronics))
@@ -195,17 +216,8 @@ obj/structure/windoor_assembly/Destroy()
 		if(do_after(user, src, 40))
 			if(gcDestroyed)
 				return
-			var/spawn_type = secure ? secure_type : windoor_type
-			var/obj/machinery/door/window/windoor = new spawn_type(loc)
+			var/obj/machinery/door/window/windoor = make_windoor()
 			to_chat(user, "<span class='notice'>You finish the [windoor.name]!</span>")
-			windoor.dir = dir
-			transfer_fingerprints_to(windoor)
-			if(electronics.one_access)
-				windoor.req_access = null
-				windoor.req_one_access = electronics.conf_access
-			else
-				windoor.req_access = electronics.conf_access
-			electronics.forceMove(windoor)
 			qdel(src)
 
 	else

@@ -59,7 +59,7 @@
 			if(1)
 				temperature = MELTPOINT_STEEL
 			if(2)
-				temperature = MELTPOINT_MITHRIL
+				temperature = MELTPOINT_MYTHRIL
 		heat(temperature, M, user)
 
 /obj/item/smithing_placeholder/attackby(obj/item/I, mob/user)
@@ -81,11 +81,13 @@
 		if(user)
 			to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
 		return
-	if(!do_after(user, A, 4 SECONDS))
-		return
 	if(user)
 		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
+	if(user && !do_after(user, A, 4 SECONDS/(temperature/material_type.melt_temperature)))
+		return
 	malleable = TRUE
+	spawn(2 MINUTES)
+		malleable = FALSE
 
 
 /obj/item/smithing_placeholder/proc/strike(atom/A, mob/user)
@@ -120,6 +122,6 @@
 	O.reagents.remove_reagent(WATER, 20)
 	var/datum/material/mat = material_type
 	if(mat)
-		result.dorfify(mat)
+		result.dorfify(mat, strikes>strikes_required?(strikes/strikes_required):0)
 	result.forceMove(get_turf(src))
 	qdel(src)

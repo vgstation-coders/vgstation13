@@ -333,6 +333,20 @@
 	emag_cost = 2 // in MJ
 	animation_delay = 14
 
+/obj/machinery/door/airlock/clockwork
+	name = "Clockwork Airlock"
+	icon = 'icons/obj/doors/door_clockwork.dmi'
+	assembly_type = /obj/structure/door_assembly/clockwork
+	glass = -1
+	hackProof = TRUE
+	machine_flags = SCREWTOGGLE //No wirejack.
+
+/obj/machinery/door/airlock/clockwork/cultify()
+	return
+
+/obj/machinery/door/airlock/clockwork/clockworkify()
+	return
+
 /*
 About the new airlock wires panel:
 *	An airlock wire dialog can be accessed by the normal way or by using wirecutters or a multitool on the door while the wire-panel is open. This would show the following wires, which you can either wirecut/mend or send a multitool pulse through. There are 9 wires.
@@ -1106,6 +1120,9 @@ About the new airlock wires panel:
 				user.delayNextAttack(10)
 
 	if(istype(I, /obj/item/weapon/batteringram))
+		if(!I.wielded)
+			to_chat(user,"<span class='warning'>\The [I] must be wielded!</span>")
+			return
 		user.delayNextAttack(30)
 		var/breaktime = 60 //Same amount of time as drilling a wall, then a girder
 		if(welded)
@@ -1275,7 +1292,7 @@ About the new airlock wires panel:
 	return ..()
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)
-	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)))
+	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE
 		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
 		return 0
 	return ..()
@@ -1369,3 +1386,6 @@ About the new airlock wires panel:
 			wires.npc_tamper(L)
 	else //60% - just open it
 		open()
+
+/obj/machinery/door/airlock/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/airlock/clockwork, CLOCKWORK_DOOR_GLOW)

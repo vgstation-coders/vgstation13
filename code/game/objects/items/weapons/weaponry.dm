@@ -523,5 +523,6 @@ obj/item/weapon/banhammer/admin
 	name = "smithing hammer"
 	desc = "for those with a predeliction for applying concussive maintenance"
 	icon_state = "hammer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
