@@ -237,6 +237,7 @@
 
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
+			return
 
 		if (joined_faction && joined_faction != "-----")
 			if (joined_faction == "NEW CUSTOM FACTION")
