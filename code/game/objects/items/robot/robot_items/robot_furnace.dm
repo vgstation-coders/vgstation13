@@ -25,7 +25,7 @@
 /obj/item/weapon/storage/bag/ore/furnace/New()
 	. = ..()
 	ore = new
-	for(var/recipe in subtypesof(/datum/smelting_recipe) - /datum/smelting_recipe)
+	for(var/recipe in subtypesof(/datum/smelting_recipe))
 		recipes += new recipe
 	update_icon()
 
