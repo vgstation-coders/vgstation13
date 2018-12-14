@@ -200,11 +200,52 @@
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
 
-obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
+/obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
+
+// -- Mushroom,traders --
+
+/obj/item/clothing/suit/space/vox/civ/mushmen
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen
+	actions_types = list(/datum/action/item_action/dim_lighting)
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+	var/up = FALSE
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
+	toggle(user)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
+	if(!user)
+		return //PANIC
+	if(!user.incapacitated())
+		if(src.up)
+			src.up = !src.up
+			src.body_parts_covered = FACE
+			to_chat(user, "<span class='notice'>You use \the [].")
+		else
+			src.up = !src.up
+			src.body_parts_covered = HEAD
+			to_chat(user, "You push the [src] up out of your face.")
+		user.update_inv_head()	//so our mob-overlays update
+		user.update_inv_wear_mask()
+		user.update_inv_glasses()
+		user.update_hair()
+
+/datum/action/item_action/dim_lighting
+	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie

@@ -840,6 +840,10 @@
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
 
+	// Mushie suits !
+	new /obj/item/clothing/suit/space/vox/civ/mushmen
+	new /obj/item/clothing/head/helmet/space/vox/civ/mushmen
+
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/mobs/carp
