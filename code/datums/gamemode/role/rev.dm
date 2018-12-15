@@ -5,6 +5,12 @@
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 
+/datum/role/revolutionary/AssignToRole(var/datum/mind/M, var/override = 0)
+	if (!(M.current) || M.current.z != map.zMainStation)
+		message_admins("Error: cannot create a revolutionary off the main z-level.")
+		return FALSE
+	return ..()
+
 /datum/role/revolutionary/Greet(var/greeting, var/custom)
 	if(!greeting)
 		return
@@ -57,6 +63,8 @@
 		to_chat(mob, "\The [faction.name] were able to get you \a [T], but could not find anywhere to slip it onto you, so it is now on the floor.")
 
 /datum/role/revolutionary/Drop(var/borged = FALSE)
+	if (!antag)
+		return ..()
 	if (borged)
 		antag.current.visible_message("<span class='big danger'>The frame beeps contentedly, purging the hostile memory engram from the MMI before initalizing it.</span>",
 				"<span class='big danger'>The frame's firmware detects and deletes your neural reprogramming! You remember nothing from the moment you were flashed until now.</span>")

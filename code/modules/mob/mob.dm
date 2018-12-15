@@ -2205,5 +2205,9 @@ mob/proc/on_foot()
 			var/datum/role/R = mind.antag_roles[role]
 			R.update_antag_hud()
 
+// Returns TRUE on success
+/mob/proc/attempt_crawling(var/turf/target)
+	return FALSE
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

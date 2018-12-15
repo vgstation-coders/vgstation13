@@ -1066,12 +1066,6 @@ function loadPage(list) {
 			message_admins("<span class='notice'>[key_name(usr)] dealt [amount] amount of [Text] damage to [L] </span>")
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
-	else if(href_list["datumrefresh"])
-		var/datum/DAT = locate(href_list["datumrefresh"])
-		if(!istype(DAT, /datum))
-			return
-		src.debug_variables(DAT)
-
 	else if(href_list["proc_call"])
 		if(!check_rights(R_DEBUG))
 			return
@@ -1137,3 +1131,11 @@ function loadPage(list) {
 		message_admins("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
 
 		L -= L[index]
+		href_list["datumrefresh"] = href_list["datum"]
+
+	// No else, as it must be checked separatly, and at the end.
+	if(href_list["datumrefresh"])
+		var/datum/DAT = locate(href_list["datumrefresh"])
+		if(!istype(DAT, /datum))
+			return
+		src.debug_variables(DAT)

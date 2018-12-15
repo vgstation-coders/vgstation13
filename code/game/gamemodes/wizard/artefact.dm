@@ -43,7 +43,7 @@
 		qdel(src)
 
 /obj/effect/rend/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/nullrod))
+	if(isholyweapon(I))
 		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
 		qdel(src)
 		return

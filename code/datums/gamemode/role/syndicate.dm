@@ -21,6 +21,7 @@
 		var/mob/living/silicon/robot/S = antag.current
 		to_chat(S, "<b>Your laws have been changed!</b>")
 		S.set_zeroth_law("","")
+		S.laws.zeroth_lock = FALSE
 		to_chat(S, "Law 0 has been purged.")
 
 	.=..()

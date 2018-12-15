@@ -115,6 +115,7 @@
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
 #define RITUALABORT_MISSING	"missing"
+#define RITUALABORT_OUTPOST "outpost"
 
 #define TATTOO_POOL		"Blood Communion"
 #define TATTOO_SILENT	"Silent Casting"

@@ -273,7 +273,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 
 /obj/effect/rune/attackby(obj/I, mob/user)
-	if(istype(I, /obj/item/weapon/nullrod))
+	if(isholyweapon(I))
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return

@@ -100,6 +100,7 @@
 		else
 			if(Subject.eyecheck() <= 0)
 				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
+				Subject.Stun(Subject.eyecheck() * 5 * -1 +10)
 
 	else if(issilicon(M))
 		var/mob/living/silicon/R = M
@@ -199,6 +200,7 @@
 				var/safety = M.eyecheck()
 				if(safety <= 0 && !M.blinded)
 					M.Knockdown(10)
+					M.Stun(10)
 					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")

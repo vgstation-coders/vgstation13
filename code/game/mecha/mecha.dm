@@ -864,12 +864,18 @@
 				return
 			switch(remove)
 				if ("power cell")
+					if(!cell)
+						return
 					cell.forceMove(src.loc)
 					cell = null
 				if ("exosuit tracking beacon")
+					if(!tracking)
+						return
 					tracking.forceMove(src.loc)
 					tracking = null
 				if ("electropack")
+					if(!electropack)
+						return
 					electropack.forceMove(src.loc)
 					electropack = null
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
