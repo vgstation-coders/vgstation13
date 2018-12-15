@@ -54,6 +54,7 @@
 /datum/design/rad_cell
 	name = "Radio-isotope thermoelectric cell"
 	desc = "A power cell that does not hold much charge, but recharges over time."
+	id = "rad_cell"
 	req_tech = list(Tc_POWERSTORAGE = 7, Tc_MATERIALS = 5)
 	reliability_base = 70
 	build_type = PROTOLATHE
