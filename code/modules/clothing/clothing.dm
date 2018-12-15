@@ -339,6 +339,9 @@
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
 
+/obj/item/proc/islightshielded() // So as to avoid unneeded casts.
+	return FALSE
+
 //Mask
 /obj/item/clothing/mask
 	name = "mask"

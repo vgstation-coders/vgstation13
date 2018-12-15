@@ -48,7 +48,7 @@
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 
-	if(species.flags & REQUIRE_DARK)
+	if(species.flags & REQUIRE_DARK && !(head && head.islightshielded()))
 		var/light_amount = 0
 		if(isturf(loc))
 			var/turf/T = loc

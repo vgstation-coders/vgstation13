@@ -228,21 +228,17 @@
 	toggle(user)
 
 /obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
-	if(!user)
-		return //PANIC
 	if(!user.incapacitated())
-		if(src.up)
-			src.up = !src.up
-			src.body_parts_covered = FACE
-			to_chat(user, "<span class='notice'>You use \the [].")
+		if(!src.up)
+			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incomming light.</span>")
+			user.overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 		else
-			src.up = !src.up
-			src.body_parts_covered = HEAD
-			to_chat(user, "You push the [src] up out of your face.")
-		user.update_inv_head()	//so our mob-overlays update
-		user.update_inv_wear_mask()
-		user.update_inv_glasses()
-		user.update_hair()
+			to_chat(user, "<span class='notice'>You disengage \the [src] light protection visor.</span>")
+		src.up = !src.up
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
+	return up
+
 
 /datum/action/item_action/dim_lighting
 	name = "Dim lighting"
