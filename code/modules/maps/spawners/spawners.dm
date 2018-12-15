@@ -841,8 +841,8 @@
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
 
 	// Mushie suits !
-	new /obj/item/clothing/suit/space/vox/civ/mushmen
-	new /obj/item/clothing/head/helmet/space/vox/civ/mushmen
+	new /obj/item/clothing/suit/space/vox/civ/mushmen(src.loc)
+	new /obj/item/clothing/head/helmet/space/vox/civ/mushmen(src.loc)
 
 // Mobs ////////////////////////////////////////////////////////
 
