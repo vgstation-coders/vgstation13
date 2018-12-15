@@ -365,7 +365,7 @@
 		return
 	if(!Adjacent(usr) || !Adjacent(over))
 		return
-	if(get_pilot() != usr && !get_passengers().Find(usr))
+	if(!occupants.Find(usr))
 		return ..() //Handle mousedrop T
 	var/turf/T = get_turf(over)
 	if(!Adjacent(T) || T.density)
@@ -581,8 +581,7 @@
 /obj/spacepod/proc/get_passengers()
 	var/list/L = list()
 	if(occupants.len > 1)
-		L = occupants.Copy()
-		L.Remove(L[1])
+		L = occupants.Copy(2)
 	return L
 
 /obj/spacepod/proc/toggle_passengers()
