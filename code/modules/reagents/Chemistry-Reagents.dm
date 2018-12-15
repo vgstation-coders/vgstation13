@@ -5397,14 +5397,12 @@
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(M.gender == MALE)
-		M.setGender(FEMALE)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
-			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
+			H.visible_message("<span class='warning'>[H] dons their magical girl outfit in a burst of light!</span>")
 			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
 			if(H.w_uniform)
 				H.u_equip(H.w_uniform, 1)
