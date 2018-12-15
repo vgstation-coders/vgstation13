@@ -98,6 +98,21 @@
 /obj/item/ammo_storage/magazine/smg9mm/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/a357
+	name = "automag magazine (.357)"
+	desc = "A magazine designed for the Automag VI handcannon. Holds 7 rounds"
+	icon_state = "automag-mag"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
+	caliber = POINT357
+	ammo_type = "/obj/item/ammo_casing/a357"
+	exact = 0
+	max_ammo = 7
+	multiple_sprites = 1
+	sprite_modulo = 7
+
+/obj/item/ammo_storage/magazine/a357/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/a50
 	name = "magazine (.50)"
 	icon_state = "50ae"
