@@ -11,7 +11,7 @@
 	dynamic_lighting = 0
 	luminosity = 1
 	plane = PLATING_PLANE
-	var/snowballs = 0
+	var/snowballs = TRUE
 	var/global/list/icon_state_to_appearance = list()
 
 /turf/unsimulated/floor/snow/New()
@@ -28,13 +28,14 @@
 		overlays += snowfx1
 		overlays += snowfx2
 		icon_state_to_appearance[icon_state] = appearance
-	snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
+	if(snowballs)
+		snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	..()
 
-	if(isshovel(W))
+	if(snowballs && isshovel(W))
 		user.visible_message("<span class='notice'>[user] starts digging out some snow with \the [W].</span>", \
 		"<span class='notice'>You start digging out some snow with \the [W].</span>")
 		user.delayNextAttack(20)
@@ -45,14 +46,15 @@
 
 /turf/unsimulated/floor/snow/attack_hand(mob/user as mob)
 
-	//Reach down and make a snowball
-	user.visible_message("<span class='notice'>[user] reaches down and starts forming a snowball.</span>", \
-	"<span class='notice'>You reach down and start forming a snowball.</span>")
-	user.delayNextAttack(10)
-	if(do_after(user, src, 5))
-		user.visible_message("<span class='notice'>[user] finishes forming a snowball.</span>", \
-		"<span class='notice'>You finish forming a snowball.</span>")
-		extract_snowballs(1, TRUE, user)
+	if(snowballs)
+		//Reach down and make a snowball
+		user.visible_message("<span class='notice'>[user] reaches down and starts forming a snowball.</span>", \
+		"<span class='notice'>You reach down and start forming a snowball.</span>")
+		user.delayNextAttack(10)
+		if(do_after(user, src, 5))
+			user.visible_message("<span class='notice'>[user] finishes forming a snowball.</span>", \
+			"<span class='notice'>You finish forming a snowball.</span>")
+			extract_snowballs(1, TRUE, user)
 
 	..()
 
@@ -106,3 +108,4 @@
 
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
+	snowballs = FALSE
