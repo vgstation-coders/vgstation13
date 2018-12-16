@@ -331,7 +331,7 @@
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
-	required_candidates = 1
+	required_candidates = 3
 	weight = 2
 	cost = 45
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
