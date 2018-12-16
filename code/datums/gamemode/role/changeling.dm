@@ -3,6 +3,7 @@
 	id = CHANGELING
 	required_pref = ROLE_CHANGELING
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	protected_traitor_prob = PROB_PROTECTED_RARE
 	logo_state = "change-logoa"
 	var/list/absorbed_dna = list()
 	var/list/absorbed_species = list()

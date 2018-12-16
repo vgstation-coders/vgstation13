@@ -4,7 +4,7 @@
 	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
 	var/list/candidates = list()//list of players that are being drafted for this rule
 	var/list/assigned = list()//list of players that were selected for this rule
-	var/role_category = ROLE_TRAITOR//rule will only accept candidates with "Yes" or "Always" in the preferences for this role
+	var/datum/role/role_category = /datum/role/traitor //rule will only accept candidates with "Yes" or "Always" in the preferences for this role
 	var/list/protected_from_jobs = list() // if set, and config.protect_roles_from_antagonist = 0, then the rule will have a much lower chance than usual to pick those roles.
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
@@ -134,15 +134,17 @@
 //////////////////////////////////////////////Remember that roundstart objectives are automatically forged by /datum/gamemode/proc/PostSetup()
 
 /datum/dynamic_ruleset/roundstart/trim_candidates()
+	var/role_id = initial(role_category.id)
 	for(var/mob/new_player/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+		if (!P.client.desires_role(role_id) || jobban_isbanned(P, role_id) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in protected_from_jobs)
-			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
+			var/probability = initial(role_category.protected_traitor_prob)
+			if (prob(probability))
 				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
@@ -172,15 +174,17 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/latejoin/trim_candidates()
+	var/role_id = initial(role_category.id)
 	for(var/mob/new_player/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category)|| (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+		if (!P.client.desires_role(role_id) || jobban_isbanned(P, role_id)|| (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in protected_from_jobs)
-			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
+			var/probability = initial(role_category.protected_traitor_prob)
+			if (prob(probability))
 				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
@@ -229,17 +233,22 @@
 
 /datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
 	var/list/trimmed_list = L.Copy()
+	var/role_id = initial(role_category.id)
 	for(var/mob/M in trimmed_list)
 		if (!M.client)//are they connected?
 			trimmed_list.Remove(M)
 			continue
-		if (!M.client.desires_role(role_category) || jobban_isbanned(M, role_category))//are they willing and not antag-banned?
+		if (!M.client.desires_role(role_id) || jobban_isbanned(M, role_id))//are they willing and not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
 			if (M.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
+			if (M.mind.assigned_role in protected_from_jobs)
+				var/probability = initial(role_category.protected_traitor_prob)
+				if (prob(probability))
+					candidates.Remove(M)
 			if ((exclusive_to_jobs.len > 0) && !(M.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
 				trimmed_list.Remove(M)
 				continue
