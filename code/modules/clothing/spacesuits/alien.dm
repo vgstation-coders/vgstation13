@@ -200,11 +200,48 @@
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
 
-obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
+/obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
+
+// -- Mushroom,traders --
+
+/obj/item/clothing/suit/space/vox/civ/mushmen
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen
+	actions_types = list(/datum/action/item_action/dim_lighting)
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+	var/up = FALSE
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
+	toggle(user)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
+	if(!user.incapacitated())
+		if(!src.up)
+			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incomming light.</span>")
+			user.overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+		else
+			to_chat(user, "<span class='notice'>You disengage \the [src] light protection visor.</span>")
+		src.up = !src.up
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
+	return up
+
+
+/datum/action/item_action/dim_lighting
+	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie

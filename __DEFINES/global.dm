@@ -12,6 +12,8 @@
 
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
 
+#define MUSHROOM_SHAPED "Mushroom"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
