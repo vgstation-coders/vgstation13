@@ -346,6 +346,7 @@
 			head_check++
 	if (forced)
 		required_heads = 1
+		required_candidates = 1
 	return (head_check >= required_heads)
 
 /datum/dynamic_ruleset/roundstart/revs/execute()
