@@ -358,8 +358,6 @@
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
-		if (!M.mind)
-			WARNING("Shit, [M] has a no mind! [M.type]")
 		assigned += M
 		candidates -= M
 		var/datum/role/revolutionary/leader/lenin = new
