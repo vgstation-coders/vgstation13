@@ -906,7 +906,7 @@ Auto Patrol: []"},
 	return ..()
 
 /obj/machinery/bot/secbot/proc/check_if_rigged()
-	if(baton && baton.bcell && baton.bcell.rigged && is_holder_of(src, baton))
+	if(baton && istype(baton) && baton.bcell && baton.bcell.rigged && is_holder_of(src, baton))
 		if(baton.bcell.explode())
 			explode()
 
@@ -1180,6 +1180,8 @@ Auto Patrol: []"},
 	spark(src)
 
 	getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+
+	qdel(src)
 
 
 
