@@ -395,10 +395,10 @@
 					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 						var/mob/living/L = get_holder_of_type(P,/mob/living)
 						if(L)
-							L.show_message("[bicon(P)] <b>Message from U¦ŸÉ8¥E1ÀÓÐ‹ (T¥u1B¤Õ), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+							L.show_message("[bicon(P)] <b>Message from U*{*,*;8AYE1*;*;*a;1 (0x034ac15e), </b>\"Caw. Cousin [character.real_name] detected in sector.\".", 2)
 				for(var/mob/dead/observer/M in player_list)
 					if(M.stat == DEAD && M.client)
-						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
+						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
