@@ -39,10 +39,6 @@
 		if(A.set_target(head_mind))
 			AppendObjective(A, TRUE) // We will have more than one kill objective
 
-/datum/faction/revolution/OnPostSetup()
-	. = ..()
-	forgeObjectives()
-
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2
 #define SHUTTLE_LEFT 3

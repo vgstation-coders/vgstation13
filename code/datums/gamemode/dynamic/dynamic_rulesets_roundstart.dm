@@ -331,7 +331,7 @@
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
-	required_candidates = 3
+	required_candidates = 1
 	weight = 2
 	cost = 45
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
@@ -344,26 +344,27 @@
 	for (var/mob/new_player/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
+	if (forced)
+		required_heads = 1
 	return (head_check >= required_heads)
 
 /datum/dynamic_ruleset/roundstart/revs/execute()
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
 	if (!R)
 		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
-	
-	R.OnPostSetup() // Forge our jecties
 
 	var/max_canditates = 4
 	for(var/i = 1 to max_canditates)
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
+		if (!M.mind)
+			WARNING("Shit, [M] has a no mind! [M.type]")
 		assigned += M
 		candidates -= M
 		var/datum/role/revolutionary/leader/lenin = new
-		lenin.AssignToRole(M.mind,1)
+		lenin.AssignToRole(M.mind, 1, 1)
 		R.HandleRecruitedRole(lenin)
 		lenin.Greet(GREET_ROUNDSTART)
-		lenin.OnPostSetup()
 	update_faction_icons()
 	return 1
