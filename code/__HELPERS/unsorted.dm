@@ -483,9 +483,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		M = whom
 		C = M.client
 		key = M.key
-	else if(istype(whom, /datum/mind)
+	else if(istype(whom, /datum/mind))
 		var/datum/mind/D = whom
-		M = whom.current
+		M = D.current
 		key = M.key
 		C = M.client
 	else if(istype(whom, /datum))
