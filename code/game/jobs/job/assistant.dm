@@ -25,7 +25,10 @@
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		if(5)
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-	H.equip_or_collect(new /obj/item/clothing/under/color/grey(H), slot_w_uniform)
+	if(H.known_languages.find(/datum/language/gutter) != 0)
+		H.equip_or_collect(new /obj/item/clothing/under/color/brown(H), slot_w_uniform)
+	else
+		H.equip_or_collect(new /obj/item/clothing/under/color/grey(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
