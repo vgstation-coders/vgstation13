@@ -84,7 +84,7 @@
 	var/text
 	if (!M) // Body destroyed
 		text = "[antag.name]/[antag.key] (BODY DESTROYED)"
-	else 
+	else
 		text = {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[key_name(M)]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
@@ -529,8 +529,8 @@
 	if(!istype(master))
 		return FALSE
 	src.master = master
-	message_admins("[M.name]/[M.key] was enthralled by [master.antag.name]/master.antag.key]. [formatJumpTo(get_turf(M.current))]")
-	log_admin("[M.name]/[M.key] was enthralled by [master.antag.name]/master.antag.key]. [formatJumpTo(get_turf(M.current))]")
+	message_admins("[key_name(M)] was enthralled by [key_name(master.antag)]. [formatJumpTo(get_turf(M.current))]")
+	log_admin("[key_name(M)] was enthralled by [key_name(master.antag)]. [formatJumpTo(get_turf(M.current))]")
 	update_faction_icons()
 	Greet(TRUE)
 	ForgeObjectives()
@@ -553,8 +553,8 @@
 
 /datum/role/thrall/Drop(var/deconverted = FALSE)
 	var/mob/M = antag.current
-	message_admins("[antag.name]/[antag.key], his master was [master.antag.name]/master.antag.key]. [formatJumpTo(get_turf(antag.current))]")
-	log_admin("[antag.name]/[antag.key] was dethralled, his master was [master.antag.name]/master.antag.key]. [formatJumpTo(get_turf(antag.current))]")
+	message_admins("[key_name(M)] was dethralled, his master was [key_name(master.antag)]. [formatJumpTo(get_turf(antag.current))]")
+	log_admin("[key_name(M)] was dethralled, his master was [key_name(master.antag)]. [formatJumpTo(get_turf(antag.current))]")
 	if (deconverted)
 		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
