@@ -151,7 +151,7 @@
 				to_chat(activator, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
 		if (RITUALABORT_OUTPOST)
 			if (activator)
-				to_chat(activator, "<span class='sinister'>This place is too remote to interest the Geometer of Blood. We must raise our structure in the heart of the station.</span>")
+				to_chat(activator, "<span class='sinister'>The veil here is still too dense to allow raising structures from the realm of Nar-Sie. We must raise our structure in the heart of the station.</span>")
 
 
 	for(var/mob/living/L in contributors)
@@ -259,7 +259,7 @@
 
 	var/mob/living/user = activator
 
-	if (user.z != map.zMainStation)
+	if (veil_thickness < CULT_ACT_III && user.z != map.zMainStation)
 		abort(RITUALABORT_OUTPOST)
 		return FALSE
 
