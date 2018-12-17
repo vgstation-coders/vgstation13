@@ -39,6 +39,8 @@
 
 	center_x = 226
 	center_y = 254
+	only_spawn_map_exclusive_vaults = TRUE
+
 
 ////////////////////////////////////////////////////////////////
 #include "tgstation-snow.dmm"

@@ -186,7 +186,15 @@ var/global/list/accessable_z_levels = list()
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow/post_mapload()
-	var/tree_density = rand(13,25)
+	var/lake_density = rand(2,8)
+	for(var/i = 0 to lake_density)
+		var/turf/T = locate(rand(0, world.maxx),rand(0, world.maxy), z)
+		if(!istype(T, base_turf))
+			continue
+		var/generator = pick(typesof(/obj/structure/radial_gen/cellular_automata/ice))
+		new generator(T)
+
+	var/tree_density = rand(25,45)
 	for(var/i = 0 to tree_density)
 		var/turf/T = locate(rand(0,world.maxx),rand(0, world.maxy), z)
 		if(!istype(T, base_turf))

@@ -109,3 +109,73 @@
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
 	snowballs = FALSE
+
+/obj/glacier
+	name = "glacier"
+	desc = "A frozen lake, kept solid by temperatures way below freezing."
+	icon = 'icons/turf/ice.dmi'
+	icon_state = "ice1"
+	anchored = 1
+	density = 0
+	plane = PLATING_PLANE
+	var/isedge
+	var/hole = 0
+
+/obj/glacier/canSmoothWith()
+	return list(/obj/glacier)
+
+/obj/glacier/New(var/icon_update_later = 0)
+	var/turf/unsimulated/floor/snow/T = loc
+	if(!istype(T))
+		qdel(src)
+		return
+	..()
+	T.snowballs = -1
+	if(icon_update_later)
+		relativewall()
+		relativewall_neighbours()
+
+/obj/glacier/relativewall()
+	overlays.Cut()
+	var/junction = 0
+	isedge = 0
+	var/edgenum = 0
+	var/edgesnum = 0
+	for(var/direction in alldirs)
+		var/turf/adj_tile = get_step(src, direction)
+		var/obj/glacier/adj_glacier = locate(/obj/glacier) in adj_tile
+		if(adj_glacier)
+			junction |= dir_to_smoothingdir(direction)
+			if(adj_glacier.isedge && direction in cardinal)
+				edgenum |= direction
+				edgesnum = adj_glacier.isedge
+	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lotterys
+		icon_state = "ice[rand(1,6)]"
+	else
+		switch(junction)
+			if(SMOOTHING_L_CURVES)
+				isedge = junction
+				relativewall_neighbours()
+		icon_state = "junction[junction]"
+	if(edgenum && !isedge)
+		icon_state = "edge[edgenum]-[edgesnum]"
+
+	if(hole)
+		overlays += image(icon,"hole_overlay")
+
+/obj/glacier/relativewall_neighbours()
+	..()
+	for(var/direction in diagonal)
+		var/turf/adj_tile = get_step(src, direction)
+		if(isSmoothableNeighbor(adj_tile))
+			adj_tile.relativewall()
+		for(var/atom/A in adj_tile)
+			if(isSmoothableNeighbor(A))
+				A.relativewall()
+
+/obj/glacier/attackby(var/obj/item/W, mob/user)
+	if(!hole && prob(W.force*5))
+		to_chat(user,"<span class='notice'>you smash a hole in the ice with \the [W]</span>") // todo: better
+		hole = TRUE
+		relativewall()
+	..()

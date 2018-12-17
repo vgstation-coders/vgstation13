@@ -29,10 +29,8 @@
 	var/list/expected_turfs = list() //Will return if turf type is different from any in the list, good to avoid generator collision with other terrain features
 
 /obj/structure/radial_gen/New()
-
 	..()
-
-	deploy_generator()
+	deploy_generator(get_turf(src))
 	qdel(src) //This is exclusively used to generate other things, delete it once we're done
 
 //Uses modular code structure, so you can define different behaviour
