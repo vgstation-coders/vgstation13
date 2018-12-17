@@ -78,14 +78,19 @@
 	if(mind && mind.GetRole(VAMPIRE))
 		return 0
 
-	//Vampires who have reached their full potential can affect nearly everything
+	// Non-mature vampires are not stopped by holy things.
 	if(M)
 		var/datum/role/vampire/vamp = M.GetRole(VAMPIRE)
-		if (vamp && (VAMP_MATURE in vamp.powers))
+		if (vamp && !(VAMP_MATURE in vamp.powers))
 			return 1
 		//Chaplains are resistant to vampire powers
 		if(mind && mind.assigned_role == "Chaplain")
 			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
+			return 0
+		// Null rod nullifies vampire powers
+		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
+		if (N)
+			to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
 			return 0
 		return 1
 
