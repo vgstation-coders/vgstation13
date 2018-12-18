@@ -141,7 +141,14 @@
 		return FALSE
 	if((isvox(user) || isskelevox(user)) && voxemote == FALSE)
 		return FALSE
-
+	if(!user.client && user.ckey == null) //Auto emote, like a monkey or corgi
+		var/someone_in_earshot=0
+		for(var/mob/M in get_hearers_in_view(7, user)) //See if anyone is in earshot
+			if(M.client)
+				someone_in_earshot=1
+				break
+		if(!someone_in_earshot)
+			return FALSE
 	if(status_check && !(is_type_in_list(user, mob_type_ignore_stat_typelist)))
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
