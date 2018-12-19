@@ -73,7 +73,7 @@
 	desc = "LOADSAMONEY"
 	icon_state = "balaclava"
 	item_state = "balaclava"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = HEAD|MOUTH|EARS
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
