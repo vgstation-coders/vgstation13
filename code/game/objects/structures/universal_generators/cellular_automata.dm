@@ -123,7 +123,7 @@ here is an example of what it might look like:
 
 	var/wallcounter = 0
 
-	for(var/iy = (row-n) to (row+n))
+	for(var/iy = max(1,row-n) to (row+n))
 		for(var/ix = (column-n) to (column+n))
 			if(ix > 0 && ix < mapgrid_width)
 				if(!(ix == column && iy == row) && iy > 0 && iy < mapgrid_height)
@@ -139,9 +139,7 @@ here is an example of what it might look like:
 				for(var/scale_row = 1 to mapgrid_scale)
 					for(var/scale_column = 1 to mapgrid_scale)
 						var/turf/T = locate((bottomleft.x-1)+(column * mapgrid_scale)+scale_column,(bottomleft.y-1)+(row * mapgrid_scale) + scale_row,bottomleft.z)
-						if(T && istype(T,ca_wall))
-							continue
-						else
+						if(!istype(T,ca_wall))
 							return TRUE
 
 /obj/structure/radial_gen/cellular_automata/proc/apply_mapgrid_to_turfs(var/turf/bottomleft)

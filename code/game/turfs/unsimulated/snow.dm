@@ -175,7 +175,7 @@
 
 /obj/glacier/attackby(var/obj/item/W, mob/user)
 	if(!hole && prob(W.force*5))
-		to_chat(user,"<span class='notice'>you smash a hole in the ice with \the [W]</span>") // todo: better
+		to_chat(user,"<span class='notice'>You smash a hole in the ice with \the [W].</span>") // todo: better
 		hole = TRUE
 		relativewall()
 	..()

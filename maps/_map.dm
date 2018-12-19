@@ -188,7 +188,7 @@ var/global/list/accessable_z_levels = list()
 /datum/zLevel/snow/post_mapload()
 	var/lake_density = rand(2,8)
 	for(var/i = 0 to lake_density)
-		var/turf/T = locate(rand(0, world.maxx),rand(0, world.maxy), z)
+		var/turf/T = locate(rand(1, world.maxx),rand(1, world.maxy), z)
 		if(!istype(T, base_turf))
 			continue
 		var/generator = pick(typesof(/obj/structure/radial_gen/cellular_automata/ice))
@@ -196,7 +196,7 @@ var/global/list/accessable_z_levels = list()
 
 	var/tree_density = rand(25,45)
 	for(var/i = 0 to tree_density)
-		var/turf/T = locate(rand(0,world.maxx),rand(0, world.maxy), z)
+		var/turf/T = locate(rand(1,world.maxx),rand(1, world.maxy), z)
 		if(!istype(T, base_turf))
 			continue
 		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
