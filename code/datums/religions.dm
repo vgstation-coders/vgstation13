@@ -1036,3 +1036,15 @@
 	H.h_style = "Bald"
 	H.f_style = "Shaved"
 	H.update_hair()
+
+/datum/religion/gutter
+	name = "Gutter Gang"
+	deity_name = "The Gutter Gods"
+	bible_names = list("Toomykins' admin application", "The Splutterings of the Gutterings", "The Brown Jumpsuit ft. Gary", "A guide to proxy warfare")
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Gutter Gangmember"
+	female_adept = "Gutter Gangmember"
+	keys = list("gutter", "toomykins", "shitter")
+
+/datum/religion/gutter/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/under/color/brown(H), slot_w_uniform)
