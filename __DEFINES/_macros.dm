@@ -62,6 +62,8 @@
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
 
+#define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
+
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)

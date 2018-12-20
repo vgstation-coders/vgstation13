@@ -78,6 +78,9 @@
 			endgame_exits += loc
 			qdel(src)
 
+		if("grinchstart")
+			grinchstart += loc
+
 	landmarks_list += src
 	return 1
 

@@ -46,12 +46,6 @@
 	name = "Grinch's bag"
 	desc = "He's coming to steal your presennts."
 	origin_tech = null
-	var/datum/role/grinch/our_grinch = null
-
-/obj/item/weapon/storage/backpack/holding/grinch/Destroy()
-	our_grinch.our_bag = null
-	our_grinch = null
-	return ..()
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)

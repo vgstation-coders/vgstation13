@@ -367,3 +367,36 @@
 		lenin.Greet(GREET_ROUNDSTART)
 	update_faction_icons()
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/grinch
+	name = "The Grinch"
+	role_category = /datum/role/grinch
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 3
+	cost = 10
+	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/roundstart/grinch/ready(var/forced = 0)
+	if (!..())
+		return FALSE
+	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
+	return (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
+
+/datum/dynamic_ruleset/roundstart/grinch/execute()
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/grinch/G = new
+	G.AssignToRole(M.mind,1)
+	G.Greet(GREET_ROUNDSTART)
+	return 1
