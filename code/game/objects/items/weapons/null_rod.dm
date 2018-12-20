@@ -280,8 +280,6 @@
 
 /obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
 	..()
-	if(istype(src, /obj/item/weapon/nullrod/mosinnagant/obrez))
-		return
 	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(do_after(user, src, 30))
@@ -300,6 +298,12 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("bashes", "smashes", "pistol-whips", "clubs")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+
+/obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
+    if (if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter)) 
+        return 
+    else 
+        return ..() 
 
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos
