@@ -278,7 +278,7 @@
 	attack_verb = list("bashes", "smashes", "buttstrokes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
-/obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A as obj, mob/living/user as mob)
+/obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
 	..()
 	if(istype(src, /obj/item/weapon/nullrod/mosinnagant/obrez))
 		return
