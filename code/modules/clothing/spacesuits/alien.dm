@@ -259,7 +259,7 @@
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
 	desc = "A very alien-looking helmet for vox crewmembers."
-	flags = FPRINT //Flags need updating from inheritance above
+	flags = FPRINT|HIDEHAIRCOMPLETELY //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	eyeprot = 0
