@@ -288,7 +288,6 @@
 			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
 			qdel(src)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
-	return
 
 /obj/item/weapon/nullrod/mosinnagant/obrez
 	name = "obrez"
