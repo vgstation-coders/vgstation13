@@ -129,3 +129,6 @@
 
 	if(play_sound)
 		L << play_sound
+
+/obj/effect/landmark/grinchstart
+	name = "grinchstart"

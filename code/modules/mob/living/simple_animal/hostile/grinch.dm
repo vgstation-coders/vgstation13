@@ -120,6 +120,9 @@
         update_icons()
 
 /mob/living/simple_animal/hostile/gremlin/grinch/UnarmedAttack(var/atom/A)
+    if(istype(A, /obj/machinery) || istype(A, /obj/structure))
+        if(CanAttack(A))
+            return ..()
     if(ismob(A))
         delayNextAttack(10)
     A.attack_hand(src)

@@ -385,12 +385,18 @@
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 
-/datum/dynamic_ruleset/roundstart/grinch/ready(var/forced = 0)
+/datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
+	if(grinchstart.len == 0)
+		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		return 0
 	if (!..())
 		return FALSE
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
-	return (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January	
+	return accepted
+
 
 /datum/dynamic_ruleset/roundstart/grinch/execute()
 	var/mob/M = pick(candidates)

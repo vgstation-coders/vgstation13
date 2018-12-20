@@ -194,3 +194,49 @@
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_MIDROUND)
 	nuclear.OnPostSetup()
+
+//////////////////////////////////////////////
+//                                          //
+//               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/grinch
+	name = "The Grinch"
+	role_category = /datum/role/grinch
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 3
+	cost = 10
+	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/midround/grinch/acceptable(var/population=0, var/threat=0)
+	if(grinchstart.len == 0)
+		log_admin("Cannot accept Grinch ruleset. Couldn't find any wizard spawn points.")
+		message_admins("Cannot accept Grinch ruleset. Couldn't find any wizard spawn points.")
+		return 0
+	if (!..())
+		return FALSE
+	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
+	message_admins("Grinch accepted : [accepted], DD:[DD], MM:[MM].")
+	return accepted
+
+/datum/dynamic_ruleset/midround/grinch/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/grinch/review_applications()
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/grinch/G = new
+	G.AssignToRole(M.mind,1)
+	G.Greet(GREET_ROUNDSTART)
+	return 1
