@@ -2991,8 +2991,8 @@ var/global/num_vending_terminals = 1
 		/obj/structure/largecrate/secure/frankenstein = 1,
 		/obj/item/weapon/boxofsnow = 3,
 		/obj/item/weapon/vinyl/clockwork = 1,
-		/obj/item/stack/sheet/brass = 3,
-		/obj/item/stack/sheet/ralloy = 3,
+		/obj/item/stack/sheet/brass/bigstack = 3,
+		/obj/item/stack/sheet/ralloy/bigstack = 3,
 		/obj/item/device/vampirehead = 1,
 		/obj/item/key/security/spare = 1,
 		/obj/item/weapon/depocket_wand = 4,
@@ -3027,8 +3027,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/depocket_wand = 100,
 		/obj/item/weapon/ram_kit = 200,
 		)
-
-	accepted_coins = list(/obj/item/weapon/coin/trader)
 
 /obj/machinery/vending/trader/New()
 	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
