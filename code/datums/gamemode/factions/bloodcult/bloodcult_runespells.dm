@@ -851,7 +851,7 @@
 
 		if (victim.client && victim.mind.assigned_role != "Chaplain")//Chaplains can never be converted
 			acceptance = get_role_desire_str(victim.client.prefs.roles[ROLE_CULTIST])
-		if (jobban_isbanned(victim, ROLE_CULTIST))
+		if (jobban_isbanned(victim, ROLE_CULTIST) || jobban_isbanned(victim, "Syndicate"))
 			acceptance = "Banned"
 
 		//Players with cult enabled in their preferences will always get converted.

@@ -19,7 +19,7 @@
 
 	var/mob/living/carbon/human/H = M.current
 
-	if(jobban_isbanned(H, "revolutionary"))
+	if(jobban_isbanned(H, "revolutionary") || jobban_isbanned(H, "Syndicate"))
 		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
 
 	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
