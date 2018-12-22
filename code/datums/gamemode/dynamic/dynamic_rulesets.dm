@@ -238,7 +238,7 @@
 		if (!M.client)//are they connected?
 			trimmed_list.Remove(M)
 			continue
-		if (!M.client.desires_role(role_id) || jobban_isbanned(M, role_id) || isantagbanned(P))//are they willing and not antag-banned?
+		if (!M.client.desires_role(role_id) || jobban_isbanned(M, role_id) || isantagbanned(M))//are they willing and not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
