@@ -671,7 +671,7 @@ turf/simulated/floor/update_icon()
 	if(P)
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
-			P.lifespan = max(world.time + delay, world.time+P.lifespan)
+			P.lifespan = max(delay, P.lifespan)
 	else
 		new /obj/effect/overlay/puddle(src, slipperiness, delay)
 
