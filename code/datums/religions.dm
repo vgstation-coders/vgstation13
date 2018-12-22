@@ -1071,8 +1071,7 @@
 	if(G.can_fire())
 		G.Fire(subject,preacher,0,0,1)
 	else
-		preacher.visible_message("<span class='warning'>*click*</span>")
-		playsound(preacher, 'sound/weapons/empty.ogg', 100, 1)
+		G.click_empty(preacher)
 		return FALSE
 
 	preacher.say("AVE NEX ALEA!")
