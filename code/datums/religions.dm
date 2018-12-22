@@ -1068,7 +1068,12 @@
 	var/obj/item/weapon/gun/G = preacher.held_items[held_gun]
 
 	sleep(0.1 SECONDS)
-	G.Fire(subject,preacher,0,0,1)
+	if(G.can_shoot())
+		G.Fire(subject,preacher,0,0,1)
+	else
+		preacher.visible_message("<span class='warning'>*click*</span>")
+		playsound(preacher, 'sound/weapons/empty.ogg', 100, 1)
+		return FALSE
 
 	preacher.say("AVE NEX ALEA!")
 
