@@ -72,7 +72,7 @@
 			var/turf/tile = locate(i, r, map.zMainStation)
 			if(tile && istype(tile, /turf/simulated/floor) && !isspace(tile.loc) && !istype(tile.loc, /area/asteroid) && !istype(tile.loc, /area/mine) && !istype(tile.loc, /area/vault) && !istype(tile.loc, /area/prison) && !istype(tile.loc, /area/vox_trading_post))
 				floor_count++
-	blobwincount = round(floor_count *  0.5) // Must take over half of the station.
+	blobwincount = round(floor_count *  0.25) // Must take over a quarter of the station.
 	blobwincount += rand(-50,50)
 
 
