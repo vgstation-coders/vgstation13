@@ -39,6 +39,7 @@
 		recruiter.display_name = "posibrain"
 		recruiter.role = ROLE_POSIBRAIN
 		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
+		recruiter.logging = TRUE
 
 		// A player has their role set to Yes or Always
 		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
@@ -54,6 +55,7 @@
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
 	to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. ([controls])</span>")
+	investigation_log(I_GHOST, "|| had a ghost automatically sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 
 /obj/item/device/mmi/posibrain/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
@@ -88,6 +90,8 @@
 		M.show_message("<span class='notice'>\The [src] buzzes and beeps as it boots up.</span>")
 	playsound(src, 'sound/misc/buzzbeep.ogg', 50, 1)
 	icon_state = "posibrain-occupied"
+
+	investigation_log(I_GHOST, "|| has been occupied by: [key_name(src)]")
 
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
@@ -153,10 +157,8 @@
 		recruiter.volunteer(O)
 		if(O in recruiter.currently_querying)
 			to_chat(O, "<span class='notice'>Click again to unvolunteer.</span>")
-			investigation_log(I_GHOST, "|| had a ghost sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 		else
 			to_chat(O, "<span class='notice'>Click again to volunteer.</span>")
-			investigation_log(I_GHOST, "|| had a ghost abandon an attempt to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 	else
 		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
 			last_ping_time = world.time
