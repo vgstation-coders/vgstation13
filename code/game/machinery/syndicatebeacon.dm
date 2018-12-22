@@ -46,7 +46,7 @@
 			src.updateUsrDialog()
 			return
 		var/mob/M = usr
-		if(M.mind.special_role || jobban_isbanned(M, "Syndicate") || jobban_isbanned(M, "traitor"))
+		if(M.mind.special_role || isantagbanned(M) || jobban_isbanned(M, "traitor"))
 			temptext = "<i>We have no need for you at this time. Have a pleasant day.</i><br>"
 			src.updateUsrDialog()
 			return

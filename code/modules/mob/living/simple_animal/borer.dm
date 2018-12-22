@@ -1048,7 +1048,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			//testing("Client of [G] is admin.")
 			continue*/
 
-		if(jobban_isbanned(G, "Syndicate"))
+		if(isantagbanned(G))
 			//testing("[G] is jobbanned.")
 			continue
 
