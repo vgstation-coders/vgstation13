@@ -1068,7 +1068,7 @@
 	var/obj/item/weapon/gun/G = preacher.held_items[held_gun]
 
 	sleep(0.1 SECONDS)
-	if(G.can_fire())
+	if(G.canbe_fired())
 		G.Fire(subject,preacher,0,0,1)
 	else
 		G.click_empty(preacher)

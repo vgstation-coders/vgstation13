@@ -299,7 +299,7 @@
 
 	return 1
 
-/obj/item/weapon/gun/proc/can_fire()
+/obj/item/weapon/gun/proc/canbe_fired()
 	return process_chambered()
 
 /obj/item/weapon/gun/proc/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
