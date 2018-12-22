@@ -136,7 +136,7 @@
 	if(!new_overmind)
 		return 0
 
-	if (jobban_isbanned(new_overmind.mob, ROLE_BLOB))
+	if (jobban_isbanned(new_overmind.mob, ROLE_BLOB) || jobban_isbanned(new_overmind.mob, "Syndicate"))
 		to_chat(usr, "<span class='warning'>You are banned from this role.</span>")
 		return 0
 
