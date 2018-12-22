@@ -18,7 +18,7 @@
 
 	for(amount, amount, amount--)
 		if(prob(chance))
-			CreateItem(pick(to_spawn))
+			CreateItem(pickweight(to_spawn))
 	qdel(src)
 
 /obj/abstract/map/spawner/proc/CreateItem(new_item_type)
@@ -818,6 +818,21 @@
 	icon_state = "space_russian"
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
+
+/obj/abstract/map/spawner/space/deer
+	name = "deer spawner"
+	icon_state = "space_russian"
+	chance = 80
+	amount = 6
+	to_spawn = list(/mob/living/simple_animal/hostile/deer)
+
+/obj/abstract/map/spawner/space/wolves
+	name = "wolf spawner"
+	icon_state = "space_russian"
+	chance = 50
+	amount = 6
+	to_spawn = list(/mob/living/simple_animal/hostile/wolf = 100,
+		/mob/living/simple_animal/hostile/wolf/alpha = 25)
 
 /obj/abstract/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
  	name = "trader spacesuit spawner"
