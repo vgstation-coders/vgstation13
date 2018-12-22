@@ -9,7 +9,7 @@
 	return "states, [text]";
 
 /mob/living/silicon/robot/mommi/whisper(message as text)
-	if (emagged)
+	if (!keeper)
 		return ..()
 	return FALSE
 
