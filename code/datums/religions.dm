@@ -1068,7 +1068,7 @@
 	var/obj/item/weapon/gun/G = preacher.held_items[held_gun]
 
 	sleep(0.1 SECONDS)
-	if(G.can_shoot())
+	if(G.can_fire())
 		G.Fire(subject,preacher,0,0,1)
 	else
 		preacher.visible_message("<span class='warning'>*click*</span>")
