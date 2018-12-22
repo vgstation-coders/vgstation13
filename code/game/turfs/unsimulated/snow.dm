@@ -17,7 +17,6 @@
 /turf/unsimulated/floor/snow/New()
 
 	..()
-	icon_state = "snow[rand(0, 6)]"
 	if(icon_state_to_appearance[icon_state])
 		appearance = icon_state_to_appearance[icon_state]
 	else
@@ -29,6 +28,7 @@
 		overlays += snowfx2
 		icon_state_to_appearance[icon_state] = appearance
 	if(snowballs)
+		icon_state = "snow[rand(0, 6)]"
 		snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
