@@ -79,34 +79,36 @@
 //////////////HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
 
-/mob/living/simple_animal/hostile/proc/ListTargets()//Step 1, find out what we can see
+/mob/living/simple_animal/hostile/proc/ListTargets(var/range)//Step 1, find out what we can see
 	var/list/L = new()
 
 	if (!search_objects)
-		L.Add(ohearers(vision_range, src))
+		L.Add(ohearers(range, src)-ohearers(range-1, src))
 
 		for (var/obj/mecha/M in mechas_list)
 			if (get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
 				L.Add(M)
 	else
-		L.Add(oview(vision_range, src))
+		L.Add(oview(range, src)-oview(range-1, src))
 
 	return L
 
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
 	var/list/Targets = list()
 	var/Target
-	for(var/atom/A in ListTargets())
-		if(Found(A))//Just in case people want to override targetting
-			var/list/FoundTarget = list()
-			FoundTarget += A
-			Targets = FoundTarget
-			break
-		if(CanAttack(A))//Can we attack it?
-			Targets += A
-			continue
-	Target = PickTarget(Targets)
-	return Target //We now have a target
+	for(var/i = 1 to vision_range)
+		for(var/atom/A in ListTargets(i))
+			if(Found(A))//Just in case people want to override targetting
+				var/list/FoundTarget = list()
+				FoundTarget += A
+				Targets = FoundTarget
+				break
+			if(CanAttack(A))//Can we attack it?
+				Targets += A
+				continue
+		Target = PickTarget(Targets)
+		if(Target)
+			return Target //We now have a target
 
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
