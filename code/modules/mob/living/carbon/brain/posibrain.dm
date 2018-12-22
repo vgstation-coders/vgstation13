@@ -91,7 +91,7 @@
 	playsound(src, 'sound/misc/buzzbeep.ogg', 50, 1)
 	icon_state = "posibrain-occupied"
 
-	investigation_log(I_GHOST, "|| has been occupied by: [key_name(src)]")
+	investigation_log(I_GHOST, "|| has been occupied by: [key_name(brainmob)]")
 
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
