@@ -266,6 +266,45 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	fluff_pickup = "smite"
 
+/obj/item/weapon/nullrod/mosinnagant
+	name = "mosin nagant"
+	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."
+	icon = 'icons/obj/gun.dmi'
+	icon_override = "nagant"
+	icon_state = "nagant"
+	item_state = "nagant"
+	slot_flags = SLOT_BELT | SLOT_BACK
+	w_class = W_CLASS_LARGE
+	attack_verb = list("bashes", "smashes", "buttstrokes")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+
+/obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
+	..()
+	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
+		if(do_after(user, src, 30))
+			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
+			qdel(src)
+			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
+
+/obj/item/weapon/nullrod/mosinnagant/obrez
+	name = "obrez"
+	desc = "Holding this makes you feel like you want to obtain an SKS and go deeper in space. This one cannot be fired."
+	icon = 'icons/obj/gun.dmi'
+	icon_override = "obrez"
+	icon_state = "obrez"
+	item_state = "obrez"
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("bashes", "smashes", "pistol-whips", "clubs")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+
+/obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
+    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter)) 
+        return 
+    else 
+        return ..() 
+
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"

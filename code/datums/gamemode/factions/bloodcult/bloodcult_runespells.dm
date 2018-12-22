@@ -851,7 +851,7 @@
 
 		if (victim.client && victim.mind.assigned_role != "Chaplain")//Chaplains can never be converted
 			acceptance = get_role_desire_str(victim.client.prefs.roles[ROLE_CULTIST])
-		if (jobban_isbanned(victim, ROLE_CULTIST))
+		if (jobban_isbanned(victim, ROLE_CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
 		//Players with cult enabled in their preferences will always get converted.
@@ -1032,6 +1032,10 @@
 
 
 /datum/rune_spell/stun/pre_cast()
+	if (Act_restriction > veil_thickness)
+		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+		return
+
 	var/mob/living/user = activator
 
 	if (istype (spell_holder,/obj/effect/rune))
