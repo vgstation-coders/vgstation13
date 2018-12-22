@@ -934,6 +934,8 @@
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
+				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(activator)].")
+				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(activator)].")
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -945,7 +947,8 @@
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
 
-
+		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(activator)], and died.")
+		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(activator)], and died.")
 
 		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
 		conversion.icon_state = ""
