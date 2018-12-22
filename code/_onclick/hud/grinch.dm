@@ -134,6 +134,16 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
+	inv_box = getFromPool(/obj/abstract/screen/inventory)
+	inv_box.name = "i_clothing"
+	inv_box.dir = SOUTH
+	inv_box.icon = ui_style
+	inv_box.slot_id = slot_w_uniform
+	inv_box.icon_state = "center"
+	inv_box.screen_loc = ui_belt
+	inv_box.layer = HUD_BASE_LAYER
+	src.adding += inv_box
+
 	mymob.throw_icon = getFromPool(/obj/abstract/screen)
 	mymob.throw_icon.icon = ui_style
 	mymob.throw_icon.icon_state = "act_throw_off"

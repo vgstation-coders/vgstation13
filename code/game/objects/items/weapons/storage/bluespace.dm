@@ -42,11 +42,6 @@
 	if(istype(W, /obj/item/weapon/storage/backpack/holding))
 		singulocreate(W, user)
 
-/obj/item/weapon/storage/backpack/holding/grinch
-	name = "Grinch's bag"
-	desc = "He's coming to steal your presennts."
-	origin_tech = null
-
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
 	user.Knockdown(10)

@@ -17,7 +17,7 @@
     antag.transfer_to(G)
     var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = new(G)
     src.our_bag = our_bag
-    G.setBackpack(our_bag)
+    G.equip_to_slot(our_bag, slot_back)
     old_mob.forceMove(null) // Get nullspaced
     spawn (1) // Destroy must be differed else there are runtimes
         qdel(old_mob)

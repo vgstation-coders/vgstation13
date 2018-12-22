@@ -807,6 +807,19 @@
 
 		return CANNOT_EQUIP
 
+	else if(isgrinch(M))
+		//START GRINCH
+		var/mob/living/simple_animal/hostile/gremlin/grinch/G = M
+		switch(slot)
+			if(slot_back)
+				if(G.back)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_BACK) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+		return CANNOT_EQUIP //Unsupported slot
+		//END GRINCH
+
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE

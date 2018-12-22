@@ -214,15 +214,14 @@
 
 /datum/dynamic_ruleset/midround/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
-		log_admin("Cannot accept Grinch ruleset. Couldn't find any wizard spawn points.")
-		message_admins("Cannot accept Grinch ruleset. Couldn't find any wizard spawn points.")
+		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
 		return 0
 	if (!..())
 		return FALSE
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
-	message_admins("Grinch accepted : [accepted], DD:[DD], MM:[MM].")
 	return accepted
 
 /datum/dynamic_ruleset/midround/grinch/execute()
@@ -233,10 +232,16 @@
 	return 1
 
 /datum/dynamic_ruleset/midround/grinch/review_applications()
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	var/mob/applicant = null
+	var/selected_key = pick(applicants)
+	for(var/mob/M in player_list)
+		if(M.key == selected_key)
+			applicant = M
+	if(!applicant || !applicant.key)
+		return
+	assigned += applicant
+	applicants -= applicant
 	var/datum/role/grinch/G = new
-	G.AssignToRole(M.mind,1)
+	G.AssignToRole(applicant.mind,1)
 	G.Greet(GREET_ROUNDSTART)
 	return 1
