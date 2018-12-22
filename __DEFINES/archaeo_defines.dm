@@ -29,6 +29,7 @@
 #define ARCHAEO_FOSSIL "fossil"
 #define ARCHAEO_SHELL "shell"
 #define ARCHAEO_PLANT "plant"
+#define ARCHAEO_EGG "egg"
 #define ARCHAEO_REMAINS_HUMANOID "remains_humanoid"
 #define ARCHAEO_REMAINS_ROBOT "remains_robot"
 #define ARCHAEO_REMAINS_XENO "remains_xeno"
