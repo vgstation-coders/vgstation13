@@ -253,6 +253,8 @@
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
+//Banning someone from the Syndicate role bans them from all antagonist roles
+#define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
 
 
