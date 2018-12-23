@@ -3,7 +3,7 @@
 	var/amount
 
 /datum/objective/target/skulls/format_explanation()
-	return "Capture [amount] trophy skulls. They must be from NT employees."
+	return "Capture [amount] trophy skulls (decapitated heads). They must be from NT employees."
 
 /datum/objective/target/skulls/find_target()
 	amount = rand(2,5)
