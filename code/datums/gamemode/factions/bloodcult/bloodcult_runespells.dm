@@ -151,7 +151,7 @@
 				to_chat(activator, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
 		if (RITUALABORT_OUTPOST)
 			if (activator)
-				to_chat(activator, "<span class='sinister'>This place is too remote to interest the Geometer of Blood. We must raise our structure in the heart of the station.</span>")
+				to_chat(activator, "<span class='sinister'>The veil here is still too dense to allow raising structures from the realm of Nar-Sie. We must raise our structure in the heart of the station.</span>")
 
 
 	for(var/mob/living/L in contributors)
@@ -259,7 +259,7 @@
 
 	var/mob/living/user = activator
 
-	if (user.z != map.zMainStation)
+	if (veil_thickness < CULT_ACT_III && user.z != map.zMainStation)
 		abort(RITUALABORT_OUTPOST)
 		return FALSE
 
@@ -851,7 +851,7 @@
 
 		if (victim.client && victim.mind.assigned_role != "Chaplain")//Chaplains can never be converted
 			acceptance = get_role_desire_str(victim.client.prefs.roles[ROLE_CULTIST])
-		if (jobban_isbanned(victim, ROLE_CULTIST))
+		if (jobban_isbanned(victim, ROLE_CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
 		//Players with cult enabled in their preferences will always get converted.
@@ -934,6 +934,8 @@
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
+				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(activator)].")
+				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(activator)].")
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -945,7 +947,8 @@
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
 
-
+		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(activator)], and died.")
+		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(activator)], and died.")
 
 		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
 		conversion.icon_state = ""
@@ -1032,6 +1035,10 @@
 
 
 /datum/rune_spell/stun/pre_cast()
+	if (Act_restriction > veil_thickness)
+		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+		return
+
 	var/mob/living/user = activator
 
 	if (istype (spell_holder,/obj/effect/rune))

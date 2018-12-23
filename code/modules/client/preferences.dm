@@ -1652,7 +1652,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				<th class="clmAlways">Always</th>
 			</tr>"}
 
-	if(jobban_isbanned(user, "Syndicate"))
+	if(isantagbanned(user))
 		dat += "<th colspan='6' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
 	else
 		for(var/role_id in antag_roles)

@@ -165,7 +165,7 @@
 	var/book_style = "Bible"
 
 	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "Clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide", "The Dokument")
 	switch(book_style)
 		if("Koran")
 			R.holy_book.icon_state = "koran"
@@ -228,6 +228,9 @@
 			R.holy_book.icon_state = "slab"
 			R.holy_book.item_state = "slab"
 			R.holy_book.desc = "A bizarre, ticking device... That looks broken."
+		if ("The Dokument")
+			R.holy_book.icon_state = "gunbible"
+			R.holy_book.item_state = "gunbible"
 		else
 			//If christian bible, revert to default
 			R.holy_book.icon_state = "bible"
@@ -1036,3 +1039,44 @@
 	H.h_style = "Bald"
 	H.f_style = "Shaved"
 	H.update_hair()
+
+/datum/religion/guns
+	name = "Murdercube"
+	deity_name = "Gun Jesus"
+	bible_name = "The Dokument"
+	male_adept = "Kommando"
+	female_adept = "Kommando"
+	keys = list("murdercube","murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea")
+	convert_method = "performing a ritual with a gun. The convert needs to be in good health and unafraid of being shot."
+
+/datum/religion/guns/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/weapon/gun/energy/laser/practice)
+	H.equip_or_collect(new /obj/item/clothing/under/syndicate, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/jackboots, slot_shoes)
+
+/datum/religion/guns/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_gun = preacher.find_held_item_by_type(/obj/item/weapon/gun)
+
+	if (!held_gun)
+		to_chat(preacher, "<span class='warning'>You need to hold a gun to begin the conversion.</span>")
+		return FALSE
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	var/obj/item/weapon/gun/G = preacher.held_items[held_gun]
+
+	sleep(0.1 SECONDS)
+	if(G.canbe_fired())
+		G.Fire(subject,preacher,0,0,1)
+	else
+		G.click_empty(preacher)
+		return FALSE
+
+	preacher.say("AVE NEX ALEA!")
+
+	subject.visible_message("<span class='notice'>\The [subject] masterfully completed the delicate ritual. He's now a full-fledged follower of the [deity_name].</span>")
+
+	convert(subject, preacher)
+	return TRUE

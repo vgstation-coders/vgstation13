@@ -119,10 +119,10 @@
 
 var/list/icon_state_to_appearance = list()
 
-/turf/unsimulated/mineral/update_icon(var/mineral_name = "empty") // feed in a mineral name to 'force' its appearance on an object.
+/turf/unsimulated/mineral/update_icon(var/mineral_name = "empty", var/use_overlay = TRUE) // feed in a mineral name to 'force' its appearance on an object.
 	if(mineral && mineral_name == "empty")
 		mineral_name = mineral.display_name
-	if(icon_state_to_appearance["[base_icon_state]-[mineral_name]"])
+	if(use_overlay && icon_state_to_appearance["[base_icon_state]-[mineral_name]"])
 		appearance = icon_state_to_appearance["[base_icon_state]-[mineral_name]"]
 	else
 		overlays.Cut()
@@ -987,7 +987,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/gibtonite/update_icon(var/mineral_name = "empty")
 	if(mineral_name == "empty" && !stage)
-		..("Diamond")
+		..("Diamond", FALSE)
 	else ..(mineral_name)
 
 /turf/unsimulated/mineral/gibtonite/Bumped(AM)

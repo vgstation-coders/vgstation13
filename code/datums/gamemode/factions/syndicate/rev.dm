@@ -19,7 +19,7 @@
 
 	var/mob/living/carbon/human/H = M.current
 
-	if(jobban_isbanned(H, "revolutionary"))
+	if(jobban_isbanned(H, "revolutionary") || isantagbanned(H))
 		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
 
 	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
@@ -38,10 +38,6 @@
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
 			AppendObjective(A, TRUE) // We will have more than one kill objective
-
-/datum/faction/revolution/OnPostSetup()
-	. = ..()
-	forgeObjectives()
 
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2
@@ -78,7 +74,7 @@
 	if (!istype(R))
 		return FALSE
 	for(var/datum/mind/M in get_living_heads())
-		var/mob/living/L = M.current 
+		var/mob/living/L = M.current
 		var/turf/T = get_turf(L)
 		if(istype(T.loc, /area/shuttle/escape/centcom))
 			R.win_shuttle = TRUE
@@ -91,7 +87,7 @@
 /hook_handler/revs/proc/OnArrival(var/list/args)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
 	if (!istype(R))
-		return FALSE			
+		return FALSE
 	ASSERT(args["character"])
 	ASSERT(args["rank"])
 	var/mob/living/L = args["character"]

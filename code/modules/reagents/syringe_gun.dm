@@ -45,17 +45,17 @@
 		return
 	..()
 
-/obj/item/weapon/gun/syringe/can_fire()
+/obj/item/weapon/gun/syringe/canbe_fired()
 	return syringes.len
 
 /obj/item/weapon/gun/syringe/can_discharge()
-	return can_fire()
+	return canbe_fired()
 
 /obj/item/weapon/gun/syringe/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
 	return 1		//SHOOT AND LET THE GOD GUIDE IT (probably will hit a wall anyway)
 
 /obj/item/weapon/gun/syringe/process_chambered()
-	if(can_fire())
+	if(canbe_fired())
 		if(!in_chamber)
 			var/S = syringes[1]
 			in_chamber = new /obj/item/projectile/bullet/syringe(src, S)

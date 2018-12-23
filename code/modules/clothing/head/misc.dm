@@ -58,7 +58,7 @@
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 
 /obj/item/clothing/head/nursehat
@@ -239,7 +239,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 2.0
 
@@ -257,7 +257,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 2.0
 

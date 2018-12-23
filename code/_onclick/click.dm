@@ -83,6 +83,9 @@
 		CtrlClickOn(A)
 		return
 
+	if(attempt_crawling(A))
+		return
+
 	if(isStunned())
 		return
 

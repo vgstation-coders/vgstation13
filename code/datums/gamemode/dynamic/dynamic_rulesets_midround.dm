@@ -7,7 +7,7 @@
 
 /datum/dynamic_ruleset/midround/autotraitor
 	name = "Syndicate Sleeper Agent"
-	role_category = ROLE_TRAITOR
+	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Cyborg", "Merchant")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
@@ -58,7 +58,7 @@
 
 /datum/dynamic_ruleset/midround/raginmages
 	name = "Ragin' Mages"
-	role_category = ROLE_WIZARD
+	role_category = /datum/role/wizard
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
@@ -132,7 +132,7 @@
 
 /datum/dynamic_ruleset/midround/nuclear
 	name = "Nuclear Assault"
-	role_category = ROLE_OPERATIVE
+	role_category = /datum/role/nuclear_operative
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5

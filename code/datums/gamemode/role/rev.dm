@@ -5,8 +5,11 @@
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 
-/datum/role/revolutionary/AssignToRole(var/datum/mind/M, var/override = 0)
-	if (!(M.current) || M.current.z != map.zMainStation)
+// The ticker current state check is because revs are created, at roundstart, in the cuck cube.
+// Which is outside the z-level of the main station.
+
+/datum/role/revolutionary/AssignToRole(var/datum/mind/M, var/override = 0, var/roundstart = 0)
+	if (!(M.current) || (M.current.z != map.zMainStation && !roundstart))
 		message_admins("Error: cannot create a revolutionary off the main z-level.")
 		return FALSE
 	return ..()

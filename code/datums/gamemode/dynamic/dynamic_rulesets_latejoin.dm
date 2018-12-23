@@ -7,7 +7,7 @@
 
 /datum/dynamic_ruleset/latejoin/infiltrator
 	name = "Syndicate Infiltrator"
-	role_category = ROLE_TRAITOR
+	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain", "Merchant")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
@@ -42,7 +42,7 @@
 
 /datum/dynamic_ruleset/latejoin/raginmages
 	name = "Ragin' Mages"
-	role_category = ROLE_WIZARD
+	role_category = /datum/role/wizard
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1

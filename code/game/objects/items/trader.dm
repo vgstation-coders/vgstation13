@@ -251,6 +251,8 @@
 		to_chat(usr, "<span class='warning'>Your DNA does not match the stored DNA sample.</span>")
 		return CANNOT_EQUIP
 	else
+		if(H.head.canremove)
+			return CAN_EQUIP_BUT_SLOT_TAKEN
 		return CAN_EQUIP
 
 /obj/item/clothing/head/helmet/donutgiver/verb/submit_DNA_sample()

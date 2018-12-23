@@ -93,6 +93,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/name_prefix_index = 1
 	held_items = list()
 
+/mob/living/simple_animal/borer/whisper()
+	return FALSE
+
 /mob/living/simple_animal/borer/canEnterVentWith()
 	var/static/list/allowed_items = list(
 		/mob/living/captive_brain,
@@ -1048,7 +1051,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			//testing("Client of [G] is admin.")
 			continue*/
 
-		if(jobban_isbanned(G, "Syndicate"))
+		if(isantagbanned(G))
 			//testing("[G] is jobbanned.")
 			continue
 

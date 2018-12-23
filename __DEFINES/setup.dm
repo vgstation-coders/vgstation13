@@ -186,6 +186,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define HIDEHAIRCOMPLETELY 64
 
 #define TWOHANDABLE	64
 #define MUSTTWOHAND	128
@@ -312,17 +313,17 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for invisibility
 
-#define HIDEGLOVES		HANDS
-#define HIDEJUMPSUIT	ARMS|LEGS|FULL_TORSO
-#define HIDESHOES		FEET
-#define HIDEMASK		FACE
-#define HIDEEARS		EARS
-#define HIDEEYES		EYES
-#define HIDEFACE		FACE
-#define HIDEHEADHAIR 	EARS|HEAD
-#define HIDEBEARDHAIR	BEARD
-#define HIDEHAIR		HIDEHEADHAIR|HIDEBEARDHAIR
-#define	HIDESUITSTORAGE	LOWER_TORSO
+#define HIDEGLOVES			HANDS
+#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDESHOES			FEET
+#define HIDEMASK			FACE
+#define HIDEEARS			EARS
+#define HIDEEYES			EYES
+#define HIDEFACE			FACE
+#define HIDEHEADHAIR 		EARS|HEAD
+#define HIDEBEARDHAIR		BEARD
+#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -870,7 +871,6 @@ SEE_PIXELS	256
 #define ROLE_VAMPIRE    	"vampire"
 #define ROLE_VOXRAIDER  	"vox raider"
 #define ROLE_WIZARD     	"wizard"
-
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
