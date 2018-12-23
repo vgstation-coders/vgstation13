@@ -135,6 +135,7 @@
 			/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach,
 			25;/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,
 			/obj/item/weapon/reagent_containers/food/snacks/egg,
+			60; /obj/item/weapon/reagent_containers/food/snacks/egg/parrot
 			)
 		new possibility(src.loc)
 		qdel(src)

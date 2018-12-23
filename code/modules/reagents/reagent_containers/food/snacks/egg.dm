@@ -122,3 +122,10 @@
 
 	reagents.add_reagent(TOXIN, rand(5,15))
 	reagents.add_reagent(RADIUM, rand(1,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/parrot
+	name = "parrot egg"
+	desc = "This doesn't seem realistic. Its texture feels like that of a cracker, and is faceted in microscopic shards of plasma."
+	icon_state = "egg-rainbow"
+	can_color = FALSE
+	hatch_type = /mob/living/simple_animal/parrot
