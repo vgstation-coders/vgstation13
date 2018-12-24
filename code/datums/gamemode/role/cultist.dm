@@ -295,11 +295,26 @@
 			var/mob/living/carbon/human/H = antag.current
 			if (istype(H))
 				return
-			H.Dizzy(12)
-			H.Jitter(24)
-			H.Knockdown(3)
-			H.confused = 3
-			H.eye_blurry = max(H.eye_blurry, 6)
+			var/current_act = max(-1,min(5,veil_thickness))
+			switch (current_act)
+				if (CULT_PROLOGUE)
+					return
+				if (CULT_ACT_I)
+					H.Dizzy(4)
+					H.Jitter(8)
+					H.eye_blurry = max(H.eye_blurry, 6)
+				if (CULT_ACT_II)
+					H.Dizzy(8)
+					H.Jitter(16)
+					H.confused = 1
+					H.eye_blurry = max(H.eye_blurry, 12)
+				else // Other acts, mended, etc...
+					H.Dizzy(16)
+					H.Jitter(24)
+					H.confused = 2
+					H.Knockdown(3)
+					H.eye_blurry = max(H.eye_blurry, 12)
+					H.confused = 3
 
 /datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	if (href_list["cult_privatespeak"])
