@@ -293,7 +293,7 @@
 	switch (reagent_id)
 		if (HOLYWATER)
 			var/mob/living/carbon/human/H = antag.current
-			if (istype(H))
+			if (!istype(H))
 				return
 			H.Dizzy(12)
 			H.Jitter(24)
