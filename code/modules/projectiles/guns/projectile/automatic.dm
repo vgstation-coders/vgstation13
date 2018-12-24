@@ -359,6 +359,8 @@
 		else
 			to_chat(user, "<span class='warning'>You're unable to insert \the [used_item] into \the [src]!</span>")
 
+/obj/item/weapon/gun/projectile/automatic/vector/lockbox
+	mag_type = "/obj/item/ammo_storage/magazine/m380auto/empty"
 
 /* The thing I found with guns in ss13 is that they don't seem to simulate the rounds in the magazine in the gun.
    Afaik, since projectile.dm features a revolver, this would make sense since the magazine is part of the gun.

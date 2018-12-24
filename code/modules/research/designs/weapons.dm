@@ -19,7 +19,7 @@
 	materials = list(MAT_IRON = 4000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/stunrevolver
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_security, access_weapons)
 
 /datum/design/lasercannon
@@ -31,7 +31,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/laser/cannon
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomplasmapistol
@@ -43,7 +43,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PLASMA = 12000, MAT_URANIUM = 4000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/plasma/pistol
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomplasmarifle
@@ -55,7 +55,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 3000, MAT_PLASMA = 28000, MAT_URANIUM = 12000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/plasma/rifle
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomlightplasmarifle
@@ -67,7 +67,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PLASMA = 20000, MAT_URANIUM = 8000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/plasma/light
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomlaserrifle
@@ -79,7 +79,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/laser/rifle
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomlaserpistol
@@ -91,7 +91,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 1000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/laser/pistol
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomar
@@ -103,7 +103,7 @@
 	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/ammo_12mm
@@ -135,7 +135,7 @@
 	materials = list(MAT_IRON = 5000, MAT_GOLD = 5000,MAT_URANIUM = 10000) //, MUTAGEN = 40)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/decloner
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/chemsprayer
@@ -169,7 +169,7 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_URANIUM = 1000, MAT_SILVER = 1000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/crossbow/largecrossbow
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/temp_gun
@@ -181,7 +181,7 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 500, MAT_SILVER = 3000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/temperature
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
 /datum/design/large_grenade
@@ -215,7 +215,7 @@
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/projectile/automatic/lockbox
-	locked = 1
+	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/ammo_9mm
@@ -257,3 +257,83 @@
 	materials = list(MAT_IRON = 12000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/storage/pneumatic
+
+//Ammolathe designs. They lack research values so they can't be researched.
+//Weapons
+/datum/design/vector
+	name = "Vector"
+	desc = "A gun."
+	id = "vector"
+	//req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 3)
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
+	//category = "Weapons"
+	build_path = /obj/item/weapon/gun/projectile/automatic/vector/lockbox
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
+//Single ammunition
+
+//Box ammunition
+/datum/design/ammo_b380auto
+	name = "Ammunition Box (.380AUTO)"
+	desc = "A box of .380AUTO bullets."
+	id = "ammo_9mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
+	build_path = /obj/item/ammo_storage/box/b380auto
+
+/datum/design/ammo_b380auto/practice
+	name = "Ammunition Box (.380AUTO practice)"
+	desc = "A box of .380AUTO practice bullets."
+	id = "ammo_9mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
+	build_path = /obj/item/ammo_storage/box/b380auto/practice
+
+/datum/design/ammo_b380auto/rubber
+	name = "Ammunition Box (.380AUTO rubber)"
+	desc = "A box of .380AUTO rubber bullets."
+	id = "ammo_9mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
+	build_path = /obj/item/ammo_storage/box/b380auto/rubber
+
+//Magazines
+/datum/design/magazine_357
+	name = "automag magazine (.357)"
+	desc = "A magazine designed for the Automag VI handcannon."
+	id = "magazine_357"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	//category = "Misc_Other"
+	build_path = /obj/item/ammo_storage/magazine/a357/empty
+
+/datum/design/magazine_380
+	name = "pistol magazine (.380AUTO)"
+	desc = "A magazine designed for common .380AUTO pistols."
+	id = "magazine_380"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	//category = "Misc_Other"
+	build_path = /obj/item/ammo_storage/magazine/m380auto/empty
+
+//Misc
+/datum/design/vectorreceiver
+	name = "Vector Receiver"
+	desc = "A receiver for a Vector pre-set to .380."
+	id = "vectorreceiver"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
+	//category = "Misc_Other"
+	build_path = /obj/item/weapon/vectorreceiver
+
+//Hidden
+/datum/design/skub
+	name = "Skub"
+	desc = "A controversial item."
+	id = "vectorreceiver"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
+	//category = "Hidden_Items"
+	build_path = /obj/item/toy/gasha/skub
