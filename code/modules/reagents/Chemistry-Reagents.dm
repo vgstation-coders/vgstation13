@@ -6689,6 +6689,24 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
 
+/datum/reagent/synthocarisol/phytocarisol
+	name = "Phytocarisol"
+	id = PHYTOCARISOL
+	description = "A plant based alternative to carisol, a medicine made from rhino horn dust."
+	color = "#34D3B6" //rgb: 52, 211, 182
+
+/datum/reagent/heartbreaker/defalexorin
+	name = "Defalexorin"
+	id = DEFALEXORIN
+	description = "Defalexorin is used for getting a mild high in low amounts."
+	color = "#000000" //rgb: 0, 0, 0
+
+/datum/reagent/alkycosine/phytosine
+	name = "Phytosine"
+	id = PHYTOSINE
+	description = "Neurological medication made from mutated herbs."
+	color = "#9000ff" //rgb: 144, 0 255
+
 //End of plant-specific reagents
 
 //Petritricin = cockatrice juice
