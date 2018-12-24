@@ -311,7 +311,6 @@
 				else // Other acts, mended, etc...
 					H.Dizzy(16)
 					H.Jitter(24)
-					H.confused = 2
 					H.Knockdown(3)
 					H.eye_blurry = max(H.eye_blurry, 12)
 					H.confused = 3
