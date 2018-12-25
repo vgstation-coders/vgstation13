@@ -25,6 +25,7 @@ var/global/list/special_roles = list(
 	ROLE_VOXRAIDER    	= 1,
 	ROLE_WIZARD       	= 1,
 	ROLE_COMMANDO	  	= 1,
+	ROLE_GRINCH			= 1,
 )
 
 var/list/antag_roles = list(
@@ -42,6 +43,7 @@ var/list/antag_roles = list(
 	ROLE_WIZARD       	= 1,
 	ROLE_COMMANDO	  	= 1,
 //	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
+	ROLE_GRINCH			= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -68,6 +70,7 @@ var/list/role_wiki=list(
 	ROLE_VAMPIRE		= "Vampire",
 	ROLE_VOXRAIDER		= "Vox_Raider",
 	ROLE_WIZARD			= "Wizard",
+	ROLE_GRINCH			= "Grinch",
 )
 
 var/const/MAX_SAVE_SLOTS = 8

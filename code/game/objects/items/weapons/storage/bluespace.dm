@@ -42,7 +42,6 @@
 	if(istype(W, /obj/item/weapon/storage/backpack/holding))
 		singulocreate(W, user)
 
-
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
 	user.Knockdown(10)

@@ -227,7 +227,7 @@ var/list/one_way_windows
 		user.delayNextAttack(8)
 
 	//Bang against the window
-	else if(usr.a_intent == I_HURT)
+	else if(user.a_intent == I_HURT)
 		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
 		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
