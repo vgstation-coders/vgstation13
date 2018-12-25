@@ -674,7 +674,7 @@ var/list/cult_spires = list()
 	..()
 	cult_spires.Add(src)
 	set_light(1)
-	stage = min(3,max(1,veil_thickness-1))
+	stage = Clamp(veil_thickness, 1, 3)
 	flick("spire[stage]-spawn",src)
 	spawn(10)
 		update_stage()
@@ -684,7 +684,7 @@ var/list/cult_spires = list()
 	..()
 
 /obj/structure/cult/spire/proc/upgrade()
-	var/new_stage = min(3,max(1,veil_thickness-1))
+	var/new_stage = Clamp(1, veil_thickness, 3)
 	if (new_stage>stage)
 		stage = new_stage
 		alpha = 255
