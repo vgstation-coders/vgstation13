@@ -129,3 +129,17 @@
 	icon_state = "egg-rainbow"
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/parrot
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos
+	name = "chaos egg"
+	desc = "Contents: Unknown. Origin: Unknown. Intent: Unknown. Potential: Unknown. Status: Scrambled."
+	icon_state = "egg-chaos"
+	can_color = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/hatch()
+	playsound(src, 'sound/effects/phasein.ogg', 100, 1)
+	visible_message("\The [src] cracks open, revealing a realm of the unknown within. From that realm, something emerges.")
+	var/choice = pick(existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs))
+	new choice(get_turf(src))
+	processing_objects.Remove(src)
+	qdel(src)
