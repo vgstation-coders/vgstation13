@@ -308,9 +308,6 @@ var/global/powernets_broke = 0
 	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
 		return 0
 
-	if (isgrinch(M)) // Grinches are immune to shock
-		return FALSE 
-
 	if(istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 

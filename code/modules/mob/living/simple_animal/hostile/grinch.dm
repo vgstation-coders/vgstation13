@@ -190,6 +190,9 @@
 
 	.=..()
 
+/mob/living/simple_animal/hostile/gremlin/grinch/electrocute_act()
+	return 
+
 // -- Grinch items.
 
 // Modified BoH
