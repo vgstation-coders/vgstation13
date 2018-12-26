@@ -130,7 +130,6 @@
 	var/busy = FALSE //Stop spamming the damn doorsmash
 	wanted_objects = list(
 		/obj/machinery/light,
-		/obj/machinery/door        // Bust out lights
 	)
 	search_objects = 1
 
