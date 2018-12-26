@@ -290,6 +290,9 @@
 	female_adept = "Mistress of Slam"
 	keys = list("slam", "bball", "basketball", "basket ball")
 
+/datum/religion/slam/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new/obj/item/weapon/beach_ball/holoball)
+
 /datum/religion/judaism
 	name = "Judaism"
 	deity_name = "Yahweh"
@@ -546,8 +549,8 @@
 	female_adept = "Disciple of the Nine"
 	keys = list("nine divines", "eight divines")
 
-/datum/religion/deadra
-	name = "Cult of the Deadreas"
+/datum/religion/daedra
+	name = "Cult of the Daedreas"
 	deity_names = list("Azura", "Boethiah", "Sheogorath", "Sanguine", "Hircine", "Meridia", "Hermaeus Mora", "Nocturnal", "Oghma Infinium")
 	bible_names = list("The Blessings of Sheogorath", "Boethiah's Pillow Book", "Invocation of Azura")
 	male_adept = "Daedra Worshipper"
@@ -903,6 +906,7 @@
 
 /datum/religion/vampirism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
+	H.equip_or_collect(new /obj/item/clothing/mask/vamp_fangs(H), slot_wear_mask)
 
 /datum/religion/vox
 	name = "Voxophilia"
