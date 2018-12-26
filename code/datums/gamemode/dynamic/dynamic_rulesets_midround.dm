@@ -205,7 +205,7 @@
 
 /datum/dynamic_ruleset/midround/weeaboo
 	name = "Crazed Weeaboo"
-	role_category = ROLE_TRAITOR
+	role_category = /datum/role/weeaboo
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1

@@ -234,6 +234,8 @@ var/list/forced_roundstart_ruleset = list()
 					current_rules += new_rule
 				return 1
 		else if (forced)
+			to_chat(world, "ruletype: [ruletype]")
+			to_chat(world, "forced: [forced]")
 			message_admins("The ruleset couldn't be executed due to lack of elligible players.")
 			log_admin("The ruleset couldn't be executed due to lack of elligible players.")
 	return 0
