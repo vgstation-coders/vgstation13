@@ -50,6 +50,8 @@
 	for (var/T in targets)
 		var/mob/living/carbon/C = T
 		var/dist = get_dist(user, C)
+		if (C.is_blind())
+			continue
 		switch (dist)
 			if (0 to 1) // Close mobs
 				C.Stun(8)
