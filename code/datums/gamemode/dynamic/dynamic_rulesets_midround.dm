@@ -234,7 +234,7 @@
 /datum/dynamic_ruleset/midround/grinch/review_applications()
 	var/mob/applicant = null
 	var/selected_key = pick(applicants)
-	for(var/mob/M in player_list)
+	for(var/mob/M in dead_players)
 		if(M.key == selected_key)
 			applicant = M
 	if(!applicant || !applicant.key)
@@ -244,4 +244,5 @@
 	var/datum/role/grinch/G = new
 	G.AssignToRole(applicant.mind,1)
 	G.Greet(GREET_ROUNDSTART)
+	G.OnPostSetup()
 	return 1

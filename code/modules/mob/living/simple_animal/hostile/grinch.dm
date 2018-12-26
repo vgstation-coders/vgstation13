@@ -190,6 +190,9 @@
 
 	.=..()
 
+/mob/living/simple_animal/hostile/gremlin/grinch/electrocute_act()
+	return 
+
 // -- Grinch items.
 
 // Modified BoH
@@ -204,3 +207,9 @@
 	if (!..())
 		return FALSE
 	return isgrinch(M)
+
+/obj/item/weapon/storage/backpack/holding/grinch/attackby(obj/item/weapon/W, mob/user)
+	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
+	if(H || istype(W, /obj/item/weapon/storage/backpack/holding))
+		return
+	return ..()
