@@ -1562,6 +1562,7 @@
 	plant_icon = "dionanode"
 	mob_drop = /obj/item/seeds/dionanode
 	product_requires_player = 1
+	product_kill_inactive = FALSE
 	immutable = 1
 
 	lifespan = 50

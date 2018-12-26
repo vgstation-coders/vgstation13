@@ -871,6 +871,7 @@ SEE_PIXELS	256
 #define ROLE_VAMPIRE    	"vampire"
 #define ROLE_VOXRAIDER  	"vox raider"
 #define ROLE_WIZARD     	"wizard"
+#define ROLE_GRINCH			"Grinch"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be

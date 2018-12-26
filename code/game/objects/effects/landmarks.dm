@@ -78,6 +78,9 @@
 			endgame_exits += loc
 			qdel(src)
 
+		if("grinchstart")
+			grinchstart += loc
+
 	landmarks_list += src
 	return 1
 
@@ -126,3 +129,6 @@
 
 	if(play_sound)
 		L << play_sound
+
+/obj/effect/landmark/grinchstart
+	name = "grinchstart"

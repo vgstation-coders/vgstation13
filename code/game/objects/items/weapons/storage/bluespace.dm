@@ -35,13 +35,14 @@
 		return
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
+	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
+		return
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
 	if(H)
 		singulocreate(H, user)
 		return
 	if(istype(W, /obj/item/weapon/storage/backpack/holding))
 		singulocreate(W, user)
-
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
