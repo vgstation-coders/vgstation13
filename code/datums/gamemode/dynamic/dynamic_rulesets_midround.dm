@@ -241,7 +241,7 @@
 			break
 		var/mob/applicant = null
 		var/selected_key = pick(applicants)
-		for(var/mob/M in player_list)
+		for(var/mob/M in dead_players)
 			if(M.key == selected_key)
 				applicant = M
 		if(!applicant || !applicant.key)
