@@ -191,14 +191,14 @@
 	.=..()
 
 /mob/living/simple_animal/hostile/gremlin/grinch/electrocute_act()
-	return 
+	return
 
 // -- Grinch items.
 
 // Modified BoH
 /obj/item/weapon/storage/backpack/holding/grinch
 	name = "Grinch's bag"
-	desc = "He's coming to steal your presennts."
+	desc = "He's coming to steal your presents."
 	item_state = "grinchbag"
 	icon_state = "grinchbag"
 	origin_tech = null
