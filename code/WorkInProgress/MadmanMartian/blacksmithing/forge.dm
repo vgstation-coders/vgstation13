@@ -62,7 +62,7 @@
 		qdel(I)
 		if(current_temp < MELTPOINT_STEEL)
 			current_temp = MELTPOINT_STEEL
-		fuel_time += 20 SECONDS
+		fuel_time += 40 SECONDS
 		return
 	else if(I.is_hot() && status == FALSE)
 		to_chat(user, "<span class = 'notice'>You attempt to light \the [src] with \the [I].</span>")
