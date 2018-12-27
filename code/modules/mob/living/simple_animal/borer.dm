@@ -389,6 +389,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set desc = "Communicate with your brethren."
 	if(!message)
 		return
+	if(src.stat)
+		to_chat(src, "<span class='warning'>You cannot transmit over the cortical hivemind in your current state.</span>")
+		return
 
 	var/turf/T = get_turf(src)
 	log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) Borer Cortical Hivemind: [message]")
