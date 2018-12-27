@@ -26,6 +26,7 @@ var/global/list/special_roles = list(
 	ROLE_WIZARD       	= 1,
 	ROLE_COMMANDO	  	= 1,
 	ROLE_GRINCH			= 1,
+	ROLE_WEEABOO		= 1,
 )
 
 var/list/antag_roles = list(
@@ -44,6 +45,7 @@ var/list/antag_roles = list(
 	ROLE_COMMANDO	  	= 1,
 //	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
 	ROLE_GRINCH			= 1,
+	ROLE_WEEABOO		= 1,
 )
 
 var/list/nonantag_roles = list(

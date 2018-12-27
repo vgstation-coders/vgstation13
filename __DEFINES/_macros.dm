@@ -253,6 +253,12 @@
 
 #define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
 
+#define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
+
+#define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles

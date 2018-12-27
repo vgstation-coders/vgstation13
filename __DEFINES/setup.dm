@@ -872,6 +872,7 @@ SEE_PIXELS	256
 #define ROLE_VOXRAIDER  	"vox raider"
 #define ROLE_WIZARD     	"wizard"
 #define ROLE_GRINCH			"Grinch"
+#define ROLE_WEEABOO		"crazed weeaboo"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -1476,7 +1477,8 @@ var/proccalls = 1
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
 #define HONORABLE_HIGHLANDER 2
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER
+#define HONORABLE_WEEABOO      4
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_WEEABOO
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 

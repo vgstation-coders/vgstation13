@@ -37,6 +37,7 @@
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
+#define WEEABOO "crazed weeaboo"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"

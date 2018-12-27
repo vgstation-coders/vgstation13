@@ -73,3 +73,42 @@
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)
 	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//           CRAZED WEEABOO             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/weeaboo
+	name = "Crazed Weeaboo"
+	role_category = /datum/role/weeaboo
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 1
+	weight = 1
+	cost = 10
+	requirements = list(90,90,80,70,60,50,40,30,20,10)
+	logo = "weeaboo-logo"
+
+/datum/dynamic_ruleset/latejoin/weeaboo/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.threat_level))
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/latejoin/weeaboo/execute()
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/weeaboo/newWeeaboo = new
+	newWeeaboo.AssignToRole(M.mind,1)
+	newWeeaboo.Greet(GREET_DEFAULT)
+	newWeeaboo.OnPostSetup()
+	newWeeaboo.ForgeObjectives()
+	newWeeaboo.AnnounceObjectives()
+	return 1
