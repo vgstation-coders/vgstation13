@@ -176,12 +176,12 @@
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
 
-/mob/living/verb/succumb()
+/mob/living/verb/succumb(var/gibbed as num, var/deathgasping as num)
 	set hidden = 1
 	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
 		src.apply_damage(maxHealth + src.health, OXY)
-		death(0)
+		death(gibbed, deathgasping)
 		to_chat(src, "<span class='info'>You have given up life and succumbed to death.</span>")
 
 

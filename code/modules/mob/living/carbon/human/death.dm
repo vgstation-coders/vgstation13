@@ -73,7 +73,7 @@
 
 	obj_overlays = null
 
-/mob/living/carbon/human/death(gibbed)
+/mob/living/carbon/human/death(gibbed, deathgasping)
 	if(stat == DEAD)
 		return
 	if(healths)
@@ -102,8 +102,8 @@
 		if(H.mind)
 			H.mind.kills += "[name] ([ckey])"
 
-	if(!gibbed)
-		emote("deathgasp") //Let the world KNOW WE ARE DEAD
+	if(!gibbed && !deathgasping)
+		emote("deathgasp", message = TRUE) //Let the world KNOW WE ARE DEAD ; TRUE means that deathgasping won't call death() again.
 
 		update_canmove()
 	stat = DEAD

@@ -355,7 +355,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				return
 
 	if(src.health < 0 && stat != DEAD) //crit people
-		succumb()
+		succumb(gibbed = 0, deathgasping = 1)
 		ghostize(1)
 	else if(stat == DEAD)
 		ghostize(1)

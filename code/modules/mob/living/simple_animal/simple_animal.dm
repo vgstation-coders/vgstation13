@@ -512,7 +512,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
