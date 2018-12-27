@@ -34,7 +34,7 @@
 /turf/unsimulated/mineral/snow
 	icon_state = "snow_rock"
 	base_icon_state = "snow_rock"
-	mined_type = /turf/unsimulated/floor/snow
+	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
 
 /turf/unsimulated/mineral/snow/New()
@@ -795,6 +795,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	. = ..()
 
+/turf/unsimulated/mineral/random/snow
+	icon_state = "snow_rock"
+	base_icon_state = "snow_rock"
+	mined_type = /turf/unsimulated/floor/snow/permafrost
+	overlay_state = "snow_rock_overlay"
+
 /turf/unsimulated/mineral/random/high_chance
 	icon_state = "rock(high)"
 	mineralChance = 25
@@ -821,6 +827,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Cytine"  = 5
 		*/
 	)
+
+/turf/unsimulated/mineral/random/high_chance/snow
+	icon_state = "snow_rock"
+	base_icon_state = "snow_rock"
+	mined_type = /turf/unsimulated/floor/snow/permafrost
+	overlay_state = "snow_rock_overlay"
+
 
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
@@ -850,6 +863,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Clown"   = 15,
 		"Phazon"  = 10
 	)
+
+/turf/unsimulated/mineral/random/high_chance_clown/snow
+	icon_state = "snow_rock"
+	base_icon_state = "snow_rock"
+	mined_type = /turf/unsimulated/floor/snow/permafrost
+	overlay_state = "snow_rock_overlay"
+
 
 /turf/unsimulated/mineral/random/Destroy()
 	return

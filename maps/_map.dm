@@ -145,12 +145,16 @@ var/global/list/accessable_z_levels = list()
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/z //Number of the z-level (the z coordinate)
 
+/datum/zLevel/proc/post_mapload()
+	return
+
 ////////////////////////////////
 
 /datum/zLevel/station
 
 	name = "station"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
+
 
 /datum/zLevel/centcomm
 
@@ -175,6 +179,28 @@ var/global/list/accessable_z_levels = list()
 	teleJammed = 1
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
+
+/datum/zLevel/snow
+	name = "snow"
+	base_turf = /turf/unsimulated/floor/snow
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
+
+/datum/zLevel/snow/post_mapload()
+	var/lake_density = rand(2,8)
+	for(var/i = 0 to lake_density)
+		var/turf/T = locate(rand(1, world.maxx),rand(1, world.maxy), z)
+		if(!istype(T, base_turf))
+			continue
+		var/generator = pick(typesof(/obj/structure/radial_gen/cellular_automata/ice))
+		new generator(T)
+
+	var/tree_density = rand(25,45)
+	for(var/i = 0 to tree_density)
+		var/turf/T = locate(rand(1,world.maxx),rand(1, world.maxy), z)
+		if(!istype(T, base_turf))
+			continue
+		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
+		new generator(T)
 
 // Debug ///////////////////////////////////////////////////////
 
