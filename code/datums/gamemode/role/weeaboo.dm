@@ -2,7 +2,7 @@
 	name = WEEABOO 
 	id = WEEABOO
 	required_pref = ROLE_WEEABOO
-	special_role = ROLE_WEEABOO
+	special_role = WEEABOO
 	logo_state = "weeaboo-logo"
 
 /datum/role/weeaboo/OnPostSetup()

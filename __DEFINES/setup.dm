@@ -872,7 +872,7 @@ SEE_PIXELS	256
 #define ROLE_VOXRAIDER  	"vox raider"
 #define ROLE_WIZARD     	"wizard"
 #define ROLE_GRINCH			"Grinch"
-#define ROLE_WEEABOO		"weeaboo"
+#define ROLE_WEEABOO		"crazed weeaboo"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
