@@ -516,7 +516,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				continue
 			if(!found_valid_disp)
 				dat += "<HR>"
-				dat += "<tr><td class='column1'>Transfer to <A href='?src=\ref[src];toggle_disp=1'>[(!mode_disp ? "buffer" : "beaker")]:</A></td></tr>"
+				dat += "<table><td class='column1'>Transfer to <A href='?src=\ref[src];toggle_disp=1'>[(!mode_disp ? "buffer" : "beaker")]:</A></td></table>"
 				found_valid_disp = TRUE
 			dat += {"
 				<table>
