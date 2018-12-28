@@ -1580,6 +1580,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			heart_attack.health = 50
 			heart_attack.maxHealth = 50
 			heart_attack.stat_attack = 1
+			score["heartattacks"]++
 			qdel(blown_heart)
 
 

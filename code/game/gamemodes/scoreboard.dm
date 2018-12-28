@@ -205,6 +205,9 @@
 			for(var/obj/item/weapon/cell/C in A.contents)
 				if(C.percent() < 30)
 					score["powerloss"]++ //Enough to auto-cut equipment, so alarm
+	for(var/datum/powernet/PN in powernets)
+		if(PN.avail > score["maxpower"])
+			score["maxpower"] = PN.avail
 
 	var/roundlength = world.time/10 //Get a value in seconds
 	score["time"] = round(roundlength) //One point for every five seconds. One minute is 12 points, one hour 720 points

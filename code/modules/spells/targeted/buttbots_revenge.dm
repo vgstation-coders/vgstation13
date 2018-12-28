@@ -38,6 +38,7 @@
 			playsound(src, 'sound/effects/superfart.ogg', 50, 1)
 			C.apply_damage(40, BRUTE, LIMB_GROIN)
 			C.apply_damage(10, BURN, LIMB_GROIN)
+			score["assesblasted"]++
 	return
 
 /spell/targeted/buttbots_revenge/empower_spell()
