@@ -70,6 +70,14 @@ var/global/datum/credits/end_credits = new
 	for(var/datum/episode_name/N in episode_names)
 		drafted_names["[N.thename]"] = N.weight
 	episode_name = pickweight(drafted_names)
+	if(prob(5))
+		episode_name += ": PART I"
+	else if(prob(5))
+		episode_name += ": PART II"
+	else if(prob(2))
+		episode_name += ": PART III"
+	else if(prob(2) && score["time"] > 60 * 60 * 3) //3 hours
+		episode_name += ": THE FEATURE LENGTH PRESENTATION"
 
 /datum/credits/proc/finalize_episodestring(var/thename)
 	var/season = rand(1,22)
