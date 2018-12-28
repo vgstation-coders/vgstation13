@@ -263,7 +263,12 @@
 		abort(RITUALABORT_OUTPOST)
 		return FALSE
 
-	if (veil_thickness >= CULT_ACT_II)
+	if (veil_thickness >= CULT_ACT_I)
+		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Spire")
+		if (spawnchoice == "Spire")
+			spawntype = /obj/structure/cult/spire
+
+	else if (veil_thickness >= CULT_ACT_II)
 		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Forge","Spire")
 		switch (spawnchoice)
 			if ("Forge")
