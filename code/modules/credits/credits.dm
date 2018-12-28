@@ -76,8 +76,16 @@ var/global/datum/credits/end_credits = new
 		episode_name += ": PART II"
 	else if(prob(2))
 		episode_name += ": PART III"
-	else if(prob(2) && score["time"] > 60 * 60 * 3) //3 hours
+	else if(prob(4) && score["time"] > 60 * 60 * 3) //3 hours
 		episode_name += ": THE FEATURE LENGTH PRESENTATION"
+	else if(prob(4) && score["time"] < 60 * 30) //30 min
+		episode_name += ": ABRIDGED"
+	else if(prob(1))
+		episode_name += ": NOW IN 3D"
+	else if(prob(1))
+		episode_name += ": ON ICE!"
+	else if(prob(1))
+		episode_name += ": THE SEASON FINALE"
 
 /datum/credits/proc/finalize_episodestring(var/thename)
 	var/season = rand(1,22)
