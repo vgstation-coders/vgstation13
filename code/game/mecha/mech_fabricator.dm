@@ -30,7 +30,6 @@
 	desc = "A specialised fabricator for robotic and mechatronic components."
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "fab"
-	req_one_access = list(access_robotics)
 
 	research_flags = NANOTOUCH | HASOUTPUT | HASMAT_OVER | TAKESMATIN | ACCESS_EMAG | LOCKBOXES
 
