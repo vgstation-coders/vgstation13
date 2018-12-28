@@ -31,13 +31,19 @@
 		var/datum/gamemode/dynamic/mode = ticker.mode
 		switch(mode.threat_level)
 			if(0 to 30)
-				episode_names += new /datum/episode_name("[pick("THE DAY [uppertext(station_name())] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "THIS SIDE OF PARADISE", "HOME ALONE", "[uppertext(station_name())]: A SITUATION COMEDY", "THE SILENT SHUFFLE", "GO BIG OR GO [uppertext(station_name())]")]", "Low threat level of [mode.threat_level]%.", 200)
+				episode_names += new /datum/episode_name("[pick("THE DAY [uppertext(station_name())] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "THIS SIDE OF PARADISE", "HOME ALONE", "[uppertext(station_name())]: A SITUATION COMEDY", "THE SILENT SHUFFLE", "GO BIG OR GO [uppertext(station_name())]", "PLACEBO EFFECT")]", "Low threat level of [mode.threat_level]%.", 200)
 			if(30 to 70)
 				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppertext(station_name())]!", "THE BALLAD OF [uppertext(station_name())]", "THE [uppertext(station_name())] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA")]", "Moderate threat level of [mode.threat_level]%.", 200)
 			if(70 to 100)
-				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "THE END OF [uppertext(station_name())] AS WE KNOW IT", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "HELL IS OTHER SPESSMEN", "EVERYBODY HATES [uppertext(station_name())]")]", "High threat level of [mode.threat_level]%.", 200)
+				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "THE END OF [uppertext(station_name())] AS WE KNOW IT", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppertext(station_name())]")]", "High threat level of [mode.threat_level]%.", 200)
 		if(locate(/datum/dynamic_ruleset/roundstart/malf) in mode.executed_rules)
 			episode_names += new /datum/episode_name("[pick("I'M SORRY [uppertext(station_name())], I'M AFRAID I CAN'T LET YOU DO THAT", "A STRANGE GAME")]", "Round included a malfunctioning AI.", 200)
+		if(locate(/datum/dynamic_ruleset/roundstart/revs) in mode.executed_rules)
+			episode_names += new /datum/episode_name("[pick("THE CREW STARTS A REVOLUTION", "HELL IS OTHER SPESSMEN")]", "Round included roundstart revs.", 200)
+			if(copytext(uppertext(station_name()),1,2) == "V")
+				episode_names += new /datum/episode_name("V FOR [uppertext(station_name())]", "Round included roundstart revs... and the station's name starts with V.", 500)
+		if(ticker.station_was_nuked)
+			episode_names += new /datum/episode_name("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD")]", "The station was nuked!", 250)
 		//if(locate(/datum/dynamic_ruleset/roundstart/blob) in mode.executed_rules) //uncomment when blob gets readded
 		//	episode_names += new /datum/episode_name("[pick("MARRIED TO THE BLOB", "THE CREW GETS QUARANTINED")]", "Round included a roundstart blob.", 200)
 
