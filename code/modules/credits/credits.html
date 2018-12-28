@@ -52,11 +52,14 @@
 			display: inline;
 			font-weight:normal;
 		}
-		
+
 
 	</style>
 </head>
 <body>
+	<div id="soundplayer" style="display: none;">
+		<audio autoplay><source src="http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3" type="audio/mpeg"></audio>
+	</div>
 	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
 		<tr>
 			<td class="letterboxer"></td>
@@ -77,7 +80,7 @@
 	<script type="text/javascript">
 	var producers = [];
 	var lastinterval;
-	
+
 	function setScrollingText(text){
 		document.getElementById("marquee").innerHTML = text;
 	}
@@ -85,24 +88,24 @@
 		producers = text.split("%n");
 		producers = producers.slice(0, -1); //get rid of the last %n
 	}
-	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime){
+	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime, startingDelay, songLink){
 		if (splashTime === undefined) {
 			splashTime = 2000;
 		}
 		splashTime = parseInt(splashTime); //Just in case
-		
+
 		if (scrollSpeed === undefined) {
 			scrollSpeed = 25;
 		}
 		scrollSpeed = parseInt(scrollSpeed); //Just in case
-		
+
 		setScrollingText(scrollyString);
 		setProducers(producersString);
-		
+
 		splashLoop(producers, 0, splashTime);
 		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
 	}
-	
+
 	function splashLoop(arr, index, time) {
 		if (index === arr.length){
 			return;
@@ -120,10 +123,16 @@
 			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
 				//document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</textarea>"; clearInterval(lastinterval); return; //debugging
 				clearInterval(lastinterval);
-				window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
+				stopItNow();
 				return;
 			}
 		}, speed);
+	}
+
+	function stopItNow(){
+		var sound = document.getElementById("soundplayer");
+		sound.parentNode.removeChild(sound);
+		window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
 	};
 	</script>
 </body>
