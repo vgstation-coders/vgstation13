@@ -689,6 +689,18 @@
 /datum/find/plant/additional_description(var/obj/item/I)
 	I.desc += "A fossilised shred of alien plant matter."
 
+/datum/find/egg
+	find_ID = ARCHAEO_EGG
+	apply_image_decorations = FALSE
+	apply_material_decorations = FALSE
+	apply_prefix = FALSE
+	responsive_reagent = CARBON
+
+/datum/find/egg/spawn_item()
+	var/obj/item/new_item = new /obj/item/weapon/fossil/egg
+	item_type = new_item.name
+	return new_item
+
 /datum/find/remains_human
 	find_ID = ARCHAEO_REMAINS_HUMANOID
 	anomaly_factor = 2

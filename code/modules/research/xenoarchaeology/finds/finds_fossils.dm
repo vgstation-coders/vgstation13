@@ -116,3 +116,29 @@
 		/obj/item/seeds/mushroommanspore,
 		)
 	nonplant_seed_type = pick(prehistoric_plants)
+
+
+/obj/item/weapon/fossil/egg
+	name = "Fossilized egg"
+	desc = "A long dead egg."
+	icon_state = "egg"
+
+/obj/item/weapon/fossil/egg/New()
+	..()
+	create_reagents(5)
+
+/obj/item/weapon/fossil/egg/on_reagent_change()
+	if(reagents.has_reagent(REZADONE, 5))
+		visible_message("<span class = 'notice'>\The [src] revitalizes!</span>")
+		var/possibility = pick(
+			50; /obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+			/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach,
+			25;/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,
+			/obj/item/weapon/reagent_containers/food/snacks/egg,
+			60; /obj/item/weapon/reagent_containers/food/snacks/egg/parrot,
+			20; /obj/item/weapon/reagent_containers/food/snacks/egg/chaos
+			)
+		new possibility(src.loc)
+		qdel(src)
+
+
