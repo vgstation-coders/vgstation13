@@ -7,7 +7,7 @@
 	density = 0
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "glowshroomf"
-	layer = BELOW_OBJ_LAYER
+	layer = BELOW_TABLE_LAYER
 	var/endurance = 30
 	var/potency = 30
 	var/delay = 1200
