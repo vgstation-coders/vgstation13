@@ -149,8 +149,7 @@
 /datum/dynamic_ruleset/roundstart/bloodcult
 	name = "Blood Cult"
 	role_category = /datum/role/cultist
-	protected_from_jobs = list("Merchant")
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Warden", "Detective","Head of Security", "Captain", "Chaplain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
@@ -327,8 +326,7 @@
 /datum/dynamic_ruleset/roundstart/revs
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
-	protected_from_jobs = list("Merchant")
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 3
@@ -394,7 +392,7 @@
 		return FALSE
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
-	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January	
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
 	return accepted
 
 
