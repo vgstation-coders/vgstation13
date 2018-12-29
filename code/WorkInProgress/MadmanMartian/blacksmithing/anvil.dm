@@ -13,6 +13,7 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	density = 1
+	force = 40 //as much as a wielded fireaxe
 	throwforce = 40
 
 /obj/item/anvil/can_pickup(mob/living/M)
