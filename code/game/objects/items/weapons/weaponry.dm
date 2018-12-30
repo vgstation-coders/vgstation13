@@ -107,9 +107,9 @@
 		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
 		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
 	if(active)
-		message += " alt-click it to disable your teleport power!</span>"
+		message += " Alt-click it to disable your teleport power!</span>"
 	else
-		message += " alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
+		message += " Alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/AltClick(mob/user)
@@ -141,7 +141,7 @@
 /obj/item/weapon/katana/hesfast/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
-	
+
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
