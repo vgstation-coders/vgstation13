@@ -141,7 +141,7 @@
 /obj/item/weapon/katana/hesfast/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
-	
+
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
@@ -260,6 +260,13 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	icon_state = "tacknife"
 	item_state = "knife"
 	force = 10
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
+	slowdown = 0.999
+
+/obj/item/weapon/kitchen/utensil/knife/tactical/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		slowdown = 0.8
 
 /obj/item/weapon/kitchen/utensil/knife/skinning
 	name = "skinning knife"

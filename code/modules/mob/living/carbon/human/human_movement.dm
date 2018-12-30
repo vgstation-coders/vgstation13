@@ -56,15 +56,6 @@
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
-	if(locate(/obj/item/weapon/kitchen/utensil/knife/tactical) in held_items)
-		. *= 0.99 // Everybody knows holding a knife makes you go faster.
-		if(Holiday == APRIL_FOOLS_DAY)
-			. *= 0.8 // WITH ADDED REALISM.
-		/*
-	for(var/i = 1 to held_items.len)
-		var/obj/item/I = held_items[i]
-		if(istype(I, /obj/item/weapon/kitchen/utensil/knife/tactical))
-			. *= 0.50*/
 	if(!reagents.has_any_reagents(HYPERZINES))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
