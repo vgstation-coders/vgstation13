@@ -1050,7 +1050,7 @@
 	bible_name = "The Dokument"
 	male_adept = "Kommando"
 	female_adept = "Kommando"
-	keys = list("murdercube","murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea")
+	keys = list("murdercube","murderkube", "murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea", "dakka")
 	convert_method = "performing a ritual with a gun. The convert needs to be in good health and unafraid of being shot."
 
 /datum/religion/guns/equip_chaplain(var/mob/living/carbon/human/H)
