@@ -4631,7 +4631,7 @@
 	description = "Absolutely nothing."
 	nutriment_factor = 0
 	
-/datum/reagent/nothing/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
 
     if(ishuman(M))
         var/mob/living/carbon/human/H = M
