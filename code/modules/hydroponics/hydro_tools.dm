@@ -368,50 +368,6 @@
 	toxicity = 8
 	weed_kill_str = 7
 
-
-// *************************************
-// Nutrient defines for hydroponics
-// *************************************
-
-/obj/item/weapon/reagent_containers/glass/fertilizer
-	name = "fertilizer bottle"
-	desc = "A small glass bottle. Can hold up to 10 units."
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT | OPENCONTAINER
-	possible_transfer_amounts = null
-	w_class = W_CLASS_SMALL
-
-	var/fertilizer //Reagent contained, if any.
-
-	//Like a shot glass!
-	amount_per_transfer_from_this = 10
-	volume = 10
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/New()
-	..()
-
-	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-
-	if(fertilizer)
-		reagents.add_reagent(fertilizer,10)
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/ez
-	name = "bottle of E-Z-Nutrient"
-	icon_state = "bottle16"
-	fertilizer = EZNUTRIENT
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/l4z
-	name = "bottle of Left 4 Zed"
-	icon_state = "bottle18"
-	fertilizer = LEFT4ZED
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/rh
-	name = "bottle of Robust Harvest"
-	icon_state = "bottle15"
-	fertilizer = ROBUSTHARVEST
-
 //Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
 	name = "hatchet"
