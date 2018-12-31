@@ -4630,6 +4630,20 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
+	
+/datum/reagent/nothing/on_mob_life(var/mob/living/M)
+
+    if(ishuman(M))
+        var/mob/living/carbon/human/H = M
+        if(H.mind.miming)
+            if(M.getOxyLoss() && prob(80))
+                M.adjustOxyLoss(-REM)
+            if(M.getBruteLoss() && prob(80))
+                M.heal_organ_damage(REM, 0)
+            if(M.getFireLoss() && prob(80))
+                M.heal_organ_damage(0, REM)
+            if(M.getToxLoss() && prob(80))
+                M.adjustToxLoss(-REM)
 
 /datum/reagent/drink/potato_juice
 	name = "Potato Juice"
