@@ -25,7 +25,7 @@
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE
 
 	light_color = LIGHT_COLOR_CYAN
 	power_change()
