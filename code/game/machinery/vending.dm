@@ -16,6 +16,7 @@ var/global/num_vending_terminals = 1
 	var/obj/structure/vendomatpack/pack = null
 	anchored = 1
 	density = 1
+	layer = OPEN_DOOR_LAYER //This is below BELOW_OBJ_LAYER because vendors can contain crates/closets
 	var/health = 100
 	var/maxhealth = 100 //Kicking feature
 	var/active = 1		//No sales pitches if off!
