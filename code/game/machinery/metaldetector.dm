@@ -202,7 +202,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.say("Threat Detected! Subject: [dudesname]")////
+			say("Threat Detected! Subject: [dudesname]")////
 
 
 		else if(dudesthreat && senset)
@@ -214,7 +214,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.say("Additional screening required! Subject: [dudesname]")
+			say("Additional screening required! Subject: [dudesname]")
 
 
 		else
@@ -226,7 +226,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.say("Subject: [dudesname] clear.")
+			say("Subject: [dudesname] clear.")
 
 
 	flick("[base_state]_flash", src)
