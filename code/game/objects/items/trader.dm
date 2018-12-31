@@ -69,7 +69,7 @@
 	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelevoxsuit,
-	list(/obj/item/clothing/suit/wintercoat/ce, /obj/item/clothing/suit/wintercoat/cmo, /obj/item/clothing/suit/wintercoat/security/hos, /obj/item/clothing/suit/wintercoat/hop, /obj/item/clothing/suit/wintercoat/captain, /obj/item/clothing/suit/wintercoat/clown, /obj/item/clothing/suit/wintercoat/slimecoat),
+	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
 	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
@@ -638,7 +638,7 @@
 										"Try again when you can relate to the intoxicating taste of blood.",
 										"What is a man? A miserable little pile of soft drinks.",
 										"You mortals all look underage to me. Pray tell, can you even manage a bottle?",
-										"Bah. You mock Le Confrérie des Chevaliers du Tastevin with your plebian visage.",
+										"Bah. You mock Le ConfrÃ©rie des Chevaliers du Tastevin with your plebian visage.",
 										"I will not associate with any less than an iron liver.",
 										"You dare ask my service when you cannot even hold your liquor?")
 			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
