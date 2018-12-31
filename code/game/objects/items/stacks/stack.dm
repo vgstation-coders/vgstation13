@@ -47,61 +47,56 @@
 
 /obj/item/stack/proc/list_recipes(mob/user as mob, recipes_sublist)
 	ASSERT(isnum(amount))
-	if (!recipes)
+	if(!recipes)
 		return
-	if (!src || amount<=0)
+	if(!src || amount <= 0)
 		user << browse(null, "window=stack")
 	user.set_machine(src) //for correct work of onclose
 	var/list/recipe_list = recipes
-	if (recipes_sublist && recipe_list[recipes_sublist] && istype(recipe_list[recipes_sublist], /datum/stack_recipe_list))
+	if(recipes_sublist && recipe_list[recipes_sublist] && istype(recipe_list[recipes_sublist], /datum/stack_recipe_list))
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
-	var/t1 = text("<HTML><HEAD><title>Constructions from []</title></HEAD><body><TT>Amount Left: []<br>", src, src.amount)
-	for(var/i=1;i<=recipe_list.len,i++)
+	var/t1 = "<HTML><HEAD><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
+	for(var/i = 1;i <= recipe_list.len,i++)
 		var/E = recipe_list[i]
-		if (isnull(E))
+		if(isnull(E))
 			t1 += "<hr>"
 			continue
 
-		if (i>1 && !isnull(recipe_list[i-1]))
-			t1+="<br>"
+		if(i > 1 && !isnull(recipe_list[i-1]))
+			t1 += "<br>"
 
-		if (istype(E, /datum/stack_recipe_list))
+		if(istype(E, /datum/stack_recipe_list))
 			var/datum/stack_recipe_list/srl = E
 
 			var/stack_name = (irregular_plural && srl.req_amount > 1) ? irregular_plural : "[singular_name]\s"
-			if (src.amount >= srl.req_amount)
+			if(src.amount >= srl.req_amount)
 				t1 += "<a href='?src=\ref[src];sublist=[i]'>[srl.title] ([srl.req_amount] [stack_name])</a>"
 			else
 				t1 += "[srl.title] ([srl.req_amount] [stack_name]\s)<br>"
 
-		if (istype(E, /datum/stack_recipe))
+		if(istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
 			var/max_multiplier = round(src.amount / R.req_amount)
 			var/title as text
 			var/can_build = 1
 			can_build = can_build && (max_multiplier>0)
-			/*
-			if (R.one_per_turf)
-				can_build = can_build && !(locate(R.result_type) in usr.loc)
-			if (R.on_floor)
-				can_build = can_build && istype(usr.loc, /turf/simulated/floor)
-			*/
-			if (R.res_amount>1)
-				title+= "[R.res_amount]x [R.title]\s"
+
+			if(R.res_amount > 1)
+				title += "[R.res_amount]x [R.title]\s"
 			else
-				title+= "[R.title]"
-			//title+= " ([R.req_amount] [src.singular_name]\s)"
-			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
+				title += "[R.title]"
+
+			title += " ([R.req_amount] [CORRECT_STACK_NAME(src)])"
 			if(R.other_reqs.len)
-				for(var/ii=1 to R.other_reqs.len)
+				for(var/ii = 1 to R.other_reqs.len)
 					can_build = 0
 					var/obj/looking_for = R.other_reqs[ii]
 					var/req_amount
 					if(ispath(looking_for, /obj/item/stack))
 						var/obj/item/stack/S = new looking_for
 						req_amount = R.other_reqs[looking_for]
-						title +=  ", [req_amount] [CORRECT_STACK_NAME(S)]"
+						title += ", [req_amount] [CORRECT_STACK_NAME(S)]"
 					else
 						title += ", [initial(looking_for.name)] required in vicinity"
 					if(ispath(user.get_inactive_hand(), looking_for))
@@ -122,17 +117,17 @@
 									can_build = 1
 									continue
 					break
-			if (can_build)
-				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
+			if(can_build)
+				t1 += "<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>"
 			else
-				t1 += text("[]", title)
+				t1 += "[title]"
 				continue
-			if (R.max_res_amount>1 && max_multiplier>1)
+			if(R.max_res_amount > 1 && max_multiplier > 1)
 				max_multiplier = min(max_multiplier, round(R.max_res_amount/R.res_amount))
 				t1 += " |"
-				var/list/multipliers = list(5,10,25)
-				for (var/n in multipliers)
-					if (max_multiplier>=n)
+				var/list/multipliers = list(5, 10, 25)
+				for(var/n in multipliers)
+					if(max_multiplier>=n)
 						t1 += " <A href='?src=\ref[src];make=[i];multiplier=[n]'>[n*R.res_amount]x</A>"
 				if (!(max_multiplier in multipliers))
 					t1 += " <A href='?src=\ref[src];make=[i];multiplier=[max_multiplier]'>[max_multiplier*R.res_amount]x</A>"
