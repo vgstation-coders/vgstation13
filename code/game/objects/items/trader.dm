@@ -636,7 +636,7 @@
 										"Try again when you can relate to the intoxicating taste of blood.",
 										"What is a man? A miserable little pile of soft drinks.",
 										"You mortals all look underage to me. Pray tell, can you even manage a bottle?",
-										"Bah. You mock Le Confr�rie des Chevaliers du Tastevin with your plebian visage.",
+										"Bah. You mock Le Confrérie des Chevaliers du Tastevin with your plebian visage.",
 										"I will not associate with any less than an iron liver.",
 										"You dare ask my service when you cannot even hold your liquor?")
 			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
