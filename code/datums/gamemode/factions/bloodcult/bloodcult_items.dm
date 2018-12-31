@@ -330,12 +330,12 @@ var/list/arcane_tomes = list()
 
 	if (!spell_type)
 		if (!(src in user.held_items))//triggering an empty rune from a tome removes it.
-			user.put_in_hands(src)
 			if (istype(loc, /obj/item/weapon/tome))
 				var/obj/item/weapon/tome/T = loc
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
 				user << browse(T.tome_text(), "window=arcanetome;size=537x375")
+				user.put_in_hands(src)
 		return
 
 	if (attuned_rune)
