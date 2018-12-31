@@ -93,14 +93,22 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 
 //Infects mob M with random lesser disease, if he doesn't have one
 /proc/infect_mob_random_lesser(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D = new /datum/disease2/disease("infect_mob_random_lesser")
+	var/datum/disease2/disease/D
+	if(prob(70))
+		D = new /datum/disease2/disease/bacteria("infect_mob_random_lesser")
+	else
+		D = new /datum/disease2/disease("infect_mob_random_lesser")
 	D.makerandom(FALSE, TRUE)
 	D.infectionchance = 1
 	M.virus2["[D.uniqueID]"] = D
 
 //Infects mob M with random greated disease, if he doesn't have one
 /proc/infect_mob_random_greater(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D = new /datum/disease2/disease("infect_mob_random_greater")
+	var/datum/disease2/disease/D
+	if(prob(30))
+		D = new /datum/disease2/disease/parasite("infect_mob_random_greater")
+	else
+		D = new /datum/disease2/disease("infect_mob_random_greater")
 	D.makerandom(TRUE, TRUE)
 	M.virus2["[D.uniqueID]"] = D
 
