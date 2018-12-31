@@ -37,30 +37,20 @@
 		ruleS: List: The list of rules to evaluate these objects by
 
 	@return:
-		List: L, re-ordered with the most relevant objects (according to the rules given) to the least relevant objects
+		List: comparison, ordered with the most relevant objects (according to the rules given) to the least relevant objects
 **/
 /proc/evaluate_list(var/list/L, var/list/rules)
 	if(!L.len || L.len < 2 || !rules.len) //List is empty, or only has one element so can't compare, or no rules to compare with
 		return L
 	var/list/comparison = L.Copy()
-	var/evaluating = TRUE
 	//First, we associate a value with each object in the comparison list
 	for(var/datum/D in comparison)
 		var/relevance
 		for(var/datum/fuzzy_ruling/FR in rules)
 			relevance += FR.evaluate(D)*FR.weighting
 		comparison[D] = relevance
-	//Then, bubblesort
-	while(evaluating)
-		evaluating = FALSE
-		for(var/i = 2 to comparison.len)
-			var/obj = comparison[i]
-			var/obj2 = comparison[i-1]
-			if(comparison[obj] > comparison[obj2])
-				comparison[i-1] = obj
-				comparison[i] = obj2
-				evaluating = TRUE
-				continue
+	//Then, we use sortTim with descending numeric arg, so we get them from highest to lowest
+	sortTim(comparison, /proc/cmp_numeric_dsc,TRUE)
 
 	for(var/datum/D in L)
 		comparison[D] = L[D] //So we don't lose assoc values, should there be any
