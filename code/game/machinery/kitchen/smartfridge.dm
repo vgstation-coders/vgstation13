@@ -7,6 +7,7 @@
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
 	density = 1
+	opacity = 1
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 5
@@ -81,10 +82,15 @@
 
 	RefreshParts()
 
+	update_nearby_tiles()
+
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
 		returnToPool(piles[key])
 	piles.Cut()
+
+	update_nearby_tiles()
+
 	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
@@ -332,6 +338,12 @@
 	updateUsrDialog()
 	return TRUE
 
+/obj/machinery/smartfridge/wrenchAnchor()
+
+	. = ..()
+	world << "AIR UPDATE"
+	update_nearby_tiles()
+
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
@@ -488,6 +500,23 @@
 				display_miniicons = MINIICONS_ON
 
 	src.updateUsrDialog()
+
+/obj/machinery/smartfridge/proc/update_nearby_tiles(var/turf/T)
+    if(!SS_READY(SSair))
+        return 0
+
+    if(!T)
+        T = get_turf(src)
+    if(isturf(T))
+        SSair.mark_for_update(T)
+    return 1
+
+/obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+    if(air_group && anchored)
+        return 0
+    if(istype(mover) && mover.checkpass(PASSGLASS))
+        return 1
+    return !density
 
 #undef MAX_SHELVES
 #undef MINIICONS_ON
