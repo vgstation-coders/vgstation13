@@ -74,7 +74,7 @@ var/global/list/falltempoverlays = list()
 
 /spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE) //if recharge is started is important for the trigger spells
 	if(!holder)
-		holder = user //just in case
+		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))

@@ -109,6 +109,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	//still_recharging_msg = "<span class='notice'>[name] is still recharging.</span>"
 	charge_counter = charge_max
 
+/spell/proc/set_holder(var/new_holder)
+	if(holder == new_holder)
+		world.log << "[src] is trying to set its holder to the same holder!"
+	holder = new_holder
+
 /spell/proc/process()
 	spawn while(charge_counter < charge_max)
 		if(holder && !holder.timestopped)
@@ -141,7 +146,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
 	if(!holder)
-		holder = user //just in case
+		set_holder(user) //just in case
 
 	var/list/targets = target_override
 
@@ -195,7 +200,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 //This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!holder)
-		holder = user //just in case
+		set_holder(user) //just in case
 	if(!force_remove && !currently_channeled)
 		if(!cast_check(skipcharge, user))
 			return 0
