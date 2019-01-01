@@ -224,7 +224,7 @@
 		else if(shuttle.moving)
 			dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
 		else
-			dat += {"<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a>"}
+			dat += {"<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a><br>"}
 			if(shuttle.current_port)
 				dat += "Location: <b>[shuttle.current_port.areaname]</b><br>"
 			else
