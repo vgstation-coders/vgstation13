@@ -251,12 +251,16 @@
 /obj/structure/closet/secure_closet/detective/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/under/det,
+		/obj/item/clothing/under/det/noir,
 		/obj/item/clothing/suit/storage/det_suit,
+		/obj/item/clothing/suit/storage/det_suit/noir,
 		/obj/item/clothing/suit/storage/forensics/blue,
 		/obj/item/clothing/suit/storage/forensics/red,
 		/obj/item/clothing/gloves/black,
 		/obj/item/clothing/head/det_hat,
+		/obj/item/clothing/head/det_hat/noir,
 		/obj/item/clothing/shoes/brown,
+		/obj/item/clothing/shoes/laceup,
 		/obj/item/weapon/storage/box/evidence,
 		/obj/item/device/radio/headset/headset_sec,
 		/obj/item/device/detective_scanner,
