@@ -213,3 +213,22 @@ proc/get_cardinal_dir(atom/A, atom/B)
 		if(SMOOTHING_WEST)
 			return WEST
 	return dir
+
+/proc/dir2arrow(var/dir) // ↑ ↓ → ← ↖ ↘ ↙ ↗
+	switch(dir)
+		if(NORTH)
+			return "&uarr;"
+		if(SOUTH)
+			return "&darr;"
+		if(EAST)
+			return "&rarr;"
+		if(WEST)
+			return "&larr;"
+		if(NORTHEAST)
+			return "&#8599;"
+		if(SOUTHEAST)
+			return "&#8600;"
+		if(SOUTHWEST)
+			return "&#8601;"
+		if(NORTHWEST)
+			return "&#8598;"
