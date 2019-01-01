@@ -342,8 +342,7 @@
 
 	. = ..()
 	if(.)
-		to_chat(world, "WORLD UPDATE")
-		SSair.mark_for_update(loc)
+		update_nearby_tiles()
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
@@ -513,7 +512,7 @@
     return 1
 
 /obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group)
+	if(!istype(mover))
 		return !anchored
 	return ..()
 
