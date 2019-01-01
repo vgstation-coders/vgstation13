@@ -341,8 +341,9 @@
 /obj/machinery/smartfridge/wrenchAnchor()
 
 	. = ..()
-	world << "AIR UPDATE"
-	update_nearby_tiles()
+	if(.)
+		to_chat(world, "WORLD UPDATE")
+		SSair.mark_for_update(loc)
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
@@ -512,11 +513,9 @@
     return 1
 
 /obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-    if(air_group && anchored)
-        return 0
-    if(istype(mover) && mover.checkpass(PASSGLASS))
-        return 1
-    return !density
+	if(air_group)
+		return !anchored
+	return ..()
 
 #undef MAX_SHELVES
 #undef MINIICONS_ON
