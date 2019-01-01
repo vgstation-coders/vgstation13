@@ -22,4 +22,5 @@
 	disclaimers += "<br>"
 	disclaimers += "This motion picture is (not) protected under the copyright laws of the United States and all countries throughout the universe. Country of first publication: United States of America. Any unauthorized exhibition, distribution, or copying of this picture or any part thereof (including soundtrack) is an infringement of the relevant copyright and will subject the infringer to civil liability and criminal prosecution."
 	disclaimers += "The story, all names, characters, and incidents portrayed in this production are fictitious. No identification with actual persons (living or deceased), places, buildings, and products is intended or should be inferred."
-	disclaimers += "No person or entity associated with this film received payment or anything of value, or entered into any agreement, in connection with the depiction of tobacco products."
+	if(score["tobacco"] > 0)
+		disclaimers += "No person or entity associated with this film received payment or anything of value, or entered into any agreement, in connection with the depiction of tobacco products."

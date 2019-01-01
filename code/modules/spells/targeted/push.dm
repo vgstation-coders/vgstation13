@@ -67,6 +67,7 @@
 			if(!success)
 				L.Remove(attempt)
 			else
+				score["dimensionalpushes"]++
 				break
 		if(!success)
 			target.forceMove(pick(backup_L))

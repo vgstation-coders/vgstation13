@@ -2,8 +2,12 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits
 	var/generated = FALSE
-	var/starting_delay = 8 SECONDS
+	var/starting_delay = 10 SECONDS
 	var/post_delay = 5 SECONDS //time that the server stays up after the credits start rolling (to prevent serb shutting down before all the clients receive the credits, or that's the idea at least)
+	var/scroll_speed = 20 //Lower is faster.
+	var/splash_time = 2000 //Time in miliseconds that each head of staff/star/production staff etc splash screen gets before displaying the next one.
+
+	var/song_link = "http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3"
 	var/control = "mapwindow.credits"
 	var/file = 'code/modules/credits/credits.html'
 
@@ -27,9 +31,6 @@ var/global/datum/credits/end_credits = new
 	generated = TRUE
 
 /datum/credits/proc/rollem()
-	log_debug("Playing credits song...")
-	world << sound('sound/music/Frolic_Luciano_Michelini_Short.ogg')
-
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
 	if(episode_name == "") //admin might've already set one
 		pick_name()
@@ -37,7 +38,7 @@ var/global/datum/credits/end_credits = new
 
 	var/scrollytext = episode_string + cast_string + disclaimers_string
 
-	var/list/js_args = list(scrollytext, producers_string, 20, 2000) //arguments for the makeCredits function back in the javascript
+	var/list/js_args = list(scrollytext, producers_string, scroll_speed, splash_time, starting_delay, song_link) //arguments for the makeCredits function back in the javascript
 
 	log_debug("Sending credit info to all clients...")
 	for(var/client/C in clients)
@@ -59,7 +60,7 @@ var/global/datum/credits/end_credits = new
 	set name = "Skip Credits"
 	set category = "OOC"
 	verbs -= /client/proc/clear_credits
-	winset(src, end_credits.control, "is-visible=false")
+	src << output(null, "[end_credits.control]:stopItNow")
 
 
 
@@ -69,9 +70,28 @@ var/global/datum/credits/end_credits = new
 	for(var/datum/episode_name/N in episode_names)
 		drafted_names["[N.thename]"] = N.weight
 	episode_name = pickweight(drafted_names)
+	if(prob(5))
+		episode_name += ": PART I"
+	else if(prob(5))
+		episode_name += ": PART II"
+	else if(prob(2))
+		episode_name += ": PART III"
+	else if(prob(4) && score["time"] > 60 * 60 * 3) //3 hours
+		episode_name += ": THE FEATURE LENGTH PRESENTATION"
+	else if(prob(4) && score["time"] < 60 * 30) //30 min
+		episode_name += ": ABRIDGED"
+	else if(prob(1))
+		episode_name += ": NOW IN 3D"
+	else if(prob(1))
+		episode_name += ": ON ICE!"
+	else if(prob(1))
+		episode_name += ": THE SEASON FINALE"
 
 /datum/credits/proc/finalize_episodestring(var/thename)
-	episode_string = "<h1>SEASON [rand(1,22)] EPISODE [rand(1,17)]<br>[uppertext(episode_name)]</h1><br><div style='padding-bottom: 75px;'></div>"
+	var/season = rand(1,22)
+	var/episodenum = rand(1,17) //Maybe we could do this cumulatively so that the round after 670 becomes 671 etc and the season is just the last 2 numbers of the current IRL year?
+	episode_string = "<h1>SEASON [season] EPISODE [episodenum]<br>[uppertext(episode_name)]</h1><br><div style='padding-bottom: 75px;'></div>"
+	log_game("So ends SEASON [season] EPISODE [episodenum] - [uppertext(episode_name)]")
 
 /datum/credits/proc/finalize_disclaimerstring()
 	disclaimers_string = "<div class='disclaimers'>"

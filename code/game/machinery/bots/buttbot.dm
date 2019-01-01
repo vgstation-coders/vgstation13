@@ -67,6 +67,7 @@ Here it is: Buttbot.
 
 		say(jointext(split_phrase," "), language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
 		fart()
+		score["buttbotfarts"]++
 
 
 
