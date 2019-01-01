@@ -186,9 +186,6 @@
 		span_s = "<i>"
 		span_e = "</i>"
 
-	if(shuttle && !shuttle.linked_port)
-		span_s = ""
-		span_e = ""
 
 	return "[span_s][name][span_e]"
 
@@ -224,12 +221,10 @@
 				dat += "Additional information has not been provided."
 		else if(!shuttle.linked_area)
 			dat = "<h2><font color='red'>UNABLE TO FIND [uppertext(shuttle.name)]</font></h2>"
-		else if(!shuttle.linked_port)
-			dat += {"<h2><font color='red'>This shuttle has no docking port specified.</font></h2><br>
-				<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a>"}
 		else if(shuttle.moving)
 			dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
 		else
+			dat += {"<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a>"}
 			if(shuttle.current_port)
 				dat += "Location: <b>[shuttle.current_port.areaname]</b><br>"
 			else
@@ -302,6 +297,7 @@
 	src.add_fingerprint(usr)
 	if(href_list["move"])
 		if(!shuttle)
+			to_chat(usr, "<span class = 'warning'>No shuttle detected.</span>")
 			return
 		if(!allowed(usr))
 			to_chat(usr, "<font color='red'>Access denied.</font>")
@@ -314,9 +310,11 @@
 		if(!allow_selecting_all && !(selected_port in shuttle.docking_ports))
 			//Check disks too
 			if(!disk || !disk.compactible(shuttle) || (disk.destination != selected_port))
+				to_chat(usr, "<span class = 'warning'>[!disk?"No disk detected":!disk.compactible(shuttle)?"Current disk not conpatable with current shuttle.":"Currently selected docking port not valid."]</span>")
 				return
 
 		if(selected_port.docked_with) //If used by another shuttle, don't try to move this shuttle
+			to_chat(usr, "<span class = 'warning'>Selected port is currently in use.</span>")
 			return
 
 		//Send a message to the shuttle to move
@@ -367,13 +365,15 @@
 			return
 		var/list/L = list()
 		for(var/datum/shuttle/S in shuttles)
-			var/name = S.name
-			switch(S.can_link_to_computer)
-				if(LINK_PASSWORD_ONLY)
-					name = "[name] (requires password)"
-				if(LINK_FORBIDDEN)
-					continue
-
+			var/name
+			if(S.can_link_to_computer == LINK_FORBIDDEN)
+				continue
+			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+				name = S.name
+			else if(S.password)
+				name = "[S.name] (requires password)"
+			else
+				continue
 			L += name
 			L[name] = S
 
@@ -383,7 +383,7 @@
 		if(L[choice] && istype(L[choice],/datum/shuttle))
 			var/datum/shuttle/S = L[choice]
 
-			if(S.can_link_to_computer == LINK_PASSWORD_ONLY)
+			if(S.password)
 				var/password_attempt = input(usr,"Please input [capitalize(S.name)]'s interface password:", "Shuttle control console", 00000) as num
 
 				if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
@@ -444,13 +444,15 @@
 
 		var/list/L = list()
 		for(var/datum/shuttle/S in shuttles)
-			var/name = S.name
-			switch(S.can_link_to_computer)
-				if(LINK_PASSWORD_ONLY)
-					name = "[name] (password)"
-				if(LINK_FORBIDDEN)
-					name = "[name] (private)"
-
+			var/name
+			if(S.can_link_to_computer == LINK_FORBIDDEN)
+				continue
+			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+				name = S.name
+			else if(S.password)
+				name = "[S.name] (requires password)"
+			else
+				continue
 			L += name
 			L[name] = S
 
