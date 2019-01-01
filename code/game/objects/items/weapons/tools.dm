@@ -490,7 +490,7 @@
 		if(E.welding_proof)
 			user.simple_message("<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
 			return
-		if(safety && eye_damaging && !(user.sdisabilities & BLIND))
+		if(safety < 2 && eye_damaging && !(user.sdisabilities & BLIND))
 			switch(safety)
 				if(1)
 					user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
