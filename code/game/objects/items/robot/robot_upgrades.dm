@@ -241,7 +241,7 @@
 	desc = "Used to give a engineering cyborg a magnetic gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
-	required_modules = list(/obj/item/weapon/robot_module/engineering)
+	required_modules = list(ENGINEERING_MODULE)
 	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
 
 //Service Stuff
