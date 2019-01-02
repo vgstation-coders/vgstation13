@@ -550,7 +550,7 @@ var/list/department_radio_keys = list(
 		watcher.show_message(rendered, 2)
 
 	if (said_last_words) // dying words
-		succumb(gibbed = 0, deathgasping = 1)
+		succumb_proc(gibbed = 0, deathgasping = 1)
 
 	returnToPool(speech)
 
