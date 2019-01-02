@@ -103,19 +103,12 @@
 	if(damage <= 0)
 		damage = 0
 
-	var/mob/living/carbon/human/H = src
-	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
-		heal_overall_damage(damage/2, damage/2)
-		Jitter(10)
-		Stun(5)
-		Knockdown(5)
-		//It would be cool if someone added an animation of some electrical shit going through the body
-	else
-		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
-			return 0
-		Jitter(20)
-		Stun(10)
-		Knockdown(10)
+
+	if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
+		return 0
+	Jitter(20)
+	Stun(10)
+	Knockdown(10)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \

@@ -985,7 +985,7 @@
 		eyes.damage += rand(3,4)
 		if(eyes.damage >= eyes.min_bruised_damage)
 			if(M.stat != 2)
-				if(eyes.robotic >= 1) //robot eyes bleeding might be a bit silly
+				if(eyes.robotic < 1) //robot eyes bleeding might be a bit silly
 					to_chat(M, "<span class='warning'>Your eyes start to bleed profusely!</span>")
 			if(prob(50) && (!istype(H) || !(H.species.flags & NO_PAIN)))
 				if(M.stat != 2)
@@ -994,9 +994,6 @@
 				M.eye_blurry += 10
 				M.Paralyse(1)
 				M.Knockdown(4)
-			if (eyes.damage >= eyes.min_broken_damage)
-				if(M.stat != 2)
-					to_chat(M, "<span class='warning'>You go blind!</span>")
 		var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
 		if(affecting.take_damage(7))
 			M:UpdateDamageIcon(1)

@@ -383,7 +383,8 @@
 	return 0
 
 /datum/organ/external/process()
-
+	if(!owner)
+		return
 	//Process wounds, doing healing etc. Only do this every few ticks to save processing power
 	if(owner.life_tick % wound_update_accuracy == 0)
 		update_wounds()

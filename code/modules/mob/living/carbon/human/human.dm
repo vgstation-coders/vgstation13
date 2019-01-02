@@ -103,6 +103,10 @@
 	h_style = "Bald"
 	..(new_loc, "Undead")
 
+/mob/living/carbon/human/android/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Android")
+
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
@@ -390,6 +394,24 @@
 
 	var/datum/organ/external/affected_organ = get_organ(check_zone(def_zone))
 	var/siemens_coeff = base_siemens_coeff * get_siemens_coefficient_organ(affected_organ)
+	var/damage = shock_damage * siemens_coeff
+	if(species && species.flags & ELECTRIC_HEAL)
+		heal_overall_damage(damage/2, damage/2)
+		Jitter(10)
+		Stun(5)
+		Knockdown(5)
+		if(get_cell())
+			var/obj/item/weapon/cell/C = get_cell()
+			C.give(damage/4)
+		visible_message( \
+		"<span class='warning'>[src] was shocked by the [source]!</span>", \
+		"<span class='danger'>You feel a powerful shock course through your body!</span>", \
+		"<span class='warning'>You hear a heavy electrical crack.</span>", \
+		"<span class='notice'>[src] starts raving!</span>", \
+		"<span class='notice'>You feel butterflies in your stomach!</span>", \
+		"<span class='warning'>You hear a policeman whistling!</span>"
+		)
+		return damage
 
 	return ..(shock_damage, source, siemens_coeff, def_zone)
 
