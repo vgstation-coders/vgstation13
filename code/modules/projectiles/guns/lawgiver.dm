@@ -32,7 +32,7 @@
 	voice_triggers = list("laser", "lethal", "beam")
 	firing_mode = LAWGIVER_LASER
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
-	projectile_type = /obj/item/projectile/beam/heavylaser
+	projectile_type = /obj/item/projectile/beam/heavylaser/lawgiver
 	fire_delay = 5
 	activation_message = "LASER."
 	ammo_per_shot = 20
