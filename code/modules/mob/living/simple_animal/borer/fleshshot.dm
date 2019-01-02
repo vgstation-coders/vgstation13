@@ -26,8 +26,6 @@
 	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
-	if(!parent_borer)
-		qdel(src)
 
 /obj/item/weapon/gun/hookshot/flesh/dropped()
 	..()

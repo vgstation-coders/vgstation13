@@ -241,6 +241,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		hologram_hud()
 	else if(isgrinch(mymob))
 		grinch_hud()
+	else if(isnecro(mymob))
+		necro_hud()
 
 	if(isliving(mymob))
 		var/obj/abstract/screen/using

@@ -262,3 +262,26 @@
 	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
 	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
+
+
+/datum/hud/proc/necro_hud()
+	mymob.healths = getFromPool(/obj/abstract/screen)
+	mymob.healths.icon = 'icons/mob/screen1_slime.dmi'
+	mymob.healths.icon_state = "slime_health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_construct_health
+
+	mymob.pullin = getFromPool(/obj/abstract/screen)
+	mymob.pullin.icon = 'icons/mob/screen1_slime.dmi'
+	mymob.pullin.icon_state = "pull0"
+	mymob.pullin.name = "pull"
+	mymob.pullin.screen_loc = ui_construct_pull
+
+	mymob.zone_sel = getFromPool(/obj/abstract/screen/zone_sel)
+	mymob.zone_sel.icon = 'icons/mob/screen1_slime.dmi'
+	mymob.zone_sel.overlays.len = 0
+	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+
+	mymob.client.reset_screen()
+
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel)

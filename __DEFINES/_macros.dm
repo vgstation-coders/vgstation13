@@ -64,7 +64,7 @@
 
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
-#define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
+#define isslimeadult(A) (istype(A, /mob/living/carbon/slime/adult) || istype(A, /mob/living/carbon/complex/necrophage))
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
 
@@ -115,6 +115,8 @@
 #define isnewplayer(A) istype(A, /mob/new_player)
 
 #define isovermind(A) istype(A, /mob/camera/blob)
+
+#define isnecro(A) istype(A, /mob/living/carbon/complex/necrophage)
 
 #define isorgan(A) istype(A, /datum/organ/external)
 
