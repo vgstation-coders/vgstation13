@@ -338,7 +338,8 @@
 	updateUsrDialog()
 	return TRUE
 
-/obj/machinery/smartfridge/wrenchAnchor()
+//Unwrenching a SmartFridge is especially longer to make it much easier to intervene
+/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/time_to_wrench = 10 SECONDS)
 
 	. = ..()
 	if(.)
