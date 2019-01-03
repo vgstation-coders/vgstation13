@@ -180,9 +180,7 @@
 	set hidden = 1
 	succumb_proc(0, 1)
 
-/mob/living/verb/succumb_proc(var/gibbed as num, var/deathgasping as num)
-	if (isnull(deathgasping)) // From typing it, hence manually calling the verb
-		deathgasping = 1
+/mob/living/proc/succumb_proc(var/gibbed = 0, var/deathgasping = 1)
 	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
 		src.apply_damage(maxHealth + src.health, OXY)
