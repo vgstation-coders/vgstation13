@@ -27,7 +27,7 @@
 	source = A
 
 /datum/fuzzy_ruling/distance/evaluate(var/datum/D)
-	return 1/get_dist(source,D)
+	return 1/max(get_dist(source,D), 1)
 
 /**
 	Evaluate_list
