@@ -231,6 +231,9 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/updatespeciescolor(var/mob/living/carbon/human/H) //Handles changing icobase for species that have multiple skin colors.
 	return
 
+/datum/species/proc/handle_life(var/mob/living/carbon/human/H) //Handles stuff unique to the species in life. The human has STAT != DEAD when this is called
+	return
+
 // Sent from /datum/lung_gas/metabolizable.
 /datum/species/proc/receiveGas(var/gas_id, var/ratio, var/moles, var/mob/living/carbon/human/H)
 	//testing("receiveGas: [gas_id] ? [breath_type] - ratio=[ratio], moles=[moles]")
@@ -844,7 +847,7 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN
+	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_PAIN
 	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	blood_color = "#004400"
@@ -1228,7 +1231,7 @@ var/list/has_died_as_golem = list()
 	name = "Android"
 	icobase = 'icons/mob/human_races/o_robot.dmi'
 	deform = 'icons/mob/human_races/robotic.dmi'
-	flags = IS_WHITELISTED|NO_BREATHE|NO_PAIN|NO_HUNGER|ELECTRIC_HEAL|PLASMA_IMMUNE|HYPOTHERMIA_IMMUNE
+	flags = IS_WHITELISTED|NO_BREATHE|NO_PAIN|NO_HUNGER|IS_ROBOT|ELECTRIC_HEAL|PLASMA_IMMUNE|HYPOTHERMIA_IMMUNE
 	anatomy_flags = NO_SKIN|NO_BLOOD
 	meat_type = null
 	chem_flags = NO_INJECT|NO_CRYO|NO_CLONE
@@ -1237,7 +1240,7 @@ var/list/has_died_as_golem = list()
 
 	has_organ = list(
 		"brain" = /datum/organ/internal/brain/mami,
-		"heart" = /datum/organ/internal/heart/cell,
+		"heart" = /datum/organ/internal/heart/cell/full,
 		"eyes" = /datum/organ/internal/eyes/adv_1,
 	)
 
@@ -1252,3 +1255,7 @@ var/list/has_died_as_golem = list()
 /datum/species/android/handle_post_spawn(var/mob/living/carbon/human/H)
 	for(var/datum/organ/external/E in H.organs)
 		E.status |= ORGAN_ROBOT
+
+/datum/species/android/handle_life(var/mob/living/carbon/human/H)
+	if(!H.get_cell() || !H.get_cell().use(0.5))
+		H.adjustOxyLoss(5)

@@ -26,6 +26,7 @@
 	var/obj/abstract/screen/fire = null
 	var/obj/abstract/screen/bodytemp = null
 	var/obj/abstract/screen/healths = null
+	var/obj/abstract/screen/cellstat = null
 	var/obj/abstract/screen/throw_icon = null
 	var/obj/abstract/screen/camera_icon = null
 	var/obj/abstract/screen/album_icon = null

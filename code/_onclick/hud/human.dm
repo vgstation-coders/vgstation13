@@ -368,6 +368,12 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
+	mymob.cellstat = getFromPool(/obj/abstract/screen)
+	mymob.cellstat.icon = 'icons/mob/screen1_cell.dmi'
+	mymob.cellstat.icon_state = null
+	mymob.cellstat.name = "cell status"
+	mymob.cellstat.screen_loc = ui_cell
+
 	mymob.nutrition_icon = getFromPool(/obj/abstract/screen)
 	mymob.nutrition_icon.icon = ui_style
 	mymob.nutrition_icon.icon_state = "nutrition0"
@@ -412,7 +418,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.cellstat, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
 	mymob.client.screen += src.adding + src.hotkeybuttons
 	inventory_shown = 0
 

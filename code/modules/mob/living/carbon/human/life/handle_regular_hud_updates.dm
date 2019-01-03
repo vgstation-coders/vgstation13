@@ -214,6 +214,22 @@
 				if(nutrition < STARVATION_MIN)
 					nutrition_icon.icon_state = "nutrition5"
 
+		if(cellstat)
+			if(get_cell())
+				var/obj/item/weapon/cell/C = get_cell()
+				var/percent = C.percent()
+				switch(percent)
+					if(50 to 100)
+						cellstat.icon_state = "cell3"
+					if(25 to 50)
+						cellstat.icon_state = "cell2"
+					if(1 to 25)
+						cellstat.icon_state = "cell1"
+					else
+						cellstat.icon_state = "cell0"
+			else
+				cellstat.icon_state = null
+
 		if(pressure)
 			pressure.icon_state = "pressure[pressure_alert]"
 

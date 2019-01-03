@@ -174,6 +174,11 @@
 		if(client)
 			client.screen -= healths
 		healths = null
+	if(cellstat)
+		returnToPool(cellstat)
+		if(client)
+			client.screen -= cellstat
+		cellstat = null
 	if(throw_icon)
 		returnToPool(throw_icon)
 		if(client)

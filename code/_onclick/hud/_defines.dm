@@ -90,6 +90,7 @@
 #define ui_temp "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]"
 #define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[15*PIXEL_MULTIPLIER]"
 #define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+1:[17*PIXEL_MULTIPLIER]"
+#define ui_cell "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-3:[9*PIXEL_MULTIPLIER]"
 									//borgs
 #define ui_borg_temp "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //same as humans
 #define ui_borg_pressure "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[15*PIXEL_MULTIPLIER]" //borg pressure-o-meter goes in the health slot

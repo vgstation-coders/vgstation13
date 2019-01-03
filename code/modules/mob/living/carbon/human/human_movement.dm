@@ -9,7 +9,7 @@
 
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(HYPERZINES))
+	if(reagents.has_any_reagents(HYPERZINES) && !(species && species.flags & IS_ROBOT))
 		return // Hyperzine ignores base slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
@@ -57,7 +57,8 @@
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
-	if(!reagents.has_any_reagents(HYPERZINES))
+
+	if(!reagents.has_any_reagents(HYPERZINES) && !(species && species.flags & IS_ROBOT))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
