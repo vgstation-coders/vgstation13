@@ -7,6 +7,7 @@
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
 	density = 1
+	opacity = 1
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 5
@@ -25,7 +26,7 @@
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE
 
 	light_color = LIGHT_COLOR_CYAN
 	power_change()
@@ -81,10 +82,15 @@
 
 	RefreshParts()
 
+	update_nearby_tiles()
+
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
 		returnToPool(piles[key])
 	piles.Cut()
+
+	update_nearby_tiles()
+
 	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
@@ -332,6 +338,13 @@
 	updateUsrDialog()
 	return TRUE
 
+//Unwrenching a SmartFridge is especially longer to make it much easier to intervene
+/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/time_to_wrench = 10 SECONDS)
+
+	. = ..()
+	if(.)
+		update_nearby_tiles()
+
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
@@ -488,6 +501,21 @@
 				display_miniicons = MINIICONS_ON
 
 	src.updateUsrDialog()
+
+/obj/machinery/smartfridge/proc/update_nearby_tiles(var/turf/T)
+    if(!SS_READY(SSair))
+        return 0
+
+    if(!T)
+        T = get_turf(src)
+    if(isturf(T))
+        SSair.mark_for_update(T)
+    return 1
+
+/obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(!istype(mover))
+		return !anchored
+	return ..()
 
 #undef MAX_SHELVES
 #undef MINIICONS_ON
