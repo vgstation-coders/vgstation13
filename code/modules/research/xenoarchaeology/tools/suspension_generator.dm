@@ -363,12 +363,13 @@
 	..()
 
 /obj/machinery/suspension_gen/AltClick(mob/user)
-	if(!user.incapacitated() && user.Adjacent(get_turf(src)))
-		if(!suspension_field)
-			if(cell.charge > 0)
-				if(anchored)
-					activate()
-				else
-					to_chat(usr, "<span class='warning'>You are unable to activate [src] until it is properly secured on the ground.</span>")
-		else
-			deactivate()
+	if(user.incapacitated() || !user.Adjacent(get_turf(src)) || locked)
+		return
+	if(!suspension_field)
+		if(cell.charge > 0)
+			if(anchored)
+				activate()
+			else
+				to_chat(usr, "<span class='warning'>You are unable to activate [src] until it is properly secured on the ground.</span>")
+	else
+		deactivate()
