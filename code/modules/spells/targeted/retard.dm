@@ -29,8 +29,6 @@
 			amt_dam_brain = 90 //90 brain damage
 			message = "<span class='danger'>Yu fell dumb dumb!1!!<span>" //Message changes when upgraded
 			hud_state = "wiz_retard1" //Icon changes when upgraded
-		else // No way anything is going to be done if it isn't 0 or 1.
-			return
 	return "You drastically improve your ability to make people retarded." //Messages the wizard sees when upgrading the spell
 
 /spell/targeted/retard/get_upgrade_info(upgrade_type, level) //So it shows up in the spellbook
