@@ -119,7 +119,7 @@
 /obj/machinery/suspension_gen/Topic(href, href_list)
 	if(..())
 		return
-	usr.set_machine(src)
+	user.set_machine(src)
 
 	if(href_list["toggle_field"])
 		if(!suspension_field)
@@ -127,26 +127,26 @@
 				if(anchored)
 					activate()
 				else
-					to_chat(usr, "<span class='warning'>You are unable to activate [src] until it is properly secured on the ground.</span>")
+					to_chat(user, "<span class='warning'>You are unable to activate [src] until it is properly secured on the ground.</span>")
 		else
 			deactivate()
 	if(href_list["select_field"])
 		field_type = href_list["select_field"]
 	else if(href_list["insertcard"])
-		var/obj/item/I = usr.get_active_hand()
+		var/obj/item/I = user.get_active_hand()
 		if (istype(I, /obj/item/weapon/card))
-			if(usr.drop_item(I, src))
+			if(user.drop_item(I, src))
 				auth_card = I
 				if(attempt_unlock(I))
-					to_chat(usr, "<span class='info'>You insert [I], the console flashes \'<i>Access granted.</a>\'</span>")
+					to_chat(user, "<span class='info'>You insert [I], the console flashes \'<i>Access granted.</a>\'</span>")
 				else
-					to_chat(usr, "<span class='warning'>You insert [I], the console flashes \'<i>Access denied.</a>\'</span>")
+					to_chat(user, "<span class='warning'>You insert [I], the console flashes \'<i>Access denied.</a>\'</span>")
 	else if(href_list["ejectcard"])
 		if(auth_card)
-			if(ishuman(usr))
-				auth_card.forceMove(usr.loc)
-				if(!usr.get_active_hand())
-					usr.put_in_hands(auth_card)
+			if(ishuman(user))
+				auth_card.forceMove(user.loc)
+				if(!user.get_active_hand())
+					user.put_in_hands(auth_card)
 				auth_card = null
 			else
 				auth_card.forceMove(loc)
@@ -154,8 +154,8 @@
 	else if(href_list["lock"])
 		locked = 1
 	else if(href_list["close"])
-		usr.unset_machine()
-		usr << browse(null, "window=suspension")
+		user.unset_machine()
+		user << browse(null, "window=suspension")
 
 	updateUsrDialog()
 
@@ -335,7 +335,7 @@
 	set category = "Object"
 
 	if(anchored)
-		to_chat(usr, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
+		to_chat(user, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
 	else
 		dir = turn(dir, -90)
 
@@ -345,7 +345,7 @@
 	set category = "Object"
 
 	if(anchored)
-		to_chat(usr, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
+		to_chat(user, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
 	else
 		dir = turn(dir, 90)
 
@@ -370,6 +370,6 @@
 			if(anchored)
 				activate()
 			else
-				to_chat(usr, "<span class='warning'>You are unable to activate [src] until it is properly secured on the ground.</span>")
+				to_chat(user, "<span class='warning'>You are unable to activate [src] until it is properly secured on the ground.</span>")
 	else
 		deactivate()
