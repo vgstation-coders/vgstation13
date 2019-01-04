@@ -161,3 +161,11 @@ proc/getScanDesign(var/obj/O)
 	..()
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+
+
+/obj/item/weapon/disk/design_disk/ammolathe
+	name = "Component Design Disk (Ammolathe)"
+
+/obj/item/weapon/disk/design_disk/ammolathe/New()
+	..()
+	blueprint = new/datum/design/ammolathe(src)

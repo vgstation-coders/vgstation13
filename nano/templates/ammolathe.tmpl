@@ -1,6 +1,6 @@
 <!-- 
 Title: Autolathe UI 
-Used In File(s): \code\game\machinery\autolathe.dm
+Used In File(s): \code\game\machinery\ammolathe.dm
 -->
 
 <style type='text/css'>
@@ -45,31 +45,34 @@ Used In File(s): \code\game\machinery\autolathe.dm
 		Categories
 	</div>
 	<div class="line">
-		{{:helper.link('Weapons', 	'gear',{'screen':11},(data.screen==11)?'linkOn':'', 'fixedLeftWide')}}
+		{{:helper.link('Weapons',	'gear',{'screen':010},(data.screen==010)?'linkOn':'', 'fixedLeftWide')}}
 	</div>
 	<div class="line">
-		{{:helper.link('Ammunition',	 'gear',{'screen':12},(data.screen==32)?'linkOn':'', 'fixedLeftWide')}}
+		{{:helper.link('Single Ammunition',	'gear',{'screen':011},(data.screen==011)?'linkOn':'', 'fixedLeftWide')}}
 	</div>
 	<div class="line">
-		{{:helper.link('Magazines',	 'gear',{'screen':21},(data.screen==41)?'linkOn':'', 'fixedLeftWide')}}
+		{{:helper.link('Box Ammunition',	'gear',{'screen':100},(data.screen==100)?'linkOn':'', 'fixedLeftWide')}}
 	</div>
 	<div class="line">
-		{{:helper.link('Misc. Items',	 'gear',{'screen':22},(data.screen==42)?'linkOn':'', 'fixedLeftWide')}}
+		{{:helper.link('Magazines',	'gear',{'screen':101},(data.screen==101)?'linkOn':'', 'fixedLeftWide')}}
+	</div>
+	<div class="line">
+		{{:helper.link('Misc. Items',	'gear',{'screen':110},(data.screen==110)?'linkOn':'', 'fixedLeftWide')}}
 	</div>
 	{{if data.hacked == 01}}
 	<div class="line">
-		{{:helper.link('CONTRABAND',	 'gear',{'screen':51},(data.screen==51)?'linkOn':'', 'fixedLeftWide')}}
+		{{:helper.link('CONTRABAND',	'gear',{'screen':111},(data.screen==111)?'linkOn':'', 'fixedLeftWide')}}
 	</div>
 	{{/if}}
 	<div class="itemLabel">
 		Other
 	</div>
 	<div class="line">
-		{{:helper.link('Material Storage', 'gear',{'screen':01},(data.screen==01)?'linkOn':'', 'fixedLeftWide')}}
+		{{:helper.link('Material Storage', 'gear',{'screen':001},(data.screen==001)?'linkOn':'', 'fixedLeftWide')}}
 	</div>
 </div>
 
-{{if data.screen == 01}}
+{{if data.screen == 001}}
 	<div class="item">
 		<div class="itemLabel">
 			Material Storage
@@ -94,7 +97,7 @@ Used In File(s): \code\game\machinery\autolathe.dm
 	</div>
 {{/if}}
 
-{{if data.screen == 11}}
+{{if data.screen == 010}}
 	<div class="item">
 		<div class="itemLabel">
 			Weapons
@@ -119,15 +122,15 @@ Used In File(s): \code\game\machinery\autolathe.dm
 	</div>
 {{/if}}
 
-{{if data.screen == 12}}
+{{if data.screen == 011}}
 	<div class="item">
 		<div class="itemLabel">
-			Ammunition
+			Single Ammunition
 		</div>
 		<div class="itemContentWide" style="width:100%;">
 			<div class="statusDisplay">
 				<div class="line">
-					{{for data.parts.Ammunition}}
+					{{for data.parts.Single_ammunition}}
 						<div class="line">
 							<div class="statusValue">
 								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
@@ -144,7 +147,32 @@ Used In File(s): \code\game\machinery\autolathe.dm
 	</div>
 {{/if}}
 
-{{if data.screen == 21}}
+{{if data.screen == 100}}
+	<div class="item">
+		<div class="itemLabel">
+			Box Ammunition
+		</div>
+		<div class="itemContentWide" style="width:100%;">
+			<div class="statusDisplay">
+				<div class="line">
+					{{for data.parts.Box_ammunition}}
+						<div class="line">
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+								{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
+								{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+							</div>
+						</div>
+					{{empty}}
+						<i>No parts in memory</i>
+					{{/for}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/if}}
+
+{{if data.screen == 101}}
 	<div class="item">
 		<div class="itemLabel">
 			Magazines
@@ -169,7 +197,7 @@ Used In File(s): \code\game\machinery\autolathe.dm
 	</div>
 {{/if}}
 
-{{if data.screen == 22}}
+{{if data.screen == 110}}
 	<div class="item">
 		<div class="itemLabel">
 			Miscellaneous Items
@@ -194,7 +222,7 @@ Used In File(s): \code\game\machinery\autolathe.dm
 	</div>
 {{/if}}
 
-{{if data.screen == 51}}
+{{if data.screen == 111}}
 	<div class="item">
 		<div class="itemLabel">
 			CONTRABAND

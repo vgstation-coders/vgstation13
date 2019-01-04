@@ -260,14 +260,23 @@
 
 //Ammolathe designs. They lack research values so they can't be researched.
 //Weapons
+/obj/item/weapon/gun/projectile/sec
+/datum/design/glock
+	name = "NT Glock"
+	desc = "A NT Glock. It uses .380AUTO rounds."
+	id = "glock"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000)
+	build_path = /obj/item/weapon/gun/projectile/sec/lockbox
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 /datum/design/vector
 	name = "Vector"
 	desc = "A gun."
 	id = "vector"
-	//req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 3)
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
-	//category = "Weapons"
 	build_path = /obj/item/weapon/gun/projectile/automatic/vector/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
@@ -300,23 +309,78 @@
 	build_path = /obj/item/ammo_storage/box/b380auto/rubber
 
 //Magazines
+//Normal 9mm and 12mm already have a designs above.
+/datum/design/magazine_9mm_beretta
+	name = "Magazine (9mm beretta)"
+	desc = "A magazine designed for the Beretta 92FS."
+	id = "magazine_9mm_beretta"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/beretta/empty
+
 /datum/design/magazine_357
-	name = "automag magazine (.357)"
+	name = "Automag magazine (.357)"
 	desc = "A magazine designed for the Automag VI handcannon."
 	id = "magazine_357"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)
-	//category = "Misc_Other"
 	build_path = /obj/item/ammo_storage/magazine/a357/empty
 
 /datum/design/magazine_380
-	name = "pistol magazine (.380AUTO)"
+	name = "Pistol magazine (.380AUTO)"
 	desc = "A magazine designed for common .380AUTO pistols."
 	id = "magazine_380"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)
-	//category = "Misc_Other"
 	build_path = /obj/item/ammo_storage/magazine/m380auto/empty
+
+/datum/design/magazine_c45
+	name = "Pistol magazine (.45)"
+	desc = "A magazine designed for common .45 pistols."
+	id = "magazine_45"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/c45/empty
+
+/datum/design/magazine_45_uzi
+	name = "Magazine (.45 uzi)"
+	desc = "A magazine designed for .45 uzis."
+	id = "magazine_45_uzi"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/uzi45/empty
+
+/datum/design/magazine_50
+	name = "Magazine (.50)"
+	desc = "A magazine designed for .50."
+	id = "magazine_50"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/a50/empty
+
+/datum/design/magazine_75
+	name = "Magazine (.75)"
+	desc = "A magazine designed for .75."
+	id = "magazine_75"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/a75/empty
+
+/datum/design/magazine_a762
+	name = "Magazine (a762)"
+	desc = "A magazine designed for a762."
+	id = "magazine_a762"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/a762/empty
+
+/datum/design/magazine_12ga
+	name = "NT-12 drum magazine (12ga)"
+	desc = "A box magazine designed for the NT-12."
+	id = "magazine_12ga"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/a12ga/empty
 
 //Misc
 /datum/design/vectorreceiver
@@ -325,15 +389,29 @@
 	id = "vectorreceiver"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
-	//category = "Misc_Other"
 	build_path = /obj/item/weapon/vectorreceiver
 
 //Hidden
-/datum/design/skub
-	name = "Skub"
-	desc = "A controversial item."
-	id = "vectorreceiver"
+/datum/design/earmuffs
+	name = "Earmuffs"
+	desc = "Protects your hearing from both loud and quiet noises."
+	id = "earmuffs"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
-	//category = "Hidden_Items"
-	build_path = /obj/item/toy/gasha/skub
+	materials = list(MAT_IRON = 500, MAT_GLASS = 1500)
+	build_path = /obj/item/clothing/ears/earmuffs
+
+/datum/design/muzzle
+	name = "Muzzle"
+	desc = "To stop that awful noise."
+	id = "muzzle"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 1500, MAT_GLASS = 500)
+	build_path = /obj/item/clothing/mask/muzzle
+
+/datum/design/blindfold
+	name = "Blindfold"
+	desc = "Covers the eyes, preventing sight."
+	id = "blindfold"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500, MAT_GLASS = 1500)
+	build_path = /obj/item/clothing/glasses/sunglasses/blindfold
