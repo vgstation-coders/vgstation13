@@ -57,6 +57,11 @@
 	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can deathgasp
 
 /datum/emote/living/deathgasp/run_emote(mob/living/user, params)
+	if(M_ELVIS in user.mutations)
+		user.emote("fart")
+		message = "has left the building..."
+	if(!issilent(user) && (M_HARDCORE in user.mutations))
+		message = "whispers with their final breath, <i>'i told u i was hardcore..'</i>"
 	. = ..()
 	if(. && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
