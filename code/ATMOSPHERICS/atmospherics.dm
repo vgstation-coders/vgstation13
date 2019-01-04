@@ -60,8 +60,8 @@ Pipelines + Other Objects -> Pipe network
 
 /obj/machinery/atmospherics/Destroy()
 	for(var/mob/living/M in src) //ventcrawling is serious business
-		M.remove_ventcrawl()
 		M.forceMove(src.loc)
+		M.remove_ventcrawl()
 	if(pipe_image)
 		for(var/mob/living/M in player_list)
 			if(M.client)
@@ -360,8 +360,8 @@ Pipelines + Other Objects -> Pipe network
 			target_move.shake(2, 3)
 			spawn(0)
 				if(do_after(user, target_move, 10))
-					user.remove_ventcrawl()
 					user.forceMove(target_move.loc) //handles entering and so on
+					user.remove_ventcrawl()
 					user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
 		else if(target_move.can_crawl_through())
 			if(target_move.return_network(target_move) != return_network(src))
@@ -377,8 +377,8 @@ Pipelines + Other Objects -> Pipe network
 				playsound(src, 'sound/machines/ventcrawl.ogg', 50, 1, -3)
 	else
 		if((direction & initialize_directions) || is_type_in_list(src, ventcrawl_machinery) && src.can_crawl_through()) //if we move in a way the pipe can connect, but doesn't - or we're in a vent
-			user.remove_ventcrawl()
 			user.forceMove(src.loc, glide_size_override = DELAY2GLIDESIZE(1))
+			user.remove_ventcrawl()
 			user.visible_message("You hear something squeezing through the pipes.", "You climb out the ventilation system.")
 	user.canmove = 0
 	spawn(1)

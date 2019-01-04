@@ -192,7 +192,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 							forceMove(vent_found)
 							add_ventcrawl(vent_found)
 							diary << "[src] is ventcrawling."
-
+							return 1
 						else
 							to_chat(src, "<span class='danger'>This vent is not connected to anything.</span>")
 					else
@@ -203,6 +203,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 				to_chat(src, "<span class='warning'>You can't vent crawl while you're restrained!</span>")
 		else
 			to_chat(src, "<span class='danger'>You must be conscious to do this!</span>")
+	return 0
 
 
 /mob/living/proc/add_ventcrawl(obj/machinery/atmospherics/starting_machine)
