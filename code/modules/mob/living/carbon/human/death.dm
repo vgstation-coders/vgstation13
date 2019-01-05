@@ -102,7 +102,7 @@
 		if(H.mind)
 			H.mind.kills += "[name] ([ckey])"
 
-	if(!gibbed && !deathgasping)
+	if(!gibbed && deathgasping)
 		emote("deathgasp", message = TRUE) //Let the world KNOW WE ARE DEAD ; TRUE means that deathgasping won't call death() again.
 
 		update_canmove()
