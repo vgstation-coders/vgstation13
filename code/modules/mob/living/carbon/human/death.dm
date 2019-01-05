@@ -73,7 +73,7 @@
 
 	obj_overlays = null
 
-/mob/living/carbon/human/death(gibbed, deathgasping)
+/mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)
 		return
 	if(healths)
@@ -102,9 +102,7 @@
 		if(H.mind)
 			H.mind.kills += "[name] ([ckey])"
 
-	if(!gibbed && deathgasping)
-		emote("deathgasp", message = TRUE) //Let the world KNOW WE ARE DEAD ; TRUE means that deathgasping won't call death() again.
-
+	if(!gibbed)
 		update_canmove()
 	stat = DEAD
 	tod = worldtime2text() //Weasellos time of death patch
