@@ -2,7 +2,7 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits
 	var/generated = FALSE
-	var/starting_delay = 10 SECONDS //Audio will start playing this many seconds before server shutdown. Takes maybe 2 seconds to start playing while it buffers!
+	var/starting_delay = 15 SECONDS //Audio will start playing this many seconds before server shutdown. Takes maybe 2 seconds to start playing while it buffers!
 	var/scroll_speed = 20 //Lower is faster.
 	var/splash_time = 2000 //Time in miliseconds that each head of staff/star/production staff etc splash screen gets before displaying the next one.
 
@@ -48,7 +48,7 @@ var/global/datum/credits/end_credits = new
 				C << output(list2params(list(audio_link)), "[end_credits.control]:setAudio")
 
 
-/datum/credits/proc/play_to_clients() //This rolls the credits proper.
+/datum/credits/proc/play_to_clients()
 	for(var/client/C in clients)
 		C << output("", "[end_credits.control]:startCredits") //Execute the startCredits() function in credits.html with no parameters.
 
