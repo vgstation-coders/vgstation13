@@ -108,6 +108,10 @@
 			qdel(A)
 		orient_object = null
 
+	if (ticker.mode && istype(ticker.mode, /datum/gamemode/dynamic))
+		var/datum/gamemode/dynamic/D = ticker.mode
+		for (var/datum/dynamic_ruleset/DR in D.midround_rules)
+			DR.applicants -= src
 	..()
 
 /mob/projectile_check()

@@ -175,3 +175,7 @@
 
 #define PROB_PROTECTED_REGULAR 50
 #define PROB_PROTECTED_RARE    80
+
+// -- Dynamic rulesets
+
+#define HUMAN_ANTAG 1
