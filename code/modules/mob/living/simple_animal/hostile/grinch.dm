@@ -7,10 +7,24 @@
 	icon_dead = "grinch_dead"
 	held_items = list(null, null)
 	mob_bump_flag = PASSTABLE // Pass over everything
+	mutations = list(M_CLUMSY)
 
 	// -- Much more health than a regular gremlin.
-	health = 75
-	maxHealth = 75
+	health = 125
+	maxHealth = 125
+
+	// -- They're not affected by overpressured atmos, but need O2 to survive
+
+	min_oxy = 25
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 25
+	min_co2 = 0
+	max_co2 = 25
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 223	//Below -50 Degrees Celcius
+	maxbodytemp = 323	//Above 50 Degrees Celcius
 
 	var/list/obj/abstract/Overlays/obj_overlays[TOTAL_LAYERS]
 
@@ -176,7 +190,23 @@
 
 /mob/living/simple_animal/hostile/gremlin/grinch/Life()
 	..()
-	regular_hud_updates()
+	if (healths)
+		switch(health)
+			if(100 to INFINITY)
+				healths.icon_state = "health0"
+			if(80 to 100)
+				healths.icon_state = "health1"
+			if(60 to 80)
+				healths.icon_state = "health2"
+			if(40 to 60)
+				healths.icon_state = "health3"
+			if(20 to 40)
+				healths.icon_state = "health4"
+			if(0 to 20)
+				healths.icon_state = "health5"
+			else
+				healths.icon_state = "health6"
+
 
 /mob/living/simple_animal/hostile/gremlin/grinch/canEnterVentWith()
 	var/list/allowed = ..()
