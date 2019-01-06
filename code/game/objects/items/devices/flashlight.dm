@@ -311,11 +311,11 @@
 		charge_current -= 1 //Reduce the charge counter by 1
 		if(ismob(A)) //If whatever you attack is a person
 			var/mob/M = A //Makes A count as M
-			log_attack("<font color='red'>[user.name] ([user.ckey]) has used an EMP flashlight on [M.name] ([M.ckey])!</font>") //Admin logs when checking someone's attack logs
+			log_attack("<span class='bad'>[user.name] ([user.ckey]) has used an EMP flashlight on [M.name] ([M.ckey])!</span>") //Admin logs when checking someone's attack logs
 			M.visible_message("<span class='danger'>[user] has blasted [A] with a pulse! </span>", \
 			"<span class='userdanger'>You have been blasted with a pulse!</span>") //What other people see when someone blasts someone with EMP and what you see if someone blasts you, respectively
 		else //If whatever you attack is not a person
-			log_attack("<font color='red'>[user.name] ([user.ckey]) has used an EMP flashlight on [A.name]!</font>") //Admin logs show what item you used the EMP flashlight on
+			log_attack("<span class='bad'>[user.name] ([user.ckey]) has used an EMP flashlight on [A.name]!</span>") //Admin logs show what item you used the EMP flashlight on
 			A.visible_message("<span class='danger'>[user] has blasted [A]!</span>") //What people see when someone EMPs an object
 		to_chat(user, "The EMP flashlight has [charge_current] charges left.") //Shows the user how many charges are left on the EMP.
 		A.emp_act(2) //Light EMP pulse
@@ -325,5 +325,5 @@
 /obj/item/device/flashlight/emp/examine(mob/user) //What happens if you examine
 	..() //Examine is normal except for the to_chat appearing afterwards
 	if(is_holder_of(user, src)) //If you hold it
-		to_chat(user, "Charges: <font color='red'>[charge_current]/4</font>") //Shows you in red how many charges are left out of how many
-		to_chat(user, "Timer: <font color='green'>[charge_seconds]/30</font>") //Shows you in green the timer until 30 seconds
+		to_chat(user, "Charges: <span class='bad'>[charge_current]/4</span>") //Shows you in red how many charges are left out of how many
+		to_chat(user, "Timer: <span class='good'>[charge_seconds]/30</span>") //Shows you in green the timer until 30 seconds
