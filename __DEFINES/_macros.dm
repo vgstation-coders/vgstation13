@@ -58,6 +58,8 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
+
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
@@ -85,6 +87,8 @@
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
+
+#define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
