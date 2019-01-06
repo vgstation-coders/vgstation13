@@ -4,19 +4,14 @@
 	icon_state = "ammolathe"
 	icon_state_open = "ammolathe_t"
 	nano_file = "ammolathe.tmpl"
+
 	default_mat_overlays = TRUE
-
-	start_end_anims = 1
-
-	build_time = 0.5
-
-	allowed_materials = 0
+	//build_time = 0.5
+	allowed_materials = 0 //A 0 or FALSE Allows all materials.
+	light_color = LIGHT_COLOR_RED
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK //| EMAGGABLE
-
 	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES
-
-	light_color = LIGHT_COLOR_RED
 
 	one_part_set_only = 0
 	part_sets = list(
@@ -57,8 +52,7 @@
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/kitchen/utensil/knife/tactical(), \
-		new /obj/item/clothing/ears/earmuffs(), \
-		new /obj/item/clothing/mask/muzzle(), \
-		new /obj/item/clothing/glasses/sunglasses/blindfold(), \
-		)
+		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
+		new /obj/item/weapon/reagent_containers/syringe(), \
+		) //Syringes and vials are technically an ammo.
 	)

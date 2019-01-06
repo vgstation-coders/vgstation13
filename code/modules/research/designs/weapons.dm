@@ -392,26 +392,3 @@
 	build_path = /obj/item/weapon/vectorreceiver
 
 //Hidden
-/datum/design/earmuffs
-	name = "Earmuffs"
-	desc = "Protects your hearing from both loud and quiet noises."
-	id = "earmuffs"
-	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 1500)
-	build_path = /obj/item/clothing/ears/earmuffs
-
-/datum/design/muzzle
-	name = "Muzzle"
-	desc = "To stop that awful noise."
-	id = "muzzle"
-	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 1500, MAT_GLASS = 500)
-	build_path = /obj/item/clothing/mask/muzzle
-
-/datum/design/blindfold
-	name = "Blindfold"
-	desc = "Covers the eyes, preventing sight."
-	id = "blindfold"
-	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 1500)
-	build_path = /obj/item/clothing/glasses/sunglasses/blindfold
