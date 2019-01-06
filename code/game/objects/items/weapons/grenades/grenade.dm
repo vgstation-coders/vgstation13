@@ -103,12 +103,12 @@
 		if(active)
 			to_chat(user, "<span class = 'warning'>It's already primed!</span>")
 			return
-		var/new_time = input(user, "What would you like the timer to be set to?","Time",det_time) as num
-		if(new_time <= 3 SECONDS)
+		var/new_time = input(user, "What would you like the timer to be set to, in seconds?","Time",det_time/10) as num
+		if(new_time <= 3)
 			to_chat(user, "<span class = 'warning'>\The [src] beeps. The given time was too low.</span>")
 			return
-		if(!user.is_holding_item(src))
-			to_chat(user, "<span class = 'warning'>You fumble while trying to modify \the [src]. It is best to hold it in hand while performing this operation.</span>")
+		if(!Adjacent(user, MAX_ITEM_DEPTH))
+			to_chat(user, "<span class = 'warning'>You fumble while trying to modify \the [src]. It is best to keep the grenade in proximity when modifying it..</span>")
 			return
 		det_time = new_time SECONDS
 		to_chat(user, "<span class = 'notice'>The detonation time is now [det_time/10] seconds.</span>")
