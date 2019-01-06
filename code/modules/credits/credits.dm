@@ -2,7 +2,7 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits
 	var/generated = FALSE
-	var/starting_delay = 15 SECONDS //Audio will start playing this many seconds before server shutdown. Takes maybe 2 seconds to start playing while it buffers!
+	var/starting_delay = 12 SECONDS //Audio will start playing this many seconds before server shutdown. Takes maybe 2 seconds to start playing while it buffers!
 	var/scroll_speed = 20 //Lower is faster.
 	var/splash_time = 2000 //Time in miliseconds that each head of staff/star/production staff etc splash screen gets before displaying the next one.
 
@@ -41,16 +41,16 @@ var/global/datum/credits/end_credits = new
 
 	for(var/client/C in clients)
 		C.verbs += /client/proc/clear_credits
-		C << output(end_credits.file, end_credits.control)
+		C << output(file, control)
 		spawn(1 SECONDS) //@todo find a better way to do this
-			C << output(list2params(js_args), "[end_credits.control]:setupCredits")
+			C << output(list2params(js_args), "[control]:setupCredits")
 			if(playaudio)
-				C << output(list2params(list(audio_link)), "[end_credits.control]:setAudio")
+				C << output(list2params(list(audio_link)), "[control]:setAudio")
 
 
 /datum/credits/proc/play_to_clients()
 	for(var/client/C in clients)
-		C << output("", "[end_credits.control]:startCredits") //Execute the startCredits() function in credits.html with no parameters.
+		C << output("", "[control]:startCredits") //Execute the startCredits() function in credits.html with no parameters.
 
 /client/proc/clear_credits()
 	set name = "Skip Credits"
@@ -103,7 +103,7 @@ var/global/datum/credits/end_credits = new
 		producers += "<h1>Starring<br>[thebigstar(star)]</h1><br>"
 
 	producers_string = ""
-	for(var/producer in end_credits.producers)
+	for(var/producer in producers)
 		producers_string += "[producer]%n" //%n being an arbitrary "new producer" char we use to split this string back in the javascript
 
 /datum/credits/proc/generate_caststring()

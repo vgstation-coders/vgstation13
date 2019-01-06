@@ -65,19 +65,33 @@
 			<td class="letterboxer"></td>
 			<td id="splash">
 				IF YOU CAN SEE THIS, TELL A CODER WHAT HAPPENED!
+				HELPFUL DETAILS INCLUDE:
+				WAS THE ROUNDEND DELAYED?
+				WAS THE SERVER MANUALLY REBOOTED?
+				DID YOU PLAY MORE THAN ONE ROUND IN A ROW WITHOUT CLOSING THE GAME?
+				DID CREDITS FAIL TO DISPLAY FOR YOU LAST ROUND?
+				IS YOUR CONNECTION SLOW/WERE YOU TORRENTING DOLPHIN PORN JUST NOW?
+				DID THIS TEXT DISPLAY FOR ANYONE ELSE?
 			</td>
 			<td class="letterboxer"></td>
 		</tr>
 		<tr>
 			<td class="letterboxer"></td>
 			<td id="marquee">
-				IF YOU CAN SEE THIS, REALLY TELL A CODER WHAT HAPPENED!
+				IF YOU CAN SEE THIS, THE TEXT HAS STARTED SCROLLING,
+				SO REALLY TELL A CODER WHAT HAPPENED!
 			</td>
 			<td class="letterboxer"></td>
 		</tr>
 	</table>
 
 	<script type="text/javascript">
+
+	//Runs a route within byond, client or server side. Consider this "ehjax" for byond.
+	function runByond(uri) {
+		window.location = uri;
+	}
+
 	var producers = [];
 	var lastinterval; //just for the auto-suicide failsafe
 	var scrollSpeed = 25; //miliseconds between each pixel we go up
@@ -112,7 +126,7 @@
 		if(started == 1 || initialized == 0)
 			return;
 		started = 1;
-		window.location = 'byond://winset?id=mapwindow.credits;is-visible=true';
+		runByond('byond://winset?id=mapwindow.credits;is-visible=true');
 		splashLoop(producers, 0, splashTime);
 		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
 	}
@@ -142,7 +156,7 @@
 
 	function commitSuicide(){
 		document.documentElement.innerHTML = '';
-		window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
+		runByond('byond://winset?id=mapwindow.credits;is-visible=false');
 	};
 	</script>
 </body>
