@@ -320,7 +320,7 @@
 	else //If you are in proximity but there are no charges
 		to_chat (user, "<span class='warning'>\The [src] must take time to recharge.</span>") //Wait for the EMP flashlight to recharge
 
-/obj/item/device/flashlight/emp/examine(mob/user, proximity) //What happens if you examine
+/obj/item/device/flashlight/emp/examine(mob/user) //What happens if you examine
 	..() //Examine is normal except for the to_chat appearing afterwards
 	if(is_holder_of(user, src)) //If you hold it
 		to_chat(user, "Charges: <font color='red'>[charge_current]/4</font>") //Shows you in red how many charges are left out of how many
