@@ -278,6 +278,7 @@
 	var/charge_current = 4 //The amount of charges it spawns with
 	var/charge_tick = 0 //In our case, it is used as a 'timer' until you gain a new charge.
 	var/processing = FALSE
+	var/charge_seconds = 0 //For the timer
 
 /obj/item/device/flashlight/emp/New() //If it exists, it will be processed (constantly updated). Taken from advanced energy gun code
 	..() //The "New" process does everything normally except...
@@ -292,6 +293,7 @@
 		processing = FALSE
 		processing_objects.Remove(src)
 	charge_tick++ //Post-increment charge_tick. It increases by 1 every time it is processed.
+	charge_seconds = (charge_tick*2) //For timer
 	if(charge_tick < 15) //15 ticks required until you gain a flashlight charge
 		return 0 //If it's not 15 ticks then cancel the process until it is called again next tick
 	charge_tick = 0 //If it's 15 ticks reset to 0
@@ -324,4 +326,4 @@
 	..() //Examine is normal except for the to_chat appearing afterwards
 	if(is_holder_of(user, src)) //If you hold it
 		to_chat(user, "Charges: <font color='red'>[charge_current]/4</font>") //Shows you in red how many charges are left out of how many
-		to_chat(user, "Timer: <font color='green'>[charge_tick]/15</font>") //Shows you in green the timer until 15
+		to_chat(user, "Timer: <font color='green'>[charge_seconds]/30</font>") //Shows you in green the timer until 30 seconds
