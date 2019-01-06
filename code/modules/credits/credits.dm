@@ -109,8 +109,8 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/generate_caststring()
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"
 	cast_string += "<table class='crewtable'>"
-	for(var/mob/living/carbon/human/H in living_mob_list|dead_mob_list)
-		if(H.iscorpse || (H.timeofdeath && H.timeofdeath < 5 MINUTES)) //don't mention these losers (prespawned corpses mostly)
+	for(var/mob/living/carbon/human/H in mob_list)
+		if(!H.key || H.iscorpse)
 			continue
 		if(!star || H.talkcount > star.talkcount)
 			star = H
@@ -121,7 +121,7 @@ var/global/datum/credits/end_credits = new
 	cast_string += "<div class='disclaimers'>"
 	var/list/corpses = list()
 	for(var/mob/living/carbon/human/H in dead_mob_list)
-		if(H.iscorpse || (H.timeofdeath && H.timeofdeath < 5 MINUTES)) //no prespawned corpses
+		if(!H.key || H.iscorpse)
 			continue
 		else if(H.real_name)
 			corpses += H.real_name
@@ -132,14 +132,15 @@ var/global/datum/credits/end_credits = new
 
 /proc/gender_credits(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)
-		return "<tr><td class='actorname'>[uppertext(H.mind.key)]</td><td class='actorsegue'> as </td><td class='actorrole'>[H.real_name], [H.get_assignment()]</td></tr>"
+		var/assignment = H.get_assignment(if_no_id = "", if_no_job = "")
+		return "<tr><td class='actorname'>[uppertext(H.mind.key)]</td><td class='actorsegue'> as </td><td class='actorrole'>[H.real_name][assignment == "" ? "" : ", [assignment]"]</td></tr>"
 	else
 		var/t_him = "Them"
 		if(H.gender == MALE)
 			t_him = "Him"
 		else if(H.gender == FEMALE)
 			t_him = "Her"
-		return "<tr><td class='actorname'>[uppertext(H.real_name)]</td><td class='actorsegue'> as </td><td class='actorrole'>[t_him]self</td></tr>"
+		return "<tr><td class='actorname'>[uppertext(H.real_name)]</td><td class='actorsegue'> as </td><td class='actorrole'>[t_him == "Them" ? "Themselves" : "[t_him]self"]</td></tr>"
 
 /proc/thebigstar(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)
