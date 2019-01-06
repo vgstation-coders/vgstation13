@@ -291,7 +291,7 @@
 		return FALSE
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
-	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 15th of January
 	return accepted
 
 /datum/dynamic_ruleset/midround/grinch/execute()
