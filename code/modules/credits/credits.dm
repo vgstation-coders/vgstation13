@@ -2,13 +2,12 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits
 	var/generated = FALSE
-	var/starting_delay = 10 SECONDS
-	var/post_delay = 5 SECONDS //time that the server stays up after the credits start rolling (to prevent serb shutting down before all the clients receive the credits, or that's the idea at least)
+	var/starting_delay = 10 SECONDS //Audio will start playing this many seconds before server shutdown. Takes maybe 2 seconds to start playing while it buffers!
 	var/scroll_speed = 20 //Lower is faster.
 	var/splash_time = 2000 //Time in miliseconds that each head of staff/star/production staff etc splash screen gets before displaying the next one.
 
-	var/song_link = "http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3"
-	var/control = "mapwindow.credits"
+	var/audio_link = "http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3" //@todo bug pomf to upload this elsewhere
+	var/control = "mapwindow.credits" //if updating this, update in credits.html as well
 	var/file = 'code/modules/credits/credits.html'
 
 	var/director = "Pomf Chicken Productions"
@@ -30,7 +29,7 @@ var/global/datum/credits/end_credits = new
 	draft_episode_names() //only selects the possibilities, doesn't pick one yet
 	generated = TRUE
 
-/datum/credits/proc/rollem()
+/datum/credits/proc/prepare_assets(var/playaudio = TRUE)
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
 	if(episode_name == "") //admin might've already set one
 		pick_name()
@@ -38,29 +37,27 @@ var/global/datum/credits/end_credits = new
 
 	var/scrollytext = episode_string + cast_string + disclaimers_string
 
-	var/list/js_args = list(scrollytext, producers_string, scroll_speed, splash_time, starting_delay, song_link) //arguments for the makeCredits function back in the javascript
+	var/list/js_args = list(scrollytext, producers_string, scroll_speed, splash_time) //arguments for the makeCredits function back in the javascript
 
-	log_debug("Sending credit info to all clients...")
 	for(var/client/C in clients)
-		C.show_credits(js_args)
+		C.verbs += /client/proc/clear_credits
+		C << output(end_credits.file, end_credits.control)
+		spawn(1 SECONDS) //@todo find a better way to do this
+			C << output(list2params(js_args), "[end_credits.control]:setupCredits")
+			if(playaudio)
+				C << output(list2params(list(audio_link)), "[end_credits.control]:setAudio")
 
-/client/proc/show_credits(var/list/js_args)
-	set waitfor = FALSE
 
- 	verbs += /client/proc/clear_credits
-
-	src << output(end_credits.file, end_credits.control)
-	log_debug("[src] received credits info correctly.")
-	sleep(end_credits.starting_delay)
-	src << output(list2params(js_args), "[end_credits.control]:makeCredits")
-	winset(src, end_credits.control, "is-visible=true")
-	log_debug("[src] is showing credits correctly.")
+/datum/credits/proc/play_to_clients() //This rolls the credits proper.
+	for(var/client/C in clients)
+		C << output("", "[end_credits.control]:startCredits") //Execute the startCredits() function in credits.html with no parameters.
 
 /client/proc/clear_credits()
 	set name = "Skip Credits"
 	set category = "OOC"
 	verbs -= /client/proc/clear_credits
-	src << output(null, "[end_credits.control]:stopItNow")
+	src << output(null, end_credits.control)
+	winset(src, end_credits.control, "is-visible=false")
 
 
 
@@ -70,22 +67,6 @@ var/global/datum/credits/end_credits = new
 	for(var/datum/episode_name/N in episode_names)
 		drafted_names["[N.thename]"] = N.weight
 	episode_name = pickweight(drafted_names)
-	if(prob(5))
-		episode_name += ": PART I"
-	else if(prob(5))
-		episode_name += ": PART II"
-	else if(prob(2))
-		episode_name += ": PART III"
-	else if(prob(4) && score["time"] > 60 * 60 * 3) //3 hours
-		episode_name += ": THE FEATURE LENGTH PRESENTATION"
-	else if(prob(4) && score["time"] < 60 * 30) //30 min
-		episode_name += ": ABRIDGED"
-	else if(prob(1))
-		episode_name += ": NOW IN 3D"
-	else if(prob(1))
-		episode_name += ": ON ICE!"
-	else if(prob(1))
-		episode_name += ": THE SEASON FINALE"
 
 /datum/credits/proc/finalize_episodestring(var/thename)
 	var/season = rand(1,22)
