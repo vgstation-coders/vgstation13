@@ -270,12 +270,14 @@
 	slime_brightness(user)
 	return 1
 
+//EMP FLASHLIGHT
 /obj/item/device/flashlight/emp //EMP flashlight for syndicate boys and girls. Idea secured from TG
 	origin_tech = Tc_SYNDICATE + "=3;" + Tc_ENGINEERING + "=1" //Tech levels when deconstructed in a Destructive Analyzer
 //Default description as flashlight but defined proc below determines if you can see the counter and timer.
 	var/charge_max = 4 //The amount of charges it stores. Also uses vars so admins can tamper with this
 	var/charge_current = 4 //The amount of charges it spawns with
 	var/charge_tick = 0 //In our case, it is used as a 'timer' until you gain a new charge.
+	var/processing = FALSE
 
 /obj/item/device/flashlight/emp/New() //If it exists, it will be processed (constantly updated). Taken from advanced energy gun code
 	..() //The "New" process does everything normally except...
@@ -286,17 +288,23 @@
 	..() //Do the rest of the destroy process
 
 /obj/item/device/flashlight/emp/process() //EMP flashlight process
+	if(charge_current >= charge_max) //Performance stuff
+		processing = FALSE
+		processing_objects.Remove(src)
 	charge_tick++ //Post-increment charge_tick. It increases by 1 every time it is processed.
 	if(charge_tick < 15) //15 ticks required until you gain a flashlight charge
 		return 0 //If it's not 15 ticks then cancel the process until it is called again next tick
 	charge_tick = 0 //If it's 15 ticks reset to 0
 	charge_current = min(charge_current+1, charge_max) //Either add +1 to charge_current (give it another charge in our case), or remain at the value determined by charge_max, depends on which value is lower
-	return 1 //The process is a success and will be called for again next time.
+	return 1
 
 /obj/item/device/flashlight/emp/afterattack(atom/movable/A, mob/user, proximity) //Can use it on anyone and anything as long as you are near them
 	. = ..() //I don't really grasp the idea of what this does but it's important
 	if(!proximity) //If you are not near whatever you use this on...
 		return 0 //Cancel the whole thing
+	if(!processing) //Performance stuff
+		processing = TRUE
+		processing_objects.Add(src)
 	if (charge_current > 0) //If you don't have 0 "current charge"
 		charge_current -= 1 //Reduce the charge counter by 1
 		if(ismob(A)) //If whatever you attack is a person
@@ -311,9 +319,9 @@
 		A.emp_act(2) //Light EMP pulse
 	else //If you are in proximity but there are no charges
 		to_chat (user, "<span class='warning'>\The [src] must take time to recharge.</span>") //Wait for the EMP flashlight to recharge
-	return //That's it.
 
-/obj/item/device/flashlight/emp/examine(mob/user) //What happens if you examine
+/obj/item/device/flashlight/emp/examine(mob/user, proximity) //What happens if you examine
 	..() //Examine is normal except for the to_chat appearing afterwards
-	to_chat(user, "Charges: <font color='red'>[charge_current]/4</font>") //Shows you in red how many charges are left out of how many
-	to_chat(user, "Timer: <font color='green'>[charge_tick]/15</font>") //Shows you in green the timer until 15
+	if(is_holder_of(user, src)) //If you hold it
+		to_chat(user, "Charges: <font color='red'>[charge_current]/4</font>") //Shows you in red how many charges are left out of how many
+		to_chat(user, "Timer: <font color='green'>[charge_tick]/15</font>") //Shows you in green the timer until 15

@@ -623,7 +623,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_tools/flashlightemp
 	name = "EMP Flashlight"
-	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoeve you use it on. Up to 4 charges that recover every 15 ticks, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine.
+	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoever you use it on. Up to 4 charges that recover every 15 seconds, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine."
 	item = /obj/item/device/flashlight/emp
 	cost = 4
 
