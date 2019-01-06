@@ -665,7 +665,7 @@
 	C.update_canmove()
 	C.remove_changeling_powers()
 
-	C.emote("deathgasp")
+	C.emote("deathgasp", message = TRUE)
 	C.tod = worldtime2text()
 	var/time_to_take = rand(800, 1200)
 	to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
