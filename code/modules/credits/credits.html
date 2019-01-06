@@ -58,7 +58,7 @@
 </head>
 <body>
 	<div id="soundplayer" style="display: none;">
-		<audio autoplay><source src="http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3" type="audio/mpeg"></audio>
+		<!-- the soundplayer gets added here via javascript! !-->
 	</div>
 	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
 		<tr>
@@ -79,7 +79,12 @@
 
 	<script type="text/javascript">
 	var producers = [];
-	var lastinterval;
+	var lastinterval; //just for the auto-suicide failsafe
+	var scrollSpeed = 25; //miliseconds between each pixel we go up
+	var splashTime = 2000; //in miliseconds
+	var started = 0;
+	var initialized = 0;
+	var playingAudio = 0;
 
 	function setScrollingText(text){
 		document.getElementById("marquee").innerHTML = text;
@@ -88,26 +93,32 @@
 		producers = text.split("%n");
 		producers = producers.slice(0, -1); //get rid of the last %n
 	}
-	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime, startingDelay, songLink){
-		if (splashTime === undefined) {
-			splashTime = 2000;
-		}
-		splashTime = parseInt(splashTime); //Just in case
+	function setAudio(link){
+		var sound = document.getElementById("soundplayer");
+		sound.innerHTML = "<audio autoplay><source src='" + link +"' type='audio/mpeg'></audio>"
+		playingAudio = 1; //starts playing immediately!
+	}
 
-		if (scrollSpeed === undefined) {
-			scrollSpeed = 25;
-		}
-		scrollSpeed = parseInt(scrollSpeed); //Just in case
+	function setupCredits(scrollyString, producersString, newScrollSpeed, newSplashTime){
+		if(newSplashTime !== undefined) {splashTime = parseInt(newSplashTime)}
+		if(newScrollSpeed !== undefined) {scrollSpeed = parseInt(newScrollSpeed)}
 
 		setScrollingText(scrollyString);
 		setProducers(producersString);
+		initialized = 1;
+	}
 
+	function startCredits(){
+		if(started == 1 || initialized == 0)
+			return;
+		started = 1;
+		window.location = 'byond://winset?id=mapwindow.credits;is-visible=true';
 		splashLoop(producers, 0, splashTime);
 		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
 	}
 
-	function splashLoop(arr, index, time) {
-		if (index === arr.length){
+	function splashLoop(arr, index, time){
+		if(index === arr.length){
 			return;
 		}
 		document.getElementById("splash").innerHTML = arr[index];
@@ -120,18 +131,17 @@
 		lastinterval = setInterval(function () {
 			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
+			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this might keep going if the server doesn't start back up
 				//document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</textarea>"; clearInterval(lastinterval); return; //debugging
 				clearInterval(lastinterval);
-				stopItNow();
+				commitSuicide();
 				return;
 			}
 		}, speed);
 	}
 
-	function stopItNow(){
-		var sound = document.getElementById("soundplayer");
-		sound.parentNode.removeChild(sound);
+	function commitSuicide(){
+		document.documentElement.innerHTML = '';
 		window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
 	};
 	</script>
