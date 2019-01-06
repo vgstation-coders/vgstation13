@@ -248,6 +248,7 @@ var/list/score=list(
 	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
 	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
 	"shoeshatches"  = 0, //Amount of shoes magically snatched.
+	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
 	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess

@@ -46,7 +46,6 @@
 #define MALF "malfunctioning AI"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
-#define HIGHLANDER "highlander"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
