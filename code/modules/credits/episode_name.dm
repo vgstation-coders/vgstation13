@@ -109,7 +109,7 @@
 	if(score["kudzugrowth"] > 200)
 		episode_names += new /datum/episode_name("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]))
 	if(score["oremined"] > 500)
-		episode_names += new /datum/episode_name("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(450, score["oremined"]/7))
+		episode_names += new /datum/episode_name("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(300, score["oremined"]/15))
 	//future idea: "apocalypse meow" if over 10 catbeast corpses
 	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire
 	for(var/mob/living/simple_animal/corgi/C in living_mob_list)
