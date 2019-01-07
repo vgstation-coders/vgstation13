@@ -263,6 +263,7 @@ var/list/score=list(
 	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
 	"singuloosed"   = 0, //If nonzero, then there was a proper singuloose (containment was up at the time)
+	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
