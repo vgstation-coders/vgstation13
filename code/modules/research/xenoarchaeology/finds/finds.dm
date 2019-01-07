@@ -555,6 +555,7 @@
 	new_gun.item_state = new_gun.icon_state
 	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
+	new_gun.desc = ""
 
 	//5% chance to explode when first fired
 	//10% chance to have an unchargeable cell
@@ -571,7 +572,6 @@
 	return new_gun
 
 /datum/find/laser/additional_description(var/obj/item/I)
-	I.desc = ""
 	I.desc += "Looks like an antique energy weapon, you're not sure if it will fire or not."
 	if(prob(10)) // 10% chance to be a smart gun
 		I.can_take_pai = TRUE
