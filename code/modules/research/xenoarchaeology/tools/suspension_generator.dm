@@ -363,6 +363,9 @@
 	..()
 
 /obj/machinery/suspension_gen/AltClick(mob/user)
+	toggle(user)
+	
+/obj/machinery/suspension_gen/proc/toggle(mob/user)
 	if(user.incapacitated() || !user.Adjacent(get_turf(src)) || locked)
 		return
 	if(!suspension_field)
