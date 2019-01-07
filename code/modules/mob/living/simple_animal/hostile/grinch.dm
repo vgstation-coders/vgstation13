@@ -15,7 +15,7 @@
 
 	// -- They're not affected by overpressured atmos, but need O2 to survive
 
-	min_oxy = 25
+	min_oxy = 15
 	max_oxy = 0
 	min_tox = 0
 	max_tox = 25
