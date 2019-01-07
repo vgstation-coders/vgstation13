@@ -249,6 +249,8 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
+#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
@@ -264,6 +266,12 @@
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
 #define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define issurvivor(H) (H.mind && H.mind.GetRole(SURVIVOR))
+
+#define iscrusader(H) (H.mind && H.mind.GetRole(CRUSADER))
+
+#define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
 
 #define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
 

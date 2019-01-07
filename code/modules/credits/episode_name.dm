@@ -68,8 +68,12 @@
 				episode_names += new /datum/episode_name("V FOR [uppr_name]", "Round included roundstart revs... and the station's name starts with V.", 750)
 		if(ticker.explosion_in_progress || ticker.station_was_nuked)
 			episode_names += new /datum/episode_name("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD")]", "The station was nuked!", 350)
-		else if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/nuclear) in mode.executed_rules))
-			episode_names += new /datum/episode_name("[pick("THE CREW SOLVES THE NUCLEAR CRISIS", "BLAST, FOILED AGAIN", "FISSION MAILED", 50;"I OPENED THE WINDOW, AND IN FLEW COPS")]", "The crew defeated the nuclear operatives.", 350)
+		else
+			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/nuclear) in mode.executed_rules))
+				episode_names += new /datum/episode_name("[pick("THE CREW SOLVES THE NUCLEAR CRISIS", "BLAST, FOILED AGAIN", "FISSION MAILED", 50;"I OPENED THE WINDOW, AND IN FLEW COPS")]", "The crew defeated the nuclear operatives.", 350)
+			if(score["nukedefuse"] < 30)
+				episode_names += new /datum/episode_name("[score["nukedefuse"]] SECOND[score["nukedefuse"] == 1 ? "" : "S"] TO MIDNIGHT", "The nuke was defused with [score["nukedefuse"]] seconds remaining.", (30 - score["nukedefuse"]) * 100)
+
 		//if(locate(/datum/dynamic_ruleset/roundstart/blob) in mode.executed_rules) //uncomment when blob gets readded
 		//	episode_names += new /datum/episode_name("[pick("MARRIED TO THE BLOB", "THE CREW GETS QUARANTINED")]", "Round included a roundstart blob.", 250)
 	if(narsie_list.len > 0)
@@ -86,6 +90,8 @@
 		episode_names += new /datum/episode_name("A SONG OF ASS AND FIRE", "[score["assesblasted"]] people were magically assblasted this round.", min(1000, score["assesblasted"]*50))
 	if(score["assesblasted"] > 3 && score["random_soc"] > 4)
 		episode_names += new /datum/episode_name("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1000, score["assesblasted"]*30 + score["random_soc"]*30))
+	if(score["greasewiz"] > 7 && score["lightningwiz"] > 7)
+		episode_names += new /datum/episode_name("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1000, score["greasewiz"]*30 + score["lightningwiz"]*30))
 	if(score["heartattacks"] > 4)
 		episode_names += new /datum/episode_name("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1000, score["heartattacks"]*100))
 	if(score["richestcash"] > 30000)
@@ -112,7 +118,7 @@
 		episode_names += new /datum/episode_name("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]))
 	if(score["oremined"] > 500)
 		episode_names += new /datum/episode_name("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(300, score["oremined"]/15))
-	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire
+	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire, if the chef was the only survivor, "if you can't stand the heat..."
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
@@ -145,7 +151,7 @@
 			if(score["escapees"] == 0)
 				episode_names += new /datum/episode_name("[pick("DEAD SPACE", "THE CREW GOES MISSING", "LOST IN TRANSLATION", "[uppr_name]: DELETED SCENES", "WHAT HAPPENS IN [uppr_name], STAYS IN [uppr_name]", "SCOOBY-DOO, WHERE'S THE CREW?")]", "There were no escapees on the shuttle.", 200)
 			if(score["escapees"] < 6 && score["escapees"] > 0 && score["deadcrew"] > score["escapees"]*2)
-				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES")]", "[score["deadcrew"]] people died this round.", 200)
+				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES", "WISH YOU WERE HERE")]", "[score["deadcrew"]] people died this round.", 200)
 
 			if(human_escapees.len == 1)
 				var/shoecount = 0
@@ -165,6 +171,20 @@
 					if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/rank/chef))
 						chance += 250
 					episode_names += new /datum/episode_name("HAIL TO THE CHEF", "The Chef was the only survivor in the shuttle.", chance)
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Clown")
+					var/chance = 250
+					if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/gas/clown_hat))
+						chance += 500
+					if(is_type_in_list(H.get_item_by_slot(slot_shoes), list(/obj/item/clothing/shoes/clown_shoes, /obj/item/clothing/shoes/jestershoes)))
+						chance += 500
+					if(is_type_in_list(H.get_item_by_slot(slot_w_uniform), list(/obj/item/clothing/under/rank/clown, /obj/item/clothing/under/jester)))
+						chance += 250
+					episode_names += new /datum/episode_name("[pick("COME HELL OR HIGH HONKER", "THE LAST LAUGH")]", "The Clown was the only survivor in the shuttle.", chance)
+
+				if(istype(H.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/raincoat) && locate(/obj/item/weapon/fireaxe) in H.held_items)
+					episode_names += new /datum/episode_name("[pick("SPACE AMERICAN PSYCHO", "NANOTRASEN PSYCHO", "[uppr_name] PSYCHO")]", "The only survivor in the shuttle wore a raincoat and held a fireaxe.", 1500)
+				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/luchador) && istype(H.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves/boxing))
+					episode_names += new /datum/episode_name("[pick("THE CREW, ON THE ROPES", "THE CREW, DOWN FOR THE COUNT", "[uppr_name], DOWN AND OUT")]", "The only survivor in the shuttle wore a luchador mask and boxing gloves.", 1500)
 
 			var/braindamage_total = 0
 			var/all_retarded = TRUE
@@ -181,9 +201,14 @@
 			var/clowncount = 0
 			var/mimecount = 0
 			var/assistantcount = 0
+			var/chefcount = 0
+			var/chaplaincount = 0
 			var/skeletoncount = 0
 			var/voxcount = 0
+			var/dionacount = 0
 			var/baldycount = 0
+			var/fattycount = 0
+			var/horsecount = 0
 			for(var/mob/living/carbon/human/H in human_escapees)
 				if(H.mind && H.mind.miming)
 					mimecount++
@@ -191,22 +216,46 @@
 					clowncount++
 				if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/color/grey) || (H.mind && H.mind.assigned_role == "Assistant"))
 					assistantcount++
+				if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/chefhat) || (H.mind && H.mind.assigned_role == "Chef"))
+					chefcount++
+				if(H.mind && H.mind.assigned_role == "Chaplain")
+					chaplaincount++
+					if(ischangeling(H))
+						episode_names += new /datum/episode_name("[uppertext(H.real_name)]: A BLESSING IN DISGUISE", "The Chaplain, [H.real_name], was a changeling and escaped alive.", 750)
 				if(isskellington(H) || isplasmaman(H) || isskelevox(H))
 					skeletoncount++
 				if(isvox(H) || isskelevox(H))
 					voxcount++
+				if(isdiona(H))
+					dionacount++
 				if(isjusthuman(H) && (H.h_style == "Bald" || H.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
 					baldycount++
+				if(M_FAT in H.mutations)
+					fattycount++
+				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/horsehead))
+					horsecount++
 			if(clowncount > 3)
-				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*100))
+				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*150))
 			if(mimecount > 3)
-				episode_names += new /datum/episode_name("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*100))
+				episode_names += new /datum/episode_name("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*150))
+			if(chaplaincount > 2)
+				episode_names += new /datum/episode_name("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*250))
+			if(chefcount > 2)
+				episode_names += new /datum/episode_name("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 200%; text-shadow: rgb(123, 96, 38) 1px 1px 0px, rgb(123, 96, 38) 1px 1px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*250)) //intentionally not capitalized
 			if(assistantcount / human_escapees > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*100))
 			if(skeletoncount / human_escapees > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*100))
+			if(voxcount / human_escapees > 0.6)
+				episode_names += new /datum/episode_name("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*100))
+			if(dionacount / human_escapees > 0.6)
+				episode_names += new /datum/episode_name("ALL BARK AND NO BITE", "Most of the survivors were Diona.", min(1500, dionacount*100))
 			if(baldycount / human_escapees > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name("TO BALDLY GO", "Most of the survivors were bald, and it shows.", min(1500, baldycount*100))
+			if(fattycount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*100))
+			if(horsecount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*100))
 
 			var/bearcount = 0
 			for(var/mob/living/simple_animal/hostile/bear/B in shuttle)
@@ -249,27 +298,24 @@
 						nasty_things |= "HELL-BOUND PRANKSTER"
 
 				for(var/mob/living/M in mob_list)
-					if(M.mind && (M.mind.antag_roles.len > 0))
-						for(var/role in M.mind.antag_roles)
-							switch(role)
-								if(TRAITOR)
-									adjectives |= "TRAITOROUS"
-								if(ROGUE)
-									adjectives |= "DOUBLE-CROSSING"
-								if(VAMPIRE)
-									adjectives |= "BLOOD-SUCKING"
-								if(HEADREV, REV)
-									adjectives |= "REVOLTING"
-								if(WEEABOO)
-									adjectives |= "CRAZED"
-								if(SURVIVOR)
-									adjectives |= "PARANOID"
-								if(CRUSADER)
-									adjectives |= "MEDIEVAL"
-								if(CULTIST, LEGACY_CULTIST)
-									adjectives |= "OCCULT"
-								if(CHANGELING)
-									nasty_things |= "SHAPE-SHIFTING BACKSTABBERS"
+					if(istraitor(M))
+						adjectives |= "TRAITOROUS"
+					if(isdoubleagent(M))
+						adjectives |= "DOUBLE-CROSSING"
+					if(isvampire(M))
+						adjectives |= "BLOOD-SUCKING"
+					if(isrev(M))
+						adjectives |= "REVOLTING"
+					if(isweeaboo(M))
+						adjectives |= "CRAZED"
+					if(issurvivor(M))
+						adjectives |= "PARANOID"
+					if(iscrusader(M))
+						adjectives |= "MEDIEVAL"
+					if(isanycultist(M))
+						adjectives |= "OCCULT"
+					if(ischangeling(M))
+						nasty_things |= "SHAPE-SHIFTING BACKSTABBERS"
 
 				if(nasty_things.len > 3)
 					var/final_string = "NIGHT OF THE DAY OF THE DAWN AT NOON OF THE SON OF THE BRIDE OF THE RETURN OF THE REVENGE OF THE TERROR OF THE ATTACK OF "

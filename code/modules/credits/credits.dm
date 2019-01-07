@@ -71,8 +71,8 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/finalize_episodestring(var/thename)
 	var/season = rand(1,22)
 	var/episodenum = rand(1,17) //Maybe we could do this cumulatively so that the round after 670 becomes 671 etc and the season is just the last 2 numbers of the current IRL year?
-	episode_string = "<h1>SEASON [season] EPISODE [episodenum]<br>[uppertext(episode_name)]</h1><br><div style='padding-bottom: 75px;'></div>"
-	log_game("So ends SEASON [season] EPISODE [episodenum] - [uppertext(episode_name)]")
+	episode_string = "<h1>SEASON [season] EPISODE [episodenum]<br>[episode_name]</h1><br><div style='padding-bottom: 75px;'></div>"
+	log_game("So ends SEASON [season] EPISODE [episodenum] - [episode_name]")
 
 /datum/credits/proc/finalize_disclaimerstring()
 	disclaimers_string = "<div class='disclaimers'>"
@@ -117,6 +117,11 @@ var/global/datum/credits/end_credits = new
 
 		cast_string += "[gender_credits(H)]"
 
+	for(var/mob/living/silicon/S in mob_list)
+		if(!S.key)
+			continue
+		cast_string += "[silicon_credits(S)]"
+
 	cast_string += "</table><br>"
 	cast_string += "<div class='disclaimers'>"
 	var/list/corpses = list()
@@ -141,6 +146,12 @@ var/global/datum/credits/end_credits = new
 		else if(H.gender == FEMALE)
 			t_him = "Her"
 		return "<tr><td class='actorname'>[uppertext(H.real_name)]</td><td class='actorsegue'> as </td><td class='actorrole'>[t_him == "Them" ? "Themselves" : "[t_him]self"]</td></tr>"
+
+/proc/silicon_credits(var/mob/living/silicon/S)
+	if(S.mind && S.mind.key)
+		return "<tr><td class='actorname'>[uppertext(S.mind.key)]</td><td class='actorsegue'> as </td><td class='actorrole'>[S.name]</td></tr>"
+	else
+		return "<tr><td class='actorname'>[uppertext(S.name)]</td><td class='actorsegue'> as </td><td class='actorrole'>Itself</td></tr>"
 
 /proc/thebigstar(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)
