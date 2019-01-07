@@ -249,6 +249,8 @@ var/list/score=list(
 	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
 	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
 	"shoeshatches"  = 0, //Amount of shoes magically snatched.
+	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
+	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
 	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
 	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
@@ -265,6 +267,7 @@ var/list/score=list(
 	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
 	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
 	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
+	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
