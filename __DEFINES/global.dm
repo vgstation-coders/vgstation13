@@ -262,7 +262,8 @@ var/list/score=list(
 	"explosions"	= 0, //How many explosions happened total
 	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
-	"singuloosed"   = 0, //If nonzero, then there was a proper singuloose (containment was up at the time)
+	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
+	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
 	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
 
 	"arenafights"   = 0,
