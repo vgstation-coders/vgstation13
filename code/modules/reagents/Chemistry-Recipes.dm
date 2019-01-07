@@ -513,7 +513,9 @@
 	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		holder.del_reagent(GLYCEROL)
 		holder.del_reagent(PACID)
+		holder.del_reagent(PHENOL)
 		holder.del_reagent(SACID)
+		holder.del_reagent(FORMIC_ACID)
 	else
 		holder.clear_reagents()
 
@@ -1063,6 +1065,247 @@
 		if(ismob(holder.my_atom.loc))
 			var/mob/mob_holder = holder.my_atom.loc
 			mob_holder.drop_item(holder.my_atom) //Bandaid to work around items becoming invisible when their appearance is changed!
+
+///////////////////////////////////////////////Pharmacognosy Time/////////////////////////////////////////////////
+
+/datum/chemical_reaction/tricordrazine/botany
+	name = "Tricordrazine Botany"
+	id = TRICORDRAZINE
+	result = TRICORDRAZINE
+	required_reagents = list(INAPROVALINE = 1, ALLICIN = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/peptobismol/botany
+	name = "Peptobismol Botany"
+	id = PEPTOBISMOL
+	result = PEPTOBISMOL
+	required_reagents = list(ALLICIN = 1, DISCOUNT = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/sterilizine/botany
+	name = "Sterilizine Botany"
+	id = STERILIZINE
+	result = STERILIZINE
+	required_reagents = list(ETHANOL = 1, ALLICIN = 1, CHLORINE = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/hyronalin/botany
+	name = "Hyronalin Botany"
+	id = HYRONALIN
+	result = HYRONALIN
+	required_reagents = list(RADIUM = 1, ALLICIN = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/alkysine/botany
+	name = "Alkysine Botany"
+	id = ALKYSINE
+	result = ALKYSINE
+	required_reagents = list(CHLORINE = 1, NITROGEN = 1, ALLICIN = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/alkycosine/botany
+	name = "Alkycosine Botany"
+	id = ALKYCOSINE
+	result = ALKYCOSINE
+	required_reagents = list(ALKYSINE = 1, BLEACH = 1, ALLICIN = 1)
+	required_temp = T0C + 40
+	result_amount = 4
+
+/datum/chemical_reaction/imidazoline/botany
+	name = "Imidazoline Botany"
+	id = IMIDAZOLINE
+	result = IMIDAZOLINE
+	required_reagents = list(CARBON = 1, HYDROGEN = 1, ALLICIN = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/inacusiate/botany
+	name = "Inacusiate Botany"
+	id = INACUSIATE
+	result = INACUSIATE
+	required_reagents = list(WATER = 1, CARBON = 1, ALLICIN = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/ethylredoxrazine/botany
+	name = "Ethylredoxrazine Botany"
+	id = ETHYLREDOXRAZINE
+	result = ETHYLREDOXRAZINE
+	required_reagents = list(OXYGEN = 1, ALLICIN = 1, CARBON = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/mindbreaker/botany
+	name = "Mindbreaker Toxin Botany"
+	id = MINDBREAKER
+	result = MINDBREAKER
+	required_reagents = list(SILICON = 1, HYDROGEN = 1, ALLICIN = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/pacid/botany
+	name = "Polytrinic Acid Botany"
+	id = PACID
+	result = PACID
+	required_reagents = list(FORMIC_ACID = 1, CHLORINE = 1, POTASSIUM = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/glycerol/botany
+	name = "Glycerol Botany"
+	id = GLYCEROL
+	result = GLYCEROL
+	required_reagents = list(CORNOIL = 3, FORMIC_ACID = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/nitroglycerin/botany
+	name = "Nitroglycerin Explosion Botany"
+	id = NITROGLYCERIN
+	result = NITROGLYCERIN
+	required_reagents = list(GLYCEROL = 1, PHENOL = 1, FORMIC_ACID = 1)
+	result_amount = 2
+	alert_admins = ALERT_AMOUNT_ONLY
+
+/datum/chemical_reaction/napalm/botany
+	name = "Napalm Botany"
+	id = "napalm"
+	result = null
+	required_reagents = list(ALUMINUM = 1, PLASMA = 1, FORMIC_ACID = 1 )
+	result_amount = 1
+
+/datum/chemical_reaction/surfactant/botany
+	name = "Foam surfactant Botany"
+	id = FLUOROSURFACTANT
+	result = FLUOROSURFACTANT
+	required_reagents = list(FLUORINE = 2, CARBON = 2, FORMIC_ACID = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/soysauce/botany //this is supposed to be in already under soysauce/natural but I couldn't find it so here this is
+	name = "Soy Sauce Botany"
+	id = SOYSAUCE
+	result = SOYSAUCE
+	required_reagents = list(SOYMILK = 4, FORMIC_ACID = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/cream/botany
+	name = "Cream Botany"
+	id = CREAM
+	result = CREAM
+	required_reagents = list(MILK = 10, FORMIC_ACID = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/acidspit/botany
+	name = "Acid Spit Botany"
+	id = ACIDSPIT
+	result = ACIDSPIT
+	required_reagents = list(FORMIC_ACID = 1, WINE = 5)
+	result_amount = 6
+
+/datum/chemical_reaction/acidtea/botany
+	name = "Earl's Grey Tea Botany"
+	id = ACIDTEA
+	result = ACIDTEA
+	required_reagents = list(FORMIC_ACID = 1, TEA = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/active_charcoal/botany
+	name = "Activated Charcoal Botany"
+	id = CHARCOAL
+	result = CHARCOAL
+	required_reagents = list(CARBON = 1, FORMIC_ACID = 2)
+	required_temp = T0C + 450
+	result_amount = 1
+
+/datum/chemical_reaction/weedeater/botany
+	name = "Weed Eater"
+	id = WEED_EATER
+	result = WEED_EATER
+	required_reagents = list(MESCALINE = 1, AMATOXIN = 1, PSILOCYBIN = 1, KARMOTRINE = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/synthocarisol/botany
+	name = "Synthocarisol Botany"
+	id = SYNTHOCARISOL
+	result = SYNTHOCARISOL
+	required_reagents = list(OPIUM = 1, INAPROVALINE = 1)
+	required_temp = T0C + 77
+	result_amount = 2
+
+/datum/chemical_reaction/solidification/plastic/botany
+	name = "Plastic Botany"
+	id = "solidplastic"
+	result = null
+	required_reagents = list(PHENOL = 10, PLASTICIDE = 20)
+	result_amount = 10
+
+/datum/chemical_reaction/spaceacillin/botany
+	name = "Spaceacillin Botany"
+	id = SPACEACILLIN
+	result = SPACEACILLIN
+	required_reagents = list(PHYSOSTIGMINE = 1, INAPROVALINE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/plantbgone/botany
+	name = "Plant-B-Gone Botany"
+	id = PLANTBGONE
+	result = PLANTBGONE
+	required_reagents = list(SOLANINE = 1, WATER = 4)
+	result_amount = 5
+
+/datum/chemical_reaction/dermaline/botany
+	name = "Dermaline"
+	id = DERMALINE
+	result = DERMALINE
+	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, TANNIC_ACID = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/dexalinp/botany
+	name = "Dexalin Plus Botany"
+	id = DEXALINP
+	result = DEXALINP
+	required_reagents = list(THYMOL = 1, CARBON = 1, IRON = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/cryoxadone/botany
+	name = "Cryoxadone Botany"
+	id = CRYOXADONE
+	result = CRYOXADONE
+	required_reagents = list(THYMOL = 1, WATER = 1, OXYGEN = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/heartbreaker/botany
+	name = "Heartbreaker Toxin"
+	id = HEARTBREAKER
+	result = HEARTBREAKER
+	required_reagents = list(MINDBREAKER = 1, THYMOL = 1)
+	required_temp = T0C + 37
+	result_amount = 5
+
+/datum/chemical_reaction/zombiepowder/botany
+	name = "Zombie Powder Botany"
+	id = ZOMBIEPOWDER
+	result = ZOMBIEPOWDER
+	required_reagents = list(CARPOTOXIN = 5, VALERENIC_ACID = 5, COPPER = 5)
+	result_amount = 2
+
+/datum/chemical_reaction/neurotoxin/botany
+	name = "Neurotoxin Botany"
+	id = NEUROTOXIN
+	result = NEUROTOXIN
+	required_reagents = list(GARGLEBLASTER = 1, VALERENIC_ACID = 1)
+	result_amount = 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////////////////////////////////////////////NEW SLIME CORE REACTIONS/////////////////////////////////////////////
 
