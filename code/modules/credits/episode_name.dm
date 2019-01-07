@@ -107,7 +107,7 @@
 	if(score["turfssingulod"] > 200)
 		episode_names += new /datum/episode_name("[pick("THE SINGULARITY GETS LOOSE", "THE SINGULARITY GETS LOOSE (AGAIN)", "CONTAINMENT FAILURE", "THE GOOSE IS LOOSE", 50;"THE CREW'S ENGINE SUCKS", 50;"THE CREW GOES DOWN THE DRAIN")]", "The Singularity ate [score["turfssingulod"]] turfs this round.", min(1000, score["turfssingulod"]/2)) //no "singularity's day out" please we already have enough
 	if(score["shardstouched"] > 0)
-		episode_names += new /datum/episode_name("[pick("HIGH EFFECT ENGINEERING", 25;"NEVER GO SHARD TO SHARD")]", "This is what happens when two shards touch.", min(2000, score["shardstouched"]*750))
+		episode_names += new /datum/episode_name("[pick("HIGH EFFECT ENGINEERING", 25;"THE CREW'S ENGINE BLOWS", 25;"NEVER GO SHARD TO SHARD")]", "This is what happens when two shards touch.", min(2000, score["shardstouched"]*750))
 	if(score["kudzugrowth"] > 200)
 		episode_names += new /datum/episode_name("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]))
 	if(score["oremined"] > 500)
@@ -116,7 +116,7 @@
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
-		if(iscatbeast(H) && (H.z == map.zMainStation || istype(get_area(H), /area/shuttle/escape/centcom))
+		if(iscatbeast(H) && (H.z == map.zMainStation || istype(get_area(H), /area/shuttle/escape/centcom)))
 			deadcatbeastcount++
 	if(deadcatbeastcount > 10)
 		episode_names += new /datum/episode_name("APOCALYPSE MEOW", "There were [deadcatbeastcount] dead catbeasts in world.", min(1000, deadcatbeastcount*50))
