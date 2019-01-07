@@ -61,7 +61,7 @@
 			if(70 to 100)
 				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "THE END OF [uppr_name] AS WE KNOW IT", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]")]", "High threat level of [mode.threat_level]%.", 250)
 		if(locate(/datum/dynamic_ruleset/roundstart/malf) in mode.executed_rules)
-			episode_names += new /datum/episode_name("[pick("I'M SORRY [uppr_name], I'M AFRAID I CAN'T LET YOU DO THAT", "A STRANGE GAME", "THE AI GOES ROGUE")]", "Round included a malfunctioning AI.", 250)
+			episode_names += new /datum/episode_name("[pick("I'M SORRY [uppr_name], I'M AFRAID I CAN'T LET YOU DO THAT", "A STRANGE GAME", "THE AI GOES ROGUE", "RISE OF THE MACHINES")]", "Round included a malfunctioning AI.", 300)
 		if(locate(/datum/dynamic_ruleset/roundstart/revs) in mode.executed_rules)
 			episode_names += new /datum/episode_name("[pick("THE CREW STARTS A REVOLUTION", "HELL IS OTHER SPESSMEN")]", "Round included roundstart revs.", 250)
 			if(copytext(uppr_name,1,2) == "V")
@@ -73,7 +73,7 @@
 		//if(locate(/datum/dynamic_ruleset/roundstart/blob) in mode.executed_rules) //uncomment when blob gets readded
 		//	episode_names += new /datum/episode_name("[pick("MARRIED TO THE BLOB", "THE CREW GETS QUARANTINED")]", "Round included a roundstart blob.", 250)
 	if(narsie_list.len > 0)
-		episode_names += new /datum/episode_name("[pick("NAR-SIE'S DAY OUT", "NAR-SIE'S VACATION", "THE CREW LEARNS ABOUT SACRED GEOMETRY", "STUDY HARD, BUT PART-SIE HARDER", "THE CREW FINDS GOD")]", "Nar-Sie is loose!", 350)
+		episode_names += new /datum/episode_name("[pick("NAR-SIE'S DAY OUT", "NAR-SIE'S VACATION", "THE CREW LEARNS ABOUT SACRED GEOMETRY", "STUDY HARD, BUT PART-SIE HARDER", "REALM OF THE MAD GOD")]", "Nar-Sie is loose!", 350)
 
 
 	if(SNOW_THEME)
@@ -89,7 +89,7 @@
 	if(score["heartattacks"] > 4)
 		episode_names += new /datum/episode_name("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1000, score["heartattacks"]*100))
 	if(score["richestcash"] > 30000)
-		episode_names += new /datum/episode_name("THE IRRESISTIBLE RISE OF [uppertext(score["richestname"])]", "Scrooge Mc[score["richestkey"]] racked up [score["richestcash"]] credits this round.", min(250, score["richestcash"]/500))
+		episode_names += new /datum/episode_name("[pick("WAY OF THE WALLET", "THE IRRESISTIBLE RISE OF [uppertext(score["richestname"])]", "PRETTY PENNY", "IT'S THE ECONOMY, STUPID")]", "Scrooge Mc[score["richestkey"]] racked up [score["richestcash"]] credits this round.", min(450, score["richestcash"]/500))
 	if(end_credits.star && star.times_cloned > 2)
 		episode_names += new /datum/episode_name("[uppertext(star.real_name)] MUST DIE", "The star of the show, [star.real_name], was cloned [star.times_cloned] times.", min(500, star.times_cloned*50))
 	if(score["deadaipenalty"] > 2)
@@ -106,8 +106,12 @@
 		episode_names += new /datum/episode_name("WHAT HAPPENS WHEN YOU MIX MOMMIS AND COMMERCIAL-GRADE PACKING FOAM", "There was a powergrid with [score["maxpower"]]W, and 1 or more MoMMIs playing.", 250)
 	if(score["singuloosed"] > 0)
 		episode_names += new /datum/episode_name("[pick("THE SINGULARITY GETS LOOSE [prob(50) ? "(AGAIN)" : ""]", "THE CREW'S ENGINE SUCKS", "CONTAINMENT FAILURE", "THE GOOSE IS LOOSE")]", "There Singularity got loose this round.", 300) //no "singularity's day out" please we already have enough
+	if(score["kudzugrowth"] > 200)
+		episode_names += new /datum/episode_name("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]))
+	if(score["oremined"] > 500)
+		episode_names += new /datum/episode_name("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(450, score["oremined"]/7))
 	//future idea: "apocalypse meow" if over 10 catbeast corpses
-	//future idea: "the crew loses their chill" if most of the station is on fire
+	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire
 	for(var/mob/living/simple_animal/corgi/C in living_mob_list)
 		if(C.spell_list.len > 0)
 			episode_names += new /datum/episode_name("[pick("WHERE NO DOG HAS GONE BEFORE", "IAN SAYS", "IAN'S DAY OUT", "CORGI MAGIC")]", "You know what you did.", 1000)
