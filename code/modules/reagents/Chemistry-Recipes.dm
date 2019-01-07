@@ -1211,13 +1211,6 @@
 	required_temp = T0C + 450
 	result_amount = 1
 
-/datum/chemical_reaction/weedeater/botany
-	name = "Weed Eater"
-	id = WEED_EATER
-	result = WEED_EATER
-	required_reagents = list(MESCALINE = 1, AMATOXIN = 1, PSILOCYBIN = 1, KARMOTRINE = 2)
-	result_amount = 5
-
 /datum/chemical_reaction/synthocarisol/botany
 	name = "Synthocarisol Botany"
 	id = SYNTHOCARISOL
