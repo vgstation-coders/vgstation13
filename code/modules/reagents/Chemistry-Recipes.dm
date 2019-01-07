@@ -1290,23 +1290,6 @@
 	required_reagents = list(GARGLEBLASTER = 1, VALERENIC_ACID = 1)
 	result_amount = 2
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /////////////////////////////////////////////NEW SLIME CORE REACTIONS/////////////////////////////////////////////
 
 //Grey
