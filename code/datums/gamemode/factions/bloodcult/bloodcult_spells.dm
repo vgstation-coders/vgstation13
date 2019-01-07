@@ -65,10 +65,10 @@
 	if (user.checkTattoo(TATTOO_MEMORIZE))
 		tome = "Knowledge"
 	if (!tome)
-		tome = (istype(A) && A.state == TOME_OPEN)
+		tome = istype(A)
 		if (!tome)
 			A = user.get_inactive_hand()
-			tome = (istype(A) && A.state == TOME_OPEN)
+			tome = istype(A)
 		if (tome)
 			tome = "Tome"
 
