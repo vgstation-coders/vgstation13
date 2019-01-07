@@ -307,4 +307,5 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 					temp = 0
 					message_admins("A singulo exists and a containment field has failed.",1)
 					investigation_log(I_SINGULO,"has <font color='red'>failed</font> whilst a singulo exists.")
+					score["singuloosed"]++
 			O.last_warning = world.time

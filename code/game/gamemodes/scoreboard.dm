@@ -84,7 +84,7 @@
 
 			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
 				score["escapees"]++
-//					player.unlock_medal("100M Dash", 1)
+//				player.unlock_medal("100M Dash", 1)
 //				player.unlock_medal("Survivor", 1)
 //				for(var/obj/item/weapon/gnomechompski/G in player.get_contents())
 //					player.unlock_medal("Guardin' gnome", 1)
