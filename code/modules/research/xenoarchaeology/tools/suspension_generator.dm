@@ -122,14 +122,7 @@
 	usr.set_machine(src)
 
 	if(href_list["toggle_field"])
-		if(!suspension_field)
-			if(cell.charge > 0)
-				if(anchored)
-					activate()
-				else
-					to_chat(usr, "<span class='warning'>You are unable to activate \the [src] until it is properly secured on the ground.</span>")
-		else
-			deactivate()
+		toggle(usr)
 	if(href_list["select_field"])
 		field_type = href_list["select_field"]
 	else if(href_list["insertcard"])
