@@ -57,7 +57,7 @@
 			if(0 to 30)
 				episode_names += new /datum/episode_name("[pick("THE DAY [uppr_name] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "THIS SIDE OF PARADISE", "HOME ALONE", "[uppr_name]: A SITUATION COMEDY", "GO BIG OR GO [uppr_name]", "PLACEBO EFFECT")]", "Low threat level of [mode.threat_level]%.", 150)
 			if(30 to 70)
-				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE BALLAD OF [uppr_name]", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR")]", "Moderate threat level of [mode.threat_level]%.", 200)
+				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE BALLAD OF [uppr_name]", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR", "A HOUSE DIVIDED")]", "Moderate threat level of [mode.threat_level]%.", 200)
 			if(70 to 100)
 				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "THE END OF [uppr_name] AS WE KNOW IT", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]")]", "High threat level of [mode.threat_level]%.", 250)
 		if(locate(/datum/dynamic_ruleset/roundstart/malf) in mode.executed_rules)
@@ -119,6 +119,7 @@
 	if(score["oremined"] > 500)
 		episode_names += new /datum/episode_name("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(300, score["oremined"]/15))
 	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire, if the chef was the only survivor, "if you can't stand the heat..."
+	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
@@ -180,6 +181,28 @@
 					if(is_type_in_list(H.get_item_by_slot(slot_w_uniform), list(/obj/item/clothing/under/rank/clown, /obj/item/clothing/under/jester)))
 						chance += 250
 					episode_names += new /datum/episode_name("[pick("COME HELL OR HIGH HONKER", "THE LAST LAUGH")]", "The Clown was the only survivor in the shuttle.", chance)
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Internal Affairs Agent")
+					var/chance = 250
+					if(locate(/obj/item/weapon/storage/briefcase) in H.held_items)
+						chance += 500
+					if(is_type_in_list(H.get_item_by_slot(slot_wear_suit), list(/obj/item/clothing/suit/storage/lawyer, /obj/item/clothing/suit/storage/internalaffairs)))
+						chance += 500
+					if(is_type_in_list(H.get_item_by_slot(slot_w_uniform), list(/obj/item/clothing/under/rank/internalaffairs, /obj/item/clothing/under/bridgeofficer, /obj/item/clothing/under/lawyer)))
+						chance += 250
+					episode_names += new /datum/episode_name("DEVIL'S ADVOCATE", "The IAA was the only survivor in the shuttle.", chance) //maybe DOUBLE JEOPARDY if there are only 2 surviving IAAs?
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Detective")
+					var/chance = 250
+					if(locate(/obj/item/weapon/gun/projectile/detective) in H.held_items)
+						chance += 1000
+					if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/det_hat))
+						chance += 500
+					if(is_type_in_list(H.get_item_by_slot(slot_wear_suit), list(/obj/item/clothing/suit/storage/det_suit/, /obj/item/clothing/suit/storage/forensics)))
+						chance += 500
+					if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/det))
+						chance += 250
+					episode_names += new /datum/episode_name("[uppertext(H.real_name)]: LOOSE CANNON", "The Detective was the only survivor in the shuttle.", chance)
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chaplain") //We don't check for uniform here because the chaplain's thing kind of is to improvise their garment gimmick
+					episode_names += new /datum/episode_name("BLESS THIS MESS", "The Chaplain was the only survivor in the shuttle.", 1250)
 
 				if(istype(H.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/raincoat) && locate(/obj/item/weapon/fireaxe) in H.held_items)
 					episode_names += new /datum/episode_name("[pick("SPACE AMERICAN PSYCHO", "NANOTRASEN PSYCHO", "[uppr_name] PSYCHO")]", "The only survivor in the shuttle wore a raincoat and held a fireaxe.", 1500)
@@ -209,10 +232,11 @@
 			var/baldycount = 0
 			var/fattycount = 0
 			var/horsecount = 0
+			var/piggycount = 0
 			for(var/mob/living/carbon/human/H in human_escapees)
 				if(H.mind && H.mind.miming)
 					mimecount++
-				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/gas/clown_hat) || (H.mind && H.mind.assigned_role == "Clown"))
+				if(is_type_in_list(H.get_item_by_slot(slot_wear_mask), list(/obj/item/clothing/mask/gas/clown_hat, /obj/item/clothing/mask/gas/sexyclown)) || (H.mind && H.mind.assigned_role == "Clown"))
 					clowncount++
 				if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/color/grey) || (H.mind && H.mind.assigned_role == "Assistant"))
 					assistantcount++
@@ -234,34 +258,41 @@
 					fattycount++
 				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/horsehead))
 					horsecount++
+				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/pig))
+					piggycount++
 			if(clowncount > 3)
-				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*150))
+				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*200))
 			if(mimecount > 3)
-				episode_names += new /datum/episode_name("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*150))
+				episode_names += new /datum/episode_name("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*200))
 			if(chaplaincount > 2)
-				episode_names += new /datum/episode_name("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*250))
+				episode_names += new /datum/episode_name("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*450))
 			if(chefcount > 2)
-				episode_names += new /datum/episode_name("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 200%; text-shadow: rgb(123, 96, 38) 1px 1px 0px, rgb(123, 96, 38) 1px 1px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*250)) //intentionally not capitalized
+				episode_names += new /datum/episode_name("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 175%; text-shadow: rgb(123, 96, 38) 1.5px 1.5px 0px, rgb(123, 96, 38) 1.5px 1.5px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized
 			if(assistantcount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*100))
+				episode_names += new /datum/episode_name("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
 			if(skeletoncount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*100))
+				episode_names += new /datum/episode_name("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*200))
 			if(voxcount / human_escapees > 0.6)
-				episode_names += new /datum/episode_name("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*100))
+				episode_names += new /datum/episode_name("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*200))
 			if(dionacount / human_escapees > 0.6)
-				episode_names += new /datum/episode_name("ALL BARK AND NO BITE", "Most of the survivors were Diona.", min(1500, dionacount*100))
+				episode_names += new /datum/episode_name("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*200))
 			if(baldycount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("TO BALDLY GO", "Most of the survivors were bald, and it shows.", min(1500, baldycount*100))
+				episode_names += new /datum/episode_name("TO BALDLY GO", "Most of the survivors were bald, and it shows.", min(1500, baldycount*200))
 			if(fattycount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*100))
+				episode_names += new /datum/episode_name("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*200))
 			if(horsecount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*100))
+				episode_names += new /datum/episode_name("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*200))
 
 			var/bearcount = 0
 			for(var/mob/living/simple_animal/hostile/bear/B in shuttle)
 				bearcount += 1
 			if(bearcount > 3)
 				episode_names += new /datum/episode_name("BEARS REPEATING", "There were [bearcount] bears on the shuttle.", min(1000, bearcount*100))
+
+			for(var/mob/living/simple_animal/hostile/retaliate/box/B in shuttle)
+				piggycount += 1
+			if(piggycount > 3)
+				episode_names += new /datum/episode_name("BRINGING HOME THE BACON", "[piggycount] little piggies went to the shuttle...", min(1000, piggycount*100))
 
 			var/beecount = 0
 			for(var/mob/living/simple_animal/bee/B in shuttle)
