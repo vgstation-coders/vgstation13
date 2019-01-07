@@ -195,7 +195,7 @@
 					skeletoncount++
 				if(isvox(H) || isskelevox(H))
 					voxcount++
-				if(isjusthuman(H) && H.h_style == "Bald" && !is_slot_hidden(H.body_parts_covered,FULL_HEAD))
+				if(isjusthuman(H) && (H.h_style == "Bald" || H.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
 					baldycount++
 			if(clowncount > 3)
 				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*100))
