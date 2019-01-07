@@ -236,6 +236,7 @@ var/list/score=list(
 	"meals"          = 0, //How much food was actively cooked that day
 	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
 	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
+	"lawchanges"	 = 0, //Amount of AI modules used.
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -261,6 +262,7 @@ var/list/score=list(
 	"explosions"	= 0, //How many explosions happened total
 	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
+	"singuloosed"   = 0, //If nonzero, then there was a proper singuloose (containment was up at the time)
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
