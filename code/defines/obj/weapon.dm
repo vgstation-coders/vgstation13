@@ -548,9 +548,6 @@
 
 /obj/item/weapon/caution/proximity_sign/attack_self(mob/user as mob)
 	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.mind.assigned_role != "Janitor")
-			return
 		if(armed)
 			armed = 0
 			to_chat(user, "<span class='notice'>You disarm \the [src].</span>")
@@ -561,7 +558,7 @@
 		else
 			armed = 0
 			timepassed = 0
-		to_chat(H, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
+		to_chat(user, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
 
 /obj/item/weapon/caution/proximity_sign/process()
 	if(!timing)

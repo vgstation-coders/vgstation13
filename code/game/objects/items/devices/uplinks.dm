@@ -47,7 +47,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
 	if(!job)
 		job = user.mind.assigned_role
-	var/dat = "<B>[src.welcome]</B><BR>"
+
+	var/dat = list()
+	dat += "<B>[src.welcome]</B><BR>"
 
 	dat += {"Tele-Crystals left: [src.uses]<BR>
 		<HR>
@@ -62,7 +64,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		index++
 		dat += "<b>[category]</b><br>"
 
-		// First, let'
+		var/discounted_list = list() //These go on top.
+		var/nondiscounted_list = list()
 
 		var/i = 0
 		// Loop through items in category
@@ -72,27 +75,37 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			var/itemcost = item.get_cost(job)
 			var/cost_text = ""
 			var/desc = "[item.desc]"
+			var/final_text = ""
 			if(itemcost > 0)
-				if(item.matches_job(job))
+				if(item.gives_discount(job))
 					cost_text = "<span style='color: yellow; font-weight: bold;'>([itemcost]!)</span>"
 				else
 					cost_text = "([itemcost])"
 			if(itemcost <= uses)
-				dat += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
+				final_text += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
-				dat += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
+				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(item.desc)
 				if(show_description == 2)
-					dat += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
 				else
-					dat += "<A href='byond://?src=\ref[src];show_desc=2'><font size=2>\[?\]</font></A>"
-			dat += "<BR>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[desc]'><font size=2>\[?\]</font></A>"
+			final_text += "<BR>"
+
+			if(item.gives_discount(job))
+				discounted_list += final_text
+			else
+				nondiscounted_list += final_text
+
+		for(var/text in discounted_list|nondiscounted_list) //Discounted first, nondiscounted later.
+			dat += text
 
 		// Break up the categories, if it isn't the last.
 		if(buyable_items.len != index)
 			dat += "<br>"
 
 	dat += "<HR>"
+	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
 
 // Interaction code. Gathers a list of items purchasable from the paren't uplink and displays it. It also adds a lock button.
