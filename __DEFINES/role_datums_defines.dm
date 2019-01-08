@@ -174,4 +174,4 @@
 // -- Protected roles
 
 #define PROB_PROTECTED_REGULAR 50
-#define PROB_PROTECTED_RARE    80ll
+#define PROB_PROTECTED_RARE    80

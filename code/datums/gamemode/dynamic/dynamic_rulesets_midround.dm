@@ -72,8 +72,8 @@
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
-	var/player_count = living_players.len
-	var/antag_count = living_antags.len
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
 	if ((antag_count < max_traitors) && prob(mode.threat_level))//adding traitors if the antag population is getting low
 		return ..()
@@ -97,6 +97,7 @@
 /datum/dynamic_ruleset/midround/autotraitor/execute()
 	var/mob/M = pick(living_players)
 	assigned += M
+	living_players -= M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.OnPostSetup()
