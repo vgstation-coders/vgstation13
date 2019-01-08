@@ -44,6 +44,10 @@
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
 /datum/dynamic_ruleset/midround//Can be drafted once in a while during a round
+	var/list/living_players = list()
+	var/list/living_antags = list()
+	var/list/dead_players = list()
+	var/list/list_observers = list()
 
 /datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
@@ -210,12 +214,6 @@
 //            MIDROUND RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-
-/datum/dynamic_ruleset/midround/
-	var/list/living_players = list()
-	var/list/living_antags = list()
-	var/list/dead_players = list()
-	var/list/list_observers = list()
 
 /datum/dynamic_ruleset/midround/trim_candidates()
 	//unlike the previous two types, these rulesets are not meant for /mob/new_player
