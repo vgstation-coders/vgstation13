@@ -52,13 +52,15 @@
 	if (S.amount < req_amount*multiplier)
 		return
 	var/list/stacks_to_consume = list()
+	stacks_to_consume.Add(S)
+	stacks_to_consume[S] = req_amount*multiplier
 	if(other_reqs.len)
 		for(var/i=1 to other_reqs.len)
 			var/looking_for = other_reqs[i]
-			var/req_amount
+			var/required_amount
 			var/found = FALSE
 			if(ispath(looking_for, /obj/item/stack))
-				req_amount = other_reqs[looking_for]
+				required_amount = other_reqs[looking_for]*multiplier
 			if(ispath(usr.get_inactive_hand(), looking_for))
 				found = TRUE
 				if(req_amount) //It's of a stack/sheet subtype
@@ -67,18 +69,18 @@
 						found = FALSE
 					else
 						stacks_to_consume.Add(SS)
-						stacks_to_consume[S] = req_amount
+						stacks_to_consume[S] = required_amount
 					continue
 			for(var/obj/I in range(get_turf(usr),1))
 				if(ispath(looking_for, I))
 					found = TRUE
-					if(req_amount) //It's of a stack/sheet subtype
+					if(required_amount) //It's of a stack/sheet subtype
 						var/obj/item/stack/SS = I
-						if(SS.amount < req_amount)
+						if(SS.amount < required_amount)
 							found = FALSE
 						else
 							stacks_to_consume.Add(SS)
-							stacks_to_consume[S] = req_amount
+							stacks_to_consume[S] = required_amount
 			if(!found)
 				return
 	var/atom/O
@@ -94,26 +96,33 @@
 	if(start_unanchored)
 		var/obj/A = O
 		A.anchored = 0
-	var/put_in_hand = finish_building(usr, S, O)
+	var/atom/movable/put_in_hand = finish_building(usr, S, O)
 
 	//if (R.max_res_amount>1)
 	//	var/obj/item/stack/new_item = O
 	//	new_item.amount = R.res_amount*multiplier
 	//	//new_item.add_to_stacks(usr)
 
-	S.use(req_amount*multiplier)
+	var/datum/material/mat
+	var/datum/materials/materials_list = new
 	for(var/obj/item/stack/SS in stacks_to_consume)
 		SS.use(stacks_to_consume[SS])
+		if(istype(SS, /obj/item/stack/sheet))
+			var/obj/item/stack/sheet/SSS = SS
+			mat = materials_list.getMaterial(SSS.mat_type)
+			if(!put_in_hand.materials)
+				put_in_hand.materials = getFromPool(/datum/materials, put_in_hand)
+			put_in_hand.materials.addAmount(mat.id, (mat.cc_per_sheet)*stacks_to_consume[SSS])
+
 	if (S.amount<=0)
 		usr.before_take_item(S)
-		if(put_in_hand && istype(O,/obj/item))
-			usr.put_in_hands(O)
+		if(put_in_hand && istype(put_in_hand,/obj/item))
+			usr.put_in_hands(put_in_hand)
 	O.add_fingerprint(usr)
 	//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
 	if (istype(O, /obj/item/weapon/storage) )
 		for(var/obj/item/I in O)
 			qdel(I)
-
 	return put_in_hand
 
 //Recipe list datum
@@ -168,7 +177,7 @@
 		else if(S.material_type)
 			mat = S.material_type
 		R.dorfify(mat)
-	return 1
+	return R
 
 
 /datum/stack_recipe/blacksmithing
@@ -181,8 +190,9 @@
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
 	//Yeah nah let's put you in a blacksmith_placeholder
 	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
+	R.forceMove(I)
 	I.name = "unforged [R.name]"
-	return 0
+	return I
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
@@ -411,7 +421,7 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 			R.name = "[L.source_string ? "[L.source_string]" : ""] [R.name]"
 		else
 			R.name = "[L.source_string ? "[L.source_string] leather " : ""] [R.name]"
-	return 1
+	return R
 
 var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/bullwhip,					10,	time = 100,),

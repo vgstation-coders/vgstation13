@@ -18,8 +18,10 @@
 			user.drop_item(I)
 			finishing_requirements.Remove(I.type)
 			gen_quality(quality-I.quality, quality, I.material_type)
+			if(!materials)
+				materials = getFromPool(/datum/materials, src)
+			I.recycle(materials)
 			qdel(I)
-
 			if(!finishing_requirements.len) //We're done
 				user.drop_item(src)
 				result = new result
@@ -27,6 +29,9 @@
 				if(mat)
 					result.dorfify(mat, 0, quality)
 				user.put_in_hands(result)
+				if(!result.materials)
+					result.materials = getFromPool(/datum/materials, result)
+				recycle(result.materials)
 				qdel(src)
 		return
 	..()
