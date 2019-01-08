@@ -8,7 +8,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink
 	var/welcome 					// Welcoming menu message
-	var/uses 						// Numbers of crystals
+	var/uses 						// Number of crystals
 	// List of items not to shove in their hands.
 	var/list/purchase_log = list()
 	var/show_description = null
@@ -62,23 +62,22 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		index++
 		dat += "<b>[category]</b><br>"
 
-		var/i = 0
+		// First, let'
 
+		var/i = 0
 		// Loop through items in category
 		for(var/datum/uplink_item/item in buyable_items[category])
 			i++
 
+			var/itemcost = item.get_cost(job)
 			var/cost_text = ""
 			var/desc = "[item.desc]"
-			if(item.job && item.job.len)
-				if(!(item.job.Find(job)))
-					//world.log << "Skipping job item that doesn't match"
-					continue
+			if(itemcost > 0)
+				if(item.matches_job(job))
+					cost_text = "<span style='color: yellow; font-weight: bold;'>([itemcost]!)</span>"
 				else
-					//world.log << "Found matching job item"
-			if(item.cost > 0)
-				cost_text = "([item.cost])"
-			if(item.cost <= uses)
+					cost_text = "([itemcost])"
+			if(itemcost <= uses)
 				dat += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
 				dat += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
@@ -129,7 +128,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			var/category = split[1]
 			var/number = text2num(split[2])
 
-			var/list/buyable_items = get_uplink_items()
+			if(!job) //Should never happen unless the user somehow sends out a Topic() call before opening their uplink, but just in case.
+				job = usr.mind.assigned_role
+			var/list/buyable_items = get_uplink_items(job)
 
 			var/list/uplink = buyable_items[category]
 			if(uplink && uplink.len >= number)

@@ -1,6 +1,6 @@
 var/list/uplink_items = list()
 
-/proc/get_uplink_items(var/job = null)
+/proc/get_uplink_items()
 	// If not already initialized..
 	if(!uplink_items.len)
 
@@ -17,15 +17,16 @@ var/list/uplink_items = list()
 				continue
 			if(I.excludefrom.len && ticker && (ticker.mode.type in I.excludefrom))
 				continue
-			if(I.last)
-				last += I
-				continue
 			if(I.only_on_month)
 				if(time2text(world.realtime,"MM") != I.only_on_month)
 					continue
 			if(I.only_on_day)
 				if(time2text(world.realtime,"DD") != I.only_on_day)
 					continue
+
+			if(I.last)
+				last += I
+				continue
 
 			if(!uplink_items[I.category])
 				uplink_items[I.category] = list()
@@ -37,6 +38,8 @@ var/list/uplink_items = list()
 				uplink_items[I.category] = list()
 
 			uplink_items[I.category] += I
+
+		uplink_items.Swap(uplink_items.Find("Job Specific Tools"), uplink_items.len) //Swap job specific tools to the end.
 
 	return uplink_items
 
@@ -53,7 +56,7 @@ var/list/uplink_items = list()
 	var/abstract = 0
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
-	var/list/job = null
+	var/list/job = list() //Empty list does nothing. If list is not empty, jobs outside this list get 25% extra cost on the item.
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
@@ -61,15 +64,21 @@ var/list/uplink_items = list()
 	var/refundable = FALSE
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
+/datum/uplink_item/proc/get_cost(var/user_job, var/cost_modifier = 1)
+	. = cost //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
+	if(job.len && !matches_job(user_job))
+		. = cost * 1.25
+	. = round(. * cost_modifier)
+
+/datum/uplink_item/proc/matches_job(var/user_job)
+	return user_job && job.len && job.Find(user_job)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	U.uses -= max(cost, 0)
+	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new item(loc,user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
-
-
 	..()
 	if(!istype(U))
 		return 0
@@ -87,7 +96,7 @@ var/list/uplink_items = list()
 	// If the uplink's holder is in the user's contents
 	if ((U.loc in user.contents || (in_range(U.loc, user) && istype(U.loc.loc, /turf))))
 		user.set_machine(U)
-		if(cost > U.uses)
+		if(get_cost(U.job) > U.uses)
 			return 0
 
 		var/obj/I = spawn_item(get_turf(user), U, user)
@@ -110,12 +119,12 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [cost]."}
+			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 			if(user.mind)
 				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename]"}
-				user.mind.spent_TC += cost
+				user.mind.spent_TC += get_cost(U.job)
 		U.interact(user)
 
 		return 1
@@ -821,12 +830,12 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(I.cost > U.uses)
+			if(I.get_cost() > U.uses)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.cost)
+		U.uses -= max(0, I.get_cost())
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new I.item(loc)
