@@ -77,6 +77,13 @@
 	clumsy_check = 0
 	var/charge_tick = 0
 
+/obj/item/weapon/gun/energy/staff/can_Fire(mob/user, var/display_message = 0)
+	if (!..())
+		return FALSE
+	if (!iswizard(user))
+		to_chat(user, "<span class='warning'>You fumble trying to fire wave \the [src]. How did he handle it again?</span>")
+		return FALSE
+	return TRUE
 
 /obj/item/weapon/gun/energy/staff/New()
 	..()
@@ -112,8 +119,10 @@
 	if(P && istype(P))
 		P.changetype=changetype
 	return 1
-
 /obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
+	if (!iswizard(user))
+		return
+	
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -175,6 +184,9 @@
 	return 1
 
 /obj/item/weapon/gun/energy/staff/necro/attack_self(mob/user)
+	if (!iswizard(user))
+		return
+		
 	if(next_change > world.timeofday)
 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
 		return
