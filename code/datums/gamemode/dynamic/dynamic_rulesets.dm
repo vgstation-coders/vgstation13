@@ -44,10 +44,6 @@
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
 /datum/dynamic_ruleset/midround//Can be drafted once in a while during a round
-	var/list/living_players = list()
-	var/list/living_antags = list()
-	var/list/dead_players = list()
-	var/list/list_observers = list()
 
 /datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
@@ -85,14 +81,14 @@
 		if(!M.client || banned_factor || M.client.is_afk())
 			continue
 
-		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [role_category]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
 
 	spawn(1 MINUTES)
 		searching = 0
 		for(var/mob/M in possible_volunteers)
 			if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
 				continue
-			to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Applications for [role_category] are now closed.</span>[logo ? "[bicon(logo_icon)]" : ""]")
+			to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Applications for [initial(role_category.id)] are now closed.</span>[logo ? "[bicon(logo_icon)]" : ""]")
 		if(!applicants || applicants.len <= 0)
 			log_admin("DYNAMIC MODE: [name] received no applications.")
 			message_admins("DYNAMIC MODE: [name] received no applications.")
@@ -215,6 +211,11 @@
 //                                          //
 //////////////////////////////////////////////
 
+/datum/dynamic_ruleset/midround/
+	var/list/living_players = list()
+	var/list/living_antags = list()
+	var/list/dead_players = list()
+	var/list/list_observers = list()
 
 /datum/dynamic_ruleset/midround/trim_candidates()
 	//unlike the previous two types, these rulesets are not meant for /mob/new_player

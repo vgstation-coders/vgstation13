@@ -1,8 +1,5 @@
 // -- General rulesets types --
 
-/datum/dynamic_ruleset/midround/from_ghosts
-	var/flags
-
 /datum/dynamic_ruleset/midround/from_ghosts/execute()
 	var/list/possible_candidates = list()
 	possible_candidates.Add(dead_players)
@@ -15,6 +12,7 @@
 		if(applicants.len <= 0)
 			break
 		var/mob/applicant = pick(applicants)
+		applicants -= applicant				
 		if(!isobserver(applicant))
 			//Making sure we don't recruit people who got back into the game since they applied
 			i++
@@ -45,7 +43,7 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/review_applications()
 	var/datum/faction/active_fac = find_active_faction_by_type(my_fac)
-	if (!my_fac)
+	if (!active_fac)
 		active_fac = ticker.mode.CreateFaction(my_fac, null, 1)
 	my_fac = active_fac
 	. = ..()
@@ -53,7 +51,9 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
-	return ..()
+	new_role.Greet(GREET_MIDROUND)
+	new_role.ForgeObjectives()
+	new_role.AnnounceObjectives()
 
 //////////////////////////////////////////////
 //                                          //
@@ -72,8 +72,8 @@
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
-	var/player_count = mode.living_players.len
-	var/antag_count = mode.living_antags.len
+	var/player_count = living_players.len
+	var/antag_count = living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
 	if ((antag_count < max_traitors) && prob(mode.threat_level))//adding traitors if the antag population is getting low
 		return ..()
@@ -97,7 +97,6 @@
 /datum/dynamic_ruleset/midround/autotraitor/execute()
 	var/mob/M = pick(living_players)
 	assigned += M
-	living_players -= M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.OnPostSetup()
@@ -124,7 +123,7 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
 
-/datum/dynamic_ruleset/midround/raginmages/from_ghosts/faction_based/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
@@ -135,7 +134,7 @@
 
 	return ..()
 
-/datum/dynamic_ruleset/midround/raginmages/from_ghosts/faction_based/ready(var/forced = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
@@ -152,25 +151,26 @@
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
-	required_candidates = 5
+	required_candidates = 1
 	weight = 5
 	cost = 35
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	logo = "nuke-logo"
 
-/datum/dynamic_ruleset/midround/nuclear/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
 	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0//unavailable if nuke ops were already sent at roundstart
 	return ..()
 
-/datum/dynamic_ruleset/midround/nuclear/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
+		to_chat(world, "[required_candidates] > [dead_players.len] + [list_observers.len]")
 		return 0
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	if (index == 1) // Our first guy is the leader
-		var/datum/role/new_role = new role_category
+		var/datum/role/nuclear_operative/leader/new_role = new 
 		new_role.AssignToRole(new_character.mind,1)
 		setup_role(new_role)
 	else
@@ -180,7 +180,7 @@
 	
 //////////////////////////////////////////////
 //                                          //
-//         SPACE WEEABOO (MIDROUND)                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//         SPACE WEEABOO (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
 
@@ -196,8 +196,8 @@
 	logo = "weeaboo-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
-	var/player_count = mode.living_players.len
-	var/antag_count = mode.living_antags.len
+	var/player_count = living_players.len
+	var/antag_count = living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
 	if ((antag_count < max_traitors) && prob(mode.threat_level))
 		return ..()
@@ -226,7 +226,7 @@
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 
-/datum/dynamic_ruleset/midround/grinch/from_ghosts/acceptable(var/population=0, var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
 		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
 		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
