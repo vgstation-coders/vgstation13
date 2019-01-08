@@ -113,14 +113,10 @@
 /mob/living/carbon/human/Stun(amount)
 	if(M_HULK in mutations)
 		return
-	if (species && species.flags & MOB_CANT_STUN)
-		return
 	..()
 
 /mob/living/carbon/human/Knockdown(amount)
 	if(M_HULK in mutations)
-		return
-	if (species && species.flags & MOB_CANT_STUN)
 		return
 	..()
 
