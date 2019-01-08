@@ -7,7 +7,6 @@ var/list/uplink_items = list()
 		// Fill in the list	and order it like this:
 		// A keyed list, acting as categories, which are lists to the datum.
 
-		var/list/last = list()
 		for(var/item in typesof(/datum/uplink_item))
 
 			var/datum/uplink_item/I = new item()
@@ -24,16 +23,6 @@ var/list/uplink_items = list()
 				if(time2text(world.realtime,"DD") != I.only_on_day)
 					continue
 
-			if(I.last)
-				last += I
-				continue
-
-			if(!uplink_items[I.category])
-				uplink_items[I.category] = list()
-
-			uplink_items[I.category] += I
-
-		for(var/datum/uplink_item/I in last)
 			if(!uplink_items[I.category])
 				uplink_items[I.category] = list()
 
@@ -51,7 +40,6 @@ var/list/uplink_items = list()
 	var/item = null
 	var/cost = 0
 	var/discounted_cost = 0
-	var/last = 0 // Appear last
 	var/abstract = 0
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.

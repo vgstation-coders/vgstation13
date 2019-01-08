@@ -89,7 +89,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				if(show_description == 2)
 					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
 				else
-					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[desc]'><font size=2>\[?\]</font></A>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
 			final_text += "<BR>"
 
 			if(item.gives_discount(job))
