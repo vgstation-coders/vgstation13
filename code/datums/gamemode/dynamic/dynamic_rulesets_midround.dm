@@ -68,7 +68,7 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
-	cost = 5
+	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
@@ -177,7 +177,7 @@
 		return ..()
 
 
-	
+
 //////////////////////////////////////////////
 //                                          //
 //         SPACE WEEABOO (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,9 +190,9 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 1
+	weight = 4
 	cost = 10
-	requirements = list(90,90,80,70,60,50,40,30,20,10)
+	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	logo = "weeaboo-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
@@ -235,5 +235,5 @@
 		return FALSE
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
-	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 15) 	// Between the 15th of December and the 15th of January
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
 	return accepted

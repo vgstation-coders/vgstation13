@@ -178,10 +178,15 @@
 
 /mob/living/verb/succumb()
 	set hidden = 1
+	succumb_proc(0)
+
+/mob/living/proc/succumb_proc(var/gibbed = 0, var/from_deathgasp = FALSE)
 	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
 		src.apply_damage(maxHealth + src.health, OXY)
-		death(0)
+		if (!from_deathgasp)
+			emote("deathgasp", message = TRUE)
+		death(gibbed)
 		to_chat(src, "<span class='info'>You have given up life and succumbed to death.</span>")
 
 
