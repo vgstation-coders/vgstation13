@@ -152,7 +152,7 @@
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
-	required_candidates = 1
+	required_candidates = 5
 	weight = 5
 	cost = 35
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -197,8 +197,8 @@
 	logo = "weeaboo-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
-	var/player_count = living_players.len
-	var/antag_count = living_antags.len
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
 	if ((antag_count < max_traitors) && prob(mode.threat_level))
 		return ..()
