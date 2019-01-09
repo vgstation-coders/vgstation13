@@ -272,31 +272,31 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
 	return
 
-/obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob)
+/obj/item/clothing/mask/cigarette/afterattack(obj/reagentholder, mob/user as mob)
 	..()
-	if(istype(glass))	//You can dip cigarettes into beakers and beaker subtypes
-		if(glass.reagents.has_reagent(SACID) || glass.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
-			var/atom/new_butt = new type_butt(get_turf(glass))
+	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+		if(reagentholder.reagents.has_reagent(SACID) || reagentholder.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
+			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
 			processing_objects.Remove(src)
-			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [glass].</span>")
+			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [reagentholder].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		if(glass.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
-			var/atom/new_butt = new type_butt(get_turf(glass))
+		if(reagentholder.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
+			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
 			processing_objects.Remove(src)
-			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [glass].</span>")
+			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [reagentholder].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		var/transfered = glass.reagents.trans_to(src, chem_volume)
+		var/transfered = reagentholder.reagents.trans_to(src, chem_volume)
 		if(transfered)	//If reagents were transfered, show the message
-			to_chat(user, "<span class='notice'>You dip \the [src] into \the [glass].</span>")
+			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder].</span>")
 		else	//If not, either the beaker was empty, or the cigarette was full
-			if(!glass.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell a cigarette is "full"
-				to_chat(user, "<span class='warning'>\The [glass] is empty.</span>")
+			if(!reagentholder.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell a cigarette is "full"
+				to_chat(user, "<span class='warning'>\The [reagentholder] is empty.</span>")
 				return
 
 /obj/item/clothing/mask/cigarette/proc/light(var/flavor_text = "[usr] lights \the [src].")
@@ -328,6 +328,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	lit = 1 //All checks that could have stopped the cigarette are done, let us begin
+	score["tobacco"]++
 
 	flags &= ~NOREACT //Allow reagents to react after being lit
 	clothing_flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
@@ -374,7 +375,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -550,6 +551,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
 		lit = 1
+		score["tobacco"]++
 		damtype = BURN
 		update_brightness()
 		var/turf/T = get_turf(src)

@@ -136,6 +136,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/brunt_damage_mod = 1
 	var/sharpness_mod = 1
 	var/quality_mod = 1
+	var/melt_temperature = MELTPOINT_STEEL
+	var/armor_mod = 1
+
 
 /datum/material/New()
 	if(processed_name=="")
@@ -159,6 +162,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.1
 	sharpness_mod = 0.8
 	quality_mod = 1.1
+	melt_temperature = MELTPOINT_STEEL
 
 /datum/material/glass
 	name="Sand"
@@ -172,6 +176,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	alpha = 122
 	brunt_damage_mod = 0.7
 	sharpness_mod = 1.4
+	melt_temperature = MELTPOINT_GLASS
 
 /datum/material/glass/on_use(obj/source)
 	if(!..())
@@ -195,6 +200,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.6
 	quality_mod = 2
+	melt_temperature = MELTPOINT_CARBON
 
 /datum/material/plasma
 	name="Plasma"
@@ -226,6 +232,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 0.5
 	sharpness_mod = 0.5
 	quality_mod = 1.7
+	melt_temperature = MELTPOINT_GOLD
 
 /datum/material/silver
 	name="Silver"
@@ -238,6 +245,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 0.7
 	sharpness_mod = 0.7
 	quality_mod = 1.5
+	melt_temperature = MELTPOINT_SILVER
 
 
 /datum/material/uranium
@@ -251,6 +259,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.8
 	sharpness_mod = 0.2
 	quality_mod = 1.4
+	melt_temperature = MELTPOINT_URANIUM
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
@@ -267,6 +276,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
+	melt_temperature = MELTPOINT_POTASSIUM
 
 /datum/material/clown/New()
 	if(!..())
@@ -284,7 +294,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
 	if(!..())
 		return
-	if(prob(2*source.quality))
+	if(prob(10*source.quality))
 		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
 
 /datum/material/phazon
@@ -299,11 +309,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.8
 	quality_mod = 2.2
+	melt_temperature = MELTPOINT_PLASMA
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
 		return
-	if(prob(0.5*source.quality))
+	if(prob(5*source.quality))
 		switch(rand(1,2))
 			if(1) //EMP
 				empulse(get_turf(pick(source,target,user)), 0.25*source.quality, 0.5*source.quality, 1)
@@ -352,6 +363,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype = null
 	cc_per_sheet = CC_PER_SHEET_METAL
 	color = "#A97F1B"
+	melt_temperature = MELTPOINT_BRASS
 
 /datum/material/ralloy
 	name = "Replicant Alloy"
@@ -376,6 +388,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/telecrystal
 	sheettype=null
 	cointype=null
+
+/datum/material/mythril
+	name="mythril"
+	id=MAT_MYTHRIL
+	value=50
+	oretype=/obj/item/weapon/ore/mythril
+	sheettype=/obj/item/stack/sheet/mineral/mythril
+	cointype=/obj/item/weapon/coin/mythril
+	color = "#FFEDD2" //rgb: 255,237,238
+	brunt_damage_mod = 1.4
+	sharpness_mod = 0.6
+	quality_mod = 1.5
+	armor_mod = 1.75
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium

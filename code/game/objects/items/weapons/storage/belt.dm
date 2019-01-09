@@ -163,8 +163,9 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-        "/obj/item/weapon/reagent_containers/hypospray/autoinjector",
+		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
+		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
 		"/obj/item/weapon/switchtool/surgery",
@@ -214,7 +215,9 @@
 		"/obj/item/device/hailer",
 		"obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
-		"/obj/item/clothing/accessory/holobadge"
+		"/obj/item/clothing/accessory/holobadge",
+		"/obj/item/weapon/autocuffer",
+		"/obj/item/weapon/depocket_wand"
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
@@ -339,12 +342,8 @@
 	icon_state = "lazarusbelt"
 
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
-	var/blocked = list(
-	/mob/living/simple_animal/hostile/hivebot/tele,
-	/mob/living/simple_animal/hostile/wendigo/evolved,
-	/mob/living/simple_animal/hostile/wendigo/alpha,
-	)
-	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
+
+	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)) // list of possible hostile mobs
 	critters = shuffle(critters)
 	while(contents.len < 6)
 		var/obj/item/device/mobcapsule/MC = new /obj/item/device/mobcapsule(src)

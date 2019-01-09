@@ -138,30 +138,30 @@
 		mind.transfer_to(C)
 		to_chat(C, "<span class='sinister'>The Geometer of Blood is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the shell of an Harvester.<br>Your tendrils can use and draw runes without need for a tome, your eyes can see beings through walls, and your mind can open any door. Use these assets to serve Nar-Sie and bring him any remaining living human in the world.<br>You can teleport yourself back to Nar-Sie along with any being under yourself at any time using your \"Harvest\" spell.</span>")
 		dust()
-	else if(client)
-		var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if (cult_fact)
-			cult_fact.harvested++
-		var/mob/dead/G = (ghostize())
-		G.icon = 'icons/mob/mob.dmi'
-		G.icon_state = "ghost-narsie"
-		G.overlays = 0
-		if(istype(G.mind.current, /mob/living/carbon/human/))
-			var/mob/living/carbon/human/H = G.mind.current
-			G.overlays += H.obj_overlays[ID_LAYER]
-			G.overlays += H.obj_overlays[EARS_LAYER]
-			G.overlays += H.obj_overlays[SUIT_LAYER]
-			G.overlays += H.obj_overlays[GLASSES_LAYER]
-			G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-			G.overlays += H.obj_overlays[BELT_LAYER]
-			G.overlays += H.obj_overlays[BACK_LAYER]
-			G.overlays += H.obj_overlays[HEAD_LAYER]
-			G.overlays += H.obj_overlays[HANDCUFF_LAYER]
-		G.invisibility = 0
-		to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
-
-	else
-		dust()
+	else if(!iscultist(src))
+		if(client)
+			var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
+			if (cult_fact)
+				cult_fact.harvested++
+			var/mob/dead/G = (ghostize())
+			G.icon = 'icons/mob/mob.dmi'
+			G.icon_state = "ghost-narsie"
+			G.overlays = 0
+			if(istype(G.mind.current, /mob/living/carbon/human/))
+				var/mob/living/carbon/human/H = G.mind.current
+				G.overlays += H.obj_overlays[ID_LAYER]
+				G.overlays += H.obj_overlays[EARS_LAYER]
+				G.overlays += H.obj_overlays[SUIT_LAYER]
+				G.overlays += H.obj_overlays[GLASSES_LAYER]
+				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.obj_overlays[BELT_LAYER]
+				G.overlays += H.obj_overlays[BACK_LAYER]
+				G.overlays += H.obj_overlays[HEAD_LAYER]
+				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+			G.invisibility = 0
+			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
+		spawn(1)
+			dust()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -178,10 +178,15 @@
 
 /mob/living/verb/succumb()
 	set hidden = 1
+	succumb_proc(0)
+
+/mob/living/proc/succumb_proc(var/gibbed = 0, var/from_deathgasp = FALSE)
 	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
 		src.apply_damage(maxHealth + src.health, OXY)
-		death(0)
+		if (!from_deathgasp)
+			emote("deathgasp", message = TRUE)
+		death(gibbed)
 		to_chat(src, "<span class='info'>You have given up life and succumbed to death.</span>")
 
 
@@ -1205,14 +1210,17 @@ Thanks.
 	return
 
 //same as above
-/mob/living/pointed(atom/A as mob|obj|turf in view())
+/mob/living/pointed(atom/A as mob|obj|turf in view(get_turf(src)))
 	if(src.incapacitated())
 		return 0
 	if(!..())
 		return 0
-	usr.visible_message("<b>[src]</b> points to [A]")
+	var/turf/T = get_turf(src)
+	T.visible_message("[pointToMessage(src, A)]")
 	return 1
 
+/mob/living/proc/pointToMessage(var/pointer, var/pointed_at)
+	return "<b>\The [pointer]</b> points at <b>\the [pointed_at]</b>."
 
 /mob/living/proc/generate_static_overlay()
 	if(!istype(static_overlays,/list))
@@ -1321,7 +1329,7 @@ Thanks.
 			if (!now_pushing)
 				now_pushing = 1
 
-				if (!AM.anchored)
+				if (!AM.anchored && AM.can_be_pushed(src))
 					var/t = get_dir(src, AM)
 					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
@@ -1796,7 +1804,7 @@ Thanks.
 	user.visible_message("<span class='warning'>[user] injects [src] with the \the [tool]!</span>",
 						 "<span class='warning'>You inject [src] with \the [tool]!</span>")
 	var/reagent_names = english_list(tool.get_reagent_names())
-	add_attacklogs(user, src, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
+	add_attacklogs(user, src, "injected", object = tool, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
 
 	// TODO Every reagent reacts with the full volume instead of being scaled accordingly
 	// TODO which is pretty irrelevant now but should be fixed

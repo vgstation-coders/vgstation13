@@ -48,7 +48,7 @@
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 
-	if(species.flags & REQUIRE_DARK)
+	if(species.flags & REQUIRE_DARK && !(head && head.islightshielded()))
 		var/light_amount = 0
 		if(isturf(loc))
 			var/turf/T = loc
@@ -142,14 +142,4 @@
 
 	handle_trace_chems()
 
-	var/datum/organ/internal/liver/liver = internal_organs_by_name["liver"]
-	if(liver)
-		liver.process()
-
-	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
-	if(eyes)
-		eyes.process()
-
 	updatehealth()
-
-	return //TODO: DEFERRED

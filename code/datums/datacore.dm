@@ -2,14 +2,6 @@
 	data_core = new /obj/effect/datacore()
 	return 1
 
-/obj/effect/datacore/proc/manifest(var/nosleep = 0)
-	spawn()
-		if(!nosleep)
-			sleep(40)
-		for(var/mob/living/carbon/human/H in player_list)
-			manifest_inject(H)
-		return
-
 /obj/effect/datacore/proc/manifest_modify(var/name, var/assignment)
 	if(PDA_Manifest.len)
 		PDA_Manifest.len = 0
@@ -51,7 +43,7 @@
 		if(job && job.no_crew_manifest)
 			return
 
-		var/id = add_zero(num2hex(rand(1, 1.6777215E7)), 6)	//this was the best they could come up with? A large random number? *sigh*
+		var/id = num2hex(rand(1, 1.6777215E7), 6)	//this was the best they could come up with? A large random number? *sigh*
 
 
 		//General Record

@@ -50,6 +50,7 @@
 			shade.name = "[real_name] the Shade"
 			shade.real_name = "[real_name]"
 			mind.transfer_to(shade)
+			update_faction_icons()
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
 	if(species)
@@ -102,8 +103,6 @@
 			H.mind.kills += "[name] ([ckey])"
 
 	if(!gibbed)
-		emote("deathgasp") //Let the world KNOW WE ARE DEAD
-
 		update_canmove()
 	stat = DEAD
 	tod = worldtime2text() //Weasellos time of death patch

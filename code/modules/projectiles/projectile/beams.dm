@@ -572,8 +572,11 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/heavylaser
 	name = "heavy laser"
 	icon_state = "heavylaser"
-	damage = 40
+	damage = 60
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
+
+/obj/item/projectile/beam/heavylaser/lawgiver
+	damage = 40
 
 /obj/item/projectile/beam/xray
 	name = "xray beam"

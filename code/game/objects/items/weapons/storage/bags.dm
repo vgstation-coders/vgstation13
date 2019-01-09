@@ -80,7 +80,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 
 // -----------------------------
@@ -98,6 +98,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
 	can_only_hold = list("/obj/item/weapon/ore")
+	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/ore/auto
 	name = "automatic ore loader"
@@ -177,6 +178,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
+	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/plants/portactor
 	name = "portable seed extractor"
@@ -428,6 +430,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
@@ -506,3 +509,32 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	..()
 	for(var/i=1 to 10)
 		new /obj/item/potion/random(src)
+
+/obj/item/weapon/storage/bag/potion/predicted_potion_bundle
+	name = "Predicted potion bundle"
+	desc = "What could potionly go right?"
+
+/obj/item/weapon/storage/bag/potion/predicted_potion_bundle/New()
+	..()
+	for(var/i = 1 to 40)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)
+
+/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle
+	name = "Lesser predicted potion bundle"
+	desc = "What could potionly go slightly more right?"
+
+/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
+	..()
+	for(var/i = 1 to 8)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)
+
+/obj/item/weapon/storage/bag/ammo_pouch
+	name = "ammunition pouch"
+	desc = "Designed to hold stray magazines and spare bullets."
+	icon_state = "ammo_pouch"
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	storage_slots = 3
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BELT | SLOT_POCKET

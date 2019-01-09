@@ -10,7 +10,7 @@
 	var/path = 0
 	var/obj/item/device/assembly_holder/detonator = null
 	var/list/beakers = new/list()
-	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle)
+	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle, /obj/item/weapon/reagent_containers/food/drinks)
 	var/affected_area = 3
 	var/inserted_cores = 0
 	var/obj/item/slime_extract/firstExtract = null	//for large and Ex grenades
@@ -105,8 +105,8 @@
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
 				var/temp_reagents = new/list()
 				var/reagents_text = ""
-				for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
-					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker) || istype(G, /obj/item/weapon/reagent_containers/glass/bottle))
+				for(var/obj/item/weapon/reagent_containers/G in beakers)
+					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker) || istype(G, /obj/item/weapon/reagent_containers/glass/bottle) || istype(G, /obj/item/weapon/reagent_containers/food/drinks))
 						temp_reagents += G.reagents.amount_cache
 						if(reagents_text)
 							reagents_text += " and ([english_list(temp_reagents)])"
@@ -223,7 +223,7 @@
 
 	//if(prob(reliability))
 	var/has_reagents = 0
-	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
+	for(var/obj/item/weapon/reagent_containers/G in beakers)
 		if(G.reagents.total_volume)
 			has_reagents = 1
 
@@ -239,7 +239,7 @@
 
 	reservoir = new /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade() //acts like a stasis beaker, so the chemical reactions don't occur before all the slime reactions have occured
 
-	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
+	for(var/obj/item/weapon/reagent_containers/G in beakers)
 		G.reagents.trans_to(reservoir, G.reagents.total_volume)
 	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
 		S.reagents.trans_to(reservoir, S.reagents.total_volume)
@@ -304,7 +304,7 @@
 	name = "Large Chem Grenade"
 	desc = "An oversized grenade that affects a larger area."
 	icon_state = "large_grenade"
-	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract)
+	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract, /obj/item/weapon/reagent_containers/food/drinks)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
@@ -312,7 +312,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	name = "EX Chem Grenade"
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
-	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract)
+	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract, /obj/item/weapon/reagent_containers/food/drinks)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 

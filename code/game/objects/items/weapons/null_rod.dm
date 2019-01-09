@@ -18,7 +18,7 @@
 
 /obj/item/weapon/nullrod/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS|FIRELOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
 
@@ -49,7 +49,7 @@
 		var/datum/role/vampire/V = isvampire(H)
 
 		if(V && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
-			if(!(VAMP_MATURE in V.powers))
+			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 					V.nullified = max(5, V.nullified + 2)
@@ -68,15 +68,31 @@
 	*/
 
 	..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
-/*
-/obj/item/weapon/nullrod/afterattack(atom/A, mob/user as mob, prox_flag, params)
+
+/obj/item/weapon/nullrod/afterattack(var/atom/A, var/mob/user, var/prox_flag, var/params)
 	if(!prox_flag)
 		return
-	user.delayNextAttack(8)
 	if(istype(A, /turf/simulated/floor))
-		to_chat(user, "<span class='notice'>You hit the floor with the [src].</span>")
-		call(/obj/effect/rune/proc/revealrunes)(src)
-*/
+		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)
+		animation.alpha = 0
+		animate(animation, alpha = 255, time = 2)
+		animate(alpha = 0, time = 3)
+		user.delayNextAttack(8)
+		to_chat(user, "<span class='notice'>You hit \the [A] with \the [src].</span>")
+		var/found = 0
+		for(var/obj/effect/rune/R in range(1,A))
+			found = 1
+			R.reveal()
+		if (found)
+			to_chat(user, "<span class='warning'>Arcane markings suddenly glow from underneath a thin layer of dust!</span>")
+		found = 0
+		for(var/obj/structure/cult/S in range(1,A))
+			found = 1
+			S.reveal()
+		if (found)
+			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
+		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
+
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")
@@ -249,6 +265,45 @@
 	attack_verb = list("bashes", "smashes", "pulverizes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	fluff_pickup = "smite"
+
+/obj/item/weapon/nullrod/mosinnagant
+	name = "mosin nagant"
+	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."
+	icon = 'icons/obj/gun.dmi'
+	icon_override = "nagant"
+	icon_state = "nagant"
+	item_state = "nagant"
+	slot_flags = SLOT_BELT | SLOT_BACK
+	w_class = W_CLASS_LARGE
+	attack_verb = list("bashes", "smashes", "buttstrokes")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+
+/obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
+	..()
+	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
+		if(do_after(user, src, 30))
+			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
+			qdel(src)
+			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
+
+/obj/item/weapon/nullrod/mosinnagant/obrez
+	name = "obrez"
+	desc = "Holding this makes you feel like you want to obtain an SKS and go deeper in space. This one cannot be fired."
+	icon = 'icons/obj/gun.dmi'
+	icon_override = "obrez"
+	icon_state = "obrez"
+	item_state = "obrez"
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("bashes", "smashes", "pistol-whips", "clubs")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+
+/obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
+    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter)) 
+        return 
+    else 
+        return ..() 
 
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos

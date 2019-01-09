@@ -18,7 +18,7 @@
 	var/obj/spacepod/S = target
 	if(S.equipment_system && S.equipment_system.weapon_system)
 		var/obj/item/device/spacepod_equipment/weaponry/W = S.equipment_system.weapon_system
-		if(S.passengers.Find(owner) && !S.passenger_fire)
+		if(S.get_passengers().Find(owner) && !S.passenger_fire)
 			to_chat(owner, "<span class = 'warning'>Passenger gunner system disabled.</span>")
 			return
 		W.fire_weapons()
@@ -58,24 +58,16 @@
 /datum/action/spacepod/passenger/Trigger()
 	..()
 	var/obj/spacepod/S = target
-	if(!S || !S.passengers.len || !S.passengers.Find(owner))
+	if(!S || !S.occupants.Find(owner))
 		to_chat(owner, "<span class = 'warning'>How did you get control of this button?</span>")
 		qdel(src)
 		return
 
-/datum/action/spacepod/passenger/assume_control
-	name = "Assume pod controls"
-	button_icon_state = "assume_control"
+/datum/action/spacepod/pilot/change_speed
+	name = "Change speed"
+	button_icon_state = "change_speed"
 
-/datum/action/spacepod/passenger/assume_control/Trigger()
+/datum/action/spacepod/pilot/change_speed/Trigger()
 	..()
 	var/obj/spacepod/S = target
-
-	if(!S.occupant)
-		to_chat(owner, "<span class = 'warning'>You assume control of \the [S].</span>")
-		S.move_passenger_outside(owner, get_turf(S))
-		spawn(1)
-			S.move_pilot_inside(owner)
-			qdel(src)
-	else
-		to_chat(owner, "<span class = 'warning'>[S.occupant] is the pilot of \the [S] currently.</span>")
+	S.change_speed()

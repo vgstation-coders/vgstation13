@@ -37,6 +37,8 @@ var/const/APC_WIRE_AI_CONTROL = 8
 	switch(index)
 
 		if(APC_WIRE_IDSCAN)
+			if(A.emagged)
+				return
 			A.locked = 0
 
 			spawn(300)

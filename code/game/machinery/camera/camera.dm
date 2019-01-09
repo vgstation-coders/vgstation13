@@ -1,3 +1,7 @@
+#define CAMERA_MAX_HEALTH 120
+#define CAMERA_DEACTIVATE_HEALTH 45
+#define CAMERA_MIN_WEAPON_DAMAGE 5
+
 var/list/camera_names=list()
 /obj/machinery/camera
 	name = "security camera"
@@ -8,6 +12,7 @@ var/list/camera_names=list()
 	idle_power_usage = 5
 	active_power_usage = 10
 	plane = ABOVE_HUMAN_PLANE
+	flags = FPRINT
 
 	var/datum/wires/camera/wires = null // Wires datum
 	var/list/network = list(CAMERANET_SS13)
@@ -34,7 +39,7 @@ var/list/camera_names=list()
 	var/hear_voice = 0
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
-
+	var/health = CAMERA_MAX_HEALTH
 
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
@@ -186,7 +191,23 @@ var/list/camera_names=list()
 #define MAX_CAMERA_MESSAGES 15
 var/list/camera_messages = list()
 
-/obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
+/obj/machinery/camera/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damtype == HALLOSS)
+		return
+
+	take_damage(Proj.damage)
+
+/obj/machinery/camera/proc/dismantle()
+	if(assembly)
+		assembly.anchored = TRUE
+		assembly.state = 1
+		assembly.forceMove(loc)
+		transfer_fingerprints(src, assembly)
+		assembly.update_icon()
+		assembly = null
+	qdel(src)
+
+/obj/machinery/camera/attackby(obj/item/W, mob/living/user)
 
 	// DECONSTRUCTION
 	if(isscrewdriver(W))
@@ -199,12 +220,7 @@ var/list/camera_messages = list()
 
 	else if(iswelder(W) && wires.CanDeconstruct())
 		if(weld(W, user))
-			if(assembly)
-				assembly.state = 1
-				assembly.forceMove(src.loc)
-				assembly = null
-
-			qdel(src)
+			dismantle()
 
 	// Upgrades!
 	else if(is_type_in_list(W, assembly.possible_upgrades)) // Is a possible upgrade
@@ -291,7 +307,29 @@ var/list/camera_messages = list()
 					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
-	return
+		add_fingerprint(user)
+		user.delayNextAttack(8)
+		if(user.a_intent == I_HELP)
+			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
+			return
+		W.on_attack(src, user)
+		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
+			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
+			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
+			return
+		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		take_damage(W.force)
+
+/obj/machinery/camera/proc/take_damage(var/amount)
+	if(amount <= 0)
+		return
+	triggerCameraAlarm()
+	health -= amount
+	if(health <= CAMERA_DEACTIVATE_HEALTH && status)
+		deactivate()
+	if(health <= 0)
+		spark(src)
+		dismantle()
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())
@@ -425,10 +463,9 @@ var/list/camera_messages = list()
 		return 1
 	return 0
 
-/obj/machinery/camera/proc/tv_message(var/atom/movable/hearer, var/datum/speech/speech)
+/obj/machinery/camera/proc/tv_message(var/datum/speech/speech)
 	speech.wrapper_classes.Add("tv")
-	hearer.Hear(speech)
-
+	return speech
 	/*
 	var/namepart =  "[speaker.GetVoice()][speaker.get_alt_name()] "
 	var/messagepart = "<span class='message'>[hearer.lang_treat(speaker, speaking, raw_message)]</span>"
@@ -437,14 +474,15 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(isHearing())
+		var/datum/speech/copy = speech.clone()
+		tv_message(copy)
 		for(var/obj/machinery/computer/security/S in tv_monitors)
 			if(S.current == src)
-				if(istype(S, /obj/machinery/computer/security/telescreen))
-					for(var/mob/M in viewers(world.view,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
-				else
-					for(var/mob/M in viewers(1,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
+				var/range = (istype(S, /obj/machinery/computer/security/telescreen) ? world.view : 1)
+				for (var/mob/virtualhearer/VH in viewers(range, S))
+					if (!ismob(VH.attached))
+						continue
+					VH.Hear(copy, "[bicon(S)] [rendered_speech]")
 
 /obj/machinery/camera/arena
 	name = "arena camera"
@@ -495,6 +533,9 @@ var/list/camera_messages = list()
 /obj/machinery/camera/arena/attack_pai(mob/user as mob)
 	return
 
+/obj/machinery/camera/arena/bullet_act(var/obj/item/projectile/Proj)
+	return
+
 /obj/machinery/camera/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
@@ -507,3 +548,7 @@ var/list/camera_messages = list()
 		togglePanelOpen(null, L)
 	if(wires)
 		wires.npc_tamper(L)
+
+#undef CAMERA_MAX_HEALTH
+#undef CAMERA_DEACTIVATE_HEALTH
+#undef CAMERA_MIN_WEAPON_DAMAGE

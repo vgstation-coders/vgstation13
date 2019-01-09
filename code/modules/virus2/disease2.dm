@@ -22,9 +22,12 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	..()
 
-/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0)
+/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0, var/old_effect)
 	var/list/datum/disease2/effect/list = list()
-	for(var/e in typesof(/datum/disease2/effect))
+	var/list/to_choose = subtypesof(/datum/disease2/effect)
+	if(old_effect) //So it doesn't just evolve right back into the previous virus type
+		to_choose.Remove(old_effect)
+	for(var/e in to_choose)
 		var/datum/disease2/effect/f = new e
 		if(f.stage == stage && f.badness <= max_badness)
 			list += f
@@ -163,7 +166,7 @@ var/global/list/disease2_list = list()
 	uniqueID = rand(0,10000)
 	var/i = rand(1, effects.len)
 	var/datum/disease2/effect/e = effects[i]
-	var/datum/disease2/effect/f = new_random_effect(2, e.stage)
+	var/datum/disease2/effect/f = new_random_effect(2, e.stage, e.type)
 	effects[i] = f
 	log_debug("Virus [uniqueID] has major mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."

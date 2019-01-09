@@ -330,9 +330,9 @@ var/list/forced_roundstart_ruleset = list()
 	if (dead_players.len > living_players.len)
 		chance -= 30//more than half the crew died? ew, let's calm down on antags
 	if (threat > 70)
-		chance += 20
+		chance += 15
 	if (threat < 30)
-		chance -= 20
+		chance -= 15
 	chance = round(max(0,chance))
 	message_admins("DYNAMIC MODE: Chance of injection with the current player numbers and threat level is...[chance]%.")
 	log_admin("DYNAMIC MODE: Chance of injection with the current player numbers and threat level is...[chance]%.")

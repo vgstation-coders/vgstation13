@@ -26,10 +26,7 @@
 		else if(istype(obstacle, /obj/structure/grille/))
 			var/obj/structure/grille/G = obstacle
 			G.health = (0.25*initial(G.health))
-			G.broken = 1
-			G.icon_state = "[initial(G.icon_state)]-b"
-			G.setDensity(FALSE)
-			getFromPool(/obj/item/stack/rods, get_turf(G.loc))
+			G.healthcheck()
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/table))
@@ -71,8 +68,8 @@
 				L.take_overall_damage(5,0)
 				if(L.locked_to)
 					L.locked_to.unlock_atom(L)
-				L.Stun(5)
-				L.Knockdown(5)
+				L.Stun(2)
+				L.Knockdown(2)
 				L.apply_effect(STUTTER, 5)
 				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
 				breakthrough = 1
@@ -169,7 +166,7 @@
 
 /obj/effect/overlay/wraithnail
 	name = "red bolt"
-	desc = "A pointy red nail, lodged into the ground."
+	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "wraithnail"
 	anchored = 1
@@ -239,7 +236,10 @@
 		/spell/aoe_turf/conjure/struct,
 		/spell/aoe_turf/conjure/wall,
 		/spell/aoe_turf/conjure/floor,
+		/spell/aoe_turf/conjure/door,
 		/spell/aoe_turf/conjure/pylon,
+		/spell/aoe_turf/conjure/construct/lesser/alt,
+		/spell/aoe_turf/conjure/soulstone,
 		/spell/aoe_turf/conjure/hex,
 		)
 	var/mob/living/simple_animal/construct/heal_target = null

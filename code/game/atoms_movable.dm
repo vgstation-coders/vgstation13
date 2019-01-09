@@ -510,6 +510,7 @@
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+	set waitfor = FALSE
 	if(!target || !src)
 		return 0
 	if(override)
@@ -1019,3 +1020,6 @@
 	if(Lag > 0)
 		set_glide_size(DELAY2GLIDESIZE(Lag))
 	walk_to(src,Trg,Min,Lag,Speed)
+
+/atom/movable/proc/can_be_pushed(mob/user)
+	return 1

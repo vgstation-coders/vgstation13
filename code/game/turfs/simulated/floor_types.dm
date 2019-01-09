@@ -148,6 +148,8 @@
 
 /turf/simulated/floor/engine/cult/cultify()
 	return
+/turf/simulated/floor/engine/cult/clockworkify()
+	return
 
 /turf/simulated/floor/engine/airless
 	oxygen = 0.01

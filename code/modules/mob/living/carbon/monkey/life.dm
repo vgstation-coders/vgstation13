@@ -11,7 +11,6 @@
 
 
 /mob/living/carbon/monkey/Life()
-	set invisibility = 0
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -38,10 +37,6 @@
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
 					location_as_object.handle_internal_lifeform(src, 0)
-
-
-		//Updates the number of stored chemicals for powers
-		//handle_changeling()
 
 		//Mutations and radiation
 		handle_mutations_and_radiation()
@@ -239,9 +234,8 @@
 	if(flags & INVULNERABLE)
 		return
 
-	if(reagents)
-		if(reagents.has_reagent(LEXORIN))
-			return
+	if(reagents && reagents.has_any_reagents(LEXORINS))
+		return
 
 	if(!loc)
 		return //probably ought to make a proper fix for this, but :effort: --NeoFite
@@ -754,11 +748,6 @@
 			emote("scratch")
 			return
 
-
-/*/mob/living/carbon/monkey/proc/handle_changeling()
-	if(mind && mind.changeling)
-		mind.changeling.regenerate()
-*/
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()
 	if(..())

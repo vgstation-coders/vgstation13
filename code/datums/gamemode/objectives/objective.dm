@@ -7,10 +7,6 @@
 
 	var/flags = 0 // Objective flags.
 
-/datum/objective/target/New(var/text,var/auto_target = TRUE)
-	if(text)
-		explanation_text = text
-
 /datum/objective/target/Destroy()
 	owner = null
 	faction = null
@@ -42,7 +38,7 @@
 	if(M)
 		O.owner = M
 	if(F)
-		faction = F
+		O.faction = F
 	if(O.PostAppend())
 		return TRUE
 	else
@@ -69,8 +65,9 @@
 				dat += {"<BR>[current_completion ? "Success" : "Failed"]"}
 	if(admin_edit)
 		if (owner)
-			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add personal objective)</a>"
+			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add personal objective)</a> <br/>"
 		else if (faction)
-			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add faction objective)</a>"
-		dat += "<br><a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(generate objectives)</a>"
+			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add faction objective)</a> <br/>"
+		dat += "<a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(generate objectives)</a> <br/>"
+		dat += "<a href='?src=\ref[M];obj_announce=1'>(annouce objectives)</a><br/>"
 	return dat

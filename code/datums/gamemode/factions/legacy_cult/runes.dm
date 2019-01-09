@@ -15,7 +15,7 @@
 	name = "Rune"
 
 /obj/effect/rune_legacy/proc/findNullRod(var/atom/target)
-	if(istype(target,/obj/item/weapon/nullrod))
+	if(isholyprotection(target))
 		var/turf/T = get_turf(target)
 		nullblock = 1
 		T.turf_animation('icons/effects/96x96.dmi',"nullding",-WORLD_ICON_SIZE,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/instruments/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
@@ -199,7 +199,7 @@
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult_legacy(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
-			my_cult.HandleRecruitedMind(M.mind)
+			my_cult.HandleRecruitedMind(M.mind, TRUE)
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
@@ -234,8 +234,6 @@
 				to_chat(usr, "<span class='danger'>[M] now knows the truth! Stop \him!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='danger'>And you were able to force it out of your mind. You now know the truth, there's something horrible out there, stop it and its minions at all costs.</span>")
-			if (my_cult.has_enough_adepts())
-				my_cult.getNewObjective()
 			return 0
 
 	usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
@@ -673,7 +671,7 @@
 
 	var/datum/faction/cult/my_cult = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 	if(my_cult)
-		my_cult.HandleRecruitedMind(D.mind)
+		my_cult.HandleRecruitedMind(D.mind, TRUE)
 	/*else
 		ticker.mode.cult += D.mind*/
 
@@ -1021,7 +1019,7 @@
 	if (istype(W,/obj/item/weapon/paper/talisman))
 		rad = 4
 		go = 1
-	if (istype(W,/obj/item/weapon/nullrod))
+	if (isholyweapon(W))
 		rad = 1
 		go = 1
 	if(go)
@@ -1030,7 +1028,7 @@
 				R:visibility=15
 			S=1
 	if(S)
-		if(istype(W,/obj/item/weapon/nullrod))
+		if(isholyweapon(W))
 			to_chat(usr, "<span class='warning'>Arcane markings suddenly glow from underneath a thin layer of dust!</span>")
 			return
 		if(istype(W,/obj/effect/rune_legacy))

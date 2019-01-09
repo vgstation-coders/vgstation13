@@ -145,10 +145,10 @@
 
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
-//BRUTELOSS = 1
-//FIRELOSS = 2
-//TOXLOSS = 4
-//OXYLOSS = 8
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
@@ -807,12 +807,25 @@
 
 		return CANNOT_EQUIP
 
+	else if(isgrinch(M))
+		//START GRINCH
+		var/mob/living/simple_animal/hostile/gremlin/grinch/G = M
+		switch(slot)
+			if(slot_back)
+				if(G.back)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_BACK) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+		return CANNOT_EQUIP //Unsupported slot
+		//END GRINCH
+
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
-	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
+	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) && !isgrinch(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
 		to_chat(user, "You can't pick things up!")
 		return FALSE
 	if(anchored) //Object isn't anchored
@@ -1203,7 +1216,7 @@ var/global/list/image/blood_overlays = list()
 		var/mob/living/carbon/human/H = C
 		if (!H.has_organ_for_slot(slot_handcuffed))
 			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
-			return
+			return FALSE
 
 	if(restraint_apply_sound)
 		playsound(src, restraint_apply_sound, 30, 1, -2)
@@ -1213,7 +1226,7 @@ var/global/list/image/blood_overlays = list()
 	if(do_after(user, C, restraint_apply_time))
 		if(C.handcuffed)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
-			return
+			return FALSE
 		feedback_add_details("handcuffs", "[name]")
 
 		if(clumsy_check(user) && prob(50))
@@ -1232,6 +1245,7 @@ var/global/list/image/blood_overlays = list()
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
 		cuffs.on_restraint_apply(C)
+		return TRUE
 
 /obj/item/proc/on_restraint_removal(var/mob/living/carbon/C) //Needed for syndicuffs
 	return
@@ -1248,6 +1262,9 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
+
+/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
+	return TRUE
 
 /obj/item/MouseDropFrom(var/obj/over_object)
 	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
@@ -1293,4 +1310,21 @@ var/global/list/image/blood_overlays = list()
 		add_fingerprint(usr)
 
 /obj/item/proc/pre_throw()
+	return
+
+/**
+	Attempt to heat this object from a presumed heat source.
+	@args:
+		A: Atom: The source of the heat
+		user: mob: Whomever may be trying to heat this object
+
+	@return:
+		TRUE if succesful
+		FALSE if not succesful
+		NULL if override not defined
+**/
+/obj/item/proc/attempt_heating(atom/A, mob/user)
+	return
+
+/obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return

@@ -26,7 +26,7 @@
 		user.fire_stacks += 5
 		user.IgniteMob()
 		user.audible_scream()
-		return FIRELOSS //Set ablaze and burned to crisps
+		return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
@@ -110,7 +110,8 @@
 
 	if(ishuman(M)) //Only humans can be vampires or cultists. isChaplain() checks are here to ensure only the proper chaplain has the gameplay-related interactions.
 		var/mob/living/carbon/human/H = M
-		if(V && !(VAMP_MATURE in V.powers) && isChaplain(user)) //The user is a "young" Vampire, fuck up his vampiric powers and hurt his head
+		V = isvampire(M)
+		if(V && (VAMP_MATURE in V.powers) && isChaplain(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
 			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 				V.nullified = max(5, V.nullified + 2)
@@ -118,7 +119,7 @@
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
 		if(T && isChaplain(user))
-			T.Drop() // Remove the thrall using the Drop() function to leave the role.
+			T.Drop(TRUE) // Remove the thrall using the Drop() function to leave the role.
 			return 1 //That's it, game over
 
 		bless_mob(user, H) //Let's outsource the healing code, because we can

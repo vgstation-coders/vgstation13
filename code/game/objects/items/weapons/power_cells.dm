@@ -24,7 +24,7 @@
 
 /obj/item/weapon/cell/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (FIRELOSS)
+	return (SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/cell/empty/New()
 	..()
@@ -205,3 +205,45 @@
 	..()
 	charge = maxcharge
 	return 1
+
+/obj/item/weapon/cell/ultra
+	name = "ultra-capacity power cell"
+	origin_tech = Tc_POWERSTORAGE + "=8"
+	icon_state = "ucell"
+	maxcharge = 50000
+	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+
+/obj/item/weapon/cell/ultra/empty/New()
+	..()
+	charge = 0
+
+/obj/item/weapon/cell/rad
+	name = "RTG power cell"
+	origin_tech = Tc_POWERSTORAGE + "=7"
+	icon_state = "rcell"
+	maxcharge = 100
+	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
+
+/obj/item/weapon/cell/rad/empty/New()
+	..()
+	charge = 0
+
+/obj/item/weapon/cell/rad/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/cell/rad/Destroy()
+	..()
+	processing_objects.Remove(src)
+
+/obj/item/weapon/cell/rad/give()
+	return
+
+/obj/item/weapon/cell/rad/process()
+	if(maxcharge <= charge)
+		return 0
+	var/power_used = min(maxcharge-charge,5)
+	charge += power_used
+	if(prob(5))
+		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+			L.apply_radiation(5, RAD_EXTERNAL)

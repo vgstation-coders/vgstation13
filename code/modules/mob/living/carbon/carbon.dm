@@ -200,7 +200,10 @@
 					num_injuries++
 
 			if(num_injuries == 0)
-				to_chat(src, "My legs are OK.")
+				if(hallucinating())
+					to_chat(src, "<span class = 'orange'>My legs are OK.</span>")
+				else
+					to_chat(src, "My limbs are [pick("okay","OK")].")
 
 			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
@@ -259,7 +262,7 @@
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
 
-					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.audible_scream()
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
 					spark(H, 3, FALSE)
@@ -503,7 +506,7 @@
 	return 0
 
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
-	var/walking_factor = (!slip_on_walking && m_intent == "walk")
+	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
@@ -635,14 +638,14 @@
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
 
-		if(. > 1 && reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown

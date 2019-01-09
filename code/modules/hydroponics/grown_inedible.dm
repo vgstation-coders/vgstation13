@@ -200,7 +200,7 @@
 
 /obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS|TOXLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves)
@@ -261,3 +261,30 @@
 		user.drop_item(src, force_drop = 1)
 		qdel(src)
 		return
+
+/obj/item/weapon/carnivorous_pumpkin
+	name = "carnivorous pumpkin"
+	desc = "It hungers. For heads."
+	icon = 'icons/obj/clothing/hats.dmi'
+	icon_state = "hardhat1_pumpkin"
+	cant_drop = 1
+
+/obj/item/weapon/carnivorous_pumpkin/New()
+	..()
+	spawn(rand(40 SECONDS, 90 SECONDS))
+		if(gcDestroyed)
+			return
+		var/mob/living/carbon/human/H = loc
+		if(istype(H))
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			if(head_organ)
+				head_organ.explode()
+		visible_message("<span class = 'warning'>\The [src] laughs, before disappearing from view.</span>")
+		qdel(src)
+
+/obj/item/weapon/carnivorous_pumpkin/attack(mob/living/carbon/M, mob/living/carbon/user)
+	if(ishuman(M) && M != user)
+		user.drop_item(src, force_drop = 1)
+		M.drop_item(M.get_active_hand(), force_drop = 1)
+		M.put_in_hands(src)
+		to_chat(M, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")

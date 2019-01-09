@@ -8,9 +8,9 @@
 /datum/dynamic_ruleset/roundstart/traitor
 	name = "Syndicate Traitors"
 	persistent = 1
-	role_category = ROLE_TRAITOR
-	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "AI", "Detective", "Head of Security", "Captain")
-	restricted_from_jobs = list("Cyborg","Mobile MMI")
+	role_category = /datum/role/traitor
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
+	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
 	cost = 10
@@ -42,7 +42,7 @@
 //               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-
+/*
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = ROLE_CHANGELING
@@ -66,7 +66,7 @@
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 
-
+*/
 //////////////////////////////////////////////
 //                                          //
 //               VAMPIRES                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@
 
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
-	role_category = ROLE_VAMPIRE
+	role_category = /datum/role/vampire
 	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
@@ -93,7 +93,7 @@
 		candidates -= M
 		var/datum/faction/vampire/fac = ticker.mode.CreateFaction(/datum/faction/vampire, null, 1)
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
-		newVampire.Greet(GREET_ROUNDSTART)
+		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
 	update_faction_icons()
 	return 1
@@ -107,7 +107,7 @@
 
 /datum/dynamic_ruleset/roundstart/wizard
 	name = "Wizard"
-	role_category = ROLE_WIZARD
+	role_category = /datum/role/wizard
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
@@ -115,6 +115,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	var/list/roundstart_wizards = list()
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -130,6 +131,7 @@
 		candidates -= M
 		var/datum/role/wizard/newWizard = new
 		newWizard.AssignToRole(M.mind,1)
+		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 		if (!federation)
 			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
@@ -140,13 +142,54 @@
 
 //////////////////////////////////////////////
 //                                          //
-//               CULT (LEGACY)              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                BLOOD CULT                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
 
+/datum/dynamic_ruleset/roundstart/bloodcult
+	name = "Blood Cult"
+	role_category = /datum/role/cultist
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Warden", "Detective","Head of Security", "Captain", "Chaplain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 4
+	weight = 3
+	cost = 25
+	requirements = list(90,80,60,30,20,10,10,10,10,10)
+	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+
+/datum/dynamic_ruleset/roundstart/bloodcult/execute()
+	//if ready() did its job, candidates should have 4 or more members in it
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	var/cultists = cultist_cap[indice_pop]
+
+	for(var/cultists_number = 1 to cultists)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/cultist/newCultist = new
+		newCultist.AssignToRole(M.mind,1)
+		cult.HandleRecruitedRole(newCultist)
+		newCultist.Greet(GREET_ROUNDSTART)
+	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//               CULT (LEGACY)              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+/*
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
-	role_category = ROLE_LEGACY_CULTIST
+	role_category = /datum/role/legacy_cultist
+	role_category_override = ROLE_CULTIST // H-ha
 	protected_from_jobs = list("Merchant")
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
@@ -173,7 +216,7 @@
 		legacy.HandleRecruitedRole(newCultist)
 		newCultist.Greet(GREET_ROUNDSTART)
 	return 1
-
+*/
 
 //////////////////////////////////////////////
 //                                          //
@@ -183,7 +226,7 @@
 
 /datum/dynamic_ruleset/roundstart/nuclear
 	name = "Nuclear Emergency"
-	role_category = ROLE_OPERATIVE
+	role_category = /datum/role/nuclear_operative
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
@@ -194,7 +237,7 @@
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
-	//if ready() did its job, candidates should have 4 or more members in it
+	//if ready() did its job, candidates should have 5 or more members in it
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if (!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
@@ -230,7 +273,7 @@
 
 /datum/dynamic_ruleset/roundstart/malf
 	name = "Malfunctioning AI"
-	role_category = ROLE_MALF
+	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
@@ -273,3 +316,91 @@
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//               REVS		                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/revs
+	name = "Revolution"
+	role_category = /datum/role/revolutionary
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 3
+	weight = 2
+	cost = 45
+	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	var/required_heads = 3
+
+/datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
+	if (!..())
+		return FALSE
+	var/head_check = 0
+	for (var/mob/new_player/player in player_list)
+		if (player.mind.assigned_role in command_positions)
+			head_check++
+	if (forced)
+		required_heads = 1
+		required_candidates = 1
+	return (head_check >= required_heads)
+
+/datum/dynamic_ruleset/roundstart/revs/execute()
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+
+	var/max_canditates = 4
+	for(var/i = 1 to max_canditates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/revolutionary/leader/lenin = new
+		lenin.AssignToRole(M.mind, 1, 1)
+		R.HandleRecruitedRole(lenin)
+		lenin.Greet(GREET_ROUNDSTART)
+	update_faction_icons()
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/grinch
+	name = "The Grinch"
+	role_category = /datum/role/grinch
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 3
+	cost = 10
+	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
+	if(grinchstart.len == 0)
+		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		return 0
+	if (!..())
+		return FALSE
+	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
+	return accepted
+
+
+/datum/dynamic_ruleset/roundstart/grinch/execute()
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/grinch/G = new
+	G.AssignToRole(M.mind,1)
+	G.Greet(GREET_ROUNDSTART)
+	return 1

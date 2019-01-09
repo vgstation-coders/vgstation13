@@ -30,10 +30,26 @@
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
 	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
 
+	var/list/target_rules = list()
+
+/mob/living/simple_animal/hostile/New()
+	..()
+	initialize_rules()
+
+/mob/living/simple_animal/hostile/proc/initialize_rules()
+	target_rules.Add(new /datum/fuzzy_ruling/is_mob)
+	target_rules.Add(new /datum/fuzzy_ruling/is_obj{weighting = 0.5})
+	var/datum/fuzzy_ruling/distance/D = new /datum/fuzzy_ruling/distance
+	D.set_source(src)
+	target_rules.Add(D)
+
 /mob/living/simple_animal/hostile/resetVariables()
 	..("wanted_objects", "friends", args)
 	wanted_objects = list()
 	friends = list()
+
+/mob/living/simple_animal/hostile/whisper()
+	return FALSE
 
 /mob/living/simple_animal/hostile/Life()
 	if(timestopped)
@@ -53,11 +69,12 @@
 	if(!stat)
 		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
 			var/mob/living/L = loc.loc
-			if(!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
+			if(!istype(L) || (L.faction != src.faction && CanAttack(L))) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction AND we're being held by a mob whom we consider a valid target!
 				returnToPool(loc)
 			else
 				return 0
-
+		if(is_pacified())
+			return 0
 		switch(stance)
 			if(HOSTILE_STANCE_IDLE)
 				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
@@ -80,16 +97,13 @@
 
 /mob/living/simple_animal/hostile/proc/ListTargets()//Step 1, find out what we can see
 	var/list/L = new()
-
 	if (!search_objects)
 		L.Add(ohearers(vision_range, src))
-
 		for (var/obj/mecha/M in mechas_list)
 			if (get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
 				L.Add(M)
 	else
 		L.Add(oview(vision_range, src))
-
 	return L
 
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
@@ -105,7 +119,8 @@
 			Targets += A
 			continue
 	Target = PickTarget(Targets)
-	return Target //We now have a target
+	if(Target)
+		return Target //We now have a target
 
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
@@ -119,7 +134,8 @@
 				Targets -= A
 	if(!Targets.len)//We didnt find nothin!
 		return
-	var/chosen_target = pick(Targets)//Pick the remaining targets (if any) at random
+	Targets = evaluate_list(Targets, target_rules)
+	var/chosen_target = Targets[1]//Pick the top target, as it would be highest priority
 	return chosen_target
 
 /mob/living/simple_animal/hostile/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
@@ -168,7 +184,7 @@
 					return 1
 		if((environment_smash_flags & OPEN_DOOR_STRONG) && istype(the_target, /obj/machinery/door/airlock))
 			var/obj/machinery/door/airlock/A = the_target
-			if(!A.density)
+			if(!A.density || A.operating || A.locked || A.welded)
 				return 0
 			return 1
 	return 0
@@ -389,7 +405,7 @@
 				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
 					if(istype(A, /obj/machinery/door/airlock))
 						var/obj/machinery/door/airlock/AIR = A
-						if(AIR.density)
+						if(!AIR.density || AIR.locked || AIR.welded || AIR.operating)
 							continue
 					UnarmedAttack(A)
 	return

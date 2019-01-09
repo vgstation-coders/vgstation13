@@ -322,7 +322,7 @@
 				qdel(src) //No scraps
 			return
 		if(2.0)
-			if(prob(30))
+			if(prob(50))
 				if(state == 2)
 					state = 1
 					update_icon()
@@ -393,6 +393,9 @@
 	icon_state = "cultgirder"
 	anchored = 1
 	density = 1
+
+/obj/structure/cultgirder/clockworkify()
+	return
 
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswrench(W))

@@ -147,9 +147,10 @@
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
-	if(mykey && heldkey)
-		return 1
-	return user.is_holding_item(mykey)
+	if(mykey)
+		return heldkey == mykey || user.is_holding_item(mykey)
+	return istype(heldkey, keytype) || user.find_held_item_by_type(keytype)
+
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated())
@@ -157,7 +158,7 @@
 		return
 	if(!check_key(user))
 		if(can_warn())
-			to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
+			to_chat(user, "<span class='notice'>You'll need the key in one of your hands or inside the ignition slot to drive \the [src].</span>")
 		return 0
 	if(empstun > 0)
 		if(user && can_warn(user))

@@ -294,7 +294,7 @@
 	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
 
 	//Are we capturing a cult-banned player as a cultist? Sucks for them!
-	if (iscultist(user) && jobban_isbanned(body, ROLE_CULTIST))
+	if (iscultist(user) && (jobban_isbanned(body, ROLE_CULTIST) || isantagbanned(body)))
 		to_chat(body, "<span class='danger'>A cultist tried to capture your soul, but due to past behaviour you have been banned from the role. Your body will instead dust away.</span>")
 		to_chat(user, "<span class='notice'>Their soul wasn't fit for our cult, and wasn't accepted by \the [src].</span>")
 
@@ -303,6 +303,9 @@
 		if(add_target)
 			qdel(add_target)
 		return
+
+	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)].")
+	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)].")
 
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob = new(src)//put shade in stone
@@ -337,6 +340,8 @@
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.OnPostSetup()
 		newCultist.Greet(GREET_SOULSTONE)
+		newCultist.conversion["soulstone"] = user
+		cult_risk(user)//risk of exposing the cult early if too many soul trappings
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
@@ -405,6 +410,7 @@
 						cult.HandleRecruitedRole(newCultist)
 						newCultist.OnPostSetup()
 						newCultist.Greet(GREET_SOULSTONE)
+						newCultist.conversion["soulstone"] = U
 		if("CONSTRUCT")
 			var/obj/structure/constructshell/T = target
 			var/obj/item/device/soulstone/C = src
@@ -448,8 +454,8 @@
 						deleteafter = 1
 				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
-					if(cult_round && istype(cult_round))
-						cult_round.HandleRecruitedMind(Z.mind)
+					if(istype(cult_round))
+						cult_round.HandleRecruitedMind(Z.mind, TRUE)
 				Z.real_name = A.real_name
 				Z.name = "[Z.real_name] the [construct_class]"
 				name = "Soul Stone Shard"
@@ -501,8 +507,8 @@
 						deleteafter = 1
 				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
-					if(cult_round && istype(cult_round))
-						cult_round.HandleRecruitedMind(Z.mind)
+					if(istype(cult_round))
+						cult_round.HandleRecruitedMind(Z.mind, TRUE)
 				Z.real_name = A.real_name
 				Z.name = "[Z.real_name] the [construct_class]"
 				name = "Soul Stone Shard"

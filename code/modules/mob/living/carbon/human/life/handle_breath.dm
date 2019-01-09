@@ -3,7 +3,7 @@
 /mob/living/carbon/human/proc/breathe()
 	if(flags & INVULNERABLE)
 		return
-	if(reagents.has_reagent(LEXORIN))
+	if(reagents.has_any_reagents(LEXORINS))
 		return
 	if(undergoing_hypothermia() == PROFOUND_HYPOTHERMIA) // we're not breathing. see handle_hypothermia.dm for details.
 		return
@@ -47,7 +47,7 @@
 				//
 			else if(isobj(loc))
 				var/obj/location_as_object = loc
-				breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
+				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(isturf(loc))
 				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 					//Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)

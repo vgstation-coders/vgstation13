@@ -202,3 +202,29 @@
 /obj/item/weapon/gun/projectile/beretta/update_icon()
 	..()
 	icon_state = "beretta[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag
+	name = "\improper Automag VI"
+	desc = "It also doubles as a fingerprint removal tool."
+	icon_state = "automag"
+	max_shells = 7
+	caliber = list(POINT357 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_SYNDICATE + "=3"
+	ammo_type = "/obj/item/ammo_casing/a357"
+	mag_type = "/obj/item/ammo_storage/magazine/a357"
+	load_method = 2
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/automag/update_icon()
+	..()
+	icon_state = "automag[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag/prestige
+	name = "\improper Prestige Automag VI"
+	desc = "It also doubles as a fingerprint removal tool. This one is made to look more like the original AutomagIV from the 20th century."
+	icon_state = "automag-prestige"
+
+/obj/item/weapon/gun/projectile/automag/prestige/update_icon()
+	..()
+	icon_state = "automag-prestige[chambered ? "" : "-e"]"

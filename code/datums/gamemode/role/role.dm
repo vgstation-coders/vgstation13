@@ -27,13 +27,16 @@
 		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
 	@CanBeAssigned(Mind)
 		General sanity checks before assigning the person to the role, such as checking if they're part of the protected jobs or antags.
-
+	@PreMindTransfer(Old_character, Mob/Living)
+		Things to do to the *old* body prior to the mind transfer.
+	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
+		Things to do to the *new* body after the mind transfer is completed.
 */
 
-#define ROLE_MIXABLE   1 // Can be used in mixed mode
-#define ROLE_NEED_HOST 2 // Antag needs a host/partner
-#define ROLE_ADDITIVE  4 // Antag can be added on top of another antag.
-#define ROLE_GOOD      8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
+#define ROLE_MIXABLE   			1 // Can be used in mixed mode
+#define ROLE_NEED_HOST 			2 // Antag needs a host/partner
+#define ROLE_ADDITIVE  			4 // Antag can be added on top of another antag.
+#define ROLE_GOOD     			8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
 
 /datum/role
 	//////////////////////////////
@@ -55,6 +58,7 @@
 
 	// Jobs that have a much lower chance to be this antag.
 	var/list/protected_jobs = list()
+	var/protected_traitor_prob = PROB_PROTECTED_REGULAR
 
 	// Jobs that can only be this antag
 	var/list/required_jobs=list()
@@ -245,12 +249,12 @@
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
-	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 	else
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 	[name] [antag.name]/[antag.key]<b><font color=red> - (DESTROYED)</font></b>
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
-	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 
 
 /datum/role/proc/Greet(var/greeting,var/custom)
@@ -264,10 +268,10 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 
-/datum/role/proc/PreMindTransfer(var/datum/mind/M)
+/datum/role/proc/PreMindTransfer(var/mob/living/old_character)
 	return
 
-/datum/role/proc/PostMindTransfer(var/datum/mind/M)
+/datum/role/proc/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	return
 
 /datum/role/proc/GetFaction()
@@ -296,7 +300,9 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag.key]</b> was <b>[antag.name]</b> ("
 	if(M)
-		if(M.stat == DEAD)
+		if(!antag.GetRole(id))
+			text += "removed"
+		else if(M.stat == DEAD)
 			text += "died"
 		else
 			text += "survived"
@@ -346,7 +352,7 @@
 	if (faction)
 		text += faction.name
 	else
-		text += "<i>none</i>"
+		text += "<i>none</i> <br/>"
 	if (admin_edit)
 		text += " - "
 		if (faction)
@@ -355,7 +361,7 @@
 			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
 	text += "<br>"
 	if (objectives.objectives.len)
-		text += "<b>personnal objectives</b><ul>"
+		text += "<b>personal objectives</b><br><ul>"
 	text += objectives.GetObjectiveString(0,admin_edit,M, src)
 	if (objectives.objectives.len)
 		text += "</ul>"
@@ -364,6 +370,7 @@
 			if (objectives.objectives.len)
 				text += "<br>"
 			text += "<b>faction objectives</b><ul>"
+			text += "<br/>"
 		text += faction.objective_holder.GetObjectiveString(0,admin_edit,M)
 		if (faction.objective_holder.objectives.len)
 			text += "</ul>"
@@ -452,8 +459,13 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
-/datum/role/proc/handle_mind_transfer(var/mob/living/new_character)
-	return TRUE
+// -- Custom reagent reaction for your antag - now in a (somewhat) maintable fashion
+
+/datum/role/proc/handle_reagent(var/reagent_id)
+	return
+
+/datum/role/proc/handle_splashed_reagent(var/reagent_id)
+	return
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
@@ -522,6 +534,77 @@
 	name = BLOBOVERMIND
 	id = BLOBOVERMIND
 	logo_state = "blob-logo"
+	greets = list(GREET_DEFAULT,GREET_CUSTOM)
+	var/countdown = 60
+
+/datum/role/blob_overmind/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+	..()
+	wikiroute = role_wiki[BLOBOVERMIND]
+
+/datum/role/blob_overmind/process()
+	if(!antag || istype(antag.current,/mob/camera/blob))
+		return
+	if (countdown > 0)
+		countdown--
+		if (countdown == 59)
+			to_chat(antag.current, "<span class='alert'>You feel tired and bloated.</span>")
+		else if (countdown == 30)
+			to_chat(antag.current, "<span class='alert'>You feel like you are about to burst.</span>")
+		else if (countdown <= 0)
+			burst()
+	if (antag.current.hud_used)
+		if(antag.current.hud_used.blob_countdown_display)
+			antag.current.hud_used.blob_countdown_display.overlays.len = 0
+			var/first = round(countdown/10)
+			var/second = countdown%10
+			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
+			var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
+			I1.pixel_x += 10 * PIXEL_MULTIPLIER
+			I2.pixel_x += 17 * PIXEL_MULTIPLIER
+			I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+			I2.pixel_y -= 11 * PIXEL_MULTIPLIER
+			antag.current.hud_used.blob_countdown_display.overlays += I1
+			antag.current.hud_used.blob_countdown_display.overlays += I2
+		else
+			antag.current.hud_used.blob_infected_hud()
+
+/datum/role/blob_overmind/proc/burst()
+	if(!antag || istype(antag.current,/mob/camera/blob))
+		return
+
+	var/client/blob_client = null
+	var/turf/location = null
+
+	if(iscarbon(antag.current))
+		var/mob/living/carbon/C = antag.current
+		if(directory[ckey(antag.key)])
+			blob_client = directory[ckey(antag.key)]
+			location = get_turf(C)
+			if(location.z != map.zMainStation || istype(location, /turf/space))
+				location = null
+			C.gib()
+
+	if(blob_client && location)
+		new /obj/effect/blob/core(location, 200, blob_client, 3)
+	Drop()
+
+/datum/role/blob_overmind/Greet(var/greeting,var/custom)
+	if(!greeting || !antag || istype(antag.current,/mob/camera/blob))
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_CUSTOM)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are infected by the Blob!</br></span>")
+			to_chat(antag.current, "<span class='warning'>Your body is ready to give spawn to a new blob core which will eat this station.</span>")
+			to_chat(antag.current, "<span class='warning'>Find a good location to spawn the core and then take control and overwhelm the station!</span>")
+			to_chat(antag.current, "<span class='warning'>When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.</span>")
+			to_chat(antag.current, "<span class='warning'>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</span>")
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+
 
 //________________________________________________
 
@@ -533,6 +616,9 @@
 	logo_state = "wizard-logo"
 
 /datum/role/wizard/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/wizard)
+		return
 	switch(rand(1,100))
 		if(1 to 30)
 			AppendObjective(/datum/objective/target/assassinate)
@@ -570,6 +656,12 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
+
+/datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
+	. = ..()
+	for (var/spell/S in old_character.spell_list)
+		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
+			new_character.add_spell(S)
 
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE

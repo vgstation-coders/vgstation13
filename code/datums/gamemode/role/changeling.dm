@@ -3,10 +3,12 @@
 	id = CHANGELING
 	required_pref = ROLE_CHANGELING
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	protected_traitor_prob = PROB_PROTECTED_RARE
 	logo_state = "change-logoa"
 	var/list/absorbed_dna = list()
 	var/list/absorbed_species = list()
 	var/list/absorbed_languages = list()
+	var/list/absorbed_chems = list()
 	var/absorbedcount = 0
 	var/chem_charges = 20
 	var/chem_recharge_rate = 0.5
@@ -50,9 +52,14 @@
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/changeling)
+		return
 	AppendObjective(/datum/objective/absorb)
 	AppendObjective(/datum/objective/target/assassinate)
 	AppendObjective(/datum/objective/target/steal)
+	if(prob(50))
+		AppendObjective(/datum/objective/chem_sample)
 	if(prob(50))
 		AppendObjective(/datum/objective/escape)
 	else
@@ -158,28 +165,6 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 15
 	verbpath = /obj/item/verbs/changeling/proc/changeling_horror_form
 
-/datum/power/changeling/deaf_sting
-	name = "Deaf Sting"
-	desc = "We silently sting a human, completely deafening them for a short time."
-	genomecost = 1
-	allowduringlesserform = 1
-	verbpath = /obj/item/verbs/changeling/proc/changeling_deaf_sting
-
-/datum/power/changeling/blind_sting
-	name = "Blind Sting"
-	desc = "We silently sting a human, completely blinding them for a short time."
-	genomecost = 2
-	allowduringlesserform = 1
-	verbpath = /obj/item/verbs/changeling/proc/changeling_blind_sting
-
-/datum/power/changeling/silence_sting
-	name = "Silence Sting"
-	desc = "We silently sting a human, completely silencing them for a short time."
-	helptext = "Does not provide a warning to a victim that they have been stung, until they try to speak and cannot."
-	genomecost = 2
-	allowduringlesserform = 1
-	verbpath = /obj/item/verbs/changeling/proc/changeling_silence_sting
-
 /datum/power/changeling/mimicvoice
 	name = "Mimic Voice"
 	desc = "We shape our vocal glands to sound like a desired voice."
@@ -201,39 +186,6 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	helptext = "Does not provide a warning to others. The victim will transform much like a changeling would."
 	genomecost = 3
 	verbpath = /obj/item/verbs/changeling/proc/changeling_transformation_sting
-
-/datum/power/changeling/paralysis_sting
-	name = "Paralysis Sting"
-	desc = "We silently sting a human, paralyzing them for a short time."
-	genomecost = 4
-	verbpath = /obj/item/verbs/changeling/proc/changeling_paralysis_sting
-
-/datum/power/changeling/LSDSting
-	name = "Hallucination Sting"
-	desc = "We evolve the ability to sting a target with a powerful hallunicationary chemical."
-	helptext = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
-	genomecost = 3
-	verbpath = /obj/item/verbs/changeling/proc/changeling_lsdsting
-
-/datum/power/changeling/DeathSting
-	name = "Death Sting"
-	desc = "We silently sting a human, filling him with potent chemicals. His rapid death is all but assured."
-	genomecost = 8
-	verbpath = /obj/item/verbs/changeling/proc/changeling_DEATHsting
-
-/datum/power/changeling/unfat_sting
-	name = "Unfat Sting"
-	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
-	helptext = "Caution: This can also target you!"
-	genomecost = 0
-	verbpath = /obj/item/verbs/changeling/proc/changeling_unfat_sting
-
-/datum/power/changeling/fat_sting
-	name = "Fat Sting"
-	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
-	helptext = "Caution: This can also target you!"
-	genomecost = 0
-	verbpath = /obj/item/verbs/changeling/proc/changeling_fat_sting
 
 /datum/power/changeling/boost_range
 	name = "Boost Range"
@@ -276,7 +228,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/power/changeling/DigitalCamoflague
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
-	helptext = "We cannot be tracked by camera while using this skill.  However, humans looking at us will find us... uncanny.  We must constantly expend chemicals to maintain our form like this."
+	helptext = "We cannot be tracked by camera while using this skill. We must constantly expend chemicals to maintain our form like this."
 	genomecost = 3
 	allowduringlesserform = 1
 	verbpath = /obj/item/verbs/changeling/proc/changeling_digitalcamo
@@ -294,6 +246,21 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	helptext = "The blade can be retracted by using the same verb used to manifest it. It has a chance to deflect projectiles."
 	genomecost = 5
 	verbpath = /obj/item/verbs/changeling/proc/changeling_armblade
+
+/datum/power/changeling/chemsting
+	name = "Chemical Sting"
+	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
+	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
+	genomecost = 1
+	verbpath = /obj/item/verbs/changeling/proc/changeling_chemsting
+
+/datum/power/changeling/chemspit
+	name = "Chemical Spit"
+	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to fire like projectile venom in our facing direction."
+	helptext = "Handy for firing acid at enemies, providing we have learned such chemicals."
+	genomecost = 1
+	allowduringlesserform = 1
+	verbpath = /obj/item/verbs/changeling/proc/changeling_chemspit
 
 /datum/power_holder
 	var/datum/role/R
@@ -621,3 +588,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		call(M.current, Thepower.verbpath)()
 	else if(remake_verbs)
 		M.current.make_changeling()
+
+/datum/role/changeling/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
+	if (!power_holder) // This is for when you spawn as a new_player
+		return
+	new_character.make_changeling() // Will also restore any & all genomes/powers we have

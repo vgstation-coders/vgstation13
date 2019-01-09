@@ -76,7 +76,7 @@ var/list/factions_with_hud_icons = list()
 		return 0
 	return 1
 
-/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
+/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
 			WARNING("Mind was already a role in this faction")
@@ -84,12 +84,12 @@ var/list/factions_with_hud_icons = list()
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
 		return 0
-	var/datum/role/R = new roletype(null,src, initial_role) // Add him to our roles
-	if(!R.AssignToRole(M))
+	var/datum/role/R = new roletype(null,src,late_role) // Add him to our roles
+	if(!R.AssignToRole(M, override))
 		R.Drop()
 		return 0
 	R.OnPostSetup()
-	return 1
+	return R
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
 	ticker.mode.orphaned_roles.Remove(R)
@@ -137,7 +137,7 @@ var/list/factions_with_hud_icons = list()
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			count++
-			if (count < objective_holder.objectives.len)
+			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
 		if (win)
@@ -178,6 +178,7 @@ var/list/factions_with_hud_icons = list()
 	else
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
+			dat += "<br>"
 	return dat
 
 /datum/faction/proc/process()
@@ -218,7 +219,7 @@ var/list/factions_with_hud_icons = list()
 
 	//then re-add them
 	for(var/datum/role/R in members)
-		if(R.antag && R.antag.current && R.antag.current.client)
+		if(R.antag && R.antag.current && R.antag.current.client && R.antag.GetRole(R.id))//if the mind doesn't have access to the role, they shouldn't see the icons
 			for(var/datum/role/R_target in members)
 				if(R_target.antag && R_target.antag.current)
 					var/imageloc = R_target.antag.current
@@ -283,7 +284,7 @@ var/list/factions_with_hud_icons = list()
 	if (!(O in objective_holder.objectives))
 		WARNING("Trying to force completion of an objective ([O]) to faction ([src]) who never had it.")
 		return FALSE
-	O.force_success = TRUE
+	O.force_success = !O.force_success
 
 /datum/faction/proc/Declare()
 	var/dat = GetObjectivesMenuHeader()
@@ -372,48 +373,8 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/wizard/ragin/check_win()
 	if(members.len == max_roles)
 		return 1
+
 //________________________________________________
-
-#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
-#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
-#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
-#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
-
-/datum/faction/revolution
-	name = "Revolutionaries"
-	ID = REVOLUTION
-	required_pref = ROLE_REV
-	initial_role = HEADREV
-	late_role = REV
-	desc = "Viva!"
-	logo_state = "rev-logo"
-	initroletype = /datum/role/revolutionary/leader
-	roletype = /datum/role/revolutionary
-
-/datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
-	if(M.assigned_role in command_positions)
-		return ADD_REVOLUTIONARY_FAIL_IS_COMMAND
-
-	var/mob/living/carbon/human/H = M.current
-
-	if(jobban_isbanned(H, "revolutionary"))
-		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
-
-	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
-		if(L.imp_in == H) // a check if it's actually implanted
-			return ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED
-
-	if(isrev(H)) //HOW DO YOU FUCK UP THIS BADLY.
-		return ADD_REVOLUTIONARY_FAIL_IS_REV
-
-	return ..()
-
-/datum/faction/revolution/forgeObjectives()
-	var/list/heads = get_living_heads()
-	for(var/datum/mind/head_mind in heads)
-		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
-		if(A.set_target(head_mind))
-			AppendObjective(A)
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad

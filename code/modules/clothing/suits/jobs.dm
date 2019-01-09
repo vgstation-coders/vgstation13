@@ -20,7 +20,7 @@
 	item_state = "apron"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass/fertilizer,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
+	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
 	species_fit = list(VOX_SHAPED)
 
 //Captain
@@ -75,7 +75,7 @@
 
 //Chef
 /obj/item/clothing/suit/chef/classic
-	name = "A classic chef's apron."
+	name = "classic chef's apron"
 	desc = "A basic, dull, white chef's apron."
 	icon_state = "apronchef"
 	item_state = "apronchef"
@@ -270,4 +270,4 @@
 		else
 			to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
 			return
-		usr.update_inv_wear_suit()	//so our overlays update
+	usr.update_inv_wear_suit()	//so our overlays update

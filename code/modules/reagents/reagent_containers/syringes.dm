@@ -32,11 +32,12 @@
 	                            /obj/item/clothing/mask/facehugger/lamarr,
 	                            /obj/item/asteroid/hivelord_core,
 								/obj/item/weapon/reagent_containers/blood,
-								/obj/item/weapon/light)
+								/obj/item/weapon/light,
+								/obj/item/weapon/fossil/egg)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/syringe/on_reagent_change()
 	update_icon()
@@ -172,7 +173,7 @@
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
 	// Drawing from objects draws their contents
 	else if (isobj(target))
-		if (!target.is_open_container() && !istype(target, /obj/structure/reagent_dispensers) && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
+		if (!target.is_open_container() && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from this object.")
 			return
 
@@ -293,6 +294,13 @@
 
 	can_draw_blood = FALSE
 	can_stab = FALSE
+
+/obj/item/weapon/reagent_containers/syringe/giant/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/gisy = matrix()
+	gisy.Scale(1.2,1.2)
+	transform = gisy
 
 /obj/item/weapon/reagent_containers/syringe/giant/get_injection_time(var/mob/target)
 	if (istype(target, /mob/living/carbon/human))

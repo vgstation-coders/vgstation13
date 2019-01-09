@@ -121,6 +121,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		if(!hascall(target, procname))
 			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
+			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
 		if(!argnum && (argnum!=0))

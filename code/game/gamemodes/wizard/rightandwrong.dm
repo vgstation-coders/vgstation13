@@ -43,7 +43,7 @@
 			return equip_guns()
 
 /mob/living/carbon/human/proc/equip_guns()
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -141,7 +141,12 @@
 			new /obj/item/weapon/gun/siren(get_turf(src))
 		if("bulletstorm")
 			new /obj/item/weapon/gun/bulletstorm(get_turf(src))
+		if("nt12")
+			new /obj/item/weapon/gun/projectile/shotgun/nt12(get_turf(src))
+		if ("automag")
+			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+	score["gunsspawned"]++
 
 /mob/living/carbon/human/proc/equip_swords()
 	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity")

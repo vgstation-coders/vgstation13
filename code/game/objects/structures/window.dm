@@ -49,15 +49,12 @@ var/list/one_way_windows
 	update_icon()
 	oneway_overlay = image('icons/obj/structures.dmi', src, "one_way_overlay")
 	if(one_way)
-		if(!one_way_windows)
-			one_way_windows = list()
-		one_way_windows.Add(src)
-		update_oneway_nearby_clients()
-		overlays += oneway_overlay
+		one_way = !one_way
+		toggle_one_way()
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
-		if(!istype(C.mob, /mob/dead/observer))
+		if(!istype(C.mob, /mob/dead/observer) && !(M_XRAY in C.mob.mutations))
 			if(((x >= (C.mob.x - C.view)) && (x <= (C.mob.x + C.view))) && ((y >= (C.mob.y - C.view)) && (y <= (C.mob.y + C.view))))
 				C.update_one_way_windows(view(C.view,C.mob))
 
@@ -230,7 +227,7 @@ var/list/one_way_windows
 		user.delayNextAttack(8)
 
 	//Bang against the window
-	else if(usr.a_intent == I_HURT)
+	else if(user.a_intent == I_HURT)
 		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
 		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
@@ -279,6 +276,20 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
+/obj/structure/window/proc/toggle_one_way() //Toggle whether a window is a one-way window or not.
+	if(!one_way)
+		one_way = 1
+		if(!one_way_windows)
+			one_way_windows = list()
+		one_way_windows.Add(src)
+		update_oneway_nearby_clients()
+		overlays += oneway_overlay
+	else
+		one_way = 0
+		one_way_windows.Remove(src)
+		update_oneway_nearby_clients()
+		overlays -= oneway_overlay
+
 /obj/structure/window/proc/smart_toggle() //For "smart" windows
 	if(opacity)
 		animate(src, color="#FFFFFF", time=5)
@@ -325,11 +336,8 @@ var/list/one_way_windows
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
 		else
 			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
-			one_way = 0
-			one_way_windows.Remove(src)
-			update_oneway_nearby_clients()
+			toggle_one_way()
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
-			overlays -= oneway_overlay
 			return
     /* One-way windows have serious performance issues - N3X
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
@@ -347,14 +355,9 @@ var/list/one_way_windows
 			update_nearby_tiles()
 			ini_dir = dir
 		var/obj/item/stack/sheet/mineral/plastic/P = W
-		one_way = 1
-		if(!one_way_windows)
-			one_way_windows = list()
-		one_way_windows.Add(src)
-		update_oneway_nearby_clients()
+		toggle_one_way()
 		P.use(1)
 		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
-		overlays += oneway_overlay
 		return
 	*/
 
@@ -576,7 +579,6 @@ var/list/one_way_windows
 
 	update_nearby_tiles()
 	..()
-	dir = ini_dir
 	update_nearby_tiles()
 
 //This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_icons().
@@ -631,6 +633,10 @@ var/list/one_way_windows
 /obj/structure/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/reinforced/clockwork, BRASS_WINDOW_GLOW)
 
+/obj/structure/window/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -643,7 +649,7 @@ var/list/one_way_windows
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
-	d_state = WINDOWLOOSE
+	d_state = 0
 
 /obj/structure/window/plasma
 
@@ -658,6 +664,10 @@ var/list/one_way_windows
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
 
+/obj/structure/window/plasma/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/reinforced/plasma
 
 	name = "reinforced plasma window"
@@ -667,6 +677,10 @@ var/list/one_way_windows
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+
+/obj/structure/window/reinforced/plasma/loose
+	anchored = 0
+	d_state = 0
 
 
 // Used on Packed ; smartglassified roundstart
@@ -709,6 +723,10 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/clockwork/clockworkify()
 	return
 
+/obj/structure/window/reinforced/clockwork/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
@@ -716,6 +734,7 @@ var/list/one_way_windows
 		"d_state")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

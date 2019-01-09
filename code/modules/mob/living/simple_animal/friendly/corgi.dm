@@ -472,6 +472,7 @@
 	response_disarm = "bops"
 	response_harm   = "kicks"
 	spin_emotes = list("dances around","chases his tail")
+	is_pet = TRUE
 
 /mob/living/simple_animal/corgi/Ian/santa
 	name = "Santa's Corgi Helper"
@@ -631,6 +632,7 @@
 	icon_living = "doby"
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around","chases her nub of a tail")
+	is_pet = TRUE
 
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal

@@ -31,6 +31,17 @@ mineral
 	proc/UpdateTurf(var/turf/unsimulated/mineral/T)
 		T.UpdateMineral()
 
+mineral/proc/DropMineral(var/turf/unsimulated/mineral/T)
+	var/obj/item/weapon/ore/O = new ore (T)
+	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
+	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
+	if(istype(O))
+		if(!T.geologic_data)
+			T.geologic_data = new/datum/geosample(T)
+		T.geologic_data.UpdateNearbyArtifactInfo(T)
+		O.geologic_data = T.geologic_data
+	return O
+
 mineral/uranium
 	name = "Uranium"
 	result_amount = 5
@@ -165,11 +176,15 @@ mineral/gibtonite
 	result_amount = 1
 	spread = 1
 	ore = /obj/item/weapon/gibtonite
-	UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/mineral/gibtonite))
-			T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
-		else
-			..()
+
+mineral/gibtonite/UpdateTurf(var/turf/unsimulated/mineral/T)
+	if(!istype(T,/turf/unsimulated/mineral/gibtonite))
+		var/old_state = T.icon_state
+		var/turf/unsimulated/mineral/newturf = T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
+		newturf.base_icon_state = old_state
+		newturf.icon_state = old_state
+	else
+		..()
 
 
 mineral/ice
@@ -190,3 +205,19 @@ mineral/cave
 			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
 		else
 			..()
+
+mineral/cave/ice
+	display_name = "Ice Cave"
+	name = "Ice Cave"
+	UpdateTurf(var/turf/T)
+		if(!istype(T,/turf/unsimulated/floor/asteroid/cave/permafrost))
+			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/permafrost)
+		else
+			..()
+
+mineral/mythril
+	display_name = "Silver"
+	name = "Mythril"
+	result_amount = 4
+	spread = 2
+	ore = /obj/item/weapon/ore/mythril

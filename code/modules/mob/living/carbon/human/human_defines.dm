@@ -61,7 +61,6 @@
 	var/icon/lying_icon = null
 
 	var/special_voice = "" // For changing our voice. Used by a symptom.
-	var/said_last_words=0
 
 	var/failed_last_breath = 0 //This is used to determine if the mob failed a breath. If they did fail a brath, they will attempt to breathe each tick, otherwise just once per 4 ticks.
 
@@ -92,3 +91,4 @@
 
 	var/become_zombie_after_death = FALSE
 	var/times_cloned = 0 //How many times this person has been cloned
+	var/talkcount = 0 // How many times a person has talked - used for determining who's been the "star" for the purposes of round end credits 

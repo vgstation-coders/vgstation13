@@ -1,12 +1,12 @@
 
 /obj/machinery/artifact_analyser
-	name = "Anomaly Analyser"
+	name = "anomaly analyser"
 	desc = "Studies the emissions of anomalous materials to discover their uses."
-	icon = 'icons/obj/virology.dmi'
-	icon_state = "isolator"
-	anchored = 1
-	density = 1
-	var/scan_in_progress = 0
+	icon = 'icons/obj/xenoarchaeology.dmi'
+	icon_state = "xenoarch_console"
+	anchored = TRUE
+	density = TRUE
+	var/scan_in_progress = FALSE
 	var/scan_num = 0
 	var/obj/scanned_obj
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
@@ -18,12 +18,20 @@
 /obj/machinery/artifact_analyser/New()
 	..()
 	reconnect_scanner()
+	update_icon()
+
+/obj/machinery/artifact_analyser/update_icon()
+	icon_state = "[initial(icon_state)][scan_in_progress]"
+	if(owned_scanner)
+		owned_scanner.update_icon()
 
 /obj/machinery/artifact_analyser/proc/reconnect_scanner()
 	//connect to a nearby scanner pad
 	owned_scanner = locate(/obj/machinery/artifact_scanpad) in get_step(src, dir)
 	if(!owned_scanner)
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
+	if(owned_scanner)
+		owned_scanner.owner_console = src
 
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
 	if(..())
@@ -62,7 +70,8 @@
 /obj/machinery/artifact_analyser/process()
 	if(scan_in_progress && world.time > scan_completion_time)
 		//finish scanning
-		scan_in_progress = 0
+		scan_in_progress = FALSE
+		update_icon()
 		updateDialog()
 
 		//print results
@@ -92,8 +101,8 @@
 
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
-			A.anchored = 0
-			A.being_used = 0
+			A.anchored = FALSE
+			A.being_used = FALSE
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
 	if(..())
@@ -102,7 +111,7 @@
 		if(!owned_scanner)
 			reconnect_scanner()
 		if(owned_scanner)
-			var/artifact_in_use = 0
+			var/artifact_in_use = FALSE
 			for(var/obj/O in owned_scanner.loc)
 				if(O == owned_scanner)
 					continue
@@ -111,28 +120,30 @@
 				if(istype(O, /obj/machinery/artifact))
 					var/obj/machinery/artifact/A = O
 					if(A.being_used)
-						artifact_in_use = 1
+						artifact_in_use = TRUE
 					else
-						A.anchored = 1
-						A.being_used = 1
+						A.anchored = TRUE
+						A.being_used = TRUE
 
 				if(artifact_in_use)
 					src.visible_message("<b>[name]</b> states, \"Cannot harvest. Too much interference.\"")
 				else
 					scanned_object = O
-					scan_in_progress = 1
+					scan_in_progress = TRUE
+					update_icon()
 					scan_completion_time = world.time + scan_duration
 					src.visible_message("<b>[name]</b> states, \"Scanning begun.\"")
 				break
 			if(!scanned_object)
 				src.visible_message("<b>[name]</b> states, \"Unable to isolate scan target.\"")
 	if(href_list["halt_scan"])
-		scan_in_progress = 0
+		scan_in_progress = FALSE
+		update_icon()
 		src.visible_message("<b>[name]</b> states, \"Scanning halted.\"")
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
-			A.anchored = 0
-			A.being_used = 0
+			A.anchored = FALSE
+			A.being_used = FALSE
 
 	if(href_list["close"])
 		usr.unset_machine(src)

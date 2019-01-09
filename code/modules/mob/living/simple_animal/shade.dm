@@ -6,15 +6,15 @@
 	icon_state = "shade"
 	icon_living = "shade"
 	icon_dead = "shade_dead"
-	maxHealth = 50
-	health = 50
+	maxHealth = 40
+	health = 40
 	speak_emote = list("hisses")
 	emote_hear = list("wails","screeches")
 	response_help  = "puts their hand through"
 	response_disarm = "flails at"
 	response_harm   = "punches"
-	melee_damage_lower = 5
-	melee_damage_upper = 15
+	melee_damage_lower = 8
+	melee_damage_upper = 8
 	attacktext = "torments"
 	minbodytemp = 0
 	maxbodytemp = 4000
@@ -30,6 +30,10 @@
 	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
+
+/mob/living/simple_animal/construct/New()
+	..()
+	add_language(LANGUAGE_CULT)
 
 /mob/living/simple_animal/shade/Login()
 	..()
@@ -95,7 +99,7 @@
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
-			if(istype(O,/obj/item/weapon/nullrod))
+			if(isholyweapon(O))
 				damage *= 2
 				purge = 3
 			adjustBruteLoss(damage)

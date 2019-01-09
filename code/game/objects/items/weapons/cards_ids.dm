@@ -621,7 +621,7 @@
 	registered_name = "Cargonian"
 	icon_state = "cargo"
 	desc = "ROH ROH! HEIL THE QUARTERMASTER!"
-	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
+	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
 
 /obj/item/weapon/card/id/engineering
 	name = "Engineering ID"

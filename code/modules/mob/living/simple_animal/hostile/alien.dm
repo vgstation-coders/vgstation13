@@ -43,7 +43,10 @@ var/list/nest_locations = list()
 	var/acid = 200
 
 /mob/living/simple_animal/hostile/alien/Life()
-	..()
+	. = ..()
+	if(!.)
+		return
+
 	var/turf/T = get_turf(src)
 	if(weed < 50)
 		weed++
@@ -247,7 +250,10 @@ var/list/nest_locations = list()
 	var/egg = 55
 
 /mob/living/simple_animal/hostile/alien/queen/Life()
-	..()
+	. = ..()
+	if(!.)
+		return
+
 	var/turf/T = get_turf(src)
 	if(nest < 75)
 		nest++

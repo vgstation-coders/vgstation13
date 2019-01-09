@@ -105,12 +105,10 @@
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/shade = new (T)
-			var/true_name = "a nobody"
-			if (real_name && real_name != "unknown")
-				true_name = real_name
-			shade.name = "Shade of [true_name]"
-			shade.real_name = "Shade of [true_name]"
+			shade.name = "[real_name] the Shade"
+			shade.real_name = "[real_name]"
 			mind.transfer_to(shade)
+			update_faction_icons()
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 	else
 		ghostize()
@@ -160,7 +158,7 @@
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
 			damage = 0
-		if(istype(O,/obj/item/weapon/nullrod))
+		if(isholyweapon(O))
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)

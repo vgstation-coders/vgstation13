@@ -52,14 +52,12 @@ var/global/list/narsie_list = list()
 		world << sound('sound/effects/wind/wind_5_1.ogg')
 		if(narnar)
 			narsie_spawn_animation()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		cult.progress(CULT_EPILOGUE)
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
-		/* Checks if the gamemode was cult
-		if(istype(ticker.mode, /datum/game_mode/cult))
-			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			if (mode_ticker.objectives[mode_ticker.current_objective] == "eldergod")
-				mode_ticker.third_phase()*/
 
-		if (emergency_shuttle)
+		if (emergency_shuttle && !cult)//in case of Cult 3.0, the round will end after about 5 minutes
 			emergency_shuttle.incall()
 			emergency_shuttle.can_recall = 0
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
@@ -394,19 +392,6 @@ var/global/list/narsie_list = list()
 	overlays = 0
 	overlays += image(icon,"glow-[icon_state]",overlay_layer)
 */
-
-
-/**
- * Wizard narsie.
- */
-/obj/machinery/singularity/narsie/wizard
-	grav_pull = 0
-
-/obj/machinery/singularity/narsie/wizard/eat()
-	set background = BACKGROUND_ENABLED
-
-	for (var/turf/T in trange(consume_range, src))
-		consume(T)
 
 /**
  * MR. CLEAN

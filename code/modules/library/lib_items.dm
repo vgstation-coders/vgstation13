@@ -24,6 +24,7 @@
 	var/health = 50
 	var/tmp/busy = 0
 	var/list/valid_types = list(/obj/item/weapon/book, \
+								/obj/item/weapon/tome, \
 								/obj/item/weapon/tome_legacy, \
 								/obj/item/weapon/spellbook, \
 								/obj/item/weapon/storage/bible)

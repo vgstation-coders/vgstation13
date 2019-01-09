@@ -9,7 +9,7 @@
 
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores base slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores
@@ -56,8 +56,7 @@
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
-
-	if(!reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(!reagents.has_any_reagents(HYPERZINES))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
@@ -71,7 +70,7 @@
 		. *= MAGBOOTS_SLOWDOWN_HIGH //Chemical magboots, imagine.
 
 	if(isslimeperson(src))
-		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		if(reagents.has_any_reagents(HYPERZINES))
 			. *= 2
 		if(reagents.has_reagent(FROSTOIL))
 			. *= 5
@@ -168,5 +167,5 @@
 	// We have magboots, and magboots can protect us
 	if (. && magboots_slip_factor)
 		return SLIP_HAS_MAGBOOTIES
-	// We don't have magbboots, or magboots can't protect us
+	// We don't have magboots, or magboots can't protect us
 	return (. && !shoes_slip_factor)

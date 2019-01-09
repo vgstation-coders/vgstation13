@@ -202,6 +202,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		DEXALINP = 75,
 		HYRONALIN = 100,
 		BLOOD = 100,
+		PHYTOSINE = 100,
+		PHYTOCARISOL = 100,
 		// Misc Poisons
 		PHYSOSTIGMINE = 100,
 		MERCURY = 100,
@@ -220,6 +222,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		NOTHING = 50,
 		MINDBREAKER = 100,
 		MINTTOXIN = 60,
+		DEFALEXORIN = 100,
 		// Things of Dubious Use
 		SUGAR = 100,
 		ETHYLREDOXRAZINE = 100,

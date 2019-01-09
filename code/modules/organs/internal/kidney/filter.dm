@@ -1,3 +1,9 @@
+/datum/organ/internal/kidney
+	name = "kidneys"
+	parent_organ = LIMB_GROIN
+	organ_type = "kidneys"
+	removed_type = /obj/item/organ/internal/kidneys
+
 // Kidney upgrade
 /datum/organ/internal/kidney/filter
 	name = "toxin filters"

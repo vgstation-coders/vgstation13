@@ -3,6 +3,10 @@
 	density = TRUE
 	anchored = TRUE
 
+/obj/structure/cult_legacy/cultify()
+	return
+/obj/structure/cult_legacy/clockworkify()
+	return
 
 /obj/structure/cult_legacy/talisman
 	name = "Altar"
@@ -23,6 +27,7 @@
 	light_color = LIGHT_COLOR_RED
 	var/last_check = 0
 
+/*
 /obj/structure/cult_legacy/pylon/New()
 	..()
 	processing_objects.Add(src)
@@ -30,7 +35,6 @@
 /obj/structure/cult_legacy/pylon/Destroy()
 	processing_objects.Remove(src)
 	..()
-
 
 /obj/structure/cult_legacy/pylon/process()
 	if(!isbroken && world.time > last_check + 3 SECONDS)
@@ -41,7 +45,7 @@
 					src.visible_message("<span class='sinister'>\the [src] mends some of \the <EM>[C]'s</EM> wounds.</span>")
 				make_tracker_effects(get_turf(src), C)
 				C.health = min(C.maxHealth, C.health + 3) //Not quite as good as artificers
-
+*/
 
 /obj/structure/cult_legacy/pylon/attack_hand(mob/M as mob)
 	attackpylon(M, 5)

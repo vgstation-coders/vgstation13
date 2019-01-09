@@ -17,27 +17,18 @@
 	if(!location)
 		return FALSE
 
-	if(istype(location, /turf/simulated/shuttle/floor4)) // Fails tratiors if they are in the shuttle brig -- Polymorph
-		if(istype(owner.current, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = owner.current
-			if(!H.restrained()) // Technically, traitors will fail the objective if they are time stopped by a wizard
-				return TRUE
-		else if(istype(owner.current, /mob/living/carbon)) // I don't think non-humanoid carbons can get the escape objective, but I'm leaving it to be safe
-			var/mob/living/carbon/C = owner.current
-			if (!C.handcuffed)
-				return TRUE
-		return FALSE
-
-	var/area/check_area = location.loc
-	if(istype(check_area, /area/shuttle/escape/centcom))
-		return TRUE
-	if(istype(check_area, /area/shuttle/escape_pod1/centcom))
-		return TRUE
-	if(istype(check_area, /area/shuttle/escape_pod2/centcom))
-		return TRUE
-	if(istype(check_area, /area/shuttle/escape_pod3/centcom))
-		return TRUE
-	if(istype(check_area, /area/shuttle/escape_pod5/centcom))
+	var/datum/shuttle/S = is_on_shuttle(owner.current)
+	if(emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S))
+		if(istype(location, /turf/simulated/shuttle/floor4)) // Fails traitors if they are in the shuttle brig
+			if(istype(owner.current, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = owner.current
+				if(!H.restrained()) // Technically, traitors will fail the objective if they are time stopped by a wizard
+					return TRUE
+			else if(istype(owner.current, /mob/living/carbon))
+				var/mob/living/carbon/C = owner.current
+				if (!C.handcuffed)
+					return TRUE
+			return FALSE
 		return TRUE
 	else
 		return FALSE

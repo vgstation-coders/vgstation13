@@ -16,47 +16,47 @@
 			return
 		switch(href_list["makeAntag"])
 			if("1")
-				log_admin("[key_name(usr)] has attempted to spawn [count] traitors.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] traitors.")
 				var/success = makeAntag(/datum/role/traitor, null, count, FROM_PLAYERS)
-				log_admin("[success] number of traitors made.")
+				message_admins("[success] number of traitors made.")
 				to_chat(usr, "<span class='notice'>[success] number of traitors made.</span>")
 			if("2")
-				log_admin("[key_name(usr)] has attempted to spawn [count] changelings.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] changelings.")
 				var/success = makeAntag(/datum/role/changeling, null, count, FROM_PLAYERS)
-				log_admin("[success] number of changelings made.")
+				message_admins("[success] number of changelings made.")
 				to_chat(usr, "<span class='notice'>[success] number of changelings made.</span>")
 			if("3")
-				log_admin("[key_name(usr)] has attempted to spawn [count] revolutionaries.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] revolutionaries.")
 				var/success = makeAntag(null, /datum/faction/revolution, count, FROM_PLAYERS)
-				log_admin("[success] number of revolutionaries made.")
+				message_admins("[success] number of revolutionaries made.")
 				to_chat(usr, "<span class='notice'>[success] number of revolutionaries made.</span>")
 			if("4")
-				log_admin("[key_name(usr)] has attempted to spawn [count] cultists.")
-				var/success = makeAntag(null, /datum/faction/cult, count , FROM_PLAYERS)
-				log_admin("[success] number of cultists made.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] cultists.")
+				var/success = makeAntag(null, /datum/faction/bloodcult, count , FROM_PLAYERS)
+				message_admins("[success] number of cultists made.")
 				to_chat(usr, "<span class='notice'>[success] number of cultists made..</span>")
 			if("5")
-				log_admin("[key_name(usr)] has attempted to spawn [count] malfunctioning AI.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] malfunctioning AI.")
 				var/success = makeAntag(null, /datum/faction/malf, count, FROM_PLAYERS)
-				log_admin("[success] number of angry computer screens made.")
+				message_admins("[success] number of angry computer screens made.")
 				to_chat(usr, "<span class='notice'>[success] number of malf AIs made.</span>")
 			if("6")
-				log_admin("[key_name(usr)] has attempted to spawn [count] wizards.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] wizards.")
 				var/success = makeAntag(null, /datum/faction/wizard, count, FROM_GHOSTS)
-				log_admin("[success] number of wizards made.")
+				message_admins("[success] number of wizards made.")
 				to_chat(usr, "<span class='notice'>[success] number of wizards made.</span>")
 			if("7")
-				log_admin("[key_name(usr)] has spawned a nuke team.")
+				message_admins("[key_name(usr)] has spawned a nuke team.")
 				var/success = makeAntag(null, /datum/faction/syndicate/nuke_op, count, FROM_GHOSTS)
-				log_admin("[success] number of nuclear operatives made.")
+				message_admins("[success] number of nuclear operatives made.")
 				to_chat(usr, "<span class='notice'>[success] number of nuclear operatives made.</span>")
 			if("8")
-				log_admin("[key_name(usr)] has attempted to spawn [count] vampires.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] vampires.")
 				var/success = makeAntag(/datum/role/vampire, null, count, FROM_PLAYERS)
-				log_admin("[success] number of vampires made.")
+				message_admins("[success] number of vampires made.")
 				to_chat(usr, "<span class='notice'>[success] number of vampires made.</span>")
 			if("9")
-				log_admin("[key_name(usr)] has spawned aliens.")
+				message_admins("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
 					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
 
@@ -112,16 +112,18 @@
 			return
 		//testing("Lawtype: [lawtype]")
 
-		var/law_zeroth=null
-		var/law_zeroth_borg=null
+		var/law_zeroth = ""
+		var/law_zeroth_borg = ""
 		if(S.laws.zeroth || S.laws.zeroth_borg)
 			if(alert(src,"Do you also wish to clear law zero?","Yes","No") == "No")
-				law_zeroth=S.laws.zeroth
-				law_zeroth_borg=S.laws.zeroth
+				law_zeroth = S.laws.zeroth
+				law_zeroth_borg = S.laws.zeroth
+			else
+				S.laws.zeroth_lock = FALSE
 
 		S.laws = new lawtype
-		S.laws.zeroth=law_zeroth
-		S.laws.zeroth_borg=law_zeroth_borg
+		S.laws.zeroth = law_zeroth
+		S.laws.zeroth_borg = law_zeroth_borg
 
 		log_admin("[key_name(usr)] has reset [key_name(S)]: [lawtype]")
 		message_admins("[usr.key] has reset [key_name(S)]: [lawtype]")
@@ -551,8 +553,8 @@
 				blade.update_icon()
 				new_shade.status_flags |= GODMODE
 				new_shade.canmove = 0
-				new_shade.name = "Shade of [M.real_name]"
-				new_shade.real_name = "Shade of [M.real_name]"
+				new_shade.name = "[M.real_name] the Shade"
+				new_shade.real_name = "[M.real_name]"
 				new_shade.give_blade_powers()
 			if("blob")
 				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)
@@ -991,7 +993,7 @@
 		jobs += "</tr></table>"
 
 	//Antagonist (Orange)
-		var/isbanned_dept = jobban_isbanned(M, "Syndicate")
+		var/isbanned_dept = isantagbanned(M)
 		jobs += "<table cellpadding='1' cellspacing='0' width='100%'>"
 		jobs += "<tr bgcolor='ffeeaa'><th colspan='10'><a href='?src=\ref[src];jobban3=Syndicate;jobban4=\ref[M]'>Antagonist Positions</a></th></tr><tr align='center'>"
 
@@ -2885,20 +2887,6 @@
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
 
-				/*why were there two of those anyway? meteor blobs are an improvement either way.
-			if("goblob")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","Blob")
-				log_admin("[key_name(usr)] spawned a blob", 1)
-				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a blob.</span>", 1)
-				new /datum/event/blob
-
-			if("goblob")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","BL")
-				mini_blob_event()
-				message_admins("[key_name_admin(usr)] has spawned blob", 1)
-				*/
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
@@ -4414,8 +4402,6 @@
 						locations += list("Vox home (MOVING TO IT WILL END THE ROUND)" = "dock_home")
 					if(/datum/shuttle/escape)
 						locations += list("Escape shuttle home" = "dock_station","Escape shuttle centcom" = "dock_centcom")
-					if(/datum/shuttle/taxi)
-						locations += list("Taxi medbay silicon" = "dock_medical_silicon","Taxi engineering cargo" = "dock_engineering_cargo","Taxi security science" = "dock_security_science","Taxi abandoned station" = "dock_abandoned")
 					if(/datum/shuttle/supply)
 						locations += list("Centcom loading bay" = "dock_centcom", "Station cargo bay" = "dock_station")
 
@@ -4845,6 +4831,68 @@
 		if (!istype(mind))
 			return
 		mind.role_panel()
+
+	else if(href_list["credits"])
+		switch(href_list["credits"])
+			if("resetname")
+				if(!end_credits.generated) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.episode_name = ""
+					log_admin("[key_name(usr)] reset the current round's episode name. A new one will automatically generate later.")
+					message_admins("[key_name_admin(usr)] reset the current round's episode name. A new one will automatically generate later.")
+			if("rerollname")
+				end_credits.pick_name()
+				log_admin("[key_name(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
+				message_admins("[key_name_admin(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
+			if("setname")
+				var/newname = input(usr,"Write the name of this latest rerun...","New Episode Name") as text|null
+				if(newname)
+					end_credits.episode_name = newname
+					log_admin("[key_name(usr)] forced the current round's episode name to '[newname]'")
+					message_admins("[key_name_admin(usr)] forced the current round's episode name to '[newname]'")
+
+			if("namedatumedit")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N)
+					var/newname = input(usr,"Write a new possible episode name. This is NOT guaranteed to be picked as the final name, unless you modified the weight to 99999% or something.","Edit Name",N.thename) as text|null
+					if(newname)
+						N.thename = newname
+			if("namedatumweight")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N)
+					var/newweight = input(usr,"Write the new possibility that '[N.thename]' will be selected as the final episode name. Default is 100.","Edit Weight",N.weight) as num|null
+					if(newweight)
+						N.weight = newweight
+			if("namedatumremove")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N && alert("Are you sure you want to remove the name '[N.thename]' from the possible episode names to be picked?", "Removing possible name", "Yes", "No") == "Yes")
+					end_credits.episode_names -= N
+					qdel(N)
+
+			if("newdisclaimer")
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
+				if(newdisclaimer)
+					end_credits.disclaimers.Insert(1,newdisclaimer)
+					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+			if("editdisclaimer")
+				var/i = text2num(href_list["disclaimerindex"])
+				var/olddisclaimer = end_credits.disclaimers[i]
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer.","Edit Disclaimer",olddisclaimer) as message|null
+				if(newdisclaimer)
+					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					end_credits.disclaimers[i] = newdisclaimer
+			if("disclaimerup")
+				var/i = text2num(href_list["disclaimerindex"])
+				if(i > 1)
+					end_credits.disclaimers.Swap(i,i-1)
+			if("disclaimerdown")
+				var/i = text2num(href_list["disclaimerindex"])
+				if(i < end_credits.disclaimers.len)
+					end_credits.disclaimers.Swap(i,i+1)
+
+		CreditsPanel() //refresh!
+
 
 	// ----- Religion and stuff
 	if (href_list["religions"])

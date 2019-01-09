@@ -160,7 +160,6 @@
 		"pda_minimap_box.png"	= 'icons/pda_icons/pda_minimap_box.png',
 		"pda_minimap_bg_notfound.png"	= 'icons/pda_icons/pda_minimap_bg_notfound.png',
 		"pda_minimap_deff.png"					= 'icons/pda_icons/pda_minimap_deff.png',
-		"pda_minimap_taxi.png"					= 'icons/pda_icons/pda_minimap_taxi.png',
 		"pda_minimap_meta.png"				= 'icons/pda_icons/pda_minimap_meta.png',
 		"pda_minimap_loc.gif"					= 'icons/pda_icons/pda_minimap_loc.gif',
 		"pda_minimap_mkr.gif"					= 'icons/pda_icons/pda_minimap_mkr.gif'
@@ -338,6 +337,11 @@
 		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
 	)
 
+/datum/asset/simple/nanoui_maps/New()
+	for(var/z in 1 to world.maxz)
+		if(z == CENTCOMM_Z)
+			continue
+		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()

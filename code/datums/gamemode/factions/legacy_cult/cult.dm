@@ -63,6 +63,18 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		cult_words[word] = pick(runewords)
 		runewords -= cult_words[word]
 
+/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
+	if (!..())
+		return
+	if (has_enough_adepts())
+		getNewObjective()
+
+/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
+	if (!..())
+		return
+	if (has_enough_adepts())
+		getNewObjective()
+
 // Urist-runes naming & recognition procs.
 // Those procs are a mess
 
@@ -255,7 +267,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/text = current_objective.feedbackText()
 	if (text)
 		for (var/datum/role/R in members)
-			to_chat(R.antag.current, text)
+			if (R.antag.current)
+				to_chat(R.antag.current, text)
 
 /datum/faction/cult/narsie/handleNewObjective(var/datum/objective/O)
 	if (current_objective)
@@ -301,7 +314,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
                     "")
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
-			to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
+			if (M)
+				to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
 
 	if (href_list["cult_mindspeak"])
 		if (!usr.client.holder)
@@ -311,7 +325,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
                     "")
 		var/datum/role/R = locate(href_list["cult_mindspeak"])
 		var/mob/M = R.antag.current
-		to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
+		if (M)
+			to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
 
 	if (href_list["check_words"])
 		if (!usr.client.holder)
@@ -338,11 +353,14 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 
 /datum/faction/cult/narsie/proc/reroll_sac(var/datum/objective/target/assassinate/sacrifice/S)
+	log_admin("LEGACY CULT: rerolling sacrifice.")
 	var/list/possible_targets = S.get_targets()
 	S.target = pick(possible_targets)
 	if (!S.target) // No targets still ? Time to reroll the objective.
+		log_admin("LEGACY CULT: qdeling the objective...")
 		objective_holder.objectives -= current_objective
 		qdel(current_objective)
+		current_objective = null
 		getNewObjective(debug = TRUE) // This objective never happened.
 		return
 	for (var/datum/role/R in members)

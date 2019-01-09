@@ -304,6 +304,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
+	darksight = 3
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -1162,7 +1163,7 @@ var/list/has_died_as_golem = list()
 
 	gender = NEUTER
 
-	darksight = 5
+	darksight = 8
 	tox_mod = 0.8
 	brute_mod = 1.8
 	burn_mod = 0.6

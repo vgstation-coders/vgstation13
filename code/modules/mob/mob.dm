@@ -3,6 +3,7 @@
 
 /mob
 	plane = MOB_PLANE
+	var/said_last_words = 0 // All mobs can now whisper as they die
 
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
@@ -314,7 +315,7 @@
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
 
-	update_colour(0,1)
+	update_colour(0)
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
@@ -1034,11 +1035,12 @@ var/list/slot_equipment_priority = list( \
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view())
+/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
 	set name = "Point To"
 	set category = "Object"
 
-	if((usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || attack_delayer.blocked())
+
+	if((usr.isUnconscious() && !isobserver(src)) || !(get_turf(src))|| attack_delayer.blocked())
 		return 0
 
 	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
@@ -1048,7 +1050,7 @@ var/list/slot_equipment_priority = list( \
 		I.showoff(src)
 		return 0
 
-	if(!(A in view(src.loc) + get_all_slots()))
+	if(!(A in (view(get_turf(src)) + get_all_slots())))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1210,7 +1212,7 @@ var/list/slot_equipment_priority = list( \
 		memory()
 
 //mob verbs are faster than object verbs. See http://www.byond.com/forum/?post=1326139&page=2#comment8198716 for why this isn't atom/verb/examine()
-/mob/verb/examination(atom/A as mob|obj|turf in view()) //It used to be oview(12), but I can't really say why
+/mob/verb/examination(atom/A as mob|obj|turf in view(src)) //It used to be oview(12), but I can't really say why
 	set name = "Examine"
 	set category = "IC"
 
@@ -2015,7 +2017,6 @@ mob/proc/on_foot()
 		"bhunger",
 		"druggy",
 		"confused",
-		"antitoxs",
 		"sleeping",
 		"resting",
 		"lying",
@@ -2171,6 +2172,8 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(!(status_flags & PACIFIABLE))
+		return 0
 	if (reagents && reagents.has_reagent(CHILLWAX))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
@@ -2185,6 +2188,13 @@ mob/proc/on_foot()
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return 1
 
+	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
+		if(P.isDead())
+			continue
+		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
+		return 1
+
+
 	return 0
 
 /mob/proc/handle_regular_hud_updates()
@@ -2197,6 +2207,10 @@ mob/proc/on_foot()
 			R.update_antag_hud()
 
 /mob/proc/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return FALSE
+
+// Returns TRUE on success
+/mob/proc/attempt_crawling(var/turf/target)
 	return FALSE
 
 #undef MOB_SPACEDRUGS_HALLUCINATING

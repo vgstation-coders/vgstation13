@@ -39,6 +39,7 @@
 		recruiter.display_name = "posibrain"
 		recruiter.role = ROLE_POSIBRAIN
 		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
+		recruiter.logging = TRUE
 
 		// A player has their role set to Yes or Always
 		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
@@ -54,6 +55,7 @@
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
 	to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. ([controls])</span>")
+	investigation_log(I_GHOST, "|| had a ghost automatically sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 
 /obj/item/device/mmi/posibrain/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
@@ -80,7 +82,7 @@
 
 	to_chat(src.brainmob, "<b>You are \a [src], brought into existence on [station_name()].</b>")
 	to_chat(src.brainmob, "<b>As a synthetic intelligence, you answer to all crewmembers, as well as the AI.</b>")
-	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>")
+	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm to the station or its crew.</b>")
 	src.brainmob.mind.assigned_role = "Positronic Brain"
 
 	var/turf/T = get_turf(src.loc)
@@ -88,6 +90,8 @@
 		M.show_message("<span class='notice'>\The [src] buzzes and beeps as it boots up.</span>")
 	playsound(src, 'sound/misc/buzzbeep.ogg', 50, 1)
 	icon_state = "posibrain-occupied"
+
+	investigation_log(I_GHOST, "|| has been occupied by: [key_name(brainmob)]")
 
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
@@ -151,11 +155,15 @@
 /obj/item/device/mmi/posibrain/attack_ghost(var/mob/dead/observer/O)
 	if(searching)
 		recruiter.volunteer(O)
-		to_chat(O, "<span class='notice'>Click again to unvolunteer.</span>")
+		if(O in recruiter.currently_querying)
+			to_chat(O, "<span class='notice'>Click again to unvolunteer.</span>")
+		else
+			to_chat(O, "<span class='notice'>Click again to volunteer.</span>")
 	else
 		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
 			last_ping_time = world.time
 			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+			investigation_log(I_GHOST, "|| was pinged by [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 		else
 			to_chat(O, "[src] is recharging. Try again in a few moments.")
 

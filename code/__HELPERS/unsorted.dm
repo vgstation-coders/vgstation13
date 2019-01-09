@@ -483,6 +483,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		M = whom
 		C = M.client
 		key = M.key
+	else if(istype(whom, /datum/mind))
+		var/datum/mind/D = whom
+		M = D.current
+		key = M.key
+		C = M.client
 	else if(istype(whom, /datum))
 		var/datum/D = whom
 		return "*invalid:[D.type]*"
@@ -538,42 +543,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // Otherwise, the user mob's machine var will be reset directly.
 //
 /proc/onclose(mob/user, windowid, var/atom/ref=null)
-	if(!user.client)
-		return
-	var/param = "null"
-	if(ref)
-		param = "\ref[ref]"
-
-	winset(user, windowid, "on-close=\".windowclose [param]\"")
+	set waitfor = FALSE // winexists sleeps
+	for(var/i in 1 to WINSET_MAX_ATTEMPTS)
+		if(user && winexists(user, windowid))
+			var/param = ref ? "\ref[ref]" : "null"
+			winset(user, windowid, "on-close=\".windowclose [param]\"")
+			break
 
 //	to_chat(world, "OnClose [user]: [windowid] : ["on-close=\".windowclose [param]\""]")
-
-
-// the on-close client verb
-// called when a browser popup window is closed after registering with proc/onclose()
-// if a valid atom reference is supplied, call the atom's Topic() with "close=1"
-// otherwise, just reset the client mob's machine var.
-//
-/client/verb/windowclose(var/atomref as text)
-	set hidden = 1						// hide this verb from the user's panel
-	set name = ".windowclose"			// no autocomplete on cmd line
-
-//	to_chat(world, "windowclose: [atomref]")
-	if(atomref!="null")				// if passed a real atomref
-		var/hsrc = locate(atomref)	// find the reffed atom
-		var/href = "close=1"
-		if(hsrc)
-//			to_chat(world, "[src] Topic [href] [hsrc]")
-			usr = src.mob
-			src.Topic(href, params2list(href), hsrc)	// this will direct to the atom's
-			return										// Topic() proc via client.Topic()
-
-	// no atomref specified (or not found)
-	// so just reset the user mob's machine var
-	if(src && src.mob)
-//		to_chat(world, "[src] was [src.mob.machine], setting to null")
-		src.mob.unset_machine()
-	return
 
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
@@ -997,9 +974,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	if(perfectcopy)
 		if((O) && (original))
-			for(var/V in original.vars)
-				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","group")))
-					O.vars[V] = original.vars[V]
+			for(var/V in original.vars - variables_not_to_be_copied)
+				O.vars[V] = original.vars[V]
 	return O
 
 
@@ -1109,9 +1085,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 
-					for(var/V in T.vars)
-						if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")))
-							X.vars[V] = T.vars[V]
+					for(var/V in T.vars - variables_not_to_be_copied)
+						X.vars[V] = T.vars[V]
 
 //					var/area/AR = X.loc
 
@@ -1411,6 +1386,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	B.fingerprints = A.fingerprints
 	B.fingerprintshidden = A.fingerprintshidden
 	B.fingerprintslast = A.fingerprintslast
+	B.suit_fibers = A.suit_fibers
 
 //Checks if any of the atoms in the turf are dense
 //Returns 1 is anything is dense, 0 otherwise
@@ -1659,27 +1635,29 @@ Game Mode config tags:
 	var/turf/U = get_turf(target)
 	if (!T || !U)
 		return
-	var/obj/item/projectile/A
-	A = new projectile(T)
+	if(ispath(projectile))
+		projectile = new projectile(T)
+	else
+		projectile.forceMove(T)
 	var/fire_sound
 	if(shot_sound)
 		fire_sound = shot_sound
 	else
-		fire_sound = A.fire_sound
+		fire_sound = projectile.fire_sound
 
-	A.original = target
-	A.target = U
-	A.shot_from = source
+	projectile.original = target
+	projectile.target = U
+	projectile.shot_from = source
 	if(istype(source, /mob))
-		A.firer = source
-	A.current = T
-	A.starting = T
-	A.yo = U.y - T.y
-	A.xo = U.x - T.x
+		projectile.firer = source
+	projectile.current = T
+	projectile.starting = T
+	projectile.yo = U.y - T.y
+	projectile.xo = U.x - T.x
 	playsound(T, fire_sound, 75, 1)
 	spawn()
-		A.OnFired()
-		A.process()
+		projectile.OnFired()
+		projectile.process()
 
 
 //Increases delay as the server gets more overloaded,

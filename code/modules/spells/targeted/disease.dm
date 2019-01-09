@@ -1,6 +1,6 @@
 /spell/targeted/disease
 	name = "Diseased Touch (50)"
-	desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
+	desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shuts down their major organs resulting in a quick painful death."
 	abbreviation = "HN"
 
 	school = "vampire"

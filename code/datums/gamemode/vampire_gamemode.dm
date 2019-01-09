@@ -22,7 +22,7 @@
 		message_admins("Error: trying to give a vampire power to a non-vampire.")
 		return FALSE
 
-	if (spell_path)
+	if (spell_path && !(locate(spell_path) in V.antag.current.spell_list))
 		var/spell/S = new spell_path
 		V.antag.current.add_spell(S)
 

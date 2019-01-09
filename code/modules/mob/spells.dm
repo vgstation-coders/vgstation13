@@ -5,7 +5,7 @@
 	if(!spell_masters)
 		spell_masters = list()
 
-	spell_to_add.holder = src
+	spell_to_add.set_holder(src)
 	if(spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			if(spell_master.type == master_type)

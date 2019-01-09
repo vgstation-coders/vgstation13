@@ -62,6 +62,8 @@
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
 
+#define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
+
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
@@ -132,6 +134,10 @@
 
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
+#define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
+
+#define ishammer(A) is_type_in_list(A, list(/obj/item/weapon/hammer, /obj/item/weapon/storage/toolbox))
+
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
@@ -156,6 +162,8 @@
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
+#define isglasssheet(A) istype(A, /obj/item/stack/sheet/glass)
+
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
@@ -169,6 +177,10 @@
 #define iswindow(A) (istype(A, /obj/structure/window))
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
+
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+
+#define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
 #define isAPC(A) istype(A, /obj/machinery/power/apc)
 
@@ -199,8 +211,10 @@
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
-//Macros for antags
 
+#define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
+
+//Macros for roles/antags
 #define isrole(type, H) (H.mind && H.mind.GetRole(type))
 
 #define isfaction(A) (istype(A, /datum/faction))
@@ -239,9 +253,16 @@
 
 #define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
 
+#define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
+
+#define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
-
+//Banning someone from the Syndicate role bans them from all antagonist roles
+#define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
 
 

@@ -30,6 +30,9 @@ var/global/datum/controller/occupations/job_master
 			if(!map.enabled_jobs.Find(job.type))
 				continue
 
+		if(map.disabled_jobs.Find(job.type))
+			continue
+
 		occupations += job
 
 

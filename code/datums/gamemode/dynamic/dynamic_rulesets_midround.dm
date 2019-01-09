@@ -7,12 +7,12 @@
 
 /datum/dynamic_ruleset/midround/autotraitor
 	name = "Syndicate Sleeper Agent"
-	role_category = ROLE_TRAITOR
-	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "AI", "Merchant")
-	restricted_from_jobs = list("Cyborg","Mobile MMI")
+	role_category = /datum/role/traitor
+	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Cyborg", "Merchant")
+	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
-	cost = 5
+	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
@@ -54,16 +54,16 @@
 //                                          //
 //              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////
+//////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
 
 /datum/dynamic_ruleset/midround/raginmages
 	name = "Ragin' Mages"
-	role_category = ROLE_WIZARD
+	role_category = /datum/role/wizard
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 3
-	cost = 30
+	weight = 1
+	cost = 50
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
 
@@ -73,7 +73,8 @@
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = initial(weight) * 5
+		weight = 5
+		cost = 10
 
 	return ..()
 
@@ -131,7 +132,7 @@
 
 /datum/dynamic_ruleset/midround/nuclear
 	name = "Nuclear Assault"
-	role_category = ROLE_OPERATIVE
+	role_category = /datum/role/nuclear_operative
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
@@ -193,3 +194,125 @@
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_MIDROUND)
 	nuclear.OnPostSetup()
+
+
+
+//////////////////////////////////////////////
+//                                          //
+//         SPACE WEEABOO (MIDROUND)                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/weeaboo
+	name = "crazed weeaboo attack"
+	role_category = /datum/role/weeaboo
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(90,90,60,20,10,10,10,10,10,10)
+	logo = "weeaboo-logo"
+
+/datum/dynamic_ruleset/midround/weeaboo/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.threat_level))
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/weeaboo/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/weeaboo/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/weeaboo/review_applications()
+	for (var/i = required_candidates, i > 0, i--)
+		if(applicants.len <= 0)
+			break
+		var/mob/applicant = null
+		var/selected_key = pick(applicants)
+		for(var/mob/M in dead_players)
+			if(M.key == selected_key)
+				applicant = M
+		if(!applicant || !applicant.key)
+			i++
+			continue
+		applicants -= applicant.key
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			i++
+			continue
+
+		var/mob/living/carbon/human/new_character= makeBody(applicant)
+		new_character.dna.ResetSE()
+
+		assigned += new_character
+		var/datum/role/weeaboo/newWeeaboo = new
+		newWeeaboo.AssignToRole(new_character.mind,1)
+		newWeeaboo.OnPostSetup()
+		newWeeaboo.Greet(GREET_DEFAULT)
+		newWeeaboo.ForgeObjectives()
+		newWeeaboo.AnnounceObjectives()
+
+
+//////////////////////////////////////////////
+//                                          //
+//               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/grinch
+	name = "The Grinch"
+	role_category = /datum/role/grinch
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 3
+	cost = 10
+	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/midround/grinch/acceptable(var/population=0, var/threat=0)
+	if(grinchstart.len == 0)
+		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		return 0
+	if (!..())
+		return FALSE
+	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
+	return accepted
+
+/datum/dynamic_ruleset/midround/grinch/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/grinch/review_applications()
+	var/mob/applicant = null
+	var/selected_key = pick(applicants)
+	for(var/mob/M in dead_players)
+		if(M.key == selected_key)
+			applicant = M
+	if(!applicant || !applicant.key)
+		return
+	assigned += applicant
+	applicants -= applicant
+	var/datum/role/grinch/G = new
+	G.AssignToRole(applicant.mind,1)
+	G.Greet(GREET_ROUNDSTART)
+	G.OnPostSetup()
+	return 1

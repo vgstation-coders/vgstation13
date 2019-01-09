@@ -35,8 +35,7 @@
 		H.visible_message("<span class='warning'>Stone spikes shoot out from the sides of \the [src]!</span>")
 		if(H.wear_mask == src) //the mob is wearing this mask
 			if(H.mind)
-				var/datum/mind/M = H.mind
-				if(jobban_isbanned(M, "Syndicate") || jobban_isbanned(H, "vampire"))
+				if(isantagbanned(H) || jobban_isbanned(H, "vampire"))
 					to_chat(H, "<span class='danger'>[src] seems to actively reject your advances. You are cursed!</span>")
 					H.sleeping+=rand(20, 50)
 					H.hallucination+=rand(100,500)

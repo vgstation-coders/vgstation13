@@ -96,9 +96,11 @@
 
 		if(Subject.eyecheck() > 0 || flashfail)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
+			flashfail = TRUE
 		else
 			if(Subject.eyecheck() <= 0)
 				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
+				Subject.Stun(Subject.eyecheck() * 5 * -1 +10)
 
 	else if(issilicon(M))
 		var/mob/living/silicon/R = M
@@ -108,13 +110,17 @@
 			length = rand(5,10)
 			R.Knockdown(length)
 			R.flashed = 1
-			R.flash_eyes(affect_silicon = 1)
 			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
 			spawn(length SECONDS)
 				if (R.flashed)
 					R.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
+		return
+	if(!flashfail)
+		M.flash_eyes(affect_silicon = 1)
+
+	return !flashfail
 
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
@@ -194,6 +200,7 @@
 				var/safety = M.eyecheck()
 				if(safety <= 0 && !M.blinded)
 					M.Knockdown(10)
+					M.Stun(10)
 					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")

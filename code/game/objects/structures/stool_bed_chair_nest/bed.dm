@@ -18,6 +18,7 @@
 	sheet_amt = 1
 
 	var/lock_type = /datum/locking_category/buckle/bed
+	var/glued = FALSE
 
 /obj/structure/bed/New()
 	..()
@@ -68,21 +69,30 @@
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
+	add_fingerprint(user)
+
 	var/mob/M = get_locked(lock_type)[1]
+	var/success = unlock_atom(M)
+
 	if(M != user)
-		M.visible_message(\
-			"<span class='notice'>[M] was unbuckled by [user]!</span>",\
-			"You were unbuckled from \the [src] by [user].",\
+		if(!success)
+			user.delayNextAttack(8)
+			M.visible_message("<span class='warning'>[user] struggles in vain trying to pull [M] off \the [src].</span>")
+			return
+		M.visible_message(
+			"<span class='notice'>[M] was unbuckled by [user]!</span>",
+			"You were unbuckled from \the [src] by [user].",
 			"You hear metal clanking.")
 	else
-		M.visible_message(\
-			"<span class='notice'>[M] unbuckled \himself!</span>",\
-			"You unbuckle yourself from \the [src].",\
+		if(!success)
+			user.delayNextAttack(8)
+			M.visible_message("<span class='warning'>[user] struggles in vain trying to pull themselves off \the [src].</span>")
+			return
+		M.visible_message(
+			"<span class='notice'>[M] unbuckled \himself!</span>",
+			"You unbuckle yourself from \the [src].",
 			"You hear metal clanking.")
 	playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
-	unlock_atom(M)
-
-	add_fingerprint(user)
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
@@ -126,6 +136,23 @@
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
+
+/obj/structure/bed/unlock_atom(var/atom/movable/AM)
+	if(glued)
+		return FALSE
+	return ..()
+
+/obj/structure/bed/Destroy()
+	if(glued && is_locking(lock_type))
+		glued = FALSE // So that unlock_atom called in /atom/movable/Destroy can succeed
+		var/mob/living/carbon/human/locked = get_locked(lock_type)[1]
+		if(istype(locked) && locked.remove_butt())
+			playsound(src, 'sound/items/poster_ripped.ogg', 100, TRUE)
+			visible_message("<span class='danger'>[locked]'s butt is ripped from their body as \the [src] gets dismantled!</span>")
+			locked.apply_damage(10, BRUTE, LIMB_GROIN)
+			locked.apply_damage(10, BURN, LIMB_GROIN)
+			locked.audible_scream()
+	..()
 
 /*
  * Roller beds
