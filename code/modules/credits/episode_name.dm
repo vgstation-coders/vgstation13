@@ -165,48 +165,48 @@
 				var/mob/living/carbon/human/H = human_escapees[1]
 				if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chef")
 					var/chance = 250
-					if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/chefhat))
+					if(H.is_wearing_item(/obj/item/clothing/head/chefhat))
 						chance += 500
-					if(istype(H.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/chef))
+					if(H.is_wearing_item(/obj/item/clothing/suit/chef))
 						chance += 500
-					if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/rank/chef))
+					if(H.is_wearing_item(/obj/item/clothing/under/rank/chef))
 						chance += 250
 					episode_names += new /datum/episode_name("HAIL TO THE CHEF", "The Chef was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Clown")
 					var/chance = 250
-					if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/gas/clown_hat))
+					if(H.is_wearing_item(/obj/item/clothing/mask/gas/clown_hat))
 						chance += 500
-					if(is_type_in_list(H.get_item_by_slot(slot_shoes), list(/obj/item/clothing/shoes/clown_shoes, /obj/item/clothing/shoes/jestershoes)))
+					if(H.is_wearing_any(list(/obj/item/clothing/shoes/clown_shoes, /obj/item/clothing/shoes/jestershoes)))
 						chance += 500
-					if(is_type_in_list(H.get_item_by_slot(slot_w_uniform), list(/obj/item/clothing/under/rank/clown, /obj/item/clothing/under/jester)))
+					if(H.is_wearing_any(list(/obj/item/clothing/under/rank/clown, /obj/item/clothing/under/jester)))
 						chance += 250
 					episode_names += new /datum/episode_name("[pick("COME HELL OR HIGH HONKER", "THE LAST LAUGH")]", "The Clown was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Internal Affairs Agent")
 					var/chance = 250
-					if(locate(/obj/item/weapon/storage/briefcase) in H.held_items)
+					if(H.is_holding_item(/obj/item/weapon/storage/briefcase))
 						chance += 500
-					if(is_type_in_list(H.get_item_by_slot(slot_wear_suit), list(/obj/item/clothing/suit/storage/lawyer, /obj/item/clothing/suit/storage/internalaffairs)))
+					if(H.is_wearing_any(list(/obj/item/clothing/suit/storage/lawyer, /obj/item/clothing/suit/storage/internalaffairs)))
 						chance += 500
-					if(is_type_in_list(H.get_item_by_slot(slot_w_uniform), list(/obj/item/clothing/under/rank/internalaffairs, /obj/item/clothing/under/bridgeofficer, /obj/item/clothing/under/lawyer)))
+					if(H.is_wearing_any(list(/obj/item/clothing/under/rank/internalaffairs, /obj/item/clothing/under/bridgeofficer, /obj/item/clothing/under/lawyer)))
 						chance += 250
 					episode_names += new /datum/episode_name("DEVIL'S ADVOCATE", "The IAA was the only survivor in the shuttle.", chance) //maybe DOUBLE JEOPARDY if there are only 2 surviving IAAs?
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Detective")
 					var/chance = 250
-					if(locate(/obj/item/weapon/gun/projectile/detective) in H.held_items)
+					if(H.is_holding_item(/obj/item/weapon/gun/projectile/detective))
 						chance += 1000
-					if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/det_hat))
+					if(H.is_wearing_item(/obj/item/clothing/head/det_hat))
 						chance += 500
-					if(is_type_in_list(H.get_item_by_slot(slot_wear_suit), list(/obj/item/clothing/suit/storage/det_suit/, /obj/item/clothing/suit/storage/forensics)))
+					if(H.is_wearing_any(list(/obj/item/clothing/suit/storage/det_suit/, /obj/item/clothing/suit/storage/forensics)))
 						chance += 500
-					if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/det))
+					if(H.is_wearing_item(/obj/item/clothing/under/det))
 						chance += 250
 					episode_names += new /datum/episode_name("[uppertext(H.real_name)]: LOOSE CANNON", "The Detective was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chaplain") //We don't check for uniform here because the chaplain's thing kind of is to improvise their garment gimmick
 					episode_names += new /datum/episode_name("BLESS THIS MESS", "The Chaplain was the only survivor in the shuttle.", 1250)
 
-				if(istype(H.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/raincoat) && locate(/obj/item/weapon/fireaxe) in H.held_items)
+				if(H.is_wearing_item(/obj/item/clothing/suit/raincoat) && H.is_holding_item(/obj/item/weapon/fireaxe))
 					episode_names += new /datum/episode_name("[pick("SPACE AMERICAN PSYCHO", "NANOTRASEN PSYCHO", "[uppr_name] PSYCHO")]", "The only survivor in the shuttle wore a raincoat and held a fireaxe.", 1500)
-				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/luchador) && istype(H.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves/boxing))
+				if(H.is_wearing_item(/obj/item/clothing/mask/luchador) && H.is_wearing_item(/obj/item/clothing/gloves/boxing))
 					episode_names += new /datum/episode_name("[pick("THE CREW, ON THE ROPES", "THE CREW, DOWN FOR THE COUNT", "[uppr_name], DOWN AND OUT")]", "The only survivor in the shuttle wore a luchador mask and boxing gloves.", 1500)
 
 			var/braindamage_total = 0
@@ -236,11 +236,11 @@
 			for(var/mob/living/carbon/human/H in human_escapees)
 				if(H.mind && H.mind.miming)
 					mimecount++
-				if(is_type_in_list(H.get_item_by_slot(slot_wear_mask), list(/obj/item/clothing/mask/gas/clown_hat, /obj/item/clothing/mask/gas/sexyclown)) || (H.mind && H.mind.assigned_role == "Clown"))
+				if(H.is_wearing_any(list(/obj/item/clothing/mask/gas/clown_hat, /obj/item/clothing/mask/gas/sexyclown)) || (H.mind && H.mind.assigned_role == "Clown"))
 					clowncount++
-				if(istype(H.get_item_by_slot(slot_w_uniform), /obj/item/clothing/under/color/grey) || (H.mind && H.mind.assigned_role == "Assistant"))
+				if(H.is_wearing_item(/obj/item/clothing/under/color/grey) || (H.mind && H.mind.assigned_role == "Assistant"))
 					assistantcount++
-				if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/chefhat) || (H.mind && H.mind.assigned_role == "Chef"))
+				if(H.is_wearing_item(/obj/item/clothing/head/chefhat) || (H.mind && H.mind.assigned_role == "Chef"))
 					chefcount++
 				if(H.mind && H.mind.assigned_role == "Chaplain")
 					chaplaincount++
@@ -256,9 +256,9 @@
 					baldycount++
 				if(M_FAT in H.mutations)
 					fattycount++
-				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/horsehead))
+				if(H.is_wearing_item(/obj/item/clothing/mask/horsehead))
 					horsecount++
-				if(istype(H.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/pig))
+				if(H.is_wearing_item(/obj/item/clothing/mask/pig))
 					piggycount++
 			if(clowncount > 3)
 				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*200))
