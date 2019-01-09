@@ -74,13 +74,7 @@ var/list/arcane_tomes = list()
 			<div class="column">      <div align="left">      <b><ul>"}
 
 	for (var/obj/item/weapon/talisman/T in talismans)
-		var/datum/rune_spell/instance = T.spell_type
-		var/talisman_name = "\[blank\]"
-		if (T.blood_text)
-			talisman_name = "\[blood message\]"
-		if (instance)
-			talisman_name = initial(instance.name)
-		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[talisman_name][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
+		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[T.talisman_name()][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
 
 	dat += {"</ul></b></div><div style="margin: 0px 20px;" align="justify">"}
 
@@ -242,6 +236,22 @@ var/list/arcane_tomes = list()
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
+/obj/item/weapon/tome/AltClick(var/mob/user)
+	var/list/choices = list()
+	var/datum/rune_spell/instance
+	var/list/choice_to_talisman = list()
+	for(var/obj/item/weapon/talisman/T in talismans)
+		instance = T.spell_type
+//		choices += list(list(initial(instance.name), T.radial_icon_name()))
+		choices += list(list(T, T.radial_icon_name(), initial(instance.desc_talisman), T.talisman_name()))
+		choice_to_talisman[initial(instance.name)] = T
+	var/choice = show_radial_menu(user,loc,choices,'icons/obj/talisman_radial.dmi', "radial-cult2")
+	if(!choice_to_talisman[choice])
+		return
+	var/obj/item/weapon/talisman/chosen_talisman = choice_to_talisman[choice]
+	talismans.Remove(chosen_talisman)
+	usr.put_in_hands(chosen_talisman)
+	
 
 #undef PAGE_FOREWORD
 #undef PAGE_LORE1
@@ -445,6 +455,48 @@ var/list/arcane_tomes = list()
 	if(P.is_hot())
 		ashify_item(user)
 		return 1
+
+/obj/item/weapon/talisman/proc/talisman_name()
+	var/datum/rune_spell/instance = spell_type
+	if (blood_text)
+		return "\[blood message\]"
+	if (instance)
+		return initial(instance.name)
+	else
+		return "\[blank\]"
+
+/obj/item/weapon/talisman/proc/radial_icon_name()
+	var/name = null
+	if (spell_type == null)
+		return "radial_talisman_blank"
+	else
+		var/datum/rune_spell/instance = spell_type
+		switch(initial(instance.name))
+			if ("Stun")
+				name = "radial_talisman_stun"
+			if ("Confusion")
+				name = "radial_talisman_confusion"
+			if ("Deaf-Mute")
+				name = "radial_talisman_deafmute"
+			if ("Conceal")
+				name = "radial_talisman_conceal"
+			if ("Summon Robes")
+				name = "radial_talisman_summonrobes"
+			if ("Path Entrance")
+				name = "radial_talisman_pathentrance"
+			if ("Path Exit")
+				name = "radial_talisman_pathexit"
+			if ("Communication")
+				name = "radial_talisman_communication"
+			if ("Pulse")
+				name = "radial_talisman_confusion"
+			if ("Reveal")
+				name = "radial_talisman_reveal"
+			if ("Summon Tome")
+				name = "radial_talisman_confusion"
+			else
+				name = "radial_talisman_unknown"
+	return name
 
 ///////////////////////////////////////CULT BLADE////////////////////////////////////////////////
 
