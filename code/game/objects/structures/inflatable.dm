@@ -475,3 +475,9 @@
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
 		if(do_after_many(user,list(target,src),20)) //Twice the normal time
 			enter_shelter(target)
+
+/obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
+	if (mover in contents)
+		contents -= mover
+		update_icon()
+	return ..()
