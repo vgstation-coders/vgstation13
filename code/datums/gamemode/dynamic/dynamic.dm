@@ -1,5 +1,14 @@
 var/list/forced_roundstart_ruleset = list()
 
+var/list/threat_by_job = list(
+	"Captain" = 15,
+	"Head of Security" = 15,
+	"Head of Personnel" = 10,
+	"Warden" = 10,
+	"Security Officer" = 10,
+	"Detective" = 10,
+)
+
 /datum/gamemode/dynamic
 	name = "Dynamic Mode"
 	var/threat_level = 0//rolled at the beginning of the round.
@@ -368,3 +377,10 @@ var/list/forced_roundstart_ruleset = list()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
+	
+	// -- No injection, we'll just update the threat
+	else
+		to_chat(world, "Threat is [threat]")
+		threat = min(threat + threat_by_job[newPlayer.mind.assigned_role], 100)
+		threat_level = min(threat_level + threat_by_job[newPlayer.mind.assigned_role], 100)
+		to_chat(world, "Threat is [threat]")
