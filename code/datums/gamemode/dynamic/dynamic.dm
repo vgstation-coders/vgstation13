@@ -380,7 +380,5 @@ var/list/threat_by_job = list(
 	
 	// -- No injection, we'll just update the threat
 	else
-		to_chat(world, "Threat is [threat]")
 		threat = min(threat + threat_by_job[newPlayer.mind.assigned_role], 100)
 		threat_level = min(threat_level + threat_by_job[newPlayer.mind.assigned_role], 100)
-		to_chat(world, "Threat is [threat]")
