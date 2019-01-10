@@ -1052,6 +1052,7 @@
 	packet_icon = "seed-novaflower"
 	products = list(/obj/item/weapon/grown/novaflower)
 	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "novaflower"
 	chems = list(NUTRIMENT = list(1), CAPSAICIN = list(1,5))
 
