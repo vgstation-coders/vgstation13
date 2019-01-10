@@ -1461,7 +1461,7 @@
 	seed_name = "grass"
 	display_name = "grass"
 	packet_icon = "seed-grass"
-	products = list(/obj/item/stack/tile/grass)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grass)
 	plant_icon = "grass"
 	harvest_repeat = 1
 
