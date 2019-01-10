@@ -210,6 +210,7 @@
 		"/obj/item/taperoll/police",
 		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/gun/energy/stunrevolver",
 		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
@@ -217,7 +218,7 @@
 		"/obj/item/device/gps/secure",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
-		"/obj/item/weapon/depocket_wand"
+		"/obj/item/weapon/depocket_wand",
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
