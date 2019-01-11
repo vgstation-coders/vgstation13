@@ -2,8 +2,14 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker
 	var/remaining_time = 0
-	var/const/restart_timeout = 60 SECONDS //Right now, this is padded out by the end credit's audio starting time (at the time of writing this, 10 seconds)
+	var/const/restart_timeout = 60 SECONDS //Right now, this is padded out by the end credit's audio starting time (at the time of writing this, 12 seconds)
 	var/current_state = GAME_STATE_PREGAME
+	var/gamestart_time = -1 //In seconds. Set by ourselves in setup()
+	var/shuttledocked_time = -1 //In seconds. Set by emergency_shuttle/proc/shuttle_phase()
+	var/gameend_time = -1 //In seconds. Set by ourselves in process()
+
+	var/pregame_timeleft = 0
+	var/delay_end = 0	//if set to nonzero, the round will not restart on its own
 
 	var/hide_mode = 0
 	var/datum/gamemode/mode = null
@@ -27,15 +33,12 @@ var/datum/controller/gameticker/ticker
 							//Use the hardcore_mode_on macro - if(hardcore_mode_on) to_chat(user,"You're hardcore!")
 	var/datum/rune_controller/rune_controller
 
-	var/pregame_timeleft = 0
+	var/triai = 0 //Global holder for Triumvirate
 
-	var/delay_end = 0	//if set to nonzero, the round will not restart on it's own
-
-	var/triai = 0//Global holder for Triumvirate
 	var/explosion_in_progress
 	var/station_was_nuked
 
-	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1)
+	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
 
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
@@ -78,7 +81,7 @@ var/datum/controller/gameticker/ticker
 #ifdef GAMETICKER_LOBBY_DURATION
 		var/delay_timetotal = GAMETICKER_LOBBY_DURATION
 #else
-		var/delay_timetotal = 5 MINUTES
+		var/delay_timetotal = DEFAULT_LOBBY_TIME
 #endif
 		pregame_timeleft = world.timeofday + delay_timetotal
 		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
@@ -177,6 +180,8 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
+
+	gamestart_time = world.time / 10
 
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
@@ -432,6 +437,7 @@ var/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 			end_credits.on_roundend()
+			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)

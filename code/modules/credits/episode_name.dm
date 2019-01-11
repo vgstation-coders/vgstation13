@@ -1,7 +1,7 @@
 /datum/episode_name
 	var/thename = ""
 	var/reason = "Default episode name." //Explanation on why this episode name fits this round. For the admin panel.
-	var/weight = 100 //50 will have 50% the chance of being picked. 200 will have 200% the chance of being picked, etc. Relative to other names, not total (just the default names already total 900%)
+	var/weight = 100 //50 will have 50% the chance of being picked. 200 will have 200% the chance of being picked, etc. Relative to other names, not total (just the default names already total 800%)
 
 /datum/episode_name/New(var/thename, var/reason, var/weight)
 	if(!thename)
@@ -77,35 +77,35 @@
 		//if(locate(/datum/dynamic_ruleset/roundstart/blob) in mode.executed_rules) //uncomment when blob gets readded
 		//	episode_names += new /datum/episode_name("[pick("MARRIED TO THE BLOB", "THE CREW GETS QUARANTINED")]", "Round included a roundstart blob.", 250)
 	if(narsie_list.len > 0)
-		episode_names += new /datum/episode_name("[pick("NAR-SIE'S DAY OUT", "NAR-SIE'S VACATION", "THE CREW LEARNS ABOUT SACRED GEOMETRY", "REALM OF THE MAD GOD", 50;"STUDY HARD, BUT PART-SIE HARDER")]", "Nar-Sie is loose!", 350)
+		episode_names += new /datum/episode_name("[pick("NAR-SIE'S DAY OUT", "NAR-SIE'S VACATION", "THE CREW LEARNS ABOUT SACRED GEOMETRY", "REALM OF THE MAD GOD", 50;"STUDY HARD, BUT PART-SIE HARDER")]", "Nar-Sie is loose!", 500)
 
 
 	if(SNOW_THEME)
 		episode_names += new /datum/episode_name("A VERY [pick("NANOTRASEN", "EXPEDITIONARY", "SECURE", "PLASMA", "MARTIAN")] CHRISTMAS", "'Tis the season.", 1000)
 	if(score["gunsspawned"] > 0)
-		episode_names += new /datum/episode_name("[pick("GUNS, GUNS EVERYWHERE", "THUNDER GUN EXPRESS", "THE CREW GOES AMERICA ALL OVER EVERYBODY'S ASS")]", "[score["gunsspawned"]] guns were spawned this round.", min(450, score["gunsspawned"]*10))
+		episode_names += new /datum/episode_name("[pick("GUNS, GUNS EVERYWHERE", "THUNDER GUN EXPRESS", "THE CREW GOES AMERICA ALL OVER EVERYBODY'S ASS")]", "[score["gunsspawned"]] guns were spawned this round.", min(750, score["gunsspawned"]*10))
 	if(score["dimensionalpushes"] > 10)
-		episode_names += new /datum/episode_name("THE CREW GETS PUSHED TOO FAR", "[score["dimensionalpushes"]] things were dimensionalpush'd this round.", min(1000, score["dimensionalpushes"]*15))
+		episode_names += new /datum/episode_name("THE CREW GETS PUSHED TOO FAR", "[score["dimensionalpushes"]] things were dimensionalpush'd this round.", min(1500, score["dimensionalpushes"]*15))
 	if(score["assesblasted"] > 4)
-		episode_names += new /datum/episode_name("A SONG OF ASS AND FIRE", "[score["assesblasted"]] people were magically assblasted this round.", min(1000, score["assesblasted"]*50))
+		episode_names += new /datum/episode_name("A SONG OF ASS AND FIRE", "[score["assesblasted"]] people were magically assblasted this round.", min(1500, score["assesblasted"]*50))
 	if(score["assesblasted"] > 3 && score["random_soc"] > 4)
-		episode_names += new /datum/episode_name("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1000, score["assesblasted"]*30 + score["random_soc"]*30))
+		episode_names += new /datum/episode_name("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1500, score["assesblasted"]*30 + score["random_soc"]*30))
 	if(score["greasewiz"] > 7 && score["lightningwiz"] > 7)
-		episode_names += new /datum/episode_name("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1000, score["greasewiz"]*30 + score["lightningwiz"]*30))
+		episode_names += new /datum/episode_name("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1500, score["greasewiz"]*30 + score["lightningwiz"]*30))
 	if(score["heartattacks"] > 4)
-		episode_names += new /datum/episode_name("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1000, score["heartattacks"]*100))
+		episode_names += new /datum/episode_name("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1500, score["heartattacks"]*150))
 	if(score["richestcash"] > 30000)
 		episode_names += new /datum/episode_name("[pick("WAY OF THE WALLET", "THE IRRESISTIBLE RISE OF [uppertext(score["richestname"])]", "PRETTY PENNY", "IT'S THE ECONOMY, STUPID")]", "Scrooge Mc[score["richestkey"]] racked up [score["richestcash"]] credits this round.", min(450, score["richestcash"]/500))
 	if(star && star.times_cloned > 2)
 		episode_names += new /datum/episode_name("[uppertext(star.real_name)] MUST DIE", "The star of the show, [star.real_name], was cloned [star.times_cloned] times.", min(500, star.times_cloned*50))
-	if(score["deadaipenalty"] > 2)
-		episode_names += new /datum/episode_name("THE ONE WHERE [score["deadaipenalty"]] AIS DIE", "That's a lot of dead AIs.", min(1000, score["deadaipenalty"]*100))
+	if(score["deadaipenalty"] > 3)
+		episode_names += new /datum/episode_name("THE ONE WHERE [score["deadaipenalty"]] AIS DIE", "That's a lot of dead AIs.", min(1500, score["deadaipenalty"]*150))
 	if(score["lawchanges"] > 10)
 		episode_names += new /datum/episode_name("THE CREW LEARNS ABOUT LAWSETS", "There were [score["lawchanges"]] law changes this round.", min(750, score["lawchanges"]*25))
 	if(score["slips"] > 100)
 		episode_names += new /datum/episode_name("THE CREW GOES BANANAS", "[score["slips"]] people slipped this round.", min(500, score["slips"]/2))
 	if(score["buttbotfarts"] > 100)
-		episode_names += new /datum/episode_name("DO BUTTBOTS DREAM OF ELECTRIC FARTS?", "[score["buttbotfarts"]] messages were mimicked by buttbots this round.", min(250, score["buttbotfarts"]/3))
+		episode_names += new /datum/episode_name("DO BUTTBOTS DREAM OF ELECTRIC FARTS?", "[score["buttbotfarts"]] messages were mimicked by buttbots this round.", min(500, score["buttbotfarts"]/3))
 	if(score["clownabuse"] > 75)
 		episode_names += new /datum/episode_name("EVERYBODY LOVES A CLOWN", "[score["clownabuse"]] instances of clown abuse this round.", min(350, score["clownabuse"]*2))
 	if(score["maxpower"] > HUNDRED_MEGAWATTS && (locate(/mob/living/silicon/robot/mommi) in mob_list))
@@ -133,7 +133,7 @@
 			episode_names += new /datum/episode_name("[pick("WHERE NO DOG HAS GONE BEFORE", "IAN SAYS", "IAN'S DAY OUT", "CORGI MAGIC")]", "You know what you did.", 1000)
 			break
 
-	if(emergency_shuttle.location == CENTCOMM_Z)
+	if(ticker && ticker.shuttledocked_time != -1 && emergency_shuttle.location == CENTCOMM_Z)
 		var/area/shuttle = locate(/area/shuttle/escape/centcom)
 		if(shuttle) //These names are only to be rolled if the round ended with the shuttle normally docking at centcomm.
 			var/list/shuttle_escapees = list() //We want to only count people that were on the shuttle. Pods don't even real
@@ -145,21 +145,84 @@
 				if(ishuman(M))
 					human_escapees |= M
 
-			if(score["time"] < 60 * 19) //round was shorter than 19 minutes (but shuttle still docked)
-				episode_names += new /datum/episode_name("[pick("THE CAPTAIN STUBS THEIR TOE", "QUICK GETAWAY", "A MOST EFFICIENT APOCALYPSE", "ON SECOND THOUGHT, LET'S NOT GO TO [uppr_name]. 'TIS A SILLY PLACE.")]", "This round was about as short as they come.", 500)
+			to_chat(world, "HITLERS ROUNDLENGTH [ticker.shuttledocked_time] MINUS SHUTTLE [ticker.gamestart_time] IS [ticker.shuttledocked_time - ticker.gamestart_time] NEEDS TO BE [SHUTTLEARRIVETIME + SHUTTLEGRACEPERIOD + 60]")
+			if(ticker.shuttledocked_time - ticker.gamestart_time < SHUTTLEARRIVETIME + SHUTTLEGRACEPERIOD + 60) //shuttle docked in less than 16 minutes!!
+				episode_names += new /datum/episode_name("[pick("THE CAPTAIN STUBS THEIR TOE", "QUICK GETAWAY", "A MOST EFFICIENT APOCALYPSE", "ON SECOND THOUGHT, LET'S NOT GO TO [uppr_name]. 'TIS A SILLY PLACE.")]", "This round was about as short as they come.", 750)
 			if(score["deadcrew"] == 0)
-				episode_names += new /datum/episode_name("[pick("EMPLOYEE TRANSFER", "LIVE LONG AND PROSPER", "PEACE AND QUIET IN [uppr_name]", "THE CREW TRIES TO KILL A FLY FOR [round(score["time"]/60)] MINUTES")]", "No-one died this round.", 1000) //in practice, this one is very very very rare, so if it happens let's pick it more often
-			if(score["escapees"] == 0)
+				episode_names += new /datum/episode_name("[pick("EMPLOYEE TRANSFER", "LIVE LONG AND PROSPER", "PEACE AND QUIET IN [uppr_name]", "THE CREW TRIES TO KILL A FLY FOR [round(score["time"]/60)] MINUTES")]", "No-one died this round.", 2000) //in practice, this one is very very very rare, so if it happens let's pick it more often
+			if(score["escapees"] == 0 && ticker && ticker.shuttledocked_time != -1)
 				episode_names += new /datum/episode_name("[pick("DEAD SPACE", "THE CREW GOES MISSING", "LOST IN TRANSLATION", "[uppr_name]: DELETED SCENES", "WHAT HAPPENS IN [uppr_name], STAYS IN [uppr_name]", "SCOOBY-DOO, WHERE'S THE CREW?")]", "There were no escapees on the shuttle.", 200)
 			if(score["escapees"] < 6 && score["escapees"] > 0 && score["deadcrew"] > score["escapees"]*2)
 				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES", "WISH YOU WERE HERE")]", "[score["deadcrew"]] people died this round.", 200)
 
-			if(human_escapees.len == 1)
-				var/shoecount = 0
-				for(var/obj/item/clothing/shoes/S in shuttle) //they gotta be on the floor
-					shoecount++
-				if(shoecount > 5 || score["shoeshatches"] > 10)
-					episode_names += new /datum/episode_name("THE SOLE SURVIVOR", "There was only one survivor in the shuttle, and they didn't forget their shoes.", 750) //I'm not sorry
+			var/clowncount = 0
+			var/mimecount = 0
+			var/assistantcount = 0
+			var/chefcount = 0
+			var/chaplaincount = 0
+			var/lawyercount = 0
+			var/minercount = 0
+			var/skeletoncount = 0
+			var/voxcount = 0
+			var/dionacount = 0
+			var/baldycount = 0
+			var/fattycount = 0
+			var/horsecount = 0
+			var/piggycount = 0
+			for(var/mob/living/carbon/human/H in human_escapees)
+				if(H.mind && H.mind.miming)
+					mimecount++
+				if(H.is_wearing_any(list(/obj/item/clothing/mask/gas/clown_hat, /obj/item/clothing/mask/gas/sexyclown)) || (H.mind && H.mind.assigned_role == "Clown"))
+					clowncount++
+				if(H.is_wearing_item(/obj/item/clothing/under/color/grey) || (H.mind && H.mind.assigned_role == "Assistant"))
+					assistantcount++
+				if(H.is_wearing_item(/obj/item/clothing/head/chefhat) || (H.mind && H.mind.assigned_role == "Chef"))
+					chefcount++
+				if(H.is_wearing_any(list(/obj/item/clothing/suit/storage/lawyer, /obj/item/clothing/under/lawyer)) || (H.mind && H.mind.assigned_role == "Internal Affairs Agent"))
+					lawyercount++
+				if(H.mind && H.mind.assigned_role == "Shaft Miner")
+					minercount++
+				if(H.mind && H.mind.assigned_role == "Chaplain")
+					chaplaincount++
+					if(ischangeling(H))
+						episode_names += new /datum/episode_name("[uppertext(H.real_name)]: A BLESSING IN DISGUISE", "The Chaplain, [H.real_name], was a changeling and escaped alive.", 750)
+				if(isskellington(H) || isplasmaman(H) || isskelevox(H))
+					skeletoncount++
+				if(isvox(H) || isskelevox(H))
+					voxcount++
+				if(isdiona(H))
+					dionacount++
+				if(isjusthuman(H) && (H.h_style == "Bald" || H.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
+					baldycount++
+				if(M_FAT in H.mutations)
+					fattycount++
+				if(H.is_wearing_item(/obj/item/clothing/mask/horsehead))
+					horsecount++
+				if(H.is_wearing_item(/obj/item/clothing/mask/pig))
+					piggycount++
+
+			if(clowncount > 3)
+				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*200))
+			if(mimecount > 3)
+				episode_names += new /datum/episode_name("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*200))
+			if(chaplaincount > 2)
+				episode_names += new /datum/episode_name("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*450))
+			if(chefcount > 2)
+				episode_names += new /datum/episode_name("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 175%; text-shadow: rgb(123, 96, 38) 1.5px 1.5px 0px, rgb(123, 96, 38) 1.5px 1.5px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized
+			if(assistantcount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
+			if(skeletoncount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*200))
+			if(voxcount / human_escapees > 0.6)
+				episode_names += new /datum/episode_name("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*200))
+			if(dionacount / human_escapees > 0.6)
+				episode_names += new /datum/episode_name("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*200))
+			if(baldycount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("TO BALDLY GO", "Most of the survivors were bald, and it shows.", min(1500, baldycount*200))
+			if(fattycount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*200))
+			if(horsecount / human_escapees > 0.6 && human_escapees.len > 3)
+				episode_names += new /datum/episode_name("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*200))
 
 			if(human_escapees.len == 1)
 				var/mob/living/carbon/human/H = human_escapees[1]
@@ -189,7 +252,7 @@
 						chance += 500
 					if(H.is_wearing_any(list(/obj/item/clothing/under/rank/internalaffairs, /obj/item/clothing/under/bridgeofficer, /obj/item/clothing/under/lawyer)))
 						chance += 250
-					episode_names += new /datum/episode_name("DEVIL'S ADVOCATE", "The IAA was the only survivor in the shuttle.", chance) //maybe DOUBLE JEOPARDY if there are only 2 surviving IAAs?
+					episode_names += new /datum/episode_name("DEVIL'S ADVOCATE", "The IAA was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Detective")
 					var/chance = 250
 					if(H.is_holding_item(/obj/item/weapon/gun/projectile/detective))
@@ -209,6 +272,25 @@
 				if(H.is_wearing_item(/obj/item/clothing/mask/luchador) && H.is_wearing_item(/obj/item/clothing/gloves/boxing))
 					episode_names += new /datum/episode_name("[pick("THE CREW, ON THE ROPES", "THE CREW, DOWN FOR THE COUNT", "[uppr_name], DOWN AND OUT")]", "The only survivor in the shuttle wore a luchador mask and boxing gloves.", 1500)
 
+			if(human_escapees.len == 2)
+				if(lawyercount == 2)
+					episode_names += new /datum/episode_name("DOUBLE JEOPARDY", "The only two survivors were IAAs or lawyers.", 2500)
+				if(chefcount == 2)
+					episode_names += new /datum/episode_name("CHEF WARS", "The only two survivors were chefs.", 2500)
+				if(minercount == 2)
+					episode_names += new /datum/episode_name("THE DOUBLE DIGGERS", "The only two survivors were miners.", 2500)
+				if(clowncount == 2)
+					episode_names += new /datum/episode_name("A TALE OF TWO CLOWNS", "The only two survivors were clowns.", 2500)
+				if(clowncount == 1 && mimecount == 1)
+					episode_names += new /datum/episode_name("THE DYNAMIC DUO", "The only two survivors were the Clown, and the Mime.", 2500)
+
+			if(human_escapees.len == 1)
+				var/shoecount = 0
+				for(var/obj/item/clothing/shoes/S in shuttle) //they gotta be on the floor
+					shoecount++
+				if(shoecount > 5 || score["shoeshatches"] > 10)
+					episode_names += new /datum/episode_name("THE SOLE SURVIVOR", "There was only one survivor in the shuttle, and they didn't forget their shoes.", 1500) //I'm not sorry
+
 			var/braindamage_total = 0
 			var/all_retarded = TRUE
 			for(var/mob/living/carbon/human/H in human_escapees)
@@ -218,70 +300,8 @@
 			var/average_braindamage = braindamage_total / human_escapees.len
 			if(average_braindamage > 30)
 				episode_names += new /datum/episode_name("[pick("THE CREW'S SMALL IQ PROBLEM", "OW! MY BALLS", "BR[pick("AI", "IA")]N DAMAGE", "THE VERY SPECIAL CREW OF [uppr_name]")]", "Average of [average_braindamage] brain damage for each human shuttle escapee.", min(1000, average_braindamage*10))
-			if(all_retarded)
-				episode_names += new /datum/episode_name("...AND PRAY THERE'S INTELLIGENT LIFE SOMEWHERE OUT IN SPACE, 'CAUSE THERE'S BUGGER ALL DOWN HERE IN [uppr_name]", "Everyone was retarded this round.", 1500)
-
-			var/clowncount = 0
-			var/mimecount = 0
-			var/assistantcount = 0
-			var/chefcount = 0
-			var/chaplaincount = 0
-			var/skeletoncount = 0
-			var/voxcount = 0
-			var/dionacount = 0
-			var/baldycount = 0
-			var/fattycount = 0
-			var/horsecount = 0
-			var/piggycount = 0
-			for(var/mob/living/carbon/human/H in human_escapees)
-				if(H.mind && H.mind.miming)
-					mimecount++
-				if(H.is_wearing_any(list(/obj/item/clothing/mask/gas/clown_hat, /obj/item/clothing/mask/gas/sexyclown)) || (H.mind && H.mind.assigned_role == "Clown"))
-					clowncount++
-				if(H.is_wearing_item(/obj/item/clothing/under/color/grey) || (H.mind && H.mind.assigned_role == "Assistant"))
-					assistantcount++
-				if(H.is_wearing_item(/obj/item/clothing/head/chefhat) || (H.mind && H.mind.assigned_role == "Chef"))
-					chefcount++
-				if(H.mind && H.mind.assigned_role == "Chaplain")
-					chaplaincount++
-					if(ischangeling(H))
-						episode_names += new /datum/episode_name("[uppertext(H.real_name)]: A BLESSING IN DISGUISE", "The Chaplain, [H.real_name], was a changeling and escaped alive.", 750)
-				if(isskellington(H) || isplasmaman(H) || isskelevox(H))
-					skeletoncount++
-				if(isvox(H) || isskelevox(H))
-					voxcount++
-				if(isdiona(H))
-					dionacount++
-				if(isjusthuman(H) && (H.h_style == "Bald" || H.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
-					baldycount++
-				if(M_FAT in H.mutations)
-					fattycount++
-				if(H.is_wearing_item(/obj/item/clothing/mask/horsehead))
-					horsecount++
-				if(H.is_wearing_item(/obj/item/clothing/mask/pig))
-					piggycount++
-			if(clowncount > 3)
-				episode_names += new /datum/episode_name("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*200))
-			if(mimecount > 3)
-				episode_names += new /datum/episode_name("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*200))
-			if(chaplaincount > 2)
-				episode_names += new /datum/episode_name("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*450))
-			if(chefcount > 2)
-				episode_names += new /datum/episode_name("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 175%; text-shadow: rgb(123, 96, 38) 1.5px 1.5px 0px, rgb(123, 96, 38) 1.5px 1.5px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized
-			if(assistantcount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
-			if(skeletoncount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*200))
-			if(voxcount / human_escapees > 0.6)
-				episode_names += new /datum/episode_name("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*200))
-			if(dionacount / human_escapees > 0.6)
-				episode_names += new /datum/episode_name("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*200))
-			if(baldycount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("TO BALDLY GO", "Most of the survivors were bald, and it shows.", min(1500, baldycount*200))
-			if(fattycount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*200))
-			if(horsecount / human_escapees > 0.6 && human_escapees.len > 3)
-				episode_names += new /datum/episode_name("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*200))
+			if(all_retarded && human_escapees.len > 2)
+				episode_names += new /datum/episode_name("...AND PRAY THERE'S INTELLIGENT LIFE SOMEWHERE OUT IN SPACE, 'CAUSE THERE'S BUGGER ALL DOWN HERE IN [uppr_name]", "Everyone was retarded this round.", human_escapees.len * 500)
 
 			var/bearcount = 0
 			for(var/mob/living/simple_animal/hostile/bear/B in shuttle)
@@ -292,7 +312,7 @@
 			for(var/mob/living/simple_animal/hostile/retaliate/box/B in shuttle)
 				piggycount += 1
 			if(piggycount > 3)
-				episode_names += new /datum/episode_name("BRINGING HOME THE BACON", "[piggycount] little piggies went to the shuttle...", min(1000, piggycount*100))
+				episode_names += new /datum/episode_name("BRINGING HOME THE BACON", "[piggycount] little piggies went to the shuttle...", min(1500, piggycount*200))
 
 			var/beecount = 0
 			for(var/mob/living/simple_animal/bee/B in shuttle)
@@ -358,4 +378,4 @@
 							final_string += "[X], "
 					final_string += "GOD-FORSAKEN CREW OF [uppr_name]"
 
-					episode_names += new /datum/episode_name(final_string, "Thanks to the Staff of Change, we had quite a diverse shuttle.", 1500)
+					episode_names += new /datum/episode_name(final_string, "Thanks to the Staff of Change, we had quite a diverse shuttle.", 2500)

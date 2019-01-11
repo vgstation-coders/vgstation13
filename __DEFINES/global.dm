@@ -235,8 +235,6 @@ var/list/score=list(
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
 	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
-	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
-	"lawchanges"	 = 0, //Amount of AI modules used.
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -268,6 +266,9 @@ var/list/score=list(
 	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
 	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
 	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
+	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
+	"lawchanges"	 = 0, //Amount of AI modules used.
+
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
