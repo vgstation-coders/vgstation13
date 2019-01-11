@@ -387,11 +387,6 @@
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
 
-	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
-		to_chat(user, "You use [O] as compost for [src].")
-		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
-		qdel(O)
-
 	else
 		return ..()
 

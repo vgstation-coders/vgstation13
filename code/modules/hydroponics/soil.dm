@@ -18,6 +18,12 @@
 			return 1
 		else
 			..()
+
+	else if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
+		to_chat(user, "You use [W] as compost for [src].")
+		W.reagents.trans_to(src, W.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+		qdel(W)
+
 	else
 		return ..()
 
