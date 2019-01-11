@@ -45,21 +45,27 @@
 	var/uppr_name = uppertext(station_name()) //so we don't run these two 500 times
 
 	episode_names += new /datum/episode_name("THE [pick("DOWNFALL OF", "RISE OF", "TROUBLE WITH", "FINAL STAND OF", "DARK SIDE OF")] [pick("SPACEMEN", "HUMANITY", "DIGNITY", "SANITY", "THE CHIMPANZEES", "THE VENDOMAT PRICES", "[uppr_name]")]")
-	episode_names += new /datum/episode_name("THE CREW [pick("GOES JIHAD", "GOES ON WELFARE", "GIVES BACK", "SELLS OUT", "GETS WHACKED", "BITES THE DUST", "SOLVES THE PLASMA CRISIS", "HITS THE ROAD", "GETS AN ANAL PROBE", "RULES THE WORLD", "RISES", "SAVES THE DAY", "RETIRES", "GOES TO HELL", "DOES A CLIP SHOW", "GETS AUDITED", "DOES A TV COMMERCIAL", "AFTER HOURS", "GOES TOO FAR", "GIVES UP THE DREAM", "SHOULD NOT BE ALLOWED ON TV", "GETS A LIFE", "IS DONE FOR", "STRIKES BACK")]")
-	episode_names += new /datum/episode_name("THE CREW'S [pick("DAY OUT", "PUNISHMENT", "BIG GAY ADVENTURE", "LUNCH BREAK", "LAST DAY", "[pick("WILD", "WACKY", "LAME", "UNEXPECTED")] VACATION", "CHANGE OF HEART", "BIG BREAK", "BACK IN BUSINESS", "NEW GROOVE", "SCHOOL MUSICAL", "HISTORY LESSON", "FLYING CIRCUS", "SMALL PROBLEM", "BIG SCORE", "BLOOPER REEL")]")
+	episode_names += new /datum/episode_name("THE CREW [pick("GOES JIHAD", "GOES ON WELFARE", "GIVES BACK", "SELLS OUT", "GETS WHACKED", "SOLVES THE PLASMA CRISIS", "HITS THE ROAD", "GETS AN ANAL PROBE", "RISES", "RETIRES", "GOES TO HELL", "DOES A CLIP SHOW", "GETS AUDITED", "DOES A TV COMMERCIAL", "AFTER HOURS", "GETS A LIFE", "STRIKES BACK")]")
+	episode_names += new /datum/episode_name("THE CREW'S [pick("DAY OUT", "BIG GAY ADVENTURE", "LAST DAY", "[pick("WILD", "WACKY", "LAME", "UNEXPECTED")] VACATION", "CHANGE OF HEART", "NEW GROOVE", "SCHOOL MUSICAL", "HISTORY LESSON", "FLYING CIRCUS", "SMALL PROBLEM", "BIG SCORE", "BLOOPER REEL")]")
 	episode_names += new /datum/episode_name("THE CREW GETS [pick("RACIST", "PICKLED", "AN INCURABLE DISEASE", "PIZZA", "NEW WHEELS", "A VALUABLE HISTORY LESSON", "A BREAK", "HIGH", "TO LIVE", "TO RELIVE THEIR CHILDHOOD", "EMBROILED IN CIVIL WAR", "SERIOUS ABOUT [pick("DRUG ABUSE", "CRIME", "PRODUCTIVITY", "ANCIENT AMERICAN CARTOONS", "SPACEBALL")]")]")
 	episode_names += new /datum/episode_name("[pick("SPACE", "SEXY", "DRAGON", "WARLOCK", "LAUNDRY", "GUN", "ADVERTISING", "DOG", "CARBON MONOXIDE", "NINJA", "WIZARD", "SOCRATIC", "JUVENILE DELIQUENCY", "POLITICALLY MOTIVATED", "RADTACULAR SICKNASTY")] [pick("QUEST", "FORCE", "ADVENTURE")]")
-	episode_names += new /datum/episode_name("[pick("BALANCE OF POWER", "SPACE TRACK", "SEX BOMB", "WHOSE IDEA WAS THIS ANYWAY?", "WHATEVER HAPPENED, HAPPENED", "THE GOOD, THE BAD, AND [uppr_name]", "RESTRAIN YOUR ENJOYMENT", "[uppr_name]: A NATIONAL CONCERN", "A PUBLIC RELATIONS NIGHTMARE", "WITH APOLOGIES TO THE CREW", "PILOT", "REAL HOUSEWIVES OF [uppr_name]", "MEANWHILE, ON [uppr_name]...")]")
+	episode_names += new /datum/episode_name("[pick("BALANCE OF POWER", "SPACE TRACK", "SEX BOMB", "WHOSE IDEA WAS THIS ANYWAY?", "WHATEVER HAPPENED, HAPPENED", "THE GOOD, THE BAD, AND [uppr_name]", "RESTRAIN YOUR ENJOYMENT", "PILOT", "REAL HOUSEWIVES OF [uppr_name]", "MEANWHILE, ON [uppr_name]...")]")
+
+	switch(score["crewscore"])
+		if(-INFINITY to -2000)
+			episode_names += new /datum/episode_name("[pick("THE CREW'S PUNISHMENT", "A PUBLIC RELATIONS NIGHTMARE", "[uppr_name]: A NATIONAL CONCERN", "WITH APOLOGIES TO THE CREW", "THE CREW BITES THE DUST", "THE CREW GOES TOO FAR", "THE CREW GIVES UP THE DREAM", "THE CREW IS DONE FOR", "THE CREW SHOULD NOT BE ALLOWED ON TV", "THE END OF [uppr_name] AS WE KNOW IT")]", "Extremely low score of [score["crewscore"]].", 250)
+		if(4500 to INFINITY)
+			episode_names += new /datum/episode_name("[pick("THE CREW'S DAY OUT", "THIS SIDE OF PARADISE", "[uppr_name]: A SITUATION COMEDY", "THE CREW'S LUNCH BREAK", "THE CREW'S BACK IN BUSINESS", "THE CREW'S BIG BREAK", "THE CREW SAVES THE DAY", "THE CREW RULES THE WORLD")]", "High score of [score["crewscore"]].", 250)
 
 	if(istype(ticker.mode, /datum/gamemode/dynamic))
 		var/datum/gamemode/dynamic/mode = ticker.mode
 		switch(mode.threat_level)
 			if(0 to 30)
-				episode_names += new /datum/episode_name("[pick("THE DAY [uppr_name] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "THIS SIDE OF PARADISE", "HOME ALONE", "[uppr_name]: A SITUATION COMEDY", "GO BIG OR GO [uppr_name]", "PLACEBO EFFECT")]", "Low threat level of [mode.threat_level]%.", 150)
+				episode_names += new /datum/episode_name("[pick("THE DAY [uppr_name] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "THIS SIDE OF PARADISE", "HOME ALONE", "GO BIG OR GO [uppr_name]", "PLACEBO EFFECT")]", "Low threat level of [mode.threat_level]%.", 150)
 			if(30 to 70)
 				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE BALLAD OF [uppr_name]", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR", "A HOUSE DIVIDED")]", "Moderate threat level of [mode.threat_level]%.", 200)
 			if(70 to 100)
-				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "THE END OF [uppr_name] AS WE KNOW IT", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]")]", "High threat level of [mode.threat_level]%.", 250)
+				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]")]", "High threat level of [mode.threat_level]%.", 250)
 		if(locate(/datum/dynamic_ruleset/roundstart/malf) in mode.executed_rules)
 			episode_names += new /datum/episode_name("[pick("I'M SORRY [uppr_name], I'M AFRAID I CAN'T LET YOU DO THAT", "A STRANGE GAME", "THE AI GOES ROGUE", "RISE OF THE MACHINES")]", "Round included a malfunctioning AI.", 300)
 		if(locate(/datum/dynamic_ruleset/roundstart/revs) in mode.executed_rules)
@@ -118,6 +124,8 @@
 		episode_names += new /datum/episode_name("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]))
 	if(score["oremined"] > 500)
 		episode_names += new /datum/episode_name("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(300, score["oremined"]/15))
+	if(score["disease"] >= score["escapees"] && score["escapees"] > 5)
+		episode_names += new /datum/episode_name("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
 	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire, if the chef was the only survivor, "if you can't stand the heat..."
 	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
 
