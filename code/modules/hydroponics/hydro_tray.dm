@@ -389,7 +389,7 @@
 
 	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
 		to_chat(user, "You use [O] as compost for [src].")
-		W.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
 
 	else
