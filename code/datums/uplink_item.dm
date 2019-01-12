@@ -12,10 +12,6 @@ var/list/uplink_items = list()
 			var/datum/uplink_item/I = new item()
 			if(!I.item)
 				continue
-			if(I.gamemodes.len && ticker && !(ticker.mode.name in I.gamemodes))
-				continue
-			if(I.excludefrom.len && ticker && (ticker.mode.type in I.excludefrom))
-				continue
 			if(I.only_on_month)
 				if(time2text(world.realtime,"MM") != I.only_on_month)
 					continue
@@ -41,9 +37,10 @@ var/list/uplink_items = list()
 	var/cost = 0
 	var/discounted_cost = 0
 	var/abstract = 0
-	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
-	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
 	var/list/jobs_with_discount = list() //Jobs in this list get the discount price.
+	var/list/jobs_exclusive = list() //If empty, does nothing. If not empty, ONLY jobs in this list can buy this item.
+	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
+
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
@@ -62,6 +59,9 @@ var/list/uplink_items = list()
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
+	if((jobs_exclusive.len && !jobs_exclusive.Find(U.job)) || (jobs_excluded.len && jobs_excluded.Find(U.job)))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! ([formatJumpTo(get_turf(U))])")
+		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new item(loc,user)
@@ -141,7 +141,7 @@ var/list/uplink_items = list()
 
 //Nuke Ops Prices
 /datum/uplink_item/nukeprice
-	gamemodes = list("nuclear emergency")
+	jobs_exclusive = list("Nuclear Operative")
 
 /datum/uplink_item/nukeprice/crossbow
 	name = "Energy Crossbow"
@@ -193,7 +193,7 @@ var/list/uplink_items = list()
 	desc = "A miniature energy crossbow that is small enough both to fit into a pocket and to slip into a backpack unnoticed by observers. Fires bolts tipped with an organic, poisonous substance. Stuns enemies for a short period of time. Recharges on its own."
 	item = /obj/item/weapon/gun/energy/crossbow
 	cost = 12
-	excludefrom = list("nuclear emergency")
+	jobs_excluded = list("Nuclear Operative")
 
 /datum/uplink_item/dangerous/sword
 	name = "Energy Sword"
@@ -230,7 +230,7 @@ var/list/uplink_items = list()
 	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."
 	item = /obj/item/weapon/gun/gatling
 	cost = 40
-	gamemodes = list("nuclear emergency")
+	jobs_exclusive = list("Nuclear Operative")
 
 // STEALTHY WEAPONS
 
@@ -271,7 +271,7 @@ var/list/uplink_items = list()
 	desc = "A jumpsuit used to imitate the uniforms of Nanotrasen crewmembers. When caught in an EMP blast, will become psychedelic and unchangeable. When interacted with by another jumpsuit, will scan and add its appearance."
 	item = /obj/item/clothing/under/chameleon
 	cost = 2
-	excludefrom = list("nuclear emergency")
+	jobs_excluded = list("Nuclear Operative")
 
 /datum/uplink_item/stealthy_tools/cold_jumpsuit
 	name = "Quick Vent Jumpsuit"
@@ -284,7 +284,7 @@ var/list/uplink_items = list()
 	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
-	excludefrom = list("nuclear emergency")
+	jobs_excluded = list("Nuclear Operative")
 
 /datum/uplink_item/stealthy_tools/agent_card
 	name = "Agent ID Card"
@@ -297,7 +297,7 @@ var/list/uplink_items = list()
 	desc = "A conspicuous gas mask that mimics the voice named on your identification card. When no identification is worn, the mask will render your voice distinguishably unrecognizable."
 	item = /obj/item/clothing/mask/gas/voice
 	cost = 5
-	excludefrom = list("nuclear emergency")
+	jobs_excluded = list("Nuclear Operative")
 
 /datum/uplink_item/stealthy_tools/dnascrambler
 	name = "DNA Scrambler"
@@ -425,14 +425,14 @@ var/list/uplink_items = list()
 	desc = "A printed circuit board that completes the teleporter onboard the mothership. It is advised to test fire the teleporter before entering it, as malfunctions can occur."
 	item = /obj/item/weapon/circuitboard/teleporter
 	cost = 40
-	gamemodes = list("nuclear emergency")
+	jobs_exclusive = list("Nuclear Operative")
 
 /datum/uplink_item/device_tools/popout_cake
 	name = "Pop-Out Cake"
 	desc = "A massive and delicious cake, big enough to store a person inside. It's equipped with a one-use party horn and special effects, and can be cut into edible slices in case of an emergency."
 	item = /obj/structure/popout_cake
 	cost = 6
-	gamemodes = list("nuclear emergency")
+	jobs_exclusive = list("Nuclear Operative")
 
 /datum/uplink_item/device_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
@@ -446,7 +446,7 @@ var/list/uplink_items = list()
 //	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
 //	item = /obj/item/weapon/robot_spawner/syndicate
 //	cost = 40
-//	gamemodes = list("nuclear emergency")
+//	jobs_exclusive = list("Nuclear Operative")
 //	refundable = TRUE
 
 // IMPLANTS

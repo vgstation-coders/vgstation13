@@ -72,6 +72,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		for(var/datum/uplink_item/item in buyable_items[category])
 			i++
 
+			if((item.jobs_exclusive.len && !item.jobs_exclusive.Find(job)) || (item.jobs_excluded.len && item.jobs_excluded.Find(job)))
+				continue
+
 			var/itemcost = item.get_cost(job)
 			var/cost_text = ""
 			var/desc = "[item.desc]"
@@ -236,7 +239,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/radio/uplink/nukeops/New()
 	..()
-	hidden_uplink.uses = 80
+	hidden_uplink.uses = 80 //haha fuck OOP
+	hidden_uplink.job = "Nuclear Operative"
 
 /obj/item/device/multitool/uplink/New()
 	hidden_uplink = new(src)
