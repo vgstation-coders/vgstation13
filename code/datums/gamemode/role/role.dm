@@ -126,7 +126,7 @@
 
 	return 1
 
-/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0)
+/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
 	if(!istype(M) && !override)
 		stack_trace("M is [M.type]!")
 		return 0
@@ -138,14 +138,18 @@
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
+	if(msg_admins)
+		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 
 	if (!OnPreSetup())
 		return FALSE
 	return 1
 
-/datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
+/datum/role/proc/RemoveFromRole(var/datum/mind/M, var/msg_admins = TRUE) //Called on deconvert
 	M.antag_roles[id] = null
 	M.antag_roles.Remove(id)
+	if(msg_admins)
+		message_admins("[key_name(M)] is <span class='danger'>no longer</span> \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 	antag = null
 
 // Destroy this role
