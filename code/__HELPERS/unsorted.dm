@@ -519,6 +519,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		else if(M.name)
 			. += "/([M.name])"
 
+	if(M && isanyantag(M))
+		. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
+
 	if(more_info && M)
 		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
 
