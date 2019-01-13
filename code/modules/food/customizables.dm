@@ -103,7 +103,7 @@
 	..()
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
 		if(user.drop_item(W))
-			var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
+			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
 			qdel(W)
 			qdel(src)
 

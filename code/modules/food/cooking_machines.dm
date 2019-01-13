@@ -688,7 +688,7 @@ var/global/ingredientLimit = 10
 	var/icon_state_on = "oven_on"
 	idle_power_usage = 200
 	active_power_usage = 5000
-	heat_production = 450
+	heat_production = 1500
 	source_temperature = T0C+180
 	density = 1
 	anchored = 1
@@ -735,6 +735,19 @@ var/global/ingredientLimit = 10
 			within = I
 			toggle(user)
 		return 1 //Return 1 when handling reagent containers so they don't splash stuff everywhere
+	if(istype(I, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = I
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			user.visible_message("<span class = 'warning'>\The [user] begins to slam \the [M]'s head into \the [src]!</span>",
+		"<span class = 'warning'>You begin to slam \the [M]'s head into \the [src].</span>")
+			if(do_after_many(user, list(src, M), 1 SECONDS))
+				playsound(src, 'sound/effects/clang.ogg', 50, 1)
+				user.visible_message("<span class = 'warning'>\The [user] slams \the [M]'s head into \the [src]!</span>")
+				M.apply_damage(10, BRUTE, LIMB_HEAD, used_weapon = "Concussive slamming by something on a hinge.")
+				if(use_power == 2)
+					M.apply_damage((source_temperature-T0C)/10, BURN, LIMB_HEAD, used_weapon = "Contact with heating element.")
+
 
 /obj/machinery/oven/attack_hand(mob/user)
 	if(isjustobserver(user))
