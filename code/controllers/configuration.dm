@@ -169,6 +169,7 @@
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
+	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
 
 	var/enable_roundstart_away_missions = 0
 
@@ -562,6 +563,8 @@
 					skip_vault_generation = 1
 				if("shut_up_automatic_diagnostic_and_announcement_system")
 					shut_up_automatic_diagnostic_and_announcement_system = 1
+				if("no_lobby_music")
+					no_lobby_music = 1
 				if("enable_roundstart_away_missions")
 					enable_roundstart_away_missions = 1
 				if("enable_wages")
