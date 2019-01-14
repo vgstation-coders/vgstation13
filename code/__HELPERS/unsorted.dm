@@ -468,7 +468,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/M = E/(SPEED_OF_LIGHT_SQ)
 	return M
 
-/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE)
+/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE, var/showantag = TRUE)
 	var/mob/M
 	var/client/C
 	var/key
@@ -519,7 +519,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		else if(M.name)
 			. += "/([M.name])"
 
-	if(M && isanyantag(M))
+	if(showantag && M && isanyantag(M))
 		. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
 
 	if(more_info && M)
