@@ -1710,9 +1710,6 @@ Game Mode config tags:
 
 	var/produce = rand(min_seeds,max_seeds)
 
-	if(user)
-		user.drop_item(O, force_drop = TRUE)
-
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
@@ -1728,8 +1725,6 @@ Game Mode config tags:
 				while(min_seeds <= produce)
 					new F.nonplant_seed_type(seedloc)
 					min_seeds++
-				if(user)
-					user.drop_item(F, force_drop = TRUE)
 				qdel(F)
 				return TRUE
 
@@ -1742,8 +1737,6 @@ Game Mode config tags:
 	else
 		return FALSE
 
-	if(user)
-		user.drop_item(O, force_drop = TRUE)
 	qdel(O)
 	return TRUE
 
