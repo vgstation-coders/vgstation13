@@ -79,6 +79,8 @@
 	for(var/mob/living/carbon/human/player in player_list)
 		if(player.z != map.zMainStation)//We only look for people currently aboard the station
 			continue
+		if (iscultist(player)) // Edit of 08/01/19 : no longer able to sacrifice cultists
+			continue
 		//They may be dead, but we only need their flesh
 		possible_targets += player
 
