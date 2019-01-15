@@ -46,7 +46,6 @@
 	size = SIZE_SMALL //dog-sized spiders are still big!
 
 	var/icon_aggro = null // for swapping to when we get aggressive
-	var/busy = 0
 	var/poison_per_bite = 5
 	var/poison_type = TOXIN
 	var/delimbable_icon = TRUE
@@ -120,23 +119,6 @@
 				src.visible_message("<span class='warning'>\the [src] injects a powerful toxin!</span>")
 				L.reagents.add_reagent(poison_type, poison_per_bite)
 
-/mob/living/simple_animal/hostile/giant_spider/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	..()
-	if(!stat)
-		if(stance == HOSTILE_STANCE_IDLE)
-			//1% chance to skitter madly away
-			if(!busy && !(life_tick % 100))// Every 100 life ticks or prob(1)
-				/*var/list/move_targets = list()
-				for(var/turf/T in orange(20, src))
-					move_targets.Add(T)*/
-				stop_automated_movement = 1
-				Goto(pick(orange(20, src)), move_to_delay)
-				spawn(50)
-					stop_automated_movement = 0
-					walk(src,0)
-				return 1
 
 /mob/living/simple_animal/hostile/giant_spider/Aggro()
 	..()
