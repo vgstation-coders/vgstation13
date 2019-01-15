@@ -194,7 +194,6 @@
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
 	var/trip_prob = 90
-	var/thrown_from
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.throw_item(target)
@@ -206,18 +205,13 @@
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
 	if(!throw_range)
 		return //divide by zero, also you throw like a girl
-	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
-		if(istype(usr, /mob/living/carbon/human)) //if the user is human
-			var/mob/living/carbon/human/H = usr
-			if(clumsy_check(H) && prob(50))
-				to_chat(H, "<span class='warning'>You smack yourself in the face while swinging the [src]!</span>")
-				H.Stun(2)
-				H.drop_item(src)
-				return
-	if (!thrown_from && usr) //if something hasn't set it already (like a mech does when it launches)
-		thrown_from = usr //then the user must have thrown it
-	if (!istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas))
-		playsound(src, throw_sound, 20, 1) //because mechs play the sound anyways
+	if(istype(usr, /mob/living/carbon/human)) //if the user is human
+		var/mob/living/carbon/human/H = usr
+		if(clumsy_check(H) && prob(50))
+			to_chat(H, "<span class='warning'>You smack yourself in the face while swinging the [src]!</span>")
+			H.Stun(2)
+			H.drop_item(src)
+			return
 	var/turf/target = get_turf(A)
 	var/atom/movable/adjtarget = new /atom/movable
 	var/xadjust = 0
@@ -236,7 +230,6 @@
 		adjtarget.y = src.y
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
 	..(get_turf(adjtarget), throw_range, throw_speed)
-	thrown_from = null
 
 /obj/item/weapon/legcuffs/bolas/throw_impact(atom/hit_atom) //Pomf was right, I was wrong - Comic
 	if(isliving(hit_atom) && hit_atom != usr) //if the target is a live creature other than the thrower
@@ -268,10 +261,11 @@
 			throw_failed()
 			return
 
-/obj/item/weapon/legcuffs/bolas/proc/throw_failed() //called when the throw doesn't entangle
-	//log_admin("Logged as [thrown_from]")
-	if(!thrown_from || !istype(thrown_from, /mob/living)) //in essence, if we don't know whether a person threw it
-		qdel(src) //destroy it, to stop infinite bolases
+/obj/item/weapon/legcuffs/bolas/proc/throw_failed() // Empty, overriden on mechs
+	return
+
+/obj/item/weapon/legcuffs/bolas/mech/throw_failed() // To avoid infinite Bolas
+	qdel(src)
 
 /obj/item/weapon/legcuffs/bolas/to_bump()
 	..()
