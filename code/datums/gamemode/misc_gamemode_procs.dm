@@ -1,4 +1,4 @@
-proc/display_roundstart_logout_report()
+/proc/display_roundstart_logout_report()
 	var/msg = "<span class='notice'><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
 
@@ -52,20 +52,57 @@ proc/display_roundstart_logout_report()
 			to_chat(M, msg)
 
 
-proc/get_nt_opposed()
+/proc/get_nt_opposed()
 	var/list/dudes = list()
 	for(var/mob/living/carbon/human/man in player_list)
-		if(man.client)
-			if(man.client.prefs.nanotrasen_relation == "Opposed")
-				dudes += man
-			else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
-				dudes += man
-	if(dudes.len == 0)
-		return null
-	return pick(dudes)
+		if (!man.client || !man.mind)
+			continue
 
+		if (man.mind.assigned_role == "MODE") // Wiz, nukies, ...
+			continue
 
-proc/equip_wizard(mob/living/carbon/human/wizard_mob)
+		if(man.client.prefs.nanotrasen_relation == "Opposed")
+			dudes += man
+		else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
+			dudes += man
+
+		else if( (man.mind.antag_roles[CULTIST] && prob(40)) || \
+				 (man.mind.antag_roles[CHANGELING] && prob(50)) || \
+				 (man.mind.antag_roles[TRAITOR] && prob(30)) || \
+				 (man.mind.antag_roles[HEADREV] && prob(30)) \
+				 )
+			dudes += man
+
+		else if(prob(10))
+			dudes += man
+
+	return dudes
+
+/datum/gamemode/proc/send_intercept()
+	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
+<B> In case you have misplaced your copy, attached is a list of personnel whom reliable sources&trade; suspect may be affiliated with the Syndicate:</B><br> <I>Reminder: Acting upon this information without solid evidence will result in termination of your working contract with Nanotrasen.</I></br>"}
+
+	var/list/suspects = get_nt_opposed()
+
+	for(var/mob/M in suspects)
+		switch(rand(1, 100))
+			if(1 to 50)
+				intercepttext += "Someone with the job of <b>[M.mind.assigned_role]</b> <br>"
+			else
+				intercepttext += "<b>[M.name]</b>, the <b>[M.mind.assigned_role]</b> <br>"
+
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- '[command_name()] Status Summary'"
+			intercept.info = intercepttext
+
+			comm.messagetitle.Add("[command_name()] Status Summary")
+			comm.messagetext.Add(intercepttext)
+
+	command_alert(/datum/command_alert/enemy_comms_interception)
+
+/proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 	if (!istype(wizard_mob))
 		return
 
@@ -106,7 +143,7 @@ proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 	wizard_mob.update_icons()
 	return 1
 
-proc/name_wizard(mob/living/carbon/human/wizard_mob)
+/proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
@@ -247,6 +284,11 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
 
+	// -- If opposed or skeptical, more TC.
+		if (traitor_mob.client && (traitor_mob.client.prefs.nanotrasen_relation == "Opposed") || (traitor_mob.client.prefs.nanotrasen_relation == "Skeptical"))
+			R.hidden_uplink.uses += 8
+			traitor_mob.mind.total_TC += R.hidden_uplink.uses
+			traitor_mob.mind.store_memory("<i>Note: corporate intelligence may have information suggesting that you are working with us. Exercice caution.</i>")
 
 /datum/mind/proc/find_syndicate_uplink()
 	var/uplink = null
