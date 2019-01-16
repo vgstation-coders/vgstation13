@@ -667,10 +667,33 @@
 		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
 			new_character.add_spell(S)
 
+/datum/role/wizard/GetScoreboard()
+	. = ..()
+	if(disallow_job) //Not a survivor wizzie
+		var/mob/living/carbon/human/H = antag.current
+		var/bought_nothing = TRUE
+		if(H.spell_list)
+			bought_nothing = FALSE
+			. += "<BR>The wizard knew:<BR>"
+			for(var/spell/S in H.spell_list)
+				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				end_icons += tempimage
+				var/tempstate = end_icons.len
+				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
+		if(H.mind.artifacts_bought)
+			bought_nothing = FALSE
+			. += "<BR>Additionally, the wizard brought:<BR>"
+			for(var/entry in H.mind.artifacts_bought)
+				. += "[entry]<BR>"
+		if(bought_nothing)
+			. += "The wizard used only the magic of charisma this round."
+
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
+	name = MAGICIAN
 	id = MAGICIAN
 	logo_state = "magik-logo"
+	var/summons_received
 
 /datum/role/wizard/summon_magic/ForgeObjectives()
 	var/datum/objective/survive/S = new
@@ -681,6 +704,11 @@
 
 /datum/role/wizard/summon_magic/OnPostSetup()
 	return TRUE
+
+/datum/role/wizard/summon_magic/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
+
 //________________________________________________
 
 /datum/role/wish_granter_avatar
