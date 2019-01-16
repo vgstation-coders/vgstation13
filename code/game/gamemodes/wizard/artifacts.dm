@@ -76,7 +76,12 @@
 	desc = "This launcher can hold up to 5 potions for rapid potion throwing."
 	price = Sp_BASE_PRICE * 0.25
 	abbreviation = "PL"
-	spawned_items = list(/obj/item/weapon/gun/potionlauncher)
+	spawned_items = list(/obj/item/weapon/gun/potionlauncher
+	/obj/item/potion/random,\
+	/obj/item/potion/random,\
+	/obj/item/potion/random,\
+	/obj/item/potion/random,\
+	/obj/item/potion/random)
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
