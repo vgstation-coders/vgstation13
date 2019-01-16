@@ -1985,6 +1985,7 @@
 #include "code\modules\projectiles\guns\projectile\osipr.dm"
 #include "code\modules\projectiles\guns\projectile\pistol.dm"
 #include "code\modules\projectiles\guns\projectile\pneumatic.dm"
+#include "code\modules\projectiles\guns\projectile\potion_launcher.dm"
 #include "code\modules\projectiles\guns\projectile\revolver.dm"
 #include "code\modules\projectiles\guns\projectile\rocketlauncher.dm"
 #include "code\modules\projectiles\guns\projectile\roulette.dm"

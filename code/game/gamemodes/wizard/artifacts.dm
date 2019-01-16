@@ -71,6 +71,12 @@
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
 	price = APPRENTICE_PRICE
 */
+/datum/spellbook_artifact/potion_launcher
+	name = "Potion Launcher"
+	desc = "This launcher can hold up to 5 potions for rapid potion throwing."
+	price = Sp_BASE_PRICE * 0.25
+	abbreviation = "PL"
+	spawned_items = list(/obj/item/weapon/gun/potionlauncher)
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
