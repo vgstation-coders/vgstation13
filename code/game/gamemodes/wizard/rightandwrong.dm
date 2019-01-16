@@ -37,9 +37,9 @@
 /mob/living/carbon/human/proc/equip_survivor(var/datum/role/R)
 	var/summon_type = R.type
 	switch (summon_type)
-		if ("swords")
+		if (/datum/role/traitor/survivor/crusader)
 			return equip_swords(R)
-		if ("magic")
+		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
 		else
 			return equip_guns(R)
