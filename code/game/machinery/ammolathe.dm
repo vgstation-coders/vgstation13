@@ -51,7 +51,6 @@
 		new /obj/item/ammo_storage/speedloader/shotgun(), \
 		),
 		"Hidden_Items" = list(
-		new /obj/item/weapon/kitchen/utensil/knife/tactical(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/syringe(), \
 		) //Syringes and vials are technically an ammo.
