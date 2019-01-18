@@ -82,3 +82,10 @@
 /obj/item/weapon/diseasedisk/premade/New()
 	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
+
+/obj/item/weapon/diseasedisk/zombie
+	name = "Stubborn Brain Syndrome"
+	effect = new /datum/disease2/effect/zombie
+	stage = 4
+
+
