@@ -87,5 +87,3 @@
 	name = "Stubborn Brain Syndrome"
 	effect = new /datum/disease2/effect/zombie
 	stage = 4
-
-
