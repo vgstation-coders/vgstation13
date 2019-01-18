@@ -780,8 +780,8 @@ var/list/uplink_items = list()
 	name = "Zombie Virus Syndrome"
 	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a disk."
 	item = /obj/item/weapon/diseasedisk/zombie
-	cost = 12
-	discounted_cost = 20
+	cost = 20
+	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/organ_remover
