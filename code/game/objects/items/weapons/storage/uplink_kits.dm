@@ -142,9 +142,8 @@
 				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
 				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
 				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/gun/grenadelauncher
+				new /obj/item/weapon/gun/grenadelauncher(src)
 				new /obj/item/clothing/glasses/sunglasses(src)
-				//new /obj/item/clothing/ears/earmuffs(src) In case of issues with radio version break glass.
 				new /obj/item/device/radio/headset/headset_earmuffs(src)
 
 		tag = tagname
