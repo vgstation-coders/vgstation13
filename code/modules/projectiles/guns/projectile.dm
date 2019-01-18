@@ -282,3 +282,12 @@
 		playsound(M, empty_sound, 100, 1)
 		return 0
 	return ..()
+
+/obj/item/weapon/gun/projectile/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"chambered",
+		"stored_magazine",
+		"loaded")
+
+	reset_vars_after_duration(resettable_vars, duration)
