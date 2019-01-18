@@ -84,6 +84,6 @@
 	effect = new /datum/disease2/effect
 
 /obj/item/weapon/diseasedisk/zombie
-	name = "Stubborn Brain Syndrome"
+	name = "Stubborn Brain Syndrome (Stage 4)"
 	effect = new /datum/disease2/effect/zombie
 	stage = 4
