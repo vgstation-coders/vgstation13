@@ -480,6 +480,9 @@ var/list/department_radio_keys = list(
 	var/oldmsg = message
 #endif
 
+	if (isDead())
+		return
+
 	if(say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
