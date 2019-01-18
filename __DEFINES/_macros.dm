@@ -263,6 +263,8 @@
 
 #define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
 
+#define istimeagent(H) (H.mind && H.mind.GetRole(TIMEAGENT))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles
