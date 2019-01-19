@@ -415,6 +415,9 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 	set category = "Mapping"
 	set name = "Check wire connections"
 
+	if(!check_rights(R_DEBUG))
+		return
+
 	if(!mob)
 		to_chat(usr, "<span class = 'warning'>You require a mob for this to work.</span>")
 		return
