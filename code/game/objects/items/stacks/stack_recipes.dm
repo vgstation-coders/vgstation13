@@ -370,6 +370,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("bowl",				/obj/item/trash/bowl,					1													),
 	null,
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
+	new/datum/stack_recipe("crossbow_frame",    /obj/item/crossbowframe,                5,      time = 50),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
