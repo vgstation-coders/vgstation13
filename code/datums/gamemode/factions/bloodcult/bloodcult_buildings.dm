@@ -1379,7 +1379,7 @@ var/list/bloodstone_list = list()
 			new /obj/effect/cult_ritual/backup_spawn(T)
 
 /obj/structure/cult/bloodstone/dance_start()
-	while(src && loc && anchor)
+	while(!gcDestroyed && loc && anchor)
 		for (var/mob/M in contributors)
 			if (!iscultist(M) || get_dist(src,M) > 1 || (M.stat != CONSCIOUS))
 				if (M.client)
@@ -1407,7 +1407,7 @@ var/list/bloodstone_list = list()
 	anchor = FALSE
 	for (var/obj/structure/teleportwarp/TW in src.loc)
 		qdel(TW)
-	if (src && loc)
+	if (!gcDestroyed && loc)
 		new /obj/machinery/singularity/narsie/large(src.loc)
 		stat_collection.cult_narsie_summoned = TRUE
 	return 1
