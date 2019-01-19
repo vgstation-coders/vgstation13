@@ -165,7 +165,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
-		to_chat(world, "[required_candidates] > [dead_players.len] + [list_observers.len]")
 		return 0
 	return ..()
 
