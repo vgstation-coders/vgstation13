@@ -170,6 +170,7 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/start_line_profiling
 	src.verbs += /client/proc/stop_line_profiling
 	src.verbs += /client/proc/show_line_profiling
+	src.verbs += /client/proc/check_wires
 	#if UNIT_TESTS_ENABLED
 	src.verbs += /client/proc/unit_test_panel
 	#endif
@@ -409,3 +410,30 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 	else
 		message_admins("[src.ckey] used 'Disable all movement', restoring all movement.")*/
 */
+
+/client/proc/check_wires()
+	set category = "Mapping"
+	set name = "Check wire connections"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(!mob)
+		to_chat(usr, "<span class = 'warning'>You require a mob for this to work.</span>")
+		return
+
+	var/z = mob.z
+	to_chat(usr, "<span class = 'notice'>Checking wire connections on current Z Level [z]</span>")
+
+	for(var/obj/structure/cable/C in world)
+		if(C.z != z)
+			continue
+		if(!C.d1) //It's a stub
+			continue
+		var/obj/structure/cable/neighbour
+		neighbour = locate() in get_step(get_turf(C),C.d1)
+		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
+			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+		neighbour = locate() in get_step(get_turf(C),C.d2)
+		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
+			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
