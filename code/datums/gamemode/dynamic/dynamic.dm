@@ -368,3 +368,7 @@ var/list/forced_roundstart_ruleset = list()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
+
+/datum/gamemode/dynamic/mob_destroyed(var/mob/M)
+	for (var/datum/dynamic_ruleset/DR in midround_rules)
+		DR.applicants -= M

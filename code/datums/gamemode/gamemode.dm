@@ -252,3 +252,6 @@
 
 /datum/gamemode/proc/declare_completion()
 	return GetScoreboard()
+
+/datum/gamemode/proc/mob_destroyed(var/mob/M)
+	return
