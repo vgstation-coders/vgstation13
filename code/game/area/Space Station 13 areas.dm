@@ -1509,12 +1509,24 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Security Lobby"
 	icon_state = "sec_lobby"
 
+/area/security/hallway
+	name = "\improper Security Hallway"
+	icon_state = "sec_hall"
+
+/area/security/main/dormitories
+	name = "\improper Security Dormitories"
+	icon_state = "sec_quarters"
+
 /area/security/brig
 	name = "\improper Brig"
 	icon_state = "brig"
 
+/area/security/prison_proc
+	name = "\improper Prison Wing Processing"
+	icon_state = "sec_proc"
+
 /area/security/prison
-	name = "\improper Prison Wing"
+	name = "\improper Prison Wing Corridor"
 	icon_state = "sec_prison"
 
 /area/security/perma
