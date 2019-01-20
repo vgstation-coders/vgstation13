@@ -45,6 +45,11 @@
 	message = "mumbles!"
 	emote_type = EMOTE_AUDIBLE
 
+/datum/emote/living/carbon/human/default
+	key = "default"
+	key_third_person = "*default"
+	message = "pulls both arms outwards in front of their chest and pumps them behind their back, repeats this motion in a smaller range of motion down to their hips two times once more all while sliding their legs in a faux walking motion, claps their hands together in front of them while both their knees knock together, pumps their arms downward, pronating their wrists and abducting their fingers outward while crossing their legs back and forth, repeats this motion again two times while keeping their shoulders low and hunching over, does finger gun with right hand with left hand bent on their hip while looking directly forward and putting their left leg forward then crossing their arms and leaning back a little while bending their knees at an angle."
+
 /datum/emote/living/carbon/human/pale
 	key = "pale"
 	message = "goes pale for a second."
