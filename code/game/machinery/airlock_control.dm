@@ -30,10 +30,12 @@
 
 		if("unlock")
 			locked = 0
+			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			update_icon()
 
 		if("lock")
 			locked = 1
+			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			update_icon()
 
 		if("toggle_lock")
@@ -41,23 +43,32 @@
 				close(1)
 				sleep(2)
 			locked = !locked
+			if (locked == 1)
+				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+			if (locked == 0)
+				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+
 			update_icon()
 
 		if("secure_open")
 			locked = 0
+			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			update_icon()
 
 			sleep(2)
 			open(1)
 
 			locked = 1
+			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			update_icon()
 
 		if("secure_close")
 			locked = 0
+			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			close(1)
 
 			locked = 1
+			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			sleep(2)
 			update_icon()
 
@@ -396,9 +407,9 @@ obj/machinery/access_button/Topic(href,href_list)
 			var/newfilter = input(usr, RADIO_FILTER_EXPLANATION, "Radio Filter", customfilter) as null|anything in radiofilters
 			if (newfilter)
 				if(usr.incapacitated() || (!issilicon(usr) && !Adjacent(usr)))
-					return	
+					return
 				customfilter = newfilter
-			
+
 		if("set_freq" in href_list)
 			var/newfreq=frequency
 			if(href_list["set_freq"]!="-1")
@@ -413,5 +424,5 @@ obj/machinery/access_button/Topic(href,href_list)
 					initialize()
 
 		update_multitool_menu(usr)
-		
+
 #undef RADIO_FILTER_EXPLANATION

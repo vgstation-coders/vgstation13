@@ -95,6 +95,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 				//Cutting this wire also drops the door bolts, and mending it does not raise them. (This is what happens now, except there are a lot more wires going to door bolts at present)
 				if(A.locked!=1)
 					A.locked = 1
+					playsound(A, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				A.update_icon()
 
 		if(AIRLOCK_WIRE_AI_CONTROL)
@@ -154,13 +155,15 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			//raises them if they are down (only if power's on)
 			if(!A.locked)
 				A.locked = 1
+				playsound(A, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				for(var/mob/M in range(1, A))
-					to_chat(M, "You hear a click from the bottom of the door.")
+					to_chat(M, "You hear a metallic clunk from the bottom of the door.")
 			else
 				if(A.arePowerSystemsOn()) //only can raise bolts if power's on
 					A.locked = 0
+					playsound(A, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 					for(var/mob/M in range(1, A))
-						to_chat(M, "You hear a click from the bottom of the door.")
+						to_chat(M, "You hear a metallic clunk from the bottom of the door.")
 			A.update_icon()
 
 		if(AIRLOCK_WIRE_BACKUP_POWER1, AIRLOCK_WIRE_BACKUP_POWER2)
