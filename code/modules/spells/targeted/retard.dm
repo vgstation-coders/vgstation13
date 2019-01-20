@@ -9,14 +9,14 @@
 	//Invocation is noted below
 	invocation_type = SpI_WHISPER //Wizard will whisper what they say instead of shouting
 	range = 3 // Target anyone within 3 tiles of you
-	cooldown_min = 40 //Minimum of 4 seconds cooldown. Decreased by 8 seconds per rank (2 ranks)
+	cooldown_min = 80 //Minimum of 8 seconds cooldown. Decreased by 4 seconds per rank (3 ranks)
 	amt_dam_brain = 30 //30 brain damage
 	max_targets = 1 // Can only target one person
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey) // Only works on humans and monkeys
 	spell_flags = WAIT_FOR_CLICK //Click on whoever you want to get brain damaged
 	message = "<span class='danger'>You feel dumber!<span>" //What the victim sees when affected
 	mind_affecting = 1 //Blocked by tinfoil hat
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1) //Cooldown can be upgraded up to 2 times and the power only once. Also to show up in the spellbook.
+	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_POWER = 1) //Cooldown can be upgraded up to 3 times and the power only once. Also to show up in the spellbook.
 	hud_state = "wiz_retard" //Icon is from screen_spells.dmi
 
 /spell/targeted/retard/empower_spell()
