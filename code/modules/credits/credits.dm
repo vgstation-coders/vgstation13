@@ -6,7 +6,7 @@ var/global/datum/credits/end_credits = new
 	var/scroll_speed = 20 //Lower is faster.
 	var/splash_time = 2000 //Time in miliseconds that each head of staff/star/production staff etc splash screen gets before displaying the next one.
 
-	var/audio_link = "http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3" //@todo bug pomf to upload this elsewhere
+	var/audio_link = "http://ss13.moe:3000/Pomf/vgstation-media/raw/master/roundend/credits/Frolic_Luciano_Michelini.ogg"
 	var/control = "mapwindow.credits" //if updating this, update in credits.html as well
 	var/file = 'code/modules/credits/credits.html'
 
