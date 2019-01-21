@@ -116,7 +116,6 @@
 		/obj/item/weapon/storage/lockbox/loyalty,
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/belt/security,
-		/obj/item/device/flash,
 		/obj/item/weapon/melee/baton/loaded,
 		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
