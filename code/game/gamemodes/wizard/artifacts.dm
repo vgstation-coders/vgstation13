@@ -9,8 +9,13 @@
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
-	for(var/T in spawned_items)
-		new T(get_turf(user))
+	for(var/path in spawned_items)
+		var/obj/item/I = new path(get_turf(user))
+		if(user.mind)
+			var/icon/tempimage = icon(I.icon, I.icon_state)
+			end_icons += tempimage
+			var/tempstate = end_icons.len
+			user.mind.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
 
 /datum/spellbook_artifact/proc/can_buy(var/mob/user)
 	return TRUE

@@ -4,7 +4,7 @@
 	required_pref = ROLE_TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
-
+	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
 	..()
@@ -108,6 +108,17 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
+/datum/role/traitor/GetScoreboard()
+	. = ..()
+	if(can_be_smooth)
+		var/mob/living/L = antag.current
+		if(L.mind.uplink_items_bought.len)
+			. += "The traitor bought:<BR>"
+			for(var/entry in L.mind.uplink_items_bought)
+				. += "[entry]<BR>"
+		else
+			. += "The traitor was a smooth operator this round."
+
 //_______________________________________________
 
 /*
@@ -118,7 +129,9 @@
 	id = SURVIVOR
 	name = SURVIVOR
 	logo_state = "gun-logo"
+	can_be_smooth = FALSE
 	var/survivor_type = "survivor"
+	var/summons_received
 
 /datum/role/traitor/survivor/crusader
 	id = CRUSADER
@@ -135,6 +148,11 @@
 
 /datum/role/traitor/survivor/OnPostSetup()
 	return TRUE
+
+/datum/role/traitor/survivor/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
+
 //________________________________________________
 
 

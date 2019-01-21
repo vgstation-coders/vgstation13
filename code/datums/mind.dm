@@ -60,6 +60,7 @@
 		//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
 	var/list/uplink_items_bought = list()
+	var/list/artifacts_bought = list()
 	var/total_TC = 0
 	var/spent_TC = 0
 
@@ -96,7 +97,7 @@
 	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
-	
+
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)

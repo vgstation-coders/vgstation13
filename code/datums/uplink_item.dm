@@ -111,7 +111,7 @@ var/list/uplink_items = list()
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 			if(user.mind)
-				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename]"}
+				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				user.mind.spent_TC += get_cost(U.job)
 		U.interact(user)
 
