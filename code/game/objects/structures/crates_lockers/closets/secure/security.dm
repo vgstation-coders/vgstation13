@@ -120,6 +120,7 @@
 		/obj/item/weapon/melee/baton/loaded,
 		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
+		/obj/item/weapon/gun/projectile/sec/fancy,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/device/gps/secure,
 		/obj/item/clothing/suit/armor/hos,
