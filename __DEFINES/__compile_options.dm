@@ -25,14 +25,14 @@
 // test_box.dm:
 //#define MAP_OVERRIDE 5
 // test_tiny.dm:
-#define MAP_OVERRIDE 6
+//#define MAP_OVERRIDE 6
 // tgstation.dm:
 //#define MAP_OVERRIDE 7
 
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
-#define DEVELOPER_MODE 1
+#define DEVELOPER_MODE 0
 
 // If 1, unit tests will be compiled
 #define UNIT_TESTS_ENABLED DEVELOPER_MODE
