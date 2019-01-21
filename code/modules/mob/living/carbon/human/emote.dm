@@ -235,6 +235,8 @@
 		if(H.species.anatomy_flags & NO_BONES)
 			message = "<span class = 'warning'>smacks their head as they flail their arms to the side.</span>"
 			playsound(H, 'sound/weapons/punch1.ogg', 50, 1)
+			A = H.get_organ(LIMB_HEAD)
+			H.apply_damage(50, BRUTE, A)
 		else
 			message = "<span class = 'warning'>dabs too hard!</span>"
 			H.apply_damage(50, BRUTE, A)
