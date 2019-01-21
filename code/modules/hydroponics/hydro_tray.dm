@@ -327,7 +327,7 @@
 
 		return
 
-	else if (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
+	else if (ishoe(O))
 
 		if(weedlevel > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
