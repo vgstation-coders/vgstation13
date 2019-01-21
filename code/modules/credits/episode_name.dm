@@ -75,7 +75,7 @@
 		if(ticker.explosion_in_progress || ticker.station_was_nuked)
 			episode_names += new /datum/episode_name("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD")]", "The station was nuked!", 350)
 		else
-			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/nuclear) in mode.executed_rules))
+			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
 				episode_names += new /datum/episode_name("[pick("THE CREW SOLVES THE NUCLEAR CRISIS", "BLAST, FOILED AGAIN", "FISSION MAILED", 50;"I OPENED THE WINDOW, AND IN FLEW COPS")]", "The crew defeated the nuclear operatives.", 350)
 			if(score["nukedefuse"] < 30)
 				episode_names += new /datum/episode_name("[score["nukedefuse"]] SECOND[score["nukedefuse"] == 1 ? "" : "S"] TO MIDNIGHT", "The nuke was defused with [score["nukedefuse"]] seconds remaining.", (30 - score["nukedefuse"]) * 100)
