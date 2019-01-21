@@ -214,6 +214,8 @@
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
+#define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
+
 //Macros for roles/antags
 #define isfaction(A) (istype(A, /datum/faction))
 
