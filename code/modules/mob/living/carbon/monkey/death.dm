@@ -31,7 +31,7 @@
 	if(healths)
 		healths.icon_state = "health5"
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 	stat = DEAD
 
 	update_canmove()

@@ -8,7 +8,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink
 	var/welcome 					// Welcoming menu message
-	var/uses 						// Numbers of crystals
+	var/uses 						// Number of crystals
 	// List of items not to shove in their hands.
 	var/list/purchase_log = list()
 	var/show_description = null
@@ -47,7 +47,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
 	if(!job)
 		job = user.mind.assigned_role
-	var/dat = "<B>[src.welcome]</B><BR>"
+
+	var/dat = list()
+	dat += "<B>[src.welcome]</B><BR>"
 
 	dat += {"Tele-Crystals left: [src.uses]<BR>
 		<HR>
@@ -62,38 +64,51 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		index++
 		dat += "<b>[category]</b><br>"
 
-		var/i = 0
+		var/discounted_list = list() //These go on top.
+		var/nondiscounted_list = list()
 
+		var/i = 0
 		// Loop through items in category
 		for(var/datum/uplink_item/item in buyable_items[category])
 			i++
 
+			if((item.jobs_exclusive.len && !item.jobs_exclusive.Find(job)) || (item.jobs_excluded.len && item.jobs_excluded.Find(job)))
+				continue
+
+			var/itemcost = item.get_cost(job)
 			var/cost_text = ""
 			var/desc = "[item.desc]"
-			if(item.job && item.job.len)
-				if(!(item.job.Find(job)))
-					//world.log << "Skipping job item that doesn't match"
-					continue
+			var/final_text = ""
+			if(itemcost > 0)
+				if(item.gives_discount(job))
+					cost_text = "<span style='color: yellow; font-weight: bold;'>([itemcost]!)</span>"
 				else
-					//world.log << "Found matching job item"
-			if(item.cost > 0)
-				cost_text = "([item.cost])"
-			if(item.cost <= uses)
-				dat += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
+					cost_text = "([itemcost])"
+			if(itemcost <= uses)
+				final_text += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
-				dat += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
+				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(item.desc)
 				if(show_description == 2)
-					dat += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
 				else
-					dat += "<A href='byond://?src=\ref[src];show_desc=2'><font size=2>\[?\]</font></A>"
-			dat += "<BR>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
+			final_text += "<BR>"
+
+			if(item.gives_discount(job))
+				discounted_list += final_text
+			else
+				nondiscounted_list += final_text
+
+		for(var/text in discounted_list|nondiscounted_list) //Discounted first, nondiscounted later.
+			dat += text
 
 		// Break up the categories, if it isn't the last.
 		if(buyable_items.len != index)
 			dat += "<br>"
 
 	dat += "<HR>"
+	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
 
 // Interaction code. Gathers a list of items purchasable from the paren't uplink and displays it. It also adds a lock button.
@@ -129,7 +144,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			var/category = split[1]
 			var/number = text2num(split[2])
 
-			var/list/buyable_items = get_uplink_items()
+			if(!job) //Should never happen unless the user somehow sends out a Topic() call before opening their uplink, but just in case.
+				job = usr.mind.assigned_role
+			var/list/buyable_items = get_uplink_items(job)
 
 			var/list/uplink = buyable_items[category]
 			if(uplink && uplink.len >= number)
@@ -222,7 +239,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/radio/uplink/nukeops/New()
 	..()
-	hidden_uplink.uses = 80
+	hidden_uplink.uses = 80 //haha fuck OOP
+	hidden_uplink.job = "Nuclear Operative"
 
 /obj/item/device/multitool/uplink/New()
 	hidden_uplink = new(src)

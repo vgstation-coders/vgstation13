@@ -1563,7 +1563,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Medical"
 
 /datum/supply_packs/virus
-	name = "Virus dishes"
+	name = "Disease dishes"
 	contains = list(/obj/item/weapon/virusdish/random,
 					/obj/item/weapon/virusdish/random,
 					/obj/item/weapon/virusdish/random,

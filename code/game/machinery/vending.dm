@@ -3043,10 +3043,10 @@ var/global/num_vending_terminals = 1
 	product_slogans = list(
 		"Haircuts for everyone!",
 		"Choose your own style!",
-		"A new look avaliable now!"
+		"A new look available now!"
 	)
 	product_ads = list(
-		"Our new hairdye formula, now avaliable in any color!"
+		"Our new hairdye formula, now available in any color!"
 	)
 	vend_reply = "Enjoy your new look!"
 	icon_state = "barber"
