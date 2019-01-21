@@ -477,7 +477,6 @@
 			enter_shelter(target)
 
 /obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
-	if (mover in contents)
-		contents -= mover
+	spawn(1)
 		update_icon()
 	return ..()
