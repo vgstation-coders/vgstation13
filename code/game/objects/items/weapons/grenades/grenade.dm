@@ -123,3 +123,10 @@
 
 /obj/item/weapon/grenade/attack_paw(mob/user as mob)
 	return attack_hand(user)
+
+/obj/item/weapon/grenade/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"active")
+
+	reset_vars_after_duration(resettable_vars, duration)
