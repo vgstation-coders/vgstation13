@@ -56,6 +56,10 @@
 					rel.religiousLeader = H.mind
 					J = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
 					rel.convert(H, null, can_renounce = FALSE)
+					if(key == "christianity")
+						message_admins("[key_name(H)] has selected Christianity and converted the entire crew.")
+						for(var/mob/living/carbon/human/P in player_list)
+							rel.convert(P,null,TRUE,TRUE)
 					to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
 					chap_religion = rel
 					choice = TRUE
