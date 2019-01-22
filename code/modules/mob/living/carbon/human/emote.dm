@@ -221,6 +221,15 @@
 
 /datum/emote/living/carbon/human/dab/run_emote(mob/user)
 	var/mob/living/carbon/human/H = user
+	if(!istype(H))
+		return
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		if(!H.stunned && !H.restrained() && !iswizard(H))
+			H.visible_message("<span class = 'warning'><b>[H]</b> slaps themselves in the face.</span>")
+			H.apply_effects(10, 10, 10, 0, 10, 10, 0, 10, 0)
+		return
+	if(H.stunned || H.restrained())
+		return
 	if(world.time-H.lastDab >= 10 SECONDS)
 		for(var/mob/living/M in view(0))
 			if(M != H && M.loc == H.loc)
@@ -236,10 +245,9 @@
 			message = "<span class = 'warning'>smacks their head as they flail their arms to the side.</span>"
 			playsound(H, 'sound/weapons/punch1.ogg', 50, 1)
 			A = H.get_organ(LIMB_HEAD)
-			H.apply_damage(50, BRUTE, A)
+			H.apply_damage(5, BRUTE, A)
 		else
 			message = "<span class = 'warning'>dabs too hard!</span>"
-			H.apply_damage(50, BRUTE, A)
-			A.fracture()
+			H.apply_damage(5, BRUTE, A)
 		emote_type = EMOTE_VISIBLE
 		. = ..()
