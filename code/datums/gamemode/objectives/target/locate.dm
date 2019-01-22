@@ -15,7 +15,7 @@
 			/obj/item/weapon/disk/nuclear,
 			/obj/item/weapon/reagent_containers/glass/bucket,
 			)
-	for(var/i = 0 to rand(3,potential_objects.len))
+	for(var/i = 0 to rand(3,potential_objects.len-1))
 		var/pick = pick(potential_objects)
 		objects_to_locate.Add(pick)
 		potential_objects.Remove(pick)
@@ -28,7 +28,7 @@
 		if(objects_to_locate.len > 1)
 			for(var/i in objects_to_locate)
 				var/obj/item/I = i
-				if(objects_to_locate[i] != objects_to_locate[objects_to_locate.len])
+				if(objects_to_locate[i] != objects_to_locate[objects_to_locate.len-1])
 					explanation += "a [initial(I.name)], "
 				else
 					explanation += "& a [initial(I.name)]."
@@ -42,7 +42,8 @@
 /datum/objective/target/locate/proc/check(var/list/objects)
 	for(var/A in objects_to_locate)
 		if(is_type_in_list(A, objects))
-			to_chat(owner.current, "[A] located.")
+			var/atom/thing = A
+			to_chat(owner.current, "[initial(thing.name)] located.")
 			objects_to_locate.Remove(A)
 	explanation_text = format_explanation()
 	IsFulfilled()
