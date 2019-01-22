@@ -4,7 +4,7 @@
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"
 	var/base_state = "left"
-	var/health = 50
+	var/health = 60
 	visible = 0.0
 	use_power = 0
 	flow_flags = ON_BORDER
