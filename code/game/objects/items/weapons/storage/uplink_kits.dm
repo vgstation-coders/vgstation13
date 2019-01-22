@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -128,6 +128,14 @@
 				new /obj/item/clothing/head/beret/sec/ocelot(src)
 				new /obj/item/clothing/gloves/red(src)
 				new /obj/item/clothing/accessory/storage/bandolier(src)
+
+			if ("palpatine")// It's treason then (16 + ? + ? + ?)
+				new /obj/item/weapon/dualsaber(src) //He had like one saber when he went ballistic but you get it
+				new /obj/item/weapon/dnainjector/nofail/telemut(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/weapon/spellbook/oneuse/lightning(src) //UNLIMITED POWER
+				new /obj/item/clothing/head/chaplain_hood/sith(src)
+				new /obj/item/clothing/under/psysuit/sith(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
 				new /obj/item/weapon/implanter/traitor(src)

@@ -151,6 +151,11 @@
 	item_state = "psysuit"
 	_color = "psysuit"
 
+/obj/item/clothing/under/psysuit/sith
+	name = "Chancellor's undersuit"
+	desc = "It's treason then."
+	wizard_garb = 1 //Allows lightning to be used
+
 /obj/item/clothing/under/gimmick/rank/captain/suit
 	name = "captain's suit"
 	desc = "A green suit and yellow necktie. Exemplifies authority."

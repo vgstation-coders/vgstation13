@@ -46,6 +46,11 @@
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0.9
 
+/obj/item/clothing/head/chaplain_hood/sith
+	name = "Chancellor's Hood"
+	desc = "I am the Senate."
+	wizard_garb = 1 // Alows lightning to be used
+
 //Chaplain
 /obj/item/clothing/head/nun_hood
 	name = "nun hood"
