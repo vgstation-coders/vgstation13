@@ -4450,29 +4450,29 @@
 	reagents.add_reagent(SUGAR, 2)
 	icon_state = "sweet[rand(1,12)]"
 	if (icon_state == "sweet1")
-		name = "Strawberry " + name
+		name = "\improper Strawberry " + name
 	if (icon_state == "sweet2")
-		name = "Lime " + name
+		name = "\improper Lime " + name
 	if (icon_state == "sweet3")
-		name = "Blueberry " + name
+		name = "\improper Blueberry " + name
 	if (icon_state == "sweet4")
-		name = "Lemon " + name
+		name = "\improper Lemon " + name
 	if (icon_state == "sweet5")
-		name = "Grape " + name
+		name = "\improper Grape " + name
 	if (icon_state == "sweet6")
-		name = "Lemonade " + name
+		name = "\improper Lemonade " + name
 	if (icon_state == "sweet7")
-		name = "Bubblegum " + name
+		name = "\improper Bubblegum " + name
 	if (icon_state == "sweet8")
-		name = "Raspberry " + name
+		name = "\improper Raspberry " + name
 	if (icon_state == "sweet9")
-		name = "Orange " + name
+		name = "\improper Orange " + name
 	if (icon_state == "sweet10")
-		name = "Liquorice " + name
+		name = "\improper Liquorice " + name
 	if (icon_state == "sweet11")
-		name = "Apple " + name
+		name = "\improper Apple " + name
 	if (icon_state == "sweet12")
-		name = "Cranberry " + name
+		name = "\improper Cranberry " + name
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
 	desc = "Something about this sweet doesn't seem right."
