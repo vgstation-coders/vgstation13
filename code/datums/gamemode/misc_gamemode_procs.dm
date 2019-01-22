@@ -1,3 +1,8 @@
+#define LOW_THREAT 1
+#define MEDIUM_THREAT 2
+#define HIGH_THREAT 3
+
+
 /proc/display_roundstart_logout_report()
 	var/msg = "<span class='notice'><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
@@ -91,6 +96,41 @@
 			else
 				intercepttext += "<b>[M.name]</b>, the <b>[M.mind.assigned_role]</b> <br>"
 
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- '[command_name()] Status Summary'"
+			intercept.info = intercepttext
+
+			comm.messagetitle.Add("[command_name()] Status Summary")
+			comm.messagetext.Add(intercepttext)
+
+	command_alert(/datum/command_alert/enemy_comms_interception)
+
+/datum/gamemode/dynamic/send_intercept()
+	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
+<B> In case you have misplaced your copy, attached is a brief report on the star sector status:</br>"}
+
+	var/list/threat_detected = list(MEDIUM_THREAT)
+
+	if (threat > 50)
+		threat_detected += HIGH_THREAT
+
+	else
+		threat_detected += LOW_THREAT
+	
+	var/detected = pick(threat_detected)
+
+	switch (detected)
+		if (LOW_THREAT)
+			intercepttext += "<b>NanoTrasen controlled territory.</b> The station is nested deep inside our area of control, and a major attack is unlikely. <br/>"
+
+		if (MEDIUM_THREAT)
+			intercepttext += "<b>Contested system.</b> This station lies on the edge of our sphere of influence; exercice increased caution. <br/>"
+
+		if (HIGH_THREAT)
+			intercepttext += "<b>Uncharted space.</b> Congratulations and thank you for participating in the NT 'Frontier' space program."
+	
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
@@ -283,12 +323,6 @@
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features.")
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
-
-	// -- If opposed or skeptical, more TC.
-		if (traitor_mob.client && (traitor_mob.client.prefs.nanotrasen_relation == "Opposed") || (traitor_mob.client.prefs.nanotrasen_relation == "Skeptical"))
-			R.hidden_uplink.uses += 8
-			traitor_mob.mind.total_TC += R.hidden_uplink.uses
-			traitor_mob.mind.store_memory("<i>Note: corporate intelligence may have information suggesting that you are working with us. Exercice caution.</i>")
 
 /datum/mind/proc/find_syndicate_uplink()
 	var/uplink = null
