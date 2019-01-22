@@ -366,6 +366,7 @@
 #include "code\datums\gamemode\objectives\target\assassinate.dm"
 #include "code\datums\gamemode\objectives\target\debrain.dm"
 #include "code\datums\gamemode\objectives\target\harm.dm"
+#include "code\datums\gamemode\objectives\target\locate.dm"
 #include "code\datums\gamemode\objectives\target\protection.dm"
 #include "code\datums\gamemode\objectives\target\sacrifice.dm"
 #include "code\datums\gamemode\objectives\target\target.dm"

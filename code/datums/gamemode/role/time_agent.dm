@@ -17,6 +17,10 @@
 	required_pref = ROLE_MADNESS
 	logo_state = "time-logo"
 
+/datum/role/time_agent/ForgeObjectives()
+	AppendObjective(/datum/objective/target/locate/random)
+	AppendObjective(/datum/objective/survive)
+
 /datum/role/time_agent/OnPostSetup()
 	.=..()
 	if(istype(antag.current, /mob/living/carbon/human))
@@ -41,6 +45,20 @@
 	icon_state = "polaroid"
 	item_state = "polaroid"
 	w_class = W_CLASS_SMALL
+	var/triggered = FALSE
+
+/obj/item/device/chronocapture/afterattack(atom/target, mob/user)
+	if(!triggered)
+		triggered = TRUE
+		playsound(loc, "polaroid", 75, 1, -3)
+		spawn(3 SECONDS)
+			triggered = FALSE
+		if(istimeagent(user))
+			var/datum/role/R = user.mind.GetRole(TIMEAGENT)
+			if(R)
+				var/datum/objective/target/locate/L = locate() in R.objectives.GetObjectives()
+				if(L)
+					L.check(range(target,3))
 
 /obj/item/weapon/gun/projectile/automatic/rewind
 	name = "rewind rifle"
