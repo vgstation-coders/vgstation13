@@ -468,10 +468,11 @@
 		C.update_special_views()
 
 /atom/movable/proc/forceEnter(atom/destination)
+	var/atom/movable/old_loc = loc
 	if(destination)
-		if(loc)
-			loc.Exited(src)
 		loc = destination
+		if(old_loc)
+			old_loc.Exited(src)
 		loc.Entered(src)
 		if(isturf(destination))
 			var/area/A = get_area(destination)
