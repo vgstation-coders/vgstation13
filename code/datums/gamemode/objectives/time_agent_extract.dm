@@ -34,7 +34,7 @@
 	processing_objects.Add(src)
 	last_effect = world.time
 	playsound(loc, 'sound/effects/portal_open.ogg', 60, 1)
-
+	set_light(3, l_color = LIGHT_COLOR_CYAN)
 /obj/effect/time_anomaly/process()
 	if(world.time >= last_effect+30 SECONDS)
 		last_effect = world.time

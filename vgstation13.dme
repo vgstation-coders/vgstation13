@@ -373,6 +373,7 @@
 #include "code\datums\gamemode\objectives\survive_silicon.dm"
 #include "code\datums\gamemode\objectives\uphold_vows.dm"
 #include "code\datums\gamemode\objectives\time_agent_extract.dm"
+#include "code\datums\gamemode\objectives\freeform\aid.dm"
 #include "code\datums\gamemode\objectives\freeform\changeling.dm"
 #include "code\datums\gamemode\objectives\freeform\christmas.dm"
 #include "code\datums\gamemode\objectives\freeform\rambler.dm"

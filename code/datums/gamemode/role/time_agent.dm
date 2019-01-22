@@ -20,7 +20,9 @@
 
 /datum/role/time_agent/ForgeObjectives()
 	AppendObjective(/datum/objective/target/locate/random)
-	AppendObjective(/datum/objective/target/assassinate)
+	if(prob(30))
+		AppendObjective(/datum/objective/target/assassinate)
+	AppendObjective(/datum/objective/freeform/aid)
 
 
 /datum/role/time_agent/process()
@@ -60,6 +62,7 @@
 		H.put_in_hands(gun)
 		objects_to_delete = list(under, helmet, suit, mask, camera, jump_charge, belt, gun)
 		H.fully_replace_character_name(newname = "John Beckett")
+		H.make_all_robot_parts_organic()
 
 /datum/role/time_agent/proc/extract()
 	var/mob/living/carbon/human/H = antag.current
@@ -130,6 +133,7 @@
 			if(TAE && target == TAE.anomaly)
 				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
 				R.extract()
+				TAE.anomaly = null
 				qdel(target)
 		return
 	if(proximity_flag && !triggered)
