@@ -12,14 +12,14 @@
 **/
 
 /datum/role/time_agent
-	name = "Time Agent"
+	name = "time agent"
 	id = TIMEAGENT
 	required_pref = ROLE_MADNESS
 	logo_state = "time-logo"
 
 /datum/role/time_agent/ForgeObjectives()
 	AppendObjective(/datum/objective/target/locate/random)
-	AppendObjective(/datum/objective/survive)
+	AppendObjective(/datum/objective/target/assassinate)
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
@@ -29,13 +29,13 @@
 			showrift(H,1)
 		H.delete_all_equipped_items()
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/scientist(H), slot_w_uniform)
-		H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/time, slot_head)
-		H.equip_to_slot_or_del(new /obj/item/clothing/suit/space/time, slot_wear_suit)
-		H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/death_commando, slot_wear_mask)
-		H.equip_to_slot_or_del(new /obj/item/device/chronocapture, slot_l_store)
-		H.equip_to_slot_or_del(new /obj/item/device/jump_charge, slot_r_store)
-		H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/grenade/chrono, slot_belt)
-		H.put_in_hands(new /obj/item/weapon/gun/projectile/automatic/rewind)
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/time(H), slot_head)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/space/time(H), slot_wear_suit)
+		H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/death_commando(H), slot_wear_mask)
+		H.equip_to_slot_or_del(new /obj/item/device/chronocapture(H), slot_l_store)
+		H.equip_to_slot_or_del(new /obj/item/device/jump_charge(H), slot_r_store)
+		H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/grenade/chrono(H), slot_belt)
+		H.put_in_hands(new /obj/item/weapon/gun/projectile/automatic/rewind(H))
 		H.fully_replace_character_name(newname = "John Beckett")
 
 /obj/item/device/chronocapture
@@ -58,7 +58,7 @@
 			if(R)
 				var/datum/objective/target/locate/L = locate() in R.objectives.GetObjectives()
 				if(L)
-					L.check(range(target,3))
+					L.check(view(target,2))
 
 /obj/item/weapon/gun/projectile/automatic/rewind
 	name = "rewind rifle"
