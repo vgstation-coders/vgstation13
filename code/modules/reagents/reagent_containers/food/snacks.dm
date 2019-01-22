@@ -4448,8 +4448,8 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 2)
-	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper lemon","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorish","\improper apple","\improper cranberry")
-	var/variety = rand(1,12)
+	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorish","\improper apple","\improper cranberry")
+	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
 	icon_state = "sweet[variety]"
 	name = "[flavors[variety]] sweet"
 
