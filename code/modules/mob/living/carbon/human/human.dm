@@ -1875,3 +1875,18 @@ mob/living/carbon/human/isincrit()
 	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
 	delayNextMove(crawldelay, additive=1)
+
+/mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
+	..()
+	if(!mind.faith || speech.frequency || speech.speaker == src || !ishuman(speech.speaker) || length(speech.message) < 20)
+		return
+	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
+		var/mob/living/carbon/human/H = speech.speaker
+		if(H.mind == mind.faith.religiousLeader)
+			AdjustDizzy(rand(-8,-10))
+			stuttering = max(0,stuttering-rand(8,10))
+			jitteriness = max(0,jitteriness-rand(8,10))
+			hallucination = max(0,hallucination-rand(8,10))
+			confused = max(0,confused-rand(8,10))
+			drowsyness = max(0, drowsyness-rand(8,10))
+			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
