@@ -4439,7 +4439,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet
 	name = "\improper Sweet"
-	desc = "Comes in many different and unique flavours!"
+	desc = "Comes in many different and unique flavours! One of the flagship products of the Getmore Chocolate Corp. Not suitable for children aged 0-3. Do not consume around open flames or expose to radiation. Expiration date: 2921."
 	food_flags = FOOD_SWEET
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
@@ -4449,6 +4449,30 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 2)
 	icon_state = "sweet[rand(1,12)]"
+	if (icon_state == "sweet1")
+		name = "Strawberry " + name
+	if (icon_state == "sweet2")
+		name = "Lime " + name
+	if (icon_state == "sweet3")
+		name = "Blueberry " + name
+	if (icon_state == "sweet4")
+		name = "Lemon " + name
+	if (icon_state == "sweet5")
+		name = "Grape " + name
+	if (icon_state == "sweet6")
+		name = "Lemonade " + name
+	if (icon_state == "sweet7")
+		name = "Bubblegum " + name
+	if (icon_state == "sweet8")
+		name = "Raspberry " + name
+	if (icon_state == "sweet9")
+		name = "Orange " + name
+	if (icon_state == "sweet10")
+		name = "Liquorice " + name
+	if (icon_state == "sweet11")
+		name = "Apple " + name
+	if (icon_state == "sweet12")
+		name = "Cranberry " + name
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
 	desc = "Something about this sweet doesn't seem right."
