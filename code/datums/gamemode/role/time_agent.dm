@@ -16,10 +16,24 @@
 	id = TIMEAGENT
 	required_pref = ROLE_MADNESS
 	logo_state = "time-logo"
+	var/list/objects_to_delete = list()
 
 /datum/role/time_agent/ForgeObjectives()
 	AppendObjective(/datum/objective/target/locate/random)
 	AppendObjective(/datum/objective/target/assassinate)
+
+
+/datum/role/time_agent/process()
+	if(!objectives.GetObjectives().len || locate(/datum/objective/time_agent_extract) in objectives.GetObjectives())
+		return //Not set up yet
+	var/finished = TRUE
+	for(var/datum/objective/O in objectives.GetObjectives())
+		if(!O.IsFulfilled())
+			finished = FALSE
+			break
+	if(finished)
+		to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating extraction point.</span>")
+		AppendObjective(/datum/objective/time_agent_extract)
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
@@ -28,15 +42,33 @@
 		spawn()
 			showrift(H,1)
 		H.delete_all_equipped_items()
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/scientist(H), slot_w_uniform)
-		H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/time(H), slot_head)
-		H.equip_to_slot_or_del(new /obj/item/clothing/suit/space/time(H), slot_wear_suit)
-		H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/death_commando(H), slot_wear_mask)
-		H.equip_to_slot_or_del(new /obj/item/device/chronocapture(H), slot_l_store)
-		H.equip_to_slot_or_del(new /obj/item/device/jump_charge(H), slot_r_store)
-		H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/grenade/chrono(H), slot_belt)
-		H.put_in_hands(new /obj/item/weapon/gun/projectile/automatic/rewind(H))
+		var/under = new /obj/item/clothing/under/rank/scientist(H)
+		H.equip_to_slot_or_del(under, slot_w_uniform)
+		var/helmet = new /obj/item/clothing/head/helmet/space/time(H)
+		H.equip_to_slot_or_del(helmet, slot_head)
+		var/suit = new /obj/item/clothing/suit/space/time(H)
+		H.equip_to_slot_or_del(suit, slot_wear_suit)
+		var/mask = new /obj/item/clothing/mask/gas/death_commando(H)
+		H.equip_to_slot_or_del(mask, slot_wear_mask)
+		var/camera = new /obj/item/device/chronocapture(H)
+		H.equip_to_slot_or_del(camera, slot_l_store)
+		var/jump_charge = new /obj/item/device/jump_charge(H)
+		H.equip_to_slot_or_del(jump_charge, slot_r_store)
+		var/belt = new /obj/item/weapon/storage/belt/grenade/chrono(H)
+		H.equip_to_slot_or_del(belt, slot_belt)
+		var/gun = new /obj/item/weapon/gun/projectile/automatic/rewind(H)
+		H.put_in_hands(gun)
+		objects_to_delete = list(under, helmet, suit, mask, camera, jump_charge, belt, gun)
 		H.fully_replace_character_name(newname = "John Beckett")
+
+/datum/role/time_agent/proc/extract()
+	var/mob/living/carbon/human/H = antag.current
+	H.drop_all()
+	showrift(H,1)
+	qdel(H)
+	for(var/i in objects_to_delete)
+		objects_to_delete.Remove(i)
+		qdel(i)
 
 /obj/item/device/chronocapture
 	name = "chronocapture device"
@@ -91,6 +123,15 @@
 	var/triggered = FALSE
 
 /obj/item/device/jump_charge/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
+		var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
+		if(R)
+			var/datum/objective/time_agent_extract/TAE = locate() in R.objectives.GetObjectives()
+			if(TAE && target == TAE.anomaly)
+				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
+				R.extract()
+				qdel(target)
+		return
 	if(proximity_flag && !triggered)
 		playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 		icon_state = "jump_charge_firing"

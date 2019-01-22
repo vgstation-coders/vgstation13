@@ -27,6 +27,8 @@
 
 /datum/objective/proc/feedbackText()
 
+/datum/objective/proc/format_explanation()
+
 /datum/objective_holder
 	var/list/datum/objective/objectives = list()
 	var/datum/mind/owner = null
