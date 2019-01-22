@@ -238,7 +238,6 @@
 		emote_type = EMOTE_VISIBLE
 		H.visible_message(message)
 		H.lastDab=world.time
-		H.gib()
 	else
 		var/armtobreak = pick(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)
 		var/datum/organ/external/A = H.get_organ(armtobreak)
