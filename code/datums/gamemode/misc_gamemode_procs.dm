@@ -113,7 +113,7 @@
 
 	var/list/threat_detected = list(MEDIUM_THREAT)
 
-	if (threat > 50)
+	if (threat_level > 50)
 		threat_detected += HIGH_THREAT
 
 	else
