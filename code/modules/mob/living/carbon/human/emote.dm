@@ -215,15 +215,26 @@
 	key_third_person = "*dab"
 	restraint_check = TRUE
 
-/datum/emote/living/carbon/human/dab/can_run_emote(mob/user)
-	..()
+/datum/emote/living/carbon/human/dab/can_run_emote(mob/user, var/status_check = TRUE)
 	var/mob/living/carbon/human/H = user
+	if (iswizard(H))
+		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
+		return FALSE
 	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
+		if(user.stat > stat_allowed)
+			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
+			return FALSE
+		if(restraint_check && (user.restrained() || user.locked_to))
+			to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+			return FALSE
 		return TRUE
 	else
+		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
 
-/datum/emote/living/carbon/human/dab/run_emote(mob/user)
+/datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
+	if(!(can_run_emote(user, !ignore_status)))
+		return FALSE
 	var/mob/living/carbon/human/H = user
 	if(!istype(H))
 		return
