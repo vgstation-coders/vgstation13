@@ -4448,31 +4448,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 2)
-	icon_state = "sweet[rand(1,12)]"
-	if (icon_state == "sweet1")
-		name = "\improper Strawberry " + name
-	if (icon_state == "sweet2")
-		name = "\improper Lime " + name
-	if (icon_state == "sweet3")
-		name = "\improper Blueberry " + name
-	if (icon_state == "sweet4")
-		name = "\improper Lemon " + name
-	if (icon_state == "sweet5")
-		name = "\improper Grape " + name
-	if (icon_state == "sweet6")
-		name = "\improper Lemonade " + name
-	if (icon_state == "sweet7")
-		name = "\improper Bubblegum " + name
-	if (icon_state == "sweet8")
-		name = "\improper Raspberry " + name
-	if (icon_state == "sweet9")
-		name = "\improper Orange " + name
-	if (icon_state == "sweet10")
-		name = "\improper Liquorice " + name
-	if (icon_state == "sweet11")
-		name = "\improper Apple " + name
-	if (icon_state == "sweet12")
-		name = "\improper Cranberry " + name
+	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper lemon","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorish","\improper apple","\improper cranberry")
+	var/variety = rand(1,12)
+	icon_state = "sweet[variety]"
+	name = "[flavors[variety]] sweet"
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
 	desc = "Something about this sweet doesn't seem right."
