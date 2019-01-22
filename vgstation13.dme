@@ -383,6 +383,7 @@
 #include "code\datums\gamemode\objectives\target\delayedassassinate.dm"
 #include "code\datums\gamemode\objectives\target\harm.dm"
 #include "code\datums\gamemode\objectives\target\killorexile.dm"
+#include "code\datums\gamemode\objectives\target\locate.dm"
 #include "code\datums\gamemode\objectives\target\protection.dm"
 #include "code\datums\gamemode\objectives\target\sacrifice.dm"
 #include "code\datums\gamemode\objectives\target\target.dm"
