@@ -16,14 +16,13 @@
 	deploy_path = /obj/structure/inflatable/door
 
 /obj/item/weapon/grenade/inflatable/station
-	name = "Discount Dans Inflatable Station"
+	name = "Discount Dans Inflatable Station in a can"
 	desc = "Packed full of inflatable bits! Do not chew."
 	var/range = 5
 
 
 /**
-	Makes a radial station.
-	Starts with a wall, then
+	Makes an instant inflatable station
 **/
 /obj/item/weapon/grenade/inflatable/station/prime()
 	playsound(src, 'sound/items/zip.ogg', 75, 1)
@@ -35,7 +34,11 @@
 	var/list/interior = view(src, range-1)
 	for(var/turf/T in full_affected_area)
 		if(!(interior.Find(T)))
-			var/obj/structure/inflatable/R = new /obj/structure/inflatable/wall(T)
+			var/obj/structure/inflatable/R
+			if(cardinal.Find(get_dir(T, src)))
+				R = new /obj/structure/inflatable/door(T)
+			else
+				R = new /obj/structure/inflatable/wall(T)
 			R.spawn_undeployed = FALSE
 		if(prob(30))
 			var/new_trash = pick(possible_trash)
