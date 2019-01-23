@@ -1099,6 +1099,7 @@
 #include "code\game\turfs\unsimulated.dm"
 #include "code\game\turfs\simulated\floor.dm"
 #include "code\game\turfs\simulated\floor_glass.dm"
+#include "code\game\turfs\simulated\floor_inflatable.dm"
 #include "code\game\turfs\simulated\floor_types.dm"
 #include "code\game\turfs\simulated\invulnerable_wall.dm"
 #include "code\game\turfs\simulated\mineral.dm"
