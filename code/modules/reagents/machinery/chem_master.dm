@@ -169,6 +169,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		src.updateUsrDialog()
 		return 1
 
+	else if(href_list["pill_icon_toggle"])
+		if (pill_display_number == MAX_PILL_SPRITE/2)
+			pill_display_number = MAX_PILL_SPRITE
+		else
+			pill_display_number = MAX_PILL_SPRITE/2
+		src.updateUsrDialog()
+		return 1
+
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
 		if(href_list["analyze"])
@@ -295,14 +303,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 		else if(href_list["toggle"])
 			mode = !mode
-			src.updateUsrDialog()
-			return 1
-
-		else if(href_list["pill_icon_toggle"])
-			if (pill_display_number == MAX_PILL_SPRITE/2)
-				pill_display_number = MAX_PILL_SPRITE
-			else
-				pill_display_number = MAX_PILL_SPRITE/2
 			src.updateUsrDialog()
 			return 1
 
@@ -475,7 +475,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
 		dat += generate_pill_icon_div(pill_display_number)
-
 	else
 		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
