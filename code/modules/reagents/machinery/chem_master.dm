@@ -1,7 +1,9 @@
-#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+#define MAX_PILL_SPRITE 40 //Max icon state of the pill sprites
 var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white", "oblong cyan", "oblong darkred", "oblong orange-striped", "oblong lightblue-drab", \
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
-"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
+"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green","oblong green-yellow","oblong grey-purple","oblong black-red", \
+"oblong yellow-grey","oblong green-purple","oblong blue-red","oblong green-brown","oblong yellow-cyan","oblong purple-cyan","oblong yellow-red","round pink", \
+"round purple-red","round black","round green-blue","round orange","round blue-beige","round blue","round beige-yellow","round red-green","round darkpink")
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
