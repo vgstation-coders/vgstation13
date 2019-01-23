@@ -1,5 +1,8 @@
 // -- General rulesets types --
 
+/datum/dynamic_ruleset/midround/from_ghosts/
+	weight = 0
+
 /datum/dynamic_ruleset/midround/from_ghosts/execute()
 	var/list/possible_candidates = list()
 	possible_candidates.Add(dead_players)
@@ -39,6 +42,7 @@
 // -- Faction based --
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based
+	weight = 0
 	var/datum/faction/my_fac = null // If the midround lawset will try to add our antag to a faction
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/review_applications()
