@@ -61,7 +61,7 @@
 /obj/machinery/disease2/diseaseanalyser/proc/PrintPaper(var/obj/item/weapon/virusdish/D)
 	var/obj/item/weapon/paper/P = new(src.loc)
 	P.info = D.virus2.get_info()
-	P.name = "Virus #[D.virus2.uniqueID]"
+	P.name = "[D.virus2.form] #[D.virus2.uniqueID]"
 	visible_message("\The [src.name] prints a sheet of paper.")
 
 /obj/machinery/disease2/diseaseanalyser/proc/Analyse(var/obj/item/weapon/virusdish/D)

@@ -16,6 +16,7 @@
 			handle_blood()
 
 		if(health <= config.health_threshold_dead || !has_brain())
+			emote("deathgasp", message = TRUE)
 			death()
 			blinded = 1
 			silent = 0

@@ -309,6 +309,10 @@ SKIP_VAULT_GENERATION
 ## Recommended for your sanity if you start the server a lot for testing things.
 #SHUT_UP_AUTOMATIC_DIAGNOSTIC_AND_ANNOUNCEMENT_SYSTEM
 
+## NO_LOBBY_MUSIC
+## Uncomment to never play lobby music. Useful if you use guest keys to multiaccount-test stuff, since you can't use client preferences for those.
+#NO_LOBBY_MUSIC
+
 ## ENABLE_ROUNDSTART_AWAY_MISSIONS
 ## Uncomment to genereate an away mission at the beginning of each round
 #ENABLE_ROUNDSTART_AWAY_MISSIONS

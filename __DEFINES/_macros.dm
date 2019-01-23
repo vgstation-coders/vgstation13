@@ -214,16 +214,20 @@
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
+#define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
+
 //Macros for roles/antags
+#define isfaction(A) (istype(A, /datum/faction))
+
 #define isrole(type, H) (H.mind && H.mind.GetRole(type))
 
-#define isfaction(A) (istype(A, /datum/faction))
+#define isanyantag(H) (H.mind && H.mind.antag_roles.len)
+
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
 #define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
-
-#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 

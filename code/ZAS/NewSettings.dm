@@ -313,7 +313,7 @@ var/global/ZAS_Settings/zas_settings = new
 		else
 			error("[id] has an invalid typeval.")
 			return
-	to_chat(world, "<span class='notice'><b>[key_name(user)] changed ZAS setting <i>[setting.name]</i> to <i>[displayedValue]</i>.</b></span>")
+	to_chat(world, "<span class='notice'><b>[key_name(user, showantag = FALSE)] changed ZAS setting <i>[setting.name]</i> to <i>[displayedValue]</i>.</b></span>")
 
 	ChangeSettingsDialog(user)
 
@@ -512,4 +512,4 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/airflow_speed_decay",       1)
 			Set("/datum/ZAS_Setting/airflow_delay",             20)
 			Set("/datum/ZAS_Setting/airflow_mob_slowdown",      3)
-	to_chat(world, "<span class='notice'><b>[key_name(usr)] loaded ZAS preset <i>[def]</i></b></span>")
+	to_chat(world, "<span class='notice'><b>[key_name(usr, showantag = FALSE)] loaded ZAS preset <i>[def]</i></b></span>")

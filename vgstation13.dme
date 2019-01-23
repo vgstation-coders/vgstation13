@@ -2320,6 +2320,7 @@
 #include "code\modules\spells\targeted\hypnotise.dm"
 #include "code\modules\spells\targeted\mind_transfer.dm"
 #include "code\modules\spells\targeted\parrotmorph.dm"
+#include "code\modules\spells\targeted\prestidigitation.dm"
 #include "code\modules\spells\targeted\pumpkinhead.dm"
 #include "code\modules\spells\targeted\push.dm"
 #include "code\modules\spells\targeted\recall.dm"
