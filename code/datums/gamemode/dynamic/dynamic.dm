@@ -126,7 +126,7 @@ var/list/forced_roundstart_ruleset = list()
 	var/list/drafted_rules = list()
 	var/i = 0
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
+		if (rule.weight && rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
 			i++																			//we check whether we've got elligible players
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
