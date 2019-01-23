@@ -18,6 +18,25 @@
 	logo_state = "time-logo"
 	var/list/objects_to_delete = list()
 
+
+/datum/role/time_agent/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_CUSTOM)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>[custom]</span>")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Time Agent.<br>Specifically you are a scientist by the name of John Beckett, having discovered a method to travel through time, and becoming lost to it. <br>\
+			Now, you are forced to take responsibility for maintaining the time stream by the mysterious 'Time Agency'.<br>\
+			You only have a limited amount of time before this timeline is deemed lost, in which case you will be forcibly extracted and the mission considered a failure.<br>\
+			Locate certain time-sensitive objects scattered around the station, so as to locate the time anomaly and use it for extraction.<br>\
+			This may not be the first time you visit this timeline, and it may not be the last.</span>")
+
+	to_chat(antag.current, "<span class='danger'>Remember that the items you are provided with are largely non-expendable. Try not to lose them, especially the jump charge, as it is your ticket home.</span>")
+
+
 /datum/role/time_agent/ForgeObjectives()
 	AppendObjective(/datum/objective/target/locate/random)
 	if(prob(30))
@@ -34,15 +53,13 @@
 			finished = FALSE
 			break
 	if(finished)
-		to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating extraction point.</span>")
+		to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating anomaly location.</span>")
 		AppendObjective(/datum/objective/time_agent_extract)
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
 	if(istype(antag.current, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = antag.current
-		spawn()
-			showrift(H,1)
 		H.delete_all_equipped_items()
 		var/under = new /obj/item/clothing/under/rank/scientist(H)
 		H.equip_to_slot_or_del(under, slot_w_uniform)
@@ -63,6 +80,20 @@
 		objects_to_delete = list(under, helmet, suit, mask, camera, jump_charge, belt, gun)
 		H.fully_replace_character_name(newname = "John Beckett")
 		H.make_all_robot_parts_organic()
+		var/list/potential_locations = list()
+		for(var/area/maintenance/A in areas)
+			potential_locations.Add(A)
+		var/placed = FALSE
+		while(!placed && potential_locations.len)
+			var/area/maintenance/A = pick(potential_locations)
+			potential_locations.Remove(A)
+			for(var/turf/simulated/floor/F in A.contents)
+				if(!F.has_dense_content())
+					H.forceMove(F)
+					placed = TRUE
+					break
+		spawn()
+			showrift(H,1)
 
 /datum/role/time_agent/proc/extract()
 	var/mob/living/carbon/human/H = antag.current

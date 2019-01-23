@@ -495,6 +495,36 @@
 
 //////////////////////////////////////////////
 //                                          //
+//               TIME AGENT                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent
+	name = "time agent anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.threat_level))
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if(required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+
+//////////////////////////////////////////////
+//                                          //
 //               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
