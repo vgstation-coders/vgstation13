@@ -34,6 +34,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_pill_count = 20
 	var/max_pill_size = 50
 	var/iconToggle = 0
+	var/pill_display_number = 20
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -437,11 +438,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	for(var/i = 1 to MAX_PILL_SPRITE)
 		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
 
-/obj/machinery/chem_master/proc/generate_pill_icon_div()
+/obj/machinery/chem_master/proc/generate_pill_icon_div(pill_display_number)
 	var/dat = list()
 	dat += "<HR>"
 	dat += "<div class='pillIconsContainer'>"
-	for(var/i = 1 to MAX_PILL_SPRITE/2) // show the first half, rounding needed for odd
+	for(var/i = 1 to pill_display_number) // show the first half, rounding needed for odd
 		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 					<div class="pillIcon">
 						[pill_icon_cache[i]]
@@ -449,16 +450,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				</a>"}
 		if (i%10 == 0)
 			dat += "<br>"
-
-	if (iconToggle)
-		for(var/i = (MAX_PILL_SPRITE/2)+1 to MAX_PILL_SPRITE) // show the second half, rounding needed for odd
-			dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
-					<div class="pillIcon">
-						[pill_icon_cache[i]]
-					</div>
-				</a>"}
-			if (i%10 == 0)
-				dat += "<br>"
 
 	dat += {"</div>"}
 	return dat
@@ -478,7 +469,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
-			//dat += generate_pill_icon_div()
+			dat += generate_pill_icon_div(pill_display_number)
 	else
 		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
@@ -602,9 +593,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			// PILL ICONS
 			//
 
-			dat += "<HR><a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a>"
+			dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a>"
 
-			dat += generate_pill_icon_div()
+			if (iconToggle)
+				pill_display_number = MAX_PILL_SPRITE
+			else
+				pill_display_number = MAX_PILL_SPRITE/2
+
+			dat += generate_pill_icon_div(pill_display_number)
 
 
 
