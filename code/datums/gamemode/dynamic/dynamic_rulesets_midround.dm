@@ -12,7 +12,7 @@
 		if(applicants.len <= 0)
 			break
 		var/mob/applicant = pick(applicants)
-		applicants -= applicant				
+		applicants -= applicant
 		if(!isobserver(applicant))
 			//Making sure we don't recruit people who got back into the game since they applied
 			i++
@@ -170,7 +170,7 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	if (index == 1) // Our first guy is the leader
-		var/datum/role/nuclear_operative/leader/new_role = new 
+		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
 		setup_role(new_role)
 	else
@@ -208,6 +208,36 @@
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
+
+//////////////////////////////////////////////
+//                                          //
+//               TIME AGENT                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent
+	name = "time agent anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.threat_level))
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if(required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
 
 //////////////////////////////////////////////
 //                                          //

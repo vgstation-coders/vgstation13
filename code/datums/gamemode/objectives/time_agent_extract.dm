@@ -4,13 +4,18 @@
 	var/extracted = FALSE
 
 /datum/objective/time_agent_extract/PostAppend()
+	var/list/potential_locations = list()
 	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+	var/placed = FALSE
+	while(!placed && potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
 		for(var/turf/simulated/floor/F in A.contents)
 			if(!F.has_dense_content())
 				anomaly = new /obj/effect/time_anomaly(F)
+				placed = TRUE
 				break
-		if(anomaly)
-			break
 	explanation_text = format_explanation()
 	return TRUE
 
@@ -35,6 +40,7 @@
 	last_effect = world.time
 	playsound(loc, 'sound/effects/portal_open.ogg', 60, 1)
 	set_light(3, l_color = LIGHT_COLOR_CYAN)
+
 /obj/effect/time_anomaly/process()
 	if(world.time >= last_effect+30 SECONDS)
 		last_effect = world.time
