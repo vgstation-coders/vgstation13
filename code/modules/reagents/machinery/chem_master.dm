@@ -33,6 +33,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
+	var/iconToggle = 1
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -297,6 +298,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			src.updateUsrDialog()
 			return 1
 
+		else if(href_list["pill_icon_toggle"])
+			iconToggle = !iconToggle
+			src.updateUsrDialog()
+			return 1
+
 		else if(href_list["toggle_disp"])
 			slurpmode = !slurpmode
 			src.updateUsrDialog()
@@ -454,7 +460,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	user.set_machine(src)
 
 	var/dat = list()
-	if(!beaker)
+	if(!beaker )
 		dat += "Please insert a beaker.<BR>"
 		if(!condi)
 			if(src.loaded_pill_bottle)
@@ -584,7 +590,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// PILL ICONS
 			//
-			dat += generate_pill_icon_div()
+
+			dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Pill Icons</a>"
+
+			if (iconToggle)
+				dat += generate_pill_icon_div()
+
+
+
 
 			//
 			// BUTTONS
