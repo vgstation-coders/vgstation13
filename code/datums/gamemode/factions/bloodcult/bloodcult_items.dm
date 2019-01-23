@@ -249,6 +249,8 @@ var/list/arcane_tomes = list()
 	if(!choice_to_talisman[choice])
 		return
 	var/obj/item/weapon/talisman/chosen_talisman = choice_to_talisman[choice]
+	if(!usr.held_items.Find(src))
+		return
 	talismans.Remove(chosen_talisman)
 	usr.put_in_hands(chosen_talisman)
 	
