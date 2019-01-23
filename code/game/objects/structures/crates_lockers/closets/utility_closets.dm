@@ -88,6 +88,7 @@
 		/obj/item/weapon/tank/oxygen/red,
 		/obj/item/weapon/extinguisher,
 		/obj/item/clothing/head/hardhat/red,
+		/obj/item/weapon/storage/box/inflatables,
 	)
 
 /obj/structure/closet/firecloset/full/atoms_to_spawn()
@@ -216,6 +217,7 @@
 		/obj/item/weapon/tank/oxygen/red,
 		/obj/item/weapon/extinguisher,
 		/obj/item/clothing/head/hardhat/red,
+		/obj/item/weapon/storage/box/inflatables,
 	)
 
 /*
