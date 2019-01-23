@@ -443,7 +443,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/proc/generate_pill_icon_div(pill_display_number)
 	var/dat = list()
 	dat += "<HR>"
-	dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a><br><br>"
+	dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a><br>"
 	dat += "<div class='pillIconsContainer'>"
 	for(var/i = 1 to pill_display_number)
 		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
