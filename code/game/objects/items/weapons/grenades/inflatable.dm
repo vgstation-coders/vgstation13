@@ -18,7 +18,7 @@
 /obj/item/weapon/grenade/inflatable/station
 	name = "Discount Dans Inflatable Station in a can"
 	desc = "Packed full of inflatable bits! Do not chew."
-	var/range = 5
+	var/range = 7
 
 
 /**
@@ -26,25 +26,30 @@
 **/
 /obj/item/weapon/grenade/inflatable/station/prime()
 	playsound(src, 'sound/items/zip.ogg', 75, 1)
+	var/turf/source = get_turf(src)
 	var/list/possible_trash = subtypesof(/obj/item/trash)-typesof(/obj/item/trash/mannequin)
-	var/list/full_affected_area = view(src, range)
-	for(var/mob/living/M in full_affected_area)
+	var/list/full_affected_area = circleviewturfs(source, range)
+	for(var/mob/living/M in view(source, range))
+		if(get_turf(M) == source)
+			M.gib()
+			continue
 		to_chat(M, "<span class = 'warning'>You are bounced away from \the [src] as it deploys!</span>")
-		M.throw_at(get_ranged_target_turf(get_turf(src), get_dir(src, M), range*3), 50, 3)
-	var/list/interior = view(src, range-1)
+		M.throw_at(get_ranged_target_turf(source, get_dir(source, M), range*3), 50, 3)
+	var/list/interior = circleviewturfs(src, range-1)
 	for(var/turf/T in full_affected_area)
 		if(!(interior.Find(T)))
 			var/obj/structure/inflatable/R
-			if(cardinal.Find(get_dir(T, src)))
+			if(cardinal.Find(get_dir(T, source)))
 				R = new /obj/structure/inflatable/door(T)
 			else
 				R = new /obj/structure/inflatable/wall(T)
 			R.spawn_undeployed = FALSE
-		if(prob(30))
+		if(prob(30) && interior.Find(T))
 			var/new_trash = pick(possible_trash)
 			new new_trash(T)
 		if(istype(T, get_base_turf(T.z)))
 			T.ChangeTurf(/turf/simulated/floor/inflatable/air)
 
-	var/obj/structure/inflatable/R = new /obj/structure/inflatable/wall(get_turf(src))
+	var/obj/structure/inflatable/R = new /obj/structure/inflatable/wall(source)
 	R.spawn_undeployed = FALSE
+	qdel(src)
