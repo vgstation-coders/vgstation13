@@ -613,7 +613,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					<A href='?src=\ref[src];createbottle_multiple=1;createempty=1'>Create empty bottles</A><BR>"}
 
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 500, 800, src)
+	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 475, 500, src)
 	popup.add_stylesheet("chemmaster", 'html/browser/chem_master.css')
 	popup.set_content(dat)
 	popup.open()
