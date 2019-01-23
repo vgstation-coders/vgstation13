@@ -33,7 +33,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
-	var/iconToggle = 1
+	var/iconToggle = 0
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -441,15 +441,26 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/dat = list()
 	dat += "<HR>"
 	dat += "<div class='pillIconsContainer'>"
-	for(var/i = 1 to MAX_PILL_SPRITE)
+	for(var/i = 1 to MAX_PILL_SPRITE/2) // show the first half, rounding needed for odd
 		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 					<div class="pillIcon">
 						[pill_icon_cache[i]]
 					</div>
 				</a>"}
 		if (i%10 == 0)
-			dat +="<br>"
-	dat += "</div>"
+			dat += "<br>"
+
+	if (iconToggle)
+		for(var/i = (MAX_PILL_SPRITE/2)+1 to MAX_PILL_SPRITE) // show the second half, rounding needed for odd
+			dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
+					<div class="pillIcon">
+						[pill_icon_cache[i]]
+					</div>
+				</a>"}
+			if (i%10 == 0)
+				dat += "<br>"
+
+	dat += {"</div>"}
 	return dat
 
 /obj/machinery/chem_master/attack_hand(mob/user as mob)
@@ -467,7 +478,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
-			dat += generate_pill_icon_div()
+			//dat += generate_pill_icon_div()
 	else
 		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
@@ -591,10 +602,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			// PILL ICONS
 			//
 
-			dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Pill Icons</a>"
+			dat += "<HR><a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a>"
 
-			if (iconToggle)
-				dat += generate_pill_icon_div()
+			dat += generate_pill_icon_div()
 
 
 
@@ -610,7 +620,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					<A href='?src=\ref[src];createbottle_multiple=1;createempty=1'>Create empty bottles</A><BR>"}
 
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 475, 500, src)
+	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 500, 800, src)
 	popup.add_stylesheet("chemmaster", 'html/browser/chem_master.css')
 	popup.set_content(dat)
 	popup.open()
