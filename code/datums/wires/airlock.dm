@@ -13,13 +13,14 @@ var/const/AIRLOCK_WIRE_ELECTRIFY = 256
 var/const/AIRLOCK_WIRE_SAFETY = 512
 var/const/AIRLOCK_WIRE_SPEED = 1024
 var/const/AIRLOCK_WIRE_LIGHT = 2048
+var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 /datum/wires/airlock/secure
 	random = 1
 
 /datum/wires/airlock
 	holder_type = /obj/machinery/door/airlock
-	wire_count = 12
+	wire_count = 13
 	window_y = 570
 
 /datum/wires/airlock/New()
@@ -36,6 +37,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
 		"[AIRLOCK_WIRE_SPEED]"         = "Speed",
 		"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
+		"[AIRLOCK_WIRE_ONOPEN]"        = "On Open"
 	)
 	..()
 
@@ -212,3 +214,6 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_LIGHT)
 			A.lights = !A.lights
 			A.update_icon()
+
+		if(AIRLOCK_WIRE_ONOPEN)
+			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
