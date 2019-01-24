@@ -1125,7 +1125,7 @@
 
 	if(alien && alien == IS_VOX)
 		M.adjustOxyLoss(-2 * REM)
-		M.adjustToxLoss(-2 * REM)
+		M.adjustToxLoss(REM)
 
 /datum/reagent/hydrogen
 	name = "Hydrogen"
