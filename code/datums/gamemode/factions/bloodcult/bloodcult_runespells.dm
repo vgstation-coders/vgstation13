@@ -1633,9 +1633,11 @@ var/list/blind_victims = list()
 
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
 	if (istype (spell_holder,/obj/item/weapon/talisman))
+		var/obj/item/weapon/talisman/T = spell_holder
 		activator.u_equip(spell_holder)
-		spell_holder.forceMove(BT)
-		BT.remaining = spell_holder
+		if (T.uses > 1)
+			BT.remaining = spell_holder
+			spell_holder.forceMove(BT)
 
 	for(var/slot in slots_to_store)
 		var/obj/item/user_slot = activator.get_item_by_slot(slot)
