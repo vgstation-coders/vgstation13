@@ -987,9 +987,7 @@
 
 	if(..())
 		return 1
-
-	if(alien && alien == IS_VOX)
-		M.adjustToxLoss(REM)
+		
 	else
 		if(M.losebreath >= 10)
 			M.losebreath = max(10, M.losebreath - 5)
