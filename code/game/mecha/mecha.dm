@@ -37,7 +37,7 @@
 	var/list/log = new
 	var/last_message = 0 // Used in occupant_message()
 	var/add_req_access = 1
-	var/maint_access = 1
+	var/maint_access = 1 //Whether maintenance can be toggled
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
 	var/lights = 0
@@ -1721,7 +1721,7 @@
 						</head>
 						<body>
 						[add_req_access?"<a href='?src=\ref[src];req_access=1;id_card=\ref[id_card];user=\ref[user]'>Edit operation keycodes</a>":null]
-						[maint_access?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>[state ? "Terminate" : "Initiate"] maintenance protocol</a>":null]
+						[(maint_access || state==STATE_BOLTSEXPOSED)?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>[state ? "Terminate" : "Initiate"] maintenance protocol</a>":null]
 						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>":null]
 						</body>
 						</html>"}
@@ -1878,7 +1878,7 @@
 			return
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
-	if(href_list["maint_access"] && maint_access)
+	if(href_list["maint_access"] && (maint_access || state==STATE_BOLTSEXPOSED))
 		if(!in_range(src, usr))
 			return
 		var/mob/user = topic_filter.getMob("user")
