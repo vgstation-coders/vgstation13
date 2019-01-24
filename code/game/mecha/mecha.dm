@@ -1329,8 +1329,7 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
+
 	src.go_out()
 	add_fingerprint(usr)
 	return
@@ -1722,7 +1721,8 @@
 						<body>
 						[add_req_access?"<a href='?src=\ref[src];req_access=1;id_card=\ref[id_card];user=\ref[user]'>Edit operation keycodes</a>":null]
 						[maint_access?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>[state ? "Terminate" : "Initiate"] maintenance protocol</a>":null]
-						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>":null]
+						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>\
+						<a href='?src=\ref[src];eject=1'>Eject Occupant</a>":null]
 						</body>
 						</html>"}
 	user << browse(output, "window=exosuit_maint_console")
@@ -1787,10 +1787,9 @@
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 		return
 	if(href_list["eject"])
-		if(usr != src.occupant)
+		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
 			return
-		src.eject()
-		return
+		eject()
 	if(href_list["toggle_lights"])
 		if(usr != src.occupant)
 			return
