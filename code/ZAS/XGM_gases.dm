@@ -78,8 +78,8 @@
 	specific_heat = 40	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol. N₂O
 
-	tile_overlay = new /image/effect('icons/effects/tile_effects.dmi', "sleeping_agent", FLY_LAYER)
-	overlay_limit = 1 / CELL_VOLUME
+	//tile_overlay = new /image/effect('icons/effects/tile_effects.dmi', "sleeping_agent", FLY_LAYER)
+	//overlay_limit = 1 / CELL_VOLUME
 	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED // N₂O is a powerful oxidizer
 
 /datum/gas/sleeping_agent/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
