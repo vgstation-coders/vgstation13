@@ -200,6 +200,8 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 		if(AIRLOCK_WIRE_OPEN_DOOR)
 			//tries to open the door without ID
 			//will succeed only if the ID wire is cut or the door requires no access
+			for(var/mob/M in range(1, A))
+				to_chat(M, "<span class = 'notice'>You see \the [holder]'s keypad blink green for a second.</span>")
 			if(!A.requiresID() || A.check_access(null))
 				if(A.density)
 					A.open()
