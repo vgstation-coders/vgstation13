@@ -140,7 +140,7 @@
 			if(beaker)
 				to_add.trans_id_to(beaker,id,amount)
 			else
-				to_add.remove_reagent(id,amount)
+				to_add.trans_id_to(reagents,id,amount)
 
 	else if(href_list["main"])
 		attack_hand(usr)
@@ -165,7 +165,7 @@
 			if(4)
 				. = CREAM
 			if(5)
-				. = WATER
+				. = ICE
 		if(reagents.has_reagent(.,6))
 			reagents.trans_id_to(to_add, .,5)
 		else
@@ -200,7 +200,7 @@
 		dat += "<A href='?src=\ref[src];synthcond=1;type=3'>Alcohol</A><BR>"
 		dat += "<strong>Finish With:</strong><BR>"
 		dat += "<A href='?src=\ref[src];synthcond=1;type=4'>Cream</A><BR>"
-		dat += "<A href='?src=\ref[src];synthcond=1;type=5'>Water</A><BR>"
+		dat += "<A href='?src=\ref[src];synthcond=1;type=5'>Ice</A><BR>"
 		dat += "<strong>Dispense in:</strong><BR>"
 	dat += "<A href='?src=\ref[src];createcup=1'>Chocolate Cone</A><BR>"
 	dat += "<A href='?src=\ref[src];createcone=1'>Cone</A><BR>"
