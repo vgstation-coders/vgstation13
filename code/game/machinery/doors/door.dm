@@ -104,10 +104,7 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 
-	if(!requiresID())
-		user = null
-
-	if(allowed(user))
+	if(!requiresID() || allowed(user))
 		if (isshade(user))
 			user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
 		open()
@@ -141,10 +138,7 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 
-	if (!requiresID())
-		user = null
-
-	if (allowed(user))
+	if (!requiresID() || allowed(user))
 		if (!density)
 			return close()
 		else
@@ -162,7 +156,7 @@ var/list/all_doors = list()
 	if(istype(I, /obj/item/device/detective_scanner))
 		return //It does its own thing on attack
 
-	if (allowed(user))
+	if (!requiresID() || allowed(user))
 		if (!density)
 			return close()
 		else
