@@ -2289,7 +2289,7 @@
 	if(..())
 		return 1
 		
-	if(H.species.name=="Plasmaman")
+	if(M.species.name=="Plasmaman")
 		return
 	else
 		M.adjustToxLoss(3 * REM)
