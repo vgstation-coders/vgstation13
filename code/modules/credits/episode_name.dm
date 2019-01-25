@@ -16,27 +16,30 @@
 	if(weight)
 		src.weight = weight
 
-	if(prob(5))
-		thename += ": PART I"
-	else if(prob(5))
-		thename += ": PART II"
-	else if(prob(2))
-		thename += ": PART III"
-	else if(prob(4) && score["time"] > 60 * 60 * 3) //3 hours
-		thename += ": THE FEATURE LENGTH PRESENTATION"
-	else if(prob(4) && score["time"] > 0 && score["time"] < 60 * 30) //30 min
-		thename += ": ABRIDGED"
-	else if(prob(1))
-		thename += ": NOW IN 3D"
-	else if(prob(1))
-		thename += ": ON ICE!"
-	else if(prob(1))
-		thename += ": THE SEASON FINALE"
-	else if(prob(50))
-		for(var/client/C in clients)
-			if(C.key == "pomf123" || C.key == "exadv1")
-				thename += ": THE DIRECTOR'S CUT"
-				break
+	switch(rand(1,100))
+		if(0 to 5)
+			thename += ": PART I"
+		if(6 to 10)
+			thename += ": PART II"
+		if(11 to 12)
+			thename += ": PART III"
+		if(13)
+			thename += ": NOW IN 3D"
+		if(14)
+			thename += ": ON ICE!"
+		if(15)
+			thename += ": THE SEASON FINALE"
+		if(16 to 35)
+			if(score["time"] > 60 * 60 * 3) //3 hours
+				thename += ": THE FEATURE LENGTH PRESENTATION"
+		if(36 to 55)
+			if(score["time"] > 0 && score["time"] < 60 * 30) //30 min
+				thename += ": ABRIDGED"
+		else
+			for(var/client/C in clients)
+				if(C.key && (C.key == "pomf123" || C.key == "exadv1"))
+					thename += ": THE DIRECTOR'S CUT"
+					break
 
 
 /datum/episode_name/proc/make_div(var/admindatum) //This is just for the admin panel.
