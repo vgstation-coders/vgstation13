@@ -79,6 +79,7 @@
 
 	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
+	var/lastDab = 0 //Dab cooldown.
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
 	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
@@ -91,4 +92,4 @@
 
 	var/become_zombie_after_death = FALSE
 	var/times_cloned = 0 //How many times this person has been cloned
-	var/talkcount = 0 // How many times a person has talked - used for determining who's been the "star" for the purposes of round end credits 
+	var/talkcount = 0 // How many times a person has talked - used for determining who's been the "star" for the purposes of round end credits

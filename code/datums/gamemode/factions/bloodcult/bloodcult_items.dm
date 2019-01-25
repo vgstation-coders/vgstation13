@@ -972,7 +972,7 @@ var/list/arcane_tomes = list()
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
 
-/obj/item/clothing/head/culthood/get_cult_power()
+/obj/item/clothing/shoes/cult/get_cult_power()
 	return 10
 
 /obj/item/clothing/shoes/cult/cultify()

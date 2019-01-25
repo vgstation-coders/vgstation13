@@ -88,7 +88,9 @@ var/list/forced_roundstart_ruleset = list()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 		latejoin_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
-		midround_rules += new rule()
+		var/datum/dynamic_ruleset/midround/DR = rule
+		if (initial(DR.weight))
+			midround_rules += new rule()
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind)
 			roundstart_pop_ready++

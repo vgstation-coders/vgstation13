@@ -219,3 +219,4 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 		if(AIRLOCK_WIRE_ONOPEN)
 			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
+

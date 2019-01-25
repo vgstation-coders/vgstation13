@@ -492,9 +492,6 @@ var/const/MAX_SAVE_SLOTS = 8
 			var/available_in_days = job.available_in_days(user.client)
 			HTML += "<font color=red>[rank]</font></td><td><font color=red> \[IN [(available_in_days)] DAYS]</font></td></tr>"
 			continue
-		if((job_civilian_low & ASSISTANT) && (rank != "Assistant"))
-			HTML += "<font color=orange>[rank]</font></td><td></td></tr>"
-			continue
 		if((rank in command_positions) || (rank == "AI"))//Bold head jobs
 			if(job.alt_titles)
 				HTML += "<b><span class='dark'><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">[GetPlayerAltTitle(job)]</a></span></b>"
@@ -552,14 +549,6 @@ var/const/MAX_SAVE_SLOTS = 8
 
 		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");' oncontextmenu='javascript:return mouseDown(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");'>"
 
-
-		if(rank == "Assistant")//Assistant is special
-			if(job_civilian_low & ASSISTANT)
-				HTML += " <font color=green>Yes</font>"
-			else
-				HTML += " <font color=red>No</font>"
-			HTML += "</a></td></tr>"
-			continue
 		//if(job.alt_titles)
 			//HTML += "</a></td></tr><tr bgcolor='[lastJob.selection_color]'><td width='60%' align='center'><a>&nbsp</a></td><td><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">\[[GetPlayerAltTitle(job)]\]</a></td></tr>"
 		HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
@@ -725,14 +714,6 @@ var/const/MAX_SAVE_SLOTS = 8
 		user << browse(null, "window=mob_occupation")
 		ShowChoices(user)
 		return
-
-	if(role == "Assistant")
-		if(job_civilian_low & job.flag)
-			job_civilian_low &= ~job.flag
-		else
-			job_civilian_low |= job.flag
-		SetChoices(user)
-		return 1
 
 	if(job.species_blacklist.Find(src.species)) //Check if our species is in the blacklist
 		to_chat(user, "<span class='notice'>Your species ("+src.species+") can't have this job!</span>")

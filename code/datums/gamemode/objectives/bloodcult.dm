@@ -170,7 +170,7 @@
 			qdel(B)
 
 	spawn()
-		anchor.dance_start()
+		anchor.dance_start()//the dance starts once, and only ends for good when Nar-Sie rises or the anchor is destroyed first.
 
 	message_admins("Blood Cult: ACT IV has begun.")
 	return TRUE

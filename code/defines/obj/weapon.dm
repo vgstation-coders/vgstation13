@@ -523,9 +523,28 @@
 /obj/item/weapon/batteringram/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I,/obj/item/weapon/ram_kit))
 		flags &= ~MUSTTWOHAND //Retains FPRINT and TWOHANDABLE
+		icon_state = "ram-upgraded"
 		qdel(I)
 	else
 		..()
+
+/obj/item/weapon/batteringram/proc/can_ram(mob/user)
+	if(ishuman(user))
+		if(wielded)
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>\The [src] must be wielded!</span>")
+			return FALSE
+	else if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(HAS_MODULE_QUIRK(R,MODULE_IS_THE_LAW))
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>You are not compatible with \the [src]!</span>")
+			return FALSE
+	else
+		to_chat(user,"<span class='warning'>\The [src] is too bulky!</span>")
+		return FALSE
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"

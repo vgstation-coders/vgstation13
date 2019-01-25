@@ -1122,8 +1122,8 @@ About the new airlock wires panel:
 				user.delayNextAttack(10)
 
 	if(istype(I, /obj/item/weapon/batteringram))
-		if(!I.wielded)
-			to_chat(user,"<span class='warning'>\The [I] must be wielded!</span>")
+		var/obj/item/weapon/batteringram/B = I
+		if(!B.can_ram(user))
 			return
 		user.delayNextAttack(30)
 		var/breaktime = 60 //Same amount of time as drilling a wall, then a girder

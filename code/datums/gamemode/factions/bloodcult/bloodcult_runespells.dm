@@ -245,16 +245,23 @@
 	var/turf/loc_memory = null
 	var/spawntype = /obj/structure/cult/altar
 
+/datum/rune_spell/raisestructure/proc/proximity_check()
+	var/obj/effect/rune/R = spell_holder
+	if (locate(/obj/structure/cult) in range(R.loc,1))
+		abort(RITUALABORT_BLOCKED)
+		return FALSE
+
+	if (locate(/obj/machinery/door/mineral/cult) in range(R.loc,1))
+		abort(RITUALABORT_NEAR)
+		return FALSE
+
+	else return TRUE
+
 /datum/rune_spell/raisestructure/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	if (locate(/obj/structure/cult) in range(R.loc,1))
-		abort(RITUALABORT_BLOCKED)
-		return
-
-	if (locate(/obj/machinery/door/mineral/cult) in range(R.loc,1))
-		abort(RITUALABORT_NEAR)
+	if (!proximity_check())
 		return
 
 	var/mob/living/user = activator
@@ -355,7 +362,9 @@
 				remaining_cost = 0
 
 
-		if (accumulated_blood >= remaining_cost)
+		if (accumulated_blood >= remaining_cost )
+			if (!proximity_check())
+				return
 			success()
 			return
 
@@ -1624,9 +1633,11 @@ var/list/blind_victims = list()
 
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
 	if (istype (spell_holder,/obj/item/weapon/talisman))
+		var/obj/item/weapon/talisman/T = spell_holder
 		activator.u_equip(spell_holder)
-		spell_holder.forceMove(BT)
-		BT.remaining = spell_holder
+		if (T.uses > 1)
+			BT.remaining = spell_holder
+			spell_holder.forceMove(BT)
 
 	for(var/slot in slots_to_store)
 		var/obj/item/user_slot = activator.get_item_by_slot(slot)

@@ -465,7 +465,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 */
 
 /obj/item/shuttle_license
-	name = "shuttle verificiation license"
+	name = "shuttle verification license"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	desc = "Required for turning a dull room with some engines in the back into something that can move through space!"
