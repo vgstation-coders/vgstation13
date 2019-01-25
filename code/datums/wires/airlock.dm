@@ -20,7 +20,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 /datum/wires/airlock
 	holder_type = /obj/machinery/door/airlock
-	wire_count = 12
+	wire_count = 13
 	window_y = 570
 
 /datum/wires/airlock/New()
@@ -97,7 +97,6 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 				//Cutting this wire also drops the door bolts, and mending it does not raise them. (This is what happens now, except there are a lot more wires going to door bolts at present)
 				if(A.locked!=1)
 					A.locked = 1
-					playsound(A, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				A.update_icon()
 
 		if(AIRLOCK_WIRE_AI_CONTROL)
