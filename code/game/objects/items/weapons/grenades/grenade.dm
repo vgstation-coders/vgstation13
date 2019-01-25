@@ -104,7 +104,7 @@
 			to_chat(user, "<span class = 'warning'>It's already primed!</span>")
 			return
 		var/new_time = input(user, "What would you like the timer to be set to, in seconds?","Time",det_time/10) as num
-		if(new_time <= 3)
+		if(new_time < 3)
 			to_chat(user, "<span class = 'warning'>\The [src] beeps. The given time was too low.</span>")
 			return
 		if(!Adjacent(user, MAX_ITEM_DEPTH))
