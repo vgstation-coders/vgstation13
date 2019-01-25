@@ -40,7 +40,7 @@
 	reagents.add_reagent(soda, min(reagent_total-reagents.get_reagent_amount(soda), reagent_total))
 	reagents.add_reagent(alcohol, min(reagent_total-reagents.get_reagent_amount(alcohol), reagent_total))
 	reagents.add_reagent(CREAM, min(reagent_total-reagents.get_reagent_amount(CREAM), reagent_total))
-	reagents.add_reagent(WATER, min(reagent_total-reagents.get_reagent_amount(WATER), reagent_total))
+	reagents.add_reagent(ICE, min(reagent_total-reagents.get_reagent_amount(ICE), reagent_total), T0C)
 	reagents.add_reagent(NUTRIMENT, min(reagent_total-reagents.get_reagent_amount(NUTRIMENT), reagent_total))
 	reagents.add_reagent(SPRINKLES, min(reagent_total-reagents.get_reagent_amount(SPRINKLES), reagent_total))
 
