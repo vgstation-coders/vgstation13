@@ -14,7 +14,7 @@
 	required_candidates = 1
 	weight = 7
 	cost = 10
-	requirements = list(10,20,10,10,10,10,10,10,10,10)
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	var/autotraitor_cooldown = 900//15 minutes
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
