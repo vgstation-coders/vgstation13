@@ -46,6 +46,8 @@ var/global/disable_vents     = 0
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
+#define DEFAULT_LOBBY_TIME 5 MINUTES
+
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
 #define WARNING_HIGH_PRESSURE 325 	//This determins when the orange pressure icon is displayed (it is 0.7 * HAZARD_HIGH_PRESSURE)
