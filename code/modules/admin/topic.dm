@@ -4846,7 +4846,7 @@
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
 					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
 			if("setstarmob")
-				var/newstar = thebigstar(input(usr, "Who should be the featured star of this episode? WARNING: Only tested with humans.", "New star from moblist...") as null|anything in moblist)
+				var/newstar = thebigstar(input(usr, "Who should be the featured star of this episode? WARNING: Only tested with humans.", "New star from moblist...") as null|anything in sortmobs())
 				if(newstar)
 					end_credits.star = newstar
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
