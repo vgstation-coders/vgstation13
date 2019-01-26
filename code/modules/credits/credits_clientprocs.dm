@@ -8,6 +8,10 @@
 /client/proc/download_credits()
 	if(prefs.credits == CREDITS_NEVER)
 		return
+
+	if(!end_credits.finalized)
+		log_debug("[src] tried to download credits before the credits were ever finalized! Credits preference: [prefs.credits]")
+		return
 	src << output(list2params(end_credits.js_args), "[end_credits.control]:setupCredits")
 	received_credits = TRUE
 

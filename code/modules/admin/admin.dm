@@ -1548,7 +1548,7 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 			dat += "&nbsp"
 		dat += "<a href='?src=\ref[src];credits=editdisclaimer;disclaimerindex=[i]'> (Edit) </a>"
 		if(findtext(disclaimer, "<img"))
-			dat += "[disclaimer]"
+			dat += "<span style='background-color: black'>[disclaimer]</span>"
 		else
 			dat += "[html_encode(disclaimer)]"
 		dat += "<br>"

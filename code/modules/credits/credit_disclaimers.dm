@@ -1,8 +1,12 @@
 /datum/credits/proc/draft_disclaimers()
 	var/inline_images = ""
+	var/images = 0
 	for(var/filename in flist("icons/credits/"))
 		var/icon/I = icon("icons/credits/[filename]")
 		inline_images += "<span style='display: inline-block, vertical-align: middle, margin: 0px 20px;'><img style='display: inline-block,' src='data:image/png;base64,[icon2base64(I)]'></span>"
+		images++
+		if(images % 3 == 0)
+			inline_images += "<br>"
 
 	disclaimers += "Filmed on Location at [station_name()]."
 	disclaimers += "Filmed with BYOND&#169; cameras and lenses. Outer space footage provided by NASA."

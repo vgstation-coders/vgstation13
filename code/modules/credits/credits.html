@@ -94,7 +94,7 @@
 		window.location = uri;
 	}
 
-	var producers = [];
+	var splashyText = [];
 	var lastinterval; //just for the auto-suicide failsafe
 	var scrollSpeed = 25; //miliseconds between each pixel we go up
 	var splashTime = 2000; //in miliseconds
@@ -104,9 +104,9 @@
 	function setScrollingText(text){
 		document.getElementById("marquee").innerHTML = text;
 	}
-	function setProducers(text){
-		producers = text.split("%<splashbreak>");
-		producers = producers.slice(0, -1); //get rid of the last %<splashbreak>
+	function setSplashyText(text){
+		splashyText = text.split("%<splashbreak>");
+		splashyText = splashyText.slice(0, -1); //get rid of the last %<splashbreak>
 	}
 	function setAudio(link, autoplay){
 		var sound = document.getElementById("sounddiv");
@@ -118,12 +118,12 @@
 		}
 	}
 
-	function setupCredits(scrollyString, producersString, newScrollSpeed, newSplashTime){
+	function setupCredits(scrollyString, splashyString, newScrollSpeed, newSplashTime){
 		if(newSplashTime !== undefined) {splashTime = parseInt(newSplashTime)}
 		if(newScrollSpeed !== undefined) {scrollSpeed = parseInt(newScrollSpeed)}
 
 		setScrollingText(scrollyString);
-		setProducers(producersString);
+		setSplashyText(splashyString);
 		initialized = 1;
 	}
 
@@ -137,8 +137,8 @@
 			return;
 		started = 1;
 		runByond('byond://winset?id=mapwindow.credits;is-visible=true');
-		splashLoop(producers, 0, splashTime);
-		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
+		splashLoop(splashyText, 0, splashTime);
+		setTimeout(rollMarquee, splashyText.length*splashTime, scrollSpeed);
 	}
 
 	function splashLoop(arr, index, time){
@@ -155,7 +155,7 @@
 		lastinterval = setInterval(function () {
 			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this might keep going if the server doesn't start back up
+			if(bottom > 6000){ //RUNAWAY CREDIT ALART - no seriously this might keep going if the server doesn't start back up
 				//debugMe()
 				clearInterval(lastinterval);
 				commitSuicide();
