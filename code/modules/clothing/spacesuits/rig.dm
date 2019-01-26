@@ -12,7 +12,7 @@
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
-	actions_types = list(/datum/action/item_action/toggle_light)
+	actions_types = list(/datum/action/item_action/toggle_rig_light)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
@@ -43,15 +43,29 @@
 		if(on) //The helmet light is currently on
 			on = 0 //Force it off
 			update_brightness() //Update as neccesary
-		actions_types = null//Disable the action button (which is only used to toggle the light, in theory)
+		actions_types.Remove(/datum/action/item_action/toggle_rig_light)//Disable the action button (which is only used to toggle the light, in theory)
 	else //We have a light
-		actions_types = list(/datum/action/item_action/toggle_light) //Make sure we restore the action button
+		actions_types |= /datum/action/item_action/toggle_rig_light //Make sure we restore the action button
 
 /obj/item/clothing/head/helmet/space/rig/process()
 	if(on && rig)
 		if(!rig.cell.use(1) || rig.loc != loc)
-			on = !on
-			update_brightness()
+			toggle_light()
+
+/obj/item/clothing/head/helmet/space/rig/proc/toggle_light(var/mob/user)
+	if(no_light)
+		return
+	if(rig)
+		on = !on
+		if(!rig.cell || rig.cell.charge < 1)
+			on = FALSE
+		update_brightness()
+		if(user)
+			user.update_inv_head()
+
+/obj/item/clothing/head/helmet/space/rig/wield()
+	..()
+	CRASH("oh no")
 
 
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
@@ -66,19 +80,15 @@
 /obj/item/clothing/head/helmet/space/rig/update_icon()
 	icon_state = "rig[on]-[_color]" //No need for complicated if trees
 
-/obj/item/clothing/head/helmet/space/rig/attack_self(mob/user)
-	if(no_light)
-		return
-	if(rig && is_worn_by(user) && rig.cell && rig.cell.charge >= 1)
-		on = !on
-		update_brightness()
-		user.update_inv_head()
 
 /obj/item/clothing/head/helmet/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
 	if(from_slot == slot_head && istype(user))
-		if(rig.is_worn_by(user))
+		if(rig && rig.is_worn_by(user))
 			rig.deactivate_suit(user)
+			if(on)
+				toggle_light(user)
+			rig = null
 
 /obj/item/clothing/suit/space/rig
 	name = "engineering hardsuit"
@@ -103,7 +113,6 @@
 	..()
 	cell = new cell_type
 	H = new head_type
-	H.rig = src
 
 /obj/item/clothing/suit/space/rig/Destroy()
 	qdel(cell)
@@ -131,6 +140,7 @@
 		if(!user.head)
 			to_chat(user, "<span class = 'notice'>\The [H] extends from \the [src].</span>")
 			user.equip_to_slot(H, slot_head)
+			H.rig = src
 			H = null
 			initialize_suit(user)
 	else
