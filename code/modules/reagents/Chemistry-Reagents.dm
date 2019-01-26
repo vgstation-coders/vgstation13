@@ -2290,7 +2290,7 @@
 		return 1
 		
 	var/mob/living/carbon/human/H = M
-	if(H.species.name=="Plasmaman")
+	if(isplasmaman(H))
 		return 1
 	else
 		M.adjustToxLoss(3 * REM)
