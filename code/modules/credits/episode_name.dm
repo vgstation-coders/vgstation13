@@ -83,6 +83,8 @@
 				episode_names += new /datum/episode_name/rare("V FOR [uppr_name]", "Round included roundstart revs... and the station's name starts with V.", 1500)
 		if(ticker.explosion_in_progress || ticker.station_was_nuked)
 			episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD", 25;"THE BIG BANG THEORY")]", "The station was nuked!", 350)
+			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
+				theme = "Syndie" //This really should use the nukeop's check_win(), but it wasn't coded like that.
 		else
 			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
 				episode_names += new /datum/episode_name/rare("[pick("THE CREW SOLVES THE NUCLEAR CRISIS", "BLAST, FOILED AGAIN", "FISSION MAILED", 50;"I OPENED THE WINDOW, AND IN FLEW COPS")]", "The crew defeated the nuclear operatives.", 350)
@@ -223,23 +225,27 @@
 				episode_names += new /datum/episode_name/rare("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*450))
 			if(chefcount > 2)
 				episode_names += new /datum/episode_name/rare("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 175%; text-shadow: rgb(123, 96, 38) 1.5px 1.5px 0px, rgb(123, 96, 38) 1.5px 1.5px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized
-			if(assistantcount / human_escapees > 0.6 && human_escapees.len > 3)
+			if(assistantcount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
-			if(skeletoncount / human_escapees > 0.6 && human_escapees.len > 3)
+			if(skeletoncount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*200))
-			if(voxcount / human_escapees > 0.6)
+			if(voxcount / human_escapees.len > 0.6)
 				episode_names += new /datum/episode_name/rare("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*200))
-			if(dionacount / human_escapees > 0.6)
+			if(dionacount / human_escapees.len > 0.6)
 				episode_names += new /datum/episode_name/rare("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*200))
-			if(baldycount / human_escapees > 0.6 && human_escapees.len > 3)
+			if(baldycount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("TO BALDLY GO", "Most of the survivors were bald, and it shows.", min(1500, baldycount*200))
-			if(fattycount / human_escapees > 0.6 && human_escapees.len > 3)
+			if(fattycount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*200))
-			if(horsecount / human_escapees > 0.6 && human_escapees.len > 3)
+			if(horsecount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*200))
 
 			if(human_escapees.len == 1)
 				var/mob/living/carbon/human/H = human_escapees[1]
+
+				if(istraitor(H) || isdoubleagent(H) || isnukeop(H))
+					theme = "Syndie"
+
 				if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chef")
 					var/chance = 250
 					if(H.is_wearing_item(/obj/item/clothing/head/chefhat))
@@ -333,7 +339,7 @@
 				beecount += B.bees.len
 			if(beecount > 15)
 				episode_names += new /datum/episode_name/rare("FLIGHT OF THE BUMBLEBEES", "There were [beecount] bees on the shuttle.", min(1500, beecount*25))
-				if(voxcount / human_escapees > 0.6)
+				if(voxcount / human_escapees.len > 0.6)
 					episode_names += new /datum/episode_name/rare("THE BIRD[human_escapees.len == 1 ? "" : "S"] AND THE BEES", "There were [beecount] bees on the shuttle, and most or all of the survivors were Vox.", min(2500, beecount*40 + voxcount*500))
 
 			if(score["random_soc"] > 7)

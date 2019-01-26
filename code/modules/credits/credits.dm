@@ -9,6 +9,7 @@ var/global/datum/credits/end_credits = new
 	var/file = 'code/modules/credits/credits.html'
 
 	var/director = "Pomf Chicken Productions"
+	var/theme = "NT"
 	var/list/producers = list()
 	var/mob/living/carbon/human/most_talked //Human that talked the most this round. Will become the star if admins don't set one.
 	var/star //Is text returned by thebigstar(), not a mob.
@@ -59,8 +60,8 @@ var/global/datum/credits/end_credits = new
 	draft_caststring() //roundend grief not included in the credits
 	draft_producerstring() //so that we show admins who have logged out before the credits roll
 	draft_star() //done early so admins have time to edit it
-	draft_disclaimers()
 	draft_episode_names() //only selects the possibilities, doesn't pick one yet
+	draft_disclaimers()
 	drafted = TRUE
 
 /*
@@ -74,12 +75,12 @@ var/global/datum/credits/end_credits = new
 		return
 	if(!drafted) //In case the world is rebooted without the round ending normally.
 		draft()
-	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
-	finalize_starstring()
 
 	if(episode_name == "") //admin might've already set one
 		pick_name()
 	finalize_episodestring()
+	finalize_starstring()
+	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
 
 	var/scrollytext = episode_string + cast_string + disclaimers_string
 	var/splashytext = producers_string + star_string
@@ -182,7 +183,7 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/finalize_disclaimerstring()
 	disclaimers_string = "<div class='disclaimers'>"
 	for(var/disclaimer in disclaimers)
-		disclaimers_string += "[disclaimer]<br>"
+		disclaimers_string += "[disclaimer]"
 	disclaimers_string += "</div>"
 
 /datum/credits/proc/draft_producerstring()
