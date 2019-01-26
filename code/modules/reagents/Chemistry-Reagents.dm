@@ -2289,8 +2289,9 @@
 	if(..())
 		return 1
 		
-	if(M.species.name=="Plasmaman")
-		return
+	var/mob/living/carbon/human/H = M
+	if(H.species.name=="Plasmaman")
+		return 1
 	else
 		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
