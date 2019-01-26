@@ -1539,6 +1539,13 @@ var/proccalls = 1
 #define ITEM_ANIMATION 1
 #define PERSON_ANIMATION 2
 
+//For client preferences.
+#define CREDITS_NEVER "Never"
+#define CREDITS_ALWAYS "Always"
+#define CREDITS_NO_RERUNS "No Reruns"
+#define JINGLE_NEVER "Never"
+#define JINGLE_CLASSIC "Classics"
+#define JINGLE_ALL "All"
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 
