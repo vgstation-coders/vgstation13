@@ -63,11 +63,6 @@
 		if(user)
 			user.update_inv_head()
 
-/obj/item/clothing/head/helmet/space/rig/wield()
-	..()
-	CRASH("oh no")
-
-
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 	if(on)
 		processing_objects.Add(src)
