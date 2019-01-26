@@ -2,7 +2,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker
 	var/remaining_time = 0
-	var/const/restart_timeout = 60 SECONDS //Right now, this is padded out by the end credit's audio starting time (at the time of writing this, 12 seconds)
+	var/const/restart_timeout = 60 SECONDS //Right now, this is padded out by the end credit's audio starting time (at the time of writing this, 10 seconds)
 	var/current_state = GAME_STATE_PREGAME
 	var/gamestart_time = -1 //In seconds. Set by ourselves in setup()
 	var/shuttledocked_time = -1 //In seconds. Set by emergency_shuttle/proc/shuttle_phase()
