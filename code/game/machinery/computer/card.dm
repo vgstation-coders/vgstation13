@@ -264,6 +264,15 @@
 						//let custom jobs function as an impromptu alt title, mainly for sechuds
 						if(temp_t && modify)
 							modify.assignment = temp_t
+					if (!(temp_t in all_jobs_txt))
+						var/new_dept = input("Choose the departement this job belongs to.") as null|anything in departement_list
+						if (new_dept)
+							for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
+								if (L)
+									var/datum/data/record/R = find_record("name", modify.registered_name, L)
+									if (R)
+										R.fields["override_dept"] = new_dept
+
 				else
 					var/list/access = list()
 					if(is_centcom())
