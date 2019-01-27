@@ -107,7 +107,7 @@
 		if(max_i <= 0)
 			return
 	while(!istype(pickedstart, /turf/space))
-
+	
 	if(meteorpath)
 		return new meteorpath(pickedstart, pickedgoal)
 	else

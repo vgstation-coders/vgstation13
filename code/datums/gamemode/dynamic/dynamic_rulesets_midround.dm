@@ -207,10 +207,10 @@
 // -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/finish_setup(var/mob/new_character, var/index)
-	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"], offset_origin = 215, offset_dest = 150)
-	var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"], offset_origin = 150, offset_dest = 230)
+	var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core, offset_origin = 150, offset_dest = 230)
 	meteor.AssignMob(new_character)
-	. = ..()
+	return 1 // The actual role (and faction) are created upon impact.
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/review_applications()
 	command_alert(/datum/command_alert/blob_storm/overminds)

@@ -248,7 +248,7 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	if(!greeting || !antag || !antag.current)
+	if(!antag || !antag.current)
 		return
 	var/mob/M = antag.current
 	if (M)
