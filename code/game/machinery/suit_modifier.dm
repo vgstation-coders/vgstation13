@@ -61,6 +61,7 @@
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
 	var/image/overlay = image(icon, src, null)
+	overlay.plane = ABOVE_HUMAN_PLANE
 	overlays += overlay
 	flick("suitmodifier_activate", overlay)
 	use_power = 2

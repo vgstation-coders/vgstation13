@@ -47,12 +47,12 @@
 		return
 	var/mob/living/carbon/human/H = user
 	if(H.internal)
-		to_chat(user, "<span class = 'binaryradio'>Internals pressurizer online.</span>")
 		var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
 		if(L)
 			var/datum/lung_gas/metabolizable/M = locate() in L.gasses
 			gas_id = M.id
 		processing_objects.Add(src)
+		to_chat(user, "<span class = 'binaryradio'>Internals pressurizer online. Syphoning [gas_id] from environment to [H.internal]</span>")
 	else
 		to_chat(user, "<span class = 'binaryradio'>Internals pressurizer failed to find internals. Aborting.</span>")
 
@@ -78,6 +78,7 @@
 			var/datum/gas_mixture/internal = H.internal.return_air()
 			var/datum/gas_mixture/sample = M.remove(25)
 			var/amount_to_transfer = sample.gas[gas_id]
+			to_chat(H, "<span class = 'binaryradio'>Sampled [amount_to_transfer] from environment.</span>")
 			if(amount_to_transfer)
 				sample.adjust_gas(gas_id, -amount_to_transfer)
 				internal.adjust_gas(gas_id, amount_to_transfer)
