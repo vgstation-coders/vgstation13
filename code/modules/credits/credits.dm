@@ -222,9 +222,6 @@ var/global/datum/credits/end_credits = new
 		producers_string += "[producer]%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
 
 /datum/credits/proc/draft_star()
-	if(customized_star)
-		star = customized_star
-		return
 	var/mob/living/carbon/human/most_talked
 	for(var/mob/living/carbon/human/H in mob_list)
 		if(!H.key || H.iscorpse)
@@ -234,9 +231,9 @@ var/global/datum/credits/end_credits = new
 	star = thebigstar(most_talked)
 
 /datum/credits/proc/finalize_starstring()
-	if(star == "")
+	if(customized_star == "" && star == "")
 		return
-	star_string = "<h1>Starring<br>[star]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
+	star_string = "<h1>Starring<br>[customized_star != "" ? customized_star : star]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
 
 /datum/credits/proc/draft_caststring()
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"

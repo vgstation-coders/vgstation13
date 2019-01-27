@@ -1508,14 +1508,14 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 
 	var/dat = "<center><B>Credits Panel</B></center><hr>"
 	dat += "<center><B>Star Of The Show:</b></center>"
-	dat += "Chosen Star: [end_credits.star == "" && end_credits.customized_star == "" ? "(Will Select Automatically)" : end_credits.star || end_credits.customized_star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
+	dat += "Chosen Star: [end_credits.customized_star == "" && end_credits.star == "" ? "(Will Select Automatically)" : end_credits.customized_star || end_credits.star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
 	if(end_credits.customized_star != "" && !end_credits.drafted)
 		dat += "<A href='?src=\ref[src];credits=resetstar'>(Reset)</A> "
 	if(!end_credits.drafted)
 		dat += "<span style='color:red'><br>The round isn't over, so the featured star hasn't been picked yet.<br>You can manually set one now, or whichever human has talked the most this round will automatically be selected as the featured star when the round ends.</span>"
 	dat += "<hr>"
 	dat += "<center><B>Episode Name:</B></center>"
-	dat += "Chosen Name: [end_credits.episode_name == "" && end_credits.customized_name == "" ? "(Will Generate Automatically)" : end_credits.episode_name || end_credits.customized_name] <A href='?src=\ref[src];credits=setname'>(Set)</A> "
+	dat += "Chosen Name: [end_credits.customized_name == "" && end_credits.episode_name == "" ? "(Will Generate Automatically)" : end_credits.customized_name || end_credits.episode_name] <A href='?src=\ref[src];credits=setname'>(Set)</A> "
 	if(end_credits.customized_name != "" && !end_credits.drafted)
 		dat += "<A href='?src=\ref[src];credits=resetname'>(Reset)</A> "
 	else if(end_credits.drafted)
