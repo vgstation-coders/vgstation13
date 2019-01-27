@@ -2288,10 +2288,15 @@
 
 	if(..())
 		return 1
-
+		
+	var/mob/living/carbon/human/H = M
+	if(isplasmaman(H))
+		return 1
+	else
+		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2 * REM)
-	M.adjustToxLoss(3 * REM)
+	
 
 /datum/reagent/leporazine
 	name = "Leporazine"
