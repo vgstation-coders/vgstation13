@@ -137,15 +137,25 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			A.lights = mended
 			A.update_icon()
 
+		if (AIRLOCK_WIRE_IDSCAN)
+			if(!mended)
+				A.AccessEnabled = 0 //So you can't multi-tool it before bricking
+				to_chat(usr, "<span class='notice'>The ID slot turns off.</span>")
+
 
 /datum/wires/airlock/UpdatePulsed(var/index, mob/user)
 
 	var/obj/machinery/door/airlock/A = holder
 	switch(index)
 		if(AIRLOCK_WIRE_IDSCAN)
-			//Sending a pulse through this flashes the red light on the door (if the door has power).
-			if((A.arePowerSystemsOn()) && (!(A.stat & NOPOWER)) && A.density)
-				A.door_animate("deny")
+			//Sending a pulse through this disables the airlock's access requirement for 10 ticks
+			if((A.arePowerSystemsOn()) && (!(A.stat & NOPOWER)))
+				A.AccessEnabled = 1
+				to_chat(usr, "<span class='notice'>The ID slot flashes yellow.</span>")
+				spawn(100)
+					if(A)
+						if(A.AccessEnabled == 1)
+							A.AccessEnabled = 0
 		if(AIRLOCK_WIRE_MAIN_POWER1, AIRLOCK_WIRE_MAIN_POWER2)
 			//Sending a pulse through either one causes a breaker to trip, disabling the door for 10 seconds if backup power is connected, or 1 minute if not (or until backup power comes back on, whichever is shorter).
 			A.loseMainPower()

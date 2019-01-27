@@ -23,6 +23,7 @@ var/list/all_doors = list()
 	var/autoclose = 0
 	var/glass = 0
 	var/normalspeed = 1
+	var/AccessEnabled = 0 //If 0 the airlock doesn't require access because it was hacked. If 1 it's not tampered with. Not to be confused with the proc "RequiresID"
 
 	machine_flags = SCREWTOGGLE
 
@@ -53,6 +54,13 @@ var/list/all_doors = list()
 	var/soundpitch = 30
 
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
+
+/obj/machinery/door/examine(mob/user)
+	..()
+	if(AccessEnabled == 1)
+		to_chat(usr, "<span class='notice'>The ID slot flashes yellow.</span>")
+	else if(!requiresID())
+		to_chat(usr, "<span class='notice'>The ID slot is off.</span>")
 
 /obj/machinery/door/projectile_check()
 	if(opacity)
@@ -104,11 +112,14 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 
-	if(!requiresID() || allowed(user))
-		if (isshade(user))
-			user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
-		open()
-	else if(!operating)
+	if(AccessEnabled || allowed(user))
+		if(!requiresID())
+			user = null
+		if(requiresID())
+			if (isshade(user))
+				user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
+			open()
+	if(!operating)
 		denied()
 
 /obj/machinery/door/attack_ai(mob/user as mob)
@@ -138,11 +149,24 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 
-	if (!requiresID() || allowed(user))
-		if (!density)
-			return close()
-		else
-			return open()
+	if (AccessEnabled || allowed(user))
+		if(!requiresID())
+			user = null
+		if(requiresID())
+			if (!density)
+				return close()
+			else
+				return open()
+
+	if(AccessEnabled || allowed(user))
+		if(!requiresID())
+			user = null
+		if(requiresID())
+			if (isshade(user))
+				user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
+			open()
+		else if(!operating)
+			denied()
 
 	if(horror_force(user))
 		return
@@ -156,11 +180,14 @@ var/list/all_doors = list()
 	if(istype(I, /obj/item/device/detective_scanner))
 		return //It does its own thing on attack
 
-	if (!requiresID() || allowed(user))
-		if (!density)
-			return close()
-		else
-			return open()
+	if (AccessEnabled || allowed(user))
+		if(!requiresID())
+			user = null
+		if(requiresID())
+			if (!density)
+				return close()
+			else
+				return open()
 
 
 	if(horror_force(user))
