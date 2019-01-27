@@ -18,7 +18,7 @@
 /client/proc/play_downloaded_credits()
 	if(prefs.credits == CREDITS_NEVER)
 		return
-	if(prefs.credits == CREDITS_NO_RERUNS && end_credits.is_rerun)
+	if(prefs.credits == CREDITS_NO_RERUNS && end_credits.is_rerun())
 		return
 
 	if(!received_credits)
@@ -34,7 +34,7 @@
 		src << output(list2params(list(end_credits.audio_link, FALSE)), "[end_credits.control]:setAudio")
 		received_roundend_audio = TRUE
 	else
-		if(prefs.credits == CREDITS_NO_RERUNS && end_credits.is_rerun)
+		if(prefs.credits == CREDITS_NO_RERUNS && end_credits.is_rerun())
 			return
 		if(received_roundend_audio)
 			src << output("", "[end_credits.control]:startAudio") //Execute the playAudio() function in credits.html with no parameters.
@@ -61,7 +61,7 @@
 		src << output(list2params(list(link, FALSE)), "[end_credits.control]:setAudio")
 		received_roundend_audio = TRUE
 	else
-		if(prefs.credits == CREDITS_NO_RERUNS && !end_credits.is_rerun)
+		if(prefs.credits == CREDITS_NO_RERUNS && !end_credits.is_rerun())
 			return
 		if(received_roundend_audio)
 			src << output("", "[end_credits.control]:startAudio") //Execute the playAudio() function in credits.html with no parameters.
