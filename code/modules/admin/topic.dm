@@ -4836,37 +4836,36 @@
 		switch(href_list["credits"])
 			if("resetstar")
 				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
-					end_credits.star = null
+					end_credits.customized_star = ""
 					log_admin("[key_name(usr)] reset the current round's featured star. A new one will automatically generate later.")
 					message_admins("[key_name_admin(usr)] reset the current round's featured star. A new one will automatically generate later.")
 			if("setstartext")
-				var/newstar = thebigstar(input(usr,"Write the new star. In the final credits, it will be displayed as: 'Starring\[linebreak\]\[whatever you type here\]'. Mind your capitalization! You may also use HTML. Do not include the characters '%<splashbreak>' anywhere unless you know what you're doing, please.","in my dream, i am the star. its me",null) as text|null)
+				var/newstar = thebigstar(input(usr,"Write the new star. In the final credits, it will be displayed as: 'Starring\[linebreak\]\[whatever you type here\]'. Mind your capitalization! You may also use HTML. Do not include the characters '%<splashbreak>' anywhere unless you know what you're doing, please.","in my dream, i am the star. its me", end_credits.star) as text|null)
 				if(newstar)
-					end_credits.star = newstar
+					end_credits.customized_star = newstar
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
 					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
 			if("setstarmob")
 				var/newstar = thebigstar(input(usr, "Who should be the featured star of this episode? WARNING: Only tested with humans.", "New star from moblist...") as null|anything in sortmobs())
 				if(newstar)
-					end_credits.star = newstar
+					end_credits.customized_star = newstar
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
 					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
 
 			if("resetname")
 				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
-					end_credits.episode_name = ""
-					end_credits.is_rerun = initial(end_credits.is_rerun)
+					end_credits.customized_name = ""
 					log_admin("[key_name(usr)] reset the current round's episode name. A new one will automatically generate later.")
 					message_admins("[key_name_admin(usr)] reset the current round's episode name. A new one will automatically generate later.")
 			if("rerollname")
-				end_credits.pick_name()
+				end_credits.customized_name = ""
+				end_credits.finalize_name()
 				log_admin("[key_name(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
 				message_admins("[key_name_admin(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
 			if("setname")
-				var/newname = input(usr,"Write the name of this latest rerun...","New Episode Name") as text|null
+				var/newname = input(usr,"Write the super original name of this masterpiece...","New Episode Name") as text|null
 				if(newname)
-					end_credits.episode_name = uppertext(newname)
-					end_credits.is_rerun = FALSE
+					end_credits.customized_name = uppertext(newname)
 					log_admin("[key_name(usr)] forced the current round's episode name to '[newname]'")
 					message_admins("[key_name_admin(usr)] forced the current round's episode name to '[newname]'")
 

@@ -9,20 +9,23 @@ var/global/datum/credits/end_credits = new
 	var/file = 'code/modules/credits/credits.html'
 
 	var/director = "Pomf Chicken Productions"
-	var/theme = "NT"
 	var/list/producers = list()
-	var/mob/living/carbon/human/most_talked //Human that talked the most this round. Will become the star if admins don't set one.
-	var/star //Is text returned by thebigstar(), not a mob.
+	var/star = ""
 	var/list/disclaimers = list()
 	var/list/datum/episode_name/episode_names = list()
-	var/episode_name = ""
-	var/is_rerun = TRUE //A 'rerun' is defined as a round where no admin set a custom episode name and the rolled episode name wasn't of the /rare subtype.
 
+	var/episode_name = ""
 	var/producers_string = ""
 	var/episode_string = ""
 	var/cast_string = ""
 	var/disclaimers_string = ""
 	var/star_string = ""
+
+	//If any of the following four are modified, the episode is considered "not a rerun".
+	var/customized_name = ""
+	var/customized_star = ""
+	var/rare_episode_name = FALSE
+	var/theme = "NT"
 
 	var/drafted = FALSE
 	var/finalized = FALSE
@@ -47,6 +50,12 @@ var/global/datum/credits/end_credits = new
 		"http://ss13.moe/media/source/roundend/jinglenew/soniclevelcomplete.mp3",
 		"http://ss13.moe/media/source/roundend/jinglenew/tfvictory.mp3"
 		)
+
+/datum/credits/proc/is_rerun()
+	if(customized_name != "" || customized_star != "" || rare_episode_name == TRUE || theme != initial(theme))
+		return FALSE
+	else
+		return TRUE
 
 /*
  * draft():
@@ -76,8 +85,7 @@ var/global/datum/credits/end_credits = new
 	if(!drafted) //In case the world is rebooted without the round ending normally.
 		draft()
 
-	if(episode_name == "") //admin might've already set one
-		pick_name()
+	finalize_name()
 	finalize_episodestring()
 	finalize_starstring()
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
@@ -86,7 +94,7 @@ var/global/datum/credits/end_credits = new
 	var/splashytext = producers_string + star_string
 
 	finalized = TRUE
-	js_args = list(scrollytext, splashytext, scroll_speed, splash_time) //arguments for the makeCredits function back in the javascript
+	js_args = list(scrollytext, splashytext, theme, scroll_speed, splash_time) //arguments for the makeCredits function back in the javascript
 
 /*
  * send2clients():
@@ -140,7 +148,7 @@ var/global/datum/credits/end_credits = new
 			if(CREDITS_ALWAYS)
 				C.credits_audio()
 			if(CREDITS_NO_RERUNS) //The time has come to decide. Shall we play credits audio, or preload the jingle audio instead?
-				if(!is_rerun)
+				if(!is_rerun())
 					C.credits_audio()
 				else
 					C.jingle_audio(preload_only = TRUE)
@@ -164,7 +172,10 @@ var/global/datum/credits/end_credits = new
 
 
 
-/datum/credits/proc/pick_name()
+/datum/credits/proc/finalize_name()
+	if(customized_name)
+		episode_name = customized_name
+		return
 	var/list/drafted_names = list()
 	var/list/is_rare_assoc_list = list()
 	for(var/datum/episode_name/N in episode_names)
@@ -172,13 +183,13 @@ var/global/datum/credits/end_credits = new
 		is_rare_assoc_list["[N.thename]"] = N.rare
 	episode_name = pickweight(drafted_names)
 	if(is_rare_assoc_list[episode_name] == TRUE)
-		is_rerun = FALSE
+		rare_episode_name = TRUE
 
-/datum/credits/proc/finalize_episodestring(var/thename)
+/datum/credits/proc/finalize_episodestring()
 	var/season = rand(1,22)
 	var/episodenum = rand(1,17) //Maybe we could do this cumulatively so that the round after 670 becomes 671 etc and the season is just the last 2 numbers of the current IRL year?
-	episode_string = "<h1>SEASON [season] EPISODE [episodenum]<br>[episode_name]</h1><br><div style='padding-bottom: 75px;'></div>"
-	log_game("So ends [is_rerun ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
+	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
+	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
 
 /datum/credits/proc/finalize_disclaimerstring()
 	disclaimers_string = "<div class='disclaimers'>"
@@ -211,13 +222,19 @@ var/global/datum/credits/end_credits = new
 		producers_string += "[producer]%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
 
 /datum/credits/proc/draft_star()
-	if(star)
-		star = thebigstar(star)
-	else if(most_talked)
-		star = thebigstar(most_talked) //We want this ran now, in case the star gibs before the credits roll etc
+	if(customized_star)
+		star = customized_star
+		return
+	var/mob/living/carbon/human/most_talked
+	for(var/mob/living/carbon/human/H in mob_list)
+		if(!H.key || H.iscorpse)
+			continue
+		if(!most_talked || H.talkcount > most_talked.talkcount)
+			most_talked = H
+	star = thebigstar(most_talked)
 
 /datum/credits/proc/finalize_starstring()
-	if(star_string)
+	if(star == "")
 		return
 	star_string = "<h1>Starring<br>[star]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
 
@@ -227,9 +244,6 @@ var/global/datum/credits/end_credits = new
 	for(var/mob/living/carbon/human/H in mob_list)
 		if(!H.key || H.iscorpse)
 			continue
-		if(!most_talked || H.talkcount > most_talked.talkcount)
-			most_talked = H
-
 		cast_string += "[gender_credits(H)]"
 
 	for(var/mob/living/silicon/S in mob_list)

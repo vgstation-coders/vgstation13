@@ -43,7 +43,7 @@
 
 
 /datum/episode_name/proc/make_div(var/admindatum) //This is just for the admin panel.
-	. = "[weight]% <a href='?src=\ref[admindatum];credits=namedatumweight;nameref=\ref[src]'>(Set)</a> - "
+	. = "[rare ? "<span style='color:green' title='Rare, not-a-rerun episode name!'>" + "[weight]" + "%</span>" : "[weight]" + "%"] <a href='?src=\ref[admindatum];credits=namedatumweight;nameref=\ref[src]'>(Set)</a> - "
 	. += "[thename] - <a href='?src=\ref[admindatum];credits=namedatumedit;nameref=\ref[src]'>(Edit)</a> "
 	. += "<a href='?src=\ref[admindatum];credits=namedatumremove;nameref=\ref[src]'>(Remove)</a> "
 	. += "<span title='[reason]'>(?)</span>"
@@ -84,7 +84,7 @@
 		if(ticker.explosion_in_progress || ticker.station_was_nuked)
 			episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD", 25;"THE BIG BANG THEORY")]", "The station was nuked!", 350)
 			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
-				theme = "Syndie" //This really should use the nukeop's check_win(), but it wasn't coded like that.
+				theme = "syndie" //This really should use the nukeop's check_win(), but the newcops gamemode wasn't coded like that.
 		else
 			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
 				episode_names += new /datum/episode_name/rare("[pick("THE CREW SOLVES THE NUCLEAR CRISIS", "BLAST, FOILED AGAIN", "FISSION MAILED", 50;"I OPENED THE WINDOW, AND IN FLEW COPS")]", "The crew defeated the nuclear operatives.", 350)
@@ -219,12 +219,14 @@
 
 			if(clowncount > 3)
 				episode_names += new /datum/episode_name/rare("CLOWNS GALORE", "There were [clowncount] clowns on the shuttle.", min(1500, clowncount*200))
+				theme = "clown"
 			if(mimecount > 3)
 				episode_names += new /datum/episode_name/rare("THE SILENT SHUFFLE", "There were [mimecount] mimes on the shuttle.", min(1500, mimecount*200))
 			if(chaplaincount > 2)
 				episode_names += new /datum/episode_name/rare("COUNT YOUR BLESSINGS", "There were [chaplaincount] chaplains on the shuttle. Like, the real deal, not just clothes.", min(1500, chaplaincount*450))
 			if(chefcount > 2)
-				episode_names += new /datum/episode_name/rare("<span style='color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; font-size: 175%; text-shadow: rgb(123, 96, 38) 1.5px 1.5px 0px, rgb(123, 96, 38) 1.5px 1.5px 0.1px;'>Too Many Cooks</span>", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized
+				episode_names += new /datum/episode_name/rare("Too Many Cooks", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized, as the theme will customize it
+				theme = "cooks"
 			if(assistantcount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
 			if(skeletoncount / human_escapees.len > 0.6 && human_escapees.len > 3)
@@ -244,7 +246,7 @@
 				var/mob/living/carbon/human/H = human_escapees[1]
 
 				if(istraitor(H) || isdoubleagent(H) || isnukeop(H))
-					theme = "Syndie"
+					theme = "syndie"
 
 				if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chef")
 					var/chance = 250
@@ -264,6 +266,7 @@
 					if(H.is_wearing_any(list(/obj/item/clothing/under/rank/clown, /obj/item/clothing/under/jester)))
 						chance += 250
 					episode_names += new /datum/episode_name/rare("[pick("COME HELL OR HIGH HONKER", "THE LAST LAUGH")]", "The Clown was the only survivor in the shuttle.", chance)
+					theme = "clown"
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Internal Affairs Agent")
 					var/chance = 250
 					if(H.is_holding_item(/obj/item/weapon/storage/briefcase))

@@ -118,12 +118,13 @@
 		}
 	}
 
-	function setupCredits(scrollyString, splashyString, newScrollSpeed, newSplashTime){
+	function setupCredits(scrollyString, splashyString, theme, newScrollSpeed, newSplashTime){
 		if(newSplashTime !== undefined) {splashTime = parseInt(newSplashTime)}
 		if(newScrollSpeed !== undefined) {scrollSpeed = parseInt(newScrollSpeed)}
 
 		setScrollingText(scrollyString);
 		setSplashyText(splashyString);
+		applyTheme(theme);
 		initialized = 1;
 	}
 
@@ -162,6 +163,24 @@
 				return;
 			}
 		}, speed);
+	}
+
+	function applyTheme(theme){
+		if(!theme)
+			return
+		switch(theme){
+			case "clown":
+				var crayons = ['red', 'orange', 'yellow', 'green', 'cyan', 'purple'];
+				var divs = document.getElementsByTagName('*');
+				for(var i=0; i<divs.length; i++) {
+					divs[i].style.color = crayons[Math.floor(Math.random() * crayons.length)]
+					divs[i].style.fontFamily = "Comic Sans MS, cursive, sans-serif";
+				}
+				break;
+			case "cooks":
+				document.getElementsByTagName("style")[0].innerHTML += ".actorname, .actorrole, #splash, #episodename {color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; text-shadow: rgb(123, 96, 38) 1.5px 1.5px 0px, rgb(123, 96, 38) 1px 1px 0.1px; overflow: visible !important;} #episodename {font-size: 175%;}"
+				break;
+		}
 	}
 
 	function debugMe(){

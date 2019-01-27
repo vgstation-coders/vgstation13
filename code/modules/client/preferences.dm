@@ -384,7 +384,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Attack Animations:<b>
 	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
-	<b>Show Credits <span title='&#39;No Reruns&#39; will roll credits only if an admin set a special episode name, or if a rare and exclusive episode name was selected thanks to something uncommon happening that round.'>(?):</span><b>
+	<b>Show Credits <span title='&#39;No Reruns&#39; will roll credits only if an admin customized something about this round&#39;s credits, or if a rare and exclusive episode name was selected thanks to something uncommon happening that round.'>(?):</span><b>
 	<a href='?_src_=prefs;preference=credits'><b>[credits]</b></a><br>
 	<b>Server Shutdown Jingle <span title='These jingles will only play if credits don&#39;t roll for you that round. &#39;Classics&#39; will only play &#39;APC Destroyed&#39; and &#39;Banging Donk&#39;, &#39;All&#39; will play the previous plus retro videogame sounds.'>(?):</span><b>
 	<a href='?_src_=prefs;preference=jingle'><b>[jingle]</b></a><br>
