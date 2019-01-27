@@ -108,8 +108,6 @@
 			return
 	while(!istype(pickedstart, /turf/space))
 
-	to_chat(world, "[startx], [starty] : [endx], [endy]")
-
 	if(meteorpath)
 		return new meteorpath(pickedstart, pickedgoal)
 	else

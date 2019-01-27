@@ -248,6 +248,8 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	if(!greeting || !antag || !antag.current)
+		return
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
