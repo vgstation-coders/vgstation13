@@ -129,13 +129,15 @@
 				new /obj/item/clothing/gloves/red(src)
 				new /obj/item/clothing/accessory/storage/bandolier(src)
 
-			if ("palpatine")// It's treason then (16 + ? + ? + ?)
-				new /obj/item/weapon/dualsaber(src) //He had like one saber when he went ballistic but you get it
+			if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
+				new /obj/item/weapon/melee/energy/sword(src) //He had like one saber when he went ballistic but you get it
+				new /obj/item/weapon/melee/energy/sword(src) //They are non-functional by themselves but can be combined into a double e-sword
 				new /obj/item/weapon/dnainjector/nofail/telemut(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
-				new /obj/item/weapon/spellbook/oneuse/lightning(src) //UNLIMITED POWER
+				new /obj/item/weapon/spellbook/oneuse/lightning(src) //UNLIMITED POWER, requires wizard garb
 				new /obj/item/clothing/head/chaplain_hood/sith(src)
 				new /obj/item/clothing/under/psysuit/sith(src)
+				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
 				new /obj/item/weapon/implanter/traitor(src)
