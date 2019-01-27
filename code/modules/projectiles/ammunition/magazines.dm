@@ -33,6 +33,36 @@
 /obj/item/ammo_storage/magazine/beretta/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/a12ga
+	name = "NT-12 box magazine (12ga)"
+	desc = "A box magazine designed for the NT-12. Holds 4 rounds."
+	icon_state = "nt12-mag"
+	origin_tech = Tc_COMBAT + "=2"
+	caliber = GAUGE12
+	ammo_type = "/obj/item/ammo_casing/shotgun"
+	exact = 0
+	max_ammo = 4
+	multiple_sprites = 1
+	sprite_modulo = 4
+
+/obj/item/ammo_storage/magazine/a12ga/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/a12ga/drum
+	name = "NT-12 drum magazine (12ga)"
+	desc = "A drum magazine designed for the NT-12. Holds 20 rounds."
+	icon_state = "nt12-drum"
+	origin_tech = Tc_COMBAT + "=2"
+	caliber = GAUGE12
+	ammo_type = "/obj/item/ammo_casing/shotgun"
+	exact = 0
+	max_ammo = 20
+	multiple_sprites = 1
+	sprite_modulo = 20
+
+/obj/item/ammo_storage/magazine/a12ga/drum/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/a12mm
 	name = "magazine (12mm)"
 	icon_state = "12mm"
@@ -66,6 +96,21 @@
 	multiple_sprites = 1
 
 /obj/item/ammo_storage/magazine/smg9mm/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/a357
+	name = "automag magazine (.357)"
+	desc = "A magazine designed for the Automag VI handcannon. Holds 7 rounds"
+	icon_state = "automag-mag"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
+	caliber = POINT357
+	ammo_type = "/obj/item/ammo_casing/a357"
+	exact = 0
+	max_ammo = 7
+	multiple_sprites = 1
+	sprite_modulo = 7
+
+/obj/item/ammo_storage/magazine/a357/empty
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a50
@@ -199,54 +244,79 @@
 	max_ammo = 0
 	multiple_sprites = 1
 	sprite_modulo = 2
-	var/stuncharge = 100
-	var/lasercharge = 100
-	var/rapid_ammo_type = "/obj/item/ammo_casing/a12mm"
-	var/rapid_ammo_count = 5
-	var/flare_ammo_type = "/obj/item/ammo_casing/shotgun/flare"
-	var/flare_ammo_count = 5
-	var/ricochet_ammo_type = "/obj/item/ammo_casing/a75"
-	var/ricochet_ammo_count = 5
+	var/list/ammo_counters
+	var/compatible_gun_type = /obj/item/weapon/gun/lawgiver
 
 /obj/item/ammo_storage/magazine/lawgiver/New()
 	..()
+	var/list/new_ammo_counters = list()
+	for(var/datum/lawgiver_mode/mode in lawgiver_modes[compatible_gun_type])
+		new_ammo_counters[mode] = LAWGIVER_MAX_AMMO * mode.ammo_per_shot
+	ammo_counters = new_ammo_counters
 	update_icon()
+
+/obj/item/ammo_storage/magazine/lawgiver/proc/generate_description()
+	. = list("<span class='info'>")
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		var/ammo_left = ammo_counters[mode] / mode.ammo_per_shot
+		switch(mode.kind)
+			if(LAWGIVER_MODE_KIND_ENERGY)
+				. += "It has enough energy for [ammo_left] [mode.firing_mode] shot[ammo_left != 1 ? "s" : ""] left.\n"
+			if(LAWGIVER_MODE_KIND_BULLET)
+				. += "It has [ammo_left] [mode.firing_mode] round[ammo_left != 1 ? "s" : ""] remaining.\n"
+	. += "</span>"
+	return jointext(., null)
 
 /obj/item/ammo_storage/magazine/lawgiver/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It has enough energy for [stuncharge/20] stun shot\s left.</span>")
-	to_chat(user, "<span class='info'>It has enough energy for [lasercharge/20] laser shot\s left.</span>")
-	to_chat(user, "<span class='info'>It has [rapid_ammo_count] rapid fire round\s remaining.</span>")
-	to_chat(user, "<span class='info'>It has [flare_ammo_count] [istype(src, /obj/item/ammo_storage/magazine/lawgiver/demolition) ? "hi-EX" : "flare"] round\s remaining.</span>")
-	to_chat(user, "<span class='info'>It has [ricochet_ammo_count] ricochet round\s remaining.</span>")
+	to_chat(user, generate_description())
 
 /obj/item/ammo_storage/magazine/lawgiver/update_icon()
 	overlays.len = 0
-	if(stuncharge > 0)
-		var/image/stuncharge_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-stun-[stuncharge/20]")
-		overlays += stuncharge_overlay
-	if(lasercharge > 0)
-		var/image/lasercharge_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-laser-[lasercharge/20]")
-		overlays += lasercharge_overlay
-	if(rapid_ammo_count > 0)
-		var/image/rapid_ammo_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-rapid-[rapid_ammo_count]")
-		overlays += rapid_ammo_overlay
-	if(flare_ammo_count > 0)
-		var/image/flare_ammo_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-flare-[flare_ammo_count]")
-		overlays += flare_ammo_overlay
-	if(ricochet_ammo_count > 0)
-		var/image/ricochet_ammo_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-ricochet-[ricochet_ammo_count]")
-		overlays += ricochet_ammo_overlay
+	// We only have 5 overlays but potentially more
+	// than 5 ammo types. Ammo types after the 5th don't
+	// get an overlay.
+	var/static/list/available_overlays = list(
+		"stun", "laser", "rapid", "flare", "ricochet",
+	)
+	for(var/i in 1 to min(available_overlays.len, ammo_counters.len))
+		var/datum/lawgiver_mode/mode = ammo_counters[i]
+		var/ammo_left = ammo_counters[mode] / mode.ammo_per_shot
+		overlays += image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-[available_overlays[i]]-[ammo_left]")
+
+/obj/item/ammo_storage/magazine/lawgiver/proc/isEmpty()
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		if(ammo_counters[mode] != 0)
+			return FALSE
+	return TRUE
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/isFull()
-	if (stuncharge == 100 && lasercharge == 100 && rapid_ammo_count == 5 && flare_ammo_count == 5 && ricochet_ammo_count == 5)
-		return 1
-	else
-		return 0
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		if(ammo_counters[mode] != LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+			return FALSE
+	return TRUE
+
+/obj/item/ammo_storage/magazine/lawgiver/recharger_process(var/obj/machinery/recharger/charger)
+	if(isFull())
+		charger.update_icon()
+		charger.icon_state = "recharger2"
+		return
+
+	icon_state = "recharger1"
+
+	var/charged_amount = 0
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		if(ammo_counters[mode] == LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+			continue
+		charged_amount += mode.ammo_per_shot * charger.charging_speed_modifier
+		ammo_counters[mode] = min(ammo_counters[mode] + charged_amount, LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+
+	charger.try_use_power(100 * charger.charging_speed_modifier + 100 * charger.charging_speed_modifier * charger.efficiency_modifier)
+	charger.update_icon()
 
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
-	flare_ammo_type = "/obj/item/ammo_casing/a75"
+	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."

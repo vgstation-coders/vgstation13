@@ -30,4 +30,12 @@ var/datum/subsystem/map/SSmap
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
 
+	log_startup_progress("Calling post on zLevels, letting them know they can do zlevel specific stuff...")
+	var/watch_prim = start_watch()
+	for(var/datum/zLevel/z in map.zLevels)
+		log_startup_progress("Generating zLevel [z.z].")
+		var/watch = start_watch()
+		z.post_mapload()
+		log_startup_progress("Finished with zLevel [z.z] in [stop_watch(watch)]s.")
+	log_startup_progress("Finished calling post on zLevels in [stop_watch(watch_prim)]s.")
 	..()

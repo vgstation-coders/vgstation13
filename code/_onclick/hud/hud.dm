@@ -239,6 +239,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		martian_hud()
 	else if(ishologram(mymob))
 		hologram_hud()
+	else if(isgrinch(mymob))
+		grinch_hud()
 
 	if(isliving(mymob))
 		var/obj/abstract/screen/using

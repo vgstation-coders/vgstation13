@@ -99,6 +99,14 @@
 	else
 		return ..()
 
+/obj/item/trash/pietin/attackby(obj/item/W, mob/user,params)
+	..()
+	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
+		if(user.drop_item(W))
+			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
+			qdel(W)
+			qdel(src)
+
 // Customizable Foods //////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable
@@ -289,6 +297,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie
 	name = "pie"
 	icon_state = "piecustom"
+	trash = /obj/item/trash/pietin
+	ingMax = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake
 	name = "cake"

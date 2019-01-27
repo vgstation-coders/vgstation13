@@ -17,6 +17,7 @@
 	plane = HUD_PLANE
 
 /obj/abstract/screen/Destroy()
+	animate(src)
 	master = null
 	..()
 

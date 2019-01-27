@@ -11,9 +11,9 @@
 	var/list/specific_heat = list()
 	// Molar mass of the gas. Used for calculating specific entropy.
 	var/list/molar_mass = list()
-	// Tile overlays. /images, created from references to 'icons/effects/tile_effects.dmi'
+	// Tile overlays.
 	var/list/tile_overlay = list()
-	// Overlay limits. There must be at least this many moles for the overlay to appear.
+	// Overlay limits. There must be strictly more than this many moles per liter for the overlay to appear.
 	var/list/overlay_limit = list()
 	// Flags.
 	var/list/flags = list()
@@ -38,8 +38,8 @@
 	molar_mass[gas.id] = gas.molar_mass
 	flags[gas.id] = gas.flags
 	if(gas.tile_overlay)
-		tile_overlay[gas.id] = image('icons/effects/tile_effects.dmi', gas.tile_overlay, FLY_LAYER)
-	if(gas.overlay_limit)
+		tile_overlay[gas.id] = gas.tile_overlay
+	if(isnum(gas.overlay_limit))
 		overlay_limit[gas.id] = gas.overlay_limit
 	return TRUE
 

@@ -42,7 +42,7 @@
 		if(user.client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class='warning'>You cannot speak in IC (muted).</span>")
 			return 0
-	if(issilent(user))
+	if(issilent(user) || user.is_mute())
 		to_chat(user, "<span class='warning'>You find yourself unable to speak at all.</span>")
 		return 0
 	if(spamcheck)

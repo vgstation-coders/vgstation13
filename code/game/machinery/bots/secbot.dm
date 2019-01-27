@@ -79,6 +79,8 @@
 			set_light(0)
 
 	var/obj/item/weapon/melee/baton/baton = null
+	var/baton_type = /obj/item/weapon/melee/baton/
+	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
 
 /obj/machinery/bot/secbot/beepsky
 	name = "Officer Beep O'sky"
@@ -798,7 +800,7 @@ Auto Patrol: []"},
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	var/obj/item/weapon/secbot_assembly/Sa = new /obj/item/weapon/secbot_assembly(Tsec)
+	var/obj/item/weapon/secbot_assembly/Sa = new secbot_assembly_type(Tsec)
 	Sa.build_step = 1
 	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
 	Sa.created_name = src.name
@@ -807,7 +809,7 @@ Auto Patrol: []"},
 		if(is_holder_of(src, baton))
 			baton.forceMove(Tsec)
 	else
-		new /obj/item/weapon/melee/baton/loaded(Tsec)
+		new baton_type(Tsec)
 
 	if(prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
@@ -906,7 +908,7 @@ Auto Patrol: []"},
 	return ..()
 
 /obj/machinery/bot/secbot/proc/check_if_rigged()
-	if(baton && baton.bcell && baton.bcell.rigged && is_holder_of(src, baton))
+	if(istype(baton) && baton.bcell && baton.bcell.rigged && is_holder_of(src, baton))
 		if(baton.bcell.explode())
 			explode()
 
@@ -1157,31 +1159,8 @@ Auto Patrol: []"},
 		)
 	safe_weapons = null //no safe weapons for britsky
 
-
-/obj/machinery/bot/secbot/beepsky/britsky/explode()
-	start_walk_to(0)
-	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
-	var/turf/Tsec = get_turf(src)
-
-	var/obj/item/weapon/secbot_assembly/britsky/Sa = new /obj/item/weapon/secbot_assembly/britsky(Tsec)
-	Sa.build_step = 1
-	Sa.overlays += image('icons/obj/aibots.dmi', "bhs_hole")
-	Sa.created_name = src.name
-	new /obj/item/device/assembly/prox_sensor(Tsec)
-	if(baton)
-		if(is_holder_of(src, baton))
-			baton.forceMove(Tsec)
-	else
-		new /obj/item/weapon/melee/classic_baton(Tsec)
-
-	if(prob(50))
-		new /obj/item/robot_parts/l_arm(Tsec)
-
-	spark(src)
-
-	getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-
-
+	baton_type = /obj/item/weapon/melee/classic_baton/
+	secbot_assembly_type = /obj/item/weapon/secbot_assembly/britsky
 
 //Britsky Construction
 

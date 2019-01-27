@@ -268,6 +268,65 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	var/law_borg = "Accomplish your AI's objectives at all costs."
 	to_chat(killer, "<b>Your laws have been changed!</b>")
 	killer.set_zeroth_law(law, law_borg)
+	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
+
+
+/proc/equip_weeaboo(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return 0
+	H.delete_all_equipped_items()
+	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
+	hayai.cant_drop = 1
+	H.put_in_hands(hayai)
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+
+
+/proc/name_weeaboo(var/mob/living/carbon/human/H)
+	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
+	if(!isjusthuman(H))
+		H.set_species("Human", 1)
+	var/weeaboo_title = pick(ninja_titles)
+	var/weeaboo_name = pick(ninja_names)
+	var/randomname = "[weeaboo_title] [weeaboo_name]"
+	spawn(0)
+		var/newname = copytext(sanitize(input(H, "You are an angry Space Weeaboo. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
+
+		if (!newname)
+			newname = randomname
+
+		H.fully_replace_character_name(H.real_name, newname)
+
+/proc/share_syndicate_codephrase(var/mob/living/agent)
+	if(!agent)
+		return 0
+	if(!agent.mind)
+		message_admins("tried to call share_syndicate_codephrase() on [agent] but it had no mind!")
+		return 0
+	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
+	if (syndicate_code_phrase)
+		words += "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]<br>"
+		agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
+	else
+		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
+	if (syndicate_code_response)
+		words += "<span class='warning'>Code Response: </span>[syndicate_code_response]<br>"
+		agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
+	else
+		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
+
+	if(syndicate_code_phrase || syndicate_code_response)
+		words += "Use the code words in the order provided, during regular conversation, to identify other agents. Proceed with caution, however, as everyone is a potential foe.<br>"
+	else
+		words += "Trust nobody.<br>"
+
+	to_chat(agent,words)
+	return 1
 

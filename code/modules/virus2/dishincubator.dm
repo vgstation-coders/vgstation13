@@ -158,7 +158,7 @@
 		dat += "Eject chemicals: <A href='?src=\ref[src];ejectchem=1'> Eject</a>"
 		dat += "<BR>"
 	if(dish)
-		dat += "Eject Virus dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
+		dat += "Eject pathogen dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
 		dat += "<BR>"
 		if(beaker)
 			dat += "Breed viral culture in beaker: <A href='?src=\ref[src];virus=1'> Start</a>"
@@ -208,7 +208,7 @@
 	if(beaker)
 		if(!beaker.reagents.remove_reagent(VIRUSFOOD,5))
 			foodsupply += 10
-		if(!beaker.reagents.remove_any_reagents(TOXINS,1))
+		if(beaker.reagents.remove_any_reagents(TOXINS,1))
 			toxins += 1
 
 	src.updateUsrDialog()

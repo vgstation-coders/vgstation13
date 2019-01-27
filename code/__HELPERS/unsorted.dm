@@ -468,7 +468,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/M = E/(SPEED_OF_LIGHT_SQ)
 	return M
 
-/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE)
+/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE, var/showantag = TRUE)
 	var/mob/M
 	var/client/C
 	var/key
@@ -483,6 +483,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		M = whom
 		C = M.client
 		key = M.key
+	else if(istype(whom, /datum/mind))
+		var/datum/mind/D = whom
+		M = D.current
+		key = M.key
+		C = M.client
 	else if(istype(whom, /datum))
 		var/datum/D = whom
 		return "*invalid:[D.type]*"
@@ -513,6 +518,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. += "/([M.real_name])"
 		else if(M.name)
 			. += "/([M.name])"
+
+	if(showantag && M && isanyantag(M))
+		. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
 
 	if(more_info && M)
 		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
@@ -1631,7 +1639,7 @@ Game Mode config tags:
 	if (!T || !U)
 		return
 	if(ispath(projectile))
-		projectile = new(T)
+		projectile = new projectile(T)
 	else
 		projectile.forceMove(T)
 	var/fire_sound
@@ -1702,9 +1710,6 @@ Game Mode config tags:
 
 	var/produce = rand(min_seeds,max_seeds)
 
-	if(user)
-		user.drop_item(O, force_drop = TRUE)
-
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
@@ -1720,8 +1725,6 @@ Game Mode config tags:
 				while(min_seeds <= produce)
 					new F.nonplant_seed_type(seedloc)
 					min_seeds++
-				if(user)
-					user.drop_item(F, force_drop = TRUE)
 				qdel(F)
 				return TRUE
 
@@ -1734,8 +1737,6 @@ Game Mode config tags:
 	else
 		return FALSE
 
-	if(user)
-		user.drop_item(O, force_drop = TRUE)
 	qdel(O)
 	return TRUE
 

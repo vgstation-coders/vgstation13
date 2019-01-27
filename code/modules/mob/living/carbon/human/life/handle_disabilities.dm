@@ -78,6 +78,7 @@
 						"try to live freely and automatically good bye", \
 						"why woud i take a pin pointner??", \
 						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
+						"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
 					emote("drool")

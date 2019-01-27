@@ -11,7 +11,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	var/active = 0
-	var/det_time = 50
+	var/det_time = 5 SECONDS
 	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
@@ -81,8 +81,9 @@
 	playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	spawn(det_time)
+		if(gcDestroyed)
+			return
 		prime(user)
-		return
 
 
 /obj/item/weapon/grenade/proc/prime()
@@ -99,19 +100,18 @@
 
 /obj/item/weapon/grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isscrewdriver(W))
-		switch(det_time)
-			if (1)
-				det_time = 10
-				to_chat(user, "<span class='notice'>You set the [name] for 1 second detonation time.</span>")
-			if (10)
-				det_time = 30
-				to_chat(user, "<span class='notice'>You set the [name] for 3 second detonation time.</span>")
-			if (30)
-				det_time = 50
-				to_chat(user, "<span class='notice'>You set the [name] for 5 second detonation time.</span>")
-			if (50)
-				det_time = 1
-				to_chat(user, "<span class='notice'>You set the [name] for instant detonation.</span>")
+		if(active)
+			to_chat(user, "<span class = 'warning'>It's already primed!</span>")
+			return
+		var/new_time = input(user, "What would you like the timer to be set to, in seconds?","Time",det_time/10) as num
+		if(new_time < 3)
+			to_chat(user, "<span class = 'warning'>\The [src] beeps. The given time was too low.</span>")
+			return
+		if(!Adjacent(user, MAX_ITEM_DEPTH))
+			to_chat(user, "<span class = 'warning'>You fumble while trying to modify \the [src]. It is best to keep the grenade in proximity when modifying it..</span>")
+			return
+		det_time = new_time SECONDS
+		to_chat(user, "<span class = 'notice'>The detonation time is now [det_time/10] seconds.</span>")
 		add_fingerprint(user)
 	..()
 	return

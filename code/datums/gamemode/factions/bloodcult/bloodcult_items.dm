@@ -330,12 +330,12 @@ var/list/arcane_tomes = list()
 
 	if (!spell_type)
 		if (!(src in user.held_items))//triggering an empty rune from a tome removes it.
-			user.put_in_hands(src)
 			if (istype(loc, /obj/item/weapon/tome))
 				var/obj/item/weapon/tome/T = loc
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
 				user << browse(T.tome_text(), "window=arcanetome;size=537x375")
+				user.put_in_hands(src)
 		return
 
 	if (attuned_rune)
@@ -563,8 +563,8 @@ var/list/arcane_tomes = list()
 	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
-	health = 50
-	var/maxHealth = 50
+	health = 40
+	var/maxHealth = 40
 
 /obj/item/weapon/melee/soulblade/Destroy()
 	var/turf/T = get_turf(src)
@@ -945,7 +945,7 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	armor = list(melee = 30, bullet = 10, laser = 10,energy = 5, bomb = 10, bio = 25, rad = 0)
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0
@@ -972,7 +972,7 @@ var/list/arcane_tomes = list()
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
 
-/obj/item/clothing/head/culthood/get_cult_power()
+/obj/item/clothing/shoes/cult/get_cult_power()
 	return 10
 
 /obj/item/clothing/shoes/cult/cultify()

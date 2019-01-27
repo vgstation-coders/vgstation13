@@ -33,10 +33,10 @@
 		Things to do to the *new* body after the mind transfer is completed.
 */
 
-#define ROLE_MIXABLE   1 // Can be used in mixed mode
-#define ROLE_NEED_HOST 2 // Antag needs a host/partner
-#define ROLE_ADDITIVE  4 // Antag can be added on top of another antag.
-#define ROLE_GOOD      8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
+#define ROLE_MIXABLE   			1 // Can be used in mixed mode
+#define ROLE_NEED_HOST 			2 // Antag needs a host/partner
+#define ROLE_ADDITIVE  			4 // Antag can be added on top of another antag.
+#define ROLE_GOOD     			8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
 
 /datum/role
 	//////////////////////////////
@@ -58,6 +58,7 @@
 
 	// Jobs that have a much lower chance to be this antag.
 	var/list/protected_jobs = list()
+	var/protected_traitor_prob = PROB_PROTECTED_REGULAR
 
 	// Jobs that can only be this antag
 	var/list/required_jobs=list()
@@ -125,7 +126,7 @@
 
 	return 1
 
-/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0)
+/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
 	if(!istype(M) && !override)
 		stack_trace("M is [M.type]!")
 		return 0
@@ -137,14 +138,18 @@
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
+	if(msg_admins)
+		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 
 	if (!OnPreSetup())
 		return FALSE
 	return 1
 
-/datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
+/datum/role/proc/RemoveFromRole(var/datum/mind/M, var/msg_admins = TRUE) //Called on deconvert
 	M.antag_roles[id] = null
 	M.antag_roles.Remove(id)
+	if(msg_admins)
+		message_admins("[key_name(M)] is <span class='danger'>no longer</span> \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 	antag = null
 
 // Destroy this role
@@ -531,7 +536,7 @@
 
 /datum/role/blob_overmind
 	name = BLOBOVERMIND
-	id = BLOBOVERMIND
+	id = ROLE_BLOB
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
@@ -539,6 +544,10 @@
 /datum/role/blob_overmind/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[BLOBOVERMIND]
+
+/datum/role/blob_overmind/OnPostSetup()
+	. = ..()
+	AnnounceObjectives()
 
 /datum/role/blob_overmind/process()
 	if(!antag || istype(antag.current,/mob/camera/blob) || !antag.current || isobserver(antag.current))
@@ -551,7 +560,7 @@
 			to_chat(antag.current, "<span class='alert'>You feel like you are about to burst.</span>")
 		else if (countdown <= 0)
 			burst()
-	if (antag.current.hud_used)
+	if (antag && antag.current.hud_used)
 		if(antag.current.hud_used.blob_countdown_display)
 			antag.current.hud_used.blob_countdown_display.overlays.len = 0
 			var/first = round(countdown/10)
@@ -662,13 +671,36 @@
 /datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
 	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD)
+		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
 			new_character.add_spell(S)
+
+/datum/role/wizard/GetScoreboard()
+	. = ..()
+	if(disallow_job) //Not a survivor wizzie
+		var/mob/living/carbon/human/H = antag.current
+		var/bought_nothing = TRUE
+		if(H.spell_list)
+			bought_nothing = FALSE
+			. += "<BR>The wizard knew:<BR>"
+			for(var/spell/S in H.spell_list)
+				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				end_icons += tempimage
+				var/tempstate = end_icons.len
+				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
+		if(H.mind.artifacts_bought)
+			bought_nothing = FALSE
+			. += "<BR>Additionally, the wizard brought:<BR>"
+			for(var/entry in H.mind.artifacts_bought)
+				. += "[entry]<BR>"
+		if(bought_nothing)
+			. += "The wizard used only the magic of charisma this round."
 
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
+	name = MAGICIAN
 	id = MAGICIAN
 	logo_state = "magik-logo"
+	var/summons_received
 
 /datum/role/wizard/summon_magic/ForgeObjectives()
 	var/datum/objective/survive/S = new
@@ -679,6 +711,11 @@
 
 /datum/role/wizard/summon_magic/OnPostSetup()
 	return TRUE
+
+/datum/role/wizard/summon_magic/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
+
 //________________________________________________
 
 /datum/role/wish_granter_avatar

@@ -529,3 +529,12 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	for(var/i = 1 to 8)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
+
+/obj/item/weapon/storage/bag/ammo_pouch
+	name = "ammunition pouch"
+	desc = "Designed to hold stray magazines and spare bullets."
+	icon_state = "ammo_pouch"
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	storage_slots = 3
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BELT | SLOT_POCKET

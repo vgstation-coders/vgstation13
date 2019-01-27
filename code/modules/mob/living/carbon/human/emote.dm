@@ -72,7 +72,9 @@
 	key = "fart"
 	key_third_person = "farts"
 
-/datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override)
+/datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
+		return FALSE
 	var/mob/living/carbon/human/H = user
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
@@ -84,7 +86,7 @@
 
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
-			if(!H.mind.miming)
+			if(H.mind && !H.mind.miming)
 				H.visible_message("<span class = 'warning'><b>[H]</b> farts in <b>[M]</b>'s face!</span>")
 			else
 				H.visible_message("<span class = 'warning'><b>[H]</b> silently farts in <b>[M]</b>'s face!</span>")
@@ -206,3 +208,46 @@
 						explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
 						H.dust()
 //Ayy lmao
+
+
+/datum/emote/living/carbon/human/dab
+	key = "dab"
+	key_third_person = "*dab"
+
+/datum/emote/living/carbon/human/dab/can_run_emote(mob/user)
+	var/mob/living/carbon/human/H = user
+	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
+		return TRUE
+
+/datum/emote/living/carbon/human/dab/run_emote(mob/user)
+	var/mob/living/carbon/human/H = user
+	if(!istype(H))
+		return
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		if(!H.stunned && !H.restrained() && !iswizard(H))
+			H.visible_message("<span class = 'warning'><b>[H]</b> slaps themselves in the face.</span>")
+			H.apply_effects(10, 10, 10, 0, 10, 10, 0, 10, 0)
+		return
+	if(H.stunned || H.restrained())
+		return
+	if(world.time-H.lastDab >= 10 SECONDS)
+		for(var/mob/living/M in view(0))
+			if(M != H && M.loc == H.loc)
+				H.visible_message("<span class = 'warning'><b>[H]</b> dabs on <b>[M]</b>!</span>")
+		message = "<b>[H]</b> dabs."
+		emote_type = EMOTE_VISIBLE
+		H.visible_message(message)
+		H.lastDab=world.time
+	else
+		var/armtobreak = pick(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)
+		var/datum/organ/external/A = H.get_organ(armtobreak)
+		if(H.species.anatomy_flags & NO_BONES)
+			message = "<span class = 'warning'>smacks their head as they flail their arms to the side.</span>"
+			playsound(H, 'sound/weapons/punch1.ogg', 50, 1)
+			A = H.get_organ(LIMB_HEAD)
+			H.apply_damage(5, BRUTE, A)
+		else
+			message = "<span class = 'warning'>dabs too hard!</span>"
+			H.apply_damage(5, BRUTE, A)
+		emote_type = EMOTE_VISIBLE
+		. = ..()

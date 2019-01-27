@@ -899,7 +899,7 @@
 	linked_spell = new /spell/mech/repair(M, src)
 	return
 
-/obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
+/obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
 	qdel(pr_repair_droid)
 	pr_repair_droid = null
@@ -1220,7 +1220,7 @@
 		GM.temperature = 1500+T0C //should be enough to start a fire
 		GM.adjust_gas(GAS_PLASMA, 100)
 		T.visible_message("The [src] suddenly disgorges a cloud of heated plasma.")
-		destroy()
+		qdel(src)
 	else
 		GM.temperature = istype(T) ? T.air.temperature : T20C
 		GM.adjust_gas(GAS_PLASMA, 5)

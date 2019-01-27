@@ -117,13 +117,13 @@ var/list/department_radio_keys = list(
 		say_testing(src, "ur ded kid")
 		say_dead(message)
 		return
+	if(check_emote(message))
+		say_testing(src, "Emoted")
+		return
 	if (stat) // Unconcious.
 		if(message_mode == MODE_WHISPER) //Lets us say our last words.
 			say_testing(src, "message mode was whisper.")
 			whisper(copytext(message, 3))
-		return
-	if(check_emote(message))
-		say_testing(src, "Emoted")
 		return
 	if(!can_speak_basic(message))
 		say_testing(src, "we aren't able to talk")
@@ -246,6 +246,10 @@ var/list/department_radio_keys = list(
 
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)
+
+/mob/living/carbon/human/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type)
+	talkcount++
+	. = ..()
 
 /mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
@@ -466,6 +470,92 @@ var/list/department_radio_keys = list(
 		spawn(30)
 			if(client)
 				client.images -= speech_bubble
+
+/mob/living/whisper(message as text)
+	if(!IsVocal())
+		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
+		return
+
+#ifdef SAY_DEBUG
+	var/oldmsg = message
+#endif
+
+	if (isDead())
+		return
+
+	if(say_disabled)	//This is here to try to identify lag problems
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
+		return
+
+	var/datum/speech/speech = create_speech(message)
+	speech.language = parse_language(speech.message)
+	speech.mode = SPEECH_MODE_WHISPER
+	speech.message_classes.Add("whisper")
+
+	if(istype(speech.language))
+		speech.message = copytext(speech.message,2+length(speech.language.key))
+	else
+		if(!isnull(speech.language))
+			var/n = speech.language
+			speech.message = copytext(speech.message,1+length(n))
+			say_testing(src, "We tried to speak a language we don't have length = [length(n)], oldmsg = [oldmsg] parsed message = [speech.message]")
+			speech.language = null
+		speech.language = get_default_language()
+
+	speech.message = trim(speech.message)
+
+	if(!can_speak(message))
+		return
+
+	speech.message = "[message]"
+
+	if (client && client.prefs.muted & MUTE_IC)
+		to_chat(src, "<span class='danger'>You cannot whisper (muted).</span>")
+		return
+	
+
+	var/whispers = "whispers"
+	var/critical = InCritical()
+
+	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
+	treat_speech(speech)
+
+	// If whispering your last words, limit the whisper based on how close you are to death.
+	if(critical && !said_last_words)
+		var/health_diff = round(-config.health_threshold_dead + health)
+		// If we cut our message short, abruptly end it with a-..
+		var/message_len = length(speech.message)
+		speech.message = copytext(speech.message, 1, health_diff) + "[message_len > health_diff ? "-.." : "..."]"
+		speech.message = Ellipsis(speech.message, 10, 1)
+		speech.mode= SPEECH_MODE_FINAL
+		whispers = "whispers with their final breath"
+		said_last_words = src.stat
+	treat_speech(speech)
+
+
+	var/listeners = get_hearers_in_view(1, src) | observers
+	var/eavesdroppers = get_hearers_in_view(2, src) - listeners
+	var/watchers = hearers(5, src) - listeners - eavesdroppers
+	var/rendered = render_speech(speech)
+
+	for (var/atom/movable/listener in listeners)
+		listener.Hear(speech, rendered)
+	
+	speech.message = stars(speech.message)
+	rendered = render_speech(speech)
+
+	for (var/atom/movable/eavesdropper in eavesdroppers)
+		eavesdropper.Hear(speech, rendered)
+
+	rendered = "<span class='game say'><span class='name'>[src.name]</span> [whispers] something.</span>"
+
+	for (var/mob/watcher in watchers)
+		watcher.show_message(rendered, 2)
+
+	if (said_last_words) // dying words
+		succumb_proc(0)
+
+	returnToPool(speech)
 
 /obj/effect/speech_bubble
 	var/mob/parent

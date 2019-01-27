@@ -19,13 +19,12 @@
 
 	// Makes sure the AI isn't a traitor before changing their law 0. --NeoFite
 	// Ported. - N3X
-	/*if (ismob(target) && is_special_character(target) && priority == LAW_ZERO)
+	if(ismob(target) && laws.zeroth_lock && priority == LAW_ZERO)
 		to_chat(target, "[sender.real_name] attempted to modify your zeroth law.")// And lets them know that someone tried. --NeoFite
 
 		to_chat(target, "It would be in your best interest to play along with [sender.real_name] that [law]")
 		lawchanges.Add("The law specified [targetName], but the AI's existing law 0 cannot be overriden.")
 		return 1 // Returning 0 would not present the user with successful upload message. - N3X
-	*/
 
 	laws.add_law(priority, law)
 	log_game("[sender.name]([sender.key]) added law \"[law]\" on [fmtSubject(target)]")

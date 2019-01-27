@@ -1,6 +1,6 @@
 
 /datum/objective/bloodcult_reunion
-	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar."
+	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar aboard the station."
 	name = "Blood Cult: Prologue"
 	var/altar_built = FALSE
 
@@ -78,6 +78,8 @@
 	var/list/possible_targets = list()
 	for(var/mob/living/carbon/human/player in player_list)
 		if(player.z != map.zMainStation)//We only look for people currently aboard the station
+			continue
+		if (iscultist(player)) // Edit of 08/01/19 : no longer able to sacrifice cultists
 			continue
 		//They may be dead, but we only need their flesh
 		possible_targets += player
@@ -161,10 +163,14 @@
 			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = updated_map
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		B.holomap_datum.initialize_holomap(B.loc)
+		if (B.loc)
+			B.holomap_datum.initialize_holomap(B.loc)
+		else
+			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			qdel(B)
 
 	spawn()
-		anchor.dance_start()
+		anchor.dance_start()//the dance starts once, and only ends for good when Nar-Sie rises or the anchor is destroyed first.
 
 	message_admins("Blood Cult: ACT IV has begun.")
 	return TRUE

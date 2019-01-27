@@ -87,6 +87,8 @@ client/proc/one_click_antag()
 			count--
 			var/mob/living/carbon/human/H = pick(candidates)
 			candidates.Remove(H)
+			if (initial(F.initial_role) in H.mind.antag_roles) // Ex: a head rev being made a revolutionary.
+				continue
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
@@ -99,6 +101,7 @@ client/proc/one_click_antag()
 				recruit_count++
 
 		FF.OnPostSetup()
+		FF.forgeObjectives()
 
 		return recruit_count
 
@@ -110,7 +113,8 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-
+			if(M.GetRole(initial(R.id)))
+				continue
 			var/datum/role/newRole = new R
 			message_admins("polling if [key_name(H)] wants to become a [newRole.name]")
 			if(!newRole)
@@ -120,6 +124,7 @@ client/proc/one_click_antag()
 				newRole.Drop()
 				continue
 			newRole.OnPostSetup()
+			newRole.ForgeObjectives()
 			newRole.Greet(GREET_LATEJOIN)
 			message_admins("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
@@ -139,7 +144,7 @@ client/proc/one_click_antag()
 					continue
 				candidates.Add(H)
 	for(var/mob/M in candidates)
-		if(jobban_isbanned(M, "Syndicate"))
+		if(isantagbanned(M))
 			candidates.Remove(M)
 		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
 			candidates.Remove(M)
@@ -162,7 +167,7 @@ client/proc/one_click_antag()
 
 	//Generates a list of commandos from active ghosts. Then the user picks which characters to respawn as the commandos.
 	for(var/mob/dead/observer/G in get_active_candidates(ROLE_COMMANDO, poll="Do you wish to be considered for an elite syndicate strike team being sent in?"))
-		if(!jobban_isbanned(G, "operative") && !jobban_isbanned(G, "Syndicate"))
+		if(!jobban_isbanned(G, "operative") && !isantagbanned(G))
 			candidates += G
 
 	for(var/mob/dead/observer/G in candidates)

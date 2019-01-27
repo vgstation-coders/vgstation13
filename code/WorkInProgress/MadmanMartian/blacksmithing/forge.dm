@@ -28,7 +28,7 @@
 		heating.forceMove(get_turf(src))
 		heating = null
 	for(var/obj/I in contents)
-		qdel(I)
+		I.forceMove(get_turf(src))
 	..()
 
 /obj/structure/forge/attackby(obj/item/I, mob/user)
@@ -62,7 +62,7 @@
 		qdel(I)
 		if(current_temp < MELTPOINT_STEEL)
 			current_temp = MELTPOINT_STEEL
-		fuel_time += 20 SECONDS
+		fuel_time += 40 SECONDS
 		return
 	else if(I.is_hot() && status == FALSE)
 		to_chat(user, "<span class = 'notice'>You attempt to light \the [src] with \the [I].</span>")
@@ -71,13 +71,17 @@
 				to_chat(user, "<span class = 'warning'>\The [src] does not light.</span>")
 				return
 			toggle_lit()
+	else if(iscrowbar(I))
+		to_chat(user, "<span class = 'notice'>You begin to disassemble \the [src].</span>")
+		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
+		if(do_after(user, src, 5 SECONDS))
+			drop_stack(/obj/item/stack/sheet/mineral/sandstone, get_turf(src), rand(5, 20))
+			qdel(src)
 	else if(!heating)
 		if(user.drop_item(I, src))
 			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 			heating = I
 			return
-	else if(iscrowbar(I) && do_after(user, src, 5 SECONDS))
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, get_turf(src), rand(5, 20))
 	..()
 
 /obj/structure/forge/proc/toggle_lit()

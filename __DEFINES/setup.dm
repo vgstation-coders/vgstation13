@@ -186,6 +186,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define HIDEHAIRCOMPLETELY 64
 
 #define TWOHANDABLE	64
 #define MUSTTWOHAND	128
@@ -312,17 +313,17 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for invisibility
 
-#define HIDEGLOVES		HANDS
-#define HIDEJUMPSUIT	ARMS|LEGS|FULL_TORSO
-#define HIDESHOES		FEET
-#define HIDEMASK		FACE
-#define HIDEEARS		EARS
-#define HIDEEYES		EYES
-#define HIDEFACE		FACE
-#define HIDEHEADHAIR 	EARS|HEAD
-#define HIDEBEARDHAIR	BEARD
-#define HIDEHAIR		HIDEHEADHAIR|HIDEBEARDHAIR
-#define	HIDESUITSTORAGE	LOWER_TORSO
+#define HIDEGLOVES			HANDS
+#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDESHOES			FEET
+#define HIDEMASK			FACE
+#define HIDEEARS			EARS
+#define HIDEEYES			EYES
+#define HIDEFACE			FACE
+#define HIDEHEADHAIR 		EARS|HEAD
+#define HIDEBEARDHAIR		BEARD
+#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -456,7 +457,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 								  0.33,0.33,0.33,0,\
 								  0.00,0.00,0.00,1,\
 								  0.00,0.00,0.00,0)
-var/global/list/bad_changing_colour_ckeys = list()
 
 // Bustanuts
 #define M_HARDCORE      300
@@ -573,6 +573,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
+#define PACIFIABLE 16		//Should a mob have this flag in their status_flags, they will be able to run is_pacified(), not all mobs call is_pacified however.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
@@ -764,6 +765,7 @@ SEE_PIXELS	256
 #define ORGAN_DEAD			1024
 #define ORGAN_MUTATED		2048
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
+#define ORGAN_MALFUNCTIONING 8192
 
 //////////////////MATERIAL DEFINES/////////////////
 
@@ -782,6 +784,7 @@ SEE_PIXELS	256
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
+#define MAT_MYTHRIL		"$mythril"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -868,7 +871,8 @@ SEE_PIXELS	256
 #define ROLE_VAMPIRE    	"vampire"
 #define ROLE_VOXRAIDER  	"vox raider"
 #define ROLE_WIZARD     	"wizard"
-
+#define ROLE_GRINCH			"Grinch"
+#define ROLE_WEEABOO		"crazed weeaboo"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -1473,7 +1477,8 @@ var/proccalls = 1
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
 #define HONORABLE_HIGHLANDER 2
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER
+#define HONORABLE_WEEABOO      4
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_WEEABOO
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 

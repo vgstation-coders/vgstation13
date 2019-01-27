@@ -63,6 +63,7 @@
 		synd_mind.current.forceMove(synd_spawn[spawnpos])
 
 		equip_nuke_op(synd_mind.current)
+		share_syndicate_codephrase(N.antag.current)
 
 		if(!leader_selected)
 			prepare_syndicate_leader(synd_mind, nuke_code)

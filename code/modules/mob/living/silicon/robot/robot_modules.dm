@@ -514,7 +514,7 @@
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate-modded combat robot module"
 	module_holder = "malf"
-	quirk_flags = MODULE_IS_DEFINITIVE
+	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_HAS_PROJ_RES
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
@@ -561,7 +561,7 @@
 	modules += new /obj/item/device/chameleon(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/device/healthanalyzer(src)
-	modules += new /obj/item/device/mass_spectrometer/adv(src)
+	modules += new /obj/item/device/reagent_scanner/adv(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/revivalprod(src)
@@ -575,7 +575,7 @@
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
 	module_holder = "malf"
-	quirk_flags = MODULE_IS_THE_LAW
+	quirk_flags = MODULE_IS_THE_LAW | MODULE_HAS_PROJ_RES
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	sprites = list(
 		"Bladewolf" = "bladewolf",

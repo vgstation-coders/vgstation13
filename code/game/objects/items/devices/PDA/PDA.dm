@@ -54,6 +54,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/detonate = 1 // Can the PDA be blown up?
 	var/hidden = 0 // Is the PDA hidden from the PDA list?
 	var/reply = null //Where are replies directed? For multicaster. Most set this to self in new.
+	var/show_overlays = TRUE
 
 	var/obj/item/weapon/card/id/id = null //Making it possible to slot an ID card into the PDA so it can function as both.
 	var/ownjob = null //related to above
@@ -444,9 +445,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/trader
 	name = "Trader PDA"
 	desc = "Much good for trade."
-	note = "Congratulations, your station �plU�%ZÒ67�Ez4ƦU���8�E1��Ћ���~���@��T�u1B��k�@i�8�NJ��"
+	note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
 	icon_state = "pda-trader"
 	default_cartridge = /obj/item/weapon/cartridge/trader
+	show_overlays = FALSE
 
 /obj/item/device/pda/chef
 	name = "Chef PDA"
@@ -1789,7 +1791,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				tnote = null
 			if("Ringtone")
 				var/t = input(U, "Please enter new ringtone", name, ttone) as text
-				if (in_range(src, U) && loc == U)
+				if (in_range(U, src) && loc == U)
 					if (t)
 						if(src.hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
 							to_chat(U, "The PDA softly beeps.")
@@ -1969,7 +1971,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 									message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
 								else
 									U.show_message("<span class='notice'>Success!</span>", 1)
-									log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded")
+									log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded")
 									message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
 									P.explode()
 				else
@@ -2183,7 +2185,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
 		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
-		P.overlays += image('icons/obj/pda.dmi', "pda-r")
+		if(P.show_overlays)
+			P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
 		to_chat(U, "[bicon(src)] <span class='notice'>ERROR: Messaging server is not responding.</span>")
 
@@ -2323,7 +2326,7 @@ obj/item/device/pda/AltClick()
 		id.virtual_wallet.transaction_log.Add(T)
 		to_chat(user, "<span class='info'>You insert [T.amount] credit\s into the PDA.</span>")
 		qdel(dosh)
-		updateUsrDialog()
+		updateDialog()
 
 	return
 

@@ -156,6 +156,12 @@
 	name="Handgun Holster"
 	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
+/datum/biogen_recipe/leather/ammo_pouch
+	cost = 250
+	id="ammopouch"
+	name = "Ammo Pouch"
+	result=/obj/item/weapon/storage/bag/ammo_pouch
+
 /datum/biogen_recipe/paper
 	category="Paper"
 

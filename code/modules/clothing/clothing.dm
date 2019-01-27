@@ -339,6 +339,9 @@
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
 
+/obj/item/proc/islightshielded() // So as to avoid unneeded casts.
+	return FALSE
+
 //Mask
 /obj/item/clothing/mask
 	name = "mask"
@@ -464,7 +467,7 @@
 	name = "Space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
 	permeability_coefficient = 0.01

@@ -99,7 +99,7 @@
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
-			if(istype(O,/obj/item/weapon/nullrod))
+			if(isholyweapon(O))
 				damage *= 2
 				purge = 3
 			adjustBruteLoss(damage)

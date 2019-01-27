@@ -15,7 +15,7 @@
 	name = "Rune"
 
 /obj/effect/rune_legacy/proc/findNullRod(var/atom/target)
-	if(istype(target,/obj/item/weapon/nullrod))
+	if(isholyprotection(target))
 		var/turf/T = get_turf(target)
 		nullblock = 1
 		T.turf_animation('icons/effects/96x96.dmi',"nullding",-WORLD_ICON_SIZE,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/instruments/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
@@ -1019,7 +1019,7 @@
 	if (istype(W,/obj/item/weapon/paper/talisman))
 		rad = 4
 		go = 1
-	if (istype(W,/obj/item/weapon/nullrod))
+	if (isholyweapon(W))
 		rad = 1
 		go = 1
 	if(go)
@@ -1028,7 +1028,7 @@
 				R:visibility=15
 			S=1
 	if(S)
-		if(istype(W,/obj/item/weapon/nullrod))
+		if(isholyweapon(W))
 			to_chat(usr, "<span class='warning'>Arcane markings suddenly glow from underneath a thin layer of dust!</span>")
 			return
 		if(istype(W,/obj/effect/rune_legacy))

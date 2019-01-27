@@ -1,3 +1,67 @@
+// -- General rulesets types --
+
+/datum/dynamic_ruleset/midround/from_ghosts/
+	weight = 0
+	var/makeBody = TRUE
+
+/datum/dynamic_ruleset/midround/from_ghosts/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/from_ghosts/review_applications()
+	for (var/i = required_candidates, i > 0, i--)
+		if(applicants.len <= 0)
+			break
+		var/mob/applicant = pick(applicants)
+		applicants -= applicant				
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			i++
+			continue
+
+		var/mob/living/carbon/human/new_character = applicant
+
+		if (makeBody)
+			new_character = makeBody(applicant)
+			new_character.dna.ResetSE()
+
+		finish_setup(new_character, i)
+
+	applicants.Cut()
+
+/datum/dynamic_ruleset/midround/from_ghosts/proc/finish_setup(var/mob/new_character, var/index)
+	var/datum/role/new_role = new role_category
+	new_role.AssignToRole(new_character.mind,1)
+	setup_role(new_role)
+
+/datum/dynamic_ruleset/midround/from_ghosts/proc/setup_role(var/datum/role/new_role)
+	new_role.OnPostSetup()
+	new_role.Greet(GREET_MIDROUND)
+	new_role.ForgeObjectives()
+	new_role.AnnounceObjectives()
+
+// -- Faction based --
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based
+	weight = 0
+	var/datum/faction/my_fac = null // If the midround lawset will try to add our antag to a faction
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/review_applications()
+	var/datum/faction/active_fac = find_active_faction_by_type(my_fac)
+	if (!active_fac)
+		active_fac = ticker.mode.CreateFaction(my_fac, null, 1)
+	my_fac = active_fac
+	. = ..()
+	my_fac.OnPostSetup()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_MIDROUND)
+	new_role.ForgeObjectives()
+	new_role.AnnounceObjectives()
 
 //////////////////////////////////////////////
 //                                          //
@@ -7,12 +71,12 @@
 
 /datum/dynamic_ruleset/midround/autotraitor
 	name = "Syndicate Sleeper Agent"
-	role_category = ROLE_TRAITOR
+	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Cyborg", "Merchant")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
-	cost = 5
+	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
@@ -56,9 +120,10 @@
 //                                          //
 //////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
 
-/datum/dynamic_ruleset/midround/raginmages
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages
 	name = "Ragin' Mages"
-	role_category = ROLE_WIZARD
+	role_category = /datum/role/wizard
+	my_fac = /datum/faction/wizard
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
@@ -67,7 +132,7 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
 
-/datum/dynamic_ruleset/midround/raginmages/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
@@ -78,48 +143,10 @@
 
 	return ..()
 
-/datum/dynamic_ruleset/midround/raginmages/ready(var/forced = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
-
-/datum/dynamic_ruleset/midround/raginmages/execute()
-	var/list/possible_candidates = list()
-	possible_candidates.Add(dead_players)
-	possible_candidates.Add(list_observers)
-	send_applications(possible_candidates)
-	return 1
-
-/datum/dynamic_ruleset/midround/raginmages/review_applications()
-	var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
-	if (!federation)
-		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
-	for (var/i = required_candidates, i > 0, i--)
-		if(applicants.len <= 0)
-			break
-		var/mob/applicant = pick(applicants)
-		if(!applicant || !applicant.key)
-			i++
-			continue
-		applicants -= applicant
-		if(!isobserver(applicant))
-			//Making sure we don't recruit people who got back into the game since they applied
-			i++
-			continue
-
-		var/mob/living/carbon/human/new_character= makeBody(applicant)
-		new_character.dna.ResetSE()
-
-		assigned += new_character
-		var/datum/role/wizard/newWizard = new
-		newWizard.AssignToRole(new_character.mind,1)
-		federation.HandleRecruitedRole(newWizard)
-		newWizard.OnPostSetup()
-		newWizard.Greet(GREET_MIDROUND)
-		newWizard.ForgeObjectives()
-		newWizard.AnnounceObjectives()
-		applicants.Cut() // To clear references.
-
 
 //////////////////////////////////////////////
 //                                          //
@@ -127,9 +154,10 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/nuclear
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear
 	name = "Nuclear Assault"
-	role_category = ROLE_OPERATIVE
+	role_category = /datum/role/nuclear_operative
+	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
@@ -138,56 +166,23 @@
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	logo = "nuke-logo"
 
-/datum/dynamic_ruleset/midround/nuclear/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
 	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0//unavailable if nuke ops were already sent at roundstart
 	return ..()
 
-/datum/dynamic_ruleset/midround/nuclear/ready(var/forced = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
 
-/datum/dynamic_ruleset/midround/nuclear/execute()
-	var/list/possible_candidates = list()
-	possible_candidates.Add(dead_players)
-	possible_candidates.Add(list_observers)
-	send_applications(possible_candidates)
-	return 1
-
-/datum/dynamic_ruleset/midround/nuclear/review_applications()
-	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	if (!nuclear)
-		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
-	for (var/i = required_candidates, i > 0, i--)
-		if(applicants.len <= 0)
-			break
-		var/mob/applicant = pick(applicants)
-		if(!applicant || !applicant.key)
-			i++
-			continue
-		applicants -= applicant
-		if(!isobserver(applicant))
-			//Making sure we don't recruit people who got back into the game since they applied
-			i++
-			continue
-
-		var/mob/living/carbon/human/new_character= makeBody(applicant)
-		new_character.dna.ResetSE()
-
-		assigned += new_character
-		if (i == required_candidates)
-			var/datum/role/nuclear_operative/leader/newCop = new
-			newCop.AssignToRole(new_character.mind,1)
-			nuclear.HandleRecruitedRole(newCop)
-			newCop.Greet(GREET_MIDROUND)
-		else
-			var/datum/role/nuclear_operative/newCop = new
-			newCop.AssignToRole(new_character.mind,1)
-			nuclear.HandleRecruitedRole(newCop)
-			newCop.Greet(GREET_MIDROUND)
-	nuclear.OnPostSetup()
-	applicants.Cut() // To clear references.
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
+	if (index == 1) // Our first guy is the leader
+		var/datum/role/nuclear_operative/leader/new_role = new 
+		new_role.AssignToRole(new_character.mind,1)
+		setup_role(new_role)
+	else
+		return ..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -195,51 +190,82 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/blob_storm
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm
 	name = "Blob Overmind Storm"
-	role_category = ROLE_BLOB
+	role_category = /datum/role/blob_overmind/
+	my_fac = /datum/faction/blob_conglomerate/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 1
 	weight = 5
 	cost = 35
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
-	logo = "nuke-logo"
+	logo = "blob-logo"
 
-/datum/dynamic_ruleset/midround/blob_storm/execute()
-	var/list/possible_candidates = list()
-	possible_candidates.Add(dead_players)
-	possible_candidates.Add(list_observers)
-	send_applications(possible_candidates)
-	return 1
+	makeBody = FALSE
 
-/datum/dynamic_ruleset/midround/blob_storm/review_applications()
-	var/datum/faction/blob_conglomerate/bleb = find_active_faction_by_type(/datum/faction/blob_conglomerate)
-	if (!bleb)
-		bleb = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
-		bleb.CountFloors()
-		bleb.ForgeObjectives()
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/finish_setup(var/mob/new_character, var/index)
+	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"], offset_origin = 215, offset_dest = 75) // 215 offset : ensure that it actually hits the station (else, the round ends abruptly.)
+	var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+	meteor.AssignMob(new_character)
+	. = ..()
 
-	var/living = 0
-	var/cores_spawned = 0
-	for(var/mob/living/M in player_list)
-		if(M.stat == CONSCIOUS)
-			living++
-	cores_spawned = 1 + round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
+//////////////////////////////////////////////
+//                                          //
+//         SPACE WEEABOO (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
 
-	if (cores_spawned && applicants.len)
-		command_alert(/datum/command_alert/blob_storm/overminds)
+/datum/dynamic_ruleset/midround/from_ghosts/weeabo
+	name = "crazed weeaboo attack"
+	role_category = /datum/role/weeaboo
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(90,90,60,20,10,10,10,10,10,10)
+	logo = "weeaboo-logo"
 
-	for (var/i = 1 to cores_spawned)
-		if (!applicants.len)
-			return
-		var/mob/applicant = pick(applicants)
-		if(!isobserver(applicant))
-			//Making sure we don't recruit people who got back into the game since they applied
-			continue
-		var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"])
-		var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
-		meteor.AssignMob(applicant, bleb)
+/datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.threat_level))
+		return ..()
+	else
+		return 0
 
-	applicants.Cut() // To clear references.
+/datum/dynamic_ruleset/midround/from_ghosts/weeaboo/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
 
+//////////////////////////////////////////////
+//                                          //
+//               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/grinch
+	name = "The Grinch"
+	role_category = /datum/role/grinch
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 3
+	cost = 10
+	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
+	if(grinchstart.len == 0)
+		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
+		return 0
+	if (!..())
+		return FALSE
+	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
+	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
+	return accepted

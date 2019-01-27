@@ -1,7 +1,7 @@
 /datum/role/cultist
 	id = CULTIST
 	name = "Cultist"
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
@@ -20,7 +20,7 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
-	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -45,7 +45,7 @@
 		return
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
-	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -293,13 +293,27 @@
 	switch (reagent_id)
 		if (HOLYWATER)
 			var/mob/living/carbon/human/H = antag.current
-			if (istype(H))
+			if (!istype(H))
 				return
-			H.Dizzy(12)
-			H.Jitter(24)
-			H.Knockdown(3)
-			H.confused = 3
-			H.eye_blurry = max(H.eye_blurry, 6)
+			var/current_act = max(-1,min(5,veil_thickness))
+			switch (current_act)
+				if (CULT_PROLOGUE)
+					return
+				if (CULT_ACT_I)
+					H.Dizzy(4)
+					H.Jitter(8)
+					H.eye_blurry = max(H.eye_blurry, 6)
+				if (CULT_ACT_II)
+					H.Dizzy(8)
+					H.Jitter(16)
+					H.confused = 1
+					H.eye_blurry = max(H.eye_blurry, 12)
+				else // Other acts, mended, etc...
+					H.Dizzy(16)
+					H.Jitter(24)
+					H.Knockdown(3)
+					H.eye_blurry = max(H.eye_blurry, 12)
+					H.confused = 3
 
 /datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	if (href_list["cult_privatespeak"])
@@ -309,3 +323,9 @@
 		var/mob/mob = M.current
 		if (mob)
 			to_chat(mob, "<span class='danger'>Nar-Sie</span> murmurs to you... <span class='sinister'>[message]</span>")
+
+			for(var/mob/dead/observer/O in player_list)
+				to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [mob.real_name], <span class='sinister'>[message]</span></span>")
+
+			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
+			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")

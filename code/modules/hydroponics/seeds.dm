@@ -1052,6 +1052,7 @@
 	packet_icon = "seed-novaflower"
 	products = list(/obj/item/weapon/grown/novaflower)
 	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "novaflower"
 	chems = list(NUTRIMENT = list(1), CAPSAICIN = list(1,5))
 
@@ -1461,7 +1462,7 @@
 	seed_name = "grass"
 	display_name = "grass"
 	packet_icon = "seed-grass"
-	products = list(/obj/item/stack/tile/grass)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grass)
 	plant_icon = "grass"
 	harvest_repeat = 1
 
@@ -1562,6 +1563,7 @@
 	plant_icon = "dionanode"
 	mob_drop = /obj/item/seeds/dionanode
 	product_requires_player = 1
+	product_kill_inactive = FALSE
 	immutable = 1
 
 	lifespan = 50

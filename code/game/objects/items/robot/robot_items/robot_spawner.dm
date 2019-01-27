@@ -89,6 +89,7 @@
 		return
 	if(faction)
 		R.faction = faction
+	R.Namepick()
 
 //Syndicate robot spawner
 /obj/item/weapon/robot_spawner/syndicate

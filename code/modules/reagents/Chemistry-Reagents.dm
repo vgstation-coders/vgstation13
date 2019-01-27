@@ -86,7 +86,7 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-	
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -156,7 +156,7 @@
 
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
-	
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -1042,6 +1042,16 @@
 		return 1
 	if(volume >= 5)
 		T.bless()
+
+/datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+
+	if(volume >= 5)
+		if(istype(M,/mob/living/simple_animal/construct))
+			var/mob/living/simple_animal/construct/C = M
+			C.purge = 3
+			C.adjustBruteLoss(5)
+			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -4491,9 +4501,10 @@
 		M.drowsyness = max(0,M.drowsyness + adj_drowsy)
 	if(adj_sleepy)
 		M.sleeping = max(0,M.sleeping + adj_sleepy)
-	if(adj_temp)
-		if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-			M.bodytemperature = min(310, M.bodytemperature + (25 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(adj_temp > 0 && M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
+	else if(adj_temp < 0 && M.bodytemperature > 310)
+		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
 	name = "Orange juice"
@@ -4619,6 +4630,20 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
+	
+/datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
+
+    if(ishuman(M))
+        var/mob/living/carbon/human/H = M
+        if(H.mind.miming)
+            if(M.getOxyLoss() && prob(80))
+                M.adjustOxyLoss(-REM)
+            if(M.getBruteLoss() && prob(80))
+                M.heal_organ_damage(REM, 0)
+            if(M.getFireLoss() && prob(80))
+                M.heal_organ_damage(0, REM)
+            if(M.getToxLoss() && prob(80))
+                M.adjustToxLoss(-REM)
 
 /datum/reagent/drink/potato_juice
 	name = "Potato Juice"
@@ -6351,24 +6376,31 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
 	causes_jitteriness = 0
 	var/activated = 0
+	var/noir_set_by_us = 0
 
 /datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(!activated)
-		M.update_colour()
+		if (M_NOIR in M.mutations)
+			noir_set_by_us = 0
+		else
+			noir_set_by_us = 1
+			M.dna.SetSEState(NOIRBLOCK, 1)
+			genemutcheck(M, NOIRBLOCK)
+			M.update_mutations()
 		activated = 1
 
 /datum/reagent/drink/coffee/detcoffee/reagent_deleted()
 	if(..())
 		return 1
-
 	if(!holder)
 		return
 	var/mob/M =  holder.my_atom
-
-	if(ishuman(M))
-		M.update_colour()
+	if (istype(M) && activated && noir_set_by_us)
+		M.dna.SetSEState(NOIRBLOCK, 0)
+		genemutcheck(M, NOIRBLOCK)
+		M.update_mutations()
 
 /datum/reagent/drink/coffee/etank
 	name = "Recharger"
@@ -6670,6 +6702,24 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = THYMOL
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
+
+/datum/reagent/synthocarisol/phytocarisol
+	name = "Phytocarisol"
+	id = PHYTOCARISOL
+	description = "A plant based alternative to carisol, a medicine made from rhino horn dust."
+	color = "#34D3B6" //rgb: 52, 211, 182
+
+/datum/reagent/heartbreaker/defalexorin
+	name = "Defalexorin"
+	id = DEFALEXORIN
+	description = "Defalexorin is used for getting a mild high in low amounts."
+	color = "#000000" //rgb: 0, 0, 0
+
+/datum/reagent/alkycosine/phytosine
+	name = "Phytosine"
+	id = PHYTOSINE
+	description = "Neurological medication made from mutated herbs."
+	color = "#9000ff" //rgb: 144, 0 255
 
 //End of plant-specific reagents
 

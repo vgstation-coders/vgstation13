@@ -111,6 +111,10 @@ var/list/blood_communion = list()
 	H.b_eyes = 0
 	H.revive(0)
 	H.status_flags &= ~GODMODE
+	H.status_flags &= ~CANSTUN
+	H.status_flags &= ~CANKNOCKDOWN
+	H.status_flags &= ~CANPARALYSE
+	H.status_flags &= ~PACIFIABLE
 	H.regenerate_icons()
 
 /datum/cult_tattoo/memorize

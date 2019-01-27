@@ -56,7 +56,6 @@
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
-
 	if(!reagents.has_any_reagents(HYPERZINES))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN

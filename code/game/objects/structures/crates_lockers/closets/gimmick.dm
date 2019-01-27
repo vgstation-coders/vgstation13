@@ -56,7 +56,7 @@
 		add_fingerprint(user)
 		var/winterboots = new /obj/item/clothing/shoes/winterboots(get_turf(src))
 		user.put_in_inactive_hand(winterboots)
-		var/wintercoat = new /obj/item/clothing/suit/wintercoat(get_turf(src))
+		var/wintercoat = new /obj/item/clothing/suit/storage/wintercoat(get_turf(src))
 		user.put_in_active_hand(wintercoat)
 		coats--
 		update_icon()

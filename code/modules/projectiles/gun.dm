@@ -58,7 +58,7 @@
 	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
 
 	// Tells is_honorable() which special_roles to respect.
-	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER
+	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_WEEABOO
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -299,7 +299,7 @@
 
 	return 1
 
-/obj/item/weapon/gun/proc/can_fire()
+/obj/item/weapon/gun/proc/canbe_fired()
 	return process_chambered()
 
 /obj/item/weapon/gun/proc/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)

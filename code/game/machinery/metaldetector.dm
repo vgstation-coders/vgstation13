@@ -202,7 +202,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
+			say("Threat Detected! Subject: [dudesname]")////
 
 
 		else if(dudesthreat && senset)
@@ -214,7 +214,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Additional screening required! Subject: [dudesname]</span>")
+			say("Additional screening required! Subject: [dudesname]")
 
 
 		else
@@ -226,7 +226,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'notice'> Subject: [dudesname] clear.</span>")
+			say("Subject: [dudesname] clear.")
 
 
 	flick("[base_state]_flash", src)

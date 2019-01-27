@@ -128,7 +128,7 @@
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	actions_types = list(/datum/action/item_action/toggle_goggles)
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
 	var/area/A = get_area(src)

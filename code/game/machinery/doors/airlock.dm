@@ -784,6 +784,7 @@ About the new airlock wires panel:
 							to_chat(usr, "<span class='warning'>Nope.</span>")
 							return 0
 						src.locked = 1
+						playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 						to_chat(usr, "The door is now bolted.")
 						investigation_log(I_WIRES, "|| bolted via robot interface by [key_name(usr)]")
 						update_icon()
@@ -898,6 +899,7 @@ About the new airlock wires panel:
 								to_chat(usr, "<span class='warning'>Nope.</span>")
 								return 0
 							src.locked = 0
+							playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 							to_chat(usr, "The door is now unbolted.")
 							investigation_log(I_WIRES, "|| un-bolted via robot interface by [key_name(usr)]")
 							update_icon()
@@ -1120,6 +1122,9 @@ About the new airlock wires panel:
 				user.delayNextAttack(10)
 
 	if(istype(I, /obj/item/weapon/batteringram))
+		var/obj/item/weapon/batteringram/B = I
+		if(!B.can_ram(user))
+			return
 		user.delayNextAttack(30)
 		var/breaktime = 60 //Same amount of time as drilling a wall, then a girder
 		if(welded)
@@ -1286,10 +1291,13 @@ About the new airlock wires panel:
 			spawn(20)
 				autoclose()
 	// </worry>
-	return ..()
+
+	.=..()
+	if(. && !(stat & (NOPOWER) || !src.arePowerSystemsOn())) //It opened, and there's power
+		wires.SignalIndex(AIRLOCK_WIRE_ONOPEN)
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)
-	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)))
+	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE
 		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
 		return 0
 	return ..()
@@ -1357,8 +1365,10 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/proc/prison_open()
 	locked = 0
+	playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 	open()
 	locked = 1
+	playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 	return
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
