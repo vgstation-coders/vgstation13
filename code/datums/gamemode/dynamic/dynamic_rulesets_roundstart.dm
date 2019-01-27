@@ -366,7 +366,7 @@
 			lenin.Greet(GREET_ROUNDSTART)
 		update_faction_icons()
 		R.OnPostSetup()
-		return 1
+	return 1
 
 //////////////////////////////////////////////
 //                                          //
