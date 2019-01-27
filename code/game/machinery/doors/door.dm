@@ -158,16 +158,6 @@ var/list/all_doors = list()
 			else
 				return open()
 
-	if(AccessEnabled || allowed(user))
-		if(!requiresID())
-			user = null
-		if(requiresID())
-			if (isshade(user))
-				user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
-			open()
-		else if(!operating)
-			denied()
-
 	if(horror_force(user))
 		return
 
