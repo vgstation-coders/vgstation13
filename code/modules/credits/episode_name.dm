@@ -304,6 +304,7 @@
 					episode_names += new /datum/episode_name/rare("THE DOUBLE DIGGERS", "The only two survivors were miners.", 2500)
 				if(clowncount == 2)
 					episode_names += new /datum/episode_name/rare("A TALE OF TWO CLOWNS", "The only two survivors were clowns.", 2500)
+					theme = "clown"
 				if(clowncount == 1 && mimecount == 1)
 					episode_names += new /datum/episode_name/rare("THE DYNAMIC DUO", "The only two survivors were the Clown, and the Mime.", 2500)
 
