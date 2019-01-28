@@ -64,9 +64,8 @@
 		set_light(0)
 
 /obj/item/candle/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
-			light("", 1)
+	if(istype(Proj ,/obj/item/projectile/beam) && (Proj.damage != 0))
+		light("", 1)
 
 /obj/item/candle/is_hot()
 	if(lit)
