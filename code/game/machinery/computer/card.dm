@@ -268,7 +268,7 @@
 						var/new_dept = input("Choose the departement this job belongs to.") as null|anything in departement_list
 						if (new_dept)
 							for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
-								if (L)
+								if (L.len)
 									var/datum/data/record/R = find_record("name", modify.registered_name, L)
 									if (R)
 										R.fields["override_dept"] = new_dept
