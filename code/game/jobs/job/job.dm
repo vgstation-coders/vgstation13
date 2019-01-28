@@ -60,6 +60,8 @@
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 
+	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu.
+
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
 	return 1
 

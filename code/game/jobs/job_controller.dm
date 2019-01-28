@@ -10,6 +10,8 @@ var/global/datum/controller/occupations/job_master
 
 	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
+	var/priority_jobs_remaining = 3 //Limit on how many prioritized jobs can be had at once.
+
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
@@ -79,16 +81,61 @@ var/global/datum/controller/occupations/job_master
 
 			unassigned -= player
 			job.current_positions++
+			if(job.current_positions >= job.total_positions && job.priority)
+				TogglePriority(rank)
+
 			return 1
 	Debug("AR has failed, Player: [player], Rank: [rank]")
 	return 0
 
-/datum/controller/occupations/proc/FreeRole(var/rank)	//making additional slot on the fly
+/datum/controller/occupations/proc/FreeRole(var/rank, mob/user)	//making additional slot on the fly
 	var/datum/job/job = GetJob(rank)
 	if(job && job.current_positions >= job.total_positions)
 		job.total_positions++
+		if(user)
+			log_admin("[key_name(user)] has freed up a slot for the [rank] job.")
+			message_admins("[key_name_admin(user)] has freed up a slot for the [rank] job.")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is now available!")
 		return 1
 	return 0
+
+/datum/controller/occupations/proc/TogglePriority(var/rank, mob/user)
+	var/datum/job/job = GetJob(rank)
+	if(job)
+		if(job.priority)
+			job.priority = FALSE
+			priority_jobs_remaining++
+		else
+			if(priority_jobs_remaining < 1)
+				return 0
+			job.priority = TRUE
+			priority_jobs_remaining--
+		if(user)
+			log_admin("[key_name(user)] has set the priority of the [rank] job to [job.priority].")
+			message_admins("[key_name_admin(user)] has set the priority of the [rank] job to [job.priority].")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is [job.priority ? "now highly requested!" : "no longer highly requested."]")
+		return 1
+	return 0
+
+/datum/controller/occupations/proc/IsJobPrioritized(var/rank)
+	var/datum/job/job = GetJob(rank)
+	if(job)
+		return job.priority
+	return 0
+
+/datum/controller/occupations/proc/GetPrioritizedJobs() //Returns a list of job datums.
+	. = list()
+	for(var/datum/job/J in occupations)
+		if(J.priority)
+			. += J
+
+/datum/controller/occupations/proc/GetUnprioritizedJobs() //Returns a list of job datums.
+	. = list()
+	for(var/datum/job/J in occupations)
+		if(!J.priority)
+			. += J
 
 /datum/controller/occupations/proc/FindOccupationCandidates(datum/job/job, level, flag)
 	Debug("Running FOC, Job: [job], Level: [level], Flag: [flag]")

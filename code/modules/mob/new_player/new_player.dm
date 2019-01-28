@@ -457,7 +457,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
 	dat += "Choose from the following open positions:<br>"
-	for(var/datum/job/job in job_master.occupations)
+	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
@@ -467,10 +467,14 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
 					continue
-			dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
+
+			if(job.priority)
+				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
+			else
+				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
 
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=300x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
 
 
 /mob/new_player/proc/create_character()
