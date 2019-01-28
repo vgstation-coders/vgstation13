@@ -12,10 +12,12 @@
 	for(var/path in spawned_items)
 		var/obj/item/I = new path(get_turf(user))
 		if(user.mind)
-			var/icon/tempimage = icon(I.icon, I.icon_state)
-			end_icons += tempimage
-			var/tempstate = end_icons.len
-			user.mind.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
+			var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
+			if(W)
+				var/icon/tempimage = icon(I.icon, I.icon_state)
+				end_icons += tempimage
+				var/tempstate = end_icons.len
+				W.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
 
 /datum/spellbook_artifact/proc/can_buy(var/mob/user)
 	return TRUE

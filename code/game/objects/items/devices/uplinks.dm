@@ -14,6 +14,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	var/show_description = null
 	var/active = 0
 	var/job = null
+	var/datum/role/owner //The original owner of this uplink
 
 /obj/item/device/uplink/New()
 	..()
