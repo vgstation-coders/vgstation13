@@ -1354,6 +1354,8 @@ var/list/bloodstone_list = list()
 	return
 
 /obj/structure/cult/bloodstone/takeDamage(var/damage)
+	if(veil_thickness == CULT_EPILOGUE)
+		return
 	var/backup = (health > (2*maxHealth/3)) + (health > (maxHealth/3))
 	health -= damage
 	if (health <= 0)
