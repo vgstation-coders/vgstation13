@@ -325,6 +325,8 @@
 /obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user)
 	if (altar_task)
 		return
+	if (!istype(O))
+		return
 	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
 		if(!user.drop_item(O))
 			return

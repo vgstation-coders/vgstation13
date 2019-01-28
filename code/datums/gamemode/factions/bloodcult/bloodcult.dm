@@ -78,6 +78,7 @@ var/veil_thickness = CULT_PROLOGUE
 		else
 			qdel(B)
 			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
 
 /proc/cult_risk(var/mob/M)//too many conversions/soul-stoning might bring the cult to the attention of Nanotrasen prematurely
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -102,13 +103,15 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (risk > 0)
 		if(prob(risk))
-			message_admins("With a chance of [risk]%, the cult's activities have been prematurely exposed.")
+			message_admins("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have been prematurely exposed.")
+			log_admin("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have been prematurely exposed.")
 			cult.warning = TRUE
 			command_alert(/datum/command_alert/cult_detected)
 		else
-			message_admins("With a chance of [risk]%, the cult's activities have avoided raising suspicion for now...")
+			message_admins("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have avoided raising suspicion for now...")
+			log_admin("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have avoided raising suspicion for now...")
 			if (M)
-				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring attention to us unwanted attention. You should focus on the objective with your current force.</span>")
+				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring us unwanted attention. You should focus on the objective with your current force.</span>")
 
 
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
@@ -140,7 +143,7 @@ var/veil_thickness = CULT_PROLOGUE
 	return cult_win
 
 /datum/faction/bloodcult/proc/fail()
-	if (cult_win || veil_thickness == CULT_MENDED)
+	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
 	progress(CULT_MENDED)
 
