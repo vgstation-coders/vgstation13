@@ -1091,4 +1091,4 @@
 	bible_name = "Guide to Speedrunning"
 	male_adept = "Speedrunner"
 	female_adept = "Speedrunner"
-	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer")
+	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station")
