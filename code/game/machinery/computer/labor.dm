@@ -52,7 +52,7 @@ var/list/labor_console_categories = list(
 	var/dat = list()
 	dat += "<center>"
 
-	if(awaiting_swipe || verifying)
+	if(awaiting_swipe)
 		dat += "<div class='modal'><div class='modal-content'><div class='line'>Swipe a valid ID to confirm:</div><br>"
 		if(freeing != "")
 			dat += "<b>Freeing</b> <div class='line'>[uppertext(freeing)]</div> Job Slot"
@@ -62,6 +62,8 @@ var/list/labor_console_categories = list(
 		if(isAdminGhost(user))
 			dat += "<br><br><div class='line'>...or...</div><A href='?src=\ref[src];adminhax=1'>CHEEKY ADMINGHOST-ONLY CARD BYPASS BUTTON</A>"
 		dat += "</div></div>"
+	else if(verifying)
+		dat += "<div class='modal'><div class='modal-content'><div class='line'>Verifying...</div></div></div>"
 
 	var/i = 0
 	for(var/cat_index in labor_console_categories)
