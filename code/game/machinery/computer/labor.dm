@@ -26,14 +26,16 @@ var/list/labor_console_categories = list(
 
 	var/icon/verified_overlay
 	var/icon/awaiting_overlay
-	var/icon/modal_overlay
 
 /obj/machinery/computer/labor/New()
 	..()
 	job_master.labor_consoles += src
+
+/obj/machinery/computer/labor/initialize()
+	. = ..()
 	verified_overlay = image(icon, "labor_verified")
 	awaiting_overlay = image(icon, "labor_awaiting")
-	modal_overlay = image(icon, "labor_modal")
+
 
 /obj/machinery/computer/labor/Destroy()
 	job_master.labor_consoles -= src
@@ -193,5 +195,4 @@ var/list/labor_console_categories = list(
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(awaiting_swipe || verifying)
-		overlays += modal_overlay
 		overlays += awaiting_overlay
