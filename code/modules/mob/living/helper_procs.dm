@@ -42,3 +42,24 @@ default behaviour is:
 /mob/living/proc/isDeadorDying()	//returns 1 if dead or in crit
 	if(stat == DEAD || health <= config.health_threshold_crit)
 		return TRUE
+
+/mob/living/proc/make_zombie(mob/master)
+	to_chat(world, "make zombie called on [src]")
+	ghostize()
+	adjustBruteLoss(-30)
+	adjustToxLoss(-getToxLoss())
+	adjustOxyLoss(-getOxyLoss())
+	updatehealth()
+	if(health > 0)
+		if(BrainContainer)
+			qdel(BrainContainer)
+		BrainContainer = new /datum/component_container/zombie(src)
+		BrainContainer.AddComponent(/datum/component/controller/mob)
+		BrainContainer.AddComponent(/datum/component/controller/movement/astar)
+		var/datum/component/ai/target_finder/zombie/Z = BrainContainer.AddComponent(/datum/component/ai/target_finder/zombie)
+		Z.masters.Add(master)
+		BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
+		BrainContainer.AddComponent(/datum/component/ai/hunt)
+		BrainContainer.AddComponent(/datum/component/ai/revive)
+		BrainContainer.register_for_updates()
+		stat = 0

@@ -28,12 +28,11 @@ var/datum/subsystem/component/SScomp
 
 		if(!C || C.gcDestroyed || !C.holder || !C.components.len)
 			continue
-
+		C.SendSignal(COMSIG_TICK, list())
 		if(isliving(C.holder))
 			var/mob/living/M = C.holder
 			if (!M || M.disposed || M.gcDestroyed || M.timestopped || M.monkeyizing || M.stat == DEAD)
 				continue
-
 
 		C.SendSignal(COMSIG_LIFE, list())
 

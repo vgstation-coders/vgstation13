@@ -86,6 +86,8 @@
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
 
+#define iszombie(A) (isliving(A) && istype(A:BrainContainer, /datum/component_container/zombie))
+
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
 #define isAIEye(A) istype(A, /mob/camera/aiEye)

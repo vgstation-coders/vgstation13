@@ -8,6 +8,8 @@
 
 	clear_fullscreens()
 	..()
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_DEATH)
 
 /mob/living/proc/init_butchering_list()
 	butchering_drops = list()

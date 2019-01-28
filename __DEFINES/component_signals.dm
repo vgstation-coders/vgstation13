@@ -20,6 +20,11 @@
  */
 #define COMSIG_LIFE   "life"
 
+/** Sent by component subsystem. No arguments
+ */
+
+#define COMSIG_TICK   "tick"
+
 /** Sent when a mob AI component has identified a new target.
  * @param target /atom: The targetted entity.
  */
@@ -128,3 +133,8 @@
 
 #define COMSIG_GETDAMTYPE "get_dam_type"
 
+/** Sent when a mob dies.
+ * @param: none
+ */
+
+#define COMSIG_DEATH "death"

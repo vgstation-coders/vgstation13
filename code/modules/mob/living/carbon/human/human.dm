@@ -79,6 +79,10 @@
 	..(new_loc)
 	initialize_basic_NPC_components()
 
+/mob/living/carbon/human/zombie/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc)
+	make_zombie()
+
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
@@ -1812,13 +1816,6 @@ mob/living/carbon/human/isincrit()
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
-	ghostize()
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? mind : null))
-	T.get_clothes(src, T)
-	T.name = real_name
-	T.host = src
-	forceMove(null)
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
