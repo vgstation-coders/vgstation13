@@ -12,19 +12,28 @@ var/list/labor_console_categories = list(
 	name = "Labor Administration Console"
 	desc = "According to the manual, you need to take a six-week Labor Administration Associate Training Course before you're qualified to navigate this console's complex interface. Being a Head of Personnel is hard work."
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "comm_logs"
+	icon_state = "labor"
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_hop)
 	circuit = "/obj/item/weapon/circuitboard/labor"
 
+	var/awaiting_swipe = FALSE
+	var/verifying = FALSE
 	var/freeing = "" //If this variable is set with a job's title, the user will be prompted to swipe to free up a job slot.
 	var/toggling_priority = "" //If this variable is set with a job's title, the user will be prompted to swipe to prioritize/deprioritize.
 	var/selected_category = "Civilian"
 	var/list/swipe_sounds = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg', 'sound/effects/cardswipe3.ogg')
 
+	var/icon/verified_overlay
+	var/icon/awaiting_overlay
+	var/icon/modal_overlay
+
 /obj/machinery/computer/labor/New()
 	..()
 	job_master.labor_consoles += src
+	verified_overlay = image(icon, "labor_verified")
+	awaiting_overlay = image(icon, "labor_awaiting")
+	modal_overlay = image(icon, "labor_modal")
 
 /obj/machinery/computer/labor/Destroy()
 	job_master.labor_consoles -= src
@@ -41,7 +50,7 @@ var/list/labor_console_categories = list(
 	var/dat = list()
 	dat += "<center>"
 
-	if(freeing != "" || toggling_priority != "")
+	if(awaiting_swipe || verifying)
 		dat += "<div class='modal'><div class='modal-content'><div class='line'>Swipe a valid ID to confirm:</div><br>"
 		if(freeing != "")
 			dat += "<b>Freeing</b> <div class='line'>[uppertext(freeing)]</div> Job Slot"
@@ -89,29 +98,33 @@ var/list/labor_console_categories = list(
 	onclose(user, "labor_admin")
 
 /obj/machinery/computer/labor/proc/verified(mob/user, var/delay = TRUE)
-	if(toggling_priority != "")
-		if(job_master.TogglePriority(toggling_priority, user))
+	if(awaiting_swipe == TRUE)
+		if((toggling_priority != "" && job_master.TogglePriority(toggling_priority, user)) || (freeing != "" && job_master.FreeRole(freeing, user)))
+			awaiting_swipe = FALSE
+			verifying = TRUE
+			update_icon()
 			spawn(delay ? 1 SECONDS : 0)
+				verifying = FALSE
 				playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
 				updateUsrDialog()
-	toggling_priority = "" //clear it even if it doesn't work
-
-	if(freeing != "")
-		if(job_master.FreeRole(freeing, user))
-			spawn(delay ? 1 SECONDS : 0)
-				playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
-				updateUsrDialog()
-	freeing = "" //clear it even if it doesn't work
+				update_icon()
+				overlays += verified_overlay
+				spawn(1 SECONDS)
+					overlays -= verified_overlay
+		toggling_priority = "" //clear it even if it doesn't work
+		freeing = "" //clear it even if it doesn't work
 
 /obj/machinery/computer/labor/proc/cancel_swipe()
+	awaiting_swipe = FALSE
 	toggling_priority = ""
 	freeing = ""
+	update_icon()
 
 /obj/machinery/computer/labor/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
 	if(.)
 		return .
-	if(toggling_priority != "" || freeing != "")
+	if(awaiting_swipe)
 		if(isID(W) || isPDA(W))
 			if(!check_access(W))
 				to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
@@ -142,6 +155,8 @@ var/list/labor_console_categories = list(
 				return
 			if(job_master.GetJob(href_list["free"]))
 				freeing = href_list["free"]
+				awaiting_swipe = TRUE
+				update_icon()
 
 		else if(href_list["priority"])
 			if(!is_valid_job(href_list["priority"]))
@@ -149,6 +164,8 @@ var/list/labor_console_categories = list(
 				return
 			if(job_master.GetJob(href_list["priority"]))
 				toggling_priority = href_list["priority"]
+				awaiting_swipe = TRUE
+				update_icon()
 
 		else if(href_list["adminhax"]) // aww shit
 			if(!usr.client.holder)
@@ -169,3 +186,12 @@ var/list/labor_console_categories = list(
 			if(job_datum && job_datum.title == title)
 				return TRUE
 	return FALSE
+
+/obj/machinery/computer/labor/update_icon()
+	..()
+	overlays = 0
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if(awaiting_swipe || verifying)
+		overlays += modal_overlay
+		overlays += awaiting_overlay
