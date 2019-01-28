@@ -1,3 +1,13 @@
+var/list/labor_console_categories = list(
+	"Command" = command_positions,
+	"Civilian" = civilian_positions,
+	"Security" = security_positions,
+	"Engineering" = engineering_positions,
+	"Medical" = medical_positions,
+	"Science" = science_positions,
+	"Cargo" = cargo_positions,
+	)
+
 /obj/machinery/computer/labor
 	name = "Labor Administration Console"
 	desc = "According to the manual, you need to take a six-week Labor Administration Associate Training Course before you're qualified to navigate this console's complex interface. Being a HoP is hard work."
@@ -12,15 +22,13 @@
 	var/selected_category = "Civilian"
 	var/list/swipe_sounds = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg', 'sound/effects/cardswipe3.ogg')
 
-var/list/labor_console_categories = list(
-	"Command" = command_positions,
-	"Civilian" = civilian_positions,
-	"Security" = security_positions,
-	"Engineering" = engineering_positions,
-	"Medical" = medical_positions,
-	"Science" = science_positions,
-	"Cargo" = cargo_positions,
-	)
+/obj/machinery/computer/labor/New()
+	..()
+	job_master.labor_consoles += src
+
+/obj/machinery/computer/labor/Destroy()
+	job_master.labor_consoles -= src
+	..()
 
 /obj/machinery/computer/labor/attack_ai(var/mob/user as mob)
 	add_hiddenprint(user)
@@ -119,11 +127,6 @@ var/list/labor_console_categories = list(
 	if(prob(5))
 		verified(user)
 
-/obj/machinery/computer/labor/process()
-	if(!..())
-		src.updateDialog()
-	return
-
 /obj/machinery/computer/labor/Topic(href, href_list)
 	if(..())
 		return 1
@@ -134,10 +137,16 @@ var/list/labor_console_categories = list(
 			selected_category = sanitize_inlist(href_list["category"], labor_console_categories, labor_console_categories[1]) //hey isn't it funny how lists start at 1
 
 		else if(href_list["free"])
+			if(!is_valid_job(href_list["free"]))
+				to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["free"]] button was there just a second ago!")
+				return
 			if(job_master.GetJob(href_list["free"]))
 				freeing = href_list["free"]
 
 		else if(href_list["priority"])
+			if(!is_valid_job(href_list["priority"]))
+				to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["priority"]] button was there just a second ago!")
+				return
 			if(job_master.GetJob(href_list["priority"]))
 				toggling_priority = href_list["priority"]
 
@@ -146,3 +155,11 @@ var/list/labor_console_categories = list(
 
 		add_fingerprint(usr)
 		updateUsrDialog()
+
+/obj/machinery/computer/labor/proc/is_valid_job(title)
+	for(var/cat in labor_console_categories)
+		for(var/job_string in labor_console_categories[cat])
+			var/datum/job/job_datum = job_master.GetJob(job_string)
+			if(job_datum && job_datum.title == title)
+				return TRUE
+	return FALSE
