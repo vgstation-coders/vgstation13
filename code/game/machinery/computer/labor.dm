@@ -45,7 +45,7 @@ var/list/labor_console_categories = list(
 	dat += "<center>"
 
 	if(freeing != "" || toggling_priority != "")
-		dat += "<div class='modal'><div class='modal-content'><div class='line'>Swipe your ID to confirm:</div><br>"
+		dat += "<div class='modal'><div class='modal-content'><div class='line'>Swipe a valid ID to confirm:</div><br>"
 		if(freeing != "")
 			dat += "<b>Freeing</b> <div class='line'>[uppertext(freeing)]</div> Job Slot"
 		else if(toggling_priority != "")

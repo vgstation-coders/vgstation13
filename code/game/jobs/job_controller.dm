@@ -100,7 +100,7 @@ var/global/datum/controller/occupations/job_master
 			log_admin("[key_name(user)] has freed up a slot for the [rank] job.")
 			message_admins("[key_name_admin(user)] has freed up a slot for the [rank] job.")
 		for(var/mob/new_player/player in player_list)
-			to_chat(player, "<span class='notice'>The [rank] job is now available!")
+			to_chat(player, "<span class='notice'>The [rank] job is now available!</span>")
 		return 1
 	return 0
 
@@ -119,7 +119,7 @@ var/global/datum/controller/occupations/job_master
 			log_admin("[key_name(user)] has set the priority of the [rank] job to [job.priority].")
 			message_admins("[key_name_admin(user)] has set the priority of the [rank] job to [job.priority].")
 		for(var/mob/new_player/player in player_list)
-			to_chat(player, "<span class='notice'>The [rank] job is [job.priority ? "now highly requested!" : "no longer highly requested."]")
+			to_chat(player, "<span class='notice'>The [rank] job is [job.priority ? "now highly requested!" : "no longer highly requested."]</span>")
 		return 1
 	return 0
 
