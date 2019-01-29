@@ -131,6 +131,8 @@
 		deactivate_suit(user)
 
 /obj/item/clothing/suit/space/rig/proc/toggle_helmet(mob/living/carbon/human/user)
+	if(!user.is_wearing_item(src, slot_wear_suit))
+		return
 	if(H)
 		if(!user.head)
 			to_chat(user, "<span class = 'notice'>\The [H] extends from \the [src].</span>")

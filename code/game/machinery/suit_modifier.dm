@@ -68,6 +68,8 @@
 	spawn(12) //Length of above animation
 		overlay.icon_state = "suitmodifier_working"
 		var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+		if(H.head && istype(H.head, R.head_type))
+			R.toggle_helmet(H)
 		var/list/modules_to_activate = list()
 		for(var/obj/item/rig_module/RM in modules_to_install)
 			if(locate(RM.type) in R.modules) //One already installed
@@ -79,9 +81,6 @@
 				modules_to_activate.Add(RM)
 				RM.forceMove(R)
 		flick("suitmodifier_close", overlay)
-		for(var/obj/item/rig_module/RM in modules_to_activate)
-			RM.activate(H, R)
-			say("[RM] initialized", class = "binaryradio")
 		if(cell && R.cell.charge < cell.charge)
 			R.cell.forceMove(get_turf(src))
 			cell.forceMove(R)
@@ -93,4 +92,5 @@
 		overlay.icon_state = null
 		overlays.Cut()
 		qdel(overlay)
+		R.toggle_helmet(H)
 		use_power = 1

@@ -23,7 +23,7 @@
 /obj/item/rig_module/speed_boost/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	if(R.cell.use(500))
 		to_chat(user, "<span class = 'binaryradio'>Speed module engaged.</span>")
-		R.slowdown = max(1, slowdown/2)
+		R.slowdown = max(1, slowdown/1.25)
 
 /obj/item/rig_module/speed_boost/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
 	R.slowdown = initial(R.slowdown)
