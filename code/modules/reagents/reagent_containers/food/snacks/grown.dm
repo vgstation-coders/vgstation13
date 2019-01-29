@@ -1028,3 +1028,19 @@ var/list/special_fruits = list()
 	desc = "An unusually fatty fruit, it can be used in both savory and sweet dishes."
 	icon_state = "avocado_pitted"
 	cant_eat_msg = null
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+	name = "pear"
+	desc = "The inferior alternative to apples."
+	icon_state = "pear"
+	potency = 15
+	filling_color = "#DFE88B"
+	plantname = "pear"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear
+	name = "silver pear"
+	desc = "Silver will always be the inferior alternative to gold."
+	icon_state = "silverpear"
+	potency = 15
+	filling_color = "#DFE88B"
+	plantname = "silverpear"

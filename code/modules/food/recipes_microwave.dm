@@ -2637,3 +2637,21 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+
+/datum/recipe/pickledpears
+	reagents = list(VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
+
+/datum/recipe/bulgogi
+	reagents = list(SOYSAUCE = 10, SUGAR =5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bulgogi

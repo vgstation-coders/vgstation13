@@ -5777,3 +5777,25 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 /obj/item/weapon/reagent_containers/food/snacks/sauerkraut/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/pickledpears
+	name = "pickled pears"
+	desc = "A jar filled with pickled pears."
+	icon_state = "pickledpears"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/pickledpears/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/bulgogi
+	name = "bulgogi"
+	desc = "Thin grilled beef marinated with grated pear juice."
+	icon_state = "bulgogi"
+	food_flags = FOOD_SWEET | FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/bulgogi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	bitesize = 10
