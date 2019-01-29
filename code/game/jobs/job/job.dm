@@ -60,10 +60,14 @@
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 
-	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward on spawn.
-	var/priority_reward = /obj/item/weapon/storage/box/priority_care
+	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
 
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
+	return 1
+
+/datum/job/proc/priority_reward_equip(var/mob/living/carbon/human/H)
+	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+	H.equip_or_collect(new /obj/item/weapon/storage/box/priority_care(H.back), slot_in_backpack)
 	return 1
 
 /datum/job/proc/get_access()

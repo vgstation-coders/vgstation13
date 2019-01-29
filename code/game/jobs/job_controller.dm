@@ -531,8 +531,7 @@ var/global/datum/controller/occupations/job_master
 	spawnId(H, rank, alt_title, balance_wallet)
 
 	if(job && job.priority)
-		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
-		H.equip_or_collect(new job.priority_reward(H.back), slot_in_backpack)
+		job.priority_reward_equip(H)
 
 	if(!job || !job.no_headset)
 		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
