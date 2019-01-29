@@ -82,8 +82,6 @@ var/global/datum/controller/occupations/job_master
 
 			unassigned -= player
 			job.current_positions++
-			if(job.current_positions >= job.total_positions && job.priority)
-				TogglePriority(rank)
 
 			for(var/obj/machinery/computer/labor/L in labor_consoles)
 				L.updateUsrDialog()
@@ -103,6 +101,11 @@ var/global/datum/controller/occupations/job_master
 			to_chat(player, "<span class='notice'>The [rank] job is now available!</span>")
 		return 1
 	return 0
+
+/datum/controller/occupations/proc/CheckPriorityFulfilled(var/rank)
+	var/datum/job/job = GetJob(rank)
+	if(job.current_positions >= job.total_positions && job.priority)
+		job_master.TogglePriority(rank)
 
 /datum/controller/occupations/proc/TogglePriority(var/rank, mob/user)
 	var/datum/job/job = GetJob(rank)
@@ -526,6 +529,10 @@ var/global/datum/controller/occupations/job_master
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 	spawnId(H, rank, alt_title, balance_wallet)
+
+	if(job && job.priority)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+		H.equip_or_collect(new job.priority_reward(H.back), slot_in_backpack)
 
 	if(!job || !job.no_headset)
 		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)

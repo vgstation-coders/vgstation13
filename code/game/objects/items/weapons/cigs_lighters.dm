@@ -656,6 +656,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	color_suffix = "-y"
 /obj/item/weapon/lighter/green
 	color_suffix = "-g"
+/obj/item/weapon/lighter/NT
+	desc = "A limited edition, super-exclusive Nanotrasen-colored cheap lighter. You're not thrilled."
+	color_suffix = "-nt"
 
 /obj/item/weapon/lighter/random/New()
 	color_suffix = "-[pick("r","c","y","g")]"

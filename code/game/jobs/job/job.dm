@@ -60,7 +60,8 @@
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 
-	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu.
+	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward on spawn.
+	var/priority_reward = /obj/item/weapon/storage/box/priority_care
 
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
 	return 1
