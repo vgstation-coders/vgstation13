@@ -323,6 +323,11 @@
 	if(!IsJobAvailable(rank))
 		to_chat(src, alert("[rank] is not available. Please try another."))
 		return 0
+	var/datum/job/job = job_master.GetJob(rank)
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
