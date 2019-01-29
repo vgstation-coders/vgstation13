@@ -76,11 +76,9 @@
 
 			var/pressure_delta = 10*ONE_ATMOSPHERE - internals.pressure
 			var/transfer_moles = pressure_delta * internals.volume / (M.temperature * R_IDEAL_GAS_EQUATION)
-			to_chat(H, "[transfer_moles]")
 			if(transfer_moles > 0)
 				var/datum/gas_mixture/removed = M.remove(transfer_moles)
 				if(!removed)
-					to_chat(H, "no removed")
 					return
 				var/datum/gas_mixture/to_add = new
 				to_add.temperature = removed.temperature
