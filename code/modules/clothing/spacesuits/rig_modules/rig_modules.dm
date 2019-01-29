@@ -23,7 +23,7 @@
 /obj/item/rig_module/speed_boost/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	if(R.cell.use(500))
 		to_chat(user, "<span class = 'binaryradio'>Speed module engaged.</span>")
-		R.slowdown /= 2
+		R.slowdown = max(1, slowdown/2)
 
 /obj/item/rig_module/speed_boost/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
 	R.slowdown = initial(R.slowdown)
@@ -70,16 +70,21 @@
 		to_chat(H, "<span class = 'binaryradio'>Internals pressurizer failed to find internals. Aborting.</span>")
 		processing_objects.Remove(src)
 	else
-		var/turf/T = get_turf(H)
-		if(isspace(T))
-			return
-		var/datum/gas_mixture/M = T.return_air()
-		if(M.gas[gas_id] && M.gas[gas_id] >= 1 && rig.cell.use(50))
-			var/datum/gas_mixture/internal = H.internal.return_air()
-			var/datum/gas_mixture/sample = M.remove(25)
-			var/amount_to_transfer = sample.gas[gas_id]
-			to_chat(H, "<span class = 'binaryradio'>Sampled [amount_to_transfer] from environment.</span>")
-			if(amount_to_transfer)
-				sample.adjust_gas(gas_id, -amount_to_transfer)
-				internal.adjust_gas(gas_id, amount_to_transfer)
-			M.merge(sample)
+		var/datum/gas_mixture/M = H.loc.return_air()
+		if(M.gas[gas_id] && rig.cell.use(50))
+			var/datum/gas_mixture/internals = H.internal.air_contents
+
+			var/pressure_delta = 10*ONE_ATMOSPHERE - internals.pressure
+			var/transfer_moles = pressure_delta * internals.volume / (M.temperature * R_IDEAL_GAS_EQUATION)
+			to_chat(H, "[transfer_moles]")
+			if(transfer_moles > 0)
+				var/datum/gas_mixture/removed = M.remove(transfer_moles)
+				if(!removed)
+					to_chat(H, "no removed")
+					return
+				var/datum/gas_mixture/to_add = new
+				to_add.temperature = removed.temperature
+				to_add.adjust_gas(gas_id, removed[gas_id])
+				removed.adjust_gas(gas_id, -(removed[gas_id]))
+				internals.merge(to_add)
+				M.merge(removed)
