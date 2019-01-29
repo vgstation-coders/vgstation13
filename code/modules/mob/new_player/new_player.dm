@@ -545,6 +545,43 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	return new_character
 
+//Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
+/mob/new_player/proc/create_roundstart_cyborg()
+	//End lobby
+	spawning = 1
+	close_spawn_windows()
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
+
+	//Find a spawnloc
+	var/turf/spawn_loc
+	for(var/obj/effect/landmark/start/sloc in landmarks_list)
+		if (sloc.name != "Cyborg")
+			continue
+		if (locate(/mob/living) in sloc.loc)
+			if(!spawn_loc)
+				spawn_loc = sloc.loc //Occupied is better than nothing
+			continue
+		spawn_loc = sloc.loc
+		break
+	if(!spawn_loc)
+		spawn_loc = loc //If we absolutely can't find spawns
+		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn in the new player cube.")
+
+	//Create the robot and move over prefs
+	var/mob/living/silicon/robot/new_character = new(spawn_loc)
+	new_character.mmi = new /obj/item/device/mmi(new_character)
+	new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+
+	//Handles transferring the mind and key manually.
+	if (mind)
+		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
+		mind.original = new_character
+		mind.transfer_to(new_character)
+	new_character.key = key //Do this after. For reasons known only to oldcoders.
+	spawn()
+		new_character.Namepick()
+	return new_character
+
 /mob/new_player/proc/ViewManifest()
 
 

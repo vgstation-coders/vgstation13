@@ -369,13 +369,16 @@ var/datum/controller/gameticker/ticker
 			if(player.mind.assigned_role=="AI")
 				player.close_spawn_windows()
 				player.AIize()
+			else if(player.mind.assigned_role=="Cyborg")
+				player.create_roundstart_cyborg()
+
 			else if(!player.mind.assigned_role)
 				continue
 			else
 
 				var/mob/living/carbon/human/new_character = player.create_character()
 				switch(new_character.mind.assigned_role)
-					if("MODE","Cyborg","Mobile MMI","Trader")
+					if("MODE","Mobile MMI","Trader")
 						//No injection
 					else
 						data_core.manifest_inject(new_character)
