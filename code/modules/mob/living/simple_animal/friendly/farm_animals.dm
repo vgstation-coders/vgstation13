@@ -217,7 +217,7 @@
 	var/eggsleft = 0
 	var/body_color
 	pass_flags = PASSTABLE
-	size = SIZE_SMALL
+	size = SIZE_TINY
 	speak_override = TRUE
 
 /mob/living/simple_animal/chicken/New()

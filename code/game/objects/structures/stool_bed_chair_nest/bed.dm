@@ -110,7 +110,7 @@
 		return
 
 	if(isanimal(M))
-		if(M.size <= SIZE_TINY) //Fuck off mice
+		if(M.size <= SIZE_TINY && !istype(M, /mob/living/simple_animal/chicken)) //Fuck off mice
 			to_chat(user, "<span class='warning'>The [M] is too small to buckle in.</span>")
 			return
 
