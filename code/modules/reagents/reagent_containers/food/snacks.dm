@@ -873,7 +873,7 @@
 	name = "warm [name]"
 	processing_objects.Add(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating/
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating
 	name = "self-heating Donk-pocket"
 	icon_state = "donkpocket_wrapped"
 	desc = "Individually wrapped, frozen, unfrozen, desiccated, ressicated, twice recalled, and still edible. Infamously so."
