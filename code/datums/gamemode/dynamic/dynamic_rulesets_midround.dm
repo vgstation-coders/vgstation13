@@ -188,7 +188,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/from_ghosts/weeabo
+/datum/dynamic_ruleset/midround/from_ghosts/weeaboo
 	name = "crazed weeaboo attack"
 	role_category = /datum/role/weeaboo
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
