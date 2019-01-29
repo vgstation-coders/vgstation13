@@ -152,6 +152,9 @@
 	if(!.)
 		return //Default return value is 0 - don't check for species
 
+	if(!rambler_check())
+		return
+
 	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
 		var/wearable = null

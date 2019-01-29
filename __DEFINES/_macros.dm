@@ -279,6 +279,8 @@
 
 #define isninja(H) (H.mind && H.mind.GetRole(NINJA))
 
+#define isrambler(H) (H.mind && H.mind.GetRole(RAMBLER))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles

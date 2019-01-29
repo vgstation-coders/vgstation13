@@ -450,6 +450,41 @@
 
 //////////////////////////////////////////////
 //                                          //
+//         RAMBLER       (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/rambler
+	name = "soul rambler migration"
+	role_category = /datum/role/rambler
+	enemy_jobs = list("Librarian","Detective", "Chaplain", "Internal Affairs Agent")
+	required_enemies = list(0,0,1,1,2,2,3,3,3,4)
+	required_candidates = 1
+	weight = 1
+	cost = 5
+	requirements = list(5,5,15,15,25,25,55,55,55,75)
+	logo = "rambler-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/rambler/acceptable(var/population=0,var/threat=0)
+	if(!mode.executed_rules)
+		return FALSE
+		//We have nothing to investigate!
+	if (locate(/datum/dynamic_ruleset/midround/rambler) in mode.executed_rules)
+		return FALSE
+		//Listen, this psyche is not big enough for two metaphysical seekers.
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/rambler/finish_setup(var/mob/new_character, var/index)
+	new_character.Frankensteinize()
+	..()
+
+//////////////////////////////////////////////
+//                                          //
 //               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////

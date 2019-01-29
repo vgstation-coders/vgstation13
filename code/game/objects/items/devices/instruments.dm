@@ -7,6 +7,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/musician.dmi', "right_hand" = 'icons/mob/in-hand/right/musician.dmi')
 	icon = 'icons/obj/musician.dmi'
 	force = 10
+	var/exudes_peace = FALSE
 
 /obj/item/device/instrument/New()
 	..()
