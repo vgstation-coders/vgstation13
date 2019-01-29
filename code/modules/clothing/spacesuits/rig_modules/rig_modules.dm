@@ -71,7 +71,7 @@
 		processing_objects.Remove(src)
 	else
 		var/datum/gas_mixture/M = H.loc.return_air()
-		if(M.gas[gas_id] && rig.cell.use(50))
+		if(M[gas_id] && rig.cell.use(50))
 			var/datum/gas_mixture/internals = H.internal.air_contents
 
 			var/pressure_delta = 10*ONE_ATMOSPHERE - internals.pressure
