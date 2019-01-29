@@ -1223,6 +1223,10 @@ var/list/slot_equipment_priority = list( \
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
 		return
 
+	if(get_dist(A,client.eye) > client.view)
+		to_chat(src, "<span class='notice'>It is too far away to make out.</span>")
+		return
+
 	face_atom(A)
 	A.examine(src)
 
