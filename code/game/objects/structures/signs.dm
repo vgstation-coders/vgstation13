@@ -292,3 +292,8 @@
 
 /obj/structure/sign/russian/staff_only
 	icon_state = "RU_staff_only"
+
+/obj/structure/sign/daveposter
+	name = "Dave"
+	desc = "A warning sign stating that Dave, mining's pet goliath is nearby. It contains instructions on how to take care of it including asteroid walk timetables, recommended food and a stern warning for miners to stop feeding it beer."
+	icon_state = "davesign"
