@@ -51,20 +51,20 @@
 
 			if(sheets_this_tick >= sheets_per_tick)
 				break
-			
+
 			if(user_cell.charge <= PORTOSMELTER_MINIMUM_POWER_REQUIRED)
 				to_chat(user, "<span class='warning'>Not enough power available in \the [user_cell]!</span>")
 				break
 
-			if(!istype(I, /obj/item/weapon/ore)) //Check if it's an ore
+			if(!istype(I, /obj/item/stack/ore)) //Check if it's an ore
 				I.forceMove(get_turf(loc))
 				continue
 
-			var/obj/item/weapon/ore/O = I
+			var/obj/item/stack/ore/O = I
 			if(!O.material)
 				continue
 
-			ore.addAmount(O.material, 1)//1 per ore
+			ore.addAmount(O.material, O.amount)//1 per ore
 
 			var/datum/material/mat = ore.getMaterial(O.material)
 			if(!mat)

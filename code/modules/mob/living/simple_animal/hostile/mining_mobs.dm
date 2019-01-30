@@ -121,11 +121,7 @@ obj/item/asteroid/basilisk_hide
 	icon_state = "Diamond ore"
 
 obj/item/asteroid/basilisk_hide/New()
-	var/counter
-	for(counter=0, counter<2, counter++)
-		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(src.loc)
-		D.plane = MOB_PLANE
-		D.layer = MOB_LAYER + 0.001
+	drop_stack(/obj/item/stack/ore/diamond, loc, 2)
 	..()
 	qdel(src)
 
@@ -153,8 +149,8 @@ obj/item/asteroid/basilisk_hide/New()
 	throw_message = "sinks in slowly, before being pushed out of "
 	status_flags = CANPUSH
 	search_objects = 1
-	wanted_objects = list(/obj/item/weapon/ore/diamond, /obj/item/weapon/ore/gold, /obj/item/weapon/ore/silver,
-						  /obj/item/weapon/ore/uranium)
+	wanted_objects = list(/obj/item/stack/ore/diamond, /obj/item/stack/ore/gold, /obj/item/stack/ore/silver,
+						  /obj/item/stack/ore/uranium)
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_ASTEROID
 	var/list/ore_types_eaten = list()
@@ -165,7 +161,7 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/goldgrub/GiveTarget(var/new_target)
 	target = new_target
 	if(target != null)
-		if(istype(target, /obj/item/weapon/ore))
+		if(istype(target, /obj/item/stack/ore))
 			visible_message("<span class='notice'>\The [src] looks at \the [target] with hungry eyes.</span>")
 			stance = HOSTILE_STANCE_ATTACK
 			return
@@ -178,13 +174,13 @@ obj/item/asteroid/basilisk_hide/New()
 			Burrow()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/AttackingTarget()
-	if(istype(target, /obj/item/weapon/ore))
+	if(istype(target, /obj/item/stack/ore))
 		EatOre(target)
 		return
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/EatOre(var/atom/targeted_ore)
-	for(var/obj/item/weapon/ore/O in targeted_ore.loc)
+	for(var/obj/item/stack/ore/O in targeted_ore.loc)
 		ore_eaten++
 		if(!(O.type in ore_types_eaten))
 			ore_types_eaten += O.type
@@ -671,11 +667,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/magmaw/CanAttack(var/atom/the_target)
 	if(world.time < fire_time)
 		return
-	if(istype(the_target, /obj/item/weapon/ore/plasma) || istype(the_target, /obj/item/stack/sheet/mineral/plasma))
+	if(istype(the_target, /obj/item/stack/ore/plasma) || istype(the_target, /obj/item/stack/sheet/mineral/plasma))
 		return 1
 	if(istype(the_target, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = the_target
-		if(M.mineral && istype(M.mineral.ore, /obj/item/weapon/ore/plasma))
+		if(M.mineral && istype(M.mineral.ore, /obj/item/stack/ore/plasma))
 			return 1
 	return 0
 
@@ -687,7 +683,7 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/magmaw/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	if(proximity == 0)
 		return
-	var/is_ore = istype(A, /obj/item/weapon/ore/plasma)
+	var/is_ore = istype(A, /obj/item/stack/ore/plasma)
 	var/is_sheet = istype(A, /obj/item/stack/sheet/mineral/plasma)
 	if(is_ore || is_sheet)
 		visible_message("<span class = 'warning'>\The [src] eats \the [A]!</span>")

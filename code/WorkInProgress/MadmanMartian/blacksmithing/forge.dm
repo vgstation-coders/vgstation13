@@ -40,7 +40,7 @@
 				current_temp = TEMPERATURE_PLASMA
 			fuel_time+= 60 SECONDS
 			return
-	else if(istype(I, /obj/item/weapon/ore/plasma))
+	else if(istype(I, /obj/item/stack/ore/plasma))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
 		user.drop_item(I)
 		qdel(I)

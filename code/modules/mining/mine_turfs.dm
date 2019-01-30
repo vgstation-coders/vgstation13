@@ -384,7 +384,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			next_rock += P.excavation_amount * 10
 			while(next_rock > 100)
 				next_rock -= 100
-				var/obj/item/weapon/ore/O = new(src)
+				var/obj/item/stack/ore/O = new(src)
 				if(!geologic_data)
 					geologic_data = new/datum/geosample(src)
 				geologic_data.UpdateNearbyArtifactInfo(src)
@@ -552,7 +552,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	temperature = TCMB
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
-	var/sand_type = /obj/item/weapon/ore/glass
+	var/sand_type = /obj/item/stack/ore/glass
 	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/asteroid/air
@@ -566,7 +566,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
 	icon_state = "cavefl_1"
-	sand_type = /obj/item/weapon/ore/glass/cave
+	sand_type = /obj/item/stack/ore/glass/cave
 
 /turf/unsimulated/floor/asteroid/underground/New()
 	..()
@@ -624,7 +624,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return
 
 /turf/unsimulated/floor/asteroid/update_icon()
-	if(dug && ispath(sand_type, /obj/item/weapon/ore/glass))
+	if(dug && ispath(sand_type, /obj/item/stack/ore/glass))
 		icon_state = "asteroid_dug"
 
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
@@ -648,7 +648,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	temperature = TCMB
 	plane = PLATING_PLANE
 	var/dug
-	var/sand_type = /obj/item/weapon/ore/glass
+	var/sand_type = /obj/item/stack/ore/glass
 
 /turf/simulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
@@ -724,7 +724,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return
 
 /turf/simulated/floor/asteroid/update_icon()
-	if(dug && ispath(sand_type, /obj/item/weapon/ore/glass))
+	if(dug && ispath(sand_type, /obj/item/stack/ore/glass))
 		icon_state = "asteroid_dug"
 
 /turf/simulated/floor/asteroid/proc/gets_dug()
