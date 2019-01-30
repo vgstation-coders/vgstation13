@@ -227,5 +227,9 @@ var/global/list/all_graffitis = list(
 				user.visible_message("<span class='notice'>[user] swallows what was left of \the [src].</span>", \
 					"<span class='notice'>You finish eating \the [src].</span>")
 				qdel(src)
+		if (ishuman(M))
+			var/mob/living/carbon/human/grayon = M
+			if(grayon.brainloss && prob(20))
+				M.say("mmmm... grayons...")
 	else
 		..()
