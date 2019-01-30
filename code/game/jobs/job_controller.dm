@@ -10,9 +10,9 @@ var/global/datum/controller/occupations/job_master
 
 	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
-	var/list/order_of_succession = list(list("Head of Personnel","Head of Security"),
+	var/list/order_of_succession = list("Head of Personnel","Head of Security",
 										list("Chief Engineer","Research Director","Chief Medical Officer"),
-										"Internal Affairs Agent","Warden","Security Officer","Quartermaster","Chef","Chaplain","Clown")
+										"Warden","Security Officer")
 
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
