@@ -316,7 +316,7 @@
 			bound_height = 13 * WORLD_ICON_SIZE
 			bound_y = -6 * WORLD_ICON_SIZE
 			grav_pull = 24
-			consume_range = 6
+			consume_range = 5
 			plane = 21
 			visible_message("<span class='sinister'><font size='3'>You witness the creation of a destructive force that challenges that of the very gods.</font></span>")
 
