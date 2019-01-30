@@ -182,6 +182,7 @@ var/datum/controller/gameticker/ticker
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	equip_characters()
+	job_master.succession()
 	current_state = GAME_STATE_PLAYING
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
@@ -389,18 +390,11 @@ var/datum/controller/gameticker/ticker
 			ticker.minds += player.mind
 
 /datum/controller/gameticker/proc/equip_characters()
-	var/captainless=1
 	for(var/mob/living/carbon/human/player in player_list)
 		if(player && player.mind && player.mind.assigned_role)
-			if(player.mind.assigned_role == "Captain")
-				captainless=0
 			if(player.mind.assigned_role != "MODE")
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
-	if(captainless)
-		for(var/mob/M in player_list)
-			if(!istype(M,/mob/new_player))
-				to_chat(M, "Captainship not forced on anyone.")
 
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))

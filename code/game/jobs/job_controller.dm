@@ -10,6 +10,10 @@ var/global/datum/controller/occupations/job_master
 
 	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
+	var/list/order_of_succession = list(list("Head of Personnel","Head of Security"),
+										list("Chief Engineer","Research Director","Chief Medical Officer"),
+										"Internal Affairs Agent","Warden","Security Officer","Quartermaster","Chef","Chaplain","Clown")
+
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
@@ -365,6 +369,62 @@ var/global/datum/controller/occupations/job_master
 			unassigned -= player
 	return 1
 
+/datum/controller/occupations/proc/succession()
+	//Verify there is no captain, if there is, exit.
+	var/datum/job/job = GetJob("Captain")
+	if(job.current_positions)
+		return
+	message_admins("No captain was found! We are assigning acting captaincy.")
+
+	//Find a candidate job
+	var/rank = FindSuccessorJob()
+	if(!rank)
+		to_chat(world, "<b>There is no acting captain!</b>")
+
+	//Find any player with this job
+	var/mob/living/carbon/human/acting_captain
+	for(var/mob/living/carbon/human/H in player_list)
+		if(H.mind && H.mind.assigned_role == rank)
+			acting_captain = H
+
+	if(!acting_captain)
+		//We already verified this job is filled so this shouldn't happen...
+		to_chat(world, "<b>There is no acting captain!</b>")
+
+	//Move and announce
+	for(var/obj/effect/landmark/start/sloc in landmarks_list)
+		if(sloc.name == "Captain")
+			acting_captain.forceMove(get_turf(sloc))
+			break
+	to_chat(world, "<b>[acting_captain.real_name] is acting captain!</b>")
+
+//Searches order of succession for a job with a player.
+/datum/controller/occupations/proc/FindSuccessorJob()
+	for(var/candidate in order_of_succession)
+		if(islist(candidate))
+			var/list/candidates = candidate
+			while(candidates.len)
+				var/pick_choice = pick_n_take(candidate)
+				if(JobHasPlayer(pick_choice))
+					message_admins("Picked the [pick_choice]!")
+					return pick_choice
+				else
+					message_admins("Rejected [pick_choice] due to lack of players.")
+		else
+			if(JobHasPlayer(candidate))
+				message_admins("Picked the [candidate]!")
+				return candidate
+			else
+				message_admins("Rejected [candidate] due to lack of players.")
+	return null
+
+//Doesn't care if they're active, only checks to see if the job has at least one player.
+/datum/controller/occupations/proc/JobHasPlayer(var/rank)
+	var/datum/job/job = GetJob(rank)
+	if(job && job.current_positions)
+		return TRUE
+	else
+		return FALSE
 
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
 	if(!H)
