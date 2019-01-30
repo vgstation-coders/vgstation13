@@ -260,7 +260,7 @@
 
 //Ammolathe designs. They lack research values so they can't be researched.
 //Weapons
-/obj/item/weapon/gun/projectile/sec
+
 /datum/design/glock
 	name = "NT Glock"
 	desc = "A NT Glock. It uses .380AUTO rounds."
