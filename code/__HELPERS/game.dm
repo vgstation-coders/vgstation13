@@ -279,8 +279,8 @@ var/list/DummyCache = list()
 //#define DEBUG_ROLESELECT
 
 #ifdef DEBUG_ROLESELECT
-# define roleselect_debug(x) testing(x)
-# warning DEBUG_ROLESELECT is defined!
+#define roleselect_debug(x) testing(x)
+#warn DEBUG_ROLESELECT is defined!
 #else
 # define roleselect_debug(x)
 #endif

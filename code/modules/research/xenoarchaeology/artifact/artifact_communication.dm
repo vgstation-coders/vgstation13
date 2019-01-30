@@ -12,11 +12,12 @@
 	var/remaining = 6
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
-/obj/machinery/communication/attackby(obj/item/W as obj, mob/user as mob)
+/obj/machinery/communication/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/commstone))
 		if((W in allstones) && remaining < 6)
 			if(user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You place one of the strange stones back onto the ancient device, it snaps into place.</span>")
+				remaining++
 	..()
 
 /obj/machinery/communication/attack_ghost(mob/user as mob)
@@ -32,6 +33,7 @@
 		var/obj/item/commstone/stone = contents[1]
 		user.put_in_hands(stone)
 		to_chat(user, "<span class='notice'>You delicately remove one of the strange stones from the ancient device.</span>")
+		remaining--
 		return
 	if(remaining)
 		var/obj/item/commstone/stone = new(remaining)

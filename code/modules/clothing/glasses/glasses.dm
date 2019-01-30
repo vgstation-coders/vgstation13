@@ -363,7 +363,7 @@ BLIND     // can't see anything
 	desc = "Used for seeing walls, floors, and stuff through anything."
 	icon_state = "meson"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermonocle"

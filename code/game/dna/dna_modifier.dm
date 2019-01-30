@@ -21,6 +21,7 @@
 	var/mind=null
 	var/list/languages = list()
 	var/times_cloned=0
+	var/talkcount
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -970,7 +971,11 @@
 				databuf.types = DNA2_BUF_UI // DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier"
 				src.buffers[bufferId] = databuf
@@ -985,7 +990,11 @@
 				databuf.types = DNA2_BUF_UI|DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier + Unique Enzymes"
 				src.buffers[bufferId] = databuf
@@ -1000,7 +1009,11 @@
 				databuf.types = DNA2_BUF_SE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 				databuf.name = "Structural Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1

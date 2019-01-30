@@ -13,13 +13,14 @@ var/const/AIRLOCK_WIRE_ELECTRIFY = 256
 var/const/AIRLOCK_WIRE_SAFETY = 512
 var/const/AIRLOCK_WIRE_SPEED = 1024
 var/const/AIRLOCK_WIRE_LIGHT = 2048
+var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 /datum/wires/airlock/secure
 	random = 1
 
 /datum/wires/airlock
 	holder_type = /obj/machinery/door/airlock
-	wire_count = 12
+	wire_count = 13
 	window_y = 570
 
 /datum/wires/airlock/New()
@@ -36,6 +37,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
 		"[AIRLOCK_WIRE_SPEED]"         = "Speed",
 		"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
+		"[AIRLOCK_WIRE_ONOPEN]"        = "On Open"
 	)
 	..()
 
@@ -154,13 +156,15 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			//raises them if they are down (only if power's on)
 			if(!A.locked)
 				A.locked = 1
+				playsound(A, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				for(var/mob/M in range(1, A))
-					to_chat(M, "You hear a click from the bottom of the door.")
+					to_chat(M, "You hear a metallic clunk from the bottom of the door.")
 			else
 				if(A.arePowerSystemsOn()) //only can raise bolts if power's on
 					A.locked = 0
+					playsound(A, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 					for(var/mob/M in range(1, A))
-						to_chat(M, "You hear a click from the bottom of the door.")
+						to_chat(M, "You hear a metallic clunk from the bottom of the door.")
 			A.update_icon()
 
 		if(AIRLOCK_WIRE_BACKUP_POWER1, AIRLOCK_WIRE_BACKUP_POWER2)
@@ -196,6 +200,8 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_OPEN_DOOR)
 			//tries to open the door without ID
 			//will succeed only if the ID wire is cut or the door requires no access
+			for(var/mob/M in range(1, A))
+				to_chat(M, "<span class = 'notice'>You see \the [holder]'s keypad blink green for a second.</span>")
 			if(!A.requiresID() || A.check_access(null))
 				if(A.density)
 					A.open()
@@ -212,3 +218,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_LIGHT)
 			A.lights = !A.lights
 			A.update_icon()
+
+		if(AIRLOCK_WIRE_ONOPEN)
+			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
+

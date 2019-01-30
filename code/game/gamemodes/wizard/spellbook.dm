@@ -75,7 +75,7 @@
 
 /obj/item/weapon/spellbook/proc/get_available_potions()
 	return available_potions
-
+/*
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
@@ -86,13 +86,12 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
-
-
+*/
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
-/obj/item/weapon/spellbook/attack_self(mob/user = usr)
+/obj/item/weapon/spellbook/attack_self(var/mob/user)
 	if(!user)
 		return
 
@@ -183,7 +182,7 @@
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy())
+		if(!A.can_buy(user))
 			continue
 
 		var/artifact_name = A.name
@@ -314,8 +313,10 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price))
+				if(SA.can_buy(usr) && use(SA.price))
 					SA.purchased(usr)
+					if(SA.one_use)
+						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
 		attack_self(usr)
@@ -804,8 +805,17 @@
 	desc = "This book seems like it moves away as you get closer to it."
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
+	user.drop_item(src, force_drop = 1)	//no taking the transportation device with you
 	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
-	var/area/thearea = pick(areas)
+	var/area/thearea
+	var/area/prospective = pick(areas)
+	while(!thearea)
+		if(prospective.type != /area)
+			var/turf/T = pick(get_area_turfs(prospective.type))
+			if(T.z != 2)
+				thearea = prospective
+				break
+		prospective = pick(areas)
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)
@@ -850,7 +860,7 @@
 
 ///// ANCIENT SPELLBOOK /////
 
-/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle
 	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
 	spell = null
 	icon_state = "book"
@@ -868,7 +878,7 @@
 
 ///// WINTER SPELLBOOK /////
 
-/obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be avaliable at christmas
+/obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be available at christmas
 	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
 	icon_state = "winter"
 	desc = "A book of festive knowledge"

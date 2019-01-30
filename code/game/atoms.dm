@@ -512,11 +512,14 @@ its easier to just keep the beam vertical.
 /atom/proc/can_mech_drill()
 	return acidable()
 
-/atom/proc/blob_act(destroy = 0)
+/atom/proc/blob_act(destroy = 0,var/obj/effect/blob/source = null)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
 		return
-	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
+	if (source)
+		anim(target = loc, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	else
+		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 	return
 
 /*
@@ -923,4 +926,21 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
+	return
+
+/atom/proc/get_cell()
+	return
+
+/atom/proc/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(!reagents)
+		return INJECTION_RESULT_FAIL
+	if(reagents.is_full())
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	return INJECTION_RESULT_SUCCESS
+
+/atom/proc/is_hot()
+	return
+
+/atom/proc/thermal_energy_transfer()
 	return

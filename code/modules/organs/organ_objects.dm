@@ -137,6 +137,34 @@
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
 
+/obj/item/organ/internal/heart/cell
+	name = "biocharger"
+	icon_state = "heart-cell"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/heart/cell
+	robotic=2
+
+/obj/item/organ/internal/heart/cell/get_cell()
+	if(organ_data)
+		var/datum/organ/internal/heart/cell/C = organ_data
+		return C.cell
+
+/obj/item/organ/internal/heart/cell/attack_self(mob/user)
+	if(get_cell())
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You remove \the [C.cell] from \the [src].</span>")
+		user.put_in_hands(C.cell)
+		C.cell = null
+
+/obj/item/organ/internal/heart/cell/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/cell) && !get_cell() && organ_data && user.drop_item(I, src))
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
+		C.cell = I
+		return
+	..()
+
 /obj/item/organ/internal/lungs
 	name = "human lungs"
 	icon_state = "lungs"
@@ -260,25 +288,6 @@
 
 /obj/item/organ/internal/appendix
 	name = "appendix"
-
-/obj/item/organ/internal/stomach
-	name = "stomach"
-	icon_state = "stomach"
-	organ_tag = "stomach"
-
-/obj/item/organ/internal/stomach/update()
-	.=..()
-	if(istype(organ_data, /datum/organ/internal/stomach))
-		var/datum/organ/internal/stomach/S = organ_data
-		if(!reagents || reagents.maximum_volume != S.reagent_size)
-			create_reagents(S.reagent_size)
-
-/obj/item/organ/internal/stomach/replaced(var/mob/living/target)
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		var/datum/organ/internal/stomach/S = H.get_stomach()
-		if(S)
-			reagents.trans_to(S.get_reagents(), reagents.maximum_volume)
 
 /obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)

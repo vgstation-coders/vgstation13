@@ -14,7 +14,7 @@
 
 /obj/item/weapon/banhammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
@@ -31,7 +31,7 @@
 
 /obj/item/weapon/sord/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -61,10 +61,10 @@
 
 /obj/item/weapon/claymore/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
-	new /obj/item/weapon/melee/cultblade(loc)
+	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
 
 /obj/item/weapon/katana
@@ -86,10 +86,61 @@
 
 /obj/item/weapon/katana/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
 		return 1
+
+/obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
+	var/teleportcooldown = 600 //one minute cooldown
+	var/active = FALSE
+
+/obj/item/weapon/katana/hesfast/examine(mob/user)
+	..()
+	if(!isweeaboo(user))
+		return
+	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
+	var/message = "<span class='notice'>"
+	if(teleportcooldown < world.time)
+		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
+	else
+		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
+		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+	if(active)
+		message += " Alt-click it to disable your teleport power!</span>"
+	else
+		message += " Alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
+	to_chat(user, "[message]")
+
+/obj/item/weapon/katana/hesfast/AltClick(mob/user)
+	if(!isweeaboo(user))
+		return
+	if(!active)
+		active = TRUE
+		to_chat(user, "<span class='notice'>You will teleport on attacks if you can.</span>")
+	else//i could return on the above but this is much more readable or something
+		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
+		active = FALSE
+
+/obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
+	if(!active || !isweeaboo(user) || !ismob(A) || (A == user)) //sanity
+		return
+	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
+		return
+	var/mob/living/L = A
+	var/turf/SHHHHIIIING = get_step(L.loc, turn(L.dir, 180))
+	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm
+		return
+	teleportcooldown = initial(teleportcooldown) + world.time
+	playsound(src, "sound/weapons/shing.ogg",50,1)
+	user.forceMove(SHHHHIIIING)
+	user.dir = L.dir
+	user.say("Pshh... nothing personnel... kid...")
+	..()
+
+/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
@@ -209,6 +260,13 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	icon_state = "tacknife"
 	item_state = "knife"
 	force = 10
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
+	slowdown = 0.999
+
+/obj/item/weapon/kitchen/utensil/knife/tactical/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		slowdown = 0.8
 
 /obj/item/weapon/kitchen/utensil/knife/skinning
 	name = "skinning knife"
@@ -244,7 +302,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
 	user.delayNextAttack(50) //five times the regular attack delay
@@ -466,3 +524,12 @@ obj/item/weapon/banhammer/admin
 //		base_overlay.appearance = appearance
 //		base_overlay.plane = FLOAT_PLANE
 //		overlays += base_overlay
+
+
+/obj/item/weapon/hammer
+	name = "smithing hammer"
+	desc = "for those with a predeliction for applying concussive maintenance"
+	icon_state = "hammer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	force = 8
+	hitsound = 'sound/weapons/toolbox.ogg'

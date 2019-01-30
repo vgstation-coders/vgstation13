@@ -45,7 +45,7 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 			card.setPersonality(pai)
 			card.looking_for_personality = 0
 
-			RemoveAllFactionIcons(card.pai.mind)
+			//RemoveAllFactionIcons(card.pai.mind)
 
 			pai_candidates -= candidate
 			for(var/obj/item/device/paicard/p in paicard_list)
@@ -226,3 +226,17 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 				asked[C.key] = INFINITY
 			else
 				question(C)
+
+
+/datum/paiController/proc/was_recruited(var/mob/dead/observer/O)
+	if (!istype(O))
+		return
+
+	for(var/datum/paiCandidate/c in pai_candidates)
+		if(c.key == O.key)
+			pai_candidates -= c // We remove them from the list
+			break
+
+	for(var/obj/item/device/paicard/p in paicard_list)
+		if(!p.pai && !pai_candidates.len)
+			p.removeNotification()

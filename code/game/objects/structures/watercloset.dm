@@ -402,7 +402,7 @@
 	if(prob(CLEAN_PROB))
 		turf.clean_blood()
 		for(var/obj/effect/E in turf)
-			if(istype(E, /obj/effect/rune) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
+			if(istype(E, /obj/effect/rune_legacy) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
 				qdel(E)
 
 /obj/machinery/shower/process()

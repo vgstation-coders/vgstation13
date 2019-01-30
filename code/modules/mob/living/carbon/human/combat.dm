@@ -125,7 +125,7 @@
 		return HALLOSS
 	return ..()
 
-/mob/living/carbon/human/get_unarmed_damage(mob/victim)
+/mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = rand(0, S.max_hurt_damage)
@@ -207,8 +207,10 @@
 	..()
 
 /mob/living/carbon/human/proc/perform_cpr(mob/living/target)
+	if(target == src)
+		return 0
 	if(!get_lungs())
-		to_chat(src, "<span class='notice'><B>You have no lungs with which to perform CPR with!</B></span>")
+		to_chat(src, "<span class='notice'><B>You have no lungs with which to perform CPR!</B></span>")
 		return 0
 	if(src.species && src.species.flags & NO_BREATHE)
 		to_chat(src, "<span class='notice'><B>You don't breathe, so you can't help \the [target]!</B></span>")

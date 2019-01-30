@@ -35,10 +35,17 @@ var/list/blob_looks
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
+//Few global vars to track the blob
+var/list/blobs = list()
+var/list/blob_cores = list()
+var/list/blob_nodes = list()
+var/list/blob_resources = list()
+var/list/blob_overminds = list()
+
 
 /obj/effect/blob
 	name = "blob"
-	icon = 'icons/mob/blob/blob_64x64.dmi'
+	icon = 'icons/mob/blob/blob_64x64.dmi'//HALLOWEEN
 	icon_state = "center"
 	luminosity = 2
 	desc = "A part of a blob."
@@ -60,6 +67,7 @@ var/list/blob_looks
 	var/mob/camera/blob/overmind = null
 	var/destroy_sound = "sound/effects/blobsplat.ogg"
 
+	//var/looks = "new" HALLOWEEN
 	var/looks = "new"
 
 	// A note to the beam processing shit.
@@ -77,15 +85,12 @@ var/list/blob_looks
 	return
 
 
-/obj/effect/blob/New(turf/loc,newlook = "new",no_morph = 0)
-	looks = newlook
+//obj/effect/blob/New(turf/loc,newlook = "new",no_morph = 0) HALLOWEEN
+/obj/effect/blob/New(turf/loc,newlook = null,no_morph = 0)
+	if(newlook)
+		looks = newlook
 	update_looks()
 	blobs += src
-	if(istype(ticker.mode,/datum/game_mode/blob))
-		var/datum/game_mode/blob/blobmode = ticker.mode
-		if((blobs.len >= blobmode.blobnukeposs) && prob(3) && !blobmode.nuclear)
-			blobmode.stage(2)
-			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
@@ -104,7 +109,7 @@ var/list/blob_looks
 
 	..(loc)
 	for(var/atom/A in loc)
-		A.blob_act()
+		A.blob_act(0,src)
 	return
 
 
@@ -119,7 +124,7 @@ var/list/blob_looks
 		for(var/obj/effect/blob/B in orange(loc,1))
 			B.update_icon()
 			if(!spawning)
-				anim(target = B.loc, a_icon = icon, flick_anim = "connect_die", sleeptime = 50, direction = get_dir(B,src), lay = layer+0.3, offX = -16, offY = -16, col = "red")
+				anim(target = B.loc, a_icon = icon, flick_anim = "connect_die", sleeptime = 50, direction = get_dir(B,src), plane = src.plane, lay = layer+0.3, offX = -16, offY = -16, col = "red")
 
 	if(!manual_remove)
 		for(var/obj/effect/blob/core/C in range(loc,4))
@@ -279,6 +284,8 @@ var/list/blob_looks
 			icon = 'icons/mob/blob/blob_AME.dmi'
 		if("AME_new")
 			icon = 'icons/mob/blob/blob_AME_64x64.dmi'
+		if("skelleton")
+			icon = 'icons/mob/blob/blob_skelleton_64x64.dmi'
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
@@ -297,6 +304,7 @@ var/list/blob_looks_admin = list(//Options available to admins
 	"clownscape" = 32,
 	"AME" = 32,
 	"AME_new" = 64,
+	"skelleton" = 64,
 	)
 
 var/list/blob_looks_player = list(//Options available to players
@@ -328,7 +336,7 @@ var/list/blob_looks_player = list(//Options available to players
 	//set background = 1
 
 	for(var/mob/M in loc)
-		M.blob_act()
+		M.blob_act(0,src)
 
 	if(run_action())//If we can do something here then we dont need to pulse more
 		return
@@ -395,12 +403,12 @@ var/list/blob_looks_player = list(//Options available to players
 		else
 			B.forceMove(T)
 	else
-		T.blob_act()//If we cant move in hit the turf
+		T.blob_act(0,src)//If we cant move in hit the turf
 		B.manual_remove = 1
 		B.Delete()
 
 	for(var/atom/A in T)//Hit everything in the turf
-		A.blob_act()
+		A.blob_act(0,src)
 	return 1
 
 

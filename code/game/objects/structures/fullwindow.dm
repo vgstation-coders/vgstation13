@@ -98,6 +98,13 @@
 	var/turf/T = get_turf(src)
 	T.AltClick(user)
 
+/obj/structure/window/full/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)
+
+/obj/structure/window/full/loose
+	anchored = 0
+	d_state = 0
+
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -108,6 +115,10 @@
 	penetration_dampening = 3
 	d_state = WINDOWSECURE
 	reinforced = 1
+
+/obj/structure/window/full/reinforced/loose
+	anchored = 0
+	d_state = 0
 
 /obj/structure/window/full/plasma
 
@@ -123,6 +134,11 @@
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
 
+/obj/structure/window/full/plasma/loose
+	anchored = 0
+	d_state = 0
+
+
 /obj/structure/window/full/reinforced/plasma
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
@@ -132,6 +148,11 @@
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+
+/obj/structure/window/full/reinforced/plasma/loose
+	anchored = 0
+	d_state = 0
+
 
 /obj/structure/window/full/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
@@ -165,10 +186,18 @@
 	sheetamount = 4
 	health = 80
 
+/obj/structure/window/full/reinforced/clockwork/loose
+	anchored = 0
+	d_state = 0
+
+
 /obj/structure/window/full/reinforced/clockwork/update_icon()
 	return
 
 /obj/structure/window/full/reinforced/clockwork/cultify()
+	return
+
+/obj/structure/window/full/reinforced/clockwork/clockworkify()
 	return
 
 #undef WINDOWLOOSE

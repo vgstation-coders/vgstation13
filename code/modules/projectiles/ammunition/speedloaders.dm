@@ -36,3 +36,29 @@
 
 /obj/item/ammo_storage/speedloader/a762x55/empty
 	starting_ammo = 0
+
+/obj/item/ammo_storage/speedloader/shotgun
+	name = "double barreled shotgun speedloader"
+	desc = "The instructions read 'Just break the shotgun open, stick the shells in, and break the clip off.'"
+	icon_state = "shotgun_speedloader"
+	caliber = GAUGE12
+	exact = FALSE
+	max_ammo = 2
+	starting_ammo = 0
+
+/obj/item/ammo_storage/speedloader/shotgun/update_icon()
+	overlays.Cut()
+	if(stored_ammo.len)
+		var/count = 1
+		for(var/obj/item/ammo_casing/shotgun/S in stored_ammo)
+			var/pixelx = 0
+			var/pixely = 0
+			switch(count)
+				if(1)
+					count++
+					pixelx = -10
+				if(2)
+					pixelx = -6
+					pixely = -1
+			var/image/shell_image = image("icon" = S.icon, "icon_state" = S.icon_state, "pixel_x" = pixelx, "pixel_y" = pixely)
+			overlays += shell_image

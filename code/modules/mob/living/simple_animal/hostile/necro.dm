@@ -17,6 +17,7 @@
 		creator = Owner
 		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
+		/*
 		var/ref = "\ref[Owner.mind]"
 		var/list/necromancers
 		if(!(Owner.mind in ticker.mode.necromancer))
@@ -28,7 +29,7 @@
 		ticker.mode.update_necro_icons_added(Victim.mind)
 		ticker.mode.update_all_necro_icons()
 		ticker.mode.risen.Add(Victim.mind)
-
+		*/
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
 
@@ -125,18 +126,10 @@
 	var/can_evolve = FALSE //False if we don't want it to evolve
 	//var/busy //If the zombie is busy, and what it's busy doing
 
-#define CANT 0
-#define CAN 1
-#define CANPLUS 2
-
-
-
-	var/break_doors = CANT //If CAN, they can attempt to open doors. If CANPLUS, they break the door down entirely
 	var/health_cap = 250 //Maximum possible health it can have. Because screw having a 1000 health mob
 	var/busy = FALSE //Stop spamming the damn doorsmash
 	wanted_objects = list(
 		/obj/machinery/light,
-		/obj/machinery/door        // Bust out lights
 	)
 	search_objects = 1
 
@@ -159,16 +152,9 @@
 		else
 			if(M.isDead())
 				return 0
-
-	if(istype(the_target,/obj/machinery/door)) //Checking for doors
-		var/obj/machinery/door/D = the_target
-		if(can_open_door(D))
-			return the_target
-		else
-			return 0
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
-		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
+		return L.current_bulb && L.current_bulb.status != LIGHT_BROKEN
 
 	return ..(the_target)
 
@@ -185,143 +171,16 @@
 			eat(H)
 			return 0
 
-	if(istype (target, /obj/machinery/door))
-		var/obj/machinery/door/D = target
-		if(can_open_door(D))
-			force_door(D)
-		return 0
-
 	return..()
 
 
 
 /mob/living/simple_animal/hostile/necro/zombie/Life()
-	/*TODONE
-	First, check if the zombie can potentially evolve
-	Have the zombie move to a corpse and start chewing at it
-	If neither of these things are applicable, break some lights to set the mood: Tried it. Do not recommend
-	Otherwise, start wandering and bust down some doors to find more food
-	*/
 	if(!isUnconscious())
 		if(stance == HOSTILE_STANCE_IDLE && !client) //Not doing anything at the time
 			if(can_evolve)//Can we evolve, and have we fed
 				check_evolve()
 	..()
-				/*
-				if((health < maxHealth) || (maxHealth < health_cap) && !busy)
-					var/mob/living/carbon/human/C = find_food(can_see)//Is there something to eat in range?
-					if(C) //If so, chow down
-						Goto(C, move_to_delay)
-						busy = MOVING_TO_TARGET
-						give_up(C) //If we're not there in 10 seconds, give up
-						if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
-							busy = EATING
-							eat(C)
-							C = null
-							walk(src, 0)
-
-				if(!busy && break_doors != CANT)//So we don't try to eat and open doors
-					var/obj/machinery/door/D = find_door(can_see)//Is there a door to open in range?
-					if(D)
-						Goto(D, move_to_delay)
-						busy = MOVING_TO_TARGET
-						give_up(D)
-						if(D.Adjacent(src) && busy != OPENING_DOOR)
-							busy = OPENING_DOOR
-							force_door(D)
-							D = null
-							walk(src, 0)
-		else
-			busy = 0
-			stop_automated_movement = 0
-	else
-		walk(src,0)
-		*/
-/*
-/mob/living/simple_animal/hostile/necro/zombie/proc/find_food(var/list/can_see)
-	for(var/mob/living/carbon/human/C in can_see) //Because of how can_see lists things, it'll go in order of closest to furthest
-		if(C.isDead() && check_edibility(C))
-			return(C) //This would get the closest one
-
-/mob/living/simple_animal/hostile/necro/zombie/proc/find_door(var/list/can_see)
-	for(var/obj/machinery/door/D in can_see)
-		if(can_open_door(D))
-			return(D)
-
-/mob/living/simple_animal/hostile/necro/zombie/proc/give_up(var/C)
-	spawn(100)
-		if(busy == MOVING_TO_TARGET)
-			if(target == C && !Adjacent(target))
-				target = null
-			busy = 0
-			stop_automated_movement = 0
-			walk(src,0)
-*/
-/mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D, busy_override = 0)
-	if(busy && !busy_override) //Already smashing a door or eating something
-		return 0
-	if((istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window)) && !client)
-		return 0
-	if(break_doors == CANT)//Moreso used for when a player-controlled zombie attempts to forceopen a door
-		return 0
-	// Don't fuck with doors that are doing something
-	if(D.operating>0)
-		return 0
-
-	// Don't open opened doors.
-	if(!D.density)
-		return 0
-
-	// Can't open bolted/welded doors
-	if(istype(D,/obj/machinery/door/airlock))
-		var/obj/machinery/door/airlock/A=D
-		if(A.locked || A.welded || A.jammed)
-			if(break_doors == CANPLUS)
-				return 1
-			else
-				return 0
-
-	return 1
-
-/mob/living/simple_animal/hostile/necro/zombie/proc/force_door(var/obj/machinery/door/D)
-	var/time_mult = 1
-	if(istype(D, /obj/machinery/door/airlock/))
-		var/obj/machinery/door/airlock/A = D
-		if(A.locked)
-			time_mult += 1
-		if(A.welded)
-			time_mult += 1
-		if(A.jammed)
-			time_mult += 1
-	stop_automated_movement = 1
-	D.visible_message("<span class='warning'>\The [D]'s motors whine as something attempts to brute force their way through it!</span>")
-	playsound(D, 'sound/effects/grillehit.ogg', 50, 1)
-	D.shake(1, 8)
-	busy = TRUE
-	var/target_loc = D.loc
-	var/self_loc = src.loc
-	spawn(10 SECONDS*time_mult)
-		if(D.loc == target_loc && self_loc == src.loc) //Not moved
-			to_chat(src, "<span class = 'notice'>You get a grip of \the [D], and...</span>")
-			if(can_open_door(D, 1))//Let's see if nobody quickly bolted it
-				if(break_doors == CANPLUS) //Guaranteed
-					D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
-					if(istype(D, /obj/machinery/door/airlock/))
-						var/obj/machinery/door/airlock/A = D
-						A.locked = 0
-						A.welded = 0
-						A.jammed = 0
-					D.open(1)
-				else
-					if(prob(33))
-						D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
-						D.open(1)
-					else
-						to_chat(src, "<span class = 'notice'>You fail to open \the [D]</span>")
-						playsound(D, 'sound/effects/grillehit.ogg', 50, 1)
-						D.shake(1, 8)
-		busy = FALSE
-	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
 	if(busy)
@@ -429,14 +288,6 @@
 		to_chat(src, "Try as you might, you can't bring yourself to attack [A]")
 		return
 	..()
-	if(istype(A, /obj/machinery/door))
-		if(can_open_door(A))
-			force_door(A)
-		else
-			if(busy)
-				to_chat(src, "<span class='notice'>You're busy with something else.</span>")
-			else
-				to_chat(src, "<span class='notice'>You don't think you can get \the [A] open.</span>")
 	if(istype(A, /mob/living/carbon/human))
 		if(check_edibility(A))
 			eat(A)
@@ -536,7 +387,7 @@
 	maxHealth = 100
 	health = 100
 	can_evolve = 1
-	break_doors = CAN
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting/check_evolve()
 	..()
@@ -554,7 +405,7 @@
 	health = 150
 	can_evolve = 0
 	var/zombify_chance = 25 //Down with hardcoding
-	break_doors = CAN
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
 	if(busy)
@@ -620,7 +471,7 @@
 
 	attacktext = "slashes"
 	attack_sound = "sound/weapons/bloodyslice.ogg"
-	break_doors = CANPLUS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/necro/zombie/leatherman
 	name = "leatherman"
@@ -648,7 +499,7 @@
 	melee_damage_upper = 20
 	attacktext = "punches"
 	attack_sound = "sound/weapons/punch1.ogg"
-	break_doors = CAN
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/Life()
 	..()
@@ -691,7 +542,6 @@
 			visible_message("<span class = 'blob'>\The [src] glows with a brilliant light!</span>")
 		set_light(vision_range/2, vision_range, "#a1d68b")
 		spawn(1 SECONDS)
-			/
 			emitted_harvestable_radiation(get_turf(src), rand(250, 500), range = 7)
 
 			var/list/can_see = view(src, vision_range)
@@ -716,11 +566,4 @@
 			spawn(3 SECONDS)
 				set_light(1, 2, "#5dca31")
 
-#undef EVOLVING
-#undef MOVING_TO_TARGET
-#undef EATING
-#undef OPENING_DOOR
-#undef CAN
-#undef CANT
-#undef CANPLUS
 #undef RAD_COST

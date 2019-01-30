@@ -14,7 +14,8 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
-
+	layer = ABOVE_OBJ_LAYER
+	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
 	var/list/can_be_placed_into = list(
@@ -175,7 +176,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(reagents.total_volume)
+	if(!opaque && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -226,9 +227,7 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
-
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/update_icon()
-	return
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -248,9 +247,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
-
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace/update_icon()
-	return
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -358,11 +355,27 @@
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
+		return
 	attempt_heating(D, user)
 
+/obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
+	update_icon()
+	
+/obj/item/weapon/reagent_containers/glass/bucket/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
+	
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)
+	update_icon()
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug

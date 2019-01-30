@@ -3,7 +3,7 @@
 /mob/living/carbon/human/proc/breathe()
 	if(flags & INVULNERABLE)
 		return
-	if(reagents.has_reagent(LEXORIN))
+	if(reagents.has_any_reagents(LEXORINS))
 		return
 	if(undergoing_hypothermia() == PROFOUND_HYPOTHERMIA) // we're not breathing. see handle_hypothermia.dm for details.
 		return
@@ -47,7 +47,7 @@
 				//
 			else if(isobj(loc))
 				var/obj/location_as_object = loc
-				breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
+				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(isturf(loc))
 				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 					//Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
@@ -94,27 +94,9 @@
 
 	handle_breath(breath)
 
-	if(species.name == "Plasmaman") //For plasmamen only, fuck species modularity
+	if(species)
+		species.handle_environment(environment, src)
 
-		//Check if we're wearing our biosuit and mask.
-		if(!(istype(wear_suit, /obj/item/clothing/suit/space/plasmaman) || istype(wear_suit,/obj/item/clothing/suit/space/bomberman)) || !(istype(head,/obj/item/clothing/head/helmet/space/plasmaman) || istype(head,/obj/item/clothing/head/helmet/space/bomberman)))
-			//testing("Plasmaman [src] leakin'.  coverflags=[cover_flags]")
-			//OH FUCK HE LEAKIN'.
-			//This was OP.
-			//environment.adjust(tx = environment.total_moles()*BREATH_PERCENTAGE) //About one breath's worth. (I know we aren't breathing it out, but this should be about the right amount)
-			if(environment)
-				if(environment.oxygen && environment.total_moles() && (environment.oxygen / environment.total_moles()) >= OXYCONCEN_PLASMEN_IGNITION) //How's the concentration doing?
-					if(!on_fire)
-						to_chat(src, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
-					adjust_fire_stacks(0.5)
-					IgniteMob()
-		else
-			var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
-			if(istype(PS))
-				if(fire_stacks > 0)
-					PS.Extinguish(src)
-				else
-					PS.regulate_temp_of_wearer(src)
 
 
 	if(breath)

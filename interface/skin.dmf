@@ -816,6 +816,17 @@ window "mapwindow"
 		text-color = none
 		is-default = true
 		saved-params = "icon-size"
+	elem "credits"
+		type = BROWSER
+		pos = 0,0
+		size = 640x480
+		anchor1 = 0,0
+		anchor2 = 100,100
+		text-color = #ffffff
+		background-color = #000000
+		is-visible = false
+		saved-params = ""
+		auto-format = false
 
 window "outputwindow"
 	elem "outputwindow"
@@ -1063,4 +1074,3 @@ window "window1"
 		background-color = #fffdd0
 		border = sunken
 		saved-params = "max-lines"
-

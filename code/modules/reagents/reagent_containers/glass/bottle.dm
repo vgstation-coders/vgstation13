@@ -407,9 +407,9 @@
 	New()
 		..()
 		reagents.add_reagent(BICARODYNE, 30)
-		
+
 /obj/item/weapon/reagent_containers/glass/bottle/hypozine
-	
+
 
 /obj/item/weapon/reagent_containers/glass/bottle/hypozine/New()
 	..()
@@ -487,3 +487,58 @@
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/New()
 	..()
 	reagents.add_reagent(BLEACH, 15)
+
+/obj/item/weapon/reagent_containers/glass/bottle/eznutrient
+	name = "E-Z-Nutrient Bottle"
+	desc = "A bottle of standard grade fertilizer for regular uses. The label reads 'Grow your plants E-Z P-Z with E-Z-Nutrient. Easy!'."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/eznutrient/New()
+	..()
+	reagents.add_reagent(EZNUTRIENT, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/left4zed
+	name = "Left 4 Zed Bottle"
+	desc = "A bottle of fertilizer specialized for plant mutation. A microtransactions coupon is attached, named after the eponymous game."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/left4zed/New()
+	..()
+	reagents.add_reagent(LEFT4ZED, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/robustharvest
+	name = "Robust Harvest Bottle"
+	desc = "A bottle of fertilizer to increase plant yields and potency. You feel stronger and bolder just from looking at the liquid inside."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/robustharvest/New()
+	..()
+	reagents.add_reagent(ROBUSTHARVEST, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/carbon/New()
+	..()
+	reagents.add_reagent(CARBON, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/silicon/New()
+	..()
+	reagents.add_reagent(SILICON, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/sugar/New()
+	..()
+	reagents.add_reagent(SUGAR, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/oxygen/New()
+	..()
+	reagents.add_reagent(OXYGEN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/hydrogen/New()
+	..()
+	reagents.add_reagent(HYDROGEN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/nitrogen/New()
+	..()
+	reagents.add_reagent(NITROGEN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/potassium/New()
+	..()
+	reagents.add_reagent(POTASSIUM, 30)

@@ -31,12 +31,12 @@
 	if(healths)
 		healths.icon_state = "health5"
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 	stat = DEAD
 
 	update_canmove()
 	update_icons()
-	if(ticker.mode)
-		ticker.mode.check_win()
+	/*if(ticker.mode) WHY
+		ticker.mode.check_win()*/
 
 	return ..(gibbed)

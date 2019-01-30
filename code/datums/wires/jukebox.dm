@@ -1,5 +1,3 @@
-#define JUKEMODE_PLAY_ONCE 3
-
 /datum/wires/jukebox
 	holder_type = /obj/machinery/media/jukebox
 	wire_count = 8

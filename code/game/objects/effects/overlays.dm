@@ -133,3 +133,16 @@
 			//Don't step forward as a robot, we're not slipping just glitching.
 			R.visible_message("<span class='warning'>[R] short circuits on the water!</span>", \
 					"<span class='warning'>You short circuit on the water!</span>")
+
+/obj/effect/overlay/wallrot
+	name = "Wallrot"
+	desc = "Ick..."
+	icon = 'icons/effects/wallrot.dmi'
+	anchored = TRUE
+	density = TRUE
+	mouse_opacity = 0
+
+/obj/effect/overlay/wallrot/New()
+	..()
+	pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER

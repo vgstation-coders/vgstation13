@@ -14,6 +14,7 @@
 		/obj/item/weapon/bikehorn/baton,
 		/obj/item/weapon/blunderbuss,
 		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/device/hailer,
 		)
 	body_parts_covered = FULL_TORSO
 	flags = FPRINT
@@ -30,6 +31,13 @@
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/armor/vest/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/weapon/grenade))
+		for(var/obj/item/clothing/accessory/bangerboy/B in accessories)
+			B.attackby(I,user)
+	else
+		..()
 
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
@@ -48,6 +56,13 @@
 	desc = "The narkotiki camo pattern will come useful for botany raids."
 	icon_state = "nr_vest"
 	item_state = "nr_vest"
+
+/obj/item/clothing/suit/armor/vest/chainmail
+	name = "chainmail"
+	desc = "A series of chains linked together in a way to look like a suit."
+	icon_state = "chainmail_torso"
+	item_state = "chainmail_torso"
+	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
@@ -68,7 +83,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 
 /obj/item/clothing/suit/armor/knight/yellow
@@ -88,6 +103,10 @@
 	desc = "God wills it!"
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+
+/obj/item/clothing/suit/armor/knight/plain
+	icon_state = "knight_grey"
+	item_state = "knight_grey"
 
 /obj/item/clothing/suit/armor/xcomsquaddie
 	name = "Squaddie Armor"

@@ -8,7 +8,6 @@
 
 
 /mob/living/carbon/slime/Life()
-	set invisibility = 0
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -320,6 +319,9 @@
 		src.ear_deaf = 0
 	if (src.ear_damage < 25)
 		src.ear_damage = 0
+
+	if(say_mute)
+		say_mute = 0
 
 	src.setDensity(!src.lying)
 

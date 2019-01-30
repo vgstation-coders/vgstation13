@@ -259,6 +259,13 @@
 	if(user.incapacitated())
 		unlock_atom(user)
 		return
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
+	if(!T.has_gravity())
+		// Block relaymove() if needed.
+		if(!Process_Spacemove(0))
+			return 0
 	if(empstun > 0)
 		if(user && can_warn())
 			to_chat(user, "<span class='warning'>[src]'s banana essence battery has been shorted out.</span>")

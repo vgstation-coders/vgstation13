@@ -120,6 +120,9 @@
 	if(node1 && node2)
 		return
 
+	// While other pipes/atmos machinery can use whatever node for any other pipe,
+	// most binary pumps must specifically have the succ end on node1, and the blow
+	// end on node2.
 	node1 = findConnecting(turn(dir, 180))
 	node2 = findConnecting(dir)
 

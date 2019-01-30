@@ -21,6 +21,9 @@
 	flags = FPRINT
 	machine_flags = SCREWTOGGLE
 
+/obj/machinery/space_heater/get_cell()
+	return cell
+
 /obj/machinery/space_heater/campfire
 	name = "campfire"
 	icon_state = "campfire0"
@@ -127,7 +130,7 @@
 	..()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.molar_density("oxygen") < 5 / CELL_VOLUME)
+	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
 		return
 	if(!on && cell.charge > 0)
@@ -317,7 +320,7 @@
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if(!(cell && cell.charge > 0) && nocell != 2 | env.oxygen < 5)
+	if(!(cell && cell.charge > 0) && nocell != 2 | env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		new /obj/effect/decal/cleanable/campfire(get_turf(src))
 		qdel(src)
 		return

@@ -11,7 +11,6 @@
 
 
 /mob/living/carbon/monkey/Life()
-	set invisibility = 0
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -38,10 +37,6 @@
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
 					location_as_object.handle_internal_lifeform(src, 0)
-
-
-		//Updates the number of stored chemicals for powers
-		handle_changeling()
 
 		//Mutations and radiation
 		handle_mutations_and_radiation()
@@ -239,9 +234,8 @@
 	if(flags & INVULNERABLE)
 		return
 
-	if(reagents)
-		if(reagents.has_reagent(LEXORIN))
-			return
+	if(reagents && reagents.has_any_reagents(LEXORINS))
+		return
 
 	if(!loc)
 		return //probably ought to make a proper fix for this, but :effort: --NeoFite
@@ -329,14 +323,13 @@
 	var/SA_para_min = 0.5
 	var/SA_sleep_min = 5
 	var/oxygen_used = 0
-	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
 
 	//Partial pressure of the O2 in our breath
-	var/O2_pp = (breath.oxygen/breath.total_moles())*breath_pressure
+	var/O2_pp = breath.partial_pressure(GAS_OXYGEN)
 	// Same, but for the toxins
-	var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+	var/Toxins_pp = breath.partial_pressure(GAS_PLASMA)
 	// And CO2, lets say a PP of more than 10 will be bad (It's a little less really, but eh, being passed out all round aint no fun)
-	var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*breath_pressure
+	var/CO2_pp = breath.partial_pressure(GAS_CARBON)
 
 	if(O2_pp < safe_oxygen_min) 			// Too little oxygen
 		if(prob(20))
@@ -345,21 +338,22 @@
 			O2_pp = 0.01
 		var/ratio = safe_oxygen_min/O2_pp
 		adjustOxyLoss(min(5*ratio, 7)) // Don't fuck them up too fast (space only does 7 after all!)
-		oxygen_used = breath.oxygen*ratio/6
+		oxygen_used = breath[GAS_OXYGEN]*ratio/6
 		oxygen_alert = max(oxygen_alert, 1)
 	/*else if (O2_pp > safe_oxygen_max) 		// Too much oxygen (commented this out for now, I'll deal with pressure damage elsewhere I suppose)
 		spawn(0) emote("cough")
 		var/ratio = O2_pp/safe_oxygen_max
 		oxyloss += 5*ratio
-		oxygen_used = breath.oxygen*ratio/6
+		oxygen_used = breath[GAS_OXYGEN]*ratio/6
 		oxygen_alert = max(oxygen_alert, 1)*/
 	else 									// We're in safe limits
 		adjustOxyLoss(-5)
-		oxygen_used = breath.oxygen/6
+		oxygen_used = breath[GAS_OXYGEN]/6
 		oxygen_alert = 0
 
-	breath.oxygen -= oxygen_used
-	breath.carbon_dioxide += oxygen_used
+	breath.adjust_multi(
+		GAS_OXYGEN, -oxygen_used,
+		GAS_CARBON, oxygen_used)
 
 	if(CO2_pp > safe_co2_max)
 		if(!co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
@@ -376,12 +370,12 @@
 		co2overloadtime = 0
 
 	if(Toxins_pp > safe_toxins_max) // Too much toxins
-		var/ratio = (breath.toxins/safe_toxins_max) * 10
+		var/ratio = (breath[GAS_PLASMA]/safe_toxins_max) * 10
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(wear_mask)
 			if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-				if(breath.toxins > safe_toxins_mask)
-					ratio = (breath.toxins/safe_toxins_mask) * 10
+				if(breath[GAS_PLASMA] > safe_toxins_mask)
+					ratio = (breath[GAS_PLASMA]/safe_toxins_mask) * 10
 				else
 					ratio = 0
 		if(ratio)
@@ -391,16 +385,14 @@
 	else
 		toxins_alert = 0
 
-	if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-		for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
-			var/SA_pp = (SA.moles/breath.total_moles())*breath_pressure
-			if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
-				Paralyse(3) // 3 gives them one second to wake up and run away a bit!
-				if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
-					sleeping = max(sleeping+2, 10)
-			else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-				if(prob(20))
-					spawn(0) emote(pick("giggle", "laugh"))
+	var/SA_pp = breath.partial_pressure(GAS_SLEEPING)
+	if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
+		Paralyse(3) // 3 gives them one second to wake up and run away a bit!
+		if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
+			sleeping = max(sleeping+2, 10)
+	else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
+		if(prob(20))
+			spawn(0) emote(pick("giggle", "laugh"))
 
 
 	if(breath.temperature > (T0C+66)) // Hot air hurts :(
@@ -635,6 +627,9 @@
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)
 
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
+
 		if(silent)
 			silent = max(silent-1, 0)
 
@@ -752,11 +747,6 @@
 		spawn(0)
 			emote("scratch")
 			return
-
-
-/mob/living/carbon/monkey/proc/handle_changeling()
-	if(mind && mind.changeling)
-		mind.changeling.regenerate()
 
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()

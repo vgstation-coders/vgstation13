@@ -160,14 +160,14 @@
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "A huge, pressurized suit, designed for distinctly nonhuman proportions. It looks unusually cheap, even for Vox."
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader //brownhelmet
 	name = "alien helmet"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/suit/space/vox/civ/trader/carapace //carapace
 	name = "alien carapace armor"
@@ -200,11 +200,48 @@
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
 
-obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
+/obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
+
+// -- Mushroom,traders --
+
+/obj/item/clothing/suit/space/vox/civ/mushmen
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen
+	actions_types = list(/datum/action/item_action/dim_lighting)
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+	var/up = FALSE
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
+	toggle(user)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
+	if(!user.incapacitated())
+		if(!src.up)
+			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incomming light.</span>")
+			user.overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+		else
+			to_chat(user, "<span class='notice'>You disengage \the [src] light protection visor.</span>")
+		src.up = !src.up
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
+	return up
+
+
+/datum/action/item_action/dim_lighting
+	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie
@@ -222,7 +259,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
 	desc = "A very alien-looking helmet for vox crewmembers."
-	flags = FPRINT //Flags need updating from inheritance above
+	flags = FPRINT|HIDEHAIRCOMPLETELY //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	eyeprot = 0
@@ -294,12 +331,12 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 /obj/item/clothing/suit/space/vox/civ/mining
 	name = "vox mining pressure suit"
 	icon_state = "vox-civ-mining"
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/vox/civ/mining
 	name = "vox mining pressure helmet"
 	icon_state = "vox-civ-mining"
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer

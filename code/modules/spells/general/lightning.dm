@@ -112,6 +112,7 @@
 
 		spawn()
 			zapmuthafucka(user, L, bounces)
+		score["lightningwiz"]++
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target

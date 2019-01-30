@@ -11,10 +11,8 @@
 	var/cold_speed_protection = 300 //that cloth allows its wearer to keep walking at normal speed at lower temperatures
 
 	var/list/obj/item/clothing/accessory/accessories = list()
-	var/goliath_reinforce = FALSE
 	var/hidecount = 0
 	var/extinguishingProb = 15
-	var/can_extinguish = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -218,10 +216,7 @@
 			armor[A] -= rand(armor[A]/3, armor[A])
 
 /obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
-	if (!(iscarbon(user)  \
-	&& user.a_intent == I_HELP \
-	&& can_extinguish \
-	&& ishuman(M) && M.on_fire))
+	if (!(iscarbon(user) && user.a_intent == I_HELP && (clothing_flags & CANEXTINGUISH) && ishuman(M) && M.on_fire))
 		..()
 	else
 		var/mob/living/carbon/human/target = M
@@ -302,6 +297,9 @@
 
 	var/attack_verb_override = "punches"
 
+/obj/item/clothing/gloves/get_cell()
+	return cell
+
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
 		cell.charge -= 1000 / severity
@@ -340,6 +338,9 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+
+/obj/item/proc/islightshielded() // So as to avoid unneeded casts.
+	return FALSE
 
 //Mask
 /obj/item/clothing/mask
@@ -457,7 +458,7 @@
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
-	can_extinguish = TRUE
+	clothing_flags = CANEXTINGUISH
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
@@ -466,7 +467,7 @@
 	name = "Space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
 	permeability_coefficient = 0.01
@@ -495,7 +496,7 @@
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	can_extinguish = FALSE
+	clothing_flags = CANEXTINGUISH
 
 //Under clothing
 /obj/item/clothing/under
@@ -516,7 +517,7 @@
 		3 = Report location
 		*/
 	var/displays_id = 1
-	can_extinguish = TRUE
+	clothing_flags = CANEXTINGUISH
 
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)

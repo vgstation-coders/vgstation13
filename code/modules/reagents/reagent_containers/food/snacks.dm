@@ -1048,6 +1048,18 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/caramelburger
+	name = "caramel burger"
+	desc = "Too sweet to be any good."
+	icon_state = "caramelburger"
+	food_flags = FOOD_MEAT | FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(CARAMEL, 4)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
@@ -1111,6 +1123,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
+	name = "caramel pie"
+	desc = "Sweet pie made with caramel"
+	icon_state = "pie"
+	trash = /obj/item/trash/pietin
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(CARAMEL, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/berryclafoutis
 	name = "berry clafoutis"
@@ -1674,18 +1700,6 @@
 		reagents.add_reagent(NUTRIMENT, 3)
 		bitesize = 4
 
-/obj/item/weapon/reagent_containers/food/snacks/poppypretzel
-	name = "Poppy pretzel"
-	desc = "It's all twisted up!"
-	icon_state = "poppypretzel"
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	bitesize = 2
-
-
 /obj/item/weapon/reagent_containers/food/snacks/meatballsoup
 	name = "Meatball soup"
 	desc = "You've got balls kid, BALLS!"
@@ -2133,7 +2147,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/mommispaghetti
 	name = "bowl of MoMMi spaghetti"
 	desc = "You can feel the autism in this one."
-	icon_state = "spaghettiboiled"
+	icon_state = "mommispaghetti"
 
 /obj/item/weapon/reagent_containers/food/snacks/mommispaghetti/New()
 	..()
@@ -2243,14 +2257,14 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
-	name = "Poppy Pretzel"
-	desc = "A large soft pretzel full of POP!"
+	name = "poppy pretzel"
+	desc = "A large, soft, all-twisted-up pretzel full of POP!"
 	icon_state = "poppypretzel"
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries
 	name = "Carrot Fries"
@@ -2296,6 +2310,18 @@
 	..()
 	reagents.clear_reagents()
 	reagents.add_reagent(NUTRIMENT, 4)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelapple
+	name = "Caramel Apple"
+	desc = "An apple coated in caramel goodness."
+	icon_state = "caramelapple"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelapple/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARAMEL, 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie
@@ -2793,6 +2819,29 @@
 	name = "chocolate cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "chocolatecake_slice"
+	trash = /obj/item/trash/plate
+	bitesize = 2
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+	name = "caramel cake"
+	desc = "A cake with added caramel"
+	icon_state = "caramelcake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice
+	slices_num = 5
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 15)
+	reagents.add_reagent(CARAMEL, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice
+	name = "caramel cake slice"
+	desc = "Just a slice of cake, it is enough for everyone."
+	icon_state = "caramelcake_slice"
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
@@ -3388,6 +3437,18 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(SUGAR, 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelcookie
+	name = "caramel cookie"
+	desc = "Just like your little sister used to make."
+	icon_state = "caramelcookie"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelcookie/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(CARAMEL, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspiderleg
@@ -5686,16 +5747,33 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+/obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	name = "buttered toast"
 	desc = "Toasted bread with butter on it."
 	icon_state = "butteredtoast"
 	food_flags = FOOD_ANIMAL
 
-/obj/item/weapon/reagent_containers/food/snacks/butterfedtoast/New()
+/obj/item/weapon/reagent_containers/food/snacks/butteredtoast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/pierogi
+	name = "pierogi"
+	desc = "Dumplings with potatoes and curd inside."
+	icon_state = "pierogi"
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/pierogi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
 
+/obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+	name = "sauerkraut"
+	desc = "Cabbage that has fermented in salty brine."
+	icon_state = "sauerkraut"
+	trash = /obj/item/trash/snack_bowl
 
-
+/obj/item/weapon/reagent_containers/food/snacks/sauerkraut/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)

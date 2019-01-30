@@ -149,10 +149,10 @@
 			to_chat(user, "You wrap cable around the base of \the [src], creating a grip.")
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/sword/I = new (get_turf(user))
+				var/obj/item/weapon/sword/weaponcraft/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/sword(get_turf(src.loc))
+				new /obj/item/weapon/sword/weaponcraft(get_turf(src.loc))
 			C.use(5)
 			qdel(src)
 	if(iswelder(W))
@@ -181,7 +181,7 @@
 		icon = 'icons/obj/items.dmi'
 		icon_state = "ghettosplint"
 		qdel(W)
-	if(istype(W,/obj/item/weapon/handcuffs/cable) && stage == 1)	
+	if(istype(W,/obj/item/weapon/handcuffs/cable) && stage == 1)
 		to_chat(user,"<span class='notice'>You tie up \the [src] with \the [W], creating a ghetto splint!</span>")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
@@ -189,8 +189,8 @@
 			user.put_in_hands(I)
 		else
 			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
-		qdel(src)	
-	
+		qdel(src)
+
 /obj/item/weapon/cylinder
 	name = "beaker"
 	desc = "A beaker. There appear to be six holes drilled through the bottom."
@@ -749,6 +749,7 @@
 	icon_state = "secured_capacitor"
 	density = 0
 	state = 1
+	ghost_read = FALSE
 	var/charge = 0
 	var/charging = 0
 	var/list/power_states = list()
@@ -770,11 +771,14 @@
 	maxcharge = 1000000000
 
 /obj/machinery/power/secured_capacitor/attack_hand(mob/user as mob)
+	if(user.lying)
+		return
 	if(!charging)
 		attempt_connect(user)
 	else
 		disconnect_capacitor()
 		to_chat(user, "<span class='notice'>You halt \the [src.name]'s charging process.</span>")
+	add_fingerprint(user)
 
 /obj/machinery/power/secured_capacitor/examine(mob/user)
 	..()

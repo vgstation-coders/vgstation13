@@ -25,6 +25,7 @@
 	var/tmp/busy = 0
 	var/list/valid_types = list(/obj/item/weapon/book, \
 								/obj/item/weapon/tome, \
+								/obj/item/weapon/tome_legacy, \
 								/obj/item/weapon/spellbook, \
 								/obj/item/weapon/storage/bible)
 
@@ -182,6 +183,8 @@
 	name = "book"
 	icon = 'icons/obj/library.dmi'
 	icon_state ="book"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
+	item_state = "book"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
@@ -214,7 +217,7 @@
 		"}
 
 /obj/item/weapon/book/cultify()
-	new /obj/item/weapon/tome(loc)
+	new /obj/item/weapon/tome_legacy(loc)
 	..()
 
 /obj/item/weapon/book/proc/read_a_motherfucking_book(mob/user)
@@ -252,6 +255,12 @@
 		..()
 
 /obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!carved && W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
+		if(do_after(user, src, 30 / W.sharpness))
+			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
+			carved = 1
+			return
 	if(carved)
 		if(!store)
 			if(W.w_class < W_CLASS_MEDIUM)
@@ -324,14 +333,6 @@
 							return
 					scanner.computer.inventory.Add(src)
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || iswirecutter(W))
-		if(carved)
-			return
-		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
-		if(do_after(user, src, 30))
-			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
-			carved = 1
-			return
 
 	else if(istype(W, /obj/item/weapon/paper/talisman))
 		var/obj/item/weapon/paper/talisman/talisman = W
@@ -342,7 +343,6 @@
 			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
 			qdel(talisman)
 			runestun = 1
-
 
 
 

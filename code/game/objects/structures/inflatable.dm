@@ -83,6 +83,25 @@
 	icon_state = "folded"
 	deploy_path = /obj/structure/inflatable/shelter
 
+/obj/item/inflatable/floor
+	name = "inflatable floor"
+	desc = "A folded membrane, which rapidly expands along the horizontal plane until it runs out of room to inflate, or air to inflate with."
+	icon_state = "folded_floor"
+	deploy_path = /turf/simulated/floor/inflatable
+
+/obj/item/inflatable/floor/can_inflate(var/location)
+	var/turf/T = get_turf(src)
+	if(!istype(T, get_base_turf(T.z)))
+		return FALSE
+	return ..()
+
+/obj/item/inflatable/floor/inflate(mob/user)
+	playsound(loc, 'sound/items/zip.ogg', 75, 1)
+	visible_message("<span class='notice'>\The [src] inflates.</span>")
+	var/turf/T = get_turf(src)
+	T.ChangeTurf(/turf/simulated/floor/inflatable)
+	qdel(src)
+
 /*/obj/item/inflatable/shelter/attack_self(mob/user)
 	user.anchored = 1 Previously, this would anchor the user in place until it inflated and put them inside
 	..()
@@ -304,9 +323,9 @@
 	cabin_air = new /datum/gas_mixture()
 	cabin_air.volume = CELL_VOLUME / 3
 	cabin_air.temperature = T20C+20 //Nice and toasty to avoid Celthermia
-	cabin_air.oxygen = MOLES_O2STANDARD
-	cabin_air.nitrogen = MOLES_N2STANDARD
-	cabin_air.update_values()
+	cabin_air.adjust_multi(
+		GAS_OXYGEN, MOLES_O2STANDARD,
+		GAS_NITROGEN, MOLES_N2STANDARD)
 
 /obj/structure/inflatable/shelter/examine(mob/user)
 	..()

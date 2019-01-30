@@ -112,6 +112,9 @@ var/list/impact_master = list()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
 
+/obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
+	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
+
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 	if(blocked >= 2)
 		return 0//Full block
@@ -128,7 +131,7 @@ var/list/impact_master = list()
 	var/mob/living/L = atarget
 	if(L.flags & INVULNERABLE)
 		return 0
-	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
+	hit_apply(L)
 	if(jittery)
 		L.Jitter(jittery)
 	if(!isnull(hitsound))
@@ -389,6 +392,10 @@ var/list/impact_master = list()
 	target_angle = round(Get_Angle(starting,target))
 
 	if(linear_movement)
+		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
+		transform = projectile_matrix
+		icon_state = "[initial(icon_state)]_pixel"
+		/*
 		//If the icon has not been added yet
 		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
@@ -396,7 +403,7 @@ var/list/impact_master = list()
 				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-
+		*/
 	return 1
 
 
@@ -541,6 +548,16 @@ var/list/impact_master = list()
 /obj/item/projectile/bullet_act(/obj/item/projectile/bullet)
 	return -1
 
+/obj/item/projectile/proc/reset()
+	starting = get_turf(src)
+	if(isnull(starting))
+		return
+	override_starting_X = starting.x
+	override_starting_Y = starting.y
+	override_target_X = override_starting_X+dist_x
+	override_target_Y = override_starting_Y+dist_y
+	target = locate(override_target_X,override_target_Y,z)
+
 /obj/item/projectile/proc/rebound(var/atom/A)//Projectiles bouncing off walls and obstacles
 	var/turf/T = get_turf(src)
 	var/turf/W = get_turf(A)
@@ -579,6 +596,9 @@ var/list/impact_master = list()
 	override_target_X = W.x + newdiffX
 	override_target_Y = W.y + newdiffY
 
+	if(!rotate)
+		return
+
 	var/disty
 	var/distx
 	var/newangle
@@ -596,18 +616,19 @@ var/list/impact_master = list()
 		else if(distx < 0)
 			newangle += 360
 
-	if(!rotate)
-		return
-
 	target_angle = round(newangle)
 
 	if(linear_movement)
+		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
+		transform = projectile_matrix
+		/*
 		if( !("[icon_state][target_angle]" in bullet_master) )
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
 			if(!lock_angle)
 				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
+		*/
 
 /obj/item/projectile/test //Used to see if you can hit them.
 	invisibility = 101 //Nope!  Can't see me!

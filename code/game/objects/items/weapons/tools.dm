@@ -97,7 +97,7 @@
 /obj/item/weapon/screwdriver/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/screwdriver/New()
 	. = ..()
@@ -244,7 +244,7 @@
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (FIRELOSS|OXYLOSS)
+	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/weldingtool/New()
 	. = ..()
@@ -480,7 +480,8 @@
 /obj/item/weapon/weldingtool/proc/eyecheck(mob/user as mob)
 	if(!iscarbon(user))
 		return 1
-	var/safety = user:eyecheck()
+	var/mob/living/carbon/C = user //eyecheck is living-level
+	var/safety = C.eyecheck()
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
@@ -489,7 +490,7 @@
 		if(E.welding_proof)
 			user.simple_message("<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
 			return
-		if(safety < 2 && eye_damaging)
+		if(safety < 2 && eye_damaging && !(user.sdisabilities & BLIND))
 			switch(safety)
 				if(1)
 					user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
@@ -630,7 +631,7 @@
 
 /obj/item/weapon/crowbar/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
 	desc = "Rise and shine."
@@ -640,7 +641,7 @@
 
 /obj/item/weapon/crowbar/red/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
@@ -746,7 +747,7 @@
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")
 			return
-		if(!G.reagents.has_any_reagents(list(SACID, FORMIC_ACID), 1))
+		if(!G.reagents.has_any_reagents(SACIDS, 1))
 			user.simple_message("<span class='warning'>The tool is not compatible with that.</span>",
 				"<span class='warning'>The tool won't drink that.</span>")
 			return

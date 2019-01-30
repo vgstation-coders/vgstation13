@@ -5,11 +5,11 @@
 	icon_closed = "bio"
 	icon_opened = "bioopen"
 
-/obj/structure/closet/l3closet/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/suit/bio_suit/general( src )
-	new /obj/item/clothing/head/bio_hood/general( src )
+/obj/structure/closet/l3closet/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/bio_suit/general,
+		/obj/item/clothing/head/bio_hood/general,
+	)
 
 
 /obj/structure/closet/l3closet/general
@@ -17,12 +17,11 @@
 	icon_closed = "bio_general"
 	icon_opened = "bio_generalopen"
 
-/obj/structure/closet/l3closet/general/New()
-	..()
-	sleep(2)
-	contents = list()
-	new /obj/item/clothing/suit/bio_suit/general( src )
-	new /obj/item/clothing/head/bio_hood/general( src )
+/obj/structure/closet/l3closet/general/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/bio_suit/general,
+		/obj/item/clothing/head/bio_hood/general,
+	)
 
 
 /obj/structure/closet/l3closet/virology
@@ -30,12 +29,11 @@
 	icon_closed = "bio_virology"
 	icon_opened = "bio_virologyopen"
 
-/obj/structure/closet/l3closet/virology/New()
-	..()
-	sleep(2)
-	contents = list()
-	new /obj/item/clothing/suit/bio_suit/virology( src )
-	new /obj/item/clothing/head/bio_hood/virology( src )
+/obj/structure/closet/l3closet/virology/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/bio_suit/virology,
+		/obj/item/clothing/head/bio_hood/virology,
+	)
 
 
 /obj/structure/closet/l3closet/security
@@ -43,12 +41,11 @@
 	icon_closed = "bio_security"
 	icon_opened = "bio_securityopen"
 
-/obj/structure/closet/l3closet/security/New()
-	..()
-	sleep(2)
-	contents = list()
-	new /obj/item/clothing/suit/bio_suit/security( src )
-	new /obj/item/clothing/head/bio_hood/security( src )
+/obj/structure/closet/l3closet/security/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/bio_suit/security,
+		/obj/item/clothing/head/bio_hood/security,
+	)
 
 
 /obj/structure/closet/l3closet/janitor
@@ -56,12 +53,11 @@
 	icon_closed = "bio_janitor"
 	icon_opened = "bio_janitoropen"
 
-/obj/structure/closet/l3closet/janitor/New()
-	..()
-	sleep(2)
-	contents = list()
-	new /obj/item/clothing/suit/bio_suit/janitor( src )
-	new /obj/item/clothing/head/bio_hood/janitor( src )
+/obj/structure/closet/l3closet/janitor/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/bio_suit/janitor,
+		/obj/item/clothing/head/bio_hood/janitor,
+	)
 
 
 /obj/structure/closet/l3closet/scientist
@@ -69,9 +65,8 @@
 	icon_closed = "bio_scientist"
 	icon_opened = "bio_scientistopen"
 
-/obj/structure/closet/l3closet/scientist/New()
-	..()
-	sleep(2)
-	contents = list()
-	new /obj/item/clothing/suit/bio_suit/scientist( src )
-	new /obj/item/clothing/head/bio_hood/scientist( src )
+/obj/structure/closet/l3closet/scientist/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/bio_suit/scientist,
+		/obj/item/clothing/head/bio_hood/scientist,
+	)

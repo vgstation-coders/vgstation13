@@ -252,8 +252,8 @@
 	max=28
 	protected_jobs = list("Research Director", "Scientist")
 
-/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
-	return I:air_contents:toxins
+/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/weapon/tank/I)
+	return I.air_contents[GAS_PLASMA]
 
 /datum/theft_objective/number/traitor/coins
 	name = "credits of coins (in bag)"
@@ -278,8 +278,8 @@
 ////////////////////////////////
 // SPECIAL OBJECTIVES
 ////////////////////////////////
-/datum/objective/steal/special
-	target_category = "special"
+/*/datum/objective/steal/special
+	target_category = "special"*/
 
 /datum/theft_objective/special/nuke_gun
 	name = "nuclear gun"
@@ -320,3 +320,208 @@
 	min=10
 	max=30
 	step=5
+
+
+/* VOX THEFT OBJECTIVES */
+
+
+/datum/theft_objective/number/heist_easy
+	areas = list(/area/shuttle/vox/station)
+
+/datum/theft_objective/number/heist_hard
+	areas = list(/area/shuttle/vox/station)
+
+/datum/theft_objective/number/heist_easy/check_completion()
+	var/list/search = list()
+	var/found = 0
+	for(var/A in areas)
+		var/area/B = locate(A)
+		search += recursive_type_check(B, typepath)
+	for(var/C in search)
+		found++
+	return (found >= required_amount)
+
+/datum/theft_objective/number/heist_hard/check_completion()
+	var/list/search = list()
+	var/found = 0
+	for(var/A in areas)
+		var/area/B = locate(A)
+		search += recursive_type_check(B, typepath)
+	for(var/C in search)
+		found++
+	return (found >= required_amount)
+
+/* LAME
+/datum/theft_objective/number/heist/singulogen
+	name = "gravitational generator"
+	typepath = /obj/machinery/the_singularitygen
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist/singulogen
+	name = "gravitational generator"
+	typepath = /obj/machinery/the_singularitygen
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist/emitters
+	name = "emitters"
+	typepath = /obj/machinery/power/emitter
+	min = 4
+	max = 4
+*/
+
+///easy objectives (near the outside of the station or common///
+
+/datum/theft_objective/number/heist_easy/gun
+	name = "guns"
+	typepath = /obj/item/weapon/gun
+	min = 4
+	max = 6
+
+/datum/theft_objective/number/heist_easy/supermatter
+	name = "supermatter shard"
+	typepath = /obj/machinery/power/supermatter/shard
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_easy/jukebox
+	name = "jukebox"
+	typepath = /obj/machinery/media/jukebox
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_easy/microwave
+	name = "microwave ovens"
+	typepath = /obj/machinery/microwave
+	min = 2
+	max = 2
+
+/datum/theft_objective/number/heist_easy/camera
+	name = "polaroid cameras"
+	typepath = /obj/item/device/camera
+	min = 4
+	max = 4
+
+/datum/theft_objective/number/heist_easy/canister
+	name = "canister of plasma"
+	typepath = /obj/machinery/portable_atmospherics/canister/plasma
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_easy/plants
+	name = "house plants"
+	typepath = /obj/structure/flora
+	min = 6
+	max = 10
+
+/datum/theft_objective/number/heist_easy/borgrecharger
+	name = "cyborg recharging stations"
+	typepath = /obj/machinery/recharge_station
+	min = 2
+	max = 2
+
+/datum/theft_objective/number/heist_easy/fueltank
+	name = "welding fuel tanks"
+	typepath = /obj/structure/reagent_dispensers/fueltank
+	min = 2
+	max = 4
+
+/datum/theft_objective/number/heist_easy/filingcabinet
+	name = "filing cabinets"
+	typepath = /obj/structure/filingcabinet
+	min = 2
+	max = 4
+
+///hard objectives (near the inside of the station or rare///
+
+/datum/theft_objective/number/heist_hard/particle_accelerator
+	name = "complete and assembled particle accelerator"
+	typepath = /obj/structure/particle_accelerator
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/particle_accelerator/check_completion()
+	var/list/contents = list(/obj/structure/particle_accelerator/end_cap, \
+							/obj/structure/particle_accelerator/fuel_chamber, \
+							/obj/structure/particle_accelerator/particle_emitter/center, \
+							/obj/structure/particle_accelerator/particle_emitter/left, \
+							/obj/structure/particle_accelerator/particle_emitter/right, \
+							/obj/structure/particle_accelerator/power_box,)
+	var/list/search = list()
+	for(var/A in areas)
+		var/area/B = locate(A)
+		search += recursive_type_check(B, /obj/structure/particle_accelerator)
+	for(var/C in contents)
+		for(var/atom/A in search)
+			if(istype(A,C)) //Does search contain this part type
+				continue
+			return FALSE //It didn't, fail the object
+	return TRUE
+
+/datum/theft_objective/number/heist_hard/nuke
+	name = "thermonuclear device"
+	typepath = /obj/machinery/nuclearbomb
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/cat
+	name = "cat"
+	typepath = /mob/living/simple_animal/cat
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/duck
+	name = "rubber ducky"
+	typepath = /obj/item/weapon/bikehorn/rubberducky
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/borgupload
+	name = "cyborg upload console circuit board"
+	typepath = /obj/item/weapon/circuitboard/borgupload
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/amplifier
+	name = "subspace amplifiers"
+	typepath = /obj/item/weapon/stock_parts/subspace/amplifier
+	min = 4
+	max = 6
+
+/datum/theft_objective/number/heist_hard/clownmask
+	name = "clown's mask"
+	typepath = /obj/item/clothing/mask/gas/clown_hat
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/piano
+	name = "space piano"
+	typepath = /obj/structure/piano
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/organs/check_completion()
+	var/list/search = list()
+	for(var/A in areas)
+		var/area/B = locate(A)
+		search += recursive_type_check(B, typepath)
+	var/valid_organs=0
+	for(var/atom/A in search)
+		if(!istype(A,/obj/item/organ/internal))
+			var/obj/item/organ/internal/O = A
+			if(O && istype(O, typepath) && !O.is_printed && O.had_mind)
+				valid_organs++
+	return (valid_organs >= required_amount)
+
+/datum/theft_objective/number/heist_hard/organs/appendix
+	name = "appendixes"
+	typepath = /obj/item/organ/internal/appendix
+	min = 3
+	max = 6
+
+/datum/theft_objective/number/heist_hard/organs/eyes
+	name = "eyes"
+	typepath = /obj/item/organ/internal/eyes
+	min = 3
+	max = 6

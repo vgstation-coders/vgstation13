@@ -75,7 +75,7 @@
 	//When the shuttle moves, if stable is 0 then all unbuckled mobs will be stunned
 	var/stable = 0
 
-	var/password = 28011
+	var/password = null
 	var/can_link_to_computer = LINK_FORBIDDEN
 
 	//Whether the shuttle gibs or displaces stuff. Change this to COLLISION_DISPLACE to make all shuttles displace stuff by default
@@ -101,8 +101,8 @@
 
 	if(istype(linked_area) && linked_area.contents.len) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
-
-	password = rand(10000,99999)
+	if(password)
+		password = rand(10000,99999)
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
@@ -226,6 +226,9 @@
 	var/atom/A = linked_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
 	if(A)
 		return A
+	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
+		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+			return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
@@ -303,8 +306,8 @@
 			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 				spawn()
 					P.shoot_exhaust()
-
-	current_port.start_warning_lights()
+	if(current_port)
+		current_port.start_warning_lights()
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
@@ -816,6 +819,7 @@
 //Custom shuttles
 /datum/shuttle/custom
 	name = "custom shuttle"
+	can_link_to_computer = LINK_FREE
 
 /datum/shuttle/proc/show_outline(var/mob/user, var/turf/centered_at)
 	if(!user)

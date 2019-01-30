@@ -33,6 +33,9 @@
 /obj/structure/table/cultify()
 	new /obj/structure/table/woodentable(loc) //See New() for qdel
 
+/obj/structure/table/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/table/reinforced/clockwork, CLOCKWORK_GENERIC_GLOW)
+
 /obj/structure/table/New()
 	..()
 	for(var/obj/structure/table/T in src.loc)
@@ -595,18 +598,19 @@
 
 	else if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
-		if(WT.do_weld(user, src, 50, 0))
-			if(src.status == 2)
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>Table weakened.</span>")
-				src.status = 1
-			else
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>Table strengthened.</span>")
-				src.status = 2
+		if(WT.isOn())
+			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
+			if(WT.do_weld(user, src, 50, 0))
+				if(src.status == 2)
+					if(gcDestroyed)
+						return
+					to_chat(user, "<span class='notice'>Table weakened.</span>")
+					src.status = 1
+				else
+					if(gcDestroyed)
+						return
+					to_chat(user, "<span class='notice'>Table strengthened.</span>")
+					src.status = 2
 			return
 	return ..()
 
@@ -672,6 +676,9 @@
 	can_optable = FALSE
 
 /obj/structure/table/reinforced/clockwork/cultify()
+	return
+
+/obj/structure/table/reinforced/clockwork/clockworkify()
 	return
 
 /*

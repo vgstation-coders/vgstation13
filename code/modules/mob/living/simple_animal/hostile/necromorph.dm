@@ -208,6 +208,9 @@
 /obj/item/projectile/puke/New()
 	..()
 	create_reagents(500)
+	make_reagents()
+
+/obj/item/projectile/puke/proc/make_reagents()
 	var/room_remaining = 500
 	var/poly_to_add = rand(100,200)
 	reagents.add_reagent(PACID, poly_to_add)
@@ -216,6 +219,9 @@
 	reagents.add_reagent(SACID, sulph_to_add)
 	room_remaining -= sulph_to_add
 	reagents.add_reagent(VOMIT, room_remaining)
+
+/obj/item/projectile/puke/clear/make_reagents()
+	return
 
 
 /obj/item/projectile/puke/on_hit(var/atom/atarget, var/blocked = 0)

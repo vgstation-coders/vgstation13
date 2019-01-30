@@ -163,6 +163,7 @@
 				"<span class='notice'>You check yourself for injuries.</span>" \
 				)
 
+			var/num_injuries = 0
 			for(var/datum/organ/external/org in H.organs)
 				var/status = ""
 				var/brutedamage = org.brute_dam
@@ -176,26 +177,35 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "<span class='warning'>bleeding</span>"
+					status = "<span class='warning'>badly wounded</span>"
 				if(brutedamage > 40)
 					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
 					status += "<span class='orange bold'>peeling away</span>"
-
 				else if(burndamage > 10)
 					status += "<span class='orange italics'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
+				if(org.status & ORGAN_BLEEDING)
+					status = "<span class='danger'>bleeding</span>"
 				if(org.status & ORGAN_DESTROYED)
-					status = "MISSING!"
+					status = "MISSING"
 				if(org.status & ORGAN_MUTATED)
-					status = "weirdly shapen."
-				if(status == "")
-					status = "OK"
-				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
-			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
+					status = "weirdly shapen"
+
+				if(status != "")
+					to_chat(src, "My [org.display_name] is [status].")
+					num_injuries++
+
+			if(num_injuries == 0)
+				if(hallucinating())
+					to_chat(src, "<span class = 'orange'>My legs are OK.</span>")
+				else
+					to_chat(src, "My limbs are [pick("okay","OK")].")
+
+			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
 			var/t_him = "it"
@@ -252,7 +262,7 @@
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
 
-					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.audible_scream()
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
 					spark(H, 3, FALSE)
@@ -502,6 +512,7 @@
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
+	score["slips"]++
 	return 1
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
@@ -635,16 +646,14 @@
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
 
-		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
-			. *= 0.4
-			if(. < 1)//we don't want to move faster than the base speed
-				. = 1
+		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
+			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown

@@ -1,4 +1,5 @@
 #define NEXT_PAGE_ID "__next__"
+#define DEFAULT_CHECK_DELAY 2 SECONDS
 
 /obj/screen/radial
 	icon = 'icons/mob/radial.dmi'
@@ -10,14 +11,18 @@
 	icon_state = "radial_slice"
 	var/choice
 	var/next_page = FALSE
+	var/tooltip_desc
 
 /obj/screen/radial/slice/MouseEntered(location, control, params)
 	. = ..()
 	icon_state = "radial_slice_focus"
+	if(tooltip_desc)
+		openToolTip(usr,src,params,title = src.name,content = tooltip_desc,theme = parent.tooltip_theme)
 
 /obj/screen/radial/slice/MouseExited(location, control, params)
 	. = ..()
 	icon_state = "radial_slice"
+	closeToolTip(usr)
 
 /obj/screen/radial/slice/Click(location, control, params)
 	if(usr.client == parent.current_user)
@@ -38,8 +43,11 @@
 	var/list/choices = list() //List of choice id's
 	var/list/choices_icons = list() //choice_id -> icon
 	var/list/choices_values = list() //choice_id -> choice
+	var/list/choices_tooltips = list() //choice_id -> tooltip
 	var/list/page_data = list() //list of choices per page
 
+	var/icon_file = 'icons/mob/radial.dmi'
+	var/tooltip_theme = "radial-default"
 
 	var/selected_choice
 	var/list/obj/screen/elements = list()
@@ -48,6 +56,10 @@
 	var/atom/anchor
 	var/image/menu_holder
 	var/finished = FALSE
+
+	var/event/custom_check
+	var/next_check = 0
+	var/check_delay = DEFAULT_CHECK_DELAY
 
 	var/radius = 32
 	var/starting_angle = 0
@@ -103,6 +115,7 @@
 		var/elements_to_add = max_elements - elements.len
 		for(var/i in 1 to elements_to_add) //Create all elements
 			var/obj/screen/radial/new_element = new /obj/screen/radial/slice
+			new_element.icon = icon_file
 			new_element.parent = src
 			elements += new_element
 
@@ -183,15 +196,28 @@
 		E.next_page = FALSE
 		if(choices_icons[choice_id])
 			push(E.overlays,choices_icons[choice_id])
+		if(choices_tooltips[choice_id])
+			E.tooltip_desc = choices_tooltips[choice_id]
 
-/datum/radial_menu/New()
+/datum/radial_menu/New(var/icon_file, var/tooltip_theme, var/radius, var/min_angle)
+	if(icon_file)
+		src.icon_file = icon_file
+	if(tooltip_theme)
+		src.tooltip_theme = tooltip_theme
+	if(radius)
+		src.radius = radius
+	if(min_angle)
+		src.min_angle = min_angle
+
 	close_button = new
 	close_button.parent = src
+	close_button.icon = src.icon_file
 
 /datum/radial_menu/proc/Reset()
 	choices.Cut()
 	choices_icons.Cut()
 	choices_values.Cut()
+	choices_tooltips.Cut()
 	current_page = 1
 
 /datum/radial_menu/proc/element_chosen(choice_id,mob/user)
@@ -200,17 +226,29 @@
 /datum/radial_menu/proc/get_next_id()
 	return "c_[choices.len]"
 
-/datum/radial_menu/proc/set_choices(list/new_choices)
+/datum/radial_menu/proc/set_choices(var/list/new_choices)
 	if(choices.len)
 		Reset()
-	for(var/E in new_choices)
+	for(var/list/E in new_choices)
 		var/id = get_next_id()
 		choices += id
-		choices_values[id] = E
-		if(new_choices[E])
-			var/I = extract_image(new_choices[E])
-			if(I)
-				choices_icons[id] = I
+		var/choice_name = E[1]
+		choices_values[id] = choice_name
+
+		if(E.len > 1)
+			var/extracted_image
+			var/choice_icon = E[2]
+			if(istext(choice_icon)) //a string representing an icon_state from our icon_file
+				extracted_image = extract_image(image(icon = icon_file, icon_state = choice_icon))
+			else
+				extracted_image = extract_image(choice_icon)
+			if(extracted_image)
+				choices_icons[id] = extracted_image
+
+		if(E.len > 2)
+			var/choice_tooltip = E[3]
+			choices_tooltips[id] = choice_tooltip
+
 	setup_menu()
 
 
@@ -218,6 +256,7 @@
 	var/mutable_appearance/MA = new /mutable_appearance(E)
 	if(MA)
 		MA.layer = ABOVE_HUD_LAYER
+		MA.plane = ABOVE_HUD_PLANE
 		MA.appearance_flags |= RESET_TRANSFORM
 	return MA
 
@@ -244,27 +283,46 @@
 		current_user.images -= menu_holder
 
 /datum/radial_menu/proc/wait()
-	while (current_user && !finished && !selected_choice)
+	while (!gcDestroyed && current_user && !finished && !selected_choice)
+		if(istype(custom_check) && next_check < world.time)
+			if(!INVOKE_EVENT(custom_check, list()))
+				return
+			else
+				next_check = world.time + check_delay
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
 	Reset()
 	hide()
+	if(istype(custom_check))
+		custom_check.holder = null
+		custom_check = null
 	. = ..()
 /*
 	Presents radial menu to user anchored to anchor (or user if the anchor is currently in users screen)
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices)
-	var/datum/radial_menu/menu = new
-	if(!user)
-		user = usr
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/event/custom_check,var/uniqueid,var/radius,var/min_angle)
+	if(!user || !anchor || !length(choices))
+		return
+
+	var/client/current_user = user.client
+	if(anchor in current_user.radial_menus)
+		return
+	current_user.radial_menus += anchor //This should probably be done in the menu's New()
+
+	var/datum/radial_menu/menu = new(icon_file, tooltip_theme, radius, min_angle)
+
+	if(istype(custom_check))
+		menu.custom_check = custom_check
 	menu.anchor = anchor
 	menu.check_screen_border(user) //Do what's needed to make it look good near borders or on hud
 	menu.set_choices(choices)
 	menu.show_to(user)
 	menu.wait()
-	var/answer = menu.selected_choice
-	qdel(menu)
-	return answer
+	if(!menu.gcDestroyed)
+		var/answer = menu.selected_choice
+		qdel(menu)
+		current_user.radial_menus -= anchor
+		return answer

@@ -227,6 +227,7 @@
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	occupant = H
 	H.times_cloned = R.times_cloned +1
+	H.talkcount = R.talkcount
 
 	if(!connected.emagged)
 		icon_state = "pod_1"
@@ -258,9 +259,8 @@
 
 	H.ckey = R.ckey
 	to_chat(H, "<span class='notice'><b>Consciousness slowly creeps over you as your body regenerates.</b><br><i>So this is what cloning feels like?</i></span>")
-
 	// -- Mode/mind specific stuff goes here
-
+	/*
 	if(isrev(H) || isrevhead(H))
 		ticker.mode.update_all_rev_icons() //So the icon actually appears
 	if(isnukeop(H))
@@ -281,7 +281,7 @@
 			H.add_spell(spell_to_add)
 
 	// -- End mode specific stuff
-
+	*/
 	if (H.mind.miming)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)

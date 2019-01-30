@@ -210,7 +210,7 @@
 
 			stacks["[stackA.type]"] = stack
 			returnToPool(stackA)
-		//else if (istype(O, /obj/item/weapon/ore/slag))
+		//else if (istype(O, /obj/item/stack/ore/slag))
 		//	returnToPool(O)
 		else
 			A.forceMove(out_T)

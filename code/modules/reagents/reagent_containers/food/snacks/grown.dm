@@ -36,11 +36,21 @@ var/list/special_fruits = list()
 		//Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
 			seed = SSplant.seeds[plantname]
-			if(!seed || !seed.chems)
+			if(!seed)
 				return
 
 			potency = round(seed.potency)
 			force = seed.thorny ? 5+seed.carnivorous*3 : 0
+
+			if(seed.teleporting)
+				name = "blue-space [name]"
+			if(seed.stinging)
+				name = "stinging [name]"
+			if(seed.juicy == 2)
+				name = "slippery [name]"
+
+			if(!seed.chems)
+				return
 
 			var/totalreagents = 0
 			for(var/rid in seed.chems)
@@ -59,13 +69,6 @@ var/list/special_fruits = list()
 					if(reagent_data.len > 1 && potency > 0)
 						rtotal += round(potency/reagent_data[2])
 					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
-
-			if(seed.teleporting)
-				name = "blue-space [name]"
-			if(seed.stinging)
-				name = "stinging [name]"
-			if(seed.juicy == 2)
-				name = "slippery [name]"
 
 		if(reagents.total_volume > 0)
 			bitesize = 1 + round(reagents.total_volume/2, 1)
@@ -242,6 +245,7 @@ var/list/special_fruits = list()
 		spark(hit_atom)
 		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
 		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...
+			A.unlock_from()
 			A.forceMove(picked) //And teleport them to the chosen location.
 			spawn()
 				spark(A)
@@ -613,6 +617,9 @@ var/list/special_fruits = list()
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/testing
+	potency = 100
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
 	name = "killer-tomato"
 	desc = "I say to-mah-to, you say tom-mae-to... OH GOD IT'S EATING MY LEGS!!"
@@ -782,6 +789,27 @@ var/list/special_fruits = list()
 	qdel(src)
 
 	to_chat(user, "<span class='notice'>You plant the glowshroom.</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/grass
+	name = "grass"
+	desc = "Green and lush."
+	icon_state = "grassclump"
+	filling_color = "#32CD32"
+	plantname = "grass"
+	var/stacktype = /obj/item/stack/tile/grass
+	var/tile_coefficient = 0.02 // 1/50
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/grass/attack_self(mob/user as mob)
+	to_chat(user, "<span class='notice'>You prepare the astroturf.</span>")
+	var/grassAmount = 1 + round(potency * tile_coefficient) // The grass we're holding
+	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/grass/G in user.loc) // The grass on the floor
+		if(G.type != type)
+			continue
+		grassAmount += 1 + round(G.potency * tile_coefficient)
+		qdel(G)
+
+	drop_stack(stacktype, get_turf(user), grassAmount, user)
+	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 	name = "chicken-of-the-stars"

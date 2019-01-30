@@ -38,6 +38,7 @@
 	var/list/uni_append = list(0x12C,0x4E2)    // Same as above for DNA2.
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
+	var/canPossess = FALSE
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -167,7 +168,7 @@
 
 /mob/living/carbon/monkey/base_movement_tally()
 	. = ..()
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
@@ -285,17 +286,36 @@
 /mob/living/carbon/monkey/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
 
+/mob/living/carbon/monkey/attack_ghost(var/mob/dead/observer/O)
+	if(canPossess)
+		if(!(src.key))
+			if(O.can_reenter_corpse)
+				var/response = alert(O,"Do you want to take over \the [src]?","Monkey Madness","Yes","No")
+				if(response == "Yes")
+					if(!(src.key))
+						ckey = O.ckey
+						canPossess = FALSE
+						var/newname = input(src,"Enter a name, or leave blank for the default name.", "Name change","") as text
+						newname = copytext(sanitize(newname),1,MAX_NAME_LEN)
+						if (newname != "")
+							fully_replace_character_name(newname = newname)
+					else if(src.key)
+						to_chat(src, "<span class='notice'>Somebody jumped your claim on \the [src] and is already controlling it. Try another </span>")
+			else if(!(O.can_reenter_corpse))
+				to_chat(O,"<span class='notice'>While \the [src] may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
+
 /mob/living/carbon/monkey/Stat()
 	..()
 	if(statpanel("Status"))
 		stat(null, text("Intent: []", a_intent))
 		stat(null, text("Move Mode: []", m_intent))
-		if(client && mind)
+		/*if(client && mind)
 			if (client.statpanel == "Status")
 				if(mind.changeling)
 					stat("Chemical Storage", mind.changeling.chem_charges)
 					stat("Genetic Damage Time", mind.changeling.geneticdamage)
 	return
+	*/
 
 
 /mob/living/carbon/monkey/verb/removeinternal()
@@ -459,6 +479,7 @@
 	canWearBack = 0
 	held_items = list()
 	flag = NO_BREATHE
+	canPossess = TRUE
 	var/growth = 0
 
 /mob/living/carbon/monkey/mushroom/say()

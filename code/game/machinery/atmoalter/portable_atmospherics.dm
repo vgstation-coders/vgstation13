@@ -86,8 +86,9 @@
 	return 1
 
 /obj/machinery/portable_atmospherics/proc/eject_holding()
-	holding.forceMove(loc)
-	holding = null
+	if(holding)
+		holding.forceMove(loc)
+		holding = null
 
 /obj/machinery/portable_atmospherics/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 
@@ -113,9 +114,8 @@
 			if(possible_port)
 				if(connect(possible_port))
 					to_chat(user, "<span class='notice'>You connect [name] to the port.</span>")
-					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-					if(src.air_contents.toxins > 0 || (istype(S)))
-						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
+					if(air_contents[GAS_PLASMA] > 0 || air_contents[GAS_SLEEPING] > 0)
+						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[air_contents[GAS_PLASMA] > 0 ? "Toxins" : ""] [air_contents[GAS_SLEEPING] > 0 ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					pixel_x = possible_port.pixel_x
 					pixel_y = possible_port.pixel_y
 					return 1

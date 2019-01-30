@@ -58,9 +58,13 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
+
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
+
+#define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -83,6 +87,8 @@
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
+
+#define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
@@ -132,6 +138,10 @@
 
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
+#define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
+
+#define ishammer(A) is_type_in_list(A, list(/obj/item/weapon/hammer, /obj/item/weapon/storage/toolbox))
+
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
@@ -156,6 +166,8 @@
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
+#define isglasssheet(A) istype(A, /obj/item/stack/sheet/glass)
+
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
@@ -169,6 +181,10 @@
 #define iswindow(A) (istype(A, /obj/structure/window))
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
+
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+
+#define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
 #define isAPC(A) istype(A, /obj/machinery/power/apc)
 
@@ -184,7 +200,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -199,34 +215,71 @@
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
-//Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
+#define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
-#define iscult(H) (H.mind in ticker.mode.cult)
+#define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
-#define isculthead(H) (iscult(H)&&(H.mind in ticker.mode.modePlayer))
+//Macros for roles/antags
+#define isfaction(A) (istype(A, /datum/faction))
 
-#define ischangeling(H) (H.mind in ticker.mode.changelings)
+#define isrole(type, H) (H.mind && H.mind.GetRole(type))
 
-#define isrev(H) (H.mind in ticker.mode.revolutionaries)
+#define isanyantag(H) (H.mind && H.mind.antag_roles.len)
 
-#define isrevhead(H) (H.mind in ticker.mode.head_revolutionaries)
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
-#define istraitor(H) (H.mind in ticker.mode.traitors)
+#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
-#define ismalf(H) (H.mind in ticker.mode.malf_ai)
+#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define isnukeop(H) (H.mind in ticker.mode.syndicates)
-#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
+#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
-#define iswizard(H) (H.mind in ticker.mode.wizards)
+#define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
 
-#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
+#define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
-#define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+#define isrev(H) (isrevnothead(H) || isrevhead(H))
+
+#define isrevnothead(H) (H.mind && H.mind.GetRole(REV))
+
+#define isrevhead(H) (H.mind && H.mind.GetRole(HEADREV))
+
+#define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
+
+#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+
+#define ismalf(H) (H.mind && H.mind.GetRole(MALF))
+
+#define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
+
+#define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
+
+#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
+
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+
+#define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
+
+#define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define issurvivor(H) (H.mind && H.mind.GetRole(SURVIVOR))
+
+#define iscrusader(H) (H.mind && H.mind.GetRole(CRUSADER))
+
+#define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
+
+#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+
+#define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
+
+//Banning someone from the Syndicate role bans them from all antagonist roles
+#define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
+
 
 
 //Macro for AREAS!

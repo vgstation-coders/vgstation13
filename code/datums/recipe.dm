@@ -32,7 +32,7 @@
  *
  * */
 
-//The person who made this honestly thought that the average coder from the distant future of 2018 would understand any of this shit without a thorough and painful examination
+//The person who made this honestly thought that the average coder from the distant future of 2019 would understand any of this shit without a thorough and painful examination
 //And this is exactly why any Chemistry-related system is impenetrable to anyone but the best coders, even things theorically as simple as this
 //So as I decrypt this arcane coding technology, I'll add comments where I see it fit, so absolutely fucking everywhere
 //I'll take my Nobel Prize with fries thank you
@@ -48,18 +48,28 @@
 //First step, let's check the reagents in our recipe machine (generally a microwave)
 //Since it's reagents, it's about time for Chemistry-Holder insanity
 /datum/recipe/proc/check_reagents(var/datum/reagents/avail_reagents) //1 = Precisely what we need, 0 = Not enough, -1 = More than needed
-	//Now, here comes the arcane magic. Before we even do anything, we estimate we have just what we need. Why ? Who knows
 	. = 1
-	//Scan the reagents in our recipe machine thingie one by one for shit we need in our recipe (water, hotsauce, salt, etc...)
 	for(var/r_r in reagents)
-		//Get the amount of said reagent we'll need in our recipe and assign it to that variable
-		var/reagent_amount = avail_reagents.get_reagent_amount(r_r)
-		//And now, the fun begins. Let's put this in plain words because holy crap
-		if(!(abs(reagent_amount - reagents[r_r]) < 0.5)) //If the absolute value of the amount of our reagent minus the needed amount of reagents for the recipe is NOT under 0.5 (rounding sanity)
-			if(reagent_amount > reagents[r_r]) //Let's check if the amount of our reagent is above the needed amount
-				. = -1 //If so, then we can say that we have more of this reagent that needed
-			else //Else
-				return 0 //We don't have what we need, abort, ABORT
+		if(islist(r_r))
+			var/list/L = r_r
+			var/found = FALSE
+			for(var/I in L)
+				var/reagent_amount = avail_reagents.get_reagent_amount(I)
+				if(!(abs(reagent_amount - reagents[I]) < 0.5))
+					found = TRUE
+					if(reagent_amount > reagents[I])
+						. = -1
+					break
+			if(!found)
+				return 0//We don't have what we need.
+		else
+			var/reagent_amount = avail_reagents.get_reagent_amount(r_r)
+			//And now, the fun begins. Let's put this in plain words because holy crap
+			if(!(abs(reagent_amount - reagents[r_r]) < 0.5)) //If the absolute value of the amount of our reagent minus the needed amount of reagents for the recipe is NOT under 0.5 (rounding sanity)
+				if(reagent_amount > reagents[r_r]) //Let's check if the amount of our reagent is above the needed amount
+					. = -1 //If so, then we can say that we have more of this reagent that needed
+				else //Else
+					return 0 //We don't have what we need, abort, ABORT
 		//Remember that this is a for loop, so we do this for every reagent listed in our recipe
 	//Now, that check was fun, but we need to check for reagents we have not included per se (things not used in our recipe)
 	if((reagents ? (reagents.len) : (0)) < avail_reagents.reagent_list.len) //Given we have reagents in our recipe, are there more reagents in our machine than reagents needed in our recipe ?
@@ -99,6 +109,10 @@
 	for(var/obj/O in (container.contents - result_obj)) //Find all objects (for instance, raw food or beakers) in our machine, excluding the result we just created
 		if(O.reagents) //Little sanity, can't hurt
 			for(var/r_r in reagents_forbidden) //Check forbidden reagents
+				if(islist(r_r))
+					var/list/L = r_r
+					for(var/I in L)
+						O.reagents.del_reagent(I) //If we find any, remove
 				O.reagents.del_reagent("[r_r]") //If we find any, remove
 			O.reagents.update_total() //Make sure we're set
 			O.reagents.trans_to(result_obj, O.reagents.total_volume) //If we have reagents in here, squeeze them into the end product

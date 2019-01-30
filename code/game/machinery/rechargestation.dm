@@ -333,3 +333,7 @@
 	var/mob/living/silicon/robot/R = AM
 	mob_enter(R)
 	return
+
+/obj/machinery/recharge_station/get_cell()
+	if(occupant)
+		return occupant.get_cell()

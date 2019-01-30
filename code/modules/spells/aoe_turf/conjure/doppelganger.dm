@@ -40,7 +40,8 @@ var/list/doppelgangers = list()
 	D.alpha = OPAQUE // No more invisible doppels
 	doppelgangers_count_by_wizards[holder]++ // Update the counts of doppels we summoned
 	spawn (spell_duration)
-		D.death()
+		if(D.stat != DEAD)
+			D.death()
 
 /spell/aoe_turf/conjure/doppelganger/on_holder_death(mob/user)
 	if(!user)

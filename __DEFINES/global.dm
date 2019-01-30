@@ -12,6 +12,8 @@
 
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
 
+#define MUSHROOM_SHAPED "Mushroom"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
@@ -112,6 +114,7 @@ var/airtunnel_stop = 68 // default
 var/airtunnel_bottom = 72 // default
 var/list/monkeystart = list()
 var/list/wizardstart = list()
+var/list/grinchstart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
 var/list/assistant_latejoin = list()
@@ -224,6 +227,7 @@ var/list/score=list(
 	"oremined"       = 0, //How many chunks of ore were smelted
 	"eventsendured"  = 0, //How many random events did the station endure?
 	"powerloss"      = 0, //How many APCs have alarms (under 30 %)?
+	"maxpower"       = 0, //Most watts in grid on any of the world's powergrids.
 	"escapees"       = 0, //How many people got out alive?
 	"deadcrew"       = 0, //Humans who died during the round
 	"deadsilicon"	 = 0, //Silicons who died during the round
@@ -238,6 +242,15 @@ var/list/score=list(
 	"deadaipenalty" = 0, //AIs who died during the round
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
+	"slips"			= 0, //How many people have slipped during this round
+	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
+	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
+	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
+	"shoeshatches"  = 0, //Amount of shoes magically snatched.
+	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
+	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
+	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
+	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -247,6 +260,15 @@ var/list/score=list(
 	"dmgestdamage"  = 0,
 	"dmgestkey"     = null,
 	"explosions"	= 0, //How many explosions happened total
+	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
+	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
+	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
+	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
+	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
+	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
+	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
+	"lawchanges"	 = 0, //Amount of AI modules used.
+
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
@@ -389,6 +411,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
 	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	)
 
 // Set by traitor item, affects cargo supplies
@@ -431,3 +454,18 @@ var/list/bank_security_text2num_associative = list(
 	"Two" = 2
 ) // Can't use a zero. Throws a fit about out of bounds indices if you do.
 // Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
+//Radial menus currently existing in the world.
+var/global/list/radial_menus = list()
+
+// Copying atoms is stupid and this is a stupid solution
+var/list/variables_not_to_be_copied = list(
+	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
+	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
+	"on_item_removed","on_moved","on_destroyed","on_density_change",
+	"on_z_transition","on_use","on_emote","on_life","on_resist",
+	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
+	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
+	"on_explode","on_projectile","in_chamber","power_supply","contents",
+	"x","y","z"
+)

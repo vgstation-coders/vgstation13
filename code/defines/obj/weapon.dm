@@ -15,7 +15,7 @@
 
 /obj/item/weapon/phone/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /*/obj/item/weapon/syndicate_uplink
 	name = "station bounced radio"
@@ -62,7 +62,7 @@
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/corncob
 	name = "corn cob"
@@ -201,7 +201,7 @@
 
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
 	if(!throw_range)
@@ -407,7 +407,7 @@
 
 /obj/item/weapon/legcuffs/beartrap/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/legcuffs/beartrap/update_icon()
 	icon_state = "beartrap[armed]"
@@ -520,6 +520,32 @@
 	throw_speed = 1
 	throw_range = 3
 
+/obj/item/weapon/batteringram/attackby(var/obj/item/I, mob/user as mob)
+	if(istype(I,/obj/item/weapon/ram_kit))
+		flags &= ~MUSTTWOHAND //Retains FPRINT and TWOHANDABLE
+		icon_state = "ram-upgraded"
+		qdel(I)
+	else
+		..()
+
+/obj/item/weapon/batteringram/proc/can_ram(mob/user)
+	if(ishuman(user))
+		if(wielded)
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>\The [src] must be wielded!</span>")
+			return FALSE
+	else if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(HAS_MODULE_QUIRK(R,MODULE_IS_THE_LAW))
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>You are not compatible with \the [src]!</span>")
+			return FALSE
+	else
+		to_chat(user,"<span class='warning'>\The [src] is too bulky!</span>")
+		return FALSE
+
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
 	name = "wet floor sign"
@@ -541,9 +567,6 @@
 
 /obj/item/weapon/caution/proximity_sign/attack_self(mob/user as mob)
 	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.mind.assigned_role != "Janitor")
-			return
 		if(armed)
 			armed = 0
 			to_chat(user, "<span class='notice'>You disarm \the [src].</span>")
@@ -554,7 +577,7 @@
 		else
 			armed = 0
 			timepassed = 0
-		to_chat(H, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
+		to_chat(user, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
 
 /obj/item/weapon/caution/proximity_sign/process()
 	if(!timing)
@@ -702,7 +725,7 @@
 
 /obj/item/weapon/wire/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (OXYLOSS)
+	return (SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/module
 	icon = 'icons/obj/module.dmi'

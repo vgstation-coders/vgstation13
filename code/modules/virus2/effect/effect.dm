@@ -64,7 +64,7 @@
 /datum/disease2/effect/proc/minormutate()
 	switch(pick(1,2,3,4,5))
 		if(1)
-			chance = rand(0, max_chance)
+			chance = rand(initial(chance), max_chance)
 		if(2)
 			multiplier = rand(1, max_multiplier)
 
@@ -1189,7 +1189,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		H.adjustToxLoss(15*multiplier)
 
 /datum/disease2/effect/organs/vampire
-	stage = 3 //For use with vampires?
+	stage = 1 //For use with vampires?
+	badness = 3
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -1378,12 +1379,12 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
+		GM.adjust_gas(GAS_PLASMA, 100)
 		//GM.temperature = 1500+T0C //should be enough to start a fire
 		to_chat(mob, "<span class='warning'>You exhale a large plume of toxic gas!</span>")
 	else
-		GM.toxins += 10
 		GM.temperature = istype(T) ? T.air.temperature : T20C
+		GM.adjust_gas(GAS_PLASMA, 100)
 		to_chat(mob, "<span class = 'warning'> A toxic gas emanates from your pores!</span>")
 	T.assume_air(GM)
 	return
@@ -1579,6 +1580,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			heart_attack.health = 50
 			heart_attack.maxHealth = 50
 			heart_attack.stat_attack = 1
+			score["heartattacks"]++
 			qdel(blown_heart)
 
 

@@ -666,7 +666,7 @@ obj/structure/bomberflame/Destroy()
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
-	clothing_flags = ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL|CONTAINPLASMAMAN
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -695,7 +695,16 @@ obj/structure/bomberflame/Destroy()
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	species_restricted = list("exclude")
+	clothing_flags = CONTAINPLASMAMAN
 	var/never_removed = 1
+
+/obj/item/clothing/head/helmet/space/bomberman/equipped(mob/living/carbon/human/H, head)
+	if(istype(H) && H.get_item_by_slot(head) == src)
+		H.mutations.Add(M_NO_BREATH)
+
+/obj/item/clothing/head/helmet/space/bomberman/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	if(from_slot == slot_head && istype(user))
+		user.mutations.Remove(M_NO_BREATH)
 
 /obj/item/clothing/head/helmet/space/bomberman/New()
 	..()
@@ -1080,7 +1089,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)
-		to_chat(O, "<b>A round has begun in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>")
+		to_chat(O, "<b>A round has begun in <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>[name]</A>!</b>")
 
 	sleep(40)
 

@@ -236,7 +236,6 @@
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()
 		else
-			:
 			if(a_right != D)
 				a_right.pulsed(0)
 			if(a_left != D)

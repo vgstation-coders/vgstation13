@@ -13,7 +13,7 @@
 		/turf/simulated/floor/engine=1
 	)
 	spawntypes = list(
-		/obj/item/device/mass_spectrometer/adv=1,
+		/obj/item/device/reagent_scanner/adv=1,
 		/obj/item/clothing/glasses/hud/health=1,
 		/obj/machinery/bot/medbot/mysterious=1
 	)
@@ -51,7 +51,7 @@
 		/obj/effect/gateway=1,
 		/obj/item/mounted/frame/painting/narsie=1,
 		/obj/effect/gibspawner=1,
-		/obj/structure/cult/talisman=1,
+		/obj/structure/cult_legacy/talisman=1,
 		/obj/item/toy/crayon/red=2,
 		/obj/effect/decal/cleanable/blood=4,
 		/obj/structure/table/woodentable=2,

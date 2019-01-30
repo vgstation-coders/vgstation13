@@ -4,7 +4,7 @@ Deuterium-deuterium fusion : 40 x 10^7 K
 Deuterium-tritium fusion: 4.5 x 10^7 K
 */
 
-//#DEFINE MAX_STORED_ENERGY (held_plasma.toxins * held_plasma.toxins * SPECIFIC_HEAT_TOXIN)
+//#DEFINE MAX_STORED_ENERGY (held_plasma[GAS_PLASMA] * held_plasma[GAS_PLASMA] * SPECIFIC_HEAT_TOXIN)
 
 /obj/effect/rust_em_field
 	name = "EM Field"
@@ -139,7 +139,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	//the amount of plasma pulled in each update is relative to the field strength, with 50T (max field strength) = 100% of area covered by the field
 	//at minimum strength, 0.25% of the field volume is pulled in per update (?)
 	//have a max of 1000 moles suspended
-	if(held_plasma.toxins < transfer_ratio * 1000)
+	if(held_plasma[GAS_PLASMA] < transfer_ratio * 1000)
 		var/moles_covered = environment.return_pressure()*volume_covered/(environment.temperature * R_IDEAL_GAS_EQUATION)
 //		to_chat(world, "<span class='notice'>moles_covered: [moles_covered]</span>")
 		//
@@ -149,15 +149,12 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		//The min() in the following line of code simulates that bug, because god is dead.
 		//Obviously the correct solution would be to fix all the errors in here, but that would involve rebalancing every magic number in this file.
 		var/datum/gas_mixture/gas_covered = environment.remove(min(moles_covered, environment.molar_density() * CELL_VOLUME))
-		var/datum/gas_mixture/plasma_captured = new /datum/gas_mixture()
+		var/datum/gas_mixture/plasma_captured = new()
 		//
-		plasma_captured.toxins = round(gas_covered.toxins * transfer_ratio)
-//		to_chat(world, "<span class='warning'>[plasma_captured.toxins] moles of plasma captured</span>")
 		plasma_captured.temperature = gas_covered.temperature
-		plasma_captured.update_values()
+		plasma_captured.adjust_gas(GAS_PLASMA, round(gas_covered[GAS_PLASMA] * transfer_ratio))
 		//
-		gas_covered.toxins -= plasma_captured.toxins
-		gas_covered.update_values()
+		gas_covered.subtract(plasma_captured)
 		//
 		held_plasma.merge(plasma_captured)
 		//
@@ -175,15 +172,15 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 	//change held plasma temp according to energy levels
 	//SPECIFIC_HEAT_TOXIN
-	if(mega_energy > 0 && held_plasma.toxins)
+	if(mega_energy > 0 && held_plasma[GAS_PLASMA])
 		var/heat_capacity = held_plasma.heat_capacity()//200 * number of plasma moles
 		if(heat_capacity > 0.0003)	//formerly MINIMUM_HEAT_CAPACITY
 			held_plasma.temperature = (heat_capacity + mega_energy * 35000)/heat_capacity
 
 	//if there is too much plasma in the field, lose some
-	/*if( held_plasma.toxins > (MOLES_CELLSTANDARD * 7) * (50 / field_strength) )
+	/*if( held_plasma[GAS_PLASMA] > (MOLES_CELLSTANDARD * 7) * (50 / field_strength) )
 		Loseplasma()*/
-	if(held_plasma.toxins > 1)
+	if(held_plasma[GAS_PLASMA] > 1)
 		//lose a random amount of plasma back into the air, increased by the field strength (want to switch this over to frequency eventually)
 		var/loss_ratio = rand() * (0.05 + (0.05 * 50 / field_strength))
 //		to_chat(world, "lost [loss_ratio*100]% of held plasma")
@@ -191,17 +188,14 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		var/datum/gas_mixture/plasma_lost = new
 		plasma_lost.temperature = held_plasma.temperature
 		//
-		plasma_lost.toxins = held_plasma.toxins * loss_ratio
-		//plasma_lost.update_values()
-		held_plasma.toxins -= held_plasma.toxins * loss_ratio
-		//held_plasma.update_values()
+		plasma_lost.adjust_gas(GAS_PLASMA, held_plasma[GAS_PLASMA] * loss_ratio)
+		held_plasma.subtract(plasma_lost)
 		//
 		environment.merge(plasma_lost)
 		radiation += loss_ratio * mega_energy * 0.1
 		mega_energy -= loss_ratio * mega_energy * 0.1
 	else
-		held_plasma.toxins = 0
-		//held_plasma.update_values()
+		held_plasma.multiply(0) //Pretty sure this is equivalent but this thing is so fucked up already I don't even care enough to make sure
 
 	//handle some reactants formatting
 	for(var/reactant in dormant_reactant_quantities)

@@ -195,7 +195,7 @@
 	overlays += dye_color
 
 /obj/item/weapon/hair_dye/attack_self(mob/user as mob)
-	var/new_color = input(user, "Choose the dye's color:", "Color Select") as color|null
+	var/new_color = input(user, "Choose the dye's color:", "Color Select", rgb(color_r, color_g, color_b)) as color|null
 	if(new_color)
 		color_r = hex2num(copytext(new_color, 2, 4))
 		color_g = hex2num(copytext(new_color, 4, 6))
@@ -443,7 +443,8 @@
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if (isvampire(H))
-			if (!(VAMP_MATURE in H.mind.vampire.powers))
+			var/datum/role/vampire/V = H.mind.GetRole(VAMPIRE)
+			if (!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 
@@ -455,7 +456,7 @@
 					return
 				if (21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-					H.emote("scream")
+					H.audible_scream()
 					H.dir = turn(H.dir, 180)
 					return
 				if (41 to 50)
@@ -517,7 +518,7 @@
 	overlays += I
 
 /obj/item/weapon/nanitecontacts/attack_self(mob/user)
-	var/new_color = input(user, "Choose the contact's color:", "Color Select") as color|null
+	var/new_color = input(user, "Choose the contact's color:", "Color Select", rgb(color_r, color_g, color_b)) as color|null
 	if(new_color)
 		color_r = hex2num(copytext(new_color, 2, 4))
 		color_g = hex2num(copytext(new_color, 4, 6))

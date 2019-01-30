@@ -156,9 +156,9 @@ Class Procs:
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
-		/obj/structure/cult/talisman,
-		/obj/structure/cult/forge,
-		/obj/structure/cult/tome
+		/obj/structure/cult_legacy/talisman,
+		/obj/structure/cult_legacy/forge,
+		/obj/structure/cult_legacy/tome
 		)
 	var/I = pick(random_structure)
 	new I(loc)
@@ -492,12 +492,12 @@ Class Procs:
 
 /obj/machinery/proc/togglePanelOpen(var/obj/toggleitem, var/mob/user)
 	panel_open = !panel_open
-	if(!icon_state_open)
-		icon_state_open = icon_state
 	if(panel_open)
-		icon_state = icon_state_open
+		if(icon_state_open)
+			icon_state = icon_state_open
 	else
-		icon_state = initial(icon_state)
+		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
+			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
 	if(isscrewdriver(toggleitem))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)

@@ -123,7 +123,7 @@
 		var/mob/living/simple_animal/mouse/mouse = M
 
 		item_state = initial(mouse.icon_state) //Initial icon states are "mouse_gray", "mouse_white", etc
-		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray")))
+		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray", "mouse_black")))
 			item_state = "mouse_gray"
 
 //CORGI
@@ -187,3 +187,10 @@
 /obj/item/weapon/holder/animal/slime/attack_self(mob/user)
 	..()
 	unfreeze()
+
+/obj/item/weapon/holder/animal/pillow
+	name = "pillow holder"
+	desc = "Comforbable"
+	item_state = "pillow"
+	slot_flags = SLOT_HEAD
+	update_itemstate_on_twohand = TRUE

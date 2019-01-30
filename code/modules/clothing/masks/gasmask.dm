@@ -99,26 +99,17 @@
 	origin_tech = Tc_SYNDICATE + "=4"
 	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	var/list/clothing_choices = list()
-//someone who isn't me should really refactor this so it isnt instantiating all the masks in the game on startup
+	permeability_coefficient = 0.90
+	var/static/list/clothing_choices
+
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	for(var/Type in existing_typesof(/obj/item/clothing/mask) - /obj/item/clothing/mask - typesof(/obj/item/clothing/mask/gas/voice))
-		clothing_choices += new Type
-
-/obj/item/clothing/mask/gas/voice/attackby(obj/item/I, mob/user)
-	..()
-	if(!istype(I, /obj/item/clothing/mask) || istype(I, src.type))
-		return 0
-	else
-		var/obj/item/clothing/mask/M = I
-		if(src.clothing_choices.Find(M))
-			to_chat(user, "<span class='warning'>[M.name]'s pattern is already stored.</span>")
-			return
-		src.clothing_choices += M
-		to_chat(user, "<span class='notice'>[M.name]'s pattern absorbed by \the [src].</span>")
-		return 1
-	return 0
+	if(!clothing_choices)
+		var/list/choices = list()
+		for(var/Type in existing_typesof(/obj/item/clothing/mask) - /obj/item/clothing/mask - typesof(/obj/item/clothing/mask/gas/voice))
+			var/obj/item/clothing/mask/mask_type = Type
+			choices[initial(mask_type.name)] = mask_type
+		clothing_choices = choices
 
 /datum/action/item_action/change_appearance_mask
 	name = "Change Mask Appearance"
@@ -130,23 +121,26 @@
 	T.change()
 
 /obj/item/clothing/mask/gas/voice/proc/change()
-
-	var/obj/item/clothing/mask/A
-	A = input("Select Form to change it to", "BOOYEA", A) as null|anything in clothing_choices
-	if(!A ||(usr.stat))
+	var/choice = input(usr, "Select Form to change it to", "BOOYEA") as null|anything in clothing_choices
+	if(!choice || !usr.Adjacent(src) || usr.incapacitated())
 		return
 
-	desc = null
-	permeability_coefficient = 0.90
+	// `clothing_choices` is an associative list of (name => type path)
+	// so `chosen_type` is the type path of the chosen mask.
+	// we abuse `initial()` to read vars from that type path,
+	// avoiding the creation of a dummy object
+	var/obj/item/clothing/mask/chosen_type = clothing_choices[choice]
 
-	desc = A.desc
-	name = A.name
-	flags = A.flags
-	icon = A.icon
-	icon_state = A.icon_state
-	item_state = A.item_state
-	can_flip = A.can_flip
-	body_parts_covered = A.body_parts_covered
+	// Don't change this to set `appearance`, it will mess with the plane/layer if this thing is equipped
+	name = initial(chosen_type.name)
+	desc = initial(chosen_type.desc)
+	icon = initial(chosen_type.icon)
+	icon_state = initial(chosen_type.icon_state)
+	flags = initial(chosen_type.flags)
+	item_state = initial(chosen_type.item_state)
+	can_flip = initial(chosen_type.can_flip)
+	body_parts_covered = initial(chosen_type.body_parts_covered)
+	hides_identity = initial(chosen_type.hides_identity)
 	usr.update_inv_wear_mask(1)	//so our overlays update.
 
 /obj/item/clothing/mask/gas/voice/attack_self(mob/user)

@@ -30,16 +30,24 @@
 
 #define QUANTIZE(variable)		(round(variable, 0.0001))
 
-#define INFINITY 1e31 //closer than enough
+#define INFINITY 1.#INF
 
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16
 
 #define MELTPOINT_GLASS   (1500+T0C)
 #define MELTPOINT_STEEL   (1510+T0C)
+#define MELTPOINT_PLASMA (MELTPOINT_STEEL+500)
 #define MELTPOINT_SILICON 1687 // KELVIN
 #define MELTPOINT_PLASTIC (180+T0C)
 #define MELTPOINT_SNOW	304.15	//about 30°C
+#define MELTPOINT_CARBON (T0C+3550)
+#define MELTPOINT_GOLD (T0C+1064)
+#define MELTPOINT_SILVER (T0C+961.8)
+#define MELTPOINT_URANIUM (T0C+1132)
+#define MELTPOINT_POTASSIUM (T0C+63.5)
+#define MELTPOINT_BRASS (T0C+940)
+#define MELTPOINT_MYTHRIL (T0C+893) //Using sterling silver (because silver steel) as base
 
 // The highest number supported is a signed 32-bit floating point number.
 // Integers beyond the 24 bit range are represented as single-precision floating points, and thus will lose accuracy beyond the range of +/- 16777216

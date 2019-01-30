@@ -37,9 +37,7 @@
 	icon_state = "fake-moustache"
 	flags = FPRINT
 	body_parts_covered = BEARD
-
-/obj/item/clothing/mask/fakemoustache/is_hidden_identity()
-	return TRUE
+	hides_identity = HIDES_IDENTITY_ALWAYS
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
@@ -75,13 +73,11 @@
 	desc = "LOADSAMONEY"
 	icon_state = "balaclava"
 	item_state = "balaclava"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = HEAD|MOUTH|EARS
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
-/obj/item/clothing/mask/balaclava/is_hidden_identity()
-	return TRUE
+	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
@@ -229,3 +225,36 @@ obj/item/clothing/mask/joy
 
 /obj/item/clothing/mask/goldface/update_icon()
 	icon_state = pick("goldenmask","goldenmask_anger","goldenmask_joy","goldenmask_despair")
+
+
+/obj/item/clothing/mask/holopipe
+	name = "holo pipe"
+	desc = "It is not a pipe."
+	icon_state = "holopipe_off"
+	item_state = "holopipe_off"
+	var/activated = 0
+
+
+/obj/item/clothing/mask/holopipe/proc/activate(var/mob/user as mob)
+	if(!user.incapacitated())
+		src.activated = !src.activated
+		if(src.activated)
+			icon_state = "holopipe_on"
+			item_state = "holopipe_on"
+			to_chat(user, "You activate the holo pipe.")
+			user.update_inv_wear_mask()
+		else
+			icon_state = "holopipe_off"
+			item_state = "holopipe_off"
+			to_chat(user, "You deactivate the holo pipe.")
+			user.update_inv_wear_mask()
+
+/obj/item/clothing/mask/holopipe/attack_self(var/mob/user)
+	activate(user)
+
+/obj/item/clothing/mask/holopipe/verb/activate_pipe()
+	set category = "Object"
+	set name = "Toggle pipe"
+	set src in usr
+	if(!usr.incapacitated())
+		activate(usr)

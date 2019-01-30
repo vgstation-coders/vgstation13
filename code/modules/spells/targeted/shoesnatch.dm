@@ -33,6 +33,7 @@
 			target.visible_message(	"<span class='danger'>[target]'s shoes suddenly vanish!</span>", \
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
 			user.put_in_active_hand(old_shoes)
+			score["shoeshatches"]++
 
 		else if(spawn_shards) //Spawn shards if the target isn't wearing shoes
 			to_chat(user, "<span class='danger'>You conjure several glass shards around \the [target].</span>")

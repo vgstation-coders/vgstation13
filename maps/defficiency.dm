@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Defficiency
 //**************************************************************
@@ -59,6 +59,9 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
+	center_x = 231
+	center_y = 249
+
 //The central shuttle leads to both outposts
 /datum/map/active/New()
 	. = ..()
@@ -88,11 +91,10 @@
 	wires = new /datum/wires/airlock/secure(src)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 
 #include "defficiency/areas.dm" // Areas
 
 #include "defficiency/jobs.dm"
 
 #include "defficiency.dmm"
-
+#endif

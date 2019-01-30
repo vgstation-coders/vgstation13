@@ -607,11 +607,10 @@ turf/simulated/floor/update_icon()
 			coil.turf_place(src, user)
 		else
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
-	else if(istype(C, /obj/item/weapon/pickaxe/shovel))
+	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
-			new /obj/item/weapon/ore/glass(src)
-			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
+			drop_stack(/obj/item/stack/ore/glass, src, 2) //Make some sand if you shovel grass
 			to_chat(user, "<span class='notice'>You shovel the grass.</span>")
 			if(prob(10))
 				var/to_spawn = pick(
@@ -671,7 +670,7 @@ turf/simulated/floor/update_icon()
 	if(P)
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
-			P.lifespan = max(world.time + delay, world.time+P.lifespan)
+			P.lifespan = max(delay, P.lifespan)
 	else
 		new /obj/effect/overlay/puddle(src, slipperiness, delay)
 
@@ -697,9 +696,9 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
+		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
-	return
 
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster

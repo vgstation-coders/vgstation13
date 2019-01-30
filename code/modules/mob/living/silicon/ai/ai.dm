@@ -138,14 +138,14 @@ var/list/ai_list = list()
 			to_chat(src, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
 			to_chat(src, "To use something, simply click on it.")
 			to_chat(src, "Use say :b to speak to your cyborgs through binary.")
-			if(!(ticker && ticker.mode && (mind in ticker.mode.malf_ai)))
-				show_laws()
+			show_laws()
+			if (!ismalf(src))
 				to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
 
 			job = "AI"
 	ai_list += src
 	..()
-	return
+	playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"
@@ -263,7 +263,7 @@ var/list/ai_list = list()
 		"Diagnosis" = "ai-atlantiscze",
 		"Drink It!" = "ai-silveryferret",
 		"Metaclub" = "ai-terminal",
-		"Jack Frost" = "ai-jack",	
+		"Jack Frost" = "ai-jack",
 	)
 	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
 	if(!selected)
@@ -275,12 +275,11 @@ var/list/ai_list = list()
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()
-	if(ticker.mode.name == "AI malfunction")
-		var/datum/game_mode/malfunction/malf = ticker.mode
-		for (var/datum/mind/malfai in malf.malf_ai)
-			if(mind == malfai) // are we the evil one?
-				if(malf.apcs >= 3)
-					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
+	if(malf && malf.apcs >= 3)
+		stat(null, "Amount of APCS hacked: [malf.apcs]")
+		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+
 
 /mob/proc/remove_malf_spells()
 	for(var/spell/S in spell_list)
