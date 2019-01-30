@@ -113,7 +113,9 @@ CREATE TABLE client (
     parallax_speed INTEGER,
     stumble        INTEGER,
     attack_animation INTEGER,
-    pulltoggle     INTEGER
+    pulltoggle     INTEGER,
+    credits        TEXT,
+    jingle         TEXT
 );
 
 

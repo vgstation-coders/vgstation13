@@ -271,11 +271,11 @@ var/savefile/panicfile
 
 	stop_all_media()
 
-	if(!end_credits.generated)
-		end_credits.on_roundend()
-	end_credits.rollem()
+	end_credits.on_world_reboot_start()
 
-	sleep(end_credits.starting_delay + end_credits.post_delay)
+	sleep(max(10, end_credits.audio_post_delay))
+
+	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
