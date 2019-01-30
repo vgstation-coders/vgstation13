@@ -71,7 +71,7 @@
 	return ..()
 
 /obj/item/weapon/gun/projectile/automatic/lockbox
-	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"
+	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/automatic/uzi
 	name = "\improper Uzi"
@@ -151,8 +151,7 @@
 	return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
-	mag_type = "/obj/item/ammo_storage/magazine/a12mm/empty"
-
+	spawn_mag = FALSE
 
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw
@@ -360,7 +359,7 @@
 			to_chat(user, "<span class='warning'>You're unable to insert \the [used_item] into \the [src]!</span>")
 
 /obj/item/weapon/gun/projectile/automatic/vector/lockbox
-	mag_type = "/obj/item/ammo_storage/magazine/m380auto/empty"
+	spawn_mag = FALSE
 
 /* The thing I found with guns in ss13 is that they don't seem to simulate the rounds in the magazine in the gun.
    Afaik, since projectile.dm features a revolver, this would make sense since the magazine is part of the gun.

@@ -167,7 +167,7 @@
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
 /obj/item/weapon/gun/projectile/sec/lockbox
-	mag_type = "/obj/item/ammo_storage/magazine/m380auto/empty"
+	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/luger
 	name = "\improper Luger P08"
