@@ -273,7 +273,7 @@
 
 /datum/design/vector
 	name = "Vector"
-	desc = "A gun."
+	desc = "A lightweight and compact gun, it has a detachable receiver that contains a recoil mitigation system."
 	id = "vector"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
@@ -287,7 +287,7 @@
 /datum/design/ammo_b380auto
 	name = "Ammunition Box (.380AUTO)"
 	desc = "A box of .380AUTO bullets."
-	id = "ammo_9mm"
+	id = "ammo_380auto"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
 	build_path = /obj/item/ammo_storage/box/b380auto
@@ -295,7 +295,7 @@
 /datum/design/ammo_b380auto/practice
 	name = "Ammunition Box (.380AUTO practice)"
 	desc = "A box of .380AUTO practice bullets."
-	id = "ammo_9mm"
+	id = "ammo_380auto_P"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
 	build_path = /obj/item/ammo_storage/box/b380auto/practice
@@ -303,7 +303,7 @@
 /datum/design/ammo_b380auto/rubber
 	name = "Ammunition Box (.380AUTO rubber)"
 	desc = "A box of .380AUTO rubber bullets."
-	id = "ammo_9mm"
+	id = "ammo_380auto_R"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
 	build_path = /obj/item/ammo_storage/box/b380auto/rubber
