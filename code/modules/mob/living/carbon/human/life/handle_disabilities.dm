@@ -43,7 +43,7 @@
 					"can u give me [pick("telikesis","halk","eppilapse")]?", \
 					"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
 					"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
-					"SOTP IT#", \
+					"SOTP IT#", "do grayons end when you eat thom tough?"\
 					"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
 				if(2)
 					say(pick("FUS RO DAH", \
