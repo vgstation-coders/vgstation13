@@ -32,14 +32,19 @@ mineral
 		T.UpdateMineral()
 
 mineral/proc/DropMineral(var/turf/unsimulated/mineral/T)
-	var/obj/item/stack/ore/O = drop_stack(ore, T, result_amount)
+	var/obj/item/O
+	if(ispath(O,/obj/item/stack))
+		O = drop_stack(ore, T, 1)
+	else
+		O = new ore(T)
 	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
 	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
-	if(istype(O))
+	if(istype(O, /obj/item/stack/ore))
+		var/obj/item/stack/ore/OR = O
 		if(!T.geologic_data)
 			T.geologic_data = new/datum/geosample(T)
 		T.geologic_data.UpdateNearbyArtifactInfo(T)
-		O.geologic_data = T.geologic_data
+		OR.geologic_data = T.geologic_data
 	return O
 
 mineral/uranium

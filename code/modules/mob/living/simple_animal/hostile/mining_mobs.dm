@@ -182,10 +182,8 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/EatOre(var/atom/targeted_ore)
 	for(var/obj/item/stack/ore/O in targeted_ore.loc)
 		ore_eaten++
-		if(!(O.type in ore_types_eaten))
-			ore_types_eaten += O.type
-		qdel(O)
-		O = null
+		ore_types_eaten[O.type]++
+		O.use(1)
 	if(ore_eaten > 5)//Limit the scope of the reward you can get, or else things might get silly
 		ore_eaten = 5
 	visible_message("<span class='notice'>\The [targeted_ore] was swallowed whole!</span>")
@@ -220,10 +218,8 @@ obj/item/asteroid/basilisk_hide/New()
 	if(!ore_eaten || ore_types_eaten.len == 0)
 		return
 	visible_message("<span class='danger'>\The [src] spits up the contents of its stomach before dying!</span>")
-	var/counter
 	for(var/R in ore_types_eaten)
-		for(counter=0, counter < ore_eaten, counter++)
-			new R(src.loc)
+		drop_stack(R, loc, ore_types_eaten[R])
 	ore_types_eaten.len = 0
 	ore_eaten = 0
 
@@ -693,11 +689,8 @@ obj/item/asteroid/basilisk_hide/New()
 		else if(is_sheet)
 			fire_time = world.time + 90 SECONDS
 			fire_extremity = 2
-		if(is_sheet)
-			var/obj/item/stack/sheet/S = A
-			S.use(1)
-		else
-			qdel(A)
+		var/obj/item/stack/sheet/S = A
+		S.use(1)
 		return
 	return ..()
 

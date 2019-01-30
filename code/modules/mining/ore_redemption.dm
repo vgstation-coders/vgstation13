@@ -63,7 +63,7 @@
 					continue //Skip slag for now.
 				if(O)
 					process_sheet(O)
-					score["oremined"] += 1
+					score["oremined"] += O.amount
 				else
 					break
 		else

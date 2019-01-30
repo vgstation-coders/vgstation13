@@ -12,7 +12,7 @@
 /obj/item/stack/ore/recycle(var/datum/materials/rec)
 	if(material==null)
 		return NOT_RECYCLABLE
-	rec.addAmount(material, 1)
+	rec.addAmount(material, amount)
 	return w_type
 
 /obj/item/stack/ore/uranium

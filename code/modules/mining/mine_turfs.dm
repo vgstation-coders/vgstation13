@@ -630,8 +630,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
 	if(dug)
 		return
-	for(var/i = 1 to 5)
-		new sand_type(src)
+	drop_stack(sand_type, src, 5)
 	dug = 1
 	//icon_plating = "asteroid_dug"
 	update_icon()
@@ -730,8 +729,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/simulated/floor/asteroid/proc/gets_dug()
 	if(dug)
 		return
-	for(var/i = 1 to 5)
-		new sand_type(src)
+	drop_stack(sand_type, src, 5)
 	dug = 1
 	//icon_plating = "asteroid_dug"
 	update_icon()

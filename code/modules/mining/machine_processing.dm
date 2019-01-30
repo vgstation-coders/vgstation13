@@ -413,7 +413,7 @@
 		if(!mat)
 			continue
 
-		credits += mat.value //Dosh.
+		credits += mat.value*O.amount //Dosh.
 
 		qdel(O)
 

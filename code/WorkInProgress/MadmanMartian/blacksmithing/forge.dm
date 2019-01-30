@@ -42,12 +42,12 @@
 			return
 	else if(istype(I, /obj/item/stack/ore/plasma))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
-		user.drop_item(I)
-		qdel(I)
-		if(current_temp < MELTPOINT_STEEL)
-			current_temp = MELTPOINT_STEEL
-		fuel_time += 20 SECONDS
-		return
+		var/obj/item/stack/ore/plasma/P = I
+		if(P.use(1))
+			if(current_temp < MELTPOINT_STEEL)
+				current_temp = MELTPOINT_STEEL
+			fuel_time += 20 SECONDS
+			return
 	else if(istype(I, /obj/item/stack/sheet/wood))
 		var/obj/item/stack/sheet/wood/W = I
 		if(W.use(1))
