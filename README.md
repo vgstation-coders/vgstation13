@@ -6,7 +6,9 @@
 
 [IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it:  [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
 
-[Discord Coding Server Invite Link](https://discord.gg/YJkzRYN)
+Discord Coding Server Invite Link:
+No longer available from github due to spambots using it.
+Ask on the /vg/ thread for a link or join the IRC at the link above and ask for an invite, there's a bot that relays messages between IRC and discord.
 
 ---
 
