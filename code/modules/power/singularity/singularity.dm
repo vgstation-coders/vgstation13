@@ -564,7 +564,7 @@
 			mezzer()
 		else
 			return 0
-	if(current_size < 11)
+	if(current_size > 9)
 		smwave()
 	return 1
 
@@ -597,7 +597,7 @@
 				else
 					to_chat(H, "<span class='warning'>You stare directly into \the [src] but your eyewear does absolutely nothing to protect you from it!</span>")
 				M.visible_message("<span class='danger'>[M] stares blankly at \the [src]!</span>", \
-				"<span class='danger'>You stare directly into \the [src] and feel [current_size < 11 ? "helpless" : "weak"].</span>")
+				"<span class='danger'>You stare directly into \the [src] and feel [current_size > 9 ? "helpless" : "weak"].</span>")
 				M.apply_effect(3, STUN)
 
 /obj/machinery/singularity/proc/emp_area()
