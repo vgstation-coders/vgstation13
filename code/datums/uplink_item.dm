@@ -513,7 +513,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
-	desc = "Picking this choice will send you a random item from the list. Useful for when you cannot think of a strategy to finish your objectives with."
+	desc = "Picking this choice will send you a random item from the list for half the cost. Useful for when you cannot think of a strategy to finish your objectives with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
