@@ -53,14 +53,17 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
-	. = round(. * cost_modifier, 1) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
+	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
+/datum/uplink_item/proc/available_for_job(var/user_job)
+	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	if((jobs_exclusive.len && !jobs_exclusive.Find(U.job)) || (jobs_excluded.len && jobs_excluded.Find(U.job)))
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! ([formatJumpTo(get_turf(U))])")
+	if(!available_for_job(U.job))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -523,13 +526,15 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(I.get_cost() > U.uses)
+			if(!I.available_for_job(U.job))
+				continue
+			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.get_cost())
+		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new I.item(loc)
 
