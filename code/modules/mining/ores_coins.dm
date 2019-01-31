@@ -64,10 +64,10 @@
 	var/location = get_turf(user)
 	for(var/obj/item/stack/ore/glass/sandToConvert in location)
 		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-		qdel(sandToConvert)
+		sandToConvert.use(1)
 
 	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	qdel(src)
+	use(1)
 
 /obj/item/stack/ore/plasma
 	name = "Plasma ore"
