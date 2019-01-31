@@ -7,7 +7,7 @@
 	duration = 300
 	charge_max = 10 SECONDS
 	cooldown_min = 2 SECONDS
-	spell_flags = 0
+	spell_flags = GRANDMASTER
 	range = 0
 	cast_sound = null
 

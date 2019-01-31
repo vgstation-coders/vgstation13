@@ -6,7 +6,7 @@
 
 	school = "transmutation"
 	charge_max = 300
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES|GRANDMASTER
 	invocation_type = SpI_NONE
 	cooldown_min = 100 //50 deciseconds reduction per rank
 	duration = 30 //in deciseconds

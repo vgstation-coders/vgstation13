@@ -6,7 +6,7 @@
 
 	school = "conjuration"
 	charge_max = 120
-	spell_flags = 0
+	spell_flags = GRANDMASTER
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 1

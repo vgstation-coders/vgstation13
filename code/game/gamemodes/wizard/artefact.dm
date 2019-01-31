@@ -310,3 +310,31 @@
 			T = get_turf(src)
 			if(user.z != T.z || is_holder_of(user, src))
 				user.dust()
+
+/obj/item/clothing/suit/cultrobes/grandmaster
+	name = "grandmaster robes"
+	desc = "A set of robes for a cult kingpin."
+	icon_state = "magusred"
+	item_state = "magusred"
+	wizard_garb = TRUE
+
+/obj/item/clothing/suit/cultrobes/get_cult_power()
+	return 60
+
+/obj/item/clothing/shoes/cult/grandmaster
+	name = "grandmaster sandals"
+	icon_state = "wizard"
+	wizard_garb = TRUE
+
+/obj/item/clothing/shoes/cult/grandmaster/get_cult_power()
+	return 10
+
+/obj/item/clothing/head/culthood/grandmaster
+	name = "grandmaster hood"
+	desc = "This is an unusual grandmaster hood, because it is not pointy."
+	icon_state = "magus"
+	item_state = "magus"
+	wizard_garb = TRUE
+
+/obj/item/clothing/head/culthood/grandmaster/get_cult_power()
+	return 20

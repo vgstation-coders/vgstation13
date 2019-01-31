@@ -5,6 +5,7 @@
 #define Z2NOCAST		8	//if this is added, the spell can't be cast at centcomm
 #define STATALLOWED		16	//if set, the user doesn't have to be conscious to cast. Required for ghost spells
 #define IGNOREPREV		32	//if set, each new target does not overlap with the previous one
+#define GRANDMASTER		64  //is the cult grandmaster allowed to learn this?
 //The following flags only affect different types of spell, and therefore overlap
 //Targeted spells
 #define INCLUDEUSER		64	//does the spell include the caster in its target selection?

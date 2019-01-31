@@ -11,6 +11,7 @@
 
 	spell_flags = WAIT_FOR_CLICK
 	spell_aspect_flags = SPELL_FIRE
+	spell_flags = GRANDMASTER
 	dumbfire = 0
 
 	amt_dam_brute = 0

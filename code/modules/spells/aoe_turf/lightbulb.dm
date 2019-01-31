@@ -5,7 +5,7 @@
 	abbreviation = "LB"
 
 	charge_max = 150
-	spell_flags = null
+	spell_flags = GRANDMASTER
 	invocation = "EAIS' RAUG"
 	invocation_type = SpI_WHISPER
 	selection_type = "range"

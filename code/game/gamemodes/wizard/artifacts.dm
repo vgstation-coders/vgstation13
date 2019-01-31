@@ -6,6 +6,7 @@
 	var/one_use = FALSE
 	var/list/spawned_items = list()
 	var/price = Sp_BASE_PRICE
+	var/grandmaster = FALSE //Is the cult grandmaster allowed to buy this?
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
@@ -18,6 +19,8 @@
 			user.mind.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
 
 /datum/spellbook_artifact/proc/can_buy(var/mob/user)
+	if(user.mind.GetRole(GRANDMASTER) && grandmaster)
+		return FALSE
 	return TRUE
 
 /datum/spellbook_artifact/staff_of_change
@@ -32,12 +35,14 @@
 	desc = "An artefact that channels the will of the user into destructive bolts of force."
 	abbreviation = "MF"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/focus)
+	grandmaster = TRUE
 
 /datum/spellbook_artifact/shards
 	name = "Soul Stone Bundle"
 	desc = "Grants you a soul stone belt with six empty shards, and the Artificer spell. Soul stone shards are ancient tools capable of capturing and harnessing the spirits of the dead and dying. The Artificer spell allows you to create arcane machines for the captured souls to pilot."
 	abbreviation = "SS"
 	spawned_items = list(/obj/item/weapon/storage/belt/soulstone/full)
+	grandmaster = TRUE
 
 /datum/spellbook_artifact/shards/purchased(mob/living/carbon/human/H)
 	..()
@@ -106,9 +111,10 @@
 
 /datum/spellbook_artifact/lesser_predicted_potion_bundle
 	name = "Lesser predicted potion bundle"
-	desc = "Contains 8  potions. Don't go using them all in one place!"
+	desc = "Contains 8 potions. Don't go using them all in one place!"
 	abbreviation = "LPB"
 	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle)
+	grandmaster = TRUE
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
@@ -165,7 +171,7 @@
 
 /datum/spellbook_artifact/summon_guns/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, or blades
-	return is_roundstart_wizard(user)
+	return is_roundstart_wizard(user) || user.find_held_item_by_type(/obj/item/weapon/spellbook/admin)
 
 
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
@@ -182,7 +188,7 @@
 
 /datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, or blades
-	return is_roundstart_wizard(user)
+	return is_roundstart_wizard(user) || user.find_held_item_by_type(/obj/item/weapon/spellbook/admin)
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
@@ -198,7 +204,7 @@
 
 /datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, or blades
-	return is_roundstart_wizard(user)
+	return is_roundstart_wizard(user) || user.find_held_item_by_type(/obj/item/weapon/spellbook/admin)
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()
@@ -214,6 +220,7 @@
 						/obj/item/weapon/glow_orb,\
 						/obj/item/weapon/glow_orb,\
 						)
+	grandmaster = TRUE
 
 /datum/spellbook_artifact/butterflyknife
 	name = "Crystal Butterfly Knife"
@@ -261,13 +268,13 @@
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy(var/mob/user)
-	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
+	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas)) || user.find_held_item_by_type(/obj/item/weapon/spellbook/admin)
 
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
 	spawned_items = list(/obj/item/phylactery)
-
+	grandmaster = TRUE
 
 /datum/spellbook_artifact/darkness
 	name = "Tone setter - darkness"
@@ -289,6 +296,7 @@
 	abbreviation = "PTDB"
 	desc = "A group of spells for general utility."
 	price = Sp_BASE_PRICE
+	grandmaster = TRUE
 
 /datum/spellbook_artifact/prestidigitation/purchased(mob/living/carbon/human/H)
 	..()
@@ -299,3 +307,44 @@
 	H.add_spell(new/spell/targeted/create_trinket)
 	H.add_spell(new/spell/targeted/cool_object)
 	H.add_spell(new/spell/targeted/warm_object)
+
+/datum/spellbook_artifact/summon_identity
+	name = "Summon Identity"
+	abbreviation = "SUID"
+	desc = "Experience of the joy of labor by injecting yourself into the crew manifest and records, and conjuring yourself an agent ID badge and some unfortunate sap close enough to a wormhole to jerk through for you to loot! Vacation as a wage slave!"
+	price = Sp_BASE_PRICE
+	spawned_items = list(/obj/item/weapon/card/id/syndicate)
+
+	grandmaster = TRUE
+
+/datum/spellbook_artifact/summon_identity/can_buy(var/mob/user)
+	return user.mind.GetRole(GRANDMASTER) || Holiday == LABOUR_DAY || user.find_held_item_by_type(/obj/item/weapon/spellbook/admin)
+
+/datum/spellbook_artifact/summon_identity/purchased(mob/living/carbon/human/H)
+	..()
+	var/job = pick("Assistant","Station Engineer","Atmospheric Technician","Cargo Technician","Mechanic","Shaft Miner","Paramedic")
+	//Find us a job that has maintenance access and is not a 1-slot or loyalty implant job that might stand out suspiciously.
+	for(var/path in typesof(/obj/effect/landmark/corpse))
+		var/obj/effect/landmark/corpse/C = new path
+		if(C.corpseidaccess == job)
+			C.forceMove(get_turf(H))
+			break
+		else
+			qdel(C)
+	H.mind.assigned_role = job
+	data_core.manifest_inject(H)
+	to_chat(H,"<span class='info'>You are now registered as a proud [job].</span>")
+
+/datum/spellbook_artifact/cultarmor
+	name = "Grandmaster Robe Set"
+	desc = "A special set of robes that lets you cast magic, count as three extra people when raising a structure, and heat half as much at the forge."
+	abbreviation = "CLTR"
+	spawned_items = list(
+	/obj/item/clothing/shoes/cult/grandmaster,\
+	/obj/item/clothing/suit/cultrobes/grandmaster,\
+	/obj/item/clothing/head/culthood/grandmaster)
+
+	grandmaster = TRUE
+
+/datum/spellbook_artifact/cultarmor/can_buy(var/mob/user)
+	return user.mind.GetRole(GRANDMASTER)

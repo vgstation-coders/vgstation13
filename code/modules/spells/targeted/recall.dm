@@ -6,7 +6,7 @@
 
 	school = "abjuration"
 	charge_max = 100
-	spell_flags = SELECTABLE | WAIT_FOR_CLICK
+	spell_flags = SELECTABLE | WAIT_FOR_CLICK | GRANDMASTER
 	hud_state = "wiz_bound"
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1)
 

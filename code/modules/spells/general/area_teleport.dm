@@ -6,7 +6,7 @@
 
 	school = "abjuration"
 	charge_max = 600
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES|GRANDMASTER
 	autocast_flags = AUTOCAST_NOTARGET
 	invocation = "SCYAR NILA"
 	invocation_type = SpI_SHOUT

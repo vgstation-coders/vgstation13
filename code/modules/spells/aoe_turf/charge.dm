@@ -5,7 +5,7 @@
 
 	school = "transmutation"
 	charge_max = 600
-	spell_flags = 0
+	spell_flags = GRANDMASTER
 	invocation = "DIRI CEL"
 	invocation_type = SpI_WHISPER
 	range = 0

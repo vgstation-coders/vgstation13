@@ -6,7 +6,7 @@
 
 	school = "necromancy"
 	charge_max = 90 SECONDS
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES|GRANDMASTER
 
 	invocation = "KON TEAH STOV"
 	invocation_type = SpI_SHOUT

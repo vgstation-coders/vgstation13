@@ -44,17 +44,15 @@
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
 
-	var/op = 1
-
-/obj/item/weapon/spellbook/admin
-	uses = 30 * Sp_BASE_PRICE
-	op = 0
-
 /obj/item/weapon/spellbook/New()
 	..()
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
 
+	populate_spells()
+	populate_artifacts()
+
+/obj/item/weapon/spellbook/proc/populate_spells()
 	for(var/type_S in getAllWizSpells())
 		var/spell/S = new type_S // Because initial doesn't work with lists
 		if (!S.holiday_required.len)
@@ -62,10 +60,28 @@
 		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
 			available_spells += type_S // We're giving types
 
+/obj/item/weapon/spellbook/proc/populate_artifacts()
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
 		available_artifacts.Remove(T) //Remove the path from the list
-	//Result is a list full of /datum/spellbook_artifact objects
+
+/obj/item/weapon/spellbook/admin
+	uses = 30 * Sp_BASE_PRICE
+
+/obj/item/weapon/spellbook/admin/populate_spells()
+	for(var/type_S in getAllWizSpells())
+		var/spell/S = new type_S
+		available_spells += type_S //Admins don't need holiday restrictions
+
+/obj/item/weapon/spellbook/cult
+	uses = 3 * Sp_BASE_PRICE
+	max_uses = 3 * Sp_BASE_PRICE
+
+/obj/item/weapon/spellbook/cult/populate_spells()
+	for(var/type_S in getAllWizSpells())
+		var/spell/S = new type_S
+		if(S.spell_flags & GRANDMASTER)
+			available_spells += type_S
 
 /obj/item/weapon/spellbook/proc/get_available_spells()
 	return available_spells.Copy()

@@ -112,3 +112,41 @@
 	newWeeaboo.ForgeObjectives()
 	newWeeaboo.AnnounceObjectives()
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//      CULT GRANDMASTER (SOLOCULT)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/grandmaster
+	name = "Cult Grandmaster"
+	role_category = /datum/role/cultist
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 1
+	weight = 1
+	cost = 50
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+
+/datum/dynamic_ruleset/latejoin/grandmaster/acceptable(var/population=0,var/threat=0)
+	if(wizardstart.len == 0)
+		log_admin("Cannot accept Grandmaster ruleset. Couldn't find any wizard spawn points.")
+		message_admins("Cannot accept Grandmaster ruleset. Couldn't find any wizard spawn points.")
+		return 0
+	if (find_active_faction_by_type(/datum/faction/bloodcult))
+		message_admins("Rejected Grandmaster ruleset. There was already a blood cult.")
+		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/grandmaster/execute()
+	var/datum/faction/bloodcult/cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/cultist/gm = new
+	gm.AssignToRole(M.mind,1)
+	cult.HandleRecruitedRole(gm)
+	gm.Greet(GREET_LATEJOIN)
+	return 1
