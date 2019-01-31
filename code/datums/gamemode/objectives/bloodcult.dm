@@ -80,18 +80,24 @@
 
 /datum/objective/bloodcult_sacrifice/proc/find_target()
 	var/list/possible_targets = list()
+	var/list/backup_targets = list()
 	for(var/mob/living/carbon/human/player in player_list)
-		if(player.z != map.zMainStation)//We only look for people currently aboard the station
+		var/turf/player_turf = get_turf(player)
+		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
 			continue
-		if (iscultist(player)) // Edit of 08/01/19 : no longer able to sacrifice cultists
-			continue
-		//They may be dead, but we only need their flesh
-		possible_targets += player
+		if (iscultist(player)) // If there are only cultists left on the station, we'll have to sacrifice one of them
+			backup_targets += player
+		else
+			//They may be dead, but we only need their flesh
+			possible_targets += player
 
-	if(!possible_targets.len)
-		message_admins("Blood Cult: Could not find a suitable sacrifice target. Trying again in a minute.")
-		log_admin("Blood Cult: Could not find a suitable sacrifice target. Trying again in a minute.")
-		return null
+	if(possible_targets.len <= 0)
+		if (backup_targets.len <= 0)
+			message_admins("Blood Cult: Could not find a suitable sacrifice target. Trying again in a minute.")
+			log_admin("Blood Cult: Could not find a suitable sacrifice target. Trying again in a minute.")
+			return null
+		else
+			return pick(backup_targets)
 
 	return pick(possible_targets - failed_targets)
 
@@ -193,7 +199,7 @@
 /datum/objective/bloodcult_feast
 	explanation_text = "The Feast: This is your victory, you may take part in the celebrations of a work well done."
 	name = "Blood Cult: Epilogue"
-	var/timer = 300 SECONDS
+	var/timer = 200 SECONDS
 
 /datum/objective/bloodcult_feast/PostAppend()
 	message_admins("Blood Cult: The cult has won.")

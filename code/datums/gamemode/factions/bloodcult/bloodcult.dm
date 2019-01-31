@@ -92,6 +92,8 @@ var/veil_thickness = CULT_PROLOGUE
 	var/living_cultists = 0
 	var/living_noncultists = 0
 	for (var/mob/living/L in player_list)
+		if (issilicon(L))
+			continue
 		if (L.stat != DEAD)
 			if (iscultist(L))
 				living_cultists++
