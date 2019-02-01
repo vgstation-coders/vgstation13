@@ -1097,7 +1097,10 @@
 
 	if(..())
 		return 1
-
+		
+	if(isjusthuman(M))
+		M.adjustToxLoss(-REM)
+	
 	if(alien && alien == IS_VOX)
 		M.adjustToxLoss(REM)
 
