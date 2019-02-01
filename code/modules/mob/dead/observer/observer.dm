@@ -1077,6 +1077,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set category = "Ghost"
 	set desc = "Create a bomberman arena for other observers and dead players."
 
+	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
+
 	if (arenas.len)
 		to_chat(src, "<span class ='notice'>There are already bomberman arenas! Use the Find Arenas verb to jump to them.</span>")
 
