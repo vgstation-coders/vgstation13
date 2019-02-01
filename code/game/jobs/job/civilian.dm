@@ -53,6 +53,10 @@
 
 	return 1
 
+/datum/job/bartender/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser(H.back), slot_in_backpack)
 
 
 /datum/job/chef
@@ -154,6 +158,10 @@
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	return 1
 
+/datum/job/hydro/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/glass/bottle/diethylamine(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/glass/bottle/diethylamine(H.back), slot_in_backpack)
 
 
 //Cargo
@@ -285,6 +293,11 @@
 		H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_in_backpack)
 	return 1
 
+/datum/job/mining/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.put_in_hands(new /obj/item/weapon/pickaxe/drill(get_turf(H)))
+
+
 /datum/job/clown
 	title = "Clown"
 	flag = CLOWN
@@ -330,7 +343,9 @@
 	H.rename_self("clown")
 	return 1
 
-
+/datum/job/clown/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
 /datum/job/mime
 	title = "Mime"
@@ -380,6 +395,10 @@
 	H.mind.miming = MIMING_OUT_OF_CHOICE
 	H.rename_self("mime")
 	return 1
+
+/datum/job/mime/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/baguette(H.back), slot_in_backpack)
 
 //Mime's break vow spell, couldn't think of anywhere else to put this
 
@@ -448,6 +467,10 @@
 	// Now spawns on the janikart.  H.equip_or_collect(new /obj/item/key(H), slot_l_store)
 	return 1
 
+/datum/job/janitor/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/grenade/chem_grenade/cleaner(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/spray/cleaner(H.back), slot_in_backpack)
 
 
 //More or less assistants

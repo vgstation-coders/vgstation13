@@ -51,6 +51,8 @@
 /datum/job/chief_engineer/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
+	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/cracker(H.back), slot_in_backpack) //poly gets part of the divvy, savvy?
 
 
 /datum/job/engineer
@@ -107,6 +109,7 @@
 /datum/job/engineer/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
+	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
 
 /datum/job/atmos
 	title = "Atmospheric Technician"
@@ -151,6 +154,7 @@
 /datum/job/atmos/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
+	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
 
 /datum/job/mechanic
 	title = "Mechanic"
