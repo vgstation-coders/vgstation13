@@ -288,7 +288,8 @@
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	exclusive_to_jobs = list("AI")
+	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
+	var/list/job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 3
@@ -299,14 +300,45 @@
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+
+	var/mob/M = progressive_job_search()
+	for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+		if(M.mind.assigned_role == "AI")
+			//We have located an AI to replace
+			displace_AI(player)
+	//There was no AI to replace.
+	M.mind.assigned_role = "AI"
 	var/datum/role/malfAI/AI = new
 	AI.AssignToRole(M.mind,1)
 	unction.HandleRecruitedRole(AI)
 	AI.Greet(GREET_ROUNDSTART)
 	return 1
+
+//First try to recruit an AI, then try to recruit a cyborg, then go to anybody left.
+/datum/dynamic_ruleset/roundstart/malf/proc/progressive_job_search()
+	for(var/job in job_priority)
+		for(var/mob/M in candidates)
+			if(M.mind.assigned_role == job)
+				assigned += M
+				candidates -= M
+				return M
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	return M
+
+/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
+	old_AI.mind.assigned_role = null
+	old_AI.ready = 0
+	switch(alert(old_AI,"Your system has been corrupted by a malfunction, but you were not a valid candidate to be malfunctioning AI.", "AI Malfunction!",
+						/*"Become Slaved Cyborg","Exile as MoMMI"*/,"I Choose Death!"))
+		/*if("Become Slaved Cyborg")
+			old_AI.mind.assigned_role == "Cyborg"
+			create_roundstart_cyborg()
+		if("Exile as MoMMI")
+			old_AI.mind.assigned_role == "Mobile MMI"*/
+		if("I Choose Death!")
+			old_AI.create_observer()
 
 //////////////////////////////////////////////
 //                                          //
