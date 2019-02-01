@@ -564,8 +564,8 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		spawn_loc = sloc.loc
 		break
 	if(!spawn_loc)
-		spawn_loc = loc //If we absolutely can't find spawns
-		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn in the new player cube.")
+		spawn_loc = pick(latejoin) //If we absolutely can't find spawns
+		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn at the arrival shuttle.")
 
 	//Create the robot and move over prefs
 	var/mob/living/silicon/robot/new_character = new(spawn_loc)
