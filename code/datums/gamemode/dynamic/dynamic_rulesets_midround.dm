@@ -203,6 +203,9 @@
 	if(!locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
 		new_role.refund_value = BASE_SOLO_REFUND * 4
 		//If it's a spontaneous ragin' mage, it costs more, so refund more
+	else
+		new_role.refund_value = BASE_SOLO_REFUND/2
+		//We have plenty of threat to go around
 
 //////////////////////////////////////////////
 //                                          //
