@@ -44,6 +44,7 @@
 #define SYNDIESQUADIE "syndicate commando"
 #define RESPONDER "emergency responder"
 #define MALF "malfunctioning AI"
+#define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
 #define IMPLANTSLAVE "Greytider"

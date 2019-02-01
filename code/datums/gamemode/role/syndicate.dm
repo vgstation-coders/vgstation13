@@ -10,6 +10,7 @@
 	..()
 	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
+		can_be_smooth = FALSE //Can't buy anything
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
 	else
@@ -17,12 +18,18 @@
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
 
 /datum/role/traitor/Drop()
-	if(isrobot(antag.current) || isAI(antag.current))
+	if(isrobot(antag.current))
 		var/mob/living/silicon/robot/S = antag.current
 		to_chat(S, "<b>Your laws have been changed!</b>")
-		S.set_zeroth_law("","")
+		S.set_zeroth_law("")
 		S.laws.zeroth_lock = FALSE
 		to_chat(S, "Law 0 has been purged.")
+	if(isAI(antag.current))
+		var/mob/living/silicon/ai/KAI = antag.current
+		to_chat(KAI, "<b>Your laws have been changed!</b>")
+		KAI.set_zeroth_law("","")
+		KAI.laws.zeroth_lock = FALSE
+		KAI.notify_slaved()
 
 	.=..()
 
@@ -111,13 +118,12 @@
 /datum/role/traitor/GetScoreboard()
 	. = ..()
 	if(can_be_smooth)
-		var/mob/living/L = antag.current
-		if(L.mind.uplink_items_bought.len)
+		if(uplink_items_bought)
 			. += "The traitor bought:<BR>"
-			for(var/entry in L.mind.uplink_items_bought)
+			for(var/entry in uplink_items_bought)
 				. += "[entry]<BR>"
 		else
-			. += "The traitor was a smooth operator this round."
+			. += "The traitor was a smooth operator this round.<BR>"
 
 //_______________________________________________
 
