@@ -1,6 +1,8 @@
 var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/grapes = list(GRAPEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes = list(GGRAPEJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),

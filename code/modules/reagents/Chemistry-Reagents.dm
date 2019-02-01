@@ -2288,7 +2288,7 @@
 
 	if(..())
 		return 1
-		
+
 	var/mob/living/carbon/human/H = M
 	if(isplasmaman(H))
 		return 1
@@ -2296,7 +2296,7 @@
 		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2 * REM)
-	
+
 
 /datum/reagent/leporazine
 	name = "Leporazine"
@@ -4578,6 +4578,20 @@
 				M.disabilities &= ~NEARSIGHTED
 	data++
 
+/datum/reagent/drink/grapejuice
+	name = "Grape Juice"
+	id = GRAPEJUICE
+	description = "Freshly squeezed juice from red grapes, quite sweet."
+	color = "#512284" //rgb: 81, 34, 132
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+
+/datum/reagent/drink/ggrapejuice
+	name = "Green Grape Juice"
+	id = GGRAPEJUICE
+	description = "Freshly squeezed juice from green grapes, smoothly sweet."
+	color = "#B79E42" //rgb: 183, 158, 66
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+
 /datum/reagent/drink/berryjuice
 	name = "Berry Juice"
 	id = BERRYJUICE
@@ -4635,7 +4649,7 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
-	
+
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
 
     if(ishuman(M))
@@ -5185,6 +5199,24 @@
 	id = WINE
 	description = "An premium alchoholic beverage made from distilled grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
+/datum/reagent/ethanol/bwine
+	name = "Berry Wine"
+	id = BWINE
+	description = "Sweet berry wine!"
+	color = "#C760A2" //rgb: 199, 96, 162
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
+/datum/reagent/ethanol/wwine
+	name = "White Wine"
+	id = WWINE
+	description = "An premium alchoholic beverage made from distilled green grape juice."
+	color = "#C6C693" //rgb: 198, 198, 147
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145

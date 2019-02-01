@@ -2406,7 +2406,23 @@
 	name = "Wine"
 	id = WINE
 	result = WINE
+	required_reagents = list(GRAPEJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/bwine
+	name = "Berry Wine"
+	id = BWINE
+	result = BWINE
 	required_reagents = list(BERRYJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/wwine
+	name = "White Wine"
+	id = WWINE
+	result = WWINE
+	required_reagents = list(GGRAPEJUICE = 10)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 

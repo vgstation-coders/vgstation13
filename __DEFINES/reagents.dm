@@ -359,6 +359,10 @@
 #define SUICIDE			"suicide"
 #define KARMOTRINE		"karmotrine"
 #define DEGENERATECALCIUM "degeneratecalcium"
+#define GRAPEJUICE		"grapejuice"
+#define GGRAPEJUICE		"ggrapejuice"
+#define BWINE			"bwine"
+#define WWINE			"wwine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

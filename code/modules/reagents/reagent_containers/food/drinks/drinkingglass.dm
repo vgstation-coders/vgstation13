@@ -128,6 +128,14 @@
 					icon_state = "wineglass"
 					name = "glass of wine"
 					desc = "A very classy looking drink."
+				if(WWINE)
+					icon_state = "wwineglass"
+					name = "glass of white wine"
+					desc = "A very classy looking drink."
+				if(BWINE)
+					icon_state = "bwineglass"
+					name = "glass of berry wine"
+					desc = "A particular favorite of doctors."
 				if(COGNAC)
 					icon_state = "cognacglass"
 					name = "glass of cognac"
