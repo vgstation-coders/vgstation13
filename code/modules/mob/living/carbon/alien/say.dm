@@ -16,7 +16,7 @@
 	var/message_a = say_quote("\"[html_encode(message)]\"")
 	var/rendered = text("<i><span class='game say'>Hivemind, <span class='name'>[]</span> <span class='message'>[]</span></span></i>",name,message_a)
 	for (var/mob/S in player_list)
-		if((!S.stat && S.hivecheck()) || ((S in dead_mob_list) && !istype(S, /mob/new_player)))
+		if((!S.stat && S.hivecheck()) || ((S in dead_mob_list) && istype(S, /mob/dead/observer) && S.client))
 			handle_render(S,rendered,src)
 
 /mob/living/carbon/alien/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
