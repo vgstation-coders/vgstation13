@@ -84,5 +84,8 @@
 	var/list/ViewFilter = list()
 	var/list/ObscuredTurfs = list()
 
+	var/received_credits = FALSE
+	var/received_roundend_audio = FALSE
+
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

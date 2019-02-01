@@ -53,14 +53,17 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
-	. = round(. * cost_modifier, 1) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
+	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
+/datum/uplink_item/proc/available_for_job(var/user_job)
+	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	if((jobs_exclusive.len && !jobs_exclusive.Find(U.job)) || (jobs_excluded.len && jobs_excluded.Find(U.job)))
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! ([formatJumpTo(get_turf(U))])")
+	if(!available_for_job(U.job))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -110,9 +113,17 @@ var/list/uplink_items = list()
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
+
 			if(user.mind)
-				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				user.mind.spent_TC += get_cost(U.job)
+				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
+				var/datum/role/R = user.mind.GetRole(ROLE_OPERATIVE)
+				if(R)
+					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+				else
+					R = user.mind.GetRole(TRAITOR)
+					if(R)
+						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
@@ -510,7 +521,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
-	desc = "Picking this choice will send you a random item from the list. Useful for when you cannot think of a strategy to finish your objectives with."
+	desc = "Picking this choice will send you a random item from the list for half the cost. Useful for when you cannot think of a strategy to finish your objectives with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
@@ -523,13 +534,15 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(I.get_cost() > U.uses)
+			if(!I.available_for_job(U.job))
+				continue
+			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.get_cost())
+		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new I.item(loc)
 

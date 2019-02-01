@@ -1506,14 +1506,21 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		return
 
 	var/dat = "<center><B>Credits Panel</B></center><hr>"
+	dat += "<center><B>Star Of The Show:</b></center>"
+	dat += "Chosen Star: [end_credits.customized_star == "" && end_credits.star == "" ? "(Will Select Automatically)" : end_credits.customized_star || end_credits.star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
+	if(end_credits.customized_star != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetstar'>(Reset)</A> "
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'><br>The round isn't over, so the featured star hasn't been picked yet.<br>You can manually set one now, or whichever human has talked the most this round will automatically be selected as the featured star when the round ends.</span>"
+	dat += "<hr>"
 	dat += "<center><B>Episode Name:</B></center>"
-	dat += "Chosen Name: [end_credits.episode_name == "" ? "(Will Generate Automatically)" : end_credits.episode_name] <A href='?src=\ref[src];credits=setname'>(Set) </A>"
-	if(end_credits.episode_name != "" && !end_credits.generated)
-		dat += "<A href='?src=\ref[src];credits=resetname'>(Reset)</A>"
-	else if(end_credits.generated)
-		dat += "<A href='?src=\ref[src];credits=rerollname'>(Reroll!)</A>"
+	dat += "Chosen Name: [end_credits.customized_name == "" && end_credits.episode_name == "" ? "(Will Generate Automatically)" : end_credits.customized_name || end_credits.episode_name] <A href='?src=\ref[src];credits=setname'>(Set)</A> "
+	if(end_credits.customized_name != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetname'>(Reset)</A> "
+	else if(end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=rerollname'>(Reroll!)</A> "
 	dat += "<br>"
-	if(!end_credits.generated)
+	if(!end_credits.drafted)
 		dat += "<span style='color:red'>The round isn't over, so the name possibilities haven't been drafted yet.<br>You can manually write down a set name now, or come back when the round ends.</span>"
 	else
 		dat += "Drafted Name Possibilities: "
@@ -1523,7 +1530,7 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		dat += "</div>"
 	dat += "<hr>"
 	dat += "<center><B>Disclaimers:</B></center>"
-	if(!end_credits.generated)
+	if(!end_credits.drafted)
 		dat += "<span style='color:red'>The round isn't over, so the disclaimers haven't been generated yet.<br>You can add some now (they will show up at the top), or come back when the round ends.</span>"
 	dat += "<br>Generated Disclaimers: "
 	dat += "<div id='disclaimers'>"
@@ -1540,7 +1547,7 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 			dat += "&nbsp"
 		dat += "<a href='?src=\ref[src];credits=editdisclaimer;disclaimerindex=[i]'> (Edit) </a>"
 		if(findtext(disclaimer, "<img"))
-			dat += "[disclaimer]"
+			dat += "<span style='background-color: black'>[disclaimer]</span>"
 		else
 			dat += "[html_encode(disclaimer)]"
 		dat += "<br>"

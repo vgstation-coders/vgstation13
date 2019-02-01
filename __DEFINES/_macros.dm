@@ -58,6 +58,8 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
+
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
@@ -85,6 +87,8 @@
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
+
+#define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
@@ -245,6 +249,8 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
+#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
@@ -260,6 +266,12 @@
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
 #define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define issurvivor(H) (H.mind && H.mind.GetRole(SURVIVOR))
+
+#define iscrusader(H) (H.mind && H.mind.GetRole(CRUSADER))
+
+#define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
 
 #define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
 

@@ -72,7 +72,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		for(var/datum/uplink_item/item in buyable_items[category])
 			i++
 
-			if((item.jobs_exclusive.len && !item.jobs_exclusive.Find(job)) || (item.jobs_excluded.len && item.jobs_excluded.Find(job)))
+			if(!item.available_for_job(job))
 				continue
 
 			var/itemcost = item.get_cost(job)

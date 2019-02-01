@@ -16,7 +16,7 @@
 		if(applicants.len <= 0)
 			break
 		var/mob/applicant = pick(applicants)
-		applicants -= applicant				
+		applicants -= applicant
 		if(!isobserver(applicant))
 			//Making sure we don't recruit people who got back into the game since they applied
 			i++
@@ -91,6 +91,9 @@
 /datum/dynamic_ruleset/midround/autotraitor/trim_candidates()
 	..()
 	for(var/mob/living/player in living_players)
+		if(isAI(player) || isMoMMI(player))
+			living_players -= player //Your assigned role doesn't change when you are turned into a MoMMI or AI
+			continue
 		if(player.z == map.zCentcomm)
 			living_players -= player//we don't autotator people on Z=2
 			continue
@@ -112,6 +115,55 @@
 	newTraitor.Greet(GREET_AUTOTATOR)
 	newTraitor.ForgeObjectives()
 	newTraitor.AnnounceObjectives()
+	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//         Malfunctioning AI                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//               Bus Only                   //
+//////////////////////////////////////////////
+/datum/dynamic_ruleset/midround/malf
+	name = "Malfunctioning AI"
+	role_category = /datum/role/malfAI
+	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
+	exclusive_to_jobs = list("AI")
+	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
+	required_candidates = 1
+	weight = 0
+	cost = 101
+	requirements = list(101,101,101,101,101,101,101,101,101,101)
+
+/datum/dynamic_ruleset/midround/malf/trim_candidates()
+	..()
+	candidates = candidates[CURRENT_LIVING_PLAYERS]
+	for(var/mob/living/player in candidates)
+		if(!isAI(player))
+			candidates -= player
+			continue
+		if(player.z == map.zCentcomm)
+			candidates -= player//we don't autotator people on Z=2
+			continue
+		if(player.mind && (player.mind.antag_roles.len > 0))
+			candidates -= player//we don't autotator people with roles already
+
+/datum/dynamic_ruleset/midround/malf/execute()
+	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
+	if (!unction)
+		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
+	if(!candidates || !candidates.len)
+		return 0
+	var/mob/living/silicon/ai/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/malfAI/AI = new
+	AI.AssignToRole(M.mind,1)
+	unction.HandleRecruitedRole(AI)
+	AI.Greet(GREET_ROUNDSTART)
+	for(var/mob/living/silicon/robot/R in M.connected_robots)
+		unction.HandleRecruitedMind(R.mind)
+	unction.forgeObjectives()
+	unction.AnnounceObjectives()
 	return 1
 
 //////////////////////////////////////////////
@@ -178,7 +230,7 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	if (index == 1) // Our first guy is the leader
-		var/datum/role/nuclear_operative/leader/new_role = new 
+		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
 		setup_role(new_role)
 	else
@@ -224,7 +276,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/from_ghosts/weeabo
+/datum/dynamic_ruleset/midround/from_ghosts/weeaboo
 	name = "crazed weeaboo attack"
 	role_category = /datum/role/weeaboo
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
