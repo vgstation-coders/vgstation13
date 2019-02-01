@@ -54,6 +54,14 @@
 
 	return ..()
 
+/obj/item/weapon/storage/AltClick(mob/user)
+	if(!(in_range(src, user) || is_holder_of(user, src)))
+		return ..()
+	orient2hud(user)
+	if(user.s_active)
+		user.s_active.close(user)
+	src.show_to(user)
+
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
 	for(var/obj/objects in contents)
