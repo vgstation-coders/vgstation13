@@ -976,8 +976,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 
 
-/datum/bomberman_arena/proc/spawn_player(var/turf/T)
-	var/mob/living/carbon/human/M = new(T)
+/datum/bomberman_arena/proc/spawn_player(var/turf/T, var/mob/M)
+	M.forceMove(T)
 	M.name = "Bomberman #[rand(1,999)]"
 	M.real_name = M.name
 	var/list/randomhexes = list(
@@ -1046,16 +1046,16 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(!isobserver(client_mob))
 			continue
 
-		var/mob/living/carbon/human/M = spawn_player(S.spawnpoint)
-		M.ckey = C.ckey
-		dress_player(M)
-		M.stunned = 3
-		gladiators += M
+		client_mob.transmogrify(/mob/living/carbon/human/, TRUE)
+		spawn_player(S.spawnpoint, client_mob)
+		dress_player(client_mob)
+		client_mob.stunned = 3
+		gladiators += client_mob
 
 		if(S.player_mob)
 			qdel(S.player_mob)
 
-		S.player_mob = M
+		S.player_mob = client_mob
 
 		if(S.player_mob.ckey)
 			readied++
@@ -1304,6 +1304,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 /datum/bomberman_arena/proc/planner(var/size,mob/user)
 	var/choice = 0
+	if (!user)
+		return TRUE
 	switch(size)
 		if("15x13 (2 players)")
 			var/obj/structure/planner/pencil = new(center, src)
