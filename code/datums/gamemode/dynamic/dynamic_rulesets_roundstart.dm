@@ -302,11 +302,12 @@
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
 
 	var/mob/M = progressive_job_search()
-	for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
-		if(M.mind.assigned_role == "AI")
-			//We have located an AI to replace
-			displace_AI(player)
-	//There was no AI to replace.
+	if(M.mind.assigned_role != "AI")
+		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+			if(M.mind.assigned_role == "AI")
+				//We have located an AI to replace
+				displace_AI(player)
+	//There was no AI to displace, we're making one fresh
 	M.mind.assigned_role = "AI"
 	var/datum/role/malfAI/AI = new
 	AI.AssignToRole(M.mind,1)
