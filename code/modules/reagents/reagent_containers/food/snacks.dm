@@ -109,7 +109,6 @@
 	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
 		//This is mostly caused either by "persistent" food items or spamming
 		to_chat(user, "<span class='notice'>There's nothing left of \the [src]!</span>")
-		M.drop_from_inventory(src)	//Drop our item before we delete it
 		qdel(src)
 		return 0
 
