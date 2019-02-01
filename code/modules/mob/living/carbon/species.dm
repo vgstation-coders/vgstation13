@@ -315,8 +315,19 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 		)
 
+	cold_level_1 = 210 //Default 220 - Lower is better
+	cold_level_2 = 190 //Default 200
+	cold_level_3 = 110 //Default 120
+
+	heat_level_1 = 380 //Default 360 - Higher is better
+	heat_level_2 = 420 //Default 400
+	heat_level_3 = 1200 //Default 1000
+
 	flags = NO_PAIN
-	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
+	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
+
+	blood_color = "#272727"
+	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
