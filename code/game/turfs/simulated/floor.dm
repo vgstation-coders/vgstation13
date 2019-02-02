@@ -700,6 +700,10 @@ turf/simulated/floor/update_icon()
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
+/turf/simulated/floor/clockworkify()
+	ChangeTurf(/turf/simulated/floor/mineral/clockwork)
+	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
+
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster
 	if(floor_tile)
