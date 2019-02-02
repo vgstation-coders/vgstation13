@@ -5204,7 +5204,7 @@
 /datum/reagent/ethanol/wine
 	name = "Wine"
 	id = WINE
-	description = "An premium alcoholic beverage made from fermented grape juice."
+	description = "A premium alcoholic beverage made from fermented grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
 	dizzy_adj = 2
 	slur_start = 65
@@ -5222,7 +5222,7 @@
 /datum/reagent/ethanol/wwine
 	name = "White Wine"
 	id = WWINE
-	description = "An premium alcoholic beverage made from fermented green grape juice."
+	description = "A premium alcoholic beverage made from fermented green grape juice."
 	color = "#C6C693" //rgb: 198, 198, 147
 	dizzy_adj = 2
 	slur_start = 65
@@ -5577,7 +5577,7 @@
 /datum/reagent/ethanol/deadrum/wine
 	name = "Wine"
 	id = WINE
-	description = "An premium alcoholic beverage made from fermented grape juice."
+	description = "A premium alcoholic beverage made from fermented grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
 	dizzy_adj = 2
 	slur_start = 65
