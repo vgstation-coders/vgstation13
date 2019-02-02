@@ -80,6 +80,13 @@ var/list/forced_roundstart_ruleset = list()
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
+
+	if (threat_level == 66.6)
+		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/bloodcult()
+		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/vampire()
+		log_admin("666 threat override.")
+		message_admins("666 threat override.", 1)
+
 	return 1
 
 /datum/gamemode/dynamic/Setup()
