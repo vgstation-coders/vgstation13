@@ -100,7 +100,7 @@
 
 /obj/item/ammo_storage/magazine/a357
 	name = "automag magazine (.357)"
-	desc = "A magazine designed for the Automag VI handcannon. Holds 7 rounds"
+	desc = "A magazine designed for the Automag VI handcannon. Holds 7 rounds."
 	icon_state = "automag-mag"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	caliber = POINT357
