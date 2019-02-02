@@ -284,9 +284,6 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
-	if(job.species_whitelist.len)
-		if(!job.species_whitelist.Find(client.prefs.species))
-			return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")
@@ -326,6 +323,11 @@
 	if(!IsJobAvailable(rank))
 		to_chat(src, alert("[rank] is not available. Please try another."))
 		return 0
+	var/datum/job/job = job_master.GetJob(rank)
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
@@ -461,6 +463,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					continue
 			dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
 
 	dat += "</center>"
