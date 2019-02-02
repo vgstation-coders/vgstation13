@@ -325,24 +325,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				else if(prob(15))
 					B = getFromPool(/obj/structure/boulder, src)
 
-				var/mineral/has_minerals = mineral
 				if(B)
 					GetDrilled(0)
 				else
 					GetDrilled(1)
 
-				if(!B && !has_minerals)
-					var/I = rand(1,500)
-					if(I == 1)
-						switch(polarstar)
-							if(0)
-								new/obj/item/weapon/gun/energy/polarstar(src)
-								polarstar = 1
-								visible_message("<span class='notice'>A gun was buried within!</span>")
-							if(1)
-								new/obj/item/device/modkit/spur_parts(src)
-								visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
-								polarstar = 2
 				return
 
 			if(finds && finds.len)
@@ -452,6 +439,18 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				if(prob(50))
 					M.Stun(5)
 			M.apply_radiation(25, RAD_EXTERNAL)
+
+	if(artifact_fail && !mineral)
+		if(prob(1))
+			switch(polarstar)
+				if(0)
+					new/obj/item/weapon/gun/energy/polarstar(src)
+					polarstar = 1
+					visible_message("<span class='notice'>A gun was buried within!</span>")
+				if(1)
+					new/obj/item/device/modkit/spur_parts(src)
+					visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
+					polarstar = 2
 
 	if(rand(1,500) == 1)
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
