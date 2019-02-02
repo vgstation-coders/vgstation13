@@ -785,6 +785,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
+/datum/uplink_item/jobspecific/zombievirus
+	name = "Zombie Virus Syndrome"
+	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a disk."
+	item = /obj/item/weapon/diseasedisk/zombie
+	cost = 20
+	discounted_cost = 12
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
 /datum/uplink_item/jobspecific/organ_remover
 	name = "Modified Organics Extractor"
 	desc = "A tool used by vox raiders to extract organs from unconscious victims has been reverse-engineered by syndicate scientists to be used by anyone, but it cannot extract hearts. It works twice as fast as the vox-only variant. Click on it to select the type of organ to extract, and then select the appropiate body zone."
