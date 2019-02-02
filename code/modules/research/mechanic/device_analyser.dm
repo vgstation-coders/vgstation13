@@ -1,6 +1,13 @@
 //You use this to scan items and machines to recreate them in a fabricator or the flatpacker
 //You can scan syndicate items, but only with the syndicate version (might be overpowered, so I'll make it expensive)
 
+/*
+=====
+NOTE
+AN OBJECT NEEDS TO HAVE RESEARCH SO THAT IT CAN BE SCANNED
+=====
+*/
+
 /obj/item/device/device_analyser
 	name = "device analyzer"
 	desc = "An electromagnetic scanner used by mechanics. Capable of storing objects and machines as portable designs."

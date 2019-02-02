@@ -135,6 +135,7 @@
 	var/deactivated = 0 //Eventually the dice runs out of power
 	var/infinite = 0 //dice with 1 will not run out
 	mech_flags = MECH_SCAN_ILLEGAL
+	origin_tech = Tc_ANOMALY + "=3"
 
 /obj/item/weapon/dice/d20/cursed/pickup(mob/user as mob)
 	..()
