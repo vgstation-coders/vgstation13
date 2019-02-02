@@ -438,14 +438,10 @@ var/global/datum/controller/occupations/job_master
 		alt_title = H.mind.role_alt_title
 
 		switch(rank)
-			if("Cyborg")
-				spawn(20)//We need to be absolutely certain the borg is made after AI for law sync reasons.
-					H.Robotize()
-				return 1
 			if("Mobile MMI")
 				H.MoMMIfy()
 				return 1
-			if("AI","Clown")	//don't need bag preference stuff!
+			if("AI","Clown","Cyborg")	//don't need bag preference stuff!
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
 					H.species.equip(H)
 			else
