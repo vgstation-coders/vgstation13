@@ -5706,7 +5706,7 @@
 /datum/reagent/ethanol/deadrum/toxins_special
 	name = "Toxins Special"
 	id = TOXINSSPECIAL
-	description = "This thing is FLAMING!. CALL THE DAMN SHUTTLE!"
+	description = "This thing is FLAMING! CALL THE DAMN SHUTTLE!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
