@@ -226,6 +226,7 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -272,9 +273,11 @@ var/savefile/panicfile
 	stop_all_media()
 
 	end_credits.on_world_reboot_start()
+	testing("[time_stamp()] - World reboot is now sleeping.")
 
 	sleep(max(10, end_credits.audio_post_delay))
 
+	testing("[time_stamp()] - World reboot is done sleeping.")
 	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
