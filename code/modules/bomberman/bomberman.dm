@@ -968,7 +968,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		message_admins("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[center.x];Y=[center.y];Z=[center.z]'>JMP</A>)")
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
 
-		for(var/mob/dead/observer/O in observers)
+		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
 
 	else
@@ -1060,13 +1060,14 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(S.player_mob.ckey)
 			readied++
 
-	if(readied < min_number_of_players)
+	if(readied < 2)
 		status = ARENA_AVAILABLE
 
 		for(var/mob/M in arena)
 			to_chat(M, "<span class='danger'>Not enough players. Round canceled.</span>")
 
 		for(var/mob/M in gladiators)
+			M.completely_untransmogrify()
 			qdel(M)
 
 		gladiators = list()
@@ -1153,6 +1154,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/living/M in gladiators)
 		if(M)
+			M.completely_untransmogrify()
 			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 

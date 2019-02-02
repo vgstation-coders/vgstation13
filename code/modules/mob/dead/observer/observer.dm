@@ -1084,7 +1084,4 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(src, "<span class ='notice'>There are already bomberman arenas! Use the Find Arenas verb to jump to them.</span>")
 
 	to_chat(src, "<span class='notice'>Pooling other ghosts for a bomberman arena...</span>")
-	var/datum/bomberman_arena/B = new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
-
-	for (var/mob/dead/observer/O in player_list)
-		to_chat(O, "<span class = 'notice'>Someone wants to create a midround bomberman arena! <a href='?src=\ref[O];jumptoarenacood=\ref[B]'>Jump to.</a></span>")
+	new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
