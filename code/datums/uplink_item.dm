@@ -657,25 +657,22 @@ var/list/uplink_items = list()
 	name = "Energized Bananium Sword"
 	desc = "When concealed a simple banana, when active a deadly means of executing swift justice. Highly regarded for their utility on away missions from the Clown Planet. WARNING: Extremely dangerous if two Bananium Swords are combined! Only those trained in the clownish arts should attempt!"
 	item = /obj/item/weapon/melee/energy/sword/bsword
-	cost = 12
-	discounted_cost = 8
-	jobs_with_discount = list("Clown")
+	cost = 8
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/banannon
 	name = "Banannon"
 	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard. WARNING: Only those trained in the clownish arts can use this weapon effectively!"
 	item = /obj/item/weapon/gun/banannon
-	cost = 24
-	discounted_cost = 18
-	jobs_with_discount = list("Clown")
+	cost = 18
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/livingballoons
 	name = "Box of Living Long Balloons"
 	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them. Needless to say, using these is a bad idea for those not trained in the clownish arts."
 	item = /obj/item/weapon/storage/box/balloons/long/living
-	cost = 10
-	discounted_cost = 6
-	jobs_with_discount = list("Clown")
+	cost = 6
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/bananagun
 	name = "Banana Gun"
@@ -706,8 +703,7 @@ var/list/uplink_items = list()
 	desc = "Grants the user the ability to periodically fire an invisible gun from their white gloves. Only real Mimes are trained in the art of firing this artefact silently."
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
-	discounted_cost = 16
-	jobs_with_discount = list("Mime")
+	jobs_exclusive = list("Mime")
 
 /datum/uplink_item/jobspecific/specialsauce
 	name = "Chef Excellence's Special Sauce"
