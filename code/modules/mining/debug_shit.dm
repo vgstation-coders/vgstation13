@@ -5,7 +5,7 @@
 		for(var/ore_id in materials.storage)
 			materials.addAmount(ore_id, 20)
 
-/obj/item/weapon/ore/slag/hax
+/obj/item/stack/ore/slag/hax
 	New()
 		..()
 		for(var/ore_id in mats.storage)

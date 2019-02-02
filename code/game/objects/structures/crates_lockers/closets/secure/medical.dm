@@ -55,7 +55,8 @@
 		/obj/item/clothing/monkeyclothes/doctor = 2,
 		pick(
 			/obj/item/weapon/storage/backpack/medic,
-			/obj/item/weapon/storage/backpack/satchel_med),
+			/obj/item/weapon/storage/backpack/satchel_med,
+			/obj/item/weapon/storage/backpack/messenger/med,),
 		/obj/item/clothing/under/rank/nursesuit,
 		/obj/item/clothing/head/nursehat,
 	)
@@ -106,7 +107,8 @@
 	. = list(
 		pick(
 			/obj/item/weapon/storage/backpack/medic,
-			/obj/item/weapon/storage/backpack/satchel_med),
+			/obj/item/weapon/storage/backpack/satchel_med,
+			/obj/item/weapon/storage/backpack/messenger/med),
 		/obj/item/clothing/suit/bio_suit/cmo = 2,
 		/obj/item/clothing/shoes/white,
 	)

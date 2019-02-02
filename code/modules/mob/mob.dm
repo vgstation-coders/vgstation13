@@ -108,6 +108,8 @@
 			qdel(A)
 		orient_object = null
 
+	if (ticker && ticker.mode)
+		ticker.mode.mob_destroyed(src)
 	..()
 
 /mob/projectile_check()
@@ -1219,6 +1221,10 @@ var/list/slot_equipment_priority = list( \
 //	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
 	if(is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
+		return
+
+	if(get_dist(A,client.eye) > client.view)
+		to_chat(src, "<span class='notice'>It is too far away to make out.</span>")
 		return
 
 	face_atom(A)

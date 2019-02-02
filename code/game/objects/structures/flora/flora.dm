@@ -297,9 +297,11 @@
 				filled = TRUE
 		if(filled)
 			to_chat(user, "There is already something in the pot.")
+			playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 			return
 	if(user.drop_item(I, src))
 		user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)
@@ -309,16 +311,19 @@
 			count++
 			if(count > contents.len)	//pot is emptied of non-ornament items
 				user.visible_message("<span class='notice'>[user] plucks \the [I] off \the [src].</span>", "You take \the [I] off \the [src].")
+				playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 				I.forceMove(loc)
 				user.put_in_active_hand(I)
 				overlays -= overlays[overlays.len]
 				return
 			I = contents[count]
 		user.visible_message("<span class='notice'>[user] retrieves something from the pot.</span>", "You retrieve \the [I] from the [src].")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 		I.forceMove(loc)
 		user.put_in_active_hand(I)
 	else
-		to_chat(user, "You root around in the roots.")
+		to_chat(user, "You root around in the roots. There isn't anything in there.")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 
 /obj/structure/flora/pottedplant/attack_paw(mob/user)
 	return attack_hand(user)

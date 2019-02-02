@@ -5,7 +5,7 @@
 //Recoded as a projectile for better movement/appearance
 
 /datum/event/immovable_rod
-	announceWhen = 100
+	announceWhen = 1
 
 /datum/event/immovable_rod/announce()
 	command_alert(/datum/command_alert/immovable_rod)

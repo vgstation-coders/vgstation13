@@ -80,7 +80,7 @@ var/list/department_radio_keys = list(
 	if (isalien(src))
 		return 1
 	if (!ishuman(src))
-		return
+		return 0
 	var/mob/living/carbon/human/H = src
 	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
@@ -480,6 +480,9 @@ var/list/department_radio_keys = list(
 	var/oldmsg = message
 #endif
 
+	if (isDead())
+		return
+
 	if(say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
@@ -509,7 +512,7 @@ var/list/department_radio_keys = list(
 	if (client && client.prefs.muted & MUTE_IC)
 		to_chat(src, "<span class='danger'>You cannot whisper (muted).</span>")
 		return
-	
+
 
 	var/whispers = "whispers"
 	var/critical = InCritical()
@@ -537,7 +540,7 @@ var/list/department_radio_keys = list(
 
 	for (var/atom/movable/listener in listeners)
 		listener.Hear(speech, rendered)
-	
+
 	speech.message = stars(speech.message)
 	rendered = render_speech(speech)
 

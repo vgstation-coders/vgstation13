@@ -325,6 +325,8 @@
 /obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user)
 	if (altar_task)
 		return
+	if (!istype(O))
+		return
 	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
 		if(!user.drop_item(O))
 			return
@@ -1352,6 +1354,8 @@ var/list/bloodstone_list = list()
 	return
 
 /obj/structure/cult/bloodstone/takeDamage(var/damage)
+	if(veil_thickness == CULT_EPILOGUE)
+		return
 	var/backup = (health > (2*maxHealth/3)) + (health > (maxHealth/3))
 	health -= damage
 	if (health <= 0)
@@ -1379,7 +1383,7 @@ var/list/bloodstone_list = list()
 			new /obj/effect/cult_ritual/backup_spawn(T)
 
 /obj/structure/cult/bloodstone/dance_start()
-	while(src && loc && anchor)
+	while(!gcDestroyed && loc && anchor)
 		for (var/mob/M in contributors)
 			if (!iscultist(M) || get_dist(src,M) > 1 || (M.stat != CONSCIOUS))
 				if (M.client)
@@ -1407,8 +1411,9 @@ var/list/bloodstone_list = list()
 	anchor = FALSE
 	for (var/obj/structure/teleportwarp/TW in src.loc)
 		qdel(TW)
-	new /obj/machinery/singularity/narsie/large(src.loc)
-	stat_collection.cult_narsie_summoned = TRUE
+	if (!gcDestroyed && loc)
+		new /obj/machinery/singularity/narsie/large(src.loc)
+		stat_collection.cult_narsie_summoned = TRUE
 	return 1
 
 /obj/structure/cult/bloodstone/ex_act(var/severity)

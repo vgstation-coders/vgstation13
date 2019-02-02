@@ -271,7 +271,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					continue
 
 				// AIs/Robots can do shit from afar.
-				if (isAI(M) || isrobot(M))
+				if (isAI(M) || isrobot(M) || isAdminGhost(M))
 					is_in_use = 1
 					src.attack_ai(M)
 

@@ -88,7 +88,7 @@
 
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -111,7 +111,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -149,7 +149,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -174,7 +174,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -192,7 +192,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -214,7 +214,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -239,7 +239,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)

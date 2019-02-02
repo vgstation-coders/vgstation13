@@ -62,6 +62,17 @@
 	build_path = /obj/item/weapon/cell/rad/empty
 	category = "Engineering"
 
+/datum/design/phazon_cell
+	name = "Phazon decay thermoelectic cell"
+	desc = "Using the power of weird science, we've made a cell that uses the rarest material known."
+	id = "phazon_cell"
+	req_tech = list(Tc_POWERSTORAGE = 9, Tc_MATERIALS = 9)
+	reliability_base = 70
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_PHAZON = 200)
+	build_path = /obj/item/weapon/cell/rad/large/empty
+	category = "Engineering"
+
 /datum/design/light_replacer
 	name = "Light Replacer"
 	desc = "A device to automatically replace lights. Refill with working lightbulbs."

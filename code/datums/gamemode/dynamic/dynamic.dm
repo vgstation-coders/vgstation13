@@ -89,6 +89,13 @@ var/list/threat_by_job = list(
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
+
+	if (threat_level == 66.6)
+		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/bloodcult()
+		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/vampire()
+		log_admin("666 threat override.")
+		message_admins("666 threat override.", 1)
+
 	return 1
 
 /datum/gamemode/dynamic/Setup()
@@ -97,7 +104,9 @@ var/list/threat_by_job = list(
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 		latejoin_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
-		midround_rules += new rule()
+		var/datum/dynamic_ruleset/midround/DR = rule
+		if (initial(DR.weight))
+			midround_rules += new rule()
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind)
 			roundstart_pop_ready++
@@ -382,3 +391,7 @@ var/list/threat_by_job = list(
 	else
 		threat = min(threat + threat_by_job[newPlayer.mind.assigned_role], 100)
 		threat_level = min(threat_level + threat_by_job[newPlayer.mind.assigned_role], 100)
+
+/datum/gamemode/dynamic/mob_destroyed(var/mob/M)
+	for (var/datum/dynamic_ruleset/DR in midround_rules)
+		DR.applicants -= M

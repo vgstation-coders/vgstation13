@@ -138,6 +138,9 @@ rcd light flash thingy on matter drain
 	summon_type = list(/obj/machinery/transformer/conveyor)
 	hud_state = "autoborger"
 	override_base = "grey"
+	
+/spell/aoe_turf/conjure/place_transformer/New()
+	..()
 
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
@@ -168,6 +171,7 @@ rcd light flash thingy on matter drain
 	if(!C.visibleTurfs[middle])
 		alert(holder, "We cannot get camera vision of this location.")
 		return 0
+	newVars = list("belongstomalf" = holder)
 	return 1
 
 /spell/aoe_turf/conjure/place_transformer/cast(var/list/targets,mob/user)
@@ -177,7 +181,7 @@ rcd light flash thingy on matter drain
 	var/mob/living/silicon/ai/A = user
 	A.can_shunt = 0
 	to_chat(user, "You cannot shunt anymore.")
-
+	
 /datum/AI_Module/large/highrescams
 	module_name = "High Resolution Cameras"
 	mod_pick_name = "High Res Cameras"

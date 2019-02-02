@@ -4,7 +4,7 @@
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"
 	var/base_state = "left"
-	var/health = 100
+	var/health = 60
 	visible = 0.0
 	use_power = 0
 	flow_flags = ON_BORDER
@@ -356,7 +356,7 @@
 	req_access = list(access_security)
 	secure = TRUE
 	var/id_tag = null
-	health = 200
+	health = 100
 	assembly_type = /obj/structure/windoor_assembly/secure
 	penetration_dampening = 4
 
@@ -364,7 +364,7 @@
 	name = "plasma window door"
 	desc = "A sliding glass door strengthened by plasma."
 	icon = 'icons/obj/doors/plasmawindoor.dmi'
-	health = 300
+	health = 150
 	assembly_type = /obj/structure/windoor_assembly/plasma
 	shard_type = /obj/item/weapon/shard/plasma
 	penetration_dampening = 6
@@ -373,7 +373,7 @@
 	name = "secure plasma window door"
 	icon_state = "leftsecure"
 	base_state = "leftsecure"
-	health = 400
+	health = 200
 	secure = TRUE
 	assembly_type = /obj/structure/windoor_assembly/plasma
 	penetration_dampening = 8
