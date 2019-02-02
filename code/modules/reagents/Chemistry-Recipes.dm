@@ -2426,6 +2426,14 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/plumphwine
+	name = "Plump Helmet Wine"
+	id = PLUMPHWINE
+	result = PLUMPHWINE
+	required_reagents = list(PLUMPHJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
 /datum/chemical_reaction/sangria
 	name = "Sangria"
 	id = SANGRIA
