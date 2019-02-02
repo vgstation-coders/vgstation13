@@ -212,11 +212,14 @@
 	weight = 5
 	cost = 35
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "nuke-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
 	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0//unavailable if nuke ops were already sent at roundstart
+	var/indice_pop = min(10,round(living_players.len/5)+1)
+	required_candidates = operative_cap[indice_pop]
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)

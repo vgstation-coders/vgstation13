@@ -158,6 +158,11 @@
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 
+/datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	required_candidates = cultist_cap[indice_pop]
+	..()
+
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -235,6 +240,12 @@
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
+
+
+/datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	required_candidates = operative_cap[indice_pop]
+	..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
 	//if ready() did its job, candidates should have 5 or more members in it
