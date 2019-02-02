@@ -22,7 +22,7 @@ var/list/labor_console_categories = list(
 	var/freeing = "" //If this variable is set with a job's title, the user will be prompted to swipe to free up a job slot.
 	var/toggling_priority = "" //If this variable is set with a job's title, the user will be prompted to swipe to prioritize/deprioritize.
 	var/selected_category = "Civilian"
-	var/list/swipe_sounds = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg', 'sound/effects/cardswipe3.ogg')
+	var/list/swipe_sounds = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
 
 	var/icon/verified_overlay
 	var/icon/awaiting_overlay
