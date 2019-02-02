@@ -195,7 +195,7 @@
 	var/random_sound = 0
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/user)
-	if(user.mind && user.mind.assigned_role != "Clown" && M_CLUMSY in user.mutations)
+	if(user.mind && M_CLUMSY in user.mutations)
 		to_chat(user, "<span class='danger'>These shoes are too powerful for you to handle!</span>")
 		if(prob(25))
 			if(ishuman(user))
