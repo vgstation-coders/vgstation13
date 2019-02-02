@@ -252,6 +252,7 @@ var/list/special_fruits = list()
 	else //Teleports the thrower instead.
 		spark(M)
 		new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
+		M.unlock_from()
 		M.forceMove(picked) //Send then to that location we picked previously
 		spawn()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
