@@ -102,7 +102,7 @@
 	var/last_tase_timeofday
 	var/last_high_damage_taken_timeofday
 
-/mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
+/mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
 
@@ -114,7 +114,10 @@
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
 
 	if(AIlink)
-		connected_ai = select_active_ai_with_fewest_borgs()
+		if(malfAI)
+			connected_ai = malfAI
+		else
+			connected_ai = select_active_ai_with_fewest_borgs()
 
 	if(connected_ai)
 		connected_ai.connected_robots += src

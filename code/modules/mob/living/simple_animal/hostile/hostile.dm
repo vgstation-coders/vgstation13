@@ -44,9 +44,10 @@
 	target_rules.Add(D)
 
 /mob/living/simple_animal/hostile/resetVariables()
-	..("wanted_objects", "friends", args)
+	..("wanted_objects", "friends", "target_rule", args)
 	wanted_objects = list()
 	friends = list()
+	target_rules = list()
 
 /mob/living/simple_animal/hostile/whisper()
 	return FALSE

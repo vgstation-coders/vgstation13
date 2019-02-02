@@ -32,7 +32,7 @@
  *
  * */
 
-//The person who made this honestly thought that the average coder from the distant future of 2018 would understand any of this shit without a thorough and painful examination
+//The person who made this honestly thought that the average coder from the distant future of 2019 would understand any of this shit without a thorough and painful examination
 //And this is exactly why any Chemistry-related system is impenetrable to anyone but the best coders, even things theorically as simple as this
 //So as I decrypt this arcane coding technology, I'll add comments where I see it fit, so absolutely fucking everywhere
 //I'll take my Nobel Prize with fries thank you
@@ -48,19 +48,16 @@
 //First step, let's check the reagents in our recipe machine (generally a microwave)
 //Since it's reagents, it's about time for Chemistry-Holder insanity
 /datum/recipe/proc/check_reagents(var/datum/reagents/avail_reagents) //1 = Precisely what we need, 0 = Not enough, -1 = More than needed
-	//Now, here comes the arcane magic. Before we even do anything, we estimate we have just what we need. Why ? Who knows
 	. = 1
-	//Scan the reagents in our recipe machine thingie one by one for shit we need in our recipe (water, hotsauce, salt, etc...)
 	for(var/r_r in reagents)
-		//Get the amount of said reagent we'll need in our recipe and assign it to that variable
 		if(islist(r_r))
 			var/list/L = r_r
 			var/found = FALSE
 			for(var/I in L)
 				var/reagent_amount = avail_reagents.get_reagent_amount(I)
-				if(!(abs(reagent_amount - reagents[r_r]) < 0.5))
+				if(!(abs(reagent_amount - reagents[I]) < 0.5))
 					found = TRUE
-					if(reagent_amount > reagents[r_r])
+					if(reagent_amount > reagents[I])
 						. = -1
 					break
 			if(!found)

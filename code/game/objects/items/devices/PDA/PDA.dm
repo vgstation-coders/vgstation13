@@ -1791,7 +1791,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				tnote = null
 			if("Ringtone")
 				var/t = input(U, "Please enter new ringtone", name, ttone) as text
-				if (in_range(src, U) && loc == U)
+				if (in_range(U, src) && loc == U)
 					if (t)
 						if(src.hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
 							to_chat(U, "The PDA softly beeps.")
@@ -1971,7 +1971,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 									message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
 								else
 									U.show_message("<span class='notice'>Success!</span>", 1)
-									log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded")
+									log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded")
 									message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
 									P.explode()
 				else

@@ -147,7 +147,7 @@
 		var/obj/item/stack/sheet/glass/G = W
 		for(var/datum/stack_recipe/SR in G.recipes)
 			if(ispath(SR.result_type, /obj/structure/window))
-				var/obj/structure/window/S = SR.build(user,G)
+				var/obj/structure/window/S = SR.build(user,G,1,loc)
 				if(S)
 					S.forceMove(get_turf(src))
 					S.dir = get_dir(src, user)

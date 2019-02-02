@@ -218,3 +218,17 @@
 	for (var/obj/machinery/door/window/plasma/secure/interogation_room/W in range(range))
 		if (W.smartwindow && src.id_tag == W.smartwindow.id_tag)
 			W.smartwindow.toggle_smart_transparency()
+
+/obj/machinery/door_control/mapped/box_armoury
+    name = "windoor control"
+    desc = "Open or close the windoors in the armoury."
+    id_tag = "IDTagBoxArmoury"
+    req_access = list(access_security)
+    range = 6
+
+/obj/machinery/door_control/mapped/box_armoury/attack_hand(var/mob/user)
+    ..() // Sanity
+    for (var/obj/machinery/door/window/brigdoor/W in range(range))
+        if (src.id_tag == W.id_tag)
+            spawn()
+                W.attack_hand(user)

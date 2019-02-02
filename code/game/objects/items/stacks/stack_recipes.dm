@@ -37,14 +37,16 @@
 /datum/stack_recipe/proc/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
 	return R
 
-/datum/stack_recipe/proc/build(var/mob/usr, var/obj/item/stack/S, var/multiplier = 1)
+/datum/stack_recipe/proc/build(var/mob/usr, var/obj/item/stack/S, var/multiplier = 1, var/turf/construct_loc)
 	if (S.amount < req_amount*multiplier)
 		if (res_amount*multiplier>1)
 			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build [res_amount*multiplier] [title]\s!</span>")
 		else
 			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build \the [title]!</span>")
 		return
-	if (!can_build_here(usr, usr.loc))
+	if(!construct_loc)
+		construct_loc = usr.loc
+	if (!can_build_here(usr, construct_loc))
 		return
 	if (time)
 		if (!do_after(usr, get_turf(S), time))

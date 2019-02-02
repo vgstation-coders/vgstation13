@@ -136,7 +136,7 @@ var/list/all_doors = list()
 			return
 
 
-	if(isobserver(user) && !isAdminGhost(user))
+	if(isobserver(user)) //Adminghosts don't want to toggle the door open, they want to see the AI interface
 		return
 
 	add_fingerprint(user)

@@ -523,9 +523,28 @@
 /obj/item/weapon/batteringram/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I,/obj/item/weapon/ram_kit))
 		flags &= ~MUSTTWOHAND //Retains FPRINT and TWOHANDABLE
+		icon_state = "ram-upgraded"
 		qdel(I)
 	else
 		..()
+
+/obj/item/weapon/batteringram/proc/can_ram(mob/user)
+	if(ishuman(user))
+		if(wielded)
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>\The [src] must be wielded!</span>")
+			return FALSE
+	else if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(HAS_MODULE_QUIRK(R,MODULE_IS_THE_LAW))
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>You are not compatible with \the [src]!</span>")
+			return FALSE
+	else
+		to_chat(user,"<span class='warning'>\The [src] is too bulky!</span>")
+		return FALSE
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
@@ -548,9 +567,6 @@
 
 /obj/item/weapon/caution/proximity_sign/attack_self(mob/user as mob)
 	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.mind.assigned_role != "Janitor")
-			return
 		if(armed)
 			armed = 0
 			to_chat(user, "<span class='notice'>You disarm \the [src].</span>")
@@ -561,7 +577,7 @@
 		else
 			armed = 0
 			timepassed = 0
-		to_chat(H, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
+		to_chat(user, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
 
 /obj/item/weapon/caution/proximity_sign/process()
 	if(!timing)

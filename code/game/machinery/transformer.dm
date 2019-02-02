@@ -23,6 +23,7 @@
 	var/force_borg_module=null
 	var/name_type=NAMETYPE_NORMAL
 	var/enable_namepick=TRUE
+	var/belongstomalf=null //malf AI that owns autoborger
 
 /obj/machinery/transformer/New()
 	// On us
@@ -82,7 +83,7 @@
 
 	// Delete the items or they'll all pile up in a single tile and lag
 	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
-	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE)
+	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE, malfAI=belongstomalf)
 	if(R)
 		R.cell.maxcharge = robot_cell_charge
 		R.cell.charge = robot_cell_charge

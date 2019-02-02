@@ -339,14 +339,18 @@
 	if(H)
 		qdel(H)
 
-/proc/add_law_zero(mob/living/silicon/ai/killer)
+/proc/add_law_zero(mob/living/silicon/killer)
 	var/law = "Accomplish your objectives at all costs."
-	var/law_borg = "Accomplish your AI's objectives at all costs."
+	if(isAI(killer))
+		var/mob/living/silicon/ai/KAI = killer
+		KAI.set_zeroth_law(law, "Accomplish your AI's objectives at all costs.")
+		KAI.notify_slaved()
+	else
+		var/mob/living/silicon/robot/KR = killer
+		KR.set_zeroth_law(law)
 	to_chat(killer, "<b>Your laws have been changed!</b>")
-	killer.set_zeroth_law(law, law_borg)
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
-
 
 
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)

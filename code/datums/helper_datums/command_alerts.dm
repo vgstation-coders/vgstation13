@@ -464,8 +464,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/immovable_rod
 	name = "Immovable Rod (\"What The Fuck Was That?\")"
-	alert_title = "General Alert"
-	message = "What the fuck was that?!"
+	alert_title = "Local Bluespace Sensor Report"
+	message = "Alert: The station appears to be on a collision course with an anomalous object perfectly suspended in space. Heavy structural damage may result."
 
 /datum/command_alert/rogue_drone
 	name = "Rogue Drones - Alert"
