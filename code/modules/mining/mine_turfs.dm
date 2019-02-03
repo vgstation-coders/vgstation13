@@ -150,6 +150,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 
 /turf/unsimulated/mineral/ex_act(severity)
+	if(severity < mining_difficulty)
+		return
 	switch(severity)
 		if(3.0)
 			if (prob(75))
@@ -241,7 +243,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			return
 		user.visible_message("<span class='notice'>[user] starts installing reinforcements to \the [src].</span>", \
 			"<span class='notice'>You start installing reinforcements to \the [src].</span>")
-		if(do_after(user, src, max(minimum_mine_time,4 SECONDS)))
+		if(do_after(user, src, max(minimum_mine_time,4 SECONDS*mining_difficulty)))
 			if(!S.use(2))
 				to_chat(user,"<span class='warning>You don't have enough material.</span>")
 				return
@@ -395,7 +397,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		return 0
 	if(istype(user,/mob/living/simple_animal/construct/armoured))
 		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
-		if(do_after(user, src, max(minimum_mine_time,40)))
+		if(do_after(user, src, max(minimum_mine_time,40*mining_difficulty)))
 			GetDrilled(0)
 		return 1
 	return 0
@@ -541,6 +543,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	minimum_mine_time = 5 SECONDS
 
 /turf/unsimulated/mineral/hyperdense
+	name = "hyperdense rock"
+	mining_difficulty = 5
 	minimum_mine_time = 99 SECONDS //GL HF
 
 /**********************Asteroid**************************/
