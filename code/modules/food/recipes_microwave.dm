@@ -2659,7 +2659,6 @@
 /datum/recipe/candiedpear
 	reagents = list(CARAMEL = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/candiedpear
