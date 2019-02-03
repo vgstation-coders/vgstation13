@@ -12,9 +12,11 @@ var/global/datum/watchdog/watchdog = new
 		return
 	if(fexists(update_signal_file) == 1)
 		waiting=1
+		testing("[time_stamp()] - Watchdog has detected an update.")
 		to_chat(world, "<span class='notice'>\[AUTOMATIC ANNOUNCEMENT\] Update received.  Server will restart automatically after the round ends.</span>")
 
 /datum/watchdog/proc/signal_ready()
+	testing("[time_stamp()] - Watchdog has sent the 'ready' signal. Bye!")
 	var/signal = file(server_signal_file)
 	fdel(signal)
 	signal << chosen_map
