@@ -2637,3 +2637,44 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+
+/datum/recipe/pickledpears
+	reagents = list(VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
+
+/datum/recipe/bulgogi
+	reagents = list(SOYSAUCE = 10, SUGAR =5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bulgogi
+
+/datum/recipe/candiedpear
+	reagents = list(CARAMEL = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/candiedpear
+
+/datum/recipe/bakedpears
+	reagents = list(CINNAMON = 5, SUGAR = 5, CREAM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bakedpears
+
+/datum/recipe/winepear
+	reagents = list(CINNAMON = 5, WINE = 5, CREAM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/winepear

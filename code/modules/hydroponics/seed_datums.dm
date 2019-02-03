@@ -301,6 +301,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		list("seed-cocoapod",           "cocoapod",				5),
 		list("seed-cherry",             "cherry",				5),
 		list("seed-kudzu",              "kudzu",				4),
+		list("seed-pear",               "pear", 				6),
 		))
 
 	if (change_packet)

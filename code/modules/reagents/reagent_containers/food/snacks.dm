@@ -5776,3 +5776,55 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 /obj/item/weapon/reagent_containers/food/snacks/sauerkraut/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/pickledpears
+	name = "pickled pears"
+	desc = "A jar filled with pickled pears."
+	icon_state = "pickledpears"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/pickledpears/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/bulgogi
+	name = "bulgogi"
+	desc = "Thin grilled beef marinated with grated pear juice."
+	icon_state = "bulgogi"
+	food_flags = FOOD_SWEET | FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/bulgogi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	bitesize = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/candiedpear
+	name = "candiedpear"
+	desc = "A pear covered with caramel. Quite sugary."
+	icon_state = "candiedpear"
+
+/obj/item/weapon/reagent_containers/food/snacks/candiedpear/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bakedpears
+	name = "bakedpears"
+	desc = "Baked pears cooked with cinnamon, sugar and some cream."
+	icon_state = "bakedpears"
+
+/obj/item/weapon/reagent_containers/food/snacks/bakedpears/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/winepear
+	name = "winepear"
+	desc = "This pear has been laced with wine, some cinnamon and a touch of cream."
+	icon_state = "winepear"
+
+/obj/item/weapon/reagent_containers/food/snacks/winepear/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 2
