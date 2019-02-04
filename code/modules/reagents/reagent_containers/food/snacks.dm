@@ -5800,7 +5800,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedpear
-	name = "candiedpear"
+	name = "candied pear"
 	desc = "A pear covered with caramel. Quite sugary."
 	icon_state = "candiedpear"
 
@@ -5810,7 +5810,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/bakedpears
-	name = "bakedpears"
+	name = "baked pears"
 	desc = "Baked pears cooked with cinnamon, sugar and some cream."
 	icon_state = "bakedpears"
 
@@ -5820,7 +5820,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/winepear
-	name = "winepear"
+	name = "wine pear"
 	desc = "This pear has been laced with wine, some cinnamon and a touch of cream."
 	icon_state = "winepear"
 
