@@ -150,17 +150,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 
 /turf/unsimulated/mineral/ex_act(severity)
-	if(severity < mining_difficulty)
-		return
-	switch(severity)
-		if(3.0)
-			if (prob(75))
+	if(prob(100/mining_difficulty))
+		switch(severity)
+			if(3.0)
+				if (prob(75))
+					GetDrilled()
+			if(2.0)
+				if (prob(90))
+					GetDrilled()
+			if(1.0)
 				GetDrilled()
-		if(2.0)
-			if (prob(90))
-				GetDrilled()
-		if(1.0)
-			GetDrilled()
 
 
 /turf/unsimulated/mineral/Bumped(AM)
