@@ -181,7 +181,7 @@ var/list/threat_by_job = list(
 		drafted_rules -= starting_rule
 
 		threat = max(0,threat-starting_rule.cost)
-		if (starting_rule.execute())//this should never fail since ready() returned 1
+		if (starting_rule.execute(starting_rule.cost))//this should never fail since ready() returned 1
 			executed_rules += starting_rule
 			if (starting_rule.persistent)
 				current_rules += starting_rule
