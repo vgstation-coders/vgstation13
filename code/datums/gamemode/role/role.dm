@@ -800,3 +800,28 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	name = IMPLANTLEADER
 	id = IMPLANTLEADER
 	logo_state = "greytide_leader-logo"
+
+/datum/role/catbeast
+	name = CATBEAST
+	id = CATBEAST
+	required_pref = ROLE_MINOR
+	special_role = CATBEAST
+	var/next_threat_increment
+
+/datum/role/catbeast/Greet()
+	to_chat(antag.current, "<B>You are a mangy catbeast!</B><BR>The longer you avoid the crew, the greater danger the station will attract!"
+
+/datum/role/catbeast/OnPostSetup()
+	antag.current.set_species("Tajaran", force_organs=1)
+	antag.current.regenerate_icons()
+	next_threat_increment = world.time
+	return TRUE
+
+/datum/role/catbeast/ForgeObjectives()
+	AppendObjective(/datum/objective/survive)
+
+/datum/role/catbeast/process()
+	if(antag.current.stat != DEAD)
+		if(next_threat_increment < world.time)
+			mode.threat = min(mode.threat+1,mode.threat_level)
+			next_threat_increment = world.time + 20 SECONDS

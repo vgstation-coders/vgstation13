@@ -299,3 +299,14 @@
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
 	return accepted
+
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast
+	name = "loose catbeast"
+	role_category = /datum/role/catbeast
+	enemy_jobs = list("Assistant")
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 1
+	cost = 0
+	requirements = list(0,0,0,0,0,0,0,0,0,0)
+	logo = "catbeast-logo"
