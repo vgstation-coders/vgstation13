@@ -823,5 +823,10 @@ Once done, you will be able to interface with all systems, notably the onboard n
 /datum/role/catbeast/process()
 	if(antag.current.stat != DEAD)
 		if(next_threat_increment < world.time)
-			mode.threat = min(mode.threat+1,mode.threat_level)
+
+			if(mode.threat == mode.threat_level)
+				mode.threat_level = min(mode.threat_level+1,100)
+				mode.threat = mode.threat_level
+			else
+				mode.threat = min(mode.threat+1,mode.threat_level)
 			next_threat_increment = world.time + 20 SECONDS

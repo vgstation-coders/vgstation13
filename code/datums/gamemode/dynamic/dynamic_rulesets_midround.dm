@@ -310,3 +310,9 @@
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	logo = "catbeast-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
+	if(threat>50) //We're threatening enough!
+		message_admins("Rejected catbeast ruleset, [threat] threat was over 50."
+		return FALSE
+	..()
