@@ -480,7 +480,7 @@ var/list/department_radio_keys = list(
 	var/oldmsg = message
 #endif
 
-	if (isDead())
+	if (isDead() || (stat == UNCONSCIOUS && health > 0))
 		return
 
 	if(say_disabled)	//This is here to try to identify lag problems
