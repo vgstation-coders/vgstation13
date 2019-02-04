@@ -18,7 +18,8 @@
 
 	hasmouth = 0
 
-	can_butcher = 0
+	can_butcher = FALSE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
 	// canstun and CANKNOCKDOWN don't affect slimes because they ignore stun and knockdown variables
 	// for the sake of cleanliness, though, here they are.

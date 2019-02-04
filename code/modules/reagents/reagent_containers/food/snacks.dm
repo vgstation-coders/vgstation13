@@ -2141,6 +2141,15 @@
 	..()
 	reagents.add_reagent(SLIMEJELLY, 5)
 
+/obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin
+	name = "Gelatin Burger"
+	desc = "It's a bit soggy."
+	food_flags = FOOD_MEAT | FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry/New()
