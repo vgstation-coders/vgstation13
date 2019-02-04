@@ -1,4 +1,4 @@
-/var/global/sent_aliens_to_station = 0
+/*/var/global/sent_aliens_to_station = 0
 
 /datum/event/alien_infestation
 	announceWhen	= 450
@@ -40,4 +40,4 @@
 		vents -= vent
 		spawncount--
 		successSpawn = 1
-	return successSpawn
+	return successSpawn*/

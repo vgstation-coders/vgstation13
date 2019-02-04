@@ -55,10 +55,10 @@
 				var/success = makeAntag(/datum/role/vampire, null, count, FROM_PLAYERS)
 				message_admins("[success] number of vampires made.")
 				to_chat(usr, "<span class='notice'>[success] number of vampires made.</span>")
-			if("9")
+			/*if("9")
 				message_admins("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
-					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
+					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")*/
 
 	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
@@ -2887,12 +2887,12 @@
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
 
-			if("aliens")
+			/*if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
 				log_admin("[key_name(usr)] spawned an alien infestation", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] attempted an alien infestation</span>", 1)
-				new /datum/event/alien_infestation
+				new /datum/event/alien_infestation*/
 
 
 			if("power")
@@ -3088,7 +3088,7 @@
 				//can be found in code\game\game_modes\events\wormholes.dm
 				wormhole_event()
 
-			if("aliens")
+			/*if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AL")
 				if(aliens_allowed)
@@ -3098,7 +3098,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ALS")
 				if(aliens_allowed)
-					create_xeno()
+					create_xeno()*/
 			if("spiders")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SL")
@@ -3167,12 +3167,12 @@
 				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
-			if("aliens")
+			/*if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AL")
 				message_admins("[key_name_admin(usr)] has spawned aliens", 1)
 				//makeAliens()
-				new /datum/event/alien_infestation
+				new /datum/event/alien_infestation*/
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")

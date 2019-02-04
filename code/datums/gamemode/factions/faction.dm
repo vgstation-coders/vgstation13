@@ -434,3 +434,11 @@ var/list/factions_with_hud_icons = list()
 	initroletype = /datum/role/blob_overmind
 
 //________________________________________________
+
+/datum/faction/xeno_hive
+	name = XENOHIVE
+	ID = XENOHIVE
+	logo_state = "xeno-logo"
+	roletype = /datum/role/xeno
+	initroletype = /datum/role/xeno
+	hud_icons = list("xeno-logo")

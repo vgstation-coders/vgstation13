@@ -180,7 +180,7 @@
 	spawn(rand(1500, 3000)) //Delayed announcements to keep the crew on their toes.
 		biohazard_alert()
 
-/proc/alien_infestation(var/spawncount = 1) // -- TLE
+/*/proc/alien_infestation(var/spawncount = 1) // -- TLE
 	//command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert")
 //	world << sound('sound/AI/aliens.ogg')
 	var/list/vents = list()
@@ -213,7 +213,7 @@
 			spawn(rand(5000, 6000)) //Delayed announcements to keep the crew on their toes.
 				command_alert(/datum/command_alert/xenomorphs)
 
-		return success
+		return success*/
 
 /proc/high_radiation_event()
 

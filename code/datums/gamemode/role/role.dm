@@ -800,3 +800,13 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	name = IMPLANTLEADER
 	id = IMPLANTLEADER
 	logo_state = "greytide_leader-logo"
+
+
+/datum/role/xeno
+	name = XENO
+	id = XENO
+	logo_state = "xeno-logo"
+
+/datum/role/xeno/Greet()
+	to_chat(antag.current,"<B>You are a xenomorph!</B><BR>You must do your best to propogate your race. That means securing a nest, ensuring at least one drone and eventual queen, and securing humanoids to invest with facehuggers.")
+	to_chat(antag.current,"Speak through the alien hivemind with :a. Lurk inside alien weeds to regeneate plasma. Some xenos can ventcrawl (shortcut: alt-click).")

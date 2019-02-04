@@ -152,8 +152,8 @@ client/proc/one_click_antag()
 	return candidates
 
 
-/datum/admins/proc/makeAliens()
-	return alien_infestation(3)
+/*/datum/admins/proc/makeAliens()
+	return alien_infestation(3)*/
 
 
 /datum/admins/proc/makeDeathsquad()

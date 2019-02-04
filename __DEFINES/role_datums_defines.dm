@@ -16,6 +16,7 @@
 #define CUSTOMSQUAD "custom squad"
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
+#define XENOHIVE "xenomorph hive"
 #define CLOCKWORK "clockwork"
 //-------
 #define HIVEMIND "changeling hivemind"
@@ -47,6 +48,7 @@
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
+#define XENO "xenomorph"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
