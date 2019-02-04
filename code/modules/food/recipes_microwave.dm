@@ -152,7 +152,7 @@
 	reagents = list(FLOUR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 
