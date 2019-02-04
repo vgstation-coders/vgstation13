@@ -1945,6 +1945,7 @@
 #include "code\modules\power\solars\panel.dm"
 #include "code\modules\power\solars\tracker.dm"
 #include "code\modules\power\solars\panels\fake.dm"
+#include "code\modules\procedural mapping\instant_room.dm"
 #include "code\modules\procedural mapping\mapGenerator.dm"
 #include "code\modules\procedural mapping\mapGeneratorModule.dm"
 #include "code\modules\procedural mapping\mapGeneratorReadme.dm"
