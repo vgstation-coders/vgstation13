@@ -15,7 +15,8 @@ var/global/datum/watchdog/watchdog = new
 		testing("[time_stamp()] - Watchdog has detected an update.")
 		to_chat(world, "<span class='notice'>\[AUTOMATIC ANNOUNCEMENT\] Update received.  Server will restart automatically after the round ends.</span>")
 
-/datum/watchdog/proc/signal_ready()
+/datum/watchdog/proc/signal_ready() //This apparently uses some magic non-DM thing that kills the server process directly.
+	world.pre_shutdown()
 	testing("[time_stamp()] - Watchdog has sent the 'ready' signal. Bye!")
 	var/signal = file(server_signal_file)
 	fdel(signal)
