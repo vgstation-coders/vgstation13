@@ -169,7 +169,7 @@
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
-		for(var/atom/Obj as mob|obj|turf|area in range(1))
+		for(var/atom/Obj in range(1, src))
 			if(objects > loopsanity)
 				break
 			objects++
