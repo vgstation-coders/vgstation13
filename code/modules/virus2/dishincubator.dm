@@ -19,12 +19,17 @@
 
 	var/foodsupply = 0
 	var/toxins = 0
+	var/strength = 0
+	var/weaken = 0
 	var/mutatechance = 5
 	var/growthrate = 3
+	var/view_virus_info = FALSE
 
 	var/virusing
 
 	var/last_notice
+
+	var/scancount
 /obj/machinery/disease2/incubator/New()
 	. = ..()
 
@@ -41,7 +46,7 @@
 	RefreshParts()
 
 /obj/machinery/disease2/incubator/RefreshParts()
-	var/scancount = 0
+	scancount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
@@ -112,9 +117,15 @@
 		if(radiation == 3)
 			radiation = 0
 	if (href_list["flush"])
-		radiation = 0
-		toxins = 0
-		foodsupply = 0
+		switch(href_list["flush"])
+			if("fud")
+				foodsupply = 0
+			if("tox")
+				toxins = 0
+			if("str")
+				strength = 0
+			if("wek")
+				weaken = 0
 
 	if(href_list["virus"])
 		if (!dish)
@@ -131,6 +142,8 @@
 				var/list/virus = list("[dish.virus2.uniqueID]" = D)
 				B.data["virus2"] += virus
 				say("Injection complete.")
+	if(href_list["toggle_view"])
+		view_virus_info = !view_virus_info
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
 
@@ -139,44 +152,47 @@
 	if(.)
 		return
 	user.set_machine(src)
-	var/dat = list()
-	if(!dish)
-		dat += "Please insert dish into the incubator.<BR>"
-	var/string = "Off"
-	if(on)
-		string = "On"
-	dat += "Power status: <A href='?src=\ref[src];power=1'>[string]</a>"
-	dat += "<BR>"
-	dat += "Food supply: [foodsupply]"
+	var/dat = ""
+	dat += "Power status: <A href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"
 	dat += "<BR>"
 	dat += "Radiation setting: [radiation?(radiation==1?"Minor":"Major"):"Inactive"] (<A href='?src=\ref[src];rad=1'>Toggle radiation level</a>)"
 	dat += "<BR>"
-	dat += "Toxins: [toxins]"
+	dat += "<hr>"
 	if(dish)
-		dat += "<BR>"
-		dat += "Growth level: [dish.growth]"
-	dat += "<BR><BR>"
+		dat += "Pathogen dish: [dish]"
+		dat += "<br>Growth level: [dish.growth]"
+		if(scancount >= 3 && dish.analysed)
+			if(view_virus_info)
+				dat += "<BR>[dish.info]"
+			dat += "<BR><A href='?src=\ref[src];toggle_view=1'>Toggle pathogen information</a>"
+		dat += "<BR>Eject pathogen dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
+	else
+		dat += "Please insert dish into the incubator.<BR>"
+	dat += "<hr>"
+	dat += "Toxins: [toxins]: <A href='?src=\ref[src];flush=tox'>Flush</a>"
+	if(scancount >= 3)
+		dat += "<BR>Strengthening agent: [strength]: <A href='?src=\ref[src];flush=str'>Flush</a>"
+		dat += "<BR>Weakening agent: [weaken]: <A href='?src=\ref[src];flush=wek'>Flush</a>"
+	dat += "<BR>Food supply: [foodsupply]: <A href='?src=\ref[src];flush=fud'>Flush</a>"
 	if(beaker)
+		dat += "<BR>"
 		dat += "Eject chemicals: <A href='?src=\ref[src];ejectchem=1'> Eject</a>"
 		dat += "<BR>"
-	if(dish)
-		dat += "Eject pathogen dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
-		dat += "<BR>"
-		if(beaker)
+		if(dish)
 			dat += "Breed viral culture in beaker: <A href='?src=\ref[src];virus=1'> Start</a>"
 			dat += "<BR>"
-	dat += "<br><hr><A href='?src=\ref[src];flush=1'>Flush system</a><BR>"
-	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", "Pathogenic Incubator", 575, 400, src)
 	popup.set_content(dat)
 	popup.open()
 
 /obj/machinery/disease2/incubator/process()
+	var/change = FALSE
 	if(on)
 		use_power(50,EQUIP)
 		if(!powered(EQUIP))
-			on = 0
+			on = FALSE
 			icon_state = "incubator"
+			change = TRUE
 		if (dish && dish.virus2)
 			if(dish.growth >= INCUBATOR_MAX_SIZE)
 				if(icon_state != "incubator_fed")
@@ -187,6 +203,7 @@
 			else if(foodsupply)
 				foodsupply -= 1
 				dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
+				change = TRUE
 			if(radiation && prob(mutatechance))
 				if(radiation == 1)
 					dish.virus2.minormutate()
@@ -198,19 +215,36 @@
 						dish.analysed = 0
 				alert_noise("beep")
 				flick("incubator_mut", src)
-			if(toxins && prob(5))
+			if(toxins && prob(mutatechance))
 				dish.virus2.infectionchance -= 1
-			if(toxins > 50)
-				dish.virus2 = null
+				toxins--
+				change = TRUE
+			if(strength && prob(mutatechance))
+				dish.virus2.minorstrength()
+				strength--
+				change = TRUE
+			if(weaken && prob(mutatechance))
+				dish.virus2.minorweak()
+				weaken--
+				change = TRUE
 	else
 		icon_state = "incubator"
 
 	if(beaker)
 		if(!beaker.reagents.remove_reagent(VIRUSFOOD,5))
 			foodsupply += 10
+			change = TRUE
 		if(beaker.reagents.remove_any_reagents(TOXINS,1))
 			toxins += 1
-
-	src.updateUsrDialog()
+			change = TRUE
+		if(scancount >= 3)
+			if(!beaker.reagents.remove_reagent(CREATINE,1))
+				strength += 10
+				change = TRUE
+			if(!beaker.reagents.remove_reagent(SPACEACILLIN,1))
+				weaken += 10
+				change = TRUE
+	if(change)
+		updateUsrDialog()
 
 #undef INCUBATOR_MAX_SIZE

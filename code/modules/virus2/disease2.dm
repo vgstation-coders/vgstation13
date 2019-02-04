@@ -164,6 +164,14 @@ var/global/list/disease2_list = list()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
+/datum/disease2/disease/proc/minorstrength()
+	var/datum/disease2/effect/e = pick(effects)
+	e.multiplier_tweak(0.1)
+
+/datum/disease2/disease/proc/minorweak()
+	var/datum/disease2/effect/e = pick(effects)
+	e.multiplier_tweak(-0.1)
+
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)
 	var/i = rand(1, effects.len)
