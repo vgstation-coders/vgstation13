@@ -4438,7 +4438,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet
 	name = "\improper Sweet"
-	desc = "Comes in many different and unique flavours!"
+	desc = "Comes in many different and unique flavours! One of the flagship products of the Getmore Chocolate Corp. Not suitable for children aged 0-3. Do not consume around open flames or expose to radiation. Expiration date: 2921."
 	food_flags = FOOD_SWEET
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
@@ -4447,7 +4447,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 2)
-	icon_state = "sweet[rand(1,12)]"
+	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorish","\improper apple","\improper cranberry")
+	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
+	icon_state = "sweet[variety]"
+	name = "[flavors[variety]] sweet"
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
 	desc = "Something about this sweet doesn't seem right."
