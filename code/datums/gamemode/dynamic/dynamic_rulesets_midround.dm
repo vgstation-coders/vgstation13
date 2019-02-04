@@ -47,11 +47,14 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/review_applications()
 	var/datum/faction/active_fac = find_active_faction_by_type(my_fac)
+	var/new_faction = 0
 	if (!active_fac)
+		new_faction = 1
 		active_fac = ticker.mode.CreateFaction(my_fac, null, 1)
 	my_fac = active_fac
 	. = ..()
-	my_fac.OnPostSetup()
+	if (new_faction)
+		my_fac.OnPostSetup()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
