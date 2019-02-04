@@ -108,7 +108,9 @@
 			dish.forceMove(src.loc)
 			dish = null
 	if (href_list["rad"])
-		radiation += 10
+		radiation++
+		if(radiation == 3)
+			radiation = 0
 	if (href_list["flush"])
 		radiation = 0
 		toxins = 0
@@ -147,7 +149,7 @@
 	dat += "<BR>"
 	dat += "Food supply: [foodsupply]"
 	dat += "<BR>"
-	dat += "Radiation levels: [radiation] RADS (<A href='?src=\ref[src];rad=1'>Radiate</a>)"
+	dat += "Radiation setting: [radiation?(radiation==1?"Minor":"Major"):"Inactive"] (<A href='?src=\ref[src];rad=1'>Toggle radiation level</a>)"
 	dat += "<BR>"
 	dat += "Toxins: [toxins]"
 	if(dish)
@@ -182,22 +184,20 @@
 				if(last_notice + FED_PING_DELAY < world.time)
 					last_notice = world.time
 					alert_noise("ping")
-			if(foodsupply)
+			else if(foodsupply)
 				foodsupply -= 1
 				dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
-			if(radiation)
-				if(radiation > 50 & prob(mutatechance))
+			if(radiation && prob(mutatechance))
+				if(radiation == 1)
+					dish.virus2.minormutate()
+				else if(radiation == 2)
 					dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
 					dish.virus2.majormutate()
 					if(dish.info && dish.analysed)
 						dish.info = "OUTDATED : [dish.info]"
 						dish.analysed = 0
-					alert_noise("beep")
-					flick("incubator_mut", src)
-
-				else if(prob(mutatechance))
-					dish.virus2.minormutate()
-				radiation -= 1
+				alert_noise("beep")
+				flick("incubator_mut", src)
 			if(toxins && prob(5))
 				dish.virus2.infectionchance -= 1
 			if(toxins > 50)
