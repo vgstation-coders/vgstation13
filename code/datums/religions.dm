@@ -519,7 +519,7 @@
 	convert(subject, preacher)
 	return TRUE
 
-/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject)
+/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject, var/can_renounce = TRUE)
 	. = ..()
 	if (subject)
 		subject.adjustBrainLoss(100) // Welcome to the club
