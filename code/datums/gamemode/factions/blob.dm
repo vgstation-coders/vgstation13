@@ -80,10 +80,6 @@
 	var/datum/objective/invade/I = new
 	AppendObjective(I)
 
-/datum/faction/blob_conglomerate/proc/AnnounceObjectives()
-	for (var/datum/role/R in members)
-		R.AnnounceObjectives()
-
 /datum/faction/blob_conglomerate/proc/win(var/result)
 	. = 1
 	win = result
