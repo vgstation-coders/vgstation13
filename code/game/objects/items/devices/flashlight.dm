@@ -269,3 +269,61 @@
 	on = !on
 	slime_brightness(user)
 	return 1
+
+//EMP FLASHLIGHT
+/obj/item/device/flashlight/emp //EMP flashlight for syndicate boys and girls. Idea secured from TG
+	origin_tech = Tc_SYNDICATE + "=3;" + Tc_ENGINEERING + "=1" //Tech levels when deconstructed in a Destructive Analyzer
+//Default description as flashlight but defined proc below determines if you can see the counter and timer.
+	var/charge_max = 4 //The amount of charges it stores. Also uses vars so admins can tamper with this
+	var/charge_current = 4 //The amount of charges it spawns with
+	var/charge_tick = 0 //In our case, it is used as a 'timer' until you gain a new charge.
+	var/processing = FALSE
+	var/charge_seconds = 0 //For the timer
+
+/obj/item/device/flashlight/emp/New() //If it exists, it will be processed (constantly updated). Taken from advanced energy gun code
+	..() //The "New" process does everything normally except...
+	processing_objects.Add(src) //Adds the item to the list of processing items. src is the flashlight (source)
+
+/obj/item/device/flashlight/emp/Destroy() //If it no longer exists, it will no longer be processed to prevent unnecessary lag
+	processing_objects.Remove(src) //Removes from list of processed items
+	..() //Do the rest of the destroy process
+
+/obj/item/device/flashlight/emp/process() //EMP flashlight process
+	if(charge_current >= charge_max) //Performance stuff
+		processing = FALSE
+		processing_objects.Remove(src)
+	charge_tick++ //Post-increment charge_tick. It increases by 1 every time it is processed.
+	charge_seconds = (charge_tick*2) //For timer
+	if(charge_tick < 15) //15 ticks required until you gain a flashlight charge
+		return 0 //If it's not 15 ticks then cancel the process until it is called again next tick
+	charge_tick = 0 //If it's 15 ticks reset to 0
+	charge_current = min(charge_current+1, charge_max) //Either add +1 to charge_current (give it another charge in our case), or remain at the value determined by charge_max, depends on which value is lower
+	return 1
+
+/obj/item/device/flashlight/emp/afterattack(atom/movable/A, mob/user, proximity) //Can use it on anyone and anything as long as you are near them
+	. = ..() //I don't really grasp the idea of what this does but it's important
+	if(!proximity) //If you are not near whatever you use this on...
+		return 0 //Cancel the whole thing
+	if(!processing) //Performance stuff
+		processing = TRUE
+		processing_objects.Add(src)
+	if (charge_current > 0) //If you don't have 0 "current charge"
+		charge_current -= 1 //Reduce the charge counter by 1
+		if(ismob(A)) //If whatever you attack is a person
+			var/mob/M = A //Makes A count as M
+			log_attack("<span class='bad'>[user.name] ([user.ckey]) has used an EMP flashlight on [M.name] ([M.ckey])!</span>") //Admin logs when checking someone's attack logs
+			M.visible_message("<span class='danger'>[user] has blasted [A] with a pulse! </span>", \
+			"<span class='userdanger'>You have been blasted with a pulse!</span>") //What other people see when someone blasts someone with EMP and what you see if someone blasts you, respectively
+		else //If whatever you attack is not a person
+			log_attack("<span class='bad'>[user.name] ([user.ckey]) has used an EMP flashlight on [A.name]!</span>") //Admin logs show what item you used the EMP flashlight on
+			A.visible_message("<span class='danger'>[user] has blasted [A]!</span>") //What people see when someone EMPs an object
+		to_chat(user, "The EMP flashlight has [charge_current] charges left.") //Shows the user how many charges are left on the EMP.
+		A.emp_act(2) //Light EMP pulse
+	else //If you are in proximity but there are no charges
+		to_chat (user, "<span class='warning'>\The [src] must take time to recharge.</span>") //Wait for the EMP flashlight to recharge
+
+/obj/item/device/flashlight/emp/examine(mob/user) //What happens if you examine
+	..() //Examine is normal except for the to_chat appearing afterwards
+	if(is_holder_of(user, src)) //If you hold it
+		to_chat(user, "Charges: <span class='bad'>[charge_current]/4</span>") //Shows you in red how many charges are left out of how many
+		to_chat(user, "Timer: <span class='good'>[charge_seconds]/30</span>") //Shows you in green the timer until 30 seconds

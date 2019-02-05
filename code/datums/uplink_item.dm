@@ -334,6 +334,12 @@ var/list/uplink_items = list()
 	item = /obj/item/toy/balloon/decoy
 	cost = 1
 
+/datum/uplink_item/stealthy_tools/flashlightemp
+	name = "EMP Flashlight"
+	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoever you use it on. Up to 4 charges that recover every 30 seconds, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine."
+	item = /obj/item/device/flashlight/emp
+	cost = 4
+
 
 // DEVICE AND TOOLS
 
