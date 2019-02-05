@@ -130,14 +130,7 @@
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)
-				see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			var/obj/item/clothing/glasses/scanner/meson/M = is_wearing_item(/obj/item/clothing/glasses/scanner/meson, slot_glasses)
-			var/obj/item/clothing/glasses/scanner/night/N = is_wearing_item(/obj/item/clothing/glasses/scanner/night, slot_glasses)
-			if(M || N)
-				if(M.on == TRUE || N.on == TRUE)
-					see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-				else
-					see_invisible = SEE_INVISIBLE_LEVEL_TWO
+				see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
     // Legacy Cult
 		if(seer == 1)
 			var/obj/effect/rune_legacy/R = locate() in loc
