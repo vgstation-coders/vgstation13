@@ -14,9 +14,9 @@
 
 /datum/role/catbeast/OnPostSetup()
 	var/mob/living/carbon/human/H = antag.current
-	equip_catbeast(H)
 	H.set_species("Tajaran", force_organs=1)
 	H.dna.ResetUI()
+	equip_catbeast(H)
 	H.regenerate_icons()
 	spawn(3 MINUTES)
 		if(antag.current.stat!=DEAD && OnStation())
@@ -33,10 +33,15 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 							/obj/item/clothing/under/rank/clown,/obj/item/clothing/under/rank/xenoarch)
 	var/chosen_shirt = pick(shirts)
 	H.equip_to_slot_or_del(new chosen_shirt, slot_w_uniform)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal/catbeast, slot_shoes)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger, slot_back)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/joy, slot_wear_mask)
-	H.real_name = pick(catbeast_names)
+	//Null old name because we're from ghosts
+	H.fully_replace_character_name(null,pick(catbeast_names))
+
+/obj/item/clothing/shoes/sandal/catbeast
+	desc = "Strange sandals designed with claws in mind. They look uncomfortable if you're not a cat."
+	species_restricted = list("Tajaran")
 
 /datum/role/catbeast/ForgeObjectives()
 	AppendObjective(/datum/objective/catbeast/survive5)
