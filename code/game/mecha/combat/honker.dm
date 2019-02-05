@@ -160,6 +160,3 @@ proc/rand_hex_color()
 	for (var/i=0;i<6;i++)
 		color = color+pick(colors)
 	return color
-
-/obj/mecha/combat/honker/startMechWalking()
-	icon_state = initial_icon + "-move"

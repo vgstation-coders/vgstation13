@@ -3,7 +3,7 @@
 	name = "Clarke"
 	icon_state = "clarke"
 	initial_icon = "clarke"
-	step_in = 1
+	step_in = 3
 	step_energy_drain = 2
 	max_temperature = 100000
 	health = 100
@@ -42,16 +42,11 @@
 		if(overlay_applied)
 			overlays -= thruster_overlay
 			overlay_applied = FALSE
-	return step(src,direction)
-
-/obj/mecha/working/clarke/mechsteprand()
-	return step_rand(src)
+	return ..()
 
 /obj/mecha/working/clarke/Process_Spacemove(var/check_drift = 0)
 	return TRUE
 
-/obj/mecha/working/clarke/startMechWalking()
-	icon_state = initial_icon + "-move"
 
 /obj/mecha/working/clarke/get_commands()
 	var/output = {"<div class='wr'>
