@@ -357,6 +357,8 @@
 /mob/living/carbon/complex/proc/handle_chemicals_in_body()
 
 	burn_calories(HUNGER_FACTOR,1)
+	if(M_REGEN in mutations)
+		burn_calories(HUNGER_FACTOR, 1) //Burns calories a second time
 	if(reagents)
 		reagents.metabolize(src)
 

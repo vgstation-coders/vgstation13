@@ -58,6 +58,8 @@
 	var/mob/living/runner = AM
 	var/cached_temp = runner.bodytemperature
 	if(runner.burn_calories(HUNGER_FACTOR*2))
+		if(M_REGEN in runner.mutations)
+			runner.burn_calories(HUNGER_FACTOR*2) // Burns twice your calories a second time if you have M_REGEN
 		flick("treadmill-running", src)
 		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
