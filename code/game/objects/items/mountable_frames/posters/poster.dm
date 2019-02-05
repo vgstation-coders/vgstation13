@@ -5,6 +5,8 @@
 	icon = 'icons/obj/posters.dmi'
 	icon_state = "rolled_poster"
 	var/serial_number = 0
+	var/build_time = 17
+	var/path = /obj/structure/sign/poster
 	w_type=RECYK_MISC
 
 
@@ -23,23 +25,24 @@
 
 
 	//declaring D because otherwise if P gets 'deconstructed' we lose our reference to P.resulting_poster
-	var/obj/structure/sign/poster/D = new(src.serial_number)
+	var/obj/structure/sign/poster/D = new path(src.serial_number)
 
 	var/temp_loc = user.loc
 	flick("poster_being_set",D)
 	D.forceMove(on_wall)
 	qdel(src)	//delete it now to cut down on sanity checks afterwards. Agouri's code supports rerolling it anyway
-	playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, 1)
+	if(build_time) //Silent if instant
+		playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, 1)
 
 
 	if(!D)
 		return
 
-	if(do_after(user, on_wall, 17))//Let's check if everything is still there
-		to_chat(user, "<span class='notice'>You place the poster!</span>")
+	if(do_after(user, on_wall, build_time))//Let's check if everything is still there
+		to_chat(user, "<span class='notice'>You place \the [src]!</span>")
+		return D
 	else
 		D.roll_and_drop(temp_loc)
-	return
 
 
 //############################## THE ACTUAL DECALS ###########################
