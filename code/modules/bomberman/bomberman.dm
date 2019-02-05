@@ -1052,15 +1052,12 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		client_mob.stunned = 3
 		gladiators += client_mob
 
-		if(S.player_mob)
-			qdel(S.player_mob)
-
 		S.player_mob = client_mob
 
 		if(S.player_mob.ckey)
 			readied++
 
-	if(readied < 2)
+	if(readied < 1)
 		status = ARENA_AVAILABLE
 
 		for(var/mob/M in arena)
