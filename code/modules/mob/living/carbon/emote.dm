@@ -267,14 +267,14 @@
 	male_sounds = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
 	female_sounds = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
 
-/datum/emote/living/carbon/sound/run_emote(mob/user)
+/datum/emote/living/carbon/sound/run_emote(mob/user, params, ignore_status = FALSE)
 	var/mob/living/carbon/human/H = user
 	if (!istype(H))
 		return ..()
 	if (H.stat == DEAD)
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
-		if(world.time-H.last_emote_sound >= 60)//prevent scream spam with things like poly spray
+		if(world.time-H.last_emote_sound >= 80)//prevent scream spam with things like poly spray
 			if(sound_message)
 				message = sound_message
 			var/sound
@@ -289,6 +289,8 @@
 						sound = pick(female_sounds)
 			playsound(user, sound, 50, 0)
 			H.last_emote_sound = world.time
+			if(ignore_status == FALSE)
+				H.adjustOxyLoss(10)
 
 	else
 		message = "makes a very loud noise."
