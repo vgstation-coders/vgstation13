@@ -1079,15 +1079,17 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
 		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
+		return
 
 	if (arenas.len)
 		to_chat(src, "<span class ='notice'>There are already bomberman arenas! Use the Find Arenas verb to jump to them.</span>")
+		return
 
 	to_chat(src, "<span class='notice'>Pooling other ghosts for a bomberman arena...</span>")
 	for (var/obj/effect/landmark/bomberman_arena/landmark in landmarks_list)
 		if (landmark.busy)
 			continue
-		var/datum/bomberman_arena/B = new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
+		var/datum/bomberman_arena/B = new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src, landmark)
 		arenas += B
 		return
 	to_chat(src, "<span class='notice'>There are unfortunatly no available arenas!</span>")

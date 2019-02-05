@@ -155,7 +155,7 @@ var/global/list/bombermangear = list()
 /obj/structure/bomberman/power/
 	icon_state = "bomb_power"
 
-/obj/structure/bomberman/New(turf/loc, var/Bpower=1, var/destroy=0, var/hurt=0, var/dispenser=null, var/line_dir=null)
+/obj/structure/bomberman/New(turf/loc, var/Bpower=1, var/destroy=0, var/hurt=0, var/dispenser=null, var/line_dir=null, var/obj/effect/landmark/bomberman_arena/landmark)
 	..()
 	bombpower = Bpower
 	destroy_environnement = destroy
@@ -168,6 +168,9 @@ var/global/list/bombermangear = list()
 	if((!parent || !parent.arena) && bomberman_destroy)
 		destroy_environnement = 1
 
+	if (landmark)
+		landmark.busy = TRUE
+		our_landmark = landmark
 
 	if(line_dir)
 		var/turf/T1 = get_turf(src)
@@ -753,6 +756,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/list/tools = list()		//clothes and bomb dispensers spawned by the arena.
 	var/auto_start = 60			//how long (in seconds) till the game automatically begins when at least two players have registered
 	var/counting = 0
+	var/obj/effect/landmark/bomberman_arena/our_landmark = null
 
 /datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user)
 	if(!a_center)
@@ -785,6 +789,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	swalls = null
 	gladiators = null
 	tools = null
+	if (our_landmark)
+		our_landmark.busy = FALSE
+		our_landmark = null
 
 /datum/bomberman_arena/proc/open(var/size,mob/user)
 	var/x = 1
@@ -1046,18 +1053,18 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(!isobserver(client_mob))
 			continue
 
-		client_mob.transmogrify(/mob/living/carbon/human/, TRUE)
-		spawn_player(S.spawnpoint, client_mob)
-		dress_player(client_mob)
-		client_mob.stunned = 3
-		gladiators += client_mob
+		var/mob/bomber = client_mob.transmogrify(/mob/living/carbon/human/, TRUE)
+		spawn_player(S.spawnpoint, bomber)
+		dress_player(bomber)
+		bomber.stunned = 3
+		gladiators += bomber
 
-		S.player_mob = client_mob
+		S.player_mob = bomber
 
-		if(S.player_mob.ckey)
+		if(bomber.ckey)
 			readied++
 
-	if(readied < 1)
+	if(readied < min_number_of_players)
 		status = ARENA_AVAILABLE
 
 		for(var/mob/M in arena)
@@ -1275,7 +1282,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 				S.icon.ghost_unsubscribe(S.player_client.mob)
 	if(slots == ready.len)
 		start(ready)
-	else if(ready.len >= 1)
+	else if(ready.len >= min_number_of_players)
 		if(!counting)
 			counting = 1
 			spawn()
