@@ -109,12 +109,12 @@
 
 	return FALSE
 
-/obj/item/weapon/dakimakura/examine(mob/user)
+/*/obj/item/weapon/dakimakura/examine(mob/user)
 	..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(WEEABOO))
-			to_chat(H,"<span class='info'>It will be ready to substitute in [recharge/10] seconds.")
+			to_chat(H,"<span class='info'>It will be ready to substitute in [recharge/10] seconds.")*/
 
 /obj/item/weapon/dakimakura/attack_hand(mob/user)
 	if(isturf(loc))
@@ -137,8 +137,15 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
 
+/obj/item/clothing/gloves/nentendiepower/examine(mob/user)
+	..()
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.mind.GetRole(WEEABOO))
+			to_chat(H,"<span class='info'>It will be ready to blast an APC in [max(0,cooldown-world.time)/10] seconds.")
+
 /obj/item/clothing/gloves/nentendiepower/Touch(atom/A, mob/living/user, prox)
-	if(!cooldown)
+	if(world.time > cooldown)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(H.mind.GetRole(WEEABOO))
@@ -149,6 +156,7 @@
 					if(istype(T))
 						T.break_tile()
 					APC.terminal.Destroy()
+					cooldown = world.time + 10 SECONDS
 	else
 		..()
 
