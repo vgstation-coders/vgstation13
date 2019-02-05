@@ -267,29 +267,28 @@
 	male_sounds = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
 	female_sounds = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
 
-/datum/emote/living/carbon/sound/run_emote(mob/user, params)
+/datum/emote/living/carbon/sound/run_emote(mob/user)
 	var/mob/living/carbon/human/H = user
 	if (!istype(H))
 		return ..()
 	if (H.stat == DEAD)
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
-		if (params == TRUE) // Forced scream
-			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
-				if(sound_message)
-					message = sound_message
-				var/sound
-				if (isvox(H) || isskelevox(H))
-					sound = pick(birb_sounds)
+		if(world.time-H.last_emote_sound >= 60)//prevent scream spam with things like poly spray
+			if(sound_message)
+				message = sound_message
+			var/sound
+			if (isvox(H) || isskelevox(H))
+				sound = pick(birb_sounds)
 
-				else
-					switch(H.gender)
-						if (MALE)
-							sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-						if (FEMALE)
-							sound = pick(female_sounds)
-				playsound(user, sound, 50, 0)
-				H.last_emote_sound = world.time
+			else
+				switch(H.gender)
+					if (MALE)
+						sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+					if (FEMALE)
+						sound = pick(female_sounds)
+			playsound(user, sound, 50, 0)
+			H.last_emote_sound = world.time
 
 	else
 		message = "makes a very loud noise."
