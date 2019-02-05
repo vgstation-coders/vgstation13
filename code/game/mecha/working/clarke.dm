@@ -14,19 +14,27 @@
 	var/image/thruster_overlay
 	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
+	var/datum/effect/effect/system/trail/ion_trail
 
 /obj/mecha/working/clarke/New()
 	..()
 	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial(icon_state)]-thruster_overlay")
 	scrubber = new(src)
+	ion_trail = new /datum/effect/effect/system/trail()
+	ion_trail.set_up(src)
+	ion_trail.start()
 
 /obj/mecha/working/clarke/Destroy()
 	qdel(scrubber)
 	scrubber = null
+	qdel(ion_trail)
+	ion_trail = null
 	..()
 
 /obj/mecha/working/clarke/check_for_support()
-	return 1
+	if(cell.use(20))
+		return 1
+	return ..()
 
 /obj/mecha/working/clarke/mechturn(direction)
 	dir = direction
@@ -35,10 +43,12 @@
 
 /obj/mecha/working/clarke/mechstep(direction)
 	if(istype(get_turf(src), /turf/space))
+		step_in = 1
 		if(!overlay_applied)
 			overlays += thruster_overlay
 			overlay_applied = TRUE
 	else
+		step_in = initial(step_in)
 		if(overlay_applied)
 			overlays -= thruster_overlay
 			overlay_applied = FALSE
@@ -47,6 +57,8 @@
 /obj/mecha/working/clarke/Process_Spacemove(var/check_drift = 0)
 	return TRUE
 
+/obj/mecha/working/clarke/play_mechmove()
+	return //We lack a caterpillar tread sound
 
 /obj/mecha/working/clarke/get_commands()
 	var/output = {"<div class='wr'>

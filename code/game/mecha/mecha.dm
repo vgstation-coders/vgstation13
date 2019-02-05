@@ -437,6 +437,9 @@
 	playsound(src,'sound/mecha/mechturn.ogg',40,1)
 	return 1
 
+/obj/mecha/proc/play_mechmove()
+	playsound(src, get_sfx("mechstep"),40,1)
+
 /obj/mecha/proc/mechstep(direction)
 	var/current_dir = dir
 	set_glide_size(DELAY2GLIDESIZE(step_in))
@@ -444,7 +447,7 @@
 	if(lock_dir)
 		dir = current_dir
 	if(result)
-	 playsound(src, get_sfx("mechstep"),40,1)
+	 play_mechmove()
 	return result
 
 
@@ -452,7 +455,7 @@
 	set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
-	 playsound(src, get_sfx("mechstep"),40,1)
+	 play_mechmove()
 	return result
 
 /obj/mecha/to_bump(var/atom/obstacle)
