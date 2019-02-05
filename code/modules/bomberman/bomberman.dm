@@ -1275,7 +1275,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 				S.icon.ghost_unsubscribe(S.player_client.mob)
 	if(slots == ready.len)
 		start(ready)
-	else if(ready.len >= min_number_of_players)
+	else if(ready.len >= 1)
 		if(!counting)
 			counting = 1
 			spawn()
