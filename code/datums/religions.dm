@@ -1084,3 +1084,11 @@
 
 	convert(subject, preacher)
 	return TRUE
+
+/datum/religion/speedrun
+	name = "Speedrunning"
+	deity_name = "TASbot"
+	bible_name = "Guide to Speedrunning"
+	male_adept = "Speedrunner"
+	female_adept = "Speedrunner"
+	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
