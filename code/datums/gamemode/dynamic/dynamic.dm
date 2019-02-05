@@ -328,7 +328,7 @@ var/list/threat_by_job = list(
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
-						drafted_rules[rule] = rule.weight
+						drafted_rules[rule] = rule.get_weight()
 
 			if (drafted_rules.len > 0)
 				message_admins("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")

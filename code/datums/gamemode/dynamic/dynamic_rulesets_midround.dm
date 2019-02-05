@@ -77,6 +77,7 @@
 	weight = 7
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
@@ -182,6 +183,7 @@
 	cost = 50
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -266,6 +268,7 @@
 	cost = 10
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	logo = "weeaboo-logo"
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
