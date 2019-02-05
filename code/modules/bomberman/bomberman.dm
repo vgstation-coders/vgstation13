@@ -155,7 +155,7 @@ var/global/list/bombermangear = list()
 /obj/structure/bomberman/power/
 	icon_state = "bomb_power"
 
-/obj/structure/bomberman/New(turf/loc, var/Bpower=1, var/destroy=0, var/hurt=0, var/dispenser=null, var/line_dir=null, var/obj/effect/landmark/bomberman_arena/landmark)
+/obj/structure/bomberman/New(turf/loc, var/Bpower=1, var/destroy=0, var/hurt=0, var/dispenser=null, var/line_dir=null)
 	..()
 	bombpower = Bpower
 	destroy_environnement = destroy
@@ -167,10 +167,6 @@ var/global/list/bombermangear = list()
 		hurt_players = 1
 	if((!parent || !parent.arena) && bomberman_destroy)
 		destroy_environnement = 1
-
-	if (landmark)
-		landmark.busy = TRUE
-		our_landmark = landmark
 
 	if(line_dir)
 		var/turf/T1 = get_turf(src)
@@ -758,7 +754,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/counting = 0
 	var/obj/effect/landmark/bomberman_arena/our_landmark = null
 
-/datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user)
+/datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user, var/obj/effect/landmark/bomberman_arena/landmark)
 	if(!a_center)
 		return
 	if(!size)
@@ -776,6 +772,11 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		var/obj/structure/planner/spawnpoint/P = new(S.spawnpoint, src, S)
 		S.icon = P
 		planners += P
+	
+	if (landmark)
+		landmark.busy = TRUE
+		our_landmark = landmark
+
 
 /datum/bomberman_arena/Destroy()
 	..()
