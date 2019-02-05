@@ -596,7 +596,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//Configurable regen speed woo, no-regen hardcore or instaheal hugbox, choose your destiny
 		heal_amt = heal_amt * config.organ_regeneration_multiplier
 		if(M_REGEN in owner.mutations)
-			heal_amt = heal_amt * config.organ_regeneration_multiplier //Regenerates a second time if you have regeneration
+			heal_amt = heal_amt * 2 // Will make you regenerate twice as fast if you have regeneration
 		//Amount of healing is spread over all the wounds
 		heal_amt = heal_amt / (wounds.len + 1)
 		//Making it look prettier on scanners
