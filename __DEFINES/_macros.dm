@@ -48,6 +48,8 @@
 
 #define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich)) //|| istype(A:head, /obj/item/clothing
 
+#define ismanifested(A) (ishuman(A) && istype(A:species, /datum/species/manifested))
+
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
 #define isbrain(A) istype(A, /mob/living/carbon/brain)

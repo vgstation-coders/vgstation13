@@ -23,11 +23,11 @@
 	return TRUE
 
 /datum/spellbook_artifact/staff_of_change
-	name = "Staff of Change"
+	name = "Staff of Polymorph"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
 	price = 2 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/polymorph)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"

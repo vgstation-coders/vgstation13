@@ -2060,7 +2060,7 @@ mob/proc/on_foot()
 	spawn(duration + 1)
 		regenerate_icons()
 
-/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE, var/kill_on_death = TRUE, var/allow_revert = TRUE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
 			var/obj/transmog_body_container/tC = transmogged_from
@@ -2087,19 +2087,21 @@ mob/proc/on_foot()
 		EXCEPTION(target_type)
 		return
 	var/mob/M = new target_type(loc)
-	var/obj/transmog_body_container/C = new (M)
-	M.transmogged_from = C
-	transmogged_to = M
+	if(allow_revert)
+		var/obj/transmog_body_container/C = new (M)
+		C.kill_on_death = kill_on_death
+		M.transmogged_from = C
+		transmogged_to = M
+		C.set_contained_mob(src)
 	if(key)
 		M.key = key
-	if(offer_revert_spell)
+	if(allow_revert && offer_revert_spell)
 		var/spell/change_back
 		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
 			change_back = new offer_revert_spell
 		else
 			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
@@ -2145,6 +2147,7 @@ mob/proc/on_foot()
 	desc = "You should not be seeing this."
 	flags = TIMELESS
 	var/mob/contained_mob
+	var/kill_on_death = TRUE
 
 /obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
 	ASSERT(M)
