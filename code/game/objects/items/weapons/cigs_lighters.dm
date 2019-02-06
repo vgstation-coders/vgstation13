@@ -267,6 +267,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(I.is_hot())
 			light("<span class='notice'>[user] fiddles with \his [W.name], and manages to light their [name].</span>")
 
+	else if(istype(W, /obj/item/weapon/gun/energy))
+		var/obj/item/weapon/gun/energy/I = W
+		if(I.can_discharge())
+			if(prob(95))
+				I.Fire(src,user,0,0,1)
+				light("<span class='warning'>[user] points \the [W.name] at their face and pulls the trigger, lighting \the [src]. That's some next level shit.</span>")
+			else
+				I.Fire(user,user,0,0,1)
+				visible_message("<span class='danger'>[user] points \the [W.name] at their face and pulls the trigger, shooting themself in the face. What a fucking idiot.</span>")
+
 	//All other items are included here, any item that is hot can light the cigarette
 	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
