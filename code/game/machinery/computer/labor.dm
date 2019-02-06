@@ -79,8 +79,8 @@ var/list/labor_console_categories = list(
 		var/datum/job/job_datum = job_master.GetJob(job_string)
 		if(job_datum.priority)
 			continue
-		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.total_positions])</td> <td>"
-		if(job_datum.current_positions >= job_datum.total_positions)
+		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td>"
+		if(job_datum.current_positions >= job_datum.get_total_positions())
 			dat += "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot!)</A>"
 		else
 			dat += "<A [job_master.priority_jobs_remaining < 1 ? "class='linkOff'" : "href='?src=\ref[src];priority=[job_datum.title]'"]>&emsp14;(Prioritize)&emsp14;</A>"
@@ -90,7 +90,7 @@ var/list/labor_console_categories = list(
 	dat += "<div class='footer'><h3>Prioritized Jobs</h3>[job_master.priority_jobs_remaining] more job\s can prioritized.<br>"
 	dat += "<table>"
 	for(var/datum/job/job_datum in job_master.GetPrioritizedJobs())
-		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.total_positions])</td> <td><A href='?src=\ref[src];priority=[job_datum.title]'>(Remove)</A></td></tr>"
+		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td><A href='?src=\ref[src];priority=[job_datum.title]'>(Remove)</A></td></tr>"
 	dat += "</table>"
 	dat += "</div>"
 
