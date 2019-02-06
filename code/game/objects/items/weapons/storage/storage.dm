@@ -344,7 +344,7 @@
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
-/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
+/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	if(!istype(W))
 		return 0
 
@@ -383,7 +383,13 @@
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)
 
-	refresh_all()
+	for(var/mob/M in is_seeing)
+		if (M.client)
+			M.client.screen -= W
+
+	if (refresh)
+		refresh_all()
+
 	return 1
 
 //This proc is called when you want to place an item into the storage item.
@@ -555,10 +561,10 @@
 	return cansee
 
 /obj/item/weapon/storage/proc/refresh_all()
-	orient2hud()
-
 	for(var/mob/M in is_seeing)
 		show_to(M)
+
+	orient2hud()
 
 /obj/item/weapon/storage/proc/close_all()
 	for(var/mob/M in is_seeing)
@@ -632,7 +638,9 @@
 
 /obj/item/weapon/storage/proc/mass_remove(var/atom/A)
 	for(var/obj/item/O in contents)
-		remove_from_storage(O, A)
+		remove_from_storage(O, A, refresh = 0)
+
+	refresh_all()
 
 /obj/item/weapon/storage/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbids wearing a storage item in a  no_storage_slot (ie plastic bags over head) with something already inside
