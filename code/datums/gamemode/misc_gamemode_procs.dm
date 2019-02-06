@@ -377,7 +377,7 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/mounted/poster/anime, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken, slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
 
 /proc/name_weeaboo(var/mob/living/carbon/human/H)
 	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.

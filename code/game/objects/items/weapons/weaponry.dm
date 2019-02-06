@@ -89,11 +89,18 @@
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
-		return 1
+	return 1
 
 /obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
 	var/teleportcooldown = 600 //one minute cooldown
 	var/active = FALSE
+
+/obj/item/weapon/katana/hesfast/IsShield()
+	/*if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(is_type_in_list(/obj/item/weapon/dakimakura,H.held_items))
+			return FALSE*/
+	return TRUE
 
 /obj/item/weapon/katana/hesfast/examine(mob/user)
 	..()
