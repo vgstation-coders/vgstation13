@@ -18,7 +18,8 @@
 	var/list/deity_names = list()
 
 	var/datum/action/renounce/action_renounce
-	var/list/keys = list("christianity") // What you need to type to get this particular relgion.
+	var/list/keys = list("abstractbasetype") // What you need to type to get this particular relgion.
+	var/converts_everyone = FALSE
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
@@ -128,10 +129,13 @@
 		preacher.put_in_hands(holy_book)
 	religiousLeader = preacher.mind
 	convert(preacher, null)
-	if(keys[1]=="christianity")
-		message_admins("[key_name(preacher)] has selected Christianity and converted the entire crew.")
+	OnPostActivation()
+
+/datum/religion/proc/OnPostActivation()
+	if(converts_everyone)
+		message_admins("[key_name(religiousLeader)] has selected [name] and converted the entire crew.")
 		for(var/mob/living/carbon/human/H in player_list)
-			if(H==preacher)
+			if(isReligiousLeader(H))
 				continue
 			convert(H,null,TRUE,TRUE)
 
@@ -246,6 +250,10 @@
 			R.holy_book.item_state = "bible"
 
 // The list of all religions spacemen have designed, so far.
+/datum/religion/default
+	keys = list("christianity")
+	converts_everyone = TRUE
+
 /datum/religion/catholic
 	name = "Catholicism"
 	deity_name = "Jesus Christ"
