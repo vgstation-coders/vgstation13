@@ -138,15 +138,15 @@
 		if(iswelder(I))
 			var/obj/item/weapon/weldingtool/WT = I
 			if(WT.is_hot()) //Badasses dont get blinded while lighting their !!campfire!! with a welding tool
-				light("<span class='notice'>[user] casually lights \the [name] with \his [I], what a badass.</span>")
+				light("<span class='notice'>[user] casually lights \the [name] with \the [I], what a badass.</span>")
 		else if(istype(I, /obj/item/weapon/lighter/zippo))
 			var/obj/item/weapon/lighter/zippo/Z = I
 			if(Z.is_hot())
-				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \his [I]. Damn, that's cool.</span>")
+				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \the [I]. Damn, that's cool.</span>")
 		else if(istype(I, /obj/item/weapon/lighter))
 			var/obj/item/weapon/lighter/L = I
 			if(L.is_hot())
-				light("<span class='notice'>After some fiddling, [user] manages to light \the [name] with \his [I].</span>")
+				light("<span class='notice'>After some fiddling, [user] manages to light \the [name] with \the [I].</span>")
 		else if(istype(I, /obj/item/weapon/melee/energy/sword))
 			var/obj/item/weapon/melee/energy/sword/S = I
 			if(S.is_hot())
@@ -157,7 +157,7 @@
 				light("<span class='notice'>[user] fiddles with \his [I.name], and manages to light \the [name].</span>")
 		//All other items are included here, any item that is hot can light the campfire
 		else if(I.is_hot())
-			light("<span class='notice'>[user] lights \the [name] with \his [I].</span>")
+			light("<span class='notice'>[user] lights \the [name] with \the [I].</span>")
 		return
 	if(istype(I, /obj/item/stack/sheet/wood) && ((on)||(nocell == 2)))
 		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
