@@ -45,6 +45,10 @@
 	processing_objects.Remove(src)
 	create_reagents(250)
 
+/obj/machinery/bunsen_burner/preloaded/New()
+	..()
+	reagents.add_reagent(ETHANOL, 250)
+
 /obj/machinery/bunsen_burner/Destroy()
 	if(held_container)
 		held_container.forceMove(get_turf(src))
