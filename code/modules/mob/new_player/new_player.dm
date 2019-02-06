@@ -555,6 +555,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.key = key		//Manually transfer the key to log them in
 
+	var/datum/religion/R = ticker.chap_rel
+	if(R && R.converts_everyone && !R.isReligiousLeader(new_character))
+		R.convert(new_character,null,TRUE,TRUE)
+
 	return new_character
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.

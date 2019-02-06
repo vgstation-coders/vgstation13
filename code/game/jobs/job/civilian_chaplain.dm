@@ -12,7 +12,7 @@
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	pdaslot = slot_belt
 	pdatype = /obj/item/device/pda/chaplain
-	var/datum/religion/chap_religion = new /datum/religion // He gets the default one
+	var/datum/religion/chap_religion = new /datum/religion/default // default = space christianity
 
 /datum/job/chaplain/equip(var/mob/living/carbon/human/H)
 	switch(H.backbag)
@@ -56,6 +56,7 @@
 					rel.religiousLeader = H.mind
 					J = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
 					rel.convert(H, null, can_renounce = FALSE)
+					rel.OnPostActivation()
 					to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
 					chap_religion = rel
 					choice = TRUE
