@@ -3279,7 +3279,7 @@
 	name = "Synthmouse"
 	id = "synthmouse"
 	result = null
-	required_reagents = list(BLOOD = 5, AMINOMICIN = 1)
+	required_reagents = list(NUTRIMENT = 5, AMINOMICIN = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
