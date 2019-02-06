@@ -7082,9 +7082,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = 208.4
 	custom_metabolism = 0.01 //oh shit what are you doin
 
-/datum/reagent/aminociprinidol
-	name = "Aminociprinidol"
-	id = AMINOCIPRINIDOL
+/datum/reagent/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
 	description = "An extremely dangerous, flesh-replicating material, mutated by exposure to God-knows-what. Do not mix with nutriment under any circumstances."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#cb42f4" //rgb: 203, 66, 244

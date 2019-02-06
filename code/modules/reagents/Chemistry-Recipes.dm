@@ -3279,7 +3279,7 @@
 	name = "Synthmouse"
 	id = "synthmouse"
 	result = null
-	required_reagents = list(NUTRIMENT = 5, AMINOMICIN = 1)
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIN = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -3303,10 +3303,10 @@
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/mouse(location)
 
-/datum/chemical_reaction/aminociprinidol
-	name = "Aminociprinidol"
-	id = AMINOCIPRINIDOL
-	result = AMINOCIPRINIDOL
+/datum/chemical_reaction/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	result = AMINOCYPRINIDOL
 	required_reagents = list(AMINOMICIN = 1, CARPPHEROMONES = 5)
 	result_amount = 1
 
@@ -3314,7 +3314,7 @@
 	name = "Synthcarp"
 	id = "synthcarp"
 	result = null
-	required_reagents = list(NUTRIMENT = 10, AMINOCIPRINIDOL = 1)
+	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthcarp/on_reaction(var/datum/reagents/holder, var/created_volume)
