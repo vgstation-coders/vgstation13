@@ -74,11 +74,8 @@
 	return 0
 
 /obj/item/candle/Crossed(var/obj/Proj)
-	if(istype(Proj, /obj/item/projectile/beam))
+	if(isbeam(Proj))
+		//Can also be an obj/effect, but they both have the damage var
 		var/obj/item/projectile/beam/P = Proj
-		if(P.damage != 0)
-			light("", 1)
-	else if(istype(Proj, /obj/effect/beam))
-		var/obj/effect/beam/P = Proj
 		if(P.damage != 0)
 			light("", 1)
