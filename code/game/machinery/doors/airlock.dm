@@ -1403,6 +1403,14 @@ About the new airlock wires panel:
 	playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 	return
 
+/obj/machinery/door/airlock/proc/toggle_bolts()
+	locked = !locked
+	if (locked == 1)
+		playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+	if (locked == 0)
+		playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+	return
+
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
 		density ? open(TRUE) : close(TRUE)
