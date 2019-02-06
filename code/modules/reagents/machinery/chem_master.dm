@@ -46,7 +46,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(300)
+	create_reagents(1000)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
