@@ -20,7 +20,7 @@ var/list/beam_master = list()
 	layer = PROJECTILE_LAYER
 	plane = LIGHTING_PLANE
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-	damage = 30
+	damage = 15
 	damage_type = BURN
 	flag = "laser"
 	eyeblur = 4
@@ -295,7 +295,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/captain
 	name = "captain laser"
 	icon_state = "laser_old"
-	damage = 40
+	damage = 20
 	linear_movement = 0
 
 /obj/item/projectile/beam/retro
@@ -559,29 +559,29 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"
-	damage = 25
+	damage = 12.5
 
 /obj/item/projectile/beam/weaklaser
 	name = "weak laser"
-	damage = 15
+	damage = 7.5
 
 /obj/item/projectile/beam/veryweaklaser
 	name = "very weak laser"
-	damage = 5
+	damage = 2.5
 
 /obj/item/projectile/beam/heavylaser
 	name = "heavy laser"
 	icon_state = "heavylaser"
-	damage = 60
+	damage = 30
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
 
 /obj/item/projectile/beam/heavylaser/lawgiver
-	damage = 40
+	damage = 20
 
 /obj/item/projectile/beam/xray
 	name = "xray beam"
 	icon_state = "xray"
-	damage = 30
+	damage = 15
 	kill_count = 500
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
 	penetration = -1
@@ -605,12 +605,12 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/deathlaser
 	name = "death laser"
 	icon_state = "heavylaser"
-	damage = 60
+	damage = 30
 
 /obj/item/projectile/beam/emitter
 	name = "emitter beam"
 	icon_state = "emitter"
-	damage = 30
+	damage = 15
 
 /obj/item/projectile/beam/emitter/singularity_pull()
 	return
@@ -656,7 +656,7 @@ var/list/beam_master = list()
 	flag = "laser"
 	kill_count = 100
 	layer = PROJECTILE_LAYER
-	damage = 15
+	damage = 7.5
 	icon = 'icons/obj/lightning.dmi'
 	icon_state = "heatray"
 	animate_movement = 0

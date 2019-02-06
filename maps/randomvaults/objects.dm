@@ -522,7 +522,7 @@
 	projectile_type = /obj/item/projectile/beam/retro/weak
 
 /obj/item/projectile/beam/retro/weak
-	damage = 15
+	damage = 7.5
 	linear_movement = 0
 
 /turf/simulated/floor/engine/old

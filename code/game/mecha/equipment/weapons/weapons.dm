@@ -91,7 +91,7 @@
 /obj/item/projectile/beam/pulse/heavy
 	name = "heavy pulse laser"
 	icon_state = "u_laser"
-	damage = 60
+	damage = 30
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/taser
 	name = "\improper PBT \"Pacifier\" mounted taser"

@@ -288,7 +288,7 @@
 	..()
 
 /obj/item/projectile/beam/drone
-	damage = 10
+	damage = 5
 
 /obj/item/projectile/beam/pulse/drone
-	damage = 7
+	damage = 3.5
