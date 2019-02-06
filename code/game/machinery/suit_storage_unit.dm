@@ -88,7 +88,7 @@
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
-/obj/machinery/suit_storage_unit/excavation
+/obj/machinery/suit_storage_unit/ror
 	name = "Survivor's Suit Storage Unit"
 	department = "sci"
 	suit_type = /obj/item/clothing/suit/space/rig/ror
