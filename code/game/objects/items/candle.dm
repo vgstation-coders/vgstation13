@@ -73,8 +73,12 @@
 		return source_temperature
 	return 0
 
-/obj/item/candle/Crossed(var/obj/item/projectile/beam/Proj)
-	if(!istype(Proj))
-		return
-	if(Proj.damage != 0)
-		light("", 1)
+/obj/item/candle/Crossed(var/obj/Proj)
+	if(istype(Proj, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/P = Proj
+		if(P.damage != 0)
+			light("", 1)
+	else if(istype(Proj, /obj/effect/beam))
+		var/obj/effect/beam/P = Proj
+		if(P.damage != 0)
+			light("", 1)
