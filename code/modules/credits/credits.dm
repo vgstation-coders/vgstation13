@@ -194,8 +194,8 @@ var/global/datum/credits/end_credits = new
 		rare_episode_name = TRUE
 
 /datum/credits/proc/finalize_episodestring()
-	var/season = rand(1,22)
-	var/episodenum = rand(1,17) //Maybe we could do this cumulatively so that the round after 670 becomes 671 etc and the season is just the last 2 numbers of the current IRL year?
+	var/season = time2text(world.realtime,"YY")
+	var/episodenum = SSpersistence.round_count_list[season]
 	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
 	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
 
