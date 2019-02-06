@@ -600,7 +600,24 @@
 /obj/item/weapon/caution/cone
 	desc = "This cone is trying to warn you of something!"
 	name = "warning cone"
+	icon = 'icons/obj/janitor.dmi'
 	icon_state = "cone"
+	item_state = "cone"
+
+	species_fit = list(VOX_SHAPED)
+
+	flags = HIDEHAIRCOMPLETELY
+	body_parts_covered = FULL_HEAD
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_HEAD
+
+/obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswirecutter(I))
+		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
+		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
+		qdel(src)
+		return
+	return ..()
 
 /obj/item/weapon/SWF_uplink
 	name = "station-bounced radio"
