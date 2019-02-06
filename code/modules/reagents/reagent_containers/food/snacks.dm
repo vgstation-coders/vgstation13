@@ -873,6 +873,34 @@
 	name = "warm [name]"
 	processing_objects.Add(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating
+	name = "self-heating Donk-pocket"
+	icon_state = "donkpocket_wrapped"
+	desc = "Individually wrapped, frozen, unfrozen, desiccated, resiccated, twice recalled, and still edible. Infamously so."
+	wrapped = TRUE
+	var/unwrapping = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating/proc/Unwrap(mob/user)
+	if(unwrapping)
+		return
+	playsound(src, 'sound/misc/donkselfheat.ogg', 35, 0, -4)
+	to_chat(user, "<span class='notice'>Following the instructions, you shake the packaging firmly and rip it open with an unsatisfying wet crunch.</span>")
+	unwrapping = TRUE
+	spawn(2 SECONDS)
+		name = "\improper Donk-pocket"
+		desc = "Freshly warmed and probably not toxic."
+		icon_state = "donkpocket"
+		reagents.add_reagent(CALCIUMOXIDE, 0.2)
+		warm_up()
+		wrapped = 0
+		unwrapping = FALSE
+
 /obj/item/weapon/reagent_containers/food/snacks/brainburger
 	name = "brainburger"
 	desc = "A strange looking burger. It looks almost sentient."

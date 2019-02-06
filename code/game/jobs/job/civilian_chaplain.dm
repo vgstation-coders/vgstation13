@@ -231,3 +231,7 @@
 		feedback_set_details("religion_deity","[new_deity]")
 		feedback_set_details("religion_book","[new_book_style]")
 	return 1
+
+/datum/job/chaplain/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater(H.back), slot_in_backpack)
