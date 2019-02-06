@@ -598,7 +598,7 @@
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
 
-obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
 	if(iswirecutter(I))
 		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
 		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
