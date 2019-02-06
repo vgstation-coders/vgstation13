@@ -2103,6 +2103,8 @@ mob/proc/on_foot()
 			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
 	timestopped = 1
+	if(!allow_revert)
+		qdel(src)
 	return M
 
 /mob/proc/completely_untransmogrify()	//Reverts a mob through all layers of transmogrification, back down to the base mob. Returns this mob.
