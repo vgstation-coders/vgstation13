@@ -386,11 +386,11 @@ var/list/threat_by_job = list(
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
-	
+
 	// -- No injection, we'll just update the threat
 	else
 		threat = min(threat + threat_by_job[newPlayer.mind.assigned_role], 100)
-		threat_level = min(threat_level + threat_by_job[newPlayer.mind.assigned_role], 100)
+		//threat_level = min(threat_level + threat_by_job[newPlayer.mind.assigned_role], 100)
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
