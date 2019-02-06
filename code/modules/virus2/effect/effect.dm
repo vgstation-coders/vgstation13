@@ -68,6 +68,9 @@
 		if(2)
 			multiplier = rand(1, max_multiplier)
 
+/datum/disease2/effect/proc/multiplier_tweak(var/tweak)
+	multiplier = Clamp(multiplier+tweak,1,max_multiplier)
+
 /datum/disease2/effect/proc/getcopy(var/datum/disease2/disease/disease)
 	var/datum/disease2/effect/new_e = new type(disease)
 	new_e.chance = chance
