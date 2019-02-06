@@ -83,6 +83,14 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return(SUICIDE_ACT_OXYLOSS)
 
 
+//Subtype with freebies
+/obj/item/weapon/storage/bag/plastic/carrots/New()
+	..()
+	new /obj/item/weapon/screwdriver(src)
+	for(var/i = 1 to 4)
+		new /obj/item/weapon/reagent_containers/food/snacks/grown/carrot(src)
+
+
 // -----------------------------
 //        Mining Satchel
 // -----------------------------

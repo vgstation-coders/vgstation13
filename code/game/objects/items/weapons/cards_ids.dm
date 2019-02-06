@@ -695,6 +695,19 @@
 	access = list(access_trade)
 	base_access = list(access_trade)
 
+/obj/item/weapon/card/id/volunteer
+	name = "Volunteer ID"
+	desc = "Indicates the holder has agreed to undergo conversion into a silicon-based lifeform."
+	registered_name = "Volunteer"
+	icon_state = "volunteer"
+	access = list(access_robotics)
+
+/obj/item/weapon/card/id/convict
+	name = "Convict ID"
+	desc = "A symbol of institutionalization. Man on the inside. No longer a human, just an ID card to be processed."
+	registered_name = "Convict"
+	icon_state = "convict"
+
 /obj/item/weapon/card/id/tunnel_clown
 	name = "Tunnel Clown ID card"
 	assignment = "Tunnel Clown!"

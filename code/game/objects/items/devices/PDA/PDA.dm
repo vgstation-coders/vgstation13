@@ -442,6 +442,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a special edition with a transparent case."
 	note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
 
+/obj/item/device/pda/clear/incentive
+	name = "Deluxe PDA"
+	desc = "Trading is already paying off."
+	default_cartridge = /obj/item/weapon/cartridge/trader
+
 /obj/item/device/pda/trader
 	name = "Trader PDA"
 	desc = "Much good for trade."

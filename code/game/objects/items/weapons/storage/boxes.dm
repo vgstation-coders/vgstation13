@@ -135,6 +135,31 @@
 		)
 		new toSpawn(src)
 
+/obj/item/weapon/storage/box/priority_prisoner
+	name = "informant care parcel"
+	desc = "A small parcel of miscellaneous junk Nanotrasen hands out to convicts that nark on more dangerous sorts."
+	icon_state = "nt"
+
+/obj/item/weapon/storage/box/priority_prisoner/New()
+	..()
+	new /obj/item/weapon/lighter/NT(src)
+	new /obj/item/weapon/storage/fancy/cigarettes(src)
+	for(var/i in 1 to 2)
+		var/toSpawn = pick(
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink,
+			/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka)
+		new toSpawn(src)
+	new /obj/item/weapon/paper(src)
+	new /obj/item/weapon/pen/NT(src)
+	new /obj/item/weapon/chisel(src)
+
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
 	desc = "A box containing white latex gloves. gloves. gloves."

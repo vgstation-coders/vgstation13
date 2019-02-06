@@ -272,6 +272,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	. = ..()
 	create_reagents(50)
 
+/obj/item/weapon/implant/chem/sleepy/New()
+	..()
+	reagents.add_reagent(STOXIN,50)
+
 /obj/item/weapon/implant/loyalty
 	name = "loyalty"
 	desc = "Makes you loyal or such."

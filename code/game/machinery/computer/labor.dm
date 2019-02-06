@@ -6,6 +6,7 @@ var/list/labor_console_categories = list(
 	"Medical" = medical_positions,
 	"Science" = science_positions,
 	"Cargo" = cargo_positions,
+	"Not Crew" = misc_positions,
 	)
 
 /obj/machinery/computer/labor
@@ -77,6 +78,8 @@ var/list/labor_console_categories = list(
 	dat += "<table>"
 	for(var/job_string in labor_console_categories[selected_category])
 		var/datum/job/job_datum = job_master.GetJob(job_string)
+		if(!job_datum)
+			continue //Skip if we can't find it somehow (e.g.: map specific)
 		if(job_datum.priority)
 			continue
 		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.total_positions])</td> <td>"

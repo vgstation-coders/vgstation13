@@ -122,6 +122,9 @@ var/list/nonhuman_positions = list(
 
 var/list/misc_positions = list(
 	"Trader",
+	"Convict",
+	"Cyborgification Volunteer",
+	"AIization Volunteer"
 )
 
 /proc/guest_jobbans(var/job)

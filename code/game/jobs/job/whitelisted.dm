@@ -69,6 +69,10 @@
 
 	return 1
 
+/datum/job/trader/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/device/pda/clear/incentive, slot_wear_id)
+
 /datum/job/trader/introduce(mob/living/carbon/human/M, job_title)
 	if(!job_title)
 		job_title = src.title
