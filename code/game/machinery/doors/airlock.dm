@@ -1409,7 +1409,6 @@ About the new airlock wires panel:
 		playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 	if (locked == FALSE)
 		playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
-	return
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
