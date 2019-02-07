@@ -99,7 +99,7 @@ var/list/threat_by_job = list(
 	return 1
 
 /datum/gamemode/dynamic/Setup()
-	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 		latejoin_rules += new rule()
@@ -133,6 +133,7 @@ var/list/threat_by_job = list(
 
 /datum/gamemode/dynamic/proc/rigged_roundstart()
 	message_admins("[forced_roundstart_ruleset.len] rulesets being forced. Will now attempt to draft players for them.")
+	var/list/delayed_rules = list()
 	for (var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
 		rule.mode = src
 		rule.candidates = candidates.Copy()
@@ -170,13 +171,17 @@ var/list/threat_by_job = list(
 
 /datum/gamemode/dynamic/proc/picking_roundstart_rule(var/list/drafted_rules = list())
 	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
-
+	
 	if (starting_rule)
-		message_admins("Picking a ruleset...<font size='3'>[starting_rule.name]</font>!")
+		message_admins("Picking a [istype()] ruleset...<font size='3'>[starting_rule.name]</font>!")
 		log_admin("Picking a ruleset...[starting_rule.name]!")
 
 		roundstart_rules -= starting_rule
 		drafted_rules -= starting_rule
+
+		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
+			message_admins("Delayed ruleset, with a delay of [starting_rule:delay].")
+			return pick_delay(starting_rule)
 
 		threat = max(0,threat-starting_rule.cost)
 		if (starting_rule.execute())//this should never fail since ready() returned 1
@@ -193,6 +198,19 @@ var/list/threat_by_job = list(
 		else
 			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 	return 0
+
+/datum/gamemode/dynamic/proc/pick_delay(var/datum/dynamic_ruleset/roundstart/delayed/rule)
+	spawn(rule.delay)
+	rule.candidates = player_list.Copy()
+	rule.trim_candidates()
+	if (starting_rule.execute())//this should never fail since ready() returned 1
+		executed_rules += starting_rule
+		if (starting_rule.persistent)
+			current_rules += starting_rule
+		else
+			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+	return 0
+
 
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
 	var/datum/dynamic_ruleset/latejoin/latejoin_rule = pickweight(drafted_rules)

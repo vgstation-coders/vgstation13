@@ -334,7 +334,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/revs
+/datum/dynamic_ruleset/roundstart/delayed/revs
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
@@ -344,9 +344,10 @@
 	weight = 2
 	cost = 45
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	delay = 5 MINUTES
 	var/required_heads = 3
 
-/datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
+/datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
 	if (!..())
 		return FALSE
 	var/head_check = 0
@@ -358,25 +359,24 @@
 		required_candidates = 1
 	return (head_check >= required_heads)
 
-/datum/dynamic_ruleset/roundstart/revs/execute()
-	spawn (5 MINUTES)
-		var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-		if (!R)
-			R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+/datum/dynamic_ruleset/roundstart/delayed/revs/execute()
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
 
-		var/max_canditates = 4
-		for(var/i = 1 to max_canditates)
-			if(candidates.len <= 0)
-				break
-			var/mob/M = pick(candidates)
-			assigned += M
-			candidates -= M
-			var/datum/role/revolutionary/leader/lenin = new
-			lenin.AssignToRole(M.mind, 1, 1)
-			R.HandleRecruitedRole(lenin)
-			lenin.Greet(GREET_ROUNDSTART)
-		update_faction_icons()
-		R.OnPostSetup()
+	var/max_canditates = 4
+	for(var/i = 1 to max_canditates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/revolutionary/leader/lenin = new
+		lenin.AssignToRole(M.mind, 1, 1)
+		R.HandleRecruitedRole(lenin)
+		lenin.Greet(GREET_ROUNDSTART)
+	update_faction_icons()
+	R.OnPostSetup()
 	return 1
 
 //////////////////////////////////////////////

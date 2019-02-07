@@ -46,7 +46,7 @@
 /datum/faction/revolution/check_win()
 	// -- 1. Did the shuttle leave ?
 	if (win_shuttle)
-		return end(SHUTTLE_LEFT)
+		return 1
 
 	// -- 2. Are all the heads dead ?
 	var/list/total_heads = get_living_heads()
@@ -57,14 +57,14 @@
 			incapacitated_heads++
 
 	if (incapacitated_heads >= total_heads.len)
-		return end(ALL_HEADS_DEAD)
+		return 1
 
 	// -- 3. Are all the revs deads ?
 	for (var/datum/role/R in members)
 		if (R.antag && R.antag.current && !(R.antag.current.isDead() || R.antag.current.z != map.zMainStation))
 			return FALSE
 
-	return end(ALL_REVS_DEAD)
+	return FACTION_FAILURE
 
 // Called on arrivals and emergency shuttle departure.
 /hook_handler/revs
@@ -96,6 +96,7 @@
 		if(A.set_target(L.mind))
 			R.AppendObjective(A, TRUE) // We will have more than one kill objective
 
+/*
 /datum/faction/revolution/proc/end(var/result)
 	. = TRUE
 	switch (result)
@@ -105,3 +106,4 @@
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
 		if (SHUTTLE_LEFT)
 			to_chat(world, "<font size = 3><b>Revolution minor victory!</b></font><br/><font size = 2>The heads called the shuttle to leave the station!</font>")
+*/

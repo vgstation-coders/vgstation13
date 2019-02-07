@@ -243,7 +243,10 @@
 
 /datum/gamemode/proc/check_finished()
 	for(var/datum/faction/F in factions)
-		if(F.check_win())
+		var/win = F.check_win()
+		if (win < 0)
+			qdel(F) // Destroys the faction, it's not useful anymore.
+		else if (win > 0)
 			return 1
 	if(emergency_shuttle.location==2 || ticker.station_was_nuked)
 		return 1

@@ -41,6 +41,9 @@
 
 /datum/dynamic_ruleset/roundstart//One or more of those drafted at roundstart
 
+/datum/dynamic_ruleset/roundstart/delayed/ // Executed with a 30 seconds delay
+	var/delay = 30 SECONDS
+
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
 /datum/dynamic_ruleset/midround//Can be drafted once in a while during a round
@@ -136,6 +139,29 @@
 /datum/dynamic_ruleset/roundstart/trim_candidates()
 	var/role_id = initial(role_category.id)
 	for(var/mob/new_player/P in candidates)
+		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
+			candidates.Remove(P)
+			continue
+		if (!P.client.desires_role(role_id) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+			candidates.Remove(P)
+			continue
+		if (P.mind.assigned_role in protected_from_jobs)
+			var/probability = initial(role_category.protected_traitor_prob)
+			if (prob(probability))
+				candidates.Remove(P)
+			continue
+		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+			candidates.Remove(P)
+			continue
+		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
+			candidates.Remove(P)
+			continue
+
+/datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
+	if (mode && mode.state <  GAME_STATE_PLAYING)
+		return ..() // If the game didn't start, we'll use the parent's method to see if we have enough people desiring the role & what not.
+	var/role_id = initial(role_category.id)
+	for(var/mob/living/carbon/human/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
