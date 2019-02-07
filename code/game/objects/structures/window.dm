@@ -37,6 +37,7 @@ var/list/one_way_windows
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
+	var/disperse_coeff = 0.95
 
 /obj/structure/window/New(loc)
 
@@ -196,7 +197,7 @@ var/list/one_way_windows
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		if(istype(mover,/obj/item/projectile/beam))
 			var/obj/item/projectile/beam/B = mover
-			B.damage = B.damage/2
+			B.damage *= disperse_coeff
 			if(B.damage <= 1)
 				B.bullet_die()
 		return 1
@@ -651,6 +652,7 @@ var/list/one_way_windows
 	d_state = WINDOWSECURE
 	reinforced = 1
 	penetration_dampening = 3
+	disperse_coeff = 0.8
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
@@ -668,6 +670,7 @@ var/list/one_way_windows
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
+	disperse_coeff = 0.75
 
 /obj/structure/window/plasma/loose
 	anchored = 0
@@ -682,6 +685,7 @@ var/list/one_way_windows
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+	disperse_coeff = 0.6
 
 /obj/structure/window/reinforced/plasma/loose
 	anchored = 0
