@@ -194,6 +194,11 @@ var/list/one_way_windows
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
+		if(istype(mover,/obj/item/projectile/beam))
+			var/obj/item/projectile/beam/B = mover
+			B.damage = B.damage/2
+			if(B.damage <= 1)
+				B.bullet_die()
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
