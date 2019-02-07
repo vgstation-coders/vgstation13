@@ -1405,9 +1405,9 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/proc/toggle_bolts()
 	locked = !locked
-	if (locked == 1)
+	if (locked == TRUE)
 		playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
-	if (locked == 0)
+	if (locked == FALSE)
 		playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 	return
 
