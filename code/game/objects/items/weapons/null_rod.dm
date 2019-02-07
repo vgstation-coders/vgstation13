@@ -53,8 +53,12 @@
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 					V.nullified = max(5, V.nullified + 2)
+
+				/* undead smite abilities moved to thurible (and silver weapons in general).
+
 				V.smitecounter += 30 //Smithe the shit out of him. Four strikes and he's out
 
+				*/
 
 	//A 25% chance to de-cult per hit that bypasses all protections? Is this some kind of joke? The last thing cult needs right now is that kind of nerfs. Jesus dylan.
 	/*
@@ -93,6 +97,8 @@
 			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
 		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
 
+/* undead smite abilities moved to thurible. (and silver weapons in general)
+
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")
@@ -102,6 +108,7 @@
 			if(V && !(VAMP_UNDYING in V.powers))
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
+*/
 
 /obj/item/weapon/nullrod/attack_self(mob/user)
 	if(reskinned)
@@ -300,10 +307,10 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
 /obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
-    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter)) 
-        return 
-    else 
-        return ..() 
+    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+        return
+    else
+        return ..()
 
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos
