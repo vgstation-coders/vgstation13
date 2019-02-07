@@ -359,24 +359,23 @@
 	return (head_check >= required_heads)
 
 /datum/dynamic_ruleset/roundstart/revs/execute()
-	spawn (5 MINUTES)
-		var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-		if (!R)
-			R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
 
-		var/max_canditates = 4
-		for(var/i = 1 to max_canditates)
-			if(candidates.len <= 0)
-				break
-			var/mob/M = pick(candidates)
-			assigned += M
-			candidates -= M
-			var/datum/role/revolutionary/leader/lenin = new
-			lenin.AssignToRole(M.mind, 1, 1)
-			R.HandleRecruitedRole(lenin)
-			lenin.Greet(GREET_ROUNDSTART)
-		update_faction_icons()
-		R.OnPostSetup()
+	var/max_canditates = 4
+	for(var/i = 1 to max_canditates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/revolutionary/leader/lenin = new
+		lenin.AssignToRole(M.mind, 1, 1)
+		R.HandleRecruitedRole(lenin)
+		lenin.Greet(GREET_ROUNDSTART)
+	update_faction_icons()
+	R.OnPostSetup()
 	return 1
 
 //////////////////////////////////////////////
