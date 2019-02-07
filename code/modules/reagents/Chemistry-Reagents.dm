@@ -7075,7 +7075,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/aminomicin
 	name = "Aminomicin"
 	id = AMINOMICIN
-	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with blood."
+	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with nutriment."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 13.49 //our ingredients are pretty dense
