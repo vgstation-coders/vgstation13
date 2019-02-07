@@ -273,11 +273,12 @@ var/list/threat_by_job = list(
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
-		message_admins("DYNAMIC MODE: Checking state of the round.")
-		log_admin("DYNAMIC MODE: Checking state of the round.")
 		//time to inject some threat into the round
 		if(emergency_shuttle.departed)//unless the shuttle is gone
 			return
+
+		message_admins("DYNAMIC MODE: Checking state of the round.")
+		log_admin("DYNAMIC MODE: Checking state of the round.")
 
 		update_playercounts()
 
@@ -386,7 +387,7 @@ var/list/threat_by_job = list(
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
-	
+
 	// -- No injection, we'll just update the threat
 	else
 		threat = min(threat + threat_by_job[newPlayer.mind.assigned_role], 100)
