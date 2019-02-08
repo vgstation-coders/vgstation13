@@ -39,6 +39,8 @@
 	var/t_him = "it"
 	var/t_has = "has"
 	var/t_is = "is"
+	var/t_s = "s"
+	var/t_es = "es"
 
 	var/msg = "<span class='info'>*---------*\nThis is "
 
@@ -48,6 +50,8 @@
 		t_him = "them"
 		t_has = "have"
 		t_is = "are"
+		t_s = ""
+		t_es = ""
 	else
 		switch(gender)
 			if(MALE)
@@ -116,8 +120,6 @@
 			msg += "[t_He] [t_has] [bicon(gloves)] \a [gloves] on [t_his] hands.[gloves.description_accessories()]\n"
 	else if(blood_DNA && blood_DNA.len && !(slot_gloves in obscured))
 		msg += "<span class='warning'>[t_He] [t_has] blood-stained hands!</span>\n"
-
-	//handcuffed?
 
 	//handcuffed?
 	if(handcuffed && handcuffed.is_visible())
@@ -194,15 +196,15 @@
 			msg += "<span class='warning'>[t_He] [t_has] a splint on [t_his] [o.display_name]!</span>\n"
 
 	if(suiciding)
-		msg += "<span class='warning'>[t_He] appears to have committed suicide... there is no hope of recovery.</span>\n"
+		msg += "<span class='warning'>[t_He] appear[t_s] to have committed suicide... there is no hope of recovery.</span>\n"
 
 	if(M_DWARF in mutations)
 		msg += "[t_He] [t_is] a short, sturdy creature fond of drink and industry.\n"
 
 	if (isUnconscious())
-		msg += "<span class='warning'>[t_He] [t_is]n't responding to anything around [t_him] and seems to be asleep.</span>\n"
+		msg += "<span class='warning'>[t_He] [t_is]n't responding to anything around [t_him] and seem[t_s] to be asleep.</span>\n"
 		if((isDead() || src.health < config.health_threshold_crit) && distance <= 3)
-			msg += "<span class='warning'>[t_He] does not appear to be breathing.</span>\n"
+			msg += "<span class='warning'>[t_He] do[t_es] not appear to be breathing.</span>\n"
 
 		if(ishuman(user) && !user.isUnconscious() && distance <= 1)
 			user.visible_message("<span class='info'>[user] checks [src]'s pulse.</span>")
@@ -210,9 +212,9 @@
 			spawn(15)
 				if(user && distance <= 1 && (!istype(user) || !user.isUnconscious()))
 					if(pulse == PULSE_NONE || (status_flags & FAKEDEATH))
-						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[mind ? "" : " and [t_his] soul has departed"]...</span>")
+						to_chat(user, "<span class='deadsay'>[t_He] [t_has] no pulse[mind ? "" : " and [t_his] soul has departed"]...</span>")
 					else
-						to_chat(user, "<span class='deadsay'>[t_He] has a pulse!</span>")
+						to_chat(user, "<span class='deadsay'>[t_He] [t_has] a pulse!</span>")
 
 	msg += "<span class='warning'>"
 
@@ -245,14 +247,14 @@
 		if(temp)
 			if(!temp.is_existing())
 				is_destroyed["[temp.display_name]"] = 1
-				wound_flavor_text["[temp.display_name]"] = "<span class='danger'>[t_He] is missing [t_his] [temp.display_name].</span>\n"
+				wound_flavor_text["[temp.display_name]"] = "<span class='danger'>[t_He] [t_is] missing [t_his] [temp.display_name].</span>\n"
 				continue
 			if(temp.status & ORGAN_PEG)
 				if(!(temp.brute_dam + temp.burn_dam))
-					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] has a peg [temp.display_name]!</span>\n"
+					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a peg [temp.display_name]!</span>\n"
 					continue
 				else
-					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] has a peg [temp.display_name], it has"
+					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a peg [temp.display_name], it has"
 				if(temp.brute_dam)
 					switch(temp.brute_dam)
 						if(0 to 20)
@@ -270,10 +272,10 @@
 				wound_flavor_text["[temp.display_name]"] += "!</span>\n"
 			else if(temp.status & ORGAN_ROBOT)
 				if(!(temp.brute_dam + temp.burn_dam))
-					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] has a robot [temp.display_name]!</span>\n"
+					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a robot [temp.display_name]!</span>\n"
 					continue
 				else
-					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] has a robot [temp.display_name], it has"
+					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a robot [temp.display_name], it has"
 				if(temp.brute_dam)
 					switch(temp.brute_dam)
 						if(0 to 20)
@@ -315,22 +317,22 @@
 						switch(wound_descriptors[wound])
 							if(1)
 								if(!flavor_text.len)
-									flavor_text += "<span class='warning'>[t_He] has[prob(10) && !(wound in no_exclude)  ? " what might be" : ""] a [wound]"
+									flavor_text += "<span class='warning'>[t_He] [t_has][prob(10) && !(wound in no_exclude)  ? " what might be" : ""] a [wound]"
 								else
 									flavor_text += "[prob(10) && !(wound in no_exclude) ? " what might be" : ""] a [wound]"
 							if(2)
 								if(!flavor_text.len)
-									flavor_text += "<span class='warning'>[t_He] has[prob(10) && !(wound in no_exclude) ? " what might be" : ""] a pair of [wound]s"
+									flavor_text += "<span class='warning'>[t_He] [t_has][prob(10) && !(wound in no_exclude) ? " what might be" : ""] a pair of [wound]s"
 								else
 									flavor_text += "[prob(10) && !(wound in no_exclude) ? " what might be" : ""] a pair of [wound]s"
 							if(3 to 5)
 								if(!flavor_text.len)
-									flavor_text += "<span class='warning'>[t_He] has several [wound]s"
+									flavor_text += "<span class='warning'>[t_He] [t_has] several [wound]s"
 								else
 									flavor_text += " several [wound]s"
 							if(6 to INFINITY)
 								if(!flavor_text.len)
-									flavor_text += "<span class='warning'>[t_He] has a bunch of [wound]s"
+									flavor_text += "<span class='warning'>[t_He] [t_has] a bunch of [wound]s"
 								else
 									flavor_text += " a ton of [wound]\s"
 					var/flavor_text_string = ""
@@ -414,7 +416,7 @@
 
 		if(distance <= 3)
 			if(!has_brain())
-				msg += "<font color='blue'><b>[t_He] has had [t_his] brain removed.</b></font>\n"
+				msg += "<font color='blue'><b>[t_He] [t_has] had [t_his] brain removed.</b></font>\n"
 
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 	if(butchering_drops && butchering_drops.len)
