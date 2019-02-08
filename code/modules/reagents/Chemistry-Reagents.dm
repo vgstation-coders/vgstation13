@@ -2288,7 +2288,7 @@
 
 	if(..())
 		return 1
-		
+
 	var/mob/living/carbon/human/H = M
 	if(isplasmaman(H))
 		return 1
@@ -2296,7 +2296,7 @@
 		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2 * REM)
-	
+
 
 /datum/reagent/leporazine
 	name = "Leporazine"
@@ -4635,7 +4635,7 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
-	
+
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
 
     if(ishuman(M))
@@ -6169,15 +6169,16 @@
 	description = "Concentrated honking"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
-	custom_metabolism = 0.01
+	custom_metabolism = 0.05
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
-	if(prob(0.9))
+	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
