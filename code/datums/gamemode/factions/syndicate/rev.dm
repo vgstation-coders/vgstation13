@@ -30,6 +30,14 @@
 		return ADD_REVOLUTIONARY_FAIL_IS_REV
 
 	. = ..()
+	var/datum/role/revolutionary/rev = M.GetRole(REV)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(locate(/datum/dynamic_ruleset/roundstart/revs) in D.executed_rules)
+		rev.Greet(GREET_CONVERTED)
+	else if(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in D.executed_rules)
+		rev.Greet(GREET_REVSQUAD_CONVERTED)
+	else if(locate(/datum/dynamic_ruleset/roundstart/revs) in D.executed_rules)
+		rev.Greet(GREET_PROVOC_CONVERTED)
 	update_faction_icons()
 
 /datum/faction/revolution/forgeObjectives()
@@ -38,6 +46,49 @@
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
 			AppendObjective(A, TRUE) // We will have more than one kill objective
+
+/datum/faction/revolution/OnPostSetup()
+	..()
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in D.executed_rules)
+		//Setup the revheads for revsquad!
+		var/list/turf/revsq_spawn = list()
+
+		for(var/obj/effect/landmark/A in landmarks_list)
+			if(A.name == "RevSq-Spawn")
+				revsq_spawn += get_turf(A)
+				qdel(A)
+				A = null
+				continue
+
+		var/spawnpos = 1
+
+		for(var/datum/role/revolutionary/leader/L in members)
+			if(spawnpos > revsq_spawn.len)
+				spawnpos = 1
+			var/mob/living/carbon/human/RS = L.antag.current
+			RS.forceMove(revsq_spawn[spawnpos])
+
+			equip_revsquad(RS)
+			RS.fully_replace_character_name(null,random_name(RS.gender))
+			spawnpos++
+
+		update_faction_icons()
+
+/datum/faction/revs/AdminPanelEntry()
+	var/list/dat = ..()
+	dat += "<br><h2>Heads of Staff</h2><BR><BR>"
+	var/list/heads = get_living_heads()
+	for(var/datum/mind/head_mind in heads)
+		var/mob/M = head_mind.current
+		if (M)
+			return {"[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+				 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+				 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
+		else
+			return {"[name] [head_mind.name]/[M.key]<b><font color=red> - (DESTROYED)</font></b>
+				 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+				 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2

@@ -116,3 +116,35 @@
 	newWeeaboo.ForgeObjectives()
 	newWeeaboo.AnnounceObjectives()
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//       REVOLUTIONARY PROVOCATEUR          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/provocateur
+	name = "Revolutionary Provocateur"
+	role_category = /datum/role/revolutionary
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 1
+	weight = 2
+	cost = 30
+	requirements = list(101,101,70,40,30,20,10,10,10,10)
+
+
+/datum/dynamic_ruleset/latejoin/provocateur/acceptable(var/population=0,var/threat=0)
+	if (find_active_faction_by_type(/datum/faction/revolution))
+		return FALSE //Never send 2 rev types
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/provocateur/execute()
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/revolutionary/P = new
+	P.AssignToRole(M.mind,1)
+	P.Greet(GREET_LATEJOIN)
+	return 1
