@@ -726,3 +726,21 @@
 		return TRUE
 	else
 		return FALSE
+
+/obj/item/weapon/card/id/vox/extra
+	name = "Spare trader ID"
+	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
+	assignment = "Trader"
+	var canSet = TRUE
+
+/obj/item/weapon/card/id/vox/extra/attack_self(mob/user as mob)
+	if(canSet)
+		var t = reject_bad_name(input(user, "What name would you like to put on this card?", "Trader ID Card Name", ishuman(user) ? user.real_name : user.name))
+		if(!t) //Same as mob/new_player/prefrences.dm
+			alert("Invalid name.")
+			return
+		src.registered_name = t
+		canSet = FALSE
+		name = "[t]'s ID card ([assignment])"
+	else
+		return
