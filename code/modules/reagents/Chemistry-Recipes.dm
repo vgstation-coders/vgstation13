@@ -2884,7 +2884,7 @@
 	name = "Honk Serum"
 	id = HONKSERUM
 	result = HONKSERUM
-	required_reagents = list(BANANA = 1, ETHYLREDOXRAZINE = 1, ALKYSINE = 1)
+	required_reagents = list(BANANA = 1, INACUSIATE = 1, ALKYSINE = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/silencer
