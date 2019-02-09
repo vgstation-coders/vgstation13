@@ -878,8 +878,3 @@ var/list/uplink_items = list()
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Chaplain")
-
-/datum/uplink_item/jobspecific/traitor_bible/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	U.uses -= max(cost, 0)
-	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc) //Fix for amount ref
