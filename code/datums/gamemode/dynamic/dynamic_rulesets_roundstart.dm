@@ -348,15 +348,15 @@
 	var/required_heads = 3
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
+	if (forced)
+		required_heads = 1
+		required_candidates = 1
 	if (!..())
 		return FALSE
 	var/head_check = 0
 	for (var/mob/new_player/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
-	if (forced)
-		required_heads = 1
-		required_candidates = 1
 	return (head_check >= required_heads)
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/execute()

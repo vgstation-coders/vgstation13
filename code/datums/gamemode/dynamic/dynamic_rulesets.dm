@@ -158,7 +158,7 @@
 			continue
 
 /datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
-	if (mode && mode.state <  GAME_STATE_PLAYING)
+	if (ticker && ticker.current_state <  GAME_STATE_PLAYING)
 		return ..() // If the game didn't start, we'll use the parent's method to see if we have enough people desiring the role & what not.
 	var/role_id = initial(role_category.id)
 	for(var/mob/living/carbon/human/P in candidates)
