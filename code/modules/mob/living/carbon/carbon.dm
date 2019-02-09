@@ -636,7 +636,7 @@
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
 	if(!istype(loc, /turf/space))
-		for(var/obj/item/I in get_clothing_items())
+		for(var/obj/item/I in get_all_slots())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
