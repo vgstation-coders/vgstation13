@@ -1330,6 +1330,8 @@
 	set src = usr.loc
 	set popup_menu = 0
 
+	if(usr != occupant)
+		return
 	src.go_out()
 	add_fingerprint(usr)
 	return
@@ -1789,7 +1791,7 @@
 	if(href_list["eject"])
 		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
 			return
-		eject()
+		go_out()
 	if(href_list["toggle_lights"])
 		if(usr != src.occupant)
 			return
