@@ -32,7 +32,7 @@
 	..()
 
 /obj/mecha/working/clarke/check_for_support()
-	if(cell.use(20))
+	if(cell?.use(20))
 		return 1
 	return ..()
 
