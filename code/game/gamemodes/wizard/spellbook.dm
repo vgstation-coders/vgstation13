@@ -859,6 +859,17 @@
 	spawn()
 		pie.throw_at(user, get_dist(pie,user),rand(40,90))
 
+/obj/item/weapon/spellbook/oneuse/ice_barrage
+	spell = /spell/targeted/ice_barrage
+	spellname = "Ice Barrage"
+	desc = "Cold to the touch."
+	icon_state = "bookAncient"
+
+/obj/item/weapon/spellbook/oneuse/ice_barrage/recoil(mob/living/carbon/user)
+	..()
+	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
+	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
+
 
 ///// ANCIENT SPELLBOOK /////
 
