@@ -380,6 +380,7 @@
 	"Atlas Shrugged", "The Serenity of the Black Wood", "The World Does Not Weep")
 
 /obj/item/weapon/book/occult/New()
+	..()
 	name = pick(possible_names)
 	title = name
 	icon_state = "book[rand(1, 9)]"
