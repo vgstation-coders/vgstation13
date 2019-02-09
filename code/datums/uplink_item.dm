@@ -878,3 +878,11 @@ var/list/uplink_items = list()
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Chaplain")
+
+/datum/uplink_item/jobspecific/occultbook
+	name = "Occult Book"
+	desc = "A reproduction of a forbidden and occult book. Causes brain damage, eye damage and hallucations to anyone unfortunate enough to attempt to read it. Use a pen to change its title."
+	item = /obj/item/weapon/book/occult
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Librarian", "Chaplain")
