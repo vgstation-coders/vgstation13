@@ -220,6 +220,8 @@
 
 #define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
+#define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
+
 //Macros for roles/antags
 #define isfaction(A) (istype(A, /datum/faction))
 

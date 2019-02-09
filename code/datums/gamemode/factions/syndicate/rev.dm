@@ -59,12 +59,6 @@
 	if (incapacitated_heads >= total_heads.len)
 		return end(ALL_HEADS_DEAD)
 
-	// -- 3. Are all the revs deads ?
-	for (var/datum/role/R in members)
-		if (R.antag && R.antag.current && !(R.antag.current.isDead() || R.antag.current.z != map.zMainStation))
-			return FALSE
-
-	return end(ALL_REVS_DEAD)
 
 // Called on arrivals and emergency shuttle departure.
 /hook_handler/revs
