@@ -566,7 +566,8 @@
 						else
 							holomap_datum.cursor.pixel_x = (T.x-8)*PIXEL_MULTIPLIER
 							holomap_datum.cursor.pixel_y = (T.y-8)*PIXEL_MULTIPLIER
-						personnal_I.overlays += holomap_datum.cursor
+						if (T.z == STATION_Z)
+							personnal_I.overlays += holomap_datum.cursor
 						watcher_maps["\ref[user]"] = personnal_I
 					var/image/I = watcher_maps["\ref[user]"]
 					I.loc = user.hud_used.holomap_obj
