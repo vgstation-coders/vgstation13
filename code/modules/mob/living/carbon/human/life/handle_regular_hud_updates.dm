@@ -298,6 +298,10 @@
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
+		if(has_reagent_in_blood(INCENSE_MOONFLOWERS))
+			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
+		else
+			clear_fullscreen("high_red")
 
 		var/masked = 0
 

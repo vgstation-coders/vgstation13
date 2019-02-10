@@ -142,6 +142,11 @@
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "druggy"
 
+/obj/abstract/screen/fullscreen/high/red
+	color = "red"
+	alpha = 150
+	blend_mode = 4
+
 /obj/abstract/screen/fullscreen/conversion_border
 	icon_state = "conversionoverlay"
 	layer = HALLUCINATION_LAYER

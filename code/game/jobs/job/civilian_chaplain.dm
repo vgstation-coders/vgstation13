@@ -26,14 +26,18 @@
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 	H.add_language("Spooky") //SPOOK
 	H.equip_or_collect(new /obj/item/clothing/under/rank/chaplain(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/weapon/nullrod(H.back), slot_l_store)//each chaplain bring their own
 	//H.equip_or_collect(new /obj/item/device/pda/chaplain(H), slot_belt)
 	H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
+
 	if(H.backbag == 1)
 		H.put_in_hands(new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
-	var/obj/item/weapon/storage/bible/B // Initialised here because we might need it eslewhere
+	H.put_in_hands(new /obj/item/weapon/thurible(H))
+
+	var/obj/item/weapon/storage/bible/B // Initialised here because we might need it elsewhere
 
 	spawn(0) //We are done giving earthly belongings, now let's move on to spiritual matters
 		var/new_religion = sanitize(stripped_input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please put your ID in your ID slot to prevent errors)", "Name of Religion", chap_religion.name), 1, MAX_NAME_LEN)
@@ -52,6 +56,7 @@
 					B.name = rel.bible_name
 					B.my_rel = rel
 					rel.holy_book = B
+					H.equip_or_collect(new rel.preferred_incense(H.back), slot_in_backpack)
 					H.put_in_hands(B)
 					rel.religiousLeader = H.mind
 					J = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)

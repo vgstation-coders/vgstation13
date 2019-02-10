@@ -392,18 +392,17 @@
 		check_vampire_upgrade()
 
 /datum/role/vampire/handle_reagent(var/reagent_id)
-	switch (reagent_id)
-		if (HOLYWATER)
-			var/mob/living/carbon/human/H = antag.current
-			if (!istype(H))
-				return
-			if(VAMP_MATURE in powers)
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
-				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
-				smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
-			else
-				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
-				smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
+	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
+		var/mob/living/carbon/human/H = antag.current
+		if (!istype(H))
+			return
+		if(VAMP_MATURE in powers)
+			to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
+			H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
+			smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
+		else
+			to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
+			smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 
 /*
 	Commented out for now.

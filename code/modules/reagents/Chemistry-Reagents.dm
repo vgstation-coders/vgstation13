@@ -7092,3 +7092,74 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 111.75 //our ingredients are extremely dense, especially carppheromones
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin
+
+
+//////////////////////
+//					//
+//      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//					//
+//////////////////////
+/datum/reagent/incense
+	reagent_state = REAGENT_STATE_GAS
+	density = 3.214
+	specheatcap = 1.34
+	color = "#E0D3D3" //rgb: 224, 211, 211
+
+
+/datum/reagent/incense/harebells//similar effects as holy water to cultists and vampires
+	name = "Holy Incense"
+	id = INCENSE_HAREBELLS
+	description = "An incense used in holy rituals. Can be used to impede the occult."
+
+/datum/reagent/incense/poppies//similar effects as chill wax and paracetamol
+	name = "Opium Incense"
+	id = INCENSE_POPPIES
+	description = "A pleasing fragrance that soothes the nerves and removes pain."
+	pain_resistance = 60
+
+/datum/reagent/incense/poppies/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(C.pain_level < BASE_CARBON_PAIN_RESIST)
+			C.pain_shock_stage--
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.druggy = max(H.druggy, 5)
+			H.Dizzy(2)
+			if(prob(5))
+				H.emote(pick("stare", "giggle"))
+			if(prob(5))
+				to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
+			if(prob(2))
+				to_chat(H, "<span class='notice'>You doze off for a second.</span>")
+				H.sleeping += 1
+
+/datum/reagent/incense/sunflowers//flavor text, does nothing
+	name = "Incense"
+	id = INCENSE_SUNFLOWERS
+	description = "While it smells really nice, incense is known to increase the risk of lung cancer."
+
+/datum/reagent/incense/moonflowers//Basically mindbreaker
+	name = "Hallucinogenic Incense"
+	id = INCENSE_MOONFLOWERS
+	description = "This frangrance is so unsettling that it makes you question reality."
+
+/datum/reagent/incense/moonflowers/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if (M.hallucination < 22)
+		M.hallucination += 10
+
+/datum/reagent/incense/novaflowers//Converts itself to hyperzine, but makes you hungry
+	name = "Hyperactivity Incense"
+	id = INCENSE_NOVAFLOWERS
+	description = "This frangrance helps you focus and pull into your energy reserves to move quickly."
+
+/datum/reagent/incense/novaflowers/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(holder.get_reagent_amount(HYPERZINE) < 2)
+		holder.add_reagent(HYPERZINE, 0.5)
+	M.nutrition--
