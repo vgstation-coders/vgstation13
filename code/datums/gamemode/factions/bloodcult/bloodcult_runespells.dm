@@ -165,6 +165,12 @@
 	if (progbar)
 		progbar.loc = null
 
+	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
+		holomarker.id = HOLOMAP_MARKER_CULT_RUNE
+		holomarker.color = null
+		holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"] = holomarker
+
 	if (spell_holder.icon_state == "temp")
 		qdel(spell_holder)
 	else
@@ -2056,6 +2062,12 @@ var/list/blind_victims = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
 
+	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
+		holomarker.id = HOLOMAP_MARKER_CULT_ENTRANCE
+		holomarker.color = W.color
+		holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"] = holomarker
+
 	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
 
 /datum/rune_spell/portalentrance/midcast(var/mob/add_cultist)
@@ -2161,6 +2173,12 @@ var/list/bloodcult_exitportals = list()
 	spell_holder.icon = initial(spell_holder.icon)
 
 	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
+
+	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
+		holomarker.id = HOLOMAP_MARKER_CULT_EXIT
+		holomarker.color = W.color
+		holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"] = holomarker
 
 	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
 

@@ -1526,6 +1526,12 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
 #define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
 #define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
+#define HOLOMAP_MARKER_CULT_FORGE		"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
 
 #define DEFAULT_BLOOD "#A10808"

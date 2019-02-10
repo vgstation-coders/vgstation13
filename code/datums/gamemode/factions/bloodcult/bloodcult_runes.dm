@@ -47,6 +47,14 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	rune_list.Add(src)
 
+	var/datum/holomap_marker/holomarker = new()
+	holomarker.id = HOLOMAP_MARKER_CULT_RUNE
+	holomarker.filter = HOLOMAP_FILTER_CULT
+	holomarker.x = src.x
+	holomarker.y = src.y
+	holomarker.z = src.z
+	holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"] = holomarker
+
 /obj/effect/rune/Destroy()
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if (AI.client)
@@ -67,6 +75,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		active_spell = null
 
 	rune_list.Remove(src)
+
+	holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"
 	..()
 
 /obj/effect/rune/examine(var/mob/user)
@@ -459,7 +469,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 /obj/effect/rune/proc/fizzle(var/mob/living/user)
 	var/silent = user.checkTattoo(TATTOO_SILENT)
 	if (!silent)
-		user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
+		user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP","I'F ON'Y I 'AD 'TAB' E"))
 	one_pulse()
 	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
