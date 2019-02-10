@@ -78,7 +78,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/watchdog_force_restart,	/*forces restart using watchdog feature*/
 	/client/proc/manage_religions,
 	/client/proc/set_veil_thickness,
-	/client/proc/credits_panel			/*allows you to customize the roundend credits before they happen*/
+	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
+	/client/proc/persistence_panel			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -1218,4 +1219,12 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.CreditsPanel()
 	feedback_add_details("admin_verb","CP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/persistence_panel()
+	set name = "Persistence Panel"
+	set category = "Admin"
+	if(holder)
+		holder.PersistencePanel()
+	feedback_add_details("admin_verb","PEP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

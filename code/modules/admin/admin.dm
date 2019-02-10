@@ -1557,3 +1557,19 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
 
 	usr << browse(dat, "window=creditspanel;size=600x800")
+
+/datum/admins/proc/PersistencePanel()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>Persistence Panel</B></center><hr>"
+
+	for(var/index in SSpersistence_map.subdatums)
+		var/datum/map_persistence_type/T = SSpersistence_map.subdatums[index]
+		if(!istype(T))
+			continue
+		dat += "<b>[T.name]</b>: [T.tracking.len] entries - <A href='?src=\ref[src];persistencedatum=\ref[T];persistenceaction=qdelall'>(DELETE ALL)</A><br>"
+		dat += "[T.saving ? "Will save at the end of the round." : "Will not save."] <A href='?src=\ref[src];persistencedatum=\ref[T];persistenceaction=togglesaving'>(Toggle)</A><br>"
+		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
+
+	usr << browse(dat, "window=persistencepanel;size=500x600")

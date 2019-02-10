@@ -4913,6 +4913,17 @@
 
 		CreditsPanel() //refresh!
 
+	if(href_list["persistencedatum"])
+		var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
+
+		switch(href_list["persistenceaction"])
+			if("qdelall")
+				T.qdelAllTrackedItems()
+			if("togglesaving")
+				T.toggleSavingThisRound()
+
+		PersistencePanel() //refresh!
+
 
 	// ----- Religion and stuff
 	if (href_list["religions"])
