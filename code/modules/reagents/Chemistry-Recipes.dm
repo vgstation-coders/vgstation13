@@ -2880,6 +2880,13 @@
 	required_reagents = list(BANANA = 1, CREAM = 1, SUGAR = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/honkserum
+	name = "Honk Serum"
+	id = HONKSERUM
+	result = HONKSERUM
+	required_reagents = list(BANANA = 1, INACUSIATE = 1, ALKYSINE = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/silencer
 	name = "Silencer"
 	id = SILENCER
