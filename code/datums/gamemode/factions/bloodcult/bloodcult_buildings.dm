@@ -227,7 +227,7 @@
 	holomap_markers[HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"] = holomarker
 
 	holomap_datum = new /datum/station_holomap/cult()
-	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar")
+	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
 
 
 /obj/structure/cult/altar/Destroy()
