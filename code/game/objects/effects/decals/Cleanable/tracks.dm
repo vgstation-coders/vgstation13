@@ -34,9 +34,15 @@
 	var/dirs=0
 	icon = 'icons/effects/fluidtracks.dmi'
 	icon_state = ""
+	persistence_type = SS_TRACKS
 	var/coming_state="blood1"
 	var/going_state="blood2"
 	var/updatedtracks=0
+
+	//This is a list containing a set of instructions to recreate these footprints from scratch.
+	//Each step is a list of 3 variables, representing comingdir, goingdir, and bloodcolor.
+	//It is populated every time we use AddTracks().
+	var/list/steps_to_remake = list()
 
 	var/list/setdirs=list(
 		"1"=0,
@@ -74,7 +80,23 @@
 		"128"=0
 	)
 
+/obj/effect/decal/cleanable/blood/tracks/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/list/steps_to_remake)
+	if(steps_to_remake && steps_to_remake.len)
+		for(var/list/comingdir_goingdir_and_bloodcolor_in_that_order in steps_to_remake)
+			if(!comingdir_goingdir_and_bloodcolor_in_that_order || comingdir_goingdir_and_bloodcolor_in_that_order.len != 3)
+				log_debug("Footprint with bad steps to remake! [list2params(args)]")
+				qdel(src)
+				return
+			AddTracks(null, comingdir_goingdir_and_bloodcolor_in_that_order[1], comingdir_goingdir_and_bloodcolor_in_that_order[2], adjust_brightness(comingdir_goingdir_and_bloodcolor_in_that_order[3], -90/age))
+	..()
+
+/obj/effect/decal/cleanable/blood/tracks/atom2mapsave()
+	. = ..()
+	.["steps_to_remake"] = steps_to_remake
+
 /obj/effect/decal/cleanable/blood/tracks/proc/AddTracks(var/list/DNA, var/comingdir, var/goingdir, var/bloodcolor=DEFAULT_BLOOD)
+	steps_to_remake += list(list(comingdir, goingdir, bloodcolor)) //list in list because DM eats one list
+
 	var/updated=0
 	// Shift our goingdir 4 spaces to the left so it's in the GOING bitblock.
 	var/realgoing=goingdir<<4
@@ -214,4 +236,3 @@
 	gender = PLURAL
 	random_icon_states = null
 	amount = 0
-

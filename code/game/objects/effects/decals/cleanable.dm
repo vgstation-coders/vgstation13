@@ -17,11 +17,64 @@
 
 	var/on_wall = 0 //Wall on which this decal is placed on
 
-/obj/effect/decal/cleanable/New()
-	if(random_icon_states && length(src.random_icon_states) > 0)
+	var/persistence_type = SS_CLEANABLE
+	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
+	var/persistent_type_replacement //If defined, the persistent item generated from this will be of this type rather than our own.
+	/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+		..(loc)
+		if(age)
+			setPersistenceAge(age)
+		if(icon_state)
+			src.icon_state = icon_state
+		if(color)
+			src.color = color
+		if(dir)
+			src.dir = dir
+		if(pixel_x)
+			src.pixel_x = pixel_x
+		if(pixel_y)
+			src.pixel_y = pixel_y
+
+/obj/effect/decal/cleanable/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+	if(age)
+		setPersistenceAge(age)
+	if(icon_state)
+		src.icon_state = icon_state
+	else if(random_icon_states && length(src.random_icon_states) > 0)
 		src.icon_state = pick(src.random_icon_states)
+	if(color)
+		src.color = color
+	if(dir)
+		src.dir = dir
+	if(pixel_x)
+		src.pixel_x = pixel_x
+	if(pixel_y)
+		src.pixel_y = pixel_y
+
+	if(ticker)
+		initialize()
+
+	..(loc)
+
+/obj/effect/decal/cleanable/initialize()
+	..()
+	if(persistence_type)
+		SSpersistence_map.track(src, persistence_type)
+
+/obj/effect/decal/cleanable/Destroy()
+	if(persistence_type)
+		SSpersistence_map.forget(src, SS_CLEANABLE)
 	..()
 
+/obj/effect/decal/cleanable/getPersistenceAge()
+	return age
+/obj/effect/decal/cleanable/setPersistenceAge(nu)
+	age = nu
+
+/obj/effect/decal/cleanable/atom2mapsave()
+	. = ..()
+	if(persistent_type_replacement)
+		.["type"] = persistent_type_replacement
 
 /obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O,/obj/item/weapon/mop))
@@ -45,8 +98,8 @@
 				legacy_cult.bloody_floors -= T
 	..()
 
-/obj/effect/decal/cleanable/proc/dry()
-	name = "dried [src.name]"
+/obj/effect/decal/cleanable/proc/dry(var/drying_age)
+	name = "dried [initial(src.name)]"
 	desc = "It's dry and crusty. Someone is not doing their job."
 	color = adjust_brightness(color, -50)
 	amount = 0

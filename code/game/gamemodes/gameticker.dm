@@ -442,6 +442,8 @@ var/datum/controller/gameticker/ticker
 
 			end_credits.on_round_end()
 
+			SSpersistence_map.onRoundEnd() //write those map files, now!
+
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
