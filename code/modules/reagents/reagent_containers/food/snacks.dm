@@ -4420,7 +4420,7 @@
 	reagents.add_reagent(HYPERZINE,1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/HasProximity(atom/movable/AM as mob|obj)
-	if(!jump_cd)
+	if(!jump_cd && isliving(AM))
 		jump()
 	return ..()
 
