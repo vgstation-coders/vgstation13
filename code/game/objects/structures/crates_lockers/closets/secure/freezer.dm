@@ -119,7 +119,8 @@
 	return list(
 		/obj/item/weapon/reagent_containers/food/drinks/milk = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/soymilk = 5,
-		/obj/item/weapon/storage/fancy/egg_box = 2
+		/obj/item/weapon/storage/fancy/egg_box = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/mint = 1
 	)
 
 
