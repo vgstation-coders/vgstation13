@@ -264,6 +264,18 @@
 	other_amounts=list(5,10,20)
 	result=/obj/item/stack/tile/arcade
 
+/datum/biogen_recipe/leather/secbelt
+	cost=400
+	id="secbelt"
+	name="Security Belt"
+	result=/obj/item/weapon/storage/belt/security
+
+/datum/biogen_recipe/leather/bandolier
+	cost = 300
+	id="bandolier"
+	name = "Bandolier"
+	result=/obj/item/clothing/accessory/storage/bandolier
+
 /obj/machinery/biogenerator
 	name = "Biogenerator"
 	desc = ""
