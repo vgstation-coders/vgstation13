@@ -35,6 +35,7 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
+	max_combined_w_class = 21
 	can_only_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
 	slot_flags = SLOT_BELT | SLOT_OCLOTHING
@@ -43,11 +44,16 @@
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
 		icon_state = "trashbag0"
+		slowdown = 1
 	else if(contents.len < 12)
 		icon_state = "trashbag1"
+		slowdown = 1.4
 	else if(contents.len < 21)
 		icon_state = "trashbag2"
-	else icon_state = "trashbag3"
+		slowdown = 1.6
+	else
+		icon_state = "trashbag3"
+		slowdown = 1.8
 
 
 // -----------------------------
