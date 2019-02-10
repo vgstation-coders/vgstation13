@@ -132,7 +132,7 @@
 				anim(target = location, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
 				if (location.zone)//is there a simulated atmosphere where we are?
 					var/list/potential_breathers = list()
-					for(var/turf/simulated/T in location.zone)//are they in that same atmospheric zone?
+					for(var/turf/simulated/T in location.zone.contents)//are they in that same atmospheric zone?
 						for (var/mob/living/carbon/C in T)
 							if (get_dist(location, C) <= 7)//are they relatively close?
 								if (!ishuman(C))
