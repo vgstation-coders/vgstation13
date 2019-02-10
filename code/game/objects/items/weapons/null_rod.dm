@@ -71,7 +71,7 @@
 			to_chat(M, "<span class='warning'>\The [src]'s intense field is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
 	*/
 
-	..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
+	. = ..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
 
 /obj/item/weapon/nullrod/afterattack(var/atom/A, var/mob/user, var/prox_flag, var/params)
 	if(!prox_flag)

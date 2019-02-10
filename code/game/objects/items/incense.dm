@@ -98,6 +98,8 @@
 
 /obj/item/incense_stick/proc/exting()
 	lit = FALSE
+	damtype = BRUTE
+	attack_verb = unlit_attack_verb
 	update_icon()
 	set_light(0)
 	if (istype(loc,/obj/item/weapon/thurible))
@@ -109,6 +111,8 @@
 		return
 	flammable = FALSE
 	lit = TRUE
+	damtype = BURN
+	attack_verb = lit_attack_verb
 	update_icon()
 	set_light(1)
 	if (istype(loc,/obj/item/weapon/thurible))
@@ -128,18 +132,18 @@
 				anim(target = location, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
 				if (location.zone)//is there a simulated atmosphere where we are?
 					var/list/potential_breathers = list()
-					for(var/turf/simulated/T in location.zone.contents)//are they in that same atmospheric zone?
-						for (var/mob/living/carbon/C in T.contents)
+					for(var/turf/simulated/T in location.zone)//are they in that same atmospheric zone?
+						for (var/mob/living/carbon/C in T)
 							if (get_dist(location, C) <= 7)//are they relatively close?
 								if (!ishuman(C))
-									potential_breathers |= C
+									potential_breathers += C
 								else
 									var/mob/living/carbon/human/H = C
 									if(H.species && H.species.flags & NO_BREATHE)//can they breath?
 										continue
 									if(H.internal)//are their internals off?
 										continue
-									potential_breathers |= C
+									potential_breathers += C
 
 					for (var/mob/living/carbon/C in potential_breathers)
 						C.reagents.add_reagent(fragrance,0.5)
@@ -164,13 +168,9 @@
 	if (lit)
 		icon_state = "incensestick_[length]_lit"
 		item_state = "incensestick_lit"
-		damtype = BURN
-		attack_verb = lit_attack_verb
 	else
 		icon_state = "incensestick_[length]"
 		item_state = "incensestick"
-		damtype = BRUTE
-		attack_verb = unlit_attack_verb
 
 	if(ismob(loc))
 		var/mob/M = loc
@@ -334,6 +334,14 @@
 	vending_cat = "incense material"
 	var/obj/item/incense_stick/incense = null
 
+
+/obj/item/weapon/thurible/Destroy()
+	if (incense)
+		qdel(incense)
+		incense = null
+	..()
+
+
 /obj/item/weapon/thurible/update_icon()
 	if (incense && incense.lit)
 		icon_state = "thurible_lit"
@@ -360,7 +368,7 @@
 		var/mob/living/simple_animal/SA = M
 		if (SA.mob_property_flags & MOB_UNDEAD)
 			force = 50
-	..()
+	. = ..()
 	force = 10
 
 /obj/item/weapon/thurible/pickup(var/mob/living/user)
