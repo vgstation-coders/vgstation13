@@ -1,5 +1,5 @@
 /datum/role/cultist
-	id = CULTIST
+	id = ROLE_CULTIST
 	name = "Cultist"
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
