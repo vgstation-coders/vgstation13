@@ -29,22 +29,28 @@
 	var/flammable = TRUE
 
 	var/fragrance = INCENSE_HAREBELLS
+	var/adjective = "holy"
 	var/list/breathed_at_least_once = list()
 
 /obj/item/incense_stick/harebells
 	fragrance = INCENSE_HAREBELLS
+	adjective = "holy"
 
 /obj/item/incense_stick/poppies
 	fragrance = INCENSE_POPPIES
+	adjective = "calming"
 
 /obj/item/incense_stick/sunflowers
 	fragrance = INCENSE_SUNFLOWERS
+	adjective = "pleasant"
 
 /obj/item/incense_stick/moonflowers
 	fragrance = INCENSE_MOONFLOWERS
+	adjective = "disturbing"
 
 /obj/item/incense_stick/novaflowers
 	fragrance = INCENSE_NOVAFLOWERS
+	adjective = "stimulating"
 
 /obj/item/incense_stick/examine(mob/user)
 
@@ -136,32 +142,11 @@
 									potential_breathers |= C
 
 					for (var/mob/living/carbon/C in potential_breathers)
-						switch (fragrance)
-							if (INCENSE_HAREBELLS)
-								C.reagents.add_reagent(INCENSE_HAREBELLS,0.5)
-								if (!(C in breathed_at_least_once))
-									breathed_at_least_once += C
-									to_chat(C,"An holy fragrance fills the air.[(iscultist(C)||isvampire(C))? "..<span class='danger'>and gives you a splitting headache!</span>" : ""]")
-							if (INCENSE_POPPIES)
-								C.reagents.add_reagent(INCENSE_POPPIES,0.5)
-								if (!(C in breathed_at_least_once))
-									breathed_at_least_once += C
-									to_chat(C,"A calming fragrance fills the air.")
-							if (INCENSE_SUNFLOWERS)
-								C.reagents.add_reagent(INCENSE_SUNFLOWERS,0.5)
-								if (!(C in breathed_at_least_once))
-									breathed_at_least_once += C
-									to_chat(C,"A pleasant fragrance fills the air.")
-							if (INCENSE_MOONFLOWERS)
-								C.reagents.add_reagent(INCENSE_MOONFLOWERS,0.5)
-								if (!(C in breathed_at_least_once))
-									breathed_at_least_once += C
-									to_chat(C,"<span class='warning'>A disturbing fragrance fills the air.</span>")
-							if (INCENSE_NOVAFLOWERS)
-								C.reagents.add_reagent(INCENSE_NOVAFLOWERS,0.5)
-								if (!(C in breathed_at_least_once))
-									breathed_at_least_once += C
-									to_chat(C,"<span class='notice'>A stimulating fragrance fills the air.</span>")
+						C.reagents.add_reagent(fragrance,0.5)
+						if (!(C in breathed_at_least_once))
+							breathed_at_least_once += C
+							to_chat(C,"\A [adjective] fragrance fills the air.[((fragrance == INCENSE_HAREBELLS)&&(iscultist(C)||isvampire(C))) ? "..<span class='danger'>and gives you a splitting headache!</span>" : ""]")
+
 		update_icon()
 		if (combustible <= 0)
 			exting()

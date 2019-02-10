@@ -7116,6 +7116,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = INCENSE_POPPIES
 	description = "A pleasing fragrance that soothes the nerves and removes pain."
 	pain_resistance = 60
+	custom_metabolism = 0.15
 
 /datum/reagent/incense/poppies/on_mob_life(var/mob/living/M)
 	if(..())
@@ -7145,6 +7146,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Hallucinogenic Incense"
 	id = INCENSE_MOONFLOWERS
 	description = "This frangrance is so unsettling that it makes you question reality."
+	custom_metabolism = 0.15
 
 /datum/reagent/incense/moonflowers/on_mob_life(var/mob/living/M)
 	if(..())
@@ -7156,6 +7158,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Hyperactivity Incense"
 	id = INCENSE_NOVAFLOWERS
 	description = "This frangrance helps you focus and pull into your energy reserves to move quickly."
+	custom_metabolism = 0.15
 
 /datum/reagent/incense/novaflowers/on_mob_life(var/mob/living/M)
 	if(..())
