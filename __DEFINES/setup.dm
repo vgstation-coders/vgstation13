@@ -1529,6 +1529,7 @@ var/proccalls = 1
 
 
 #define DEFAULT_BLOOD "#A10808"
+#define DEFAULT_FLESH "#FFC896"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
