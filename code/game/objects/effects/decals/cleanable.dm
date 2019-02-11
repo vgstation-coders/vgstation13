@@ -74,7 +74,7 @@
 
 /obj/effect/decal/cleanable/Destroy()
 	if(persistence_type)
-		SSpersistence_map.forget(src, SS_CLEANABLE)
+		SSpersistence_map.forget(src, persistence_type)
 	..()
 
 /obj/effect/decal/cleanable/getPersistenceAge()
