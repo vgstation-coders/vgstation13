@@ -87,7 +87,7 @@
 				log_debug("Footprint with bad steps to remake! [list2params(args)]")
 				qdel(src)
 				return
-			AddTracks(null, comingdir_goingdir_and_bloodcolor_in_that_order[1], comingdir_goingdir_and_bloodcolor_in_that_order[2], adjust_brightness(comingdir_goingdir_and_bloodcolor_in_that_order[3], -90/age))
+			AddTracks(null, comingdir_goingdir_and_bloodcolor_in_that_order[1], comingdir_goingdir_and_bloodcolor_in_that_order[2], adjust_brightness(comingdir_goingdir_and_bloodcolor_in_that_order[3], -90/(age*1.5)))
 	..()
 
 /obj/effect/decal/cleanable/blood/tracks/atom2mapsave()

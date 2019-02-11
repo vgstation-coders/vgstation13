@@ -70,6 +70,8 @@
 	return age
 /obj/effect/decal/cleanable/setPersistenceAge(nu)
 	age = nu
+	if(nu > 1)
+		counts_as_blood = FALSE
 
 /obj/effect/decal/cleanable/atom2mapsave()
 	. = ..()
@@ -99,7 +101,7 @@
 	..()
 
 /obj/effect/decal/cleanable/proc/dry(var/drying_age)
-	name = "dried [initial(src.name)]"
+	name = "dried [replacetext(initial(src.name), "wet ", "")]"
 	desc = "It's dry and crusty. Someone is not doing their job."
 	color = adjust_brightness(color, -50)
 	amount = 0

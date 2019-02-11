@@ -50,7 +50,7 @@ var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood/atom2mapsave()
 	. = ..()
-	.["basecolor"] = adjust_brightness(basecolor, -90/age)
+	.["basecolor"] = adjust_brightness(basecolor, -90/(age*2))
 
 /obj/effect/decal/cleanable/blood/setPersistenceAge(var/nu)
 	. = ..()
@@ -65,11 +65,11 @@ var/global/list/blood_list = list()
 			desc = "This looks like it's been sitting there a good while."
 		if(4)
 			alpha = 220
-			name = "old [initial(src.name)]"
+			name = "old [replacetext(initial(src.name), "wet ", "")]"
 			desc = "It's dry, dark, flakey, and crackled throughout. Perhaps it's the chef's cooking?"
 		if(5)
 			alpha = 200
-			name = "crusty old [initial(src.name)]"
+			name = "crusty old [replacetext(initial(src.name), "wet ", "")]"
 			desc = "Probably too late to put it back in."
 	update_icon()
 
