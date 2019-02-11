@@ -216,6 +216,7 @@
 	storage_slots = 21 //3 rows of 7 items
 	max_combined_w_class = 21
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_PAPER
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
 	can_only_hold = list("/obj/item/weapon/match", "/obj/item/weapon/p_folded/note_small", "/obj/item/weapon/coin", \
@@ -253,10 +254,20 @@
 
 /obj/item/weapon/storage/fancy/matchbox/attackby(obj/item/weapon/match/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/match) && !W.lit)
-		W.lit = 1
-		W.update_brightness()
+		W.light()
 		return
 	return ..()
+
+/obj/item/weapon/storage/fancy/matchbox/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	. = ..()
+	if(.)
+		if(W.is_hot() >= src.autoignition_temperature)
+			ignite(W.is_hot())
+
+/obj/item/weapon/storage/fancy/matchbox/ignite(temperature)
+	for(var/obj/item/weapon/match/ohno in src)
+		ohno.light()
+	. = ..()
 
 /obj/item/weapon/storage/fancy/matchbox/strike_anywhere
 	name = "strike-anywhere matchbox"
