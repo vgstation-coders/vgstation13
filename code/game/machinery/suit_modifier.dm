@@ -19,8 +19,14 @@
 
 	var/list/modules_to_install = list()
 	var/obj/item/weapon/cell/cell = null
+	var/image/suit_overlay
 	idle_power_usage = 50
 	active_power_usage = 300
+
+/obj/machinery/suit_modifier/New()
+	..()
+	suit_overlay = image('icons/obj/stationobjs.dmi')
+	suit_overlay.plane = ABOVE_HUMAN_PLANE
 
 /obj/machinery/suit_modifier/examine(mob/user)
 	..()
@@ -60,37 +66,43 @@
 			process_module_installation(H)
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
-	var/image/overlay = image(icon, src, null)
-	overlay.plane = ABOVE_HUMAN_PLANE
-	overlays += overlay
-	flick("suitmodifier_activate", overlay)
+	suit_overlay.icon_state = "suitmodifier_activate"
+	overlays.Add(suit_overlay)
 	use_power = 2
-	spawn(12) //Length of above animation
-		overlay.icon_state = "suitmodifier_working"
-		var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
-		if(H.head && istype(H.head, R.head_type))
-			R.toggle_helmet(H)
-		var/list/modules_to_activate = list()
-		for(var/obj/item/rig_module/RM in modules_to_install)
-			if(locate(RM.type) in R.modules) //One already installed
-				continue
-			if(do_after(H, src, 5 SECONDS, needhand = FALSE))
-				say("Module installed.", class = "binaryradio")
-				R.modules.Add(RM)
-				modules_to_install.Remove(RM)
-				modules_to_activate.Add(RM)
-				RM.forceMove(R)
-		flick("suitmodifier_close", overlay)
-		if(cell && R.cell.charge < cell.charge)
-			R.cell.forceMove(get_turf(src))
-			cell.forceMove(R)
-			R.cell = cell
-			cell = null
-		playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
-		new /obj/effect/effect/smoke(get_turf(src))
-		unlock_atom(H)
-		overlay.icon_state = null
-		overlays.Cut()
-		qdel(overlay)
+	sleep(12)
+	overlays.Remove(suit_overlay)
+	suit_overlay.icon_state = "suitmodifier_working"
+	overlays.Add(suit_overlay)
+	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	if(H.head && istype(H.head, R.head_type))
 		R.toggle_helmet(H)
-		use_power = 1
+	var/list/modules_to_activate = list()
+	for(var/obj/item/rig_module/RM in modules_to_install)
+		if(locate(RM.type) in R.modules) //One already installed
+			continue
+		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
+			say("Module installed to \the [R].", class = "binaryradio")
+			R.modules.Add(RM)
+			modules_to_install.Remove(RM)
+			modules_to_activate.Add(RM)
+			RM.forceMove(R)
+	overlays.Remove(suit_overlay)
+	suit_overlay.icon_state = "suitmodifier_close"
+	overlays.Add(suit_overlay)
+	sleep(27)
+	overlays.Remove(suit_overlay)
+	suit_overlay.icon_state = "suitmodifier_closed"
+	overlays.Add(suit_overlay)
+	sleep(20)
+	if(cell && R.cell.charge < cell.charge)
+		R.cell.forceMove(get_turf(src))
+		cell.forceMove(R)
+		R.cell = cell
+		cell = null
+	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
+	new /obj/effect/effect/smoke(get_turf(src))
+	unlock_atom(H)
+	overlays.Remove(suit_overlay)
+	suit_overlay.icon_state = null
+	R.toggle_helmet(H)
+	use_power = 1
