@@ -28,6 +28,28 @@
 	item_state = "that"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	var/magichatchance = 5 //%
+	var/ismagichat
+	var/timer
+
+/obj/item/clothing/head/that/New()
+	if(prob(magichatchance))
+		desc = "It's a magic looking hat."
+		ismagichat = TRUE
+		wizard_garb = TRUE
+
+/obj/item/clothing/head/that/attackby(obj/item/W, mob/user)
+	if(ismagichat)
+		var/allowed_wands = list(/obj/item/item_handle, /obj/item/weapon/cane, /obj/item/weapon/nullrod, /obj/item/weapon/staff)
+		if(is_type_in_list(W, allowed_wands))
+			if(world.time - timer >= 20SECONDS)
+				timer = world.time
+				user.visible_message("<span class='notice'>[user] taps \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>","<span class='notice'>You tap \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>")
+				new/mob/living/simple_animal/rabbit(get_turf(src))
+	..()
+
+/obj/item/clothing/head/that/magic
+	magichatchance = 100 //%
 
 /obj/item/clothing/head/that/armored
 	name = "armored top-hat"

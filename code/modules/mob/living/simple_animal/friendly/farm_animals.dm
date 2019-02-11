@@ -376,3 +376,43 @@
 
 /mob/living/simple_animal/hostile/retaliate/box/pig/target_check(atom/A)
 	return TRUE	//Will attack anyone.
+
+//Rabbits
+/mob/living/simple_animal/rabbit
+	name = "rabbit"
+	desc = "Their behavior has attracted the attention of space law enforcement and are considered illegal in many sectors of the galaxy." //"Breed like rabbits" and ERP being illegal joke.
+	icon_state = "rabbit_white"
+	icon_living = "rabbit_white"
+	icon_dead = "rabbit_white_dead"
+	speak = list("...","..!","..?")
+	speak_emote = list("sniffles","grunts")
+	emote_hear = list("sniffles","grunts")
+	emote_see = list("hops","twitches it's ears")
+	speak_chance = 2
+	turns_per_move = 3
+	response_help = "pets"
+	response_disarm = "flips"
+	response_harm = "kicks"
+	attacktext = "kicks"
+	health = 10
+	pass_flags = PASSTABLE
+	size = SIZE_SMALL
+	speak_override = TRUE
+	var/body_color
+
+/mob/living/simple_animal/rabbit/New()
+	if(!body_color)
+		body_color = pick( list("white","grey","brown") )
+	icon_state = "rabbit_[body_color]"
+	icon_living = "rabbit_[body_color]"
+	icon_dead = "rabbit_[body_color]_dead"
+	..()
+	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
+	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
+
+/mob/living/simple_animal/rabbit/Life()
+	if(timestopped)
+		return FALSE //Under effects of time magic.
+	. =..()
+	if(!.)
+		return
