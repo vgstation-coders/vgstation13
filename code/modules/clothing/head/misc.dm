@@ -29,7 +29,6 @@
 	flags = FPRINT
 	siemens_coefficient = 0.9
 	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
-	var/allowed_wands = list(/obj/item/item_handle, /obj/item/weapon/cane, /obj/item/weapon/nullrod, /obj/item/weapon/staff)
 	var/timer
 
 /obj/item/clothing/head/that/New()
@@ -42,6 +41,7 @@
 
 /obj/item/clothing/head/that/attackby(obj/item/W, mob/user)
 	if(wizard_garb)
+		var/static/list/allowed_wands = list(/obj/item/item_handle, /obj/item/weapon/cane, /obj/item/weapon/nullrod, /obj/item/weapon/staff)
 		if(is_type_in_list(W, allowed_wands))
 			if(world.time - timer >= 20 SECONDS)
 				timer = world.time
