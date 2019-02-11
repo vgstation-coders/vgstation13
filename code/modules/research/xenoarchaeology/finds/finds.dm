@@ -554,10 +554,8 @@
 	new_gun.icon_state = "egun[rand(1,6)]"
 	new_gun.item_state = new_gun.icon_state
 	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-	if(prob(10)) // 10% chance to be a smart gun
-		new_gun.can_take_pai = TRUE
-		new_gun.desc += " There seems to be some sort of slot in the handle."
 	new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
+	new_gun.desc = ""
 
 	//5% chance to explode when first fired
 	//10% chance to have an unchargeable cell
@@ -575,12 +573,16 @@
 
 /datum/find/laser/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique energy weapon, you're not sure if it will fire or not."
+	if(prob(10)) // 10% chance to be a smart gun
+		I.can_take_pai = TRUE
+		I.desc += " There seems to be some sort of slot in the handle."
 
 /datum/find/gun
 	find_ID = ARCHAEO_GUN
 	anomaly_factor = 2
 	item_type = "gun"
 	responsive_reagent = IRON
+	additional_desc = TRUE
 
 /datum/find/gun/spawn_item()
 	var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile
@@ -588,9 +590,7 @@
 	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_gun.item_state = new_gun.icon_state
 	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-	if(prob(10)) // 10% chance to be a smart gun
-		new_gun.can_take_pai = TRUE
-		new_gun.desc += " There seems to be some sort of slot in the handle."
+	new_gun.desc = ""
 
 	//let's get some ammunition in this gun : weighted to pick available ammo
 	new_gun.caliber = pick(50;list(POINT357 = 1),
@@ -625,6 +625,9 @@
 
 /datum/find/gun/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique projectile weapon, you're not sure if it will fire or not."
+	if(prob(10)) // 10% chance to be a smart gun
+		I.can_take_pai = TRUE
+		I.desc += " There seems to be some sort of slot in the handle."
 
 
 /datum/find/unknown
@@ -632,13 +635,13 @@
 	anomaly_factor = 2
 	responsive_reagent = MERCURY
 
-/datum/find/unknown/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = new
+/datum/find/unknown/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
 	if(prob(50))
 		qdel(new_item)
 		new_item = new /obj/item/weapon/glow_orb
 	if(prob(50))
 		apply_image_decorations = FALSE
+	return new_item
 
 /datum/find/fossil
 	find_ID = ARCHAEO_FOSSIL
@@ -688,6 +691,18 @@
 
 /datum/find/plant/additional_description(var/obj/item/I)
 	I.desc += "A fossilised shred of alien plant matter."
+
+/datum/find/egg
+	find_ID = ARCHAEO_EGG
+	apply_image_decorations = FALSE
+	apply_material_decorations = FALSE
+	apply_prefix = FALSE
+	responsive_reagent = CARBON
+
+/datum/find/egg/spawn_item()
+	var/obj/item/new_item = new /obj/item/weapon/fossil/egg
+	item_type = new_item.name
+	return new_item
 
 /datum/find/remains_human
 	find_ID = ARCHAEO_REMAINS_HUMANOID
@@ -953,16 +968,18 @@
 
 /obj/item/weapon/archaeological_find
 	name = "object"
+	desc = "This object is completely alien."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "ano01"
 	var/datum/find/find_type
 
 /obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
+	..()
 	AddToProfiler()
 	if(new_item_type)
 		find_type = new_item_type
 	else
-		find_type = pick(archaeo_types)
+		find_type = get_random_find()
 
 	icon_state = "unknown[rand(1,4)]"
 	var/obj/item/weapon/new_item = find_type.create_find(src)

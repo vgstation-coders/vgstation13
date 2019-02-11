@@ -323,7 +323,12 @@
 				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 				masked = 1
 
-		if(!masked)
+		var/clear_tint = !masked
+		if (istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen/))
+			var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/mushhelmet = head
+			clear_tint = !mushhelmet.up
+
+		if(clear_tint)
 			clear_fullscreen("tint")
 
 		if(machine)

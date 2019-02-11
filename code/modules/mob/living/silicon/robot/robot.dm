@@ -102,7 +102,7 @@
 	var/last_tase_timeofday
 	var/last_high_damage_taken_timeofday
 
-/mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
+/mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
 
@@ -114,7 +114,10 @@
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
 
 	if(AIlink)
-		connected_ai = select_active_ai_with_fewest_borgs()
+		if(malfAI)
+			connected_ai = malfAI
+		else
+			connected_ai = select_active_ai_with_fewest_borgs()
 
 	if(connected_ai)
 		connected_ai.connected_robots += src
@@ -462,12 +465,13 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
-	if(istype(Proj, /obj/item/projectile/energy/electrode))
-		last_tase_timeofday = world.timeofday
-		if(can_diagnose())
-			to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
-	if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
-		last_high_damage_taken_timeofday = world.timeofday
+	if(!HAS_MODULE_QUIRK(src, MODULE_HAS_PROJ_RES))
+		if(istype(Proj, /obj/item/projectile/energy/electrode))
+			last_tase_timeofday = world.timeofday
+			if(can_diagnose())
+				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
+		if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
+			last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	return 2

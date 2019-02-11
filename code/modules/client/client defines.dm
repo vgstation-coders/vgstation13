@@ -59,7 +59,6 @@
 
 	var/filling = 0 //SOME STUPID SHIT POMF IS DOING
 	var/haszoomed = 0
-	var/updating_colour = 0
 
 	// Their chat window, sort of important.
 	// See /goon/code/datums/browserOutput.dm
@@ -88,6 +87,10 @@
 	//ambience
 	var/last_ambient_noise //no repeats.
 	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
+
+	var/received_credits = FALSE
+	var/received_roundend_audio = FALSE
+
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

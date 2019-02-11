@@ -32,7 +32,8 @@
 	                            /obj/item/clothing/mask/facehugger/lamarr,
 	                            /obj/item/asteroid/hivelord_core,
 								/obj/item/weapon/reagent_containers/blood,
-								/obj/item/weapon/light)
+								/obj/item/weapon/light,
+								/obj/item/weapon/fossil/egg)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -293,6 +294,13 @@
 
 	can_draw_blood = FALSE
 	can_stab = FALSE
+
+/obj/item/weapon/reagent_containers/syringe/giant/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/gisy = matrix()
+	gisy.Scale(1.2,1.2)
+	transform = gisy
 
 /obj/item/weapon/reagent_containers/syringe/giant/get_injection_time(var/mob/target)
 	if (istype(target, /mob/living/carbon/human))

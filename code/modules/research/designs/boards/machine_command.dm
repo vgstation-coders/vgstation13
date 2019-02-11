@@ -41,3 +41,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/telestation
+
+/datum/design/laborconsole
+	name = "Circuit Design (Labor Administration Console)"
+	desc = "Allows for the construction of circuit boards used to build a labor administration console."
+	id = "laborconsole"
+	req_tech = list(Tc_PROGRAMMING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/labor

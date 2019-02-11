@@ -24,6 +24,7 @@
 #define SS_INIT_TICKER            -21
 #define SS_INIT_FINISH            -22
 #define SS_INIT_MINIMAP           -23
+#define SS_INIT_PERSISTENCE_MISC  -99
 
 
 #define SS_PRIORITY_TICKER         200

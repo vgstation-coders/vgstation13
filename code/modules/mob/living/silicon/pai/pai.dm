@@ -211,6 +211,9 @@
 /mob/living/silicon/pai/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	return //Pais do not do this
 
+/mob/living/silicon/pai/pointToMessage(var/pointer, var/pointed_at)
+	return "<b>\The [pointer]</b> points its laser sight at <b>\the [pointed_at]</b>."
+
 /mob/living/silicon/pai/proc/switchCamera(var/obj/machinery/camera/C)
 	usr:cameraFollow = null
 	if (!C)

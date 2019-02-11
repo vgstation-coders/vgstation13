@@ -12,7 +12,9 @@
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng),
+			/obj/item/weapon/storage/backpack/satchel_eng,
+			/obj/item/weapon/storage/backpack/messenger/engi,
+			),
 		/obj/item/blueprints/primary,
 		/obj/item/clothing/under/rank/chief_engineer,
 		/obj/item/clothing/head/hardhat/white,
@@ -85,7 +87,9 @@
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng),
+			/obj/item/weapon/storage/backpack/satchel_eng,
+			/obj/item/weapon/storage/backpack/messenger/engi,
+			),
 		/obj/item/clothing/under/rank/engineer,
 		/obj/item/clothing/shoes/workboots,
 		/obj/item/weapon/storage/box/inflatables,
@@ -115,8 +119,10 @@
 /obj/structure/closet/secure_closet/engineering_atmos/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack,
-			/obj/item/weapon/storage/backpack/satchel_norm),
+			/obj/item/weapon/storage/backpack/industrial,
+			/obj/item/weapon/storage/backpack/satchel_eng,
+			/obj/item/weapon/storage/backpack/messenger/engi,
+			),
 		/obj/item/clothing/under/rank/atmospheric_technician,
 		/obj/item/clothing/shoes/workboots,
 		/obj/item/weapon/storage/box/inflatables,
@@ -150,7 +156,9 @@
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng),
+			/obj/item/weapon/storage/backpack/satchel_eng,
+			/obj/item/weapon/storage/backpack/messenger/engi,
+			),
 		/obj/item/clothing/under/rank/mechanic,
 		/obj/item/clothing/shoes/workboots,
 		/obj/item/weapon/storage/toolbox/mechanical,

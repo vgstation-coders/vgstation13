@@ -10,6 +10,9 @@ var/global/datum/controller/occupations/job_master
 
 	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
+	var/priority_jobs_remaining = 3 //Limit on how many prioritized jobs can be had at once.
+	var/list/labor_consoles = list()
+
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
@@ -29,6 +32,9 @@ var/global/datum/controller/occupations/job_master
 				continue
 			if(!map.enabled_jobs.Find(job.type))
 				continue
+
+		if(map.disabled_jobs.Find(job.type))
+			continue
 
 		occupations += job
 
@@ -76,16 +82,67 @@ var/global/datum/controller/occupations/job_master
 
 			unassigned -= player
 			job.current_positions++
+
+			for(var/obj/machinery/computer/labor/L in labor_consoles)
+				L.updateUsrDialog()
+
 			return 1
 	Debug("AR has failed, Player: [player], Rank: [rank]")
 	return 0
 
-/datum/controller/occupations/proc/FreeRole(var/rank)	//making additional slot on the fly
+/datum/controller/occupations/proc/FreeRole(var/rank, mob/user)	//making additional slot on the fly
 	var/datum/job/job = GetJob(rank)
 	if(job && job.current_positions >= job.total_positions)
 		job.total_positions++
+		if(user)
+			log_admin("[key_name(user)] has freed up a slot for the [rank] job.")
+			message_admins("[key_name_admin(user)] has freed up a slot for the [rank] job.")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is now available!</span>")
 		return 1
 	return 0
+
+/datum/controller/occupations/proc/CheckPriorityFulfilled(var/rank)
+	var/datum/job/job = GetJob(rank)
+	if(job.current_positions >= job.total_positions && job.priority)
+		job_master.TogglePriority(rank)
+
+/datum/controller/occupations/proc/TogglePriority(var/rank, mob/user)
+	var/datum/job/job = GetJob(rank)
+	if(job)
+		if(job.priority)
+			job.priority = FALSE
+			priority_jobs_remaining++
+		else
+			if(priority_jobs_remaining < 1)
+				return 0
+			job.priority = TRUE
+			priority_jobs_remaining--
+		if(user)
+			log_admin("[key_name(user)] has set the priority of the [rank] job to [job.priority].")
+			message_admins("[key_name_admin(user)] has set the priority of the [rank] job to [job.priority].")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is [job.priority ? "now highly requested!" : "no longer highly requested."]</span>")
+		return 1
+	return 0
+
+/datum/controller/occupations/proc/IsJobPrioritized(var/rank)
+	var/datum/job/job = GetJob(rank)
+	if(job)
+		return job.priority
+	return 0
+
+/datum/controller/occupations/proc/GetPrioritizedJobs() //Returns a list of job datums.
+	. = list()
+	for(var/datum/job/J in occupations)
+		if(J.priority)
+			. += J
+
+/datum/controller/occupations/proc/GetUnprioritizedJobs() //Returns a list of job datums.
+	. = list()
+	for(var/datum/job/J in occupations)
+		if(!J.priority)
+			. += J
 
 /datum/controller/occupations/proc/FindOccupationCandidates(datum/job/job, level, flag)
 	Debug("Running FOC, Job: [job], Level: [level], Flag: [flag]")
@@ -435,14 +492,10 @@ var/global/datum/controller/occupations/job_master
 		alt_title = H.mind.role_alt_title
 
 		switch(rank)
-			if("Cyborg")
-				spawn(20)//We need to be absolutely certain the borg is made after AI for law sync reasons.
-					H.Robotize()
-				return 1
 			if("Mobile MMI")
 				H.MoMMIfy()
 				return 1
-			if("AI","Clown")	//don't need bag preference stuff!
+			if("AI","Clown","Cyborg")	//don't need bag preference stuff!
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
 					H.species.equip(H)
 			else
@@ -476,6 +529,9 @@ var/global/datum/controller/occupations/job_master
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 	spawnId(H, rank, alt_title, balance_wallet)
+
+	if(job && job.priority)
+		job.priority_reward_equip(H)
 
 	if(!job || !job.no_headset)
 		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)

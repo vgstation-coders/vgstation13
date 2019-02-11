@@ -16,6 +16,7 @@
 			handle_blood()
 
 		if(health <= config.health_threshold_dead || !has_brain())
+			emote("deathgasp", message = TRUE)
 			death()
 			blinded = 1
 			silent = 0
@@ -91,16 +92,17 @@
 		else if(!has_eyes())           //Eyes cut out? Permablind.
 			eye_blind =  1
 			blinded =    1
-			eye_blurry = 1
+			eye_blurry = 0
 		else if(sdisabilities & BLIND) //Disabled-blind, doesn't get better on its own
 			blinded =    1
+			eye_blurry = 0
 		else if(eye_blind)		       //Blindness, heals slowly over time
 			eye_blind =  max(eye_blind - 1, 0)
 			blinded =    1
 		else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
 			eye_blurry = max(eye_blurry - 3, 0)
 			blinded =    1
-		else if(eye_blurry)	           //Blurry eyes heal slowly
+		else if(eye_blurry)
 			eye_blurry = max(eye_blurry - 1, 0)
 
 		//Ears

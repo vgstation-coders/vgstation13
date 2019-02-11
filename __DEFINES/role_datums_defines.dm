@@ -16,6 +16,7 @@
 #define CUSTOMSQUAD "custom squad"
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
+#define CLOCKWORK "clockwork"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -36,20 +37,23 @@
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
+#define WEEABOO "crazed weeaboo"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"
 #define SYNDIESQUADIE "syndicate commando"
 #define RESPONDER "emergency responder"
 #define MALF "malfunctioning AI"
+#define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
-#define HIGHLANDER "highlander"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
 #define IMPLANTLEADER "Grey Leader"
+#define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
+#define GRINCH "The Grinch"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -57,6 +61,7 @@
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
 #define GREET_MIDROUND		"midround"
+#define GREET_MASTER		"master"
 
 #define GREET_AUTOTATOR		"autotator"
 
@@ -112,6 +117,7 @@
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
 #define RITUALABORT_MISSING	"missing"
+#define RITUALABORT_OUTPOST "outpost"
 
 #define TATTOO_POOL		"Blood Communion"
 #define TATTOO_SILENT	"Silent Casting"
@@ -134,6 +140,10 @@
 
 #define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
 
+#define CONVERSION_REFUSE	-1
+#define CONVERSION_NOCHOICE	0
+#define CONVERSION_ACCEPT	1
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags
@@ -154,4 +164,14 @@
 #define FROM_GHOSTS 1
 #define FROM_PLAYERS 2
 
-#define PROTECTED_TRAITOR_PROB 66 // Probability than a protected role is rejected from the candidate list
+// -- Revs
+
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
+#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
+#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
+
+// -- Protected roles
+
+#define PROB_PROTECTED_REGULAR 50
+#define PROB_PROTECTED_RARE    80

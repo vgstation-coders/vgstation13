@@ -4,11 +4,13 @@
 	required_pref = ROLE_TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
-
+	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
 	..()
+	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
+		can_be_smooth = FALSE //Can't buy anything
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
 	else
@@ -16,11 +18,18 @@
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
 
 /datum/role/traitor/Drop()
-	if(isrobot(antag.current) || isAI(antag.current))
+	if(isrobot(antag.current))
 		var/mob/living/silicon/robot/S = antag.current
 		to_chat(S, "<b>Your laws have been changed!</b>")
-		S.set_zeroth_law("","")
+		S.set_zeroth_law("")
+		S.laws.zeroth_lock = FALSE
 		to_chat(S, "Law 0 has been purged.")
+	if(isAI(antag.current))
+		var/mob/living/silicon/ai/KAI = antag.current
+		to_chat(KAI, "<b>Your laws have been changed!</b>")
+		KAI.set_zeroth_law("","")
+		KAI.laws.zeroth_lock = FALSE
+		KAI.notify_slaved()
 
 	.=..()
 
@@ -106,6 +115,16 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
+/datum/role/traitor/GetScoreboard()
+	. = ..()
+	if(can_be_smooth)
+		if(uplink_items_bought)
+			. += "The traitor bought:<BR>"
+			for(var/entry in uplink_items_bought)
+				. += "[entry]<BR>"
+		else
+			. += "The traitor was a smooth operator this round.<BR>"
+
 //_______________________________________________
 
 /*
@@ -116,7 +135,9 @@
 	id = SURVIVOR
 	name = SURVIVOR
 	logo_state = "gun-logo"
+	can_be_smooth = FALSE
 	var/survivor_type = "survivor"
+	var/summons_received
 
 /datum/role/traitor/survivor/crusader
 	id = CRUSADER
@@ -133,6 +154,11 @@
 
 /datum/role/traitor/survivor/OnPostSetup()
 	return TRUE
+
+/datum/role/traitor/survivor/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
+
 //________________________________________________
 
 
@@ -195,7 +221,7 @@
 
 /datum/role/nuclear_operative
 	name = NUKE_OP
-	id = NUKE_OP
+	id = ROLE_OPERATIVE
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
 

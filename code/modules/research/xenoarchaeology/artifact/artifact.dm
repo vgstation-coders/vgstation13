@@ -24,8 +24,10 @@
 	100;/obj/machinery/auto_cloner,
 	100;/obj/structure/bed/chair/vehicle/gigadrill,
 	100;/obj/mecha/working/hoverpod,
+	100;/obj/structure/essence_printer,
 	100;/obj/machinery/replicator,
 	100;/obj/machinery/communication,
+	100;/mob/living/simple_animal/hostile/roboduck,
 	1000;/obj/machinery/artifact)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

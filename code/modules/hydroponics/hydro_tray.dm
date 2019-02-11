@@ -179,7 +179,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -249,7 +249,7 @@
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && istype(O, /obj/item/weapon/pickaxe/shovel))
+	else if(seed && isshovel(O))
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
@@ -327,7 +327,7 @@
 
 		return
 
-	else if (istype(O, /obj/item/weapon/minihoe))
+	else if (ishoe(O))
 
 		if(weedlevel > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
@@ -386,6 +386,11 @@
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
+
+	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
+		to_chat(user, "You use \the [O] as compost for \the [src].")
+		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+		qdel(O)
 
 	else
 		return ..()

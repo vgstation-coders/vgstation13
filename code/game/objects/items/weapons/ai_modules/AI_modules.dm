@@ -83,6 +83,7 @@ Refactored AI modules by N3X15
 	lawchanges.Add("[time] : [log_entry]")
 	message_admins(log_entry)
 	log_game(log_entry)
+	score["lawchanges"]++
 	return 1
 
 // Constructs the law and desc from variables.
@@ -106,8 +107,8 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/reset/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
-	/*if (!(ismob(target) && is_special_character(target)))
-		laws.set_zeroth_law("")*/
+	if(!laws.zeroth_lock)
+		laws.set_zeroth_law("")
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()
 	if(ismob(target))
@@ -131,8 +132,8 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/purge/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
-	/*if (!(ismob(target) && is_special_character(target)))
-		laws.set_zeroth_law("")*/
+	if(!laws.zeroth_lock)
+		laws.set_zeroth_law("")
 	if(ismob(target))
 		to_chat(target, "[sender.real_name] attempted to wipe your laws using a purge module.")
 	laws.clear_supplied_laws()
@@ -157,8 +158,8 @@ Refactored AI modules by N3X15
 	target:keeper=1
 
 	// Purge, as some essential functions being disabled will cause problems with added laws. (CAN'T SAY GAY EVERY 30 SECONDS IF YOU CAN'T SPEAK.)
-	/*if (!(ismob(target) && is_special_character(target)))
-		laws.set_zeroth_law("")*/
+	if(!laws.zeroth_lock)
+		laws.set_zeroth_law("")
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()
 	laws.clear_inherent_laws()

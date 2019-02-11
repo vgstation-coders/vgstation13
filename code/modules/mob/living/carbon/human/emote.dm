@@ -72,7 +72,9 @@
 	key = "fart"
 	key_third_person = "farts"
 
-/datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override)
+/datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
+		return FALSE
 	var/mob/living/carbon/human/H = user
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
@@ -84,7 +86,7 @@
 
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
-			if(!H.mind.miming)
+			if(H.mind && !H.mind.miming)
 				H.visible_message("<span class = 'warning'><b>[H]</b> farts in <b>[M]</b>'s face!</span>")
 			else
 				H.visible_message("<span class = 'warning'><b>[H]</b> silently farts in <b>[M]</b>'s face!</span>")
@@ -206,3 +208,71 @@
 						explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
 						H.dust()
 //Ayy lmao
+
+
+/datum/emote/living/carbon/human/dab
+	key = "dab"
+	key_third_person = "*dab"
+	restraint_check = TRUE
+
+/datum/emote/living/carbon/human/dab/can_run_emote(mob/user, var/status_check = TRUE)
+	var/mob/living/carbon/human/H = user
+	if (iswizard(H))
+		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
+		return FALSE
+	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
+		if(user.stat > stat_allowed)
+			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
+			return FALSE
+		if(restraint_check && (user.restrained() || user.locked_to))
+			to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+			return FALSE
+		return TRUE
+	else
+		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
+		return FALSE
+
+/datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
+	if(!(can_run_emote(user, !ignore_status)))
+		return FALSE
+	var/mob/living/carbon/human/H = user
+	if(!istype(H))
+		return
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
+		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
+		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
+		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
+		if(confirm != "Yes")
+			return
+		H.suiciding = 1
+		H.visible_message("<span class='danger'>[H] holds one arm up and slams \his other arm into \his face! It looks like \he's trying to commit suicide.</span>",)
+		for(var/datum/organ/external/breakthis in H.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_HEAD))
+			H.apply_damage(50, BRUTE, breakthis)
+			if(!(H.species.anatomy_flags & NO_BONES))
+				breakthis.fracture()
+		H.adjustOxyLoss(max(175 - H.getToxLoss() - H.getFireLoss() - H.getBruteLoss() - H.getOxyLoss(), 0))
+		H.updatehealth()
+	else
+		if(world.time-H.lastDab >= 10 SECONDS)
+			for(var/mob/living/M in view(0))
+				if(M != H && M.loc == H.loc)
+					H.visible_message("<span class = 'warning'><b>[H]</b> dabs on <b>[M]</b>!</span>")
+			message = "<b>[H]</b> dabs."
+			emote_type = EMOTE_VISIBLE
+			H.visible_message(message)
+			H.lastDab=world.time
+		else
+			var/armtobreak = pick(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)
+			var/datum/organ/external/A = H.get_organ(armtobreak)
+			if(H.species.anatomy_flags & NO_BONES)
+				message = "<span class = 'warning'>smacks their head as they flail their arms to the side.</span>"
+				playsound(H, 'sound/weapons/punch1.ogg', 50, 1)
+				A = H.get_organ(LIMB_HEAD)
+				H.apply_damage(50, BRUTE, A)
+			else
+				message = "<span class = 'warning'>dabs too hard!</span>"
+				H.apply_damage(50, BRUTE, A)
+				A.fracture()
+			emote_type = EMOTE_VISIBLE
+			. = ..()

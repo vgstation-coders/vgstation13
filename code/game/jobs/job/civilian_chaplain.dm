@@ -12,7 +12,7 @@
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	pdaslot = slot_belt
 	pdatype = /obj/item/device/pda/chaplain
-	var/datum/religion/chap_religion = new /datum/religion // He gets the default one
+	var/datum/religion/chap_religion = new /datum/religion/default // default = space christianity
 
 /datum/job/chaplain/equip(var/mob/living/carbon/human/H)
 	switch(H.backbag)
@@ -55,7 +55,8 @@
 					H.put_in_hands(B)
 					rel.religiousLeader = H.mind
 					J = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
-					rel.convert(H, null)
+					rel.convert(H, null, can_renounce = FALSE)
+					rel.OnPostActivation()
 					to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
 					chap_religion = rel
 					choice = TRUE
@@ -74,8 +75,8 @@
 			B.my_rel = chap_religion
 			H.put_in_hands(B)
 			chap_religion.religiousLeader = H.mind
-			to_chat(H, "A great, intense revelation go through your spirit. You are know the religious leader of [chap_religion.name]. Convert people by [chap_religion.convert_method]")
-			chap_religion.convert(H, null)
+			to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [chap_religion.name]. Convert people by [chap_religion.convert_method]")
+			chap_religion.convert(H, null, can_renounce = FALSE)
 
 		//This goes down here due to problems with loading orders that took me 4 hours to identify
 		var/obj/item/weapon/card/id/I = null
@@ -108,7 +109,7 @@
 			if(!B)
 				break //Prevents possible runtime errors
 			new_book_style = input(H, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[B.name == "Clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																				   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+																				   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide", "The Dokument")
 			switch(new_book_style)
 				if("Koran")
 					B.icon_state = "koran"
@@ -195,6 +196,9 @@
 				if("The Guide")
 					B.icon_state = "guide"
 					B.item_state = "guide"
+				if("The Dokument")
+					B.icon_state = "gunbible"
+					B.item_state = "gunbible"
 				if("Slab")
 					B.icon_state = "slab"
 					B.item_state = "slab"
@@ -228,3 +232,7 @@
 		feedback_set_details("religion_deity","[new_deity]")
 		feedback_set_details("religion_book","[new_book_style]")
 	return 1
+
+/datum/job/chaplain/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater(H.back), slot_in_backpack)

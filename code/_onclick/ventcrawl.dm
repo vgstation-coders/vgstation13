@@ -96,6 +96,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		return FALSE
 	return TRUE
 
+/mob/living/simple_animal/hostile/gremlin/grinch/can_ventcrawl()
+	return TRUE
+
 /mob/living/simple_animal/spiderbot/can_ventcrawl()
 	return TRUE
 

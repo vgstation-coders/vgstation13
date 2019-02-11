@@ -9,11 +9,10 @@
 	machine_flags = 0 // THIS SHOULD NOT EVER BE UNWRENCHED AND IT SHOULD NOT EVER SPAWN MACHINE FRAMES, MY GOD
 
 /obj/machinery/portable_atmospherics/hydroponics/soil/attackby(var/obj/item/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/pickaxe/shovel))
+	if(isshovel(W))
 		if(!seed)
 			to_chat(user, "You clear up [src]!")
-			new /obj/item/weapon/ore/glass(loc)//we get some of the dirt back
-			new /obj/item/weapon/ore/glass(loc)
+			drop_stack(/obj/item/stack/ore/glass, loc, 2)//we get some of the dirt back
 			qdel(src)
 			return 1
 		else

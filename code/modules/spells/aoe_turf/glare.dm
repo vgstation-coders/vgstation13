@@ -35,11 +35,11 @@
 		if(!C.vampire_affected(user.mind))
 			continue
 		targets += C
-	
+
 	if (!targets.len)
 		to_chat(user, "<span class='warning'>There are no targets.</span>")
 		return FALSE
-	
+
 	return targets
 
 /spell/aoe_turf/glare/cast(var/list/targets, var/mob/user)
@@ -50,12 +50,13 @@
 	for (var/T in targets)
 		var/mob/living/carbon/C = T
 		var/dist = get_dist(user, C)
+		if (C.is_blind())
+			continue
 		switch (dist)
 			if (0 to 1) // Close mobs
 				C.Stun(8)
 				C.Knockdown(8)
 				C.stuttering += 20
-				C.blinded += 6
 			else // Further away mobs
 				var/distance_value = max(0, abs(dist-3) + 1)
 				C.Stun(distance_value)

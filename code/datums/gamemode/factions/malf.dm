@@ -4,9 +4,9 @@
 	ID = MALF
 	required_pref = ROLE_MALF
 	initial_role = MALF
-	late_role = MALF //There shouldn't really be any late roles for malfunction, but just in case we can corrupt an AI in the future, let's keep this
-	initroletype = /datum/role/malfAI
-	roletype = /datum/role/malfAI
+	late_role = MALFBOT //There shouldn't really be any late roles for malfunction, but just in case we can corrupt an AI in the future, let's keep this
+	initroletype = /datum/role/malfAI //First addition should be the AI
+	roletype = /datum/role/malfbot //Then anyone else should be bots
 	logo_state = "malf-logo"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
@@ -45,6 +45,11 @@
 	return FALSE
 
 /datum/faction/malf/check_win()
+	if (malf_mode_declared)
+		for (var/datum/role/R in members)
+			if (R.antag.assigned_role == "AI")
+				if (!R.antag.current || R.antag.current.isDead())
+					return 1
 	if(malf_win)
 		return 1
 	else

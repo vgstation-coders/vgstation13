@@ -56,11 +56,11 @@
 				FD.force_open(chassis.occupant, src)
 			return
 		if(!O.anchored)
-			if(istype(O, /obj/item/weapon/ore) && W.ore_box)
+			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
-				for(var/obj/item/weapon/ore/I in get_turf(target))
+				for(var/obj/item/stack/ore/I in get_turf(target))
 					if(I.material)
-						W.ore_box.materials.addAmount(I.material, 1)
+						W.ore_box.materials.addAmount(I.material, I.amount)
 						returnToPool(I)
 						count++
 				if(count)
@@ -175,9 +175,9 @@
 				var/obj/mecha/working/W = chassis
 				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
-					for(var/obj/item/weapon/ore/ore in range(chassis,1))
+					for(var/obj/item/stack/ore/ore in range(chassis,1))
 						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							W.ore_box.materials.addAmount(ore.material,1)
+							W.ore_box.materials.addAmount(ore.material,ore.amount)
 							returnToPool(ore)
 							count++
 					if(count)
@@ -196,8 +196,8 @@
 				if(get_dir(chassis,M)&chassis.dir || istype(src, /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill)) //Only dig frontmost 1x3 unless the drill is diamond
 					M.gets_dug()
 					if(hydraulic_clamp && ore_box)
-						for(var/obj/item/weapon/ore/glass/sandore in get_turf(M))
-							ore_box.materials.addAmount(sandore.material,1)
+						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
+							ore_box.materials.addAmount(sandore.material,sandore.amount)
 							returnToPool(sandore)
 							count++
 			log_message("Drilled through [target]")
@@ -899,7 +899,7 @@
 	linked_spell = new /spell/mech/repair(M, src)
 	return
 
-/obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
+/obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
 	qdel(pr_repair_droid)
 	pr_repair_droid = null
@@ -1220,7 +1220,7 @@
 		GM.temperature = 1500+T0C //should be enough to start a fire
 		GM.adjust_gas(GAS_PLASMA, 100)
 		T.visible_message("The [src] suddenly disgorges a cloud of heated plasma.")
-		destroy()
+		qdel(src)
 	else
 		GM.temperature = istype(T) ? T.air.temperature : T20C
 		GM.adjust_gas(GAS_PLASMA, 5)

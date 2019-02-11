@@ -55,6 +55,7 @@
 	var/core_removal_stage = 0 //For removing cores
 	universal_speak = 1
 	universal_understand = 1
+	held_items = list()
 
 /mob/living/carbon/slime/adult
 	name = "adult slime"

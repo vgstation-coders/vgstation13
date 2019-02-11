@@ -188,6 +188,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic coat", /obj/item/clothing/suit/raincoat, 5), \
 	new/datum/stack_recipe("plastic flaps", /obj/structure/plasticflaps, 10, one_per_turf = 1, on_floor = 1, start_unanchored = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("warning cone", /obj/item/weapon/caution/cone, 2, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe_list("curtains",list(
 		new/datum/stack_recipe("white curtains", /obj/structure/curtain, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("black curtains", /obj/structure/curtain/black, 4, one_per_turf = 1, on_floor = 1), \
@@ -351,8 +352,9 @@ var/list/datum/stack_recipe/clown_recipes = list ( \
  * Mythril
  */
 /obj/item/stack/sheet/mineral/mythril
-	name = "mythril"
+	name = "mythril shards"
 	icon_state = "sheet-mythril"
+	singular_name = "mythril shard"
 	force = 5.0
 	throwforce = 5
 	w_class = W_CLASS_MEDIUM
@@ -360,6 +362,17 @@ var/list/datum/stack_recipe/clown_recipes = list ( \
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=4"
 	perunit = 2000
+	recyck_mat = MAT_MYTHRIL
+	mat_type = MAT_MYTHRIL
+
+var/list/datum/stack_recipe/mythril_recipes = list ( \
+	blacksmithing_recipes,
+	)
+
+/obj/item/stack/sheet/mineral/mythril/New(var/loc, var/amount=null)
+	recipes = mythril_recipes
+	..()
+
 
 /*
 /obj/item/stack/sheet/mineral/pharosium

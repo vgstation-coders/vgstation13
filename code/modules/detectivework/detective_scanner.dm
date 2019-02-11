@@ -35,7 +35,7 @@
 
 /obj/item/device/detective_scanner/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	if (!ishuman(M))
-		to_chat(user, "<span class='warning'>[M] is not human and cannot have the fingerprints.</span>")
+		to_chat(user, "<span class='warning'>[M] is not human and cannot have fingerprints.</span>")
 		return 0
 	if (( !( istype(M.dna, /datum/dna) ) || M.gloves) )
 		to_chat(user, "<span class='notice'>No fingerprints found on [M]</span>")
@@ -107,6 +107,14 @@
 	var/list/fingerprints_found = src.extract_fingerprints(A)
 	var/list/fibers_found       = src.extract_fibers(A)
 
+	if (istype(A,/obj/effect/rune))
+		var/obj/effect/rune/R = A
+		if (R.blood1)
+			blood_DNA_found[R.blood1.data["blood_DNA"]] = R.blood1.data["blood_type"]
+		if (R.blood2)
+			blood_DNA_found[R.blood2.data["blood_DNA"]] = R.blood2.data["blood_type"]
+		if (R.blood3)
+			blood_DNA_found[R.blood3.data["blood_DNA"]] = R.blood3.data["blood_type"]
 	// Blood/vomit splatters no longer clickable, so scan the entire turf.
 	if (istype(A,/turf))
 		var/turf/T=A
@@ -116,6 +124,14 @@
 				blood_DNA_found    += extract_blood(O)
 				//fingerprints_found += extract_fingerprints(O)
 				//fibers_found       += extract_fibers(O)
+			if (istype(O,/obj/effect/rune))
+				var/obj/effect/rune/R = O
+				if (R.blood1)
+					blood_DNA_found[R.blood1.data["blood_DNA"]] = R.blood1.data["blood_type"]
+				if (R.blood2)
+					blood_DNA_found[R.blood2.data["blood_DNA"]] = R.blood2.data["blood_type"]
+				if (R.blood3)
+					blood_DNA_found[R.blood3.data["blood_DNA"]] = R.blood3.data["blood_type"]
 	//General
 	if (fingerprints_found.len == 0 && blood_DNA_found.len == 0 && fibers_found.len == 0)
 		user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\

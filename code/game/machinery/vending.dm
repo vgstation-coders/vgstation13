@@ -16,6 +16,7 @@ var/global/num_vending_terminals = 1
 	var/obj/structure/vendomatpack/pack = null
 	anchored = 1
 	density = 1
+	layer = OPEN_DOOR_LAYER //This is below BELOW_OBJ_LAYER because vendors can contain crates/closets
 	var/health = 100
 	var/maxhealth = 100 //Kicking feature
 	var/active = 1		//No sales pitches if off!
@@ -689,7 +690,7 @@ var/global/num_vending_terminals = 1
 		src.TurnOff(600) //A whole minute
 	/*if(prob(1))
 		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
-		user.emote("scream",,, 1)
+		user.audible_scream()
 		shake_camera(user, 2, 1)*/
 
 /obj/machinery/vending/kick_act(mob/living/carbon/human/user)
@@ -1376,6 +1377,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
+	vouched = list(
+		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
+		)
 
 	pack = /obj/structure/vendomatpack/snack
 
@@ -1526,6 +1530,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/weapon/storage/fancy/matchbox/strike_anywhere = 10,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 2,
+		/obj/item/clothing/mask/holopipe = 1,
 		)
 	prices = list(
 		/obj/item/weapon/storage/fancy/cigarettes = 20,
@@ -1925,9 +1930,9 @@ var/global/num_vending_terminals = 1
 	vend_delay = 26
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/beezeez = 20,
-		/obj/item/weapon/reagent_containers/glass/fertilizer/ez = 35,
-		/obj/item/weapon/reagent_containers/glass/fertilizer/l4z = 25,
-		/obj/item/weapon/reagent_containers/glass/fertilizer/rh = 15,
+		/obj/item/weapon/reagent_containers/glass/bottle/eznutrient = 30,
+		/obj/item/weapon/reagent_containers/glass/bottle/left4zed = 20,
+		/obj/item/weapon/reagent_containers/glass/bottle/robustharvest = 10,
 		/obj/item/weapon/plantspray/pests = 20,
 		/obj/item/weapon/reagent_containers/syringe = 5,
 		/obj/item/weapon/reagent_containers/dropper = 2,
@@ -1991,6 +1996,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/riceseed = 3,
 		/obj/item/seeds/cinnamomum = 3,
 		/obj/item/seeds/avocadoseed = 3,
+		/obj/item/seeds/pearseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -2957,6 +2963,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Trader Supply"
 	desc = "Its wiring has been modified to prevent hacking."
 	unhackable = 1
+	desc = "Make much coin."
+	req_access = list(access_trade)
 	product_slogans = list(
 		"Profits."
 	)
@@ -2982,6 +2990,18 @@ var/global/num_vending_terminals = 1
 		/obj/item/fish_eggs/seadevil = 1,
 		/obj/machinery/power/antiquesynth = 1,
 		/obj/item/crackerbox = 1,
+		/obj/structure/closet/crate/chest/alcatraz = 1,
+		/obj/structure/largecrate/secure = 1,
+		/obj/structure/largecrate/secure/magmaw = 1,
+		/obj/structure/largecrate/secure/frankenstein = 1,
+		/obj/item/weapon/boxofsnow = 3,
+		/obj/item/weapon/vinyl/clockwork = 1,
+		/obj/item/stack/sheet/brass/bigstack = 3,
+		/obj/item/stack/sheet/ralloy/bigstack = 3,
+		/obj/item/device/vampirehead = 1,
+		/obj/item/key/security/spare = 1,
+		/obj/item/weapon/depocket_wand = 4,
+		/obj/item/weapon/ram_kit = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -2998,10 +3018,20 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
 		/obj/item/fish_eggs/seadevil = 50,
 		/obj/machinery/power/antiquesynth = 350,
+		/obj/structure/closet/crate/chest/alcatraz = 300,
+		/obj/structure/largecrate/secure = 100,
+		/obj/structure/largecrate/secure/magmaw = 100,
+		/obj/structure/largecrate/secure/frankenstein = 100,
+		/obj/item/weapon/boxofsnow = 50,
 		/obj/item/crackerbox = 200,
+		/obj/item/weapon/vinyl/clockwork = 50,
+		/obj/item/stack/sheet/brass/bigstack = 50,
+		/obj/item/stack/sheet/ralloy/bigstack = 50,
+		/obj/item/device/vampirehead = 150,
+		/obj/item/key/security/spare = 50,
+		/obj/item/weapon/depocket_wand = 100,
+		/obj/item/weapon/ram_kit = 200,
 		)
-
-	accepted_coins = list(/obj/item/weapon/coin/trader)
 
 /obj/machinery/vending/trader/New()
 	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
@@ -3017,10 +3047,10 @@ var/global/num_vending_terminals = 1
 	product_slogans = list(
 		"Haircuts for everyone!",
 		"Choose your own style!",
-		"A new look avaliable now!"
+		"A new look available now!"
 	)
 	product_ads = list(
-		"Our new hairdye formula, now avaliable in any color!"
+		"Our new hairdye formula, now available in any color!"
 	)
 	vend_reply = "Enjoy your new look!"
 	icon_state = "barber"

@@ -198,3 +198,8 @@
 	name = "security messenger bag"
 	desc = "A tactical backpack worn over one shoulder. This one is in Security colors."
 	icon_state = "courierbagsec"
+
+/obj/item/weapon/storage/backpack/messenger/black
+	name = "black messenger bag"
+	desc = "For the freerunning pizza delivery hacker on the go."
+	icon_state = "courierbagblack"

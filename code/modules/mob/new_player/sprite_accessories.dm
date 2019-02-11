@@ -48,6 +48,12 @@
 ////////////////////////////
 */
 
+/*
+ * If you add a new hairstyle, remember to also add its "under helmet version".
+ * You can easily make it by copy-pasting your hairstyle, surimposing the helmet sprite over it, and shaving off the pixels that sticks.
+ * The icon_state for it should be named [yourhairstyle]_s2.
+ */
+
 /datum/sprite_accessory/hair
 
 	icon = 'icons/mob/human_face.dmi'	  // default icon for all hairs

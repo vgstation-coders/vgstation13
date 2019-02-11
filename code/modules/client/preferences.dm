@@ -25,6 +25,8 @@ var/global/list/special_roles = list(
 	ROLE_VOXRAIDER    	= 1,
 	ROLE_WIZARD       	= 1,
 	ROLE_COMMANDO	  	= 1,
+	ROLE_GRINCH			= 1,
+	ROLE_WEEABOO		= 1,
 )
 
 var/list/antag_roles = list(
@@ -42,6 +44,8 @@ var/list/antag_roles = list(
 	ROLE_WIZARD       	= 1,
 	ROLE_COMMANDO	  	= 1,
 //	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
+	ROLE_GRINCH			= 1,
+	ROLE_WEEABOO		= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -68,6 +72,7 @@ var/list/role_wiki=list(
 	ROLE_VAMPIRE		= "Vampire",
 	ROLE_VOXRAIDER		= "Vox_Raider",
 	ROLE_WIZARD			= "Wizard",
+	ROLE_GRINCH			= "Grinch",
 )
 
 var/const/MAX_SAVE_SLOTS = 8
@@ -194,6 +199,10 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
 
 	var/pulltoggle = 1 //If 1, the "pull" verb toggles between pulling/not pulling. If 0, the "pull" verb will always try to pull, and do nothing if already pulling.
+
+	var/credits = CREDITS_ALWAYS
+	var/jingle = JINGLE_CLASSIC
+
 	var/client/client
 	var/saveloaded = 0
 
@@ -262,7 +271,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=all'>Always Random Body: [be_random_body ? "Yes" : "No"]</A><br>
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
-	<b>Secondary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
+	<b>Tertiary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
 	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'>Set</a><br>
 	<b>Limbs:</b> <a href='byond://?_src_=prefs;subsection=limbs;task=menu'>Set</a><br>
@@ -375,6 +384,10 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Attack Animations:<b>
 	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
+	<b>Show Credits <span title='&#39;No Reruns&#39; will roll credits only if an admin customized something about this round&#39;s credits, or if a rare and exclusive episode name was selected thanks to something uncommon happening that round.'>(?):</span><b>
+	<a href='?_src_=prefs;preference=credits'><b>[credits]</b></a><br>
+	<b>Server Shutdown Jingle <span title='These jingles will only play if credits don&#39;t roll for you that round. &#39;Classics&#39; will only play &#39;APC Destroyed&#39; and &#39;Banging Donk&#39;, &#39;All&#39; will play the previous plus retro videogame sounds.'>(?):</span><b>
+	<a href='?_src_=prefs;preference=jingle'><b>[jingle]</b></a><br>
   </div>
 </div>"}
 
@@ -487,9 +500,6 @@ var/const/MAX_SAVE_SLOTS = 8
 			var/available_in_days = job.available_in_days(user.client)
 			HTML += "<font color=red>[rank]</font></td><td><font color=red> \[IN [(available_in_days)] DAYS]</font></td></tr>"
 			continue
-		if((job_civilian_low & ASSISTANT) && (rank != "Assistant"))
-			HTML += "<font color=orange>[rank]</font></td><td></td></tr>"
-			continue
 		if((rank in command_positions) || (rank == "AI"))//Bold head jobs
 			if(job.alt_titles)
 				HTML += "<b><span class='dark'><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">[GetPlayerAltTitle(job)]</a></span></b>"
@@ -548,13 +558,6 @@ var/const/MAX_SAVE_SLOTS = 8
 		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");' oncontextmenu='javascript:return mouseDown(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");'>"
 
 
-		if(rank == "Assistant")//Assistant is special
-			if(job_civilian_low & ASSISTANT)
-				HTML += " <font color=green>Yes</font>"
-			else
-				HTML += " <font color=red>No</font>"
-			HTML += "</a></td></tr>"
-			continue
 		//if(job.alt_titles)
 			//HTML += "</a></td></tr><tr bgcolor='[lastJob.selection_color]'><td width='60%' align='center'><a>&nbsp</a></td><td><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">\[[GetPlayerAltTitle(job)]\]</a></td></tr>"
 		HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
@@ -720,14 +723,6 @@ var/const/MAX_SAVE_SLOTS = 8
 		user << browse(null, "window=mob_occupation")
 		ShowChoices(user)
 		return
-
-	if(role == "Assistant")
-		if(job_civilian_low & job.flag)
-			job_civilian_low &= ~job.flag
-		else
-			job_civilian_low |= job.flag
-		SetChoices(user)
-		return 1
 
 	if(job.species_blacklist.Find(src.species)) //Check if our species is in the blacklist
 		to_chat(user, "<span class='notice'>Your species ("+src.species+") can't have this job!</span>")
@@ -1094,9 +1089,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					else
 						to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
 				if("next_hair_style")
-					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
+					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("previous_hair_style")
-					h_style = previous_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
+					h_style = previous_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("next_facehair_style")
 					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
@@ -1185,7 +1180,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("hair")
 					if(species == "Human" || species == "Unathi")
-						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
+						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(new_hair)
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
@@ -1198,7 +1193,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("facial")
 					if(species == "Human" || species == "Unathi")
-						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference") as color|null
+						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference", rgb(r_facial, g_facial, b_facial)) as color|null
 						if(new_facial)
 							r_facial = hex2num(copytext(new_facial, 2, 4))
 							g_facial = hex2num(copytext(new_facial, 4, 6))
@@ -1222,7 +1217,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					ShowChoices(user)
 
 				if("eyes")
-					var/new_eyes = input(user, "Choose your character's eye colour:", "Character Preference") as color|null
+					var/new_eyes = input(user, "Choose your character's eye colour:", "Character Preference", rgb(r_eyes, g_eyes, b_eyes)) as color|null
 					if(new_eyes)
 						r_eyes = hex2num(copytext(new_eyes, 2, 4))
 						g_eyes = hex2num(copytext(new_eyes, 4, 6))
@@ -1454,6 +1449,24 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						attack_animation = NO_ANIMATION
 						person_animation_viewers -= client
 
+				if("credits")
+					switch(credits)
+						if(CREDITS_NEVER)
+							credits = CREDITS_ALWAYS
+						if(CREDITS_ALWAYS)
+							credits = CREDITS_NO_RERUNS
+						if(CREDITS_NO_RERUNS)
+							credits = CREDITS_NEVER
+
+				if("jingle")
+					switch(jingle)
+						if(JINGLE_NEVER)
+							jingle = JINGLE_CLASSIC
+						if(JINGLE_CLASSIC)
+							jingle = JINGLE_ALL
+						if(JINGLE_ALL)
+							jingle = JINGLE_NEVER
+
 			if(user.client.holder)
 				switch(href_list["preference"])
 					if("hear_ahelp")
@@ -1652,7 +1665,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				<th class="clmAlways">Always</th>
 			</tr>"}
 
-	if(jobban_isbanned(user, "Syndicate"))
+	if(isantagbanned(user))
 		dat += "<th colspan='6' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
 	else
 		for(var/role_id in antag_roles)

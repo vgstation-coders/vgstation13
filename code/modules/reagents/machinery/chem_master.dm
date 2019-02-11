@@ -1,7 +1,9 @@
-#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+#define MAX_PILL_SPRITE 40 //Max icon state of the pill sprites
 var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white", "oblong cyan", "oblong darkred", "oblong orange-striped", "oblong lightblue-drab", \
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
-"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
+"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green","oblong green-yellow","oblong grey-purple","oblong black-red", \
+"oblong yellow-grey","oblong green-purple","oblong blue-red","oblong green-brown","oblong yellow-cyan","oblong purple-cyan","oblong yellow-red","round pink", \
+"round purple-red","round black","round green-blue","round orange","round blue-beige","round blue","round beige-yellow","round red-green","round darkpink")
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
@@ -13,7 +15,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	idle_power_usage = 20
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
-	var/mode = 1
+	var/mode = 1 //1 = from buffer to beaker. 0 = from buffer to disposals.
+	var/slurpmode = 0 //1 = from obj to beaker. 0 = from obj to buffer.
+	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
@@ -29,6 +33,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
+	var/pill_display_number = MAX_PILL_SPRITE/2
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -44,7 +49,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(300)
+	create_reagents(1000)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
@@ -164,6 +169,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		src.updateUsrDialog()
 		return 1
 
+	else if(href_list["pill_icon_toggle"])
+		if (pill_display_number == MAX_PILL_SPRITE/2)
+			pill_display_number = MAX_PILL_SPRITE
+		else
+			pill_display_number = MAX_PILL_SPRITE/2
+		src.updateUsrDialog()
+		return 1
+
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
 		if(href_list["analyze"])
@@ -210,6 +223,25 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			src.updateUsrDialog()
 			return 1
 
+		else if(href_list["slurpall"])
+			var/obj/O = locate(href_list["disp"])
+			if(!is_type_in_list(O, slurp_types) || get_dist(src, O) > 1)
+				return
+			var/amount
+			if(href_list["amount"])
+				amount = text2num(href_list["amount"])
+			else if(href_list["percent"])
+				amount = O.reagents.total_volume * text2num(href_list["percent"]) / 100
+			if(isnull(amount) || amount < 0)
+				return
+			if(slurpmode)
+				O.reagents.trans_to(beaker, amount)
+			else
+				O.reagents.trans_to(src, amount)
+
+			src.updateUsrDialog()
+			return 1
+
 		else if(href_list["remove"])
 			var/id = href_list["remove"]
 			var/amount
@@ -243,29 +275,39 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 		else if(href_list["addcustom"])
 			var/id = href_list["addcustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
 			return 1
 		else if(href_list["addallcustom"])
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "addall" = "1"))
 			return 1
+		else if(href_list["slurpallcustom"])
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
+			useramount = isgoodnumber(useramount)
+			src.Topic(null, list("amount" = "[useramount]", "slurpall" = "1", "disp" = href_list["disp"]))
+			return 1
 		else if(href_list["removecustom"])
 			var/id = href_list["removecustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "remove" = "[id]"))
 			return 1
 		else if(href_list["removeallcustom"])
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "removeall" = "1"))
 			return 1
 
 		else if(href_list["toggle"])
 			mode = !mode
+			src.updateUsrDialog()
+			return 1
+
+		else if(href_list["toggle_disp"])
+			slurpmode = !slurpmode
 			src.updateUsrDialog()
 			return 1
 
@@ -398,18 +440,20 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	for(var/i = 1 to MAX_PILL_SPRITE)
 		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
 
-/obj/machinery/chem_master/proc/generate_pill_icon_div()
+/obj/machinery/chem_master/proc/generate_pill_icon_div(pill_display_number)
 	var/dat = list()
 	dat += "<HR>"
+	dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a><br>"
 	dat += "<div class='pillIconsContainer'>"
-	for(var/i = 1 to MAX_PILL_SPRITE)
+	for(var/i = 1 to pill_display_number)
 		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 					<div class="pillIcon">
 						[pill_icon_cache[i]]
 					</div>
 				</a>"}
 		if (i%10 == 0)
-			dat +="<br>"
+			dat += "<br>"
+
 	dat += "</div>"
 	return dat
 
@@ -421,6 +465,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	user.set_machine(src)
 
 	var/dat = list()
+
 	if(!beaker)
 		dat += "Please insert a beaker.<BR>"
 		if(!condi)
@@ -428,7 +473,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
-			dat += generate_pill_icon_div()
+			dat += generate_pill_icon_div(pill_display_number)
 	else
 		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
@@ -478,6 +523,34 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "</table>"
 
 		//
+		// NEARBY SLURPABLES
+		//
+		var/found_valid_disp = FALSE
+		for(var/obj/O in orange(1,src))
+			if(!is_type_in_list(O, slurp_types))
+				continue
+			if(!O.reagents.total_volume)
+				continue
+			if(!found_valid_disp)
+				dat += "<HR>"
+				dat += "<table><td class='column1'>Transfer to <A href='?src=\ref[src];toggle_disp=1'>[(!slurpmode ? "buffer" : "beaker")]:</A></td></table>"
+				found_valid_disp = TRUE
+			dat += {"
+				<table>
+					<td class="column1">
+						\The [O], [O.reagents.total_volume] Units - ([dir2arrow(get_dir(src,O))])
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=10'>10u</A>
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=50'>50u</A>
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=100'>100u</A>
+						<A href='?src=\ref[src];slurpallcustom=1;disp=\ref[O]'>Custom</A>
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=[O.reagents.total_volume]'>All</A>
+					</td>
+				</table>
+			"}
+
+		//
 		// BUFFER
 		//
 
@@ -523,7 +596,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// PILL ICONS
 			//
-			dat += generate_pill_icon_div()
+
+			dat += generate_pill_icon_div(pill_display_number)
+
+
+
 
 			//
 			// BUTTONS

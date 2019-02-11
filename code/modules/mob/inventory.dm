@@ -293,11 +293,18 @@
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
 		return 1
 
+
 // Drops all and only equipped items, including items in hand
 /mob/proc/drop_all()
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
 	drop_hands()
+	
+// deletes all and only equipped items, including items in hand
+/mob/proc/delete_all_equipped_items()
+	for (var/obj/item/I in get_all_slots())
+		qdel(I)
+	delete_held_items()
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
@@ -339,6 +346,10 @@
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
 	for(var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
+		
+/mob/proc/delete_held_items(var/atom/Target) //deletes both items
+	for(var/obj/item/I in held_items)
+		qdel(I)
 
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?

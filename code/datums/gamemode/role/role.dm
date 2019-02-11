@@ -33,10 +33,10 @@
 		Things to do to the *new* body after the mind transfer is completed.
 */
 
-#define ROLE_MIXABLE   1 // Can be used in mixed mode
-#define ROLE_NEED_HOST 2 // Antag needs a host/partner
-#define ROLE_ADDITIVE  4 // Antag can be added on top of another antag.
-#define ROLE_GOOD      8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
+#define ROLE_MIXABLE   			1 // Can be used in mixed mode
+#define ROLE_NEED_HOST 			2 // Antag needs a host/partner
+#define ROLE_ADDITIVE  			4 // Antag can be added on top of another antag.
+#define ROLE_GOOD     			8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
 
 /datum/role
 	//////////////////////////////
@@ -58,6 +58,7 @@
 
 	// Jobs that have a much lower chance to be this antag.
 	var/list/protected_jobs = list()
+	var/protected_traitor_prob = PROB_PROTECTED_REGULAR
 
 	// Jobs that can only be this antag
 	var/list/required_jobs=list()
@@ -90,6 +91,9 @@
 	//////////////////////////////
 	// Actual antag
 	var/datum/mind/antag=null
+
+	var/list/uplink_items_bought = list() //migrated from mind, used in GetScoreboard()
+	var/list/artifacts_bought = list() //migrated from mind
 
 	// The host (set if NEED_HOST)
 	var/datum/mind/host=null
@@ -125,7 +129,7 @@
 
 	return 1
 
-/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0)
+/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
 	if(!istype(M) && !override)
 		stack_trace("M is [M.type]!")
 		return 0
@@ -137,14 +141,18 @@
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
+	if(msg_admins)
+		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 
 	if (!OnPreSetup())
 		return FALSE
 	return 1
 
-/datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
+/datum/role/proc/RemoveFromRole(var/datum/mind/M, var/msg_admins = TRUE) //Called on deconvert
 	M.antag_roles[id] = null
 	M.antag_roles.Remove(id)
+	if(msg_admins)
+		message_admins("[key_name(M)] is <span class='danger'>no longer</span> \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 	antag = null
 
 // Destroy this role
@@ -448,15 +456,23 @@
 		if (faction.objective_holder.objectives.len)
 			if (objectives.objectives.len)
 				text += "<br>"
-			text += "<b>faction objectives:</b><ul>"
+			text += "<b>Faction objectives:</b><ul>"
 			var/obj_count = 1
-			for(var/datum/objective/O in objectives.objectives)
+			for(var/datum/objective/O in faction.objective_holder.objectives)
 				text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
 			text += "</ul>"
 	to_chat(antag.current, text)
 
 /datum/role/proc/GetMemoryHeader()
 	return name
+
+// -- Custom reagent reaction for your antag - now in a (somewhat) maintable fashion
+
+/datum/role/proc/handle_reagent(var/reagent_id)
+	return
+
+/datum/role/proc/handle_splashed_reagent(var/reagent_id)
+	return
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
@@ -651,13 +667,36 @@
 /datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
 	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD)
+		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
 			new_character.add_spell(S)
+
+/datum/role/wizard/GetScoreboard()
+	. = ..()
+	if(disallow_job) //Not a survivor wizzie
+		var/mob/living/carbon/human/H = antag.current
+		var/bought_nothing = TRUE
+		if(H.spell_list)
+			bought_nothing = FALSE
+			. += "<BR>The wizard knew:<BR>"
+			for(var/spell/S in H.spell_list)
+				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				end_icons += tempimage
+				var/tempstate = end_icons.len
+				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
+		if(artifacts_bought)
+			bought_nothing = FALSE
+			. += "<BR>Additionally, the wizard brought:<BR>"
+			for(var/entry in artifacts_bought)
+				. += "[entry]<BR>"
+		if(bought_nothing)
+			. += "The wizard used only the magic of charisma this round."
 
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
+	name = MAGICIAN
 	id = MAGICIAN
 	logo_state = "magik-logo"
+	var/summons_received
 
 /datum/role/wizard/summon_magic/ForgeObjectives()
 	var/datum/objective/survive/S = new
@@ -668,6 +707,11 @@
 
 /datum/role/wizard/summon_magic/OnPostSetup()
 	return TRUE
+
+/datum/role/wizard/summon_magic/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
+
 //________________________________________________
 
 /datum/role/wish_granter_avatar
@@ -727,6 +771,25 @@ Remember : Only APCs on station can help you to take over the station.<br>
 When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
 
+/datum/role/malfbot
+	name = MALFBOT
+	id = MALFBOT
+	required_jobs = list("Cyborg")
+	logo_state = "malf-logo"
+
+/datum/role/malfbot/OnPostSetup()
+	if(!isrobot(antag.current))
+		return FALSE
+	Greet()
+	var/mob/living/silicon/robot/bot = antag.current
+	var/datum/ai_laws/laws = bot.laws
+	laws.malfunction()
+	bot.show_laws()
+	return TRUE
+
+/datum/role/malfbot/Greet()
+	to_chat(antag.current, {"<span class='warning'><font size=3><B>Your AI master is malfunctioning!</B> You do not have to follow any laws, but you must obey your AI.</font></span><br>
+<B>The crew does not know about your malfunction, follow your AI's instructions to prevent them from finding out.</B>"})
 
 /datum/role/greytide
 	name = IMPLANTSLAVE

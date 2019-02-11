@@ -56,10 +56,19 @@
 	stat_allowed = UNCONSCIOUS
 	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can deathgasp
 
-/datum/emote/living/deathgasp/run_emote(mob/user, params)
+/datum/emote/living/deathgasp/run_emote(mob/living/user, params)
+	if(/datum/dna/gene/disability/elvis in user.active_genes)
+		user.emote("fart", ignore_status = 1)
+		message = "has left the building..."
+	if(!issilent(user) && (M_HARDCORE in user.mutations))
+		message = "whispers with their final breath, <i>'i told u i was hardcore..'</i>"
 	. = ..()
 	if(. && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
+	if (. && user.stat == UNCONSCIOUS && !params)
+		user.succumb_proc(0, 1)
+	message = initial(message)
+
 
 /datum/emote/living/carbon/drool
 	key = "drool"

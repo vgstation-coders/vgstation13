@@ -18,7 +18,8 @@
 	var/list/deity_names = list()
 
 	var/datum/action/renounce/action_renounce
-	var/list/keys = list("christianity") // What you need to type to get this particular relgion.
+	var/list/keys = list("abstractbasetype") // What you need to type to get this particular relgion.
+	var/converts_everyone = FALSE
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
@@ -94,26 +95,30 @@
 	return choice == "Yes"
 
 // Here is the proc to welcome a new soul in our religion.
-/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)
+/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher, var/can_renounce = TRUE, var/default = FALSE)
 	// If he already had one
 	if (subject.mind.faith)
 		subject.mind.faith.renounce(subject) // We remove him from that one
 
 	subject.mind.faith = src
-	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
 	adepts += subject.mind
-	action_renounce.Grant(subject)
-	if (!preacher)
-		var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
-		message_admins(msg)
+	if(can_renounce)
+		action_renounce.Grant(subject)
+	if(!default)
+		to_chat(subject, "<span class='good'>You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].</span>")
+		if (!preacher)
+			var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
+			message_admins(msg)
+		else
+			var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
+			message_admins(msg)
 	else
-		var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
-		message_admins(msg)
+		to_chat(subject, "<span class='good'>You are reminded you were christened into [name] long ago.</span>")
 
 // Activivating a religion with admin interventions.
 /datum/religion/proc/activate(var/mob/living/preacher)
 	equip_chaplain(preacher) // We do the misc things related to the religion
-	to_chat(preacher, "A great, intense revelation go through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
+	to_chat(preacher, "A great, intense revelation goes through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
 	if (holy_book)
 		preacher.put_in_hands(holy_book)
 	else
@@ -124,6 +129,15 @@
 		preacher.put_in_hands(holy_book)
 	religiousLeader = preacher.mind
 	convert(preacher, null)
+	OnPostActivation()
+
+/datum/religion/proc/OnPostActivation()
+	if(converts_everyone)
+		message_admins("[key_name(religiousLeader)] has selected [name] and converted the entire crew.")
+		for(var/mob/living/carbon/human/H in player_list)
+			if(isReligiousLeader(H))
+				continue
+			convert(H,null,TRUE,TRUE)
 
 /datum/religion/proc/renounce(var/mob/living/subject)
 	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
@@ -164,7 +178,7 @@
 	var/book_style = "Bible"
 
 	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "Clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide", "The Dokument")
 	switch(book_style)
 		if("Koran")
 			R.holy_book.icon_state = "koran"
@@ -227,12 +241,19 @@
 			R.holy_book.icon_state = "slab"
 			R.holy_book.item_state = "slab"
 			R.holy_book.desc = "A bizarre, ticking device... That looks broken."
+		if ("The Dokument")
+			R.holy_book.icon_state = "gunbible"
+			R.holy_book.item_state = "gunbible"
 		else
 			//If christian bible, revert to default
 			R.holy_book.icon_state = "bible"
 			R.holy_book.item_state = "bible"
 
 // The list of all religions spacemen have designed, so far.
+/datum/religion/default
+	keys = list("christianity")
+	converts_everyone = TRUE
+
 /datum/religion/catholic
 	name = "Catholicism"
 	deity_name = "Jesus Christ"
@@ -285,6 +306,9 @@
 	male_adept = "Master of Slam"
 	female_adept = "Mistress of Slam"
 	keys = list("slam", "bball", "basketball", "basket ball")
+
+/datum/religion/slam/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new/obj/item/weapon/beach_ball/holoball)
 
 /datum/religion/judaism
 	name = "Judaism"
@@ -512,7 +536,7 @@
 	convert(subject, preacher)
 	return TRUE
 
-/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject)
+/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject, var/can_renounce = TRUE)
 	. = ..()
 	if (subject)
 		subject.adjustBrainLoss(100) // Welcome to the club
@@ -542,8 +566,8 @@
 	female_adept = "Disciple of the Nine"
 	keys = list("nine divines", "eight divines")
 
-/datum/religion/deadra
-	name = "Cult of the Deadreas"
+/datum/religion/daedra
+	name = "Cult of the Daedreas"
 	deity_names = list("Azura", "Boethiah", "Sheogorath", "Sanguine", "Hircine", "Meridia", "Hermaeus Mora", "Nocturnal", "Oghma Infinium")
 	bible_names = list("The Blessings of Sheogorath", "Boethiah's Pillow Book", "Invocation of Azura")
 	male_adept = "Daedra Worshipper"
@@ -899,6 +923,7 @@
 
 /datum/religion/vampirism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
+	H.equip_or_collect(new /obj/item/clothing/mask/vamp_fangs(H), slot_wear_mask)
 
 /datum/religion/vox
 	name = "Voxophilia"
@@ -1021,3 +1046,66 @@
 	H.h_style = "Big Afro"
 	H.f_style = "Full Beard"
 	H.update_hair()
+
+/datum/religion/clean
+	name = "Cleanliness"
+	deity_name = "Mr. Clean"
+	bible_name = "Cleanliness - Next to Godliness"
+	male_adept = "Janitor"
+	female_adept = "Janitor"
+	keys = list("clean","cleaning","Mr. Clean","janitor")
+
+/datum/religion/clean/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/mop)
+	H.h_style = "Bald"
+	H.f_style = "Shaved"
+	H.update_hair()
+
+/datum/religion/guns
+	name = "Murdercube"
+	deity_name = "Gun Jesus"
+	bible_name = "The Dokument"
+	male_adept = "Kommando"
+	female_adept = "Kommando"
+	keys = list("murdercube","murderkube", "murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea", "dakka")
+	convert_method = "performing a ritual with a gun. The convert needs to be in good health and unafraid of being shot."
+
+/datum/religion/guns/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/weapon/gun/energy/laser/practice)
+	H.equip_or_collect(new /obj/item/clothing/under/syndicate, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/jackboots, slot_shoes)
+
+/datum/religion/guns/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_gun = preacher.find_held_item_by_type(/obj/item/weapon/gun)
+
+	if (!held_gun)
+		to_chat(preacher, "<span class='warning'>You need to hold a gun to begin the conversion.</span>")
+		return FALSE
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	var/obj/item/weapon/gun/G = preacher.held_items[held_gun]
+
+	sleep(0.1 SECONDS)
+	if(G.canbe_fired())
+		G.Fire(subject,preacher,0,0,1)
+	else
+		G.click_empty(preacher)
+		return FALSE
+
+	preacher.say("AVE NEX ALEA!")
+
+	subject.visible_message("<span class='notice'>\The [subject] masterfully completed the delicate ritual. He's now a full-fledged follower of the [deity_name].</span>")
+
+	convert(subject, preacher)
+	return TRUE
+
+/datum/religion/speedrun
+	name = "Speedrunning"
+	deity_name = "TASbot"
+	bible_name = "Guide to Speedrunning"
+	male_adept = "Speedrunner"
+	female_adept = "Speedrunner"
+	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")

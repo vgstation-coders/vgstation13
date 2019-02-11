@@ -36,11 +36,21 @@ var/list/special_fruits = list()
 		//Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
 			seed = SSplant.seeds[plantname]
-			if(!seed || !seed.chems)
+			if(!seed)
 				return
 
 			potency = round(seed.potency)
 			force = seed.thorny ? 5+seed.carnivorous*3 : 0
+
+			if(seed.teleporting)
+				name = "blue-space [name]"
+			if(seed.stinging)
+				name = "stinging [name]"
+			if(seed.juicy == 2)
+				name = "slippery [name]"
+
+			if(!seed.chems)
+				return
 
 			var/totalreagents = 0
 			for(var/rid in seed.chems)
@@ -59,13 +69,6 @@ var/list/special_fruits = list()
 					if(reagent_data.len > 1 && potency > 0)
 						rtotal += round(potency/reagent_data[2])
 					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
-
-			if(seed.teleporting)
-				name = "blue-space [name]"
-			if(seed.stinging)
-				name = "stinging [name]"
-			if(seed.juicy == 2)
-				name = "slippery [name]"
 
 		if(reagents.total_volume > 0)
 			bitesize = 1 + round(reagents.total_volume/2, 1)
@@ -249,6 +252,7 @@ var/list/special_fruits = list()
 	else //Teleports the thrower instead.
 		spark(M)
 		new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
+		M.unlock_from()
 		M.forceMove(picked) //Send then to that location we picked previously
 		spawn()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
@@ -787,6 +791,27 @@ var/list/special_fruits = list()
 
 	to_chat(user, "<span class='notice'>You plant the glowshroom.</span>")
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/grass
+	name = "grass"
+	desc = "Green and lush."
+	icon_state = "grassclump"
+	filling_color = "#32CD32"
+	plantname = "grass"
+	var/stacktype = /obj/item/stack/tile/grass
+	var/tile_coefficient = 0.02 // 1/50
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/grass/attack_self(mob/user as mob)
+	to_chat(user, "<span class='notice'>You prepare the astroturf.</span>")
+	var/grassAmount = 1 + round(potency * tile_coefficient) // The grass we're holding
+	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/grass/G in user.loc) // The grass on the floor
+		if(G.type != type)
+			continue
+		grassAmount += 1 + round(G.potency * tile_coefficient)
+		qdel(G)
+
+	drop_stack(stacktype, get_turf(user), grassAmount, user)
+	qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 	name = "chicken-of-the-stars"
 	desc = "A variant of the Earth-native Laetiporus sulphureus, adapted by Vox traders for space. Everything tastes like chicken."
@@ -1004,3 +1029,19 @@ var/list/special_fruits = list()
 	desc = "An unusually fatty fruit, it can be used in both savory and sweet dishes."
 	icon_state = "avocado_pitted"
 	cant_eat_msg = null
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+	name = "pear"
+	desc = "The inferior alternative to apples."
+	icon_state = "pear"
+	potency = 15
+	filling_color = "#DFE88B"
+	plantname = "pear"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear
+	name = "silver pear"
+	desc = "Silver will always be the inferior alternative to gold."
+	icon_state = "silverpear"
+	potency = 15
+	filling_color = "#DFE88B"
+	plantname = "silverpear"

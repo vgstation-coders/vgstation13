@@ -110,14 +110,14 @@
 			to_chat(user, "<span class='notice'>You slot [B] into [src].</span>")
 			src.updateUsrDialog()
 
-/obj/item/weapon/gun/dartgun/can_fire()
+/obj/item/weapon/gun/dartgun/canbe_fired()
 	if(!cartridge)
 		return 0
 	else
 		return cartridge.darts
 
 /obj/item/weapon/gun/dartgun/can_discharge()
-	return can_fire()
+	return canbe_fired()
 
 /obj/item/weapon/gun/dartgun/proc/has_selected_beaker_reagents()
 	return 0
@@ -147,7 +147,7 @@
 	return dart
 
 /obj/item/weapon/gun/dartgun/process_chambered()
-	if(can_fire())
+	if(canbe_fired())
 		if(!in_chamber)
 			var/obj/item/weapon/reagent_containers/syringe/S = get_mixed_syringe()
 			if(!S)

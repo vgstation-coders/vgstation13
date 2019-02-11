@@ -2,6 +2,13 @@
 #define DAMAGE			1
 #define FIRE			2
 
+#define SPACEPOD_MOVEDELAY_FAST 0.4
+#define SPACEPOD_MOVEDELAY_SLOW 3
+#define SPACEPOD_MOVEDELAY_DEFAULT SPACEPOD_MOVEDELAY_FAST
+
+#define STATUS_REMOVE 1
+#define STATUS_ADD 2
+
 /obj/spacepod
 	name = "\improper space pod"
 	desc = "A space pod meant for space travel."
@@ -12,10 +19,9 @@
 	layer = ABOVE_DOOR_LAYER
 	infra_luminosity = 15
 	internal_gravity = 1 // Can move in 0-gravity
-	var/mob/living/carbon/occupant //The pilot
 	var/passenger_limit = 1 //Upper limit for how many passengers are allowed
 	var/passengers_allowed = 1 //If the pilot allows people to jump in the side seats.
-	var/list/passengers = list()
+	var/list/occupants = list()
 	var/datum/spacepod/equipment/equipment_system
 	var/obj/item/weapon/cell/battery
 	var/datum/gas_mixture/cabin_air
@@ -33,14 +39,14 @@
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/passenger_fire = 0 //Whether or not a passenger can fire weapons attached to this pod
-	var/movement_delay = 0.4 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
-	var/list/actions_types = list(
-		/datum/action/spacepod/pilot/toggle_passengers,\
-		/datum/action/spacepod/pilot/toggle_passenger_weaponry) //Actions to create and hold for the pilot
+	var/movement_delay = SPACEPOD_MOVEDELAY_DEFAULT //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
+	var/list/actions_types = list( //Actions to create and hold for the pilot
+		/datum/action/spacepod/pilot/toggle_passengers,
+		/datum/action/spacepod/pilot/toggle_passenger_weaponry,
+		/datum/action/spacepod/pilot/change_speed,
+		)
 	var/list/actions_types_pilot = list(/datum/action/spacepod/fire_weapons) //Actions to create when a pilot boards, deleted upon leaving
-	var/list/actions_types_passenger = list(
-		/datum/action/spacepod/fire_weapons,\
-		/datum/action/spacepod/passenger/assume_control) //Actions to create when a passenger boards, deleted upon leaving
+	var/list/actions_types_passenger = list(/datum/action/spacepod/fire_weapons) //Actions to create when a passenger boards, deleted upon leaving
 	var/list/actions = list()
 
 /obj/spacepod/get_cell()
@@ -71,12 +77,9 @@
 
 
 /obj/spacepod/Destroy()
-	if(src.occupant)
-		move_pilot_outside(occupant)
-		src.occupant.gib()
-	if(passengers.len)
-		for(var/mob/living/L in passengers)
-			move_passenger_outside(L)
+	if(occupants.len)
+		for(var/mob/living/L in occupants)
+			move_outside(L)
 			L.gib()
 	if(actions.len)
 		for(var/datum/action/A in actions)
@@ -124,17 +127,20 @@
 	var/oldhealth = health
 	health = Clamp(health-damage,0, maxHealth)
 	var/percentage = (health / initial(health)) * 100
-	if(occupant && oldhealth > health && percentage <= 25 && percentage > 0)
-		occupant.playsound_local(occupant, 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
-	if(occupant && oldhealth > health && !health)
-		occupant.playsound_local(occupant, 'sound/effects/engine_alert1.ogg', 50, 0, 0, 0, 0)
+	if(get_pilot() && oldhealth > health && percentage <= 25 && percentage > 0)
+		get_pilot().playsound_local(get_pilot(), 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
+	if(get_pilot() && oldhealth > health && !health)
+		var/mob/living/L = get_pilot()
+		L.playsound_local(L, 'sound/effects/engine_alert1.ogg', 50, 0, 0, 0, 0)
 	if(health <= 0)
 		spawn(0)
-			if(occupant)
-				to_chat(occupant, "<big><span class='warning'>Critical damage to the vessel detected, core explosion imminent!</span></big>")
+			var/mob/living/L = get_pilot()
+			if(L)
+
+				to_chat(L, "<big><span class='warning'>Critical damage to the vessel detected, core explosion imminent!</span></big>")
 			for(var/i = 10, i >= 0; --i)
-				if(occupant)
-					to_chat(occupant, "<span class='warning'>[i]</span>")
+				if(L)
+					to_chat(L, "<span class='warning'>[i]</span>")
 				if(i == 0)
 					explosion(loc, 2, 4, 8)
 				sleep(10)
@@ -144,17 +150,16 @@
 /obj/spacepod/ex_act(severity)
 	switch(severity)
 		if(1)
-			var/mob/living/carbon/human/H = occupant
-			if(H)
-				move_pilot_outside(H, get_turf(src))
-				H.ex_act(severity + 1)
-				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
-			if(passengers.len)
-				for(var/mob/living/L in passengers)
-					move_passenger_outside(L, get_turf(src))
+			if(has_passengers())
+				for(var/mob/living/L in get_passengers())
+					move_outside(L, get_turf(src))
 					L.ex_act(severity + 1)
 					to_chat(L, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
-					passengers.Remove(L)
+			var/mob/living/carbon/human/H = get_pilot()
+			if(H)
+				move_outside(H, get_turf(src))
+				H.ex_act(severity + 1)
+				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 			qdel(ion_trail)
 			ion_trail = null // Should be nulled by qdel src in next line but OH WELL
 			qdel(src)
@@ -289,10 +294,10 @@
 	set category = "Spacepod"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if(usr!=src.get_pilot())
 		return
 	src.use_internal_tank = !src.use_internal_tank
-	to_chat(src.occupant, "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>")
+	to_chat(src.get_pilot(), "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>")
 	return
 
 /obj/spacepod/proc/add_cabin()
@@ -353,14 +358,14 @@
 		return
 	if(!Adjacent(M) || !Adjacent(user))
 		return
-	move_inside(M, user)
+	attempt_move_inside(M, user)
 
 /obj/spacepod/MouseDropFrom(atom/over)
 	if(!usr || !over)
 		return
 	if(!Adjacent(usr) || !Adjacent(over))
 		return
-	if(occupant != usr && !passengers.Find(usr))
+	if(!occupants.Find(usr))
 		return ..() //Handle mousedrop T
 	var/turf/T = get_turf(over)
 	if(!Adjacent(T) || T.density)
@@ -370,26 +375,17 @@
 			if((A == src) || istype(A, /mob))
 				continue
 			return
-	if(occupant == usr)
-		move_pilot_outside(usr, T)
-	else if(passengers.Find(usr))
-		move_passenger_outside(usr, T)
+	if(occupants.Find(usr))
+		move_outside(usr,T)
 
-/obj/spacepod/verb/move_inside()
+/obj/spacepod/verb/attempt_move_inside()
 	set category = "Spacepod"
 	set name = "Enter / Exit Pod"
 	set src in oview(1)
 
-	if(occupant)
-		if(occupant == usr)
-			move_pilot_outside(usr)
-			return
-		else if(passengers.len && passengers.Find(usr))
-			move_passenger_outside(usr)
-			return
-		else if (!passenger_limit || passengers.len > passenger_limit)
-			to_chat(usr, "<span class='notice'><B>\The [src] is already occupied!</B></span>")
-			return
+	if(occupants.Find(usr))
+		move_outside(usr, get_turf(src))
+		return
 
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
@@ -408,14 +404,11 @@
 
 	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
-	if(enter_after(40,usr))
-		if(!src.occupant)
-			move_pilot_inside(usr)
-		else if(src.occupant!=usr)
-			if(passengers.len < passenger_limit)
-				move_passenger_inside(usr)
-				return
-			to_chat(usr, "[src.occupant] was faster. Better luck next time, loser.")
+	if(do_after(usr, src, 4 SECONDS))
+		if(!get_pilot() || get_passengers().len < passenger_limit)
+			move_into_pod(usr)
+		else
+			to_chat(usr, "<span class = 'warning'>Not enough room inside \the [src].</span>")
 	else
 		to_chat(usr, "You stop entering the pod.")
 	return
@@ -495,7 +488,7 @@
 	return 1
 
 /obj/spacepod/relaymove(mob/user, direction)
-	if(user != occupant)
+	if(user != get_pilot())
 		return 0 //Stop hogging the wheel!
 	if(move_delayer.blocked())
 		return 0
@@ -571,89 +564,110 @@
 		L.stop_pulling()
 		L.forceMove(src)
 		src.add_fingerprint(L)
+		adjust_occupants(L, STATUS_ADD)
 		return 1
 	return 0
 
-/obj/spacepod/proc/move_pilot_inside(var/mob/living/carbon/human/H) //Person is becoming the pilot
-	if(move_into_pod(H))
-		occupant = H
-		if(actions.len)
-			for(var/datum/action/spacepod/pilot/P in actions)
-				P.Grant(occupant)
-			for(var/path in actions_types_pilot)
-				var/datum/action/A = new path(src)
-				actions.Add(A)
-				A.Grant(occupant)
+/obj/spacepod/proc/get_pilot()
+	if(occupants.len)
+		return occupants[1]
+	return 0
 
-		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
-		return 1
-	else
-		return 0
+/obj/spacepod/proc/has_passengers()
+	if(occupants.len > 1)
+		return occupants.len-1
+	return 0
 
-/obj/spacepod/proc/move_pilot_outside(mob/living/user, turf/exit_loc = src.loc)
-	if(occupant)
-		inertia_dir = 0 // engage reverse thruster and power down pod
-		occupant.forceMove(exit_loc)
-		if(actions.len)
-			for(var/datum/action/S in actions)
-				if(istype (S, /datum/action/spacepod/pilot)) //Keep these
-					S.Remove(occupant)
-				else if(S.owner == occupant) //Remove these
-					qdel(S)
-					actions.Remove(S)
-		occupant = null
-		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
-
-
-/obj/spacepod/proc/move_passenger_inside(var/mob/living/carbon/human/H)
-	if(!passengers_allowed)
-		to_chat(H, "<span class='notice'>Error: Passengers forbidden.</span>")
-		return 0
-	if(move_into_pod(H))
-		src.passengers.Add(H)
-		//dir = dir_in
-		to_chat(H, "<span class='notice'>You climb into a passenger seat within \the [src].</span>")
-		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
-		for(var/path in actions_types_passenger)
-			var/datum/action/A = new path(src)
-			actions.Add(A)
-			A.Grant(H)
-		return 1
-	else
-		return 0
-
-/obj/spacepod/proc/move_passenger_outside(mob/living/user, turf/exit_loc = src.loc)
-	if(passengers.len && passengers.Find(user))
-		user.forceMove(exit_loc)
-		passengers.Remove(user)
-		for(var/datum/action/spacepod/S in actions)
-			if(S.owner == user) //Remove these
-				qdel(S)
-				actions.Remove(S)
-		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
+/obj/spacepod/proc/get_passengers()
+	var/list/L = list()
+	if(occupants.len > 1)
+		L = occupants.Copy(2)
+	return L
 
 /obj/spacepod/proc/toggle_passengers()
-	if(usr!=src.occupant)
+	if(usr!=get_pilot())
 		return
 	src.passengers_allowed = !passengers_allowed
-	to_chat(src.occupant, "<span class='notice'>Now [passengers_allowed?"allowing passengers":"disallowing passengers, and ejecting any current passengers"].</span>")
-	if(!passengers_allowed && passengers.len)
-		for(var/mob/living/L in passengers)
+	to_chat(src.get_pilot(), "<span class='notice'>Now [passengers_allowed?"allowing passengers":"disallowing passengers, and ejecting any current passengers"].</span>")
+	if(!passengers_allowed && has_passengers())
+		for(var/mob/living/L in get_passengers())
 			to_chat(L, "<span class='warning'>Ejection sequence activated: Ejecting in 3 seconds</span>")
 			spawn(30)
-				if(passengers.Find(L) && L.loc == src)
+				if(occupants.Find(L) && L.loc == src)
 					playsound(src, 'sound/weapons/rocket.ogg', 50, 1)
 					var/turf/T = get_turf(src)
 					var/turf/target_turf
-					move_passenger_outside(L,T)
-					target_turf = get_edge_target_turf(T, WEST)
+					move_outside(L,T)
+					target_turf = get_edge_target_turf(T, opposite_dirs[dir])
 					L.throw_at(target_turf,100,3)
 
+/obj/spacepod/proc/move_outside(var/mob/occupant, var/turf/exit_turf)
+	if(!exit_turf)
+		exit_turf = get_turf(src)
+	adjust_occupants(occupant, STATUS_REMOVE)
+	occupant.forceMove(exit_turf)
+
+/obj/spacepod/proc/adjust_occupants(var/mob/user, var/status)
+	if(status == STATUS_REMOVE)
+		var/pilot = get_pilot()
+		if(user == pilot) //They're the pilot
+			for(var/datum/action/S in actions)
+				if(istype (S, /datum/action/spacepod/pilot)) //Keep these
+					S.Remove(user)
+				else if(S.owner == user) //Remove these
+					qdel(S)
+					actions.Remove(S)
+		else //They're a passenger
+			for(var/datum/action/spacepod/S in actions)
+				if(S.owner == user) //Remove these
+					qdel(S)
+					actions.Remove(S)
+		occupants.Remove(user)
+		if(get_pilot() && pilot != get_pilot()) //NEW PILOT
+			var/mob/living/new_pilot = get_pilot()
+			if(!new_pilot)
+				return
+			to_chat(new_pilot, "<span class = 'notice'>You are now the pilot of \the [src].</span>")
+			for(var/datum/action/spacepod/S in actions)
+				if(S.owner == new_pilot) //Remove these
+					qdel(S)
+					actions.Remove(S)
+			for(var/datum/action/spacepod/pilot/P in actions)
+				P.Grant(new_pilot)
+			for(var/path in actions_types_pilot)
+				var/datum/action/A = new path(src)
+				actions.Add(A)
+				A.Grant(new_pilot)
+	else if(status == STATUS_ADD)
+		occupants.Add(user)
+		if(user == get_pilot()) //They're the new pilot
+			for(var/datum/action/spacepod/pilot/P in actions)
+				P.Grant(user)
+			for(var/path in actions_types_pilot)
+				var/datum/action/A = new path(src)
+				actions.Add(A)
+				A.Grant(user)
+		else //They're a new passenger
+			for(var/path in actions_types_passenger)
+				var/datum/action/A = new path(src)
+				actions.Add(A)
+				A.Grant(user)
+
+/obj/spacepod/proc/change_speed()
+	if(usr != get_pilot())
+		return
+	if(movement_delay == SPACEPOD_MOVEDELAY_FAST)
+		movement_delay = SPACEPOD_MOVEDELAY_SLOW
+		to_chat(usr, "<span class='notice'>Thrusters strength: low.</span>")
+	else
+		movement_delay = SPACEPOD_MOVEDELAY_FAST
+		to_chat(usr, "<span class='notice'>Thrusters strength: high.</span>")
+
 /obj/spacepod/proc/toggle_passenger_guns()
-	if(usr!=src.occupant)
+	if(usr!=get_pilot())
 		return
 	src.passenger_fire = !passenger_fire
-	to_chat(src.occupant, "<span class='notice'>Now [passenger_fire?"allowing passengers to fire spacepod weaponry":"disallowing passengers to fire spacepod weaponry"].</span>")
+	to_chat(src.get_pilot(), "<span class='notice'>Now [passenger_fire?"allowing passengers to fire spacepod weaponry":"disallowing passengers to fire spacepod weaponry"].</span>")
 	playsound(src, 'sound/items/flashlight_on.ogg', 50, 1)
 
 /obj/spacepod/taxi
@@ -671,3 +685,10 @@
 
 #undef DAMAGE
 #undef FIRE
+
+#undef SPACEPOD_MOVEDELAY_FAST
+#undef SPACEPOD_MOVEDELAY_SLOW
+#undef SPACEPOD_MOVEDELAY_DEFAULT
+
+#undef STATUS_REMOVE
+#undef STATUS_ADD

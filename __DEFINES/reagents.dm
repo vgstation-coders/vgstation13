@@ -84,11 +84,13 @@
 #define ARITHRAZINE 			"arithrazine"
 #define ALKYSINE 			"alkysine"
 #define ALKYCOSINE 			"alkycosine"
+#define PHYTOSINE			"phytosine"
 #define IMIDAZOLINE 			"imidazoline"
 #define INACUSIATE 			"inacusiate"
 #define PERIDAXON 			"peridaxon"
 #define BICARIDINE 			"bicaridine"
 #define SYNTHOCARISOL 			"synthocarisol"
+#define PHYTOCARISOL			"phytocarisol"
 #define HYPERZINE 			"hyperzine"
 #define HYPOZINE 			"hypozine"
 #define CRYOXADONE 			"cryoxadone"
@@ -100,6 +102,7 @@
 #define MINDBREAKER 			"mindbreaker"
 #define HEARTBREAKER 			"heartbreaker"
 #define SPIRITBREAKER 			"spiritbreaker"
+#define DEFALEXORIN			"defalexorin"
 #define METHYLIN 			"methylin"
 #define BICARODYNE 			"bicarodyne"
 #define STABILIZINE 			"stabilizine"
@@ -390,6 +393,7 @@
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
 #define AMINOMICIN		"aminomicin"
+#define AMINOCYPRINIDOL	"aminocyprinidol"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

@@ -87,6 +87,11 @@
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
 
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_splashed_reagent(self.id)
+
 /datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	set waitfor = 0
 
@@ -151,6 +156,11 @@
 
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
+
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_reagent(id)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -1026,176 +1036,22 @@
 	if(volume >= 1)
 		O.bless()
 
-/datum/reagent/holywater/on_mob_life(var/mob/living/M, var/alien)
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if (iscultist(H))
-			var/unholy = H.checkTattoo(TATTOO_HOLY)
-			var/current_act = max(-1,min(5,veil_thickness))
-			var/datum/role/cultist/cult = H.mind.GetRole(CULTIST)
-			if (cult.holywarning_cooldown <= 0)
-				cult.holywarning_cooldown = 5
-				if (unholy)
-					to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
-				else
-					switch (current_act)
-						if (CULT_MENDED)
-							to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
-						if (CULT_PROLOGUE)
-							to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
-						if (CULT_ACT_I)
-							to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
-						if (CULT_ACT_II)
-							to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
-						if (CULT_ACT_III)
-							to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
-						if (CULT_ACT_IV)
-							to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
-						if (CULT_EPILOGUE)
-							to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
-
-			if (unholy)
-				H.eye_blurry = max(H.eye_blurry, 3)
-				return
-			else
-				switch (current_act)
-					if (CULT_MENDED)
-						H.dust()
-						return
-					if (CULT_PROLOGUE)
-						H.eye_blurry = max(H.eye_blurry, 3)
-						H.Dizzy(3)
-					if (CULT_ACT_I)
-						H.eye_blurry = max(H.eye_blurry, 6)
-						H.Dizzy(6)
-						H.stuttering = max(H.stuttering, 6)
-					if (CULT_ACT_II)
-						H.eye_blurry = max(H.eye_blurry, 12)
-						H.Dizzy(12)
-						H.stuttering = max(H.stuttering, 12)
-						H.Jitter(12)
-					if (CULT_ACT_III)
-						H.eye_blurry = max(H.eye_blurry, 16)
-						H.Dizzy(16)
-						H.stuttering = max(H.stuttering, 16)
-						H.Jitter(16)
-						if (prob(50))
-							H.Knockdown(1)
-						else if (prob(50))
-							H.confused = 2
-						H.adjustOxyLoss(5)
-					if (CULT_ACT_IV)
-						H.eye_blurry = max(H.eye_blurry, 20)
-						H.Dizzy(20)
-						H.stuttering = max(H.stuttering, 20)
-						H.Jitter(20)
-						if (prob(60))
-							H.Knockdown(2)
-						else if (prob(60))
-							H.confused = 4
-						H.adjustOxyLoss(10)
-						M.adjustToxLoss(5)
-					if (CULT_EPILOGUE)
-						H.eye_blurry = max(H.eye_blurry, 30)
-						H.Dizzy(30)
-						H.stuttering = max(H.stuttering, 30)
-						H.Jitter(30)
-						if (prob(70))
-							H.Knockdown(4)
-						else if (prob(70))
-							H.confused = 6
-						H.adjustOxyLoss(20)
-						M.adjustToxLoss(10)
-
-		if (islegacycultist(H))
-			if (prob(10))
-				var/datum/role/legacy_cultist/LC = H.mind.GetRole(LEGACY_CULTIST)
-				LC.Drop()
-			else
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
-		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		var/datum/role/vampire/V = isvampire(H)
-		if(V)
-			if(VAMP_MATURE in V.powers)
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
-				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
-				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
-			else
-				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
-				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		var/datum/role/thrall/T = isthrall(H)
-		if(T)
-			if (prob(35)) // 35% chance of dethralling
-				T.Drop(TRUE)
-
-/datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if (iscultist(H))
-			H.Dizzy(12)
-			H.Jitter(24)
-			H.Knockdown(3)
-			H.confused = 3
-			H.eye_blurry = max(H.eye_blurry, 6)
-
-	/*
-	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		var/datum/role/vampire/V = isvampire(H)
-		if(V)
-			if(!(VAMP_UNDYING in V.powers))
-				if(method == TOUCH)
-
-					if(H.wear_mask)
-						to_chat(H, "<span class='warning'>Your mask protects you from the holy water!</span>")
-						return
-
-					if(H.head)
-						to_chat(H, "<span class='warning'>Your helmet protects you from the holy water!</span>")
-						return
-
-					if(H.acidable())
-						if(prob(15) && volume >= 30)
-							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-							if(head_organ)
-								if(!(VAMP_MATURE in V.powers))
-									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
-									V.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
-									if(head_organ.take_damage(30, 0))
-										H.UpdateDamageIcon(1)
-									head_organ.disfigure("burn")
-									H.audible_scream()
-								else
-									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
-									V.smitecounter += 12 //Ditto above
-
-						else
-							if(!(VAMP_MATURE in V.powers))
-								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
-								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-								V.smitecounter += volume * 2
-							else
-								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
-								V.smitecounter += volume * 0.4
-				else
-					if(H.acidable())
-						H.take_organ_damage(min(15, volume * 2))
-						H.mind.vampire.smitecounter += 5
-	*/
-
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 
 	if(..())
 		return 1
 	if(volume >= 5)
 		T.bless()
+
+/datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+
+	if(volume >= 5)
+		if(istype(M,/mob/living/simple_animal/construct))
+			var/mob/living/simple_animal/construct/C = M
+			C.purge = 3
+			C.adjustBruteLoss(5)
+			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -2433,9 +2289,14 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H = M
+	if(isplasmaman(H))
+		return 1
+	else
+		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2 * REM)
-	M.adjustToxLoss(3 * REM)
+
 
 /datum/reagent/leporazine
 	name = "Leporazine"
@@ -4645,9 +4506,10 @@
 		M.drowsyness = max(0,M.drowsyness + adj_drowsy)
 	if(adj_sleepy)
 		M.sleeping = max(0,M.sleeping + adj_sleepy)
-	if(adj_temp)
-		if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-			M.bodytemperature = min(310, M.bodytemperature + (25 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(adj_temp > 0 && M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
+	else if(adj_temp < 0 && M.bodytemperature > 310)
+		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
 	name = "Orange juice"
@@ -4773,6 +4635,20 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
+
+/datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
+
+    if(ishuman(M))
+        var/mob/living/carbon/human/H = M
+        if(H.mind.miming)
+            if(M.getOxyLoss() && prob(80))
+                M.adjustOxyLoss(-REM)
+            if(M.getBruteLoss() && prob(80))
+                M.heal_organ_damage(REM, 0)
+            if(M.getFireLoss() && prob(80))
+                M.heal_organ_damage(0, REM)
+            if(M.getToxLoss() && prob(80))
+                M.adjustToxLoss(-REM)
 
 /datum/reagent/drink/potato_juice
 	name = "Potato Juice"
@@ -5830,7 +5706,7 @@
 /datum/reagent/ethanol/deadrum/toxins_special
 	name = "Toxins Special"
 	id = TOXINSSPECIAL
-	description = "This thing is FLAMING!. CALL THE DAMN SHUTTLE!"
+	description = "This thing is FLAMING! CALL THE DAMN SHUTTLE!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
@@ -6293,15 +6169,16 @@
 	description = "Concentrated honking"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
-	custom_metabolism = 0.01
+	custom_metabolism = 0.05
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
-	if(prob(0.9))
+	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
@@ -6505,24 +6382,31 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
 	causes_jitteriness = 0
 	var/activated = 0
+	var/noir_set_by_us = 0
 
 /datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(!activated)
-		M.update_colour()
+		if (M_NOIR in M.mutations)
+			noir_set_by_us = 0
+		else
+			noir_set_by_us = 1
+			M.dna.SetSEState(NOIRBLOCK, 1)
+			genemutcheck(M, NOIRBLOCK)
+			M.update_mutations()
 		activated = 1
 
 /datum/reagent/drink/coffee/detcoffee/reagent_deleted()
 	if(..())
 		return 1
-
 	if(!holder)
 		return
 	var/mob/M =  holder.my_atom
-
-	if(ishuman(M))
-		M.update_colour()
+	if (istype(M) && activated && noir_set_by_us)
+		M.dna.SetSEState(NOIRBLOCK, 0)
+		genemutcheck(M, NOIRBLOCK)
+		M.update_mutations()
 
 /datum/reagent/drink/coffee/etank
 	name = "Recharger"
@@ -6824,6 +6708,24 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = THYMOL
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
+
+/datum/reagent/synthocarisol/phytocarisol
+	name = "Phytocarisol"
+	id = PHYTOCARISOL
+	description = "A plant based alternative to carisol, a medicine made from rhino horn dust."
+	color = "#34D3B6" //rgb: 52, 211, 182
+
+/datum/reagent/heartbreaker/defalexorin
+	name = "Defalexorin"
+	id = DEFALEXORIN
+	description = "Defalexorin is used for getting a mild high in low amounts."
+	color = "#000000" //rgb: 0, 0, 0
+
+/datum/reagent/alkycosine/phytosine
+	name = "Phytosine"
+	id = PHYTOSINE
+	description = "Neurological medication made from mutated herbs."
+	color = "#9000ff" //rgb: 144, 0 255
 
 //End of plant-specific reagents
 
@@ -7161,7 +7063,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 		if(H.getBruteLoss() >= 30)
 			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
-				if((E.status & ORGAN_BROKEN) || (E.min_broken_damage >= E.max_damage))
+				if((E.status & ORGAN_BROKEN) || !E.is_organic() || (E.min_broken_damage >= E.max_damage))
 					continue
 				E.min_broken_damage += rand(4,8) * REM
 				if(E.min_broken_damage >= E.max_damage)
@@ -7174,9 +7076,19 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/aminomicin
 	name = "Aminomicin"
 	id = AMINOMICIN
-	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with pure nutriment."
+	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with nutriment."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 13.49 //our ingredients are pretty dense
 	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin
+
+/datum/reagent/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	description = "An extremely dangerous, flesh-replicating material, mutated by exposure to God-knows-what. Do not mix with nutriment under any circumstances."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#cb42f4" //rgb: 203, 66, 244
+	density = 111.75 //our ingredients are extremely dense, especially carppheromones
+	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin

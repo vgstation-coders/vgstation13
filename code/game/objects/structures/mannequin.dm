@@ -85,7 +85,7 @@
 		Awaken()
 
 /obj/structure/mannequin/HasProximity(var/atom/movable/AM)
-	if(trapped_prox)
+	if(trapped_prox && isliving(AM))
 		Awaken()
 		return 1
 	return 0

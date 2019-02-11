@@ -152,7 +152,7 @@
 	reagents = list(FLOUR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 
@@ -1141,7 +1141,7 @@
 	reagents = list(WATER = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/weapon/ore/clown,
+		/obj/item/stack/ore/clown,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/clownstears
 
@@ -2059,7 +2059,7 @@
 /datum/recipe/claypot//it just works
 	reagents = list(WATER = 10)
 	items = list(
-		/obj/item/weapon/ore/glass,
+		/obj/item/stack/ore/glass,
 		)
 	result = /obj/item/claypot
 
@@ -2351,8 +2351,8 @@
 /datum/recipe/mud_pie
 	reagents = list(WATER = 25)
 	items = list(
-		/obj/item/weapon/ore/glass,
-		/obj/item/weapon/ore/glass,
+		/obj/item/stack/ore/glass,
+		/obj/item/stack/ore/glass,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
 
@@ -2637,3 +2637,43 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+
+/datum/recipe/pickledpears
+	reagents = list(VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
+
+/datum/recipe/bulgogi
+	reagents = list(SOYSAUCE = 10, SUGAR =5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bulgogi
+
+/datum/recipe/candiedpear
+	reagents = list(CARAMEL = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/candiedpear
+
+/datum/recipe/bakedpears
+	reagents = list(CINNAMON = 5, SUGAR = 5, CREAM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bakedpears
+
+/datum/recipe/winepear
+	reagents = list(CINNAMON = 5, WINE = 5, CREAM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/winepear

@@ -169,7 +169,7 @@
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
-		for(var/atom/Obj as mob|obj|turf|area in range(1))
+		for(var/atom/Obj in range(1, src))
 			if(objects > loopsanity)
 				break
 			objects++
@@ -592,6 +592,7 @@
 			if(O.invisibility == 101)
 				O.singularity_act()
 	ChangeTurf(get_underlying_turf())
+	score["turfssingulod"]++
 	return(2)
 
 //Return a lattice to allow catwalk building
@@ -686,9 +687,10 @@
 		return FALSE
 
 	var/area/old_area = loc
-
+	old_area.contents.Remove(src)
+	old_area.area_turfs.Remove(src)
 	A.contents.Add(src)
-
+	A.area_turfs.Add(src)
 	if(old_area)
 		change_area(old_area, A)
 		for(var/atom/AM in contents)

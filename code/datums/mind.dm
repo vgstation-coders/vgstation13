@@ -59,7 +59,7 @@
 
 		//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
-	var/list/uplink_items_bought = list()
+
 	var/total_TC = 0
 	var/spent_TC = 0
 
@@ -96,10 +96,13 @@
 	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
-	
+
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
+
+	if (hasFactionsWithHUDIcons())
+		update_faction_icons()
 
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)
@@ -234,6 +237,7 @@
 
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
+			return
 
 		if (joined_faction && joined_faction != "-----")
 			if (joined_faction == "NEW CUSTOM FACTION")

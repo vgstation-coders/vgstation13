@@ -262,7 +262,7 @@
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
 
-					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.audible_scream()
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
 					spark(H, 3, FALSE)
@@ -636,7 +636,7 @@
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
 	if(!istype(loc, /turf/space))
-		for(var/obj/item/I in get_clothing_items())
+		for(var/obj/item/I in get_all_slots())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else

@@ -20,8 +20,7 @@
 	icon_classic = "blob_core"
 
 
-//obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0) HALLOWEEN
-/obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "skelleton",no_morph = 0)
+/obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)
 	looks = newlook
 	blob_cores += src
 	processing_objects.Add(src)
@@ -137,7 +136,7 @@
 	if(!new_overmind)
 		return 0
 
-	if (jobban_isbanned(new_overmind.mob, ROLE_BLOB))
+	if (jobban_isbanned(new_overmind.mob, ROLE_BLOB) || isantagbanned(new_overmind.mob))
 		to_chat(usr, "<span class='warning'>You are banned from this role.</span>")
 		return 0
 

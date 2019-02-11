@@ -665,7 +665,7 @@
 	C.update_canmove()
 	C.remove_changeling_powers()
 
-	C.emote("deathgasp")
+	C.emote("deathgasp", message = TRUE)
 	C.tod = worldtime2text()
 	var/time_to_take = rand(800, 1200)
 	to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
@@ -1028,7 +1028,11 @@ var/list/datum/dna/hivemind_bank = list()
 	if(amount == 0)
 		return
 
-	var/mob/living/carbon/target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = bool=="Yes"?TRUE:FALSE)
+	var/mob/living/carbon/target
+	if (bool=="Yes")
+		target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = TRUE)
+	else
+		target = M.changeling_sting(amount, /obj/item/verbs/changeling/proc/changeling_chemsting, allow_self = FALSE)
 	if(!target || !target.reagents)
 		return
 

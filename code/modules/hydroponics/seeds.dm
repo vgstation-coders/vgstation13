@@ -466,6 +466,18 @@
 		return
 	icon_state = "avocado_pit"
 
+/obj/item/seeds/pearseed
+	name = "packet of pear seeds"
+	seed_type = "pear"
+	vending_cat = "fruits"
+
+/obj/item/seeds/silverpearseed
+	name = "packet of pear seeds"
+	seed_type = "silverpear"
+	vending_cat = "fruits"
+
+
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -1052,6 +1064,7 @@
 	packet_icon = "seed-novaflower"
 	products = list(/obj/item/weapon/grown/novaflower)
 	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "novaflower"
 	chems = list(NUTRIMENT = list(1), CAPSAICIN = list(1,5))
 
@@ -1461,7 +1474,7 @@
 	seed_name = "grass"
 	display_name = "grass"
 	packet_icon = "seed-grass"
-	products = list(/obj/item/stack/tile/grass)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grass)
 	plant_icon = "grass"
 	harvest_repeat = 1
 
@@ -1562,6 +1575,7 @@
 	plant_icon = "dionanode"
 	mob_drop = /obj/item/seeds/dionanode
 	product_requires_player = 1
+	product_kill_inactive = FALSE
 	immutable = 1
 
 	lifespan = 50
@@ -1668,6 +1682,42 @@
 	potency = 10
 	ideal_light = 8
 	large = 0
+
+
+/datum/seed/pear
+	name = "pear"
+	seed_name = "pear"
+	display_name = "pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pear)
+	mutants = list("silverpear")
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-pear"
+	plant_icon = "pear"
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
+	potency = 10
+	ideal_light = 6
+	large = 0
+
+/datum/seed/pear/silver
+	name = "silverpear"
+	seed_name = "silver pear"
+	display_name = "silver pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear)
+	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-silverpear"
+	plant_icon = "silverpear"
+	chems = list(NUTRIMENT = list(1,10), SILVER = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
 
 // Vox Food
 

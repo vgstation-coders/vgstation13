@@ -74,7 +74,6 @@ obj/item/device/mmi/Destroy()
 
 		brainmob.mind.transfer_to(M)
 		M.Namepick()
-		M.updatename()
 
 		if(M.mind && M.mind.special_role)
 			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
@@ -151,6 +150,10 @@ obj/item/device/mmi/Destroy()
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
 
+		if (isrev(brainmob))
+			var/datum/role/revolutionary/R = brainmob.mind.GetRole(ROLE_REV)
+			R.Drop(TRUE)
+
 		locked = 1
 
 		feedback_inc("cyborg_mmis_filled",1)
@@ -198,6 +201,18 @@ obj/item/device/mmi/Destroy()
 	icon_state = "mmi_full"
 	locked = 1
 	return
+
+/obj/item/device/mmi/proc/create_identity(var/datum/preferences/P)
+	brainmob = new(src)
+	brainmob.dna = new()
+	brainmob.dna.ResetUI()
+	brainmob.dna.ResetSE()
+	brainmob.name = P.real_name
+	brainmob.real_name = P.real_name
+	brainmob.container = src
+	name = "Man-Machine Interface: [brainmob.real_name]"
+	icon_state = "mmi_full"
+	locked = 1
 
 /obj/item/device/mmi/radio_enabled
 	name = "Radio-enabled Man-Machine Interface"
