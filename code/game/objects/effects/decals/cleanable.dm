@@ -42,6 +42,31 @@
 
 	..(loc)
 
+	blood_list += src
+	update_icon()
+
+	if(counts_as_blood)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.add_bloody_floor(get_turf(src))
+		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(legacy_cult)
+			var/turf/T = get_turf(src)
+			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+				if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
+					legacy_cult.bloody_floors += T
+					legacy_cult.bloody_floors[T] = T
+					if (legacy_cult.has_enough_bloody_floors())
+						legacy_cult.getNewObjective()
+		if(src.loc && isturf(src.loc))
+			for(var/obj/effect/decal/cleanable/C in src.loc)
+				if(C.type in absorbs_types && C != src)
+					// Transfer DNA, if possible.
+					if (transfers_dna && C.blood_DNA)
+						blood_DNA |= C.blood_DNA.Copy()
+					amount += C.amount
+					returnToPool(C)
+
 /obj/effect/decal/cleanable/initialize()
 	..()
 	if(persistence_type)
@@ -129,33 +154,6 @@
 	viruses = list()
 	virus2 = list()
 	blood_DNA = list()
-
-/obj/effect/decal/cleanable/New()
-	..()
-	blood_list += src
-	update_icon()
-
-	if(counts_as_blood)
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
-			cult.add_bloody_floor(get_turf(src))
-		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if(legacy_cult)
-			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
-					legacy_cult.bloody_floors += T
-					legacy_cult.bloody_floors[T] = T
-					if (legacy_cult.has_enough_bloody_floors())
-						legacy_cult.getNewObjective()
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/C in src.loc)
-				if(C.type in absorbs_types && C != src)
-					// Transfer DNA, if possible.
-					if (transfers_dna && C.blood_DNA)
-						blood_DNA |= C.blood_DNA.Copy()
-					amount += C.amount
-					returnToPool(C)
 
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1

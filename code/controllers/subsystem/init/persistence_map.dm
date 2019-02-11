@@ -8,6 +8,9 @@ var/datum/subsystem/persistence_map/SSpersistence_map
 	var/list/subdatums = list()
 	var/finished = FALSE
 
+	var/savingFilth = TRUE
+	var/filthCreatedCount = 0
+
 
 /datum/subsystem/persistence_map/New()
 	NEW_SS_GLOBAL(SSpersistence_map)
@@ -47,6 +50,33 @@ var/datum/subsystem/persistence_map/SSpersistence_map
 	var/watch = start_watch()
 	for(var/name in subdatums)
 		var/datum/map_persistence_type/T = subdatums[name]
-		T.writeSavefile()
-	log_debug("[time_stamp()] - Map persistence saved in [stop_watch(watch)]s.")
+		if(savingFilth)
+			T.writeSavefile()
+		else
+			T.deleteSavefile()
+	log_debug("[time_stamp()] - Map persistence finished in [stop_watch(watch)]s.")
 	finished = TRUE
+
+/datum/subsystem/persistence_map/proc/qdelAllFilth(var/whodunnit)
+	for(var/name in subdatums)
+		var/datum/map_persistence_type/T = subdatums[name]
+		if(T.filth)
+			T.qdelAllTrackedItems() //whodunnit var intentionally left blank
+	if(whodunnit)
+		log_admin("[key_name(whodunnit)] deleted all filth on the station!")
+		message_admins("[key_name_admin(whodunnit)] deleted all filth on the station!")
+
+/datum/subsystem/persistence_map/proc/setSavingFilth(var/_saving, var/whodunnit)
+	savingFilth = _saving
+	if(whodunnit)
+		log_admin("PERSISTENCE: [key_name(usr)] [savingFilth == TRUE ? "enabled" : "disabled"] filth persistence for this round.")
+		message_admins("PERSISTENCE: [key_name_admin(usr)] [savingFilth == TRUE ? "enabled" : "disabled"] filth persistence for this round.")
+	else
+		log_admin("PERSISTENCE: Filth persistence was automatically [savingFilth == TRUE ? "enabled" : "disabled"] for this round.")
+		message_admins("PERSISTENCE: Filth persistence was automatically [savingFilth == TRUE ? "enabled" : "disabled"] for this round.")
+
+/datum/subsystem/persistence_map/proc/bumpFilthCreatedCount()
+	filthCreatedCount++
+	if(filthCreatedCount % 100 == 0)
+		for(var/obj/effect/landmark/xtra_cleanergrenades/xtra in landmarks_list)
+			new /obj/item/weapon/grenade/chem_grenade/cleaner(get_turf(xtra))

@@ -132,3 +132,6 @@
 
 /obj/effect/landmark/grinchstart
 	name = "grinchstart"
+
+/obj/effect/landmark/xtra_cleanergrenades
+	name = "xtra_cleanergrenades"

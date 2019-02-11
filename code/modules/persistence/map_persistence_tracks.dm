@@ -1,6 +1,7 @@
 /datum/map_persistence_type/tracks
 	name = SS_TRACKS
 	tracked_types = list(/obj/effect/decal/cleanable/blood/tracks)
+	filth = TRUE
 
 /datum/map_persistence_type/tracks/canTrack(var/obj/effect/decal/cleanable/blood/tracks/T)
 	if(!T.persistence_type)

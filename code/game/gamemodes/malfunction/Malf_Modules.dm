@@ -138,7 +138,7 @@ rcd light flash thingy on matter drain
 	summon_type = list(/obj/machinery/transformer/conveyor)
 	hud_state = "autoborger"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/conjure/place_transformer/New()
 	..()
 
@@ -181,7 +181,7 @@ rcd light flash thingy on matter drain
 	var/mob/living/silicon/ai/A = user
 	A.can_shunt = 0
 	to_chat(user, "You cannot shunt anymore.")
-	
+
 /datum/AI_Module/large/highrescams
 	module_name = "High Resolution Cameras"
 	mod_pick_name = "High Res Cameras"
@@ -533,5 +533,5 @@ rcd light flash thingy on matter drain
 		ticker.station_explosion_cinematic(0,null)
 		ticker.station_was_nuked = 1
 		ticker.explosion_in_progress = 0
+		SSpersistence_map.setSavingFilth(FALSE)
 	return
-

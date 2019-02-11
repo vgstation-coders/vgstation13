@@ -296,6 +296,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 	ticker.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
 													//kinda shit but I couldn't  get permission to do what I wanted to do.
+	SSpersistence_map.setSavingFilth(FALSE)
 	stat_collection.nuked++
 
 /obj/machinery/nuclearbomb/send_to_past(var/duration)

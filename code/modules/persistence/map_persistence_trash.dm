@@ -1,6 +1,7 @@
 /datum/map_persistence_type/trash
 	name = SS_TRASH
 	tracked_types = list(/obj/item/trash)
+	filth = TRUE
 
 /datum/map_persistence_type/trash/canTrack(var/obj/item/trash/T)
 	if(!T.persistence_type)

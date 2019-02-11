@@ -5,7 +5,7 @@
 	var/list/tracked_types = list()
 	var/max_per_turf = 5
 	var/max_age = 5
-	var/saving = TRUE
+	var/filth = FALSE
 
 /datum/map_persistence_type/New()
 	setFilename()
@@ -20,12 +20,17 @@
 		var/turf/T = locate(L["x"], L["y"], L["z"])
 		if(!isValidTurf(T))
 			continue
-		create(T, L)
+		var/success = create(T, L)
+		if(success)
+			if(filth)
+				SSpersistence_map.bumpFilthCreatedCount()
+
+/datum/map_persistence_type/proc/deleteSavefile()
+	var/writing = file(filename)
+	fdel(writing)
 
 //Note: We save all items. Even if they're in space etc. Next round will be in charge of seeing if they're valid. I don't expect any significant performance loss from this, but if so, this can be changed easily.
 /datum/map_persistence_type/proc/writeSavefile()
-	if(!saving)
-		return
 	var/list/finished_list = list()
 	for(var/atom/A in tracking)
 		if(A.getPersistenceAge() >= max_age) //This used to be in canTrack() but I moved it here in case an admin varedits an atom's age or something.
@@ -74,9 +79,9 @@
 	created.post_mapsave2atom(L)
 	return created
 
-/datum/map_persistence_type/proc/toggleSavingThisRound()
-	saving = !saving
-
-/datum/map_persistence_type/proc/qdelAllTrackedItems()
+/datum/map_persistence_type/proc/qdelAllTrackedItems(var/whodunnit)
 	for(var/atom/A in tracking)
 		qdel(A)
+	if(whodunnit)
+		log_admin("PERSISTENCE: [key_name(whodunnit)] deleted all [name] on the station!")
+		message_admins("PERSISTENCE: [key_name_admin(whodunnit)] deleted all [name] on the station!")

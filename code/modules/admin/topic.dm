@@ -4913,14 +4913,17 @@
 
 		CreditsPanel() //refresh!
 
-	if(href_list["persistencedatum"])
-		var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
-
+	if(href_list["persistenceaction"])
 		switch(href_list["persistenceaction"])
 			if("qdelall")
-				T.qdelAllTrackedItems()
+				if(href_list["persistencedatum"])
+					var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
+					T.qdelAllTrackedItems(usr)
+				else
+					SSpersistence_map.qdelAllFilth(usr)
 			if("togglesaving")
-				T.toggleSavingThisRound()
+				SSpersistence_map.setSavingFilth(!SSpersistence_map.savingFilth, usr)
+
 
 		PersistencePanel() //refresh!
 

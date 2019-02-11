@@ -113,6 +113,7 @@
 		var/turf/turff = get_turf(src)
 		new /turf/unsimulated/wall/supermatter(turff)
 		SetUniversalState(/datum/universal_state/supermatter_cascade)
+		SSpersistence_map.setSavingFilth(FALSE)
 		explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 		empulse(turff, 100, 200, 1)
 	qdel(src)
