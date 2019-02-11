@@ -1520,7 +1520,7 @@ obj/item/organ/external
 	var/brute_dam
 	var/burn_dam
 	var/status
-
+	var/has_meat = TRUE
 	//List of attached organs
 	//It doesn't contain the whole tree, only the organs attached to this one
 	var/list/obj/item/organ/external/children = list()
@@ -1640,12 +1640,55 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H)
 
 /obj/item/organ/external/attackby(obj/item/W, mob/user)
 	if(W.is_sharp()) //Allow cutting attached parts off
-		for(var/obj/item/organ/external/O in children)
-			children.Remove(O)
-			O.forceMove(get_turf(src))
+		if(children.len)
+			for(var/obj/item/organ/external/O in children)
+				to_chat(user, "<span class = 'notice'>You cut \the [O] from \the [src].</span>")
+				children.Remove(O)
+				O.forceMove(get_turf(src))
 
-			update_icon()
+				update_icon()
+		else
+			var/list/actions = list()
+			if(has_meat)
+				actions += "Butcher"
+			if(butchering_drops.len)
+				for(var/datum/butchering_product/B in src.butchering_drops)
+					if(B.amount <= 0)
+						continue
+					actions |= capitalize(B.verb_name)
+					actions[capitalize(B.verb_name)] = B
+			actions += "Cancel"
 
+			var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
+			if(!Adjacent(user))
+				return
+
+			if(choice == "Cancel")
+				return 0
+			else if(choice != "Butcher")
+				var/datum/butchering_product/our_product = actions[choice]
+				if(!istype(our_product))
+					return
+
+				user.visible_message("<span class='notice'>[user] starts [our_product.verb_gerund] \the [src] with \the [W].</span>",\
+					"<span class='info'>You start [our_product.verb_gerund] \the [src].</span>")
+				if(!do_after(user,src,(our_product.butcher_time * 0.5) / W.is_sharp()))
+					to_chat(user, "<span class='warning'>Your attempt to [our_product.verb_name] \the [src] has been interrupted.</span>")
+				else
+					to_chat(user, "<span class='info'>You finish [our_product.verb_gerund] \the [src].</span>")
+					our_product.spawn_result(get_turf(src), src)
+				return
+
+			user.visible_message("<span class='notice'>[user] starts butchering \the [src] with \the [W].</span>",\
+				"<span class='info'>You start butchering \the [src].</span>")
+
+			if(!do_after(user, src, 1 SECONDS / W.is_sharp()))
+				to_chat(user, "<span class='warning'>Your attempt to butcher \the [src] was interrupted.</span>")
+				return
+
+			new species.meat_type(get_turf(src))
+			to_chat(user, "<span class='info'>You butcher \the [src].</span>")
+			qdel(src)
 	..()
 
 /****************************************************
@@ -1724,6 +1767,7 @@ obj/item/organ/external/r_leg/New(loc, mob/living/carbon/human/H)
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
 	var/mob/living/carbon/human/origin_body = null
+	has_meat = FALSE
 
 /obj/item/organ/external/head/ashtype()
 	return /obj/item/weapon/skull
