@@ -147,3 +147,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	return 1
+
+/datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/device/flash/synthetic(H.back), slot_in_backpack)

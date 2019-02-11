@@ -99,7 +99,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/spells = list()	// Because spells are the hip new thing to replace verbs
 
 	var/blood_color = DEFAULT_BLOOD //Red.
-	var/flesh_color = "#FFC896" //Pink.
+	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'
@@ -315,8 +315,19 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 		)
 
+	cold_level_1 = 210 //Default 220 - Lower is better
+	cold_level_2 = 190 //Default 200
+	cold_level_3 = 110 //Default 120
+
+	heat_level_1 = 380 //Default 360 - Higher is better
+	heat_level_2 = 420 //Default 400
+	heat_level_3 = 1200 //Default 1000
+
 	flags = NO_PAIN
-	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
+	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
+
+	blood_color = "#272727"
+	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
@@ -331,7 +342,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_UNATHI)
 	tail = "sogtail"
 	attack_verb = "scratches"
-	punch_damage = 5
+	punch_damage = 2
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
 
@@ -345,6 +356,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
+
+	default_mutations=list(M_CLAWS)
 
 	flesh_color = "#34AF10"
 
@@ -866,7 +879,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_golem.dmi'
 	deform = 'icons/mob/human_races/r_def_golem.dmi'
 	known_languages = list(LANGUAGE_GOLEM)
-	meat_type = /obj/item/weapon/ore/diamond
+	meat_type = /obj/item/stack/ore/diamond
 	attack_verb = "punches"
 
 	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
@@ -942,7 +955,7 @@ var/list/has_died_as_golem = list()
 	icon = 'icons/mob/human_races/r_golem.dmi'
 	icon_state = "golem_dust"
 	density = 0
-	meat_type = /obj/item/weapon/ore/diamond
+	meat_type = /obj/item/stack/ore/diamond
 
 /mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/slime_extract/adamantine))

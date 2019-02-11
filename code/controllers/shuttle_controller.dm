@@ -6,6 +6,7 @@
 #define SHUTTLEARRIVETIME  600		// 10 minutes = 600 seconds
 #define SHUTTLELEAVETIME   180		// 3 minutes = 180 seconds
 #define SHUTTLETRANSITTIME 120		// 2 minutes = 120 seconds
+#define SHUTTLEGRACEPERIOD 300      // time after roundstart until the shuttle can be called, 5 minutes = 300 seconds
 
 var/global/datum/emergency_shuttle/emergency_shuttle
 
@@ -225,6 +226,8 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
 				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
 				world << sound('sound/AI/shuttledock.ogg')
+			if(ticker)
+				ticker.shuttledocked_time = world.time / 10
 				/*
 				if(universe.name == "Hell Rising")
 					to_chat(world, "___________________________________________________________________")

@@ -1927,6 +1927,12 @@ obj/item/organ/external/head/Destroy()
 			return OE
 	return null
 
+/mob/living/carbon/human/has_hand_check()
+	for(var/datum/organ/external/OE in grasp_organs)
+		if(OE.can_grasp())
+			return TRUE
+	return FALSE
+
 /datum/organ/external/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(

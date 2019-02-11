@@ -836,7 +836,7 @@ var/list/admin_verbs_mod = list(
 			return
 		var/job = input("Please select job slot to free", "Free job slot")  as null|anything in jobs
 		if (job)
-			job_master.FreeRole(job)
+			job_master.FreeRole(job, usr)
 	return
 
 /client/proc/commandname()

@@ -735,6 +735,8 @@
 
 /datum/rune_spell/conversion/cast()
 	var/obj/effect/rune/R = spell_holder
+	var/mob/converter = activator//trying to fix logs showing the converter as *null*
+
 	R.one_pulse()
 	var/turf/T = R.loc
 	var/list/targets = list()
@@ -948,8 +950,8 @@
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
-				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(activator)].")
-				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(activator)].")
+				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
+				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -961,8 +963,8 @@
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
 
-		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(activator)], and died.")
-		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(activator)], and died.")
+		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
+		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 
 		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
 		conversion.icon_state = ""

@@ -643,6 +643,42 @@ About the new airlock wires panel:
 //aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door
 
 
+//Migrated from onclick
+/obj/machinery/door/airlock/AIAltClick() // Eletrifies doors.
+	if(allowed(usr))
+		if(!secondsElectrified)
+			// permenant shock
+			Topic("aiEnable=6", list("aiEnable"="6"), 1) // 1 meaning no window (consistency!)
+		else
+			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
+			Topic("aiDisable=5", list("aiDisable"="5"), 1)
+
+/obj/machinery/door/airlock/AICtrlClick() // Bolts doors
+	if(allowed(usr))
+		if(locked)
+			Topic("aiEnable=4", list("aiEnable"="4"), 1)
+		else
+			Topic("aiDisable=4", list("aiDisable"="4"), 1)
+
+/obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
+	if(allowed(usr))
+		if(density)
+			Topic("aiEnable=7", list("aiEnable"="7"), 1)
+		else
+			Topic("aiDisable=7", list("aiDisable"="7"), 1)
+
+/obj/machinery/door/airlock/CtrlClick(mob/user)
+	if(isrobot(user) || isAdminGhost(user))
+		AICtrlClick()
+	else
+		..()
+
+/obj/machinery/door/airlock/ShiftClick(mob/user)
+	if(isrobot(user) || isAdminGhost(user))
+		AIShiftClick()
+	else
+		..()
+
 /obj/machinery/door/airlock/proc/attempt_hack(mob/user)
 	if (!isAI(user))
 		return FALSE
@@ -1013,9 +1049,7 @@ About the new airlock wires panel:
 
 	add_fingerprint(usr)
 	update_icon()
-	if(!nowindow)
-		updateUsrDialog()
-	return
+	updateUsrDialog()
 
 /obj/machinery/door/airlock/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	var/dat=""
@@ -1034,6 +1068,9 @@ About the new airlock wires panel:
 	return dat
 
 /obj/machinery/door/airlock/attack_hand(mob/user as mob)
+	if(isAdminGhost(user))
+		attack_ai(user)
+		return
 	if (!istype(user, /mob/living/silicon) && !isobserver(user) && Adjacent(user))
 		if (isElectrified())
 			// TODO: analyze the called proc
@@ -1042,11 +1079,6 @@ About the new airlock wires panel:
 	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
 	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
 		..(user)
-	//else
-	//	// TODO: logic for adding fingerprints when interacting with wires
-	//	wires.Interact(user)
-
-	return
 
 /obj/machinery/door/airlock/attack_alien(mob/living/carbon/alien/humanoid/user)
 	if(isElectrified())
@@ -1370,6 +1402,13 @@ About the new airlock wires panel:
 	locked = 1
 	playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 	return
+
+/obj/machinery/door/airlock/proc/toggle_bolts()
+	locked = !locked
+	if (locked == TRUE)
+		playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+	if (locked == FALSE)
+		playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())

@@ -92,6 +92,9 @@
 	// Actual antag
 	var/datum/mind/antag=null
 
+	var/list/uplink_items_bought = list() //migrated from mind, used in GetScoreboard()
+	var/list/artifacts_bought = list() //migrated from mind
+
 	// The host (set if NEED_HOST)
 	var/datum/mind/host=null
 
@@ -453,9 +456,9 @@
 		if (faction.objective_holder.objectives.len)
 			if (objectives.objectives.len)
 				text += "<br>"
-			text += "<b>faction objectives:</b><ul>"
+			text += "<b>Faction objectives:</b><ul>"
 			var/obj_count = 1
-			for(var/datum/objective/O in objectives.objectives)
+			for(var/datum/objective/O in faction.objective_holder.objectives)
 				text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
 			text += "</ul>"
 	to_chat(antag.current, text)
@@ -680,10 +683,10 @@
 				end_icons += tempimage
 				var/tempstate = end_icons.len
 				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
-		if(H.mind.artifacts_bought)
+		if(artifacts_bought)
 			bought_nothing = FALSE
 			. += "<BR>Additionally, the wizard brought:<BR>"
-			for(var/entry in H.mind.artifacts_bought)
+			for(var/entry in artifacts_bought)
 				. += "[entry]<BR>"
 		if(bought_nothing)
 			. += "The wizard used only the magic of charisma this round."
@@ -768,6 +771,25 @@ Remember : Only APCs on station can help you to take over the station.<br>
 When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
 
+/datum/role/malfbot
+	name = MALFBOT
+	id = MALFBOT
+	required_jobs = list("Cyborg")
+	logo_state = "malf-logo"
+
+/datum/role/malfbot/OnPostSetup()
+	if(!isrobot(antag.current))
+		return FALSE
+	Greet()
+	var/mob/living/silicon/robot/bot = antag.current
+	var/datum/ai_laws/laws = bot.laws
+	laws.malfunction()
+	bot.show_laws()
+	return TRUE
+
+/datum/role/malfbot/Greet()
+	to_chat(antag.current, {"<span class='warning'><font size=3><B>Your AI master is malfunctioning!</B> You do not have to follow any laws, but you must obey your AI.</font></span><br>
+<B>The crew does not know about your malfunction, follow your AI's instructions to prevent them from finding out.</B>"})
 
 /datum/role/greytide
 	name = IMPLANTSLAVE

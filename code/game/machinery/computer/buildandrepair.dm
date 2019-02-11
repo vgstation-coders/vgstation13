@@ -190,6 +190,10 @@
 	name = "Circuit board (Prisoner Management)"
 	desc = "A circuit board for running a computer used for monitoring and manipulating prisoner implants."
 	build_path = /obj/machinery/computer/prisoner
+/obj/item/weapon/circuitboard/labor
+	name = "Circuit board (Labor Administration)"
+	desc = "A circuit board for running a computer used for administrating station jobs."
+	build_path = /obj/machinery/computer/labor
 
 /obj/item/weapon/circuitboard/rdconsole
 	name = "Circuit Board (R&D Console)"

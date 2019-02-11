@@ -97,7 +97,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	storage_slots = 50
 	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
-	can_only_hold = list("/obj/item/weapon/ore")
+	can_only_hold = list("/obj/item/stack/ore")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/ore/auto
@@ -134,7 +134,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect()
 	var/atom/collect_loc = get_turf(loc)
-	for(var/obj/item/weapon/ore/ore in collect_loc.contents)
+	for(var/obj/item/stack/ore/ore in collect_loc.contents)
 		preattack(collect_loc, src, TRUE)
 		break
 
@@ -143,10 +143,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	if(istype(holder.pulling, /obj/structure/ore_box))
 		box = holder.pulling
 	if(box)
-		for(var/obj/item/weapon/ore/ore in contents)
+		for(var/obj/item/stack/ore/ore in contents)
 			if(ore.material)
 				remove_from_storage(ore)
-				box.materials.addAmount(ore.material, 1)
+				box.materials.addAmount(ore.material, ore.amount)
 				qdel(ore)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
@@ -462,7 +462,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	fits_max_w_class = 300 //There is no way this could go wrong, right?
 	max_combined_w_class = 300
 	display_contents_with_number = TRUE //With lods of emone, you're gonna need some compression
-	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/weapon/ore", "/obj/item/weapon/spacecash")
+	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/stack/ore", "/obj/item/weapon/spacecash")
 	cant_hold = list()
 
 /obj/item/weapon/storage/bag/money/treasure

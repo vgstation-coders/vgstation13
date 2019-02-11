@@ -39,10 +39,8 @@
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
 	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
-		orient2hud(usr)
-		if(usr.s_active)
-			usr.s_active.close(usr)
-		src.show_to(usr)
+		orient2hud()
+		show_to(usr)
 		return
 	if(ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src))
 		if(istype(over_object, /obj/structure/table) && usr.Adjacent(over_object) && Adjacent(usr))
@@ -54,6 +52,14 @@
 
 	return ..()
 
+/obj/item/weapon/storage/AltClick(mob/user)
+	if(!(in_range(src, user) || is_holder_of(user, src)))
+		return ..()
+	orient2hud(user)
+	if(user.s_active)
+		user.s_active.close(user)
+	src.show_to(user)
+
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
 	for(var/obj/objects in contents)
@@ -62,8 +68,6 @@
 		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/storage/proc/return_inv()
-
-
 	var/list/L = list(  )
 
 	L += src.contents
@@ -82,37 +86,31 @@
 			for(var/obj/item/I in src)
 				if(I.on_found(null, user))
 					return
+
 	if(user.s_active)
 		user.s_active.hide_from(user)
-	user.client.screen -= src.boxes
-	user.client.screen -= src.closer
-	user.client.screen -= src.contents
+
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
 	user.client.screen += src.contents
 	user.s_active = src
 	is_seeing |= user
-	return
 
 /obj/item/weapon/storage/proc/hide_from(mob/user as mob)
-
-
 	if(!user.client)
 		return
+
+	if(user.s_active != src)
+		return
+
 	user.client.screen -= src.boxes
 	user.client.screen -= src.closer
 	user.client.screen -= src.contents
-	if(user.s_active == src)
-		user.s_active = null
+	user.s_active = null
 	is_seeing -= user
-	return
 
 /obj/item/weapon/storage/proc/close(mob/user as mob)
-
-
 	src.hide_from(user)
-	user.s_active = null
-	return
 
 //This proc draws out the inventory and places the items on it. tx and ty are the upper left tile and mx, my are the bottm right.
 //The numbers are calculated from the bottom-left The bottom-left slot being 1,1.
@@ -157,7 +155,6 @@
 				cx = 4
 				cy--
 	src.closer.screen_loc = "[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]"
-	return
 
 /datum/numbered_display
 	var/obj/item/sample_object
@@ -170,10 +167,8 @@
 		sample_object = sample
 		number = 1
 
-//This proc determins the size of the inventory to be displayed. Please touch it only if you know what you're doing.
-/obj/item/weapon/storage/proc/orient2hud(mob/user as mob)
-
-
+//This proc determines the size of the inventory to be displayed. Please touch it only if you know what you're doing.
+/obj/item/weapon/storage/proc/orient2hud()
 	var/adjusted_contents = contents.len
 
 	//Numbered contents display
@@ -198,7 +193,6 @@
 	if (adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
-	return
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
@@ -341,16 +335,16 @@
 				else if (W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
-		src.orient2hud(usr)
-		if(usr.s_active)
-			usr.s_active.show_to(usr)
+
 	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
 	update_icon()
+
+	refresh_all()
 	return 1
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
-/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
+/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	if(!istype(W))
 		return 0
 
@@ -382,21 +376,20 @@
 	else
 		W.forceMove(get_turf(src))
 
-	for(var/mob/M in range(1, get_turf(src)))
-		if (M.s_active == src)
-			if (M.client)
-				M.client.screen -= W
-
-	if(usr)
-		src.orient2hud(usr)
-		if(usr.s_active)
-			usr.s_active.show_to(usr)
 	if(W.maptext)
 		W.maptext = ""
 	W.reset_plane_and_layer()
 	W.on_exit_storage(src)
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)
+
+	for(var/mob/M in is_seeing)
+		if (M.client)
+			M.client.screen -= W
+
+	if (refresh)
+		refresh_all()
+
 	return 1
 
 //This proc is called when you want to place an item into the storage item.
@@ -451,7 +444,6 @@
 		if(MoM.head_state == src) //I'm so sorry. We have exactly one storage item that goes on head, and it can't hold any items while equipped. This is so you can actually take it off.
 			return ..()
 
-	src.orient2hud(user)
 	var/atom/maxloc = src.loc
 	if(src.internal_store)
 		for(var/i = 1; i++ <= internal_store)
@@ -459,17 +451,14 @@
 				break
 			if(maxloc.loc)
 				maxloc = maxloc.loc
+
 	if (maxloc == user)
-		if (user.s_active)
-			user.s_active.close(user)
-		src.show_to(user)
+		orient2hud()
+		show_to(user)
 	else
 		..()
-		for(var/mob/M in range(1))
-			if (M.s_active == src)
-				src.close(M)
+		close_all()
 	src.add_fingerprint(user)
-	return
 
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -543,9 +532,7 @@
 			O.ex_act(severity)
 	..()
 
-// BubbleWrap - A box can be folded up to make card
-/obj/item/weapon/storage/attack_self(mob/user as mob)
-
+/obj/item/weapon/storage/attack_self(mob/user as mob) // BubbleWrap - A box can be folded up to make card
 	//Clicking on itself will empty it, if it has the verb to do that.
 	if(user.get_active_hand() == src)
 		if(src.verbs.Find(/obj/item/weapon/storage/verb/quick_empty) && contents.len)
@@ -553,26 +540,17 @@
 			return
 
 	//Otherwise we'll try to fold it.
-	if ( contents.len )
+	if(contents.len)
 		return
 
-	if ( !ispath(src.foldable) )
+	if(!ispath(src.foldable))
 		return
-	var/found = 0
-	// Close any open UI windows first
-	for(var/mob/M in range(1))
-		if (M.s_active == src)
-			src.close(M)
-		if ( M == user )
-			found = 1
-	if ( !found )	// User is too far away
-		return
-	// Now make the cardboard
+
 	to_chat(user, "<span class='notice'>You fold \the [src] flat.</span>")
 	var/folded = new src.foldable(get_turf(src),foldable_amount)
 	transfer_fingerprints_to(folded)
 	qdel(src)
-//BubbleWrap END
+
 /obj/item/weapon/storage/proc/can_see_contents()
 	var/list/cansee = list()
 	for(var/mob/M in is_seeing)
@@ -581,6 +559,12 @@
 		else
 			is_seeing -= M
 	return cansee
+
+/obj/item/weapon/storage/proc/refresh_all()
+	for(var/mob/M in is_seeing)
+		show_to(M)
+
+	orient2hud()
 
 /obj/item/weapon/storage/proc/close_all()
 	for(var/mob/M in is_seeing)
@@ -654,7 +638,9 @@
 
 /obj/item/weapon/storage/proc/mass_remove(var/atom/A)
 	for(var/obj/item/O in contents)
-		remove_from_storage(O, A)
+		remove_from_storage(O, A, refresh = 0)
+
+	refresh_all()
 
 /obj/item/weapon/storage/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbids wearing a storage item in a  no_storage_slot (ie plastic bags over head) with something already inside

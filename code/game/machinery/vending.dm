@@ -1377,6 +1377,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
+	vouched = list(
+		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
+		)
 
 	pack = /obj/structure/vendomatpack/snack
 
@@ -1993,6 +1996,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/riceseed = 3,
 		/obj/item/seeds/cinnamomum = 3,
 		/obj/item/seeds/avocadoseed = 3,
+		/obj/item/seeds/pearseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,

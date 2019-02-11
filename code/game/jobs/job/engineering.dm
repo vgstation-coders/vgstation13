@@ -23,31 +23,36 @@
 	pdatype=/obj/item/device/pda/heads/ce
 
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/heads/ce(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
-		//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
-		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/head/hardhat/white(H), slot_head)
-		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-		return 1
+/datum/job/chief_engineer/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/heads/ce(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
+	//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/head/hardhat/white(H), slot_head)
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+	else
+		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	return 1
 
+/datum/job/chief_engineer/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
+	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/cracker(H.back), slot_in_backpack) //poly gets part of the divvy, savvy?
 
 
 /datum/job/engineer
@@ -68,40 +73,43 @@
 	pdatype=/obj/item/device/pda/engineering
 
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_eng(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
-		switch(H.mind.role_alt_title)
-			if("Station Engineer")
-				H.equip_or_collect(new /obj/item/clothing/under/rank/engineer(H), slot_w_uniform)
-			if("Maintenance Technician")
-				H.equip_or_collect(new /obj/item/clothing/under/rank/maintenance_tech(H), slot_w_uniform)
-			if("Electrician")
-				H.equip_or_collect(new /obj/item/clothing/under/rank/electrician(H), slot_w_uniform)
-			if("Engine Technician")
-				H.equip_or_collect(new /obj/item/clothing/under/rank/engine_tech(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/full(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/head/hardhat(H), slot_head)
-		H.equip_or_collect(new /obj/item/device/t_scanner(H), slot_r_store)
-		//H.equip_or_collect(new /obj/item/device/pda/engineering(H), slot_l_store)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-		return 1
+/datum/job/engineer/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_eng(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
+	switch(H.mind.role_alt_title)
+		if("Station Engineer")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/engineer(H), slot_w_uniform)
+		if("Maintenance Technician")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/maintenance_tech(H), slot_w_uniform)
+		if("Electrician")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/electrician(H), slot_w_uniform)
+		if("Engine Technician")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/engine_tech(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/full(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/head/hardhat(H), slot_head)
+	H.equip_or_collect(new /obj/item/device/t_scanner(H), slot_r_store)
+	//H.equip_or_collect(new /obj/item/device/pda/engineering(H), slot_l_store)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+	else
+		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	return 1
 
-
+/datum/job/engineer/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
+	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
 
 /datum/job/atmos
 	title = "Atmospheric Technician"
@@ -120,28 +128,33 @@
 	pdatype=/obj/item/device/pda/atmos
 
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_eng(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/atmospheric_technician(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
-		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)
-		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/atmostech(H), slot_belt)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-		return 1
+/datum/job/atmos/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_eng(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/atmospheric_technician(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/atmostech(H), slot_belt)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+	else
+		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	return 1
+
+/datum/job/atmos/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
+	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
 
 /datum/job/mechanic
 	title = "Mechanic"
@@ -161,33 +174,33 @@
 	pdatype=/obj/item/device/pda/mechanic
 
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_engsci(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/mechanic(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
-		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)
-		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
-		if(!(H.flags&DISABILITY_FLAG_NEARSIGHTED)) //Does this work?
-			var/obj/item/clothing/glasses/welding/W = new (H)
-			H.equip_or_collect(W, slot_glasses)
-			W.toggle()
-		else
-			var/obj/item/clothing/head/welding/W = new (H)
-			H.equip_or_collect(W, slot_head)
-			W.toggle()
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-		return 1
+/datum/job/mechanic/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_engsci(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/mechanic(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
+	if(!(H.flags&DISABILITY_FLAG_NEARSIGHTED)) //Does this work?
+		var/obj/item/clothing/glasses/welding/W = new (H)
+		H.equip_or_collect(W, slot_glasses)
+		W.toggle()
+	else
+		var/obj/item/clothing/head/welding/W = new (H)
+		H.equip_or_collect(W, slot_head)
+		W.toggle()
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+	else
+		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	return 1

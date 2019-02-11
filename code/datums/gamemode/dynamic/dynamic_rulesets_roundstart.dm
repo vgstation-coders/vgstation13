@@ -14,7 +14,7 @@
 	required_candidates = 1
 	weight = 7
 	cost = 10
-	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	var/autotraitor_cooldown = 900//15 minutes
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
@@ -81,9 +81,9 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
-	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	weight = 2
+	cost = 25
+	requirements = list(80,60,50,30,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
 	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -157,6 +157,11 @@
 	cost = 25
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+
+/datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	required_candidates = cultist_cap[indice_pop]
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
@@ -235,6 +240,12 @@
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
+
+
+/datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	required_candidates = operative_cap[indice_pop]
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
 	//if ready() did its job, candidates should have 5 or more members in it
@@ -364,6 +375,7 @@
 		R.HandleRecruitedRole(lenin)
 		lenin.Greet(GREET_ROUNDSTART)
 	update_faction_icons()
+	R.OnPostSetup()
 	return 1
 
 //////////////////////////////////////////////

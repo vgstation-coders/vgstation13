@@ -401,17 +401,17 @@
 		if(0)
 			mode = 1
 			charge_cost = 100
-			to_chat(user, "<span class='warning'>The [src.name] is now set to improve harvests.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is now set to improve harvests.</span>")
 			projectile_type = "/obj/item/projectile/energy/florayield"
 			modifystate = "florayield"
 		if(1)
 			mode = 0
 			charge_cost = mutstrength * 10
-			to_chat(user, "<span class='warning'>The [src.name] is now set to induce mutations.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is now set to induce mutations.</span>")
 			projectile_type = "/obj/item/projectile/energy/floramut"
 			modifystate = "floramut"
 		if(2)
-			to_chat(user, "<span class='warning'>The [src.name] appears to be locked into one mode.</span>")
+			to_chat(user, "<span class='warning'>\The [src] appears to be locked into one mode.</span>")
 			return
 	update_icon()
 	return

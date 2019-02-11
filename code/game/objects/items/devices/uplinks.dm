@@ -65,14 +65,15 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		dat += "<b>[category]</b><br>"
 
 		var/discounted_list = list() //These go on top.
-		var/nondiscounted_list = list()
+		var/jobexclusive_list = list()
+		var/nondiscounted_list = list() //These go on the bottom.
 
 		var/i = 0
 		// Loop through items in category
 		for(var/datum/uplink_item/item in buyable_items[category])
 			i++
 
-			if((item.jobs_exclusive.len && !item.jobs_exclusive.Find(job)) || (item.jobs_excluded.len && item.jobs_excluded.Find(job)))
+			if(!item.available_for_job(job))
 				continue
 
 			var/itemcost = item.get_cost(job)
@@ -80,7 +81,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			var/desc = "[item.desc]"
 			var/final_text = ""
 			if(itemcost > 0)
-				if(item.gives_discount(job))
+				if(item.gives_discount(job) || item.jobs_exclusive.len)
 					cost_text = "<span style='color: yellow; font-weight: bold;'>([itemcost]!)</span>"
 				else
 					cost_text = "([itemcost])"
@@ -97,10 +98,12 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 			if(item.gives_discount(job))
 				discounted_list += final_text
+			else if(item.jobs_exclusive.len) //If we don't match this thing's job, we already exited out, so we don't need to check again
+				jobexclusive_list += final_text
 			else
 				nondiscounted_list += final_text
 
-		for(var/text in discounted_list|nondiscounted_list) //Discounted first, nondiscounted later.
+		for(var/text in discounted_list|jobexclusive_list|nondiscounted_list) //Discounted first, nondiscounted later.
 			dat += text
 
 		// Break up the categories, if it isn't the last.

@@ -141,3 +141,17 @@
 
 /obj/item/stack/tile/mineral/phazon/adjust_slowdown(mob/living/L, current_slowdown)
 	return current_slowdown * 0.75
+
+/obj/item/stack/tile/mineral/brass
+	name = "brass tile"
+	singular_name = "brass floor tile"
+	desc = "A floor tile made out of brass. Shiny."
+	icon_state = "tile_brass"
+	w_class = W_CLASS_MEDIUM
+	force = 1.0
+	throwforce = 1.0
+	throw_speed = 3
+	throw_range = 7
+	max_amount = 60
+
+	material = "brass"

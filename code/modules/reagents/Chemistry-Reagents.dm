@@ -2289,9 +2289,14 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H = M
+	if(isplasmaman(H))
+		return 1
+	else
+		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2 * REM)
-	M.adjustToxLoss(3 * REM)
+
 
 /datum/reagent/leporazine
 	name = "Leporazine"
@@ -4630,7 +4635,7 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
-	
+
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
 
     if(ishuman(M))
@@ -5701,7 +5706,7 @@
 /datum/reagent/ethanol/deadrum/toxins_special
 	name = "Toxins Special"
 	id = TOXINSSPECIAL
-	description = "This thing is FLAMING!. CALL THE DAMN SHUTTLE!"
+	description = "This thing is FLAMING! CALL THE DAMN SHUTTLE!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
@@ -6164,15 +6169,16 @@
 	description = "Concentrated honking"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
-	custom_metabolism = 0.01
+	custom_metabolism = 0.05
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
-	if(prob(0.9))
+	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
@@ -7070,9 +7076,19 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/aminomicin
 	name = "Aminomicin"
 	id = AMINOMICIN
-	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with pure nutriment."
+	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with nutriment."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 13.49 //our ingredients are pretty dense
 	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin
+
+/datum/reagent/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	description = "An extremely dangerous, flesh-replicating material, mutated by exposure to God-knows-what. Do not mix with nutriment under any circumstances."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#cb42f4" //rgb: 203, 66, 244
+	density = 111.75 //our ingredients are extremely dense, especially carppheromones
+	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin

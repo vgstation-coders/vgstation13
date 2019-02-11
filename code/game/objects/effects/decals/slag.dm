@@ -92,7 +92,7 @@
 		user.visible_message("<span class=\"danger\">\The [src] is broken apart with the [W.name] by [user.name]!</span>", \
 			"<span class=\"danger\">You break apart \the [src] with your [W.name]!", \
 			"You hear the sound of rock crumbling.")
-		var/obj/item/weapon/ore/slag/slag = new /obj/item/weapon/ore/slag(loc)
+		var/obj/item/stack/ore/slag/slag = drop_stack(/obj/item/stack/ore/slag, loc)
 		slag.materials = src.materials
 		slag.materials.holder = slag
 		qdel(src)

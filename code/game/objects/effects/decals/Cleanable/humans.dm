@@ -32,17 +32,14 @@ var/global/list/blood_list = list()
 	return
 
 /obj/effect/decal/cleanable/blood/update_icon()
-	if(basecolor == "rainbow")
-		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
-	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
+	update_plane()
+
+/obj/effect/decal/cleanable/blood/proc/update_plane()
+	if(basecolor == "#FF0000" || basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE
-	var/icon/blood = icon(base_icon,icon_state,dir)
-	blood.Blend(basecolor,ICON_MULTIPLY)
-
-	icon = blood
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("mgibbl1", "mgibbl2", "mgibbl3", "mgibbl4", "mgibbl5")
@@ -89,26 +86,20 @@ var/global/list/blood_list = list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "gibbl5"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
-	var/fleshcolor = "#FFFFFF"
+	var/fleshcolor = DEFAULT_FLESH
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
-	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
-		plane = NOIR_BLOOD_PLANE
-	else
-		plane = ABOVE_TURF_PLANE
+	color = basecolor
+
 	var/image/giblets = new(base_icon, "[icon_state]_flesh", dir)
-	if(!fleshcolor || fleshcolor == "rainbow")
-		fleshcolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
+	giblets.appearance_flags = RESET_COLOR
+	giblets.layer = GIBS_OVERLAY_LAYER
 	giblets.color = fleshcolor
 
-	var/icon/blood = new(base_icon,"[icon_state]",dir)
-	if(basecolor == "rainbow")
-		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
-	blood.Blend(basecolor,ICON_MULTIPLY)
-
-	icon = blood
 	overlays.len = 0
 	overlays += giblets
+
+	update_plane()
 
 /obj/effect/decal/cleanable/blood/gibs/up
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6","gibup1","gibup1","gibup1")

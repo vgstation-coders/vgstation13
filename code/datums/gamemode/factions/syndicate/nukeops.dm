@@ -13,8 +13,14 @@
 
 /datum/faction/syndicate/nuke_op/forgeObjectives()
 	AppendObjective(/datum/objective/nuclear)
-	for(var/datum/role/nuclear_operative/N in members)
-		N.AnnounceObjectives()
+	AnnounceObjectives()
+
+/datum/faction/syndicate/nuke_op/GetScoreboard()
+	. = ..()
+	if(faction_scoreboard_data)
+		. += "The operatives bought:<BR>"
+		for(var/entry in faction_scoreboard_data)
+			. += "[entry]<BR>"
 
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()

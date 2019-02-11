@@ -284,9 +284,6 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
-	if(job.species_whitelist.len)
-		if(!job.species_whitelist.Find(client.prefs.species))
-			return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")
@@ -326,6 +323,11 @@
 	if(!IsJobAvailable(rank))
 		to_chat(src, alert("[rank] is not available. Please try another."))
 		return 0
+	var/datum/job/job = job_master.GetJob(rank)
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
@@ -337,6 +339,8 @@
 
 	if(character.mind.assigned_role != "MODE")
 		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
+	job_master.CheckPriorityFulfilled(rank)
 
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
@@ -455,16 +459,24 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
 	dat += "Choose from the following open positions:<br>"
-	for(var/datum/job/job in job_master.occupations)
+	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
-			dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					continue
+
+			if(job.priority)
+				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
+			else
+				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
 
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=300x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
 
 
 /mob/new_player/proc/create_character()
@@ -543,6 +555,47 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.key = key		//Manually transfer the key to log them in
 
+	var/datum/religion/R = ticker.chap_rel
+	if(R && R.converts_everyone && !R.isReligiousLeader(new_character))
+		R.convert(new_character,null,TRUE,TRUE)
+
+	return new_character
+
+//Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
+/mob/new_player/proc/create_roundstart_cyborg()
+	//End lobby
+	spawning = 1
+	close_spawn_windows()
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
+
+	//Find a spawnloc
+	var/turf/spawn_loc
+	for(var/obj/effect/landmark/start/sloc in landmarks_list)
+		if (sloc.name != "Cyborg")
+			continue
+		if (locate(/mob/living) in sloc.loc)
+			if(!spawn_loc)
+				spawn_loc = sloc.loc //Occupied is better than nothing
+			continue
+		spawn_loc = sloc.loc
+		break
+	if(!spawn_loc)
+		spawn_loc = pick(latejoin) //If we absolutely can't find spawns
+		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn at the arrival shuttle.")
+
+	//Create the robot and move over prefs
+	var/mob/living/silicon/robot/new_character = new(spawn_loc)
+	new_character.mmi = new /obj/item/device/mmi(new_character)
+	new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+
+	//Handles transferring the mind and key manually.
+	if (mind)
+		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
+		mind.original = new_character
+		mind.transfer_to(new_character)
+	new_character.key = key //Do this after. For reasons known only to oldcoders.
+	spawn()
+		new_character.Namepick()
 	return new_character
 
 /mob/new_player/proc/ViewManifest()

@@ -18,7 +18,8 @@
 	var/list/deity_names = list()
 
 	var/datum/action/renounce/action_renounce
-	var/list/keys = list("christianity") // What you need to type to get this particular relgion.
+	var/list/keys = list("abstractbasetype") // What you need to type to get this particular relgion.
+	var/converts_everyone = FALSE
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
@@ -94,27 +95,30 @@
 	return choice == "Yes"
 
 // Here is the proc to welcome a new soul in our religion.
-/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher, var/can_renounce = TRUE)
+/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher, var/can_renounce = TRUE, var/default = FALSE)
 	// If he already had one
 	if (subject.mind.faith)
 		subject.mind.faith.renounce(subject) // We remove him from that one
 
 	subject.mind.faith = src
-	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
 	adepts += subject.mind
 	if(can_renounce)
 		action_renounce.Grant(subject)
-	if (!preacher)
-		var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
-		message_admins(msg)
+	if(!default)
+		to_chat(subject, "<span class='good'>You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].</span>")
+		if (!preacher)
+			var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
+			message_admins(msg)
+		else
+			var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
+			message_admins(msg)
 	else
-		var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
-		message_admins(msg)
+		to_chat(subject, "<span class='good'>You are reminded you were christened into [name] long ago.</span>")
 
 // Activivating a religion with admin interventions.
 /datum/religion/proc/activate(var/mob/living/preacher)
 	equip_chaplain(preacher) // We do the misc things related to the religion
-	to_chat(preacher, "A great, intense revelation go through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
+	to_chat(preacher, "A great, intense revelation goes through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
 	if (holy_book)
 		preacher.put_in_hands(holy_book)
 	else
@@ -125,6 +129,15 @@
 		preacher.put_in_hands(holy_book)
 	religiousLeader = preacher.mind
 	convert(preacher, null)
+	OnPostActivation()
+
+/datum/religion/proc/OnPostActivation()
+	if(converts_everyone)
+		message_admins("[key_name(religiousLeader)] has selected [name] and converted the entire crew.")
+		for(var/mob/living/carbon/human/H in player_list)
+			if(isReligiousLeader(H))
+				continue
+			convert(H,null,TRUE,TRUE)
 
 /datum/religion/proc/renounce(var/mob/living/subject)
 	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
@@ -237,6 +250,10 @@
 			R.holy_book.item_state = "bible"
 
 // The list of all religions spacemen have designed, so far.
+/datum/religion/default
+	keys = list("christianity")
+	converts_everyone = TRUE
+
 /datum/religion/catholic
 	name = "Catholicism"
 	deity_name = "Jesus Christ"
@@ -519,7 +536,7 @@
 	convert(subject, preacher)
 	return TRUE
 
-/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject)
+/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject, var/can_renounce = TRUE)
 	. = ..()
 	if (subject)
 		subject.adjustBrainLoss(100) // Welcome to the club
@@ -1084,3 +1101,11 @@
 
 	convert(subject, preacher)
 	return TRUE
+
+/datum/religion/speedrun
+	name = "Speedrunning"
+	deity_name = "TASbot"
+	bible_name = "Guide to Speedrunning"
+	male_adept = "Speedrunner"
+	female_adept = "Speedrunner"
+	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")

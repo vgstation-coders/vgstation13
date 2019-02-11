@@ -399,21 +399,21 @@
 		if(sheets_this_tick >= sheets_per_tick)
 			break
 
-		if(!istype(A, /obj/item/weapon/ore))//Check if it's an ore
+		if(!istype(A, /obj/item/stack/ore))//Check if it's an ore
 			A.forceMove(out_T)
 			continue
 
-		var/obj/item/weapon/ore/O = A
+		var/obj/item/stack/ore/O = A
 		if(!O.material)
 			continue
 
-		ore.addAmount(O.material, 1)//1 per ore
+		ore.addAmount(O.material, O.amount)
 
 		var/datum/material/mat = ore.getMaterial(O.material)
 		if(!mat)
 			continue
 
-		credits += mat.value //Dosh.
+		credits += mat.value*O.amount //Dosh.
 
 		qdel(O)
 

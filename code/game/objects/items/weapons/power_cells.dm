@@ -221,8 +221,9 @@
 	name = "RTG power cell"
 	origin_tech = Tc_POWERSTORAGE + "=7"
 	icon_state = "rcell"
-	maxcharge = 100
+	maxcharge = 1000
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
+	var/charge_rate = 10
 
 /obj/item/weapon/cell/rad/empty/New()
 	..()
@@ -242,8 +243,20 @@
 /obj/item/weapon/cell/rad/process()
 	if(maxcharge <= charge)
 		return 0
-	var/power_used = min(maxcharge-charge,5)
+	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(5, RAD_EXTERNAL)
+			L.apply_radiation(charge_rate, RAD_EXTERNAL)
+
+/obj/item/weapon/cell/rad/large
+	name = "PDTG power cell"
+	origin_tech = Tc_POWERSTORAGE + "=9"
+	icon_state = "pcell"
+	maxcharge = 2500
+	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
+	charge_rate = 25
+
+/obj/item/weapon/cell/rad/large/empty/New()
+	..()
+	charge = 0

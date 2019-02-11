@@ -46,6 +46,8 @@ var/global/disable_vents     = 0
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
+#define DEFAULT_LOBBY_TIME 5 MINUTES
+
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
 #define WARNING_HIGH_PRESSURE 325 	//This determins when the orange pressure icon is displayed (it is 0.7 * HAZARD_HIGH_PRESSURE)
@@ -1527,6 +1529,7 @@ var/proccalls = 1
 
 
 #define DEFAULT_BLOOD "#A10808"
+#define DEFAULT_FLESH "#FFC896"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1537,6 +1540,13 @@ var/proccalls = 1
 #define ITEM_ANIMATION 1
 #define PERSON_ANIMATION 2
 
+//For client preferences.
+#define CREDITS_NEVER "Never"
+#define CREDITS_ALWAYS "Always"
+#define CREDITS_NO_RERUNS "No Reruns"
+#define JINGLE_NEVER "Never"
+#define JINGLE_CLASSIC "Classics"
+#define JINGLE_ALL "All"
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 
