@@ -3,6 +3,14 @@
 	desc = "A keyring with a small steel key, and a pink fob reading \"Pussy Wagon\"."
 	icon_state = "jani_keys"
 
+/obj/item/key/janicart/New()
+	..()
+	janikeys_list.Add(src)
+
+/obj/item/key/janicart/Destroy()
+	janikeys_list.Remove(src)
+	..()
+
 /obj/item/mecha_parts/janicart_upgrade
 	name = "Janicart Cleaner Upgrade"
 	desc = "This device upgrades the janicart to automatically clean surfaces when driving."
@@ -25,6 +33,11 @@
 /obj/structure/bed/chair/vehicle/janicart/New()
 	. = ..()
 	create_reagents(100)
+	janicart_list.Add(src)
+
+/obj/structure/bed/chair/vehicle/janicart/Destroy()
+	janicart_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/janicart/examine(mob/user)
 	..()
