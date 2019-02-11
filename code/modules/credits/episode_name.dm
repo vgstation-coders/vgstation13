@@ -71,9 +71,9 @@
 				episode_names += new /datum/episode_name("[pick("THE DAY [uppr_name] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "HOME ALONE", "GO BIG OR GO [uppr_name]", "PLACEBO EFFECT")]", "Low threat level of [mode.threat_level]%.", 150)
 				if(score["crewscore"] < -2000)
 					episode_names += new /datum/episode_name/rare("[pick("HOW OH HOW DID IT ALL GO SO WRONG?!", "EXPLAIN THIS ONE TO THE EXECUTIVES", "THE CREW GOES ON SAFARI", "OUR GREATEST ENEMY")]", "Low threat level of [mode.threat_level]%... but the crew still had a very low score.", score["crewscore"]/100*-2)
-			if(30 to 70)
-				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE BALLAD OF [uppr_name]", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR", "A HOUSE DIVIDED")]", "Moderate threat level of [mode.threat_level]%.", 200)
-			if(70 to 100)
+			if(30 to 65)
+				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE BALLAD OF [uppr_name]", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR", "A HOUSE DIVIDED")]", "Moderate threat level of [mode.threat_level]%.", 150)
+			if(65 to 100)
 				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "SPACE 'NAM", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]", "THE ONE WITH ALL THE FIGHTING")]", "High threat level of [mode.threat_level]%.", 250)
 		if(locate(/datum/dynamic_ruleset/roundstart/malf) in mode.executed_rules)
 			episode_names += new /datum/episode_name/rare("[pick("I'M SORRY [uppr_name], I'M AFRAID I CAN'T LET YOU DO THAT", "A STRANGE GAME", "THE AI GOES ROGUE", "RISE OF THE MACHINES")]", "Round included a malfunctioning AI.", 300)
@@ -131,8 +131,6 @@
 		episode_names += new /datum/episode_name/rare("[pick("HIGH EFFECT ENGINEERING", 25;"THE CREW'S ENGINE BLOWS", 25;"NEVER GO SHARD TO SHARD")]", "This is what happens when two shards touch.", min(2000, score["shardstouched"]*750))
 	if(score["kudzugrowth"] > 200)
 		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]))
-	if(score["oremined"] > 500)
-		episode_names += new /datum/episode_name/rare("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "[score["oremined"]] ore mined in total this round.", min(300, score["oremined"]/15))
 	if(score["disease"] >= score["escapees"] && score["escapees"] > 5)
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
 	//future idea: "the crew loses their chill"/"disco inferno" if most of the station is on fire, if the chef was the only survivor, "if you can't stand the heat..."
@@ -180,6 +178,7 @@
 			var/minercount = 0
 			var/skeletoncount = 0
 			var/voxcount = 0
+			var/tradercount = 0
 			var/dionacount = 0
 			var/baldycount = 0
 			var/fattycount = 0
@@ -196,6 +195,8 @@
 					chefcount++
 				if(H.is_wearing_any(list(/obj/item/clothing/suit/storage/lawyer, /obj/item/clothing/under/lawyer)) || (H.mind && H.mind.assigned_role == "Internal Affairs Agent"))
 					lawyercount++
+				if(H.mind && H.mind.assigned_role == "Trader")
+					tradercount++
 				if(H.mind && H.mind.assigned_role == "Shaft Miner")
 					minercount++
 				if(H.mind && H.mind.assigned_role == "Chaplain")
@@ -241,6 +242,8 @@
 				episode_names += new /datum/episode_name/rare("[pick("THE GREAT FATSBY", "THE CREW NEEDS TO LIGHTEN UP", "THE CREW PUTS ON WEIGHT", "THE FOUR CHIN CREW")]", "Most of the survivors were fat.", min(1500, fattycount*200))
 			if(horsecount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("STRAIGHT FROM THE HORSE'S MOUTH", "Most of the survivors wore horse heads.", min(1500, horsecount*200))
+			if(tradercount == human_escapees.len)
+				episode_names += new /datum/episode_name/rare("STEALING HOME", "The Vox Traders hijacked the shuttle.", min(1500, tradercount*500))
 
 			if(human_escapees.len == 1)
 				var/mob/living/carbon/human/H = human_escapees[1]
@@ -287,6 +290,25 @@
 					if(H.is_wearing_item(/obj/item/clothing/under/det))
 						chance += 250
 					episode_names += new /datum/episode_name/rare("[uppertext(H.real_name)]: LOOSE CANNON", "The Detective was the only survivor in the shuttle.", chance)
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Shaft Miner")
+					var/chance = 250
+					if(H.is_holding_item(/obj/item/weapon/pickaxe))
+						chance += 1000
+					if(H.is_wearing_item(/obj/item/clothing/suit/space/rig/mining))
+						chance += 500
+					if(H.is_wearing_item(/obj/item/clothing/head/helmet/space/rig/mining))
+						chance += 500
+					if(H.is_wearing_item(/obj/item/clothing/under/rank/miner))
+						chance += 250
+					episode_names += new /datum/episode_name/rare("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "The Miner was the only survivor in the shuttle.", chance)
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Librarian")
+					var/chance = 750
+					if(H.is_holding_item(/obj/item/weapon/book))
+						chance += 1000
+					if(H.is_wearing_item(/obj/item/clothing/under/suit_jacket/red))
+						chance += 500
+					episode_names += new /datum/episode_name/rare("COOKING THE BOOKS", "The Librarian was the only survivor in the shuttle.", chance)
+
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chaplain") //We don't check for uniform here because the chaplain's thing kind of is to improvise their garment gimmick
 					episode_names += new /datum/episode_name/rare("BLESS THIS MESS", "The Chaplain was the only survivor in the shuttle.", 1250)
 
@@ -313,7 +335,18 @@
 				for(var/obj/item/clothing/shoes/S in shuttle) //they gotta be on the floor
 					shoecount++
 				if(shoecount > 5 || score["shoeshatches"] > 10)
-					episode_names += new /datum/episode_name/rare("THE SOLE SURVIVOR", "There was only one survivor in the shuttle, and they didn't forget their shoes.", 1500) //I'm not sorry
+					episode_names += new /datum/episode_name/rare("THE SOLE SURVIVOR", "There was only one survivor in the shuttle, and they didn't forget their shoes.", 2500) //I'm not sorry
+
+				var/headcount = 0
+				for(var/obj/item/organ/external/head/H in shuttle) //they gotta be on the floor
+					headcount++
+				var/mob/living/carbon/human/trait = human_escapees[1]
+				var/obj/item/weapon/storage/belt/skull/trophybelt = trait.is_wearing_item(/obj/item/weapon/storage/belt/skull)
+				if(trophybelt)
+					for(var/obj/item/organ/external/head/H in trophybelt)
+						headcount++
+				if(headcount > 3)
+					episode_names += new /datum/episode_name/rare("HEAD OF THE CLASS", "There was only one survivor in the shuttle, and they got a lot of head.", min(2000, headcount*300))
 
 			var/braindamage_total = 0
 			var/all_retarded = TRUE
