@@ -298,7 +298,7 @@
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
-			new /obj/item/clothing/head/wizard/magician(get_turf(src))
+			new /obj/item/clothing/head/that/magic(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magician(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
 		if("magusred")

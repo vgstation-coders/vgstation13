@@ -409,10 +409,3 @@
 	..()
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
-
-/mob/living/simple_animal/rabbit/Life()
-	if(timestopped)
-		return FALSE //Under effects of time magic.
-	. =..()
-	if(!.)
-		return
