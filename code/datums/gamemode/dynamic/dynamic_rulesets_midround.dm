@@ -231,6 +231,8 @@
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	nuclear.forgeObjectives()
 	if (index == 1) // Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
