@@ -130,7 +130,7 @@
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)
-				see_invisible = SEE_INVISIBLE_LEVEL_TWO
+				see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
     // Legacy Cult
 		if(seer == 1)
 			var/obj/effect/rune_legacy/R = locate() in loc
