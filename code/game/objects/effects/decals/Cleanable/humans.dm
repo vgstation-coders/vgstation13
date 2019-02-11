@@ -50,7 +50,7 @@ var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood/atom2mapsave()
 	. = ..()
-	.["basecolor"] = adjust_brightness(basecolor, -90/(age*2))
+	.["basecolor"] = adjust_brightness(basecolor, -100/(age*2))
 
 /obj/effect/decal/cleanable/blood/setPersistenceAge(var/nu)
 	. = ..()
@@ -128,7 +128,7 @@ var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood/gibs/atom2mapsave()
 	. = ..()
-	.["fleshcolor"] = adjust_RGB(fleshcolor, green = 15)
+	.["fleshcolor"] = adjust_RGB(fleshcolor, red = -10, green = 10)
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
 	color = basecolor

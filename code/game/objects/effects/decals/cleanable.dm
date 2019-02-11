@@ -20,20 +20,6 @@
 	var/persistence_type = SS_CLEANABLE
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	var/persistent_type_replacement //If defined, the persistent item generated from this will be of this type rather than our own.
-	/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
-		..(loc)
-		if(age)
-			setPersistenceAge(age)
-		if(icon_state)
-			src.icon_state = icon_state
-		if(color)
-			src.color = color
-		if(dir)
-			src.dir = dir
-		if(pixel_x)
-			src.pixel_x = pixel_x
-		if(pixel_y)
-			src.pixel_y = pixel_y
 
 /obj/effect/decal/cleanable/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	if(age)
