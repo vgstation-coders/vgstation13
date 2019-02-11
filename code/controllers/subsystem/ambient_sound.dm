@@ -19,7 +19,7 @@ var/datum/subsystem/ambientsound/SSambience
 		if(C && (C.prefs.toggles & SOUND_AMBIENCE))
 			C.handle_ambience()
 
-/* 
+/*
 Ambience system.
 	var/last_ambient_noise //no repeats.
 	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
@@ -30,15 +30,16 @@ client/proc/handle_ambience()
 		return
 
 	var/list/possible_ambience = get_ambience()
-	var/cancel_ambience = TRUE
 	if(last_ambient_noise)
-		for(var/datum/ambience/amb in possible_ambience)
-			if(last_ambient_noise == amb.sound)
+		var/cancel_ambience = TRUE
+		for(var/amb in possible_ambience)
+			var/datum/ambience/A = amb
+			if(last_ambient_noise == initial(A.sound))
 				cancel_ambience = FALSE
 				break
-	if(cancel_ambience)
-		src << sound(null, 0, 0, CHANNEL_AMBIENCE)//I can't think of a sane way to have this be less abrupt. I don't think you can do anything like animating sounds and having a loop for it is gay.
-		ambience_buffer = null//no delay on starting a new sound.
+		if(cancel_ambience)
+			src << sound(null, 0, 0, CHANNEL_AMBIENCE)//I can't think of a sane way to have this be less abrupt. I don't think you can do anything like animating sounds and having a loop for it is gay.
+			ambience_buffer = null//no delay on starting a new sound.
 
 	if(ambience_buffer > world.timeofday)
 		return //sound's playing. don't bother.
@@ -48,11 +49,11 @@ client/proc/handle_ambience()
 			if(last_ambient_noise == ambie.sound)
 				possible_ambience -= ambie
 				break
-	
 		var/datum/ambience/picked_ambience_datum = pick(possible_ambience) //this is a type, not an instance.
-		ambience_buffer = world.timeofday+initial(picked_ambience_datum.length)
-		last_ambient_noise = initial(picked_ambience_datum.sound)
-		src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, 25)
+		if(prob(initial(picked_ambience_datum.prob_fire)))
+			ambience_buffer = world.timeofday+initial(picked_ambience_datum.length)
+			last_ambient_noise = initial(picked_ambience_datum.sound)
+			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, 25)
 
 /client/proc/get_ambience()
 	var/area/a = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.
@@ -62,3 +63,4 @@ client/proc/handle_ambience()
 /datum/ambience
 	var/length = 0 MINUTES //doesn't need to be 100% accurate. should be in the ballpark though.
 	var/sound = null //the actual file it points to.
+	var/prob_fire = 35 //The chance we play this ambience
