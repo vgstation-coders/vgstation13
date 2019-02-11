@@ -161,7 +161,7 @@
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = cultist_cap[indice_pop]
-	..()
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
@@ -245,7 +245,7 @@
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = operative_cap[indice_pop]
-	..()
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
 	//if ready() did its job, candidates should have 5 or more members in it
