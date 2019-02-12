@@ -36,8 +36,9 @@
 		qdel(BrainContainer)
 		BrainContainer = null
 
-	for(var/datum/role/R in mind.antag_roles)
-		R.RoleMobDestroyed()
+	if(mind && mind.antag_roles.len)
+		for(var/datum/role/R in mind.antag_roles)
+			R.RoleMobDestroyed()
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
