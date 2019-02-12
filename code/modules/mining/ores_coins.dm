@@ -231,11 +231,12 @@
 	desc = "A nugget of Uqill, a rare and very dense stone."
 	icon_state = "uqill"
 	material="uqill"
+
 /obj/item/stack/ore/telecrystal
 	name = "telecrystal"
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
-	material="telecrystal"
+	material=MAT_TELECRYSTAL
 
 /obj/item/stack/ore/mythril
 	name = "mythril ore"
