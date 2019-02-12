@@ -189,7 +189,7 @@ var/datum/controller/gameticker/ticker
 	equip_characters()
 	current_state = GAME_STATE_PLAYING
 	//Handle all the cyborg syncing
-	for(var/mob/living/silicon/robot/R in player_list)
+	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(!R.connected_ai)
 			R.connected_ai = select_active_ai_with_fewest_borgs()
 			to_chat(R, "<b>You have synchronized with [R.connected_ai.name], your master. Other AIs can be ignored.</b>")
