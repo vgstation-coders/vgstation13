@@ -800,7 +800,7 @@ var/list/acceptance_lines_by_dept = list(
 	SECURITY_POSITION = list(
 		"Congratulations on joining the stronger side." = 3,
 		"The corporate slave died. Let a new, free man take their place." = 3,
-		"You have finally saw the light." = 3,
+		"You have finally seen the light." = 3,
 		"Your freedom begins at this hour, in this place." = 3,
 		"Arise, new warrior." = 3,
 	),
