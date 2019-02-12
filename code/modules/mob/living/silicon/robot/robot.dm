@@ -1,3 +1,5 @@
+var/list/cyborg_list = list()
+
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"
@@ -126,6 +128,8 @@
 	else
 		lawupdate = FALSE
 
+	track_globally()
+
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
@@ -172,6 +176,9 @@
 			add_language(lang.name, can_speak = FALSE)
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+
+/mob/living/silicon/robot/proc/track_globally()
+	cyborg_list += src
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
