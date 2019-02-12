@@ -4578,6 +4578,20 @@
 				M.disabilities &= ~NEARSIGHTED
 	data++
 
+/datum/reagent/drink/grapejuice
+	name = "Grape Juice"
+	id = GRAPEJUICE
+	description = "Freshly squeezed juice from red grapes, quite sweet."
+	color = "#512284" //rgb: 81, 34, 132
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+
+/datum/reagent/drink/ggrapejuice
+	name = "Green Grape Juice"
+	id = GGRAPEJUICE
+	description = "Freshly squeezed juice from green grapes, smoothly sweet."
+	color = "#B79E42" //rgb: 183, 158, 66
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+
 /datum/reagent/drink/berryjuice
 	name = "Berry Juice"
 	id = BERRYJUICE
@@ -4656,6 +4670,13 @@
 	description = "Juice of the potato. Bleh."
 	nutriment_factor = 5 * FOOD_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+
+/datum/reagent/drink/plumphjuice
+	name = "Plump Helmet Juice"
+	id = PLUMPHJUICE
+	description = "Eeeewwwww."
+	nutriment_factor = 5 * FOOD_METABOLISM
+	color = "#A28691" //rgb: 162, 134, 145
 
 /datum/reagent/drink/milk
 	name = "Milk"
@@ -5183,16 +5204,43 @@
 /datum/reagent/ethanol/wine
 	name = "Wine"
 	id = WINE
-	description = "An premium alchoholic beverage made from distilled grape juice."
+	description = "A premium alcoholic beverage made from fermented grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
 
+/datum/reagent/ethanol/bwine
+	name = "Berry Wine"
+	id = BWINE
+	description = "Sweet berry wine!"
+	color = "#C760A2" //rgb: 199, 96, 162
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
+/datum/reagent/ethanol/wwine
+	name = "White Wine"
+	id = WWINE
+	description = "A premium alcoholic beverage made from fermented green grape juice."
+	color = "#C6C693" //rgb: 198, 198, 147
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
+/datum/reagent/ethanol/plumphwine
+	name = "Plump Helmet Wine"
+	id = PLUMPHWINE
+	description = "A very curious wine made from fermented plump helmet mushrooms. Popular among asteroid dwellers."
+	color = "#800080" //rgb: 128, 0, 128
+	dizzy_adj = 3 //dorf wine is a bit stronger than regular stuff
+	slur_start = 60
+	confused_start = 135
+
 /datum/reagent/ethanol/cognac
 	name = "Cognac"
 	id = COGNAC
-	description = "A sweet and strongly alchoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
+	description = "A sweet and strongly alcoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
 	color = "#AB3C05" //rgb: 171, 60, 5
 	dizzy_adj = 4
 	confused_start = 115
@@ -5210,7 +5258,7 @@
 /datum/reagent/ethanol/ale
 	name = "Ale"
 	id = ALE
-	description = "A dark alchoholic beverage made by malted barley and yeast."
+	description = "A dark alcoholic beverage made by malted barley and yeast."
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/pwine
@@ -5529,7 +5577,7 @@
 /datum/reagent/ethanol/deadrum/wine
 	name = "Wine"
 	id = WINE
-	description = "An premium alchoholic beverage made from distilled grape juice."
+	description = "A premium alcoholic beverage made from fermented grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
 	dizzy_adj = 2
 	slur_start = 65
@@ -5538,7 +5586,7 @@
 /datum/reagent/ethanol/deadrum/cognac
 	name = "Cognac"
 	id = COGNAC
-	description = "A sweet and strongly alchoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
+	description = "A sweet and strongly alcoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	confused_start = 115
@@ -5557,7 +5605,7 @@
 /datum/reagent/ethanol/deadrum/ale
 	name = "Ale"
 	id = ALE
-	description = "A dark alchoholic beverage made by malted barley and yeast."
+	description = "A dark alcoholic beverage made by malted barley and yeast."
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/thirteenloko
