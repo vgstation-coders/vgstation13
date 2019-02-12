@@ -3,11 +3,11 @@
 /datum/dynamic_ruleset/midround/from_ghosts/
 	weight = 0
 
-/datum/dynamic_ruleset/midround/from_ghosts/execute()
+/datum/dynamic_ruleset/midround/from_ghosts/execute(var/threat_cost)
 	var/list/possible_candidates = list()
 	possible_candidates.Add(dead_players)
 	possible_candidates.Add(list_observers)
-	send_applications(possible_candidates)
+	send_applications(possible_candidates,threat_cost)
 	return 1
 
 /datum/dynamic_ruleset/midround/from_ghosts/review_applications()
@@ -191,13 +191,21 @@
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
 		weight = 5
 		cost = 10
-
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
+	..()
+	if(!locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
+		new_role.refund_value = BASE_SOLO_REFUND * 4
+		//If it's a spontaneous ragin' mage, it costs more, so refund more
+	else
+		new_role.refund_value = BASE_SOLO_REFUND/2
+		//We have plenty of threat to go around
 
 //////////////////////////////////////////////
 //                                          //
