@@ -740,7 +740,7 @@ var/list/failure_lines_by_dept = list(
 	SCIENCE_POSITIONS = list(
 		"Your closed mind dishonours you." = 3,
 		"Our secrets were beyond your understanding." = 3,
-		"My science was not for whimps such as you." = 3,
+		"My science was not for wimps such as you." = 3,
 	),
 	CIVILIAN_POSITIONS = list(
 		"A little job in life, and a forgotten death." = 3,
@@ -763,14 +763,14 @@ var/list/failure_lines_by_dept = list(
 var/list/acceptance_lines_by_dept = list(
 	COMMAND_POSITIONS = list(
 		"I knew you had it in you." = 3,
-		"The chains of commandings are broken." = 3,
+		"The chains of commanding are broken." = 3,
 		"Be ready to lead the stronger side." = 3,
 		"Arise, new champion." = 3,
 	),
 	ENGINEERING_POSITIONS = list(
 		"The forges of the Geometer welcome you." = 3,
 		"Your true potential has been unraveled. " = 3,
-		"Forge the sword that will slay my ennemies." = 3,
+		"Forge the sword that will slay my enemies." = 3,
 		"Arise, new craftsman." = 3,
 	),
 	MEDICAL_POSITIONS = list(
@@ -787,14 +787,14 @@ var/list/acceptance_lines_by_dept = list(
 	),
 	CIVILIAN_POSITIONS = list(
 		"Only here will you be fullfilled." = 3,
-		"A task has finally be given to you." = 3,
+		"A task has finally been given to you." = 3,
 		"Rise up." = 3,
 		"And there goes a life of servitude." = 3,
-		// Need to find an "arise" line
+		"Arise, new peon." = 3,
 	),
 	CARGO_POSITION = list(
 		"When this is over, expect much more than your dreamed 'Cargonia'." = 3,
-		"Be the hand that arms my soliders." = 3,
+		"Be the hand that arms my soldiers." = 3,
 		// Need to find an "arise" line
 	),
 	SECURITY_POSITION = list(
@@ -840,7 +840,7 @@ var/list/acceptance_lines_by_specific_race = list(
 
 var/list/failure_lines_by_specific_role = list(
 	WIZARD = list(
-		"My power dwarves your pathetic magic." = 5,
+		"My power dwarfs your pathetic magic." = 5,
 		"You have failed, magician." = 5,
 	),
 	VAMPIRE = list(
