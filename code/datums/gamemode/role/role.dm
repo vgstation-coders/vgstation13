@@ -759,9 +759,8 @@
 
 /datum/role/malfAI
 	name = MALF
-	id = MALF
+	id = ROLE_MALF
 	required_pref = ROLE_MALF
-	required_jobs = list("AI")
 	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()

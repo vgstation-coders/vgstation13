@@ -323,27 +323,10 @@ var/global/datum/controller/occupations/job_master
 		for(var/mob/new_player/player in unassigned)
 
 			// Loop through all jobs
-			for(var/datum/job/job in shuffledoccupations) // SHUFFLE ME BABY
-				if(!job)
-					continue
-
-				if(jobban_isbanned(player, job.title))
-					Debug("DO isbanned failed, Player: [player], Job:[job.title]")
-					continue
-
-				if(!job.player_old_enough(player.client))
-					Debug("DO player not old enough, Player: [player], Job:[job.title]")
-					continue
-
-				// If the player wants that job on this level, then try give it to him.
-				if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
-
-					// If the job isn't filled
-					if((job.current_positions < job.spawn_positions) || job.spawn_positions == -1)
-						Debug("DO pass, Player: [player], Level:[level], Job:[job.title]")
-						AssignRole(player, job.title)
-						unassigned -= player
-						break
+			for(var/datum/job/job in shuffledoccupations)
+				if(TryAssignJob(player,level,job))
+					unassigned -= player
+					break
 
 	// Hand out random jobs to the people who didn't get any in the last check
 	// Also makes sure that they got their preference correct
@@ -419,6 +402,23 @@ var/global/datum/controller/occupations/job_master
 			unassigned -= player
 	return 1
 
+/datum/controller/occupations/proc/TryAssignJob(var/mob/new_player/player, var/level, var/datum/job/job)
+	if(!job)
+		return FALSE
+	if(jobban_isbanned(player, job.title))
+		Debug("DO isbanned failed, Player: [player], Job:[job.title]")
+		return FALSE
+	if(!job.player_old_enough(player.client))
+		Debug("DO player not old enough, Player: [player], Job:[job.title]")
+		return FALSE
+	// If the player wants that job on this level, then try give it to him.
+	if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
+
+		// If the job isn't filled
+		if((job.current_positions < job.spawn_positions) || job.spawn_positions == -1)
+			Debug("DO pass, Player: [player], Level:[level], Job:[job.title]")
+			AssignRole(player, job.title)
+			return TRUE
 
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
 	if(!H)
