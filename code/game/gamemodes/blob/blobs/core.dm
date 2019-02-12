@@ -110,7 +110,7 @@
 	return 0
 
 /obj/effect/blob/core/proc/recruit_overmind()
-	var/list/possible_candidates = get_candidates(ROLE_BLOB)
+	var/list/possible_candidates = get_candidates(BLOBOVERMIND)
 	var/icon/logo_icon = icon('icons/logos.dmi', "blob-logo")
 	for(var/client/candidate in possible_candidates)
 		if(istype(candidate.eye,/obj/item/projectile/meteor/blob/core))
@@ -135,7 +135,7 @@
 	if(!new_overmind)
 		return 0
 
-	if (jobban_isbanned(new_overmind.mob, ROLE_BLOB) || isantagbanned(new_overmind.mob))
+	if (jobban_isbanned(new_overmind.mob, BLOBOVERMIND) || isantagbanned(new_overmind.mob))
 		to_chat(usr, "<span class='warning'>You are banned from this role.</span>")
 		return 0
 

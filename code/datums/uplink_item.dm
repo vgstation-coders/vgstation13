@@ -118,7 +118,7 @@ var/list/uplink_items = list()
 			if(user.mind)
 				user.mind.spent_TC += get_cost(U.job)
 				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
-				var/datum/role/R = user.mind.GetRole(ROLE_OPERATIVE)
+				var/datum/role/R = user.mind.GetRole(NUKE_OP)
 				if(R)
 					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				else

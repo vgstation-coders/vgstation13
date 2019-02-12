@@ -1,7 +1,7 @@
 /datum/role/grinch
     name = GRINCH
-    id = ROLE_GRINCH
-    required_pref = ROLE_GRINCH
+    id = GRINCH
+    required_pref = GRINCH
     logo_state = "synd-logo"
     disallow_job = TRUE
     refund_value = BASE_SOLO_REFUND

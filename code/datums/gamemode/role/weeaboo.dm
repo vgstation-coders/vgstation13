@@ -1,7 +1,7 @@
 /datum/role/weeaboo
 	name = WEEABOO
 	id = WEEABOO
-	required_pref = ROLE_WEEABOO
+	required_pref = WEEABOO
 	special_role = WEEABOO
 	logo_state = "weeaboo-logo"
 	refund_value = BASE_SOLO_REFUND

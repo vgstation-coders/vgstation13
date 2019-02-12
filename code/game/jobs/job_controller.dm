@@ -240,7 +240,7 @@ var/global/datum/controller/occupations/job_master
 		for(var/level = 1 to 3)
 			var/list/candidates = list()
 			if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
-				candidates = FindOccupationCandidates(job, level, ROLE_MALF)
+				candidates = FindOccupationCandidates(job, level, MALF)
 			else
 				candidates = FindOccupationCandidates(job, level)
 			if(candidates.len)

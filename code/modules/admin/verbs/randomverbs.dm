@@ -246,7 +246,7 @@ proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 /proc/create_xeno(ckey)
 	if(!ckey)
 		var/list/candidates = list()
-		for(var/mob/M in get_active_candidates(ROLE_ALIEN))
+		for(var/mob/M in get_active_candidates(ALIEN))
 			if(M.stat != DEAD)
 				continue	//we are not dead!
 			if(M.client.is_afk())

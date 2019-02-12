@@ -190,7 +190,7 @@
 			if(temp_vent.network.normal_members.len > 50) // Stops Aliens getting stuck in small networks. See: Security, Virology
 				vents += temp_vent
 
-	var/list/mob/dead/observer/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll="HEY KID, YOU WANNA BE AN ALIEN LARVA?")
+	var/list/mob/dead/observer/candidates = get_active_candidates(ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll="HEY KID, YOU WANNA BE AN ALIEN LARVA?")
 
 	if(candidates.len)
 		shuffle(candidates)

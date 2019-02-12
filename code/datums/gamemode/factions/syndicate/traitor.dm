@@ -1,7 +1,7 @@
 /datum/faction/syndicate
 	name = "The Syndicate"
 	ID = SYNDICATE
-	required_pref = ROLE_TRAITOR
+	required_pref = TRAITOR
 	desc = "A coalition of companies that actively work against Nanotrasen's intentions. Seen as Freedom fighters by some, Rebels and Malcontents by others."
 	logo_state = "synd-logo"
 

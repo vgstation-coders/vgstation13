@@ -3,7 +3,7 @@
 /datum/faction/revolution
 	name = "Revolutionaries"
 	ID = REVOLUTION
-	required_pref = ROLE_REV
+	required_pref = REV
 	initial_role = HEADREV
 	late_role = REV
 	desc = "Viva!"

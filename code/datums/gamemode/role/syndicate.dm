@@ -1,9 +1,9 @@
 /datum/role/traitor
 	name = TRAITOR
 	id = TRAITOR
-	required_pref = ROLE_TRAITOR
+	required_pref = TRAITOR
 	logo_state = "synd-logo"
-	wikiroute = ROLE_TRAITOR
+	wikiroute = TRAITOR
 	refund_value = BASE_SOLO_REFUND
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
@@ -226,8 +226,8 @@
 
 /datum/role/nuclear_operative
 	name = NUKE_OP
-	id = ROLE_OPERATIVE
-	required_pref = ROLE_OPERATIVE
+	id = NUKE_OP
+	required_pref = NUKE_OP
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
 

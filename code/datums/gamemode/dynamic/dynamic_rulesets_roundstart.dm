@@ -45,7 +45,7 @@
 /*
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
-	role_category = ROLE_CHANGELING
+	role_category = CHANGELING
 	protected_from_jobs = list("Security Officer", "Warden", "Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
@@ -194,7 +194,7 @@
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
 	role_category = /datum/role/legacy_cultist
-	role_category_override = ROLE_CULTIST // H-ha
+	role_category_override = CULTIST // H-ha
 	protected_from_jobs = list("Merchant")
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")

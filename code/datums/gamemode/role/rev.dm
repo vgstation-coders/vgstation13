@@ -48,7 +48,7 @@
 
 /datum/role/revolutionary/New()
 	..()
-	wikiroute = role_wiki[ROLE_REV]
+	wikiroute = role_wiki[REV]
 
 /datum/role/revolutionary/leader
 	name = HEADREV

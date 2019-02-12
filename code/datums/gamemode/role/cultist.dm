@@ -1,5 +1,5 @@
 /datum/role/cultist
-	id = ROLE_CULTIST
+	id = CULTIST
 	name = "Cultist"
 	required_pref = ROLE_CULTIST
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
@@ -12,7 +12,7 @@
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
-	wikiroute = role_wiki[ROLE_CULTIST]
+	wikiroute = role_wiki[CULTIST]
 
 /datum/role/cultist/OnPostSetup()
 	. = ..()
