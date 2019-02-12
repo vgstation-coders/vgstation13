@@ -30,5 +30,5 @@
 #define MEDICAL_POSITIONS list("Chief Medical Officer", "Medical Doctor", "Geneticist", "Virologist", "Paramedic", "Chemist")
 #define SCIENCE_POSITIONS list("Research Director", "Scientist", "Geneticist", "Roboticist", "Mechanic")
 #define CIVILIAN_POSITIONS list("Head of Personnel", "Bartender", "Botanist", "Chef", "Janitor", "Librarian", "Internal Affairs Agent", "Chaplain", "Clown", "Mime", "Assistant")
-#define CARGO_POSITION list("Head of Personnel", "Quartermaster", "Cargo Technician", "Shaft Miner")
-#define SECURITY_POSITION list("Head of Security", "Warden", "Detective", "Security Officer")
+#define CARGO_POSITIONS list("Head of Personnel", "Quartermaster", "Cargo Technician", "Shaft Miner")
+#define SECURITY_POSITIONS list("Head of Security", "Warden", "Detective", "Security Officer")
