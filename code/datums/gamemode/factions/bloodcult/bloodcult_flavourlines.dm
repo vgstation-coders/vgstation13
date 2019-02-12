@@ -195,7 +195,7 @@ var/list/acceptance_lines_thin_veil = list(
     "Soon you will see the fruits of our efforts." = 3,
 )
 
-var/list/failture_lines_thin_veil = list(
+var/list/failure_lines_thin_veil = list(
     "You chose to witness the end, rather than act." = 5,
 	"Can't you see how pointless it is to resist at this point?" = 5,
 )
@@ -276,7 +276,7 @@ var/list/all_depts_list = list(
 
 	// Or a lot of them !
 	else if (cultists > 10)
-		valid_lines += failture_lines_numerous_cultists
+		valid_lines += failure_lines_numerous_cultists
 
 	// Converter and victim are of the same dept
 	for (var/list/dept in all_depts_list)
