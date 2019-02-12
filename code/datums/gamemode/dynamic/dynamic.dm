@@ -336,8 +336,6 @@ var/list/threat_by_job = list(
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
 
 /datum/gamemode/dynamic/proc/injection_attempt()//will need to gather stats to refine those values later
-	if (latejoin_injection_cooldown)
-		return
 	var/chance = 0
 	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/5))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
 	if (!living_antags.len)
@@ -378,7 +376,7 @@ var/list/threat_by_job = list(
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
 
-	else if (injection_attempt())
+	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
 			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
