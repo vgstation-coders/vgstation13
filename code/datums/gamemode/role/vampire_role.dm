@@ -392,8 +392,8 @@
 		check_vampire_upgrade()
 
 /datum/role/vampire/handle_reagent(var/reagent_id)
-	switch (reagent_id)
-		if (HOLYWATER)
+	switch(reagent_id)
+		if (HOLYWATER,INCENSE_HAREBELLS)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return

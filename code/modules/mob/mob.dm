@@ -2180,7 +2180,7 @@ mob/proc/on_foot()
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(!(status_flags & PACIFIABLE))
 		return 0
-	if (reagents && reagents.has_reagent(CHILLWAX))
+	if (reagents && (reagents.has_reagent(CHILLWAX) || (reagents.has_reagent(INCENSE_POPPIES) && prob(50))))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
 				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")

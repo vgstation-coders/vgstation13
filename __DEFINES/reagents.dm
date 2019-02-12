@@ -437,3 +437,9 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
+
+#define INCENSE_HAREBELLS	"harebells"
+#define INCENSE_POPPIES		"poppies"
+#define INCENSE_SUNFLOWERS	"sunflowers"
+#define INCENSE_MOONFLOWERS	"moonflowers"
+#define INCENSE_NOVAFLOWERS	"novaflowers"
