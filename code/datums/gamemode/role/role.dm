@@ -628,6 +628,7 @@
 	name = WIZARD
 	id = WIZARD
 	special_role = WIZARD
+	required_pref = ROLE_WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
 	refund_value = BASE_SOLO_REFUND * 2
@@ -755,6 +756,7 @@
 /datum/role/malfAI
 	name = MALF
 	id = MALF
+	required_pref = ROLE_MALF
 	required_jobs = list("AI")
 	logo_state = "malf-logo"
 

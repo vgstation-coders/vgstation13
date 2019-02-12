@@ -875,6 +875,7 @@ SEE_PIXELS	256
 #define ROLE_WIZARD     	"wizard"
 #define ROLE_GRINCH			"Grinch"
 #define ROLE_WEEABOO		"crazed weeaboo"
+#define ROLE_MINOR			"minor roles"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be

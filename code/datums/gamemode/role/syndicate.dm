@@ -227,6 +227,7 @@
 /datum/role/nuclear_operative
 	name = NUKE_OP
 	id = ROLE_OPERATIVE
+	required_pref = ROLE_OPERATIVE
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
 

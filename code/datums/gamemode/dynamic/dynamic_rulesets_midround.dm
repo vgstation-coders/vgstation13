@@ -309,3 +309,27 @@
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
 	return accepted
+
+//////////////////////////////////////////////
+//                                          //
+//               LOOSE CATBEAST             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                 Minor Role               //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast
+	name = "Loose Catbeast"
+	role_category = /datum/role/catbeast
+	required_candidates = 1
+	weight = 1
+	cost = 0
+	requirements = list(0,0,0,0,0,0,0,0,0,0)
+	logo = "catbeast-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
+	if(mode.threat>50) //We're threatening enough!
+		message_admins("Rejected catbeast ruleset, [mode.threat] threat was over 50.")
+		return FALSE
+	if(!..())
+		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
+		return FALSE
+	return TRUE
