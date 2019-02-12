@@ -906,7 +906,7 @@ var/list/acceptance_lines_by_specific_role = list(
 			valid_lines += list(
 				"[converter.gender == MALE ? "He" : "She"] tried to save you." = 5,
 				"You betrayed your friend." = 5,
-				"Your arrogance must have dissapointed your friend." = 5,
+				"Your arrogance must have disappointed your friend." = 5,
 			)
 	// Act
 	if (veil_thickness >= CULT_ACT_III)
