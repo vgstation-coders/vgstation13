@@ -420,7 +420,8 @@
 	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
-		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
+		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
 
 	for(var/mob/dead/observer/O in player_list)
 		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
@@ -478,7 +479,8 @@
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
-			to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+			if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
