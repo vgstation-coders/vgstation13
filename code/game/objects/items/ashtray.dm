@@ -17,7 +17,7 @@
 /obj/item/ashtray/attackby(obj/item/weapon/W, mob/user)
 	if (health < 1)
 		return
-	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W, /obj/item/weapon/cigbutt))
+	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W, /obj/item/trash/cigbutt))
 		if(!user)
 			return
 		if (contents.len >= max_butts)
@@ -27,7 +27,7 @@
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return
 		var/obj/item/clothing/mask/cigarette/cig = W
-		if(istype(cig, /obj/item/weapon/cigbutt))
+		if(istype(cig, /obj/item/trash/cigbutt))
 			to_chat(user, "<span class='notice'>You drop the [cig] into [src].</span>")
 		if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
 			if (cig.lit == 1)
