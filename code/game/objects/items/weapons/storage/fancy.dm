@@ -216,9 +216,11 @@
 	storage_slots = 21 //3 rows of 7 items
 	max_combined_w_class = 21
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_PAPER
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
-	can_only_hold = list("/obj/item/weapon/match") // Strict type check.
+	can_only_hold = list("/obj/item/weapon/match", "/obj/item/weapon/p_folded/note_small", "/obj/item/weapon/coin", \
+		"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin", "/obj/item/weapon/reagent_containers/food/snacks/chococoin")
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/storage/fancy/matchbox/empty
@@ -252,9 +254,20 @@
 
 /obj/item/weapon/storage/fancy/matchbox/attackby(obj/item/weapon/match/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/match) && !W.lit)
-		W.lit = 1
-		W.update_brightness()
-	return
+		W.light()
+		return
+	return ..()
+
+/obj/item/weapon/storage/fancy/matchbox/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	. = ..()
+	if(.)
+		if(W.is_hot() >= src.autoignition_temperature)
+			ignite(W.is_hot())
+
+/obj/item/weapon/storage/fancy/matchbox/ignite(temperature)
+	for(var/obj/item/weapon/match/ohno in src)
+		ohno.light()
+	. = ..()
 
 /obj/item/weapon/storage/fancy/matchbox/strike_anywhere
 	name = "strike-anywhere matchbox"
@@ -279,7 +292,7 @@
 	flags = 0
 	slot_flags = SLOT_BELT
 	storage_slots = 6
-	can_only_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter") // Strict type check.
+	can_only_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter", "/obj/item/weapon/p_folded/note_small")
 	icon_type = "cigarette"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC

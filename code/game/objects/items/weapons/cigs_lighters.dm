@@ -28,6 +28,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
+	autoignition_temperature = AUTOIGNITION_PAPER
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -43,6 +44,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	. = ..()
 
 	processing_objects -= src
+
+/obj/item/weapon/match/ignite(temperature)
+	. = ..()
+	light()
+
+/obj/item/weapon/match/proc/light()
+	lit = 1
+	update_brightness()
 
 /obj/item/weapon/match/examine(mob/user)
 	..()
@@ -118,16 +127,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		return ..()
 
-/*
 /obj/item/weapon/match/attackby(obj/item/weapon/W as obj, mob/user as mob)
-
-	if(W.is_hot())
-		lit = 1
-		update_brightness()
+	if(W.is_hot() >= autoignition_temperature)
+		light()
 		user.visible_message("[user] lights \the [src] with \the [W].", \
 		"You light \the [src] with \the [W].")
 	..()
-*/
 
 /obj/item/weapon/match/strike_anywhere
 	name = "strike-anywhere match"
@@ -144,8 +149,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	if(istype(target, /obj) || istype(target, /turf))
-		lit = 1
-		update_brightness()
+		light()
 		user.visible_message("[user] strikes \the [src] on \the [target].", \
 		"You strike \the [src] on \the [target].")
 
