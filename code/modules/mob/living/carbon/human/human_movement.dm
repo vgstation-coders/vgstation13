@@ -111,7 +111,7 @@
 		prob_slip = 0 // Changing this to zero to make it line up with the comment, and also, make more sense.
 
 	//Do we have magboots or such on if so no slip
-	if(CheckSlip() == SLIP_HAS_MAGBOOTIES)
+	if(CheckSlip() == SLIP_HAS_MAGBOOTS)
 		prob_slip = 0
 
 	//Check hands and mod slip
@@ -166,6 +166,6 @@
 
 	// We have magboots, and magboots can protect us
 	if (. && magboots_slip_factor)
-		return SLIP_HAS_MAGBOOTIES
+		return SLIP_HAS_MAGBOOTS
 	// We don't have magboots, or magboots can't protect us
 	return (. && !shoes_slip_factor)

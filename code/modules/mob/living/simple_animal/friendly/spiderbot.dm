@@ -324,7 +324,7 @@
 		to_chat(user, "It is carrying \a [src.held_item] [bicon(src.held_item)].")
 
 /mob/living/simple_animal/spiderbot/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
-	return SLIP_HAS_MAGBOOTIES
+	return SLIP_HAS_MAGBOOTS
 
 /mob/living/simple_animal/spiderbot/say(var/message)
 	return ..(message, "R")

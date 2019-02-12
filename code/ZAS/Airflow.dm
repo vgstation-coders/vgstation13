@@ -94,7 +94,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(locked_to)
 		return FALSE
-	if(CheckSlip() == SLIP_HAS_MAGBOOTIES)
+	if(CheckSlip() == SLIP_HAS_MAGBOOTS)
 		return FALSE
 
 	if (grabbed_by.len)
