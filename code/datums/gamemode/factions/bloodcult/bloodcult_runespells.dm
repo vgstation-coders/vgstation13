@@ -895,16 +895,6 @@
 				to_chat(activator, "<span class='sinister'>\The [victim]'s mind appears to be completely impervious to the Geometer of Blood's words of power. If they won't become one of us, they won't need their body any longer.</span>")
 				to_chat(victim, "<span class='danger'>A sense of dread comes over you, as you feel under the gaze of a cosmic being. You cannot hear its voice, but you can feel its thirst...for your blood!</span>")
 				success = CONVERSION_REFUSE
-				if(victim.mind && victim.mind.assigned_role == "Chaplain")
-					var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
-					var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
-					if (religion_name in cult_blood_chaplain)
-						to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>Rejoice, I will give you the ending you desired.</span></span>")
-					else if (religion_name in cult_clock_chaplain)
-						to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>I will take your body, but when your soul returns to Ratvar, tell him that [pick(\
-								"he SUCKS!",\
-								"there isn't enough place for the two of us on this plane!",\
-								"he'll never be anything but a lame copycat.")]</span></span>")
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(100)
@@ -922,8 +912,8 @@
 			return
 
 		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (victim.mind)
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 			if (cult)
 				cult.progress(CULT_ACT_II)
 			else
@@ -946,7 +936,7 @@
 					I.forceMove(T)
 					I.implanted = 0
 					spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [victim]'s head.</span>")
-				convert(victim)
+				convert(victim, converter)
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
@@ -962,7 +952,8 @@
 						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
-
+					
+		cult.send_flavour_text_refuse(victim, converter)
 		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 
@@ -995,7 +986,7 @@
 		qdel(victim)
 		abort(RITUALABORT_SACRIFICE)
 
-/datum/rune_spell/conversion/proc/convert(var/mob/M)
+/datum/rune_spell/conversion/proc/convert(var/mob/M, var/mob/converter)
 	var/datum/role/cultist/newCultist = new
 	newCultist.AssignToRole(M.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -1004,6 +995,7 @@
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
+	cult.send_flavour_text_accept(victim, converter)
 	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
