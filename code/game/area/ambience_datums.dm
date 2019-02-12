@@ -54,6 +54,7 @@
 /datum/ambience/generic13
 	sound = 'sound/ambience/ambigen13.ogg'
 	length = 15 SECONDS + 30 SECONDS
+	prob_fire = 0 // Disabled for now.
 
 /datum/ambience/generic14
 	sound = 'sound/ambience/ambigen14.ogg'
