@@ -18,7 +18,7 @@
 	H.dna.ResetUI()
 	equip_catbeast(H)
 	H.regenerate_icons()
-	spawn(3 MINUTES)
+	spawn(1.5 MINUTES)
 		if(antag.current.stat!=DEAD && OnStation())
 			command_alert("An escaped catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station.", "Catbeast Detected",1)
 	return TRUE
@@ -35,7 +35,6 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	H.equip_to_slot_or_del(new chosen_shirt, slot_w_uniform)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal/catbeast, slot_shoes)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/joy, slot_wear_mask)
 	//Null old name because we're from ghosts
 	H.fully_replace_character_name(null,pick(catbeast_names))
 
