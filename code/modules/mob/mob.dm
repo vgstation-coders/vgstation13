@@ -2212,6 +2212,9 @@ mob/proc/on_foot()
 			var/datum/role/R = mind.antag_roles[role]
 			R.update_antag_hud()
 
+/mob/proc/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return FALSE
+
 // Returns TRUE on success
 /mob/proc/attempt_crawling(var/turf/target)
 	return FALSE

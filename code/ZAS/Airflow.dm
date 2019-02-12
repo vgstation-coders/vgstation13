@@ -70,7 +70,7 @@ atom/movable/GotoAirflowDest(n)
 	if(locked_to || (flags & INVULNERABLE))
 		return FALSE
 	if(shoes)
-		if(CheckSlip() < 1)
+		if((CheckSlip()) != TRUE)
 			return FALSE
 	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
@@ -94,7 +94,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(locked_to)
 		return FALSE
-	if(CheckSlip() < 0)
+	if(CheckSlip() == SLIP_HAS_MAGBOOTS)
 		return FALSE
 
 	if (grabbed_by.len)

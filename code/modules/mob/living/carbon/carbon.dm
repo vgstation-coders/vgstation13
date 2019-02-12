@@ -505,22 +505,14 @@
 				return 1
 	return 0
 
-/mob/living/carbon/CheckSlip()
-	return !locked_to && !lying && !unslippable
+/mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
+	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
 
-/mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
-	stop_pulling()
-	Stun(stun_amount)
-	Knockdown(weaken_amount)
-	score["slips"]++
-	return 1
-
-/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
-	if(!slip_on_walking && m_intent == "walk")
+/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
+	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
-	if (CheckSlip() < 1 || !on_foot())
-		return 0
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		return 1
@@ -709,3 +701,35 @@
 			if(src)
 				body_alphas.Remove(source_define)
 				regenerate_icons()
+
+
+/mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
+	if (!..())
+		return FALSE
+
+	switch(P.wet)
+		if(TURF_WET_WATER)
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+				return FALSE
+			step(src, dir)
+			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
+			"<span class='warning'>You slip on the wet floor!</span>")
+
+		if(TURF_WET_LUBE)
+			step(src, dir)
+			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+				return FALSE
+			for (var/i = 1 to 4)
+				spawn(i)
+					if(!locked_to)
+						step(src, dir)
+			take_organ_damage(2) // Was 5 -- TLE
+			visible_message("<span class='warning'>[src] slips on the floor!</span>", \
+			"<span class='warning'>You slip on the floor!</span>")
+
+		if(TURF_WET_ICE)
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE))
+				step(src, dir)
+				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
+				"<span class='warning'>You slip on the icy floor!</span>")
+	return TRUE
