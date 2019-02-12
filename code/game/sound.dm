@@ -24,7 +24,7 @@ var/list/machete_hit_sound = list('sound/weapons/machete_hit01.ogg', 'sound/weap
 var/list/machete_throw_sound = list('sound/weapons/hfmachete_throw01.ogg', 'sound/weapons/hfmachete_throw02.ogg', 'sound/weapons/hfmachete_throw03.ogg')
 var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg', 'sound/weapons/hfmachete_throw_hit02.ogg', 'sound/weapons/hfmachete_throw_hit03.ogg')
 var/list/card_swipe_sound = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
-
+var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 'sound/effects/mop3.ogg', 'sound/effects/mop4.ogg', 'sound/effects/mop5.ogg')
 
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
@@ -200,5 +200,7 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(machete_throw_hit_sound)
 			if ("card_swipe")
 				soundin = pick(card_swipe_sound)
+			if ("mop")
+				soundin = pick(mop_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin
