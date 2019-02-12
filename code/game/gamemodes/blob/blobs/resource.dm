@@ -44,7 +44,7 @@
 	if(resource_delay > world.time)
 		return 0
 
-	resource_delay = world.time + (4 SECONDS)
+	resource_delay = world.time + (8 SECONDS)
 
 	if(overmind)
 	/*	if(blob_looks[looks] == 64)
