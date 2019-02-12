@@ -261,7 +261,10 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 /datum/mind/proc/take_uplink()
 	var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
 	if(H)
+		message_admins("Found and deleted [H] for [src].")
 		qdel(H)
+	else
+		message_admins("The uplink for [src] could not be located for deletion.")
 
 /proc/add_law_zero(mob/living/silicon/killer)
 	var/law = "Accomplish your objectives at all costs."
