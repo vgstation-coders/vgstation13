@@ -731,7 +731,7 @@
 	name = "Spare trader ID"
 	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
 	assignment = "Trader"
-	var canSet = TRUE
+	var/canSet = TRUE
 
 /obj/item/weapon/card/id/vox/extra/attack_self(mob/user as mob)
 	if(canSet)
