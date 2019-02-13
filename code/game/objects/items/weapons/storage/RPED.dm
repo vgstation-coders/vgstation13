@@ -13,10 +13,10 @@
 	var/bluespace = 0
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
-	name = "Discount bluespace rapid part exchange device"
+	name = "Prototype bluespace rapid part exchange device" //Alternative name: Discount BRPED, therefore denoted as DBRPED
 	desc = "Not as good as the real deal, but still good. This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open."
-	/*icon_state =
-	item_state = */
+	icon_state = "DBRPED"
+	item_state = "DBRPED"
 	max_combined_w_class = 200
 	storage_slots = 100
 	bluespace = 1
