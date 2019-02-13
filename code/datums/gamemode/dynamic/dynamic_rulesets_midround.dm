@@ -3,11 +3,11 @@
 /datum/dynamic_ruleset/midround/from_ghosts/
 	weight = 0
 
-/datum/dynamic_ruleset/midround/from_ghosts/execute(var/threat_cost)
+/datum/dynamic_ruleset/midround/from_ghosts/execute()
 	var/list/possible_candidates = list()
 	possible_candidates.Add(dead_players)
 	possible_candidates.Add(list_observers)
-	send_applications(possible_candidates,threat_cost)
+	send_applications(possible_candidates)
 	return 1
 
 /datum/dynamic_ruleset/midround/from_ghosts/review_applications()

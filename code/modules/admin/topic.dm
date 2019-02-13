@@ -2632,6 +2632,20 @@
 			return
 		show_role_panel(M)
 
+	else if(href_list["threatlog"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			alert("The game hasn't started yet!")
+			return
+
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			alert("It's not dynamic!")
+			return
+		D.show_threatlog(usr)
+
 	// /vg/
 	else if(href_list["set_base_laws"])
 		if(!check_rights(R_FUN))
