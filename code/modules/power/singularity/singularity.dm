@@ -666,8 +666,6 @@
 */ //Fuck you centcomm
 
 /obj/machinery/singularity/Destroy()
-	consume(555)
-	investigation_log(I_SINGULO, "has been destroyed somehow.")
 	..()
 	power_machines -= src
 
