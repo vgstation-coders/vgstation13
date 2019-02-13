@@ -64,7 +64,6 @@ var/global/datum/credits/end_credits = new
  * Called by on_round_end() (on normal roundend, otherwise on_world_reboot_start() will call finalize() which will call us)
  */
 /datum/credits/proc/draft(var/force = FALSE)
-	testing("[time_stamp()] - Drafting credits...")
 	if(drafted && !force)
 		return
 	draft_caststring() //roundend grief not included in the credits
@@ -73,7 +72,6 @@ var/global/datum/credits/end_credits = new
 	draft_episode_names() //only selects the possibilities, doesn't pick one yet
 	draft_disclaimers()
 	drafted = TRUE
-	testing("[time_stamp()] - Credits drafted.")
 
 /*
  * finalize():
@@ -82,7 +80,6 @@ var/global/datum/credits/end_credits = new
  * Called by on_world_reboot_start()
 */
 /datum/credits/proc/finalize(var/force = FALSE)
-	testing("[time_stamp()] - Finalizing credits...")
 	if(finalized && !force)
 		return
 	if(!drafted) //In case the world is rebooted without the round ending normally.
@@ -98,7 +95,6 @@ var/global/datum/credits/end_credits = new
 
 	js_args = list(scrollytext, splashytext, theme, scroll_speed, splash_time) //arguments for the makeCredits function back in the javascript
 	finalized = TRUE
-	testing("[time_stamp()] - Credits finalized.")
 
 /*
  * send2clients():
@@ -106,12 +102,10 @@ var/global/datum/credits/end_credits = new
  * Called by on_world_reboot_start()
 */
 /datum/credits/proc/send2clients()
-	testing("[time_stamp()] - Sending credits to clients...")
 	if(isnull(finalized))
 		stack_trace("PANIC! CREDITS ATTEMPTED TO SEND TO CLIENTS WITHOUT BEING FINALIZED!")
 	for(var/client/C in clients)
 		C.download_credits()
-	testing("[time_stamp()] - Credits sent.")
 
 /*
  * play2clients:
@@ -119,12 +113,10 @@ var/global/datum/credits/end_credits = new
  * Called by on_world_reboot_end()
 */
 /datum/credits/proc/play2clients()
-	testing("[time_stamp()] - Playing credits to clients...")
 	if(isnull(finalized))
 		stack_trace("PANIC! CREDITS ATTEMPTED TO PLAY TO CLIENTS WITHOUT BEING FINALIZED!")
 	for(var/client/C in clients)
 		C.play_downloaded_credits()
-	testing("[time_stamp()] - Credits are playing.")
 
 /*
  * on_round_end:
@@ -195,7 +187,7 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits/proc/finalize_episodestring()
 	var/season = time2text(world.realtime,"YY")
-	var/episodenum = SSpersistence.round_count_list[season]
+	var/episodenum = SSpersistence_misc.round_count_list[season]
 	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
 	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
 

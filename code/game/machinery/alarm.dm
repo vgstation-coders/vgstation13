@@ -931,6 +931,7 @@ FIRE ALARM
 	var/wiresexposed = 0
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
 	var/shelter = 1
+	var/alarm = 0
 
 /obj/machinery/firealarm/empty
 	shelter = 0
@@ -970,6 +971,15 @@ FIRE ALARM
 
 /obj/machinery/firealarm/bullet_act(BLAH)
 	return src.alarm()
+
+/obj/machinery/firealarm/CtrlClick(var/mob/user)
+	if(user.incapacitated() || (!Adjacent(user) && !issilicon(user) && !(M_TK in usr.mutations)))
+		return
+	else
+		if(alarm == 1)
+			reset()
+		else
+			alarm()
 
 /obj/machinery/firealarm/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -1169,6 +1179,7 @@ FIRE ALARM
 	var/area/this_area = get_area(src)
 	this_area.firereset()
 	update_icon()
+	alarm = 0
 
 /obj/machinery/firealarm/proc/alarm()
 	if (!( src.working ))
@@ -1176,6 +1187,7 @@ FIRE ALARM
 	var/area/this_area = get_area(src)
 	this_area.firealert()
 	update_icon()
+	alarm = 1
 	//playsound(src, 'sound/ambience/signal.ogg', 75, 0)
 
 var/global/list/firealarms = list() //shrug

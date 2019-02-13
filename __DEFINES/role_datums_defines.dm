@@ -54,6 +54,7 @@
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
+#define CATBEAST "loose catbeast"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -175,3 +176,8 @@
 
 #define PROB_PROTECTED_REGULAR 50
 #define PROB_PROTECTED_RARE    80
+
+// -- The paper
+
+#define INTERCEPT_TIME_LOW 60 SECONDS
+#define INTERCEPT_TIME_HIGH 180 SECONDS

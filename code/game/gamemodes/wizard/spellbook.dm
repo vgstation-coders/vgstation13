@@ -24,7 +24,7 @@
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/random = Sp_BASE_PRICE*0.2,

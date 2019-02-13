@@ -204,6 +204,10 @@
 	var/altar_task = ALTARTASK_NONE
 	var/gem_delay = 300
 
+	var/list/watching_mobs = list()
+	var/list/watcher_maps = list()
+	var/datum/station_holomap/holomap_datum
+
 
 /obj/structure/cult/altar/New()
 	..()
@@ -214,8 +218,21 @@
 	for (var/mob/living/carbon/C in loc)
 		Crossed(C)
 
+	var/datum/holomap_marker/holomarker = new()
+	holomarker.id = HOLOMAP_MARKER_CULT_ALTAR
+	holomarker.filter = HOLOMAP_FILTER_CULT
+	holomarker.x = src.x
+	holomarker.y = src.y
+	holomarker.z = src.z
+	holomap_markers[HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"] = holomarker
+
+	holomap_datum = new /datum/station_holomap/cult()
+	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
+
 
 /obj/structure/cult/altar/Destroy()
+
+	stopWatching()
 	if (blade)
 		if (loc)
 			blade.forceMove(loc)
@@ -223,6 +240,9 @@
 			qdel(blade)
 	blade = null
 	flick("[icon_state]-break", src)
+
+	holomap_markers -= HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"
+
 	..()
 
 /obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
@@ -364,6 +384,33 @@
 	O.forceMove(loc)
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
 
+
+/obj/structure/cult/altar/proc/checkPosition()
+	for(var/mob/M in watching_mobs)
+		if(get_dist(src,M) > 1)
+			stopWatching(M)
+
+/obj/structure/cult/altar/proc/stopWatching(var/mob/user)
+	if(!user)
+		for(var/mob/M in watching_mobs)
+			if(M.client)
+				spawn(5)//we give it time to fade out
+					M.client.images -= watcher_maps["\ref[M]"]
+				M.callOnFace -= "\ref[src]"
+				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+
+		watching_mobs = list()
+	else
+		if(user.client)
+			spawn(5)//we give it time to fade out
+				if(!(user in watching_mobs))
+					user.client.images -= watcher_maps["\ref[user]"]
+					watcher_maps -= "\ref[user]"
+			user.callOnFace -= "\ref[src]"
+			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+
+			watching_mobs -= user
+
 /obj/structure/cult/altar/conceal()
 	if (blade || altar_task)
 		return
@@ -467,6 +514,7 @@
 	else
 		var/choices = list(
 			list("Consult Roster", "radial_altar_roster", "Check the names and status of all of the cult's members."),
+			list("Look through Veil", "radial_altar_map", "Check the veil for tears to locate other occult constructions."),
 			list("Commune with Nar-Sie", "radial_altar_commune", "Obtain guidance from Nar-Sie to help you complete your objectives."),
 			list("Conjure Soul Gem", "radial_altar_gem", "Order the altar to sculpt you a Soul Gem, to capture the soul of your enemies."),
 			)
@@ -507,6 +555,27 @@
 				dat += {"</ul></body>"}
 				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
+			if ("Look through Veil")
+				if(user.hud_used && user.hud_used.holomap_obj)
+					if(!("\ref[user]" in watcher_maps))
+						var/image/personnal_I = prepare_cult_holomap()
+						var/turf/T = get_turf(src)
+						if(map.holomap_offset_x.len >= T.z)
+							holomap_datum.cursor.pixel_x = (T.x-8+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
+							holomap_datum.cursor.pixel_y = (T.y-8+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
+						else
+							holomap_datum.cursor.pixel_x = (T.x-8)*PIXEL_MULTIPLIER
+							holomap_datum.cursor.pixel_y = (T.y-8)*PIXEL_MULTIPLIER
+						if (T.z == STATION_Z)
+							personnal_I.overlays += holomap_datum.cursor
+						watcher_maps["\ref[user]"] = personnal_I
+					var/image/I = watcher_maps["\ref[user]"]
+					I.loc = user.hud_used.holomap_obj
+					I.alpha = 0
+					animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
+					watching_mobs |= user
+					user.client.images |= watcher_maps["\ref[user]"]
+					user.callOnFace["\ref[src]"] = "checkPosition"
 			if ("Commune with Nar-Sie")
 				switch(veil_thickness)
 					if (CULT_MENDED)
@@ -681,8 +750,17 @@ var/list/cult_spires = list()
 	spawn(10)
 		update_stage()
 
+	var/datum/holomap_marker/holomarker = new()
+	holomarker.id = HOLOMAP_MARKER_CULT_SPIRE
+	holomarker.filter = HOLOMAP_FILTER_CULT
+	holomarker.x = src.x
+	holomarker.y = src.y
+	holomarker.z = src.z
+	holomap_markers[HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"] = holomarker
+
 /obj/structure/cult/spire/Destroy()
 	cult_spires.Remove(src)
+	holomap_markers -= HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"
 	..()
 
 /obj/structure/cult/spire/proc/upgrade()
@@ -855,12 +933,21 @@ var/list/cult_spires = list()
 	spawn(10)
 		setup_overlays()
 
+	var/datum/holomap_marker/holomarker = new()
+	holomarker.id = HOLOMAP_MARKER_CULT_FORGE
+	holomarker.filter = HOLOMAP_FILTER_CULT
+	holomarker.x = src.x
+	holomarker.y = src.y
+	holomarker.z = src.z
+	holomap_markers[HOLOMAP_MARKER_CULT_FORGE+"_\ref[src]"] = holomarker
+
 /obj/structure/cult/forge/Destroy()
 	if (forging)
 		qdel(forging)
 	forging = null
 	forger = null
 	processing_objects.Remove(src)
+	holomap_markers -= HOLOMAP_MARKER_CULT_FORGE+"_\ref[src]"
 	..()
 
 /obj/structure/cult/forge/proc/setup_overlays()
@@ -1171,6 +1258,17 @@ var/list/bloodstone_list = list()
 
 /obj/structure/cult/bloodstone/New()
 	..()
+	var/datum/holomap_marker/newMarker = new()
+	newMarker.id = HOLOMAP_MARKER_BLOODSTONE
+	newMarker.filter = HOLOMAP_FILTER_CULT
+	newMarker.x = x
+	newMarker.y = y
+	newMarker.z = z
+	holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = newMarker
+
+	holomap_datum = new /datum/station_holomap/cult()
+	holomap_datum.initialize_holomap(get_turf(src))
+
 	bloodstone_list.Add(src)
 	for (var/obj/O in loc)
 		if (O != src)
@@ -1222,7 +1320,7 @@ var/list/bloodstone_list = list()
 	bloodstone_list.Remove(src)
 	new /obj/effect/decal/cleanable/ash(loc)
 	new /obj/item/weapon/ectoplasm(loc)
-	var/icon/updated_map = icon(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
+
 	var/datum/holomap_marker/holomarker = new()
 	holomarker.id = HOLOMAP_MARKER_BLOODSTONE_BROKEN
 	holomarker.filter = HOLOMAP_FILTER_CULT
@@ -1230,18 +1328,20 @@ var/list/bloodstone_list = list()
 	holomarker.y = src.y
 	holomarker.z = src.z
 	holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = holomarker
+
+	/* --no need to update the map
 	if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
 		if(map.holomap_offset_x.len >= map.zMainStation)
 			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
 		else
 			updated_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = updated_map
+	*/
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		if (B.loc)
-			B.holomap_datum.initialize_holomap(B.loc)
-		else
+		if (B != src && !B.loc)
 			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
 			qdel(B)
+
 	if (bloodstone_list.len <= 0 || anchor)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
@@ -1269,7 +1369,16 @@ var/list/bloodstone_list = list()
 					user.client.images |= progbar
 			else if(user.hud_used && user.hud_used.holomap_obj)
 				if(!("\ref[user]" in watcher_maps))
-					watcher_maps["\ref[user]"] = image(holomap_datum.station_map)
+					var/image/personnal_I = prepare_cult_holomap()
+					var/turf/T = get_turf(src)
+					if(map.holomap_offset_x.len >= T.z)
+						holomap_datum.cursor.pixel_x = (T.x-9+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
+						holomap_datum.cursor.pixel_y = (T.y-9+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
+					else
+						holomap_datum.cursor.pixel_x = (T.x-9)*PIXEL_MULTIPLIER
+						holomap_datum.cursor.pixel_y = (T.y-9)*PIXEL_MULTIPLIER
+					personnal_I.overlays += holomap_datum.cursor
+					watcher_maps["\ref[user]"] = personnal_I
 				var/image/I = watcher_maps["\ref[user]"]
 				I.loc = user.hud_used.holomap_obj
 				I.alpha = 0
@@ -1304,16 +1413,9 @@ var/list/bloodstone_list = list()
 
 			watching_mobs -= user
 
-/datum/station_holomap/cult/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
+/datum/station_holomap/cult/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null, var/cursor_icon = "bloodstone-here")
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
-	cursor = image('icons/holomap_markers.dmi', "bloodstone-here")
-	if(map.holomap_offset_x.len >= T.z)
-		cursor.pixel_x = (T.x-9+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
-		cursor.pixel_y = (T.y-9+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
-	else
-		cursor.pixel_x = (T.x-9)*PIXEL_MULTIPLIER
-		cursor.pixel_y = (T.y-9)*PIXEL_MULTIPLIER
-	station_map.overlays |= cursor
+	cursor = image('icons/holomap_markers.dmi', cursor_icon)
 
 /obj/structure/cult/bloodstone/update_icon()
 	icon_state = "bloodstone-0"

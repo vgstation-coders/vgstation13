@@ -12,6 +12,7 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = ROLE_VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
+	refund_value = BASE_SOLO_REFUND
 
 	var/list/powers = list()
 	var/ismenacing = FALSE
@@ -392,8 +393,8 @@
 		check_vampire_upgrade()
 
 /datum/role/vampire/handle_reagent(var/reagent_id)
-	switch (reagent_id)
-		if (HOLYWATER)
+	switch(reagent_id)
+		if (HOLYWATER,INCENSE_HAREBELLS)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return

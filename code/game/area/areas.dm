@@ -35,6 +35,9 @@ var/area/space_area
 		power_equip = 0
 		power_environ = 0
 		space_area = src
+		for(var/datum/d in ambient_sounds)//can't think of a better way to do this.
+			qdel(d)
+		ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
 //		lighting_state = 4
 		//has_gravity = 0    // Space has gravity.  Because.. because.
 
@@ -431,43 +434,6 @@ var/area/space_area
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
-		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(media_source) && !M.client.ambience_playing)
-			M.client.ambience_playing = 1
-			var/sound = 'sound/ambience/shipambience.ogg'
-
-			if(prob(35))
-				//Ambience goes down here -- make sure to list each area seperately for ease of adding things in later, thanks!
-				//Note: areas adjacent to each other should have the same sounds to prevent cutoff when possible.- LastyScratch.
-				//TODO: This is dumb - N3X.
-				if(istype(src, /area/chapel))
-					sound = pick('sound/ambience/ambicha1.ogg', 'sound/ambience/ambicha2.ogg', 'sound/ambience/ambicha3.ogg', 'sound/ambience/ambicha4.ogg')
-				else if(istype(src, /area/medical/morgue))
-					sound = pick('sound/ambience/ambimo1.ogg', 'sound/ambience/ambimo2.ogg', 'sound/music/main.ogg')
-				else if(isspace(src))
-					sound = pick('sound/ambience/ambispace.ogg', 'sound/music/space.ogg', 'sound/music/main.ogg', 'sound/music/traitor.ogg', 'sound/ambience/spookyspace1.ogg', 'sound/ambience/spookyspace2.ogg')
-				else if(istype(src, /area/engineering))
-					sound = pick('sound/ambience/ambisin1.ogg', 'sound/ambience/ambisin2.ogg', 'sound/ambience/ambisin3.ogg', 'sound/ambience/ambisin4.ogg')
-				else if(istype(src, /area/AIsattele) || istype(src, /area/turret_protected/ai) || istype(src, /area/turret_protected/ai_upload) || istype(src, /area/turret_protected/ai_upload_foyer))
-					sound = pick('sound/ambience/ambimalf.ogg')
-				else if(istype(src, /area/maintenance/ghettobar))
-					sound = pick('sound/ambience/ghetto.ogg')
-				else if(istype(src, /area/shuttle/salvage/derelict))
-					sound = pick('sound/ambience/derelict1.ogg', 'sound/ambience/derelict2.ogg', 'sound/ambience/derelict3.ogg', 'sound/ambience/derelict4.ogg')
-				else if(istype(src, /area/mine/explored) || istype(src, /area/mine/unexplored))
-					sound = pick('sound/ambience/ambimine.ogg', 'sound/ambience/song_game.ogg', 'sound/music/torvus.ogg')
-				else if(istype(src, /area/maintenance/fsmaint2) || istype(src, /area/maintenance/port) || istype(src, /area/maintenance/aft) || istype(src, /area/maintenance/asmaint))
-					sound = pick('sound/ambience/spookymaint1.ogg', 'sound/ambience/spookymaint2.ogg')
-				else if(istype(src, /area/tcommsat) || istype(src, /area/turret_protected/tcomwest) || istype(src, /area/turret_protected/tcomeast) || istype(src, /area/turret_protected/tcomfoyer) || istype(src, /area/turret_protected/tcomsat))
-					sound = pick('sound/ambience/ambisin2.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/ambigen10.ogg')
-				else
-					sound = pick('sound/ambience/ambigen1.ogg', 'sound/ambience/ambigen3.ogg', 'sound/ambience/ambigen4.ogg', 'sound/ambience/ambigen5.ogg', 'sound/ambience/ambigen6.ogg', 'sound/ambience/ambigen7.ogg', 'sound/ambience/ambigen8.ogg', 'sound/ambience/ambigen9.ogg', 'sound/ambience/ambigen10.ogg', 'sound/ambience/ambigen11.ogg', 'sound/ambience/ambigen12.ogg', 'sound/ambience/ambigen14.ogg')
-
-			M << sound(sound, 0, 0, CHANNEL_AMBIENCE, 25)
-
-			spawn(600) // Ewww - this is very very bad.
-				if(M && M.client)
-					M.client.ambience_playing = 0
-
 		if(narrator)
 			narrator.Crossed(M)
 

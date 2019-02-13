@@ -188,6 +188,13 @@ var/datum/controller/gameticker/ticker
 	collect_minds()
 	equip_characters()
 	current_state = GAME_STATE_PLAYING
+	//Handle all the cyborg syncing
+	for(var/mob/living/silicon/robot/R in cyborg_list)
+		if(!R.connected_ai)
+			R.connected_ai = select_active_ai_with_fewest_borgs()
+			to_chat(R, "<b>You have synchronized with [R.connected_ai.name], your master. Other AIs can be ignored.</b>")
+		R.lawsync()
+
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()

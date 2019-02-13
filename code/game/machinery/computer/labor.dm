@@ -22,7 +22,6 @@ var/list/labor_console_categories = list(
 	var/freeing = "" //If this variable is set with a job's title, the user will be prompted to swipe to free up a job slot.
 	var/toggling_priority = "" //If this variable is set with a job's title, the user will be prompted to swipe to prioritize/deprioritize.
 	var/selected_category = "Civilian"
-	var/list/swipe_sounds = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
 
 	var/icon/verified_overlay
 	var/icon/awaiting_overlay
@@ -133,10 +132,10 @@ var/list/labor_console_categories = list(
 			if(!check_access(W))
 				to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
 				return
-			playsound(src, pick(swipe_sounds), 60, 1, -5)
+			playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 			verified(user)
 		if(isEmag(W))
-			playsound(src, pick(swipe_sounds), 60, 1, -5)
+			playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 			verified(user)
 
 /obj/machinery/computer/labor/kick_act(mob/user)

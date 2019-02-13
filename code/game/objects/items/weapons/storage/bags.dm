@@ -35,6 +35,7 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
+	max_combined_w_class = 21
 	can_only_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
 	slot_flags = SLOT_BELT | SLOT_OCLOTHING
@@ -43,11 +44,16 @@
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
 		icon_state = "trashbag0"
+		slowdown = 1
 	else if(contents.len < 12)
 		icon_state = "trashbag1"
+		slowdown = 1.4
 	else if(contents.len < 21)
 		icon_state = "trashbag2"
-	else icon_state = "trashbag3"
+		slowdown = 1.6
+	else
+		icon_state = "trashbag3"
+		slowdown = 1.8
 
 
 // -----------------------------
@@ -507,7 +513,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/lesser_bundle/New()
 	..()
-	for(var/i=1 to 10)
+	for(var/i=1 to 12)
 		new /obj/item/potion/random(src)
 
 /obj/item/weapon/storage/bag/potion/predicted_potion_bundle
@@ -526,7 +532,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
 	..()
-	for(var/i = 1 to 8)
+	for(var/i = 1 to 10)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 

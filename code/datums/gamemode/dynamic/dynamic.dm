@@ -9,6 +9,8 @@ var/list/threat_by_job = list(
 	"Detective" = 10,
 )
 
+#define BASE_SOLO_REFUND 10
+
 /datum/gamemode/dynamic
 	name = "Dynamic Mode"
 	var/threat_level = 0//rolled at the beginning of the round.
@@ -179,7 +181,7 @@ var/list/threat_by_job = list(
 		drafted_rules -= starting_rule
 
 		threat = max(0,threat-starting_rule.cost)
-		if (starting_rule.execute())//this should never fail since ready() returned 1
+		if (starting_rule.execute(starting_rule.cost))//this should never fail since ready() returned 1
 			executed_rules += starting_rule
 			if (starting_rule.persistent)
 				current_rules += starting_rule
@@ -273,11 +275,12 @@ var/list/threat_by_job = list(
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
-		message_admins("DYNAMIC MODE: Checking state of the round.")
-		log_admin("DYNAMIC MODE: Checking state of the round.")
 		//time to inject some threat into the round
 		if(emergency_shuttle.departed)//unless the shuttle is gone
 			return
+
+		message_admins("DYNAMIC MODE: Checking state of the round.")
+		log_admin("DYNAMIC MODE: Checking state of the round.")
 
 		update_playercounts()
 
@@ -333,8 +336,6 @@ var/list/threat_by_job = list(
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
 
 /datum/gamemode/dynamic/proc/injection_attempt()//will need to gather stats to refine those values later
-	if (latejoin_injection_cooldown)
-		return
 	var/chance = 0
 	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/5))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
 	if (!living_antags.len)
@@ -375,7 +376,7 @@ var/list/threat_by_job = list(
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
 
-	else if (injection_attempt())
+	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
 			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
@@ -395,3 +396,7 @@ var/list/threat_by_job = list(
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
 		DR.applicants -= M
+
+/datum/gamemode/dynamic/proc/refund_threat(var/regain)
+	threat = min(threat_level,threat+regain)
+	//Regenerate threat, but no more than our original threat level.

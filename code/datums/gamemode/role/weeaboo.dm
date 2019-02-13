@@ -1,9 +1,10 @@
 /datum/role/weeaboo
-	name = WEEABOO 
+	name = WEEABOO
 	id = WEEABOO
 	required_pref = ROLE_WEEABOO
 	special_role = WEEABOO
 	logo_state = "weeaboo-logo"
+	refund_value = BASE_SOLO_REFUND
 
 /datum/role/weeaboo/OnPostSetup()
 	. =..()
