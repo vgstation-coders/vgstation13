@@ -96,10 +96,6 @@
 	var/active = FALSE
 
 /obj/item/weapon/katana/hesfast/IsShield()
-	/*if(ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		if(is_type_in_list(/obj/item/weapon/dakimakura,H.held_items))
-			return FALSE*/
 	return TRUE
 
 /obj/item/weapon/katana/hesfast/examine(mob/user)

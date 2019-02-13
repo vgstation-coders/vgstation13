@@ -39,7 +39,8 @@
 /obj/item/stack/shuriken
 	name = "pizza roll shuriken"
 	desc = "Anybody wanna pizza roll?"
-	icon_state = "rods"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "donkpocket"
 	throw_range = 20
 	force = 4
 	throwforce = 30
@@ -88,8 +89,8 @@
 	desc = "Like the classic pocket monster doll or even the humble log, a true ninja can use this to perform a substitution no jutsu when held."
 	w_class = W_CLASS_MEDIUM
 	icon = 'icons/obj/weapons.dmi'
-	icon_state = "riot"
-	var/recharge = TRUE //In an earlier iteration, it was a rechargeable shield item. Now you leave it behind on the ground.
+	icon_state = "dakimakura"
+	//In an earlier iteration, it was a rechargeable shield item. Now you leave it behind on the ground.
 
 /obj/item/weapon/dakimakura/IsShield()
 	return TRUE
@@ -135,37 +136,118 @@
 //The mighty power glove. Not to be confused with engineering power gloves, of course.
 /obj/item/clothing/gloves/nentendiepower
 	name = "Nen/tendie power glove"
-	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies."
-	icon_state = "black"
+	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use on an APC to unleash your hacker skills from community college."
+	icon_state = "powerfist"
 	item_state = "black"
 	siemens_coefficient = 0
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
+	var/reservoir = 0
 
 /obj/item/clothing/gloves/nentendiepower/examine(mob/user)
 	..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(WEEABOO))
-			to_chat(H,"<span class='info'>It will be ready to blast an APC in [max(0,cooldown-world.time)/10] seconds.")
+			to_chat(H,"<span class='info'>Alt-Click to use drained power. It currently holds [round(reservoir)] energy units.</span>")
+			if(cooldown-world.time>0)
+				to_chat(H,"<span class='warning'>It will be ready to drain an APC in [round((cooldown-world.time)/10)] seconds.</span>")
+			else
+				to_chat(H,"<span class='good'>It is ready to drain an APC!</span>")
 
 /obj/item/clothing/gloves/nentendiepower/Touch(atom/A, mob/living/user, prox)
+	if(!prox)
+		return ..()
 	if(world.time > cooldown)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(H.mind.GetRole(WEEABOO))
 				if(istype(A,/obj/machinery/power/apc))
 					var/obj/machinery/power/apc/APC = A
-					APC.cell.use(cell.charge)
+					if(APC.cell.charge>10)
+						reservoir += APC.cell.charge
+					APC.cell.use(APC.cell.charge)
 					var/turf/simulated/floor/T = get_turf(APC)
 					if(istype(T))
 						T.break_tile()
-					APC.terminal.Destroy()
+					//APC.terminal.Destroy()
+					playsound(APC, pick(lightning_sound), 100, 1, "vary" = 0)
+					APC.charging = 0
+					APC.chargecount = 0
 					cooldown = world.time + 10 SECONDS
 	else
 		..()
+
+/obj/item/clothing/gloves/nentendiepower/proc/radial_check_handler(list/arguments)
+	var/event/E = arguments["event"]
+	return radial_check(E.holder)
+
+/obj/item/clothing/gloves/nentendiepower/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
+
+/obj/item/clothing/gloves/nentendiepower/AltClick(mob/user)
+	if(!user.Adjacent(src) || user.incapacitated())
+		return
+
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.mind.GetRole(WEEABOO))
+
+			var/list/choices = list(
+				list("Make Shuriken", "radial_cook"),
+				list("Charge Sword", "radial_zap"),
+			)
+			var/event/menu_event = new(owner = user)
+			menu_event.Add(src, "radial_check_handler")
+
+			var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+			if(!radial_check(user))
+				return
+			switch(task)
+				if("Make Shuriken")
+					make_shuriken(user)
+				if("Charge Sword")
+					charge_sword(user)
+
+	..()
+
+#define MAKE_SHURIKEN_COST 1000
+#define CHARGE_COST_MULTIPLIER 4
+/obj/item/clothing/gloves/nentendiepower/proc/make_shuriken(mob/user)
+	if(reservoir>=MAKE_SHURIKEN_COST)
+		var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in user.held_items
+		if(S)
+			to_chat(user,"<span class='notice'>Your generated shuriken is added to the stack.</span>")
+			S.amount++
+
+		else
+			to_chat(user,"<span class='good'>Your glove generates a fresh shuriken in your hand!</span>")
+			user.put_in_hands(new /obj/item/stack/shuriken(user))
+		reservoir -= MAKE_SHURIKEN_COST
+	else
+		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] to make that!</span>")
+
+/obj/item/clothing/gloves/nentendiepower/proc/charge_sword(mob/user)
+	var/obj/item/weapon/katana/hesfast/oursword = locate(/obj/item/weapon/katana/hesfast) in user.held_items
+	if(oursword)
+		var/difference = (oursword.teleportcooldown-world.time)*CHARGE_COST_MULTIPLIER
+		if(difference<=0)
+			to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
+			return
+		var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
+		oursword.teleportcooldown -= to_subtract
+		reservoir -= to_subtract
+		if(oursword.teleportcooldown < world.time)
+			to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
+		else
+			to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((oursword.teleportcooldown - world.time)/10)] seconds.</span>")
+
 
 /obj/item/mounted/poster/anime
 	name = "rolled-up anime poster"
@@ -197,7 +279,20 @@
 
 /obj/structure/sign/poster/anime/New()
 	..(loc,0)
-	icon_state = pick("animeposter1","animeposter2","animeposter3")
+	icon_state = pick("animeposter1","animeposter2","animeposter3","animeposter4","animeposter5","animeposter6")
+	switch(icon_state)
+		if("animeposter1")
+			name = "Death Note poster"
+		if("animeposter2")
+			name = "Naruto poster"
+		if("animeposter3")
+			name = "NERV poster"
+		if("animeposter4")
+			name = "Akira poster"
+		if("animeposter5")
+			name = "EVA poster"
+		if("animeposter6")
+			name = "Mob Psycho poster"
 
 /obj/structure/sign/poster/anime/relaymove(mob/user as mob)
 	if(user.stat)
