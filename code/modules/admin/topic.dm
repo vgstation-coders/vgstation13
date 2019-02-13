@@ -3771,7 +3771,7 @@
 				var/datum/job/J = job_master.GetJob("Security Officer")
 				if(!J)
 					return
-				J.total_positions = -1
+				J.set_total_positions(99)
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
 			if("virus_custom")
@@ -3819,7 +3819,7 @@
 					for(var/datum/job/job in job_master.occupations)
 						if(!job)
 							continue
-						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.total_positions] <BR>"
+						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
 					usr << browse(dat, "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()
