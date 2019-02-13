@@ -260,26 +260,33 @@
 	flags = FPRINT
 	vending_cat = "incense material"
 	var/fragrance = INCENSE_HAREBELLS
+	var/adjective = "holy"
 
 /obj/item/incense_oilbox/harebells
 	fragrance = INCENSE_HAREBELLS
+	adjective = "holy"
 
 /obj/item/incense_oilbox/poppies
 	fragrance = INCENSE_POPPIES
+	adjective = "calming"
 
 /obj/item/incense_oilbox/sunflowers
 	fragrance = INCENSE_SUNFLOWERS
+	adjective = "pleasant"
 
 /obj/item/incense_oilbox/moonflowers
 	fragrance = INCENSE_MOONFLOWERS
+	adjective = "disturbing"
 
 /obj/item/incense_oilbox/novaflowers
 	fragrance = INCENSE_NOVAFLOWERS
+	adjective = "stimulating"
 
 /obj/item/incense_oilbox/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype (W, /obj/item/incense_stick))
 		var/obj/item/incense_stick/S = W
 		S.fragrance = fragrance
+		S.adjective = adjective
 		to_chat(user, "<span class='notice'>You dip the stick in the container, carefully applying the oils on it.</span>")
 		return
 	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown/harebell))
@@ -287,30 +294,35 @@
 		qdel(W)
 		fragrance = INCENSE_HAREBELLS
 		to_chat(user, "<span class='notice'>The oils in the box are now blended with harebell petals, producing an holy fragrance.</span>")
+		adjective = "holy"
 		return
 	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown/poppy))
 		user.drop_item(W, force_drop = 1)
 		qdel(W)
 		fragrance = INCENSE_POPPIES
 		to_chat(user, "<span class='notice'>The oils in the box are now blended with poppy petals, producing a calming fragrance.</span>")
+		adjective = "calming"
 		return
 	if (istype (W,/obj/item/weapon/grown/sunflower))
 		user.drop_item(W, force_drop = 1)
 		qdel(W)
 		fragrance = INCENSE_SUNFLOWERS
 		to_chat(user, "<span class='notice'>The oils in the box are now blended with sunflower petals, producing a pleasant fragrance.</span>")
+		adjective = "pleasant"
 		return
 	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower))
 		user.drop_item(W, force_drop = 1)
 		qdel(W)
 		fragrance = INCENSE_MOONFLOWERS
 		to_chat(user, "<span class='notice'>The oils in the box are now blended with moonflower petals, producing a disturbing fragrance.</span>")
+		adjective = "disturbing"
 		return
 	if (istype (W,/obj/item/weapon/grown/novaflower))
 		user.drop_item(W, force_drop = 1)
 		qdel(W)
 		fragrance = INCENSE_NOVAFLOWERS
 		to_chat(user, "<span class='notice'>The oils in the box are now blended with novaflower petals, producing a stimulating fragrance.</span>")
+		adjective = "stimulating"
 		return
 	..()
 
