@@ -188,12 +188,6 @@ var/datum/controller/gameticker/ticker
 	collect_minds()
 	equip_characters()
 	current_state = GAME_STATE_PLAYING
-	//Handle all the cyborg syncing
-	for(var/mob/living/silicon/robot/R in cyborg_list)
-		if(!R.connected_ai)
-			R.connected_ai = select_active_ai_with_fewest_borgs()
-			to_chat(R, "<b>You have synchronized with [R.connected_ai.name], your master. Other AIs can be ignored.</b>")
-		R.lawsync()
 
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
@@ -273,7 +267,7 @@ var/datum/controller/gameticker/ticker
 		population_poll_loop()
 
 	wageSetup()
-
+	post_roundstart()
 	return 1
 
 /datum/controller/gameticker
@@ -715,6 +709,16 @@ var/datum/controller/gameticker/ticker
 		if(player.mind && (player.mind.assigned_role in command_positions))
 			roles += player.mind.assigned_role
 	return roles
+
+/datum/controller/gameticker/proc/post_roundstart()
+	//Handle all the cyborg syncing
+	var/list/active_ais = active_ais()
+	if(active_ais.len)
+		for(var/mob/living/silicon/robot/R in cyborg_list)
+			if(!R.connected_ai)
+				R.connect_AI(select_active_ai_with_fewest_borgs())
+				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
+			R.lawsync()
 
 
 /world/proc/has_round_started()

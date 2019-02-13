@@ -117,16 +117,9 @@ var/list/cyborg_list = list()
 
 	if(AIlink)
 		if(malfAI)
-			connected_ai = malfAI
+			connect_AI(malfAI)
 		else
-			connected_ai = select_active_ai_with_fewest_borgs()
-
-	if(connected_ai)
-		connected_ai.connected_robots += src
-		lawsync()
-		lawupdate = TRUE
-	else
-		lawupdate = FALSE
+			connect_AI(select_active_ai_with_fewest_borgs())
 
 	track_globally()
 
@@ -176,6 +169,20 @@ var/list/cyborg_list = list()
 			add_language(lang.name, can_speak = FALSE)
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+
+/mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
+	if(istype(new_AI))
+		connected_ai = new_AI
+		connected_ai.connected_robots += src
+		lawsync()
+		lawupdate = TRUE
+	else
+		lawupdate = FALSE
+
+/mob/living/silicon/robot/proc/disconnect_AI()
+	if(connected_ai)
+		connected_ai.connected_robots -= src
+		connected_ai = null
 
 /mob/living/silicon/robot/proc/track_globally()
 	cyborg_list += src
@@ -555,7 +562,7 @@ var/list/cyborg_list = list()
 					SetEmagged(TRUE)
 					SetLockdown(TRUE)
 					lawupdate = FALSE
-					connected_ai = null
+					disconnect_AI()
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)]. Laws overidden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
@@ -1178,7 +1185,7 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
-		connected_ai = null
+		disconnect_AI()
 	lawupdate = FALSE
 	lockcharge = FALSE
 	canmove = TRUE
