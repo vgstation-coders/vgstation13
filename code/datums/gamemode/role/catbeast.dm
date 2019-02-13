@@ -6,6 +6,7 @@
 	wikiroute = ROLE_MINOR
 	var/ticks_survived = 0
 	var/threat_generated = 0
+	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 
 /datum/role/catbeast/Greet()
@@ -18,6 +19,10 @@
 	H.dna.ResetUI()
 	equip_catbeast(H)
 	H.regenerate_icons()
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(istype(D))
+		D.threat_log += "[worldtime2text()]: Loose catbeast created."
+		D.threat_log += src //The actual reporting on threat it made comes from this entry
 	spawn(1.5 MINUTES)
 		if(antag.current.stat!=DEAD && OnStation())
 			command_alert("An escaped catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station.", "Catbeast Detected",1)
@@ -72,13 +77,13 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 		return //It's not dynamic!
 	threat_generated++
 	if(D.threat >= D.threat_level)
-		D.threat_level = min(D.threat_level+1,100)
-		D.threat = D.threat_level
-		//message_admins("[antag.current] increased the threat cap[reason ? " by [reason]" : ""]. It is now [D.threat_level].")
+		D.create_threat(1)
+		if(!threat_level_inflated) //Our first time raising the cap
+			D.threat_log += "[worldtime2text()]: A catbeast started increasing the threat cap."
+		threat_level_inflated++
 	else
-		D.threat = min(D.threat+1,D.threat_level)
-		//message_admins("[antag.current] increased the threat[reason ? " by [reason]" : ""]. It is now [D.threat]/[D.threat_level].")
+		D.refund_threat(1)
 
 /datum/role/catbeast/GetScoreboard()
 	. = ..()
-	. += "The catbeast survived on station for [ticks_survived*2] seconds, defiled [areas_defiled.len] rooms, and generated [threat_generated] threat!"
+	. += "The catbeast survived on station for [ticks_survived*2] seconds, defiled [areas_defiled.len] rooms, and generated [threat_generated] threat!<BR>"

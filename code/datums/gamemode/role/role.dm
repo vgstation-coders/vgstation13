@@ -480,8 +480,9 @@
 //Actions to be taken when antag.current is completely destroyed
 /datum/role/proc/RoleMobDestroyed()
 	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
-		var/datum/gamemode/dynamic/mode = ticker.mode
-		mode.refund_threat(refund_value)
+		var/datum/gamemode/dynamic/D = ticker.mode
+		D.refund_threat(refund_value)
+		D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

@@ -59,7 +59,7 @@
 	//write here your rule execution code, everything about faction/role spawning/populating.
 	return
 
-/datum/dynamic_ruleset/proc/execute(var/threat_cost)
+/datum/dynamic_ruleset/proc/execute()
 	//write here your rule execution code, everything about faction/role spawning/populating.
 	return 1
 
@@ -72,9 +72,9 @@
 	return
 
 
-/datum/dynamic_ruleset/proc/send_applications(var/list/possible_volunteers = list(),var/threat_cost)
+/datum/dynamic_ruleset/proc/send_applications(var/list/possible_volunteers = list())
 	if (possible_volunteers.len <= 0)//this shouldn't happen, as ready() should return 0 if there is not a single valid candidate
-		message_admins("Possible volunteers was 0. This shouldn't appear, because of ready().")
+		message_admins("Possible volunteers was 0. This shouldn't appear, because of ready(), unless you forced it!")
 		return
 	message_admins("DYNAMIC MODE: Polling [possible_volunteers.len] players to apply for the [name] ruleset.")
 	log_admin("DYNAMIC MODE: Polling [possible_volunteers.len] players to apply for the [name] ruleset.")
@@ -97,7 +97,9 @@
 		if(!applicants || applicants.len <= 0)
 			log_admin("DYNAMIC MODE: [name] received no applications.")
 			message_admins("DYNAMIC MODE: [name] received no applications.")
-			mode.threat = max(mode.threat_level,mode.threat+threat_cost) //Refund threat if no applications
+			mode.refund_threat(cost)
+			mode.threat_log += "[worldtime2text()]: Forced rule [name] refunded [cost] (no applications)"
+			mode.executed_rules -= src
 			return
 
 		log_admin("DYNAMIC MODE: [applicants.len] players volunteered for [name].")
