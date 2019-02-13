@@ -147,7 +147,7 @@ mineral/uqill
 
 mineral/telecrystal
 	name = "Telecrystal"
-	result_amount = 5
+	result_amount = 1
 	spread_chance = 5
 	ore = /obj/item/stack/ore/telecrystal
 
