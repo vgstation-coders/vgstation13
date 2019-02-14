@@ -59,7 +59,8 @@
 	..(speech)
 	if(dna)
 		species.handle_speech(speech,src)
-	if(config.voice_noises)
+	if(config.voice_noises && world.time>time_last_speech+5 SECONDS)
+		time_last_speech = world.time
 		playsound(src, get_sfx("voice"),50,1)
 
 
