@@ -59,6 +59,8 @@
 	..(speech)
 	if(dna)
 		species.handle_speech(speech,src)
+	if(config.voice_noises)
+		playsound(src, get_sfx("voice"),50,1)
 
 
 /mob/living/carbon/human/GetVoice()
