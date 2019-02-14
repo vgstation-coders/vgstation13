@@ -375,7 +375,7 @@
 	build_path = /obj/item/ammo_storage/magazine/a762/empty
 
 /datum/design/magazine_12ga
-	name = "NT-12 drum magazine (12ga)"
+	name = "Magazine (12ga)"
 	desc = "A box magazine designed for the NT-12."
 	id = "magazine_12ga"
 	build_type = AMMOLATHE
