@@ -157,6 +157,13 @@
 	icon_state = "bandana"
 	item_state = "bandana"
 
+/obj/item/clothing/head/sith
+	name = "Sith Cowl"
+	desc = "UNLIMITED POWER!"
+	icon_state = "sith"
+	item_state = "sith"
+	wizard_garb = 1 //Allows lightning to be used
+
 //stylish bs12 hats
 
 /obj/item/clothing/head/bowlerhat

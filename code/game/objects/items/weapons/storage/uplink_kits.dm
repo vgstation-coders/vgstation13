@@ -134,9 +134,9 @@
 				new /obj/item/weapon/melee/energy/sword(src) //They are non-functional by themselves but can be combined into a double e-sword
 				new /obj/item/weapon/dnainjector/nofail/telemut(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
-				new /obj/item/weapon/spellbook/oneuse/lightning(src) //UNLIMITED POWER, requires wizard garb
-				new /obj/item/clothing/head/chaplain_hood/sith(src)
-				new /obj/item/clothing/under/psysuit/sith(src)
+				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
+				new /obj/item/clothing/head/sith(src)
+				new /obj/item/clothing/suit/sith(src)
 				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
