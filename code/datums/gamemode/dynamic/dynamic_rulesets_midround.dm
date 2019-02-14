@@ -277,17 +277,9 @@
 		return 0
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/ready(var/forced = 0)
-	assigned += new_character
-	if (i == required_candidates)
-		var/datum/role/nuclear_operative/leader/newCop = new
-		newCop.AssignToRole(new_character.mind,1)
-		nuclear.HandleRecruitedRole(newCop)
-		newCop.Greet(GREET_MIDROUND)
-	else
-		var/datum/role/nuclear_operative/newCop = new
-		newCop.AssignToRole(new_character.mind,1)
-		nuclear.HandleRecruitedRole(newCop)
-		newCop.Greet(GREET_MIDROUND)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
 
 /datum/dynamic_ruleset/midround/pirates
 	name = "Pirate raid"
