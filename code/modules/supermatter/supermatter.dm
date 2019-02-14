@@ -146,10 +146,12 @@
 	var/prints = ""
 	if(src.fingerprintshidden)
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
-	SetUniversalState(/datum/universal_state/supermatter_cascade)
-	S.expand(STAGE_SUPER, 1)
-	log_admin("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	if(current_size == STAGE_SUPER) // and this is to go even further beyond
+		if(!istype(universe,/datum/universal_state/supermatter_cascade))
+			SetUniversalState(/datum/universal_state/supermatter_cascade)
+		S.expand(STAGE_SSGSS, 1)
+	log_admin("New SSGSS made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New SSGSS made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 20000
 
