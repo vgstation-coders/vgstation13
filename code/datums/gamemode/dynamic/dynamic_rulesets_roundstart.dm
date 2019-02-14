@@ -273,6 +273,8 @@
 			newCop.AssignToRole(M.mind,1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
+	for (var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
+		bomb.spawnbomb()
 	return 1
 
 
