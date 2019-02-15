@@ -244,9 +244,8 @@
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return FALSE // The life() procs only work on humans.
-	if(H.stat != DEAD)
-		handle_cloak(H)
-		handle_menace(H)
+	handle_cloak(H)
+	handle_menace(H)
 	handle_smite(H)
 	if(istype(H.loc, /turf/space))
 		H.check_sun()
@@ -268,6 +267,8 @@
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
+	if(H.stat != DEAD)
+		iscloaking = FALSE
 	if(!iscloaking)
 		H.alphas["vampire_cloak"] = 255
 		H.color = "#FFFFFF"
@@ -285,8 +286,9 @@
 			H.alphas["vampire_cloak"] = round((255 * 0.80))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
+	if(H.stat != DEAD)
+		ismenacing = FALSE
 	if(!ismenacing)
-		ismenacing = 0 // ? Probably not necessary
 		return FALSE
 
 	var/turf/T = get_turf(H)
