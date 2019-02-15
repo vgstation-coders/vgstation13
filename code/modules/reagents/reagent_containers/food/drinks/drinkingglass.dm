@@ -791,16 +791,21 @@
 				if(GREYTEA)
 					icon_state = GREYTEA
 					name = "Tide"
-					desc = "This probably shouldn't be considered tea..."
+					desc = "This probably shouldn't be considered tea..."	
 
 
 
 
 
 				else
-					icon_state ="mug_what"
-					name = "mug of ..something?"
-					desc = "You aren't really sure what this is."
+					overlays.len = 0
+					icon_state ="mug_empty"
+					get_reagent_name(src, TRUE)
+					var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
+					filling.icon += mix_color_from_reagents(reagents.reagent_list)
+					filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+					overlays += filling
 		else
 			icon_state = "mug_empty"
 			name = "mug"
