@@ -791,7 +791,11 @@
 				if(GREYTEA)
 					icon_state = GREYTEA
 					name = "Tide"
-					desc = "This probably shouldn't be considered tea..."	
+					desc = "This probably shouldn't be considered tea..."
+				if(HOT_COCO)
+					icon_state = "mug_what"
+					name = "Hot Chocolate"
+					desc = "Choccy milk!"						
 
 
 
