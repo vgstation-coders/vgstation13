@@ -53,7 +53,7 @@ var/global/list/disease2_list = list()
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
-	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
+	spreadtype = prob(40) ? "Airborne" : prob(40) ? "Blood" : "Contact" //Try for airborne then try for blood.
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
