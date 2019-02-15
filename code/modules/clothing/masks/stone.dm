@@ -86,9 +86,11 @@
 	vamp.AnnounceObjectives()
 	update_faction_icons()
 	spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
-		vamp.blood_total = blood_to_give
-		vamp.blood_usable = blood_to_give
-		to_chat(H, "<span class='notice'>You have accumulated [vamp.blood_total] [vamp.blood_total > 1 ? "units" : "unit"] of blood and have [vamp.blood_usable] left to use.</span>")
+		vamp.blood = blood_to_give
+		vamp.soulpower = blood_to_give
+		vamp.total_blood_collected = blood_to_give
+		to_chat(H, "<span class='notice'>You have acquired [vamp.soulpower]</span> soul power.")
+		to_chat(H, "<span class='notice'>You have [vamp.blood] units of blood available</span>.")
 		vamp.check_vampire_upgrade()
 		vamp.update_vamp_hud()
 	return TRUE

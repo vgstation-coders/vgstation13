@@ -147,6 +147,9 @@
 	alpha = 150
 	blend_mode = 4
 
+/obj/abstract/screen/fullscreen/high/red/vamp
+	alpha = 0
+
 /obj/abstract/screen/fullscreen/conversion_border
 	icon_state = "conversionoverlay"
 	layer = HALLUCINATION_LAYER

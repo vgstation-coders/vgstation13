@@ -199,11 +199,10 @@
 	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
 
 /datum/hud/proc/vampire_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
-
-
 	vampire_blood_display = getFromPool(/obj/abstract/screen)
-	vampire_blood_display.name = "Vampire Blood"
-	vampire_blood_display.icon_state = "dark128"
+	vampire_blood_display.name = "Vampire Blood and Soul Power"
+	vampire_blood_display.icon = 'icons/mob/screen1_Midnight.dmi'
+	vampire_blood_display.icon_state = "blood6"
 	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
 
 	mymob.client.screen += list(vampire_blood_display)

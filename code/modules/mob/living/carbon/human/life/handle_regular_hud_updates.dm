@@ -302,6 +302,13 @@
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
+		if (isvampire(src))
+			overlay_fullscreen("blood_hunger", /obj/abstract/screen/fullscreen/high/red/vamp)
+			var/datum/reagent/blood/B = locate() in vessel.reagent_list
+			if (B)
+				update_fullscreen_alpha("blood_hunger", a = min(255,max(0,round((BLOOD_VOLUME_MAX-B.volume)/2.2))), t = 5)
+		else
+			clear_fullscreen("blood_hunger")
 
 		var/masked = 0
 

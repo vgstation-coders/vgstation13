@@ -78,13 +78,28 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 							B = D
 							break
 
-				B.volume += 0.1 // regenerate blood VERY slowly
-				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
-					B.volume += 0.6
-					reagents.remove_reagent(NUTRIMENT, 0.5)
-				if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
-					B.volume += 1.2
-					reagents.remove_reagent(IRON, 0.5)
+				if (isvampire(src))
+					B.volume -= 0.2 // vampires have no passive blood regen, they go hungry for blood instead, go and drink so blood
+					if (reagents.has_reagent(NUTRIMENT))	//food tastes horrible and gives little blood back
+						B.volume += 0.2
+						reagents.remove_reagent(NUTRIMENT, 0.5)
+					if (reagents.has_reagent(IRON))
+						B.volume += 0.4
+						reagents.remove_reagent(IRON, 0.5)
+					if (reagents.has_reagent(BLOOD))
+						B.volume += 1
+						reagents.remove_reagent(BLOOD, 5)//same ratio as drinking blood from dead mobs
+					var/datum/role/vampire/vamp = mind.GetRole(VAMPIRE)
+					vamp.update_vamp_hud()
+				else
+					B.volume += 0.1 // regenerate blood VERY slowly
+					if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
+						B.volume += 0.6
+						reagents.remove_reagent(NUTRIMENT, 0.5)
+					if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
+						B.volume += 1.2
+						reagents.remove_reagent(IRON, 0.5)
+
 
 		// Damaged heart virtually reduces the blood volume, as the blood isn't
 		// being pumped properly anymore.

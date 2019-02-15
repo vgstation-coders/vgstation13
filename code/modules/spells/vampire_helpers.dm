@@ -20,8 +20,8 @@
 		if(!fullpower)
 			to_chat(src, "<span class='warning'>Something is blocking your powers!</span>")
 			return 0
-	if(vampire.blood_usable < required_blood)
-		to_chat(src, "<span class='warning'>You require at least [required_blood] units of usable blood to do that!</span>")
+	if(vampire.blood < required_blood)
+		to_chat(src, "<span class='warning'>You require at least [required_blood] units of blood to do that!</span>")
 		return 0
 	//chapel check
 	if(istype(get_area(src), /area/chapel))

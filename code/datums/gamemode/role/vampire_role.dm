@@ -23,8 +23,9 @@
 
 	var/reviving = FALSE
 	var/draining = FALSE
-	var/blood_usable = STARTING_BLOOD
-	var/blood_total = STARTING_BLOOD
+	var/soulpower = 0
+	var/blood = STARTING_BLOOD
+	var/total_blood_collected = STARTING_BLOOD
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
@@ -101,16 +102,22 @@
 			return FALSE
 		give_blood(amount)
 
-/datum/role/vampire/proc/give_blood(var/amount)
-	blood_total += amount
-	blood_usable += amount
+/datum/role/vampire/proc/give_blood(var/amount,var/soul=0)
+	blood += amount
+	total_blood_collected += amount
+	var/mob/living/carbon/human/H = antag.current
+	var/datum/reagent/blood/B = locate() in H.vessel.reagent_list
+	B.volume = min(B.volume+amount,BLOOD_VOLUME_MAX)
+	H.vessel.update_total()
+	if (soul)
+		soulpower += amount
 	check_vampire_upgrade()
 	update_vamp_hud()
 
 // -- Not sure if this is meant to work like that.
 // I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
-	. = "Total blood collected: <b>[blood_total]</b><br/>"
+	. = "Total blood collected: <b>[blood]</b><br/>"
 	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
@@ -118,7 +125,10 @@
 		AppendObjective(/datum/objective/freeform/vampire)
 		return
 
-	AppendObjective(/datum/objective/acquire_blood)
+	if (prob(50))
+		AppendObjective(/datum/objective/acquire_blood)//requires sucking/drinking any blood
+	else
+		AppendObjective(/datum/objective/acquire_soulpower)//requires sucking blood from living human players
 
 	AppendObjective(/datum/objective/target/assassinate)
 
@@ -160,9 +170,9 @@
 
 	var/mob/assailant = antag.current
 
-	var/blood = 0
-	var/blood_total_before = blood_total
-	var/blood_usable_before = blood_usable
+	var/newblood = 0
+	var/blood_before = blood
+	var/soul_before = soulpower
 	assailant.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [key_name(target)] in the neck and draining their blood.</font>")
 	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [key_name(assailant)].</font>")
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
@@ -183,23 +193,20 @@
 			to_chat(assailant, "<span class='warning'>Not a drop of blood here.</span>")
 			draining = null
 			return FALSE
-		if(!target.mind)
-			to_chat(assailant, "<span class='warning'>This blood is lifeless and has no power.</span>")
-			draining = null
-			return FALSE
 		if(!target.vessel.get_reagent_amount(BLOOD))
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
 		if(target.stat < DEAD) //alive
-			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
-			blood_total += blood
-			blood_usable += blood
-			target.adjustCloneLoss(10) // beep boop 10 damage
+			newblood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
+			give_blood(newblood,target.mind!=null)//only the players give soulpower
+			//target.adjustCloneLoss(10) // beep boop 10 damage
 		else
-			blood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
-			blood_total += blood
-		if(blood_total_before != blood_total)
-			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
+			newblood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
+			give_blood(newblood)
+		if(soul_before != soulpower)
+			to_chat(assailant, "<span class='notice'>You have now reached [soulpower] soul power.</span>")
+		if(blood_before != blood)
+			to_chat(assailant, "<span class='notice'>You have now [blood] [blood > 1 ? "units" : "unit"] of blood available. [total_blood_collected]u blood collected in total.</span>")
 		check_vampire_upgrade()
 		target.vessel.remove_reagent(BLOOD,25)
 		update_vamp_hud()
@@ -212,7 +219,7 @@
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
-		if (blood_total > initial(VP_type.blood_threeshold) && !(initial(VP_type.id) in powers))
+		if (soulpower > initial(VP_type.soul_threshold) && !(initial(VP_type.id) in powers))
 			var/datum/power/vampire/VP = new VP_type
 			if (!(VP.id in powers))
 				VP.Give(src)
@@ -380,7 +387,7 @@
 			H.IgniteMob()
 
 /datum/role/vampire/proc/remove_blood(var/amount)
-	blood_usable = max(0, blood_usable - amount)
+	blood = max(0, blood - amount)
 	update_vamp_hud()
 
 /datum/role/vampire/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
@@ -470,7 +477,17 @@
 			//hud_used.human_hud(hud_used.ui_style)
 		M.hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		M.hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		M.hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>U:<font color='#33FF33'>[blood_usable]</font><br> T:<font color='#FFFF00'>[blood_total]</font></div>"
+		var/vessel_blood = 0
+		if (ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/datum/reagent/blood/B = locate() in H.vessel.reagent_list //Grab some blood
+			if (B)
+				vessel_blood = B.volume
+				if (B.volume <= 0)
+					M.hud_used.vampire_blood_display.icon_state = "blood0"
+				else
+					M.hud_used.vampire_blood_display.icon_state = "blood[round(B.volume/100)+1]"
+		M.hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><font color='#FFFF33'>[soulpower]</font><br><font color='#FF0000'>[blood]</font><br><font color='#FF8800'>[vessel_blood ? "[vessel_blood]":""]</font></div>"
 
 /mob/living/carbon/human/proc/check_sun()
 	var/ax = x
