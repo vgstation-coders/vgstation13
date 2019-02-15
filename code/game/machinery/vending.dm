@@ -1312,6 +1312,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
 		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
+		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
 		)
