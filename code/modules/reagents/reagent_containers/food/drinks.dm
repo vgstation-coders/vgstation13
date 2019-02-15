@@ -859,7 +859,7 @@
 	reagents.add_reagent(APPLEJUICE, 20)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
-	name = "Canned Coffee"
+	name = "Kiririn FIRE"
 	desc = "Fine, sweet coffee, easy to drink in any scene."
 	icon_state = "cannedcoffee"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee/New()
