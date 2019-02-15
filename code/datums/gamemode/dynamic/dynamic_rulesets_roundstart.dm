@@ -137,6 +137,8 @@
 			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 		federation.HandleRecruitedRole(newWizard)//this will give the wizard their icon
 		newWizard.Greet(GREET_ROUNDSTART)
+		spawn(1)
+			newWizard.OnPostSetup()
 		return 1
 
 

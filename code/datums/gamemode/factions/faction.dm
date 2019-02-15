@@ -365,7 +365,7 @@ var/list/factions_with_hud_icons = list()
 		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		return 0 //Critical failure.
-	..()
+	//Do not call parent OnPostSetup! Wizards get individual OnPostSetup.
 
 /datum/faction/wizard/forgeObjectives()
 	for(var/datum/role/R in members)

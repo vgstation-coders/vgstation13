@@ -240,11 +240,13 @@
 */
 
 /datum/role/vampire/process()
+	..()
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return FALSE // The life() procs only work on humans.
-	handle_cloak(H)
-	handle_menace(H)
+	if(H.stat != DEAD)
+		handle_cloak(H)
+		handle_menace(H)
 	handle_smite(H)
 	if(istype(H.loc, /turf/space))
 		H.check_sun()

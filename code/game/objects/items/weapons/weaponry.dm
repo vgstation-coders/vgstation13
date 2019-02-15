@@ -110,9 +110,9 @@
 		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
 		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
 	if(active)
-		message += " Alt-click it to disable your teleport power!</span>"
+		message += " Alt-click it to stalk your prey without teleporting like a Hunter x Hunter!</span>"
 	else
-		message += " Alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
+		message += " Alt-click it enable teleporting toward your Kill la Kill!</span>"
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/AltClick(mob/user)

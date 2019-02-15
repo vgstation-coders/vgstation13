@@ -90,6 +90,7 @@
 
 /datum/role/changeling/process()
 	changelingRegen()
+	..()
 
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
 
