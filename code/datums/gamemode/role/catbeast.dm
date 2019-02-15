@@ -51,38 +51,42 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	AppendObjective(/datum/objective/catbeast/survive5)
 	AppendObjective(/datum/objective/catbeast/defile)
 
+#define SURVIVAL_THREAT 1
+#define DEFILE_THREAT 0.75
+
 /datum/role/catbeast/process()
+	if(!iscatbeast(antag.current))
+		return
 	var/area/A = OnStation()
 	if(antag.current.stat!=DEAD && A) //Not dead or unconscious or offstation
 		ticks_survived++
 		if(!(ticks_survived % 10) && ticks_survived < 150) //every 20 seconds, for 5 minutes
-			increment_threat("survival")
+			increment_threat(SURVIVAL_THREAT)
 		if(!(A in areas_defiled))
-			increment_threat("defiling [A.name]")
+			increment_threat(DEFILE_THREAT)
 			areas_defiled.Add(A)
 			to_chat(antag.current,"<span class='notice'>You have defiled [A.name] with your presence.")
 
 /datum/role/catbeast/proc/OnStation()
-	var/turf/T = get_turf(antag.current)
-	if(T.z != STATION_Z)
+	if(antag.current.z != STATION_Z)
 		return FALSE
-	var/area/A = get_area(T)
+	var/area/A = get_area(antag.current)
 	if (isspace(A))
 		return FALSE
 	return A
 
-/datum/role/catbeast/proc/increment_threat(var/reason)
+/datum/role/catbeast/proc/increment_threat(var/amount)
 	var/datum/gamemode/dynamic/D = ticker.mode
 	if(!istype(D))
 		return //It's not dynamic!
-	threat_generated++
+	threat_generated += amount
 	if(D.threat >= D.threat_level)
-		D.create_threat(1)
+		D.create_threat(amount)
 		if(!threat_level_inflated) //Our first time raising the cap
 			D.threat_log += "[worldtime2text()]: A catbeast started increasing the threat cap."
-		threat_level_inflated++
+		threat_level_inflated += amount
 	else
-		D.refund_threat(1)
+		D.refund_threat(amount)
 
 /datum/role/catbeast/GetScoreboard()
 	. = ..()
