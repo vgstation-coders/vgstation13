@@ -350,6 +350,7 @@
 
 /datum/reagent/blood
 	name = "Blood"
+	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
