@@ -103,7 +103,7 @@
 
 /datum/design/rigsuit_autorefill
 	name = "Circuit Design (Rigsuit atmosphere syphoner)"
-	desc = "When installed, the users internals are replenished from the atmosphere they reside within."
+	desc = "When installed, the user's internals are replenished from the atmosphere they reside within."
 	id = "rigsuit_autorefill"
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER

@@ -40,6 +40,7 @@
 	name = "tank pressurizer"
 	desc = "When in atmosphere, syphons from the air to refill the tank connected to your internals."
 	var/gas_id
+	var/amount = 50
 
 /obj/item/rig_module/tank_refiller/activate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
 	..()
@@ -70,19 +71,26 @@
 		to_chat(H, "<span class = 'binaryradio'>Internals pressurizer failed to find internals. Aborting.</span>")
 		processing_objects.Remove(src)
 	else
+		var/obj/item/weapon/tank/T = H.internal
+		var/datum/gas_mixture/internals = T.air_contents
+		if(internals.pressure >= 10*ONE_ATMOSPHERE)
+			return
 		var/datum/gas_mixture/M = H.loc.return_air()
-		if(M[gas_id] && rig.cell.use(50))
-			var/datum/gas_mixture/internals = H.internal.air_contents
-
-			var/pressure_delta = 10*ONE_ATMOSPHERE - internals.pressure
-			var/transfer_moles = pressure_delta * internals.volume / (M.temperature * R_IDEAL_GAS_EQUATION)
+		var/datum/gas_mixture/sample = M.remove_volume(amount) //So we don't just succ the entire room up
+		if(sample[gas_id] && rig.cell.use(50))
+			var/pressure_delta = 10*ONE_ATMOSPHERE - internals.pressure //How much pressure we have left to work with
+			var/transfer_moles = (pressure_delta/R_IDEAL_GAS_EQUATION/internals.temperature)*internals.volume //How many moles can we transfer?
+			transfer_moles = min(sample[gas_id],transfer_moles)
 			if(transfer_moles > 0)
-				var/datum/gas_mixture/removed = M.remove(transfer_moles)
-				if(!removed)
-					return
 				var/datum/gas_mixture/to_add = new
-				to_add.temperature = removed.temperature
-				to_add.adjust_gas(gas_id, removed[gas_id])
-				removed.adjust_gas(gas_id, -(removed[gas_id]))
+				to_add.temperature = sample.temperature
+				to_add.adjust_gas(gas_id, transfer_moles)
+				sample.adjust_gas(gas_id, -transfer_moles)
 				internals.merge(to_add)
-				M.merge(removed)
+				M.merge(sample)
+
+
+
+		//NEED TO GET MAXIMUM AMOUNT OF MOLES WITHOUT GOING OVER 10*ONE_ATMOSPHERE
+		//pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
+		//pressure_delta = target_moles * 8.314 * sample_temperature / internals.volume

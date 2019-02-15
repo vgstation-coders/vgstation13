@@ -94,7 +94,7 @@
 	suit_overlay.icon_state = "suitmodifier_closed"
 	overlays.Add(suit_overlay)
 	sleep(20)
-	if(cell && R.cell.charge < cell.charge)
+	if(get_cell() && R.cell.charge < cell.charge)
 		R.cell.forceMove(get_turf(src))
 		cell.forceMove(R)
 		R.cell = cell
@@ -106,3 +106,6 @@
 	suit_overlay.icon_state = null
 	R.toggle_helmet(H)
 	use_power = 1
+
+/obj/machinery/suit_modifier/get_cell()
+	return cell
