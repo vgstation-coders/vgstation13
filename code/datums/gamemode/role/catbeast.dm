@@ -55,10 +55,9 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 #define DEFILE_THREAT 0.75
 
 /datum/role/catbeast/process()
-	var/area/A = OnStation()
 	if(!iscatbeast(antag.current))
 		return
-
+	var/area/A = OnStation()
 	if(antag.current.stat!=DEAD && A) //Not dead or unconscious or offstation
 		ticks_survived++
 		if(!(ticks_survived % 10) && ticks_survived < 150) //every 20 seconds, for 5 minutes
