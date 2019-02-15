@@ -1413,6 +1413,9 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5,
 		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee = 3,
+		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 10,
