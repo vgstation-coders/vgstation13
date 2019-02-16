@@ -815,7 +815,7 @@
 	name = "Salutaretin"
 	id = SALUTARETIN
 	result = SALUTARETIN
-	required_reagents = list(COPPER = 5, FLUORINE = 5, EHTHANOL = 10)
+	required_reagents = list(COPPER = 1, FLUORINE = 1, ETHANOL = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/explosion_bicarodyne

@@ -221,16 +221,6 @@
 		mob.reagents.add_reagent(HYRONALIN, 1)
 
 
-/datum/disease2/effect/resistance
-	name = "Resistance"
-	stage = 1
-
-/datum/disease2/effect/resistance/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'>You resistance to the virus grows.</span>")
-	if (prob(90))
-		mob.reagents.add_reagent(SPACEACILLIN, 1)
-
-
 /datum/disease2/effect/soreness
 	name = "Soreness"
 	stage = 1
