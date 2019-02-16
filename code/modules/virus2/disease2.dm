@@ -301,3 +301,10 @@ proc/virus2_greater_infection()
 	infectionchance = 50
 	stageprob = 10
 	stage_variance = 0
+
+/datum/disease2/disease/prion
+	form = "Prion"
+	infectionchance = 10
+	stageprob = 80
+	stage_variance = -10
+	max_stage = 4

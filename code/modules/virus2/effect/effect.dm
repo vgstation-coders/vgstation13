@@ -78,8 +78,7 @@
 	return new_e
 
 
-////////////////////////STAGE 1/////////////////////////////////
-
+////////////////////////STAGE 1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /datum/disease2/effect/invisible
 	name = "Waiting Syndrome"
@@ -212,9 +211,42 @@
 			for(var/i = 0 to multiplier)
 				new/mob/living/simple_animal/bee(get_turf(mob))
 
+/datum/disease2/effect/hyronalinis
+	name = "Hyronalinis"
+	stage = 1
 
-////////////////////////STAGE 2/////////////////////////////////
+/datum/disease2/effect/hyronalinis/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>You gained radiation resistance.</span>")
+	if (prob(85))
+		mob.reagents.add_reagent(HYRONALIN, 1)
 
+
+/datum/disease2/effect/resistance
+	name = "Resistance"
+	stage = 1
+
+/datum/disease2/effect/resistance/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>You resistance to the virus grows.</span>")
+	if (prob(90))
+		mob.reagents.add_reagent(SPACEACILLIN, 1)
+
+
+/datum/disease2/effect/soreness
+	name = "Soreness"
+	stage = 1
+
+/datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>You feel a little sore.</span>")
+
+/datum/disease2/effect/greetness
+	name = "Greetings Syndrome"
+	stage = 1
+
+/datum/disease2/effect/greetness/activate(var/mob/living/carbon/mob)
+	if(mob.reagents.get_reagent_amount(SALUTARETIN) < 1)
+		mob.reagents.add_reagent(SALUTARETIN, 1)
+
+////////////////////////STAGE 2///////////////////////////////////////////////////////////////////////////////////////////////////
 
 /datum/disease2/effect/scream
 	name = "Loudness Syndrome"
@@ -273,7 +305,7 @@
 
 /datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
 	mob.say("*shiver")
-
+	mob.bodytemperature -= 0.2
 
 /datum/disease2/effect/hair
 	name = "Hair Loss"
@@ -405,7 +437,7 @@
 
 
 /datum/disease2/effect/vitreous
-	name = "Vitreous resonance"
+	name = "Vitreous Resonance"
 	stage = 2
 	chance = 25
 	max_chance = 75
@@ -600,7 +632,7 @@
 		if(prob(30/multiplier))
 			break
 
-////////////////////////STAGE 3/////////////////////////////////
+////////////////////////STAGE 3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /datum/disease2/effect/toxins
@@ -1056,7 +1088,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	..()
 
 
-////////////////////////STAGE 4/////////////////////////////////
+////////////////////////STAGE 4////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /datum/disease2/effect/minttoxin
