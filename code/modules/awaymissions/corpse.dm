@@ -762,7 +762,6 @@
 	corpsegender = G_FEMALE
 
 /obj/effect/landmark/corpse/waifu/secfu
-	name = "Arie"
 	corpseuniform = /obj/item/clothing/under/securityskirt/elite
 	corpsehelmet = /obj/item/clothing/head/beret/sec
 	corpseback = /obj/item/weapon/storage/backpack/security
