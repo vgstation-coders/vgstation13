@@ -273,7 +273,7 @@
 								"Bye, [N]!",
 								"So long, [N].",
 								"I'll seeya later, [N].",
-								"I've gotta go, [N].',
+								"I've gotta go, [N].",
 								"Goodbye, [N].",
 								"Sayonara, [N].",
 								"Peace out, [N].",
