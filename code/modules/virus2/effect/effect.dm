@@ -236,16 +236,16 @@
 	if(..())
 		return 1
 
-	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+	if(mob.stat || mob.health < 90 || mob.getBrainLoss() >= 10)
 		return 1
 
 	var/list/nearest_player = null
-	for(var/mob/living/L in view(M))
-		if(L == M)
+	for(var/mob/living/L in view(mob))
+		if(L == mob)
 			continue
 		if(L.stat)
 			continue
-		if(nearest_player && get_dist(L,M)>=get_dist(nearest_player,M))
+		if(nearest_player && get_dist(L,mob)>=get_dist(nearest_player,mob))
 			continue //We already have a closer living target
 		if(ishuman(L))
 			var/mob/living/carbon/human/H = L
@@ -272,7 +272,7 @@
 								"Hi, [N]!"
 								)
 	if(prob(25))
-		M.say(pick(greets))
+		mob.say(pick(greets))
 
 ////////////////////////STAGE 2///////////////////////////////////////////////////////////////////////////////////////////////////
 
