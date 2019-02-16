@@ -332,9 +332,8 @@
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 
-	var/datum/job/J = job_master.GetJob(rank)
-	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
-		J.current_positions--
+	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+		//Removal of job slot is in role/role.dm
 		character.store_position()
 		qdel(src)
 		return
@@ -344,6 +343,7 @@
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
+	var/datum/job/J = job_master.GetJob(rank)
 	if(J.spawns_from_edge)
 		Meteortype_Latejoin(what_to_move, rank)
 	else
