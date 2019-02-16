@@ -811,13 +811,6 @@
 	required_reagents = list(COPPER = 1, TUNGSTEN = 1, FLUORINE = 1)
 	result_amount = 1
 
-/datum/chemical_reaction/salutaretin
-	name = "Salutaretin"
-	id = SALUTARETIN
-	result = SALUTARETIN
-	required_reagents = list(COPPER = 1, FLUORINE = 1, ETHANOL = 1)
-	result_amount = 1
-
 /datum/chemical_reaction/explosion_bicarodyne
 	name = "Explosion"
 	id = "explosion_bicarodyne"

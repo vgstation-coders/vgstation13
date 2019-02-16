@@ -228,13 +228,51 @@
 /datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>You feel a little sore.</span>")
 
-/datum/disease2/effect/greetness
-	name = "Greetings Syndrome"
+/datum/disease2/effect/salutaretin
+	name = "Salutaretin Syndrome"
 	stage = 1
 
-/datum/disease2/effect/greetness/activate(var/mob/living/carbon/mob)
-	if(mob.reagents.get_reagent_amount(SALUTARETIN) < 1)
-		mob.reagents.add_reagent(SALUTARETIN, 1)
+/datum/disease2/effect/salutaretin/activate(var/mob/living/carbon/mob)
+	if(..())
+		return 1
+
+	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+		return 1
+
+	var/list/nearest_player = null
+	for(var/mob/living/L in view(M))
+		if(L == M)
+			continue
+		if(L.stat)
+			continue
+		if(nearest_player && get_dist(L,M)>=get_dist(nearest_player,M))
+			continue //We already have a closer living target
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			nearest_player = H
+		else if(isrobot(L))
+			var/mob/living/silicon/robot/R = L
+			nearest_player = R
+	if(!nearest_player)
+		return 1
+	var/N = "stranger"
+	if(ishuman(nearest_player))
+		var/mob/living/carbon/human/H = nearest_player
+		N = get_first_word(H.name)
+	else
+		N = pick("bot","borg","borgo","autodoc","roboticist","cyborg","robot")
+	var/list/greets = list("Howdy, [N].",
+								"Greetings, [N].",
+								"Good day to you, [N]",
+								"'Sup, [N]?'",
+								"What it do, [N]?",
+								"What's good, [N]?",
+								"Tell your mom I said hi, [N].",
+								"How's the family, [N]?",
+								"Hi, [N]!"
+								)
+	if(prob(25))
+		M.say(pick(greets))
 
 ////////////////////////STAGE 2///////////////////////////////////////////////////////////////////////////////////////////////////
 
