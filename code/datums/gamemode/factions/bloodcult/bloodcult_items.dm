@@ -247,7 +247,7 @@ var/list/arcane_tomes = list()
 		instance = T.spell_type
 		choices += list(list(T, talisman_image, initial(instance.desc_talisman), T.talisman_name()))
 		choice_to_talisman[initial(instance.name)] = T
-	var/choice = show_radial_menu(user,loc,choices,'icons/obj/talisman_radial.dmi', "radial-cult2")
+	var/choice = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi', "radial-cult2")
 	if(!choice_to_talisman[choice])
 		return
 	var/obj/item/weapon/talisman/chosen_talisman = choice_to_talisman[choice]
