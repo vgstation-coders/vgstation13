@@ -118,7 +118,12 @@
 						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
-						if(!GM.internal && GM.losebreath <= 30)
+						if(isgrey(GM))
+							GM.adjustFireLoss(10)
+							if(!GM.internal && GM.losebreath <= 30)
+								GM.losebreath += 5
+							add_attacklogs(user, GM, "gave a burning swirlie to")
+						else if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
 							add_attacklogs(user, GM, "gave a swirlie to")
 						else
