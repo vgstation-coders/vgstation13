@@ -261,7 +261,7 @@
 		N = get_first_word(H.name)
 	else
 		N = pick("bot","borg","borgo","autodoc","roboticist","cyborg","robot")
-	var/list/greets = list("Howdy, [N].",
+	var/list/greets_farewells = list("Howdy, [N].",
 								"Greetings, [N].",
 								"Good day to you, [N]",
 								"'Sup, [N]?'",
@@ -269,10 +269,19 @@
 								"What's good, [N]?",
 								"Tell your mom I said hi, [N].",
 								"How's the family, [N]?",
-								"Hi, [N]!"
+								"Hi, [N]!",
+								"Bye, [N]!",
+								"So long, [N].",
+								"I'll seeya later, [N].",
+								"I've gotta go, [N].',
+								"Goodbye, [N].",
+								"Sayonara, [N].",
+								"Peace out, [N].",
+								"Later, [N]."
 								)
-	if(prob(25))
-		mob.say(pick(greets))
+	if(prob(33))
+		mob.say(pick(greets_farewells))
+
 
 ////////////////////////STAGE 2///////////////////////////////////////////////////////////////////////////////////////////////////
 

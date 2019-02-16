@@ -53,7 +53,7 @@ var/global/list/disease2_list = list()
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
-	spreadtype = prob(40) ? "Airborne" : prob(40) ? "Blood" : "Contact" //Try for airborne then try for blood.
+	spreadtype = prob(40) ? "Airborne" : prob(40) ? "Blood" : "Contact" //Try for airborne then try for blood. //Updated to make airborne less common.
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -302,7 +302,7 @@ proc/virus2_greater_infection()
 	stageprob = 10
 	stage_variance = 0
 
-/datum/disease2/disease/prion
+/datum/disease2/disease/prion //New Prion disease type. //Has extreme stageprob.
 	form = "Prion"
 	infectionchance = 10
 	stageprob = 80
