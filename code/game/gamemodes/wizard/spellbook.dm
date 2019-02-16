@@ -711,6 +711,11 @@
 		to_chat(user, "<span class = 'warning'>The book heats up and burns your hands!</span>")
 		qdel(src)
 
+/obj/item/weapon/spellbook/oneuse/lightning/sith
+	spell = /spell/lightning/sith
+	spellname = "sith lightning"
+	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
+
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
 	spellname = "time stopping"

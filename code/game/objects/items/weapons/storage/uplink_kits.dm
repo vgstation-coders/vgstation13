@@ -138,6 +138,7 @@
 				new /obj/item/clothing/head/sith(src)
 				new /obj/item/clothing/suit/sith(src)
 				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+				new /obj/item/clothing/shoes/sandal(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
 				new /obj/item/weapon/implanter/traitor(src)

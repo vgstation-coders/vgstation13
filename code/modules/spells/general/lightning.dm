@@ -205,3 +205,7 @@
 					return "Allow the spell to arc up to 5 targets."
 		else
 			return ..()
+
+/spell/lightning/sith
+	basedamage = 25
+	invocation = "UNLIMITED POWER!"
