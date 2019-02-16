@@ -216,7 +216,8 @@
 		antag.special_role=special_role
 	if(disallow_job)
 		var/datum/job/job = job_master.GetJob(antag.assigned_role)
-		job.current_positions--
+		if(job)
+			job.current_positions--
 		antag.assigned_role="MODE"
 	return 1
 
