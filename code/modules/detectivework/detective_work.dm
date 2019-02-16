@@ -171,12 +171,12 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					if(G.wrapped)
 						scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
 						G.drop_item(G.wrapped, src)
-				else 
-					if(istype(I, /obj/item/weapon/evidencebag))
+				else
+					if(istype(I, /obj/item/weapon/storage/evidencebag))
 						scanning = I.contents[1]
 						scanning.forceMove(src)
 						I.overlays.len = 0
-						I.icon_state = "evidenceobj"		
+						I.icon_state = "evidenceobj"
 					else
 						if(M.drop_item(I, src))
 							scanning = I
