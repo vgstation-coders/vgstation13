@@ -240,10 +240,13 @@ var/list/arcane_tomes = list()
 	var/list/choices = list()
 	var/datum/rune_spell/instance
 	var/list/choice_to_talisman = list()
+	var/image/talisman_image
 	for(var/obj/item/weapon/talisman/T in talismans)
+		talisman_image = new(T.icon, T.icon_state)
+		talisman_image.overlays = T.overlays
 		instance = T.spell_type
 //		choices += list(list(initial(instance.name), T.radial_icon_name()))
-		choices += list(list(T, T.radial_icon_name(), initial(instance.desc_talisman), T.talisman_name()))
+		choices += list(list(T, talisman_image, initial(instance.desc_talisman), T.talisman_name()))
 		choice_to_talisman[initial(instance.name)] = T
 	var/choice = show_radial_menu(user,loc,choices,'icons/obj/talisman_radial.dmi', "radial-cult2")
 	if(!choice_to_talisman[choice])
@@ -466,39 +469,6 @@ var/list/arcane_tomes = list()
 		return initial(instance.name)
 	else
 		return "\[blank\]"
-
-/obj/item/weapon/talisman/proc/radial_icon_name()
-	var/name = null
-	if (spell_type == null)
-		return "radial_talisman_blank"
-	else
-		var/datum/rune_spell/instance = spell_type
-		switch(initial(instance.name))
-			if ("Stun")
-				name = "radial_talisman_stun"
-			if ("Confusion")
-				name = "radial_talisman_confusion"
-			if ("Deaf-Mute")
-				name = "radial_talisman_deafmute"
-			if ("Conceal")
-				name = "radial_talisman_conceal"
-			if ("Summon Robes")
-				name = "radial_talisman_summonrobes"
-			if ("Path Entrance")
-				name = "radial_talisman_pathentrance"
-			if ("Path Exit")
-				name = "radial_talisman_pathexit"
-			if ("Communication")
-				name = "radial_talisman_communication"
-			if ("Pulse")
-				name = "radial_talisman_confusion"
-			if ("Reveal")
-				name = "radial_talisman_reveal"
-			if ("Summon Tome")
-				name = "radial_talisman_confusion"
-			else
-				name = "radial_talisman_unknown"
-	return name
 
 ///////////////////////////////////////CULT BLADE////////////////////////////////////////////////
 
