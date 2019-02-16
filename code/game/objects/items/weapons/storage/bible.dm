@@ -3,6 +3,7 @@
 /obj/item/weapon/storage/bible
 	name = "bible"
 	desc = "Apply to head repeatedly."
+	icon = 'icons/obj/storage/bibles.dmi'
 	icon_state = "bible"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
 	item_state = "bible"
