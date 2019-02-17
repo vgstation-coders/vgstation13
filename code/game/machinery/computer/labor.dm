@@ -28,12 +28,14 @@ var/list/labor_console_categories = list(
 
 /obj/machinery/computer/labor/New()
 	..()
-	job_master.labor_consoles += src
+	if(job_master)
+		job_master.labor_consoles += src
 
 /obj/machinery/computer/labor/initialize()
 	. = ..()
 	verified_overlay = image(icon, "labor_verified")
 	awaiting_overlay = image(icon, "labor_awaiting")
+	job_master.labor_consoles += src
 
 
 /obj/machinery/computer/labor/Destroy()
