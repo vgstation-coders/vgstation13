@@ -230,7 +230,6 @@
 
 /datum/emote/living/carbon/sound
 	var/list/science_sounds = null
-	var/list/femscience_sounds = null
 	var/list/male_sounds = null
 	var/list/female_sounds = null
 	var/list/birb_sounds = null
