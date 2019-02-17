@@ -81,6 +81,10 @@
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)
+	if(!user.client)
+		is_seeing -= user
+		return
+
 	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
