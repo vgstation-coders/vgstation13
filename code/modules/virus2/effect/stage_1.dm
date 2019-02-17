@@ -128,3 +128,67 @@
 				T.add_vomit_floor(mob, 1, 1, 1)
 			for(var/i = 0 to multiplier)
 				new/mob/living/simple_animal/bee(get_turf(mob))
+
+
+/datum/disease2/effect/radresist
+	name = "Hyronalinism"
+	stage = 1
+	chance = 10
+	max_chance = 40
+	max_count = 10
+
+/datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
+	if(mob.reagents.get_reagent_amount(HYRONALIN) < REAGENTS_OVERDOSE / 2)
+		mob.reagents.add_reagent(HYRONALIN, 1)
+		to_chat(mob, "<span class = 'notice'>Your body feels more resistant to radiation.</span>")
+
+
+/datum/disease2/effect/soreness
+	name = "Soreness"
+	stage = 1
+	chance = 5
+	max_chance = 60
+
+/datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span> class = 'notice'>You feel a little sore.</span>")
+
+
+/datum/disease2/effect/socialconfusion
+	name = "Clashing Syndrome"
+	stage = 1
+	chance = 5
+	max_chance = 25
+
+/datum/disease2/effect/socialconfusion/activate(var/mob/living/carbon/mob)
+	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)
+		return 1
+
+	var/mob/living/nearest_mob = null
+	for(var/mob/living/other_mob in oview(mob))
+		if(other_mob.isUnconscious())
+			continue
+		if(nearest_mob && get_dist(other_mob,mob)>=get_dist(nearest_mob,mob))
+			continue
+		else
+			nearest_mob = other_mob
+
+	var/other_mob_name = get_first_word(nearest_mob.name)
+	var/list/greets_farewells = list("Howdy, [other_mob_name].",
+								"Greetings, [other_mob_name].",
+								"Good day to you, [other_mob_name]",
+								"'Sup, [other_mob_name]?'",
+								"What it do, [other_mob_name]?",
+								"What's good, [other_mob_name]?",
+								"Yo, [other_mob_name].",
+								"What's up, [other_mob_name]?",
+								"Hi, [other_mob_name]!",
+								"Bye, [other_mob_name]!",
+								"So long, [other_mob_name].",
+								"I'll seeya later, [other_mob_name].",
+								"I've gotta go, [other_mob_name].",
+								"Goodbye, [other_mob_name].",
+								"Sayonara, [other_mob_name].",
+								"Peace out, [other_mob_name].",
+								"Later, [other_mob_name]."
+								)
+	mob.say(pick(greets_farewells))

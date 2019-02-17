@@ -449,3 +449,22 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		E.add_child(EE)
 		E.throw_at(get_step(src,pick(alldirs)), rand(1,4), rand(1,3))
 	..()
+
+
+/datum/disease2/effect/catvision
+	name = "Cattulism Syndrome"
+	stage = 3
+	max_count = 9
+	chance = 10
+	max_chance = 15
+
+/datum/disease2/effect/catvision/activate(var/mob/living/carbon/mob)
+	if (mob.see_in_dark_override != mob.see_in_dark)
+		mob.see_in_dark_override = mob.see_in_dark
+
+	spawn(rand(200,3000))
+		mob.see_in_dark_override += 1
+		if (count == 1)
+			to_chat(mob, "<span class = 'notice'>Your pupils dilate as they adjust for low-light environments.</span>")
+		else
+			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")

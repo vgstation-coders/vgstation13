@@ -381,3 +381,39 @@
 		qdel(G)
 		if(prob(30/multiplier))
 			break
+
+
+/datum/disease2/effect/money_vomit
+    name = "Lucremesis Syndrome"
+    stage = 2
+    chance = 6
+    max_chance = 12
+
+/datum/disease2/effect/money_vomit/activate(var/mob/living/carbon/mob)
+	var/obj/item/valid_moneytypes = pick(
+				100;/obj/item/weapon/spacecash,
+				45;/obj/item/weapon/spacecash/c10,
+				15;/obj/item/weapon/spacecash/c100,
+				10;/obj/item/weapon/spacecash/c1000
+				)
+	var/obj/item/vomit_money = new valid_moneytypes(get_turf(mob), 1)
+	mob.say("*cough")
+	to_chat(mob, "<span class = 'notice'>You coughed up a [vomit_money.name]!</span>")
+
+
+/datum/disease2/effect/yelling
+	name = "Plankton's Syndrome"
+	stage = 2
+	var/triggered = 0
+	affect_voice = 1
+
+/datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
+	if(!triggered)
+		to_chat(mob, "<span class='warning'>You feel smarter.</span>")
+		affect_voice_active = 1
+		triggered = 1
+
+/datum/disease2/effect/yelling/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	message = uppertext(message + "!")
+	speech.message = message
