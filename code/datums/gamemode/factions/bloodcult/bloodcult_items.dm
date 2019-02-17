@@ -242,8 +242,7 @@ var/list/arcane_tomes = list()
 	var/list/choice_to_talisman = list()
 	var/image/talisman_image
 	for(var/obj/item/weapon/talisman/T in talismans)
-		talisman_image = new(T.icon, T.icon_state)
-		talisman_image.overlays = T.overlays
+		talisman_image = new(T)
 		instance = T.spell_type
 		choices += list(list(T, talisman_image, initial(instance.desc_talisman), T.talisman_name()))
 		choice_to_talisman[initial(instance.name)] = T
