@@ -169,7 +169,7 @@
 		"farts [pick("lightly", "tenderly", "softly", "with care")].",
 	)
 
-	if(H.mind.miming)
+	if(H.mind && H.mind.miming)
 		farts = list("silently farts.", "acts out a fart.", "lets out a silent fart.")
 
 	message = pick(farts)
