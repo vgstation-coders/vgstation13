@@ -278,7 +278,7 @@
 	var/entry_turf
 
 /obj/structure/sign/poster/anime/New()
-	..(loc,0)
+	..(loc)
 	icon_state = pick("animeposter1","animeposter2","animeposter3","animeposter4","animeposter5","animeposter6")
 	switch(icon_state)
 		if("animeposter1")
@@ -325,7 +325,7 @@
 
 /obj/structure/sign/poster/anime/roll_and_drop(turf/newloc)
 	if(newloc)
-		new /obj/item/mounted/poster/anime(newloc)
+		new /obj/item/mounted/poster/anime(newloc, serial_number)
 	else
-		new /obj/item/mounted/poster/anime(get_turf(src))
+		new /obj/item/mounted/poster/anime(get_turf(src), serial_number)
 	qdel(src)
