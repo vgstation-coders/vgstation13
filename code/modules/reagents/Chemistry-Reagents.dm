@@ -561,15 +561,15 @@
 					if(prob(15) && volume >= 30)
 						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 						if(head_organ)
-							if(head_organ.take_damage(25, 0))
+							if(head_organ.take_damage(0, 25))
 								H.UpdateDamageIcon(1)
 							head_organ.disfigure("burn")
 							H.audible_scream()
 					else
-						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+						M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
 				if(M.acidable())
-					M.take_organ_damage(min(15, volume * 2))
+					M.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
