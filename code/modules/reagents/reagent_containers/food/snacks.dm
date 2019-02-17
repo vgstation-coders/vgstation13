@@ -3193,6 +3193,7 @@
 	desc = "A box suited for pizzas."
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "pizzabox1"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
