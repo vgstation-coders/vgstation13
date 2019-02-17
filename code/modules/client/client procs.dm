@@ -373,11 +373,14 @@
 
 	// Preload the crew monitor. This needs to be done due to BYOND bug http://www.byond.com/forum/?post=1487244
 	//The above bug report thing doesn't exist anymore so uh, whatever.
-	spawn
-		send_html_resources()
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			send_html_resources()
 
 	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			nanomanager.send_resources(src)
 
 
 /client/proc/send_html_resources()
