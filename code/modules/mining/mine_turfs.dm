@@ -318,6 +318,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 					if(excavation_level > 0)
 
 						B = getFromPool(/obj/structure/boulder, src)
+						B.geological_data = geologic_data
 						if(artifact_find)
 							B.artifact_find = artifact_find
 							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
@@ -326,7 +327,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 				else if(prob(15))
 					B = getFromPool(/obj/structure/boulder, src)
-
+					B.geological_data = geologic_data
 				if(B)
 					GetDrilled(0)
 				else
