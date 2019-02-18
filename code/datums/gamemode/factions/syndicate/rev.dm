@@ -90,6 +90,7 @@
 		if(A.set_target(L.mind))
 			R.AppendObjective(A, TRUE) // We will have more than one kill objective
 
+
 /datum/faction/revolution/proc/end(var/result)
 	. = TRUE
 	switch (result)

@@ -177,6 +177,8 @@
 #define PROB_PROTECTED_REGULAR 50
 #define PROB_PROTECTED_RARE    80
 
+#define FACTION_FAILURE -1
+
 // -- The paper
 
 #define INTERCEPT_TIME_LOW 60 SECONDS

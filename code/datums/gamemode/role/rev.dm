@@ -10,7 +10,7 @@
 // Which is outside the z-level of the main station.
 
 /datum/role/revolutionary/AssignToRole(var/datum/mind/M, var/override = 0, var/roundstart = 0)
-	if (!(M.current) || (M.current.z != map.zMainStation && !roundstart))
+	if (!(M && M.current) || (M.current.z != map.zMainStation && !roundstart))
 		message_admins("Error: cannot create a revolutionary off the main z-level.")
 		return FALSE
 	return ..()
