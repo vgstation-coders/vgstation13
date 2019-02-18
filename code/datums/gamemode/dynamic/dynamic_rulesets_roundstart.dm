@@ -310,6 +310,36 @@
 
 //////////////////////////////////////////////
 //                                          //
+//         BLOB					            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/blob
+	name = "Blob conglomerate"
+	role_category = /datum/role/blob_overmind/
+	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 30
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+
+/datum/dynamic_ruleset/roundstart/blob/execute()
+	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if (!blob_fac)
+		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
+	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
+	for (var/i = 1 to min(blob_number, candidates.len))
+		var/mob/M = pick(candidates)
+		var/datum/role/blob_overmind/blob = new
+		blob.AssignToRole(M.mind, 1)
+		blob_fac.HandleRecruitedRole(blob)
+		blob.Greet(GREET_ROUNDSTART)
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
 //               EXTENDED                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////

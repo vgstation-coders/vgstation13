@@ -257,6 +257,8 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	if(!antag || !antag.current)
+		return
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
@@ -552,7 +554,7 @@
 
 /datum/role/blob_overmind
 	name = BLOBOVERMIND
-	id = BLOBOVERMIND
+	id = ROLE_BLOB
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
@@ -561,8 +563,12 @@
 	..()
 	wikiroute = role_wiki[BLOBOVERMIND]
 
+/datum/role/blob_overmind/OnPostSetup()
+	. = ..()
+	AnnounceObjectives()
+
 /datum/role/blob_overmind/process()
-	if(!antag || istype(antag.current,/mob/camera/blob))
+	if(!antag || istype(antag.current,/mob/camera/blob) || !antag.current || isobserver(antag.current))
 		return
 	if (countdown > 0)
 		countdown--
@@ -572,7 +578,7 @@
 			to_chat(antag.current, "<span class='alert'>You feel like you are about to burst.</span>")
 		else if (countdown <= 0)
 			burst()
-	if (antag.current.hud_used)
+	if (antag && antag.current.hud_used)
 		if(antag.current.hud_used.blob_countdown_display)
 			antag.current.hud_used.blob_countdown_display.overlays.len = 0
 			var/first = round(countdown/10)
@@ -594,6 +600,10 @@
 
 	var/client/blob_client = null
 	var/turf/location = null
+
+	if (faction)
+		var/datum/faction/blob_conglomerate/the_bleb = faction
+		the_bleb.declared = TRUE
 
 	if(iscarbon(antag.current))
 		var/mob/living/carbon/C = antag.current
@@ -624,7 +634,6 @@
 			to_chat(antag.current, "<span class='warning'>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-
 
 //________________________________________________
 

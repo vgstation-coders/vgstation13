@@ -2,6 +2,7 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/
 	weight = 0
+	var/makeBody = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/execute()
 	var/list/possible_candidates = list()
@@ -21,8 +22,11 @@
 			i++
 			continue
 
-		var/mob/living/carbon/human/new_character = makeBody(applicant)
-		new_character.dna.ResetSE()
+		var/mob/living/carbon/human/new_character = applicant
+
+		if (makeBody)
+			new_character = makeBody(applicant)
+			new_character.dna.ResetSE()
 
 		finish_setup(new_character, i)
 
@@ -250,7 +254,39 @@
 	else
 		return ..()
 
+//////////////////////////////////////////////
+//                                          //
+//          BLOB STORM			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm
+	name = "Blob Overmind Storm"
+	role_category = /datum/role/blob_overmind/
+	my_fac = /datum/faction/blob_conglomerate/
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 35
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	logo = "blob-logo"
+
+	makeBody = FALSE
+
+// -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/finish_setup(var/mob/new_character, var/index)
+	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"], offset_origin = 150, offset_dest = 230)
+	var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core, offset_origin = 150, offset_dest = 230)
+	meteor.AssignMob(new_character)
+	return 1 // The actual role (and faction) are created upon impact.
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/review_applications()
+	command_alert(/datum/command_alert/blob_storm/overminds)
+	. = ..()
+	spawn (60 SECONDS)
+		command_alert(/datum/command_alert/blob_storm/overminds/end)
 
 //////////////////////////////////////////////
 //                                          //

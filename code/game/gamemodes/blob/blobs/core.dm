@@ -160,7 +160,8 @@
 		icon_state = "core"
 		flick("morph_cerebrate",src)
 		var/datum/role/blob_overmind/BO = B.mind.GetRole(BLOBOVERMIND)
-		BO.logo_state = "cerebrate-logo"
+		if (BO)
+			BO.logo_state = "cerebrate-logo"
 
 	B.special_blobs += src
 	B.hud_used.blob_hud()
