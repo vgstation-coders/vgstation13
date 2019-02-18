@@ -138,8 +138,7 @@
 	max_count = 10
 
 /datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
-	var/datum/reagent/hyronalin/hyro
-	if(mob.reagents.get_reagent_amount(HYRONALIN) < hyro.overdose_am / 2)
+	if(mob.reagents.get_reagent_amount(HYRONALIN) < 15)
 		mob.reagents.add_reagent(HYRONALIN, 1)
 		to_chat(mob, "<span class = 'notice'>Your body feels more resistant to radiation.</span>")
 
