@@ -1007,7 +1007,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								<h5>Bank Account</h5>
 								<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>
 								"}
-
+			/* Old Station Map Stuff
 			if (PDA_APP_STATIONMAP)
 				if(user.client)
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_stationmap()
@@ -1073,7 +1073,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						for(var/datum/minimap_marker/mkr in app.markers)
 							dat += {"<li>[mkr.name] ([mkr.x]/[mkr.y]) <a href='byond://?src=\ref[src];choice=removeMarker;rMark=[mkr.num]'>remove</a></li>"}
 						dat += {"</ul>"}
-
+			*/
 			if (PDA_APP_SNAKEII)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_snake()
@@ -1499,6 +1499,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					id.virtual_wallet.transaction_log.Add(T)
 
 			if(PDA_APP_STATIONMAP)
+				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
+				if (app)
+					app.holomap.attack_self(U)
+
+			/* Old Station Map Stuff
+			if(PDA_APP_STATIONMAP)
 				mode = PDA_APP_STATIONMAP
 
 			if("minimapMarker")
@@ -1533,6 +1539,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/datum/minimap_marker/mkr = app.markers[to_remove]
 				qdel(mkr)
 				mkr = null
+			*/
 
 //GAME FUNCTIONS====================================
 
@@ -2471,6 +2478,11 @@ obj/item/device/pda/AltClick()
 		loop_count++
 	PDAs -= src
 	..()
+
+/obj/item/device/pda/dropped(var/mob/user)
+	var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
+	if (app)
+		app.holomap.stopWatching()
 
 /obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if (istype(AM, /mob/living/carbon))
