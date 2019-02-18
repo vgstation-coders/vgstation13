@@ -463,10 +463,9 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	night_vision_strength = mob.see_in_dark
 
 	if (mob.see_in_dark_override < 9)
-		spawn(rand(200,3000))
-			mob.see_in_dark_override = night_vision_strength + 1
-			if (count == 1)
-				to_chat(mob, "<span class = 'notice'>Your pupils dilate as they adjust for low-light environments.</span>")
-			else
-				to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
+		mob.see_in_dark_override = night_vision_strength + 1
+		if (count == 1)
+			to_chat(mob, "<span class = 'notice'>Your pupils dilate as they adjust for low-light environments.</span>")
+		else
+			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 
