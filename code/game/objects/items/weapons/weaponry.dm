@@ -146,7 +146,7 @@
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/magic
-	name = "enchanted sword"
+	name = "moonlight-enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "enchanted"
