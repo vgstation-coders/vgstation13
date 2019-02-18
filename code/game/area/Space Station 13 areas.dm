@@ -998,6 +998,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Courtroom"
 	icon_state = "courtroom"
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
+	holomap_marker = "courtroom"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/hop
 	name = "\improper Head of Personnel's Office"
