@@ -759,7 +759,7 @@
 
 /datum/role/malfAI
 	name = MALF
-	id = ROLE_MALF
+	id = MALF
 	required_pref = ROLE_MALF
 	logo_state = "malf-logo"
 
@@ -776,6 +776,9 @@
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()
 		malfAI.show_laws()
+
+		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
+			faction.HandleRecruitedMind(R.mind)
 
 /datum/role/malfAI/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>

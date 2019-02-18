@@ -289,7 +289,7 @@
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
-	var/list/job_priority = list("AI","Cyborg")
+	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 3
@@ -301,7 +301,7 @@
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
 
-	var/mob/M = progressive_job_search()
+	var/mob/M = progressive_job_search() //dynamic_rulesets.dm
 	if(M.mind.assigned_role != "AI")
 		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
 			if(player.mind.assigned_role == "AI")
@@ -310,28 +310,10 @@
 				message_admins("Displacing AI played by: [key_name(player)].")
 	//There was no AI to displace, we're making one fresh
 	M.mind.assigned_role = "AI"
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleNewMind(AI)
-	AI.Greet()
+	unction.HandleNewMind(M.mind)
+	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
+	MAI.Greet()
 	return 1
-
-//First try to recruit an AI, then try to recruit a cyborg, then go to anybody left.
-/datum/dynamic_ruleset/roundstart/malf/proc/progressive_job_search()
-	message_admins("Beginning search for Malf AI candidate.")
-	for(var/job in job_priority)
-		for(var/mob/M in candidates)
-			if(M.mind.assigned_role == job)
-				assigned += M
-				candidates -= M
-				message_admins("Selected candidate with job [job].")
-				return M
-		message_admins("No valid candidates for job [job].")
-	message_admins("Selecting candidate from list: [json_encode(candidates)]")
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	return M
 
 /datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
 	old_AI.mind.assigned_role = null
@@ -352,17 +334,6 @@
 	else
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 		old_AI.ready = 0
-
-	/*old_AI.ready = 0
-	switch(alert(old_AI,"Your system has been corrupted by a malfunction, but you were not a valid candidate to be malfunctioning AI.", "AI Malfunction!",
-						/*"Become Slaved Cyborg","Exile as MoMMI"*/,"I Choose Death!"))
-		if("Become Slaved Cyborg")
-			old_AI.mind.assigned_role == "Cyborg"
-			create_roundstart_cyborg()
-		if("Exile as MoMMI")
-			old_AI.mind.assigned_role == "Mobile MMI"
-		if("I Choose Death!")
-			old_AI.create_observer()*/
 
 //////////////////////////////////////////////
 //                                          //

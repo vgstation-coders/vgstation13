@@ -8,6 +8,7 @@
 	var/list/protected_from_jobs = list() // if set, and config.protect_roles_from_antagonist = 0, then the rule will have a much lower chance than usual to pick those roles.
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
+	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
 	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
 	var/required_enemies = list(1,1,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of enemy job workers needed per threat_level range (0-10,10-20,etc)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
@@ -130,6 +131,18 @@
 		to_chat(M, "<span class='notice'>Added to the [initial(role_category.id)] registration list.</span>")
 		applicants |= M
 		return
+
+/datum/dynamic_ruleset/proc/progressive_job_search()
+	for(var/job in job_priority)
+		for(var/mob/M in candidates)
+			if(M.mind.assigned_role == job)
+				assigned += M
+				candidates -= M
+				return M
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	return M
 
 //////////////////////////////////////////////
 //                                          //

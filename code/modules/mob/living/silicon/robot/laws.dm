@@ -156,7 +156,22 @@
 			temp = master.supplied[index]
 			if (length(temp) > 0)
 				laws.supplied[index] = temp
-	return
+
+		if(mind)
+			var/datum/role/mastermalf = connected_ai.mind.GetRole(MALF)
+			if(mastermalf)
+				var/datum/faction/my_new_faction = mastermalf.faction
+				my_new_faction.HandleRecruitedMind(mind)
+			else
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
+
+	else
+		if(mind)
+			var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+			if(MB)
+				MB.Drop()
 
 /mob/living/silicon/robot/proc/laws_sanity_check()
 	if (!laws)
