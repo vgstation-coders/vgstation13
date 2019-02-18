@@ -228,7 +228,7 @@ var/list/threat_by_job = list(
 	var/datum/dynamic_ruleset/latejoin/latejoin_rule = pickweight(drafted_rules)
 	if (latejoin_rule)
 		if (!latejoin_rule.repeatable)
-			latejoin_rules -= latejoin_rule
+			latejoin_rules = remove_rule(latejoin_rules,latejoin_rule.type)
 		spend_threat(latejoin_rule.cost)
 		threat_log += "[worldtime2text()]: [latejoin_rule.name] spent [latejoin_rule.cost]"
 		dynamic_stats.measure_threat(threat)
@@ -247,7 +247,7 @@ var/list/threat_by_job = list(
 	var/datum/dynamic_ruleset/midround/midround_rule = pickweight(drafted_rules)
 	if (midround_rule)
 		if (!midround_rule.repeatable)
-			midround_rules -= midround_rule
+			midround_rules = remove_rule(midround_rules,midround_rule.type)
 		spend_threat(midround_rule.cost)
 		threat_log += "[worldtime2text()]: [midround_rule.name] spent [midround_rule.cost]"
 		dynamic_stats.measure_threat(threat)
@@ -328,7 +328,7 @@ var/list/threat_by_job = list(
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
-						drafted_rules[rule] = rule.weight
+						drafted_rules[rule] = rule.get_weight()
 
 			if (drafted_rules.len > 0)
 				message_admins("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
@@ -393,6 +393,12 @@ var/list/threat_by_job = list(
 	message_admins("DYNAMIC MODE: Check failed!")
 	log_admin("DYNAMIC MODE: Check failed!")
 	return 0
+
+/datum/gamemode/dynamic/proc/remove_rule(var/list/rule_list,var/rule_type)
+	for(var/datum/dynamic_ruleset/DR in rule_list)
+		if(istype(DR,rule_type))
+			rule_list -= DR
+	return rule_list
 
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left

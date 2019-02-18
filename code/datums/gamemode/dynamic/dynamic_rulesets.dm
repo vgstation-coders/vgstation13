@@ -68,6 +68,13 @@
 		return 0
 	return 1
 
+/datum/dynamic_ruleset/proc/get_weight()
+	if(repeatable && weight > 1)
+		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
+			if(istype(DR,src.type))
+				weight = max(weight-2,1)
+	return weight
+
 /datum/dynamic_ruleset/proc/trim_candidates()
 	return
 
