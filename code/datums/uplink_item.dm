@@ -503,9 +503,9 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/bundle
 	name = "Syndicate Bundle"
-	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth more than 20 telecrystals, but you do not know which bundle you will receive."
+	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive."
 	item = /obj/item/weapon/storage/box/syndicate
-	cost = 20
+	cost = 14
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
@@ -870,3 +870,11 @@ var/list/uplink_items = list()
 	cost = 16
 	discounted_cost = 6
 	jobs_with_discount = list("Librarian")
+
+/datum/uplink_item/jobspecific/traitor_bible
+	name = "Feldbischof's Bible"
+	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions. 88 rapid, eight in the gun, eight in the extra mag."
+	item = /obj/item/weapon/storage/bible/traitor_gun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chaplain")

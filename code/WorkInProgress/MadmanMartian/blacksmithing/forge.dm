@@ -102,6 +102,11 @@
 		user.put_in_hands(heating)
 		heating = null
 
+/obj/structure/forge/attack_robot(var/mob/user as mob)
+	if(isMoMMI(user) && Adjacent(user))
+		return attack_hand(user)
+	else
+		return attack_ai(user)
 
 /obj/structure/forge/examine(mob/user)
 	..()

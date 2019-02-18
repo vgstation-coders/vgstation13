@@ -81,6 +81,10 @@
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)
+	if(!user.client)
+		is_seeing -= user
+		return
+
 	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
@@ -196,9 +200,10 @@
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
-/obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0,mob/M, slot)
+/obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0)
 	if(W == src)
-		to_chat(M, "<span class = 'notice'>No matter how hard you try, you can't seem to manage to fit \the [src] inside of itself.</span>")
+		if(!stop_messages)
+			to_chat(usr, "<span class = 'notice'>No matter how hard you try, you can't seem to manage to fit \the [src] inside of itself.</span>")
 		return //No putting ourselves into ourselves
 	if(!istype(W))
 		return //Not an item
@@ -218,7 +223,7 @@
 		return 0 //Storage item is full
 	if(usr && (W.cant_drop > 0))
 		if(!stop_messages)
-			usr << "<span class='notice'>You can't let go of \the [W]!</span>"
+			to_chat(usr,"<span class='notice'>You can't let go of \the [W]!</span>")
 		return 0 //Item is stuck to our hands
 
 	if(W.wielded || istype(W, /obj/item/offhand))

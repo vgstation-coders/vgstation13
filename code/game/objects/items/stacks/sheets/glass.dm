@@ -159,7 +159,7 @@ var/list/datum/stack_recipe/rglass_recipes = list (
 	new/datum/stack_recipe("window", /obj/structure/window/reinforced/loose, 1, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/loose, 2, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
-	new/datum/stack_recipe("glass tile", /obj/item/stack/tile/rglass/plasma, 5, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass, 5, time = 10, on_floor = TRUE),
 	)
 
 var/list/datum/stack_recipe/plasmaglass_recipes = list (
@@ -171,5 +171,5 @@ var/list/datum/stack_recipe/plasmarglass_recipes = list (
 	new/datum/stack_recipe("window", /obj/structure/window/reinforced/plasma/loose, 1, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/plasma/loose, 2, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/plasma, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
-	new/datum/stack_recipe("glass tile", /obj/item/stack/tile/rglass/plasma, 5, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass/plasma, 5, time = 10, on_floor = TRUE),
 	)

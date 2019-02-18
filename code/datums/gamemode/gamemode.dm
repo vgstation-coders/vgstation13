@@ -181,6 +181,9 @@
 	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
 		display_roundstart_logout_report()
 
+	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
+		send_intercept()
+
 	feedback_set_details("round_start","[time2text(world.realtime)]")
 	if(ticker && ticker.mode)
 		feedback_set_details("game_mode","[ticker.mode]")

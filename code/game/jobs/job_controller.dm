@@ -72,7 +72,7 @@ var/global/datum/controller/occupations/job_master
 			return 0
 		if(!job.player_old_enough(player.client))
 			return 0
-		var/position_limit = job.total_positions
+		var/position_limit = job.get_total_positions()
 		if(!latejoin)
 			position_limit = job.spawn_positions
 		if((job.current_positions < position_limit) || position_limit == -1)
@@ -92,8 +92,8 @@ var/global/datum/controller/occupations/job_master
 
 /datum/controller/occupations/proc/FreeRole(var/rank, mob/user)	//making additional slot on the fly
 	var/datum/job/job = GetJob(rank)
-	if(job && job.current_positions >= job.total_positions)
-		job.total_positions++
+	if(job && job.current_positions >= job.get_total_positions())
+		job.bump_position_limit()
 		if(user)
 			log_admin("[key_name(user)] has freed up a slot for the [rank] job.")
 			message_admins("[key_name_admin(user)] has freed up a slot for the [rank] job.")
@@ -104,7 +104,7 @@ var/global/datum/controller/occupations/job_master
 
 /datum/controller/occupations/proc/CheckPriorityFulfilled(var/rank)
 	var/datum/job/job = GetJob(rank)
-	if(job.current_positions >= job.total_positions && job.priority)
+	if(job.current_positions >= job.get_total_positions() && job.priority)
 		job_master.TogglePriority(rank)
 
 /datum/controller/occupations/proc/TogglePriority(var/rank, mob/user)
@@ -236,7 +236,7 @@ var/global/datum/controller/occupations/job_master
 	if((job.title == "AI") && (config) && (!config.allow_ai))
 		return 0
 
-	for(var/i = job.total_positions, i > 0, i--)
+	for(var/i = job.get_total_positions(), i > 0, i--)
 		for(var/level = 1 to 3)
 			var/list/candidates = list()
 			if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
@@ -635,10 +635,10 @@ var/global/datum/controller/occupations/job_master
 			var/datum/job/J = GetJob(name)
 			if(!J)
 				continue
-			J.total_positions = text2num(value)
+			J.set_total_positions(value)
 			J.spawn_positions = text2num(value)
 			if(name == "AI" || name == "Cyborg" || name == "Mobile MMI" || name == "Trader")//I dont like this here but it will do for now
-				J.total_positions = 0
+				J.set_total_positions(0)
 
 	return 1
 

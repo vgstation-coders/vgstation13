@@ -169,7 +169,7 @@
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
-		for(var/atom/Obj as mob|obj|turf|area in range(1))
+		for(var/atom/Obj in range(1, src))
 			if(objects > loopsanity)
 				break
 			objects++
@@ -667,7 +667,7 @@
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)
-	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+	if(istype(M) && M.CheckSlip() == SLIP_HAS_MAGBOOTS) //Wearing magboots - good enough
 		return 1
 
 	var/area/A = loc

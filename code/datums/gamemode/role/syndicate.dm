@@ -4,6 +4,7 @@
 	required_pref = ROLE_TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
+	refund_value = BASE_SOLO_REFUND
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
@@ -24,12 +25,14 @@
 		S.set_zeroth_law("")
 		S.laws.zeroth_lock = FALSE
 		to_chat(S, "Law 0 has been purged.")
-	if(isAI(antag.current))
+	else if(isAI(antag.current))
 		var/mob/living/silicon/ai/KAI = antag.current
 		to_chat(KAI, "<b>Your laws have been changed!</b>")
 		KAI.set_zeroth_law("","")
 		KAI.laws.zeroth_lock = FALSE
 		KAI.notify_slaved()
+	else if(ishuman(antag.current))
+		antag.take_uplink()
 
 	.=..()
 
@@ -136,6 +139,7 @@
 	name = SURVIVOR
 	logo_state = "gun-logo"
 	can_be_smooth = FALSE
+	refund_value = 0
 	var/survivor_type = "survivor"
 	var/summons_received
 
@@ -166,6 +170,7 @@
 	name = ROGUE
 	id = ROGUE
 	logo_state = "synd-logo"
+	refund_value = BASE_SOLO_REFUND/2
 
 /datum/role/traitor/rogue/ForgeObjectives()
 	var/datum/role/traitor/rogue/rival
@@ -222,6 +227,7 @@
 /datum/role/nuclear_operative
 	name = NUKE_OP
 	id = ROLE_OPERATIVE
+	required_pref = ROLE_OPERATIVE
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
 

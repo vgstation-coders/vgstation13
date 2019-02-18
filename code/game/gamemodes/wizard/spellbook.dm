@@ -5,6 +5,8 @@
 	desc = "The legendary book of spells of the wizard."
 	icon = 'icons/obj/library.dmi'
 	icon_state ="spellbook"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
+	item_state = "book"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
@@ -24,7 +26,7 @@
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/random = Sp_BASE_PRICE*0.2,

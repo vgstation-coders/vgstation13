@@ -55,3 +55,17 @@
 		new /obj/item/weapon/reagent_containers/syringe(), \
 		) //Syringes and vials are technically an ammo.
 	)
+
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/ammolathe,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()

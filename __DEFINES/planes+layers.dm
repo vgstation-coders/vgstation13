@@ -111,6 +111,7 @@ What is the naming convention for planes or layers?
 	#define MOUSETRAP_LAYER 			14
 	#define FIREAXE_LOCKER_LAYER		15
 	#define BLOOD_LAYER					16
+	#define GIBS_OVERLAY_LAYER			17 //Holy fuck I'm so fucking mad it took me this long to figure it out. If you suspect an overlay isn't showing TRY GIVING IT A REALLY HIGH LAYER
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		3		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.

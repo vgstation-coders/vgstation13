@@ -244,3 +244,10 @@
 	affected.implants += L
 	L.part = affected
 	return 1
+
+/datum/job/officer/get_total_positions()
+	. = ..()
+
+	var/datum/job/assistant = job_master.GetJob("Assistant")
+	if(assistant.current_positions > 5)
+		. = Clamp(. + assistant.current_positions - 5, 0, 99)

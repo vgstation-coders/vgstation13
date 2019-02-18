@@ -2180,7 +2180,7 @@ mob/proc/on_foot()
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(!(status_flags & PACIFIABLE))
 		return 0
-	if (reagents && reagents.has_reagent(CHILLWAX))
+	if (reagents && (reagents.has_reagent(CHILLWAX) || (reagents.has_reagent(INCENSE_POPPIES) && prob(50))))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
 				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
@@ -2211,6 +2211,9 @@ mob/proc/on_foot()
 		for (var/role in mind.antag_roles)
 			var/datum/role/R = mind.antag_roles[role]
 			R.update_antag_hud()
+
+/mob/proc/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return FALSE
 
 // Returns TRUE on success
 /mob/proc/attempt_crawling(var/turf/target)

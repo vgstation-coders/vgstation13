@@ -249,6 +249,10 @@
 			var/choice_tooltip = E[3]
 			choices_tooltips[id] = choice_tooltip
 
+		if(E.len > 3) // Radial's replacement for the actual name. Currently only used for talismans.
+			choice_name = E[4]
+			choices_values[id] = choice_name
+
 	setup_menu()
 
 

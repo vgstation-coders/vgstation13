@@ -22,19 +22,20 @@ var/list/labor_console_categories = list(
 	var/freeing = "" //If this variable is set with a job's title, the user will be prompted to swipe to free up a job slot.
 	var/toggling_priority = "" //If this variable is set with a job's title, the user will be prompted to swipe to prioritize/deprioritize.
 	var/selected_category = "Civilian"
-	var/list/swipe_sounds = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
 
 	var/icon/verified_overlay
 	var/icon/awaiting_overlay
 
 /obj/machinery/computer/labor/New()
 	..()
-	job_master.labor_consoles += src
+	if(job_master)
+		job_master.labor_consoles += src
 
 /obj/machinery/computer/labor/initialize()
 	. = ..()
 	verified_overlay = image(icon, "labor_verified")
 	awaiting_overlay = image(icon, "labor_awaiting")
+	job_master.labor_consoles += src
 
 
 /obj/machinery/computer/labor/Destroy()
@@ -79,8 +80,8 @@ var/list/labor_console_categories = list(
 		var/datum/job/job_datum = job_master.GetJob(job_string)
 		if(job_datum.priority)
 			continue
-		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.total_positions])</td> <td>"
-		if(job_datum.current_positions >= job_datum.total_positions)
+		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td>"
+		if(job_datum.current_positions >= job_datum.get_total_positions())
 			dat += "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot!)</A>"
 		else
 			dat += "<A [job_master.priority_jobs_remaining < 1 ? "class='linkOff'" : "href='?src=\ref[src];priority=[job_datum.title]'"]>&emsp14;(Prioritize)&emsp14;</A>"
@@ -90,7 +91,7 @@ var/list/labor_console_categories = list(
 	dat += "<div class='footer'><h3>Prioritized Jobs</h3>[job_master.priority_jobs_remaining] more job\s can prioritized.<br>"
 	dat += "<table>"
 	for(var/datum/job/job_datum in job_master.GetPrioritizedJobs())
-		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.total_positions])</td> <td><A href='?src=\ref[src];priority=[job_datum.title]'>(Remove)</A></td></tr>"
+		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td><A href='?src=\ref[src];priority=[job_datum.title]'>(Remove)</A></td></tr>"
 	dat += "</table>"
 	dat += "</div>"
 
@@ -133,10 +134,10 @@ var/list/labor_console_categories = list(
 			if(!check_access(W))
 				to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
 				return
-			playsound(src, pick(swipe_sounds), 60, 1, -5)
+			playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 			verified(user)
 		if(isEmag(W))
-			playsound(src, pick(swipe_sounds), 60, 1, -5)
+			playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 			verified(user)
 
 /obj/machinery/computer/labor/kick_act(mob/user)

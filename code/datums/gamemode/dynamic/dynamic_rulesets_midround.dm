@@ -191,13 +191,21 @@
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
 		weight = 5
 		cost = 10
-
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
+	..()
+	if(!locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
+		new_role.refund_value = BASE_SOLO_REFUND * 4
+		//If it's a spontaneous ragin' mage, it costs more, so refund more
+	else
+		new_role.refund_value = BASE_SOLO_REFUND/2
+		//We have plenty of threat to go around
 
 //////////////////////////////////////////////
 //                                          //
@@ -231,6 +239,8 @@
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	nuclear.forgeObjectives()
 	if (index == 1) // Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
@@ -299,3 +309,27 @@
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
 	return accepted
+
+//////////////////////////////////////////////
+//                                          //
+//               LOOSE CATBEAST             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                 Minor Role               //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast
+	name = "Loose Catbeast"
+	role_category = /datum/role/catbeast
+	required_candidates = 1
+	weight = 1
+	cost = 0
+	requirements = list(0,0,0,0,0,0,0,0,0,0)
+	logo = "catbeast-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
+	if(mode.threat>50) //We're threatening enough!
+		message_admins("Rejected catbeast ruleset, [mode.threat] threat was over 50.")
+		return FALSE
+	if(!..())
+		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
+		return FALSE
+	return TRUE

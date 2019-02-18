@@ -1603,7 +1603,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() < 1)
+		if (H.CheckSlip() != TRUE)
 			return
 
 		H.stop_pulling()
@@ -3193,6 +3193,7 @@
 	desc = "A box suited for pizzas."
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "pizzabox1"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
@@ -4236,7 +4237,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //exactly the same as soap
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() < 1)
+		if (H.CheckSlip() != TRUE)
 			return
 
 		H.stop_pulling()
@@ -4420,7 +4421,7 @@
 	reagents.add_reagent(HYPERZINE,1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/HasProximity(atom/movable/AM as mob|obj)
-	if(!jump_cd)
+	if(!jump_cd && isliving(AM))
 		jump()
 	return ..()
 
@@ -4475,7 +4476,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 2)
-	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorish","\improper apple","\improper cranberry")
+	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorice","\improper apple","\improper cranberry")
 	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
 	icon_state = "sweet[variety]"
 	name = "[flavors[variety]] sweet"
@@ -5720,7 +5721,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() < 1)
+		if (H.CheckSlip() != TRUE)
 			return
 
 		H.stop_pulling()

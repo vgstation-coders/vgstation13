@@ -20,7 +20,7 @@
 		/obj/item/delivery,
 		/obj/item/weapon/gift,
 		/obj/item/weapon/winter_gift,
-		/obj/item/weapon/evidencebag,
+		/obj/item/weapon/storage/evidencebag,
 		/obj/item/weapon/legcuffs/bolas,
 		/obj/item/weapon/storage
 		)

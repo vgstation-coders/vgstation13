@@ -339,7 +339,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/ice
 	name = "Ice Cup"
 	desc = "Careful, cold ice, do not chew."
-	icon_state = "coffee"
+	icon_state = "icecup"
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
 	..()
 	reagents.add_reagent(ICE, 30, reagtemp = T0C)
@@ -858,6 +858,14 @@
 	reagents.add_reagent(BEER, 30)
 	reagents.add_reagent(APPLEJUICE, 20)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
+	name = "Kiririn FIRE"
+	desc = "Fine, sweet coffee, easy to drink in any scene."
+	icon_state = "cannedcoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee/New()
+	..()
+	reagents.add_reagent(CAFE_LATTE, 50)	
+	
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink

@@ -20,6 +20,7 @@
 	var/datum/action/renounce/action_renounce
 	var/list/keys = list("abstractbasetype") // What you need to type to get this particular relgion.
 	var/converts_everyone = FALSE
+	var/preferred_incense = /obj/item/weapon/storage/fancy/incensebox/harebells
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
@@ -390,6 +391,7 @@
 	male_adept = "Militant Atheist" // Wasn't defined so the poor dude ended up being a chaplain
 	female_adept = "Militant Atheist"
 	keys = list("atheism", "none")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/sunflowers
 
 /datum/religion/atheism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/fedora(H), slot_head)
@@ -424,6 +426,7 @@
 	deity_name = "Haile Selassie I"
 	bible_name = "The Holy Piby"
 	keys = list("rastafarianism", "rastafari movement")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/poppies
 
 /datum/religion/hellenism
 	name = "Hellenism"
@@ -846,8 +849,9 @@
 	bible_name = "The Arcane Tome"
 	male_adept = "Cultist"
 	female_adept = "Cultist"
-	keys = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
+	keys = list("cult", "narsie", "nar'sie", "narnar", "nar-sie", "papa narnar", "geometer", "geometer of blood")
 	convert_method = "performing a ritual with a paper. The subject will need to stand a crayon-drawn rune."
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 
 /datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
@@ -920,6 +924,7 @@
 	male_adept = "Vampire"
 	female_adept = "Vampire"
 	keys = list("vampire", "vamp", "blood","dracula")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 
 /datum/religion/vampirism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
@@ -1109,3 +1114,4 @@
 	male_adept = "Speedrunner"
 	female_adept = "Speedrunner"
 	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers

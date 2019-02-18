@@ -511,7 +511,7 @@
 		/obj/item/weapon/bucket_sensor,
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
-		/obj/item/weapon/cigbutt/cigarbutt,
+		/obj/item/trash/cigbutt/cigarbutt,
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,

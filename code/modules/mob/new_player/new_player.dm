@@ -278,29 +278,12 @@
 	var/datum/job/job = job_master.GetJob(rank)
 	if(!job)
 		return 0
-	if((job.current_positions >= job.total_positions) && job.total_positions != -1)
+	if(job.current_positions >= job.get_total_positions())
 		return 0
 	if(jobban_isbanned(src,rank))
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
-	// assistant limits
-	if(config.assistantlimit)
-		if(job.title == "Assistant")
-			var/count = 0
-			var/datum/job/officer = job_master.GetJob("Security Officer")
-			var/datum/job/warden = job_master.GetJob("Warden")
-			var/datum/job/hos = job_master.GetJob("Head of Security")
-			count += (officer.current_positions + warden.current_positions + hos.current_positions)
-			if(job.current_positions > (config.assistantratio * count))
-				if(count >= 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
-					. = 1
-				else
-					return 0
-	if(job.title == "Assistant" && job.current_positions > 5)
-		var/datum/job/officer = job_master.GetJob("Security Officer")
-		if(officer.current_positions >= officer.total_positions)
-			officer.total_positions++
 	. = 1
 	return
 
@@ -349,9 +332,8 @@
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 
-	var/datum/job/J = job_master.GetJob(rank)
-	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
-		J.current_positions--
+	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+		//Removal of job slot is in role/role.dm
 		character.store_position()
 		qdel(src)
 		return
@@ -361,6 +343,7 @@
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
+	var/datum/job/J = job_master.GetJob(rank)
 	if(J.spawns_from_edge)
 		Meteortype_Latejoin(what_to_move, rank)
 	else

@@ -81,9 +81,9 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
-	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	weight = 2
+	cost = 25
+	requirements = list(80,60,50,30,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
 	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -161,7 +161,7 @@
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = cultist_cap[indice_pop]
-	..()
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
@@ -245,7 +245,7 @@
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = operative_cap[indice_pop]
-	..()
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
 	//if ready() did its job, candidates should have 5 or more members in it
@@ -273,6 +273,8 @@
 			newCop.AssignToRole(M.mind,1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
+	for (var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
+		bomb.spawnbomb()
 	return 1
 
 

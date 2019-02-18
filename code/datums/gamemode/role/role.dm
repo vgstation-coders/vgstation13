@@ -53,6 +53,9 @@
 	// Various flags and things.
 	var/flags = 0
 
+	// For regenerating threat if destroyed
+	var/refund_value = 0
+
 	// Jobs that cannot be this antag.
 	var/list/restricted_jobs = list()
 
@@ -212,6 +215,9 @@
 	if(special_role)
 		antag.special_role=special_role
 	if(disallow_job)
+		var/datum/job/job = job_master.GetJob(antag.assigned_role)
+		if(job)
+			job.current_positions--
 		antag.assigned_role="MODE"
 	return 1
 
@@ -474,6 +480,13 @@
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)
 	return
 
+//Actions to be taken when antag.current is completely destroyed
+/datum/role/proc/RoleMobDestroyed()
+	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
+		var/datum/gamemode/dynamic/D = ticker.mode
+		D.refund_threat(refund_value)
+		D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 
@@ -619,8 +632,10 @@
 	name = WIZARD
 	id = WIZARD
 	special_role = WIZARD
+	required_pref = ROLE_WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
+	refund_value = BASE_SOLO_REFUND * 2
 
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
@@ -745,6 +760,7 @@
 /datum/role/malfAI
 	name = MALF
 	id = MALF
+	required_pref = ROLE_MALF
 	required_jobs = list("AI")
 	logo_state = "malf-logo"
 

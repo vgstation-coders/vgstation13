@@ -92,7 +92,7 @@
 "bN" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/airless{icon_state = "asteroidfloor"},/area/awaymission/leviathan/mining)
 "bO" = (/obj/structure/table,/turf/simulated/floor/plating/airless,/area/awaymission/leviathan/mining)
 "bP" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/floor/plating/airless,/area/awaymission/leviathan/mining)
-"bQ" = (/obj/item/weapon/cigbutt,/obj/machinery/light_construct{dir = 4},/turf/simulated/floor/plating/airless,/area/awaymission/leviathan/mining)
+"bQ" = (/obj/item/trash/cigbutt,/obj/machinery/light_construct{dir = 4},/turf/simulated/floor/plating/airless,/area/awaymission/leviathan/mining)
 "bR" = (/obj/structure/ore_box,/turf/simulated/floor/plating/airless{icon_state = "platingdmg1"},/area/awaymission/leviathan/mining)
 "bS" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/airless{icon_state = "floorgrime"},/area/awaymission/leviathan/mining)
 "bT" = (/turf/simulated/floor/airless{icon_state = "floorgrime"},/area/awaymission/leviathan/mining)
