@@ -148,16 +148,20 @@
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
-	icon_state = "cultblade"
-	item_state = "cultblade"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "enchanted"
+	item_state = "enchanted"
+	w_class = W_CLASS_GIANT//don't want it stored anywhere"
 
 /obj/item/weapon/katana/magic/dropped(mob/user)
 	..()
 	qdel(src)
 
-/obj/item/weapon/katana/magic/equipped(mob/living/carbon/human/H, slot)
-	if(slot)
-		qdel(src)
+/obj/item/weapon/katana/magic/Destroy()
+	var/turf/T = get_turf(src)
+	if (T)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "empdisable")
+	..()
 
 /obj/item/weapon/harpoon
 	name = "harpoon"
