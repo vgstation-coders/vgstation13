@@ -138,13 +138,14 @@
 	max_count = 10
 
 /datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
-	if(mob.reagents.get_reagent_amount(HYRONALIN) < REAGENTS_OVERDOSE / 2)
+	var/datum/reagent/hyronalin/hyro
+	if(mob.reagents.get_reagent_amount(HYRONALIN) < hyro.overdose_am / 2)
 		mob.reagents.add_reagent(HYRONALIN, 1)
 		to_chat(mob, "<span class = 'notice'>Your body feels more resistant to radiation.</span>")
 
 
 /datum/disease2/effect/soreness
-	name = "Soreness"
+	name = "Myalgia Syndrome"
 	stage = 1
 	chance = 5
 	max_chance = 60

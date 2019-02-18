@@ -391,7 +391,7 @@
 
 /datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
 	if(!triggered)
-		to_chat(mob, "<span class='warning'>You feel smarter.</span>")
+		to_chat(mob, "<span class='notice'>You feel like what you have to say is more important.</span>")
 		affect_voice_active = 1
 		triggered = 1
 
