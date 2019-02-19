@@ -211,7 +211,6 @@ var/list/threat_by_job = list(
 			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
 			return pick_delay(starting_rule)
 
-		threat = max(0,threat-starting_rule.cost)
 		spend_threat(starting_rule.cost)
 		threat_log += "[worldtime2text()]: [starting_rule.name] spent [starting_rule.cost]"
 		if (starting_rule.execute())//this should never fail since ready() returned 1
