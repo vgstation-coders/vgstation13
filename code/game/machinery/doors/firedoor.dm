@@ -265,7 +265,7 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob, var/no_reruns = FALSE)
+/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
@@ -356,7 +356,7 @@ var/global/list/alert_overlays_global = list()
 		if(!users_to_open)
 			users_to_open = list()
 		users_to_open += users_name
-		if (twin && !no_reruns)
+		if (twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
 			twin.attackby(C, user, TRUE)
 	var/needs_to_close = 0
 	if(density)
