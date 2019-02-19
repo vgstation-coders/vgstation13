@@ -415,6 +415,8 @@
 						bloodsickness++
 						if(bloodsickness > 50 && prob(30))//better start drinking some charcoal
 							M.adjustToxLoss(2)
+							if (prob (20))
+								to_chat(M, pick("<span class='warning'>You feel sick...your stomach hurts...</span>"))
 
 /datum/reagent/blood/on_merge(var/data)
 	if(data["blood_colour"])
