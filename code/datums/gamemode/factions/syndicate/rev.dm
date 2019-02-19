@@ -32,12 +32,14 @@
 	. = ..()
 	var/datum/role/revolutionary/rev = M.GetRole(REV)
 	var/datum/gamemode/dynamic/D = ticker.mode
-	if(locate(/datum/dynamic_ruleset/roundstart/revs) in D.executed_rules)
+	if(locate(/datum/dynamic_ruleset/roundstart/delayed/revs) in D.executed_rules)
 		rev.Greet(GREET_CONVERTED)
 	else if(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in D.executed_rules)
 		rev.Greet(GREET_REVSQUAD_CONVERTED)
-	else if(locate(/datum/dynamic_ruleset/roundstart/revs) in D.executed_rules)
+	else if(locate(/datum/dynamic_ruleset/latejoin/provocateur) in D.executed_rules)
 		rev.Greet(GREET_PROVOC_CONVERTED)
+	else
+		rev.Greet(GREET_DEFAULT)
 	update_faction_icons()
 
 /datum/faction/revolution/forgeObjectives()
@@ -49,9 +51,9 @@
 
 /datum/faction/revolution/OnPostSetup()
 	..()
-	var/datum/gamemode/dynamic/D = ticker.mode
+	/*var/datum/gamemode/dynamic/D = ticker.mode
 	if(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in D.executed_rules)
-		//Setup the revheads for revsquad!
+		//Move the revheads! In the future this could be used to make the revsquad arrive via shuttle.
 		var/list/turf/revsq_spawn = list()
 
 		for(var/obj/effect/landmark/A in landmarks_list)
@@ -66,14 +68,14 @@
 		for(var/datum/role/revolutionary/leader/L in members)
 			if(spawnpos > revsq_spawn.len)
 				spawnpos = 1
-			var/mob/living/carbon/human/RS = L.antag.current
-			RS.forceMove(revsq_spawn[spawnpos])
+			if(revsq_spawn[spawnpos])
+				RS.forceMove(revsq_spawn[spawnpos])
+			spawnpos++*/
 
-			equip_revsquad(RS)
-			RS.fully_replace_character_name(null,random_name(RS.gender))
-			spawnpos++
-
-		update_faction_icons()
+	update_faction_icons()
+	if(!objective_holder.objectives.len)
+		forgeObjectives()
+		AnnounceObjectives()
 
 /datum/faction/revs/AdminPanelEntry()
 	var/list/dat = ..()
@@ -95,6 +97,12 @@
 #define SHUTTLE_LEFT 3
 
 /datum/faction/revolution/check_win()
+	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
+	if(gameactivetime < 5 MINUTES)
+		if(!(gameactivetime % 60))
+			message_admins("The revolution faction exists. [round(((5 MINUTES) - gameactivetime)/60)] minutes until win conditions begin checking.")
+		return //Don't bother checking for win before 5min
+
 	// -- 1. Did the shuttle leave ?
 	if (win_shuttle)
 		return end(SHUTTLE_LEFT)

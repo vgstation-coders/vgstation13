@@ -21,10 +21,12 @@
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
-		if (GREET_ROUNDSTART, GREET_DEFAULT)
+		if (GREET_ROUNDSTART)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are a member of the revolutionaries' leadership!</FONT><BR>Flash un-implanted crew to bring them to your side and accomplish your objectives!</span>"})
+		if (GREET_DEFAULT)
+			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are now a revolutionary!</FONT><BR>Help your fellow workers throw off the shackles of oppression! Viva!</span>"})
 		if (GREET_MIDROUND)
-			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are part of the elite revolutionary squad!</FONT><BR>Each squad flash is only good for one conversion. Choose your allies wisely!</span>"})
+			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are part of the elite revolutionary squad!</FONT><BR>Each squad flash is only good for one conversion. Choose your allies wisely! Don't forget, your flash and headset are specially protected from EMPs.</span>"})
 		if (GREET_LATEJOIN)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are the revolutionary provocateur!</FONT><BR>You are the only member of the revolution who can convert crewmen. Flash un-implanted crew to bring them to your side and accomplish your objectives!</span>"})
 		if (GREET_CONVERTED)
@@ -58,22 +60,28 @@
 	if(!.)
 		return
 	var/mob/living/carbon/human/mob = antag.current
-	var/obj/item/device/flash/rev/T = new(mob)
-	if(istype(mob))
-		var/list/slots = list (
-			"backpack" = slot_in_backpack,
-			"left pocket" = slot_l_store,
-			"right pocket" = slot_r_store,
-		)
-		var/where = mob.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 1)
+	var/datum/gamemode/dynamic/D = ticker.mode
 
-		if (!where)
-			to_chat(mob, "\The [faction.name] were unfortunately unable to get you \a [T].")
-		else
-			to_chat(mob, "\The [T] in your [where] will help you to persuade the crew to join your cause.")
+	if(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in D.executed_rules)
+		equip_revsquad(mob)
+		mob.fully_replace_character_name("Cargonian",random_name(mob.gender)) //This will change the ID name, it MUST be Cargonian!
 	else
-		T.forceMove(get_turf(mob))
-		to_chat(mob, "\The [faction.name] were able to get you \a [T], but could not find anywhere to slip it onto you, so it is now on the floor.")
+		var/obj/item/device/flash/rev/T = new(mob)
+		if(istype(mob))
+			var/list/slots = list (
+				"backpack" = slot_in_backpack,
+				"left pocket" = slot_l_store,
+				"right pocket" = slot_r_store,
+			)
+			var/where = mob.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 1)
+
+			if (!where)
+				to_chat(mob, "\The [faction.name] were unfortunately unable to get you \a [T].")
+			else
+				to_chat(mob, "\The [T] in your [where] will help you to persuade the crew to join your cause.")
+		else
+			T.forceMove(get_turf(mob))
+			to_chat(mob, "\The [faction.name] were able to get you \a [T], but could not find anywhere to slip it onto you, so it is now on the floor.")
 
 /datum/role/revolutionary/Drop(var/borged = FALSE)
 	if (!antag)
@@ -87,7 +95,7 @@
 	update_faction_icons()
 	return ..()
 
-var/list/revsquad_guns = list(/obj/item/weapon/gun/projectile/automatic/uzi/micro, ///obj/item/ammo_storage/magazine/uzi45
+var/list/revsquad_guns = list(/obj/item/weapon/gun/projectile/automatic/uzi, ///obj/item/ammo_storage/magazine/uzi45
 									/obj/item/weapon/gun/projectile/pistol, ///obj/item/ammo_storage/magazine/mc9mm
 									/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff, ///obj/item/ammo_storage/speedloader/shotgun
 									/obj/item/weapon/gun/projectile/automatic/xcom, ///obj/item/ammo_casing/a12mm/assault
@@ -125,8 +133,18 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	w_class = W_CLASS_SMALL
 	var/active = FALSE
 
+/obj/item/device/pulsar/Destroy()
+	if(active)
+		processing_objects -= src
+	..()
+
 /obj/item/device/pulsar/attack_self(mob/user)
+	if(active)
+		processing_objects -= src
+	else
+		processing_objects += src
 	active = !active
+	to_chat(user,"<span class='notice'>You toggle \the [src] [active ? "on" : "off"].")
 
 /obj/item/device/pulsar/process()
 	if(active)
@@ -138,20 +156,28 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	can_only_hold = list("/obj/item/weapon/grenade/iedcasing")
 
 /obj/item/clothing/accessory/storage/bandolier/chaos/New()
+	..()
 	for(var/i = 1 to storage_slots)
 		new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
 
+/obj/item/weapon/storage/bag/ammo_pouch/rev
+	desc = "Designed to hold stray magazines and spare bullets. This one has been enlarged significantly."
+	storage_slots = 8
+
 /obj/item/weapon/storage/bag/ammo_pouch/rev/New()
 	..()
-	var/obj/item/weapon/storage/S = locate(/obj/item/weapon/storage/backpack/messenger/black) in get_turf(src)
+	var/mob/living/carbon/human/H = locate(/mob/living/carbon/human) in get_turf(src)
+	var/obj/item/weapon/storage/S = H.back
+	if(!S)
+		return
 	for(var/obj/item/weapon/gun/projectile/P in S.contents)
 		if(P.mag_type)
 			var/path = text2path(P.mag_type)
 			new path(src)
 			new path(src)
 		else if(istype(P,/obj/item/weapon/gun/projectile/shotgun))
-			new /obj/item/ammo_storage/speedloader/shotgun(src)
-			new /obj/item/ammo_storage/speedloader/shotgun(src)
+			new /obj/item/ammo_storage/speedloader/shotgun/loaded(src)
+			new /obj/item/ammo_storage/speedloader/shotgun/loaded(src)
 		else if(istype(P,/obj/item/weapon/gun/projectile/colt))
 			new /obj/item/ammo_storage/speedloader/a357(src)
 			new /obj/item/ammo_storage/speedloader/a357(src)
@@ -177,8 +203,6 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 //equip
 
 /proc/equip_revsquad(mob/living/carbon/human/rev_mob)
-	var/radio_freq = REV_FREQ
-
 	if(rev_mob.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 		to_chat(rev_mob, "<span class='notice'>Your intensive physical training to become a Squad member has paid off and made you fit again!</span>")
 		rev_mob.overeatduration = 0 //Fat-B-Gone
@@ -191,7 +215,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 		rev_mob.update_inv_wear_suit()
 
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/revsquad(rev_mob)
-	R.set_frequency(radio_freq)
+	//R.set_frequency(REV_FREQ)
 	rev_mob.equip_to_slot_or_del(R, slot_ears)
 
 	rev_mob.equip_to_slot_or_del(new /obj/item/clothing/under/rank/cargotech(rev_mob), slot_w_uniform)
@@ -220,7 +244,9 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	else
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/head/soft(rev_mob), slot_head) //cargo cap
 
-	rev_mob.equip_to_slot_or_del(new /obj/item/weapon/card/id/supply(rev_mob), slot_wear_id)
+	var/obj/item/weapon/card/id/supply/ID = new(rev_mob)
+	ID.assignment = "Cargo Technician"
+	rev_mob.equip_to_slot_or_del(ID, slot_wear_id)
 
 	var/obj/item/weapon/storage/backpack/satchel/BP = new(rev_mob.loc)
 	rev_mob.equip_to_slot_or_del(BP, slot_back)
@@ -229,8 +255,9 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	for(var/i = 1 to rand(2,4))
 		var/tospawn = pick(revsquad_guns)
 		new tospawn(BP)
+	var/list/possible_gear = revsquad_gear.Copy()
 	while(BP.contents.len < BP.storage_slots)
-		var/tospawn = pick_n_take(revsquad_gear)
+		var/tospawn = pick_n_take(possible_gear)
 		if(istype(tospawn,/obj/item/weapon/reagent_containers/spray/rev)&&BP.storage_slots-BP.contents.len==1)
 			continue //don't spawn the lube bottle as our last item because it needs an extra slot for the antilube
 		new tospawn(BP)

@@ -40,8 +40,10 @@
 /obj/item/device/radio/headset/revsquad/New()
 	..()
 	keyslot2 = new /obj/item/device/encryptionkey/rev
-	set_frequency(REV_FREQ)
 	syndie = 1 //prevents broadcast without key
+
+/obj/item/device/radio/headset/revsquad/emp_act()
+	return
 
 /obj/item/device/radio/headset/syndicate/commando/New()
 	..()

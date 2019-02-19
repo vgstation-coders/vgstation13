@@ -366,26 +366,31 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad
 	name = "Revolutionary Squad"
-	role_category = /datum/role/revolutionary
-	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	role_category = /datum/role/revolutionary/leader
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 3
 	weight = 5
-	cost = 35
-	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	cost = 45
+	requirements = list(101,101,90,60,45,45,45,45,45,45)
 	my_fac = /datum/faction/revolution
 	logo = "rev-logo"
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/acceptable(var/population=0,var/threat=0)
-	if (find_active_faction_by_type(/datum/faction/revolution))
-		return FALSE //Never send 2 rev types
-	return ..()
+	var/required_heads = 3
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
+	if (find_active_faction_by_type(/datum/faction/revolution))
+		return FALSE //Never send 2 rev types
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return FALSE
-	return ..()
+	if(!..())
+		return FALSE
+	var/head_check = 0
+	for (var/mob/player in mode.living_players)
+		if(!player.mind)
+			continue
+		if(player.mind.assigned_role in command_positions)
+			head_check++
+	return (head_check >= required_heads)
 
 
 //////////////////////////////////////////////
