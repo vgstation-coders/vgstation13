@@ -356,6 +356,7 @@
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
+	var/bloodsickness = 0
 
 	data = list(
 		"donor"= null,
@@ -370,11 +371,9 @@
 		)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
-
 	var/datum/reagent/blood/self = src
 	if(..())
 		return 1
-
 	if(self.data && self.data["viruses"])
 		for(var/datum/disease/D in self.data["viruses"])
 			//var/datum/disease/virus = new D.type(0, D, 1)
@@ -395,18 +394,27 @@
 		if(self.data && self.data["antibodies"]) //And curing
 			C.antibodies |= self.data["antibodies"]
 
-		if(ishuman(C) && (method == TOUCH))
-			var/mob/living/carbon/human/H = C
-			H.bloody_body(self.data["donor"])
-			if(self.data["donor"])
-				H.bloody_hands(self.data["donor"])
-			spawn() //Bloody feet, result of the blood that fell on the floor
-				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
-				if(B)
-					B.Crossed(H)
+		if(ishuman(C))
+			switch (method)
+				if(TOUCH)//getting splashed with blood are we?
+					var/mob/living/carbon/human/H = C
+					H.bloody_body(self.data["donor"])
+					if(self.data["donor"])
+						H.bloody_hands(self.data["donor"])
+					spawn() //Bloody feet, result of the blood that fell on the floor
+						var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
-			H.update_icons()
+						if(B)
+							B.Crossed(H)
+
+					H.update_icons()
+
+				else//oh shit nigga you can't just drink blood! Unless you're a vampire at least.
+					if (!isvampire(M))
+						bloodsickness++
+						if(bloodsickness > 50 && prob(30))//better start drinking some charcoal
+							M.adjustToxLoss(2)
 
 /datum/reagent/blood/on_merge(var/data)
 	if(data["blood_colour"])

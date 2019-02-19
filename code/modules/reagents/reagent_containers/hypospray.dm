@@ -71,7 +71,7 @@
 			else
 				M.LAssailant = user
 
-			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
+			var/trans = reagents.trans_to(M, amount_per_transfer_from_this,intravenous=TRUE)
 			to_chat(user, "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in [src].</span>")
 
 	return

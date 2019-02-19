@@ -644,6 +644,7 @@ var/list/special_fruits = list()
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "bloodtomato"
+	intravenous = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato
 	name = "blue-tomato"

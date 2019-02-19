@@ -110,7 +110,8 @@ var/const/INGEST = 2
  * log_transfer: If true, will log the transfer of these reagents to the chemistry investigation file. If the reagents transferred contain a logged reagent, it will also alert admins.
  * whodunnit: If available, the mob that directly caused this transfer. Used for logging.
  */
-/datum/reagents/proc/trans_to(var/target, var/amount=1, var/multiplier=1, var/preserve_data=1, var/log_transfer = FALSE, var/mob/whodunnit)
+/datum/reagents/proc/trans_to(var/target, var/amount=1, var/multiplier=1, var/preserve_data=1, var/log_transfer = FALSE, var/mob/whodunnit, var/intravenous = FALSE)
+																																//intravenous = TRUE to enable blood always to vessels
 	if (!target)
 		return
 
@@ -138,7 +139,7 @@ var/const/INGEST = 2
 	for (var/datum/reagent/current_reagent in src.reagent_list)
 		if (!current_reagent)
 			continue
-		if (current_reagent.id == BLOOD && iscarbon(target))
+		if (current_reagent.id == BLOOD && intravenous && iscarbon(target))
 			var/mob/living/carbon/C = target
 			C.inject_blood(my_atom, amount)
 			continue

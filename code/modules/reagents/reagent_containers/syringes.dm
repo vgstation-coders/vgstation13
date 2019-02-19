@@ -219,7 +219,7 @@
 	// The assumption is that on_syringe_injection did it
 	if(injection_result != INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER)
 		var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
-		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
+		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user,intravenous = TRUE)
 		to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
 
 	if(is_empty())
@@ -277,7 +277,7 @@
 	// Break the syringe and transfer some of the reagents to the target
 	src.reagents.reaction(target, INGEST)
 	var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5)), 0) //nerfed by popular demand.
-	src.reagents.trans_to(target, syringestab_amount_transferred)
+	src.reagents.trans_to(target, syringestab_amount_transferred,intravenous = TRUE)
 	src.desc += " It is broken."
 	src.mode = SYRINGE_BROKEN
 	src.add_blood(target)

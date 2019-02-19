@@ -75,7 +75,7 @@
 		return
 	if (!src.is_empty())
 		reagents.reaction(M, INGEST)
-		reagents.trans_to(M, reagents.total_volume)
+		reagents.trans_to(M, reagents.total_volume,intravenous = TRUE)//it really shouldn't be intravenous but oh well. Set to FALSE once people get over it.
 	qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +279,7 @@
 	spawn(timer*30)
 		reagents.del_reagent(SUGAR)
 		reagents.reaction(M, INGEST)
-		reagents.trans_to(M, reagents.total_volume)
+		reagents.trans_to(M, reagents.total_volume,intravenous = TRUE)//it really shouldn't be intravenous but oh well. Set to FALSE once people get over it.
 		qdel(src)
 
 /obj/item/weapon/storage/pill_bottle/random

@@ -19,6 +19,20 @@
 	reagents.add_reagent(BLOOD, 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list()))
 	update_icon()
 
+
+/obj/item/weapon/reagent_containers/blood/attack_self(var/mob/user)
+	if(!src.reagents.total_volume || !src)
+		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
+		return 0
+	if (blood_type > 0 || mode == BLOODPACK_CUT)
+		imbibe(user)
+	else if(isvampire(user))
+		to_chat(user, "<span class='notice'>There's some delicious blood in there. Maybe with something pointy or sharp you could pierce it open....<span>")
+	else
+		to_chat(user, "<span class='warning'>Hang on an IV dripper first to use.<span>")
+	return 0
+
+
 /obj/item/weapon/reagent_containers/blood/on_reagent_change()
 	update_icon()
 
@@ -46,7 +60,7 @@
 /obj/item/weapon/reagent_containers/blood/update_icon()
 	if (mode == BLOODPACK_CUT)
 		name = "cut bloodpack"
-		icon_state = "[icon_state]_cut"
+		icon_state = "bloodpack_cut"
 		desc = "You can see several cuts in it. It's no longer usable."
 		overlays.len = 0
 		return

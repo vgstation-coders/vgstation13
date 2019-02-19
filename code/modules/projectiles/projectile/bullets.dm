@@ -870,8 +870,9 @@
 	..()
 	if(source_syringe)
 		create_reagents(source_syringe.reagents.total_volume)
-		source_syringe.reagents.trans_to(src, source_syringe.reagents.total_volume)
+		source_syringe.reagents.trans_to(src, source_syringe.reagents.total_volume,intravenous=TRUE)
 		name = source_syringe.name
+
 	else
 		create_reagents(capacity)
 

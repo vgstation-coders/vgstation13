@@ -78,7 +78,7 @@
 	reagents.reaction(M, INGEST)
 
 	if(M.reagents)
-		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this)
+		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this,intravenous=TRUE)
 		to_chat(user, "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>")
 		add_logs(user, M, "injected [transferred]u [reagent_ids[mode]] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 

@@ -72,7 +72,7 @@
 				to_chat(user, "<span class='notice'>Thankfully, nothing happens.</span>")
 				return
 			syringes -= S
-			S.reagents.trans_to(user, S.reagents.total_volume)
+			S.reagents.trans_to(user, S.reagents.total_volume,intravenous=TRUE)
 			qdel(S)
 			return
 	..()
