@@ -37,7 +37,8 @@
 
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
-	virus2 = new /datum/disease2/disease
+	var/virus_choice = pick(typesof(/datum/disease2/disease))
+	virus2 = new virus_choice
 	virus2.makerandom()
 	growth = rand(5, 50)
 
@@ -81,3 +82,8 @@
 /obj/item/weapon/diseasedisk/premade/New()
 	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
+
+/obj/item/weapon/diseasedisk/zombie
+	name = "Stubborn Brain Syndrome (Stage 4)"
+	effect = new /datum/disease2/effect/zombie
+	stage = 4

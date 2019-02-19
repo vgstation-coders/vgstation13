@@ -46,6 +46,8 @@ var/global/disable_vents     = 0
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
+#define DEFAULT_LOBBY_TIME 5 MINUTES
+
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
 #define WARNING_HIGH_PRESSURE 325 	//This determins when the orange pressure icon is displayed (it is 0.7 * HAZARD_HIGH_PRESSURE)
@@ -785,6 +787,7 @@ SEE_PIXELS	256
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
 #define MAT_MYTHRIL		"$mythril"
+#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -873,6 +876,7 @@ SEE_PIXELS	256
 #define ROLE_WIZARD     	"wizard"
 #define ROLE_GRINCH			"Grinch"
 #define ROLE_WEEABOO		"crazed weeaboo"
+#define ROLE_MINOR			"minor roles"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -1179,6 +1183,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_FOUR	7
 #define STAGE_FIVE	9
 #define STAGE_SUPER	11
+#define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
@@ -1524,9 +1529,16 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
 #define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
 #define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
+#define HOLOMAP_MARKER_CULT_FORGE		"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
 
 #define DEFAULT_BLOOD "#A10808"
+#define DEFAULT_FLESH "#FFC896"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1537,6 +1549,13 @@ var/proccalls = 1
 #define ITEM_ANIMATION 1
 #define PERSON_ANIMATION 2
 
+//For client preferences.
+#define CREDITS_NEVER "Never"
+#define CREDITS_ALWAYS "Always"
+#define CREDITS_NO_RERUNS "No Reruns"
+#define JINGLE_NEVER "Never"
+#define JINGLE_CLASSIC "Classics"
+#define JINGLE_ALL "All"
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 

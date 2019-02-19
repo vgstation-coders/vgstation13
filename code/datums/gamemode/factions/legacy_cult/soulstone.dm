@@ -243,6 +243,7 @@
 		return
 
 	var/mob/living/carbon/human/body = null
+	var/datum/mind/mind = null
 
 	if(istype(target,/mob/living/carbon/human))
 		body = target
@@ -252,6 +253,8 @@
 	var/true_name = "Unknown"
 
 	if(body)
+		if(body.mind)
+			mind = body.mind
 		true_name = body.real_name
 
 		for(var/obj/item/W in body)
@@ -275,20 +278,20 @@
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
 		if(body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
-			target.invisibility = 101
 			new /obj/item/weapon/skull(get_turf(target))
-	else
-		target.invisibility = 101
 
-		if(ismob(target))
-			var/mob/M = target
-			true_name = M.real_name
-			new /obj/effect/decal/cleanable/ash(get_turf(target))
-		else if(istype(target,/obj/item/organ/external/head))
-			var/obj/item/organ/external/head/H = target
-			var/mob/living/carbon/brain/BM = H.brainmob
-			true_name = BM.real_name
-			new /obj/item/weapon/skull(get_turf(target))
+	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet
+
+	if(ismob(target))
+		var/mob/M = target
+		true_name = M.real_name
+		new /obj/effect/decal/cleanable/ash(get_turf(target))
+	else if(istype(target,/obj/item/organ/external/head))
+		var/obj/item/organ/external/head/H = target
+		var/mob/living/carbon/brain/BM = H.brainmob
+		mind = BM.mind
+		true_name = BM.real_name
+		new /obj/item/weapon/skull(get_turf(target))
 
 	//Scary sound
 	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
@@ -313,7 +316,7 @@
 	shadeMob.canmove = 0//Can't move out of the soul stone
 	shadeMob.name = "[true_name] the Shade"
 	shadeMob.real_name = "[true_name]"
-	body.mind.transfer_to(shadeMob)
+	mind.transfer_to(shadeMob)
 	shadeMob.cancel_camera()
 
 	//Changing the soulstone's icon and description

@@ -44,9 +44,9 @@
 #define SYNDIESQUADIE "syndicate commando"
 #define RESPONDER "emergency responder"
 #define MALF "malfunctioning AI"
+#define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
-#define HIGHLANDER "highlander"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
@@ -54,6 +54,7 @@
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
+#define CATBEAST "loose catbeast"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -175,3 +176,10 @@
 
 #define PROB_PROTECTED_REGULAR 50
 #define PROB_PROTECTED_RARE    80
+
+#define FACTION_FAILURE -1
+
+// -- The paper
+
+#define INTERCEPT_TIME_LOW 60 SECONDS
+#define INTERCEPT_TIME_HIGH 180 SECONDS

@@ -75,7 +75,7 @@
 				"<span class='userdanger'>They're eating your back!</span>")
 			return
 		if(ishuman(M))
-			if(M.CheckSlip() < 1)
+			if(M.CheckSlip() != TRUE)
 				return
 			else
 				M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\

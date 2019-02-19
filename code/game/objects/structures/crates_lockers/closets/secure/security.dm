@@ -12,7 +12,9 @@
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/captain,
-			/obj/item/weapon/storage/backpack/satchel_cap),
+			/obj/item/weapon/storage/backpack/satchel_cap,
+			/obj/item/weapon/storage/backpack/messenger/com,
+			),
 		/obj/item/clothing/suit/captunic,
 		/obj/item/clothing/suit/storage/capjacket,
 		/obj/item/clothing/head/helmet/cap,
@@ -98,6 +100,7 @@
 		pick(
 			/obj/item/weapon/storage/backpack/security,
 			/obj/item/weapon/storage/backpack/satchel_sec,
+			/obj/item/weapon/storage/backpack/messenger/sec,
 		),
 		/obj/item/clothing/head/helmet/tactical/HoS,
 		/obj/item/device/flashlight/tactical,
@@ -146,7 +149,9 @@
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/security,
-			/obj/item/weapon/storage/backpack/satchel_sec),
+			/obj/item/weapon/storage/backpack/satchel_sec,
+			/obj/item/weapon/storage/backpack/messenger/sec,
+			),
 		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
@@ -184,7 +189,9 @@
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/security,
-			/obj/item/weapon/storage/backpack/satchel_sec),
+			/obj/item/weapon/storage/backpack/satchel_sec,
+			/obj/item/weapon/storage/backpack/messenger/sec,
+			),
 		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/clothing/head/helmet/tactical/sec/preattached,
 		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
@@ -251,12 +258,16 @@
 /obj/structure/closet/secure_closet/detective/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/under/det,
+		/obj/item/clothing/under/det/noir,
 		/obj/item/clothing/suit/storage/det_suit,
+		/obj/item/clothing/suit/storage/det_suit/noir,
 		/obj/item/clothing/suit/storage/forensics/blue,
 		/obj/item/clothing/suit/storage/forensics/red,
 		/obj/item/clothing/gloves/black,
 		/obj/item/clothing/head/det_hat,
+		/obj/item/clothing/head/det_hat/noir,
 		/obj/item/clothing/shoes/brown,
+		/obj/item/clothing/shoes/laceup,
 		/obj/item/weapon/storage/box/evidence,
 		/obj/item/device/radio/headset/headset_sec,
 		/obj/item/device/detective_scanner,

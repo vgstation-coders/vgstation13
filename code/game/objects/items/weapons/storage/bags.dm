@@ -35,6 +35,7 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
+	max_combined_w_class = 21
 	can_only_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
 	slot_flags = SLOT_BELT | SLOT_OCLOTHING
@@ -43,11 +44,16 @@
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
 		icon_state = "trashbag0"
+		slowdown = 1
 	else if(contents.len < 12)
 		icon_state = "trashbag1"
+		slowdown = 1.4
 	else if(contents.len < 21)
 		icon_state = "trashbag2"
-	else icon_state = "trashbag3"
+		slowdown = 1.6
+	else
+		icon_state = "trashbag3"
+		slowdown = 1.8
 
 
 // -----------------------------
@@ -97,7 +103,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	storage_slots = 50
 	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
-	can_only_hold = list("/obj/item/weapon/ore")
+	can_only_hold = list("/obj/item/stack/ore")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/ore/auto
@@ -134,7 +140,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect()
 	var/atom/collect_loc = get_turf(loc)
-	for(var/obj/item/weapon/ore/ore in collect_loc.contents)
+	for(var/obj/item/stack/ore/ore in collect_loc.contents)
 		preattack(collect_loc, src, TRUE)
 		break
 
@@ -143,10 +149,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	if(istype(holder.pulling, /obj/structure/ore_box))
 		box = holder.pulling
 	if(box)
-		for(var/obj/item/weapon/ore/ore in contents)
+		for(var/obj/item/stack/ore/ore in contents)
 			if(ore.material)
 				remove_from_storage(ore)
-				box.materials.addAmount(ore.material, 1)
+				box.materials.addAmount(ore.material, ore.amount)
 				qdel(ore)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
@@ -462,7 +468,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	fits_max_w_class = 300 //There is no way this could go wrong, right?
 	max_combined_w_class = 300
 	display_contents_with_number = TRUE //With lods of emone, you're gonna need some compression
-	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/weapon/ore", "/obj/item/weapon/spacecash")
+	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/stack/ore", "/obj/item/weapon/spacecash")
 	cant_hold = list()
 
 /obj/item/weapon/storage/bag/money/treasure
@@ -507,7 +513,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/lesser_bundle/New()
 	..()
-	for(var/i=1 to 10)
+	for(var/i=1 to 12)
 		new /obj/item/potion/random(src)
 
 /obj/item/weapon/storage/bag/potion/predicted_potion_bundle
@@ -526,7 +532,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
 	..()
-	for(var/i = 1 to 8)
+	for(var/i = 1 to 10)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 

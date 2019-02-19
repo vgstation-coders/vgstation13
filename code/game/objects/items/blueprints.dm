@@ -465,7 +465,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 */
 
 /obj/item/shuttle_license
-	name = "shuttle verificiation license"
+	name = "shuttle verification license"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	desc = "Required for turning a dull room with some engines in the back into something that can move through space!"
@@ -486,7 +486,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	var/area_size = A.area_turfs.len
 	var/active_engines = 0
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in A)
-		if(D.heater && anchored)
+		if(D.heater && D.anchored)
 			active_engines++
 
 	if(active_engines < 2 || area_size/active_engines > 12.5) //2 engines per 25 tiles, with a minimum of 2 engines.
@@ -496,7 +496,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	var/turf/check_turf = get_step(user, user.dir)
 
-	if(!istype(check_turf, /turf/space))
+	if(get_area(check_turf) == A)
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Unable to create docking port at current user location.</span>")
 		return
 
@@ -508,7 +508,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		to_chat(user, "Shuttlifying cancelled.")
 		return
 
-	var/obj/docking_port/shuttle/DP = new /obj/docking_port/shuttle(A.loc)
+	var/obj/docking_port/shuttle/DP = new /obj/docking_port/shuttle(get_turf(src))
 	DP.dir = user.dir
 
 

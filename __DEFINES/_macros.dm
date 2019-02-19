@@ -58,6 +58,8 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
+
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
@@ -85,6 +87,8 @@
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
+
+#define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
@@ -214,16 +218,22 @@
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
+#define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
+
+#define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
+
 //Macros for roles/antags
+#define isfaction(A) (istype(A, /datum/faction))
+
 #define isrole(type, H) (H.mind && H.mind.GetRole(type))
 
-#define isfaction(A) (istype(A, /datum/faction))
+#define isanyantag(H) (H.mind && H.mind.antag_roles.len)
+
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
 #define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
-
-#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
@@ -241,6 +251,8 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
+#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
@@ -256,6 +268,12 @@
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
 #define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define issurvivor(H) (H.mind && H.mind.GetRole(SURVIVOR))
+
+#define iscrusader(H) (H.mind && H.mind.GetRole(CRUSADER))
+
+#define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
 
 #define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
 

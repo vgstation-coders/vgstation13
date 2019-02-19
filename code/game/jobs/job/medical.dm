@@ -21,31 +21,35 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/cmo
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/heads/cmo(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-		//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
-		H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
-		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-		H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		return 1
+/datum/job/cmo/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/heads/cmo(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
+	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
+	H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+	H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	return 1
+
+/datum/job/cmo/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,58 +70,61 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
-		if (H.mind.role_alt_title)
-			switch(H.mind.role_alt_title)
-				if("Emergency Physician")
-					H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
-					H.equip_or_collect(new /obj/item/clothing/suit/storage/fr_jacket(H), slot_wear_suit)
-				if("Surgeon")
-					H.equip_or_collect(new /obj/item/clothing/under/rank/medical/blue(H), slot_w_uniform)
-					H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
-					H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
-				if("Medical Doctor")
-					H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
-					H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
+/datum/job/doctor/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
+	if (H.mind.role_alt_title)
+		switch(H.mind.role_alt_title)
+			if("Emergency Physician")
+				H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/fr_jacket(H), slot_wear_suit)
+			if("Surgeon")
+				H.equip_or_collect(new /obj/item/clothing/under/rank/medical/blue(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
+			if("Medical Doctor")
+				H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
 
-				if("Nurse")
-					if(H.gender == FEMALE)
-						if(prob(50))
-							H.equip_or_collect(new /obj/item/clothing/under/rank/nursesuit(H), slot_w_uniform)
-						else
-							H.equip_or_collect(new /obj/item/clothing/under/rank/nurse(H), slot_w_uniform)
-						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
+			if("Nurse")
+				if(H.gender == FEMALE)
+					if(prob(50))
+						H.equip_or_collect(new /obj/item/clothing/under/rank/nursesuit(H), slot_w_uniform)
 					else
-						H.equip_or_collect(new /obj/item/clothing/under/rank/medical/purple(H), slot_w_uniform)
-		else
-			H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
-			H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
-		//H.equip_or_collect(new /obj/item/device/pda/medical(H), slot_belt)
-		H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
-		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-		H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		return 1
+						H.equip_or_collect(new /obj/item/clothing/under/rank/nurse(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
+				else
+					H.equip_or_collect(new /obj/item/clothing/under/rank/medical/purple(H), slot_w_uniform)
+	else
+		H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/medical(H), slot_belt)
+	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
+	H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+	H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	return 1
+
+/datum/job/doctor/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
 
 
-
-//Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro
+//Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro //No, fuck science
 /datum/job/chemist
 	title = "Chemist"
 	flag = CHEMIST
@@ -135,33 +142,37 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/chemist
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_chem(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/chem(H), slot_back)
-		switch(H.mind.role_alt_title)
-			if("Chemist")
-				H.equip_or_collect(new /obj/item/clothing/under/rank/chemist(H), slot_w_uniform)
-			if("Pharmacist")
-				H.equip_or_collect(new /obj/item/clothing/under/rank/pharma(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
-		//H.equip_or_collect(new /obj/item/device/pda/chemist(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/chemist(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/clothing/glasses/science, slot_glasses)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		return 1
+/datum/job/chemist/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_chem(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/chem(H), slot_back)
+	switch(H.mind.role_alt_title)
+		if("Chemist")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/chemist(H), slot_w_uniform)
+		if("Pharmacist")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/pharma(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/chemist(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/chemist(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/glasses/science, slot_glasses)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	return 1
+
+/datum/job/chemist/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/storage/bag/chem(H.back), slot_in_backpack)
 
 /datum/job/geneticist
 	title = "Geneticist"
@@ -179,30 +190,34 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/geneticist
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_gen(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_medsci(H), slot_ears)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/geneticist(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
-		//H.equip_or_collect(new /obj/item/device/pda/geneticist(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/genetics(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-		H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		return 1
+/datum/job/geneticist/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_gen(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_medsci(H), slot_ears)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/geneticist(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/geneticist(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/genetics(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+	H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	return 1
+
+/datum/job/geneticist/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
 
 /datum/job/virologist
 	title = "Virologist"
@@ -220,30 +235,34 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/viro
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_vir, slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/viro(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/virologist(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
-		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/virologist(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-		H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		return 1
+/datum/job/virologist/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_vir, slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/viro(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/virologist(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
+	H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/virologist(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+	H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	return 1
+
+/datum/job/virologist/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/virusdish/random(H.back), slot_in_backpack)
 
 /*
 /datum/job/psychiatrist

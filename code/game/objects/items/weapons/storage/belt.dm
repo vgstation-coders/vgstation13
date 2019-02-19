@@ -210,6 +210,7 @@
 		"/obj/item/taperoll/police",
 		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/gun/energy/stunrevolver",
 		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
@@ -217,7 +218,7 @@
 		"/obj/item/device/gps/secure",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
-		"/obj/item/weapon/depocket_wand"
+		"/obj/item/weapon/depocket_wand",
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
@@ -334,7 +335,7 @@
 	if(amount != contents.len)
 		update_icon()
 
-/obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	update_icon()
 

@@ -89,11 +89,14 @@
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
-		return 1
+	return 1
 
 /obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
 	var/teleportcooldown = 600 //one minute cooldown
 	var/active = FALSE
+
+/obj/item/weapon/katana/hesfast/IsShield()
+	return TRUE
 
 /obj/item/weapon/katana/hesfast/examine(mob/user)
 	..()
@@ -260,6 +263,13 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	icon_state = "tacknife"
 	item_state = "knife"
 	force = 10
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
+	slowdown = 0.999
+
+/obj/item/weapon/kitchen/utensil/knife/tactical/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		slowdown = 0.8
 
 /obj/item/weapon/kitchen/utensil/knife/skinning
 	name = "skinning knife"

@@ -14,6 +14,7 @@
 	weight = 7
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/latejoin/infiltrator/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
@@ -49,6 +50,7 @@
 	weight = 1
 	cost = 50
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/latejoin/raginmages/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -87,10 +89,12 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 1
+	weight = 4
 	cost = 10
-	requirements = list(90,90,80,70,60,50,40,30,20,10)
+	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	logo = "weeaboo-logo"
+
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/latejoin/weeaboo/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len

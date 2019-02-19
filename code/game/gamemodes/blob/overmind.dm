@@ -17,6 +17,7 @@
 	var/blob_points = 0
 	var/max_blob_points = 100
 	var/maxjumprange = 20 //how far you can go in terms of non-blob tiles in a jump attempt
+	var/restrain_blob = TRUE
 
 	var/blob_warning = 0
 
@@ -40,14 +41,22 @@
 	update_specialblobs()
 
 	to_chat(src, "<span class='blob'>You are the overmind!</span>")
-	to_chat(src, "You are the overmind and can control the blob! You can expand, which will attack people, and place special blob types.")
+	//Old Explanation: too wordy to take in fast. This much explanation is better on the wiki.
+	/*to_chat(src, "You are the overmind and can control the blob! You can expand, which will attack people, and place special blob types.")
 	to_chat(src, "The location of your thoughts (eye), nodes, and core can power your buildings and expand the blob much further, use them well!")
 	to_chat(src, "<b>Normal Blobs</b> will expand your reach and can be upgraded into other special blobs that perform certain functions.")
 	to_chat(src, "<b>Shield Blob</b> is a strong and expensive blob which can take more damage. It is fireproof and can block air, use this to protect yourself from station fires. It can also begin to repair itself when powered.")
 	to_chat(src, "<b>Resource Blob</b> is a blob which will collect more resources for you, try to build these earlier to get a strong income. It will benefit from being near your core or multiple nodes, by having an increased resource rate; put it alone and it won't create resources at all.")
 	to_chat(src, "<b>Node Blob</b> is a blob which will grow, like the core. It will not provide income, but will power all the other special nodes and expand your blob by itself.")
 	to_chat(src, "<b>Factory Blob</b> is a blob which will spawn blob spores which will attack nearby food. You must make sure it is powered to operate properly!")
-	to_chat(src, "<b>Shortcuts:</b> CTRL Click = Expand Blob, Middle Mouse Click = Rally Spores, Alt Click = Create Shield, Double Click: Teleport to Blob")
+	to_chat(src, "<b>Shortcuts:</b> CTRL Click = Expand Blob, Middle Mouse Click = Rally Spores, Alt Click = Create Shield, Double Click: Teleport to Blob")*/
+	to_chat(src, "The location of your thoughts (eye), nodes, and core power your spore factories, resources, and passive expansion.")
+	to_chat(src, "<b>CTRL Click:</b> Active expand/attack. Expensive, use sparingly.")
+	to_chat(src, "<b>ALT Click:</b> (On Blob) Upgrade to healthier, fire immune Strong Blob. (On Core) Toggle passive wall smashing - stealthier and leaves cover up!")
+	to_chat(src, "<b>MIDDLE Click:</b> Rally (factory) spores. <b>DOUBLE Click:<B> Move eye (to blob).")
+	to_chat(src, "<b><span class='bad'>Always place factories and resources within 2 tiles of a node or core!</span></b>")
+	if(restrain_blob)
+		to_chat(src, "<b><span class='bad'>You are stealthily restraining your blob from smashing walls! Don't forget to toggle it off when you are ready!</span></b>")
 	update_health()
 
 /mob/camera/blob/Topic(href, href_list)
@@ -138,11 +147,13 @@
 			hud_used.mymob.gui_icons.blob_spawnstrong.color = null
 		if(blob_points >= BLOBTAUNTCOST)
 			hud_used.mymob.gui_icons.blob_taunt.color = null
+		if(blob_points >= BLOBNODCOST)
+			hud_used.mymob.gui_icons.blob_spawnnode.color = null
 		if(blob_points >= BLOBRESCOST)
 			hud_used.mymob.gui_icons.blob_spawnresource.color = null
 		if(blob_points >= BLOBFACCOST)
 			hud_used.mymob.gui_icons.blob_spawnfactory.color = null
-			hud_used.mymob.gui_icons.blob_spawnnode.color = null
+
 		if(blob_points >= BLOBCOREBASECOST+(BLOBCORECOSTINC*(number_of_cores-1)))
 			hud_used.mymob.gui_icons.blob_spawncore.color = null
 

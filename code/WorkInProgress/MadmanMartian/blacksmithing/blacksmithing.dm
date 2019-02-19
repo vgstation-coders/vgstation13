@@ -107,7 +107,7 @@
 	if(strikes > strikes_required)
 		if(prob(5*(strikes/strikes_required)))
 			to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
-			var/obj/item/weapon/ore/slag/S = new /obj/item/weapon/ore/slag(get_turf(src))
+			var/obj/item/stack/ore/slag/S = drop_stack(/obj/item/stack/ore/slag, get_turf(src))
 			recycle(S.mats)
 			result.recycle(S.mats)
 			qdel(result)

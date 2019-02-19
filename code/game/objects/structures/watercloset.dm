@@ -14,10 +14,12 @@
 	var/cistern = 0			//if the cistern bit is open
 	var/w_items = 0			//the combined w_class of all the items in the cistern
 	var/mob/living/swirlie = null	//the mob being given a swirlie
+	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 
 /obj/structure/toilet/New()
 	. = ..()
 	open = round(rand(0, 1))
+	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
 	update_icon()
 
 /obj/structure/toilet/verb/empty_container_into()
@@ -118,6 +120,9 @@
 						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
+
+						watersource.reagents.reaction(GM, TOUCH)
+
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
 							add_attacklogs(user, GM, "gave a swirlie to")

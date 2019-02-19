@@ -141,7 +141,7 @@
 
 /obj/item/weapon/gun/projectile/sec
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds."
 	icon = 'icons/obj/biggun.dmi'
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
@@ -166,6 +166,9 @@
 	..()
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
+/obj/item/weapon/gun/projectile/sec/lockbox
+	spawn_mag = FALSE
+
 /obj/item/weapon/gun/projectile/luger
 	name = "\improper Luger P08"
 	desc = "The wrath of the SS"
@@ -184,6 +187,10 @@
 /obj/item/weapon/gun/projectile/luger/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
+
+/obj/item/weapon/gun/projectile/luger/small
+	desc = "The wrath of the SS. Now in extra-concealed size for civilian uses!"
+	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/gun/projectile/beretta
 	name = "\improper Beretta 92FS"

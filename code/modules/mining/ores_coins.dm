@@ -1,34 +1,35 @@
 /**********************Mineral ores**************************/
 
-/obj/item/weapon/ore
+/obj/item/stack/ore
 	name = "Rock"
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "ore2"
 	w_type = RECYK_MISC
+	max_amount = 100
 	var/material=null
 	var/datum/geosample/geologic_data
 
-/obj/item/weapon/ore/recycle(var/datum/materials/rec)
+/obj/item/stack/ore/recycle(var/datum/materials/rec)
 	if(material==null)
 		return NOT_RECYCLABLE
-	rec.addAmount(material, 1)
+	rec.addAmount(material, amount)
 	return w_type
 
-/obj/item/weapon/ore/uranium
+/obj/item/stack/ore/uranium
 	name = "Uranium ore"
 	icon_state = "Uranium ore"
 	origin_tech = Tc_MATERIALS + "=5"
 	material=MAT_URANIUM
 	melt_temperature = 1070+T0C
 
-/obj/item/weapon/ore/iron
+/obj/item/stack/ore/iron
 	name = "Iron ore"
 	icon_state = "Iron ore"
 	origin_tech = Tc_MATERIALS + "=1"
 	material=MAT_IRON
 	melt_temperature = MELTPOINT_STEEL
 
-/obj/item/weapon/ore/glass
+/obj/item/stack/ore/glass
 	name = "Sand"
 	icon_state = "Glass ore"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -37,11 +38,11 @@
 	slot_flags = SLOT_POCKET
 	throw_range = 1 //It just scatters to the ground as soon as you throw it.
 
-/obj/item/weapon/ore/glass/cave
+/obj/item/stack/ore/glass/cave
 	name = "cave sand"
 	icon_state = "cavesand"
 
-/obj/item/weapon/ore/glass/throw_impact(atom/hit_atom)
+/obj/item/stack/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	if(isturf(hit_atom))
 		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
@@ -59,50 +60,50 @@
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[hit_atom] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
 
-/obj/item/weapon/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
+/obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
-	for(var/obj/item/weapon/ore/glass/sandToConvert in location)
+	for(var/obj/item/stack/ore/glass/sandToConvert in location)
 		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-		qdel(sandToConvert)
+		sandToConvert.use(1)
 
 	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	qdel(src)
+	use(1)
 
-/obj/item/weapon/ore/plasma
+/obj/item/stack/ore/plasma
 	name = "Plasma ore"
 	icon_state = "Plasma ore"
 	origin_tech = Tc_MATERIALS + "=2"
 	material=MAT_PLASMA
 	melt_temperature = MELTPOINT_STEEL+500
 
-/obj/item/weapon/ore/silver
+/obj/item/stack/ore/silver
 	name = "Silver ore"
 	icon_state = "Silver ore"
 	origin_tech = Tc_MATERIALS + "=3"
 	material=MAT_SILVER
 	melt_temperature = 961+T0C
 
-/obj/item/weapon/ore/gold
+/obj/item/stack/ore/gold
 	name = "Gold ore"
 	icon_state = "Gold ore"
 	origin_tech = Tc_MATERIALS + "=4"
 	material=MAT_GOLD
 	melt_temperature = 1064+T0C
 
-/obj/item/weapon/ore/diamond
+/obj/item/stack/ore/diamond
 	name = "Diamond ore"
 	icon_state = "Diamond ore"
 	origin_tech = Tc_MATERIALS + "=6"
 	material=MAT_DIAMOND
 
-/obj/item/weapon/ore/clown
+/obj/item/stack/ore/clown
 	name = "Bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = Tc_MATERIALS + "=4"
 	material=MAT_CLOWN
 	melt_temperature = MELTPOINT_GLASS
 
-/obj/item/weapon/ore/phazon
+/obj/item/stack/ore/phazon
 	name = "Phazite"
 	desc = "What the fuck?"
 	icon_state = "Phazon ore"
@@ -110,7 +111,7 @@
 	material=MAT_PHAZON
 	melt_temperature = MELTPOINT_GLASS
 
-/obj/item/weapon/ore/slag
+/obj/item/stack/ore/slag
 	name = "Slag"
 	desc = "Completely useless unless recycled."
 	icon_state = "slag"
@@ -120,123 +121,124 @@
 
 	var/datum/materials/mats=new
 
-/obj/item/weapon/ore/slag/recycle(var/datum/materials/rec)
+/obj/item/stack/ore/slag/recycle(var/datum/materials/rec)
 	if(mats.getVolume() == 1)
 		return NOT_RECYCLABLE
 
 	rec.addFrom(mats) // NOT removeFrom.  Some things just check for the return value.
 	return RECYK_MISC
 
-/obj/item/weapon/ore/mauxite
+/obj/item/stack/ore/mauxite
 	name = "mauxite ore"
 	desc = "A chunk of Mauxite, a sturdy common metal."
 	icon_state = "mauxite"
 	material="mauxite"
-/obj/item/weapon/ore/molitz
+/obj/item/stack/ore/molitz
 	name = "molitz crystal"
 	desc = "A crystal of Molitz, a common crystalline substance."
 	icon_state = "molitz"
 	material="molitz"
-/obj/item/weapon/ore/pharosium
+/obj/item/stack/ore/pharosium
 	name = "pharosium ore"
 	desc = "A chunk of Pharosium, a conductive metal."
 	icon_state = "pharosium"
 	material="pharosium"
 // Common Cluster Ores
 
-/obj/item/weapon/ore/cobryl
+/obj/item/stack/ore/cobryl
 	name = "cobryl ore"
 	desc = "A chunk of Cobryl, a somewhat valuable metal."
 	icon_state = "cobryl"
 	material="cobryl"
-/obj/item/weapon/ore/char
+/obj/item/stack/ore/char
 	name = "char ore"
 	desc = "A heap of Char, a fossil energy source similar to coal."
 	icon_state = "char"
 	material="char"
 // Rare Vein Ores
 
-/obj/item/weapon/ore/claretine
+/obj/item/stack/ore/claretine
 	name = "claretine ore"
 	desc = "A heap of Claretine, a highly conductive salt."
 	icon_state = "claretine"
 	material="claretine"
-/obj/item/weapon/ore/bohrum
+/obj/item/stack/ore/bohrum
 	name = "bohrum ore"
 	desc = "A chunk of Bohrum, a heavy and highly durable metal."
 	icon_state = "bohrum"
 	material="bohrum"
-/obj/item/weapon/ore/syreline
+/obj/item/stack/ore/syreline
 	name = "syreline ore"
 	desc = "A chunk of Syreline, an extremely valuable and coveted metal."
 	icon_state = "syreline"
 	material="syreline"
 // Rare Cluster Ores
 
-/obj/item/weapon/ore/erebite
+/obj/item/stack/ore/erebite
 	name = "erebite ore"
 	desc = "A chunk of Erebite, an extremely volatile high-energy mineral."
 	icon_state = "erebite"
 	material="erebite"
-/obj/item/weapon/ore/erebite/ex_act()
+/obj/item/stack/ore/erebite/ex_act()
 	explosion(src.loc,-1,0,2)
 	qdel(src)
 
-/obj/item/weapon/ore/erebite/bullet_act(var/obj/item/projectile/P)
+/obj/item/stack/ore/erebite/bullet_act(var/obj/item/projectile/P)
 	explosion(src.loc,-1,0,2)
 	qdel(src)
 
-/obj/item/weapon/ore/cerenkite
+/obj/item/stack/ore/cerenkite
 	name = "cerenkite ore"
 	desc = "A chunk of Cerenkite, a highly radioactive mineral."
 	icon_state = "cerenkite"
 	material="cerenkite"
 
-/obj/item/weapon/ore/cerenkite/ex_act()
+/obj/item/stack/ore/cerenkite/ex_act()
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
-/obj/item/weapon/ore/cerenkite/attack_hand(mob/user as mob)
+/obj/item/stack/ore/cerenkite/attack_hand(mob/user as mob)
 	var/L = get_turf(user)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
-/obj/item/weapon/ore/cerenkite/bullet_act(var/obj/item/projectile/P)
+/obj/item/stack/ore/cerenkite/bullet_act(var/obj/item/projectile/P)
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
-/obj/item/weapon/ore/cytine
+/obj/item/stack/ore/cytine
 	name = "cytine"
 	desc = "A glowing Cytine gemstone, somewhat valuable but not paticularly useful."
 	icon_state = "cytine"
 	material="cytine"
-/obj/item/weapon/ore/cytine/New()
+/obj/item/stack/ore/cytine/New()
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
 
-/obj/item/weapon/ore/cytine/attack_hand(mob/user as mob)
+/obj/item/stack/ore/cytine/attack_hand(mob/user as mob)
 	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
 	G.color = color
 	G.light_color = color
 	qdel(src)
 
-/obj/item/weapon/ore/uqill
+/obj/item/stack/ore/uqill
 	name = "uqill nugget"
 	desc = "A nugget of Uqill, a rare and very dense stone."
 	icon_state = "uqill"
 	material="uqill"
-/obj/item/weapon/ore/telecrystal
+
+/obj/item/stack/ore/telecrystal
 	name = "telecrystal"
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
-	material="telecrystal"
+	material=MAT_TELECRYSTAL
 
-/obj/item/weapon/ore/mythril
+/obj/item/stack/ore/mythril
 	name = "mythril ore"
 	desc = "A naturally-occuring silver steel alloy."
 	icon_state = "cobryl"
@@ -311,15 +313,15 @@
 
 
 
-/obj/item/weapon/ore/New()
+/obj/item/stack/ore/New(var/loc, var/amount=null)
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/ore/ex_act()
+/obj/item/stack/ore/ex_act()
 	return
 
-/obj/item/weapon/ore/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/stack/ore/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/core_sampler))
 		var/obj/item/device/core_sampler/C = W
 		C.sample_item(src, user)

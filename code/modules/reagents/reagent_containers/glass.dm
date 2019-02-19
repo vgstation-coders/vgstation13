@@ -176,7 +176,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(!opaque && reagents.total_volume)
+	if(!opaque && reagents && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -360,7 +360,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
 	update_icon()
-	
+
 /obj/item/weapon/reagent_containers/glass/bucket/update_icon()
 	overlays.len = 0
 
@@ -371,7 +371,7 @@
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
-	
+
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)

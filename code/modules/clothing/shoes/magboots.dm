@@ -27,7 +27,7 @@
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
 		user.visible_message("<span class='danger'>\The [user] slowly raises \his [stomp_boot] above the lying [victim.name], preparing to stomp on \him.</span>")
-		toggle()
+		toggle(user)
 
 		if(do_after(user, src, stomp_delay))
 			if(magpulse)
@@ -44,25 +44,25 @@
 		else
 			return
 
-		toggle()
+		toggle(user)
 		playsound(victim, 'sound/mecha/mechstep.ogg', 100, 1)
 
-/obj/item/clothing/shoes/magboots/proc/toggle()
-	if(usr.isUnconscious())
+/obj/item/clothing/shoes/magboots/proc/toggle(var/mob/user = usr)
+	if(user.isUnconscious())
 		return
 	if(src.magpulse)
 		src.clothing_flags &= ~NOSLIP
 		src.slowdown = NO_SLOWDOWN
 		src.magpulse = 0
 		icon_state = "[base_state]0"
-		to_chat(usr, "You disable the mag-pulse traction system.")
+		to_chat(user, "You disable the mag-pulse traction system.")
 	else
 		src.clothing_flags |= NOSLIP
 		src.slowdown = mag_slow
 		src.magpulse = 1
 		icon_state = "[base_state]1"
-		to_chat(usr, "You enable the mag-pulse traction system.")
-	usr.update_inv_shoes()	//so our mob-overlays update
+		to_chat(user, "You enable the mag-pulse traction system.")
+	user.update_inv_shoes()	//so our mob-overlays update
 
 /obj/item/clothing/shoes/magboots/attack_self()
 	src.toggle()
@@ -128,22 +128,22 @@
 	icon_state = "MAGNIFICENTboots0"
 	base_state = "MAGNIFICENTboots"
 
-/obj/item/clothing/shoes/magboots/captain/toggle()
+/obj/item/clothing/shoes/magboots/captain/toggle(var/mob/user = usr)
 	//set name = "Toggle Floor Grip"
-	if(usr.isUnconscious())
+	if(user.isUnconscious())
 		return
 	if(src.magpulse)
 		src.clothing_flags &= ~NOSLIP
 		src.slowdown = NO_SLOWDOWN
 		src.magpulse = 0
 		icon_state = "[base_state]0"
-		to_chat(usr, "You stop ruining the carpet.")
+		to_chat(user, "You stop ruining the carpet.")
 	else
 		src.clothing_flags |= NOSLIP
 		src.slowdown = mag_slow
 		src.magpulse = 1
 		icon_state = "[base_state]1"
-		to_chat(usr, "Small spikes shoot from your shoes and dig into the flooring, bracing you.")
+		to_chat(user, "Small spikes shoot from your shoes and dig into the flooring, bracing you.")
 
 
 /obj/item/clothing/shoes/magboots/funk
@@ -154,12 +154,12 @@
 	var/funk_level = 0
 	canremove = 0
 
-/obj/item/clothing/shoes/magboots/funk/toggle()
-	if(usr.isUnconscious())
+/obj/item/clothing/shoes/magboots/funk/toggle(var/mob/user = usr)
+	if(user.isUnconscious())
 		return
 	if(funk_level >= 11) //WE HAVE GONE TOO FAR, COMRADE
 		return
-	usr.visible_message("<span class = 'warning'>[usr] dials up \the [src]'s funk level to [funk_level+1]</span>")
+	user.visible_message("<span class = 'warning'>[usr] dials up \the [src]'s funk level to [funk_level+1]</span>")
 	funk_level++
 	if(funk_level >= 2)
 		clothing_flags |= NOSLIP
@@ -202,7 +202,7 @@
 		explosion(get_turf(src), round((1*funk_level)/russian)*0.25, round((1*funk_level)/russian)*0.5, round((1*funk_level)/russian))
 
 	if(prob((funk_level/russian)*2)) //IT WAS ALWAYS TOO LATE
-		toggle()
+		toggle(H)
 
 /obj/item/clothing/shoes/magboots/funk/OnMobDeath(var/mob/living/carbon/human/wearer)
 	var/mob/living/carbon/human/W = wearer

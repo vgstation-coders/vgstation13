@@ -37,7 +37,7 @@
 	if(stat == DEAD)
 		return
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 	stat = DEAD
 	update_canmove()
 	if(!gibbed)
@@ -69,6 +69,7 @@
 
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
+	cyborg_list -= src
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)

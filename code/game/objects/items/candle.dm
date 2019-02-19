@@ -72,3 +72,10 @@
 	if(lit)
 		return source_temperature
 	return 0
+
+/obj/item/candle/Crossed(var/obj/Proj)
+	if(isbeam(Proj))
+		//Can also be an obj/effect, but they both have the damage var
+		var/obj/item/projectile/beam/P = Proj
+		if(P.damage != 0)
+			light("", 1)

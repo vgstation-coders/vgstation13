@@ -33,14 +33,11 @@ var/global/list/falltempoverlays = list()
 	if(!can_improve(Sp_POWER))
 		return 0
 	spell_levels[Sp_POWER]++
-	var/temp = ""
 	range++
 	sleeptime += duration_increase_per_level
-	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-		if(2)
-			temp = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
+	var/upgrade_desc = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
 
-	return temp
+	return upgrade_desc
 
 /spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)

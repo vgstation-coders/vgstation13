@@ -2632,6 +2632,20 @@
 			return
 		show_role_panel(M)
 
+	else if(href_list["threatlog"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			alert("The game hasn't started yet!")
+			return
+
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			alert("It's not dynamic!")
+			return
+		D.show_threatlog(usr)
+
 	// /vg/
 	else if(href_list["set_base_laws"])
 		if(!check_rights(R_FUN))
@@ -2878,6 +2892,7 @@
 				if(alert(usr, "Spawn a blob cluster? (meteor blob, medium intensity, no Overminds)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_shower
 
+			/* Use dyanmic mode instead.
 			if("blobstorm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Blob Storm")
@@ -2886,7 +2901,7 @@
 
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
-
+			*/
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
@@ -3771,7 +3786,7 @@
 				var/datum/job/J = job_master.GetJob("Security Officer")
 				if(!J)
 					return
-				J.total_positions = -1
+				J.set_total_positions(99)
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
 			if("virus_custom")
@@ -3819,7 +3834,7 @@
 					for(var/datum/job/job in job_master.occupations)
 						if(!job)
 							continue
-						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.total_positions] <BR>"
+						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
 					usr << browse(dat, "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()
@@ -4834,19 +4849,38 @@
 
 	else if(href_list["credits"])
 		switch(href_list["credits"])
+			if("resetstar")
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_star = ""
+					log_admin("[key_name(usr)] reset the current round's featured star. A new one will automatically generate later.")
+					message_admins("[key_name_admin(usr)] reset the current round's featured star. A new one will automatically generate later.")
+			if("setstartext")
+				var/newstar = thebigstar(input(usr,"Write the new star. In the final credits, it will be displayed as: 'Starring\[linebreak\]\[whatever you type here\]'. Mind your capitalization! You may also use HTML. Do not include the characters '%<splashbreak>' anywhere unless you know what you're doing, please.","in my dream, i am the star. its me", end_credits.star) as text|null)
+				if(newstar)
+					end_credits.customized_star = newstar
+					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
+			if("setstarmob")
+				var/newstar = thebigstar(input(usr, "Who should be the featured star of this episode? WARNING: Only tested with humans.", "New star from moblist...") as null|anything in sortmobs())
+				if(newstar)
+					end_credits.customized_star = newstar
+					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
+
 			if("resetname")
-				if(!end_credits.generated) //Just in case the button somehow gets clicked when it shouldn't
-					end_credits.episode_name = ""
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_name = ""
 					log_admin("[key_name(usr)] reset the current round's episode name. A new one will automatically generate later.")
 					message_admins("[key_name_admin(usr)] reset the current round's episode name. A new one will automatically generate later.")
 			if("rerollname")
-				end_credits.pick_name()
+				end_credits.customized_name = ""
+				end_credits.finalize_name()
 				log_admin("[key_name(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
 				message_admins("[key_name_admin(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
 			if("setname")
-				var/newname = input(usr,"Write the name of this latest rerun...","New Episode Name") as text|null
+				var/newname = input(usr,"Write the super original name of this masterpiece...","New Episode Name") as text|null
 				if(newname)
-					end_credits.episode_name = newname
+					end_credits.customized_name = uppertext(newname)
 					log_admin("[key_name(usr)] forced the current round's episode name to '[newname]'")
 					message_admins("[key_name_admin(usr)] forced the current round's episode name to '[newname]'")
 
@@ -4856,6 +4890,7 @@
 					var/newname = input(usr,"Write a new possible episode name. This is NOT guaranteed to be picked as the final name, unless you modified the weight to 99999% or something.","Edit Name",N.thename) as text|null
 					if(newname)
 						N.thename = newname
+						N.rare = TRUE
 			if("namedatumweight")
 				var/datum/episode_name/N = locate(href_list["nameref"])
 				if(N)

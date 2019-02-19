@@ -178,7 +178,7 @@
 	if(..())
 		return 1
 
-	else if(I.materials)
+	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1

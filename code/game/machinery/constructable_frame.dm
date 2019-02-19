@@ -298,7 +298,8 @@ to destroy them and players will be able to make replacements.
 	"cell charger"=/obj/item/weapon/circuitboard/cell_charger,
 	"recharger"=/obj/item/weapon/circuitboard/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
-	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
+	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
+	"electric oven"=/obj/item/weapon/circuitboard/oven,)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -363,6 +364,17 @@ to destroy them and players will be able to make replacements.
 	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/ammolathe
+	name = "Circuit Board (Ammolathe)"
+	desc = "A circuit board used to run a machine that fabricates guns, ammunition, and firearm accessories."
+	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
+	board_type = MACHINE
+	//origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 3,
 							/obj/item/weapon/stock_parts/manipulator = 1,
@@ -1375,6 +1387,16 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/scanning_module = 1,
 						/obj/item/weapon/stock_parts/micro_laser = 1)
 
+/obj/item/weapon/circuitboard/oven
+	name = "circuit board (oven)"
+	desc = "A circuit board for an electric oven."
+	board_type = MACHINE
+	build_path = /obj/machinery/oven
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/capacitor = 2,
+						/obj/item/weapon/stock_parts/micro_laser = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1)
 
 
 /*

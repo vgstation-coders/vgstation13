@@ -654,10 +654,14 @@ Code:
 			menu = "<h4><img src=pda_bucket.png> Persistent Custodial Object Locator</h4>"
 
 			var/turf/cl = get_turf(src)
-			if (cl)
+			if (!cl)
+				menu += "ERROR: Unable to determine current location."
+			else
+				menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
+				menu += "<br><A href='byond://?src=\ref[src];choice=49'>(Refresh Coordinates)</a><br>"
 
-				menu += {"Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>
-					<h4>Located Mops:</h4>"}
+				menu += "<h4>Located Mops:</h4>"
+
 				var/ldat
 				for (var/obj/item/weapon/mop/M in mop_list)
 					var/turf/ml = get_turf(M)
@@ -707,9 +711,38 @@ Code:
 				else
 					menu += "[ldat]"
 
-			else
-				menu += "ERROR: Unable to determine current location."
-			menu += "<br><br><A href='byond://?src=\ref[src];choice=49'>Refresh GPS Locator</a>"
+				menu += "<h4>Located Jani-Carts:</h4>"
+
+				ldat = null
+				for (var/obj/structure/bed/chair/vehicle/janicart/J in janicart_list)
+					var/turf/bl = get_turf(J)
+
+					if(bl)
+						if (bl.z != cl.z)
+							continue
+						var/direction = get_dir(src, J)
+						ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
+
+				if (!ldat)
+					menu += "None"
+				else
+					menu += "[ldat]"
+
+				ldat = null
+				for (var/obj/item/key/janicart/K in janikeys_list)
+					var/turf/bl = get_turf(K)
+
+					if(bl)
+						if (bl.z != cl.z)
+							continue
+						var/direction = get_dir(src, K)
+						ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b><br>"
+
+				if (!ldat)
+					menu += "None"
+				else
+					menu += "[ldat]"
+
 
 
 /obj/item/weapon/cartridge/Topic(href, href_list)

@@ -6,15 +6,15 @@
 #define MAX_FLAG 65535
 
 var/list/same_wires = list()
-// 12 colours, if you're adding more than 12 wires then add more colours here
-var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink")
+// 14 colours, if you're adding more than 14 wires then add more colours here
+var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink", "fuchsia", "aqua")
 
 /datum/wires
 
 	var/random = 0 // Will the wires be different for every single instance.
 	var/atom/holder = null // The holder
 	var/holder_type = null // The holder type; used to make sure that the holder is the correct type.
-	var/wire_count = 0 // Max is 16
+	var/wire_count = 0 // Max is 16, but display is limited by the amount of different wire colours
 	var/wires_status = 0 // BITFLAG OF WIRES
 	var/check_wires = 0
 

@@ -145,10 +145,10 @@
 	if(del_mob)
 		qdel(src)
 
-/mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE)
+/mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return
-	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src))
+	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src), malfAI)
 	. = O
 	if(mind)		//TODO
 		mind.transfer_to(O)

@@ -80,7 +80,7 @@ var/list/department_radio_keys = list(
 	if (isalien(src))
 		return 1
 	if (!ishuman(src))
-		return
+		return 0
 	var/mob/living/carbon/human/H = src
 	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
@@ -117,13 +117,13 @@ var/list/department_radio_keys = list(
 		say_testing(src, "ur ded kid")
 		say_dead(message)
 		return
+	if(check_emote(message))
+		say_testing(src, "Emoted")
+		return
 	if (stat) // Unconcious.
 		if(message_mode == MODE_WHISPER) //Lets us say our last words.
 			say_testing(src, "message mode was whisper.")
 			whisper(copytext(message, 3))
-		return
-	if(check_emote(message))
-		say_testing(src, "Emoted")
 		return
 	if(!can_speak_basic(message))
 		say_testing(src, "we aren't able to talk")
@@ -480,11 +480,11 @@ var/list/department_radio_keys = list(
 	var/oldmsg = message
 #endif
 
-	if(say_disabled)	//This is here to try to identify lag problems
-		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
+	if (isDead() || (stat == UNCONSCIOUS && health > 0))
 		return
 
-	if(isUnconscious())
+	if(say_disabled)	//This is here to try to identify lag problems
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 
 	var/datum/speech/speech = create_speech(message)
@@ -512,7 +512,7 @@ var/list/department_radio_keys = list(
 	if (client && client.prefs.muted & MUTE_IC)
 		to_chat(src, "<span class='danger'>You cannot whisper (muted).</span>")
 		return
-	
+
 
 	var/whispers = "whispers"
 	var/critical = InCritical()
@@ -540,7 +540,7 @@ var/list/department_radio_keys = list(
 
 	for (var/atom/movable/listener in listeners)
 		listener.Hear(speech, rendered)
-	
+
 	speech.message = stars(speech.message)
 	rendered = render_speech(speech)
 
@@ -553,7 +553,7 @@ var/list/department_radio_keys = list(
 		watcher.show_message(rendered, 2)
 
 	if (said_last_words) // dying words
-		succumb(1)
+		succumb_proc(0)
 
 	returnToPool(speech)
 

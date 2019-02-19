@@ -554,10 +554,8 @@
 	new_gun.icon_state = "egun[rand(1,6)]"
 	new_gun.item_state = new_gun.icon_state
 	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-	if(prob(10)) // 10% chance to be a smart gun
-		new_gun.can_take_pai = TRUE
-		new_gun.desc += " There seems to be some sort of slot in the handle."
 	new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
+	new_gun.desc = ""
 
 	//5% chance to explode when first fired
 	//10% chance to have an unchargeable cell
@@ -575,12 +573,16 @@
 
 /datum/find/laser/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique energy weapon, you're not sure if it will fire or not."
+	if(prob(10)) // 10% chance to be a smart gun
+		I.can_take_pai = TRUE
+		I.desc += " There seems to be some sort of slot in the handle."
 
 /datum/find/gun
 	find_ID = ARCHAEO_GUN
 	anomaly_factor = 2
 	item_type = "gun"
 	responsive_reagent = IRON
+	additional_desc = TRUE
 
 /datum/find/gun/spawn_item()
 	var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile
@@ -588,9 +590,7 @@
 	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_gun.item_state = new_gun.icon_state
 	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-	if(prob(10)) // 10% chance to be a smart gun
-		new_gun.can_take_pai = TRUE
-		new_gun.desc += " There seems to be some sort of slot in the handle."
+	new_gun.desc = ""
 
 	//let's get some ammunition in this gun : weighted to pick available ammo
 	new_gun.caliber = pick(50;list(POINT357 = 1),
@@ -625,6 +625,9 @@
 
 /datum/find/gun/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique projectile weapon, you're not sure if it will fire or not."
+	if(prob(10)) // 10% chance to be a smart gun
+		I.can_take_pai = TRUE
+		I.desc += " There seems to be some sort of slot in the handle."
 
 
 /datum/find/unknown

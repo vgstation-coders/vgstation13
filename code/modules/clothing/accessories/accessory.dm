@@ -177,6 +177,10 @@
 	name = "distinguished conduct medal"
 	desc = "A bronze medal awarded for distinguished conduct. Whilst a great honor, this is most basic award given by Nanotrasen. It is often awarded by a captain to a member of his crew."
 
+/obj/item/clothing/accessory/medal/participation
+	name = "super participation medal"
+	desc = "On closer inspection, this one is dated 2551..."
+
 /obj/item/clothing/accessory/medal/bronze_heart
 	name = "bronze heart medal"
 	desc = "A bronze heart-shaped medal awarded for sacrifice. It is often awarded posthumously or for severe injury in the line of duty."

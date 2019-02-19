@@ -146,13 +146,16 @@
 			WR.crowbar_salvage += cell
 			cell.forceMove(WR)
 			cell.charge = rand(0, cell.charge)
+			cell = null
 		if(internal_tank)
 			WR.crowbar_salvage += internal_tank
 			internal_tank.forceMove(WR)
+			internal_tank = null
 	else
 		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
 			E.forceMove(T)
 			qdel(E)
+	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -185,9 +188,6 @@
 	if(pr_internal_damage)
 		qdel(pr_internal_damage)
 		pr_internal_damage = null
-	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
-		qdel(eq)
-	equipment = null
 	selected = null
 	..()
 
@@ -1329,7 +1329,8 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+
+	if(usr != occupant)
 		return
 	src.go_out()
 	add_fingerprint(usr)
@@ -1722,7 +1723,8 @@
 						<body>
 						[add_req_access?"<a href='?src=\ref[src];req_access=1;id_card=\ref[id_card];user=\ref[user]'>Edit operation keycodes</a>":null]
 						[maint_access?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>[state ? "Terminate" : "Initiate"] maintenance protocol</a>":null]
-						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>":null]
+						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>\
+						<a href='?src=\ref[src];eject=1'>Eject Occupant</a>":null]
 						</body>
 						</html>"}
 	user << browse(output, "window=exosuit_maint_console")
@@ -1787,10 +1789,9 @@
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 		return
 	if(href_list["eject"])
-		if(usr != src.occupant)
+		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
 			return
-		src.eject()
-		return
+		go_out()
 	if(href_list["toggle_lights"])
 		if(usr != src.occupant)
 			return

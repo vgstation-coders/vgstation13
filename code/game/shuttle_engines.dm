@@ -48,7 +48,7 @@
 
 /obj/structure/shuttle/engine/heater/DIY/attackby(obj/item/I, mob/user)
 	if(iswrench(I) && wrenchAnchor(user, 5 SECONDS))
-		if(anchored)
+		if(!anchored)
 			if(connected_engine)
 				connected_engine.heater = null
 				connected_engine = null

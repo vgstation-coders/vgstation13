@@ -15,6 +15,7 @@
 	@max_roles: Integer: How many members this faction is limited to. Set to 0 for no limit
 	@accept_latejoiners: Boolean: Whether or not this faction accepts newspawn latejoiners
 	@objectives: objectives datum: What are the goals of this faction?
+	@faction_scoreboard_data: This is intended to be used on GetScoreboard() to list things like nuclear ops purchases.
 
 	//TODO LATER
 	@faction_icon_state: String: The image name of the icon that appears next to people of this faction
@@ -40,6 +41,7 @@ var/list/factions_with_hud_icons = list()
 	var/logo_state = "synd-logo"
 	var/list/hud_icons = list()
 	var/datum/role/leader
+	var/list/faction_scoreboard_data = list()
 
 /datum/faction/New()
 	..()
@@ -61,6 +63,10 @@ var/list/factions_with_hud_icons = list()
 
 //For when you want your faction to have specific objectives (Vampire, suck blood. Cult, sacrifice the head of personnel's dog, etc.)
 /datum/faction/proc/forgeObjectives()
+
+/datum/faction/proc/AnnounceObjectives()
+	for(var/datum/role/R in members)
+		R.AnnounceObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
 	for(var/datum/role/R in members)
@@ -417,14 +423,5 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/strike_team/custom/New()
 	..()
 	ID = rand(1,999)
-
-//________________________________________________
-
-/datum/faction/blob_conglomerate
-	name = BLOBCONGLOMERATE
-	ID = BLOBCONGLOMERATE
-	logo_state = "blob-logo"
-	roletype = /datum/role/blob_overmind
-	initroletype = /datum/role/blob_overmind
 
 //________________________________________________
