@@ -199,7 +199,7 @@ var/list/threat_by_job = list(
 
 /datum/gamemode/dynamic/proc/picking_roundstart_rule(var/list/drafted_rules = list())
 	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
-	
+
 	if (starting_rule)
 		message_admins("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
 		log_admin("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
@@ -427,6 +427,7 @@ var/list/threat_by_job = list(
 	if (forced_latejoin_rule)
 		forced_latejoin_rule.candidates = list(newPlayer)
 		forced_latejoin_rule.trim_candidates()
+		message_admins("Forcing ruleset [forced_latejoin_rule]")
 		if (forced_latejoin_rule.ready(1))
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
