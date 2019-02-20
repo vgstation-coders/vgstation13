@@ -38,7 +38,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 							/obj/item/clothing/under/rank/clown,/obj/item/clothing/under/rank/xenoarch)
 	var/chosen_shirt = pick(shirts)
 	H.equip_to_slot_or_del(new chosen_shirt, slot_w_uniform)
-	disable_suit_sensiors(H)
+	disable_suit_sensors(H)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal/catbeast, slot_shoes)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger, slot_back)
 	//Null old name because we're from ghosts
