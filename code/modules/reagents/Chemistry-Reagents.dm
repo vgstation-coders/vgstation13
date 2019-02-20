@@ -4265,7 +4265,7 @@
 	description = "Water, tomato extract, and maybe some other stuff."
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
-	color = "#302000" //rgb: 48, 32, 0
+	color = "#731008" //rgb: 115, 16, 8
 	density = 0.63
 	specheatcap = 4.21
 
