@@ -248,6 +248,9 @@ var/list/station_holomaps = list()
 
 	var/datum/station_holomap/holomap_datum
 
+	var/bogus = 0
+	var/lastZ = STATION_Z
+
 /obj/item/device/station_map/New()
 	..()
 	holomap_datum = new()
@@ -266,7 +269,7 @@ var/list/station_holomaps = list()
 	if(user.hud_used && user.hud_used.holomap_obj)
 		watching_mob = user
 		var/turf/T = get_turf(user)
-		var/bogus = 0
+		bogus = 0
 		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
 			bogus = 1
 			holomap_datum.initialize_holomap_bogus()
@@ -278,11 +281,41 @@ var/list/station_holomaps = list()
 		animate(holomap_datum.station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
 
 		user.client.images |= holomap_datum.station_map
+		if (iscarbon(user))
+			var/mob/living/carbon/C = user
+			C.displayed_holomap = src
 
 		if(bogus)
 			to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
 		else
 			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
+
+/obj/item/device/station_map/proc/update_holomap()
+	if (!watching_mob || !watching_mob.client)
+		return
+	watching_mob.client.images -= holomap_datum.station_map
+	holomap_datum.station_map.overlays.len = 0
+	var/turf/T = get_turf(src)
+	if (lastZ != T.z)
+		lastZ = T.z
+		bogus = 0
+		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+			holomap_datum.initialize_holomap_bogus()
+			bogus = 1
+		else
+			holomap_datum.station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
+	if (!bogus)
+		if (isAI(watching_mob))
+			T = get_turf(watching_mob.client.eye)
+		if(map.holomap_offset_x.len >= T.z)
+			holomap_datum.cursor.pixel_x = (T.x-6+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
+			holomap_datum.cursor.pixel_y = (T.y-6+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
+		else
+			holomap_datum.cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
+			holomap_datum.cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
+		holomap_datum.station_map.overlays += holomap_datum.cursor
+		holomap_datum.station_map.overlays += holomap_datum.legend
+	watching_mob.client.images += holomap_datum.station_map
 
 /obj/item/device/station_map/Destroy()
 	stopWatching()
@@ -297,6 +330,9 @@ var/list/station_holomaps = list()
 		if(watching_mob.client)
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
+				if (iscarbon(watching_mob))
+					var/mob/living/carbon/C = watching_mob
+					C.displayed_holomap = null
 				M.client.images -= holomap_datum.station_map
 	watching_mob = null
 	if(holomap_datum && holomap_datum.station_map)//sanity check to prevent runtime when silicons get destroyed.
@@ -309,6 +345,7 @@ var/list/station_holomaps = list()
 	var/image/legend
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
+	station_map.overlays.len = 0
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
 	cursor = image('icons/holomap_markers.dmi', "you")
 	if(isAI)

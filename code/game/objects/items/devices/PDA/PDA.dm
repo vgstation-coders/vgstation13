@@ -1512,9 +1512,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if("104")//PDA_APP_STATIONMAP
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-				if (app && app.holomap && !app.holomap.watching_mob)
-					app.holomap.attack_self(U)
-					no_refresh = 1
+				if (app && app.holomap)
+					if(!app.holomap.watching_mob)
+						app.holomap.attack_self(U)
+						no_refresh = 1
+					var/turf/T = get_turf(src)
+					if(T.z == STATION_Z)
+						to_chat(U,"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
 
 			/* Old Station Map Stuff
 			if(PDA_APP_STATIONMAP)

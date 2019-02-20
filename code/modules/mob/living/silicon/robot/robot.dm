@@ -1173,7 +1173,8 @@ var/list/cyborg_list = list()
 								cleaned_human.update_inv_shoes(0)
 							cleaned_human.clean_blood()
 							to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
-		return
+	if (station_holomap)
+		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(mind && mind.special_role && emagged)
