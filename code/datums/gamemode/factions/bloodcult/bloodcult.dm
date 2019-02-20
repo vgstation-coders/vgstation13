@@ -186,7 +186,7 @@ var/veil_thickness = CULT_PROLOGUE
                     "")
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
-			if (M)
+			if (M && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
 				to_chat(M, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
 
 		for(var/mob/dead/observer/O in player_list)

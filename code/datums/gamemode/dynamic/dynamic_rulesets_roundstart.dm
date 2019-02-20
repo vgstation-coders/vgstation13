@@ -273,6 +273,8 @@
 			newCop.AssignToRole(M.mind,1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
+	for (var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
+		bomb.spawnbomb()
 	return 1
 
 
@@ -308,6 +310,36 @@
 
 //////////////////////////////////////////////
 //                                          //
+//         BLOB					            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/blob
+	name = "Blob conglomerate"
+	role_category = /datum/role/blob_overmind/
+	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 30
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+
+/datum/dynamic_ruleset/roundstart/blob/execute()
+	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if (!blob_fac)
+		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
+	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
+	for (var/i = 1 to min(blob_number, candidates.len))
+		var/mob/M = pick(candidates)
+		var/datum/role/blob_overmind/blob = new
+		blob.AssignToRole(M.mind, 1)
+		blob_fac.HandleRecruitedRole(blob)
+		blob.Greet(GREET_ROUNDSTART)
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
 //               EXTENDED                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -334,7 +366,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/revs
+/datum/dynamic_ruleset/roundstart/delayed/revs
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
@@ -344,21 +376,22 @@
 	weight = 2
 	cost = 45
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	delay = 5 MINUTES
 	var/required_heads = 3
 
-/datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
+/datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
+	if (forced)
+		required_heads = 1
+		required_candidates = 1
 	if (!..())
 		return FALSE
 	var/head_check = 0
 	for (var/mob/new_player/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
-	if (forced)
-		required_heads = 1
-		required_candidates = 1
 	return (head_check >= required_heads)
 
-/datum/dynamic_ruleset/roundstart/revs/execute()
+/datum/dynamic_ruleset/roundstart/delayed/revs/execute()
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
 	if (!R)
 		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)

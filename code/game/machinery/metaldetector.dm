@@ -38,7 +38,11 @@
 	var/threatcount = 0 //If threat >= PERP_LEVEL_ARREST at the end, they get arrested
 	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
 		return -1
-
+	var/list/to_evaluate = list()
+	if(ishuman(perp))
+		to_evaluate = list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null)
+	if(ismonkey(perp))
+		to_evaluate = list(perp.back)
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest
 
 		if(!wpermit(perp))
@@ -46,7 +50,7 @@
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST
 
-			for(var/obj/item/I in list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null))
+			for(var/obj/item/I in to_evaluate)
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST/2
 
@@ -183,7 +187,7 @@
 
 	var/maxthreat = 0
 	var/sndstr = ""
-	for(var/mob/living/O in view(src, range))
+	for(var/mob/living/carbon/O in view(src, range))
 		var/list/ourretlist = src.assess_perp(O)
 		if(!islist(ourretlist) || !ourretlist.len)
 			continue

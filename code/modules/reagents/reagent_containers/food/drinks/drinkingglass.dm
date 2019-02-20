@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	name = "drinking glass"
 	desc = "Your standard drinking glass."
@@ -792,17 +790,37 @@
 					icon_state = GREYTEA
 					name = "Tide"
 					desc = "This probably shouldn't be considered tea..."
+				if(TOMATOJUICE)
+					make_reagent_overlay()
+					name = "mug of tomato juice"
+					desc = "Are you sure this is tomato juice?"
+				if(BLOOD)
+					make_reagent_overlay()
+					name = "mug of tomato juice"
+					desc = "Are you sure this is tomato juice?"
+				if(HOT_COCO)
+					make_reagent_overlay()
+					name = "Hot Chocolate"
+					desc = "Choccy milk!"						
 
 
 
 
 
 				else
-					icon_state ="mug_what"
-					name = "mug of ..something?"
-					desc = "You aren't really sure what this is."
+					make_reagent_overlay()
+					get_reagent_name(src, TRUE)
 		else
+			overlays.len = 0
 			icon_state = "mug_empty"
 			name = "mug"
 			desc = "A simple mug."
 			return
+			
+/obj/item/weapon/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
+	overlays.len = 0
+	icon_state ="mug_empty"
+	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
+	filling.icon += mix_color_from_reagents(reagents.reagent_list)
+	filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+	overlays += filling

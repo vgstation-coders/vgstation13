@@ -250,12 +250,12 @@ var/const/ALLOW_CENTCOMM = FALSE
 					if ((++i) % 512 == 0)
 						sleep(1) // deliberate delay to avoid lag spikes
 
-					if ((i % 1024) == 0)
-						testing("MINIMAP: Generated [s*(y2-y1+1)+r] of [(y2-y1+1)*(x2-x1+1)] tiles.")
+					//if ((i % 1024) == 0)
+						//testing("MINIMAP: Generated [s*(y2-y1+1)+r] of [(y2-y1+1)*(x2-x1+1)] tiles.")
 				else
 					sleep(-1) // avoid sleeping if possible: prioritize pending procs
 
-		testing("MINIMAP: Generated [(y2-y1+1)*(x2-x1+1)] of [(y2-y1+1)*(x2-x1+1)] tiles. Processed [i] tiles")
+		//testing("MINIMAP: Generated [(y2-y1+1)*(x2-x1+1)] of [(y2-y1+1)*(x2-x1+1)] tiles. Processed [i] tiles")
 
 		// BYOND BUG: map_icon now contains 4 directions? Create a new icon with only a single state.
 		var/icon/result_icon = new/icon()

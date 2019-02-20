@@ -243,14 +243,15 @@
 			var/list/babies = list()
 			var/new_nutrition = round(nutrition * 0.9)
 			var/new_powerlevel = round(powerlevel / 4)
-			for(var/i=1,i<=4,i++)
+			for(var/i = 1 to 4)
 				var/newslime
-				if(prob(70))
-					newslime = primarytype
-				else
-					newslime = slime_mutation[rand(1,4)]
-				if(i == 4)
-					newslime = slime_mutation[rand(1,4)]
+				switch(i)
+					if(1 to 2)
+						newslime = slime_mutation[rand(1,maxcolorcount)]
+					if(3)
+						newslime = primarytype
+					if(4)
+						newslime = slime_mutation[rand(1,(maxcolorcount-1))]
 
 				var/mob/living/carbon/slime/M = new newslime(loc)
 				M.nutrition = new_nutrition

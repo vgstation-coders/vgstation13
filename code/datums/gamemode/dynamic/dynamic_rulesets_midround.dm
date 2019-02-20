@@ -1,7 +1,77 @@
-// -- General rulesets types --
+//////////////////////////////////////////////
+//                                          //
+//            MIDROUND RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround//Can be drafted once in a while during a round
+	var/list/living_players = list()
+	var/list/living_antags = list()
+	var/list/dead_players = list()
+	var/list/list_observers = list()
 
 /datum/dynamic_ruleset/midround/from_ghosts/
 	weight = 0
+	var/makeBody = TRUE
+
+/datum/dynamic_ruleset/midround/trim_candidates()
+	//unlike the previous two types, these rulesets are not meant for /mob/new_player
+	//and since I want those rulesets to be as flexible as possible, I'm not gonna put much here,
+	//but be sure to check dynamic_rulesets_debug.dm for an example.
+	//
+	//all you need to know is that here, the candidates list contains 4 lists itself, indexed with the following defines:
+	//candidates = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
+	//so for example you can get the list of all current dead players with var/list/dead_players = candidates[CURRENT_DEAD_PLAYERS]
+	//make sure to properly typecheck the mobs in those lists, as the dead_players list could contain ghosts, or dead players still in their bodies.
+	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
+	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
+	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS])
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS])
+
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
+	var/list/trimmed_list = L.Copy()
+	var/role_id = initial(role_category.id)
+	var/role_pref = initial(role_category.required_pref)
+	for(var/mob/M in trimmed_list)
+		if (!M.client)//are they connected?
+			trimmed_list.Remove(M)
+			continue
+		if (!M.client.desires_role(role_pref) || jobban_isbanned(M, role_id) || isantagbanned(M))//are they willing and not antag-banned?
+			trimmed_list.Remove(M)
+			continue
+		if (M.mind)
+			if (M.mind.assigned_role in restricted_from_jobs || M.mind.role_alt_title in restricted_from_jobs)//does their job allow for it?
+				trimmed_list.Remove(M)
+				continue
+			if (M.mind.assigned_role in protected_from_jobs || M.mind.role_alt_title in protected_from_jobs)
+				var/probability = initial(role_category.protected_traitor_prob)
+				if (prob(probability))
+					candidates.Remove(M)
+			if ((exclusive_to_jobs.len > 0) && !(M.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
+				trimmed_list.Remove(M)
+				continue
+	return trimmed_list
+
+//You can then for example prompt dead players in execute() to join as strike teams or whatever
+//Or autotator someone
+
+//IMPORTANT, since /datum/dynamic_ruleset/midround may accept candidates from both living, dead, and even antag players, you need to manually check whether there are enough candidates
+// (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
+/datum/dynamic_ruleset/midround/ready(var/forced = 0)
+	if (!forced)
+		var/job_check = 0
+		if (enemy_jobs.len > 0)
+			for (var/mob/M in living_players)
+				if (M.stat == DEAD)
+					continue//dead players cannot count as opponents
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+		var/threat = round(mode.threat_level/10)
+		if (job_check < required_enemies[threat])
+			return 0
+	return 1
 
 /datum/dynamic_ruleset/midround/from_ghosts/execute()
 	var/list/possible_candidates = list()
@@ -21,8 +91,11 @@
 			i++
 			continue
 
-		var/mob/living/carbon/human/new_character = makeBody(applicant)
-		new_character.dna.ResetSE()
+		var/mob/living/carbon/human/new_character = applicant
+
+		if (makeBody)
+			new_character = makeBody(applicant)
+			new_character.dna.ResetSE()
 
 		finish_setup(new_character, i)
 
@@ -77,6 +150,7 @@
 	weight = 7
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
@@ -182,6 +256,7 @@
 	cost = 50
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -248,6 +323,74 @@
 	else
 		return ..()
 
+//////////////////////////////////////////////
+//                                          //
+//          BLOB STORM			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm
+	name = "Blob Overmind Storm"
+	role_category = /datum/role/blob_overmind/
+	my_fac = /datum/faction/blob_conglomerate/
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 35
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	logo = "blob-logo"
+
+	makeBody = FALSE
+
+// -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/finish_setup(var/mob/new_character, var/index)
+	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types["blob storm"], offset_origin = 150, offset_dest = 230)
+	var/obj/item/projectile/meteor/blob/core/meteor = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core, offset_origin = 150, offset_dest = 230)
+	meteor.AssignMob(new_character)
+	return 1 // The actual role (and faction) are created upon impact.
+
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/review_applications()
+	command_alert(/datum/command_alert/blob_storm/overminds)
+	. = ..()
+	spawn (60 SECONDS)
+		command_alert(/datum/command_alert/blob_storm/overminds/end)
+
+//////////////////////////////////////////////
+//                                          //
+//            REVSQUAD (MIDROUND)           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad
+	name = "Revolutionary Squad"
+	role_category = /datum/role/revolutionary/leader
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 3
+	weight = 5
+	cost = 45
+	requirements = list(101,101,90,60,45,45,45,45,45,45)
+	my_fac = /datum/faction/revolution
+	logo = "rev-logo"
+	var/required_heads = 3
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
+	if (find_active_faction_by_type(/datum/faction/revolution))
+		return FALSE //Never send 2 rev types
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return FALSE
+	if(!..())
+		return FALSE
+	var/head_check = 0
+	for (var/mob/player in mode.living_players)
+		if(!player.mind)
+			continue
+		if(player.mind.assigned_role in command_positions)
+			head_check++
+	return (head_check >= required_heads)
 
 
 //////////////////////////////////////////////
@@ -266,6 +409,7 @@
 	cost = 10
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	logo = "weeaboo-logo"
+	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len

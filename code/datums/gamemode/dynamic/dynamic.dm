@@ -128,7 +128,7 @@ var/list/threat_by_job = list(
 	return 1
 
 /datum/gamemode/dynamic/Setup()
-	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 		latejoin_rules += new rule()
@@ -201,11 +201,15 @@ var/list/threat_by_job = list(
 	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
 
 	if (starting_rule)
-		message_admins("Picking a ruleset...<font size='3'>[starting_rule.name]</font>!")
-		log_admin("Picking a ruleset...[starting_rule.name]!")
+		message_admins("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
+		log_admin("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
 
 		roundstart_rules -= starting_rule
 		drafted_rules -= starting_rule
+
+		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
+			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
+			return pick_delay(starting_rule)
 
 		spend_threat(starting_rule.cost)
 		threat_log += "[worldtime2text()]: [starting_rule.name] spent [starting_rule.cost]"
@@ -224,11 +228,25 @@ var/list/threat_by_job = list(
 			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 	return 0
 
+/datum/gamemode/dynamic/proc/pick_delay(var/datum/dynamic_ruleset/roundstart/delayed/rule)
+	spawn()
+		sleep(rule.delay)
+		rule.candidates = player_list.Copy()
+		rule.trim_candidates()
+		if (rule.execute())//this should never fail since ready() returned 1
+			executed_rules += rule
+			if (rule.persistent)
+				current_rules += rule
+		else
+			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+	return 0
+
+
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
 	var/datum/dynamic_ruleset/latejoin/latejoin_rule = pickweight(drafted_rules)
 	if (latejoin_rule)
 		if (!latejoin_rule.repeatable)
-			latejoin_rules -= latejoin_rule
+			latejoin_rules = remove_rule(latejoin_rules,latejoin_rule.type)
 		spend_threat(latejoin_rule.cost)
 		threat_log += "[worldtime2text()]: [latejoin_rule.name] spent [latejoin_rule.cost]"
 		dynamic_stats.measure_threat(threat)
@@ -247,7 +265,7 @@ var/list/threat_by_job = list(
 	var/datum/dynamic_ruleset/midround/midround_rule = pickweight(drafted_rules)
 	if (midround_rule)
 		if (!midround_rule.repeatable)
-			midround_rules -= midround_rule
+			midround_rules = remove_rule(midround_rules,midround_rule.type)
 		spend_threat(midround_rule.cost)
 		threat_log += "[worldtime2text()]: [midround_rule.name] spent [midround_rule.cost]"
 		dynamic_stats.measure_threat(threat)
@@ -328,7 +346,7 @@ var/list/threat_by_job = list(
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
-						drafted_rules[rule] = rule.weight
+						drafted_rules[rule] = rule.get_weight()
 
 			if (drafted_rules.len > 0)
 				message_admins("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
@@ -394,6 +412,12 @@ var/list/threat_by_job = list(
 	log_admin("DYNAMIC MODE: Check failed!")
 	return 0
 
+/datum/gamemode/dynamic/proc/remove_rule(var/list/rule_list,var/rule_type)
+	for(var/datum/dynamic_ruleset/DR in rule_list)
+		if(istype(DR,rule_type))
+			rule_list -= DR
+	return rule_list
+
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left
 		return
@@ -403,6 +427,7 @@ var/list/threat_by_job = list(
 	if (forced_latejoin_rule)
 		forced_latejoin_rule.candidates = list(newPlayer)
 		forced_latejoin_rule.trim_candidates()
+		message_admins("Forcing ruleset [forced_latejoin_rule]")
 		if (forced_latejoin_rule.ready(1))
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null

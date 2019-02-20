@@ -313,7 +313,7 @@
 
 
 
-/obj/item/stack/ore/New()
+/obj/item/stack/ore/New(var/loc, var/amount=null)
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER

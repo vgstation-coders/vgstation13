@@ -316,7 +316,7 @@
 	desc = "There are [contents.len] cig\s left!"
 	return
 
-/obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	var/obj/item/clothing/mask/cigarette/C = W
 	if(!istype(C))
 		return ..() // what
@@ -460,7 +460,7 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick(src)
 	return
 
-/obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
@@ -578,7 +578,7 @@
 /obj/item/weapon/storage/fancy/cigarettes/gum/update_icon()
 	return
 
-/obj/item/weapon/storage/fancy/cigarettes/gum/remove_from_storage(obj/item/gum/G, atom/new_location)
+/obj/item/weapon/storage/fancy/cigarettes/gum/remove_from_storage(obj/item/gum/G, atom/new_location, var/force = 0, var/refresh = 1)
 	if(istype(G))
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)

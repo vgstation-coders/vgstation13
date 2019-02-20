@@ -136,7 +136,8 @@ var/global/list/crate_mimic_disguises = list(\
 
 	..()
 
-	drop_meat(src) //Fill the mimic up with its own meat
+	drop_meat(src)
+	meat_taken--
 	initialize() //Collect all items from its turf!
 
 /mob/living/simple_animal/hostile/mimic/crate/Life()
