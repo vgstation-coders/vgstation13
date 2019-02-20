@@ -294,12 +294,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
+	for(var/obj/item/weapon/implant/I in H)
+		if(istype(I, /obj/item/weapon/implant/traitor))
+			if(I.imp_in == H)
+				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
+				return 0
 	if(isrevhead(H) || (iscultist(H) && veil_thickness >= CULT_ACT_II))
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		return 0
-	else if(isrevnothead(H))
+	if(isrevnothead(H))
 		var/datum/role/R = H.mind.GetRole(REV)
 		R.Drop()
+	if(H.mind && H.mind.GetRole(IMPLANTSLAVE))
+		var/datum/role/R = H.mind.GetRole(IMPLANTSLAVE)
+		R.Drop()
+
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
 
