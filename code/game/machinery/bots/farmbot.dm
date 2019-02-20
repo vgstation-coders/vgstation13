@@ -70,7 +70,7 @@
 /obj/machinery/bot/farmbot/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if (istype(mover,/mob/living/simple_animal/bee))
 		return 1
-	return (!density || !height || air_group)
+	return ..()
 
 /obj/machinery/bot/farmbot/to_bump(M as mob|obj) //Leave no door unopened!
 	spawn(0)
