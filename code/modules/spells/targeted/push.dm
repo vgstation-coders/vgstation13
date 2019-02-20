@@ -11,16 +11,49 @@
 	invocation_type = SpI_SHOUT
 	range = 1
 	cooldown_min = 10
-	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 4)
+	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 4, Sp_POWER = 2)
 	sparks_spread = 1
 	sparks_amt = 4
 
 	hud_state = "wiz_push"
 
+
+/spell/targeted/push/empower_spell()
+	spell_levels[Sp_POWER]++
+
+	var/description = ""
+	switch(spell_levels[Sp_POWER])
+		if(0)
+			description = "You will now push small things from your vicinity."
+		if(1)
+			name = "Empowered [initial(name)]"
+			description = "You can now push objects the size of a person from your vicinity, to elsewhere on your plane."
+		if(2)
+			name = "Grand [initial(name)]"
+			description = "You can now push objects larger than a person from your vicinity, to elsewhere on your plane."
+	return "You have improved [initial(name)] into [name]. [description]"
+
+
 /spell/targeted/push/before_cast(list/targets, user)
 	var/list/valid_targets = list()
 	var/list/options = ..()
 	for(var/atom/movable/target in options)
+		if(target.anchored)
+			to_chat(holder, "<span class = 'warning'>You can't push \the [target]. It's anchored to the ground.</span>")
+			valid_targets = list()
+			break
+		var/max_size
+		switch(spell_levels[Sp_POWER])
+			if(0)
+				max_size = SIZE_SMALL
+			if(1)
+				max_size = SIZE_NORMAL
+			if(2)
+				max_size = SIZE_BIG
+		if((ismob(target) && target:size > max_size) || (isitem(target) && target:w_class > max_size))
+			to_chat(holder, "<span class = 'warning'>\The [target] is too large for your level of [name].</span>")
+			valid_targets = list()
+			break
 		if(target == holder.locked_to)
 			to_chat(holder, "<span class='warning'>You can't push something away if you're attached to it.</span>")
 			valid_targets = list()
