@@ -291,7 +291,7 @@ var/list/station_holomaps = list()
 			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 /obj/item/device/station_map/proc/update_holomap()
-	if (!watching_mob || !watching_mob.client)
+	if (!watching_mob || !watching_mob.client || !watching_mob.hud_used)
 		return
 	watching_mob.client.images -= holomap_datum.station_map
 	holomap_datum.station_map.overlays.len = 0
@@ -316,6 +316,7 @@ var/list/station_holomaps = list()
 		holomap_datum.station_map.overlays += holomap_datum.cursor
 		holomap_datum.station_map.overlays += holomap_datum.legend
 	watching_mob.client.images += holomap_datum.station_map
+	holomap_datum.station_map.loc = watching_mob.hud_used.holomap_obj
 
 /obj/item/device/station_map/Destroy()
 	stopWatching()

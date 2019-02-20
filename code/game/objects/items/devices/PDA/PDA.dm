@@ -1394,11 +1394,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
 
 	var/no_refresh = 0
-
 	var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 	if (map_app && map_app.holomap)
 		map_app.holomap.stopWatching()
-
 	if(can_use(U)) //Why reinvent the wheel? There's a proc that does exactly that.
 		add_fingerprint(U)
 		U.set_machine(src)
@@ -1515,7 +1513,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if (app && app.holomap)
 					if(!app.holomap.watching_mob)
 						app.holomap.attack_self(U)
-						no_refresh = 1
+					no_refresh = 1
 					var/turf/T = get_turf(src)
 					if(!app.holomap.bogus)
 						to_chat(U,"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
