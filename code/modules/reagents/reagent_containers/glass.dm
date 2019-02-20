@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = " "
-	var/base_name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
@@ -56,7 +55,6 @@
 
 /obj/item/weapon/reagent_containers/glass/New()
 	..()
-	base_name = name
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
 /obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
