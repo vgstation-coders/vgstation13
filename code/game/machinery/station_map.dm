@@ -250,6 +250,7 @@ var/list/station_holomaps = list()
 
 	var/bogus = 0
 	var/lastZ = STATION_Z
+	var/prevent_close = 0
 
 /obj/item/device/station_map/New()
 	..()
@@ -327,6 +328,8 @@ var/list/station_holomaps = list()
 	stopWatching()
 
 /obj/item/device/station_map/proc/stopWatching()
+	if (prevent_close)
+		return
 	if(watching_mob)
 		if(watching_mob.client)
 			var/mob/M = watching_mob

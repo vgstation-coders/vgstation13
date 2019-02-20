@@ -1401,7 +1401,17 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		add_fingerprint(U)
 		U.set_machine(src)
 
+//APP DEFINES CONVERSION============================It's an odd workaround but it works
+		var/pda_app_ringer = "[PDA_APP_RINGER]"
+		var/pda_app_spamfilter = "[PDA_APP_SPAMFILTER]"
+		var/pda_app_balancecheck = "[PDA_APP_BALANCECHECK]"
+		var/pda_app_stationmap = "[PDA_APP_STATIONMAP]"
+		var/pda_app_snakeii = "[PDA_APP_SNAKEII]"
+		var/pda_app_minesweeper = "[PDA_APP_MINESWEEPER]"
+		var/pda_app_spesspets = "[PDA_APP_SPESSPETS]"
+
 		switch(href_list["choice"])
+
 
 //BASIC FUNCTIONS===================================
 
@@ -1457,7 +1467,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //APPLICATIONS FUNCTIONS===========================
 
-			if("101")//PDA_APP_RINGER
+			if(pda_app_ringer)
 				mode = PDA_APP_RINGER
 			if("toggleDeskRinger")
 				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
@@ -1472,13 +1482,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if(i > MAXIMUM_FREQUENCY)
 						i = 1599
 					app.frequency = i
-			if("102")//PDA_APP_SPAMFILTER
+			if(pda_app_spamfilter)/
 				mode = PDA_APP_SPAMFILTER
 			if("setFilter")
 				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
 				if(app)
 					app.function = text2num(href_list["filter"])
-			if("103")//PDA_APP_BALANCECHECK
+			if(pda_app_balancecheck)/
 				mode = PDA_APP_BALANCECHECK
 			if("printCurrency")
 				var/mob/user = usr
@@ -1508,15 +1518,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					T.time = worldtime2text()
 					id.virtual_wallet.transaction_log.Add(T)
 
-			if("104")//PDA_APP_STATIONMAP
+			if(pda_app_stationmap)
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
 				if (app && app.holomap)
+					app.holomap.prevent_close = 1
+					spawn(2)
+						app.holomap.prevent_close = 0
 					if(!app.holomap.watching_mob)
 						app.holomap.attack_self(U)
 					no_refresh = 1
 					var/turf/T = get_turf(src)
 					if(!app.holomap.bogus)
-						to_chat(U,"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
+						to_chat(U,"[bicon(src)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
 
 			/* Old Station Map Stuff
 			if(PDA_APP_STATIONMAP)
@@ -1558,7 +1571,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //GAME FUNCTIONS====================================
 
-			if("105")//PDA_APP_SNAKEII
+			if(pda_app_snakeii)
 				mode = PDA_APP_SNAKEII
 
 			if("snakeNewGame")
@@ -1606,7 +1619,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				app.volume = max(0,app.volume)
 				app.volume = min(6,app.volume)
 
-			if("106")//PDA_APP_MINESWEEPER
+			if(pda_app_minesweeper)
 				mode = PDA_APP_MINESWEEPER
 
 			if("mineNewGame")
@@ -1668,7 +1681,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				app.minesweeper_game.reset_game()
 				app.ingame = 0
 
-			if("107")//PDA_APP_SPESSPETS
+			if(pda_app_spesspets)
 				mode = PDA_APP_SPESSPETS
 
 			if("eggPrev")
