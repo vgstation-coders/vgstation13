@@ -42,6 +42,9 @@
 	if (home)
 		state = BEE_HEADING_HOME
 		mob.updateState = 1
+	else
+		state = BEE_ROAMING
+		mob.updateState = 1
 
 /datum/bee/proc/death(var/gibbed = FALSE)
 	if (mob)

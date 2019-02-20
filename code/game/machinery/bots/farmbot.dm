@@ -67,6 +67,11 @@
 		if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
 			tank = new /obj/structure/reagent_dispensers/watertank(src)
 
+/obj/machinery/bot/farmbot/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	if (istype(mover,/mob/living/simple_animal/bee))
+		return 1
+	return (!density || !height || air_group)
+
 /obj/machinery/bot/farmbot/to_bump(M as mob|obj) //Leave no door unopened!
 	spawn(0)
 		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
