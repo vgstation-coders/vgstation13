@@ -1517,7 +1517,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						app.holomap.attack_self(U)
 						no_refresh = 1
 					var/turf/T = get_turf(src)
-					if(T.z == STATION_Z)
+					if(!app.holomap.bogus)
 						to_chat(U,"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
 
 			/* Old Station Map Stuff
