@@ -72,6 +72,9 @@
 #define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
 
+#define GREET_REVSQUAD_CONVERTED "revsquad"
+#define GREET_PROVOC_CONVERTED	 "provocateur"
+
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
 #define CULT_MENDED		-1
