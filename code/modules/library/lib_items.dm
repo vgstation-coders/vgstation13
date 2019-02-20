@@ -255,9 +255,9 @@
 		M.Knockdown(15)
 		M.Stun(15)
 		var/datum/organ/internal/eyes/eyes = M.internal_organs_by_name["eyes"]
-		eyes.damage += rand(10,20)
-		M.adjustBrainLoss(rand(20,40))
-		M.hallucination = max(0, M.hallucination + rand(30,60))
+		eyes.damage += rand(30,60)
+		M.adjustBrainLoss(rand(50,100))
+		M.hallucination = max(0, M.hallucination + rand(60,90))
 	read_a_motherfucking_book(user)
 
 /obj/item/weapon/book/examine(mob/user)
