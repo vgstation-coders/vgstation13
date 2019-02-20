@@ -429,6 +429,9 @@
 	.=..()
 	if (!.)
 		return
+	if(user in watching_mobs)
+		stopWatching(user)
+		return
 	if (altar_task)
 		if (altar_task == ALTARTASK_SACRIFICE)
 			if (user in contributors)

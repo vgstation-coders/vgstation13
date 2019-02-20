@@ -5,42 +5,48 @@
 	icon = 'icons/obj/posters.dmi'
 	icon_state = "rolled_poster"
 	var/serial_number = 0
+	var/build_time = 17
+	var/path = /obj/structure/sign/poster
+	var/serial = TRUE
 	w_type=RECYK_MISC
 
 
 /obj/item/mounted/poster/New(turf/loc, var/given_serial = 0)
-	if(given_serial == 0)
-		serial_number = rand(1, poster_designs.len)
-	else
-		serial_number = given_serial
-	name += " - No. [serial_number]"
-	if(serial_number == -1)
-		name = "Commendation Poster"
+	if(serial)
+		if(given_serial == 0)
+			serial_number = rand(1, poster_designs.len)
+		else
+			serial_number = given_serial
+		name += " - No. [serial_number]"
+		if(serial_number == -1)
+			name = "Commendation Poster"
 	..(loc)
 
 /obj/item/mounted/poster/do_build(turf/on_wall, mob/user)
-	to_chat(user, "<span class='notice'>You start placing the poster on the wall...</span>")//Looks like it's uncluttered enough. Place the poster.
-
-
 	//declaring D because otherwise if P gets 'deconstructed' we lose our reference to P.resulting_poster
-	var/obj/structure/sign/poster/D = new(src.serial_number)
+	var/obj/structure/sign/poster/D = new path(src.serial_number)
 
 	var/temp_loc = user.loc
-	flick("poster_being_set",D)
+	poster_animation(D,user)
 	D.forceMove(on_wall)
 	qdel(src)	//delete it now to cut down on sanity checks afterwards. Agouri's code supports rerolling it anyway
-	playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, 1)
+
 
 
 	if(!D)
 		return
 
-	if(do_after(user, on_wall, 17))//Let's check if everything is still there
-		to_chat(user, "<span class='notice'>You place the poster!</span>")
+	if(do_after(user, on_wall, build_time))//Let's check if everything is still there
+		to_chat(user, "<span class='notice'>You place \the [src]!</span>")
+		return D
 	else
 		D.roll_and_drop(temp_loc)
-	return
 
+
+/obj/item/mounted/poster/proc/poster_animation(obj/D,mob/user)
+	to_chat(user, "<span class='notice'>You start placing the poster on the wall...</span>")
+	flick("poster_being_set",D)
+	playsound(get_turf(D), 'sound/items/poster_being_created.ogg', 100, 1)
 
 //############################## THE ACTUAL DECALS ###########################
 
@@ -61,6 +67,8 @@ obj/structure/sign/poster/New(var/serial)
 		name = "Award of Sufficiency"
 		desc = "The mere sight of it makes you very proud."
 		icon_state = "goldstar"
+	else if(!serial_number)
+		//nothing
 	else
 		if(serial_number == loc)
 			serial_number = rand(1, poster_designs.len)	//This is for the mappers that want individual posters without having to use rolled posters.
@@ -93,13 +101,16 @@ obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 				return
 			visible_message("<span class='warning'>[user] rips [src] in a single, decisive motion!</span>" )
 			playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
-			ruined = 1
-			icon_state = "poster_ripped"
-			name = "ripped poster"
-			desc = "You can't make out anything from the poster's original print. It's ruined."
+			rip()
 			add_fingerprint(user)
 		if("No")
 			return
+
+/obj/structure/sign/poster/proc/rip(mob/user)
+	ruined = 1
+	icon_state = "poster_ripped"
+	name = "ripped poster"
+	desc = "You can't make out anything from the poster's original print. It's ruined."
 
 /obj/structure/sign/poster/proc/roll_and_drop(turf/newloc)
 	if(newloc)

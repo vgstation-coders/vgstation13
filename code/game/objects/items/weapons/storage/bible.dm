@@ -3,6 +3,7 @@
 /obj/item/weapon/storage/bible
 	name = "bible"
 	desc = "Apply to head repeatedly."
+	icon = 'icons/obj/storage/bibles.dmi'
 	icon_state = "bible"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
 	item_state = "bible"
@@ -18,6 +19,14 @@
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
+
+/obj/item/weapon/storage/bible/New()
+	. = ..()
+	if(ticker && (ticker.Bible_icon_state && ticker.Bible_item_state && ticker.Bible_name && ticker.chap_rel))
+		icon_state = ticker.Bible_icon_state
+		item_state = ticker.Bible_item_state
+		name = ticker.Bible_name
+		my_rel = ticker.chap_rel
 
 /obj/item/weapon/storage/bible/suicide_act(mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
@@ -41,6 +50,17 @@
 	new /obj/item/weapon/spacecash(src)
 	new /obj/item/weapon/spacecash(src)
 	new /obj/item/weapon/spacecash(src)
+
+//Even more "Special" Bible with a nicer gift on introduction
+/obj/item/weapon/storage/bible/traitor_gun
+
+	autoignition_temperature = 0 //Not actually paper
+	fire_fuel = 0
+
+/obj/item/weapon/storage/bible/traitor_gun/New()
+	. = ..()
+	new /obj/item/weapon/gun/projectile/luger/small(src)
+	new /obj/item/ammo_storage/magazine/mc9mm(src)
 
 //What happens when you slap things with the Bible in general
 /obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)

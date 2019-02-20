@@ -13,8 +13,13 @@ var/list/threat_by_job = list(
 
 /datum/gamemode/dynamic
 	name = "Dynamic Mode"
-	var/threat_level = 0//rolled at the beginning of the round.
+
+	//Threat logging vars
+	var/threat_level = 0//the "threat cap", threat shouldn't normally go above this and is used in ruleset calculations
+	var/starting_threat = 0 //threat_level's initially rolled value. Threat_level isn't changed by many things.
 	var/threat = 0//set at the beginning of the round. Spent by the mode to "purchase" rules.
+	var/list/threat_log = list() //Running information about the threat. Can store text or datum entries.
+
 	var/list/roundstart_rules = list()
 	var/list/latejoin_rules = list()
 	var/list/midround_rules = list()
@@ -42,7 +47,7 @@ var/list/threat_by_job = list(
 /datum/gamemode/dynamic/AdminPanelEntry()
 	var/dat = list()
 	dat += "Threat : <b>[threat_level]</b><br/>"
-	dat += "Threat availaible : <b>[threat]</b><br/>"
+	dat += "Threat availaible : <b>[threat]</b> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
 	dat += "Executed rulesets : "
 	if (executed_rules.len > 0)
 		dat += "<br/>"
@@ -58,6 +63,27 @@ var/list/threat_by_job = list(
 	else
 		dat += "none."
 	return jointext(dat, "")
+
+/datum/gamemode/dynamic/proc/show_threatlog(mob/admin)
+	if(!ticker || !ticker.mode)
+		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
+		return
+
+	if(!admin.check_rights(R_ADMIN))
+		return
+
+	var/out = "<TITLE>Threat Log</TITLE><B><font size='3'>Threat Log</font></B><br><B>Starting Threat:</B> [starting_threat]<BR>"
+
+	for(var/entry in threat_log)
+		if(istext(entry))
+			out += "[entry]<BR>"
+		if(istype(entry,/datum/role/catbeast))
+			var/datum/role/catbeast/C = entry
+			out += "Catbeast threat regenerated/threat_level inflated: [C.threat_generated]/[C.threat_level_inflated]<BR>"
+
+	out += "<B>Remaining threat/threat_level:</B> [threat]/[threat_level]"
+
+	usr << browse(out, "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
 	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
@@ -85,6 +111,7 @@ var/list/threat_by_job = list(
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 	threat = threat_level
+	starting_threat = threat_level
 	latejoin_injection_cooldown = rand(330,510)
 	midround_injection_cooldown = rand(600,1050)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
@@ -101,7 +128,7 @@ var/list/threat_by_job = list(
 	return 1
 
 /datum/gamemode/dynamic/Setup()
-	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 		latejoin_rules += new rule()
@@ -174,14 +201,19 @@ var/list/threat_by_job = list(
 	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
 
 	if (starting_rule)
-		message_admins("Picking a ruleset...<font size='3'>[starting_rule.name]</font>!")
-		log_admin("Picking a ruleset...[starting_rule.name]!")
+		message_admins("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
+		log_admin("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
 
 		roundstart_rules -= starting_rule
 		drafted_rules -= starting_rule
 
-		threat = max(0,threat-starting_rule.cost)
-		if (starting_rule.execute(starting_rule.cost))//this should never fail since ready() returned 1
+		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
+			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
+			return pick_delay(starting_rule)
+
+		spend_threat(starting_rule.cost)
+		threat_log += "[worldtime2text()]: [starting_rule.name] spent [starting_rule.cost]"
+		if (starting_rule.execute())//this should never fail since ready() returned 1
 			executed_rules += starting_rule
 			if (starting_rule.persistent)
 				current_rules += starting_rule
@@ -196,12 +228,27 @@ var/list/threat_by_job = list(
 			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 	return 0
 
+/datum/gamemode/dynamic/proc/pick_delay(var/datum/dynamic_ruleset/roundstart/delayed/rule)
+	spawn()
+		sleep(rule.delay)
+		rule.candidates = player_list.Copy()
+		rule.trim_candidates()
+		if (rule.execute())//this should never fail since ready() returned 1
+			executed_rules += rule
+			if (rule.persistent)
+				current_rules += rule
+		else
+			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+	return 0
+
+
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
 	var/datum/dynamic_ruleset/latejoin/latejoin_rule = pickweight(drafted_rules)
 	if (latejoin_rule)
 		if (!latejoin_rule.repeatable)
-			latejoin_rules -= latejoin_rule
-		threat = max(0,threat-latejoin_rule.cost)
+			latejoin_rules = remove_rule(latejoin_rules,latejoin_rule.type)
+		spend_threat(latejoin_rule.cost)
+		threat_log += "[worldtime2text()]: [latejoin_rule.name] spent [latejoin_rule.cost]"
 		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
 			var/mob/M = pick(latejoin_rule.assigned)
@@ -218,8 +265,9 @@ var/list/threat_by_job = list(
 	var/datum/dynamic_ruleset/midround/midround_rule = pickweight(drafted_rules)
 	if (midround_rule)
 		if (!midround_rule.repeatable)
-			midround_rules -= midround_rule
-		threat = max(0,threat-midround_rule.cost)
+			midround_rules = remove_rule(midround_rules,midround_rule.type)
+		spend_threat(midround_rule.cost)
+		threat_log += "[worldtime2text()]: [midround_rule.name] spent [midround_rule.cost]"
 		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
@@ -243,7 +291,8 @@ var/list/threat_by_job = list(
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
 		if (new_rule.ready(forced))
-			threat = max(0,threat-new_rule.cost)
+			spend_threat(new_rule.cost)
+			threat_log += "[worldtime2text()]: Forced rule [new_rule.name] spent [new_rule.cost]"
 			dynamic_stats.measure_threat(threat)
 			if (new_rule.execute())//this should never fail since ready() returned 1
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
@@ -297,7 +346,7 @@ var/list/threat_by_job = list(
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
-						drafted_rules[rule] = rule.weight
+						drafted_rules[rule] = rule.get_weight()
 
 			if (drafted_rules.len > 0)
 				message_admins("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
@@ -363,6 +412,12 @@ var/list/threat_by_job = list(
 	log_admin("DYNAMIC MODE: Check failed!")
 	return 0
 
+/datum/gamemode/dynamic/proc/remove_rule(var/list/rule_list,var/rule_type)
+	for(var/datum/dynamic_ruleset/DR in rule_list)
+		if(istype(DR,rule_type))
+			rule_list -= DR
+	return rule_list
+
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left
 		return
@@ -372,6 +427,7 @@ var/list/threat_by_job = list(
 	if (forced_latejoin_rule)
 		forced_latejoin_rule.candidates = list(newPlayer)
 		forced_latejoin_rule.trim_candidates()
+		message_admins("Forcing ruleset [forced_latejoin_rule]")
 		if (forced_latejoin_rule.ready(1))
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
@@ -397,6 +453,16 @@ var/list/threat_by_job = list(
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
 		DR.applicants -= M
 
+//Regenerate threat, but no more than our original threat level.
 /datum/gamemode/dynamic/proc/refund_threat(var/regain)
 	threat = min(threat_level,threat+regain)
-	//Regenerate threat, but no more than our original threat level.
+
+//Generate threat and increase the threat_level if it goes beyond, capped at 100
+/datum/gamemode/dynamic/proc/create_threat(var/gain)
+	threat = min(100, threat+gain)
+	if(threat>threat_level)
+		threat_level = threat
+
+//Expend threat, but do not fall below 0.
+/datum/gamemode/dynamic/proc/spend_threat(var/cost)
+	threat = max(threat-cost,0)

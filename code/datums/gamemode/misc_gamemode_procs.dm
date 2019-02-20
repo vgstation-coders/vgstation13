@@ -363,14 +363,21 @@
 	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
 	hayai.cant_drop = 1
 	H.put_in_hands(hayai)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/nentendiepower, slot_gloves)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-
+	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/anime, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
 
 /proc/name_weeaboo(var/mob/living/carbon/human/H)
 	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.

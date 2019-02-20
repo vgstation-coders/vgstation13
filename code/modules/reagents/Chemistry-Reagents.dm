@@ -350,6 +350,7 @@
 
 /datum/reagent/blood
 	name = "Blood"
+	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
@@ -561,15 +562,15 @@
 					if(prob(15) && volume >= 30)
 						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 						if(head_organ)
-							if(head_organ.take_damage(25, 0))
+							if(head_organ.take_damage(0, 25))
 								H.UpdateDamageIcon(1)
 							head_organ.disfigure("burn")
 							H.audible_scream()
 					else
-						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+						M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
 				if(M.acidable())
-					M.take_organ_damage(min(15, volume * 2))
+					M.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
@@ -4258,6 +4259,25 @@
 	M.nutrition += nutriment_factor
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
+/datum/reagent/tomato_soup
+	name = "Tomato Soup"
+	id = TOMATO_SOUP
+	description = "Water, tomato extract, and maybe some other stuff."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#302000" //rgb: 48, 32, 0
+	density = 0.63
+	specheatcap = 4.21
+
+/datum/reagent/tomato_soup/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	
 /datum/reagent/flour
 	name = "flour"
 	id = FLOUR

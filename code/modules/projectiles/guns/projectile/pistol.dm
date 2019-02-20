@@ -188,6 +188,10 @@
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
 
+/obj/item/weapon/gun/projectile/luger/small
+	desc = "The wrath of the SS. Now in extra-concealed size for civilian uses!"
+	w_class = W_CLASS_SMALL
+
 /obj/item/weapon/gun/projectile/beretta
 	name = "\improper Beretta 92FS"
 	desc = "The classic wonder nine and favorite of the undercover cop. Kong whiskey not included."

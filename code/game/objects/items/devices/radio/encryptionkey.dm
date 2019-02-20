@@ -20,6 +20,12 @@
 	origin_tech = Tc_SYNDICATE + "=3"
 	syndie = 1//Signifies that it de-crypts Syndicate transmissions
 
+/obj/item/device/encryptionkey/rev
+	icon_state = "cypherkey"
+	channels = list("Revolution" = 1)
+	origin_tech = Tc_SYNDICATE + "=3"
+	syndie = 1
+
 /obj/item/device/encryptionkey/raider
 	icon_state = "cypherkey"
 	channels = list("Raider" = 1)

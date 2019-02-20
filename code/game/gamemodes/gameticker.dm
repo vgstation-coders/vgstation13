@@ -461,7 +461,6 @@ var/datum/controller/gameticker/ticker
 				log_game("Server chose [watchdog.chosen_map]!")
 
 
-
 		spawn(50)
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")

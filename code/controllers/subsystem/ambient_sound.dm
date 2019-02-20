@@ -30,6 +30,8 @@ client/proc/handle_ambience()
 		return
 
 	var/list/possible_ambience = get_ambience()
+	if(!possible_ambience)
+		return
 	if(last_ambient_noise)
 		var/cancel_ambience = TRUE
 		for(var/amb in possible_ambience)
@@ -44,7 +46,7 @@ client/proc/handle_ambience()
 	if(ambience_buffer > world.timeofday)
 		return //sound's playing. don't bother.
 
-	if(possible_ambience.len > 1)//more than one thing. no repeats!
+	if(possible_ambience.len)
 		for(var/datum/ambience/ambie in possible_ambience)
 			if(last_ambient_noise == ambie.sound)
 				possible_ambience -= ambie

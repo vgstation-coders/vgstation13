@@ -72,6 +72,9 @@
 #define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
 
+#define GREET_REVSQUAD_CONVERTED "revsquad"
+#define GREET_PROVOC_CONVERTED	 "provocateur"
+
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
 #define CULT_MENDED		-1
@@ -176,6 +179,8 @@
 
 #define PROB_PROTECTED_REGULAR 50
 #define PROB_PROTECTED_RARE    80
+
+#define FACTION_FAILURE -1
 
 // -- The paper
 
