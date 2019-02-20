@@ -67,13 +67,13 @@
 	var/datum/tech/Tech = files.known_tech["materials"]
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
-	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*(Tech.level+(T * 3)))/25,0.01), min_cap_C)
+	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((Tech.level - 1)+(T * 2)))/25,0.01), min_cap_C)
 
 	T = 0
 	Tech = files.known_tech["programming"]
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 		T += Ml.rating - 1
-	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*(Tech.level+(T * 5)))/25,0.01), min_cap_T)
+	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
@@ -433,7 +433,7 @@
 		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
 		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 			pmat += Ma.rating - 1
-		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+(pmat*3)))/25,0.01), min_cap_C)
+		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((T.level - 1)+(pmat*2)))/25,0.01), min_cap_C)
 		if(resource_coeff!=diff)
 			resource_coeff = diff
 			output+="Production efficiency increased.<br>"
@@ -442,7 +442,7 @@
 		var/ptime = 0
 		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 			ptime += Ml.rating - 1
-		diff = max(round(initial(time_coeff) - (initial(time_coeff)*(T.level+(ptime*5)))/25,0.1), min_cap_T)
+		diff = max(round(initial(time_coeff) - (initial(time_coeff)*((T.level - 1)+(ptime*3)))/25,0.1), min_cap_T)
 		if(time_coeff!=diff)
 			time_coeff = diff
 			output+="Production routines updated.<br>"
