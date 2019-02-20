@@ -346,6 +346,16 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup
+	name = "Tomato Soup"
+	desc = "Tomato Soup! In a cup!"
+	icon_state = "tomatosoup"
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup/New()
+	..()
+	reagents.add_reagent(TOMATO_SOUP, 30, reagtemp = T0C + 80)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
