@@ -94,6 +94,7 @@
 	//////////////////////////////
 	// Actual antag
 	var/datum/mind/antag=null
+	var/destroyed = FALSE //Whether or not it has been gibbed
 
 	var/list/uplink_items_bought = list() //migrated from mind, used in GetScoreboard()
 	var/list/artifacts_bought = list() //migrated from mind
@@ -229,7 +230,17 @@
 	return
 
 /datum/role/proc/process()
-	return
+	var/mob/M = antag.current
+	if(!destroyed)
+		if(!M)
+			destroyed = TRUE
+			RoleMobDestroyed(TRUE)
+	else
+		if(M)
+			//Since this requires brain destruction, it's normally impossible.
+			message_admins("Somehow, an antag ([M], [M.ckey]) got undestroyed! This shouldn't happen.")
+			destroyed = FALSE
+			RoleMobDestroyed(FALSE)
 
 // Create objectives here.
 /datum/role/proc/ForgeObjectives()
@@ -483,11 +494,15 @@
 	return
 
 //Actions to be taken when antag.current is completely destroyed
-/datum/role/proc/RoleMobDestroyed()
+/datum/role/proc/RoleMobDestroyed(var/destruction = TRUE)
 	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
 		var/datum/gamemode/dynamic/D = ticker.mode
-		D.refund_threat(refund_value)
-		D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
+		if(destruction)
+			D.refund_threat(refund_value)
+			D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
+		else
+			D.spend_threat(refund_value)
+			D.threat_log += "[worldtime2text()]: [name] cost [refund_value] after being undestroyed."
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
@@ -568,6 +583,7 @@
 	AnnounceObjectives()
 
 /datum/role/blob_overmind/process()
+	..()
 	if(!antag || istype(antag.current,/mob/camera/blob) || !antag.current || isobserver(antag.current))
 		return
 	if (countdown > 0)

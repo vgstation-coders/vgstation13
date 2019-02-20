@@ -6,6 +6,7 @@
 	logo_state = "weeaboo-logo"
 	refund_value = BASE_SOLO_REFUND
 	wikiroute = WEEABOO
+	restricted_jobs = list("Trader") //Spawns in space
 
 /datum/role/weeaboo/OnPostSetup()
 	. =..()

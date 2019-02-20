@@ -52,7 +52,7 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/latejoin/raginmages/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/latejoin/raginmages/ready(var/forced = 0)
 	if(wizardstart.len == 0)
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
@@ -113,7 +113,6 @@
 	newWeeaboo.AssignToRole(M.mind,1)
 	newWeeaboo.Greet(GREET_DEFAULT)
 	newWeeaboo.OnPostSetup()
-	newWeeaboo.ForgeObjectives()
 	newWeeaboo.AnnounceObjectives()
 	return 1
 

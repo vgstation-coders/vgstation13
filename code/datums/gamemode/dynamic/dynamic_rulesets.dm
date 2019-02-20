@@ -103,7 +103,7 @@
 			log_admin("DYNAMIC MODE: [name] received no applications.")
 			message_admins("DYNAMIC MODE: [name] received no applications.")
 			mode.refund_threat(cost)
-			mode.threat_log += "[worldtime2text()]: Forced rule [name] refunded [cost] (no applications)"
+			mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (no applications)"
 			mode.executed_rules -= src
 			return
 

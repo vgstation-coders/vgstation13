@@ -212,7 +212,7 @@ var/list/threat_by_job = list(
 			return pick_delay(starting_rule)
 
 		spend_threat(starting_rule.cost)
-		threat_log += "[worldtime2text()]: [starting_rule.name] spent [starting_rule.cost]"
+		threat_log += "[worldtime2text()]: Roundstart [starting_rule.name] spent [starting_rule.cost]"
 		if (starting_rule.execute())//this should never fail since ready() returned 1
 			executed_rules += starting_rule
 			if (starting_rule.persistent)
@@ -248,7 +248,7 @@ var/list/threat_by_job = list(
 		if (!latejoin_rule.repeatable)
 			latejoin_rules = remove_rule(latejoin_rules,latejoin_rule.type)
 		spend_threat(latejoin_rule.cost)
-		threat_log += "[worldtime2text()]: [latejoin_rule.name] spent [latejoin_rule.cost]"
+		threat_log += "[worldtime2text()]: Latejoin [latejoin_rule.name] spent [latejoin_rule.cost]"
 		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
 			var/mob/M = pick(latejoin_rule.assigned)
@@ -267,7 +267,7 @@ var/list/threat_by_job = list(
 		if (!midround_rule.repeatable)
 			midround_rules = remove_rule(midround_rules,midround_rule.type)
 		spend_threat(midround_rule.cost)
-		threat_log += "[worldtime2text()]: [midround_rule.name] spent [midround_rule.cost]"
+		threat_log += "[worldtime2text()]: Midround [midround_rule.name] spent [midround_rule.cost]"
 		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
@@ -446,8 +446,8 @@ var/list/threat_by_job = list(
 
 	// -- No injection, we'll just update the threat
 	else
-		threat = min(threat + threat_by_job[newPlayer.mind.assigned_role], 100)
-		//threat_level = min(threat_level + threat_by_job[newPlayer.mind.assigned_role], 100)
+		refund_threat(threat_by_job[newPlayer.mind.assigned_role])
+		threat_log += "[worldtime2text()]: [newPlayer] refunded [threat_by_job[newPlayer.mind.assigned_role]] by joining as [newPlayer.mind.assigned_role]."
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)

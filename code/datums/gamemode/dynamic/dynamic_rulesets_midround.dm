@@ -83,13 +83,20 @@
 /datum/dynamic_ruleset/midround/from_ghosts/review_applications()
 	for (var/i = required_candidates, i > 0, i--)
 		if(applicants.len <= 0)
+			if(i == required_candidates)
+				//We have found no candidates so far and we are out of applicants.
+				mode.refund_threat(cost)
+				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
+				mode.executed_rules -= src
 			break
 		var/mob/applicant = pick(applicants)
 		applicants -= applicant
 		if(!isobserver(applicant))
-			//Making sure we don't recruit people who got back into the game since they applied
-			i++
-			continue
+			if(applicant.stat == DEAD) //Not an observer? If they're dead, make them one.
+				applicant = applicant.ghostize(FALSE) //
+			else //Not dead? Disregard them, pick a new applicant
+				i++
+				continue
 
 		var/mob/living/carbon/human/new_character = applicant
 
@@ -128,6 +135,7 @@
 	. = ..()
 	if (new_faction)
 		my_fac.OnPostSetup()
+	return new_faction
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
@@ -258,7 +266,9 @@
 	logo = "raginmages-logo"
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
 	if(wizardstart.len == 0)
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
@@ -266,11 +276,6 @@
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
 		weight = 5
 		cost = 10
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)

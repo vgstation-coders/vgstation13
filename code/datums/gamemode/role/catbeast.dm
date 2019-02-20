@@ -55,6 +55,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 #define DEFILE_THREAT 0.75
 
 /datum/role/catbeast/process()
+	..()
 	if(!iscatbeast(antag.current))
 		return
 	var/area/A = OnStation()
