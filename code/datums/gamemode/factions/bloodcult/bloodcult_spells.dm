@@ -38,7 +38,7 @@
 		spell = null//so we're not stuck trying to write the same spell over and over again
 
 	if (user.checkTattoo(TATTOO_FAST))
-		cast_delay = 6
+		cast_delay = 5
 
 	var/mob/living/carbon/C = user
 	var/muted = C.muted()
@@ -244,3 +244,58 @@
 		H.visible_message("<span class='warning'>\The [user] squeezes the blood in their hand, and it takes the shape of a dagger!</span>",
 			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0,-2)
+
+//SPELL IV
+/spell/cult/arcane_dimension
+	name = "Arcane Dimension (empty)"
+	desc = "Cast while holding an Arcane Tome to discretly store it through the veil."
+	hud_state = "cult_pocket_empty"
+
+	invocation_type = SpI_NONE
+	charge_type = Sp_RECHARGE
+	charge_max = 0
+	range = 0
+	spell_flags = null
+	insufficient_holder_msg = ""
+	still_recharging_msg = ""
+
+	cast_delay = 0
+
+	var/obj/item/weapon/tome/stored_tome = null
+
+/spell/cult/arcane_dimension/choose_targets(var/mob/user = usr)
+	return list(user)
+
+/spell/cult/arcane_dimension/cast(var/list/targets, var/mob/living/carbon/user)
+	..()
+	if (stored_tome)
+		stored_tome.forceMove(get_turf(user))
+		if (user.get_inactive_hand() && user.get_active_hand())//full hands
+			to_chat(user,"<span class='warning'>Your hands being full, your [stored_tome] had nowhere to fall but on the ground.</span>")
+		else
+			to_chat(user,"<span class='notice'>You hold your hand palm up, and your [stored_tome] drops in it from thin air.</span>")
+			user.put_in_hands(stored_tome)
+		stored_tome = null
+		name = "Arcane Dimension (empty)"
+		connected_button.name = name
+		desc = "Cast while holding an Arcane Tome to discretly store it through the veil."
+		hud_state = "cult_pocket_empty"
+		connected_button.overlays.len = 0
+		connected_button.MouseExited()
+		return
+
+	var/obj/item/weapon/tome/held_tome = user.get_active_hand()
+	if (!held_tome)
+		held_tome = user.get_inactive_hand()
+
+	if (held_tome)
+		stored_tome = held_tome
+		user.u_equip(held_tome)
+		held_tome.loc = null
+		to_chat(user,"<span class='notice'>With a swift movement of your arm, you drop \the [held_tome] that disappears into thin air before touching the ground.</span>")
+		name = "Arcane Dimension (full)"
+		connected_button.name = name
+		desc = "Cast to pick up your Arcane Tome back from the veil. You should preferably have a free hand."
+		hud_state = "cult_pocket_full"
+		connected_button.overlays.len = 0
+		connected_button.MouseExited()
