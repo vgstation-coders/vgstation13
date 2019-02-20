@@ -15,4 +15,4 @@
     if (..())
         return TRUE
     else
-        return (target >= blobs)
+        return (blobs >= target)
