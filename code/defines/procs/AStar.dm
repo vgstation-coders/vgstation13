@@ -30,7 +30,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 // Also added 'exclude' turf to avoid travelling over; defaults to null
 
-//Currently, there's four main ways to call AStar
+//currently, there's four main ways to call AStar
 //
 // 1) adjacent = "/turf/proc/AdjacentTurfsWithAccess" and distance = "/turf/proc/Distance"
 //	Seeks a path moving in all directions (including diagonal) and checking for the correct id to get through doors
@@ -160,7 +160,7 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
 	var/list/path = null //the returned path, if any
-	var/PathNode/cur //current processed turf
+	var/PathNode/current_node //current processed turf
 
 	//sanitation
 	start = get_turf(start)
@@ -174,47 +174,47 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 	while(!open.IsEmpty() && !path)
 	{
 			//get the lower f node on the open list
-		cur = open.Dequeue() //get the lower f turf in the open list
-		closed.Add(cur.source) //and tell we've processed it
+		current_node = open.Dequeue() //get the lower f turf in the open list
+		closed.Add(current_node.source) //and tell we've processed it
 
 		//if we only want to get near the target, check if we're close enough
 		var/closeenough
 		if(mintargetdist)
-			closeenough = call(cur.source,dist)(end) <= mintargetdist
+			closeenough = call(current_node.source,dist)(end) <= mintargetdist
 
 		//if too many steps, abandon that path
-		if(maxnodedepth && (cur.nt > maxnodedepth))
+		if(maxnodedepth && (current_node.nt > maxnodedepth))
 			continue
 
 		//found the target turf (or close enough), let's create the path to it
-		if(cur.source == end || closeenough)
+		if(current_node.source == end || closeenough)
 			path = new()
-			path.Add(cur.source)
-			while(cur.prevNode)
-				cur = cur.prevNode
-				path.Add(cur.source)
+			path.Add(current_node.source)
+			while(current_node.prevNode)
+				current_node = current_node.prevNode
+				path.Add(current_node.source)
 			break
 
 		//IMPLEMENTATION TO FINISH
 		//do we really need this minnodedist ???
 		/*if(minnodedist && maxnodedepth)
-			if(call(cur.source,minnodedist)(end) + cur.nt >= maxnodedepth)
+			if(call(current_node.source,minnodedist)(end) + current_node.nt >= maxnodedepth)
 				continue
 		*/
 
 		//get adjacents turfs using the adjacent proc, checking for access with id
-		var/list/L = call(cur.source,adjacent)(id,closed)
+		var/list/L = call(current_node.source,adjacent)(id,closed)
 
 		for(var/turf/T in L)
 			if(T == exclude)
 				continue
 
-			var/newg = cur.g + call(cur.source,dist)(T)
+			var/newg = current_node.g + call(current_node.source,dist)(T)
 			if(!T.PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,newg,call(T,dist)(end),cur.nt+1))
-			else //is already in open list, check if it's a better way from the current turf
+				open.Enqueue(new /PathNode(T,current_node,newg,call(T,dist)(end),current_node.nt+1))
+			else //is already in open list, check if it's a better way from the current_noderent turf
 				if(newg < T.PNode.g)
-					T.PNode.prevNode = cur
+					T.PNode.prevNode = current_node
 					T.PNode.g = newg
 					T.PNode.calc_f()
 					open.ReSort(T.PNode)//reorder the changed element in the list

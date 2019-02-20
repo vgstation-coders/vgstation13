@@ -19,17 +19,16 @@ var/list/AStar_waitingprocess = list()
 		currentrun = AStar_waitingbuild.Copy()
 
 	while(currentrun.len)
-		var/datum/astar_waiting/AW = currentrun[currentrun.len]
+		var/datum/astar/AS = currentrun[currentrun.len]
 		currentrun.len--
-		if(AW.gcDestroyed)
+		if(AS.gcDestroyed)
 			continue
-		SSAStarbuild &= AW
-		AW.receive_AStar(AStar(AW.start, AW.target, AW.adjacent, AW.distance, AW.maxnodes, AW.maxnodedepth, AW.mintargetdist, AW.minnodedist, AW.ID, AW.exclude))
+		AS.process_path_creation()
 
 #define REGISTER_ASTAR(A, args) if(SSAStarbuild) SSAStarbuild.register_atom(A, args)
 
 /proc/has_astar_path(var/atom/A)
-	for(var/datum/astar_waiting/AW in AStar_waitingbuild)
+	for(var/datum/astar/AW in AStar_waitingbuild)
 		if(AW.waiting == A)
 			return 1
 
@@ -39,22 +38,30 @@ var/list/AStar_waitingprocess = list()
 
 	ASSERT(args["target"])
 
-	new /datum/astar_waiting(A, args)
+	new /datum/astar(A, args)
 
-/datum/astar_waiting
+#define NOT_STARTED 0
+#define STARTED 1
+#define FAILED 2
+#define PATH_MADE 3
+#define PATH_COMPLETED 4
+
+/datum/astar
 	var/waiting
 	var/start
 	var/target
 	var/adjacent
 	var/distance
 	var/maxnodes
-	var/maxnodedepth
+	var/maxnodedepth = 30
 	var/mintargetdist
 	var/minnodedist
 	var/ID
-	var/exclude
+	var/turf/exclude
+	var/list/path = list()
+	var/status = NOT_STARTED
 
-/datum/astar_waiting/New(var/atom/A, var/list/args)
+/datum/astar/New(var/atom/A, var/list/args)
 	ASSERT(A)
 	ASSERT(args)
 	waiting = A
@@ -83,13 +90,29 @@ var/list/AStar_waitingprocess = list()
 		to_chat(world, "[i] = [vars[i]]")
 	AStar_waitingbuild |= src
 
-/datum/astar_waiting/proc/receive_AStar(var/list/path)
+/datum/astar/proc/receive_AStar()
 	ASSERT(!islist(path) || !path.len)
 
-	AStar_waitingprocess.Add(new /datum/astar_path(waiting, path))
-	qdel(src)
+	AStar_waitingprocess.Add(src)
+	AStar_waitingbuild.Remove(src)
 
-/datum/astar_waiting/Destroy()
+/datum/astar/proc/process_path_movement()
+	if(!path || !path.len)
+		qdel(src)
+		return
+	step_to(target, path[1])
+	if(path.len == 1)
+		path.Cut()
+		qdel(src)
+	else
+		path.Remove(path[1])
+
+/datum/astar/proc/process_path_creation()
+	if(status == NOT_STARTED)
+		status = STARTED
+
+
+/datum/astar/Destroy()
 	AStar_waitingbuild &= src
 	waiting = null
 	start = null
@@ -101,6 +124,9 @@ var/list/AStar_waitingprocess = list()
 	mintargetdist = null
 	ID = null
 	exclude = null
+	path.Cut()
+	AStar_waitingbuild &= src
+	AStar_waitingprocess &= src
 	..()
 
 //subsystem that processes Astar paths
@@ -117,33 +143,8 @@ var/list/AStar_waitingprocess = list()
 		currentrun = AStar_waitingprocess = list()
 
 	while(currentrun.len)
-		var/datum/astar_path/AP = currentrun[currentrun.len]
+		var/datum/astar/AP = currentrun[currentrun.len]
 		currentrun.len--
 		if(AP.gcDestroyed)
 			continue
-		AP.process_path()
-
-/datum/astar_path
-	var/atom/target
-	var/list/path
-
-/datum/astar_path/New(var/atom/new_target, var/list/new_path)
-	target = new_target
-	path = new_path
-	AStar_waitingprocess |= src
-
-/datum/astar_path/Destroy()
-	target = null
-	path.Cut()
-	AStar_waitingprocess &= src
-
-/datum/astar_path/proc/process_path()
-	if(!path || !path.len)
-		qdel(src)
-		return
-	step_to(target, path[1])
-	if(path.len == 1)
-		path.Cut()
-		qdel(src)
-	else
-		path.Remove(path[1])
+		AP.process_path_movement()
