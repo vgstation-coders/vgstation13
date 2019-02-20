@@ -345,8 +345,8 @@ var/list/station_holomaps = list()
 	var/image/legend
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
-	station_map.overlays.len = 0
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
+	station_map.overlays.len = 0
 	cursor = image('icons/holomap_markers.dmi', "you")
 	if(isAI)
 		T = get_turf(user.client.eye)
