@@ -118,7 +118,7 @@
 
 	else
 		threat_detected += LOW_THREAT
-	
+
 	var/detected = pick(threat_detected)
 
 	switch (detected)
@@ -130,7 +130,7 @@
 
 		if (HIGH_THREAT)
 			intercepttext += "<b>Uncharted space.</b> Congratulations and thank you for participating in the NT 'Frontier' space program."
-	
+
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
@@ -141,6 +141,10 @@
 			comm.messagetext.Add(intercepttext)
 
 	command_alert(/datum/command_alert/enemy_comms_interception)
+
+/proc/disable_suit_sensiors(mob/living/carbon/human/H)
+	var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
+	U.sensor_mode = 0
 
 /proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 	if (!istype(wizard_mob))
@@ -158,6 +162,7 @@
 
 	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
+	disable_suit_sensiors(wizard_mob)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
@@ -368,6 +373,7 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensiors(H)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
 	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/nentendiepower, slot_gloves)
