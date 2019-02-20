@@ -31,6 +31,7 @@ LATEJOIN
 latespawn(newPlayer) -> injection_attempt() -> [For each latespawn rule...]
 -> acceptable(living players, threat_level) -> trim_candidates() -> ready(forced=FALSE) **If true, add to drafted rules
 **NOTE that acceptable uses threat_level not threat! 				 **NOTE Latejoin timer is ONLY reset if at least one rule was drafted.
+**NOTE the new_player.dm AttemptLateSpawn() calls OnPostSetup for all roles (unless assigned role is MODE)
 
 [After collecting all draftble rules...]
 -> picking_latejoin_ruleset(drafted_rules) -> spend threat -> ruleset.execute()

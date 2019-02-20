@@ -135,6 +135,7 @@
 	. = ..()
 	if (new_faction)
 		my_fac.OnPostSetup()
+	return new_faction
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
@@ -279,7 +280,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
 	..()
-	new_role.OnPostSetup()
 	if(!locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
 		new_role.refund_value = BASE_SOLO_REFUND * 4
 		//If it's a spontaneous ragin' mage, it costs more, so refund more
