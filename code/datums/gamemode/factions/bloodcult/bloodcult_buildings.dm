@@ -767,7 +767,7 @@ var/list/cult_spires = list()
 	..()
 
 /obj/structure/cult/spire/proc/upgrade()
-	var/new_stage = Clamp(1, veil_thickness, 3)
+	var/new_stage = Clamp(veil_thickness, 1, 3)
 	if (new_stage>stage)
 		stage = new_stage
 		alpha = 255
