@@ -973,13 +973,19 @@ FIRE ALARM
 	return src.alarm()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
-	if(user.incapacitated() || (!Adjacent(user) && !issilicon(user) && !isAI(user) && !(M_TK in usr.mutations)))
+	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))
 		return
 	else
 		if(alarm == 1)
 			reset()
 		else
 			alarm()
+
+/obj/machinery/firealarm/AICtrlClick()
+	if(alarm == 1)
+		reset()
+	else
+		alarm()
 
 /obj/machinery/firealarm/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
