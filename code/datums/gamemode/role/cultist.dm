@@ -51,6 +51,7 @@
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/role/cultist/process()
+	..()
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
 

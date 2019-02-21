@@ -567,7 +567,7 @@ var/global/list/paper_folding_results = list ( \
 						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
 						<fieldset>
 	  					<legend>Picture</legend>
-						<center><img src="previewicon.png" width="64" height="64"><img src="previewicon2.png" width="64" height="64"></center>
+						<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
 						</fieldset><BR>
 						Name: [identity]<BR>
 						Blood Type: [merchant.dna.b_type]<BR>

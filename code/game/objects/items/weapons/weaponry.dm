@@ -108,11 +108,11 @@
 		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
 	else
 		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
-		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
 	if(active)
-		message += " Alt-click it to disable your teleport power!</span>"
+		message += " Alt-click it to stop teleporting, just in case you enter a no-warp trap room like the ones in Aincrad.</span>"
 	else
-		message += " Alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
+		message += " Alt-click it to enable your teleportation, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/AltClick(mob/user)
