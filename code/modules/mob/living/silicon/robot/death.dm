@@ -76,6 +76,9 @@
 			mmi.forceMove(T)
 		if(mmi.brainmob)
 			if(mind)
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
 				mind.transfer_to(mmi.brainmob)
 			mmi.brainmob.locked_to_z = locked_to_z
 		else

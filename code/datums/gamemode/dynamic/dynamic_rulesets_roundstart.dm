@@ -288,7 +288,8 @@
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	exclusive_to_jobs = list("AI")
+	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
+	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 3
@@ -299,14 +300,40 @@
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleRecruitedRole(AI)
-	AI.Greet(GREET_ROUNDSTART)
+
+	var/mob/M = progressive_job_search() //dynamic_rulesets.dm
+	if(M.mind.assigned_role != "AI")
+		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+			if(player.mind.assigned_role == "AI")
+				//We have located an AI to replace
+				displace_AI(player)
+				message_admins("Displacing AI played by: [key_name(player)].")
+	//There was no AI to displace, we're making one fresh
+	M.mind.assigned_role = "AI"
+	unction.HandleNewMind(M.mind)
+	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
+	MAI.Greet()
 	return 1
+
+/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
+	old_AI.mind.assigned_role = null
+	var/list/shuffledoccupations = shuffle(job_master.occupations)
+	for(var/level = 1 to 3)
+		if(old_AI.mind.assigned_role)
+			break
+		for(var/datum/job/job in shuffledoccupations)
+			if(job_master.TryAssignJob(old_AI,level,job))
+				break
+	if(old_AI.mind.assigned_role)
+		return
+	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+		job_master.GiveRandomJob(old_AI)
+		return
+	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+		job_master.AssignRole(old_AI, "Assistant")
+	else
+		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
+		old_AI.ready = 0
 
 //////////////////////////////////////////////
 //                                          //
