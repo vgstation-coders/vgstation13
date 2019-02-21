@@ -446,8 +446,10 @@ var/list/threat_by_job = list(
 
 	// -- No injection, we'll just update the threat
 	else
-		refund_threat(threat_by_job[newPlayer.mind.assigned_role])
-		threat_log += "[worldtime2text()]: [newPlayer] refunded [threat_by_job[newPlayer.mind.assigned_role]] by joining as [newPlayer.mind.assigned_role]."
+		var/jobthreat = threat_by_job[newPlayer.mind.assigned_role]
+		if(jobthreat)
+			refund_threat(jobthreat)
+			threat_log += "[worldtime2text()]: [newPlayer] refunded [jobthreat] by joining as [newPlayer.mind.assigned_role]."
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
