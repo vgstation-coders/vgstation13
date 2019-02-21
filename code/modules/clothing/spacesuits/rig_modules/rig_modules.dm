@@ -16,13 +16,17 @@
 	wearer = null
 	rig = null
 
+/obj/item/rig_module/proc/say_to_wearer(var/string)
+	ASSERT(wearer)
+	to_chat(wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
+
 /obj/item/rig_module/speed_boost
 	name = "Rig speed module"
 	desc = "Self-lubricating joints allow for ease of movement when walking in a rigsuit."
 
 /obj/item/rig_module/speed_boost/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	if(R.cell.use(500))
-		to_chat(user, "<span class = 'binaryradio'>Speed module engaged.</span>")
+		say_to_wearer("Speed module engaged.")
 		R.slowdown = max(1, slowdown/1.25)
 
 /obj/item/rig_module/speed_boost/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
@@ -53,9 +57,9 @@
 			var/datum/lung_gas/metabolizable/M = locate() in L.gasses
 			gas_id = M.id
 		processing_objects.Add(src)
-		to_chat(user, "<span class = 'binaryradio'>Internals pressurizer online. Syphoning [gas_id] from environment to [H.internal]</span>")
+		say_to_wearer("Internals pressurizer online. Syphoning [gas_id] from environment to [H.internal].")
 	else
-		to_chat(user, "<span class = 'binaryradio'>Internals pressurizer failed to find internals. Aborting.</span>")
+		say_to_wearer("Internals pressurizer failed to find internals. Aborting.")
 
 /obj/item/rig_module/tank_refiller/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
 	..()
@@ -68,7 +72,7 @@
 
 	var/mob/living/carbon/human/H = wearer
 	if(!H.internal)
-		to_chat(H, "<span class = 'binaryradio'>Internals pressurizer failed to find internals. Aborting.</span>")
+		say_to_wearer("Internals pressurizer failed to find internals. Aborting.")
 		processing_objects.Remove(src)
 	else
 		var/obj/item/weapon/tank/T = H.internal
