@@ -34,7 +34,7 @@
 
 /obj/item/rig_module/health_readout/examine_addition(mob/user)
 	if(wearer)
-		to_chat(user, "<span class = 'notice'>The embedded health readout reads: [(wearer.health/wearer.maxHealth)*100]%</span>")
+		to_chat(user, "<span class = 'notice'>The embedded health readout reads: [wearer.isDead()?"0%":"[(wearer.health/wearer.maxHealth)*100]%"]</span>")
 
 /obj/item/rig_module/tank_refiller
 	name = "tank pressurizer"
