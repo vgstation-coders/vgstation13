@@ -52,25 +52,16 @@
 		return 0
 
 	block = 1
-	var/tome = ""
 
 	if(!istype(user.loc, /turf))
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 		return 0
 
-	var/obj/item/weapon/tome/A = null
-	A = user.get_active_hand()
-
-
-	if (user.checkTattoo(TATTOO_MEMORIZE))
-		tome = "Knowledge"
-	if (!tome)
-		tome = istype(A)
-		if (!tome)
-			A = user.get_inactive_hand()
-			tome = istype(A)
-		if (tome)
-			tome = "Tome"
+	var/obj/item/weapon/tome/tome = user.get_active_hand()
+	if (!tome || !istype(tome))
+		tome = user.get_inactive_hand()
+	if (!istype(tome))
+		tome = null
 
 	var/turf/T = get_turf(user)
 	rune = locate() in T
@@ -98,7 +89,12 @@
 					available_runes.Add("\Roman[i]-[initial(instance.name)]")
 					available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 				i++
-			var/spell_name = input(user,"Draw a rune with the help of the Arcane [tome].", "Trace Complete Rune", null) as null|anything in available_runes
+			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
+			if (tome.state == TOME_CLOSED)
+				tome.icon_state = "tome-open"
+				tome.item_state = "tome-open"
+				flick("tome-flickopen",tome)
+				tome.state = TOME_OPEN
 			spell = available_runes[spell_name]
 
 		var/datum/cultword/instance
@@ -155,6 +151,15 @@
 	if (write_rune_word(get_turf(user) ,data["blood"] ,word = cultwords[word]) > 1)
 		remember = 1
 		perform(user)//imediately try writing another word
+	else
+		var/obj/item/weapon/tome/tome = user.get_active_hand()
+		if (!tome || !istype(tome))
+			tome = user.get_inactive_hand()
+		if (tome && istype(tome) && tome.state == TOME_OPEN)
+			tome.icon_state = "tome"
+			tome.item_state = "tome"
+			flick("tome-stun",tome)
+			tome.state = TOME_CLOSED
 
 //SPELL II
 /spell/cult/erase_rune
