@@ -35,8 +35,6 @@
 	var/turf/oldtarget
 	var/oldloc = null
 	req_access = list(access_janitor)
-	var/path[] = new()
-	var/patrol_path[] = null
 	var/beacon_freq = 1445		// navigation beacon frequency
 	var/closest_dist
 	var/closest_loc
@@ -135,7 +133,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			src.updateUsrDialog()
 		if("patrol")
 			src.should_patrol =!src.should_patrol
-			src.patrol_path = null
+			drop_astar_path()
 			src.updateUsrDialog()
 		if("freq")
 			var/freq = text2num(input("Select frequency for  navigation beacons", "Frequnecy", num2text(beacon_freq / 10))) * 10
@@ -210,90 +208,6 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 						T.targetted_by = src	// Claim the messy tile we are targeting.
 						break
 
-	if(!src.target || src.target == null)
-		if(src.loc != src.oldloc)
-			src.oldtarget = null
-
-		if (!should_patrol)
-			return
-
-		if (!patrol_path || patrol_path.len < 1)
-			var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
-
-			if(!frequency)
-				return
-
-			closest_dist = 9999
-			closest_loc = null
-			next_dest_loc = null
-
-			var/datum/signal/signal = getFromPool(/datum/signal)
-			signal.source = src
-			signal.transmission_method = 1
-			signal.data = list("findbeacon" = "patrol")
-			frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-			spawn(5)
-				if (!next_dest_loc)
-					next_dest_loc = closest_loc
-				if (next_dest_loc)
-					src.patrol_path = AStar(src.loc, next_dest_loc, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=null)
-		else
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
-			patrol_move()
-
-		return
-
-	if(!path)
-		path = new()
-	if(target && path.len == 0)
-		spawn(0)
-			if(!src || !target)
-				return
-			src.path = AStar(src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 30)
-			if (!path)
-				path = list()
-			if(src.path.len == 0)
-				src.oldtarget = src.target
-				target.targetted_by = null
-				src.target = null
-		return
-	if(isturf(loc))
-		if(src.path.len > 0 && src.target && (src.target != null))
-			step_to(src, src.path[1])
-			src.path -= src.path[1]
-		else if(src.path.len == 1)
-			step_to(src, target)
-
-	if(src.target && (src.target != null))
-		patrol_path = null
-		if(src.loc == src.target)
-			clean(src.target)
-			src.path = new()
-			src.target = null
-			return
-
-	src.oldloc = src.loc
-
-/obj/machinery/bot/cleanbot/proc/patrol_move()
-	if(!isturf(loc))
-		return
-	if (src.patrol_path.len <= 0)
-		return
-
-	var/next = src.patrol_path[1]
-	src.patrol_path -= next
-	if (next == src.loc)
-		return
-
-	var/moved = step_towards(src, next)
-	if (!moved)
-		failed_steps++
-	if (failed_steps > 4)
-		patrol_path = null
-		next_dest = null
-		failed_steps = 0
-	else
-		failed_steps = 0
 
 /obj/machinery/bot/cleanbot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]

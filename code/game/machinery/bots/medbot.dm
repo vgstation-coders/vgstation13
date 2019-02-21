@@ -34,7 +34,6 @@
 	var/obj/item/weapon/reagent_containers/glass/reagent_glass = null //Can be set to draw from this for reagents.
 	var/skin = null //Set to "tox", "ointment" or "o2" for the other two firstaid kits.
 	var/frustration = 0
-	var/path[] = new()
 	var/mob/living/carbon/patient = null
 	var/mob/living/carbon/oldpatient = null
 	var/oldloc = null
@@ -341,8 +340,6 @@
 			else
 				continue
 
-	if(!path)
-		path = new()
 	if(patient && (get_dist(src,patient) <= 1))
 		if(!currently_healing)
 			currently_healing = 1

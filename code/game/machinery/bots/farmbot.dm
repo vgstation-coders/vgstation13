@@ -52,8 +52,6 @@
 
 	var/obj/structure/reagent_dispensers/watertank/tank // the water tank that was used to make it, remains inside the bot.
 
-	var/path[] = new() // used for pathing
-	var/frustration
 
 /obj/machinery/bot/farmbot/New()
 	..()
@@ -251,7 +249,6 @@
 	if ( mode && target )
 		if ( get_dist(target,src) <= 1 || ( emagged && mode == FARMBOT_MODE_FERTILIZE ) )
 			// If we are in emagged fertilize mode, we throw the fertilizer, so distance doesn't matter
-			frustration = 0
 			use_farmbot_item()
 		else
 			move_to_target()
@@ -345,48 +342,6 @@
 
 /obj/machinery/bot/farmbot/proc/move_to_target()
 	//Mostly copied from medibot code.
-
-	if(src.frustration > 8)
-		target = null
-		mode = 0
-		frustration = 0
-		src.path = new()
-	if(!src.path)
-		src.path = new()
-	if(src.target && (src.path.len) && (get_dist(src.target,src.path[src.path.len]) > 2))
-		src.path = new()
-	if(src.target && src.path.len == 0 && (get_dist(src,src.target) > 1))
-		spawn(0)
-			var/turf/dest = get_step_towards(target,src)  //Can't pathfind to a tray, as it is dense, so pathfind to the spot next to the tray
-
-			src.path = AStar(src.loc, dest, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if(path && src.path.len == 0)
-				for ( var/turf/spot in orange(1,target) ) //The closest one is unpathable, try  the other spots
-					if ( spot == dest ) //We already tried this spot
-						continue
-					if ( spot.density )
-						continue
-					src.path = AStar(src.loc, spot, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-					src.path = reverseRange(src.path)
-					if ( src.path.len > 0 )
-						break
-
-				if ( src.path.len == 0 )
-					target = null
-					mode = 0
-		return
-
-	if(src.path.len > 0 && src.target && isturf(loc))
-		step_to(src, src.path[1])
-		src.path -= src.path[1]
-		spawn(3)
-			if(src.path.len)
-				step_to(src, src.path[1])
-				src.path -= src.path[1]
-
-	if(src.path.len > 8 && src.target)
-		src.frustration++
-
 
 /obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fert)
 	if ( !fert )
