@@ -121,13 +121,13 @@
 
 			if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
 				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
-				new /obj/item/weapon/melee/energy/sword/red(src) //They are non-functional by themselves but can be combined into a double e-sword
+				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
 				new /obj/item/weapon/dnainjector/nofail/telemut(src)
+				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
 				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
 				new /obj/item/clothing/head/sith(src)
 				new /obj/item/clothing/suit/sith(src)
-				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
 				new /obj/item/clothing/shoes/sandal(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
