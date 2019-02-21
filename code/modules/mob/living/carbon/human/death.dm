@@ -47,6 +47,7 @@
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/shade = new (T)
+			playsound(T, 'sound/hallucinations/growl1.ogg', 50, 1)
 			shade.name = "[real_name] the Shade"
 			shade.real_name = "[real_name]"
 			mind.transfer_to(shade)
