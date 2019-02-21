@@ -184,7 +184,7 @@
 		russian+=3
 	if(findtext("putin",lowertext(H.name))) // No celebrities were harmed. Cannot be both Putin and the other names.
 		russian+=5
-	if(H.reagents.has_reagent(VODKA))
+	if(H.reagents.has_reagent(VODKA)) //REAL vodka, not any derivative of greyshit vodka
 		russian+=2
 
 	if(funk_level > 2 && prob((50/russian)**funk_level))
