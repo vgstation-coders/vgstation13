@@ -119,17 +119,6 @@
 				new /obj/item/clothing/gloves/red(src)
 				new /obj/item/clothing/accessory/storage/bandolier(src)
 
-			if("bangerboy")//5?*6+12+0+3?=45
-				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
-				new /obj/item/weapon/gun/grenadelauncher(src)
-				new /obj/item/clothing/glasses/sunglasses(src)
-				new /obj/item/device/radio/headset/headset_earmuffs(src)
-
 			if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
 				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
 				new /obj/item/weapon/melee/energy/sword/red(src) //They are non-functional by themselves but can be combined into a double e-sword
