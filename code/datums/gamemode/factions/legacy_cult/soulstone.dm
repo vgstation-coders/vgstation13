@@ -329,7 +329,7 @@
 		dir = NORTH
 		update_icon()
 	user.update_inv_hands()
-	to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.</span>")
+	to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them succeed in their goals at all costs.</span>")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
 
 	//Is our user a cultist? Then you're a cultist too now!
