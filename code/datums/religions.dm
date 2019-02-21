@@ -279,6 +279,7 @@
 	male_adept = "Magister"
 	female_adept = "Magistera"
 	keys = list("satan", "evil", "satanism")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 
 /datum/religion/lovecraft
 	name = "Esoteric order of Dagon"
@@ -307,6 +308,7 @@
 	male_adept = "Master of Slam"
 	female_adept = "Mistress of Slam"
 	keys = list("slam", "bball", "basketball", "basket ball")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vale
 
 /datum/religion/slam/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new/obj/item/weapon/beach_ball/holoball)
@@ -382,6 +384,7 @@
 	male_adept = "Druid"
 	female_adept = "Druidess"
 	keys = list("druidism", "celtic")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 
 /datum/religion/atheism
 	name = "Atheism"
@@ -404,6 +407,7 @@
 	male_adept = "Biologist"
 	female_adept = "Biologist"
 	keys = list("evolution", "biology", "monkey", "monkeys")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/scientology
 	name = "Scientology"
@@ -453,6 +457,7 @@
 	deity_name = "The Flying Spaghetti Monster"
 	bible_name = "The Gospel of the Flying Spaghetti Monster"
 	keys = list("pastafarianism")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/sunflowers
 
 /datum/religion/chaos
 	name = "Chaos"
@@ -486,6 +491,7 @@
 	male_adept = "LGBT Advocate"
 	female_adept = "LGBT Advocate"
 	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/homosexuality/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
@@ -499,6 +505,7 @@
 	female_adept = "Retard"
 	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
 	convert_method = "standing both next to a table."
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
@@ -552,6 +559,7 @@
 	male_adept = "Academician"
 	female_adept = "Academician"
 	keys = list("Science")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/sunflowers
 
 /datum/religion/justice
 	name = "Tribunal"
@@ -625,6 +633,7 @@
 	male_adept = "Veterinarian"
 	female_adept = "Veterinarian"
 	keys = list("ianism", "ian", "dog", "puppy", "doggo", "pupper")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 
 /datum/religion/admins
 	name = "Adminism"
@@ -660,6 +669,7 @@
 	male_adept = "Ghost"
 	female_adept = "Ghost"
 	keys = list("spook", "spooky", "boo", "ghost", "halloween", "2spooky")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 
 /datum/religion/spooky/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/pumpkinhead(H), slot_head)
@@ -710,6 +720,7 @@
 	male_adept = "Drunkard"
 	female_adept = "Drunkard"
 	keys = list("alcohol", "booze", "beer", "wine", "ethanol", "c2h6o")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vodka
 
 /datum/religion/robutness
 	name = "Robustness"
@@ -719,6 +730,7 @@
 	male_adept = "Robuster"
 	female_adept = "Robuster"
 	keys = list("robust", "robustness", "strength")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vale
 
 /datum/religion/suicide
 	name = "Thanatology" // Guess it works
@@ -728,6 +740,7 @@
 	male_adept = "Reaper"
 	female_adept = "Reaper"
 	keys = list("suicide", "death", "succumb")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 
 /datum/religion/communism
 	name = "Communism"
@@ -773,6 +786,7 @@
 	male_adept = "Feldbischof" //No seriously, that's a thing, look it up
 	female_adept = "Feldbischof"
 	keys = list("fascism", "nazi", "national socialism")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
 /datum/religion/nazism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
@@ -785,7 +799,7 @@
 	female_adept = "Nanotrasen Officer"
 	keys = list("security", "space law", "law", "nanotrasen", "centcomm")
 	convert_method = "performing a ritual with a flashbang and a screwdriver. You need to hold the flashbang, with its timer set to 5 seconds, your convert needs to hold the screwdriver and have a free empty hand."
-
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
 /datum/religion/security/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/centhat(H), slot_head)
@@ -893,6 +907,7 @@
 	male_adept = "Revolutionary"
 	female_adept = "Revolutionary"
 	keys = list("revolution", "rev", "revolt")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
 /datum/religion/wizard
 	name = "Wizardry"
@@ -901,6 +916,7 @@
 	male_adept = "Wizard"
 	female_adept = "Wizard"
 	keys = list("wizard", "wiz", "magic")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
 /datum/religion/wizard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/wizard(H), slot_head)
@@ -937,6 +953,7 @@
 	male_adept = "Vox Enthusiast" //And that's terrible
 	female_adept = "Vox Enthusiast"
 	keys = list("vox", "raiders", "raid", "bird", "birb")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vapor
 
 /datum/religion/bleb
 	name = "Blob Worship"
@@ -953,6 +970,7 @@
 	male_adept = "Co-Clown"
 	female_adept = "Co-Clown"
 	keys = list("honk", "clown", "honkmother")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/clown/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
@@ -1019,11 +1037,11 @@
 
 /datum/religion/vegan
 	name = "Veganism"
-
 	bible_name = "Mercy For Animals"
 	male_adept = "Animal Rights Activist"
 	female_adept = "Animal Rights Activist"
 	keys = list("vegan","vegetarian","veganism","vegetarianism", "animals", "animal rights")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 
 /datum/religion/vegan/equip_chaplain(var/mob/living/carbon/human/H)
 	//Add veganism disability
@@ -1037,6 +1055,7 @@
 	male_adept = "Expedition Leader"
 	female_adept = "Expedition Leader"
 	keys = list("armok", "dwarf", "dorf", "dwarf fortress", "dorf fort")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vodka
 
 /datum/religion/art
 	name = "The Joy of Painting"
@@ -1059,6 +1078,7 @@
 	male_adept = "Janitor"
 	female_adept = "Janitor"
 	keys = list("clean","cleaning","Mr. Clean","janitor")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vapor
 
 /datum/religion/clean/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/mop)
@@ -1074,6 +1094,7 @@
 	female_adept = "Kommando"
 	keys = list("murdercube","murderkube", "murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea", "dakka")
 	convert_method = "performing a ritual with a gun. The convert needs to be in good health and unafraid of being shot."
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
 /datum/religion/guns/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/weapon/gun/energy/laser/practice)

@@ -13,6 +13,7 @@ var/list/special_fruits = list()
 	var/potency = -1
 	var/hydroflags = 0
 	var/datum/seed/seed
+	var/fragrance
 	icon = 'icons/obj/harvest.dmi'
 	New(newloc, newpotency)
 		if(!isnull(newpotency))
@@ -316,6 +317,7 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
+	fragrance = INCENSE_VODKA
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -361,6 +363,7 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
+	fragrance = INCENSE_LEAFY
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
@@ -555,6 +558,7 @@ var/list/special_fruits = list()
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+	fragrance = INCENSE_BANANA
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"
@@ -797,6 +801,7 @@ var/list/special_fruits = list()
 	icon_state = "grassclump"
 	filling_color = "#32CD32"
 	plantname = "grass"
+	fragrance = INCENSE_DENSE
 	var/stacktype = /obj/item/stack/tile/grass
 	var/tile_coefficient = 0.02 // 1/50
 
@@ -874,6 +879,7 @@ var/list/special_fruits = list()
 	desc = "A thin organic film bearing seeds, held slightly aloft by internal gasses and a reservoir of chemicals."
 	icon_state = "vaporsac"
 	filling_color = "#FFFFFF"
+	fragrance = INCENSE_VAPOR
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/attack(mob/living/M, mob/user, def_zone, eat_override = 0)
 	pop(user)

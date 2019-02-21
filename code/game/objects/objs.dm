@@ -567,7 +567,7 @@ a {
 
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))
-		return (M_CLUMSY in user.mutations)
+		return (M_CLUMSY in user.mutations) || reagents.has_reagent(/datum/reagent/incense/banana)
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.

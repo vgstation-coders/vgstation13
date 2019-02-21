@@ -188,6 +188,7 @@
 	icon_state = "valeleaves"
 	plantname = "vale"
 	hydroflags = HYDRO_PREHISTORIC
+	fragrance = INCENSE_CRAVE
 
 /datum/seed/surik
 	name = "surik"
