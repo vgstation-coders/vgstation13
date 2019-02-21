@@ -1105,8 +1105,12 @@
 		if (!(M_HULK in C.mutations))
 			to_chat(M, "<span class='danger'>You find yourself unable to say a word.</span>")
 			C.Silent(15)
-		C.Knockdown(25)
-		C.Stun(25)
+		C.Knockdown(15)//used to be 25
+		C.Stun(15)//used to be 25
+
+	if (!(locate(/obj/effect/stun_indicator) in M))
+		new /obj/effect/stun_indicator(M)
+
 	qdel(src)
 
 /obj/effect/cult_ritual/stun
