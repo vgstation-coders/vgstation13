@@ -15,7 +15,7 @@
 	weight = 7
 	cost = 10
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
-	var/autotraitor_cooldown = 900//15 minutes
+	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
