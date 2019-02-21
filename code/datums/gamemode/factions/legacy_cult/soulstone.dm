@@ -307,8 +307,8 @@
 			qdel(add_target)
 		return
 
-	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)].")
-	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)].")
+	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
+	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
 
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob = new(src)//put shade in stone
@@ -329,9 +329,8 @@
 		dir = NORTH
 		update_icon()
 	user.update_inv_hands()
-	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
+	to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.</span>")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
-
 
 	//Is our user a cultist? Then you're a cultist too now!
 	if (iscultist(user))
@@ -346,6 +345,12 @@
 		newCultist.conversion["soulstone"] = user
 		cult_risk(user)//risk of exposing the cult early if too many soul trappings
 
+	else
+		if (iscultist(shadeMob))
+			to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
+			to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
+			shadeMob.mind.decult()
+	
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
 	var/turf/T2 = null
