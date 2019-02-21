@@ -289,6 +289,10 @@
 		held_tome = user.get_inactive_hand()
 
 	if (held_tome)
+		if (held_tome.state == TOME_OPEN)
+			held_tome.icon_state = "tome"
+			held_tome.item_state = "tome"
+			held_tome.state = TOME_CLOSED
 		stored_tome = held_tome
 		user.u_equip(held_tome)
 		held_tome.loc = null
