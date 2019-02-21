@@ -182,33 +182,33 @@ Message ends."}
 // -- Scoreboard --
 
 /datum/faction/blob_conglomerate/GetScoreboard()
-	var/list/results = list()
-	results += ..()
-	results += "<br/>"
+	var/dat = ..()
+	dat += "<br/>"
 	switch (win)
 		if (STATION_TAKEOVER)
-			results += "<b>Blob victory!</b>"
+			dat += "<b>Blob victory!</b>"
 		if (STATION_WAS_NUKED)
-			results += "<b>Crew minor victory!</b>"
+			dat += "<b>Crew minor victory!</b>"
 		if (BLOB_IS_DED)
-			results += "<b>Crew victory!</b>"
-	results += "<br />"
+			dat += "<b>Crew victory!</b>"
+	dat += "<br />"
 	var/datum/station_state/end = new
 	end.count()
-	results += "<b>Percentage of station taken: [end.score(start)]</b>"
-	results += "<br/>"
-	results += "<b>Quarantaine status:</b><br/>"
+	dat += "<b>Total blobs: [blobs]</b>"
+	dat += "<b>Station Integrity: [end.score(start)]%</b>"
+	dat += "<br/>"
+	dat += "<b>Quarantaine status:</b><br/>"
 	var/list/result = check_quarantaine()
-	results += "Dead humans: <b>[result["numDead"]]</b><br/>"
-	results += "Alive humans still on board: <b>[result["numAlive"]]</b><br/>"
-	results += "Humans in space: <b>[result["numSpace"]]</b><br/>"
-	results += "Humans off-station: <b>[result["numOffStation"]]</b><br/>"
-	results += "Pre-escapes: <b>[pre_escapees.len]</b>"
+	dat += "Dead humans: <b>[result["numDead"]]</b><br/>"
+	dat += "Alive humans still on board: <b>[result["numAlive"]]</b><br/>"
+	dat += "Humans in space: <b>[result["numSpace"]]</b><br/>"
+	dat += "Humans off-station: <b>[result["numOffStation"]]</b><br/>"
+	dat += "Pre-escapes: <b>[pre_escapees.len]</b><br/>"
 	if (result["numOffStation"] + result["numSpace"])
-		results += "<span class='danger'>The AI has failed to enforce the quarantaine.</span>"
+		dat += "<span class='danger'>The AI has failed to enforce the quarantine.</span>"
 	else
-		results += "<span class='notice'>The AI has managed to enforce the quarantaine.</span>"
-	return jointext(result, "")
+		dat += "<span class='good'>The AI has managed to enforce the quarantine.</span><BR>"
+	return dat
 
 /datum/faction/blob_conglomerate/proc/check_quarantaine()
 	var/list/result = list()
@@ -290,15 +290,15 @@ Message ends."}
 	return
 
 
-/datum/station_state/proc/score(var/datum/station_state/result)
-	if(!result)
+/datum/station_state/proc/score(var/datum/station_state/start)
+	if(!start)
 		return 0
 	var/output = 0
-	output += (result.floor / max(floor,1))
-	output += (result.r_wall/ max(r_wall,1))
-	output += (result.wall / max(wall,1))
-	output += (result.window / max(window,1))
-	output += (result.door / max(door,1))
-	output += (result.grille / max(grille,1))
-	output += (result.mach / max(mach,1))
+	output += (floor / max(start.floor,1))
+	output += (r_wall/ max(start.r_wall,1))
+	output += (wall / max(start.wall,1))
+	output += (window / max(start.window,1))
+	output += (door / max(start.door,1))
+	output += (grille / max(start.grille,1))
+	output += (mach / max(start.mach,1))
 	return (output/7)

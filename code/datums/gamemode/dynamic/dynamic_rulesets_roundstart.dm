@@ -332,9 +332,8 @@
 	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
 	for (var/i = 1 to min(blob_number, candidates.len))
 		var/mob/M = pick(candidates)
-		var/datum/role/blob_overmind/blob = new
-		blob.AssignToRole(M.mind, 1)
-		blob_fac.HandleRecruitedRole(blob)
+		blob_fac.HandleNewMind(M.mind)
+		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
 	return 1
 

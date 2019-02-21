@@ -569,7 +569,8 @@
 
 /datum/role/blob_overmind
 	name = BLOBOVERMIND
-	id = ROLE_BLOB
+	id = BLOBOVERMIND
+	required_pref = ROLE_BLOB
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
