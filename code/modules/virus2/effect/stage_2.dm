@@ -381,3 +381,44 @@
 		qdel(G)
 		if(prob(30/multiplier))
 			break
+
+/datum/disease2/effect/calorieburn
+	name = "Caloric expenditure overefficiency"
+	stage = 2
+	multiplier = 1.5
+	max_multiplier = 4
+	var/activated = FALSE
+
+/datum/disease2/effect/calorieburn/activate(var/mob/living/carbon/mob)
+	if(!activated)
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H
+			H.calorie_burn_rate *= multiplier
+		activated = TRUE
+
+/datum/disease2/effect/calorieburn/deactivate(var/mob/living/carbon/mob)
+	if(activated)
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H
+			H.calorie_burn_rate /= multiplier
+
+/datum/disease2/effect/calorieconserve
+	name = "Caloric expenditure defficiency"
+	stage = 2
+	multiplier = 1.5
+	max_multiplier = 4
+	var/activated = FALSE
+
+/datum/disease2/effect/calorieconserve/activate(var/mob/living/carbon/mob)
+	if(!activated)
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H
+			H.calorie_burn_rate /= multiplier
+		activated = TRUE
+
+/datum/disease2/effect/calorieconserve/deactivate(var/mob/living/carbon/mob)
+	if(activated)
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H
+			H.calorie_burn_rate *= multiplier
+
