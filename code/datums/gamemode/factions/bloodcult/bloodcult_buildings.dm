@@ -1351,6 +1351,12 @@ var/list/bloodstone_list = list()
 			cult.fail()
 	..()
 
+/obj/structure/cult/bloodstone/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	cultist_act(user)
+	return 1
+
 /obj/structure/cult/bloodstone/cultist_act(var/mob/user)
 	.=..()
 	if (!.)
