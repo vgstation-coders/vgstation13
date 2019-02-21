@@ -1086,7 +1086,7 @@ var/list/cult_spires = list()
 		var/obj/item/clothing/mask/cigarette/fag = I
 		fag.light("<span class='notice'>\The [user] lights \the [fag] by bringing its tip close to \the [src]'s molten flow.</span>")
 		return 1
-	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
+	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper) || istype(I,/obj/item/weapon/tome))
 		I.ashify_item(user)
 		return 1
 	..()
