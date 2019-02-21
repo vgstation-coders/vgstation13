@@ -1392,11 +1392,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/mob/living/U = usr
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
-
 	var/no_refresh = 0
-	var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
-	if (map_app && map_app.holomap)
-		map_app.holomap.stopWatching()
+	if (href_list["choice"] != "104")//PDA_APP_STATIONMAP
+		var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
+		if (map_app && map_app.holomap)
+			map_app.holomap.stopWatching()
 	if(can_use(U)) //Why reinvent the wheel? There's a proc that does exactly that.
 		add_fingerprint(U)
 		U.set_machine(src)
