@@ -57,12 +57,7 @@
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 		return 0
 
-	var/obj/item/weapon/tome/tome = user.get_active_hand()
-	if (!tome || !istype(tome))
-		tome = user.get_inactive_hand()
-	if (!istype(tome))
-		tome = null
-
+	var/obj/item/weapon/tome/tome = locate() in user.held_items
 	var/turf/T = get_turf(user)
 	rune = locate() in T
 
@@ -152,10 +147,8 @@
 		remember = 1
 		perform(user)//imediately try writing another word
 	else
-		var/obj/item/weapon/tome/tome = user.get_active_hand()
-		if (!tome || !istype(tome))
-			tome = user.get_inactive_hand()
-		if (tome && istype(tome) && tome.state == TOME_OPEN)
+		var/obj/item/weapon/tome/tome = locate() in user.held_items
+		if (tome && tome.state == TOME_OPEN)
 			tome.icon_state = "tome"
 			tome.item_state = "tome"
 			flick("tome-stun",tome)
@@ -284,10 +277,7 @@
 		connected_button.MouseExited()
 		return
 
-	var/obj/item/weapon/tome/held_tome = user.get_active_hand()
-	if (!held_tome)
-		held_tome = user.get_inactive_hand()
-
+	var/obj/item/weapon/tome/held_tome = locate() in user.held_items
 	if (held_tome)
 		if (held_tome.state == TOME_OPEN)
 			held_tome.icon_state = "tome"
