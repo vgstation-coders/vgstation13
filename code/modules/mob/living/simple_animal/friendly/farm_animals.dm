@@ -41,9 +41,7 @@
 			Retaliate()
 
 		if(enemies.len && prob(10))
-			enemies = list()
-			LoseTarget()
-			src.visible_message("<span class='notice'>[src] calms down.</span>")
+			Calm()
 
 		if(stat == CONSCIOUS)
 			if(udder && prob(5))
@@ -62,6 +60,11 @@
 					if(locate(/obj/effect/plantsegment) in step)
 						Move(step)
 
+/mob/living/simple_animal/hostile/retaliate/goat/proc/Calm()
+	enemies.Cut()
+	LoseTarget()
+	src.visible_message("<span class='notice'>[src] calms down.</span>")
+
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
 	if(!stat)
 		..()
@@ -77,7 +80,8 @@
 				say("Nom")
 
 /mob/living/simple_animal/hostile/retaliate/goat/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
+	if(stat == CONSCIOUS)
+		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
 		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
@@ -85,6 +89,9 @@
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
 			to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage))
+			Calm()
+			qdel(O)
 	else
 		..()
 //cow
