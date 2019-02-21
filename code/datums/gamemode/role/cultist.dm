@@ -8,6 +8,7 @@
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
+	var/second_chance = 1
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
