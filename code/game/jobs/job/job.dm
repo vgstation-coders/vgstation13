@@ -72,6 +72,9 @@
 /datum/job/proc/bump_position_limit()
 	xtra_positions++
 
+/datum/job/proc/reject_new_slots()
+	return FALSE
+
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
 	return 1
 

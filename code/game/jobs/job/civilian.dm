@@ -347,6 +347,12 @@
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
+/datum/job/clown/reject_new_slots()
+	if(security_level == SEC_LEVEL_RAINBOW)
+		return FALSE
+	else
+		return "Rainbow Alert"
+
 /datum/job/mime
 	title = "Mime"
 	flag = MIME
@@ -399,6 +405,12 @@
 /datum/job/mime/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/baguette(H.back), slot_in_backpack)
+
+/datum/job/mime/reject_new_slots()
+	if(security_level == SEC_LEVEL_RAINBOW)
+		return FALSE
+	else
+		return "Rainbow Alert"
 
 //Mime's break vow spell, couldn't think of anywhere else to put this
 

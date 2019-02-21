@@ -82,7 +82,8 @@ var/list/labor_console_categories = list(
 			continue
 		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td>"
 		if(job_datum.current_positions >= job_datum.get_total_positions())
-			dat += "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot!)</A>"
+			var/reason = job_datum.reject_new_slots()
+			dat += "[reason ? "([reason])" : "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot!)</A>"]"
 		else
 			dat += "<A [job_master.priority_jobs_remaining < 1 ? "class='linkOff'" : "href='?src=\ref[src];priority=[job_datum.title]'"]>&emsp14;(Prioritize)&emsp14;</A>"
 		dat += "</td></tr>"
