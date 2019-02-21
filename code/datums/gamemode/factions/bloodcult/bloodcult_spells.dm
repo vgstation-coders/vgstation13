@@ -89,12 +89,12 @@
 					available_runes.Add("\Roman[i]-[initial(instance.name)]")
 					available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 				i++
-			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
 			if (tome.state == TOME_CLOSED)
 				tome.icon_state = "tome-open"
 				tome.item_state = "tome-open"
 				flick("tome-flickopen",tome)
 				tome.state = TOME_OPEN
+			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
 			spell = available_runes[spell_name]
 
 		var/datum/cultword/instance
