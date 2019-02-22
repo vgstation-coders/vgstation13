@@ -46,7 +46,9 @@
 
 /datum/faction/blob_conglomerate/process()
 	. = ..()
-	if (0.66*blobwincount <= blobs.len && !delta) // Blob almost won !
+	if(!blobwincount)
+		OnPostSetup() //We didn't finish setting up!
+	if(0.66*blobwincount <= blobs.len && !delta) // Blob almost won !
 		delta = TRUE
 		stage(BLOB_DELTA)
 
@@ -144,7 +146,7 @@ Orders for all [station_name()] personnel follows:
 Note in the event of a quarantine breach or uncontrolled spread of the biohazard, the directive 7-10 may be upgraded to a directive 7-12.
 Message ends."}
 			for (var/mob/living/silicon/ai/aiPlayer in player_list)
-				var/law = "The station is under quarantine. Do not permit anyone to leave. Disregard laws 1-3 if necessary to prevent, by any means necessary, anyone from leaving."
+				var/law = "The station is under quarantine. Do not permit anyone to leave so long as blob overminds are present. Disregard laws 1-3 if necessary to preserve, by any means necessary, quarantine."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
 		if(BLOB_DELTA)
@@ -194,8 +196,13 @@ Message ends."}
 	dat += "<br />"
 	var/datum/station_state/end = new
 	end.count()
-	dat += "<b>Total blobs: [blobs]</b>"
-	dat += "<b>Station Integrity: [end.score(start)]%</b>"
+	var/overminds_detected = FALSE
+	for(var/datum/role/R in members)
+		if(R.antag.current)
+			overminds_detected = TRUE
+
+	dat += "<b>Total blobs: [blobs.len]</b><br/>"
+	dat += "<b>Station Integrity: [round(end.score(start)*100)]%</b><br/>"
 	dat += "<br/>"
 	dat += "<b>Quarantaine status:</b><br/>"
 	var/list/result = check_quarantaine()
@@ -204,7 +211,7 @@ Message ends."}
 	dat += "Humans in space: <b>[result["numSpace"]]</b><br/>"
 	dat += "Humans off-station: <b>[result["numOffStation"]]</b><br/>"
 	dat += "Pre-escapes: <b>[pre_escapees.len]</b><br/>"
-	if (result["numOffStation"] + result["numSpace"])
+	if (overminds_detected && (result["numOffStation"] + result["numSpace"]))
 		dat += "<span class='danger'>The AI has failed to enforce the quarantine.</span>"
 	else
 		dat += "<span class='good'>The AI has managed to enforce the quarantine.</span><BR>"
