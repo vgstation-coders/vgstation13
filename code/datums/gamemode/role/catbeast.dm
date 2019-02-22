@@ -4,7 +4,7 @@
 	special_role = CATBEAST
 	required_pref = ROLE_MINOR
 	wikiroute = ROLE_MINOR
-	logo_state = "cb-logo"
+	logo_state = "catbeast-logo"
 	var/ticks_survived = 0
 	var/threat_generated = 0
 	var/threat_level_inflated = 0
