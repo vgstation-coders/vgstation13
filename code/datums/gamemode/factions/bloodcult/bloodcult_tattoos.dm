@@ -70,11 +70,16 @@ var/list/blood_communion = list()
 	icon_state = "holy"
 	tier = 2
 
-/datum/cult_tattoo/fast
-	name = TATTOO_FAST
-	desc = "Trace runes 60% faster."
-	icon_state = "fast"
+/datum/cult_tattoo/memorize
+	name = TATTOO_MEMORIZE//Arcane Dimension
+	desc = "Allows you to hide a tome into thin air, and pull it out whenever you want."
+	icon_state = "memorize"
 	tier = 2
+
+/datum/cult_tattoo/memorize/getTattoo(var/mob/M)
+	..()
+	if (M.mind && M.mind.GetRole(CULTIST))
+		M.add_spell(new /spell/cult/arcane_dimension, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/cult_tattoo/chat
 	name = TATTOO_CHAT
@@ -118,10 +123,10 @@ var/list/blood_communion = list()
 	H.fixblood()
 	H.regenerate_icons()
 
-/datum/cult_tattoo/memorize
-	name = TATTOO_MEMORIZE
-	desc = "Trace complete runes without having to hold an open tome."
-	icon_state = "memorize"
+/datum/cult_tattoo/fast
+	name = TATTOO_FAST
+	desc = "Trace runes 66% faster."
+	icon_state = "fast"
 	tier = 3
 
 /datum/cult_tattoo/shortcut
