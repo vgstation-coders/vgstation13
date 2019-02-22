@@ -381,3 +381,21 @@
 		qdel(G)
 		if(prob(30/multiplier))
 			break
+
+
+/datum/disease2/effect/yelling
+	name = "Plankton's Syndrome"
+	stage = 2
+	var/triggered = 0
+	affect_voice = 1
+
+/datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
+	if(!triggered)
+		to_chat(mob, "<span class='notice'>You feel like what you have to say is more important.</span>")
+		affect_voice_active = 1
+		triggered = 1
+
+/datum/disease2/effect/yelling/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	message = uppertext(message + "!")
+	speech.message = message
