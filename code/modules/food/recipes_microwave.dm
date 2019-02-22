@@ -143,6 +143,15 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
+/datum/recipe/gelatinburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slime)
+	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin
+
+/datum/recipe/gelatinburger/alt
+//Uses gelatin from cooking.
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/gelatin)
+
 /datum/recipe/veggieburger
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
@@ -1642,6 +1651,13 @@
 				/obj/item/weapon/reagent_containers/food/snacks/yogurt
 				)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pannacotta
+
+/datum/recipe/pannacotta/alt
+//Uses gelatin from butchered slime people
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
+				/obj/item/weapon/reagent_containers/food/snacks/yogurt
+				)
 
 /datum/recipe/yogurt
 	reagents = list(CREAM = 10, VIRUSFOOD = 5)

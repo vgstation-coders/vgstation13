@@ -15,8 +15,8 @@
 	holder_type = /obj/item/weapon/holder/animal/slime
 	var/colour = "grey"
 	var/paralyzed = 0
-	can_butcher = 0
-	meat_type = null
+	can_butcher = FALSE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
 	mob_bump_flag = SLIME
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
