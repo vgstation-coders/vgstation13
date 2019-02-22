@@ -261,7 +261,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 1
-	cost = 50
+	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
 	repeatable = TRUE
@@ -281,7 +281,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
 	..()
 	if(!locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		new_role.refund_value = BASE_SOLO_REFUND * 4
+		new_role.refund_value = BASE_SOLO_REFUND
 		//If it's a spontaneous ragin' mage, it costs more, so refund more
 	else
 		new_role.refund_value = BASE_SOLO_REFUND/2
