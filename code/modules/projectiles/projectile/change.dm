@@ -66,11 +66,14 @@
 
 /obj/item/projectile/polymorph/on_hit(var/atom/hit)
 	if(hit == firer)
-		firer.transmogrify(/mob/living/simple_animal/pollywog, allow_revert = FALSE)
+		var/mob/living/M = new /mob/living/simple_animal/pollywog(firer.loc)
+		M.ckey = firer.ckey
+		firer.Premorph()
+		qdel(firer)
 		return
 	var/stat = status
-	spawn(1)//fixes bugs caused by the target ceasing to exist before the projectile has died.
-		polymorph(hit,stat)
+	bullet_die()
+	polymorph(hit,stat)
 
 /obj/item/projectile/polymorph/proc/polymorph(var/mob/living/M, var/status)
 	if(istype(M) && M.stat != DEAD)
