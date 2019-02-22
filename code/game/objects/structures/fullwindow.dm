@@ -95,8 +95,14 @@
 		ini_dir = dir
 
 /obj/structure/window/full/AltClick(var/mob/user)
-	var/turf/T = get_turf(src)
-	T.AltClick(user)
+	. = ..()
+	var/turf/T = loc
+	if (istype(T))
+		if (user.listed_turf == T)
+			user.listed_turf = null
+		else
+			user.listed_turf = T
+			user.client.statpanel = T.name
 
 /obj/structure/window/full/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)
