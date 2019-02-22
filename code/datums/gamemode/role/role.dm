@@ -230,6 +230,8 @@
 	return
 
 /datum/role/proc/process()
+	if(!antag)
+		return //The role may have been just created and unassigned
 	var/mob/M = antag.current
 	if(!destroyed)
 		if(!M)
