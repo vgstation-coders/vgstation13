@@ -230,6 +230,8 @@
 	return
 
 /datum/role/proc/process()
+	if(!antag)
+		return //The role may have been just created and unassigned
 	var/mob/M = antag.current
 	if(!destroyed)
 		if(!M)
@@ -569,7 +571,8 @@
 
 /datum/role/blob_overmind
 	name = BLOBOVERMIND
-	id = ROLE_BLOB
+	id = BLOBOVERMIND
+	required_pref = ROLE_BLOB
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
@@ -786,7 +789,6 @@
 	name = MALF
 	id = MALF
 	required_pref = ROLE_MALF
-	required_jobs = list("AI")
 	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()
@@ -802,6 +804,9 @@
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()
 		malfAI.show_laws()
+
+		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
+			faction.HandleRecruitedMind(R.mind)
 
 /datum/role/malfAI/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>

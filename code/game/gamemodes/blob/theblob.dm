@@ -402,8 +402,14 @@ var/list/blob_looks_player = list(//Options available to players
 				B.aftermove()
 				if(B.spawning > 1)
 					B.spawning = 1
+				if(istype(T,/turf/simulated/floor))
+					var/turf/simulated/floor/F = T
+					F.burn_tile()
 		else
 			B.forceMove(T)
+			if(istype(T,/turf/simulated/floor))
+				var/turf/simulated/floor/F = T
+				F.burn_tile()
 	else //If we cant move in hit the turf
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.

@@ -7,6 +7,7 @@
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 	var/subjectname = ""
 	var/subjectjob = null
+	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 	New()
@@ -18,7 +19,7 @@
 	..(A)
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
-			name = "[M.name] meat"
+			name = "[M.name] [meatword]"
 		subjectname = M.name
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
@@ -301,3 +302,13 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	. = ..()
 	if(ishuman(eater))
 		eater.contract_disease(new /datum/disease/wendigo_transformation)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	name = "gelatin"
+	desc = "A slab of gelatin. It has a similar composition to regular meat but with a bit more jelly."
+	icon_state = "slime_meat"
+	meatword = "gelatin"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 10)

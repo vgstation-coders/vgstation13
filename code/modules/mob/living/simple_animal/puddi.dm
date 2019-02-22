@@ -17,7 +17,7 @@
 	response_harm   = "slaps"
 	speak_override = TRUE
 
-	meat_type = null
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
 /mob/living/simple_animal/puddi/happy
 	icon_state = "livingpuddi-happy"

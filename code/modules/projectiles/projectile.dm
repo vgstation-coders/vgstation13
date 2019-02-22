@@ -106,6 +106,7 @@ var/list/impact_master = list()
 	var/fire_sound = 'sound/weapons/Gunshot.ogg' //sound that plays when the projectile is fired
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
+	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
 
 /obj/item/projectile/New()
 	..()
@@ -428,7 +429,10 @@ var/list/impact_master = list()
 		bullet_die()
 		return 1
 	if(travel_range)
-		if(get_exact_dist(starting, get_turf(src)) > travel_range)
+		var/turf/T = get_turf(src)
+		if(get_exact_dist(starting, T) > travel_range)
+			if (decay_type)
+				new decay_type(T)
 			bullet_die()
 			return 1
 	kill_count--

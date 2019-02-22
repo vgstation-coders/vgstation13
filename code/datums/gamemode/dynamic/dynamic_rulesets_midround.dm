@@ -239,8 +239,8 @@
 	candidates -= M
 	var/datum/role/malfAI/AI = new
 	AI.AssignToRole(M.mind,1)
-	unction.HandleRecruitedRole(AI)
-	AI.Greet(GREET_ROUNDSTART)
+	unction.HandleNewMind(M.mind)
+	AI.Greet()
 	for(var/mob/living/silicon/robot/R in M.connected_robots)
 		unction.HandleRecruitedMind(R.mind)
 	unction.forgeObjectives()

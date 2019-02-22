@@ -15,7 +15,7 @@
 	weight = 7
 	cost = 10
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
-	var/autotraitor_cooldown = 900//15 minutes
+	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
@@ -288,7 +288,8 @@
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	exclusive_to_jobs = list("AI")
+	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
+	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 3
@@ -299,14 +300,40 @@
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleRecruitedRole(AI)
-	AI.Greet(GREET_ROUNDSTART)
+
+	var/mob/M = progressive_job_search() //dynamic_rulesets.dm
+	if(M.mind.assigned_role != "AI")
+		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+			if(player.mind.assigned_role == "AI")
+				//We have located an AI to replace
+				displace_AI(player)
+				message_admins("Displacing AI played by: [key_name(player)].")
+	//There was no AI to displace, we're making one fresh
+	M.mind.assigned_role = "AI"
+	unction.HandleNewMind(M.mind)
+	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
+	MAI.Greet()
 	return 1
+
+/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
+	old_AI.mind.assigned_role = null
+	var/list/shuffledoccupations = shuffle(job_master.occupations)
+	for(var/level = 1 to 3)
+		if(old_AI.mind.assigned_role)
+			break
+		for(var/datum/job/job in shuffledoccupations)
+			if(job_master.TryAssignJob(old_AI,level,job))
+				break
+	if(old_AI.mind.assigned_role)
+		return
+	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+		job_master.GiveRandomJob(old_AI)
+		return
+	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+		job_master.AssignRole(old_AI, "Assistant")
+	else
+		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
+		old_AI.ready = 0
 
 //////////////////////////////////////////////
 //                                          //
@@ -332,9 +359,8 @@
 	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
 	for (var/i = 1 to min(blob_number, candidates.len))
 		var/mob/M = pick(candidates)
-		var/datum/role/blob_overmind/blob = new
-		blob.AssignToRole(M.mind, 1)
-		blob_fac.HandleRecruitedRole(blob)
+		blob_fac.HandleNewMind(M.mind)
+		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
 	return 1
 
