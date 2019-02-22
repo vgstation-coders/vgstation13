@@ -328,8 +328,6 @@
 	stun = 2
 	weaken = 2
 	destroy = 1
-	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
-	bounces = 1
 	fire_sound = 'sound/weapons/osipr_fire.ogg'
 
 /obj/item/projectile/bullet/hecate
