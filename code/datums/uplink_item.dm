@@ -698,11 +698,16 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
+	desc = "Spray something to render it invisible for five minutes! One-time use. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/invisible_spray/permanent
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	cost = 4
+	jobs_exclusive = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
 	name = "Advanced Mime Gloves"
