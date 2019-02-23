@@ -26,7 +26,7 @@
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 	H.add_language("Spooky") //SPOOK
 	H.equip_or_collect(new /obj/item/clothing/under/rank/chaplain(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/weapon/nullrod(H.back), slot_l_store)//each chaplain bring their own
+	H.equip_or_collect(new /obj/item/weapon/nullrod(H), slot_l_store)//each chaplain brings their own
 	//H.equip_or_collect(new /obj/item/device/pda/chaplain(H), slot_belt)
 	H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
 

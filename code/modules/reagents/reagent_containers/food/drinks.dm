@@ -355,7 +355,7 @@
 	reagents.add_reagent(TOMATO_SOUP, 30, reagtemp = T0C + 80)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
@@ -927,6 +927,15 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
+
+/obj/item/weapon/reagent_containers/food/drinks/discount_shaker
+	name = "\improper discount shaker"
+	desc = "A metal shaker to mix drinks in."
+	icon_state = "shaker"
+	origin_tech = Tc_MATERIALS + "=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+	flags = FPRINT  | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
 	name = "\improper Thermos"

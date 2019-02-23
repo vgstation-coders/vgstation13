@@ -32,6 +32,7 @@
 	H.equip_or_collect(new /obj/item/clothing/under/rank/bartender(H), slot_w_uniform)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	//H.equip_or_collect(new /obj/item/device/pda/bar(H), slot_belt)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/shaker(H), slot_l_store)//each bartender brings their own
 
 	if(H.backbag == 1)
 		var/obj/item/weapon/storage/box/survival/Barpack = new H.species.survival_gear(H)
