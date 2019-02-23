@@ -173,7 +173,6 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
 
-		user.drop_item(AE, src, force_drop = 1)
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("[user] installs [AE] into [src].", "You start to install [AE] into [src].")
 
@@ -184,8 +183,7 @@ obj/structure/windoor_assembly/Destroy()
 			electronics = AE
 			electronics.installed = TRUE
 			update_name()
-		else
-			AE.forceMove(loc)
+			user.drop_item(AE, src, force_drop = 1)
 
 	//Screwdriver to remove airlock electronics. Step 6 undone.
 	if(isscrewdriver(W) && (anchored && electronics))
