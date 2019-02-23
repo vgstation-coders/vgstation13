@@ -293,6 +293,7 @@ var/list/special_fruits = list()
 	potency = 30
 	filling_color = "#CC6464"
 	plantname = "poppies"
+	fragrance = INCENSE_POPPIES
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/harebell
 	name = "harebell"
@@ -301,6 +302,7 @@ var/list/special_fruits = list()
 	potency = 1
 	filling_color = "#D4B2C9"
 	plantname = "harebells"
+	fragrance = INCENSE_HAREBELLS
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
@@ -309,6 +311,7 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#E6E6FA"
 	plantname = "moonflowers"
+	fragrance = INCENSE_MOONFLOWERS
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
@@ -317,7 +320,6 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
-	fragrance = INCENSE_VODKA
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -750,6 +752,7 @@ var/list/special_fruits = list()
 	icon_state = "plumphelmet"
 	filling_color = "#F714BE"
 	plantname = "plumphelmet"
+	fragrance = INCENSE_BOOZE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom
 	name = "walking mushroom"

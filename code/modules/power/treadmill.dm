@@ -62,8 +62,7 @@
 		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
 		if(runner.reagents) //Sanity
-			for(var/datum/reagent/R in runner.reagents.reagent_list)
-				calc *= R.sport
+			calc *= runner.reagents.get_sportiness()
 		if(M_HULK in runner.mutations)
 			calc *= 5
 		count_power += calc

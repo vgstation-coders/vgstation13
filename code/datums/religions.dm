@@ -720,7 +720,7 @@
 	male_adept = "Drunkard"
 	female_adept = "Drunkard"
 	keys = list("alcohol", "booze", "beer", "wine", "ethanol", "c2h6o")
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vodka
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/booze
 
 /datum/religion/robutness
 	name = "Robustness"
@@ -1055,7 +1055,7 @@
 	male_adept = "Expedition Leader"
 	female_adept = "Expedition Leader"
 	keys = list("armok", "dwarf", "dorf", "dwarf fortress", "dorf fort")
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vodka
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/booze
 
 /datum/religion/art
 	name = "The Joy of Painting"

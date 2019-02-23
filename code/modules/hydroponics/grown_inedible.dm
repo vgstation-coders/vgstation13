@@ -7,6 +7,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	var/plantname
 	var/potency = 1
+	var/fragrance = null
 
 /obj/item/weapon/grown/New()
 
@@ -90,6 +91,7 @@
 	w_class = W_CLASS_TINY
 	throw_speed = 1
 	throw_range = 3
+	fragrance = INCENSE_SUNFLOWERS
 
 /obj/item/weapon/grown/sunflower/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<font color='green'><b> [user] smacks you with a sunflower! </font><font color='yellow'><b>FLOWER POWER<b></font>")
@@ -111,6 +113,7 @@
 	throw_speed = 1
 	throw_range = 3
 	attack_verb = list("sears", "heats", "whacks", "steams")
+	fragrance = INCENSE_NOVAFLOWERS
 
 /obj/item/weapon/grown/novaflower/New()
 	..()

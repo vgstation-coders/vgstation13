@@ -176,7 +176,7 @@
 	return
 
 //Called after add_reagents creates a new reagent
-/datum/reagent/proc/on_new(var/data)
+/datum/reagent/proc/on_introduced(var/data)
 	return
 
 //Called when two reagents are mixing
@@ -192,6 +192,8 @@
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
+/datum/reagent/proc/OnTransfer()
+	return
 
 /datum/reagent/send_to_past(var/duration)
 	var/static/list/resettable_vars = list(
@@ -7172,11 +7174,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 3.214
 	specheatcap = 1.34
 	color = "#E0D3D3" //rgb: 224, 211, 211
-	var/obj/source = null
+	data = list("source" = null)
 
-/datum/reagent/incense/New()
+/datum/reagent/incense/on_introduced(var/data)
 	..()
-	source = holder.my_atom
+	if(!src.data["source"]) //src is necessary because of this terrible var name, but consistency!
+		src.data["source"] = holder.my_atom
 
 /datum/reagent/incense/proc/OnDisperse(var/turf/location)
 
@@ -7245,37 +7248,35 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Banana Incense"
 	id = INCENSE_BANANA
 	description = "This fragrance helps you be more clumsy, so you can laugh at yourself."
-	custom_metabolism = 0.15
 
 /datum/reagent/incense/cabbage
 	name = "Leafy Incense"
 	id = INCENSE_LEAFY
 	description = "This fragrance smells of fresh greens, delicious to most animals."
-	custom_metabolism = 1
 
 /datum/reagent/incense/cabbage/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(isanimal(M))
+	if(isanimal(M) || ismonkey(M))
 		if(istype(M,/mob/living/simple_animal/hostile))
 			var/mob/living/simple_animal/hostile/H = M
 			switch(H.stance)
 				if(HOSTILE_STANCE_ATTACK,HOSTILE_STANCE_ATTACKING)
 					return
-			H.start_walk_to(source,1,6)
+		M.start_walk_to(get_turf(data["source"]),1,6)
 
-/datum/reagent/incense/potato
+/datum/reagent/incense/booze
 	name = "Alcoholic Incense"
-	id = INCENSE_VODKA
+	id = INCENSE_BOOZE
 	description = "This fragrance is dense with the odor of ethanol."
 
-/datum/reagent/incense/potato/on_mob_life(var/mob/living/M)
+/datum/reagent/incense/booze/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(M.slurring > 22)
+	if(M.slurring < 22)
 		M.slurring += 10
-	if(M.confused > 22)
-		M.confused += 10
+	if(M.eye_blurry < 22)
+		M.eye_blurry += 10
 
 /datum/reagent/incense/vapor
 	name = "Airy Incense"
@@ -7283,18 +7284,18 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "It burns your nostrils a little. The incense smells... clean."
 
 /datum/reagent/incense/vapor/OnDisperse(var/turf/location)
-	for(var/turf/simulated/T in view(1,location))
+	for(var/turf/simulated/T in view(2,location))
 		T.dry(TURF_WET_LUBE)
 
 /datum/reagent/incense/dense
 	name = "Dense Incense"
 	id = INCENSE_DENSE
 	description = "This isn't really a fragrance so much as tactical smoke."
-	custom_metabolism = 2
+	custom_metabolism = 0.25
 
 /datum/reagent/incense/dense/OnDisperse(var/turf/location)
 	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-	smoke.set_up(1, 0, location) //Make one cloud of smoke, any directional
+	smoke.set_up(2, 0, location) //Make 2 drifting clouds of smoke, direction
 	smoke.start()
 
 /datum/reagent/incense/dense/on_mob_life(var/mob/living/M)
