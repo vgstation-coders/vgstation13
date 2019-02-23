@@ -224,12 +224,15 @@
 		M.update_inv_hands()
 
 /obj/item/incense_stick/proc/set_fragrance(var/newfrag)
+	if(fragrance == newfrag)
+		return FALSE
 	fragrance = newfrag
 	for(var/path in typesof(/obj/item/incense_stick))
 		var/obj/item/incense_stick/IS = new path
 		if(fragrance == IS.fragrance)
 			adjective = IS.adjective
 			color = IS.color
+	return TRUE
 
 
 /obj/item/weapon/storage/fancy/incensebox
@@ -394,8 +397,8 @@
 			to_chat(user, "<span class='warning'>A floral product must be blended inside first!</span>")
 			return
 		var/obj/item/incense_stick/S = W
-		S.set_fragrance(fragrance)
-		to_chat(user, "<span class='notice'>You dip the stick in the container, carefully applying the [adjective] oils on it.</span>")
+		if(S.set_fragrance(fragrance))
+			to_chat(user, "<span class='notice'>You dip the stick in the container, carefully applying the [adjective] oils on it.</span>")
 		return
 	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(W,/obj/item/weapon/grown))
 		if(W:fragrance) //for both types this is null by default, so it's "safe" to use the trusted operator
