@@ -222,6 +222,8 @@
 
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
 
+#define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
+
 //Macros for roles/antags
 #define isfaction(A) (istype(A, /datum/faction))
 

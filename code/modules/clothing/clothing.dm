@@ -136,6 +136,11 @@
 	else
 		verbs -= /obj/item/clothing/verb/removeaccessory
 
+/obj/item/clothing/proc/is_worn_by(mob/user)
+	if(user.is_wearing_item(src))
+		return TRUE
+	return FALSE
+
 /obj/item/clothing/New() //so sorry
 	..()
 	update_verbs()
