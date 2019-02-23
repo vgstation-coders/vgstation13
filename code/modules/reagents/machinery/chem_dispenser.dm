@@ -13,6 +13,7 @@
 	var/rechargerate = 2
 	var/amount = 30
 	var/obj/item/weapon/reagent_containers/container = null
+	var/beaker = FALSE
 	var/recharged = 0
 	var/custom = 0
 	var/useramount = 30 // Last used amount
@@ -256,6 +257,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
 		container = null
+		beaker = FALSE
+		update_icon()
 		return 1
 
 /obj/machinery/chem_dispenser/AltClick()
@@ -293,6 +296,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 			container =  D
 			to_chat(user, "You add \the [D] to the machine!")
+			beaker = TRUE
+			update_icon()
 
 			nanomanager.update_uis(src) // update all UIs attached to src
 			return 1
@@ -316,6 +321,21 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return
 
 	ui_interact(user)
+
+/obj/machinery/chem_dispenser/update_icon()
+
+	overlays.len = 0
+	var/image/overlay
+
+	if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
+		overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay2")
+	else
+		overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay1")
+
+	if(beaker)
+		overlay.pixel_x = pick(-7,-3, 0, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
+		overlays += overlay
+
 //Cafe stuff
 
 /obj/machinery/chem_dispenser/brewer/
