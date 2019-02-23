@@ -333,7 +333,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay1")
 
 	if(beaker)
-		overlay.pixel_x = pick(-7,-3, 0, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
+		overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
 		overlays += overlay
 
 //Cafe stuff
