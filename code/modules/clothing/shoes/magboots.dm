@@ -180,10 +180,10 @@
 	else
 		if(H.w_uniform.type == /obj/item/clothing/under/russobluecamooutfit || istype(H.w_uniform, /obj/item/clothing/under/neorussian))
 			russian+=2
-	if((findtext("ivan",lowertext(H.name)) || findtext("yuri",lowertext(H.name)) || findtext("vlad",lowertext(H.name) && !findtext("putin",lowertext(H.name))) || findtext("lenin",lowertext(H.name)) || findtext("boris",lowertext(H.name)) || findtext("sasha",lowertext(H.name)) || findtext("misha",lowertext(H.name)) || findtext("sergei",lowertext(H.name))) && !findtext("putin",lowertext(H.name)))
-		russian+=3
-	if(findtext("putin",lowertext(H.name))) // No celebrities were harmed. Cannot be both Putin and the other names.
+	if(findtext("putin",lowertext(H.name)))
 		russian+=5
+	else if(findtext("ivan",lowertext(H.name)) || findtext("yuri",lowertext(H.name)) || findtext("vlad",lowertext(H.name) && !findtext("putin",lowertext(H.name))) || findtext("lenin",lowertext(H.name)) || findtext("boris",lowertext(H.name)) || findtext("sasha",lowertext(H.name)) || findtext("misha",lowertext(H.name)) || findtext("sergei",lowertext(H.name)))
+		russian+=3
 	if(H.reagents.has_reagent(VODKA)) //REAL vodka, not any derivative of greyshit vodka
 		russian+=2
 
