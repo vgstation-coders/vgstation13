@@ -707,6 +707,7 @@ var/list/uplink_items = list()
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
 	cost = 4
+	jobs_excluded = list()
 	jobs_exclusive = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
