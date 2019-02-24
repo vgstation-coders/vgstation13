@@ -21,6 +21,15 @@
 	master = null
 	..()
 
+/obj/abstract/screen/resetVariables()
+	..("icon","icon_state","name","master", "screen_loc", args)
+	icon = initial(icon)
+	icon_state = null
+	name = null
+	master = null
+	screen_loc = null
+	animate(src)
+
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
