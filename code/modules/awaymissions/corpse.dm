@@ -761,7 +761,7 @@
 	corpseidaccess = "Assistant"
 	corpsegender = G_FEMALE
 
-/obj/effect/landmark/corpse/waifu/secfu
+/obj/effect/landmark/corpse/waifu/secfu //bodybag sold separately.
 	corpseuniform = /obj/item/clothing/under/securityskirt/elite
 	corpsehelmet = /obj/item/clothing/head/beret/sec
 	corpseback = /obj/item/weapon/storage/backpack/security
@@ -773,6 +773,7 @@
 	corpsepocket1 = /obj/item/weapon/handcuffs
 	corpsepocket2 = /obj/item/device/flash
 	corpseid = 1
+	name = "Lucy Pinata"
 	corpseidjob = "Waifu"
 	corpseidaccess = "Security Officer"
 	corpsegender = G_FEMALE
