@@ -53,7 +53,7 @@
 	var/armor
 	if(affecting)
 		var/hit_area = affecting.display_name
-		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
+		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
 		if(armor >= 2)
 			return TRUE //We still connected
 		if(!I.force)

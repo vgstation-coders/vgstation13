@@ -21,6 +21,42 @@
 		return sharpness
 	return 0
 
+/obj/item/weapon/melee/energy/attack(var/mob/living/carbon/M, var/mob/living/user) //You will literally take someone's hand off with this
+	if(user.a_intent == I_DISARM && (user.zone_sel.selecting == LIMB_RIGHT_HAND || user.zone_sel.selecting == LIMB_LEFT_HAND))
+		var/datum/organ/external/l_hand/LH = M.get_organ(LIMB_LEFT_HAND)
+		var/datum/organ/external/r_hand/RH = M.get_organ(LIMB_RIGHT_HAND)
+		var/target = user.zone_sel.selecting
+		if(!active)
+			to_chat(usr, "You need to activate \the [src] before you can take someone's hand off!")
+			return
+		if(LH.status & ORGAN_DESTROYED && target == LIMB_LEFT_HAND)
+			to_chat(user, "<span class='warning'> There is no left hand to try to cut off!</span>")
+			return
+		else if(RH.status & ORGAN_DESTROYED && target == LIMB_RIGHT_HAND)
+			to_chat(user, "<span class='warning'> There is no right hand to try to cut off!</span>")
+			return
+		else if(prob(25))
+			if(target == LIMB_LEFT_HAND)
+				LH.droplimb(1)
+				M.audible_scream()
+				playsound(user, "sound/weapons/blade1.ogg", 100, 1)
+				user.visible_message("<span class='danger'>[user] cuts [M]'s left hand with the [src]!</span>", \
+				                     "<span class='warning'>You slice [M]'s left hand with the [src]! </span>")
+			else if(target == LIMB_RIGHT_HAND)
+				RH.droplimb(1)
+				M.audible_scream()
+				playsound(user, "sound/weapons/blade1.ogg", 100, 1)
+				user.visible_message("<span class='danger'>[user] cuts [M]'s right hand with the [src]!</span>", \
+				                     "<span class='warning'>You slice [M]'s right hand with the [src]! </span>")
+			return
+		else
+			playsound(user, "sound/weapons/swing02.ogg", 100, 1)
+			user.visible_message("<span class='danger'>[user] tries to cut M's hand with the [src] but misses!</span>", \
+			                     "<span class='warning'>You miss trying to slice [M]'s hand!</span>")
+			return
+	else
+		..()
+
 /obj/item/weapon/melee/energy/axe
 	name = "energy axe"
 	desc = "An energised battle axe."
@@ -35,7 +71,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
-
+	armor_penetration = 50
 
 /obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
@@ -47,6 +83,7 @@
 	force = 3
 	active_force = 30
 	throwforce = 5
+	armor_penetration = 50
 
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
@@ -64,17 +101,16 @@
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-
 /obj/item/weapon/melee/energy/sword/activated/New()
 	..()
 	active = 1
 	force = 30
 	w_class = W_CLASS_LARGE
 	sharpness = sharpness_on
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL_AIRLOCK
 	hitsound = "sound/weapons/blade1.ogg"
 	update_icon()
-
+	armor_penetration = 100
 
 /obj/item/weapon/melee/energy/sword/IsShield()
 	if(active)
@@ -109,10 +145,11 @@
 		force = 30
 		w_class = W_CLASS_LARGE
 		sharpness = sharpness_on
-		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
+		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL_AIRLOCK
 		hitsound = "sound/weapons/blade1.ogg"
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")
+		armor_penetration = 100
 	else
 		force = 3
 		w_class = W_CLASS_SMALL
@@ -121,6 +158,7 @@
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		hitsound = "sound/weapons/empty.ogg"
 		to_chat(user, "<span class='notice'> [src] can now be concealed.</span>")
+		armor_penetration = initial(armor_penetration)
 	update_icon()
 
 /obj/item/weapon/melee/energy/sword/update_icon()
@@ -140,21 +178,12 @@
 		qdel(src)
 
 
-/obj/item/weapon/melee/energy/sword/bsword
+/obj/item/weapon/melee/energy/sword/bsword //It's a child of energy sword, it doesn't need to be copypasted
 	name = "banana"
 	desc = "It's yellow."
 	base_state = "bsword0"
 	active_state = "bsword1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 3
-	throwforce = 5
-	throw_speed = 1
-	throw_range = 5
-	w_class = W_CLASS_SMALL
-	flags = FPRINT
-	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-
 
 /obj/item/weapon/melee/energy/sword/bsword/update_icon()
 	if(active)
@@ -206,6 +235,7 @@
 	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
 	var/event_key
+	armor_penetration = 50
 
 /obj/item/weapon/melee/energy/hfmachete/update_icon()
 	icon_state = "[base_state][active]"
@@ -227,16 +257,18 @@
 		throwforce = 6
 		throw_speed = 3
 		sharpness = 1.7
-		sharpness_flags += HOT_EDGE
+		sharpness_flags += HOT_EDGE | CUT_WALL_AIRLOCK
 		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
 		event_key = user.on_moved.Add(src, "mob_moved")
+		armor_penetration = 100
 	else
 		force = initial(force)
 		throwforce = initial(throwforce)
 		throw_speed = initial(throw_speed)
 		sharpness = initial(sharpness)
 		sharpness_flags = initial(sharpness_flags)
+		armor_penetration = initial(armor_penetration)
 		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
 		user.on_moved.Remove(event_key)
@@ -298,6 +330,7 @@
 	throw_speed = 3
 	sharpness = 1.7
 	w_class = W_CLASS_LARGE
-	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE | CUT_WALL_AIRLOCK
 	hitsound = get_sfx("machete_hit")
 	update_icon()
+	armor_penetration = 100

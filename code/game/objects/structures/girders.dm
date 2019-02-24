@@ -297,6 +297,23 @@
 			if(user.drop_item(P, src.loc))
 				user.visible_message("<span class='warning'>[user] fits \the [P] into \the [src]</span>", \
 				"<span class='notice'>You fit \the [P] into \the [src]</span>")
+
+	else if((W.sharpness_flags & (CUT_WALL_AIRLOCK)) && user.a_intent == I_HURT)
+		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+		"<span class='notice'>You begin slicing through \the [src].</span>", \
+		"<span class='warning'>You hear slicing noises.</span>")
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+
+		if(do_after(user, src, 20))
+			if(!istype(src))
+				return
+			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+			"<span class='notice'>You slice through \the [src].</span>", \
+			"<span class='warning'>You hear slicing noises.</span>")
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			getFromPool(material, get_turf(src), 2)
+			qdel(src)
+
 	else
 		..()
 

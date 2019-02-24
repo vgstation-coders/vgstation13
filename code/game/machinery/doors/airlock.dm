@@ -1153,6 +1153,47 @@ About the new airlock wires panel:
 			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
 
+	if((I.sharpness_flags & (CUT_WALL_AIRLOCK)) && user.a_intent == I_HURT)
+		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+		"<span class='notice'>You begin slicing through \the [src].</span>", \
+		"<span class='warning'>You hear slicing noises.</span>")
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+
+		if(do_after(user, src, 200))
+			if(!istype(src))
+				return
+			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+			"<span class='notice'>You slice through \the [src].</span>", \
+			"<span class='warning'>You hear slicing noises.</span>")
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			operating = -1
+			var/obj/structure/door_assembly/DA = revert(user)
+			DA.anchored = 0
+			DA.state = 0
+			DA.update_state()
+			qdel(src)
+
+/*/obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+	operating = -1
+	var/obj/structure/door_assembly/DA = revert(user,user.dir)
+	DA.anchored = 0
+	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
+	DA.update_state()
+	qdel(src)
+
+/obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
+	var/obj/structure/door_assembly/DA = new assembly_type(loc)
+	DA.anchored = 1
+	DA.fingerprints += src.fingerprints
+	DA.fingerprintshidden += src.fingerprintshidden
+	DA.fingerprintslast = user.ckey
+	if (mineral)
+		DA.glass = mineral
+	else if (glass && !DA.glass)
+		DA.glass = 1
+*/
+
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
 		if(!B.can_ram(user))
