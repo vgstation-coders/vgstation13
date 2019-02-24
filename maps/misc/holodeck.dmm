@@ -77,7 +77,7 @@
 "by" = (/obj/item/toy/gasha/greyshirt,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "f8"},/area/holodeck/source_checkers)
 "bz" = (/turf/simulated/floor{icon_state = "white"; name = "g8"},/area/holodeck/source_checkers)
 "bA" = (/obj/item/toy/gasha/greyshirt,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "h8"},/area/holodeck/source_checkers)
-"bB" = (/obj/structure/curtain/black,/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_theatre)
+"bB" = (/obj/structure/curtain/black/holo,/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_theatre)
 "bC" = (/obj/effect/landmark{name = "Atmospheric Test Start"},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Burn-Mix Floor"; nitrogen = 0; oxygen = 2500; temperature = 370; toxins = 5},/area/holodeck/source_burntest)
 "bD" = (/obj/item/toy/gasha/shade{name = "shade (pawn)"},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "a7"},/area/holodeck/source_chess)
 "bE" = (/obj/item/toy/gasha/shade{name = "shade (pawn)"},/turf/simulated/floor{icon_state = "white"; name = "b7"},/area/holodeck/source_chess)
