@@ -971,6 +971,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Head of Personnel's Quarters"
 	icon_state = "head_quarters"
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/heads/rd
 	name = "\improper Research Director's Quarters"
@@ -996,12 +998,16 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Courtroom"
 	icon_state = "courtroom"
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
+	holomap_marker = "courtroom"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/hop
 	name = "\improper Head of Personnel's Office"
 	icon_state = "head_quarters"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/mint
 	name = "\improper Mint"
@@ -1082,9 +1088,11 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Theatre"
 
 /area/library
- 	name = "\improper Library"
- 	icon_state = "library"
- 	shuttle_can_crush = FALSE
+	name = "\improper Library"
+	icon_state = "library"
+	shuttle_can_crush = FALSE
+	holomap_marker = "library"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel
 	shuttle_can_crush = FALSE
@@ -1093,6 +1101,8 @@ proc/process_adminbus_teleport_locs()
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
+	holomap_marker = "chapel"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel/office
 	name = "\improper Chapel Office"
@@ -2435,15 +2445,15 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/snowplanet
 	name = "snowplanet"
 	icon_state = "mining_production"
-	
+
 /area/awaymission/articwasteland
 	name = "artic wasteland"
 	icon_state = "away"
-	
+
 /area/awaymission/articwasteland/gateway
 	name = "artic wasteland gateway shelter"
 	icon_state = "away2"
-	
+
 /////////////////////////////////////////////////////////////////////
 /*
  Lists of areas to be used with is_type_in_list.
