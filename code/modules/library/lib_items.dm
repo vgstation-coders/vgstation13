@@ -351,10 +351,10 @@
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
 			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
-			return()
+			return
 		if(occult)
 			to_chat(user, "<span class='sinister'>You feel as if it would be a bad idea to add a talisman to this particular book.</span>")
-			return()
+			return
 		if(talisman.imbue == "runestun")
 			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
 			qdel(talisman)
