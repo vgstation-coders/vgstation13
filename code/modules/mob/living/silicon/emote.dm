@@ -119,8 +119,8 @@
 
 	if(stat != DEAD)
 		if(!cell || !cell.charge)
-			visible_message("The power warning light on <span class='name'>[src]</span> flashes urgently.",\
-							"You announce you are operating in low power mode.")
+			visible_message("The power warning light on <span class='name'>[src]</span> flashes urgently.")
+			to_chat(src, "<span class='info' style=\"font-family:Courier\">You announce you are operating in low power mode.</span>")
 			playsound(loc, 'sound/machines/buzz-two.ogg', 50, 0)
 		else
 			to_chat(src, "<span class='warning'>You can only use this emote when you're out of charge.</span>")
