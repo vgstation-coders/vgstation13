@@ -124,7 +124,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(name == initial(name)) // Easier reporting of griff.
 		name = "[name] ([rand(1, 1000)])"
 		real_name = name
-
 	update_verbs(BORER_MODE_DETACHED)
 
 	research = new (src)
@@ -204,7 +203,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	else
 		clear_fullscreen("damage")
 
-/mob/living/simple_animal/borer/proc/update_verbs(var/mode)
+/mob/living/simple_animal/borer/proc/update_verbs(var/mode,var/monkey_host=FALSE)
 	if(verb_holders.len>0)
 		for(var/VH in verb_holders)
 			qdel(VH)
@@ -246,6 +245,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			avail_chems += unlocked_chems_leg
 	for(var/verbtype in verbtypes)
 		verb_holders+=new verbtype(src)
+	verbs -= /mob/living/simple_animal/borer/proc/bond_brain
+	if (monkey_host)
+		verbs += /mob/living/simple_animal/borer/proc/bond_brain
 
 /mob/living/simple_animal/borer/player_panel_controls(var/mob/user)
 	var/html="<h2>[src] Controls</h2>"
@@ -435,16 +437,17 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!host || host.stat==DEAD || !src || controlling || research.unlocking)
 		return
 
-	to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
-	to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
+	if (rptext)
+		to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
+		to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
 
 	host_brain.ckey = host.ckey
 	host_brain.name = host.real_name
 	host.ckey = src.ckey
 	controlling = 1
 
-	/* Broken
 	host.verbs += /mob/living/carbon/proc/release_control
+	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
 	host.verbs += /mob/living/carbon/proc/spawn_larvae
 	*/
@@ -922,7 +925,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	hostlimb = body_region
 
-	update_verbs(limb_to_mode(hostlimb)) // Must be called before being removed from turf. (BYOND verb transfer bug)
+	update_verbs(limb_to_mode(hostlimb),ismonkey(M)) // Must be called before being removed from turf. (BYOND verb transfer bug)
 
 	src.host = M
 	src.forceMove(M)
@@ -946,6 +949,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	// /vg/ - Our users are shit, so we start with control over host.
 	if(config.borer_takeover_immediately)
 		do_bonding(rptext=1)
+	else if (ismonkey(M))
+		do_bonding(0)
+		M.do_release_control(0)
+		//look, I know, but for some reason the borer won't get the Assume Control verb without that.
 
 	extend_o_arm.forceMove(host)
 
