@@ -27,6 +27,12 @@
 	var/obj/item/broken_device/G = new/obj/item/broken_device
 	G.component = wrapped.type // the broken component now "remembers" the component it used to be, now it's scrap. This is used to fix the scrap into the component it was.
 	var/brokenpartname = wrapped.name
+	if(ispowercell(wrapped)) //dead cell unlocks the cover
+		if(owner.locked)
+			owner.locked = FALSE 
+			owner.visible_message("A click sounds from <span class='name'>[owner]</span>, indicating the automatic cover release failsafe.")
+			if(owner.can_diagnose())
+				to_chat(owner, "<span class='notice' style=\"font-family:Courier\">Cover auto-unlocked.</span>")
 	wrapped = G
 
 	// The thing itself isn't there anymore, but some fried remains are.
