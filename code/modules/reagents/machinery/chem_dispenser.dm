@@ -322,14 +322,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/update_icon()
 
 	overlays.len = 0
-	var/image/overlay
-
-	if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
-		overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay2")
-	else
-		overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay1")
 
 	if(container)
+	
+		var/image/overlay
+
+		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay2")
+		else
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay1")
+
 		overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
 		overlays += overlay
 
