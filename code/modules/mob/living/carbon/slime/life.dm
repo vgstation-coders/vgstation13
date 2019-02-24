@@ -368,14 +368,16 @@
 	if(amount_grown >= 10 && !Victim && !Target)
 		if(istype(src, /mob/living/carbon/slime/adult))
 			if(!client)
-				for(var/i=1,i<=4,i++)
+				for(var/i = 1 to 4)
 					var/newslime
-					if(prob(70))
-						newslime = primarytype
-					else
-						newslime = slime_mutation[rand(1,4)]
-					if(i == 4)
-						newslime = slime_mutation[rand(1,4)]
+					switch(i)
+						if(1 to 2)
+							newslime = slime_mutation[rand(1,maxcolorcount)]
+						if(3)
+							newslime = primarytype
+						if(4)
+							newslime = slime_mutation[rand(1,(maxcolorcount-1))]
+//For an explination on how and why this is what it is go to 'code\modules\mob\living\carbon\slime\subtypes.dm' and see the READ ME at the top.
 
 					var/mob/living/carbon/slime/M = new newslime(loc)
 					M.powerlevel = round(powerlevel/4)

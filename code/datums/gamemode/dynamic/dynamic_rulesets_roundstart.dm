@@ -14,8 +14,8 @@
 	required_candidates = 1
 	weight = 7
 	cost = 10
-	requirements = list(40,30,20,10,10,10,10,10,10,10)
-	var/autotraitor_cooldown = 900//15 minutes
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
@@ -81,9 +81,9 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
-	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	weight = 2
+	cost = 25
+	requirements = list(80,60,50,30,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
 	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -137,7 +137,7 @@
 			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 		federation.HandleRecruitedRole(newWizard)//this will give the wizard their icon
 		newWizard.Greet(GREET_ROUNDSTART)
-		return 1
+	return 1
 
 
 //////////////////////////////////////////////
@@ -157,6 +157,11 @@
 	cost = 25
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+
+/datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	required_candidates = cultist_cap[indice_pop]
+	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
@@ -236,6 +241,12 @@
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 
+
+/datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
+	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	required_candidates = operative_cap[indice_pop]
+	. = ..()
+
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
 	//if ready() did its job, candidates should have 5 or more members in it
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
@@ -262,6 +273,8 @@
 			newCop.AssignToRole(M.mind,1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
+	for (var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
+		bomb.spawnbomb()
 	return 1
 
 
@@ -275,7 +288,8 @@
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	exclusive_to_jobs = list("AI")
+	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
+	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 3
@@ -286,13 +300,68 @@
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleRecruitedRole(AI)
-	AI.Greet(GREET_ROUNDSTART)
+
+	var/mob/M = progressive_job_search() //dynamic_rulesets.dm
+	if(M.mind.assigned_role != "AI")
+		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+			if(player.mind.assigned_role == "AI")
+				//We have located an AI to replace
+				displace_AI(player)
+				message_admins("Displacing AI played by: [key_name(player)].")
+	//There was no AI to displace, we're making one fresh
+	M.mind.assigned_role = "AI"
+	unction.HandleNewMind(M.mind)
+	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
+	MAI.Greet()
+	return 1
+
+/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
+	old_AI.mind.assigned_role = null
+	var/list/shuffledoccupations = shuffle(job_master.occupations)
+	for(var/level = 1 to 3)
+		if(old_AI.mind.assigned_role)
+			break
+		for(var/datum/job/job in shuffledoccupations)
+			if(job_master.TryAssignJob(old_AI,level,job))
+				break
+	if(old_AI.mind.assigned_role)
+		return
+	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+		job_master.GiveRandomJob(old_AI)
+		return
+	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+		job_master.AssignRole(old_AI, "Assistant")
+	else
+		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
+		old_AI.ready = 0
+
+//////////////////////////////////////////////
+//                                          //
+//         BLOB					            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/blob
+	name = "Blob conglomerate"
+	role_category = /datum/role/blob_overmind/
+	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 30
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+
+/datum/dynamic_ruleset/roundstart/blob/execute()
+	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if (!blob_fac)
+		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
+	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
+	for (var/i = 1 to min(blob_number, candidates.len))
+		var/mob/M = pick(candidates)
+		blob_fac.HandleNewMind(M.mind)
+		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
+		blob.Greet(GREET_ROUNDSTART)
 	return 1
 
 //////////////////////////////////////////////
@@ -323,7 +392,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/revs
+/datum/dynamic_ruleset/roundstart/delayed/revs
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
@@ -333,39 +402,39 @@
 	weight = 2
 	cost = 45
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	delay = 5 MINUTES
 	var/required_heads = 3
 
-/datum/dynamic_ruleset/roundstart/revs/ready(var/forced = 0)
+/datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
+	if (forced)
+		required_heads = 1
+		required_candidates = 1
 	if (!..())
 		return FALSE
 	var/head_check = 0
 	for (var/mob/new_player/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
-	if (forced)
-		required_heads = 1
-		required_candidates = 1
 	return (head_check >= required_heads)
 
-/datum/dynamic_ruleset/roundstart/revs/execute()
-	spawn (5 MINUTES)
-		var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-		if (!R)
-			R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+/datum/dynamic_ruleset/roundstart/delayed/revs/execute()
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
 
-		var/max_canditates = 4
-		for(var/i = 1 to max_canditates)
-			if(candidates.len <= 0)
-				break
-			var/mob/M = pick(candidates)
-			assigned += M
-			candidates -= M
-			var/datum/role/revolutionary/leader/lenin = new
-			lenin.AssignToRole(M.mind, 1, 1)
-			R.HandleRecruitedRole(lenin)
-			lenin.Greet(GREET_ROUNDSTART)
-		update_faction_icons()
-		R.OnPostSetup()
+	var/max_canditates = 4
+	for(var/i = 1 to max_canditates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/revolutionary/leader/lenin = new
+		lenin.AssignToRole(M.mind, 1, 1)
+		R.HandleRecruitedRole(lenin)
+		lenin.Greet(GREET_ROUNDSTART)
+	update_faction_icons()
+	R.OnPostSetup()
 	return 1
 
 //////////////////////////////////////////////

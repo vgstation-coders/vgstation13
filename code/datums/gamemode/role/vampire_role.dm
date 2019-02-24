@@ -12,6 +12,7 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = ROLE_VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
+	refund_value = BASE_SOLO_REFUND
 
 	var/list/powers = list()
 	var/ismenacing = FALSE
@@ -239,6 +240,7 @@
 */
 
 /datum/role/vampire/process()
+	..()
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return FALSE // The life() procs only work on humans.
@@ -265,6 +267,8 @@
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
+	if(H.stat != DEAD)
+		iscloaking = FALSE
 	if(!iscloaking)
 		H.alphas["vampire_cloak"] = 255
 		H.color = "#FFFFFF"
@@ -282,8 +286,9 @@
 			H.alphas["vampire_cloak"] = round((255 * 0.80))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
+	if(H.stat != DEAD)
+		ismenacing = FALSE
 	if(!ismenacing)
-		ismenacing = 0 // ? Probably not necessary
 		return FALSE
 
 	var/turf/T = get_turf(H)
@@ -392,8 +397,8 @@
 		check_vampire_upgrade()
 
 /datum/role/vampire/handle_reagent(var/reagent_id)
-	switch (reagent_id)
-		if (HOLYWATER)
+	switch(reagent_id)
+		if (HOLYWATER,INCENSE_HAREBELLS)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return

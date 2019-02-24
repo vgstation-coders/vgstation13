@@ -350,6 +350,7 @@
 
 /datum/reagent/blood
 	name = "Blood"
+	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
@@ -561,15 +562,15 @@
 					if(prob(15) && volume >= 30)
 						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 						if(head_organ)
-							if(head_organ.take_damage(25, 0))
+							if(head_organ.take_damage(0, 25))
 								H.UpdateDamageIcon(1)
 							head_organ.disfigure("burn")
 							H.audible_scream()
 					else
-						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+						M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
 				if(M.acidable())
-					M.take_organ_damage(min(15, volume * 2))
+					M.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
@@ -2288,7 +2289,7 @@
 
 	if(..())
 		return 1
-		
+
 	var/mob/living/carbon/human/H = M
 	if(isplasmaman(H))
 		return 1
@@ -2296,7 +2297,7 @@
 		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
 		holder.remove_reagent("inaprovaline", 2 * REM)
-	
+
 
 /datum/reagent/leporazine
 	name = "Leporazine"
@@ -4258,6 +4259,25 @@
 	M.nutrition += nutriment_factor
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
+/datum/reagent/tomato_soup
+	name = "Tomato Soup"
+	id = TOMATO_SOUP
+	description = "Water, tomato extract, and maybe some other stuff."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#731008" //rgb: 115, 16, 8
+	density = 0.63
+	specheatcap = 4.21
+
+/datum/reagent/tomato_soup/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	
 /datum/reagent/flour
 	name = "flour"
 	id = FLOUR
@@ -4578,6 +4598,20 @@
 				M.disabilities &= ~NEARSIGHTED
 	data++
 
+/datum/reagent/drink/grapejuice
+	name = "Grape Juice"
+	id = GRAPEJUICE
+	description = "Freshly squeezed juice from red grapes, quite sweet."
+	color = "#512284" //rgb: 81, 34, 132
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+
+/datum/reagent/drink/ggrapejuice
+	name = "Green Grape Juice"
+	id = GGRAPEJUICE
+	description = "Freshly squeezed juice from green grapes, smoothly sweet."
+	color = "#B79E42" //rgb: 183, 158, 66
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+
 /datum/reagent/drink/berryjuice
 	name = "Berry Juice"
 	id = BERRYJUICE
@@ -4635,7 +4669,7 @@
 	id = NOTHING
 	description = "Absolutely nothing."
 	nutriment_factor = 0
-	
+
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
 
     if(ishuman(M))
@@ -4656,6 +4690,13 @@
 	description = "Juice of the potato. Bleh."
 	nutriment_factor = 5 * FOOD_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+
+/datum/reagent/drink/plumphjuice
+	name = "Plump Helmet Juice"
+	id = PLUMPHJUICE
+	description = "Eeeewwwww."
+	nutriment_factor = 5 * FOOD_METABOLISM
+	color = "#A28691" //rgb: 162, 134, 145
 
 /datum/reagent/drink/milk
 	name = "Milk"
@@ -5183,16 +5224,43 @@
 /datum/reagent/ethanol/wine
 	name = "Wine"
 	id = WINE
-	description = "An premium alchoholic beverage made from distilled grape juice."
+	description = "A premium alcoholic beverage made from fermented grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
 
+/datum/reagent/ethanol/bwine
+	name = "Berry Wine"
+	id = BWINE
+	description = "Sweet berry wine!"
+	color = "#C760A2" //rgb: 199, 96, 162
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
+/datum/reagent/ethanol/wwine
+	name = "White Wine"
+	id = WWINE
+	description = "A premium alcoholic beverage made from fermented green grape juice."
+	color = "#C6C693" //rgb: 198, 198, 147
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
+/datum/reagent/ethanol/plumphwine
+	name = "Plump Helmet Wine"
+	id = PLUMPHWINE
+	description = "A very curious wine made from fermented plump helmet mushrooms. Popular among asteroid dwellers."
+	color = "#800080" //rgb: 128, 0, 128
+	dizzy_adj = 3 //dorf wine is a bit stronger than regular stuff
+	slur_start = 60
+	confused_start = 135
+
 /datum/reagent/ethanol/cognac
 	name = "Cognac"
 	id = COGNAC
-	description = "A sweet and strongly alchoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
+	description = "A sweet and strongly alcoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
 	color = "#AB3C05" //rgb: 171, 60, 5
 	dizzy_adj = 4
 	confused_start = 115
@@ -5210,7 +5278,7 @@
 /datum/reagent/ethanol/ale
 	name = "Ale"
 	id = ALE
-	description = "A dark alchoholic beverage made by malted barley and yeast."
+	description = "A dark alcoholic beverage made by malted barley and yeast."
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/pwine
@@ -5529,7 +5597,7 @@
 /datum/reagent/ethanol/deadrum/wine
 	name = "Wine"
 	id = WINE
-	description = "An premium alchoholic beverage made from distilled grape juice."
+	description = "A premium alcoholic beverage made from fermented grape juice."
 	color = "#7E4043" //rgb: 126, 64, 67
 	dizzy_adj = 2
 	slur_start = 65
@@ -5538,7 +5606,7 @@
 /datum/reagent/ethanol/deadrum/cognac
 	name = "Cognac"
 	id = COGNAC
-	description = "A sweet and strongly alchoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
+	description = "A sweet and strongly alcoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	confused_start = 115
@@ -5557,7 +5625,7 @@
 /datum/reagent/ethanol/deadrum/ale
 	name = "Ale"
 	id = ALE
-	description = "A dark alchoholic beverage made by malted barley and yeast."
+	description = "A dark alcoholic beverage made by malted barley and yeast."
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/thirteenloko
@@ -5706,7 +5774,7 @@
 /datum/reagent/ethanol/deadrum/toxins_special
 	name = "Toxins Special"
 	id = TOXINSSPECIAL
-	description = "This thing is FLAMING!. CALL THE DAMN SHUTTLE!"
+	description = "This thing is FLAMING! CALL THE DAMN SHUTTLE!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
@@ -6169,15 +6237,16 @@
 	description = "Concentrated honking"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
-	custom_metabolism = 0.01
+	custom_metabolism = 0.05
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
-	if(prob(0.9))
+	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
+		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
@@ -7075,9 +7144,93 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/aminomicin
 	name = "Aminomicin"
 	id = AMINOMICIN
-	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with pure nutriment."
+	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with nutriment."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 13.49 //our ingredients are pretty dense
 	specheatcap = 208.4
 	custom_metabolism = 0.01 //oh shit what are you doin
+
+/datum/reagent/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	description = "An extremely dangerous, flesh-replicating material, mutated by exposure to God-knows-what. Do not mix with nutriment under any circumstances."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#cb42f4" //rgb: 203, 66, 244
+	density = 111.75 //our ingredients are extremely dense, especially carppheromones
+	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
+	custom_metabolism = 0.01 //oh shit what are you doin
+
+
+//////////////////////
+//					//
+//      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//					//
+//////////////////////
+/datum/reagent/incense
+	reagent_state = REAGENT_STATE_GAS
+	density = 3.214
+	specheatcap = 1.34
+	color = "#E0D3D3" //rgb: 224, 211, 211
+
+
+/datum/reagent/incense/harebells//similar effects as holy water to cultists and vampires
+	name = "Holy Incense"
+	id = INCENSE_HAREBELLS
+	description = "An incense used in holy rituals. Can be used to impede the occult."
+
+/datum/reagent/incense/poppies//similar effects as chill wax and paracetamol
+	name = "Opium Incense"
+	id = INCENSE_POPPIES
+	description = "A pleasing fragrance that soothes the nerves and removes pain."
+	pain_resistance = 60
+	custom_metabolism = 0.15
+
+/datum/reagent/incense/poppies/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(C.pain_level < BASE_CARBON_PAIN_RESIST)
+			C.pain_shock_stage--
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.druggy = max(H.druggy, 5)
+			H.Dizzy(2)
+			if(prob(5))
+				H.emote(pick("stare", "giggle"))
+			if(prob(5))
+				to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
+			if(prob(2))
+				to_chat(H, "<span class='notice'>You doze off for a second.</span>")
+				H.sleeping += 1
+
+/datum/reagent/incense/sunflowers//flavor text, does nothing
+	name = "Incense"
+	id = INCENSE_SUNFLOWERS
+	description = "While it smells really nice, incense is known to increase the risk of lung cancer."
+
+/datum/reagent/incense/moonflowers//Basically mindbreaker
+	name = "Hallucinogenic Incense"
+	id = INCENSE_MOONFLOWERS
+	description = "This frangrance is so unsettling that it makes you question reality."
+	custom_metabolism = 0.15
+
+/datum/reagent/incense/moonflowers/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if (M.hallucination < 22)
+		M.hallucination += 10
+
+/datum/reagent/incense/novaflowers//Converts itself to hyperzine, but makes you hungry
+	name = "Hyperactivity Incense"
+	id = INCENSE_NOVAFLOWERS
+	description = "This frangrance helps you focus and pull into your energy reserves to move quickly."
+	custom_metabolism = 0.15
+
+/datum/reagent/incense/novaflowers/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(holder.get_reagent_amount(HYPERZINE) < 2)
+		holder.add_reagent(HYPERZINE, 0.5)
+	M.nutrition--

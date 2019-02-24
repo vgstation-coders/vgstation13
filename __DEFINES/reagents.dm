@@ -359,6 +359,12 @@
 #define SUICIDE			"suicide"
 #define KARMOTRINE		"karmotrine"
 #define DEGENERATECALCIUM "degeneratecalcium"
+#define GRAPEJUICE		"grapejuice"
+#define GGRAPEJUICE		"ggrapejuice"
+#define BWINE			"bwine"
+#define WWINE			"wwine"
+#define PLUMPHJUICE		"plumphjuice"
+#define PLUMPHWINE		"phwine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -393,6 +399,8 @@
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
 #define AMINOMICIN		"aminomicin"
+#define AMINOCYPRINIDOL	"aminocyprinidol"
+#define TOMATO_SOUP		"tomato_soup"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -436,3 +444,9 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
+
+#define INCENSE_HAREBELLS	"harebells"
+#define INCENSE_POPPIES		"poppies"
+#define INCENSE_SUNFLOWERS	"sunflowers"
+#define INCENSE_MOONFLOWERS	"moonflowers"
+#define INCENSE_NOVAFLOWERS	"novaflowers"

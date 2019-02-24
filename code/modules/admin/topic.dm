@@ -2632,6 +2632,20 @@
 			return
 		show_role_panel(M)
 
+	else if(href_list["threatlog"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			alert("The game hasn't started yet!")
+			return
+
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			alert("It's not dynamic!")
+			return
+		D.show_threatlog(usr)
+
 	// /vg/
 	else if(href_list["set_base_laws"])
 		if(!check_rights(R_FUN))
@@ -2878,6 +2892,7 @@
 				if(alert(usr, "Spawn a blob cluster? (meteor blob, medium intensity, no Overminds)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_shower
 
+			/* Use dyanmic mode instead.
 			if("blobstorm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Blob Storm")
@@ -2886,7 +2901,7 @@
 
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
-
+			*/
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
@@ -3771,7 +3786,7 @@
 				var/datum/job/J = job_master.GetJob("Security Officer")
 				if(!J)
 					return
-				J.total_positions = -1
+				J.set_total_positions(99)
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
 			if("virus_custom")
@@ -3819,7 +3834,7 @@
 					for(var/datum/job/job in job_master.occupations)
 						if(!job)
 							continue
-						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.total_positions] <BR>"
+						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
 					usr << browse(dat, "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()

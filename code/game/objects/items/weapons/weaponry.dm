@@ -89,11 +89,14 @@
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
-		return 1
+	return 1
 
 /obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
 	var/teleportcooldown = 600 //one minute cooldown
 	var/active = FALSE
+
+/obj/item/weapon/katana/hesfast/IsShield()
+	return TRUE
 
 /obj/item/weapon/katana/hesfast/examine(mob/user)
 	..()
@@ -105,11 +108,11 @@
 		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
 	else
 		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
-		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
 	if(active)
-		message += " Alt-click it to disable your teleport power!</span>"
+		message += " Alt-click it to stop teleporting, just in case you enter a no-warp trap room like the ones in Aincrad.</span>"
 	else
-		message += " Alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
+		message += " Alt-click it to enable your teleportation, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/AltClick(mob/user)
@@ -143,18 +146,22 @@
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/magic
-	name = "enchanted sword"
+	name = "moonlight-enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
-	icon_state = "cultblade"
-	item_state = "cultblade"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "enchanted"
+	item_state = "enchanted"
+	w_class = W_CLASS_GIANT//don't want it stored anywhere"
 
 /obj/item/weapon/katana/magic/dropped(mob/user)
 	..()
 	qdel(src)
 
-/obj/item/weapon/katana/magic/equipped(mob/living/carbon/human/H, slot)
-	if(slot)
-		qdel(src)
+/obj/item/weapon/katana/magic/Destroy()
+	var/turf/T = get_turf(src)
+	if (T)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "empdisable")
+	..()
 
 /obj/item/weapon/harpoon
 	name = "harpoon"

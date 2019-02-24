@@ -18,8 +18,8 @@
 	attack_sound = 'sound/weapons/welderattack.ogg'
 	faction = "slimesummon"
 	speed = 5
-	can_butcher = 0
-	meat_type = null
+	can_butcher = FALSE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
 	var/colour = "grey"
 	held_items = list()

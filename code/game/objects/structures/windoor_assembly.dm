@@ -172,17 +172,18 @@ obj/structure/windoor_assembly/Destroy()
 		if(AE.icon_state =="door_electronics_smoked")
 			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
-		if(user.drop_item(AE, src)) // To prevent you using the airlock electronics on 2 windoors at once.
-			playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-			user.visible_message("[user] installs [AE] into [src].", "You start to install [AE] into [src].")
 
-			if(do_after(user, src, 40))
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>You've installed [AE]!</span>")
-				electronics = AE
-				electronics.installed = TRUE
-				update_name()
+		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		user.visible_message("[user] installs [AE] into [src].", "You start to install [AE] into [src].")
+
+		if(do_after(user, src, 40))
+			if(gcDestroyed)
+				return
+			to_chat(user, "<span class='notice'>You've installed [AE]!</span>")
+			electronics = AE
+			electronics.installed = TRUE
+			update_name()
+			user.drop_item(AE, src, force_drop = 1)
 
 	//Screwdriver to remove airlock electronics. Step 6 undone.
 	if(isscrewdriver(W) && (anchored && electronics))

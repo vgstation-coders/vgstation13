@@ -158,6 +158,15 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
+/obj/item/clothing/suit/sith
+	name = "Sith Robe"
+	desc = "It's treason then."
+	icon_state = "sith"
+	item_state = "sith"
+	clothing_flags = ONESIZEFITSALL
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
+	wizard_garb = 1 //Allows lightning to be used
+	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/dualsaber) //Fits e-swords
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"

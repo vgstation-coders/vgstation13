@@ -82,6 +82,7 @@
 	icon_state = "cbbolt"
 	damage = 10
 	damage_type = TOX
+	stun = 10
 	nodamage = 0
 	weaken = 10
 	stutter = 10

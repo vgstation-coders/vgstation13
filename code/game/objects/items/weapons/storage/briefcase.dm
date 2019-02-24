@@ -27,6 +27,7 @@
 	..()
 	new /obj/item/weapon/paper/demotion_key(src)
 	new /obj/item/weapon/paper/commendation_key(src)
+	new /obj/item/weapon/pen/NT(src)
 
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))

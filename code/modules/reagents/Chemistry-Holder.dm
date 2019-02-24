@@ -259,10 +259,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/trans_id_to(var/obj/target, var/reagent, var/amount=1, var/preserve_data=1)//Not sure why this proc didn't exist before. It does now! /N
 	if (!target)
 		return
-	if (!target.reagents || src.is_empty() || !src.get_reagent_amount(reagent))
+	if (src.is_empty() || !src.get_reagent_amount(reagent))
 		return
-
-	var/datum/reagents/R = target.reagents
+	var/datum/reagents/R
+	if(istype(target, /datum/reagents))
+		R = target
+	else
+		if(!target.reagents)
+			return
+		R = target.reagents
 	if(src.get_reagent_amount(reagent)<amount)
 		amount = src.get_reagent_amount(reagent)
 	amount = min(amount, R.maximum_volume-R.total_volume)

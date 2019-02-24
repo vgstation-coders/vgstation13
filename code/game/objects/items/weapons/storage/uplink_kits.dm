@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -19,14 +19,12 @@
 				new /obj/item/device/chameleon(src)
 				new /obj/item/weapon/soap/syndie(src)
 
-
 			if("screwed")//6?+6?+10+4=26
-				new /obj/effect/spawner/newbomb/timer/syndicate(src)
-				new /obj/effect/spawner/newbomb/timer/syndicate(src)
+				new /obj/effect/spawner/newbomb/timer(src)
+				new /obj/effect/spawner/newbomb/timer(src)
 				new /obj/item/device/powersink(src)
 				new /obj/item/clothing/suit/space/syndicate(src)
 				new /obj/item/clothing/head/helmet/space/syndicate(src)
-
 
 			if("guns")//13+4+6+4=27
 				new /obj/item/weapon/gun/projectile(src)
@@ -34,14 +32,12 @@
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/weapon/plastique(src)
 
-
 			if("murder")//8+6+6+2+4=26
 				new /obj/item/weapon/melee/energy/sword(src)
 				new /obj/item/clothing/glasses/thermal/syndi(src)
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/clothing/shoes/syndigaloshes(src)
 				new /obj/item/weapon/storage/belt/skull(src)
-
 
 			if("freedom")//18+5=23
 				var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
@@ -53,20 +49,17 @@
 				U.update()
 				U.name = "Uplink"
 
-
 			if("hacker")//14+6+5+3=28
 				new /obj/item/weapon/aiModule/freeform/syndicate(src)
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/device/encryptionkey/binary(src)
 				new /obj/item/device/multitool/ai_detect(src)
 
-
 			if("lordsingulo")//14+4+6=24
 				new /obj/item/beacon/syndicate(src)
 				new /obj/item/clothing/suit/space/syndicate(src)
 				new /obj/item/clothing/head/helmet/space/syndicate(src)
 				new /obj/item/weapon/card/emag(src)
-
 
 			if("smoothoperator")//6?+2+2?+1+1?+1?+4+4=21
 				new /obj/item/weapon/gun/projectile/pistol(src)
@@ -82,7 +75,6 @@
 				new /obj/item/device/encryptionkey/syndicate/hacked(src)
 				new /obj/item/weapon/plastique(src)
 
-
 			if("psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
 				new /obj/item/clothing/suit/raincoat(src)
 				new /obj/item/clothing/under/suit_jacket(src)
@@ -93,7 +85,6 @@
 				new /obj/item/weapon/newspaper(src)
 				new /obj/item/weapon/fireaxe(src)
 				new /obj/item/clothing/shoes/syndigaloshes(src)
-
 
 			if("hotline")//5+10+2+(hyperzine pills, 2x2?)=22
 				new /obj/item/clothing/under/bikersuit(src)
@@ -106,7 +97,6 @@
 				new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/weapon/soap/syndie(src)
-
 
 			if("balloon")//20+20+20+20+20+20+20+20=160
 				new /obj/item/toy/syndicateballoon(src)
@@ -129,6 +119,17 @@
 				new /obj/item/clothing/gloves/red(src)
 				new /obj/item/clothing/accessory/storage/bandolier(src)
 
+			if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
+				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
+				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
+				new /obj/item/weapon/dnainjector/nofail/telemut(src)
+				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
+				new /obj/item/clothing/head/sith(src)
+				new /obj/item/clothing/suit/sith(src)
+				new /obj/item/clothing/shoes/sandal(src)
+
 			if("anarchist")//14+14+6=34, plus molotovs
 				new /obj/item/weapon/implanter/traitor(src)
 				new /obj/item/weapon/implanter/traitor(src)
@@ -145,6 +146,16 @@
 				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 
+			if("bangerboy")//5?*6+12+0+3?=45
+				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+				new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+				new /obj/item/weapon/gun/grenadelauncher(src)
+				new /obj/item/clothing/glasses/sunglasses(src)
+				new /obj/item/device/radio/headset/headset_earmuffs(src)
 
 		tag = tagname
 

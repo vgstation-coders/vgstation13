@@ -4,9 +4,9 @@
 	ID = MALF
 	required_pref = ROLE_MALF
 	initial_role = MALF
-	late_role = MALF //There shouldn't really be any late roles for malfunction, but just in case we can corrupt an AI in the future, let's keep this
-	initroletype = /datum/role/malfAI
-	roletype = /datum/role/malfAI
+	late_role = MALFBOT
+	initroletype = /datum/role/malfAI //First addition should be the AI
+	roletype = /datum/role/malfbot //Then anyone else should be bots
 	logo_state = "malf-logo"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800

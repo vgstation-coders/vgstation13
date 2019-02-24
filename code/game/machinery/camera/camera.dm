@@ -345,7 +345,8 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
 	vision_flags = SEE_SELF
-	update_upgrades()
+	if(assembly)
+		update_upgrades()
 	cameranet.addCamera(src)
 	if(choice==1)
 		status = !( src.status )

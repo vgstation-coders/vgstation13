@@ -30,8 +30,9 @@
 	hud_state = "const_shell_alt"
 
 /spell/aoe_turf/conjure/construct/lesser/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
-	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	if(!delay_animation)
+		delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
 /spell/aoe_turf/conjure/floor
@@ -154,9 +155,6 @@
 
 	summon_type = list(/turf/simulated/wall/r_wall)
 
-/spell/aoe_turf/conjure/wall/reinforced/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	. = ..()
-
 /spell/aoe_turf/conjure/soulstone
 	name = "Summon Soulstone"
 	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space"
@@ -175,8 +173,9 @@
 	override_base = "cult"
 
 /spell/aoe_turf/conjure/soulstone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
-	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	if(!delay_animation)
+		delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
 /spell/aoe_turf/conjure/pylon
@@ -198,8 +197,9 @@
 	override_base = "cult"
 
 /spell/aoe_turf/conjure/pylon/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
-	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	if(!delay_animation)
+		delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
 /spell/aoe_turf/conjure/pylon/cast(list/targets)
@@ -383,8 +383,9 @@
 	return list(get_turf(user))
 
 /spell/aoe_turf/conjure/hex/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
-	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	if(!delay_animation)
+		delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
 /spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
@@ -420,8 +421,9 @@
 
 
 /spell/aoe_turf/conjure/struct/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
-	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	if(!delay_animation)
+		delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
 /spell/aoe_turf/conjure/struct/before_channel(var/mob/user)

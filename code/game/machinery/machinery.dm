@@ -682,7 +682,7 @@ Class Procs:
 /obj/machinery/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
 	var/shouldplaysound = 0
 	if(component_parts)
-		if(panel_open)
+		if(panel_open || W.bluespace)
 			var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
 			var/P
 			for(var/obj/item/A in component_parts)

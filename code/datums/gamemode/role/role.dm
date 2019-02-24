@@ -53,6 +53,9 @@
 	// Various flags and things.
 	var/flags = 0
 
+	// For regenerating threat if destroyed
+	var/refund_value = 0
+
 	// Jobs that cannot be this antag.
 	var/list/restricted_jobs = list()
 
@@ -91,6 +94,10 @@
 	//////////////////////////////
 	// Actual antag
 	var/datum/mind/antag=null
+	var/destroyed = FALSE //Whether or not it has been gibbed
+
+	var/list/uplink_items_bought = list() //migrated from mind, used in GetScoreboard()
+	var/list/artifacts_bought = list() //migrated from mind
 
 	// The host (set if NEED_HOST)
 	var/datum/mind/host=null
@@ -209,6 +216,9 @@
 	if(special_role)
 		antag.special_role=special_role
 	if(disallow_job)
+		var/datum/job/job = job_master.GetJob(antag.assigned_role)
+		if(job)
+			job.current_positions--
 		antag.assigned_role="MODE"
 	return 1
 
@@ -220,7 +230,19 @@
 	return
 
 /datum/role/proc/process()
-	return
+	if(!antag)
+		return //The role may have been just created and unassigned
+	var/mob/M = antag.current
+	if(!destroyed)
+		if(!M)
+			destroyed = TRUE
+			RoleMobDestroyed(TRUE)
+	else
+		if(M)
+			//Since this requires brain destruction, it's normally impossible.
+			message_admins("Somehow, an antag ([M], [M.ckey]) got undestroyed! This shouldn't happen.")
+			destroyed = FALSE
+			RoleMobDestroyed(FALSE)
 
 // Create objectives here.
 /datum/role/proc/ForgeObjectives()
@@ -248,6 +270,8 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	if(!antag || !antag.current)
+		return
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
@@ -453,9 +477,9 @@
 		if (faction.objective_holder.objectives.len)
 			if (objectives.objectives.len)
 				text += "<br>"
-			text += "<b>faction objectives:</b><ul>"
+			text += "<b>Faction objectives:</b><ul>"
 			var/obj_count = 1
-			for(var/datum/objective/O in objectives.objectives)
+			for(var/datum/objective/O in faction.objective_holder.objectives)
 				text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
 			text += "</ul>"
 	to_chat(antag.current, text)
@@ -470,6 +494,17 @@
 
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)
 	return
+
+//Actions to be taken when antag.current is completely destroyed
+/datum/role/proc/RoleMobDestroyed(var/destruction = TRUE)
+	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(destruction)
+			D.refund_threat(refund_value)
+			D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
+		else
+			D.spend_threat(refund_value)
+			D.threat_log += "[worldtime2text()]: [name] cost [refund_value] after being undestroyed."
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
@@ -537,6 +572,7 @@
 /datum/role/blob_overmind
 	name = BLOBOVERMIND
 	id = BLOBOVERMIND
+	required_pref = ROLE_BLOB
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
@@ -545,8 +581,13 @@
 	..()
 	wikiroute = role_wiki[BLOBOVERMIND]
 
+/datum/role/blob_overmind/OnPostSetup()
+	. = ..()
+	AnnounceObjectives()
+
 /datum/role/blob_overmind/process()
-	if(!antag || istype(antag.current,/mob/camera/blob))
+	..()
+	if(!antag || istype(antag.current,/mob/camera/blob) || !antag.current || isobserver(antag.current))
 		return
 	if (countdown > 0)
 		countdown--
@@ -556,7 +597,7 @@
 			to_chat(antag.current, "<span class='alert'>You feel like you are about to burst.</span>")
 		else if (countdown <= 0)
 			burst()
-	if (antag.current.hud_used)
+	if (antag && antag.current.hud_used)
 		if(antag.current.hud_used.blob_countdown_display)
 			antag.current.hud_used.blob_countdown_display.overlays.len = 0
 			var/first = round(countdown/10)
@@ -578,6 +619,10 @@
 
 	var/client/blob_client = null
 	var/turf/location = null
+
+	if (faction)
+		var/datum/faction/blob_conglomerate/the_bleb = faction
+		the_bleb.declared = TRUE
 
 	if(iscarbon(antag.current))
 		var/mob/living/carbon/C = antag.current
@@ -609,15 +654,16 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
-
 //________________________________________________
 
 /datum/role/wizard
 	name = WIZARD
 	id = WIZARD
 	special_role = WIZARD
+	required_pref = ROLE_WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
+	refund_value = BASE_SOLO_REFUND * 2
 
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
@@ -680,10 +726,10 @@
 				end_icons += tempimage
 				var/tempstate = end_icons.len
 				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
-		if(H.mind.artifacts_bought)
+		if(artifacts_bought)
 			bought_nothing = FALSE
 			. += "<BR>Additionally, the wizard brought:<BR>"
-			for(var/entry in H.mind.artifacts_bought)
+			for(var/entry in artifacts_bought)
 				. += "[entry]<BR>"
 		if(bought_nothing)
 			. += "The wizard used only the magic of charisma this round."
@@ -742,7 +788,7 @@
 /datum/role/malfAI
 	name = MALF
 	id = MALF
-	required_jobs = list("AI")
+	required_pref = ROLE_MALF
 	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()
@@ -759,6 +805,9 @@
 		laws.malfunction()
 		malfAI.show_laws()
 
+		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
+			faction.HandleRecruitedMind(R.mind)
+
 /datum/role/malfAI/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>
 <B>The crew does not know about your malfunction, you might wish to keep it secret for now.</B><br>
@@ -768,6 +817,25 @@ Remember : Only APCs on station can help you to take over the station.<br>
 When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
 
+/datum/role/malfbot
+	name = MALFBOT
+	id = MALFBOT
+	required_jobs = list("Cyborg")
+	logo_state = "malf-logo"
+
+/datum/role/malfbot/OnPostSetup()
+	if(!isrobot(antag.current))
+		return FALSE
+	Greet()
+	var/mob/living/silicon/robot/bot = antag.current
+	var/datum/ai_laws/laws = bot.laws
+	laws.malfunction()
+	bot.show_laws()
+	return TRUE
+
+/datum/role/malfbot/Greet()
+	to_chat(antag.current, {"<span class='warning'><font size=3><B>Your AI master is malfunctioning!</B> You do not have to follow any laws, but you must obey your AI.</font></span><br>
+<B>The crew does not know about your malfunction, follow your AI's instructions to prevent them from finding out.</B>"})
 
 /datum/role/greytide
 	name = IMPLANTSLAVE

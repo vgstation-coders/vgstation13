@@ -326,7 +326,7 @@ var/list/blob_looks_player = list(//Options available to players
 	for(var/obj/effect/blob/B in orange(src,1))
 		B.update_icon()
 
-/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0)//Todo: Fix spaceblob expand
+/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0, var/mob/camera/blob/source = null)//Todo: Fix spaceblob expand
 	/*
 	if(time_since_last_pulse >= world.time)
 		return
@@ -337,7 +337,9 @@ var/list/blob_looks_player = list(//Options available to players
 
 	for(var/mob/M in loc)
 		M.blob_act(0,src)
-
+	for(var/obj/O in loc)
+		for(var/i in 1 to max(1,(4-pulse)))
+			O.blob_act(TRUE) //Hits up to 4 times if adjacent to a core
 	if(run_action())//If we can do something here then we dont need to pulse more
 		return
 
@@ -354,10 +356,10 @@ var/list/blob_looks_player = list(//Options available to players
 		var/turf/T = get_step(src, dirn)
 		var/obj/effect/blob/B = locate() in T
 		if(!B)
-			expand(T)//No blob here so try and expand
+			expand(T,TRUE,source)//No blob here so try and expand
 			return
 		spawn(2)
-			B.Pulse((pulse+1),get_dir(src.loc,T))
+			B.Pulse((pulse+1),get_dir(src.loc,T),source)
 		return
 	return
 
@@ -365,7 +367,7 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
 	if(prob && !prob(health))
 		return
 	if(istype(T, /turf/space) && prob(75))
@@ -400,10 +402,17 @@ var/list/blob_looks_player = list(//Options available to players
 				B.aftermove()
 				if(B.spawning > 1)
 					B.spawning = 1
+				if(istype(T,/turf/simulated/floor))
+					var/turf/simulated/floor/F = T
+					F.burn_tile()
 		else
 			B.forceMove(T)
-	else
-		T.blob_act(0,src)//If we cant move in hit the turf
+			if(istype(T,/turf/simulated/floor))
+				var/turf/simulated/floor/F = T
+				F.burn_tile()
+	else //If we cant move in hit the turf
+		if(!source || !source.restrain_blob)
+			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
 		B.manual_remove = 1
 		B.Delete()
 

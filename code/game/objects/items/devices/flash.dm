@@ -234,11 +234,6 @@
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
 		item_state = "flashburnt"
-/*
-/obj/item/device/flash/revsquad
-	limited_conversions = REVSQUAD_FLASH_USES
-	mech_flags = MECH_SCAN_FAIL
-*/
 
 /obj/item/device/flash/rev
 	mech_flags = MECH_SCAN_FAIL
@@ -276,4 +271,7 @@
 
 
 /obj/item/device/flash/rev/revsquad
-	limited_conversions = 2
+	limited_conversions = 1
+
+/obj/item/device/flash/rev/revsquad/emp_act(severity)
+	return

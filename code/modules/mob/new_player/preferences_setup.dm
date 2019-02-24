@@ -325,7 +325,7 @@
 
 				if(CHAPLAIN)
 					clothes_s = new /icon(uniform_dmi, "chapblack_s")
-					clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
+					clothes_s.Blend(new /icon(feet_dmi, "laceups"), ICON_UNDERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 				if(CLOWN)
 					clothes_s = new /icon(uniform_dmi, "clown_s")

@@ -1543,6 +1543,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "secure shuttle permit crate"
 	group = "Engineering"
 
+/datum/supply_packs/suit_modification_station
+	name = "suit modification station"
+	contains = list()
+	cost = 400
+	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical

@@ -19,6 +19,7 @@ var/global/list/rnd_machines = list()
 	var/base_state	= ""
 	var/build_time	= 0
 	var/auto_make = 0
+	var/default_mat_overlays = FALSE
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -224,8 +225,12 @@ var/global/list/rnd_machines = list()
 		if(research_flags & HASMAT_OVER)
 			update_icon()
 			overlays |= image(icon = icon, icon_state = "[base_state]_[stack.name]")
+			if(default_mat_overlays)
+				overlays |= image(icon = icon, icon_state = "autolathe_[stack.name]")
 			spawn(ANIM_LENGTH)
 				overlays -= image(icon = icon, icon_state = "[base_state]_[stack.name]")
+				if(default_mat_overlays)
+					overlays -= image(icon = icon, icon_state = "autolathe_[stack.name]")
 
 		icon_state = "[base_state]"
 		use_power(max(1000, (3750*amount/10)))

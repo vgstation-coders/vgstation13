@@ -130,7 +130,7 @@
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)
-				see_invisible = SEE_INVISIBLE_LEVEL_TWO
+				see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
     // Legacy Cult
 		if(seer == 1)
 			var/obj/effect/rune_legacy/R = locate() in loc
@@ -298,6 +298,10 @@
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
+		if(has_reagent_in_blood(INCENSE_MOONFLOWERS))
+			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
+		else
+			clear_fullscreen("high_red")
 
 		var/masked = 0
 

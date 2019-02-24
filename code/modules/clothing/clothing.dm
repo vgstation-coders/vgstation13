@@ -136,6 +136,11 @@
 	else
 		verbs -= /obj/item/clothing/verb/removeaccessory
 
+/obj/item/clothing/proc/is_worn_by(mob/user)
+	if(user.is_wearing_item(src))
+		return TRUE
+	return FALSE
+
 /obj/item/clothing/New() //so sorry
 	..()
 	update_verbs()
@@ -490,7 +495,7 @@
 	flags = FPRINT
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	siemens_coefficient = 0.9

@@ -47,10 +47,6 @@ var/const/ASSISTANT			=(1<<13)
 var/const/TRADER			=(1<<14)
 
 
-var/list/assistant_occupations = list(
-)
-
-
 var/list/command_positions = list(
 	"Captain",
 	"Head of Personnel",
@@ -154,4 +150,3 @@ var/list/misc_positions = list(
 			titles = J.alt_titles
 
 	return titles
-

@@ -212,6 +212,7 @@
 				src.temp += "<br><b>Antigen:</b> [v.fields["antigen"]]"
 				src.temp += "<br><b>Spread:</b> [v.fields["spread type"]] "
 				src.temp += "<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
+				temp += "<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"
 
 			if (href_list["del_all"])
 				src.temp = text("Are you sure you wish to delete all records?<br>\n\t<A href='?src=\ref[];temp=1;del_all2=1'>Yes</A><br>\n\t<A href='?src=\ref[];temp=1'>No</A><br>", src, src)
@@ -328,7 +329,14 @@
 							if ((!( t1 ) || !( src.authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || src.active1 != a1))
 								return
 							v.fields["description"] = t1
-					else
+					if("del_vir")
+						var/datum/data/record/V = locate(href_list["del_vir"])
+						if(V)
+							virusDB.Remove("[V.fields["id"]]")
+							qdel(V)
+							src.temp = "Record Deleted."
+							screen = 5
+
 
 			if (href_list["p_stat"])
 				if (src.active1)

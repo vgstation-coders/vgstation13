@@ -53,14 +53,17 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
-	. = round(. * cost_modifier, 1) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
+	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
+/datum/uplink_item/proc/available_for_job(var/user_job)
+	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	if((jobs_exclusive.len && !jobs_exclusive.Find(U.job)) || (jobs_excluded.len && jobs_excluded.Find(U.job)))
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! ([formatJumpTo(get_turf(U))])")
+	if(!available_for_job(U.job))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -110,9 +113,17 @@ var/list/uplink_items = list()
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
+
 			if(user.mind)
-				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				user.mind.spent_TC += get_cost(U.job)
+				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
+				var/datum/role/R = user.mind.GetRole(ROLE_OPERATIVE)
+				if(R)
+					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+				else
+					R = user.mind.GetRole(TRAITOR)
+					if(R)
+						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
@@ -251,7 +262,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/detomatix
 	name = "Detomatix PDA Cartridge"
-	desc = "When inserted into a Personal Data Assistant, this cartridge gives you five opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
+	desc = "When inserted into a Personal Data Assistant, this cartridge gives you four opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
@@ -322,6 +333,12 @@ var/list/uplink_items = list()
 	desc = "A balloon that looks just like you when inflated."
 	item = /obj/item/toy/balloon/decoy
 	cost = 1
+
+/datum/uplink_item/stealthy_tools/flashlightemp
+	name = "EMP Flashlight"
+	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoever you use it on. Up to 4 charges that recover every 30 seconds, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine."
+	item = /obj/item/device/flashlight/emp
+	cost = 4
 
 
 // DEVICE AND TOOLS
@@ -486,9 +503,9 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/bundle
 	name = "Syndicate Bundle"
-	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth more than 20 telecrystals, but you do not know which bundle you will receive."
+	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive."
 	item = /obj/item/weapon/storage/box/syndicate
-	cost = 20
+	cost = 14
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
@@ -510,7 +527,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
-	desc = "Picking this choice will send you a random item from the list. Useful for when you cannot think of a strategy to finish your objectives with."
+	desc = "Picking this choice will send you a random item from the list for half the cost. Useful for when you cannot think of a strategy to finish your objectives with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
@@ -523,13 +540,15 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(I.get_cost() > U.uses)
+			if(!I.available_for_job(U.job))
+				continue
+			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.get_cost())
+		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new I.item(loc)
 
@@ -644,25 +663,22 @@ var/list/uplink_items = list()
 	name = "Energized Bananium Sword"
 	desc = "When concealed a simple banana, when active a deadly means of executing swift justice. Highly regarded for their utility on away missions from the Clown Planet. WARNING: Extremely dangerous if two Bananium Swords are combined! Only those trained in the clownish arts should attempt!"
 	item = /obj/item/weapon/melee/energy/sword/bsword
-	cost = 12
-	discounted_cost = 8
-	jobs_with_discount = list("Clown")
+	cost = 8
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/banannon
 	name = "Banannon"
 	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard. WARNING: Only those trained in the clownish arts can use this weapon effectively!"
 	item = /obj/item/weapon/gun/banannon
-	cost = 24
-	discounted_cost = 18
-	jobs_with_discount = list("Clown")
+	cost = 18
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/livingballoons
 	name = "Box of Living Long Balloons"
 	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them. Needless to say, using these is a bad idea for those not trained in the clownish arts."
 	item = /obj/item/weapon/storage/box/balloons/long/living
-	cost = 10
-	discounted_cost = 6
-	jobs_with_discount = list("Clown")
+	cost = 6
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/bananagun
 	name = "Banana Gun"
@@ -682,19 +698,23 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
+	desc = "Spray something to render it invisible for five minutes! One-time use. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/invisible_spray/permanent
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	cost = 4
+	jobs_exclusive = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
 	name = "Advanced Mime Gloves"
 	desc = "Grants the user the ability to periodically fire an invisible gun from their white gloves. Only real Mimes are trained in the art of firing this artefact silently."
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
-	discounted_cost = 16
-	jobs_with_discount = list("Mime")
+	jobs_exclusive = list("Mime")
 
 /datum/uplink_item/jobspecific/specialsauce
 	name = "Chef Excellence's Special Sauce"
@@ -776,6 +796,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
+/datum/uplink_item/jobspecific/zombievirus
+	name = "Zombie Virus Syndrome"
+	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a disk."
+	item = /obj/item/weapon/diseasedisk/zombie
+	cost = 20
+	discounted_cost = 12
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
 /datum/uplink_item/jobspecific/organ_remover
 	name = "Modified Organics Extractor"
 	desc = "A tool used by vox raiders to extract organs from unconscious victims has been reverse-engineered by syndicate scientists to be used by anyone, but it cannot extract hearts. It works twice as fast as the vox-only variant. Click on it to select the type of organ to extract, and then select the appropiate body zone."
@@ -847,3 +875,11 @@ var/list/uplink_items = list()
 	cost = 16
 	discounted_cost = 6
 	jobs_with_discount = list("Librarian")
+
+/datum/uplink_item/jobspecific/traitor_bible
+	name = "Feldbischof's Bible"
+	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions. 88 rapid, eight in the gun, eight in the extra mag."
+	item = /obj/item/weapon/storage/bible/traitor_gun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chaplain")

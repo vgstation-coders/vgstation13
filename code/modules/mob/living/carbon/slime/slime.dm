@@ -18,7 +18,8 @@
 
 	hasmouth = 0
 
-	can_butcher = 0
+	can_butcher = FALSE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
 	// canstun and CANKNOCKDOWN don't affect slimes because they ignore stun and knockdown variables
 	// for the sake of cleanliness, though, here they are.
@@ -50,11 +51,13 @@
 	var/primarytype = /mob/living/carbon/slime
 	var/adulttype = /mob/living/carbon/slime/adult
 	var/coretype = /obj/item/slime_extract/grey
-	var/list/slime_mutation[4]
+	var/list/slime_mutation[5]
+	var/maxcolorcount = 5
 
 	var/core_removal_stage = 0 //For removing cores
 	universal_speak = 1
 	universal_understand = 1
+	held_items = list()
 
 /mob/living/carbon/slime/adult
 	name = "adult slime"
@@ -69,6 +72,7 @@
 
 	update_icon = 0
 	nutrition = 800 // 1200 = max
+	maxcolorcount = 5 //Based on how many different colors they can split into.
 
 /mob/living/carbon/slime/Destroy()
 	..()
@@ -101,6 +105,8 @@
 	slime_mutation[2] = /mob/living/carbon/slime/metal
 	slime_mutation[3] = /mob/living/carbon/slime/blue
 	slime_mutation[4] = /mob/living/carbon/slime/purple
+	slime_mutation[5] = /mob/living/carbon/slime
+	//For an explination on how and why this list is what it is go to 'code\modules\mob\living\carbon\slime\subtypes.dm' and see the READ ME at the top.
 
 /mob/living/carbon/slime/movement_delay()
 	if (bodytemperature >= 330.23) // 135 F
@@ -1080,6 +1086,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/slime/IgniteMob()
 	return 0
+
+/mob/living/carbon/slime/ApplySlip(var/obj/effect/overlay/puddle/P)
+	return FALSE
 
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 

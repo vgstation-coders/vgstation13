@@ -4,12 +4,14 @@
 	required_pref = ROLE_TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
+	refund_value = BASE_SOLO_REFUND
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
 	..()
 	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
+		can_be_smooth = FALSE //Can't buy anything
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
 	else
@@ -17,12 +19,20 @@
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
 
 /datum/role/traitor/Drop()
-	if(isrobot(antag.current) || isAI(antag.current))
+	if(isrobot(antag.current))
 		var/mob/living/silicon/robot/S = antag.current
 		to_chat(S, "<b>Your laws have been changed!</b>")
-		S.set_zeroth_law("","")
+		S.set_zeroth_law("")
 		S.laws.zeroth_lock = FALSE
 		to_chat(S, "Law 0 has been purged.")
+	else if(isAI(antag.current))
+		var/mob/living/silicon/ai/KAI = antag.current
+		to_chat(KAI, "<b>Your laws have been changed!</b>")
+		KAI.set_zeroth_law("","")
+		KAI.laws.zeroth_lock = FALSE
+		KAI.notify_slaved()
+	else if(ishuman(antag.current))
+		antag.take_uplink()
 
 	.=..()
 
@@ -111,13 +121,12 @@
 /datum/role/traitor/GetScoreboard()
 	. = ..()
 	if(can_be_smooth)
-		var/mob/living/L = antag.current
-		if(L.mind.uplink_items_bought.len)
+		if(uplink_items_bought)
 			. += "The traitor bought:<BR>"
-			for(var/entry in L.mind.uplink_items_bought)
+			for(var/entry in uplink_items_bought)
 				. += "[entry]<BR>"
 		else
-			. += "The traitor was a smooth operator this round."
+			. += "The traitor was a smooth operator this round.<BR>"
 
 //_______________________________________________
 
@@ -130,6 +139,7 @@
 	name = SURVIVOR
 	logo_state = "gun-logo"
 	can_be_smooth = FALSE
+	refund_value = 0
 	var/survivor_type = "survivor"
 	var/summons_received
 
@@ -160,6 +170,7 @@
 	name = ROGUE
 	id = ROGUE
 	logo_state = "synd-logo"
+	refund_value = BASE_SOLO_REFUND/2
 
 /datum/role/traitor/rogue/ForgeObjectives()
 	var/datum/role/traitor/rogue/rival
@@ -216,6 +227,7 @@
 /datum/role/nuclear_operative
 	name = NUKE_OP
 	id = ROLE_OPERATIVE
+	required_pref = ROLE_OPERATIVE
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
 

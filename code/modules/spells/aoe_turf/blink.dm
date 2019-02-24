@@ -30,11 +30,7 @@
 
 /spell/aoe_turf/blink/proc/makeAnimation(var/turf/T, var/turf/starting)
 	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-	smoke.set_up(3, 0, starting)
-	smoke.start()
-
-	smoke = new()
-	smoke.set_up(3, 0, T)
+	smoke.set_up(1, 0, T)
 	smoke.start()
 
 /spell/aoe_turf/blink/vamp
