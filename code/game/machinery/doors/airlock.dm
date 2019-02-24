@@ -1173,27 +1173,6 @@ About the new airlock wires panel:
 			DA.update_state()
 			qdel(src)
 
-/*/obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
-	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-	operating = -1
-	var/obj/structure/door_assembly/DA = revert(user,user.dir)
-	DA.anchored = 0
-	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
-	DA.update_state()
-	qdel(src)
-
-/obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
-	var/obj/structure/door_assembly/DA = new assembly_type(loc)
-	DA.anchored = 1
-	DA.fingerprints += src.fingerprints
-	DA.fingerprintshidden += src.fingerprintshidden
-	DA.fingerprintslast = user.ckey
-	if (mineral)
-		DA.glass = mineral
-	else if (glass && !DA.glass)
-		DA.glass = 1
-*/
-
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
 		if(!B.can_ram(user))
