@@ -29,19 +29,22 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
 		uses = 90 // Because this is only happening on centcomm's snowflake uplink
 
-/obj/item/device/uplink/proc/refund(mob/user)
-	if(!user)
+/obj/item/device/uplink/proc/refund(mob/user, obj/item/I)
+	if(!user || !I)
 		return
-	var/obj/item/I = user.get_active_hand()
-	if(I) // Make sure there's actually something in the hand before even bothering to check
-		for(var/item in typesof(/datum/uplink_item))
+	if(!uplink_items)
+		get_uplink_items()
+	for(var/category in uplink_items)
+		for(var/item in uplink_items[category])
 			var/datum/uplink_item/UI = item
-			var/cost = UI.refund_amount ? UI.refund_amount : UI.cost
-			var/refundable = initial(UI.refundable)
-			if(refundable && I.check_uplink_validity())
+			var/path = UI.refund_path || UI.item
+			var/cost = UI.refund_amount || UI.cost
+			if(istype(I, path) && UI.refundable && I.check_uplink_validity())
 				uses += cost
 				to_chat(user, "<span class='notice'>[I] refunded.</span>")
 				qdel(I)
+				return TRUE
+	return FALSE
 
 //Let's build a menu!
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
@@ -89,9 +92,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				final_text += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
 				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
+			if(item.refundable)
+				final_text += "<span style='color: yellow;'>\[R\]</span>"
 			if(item.desc)
 				if(show_description == 2)
-					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc][item.refundable ? " Use this item on your uplink to refund it for [item.refund_amount || item.cost] TC.":""]</font>"
 				else
 					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
 			final_text += "<BR>"
@@ -239,6 +244,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/radio/uplink/attack_self(mob/user as mob)
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
+
+/obj/item/device/radio/uplink/attackby(var/obj/I, var/mob/user)
+	if(hidden_uplink && hidden_uplink.refund(user, I))
+		return
+	..()
 
 /obj/item/device/radio/uplink/nukeops/New()
 	..()
