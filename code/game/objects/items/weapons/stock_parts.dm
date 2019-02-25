@@ -62,6 +62,8 @@
 				new /obj/machinery/power/secured_capacitor/adv(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv/super)
 				new /obj/machinery/power/secured_capacitor/adv/super(get_turf(src.loc))
+			if(/obj/item/weapon/stock_parts/capacitor/adv/super/ultra)
+				new /obj/machinery/power/secured_capacitor/adv/super/ultra(get_turf(src.loc))
 		qdel(src)
 
 /obj/item/weapon/stock_parts/scanning_module
@@ -182,6 +184,9 @@
 	rating = 3
 	starting_materials = list(MAT_IRON = 80)
 
+//Rating 4
+//Please don't make these too easily accessible to the station.
+
 /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
 	name = "bluespace matter bin"
 	desc = "A container linked to a small local subspace pocket that holds raw materials. Any machine equipped with this shares its materials pool."
@@ -189,6 +194,42 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=4"
 	rating = 4
 	starting_materials = list(MAT_IRON = 80, MAT_SILVER = 20, MAT_GOLD = 20)
+
+/obj/item/weapon/stock_parts/micro_laser/high/ultra/giga
+	name = "giga micro-laser"
+	icon_state = "giga_micro_laser"
+	desc = "A tiny laser, capable of fine manipulation, and worryingly high damage capabilities. Used in the construction of certain devices."
+	origin_tech = Tc_MAGNETS + "=8"
+	rating = 4
+	starting_materials = list(MAT_IRON = 250, MAT_URANIUM = 50, MAT_DIAMOND = 20, MAT_PHAZON = 5)
+
+/obj/item/weapon/stock_parts/capacitor/adv/super/ultra
+	name = "ultra capacitor"
+	icon_state = "capacitor2_ultra"
+	desc = "An ultra-high capacity capacitor, used in the construction of certain devices."
+	origin_tech = Tc_POWERSTORAGE + "=8;" + Tc_MATERIALS + "=6"
+	rating = 4
+	starting_materials = list(MAT_IRON = 250, MAT_URANIUM = 100, MAT_GOLD = 20, MAT_PHAZON = 5)
+	maximum_charge = 5000000000
+
+
+/obj/item/weapon/stock_parts/manipulator/nano/pico/femto
+	name = "femto manipulator"
+	icon_state = "femto_mani"
+	desc = "A manipulator capable of manipulating protons, used in the construction of certain devices."
+	origin_tech = Tc_MATERIALS + "=7;" + Tc_PROGRAMMING + "=4"
+	rating = 4
+	starting_materials = list(MAT_IRON = 125, MAT_URANIUM = 30, MAT_SILVER = 10, MAT_PHAZON = 5)
+
+
+/obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace
+	name = "bluespace scanning module"
+	desc = "A compact, high resolution bluespace scanning module used in the construction of certain devices."
+	icon_state = "ultra_scan_module"
+	origin_tech = Tc_MAGNETS + "=7"
+	rating = 4
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20, MAT_SILVER = 10, MAT_PHAZON = 5)
+
 
 // Subspace stock parts
 
