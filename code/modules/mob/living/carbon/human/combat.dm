@@ -158,6 +158,7 @@
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
 	var/base_chance = 8
 
+	base_chance += min(reagents.get_sportiness(),5)
 	if(mutations.Find(M_HULK))
 		base_chance += 12
 	if(istype(gloves))
