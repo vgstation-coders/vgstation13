@@ -66,7 +66,9 @@
 	if (isnull(msg))
 		return
 
-	var/deity = input("Deity: The current chosen deity is [ticker.Bible_deity_name]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), ticker.Bible_deity_name) as null | text
+	var/predicted_deity = DecidePrayerGod(M)
+
+	var/deity = input("Deity: The current chosen deity is [predicted_deity]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), predicted_deity) as null | text
 
 	if(isnull(deity)) //Hit the cancel button
 		return

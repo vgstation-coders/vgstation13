@@ -1,3 +1,16 @@
+/proc/DecidePrayerGod(var/mob/living/carbon/human/H)
+	if(!H || !istype(H))
+		return "Animal Jesus"
+	if(H.mind.GetRole(CULTIST))
+		return "Nar-Sie"
+	else if (usr.mind && usr.mind.faith) // The user has a faith
+		var/datum/religion/R = usr.mind.faith
+		return R.deity_name
+	else if(usr.mind.assigned_role == "Clown")
+		return "Honkmother"
+	else
+		return "Faithless"
+
 //Proc for selecting a religion
 /proc/ChooseReligion(var/mob/living/carbon/human/H)
 	var/obj/item/weapon/storage/bible/B
@@ -49,7 +62,7 @@
 		to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [chaplain_religion.name]. Convert people by [chaplain_religion.convert_method]")
 		chaplain_religion.convert(H, null, can_renounce = FALSE)
 
-	switch(input(H, "Would you like the traditional [chaplain_religion.bookstyle] design and to worship [chaplain_religion.deity_name][chaplain_religion.deity_names.len ? "one of [json_encode(chaplain_religion.deity_names)]":""]?") in list("Yes", "No"))
+	switch(input(H, "Would you like the traditional [chaplain_religion.bookstyle] design and to worship [chaplain_religion.deity_names.len ? "one of [english_list(chaplain_religion.deity_names)]" : chaplain_religion.deity_name]?") in list("Yes", "No"))
 		if("No")
 			chaplain_religion.deity_name = ChooseDeity(H,chaplain_religion,FALSE)
 			chooseBible(chaplain_religion,H,FALSE)
@@ -67,7 +80,7 @@
 
 /proc/ChooseDeity(mob/chooser, datum/religion/R, var/default = FALSE)
 	if(default)
-		if(R.deity_name)
+		if(!R.deity_names.len)
 			return R.deity_name
 		else
 			return input(chooser, "Your religion is polytheistic. Who is your patron?") as anything in R.deity_names
