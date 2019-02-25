@@ -217,12 +217,13 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 //sharpness flags
-#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
-#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
-#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
-#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
-#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
-#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define SHARP_TIP 		 1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		 2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	 4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define CUT_WALL_AIRLOCK 64 //Will cut through walls, airlocks, and girders when given the chance
 
 //flags for pass_flags
 #define PASSTABLE	1
