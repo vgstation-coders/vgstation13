@@ -129,7 +129,6 @@
 			if("wek")
 				weaken = 0
 	if(href_list["target"])
-		to_chat(world, "target called.")
 		effect_focus++
 		if(effect_focus > dish.virus2.effects.len)
 			effect_focus = 0
