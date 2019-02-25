@@ -1,3 +1,84 @@
+//Proc for selecting a religion
+/proc/ChooseReligion(var/mob/living/carbon/human/H)
+	var/obj/item/weapon/storage/bible/B
+	var/datum/religion/chaplain_religion
+	var/new_religion = sanitize(stripped_input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please put your ID in your ID slot to prevent errors)", "Name of Religion", "Christianity"), 1, MAX_NAME_LEN)
+	if(!new_religion)
+		new_religion = "Christianity" // If nothing was typed
+
+	var/choice = FALSE
+
+	for (var/R in typesof(/datum/religion))
+		var/datum/religion/rel = new R
+		for (var/key in rel.keys)
+			if (lowertext(new_religion) == key)
+				rel.equip_chaplain(H) // We do the misc things related to the religion
+				chaplain_religion = rel
+				B = new rel.bible_type(H)
+				B.my_rel = rel
+				B.name = rel.bible_name
+				H.put_in_hands(B)
+				chaplain_religion.holy_book = B
+				H.equip_or_collect(new rel.preferred_incense(H.back), slot_in_backpack)
+				rel.religiousLeader = H.mind
+				for(var/object in H.get_body_slots())
+					if(istype(object, /obj/item/weapon/card/id))
+						var/obj/item/weapon/card/id/ID = object
+						ID.assignment =  (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
+						ID.name = "[H]'s ID Card ([ID.assignment])"
+				rel.convert(H, null, can_renounce = FALSE)
+				rel.OnPostActivation()
+				to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
+				choice = TRUE
+				break // We got our religion ! Abort, abort.
+		if (choice)
+			break
+
+	if (!choice) // Nothing was found
+		chaplain_religion = new
+		chaplain_religion.name = "[new_religion]"
+		chaplain_religion.deity_name = "[new_religion]"
+		chaplain_religion.bible_name = "The Holy Book of [new_religion]"
+		chaplain_religion.equip_chaplain(H) // We do the misc things related to the religion
+		B = new /obj/item/weapon/storage/bible
+		chaplain_religion.holy_book = B
+		B.name = "The Holy Book of [new_religion]"
+		B.my_rel = chaplain_religion
+		H.put_in_hands(B)
+		chaplain_religion.religiousLeader = H.mind
+		to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [chaplain_religion.name]. Convert people by [chaplain_religion.convert_method]")
+		chaplain_religion.convert(H, null, can_renounce = FALSE)
+
+	switch(input(H, "Would you like the traditional [chaplain_religion.bookstyle] design and to worship [chaplain_religion.deity_name][chaplain_religion.deity_names.len ? "one of [json_encode(chaplain_religion.deity_names)]":""]?") in list("Yes", "No"))
+		if("No")
+			chaplain_religion.deity_name = ChooseDeity(H,chaplain_religion,FALSE)
+			chooseBible(chaplain_religion,H,FALSE)
+		if("Yes")
+			chaplain_religion.deity_name = ChooseDeity(H,chaplain_religion,TRUE)
+			chooseBible(chaplain_religion,H,TRUE)
+
+	B.icon_state = chaplain_religion.holy_book.icon_state
+	B.item_state = chaplain_religion.holy_book.item_state
+
+	if(ticker)
+		ticker.religions += chaplain_religion
+	feedback_set_details("religion_deity","[chaplain_religion.deity_name]")
+	feedback_set_details("religion_book","[B.icon_state]")
+
+/proc/ChooseDeity(mob/chooser, datum/religion/R, var/default = FALSE)
+	if(default)
+		if(R.deity_name)
+			return R.deity_name
+		else
+			return input(chooser, "Your religion is polytheistic. Who is your patron?") as anything in R.deity_names
+	else
+		var/new_deity = copytext(sanitize(input(chooser, "Who do you worship?", "Name of Deity", R.deity_name)), 1, MAX_NAME_LEN)
+		if(length(new_deity))
+			return new_deity
+		else
+			return R.deity_name
+
+
 // This file lists all religions, as well as the prototype for a religion
 /datum/religion
 	// Following tradition, the default is Space Jesus (this is here to avoid people getting an empty relgion)
@@ -21,12 +102,14 @@
 	var/list/keys = list("abstractbasetype") // What you need to type to get this particular relgion.
 	var/converts_everyone = FALSE
 	var/preferred_incense = /obj/item/weapon/storage/fancy/incensebox/harebells
+	var/symbolstyle = 10
+	var/bookstyle = "Holy Light"
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
 		bible_name = pick(bible_names)
-	if (deity_names.len)
-		deity_name = pick(deity_names)
+	/*if (deity_names.len)
+		deity_name = pick(deity_names)*/
 	action_renounce = new /datum/action/renounce(src)
 
 /datum/religion/proc/isReligiousLeader(var/mob/living/user)
@@ -168,7 +251,7 @@
 	R.renounce(owner)
 	Remove(owner)
 
-/proc/chooseBible(var/datum/religion/R, var/mob/user)
+/proc/chooseBible(var/datum/religion/R, var/mob/user, var/noinput = FALSE) //Noinput if they just wanted the defaults
 
 	if (!istype(R) || !user)
 		return FALSE
@@ -176,9 +259,9 @@
 	if (!R.holy_book)
 		return FALSE
 
-	var/book_style = "Bible"
-
-	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "Clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
+	var/book_style = R.bookstyle
+	if(!noinput)
+		book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "Slab", "Tome", "The King in Yellow", "Ithaqua", "Scientology", \
 																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide", "The Dokument")
 	switch(book_style)
 		if("Koran")
@@ -254,6 +337,8 @@
 /datum/religion/default
 	keys = list("christianity")
 	converts_everyone = TRUE
+	symbolstyle = 2
+	bookstyle = "Bible"
 
 /datum/religion/catholic
 	name = "Catholicism"
@@ -262,6 +347,8 @@
 	male_adept = "Bishop"
 	female_adept = "Bishop"
 	keys = list("catholic", "catholicism", "roman catholicism")
+	symbolstyle = 2
+	bookstyle = "Bible"
 
 /datum/religion/catholic/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/mitre(H), slot_head)
@@ -271,6 +358,7 @@
 	deity_name = "God"
 	bible_names = list("The Gnostic Bible", "The Dead Seas Scrolls")
 	keys = list("theist", "gnosticism", "theism")
+	bookstyle = "Torah"
 
 /datum/religion/satanism
 	name = "Satanism"
@@ -280,18 +368,22 @@
 	female_adept = "Magistera"
 	keys = list("satan", "evil", "satanism")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	bookstyle = "Burning"
 
 /datum/religion/lovecraft
 	name = "Esoteric order of Dagon"
 	deity_name = "Cthulhu" //I hope it's spelt correctly
 	bible_names = list("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 	keys = list("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
+	symbolstyle = 5
+	bookstyle = "Necronomicon" //also "Unaussprechlichen Kulten" "Ithaqua"
 
 /datum/religion/hastur
 	name = "Brotherhood of The Yellow Sign" //I'm fed up with people think I worship Dagon. We're moving out.
 	deity_name = "Hastur"
 	bible_name = "The King in Yellow" //The name of the titular fictional play in the 1895 book by Robert Chambers
 	keys = list("hastur","yellow sign","king in yellow","brotherhood of the yellow sign")
+	bookstyle = "The King in Yellow"
 
 /datum/religion/islam
 	name = "Islam"
@@ -300,6 +392,8 @@
 	male_adept = "Imam"
 	female_adept = "Imam"
 	keys = list("islam", "muslim")
+	symbolstyle = 4
+	bookstyle = "Koran"
 
 /datum/religion/slam
 	name = "Slam"
@@ -320,6 +414,8 @@
 	male_adept = "Rabbi"
 	female_adept = "Rabbi"
 	keys = list("jew", "judaism", "jews")
+	symbolstyle = 1
+	bookstyle = "Torah"
 
 /datum/religion/hinduism
 	name = "Hinduism"
@@ -352,6 +448,8 @@
 	female_adept = "Apostle"
 	bible_name = "The Book of Mormon"
 	keys = list("mormon", "mormonism")
+	symbolstyle = 2
+	bookstyle = "Bible"
 
 /datum/religion/confucianism
 	name = "Confucianism"
@@ -368,6 +466,8 @@
 	male_adept = "High Priest"
 	female_adept = "High Priestess"
 	keys = list("wicca", "pagan", "paganism")
+	symbolstyle = 6
+	bookstyle = "Book of Shadows"
 
 /datum/religion/nordic
 	name = "Viking Mythos"
@@ -395,6 +495,7 @@
 	female_adept = "Militant Atheist"
 	keys = list("atheism", "none")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/sunflowers
+	bookstyle = "Atheist"
 
 /datum/religion/atheism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/fedora(H), slot_head)
@@ -416,6 +517,8 @@
 	male_adept = "OT III"
 	female_adept = "OT III"
 	keys = list("scientology")
+	symbolstyle = 8
+	bookstyle = "Scientology"
 
 /datum/religion/discordianism
 	name = "Discordianism"
@@ -439,6 +542,7 @@
 	male_adept = "Oracle"
 	female_adept = "Oracle"
 	keys = list("hellenism", "greece", "greek")
+	bookstyle = "Torah"
 
 /datum/religion/latin
 	name = "Cult of Rome"
@@ -447,6 +551,7 @@
 	male_adept = "Pontifex"
 	female_adept = "Pontifex"
 	keys = list("latin", "rome", "roma", "roman")
+	bookstyle = "Torah"
 
 /datum/religion/latin/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/helmet/roman/legionaire(H), slot_head)
@@ -466,6 +571,7 @@
 	male_adept = "Apostate Preacher"
 	female_adept = "Apostate Preacher"
 	keys = list("chaos")
+	bookstyle = "Burning"
 
 /datum/religion/imperium
 	name = "The Imperial Creed"
@@ -638,6 +744,8 @@
 	female_adept = "Veterinarian"
 	keys = list("ianism", "ian", "dog", "puppy", "doggo", "pupper")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
+	symbolstyle = 9
+	bookstyle = "Ianism"
 
 /datum/religion/admins
 	name = "Adminism"
@@ -665,6 +773,7 @@
 	male_adept = "Hitchhiker"
 	female_adept = "Hitchhiker"
 	keys = list("42")
+	bookstyle = "The Guide"
 
 /datum/religion/spooky
 	name = "Spooky"
@@ -674,6 +783,7 @@
 	female_adept = "Ghost"
 	keys = list("spook", "spooky", "boo", "ghost", "halloween", "2spooky")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	bookstyle = "Tome"
 
 /datum/religion/spooky/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/pumpkinhead(H), slot_head)
@@ -745,6 +855,7 @@
 	female_adept = "Reaper"
 	keys = list("suicide", "death", "succumb")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	bookstyle = "Tome"
 
 /datum/religion/communism
 	name = "Communism"
@@ -870,6 +981,7 @@
 	keys = list("cult", "narsie", "nar'sie", "narnar", "nar-sie", "papa narnar", "geometer", "geometer of blood")
 	convert_method = "performing a ritual with a paper. The subject will need to stand a crayon-drawn rune."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	bookstyle = "Tome"
 
 /datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
@@ -945,6 +1057,7 @@
 	female_adept = "Vampire"
 	keys = list("vampire", "vamp", "blood","dracula")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	bookstyle = "Burning"
 
 /datum/religion/vampirism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
@@ -975,6 +1088,7 @@
 	female_adept = "Co-Clown"
 	keys = list("honk", "clown", "honkmother")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
+	bookstyle = "Honk"
 
 /datum/religion/clown/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
@@ -986,6 +1100,7 @@
 	male_adept = "..."
 	female_adept = "..."
 	keys = list("silence", "mime", "quiet", "...")
+	bookstyle = "Scrapbook"
 
 /datum/religion/mime/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
@@ -1022,6 +1137,7 @@
 	male_adept = "Servant of Ratvar"
 	female_adept = "Servant of Ratvar"
 	keys = list("ratvar", "clockwork", "ratvarism")
+	bookstyle = "Slab"
 
 /datum/religion/clockworkcult/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/clockwork_hood(H), slot_head)
@@ -1068,6 +1184,7 @@
 	male_adept = "Painter"
 	female_adept = "Painter"
 	keys = list("art", "bob ross", "happy little trees", "happy little clouds")
+	bookstyle = "Scrapbook"
 
 /datum/religion/art/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/mounted/frame/painting)
@@ -1099,6 +1216,7 @@
 	keys = list("murdercube","murderkube", "murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea", "dakka")
 	convert_method = "performing a ritual with a gun. The convert needs to be in good health and unafraid of being shot."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
+	bookstyle = "The Dokument"
 
 /datum/religion/guns/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/weapon/gun/energy/laser/practice)
@@ -1140,3 +1258,4 @@
 	female_adept = "Speedrunner"
 	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
+	bookstyle = "Creeper"
