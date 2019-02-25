@@ -21,6 +21,44 @@
 		return sharpness
 	return 0
 
+/obj/item/weapon/melee/energy/attack(var/mob/living/carbon/M, var/mob/living/user) //You will literally take someone's hand off with this
+	if(user.a_intent == I_DISARM && (user.zone_sel.selecting == LIMB_RIGHT_HAND || user.zone_sel.selecting == LIMB_LEFT_HAND))
+		var/datum/organ/external/l_arm/LA = M.get_organ(LIMB_LEFT_ARM)
+		var/datum/organ/external/r_arm/RA = M.get_organ(LIMB_RIGHT_ARM)
+		var/target = user.zone_sel.selecting
+		if(!active)
+			to_chat(usr, "You need to activate \the [src] before you can take someone's hand off!")
+			return
+		if(LA.status & ORGAN_DESTROYED && target == LIMB_LEFT_HAND)
+			to_chat(user, "<span class='warning'> There is no left hand to try to cut off!</span>")
+			return
+		else if(RA.status & ORGAN_DESTROYED && target == LIMB_RIGHT_HAND)
+			to_chat(user, "<span class='warning'> There is no right hand to try to cut off!</span>")
+			return
+		else if(prob(60))
+			if(target == LIMB_LEFT_ARM)
+				LA.droplimb(1)
+				M.audible_scream()
+				playsound(user, "sound/weapons/blade1.ogg", 100, 1)
+				user.visible_message("<span class='danger'>[user] cuts [M]'s left arm with the [src]!</span>", \
+				                     "<span class='warning'>You slice [M]'s left arm with the [src]! </span>")
+			else if(target == LIMB_RIGHT_ARM)
+				RA.droplimb(1)
+				M.audible_scream()
+				playsound(user, "sound/weapons/blade1.ogg", 100, 1)
+				user.visible_message("<span class='danger'>[user] cuts [M]'s right arm with the [src]!</span>", \
+				                     "<span class='warning'>You slice [M]'s right arm with the [src]! </span>")
+			return
+		else
+			playsound(user, "sound/weapons/swing02.ogg", 100, 1)
+			user.visible_message("<span class='danger'>[user] tries to cut M's arm with the [src] but misses!</span>", \
+			                     "<span class='warning'>You miss trying to slice [M]'s arm!</span>")
+			return
+	else
+		..()
+
+
+
 /obj/item/weapon/melee/energy/axe
 	name = "energy axe"
 	desc = "An energised battle axe."
