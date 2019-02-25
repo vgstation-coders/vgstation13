@@ -7249,6 +7249,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = INCENSE_BANANA
 	description = "This fragrance helps you be more clumsy, so you can laugh at yourself."
 
+/datum/reagent/incense/banana/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5))
+		to_chat(M,"<span class='warning'>[pick("You feel like giggling!", "You feel clumsy!", "You want to honk!")]</span>")
+
 /datum/reagent/incense/cabbage
 	name = "Leafy Incense"
 	id = INCENSE_LEAFY
@@ -7285,7 +7291,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 /datum/reagent/incense/vapor/OnDisperse(var/turf/location)
 	for(var/turf/simulated/T in view(2,location))
-		T.dry(TURF_WET_LUBE)
+		if(T.is_wet())
+			T.dry(TURF_WET_LUBE)
+			T.turf_animation('icons/effects/water.dmi',"dry_floor",0,0,TURF_LAYER)
 
 /datum/reagent/incense/dense
 	name = "Dense Incense"
