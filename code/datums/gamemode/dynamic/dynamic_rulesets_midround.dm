@@ -338,12 +338,12 @@
 	name = "Blob Overmind Storm"
 	role_category = /datum/role/blob_overmind/
 	my_fac = /datum/faction/blob_conglomerate/
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
+	required_enemies = list(3,2,2,1,1,1,0,0,0,0)
 	required_candidates = 1
 	weight = 5
-	cost = 35
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	cost = 15
+	requirements = list(90,60,40,40,40,40,30,20,15,15)
 	logo = "blob-logo"
 
 	makeBody = FALSE
@@ -358,9 +358,9 @@
 
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/review_applications()
-	command_alert(/datum/command_alert/blob_storm/overminds)
+	command_alert(/datum/command_alert/meteor_storm)
 	. = ..()
-	spawn (60 SECONDS)
+	spawn (120 SECONDS)
 		command_alert(/datum/command_alert/blob_storm/overminds/end)
 
 //////////////////////////////////////////////
