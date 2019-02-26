@@ -1274,7 +1274,7 @@ var/list/bloodstone_list = list()
 
 	bloodstone_list.Add(src)
 	for (var/obj/O in loc)
-		if (O != src)
+		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
 			O.ex_act(2)
 	safe_space()
 	set_light(3)
