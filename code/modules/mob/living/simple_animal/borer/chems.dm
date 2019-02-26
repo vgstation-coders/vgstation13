@@ -31,6 +31,9 @@
 /datum/borer_chem/head/ryetalyn
 	id = RYETALYN
 
+/datum/borer_chem/head/methylin
+	id = METHYLIN
+
 /datum/borer_chem/chest/blood
 	id = BLOOD
 
