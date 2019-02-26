@@ -7268,7 +7268,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			var/mob/living/simple_animal/hostile/H = M
 			switch(H.stance)
 				if(HOSTILE_STANCE_ATTACK,HOSTILE_STANCE_ATTACKING)
-					return
+					if(istype(M,/mob/living/simple_animal/hostile/retaliate/goat))
+						var/mob/living/simple_animal/hostile/retaliate/goat/G = M
+						G.Calm()
+					else
+						return
 		M.start_walk_to(get_turf(data["source"]),1,6)
 
 /datum/reagent/incense/booze

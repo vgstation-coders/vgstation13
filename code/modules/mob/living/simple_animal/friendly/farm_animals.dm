@@ -97,6 +97,8 @@
 			heart.plane = ABOVE_HUMAN_PLANE
 			flick_overlay(heart, list(user.client), 20)
 			qdel(O)
+		else
+			..()
 	else
 		..()
 //cow
