@@ -107,7 +107,7 @@
 		if(max_i <= 0)
 			return
 	while(!istype(pickedstart, /turf/space))
-	
+
 	if(meteorpath)
 		return new meteorpath(pickedstart, pickedgoal)
 	else
@@ -408,6 +408,7 @@ var/list/blob_candidates = list()
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorcore"
 	var/client/blob_candidate = null
+	var/could_reenter_corpse = FALSE
 
 /obj/item/projectile/meteor/blob/core/proc/AssignMob(var/mob/M)
 	blob_candidate = M.client
@@ -415,6 +416,11 @@ var/list/blob_candidates = list()
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src
 		blob_candidate.mob.see_invisible = SEE_INVISIBLE_MINIMUM
+		if(isobserver(M))
+			var/mob/dead/observer/O = M
+			if(O.can_reenter_corpse)
+				O.can_reenter_corpse = FALSE
+				could_reenter_corpse = TRUE
 
 /obj/item/projectile/meteor/blob/core/Destroy()
 	if(blob_candidate)
@@ -422,6 +428,9 @@ var/list/blob_candidates = list()
 		blob_candidate.eye = blob_candidate.mob
 		blob_candidates -= blob_candidate
 		blob_candidate = null
+		if(isobserver(blob_candidate.mob))
+			var/mob/dead/observer/O = blob_candidate.mob
+			O.can_reenter_corpse = could_reenter_corpse
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
