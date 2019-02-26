@@ -24,16 +24,15 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_CUSTOM)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>[custom]</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='info'>[custom]</span>")
 		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Soul Rambler.<br>You wander space, looking for the man who killed your closest friend. And, perhaps, seeking answers to less tangible questions about life. If you happen to help people along the way, so be it.</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='info'><B>You are a Soul Rambler.</B><BR>You wander space, looking for the man who killed your closest friend. And, perhaps, seeking answers to less tangible questions about life. If you happen to help people along the way, so be it.</span>")
 
 	to_chat(antag.current, "<span class='danger'>You have no powers, except the power to blow minds. Your shakashuri can be used to pacify spirits, but you will otherwise need to rely on your weapons-grade philosophical insights.</span>")
 
 /obj/item/device/instrument/recorder/shakashuri
 	name = "Shakashuri"
 	desc = "Similar to other woodwinds, though it can be played only by a true rambler of souls."
-	exudes_peace = TRUE
 	slot_flags = SLOT_BACK
 
 /obj/item/device/instrument/recorder/shakashuri/attack_self(mob/user)
@@ -42,6 +41,10 @@
 		return
 	else
 		..()
+
+/obj/item/device/instrument/recorder/shakashuri/OnPlayed(mob/user,mob/M)
+	if(user!=M)
+		M.reagents.add_reagent(CHILLWAX,0.3)
 
 /obj/item/weapon/reagent_containers/food/snacks/quiche/frittata/New()
 	..()

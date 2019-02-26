@@ -464,14 +464,12 @@
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	logo = "rambler-logo"
+	repeatable = FALSE //Listen, this psyche is not big enough for two metaphysical seekers.
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/acceptable(var/population=0,var/threat=0)
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	if (locate(/datum/dynamic_ruleset/midround/rambler) in mode.executed_rules)
-		return FALSE
-		//Listen, this psyche is not big enough for two metaphysical seekers.
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced = 0)

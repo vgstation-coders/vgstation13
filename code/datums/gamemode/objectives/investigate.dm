@@ -1,8 +1,8 @@
-/datum/objective/ramble
+/datum/objective/investigate
 	explanation_text = "Bring peace to the spirits of the dead by identifying one dangerous killer. Set your crystal necklace to the identity of the one responsible."
 	name = "Investigate Killing"
 
-/datum/objective/ramble/IsFulfilled()
+/datum/objective/investigate/IsFulfilled()
 	if (..())
 		return TRUE
 	if(!owner.current)

@@ -7,7 +7,6 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/musician.dmi', "right_hand" = 'icons/mob/in-hand/right/musician.dmi')
 	icon = 'icons/obj/musician.dmi'
 	force = 10
-	var/exudes_peace = FALSE
 
 /obj/item/device/instrument/New()
 	..()
@@ -41,6 +40,9 @@
 
 	user.set_machine(src)
 	song.interact(user)
+
+/obj/item/device/instrument/proc/OnPlayed(mob/user,mob/M)
+	return
 
 /obj/item/device/instrument/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] begins trying to play Faerie's Aire and Death Waltz with \the [src]! It looks like \he's trying to commit suicide.</span>")

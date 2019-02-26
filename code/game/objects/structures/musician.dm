@@ -64,10 +64,9 @@
 			continue
 		if(M.client.prefs.hear_instruments)
 			M.playsound_local(source, soundfile, 100, falloff = 5)
-		if(instrumentObj.exudespeace)
-			if(M == user)
-				continue
-			M.add_reagent(CHILLWAX,0.2)
+		if(istype(instrumentObj,/obj/item/device/instrument))
+			var/obj/item/device/instrument/INS
+			INS.OnPlayed(user,M)
 
 /datum/song/proc/updateDialog(mob/user)
 	instrumentObj.updateDialog()		// assumes it's an object in world, override if otherwise
