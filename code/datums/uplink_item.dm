@@ -244,16 +244,6 @@ var/list/uplink_items = list()
 	cost = 40
 	jobs_exclusive = list("Nuclear Operative")
 
-/datum/uplink_item/dangerous/robot
-	name = "Syndicate Robot Teleporter"
-	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
-	item = /obj/item/weapon/robot_spawner/syndicate
-	refund_path = /obj/item/weapon/robot_spawner //Any spawner is fine. They are super rare and need to be unused to pass the refund check anyways.
-	cost = 50
-	refund_amount = 25
-	jobs_exclusive = list("Nuclear Operative")
-	refundable = TRUE
-
 /datum/uplink_item/dangerous/dude_bombs_lmao
 	name = "Modified Tank Transfer Valve"
 	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
@@ -261,6 +251,14 @@ var/list/uplink_items = list()
 	refund_path = /obj/item/device/transfer_valve/mediumsize
 	cost = 100
 	refund_amount = 15
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/robot
+	name = "Syndicate-modded Combat Robot Teleporter"
+	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
+	item = /obj/item/weapon/robot_spawner/syndicate
+	cost = 100
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
