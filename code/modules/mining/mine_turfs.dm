@@ -167,6 +167,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			GetDrilled()
 
+/turf/unsimulated/mineral/blob_act()
+	GetDrilled()
 
 /turf/unsimulated/mineral/Bumped(AM)
 	. = ..()
