@@ -1,4 +1,9 @@
 /**********************Mineral deposits**************************/
+#define MINE_DIFFICULTY_NORM 1
+#define MINE_DIFFICULTY_TOUGH 3
+#define MINE_DIFFICULTY_DENSE 5
+#define MINE_DIFFICULTY_GLHF 9
+
 
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
@@ -29,7 +34,7 @@
 	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
 	var/rockernaut = NONE
 	var/minimum_mine_time = 0
-	var/mining_difficulty = 1
+	var/mining_difficulty = MINE_DIFFICULTY_NORM
 
 
 /turf/unsimulated/mineral/snow
@@ -150,16 +155,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 
 /turf/unsimulated/mineral/ex_act(severity)
-	if(prob(100/mining_difficulty))
-		switch(severity)
-			if(3.0)
-				if (prob(75))
-					GetDrilled()
-			if(2.0)
-				if (prob(90))
-					GetDrilled()
-			if(1.0)
+	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)
+		return
+	switch(severity)
+		if(3.0)
+			if (prob(75))
 				GetDrilled()
+		if(2.0)
+			if (prob(90))
+				GetDrilled()
+		if(1.0)
+			GetDrilled()
 
 
 /turf/unsimulated/mineral/Bumped(AM)
@@ -539,12 +545,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/dense
 	name = "dense rock"
-	mining_difficulty = 5
+	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 5 SECONDS
 
 /turf/unsimulated/mineral/hyperdense
 	name = "hyperdense rock"
-	mining_difficulty = 5
+	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 99 SECONDS //GL HF
 
 /**********************Asteroid**************************/
