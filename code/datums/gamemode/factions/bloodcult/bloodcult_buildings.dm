@@ -275,7 +275,10 @@
 				for(var/mob/M in observers)
 					if(!M.client || isantagbanned(M) || jobban_isbanned(M, ROLE_CULTIST) || M.client.is_afk())
 						continue
-					to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
+					if (M.mind && M.mind.GetRole(CULTIST))
+						var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+						if (cultist.second_chance)
+							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
 	if (istype(I, /obj/item/weapon/grab))
 		if (blade)
@@ -648,7 +651,7 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
-		if(!isobserver(M))
+		if(!isobserver(M) || !iscultist(M))
 			return
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
@@ -660,6 +663,12 @@
 		var/mob/living/simple_animal/shade/shadeMob = new(blade)
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
+		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+		cultist.second_chance = 0
+		shadeMob.real_name = M.mind.name
+		shadeMob.name = "[shadeMob.real_name] the Shade"
+		M.mind.transfer_to(shadeMob)
+		/*
 		shadeMob.ckey = usr.ckey
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
@@ -668,6 +677,7 @@
 			shadeMob.name = "[shadeMob.real_name] the Shade"
 			if (shadeMob.mind)
 				shadeMob.mind.name = shadeMob.real_name
+		*/
 		shadeMob.cancel_camera()
 		shadeMob.give_blade_powers()
 		blade.dir = NORTH
