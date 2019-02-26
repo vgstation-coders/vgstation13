@@ -434,14 +434,14 @@ var/list/bloodstone_backup = 0
 /obj/effect/stun_indicator/New()
 	..()
 	if (!ismob(loc))
-		qdel()
+		qdel(src)
 		return
 
 	victim = loc
 	current_dots = Clamp(round(victim.knockdown/2.5),0,5)
 
 	if (!current_dots)
-		qdel()
+		qdel(src)
 		return
 
 	current_dots++//so we get integers from 1 to 6
