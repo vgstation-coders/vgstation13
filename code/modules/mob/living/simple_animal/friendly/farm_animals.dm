@@ -91,6 +91,11 @@
 				to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage))
 			Calm()
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src].</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
 			qdel(O)
 	else
 		..()
