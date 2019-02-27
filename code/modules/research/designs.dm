@@ -147,14 +147,9 @@ proc/getScanDesign(var/obj/O)
 ////////////////////////////////////////
 
 /obj/item/weapon/disk/design_disk
-	name = "Component Design Disk"
+	name = "component design disk"
 	desc = "A disk for storing device design data for construction in lathes."
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk2"
-	item_state = "card-id"
-	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
-	w_type = RECYK_ELECTRONIC
+	icon_state = "disk_design"
 	var/datum/design/blueprint
 
 /obj/item/weapon/disk/design_disk/New()
@@ -164,7 +159,7 @@ proc/getScanDesign(var/obj/O)
 
 
 /obj/item/weapon/disk/design_disk/ammolathe
-	name = "Component Design Disk (Ammolathe)"
+	name = "component design disk (Ammolathe)"
 
 /obj/item/weapon/disk/design_disk/ammolathe/New()
 	..()
