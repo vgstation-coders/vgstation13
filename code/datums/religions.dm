@@ -277,7 +277,7 @@
 	deity_name = "Satan"
 	bible_name = "The Satanic Bible" //What I found on Google, ergo the truth
 	male_adept = "Magister"
-	female_adept = "Magistera"
+	female_adept = "Magistra"
 	keys = list("satan", "evil", "satanism")
 
 /datum/religion/lovecraft
