@@ -223,7 +223,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
 #define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
 #define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
-#define CUT_WALL_AIRLOCK 64 //Will cut through walls, airlocks, and girders when given the chance
+#define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
+#define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
 
 //flags for pass_flags
 #define PASSTABLE	1

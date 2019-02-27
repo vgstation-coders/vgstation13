@@ -343,14 +343,14 @@
 			dismantle_wall()
 		return
 
-    //CUT_WALL_AIRLOCK will dismantle the wall
-	else if(W.sharpness_flags & (CUT_WALL_AIRLOCK) && user.a_intent == I_HURT)
+    //CUT_WALL will dismantle the wall
+	else if(W.sharpness_flags & (CUT_WALL) && user.a_intent == I_HURT)
 		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
 		"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 		"<span class='warning'>You hear slicing noises.</span>")
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 
-		if(do_after(user, src, hardness))
+		if(do_after(user, src, 300))
 			if(!istype(src))
 				return
 			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
