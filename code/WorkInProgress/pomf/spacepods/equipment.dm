@@ -158,7 +158,7 @@
 	desc = "used in tandem with a pod locking system"
 	icon = 'icons/pods/ship.dmi'
 	icon_state = "key"
-
+	w_class = W_CLASS_SMALL
 	var/code
 
 /obj/item/device/pod_key/attack_self(mob/user)

@@ -34,6 +34,7 @@
 	desc = "Allows for the construction of a spacepod mounted locking system."
 	id = "pod_lock"
 	build_type = PODFAB
+	build_path = /obj/item/device/spacepod_equipment/locking/lock
 	req_tech = list(Tc_MATERIALS = 2, Tc_BLUESPACE = 2)
 	category = "Misc"
 	materials = list(MAT_IRON = 3500)
@@ -43,6 +44,7 @@
 	desc = "To be paired with a toggle lock system."
 	id = "pod_key"
 	build_type = PODFAB
+	build_path = /obj/item/device/pod_key
 	req_tech = list(Tc_MATERIALS = 2, Tc_BLUESPACE = 2)
 	category = "Misc"
 	materials = list(MAT_IRON = 1500)
