@@ -24,15 +24,12 @@
 
 	if(.)
 		if(nutrition && stat != DEAD)
-			if(M_REGEN in mutations)
-				burn_calories(HUNGER_FACTOR / 20) //Will make you consume twice the calories if you have regeneration block
 			burn_calories(HUNGER_FACTOR / 20)
 			if(m_intent == "run")
-				if(M_REGEN in mutations)
-					burn_calories(HUNGER_FACTOR / 10)
-				else
-					burn_calories(HUNGER_FACTOR / 20)
-		update_minimap()
+				burn_calories(HUNGER_FACTOR / 20)
+		//update_minimap()
+		if (displayed_holomap)
+			displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)

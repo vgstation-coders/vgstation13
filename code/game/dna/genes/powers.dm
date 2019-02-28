@@ -85,6 +85,15 @@
 /datum/dna/gene/basic/regenerate/New()
 	block=REGENERATEBLOCK
 
+/datum/dna/gene/basic/regenerate/activate(var/mob/M, var/connected, var/flags)
+	..()
+	M.calorie_burn_rate *= 2
+
+/datum/dna/gene/basic/regenerate/deactivate(var/mob/M, var/connected, var/flags)
+	if(..())
+		M.calorie_burn_rate = initial(calorie_burn_rate)
+
+
 /datum/dna/gene/basic/increaserun
 	name = "Super Speed"
 	activation_messages = list("Your leg muscles pulsate.")
