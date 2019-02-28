@@ -143,12 +143,13 @@
 /obj/item/device/spacepod_equipment/locking/lock/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/pod_key))
 		var/obj/item/device/pod_key/P = I
-		if(!P.code && !code)
+		if(!P.code)
+			if(!code)
+				code = rand(1, 65535)
 			to_chat(user, "<span class = 'notice'>You pair \the [P] with \the [src].</span>")
-			code = rand(1, 65535)
 			P.code = code
 		else
-			to_chat(user, "<span class = 'warning'>\The [src] or \the [P] is already paired.</span>")
+			to_chat(user, "<span class = 'warning'>\The [P] is already codelocked.</span>")
 		return
 	..()
 
