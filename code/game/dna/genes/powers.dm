@@ -85,13 +85,13 @@
 /datum/dna/gene/basic/regenerate/New()
 	block=REGENERATEBLOCK
 
-/datum/dna/gene/basic/regenerate/activate(var/mob/M, var/connected, var/flags)
+/datum/dna/gene/basic/regenerate/activate(var/mob/living/carbon/human/H)
 	..()
-	M.calorie_burn_rate *= 2
+	H.calorie_burn_rate *= 2
 
-/datum/dna/gene/basic/regenerate/deactivate(var/mob/M, var/connected, var/flags)
+/datum/dna/gene/basic/regenerate/deactivate(var/mob/living/carbon/human/H)
 	if(..())
-		M.calorie_burn_rate = initial(calorie_burn_rate)
+		H.calorie_burn_rate /= 2
 
 
 /datum/dna/gene/basic/increaserun
