@@ -25,6 +25,7 @@
 	if(.)
 		if(nutrition && stat != DEAD)
 			burn_calories(HUNGER_FACTOR / 20)
+
 			if(m_intent == "run")
 				burn_calories(HUNGER_FACTOR / 20)
 		//update_minimap()
