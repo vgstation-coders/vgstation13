@@ -135,10 +135,16 @@
 	my_atom.locked = !my_atom.locked
 	my_atom.visible_message("<span class = 'notice'>\The [my_atom] beeps!</span>")
 
+/obj/item/device/spacepod_equipment/locking/proc/multitool_act(mob/user, var/obj/item/device/multitool/MT)
+	return 1
+
 /obj/item/device/spacepod_equipment/locking/lock
 	name = "spacepod physical lock system"
 	desc = "Use a remote key to lock and unlock the pod."
 	var/code
+
+/obj/item/device/spacepod_equipment/locking/lock/multitool_act(mob/user, var/obj/item/device/multitool/MT)
+	to_chat(user, "[replacetext(code, regex("[0-rand(1-9)]"), "_")]")
 
 /obj/item/device/spacepod_equipment/locking/lock/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/pod_key))

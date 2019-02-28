@@ -175,6 +175,9 @@
 		hatch_open = !hatch_open
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch.</span>")
 		return
+	if(hatch_open && ismultitool(W) && ES.locking_system)
+		to_chat(world, "multitool act called")
+		return ES.locking_system.multitool_act(user, W)
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 5))
@@ -233,7 +236,7 @@
 		to_chat(user, "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>")
 		return
 	if(locked)
-		to_chat(user, "<span class = 'warning'>\The [src] is locked.</span>")
+		to_chat(user, "<span class = 'warning'>\The [src] is locked, disallowing access to the internal components.</span>")
 		return
 	var/list/possible = list()
 	if(battery)
@@ -287,6 +290,10 @@
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		*/
+
+/obj/spacepod/emag_act(var/mob/user, var/obj/item/card/emag/E)
+	locked = FALSE
+	visible_message("<span class = 'warning'>\The [src] beeps twice.</span>")
 
 /obj/spacepod/civilian
 	icon_state = "pod_civ"
