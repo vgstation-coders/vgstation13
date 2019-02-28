@@ -1429,16 +1429,16 @@
 
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
-	for(var/datum/organ/external/O in src.organs)
+	for(var/datum/organ/external/O in organs)
 		if(O.is_robotic())
-			O.status &= ~ORGAN_ROBOT
+			O.fleshify()
 	update_icons()
+	update_body()
 
 // Makes all robot internal organs organic.
 /mob/living/carbon/human/proc/make_robot_internals_organic()
-	for(var/datum/organ/internal/O in src.organs)
-		if(O.robotic)
-			O.robotic = 0
+	for(var/datum/organ/internal/O in internal_organs)
+		O.robotic = 0
 
 // Makes all robot organs, internal and external, organic.
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
@@ -1448,13 +1448,15 @@
 // Makes all limbs robotic.
 /mob/living/carbon/human/proc/make_organic_limbs_robotic()
 	for(var/datum/organ/external/O in organs)
-		O.robotize()
+		if(!O.is_robotic())
+			O.robotize()
 	update_icons()
+	update_body()
 
 // Makes all internal organs robotic.
 /mob/living/carbon/human/proc/make_organic_internals_robotic()
-	for(var/datum/organ/internal/O in organs)
-		O.robotic = TRUE
+	for(var/datum/organ/internal/O in internal_organs)
+		O.robotic = 2
 
 // Makes all organs, internal and external, robotic.
 /mob/living/carbon/human/proc/make_all_organic_parts_robotic()
