@@ -69,12 +69,16 @@
 
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
+	cyborg_list -= src
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
 			mmi.forceMove(T)
 		if(mmi.brainmob)
 			if(mind)
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
 				mind.transfer_to(mmi.brainmob)
 			mmi.brainmob.locked_to_z = locked_to_z
 		else

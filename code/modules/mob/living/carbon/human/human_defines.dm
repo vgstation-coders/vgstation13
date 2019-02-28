@@ -93,3 +93,4 @@
 	var/become_zombie_after_death = FALSE
 	var/times_cloned = 0 //How many times this person has been cloned
 	var/talkcount = 0 // How many times a person has talked - used for determining who's been the "star" for the purposes of round end credits
+	var/calorie_burn_rate = HUNGER_FACTOR

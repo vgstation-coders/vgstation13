@@ -99,7 +99,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/spells = list()	// Because spells are the hip new thing to replace verbs
 
 	var/blood_color = DEFAULT_BLOOD //Red.
-	var/flesh_color = "#FFC896" //Pink.
+	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'
@@ -342,7 +342,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_UNATHI)
 	tail = "sogtail"
 	attack_verb = "scratches"
-	punch_damage = 5
+	punch_damage = 2
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
 
@@ -356,6 +356,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
+
+	default_mutations=list(M_CLAWS)
 
 	flesh_color = "#34AF10"
 
@@ -1046,7 +1048,7 @@ var/list/has_died_as_golem = list()
 	icobase = 'icons/mob/human_races/r_slime.dmi'
 	deform = 'icons/mob/human_races/r_def_slime.dmi'
 	known_languages = list(LANGUAGE_SLIME)
-	meat_type = /obj/item/slime_heart
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	attack_verb = "glomps"
 
 	flags = IS_WHITELISTED | NO_BREATHE
@@ -1099,7 +1101,7 @@ var/list/has_died_as_golem = list()
 	icon = null //'icons/mob/human_races/r_slime.dmi'
 	icon_state = null //"slime_puddle"
 	density = 0
-	meat_type = /obj/item/slime_heart
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	var/mob/living/carbon/human/slime_person
 
 /mob/living/slime_pile/New()

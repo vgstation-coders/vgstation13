@@ -1,7 +1,9 @@
-#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+#define MAX_PILL_SPRITE 40 //Max icon state of the pill sprites
 var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white", "oblong cyan", "oblong darkred", "oblong orange-striped", "oblong lightblue-drab", \
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
-"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
+"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green","oblong green-yellow","oblong grey-purple","oblong black-red", \
+"oblong yellow-grey","oblong green-purple","oblong blue-red","oblong green-brown","oblong yellow-cyan","oblong purple-cyan","oblong yellow-red","round pink", \
+"round purple-red","round black","round green-blue","round orange","round blue-beige","round blue","round beige-yellow","round red-green","round darkpink")
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
@@ -31,6 +33,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
+	var/pill_display_number = MAX_PILL_SPRITE/2
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -46,7 +49,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(300)
+	create_reagents(1000)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
@@ -163,6 +166,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	else if(href_list["pill_sprite"])
 		pillsprite = href_list["pill_sprite"]
+		src.updateUsrDialog()
+		return 1
+
+	else if(href_list["pill_icon_toggle"])
+		if (pill_display_number == MAX_PILL_SPRITE/2)
+			pill_display_number = MAX_PILL_SPRITE
+		else
+			pill_display_number = MAX_PILL_SPRITE/2
 		src.updateUsrDialog()
 		return 1
 
@@ -429,18 +440,20 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	for(var/i = 1 to MAX_PILL_SPRITE)
 		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
 
-/obj/machinery/chem_master/proc/generate_pill_icon_div()
+/obj/machinery/chem_master/proc/generate_pill_icon_div(pill_display_number)
 	var/dat = list()
 	dat += "<HR>"
+	dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a><br>"
 	dat += "<div class='pillIconsContainer'>"
-	for(var/i = 1 to MAX_PILL_SPRITE)
+	for(var/i = 1 to pill_display_number)
 		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 					<div class="pillIcon">
 						[pill_icon_cache[i]]
 					</div>
 				</a>"}
 		if (i%10 == 0)
-			dat +="<br>"
+			dat += "<br>"
+
 	dat += "</div>"
 	return dat
 
@@ -452,6 +465,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	user.set_machine(src)
 
 	var/dat = list()
+
 	if(!beaker)
 		dat += "Please insert a beaker.<BR>"
 		if(!condi)
@@ -459,7 +473,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
-			dat += generate_pill_icon_div()
+			dat += generate_pill_icon_div(pill_display_number)
 	else
 		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
@@ -582,7 +596,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// PILL ICONS
 			//
-			dat += generate_pill_icon_div()
+
+			dat += generate_pill_icon_div(pill_display_number)
+
+
+
 
 			//
 			// BUTTONS

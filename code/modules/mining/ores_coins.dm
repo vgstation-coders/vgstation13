@@ -231,11 +231,12 @@
 	desc = "A nugget of Uqill, a rare and very dense stone."
 	icon_state = "uqill"
 	material="uqill"
+
 /obj/item/stack/ore/telecrystal
 	name = "telecrystal"
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
-	material="telecrystal"
+	material=MAT_TELECRYSTAL
 
 /obj/item/stack/ore/mythril
 	name = "mythril ore"
@@ -312,7 +313,7 @@
 
 
 
-/obj/item/stack/ore/New()
+/obj/item/stack/ore/New(var/loc, var/amount=null)
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER

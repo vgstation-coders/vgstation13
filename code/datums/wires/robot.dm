@@ -54,8 +54,7 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 
 		if (BORG_WIRE_AI_CONTROL) //Cut the AI wire to reset AI control
 			if(!mended)
-				if (R.connected_ai)
-					R.connected_ai = null
+				R.disconnect_AI()
 
 		if (BORG_WIRE_CAMERA)
 			if(!isnull(R.camera) && !R.scrambledcodes)

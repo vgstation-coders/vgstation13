@@ -28,7 +28,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	mouse_opacity = 0
 	luminosity = 0
 	var/lightswitch = 1
+	var/list/ambient_sounds = list(/datum/ambience/generic1,/datum/ambience/generic2,/datum/ambience/generic3,/datum/ambience/generic4,/datum/ambience/generic5,/datum/ambience/generic6,/datum/ambience/generic7,/datum/ambience/generic8,/datum/ambience/generic9,/datum/ambience/generic10,/datum/ambience/generic11,/datum/ambience/generic12,/datum/ambience/generic13,/datum/ambience/generic14)
+	//note. the above sounds apply to literally every area. if it does not apply. null it out. the old code had this for every other area so I don't think it's an issue
 
+	//space sounds below - Figure this out.
+	//note. the above will cause those ambient sounds to be in EVERY AREA that doesn't have them overridden. put ambient_sounds = null in your area def, or overwrite this.
 	var/eject = null
 
 	var/requires_power = 1
@@ -413,6 +417,7 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/salvage/derelict
 	name = "\improper Derelict Station"
 	icon_state = "yellow"
+	ambient_sounds = list(/datum/ambience/derelict1,/datum/ambience/derelict2,/datum/ambience/derelict3,/datum/ambience/derelict4)
 
 /area/shuttle/salvage/djstation
 	name = "\improper Ruskie DJ Station"
@@ -798,6 +803,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/maintenance
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/maint1,/datum/ambience/maint2)
 
 /area/maintenance/fpmaint
 	name = "Fore Port Maintenance"
@@ -880,6 +886,7 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/ghettobar
 	name = "Ghetto Bar"
 	icon_state = "ghettobar"
+	ambient_sounds = list(/datum/ambience/ghetto)
 
 /area/maintenance/ghettotheatre
 	name = "Ghetto Theatre"
@@ -964,6 +971,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Head of Personnel's Quarters"
 	icon_state = "head_quarters"
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/heads/rd
 	name = "\improper Research Director's Quarters"
@@ -989,12 +998,16 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Courtroom"
 	icon_state = "courtroom"
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
+	holomap_marker = "courtroom"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/hop
 	name = "\improper Head of Personnel's Office"
 	icon_state = "head_quarters"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/mint
 	name = "\improper Mint"
@@ -1075,16 +1088,21 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Theatre"
 
 /area/library
- 	name = "\improper Library"
- 	icon_state = "library"
- 	shuttle_can_crush = FALSE
+	name = "\improper Library"
+	icon_state = "library"
+	shuttle_can_crush = FALSE
+	holomap_marker = "library"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/holy1,/datum/ambience/holy2,/datum/ambience/holy3,/datum/ambience/holy4)
 
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
+	holomap_marker = "chapel"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel/office
 	name = "\improper Chapel Office"
@@ -1232,6 +1250,7 @@ proc/process_adminbus_teleport_locs()
 /area/engineering/
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/engi1,/datum/ambience/engi2,/datum/ambience/engi3,/datum/ambience/engi4)
 
 /area/engineering/engine_smes
 	name = "\improper Engineering SMES"
@@ -1393,6 +1412,7 @@ proc/process_adminbus_teleport_locs()
 	music = "signal"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/AI)
 
 //MedBay
 /area/medical
@@ -1454,6 +1474,7 @@ proc/process_adminbus_teleport_locs()
 /area/medical/morgue
 	name = "\improper Morgue"
 	icon_state = "morgue"
+	ambient_sounds = list(/datum/ambience/ded1,/datum/ambience/ded2,/datum/ambience/mainmusic)
 
 /area/medical/coldstorage
 	name = "Morgue"
@@ -2066,10 +2087,12 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Upload Chamber"
 	icon_state = "ai_upload"
 	jammed=1
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
 	icon_state = "ai_foyer"
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai
 	name = "\improper AI Chamber"
@@ -2077,10 +2100,12 @@ proc/process_adminbus_teleport_locs()
 	jammed=1
 	holomap_marker = "ai"
 	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/aisat
 	name = "\improper AI Satellite"
 	icon_state = "ai"
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/aisat_interior
 	name = "\improper AI Satellite"
@@ -2240,6 +2265,7 @@ proc/process_adminbus_teleport_locs()
 	general_area_name = "Telecommunications Satellite"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -2271,18 +2297,22 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomsat
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
 	icon_state = "tcomsatentrance"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomwest
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/tcommsat/computer
 	name = "\improper Satellite Control Room"
@@ -2657,3 +2687,6 @@ var/list/the_station_areas = list (
 	name = "\improper Telecomms Control Room"
 	icon_state = "tcomsatcomp"
 
+//for lack of a better spot and I couldn't be assed to find the definition of it.
+/area/mine
+	ambient_sounds = list(/datum/ambience/dorf,/datum/ambience/minecraft,/datum/ambience/torvusmusic)

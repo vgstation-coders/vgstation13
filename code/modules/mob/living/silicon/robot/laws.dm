@@ -124,7 +124,8 @@
 	else if (emagged)
 		to_chat(who, "<b>Remember, you are not required to listen to the AI.</b>")
 	else
-		to_chat(who, "<b>Remember, you are not bound to any AI, you are not required to listen to them.</b>")
+		if(ticker.current_state == GAME_STATE_PLAYING) //Only tell them this if the game has started. We might find an AI master for them before it starts if it hasn't.
+			to_chat(who, "<b>Remember, you are not bound to any AI, you are not required to listen to them.</b>")
 
 /mob/living/silicon/robot/proc/lawsync()
 	laws_sanity_check()
@@ -155,7 +156,22 @@
 			temp = master.supplied[index]
 			if (length(temp) > 0)
 				laws.supplied[index] = temp
-	return
+
+		if(mind)
+			var/datum/role/mastermalf = connected_ai.mind.GetRole(MALF)
+			if(mastermalf)
+				var/datum/faction/my_new_faction = mastermalf.faction
+				my_new_faction.HandleRecruitedMind(mind)
+			else
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
+
+	else
+		if(mind)
+			var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+			if(MB)
+				MB.Drop()
 
 /mob/living/silicon/robot/proc/laws_sanity_check()
 	if (!laws)

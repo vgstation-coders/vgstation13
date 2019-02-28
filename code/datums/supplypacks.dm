@@ -220,6 +220,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "glass sheets crate"
 	group = "Supplies"
 
+/datum/supply_packs/plastic50
+	name = "50 plastic sheets"
+	contains = list(/obj/item/stack/sheet/mineral/plastic)
+	amount = 50
+	cost = 30
+	containertype = /obj/structure/closet/crate/engi
+	containername = "plastic sheets crate"
+	group = "Supplies"
+
 /datum/supply_packs/wood25
 	name = "25 wooden planks"
 	contains = list(/obj/item/stack/sheet/wood)
@@ -1063,7 +1072,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/party
 	name = "Party equipment"
 	contains = list(/obj/item/weapon/storage/box/drinkingglasses,
-					/obj/item/weapon/reagent_containers/food/drinks/shaker,
+					/obj/item/weapon/reagent_containers/food/drinks/discount_shaker,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/patron,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/goldschlager,
 					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
@@ -1125,7 +1134,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser,
 	/obj/item/weapon/storage/box/drinkingglasses,
 	/obj/item/weapon/storage/box/drinkingglasses,
-	/obj/item/weapon/reagent_containers/food/drinks/shaker)
+	/obj/item/weapon/reagent_containers/food/drinks/discount_shaker)
 	cost = 40
 	containertype = /obj/structure/closet/crate/basic
 	containername = "bartending equipment crate"
@@ -1541,6 +1550,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 3000
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "secure shuttle permit crate"
+	group = "Engineering"
+
+/datum/supply_packs/suit_modification_station
+	name = "suit modification station"
+	contains = list()
+	cost = 400
+	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
 //////MEDICAL//////

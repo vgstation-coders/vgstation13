@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -20,8 +20,8 @@
 				new /obj/item/weapon/soap/syndie(src)
 
 			if("screwed")//6?+6?+10+4=26
-				new /obj/effect/spawner/newbomb/timer/syndicate(src)
-				new /obj/effect/spawner/newbomb/timer/syndicate(src)
+				new /obj/effect/spawner/newbomb/timer(src)
+				new /obj/effect/spawner/newbomb/timer(src)
 				new /obj/item/device/powersink(src)
 				new /obj/item/clothing/suit/space/syndicate(src)
 				new /obj/item/clothing/head/helmet/space/syndicate(src)
@@ -118,6 +118,17 @@
 				new /obj/item/clothing/head/beret/sec/ocelot(src)
 				new /obj/item/clothing/gloves/red(src)
 				new /obj/item/clothing/accessory/storage/bandolier(src)
+
+			if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
+				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
+				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
+				new /obj/item/weapon/dnainjector/nofail/telemut(src)
+				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
+				new /obj/item/clothing/head/sith(src)
+				new /obj/item/clothing/suit/sith(src)
+				new /obj/item/clothing/shoes/sandal(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
 				new /obj/item/weapon/implanter/traitor(src)

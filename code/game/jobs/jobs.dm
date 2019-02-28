@@ -47,10 +47,6 @@ var/const/ASSISTANT			=(1<<13)
 var/const/TRADER			=(1<<14)
 
 
-var/list/assistant_occupations = list(
-)
-
-
 var/list/command_positions = list(
 	"Captain",
 	"Head of Personnel",
@@ -128,6 +124,53 @@ var/list/misc_positions = list(
 	"Trader",
 )
 
+var/list/all_jobs_txt = list(
+	"Captain",
+	"Head of Personnel",
+	"Head of Security",
+	"Chief Engineer",
+	"Research Director",
+	"Chief Medical Officer",
+	"Station Engineer",
+	"Atmospheric Technician",
+	"Mechanic",
+	"Medical Doctor",
+	"Geneticist",
+	"Virologist",
+//	"Psychiatrist",
+	"Paramedic",
+	"Chemist",
+	"Research Director",
+	"Scientist",
+	"Roboticist",
+	"Bartender",
+	"Botanist",
+	"Chef",
+	"Janitor",
+	"Librarian",
+	"Internal Affairs Agent",
+	"Chaplain",
+	"Clown",
+	"Mime",
+	"Assistant",
+	"Quartermaster",
+	"Cargo Technician",
+	"Shaft Miner",
+	"Warden",
+	"Detective",
+	"Security Officer",
+)
+
+var/list/departement_list = list(
+	"Command",
+	"Security",
+	"Cargo",
+	"Engineering",
+	"Medical",
+	"Science",
+	"Civilian",
+)
+
 /proc/guest_jobbans(var/job)
 	return ((job in command_positions) || (job in nonhuman_positions) || (job in security_positions))
 
@@ -154,4 +197,3 @@ var/list/misc_positions = list(
 			titles = J.alt_titles
 
 	return titles
-

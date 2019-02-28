@@ -54,6 +54,7 @@
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
+#define CATBEAST "loose catbeast"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -70,6 +71,9 @@
 #define GREET_SOULSTONE		"soulstone"
 #define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
+
+#define GREET_REVSQUAD_CONVERTED "revsquad"
+#define GREET_PROVOC_CONVERTED	 "provocateur"
 
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
@@ -175,3 +179,10 @@
 
 #define PROB_PROTECTED_REGULAR 50
 #define PROB_PROTECTED_RARE    80
+
+#define FACTION_FAILURE -1
+
+// -- The paper
+
+#define INTERCEPT_TIME_LOW 10 MINUTES
+#define INTERCEPT_TIME_HIGH 18 MINUTES

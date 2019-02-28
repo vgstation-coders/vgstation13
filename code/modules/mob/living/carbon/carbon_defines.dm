@@ -24,3 +24,4 @@
 	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
 	var/coughedtime = null
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|PACIFIABLE
+	var/obj/item/device/station_map/displayed_holomap = null

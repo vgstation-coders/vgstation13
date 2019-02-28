@@ -61,6 +61,9 @@ players2.sqlite
 # Round-end statistics
 /data/statfiles/*
 
+# Persistence files
+/data/persistence/*
+
 cfg
 
 .vscode

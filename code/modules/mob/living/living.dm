@@ -35,6 +35,7 @@
 	if(BrainContainer)
 		qdel(BrainContainer)
 		BrainContainer = null
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -1522,9 +1523,6 @@ Thanks.
 	health = 0
 	stat = DEAD
 
-/mob/proc/CheckSlip()
-	return 0
-
 /mob/living/proc/turn_into_statue(forever = 0, force)
 	if(!force)
 		if(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))
@@ -1813,3 +1811,13 @@ Thanks.
 	// TODO which is pretty irrelevant now but should be fixed
 	tool.reagents.reaction(src, INGEST)
 	return ..()
+
+/mob/living/proc/ApplySlip(var/obj/effect/overlay/puddle/P)
+	return on_foot() // Check if we have legs, gravity, etc. Checked by the children.
+
+/mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_with_magbooties = 0)
+	stop_pulling()
+	Stun(stun_amount)
+	Knockdown(weaken_amount)
+	score["slips"]++
+	return 1

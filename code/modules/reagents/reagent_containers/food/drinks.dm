@@ -339,10 +339,20 @@
 /obj/item/weapon/reagent_containers/food/drinks/ice
 	name = "Ice Cup"
 	desc = "Careful, cold ice, do not chew."
-	icon_state = "coffee"
+	icon_state = "icecup"
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
 	..()
 	reagents.add_reagent(ICE, 30, reagtemp = T0C)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup
+	name = "Tomato Soup"
+	desc = "Tomato Soup! In a cup!"
+	icon_state = "tomatosoup"
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup/New()
+	..()
+	reagents.add_reagent(TOMATO_SOUP, 30, reagtemp = T0C + 80)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -858,6 +868,14 @@
 	reagents.add_reagent(BEER, 30)
 	reagents.add_reagent(APPLEJUICE, 20)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
+	name = "Kiririn FIRE"
+	desc = "Fine, sweet coffee, easy to drink in any scene."
+	icon_state = "cannedcoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee/New()
+	..()
+	reagents.add_reagent(CAFE_LATTE, 50)
+
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
@@ -871,6 +889,53 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
+	flags = FPRINT  | OPENCONTAINER | NOREACT | SILENTCONTAINER
+	var/shaking = FALSE
+	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/New()
+	..()
+	if (flags & NOREACT)
+		reaction = new(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/Destroy()
+	if (reaction)
+		qdel(reaction)
+	..()
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/attack_self(var/mob/user)
+	if (reagents.is_empty())
+		to_chat(user, "<span class='warning'>You won't shake an empty shaker now, will you?</span>")
+		return
+	if (!shaking)
+		shaking = TRUE
+		var/adjective = pick("furiously","passionately","with vigor","with determination","like a devil","with care and love","like there is no tomorrow")
+		user.visible_message("<span class='notice'>\The [user] shakes \the [src] [adjective]!</span>","<span class='notice'>You shake \the [src] [adjective]!</span>")
+		icon_state = "shaker-shake"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+		playsound(user, 'sound/items/boston_shaker.ogg', 80, 1)
+		if(do_after(user, src, 30))
+			reagents.trans_to(reaction,volume)
+			reaction.reagents.trans_to(reagents,volume)
+		icon_state = "shaker"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+		shaking = FALSE
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
+	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
+
+/obj/item/weapon/reagent_containers/food/drinks/discount_shaker
+	name = "\improper discount shaker"
+	desc = "A metal shaker to mix drinks in."
+	icon_state = "shaker"
+	origin_tech = Tc_MATERIALS + "=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+	flags = FPRINT  | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
 	name = "\improper Thermos"

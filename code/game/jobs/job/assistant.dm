@@ -3,7 +3,7 @@
 	flag = ASSISTANT
 	department_flag = CIVILIAN
 	faction = "Station"
-	total_positions = -1
+	total_positions = 2
 	spawn_positions = -1
 	supervisors = "absolutely everyone"
 	selection_color = "#dddddd"
@@ -41,8 +41,26 @@
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	return 1
 
+/datum/job/assistant/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+
 /datum/job/assistant/get_access()
 	if(config.assistant_maint)
 		return list(access_maint_tunnels)
 	else
 		return list()
+
+/datum/job/assistant/get_total_positions()
+	if(!config.assistantlimit)
+		return 99
+
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/sec_jobs = (officer.current_positions + warden.current_positions + hos.current_positions)
+
+	if(sec_jobs > 5)
+		return 99
+
+	return Clamp(sec_jobs * config.assistantratio + xtra_positions, total_positions, 99)

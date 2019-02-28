@@ -245,7 +245,7 @@
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
-			if(prob(50) && isjusthuman(H))
+			if(isjusthuman(H))
 				H.make_zombie(M)
 			else
 				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)

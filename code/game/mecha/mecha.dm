@@ -146,13 +146,16 @@
 			WR.crowbar_salvage += cell
 			cell.forceMove(WR)
 			cell.charge = rand(0, cell.charge)
+			cell = null
 		if(internal_tank)
 			WR.crowbar_salvage += internal_tank
 			internal_tank.forceMove(WR)
+			internal_tank = null
 	else
 		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
 			E.forceMove(T)
 			qdel(E)
+	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -185,9 +188,6 @@
 	if(pr_internal_damage)
 		qdel(pr_internal_damage)
 		pr_internal_damage = null
-	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
-		qdel(eq)
-	equipment = null
 	selected = null
 	..()
 
@@ -1330,6 +1330,8 @@
 	set src = usr.loc
 	set popup_menu = 0
 
+	if(usr != occupant)
+		return
 	src.go_out()
 	add_fingerprint(usr)
 	return
@@ -1789,7 +1791,7 @@
 	if(href_list["eject"])
 		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
 			return
-		eject()
+		go_out()
 	if(href_list["toggle_lights"])
 		if(usr != src.occupant)
 			return

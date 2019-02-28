@@ -873,6 +873,34 @@
 	name = "warm [name]"
 	processing_objects.Add(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating
+	name = "self-heating Donk-pocket"
+	icon_state = "donkpocket_wrapped"
+	desc = "Individually wrapped, frozen, unfrozen, desiccated, resiccated, twice recalled, and still edible. Infamously so."
+	wrapped = TRUE
+	var/unwrapping = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating/proc/Unwrap(mob/user)
+	if(unwrapping)
+		return
+	playsound(src, 'sound/misc/donkselfheat.ogg', 35, 0, -4)
+	to_chat(user, "<span class='notice'>Following the instructions, you shake the packaging firmly and rip it open with an unsatisfying wet crunch.</span>")
+	unwrapping = TRUE
+	spawn(2 SECONDS)
+		name = "\improper Donk-pocket"
+		desc = "Freshly warmed and probably not toxic."
+		icon_state = "donkpocket"
+		reagents.add_reagent(CALCIUMOXIDE, 0.2)
+		warm_up()
+		wrapped = 0
+		unwrapping = FALSE
+
 /obj/item/weapon/reagent_containers/food/snacks/brainburger
 	name = "brainburger"
 	desc = "A strange looking burger. It looks almost sentient."
@@ -1575,7 +1603,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() < 1)
+		if (H.CheckSlip() != TRUE)
 			return
 
 		H.stop_pulling()
@@ -2031,7 +2059,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/tomatosoup/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(TOMATOJUICE, 10)
+	reagents.add_reagent(TOMATO_SOUP, 10)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
@@ -2112,6 +2140,15 @@
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin
+	name = "Gelatin Burger"
+	desc = "It's a bit soggy."
+	food_flags = FOOD_MEAT | FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
@@ -3165,6 +3202,7 @@
 	desc = "A box suited for pizzas."
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "pizzabox1"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
@@ -4208,7 +4246,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //exactly the same as soap
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() < 1)
+		if (H.CheckSlip() != TRUE)
 			return
 
 		H.stop_pulling()
@@ -4392,7 +4430,7 @@
 	reagents.add_reagent(HYPERZINE,1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/HasProximity(atom/movable/AM as mob|obj)
-	if(!jump_cd)
+	if(!jump_cd && isliving(AM))
 		jump()
 	return ..()
 
@@ -4447,7 +4485,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SUGAR, 2)
-	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorish","\improper apple","\improper cranberry")
+	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorice","\improper apple","\improper cranberry")
 	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
 	icon_state = "sweet[variety]"
 	name = "[flavors[variety]] sweet"
@@ -5692,7 +5730,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() < 1)
+		if (H.CheckSlip() != TRUE)
 			return
 
 		H.stop_pulling()

@@ -1312,6 +1312,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
 		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
+		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
 		)
@@ -1377,6 +1380,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
+	vouched = list(
+		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
+		)
 
 	pack = /obj/structure/vendomatpack/snack
 
@@ -1409,6 +1415,9 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5,
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee = 3,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
@@ -2923,7 +2932,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "chapel"
 	products = list(
 		/obj/item/clothing/under/rank/chaplain = 2,
-		/obj/item/clothing/shoes/black = 2,
+		/obj/item/clothing/shoes/laceup = 2,
 		/obj/item/clothing/suit/nun = 2,
 		/obj/item/clothing/head/nun_hood = 2,
 		/obj/item/clothing/suit/chaplain_hoodie = 2,
@@ -2941,6 +2950,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/backpack/cultpack = 2,
 		/obj/item/weapon/storage/fancy/candle_box = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/eucharist = 7,
+		/obj/item/weapon/storage/fancy/incensebox/harebells = 3,
+		/obj/item/incense_oilbox/harebells = 2,
 		)
 	contraband = list(
 		/obj/item/clothing/head/clockwork_hood = 2,
@@ -2952,6 +2963,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater = 1,
 		/obj/item/clothing/head/helmet/knight/templar = 2,
  		/obj/item/clothing/suit/armor/knight/templar = 5,
+		/obj/item/weapon/thurible = 1,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
 
@@ -2974,6 +2986,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
+		/obj/item/weapon/card/id/vox/extra = 3,
 		/obj/item/weapon/capsule = 60,
 		/obj/item/weapon/implantcase/peace = 5,
 		/obj/item/vaporizer = 1,
@@ -3003,6 +3016,7 @@ var/global/num_vending_terminals = 1
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
+		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/capsule = 10,
 		/obj/item/weapon/implantcase/peace = 100,
 		/obj/item/vaporizer = 100,

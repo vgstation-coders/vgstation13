@@ -81,6 +81,10 @@
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)
+	if(!user.client)
+		is_seeing -= user
+		return
+
 	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
@@ -196,9 +200,10 @@
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
-/obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0,mob/M, slot)
+/obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0)
 	if(W == src)
-		to_chat(M, "<span class = 'notice'>No matter how hard you try, you can't seem to manage to fit \the [src] inside of itself.</span>")
+		if(!stop_messages)
+			to_chat(usr, "<span class = 'notice'>No matter how hard you try, you can't seem to manage to fit \the [src] inside of itself.</span>")
 		return //No putting ourselves into ourselves
 	if(!istype(W))
 		return //Not an item
@@ -218,7 +223,7 @@
 		return 0 //Storage item is full
 	if(usr && (W.cant_drop > 0))
 		if(!stop_messages)
-			usr << "<span class='notice'>You can't let go of \the [W]!</span>"
+			to_chat(usr,"<span class='notice'>You can't let go of \the [W]!</span>")
 		return 0 //Item is stuck to our hands
 
 	if(W.wielded || istype(W, /obj/item/offhand))
@@ -344,7 +349,7 @@
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
-/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
+/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	if(!istype(W))
 		return 0
 
@@ -383,7 +388,13 @@
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)
 
-	refresh_all()
+	for(var/mob/M in is_seeing)
+		if (M.client)
+			M.client.screen -= W
+
+	if (refresh)
+		refresh_all()
+
 	return 1
 
 //This proc is called when you want to place an item into the storage item.
@@ -555,10 +566,10 @@
 	return cansee
 
 /obj/item/weapon/storage/proc/refresh_all()
-	orient2hud()
-
 	for(var/mob/M in is_seeing)
 		show_to(M)
+
+	orient2hud()
 
 /obj/item/weapon/storage/proc/close_all()
 	for(var/mob/M in is_seeing)
@@ -632,7 +643,9 @@
 
 /obj/item/weapon/storage/proc/mass_remove(var/atom/A)
 	for(var/obj/item/O in contents)
-		remove_from_storage(O, A)
+		remove_from_storage(O, A, refresh = 0)
+
+	refresh_all()
 
 /obj/item/weapon/storage/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbids wearing a storage item in a  no_storage_slot (ie plastic bags over head) with something already inside

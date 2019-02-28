@@ -402,6 +402,8 @@
 			new /obj/item/weapon/spellbook/oneuse/push(get_turf(src))
 		if("pie")
 			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
+		if("ice_barrage")
+			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 	var/datum/role/wizard/summon_magic/S = R
 	if(S)
 		S.summons_received = randomizemagic

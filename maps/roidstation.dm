@@ -36,6 +36,10 @@
 	center_x = 177
 	center_y = 193
 
+/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
+	if(istype(DR.role_category,/datum/role/blob_overmind))
+		return FALSE
+	return TRUE
 
 ////////////////////////////////////////////////////////////////
 #include "roidstation/areas.dm"

@@ -2406,7 +2406,31 @@
 	name = "Wine"
 	id = WINE
 	result = WINE
+	required_reagents = list(GRAPEJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/bwine
+	name = "Berry Wine"
+	id = BWINE
+	result = BWINE
 	required_reagents = list(BERRYJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/wwine
+	name = "White Wine"
+	id = WWINE
+	result = WWINE
+	required_reagents = list(GGRAPEJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/plumphwine
+	name = "Plump Helmet Wine"
+	id = PLUMPHWINE
+	result = PLUMPHWINE
+	required_reagents = list(PLUMPHJUICE = 10)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
@@ -2880,6 +2904,13 @@
 	required_reagents = list(BANANA = 1, CREAM = 1, SUGAR = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/honkserum
+	name = "Honk Serum"
+	id = HONKSERUM
+	result = HONKSERUM
+	required_reagents = list(BANANA = 1, INACUSIATE = 1, ALKYSINE = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/silencer
 	name = "Silencer"
 	id = SILENCER
@@ -3279,7 +3310,7 @@
 	name = "Synthmouse"
 	id = "synthmouse"
 	result = null
-	required_reagents = list(NUTRIMENT = 5, AMINOMICIN = 1)
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIN = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -3302,6 +3333,58 @@
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/mouse(location)
+
+/datum/chemical_reaction/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	result = AMINOCYPRINIDOL
+	required_reagents = list(AMINOMICIN = 1, CARPPHEROMONES = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/synthcarp
+	name = "Synthcarp"
+	id = "synthcarp"
+	result = null
+	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthcarp/on_reaction(var/datum/reagents/holder, var/created_volume)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	var/location
+	if(ishuman(holder.my_atom))
+		var/mob/living/carbon/human/H = holder.my_atom
+		switch(created_volume)
+			if(1)
+				to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
+				H.apply_damage(15, BRUTE, LIMB_CHEST)
+				sleep(rand(5 SECONDS, 10 SECONDS))
+				H.vomit(instant = TRUE)
+			if(2 to 3)
+				to_chat(H, "<span class='danger'>You feel something violently tear its way out of your stomach!</span>")
+				var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
+				E.createwound(CUT, 40)
+				playsound(H, get_sfx("gib"),50,1)
+			if(4 to 5)
+				to_chat(H, "<span class='danger'>You feel something violently expanding inside your chest!</span>")
+				var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
+				for(var/datum/organ/internal/I in E.internal_organs)
+					I.take_damage(rand(I.min_bruised_damage, I.min_broken_damage+1))
+				E.fracture()
+				E.createwound(CUT, 60)
+				playsound(H, get_sfx("gib"),50,1)
+			if(5 to INFINITY)
+				to_chat(H, "<span class='warning'>Something smells fishy...</span>")
+				sleep(rand(5 SECONDS, 10 SECONDS))
+				location = get_turf(holder.my_atom)
+				H.gib()
+	else if(ismonkey(holder.my_atom))
+		var/mob/living/carbon/monkey/M = holder.my_atom
+		location = get_turf(holder.my_atom)
+		M.gib()
+	if(!location)
+		location = get_turf(holder.my_atom)
+	for(var/i=1 to created_volume)
+		new /mob/living/simple_animal/hostile/carp/baby(location)
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

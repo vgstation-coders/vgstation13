@@ -46,6 +46,7 @@ var/list/uplink_items = list()
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
 	var/static/times_bought = 0
 	var/refundable = FALSE
+	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
 /datum/uplink_item/proc/get_cost(var/user_job, var/cost_modifier = 1)
@@ -243,6 +244,31 @@ var/list/uplink_items = list()
 	cost = 40
 	jobs_exclusive = list("Nuclear Operative")
 
+/datum/uplink_item/dangerous/dude_bombs_lmao
+	name = "Modified Tank Transfer Valve"
+	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
+	item = /obj/effect/spawner/newbomb
+	refund_path = /obj/item/device/transfer_valve/mediumsize
+	cost = 100
+	refund_amount = 15
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/robot
+	name = "Syndicate-modded Combat Robot Teleporter"
+	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
+	item = /obj/item/weapon/robot_spawner/syndicate
+	cost = 100
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/mecha
+	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
+	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
+	item = /obj/effect/spawner/mecha/mauler
+	cost = 140
+	jobs_exclusive = list("Nuclear Operative")
+
 // STEALTHY WEAPONS
 
 /datum/uplink_item/stealthy_weapons
@@ -262,7 +288,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/detomatix
 	name = "Detomatix PDA Cartridge"
-	desc = "When inserted into a Personal Data Assistant, this cartridge gives you five opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
+	desc = "When inserted into a Personal Data Assistant, this cartridge gives you four opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
@@ -333,6 +359,12 @@ var/list/uplink_items = list()
 	desc = "A balloon that looks just like you when inflated."
 	item = /obj/item/toy/balloon/decoy
 	cost = 1
+
+/datum/uplink_item/stealthy_tools/flashlightemp
+	name = "EMP Flashlight"
+	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoever you use it on. Up to 4 charges that recover every 30 seconds, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine."
+	item = /obj/item/device/flashlight/emp
+	cost = 4
 
 
 // DEVICE AND TOOLS
@@ -452,14 +484,6 @@ var/list/uplink_items = list()
 	num_in_stock = 1
 	cost = 10
 
-//datum/uplink_item/dangerous/robot
-//	name = "Syndicate Robot Teleporter"
-//	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
-//	item = /obj/item/weapon/robot_spawner/syndicate
-//	cost = 40
-//	jobs_exclusive = list("Nuclear Operative")
-//	refundable = TRUE
-
 // IMPLANTS
 
 /datum/uplink_item/implants
@@ -497,9 +521,9 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/bundle
 	name = "Syndicate Bundle"
-	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth more than 20 telecrystals, but you do not know which bundle you will receive."
+	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive."
 	item = /obj/item/weapon/storage/box/syndicate
-	cost = 20
+	cost = 14
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
@@ -692,11 +716,17 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
+	desc = "Spray something to render it invisible for five minutes! One-time use. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/invisible_spray/permanent
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
 	name = "Advanced Mime Gloves"
@@ -864,3 +894,19 @@ var/list/uplink_items = list()
 	cost = 16
 	discounted_cost = 6
 	jobs_with_discount = list("Librarian")
+
+/datum/uplink_item/jobspecific/traitor_bible
+	name = "Feldbischof's Bible"
+	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions. 88 rapid, eight in the gun, eight in the extra mag."
+	item = /obj/item/weapon/storage/bible/traitor_gun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chaplain")
+
+/datum/uplink_item/jobspecific/occultbook
+	name = "Occult Book"
+	desc = "A reproduction of a forbidden and occult book. Causes brain damage, eye damage and hallucinations to anyone unfortunate enough to attempt to read it. Use a pen to change its title."
+	item = /obj/item/weapon/book/occult
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Librarian", "Chaplain")

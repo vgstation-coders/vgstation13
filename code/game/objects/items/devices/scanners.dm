@@ -191,7 +191,7 @@ Subject's pulse: ??? BPM"})
 			for(var/ID in C.virus2)
 				if(ID in virusDB)
 					var/datum/data/record/V = virusDB[ID]
-					message += "<br><span class='warning'>Warning: [V.fields["form"]] [V.fields["name"]] detected in subject's blood. Known antigen : [V.fields["antigen"]]</span>"
+					message += "<br><span class='warning'>Warning: [V.fields["name"]] detected in subject's blood. Known antigen : [V.fields["antigen"]]</span>"
 
 	for(var/datum/disease/D in M.viruses)
 		if(!D.hidden[SCANNER])

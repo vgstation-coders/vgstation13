@@ -205,6 +205,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define TIMELESS		32768 // Immune to time manipulation.
 
+#define SILENTCONTAINER	65536 //reactions inside make no noise
+
 #define ALL ~0
 #define NONE 0
 
@@ -590,10 +592,11 @@ var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons
 #define GRAB_KILL		5
 
 //Security levels
-#define SEC_LEVEL_GREEN	0
-#define SEC_LEVEL_BLUE	1
-#define SEC_LEVEL_RED	2
-#define SEC_LEVEL_DELTA	3
+#define SEC_LEVEL_RAINBOW	-1
+#define SEC_LEVEL_GREEN		0
+#define SEC_LEVEL_BLUE		1
+#define SEC_LEVEL_RED		2
+#define SEC_LEVEL_DELTA		3
 
 #define TRANSITIONEDGE	7 //Distance from edge to move to another z-level
 /*
@@ -787,6 +790,7 @@ SEE_PIXELS	256
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
 #define MAT_MYTHRIL		"$mythril"
+#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -875,6 +879,7 @@ SEE_PIXELS	256
 #define ROLE_WIZARD     	"wizard"
 #define ROLE_GRINCH			"Grinch"
 #define ROLE_WEEABOO		"crazed weeaboo"
+#define ROLE_MINOR			"minor roles"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -1181,6 +1186,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_FOUR	7
 #define STAGE_FIVE	9
 #define STAGE_SUPER	11
+#define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
@@ -1526,9 +1532,16 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
 #define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
 #define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
+#define HOLOMAP_MARKER_CULT_FORGE		"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
 
 #define DEFAULT_BLOOD "#A10808"
+#define DEFAULT_FLESH "#FFC896"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again

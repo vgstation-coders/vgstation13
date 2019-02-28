@@ -42,12 +42,7 @@
 			if(!density)
 				close(1)
 				sleep(2)
-			locked = !locked
-			if (locked == 1)
-				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
-			if (locked == 0)
-				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
-
+			toggle_bolts()
 			update_icon()
 
 		if("secure_open")

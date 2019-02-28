@@ -71,7 +71,6 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			WARNING("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(initial_role))
 		WARNING("Mind already had a role of [initial_role]!")
@@ -85,7 +84,6 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			WARNING("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
@@ -423,14 +421,5 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/strike_team/custom/New()
 	..()
 	ID = rand(1,999)
-
-//________________________________________________
-
-/datum/faction/blob_conglomerate
-	name = BLOBCONGLOMERATE
-	ID = BLOBCONGLOMERATE
-	logo_state = "blob-logo"
-	roletype = /datum/role/blob_overmind
-	initroletype = /datum/role/blob_overmind
 
 //________________________________________________

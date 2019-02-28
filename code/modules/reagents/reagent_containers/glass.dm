@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = " "
-	var/base_name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
@@ -56,7 +55,6 @@
 
 /obj/item/weapon/reagent_containers/glass/New()
 	..()
-	base_name = name
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
 /obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
@@ -176,7 +174,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(!opaque && reagents.total_volume)
+	if(!opaque && reagents && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -360,7 +358,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
 	update_icon()
-	
+
 /obj/item/weapon/reagent_containers/glass/bucket/update_icon()
 	overlays.len = 0
 
@@ -371,7 +369,7 @@
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
-	
+
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)

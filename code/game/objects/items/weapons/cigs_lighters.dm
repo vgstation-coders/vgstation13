@@ -28,6 +28,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
+	autoignition_temperature = AUTOIGNITION_PAPER
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -43,6 +44,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	. = ..()
 
 	processing_objects -= src
+
+/obj/item/weapon/match/ignite(temperature)
+	. = ..()
+	light()
+
+/obj/item/weapon/match/proc/light()
+	lit = 1
+	update_brightness()
 
 /obj/item/weapon/match/examine(mob/user)
 	..()
@@ -118,16 +127,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		return ..()
 
-/*
 /obj/item/weapon/match/attackby(obj/item/weapon/W as obj, mob/user as mob)
-
-	if(W.is_hot())
-		lit = 1
-		update_brightness()
+	if(W.is_hot() >= autoignition_temperature)
+		light()
 		user.visible_message("[user] lights \the [src] with \the [W].", \
 		"You light \the [src] with \the [W].")
 	..()
-*/
 
 /obj/item/weapon/match/strike_anywhere
 	name = "strike-anywhere match"
@@ -144,8 +149,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	if(istype(target, /obj) || istype(target, /turf))
-		lit = 1
-		update_brightness()
+		light()
 		user.visible_message("[user] strikes \the [src] on \the [target].", \
 		"You strike \the [src] on \the [target].")
 
@@ -170,7 +174,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK|SLOT_EARS
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
-	var/type_butt = /obj/item/weapon/cigbutt
+	var/type_butt = /obj/item/trash/cigbutt
 	var/lastHolder = null
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a boring old cigarette
 	var/smoketime = 300
@@ -429,7 +433,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "cigarlit"
 	flags = FPRINT
 	slot_flags = SLOT_MASK
-	type_butt = /obj/item/weapon/cigbutt/cigarbutt
+	type_butt = /obj/item/trash/cigbutt/cigarbutt
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 25
@@ -449,15 +453,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	smoketime = 7200
 	chem_volume = 30
 
-/obj/item/weapon/cigbutt
+/obj/item/trash/cigbutt
 	name = "cigarette butt"
 	desc = "A manky old cigarette butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "cigbutt"
 	w_class = W_CLASS_TINY
 	throwforce = 1
+	autoignition_temperature = 0 //The filter doesn't burn
 
-/obj/item/weapon/cigbutt/cigarbutt
+/obj/item/trash/cigbutt/cigarbutt
 	name = "cigar butt"
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
@@ -481,7 +486,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A special homemade cigar. Light it up and pass it around."
 	icon_state = "blunt"
 	overlay_on = "bluntlit"
-	type_butt = /obj/item/weapon/cigbutt/bluntbutt
+	type_butt = /obj/item/trash/cigbutt/bluntbutt
 	item_state = "blunt"
 	slot_flags = SLOT_MASK
 	species_fit = list(GREY_SHAPED)
@@ -525,7 +530,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/blunt/deus/rolled
 
-/obj/item/weapon/cigbutt/bluntbutt
+/obj/item/trash/cigbutt/bluntbutt
 	name = "blunt butt"
 	desc = "A manky old blunt butt."
 	icon = 'icons/obj/clothing/masks.dmi'
@@ -656,6 +661,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	color_suffix = "-y"
 /obj/item/weapon/lighter/green
 	color_suffix = "-g"
+/obj/item/weapon/lighter/NT
+	desc = "A limited edition, super-exclusive Nanotrasen-colored cheap lighter. You're not thrilled."
+	color_suffix = "-nt"
 
 /obj/item/weapon/lighter/random/New()
 	color_suffix = "-[pick("r","c","y","g")]"

@@ -243,8 +243,6 @@ var/savefile/panicfile
 		..()
 		return
 
-	for(var/datum/html_interface/D in html_interfaces)
-		D.closeAll()
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
@@ -267,6 +265,14 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
+	pre_shutdown()
+
+	..()
+
+/world/proc/pre_shutdown()
+	for(var/datum/html_interface/D in html_interfaces)
+		D.closeAll()
+
 	Master.Shutdown()
 	paperwork_stop()
 
@@ -286,10 +292,6 @@ var/savefile/panicfile
 
 		else
 			C << link("byond://[world.address]:[world.port]")
-
-
-	..()
-
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()

@@ -188,6 +188,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic coat", /obj/item/clothing/suit/raincoat, 5), \
 	new/datum/stack_recipe("plastic flaps", /obj/structure/plasticflaps, 10, one_per_turf = 1, on_floor = 1, start_unanchored = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("warning cone", /obj/item/weapon/caution/cone, 2, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe_list("curtains",list(
 		new/datum/stack_recipe("white curtains", /obj/structure/curtain, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("black curtains", /obj/structure/curtain/black, 4, one_per_turf = 1, on_floor = 1), \

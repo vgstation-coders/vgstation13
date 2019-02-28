@@ -136,6 +136,16 @@
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
 	category = "Engineering"
 
+/datum/design/DBRPED
+	name = "Prototype Bluespace Rapid Part Exchange Device"
+	desc = "An upgrade over the RPED that holds twice as many components and doesn't need to open wire panels to function."
+	id = "dbrped"
+	req_tech = list(Tc_ENGINEERING = 5, Tc_MATERIALS = 6, Tc_PROGRAMMING = 3, Tc_BLUESPACE = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 9000, MAT_GLASS = 5500, MAT_GOLD = 1200, MAT_DIAMOND = 3000)
+	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
+	category = "Engineering"
+
 /datum/design/mat_synth
 	name = "Material Synthesizer"
 	desc = "A device capable of producing very little rare material with a whole lot of investment."

@@ -45,6 +45,8 @@ var/veil_thickness = CULT_PROLOGUE
 		new /obj/structure/cult/bloodstone(T)
 
 	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
+
+	/* --moved to bloodstone/New()
 	var/i = 1
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		var/datum/holomap_marker/newMarker = new()
@@ -53,13 +55,18 @@ var/veil_thickness = CULT_PROLOGUE
 		newMarker.x = B.x
 		newMarker.y = B.y
 		newMarker.z = B.z
-		holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_[i]"] = newMarker
+		holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = newMarker
 		i++
+	*/
 
+	/*	--moved to code\modules\html_interface\map\station_map.dm
 	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
 	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
 	map_base.Blend("#E30000",ICON_MULTIPLY)
 	canvas.Blend(map_base,ICON_OVERLAY)
+	*/
+
+	/*	--the markers now instead get added as overlays every time the map is show to the players
 	for(var/marker in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[marker]
 		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
@@ -67,18 +74,35 @@ var/veil_thickness = CULT_PROLOGUE
 				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
 			else
 				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
+	*/
 
+	/*	--moved to code\modules\html_interface\map\station_map.dm
 	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
+	*/
 
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		if (B.loc)
-			B.holomap_datum = new /datum/station_holomap/cult()
-			B.holomap_datum.initialize_holomap(B.loc)
-		else
+		if (!B.loc)
 			qdel(B)
 			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
 			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+
+/proc/prepare_cult_holomap()
+	var/image/I = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
+	for(var/marker in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[marker]
+		var/image/markerImage = image(holomarker.icon,holomarker.id)
+		markerImage.color = holomarker.color
+		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
+			if(map.holomap_offset_x.len >= map.zMainStation)
+				markerImage.pixel_x = holomarker.x-8+map.holomap_offset_x[map.zMainStation]
+				markerImage.pixel_y = holomarker.y-8+map.holomap_offset_y[map.zMainStation]
+			else
+				markerImage.pixel_x = holomarker.x-8
+				markerImage.pixel_y = holomarker.y-8
+			markerImage.appearance_flags = RESET_COLOR
+			I.overlays += markerImage
+	return I
 
 /proc/cult_risk(var/mob/M)//too many conversions/soul-stoning might bring the cult to the attention of Nanotrasen prematurely
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -162,7 +186,7 @@ var/veil_thickness = CULT_PROLOGUE
                     "")
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
-			if (M)
+			if (M && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
 				to_chat(M, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
 
 		for(var/mob/dead/observer/O in player_list)
@@ -184,7 +208,6 @@ var/veil_thickness = CULT_PROLOGUE
 	if (change_cooldown > 0)
 		change_cooldown -= 1 SECONDS
 		if (change_cooldown <= 0)
-			target_change = FALSE
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O && !O.IsFulfilled())
 				O.failed_targets += O.sacrifice_target
@@ -199,6 +222,7 @@ var/veil_thickness = CULT_PROLOGUE
 								else if (iscultist(O.sacrifice_target))
 									to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
 	if (target_change)
+		target_change = FALSE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
 
 /datum/faction/bloodcult/proc/progress(var/new_act,var/A)

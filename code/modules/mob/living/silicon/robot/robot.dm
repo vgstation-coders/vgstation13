@@ -1,3 +1,5 @@
+var/list/cyborg_list = list()
+
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"
@@ -115,16 +117,11 @@
 
 	if(AIlink)
 		if(malfAI)
-			connected_ai = malfAI
+			connect_AI(malfAI)
 		else
-			connected_ai = select_active_ai_with_fewest_borgs()
+			connect_AI(select_active_ai_with_fewest_borgs())
 
-	if(connected_ai)
-		connected_ai.connected_robots += src
-		lawsync()
-		lawupdate = TRUE
-	else
-		lawupdate = FALSE
+	track_globally()
 
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
@@ -172,6 +169,23 @@
 			add_language(lang.name, can_speak = FALSE)
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+
+/mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
+	if(istype(new_AI))
+		connected_ai = new_AI
+		connected_ai.connected_robots += src
+		lawsync()
+		lawupdate = TRUE
+	else
+		lawupdate = FALSE
+
+/mob/living/silicon/robot/proc/disconnect_AI()
+	if(connected_ai)
+		connected_ai.connected_robots -= src
+		connected_ai = null
+
+/mob/living/silicon/robot/proc/track_globally()
+	cyborg_list += src
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
@@ -548,7 +562,7 @@
 					SetEmagged(TRUE)
 					SetLockdown(TRUE)
 					lawupdate = FALSE
-					connected_ai = null
+					disconnect_AI()
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)]. Laws overidden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
@@ -1159,7 +1173,8 @@
 								cleaned_human.update_inv_shoes(0)
 							cleaned_human.clean_blood()
 							to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
-		return
+	if (station_holomap)
+		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(mind && mind.special_role && emagged)
@@ -1171,7 +1186,7 @@
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
-		connected_ai = null
+		disconnect_AI()
 	lawupdate = FALSE
 	lockcharge = FALSE
 	canmove = TRUE

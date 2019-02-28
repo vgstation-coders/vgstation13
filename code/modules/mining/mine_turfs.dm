@@ -1,4 +1,9 @@
 /**********************Mineral deposits**************************/
+#define MINE_DIFFICULTY_NORM 1
+#define MINE_DIFFICULTY_TOUGH 3
+#define MINE_DIFFICULTY_DENSE 5
+#define MINE_DIFFICULTY_GLHF 9
+
 
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
@@ -29,6 +34,7 @@
 	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
 	var/rockernaut = NONE
 	var/minimum_mine_time = 0
+	var/mining_difficulty = MINE_DIFFICULTY_NORM
 
 
 /turf/unsimulated/mineral/snow
@@ -149,6 +155,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 
 /turf/unsimulated/mineral/ex_act(severity)
+	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)
+		return
 	switch(severity)
 		if(3.0)
 			if (prob(75))
@@ -159,6 +167,22 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			GetDrilled()
 
+/turf/unsimulated/mineral/blob_act()
+	if(mining_difficulty > MINE_DIFFICULTY_DENSE)
+		if(prob(10))
+			GetDrilled()
+		return
+
+	switch(mining_difficulty)
+		if(MINE_DIFFICULTY_NORM)
+			if(prob(90))
+				GetDrilled()
+		if(MINE_DIFFICULTY_TOUGH)
+			if(prob(60))
+				GetDrilled()
+		if(MINE_DIFFICULTY_DENSE)
+			if(prob(30))
+				GetDrilled()
 
 /turf/unsimulated/mineral/Bumped(AM)
 	. = ..()
@@ -240,7 +264,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			return
 		user.visible_message("<span class='notice'>[user] starts installing reinforcements to \the [src].</span>", \
 			"<span class='notice'>You start installing reinforcements to \the [src].</span>")
-		if(do_after(user, src, 4 SECONDS))
+		if(do_after(user, src, max(minimum_mine_time,4 SECONDS*mining_difficulty)))
 			if(!S.use(2))
 				to_chat(user,"<span class='warning>You don't have enough material.</span>")
 				return
@@ -316,6 +340,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 					if(excavation_level > 0)
 
 						B = getFromPool(/obj/structure/boulder, src)
+						B.geological_data = geologic_data
 						if(artifact_find)
 							B.artifact_find = artifact_find
 							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
@@ -324,7 +349,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 				else if(prob(15))
 					B = getFromPool(/obj/structure/boulder, src)
-
+					B.geological_data = geologic_data
 				if(B)
 					GetDrilled(0)
 				else
@@ -394,7 +419,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		return 0
 	if(istype(user,/mob/living/simple_animal/construct/armoured))
 		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
-		if(do_after(user, src, 40))
+		if(do_after(user, src, max(minimum_mine_time,40*mining_difficulty)))
 			GetDrilled(0)
 		return 1
 	return 0
@@ -534,6 +559,15 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				for(var/i=0, i<quantity, i++)
 					getFromPool(/obj/item/weapon/shard/plasma, loc)
 
+/turf/unsimulated/mineral/dense
+	name = "dense rock"
+	mining_difficulty = MINE_DIFFICULTY_DENSE
+	minimum_mine_time = 5 SECONDS
+
+/turf/unsimulated/mineral/hyperdense
+	name = "hyperdense rock"
+	mining_difficulty = MINE_DIFFICULTY_DENSE
+	minimum_mine_time = 99 SECONDS //GL HF
 
 /**********************Asteroid**************************/
 

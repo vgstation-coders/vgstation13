@@ -381,14 +381,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value = 0
 	oretype = /obj/item/ice_crystal
 
-/datum/material/telecrystal
-	name="Telecrystal"
-	id="telecrystal"
-	value=30
-	oretype=/obj/item/stack/ore/telecrystal
-	sheettype=null
-	cointype=null
-
 /datum/material/mythril
 	name="mythril"
 	id=MAT_MYTHRIL
@@ -401,6 +393,15 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.6
 	quality_mod = 1.5
 	armor_mod = 1.75
+
+/datum/material/telecrystal
+	name="telecrystal"
+	id=MAT_TELECRYSTAL
+	value=200
+	oretype=/obj/item/stack/ore/telecrystal
+	sheettype=/obj/item/bluespace_crystal
+	cointype=null
+
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
@@ -471,15 +472,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=90
 	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
-	cointype=null
-
-
-/datum/material/telecrystal
-	name="Telecrystal"
-	id="telecrystal"
-	value=30
-	oretype=/obj/item/stack/ore/telecrystal
-	sheettype=/obj/item/stack/sheet/mineral/telecrystal
 	cointype=null
 
 
