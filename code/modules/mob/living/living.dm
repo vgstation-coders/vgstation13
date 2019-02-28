@@ -991,25 +991,6 @@ Thanks.
 								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
 									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
 
-/*		if(CM.handcuffed && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,100)
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
-								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
-				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.handcuffed || CM.locked_to)
-							return
-						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.handcuffed]!</span>",
-										   "<span class='notice'>You successfully break \the [CM.handcuffed].</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						var/obj/item/cuffs = CM.handcuffed
-						CM.drop_from_inventory(cuffs)
-						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
-							qdel(cuffs)
-					else
-						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
-*/
 			else
 				B.manual_unbuckle(L)
 		//release from kudzu
