@@ -72,7 +72,7 @@
 	var/mob/living/M = owner
 	var/datum/role/vampire/V = isvampire(M)
 	M.revive(FALSE)
-	V.remove_blood(V.blood_usable)
+	V.remove_blood(V.blood_usable-10)
 	V.check_vampire_upgrade()
 	V.reviving = FALSE
 	to_chat(M, "<span class='sinister'>You awaken, ready to strike fear into the hearts of mortals once again.</span>")

@@ -167,6 +167,22 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			GetDrilled()
 
+/turf/unsimulated/mineral/blob_act()
+	if(mining_difficulty > MINE_DIFFICULTY_DENSE)
+		if(prob(10))
+			GetDrilled()
+		return
+
+	switch(mining_difficulty)
+		if(MINE_DIFFICULTY_NORM)
+			if(prob(90))
+				GetDrilled()
+		if(MINE_DIFFICULTY_TOUGH)
+			if(prob(60))
+				GetDrilled()
+		if(MINE_DIFFICULTY_DENSE)
+			if(prob(30))
+				GetDrilled()
 
 /turf/unsimulated/mineral/Bumped(AM)
 	. = ..()
