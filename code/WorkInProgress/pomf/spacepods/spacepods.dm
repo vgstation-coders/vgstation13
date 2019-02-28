@@ -22,7 +22,7 @@
 	var/passenger_limit = 1 //Upper limit for how many passengers are allowed
 	var/passengers_allowed = 1 //If the pilot allows people to jump in the side seats.
 	var/list/occupants = list()
-	var/datum/spacepod/equipment/equipment_system
+	var/datum/spacepod/equipment/ES
 	var/obj/item/weapon/cell/battery
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
@@ -31,6 +31,7 @@
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/hatch_open = 0
+	var/locked = FALSE
 	var/next_firetime = 0
 	var/list/pod_overlays
 	var/health = 400
@@ -70,7 +71,7 @@
 	src.use_internal_tank = 1
 	pr_int_temp_processor = new /datum/global_iterator/pod_preserve_temp(list(src))
 	pr_give_air = new /datum/global_iterator/pod_tank_give_air(list(src))
-	equipment_system = new(src)
+	ES = new(src)
 	for(var/path in actions_types)
 		var/datum/action/A = new path(src)
 		actions.Add(A)
@@ -89,8 +90,8 @@
 	pr_int_temp_processor = null
 	qdel(pr_give_air)
 	pr_give_air = null
-	qdel(equipment_system)
-	equipment_system = null
+	qdel(ES)
+	ES = null
 	qdel(battery)
 	battery = null
 	qdel(cabin_air)
@@ -193,24 +194,32 @@
 	if(istype(W, /obj/item/device/spacepod_equipment))
 		if(!hatch_open)
 			return ..()
-		if(!equipment_system)
+		if(!ES)
 			to_chat(user, "<span class='warning'>The pod has no equipment datum, yell at pomf</span>")
 			return
 		if(istype(W, /obj/item/device/spacepod_equipment/weaponry))
-			if(!equipment_system.weapons_allowed)
+			if(!ES.weapons_allowed)
 				to_chat(user, "<span class='notice'>The pod model does not allow for weapons to be installed.</span>")
 				return
-			if(equipment_system.weapon_system)
+			if(ES.weapon_system)
 				to_chat(user, "<span class='notice'>The pod already has a weapon system, remove it first.</span>")
 				return
 			else
 				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You insert \the [W] into the equipment system.</span>")
-					equipment_system.weapon_system = W
-					equipment_system.weapon_system.my_atom = src
-					//new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, equipment_system.weapon_system.verb_name, equipment_system.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
+					ES.weapon_system = W
+					ES.weapon_system.my_atom = src
+					//new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, ES.weapon_system.verb_name, ES.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
 					return
-
+		if(istype(W, /obj/item/device/spacepod_equipment/locking))
+			if(ES.locking_system)
+				to_chat(user, "<span class = 'notice'>\The [src] already has a locking system.</span>")
+				return
+			else if(user.drop_item(W, src))
+				to_chat(user, "<span class='notice'>You insert \the [W] into the equipment system.</span>")
+				ES.locking_system = W
+				ES.locking_system.my_atom = src
+				return
 	if(W.force)
 		visible_message("<span class = 'warning'>\The [user] hits \the [src] with \the [W]</span>")
 		adjust_health(W.force)
@@ -220,20 +229,25 @@
 /obj/spacepod/attack_hand(mob/user as mob)
 	if(!hatch_open)
 		return ..()
-	if(!equipment_system || !istype(equipment_system))
+	if(!ES || !istype(ES))
 		to_chat(user, "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>")
+		return
+	if(locked)
+		to_chat(user, "<span class = 'warning'>\The [src] is locked.</span>")
 		return
 	var/list/possible = list()
 	if(battery)
 		possible.Add("Energy Cell")
-	if(equipment_system.weapon_system)
+	if(ES.weapon_system)
 		possible.Add("Weapon System")
 	/* Not yet implemented
-	if(equipment_system.engine_system)
+	if(ES.engine_system)
 		possible.Add("Engine System")
-	if(equipment_system.shield_system)
+	if(ES.shield_system)
 		possible.Add("Shield System")
 	*/
+	if(ES.locking_system)
+		possible.Add("Locking System")
 	var/obj/item/device/spacepod_equipment/SPE
 	switch(input(user, "Remove which equipment?", null, null) as null|anything in possible)
 		if("Energy Cell")
@@ -241,27 +255,35 @@
 				to_chat(user, "<span class='notice'>You remove \the [battery] from the space pod</span>")
 				battery = null
 		if("Weapon System")
-			SPE = equipment_system.weapon_system
+			SPE = ES.weapon_system
 			if(user.put_in_any_hand_if_possible(SPE))
 				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
 				SPE.my_atom = null
-				equipment_system.weapon_system = null
+				ES.weapon_system = null
 				verbs -= typesof(/obj/item/device/spacepod_equipment/weaponry/proc)
+			else
+				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
+		if("Locking System")
+			SPE = ES.locking_system
+			if(user.put_in_any_hand_if_possible(SPE))
+				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
+				SPE.my_atom = null
+				ES.weapon_system = null
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		/*
 		if("engine system")
-			SPE = equipment_system.engine_system
+			SPE = ES.engine_system
 			if(user.put_in_any_hand_if_possible(SPE))
 				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
-				equipment_system.engine_system = null
+				ES.engine_system = null
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		if("shield system")
-			SPE = equipment_system.shield_system
+			SPE = ES.shield_system
 			if(user.put_in_any_hand_if_possible(SPE))
 				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
-				equipment_system.shield_system = null
+				ES.shield_system = null
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		*/
@@ -269,8 +291,10 @@
 /obj/spacepod/civilian
 	icon_state = "pod_civ"
 	desc = "A sleek civilian space pod."
+
 /obj/spacepod/random
 	icon_state = "pod_civ"
+
 // placeholder
 /obj/spacepod/random/New()
 	..()
@@ -310,7 +334,7 @@
 	return cabin_air
 
 /obj/spacepod/proc/add_airtank()
-	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
+	internal_tank = new /obj/machinery/portable_atmospherics/canister/air()
 	return internal_tank
 
 /obj/spacepod/proc/get_turf_air()
@@ -387,6 +411,10 @@
 		move_outside(usr, get_turf(src))
 		return
 
+	if(locked)
+		to_chat(usr, "<span class = 'warning'>\The [src] is locked.</span>")
+		return
+
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishigherbeing(usr))
@@ -412,18 +440,6 @@
 	else
 		to_chat(usr, "You stop entering the pod.")
 	return
-
-/obj/spacepod/proc/enter_after(delay as num, var/mob/user as mob, var/numticks = 5)
-	var/delayfraction = delay/numticks
-
-	var/turf/T = user.loc
-
-	for(var/i = 0, i<numticks, i++)
-		sleep(delayfraction)
-		if(!src || !user || !user.canmove || !(user.loc == T))
-			return 0
-
-	return 1
 
 /datum/global_iterator/pod_preserve_temp  //normalizing cabin air temperature to 20 degrees celsium
 	delay = 20
@@ -493,7 +509,7 @@
 	if(move_delayer.blocked())
 		return 0
 	var/moveship = 1
-	if(battery && battery.charge >= 3 && health)
+	if(battery && battery.charge >= ES.movement_charge && health)
 		src.dir = direction
 
 		if(inertia_dir == turn(direction, 180))
@@ -508,14 +524,14 @@
 	else
 		if(!battery)
 			to_chat(user, "<span class='warning'>No energy cell detected.</span>")
-		else if(battery.charge < 3)
+		else if(battery.charge < ES.movement_charge)
 			to_chat(user, "<span class='warning'>Not enough charge left.</span>")
 		else if(!health)
-			to_chat(user, "<span class='warning'>She's dead, Jim</span>")
+			to_chat(user, "<span class='warning'>\The [src] is currently exploding.</span>")
 		else
 			to_chat(user, "<span class='warning'>Unknown error has occurred, yell at pomf.</span>")
 		return 0
-	battery.charge = max(0, battery.charge - 3)
+	battery.use(ES.movement_charge)
 	move_delayer.delayNext(round(movement_delay,world.tick_lag))
 
 /obj/spacepod/process_inertia(turf/start)
@@ -540,8 +556,6 @@
 	icon_state = "x"
 	anchored = 1
 
-/obj/effect/landmark/spacepod/random/New()
-	..()
 
 /obj/effect/landmark/spacepod/guaranteed //We're not messing around: we want a guaranteed pod!
 	name = "guaranteed spacepod spawner"
@@ -681,7 +695,7 @@
 
 /obj/spacepod/taxi/New()
 	..()
-	equipment_system.weapons_allowed = 0
+	ES.weapons_allowed = 0
 
 #undef DAMAGE
 #undef FIRE

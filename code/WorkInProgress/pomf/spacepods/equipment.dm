@@ -6,7 +6,7 @@
 		return
 	var/turf/firstloc
 	var/turf/secondloc
-	if(!my_atom.equipment_system || !my_atom.equipment_system.weapon_system)
+	if(!my_atom.ES || !my_atom.ES.weapon_system)
 		to_chat(usr, "<span class='warning'>Missing equipment or weapons.</span>")
 		my_atom.verbs -= /obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system
 		return
@@ -53,10 +53,12 @@
 
 /datum/spacepod/equipment
 	var/obj/spacepod/my_atom
+	var/movement_charge = 3
 	var/weapons_allowed = 1
 	var/obj/item/device/spacepod_equipment/weaponry/weapon_system // weapons system
 	//var/obj/item/device/spacepod_equipment/engine/engine_system // engine system
 	//var/obj/item/device/spacepod_equipment/shield/shield_system // shielding system
+	var/obj/item/device/spacepod_equipment/locking/locking_system // locking system
 
 /datum/spacepod/equipment/New(var/obj/spacepod/SP)
 	..()
@@ -114,7 +116,7 @@
 
 /obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system()
 	var/obj/spacepod/S = src
-	var/obj/item/device/spacepod_equipment/weaponry/SPE = S.equipment_system.weapon_system
+	var/obj/item/device/spacepod_equipment/weaponry/SPE = S.ES.weapon_system
 	set category = "Spacepod"
 	//set name = SPE.verb_name
 	//set desc = SPE.verb_desc
@@ -124,3 +126,43 @@
 		to_chat(usr, "<span class = 'warning'>Passenger gunner system disabled.</span>")
 		return
 	SPE.fire_weapons()
+
+/obj/item/device/spacepod_equipment/locking
+	icon = 'icons/pods/ship.dmi'
+	icon_state = "locking"
+
+/obj/item/device/spacepod_equipment/locking/proc/toggle_lock()
+	my_atom.locked = !my_atom.locked
+	my_atom.visible_message("<span class = 'notice'>\The [my_atom] beeps!</span>")
+
+/obj/item/device/spacepod_equipment/locking/lock
+	name = "spacepod physical lock system"
+	desc = "Use a remote key to lock and unlock the pod."
+	var/code
+
+/obj/item/device/spacepod_equipment/locking/lock/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/device/pod_key))
+		var/obj/item/device/pod_key/P = I
+		if(!P.code && !code)
+			to_chat(user, "<span class = 'notice'>You pair \the [P] with \the [src].</span>")
+			code = rand(1, 65535)
+			P.code = code
+		else
+			to_chat(user, "<span class = 'warning'>\The [src] or \the [P] is already paired.</span>")
+		return
+	..()
+
+/obj/item/device/pod_key
+	name = "pod key"
+	desc = "used in tandem with a pod locking system"
+	icon = 'icons/pods/ship.dmi'
+	icon_state = "key"
+
+	var/code
+
+/obj/item/device/pod_key/attack_self(mob/user)
+	for(var/obj/spacepod/P in view(7, user))
+		if(P.ES.locking_system && istype(P.ES.locking_system, /obj/item/device/spacepod_equipment/locking/lock))
+			var/obj/item/device/spacepod_equipment/locking/lock/L = P.ES.locking_system
+			if(L.code == code)
+				L.toggle_lock()
