@@ -42,6 +42,7 @@
 		if (!M.client.desires_role(R.required_pref) || jobban_isbanned(M, R.id) || isantagbanned(M))//are they willing and not antag-banned?
 			trimmed_list.Remove(M)
 			continue
+	qdel(R)
 	return trimmed_list
 
 //You can then for example prompt dead players in execute() to join as strike teams or whatever

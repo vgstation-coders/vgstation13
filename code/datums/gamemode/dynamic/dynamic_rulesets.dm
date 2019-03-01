@@ -178,7 +178,7 @@
 			for (var/mob/M in mode.candidates)
 				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in R.enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in R.restricted_jobs)))
 					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
+		qdel(R)
 		var/threat = round(mode.threat_level/10)
 		if (job_check < required_enemies[threat])
 			return 0
@@ -214,7 +214,7 @@
 					continue//dead players cannot count as opponents
 				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in R.enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in R.restricted_jobs)))
 					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
+		qdel(R)
 		var/threat = round(mode.threat_level/10)
 		if (job_check < required_enemies[threat])
 			return 0
