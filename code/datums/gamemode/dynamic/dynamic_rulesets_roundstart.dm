@@ -139,6 +139,41 @@
 		newWizard.Greet(GREET_ROUNDSTART)
 	return 1
 
+//////////////////////////////////////////////
+//                                          //
+//         CIVIL WAR OF CASTERS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/cwc
+	name = "Civil War of Casters"
+	role_category = /datum/role/wizard
+	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
+	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
+	required_candidates = 1
+	weight = 2
+	cost = 45
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	persistent = 1
+	var/wizard_cd = 0 //starts off cooldown
+	var/total_wizards = 4
+
+/datum/dynamic_ruleset/roundstart/cwc/process()
+	if (wizard_cd)
+		wizard_cd--
+	else
+		wizard_cd = 210 //7 minutes
+		var/sent_wizards = count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
+		if(sent_wizards>=total_wizards)
+			return
+		var/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/RM = new()
+		if(sent_wizards % 2) //An odd number of wizards have been sent
+			RM.my_fac = /datum/faction/wizard/civilwar/quickvillains
+		else
+			RM.my_fac = /datum/faction/wizard/civilwar/manajerks
+		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [RM.my_fac.name].")
+		mode.picking_specific_rule(RM)
 
 //////////////////////////////////////////////
 //                                          //

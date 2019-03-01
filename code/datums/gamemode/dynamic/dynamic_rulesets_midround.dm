@@ -266,6 +266,13 @@
 	logo = "raginmages-logo"
 	repeatable = TRUE
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
+	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
+		return 0 //This is elegantly skipped by specific ruleset.
+		//This means that all ragin mages in CWC will be called only by that ruleset.
+	else
+		return ..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
@@ -273,19 +280,7 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
-	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = 5
-		cost = 10
 	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
-	..()
-	if(!locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		new_role.refund_value = BASE_SOLO_REFUND
-		//If it's a spontaneous ragin' mage, it costs more, so refund more
-	else
-		new_role.refund_value = BASE_SOLO_REFUND/2
-		//We have plenty of threat to go around
 
 //////////////////////////////////////////////
 //                                          //
