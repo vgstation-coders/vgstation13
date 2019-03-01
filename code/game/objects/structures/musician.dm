@@ -65,7 +65,7 @@
 		if(M.client.prefs.hear_instruments)
 			M.playsound_local(source, soundfile, 100, falloff = 5)
 		if(istype(instrumentObj,/obj/item/device/instrument))
-			var/obj/item/device/instrument/INS
+			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
 
 /datum/song/proc/updateDialog(mob/user)

@@ -7,7 +7,8 @@
 		return TRUE
 	if(!owner.current)
 		return FALSE
-	var/obj/item/clothing/mask/necklace/crystal/C = owner.current.search_contents_for(/obj/item/clothing/mask/necklace/crystal)
+	var/mob/living/rambler = owner.current
+	var/obj/item/clothing/mask/necklace/crystal/C = pick(rambler.search_contents_for(/obj/item/clothing/mask/necklace/crystal))
 	if(!C || !C.suspect)
 		return FALSE
 	if(C.suspect.mind.antag_roles.len)

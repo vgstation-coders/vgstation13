@@ -79,6 +79,8 @@ var/list/factions_with_hud_icons = list()
 	for(var/datum/role/R in members)
 		R.AnnounceObjectives()
 
+/datum/faction/proc/ShuttleDocked(state)
+
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
 	for(var/datum/role/R in members)
 		if(R.antag == M)

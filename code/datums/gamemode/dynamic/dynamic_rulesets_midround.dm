@@ -109,12 +109,16 @@
 		var/mob/living/carbon/human/new_character = applicant
 
 		if (makeBody)
-			new_character = makeBody(applicant)
-			new_character.dna.ResetSE()
+			new_character = generate_ruleset_body(applicant)
 
 		finish_setup(new_character, i)
 
 	applicants.Cut()
+
+/datum/dynamic_ruleset/midround/from_ghosts/proc/generate_ruleset_body(mob/applicant)
+	var/mob/living/carbon/human/new_character = makeBody(applicant)
+	new_character.dna.ResetSE()
+	return new_character
 
 /datum/dynamic_ruleset/midround/from_ghosts/proc/finish_setup(var/mob/new_character, var/index)
 	var/datum/role/new_role = new role_category
@@ -455,7 +459,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler
-	name = "soul rambler migration"
+	name = "Soul Rambler Migration"
 	role_category = /datum/role/rambler
 	enemy_jobs = list("Librarian","Detective", "Chaplain", "Internal Affairs Agent")
 	required_enemies = list(0,0,1,1,2,2,3,3,3,4)
@@ -470,6 +474,9 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
+	if(population>=20)
+		return FALSE
+		//We don't cotton to freaks in 20+pop
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced = 0)
@@ -477,9 +484,14 @@
 		return 0
 	return ..()
 
-/datum/dynamic_ruleset/midround/from_ghosts/rambler/finish_setup(var/mob/new_character, var/index)
-	new_character.Frankensteinize()
-	..()
+/datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
+	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
+	var/datum/preferences/A = new()
+	A.randomize_appearance_for(new_frank)
+	new_frank.key = applicant.key
+	new_frank.dna.ready_dna(new_frank)
+	new_frank.setGender(pick(MALE, FEMALE))
+	return new_frank
 
 //////////////////////////////////////////////
 //                                          //
