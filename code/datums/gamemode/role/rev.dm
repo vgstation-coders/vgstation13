@@ -2,7 +2,10 @@
 	name = REV
 	id = REV
 	required_pref = ROLE_REV
-	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
+	restricted_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
+
+
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND,GREET_LATEJOIN,GREET_CONVERTED,GREET_PROVOC_CONVERTED,GREET_REVSQUAD_CONVERTED,GREET_ADMINTOGGLE)
 
@@ -46,13 +49,14 @@
 	. = ..()
 	AnnounceObjectives()
 
-/datum/role/revolutionary/New()
+/datum/role/revolutionary/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/hyper_override = FALSE)
 	..()
 	wikiroute = role_wiki[ROLE_REV]
 
 /datum/role/revolutionary/leader
 	name = HEADREV
 	id = HEADREV
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	logo_state = "rev_head-logo"
 
 /datum/role/revolutionary/leader/OnPostSetup()

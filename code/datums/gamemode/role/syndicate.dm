@@ -5,6 +5,8 @@
 	logo_state = "synd-logo"
 	wikiroute = ROLE_TRAITOR
 	refund_value = BASE_SOLO_REFUND
+	protected_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
+	restricted_jobs = list("AI", "Cyborg","Mobile MMI")
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
@@ -229,6 +231,8 @@
 	id = ROLE_OPERATIVE
 	required_pref = ROLE_OPERATIVE
 	disallow_job = TRUE
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	restricted_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	logo_state = "nuke-logo"
 
 /datum/role/nuclear_operative/leader

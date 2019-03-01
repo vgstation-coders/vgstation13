@@ -5,12 +5,14 @@
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
+	restricted_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Warden", "Detective","Head of Security", "Captain", "Chaplain")
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
 	var/second_chance = 1
 
-/datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+/datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/hyper_override = FALSE)
 	..()
 	wikiroute = role_wiki[ROLE_CULTIST]
 

@@ -31,26 +31,17 @@
 
 /datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
 	var/list/trimmed_list = L.Copy()
-	var/role_id = initial(role_category.id)
-	var/role_pref = initial(role_category.required_pref)
+	var/datum/role/R = new role_category(hyper_override = FALSE)
 	for(var/mob/M in trimmed_list)
 		if (!M.client)//are they connected?
 			trimmed_list.Remove(M)
 			continue
-		if (!M.client.desires_role(role_pref) || jobban_isbanned(M, role_id) || isantagbanned(M))//are they willing and not antag-banned?
+		if(!R.CanBeAssigned(M.mind))
 			trimmed_list.Remove(M)
 			continue
-		if (M.mind)
-			if (M.mind.assigned_role in restricted_from_jobs || M.mind.role_alt_title in restricted_from_jobs)//does their job allow for it?
-				trimmed_list.Remove(M)
-				continue
-			if (M.mind.assigned_role in protected_from_jobs || M.mind.role_alt_title in protected_from_jobs)
-				var/probability = initial(role_category.protected_traitor_prob)
-				if (prob(probability))
-					candidates.Remove(M)
-			if ((exclusive_to_jobs.len > 0) && !(M.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
-				trimmed_list.Remove(M)
-				continue
+		if (!M.client.desires_role(R.required_pref) || jobban_isbanned(M, R.id) || isantagbanned(M))//are they willing and not antag-banned?
+			trimmed_list.Remove(M)
+			continue
 	return trimmed_list
 
 //You can then for example prompt dead players in execute() to join as strike teams or whatever
@@ -61,11 +52,12 @@
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
 		var/job_check = 0
-		if (enemy_jobs.len > 0)
+		var/datum/role/R = new role_category(hyper_override = FALSE)
+		if (R.enemy_jobs.len > 0)
 			for (var/mob/M in living_players)
 				if (M.stat == DEAD)
 					continue//dead players cannot count as opponents
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in R.enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in R.restricted_jobs)))
 					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
 		var/threat = round(mode.threat_level/10)
@@ -152,8 +144,6 @@
 /datum/dynamic_ruleset/midround/autotraitor
 	name = "Syndicate Sleeper Agent"
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Cyborg", "Merchant")
-	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
 	cost = 10
@@ -207,8 +197,6 @@
 /datum/dynamic_ruleset/midround/malf
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
-	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	exclusive_to_jobs = list("AI")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 0
@@ -257,7 +245,6 @@
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
 	my_fac = /datum/faction/wizard
-	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 1
@@ -297,7 +284,6 @@
 	name = "Nuclear Assault"
 	role_category = /datum/role/nuclear_operative
 	my_fac = /datum/faction/syndicate/nuke_op/
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
 	weight = 5
@@ -338,7 +324,6 @@
 	name = "Blob Overmind Storm"
 	role_category = /datum/role/blob_overmind/
 	my_fac = /datum/faction/blob_conglomerate/
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
 	required_enemies = list(3,2,2,1,1,1,0,0,0,0)
 	required_candidates = 1
 	weight = 5
@@ -372,7 +357,6 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad
 	name = "Revolutionary Squad"
 	role_category = /datum/role/revolutionary/leader
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 3
 	weight = 5
@@ -407,7 +391,6 @@
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo
 	name = "crazed weeaboo attack"
 	role_category = /datum/role/weeaboo
-	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 4
@@ -439,8 +422,6 @@
 /datum/dynamic_ruleset/midround/from_ghosts/grinch
 	name = "The Grinch"
 	role_category = /datum/role/grinch
-	restricted_from_jobs = list()
-	enemy_jobs = list()
 	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3

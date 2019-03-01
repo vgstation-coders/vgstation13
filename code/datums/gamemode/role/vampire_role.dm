@@ -8,6 +8,9 @@
 	special_role = ROLE_VAMPIRE
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
+	protected_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
+
 	logo_state = "vampire-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = ROLE_VAMPIRE
@@ -28,15 +31,16 @@
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
-/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
-	..()
-	var/datum/faction/vampire/vamp_fac
-	if(!fac)
-		vamp_fac = new
-		vamp_fac.addMaster(src)
-	else if (istype(fac, /datum/faction/vampire))
-		vamp_fac = fac
-		vamp_fac.addMaster(src)
+/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/hyper_override = FALSE)
+	if(!hyper_override)
+		..()
+		var/datum/faction/vampire/vamp_fac
+		if(!fac)
+			vamp_fac = new
+			vamp_fac.addMaster(src)
+		else if (istype(fac, /datum/faction/vampire))
+			vamp_fac = fac
+			vamp_fac.addMaster(src)
 	wikiroute = role_wiki[ROLE_VAMPIRE]
 
 /datum/role/vampire/Greet(var/greeting,var/custom)
@@ -529,18 +533,19 @@
 
 	var/datum/role/vampire/master
 
-/datum/role/thrall/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
-	. = ..()
-	if(!istype(master))
-		return FALSE
-	src.master = master
-	message_admins("[key_name(M)] was enthralled by [key_name(master.antag)]. [formatJumpTo(get_turf(M.current))]")
-	log_admin("[key_name(M)] was enthralled by [key_name(master.antag)]. [formatJumpTo(get_turf(M.current))]")
-	update_faction_icons()
-	Greet(TRUE)
-	ForgeObjectives()
-	AnnounceObjectives()
-	OnPostSetup()
+/datum/role/thrall/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/hyper_override = FALSE,var/datum/role/vampire/master)
+	if(!hyper_override)
+		. = ..()
+		if(!istype(master))
+			return FALSE
+		src.master = master
+		message_admins("[key_name(M)] was enthralled by [key_name(master.antag)]. [formatJumpTo(get_turf(M.current))]")
+		log_admin("[key_name(M)] was enthralled by [key_name(master.antag)]. [formatJumpTo(get_turf(M.current))]")
+		update_faction_icons()
+		Greet(TRUE)
+		ForgeObjectives()
+		AnnounceObjectives()
+		OnPostSetup()
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat

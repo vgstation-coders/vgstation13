@@ -5,11 +5,6 @@
 	var/list/candidates = list()//list of players that are being drafted for this rule
 	var/list/assigned = list()//list of players that were selected for this rule
 	var/datum/role/role_category = /datum/role/traitor //rule will only accept candidates with "Yes" or "Always" in the preferences for this role
-	var/list/protected_from_jobs = list() // if set, and config.protect_roles_from_antagonist = 0, then the rule will have a much lower chance than usual to pick those roles.
-	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
-	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
-	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
-	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
 	var/required_enemies = list(1,1,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of enemy job workers needed per threat_level range (0-10,10-20,etc)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
@@ -32,8 +27,6 @@
 
 /datum/dynamic_ruleset/New()
 	..()
-	if (config.protect_roles_from_antagonist)
-		restricted_from_jobs += protected_from_jobs
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		mode = ticker.mode
 	else
@@ -139,18 +132,6 @@
 		applicants |= M
 		return
 
-/datum/dynamic_ruleset/proc/progressive_job_search()
-	for(var/job in job_priority)
-		for(var/mob/M in candidates)
-			if(M.mind.assigned_role == job)
-				assigned += M
-				candidates -= M
-				return M
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	return M
-
 //////////////////////////////////////////////
 //                                          //
 //           ROUNDSTART RULESETS            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,56 +139,44 @@
 //////////////////////////////////////////////Remember that roundstart objectives are automatically forged by /datum/gamemode/proc/PostSetup()
 
 /datum/dynamic_ruleset/roundstart/trim_candidates()
-	var/role_id = initial(role_category.id)
-	var/role_pref = initial(role_category.required_pref)
+	var/datum/role/R = new role_category(hyper_override = TRUE)
 	for(var/mob/new_player/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_pref) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+		if (!P.client.desires_role(R.required_pref) || jobban_isbanned(P, R.id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
-		if (P.mind.assigned_role in protected_from_jobs)
-			var/probability = initial(role_category.protected_traitor_prob)
-			if (prob(probability))
-				candidates.Remove(P)
-			continue
-		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+		if(!R.CanBeAssigned(P.mind))
 			candidates.Remove(P)
 			continue
-		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
-			candidates.Remove(P)
-			continue
+	qdel(R)
 
 /datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
 	if (ticker && ticker.current_state <  GAME_STATE_PLAYING)
 		return ..() // If the game didn't start, we'll use the parent's method to see if we have enough people desiring the role & what not.
-	var/role_id = initial(role_category.id)
+	var/datum/role/R = new role_category(hyper_override = TRUE)
 	for(var/mob/living/carbon/human/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_id) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+		if (!P.client.desires_role(R.required_pref) || jobban_isbanned(P, R.id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
-		if (P.mind.assigned_role in protected_from_jobs)
-			var/probability = initial(role_category.protected_traitor_prob)
-			if (prob(probability))
-				candidates.Remove(P)
-			continue
-		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+		if(!R.CanBeAssigned(P.mind))
 			candidates.Remove(P)
 			continue
-		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
-			candidates.Remove(P)
-			continue
+	qdel(R)
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)
+		if(!role_category)
+			return ..()
 		var/job_check = 0
-		if (enemy_jobs.len > 0)
+		var/datum/role/R = new role_category(hyper_override = TRUE)
+		if (R.enemy_jobs.len > 0)
 			for (var/mob/M in mode.candidates)
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in R.enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in R.restricted_jobs)))
 					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
 		var/threat = round(mode.threat_level/10)
@@ -222,35 +191,28 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/latejoin/trim_candidates()
-	var/role_id = initial(role_category.id)
-	var/role_pref = initial(role_category.required_pref)
+	var/datum/role/R = new role_category(hyper_override = TRUE)
 	for(var/mob/new_player/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_pref) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+		if (!P.client.desires_role(R.required_pref) || jobban_isbanned(P, R.id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
-		if (P.mind.assigned_role in protected_from_jobs)
-			var/probability = initial(role_category.protected_traitor_prob)
-			if (prob(probability))
-				candidates.Remove(P)
-			continue
-		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+		if (!R.CanBeAssigned(P.mind))
 			candidates.Remove(P)
 			continue
-		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
-			candidates.Remove(P)
-			continue
+	qdel(R)
 
 /datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
 	if (!forced)
 		var/job_check = 0
-		if (enemy_jobs.len > 0)
+		var/datum/role/R = new role_category(hyper_override = TRUE)
+		if (R.enemy_jobs.len > 0)
 			for (var/mob/M in mode.living_players)
 				if (M.stat == DEAD)
 					continue//dead players cannot count as opponents
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in R.enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in R.restricted_jobs)))
 					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
 		var/threat = round(mode.threat_level/10)

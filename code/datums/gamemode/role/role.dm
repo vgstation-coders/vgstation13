@@ -63,6 +63,9 @@
 	var/list/protected_jobs = list()
 	var/protected_traitor_prob = PROB_PROTECTED_REGULAR
 
+	// Jobs that are a direct enemy to this role. Used in dynamic role generation
+	var/list/enemy_jobs = list()
+
 	// Jobs that can only be this antag
 	var/list/required_jobs=list()
 
@@ -111,25 +114,26 @@
 
 	var/wikiroute
 
-/datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
+/datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/hyper_override = FALSE)
 	// Link faction.
-	faction=fac
-	if(!faction)
-		ticker.mode.orphaned_roles += src
-	else
-		faction.members += src
+	if(!hyper_override)
+		faction=fac
+		if(!faction)
+			ticker.mode.orphaned_roles += src
+		else
+			faction.members += src
 
-	if(new_id)
-		id = new_id
+		if(new_id)
+			id = new_id
 
-	if(M && !AssignToRole(M, override))
-		Drop()
-		return 0
+		if(M && !AssignToRole(M, override))
+			Drop()
+			return 0
 
-	if(!plural_name)
-		plural_name="[name]s"
+		if(!plural_name)
+			plural_name="[name]s"
 
-	objectives.owner = M
+		objectives.owner = M
 
 	return 1
 
@@ -573,11 +577,13 @@
 	name = BLOBOVERMIND
 	id = BLOBOVERMIND
 	required_pref = ROLE_BLOB
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
+	restricted_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
 
-/datum/role/blob_overmind/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+/datum/role/blob_overmind/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/hyper_override = FALSE)
 	..()
 	wikiroute = role_wiki[BLOBOVERMIND]
 
@@ -662,6 +668,8 @@
 	special_role = WIZARD
 	required_pref = ROLE_WIZARD
 	disallow_job = TRUE
+	restricted_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	logo_state = "wizard-logo"
 	refund_value = BASE_SOLO_REFUND * 2
 
@@ -788,6 +796,9 @@
 /datum/role/malfAI
 	name = MALF
 	id = MALF
+	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
+	restricted_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
+	required_jobs = list("AI")
 	required_pref = ROLE_MALF
 	logo_state = "malf-logo"
 
