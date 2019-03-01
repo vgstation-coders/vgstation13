@@ -130,8 +130,14 @@
 	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
 /obj/item/weapon/disk
-	name = "disk"
-	icon = 'icons/obj/items.dmi'
+	name = "Corrupted Data Disk"
+	desc = "The data on this disk has decayed, and cannot be read by any computer anymore."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
+	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
