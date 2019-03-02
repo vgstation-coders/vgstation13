@@ -50,7 +50,7 @@
 		new /obj/structure/morgue(src.loc)
 		qdel(src)
 	else if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
-		set_tiny_label(user)
+		set_tiny_label(user, maxlength=32)
 	else if(iswirecutter(W))
 		remove_label()
 		to_chat(user, "<span class='notice'>You cut the tag off the bodybag.</span>")
