@@ -137,8 +137,11 @@
 			return ..()
 		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
 		if(do_after(user, src, 20))
+			if(rig)
+				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
+				return
 			if(!user.drop_item(W, src))
-				user << "<span class='warning'>Oops! You can't let go of \the [W]!</span>"
+				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
 				return
 
 			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src]</span>")
@@ -150,9 +153,7 @@
 
 			rig = W
 
-			var/icon/test = getFlatIcon(W)
-			test.Shift(NORTH,1)
-			test.Shift(EAST,6)
+			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
 
 	return ..()
