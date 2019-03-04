@@ -180,8 +180,12 @@
 	else
 		if(H.w_uniform.type == /obj/item/clothing/under/russobluecamooutfit || istype(H.w_uniform, /obj/item/clothing/under/neorussian))
 			russian+=2
-	if(findtext("ivan",lowertext(H.name)) || findtext("yuri",lowertext(H.name)) || findtext("vlad",lowertext(H.name)) || findtext("lenin",lowertext(H.name)) || findtext("boris",lowertext(H.name)) || findtext("sasha",lowertext(H.name)) || findtext("misha",lowertext(H.name)) || findtext("sergei",lowertext(H.name)))
+	if(findtext("putin",lowertext(H.name)))
+		russian+=5
+	else if(findtext("ivan",lowertext(H.name)) || findtext("yuri",lowertext(H.name)) || findtext("vlad",lowertext(H.name) && !findtext("putin",lowertext(H.name))) || findtext("lenin",lowertext(H.name)) || findtext("boris",lowertext(H.name)) || findtext("sasha",lowertext(H.name)) || findtext("misha",lowertext(H.name)) || findtext("sergei",lowertext(H.name)))
 		russian+=3
+	if(H.reagents.has_reagent(VODKA)) //REAL vodka, not any derivative of greyshit vodka
+		russian+=2
 
 	if(funk_level > 2 && prob((50/russian)**funk_level))
 		var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
@@ -199,7 +203,7 @@
 		H.reagents.add_reagent(HYPOZINE, 1)
 
 	if(funk_level > 9 && prob((5/russian)*funk_level))
-		explosion(get_turf(src), round((1*funk_level)/russian)*0.25, round((1*funk_level)/russian)*0.5, round((1*funk_level)/russian))
+		explosion(get_turf(src), round(((1*funk_level)+russian)*0.25), round(((1*funk_level)+russian)*0.5), round((1*funk_level)+russian))
 
 	if(prob((funk_level/russian)*2)) //IT WAS ALWAYS TOO LATE
 		toggle(H)
