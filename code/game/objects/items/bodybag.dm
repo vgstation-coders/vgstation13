@@ -84,31 +84,29 @@
 	else
 		icon_state = icon_opened
 
-/obj/structure/closet/body_bag/take_contents()
+/obj/structure/closet/body_bag/open()
+	var/mob/living/L = locate(/mob/living) in src
+	var/mob/user = usr
+
+	icon_closed = "bodybag_closed"
+
+	if (L && !L.resting && !L.isStunned()) //standing up: not resting, not stunned/knocked down, etc
+		if (do_after (user, src, 30))
+			..()
+		else
+			return
 	..()
-	var/mob/living/L = usr
-	for(L in src)
-		if (L.resting == FALSE) //if you are standing up and the body bag closes...
-			L.lay_down() //rest
 
 /obj/structure/closet/body_bag/close()
-	..()
-	if(usr)
-		var/mob/living/L = usr
-		if(L.loc == src) //only process bags when there's a mob inside
-			if(!processing_objects.Find(src))
-				processing_objects.Add(src)
-
-/obj/structure/closet/body_bag/open()
-	if(processing_objects.Find(src))
-		processing_objects.Remove(src) //no need to process bags when nothing is inside
-	..()
-
-
-/obj/structure/closet/body_bag/process()
-	for(var/mob/M in src)
-		if (M.resting == FALSE ) //if you are standing up...
-			open() //open the bag
+	var/mob/living/L
+	var/mob/user = usr
+	for (L in get_turf(src))
+		if (!L.resting && !L.isStunned()) //standing up: not resting, not stunned/knocked down, etc
+			if (do_after (user, src, 30))
+				icon_closed = "bodybag_closed_alive"
+				..()
+			else
+				return
 	..()
 
 //Cryobag (statis bag) below, not currently functional it seems
