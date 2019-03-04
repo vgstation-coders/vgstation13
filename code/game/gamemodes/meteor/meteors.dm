@@ -436,10 +436,18 @@ var/list/blob_candidates = list()
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
 		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
+		log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+		message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
 	else
 		new/obj/effect/blob/core(T, no_morph = 1)
-	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
-	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+		log_admin("Blob core meteor impacted at [formatJumpTo(loc)] but nobody to control it.")
+		message_admins("Blob core meteor impacted at [formatJumpTo(loc)] but nobody to control it.")
+		var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+		if (blob_fac)
+			for (var/datum/role/R in blob_fac.members)
+				if (R.antag && R.antag.current)
+					return
+			qdel(blob_fac) // There's nobody in the faction, let's destroy it
 
 //It's a tool to debug and test stuff, ok? Pls don't hand them out to players unless you just want to set the world on fire.
 /obj/item/weapon/meteor_gun
