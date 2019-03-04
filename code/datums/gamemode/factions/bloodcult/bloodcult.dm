@@ -300,8 +300,12 @@ var/veil_thickness = CULT_PROLOGUE
 		AppendObjective(new_obj)
 		for(var/datum/role/cultist/C in members)
 			var/mob/M = C.antag.current
-			if (M)
+			if (M && iscultist(M))
 				to_chat(M,"<span class='danger'>[new_obj.name]</span><b>: [new_obj.explanation_text]</b>")
+				//ACT 1
+				if (istype(new_obj,/datum/objective/bloodcult_followers))
+					to_chat(M,"<b>As our ritual progresses through its Acts, the veil gets thinner, and dormant runes awaken. Summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
+				//ACT 2
 				if (istype(new_obj,/datum/objective/bloodcult_sacrifice))
 					var/datum/objective/bloodcult_sacrifice/O = new_obj
 					if (M == O.sacrifice_target)
@@ -312,10 +316,10 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
 
-		for (var/obj/structure/cult/spire/S in cult_spires)
+		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in rune_list)
+		for (var/obj/effect/rune/R in rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))

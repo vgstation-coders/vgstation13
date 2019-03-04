@@ -933,7 +933,8 @@
 		if (victim.mind)
 			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 			if (cult)
-				cult.progress(CULT_ACT_II)
+				spawn(5)//waiting half a second to make sure that the sacrifice objective won't designate a victim that just refused conversion
+					cult.progress(CULT_ACT_II)
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
@@ -973,6 +974,7 @@
 
 		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
+		to_chat(converter, "<span class='sinister'>\The [victim] was pulled through the veil, their body was devoured by Nar-Sie and their possession stored inside this coffer.</span>")
 
 		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
 		conversion.icon_state = ""
@@ -985,10 +987,13 @@
 			victim.take_blood(cup, cup.volume)//Up to 60u
 			cup.on_reagent_change()//so we get the reagentsfillings overlay
 			new/obj/item/weapon/skull(coffer)
+			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a portion of the blood left in their body, along with their skull to potentially use in a resurrection ritual.</span>")
 		if (isslime(victim))
 			cup.reagents.add_reagent(SLIMEJELLY, 50)
+			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a slimy substance.</span>")
 		if (isalien(victim))//w/e
 			cup.reagents.add_reagent(RADIUM, 50)
+			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a green radioactive liquid.</span>")
 
 		for(var/obj/item/weapon/implant/loyalty/I in victim)
 			I.implanted = 0
