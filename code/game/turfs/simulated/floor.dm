@@ -676,9 +676,10 @@ turf/simulated/floor/update_icon()
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/puddle/P = is_wet()
-	if(P.wet > slipperiness)
-		return
-	qdel(P)
+	if(P)
+		if(P.wet > slipperiness)
+			return
+		qdel(P)
 
 
 /turf/simulated/floor/attack_construct(mob/user as mob)

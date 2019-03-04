@@ -50,7 +50,7 @@
 			target_role = (sacrifice_target.mind.assigned_role=="MODE") ? "" : ", the ([sacrifice_target.mind.assigned_role]),"
 		if (iscultist(sacrifice_target))
 			target_role = ", the cultist,"
-		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade."
+		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade. If you feel merciful for their soul, you may use an empty soul blade instead."
 		message_admins("Blood Cult: ACT II has begun, the sacrifice target is [sacrifice_target.real_name][target_role].")
 		log_admin("Blood Cult: ACT II has begun, the sacrifice target is [sacrifice_target.real_name][target_role].")
 		var/datum/faction/bloodcult/cult = faction
@@ -68,7 +68,7 @@
 			target_role = (sacrifice_target.mind.assigned_role=="MODE") ? "" : ", the ([sacrifice_target.mind.assigned_role]),"
 		if (iscultist(sacrifice_target))
 			target_role = ", the cultist,"
-		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade."
+		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade. If you feel merciful for their soul, you may use an empty soul blade instead."
 		message_admins("Blood Cult: The cult didn't sacrifice their target in time, a new target has been assigned, the new sacrifice target is [sacrifice_target.real_name][target_role].")
 		log_admin("Blood Cult: The cult didn't sacrifice their target in time, a new target has been assigned, the new sacrifice target is [sacrifice_target.real_name][target_role].")
 		var/datum/faction/bloodcult/cult = faction

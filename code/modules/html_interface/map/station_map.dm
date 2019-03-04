@@ -86,7 +86,7 @@
 				newMarker.x = T.x
 				newMarker.y = T.y
 				newMarker.z = ZLevel
-				holomap_markers[newMarker.id] = newMarker
+				holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)

@@ -12,7 +12,7 @@
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 3
 	cost = 10
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
@@ -33,7 +33,7 @@
 	if (autotraitor_cooldown)
 		autotraitor_cooldown--
 	else
-		autotraitor_cooldown = 900//15 minutes
+		autotraitor_cooldown = 450//15 minutes
 		message_admins("Dynamic Mode: Checking if we can turn someone into a traitor...")
 		mode.picking_specific_rule(/datum/dynamic_ruleset/midround/autotraitor)
 

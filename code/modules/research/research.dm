@@ -291,14 +291,9 @@ datum/tech/robotics
 
 
 /obj/item/weapon/disk/tech_disk
-	name = "Technology Disk"
+	name = "technology data disk"
 	desc = "A disk for storing technology data for further research."
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk2"
-	item_state = "card-id"
-	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
-	w_type = RECYK_ELECTRONIC
+	icon_state = "disk_tech"
 	var/datum/tech/stored
 
 /obj/item/weapon/disk/tech_disk/New()

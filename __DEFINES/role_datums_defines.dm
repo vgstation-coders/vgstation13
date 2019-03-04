@@ -130,7 +130,7 @@
 #define TATTOO_FAST		"Rapid Tracing"
 #define TATTOO_CHAT		"Dark Communication"
 #define TATTOO_MANIFEST	"Pale Body"
-#define TATTOO_MEMORIZE	"Arcane Knowledge"
+#define TATTOO_MEMORIZE	"Arcane Dimension"
 #define TATTOO_SHORTCUT	"Shortcut Tracer"
 
 #define	TOME_CLOSED	1
@@ -184,5 +184,5 @@
 
 // -- The paper
 
-#define INTERCEPT_TIME_LOW 60 SECONDS
-#define INTERCEPT_TIME_HIGH 180 SECONDS
+#define INTERCEPT_TIME_LOW 10 MINUTES
+#define INTERCEPT_TIME_HIGH 18 MINUTES

@@ -1458,6 +1458,9 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
+	else if (href_list["lookitem"])
+		var/obj/item/I = locate(href_list["lookitem"])
+		usr.examination(I)
 	else
 		return ..()
 	//if (href_list["joinresponseteam"])

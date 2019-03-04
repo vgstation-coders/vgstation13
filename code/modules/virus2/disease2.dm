@@ -157,20 +157,25 @@ var/global/list/disease2_list = list()
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
 
-/datum/disease2/disease/proc/minormutate()
+/datum/disease2/disease/proc/minormutate(var/index)
 	//uniqueID = rand(0,10000)
-	var/datum/disease2/effect/e = pick(effects)
+	var/datum/disease2/effect/e = get_effect(index)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
-/datum/disease2/disease/proc/minorstrength()
-	var/datum/disease2/effect/e = pick(effects)
+/datum/disease2/disease/proc/minorstrength(var/index)
+	var/datum/disease2/effect/e = get_effect(index)
 	e.multiplier_tweak(0.1)
 
-/datum/disease2/disease/proc/minorweak()
-	var/datum/disease2/effect/e = pick(effects)
+/datum/disease2/disease/proc/minorweak(var/index)
+	var/datum/disease2/effect/e = get_effect(index)
 	e.multiplier_tweak(-0.1)
+
+/datum/disease2/disease/proc/get_effect(var/index)
+	if(!index)
+		return pick(effects)
+	return effects[Clamp(index,0,effects.len)]
 
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)

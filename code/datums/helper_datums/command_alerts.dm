@@ -289,7 +289,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/blob_storm/overminds/end
 	name = "Meteor Blob Cluster Ended (Overminds!)"
-	message = "The station has cleared the Blob conglomerate. Investigate the hit areas at once and clear the blob. Beware for possible Overmind presence."
+	message = "The station has passed through a Blob conglomerate. Investigate the hit areas at once and clear the blob. Beware for possible Overmind presence."
 
 /////////////GRAVITY
 

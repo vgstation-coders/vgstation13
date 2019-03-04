@@ -117,28 +117,27 @@
 			isactive[name] = (SSD ? "SSD" : (active ? "Active" : "Inactive"))
 		else
 			isactive[name] = t.fields["p_stat"]
-//			to_chat(world, "[name]: [rank]")
 			//cael - to prevent multiple appearances of a player/job combination, add a continue after each line
 		var/department = 0
-		if(real_rank in command_positions)
+		if((real_rank in command_positions) || (t.fields["override_dept"] == "Command"))
 			heads[name] = rank
 			department = 1
-		if(real_rank in security_positions)
+		if((real_rank in security_positions) || (t.fields["override_dept"] == "Security"))
 			sec[name] = rank
 			department = 1
-		if(real_rank in engineering_positions)
+		if((real_rank in engineering_positions) || (t.fields["override_dept"] == "Engineering"))
 			eng[name] = rank
 			department = 1
-		if(real_rank in medical_positions)
+		if((real_rank in medical_positions) || (t.fields["override_dept"] == "Medical"))
 			med[name] = rank
 			department = 1
-		if(real_rank in science_positions)
+		if((real_rank in science_positions) || (t.fields["override_dept"] == "Science"))
 			sci[name] = rank
 			department = 1
-		if(real_rank in cargo_positions)
+		if((real_rank in cargo_positions) || (t.fields["override_dept"] == "Cargo"))
 			cgo[name] = rank
 			department = 1
-		if(real_rank in civilian_positions)
+		if((real_rank in civilian_positions) || (t.fields["override_dept"] == "Civilian"))
 			civ[name] = rank
 			department = 1
 		if(real_rank in nonhuman_positions)

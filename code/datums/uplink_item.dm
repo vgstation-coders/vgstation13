@@ -46,6 +46,7 @@ var/list/uplink_items = list()
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
 	var/static/times_bought = 0
 	var/refundable = FALSE
+	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
 /datum/uplink_item/proc/get_cost(var/user_job, var/cost_modifier = 1)
@@ -241,6 +242,31 @@ var/list/uplink_items = list()
 	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."
 	item = /obj/item/weapon/gun/gatling
 	cost = 40
+	jobs_exclusive = list("Nuclear Operative")
+
+/datum/uplink_item/dangerous/dude_bombs_lmao
+	name = "Modified Tank Transfer Valve"
+	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
+	item = /obj/effect/spawner/newbomb
+	refund_path = /obj/item/device/transfer_valve/mediumsize
+	cost = 100
+	refund_amount = 15
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/robot
+	name = "Syndicate-modded Combat Robot Teleporter"
+	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
+	item = /obj/item/weapon/robot_spawner/syndicate
+	cost = 100
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/mecha
+	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
+	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
+	item = /obj/effect/spawner/mecha/mauler
+	cost = 140
 	jobs_exclusive = list("Nuclear Operative")
 
 // STEALTHY WEAPONS
@@ -457,14 +483,6 @@ var/list/uplink_items = list()
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
-
-//datum/uplink_item/dangerous/robot
-//	name = "Syndicate Robot Teleporter"
-//	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
-//	item = /obj/item/weapon/robot_spawner/syndicate
-//	cost = 40
-//	jobs_exclusive = list("Nuclear Operative")
-//	refundable = TRUE
 
 // IMPLANTS
 
@@ -800,7 +818,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/zombievirus
 	name = "Zombie Virus Syndrome"
 	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a disk."
-	item = /obj/item/weapon/diseasedisk/zombie
+	item = /obj/item/weapon/disk/disease/zombie
 	cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")

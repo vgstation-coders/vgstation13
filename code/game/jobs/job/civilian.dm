@@ -349,6 +349,8 @@
 	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
 /datum/job/clown/reject_new_slots()
+	if(!xtra_positions)
+		return FALSE
 	if(security_level == SEC_LEVEL_RAINBOW)
 		return FALSE
 	else
@@ -408,6 +410,8 @@
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/baguette(H.back), slot_in_backpack)
 
 /datum/job/mime/reject_new_slots()
+	if(!xtra_positions)
+		return FALSE
 	if(security_level == SEC_LEVEL_RAINBOW)
 		return FALSE
 	else

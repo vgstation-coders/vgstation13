@@ -56,6 +56,7 @@ picking_specific_rule(ruletype,forced) -> forced OR acceptable(living_players, t
 RULESET
 acceptable(population,threat) just checks if enough threat_level for population indice.
 **NOTE that we currently only send threat_level as the second arg, not threat.
+ready(forced) checks if enough candidates and calls the map's map_ruleset(dynamic_ruleset) at the parent level
 logo_state: if creating a non-faction role, name should be the same for both the role (for role_HUD_icons.dmi) and the ruleset (for logos.dmi) to prevent scoreboard bugs
 
 trim_candidates() varies significantly according to the ruleset type

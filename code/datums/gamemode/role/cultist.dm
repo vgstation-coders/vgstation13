@@ -8,6 +8,7 @@
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
+	var/second_chance = 1
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -36,19 +37,22 @@
 /datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
 	. = ..()
 	if (issilicon(new_character))
-		antag.antag_roles -= CULTIST
-		antag.current.remove_language(LANGUAGE_CULT)
-		for(var/spell/cult/spell_to_remove in antag.current.spell_list)
-			antag.current.remove_spell(spell_to_remove)
-		if (src in blood_communion)
-			blood_communion.Remove(src)
-		update_faction_icons()
-		return
+		antag.decult()
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
+/datum/mind/proc/decult()
+	antag_roles -= CULTIST
+	current.remove_language(LANGUAGE_CULT)
+	for(var/spell/cult/spell_to_remove in current.spell_list)
+		current.remove_spell(spell_to_remove)
+	var/datum/role/cultist/C = GetRole(CULTIST)
+	if (C in blood_communion)
+		blood_communion.Remove(C)
+	update_faction_icons()
 
 /datum/role/cultist/process()
 	..()

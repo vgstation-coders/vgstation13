@@ -42,7 +42,9 @@
 	update_canmove()
 	if(!gibbed)
 		updateicon() //Don't call updateicon if you're already null.
-		locked = FALSE //Cover unlocks.
+		if (locked)
+			locked = FALSE //Cover unlocks.
+			visible_message("A click sounds from <span class='name'>[src]</span>, indicating the automatic cover release failsafe.")
 	if(camera)
 		camera.status = FALSE
 	if(station_holomap)

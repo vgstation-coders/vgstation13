@@ -50,7 +50,7 @@ var/list/response_team_members = list()
 	to_chat(user, "<span class='notice'>Congratulations, you've been selected to be part of an ERT. You can customize your character, but don't take too long, time is of the essence!</span>")
 	user << 'sound/music/ERT.ogg'
 
-	var/commando_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
+	var/commando_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, MAX_NAME_LEN)
 
 	//todo: make it a panel, like in character creation
 	var/new_facial = input(user, "Please select facial hair color.", "Character Generation") as color

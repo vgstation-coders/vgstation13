@@ -112,7 +112,8 @@
 	var/incapacitated_heads = 0
 
 	for (var/datum/mind/M in total_heads)
-		if (M.current.isDead() || M.current.z != map.zMainStation)
+		var/turf/T = get_turf(M.current)
+		if (M.current.isDead() || T.z != STATION_Z)
 			incapacitated_heads++
 
 	if (incapacitated_heads >= total_heads.len)

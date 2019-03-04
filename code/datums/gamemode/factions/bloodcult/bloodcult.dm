@@ -208,7 +208,6 @@ var/veil_thickness = CULT_PROLOGUE
 	if (change_cooldown > 0)
 		change_cooldown -= 1 SECONDS
 		if (change_cooldown <= 0)
-			target_change = FALSE
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O && !O.IsFulfilled())
 				O.failed_targets += O.sacrifice_target
@@ -223,6 +222,7 @@ var/veil_thickness = CULT_PROLOGUE
 								else if (iscultist(O.sacrifice_target))
 									to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
 	if (target_change)
+		target_change = FALSE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
 
 /datum/faction/bloodcult/proc/progress(var/new_act,var/A)
