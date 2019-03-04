@@ -270,6 +270,9 @@
 	expand_blob(T)
 
 /mob/camera/blob/proc/expand_blob(var/turf/T)
+	if(attack_delayer.blocked())
+		return
+	delayNextAttack(5)
 	if(!T)
 		return
 
