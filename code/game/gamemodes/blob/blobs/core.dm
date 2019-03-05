@@ -153,7 +153,7 @@
 		var/ded = TRUE
 		if(conglomerate.members.len)
 			for(var/datum/role/R in conglomerate.members)
-				if (R.antag && !(R.antag.current.isDead()))
+				if (R.antag && R.antag.current && !(R.antag.current.isDead()))
 					ded = FALSE
 					break
 		if(ded)
