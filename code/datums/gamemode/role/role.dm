@@ -572,7 +572,7 @@
 /datum/role/blob_overmind
 	name = BLOBOVERMIND
 	id = BLOBOVERMIND
-	required_pref = ROLE_BLOB
+	required_pref = BLOBOVERMIND
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
 	var/countdown = 60
@@ -660,7 +660,7 @@
 	name = WIZARD
 	id = WIZARD
 	special_role = WIZARD
-	required_pref = ROLE_WIZARD
+	required_pref = WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
 	refund_value = BASE_SOLO_REFUND * 2
@@ -788,7 +788,7 @@
 /datum/role/malfAI
 	name = MALF
 	id = MALF
-	required_pref = ROLE_MALF
+	required_pref = MALF
 	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()

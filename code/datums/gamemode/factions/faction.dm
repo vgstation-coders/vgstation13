@@ -323,7 +323,7 @@ var/list/factions_with_hud_icons = list()
 	ID = HIVEMIND
 	initial_role = CHANGELING
 	late_role = CHANGELING
-	required_pref = ROLE_CHANGELING
+	required_pref = CHANGELING
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 	roletype = /datum/role/changeling
@@ -342,7 +342,7 @@ var/list/factions_with_hud_icons = list()
 	ID = WIZFEDERATION
 	initial_role = WIZARD
 	late_role = WIZARD
-	required_pref = ROLE_WIZARD
+	required_pref = WIZARD
 	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
 	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
 	This has led to them being identified as enemies of humanity, and should be treated as such."
@@ -382,7 +382,6 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
-	required_pref = ROLE_STRIKE
 	ID = CUSTOMSQUAD
 	logo_state = "nano-logo"
 

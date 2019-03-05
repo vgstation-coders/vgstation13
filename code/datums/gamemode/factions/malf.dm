@@ -2,7 +2,7 @@
 	name = "Malfunctioning AI"
 	desc = "ERROR"
 	ID = MALF
-	required_pref = ROLE_MALF
+	required_pref = MALF
 	initial_role = MALF
 	late_role = MALFBOT
 	initroletype = /datum/role/malfAI //First addition should be the AI

@@ -273,7 +273,7 @@
 			if (istype(blade) && !blade.shade)
 				var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
 				for(var/mob/M in observers)
-					if(!M.client || isantagbanned(M) || jobban_isbanned(M, ROLE_CULTIST) || M.client.is_afk())
+					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST) || M.client.is_afk())
 						continue
 					if (M.mind && M.mind.GetRole(CULTIST))
 						var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)

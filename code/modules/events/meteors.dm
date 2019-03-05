@@ -202,10 +202,10 @@ var/global/list/thing_storm_types = list(
 			if(M.stat == CONSCIOUS)
 				living++
 		cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
-		
+
 
 	if (!(candidates.len) && !started)
-		candidates = get_candidates(ROLE_BLOB)
+		candidates = get_candidates(BLOBOVERMIND)
 
 	for(var/i = 0 to cores_spawned)
 		if (!candidates.len)

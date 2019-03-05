@@ -5,12 +5,12 @@
 /datum/role/vampire
 	id = VAMPIRE
 	name = VAMPIRE
-	special_role = ROLE_VAMPIRE
+	special_role = VAMPIRE
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
-	required_pref = ROLE_VAMPIRE
+	required_pref = VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
 	refund_value = BASE_SOLO_REFUND
 
@@ -37,7 +37,7 @@
 	else if (istype(fac, /datum/faction/vampire))
 		vamp_fac = fac
 		vamp_fac.addMaster(src)
-	wikiroute = role_wiki[ROLE_VAMPIRE]
+	wikiroute = role_wiki[VAMPIRE]
 
 /datum/role/vampire/Greet(var/greeting,var/custom)
 	if(!greeting)

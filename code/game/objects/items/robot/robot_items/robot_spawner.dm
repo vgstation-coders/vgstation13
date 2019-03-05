@@ -99,7 +99,7 @@
 	name = "syndicate robot teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot on the field."
 	borg_type = /mob/living/silicon/robot/syndie
-	role = ROLE_OPERATIVE
+	role = NUKE_OP
 	jobban_roles = list("Syndicate", "AI", "Cyborg", "Mobile MMI")
 	faction = "syndicate"
 
