@@ -160,8 +160,8 @@ var/veil_thickness = CULT_PROLOGUE
 	logo_state = "cult-logo"
 	hud_icons = list("cult-logo")
 	var/list/bloody_floors = list()
-	var/target_change = FALSE
-	var/change_cooldown = 0
+	//var/target_change = FALSE
+	//var/change_cooldown = 0
 	var/cult_win = FALSE
 	var/warning = FALSE
 
@@ -203,8 +203,10 @@ var/veil_thickness = CULT_PROLOGUE
 	initialize_cultwords()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
+/*
 /datum/faction/bloodcult/process()
 	..()
+
 	if (change_cooldown > 0)
 		change_cooldown -= 1 SECONDS
 		if (change_cooldown <= 0)
@@ -224,6 +226,7 @@ var/veil_thickness = CULT_PROLOGUE
 	if (target_change)
 		target_change = FALSE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
+*/
 
 /datum/faction/bloodcult/proc/progress(var/new_act,var/A)
 	//This proc is called to update the faction's current objectives, and veil thickness
@@ -300,22 +303,29 @@ var/veil_thickness = CULT_PROLOGUE
 		AppendObjective(new_obj)
 		for(var/datum/role/cultist/C in members)
 			var/mob/M = C.antag.current
-			if (M)
+			if (M && iscultist(M))
 				to_chat(M,"<span class='danger'>[new_obj.name]</span><b>: [new_obj.explanation_text]</b>")
+				//ACT 1
+				if (istype(new_obj,/datum/objective/bloodcult_followers))
+					to_chat(M,"<b>As our ritual progresses through its Acts, the veil gets thinner, and dormant runes awaken. Summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
+				//ACT 2
 				if (istype(new_obj,/datum/objective/bloodcult_sacrifice))
 					var/datum/objective/bloodcult_sacrifice/O = new_obj
-					if (M == O.sacrifice_target)
-						to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie, but you may wait for another target to be selected should you be afraid of death.</b>")
-					else if (iscultist(O.sacrifice_target))
-						to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
+					if (O.sacrifice_target)
+						if (M == O.sacrifice_target)
+							to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie.</b>")
+						to_chat(M,"<b>Should the target's body be annihilated, or should they flee the station, you may commune with Nar-Sie at an altar to have him designate a new target.</b>")
+					else
+						to_chat(M,"<b>There are no elligible targets aboard the station, how did you guys even manage that one?</b>")//if there's literally no humans aboard the station
+						to_chat(M,"<b>Commune with Nar-Sie at an altar to have him designate a new target.</b>")
 
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
 
-		for (var/obj/structure/cult/spire/S in cult_spires)
+		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in rune_list)
+		for (var/obj/effect/rune/R in rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))

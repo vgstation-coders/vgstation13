@@ -591,6 +591,22 @@
 					if (CULT_ACT_I)
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The conversion rune is <span class='danger'>Join Blood Self</span>, but you now have many new runes at your disposal to help you in your task, therefore I recommend you first summon an Arcane Tome to easily scribe them. The rune that conjures a tome is <span class='danger'>See Blood Hell</span>.</span></span>")
 					if (CULT_ACT_II)
+						var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+						if (cult)
+							var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
+							if (O && !O.IsFulfilled())
+								if (!O.sacrifice_target || !O.sacrifice_target.loc)//if there's no target or its body was destroyed, immediate reroll
+									replace_target()
+									return
+								else
+									var/turf/T = get_turf(O.sacrifice_target)
+									if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
+										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
+										if (choice == "Yes")
+											replace_target()
+											return
+									else
+										to_chat(user,"<b>\The [O.sacrifice_target] is still aboard the station.</b>")
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>To perform the sacrifice, you'll have to forge a cult blade first. It doesn't matter if the target is alive of not, lay their body down on the altar and plant the blade on their stomach. Next, touch the altar to perform the next step of the ritual. The more of you, the quicker it will be done.</span></span>")
 					if (CULT_ACT_III)
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The crew is now aware of our presence, prepare to draw blood. Your priority is to spill as much blood as you can all over the station, bloody trails left by foot steps count toward this goal. How you obtain the blood, I leave to your ambition, but remember that if the crew destroys every blood stones, you will be doomed.</span></span>")
@@ -619,6 +635,26 @@
 					update_icon()
 					var/obj/item/device/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
+
+/obj/structure/cult/altar/proc/replace_target()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
+		if (O && !O.IsFulfilled())
+			if (O.replace_target())
+				for(var/datum/role/cultist/C in cult.members)
+					var/mob/M = C.antag.current
+					if (M && iscultist(M))
+						to_chat(M,"<b>A new target has been assigned. [O.explanation_text]</b>")
+						if (M == O.sacrifice_target)
+							to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie.</b>")
+						to_chat(M,"<b>Should the target's body be annihilated, or should they flee the station, you may commune with Nar-Sie at an altar to have him designate a new target.</b>")
+			else
+				for(var/datum/role/cultist/C in cult.members)
+					var/mob/M = C.antag.current
+					if (M && iscultist(M))
+						to_chat(M,"<b>There are no elligible targets aboard the station, how did you guys even manage that one?</b>")//if there's literally no humans aboard the station
+						to_chat(M,"<b>There needs to be humans aboard the station, cultist or not, for a target to be selected.</b>")
 
 /obj/structure/cult/altar/noncultist_act(var/mob/user)//Non-cultists can still remove blades planted on altars.
 	if(is_locking(lock_type))
@@ -694,9 +730,9 @@
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (cult)
-		cult.change_cooldown = max(cult.change_cooldown,60 SECONDS)
+	//var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	//if (cult)
+	//	cult.change_cooldown = max(cult.change_cooldown,60 SECONDS)
 	. = ..()//true if the ritual was successful
 	altar_task = ALTARTASK_NONE
 	update_icon()
@@ -720,7 +756,7 @@
 			M.gib()
 		var/turf/T = loc
 
-		cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
 			cult.progress(CULT_ACT_III,T)
 		else
