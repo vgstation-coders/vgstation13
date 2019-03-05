@@ -196,7 +196,6 @@
 	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
 	icon_state = "rig0-mining"
 	item_state = "rig0-mining"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	_color = "mining"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -208,7 +207,6 @@
 	name = "mining hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
 	item_state = "rig-mining"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
