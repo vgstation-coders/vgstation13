@@ -6,6 +6,7 @@
 	logo_state = "weeaboo-logo"
 	refund_value = BASE_SOLO_REFUND
 	wikiroute = WEEABOO
+	disallow_job = TRUE
 	restricted_jobs = list("Trader") //Spawns in space
 
 /datum/role/weeaboo/OnPostSetup()
@@ -33,7 +34,7 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Weeaboo.<br>The crew has insulted glorious Space Nippon. Equipped with your authentic Space Kimono, your Space Katana that was folded over a million times, and your honobru bushido code, you must implore them to reconsider!</span>")
 
 	to_chat(antag.current, "<span class='danger'>Remember that guns are not honobru, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
-
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 //Weeb Items
 
@@ -201,8 +202,8 @@
 		if(H.mind.GetRole(WEEABOO))
 
 			var/list/choices = list(
-				list("Make Shuriken", "radial_cook"),
-				list("Charge Sword", "radial_zap"),
+				list("Make Shuriken", "radial_cook", "Fabricate a new shuriken. Cost: 1000."),
+				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: 40 per second."),
 			)
 			var/event/menu_event = new(owner = user)
 			menu_event.Add(src, "radial_check_handler")

@@ -75,6 +75,7 @@ var/list/role_wiki=list(
 	ROLE_VOXRAIDER		= "Vox_Raider",
 	ROLE_WIZARD			= "Wizard",
 	ROLE_GRINCH			= "Grinch",
+	WEEABOO				= "Crazed_Weeaboo",
 	ROLE_MINOR			= "Minor_Roles",
 )
 
