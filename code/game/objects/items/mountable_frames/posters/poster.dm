@@ -24,11 +24,10 @@
 
 /obj/item/mounted/poster/do_build(turf/on_wall, mob/user)
 	//declaring D because otherwise if P gets 'deconstructed' we lose our reference to P.resulting_poster
-	var/obj/structure/sign/poster/D = new path(src.serial_number)
+	var/obj/structure/sign/poster/D = new path(on_wall,src.serial_number)
 
 	var/temp_loc = user.loc
 	poster_animation(D,user)
-	D.forceMove(on_wall)
 	qdel(src)	//delete it now to cut down on sanity checks afterwards. Agouri's code supports rerolling it anyway
 
 
@@ -50,7 +49,7 @@
 
 //############################## THE ACTUAL DECALS ###########################
 
-obj/structure/sign/poster
+/obj/structure/sign/poster
 	name = "poster"
 	desc = "A large piece of space-resistant printed paper. "
 	icon = 'icons/obj/posters.dmi'
@@ -59,7 +58,7 @@ obj/structure/sign/poster
 	var/ruined = 0
 
 
-obj/structure/sign/poster/New(var/serial)
+/obj/structure/sign/poster/New(loc,var/serial)
 
 	serial_number = serial
 
@@ -67,10 +66,8 @@ obj/structure/sign/poster/New(var/serial)
 		name = "Award of Sufficiency"
 		desc = "The mere sight of it makes you very proud."
 		icon_state = "goldstar"
-	else if(!serial_number)
-		//nothing
 	else
-		if(serial_number == loc)
+		if(!serial_number)
 			serial_number = rand(1, poster_designs.len)	//This is for the mappers that want individual posters without having to use rolled posters.
 
 		var/designtype = poster_designs[serial_number]
@@ -78,9 +75,9 @@ obj/structure/sign/poster/New(var/serial)
 		name += " - [design.name]"
 		desc += " [design.desc]"
 		icon_state = design.icon_state // poster[serial_number]
-		..()
+	..()
 
-obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswirecutter(W))
 		playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 		if(ruined)
