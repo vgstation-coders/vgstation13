@@ -393,7 +393,7 @@
 /datum/rune_spell/communication
 	name = "Communication"
 	desc = "Speak so that every cultists may hear your voice."
-	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie."
+	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it to transmit a message that will be remembered at all."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
 	rune_flags = RUNE_STAND
@@ -411,6 +411,29 @@
 	R.one_pulse()
 	var/mob/living/user = activator
 	comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
+
+/datum/rune_spell/communication/midcast(var/mob/living/user)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!istype(cult))
+		return
+	if (!istype(user)) // Ghosts
+		return
+	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
+	reminder = utf8_sanitize(reminder) // No weird HTML
+	var/number = cult.cult_reminders.len
+	var/text = "[number + 1]) [reminder], by [user.real_name]."
+	cult.cult_reminders += text
+	for(var/datum/role/cultist/C in cult.members)
+		var/datum/mind/M = C.antag
+		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[reminder]</span></span>")
+			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
+			M.store_memory("Cult reminder: [text].")
+
+	for(var/mob/dead/observer/O in player_list)
+		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+
+	log_cultspeak("[key_name(user)] Cult reminder: [reminder]")
 
 /datum/rune_spell/communication/cast_talisman()//we write our message on the talisman, like in previous versions.
 	var/message = sanitize(input("Write a message to send to your acolytes.", "Blood Letter", "") as null|message, MAX_MESSAGE_LEN)
