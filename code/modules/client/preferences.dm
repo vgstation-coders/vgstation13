@@ -6,44 +6,43 @@
 var/list/preferences_datums = list()
 
 var/global/list/special_roles = list(
-	ROLE_ALIEN        	= 1, //always show
-	ROLE_BLOB         	= 1,
-	ROLE_BORER        	= 1,
+	ALIEN        	= 1,
+	BLOBOVERMIND   	= 1,
+	ROLE_BORER     	= 1,
 	CHANGELING   	= 1,
 	CULTIST      	= 1,
-	ROLE_PLANT        	= 1,
+	ROLE_PLANT     	= 1,
 	MALF         	= 1,
-	OPERATIVE    	= 1,
-	ROLE_PAI        = 1, // -- TLE
+	NUKE_OP	    	= 1,
+	ROLE_PAI        = 1,
 	ROLE_POSIBRAIN  = 1,
 	REV          	= 1,
 	TRAITOR      	= 1,
 	VAMPIRE      	= 1,
 	VOXRAIDER    	= 1,
 	WIZARD       	= 1,
-	COMMANDO	  	= 1,
+	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	WEEABOO			= 1,
 	ROLE_MINOR		= 1,
 )
 
-var/list/antag_roles = list(
+/var/list/antag_roles = list(
 	ALIEN        	= 1,
-	BLOB         	= 1,
+	BLOBOVERMIND   	= 1,
 	CHANGELING   	= 1,
 	CULTIST      	= 1,
 	MALF         	= 1,
-	OPERATIVE    	= 1,
+	NUKE_OP	    	= 1,
 	REV          	= 1,
 	TRAITOR      	= 1,
 	VAMPIRE      	= 1,
 	VOXRAIDER    	= 1,
 	WIZARD       	= 1,
-	COMMANDO	  	= 1,
+	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	WEEABOO			= 1,
 	ROLE_MINOR		= 1,
-
 )
 
 var/list/nonantag_roles = list(
@@ -54,24 +53,24 @@ var/list/nonantag_roles = list(
 )
 
 var/list/role_wiki=list(
-	ALIEN			= "Xenomorph",
-	BLOB			= "Blob",
-	ROLE_BORER			= "Cortical_Borer",
-	CHANGELING		= "Changeling",
-	CULTIST		= "Cult",
-	ROLE_PLANT			= "Dionaea",
-	WEEABOO				= "Crazed_Weeaboo",
-	MALF			= "Guide_to_Malfunction",
-	OPERATIVE		= "Nuclear_Agent",
-	PAI			= "Personal_AI",
-	POSIBRAIN		= "Guide_to_Silicon_Laws",
-	REV			= "Revolution",
-	TRAITOR		= "Traitor",
-	VAMPIRE		= "Vampire",
-	VOXRAIDER		= "Vox_Raider",
-	WIZARD			= "Wizard",
-	GRINCH			= "Grinch",
-	ROLE_MINOR			= "Minor_Roles",
+	ALIEN					= "Xenomorph",
+	BLOBOVERMIND			= "Blob",
+	ROLE_BORER				= "Cortical_Borer",
+	CHANGELING				= "Changeling",
+	CULTIST					= "Cult",
+	ROLE_PLANT				= "Dionaea",
+	MALF					= "Guide_to_Malfunction",
+	NUKE_OP					= "Nuclear_Agent",
+	ROLE_PAI				= "Personal_AI",
+	ROLE_POSIBRAIN			= "Guide_to_Silicon_Laws",
+	REV						= "Revolution",
+	TRAITOR					= "Traitor",
+	VAMPIRE					= "Vampire",
+	VOXRAIDER				= "Vox_Raider",
+	WIZARD					= "Wizard",
+	GRINCH					= "Grinch",
+	WEEABOO					= "Crazed_Weeaboo",
+	ROLE_MINOR				= "Minor_Roles",
 )
 
 var/const/MAX_SAVE_SLOTS = 8
