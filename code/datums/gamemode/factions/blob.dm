@@ -154,6 +154,8 @@
 			world << sound('sound/misc/notice1.ogg')
 			if(delta)
 				delta = FALSE
+				emergency_shuttle.shuttle_phase("station",0) //Station is FUBAR, time to go home.
+				command_alert(/datum/command_alert/FUBAR)
 				for(var/mob/living/silicon/ai/aiPlayer in player_list)
 					aiPlayer.set_zeroth_law("")
 					to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
