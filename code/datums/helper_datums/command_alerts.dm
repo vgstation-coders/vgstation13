@@ -61,7 +61,7 @@
 
 /datum/command_alert/biohazard_station_unlock
 	name = "Biohazard Level Updated - Lock Down Lifted"
-	alert_title = "Directive 7-10 concluded"
+	alert_title = "Directive 7-10 to 7-12 Concluded."
 	force_report = 1
 
 /datum/command_alert/biohazard_station_unlock/announce()
