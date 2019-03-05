@@ -5,7 +5,7 @@ var/list/failure_lines_by_dept = list(
 		"This is what passes as command these days." = 3,
 	),
 	ENGINEERING_POSITIONS = list(
-		"Our craft is more complicated than your pathetic tinkering." = 3,
+		"Our craft is more complex than your pathetic tinkering." = 3,
 		"These machines were beyond your skill anyway." = 3,
 	),
 	MEDICAL_POSITIONS = list(
@@ -16,7 +16,7 @@ var/list/failure_lines_by_dept = list(
 	SCIENCE_POSITIONS = list(
 		"Your closed mind dishonours you." = 3,
 		"Our secrets were beyond your understanding." = 3,
-		"My science was not for wimps such as you." = 3,
+		"My science was not for weaklings such as you." = 3,
 	),
 	CIVILIAN_POSITIONS = list(
 		"A little job in life, and a forgotten death." = 3,
@@ -62,7 +62,7 @@ var/list/acceptance_lines_by_dept = list(
 		"Arise, new adept." = 3,
 	),
 	CIVILIAN_POSITIONS = list(
-		"Only here will you be fullfilled." = 3,
+		"Only here will you be fulfilled." = 3,
 		"A task has finally been given to you." = 3,
 		"Rise up." = 3,
 		"And there goes a life of servitude." = 3,
@@ -71,7 +71,7 @@ var/list/acceptance_lines_by_dept = list(
 	CARGO_POSITIONS = list(
 		"When this is over, expect much more than your dreamed 'Cargonia'." = 3,
 		"Be the hand that arms my soldiers." = 3,
-		// Need to find an "arise" line
+		"Arive, new armourer." = 3,
 	),
 	SECURITY_POSITIONS = list(
 		"Congratulations on joining the stronger side." = 3,
@@ -103,7 +103,7 @@ var/list/acceptance_lines_by_specific_job = list(
 
 var/list/failure_lines_by_specific_race = list(
 	/datum/species/plasmaman = list(
-		"Your loyalty to this company that made you a living dead is amusing." = 3,
+		"Your loyalty to the company that twisted you into the living dead is amusing." = 3,
 	)
 )
 
@@ -132,11 +132,11 @@ var/list/failure_lines_by_specific_role = list(
         "You have chosen a mortal cause over a God." = 5,
     ),
     THRALL = list(
-        "A touching proof of loyalty. You could have been useful." = 5,
+        "A touching testament to your loyalty. You could have been useful." = 5,
     ),
     NUKE_OP = list( // If this ever happens...
         "This station shall be destroyed... just not in the way you expected." = 20,
-        "Your mision is proving to be... distracting." = 20,
+        "Your mission is proving to be... distracting." = 20,
         "I cannot allow competitors." = 20,
     ),
 )
@@ -144,11 +144,11 @@ var/list/failure_lines_by_specific_role = list(
 var/list/acceptance_lines_by_specific_role = list(
     WIZARD = list(
 		"Taste true power." = 5,
-		"You had the skills; I gave your purpose." = 5,
+		"You had the skills; I gave you purpose." = 5,
 	),
 	VAMPIRE = list(
 		"It's made for spilling, not sucking." = 5,
-        "A new tricks up your sleeve." = 5,
+        "A new trick up your sleeve." = 5,
 	),
 	RESPONDER = list(
 		"And to think, you came here to <i>save</i> them." = 5,
@@ -182,7 +182,7 @@ var/list/acceptance_lines_few_cultists = list(
 
 var/list/acceptance_lines_numerous_cultists =  list(
 	"Our numbers are limitless." = 3,
-    "We get stronger with each sould." = 3,
+    "We get stronger with each soul." = 3,
     "Nothing will resist our might." = 3,
 )
 
@@ -280,7 +280,7 @@ var/list/all_depts_list = list(
 
 	// Converter and victim are of the same dept
 	for (var/list/dept in all_depts_list)
-		if (victim_job in dept && converter_job in dept)
+		if ((victim_job in dept) && (converter_job in dept))
 			valid_lines += failure_lines_same_dept
 	// Act
 	if (veil_thickness >= CULT_ACT_III)
@@ -292,15 +292,14 @@ var/list/all_depts_list = list(
 		if (religion_name in cult_blood_chaplain)
 			to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>Rejoice, I will give you the ending you desired.</span></span>")
 		else if (religion_name in cult_clock_chaplain)
-			to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>I will take your body, but when your soul returns to Ratvar, tell him that [pick(\
+			to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>I will take your body, but when your soul returns to Ratvar, tell him that[pick(\
 				"... he SUCKS!",\
-				"there isn't enough place for the two of us on this plane!",\
-				"he'll never be anything but a lame copycat.")]</span></span>")
+				" there isn't room enough for the two of us on this plane!",\
+				" he'll never be anything but a lame copycat.")]</span></span>")
 
 	var/chosen_line = pickweight(valid_lines)
-	var/nar_sie_tone = pick("", "mocking", "cold", "uncaring", "amused")
-	to_chat(victim, "You can hear Nar'Sie's [nar_sie_tone] voice... <span class='warning'>[chosen_line]</span>")
-	to_chat(converter, "Nar-Sie murmurs to [victim]... <span class='warning'>[chosen_line]</span>")
+	to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[chosen_line]</span>")
+	//to_chat(converter, "Nar-Sie murmurs to [victim]... <span class='warning'>[chosen_line]</span>")
 
 /datum/faction/bloodcult/proc/send_flavour_text_accept(var/mob/victim, var/mob/converter)
 	// -- Static context
@@ -351,6 +350,5 @@ var/list/all_depts_list = list(
 		valid_lines += acceptance_lines_thin_veil
 
 	var/chosen_line = pickweight(valid_lines)
-	var/nar_sie_tone = pick("", "soft", "satisfied", "amused")
-	to_chat(victim, "You can hear Nar'Sie's [nar_sie_tone] voice... <span class='warning'>[chosen_line]</span>")
-	to_chat(converter, "Nar-Sie murmurs to [victim]... <span class='warning'>[chosen_line]</span>")
+	to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[chosen_line]</span>")
+	//to_chat(converter, "Nar-Sie murmurs to [victim]... <span class='warning'>[chosen_line]</span>")
