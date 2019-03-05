@@ -863,6 +863,7 @@ SEE_PIXELS	256
 #define ROLE_PLANT      	"Dionaea"
 #define ROLE_POSIBRAIN  	"posibrain"
 #define ROLE_MINOR			"minor roles"
+#define ROLE_ALIEN			"xenomorph"
 #define ROLE_STRIKE			"striketeam"
 
 #define AGE_MIN 17			//youngest a character can be

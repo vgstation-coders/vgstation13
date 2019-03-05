@@ -4,9 +4,8 @@
 #define SPECIAL_ROLES_SETUP 3
 
 var/list/preferences_datums = list()
-
 var/global/list/special_roles = list(
-	ALIEN        	= 1,
+	ROLE_ALIEN     	= 1,
 	BLOBOVERMIND   	= 1,
 	ROLE_BORER     	= 1,
 	CHANGELING   	= 1,
@@ -28,7 +27,7 @@ var/global/list/special_roles = list(
 )
 
 /var/list/antag_roles = list(
-	ALIEN        	= 1,
+	ROLE_ALIEN      = 1,
 	BLOBOVERMIND   	= 1,
 	CHANGELING   	= 1,
 	CULTIST      	= 1,
@@ -53,7 +52,7 @@ var/list/nonantag_roles = list(
 )
 
 var/list/role_wiki=list(
-	ALIEN					= "Xenomorph",
+	ROLE_ALIEN				= "Xenomorph",
 	BLOBOVERMIND			= "Blob",
 	ROLE_BORER				= "Cortical_Borer",
 	CHANGELING				= "Changeling",
