@@ -82,6 +82,7 @@ var/global/list/alert_overlays_global = list()
 	var/list/users_to_open
 	var/list/tile_info[4]
 	var/list/dir_alerts[4] // 4 dirs, bitflags
+	var/obj/machinery/door/firedoor/twin = null // The twin will open alongside the firedoor when opened without an active atmos hazard
 
 	// MUST be in same order as FIREDOOR_ALERT_*
 	var/list/ALERT_STATES=list(
@@ -132,9 +133,32 @@ var/global/list/alert_overlays_global = list()
 				areas_added |= A
 
 
+/obj/machinery/door/firedoor/initialize()
+	if (twin) // Already paired with something
+		return
+	for (var/i = 1 to 3) // Try to find a firelock up to 3 tiles ahead
+		switch (dir)
+			if (NORTH, SOUTH) // North south, going by the y axis
+				var/turf/T = locate(x, y + i, z)
+				var/obj/machinery/door/firedoor/DF = locate() in T
+				if (DF)
+					twin = DF
+					DF.twin = src
+					return
+			if (EAST, WEST)
+				var/turf/T = locate(x + i, y, z)
+				var/obj/machinery/door/firedoor/DF = locate() in T
+				if (DF)
+					twin = DF
+					DF.twin = src
+					return
+
 /obj/machinery/door/firedoor/Destroy()
 	for(var/area/A in areas_added)
 		A.all_doors.Remove(src)
+	if (istype(twin))
+		twin.twin = null
+		twin = null
 	. = ..()
 
 /obj/machinery/door/firedoor/proc/is_fulltile()
@@ -241,7 +265,7 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
+/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
@@ -332,6 +356,8 @@ var/global/list/alert_overlays_global = list()
 		if(!users_to_open)
 			users_to_open = list()
 		users_to_open += users_name
+		if (twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
+			twin.attackby(C, user, TRUE)
 	var/needs_to_close = 0
 	if(density)
 		if(alarmed)
