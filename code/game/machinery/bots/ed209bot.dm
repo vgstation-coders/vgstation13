@@ -794,7 +794,7 @@ Auto Patrol: []"},
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*TERMINATE*"))
 						threatcount = PERP_LEVEL_TERMINATE
 						break
-					if((R.fields["id"] == E.fields["id"]) && ((R.fields["criminal"] == "*Arrest*"))
+					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
 						threatcount = PERP_LEVEL_ARREST
 						break
 
