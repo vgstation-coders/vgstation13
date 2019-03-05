@@ -7260,6 +7260,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = INCENSE_LEAFY
 	description = "This fragrance smells of fresh greens, delicious to most animals."
 
+/datum/reagent/incense/cabbage/reagent_deleted()
+	if(..())
+		return 1
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+	walk(M,0) //Cancel walk if it ran out
+
 /datum/reagent/incense/cabbage/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
