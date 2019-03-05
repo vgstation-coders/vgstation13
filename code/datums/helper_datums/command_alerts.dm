@@ -59,6 +59,15 @@
 
 	..()
 
+/datum/command_alert/biohazard_station_unlock
+	name = "Biohazard Level Updated - Lock Down Lifted"
+	alert_title = "Directive 7-10 concluded"
+	force_report = 1
+
+/datum/command_alert/biohazard_station_unlock/announce()
+	message = "Biohazard outbreak contained succesfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
+	..()
+
 ////////BLOB (mini)
 
 /datum/command_alert/biohazard_level_5

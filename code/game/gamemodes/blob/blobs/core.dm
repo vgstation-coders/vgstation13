@@ -150,7 +150,16 @@
 
 	var/datum/faction/blob_conglomerate/conglomerate = find_active_faction_by_type(/datum/faction/blob_conglomerate)
 	if(conglomerate)
-		conglomerate.HandleRecruitedMind(B.mind)
+		var/ded = TRUE
+		if(conglomerate.members.len)
+			for(var/datum/role/R in conglomerate.members)
+				if (R.antag && !(R.antag.current.isDead()))
+					ded = FALSE
+					break
+		if(ded)
+			conglomerate.HandleNewMind(B.mind)
+		else
+			conglomerate.HandleRecruitedMind(B.mind)
 	else
 		conglomerate = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate)
 		if(conglomerate)
