@@ -91,7 +91,7 @@
 	var/mob/living/L
 	for (L in src)
 		if (!L.isStunned() && !L.resting) 
-			if (do_after (user, src, 30)) //delay if someone is standing up
+			if (do_after (user, src, 35)) //delay if someone is standing up
 				return ..()
 			else
 				return 1 //prevents "it won't bulge! messages from [closets.dm]
@@ -101,7 +101,7 @@
 	var/mob/living/L
 	for (L in get_turf(src))
 		if (!L.isStunned() && !L.resting)
-			if (do_after (user, src, 30))
+			if (do_after (user, src, 35))
 				icon_closed = "bodybag_closed_alive"
 				return ..()
 			else
