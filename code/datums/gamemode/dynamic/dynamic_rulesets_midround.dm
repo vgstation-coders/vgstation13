@@ -202,7 +202,7 @@
 //////////////////////////////////////////////
 //                                          //
 //         Malfunctioning AI                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//               Bus Only                   //
+//                              		    //
 //////////////////////////////////////////////
 /datum/dynamic_ruleset/midround/malf
 	name = "Malfunctioning AI"
@@ -211,9 +211,9 @@
 	exclusive_to_jobs = list("AI")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
-	weight = 0
-	cost = 101
-	requirements = list(101,101,101,101,101,101,101,101,101,101)
+	weight = 1
+	cost = 35
+	requirements = list(101,101,80,70,60,60,50,50,40,40)
 
 /datum/dynamic_ruleset/midround/malf/trim_candidates()
 	..()
