@@ -374,3 +374,10 @@
 	else
 		icon_state = "patch_0"
 	..()
+
+/obj/item/clothing/accessory/rabbit_foot
+	name = "rabbit's foot"
+	desc = "The hind left foot from a rabbit. It makes you feel lucky."
+	icon_state = "rabbit_foot"
+	_color = "rabbit_foot"
+	var/thisvarmakesyoulucky = TRUE //Note: Luck is a mental construct and doesn't actually exist.

@@ -398,14 +398,46 @@
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
-	var/body_color
+	var/body_type = "rabbit"
+	can_breed = TRUE
+	childtype = /mob/living/simple_animal/rabbit/bunny
+	species_type = /mob/living/simple_animal/rabbit
+
 
 /mob/living/simple_animal/rabbit/New()
-	if(!body_color)
-		body_color = pick( list("white","grey","brown") )
-	icon_state = "rabbit_[body_color]"
-	icon_living = "rabbit_[body_color]"
-	icon_dead = "rabbit_[body_color]_dead"
+	if(!colour)
+		colour = pick(list("white","grey","brown"))
+	update_icon()
+	if(can_breed)
+		gender = pick(MALE, FEMALE)
 	..()
-	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
-	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
+
+/mob/living/simple_animal/rabbit/Life()
+	if(timestopped)
+		return FALSE
+	..()
+
+/mob/living/simple_animal/rabbit/update_icon()
+	icon_state = "[body_type]_[colour]"
+	icon_living = "[body_type]_[colour]"
+	icon_dead = "[body_type]_[colour]_dead"
+
+
+/mob/living/simple_animal/rabbit/bunny
+	name = "bunny"
+	desc = "Seeing them makes you feel hoppy on the inside."
+	icon_state = "bunny_white"
+	icon_living = "bunny_white"
+	icon_dead = "bunny_white_dead"
+	health = 5
+	size = SIZE_TINY
+	body_type = "bunny"
+	can_breed = FALSE
+	var/amount_grown = 0
+
+/mob/living/simple_animal/rabbit/bunny/Life()
+	..()
+	if(!stat && !ckey)
+		amount_grown += rand(1,5)
+		if(amount_grown >= 100)
+			grow_up()

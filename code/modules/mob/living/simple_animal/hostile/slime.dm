@@ -21,7 +21,7 @@
 	can_butcher = 0
 	meat_type = null
 
-	var/colour = "grey"
+	colour = "grey"
 	held_items = list()
 
 /mob/living/simple_animal/hostile/slime/New()
