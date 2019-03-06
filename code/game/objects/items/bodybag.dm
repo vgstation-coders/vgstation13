@@ -90,11 +90,13 @@
 
 	var/mob/living/L
 	for (L in src)
-		if (!L.isStunned() && !L.resting) 
+		if (!L.isStunned() && !L.resting)
+			if(!istype(user))
+				return 1
 			if (do_after (user, src, 35)) //delay if someone is standing up
 				return ..()
 			else
-				return 1 //prevents "it won't bulge! messages from [closets.dm]
+				return 1 //prevents "it won't budge! messages from [closets.dm]
 	return ..()
 
 /obj/structure/closet/body_bag/close(mob/user)
