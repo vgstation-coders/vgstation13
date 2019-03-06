@@ -37,6 +37,7 @@
 	var/coming_state="blood1"
 	var/going_state="blood2"
 	var/updatedtracks=0
+	counts_as_blood = 0 // Cult //Set to 1 when we're sure that actual blood was added to it
 
 	var/list/setdirs=list(
 		"1"=0,
@@ -75,6 +76,11 @@
 	)
 
 /obj/effect/decal/cleanable/blood/tracks/proc/AddTracks(var/list/DNA, var/comingdir, var/goingdir, var/bloodcolor=DEFAULT_BLOOD)
+	if (!counts_as_blood)
+		if (DNA && DNA.len > 0)
+			counts_as_blood = 1
+			bloodspill_add()
+
 	var/updated=0
 	// Shift our goingdir 4 spaces to the left so it's in the GOING bitblock.
 	var/realgoing=goingdir<<4
