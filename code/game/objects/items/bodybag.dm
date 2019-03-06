@@ -84,30 +84,29 @@
 	else
 		icon_state = icon_opened
 
-/obj/structure/closet/body_bag/open()
-	var/mob/living/L = locate(/mob/living) in src
-	var/mob/user = usr
+/obj/structure/closet/body_bag/open(mob/user)
 
 	icon_closed = "bodybag_closed"
 
-	if (L && !L.resting && !L.isStunned()) //standing up: not resting, not stunned/knocked down, etc
-		if (do_after (user, src, 30))
-			..()
-		else
-			return
-	..()
-
-/obj/structure/closet/body_bag/close()
 	var/mob/living/L
-	var/mob/user = usr
+	for (L in src)
+		if (!L.isStunned() && !L.resting) 
+			if (do_after (user, src, 30)) //delay if someone is standing up
+				return ..()
+			else
+				return 1 //prevents "it won't bulge! messages from [closets.dm]
+	return ..()
+
+/obj/structure/closet/body_bag/close(mob/user)
+	var/mob/living/L
 	for (L in get_turf(src))
-		if (!L.resting && !L.isStunned()) //standing up: not resting, not stunned/knocked down, etc
+		if (!L.isStunned() && !L.resting)
 			if (do_after (user, src, 30))
 				icon_closed = "bodybag_closed_alive"
-				..()
+				return ..()
 			else
-				return
-	..()
+				return 1
+	return ..()
 
 //Cryobag (statis bag) below, not currently functional it seems
 
