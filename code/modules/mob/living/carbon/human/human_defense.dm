@@ -486,3 +486,6 @@ emp_act
 
 			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return
+
+/mob/living/carbon/human/acidable()
+	return !(species && species.anatomy_flags & ACID4WATER)

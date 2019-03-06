@@ -519,7 +519,7 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
+		if(H.species && H.species.anatomy_flags & ACID4WATER)
 			M.adjustToxLoss(REM)
 			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
@@ -550,29 +550,25 @@
 	if(isslime(M))
 		M.adjustToxLoss(rand(15, 20))
 
-	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(isgrey(H))
+		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
 			if(method == TOUCH)
-
 				if(H.check_body_part_coverage(EYES|MOUTH))
 					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
 					return
 
-				if(M.acidable())
-					if(prob(15) && volume >= 30)
-						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-						if(head_organ)
-							if(head_organ.take_damage(0, 25))
-								H.UpdateDamageIcon(1)
-							head_organ.disfigure("burn")
-							H.audible_scream()
-					else
-						M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+				if(prob(15) && volume >= 30)
+					var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+					if(head_organ)
+						if(head_organ.take_damage(0, 25))
+							H.UpdateDamageIcon(1)
+						head_organ.disfigure("burn")
+						H.audible_scream()
+				else
+					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
-				if(M.acidable())
-					M.take_organ_damage(0, min(15, volume * 2))
+				M.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
@@ -1413,13 +1409,9 @@
 	if(..())
 		return 1
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
-			return //Greys lurve dem some sacid
-
-	M.adjustFireLoss(REM)
-	M.take_organ_damage(0, REM)
+	if(M.acidable())
+		M.adjustFireLoss(REM)
+		M.take_organ_damage(0, REM)
 
 /datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1465,8 +1457,6 @@
 		if(M.acidable())
 			if(prob(15) && ishuman(M) && volume >= 30)
 				var/mob/living/carbon/human/H = M
-				if(H.species.name == "Grey")
-					return //Greys lurve dem some sacid
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ)
 					if(head_organ.take_damage(25, 0))
@@ -1477,10 +1467,6 @@
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
 		if(M.acidable())
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.name=="Grey")
-					return //Greys lurve dem some sacid
 			M.take_organ_damage(min(15, volume * 2))
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
