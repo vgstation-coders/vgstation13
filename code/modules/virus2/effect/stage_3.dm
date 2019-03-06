@@ -1,6 +1,6 @@
 /datum/disease2/effect/toxins
 	name = "Hyperacidity"
-	desc = "Inhibits the infecteds ability to process natural toxins, producing a buildup of said toxins."
+	desc = "Inhibits the infected's ability to process natural toxins, producing a buildup of said toxins."
 	stage = 3
 	max_multiplier = 3
 
@@ -10,7 +10,7 @@
 
 /datum/disease2/effect/shakey
 	name = "World Shaking Syndrome"
-	desc = "Attacks the infecteds motor output, giving them a sense of vertigo."
+	desc = "Attacks the infected's motor output, giving them a sense of vertigo."
 	stage = 3
 	max_multiplier = 3
 
@@ -20,7 +20,7 @@
 
 /datum/disease2/effect/telepathic
 	name = "Telepathy Syndrome"
-	desc = "Unlocks a portion of the infecteds brain that allows for telepathic communication."
+	desc = "Unlocks a portion of the infected's brain that allows for telepathic communication."
 	stage = 3
 
 /datum/disease2/effect/telepathic/activate(var/mob/living/carbon/mob)
@@ -30,7 +30,7 @@
 
 /datum/disease2/effect/mind
 	name = "Lazy Mind Syndrome"
-	desc = "Rots the infecteds brain."
+	desc = "Rots the infected's brain."
 	stage = 3
 
 /datum/disease2/effect/mind/activate(var/mob/living/carbon/mob)
@@ -54,7 +54,7 @@
 
 /datum/disease2/effect/deaf
 	name = "Hard of Hearing Syndrome"
-	desc = "Attacks the infecteds aural senses."
+	desc = "Attacks the infected's aural senses."
 	stage = 3
 
 /datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
@@ -86,7 +86,7 @@
 
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
-	desc = "Attacks the infecteds ability to differentiate left and right."
+	desc = "Attacks the infected's ability to differentiate left and right."
 	stage = 3
 
 /datum/disease2/effect/confusion/activate(var/mob/living/carbon/mob)
@@ -96,7 +96,7 @@
 
 /datum/disease2/effect/mutation
 	name = "DNA Degradation"
-	desc = "Attacks the infecteds DNA, causing it to break down."
+	desc = "Attacks the infected's DNA, causing it to break down."
 	stage = 3
 
 /datum/disease2/effect/mutation/activate(var/mob/living/carbon/mob)
@@ -114,7 +114,7 @@
 
 /datum/disease2/effect/sweat
 	name = "Hyper-perspiration Effect"
-	desc = "Causes the infecteds sweat glands to go into overdrive."
+	desc = "Causes the infected's sweat glands to go into overdrive."
 	stage = 3
 
 /datum/disease2/effect/sweat/activate(var/mob/living/carbon/mob)
@@ -359,7 +359,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 
 /datum/disease2/effect/butterfly_skin
 	name = "Epidermolysis Bullosa"
-	desc = "Inhibits the strength of the infecteds skin, causing it to tear on contact."
+	desc = "Inhibits the strength of the infected's skin, causing it to tear on contact."
 	stage = 3
 	max_count = 1
 	var/skip = FALSE
@@ -474,7 +474,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 
 /datum/disease2/effect/catvision
 	name = "Cattulism Syndrome"
-	desc = "Optimizes the infecteds ocular ability to process light, aiding in seeing in the dark."
+	desc = "Optimizes the infected's ocular ability to process light, aiding in seeing in the dark."
 	stage = 3
 	max_count = 9
 	chance = 7

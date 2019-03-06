@@ -21,7 +21,7 @@
 
 /datum/disease2/effect/radian
 	name = "Radian's Syndrome"
-	desc = "Causes the infected to generate strange protein, that begins radioactive decay in the denser material held within the infecteds body, causing radioactive exposure."
+	desc = "Causes the infected to generate strange protein, that begins radioactive decay in the denser material held within the infected's body, causing radioactive exposure."
 	stage = 4
 	max_multiplier = 3
 
@@ -31,7 +31,7 @@
 
 /datum/disease2/effect/deaf
 	name = "Dead Ear Syndrome"
-	desc = "Kills the infecteds aural senses."
+	desc = "Kills the infected's aural senses."
 	stage = 4
 
 /datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
@@ -113,7 +113,7 @@
 
 /datum/disease2/effect/dna
 	name = "Reverse Pattern Syndrome"
-	desc = "Attacks the infecteds DNA, causing rapid spontaneous mutation, and inhibits the ability for the infected to be affected by cryogenics."
+	desc = "Attacks the infected's DNA, causing rapid spontaneous mutation, and inhibits the ability for the infected to be affected by cryogenics."
 	stage = 4
 
 /datum/disease2/effect/dna/activate(var/mob/living/carbon/mob)
@@ -124,7 +124,7 @@
 
 /datum/disease2/effect/organs
 	name = "Shutdown Syndrome"
-	desc = "Attacks the infecteds limbs, causing them to shut down. Also inhibits toxin processing, causing toxin buildup."
+	desc = "Attacks the infected's limbs, causing them to shut down. Also inhibits toxin processing, causing toxin buildup."
 	stage = 4
 
 /datum/disease2/effect/organs/activate(var/mob/living/carbon/mob)
@@ -181,7 +181,7 @@
 
 /datum/disease2/effect/bones
 	name = "Fragile Bones Syndrome"
-	desc = "Attacks the infecteds bone structure, making it more porous and fragile."
+	desc = "Attacks the infected's bone structure, making it more porous and fragile."
 	stage = 4
 
 /datum/disease2/effect/bones/activate(var/mob/living/carbon/mob)
@@ -199,7 +199,7 @@
 
 /datum/disease2/effect/scc
 	name = "Spontaneous Cellular Collapse"
-	desc = "Converts the infecteds internal toxin treatment to synthesize Polyacid, as well as cause the infecteds skin to break, and their bones to fracture."
+	desc = "Converts the infected's internal toxin treatment to synthesize Polyacid, as well as cause the infected's skin to break, and their bones to fracture."
 	stage = 4
 
 /datum/disease2/effect/scc/activate(var/mob/living/carbon/mob)
@@ -220,7 +220,7 @@
 
 /datum/disease2/effect/necrosis
 	name = "Necrosis"
-	desc = "Attacks the cell structure of the infected, causing the infecteds skin and flesh to slough off rapidly."
+	desc = "Attacks the cell structure of the infected, causing the infected's skin and flesh to slough off rapidly."
 	stage = 4
 
 /datum/disease2/effect/necrosis/activate(var/mob/living/carbon/mob)
@@ -282,7 +282,7 @@
 
 /datum/disease2/effect/fizzle
 	name = "Fizzle Effect"
-	desc = "Causes an ill sensation in the infecteds throat."
+	desc = "Causes an ill sensation in the infected's throat."
 	stage = 4
 
 /datum/disease2/effect/fizzle/activate(var/mob/living/carbon/mob)
@@ -302,7 +302,7 @@
 
 /datum/disease2/effect/spawn
 	name = "Arachnogenesis Effect"
-	desc = "Converts the infecteds stomach to begin producing creatures of the arachnid variety."
+	desc = "Converts the infected's stomach to begin producing creatures of the arachnid variety."
 	stage = 4
 	var/spawn_type=/mob/living/simple_animal/hostile/giant_spider/spiderling
 	var/spawn_name="spiderling"
@@ -315,7 +315,7 @@
 
 /datum/disease2/effect/spawn/roach
 	name = "Blattogenesis Effect"
-	desc = "Converts the infecteds stomach to begin producing creatures of the blattid variety."
+	desc = "Converts the infected's stomach to begin producing creatures of the blattid variety."
 	stage = 4
 	spawn_type=/mob/living/simple_animal/cockroach
 	spawn_name="cockroach"
@@ -323,7 +323,7 @@
 
 /datum/disease2/effect/orbweapon
 	name = "Biolobulin Effect"
-	desc = "Converts the infecteds pores of their palm to begin synthesizing a gelatenous substance, that explodes upon reaching a high velocity."
+	desc = "Converts the infected's pores of their palm to begin synthesizing a gelatenous substance, that explodes upon reaching a high velocity."
 	stage = 4
 
 /datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob)
@@ -333,7 +333,7 @@
 
 /datum/disease2/effect/plasma
 	name = "Toxin Sublimation"
-	desc = "Converts the infecteds pores and respiratory organs to synthesize Plasma gas."
+	desc = "Converts the infected's pores and respiratory organs to synthesize Plasma gas."
 	stage = 4
 
 /datum/disease2/effect/plasma/activate(var/mob/living/carbon/mob)
@@ -357,7 +357,7 @@
 
 /datum/disease2/effect/babel
 	name = "Babel Syndrome"
-	desc = "Confuses the infecteds brain, causing them to speak a different language."
+	desc = "Confuses the infected's brain, causing them to speak a different language."
 	stage = 4
 	max_count = 1
 
@@ -394,7 +394,7 @@
 
 /datum/disease2/effect/gregarious
 	name = "Gregarious Impetus"
-	desc = "Infests the social structures of the infecteds brain, causing them to feel better in crowds of other potential victims, and punishing them for being alone."
+	desc = "Infests the social structures of the infected's brain, causing them to feel better in crowds of other potential victims, and punishing them for being alone."
 	stage = 4
 	max_chance = 25
 	max_multiplier = 4
@@ -422,7 +422,7 @@
 
 /datum/disease2/effect/thick_skin	//increases brute damage resistance, decreases thermal loss, and increases heat gained from calories burned, all scaling with the multiplier
 	name = "Harlequin Ichthyosis"	//also causes loss of sweat glands, difficulty breathing, and bleeding with a high multiplier
-	desc = "Dries out the infecteds skin should they have any, causing it to become brittle and hard, inhibiting temperature control."
+	desc = "Dries out the infected's skin should they have any, causing it to become brittle and hard, inhibiting temperature control."
 	stage = 4
 	max_multiplier = 100
 	chance = 10
@@ -524,7 +524,7 @@
 
 /datum/disease2/effect/heart_attack
 	name = "Heart Attack Syndrome"
-	desc = "Infests the infecteds heart, causing it to burst forth from the infected and attack them."
+	desc = "Infests the infected's heart, causing it to burst forth from the infected and attack them."
 	stage = 4
 	max_count = 1
 

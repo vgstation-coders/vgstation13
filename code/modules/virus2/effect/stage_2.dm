@@ -27,7 +27,7 @@
 
 /datum/disease2/effect/blind
 	name = "Blackout Syndrome"
-	desc = "Inhibits the infecteds ability to see."
+	desc = "Inhibits the infected's ability to see."
 	stage = 2
 
 /datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
@@ -132,7 +132,7 @@
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
-	desc = "Causes the infecteds nasal pathways to hemorrhage, causing a nosebleed that acts as a valid pathogen carrier. (Note: Does not affect the users blood pressure.)"
+	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed that acts as a valid pathogen carrier. (Note: Does not affect the users blood pressure.)"
 	stage = 2
 
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
@@ -174,7 +174,7 @@
 
 /datum/disease2/effect/hangman
 	name = "Hanging Man's Syndrome"
-	desc = "Inhibits a portion of the infecteds brain that controls speech, removing the infecteds ability to speak vowels."
+	desc = "Inhibits a portion of the infected's brain that controls speech, removing the infected's ability to speak vowels."
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
@@ -236,7 +236,7 @@
 
 /datum/disease2/effect/opposite
 	name = "Opposite Syndrome"
-	desc = "Inhibits a portion of the infecteds brain that affects speech, causing the infected to speak counter to what they wish to say."
+	desc = "Inhibits a portion of the infected's brain that affects speech, causing the infected to speak counter to what they wish to say."
 	stage = 2
 	affect_voice = 1
 	max_count = 1
@@ -447,7 +447,7 @@
 
 /datum/disease2/effect/yelling
 	name = "Plankton's Syndrome"
-	desc = "Attacks a portion of the infecteds brain that controls speech, causing them to be more dramatic."
+	desc = "Attacks a portion of the infected's brain that controls speech, causing them to be more dramatic."
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1

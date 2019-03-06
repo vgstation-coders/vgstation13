@@ -83,7 +83,7 @@
 
 /datum/disease2/effect/eyewater
 	name = "Watery Eyes"
-	desc = "Causes the infecteds tear ducts to overact."
+	desc = "Causes the infected's tear ducts to overact."
 	stage = 1
 
 /datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
@@ -92,7 +92,7 @@
 
 /datum/disease2/effect/wheeze
 	name = "Wheezing"
-	desc = "Inhibits the infecteds ability to breathe slightly, causing them to wheeze."
+	desc = "Inhibits the infected's ability to breathe slightly, causing them to wheeze."
 	stage = 1
 
 /datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
