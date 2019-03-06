@@ -341,7 +341,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
 	required_enemies = list(3,2,2,1,1,1,0,0,0,0)
 	required_candidates = 1
-	weight = 5
+	weight = 3
 	cost = 15
 	requirements = list(90,60,40,40,40,40,30,20,15,15)
 	logo = "blob-logo"
