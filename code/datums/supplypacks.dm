@@ -176,16 +176,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/key/tractor,
 					/obj/machinery/cart/cargo)
 	cost = 40
-	containertype = /obj/structure/largecrate/mule
+	containertype = /obj/structure/largecrate
 	containername = "tractor crate"
 	group = "Supplies"
 
 /datum/supply_packs/carts
 	name = "Carts"
-	contains = list(/obj/machinery/cart/cargo)
-	amount = 5
-	cost = 40
-	containertype = /obj/structure/largecrate/mule
+	contains = list(/obj/machinery/cart/cargo,
+                    /obj/machinery/cart/cargo)
+	cost = 15
+	containertype = /obj/structure/largecrate
 	containername = "carts crate"
 	group = "Supplies"
 
