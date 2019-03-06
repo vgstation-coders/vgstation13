@@ -173,7 +173,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/tractor
 	name = "Tractor"
 	contains = list(/obj/structure/bed/chair/vehicle/tractor,
-					/obj/item/key/tractor,
 					/obj/machinery/cart/cargo)
 	cost = 40
 	containertype = /obj/structure/largecrate
