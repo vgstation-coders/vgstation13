@@ -389,6 +389,7 @@
 #include "code\datums\gamemode\role\legacy_cultist.dm"
 #include "code\datums\gamemode\role\rev.dm"
 #include "code\datums\gamemode\role\role.dm"
+#include "code\datums\gamemode\role\summonsurvivors.dm"
 #include "code\datums\gamemode\role\syndicate.dm"
 #include "code\datums\gamemode\role\vampire_role.dm"
 #include "code\datums\gamemode\role\weeaboo.dm"
