@@ -391,7 +391,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/roundstart/blob
-	name = "Blob conglomerate"
+	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
 	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
@@ -411,6 +411,12 @@
 		blob_fac.HandleNewMind(M.mind)
 		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
+		switch(M.mind.assigned_role)
+			if("Clown")
+				blob_looks_player["clownscape"] = 32
+			if("Station Engineer","Atmospheric Technician","Chief Engineer")
+				blob_looks_player["AME"] = 32
+				blob_looks_player["AME_new"] = 64
 	return 1
 
 //////////////////////////////////////////////

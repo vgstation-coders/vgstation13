@@ -47,6 +47,7 @@
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
+#define BLOBCEREBRATE "blob cerebrate"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"

@@ -17,6 +17,7 @@
 	logo_state = "blob-logo"
 	roletype = /datum/role/blob_overmind
 	initroletype = /datum/role/blob_overmind
+	late_role = /datum/role/blob_overmind/cerebrate
 
 	var/datum/station_state/start
 
