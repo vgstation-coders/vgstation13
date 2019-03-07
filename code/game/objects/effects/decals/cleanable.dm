@@ -157,7 +157,7 @@
 		var/turf/T = get_turf(src)
 		if(T && (T.z == map.zMainStation))//F I V E   T I L E S
 			if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
-				legacy_cult.bloody_floors += T
+				legacy_cult.bloody_floors |= T
 				legacy_cult.bloody_floors[T] = T
 				if (legacy_cult.has_enough_bloody_floors())
 					legacy_cult.getNewObjective()
