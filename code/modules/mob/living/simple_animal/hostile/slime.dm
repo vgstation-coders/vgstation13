@@ -21,7 +21,7 @@
 	can_butcher = FALSE
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
-	var/colour = "grey"
+	colour = "grey"
 	held_items = list()
 
 /mob/living/simple_animal/hostile/slime/New()
