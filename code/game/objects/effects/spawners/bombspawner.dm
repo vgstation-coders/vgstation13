@@ -43,16 +43,15 @@ var/list/syndicate_bomb_spawners = list()
 	V.tank_one = PT
 	V.tank_two = OT
 
-	PT.master = V
-	OT.master = V
+	//This is just an arbitrary mix that works fairly well.
+	PT.air_contents.temperature = T0C + 170
+	OT.air_contents.temperature = T0C - 100
 
-	PT.air_contents.temperature = PLASMA_FLASHPOINT
-	PT.air_contents.adjust_multi(
-		GAS_PLASMA, 15,
-		GAS_CARBON, 33)
-
-	OT.air_contents.temperature = PLASMA_FLASHPOINT
-	OT.air_contents.adjust_gas(GAS_OXYGEN, 48)
+	for(var/obj/item/weapon/tank/T in list(PT, OT))
+		T.master = V
+		var/datum/gas_mixture/G = T.air_contents
+		G.update_values()
+		G.multiply(1650 / G.pressure) //Sets each tank's pressure to 1650kPa. This was determined experimentally to result in a 7 dev explosion with this mix.
 
 	var/obj/item/device/assembly/S
 
