@@ -328,7 +328,7 @@
 	throwforce = 3
 	throw_speed = 1
 	throw_range = 5
-	attack_delay = 25 // Heavy.
+	attack_delay = 15 // Heavy.//Come on man that makes it useless (reduced it)
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_ILLEGAL
