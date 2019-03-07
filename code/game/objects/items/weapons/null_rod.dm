@@ -189,6 +189,15 @@
 	w_class = W_CLASS_LARGE
 	fluff_pickup = "robust"
 
+/obj/item/weapon/nullrod/crozius //The Imperial Creed
+	name = "\improper Crozius Arcanum"
+	desc = "Repent! For tomorrow you die!"
+	icon_state = "crozius"
+	item_state = "crozius"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	attack_verb = list("mauls", "batters", "bashes")
+	w_class = W_CLASS_LARGE
+
 /obj/item/weapon/nullrod/spear //Ratvar? How!
 	name = "divine brass spear"
 	desc = "A holy, bronze weapon of ancient design."

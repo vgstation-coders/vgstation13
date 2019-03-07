@@ -475,6 +475,10 @@
 	female_adept = "Prioress"
 	keys = list("imperium", "imperial cult")
 
+/datum/religion/imperium/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/helmet/knight/interrogator(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/armor/knight/interrogator(H), slot_wear_suit)
+
 /datum/religion/toolboxia
 	name = "Toolboxia"
 	deity_name = "The Toolbox"

@@ -2963,6 +2963,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater = 1,
 		/obj/item/clothing/head/helmet/knight/templar = 2,
  		/obj/item/clothing/suit/armor/knight/templar = 5,
+		/obj/item/clothing/head/helmet/knight/interrogator = 2,
+ 		/obj/item/clothing/suit/armor/knight/interrogator = 2,
+ 		/obj/item/clothing/suit/armor/knight/interrogator/red = 2,
 		/obj/item/weapon/thurible = 1,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend

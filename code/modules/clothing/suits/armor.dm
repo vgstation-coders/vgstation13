@@ -108,6 +108,16 @@
 	icon_state = "knight_grey"
 	item_state = "knight_grey"
 
+/obj/item/clothing/suit/armor/knight/interrogator
+	name = "interrogator armour"
+	desc = "A fancy suit of plate armour, marked by the oath of the dark angels."
+	icon_state = "interrogator-green"
+	item_state = "interrogator-green"
+
+/obj/item/clothing/suit/armor/knight/interrogator/red
+	icon_state = "interrogator-red"
+	item_state = "interrogator-red"
+
 /obj/item/clothing/suit/armor/xcomsquaddie
 	name = "Squaddie Armor"
 	desc = "A suit of armor with heavy padding to protect against projectile attacks. Distributed to shadow organization squaddies."
