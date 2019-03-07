@@ -124,7 +124,7 @@
 	item_state = "dualsaber[wielded ? colorset : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
 	sharpness = wielded ? 1.5 : 0
 	armor_penetration = wielded ? 100 : 0
 	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
@@ -211,7 +211,7 @@
 	throw_speed = 5
 	throw_range = 10
 	sharpness = 2
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK //it's a really sharp blade m'kay
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_FAIL
@@ -342,7 +342,7 @@
 	icon_state = "bloodlust[wielded ? 1 : 0]"
 	item_state = icon_state
 	force = wielded ? 34 : initial(force)
-	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE : initial(sharpness_flags)
+	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE | CUT_WALL | CUT_AIRLOCK : initial(sharpness_flags)
 	sharpness = wielded ? 2 : initial(sharpness)
 	armor_penetration = wielded ? 100 : 50
 	to_chat(user, wielded ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
