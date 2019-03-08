@@ -16,8 +16,8 @@
 /datum/action/spacepod/fire_weapons/Trigger()
 	..()
 	var/obj/spacepod/S = target
-	if(S.equipment_system && S.equipment_system.weapon_system)
-		var/obj/item/device/spacepod_equipment/weaponry/W = S.equipment_system.weapon_system
+	if(S.ES && S.ES.weapon_system)
+		var/obj/item/device/spacepod_equipment/weaponry/W = S.ES.weapon_system
 		if(S.get_passengers().Find(owner) && !S.passenger_fire)
 			to_chat(owner, "<span class = 'warning'>Passenger gunner system disabled.</span>")
 			return
