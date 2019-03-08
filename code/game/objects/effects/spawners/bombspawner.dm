@@ -51,7 +51,7 @@ var/list/syndicate_bomb_spawners = list()
 		T.master = V
 		var/datum/gas_mixture/G = T.air_contents
 		G.update_values()
-		G.multiply(1650 / G.pressure) //Sets each tank's pressure to 1650kPa. This was determined experimentally to result in a 7 dev explosion with this mix.
+		G.multiply(10 * ONE_ATMOSPHERE / G.pressure) //Sets each tank's pressure to ten atmospheres, which incidentally results in an explosion of exactly 7 dev with default settings.
 
 	var/obj/item/device/assembly/S
 
