@@ -365,7 +365,30 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
+/proc/equip_ninja(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return 0
+	H.delete_all_equipped_items()
+	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
+	hayai.cant_drop = 1
+	H.put_in_hands(hayai)
 
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensors(H)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
+
+#define GREET_WEEB "weebgreet"
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
 		return 0
@@ -381,24 +404,27 @@
 	disable_suit_sensors(H)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/nentendiepower, slot_gloves)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/anime, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
 
-/proc/name_weeaboo(var/mob/living/carbon/human/H)
-	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
+	var/datum/role/R = H.mind.GetRole(NINJA)
+	if(R)
+		R.Greet(GREET_WEEB)
+
+/proc/name_ninja(var/mob/living/carbon/human/H)
 	if(!isjusthuman(H))
 		H.set_species("Human", 1)
-	var/weeaboo_title = pick(ninja_titles)
-	var/weeaboo_name = pick(ninja_names)
-	var/randomname = "[weeaboo_title] [weeaboo_name]"
+	var/ninja_title = pick(ninja_titles)
+	var/ninja_name = pick(ninja_names)
+	var/randomname = "[ninja_title] [ninja_name]"
 	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space Weeaboo. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
+		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
 
 		if (!newname)
 			newname = randomname
