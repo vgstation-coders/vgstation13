@@ -61,7 +61,9 @@
 		species.handle_speech(speech,src)
 	if(config.voice_noises && world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
-		playsound(src, get_sfx("voice"),50,1)
+		for(var/mob/O in hearers())
+			if(!O.is_deaf() && O.client)
+				O.client.handle_hear_voice(src)
 
 
 /mob/living/carbon/human/GetVoice()

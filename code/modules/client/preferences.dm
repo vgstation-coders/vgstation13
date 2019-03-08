@@ -108,6 +108,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/special_popup = 0
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
+	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -351,6 +352,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
 	<b>Streaming Volume</b>
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
+	<b>Hear player voices</b>
+	<a href='?_src_=prefs;preference=hear_voicesound'><b>[(hear_voicesound) ? "Yes" : "No"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
@@ -1375,6 +1378,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					progress_bars = !progress_bars
 				if("stumble")
 					stumble = !stumble
+				if("hear_voicesound")
+					hear_voicesound = !hear_voicesound
 				if("pulltoggle")
 					pulltoggle = !pulltoggle
 
