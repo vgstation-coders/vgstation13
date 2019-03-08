@@ -175,9 +175,6 @@
 		hatch_open = !hatch_open
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch.</span>")
 		return
-	if(hatch_open && ismultitool(W) && ES.locking_system)
-		to_chat(world, "multitool act called")
-		return ES.locking_system.multitool_act(user, W)
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 5))

@@ -135,23 +135,17 @@
 	my_atom.locked = !my_atom.locked
 	my_atom.visible_message("<span class = 'notice'>\The [my_atom] beeps!</span>")
 
-/obj/item/device/spacepod_equipment/locking/proc/multitool_act(mob/user, var/obj/item/device/multitool/MT)
-	return 1
-
 /obj/item/device/spacepod_equipment/locking/lock
 	name = "spacepod physical lock system"
 	desc = "Use a remote key to lock and unlock the pod."
 	var/code
-
-/obj/item/device/spacepod_equipment/locking/lock/multitool_act(mob/user, var/obj/item/device/multitool/MT)
-	to_chat(user, "[replacetext(code, regex("[0-rand(1-9)]"), "_")]")
 
 /obj/item/device/spacepod_equipment/locking/lock/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/pod_key))
 		var/obj/item/device/pod_key/P = I
 		if(!P.code)
 			if(!code)
-				code = rand(1, 65535)
+				code = rand(11111,99999)
 			to_chat(user, "<span class = 'notice'>You pair \the [P] with \the [src].</span>")
 			P.code = code
 		else
@@ -161,7 +155,7 @@
 
 /obj/item/device/pod_key
 	name = "pod key"
-	desc = "used in tandem with a pod locking system"
+	desc = "Used in tandem with a pod locking system. Authenticate the key with the lock via colliding the two."
 	icon = 'icons/pods/ship.dmi'
 	icon_state = "key"
 	w_class = W_CLASS_SMALL
@@ -173,3 +167,33 @@
 			var/obj/item/device/spacepod_equipment/locking/lock/L = P.ES.locking_system
 			if(L.code == code)
 				L.toggle_lock()
+
+/obj/item/device/pod_key/attackby(var/obj/O, mob/user)
+	if(ismultitool(O))
+		code = input(user,"Enter a number:","Key Code",code) as num
+		return
+	.=..()
+
+/obj/item/device/pod_key/afterattack(var/atom/A, mob/user, proximity_flag)
+	if(!proximity_flag)
+		return
+
+	if(istype(A, /obj/spacepod))
+		var/obj/spacepod/SP = A
+		if(SP.ES.locking_system && istype(SP.ES.locking_system, /obj/item/device/spacepod_equipment/locking/lock))
+			var/obj/item/device/spacepod_equipment/locking/lock/L = SP.ES.locking_system
+			if(code == L.code)
+				L.toggle_lock()
+				return
+			var/list/our_code = string2charlist(num2text(code))
+			var/list/their_code = string2charlist(num2text(L.code))
+			var/found_values = 0
+			var/correct_positions = 0
+			for(var/i=1 to our_code.len)
+				var/char = our_code[i]
+				var/their_char = their_code[i]
+				if(their_code.Find(char))
+					found_values++
+				if(i < their_code.len && char == their_code[i])
+					correct_positions++
+			to_chat(user, "<span class = 'notice'>[found_values] correct values, [correct_positions] correct positions.</span>")
