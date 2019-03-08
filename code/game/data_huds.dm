@@ -150,7 +150,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			if(R)
 				holder = perp.hud_list[WANTED_HUD]
 				switch(R.fields["criminal"])
-					if("*TERMINATE*")
+					if("*High Threat*")
 						holder.icon_state = "hudterminate"
 					if("*Arrest*")
 						holder.icon_state = "hudwanted"
