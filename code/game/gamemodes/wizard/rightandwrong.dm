@@ -9,11 +9,11 @@
 
 	switch (summon_type)
 		if ("swords")
-			survivor_type = /datum/role/traitor/survivor/crusader/
+			survivor_type = /datum/role/survivor/crusader/
 		if ("magic")
 			survivor_type = /datum/role/wizard/summon_magic/
 		else
-			survivor_type = /datum/role/traitor/survivor/
+			survivor_type = /datum/role/survivor/
 
 	for(var/mob/living/carbon/human/H in player_list)
 
@@ -37,7 +37,7 @@
 /mob/living/carbon/human/proc/equip_survivor(var/datum/role/R)
 	var/summon_type = R.type
 	switch (summon_type)
-		if (/datum/role/traitor/survivor/crusader)
+		if (/datum/role/survivor/crusader)
 			return equip_swords(R)
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
@@ -147,7 +147,7 @@
 			new /obj/item/weapon/gun/projectile/shotgun/nt12(get_turf(src))
 		if ("automag")
 			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
-	var/datum/role/traitor/survivor/S = R
+	var/datum/role/survivor/S = R
 	if(S)
 		S.summons_received = randomizeguns
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
@@ -288,7 +288,7 @@
 		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
 			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded/New, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
-	var/datum/role/traitor/survivor/crusader/S = R
+	var/datum/role/survivor/crusader/S = R
 	if(S)
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)

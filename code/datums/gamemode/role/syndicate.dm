@@ -128,41 +128,6 @@
 		else
 			. += "The traitor was a smooth operator this round.<BR>"
 
-//_______________________________________________
-
-/*
- * Summon guns and sword traitors
- */
-
-/datum/role/traitor/survivor
-	id = SURVIVOR
-	name = SURVIVOR
-	logo_state = "gun-logo"
-	can_be_smooth = FALSE
-	refund_value = 0
-	var/survivor_type = "survivor"
-	var/summons_received
-
-/datum/role/traitor/survivor/crusader
-	id = CRUSADER
-	name = CRUSADER
-	survivor_type = "crusader"
-	logo_state = "sword-logo"
-
-/datum/role/traitor/survivor/Greet()
-	to_chat(antag.current, "<B>You are a [survivor_type]! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
-
-/datum/role/traitor/survivor/ForgeObjectives()
-	var/datum/objective/survive/S = new
-	AppendObjective(S)
-
-/datum/role/traitor/survivor/OnPostSetup()
-	return TRUE
-
-/datum/role/traitor/survivor/GetScoreboard()
-	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
-
 //________________________________________________
 
 
