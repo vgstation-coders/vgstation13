@@ -80,6 +80,8 @@
 									crimstat = E.fields["criminal"]
 							var/background
 							switch(crimstat)
+								if("*High Threat*")
+									background = "'background-color:#696969;'"
 								if("*Arrest*")
 									background = "'background-color:#DC143C;'"
 								if("Incarcerated")
@@ -164,6 +166,8 @@
 								crimstat = E.fields["criminal"]
 							var/background
 							switch(crimstat)
+								if("*High Threat*")
+									background = "'background-color:#696969;'"
 								if("*Arrest*")
 									background = "'background-color:#DC143C;'"
 								if("Incarcerated")
@@ -550,7 +554,7 @@ What a mess.*/
 				if(3)
 					R.fields["age"] = rand(5, 85)
 				if(4)
-					R.fields["criminal"] = pick("None", "*Arrest*", "Incarcerated", "Parolled", "Released")
+					R.fields["criminal"] = pick("None", "*High Threat*", "*Arrest*", "Incarcerated", "Parolled", "Released")
 				if(5)
 					R.fields["p_stat"] = pick("*Unconcious*", "Active", "Physically Unfit")
 				if(6)
