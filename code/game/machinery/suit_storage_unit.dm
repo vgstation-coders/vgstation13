@@ -51,6 +51,7 @@
 	name = "Prisoner Suit Storage Unit"
 	department = "jail"
 	suit_type = /obj/item/clothing/suit/space/prison
+	helmet_type = /obj/item/clothing/head/helmet/space/prison
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
