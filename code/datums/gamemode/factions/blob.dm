@@ -82,7 +82,7 @@
 	var/floor_count = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-			var/turf/tile = locate(i, r, map.zMainStation)
+			var/turf/tile = locate(i, r, STATION_Z)
 			if(tile && istype(tile, /turf/simulated/floor) && !isspace(tile.loc) && !istype(tile.loc, /area/asteroid) && !istype(tile.loc, /area/mine) && !istype(tile.loc, /area/vault) && !istype(tile.loc, /area/prison) && !istype(tile.loc, /area/vox_trading_post))
 				floor_count++
 	blobwincount = round(floor_count *  0.25) // Must take over a quarter of the station.
