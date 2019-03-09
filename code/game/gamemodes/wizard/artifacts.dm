@@ -169,10 +169,8 @@
 	//Only roundstart wizards may summon guns, magic, or blades
 	return is_roundstart_wizard(user)
 
-
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
-
 	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
 
@@ -188,7 +186,6 @@
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
-
 	H.rightandwrong("magic")
 	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
 
@@ -204,9 +201,49 @@
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()
-
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
+
+/datum/spellbook_artifact/summon_bombs
+	name = "Summon Bombs"
+	desc = "HAVE YOU GONE INSANE?!"
+	abbreviation = "SB"
+	price = Sp_BASE_PRICE * 3 //60 points
+
+/datum/spellbook_artifact/summon_bombs/can_buy(var/mob/user)
+	return is_roundstart_wizard(user)
+
+/datum/spellbook_artifact/summon_bombs/purchased(mob/living/carbon/human/H)
+	..()
+	H.rightandwrong("bombs")
+	to_chat(H, "<span class='userdanger'>They call me Cuban Pete, I'm the king of the rhumba beat, when I play my maracas I go...</span>")
+
+/datum/spellbook_artifact/summon_emags
+	name = "Summon Emags"
+	desc = "Time for some chaos!"
+	abbreviation = "SE"
+
+/datum/spellbook_artifact/summon_emags/can_buy(var/mob/user)
+	return is_roundstart_wizard(user)
+
+/datum/spellbook_artifact/summon_emags/purchased(mob/living/carbon/human/H)
+	..()
+	H.rightandwrong("emags")
+	to_chat(H, "<span class='userdanger'>You gave everyone emags. Nice.</span>")
+
+/datum/spellbook_artifact/summon_mechs
+	name = "Summon Mechs"
+	desc = "This really feels like a certain tabletop now!"
+	abbreviation = "SM"
+	price = Sp_BASE_PRICE * 2 //40 points
+
+/datum/spellbook_artifact/summon_mechs/can_buy(var/mob/user)
+	return is_roundstart_wizard(user)
+
+/datum/spellbook_artifact/summon_mechs/purchased(mob/living/carbon/human/H)
+	..()
+	H.rightandwrong("mechs")
+	to_chat(H, "<span class='userdanger'>You gave everyone mechs! Grab a popcorn and watch it all unfold!</span>")
 
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"

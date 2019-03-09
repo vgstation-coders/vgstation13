@@ -25,6 +25,15 @@
 	scrubber = null
 	..()
 
+/obj/mecha/working/clarke/preloaded/New()
+	..()
+	var/obj/item/mecha_parts/mecha_equipment/tool/tiler/T = new /obj/item/mecha_parts/mecha_equipment/tool/tiler
+	T.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/ST = new /obj/item/mecha_parts/mecha_equipment/tool/switchtool
+	ST.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/tool/red/RED = new /obj/item/mecha_parts/mecha_equipment/tool/red
+	RED.attach(src)
+
 /obj/mecha/working/clarke/check_for_support()
 	return 1
 

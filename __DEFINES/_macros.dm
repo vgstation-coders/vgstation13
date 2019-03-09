@@ -277,6 +277,12 @@
 
 #define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
 
+#define isbomber(H) (H.mind && H.mind.GetRole(BOMBER))
+
+#define issaboteur(H) (H.mind && H.mind.GetRole(SABOTEUR))
+
+#define ismechwarrior(H) (H.mind && H.mind.GetRole(MECH_WARRIOR))
+
 #define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))

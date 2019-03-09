@@ -41,6 +41,16 @@
 	..()
 	return
 
+/obj/mecha/medical/odysseus/preloaded/New()
+	..()
+	var/obj/item/mecha_parts/mecha_equipment/tool/sleeper/SL = new /obj/item/mecha_parts/mecha_equipment/tool/sleeper
+	SL.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/SY = new /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
+	SY.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/TE = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
+	TE.attach(src)
+
+
 //TODO - Check documentation for client.eye and client.perspective...
 /obj/item/clothing/glasses/hud/health/mech
 	name = "Integrated Medical Hud"

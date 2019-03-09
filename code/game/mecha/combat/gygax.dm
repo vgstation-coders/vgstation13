@@ -34,6 +34,15 @@
 	..()
 	intrinsic_spells = list(new /spell/mech/gygax/overload(src))
 
+/obj/mecha/combat/gygax/preloaded/New()
+	..()
+	var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/LM = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
+	LM.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/repair_droid/RD = new /obj/item/mecha_parts/mecha_equipment/repair_droid
+	RD.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/AP = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster
+	AP.attach(src)
+
 /obj/mecha/combat/gygax/dark/New()
 	..()
 	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
@@ -112,7 +121,6 @@
 			step_energy_drain = initial(step_energy_drain)
 			src.occupant_message("<font color='red'>Leg actuators damage threshold exceded. Disabling overload.</font>")
 	return
-
 
 /obj/mecha/combat/gygax/get_stats_part()
 	var/output = ..()

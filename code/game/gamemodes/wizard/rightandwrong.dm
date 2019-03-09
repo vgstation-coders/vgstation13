@@ -1,6 +1,6 @@
 
 
-/mob/proc/rightandwrong(var/summon_type) //0 = Summon Guns, 1 = Summon Magic, 2 = Summon Swords
+/mob/proc/rightandwrong(var/summon_type) //"guns", "swords", "magic", "mechs", "bombs", "emags"
 	to_chat(usr, "<B>You summoned [summon_type]!</B>")
 	message_admins("[key_name_admin(usr, 1)] summoned [summon_type]!")
 	log_game("[key_name(usr)] summoned [summon_type]!")
@@ -10,6 +10,12 @@
 	switch (summon_type)
 		if ("swords")
 			survivor_type = /datum/role/survivor/crusader/
+		if ("bombs")
+			survivor_type = /datum/role/survivor/bomber
+		if ("emags")
+			survivor_type = /datum/role/survivor/saboteur
+		if ("mechs")
+			survivor_type = /datum/role/survivor/mech
 		if ("magic")
 			survivor_type = /datum/role/wizard/summon_magic/
 		else
@@ -41,12 +47,44 @@
 			return equip_swords(R)
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
+		if (/datum/role/survivor/bomber)
+			return equip_bombs(R)
+		if (/datum/role/survivor/mech)
+			return equip_mechs(R)
+		if (/datum/role/survivor/saboteur)
+			return equip_emags(R)
 		else
 			return equip_guns(R)
 
+/mob/living/carbon/human/proc/equip_bombs(var/datum/role/R)
+	new /obj/effect/spawner/newbomb/timer(get_turf(src))
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+
+/mob/living/carbon/human/proc/equip_mechs(var/datum/role/R)
+	var/randomizemechs = pick("ripley", "odysseus", "clarke", "gygax", "durand")
+	switch(randomizemechs)
+		if("ripley")
+			new /obj/mecha/working/ripley/preloaded(get_turf(src))
+		if("odysseus")
+			new /obj/mecha/medical/odysseus/preloaded(get_turf(src))
+		if("clarke")
+			new /obj/mecha/working/clarke/preloaded(get_turf(src))
+		if("gygax")
+			new /obj/mecha/combat/gygax/preloaded(get_turf(src))
+		if("durand")
+			new /obj/mecha/combat/durand/preloaded(get_turf(src))
+	var/datum/role/survivor/mech/M = R
+	if(M)
+		M.summons_received = randomizemechs
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+
+/mob/living/carbon/human/proc/equip_emags(var/datum/role/R)
+	new /obj/item/weapon/card/emag(get_turf(src))
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
 	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag")
-	switch (randomizeguns)
+	switch(randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
 		if("stunrevolver")

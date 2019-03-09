@@ -25,6 +25,15 @@
 */
 	return
 
+/obj/mecha/combat/durand/preloaded/New()
+	..()
+	var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/LM = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
+	LM.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/repair_droid/RD = new /obj/item/mecha_parts/mecha_equipment/repair_droid
+	RD.attach(src)
+	var/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/AP = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster
+	AP.attach(src)
+
 /obj/mecha/combat/durand/relaymove(mob/user,direction)
 	if(defence)
 		occupant_message("<font color='red'>Unable to move while in defence mode</font>", TRUE)
