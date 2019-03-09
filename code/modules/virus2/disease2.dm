@@ -1,20 +1,64 @@
+
+/*
+Welcome to the heart of our virus/disease code.
+
+/datum/disease2/disease
+
+
+
+
+*/
+
+
+
 var/global/list/disease2_list = list()
 /datum/disease2/disease
-	var/form = "Virus"
-	var/infectionchance = 70
-	var/speed = 1
-	var/spreadtype = "Contact" // Can also be "Airborne" or "Blood"
-	var/stage = 1
-	var/stageprob = 10
-	var/dead = 0
-	var/clicks = 0
+	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
+	var/spreadtype = "Contact" // Contact, Airborne, Blood
 	var/uniqueID = 0
 	var/list/datum/disease2/effect/effects = list()
-	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
+
+	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
+	var/infectionchance = 70
+
+	//clicks increases by [speed] every time the disease activates. Drinking Virus Food also accelerates the process by 10.
+	var/clicks = 0
+	var/speed = 1
+
+	//stage increments if prob(stageprob) once there are enough clicks (100 per current stage), up to max_stage
+	var/stage = 1
 	var/max_stage = 4
+	var/stageprob = 10
+	//when spreading to another mob, that new carrier has the disease's stage reduced by stage_variance
 	var/stage_variance = -1
+
+	//16 bits describing the antigens, when one bit is set, antibodies with that bit can cure the disease
+	var/antigen = 0
+	//set to 1 once appropriate antibodies are applied to their carrier. curing the disease, removing it from the carrier
+	var/dead = 0
+
+	//logging
 	var/log = ""
 	var/logged_virusfood=0
+
+/datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
+	form = "Bacteria"
+	max_stage = 3
+	infectionchance = 90
+	stageprob = 30
+	stage_variance = -4
+
+/datum/disease2/disease/parasite//slower spread. stage preserved on spread
+	form = "Parasite"
+	infectionchance = 50
+	stageprob = 10
+	stage_variance = 0
+
+/datum/disease2/disease/prion//very fast progression, but very slow spread and resets to stage 1.
+	form = "Prion"
+	infectionchance = 10
+	stageprob = 80
+	stage_variance = -10
 
 /datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,10000)
@@ -189,7 +233,7 @@ var/global/list/disease2_list = list()
 		antigen = text2num(pick(ANTIGENS))
 		antigen |= text2num(pick(ANTIGENS))
 
-/datum/disease2/disease/proc/getcopy()
+/datum/disease2/disease/proc/getcopy()//called by infect_virus2()
 	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
 	disease.form=form
 	disease.log=log
@@ -207,6 +251,7 @@ var/global/list/disease2_list = list()
 		disease.effects += e.getcopy(disease)
 	return disease
 
+/* candidate for deletion of obsolete procs
 /datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
 	var/list/types = list()
 	var/list/types2 = list()
@@ -224,6 +269,7 @@ var/global/list/disease2_list = list()
 	if (antigen != disease.antigen)
 		equal = 0
 	return equal
+*/
 
 /proc/virus_copylist(var/list/datum/disease2/disease/viruses)
 	var/list/res = list()
@@ -268,48 +314,3 @@ var/global/list/virusDB = list()
 	v.fields["spread type"] = spreadtype
 	virusDB["[uniqueID]"] = v
 	return 1
-
-proc/virus2_lesser_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_lesser(candidates[1])
-
-proc/virus2_greater_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_greater(candidates[1])
-
-/datum/disease2/disease/bacteria
-	form = "Bacteria"
-	max_stage = 3
-	infectionchance = 90
-	stageprob = 30
-	stage_variance = -4
-
-/datum/disease2/disease/parasite
-	form = "Parasite"
-	infectionchance = 50
-	stageprob = 10
-	stage_variance = 0
-
-/datum/disease2/disease/prion
-	form = "Prion"
-	infectionchance = 10
-	stageprob = 80
-	stage_variance = -10

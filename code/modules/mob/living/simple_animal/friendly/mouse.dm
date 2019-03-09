@@ -41,7 +41,6 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
 	var/is_fat = 0
 	var/can_chew_wires = 0
-	var/disease_carrier = 0
 
 	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
 	var/antibodies = 0
@@ -313,5 +312,5 @@
 /mob/living/simple_animal/mouse/wire_biter
 	can_chew_wires = 1
 
-/mob/living/simple_animal/mouse/plague
-	disease_carrier = 1
+/mob/living/simple_animal/mouse/can_be_infected()
+	return 1

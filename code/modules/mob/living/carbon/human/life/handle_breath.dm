@@ -104,7 +104,7 @@
 
 		//Spread some viruses while we are at it
 		if(virus2 && virus2.len > 0)
-			if(prob(10) && get_infection_chance(src))
+			if(prob(10) && get_infection_chance(src))//why are we calling get_infection_chance() here? spread_disease_to() calls infect_virus2() which calls it there as well!
 //					log_debug("[src] : Exhaling some viruses")
 				for(var/mob/living/M in range(1,src))
 					if(can_be_infected(M))

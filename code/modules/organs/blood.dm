@@ -415,6 +415,11 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	//	var/datum/disease/new_virus = D.Copy(1)
 	//	source.viruses += new_virus
 	//	new_virus.holder = B
+
+	if (!source.data["virus2"])
+		source.data["virus2"] = list()
+	B.data["virus2"] |= virus_copylist(src.virus2)
+
 	if(source.data["virus2"])
 		B.virus2 = virus_copylist(source.data["virus2"])
 

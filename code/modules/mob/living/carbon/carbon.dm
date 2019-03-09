@@ -737,3 +737,6 @@
 				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
 				"<span class='warning'>You slip on the icy floor!</span>")
 	return TRUE
+
+/mob/living/carbon/can_be_infected()
+	return 1

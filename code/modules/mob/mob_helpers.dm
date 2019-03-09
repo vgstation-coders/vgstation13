@@ -535,3 +535,6 @@ proc/is_blind(A)
 // Returns a string that provides identification data for this mob
 /mob/proc/identification_string()
 	return name
+
+/mob/proc/can_be_infected()
+	return 0

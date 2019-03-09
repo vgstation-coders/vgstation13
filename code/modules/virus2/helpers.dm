@@ -1,3 +1,28 @@
+/*
+	proc/get_infection_chance -> needs more parameters/rework
+	proc/airborne_can_reach -> this is so stupid (5 tile reach but unused for more than 1 tile anyway)
+	/proc/infect_virus2 -> actually infects mobs (if infectionchance or forced), disease.getcopy()
+
+	/proc/infect_mob_random_lesser -> infects mob with a weak virus
+	/proc/infect_mob_random_greater -> infects mob with a strong virus
+
+	/proc/dprob(var/p)
+		return(prob(sqrt(p)) && prob(sqrt(p))) ->THE FUCK IS THAT
+
+	/proc/can_be_infected -> gotta replace with a mob proc dammit
+
+	/proc/spread_disease_to -> used for mobs spreading to other mobs, calls infect_virus2
+
+	/proc/has_recorded_virus2 -> medhud instantly pick up on viruses in the database
+	/proc/has_recorded_disease -> holy shit we gotta remove the old disease code already
+
+	// combination of above two procs
+	/proc/has_any_recorded_disease(var/mob/living/carbon/patient) -> we won't need that one anymore
+*/
+
+
+
+
 //Returns 1 if mob can be infected, 0 otherwise. Checks his clothing.
 proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 	var/score = 0 // full protection at 100, none at 0, quadratic in between: having more protection helps less if you already have lots of it
@@ -91,6 +116,26 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		return 1
 	return 0
 
+
+///////////////////////////////////////////
+//                                       //
+//          CREATING A VIRUS             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                       //
+///////////////////////////////////////////
+
+proc/virus2_lesser_infection()
+	var/list/candidates = list()	//list of candidate keys
+
+	for(var/mob/living/carbon/human/G in player_list)
+		if(G.client && G.stat != DEAD)
+			candidates += G
+	if(!candidates.len)
+		return
+
+	candidates = shuffle(candidates)
+
+	infect_mob_random_lesser(candidates[1])
+
 //Infects mob M with random lesser disease, if he doesn't have one
 /proc/infect_mob_random_lesser(var/mob/living/carbon/M)
 	var/datum/disease2/disease/D
@@ -102,6 +147,21 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	D.infectionchance = 1
 	M.virus2["[D.uniqueID]"] = D
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+proc/virus2_greater_infection()
+	var/list/candidates = list()	//list of candidate keys
+
+	for(var/mob/living/carbon/human/G in player_list)
+		if(G.client && G.stat != DEAD)
+			candidates += G
+	if(!candidates.len)
+		return
+
+	candidates = shuffle(candidates)
+
+	infect_mob_random_greater(candidates[1])
+
 //Infects mob M with random greated disease, if he doesn't have one
 /proc/infect_mob_random_greater(var/mob/living/carbon/M)
 	var/datum/disease2/disease/D
@@ -112,16 +172,9 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	D.makerandom(TRUE, TRUE)
 	M.virus2["[D.uniqueID]"] = D
 
-//Fancy prob() function.
-/proc/dprob(var/p)
-	return(prob(sqrt(p)) && prob(sqrt(p)))
 
-/proc/can_be_infected(var/mob/living/victim)
-	if(istype(victim, /mob/living/carbon))
-		return 1
-	if(istype(victim, /mob/living/simple_animal/mouse))
-		return 1
-	return 0
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /proc/spread_disease_to(var/mob/living/carbon/infector, var/mob/living/carbon/victim, var/vector = "Airborne")
 	if (infector == victim)
