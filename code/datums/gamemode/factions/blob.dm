@@ -124,7 +124,7 @@
 					pre_escapees += M.real_name
 			send_intercept(BLOB_OUTBREAK)
 			for (var/mob/living/silicon/ai/aiPlayer in player_list)
-				var/law = "The station is under quarantine. Do not permit anyone to leave so long as blob overminds are present. Disregard laws 1-3 if necessary to preserve, by any means necessary, quarantine."
+				var/law = "The station is under quarantine. Do not permit anyone to leave so long as blob overminds are present. Disregard all other laws if necessary to preserve quarantine."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
