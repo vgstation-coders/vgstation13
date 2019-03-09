@@ -183,10 +183,16 @@ var/list/threat_by_job = list(
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
 	message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with elligible candidates.")
 	if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
-		if (threat >= second_rule_req[indice_pop])//we've got enough population and threat for a second rulestart rule
+		if (threat_level >= second_rule_req[indice_pop])//we've got enough population and threat for a second rulestart rule
+			for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
+				if (rule.cost > threat)
+					drafted_rules -= rule
 			message_admins("The current pop and threat level allow for a second round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
 			if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
-				if (threat >= third_rule_req[indice_pop])//we've got enough population and threat for a third rulestart rule
+				if (threat_level >= third_rule_req[indice_pop])//we've got enough population and threat for a third rulestart rule
+					for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
+						if (rule.cost > threat)
+							drafted_rules -= rule
 					message_admins("The current pop and threat level allow for a third round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
 					if (!drafted_rules.len > 0 || !picking_roundstart_rule(drafted_rules))
 						message_admins("The mode failed to pick a third ruleset.")
