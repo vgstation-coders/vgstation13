@@ -170,6 +170,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper MULEbot crate"
 	group = "Supplies"
 
+/datum/supply_packs/tractor
+	name = "Tractor"
+	contains = list(/obj/structure/bed/chair/vehicle/tractor,
+					/obj/machinery/cart/cargo)
+	cost = 40
+	containertype = /obj/structure/largecrate
+	containername = "tractor crate"
+	group = "Supplies"
+
+/datum/supply_packs/carts
+	name = "Carts"
+	contains = list(/obj/machinery/cart/cargo,
+                    /obj/machinery/cart/cargo)
+	cost = 15
+	containertype = /obj/structure/largecrate
+	containername = "carts crate"
+	group = "Supplies"
+
 /datum/supply_packs/porcelain
 	name = "Porcelain furniture"
 	contains = list()
