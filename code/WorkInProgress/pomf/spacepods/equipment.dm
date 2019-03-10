@@ -191,7 +191,6 @@
 			var/correct_positions = 0
 			for(var/i=1 to our_code.len)
 				var/char = our_code[i]
-				var/their_char = their_code[i]
 				if(their_code.Find(char))
 					found_values++
 				if(i < their_code.len && char == their_code[i])
