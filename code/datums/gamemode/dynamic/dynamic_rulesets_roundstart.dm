@@ -12,7 +12,7 @@
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 3
+	weight = 5
 	cost = 10
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
@@ -236,7 +236,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
-	weight = 5
+	weight = 3
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
@@ -292,7 +292,7 @@
 	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
-	weight = 3
+	weight = 2
 	cost = 35
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
 
