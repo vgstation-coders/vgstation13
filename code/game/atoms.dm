@@ -944,3 +944,27 @@ its easier to just keep the beam vertical.
 
 /atom/proc/thermal_energy_transfer()
 	return
+
+//Used for map persistence. Returns an associative list with some of our most pertinent variables. This list will be used ad-hoc by our relevant map_persistence_type datum to reconstruct this atom from scratch.
+/atom/proc/atom2mapsave()
+	. = list()
+	.["x"] = x
+	.["y"] = y
+	.["z"] = z
+	.["type"] = type
+	.["pixel_x"] = pixel_x
+	.["pixel_y"] = pixel_y
+	.["dir"] = dir
+	.["icon_state"] = icon_state
+	.["color"] = color
+	.["age"] = getPersistenceAge() + 1
+
+//We were just created using nothing but this associative list's ["x"], ["y"], ["z"] and ["type"]. OK, what else?
+/atom/proc/post_mapsave2atom(var/list/L)
+	return
+
+//Behold, my shitty attempt at an interface in DM. Or at least skimping on 1 atom-level variable so I don't get blamed for wasting RAM.
+/atom/proc/getPersistenceAge()
+	return 1
+/atom/proc/setPersistenceAge()
+	return

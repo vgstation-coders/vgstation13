@@ -4928,6 +4928,20 @@
 
 		CreditsPanel() //refresh!
 
+	if(href_list["persistenceaction"])
+		switch(href_list["persistenceaction"])
+			if("qdelall")
+				if(href_list["persistencedatum"])
+					var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
+					T.qdelAllTrackedItems(usr)
+				else
+					SSpersistence_map.qdelAllFilth(usr)
+			if("togglesaving")
+				SSpersistence_map.setSavingFilth(!SSpersistence_map.savingFilth, usr)
+
+
+		PersistencePanel() //refresh!
+
 
 	// ----- Religion and stuff
 	if (href_list["religions"])

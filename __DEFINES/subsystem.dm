@@ -24,6 +24,7 @@
 #define SS_INIT_TICKER            -21
 #define SS_INIT_FINISH            -22
 #define SS_INIT_MINIMAP           -23
+#define SS_INIT_PERSISTENCE_MAP	  -98
 #define SS_INIT_PERSISTENCE_MISC  -99
 
 
@@ -68,3 +69,9 @@
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0
 #define SS_DISPLAY_SUN             10
+
+#define SS_TRASH                  "trash"
+#define SS_CLEANABLE              "cleanable_decals"
+#define SS_BLOOD                  "blood"
+#define SS_GIBS                   "gibs"
+#define SS_TRACKS                 "tracks"
