@@ -1,4 +1,5 @@
 /mob/living/carbon/human/gib()
+	to_chat(world,"human.gib() start,  got [viruses.len] viruses")
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -18,7 +19,7 @@
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
-	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
+	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
 
 /mob/living/carbon/human/dust()

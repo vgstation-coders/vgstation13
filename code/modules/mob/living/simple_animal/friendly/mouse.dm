@@ -42,7 +42,6 @@
 	var/is_fat = 0
 	var/can_chew_wires = 0
 
-	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
 	var/antibodies = 0
 
 /mob/living/simple_animal/mouse/Life()
@@ -116,21 +115,23 @@
 						else
 							step_towards(src, C)
 							break
-				if(disease_carrier && virus2.len)
+				/*
+				if(virus2.len > 0)
 					for(var/mob/living/carbon/human/H in can_see)
 						if(Adjacent(H))
-//							visible_message("[src] bites [H]")
+							visible_message("[src] bites [H]")
 							H.attack_animal(src)
 							break
 						else
 							step_towards(src, H)
 							break
-			if(disease_carrier && virus2.len)
+				*/
+/*
+			if(virus2.len > 0)
 				for(var/mob/living/M in view(1,src))
-//					visible_message("[src] breaths on [M]")
-					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
+					//spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
-
+*/
 		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
 /mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -156,12 +157,12 @@
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
-
+/*
 /mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
 	..()
-	if(can_be_infected(target))
-		spread_disease_to(src, target, "Contact")
-
+	if(target.can_be_infected())
+		//spread_disease_to(src, target, "Contact")
+*/
 /mob/living/simple_animal/mouse/proc/nutrstats()
 	stat(null, "Nutrition level - [nutrition]")
 
@@ -177,8 +178,8 @@
 			to_chat(user, "<span class='info'>It seems well fed.</span>")
 		if(can_chew_wires)
 			to_chat(user, "<span class='notice'>It seems a bit frazzled.</span>")
-		if(disease_carrier && virus2.len)
-			to_chat(user, "<span class='blob'>It seems unwell.</span>") //Blob class is snot green
+		if(virus2.len > 0)
+			to_chat(user, "<span class='blob'>It seems unwell.</span>")
 		if(nutrition <= MOUSEHUNGRY)
 			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 

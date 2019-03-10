@@ -80,3 +80,5 @@
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
 
 	var/datum/component_container/BrainContainer
+
+	var/list/datum/disease2/disease/virus2 = list()

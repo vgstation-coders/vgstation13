@@ -154,7 +154,7 @@
 					dat += "<br>[e.name] (Strength: [e.multiplier] | Verosity: [e.chance])"
 				dat +="</td>"
 				dat += "<td>[antigens2string(B.virus2.antigen)]</td>"
-				dat += "<td>[(B.virus2.spreadtype)]</td>"
+				dat += "<td>[(B.virus2.get_spread_string())]</td>"
 			if(B == dish)
 				dat += "<td></td>"
 			else

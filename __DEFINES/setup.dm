@@ -976,7 +976,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define INFECTION_LEVEL_TWO 500
 #define INFECTION_LEVEL_THREE 1000
 
-
+//Diseases, Virus, Antigens
+#define	SPREAD_BLOOD	1//can be extracted from the carrier's blood, all diseases have this by default.
+#define	SPREAD_CONTACT	2//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
+#define	SPREAD_AIRBORNE	4//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
 
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.

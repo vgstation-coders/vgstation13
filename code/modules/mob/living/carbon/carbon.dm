@@ -7,8 +7,12 @@
 	if(now_pushing)
 		return
 	..()
-	if(can_be_infected(AM) && prob(10))
-		spread_disease_to(src, AM, "Contact")
+	/*
+	if(ismob(AM))
+		var/mob/M = AM
+		if (M.can_be_infected())
+			//spread_disease_to(src, M, "Contact")
+	*/
 	handle_symptom_on_touch(src, AM, BUMP)
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
@@ -738,5 +742,3 @@
 				"<span class='warning'>You slip on the icy floor!</span>")
 	return TRUE
 
-/mob/living/carbon/can_be_infected()
-	return 1

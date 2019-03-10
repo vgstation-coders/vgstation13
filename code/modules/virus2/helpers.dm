@@ -1,17 +1,12 @@
 /*
-	proc/get_infection_chance -> needs more parameters/rework
+	proc/get_infection_chance -> checks for protections, gonna need a thorough rework
 	proc/airborne_can_reach -> this is so stupid (5 tile reach but unused for more than 1 tile anyway)
 	/proc/infect_virus2 -> actually infects mobs (if infectionchance or forced), disease.getcopy()
 
 	/proc/infect_mob_random_lesser -> infects mob with a weak virus
 	/proc/infect_mob_random_greater -> infects mob with a strong virus
 
-	/proc/dprob(var/p)
-		return(prob(sqrt(p)) && prob(sqrt(p))) ->THE FUCK IS THAT
-
-	/proc/can_be_infected -> gotta replace with a mob proc dammit
-
-	/proc/spread_disease_to -> used for mobs spreading to other mobs, calls infect_virus2
+	/proc/spread_disease_to -> used for mobs directly spreading to other mobs, calls infect_virus2
 
 	/proc/has_recorded_virus2 -> medhud instantly pick up on viruses in the database
 	/proc/has_recorded_disease -> holy shit we gotta remove the old disease code already
@@ -22,7 +17,7 @@
 
 
 
-
+/*
 //Returns 1 if mob can be infected, 0 otherwise. Checks his clothing.
 proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 	var/score = 0 // full protection at 100, none at 0, quadratic in between: having more protection helps less if you already have lots of it
@@ -53,9 +48,7 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 
 //	log_debug("[M]'s resistance to [vector] viruses: [score]")
 	if(istype(M, /mob/living/simple_animal/mouse))
-		var/mob/living/simple_animal/mouse/MM = M
-		if(MM.disease_carrier)
-			return 1
+		return 1
 
 	if(istype(M, /mob/living/carbon/complex/martian)) //Martians are incredibly susceptible to viruses
 		var/mob/living/carbon/complex/martian/MR = M
@@ -70,7 +63,7 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 //		log_debug("Infection got through")
 		return 1
 	return 0
-
+*/
 //Checks if table-passing table can reach target (5 tile radius)
 proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	var/obj/dummy = new(source)
@@ -83,13 +76,13 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	dummy.forceMove(null)
 	dummy = null
 	return rval
-
+/*
 //Attemptes to infect mob M with virus. Set forced to 1 to ignore protective clothing.  Returns 1 if successful.
 /proc/infect_virus2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
 	if(!istype(disease))
 //		log_debug("Bad virus")
 		return 0
-	if(!can_be_infected(M))
+	if(!M.can_be_infected())
 //		log_debug("Bad mob")
 		return 0
 	if ("[disease.uniqueID]" in M.virus2)
@@ -115,8 +108,28 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		M.virus2["[D.uniqueID]"] = D
 		return 1
 	return 0
+*/
 
+//This proc is called when the disease has already bypassed clothing and other protections
+/proc/infect_disease2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
+	if(!istype(disease))
+		return 0
+	if(!M.can_be_infected())
+		return 0
+	if ("[disease.uniqueID]" in M.virus2)
+		return 0
+	if((M.antibodies & disease.antigen) != 0)
+		return 0
+	if(prob(disease.infectionchance) || forced)
+		var/datum/disease2/disease/D = disease.getcopy()
+		if (D.infectionchance > 10)
+			D.infectionchance -= 10//The virus gets weaker as it jumps from people to people
+		D.log += "<br />[timestamp()] Infected [key_name(M)] [notes]"
+		M.virus2["[D.uniqueID]"] = D
+		return 1
+	return 0
 
+/*
 ///////////////////////////////////////////
 //                                       //
 //          CREATING A VIRUS             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +235,7 @@ proc/virus2_greater_infection()
 				if(V && V.spreadtype != vector)
 					continue
 				infect_virus2(infector,V, notes="(Contact with [key_name(victim)])")
-
+*/
 // Returns 1 if patient has virus2 that medHUDs would pick up.
 // Otherwise returns 0
 /proc/has_recorded_virus2(var/mob/living/carbon/patient)
@@ -247,3 +260,13 @@ proc/virus2_greater_infection()
 	else if (has_recorded_virus2(patient))
 		return 1
 	return 0
+
+/proc/filter_disease_by_spread(var/list/diseases = list(), var/required = 0, var/forbidden = 0)
+	if (!diseases || diseases.len <= 0)
+		return list()
+	var/list/result = list()
+	for (var/ID in diseases)
+		var/datum/disease2/disease/V = diseases[ID]
+		if ((!required || (V.spread & required)) && (!forbidden || !(V.spread & forbidden)))
+			result[ID] = V
+	return result

@@ -226,9 +226,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	//set reagent data
 	B.data["donor"] = src
+
 	if (!B.data["virus2"])
 		B.data["virus2"] = list()
-	B.data["virus2"] |= virus_copylist(src.virus2)
+
+	B.data["virus2"] |= filter_disease_by_spread(virus_copylist(src.virus2),required = SPREAD_BLOOD)
 	B.data["antibodies"] = src.antibodies
 	B.data["blood_DNA"] = copytext(src.dna.unique_enzymes,1,0)
 	if(src.resistances && src.resistances.len)
@@ -352,9 +354,10 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	var/turf/T = get_turf(target)
 	var/list/drip_icons = list("1","2","3","4","5")
 
+	var/mob/living/carbon/human/human
 	if(istype(source,/mob/living/carbon/human))
-		var/mob/living/carbon/human/M = source
-		var/datum/reagent/blood/is_there_blood = get_blood(M.vessel)
+		human = source
+		var/datum/reagent/blood/is_there_blood = get_blood(human.vessel)
 		if(!is_there_blood)
 			return //If there is no blood in the mob's blood vessel, there's no reason to make any sort of splatter.
 
@@ -379,7 +382,6 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 
 		// If we have too many drips, remove them and spawn a proper blood splatter.
 		if(drips.len >= 5)
-			//TODO: copy all virus data from drips to new splatter?
 			for(var/obj/effect/decal/cleanable/blood/drip/drop in drips)
 				returnToPool(drop)
 		else
@@ -416,11 +418,9 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	//	source.viruses += new_virus
 	//	new_virus.holder = B
 
-	if (!source.data["virus2"])
-		source.data["virus2"] = list()
-	B.data["virus2"] |= virus_copylist(src.virus2)
-
-	if(source.data["virus2"])
+	if (human && human.virus2.len > 0)
+		B.virus2 = filter_disease_by_spread(virus_copylist(human.virus2),required = SPREAD_BLOOD)
+	else if(source.data["virus2"])
 		B.virus2 = virus_copylist(source.data["virus2"])
 
 	return B

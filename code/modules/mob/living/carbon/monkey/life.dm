@@ -187,6 +187,7 @@
 /mob/living/carbon/monkey/proc/findAirborneVirii()
 	if(blood_virus_spreading_disabled)
 		return 0
+	/*
 	for(var/obj/effect/decal/cleanable/blood/B in get_turf(src))
 		if(B.virus2.len)
 			for (var/ID in B.virus2)
@@ -200,6 +201,7 @@
 				var/datum/disease2/disease/V = M.virus2[ID]
 				if (infect_virus2(src,V, notes="(Airborne from mucus)"))
 					return 1
+					*/
 	return 0
 
 /mob/living/carbon/monkey/proc/handle_virus_updates()

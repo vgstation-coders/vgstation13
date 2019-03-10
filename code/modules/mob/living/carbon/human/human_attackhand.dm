@@ -181,11 +181,11 @@
 		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
 		return 0
 
-
+/*
 	if(istype(M,/mob/living/carbon))
 //		log_debug("No gloves, [M] is truing to infect [src]")
-		spread_disease_to(M, src, "Contact")
-
+		//spread_disease_to(M, src, "Contact")
+*/
 	// CHEATER CHECKS
 	if(M.mind)
 		var/punishment = FALSE

@@ -27,7 +27,7 @@
 	name = "virus containment/growth dish"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
-	var/datum/disease2/disease/virus2 = null
+	//var/datum/disease2/disease/virus2 = null
 	var/growth = 0
 	var/info = 0
 	var/analysed = 0
@@ -57,11 +57,13 @@
 		shatter(user)
 
 /obj/item/weapon/virusdish/proc/shatter(var/mob/user)
+	/*
 	if(virus2.infectionchance > 0)
 		for(var/mob/living/target in view(1, get_turf(src)))
-			if(airborne_can_reach(get_turf(src), get_turf(target)) && can_be_infected(target))
-				if(get_infection_chance(target))
-					infect_virus2(target,src.virus2, notes="([src] shattered by [key_name(user)])")
+			if(airborne_can_reach(get_turf(src), get_turf(target)) && target.can_be_infected())
+			//	if(get_infection_chance(target))
+			//		infect_virus2(target,src.virus2, notes="([src] shattered by [key_name(user)])")
+			*/
 	qdel(src)
 
 /obj/item/weapon/virusdish/examine(mob/user)

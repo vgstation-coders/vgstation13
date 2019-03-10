@@ -69,7 +69,7 @@
 				gib.update_icon()
 
 				if(viruses)
-					gib.virus2 |= virus_copylist(viruses)
+					gib.virus2 = filter_disease_by_spread(virus_copylist(viruses),required = SPREAD_BLOOD)
 
 				gib.blood_DNA = list()
 				if(MobDNA)

@@ -391,9 +391,9 @@
 		var/mob/living/carbon/C = M
 		if(self.data && self.data["virus2"]) //Infecting
 			if(method == TOUCH)
-				infect_virus2(C, self.data["virus2"], notes = "(Contact with blood)")
+			//	infect_virus2(C, self.data["virus2"], notes = "(Contact with blood)")
 			else
-				infect_virus2(C, self.data["virus2"], 1, notes = "(INJECTED)") //Injected, force infection
+			//	infect_virus2(C, self.data["virus2"], 1, notes = "(INJECTED)") //Injected, force infection
 		if(self.data && self.data["antibodies"]) //And curing
 			C.antibodies |= self.data["antibodies"]
 

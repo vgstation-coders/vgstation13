@@ -534,3 +534,6 @@
 	..()
 	if(statpanel("Status"))
 		stat(null, "Growth completing: [growth]%")
+
+/mob/living/carbon/monkey/can_be_infected()
+	return 1

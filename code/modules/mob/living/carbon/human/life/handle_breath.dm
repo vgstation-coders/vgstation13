@@ -78,7 +78,6 @@
 						block = 1
 
 				if(!block)
-
 					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
@@ -86,6 +85,24 @@
 								if(smoke)
 									smoke.reagents.copy_to(src, 10) //I dunno, maybe the reagents enter the blood stream through the lungs?
 							break //If they breathe in the nasty stuff once, no need to continue checking
+
+					//airborne viral spread/breathing
+					if (wear_mask && prob(wear_mask.sterility))
+						block = 1
+					if (head && prob(head.sterility))
+						block = 1
+
+					if (!block)
+						for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
+							if (cloud.source != src)
+								for (var/ID in cloud.viruses)
+									var/datum/disease2/disease/V = cloud.viruses[ID]
+									if (V.spread & SPREAD_AIRBORNE)
+										infect_disease2(src,V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+						if (virus2 && virus2.len > 0)
+							var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
+							if (airborne_viruses)
+								new /obj/effect/effect/pathogen_cloud(get_turf(src), src, virus_copylist(airborne_viruses))
 
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
@@ -101,15 +118,14 @@
 
 	if(breath)
 		loc.assume_air(breath)
-
+/*
 		//Spread some viruses while we are at it
 		if(virus2 && virus2.len > 0)
-			if(prob(10) && get_infection_chance(src))//why are we calling get_infection_chance() here? spread_disease_to() calls infect_virus2() which calls it there as well!
-//					log_debug("[src] : Exhaling some viruses")
-				for(var/mob/living/M in range(1,src))
-					if(can_be_infected(M))
-						spread_disease_to(src,M)
-
+			//if(get_infection_chance(src))//checking our own infection protections, so we don't spread an airborne virus if we're wearing internals
+			//	for(var/mob/living/M in range(1,src))
+			//		if(can_be_infected(M))
+			//			spread_disease_to(src,M)
+*/
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))

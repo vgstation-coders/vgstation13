@@ -1,20 +1,8 @@
 
-/*
-Welcome to the heart of our virus/disease code.
-
-/datum/disease2/disease
-
-
-
-
-*/
-
-
-
 var/global/list/disease2_list = list()
 /datum/disease2/disease
 	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
-	var/spreadtype = "Contact" // Contact, Airborne, Blood
+	var/spread = SPREAD_BLOOD //if set to 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
 	var/uniqueID = 0
 	var/list/datum/disease2/effect/effects = list()
 
@@ -97,7 +85,44 @@ var/global/list/disease2_list = list()
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
-	spreadtype = prob(40) ? "Airborne" : prob(40) ? "Blood" :"Contact" //Try for airborne then try for blood.
+
+	randomize_spread()
+
+
+/datum/disease2/disease/proc/randomize_spread()
+	spread = SPREAD_BLOOD	//without blood spread, the disease cannot be extracted or cured, we don't want that for regular diseases
+	if (prob(5))			//5% chance of spreading through both contact and the air.
+		spread |= SPREAD_CONTACT
+		spread |= SPREAD_AIRBORNE
+	else if (prob(40))		//38% chance of spreading through the air only.
+		spread |= SPREAD_AIRBORNE
+	else if (prob(60))		//34,2% chance of spreading through contact only.
+		spread |= SPREAD_CONTACT
+							//22,8% chance of staying in blood
+
+	//spread = prob(40) ? "Airborne" : prob(40) ? "Blood" :"Contact" //Try for airborne then try for blood.
+
+
+/datum/disease2/disease/proc/get_spread_string()
+	var/dat = ""
+	var/check = 0
+	if (spread & SPREAD_BLOOD)
+		dat += "Blood"
+		check += SPREAD_BLOOD
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_CONTACT)
+		dat += "Contact"
+		check += SPREAD_CONTACT
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_AIRBORNE)
+		dat += "Airborne"
+		//check += SPREAD_AIRBORNE
+		//if (spread > check)
+		//	dat += ", "
+
+	return dat
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -130,9 +155,13 @@ var/global/list/disease2_list = list()
 	//pick random antigens for the disease to have
 	D.antigen |= text2num(pick(ANTIGENS))
 	D.antigen |= text2num(pick(ANTIGENS))
-	D.spreadtype = input(C, "Select spread type", "Spread Type") as null | anything in list("Airborne", "Contact", "Blood") // select how the disease is spread
-	if (!D.spreadtype)
-		return 0
+	D.spread = 0
+	if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be very hard to cure!)",,"Yes","No") == "Yes")
+		D.spread |= SPREAD_BLOOD
+	if (alert("Can this virus spread by contact?",,"Yes","No") == "Yes")
+		D.spread |= SPREAD_CONTACT
+	if (alert("Can this virus spread by the air?",,"Yes","No") == "Yes")
+		D.spread |= SPREAD_AIRBORNE
 	infectedMob.virus2["[D.uniqueID]"] = D // assign the disease datum to the infectedMob/ selected user.
 	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
 	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
@@ -182,15 +211,16 @@ var/global/list/disease2_list = list()
 		if (e.can_run_effect(stage))
 			e.run_effect(mob)
 
-	//Short airborne spread
-	if(src.spreadtype == "Airborne")
+/*
+	//Short airborne spread from non-humans. Human virus spread is handled in handle_breath.dm
+	if(!ishuman(mob) && src.spread & SPREAD_AIRBORNE)
 		for(var/mob/living/carbon/M in oview(1,mob))
 			if(airborne_can_reach(get_turf(mob), get_turf(M)))
-				infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
+				//infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
 		for(var/mob/living/simple_animal/mouse/MM in oview(1,mob))
 			if(airborne_can_reach(get_turf(mob), get_turf(MM)))
-				infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
-
+				//infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
+*/
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
 	clicks+=speed
@@ -238,7 +268,7 @@ var/global/list/disease2_list = list()
 	disease.form=form
 	disease.log=log
 	disease.infectionchance = infectionchance
-	disease.spreadtype = spreadtype
+	disease.spread = spread
 	disease.stageprob = stageprob
 	disease.antigen   = antigen
 	disease.uniqueID = uniqueID
@@ -293,7 +323,7 @@ var/global/list/virusDB = list()
 /datum/disease2/disease/proc/get_info()
 	var/r = "GNAv2 [name()]"
 	r += "<BR>Infection rate : [infectionchance]"
-	r += "<BR>Spread form : [spreadtype]"
+	r += "<BR>Spread form : [get_spread_string()]"
 	r += "<BR>Progress Speed : [stageprob]"
 	for(var/datum/disease2/effect/e in effects)
 		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
@@ -311,6 +341,6 @@ var/global/list/virusDB = list()
 	v.fields["name"] = name()
 	v.fields["description"] = get_info()
 	v.fields["antigen"] = antigens2string(antigen)
-	v.fields["spread type"] = spreadtype
+	v.fields["spread type"] = get_spread_string()
 	virusDB["[uniqueID]"] = v
 	return 1
