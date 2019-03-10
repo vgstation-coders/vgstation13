@@ -887,7 +887,7 @@
 	tajaran
 		name = "Default tajaran skin"
 		icon_state = "default"
-		icon = 'icons/mob/human_races/r_tajaran.dmi'
+		icon = 'icons/mob/human_races/catbeast/r_tajaran.dmi'
 		species_allowed = list("Tajaran")
 
 	unathi

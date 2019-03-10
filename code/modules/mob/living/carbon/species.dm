@@ -457,8 +457,8 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/tajaran
 	name = "Tajaran"
-	icobase = 'icons/mob/human_races/r_tajaran.dmi'
-	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
+	icobase = 'icons/mob/human_races/catbeast/r_tajaran.dmi'
+	deform = 'icons/mob/human_races/catbeast/r_def_tajaran.dmi'
 	known_languages = list(LANGUAGE_CATBEAST, LANGUAGE_MOUSE)
 	tail = "tajtail"
 	attack_verb = "scratches"
