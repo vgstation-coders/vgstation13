@@ -22,3 +22,14 @@
 #define MESSENGER_BAG 5
 
 #define SHOW_HELD_ITEM_AND_POINTING_DELAY 0.7 SECONDS
+
+//Mob skintones (not counting humans with their numeric blending)
+#define VOXGREEN 1
+#define VOXBROWN 2
+#define VOXGRAY 3
+#define VOXLGREEN 4
+#define VOXAZURE 5
+#define VOXEMERALD 6
+
+#define CATBEASTBROWN 1
+#define CATBEASTBLACK 2

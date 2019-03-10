@@ -1,5 +1,5 @@
 /datum/objective/catbeast/survive5
-	explanation_text = "Stay alive on the station five minutes."
+	explanation_text = "Stay alive on the station for five minutes."
 	name = "Survive (as a catbeast)"
 
 /datum/objective/catbeast/survive5/IsFulfilled()

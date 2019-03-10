@@ -172,18 +172,24 @@
 	if(current_species)
 		if(current_species.name == "Vox")
 			switch(s_tone)
-				if(6)
+				if(VOXEMERALD)
 					icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
-				if(5)
+				if(VOXAZURE)
 					icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
-				if(4)
+				if(VOXLGREEN)
 					icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
-				if(3)
+				if(VOXGRAY)
 					icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
-				if(2)
+				if(VOXBROWN)
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+		else if(current_species.name == "Tajaran")
+			switch(s_tone)
+				if(CATBEASTBLACK)
+					icobase = 'icons/mob/human_races/catbeast/r_tajaranblack.dmi'
+				else
+					icobase = 'icons/mob/human_races/catbeast/r_tajaran.dmi'
 		else
 			icobase = current_species.icobase
 	else
