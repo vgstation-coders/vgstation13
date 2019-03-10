@@ -102,7 +102,14 @@
 						if (virus2 && virus2.len > 0)
 							var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
 							if (airborne_viruses)
-								new /obj/effect/effect/pathogen_cloud(get_turf(src), src, virus_copylist(airborne_viruses))
+								var/strength = 0
+								for (var/ID in airborne_viruses)
+									var/datum/disease2/disease/V = airborne_viruses[ID]
+									strength += V.infectionchance
+								strength = round(strength/airborne_viruses.len)
+								while (strength > 0)//stronger viruses create more clouds at once
+									getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+									strength -= 40
 
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
