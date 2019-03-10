@@ -154,7 +154,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
 	weight = 3
-	cost = 25
+	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 
@@ -237,7 +237,7 @@
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
 	weight = 3
-	cost = 30
+	cost = 40
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 
@@ -293,7 +293,7 @@
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
 	weight = 2
-	cost = 35
+	cost = 40
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
@@ -349,7 +349,7 @@
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 30
+	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
@@ -400,7 +400,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 3
 	weight = 2
-	cost = 45
+	cost = 35
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	delay = 5 MINUTES
 	var/required_heads = 3
