@@ -758,7 +758,7 @@
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.progress(CULT_ACT_III,T)
+			cult.stage(CULT_ACT_III,T)
 		else
 			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 		qdel(src)

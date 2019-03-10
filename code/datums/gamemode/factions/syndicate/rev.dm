@@ -11,7 +11,6 @@
 	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
-	var/win_shuttle = FALSE
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -94,7 +93,6 @@
 
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2
-#define SHUTTLE_LEFT 3
 
 /datum/faction/revolution/check_win()
 	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
@@ -102,10 +100,6 @@
 		if(!(gameactivetime % 60))
 			message_admins("The revolution faction exists. [round(((5 MINUTES) - gameactivetime)/60)] minutes until win conditions begin checking.")
 		return //Don't bother checking for win before 5min
-
-	// -- 1. Did the shuttle leave ?
-	if (win_shuttle)
-		return end(SHUTTLE_LEFT)
 
 	// -- 2. Are all the heads dead ?
 	var/list/total_heads = get_living_heads()
@@ -118,25 +112,24 @@
 
 	if (incapacitated_heads >= total_heads.len)
 		return end(ALL_HEADS_DEAD)
+	else if(incapacitated_heads == total_heads.len-1)
+		stage(FACTION_ENDGAME)
+		command_alert(/datum/command_alert/revolution)
+		//Only one head left!
 
+/datum/faction/revolution/process()
+	..()
+	if(stage >= FACTION_ENDGAME)
+		var/anyone = FALSE
+		for(var/datum/role/R in members)
+			if(!R.antag.current.stat)
+				anyone = TRUE //If one rev is still not incapacitated
+		if(!anyone)
+			stage(FACTION_DEFEATED)
+			command_alert(/datum/command_alert/revolutiontoppled)
 
 // Called on arrivals and emergency shuttle departure.
 /hook_handler/revs
-
-/hook_handler/revs/proc/OnEmergencyShuttleDeparture(var/list/args)
-	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-	if (!istype(R))
-		return FALSE
-	for(var/datum/mind/M in get_living_heads())
-		var/mob/living/L = M.current
-		var/turf/T = get_turf(L)
-		if(istype(T.loc, /area/shuttle/escape/centcom))
-			R.win_shuttle = TRUE
-			return TRUE
-		else if(istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
-			R.win_shuttle = TRUE
-			return TRUE
-	return FALSE
 
 /hook_handler/revs/proc/OnArrival(var/list/args)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
@@ -158,5 +151,3 @@
 			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
 		if (ALL_REVS_DEAD)
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
-		if (SHUTTLE_LEFT)
-			to_chat(world, "<font size = 3><b>Revolution minor victory!</b></font><br/><font size = 2>The heads called the shuttle to leave the station!</font>")

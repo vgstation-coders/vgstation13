@@ -384,7 +384,7 @@
 	if (spawntype == /obj/structure/cult/altar)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.progress(CULT_ACT_I)
+			cult.stage(CULT_ACT_I)
 		else
 			message_admins("Blood Cult: An altar was raised...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 	qdel(spell_holder)//this will cause this datum to del as well
@@ -947,7 +947,7 @@
 		if (victim.mind)
 			if (cult)
 				spawn(5)//waiting half a second to make sure that the sacrifice objective won't designate a victim that just refused conversion
-					cult.progress(CULT_ACT_II)
+					cult.stage(CULT_ACT_II)
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
