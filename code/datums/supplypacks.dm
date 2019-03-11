@@ -2237,7 +2237,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/structure/vendomatpack/sovietsoda,
 					/obj/structure/vendomatpack/nazivend,
 					/obj/structure/vendomatpack/sovietvend)
-	cost = 80
+	cost = 20
 	containertype = /obj/structure/stackopacks
 	containername = "Old and Forgotten stack of packs"
 	group = "Vending Machine packs"
