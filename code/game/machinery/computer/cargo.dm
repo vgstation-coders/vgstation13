@@ -113,7 +113,6 @@ For vending packs, see vending_packs.dm*/
 	name = "Supply shuttle console"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "supply"
-	req_access = list(access_cargo)
 	circuit = "/obj/item/weapon/circuitboard/supplycomp"
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/hacked = 0
