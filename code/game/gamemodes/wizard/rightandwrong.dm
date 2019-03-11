@@ -56,7 +56,8 @@
 		else
 			return equip_guns(R)
 
-/mob/living/carbon/human/proc/equip_bombs(var/datum/role/R)
+/mob/living/carbon/human/proc/equip_explosives(var/datum/role/R)
+	var/randomizeexplosives = pick("
 	new /obj/effect/spawner/newbomb/timer(get_turf(src))
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 
