@@ -46,7 +46,6 @@ var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
 var/const/TRADER			=(1<<14)
 
-
 var/list/command_positions = list(
 	"Captain",
 	"Head of Personnel",
@@ -56,14 +55,12 @@ var/list/command_positions = list(
 	"Chief Medical Officer"
 )
 
-
 var/list/engineering_positions = list(
 	"Chief Engineer",
 	"Station Engineer",
 	"Atmospheric Technician",
 	"Mechanic"
 )
-
 
 var/list/medical_positions = list(
 	"Chief Medical Officer",
@@ -74,7 +71,6 @@ var/list/medical_positions = list(
 	"Paramedic",
 	"Chemist"
 )
-
 
 var/list/science_positions = list(
 	"Research Director",
