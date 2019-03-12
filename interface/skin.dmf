@@ -94,9 +94,12 @@ macro "macro"
 		command = "quick-equip"
 	elem "CTRL+F"
 		name = "CTRL+F"
-		command = "a-intent left"
+		command = "say \"*fart\""
 	elem "CTRL+G"
 		name = "CTRL+G"
+		command = "a-intent left"
+	elem "CTRL+H"
+		name = "CTRL+H"
 		command = "a-intent right"
 	elem "CTRL+Q"
 		name = "CTRL+Q"
@@ -282,15 +285,21 @@ macro "hotkeymode"
 		command = "quick-equip"
 	elem "F"
 		name = "F"
-		command = "a-intent left"
+		command = "say \"*fart\""
 	elem "CTRL+F"
 		name = "CTRL+F"
-		command = "a-intent left"
+		command = "say \"*fart\""
 	elem "G"
 		name = "G"
-		command = "a-intent right"
+		command = "a-intent left"
 	elem "CTRL+G"
 		name = "CTRL+G"
+		command = "a-intent left"
+	elem "H"
+		name = "H"
+		command = "a-intent right"
+	elem "CTRL+H"
+		name = "CTRL+H"
 		command = "a-intent right"
 	elem "M"
 		name = "M"
@@ -386,32 +395,32 @@ menu "menu"
 		name = "&Client"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Reconnect"
 		command = ".reconnect"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quit"
 		command = ".quit"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Icons"
 		command = ""
 		saved-params = "is-checked"
@@ -444,7 +453,7 @@ menu "menu"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Icons"
@@ -455,16 +464,16 @@ menu "menu"
 		category = "&Icons"
 		can-check = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Help"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Admin help\tF1"
 		command = "adminhelp"
 		category = "&Help"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Hotkeys"
 		command = "hotkeys-help"
 		category = "&Help"
@@ -473,12 +482,12 @@ menu "menu"
 		name = "Settings"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "General Settings"
 		command = "modifypreferences 1"
 		category = "Settings"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Special Roles"
 		command = "modifypreferences 2"
 		category = "Settings"
@@ -487,7 +496,7 @@ menu "menu"
 		name = "Skin"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Swap Sides"
 		command = "swapsides"
 		category = "Skin"
@@ -497,12 +506,12 @@ menu "menu"
 		command = ""
 		is-disabled = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Profiler"
 		command = ".profile"
 		category = "Server"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "Server"
@@ -1074,3 +1083,4 @@ window "window1"
 		background-color = #fffdd0
 		border = sunken
 		saved-params = "max-lines"
+
