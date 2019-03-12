@@ -270,7 +270,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
 	<b>Tertiary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
-	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
+	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"] - [skintone2racedescription(s_tone, species)]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'>Set</a><br>
 	<b>Limbs:</b> <a href='byond://?_src_=prefs;subsection=limbs;task=menu'>Set</a><br>
 	<b>Organs:</b> <a href='byond://?_src_=prefs;subsection=organs;task=menu'>Set</a><br>
@@ -1228,23 +1228,12 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)
 							s_tone = 35 - max(min(round(new_s_tone),220),1)
+							to_chat(user,"You're now [skintone2racedescription(s_tone, species)].")
 					else if(species == "Vox")//Can't reference species flags here, sorry.
 						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
 						if(skin_c)
 							s_tone = max(min(round(skin_c),6),1)
-							switch(s_tone)
-								if(6)
-									to_chat(user,"Your vox will now be emerald.")
-								if(5)
-									to_chat(user,"Your vox will now be azure.")
-								if(4)
-									to_chat(user,"Your vox will now be light green.")
-								if(3)
-									to_chat(user,"Your vox will now be gray.")
-								if(2)
-									to_chat(user,"Your vox will now be brown.")
-								else
-									to_chat(user,"Your vox will now be green.")
+							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return
