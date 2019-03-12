@@ -110,14 +110,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			to_chat(usr, "[L.name] will not fit into the cryo cell because they have a slime latched onto their head.")
 			return
 
-	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
-	if(put_mob(L))
-		if(L == user)
-			visible_message("[user] climbs into \the [src].")
-		else
-			visible_message("[user] puts [L.name] into \the [src].")
-			if(user.pulling == L)
-				user.pulling = null
+	user.visible_message("<span class='notice'>[user] starts placing [L] in \the [src]...</span>")
+	if(do_after(user, src, 30))
+		L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
+		if(put_mob(L))
+			if(L == user)
+				visible_message("[user] climbs into \the [src].")
+			else
+				visible_message("[user] puts [L.name] into \the [src].")
+				if(user.pulling == L)
+					user.pulling = null
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || occupant == usr || usr.incapacitated() || usr.lying)
