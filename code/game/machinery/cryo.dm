@@ -110,8 +110,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			to_chat(usr, "[L.name] will not fit into the cryo cell because they have a slime latched onto their head.")
 			return
 
-	user.visible_message("<span class='notice'>[user] starts placing [L] in \the [src]...</span>")
-	if(do_after(user, src, 30))
+	if(L == user)
+		user.visible_message("<span class='notice'>[user] starts climbing into \the [src]...</span>")
+	else
+		user.visible_message("<span class='notice'>[user] starts placing [L] in \the [src]...</span>")
+	if(L.lying) //You yourself can't go inside if you're on the floor though.
+		put_mob(L)
+		visible_message("[user] places [L] into \the [src].")
+		if(user.pulling == L)
+			user.pulling = null
+	else if(do_after(user, src, 30))
 		L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 		if(put_mob(L))
 			if(L == user)
