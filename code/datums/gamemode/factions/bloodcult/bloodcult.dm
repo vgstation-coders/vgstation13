@@ -685,6 +685,10 @@ var/veil_thickness = CULT_PROLOGUE
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HELD]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_HELD])
+		if (data[BLOODCOST_TARGET_BLOODPACK])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLOODPACK]
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_BLOODPACK]
+			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_BLOODPACK])
 		if (data[BLOODCOST_TARGET_CONTAINER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_CONTAINER]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]

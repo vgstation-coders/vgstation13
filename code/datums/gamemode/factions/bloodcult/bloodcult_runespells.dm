@@ -1020,9 +1020,7 @@
 	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
-	if (victim==M)
-		victim.clear_fullscreen("conversionred", 10)
-		victim.clear_fullscreen("conversionborder", 10)
+	if (victim == M)
 		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
@@ -1030,6 +1028,13 @@
 
 /datum/rune_spell/conversion/cast_talisman()//handled by /obj/item/weapon/talisman/proc/trigger instead
 	return
+
+/datum/rune_spell/conversion/abort(var/cause)
+	if (victim)
+		victim.clear_fullscreen("conversionred", 10)
+		victim.clear_fullscreen("conversionborder", 10)
+		victim = null
+	..()
 
 /obj/effect/cult_ritual/conversion
 	anchored = 1
