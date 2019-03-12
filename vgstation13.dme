@@ -1526,6 +1526,7 @@
 #include "code\modules\migrations\SS13_Prefs\013-add-bank-pref.dm"
 #include "code\modules\migrations\SS13_Prefs\014-add-credits-pref.dm"
 #include "code\modules\migrations\SS13_Prefs\015-add-jingle_pref.dm"
+#include "code\modules\migrations\SS13_Prefs\016-add-voice.dm"
 #include "code\modules\migrations\SS13_Prefs\_base.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"
