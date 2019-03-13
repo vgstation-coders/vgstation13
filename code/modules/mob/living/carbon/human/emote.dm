@@ -78,12 +78,8 @@
 	var/mob/living/carbon/human/H = user
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
-
 	if(world.time - H.lastFart <= 400)
-		message = "strains, and nothing happens."
-		emote_type = EMOTE_VISIBLE
-		return ..()
-
+		return FALSE
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
 			if(H.mind && !H.mind.miming)

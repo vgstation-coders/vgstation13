@@ -63,7 +63,8 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tx = swap-hand
 \tz = activate held object (or y)
 \tg = cycle-intents-left
-\th = cycle-intents-right
+\tf = say "*fart"
+\\th = cycle-intents-right
 \t1 = help-intent
 \t2 = disarm-intent
 \t3 = grab-intent
@@ -83,6 +84,7 @@ Any-Mode: (hotkey doesn't need to be on)
 \tCtrl+r = throw
 \tCtrl+x = swap-hand
 \tCtrl+z = activate held object (or Ctrl+y)
+\tCtrl+f = say "*fart"
 \tCtrl+g = cycle-intents-left
 \tCtrl+h = cycle-intents-right
 \tCtrl+1 = help-intent
