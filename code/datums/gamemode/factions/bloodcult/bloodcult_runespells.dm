@@ -393,7 +393,7 @@
 /datum/rune_spell/communication
 	name = "Communication"
 	desc = "Speak so that every cultists may hear your voice."
-	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it to transmit a message that will be remembered at all."
+	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it to transmit a message that will be remembered by all."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
 	rune_flags = RUNE_STAND
