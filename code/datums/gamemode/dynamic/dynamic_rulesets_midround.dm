@@ -400,23 +400,23 @@
 
 //////////////////////////////////////////////
 //                                          //
-//         SPACE WEEABOO (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//         SPACE NINJA (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/from_ghosts/weeaboo
-	name = "crazed weeaboo attack"
-	role_category = /datum/role/weeaboo
+/datum/dynamic_ruleset/midround/from_ghosts/ninja
+	name = "Space Ninja Attack"
+	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 4
 	cost = 10
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
-	logo = "weeaboo-logo"
+	logo = "ninja-logo"
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/midround/from_ghosts/weeaboo/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -425,7 +425,7 @@
 	else
 		return 0
 
-/datum/dynamic_ruleset/midround/from_ghosts/weeaboo/ready(var/forced = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()

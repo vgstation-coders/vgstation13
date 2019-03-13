@@ -22,7 +22,7 @@ var/global/list/special_roles = list(
 	WIZARD       	= 1,
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
-	WEEABOO			= 1,
+	NINJA			= 1,
 	ROLE_MINOR		= 1,
 )
 
@@ -40,7 +40,7 @@ var/global/list/special_roles = list(
 	WIZARD       	= 1,
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
-	WEEABOO			= 1,
+	NINJA			= 1,
 	ROLE_MINOR		= 1,
 )
 
@@ -68,7 +68,7 @@ var/list/role_wiki=list(
 	VOXRAIDER				= "Vox_Raider",
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
-	WEEABOO					= "Crazed_Weeaboo",
+	NINJA					= "Space_Ninja",
 	ROLE_MINOR				= "Minor_Roles",
 )
 
