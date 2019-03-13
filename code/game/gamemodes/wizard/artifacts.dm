@@ -204,13 +204,13 @@
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
 
-/datum/spellbook_artifact/summon_bombs
-	name = "Summon Bombs"
-	desc = "HAVE YOU GONE INSANE?!"
+/datum/spellbook_artifact/summon_explosives
+	name = "Summon Explosives"
+	desc = "Gives everyone boxes of explosives out of a selection of 5, with an abysmally low chance of giving them a loaded tank transfer valve."
 	abbreviation = "SB"
-	price = Sp_BASE_PRICE * 3 //60 points
+	price = Sp_BASE_PRICE * 2 //40 points
 
-/datum/spellbook_artifact/summon_bombs/can_buy(var/mob/user)
+/datum/spellbook_artifact/summon_explosives/can_buy(var/mob/user)
 	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_bombs/purchased(mob/living/carbon/human/H)
@@ -219,8 +219,8 @@
 	to_chat(H, "<span class='userdanger'>They call me Cuban Pete, I'm the king of the rhumba beat, when I play my maracas I go...</span>")
 
 /datum/spellbook_artifact/summon_emags
-	name = "Summon Emags"
-	desc = "Time for some chaos!"
+	name = "Summon electromagnetic cards"
+	desc = "This has been sponsored by The Syndicate(TM). This will give the crew electromagnetic cards and make them motivated to ruin the station."
 	abbreviation = "SE"
 
 /datum/spellbook_artifact/summon_emags/can_buy(var/mob/user)
@@ -229,11 +229,11 @@
 /datum/spellbook_artifact/summon_emags/purchased(mob/living/carbon/human/H)
 	..()
 	H.rightandwrong("emags")
-	to_chat(H, "<span class='userdanger'>You gave everyone emags. Nice.</span>")
+	to_chat(H, "<span class='userdanger'>You gave everyone electromagnetic cards.</span>")
 
 /datum/spellbook_artifact/summon_mechs
 	name = "Summon Mechs"
-	desc = "This really feels like a certain tabletop now!"
+	desc = "This will give the crew mechs out of a selection of 5, and only two of which are properly armed. This really feels like a certain tabletop!"
 	abbreviation = "SM"
 	price = Sp_BASE_PRICE * 2 //40 points
 
