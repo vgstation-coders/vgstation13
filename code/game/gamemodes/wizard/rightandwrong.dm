@@ -48,7 +48,7 @@
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
 		if (/datum/role/survivor/bomber)
-			return equip_bombs(R)
+			return equip_explosives(R)
 		if (/datum/role/survivor/mech)
 			return equip_mechs(R)
 		if (/datum/role/survivor/saboteur)
@@ -57,8 +57,24 @@
 			return equip_guns(R)
 
 /mob/living/carbon/human/proc/equip_explosives(var/datum/role/R)
-	var/randomizeexplosives = pick("
-	new /obj/effect/spawner/newbomb/timer(get_turf(src))
+	var/randomizeexplosives = pick("Bangerboy", "EMP", "Bangerboy ULTRA", "IED", "Chrono") //It doesn't have to be practical. Just chaotic.
+	switch(randomizeexplosives)
+		if("Bangerboy")
+			new /obj/item/weapon/storage/box/flashbangs(get_turf(src))
+		if("EMP")
+			new /obj/item/weapon/storage/box/emps(get_turf(src))
+		if("Bangerboy ULTRA")
+			new /obj/item/weapon/storage/box/clusterbangs(get_turf(src))
+		if("IED")
+			new /obj/item/weapon/storage/box/IED(get_turf(src))
+		if("Chrono")
+			new /obj/item/weapon/storage/box/chrono_grenades(get_turf(src))
+	if(prob(5))
+		to_chat(R, "<span class='warning'>You rolled lucky, and received a powerful bomb!</span>")
+		new /obj/effect/spawner/newbomb/timer(get_turf(src))
+	var/datum/role/survivor/bomber/B = R
+	if(B)
+		B.summons_received = randomizeexplosives
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_mechs(var/datum/role/R)

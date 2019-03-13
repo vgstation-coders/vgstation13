@@ -230,6 +230,25 @@
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/flashbang(src)
 
+/obj/item/weapon/storage/box/clusterbangs
+	name = "box of clusterbangs (WARNING)"
+	desc = "You chose this."
+	icon_state = "flashbang"
+
+/obj/item/weapon/storage/box/clusterbangs/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+
+/obj/item/weapon/storage/box/IED
+	name = "box of Improvised Explosive Devices"
+	desc = "Contains 5 improvised explosives laced with shrapnel."
+
+/obj/item/weapon/storage/box/IED/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+
 /obj/item/weapon/storage/box/smokebombs
 	name = "box of smokebombs"
 	icon_state = "smokebomb"
