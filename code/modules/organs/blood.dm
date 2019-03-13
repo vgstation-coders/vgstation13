@@ -282,7 +282,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 	if (!injected)
 		return
-	src.virus2 |= virus_copylist(injected.data["virus2"])
+	var/list/blood_viruses = injected.data["virus2"]
+	if (istype(blood_viruses) && blood_viruses.len > 0)
+		for (var/ID in blood_viruses)
+			var/datum/disease2/disease/D = blood_viruses[ID]
+			infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 	if (injected.data["antibodies"] && prob(5))
 		antibodies |= injected.data["antibodies"]
 	var/list/chems = list()

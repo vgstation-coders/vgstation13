@@ -42,8 +42,6 @@
 	var/is_fat = 0
 	var/can_chew_wires = 0
 
-	var/antibodies = 0
-
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -88,7 +86,53 @@
 		if(prob(5))
 			to_chat(src, "<span class = 'warning'>You are getting hungry!</span>")
 
+	find_nearby_disease()
 
+	if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
+		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
+			if (cloud.source != src)
+				for (var/ID in cloud.viruses)
+					var/datum/disease2/disease/V = cloud.viruses[ID]
+					//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+					infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+
+		var/turf/T = get_turf(src)
+		var/list/breathable_cleanable_types = list(
+			/obj/effect/decal/cleanable/blood,
+			/obj/effect/decal/cleanable/mucus,
+			/obj/effect/decal/cleanable/vomit,
+			)
+
+		for(var/obj/effect/decal/cleanable/C in T)
+			if (is_type_in_list(C,breathable_cleanable_types))
+				if(istype(C.virus2,/list) && C.virus2.len > 0)
+					for(var/ID in C.virus2)
+						var/datum/disease2/disease/V = C.virus2[ID]
+						if(V.spread & SPREAD_AIRBORNE)
+							infect_disease2(V, notes="(Airborne from [C])")
+
+		for(var/obj/effect/rune/R in T)
+			if(istype(R.virus2,/list) && R.virus2.len > 0)
+				for(var/ID in R.virus2)
+					var/datum/disease2/disease/V = R.virus2[ID]
+					if(V.spread & SPREAD_AIRBORNE)
+						infect_disease2(V, notes="(Airborne from [R])")
+
+		//spreading our own airborne viruses
+		if (virus2 && virus2.len > 0)
+			var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
+			if (airborne_viruses && airborne_viruses.len > 0)
+				var/strength = 0
+				for (var/ID in airborne_viruses)
+					var/datum/disease2/disease/V = airborne_viruses[ID]
+					strength += V.infectionchance
+				strength = round(strength/airborne_viruses.len)
+				while (strength > 0)//stronger viruses create more clouds at once
+					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+					strength -= 40
+
+	for (var/mob/living/simple_animal/mouse/M in range(1,src))
+		share_contact_diseases(M)
 
 	if(!isUnconscious())
 		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
@@ -157,6 +201,7 @@
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 /*
 /mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
 	..()
@@ -249,12 +294,30 @@
 ///mob/living/simple_animal/mouse/restrained() //Hotfix to stop mice from doing things with MouseDrop
 //	return 1
 
+/mob/living/simple_animal/mouse/scoop_up(var/mob/living/M)
+	if (..())
+		var/block = M.check_contact_sterility(HANDS)
+		var/bleeding = M.check_bodypart_bleeding(HANDS)
+		share_contact_diseases(M,block,bleeding)
+
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
+		var/mob/living/carbon/human/M = AM
 		if(!stat)
-			var/mob/M = AM
 			to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
 			M << 'sound/effects/mousesqueek.ogg'
+
+		var/block = 0
+		var/bleeding = 0
+		if (lying)
+			block = M.check_contact_sterility(FULL_TORSO)
+			bleeding = M.check_bodypart_bleeding(FULL_TORSO)
+		else
+			block = M.check_contact_sterility(FEET)
+			bleeding = M.check_bodypart_bleeding(FEET)
+
+		//sharing diseases with people stepping on us
+		share_contact_diseases(M,block,bleeding)
 	..()
 
 /mob/living/simple_animal/mouse/death(var/gibbed = FALSE)

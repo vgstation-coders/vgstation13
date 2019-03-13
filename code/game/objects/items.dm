@@ -214,7 +214,7 @@
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
 
-/obj/item/attack_hand(mob/user as mob)
+/obj/item/attack_hand(var/mob/user)
 	if (!user)
 		return
 
@@ -244,7 +244,8 @@
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
-	return
+	//transfers diseases between the mob and the item
+	disease_contact(user)
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
@@ -1012,14 +1013,16 @@
 
 /obj/item/clean_blood()
 	. = ..()
-	if(blood_overlay)
+	if (virus2 && virus2.len > 0)
+		virus2 = list()
+	if (blood_overlay)
 		overlays.Remove(blood_overlay)
-	if(istype(src, /obj/item/clothing/gloves))
+	if (istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
 
 
-/obj/item/add_blood(mob/living/carbon/human/M as mob)
+/obj/item/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
 	if(istype(src, /obj/item/weapon/melee/energy))
@@ -1042,6 +1045,17 @@
 
 	if(!M)
 		return
+
+	if (M.virus2 && M.virus2.len > 0)
+		var/list/blood_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_BLOOD)
+		if (blood_diseases.len > 0)
+			for (var/ID in blood_diseases)
+				var/datum/disease2/disease/D = blood_diseases[ID]
+				infect_disease2(D, notes="(Blood, coming from [M])")
+				if (isliving(loc))
+					var/mob/living/L = loc
+					infection_attempt(L,D)//Wear gloves when doing surgery or beating that catbeast to death!
+
 	if(blood_DNA[M.dna.unique_enzymes])
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
@@ -1333,3 +1347,37 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return
+
+
+/////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
+//Called by attack_hand(), transfers diseases between the mob and the item
+/obj/item/proc/disease_contact(var/mob/living/M)
+	//first let's try to infect them with our viruses
+	for (var/ID in virus2)
+		var/datum/disease2/disease/D = virus2[ID]
+		infection_attempt(M,D)
+
+	//secondly, do they happen to carry contact-spreading viruses themselves?
+	var/list/contact_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_CONTACT)
+	if (contact_diseases.len > 0)
+		//if so are their hands protected?
+		if (!M.check_contact_sterility(HANDS))
+			for (var/ID in contact_diseases)
+				var/datum/disease2/disease/D = contact_diseases[ID]
+				infect_disease2(D, notes="(Contact, from being touched by [M])")
+
+
+	//spreading of blood-spreading diseases to items is handled by add_blood()
+
+//Called by disease_contact(), trying to infect people who pick us up
+/obj/item/proc/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D)
+	if (!istype(D))
+		return
+	if (src in perp.held_items)
+		var/block = perp.check_contact_sterility(HANDS)
+		var/bleeding = perp.check_bodypart_bleeding(HANDS)
+		if (!block)
+			if (D.spread & SPREAD_CONTACT)
+				perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
+			else if (bleeding && (D.spread & SPREAD_BLOOD))//if we're covered with a blood-spreading disease, we may infect people with bleeding hands.
+				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")

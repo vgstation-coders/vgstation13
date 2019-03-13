@@ -40,15 +40,17 @@
 		var/datum/disease2/disease/V = viruses[ID]
 		strength += V.infectionchance
 	strength = round(strength/viruses.len)
-	target = pick(range(max(0,1-(strength/20)),loc))//stronger viruses can reach turfs further away.
+	var/list/possible_turfs = list()
+	for (var/turf/T in range(max(0,(strength/20)-1),loc))//stronger viruses can reach turfs further away.
+		possible_turfs += T
+	target = pick(possible_turfs)
 	spawn()
 		sleep (1 SECONDS)
 		while (src && src.loc)
-			var/oldloc = loc
+			if (src.loc != target)
+				getFromPool(/obj/effect/effect/pathogen_cloud,src.loc,source,viruses)
 			if (prob(75))
 				step_towards(src,target)
 			else
 				step_rand(src)
-			if (oldloc != loc)
-				getFromPool(/obj/effect/effect/pathogen_cloud,oldloc,source,virus)
 			sleep (1 SECONDS)

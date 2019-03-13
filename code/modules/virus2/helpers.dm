@@ -110,22 +110,129 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	return 0
 */
 
-//This proc is called when the disease has already bypassed clothing and other protections
-/proc/infect_disease2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
+///////////////////////////////////////////
+//                                       //
+//          STERILITY CHECKS             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                       //
+///////////////////////////////////////////
+//AIRBORNE
+
+/mob/living/proc/check_airborne_sterility()
+	return 0
+
+/mob/living/carbon/human/check_airborne_sterility()
+	var/block = 0
+	if (wear_mask && (wear_mask.body_parts_covered & MOUTH) && prob(wear_mask.sterility))
+		block = 1
+	if (head && (head.body_parts_covered & MOUTH) && prob(head.sterility))
+		block = 1
+	return block
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//CONTACT
+
+/mob/living/proc/check_contact_sterility(var/body_part)
+	return 0
+
+/mob/living/carbon/human/check_contact_sterility(var/body_part)
+	var/block = 0
+	var/list/clothing_to_check = list(
+		wear_mask,
+		w_uniform,
+		head,
+		wear_suit,
+		back,
+		gloves,
+		handcuffed,
+		belt,
+		shoes,
+		wear_mask,
+		glasses,
+		ears,
+		wear_id)
+	for (var/thing in clothing_to_check)
+		var/obj/item/cloth = thing
+		if(istype(cloth) && (cloth.body_parts_covered & body_part) && prob(cloth.sterility))
+			block = 1
+	return block
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//BLEEDING (bleeding body parts allow SPREAD_BLOOD to infect)
+
+/mob/living/proc/check_bodypart_bleeding(var/body_part)
+	return 0
+
+/mob/living/carbon/human/check_bodypart_bleeding(var/body_part)
+	var/bleeding = 0
+	switch(body_part)
+		if (HEAD)//head-patting
+			var/datum/organ/external/head = organs_by_name[LIMB_HEAD]
+			if(head.status & ORGAN_BLEEDING)
+				bleeding = 1
+		if (FULL_TORSO)//hugging, lying over infected blood, broken dishes
+			var/datum/organ/external/chest = organs_by_name[LIMB_CHEST]
+			if(chest.status & ORGAN_BLEEDING)
+				bleeding = 1
+		if (FEET)//walking over infected blood, broken dishes
+			var/datum/organ/external/l_foot = organs_by_name[LIMB_LEFT_FOOT]
+			if(l_foot.status & ORGAN_BLEEDING)
+				bleeding = 1
+			var/datum/organ/external/r_foot = organs_by_name[LIMB_RIGHT_FOOT]
+			if(r_foot.status & ORGAN_BLEEDING)
+				bleeding = 1
+		if (HANDS)//walking over infected blood, broken dishes
+			var/datum/organ/external/l_hand = organs_by_name[LIMB_LEFT_HAND]
+			if(l_hand.status & ORGAN_BLEEDING)
+				bleeding = 1
+			var/datum/organ/external/r_hand = organs_by_name[LIMB_RIGHT_HAND]
+			if(r_hand.status & ORGAN_BLEEDING)
+				bleeding = 1
+	return bleeding
+
+///////////////////////////////////////////
+//                                       //
+//              INFECTION                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                       //
+///////////////////////////////////////////
+
+/atom/proc/infect_disease2(var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
+	return 0
+
+//This proc is called when the disease has already bypassed clothing and other protections, when it's actually time to infect our mob.
+/mob/living/infect_disease2(var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
 	if(!istype(disease))
 		return 0
-	if(!M.can_be_infected())
+	if(disease.spread == 0)
 		return 0
-	if ("[disease.uniqueID]" in M.virus2)
+	if(!can_be_infected())
 		return 0
-	if((M.antibodies & disease.antigen) != 0)
+	if ("[disease.uniqueID]" in virus2)
+		return 0
+	if((antibodies & disease.antigen) != 0)
 		return 0
 	if(prob(disease.infectionchance) || forced)
 		var/datum/disease2/disease/D = disease.getcopy()
 		if (D.infectionchance > 10)
 			D.infectionchance -= 10//The virus gets weaker as it jumps from people to people
-		D.log += "<br />[timestamp()] Infected [key_name(M)] [notes]"
-		M.virus2["[D.uniqueID]"] = D
+		D.stage = Clamp(D.stage+D.stage_variance, 1, D.max_stage)
+		D.log += "<br />[timestamp()] Infected [key_name(src)] [notes]"
+		virus2["[D.uniqueID]"] = D
+		return 1
+	return 0
+
+/obj/item/infect_disease2(var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
+	if(!istype(disease))
+		return 0
+	if(disease.spread == 0)
+		return 0
+	if (prob(sterility))
+		return 0
+	if ("[disease.uniqueID]" in virus2)
+		return 0
+	if(prob(disease.infectionchance) || forced)
+		var/datum/disease2/disease/D = disease.getcopy()
+		D.log += "<br />[timestamp()] Infected \a [src] [notes]"
+		virus2["[D.uniqueID]"] = D
 		return 1
 	return 0
 

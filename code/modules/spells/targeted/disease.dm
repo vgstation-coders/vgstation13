@@ -55,7 +55,7 @@
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185
-	//infect_virus2(target,shutdown,0)
+	target.infect_disease2(shutdown, notes="(Spell, from [key_name(user)])")
 
 	var/datum/role/vampire/V = isvampire(user)
 	if(!V)

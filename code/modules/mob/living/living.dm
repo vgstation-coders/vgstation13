@@ -1521,7 +1521,7 @@ Thanks.
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)
-		return
+		return 0
 
 	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
 
@@ -1529,10 +1529,11 @@ Thanks.
 		to_chat(M, "You scoop up [src].")
 		to_chat(src, "[M] scoops you up.")
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
+		return 1
 	else
 		returnToPool(D)
 
-	return
+	return 0
 
 /mob/living/nuke_act() //Called when caught in a nuclear blast
 	health = 0
@@ -1836,3 +1837,89 @@ Thanks.
 	Knockdown(weaken_amount)
 	score["slips"]++
 	return 1
+
+//Called in Life() by humans (in handle_virus_updates.dm), monkeys and mice
+/mob/living/proc/find_nearby_disease()//only tries to find Contact and Blood spread diseases. Airborne ones are handled by breathing.
+	if(locked_to)//Riding a vehicle?
+		return
+	if(flying)//Flying?
+		return
+
+	var/turf/T = get_turf(src)
+
+	//Virus Dishes aren't toys, handle with care, especially when they're open.
+	for(var/obj/effect/decal/cleanable/virusdish/dish in T)
+		dish.infection_attempt(src)
+	for(var/obj/item/weapon/virusdish/dish in T)
+		if (dish.open && dish.contained_virus)
+			dish.infection_attempt(src,dish.contained_virus)
+	var/obj/item/weapon/virusdish/dish = locate() in held_items
+	if (dish && dish.open && dish.contained_virus)
+		dish.infection_attempt(src,dish.contained_virus)
+
+	//Now to check for stuff that's on the floor
+	var/block = 0
+	var/bleeding = 0
+	if (lying)
+		block = check_contact_sterility(FULL_TORSO)
+		bleeding = check_bodypart_bleeding(FULL_TORSO)
+	else
+		block = check_contact_sterility(FEET)
+		bleeding = check_bodypart_bleeding(FEET)
+
+	var/list/viral_cleanable_types = list(
+		/obj/effect/decal/cleanable/blood,
+		/obj/effect/decal/cleanable/mucus,
+		/obj/effect/decal/cleanable/vomit,
+		)
+
+	for(var/obj/effect/decal/cleanable/C in T)
+		if (is_type_in_list(C,viral_cleanable_types))
+			if(istype(C.virus2,/list) && C.virus2.len > 0)
+				for(var/ID in C.virus2)
+					var/datum/disease2/disease/V = C.virus2[ID]
+					if (!block)
+						if (V.spread & SPREAD_CONTACT)
+							infect_disease2(V, notes="(Contact, from [C])")
+						else if (bleeding && (V.spread & SPREAD_BLOOD))
+							infect_disease2(V, notes="(Blood, from [C])")
+
+	for(var/obj/effect/rune/R in T)
+		if(istype(R.virus2,/list) && R.virus2.len > 0)
+			for(var/ID in R.virus2)
+				var/datum/disease2/disease/V = R.virus2[ID]
+				if (!block)
+					if (V.spread & SPREAD_CONTACT)
+						infect_disease2(V, notes="(Contact, from [R])")
+					else if (bleeding && (V.spread & SPREAD_BLOOD))
+						infect_disease2(V, notes="(Blood, from [R])")
+	return 0
+
+//This one is used for one-way infections, such as getting splashed with someone's blood due to clobbering them to death
+/mob/living/proc/oneway_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
+	if (!block)
+		if (istype(L.virus2) && L.virus2.len > 0)
+			for(var/ID in L.virus2)
+				var/datum/disease2/disease/V = L.virus2[ID]
+				if (V.spread & SPREAD_CONTACT)
+					infect_disease2(V, notes="(Contact, from [L])")
+				else if ((stat == DEAD) && bleeding && (V.spread & SPREAD_BLOOD))
+					infect_disease2(V, notes="(Blood, from [L])")
+
+//This one is used for two-ways infections, such as hand-shakes, hugs, punches, people bumping into each others, etc
+/mob/living/proc/share_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
+	if (!block)
+		if (istype(virus2) && virus2.len > 0)
+			for(var/ID in virus2)
+				var/datum/disease2/disease/V = virus2[ID]
+				if (V.spread & SPREAD_CONTACT)
+					L.infect_disease2(V, notes="(Contact, from [src])")
+				else if ((stat == DEAD) && bleeding && (V.spread & SPREAD_BLOOD))
+					L.infect_disease2(V, notes="(Blood, from [src])")
+		if (istype(L.virus2) && L.virus2.len > 0)
+			for(var/ID in L.virus2)
+				var/datum/disease2/disease/V = L.virus2[ID]
+				if (V.spread & SPREAD_CONTACT)
+					infect_disease2(V, notes="(Contact, from [L])")
+				else if ((stat == DEAD) && bleeding && (V.spread & SPREAD_BLOOD))
+					infect_disease2(V, notes="(Blood, from [L])")

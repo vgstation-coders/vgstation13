@@ -335,10 +335,17 @@ emp_act
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
 
 /mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 2)
+	//we're getting splashed with blood, so let's check for viruses
+	var/block = check_contact_sterility(HANDS)
+	var/bleeding = check_bodypart_bleeding(HANDS)
+	oneway_contact_diseases(source,block,bleeding)
+
 	if (gloves)
-		gloves.add_blood(source)
-		gloves:transfer_blood = amount
-		gloves:bloody_hands_mob = source
+		var/obj/item/clothing/gloves/G = gloves
+		G.add_blood(source)
+		if (istype(G))
+			G.transfer_blood = amount
+			G.bloody_hands_mob = source
 	else
 		add_blood(source)
 		bloody_hands = amount
@@ -346,6 +353,11 @@ emp_act
 	update_inv_gloves()		//updates on-mob overlays for bloody hands and/or bloody gloves
 
 /mob/living/carbon/human/proc/bloody_body(var/mob/living/source,var/update = 0)
+	//we're getting splashed with blood, so let's check for viruses
+	var/block = check_contact_sterility(FULL_TORSO)
+	var/bleeding = check_bodypart_bleeding(FULL_TORSO)
+	oneway_contact_diseases(source,block,bleeding)
+
 	if(wear_suit)
 		wear_suit.add_blood(source)
 		update_inv_wear_suit(update)

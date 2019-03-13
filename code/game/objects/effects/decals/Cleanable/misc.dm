@@ -243,3 +243,59 @@
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+
+/obj/effect/decal/cleanable/virusdish
+	name = "broken virus containment dish"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "brokendish-outline"
+	density = 0
+	anchored = 1
+	mouse_opacity = 1
+	layer = OBJ_LAYER
+	plane = OBJ_PLANE
+	var/mob/last_openner
+	var/datum/disease2/disease/contained_virus
+
+/obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
+	..()
+	if(istype(perp))
+		if(perp.locked_to)//Riding a vehicle? Just make some noise.
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
+			return
+		if(perp.flying)//Flying? Ignore it altogether.
+			return
+		else		//Otherwise you might hurt your feet if not wearing shoes
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
+			if(ishuman(perp))
+				var/mob/living/carbon/human/H = perp
+				var/danger = FALSE
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
+						danger = TRUE
+
+						if(!H.lying && H.feels_pain())
+							H.Knockdown(3)
+						if(foot.take_damage(5, 0))
+							H.UpdateDamageIcon()
+						H.updatehealth()
+
+				to_chat(perp, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
+		infection_attempt(perp)
+
+/obj/effect/decal/cleanable/virusdish/proc/infection_attempt(var/mob/living/perp)
+	//Now if your feet aren't well protected, or are bleeding, you might get infected.
+	var/block = 0
+	var/bleeding = 0
+	if (perp.lying)
+		block = perp.check_contact_sterility(FULL_TORSO)
+		bleeding = perp.check_bodypart_bleeding(FULL_TORSO)
+	else
+		block = perp.check_contact_sterility(FEET)
+		bleeding = perp.check_bodypart_bleeding(FEET)
+
+	if (!block)
+		if (contained_virus.spread & SPREAD_CONTACT)
+			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [key_name(last_openner)]" : ""])")
+		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
+			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [key_name(last_openner)]" : ""])")

@@ -1,7 +1,6 @@
 /mob/living/carbon/
 	gender = MALE
 	var/list/stomach_contents = list()
-	var/antibodies = 0
 
 	var/last_eating = 0 	//Not sure what this does... I found it hidden in food.dm
 

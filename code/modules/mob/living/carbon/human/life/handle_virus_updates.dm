@@ -10,7 +10,7 @@
 			var/datum/disease2/disease/V = virus2[ID]
 			V.cure(src)
 
-	src.findAirborneVirii()
+	src.find_nearby_disease()
 
 	for(var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
@@ -27,3 +27,4 @@
 			V.dead = 1
 
 	return
+

@@ -390,10 +390,20 @@
 	if(iscarbon(M)) //Those methods only work for carbons
 		var/mob/living/carbon/C = M
 		if(self.data && self.data["virus2"]) //Infecting
-			if(method == TOUCH)
-			//	infect_virus2(C, self.data["virus2"], notes = "(Contact with blood)")
-			else
-			//	infect_virus2(C, self.data["virus2"], 1, notes = "(INJECTED)") //Injected, force infection
+			var/list/blood_viruses = self.data["virus2"]
+			if (istype(blood_viruses) && blood_viruses.len > 0)
+				for (var/ID in blood_viruses)
+					var/datum/disease2/disease/D = blood_viruses[ID]
+					if(method == TOUCH)
+						var/block = C.check_contact_sterility(FULL_TORSO)
+						var/bleeding = C.check_bodypart_bleeding(FULL_TORSO)
+						if (!block)
+							if (D.spread & SPREAD_CONTACT)
+								C.infect_disease2(D, notes="(Contact, splashed with infected blood)")
+							else if (bleeding && (D.spread & SPREAD_BLOOD))
+								C.infect_disease2(D, notes="(Blood, splashed with infected blood)")
+					else
+						C.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 		if(self.data && self.data["antibodies"]) //And curing
 			C.antibodies |= self.data["antibodies"]
 

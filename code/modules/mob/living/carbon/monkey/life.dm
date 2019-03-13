@@ -183,27 +183,6 @@
 					emote("gasp")
 				updatehealth()
 
-// separate proc so we can jump out of it when we've succeeded in spreading disease.
-/mob/living/carbon/monkey/proc/findAirborneVirii()
-	if(blood_virus_spreading_disabled)
-		return 0
-	/*
-	for(var/obj/effect/decal/cleanable/blood/B in get_turf(src))
-		if(B.virus2.len)
-			for (var/ID in B.virus2)
-				var/datum/disease2/disease/V = B.virus2[ID]
-				if (infect_virus2(src,V, notes="(Airborne from blood)"))
-					return 1
-
-	for(var/obj/effect/decal/cleanable/mucus/M in get_turf(src))
-		if(M.virus2.len)
-			for (var/ID in M.virus2)
-				var/datum/disease2/disease/V = M.virus2[ID]
-				if (infect_virus2(src,V, notes="(Airborne from mucus)"))
-					return 1
-					*/
-	return 0
-
 /mob/living/carbon/monkey/proc/handle_virus_updates()
 	if(status_flags & GODMODE)
 		return 0	//godmode
@@ -214,7 +193,7 @@
 			var/datum/disease2/disease/V = virus2[ID]
 			V.cure(src)
 
-	src.findAirborneVirii()
+	src.find_nearby_disease()
 
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
@@ -404,6 +383,60 @@
 	else
 		fire_alert = 0
 
+	//breathing diseases
+	var/block = 0
+	var/list/blockers = list(wear_mask,glasses,hat)
+	for (var/item in blockers)
+		var/obj/item/I = item
+		if (!istype(I))
+			continue
+		if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+			block = 1
+			break
+
+	if(!block)
+		if (!check_airborne_sterility())
+			for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
+				if (cloud.source != src)
+					for (var/ID in cloud.viruses)
+						var/datum/disease2/disease/V = cloud.viruses[ID]
+						//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+						infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+
+			var/turf/T = get_turf(src)
+			var/list/breathable_cleanable_types = list(
+				/obj/effect/decal/cleanable/blood,
+				/obj/effect/decal/cleanable/mucus,
+				/obj/effect/decal/cleanable/vomit,
+				)
+
+			for(var/obj/effect/decal/cleanable/C in T)
+				if (is_type_in_list(C,breathable_cleanable_types))
+					if(istype(C.virus2,/list) && C.virus2.len > 0)
+						for(var/ID in C.virus2)
+							var/datum/disease2/disease/V = C.virus2[ID]
+							if(V.spread & SPREAD_AIRBORNE)
+								infect_disease2(V, notes="(Airborne from [C])")
+
+			for(var/obj/effect/rune/R in T)
+				if(istype(R.virus2,/list) && R.virus2.len > 0)
+					for(var/ID in R.virus2)
+						var/datum/disease2/disease/V = R.virus2[ID]
+						if(V.spread & SPREAD_AIRBORNE)
+							infect_disease2(V, notes="(Airborne from [R])")
+
+			//spreading our own airborne viruses
+			if (virus2 && virus2.len > 0)
+				var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
+				if (airborne_viruses && airborne_viruses.len > 0)
+					var/strength = 0
+					for (var/ID in airborne_viruses)
+						var/datum/disease2/disease/V = airborne_viruses[ID]
+						strength += V.infectionchance
+					strength = round(strength/airborne_viruses.len)
+					while (strength > 0)//stronger viruses create more clouds at once
+						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+						strength -= 40
 
 	//Temporary fixes to the alerts.
 

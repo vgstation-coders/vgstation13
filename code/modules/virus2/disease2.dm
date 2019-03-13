@@ -29,6 +29,11 @@ var/global/list/disease2_list = list()
 	var/log = ""
 	var/logged_virusfood=0
 
+	//cosmetic
+	var/color
+	var/pattern = 1
+	var/pattern_color
+
 /datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
 	form = "Bacteria"
 	max_stage = 3
@@ -53,6 +58,10 @@ var/global/list/disease2_list = list()
 	log_debug("[form] [uniqueID] created with notes: [notes]")
 	log += "<br />[timestamp()] CREATED - [notes]<br>"
 	disease2_list["[uniqueID]"] = src
+	var/list/randomhexes = list("8","9","a","b","c","d","e")
+	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	pattern = rand(1,6)
+	pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	..()
 
 /datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0, var/old_effect)
@@ -85,7 +94,10 @@ var/global/list/disease2_list = list()
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
-
+	var/list/randomhexes = list("8","9","a","b","c","d","e")
+	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	pattern = rand(1,6)
+	pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	randomize_spread()
 
 
@@ -211,16 +223,6 @@ var/global/list/disease2_list = list()
 		if (e.can_run_effect(stage))
 			e.run_effect(mob)
 
-/*
-	//Short airborne spread from non-humans. Human virus spread is handled in handle_breath.dm
-	if(!ishuman(mob) && src.spread & SPREAD_AIRBORNE)
-		for(var/mob/living/carbon/M in oview(1,mob))
-			if(airborne_can_reach(get_turf(mob), get_turf(M)))
-				//infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
-		for(var/mob/living/simple_animal/mouse/MM in oview(1,mob))
-			if(airborne_can_reach(get_turf(mob), get_turf(MM)))
-				//infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
-*/
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
 	clicks+=speed
@@ -273,10 +275,13 @@ var/global/list/disease2_list = list()
 	disease.antigen   = antigen
 	disease.uniqueID = uniqueID
 	disease.speed = speed
-	disease.stage = Clamp(stage+stage_variance, 1, max_stage)
+	disease.stage = stage
 	disease.clicks = clicks
 	disease.max_stage = max_stage
 	disease.stage_variance = stage_variance
+	disease.color = color
+	disease.pattern = pattern
+	disease.pattern_color = pattern_color
 	for(var/datum/disease2/effect/e in effects)
 		disease.effects += e.getcopy(disease)
 	return disease

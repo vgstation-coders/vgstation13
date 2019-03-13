@@ -46,9 +46,28 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/carbon/human/patient in range(T))
-		if(patient.head && istype(patient.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+	for(var/mob/living/simple_animal/mouse/patient in range(T))
+		if(!check_HUD_visibility(patient, M))
 			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if(holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else if(patient.status_flags & XENO_HOST)
+				holder.icon_state = "hudxeno"
+			else if(has_any_recorded_disease(patient))
+				holder.icon_state = "hudill"
+			else
+				holder.icon_state = "hudhealthy"
+			C.images += holder
+
+	for(var/mob/living/carbon/patient in range(T))
+		if (ishuman(patient))
+			var/mob/living/carbon/human/H = patient
+			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+				continue
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -76,8 +95,9 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 			C.images += holder
 
 		holder = patient.hud_list[RECORD_HUD]
-		if(holder)
-			var/targetname = patient.get_identification_name(patient.get_face_name())
+		if(holder && ishuman(patient))
+			var/mob/living/carbon/human/H = patient
+			var/targetname = H.get_identification_name(H.get_face_name())
 			var/medical = null
 			var/datum/data/record/gen_record = data_core.find_general_record_by_name(targetname)
 			if(gen_record)
