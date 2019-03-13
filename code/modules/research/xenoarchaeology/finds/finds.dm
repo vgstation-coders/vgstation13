@@ -500,13 +500,18 @@
 /datum/find/rods/spawn_item()
 	return new /obj/item/stack/rods
 
-/datum/find/stock_parts
+/datum/find/stock_parts //Tier 4 parts
 	find_ID = ARCHAEO_STOCKPARTS
 	apply_material_decorations = FALSE
 	anomaly_factor = 2
 
 /datum/find/stock_parts/spawn_item()
-	var/list/possible_spawns = existing_typesof(/obj/item/weapon/stock_parts)
+	var/list/possible_spawns = list(
+			/obj/item/weapon/stock_parts/capacitor/adv/super/ultra,
+			/obj/item/weapon/stock_parts/micro_laser/high/ultra/giga,
+			/obj/item/weapon/stock_parts/manipulator/nano/pico/femto,
+			/obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace,
+			/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
 	var/new_type = pick(possible_spawns)
 	var/obj/item/new_item = new new_type
 	item_type = new_item.name
