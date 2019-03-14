@@ -85,24 +85,3 @@
 				. += "[entry]<BR>"
 		if(bought_nothing)
 			. += "The wizard used only the magic of charisma this round."
-
-/datum/role/wizard/summon_magic
-	disallow_job = FALSE
-	name = MAGICIAN
-	id = MAGICIAN
-	logo_state = "magik-logo"
-	var/summons_received
-
-/datum/role/wizard/summon_magic/ForgeObjectives()
-	var/datum/objective/survive/S = new
-	AppendObjective(S)
-
-/datum/role/wizard/summon_magic/Greet()
-	to_chat(antag.current, "<B>You are a Magician! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
-
-/datum/role/wizard/summon_magic/OnPostSetup()
-	return TRUE
-
-/datum/role/wizard/summon_magic/GetScoreboard()
-	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
