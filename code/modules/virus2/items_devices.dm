@@ -27,6 +27,7 @@
 	name = "virus containment/growth dish"
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "virusdish"
+	w_class = W_CLASS_SMALL
 	var/growth = 0
 	var/info = 0
 	var/analysed = 0
@@ -77,6 +78,9 @@
 		var/image/I4 = image(icon,src,"virusdish-reflection")
 		overlays += I4
 
+/obj/item/weapon/virusdish/attack_hand(var/mob/user)
+	..()
+	infection_attempt(user)
 
 /obj/item/weapon/virusdish/attack_self(var/mob/user)
 	open = !open
@@ -86,12 +90,12 @@
 		last_openner = user
 		if (contained_virus)
 			contained_virus.log += "<br />[timestamp()] Containment Dish openned by [key_name(user)]."
-		infection_attempt(user)
 		processing_objects.Add(src)
 	else
 		if (contained_virus)
 			contained_virus.log += "<br />[timestamp()] Containment Dish closed by [key_name(user)]."
 		processing_objects.Remove(src)
+	infection_attempt(user)
 
 /obj/item/weapon/virusdish/process()
 	if (!contained_virus || !(contained_virus.spread & SPREAD_AIRBORNE))
@@ -172,27 +176,31 @@
 		to_chat(user, src.info)
 
 
-/obj/item/weapon/virusdish/infection_attempt(var/mob/living/perp)
-	if (!open)
-		return
-	var/block = 0
-	var/bleeding = 0
-
-	if (isturf(loc) && loc == perp.loc)//is our perp standing over the open dish?
-		if (perp.lying)
-			block = perp.check_contact_sterility(FULL_TORSO)
-			bleeding = perp.check_bodypart_bleeding(FULL_TORSO)
-		else
-			block = perp.check_contact_sterility(FEET)
-			bleeding = perp.check_bodypart_bleeding(FEET)
-
-		if (!block)
-			if (contained_virus.spread & SPREAD_CONTACT)
-				perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a virus dish[last_openner ? " openned by [key_name(last_openner)]" : ""])")
-			else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
-				perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a virus dish[last_openner ? " openned by [key_name(last_openner)]" : ""])")
-	else if (src in perp.held_items)//otherwise is he just holding it?
-		..()
+/obj/item/weapon/virusdish/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D)
+	if (open)//If the dish is open, we may get infected by the disease inside on top of those that might be stuck on it.
+		var/block = 0
+		var/bleeding = 0
+		if (src in perp.held_items)
+			block = perp.check_contact_sterility(HANDS)
+			bleeding = perp.check_bodypart_bleeding(HANDS)
+			if (!block)
+				if (D.spread & SPREAD_CONTACT)
+					perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
+				else if (bleeding && (D.spread & SPREAD_BLOOD))
+					perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
+		else if (isturf(loc) && loc == perp.loc)//is our perp standing over the open dish?
+			if (perp.lying)
+				block = perp.check_contact_sterility(FULL_TORSO)
+				bleeding = perp.check_bodypart_bleeding(FULL_TORSO)
+			else
+				block = perp.check_contact_sterility(FEET)
+				bleeding = perp.check_bodypart_bleeding(FEET)
+			if (!block)
+				if (contained_virus.spread & SPREAD_CONTACT)
+					perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a virus dish[last_openner ? " openned by [key_name(last_openner)]" : ""])")
+				else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
+					perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a virus dish[last_openner ? " openned by [key_name(last_openner)]" : ""])")
+	..(perp,D)
 
 ///////////////GNA DISK///////////////
 
