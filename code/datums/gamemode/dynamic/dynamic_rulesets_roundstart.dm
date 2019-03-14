@@ -156,15 +156,16 @@
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	persistent = 1
-	var/wizard_cd = 0 //starts off cooldown
+	var/wizard_cd = 30
 	var/total_wizards = 4
 
 /datum/dynamic_ruleset/roundstart/cwc/process()
+	..()
 	if (wizard_cd)
 		wizard_cd--
 	else
-		wizard_cd = 210 //7 minutes
-		var/sent_wizards = count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
+		wizard_cd = initial(wizard_cd) //7 minutes
+		var/sent_wizards = 1 + count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
 		if(sent_wizards>=total_wizards)
 			return
 		var/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/RM = new()
@@ -172,8 +173,21 @@
 			RM.my_fac = /datum/faction/wizard/civilwar/quickvillains
 		else
 			RM.my_fac = /datum/faction/wizard/civilwar/manajerks
-		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [RM.my_fac.name].")
-		mode.picking_specific_rule(RM)
+		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
+		mode.picking_specific_rule(RM,TRUE) //forced
+
+/datum/dynamic_ruleset/roundstart/cwc/execute()
+	var/mob/M = pick(candidates)
+	if (M)
+		assigned += M
+		candidates -= M
+		var/datum/role/wizard/newWizard = new
+		newWizard.AssignToRole(M.mind,1)
+		var/datum/faction/wizard/civilwar/manajerks/MJ = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/manajerks, null, 1)
+		ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/quickvillains, null, 1)
+		MJ.HandleRecruitedRole(newWizard)//this will give the wizard their icon
+		newWizard.Greet(GREET_MIDROUND)
+	return 1
 
 //////////////////////////////////////////////
 //                                          //

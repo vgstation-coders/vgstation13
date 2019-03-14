@@ -468,7 +468,7 @@
 /datum/role/proc/AnnounceObjectives()
 	var/text = ""
 	if (objectives.objectives.len)
-		text += "<b>[name] objectives:</b><ul>"
+		text += "<b>[capitalize(name)] objectives:</b><ul>"
 		var/obj_count = 1
 		for(var/datum/objective/O in objectives.objectives)
 			text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"

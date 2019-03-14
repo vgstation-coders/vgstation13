@@ -20,17 +20,17 @@
 	var/datum/faction/target = find_active_faction_by_type(enemy_faction)
 	if(!target)
 		target = ticker.mode.CreateFaction(enemy_faction, null, 1)
-	O.faction = target
+	O.targetfaction = target
 	AppendObjective(O)
 	..()
 
 /datum/faction/wizard/civilwar/manajerks
-	name = "Manajerks"
+	name = "The Manajerks"
 	desc = "The Manajerks are a faction within the Wizard Federation known for being able to pull mana from thin air. Their power places them at the top of the Wizard Federation, where their blue arms are seen as a status symbol."
 	enemy_faction = /datum/faction/wizard/civilwar/quickvillains
 
 /datum/faction/wizard/civilwar/quickvillains
-	name = "Quickvillains"
+	name = "The Quickvillains"
 	desc = "The Quickvillains are a faction within the Wizard Federation known for their blinding speed in spellcasting. They are an insurgency against the Manajerks and willingly don the title of 'villain' as outlaws."
 	logo_state = "apprentice-logo" //His hat is NOT blue!
 	enemy_faction = /datum/faction/wizard/civilwar/manajerks

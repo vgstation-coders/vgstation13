@@ -81,6 +81,7 @@
 	return 1
 
 /datum/dynamic_ruleset/midround/from_ghosts/review_applications()
+	message_admins("Applicant list: [english_list(applicants)]")
 	for (var/i = required_candidates, i > 0, i--)
 		if(applicants.len <= 0)
 			if(i == required_candidates)
@@ -92,11 +93,20 @@
 		var/mob/applicant = pick(applicants)
 		applicants -= applicant
 		if(!isobserver(applicant))
+			message_admins("DEBUG: Applicant [applicant] was not an observer.")
 			if(applicant.stat == DEAD) //Not an observer? If they're dead, make them one.
-				applicant = applicant.ghostize(FALSE) //
+				message_admins("DEBUG: Ghostizing applicant [applicant]")
+				applicant = applicant.ghostize(FALSE)
 			else //Not dead? Disregard them, pick a new applicant
+				message_admins("DEBUG: Rule could not use [applicant], not dead.")
 				i++
 				continue
+
+		if(!applicant)
+			message_admins("DEBUG: Applicant was null! Resetting...")
+			i++
+			continue
+		message_admins("DEBUG: Selected [applicant] for rule.")
 
 		var/mob/living/carbon/human/new_character = applicant
 
@@ -268,6 +278,7 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
+		message_admins("Rejected Ragin' Mages as there was a Civil War.")
 		return 0 //This is elegantly skipped by specific ruleset.
 		//This means that all ragin mages in CWC will be called only by that ruleset.
 	else
@@ -281,6 +292,11 @@
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
 	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
+	new_role.OnPostSetup() //Each individual role to show up gets a postsetup
+	..()
+
 
 //////////////////////////////////////////////
 //                                          //

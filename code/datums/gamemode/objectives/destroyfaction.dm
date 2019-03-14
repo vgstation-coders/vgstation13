@@ -4,7 +4,7 @@
 	var/datum/faction/targetfaction
 
 /datum/objective/destroyfaction/PostAppend()
-	explanation_text = "Kill all members of \the [faction.name]."
+	explanation_text = "Kill all members of \the [targetfaction.name]."
 	return TRUE
 
 /datum/objective/destroyfaction/IsFulfilled()

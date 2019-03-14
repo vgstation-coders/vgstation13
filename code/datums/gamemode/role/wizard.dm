@@ -45,9 +45,9 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
 		if(GREET_MIDROUND)
 			switch(faction.name)
-				if("Manajerks","Quickvillagers")
+				if("The Manajerks","The Quickvillains")
 					to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='info'>You are a Space Wizard!</br></span>")
-					to_chat(antag.current, "<span class='danger'>The Wizard Federation is in civil war! You have 7 minutes to leave your den. You are part of [faction].</br></span>")
+					to_chat(antag.current, "<span class='danger'>The Wizard Federation is in civil war! You have 7 minutes to leave your den - choose quickly and leave, you MUST NOT fight here. You are part of [faction]. Enemy wizards will not have a visible wizard icon, but friendly wizards will.</br></span>")
 					to_chat(antag.current, "<span class='info'>[faction.desc]</span>")
 				else
 					to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Wizard!!</br></span>")
