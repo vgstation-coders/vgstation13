@@ -57,6 +57,16 @@ var/list/factions_with_hud_icons = list()
 	for(var/datum/role/R in members)
 		R.OnPostSetup()
 
+/datum/faction/proc/Dismantle()
+	for(var/datum/role/R in members)
+		var/datum/gamemode/G = ticker.mode
+		G.orphaned_roles += R
+		members -= R
+	qdel(objective_holder)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	D.factions -= src
+	qdel(src)
+
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
 /datum/faction/proc/can_setup()
 	return TRUE
@@ -166,9 +176,20 @@ var/list/factions_with_hud_icons = list()
 		i++
 	return score_results
 
+/datum/faction/Topic(href, href_list)
+	..()
+	if(href_list["destroyfac"])
+		if(!usr.check_rights(R_ADMIN))
+			message_admins("[usr] tried to destroy a faction without permissions.")
+			return
+		if(alert(usr, "Are you sure you want to destroy [name]?",  "Destroy Faction" , "Yes" , "No") != "Yes")
+			return
+		message_admins("[key_name(usr)] destroyed faction [name].")
+		Dismantle()
+
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <a href='?src=\ref[src];destroyfac=1'>\[Destroy\]</A><br>"}
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)

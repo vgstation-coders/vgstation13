@@ -2203,6 +2203,40 @@
 	else if(href_list["check_antagonist"])
 		check_antagonists()
 
+	else if(href_list["adjustthreat"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		var/threatadd = input("Specify how much threat to add (negative to subtract). This can inflate the threat level.", "Adjust Threat", 0) as null|num
+		if(!threatadd)
+			return
+		if(threatadd>0)
+			D.create_threat(threatadd)
+		else
+			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
+		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
+		check_antagonists()
+
+	else if(href_list["injectnow"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		switch(href_list["injectnow"])
+			if("1")
+				D.latejoin_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the latejoin injection timer to 0.")
+			if("2")
+				D.midround_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the midround injection timer to 0.")
+			else
+				message_admins("[key_name(usr)] attempted to set an unknown timer to 0.")
+		check_antagonists()
+
 	/*
 	else if(href_list["cult_nextobj"])
 		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
