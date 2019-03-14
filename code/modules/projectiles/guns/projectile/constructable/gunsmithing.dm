@@ -770,6 +770,11 @@
 	icon_state = "secured_capacitor_adv_super"
 	maxcharge = 1000000000
 
+/obj/machinery/power/secured_capacitor/adv/super/ultra
+	name = "ultra capacitor"
+	icon_state = "secured_capacitor_adv_super_ultra"
+	maxcharge = 5000000000
+
 /obj/machinery/power/secured_capacitor/attack_hand(mob/user as mob)
 	if(user.lying)
 		return

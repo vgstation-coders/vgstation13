@@ -165,6 +165,8 @@ var/veil_thickness = CULT_PROLOGUE
 	var/cult_win = FALSE
 	var/warning = FALSE
 
+	var/list/cult_reminders = list()
+
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
@@ -355,6 +357,13 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		B.update_icon()
 	bloody_floors -= T
+
+/datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
+	. = ..()
+	if (cult_reminders.len)
+		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
+	for (var/reminder in cult_reminders)
+		R.antag.store_memory("Cult reminder: [reminder].")
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))
@@ -685,6 +694,10 @@ var/veil_thickness = CULT_PROLOGUE
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HELD]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_HELD])
+		if (data[BLOODCOST_TARGET_BLOODPACK])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLOODPACK]
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_BLOODPACK]
+			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_BLOODPACK])
 		if (data[BLOODCOST_TARGET_CONTAINER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_CONTAINER]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
@@ -711,7 +724,6 @@ var/veil_thickness = CULT_PROLOGUE
 		data[BLOODCOST_TOTAL] = max(data[BLOODCOST_TOTAL], total_needed)
 	data["blood"] = blood
 	return data
-
 
 /obj/item/proc/get_cult_power()
 	return 0

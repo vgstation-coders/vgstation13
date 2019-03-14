@@ -20,6 +20,7 @@
 
 /datum/disease2/effect/spaceadapt
 	name = "Space Adaptation Effect"
+	desc = "Causes the infected to be resistant to the effects of space exposure."
 	stage = 5
 
 /datum/disease2/effect/spaceadapt/activate(var/mob/living/carbon/mob)

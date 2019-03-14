@@ -251,6 +251,7 @@ var/global/list/virusDB = list()
 	r += "<BR>Progress Speed : [stageprob]"
 	for(var/datum/disease2/effect/e in effects)
 		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
+		r += "<BR>[e.desc]"
 
 	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
 	return r

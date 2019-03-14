@@ -59,6 +59,24 @@
 
 	..()
 
+/datum/command_alert/biohazard_station_unlock
+	name = "Biohazard Level Updated - Lock Down Lifted"
+	alert_title = "Directive 7-10 to 7-12 Concluded."
+	force_report = 1
+
+/datum/command_alert/biohazard_station_unlock/announce()
+	message = "Biohazard outbreak contained succesfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
+	..()
+
+
+/datum/command_alert/FUBAR
+	name = "Complimentary escape shuttle sent."
+	alert_title = "Evacuation of remaining assets."
+	force_report = 1
+
+/datum/command_alert/FUBAR/announce()
+	message = "Due to intense sustained damage to the station, Nanotrasen have deemed it fitting to evacuate remaining assets and personnel through an escape shuttle that was previously already en route."
+
 ////////BLOB (mini)
 
 /datum/command_alert/biohazard_level_5

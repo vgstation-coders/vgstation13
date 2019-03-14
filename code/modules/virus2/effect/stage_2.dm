@@ -1,5 +1,6 @@
 /datum/disease2/effect/scream
 	name = "Loudness Syndrome"
+	desc = "Causes the infected to scream at random."
 	stage = 2
 
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
@@ -8,6 +9,7 @@
 
 /datum/disease2/effect/drowsness
 	name = "Automated Sleeping Syndrome"
+	desc = "Makes the infected feel more drowsy."
 	stage = 2
 
 /datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
@@ -16,6 +18,7 @@
 
 /datum/disease2/effect/sleepy
 	name = "Resting Syndrome"
+	desc = "Causes the infected to collapse in random fits of narcolepsy"
 	stage = 2
 
 /datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
@@ -24,6 +27,7 @@
 
 /datum/disease2/effect/blind
 	name = "Blackout Syndrome"
+	desc = "Inhibits the infected's ability to see."
 	stage = 2
 
 /datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
@@ -32,6 +36,7 @@
 
 /datum/disease2/effect/cough
 	name = "Anima Syndrome"
+	desc = "Causes the infected to cough rapidly, infecting people in their surroundings."
 	stage = 2
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
@@ -43,6 +48,7 @@
 
 /datum/disease2/effect/hungry
 	name = "Appetiser Effect"
+	desc = "Starves the infected."
 	stage = 2
 
 /datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
@@ -51,6 +57,7 @@
 
 /datum/disease2/effect/fridge
 	name = "Refridgerator Syndrome"
+	desc = "Causes the infected to shiver at random."
 	stage = 2
 
 /datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
@@ -59,6 +66,7 @@
 
 /datum/disease2/effect/hair
 	name = "Hair Loss"
+	desc = "Causes rapid hairloss in the infected."
 	stage = 2
 
 /datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
@@ -73,6 +81,7 @@
 
 /datum/disease2/effect/stimulant
 	name = "Adrenaline Extra"
+	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
 	stage = 2
 
 /datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
@@ -85,6 +94,7 @@
 
 /datum/disease2/effect/drunk
 	name = "Glasgow Syndrome"
+	desc = "Causes the infected to synthesize pure ethanol."
 	stage = 2
 
 /datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
@@ -95,6 +105,7 @@
 
 /datum/disease2/effect/gaben
 	name = "Gaben Syndrome"
+	desc = "Makes the infected incredibly fat."
 	stage = 2
 
 /datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
@@ -106,6 +117,7 @@
 
 /datum/disease2/effect/beard
 	name = "Bearding"
+	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
 
 /datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
@@ -120,6 +132,7 @@
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
+	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed that acts as a valid pathogen carrier. (Note: Does not affect the users blood pressure.)"
 	stage = 2
 
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
@@ -134,6 +147,7 @@
 
 /datum/disease2/effect/viralsputum
 	name = "Respiratory Putrification"
+	desc = "Causes the infected to cough up viral sputum, which acts as a valid pathogen carrier."
 	stage = 2
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
@@ -150,6 +164,7 @@
 
 /datum/disease2/effect/lantern
 	name = "Lantern Syndrome"
+	desc = "Causes the infected to glow."
 	stage = 2
 
 /datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
@@ -159,6 +174,7 @@
 
 /datum/disease2/effect/hangman
 	name = "Hanging Man's Syndrome"
+	desc = "Inhibits a portion of the infected's brain that controls speech, removing the infected's ability to speak vowels."
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
@@ -188,6 +204,7 @@
 
 /datum/disease2/effect/vitreous
 	name = "Vitreous resonance"
+	desc = "Causes the infected to shake uncontrollably, at the same frequency that is required to break glass."
 	stage = 2
 	chance = 25
 	max_chance = 75
@@ -219,6 +236,7 @@
 
 /datum/disease2/effect/opposite
 	name = "Opposite Syndrome"
+	desc = "Inhibits a portion of the infected's brain that affects speech, causing the infected to speak counter to what they wish to say."
 	stage = 2
 	affect_voice = 1
 	max_count = 1
@@ -271,6 +289,7 @@
 
 /datum/disease2/effect/spiky_skin
 	name = "Porokeratosis Acanthus"
+	desc = "Causes the infected to generate keratin spines along their skin."
 	stage = 2
 	max_count = 1
 	var/skip = FALSE
@@ -346,6 +365,7 @@
 
 /datum/disease2/effect/famine
 	name = "Faminous Potation"
+	desc = "The infected emanates a field that kills off plantlife. Lethal to species descended from plants."
 	stage = 2
 	max_multiplier = 3
 
@@ -384,6 +404,7 @@
 
 /datum/disease2/effect/calorieburn
 	name = "Caloric expenditure overefficiency"
+	desc = "Causes the infected to burn calories at a higher rate."
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
@@ -404,6 +425,7 @@
 
 /datum/disease2/effect/calorieconserve
 	name = "Caloric expenditure defficiency"
+	desc = "Causes the infected to burn calories at a lower rate."
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
@@ -425,6 +447,7 @@
 
 /datum/disease2/effect/yelling
 	name = "Plankton's Syndrome"
+	desc = "Attacks a portion of the infected's brain that controls speech, causing them to be more dramatic."
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1

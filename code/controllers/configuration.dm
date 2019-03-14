@@ -120,6 +120,8 @@
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
 
+	var/voice_noises = 0
+
 	var/revival_pod_plants = 1
 	var/revival_cloning = 1
 	var/revival_brain_life = -1
@@ -637,6 +639,8 @@
 					config.borer_takeover_immediately = 1
 				if("hardcore_mode")
 					hardcore_mode = value
+				if("humans_speak")
+					voice_noises = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

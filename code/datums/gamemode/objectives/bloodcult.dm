@@ -39,6 +39,7 @@
 	explanation_text = "The Sacrifice: Nar-Sie requires the flesh of X to breach reality. Sacrifice them at an altar using a cult blade."
 	name = "Blood Cult: ACT II"
 	var/mob/living/sacrifice_target = null
+	var/datum/mind/sacrifice_mind = null
 	var/target_sacrificed = FALSE
 	var/list/failed_targets = list()
 
@@ -47,6 +48,7 @@
 	if (sacrifice_target)
 		var/target_role = ""
 		if (sacrifice_target.mind)
+			sacrifice_mind = sacrifice_target.mind
 			target_role = (sacrifice_target.mind.assigned_role=="MODE") ? "" : ", the ([sacrifice_target.mind.assigned_role]),"
 		if (iscultist(sacrifice_target))
 			target_role = ", the cultist,"
@@ -60,17 +62,18 @@
 //		sleep(60 SECONDS)//kind of a failsafe should the entire server cooperate to cause this to occur, but that shouldn't logically ever happen anyway.
 //		return PostAppend()
 
-/datum/objective/bloodcult_sacrifice/proc/replace_target()
+/datum/objective/bloodcult_sacrifice/proc/replace_target(var/mob/M)
 	sacrifice_target = find_target()
 	if (sacrifice_target)
 		var/target_role = ""
 		if (sacrifice_target.mind)
+			sacrifice_mind = sacrifice_target.mind
 			target_role = (sacrifice_target.mind.assigned_role=="MODE") ? "" : ", the ([sacrifice_target.mind.assigned_role]),"
 		if (iscultist(sacrifice_target))
 			target_role = ", the cultist,"
 		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade. If you feel merciful for their soul, you may use an empty soul blade."
-		message_admins("Blood Cult: The cult didn't sacrifice their target in time, a new target has been assigned, the new sacrifice target is [sacrifice_target.real_name][target_role].")
-		log_admin("Blood Cult: The cult didn't sacrifice their target in time, a new target has been assigned, the new sacrifice target is [sacrifice_target.real_name][target_role].")
+		message_admins("Blood Cult: [M ? "[key_name(M)] has communed with Nar-Sie about a missing sacrifice target. " : ""]A new sacrifice target has been assigned: [sacrifice_target.real_name][target_role].")
+		log_admin("Blood Cult: [M ? "[key_name(M)] has communed with Nar-Sie about a missing sacrifice target. " : ""]A new sacrifice target has been assigned: [sacrifice_target.real_name][target_role].")
 		//var/datum/faction/bloodcult/cult = faction
 		//cult.target_change = TRUE
 		return TRUE

@@ -283,7 +283,7 @@
 
 #define ismechwarrior(H) (H.mind && H.mind.GetRole(MECH_WARRIOR))
 
-#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+#define isninja(H) (H.mind && H.mind.GetRole(NINJA))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 

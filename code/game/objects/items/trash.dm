@@ -9,11 +9,55 @@
 	w_type=NOT_RECYCLABLE
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
+	var/persistence_type = SS_TRASH
+	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
 
-/obj/item/trash/New()
+/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+	if(age)
+		setPersistenceAge(age)
+	if(icon_state)
+		src.icon_state = icon_state
+	if(color)
+		src.color = color
+	if(dir)
+		src.dir = dir
+	if(pixel_x)
+		src.pixel_x = pixel_x
+	if(pixel_y)
+		src.pixel_y = pixel_y
+
+	if(ticker)
+		initialize()
+
+	..(loc)
+
+/obj/item/trash/initialize()
 	..()
 	trash_items += src
+	if(persistence_type)
+		SSpersistence_map.track(src, persistence_type)
+
+/obj/item/trash/Destroy()
+	trash_items -= src
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
+	..()
+
+/obj/item/trash/getPersistenceAge()
+	return age
+/obj/item/trash/setPersistenceAge(nu)
+	age = nu
+
+/obj/item/trash/post_mapsave2atom(var/list/L)
+	. = ..()
+	if(pixel_x == 0)
+		pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	if(pixel_y == 0)
+		pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+
+/obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
+	return
 
 /obj/item/trash/bustanuts
 	name = "\improper Busta-Nuts"
@@ -144,9 +188,3 @@
 	name = "cyber mannequin pedestale"
 	icon_state = "mannequin_cyber_empty"
 
-/obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
-	return
-
-/obj/item/trash/Destroy()
-	trash_items -= src
-	..()

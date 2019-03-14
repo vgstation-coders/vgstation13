@@ -164,6 +164,7 @@ proc/process_adminbus_teleport_locs()
 	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/shuttle/holomapAlwaysDraw()
 	return 0
@@ -466,6 +467,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	has_gravity = 1
+	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
 // === end remove
 
@@ -482,6 +484,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE //Central Command is always squeaky clean yo
 
 /area/centcom/control
 	name = "\improper Centcom Control"
@@ -609,6 +612,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/syndicate_station/start
 	icon_state = "yellow"
@@ -1129,6 +1133,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Holodeck"
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
@@ -2335,6 +2340,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Strange Location"
 	icon_state = "away"
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/awaymission/example
 	name = "\improper Strange Station"
@@ -2530,6 +2536,7 @@ var/list/the_station_areas = list (
 	requires_power = 0
 	var/sound/mysound = null
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /* We have a jukebox now, fuck that
 /area/beach/New()

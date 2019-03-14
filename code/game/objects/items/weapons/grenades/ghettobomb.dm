@@ -139,6 +139,7 @@
 
 				qdel(H.legcuffed)
 				H.legcuffed = null
+				boomtrap.IED = null
 	qdel(src)
 
 
