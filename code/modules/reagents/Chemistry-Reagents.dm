@@ -387,28 +387,28 @@
 			else //Injected
 				M.contract_disease(D, 1, 0)
 
-	if(iscarbon(M)) //Those methods only work for carbons
-		var/mob/living/carbon/C = M
+	if(iscarbon(M) || ismouse(M))
+		var/mob/living/L = M
 		if(self.data && self.data["virus2"]) //Infecting
 			var/list/blood_viruses = self.data["virus2"]
 			if (istype(blood_viruses) && blood_viruses.len > 0)
 				for (var/ID in blood_viruses)
 					var/datum/disease2/disease/D = blood_viruses[ID]
 					if(method == TOUCH)
-						var/block = C.check_contact_sterility(FULL_TORSO)
-						var/bleeding = C.check_bodypart_bleeding(FULL_TORSO)
+						var/block = L.check_contact_sterility(FULL_TORSO)
+						var/bleeding = L.check_bodypart_bleeding(FULL_TORSO)
 						if (!block)
 							if (D.spread & SPREAD_CONTACT)
-								C.infect_disease2(D, notes="(Contact, splashed with infected blood)")
+								L.infect_disease2(D, notes="(Contact, splashed with infected blood)")
 							else if (bleeding && (D.spread & SPREAD_BLOOD))
-								C.infect_disease2(D, notes="(Blood, splashed with infected blood)")
+								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
 					else
-						C.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
+						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 		if(self.data && self.data["antibodies"]) //And curing
-			C.antibodies |= self.data["antibodies"]
+			L.antibodies |= self.data["antibodies"]
 
-		if(ishuman(C) && (method == TOUCH))
-			var/mob/living/carbon/human/H = C
+		if(ishuman(L) && (method == TOUCH))
+			var/mob/living/carbon/human/H = L
 			H.bloody_body(self.data["donor"])
 			if(self.data["donor"])
 				H.bloody_hands(self.data["donor"])

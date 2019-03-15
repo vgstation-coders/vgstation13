@@ -150,7 +150,7 @@
 /mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
 	if(!..())
 		return
-	I.disease_contact(src,FULL_TORSO)
+	O.disease_contact(src,FULL_TORSO)
 
 /mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
