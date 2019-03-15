@@ -131,26 +131,16 @@ var/list/science_goggles_wearers = list()
 				M.client.images |= C.pathogen
 
 /obj/item/clothing/glasses/science/proc/disable(var/mob/M)
-	var/toggle = 0
-	if (ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if (H.glasses == src)
-			toggle = 1
-	if (ismonkey(M))
-		var/mob/living/carbon/monkey/H = M
-		if (H.glasses == src)
-			toggle = 1
-	if (toggle)
-		playsound(M,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
-		science_goggles_wearers.Remove(M)
-		for (var/obj/item/I in infected_items)
-			M.client.images -= I.pathogen
-		for (var/mob/living/L in infected_contact_mobs)
-			M.client.images -= L.pathogen
-		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
-			M.client.images -= C.pathogen
-		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-			M.client.images -= C.pathogen
+	playsound(M,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
+	science_goggles_wearers.Remove(M)
+	for (var/obj/item/I in infected_items)
+		M.client.images -= I.pathogen
+	for (var/mob/living/L in infected_contact_mobs)
+		M.client.images -= L.pathogen
+	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+		M.client.images -= C.pathogen
+	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+		M.client.images -= C.pathogen
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/glasses/eyepatch

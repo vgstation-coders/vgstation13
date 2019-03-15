@@ -139,6 +139,19 @@
 */
 		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
+
+/mob/living/simple_animal/mouse/attack_hand(var/mob/living/carbon/human/M)
+	. = ..()
+	if (ishuman(M)||ismonkey(M))
+		var/block = M.check_contact_sterility(HANDS)
+		var/bleeding = M.check_bodypart_bleeding(HANDS)
+		share_contact_diseases(M,block,bleeding)
+
+/mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
+	if(!..())
+		return
+	I.disease_contact(src,FULL_TORSO)
+
 /mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/multiplier = 1

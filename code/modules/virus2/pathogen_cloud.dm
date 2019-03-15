@@ -27,6 +27,7 @@ var/list/pathogen_clouds = list()
 	pathogen = image('icons/effects/96x96.dmi',src,"pathogen_airborne")
 	pathogen.plane = HUD_PLANE
 	pathogen.layer = UNDER_HUD_LAYER
+	pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
 	for (var/mob/living/L in science_goggles_wearers)
 		if (L.client)
 			L.client.images |= pathogen
