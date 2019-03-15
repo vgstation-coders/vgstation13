@@ -191,7 +191,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(T.intact)
 		return
 
-	if(iswirecutter(W))
+	if(W.sharpness >= 1)
 		if(shock(user, 50, W.siemens_coefficient))
 			return
 		cut(user, T)

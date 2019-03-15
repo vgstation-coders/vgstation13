@@ -82,18 +82,6 @@
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 		//Sometimes things are thrown by objects like vending machines or pneumatic cannons
 
-//Eat, or throw for massive damage
-/obj/item/stack/shuriken/attack_self(mob/user)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = usr
-		if(H.mind.GetRole(NINJA))
-			playsound(H, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			H.reagents.add_reagent(NUTRIMENT,8)
-			to_chat(user,"<span class='notice'>You quickly stuff \the [src] down your throat!")
-			//Absolutely no sanity here. A weeb can eat all his pizza rolls if he likes, instantly.
-	else
-		return ..()
-
 //Shield
 /obj/item/weapon/substitutionhologram
 	name = "hologram projector"
@@ -173,7 +161,7 @@
 
 //The mighty power glove. Not to be confused with engineering power gloves, of course.
 /obj/item/clothing/gloves/ninja
-	name = "Ninja power glove"
+	name = "ninja power glove"
 	desc = "A special sort of gloved that can be used to drain some technologies of power."
 	icon_state = "powerfist"
 	item_state = "black"
@@ -204,19 +192,51 @@
 			if(H.mind.GetRole(NINJA))
 				if(istype(A,/obj/machinery/power/apc))
 					var/obj/machinery/power/apc/APC = A
-					if(APC.cell.charge>10)
-						reservoir += APC.cell.charge
-					APC.cell.use(APC.cell.charge)
+					if(!draincell(APC.cell))
+						return
 					var/turf/simulated/floor/T = get_turf(APC)
 					if(istype(T))
 						T.break_tile()
-					//APC.terminal.Destroy()
-					playsound(APC, pick(lightning_sound), 100, 1, "vary" = 0)
+
 					APC.charging = 0
 					APC.chargecount = 0
-					cooldown = world.time + 10 SECONDS
+					return TRUE //Stops from opening the interface
+
+				else if(istype(A,/obj/item/weapon/gun/energy))
+					var/obj/item/weapon/gun/energy/E = A
+					if(draincell(E.power_supply)) //Stops you from picking it up the same click you decharge it
+						E.update_icon()
+						return TRUE
+
+				else if(istype(A,/obj/item/weapon/melee/baton))
+					var/obj/item/weapon/melee/baton/B = A
+					if(draincell(B.bcell))
+						B.status = 0
+						B.update_icon()
+						return TRUE
+
+				else if(istype(A,/mob/living/silicon/robot))
+					var/mob/living/silicon/robot/R = A
+					return draincell(R.cell) //You won't try to punch the robot you just depowered
+
+				else if(istype(A,/obj/mecha))
+					var/obj/mecha/M = A
+					return draincell(M.cell)
+
+				else if(istype(A,/obj/spacepod))
+					var/obj/spacepod/S = A
+					return draincell(S.battery)
 	else
 		..()
+
+/obj/item/clothing/gloves/ninja/proc/draincell(var/obj/item/weapon/cell/C,mob/user)
+	if(C.charge<100)
+		return FALSE
+	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
+	reservoir += C.charge
+	C.use(C.charge)
+	cooldown = world.time + 10 SECONDS
+	return TRUE
 
 /obj/item/clothing/gloves/ninja/proc/radial_check_handler(list/arguments)
 	var/event/E = arguments["event"]
@@ -364,6 +384,7 @@
 	var/teleportcooldown = 600 //one minute cooldown
 	var/active = FALSE
 	var/activate_message = "Weakness."
+	siemens_coefficient = 0
 
 /obj/item/weapon/katana/hesfast/IsShield()
 	return TRUE
@@ -395,7 +416,7 @@
 		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
 		active = FALSE
 
-/obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
+/obj/item/weapon/katana/hesfast/preattack(var/atom/A, mob/user)
 	if(!active || !isninja(user) || !ismob(A) || (A == user)) //sanity
 		return
 	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
@@ -424,6 +445,17 @@
 	desc = "Anybody wanna pizza roll?"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "donkpocket"
+
+/obj/item/stack/shuriken/pizza/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = usr
+		if(H.mind.GetRole(NINJA))
+			playsound(H, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			H.reagents.add_reagent(NUTRIMENT,8)
+			to_chat(user,"<span class='notice'>You quickly stuff \the [src] down your throat!")
+			//Absolutely no sanity here. A weeb can eat all his pizza rolls if he likes, instantly.
+	else
+		return ..()
 
 /obj/item/clothing/gloves/ninja/nentendiepower
 	name = "Nen/tendie power glove"
