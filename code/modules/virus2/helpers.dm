@@ -30,6 +30,14 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		block = 1
 	return block
 
+/mob/living/carbon/monkey/check_airborne_sterility()
+	var/block = 0
+	if (wear_mask && (wear_mask.body_parts_covered & MOUTH) && prob(wear_mask.sterility))
+		block = 1
+	if (hat && (hat.body_parts_covered & MOUTH) && prob(hat.sterility))
+		block = 1
+	return block
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //CONTACT
 
@@ -107,6 +115,11 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 			if(r_hand.status & ORGAN_BLEEDING)
 				bleeding = 1
 	return bleeding
+
+//until monkeys can bleed or have open wounds, they're safe on that end.
+
+/mob/living/simple_animal/mouse/check_bodypart_bleeding(var/body_part)
+	return splat//visibly bleeding
 
 ///////////////////////////////////////////
 //                                       //
@@ -296,3 +309,6 @@ proc/virus2_greater_infection()
 		if ((!required || (V.spread & required)) && (!forbidden || !(V.spread & forbidden)))
 			result[ID] = V
 	return result
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
