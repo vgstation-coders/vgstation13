@@ -24,16 +24,15 @@
 	AppendObjective(O)
 	..()
 
-/datum/faction/wizard/civilwar/manajerks
-	name = "The Manajerks"
-	desc = "The Manajerks are a faction within the Wizard Federation known for being able to pull mana from thin air. Their power places them at the top of the Wizard Federation, where their blue arms are seen as a status symbol."
-	enemy_faction = /datum/faction/wizard/civilwar/quickvillains
+/datum/faction/wizard/civilwar/wpf
+	name = "The Wizardly Peoples' Front"
+	desc = "The WPF are a faction within the Wizard Federation. The only people they hate more than Nanotrasen are the Peoples' Front for Wizards."
+	enemy_faction = /datum/faction/wizard/civilwar/pfw
 
-/datum/faction/wizard/civilwar/quickvillains
-	name = "The Quickvillains"
-	desc = "The Quickvillains are a faction within the Wizard Federation known for their blinding speed in spellcasting. They are an insurgency against the Manajerks and willingly don the title of 'villain' as outlaws."
-	logo_state = "apprentice-logo" //His hat is NOT blue!
-	enemy_faction = /datum/faction/wizard/civilwar/manajerks
+/datum/faction/wizard/civilwar/pfw
+	name = "The Peoples' Front for Wizards"
+	desc = "The PFW are a faction within the Wizard Federation. The only people they hate more than Nanotrasen are the Wizardly Peoples' Front."
+	enemy_faction = /datum/faction/wizard/civilwar/wpf
 
 /datum/faction/wizard/HandleNewMind(var/datum/mind/M)
 	..()

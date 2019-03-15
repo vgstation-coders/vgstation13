@@ -149,14 +149,14 @@
 	name = "Civil War of Casters"
 	role_category = /datum/role/wizard
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
-	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
+	enemy_jobs = list("Security Officer","Detective","Warden","Head of Security", "Captain")
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 1
 	weight = 2
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	persistent = 1
-	var/wizard_cd = 30
+	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
 
 /datum/dynamic_ruleset/roundstart/cwc/process()
@@ -164,15 +164,15 @@
 	if (wizard_cd)
 		wizard_cd--
 	else
-		wizard_cd = initial(wizard_cd) //7 minutes
+		wizard_cd = initial(wizard_cd)
 		var/sent_wizards = 1 + count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
 		if(sent_wizards>=total_wizards)
 			return
 		var/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/RM = new()
 		if(sent_wizards % 2) //An odd number of wizards have been sent
-			RM.my_fac = /datum/faction/wizard/civilwar/quickvillains
+			RM.my_fac = /datum/faction/wizard/civilwar/pfw
 		else
-			RM.my_fac = /datum/faction/wizard/civilwar/manajerks
+			RM.my_fac = /datum/faction/wizard/civilwar/wpf
 		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
 		mode.picking_specific_rule(RM,TRUE) //forced
 
@@ -183,9 +183,9 @@
 		candidates -= M
 		var/datum/role/wizard/newWizard = new
 		newWizard.AssignToRole(M.mind,1)
-		var/datum/faction/wizard/civilwar/manajerks/MJ = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/manajerks, null, 1)
-		ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/quickvillains, null, 1)
-		MJ.HandleRecruitedRole(newWizard)//this will give the wizard their icon
+		var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
+		ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
+		WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
 

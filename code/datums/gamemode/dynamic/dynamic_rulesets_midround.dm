@@ -93,17 +93,15 @@
 		var/mob/applicant = pick(applicants)
 		applicants -= applicant
 		if(!isobserver(applicant))
-			message_admins("DEBUG: Applicant [applicant] was not an observer.")
 			if(applicant.stat == DEAD) //Not an observer? If they're dead, make them one.
-				message_admins("DEBUG: Ghostizing applicant [applicant]")
 				applicant = applicant.ghostize(FALSE)
 			else //Not dead? Disregard them, pick a new applicant
-				message_admins("DEBUG: Rule could not use [applicant], not dead.")
+				message_admins("[name]: Rule could not use [applicant], not dead.")
 				i++
 				continue
 
 		if(!applicant)
-			message_admins("DEBUG: Applicant was null! Resetting...")
+			message_admins("[name]: Applicant was null. This may be caused if the mind changed bodies after applying.")
 			i++
 			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
