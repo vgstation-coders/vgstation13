@@ -253,7 +253,7 @@
 	mouse_opacity = 1
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE
-	var/mob/last_openner
+	var/last_openner
 	var/datum/disease2/disease/contained_virus
 
 /obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
@@ -296,6 +296,6 @@
 
 	if (!block)
 		if (contained_virus.spread & SPREAD_CONTACT)
-			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [key_name(last_openner)]" : ""])")
+			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
 		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
-			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [key_name(last_openner)]" : ""])")
+			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")

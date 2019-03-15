@@ -140,7 +140,7 @@
 	dish.pixel_y = pixel_y
 	if (contained_virus)
 		dish.contained_virus = contained_virus.getcopy()
-	dish.last_openner = last_openner
+	dish.last_openner = key_name(user)
 	src.transfer_fingerprints_to(dish)
 	playsound(get_turf(src), "shatter", 70, 1)
 	var/image/I1

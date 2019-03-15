@@ -1053,9 +1053,9 @@
 	if(!M)
 		return
 
-	if (M.virus2 && M.virus2.len > 0)
+	if (M.virus2?.len)
 		var/list/blood_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_BLOOD)
-		if (blood_diseases.len > 0)
+		if (blood_diseases?.len)
 			for (var/ID in blood_diseases)
 				var/datum/disease2/disease/D = blood_diseases[ID]
 				infect_disease2(D, notes="(Blood, coming from [M])")
@@ -1366,7 +1366,7 @@ var/global/list/image/blood_overlays = list()
 
 	//secondly, do they happen to carry contact-spreading viruses themselves?
 	var/list/contact_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_CONTACT)
-	if (contact_diseases.len > 0)
+	if (contact_diseases?.len)
 		//if so are their hands protected?
 		if (!M.check_contact_sterility(HANDS))
 			for (var/ID in contact_diseases)
