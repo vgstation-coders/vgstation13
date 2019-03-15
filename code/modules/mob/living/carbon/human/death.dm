@@ -1,5 +1,4 @@
 /mob/living/carbon/human/gib()
-	to_chat(world,"human.gib() start,  got [viruses.len] viruses")
 	death(1)
 	monkeyizing = 1
 	canmove = 0
