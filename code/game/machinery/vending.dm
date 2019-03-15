@@ -430,7 +430,7 @@ var/global/num_vending_terminals = 1
 			power_change()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
-			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it first.</span>")
+			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it with reinforced glass first.</span>")
 			return
 	. = ..()
 	if(.)
