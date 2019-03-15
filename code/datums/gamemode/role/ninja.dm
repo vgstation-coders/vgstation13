@@ -171,6 +171,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
 	var/reservoir = 0
+	var/shuriken_icon = "radial_print"
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
@@ -179,9 +180,9 @@
 		if(H.mind.GetRole(NINJA))
 			to_chat(H,"<span class='info'>Alt-Click to use drained power. It currently holds [round(reservoir)] energy units.</span>")
 			if(cooldown-world.time>0)
-				to_chat(H,"<span class='warning'>It will be ready to drain an APC in [round((cooldown-world.time)/10)] seconds.</span>")
+				to_chat(H,"<span class='warning'>It will be ready to drain a cell in [round((cooldown-world.time)/10)] seconds.</span>")
 			else
-				to_chat(H,"<span class='good'>It is ready to drain an APC!</span>")
+				to_chat(H,"<span class='good'>It is ready to drain a cell!</span>")
 
 /obj/item/clothing/gloves/ninja/Touch(atom/A, mob/living/user, prox)
 	if(!prox)
@@ -189,43 +190,20 @@
 	if(world.time > cooldown)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
-			if(H.mind.GetRole(NINJA))
-				if(istype(A,/obj/machinery/power/apc))
-					var/obj/machinery/power/apc/APC = A
-					if(!draincell(APC.cell))
-						return
-					var/turf/simulated/floor/T = get_turf(APC)
+			if(H.mind.GetRole(NINJA) && A.get_cell())
+				if(draincell(A.get_cell()))
+					if(istype(A,/obj/machinery/power/apc))
+						var/obj/machinery/power/apc/APC = A
+						APC.charging = 0
+						APC.chargecount = 0
+					else if(istype(A,/obj/item/weapon/melee/baton))
+						var/obj/item/weapon/melee/baton/B = A
+						B.status = 0
+					var/turf/simulated/floor/T = get_turf(A)
 					if(istype(T))
 						T.break_tile()
-
-					APC.charging = 0
-					APC.chargecount = 0
-					return TRUE //Stops from opening the interface
-
-				else if(istype(A,/obj/item/weapon/gun/energy))
-					var/obj/item/weapon/gun/energy/E = A
-					if(draincell(E.power_supply)) //Stops you from picking it up the same click you decharge it
-						E.update_icon()
-						return TRUE
-
-				else if(istype(A,/obj/item/weapon/melee/baton))
-					var/obj/item/weapon/melee/baton/B = A
-					if(draincell(B.bcell))
-						B.status = 0
-						B.update_icon()
-						return TRUE
-
-				else if(istype(A,/mob/living/silicon/robot))
-					var/mob/living/silicon/robot/R = A
-					return draincell(R.cell) //You won't try to punch the robot you just depowered
-
-				else if(istype(A,/obj/mecha))
-					var/obj/mecha/M = A
-					return draincell(M.cell)
-
-				else if(istype(A,/obj/spacepod))
-					var/obj/spacepod/S = A
-					return draincell(S.battery)
+					A.update_icon()
+					return TRUE //Will not perform the normal interaction if drained the cell
 	else
 		..()
 
@@ -249,8 +227,10 @@
 		return FALSE
 	return TRUE
 
+#define MAKE_SHURIKEN_COST 1000
+#define CHARGE_COST_MULTIPLIER 4
 /obj/item/clothing/gloves/ninja/AltClick(mob/user)
-	if(!user.Adjacent(src) || user.incapacitated())
+	if(!user.Adjacent(src) || user.stat)
 		return
 
 	if(ishuman(user))
@@ -258,8 +238,8 @@
 		if(H.mind.GetRole(NINJA))
 
 			var/list/choices = list(
-				list("Make Shuriken", "radial_cook", "Fabricate a new shuriken. Cost: 1000."),
-				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: 40 per second."),
+				list("Make Shuriken", shuriken_icon, "Fabricate a new shuriken. Cost: [MAKE_SHURIKEN_COST]."),
+				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
 			var/event/menu_event = new(owner = user)
 			menu_event.Add(src, "radial_check_handler")
@@ -275,8 +255,6 @@
 
 	..()
 
-#define MAKE_SHURIKEN_COST 1000
-#define CHARGE_COST_MULTIPLIER 4
 /obj/item/clothing/gloves/ninja/proc/make_shuriken(mob/user)
 	if(reservoir>=MAKE_SHURIKEN_COST)
 		var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in user.held_items
@@ -305,7 +283,6 @@
 			to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
 		else
 			to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((oursword.teleportcooldown - world.time)/10)] seconds.</span>")
-
 
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
@@ -460,6 +437,7 @@
 /obj/item/clothing/gloves/ninja/nentendiepower
 	name = "Nen/tendie power glove"
 	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use on an APC to unleash your hacker skills from community college."
+	shuriken_icon = "radial_cook"
 
 /obj/item/weapon/substitutionhologram/dakimakura
 	name = "dakimakura"
