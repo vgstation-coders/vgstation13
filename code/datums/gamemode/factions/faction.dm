@@ -189,12 +189,13 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <a href='?src=\ref[src];destroyfac=1'>\[Destroy\]</A><br>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
 	var/dat = "<br>"
 	dat += GetObjectivesMenuHeader()
+	dat += " <a href='?src=\ref[src];destroyfac=1'>\[Destroy\]</A><br>"
 	dat += "<br><b>Faction objectives</b><br>"
 	dat += objective_holder.GetObjectiveString(0,1,A)
 	dat += "<br> - <b>Members</b> - <br>"
