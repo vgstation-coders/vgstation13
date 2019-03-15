@@ -83,7 +83,7 @@
 						strength += V.infectionchance
 					strength = round(strength/mob.virus2.len)
 					while (strength > 0)//stronger viruses create more clouds at once
-						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(mob.virus2))
+						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), mob, virus_copylist(mob.virus2))
 						strength -= 30
 
 /datum/disease2/effect/hungry

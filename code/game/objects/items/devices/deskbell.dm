@@ -79,6 +79,7 @@
 
 /obj/item/device/deskbell/attack_hand(var/mob/user)
 	if(anchored)
+		disease_contact(user)
 		ring()
 	add_fingerprint(user)
 	return

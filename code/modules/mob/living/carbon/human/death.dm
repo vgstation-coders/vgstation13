@@ -44,6 +44,13 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
+	infected_contact_mobs -= src
+	if (pathogen)
+		for (var/mob/living/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
 		var/turf/T = get_turf(src)
 		if (T)

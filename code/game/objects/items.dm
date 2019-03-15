@@ -67,6 +67,7 @@
 
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
+	var/image/pathogen
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -77,6 +78,13 @@
 		new path(src)
 
 /obj/item/Destroy()
+	infected_items -= src
+	if (pathogen)
+		for (var/mob/living/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
@@ -1013,8 +1021,7 @@
 
 /obj/item/clean_blood()
 	. = ..()
-	if (virus2 && virus2.len > 0)
-		virus2 = list()
+	remove_disease2()
 	if (blood_overlay)
 		overlays.Remove(blood_overlay)
 	if (istype(src, /obj/item/clothing/gloves))

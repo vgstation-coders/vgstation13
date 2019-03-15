@@ -93,7 +93,7 @@
 					if (!block)
 						//breathing airborne viruses
 						for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
-							if (cloud.source != src)
+							if (cloud.source != src && Adjacent(cloud))
 								for (var/ID in cloud.viruses)
 									var/datum/disease2/disease/V = cloud.viruses[ID]
 									//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses

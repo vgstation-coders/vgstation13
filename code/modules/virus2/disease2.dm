@@ -232,6 +232,10 @@ var/global/list/disease2_list = list()
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
+	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
+	if (V && V.len <= 0)
+		infected_contact_mobs -= src
+
 
 /datum/disease2/disease/proc/minormutate(var/index)
 	//uniqueID = rand(0,10000)

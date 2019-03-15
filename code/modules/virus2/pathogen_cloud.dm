@@ -1,10 +1,10 @@
+var/list/pathogen_clouds = list()
 
 /obj/effect/effect/pathogen_cloud
 	name = "pathogenic cloud"
 	icon = 'icons/effects/96x96.dmi'
-	icon_state = "smoke"
+	icon_state = ""
 	color = "green"
-	alpha = 127
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	opacity = 0
@@ -14,13 +14,7 @@
 	var/list/viruses = list()
 	var/lifetime = 10 SECONDS//how long until we naturally disappear, humans breath about every 8 seconds, so it has to survive at least this long to have a chance to infect
 	var/turf/target = null//when created, we'll slowly move toward this turf
-
-/obj/effect/effect/pathogen_cloud/Destroy()
-	source = null
-	viruses = list()
-	lifetime = 3
-	target = null
-	..()
+	var/image/pathogen
 
 /obj/effect/effect/pathogen_cloud/New(var/turf/loc, var/mob/sourcemob, var/list/virus)
 	..()
@@ -28,10 +22,32 @@
 		qdel(src)
 		return
 
+	pathogen_clouds += src
+
+	pathogen = image('icons/effects/96x96.dmi',src,"pathogen_airborne")
+	pathogen.plane = HUD_PLANE
+	pathogen.layer = UNDER_HUD_LAYER
+	for (var/mob/living/L in science_goggles_wearers)
+		if (L.client)
+			L.client.images |= pathogen
+
 	source = sourcemob
 	viruses = virus
 	spawn (lifetime)
 		returnToPool(src)
+
+/obj/effect/effect/pathogen_cloud/Destroy()
+	if (pathogen)
+		for (var/mob/living/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+	pathogen_clouds -= src
+	source = null
+	viruses = list()
+	lifetime = 3
+	target = null
+	..()
 
 /obj/effect/effect/pathogen_cloud/core/New(var/turf/loc, var/mob/sourcemob, var/list/virus)
 	..()
