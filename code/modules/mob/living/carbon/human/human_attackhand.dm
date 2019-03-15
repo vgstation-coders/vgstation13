@@ -181,21 +181,16 @@
 		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
 		return 0
 
-	var/touch_zone = FULL_TORSO
 	var/datum/organ/external/S = src.get_organ(M.zone_sel.selecting)
-	if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
-		touch_zone = HEAD
-	else if(M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED))
-		touch_zone = HAND_LEFT
-	else if(M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED))
-		touch_zone = HAND_RIGHT
-	var/block = 0
-	var/bleeding = 0
-	if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
-		block = 1
-	if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(touch_zone))//both sides have to be bleeding to allow for blood infections
-		bleeding = 1
-	share_contact_diseases(M,block,bleeding)
+	if (!(!S || S.status & ORGAN_DESTROYED))
+		var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
+		var/block = 0
+		var/bleeding = 0
+		if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(touch_zone))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 
 	// CHEATER CHECKS
 	if(M.mind)

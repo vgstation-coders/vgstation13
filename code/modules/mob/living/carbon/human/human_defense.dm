@@ -236,6 +236,9 @@ emp_act
 		visible_message("<span class='danger'>\The [user] attacks \the [src] in \the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>\The [user] attacks you in \the [hit_area] with \the [I.name]!</span>")
 
+	//Contact diseases on the weapon?
+	I.disease_contact(src,get_part_from_limb(target_zone))
+
 	//Knocking teeth out!
 	var/knock_teeth = 0
 	if(originator)

@@ -312,3 +312,31 @@ proc/virus2_greater_infection()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/proc/get_part_from_limb(var/limb)
+	var/part = FULL_TORSO
+	switch (limb)
+		if(LIMB_HEAD)
+			part = HEAD
+		if(LIMB_LEFT_HAND)
+			part = HAND_LEFT
+		if(LIMB_RIGHT_HAND)
+			part = HAND_RIGHT
+		if(LIMB_LEFT_ARM)
+			part = ARM_LEFT
+		if(LIMB_RIGHT_ARM)
+			part = ARM_RIGHT
+		if(LIMB_GROIN)
+			part = LOWER_TORSO
+		if(LIMB_LEFT_LEG)
+			part = LEG_LEFT
+		if(LIMB_RIGHT_LEG)
+			part = LEG_RIGHT
+		if(LIMB_LEFT_FOOT)
+			part = FOOT_LEFT
+		if(LIMB_RIGHT_FOOT)
+			part = FOOT_RIGHT
+		if(TARGET_MOUTH)
+			part = MOUTH
+		if("eyes")
+			part = EYES
+	return part
