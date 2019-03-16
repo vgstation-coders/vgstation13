@@ -428,12 +428,8 @@ Auto Patrol: []"},
 				return
 
 			else if(patrol_target)		// has patrol target already
-				spawn(0)
-					calc_path()		// so just find a route to it
-					if(path.len == 0)
-						patrol_target = 0
-						return
-					mode = SECBOT_PATROL
+				calc_path()		// so just find a route to it
+				mode = SECBOT_PATROL
 
 
 			else					// no patrol target, so need a new one
@@ -459,61 +455,6 @@ Auto Patrol: []"},
 
 	return
 
-
-// perform a single patrol step
-
-/obj/machinery/bot/ed209/proc/patrol_step()
-	if(!isturf(loc))
-		return
-
-
-	if(loc == patrol_target)		// reached target
-		at_patrol_target()
-		return
-	if(!path || !istype(path))
-		path = list()
-	else if(path.len > 0 && patrol_target)		// valid path
-
-		var/turf/next = path[1]
-		if(next == loc)
-			path -= next
-			return
-
-
-		if(istype( next, /turf/simulated))
-
-			var/moved = step_towards(src, next)	// attempt to move
-			if(moved)	// successful move
-				blockcount = 0
-				path -= loc
-
-				look_for_perp()
-				if(lasercolor)
-					sleep(20)
-			else		// failed to move
-
-				blockcount++
-
-				if(blockcount > 5)	// attempt 5 times before recomputing
-					// find new path excluding blocked turf
-
-					spawn(2)
-						calc_path(next)
-						if(path.len == 0)
-							find_patrol_target()
-						else
-							blockcount = 0
-
-					return
-
-				return
-
-		else	// not a valid turf
-			mode = SECBOT_IDLE
-			return
-
-	else	// no path, so calculate new one
-		mode = SECBOT_START_PATROL
 
 
 // finds a new patrol target
@@ -677,15 +618,6 @@ Auto Patrol: []"},
 		"mode" = mode,
 	)
 	post_signal_multiple(control_freq, kv)
-
-
-
-// calculates a path to the current destination
-// given an optional turf to avoid
-/obj/machinery/bot/ed209/proc/calc_path(var/turf/avoid = null)
-	REGISTER_ASTAR(src,list("target" = patrol_target, "adjacent" = /turf/proc/CardinalTurfsWithAccess, "distance" = /turf/proc/Distance, "maxnodes" = 0, "maxnodedepth" = 120, "ID"=botcard, "exclude"=avoid))
-
-// look for a criminal in view of the bot
 
 /obj/machinery/bot/ed209/proc/look_for_perp()
 	if(src.disabled)

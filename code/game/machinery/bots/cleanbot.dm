@@ -133,7 +133,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			src.updateUsrDialog()
 		if("patrol")
 			src.should_patrol =!src.should_patrol
-			drop_astar_path()
+			drop_astar_path(src)
 			src.updateUsrDialog()
 		if("freq")
 			var/freq = text2num(input("Select frequency for  navigation beacons", "Frequnecy", num2text(beacon_freq / 10))) * 10
