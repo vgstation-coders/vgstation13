@@ -62,7 +62,8 @@
 	for(var/mob/M in get_hearers_in_view(15, source))
 		if(!M.client)
 			continue
-		M.playsound_local(source, soundfile, 100, falloff = 5)
+		if(M.client.prefs.hear_instruments)
+			M.playsound_local(source, soundfile, 100, falloff = 5)
 
 /datum/song/proc/updateDialog(mob/user)
 	instrumentObj.updateDialog()		// assumes it's an object in world, override if otherwise
