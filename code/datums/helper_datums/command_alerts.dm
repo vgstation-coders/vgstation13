@@ -65,7 +65,7 @@
 	force_report = 1
 
 /datum/command_alert/biohazard_station_unlock/announce()
-	message = "Biohazard outbreak contained succesfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
+	message = "Biohazard outbreak contained successfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
 	..()
 
 

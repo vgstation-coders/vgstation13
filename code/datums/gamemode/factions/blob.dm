@@ -156,9 +156,9 @@
 				delta = FALSE
 				emergency_shuttle.shuttle_phase("station",0) //Station is FUBAR, time to go home.
 				command_alert(/datum/command_alert/FUBAR)
-				for(var/mob/living/silicon/ai/aiPlayer in player_list)
-					aiPlayer.set_zeroth_law("")
-					to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
+			for(var/mob/living/silicon/ai/aiPlayer in player_list)
+				aiPlayer.set_zeroth_law("")
+				to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
 
 /datum/faction/blob_conglomerate/proc/send_intercept(var/report = BLOB_OUTBREAK)
 	var/intercepttext = ""
