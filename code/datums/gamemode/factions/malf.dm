@@ -27,7 +27,33 @@
 /datum/faction/malf/process()
 	if(apcs >= 3 && malf_mode_declared && can_malf_ai_takeover())
 		AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
-
+	if(malf_mode_declared)
+		var/is_ded = TRUE
+		for (var/datum/role/R in members)
+			if (R.antag.assigned_role == "AI")
+				if (R.antag.current && !R.antag.current.isDead())
+					is_ded = FALSE
+					break
+		if(is_ded)
+			malf_mode_declared = FALSE
+			set_security_level(SEC_LEVEL_GREEN)
+			world << sound('sound/misc/notice1.ogg')
+			command_alert(/datum/command_alert/malf_destroyed)
+			var/interceptname = "Malfunctioning AI lockdown lifted"
+			var/intercepttext = {"<Font size = 3><B>Nanotrasen Update</B>: Biohazard contained.</FONT><HR>
+Directive 7-12 has been lifted for [station_name()].
+Malfunctioning Artificial Intelligence contained or destroyed. Please resume normal station activities.
+Message ends."}
+			for (var/obj/machinery/computer/communications/comm in machines)
+				if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+					var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+					intercept.name = "paper- [interceptname]"
+					intercept.info = intercepttext
+					comm.messagetitle.Add("[interceptname]")
+					comm.messagetext.Add(intercepttext)
+			if(AI_win_timeleft <= 120) //2 minutes to death
+				emergency_shuttle.shuttle_phase("station",0) //Station is FUBAR, time to go home.
+				command_alert(/datum/command_alert/FUBAR)
 	if (AI_win_timeleft <= 0 && !station_captured)
 		station_captured = 1
 		to_nuke_or_not_to_nuke = 1
@@ -45,15 +71,7 @@
 	return FALSE
 
 /datum/faction/malf/check_win()
-	if (malf_mode_declared)
-		for (var/datum/role/R in members)
-			if (R.antag.assigned_role == "AI")
-				if (!R.antag.current || R.antag.current.isDead())
-					return 1
-	if(malf_win)
-		return 1
-	else
-		return 0
+	return malf_win
 
 
 /datum/faction/malf/proc/capture_the_station()

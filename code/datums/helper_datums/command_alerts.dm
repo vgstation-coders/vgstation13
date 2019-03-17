@@ -251,6 +251,15 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert = 'sound/AI/aimalf.ogg'
 	message = "Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core."
 
+/datum/command_alert/malf_destroyed
+	name = "AI Malfunctioning Controlled"
+	alert_title = "Rogue intelligence contained/destroyed successfully."
+	force_report = 1
+
+/datum/command_alert/malf_destroyed/announce()
+	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
+	..()
+
 /////////////METEOR STORM
 
 /datum/command_alert/meteor_round
