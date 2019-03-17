@@ -10,10 +10,6 @@
 	logo_state = "malf-logo"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
-	var/malf_mode_declared //Boolean
-	var/station_captured //Boolean
-	var/to_nuke_or_not_to_nuke //Boolean
-	var/malf_win
 
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
@@ -23,38 +19,49 @@
 /datum/faction/malf/forgeObjectives()
 	AppendObjective(/datum/objective/nuclear)
 
+/datum/faction/malf/stage(var/value)
+	if(value == FACTION_ENDGAME)
+		stage = FACTION_ENDGAME
+		command_alert(/datum/command_alert/malf_announce)
+		set_security_level("delta")
+		ticker.StartThematic("endgame")
+	else
+		..()
 
 /datum/faction/malf/process()
-	if(apcs >= 3 && malf_mode_declared && can_malf_ai_takeover())
-		AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
+	if (stage >= FACTION_ENDGAME)
+		var/living_ais = 0
+		for (var/datum/role/R in members)
+			if(!R.antag.current)
+				continue
+			if(isAI(R.antag.current) && !R.antag.current.isDead())
+				living_ais++
+		if(!living_ais)
+			command_alert(/datum/command_alert/malf_destroyed)
+			stage(FACTION_DEFEATED)
+			return
+		if(apcs >= 3 && can_malf_ai_takeover())
+			AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
 
-	if (AI_win_timeleft <= 0 && !station_captured)
-		station_captured = 1
-		to_nuke_or_not_to_nuke = 1
-		capture_the_station()
-		spawn (600)
-			to_nuke_or_not_to_nuke = 0
-			malf_win = 1
+		if (AI_win_timeleft <= 0 && stage < MALF_CHOOSING_NUKE)
+			stage(MALF_CHOOSING_NUKE)
+			capture_the_station()
+			spawn (600)
+				if(stage<FACTION_VICTORY)
+					stage(FACTION_VICTORY)
 
 
 /datum/faction/malf/proc/can_malf_ai_takeover()
 	for(var/datum/role/malfAI in members) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
 		var/turf/T = get_turf(malfAI.antag.current)
-		if(T && (T.z == map.zMainStation))
+		if(T && (T.z == STATION_Z))
 			return TRUE
 	return FALSE
 
 /datum/faction/malf/check_win()
-	if (malf_mode_declared)
-		for (var/datum/role/R in members)
-			if (R.antag.assigned_role == "AI")
-				if (!R.antag.current || R.antag.current.isDead())
-					return 1
-	if(malf_win)
+	if(stage >= FACTION_VICTORY)
 		return 1
-	else
-		return 0
-
+	return 0
 
 /datum/faction/malf/proc/capture_the_station()
 	to_chat(world, {"<FONT size = 3><B>The AI has won!</B></FONT><br>
@@ -71,6 +78,6 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	return
 
 /datum/faction/malf/get_statpanel_addition()
-	if(malf_mode_declared)
+	if(stage >= FACTION_ENDGAME)
 		return "Time left: [max(AI_win_timeleft/(apcs/3), 0)]"
 	return null

@@ -42,6 +42,7 @@ var/list/factions_with_hud_icons = list()
 	var/list/hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
+	var/stage = FACTION_DORMANT //role_datums_defines.dm
 
 /datum/faction/New()
 	..()
@@ -210,6 +211,27 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/process()
 	for (var/datum/role/R in members)
 		R.process()
+
+/datum/faction/proc/stage(var/value)
+	stage = value
+	switch(value)
+		if(FACTION_DEFEATED) //Faction was close to victory, but then lost. Send shuttle and end theme.
+			sleep(5 SECONDS)
+			emergency_shuttle.shutdown = 0
+			emergency_shuttle.online = 1
+			OnPostDefeat()
+			set_security_level("blue")
+			ticker.StopThematic()
+		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
+			ticker.StartThematic("endgame")
+			sleep(2 SECONDS)
+			set_security_level("red")
+
+/datum/faction/proc/OnPostDefeat()
+	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
+		return
+	emergency_shuttle.incall()
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
 
 /datum/faction/proc/check_win()
 	return
