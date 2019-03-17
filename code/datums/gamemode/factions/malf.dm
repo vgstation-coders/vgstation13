@@ -40,7 +40,7 @@
 			world << sound('sound/misc/notice1.ogg')
 			command_alert(/datum/command_alert/malf_destroyed)
 			var/interceptname = "Malfunctioning AI lockdown lifted"
-			var/intercepttext = {"<Font size = 3><B>Nanotrasen Update</B>: Biohazard contained.</FONT><HR>
+			var/intercepttext = {"<Font size = 3><B>Nanotrasen Update</B>: Hostile runtimes destroyed.</FONT><HR>
 Directive 7-12 has been lifted for [station_name()].
 Malfunctioning Artificial Intelligence contained or destroyed. Please resume normal station activities.
 Message ends."}
