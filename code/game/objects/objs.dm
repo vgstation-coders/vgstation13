@@ -567,6 +567,9 @@ a {
 
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
 		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA)
 	return 0
 

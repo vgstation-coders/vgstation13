@@ -60,9 +60,17 @@
 			M.Stun(8)
 			M.Knockdown(8)
 		else
-			if (issilicon(M))
-				M.Stun(4)
-				M.Knockdown(4)
+			if(issilicon(M))
+				var/salt = 4//The amount of salt we're going to generate.
+				if(isrobot(M))
+					var/mob/living/silicon/robot/R = null //Yes. I KNOW.
+					if(HAS_MODULE_QUIRK(R, MODULE_HAS_FLASH_RES))
+						salt = salt/2 //Half as much.
+					if(HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF))
+						salt = null //No salt.
+				if(salt)
+					M.Stun(salt)
+					M.Knockdown(salt)
 			else if (get_dist(M, T) <= 5)
 				M.Knockdown(2)
 			else

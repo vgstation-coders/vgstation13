@@ -18,10 +18,17 @@
 	laws = new /datum/ai_laws/noir()
 	install_upgrade(src, /obj/item/borg/upgrade/noir)
 
-/mob/living/silicon/robot/hugborg/warden/New()
+/mob/living/silicon/robot/hugborg/security/warden/New()
 	..()
 	laws = new /datum/ai_laws/robocop() //I. AM. THE. LAW.
 	install_upgrade(src, /obj/item/borg/upgrade/warden)
+
+/mob/living/silicon/robot/hugborg/hos/New()
+	..()
+	laws = new /datum/ai_laws/ntmov()
+	install_upgrade(src, /obj/item/borg/upgrade/noir)
+	install_upgrade(src, /obj/item/borg/upgrade/warden)
+	install_upgrade(src, /obj/item/borg/upgrade/hos)
 
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()
