@@ -74,7 +74,7 @@
 	"}
 
 	if(smelter_data["credits"] != -1)
-		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
+		dat += "<br>Current unclaimed GBP: [num2septext(smelter_data["credits"])]<br>"
 
 		if(istype(id))
 			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
@@ -173,7 +173,7 @@
 		return 1
 
 	if(href_list["claim"])
-		send_signal(list("claimcredits" = get_card_account(id)))
+		send_signal(list("claimcredits" = id))
 		request_status()
 		return 1
 
@@ -473,9 +473,12 @@
 		if(credits < 1)	//Is there actual money to collect?
 			return 1
 
-		var/datum/money_account/acct = signal.data["claimcredits"]
+		/*var/datum/money_account/acct = signal.data["claimcredits"]
 		if(istype(acct) && acct.charge(-credits, null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
-			credits = 0
+			credits = 0*/
+		var/obj/item/weapon/card/id/ID = signal.data["claimcredits"]
+		ID.gpb += credits
+		credits = 0
 
 	if(signal.data["inc_priority"])
 		var/idx = Clamp(signal.data["inc_priority"], 2, recipes.len)

@@ -2,6 +2,7 @@
 #define CAT_HIDDEN 2
 #define CAT_COIN   3
 #define CAT_VOUCH  4
+#define CAT_LABOR  5
 
 //Maximum price you can assign to an item
 #define MAX_ITEM_PRICE 1000000000
@@ -35,6 +36,7 @@ var/global/num_vending_terminals = 1
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/list/vouched     = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
+	var/list/labor_rewards = list() //Just like products and contraband, but spends GBP from your ID.
 
 	var/list/custom_stock = list() 	//Custom items are stored inside our contents, but we keep track of them here so we don't vend our component parts or anything.
 
@@ -44,6 +46,7 @@ var/global/num_vending_terminals = 1
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
 	var/list/voucher_records = list()
+	var/list/labor_records = list()
 	var/vend_reply				//Thank you for shopping!
 	var/last_reply = 0
 	var/last_slogan = 0			//When did we last pitch?
@@ -147,9 +150,10 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
 	build_inventory(products)
-	build_inventory(contraband, 1)
-	build_inventory(premium, 0, 1)
-	build_inventory(vouched, 0, 0, 1)
+	build_inventory(contraband, CAT_HIDDEN)
+	build_inventory(premium, CAT_COIN)
+	build_inventory(vouched, CAT_VOUCH)
+	build_inventory(labor_rewards, CAT_LABOR)
 
 /obj/machinery/vending/proc/link_to_account()
 	reconnect_database()
@@ -326,7 +330,7 @@ var/global/num_vending_terminals = 1
 				malfunction()
 
 //This proc is not used by custom vending machines.
-/obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0,voucher_only=0)
+/obj/machinery/vending/proc/build_inventory(var/list/productlist,type=CAT_NORMAL)
 	for(var/typepath in productlist)
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
@@ -340,18 +344,17 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.display_color = pick("red", "blue", "green")
-		if (hidden)
-			R.category=CAT_HIDDEN
-			hidden_records  += R
-		else if (req_coin)
-			R.category=CAT_COIN
-			coin_records    += R
-		else if (voucher_only)
-			voucher_records += R
-			R.category=CAT_VOUCH
-		else
-			R.category = CAT_NORMAL
-			product_records.Add(R)
+		R.category=type
+		switch(type)
+			if(CAT_HIDDEN)
+				hidden_records  += R
+			if(CAT_COIN)
+				coin_records    += R
+			if(CAT_VOUCH)
+				voucher_records += R
+			if(CAT_LABOR)
+				labor_records 	+= R
+		product_records.Add(R)
 
 		var/obj/item/initializer = typepath
 		if(!is_custom_machine)
@@ -364,6 +367,7 @@ var/global/num_vending_terminals = 1
 	datum_products |= coin_records
 	datum_products |= voucher_records
 	datum_products |= product_records
+	datum_products |= labor_records
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
 			return product
@@ -2696,7 +2700,7 @@ var/global/num_vending_terminals = 1
 		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
 		contraband[/obj/item/clothing/suit/space/rig/nazi] = 3
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
-		src.build_inventory(contraband, 1)
+		src.build_inventory(contraband, CAT_HIDDEN)
 		emagged = 1
 		overlays = 0
 		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
@@ -2778,7 +2782,7 @@ var/global/num_vending_terminals = 1
 		contraband[/obj/item/clothing/head/helmet/space/rig/soviet] = 3
 		contraband[/obj/item/clothing/suit/space/rig/soviet] = 3
 		contraband[/obj/item/weapon/gun/energy/laser/LaserAK] = 4
-		src.build_inventory(contraband, 1)
+		src.build_inventory(contraband, CAT_HIDDEN)
 		emagged = 1
 		overlays = 0
 		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
@@ -3217,7 +3221,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "What a glorious time to mine!"
 	icon_state = "mining"
-	products = list(
+	labor_rewards = list(
 		/obj/item/toy/canary = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 10,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 5,
@@ -3236,8 +3240,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/tank/jetpack/carbondioxide = 3,
 		/obj/item/weapon/gun/hookshot = 3,
 		/obj/item/weapon/lazarus_injector/advanced = 4,
-		)
-	contraband = list(
 		/obj/item/weapon/storage/bag/money = 2,
 		)
 	premium = list(

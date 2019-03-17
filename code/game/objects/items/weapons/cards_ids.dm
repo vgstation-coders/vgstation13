@@ -194,6 +194,7 @@
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
 	var/datum/money_account/virtual_wallet = 1	//money! If 0, don't create a wallet. Otherwise create one!
+	var/gbp = 0 //Great Britain Pound. Rewarded for labor.
 
 /obj/item/weapon/card/id/New()
 	..()
@@ -214,6 +215,8 @@
 		user.show_message("The blood type on the card is [blood_type].",1)
 		user.show_message("The DNA hash on the card is [dna_hash].",1)
 		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
+		if(gbp)
+			to_chat(user,"<span class='info'>It shines with the pride of [gbp] GBP.</span>")
 
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())

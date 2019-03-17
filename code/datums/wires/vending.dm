@@ -4,14 +4,14 @@
 
 /datum/wires/vending/New()
 	wire_names=list(
-		"[VENDING_WIRE_THROW]" 		= "Firing",
+		"[VENDING_WIRE_MALF]" 		= "Actuator",
 		"[VENDING_WIRE_CONTRABAND]" = "Contraband",
 		"[VENDING_WIRE_ELECTRIFY]" 	= "Shock",
 		"[VENDING_WIRE_IDSCAN]" 	= "ID Scan"
 	)
 	..()
 
-var/const/VENDING_WIRE_THROW = 1
+var/const/VENDING_WIRE_MALF = 1
 var/const/VENDING_WIRE_CONTRABAND = 2
 var/const/VENDING_WIRE_ELECTRIFY = 4
 var/const/VENDING_WIRE_IDSCAN = 8
@@ -47,8 +47,9 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	if(V.unhackable)
 		return
 	switch(index)
-		if(VENDING_WIRE_THROW)
-			V.shoot_inventory = !V.shoot_inventory
+		if(VENDING_WIRE_MALF)
+			V.visible_message("<span class='warning'>\The [src] [pick("sputters","whirs","buzzes")]!</span>")
+			V.damaged()
 		if(VENDING_WIRE_CONTRABAND)
 			V.extended_inventory = !V.extended_inventory
 		if(VENDING_WIRE_ELECTRIFY)
@@ -61,8 +62,6 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	if(V.unhackable)
 		return
 	switch(index)
-		if(VENDING_WIRE_THROW)
-			V.shoot_inventory = !mended
 		if(VENDING_WIRE_CONTRABAND)
 			V.extended_inventory = 0
 		if(VENDING_WIRE_ELECTRIFY)

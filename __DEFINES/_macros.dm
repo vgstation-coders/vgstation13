@@ -375,4 +375,5 @@ proc/get_space_area()
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits
+#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
+//Starts 0 credits, not sourced from any database, earns 0 credits, default secpref 1, hidden
