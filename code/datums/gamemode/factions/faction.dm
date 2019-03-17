@@ -219,13 +219,19 @@ var/list/factions_with_hud_icons = list()
 			sleep(5 SECONDS)
 			emergency_shuttle.shutdown = 0
 			emergency_shuttle.online = 1
-			emergency_shuttle.shuttle_phase("station",0)
+			OnPostDefeat()
 			set_security_level("blue")
 			ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
 			ticker.StartThematic("endgame")
 			sleep(2 SECONDS)
 			set_security_level("red")
+
+/datum/faction/proc/OnPostDefeat()
+	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
+		return
+	emergency_shuttle.incall()
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
 
 /datum/faction/proc/check_win()
 	return

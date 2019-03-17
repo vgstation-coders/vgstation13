@@ -104,6 +104,15 @@
 	force_report = 1
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
 
+/// MALF
+
+
+/datum/command_alert/malf_destroyed
+	name = "AI Malfunctioning Controlled"
+	alert_title = "Rogue intelligence contained/destroyed successfully."
+	force_report = 1
+	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
+
 /////////ERT
 
 /datum/command_alert/ert_fail

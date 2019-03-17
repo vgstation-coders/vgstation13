@@ -37,6 +37,7 @@
 			if(isAI(R.antag.current) && !R.antag.current.isDead())
 				living_ais++
 		if(!living_ais)
+			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
 			return
 		if(apcs >= 3 && can_malf_ai_takeover())
