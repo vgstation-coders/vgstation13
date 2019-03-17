@@ -18,7 +18,7 @@
 	laws = new /datum/ai_laws/noir()
 	install_upgrade(src, /obj/item/borg/upgrade/noir)
 
-/mob/living/silicon/robot/hugborg/security/warden/New()
+/mob/living/silicon/robot/hugborg/warden/New()
 	..()
 	laws = new /datum/ai_laws/robocop() //I. AM. THE. LAW.
 	install_upgrade(src, /obj/item/borg/upgrade/warden)
