@@ -48,7 +48,6 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 1
-	cost = 50
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	repeatable = TRUE
 
@@ -57,9 +56,6 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
-	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = 10
-		cost = 10
 
 	return ..()
 
