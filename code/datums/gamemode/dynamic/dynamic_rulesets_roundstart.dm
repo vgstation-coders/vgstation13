@@ -390,7 +390,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/blob
+/datum/dynamic_ruleset/roundstart/delayed/blob
 	name = "Blob conglomerate"
 	role_category = /datum/role/blob_overmind/
 	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
@@ -399,9 +399,10 @@
 	required_candidates = 1
 	weight = 3
 	cost = 45
+	delay = 5 MINUTES
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 
-/datum/dynamic_ruleset/roundstart/blob/execute()
+/datum/dynamic_ruleset/roundstart/delayed/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
 	if (!blob_fac)
 		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
