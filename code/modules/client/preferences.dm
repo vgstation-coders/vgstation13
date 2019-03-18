@@ -131,6 +131,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/b_eyes = 0						//Eye color
 	var/species = "Human"
 	var/language = "None"				//Secondary language
+	var/hear_instruments = 1
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -354,6 +355,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
 	<b>Hear player voices</b>
 	<a href='?_src_=prefs;preference=hear_voicesound'><b>[(hear_voicesound) ? "Yes" : "No"]</b></a><br>
+	<b>Hear instruments</b>
+	<a href='?_src_=prefs;preference=hear_instruments'><b>[(hear_instruments) ? "Yes":"No"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
@@ -1369,6 +1372,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					stumble = !stumble
 				if("hear_voicesound")
 					hear_voicesound = !hear_voicesound
+				if("hear_instruments")
+					hear_instruments = !hear_instruments
 				if("pulltoggle")
 					pulltoggle = !pulltoggle
 
