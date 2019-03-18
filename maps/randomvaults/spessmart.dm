@@ -10,7 +10,6 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/mop = 10,
 /obj/item/weapon/lipstick/random = 30,
 /obj/item/weapon/lazarus_injector = 500,
-/obj/item/weapon/lazarus_injector/advanced = 750,
 /obj/item/weapon/kitchen/rollingpin = 20,
 /obj/item/weapon/hand_labeler = 10,
 

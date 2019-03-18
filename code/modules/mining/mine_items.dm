@@ -729,7 +729,7 @@ proc/move_mining_shuttle()
 	throw_speed = 3
 	throw_range = 5
 	var/loaded = 1
-	var/refreshes_drops = FALSE
+	var/refreshes_drops = TRUE
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
@@ -777,19 +777,6 @@ proc/move_mining_shuttle()
 	..()
 	if(!loaded)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
-
-/obj/item/weapon/lazarus_injector/advanced
-	name = "advanced lazarus injector"
-	desc = "A lazarus injector further enhanced with a nanomachine solution. Allows for the complete regeneration of lesser beings."
-	icon_state = "adv_lazarus_hypo"
-	refreshes_drops = TRUE
-
-/obj/item/weapon/lazarus_injector/advanced/update_icon()
-	..()
-	if(loaded)
-		icon_state = "adv_lazarus_hypo"
-	else
-		icon_state = "adv_lazarus_empty"
 
 /*********************Mob Capsule*************************/
 
