@@ -715,6 +715,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];vsc=airflow'>Edit ZAS Settings</A><br>
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
+		<A href='?src=\ref[src];toggle_light=1'>Slow down lighting (Forces MC to crash, do not panic.)</A><br>
 		<hr />
 		"}
 
