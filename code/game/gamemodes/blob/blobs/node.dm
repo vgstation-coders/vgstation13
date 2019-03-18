@@ -46,10 +46,7 @@
 			M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
 	for(var/i = 1; i < 8; i += i)
-		if(overmind)
-			Pulse(5, i, overmind)
-		else
-			Pulse(5, i)
+		Pulse(5, i, overmind)
 
 	if(health < maxhealth)
 		health = min(maxhealth, health + 1)
