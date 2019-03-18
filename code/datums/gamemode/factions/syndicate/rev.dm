@@ -112,10 +112,11 @@
 
 	if (incapacitated_heads >= total_heads.len)
 		return end(ALL_HEADS_DEAD)
-	else if(incapacitated_heads == total_heads.len-1)
-		stage(FACTION_ENDGAME)
-		command_alert(/datum/command_alert/revolution)
-		//Only one head left!
+	if(stage < FACTION_ENDGAME)
+		if(incapacitated_heads == total_heads.len-1)
+			stage(FACTION_ENDGAME)
+			command_alert(/datum/command_alert/revolution)
+			//Only one head left!
 
 /datum/faction/revolution/process()
 	..()
