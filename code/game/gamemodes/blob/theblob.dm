@@ -67,7 +67,6 @@ var/list/blob_overminds = list()
 	var/mob/camera/blob/overmind = null
 	var/destroy_sound = "sound/effects/blobsplat.ogg"
 
-	//var/looks = "new" HALLOWEEN
 	var/looks = "new"
 
 	// A note to the beam processing shit.

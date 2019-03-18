@@ -417,6 +417,8 @@
 			if("Station Engineer","Atmospheric Technician","Chief Engineer")
 				blob_looks_player["AME"] = 32
 				blob_looks_player["AME_new"] = 64
+			if("Chaplain")
+				blob_looks_player["skelleton"] = 64
 	return 1
 
 //////////////////////////////////////////////
