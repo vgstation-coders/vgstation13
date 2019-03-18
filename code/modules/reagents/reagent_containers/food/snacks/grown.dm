@@ -683,8 +683,8 @@ var/list/special_fruits = list()
 	plantname = "kudzu"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
-	name = "ice-pepper"
-	desc = "It's a mutant strain of chili"
+	name = "chilly pepper"
+	desc = "It's a mutant strain of chili pepper, now cold rather than hot."
 	icon_state = "icepepper"
 	potency = 20
 	filling_color = "#66CEED"
