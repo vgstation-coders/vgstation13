@@ -44,6 +44,7 @@
 
 /datum/dynamic_ruleset/roundstart/delayed/ // Executed with a 30 seconds delay
 	var/delay = 30 SECONDS
+	var/required_type = /mob/living/carbon/human // No ghosts, new players or silicons allowed.
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
@@ -182,8 +183,11 @@
 /datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
 	if (ticker && ticker.current_state <  GAME_STATE_PLAYING)
 		return ..() // If the game didn't start, we'll use the parent's method to see if we have enough people desiring the role & what not.
-	var/role_id = initial(role_category.id)
-	for(var/mob/living/carbon/human/P in candidates)
+	var/role_id = initial(role_category.id) 
+	for (var/mob/P in candidates)
+		if (!istype(P, required_type))
+			candidates.Remove(P) // Can be a new_player, etc.
+			continue
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
