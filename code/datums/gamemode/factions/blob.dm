@@ -15,8 +15,12 @@
 	name = BLOBCONGLOMERATE
 	ID = BLOBCONGLOMERATE
 	logo_state = "blob-logo"
-	roletype = /datum/role/blob_overmind
+
 	initroletype = /datum/role/blob_overmind
+	initial_role = BLOBOVERMIND
+
+	roletype = /datum/role/blob_overmind/cerebrate
+	late_role = BLOBCEREBRATE
 
 	var/datum/station_state/start
 
@@ -53,10 +57,10 @@
 	. = ..()
 	if(!blobwincount)
 		return .
-	if(prelude_announcement && world.time >= prelude_announcement)
+	if(prelude_announcement && world.time >= prelude_announcement && detect_overminds())
 		prelude_announcement = 0
 		stage(FACTION_DORMANT)
-	if(outbreak_announcement && world.time >= outbreak_announcement)
+	if(outbreak_announcement && world.time >= outbreak_announcement && detect_overminds()) //Must be alive to advance.
 		outbreak_announcement = 0
 		stage(FACTION_ACTIVE)
 	if(declared && 0.66*blobwincount <= blobs.len && stage<FACTION_ENDGAME) // Blob almost won !
@@ -222,11 +226,6 @@ Message ends."}
 	dat += "<br />"
 	var/datum/station_state/end = new
 	end.count()
-	var/overminds_detected = FALSE
-	for(var/datum/role/R in members)
-		if(R.antag.current)
-			overminds_detected = TRUE
-
 	dat += "<b>Total blobs: [blobs.len]</b><br/>"
 	dat += "<b>Station Integrity: [round(end.score(start)*100)]%</b><br/>"
 	dat += "<br/>"
@@ -237,11 +236,17 @@ Message ends."}
 	dat += "Humans in space: <b>[result["numSpace"]]</b><br/>"
 	dat += "Humans off-station: <b>[result["numOffStation"]]</b><br/>"
 	dat += "Pre-escapes: <b>[pre_escapees.len]</b><br/>"
-	if (overminds_detected && (result["numOffStation"] + result["numSpace"]))
+	if (detect_overminds() && (result["numOffStation"] + result["numSpace"]))
 		dat += "<span class='danger'>The AI has failed to enforce the quarantine.</span>"
 	else
 		dat += "<span class='good'>The AI has managed to enforce the quarantine.</span><BR>"
 	return dat
+
+/datum/faction/blob_conglomerate/proc/detect_overminds()
+	for(var/datum/role/R in members)
+		if(R.antag.current)
+			return TRUE
+	return FALSE
 
 /datum/faction/blob_conglomerate/proc/check_quarantaine()
 	var/list/result = list()
