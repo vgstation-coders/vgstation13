@@ -3,8 +3,8 @@
 /obj/item/weapon/disk/shuttle_coords
 	name = "shuttle destination disk"
 	desc = "A small disk containing encrypted coordinates and tracking data."
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk0"
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk_shuttle"
 
 	var/obj/docking_port/destination/destination //Docking port linked to this disk.
 	//If this variable contains a path like (/obj/structure/docking_port/destination/my_dungeon), the disk will find a destination docking port of that type and automatically link to it

@@ -22,7 +22,7 @@ var/global/list/special_roles = list(
 	WIZARD       	= 1,
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
-	WEEABOO			= 1,
+	NINJA			= 1,
 	ROLE_MINOR		= 1,
 )
 
@@ -40,7 +40,7 @@ var/global/list/special_roles = list(
 	WIZARD       	= 1,
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
-	WEEABOO			= 1,
+	NINJA			= 1,
 	ROLE_MINOR		= 1,
 )
 
@@ -68,7 +68,7 @@ var/list/role_wiki=list(
 	VOXRAIDER				= "Vox_Raider",
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
-	WEEABOO					= "Crazed_Weeaboo",
+	NINJA					= "Space_Ninja",
 	ROLE_MINOR				= "Minor_Roles",
 )
 
@@ -108,6 +108,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/special_popup = 0
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
+	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -130,6 +131,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/b_eyes = 0						//Eye color
 	var/species = "Human"
 	var/language = "None"				//Secondary language
+	var/hear_instruments = 1
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -269,7 +271,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
 	<b>Tertiary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
-	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
+	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"] - [skintone2racedescription(s_tone, species)]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'>Set</a><br>
 	<b>Limbs:</b> <a href='byond://?_src_=prefs;subsection=limbs;task=menu'>Set</a><br>
 	<b>Organs:</b> <a href='byond://?_src_=prefs;subsection=organs;task=menu'>Set</a><br>
@@ -351,6 +353,10 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
 	<b>Streaming Volume</b>
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
+	<b>Hear player voices</b>
+	<a href='?_src_=prefs;preference=hear_voicesound'><b>[(hear_voicesound) ? "Yes" : "No"]</b></a><br>
+	<b>Hear instruments</b>
+	<a href='?_src_=prefs;preference=hear_instruments'><b>[(hear_instruments) ? "Yes":"No"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
@@ -1225,23 +1231,12 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)
 							s_tone = 35 - max(min(round(new_s_tone),220),1)
+							to_chat(user,"You're now [skintone2racedescription(s_tone, species)].")
 					else if(species == "Vox")//Can't reference species flags here, sorry.
 						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
 						if(skin_c)
 							s_tone = max(min(round(skin_c),6),1)
-							switch(s_tone)
-								if(6)
-									to_chat(user,"Your vox will now be emerald.")
-								if(5)
-									to_chat(user,"Your vox will now be azure.")
-								if(4)
-									to_chat(user,"Your vox will now be light green.")
-								if(3)
-									to_chat(user,"Your vox will now be gray.")
-								if(2)
-									to_chat(user,"Your vox will now be brown.")
-								else
-									to_chat(user,"Your vox will now be green.")
+							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return
@@ -1375,6 +1370,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					progress_bars = !progress_bars
 				if("stumble")
 					stumble = !stumble
+				if("hear_voicesound")
+					hear_voicesound = !hear_voicesound
+				if("hear_instruments")
+					hear_instruments = !hear_instruments
 				if("pulltoggle")
 					pulltoggle = !pulltoggle
 

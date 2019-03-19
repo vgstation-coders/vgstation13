@@ -149,8 +149,6 @@
 		glide_size = 0
 	else
 		glide_size = max(min, glide_size_override)
-	for(var/atom/movable/AM in contents)
-		AM.set_glide_size(glide_size, min, max)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -457,12 +455,15 @@
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
+
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
 	else if(client && hud_used)
 		var/client/C = client
 		C.update_special_views()

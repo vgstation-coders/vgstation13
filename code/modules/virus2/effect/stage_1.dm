@@ -1,13 +1,15 @@
 /datum/disease2/effect/invisible
 	name = "Waiting Syndrome"
+	desc = "A self-defeating symptom that doesn't seem to do anything in particular."
 	stage = 1
 
 /datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
-		return
+	return
 
 
 /datum/disease2/effect/sneeze
 	name = "Coldingtons Effect"
+	desc = "Makes the infected sneeze every so often."
 	stage = 1
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
@@ -24,6 +26,7 @@
 
 /datum/disease2/effect/gunck
 	name = "Flemmingtons"
+	desc = "Causes a sensation of mucous running down the infected's throat."
 	stage = 1
 
 /datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
@@ -32,6 +35,7 @@
 
 /datum/disease2/effect/drool
 	name = "Saliva Effect"
+	desc = "Causes the infected to drool."
 	stage = 1
 
 /datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
@@ -40,6 +44,7 @@
 
 /datum/disease2/effect/twitch
 	name = "Twitcher"
+	desc = "Causes the infected to twitch."
 	stage = 1
 
 /datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
@@ -48,6 +53,7 @@
 
 /datum/disease2/effect/headache
 	name = "Headache"
+	desc = "Gives the infected a headache."
 	stage = 1
 
 /datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
@@ -68,6 +74,7 @@
 
 /datum/disease2/effect/drained
 	name = "Drained Feeling"
+	desc = "Gives the infected a drained sensation."
 	stage = 1
 
 /datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
@@ -76,6 +83,7 @@
 
 /datum/disease2/effect/eyewater
 	name = "Watery Eyes"
+	desc = "Causes the infected's tear ducts to overact."
 	stage = 1
 
 /datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
@@ -84,6 +92,7 @@
 
 /datum/disease2/effect/wheeze
 	name = "Wheezing"
+	desc = "Inhibits the infected's ability to breathe slightly, causing them to wheeze."
 	stage = 1
 
 /datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
@@ -92,6 +101,7 @@
 
 /datum/disease2/effect/optimistic
 	name = "Full Glass Syndrome"
+	desc = "Gives a feeling of optimism to the infected."
 	stage = 1
 
 /datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
@@ -102,6 +112,7 @@
 
 /datum/disease2/effect/spyndrome
 	name = "Gyroscopic Manipulation Syndrome"
+	desc = "Makes the infected spin at random."
 	stage = 1
 
 /datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
@@ -110,6 +121,7 @@
 
 /datum/disease2/effect/bee_vomit
 	name = "Melisso-Emeto Syndrome"
+	desc = "Converts the lungs of the infected into a bee-hive, giving the infected a steady drip of honey in exchange of vomiting up a bee every so often."
 	stage = 1
 	max_multiplier = 10
 
@@ -132,6 +144,7 @@
 
 /datum/disease2/effect/radresist
 	name = "Hyronalinism"
+	desc = "Causes the infected to synthesize Hyronalin."
 	stage = 1
 	chance = 10
 	max_chance = 40
@@ -145,6 +158,7 @@
 
 /datum/disease2/effect/soreness
 	name = "Myalgia Syndrome"
+	desc = "Makes the infected more perceptive of their aches and pains."
 	stage = 1
 	chance = 5
 	max_chance = 60
@@ -155,6 +169,7 @@
 
 /datum/disease2/effect/socialconfusion
 	name = "Clashing Syndrome"
+	desc = "Befuddles the infected, making them greet and bid farewell to people in their surroundings."
 	stage = 1
 	chance = 5
 	max_chance = 25

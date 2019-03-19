@@ -513,7 +513,7 @@ proc/is_blind(A)
 
 /**
 * Honor check
-* Returns TRUE if user is BOMBERMAN, HIGHLANDER, WEEABOO...
+* Returns TRUE if user is BOMBERMAN, HIGHLANDER, NINJA...
 * Respects honorable.
 */
 /proc/is_honorable(var/mob/living/user, var/honorable = HONORABLE_ALL)
@@ -523,7 +523,7 @@ proc/is_blind(A)
 				return TRUE
 			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
-			if(isweeaboo(user) && (honorable & HONORABLE_WEEABOO))
+			if(isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
 	return FALSE
 

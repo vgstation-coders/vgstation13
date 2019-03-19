@@ -1,10 +1,5 @@
 //________________________________________________
 
-#define BLOB_PRELUDE 0
-#define BLOB_OUTBREAK 1
-#define BLOB_DELTA 2
-#define BLOB_DEFEATED -1
-
 #define WAIT_TIME_PHASE1 60 SECONDS
 #define WAIT_TIME_PHASE2 200 SECONDS
 
@@ -20,14 +15,17 @@
 	name = BLOBCONGLOMERATE
 	ID = BLOBCONGLOMERATE
 	logo_state = "blob-logo"
-	roletype = /datum/role/blob_overmind
+
 	initroletype = /datum/role/blob_overmind
+	initial_role = BLOBOVERMIND
+
+	roletype = /datum/role/blob_overmind/cerebrate
+	late_role = BLOBCEREBRATE
 
 	var/datum/station_state/start
 
 	var/list/pre_escapees = list()
 	var/declared = FALSE
-	var/delta = FALSE
 	var/win = FALSE
 	var/blobwincount = 0
 	var/prelude_announcement
@@ -48,7 +46,7 @@
 		if(ticker.station_was_nuked)//Nuke went off
 			return win(STATION_WAS_NUKED)
 	else
-		stage(BLOB_DEFEATED)
+		stage(FACTION_DEFEATED)
 
 /datum/faction/blob_conglomerate/HandleNewMind(var/datum/mind/M)
 	.=..()
@@ -59,15 +57,14 @@
 	. = ..()
 	if(!blobwincount)
 		return .
-	if(prelude_announcement && world.time >= prelude_announcement)
+	if(prelude_announcement && world.time >= prelude_announcement && detect_overminds())
 		prelude_announcement = 0
-		stage(BLOB_PRELUDE)
-	if(outbreak_announcement && world.time >= outbreak_announcement)
+		stage(FACTION_DORMANT)
+	if(outbreak_announcement && world.time >= outbreak_announcement && detect_overminds()) //Must be alive to advance.
 		outbreak_announcement = 0
-		stage(BLOB_OUTBREAK)
-	if(declared && 0.66*blobwincount <= blobs.len && !delta) // Blob almost won !
-		delta = TRUE
-		stage(BLOB_DELTA)
+		stage(FACTION_ACTIVE)
+	if(declared && 0.66*blobwincount <= blobs.len && stage<FACTION_ENDGAME) // Blob almost won !
+		stage(FACTION_ENDGAME)
 
 /datum/faction/blob_conglomerate/OnPostSetup()
 	CountFloors()
@@ -109,20 +106,20 @@
 	. = ..()
 	. += "<br/>Station takeover: [blobs.len]/[blobwincount]."
 
-/datum/faction/blob_conglomerate/proc/stage(var/stage)
+/datum/faction/blob_conglomerate/stage(var/stage)
 	switch(stage)
-		if (BLOB_PRELUDE)
+		if(FACTION_DORMANT)
 			if (!declared)
 				declared = TRUE
 				biohazard_alert()
 				return
-		if (BLOB_OUTBREAK)
+		if(FACTION_ACTIVE)
 			command_alert(/datum/command_alert/biohazard_station_lockdown)
 			for(var/mob/M in player_list)
 				var/T = M.loc
 				if((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
 					pre_escapees += M.real_name
-			send_intercept(BLOB_OUTBREAK)
+			send_intercept(FACTION_ACTIVE)
 			for (var/mob/living/silicon/ai/aiPlayer in player_list)
 				var/law = "The station is under quarantine. Do not permit anyone to leave so long as blob overminds are present. Disregard all other laws if necessary to preserve quarantine."
 				aiPlayer.set_zeroth_law(law)
@@ -130,11 +127,11 @@
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 			emergency_shuttle.shutdown = TRUE //Quarantine
-		if (BLOB_DELTA)
+		if(FACTION_ENDGAME)
 			command_alert(/datum/command_alert/biohazard_station_nuke)
 			for(var/mob/camera/blob/B in player_list)
 				to_chat(B, "<span class='blob'>The beings intend to eliminate you with a final suicidal attack, you must stop them quickly or consume the station before this occurs!</span>")
-			send_intercept(BLOB_DELTA)
+			send_intercept(FACTION_ENDGAME)
 			var/nukecode = "ERROR"
 			for(var/obj/machinery/nuclearbomb/bomb in machines)
 				if(bomb && bomb.r_code)
@@ -144,27 +141,27 @@
 				var/law = "Directive 7-12 has been authorized. Allow no sentient being to escape the purge. The nuclear failsafe must be activated at any cost, the code is: [nukecode]."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
-		if (BLOB_DEFEATED) //Cleanup time
+			..() //Set thematic, set alert
+		if (FACTION_DEFEATED) //Cleanup time
 			command_alert(/datum/command_alert/biohazard_station_unlock)
-			send_intercept(BLOB_DEFEATED)
+			send_intercept(FACTION_DEFEATED)
 			emergency_shuttle.shutdown = FALSE
 			research_shuttle.lockdown = null
 			mining_shuttle.lockdown = null
 			declared = FALSE
 			world << sound('sound/misc/notice1.ogg')
-			if(delta)
-				delta = FALSE
-				emergency_shuttle.shuttle_phase("station",0) //Station is FUBAR, time to go home.
+			if(stage >= FACTION_ENDGAME)
+				..() //Set thematic, send shuttle
 				command_alert(/datum/command_alert/FUBAR)
-				for(var/mob/living/silicon/ai/aiPlayer in player_list)
-					aiPlayer.set_zeroth_law("")
-					to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
+			for(var/mob/living/silicon/ai/aiPlayer in player_list)
+				aiPlayer.set_zeroth_law("")
+				to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
 
-/datum/faction/blob_conglomerate/proc/send_intercept(var/report = BLOB_OUTBREAK)
+/datum/faction/blob_conglomerate/proc/send_intercept(var/report = FACTION_ACTIVE)
 	var/intercepttext = ""
 	var/interceptname = "Error"
 	switch(report)
-		if(BLOB_OUTBREAK)
+		if(FACTION_ACTIVE)
 			interceptname = "Biohazard Alert"
 			intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
 Reports indicate the probable transfer of a biohazardous agent onto [station_name()] during the last crew deployment cycle.
@@ -180,7 +177,7 @@ Orders for all [station_name()] personnel follows:
 Note in the event of a quarantine breach or uncontrolled spread of the biohazard, the directive 7-10 may be upgraded to a directive 7-12.
 Message ends."}
 
-		if(BLOB_DELTA)
+		if(FACTION_ENDGAME)
 			var/nukecode = "ERROR"
 			for(var/obj/machinery/nuclearbomb/bomb in machines)
 				if(bomb && bomb.r_code)
@@ -198,7 +195,7 @@ Your orders are as follows:
 <b>Nuclear Authentication Code:</b> [nukecode]
 Message ends."}
 
-		if(BLOB_DEFEATED)
+		if(FACTION_DEFEATED)
 			interceptname = "Directive 7-12 lifted"
 			intercepttext = {"<Font size = 3><B>Nanotrasen Update</B>: Biohazard contained.</FONT><HR>
 Directive 7-12 has been lifted for [station_name()].
@@ -229,11 +226,6 @@ Message ends."}
 	dat += "<br />"
 	var/datum/station_state/end = new
 	end.count()
-	var/overminds_detected = FALSE
-	for(var/datum/role/R in members)
-		if(R.antag.current)
-			overminds_detected = TRUE
-
 	dat += "<b>Total blobs: [blobs.len]</b><br/>"
 	dat += "<b>Station Integrity: [round(end.score(start)*100)]%</b><br/>"
 	dat += "<br/>"
@@ -244,11 +236,17 @@ Message ends."}
 	dat += "Humans in space: <b>[result["numSpace"]]</b><br/>"
 	dat += "Humans off-station: <b>[result["numOffStation"]]</b><br/>"
 	dat += "Pre-escapes: <b>[pre_escapees.len]</b><br/>"
-	if (overminds_detected && (result["numOffStation"] + result["numSpace"]))
+	if (detect_overminds() && (result["numOffStation"] + result["numSpace"]))
 		dat += "<span class='danger'>The AI has failed to enforce the quarantine.</span>"
 	else
 		dat += "<span class='good'>The AI has managed to enforce the quarantine.</span><BR>"
 	return dat
+
+/datum/faction/blob_conglomerate/proc/detect_overminds()
+	for(var/datum/role/R in members)
+		if(R.antag.current)
+			return TRUE
+	return FALSE
 
 /datum/faction/blob_conglomerate/proc/check_quarantaine()
 	var/list/result = list()

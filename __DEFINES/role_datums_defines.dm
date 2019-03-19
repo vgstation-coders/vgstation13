@@ -37,7 +37,7 @@
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
-#define WEEABOO "crazed weeaboo"
+#define NINJA "space ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"
@@ -47,6 +47,7 @@
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
+#define BLOBCEREBRATE "blob cerebrate"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
@@ -76,7 +77,15 @@
 #define GREET_PROVOC_CONVERTED	 "provocateur"
 
 
-//////////////////////////////////CULT STUFF////////////////////////////////////
+///////////////// FACTION STAGES //////////////////////
+#define FACTION_DEFEATED	-1
+#define FACTION_DORMANT		0
+#define FACTION_ACTIVE		1
+#define FACTION_ENDGAME		3
+#define FACTION_VICTORY		5
+
+#define MALF_CHOOSING_NUKE	4
+
 #define CULT_MENDED		-1
 #define CULT_PROLOGUE	0
 #define CULT_ACT_I		1
@@ -84,6 +93,9 @@
 #define CULT_ACT_III	3
 #define CULT_ACT_IV		4
 #define CULT_EPILOGUE	5
+
+
+//////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"
 #define BLOODCOST_AMOUNT_BLEEDER	"bleeder_amount"

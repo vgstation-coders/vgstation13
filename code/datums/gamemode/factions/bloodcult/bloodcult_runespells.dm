@@ -384,7 +384,7 @@
 	if (spawntype == /obj/structure/cult/altar)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.progress(CULT_ACT_I)
+			cult.stage(CULT_ACT_I)
 		else
 			message_admins("Blood Cult: An altar was raised...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 	qdel(spell_holder)//this will cause this datum to del as well
@@ -393,7 +393,7 @@
 /datum/rune_spell/communication
 	name = "Communication"
 	desc = "Speak so that every cultists may hear your voice."
-	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie."
+	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it to transmit a message that will be remembered by all."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
 	rune_flags = RUNE_STAND
@@ -411,6 +411,29 @@
 	R.one_pulse()
 	var/mob/living/user = activator
 	comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
+
+/datum/rune_spell/communication/midcast(var/mob/living/user)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!istype(cult))
+		return
+	if (!istype(user)) // Ghosts
+		return
+	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
+	reminder = utf8_sanitize(reminder) // No weird HTML
+	var/number = cult.cult_reminders.len
+	var/text = "[number + 1]) [reminder], by [user.real_name]."
+	cult.cult_reminders += text
+	for(var/datum/role/cultist/C in cult.members)
+		var/datum/mind/M = C.antag
+		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[reminder]</span></span>")
+			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
+			M.store_memory("Cult reminder: [text].")
+
+	for(var/mob/dead/observer/O in player_list)
+		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+
+	log_cultspeak("[key_name(user)] Cult reminder: [reminder]")
 
 /datum/rune_spell/communication/cast_talisman()//we write our message on the talisman, like in previous versions.
 	var/message = sanitize(input("Write a message to send to your acolytes.", "Blood Letter", "") as null|message, MAX_MESSAGE_LEN)
@@ -903,16 +926,6 @@
 				to_chat(activator, "<span class='sinister'>\The [victim]'s mind appears to be completely impervious to the Geometer of Blood's words of power. If they won't become one of us, they won't need their body any longer.</span>")
 				to_chat(victim, "<span class='danger'>A sense of dread comes over you, as you feel under the gaze of a cosmic being. You cannot hear its voice, but you can feel its thirst...for your blood!</span>")
 				success = CONVERSION_REFUSE
-				if(victim.mind && victim.mind.assigned_role == "Chaplain")
-					var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
-					var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
-					if (religion_name in cult_blood_chaplain)
-						to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>Rejoice, I will give you the ending you desired.</span></span>")
-					else if (religion_name in cult_clock_chaplain)
-						to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>I will take your body, but when your soul returns to Ratvar, tell him that [pick(\
-								"he SUCKS!",\
-								"there isn't enough place for the two of us on this plane!",\
-								"he'll never be anything but a lame copycat.")]</span></span>")
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(100)
@@ -930,11 +943,11 @@
 			return
 
 		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (victim.mind)
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 			if (cult)
 				spawn(5)//waiting half a second to make sure that the sacrifice objective won't designate a victim that just refused conversion
-					cult.progress(CULT_ACT_II)
+					cult.stage(CULT_ACT_II)
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
@@ -955,7 +968,7 @@
 					I.forceMove(T)
 					I.implanted = 0
 					spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [victim]'s head.</span>")
-				convert(victim)
+				convert(victim, converter)
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
 				abort(RITUALABORT_CONVERT)
@@ -971,7 +984,8 @@
 						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
-
+					
+		cult.send_flavour_text_refuse(victim, converter)
 		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		to_chat(converter, "<span class='sinister'>\The [victim] was pulled through the veil, their body was devoured by Nar-Sie and their possession stored inside this coffer.</span>")
@@ -1008,7 +1022,7 @@
 		qdel(victim)
 		abort(RITUALABORT_SACRIFICE)
 
-/datum/rune_spell/conversion/proc/convert(var/mob/M)
+/datum/rune_spell/conversion/proc/convert(var/mob/M, var/mob/converter)
 	var/datum/role/cultist/newCultist = new
 	newCultist.AssignToRole(M.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -1017,12 +1031,11 @@
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
+	cult.send_flavour_text_accept(victim, converter)
 	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
-	if (victim==M)
-		victim.clear_fullscreen("conversionred", 10)
-		victim.clear_fullscreen("conversionborder", 10)
+	if (victim == M)
 		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
@@ -1030,6 +1043,13 @@
 
 /datum/rune_spell/conversion/cast_talisman()//handled by /obj/item/weapon/talisman/proc/trigger instead
 	return
+
+/datum/rune_spell/conversion/abort(var/cause)
+	if (victim)
+		victim.clear_fullscreen("conversionred", 10)
+		victim.clear_fullscreen("conversionborder", 10)
+		victim = null
+	..()
 
 /obj/effect/cult_ritual/conversion
 	anchored = 1

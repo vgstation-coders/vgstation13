@@ -9,7 +9,8 @@ https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DF
 
 rigged_roundstart() is called instead if there are forced rules (e.g.: an admin set the mode)
 
-can_start() -> Setup() -> roundstart() OR rigged_roundstart() -> picking_roundstart_rule(drafted_rules)
+can_start() -> Setup() -> roundstart() OR rigged_roundstart() -> picking_roundstart_rule(drafted_rules) -> PostSetup()
+**All existing roles and factions ForgeObjectives in PostSetup()
 
 PROCESS (about every 2 sec)
 Calls all rule, faction, and role process()

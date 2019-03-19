@@ -84,6 +84,34 @@
 	else
 		icon_state = icon_opened
 
+/obj/structure/closet/body_bag/open(mob/user)
+
+	icon_closed = "bodybag_closed"
+
+	var/mob/living/L
+	for (L in src)
+		if (ishuman(L))
+			if (!L.isStunned() && !L.resting)
+				if(!istype(user))
+					return 1
+				if (do_after (user, src, 35)) //delay if someone is standing up
+					return ..()
+				else
+					return 1 //prevents "it won't budge! messages from [closets.dm]
+	return ..()
+
+/obj/structure/closet/body_bag/close(mob/user)
+	var/mob/living/L
+	for (L in get_turf(src))
+		if (ishuman(L))
+			if (!L.isStunned() && !L.resting)
+				if (do_after (user, src, 35))
+					icon_closed = "bodybag_closed_alive"
+					return ..()
+				else
+					return 1
+	return ..()
+
 //Cryobag (statis bag) below, not currently functional it seems
 
 /obj/item/bodybag/cryobag

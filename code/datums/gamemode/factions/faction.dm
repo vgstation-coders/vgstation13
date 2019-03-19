@@ -42,6 +42,7 @@ var/list/factions_with_hud_icons = list()
 	var/list/hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
+	var/stage = FACTION_DORMANT //role_datums_defines.dm
 
 /datum/faction/New()
 	..()
@@ -56,6 +57,16 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/OnPostSetup()
 	for(var/datum/role/R in members)
 		R.OnPostSetup()
+
+/datum/faction/proc/Dismantle()
+	for(var/datum/role/R in members)
+		var/datum/gamemode/G = ticker.mode
+		G.orphaned_roles += R
+		members -= R
+	qdel(objective_holder)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	D.factions -= src
+	qdel(src)
 
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
 /datum/faction/proc/can_setup()
@@ -166,6 +177,17 @@ var/list/factions_with_hud_icons = list()
 		i++
 	return score_results
 
+/datum/faction/Topic(href, href_list)
+	..()
+	if(href_list["destroyfac"])
+		if(!usr.check_rights(R_ADMIN))
+			message_admins("[usr] tried to destroy a faction without permissions.")
+			return
+		if(alert(usr, "Are you sure you want to destroy [name]?",  "Destroy Faction" , "Yes" , "No") != "Yes")
+			return
+		message_admins("[key_name(usr)] destroyed faction [name].")
+		Dismantle()
+
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
@@ -174,6 +196,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
 	var/dat = "<br>"
 	dat += GetObjectivesMenuHeader()
+	dat += " <a href='?src=\ref[src];destroyfac=1'>\[Destroy\]</A><br>"
 	dat += "<br><b>Faction objectives</b><br>"
 	dat += objective_holder.GetObjectiveString(0,1,A)
 	dat += "<br> - <b>Members</b> - <br>"
@@ -188,6 +211,27 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/process()
 	for (var/datum/role/R in members)
 		R.process()
+
+/datum/faction/proc/stage(var/value)
+	stage = value
+	switch(value)
+		if(FACTION_DEFEATED) //Faction was close to victory, but then lost. Send shuttle and end theme.
+			sleep(5 SECONDS)
+			emergency_shuttle.shutdown = 0
+			emergency_shuttle.online = 1
+			OnPostDefeat()
+			set_security_level("blue")
+			ticker.StopThematic()
+		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
+			ticker.StartThematic("endgame")
+			sleep(2 SECONDS)
+			set_security_level("red")
+
+/datum/faction/proc/OnPostDefeat()
+	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
+		return
+	emergency_shuttle.incall()
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
 
 /datum/faction/proc/check_win()
 	return
@@ -337,48 +381,6 @@ var/list/factions_with_hud_icons = list()
 
 //________________________________________________
 
-/datum/faction/wizard
-	name = "Wizard Federation"
-	ID = WIZFEDERATION
-	initial_role = WIZARD
-	late_role = WIZARD
-	required_pref = WIZARD
-	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
-	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
-	This has led to them being identified as enemies of humanity, and should be treated as such."
-	initroletype = /datum/role/wizard
-	roletype = /datum/role/wizard
-	logo_state = "wizard-logo"
-	hud_icons = list("wizard-logo","apprentice-logo")
-
-/datum/faction/wizard/HandleNewMind(var/datum/mind/M)
-	..()
-	M.special_role = "Wizard"
-	M.original = M.current
-
-/datum/faction/wizard/OnPostSetup()
-	if(wizardstart.len == 0)
-		for(var/datum/role/wizard in members)
-			to_chat(wizard.antag.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
-		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
-		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
-		return 0 //Critical failure.
-	..()
-
-/datum/faction/wizard/forgeObjectives()
-	for(var/datum/role/R in members)
-		R.ForgeObjectives()
-		R.AnnounceObjectives()
-
-/datum/faction/wizard/ragin
-	accept_latejoiners = TRUE
-	var/max_wizards
-
-/datum/faction/wizard/ragin/check_win()
-	if(members.len == max_roles)
-		return 1
-
-//________________________________________________
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad

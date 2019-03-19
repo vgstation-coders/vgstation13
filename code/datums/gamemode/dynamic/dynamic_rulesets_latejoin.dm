@@ -48,7 +48,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 1
-	cost = 50
+	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	repeatable = TRUE
 
@@ -57,9 +57,6 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
-	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = 10
-		cost = 10
 
 	return ..()
 
@@ -79,24 +76,24 @@
 
 //////////////////////////////////////////////
 //                                          //
-//           CRAZED WEEABOO             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//               SPACE NINJA                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/latejoin/weeaboo
-	name = "Crazed Weeaboo"
-	role_category = /datum/role/weeaboo
+/datum/dynamic_ruleset/latejoin/ninja
+	name = "Space Ninja Attack"
+	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 4
 	cost = 10
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
-	logo = "weeaboo-logo"
+	logo = "ninja-logo"
 
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/latejoin/weeaboo/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/latejoin/ninja/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -105,15 +102,15 @@
 	else
 		return 0
 
-/datum/dynamic_ruleset/latejoin/weeaboo/execute()
+/datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
 	assigned += M
 	candidates -= M
-	var/datum/role/weeaboo/newWeeaboo = new
-	newWeeaboo.AssignToRole(M.mind,1)
-	newWeeaboo.Greet(GREET_DEFAULT)
-	newWeeaboo.OnPostSetup()
-	newWeeaboo.AnnounceObjectives()
+	var/datum/role/ninja/newninja = new
+	newninja.AssignToRole(M.mind,1)
+	newninja.Greet(GREET_DEFAULT)
+	newninja.OnPostSetup()
+	newninja.AnnounceObjectives()
 	return 1
 
 //////////////////////////////////////////////

@@ -419,7 +419,7 @@
 						adjectives |= "BLOOD-SUCKING"
 					if(isrev(M))
 						adjectives |= "REVOLTING"
-					if(isweeaboo(M))
+					if(isninja(M))
 						adjectives |= "CRAZED"
 					if(issurvivor(M))
 						adjectives |= "PARANOID"

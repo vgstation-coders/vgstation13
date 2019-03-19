@@ -165,13 +165,15 @@ var/veil_thickness = CULT_PROLOGUE
 	var/cult_win = FALSE
 	var/warning = FALSE
 
+	var/list/cult_reminders = list()
+
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
 /datum/faction/bloodcult/proc/fail()
 	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
-	progress(CULT_MENDED)
+	stage(CULT_MENDED)
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
@@ -228,19 +230,14 @@ var/veil_thickness = CULT_PROLOGUE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
 */
 
-/datum/faction/bloodcult/proc/progress(var/new_act,var/A)
+/datum/faction/bloodcult/stage(var/new_act,var/A)
 	//This proc is called to update the faction's current objectives, and veil thickness
 	if (veil_thickness == CULT_MENDED)
 		return//it's over, you lost
 
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
-		spawn (5 SECONDS)
-			emergency_shuttle.shutdown = 0//The shuttle docks to the station immediately afterwards.
-			emergency_shuttle.online = 1
-			emergency_shuttle.shuttle_phase("station",0)
-		set_security_level("blue")
-		ticker.StopThematic()
+		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
@@ -280,11 +277,8 @@ var/veil_thickness = CULT_PROLOGUE
 				veil_thickness = CULT_ACT_III
 				emergency_shuttle.force_shutdown()//No shuttle calls until the cult either wins or fails.
 				spawn_bloodstones(A)
-				spawn(5 SECONDS)
-					command_alert(/datum/command_alert/bloodstones_raised)
-					ticker.StartThematic("endgame")
-					sleep(2 SECONDS)
-					set_security_level("red")
+				..()
+				command_alert(/datum/command_alert/bloodstones_raised)
 				new_obj = new /datum/objective/bloodcult_bloodbath
 		if (CULT_ACT_IV)
 			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
@@ -332,7 +326,7 @@ var/veil_thickness = CULT_PROLOGUE
 			var/datum/objective/bloodcult_bloodbath/O = new_obj
 			O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
 			if (O.IsFulfilled())
-				progress(CULT_ACT_IV)
+				stage(CULT_ACT_IV)
 
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
@@ -346,7 +340,7 @@ var/veil_thickness = CULT_PROLOGUE
 			if (O && !O.IsFulfilled())
 				O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
 				if (O.IsFulfilled())
-					progress(CULT_ACT_IV)
+					stage(CULT_ACT_IV)
 
 
 /datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)
@@ -355,6 +349,13 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		B.update_icon()
 	bloody_floors -= T
+
+/datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
+	. = ..()
+	if (cult_reminders.len)
+		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
+	for (var/reminder in cult_reminders)
+		R.antag.store_memory("Cult reminder: [reminder].")
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))
@@ -685,6 +686,10 @@ var/veil_thickness = CULT_PROLOGUE
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HELD]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_HELD])
+		if (data[BLOODCOST_TARGET_BLOODPACK])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLOODPACK]
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_BLOODPACK]
+			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_BLOODPACK])
 		if (data[BLOODCOST_TARGET_CONTAINER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_CONTAINER]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
@@ -711,7 +716,6 @@ var/veil_thickness = CULT_PROLOGUE
 		data[BLOODCOST_TOTAL] = max(data[BLOODCOST_TOTAL], total_needed)
 	data["blood"] = blood
 	return data
-
 
 /obj/item/proc/get_cult_power()
 	return 0
