@@ -35,12 +35,14 @@
 		new /obj/item/ammo_storage/magazine/smg9mm/empty(), \
 		new /obj/item/ammo_storage/magazine/beretta/empty(), \
 		new /obj/item/ammo_storage/magazine/a12mm/empty(), \
+		new /obj/item/ammo_storage/magazine/a357/empty(),\
 		new /obj/item/ammo_storage/magazine/m380auto/empty(), \
 		new /obj/item/ammo_storage/magazine/c45/empty(), \
 		new /obj/item/ammo_storage/magazine/uzi45/empty(), \
 		new /obj/item/ammo_storage/magazine/a50/empty(), \
 		new /obj/item/ammo_storage/magazine/a75/empty(), \
 		new /obj/item/ammo_storage/magazine/a762/empty(), \
+		new /obj/item/ammo_storage/magazine/a12ga/empty(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
