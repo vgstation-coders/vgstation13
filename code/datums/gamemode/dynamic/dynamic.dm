@@ -249,7 +249,7 @@ var/list/threat_by_job = list(
 				current_rules += rule
 		else
 			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
-	return 0
+	return 1
 
 
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
