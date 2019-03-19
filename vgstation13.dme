@@ -385,6 +385,7 @@
 #include "code\datums\gamemode\objectives\target\syndicate\brig.dm"
 #include "code\datums\gamemode\objectives\target\syndicate\skulls.dm"
 #include "code\datums\gamemode\objectives\target\syndicate\steal.dm"
+#include "code\datums\gamemode\role\blob.dm"
 #include "code\datums\gamemode\role\catbeast.dm"
 #include "code\datums\gamemode\role\changeling.dm"
 #include "code\datums\gamemode\role\clockwork.dm"
