@@ -82,18 +82,6 @@
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 		//Sometimes things are thrown by objects like vending machines or pneumatic cannons
 
-//Eat, or throw for massive damage
-/obj/item/stack/shuriken/attack_self(mob/user)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = usr
-		if(H.mind.GetRole(NINJA))
-			playsound(H, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			H.reagents.add_reagent(NUTRIMENT,8)
-			to_chat(user,"<span class='notice'>You quickly stuff \the [src] down your throat!")
-			//Absolutely no sanity here. A weeb can eat all his pizza rolls if he likes, instantly.
-	else
-		return ..()
-
 //Shield
 /obj/item/weapon/substitutionhologram
 	name = "hologram projector"
@@ -173,7 +161,7 @@
 
 //The mighty power glove. Not to be confused with engineering power gloves, of course.
 /obj/item/clothing/gloves/ninja
-	name = "Ninja power glove"
+	name = "ninja power glove"
 	desc = "A special sort of gloved that can be used to drain some technologies of power."
 	icon_state = "powerfist"
 	item_state = "black"
@@ -183,6 +171,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
 	var/reservoir = 0
+	var/shuriken_icon = "radial_print"
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
@@ -191,9 +180,9 @@
 		if(H.mind.GetRole(NINJA))
 			to_chat(H,"<span class='info'>Alt-Click to use drained power. It currently holds [round(reservoir)] energy units.</span>")
 			if(cooldown-world.time>0)
-				to_chat(H,"<span class='warning'>It will be ready to drain an APC in [round((cooldown-world.time)/10)] seconds.</span>")
+				to_chat(H,"<span class='warning'>It will be ready to drain a cell in [round((cooldown-world.time)/10)] seconds.</span>")
 			else
-				to_chat(H,"<span class='good'>It is ready to drain an APC!</span>")
+				to_chat(H,"<span class='good'>It is ready to drain a cell!</span>")
 
 /obj/item/clothing/gloves/ninja/Touch(atom/A, mob/living/user, prox)
 	if(!prox)
@@ -201,22 +190,31 @@
 	if(world.time > cooldown)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
-			if(H.mind.GetRole(NINJA))
-				if(istype(A,/obj/machinery/power/apc))
-					var/obj/machinery/power/apc/APC = A
-					if(APC.cell.charge>10)
-						reservoir += APC.cell.charge
-					APC.cell.use(APC.cell.charge)
-					var/turf/simulated/floor/T = get_turf(APC)
+			if(H.mind.GetRole(NINJA) && A.get_cell())
+				if(draincell(A.get_cell()))
+					if(istype(A,/obj/machinery/power/apc))
+						var/obj/machinery/power/apc/APC = A
+						APC.charging = 0
+						APC.chargecount = 0
+					else if(istype(A,/obj/item/weapon/melee/baton))
+						var/obj/item/weapon/melee/baton/B = A
+						B.status = 0
+					var/turf/simulated/floor/T = get_turf(A)
 					if(istype(T))
 						T.break_tile()
-					//APC.terminal.Destroy()
-					playsound(APC, pick(lightning_sound), 100, 1, "vary" = 0)
-					APC.charging = 0
-					APC.chargecount = 0
-					cooldown = world.time + 10 SECONDS
+					A.update_icon()
+					return TRUE //Will not perform the normal interaction if drained the cell
 	else
 		..()
+
+/obj/item/clothing/gloves/ninja/proc/draincell(var/obj/item/weapon/cell/C,mob/user)
+	if(C.charge<100)
+		return FALSE
+	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
+	reservoir += C.charge
+	C.use(C.charge)
+	cooldown = world.time + 10 SECONDS
+	return TRUE
 
 /obj/item/clothing/gloves/ninja/proc/radial_check_handler(list/arguments)
 	var/event/E = arguments["event"]
@@ -229,8 +227,10 @@
 		return FALSE
 	return TRUE
 
+#define MAKE_SHURIKEN_COST 1000
+#define CHARGE_COST_MULTIPLIER 4
 /obj/item/clothing/gloves/ninja/AltClick(mob/user)
-	if(!user.Adjacent(src) || user.incapacitated())
+	if(!user.Adjacent(src) || user.stat)
 		return
 
 	if(ishuman(user))
@@ -238,8 +238,8 @@
 		if(H.mind.GetRole(NINJA))
 
 			var/list/choices = list(
-				list("Make Shuriken", "radial_cook", "Fabricate a new shuriken. Cost: 1000."),
-				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: 40 per second."),
+				list("Make Shuriken", shuriken_icon, "Fabricate a new shuriken. Cost: [MAKE_SHURIKEN_COST]."),
+				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
 			var/event/menu_event = new(owner = user)
 			menu_event.Add(src, "radial_check_handler")
@@ -255,8 +255,6 @@
 
 	..()
 
-#define MAKE_SHURIKEN_COST 1000
-#define CHARGE_COST_MULTIPLIER 4
 /obj/item/clothing/gloves/ninja/proc/make_shuriken(mob/user)
 	if(reservoir>=MAKE_SHURIKEN_COST)
 		var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in user.held_items
@@ -285,7 +283,6 @@
 			to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
 		else
 			to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((oursword.teleportcooldown - world.time)/10)] seconds.</span>")
-
 
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
@@ -364,6 +361,7 @@
 	var/teleportcooldown = 600 //one minute cooldown
 	var/active = FALSE
 	var/activate_message = "Weakness."
+	siemens_coefficient = 0
 
 /obj/item/weapon/katana/hesfast/IsShield()
 	return TRUE
@@ -395,7 +393,7 @@
 		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
 		active = FALSE
 
-/obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
+/obj/item/weapon/katana/hesfast/preattack(var/atom/A, mob/user)
 	if(!active || !isninja(user) || !ismob(A) || (A == user)) //sanity
 		return
 	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
@@ -425,9 +423,21 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "donkpocket"
 
+/obj/item/stack/shuriken/pizza/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = usr
+		if(H.mind.GetRole(NINJA))
+			playsound(H, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			H.reagents.add_reagent(NUTRIMENT,8)
+			to_chat(user,"<span class='notice'>You quickly stuff \the [src] down your throat!")
+			//Absolutely no sanity here. A weeb can eat all his pizza rolls if he likes, instantly.
+	else
+		return ..()
+
 /obj/item/clothing/gloves/ninja/nentendiepower
 	name = "Nen/tendie power glove"
 	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use on an APC to unleash your hacker skills from community college."
+	shuriken_icon = "radial_cook"
 
 /obj/item/weapon/substitutionhologram/dakimakura
 	name = "dakimakura"
