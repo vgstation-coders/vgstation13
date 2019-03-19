@@ -1,13 +1,17 @@
-/proc/DecidePrayerGod(var/mob/living/carbon/human/H)
-	if(!H || !istype(H))
-		return "Animal Jesus"
+/proc/DecidePrayerGod(var/mob/H)
+	if(!H || !H.mind)
+		return "a voice"
 	if(H.mind.GetRole(CULTIST))
 		return "Nar-Sie"
-	else if (usr.mind && usr.mind.faith) // The user has a faith
+	else if(usr.mind.faith) // The user has a faith
 		var/datum/religion/R = usr.mind.faith
 		return R.deity_name
 	else if(usr.mind.assigned_role == "Clown")
 		return "Honkmother"
+	else if(usr.mind.assigned_role == "Trader")
+		return "Shoalmother"
+	else if(!ishuman(H))
+		return "Animal Jesus"
 	else
 		return "Faithless"
 
