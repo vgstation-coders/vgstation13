@@ -1,12 +1,12 @@
 var/list/forced_roundstart_ruleset = list()
 
 var/list/threat_by_job = list(
-	"Captain" = 15,
-	"Head of Security" = 15,
-	"Head of Personnel" = 10,
-	"Warden" = 10,
-	"Security Officer" = 10,
-	"Detective" = 10,
+	"Captain" = 12,
+	"Head of Security" = 10,
+	"Head of Personnel" = 8,
+	"Warden" = 8,
+	"Security Officer" = 4,
+	"Detective" = 3,
 )
 
 #define BASE_SOLO_REFUND 10
