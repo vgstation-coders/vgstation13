@@ -128,7 +128,7 @@
 		result = first ^ second
 	return result
 
-//Pretends to pick an element based on its weight but really just seems to pick a random element.
+//Picks an element based on its weight
 /proc/pickweight(list/L)
 	if(!L || !L.len)
 		return
