@@ -12,6 +12,7 @@
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
 	req_one_access = list(access_security, access_forensics_lockers)
+	can_take_pai = TRUE
 	var/mob/target
 	var/oldtarget_name
 	var/threatlevel = 0
@@ -197,7 +198,7 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
-/obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/bot/secbot/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(allowed(user) && !open && !emagged)
 			locked = !locked
@@ -249,6 +250,9 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/process()
 	//set background = 1
+
+	if(integratedpai)
+		return
 
 	if(!src.on)
 		return
@@ -1224,3 +1228,43 @@ Auto Patrol: []"},
 			W.forceMove(S)
 			S.baton = W
 			qdel(src)
+/*
+ *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
+*/
+
+/obj/machinery/bot/secbot/install_pai(obj/item/device/paicard/P)
+	..()
+	overlays += image('icons/obj/aibots.dmi', "medibot_pai_overlay")
+
+/obj/machinery/bot/secbot/eject_integratedpai_if_present()
+	if(..())
+		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
+
+/obj/machinery/bot/secbot/getpAIMovementDelay()
+	return 1
+
+/obj/machinery/bot/secbot/pAImove(mob/living/silicon/pai/user, dir)
+	if(!on)
+		return
+	if(!..())
+		return
+	if(!isturf(loc))
+		return
+	step(src, dir)
+
+/obj/machinery/bot/secbot/on_integrated_pai_click(mob/living/silicon/pai/user, mob/living/carbon/M)	//called when integrated pAI clicks on the object, or uses the attack_self() hotkey
+	if(!istype(M.loc, /turf))
+		return
+	if(get_dist(src, M) <= 1)		// if right next to perp
+		if(istype(M,/mob/living/carbon))
+			playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+			if(istype(M, /mob/living/carbon/human))
+				if(M.stuttering < 10 && (!(M_HULK in M.mutations)))
+					M.stuttering = 10
+				M.Stun(10)
+				M.Knockdown(10)
+			else
+				M.Knockdown(10)
+				M.stuttering = 10
+				M.Stun(10)
+	..()
