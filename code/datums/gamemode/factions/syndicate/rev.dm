@@ -100,6 +100,8 @@
 		if(!(gameactivetime % 60))
 			message_admins("The revolution faction exists. [round(((5 MINUTES) - gameactivetime)/60)] minutes until win conditions begin checking.")
 		return //Don't bother checking for win before 5min
+	if(stage <= FACTION_DEFEATED)
+		return
 
 	// -- 2. Are all the heads dead ?
 	var/list/total_heads = get_living_heads()

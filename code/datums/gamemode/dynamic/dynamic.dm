@@ -459,7 +459,7 @@ var/list/threat_by_job = list(
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
 				if (rule.ready())
-					drafted_rules[rule] = rule.weight
+					drafted_rules[rule] = rule.get_weight()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls

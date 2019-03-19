@@ -392,6 +392,8 @@
 	var/required_heads = 3
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
+	if(forced)
+		required_heads = 1
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
 	if (required_candidates > (dead_players.len + list_observers.len))
@@ -399,7 +401,7 @@
 	if(!..())
 		return FALSE
 	var/head_check = 0
-	for (var/mob/player in mode.living_players)
+	for(var/mob/player in mode.living_players)
 		if(!player.mind)
 			continue
 		if(player.mind.assigned_role in command_positions)
