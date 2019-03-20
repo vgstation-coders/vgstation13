@@ -1,15 +1,14 @@
 /obj/item/clothing/accessory/taclight
 	name = "tactical light"
 	desc = "This is attached to something."
-	icon = null
-	icon_state = null
+	icon_state = "taclight"
 	inv_overlay
 	var/obj/item/device/flashlight/tactical/source_light
 
 /obj/item/clothing/accessory/taclight/can_attach_to(obj/item/clothing/C)
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))
 
-/obj/item/clothing/accessory/taclight/on_attached(obj/item/clothing/C,)
+/obj/item/clothing/accessory/taclight/on_attached(obj/item/clothing/C)
 	if(!istype(C))
 		return
 	attached_to = C
@@ -24,6 +23,7 @@
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
+		update_brightness()
 	..()
 		
 /obj/item/clothing/accessory/taclight/update_icon()
@@ -46,6 +46,7 @@
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
+		update_brightness()
 	attached_to = null
 	if(source_light)
 		source_light.forceMove(get_turf(src))
@@ -56,3 +57,9 @@
 		source_light = null
 	qdel(src)
 
+/obj/item/clothing/accessory/taclight/proc/update_brightness()
+	if(source_light && source_light.on)
+		set_light(source_light.brightness_on)
+	else
+		set_light(0)
+	update_icon()
