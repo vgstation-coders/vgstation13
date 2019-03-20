@@ -1127,8 +1127,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
-	if(brute_dam + burn_dam > 14)
-		return (is_robotic() && ((status & ORGAN_MALFUNCTIONING) || prob(brute_dam + burn_dam)))
+	return (return (is_robotic() && ((status & ORGAN_MALFUNCTIONING) || (brute_dam + burn dam > 14 && prob(brute_dam + burn_dam)))))
 
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
