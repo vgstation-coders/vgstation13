@@ -153,7 +153,7 @@
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 1
 	weight = 2
-	cost = 45
+	cost = 30 // + 20 for every raging' mage
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	persistent = 1
 	var/wizard_cd = 210 //7 minutes
