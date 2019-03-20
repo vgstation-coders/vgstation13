@@ -110,6 +110,26 @@
 	desc = "A compact, helmet-mounted flashlight attachment."
 	icon_state = "tacticoollight"
 	item_state = ""
+	
+/obj/item/device/flashlight/tactical/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/head) || istype(target, /obj/item/clothing/suit/armor))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/taclight/TL = new()
+		if(C.check_accessory_overlap(TL))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(TL)
+			transfer_fingerprints(src,TL)
+			forceMove(TL)
+			TL.source_light = src
+			TL.update_icon()
+		return 1
+	return ..()	
+
 
 // the desk lamps are a bit special
 /obj/item/device/flashlight/lamp
