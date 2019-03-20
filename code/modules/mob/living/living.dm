@@ -1372,6 +1372,10 @@ Thanks.
 	else
 		M = new meat_type(location)
 	meat_taken++
+
+	if (virus2?.len)
+		M.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
+
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))

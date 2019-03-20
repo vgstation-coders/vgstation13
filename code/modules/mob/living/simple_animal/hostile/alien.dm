@@ -313,7 +313,7 @@ var/list/nest_locations = list()
 	playsound(src, 'sound/voice/hiss6.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/alien/gibs_type()
-	xgibs(loc, viruses)
+	xgibs(loc, virus2)
 
 /mob/living/simple_animal/hostile/alien/adjustBruteLoss(amount,var/damage_type) // Weak to Fire
 	if(damage_type == BURN)

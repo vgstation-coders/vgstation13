@@ -3931,9 +3931,9 @@
 					E.droplimb(1, 1)
 
 			if(H.species)
-				hgibs(H.loc, H.viruses, H.dna, H.species.flesh_color, H.species.blood_color)
+				hgibs(H.loc, H.virus2, H.dna, H.species.flesh_color, H.species.blood_color)
 			else
-				hgibs(H.loc, H.viruses, H.dna)
+				hgibs(H.loc, H.virus2, H.dna)
 
 		H.hulk_time = 0 //Just to be sure.
 		H.mutations.Remove(M_HULK)

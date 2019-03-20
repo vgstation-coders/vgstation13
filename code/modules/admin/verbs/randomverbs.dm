@@ -785,7 +785,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	message_admins("[key_name_admin(usr)] has gibbed [key_name_admin(M)]", 1)
 
 	if(istype(M, /mob/dead/observer))
-		gibs(M.loc, M.viruses)
+		gibs(M.loc, M.virus2)
 		return
 
 	M.gib()
@@ -802,7 +802,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(!istype(mob, /mob/dead/observer))
 			mob.gib()
 		else
-			gibs(mob.loc, mob.viruses)
+			gibs(mob.loc, mob.virus2)
 		feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /*
 /client/proc/cmd_manual_ban()
