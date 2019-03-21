@@ -64,6 +64,8 @@
 	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
+	var/datum/daemon/daemon
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -193,6 +195,8 @@
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(daemon && daemon.flags & DAEMON_EXAMINE)
+		daemon.examine(user)
 
 
 /obj/item/attack_ai(mob/user as mob)

@@ -369,9 +369,7 @@
 	if(!istype(H))
 		return 0
 	H.delete_all_equipped_items()
-	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
-	hayai.cant_drop = 1
-	H.put_in_hands(hayai)
+	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/ninja)
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
@@ -388,14 +386,14 @@
 	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
 
+	H.see_in_dark_override = 8
+
 #define GREET_WEEB "weebgreet"
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
 		return 0
 	H.delete_all_equipped_items()
-	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
-	hayai.cant_drop = 1
-	H.put_in_hands(hayai)
+	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
@@ -412,6 +410,8 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
+
+	H.see_in_dark_override = 8
 
 	var/datum/role/R = H.mind.GetRole(NINJA)
 	if(R)
