@@ -12,7 +12,7 @@
 	if(!istype(C))
 		return
 	attached_to = C
-	attached_to.actions_types += list(/datum/action/item_action/toggle_light)
+	//attached_to.actions_types += list(/datum/action/item_action/toggle_light)
 	if(istype(attached_to, /obj/item/clothing/head))
 		icon_state = "[initial(icon_state)]_helmet"
 	else
@@ -23,16 +23,31 @@
 		M.update_action_buttons_icon()
 		M.regenerate_icons()
 		update_brightness(attached_to)
+		var/datum/action/makelight = new /datum/action/item_action/toggle_light(attached_to)
+		if(ismob(attached_to.loc))
+			var/mob/user = attached_to.loc
+			makelight.Grant(user)
 	
 	if(attached_to)
 		attached_to.overlays -= inv_overlay
-	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[icon_state]")
 	if(attached_to)
 		attached_to.overlays += inv_overlay
 		if(ishuman(attached_to.loc))
 			var/mob/living/carbon/human/H = attached_to.loc
 			H.update_inv_by_slot(attached_to.slot_flags)
-		
+			
+			
+/obj/item/clothing/accessory/taclight/attack_self(mob/user)
+	if(src.source_light)
+		source_light.on = !source_light.on
+		if(get_turf(src))
+			if(source_light.on)
+				playsound(src, source_light.sound_on, 50, 1)
+			else
+				playsound(src, source_light.sound_off, 50, 1)
+	update_brightness()
+			
 /obj/item/clothing/accessory/taclight/update_icon()
 	/*if (source_light)
 		icon_state = "[initial(icon_state)]_[flashlight.on]"*/
@@ -54,7 +69,9 @@
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
-		M.update_action_buttons_icon()
+		for(var/datum/action/A in attached_to.actions)
+			if(istype(A, /datum/action/item_action/toggle_light))
+				qdel(A)
 		update_brightness(attached_to)
 	attached_to = null
 	if(source_light)
