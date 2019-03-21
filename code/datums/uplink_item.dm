@@ -891,9 +891,8 @@ var/list/uplink_items = list()
 	name = "The E20"
 	desc = "A seemingly innocent die. Those who are not afraid to roll for attack will find its effects quite explosive. Has a four second timer."
 	item = /obj/item/weapon/dice/d20/e20
-	cost = 16
-	discounted_cost = 6
-	jobs_with_discount = list("Librarian")
+	cost = 6
+	jobs_exclusive = list("Librarian")
 
 /datum/uplink_item/jobspecific/traitor_bible
 	name = "Feldbischof's Bible"
