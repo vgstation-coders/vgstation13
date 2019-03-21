@@ -12,7 +12,7 @@
 	if(!istype(C))
 		return
 	attached_to = C
-	//attached_to.actions_types += list(/datum/action/item_action/toggle_light)
+	attached_to.actions_types += list(/datum/action/item_action/toggle_light)
 	if(istype(attached_to, /obj/item/clothing/head))
 		icon_state = "[initial(icon_state)]_helmet"
 	else
@@ -22,7 +22,7 @@
 		var/mob/M = attached_to.loc
 		M.update_action_buttons_icon()
 		M.regenerate_icons()
-		update_brightness(attached_to)
+		update_brightness(attached_to,src)
 		var/datum/action/makelight = new /datum/action/item_action/toggle_light(attached_to)
 		if(ismob(attached_to.loc))
 			var/mob/user = attached_to.loc
@@ -39,14 +39,16 @@
 			
 			
 /obj/item/clothing/accessory/taclight/attack_self(mob/user)
-	if(src.source_light)
+	to_chat(world, "<span class='boldannounce'>Calling attack_self on [src]</span>")
+	if(source_light)
 		source_light.on = !source_light.on
 		if(get_turf(src))
 			if(source_light.on)
 				playsound(src, source_light.sound_on, 50, 1)
 			else
 				playsound(src, source_light.sound_off, 50, 1)
-	update_brightness()
+	if(attached_to)
+		update_brightness(attached_to,src)
 			
 /obj/item/clothing/accessory/taclight/update_icon()
 	/*if (source_light)
@@ -65,14 +67,14 @@
 		return
 	//attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
-	attached_to.actions_types -= list(/datum/action/item_action/toggle_light)
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
 		for(var/datum/action/A in attached_to.actions)
 			if(istype(A, /datum/action/item_action/toggle_light))
 				qdel(A)
-		update_brightness(attached_to)
+				attached_to.actions_types -= list(/datum/action/item_action/toggle_light)
+		update_brightness(attached_to,src)
 	attached_to = null
 	if(source_light)
 		source_light.forceMove(get_turf(src))
@@ -83,9 +85,12 @@
 		source_light = null
 	qdel(src)
 
-/obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
-	if(source_light && source_light.on)
+/obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C, obj/item/clothing/accessory/taclight/T)
+	to_chat(world, "<span class='boldannounce'>Calling update_brightness on [C] from [src]</span>")
+	if(T.source_light && T.source_light.on)
+		to_chat(world, "<span class='boldannounce'>[T.source_light] is ON, calling set_light([source_light.brightness_on]) on [C]</span>")
 		C.set_light(source_light.brightness_on)
 	else
 		C.set_light(0)
+		to_chat(world, "<span class='boldannounce'>[T.source_light] is OFF, calling set_light(0) on [C]</span>")
 	update_icon()
