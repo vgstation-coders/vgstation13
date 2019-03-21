@@ -153,7 +153,7 @@
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 1
 	weight = 2
-	cost = 30 // + 20 for every raging' mage
+	cost = 45 // + 20 for every raging' mage
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	persistent = 1
 	var/wizard_cd = 210 //7 minutes
@@ -174,6 +174,7 @@
 		else
 			RM.my_fac = /datum/faction/wizard/civilwar/wpf
 		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
+		RM.cost = 0
 		mode.picking_specific_rule(RM,TRUE) //forced
 
 /datum/dynamic_ruleset/roundstart/cwc/execute()
