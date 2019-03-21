@@ -122,10 +122,10 @@
 			return
 		if(user.drop_item(src))
 			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			TL.source_light = src
 			C.attach_accessory(TL)
 			transfer_fingerprints(src,TL)
 			forceMove(TL)
-			TL.source_light = src
 			TL.update_icon()
 		return 1
 	return ..()	

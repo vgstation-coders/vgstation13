@@ -22,7 +22,7 @@
 		var/mob/M = attached_to.loc
 		M.update_action_buttons_icon()
 		M.regenerate_icons()
-		update_brightness(attached_to,src)
+		update_brightness(attached_to)
 		var/datum/action/makelight = new /datum/action/item_action/toggle_light(attached_to)
 		if(ismob(attached_to.loc))
 			var/mob/user = attached_to.loc
@@ -48,7 +48,7 @@
 			else
 				playsound(src, source_light.sound_off, 50, 1)
 	if(attached_to)
-		update_brightness(attached_to,src)
+		update_brightness(attached_to)
 			
 /obj/item/clothing/accessory/taclight/update_icon()
 	/*if (source_light)
@@ -74,8 +74,6 @@
 			if(istype(A, /datum/action/item_action/toggle_light))
 				qdel(A)
 				attached_to.actions_types -= list(/datum/action/item_action/toggle_light)
-		update_brightness(attached_to,src)
-	attached_to = null
 	if(source_light)
 		source_light.forceMove(get_turf(src))
 		if(user)
@@ -83,14 +81,13 @@
 		add_fingerprint(user)
 		transfer_fingerprints(src,source_light)
 		source_light = null
+	update_brightness(attached_to)
+	attached_to = null
 	qdel(src)
 
-/obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C, obj/item/clothing/accessory/taclight/T)
-	to_chat(world, "<span class='boldannounce'>Calling update_brightness on [C] from [src]</span>")
-	if(T.source_light && T.source_light.on)
-		to_chat(world, "<span class='boldannounce'>[T.source_light] is ON, calling set_light([source_light.brightness_on]) on [C]</span>")
-		C.set_light(source_light.brightness_on)
+/obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
+	if(src.source_light && src.source_light.on)
+		C.set_light(src.source_light.brightness_on)
 	else
 		C.set_light(0)
-		to_chat(world, "<span class='boldannounce'>[T.source_light] is OFF, calling set_light(0) on [C]</span>")
 	update_icon()
