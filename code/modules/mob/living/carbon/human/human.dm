@@ -1681,6 +1681,10 @@ mob/living/carbon/human/isincrit()
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
 		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
+		var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+		if(L && !L.robotic)
+			L.gasses.Remove(locate(/datum/lung_gas/metabolizable) in L.gasses)
+			L.gasses.Add(new /datum/lung_gas/metabolizable(species.breath_type, min_pp = 16, max_pp = 140))
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
