@@ -12,19 +12,26 @@
 	if(!istype(C))
 		return
 	attached_to = C
-	attached_to.overlays += inv_overlay
 	attached_to.actions_types += list(/datum/action/item_action/toggle_light)
-	//user.update_action_buttons_icon()
-	/*if istype(C, /obj/item/clothing/head)
-		user.update_inv_head()
+	if(istype(attached_to, /obj/item/clothing/head))
+		icon_state = "[initial(icon_state)]_helmet"
 	else
-		user.update_inv_wear_suit()*/
+		icon_state = "[initial(icon_state)]_armor"
 	update_icon()
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
+		M.update_action_buttons_icon()
 		M.regenerate_icons()
-		update_brightness()
-	..()
+		update_brightness(attached_to)
+	
+	if(attached_to)
+		attached_to.overlays -= inv_overlay
+	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	if(attached_to)
+		attached_to.overlays += inv_overlay
+		if(ishuman(attached_to.loc))
+			var/mob/living/carbon/human/H = attached_to.loc
+			H.update_inv_by_slot(attached_to.slot_flags)
 		
 /obj/item/clothing/accessory/taclight/update_icon()
 	/*if (source_light)
@@ -42,11 +49,13 @@
 	if(!attached_to)
 		return
 	//attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
-	//attached_to.overlays -= inv_overlay
+	attached_to.overlays -= inv_overlay
+	attached_to.actions_types -= list(/datum/action/item_action/toggle_light)
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
-		update_brightness()
+		M.update_action_buttons_icon()
+		update_brightness(attached_to)
 	attached_to = null
 	if(source_light)
 		source_light.forceMove(get_turf(src))
@@ -57,9 +66,9 @@
 		source_light = null
 	qdel(src)
 
-/obj/item/clothing/accessory/taclight/proc/update_brightness()
+/obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
 	if(source_light && source_light.on)
-		set_light(source_light.brightness_on)
+		C.set_light(source_light.brightness_on)
 	else
-		set_light(0)
+		C.set_light(0)
 	update_icon()
