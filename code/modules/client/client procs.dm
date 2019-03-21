@@ -401,6 +401,15 @@
 			return "Always"
 	return "???"
 
+/client/proc/GetRolePrefs()
+	var/list/roleprefs = list()
+	for(var/role_id in antag_roles)
+		if(desires_role(role_id,FALSE))
+			roleprefs += role_id
+	if(!roleprefs.len)
+		return "none"
+	return english_list(roleprefs)
+
 /client/proc/desires_role(var/role_id, var/display_to_user=0)
 	var/role_desired = prefs.roles[role_id]
 	if(display_to_user && !(role_desired & ROLEPREF_PERSIST))
