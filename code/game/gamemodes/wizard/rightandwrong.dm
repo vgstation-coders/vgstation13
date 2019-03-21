@@ -17,9 +17,11 @@
 
 	for(var/mob/living/carbon/human/H in player_list)
 
-		if (prob(65) || iswizard(H))
-			continue
 		if(H.stat == DEAD || !(H.client))
+			continue
+
+		if (prob(65) || iswizard(H))
+			H.equip_survivor(survivor_type)
 			continue
 
 		var/datum/role/R = new survivor_type()
@@ -34,8 +36,15 @@
 
 
 
-/mob/living/carbon/human/proc/equip_survivor(var/datum/role/R)
-	var/summon_type = R.type
+/mob/living/carbon/human/proc/equip_survivor(var/R)
+	var/summon_type
+	if(istype(R,/datum/role))
+		var/datum/role/surv = R
+		summon_type = surv.type
+	else if(ispath(R))
+		summon_type = R
+	else
+		return
 	switch (summon_type)
 		if (/datum/role/survivor/crusader)
 			return equip_swords(R)
@@ -148,7 +157,7 @@
 		if ("automag")
 			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
 	var/datum/role/survivor/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizeguns
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 	score["gunsspawned"]++
@@ -289,7 +298,7 @@
 			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded/New, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
 	var/datum/role/survivor/crusader/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
@@ -405,5 +414,5 @@
 		if("ice_barrage")
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 	var/datum/role/wizard/summon_magic/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizemagic
