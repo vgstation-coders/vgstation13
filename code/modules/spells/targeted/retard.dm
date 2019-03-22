@@ -7,7 +7,7 @@
 	school = "evocation"
 	charge_max = 200 // 20 seconds
 	//Invocation is noted below
-	invocation_type = SpI_WHISPER //Wizard will whisper what they say instead of shouting
+	invocation_type = SpI_SHOUT //Wizard will whisper what they say instead of shouting
 	range = 3 // Target anyone within 3 tiles of you
 	cooldown_min = 80 //Minimum of 8 seconds cooldown. Decreased by 4 seconds per rank (3 ranks)
 	amt_dam_brain = 30 //30 brain damage
