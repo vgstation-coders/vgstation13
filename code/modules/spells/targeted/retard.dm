@@ -38,5 +38,5 @@
 	return ..()
 
 /spell/targeted/retard/invocation() //Allows multiple possible messages for invocation
-	invocation = pick("SCRUN GL RITY", "BLO XYG EVO", "SAI AN SCRE", "PO NY NEEI", "MIE NIA PICE", "LOL 2 CAT") //Chooses between these messages at random
+	invocation = pick("SCRUN GL RITY", "BLO XYG EVO", "SAI AN SCRE", "PO NY NEEI", "MIE NIA PICE", "LOL 2 CAT", "OK R TARD) //Chooses between these messages at random
 	..() //Invocation proc from spell_code.dm is run normally, but invocation is overwritten with a message picked from above
