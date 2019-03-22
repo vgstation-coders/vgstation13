@@ -7117,7 +7117,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		//(the rapid healing is likely to land you in that "less than 30" club real quick if you're not careful...)
 		H.heal_organ_damage(3 * REM, 0)
 
-		if(H.getBruteLoss() >= 30)
+		if(H.getBruteLoss(TRUE) >= 30)
 			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
 				if((E.status & ORGAN_BROKEN) || !E.is_organic() || (E.min_broken_damage >= E.max_damage))
 					continue
