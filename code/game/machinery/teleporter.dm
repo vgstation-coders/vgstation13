@@ -270,8 +270,11 @@
 		return
 	if (!com.locked || com.locked.gcDestroyed)
 		com.locked = null
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+		return
+	var/list/contents_of_M = get_contents_in_object(M)
+	if(locate(com.locked) in contents_of_M)
+		visible_message("<span class = 'warning'>Infinite loop prevention: Attempted to teleport locked object to locked object.</span>")
 		return
 	if (istype(M, /atom/movable))
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
