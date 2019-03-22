@@ -475,10 +475,3 @@
 	item_state = "brim-hat"
 	wizard_garb = TRUE
 	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)
-
-/obj/item/clothing/under/newclothes
-	name = "Emperor's new clothes"
-	desc = "The virtuous can see them."
-	icon_state = "newclothes"
-	_color = ""
-	item_state = ""
