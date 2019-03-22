@@ -99,6 +99,18 @@ var/list/all_doors = list()
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
+	if (prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
+			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
+			if (!istype(H.head, /obj/item/clothing/head/helmet))
+				H.Stun(8)
+				H.Knockdown(5)
+				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
+				O.take_damage(10, 0)
+			return
+
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
 
@@ -134,7 +146,6 @@ var/list/all_doors = list()
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
 				O.take_damage(10, 0)
 			return
-
 
 	if(isobserver(user)) //Adminghosts don't want to toggle the door open, they want to see the AI interface
 		return
