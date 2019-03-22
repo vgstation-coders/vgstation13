@@ -25,7 +25,7 @@
 		if(0) //Not upgraded
 			name = "Brain Damage" //Nothing happens. Everything is already written above.
 		if(1) //Upgraded
-			name = "Brian Damage"
+			name = "Brian Damag"
 			desc = "Give an unlucky person A LOT of brain damage."
 			amt_dam_brain = 90 //90 brain damage
 			message = "<span class='danger'>Yu fell dumb dumb!1!!<span>" //Message changes when upgraded
