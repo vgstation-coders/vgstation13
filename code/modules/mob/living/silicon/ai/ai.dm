@@ -145,9 +145,8 @@ var/list/ai_list = list()
 			job = "AI"
 	ai_list += src
 	..()
-	var/windowserror = pick('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
 	if(prob(25))
-		playsound(src, windowserror, 75, FALSE)
+		playsound(src, get_sfx("windows error"), 75, FALSE)
 	else
 		playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
