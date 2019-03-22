@@ -147,6 +147,7 @@ var/list/all_doors = list()
 				O.take_damage(10, 0)
 			return
 
+
 	if(isobserver(user)) //Adminghosts don't want to toggle the door open, they want to see the AI interface
 		return
 
