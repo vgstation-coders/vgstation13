@@ -97,19 +97,22 @@ var/list/all_doors = list()
 			else if(!operating)
 				denied()
 
-/obj/machinery/door/proc/bump_open(mob/user as mob)
-	// TODO: analyze this
-	if (prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
+/obj/machinery/door/proc/headbutt_check(mob/user, var/stun_time = 0, var/knockdown_time = 0, var/damage = 0) //This is going to be an airlock proc until someone makes headbutting a more official thing
+	if(prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+		if(H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
 			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
-			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				H.Stun(8)
-				H.Knockdown(5)
+			if(!istype(H.head, /obj/item/clothing/head/helmet))
+				H.Stun(stun_time)
+				H.Knockdown(knockdown_time)
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-				O.take_damage(10, 0)
+				O.take_damage(damage) //Brute damage only
 			return
+
+/obj/machinery/door/proc/bump_open(mob/user as mob)
+	// TODO: analyze this
+	headbutt_check(user, 8, 5, 10)
 
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
@@ -134,19 +137,7 @@ var/list/all_doors = list()
 	attack_hand(user)
 
 /obj/machinery/door/attack_hand(mob/user as mob)
-	if (prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
-		var/mob/living/carbon/human/H = user
-
-		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
-			playsound(src, 'sound/effects/bang.ogg', 25, 1)
-			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
-			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				H.Stun(8)
-				H.Knockdown(5)
-				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-				O.take_damage(10, 0)
-			return
-
+	headbutt_check(user, 8, 5, 10)
 
 	if(isobserver(user)) //Adminghosts don't want to toggle the door open, they want to see the AI interface
 		return
