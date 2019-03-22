@@ -20,14 +20,6 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
-/obj/item/weapon/storage/bible/New()
-	. = ..()
-	if(ticker && (ticker.Bible_icon_state && ticker.Bible_item_state && ticker.Bible_name && ticker.chap_rel))
-		icon_state = ticker.Bible_icon_state
-		item_state = ticker.Bible_item_state
-		name = ticker.Bible_name
-		my_rel = ticker.chap_rel
-
 /obj/item/weapon/storage/bible/suicide_act(mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
