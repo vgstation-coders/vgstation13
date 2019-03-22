@@ -375,6 +375,7 @@
 #include "code\datums\gamemode\objectives\freeform\wizard.dm"
 #include "code\datums\gamemode\objectives\target\assassinate.dm"
 #include "code\datums\gamemode\objectives\target\debrain.dm"
+#include "code\datums\gamemode\objectives\target\delayedassassinate.dm"
 #include "code\datums\gamemode\objectives\target\harm.dm"
 #include "code\datums\gamemode\objectives\target\killorexile.dm"
 #include "code\datums\gamemode\objectives\target\protection.dm"

@@ -19,7 +19,7 @@
 
 /datum/role/ninja/ForgeObjectives()
 	AppendObjective(/datum/objective/target/steal)
-	AppendObjective(/datum/objective/target/assassinate)
+	AppendObjective(/datum/objective/target/delayed/assassinate)
 	AppendObjective(/datum/objective/target/skulls)
 	AppendObjective(/datum/objective/escape)
 
