@@ -174,6 +174,7 @@
 		else
 			RM.my_fac = /datum/faction/wizard/civilwar/wpf
 		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
+		RM.cost = 0
 		mode.picking_specific_rule(RM,TRUE) //forced
 
 /datum/dynamic_ruleset/roundstart/cwc/execute()
