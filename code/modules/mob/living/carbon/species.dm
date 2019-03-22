@@ -637,7 +637,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/vox
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 
 	anatomy_flags = HAS_SWEAT_GLANDS
 

@@ -71,7 +71,7 @@
 	desc = "It's got an awful lot of protein for a vegetable."
 	icon_state = "diona_meat"
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/vox
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
 	desc = "Considering its Avian origin, tastes unsurprisingly like chicken."
 	icon_state = "meat_vox"
