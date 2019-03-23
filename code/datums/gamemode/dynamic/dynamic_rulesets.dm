@@ -52,6 +52,8 @@
 /datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
 	//If your rule has extra checks, such as counting security officers, do that in ready() instead
+	if (!map.map_ruleset(src))
+		return 0
 	var/indice_pop = min(10,round(population/5)+1)
 	return (threat >= requirements[indice_pop])
 
@@ -65,8 +67,6 @@
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
-		return 0
-	if (!map.map_ruleset(src))
 		return 0
 	return 1
 
