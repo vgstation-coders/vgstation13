@@ -258,30 +258,8 @@
 
 /obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
 	..()
-	if(istype(perp))
-		if(perp.locked_to)//Riding a vehicle? Just make some noise.
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
-			return
-		if(perp.flying)//Flying? Ignore it altogether.
-			return
-		else		//Otherwise you might hurt your feet if not wearing shoes
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
-			if(ishuman(perp))
-				var/mob/living/carbon/human/H = perp
-				var/danger = FALSE
-				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
-					if(foot.is_organic())
-						danger = TRUE
-
-						if(!H.lying && H.feels_pain())
-							H.Knockdown(3)
-						if(foot.take_damage(5, 0))
-							H.UpdateDamageIcon()
-						H.updatehealth()
-
-				to_chat(perp, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
-		infection_attempt(perp)
+	FeetStab(perp)
+	infection_attempt(perp,damage = 10,knockdown = 0)
 
 /obj/effect/decal/cleanable/virusdish/proc/infection_attempt(var/mob/living/perp)
 	//Now if your feet aren't well protected, or are bleeding, you might get infected.
