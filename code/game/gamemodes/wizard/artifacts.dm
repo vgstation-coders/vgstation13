@@ -58,6 +58,12 @@
 	/obj/item/clothing/suit/space/rig/wizard,\
 	/obj/item/clothing/head/helmet/space/rig/wizard)
 
+/datum/spellbook_artifact/scrying/purchased(mob/living/carbon/human/H)
+	..()
+	if(istype(H) && !H.mutations.Find(M_NO_BREATH))
+		H.mutations.Add(M_NO_BREATH)
+		to_chat(H, "<span class='notice'>You feel no need to breathe.</span>")
+
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
 	desc = "An arcane staff capable of shooting bolts of eldritch energy which cause inanimate objects to come to life. This magic doesn't affect machines."
