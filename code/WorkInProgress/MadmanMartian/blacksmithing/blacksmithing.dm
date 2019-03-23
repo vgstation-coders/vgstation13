@@ -103,7 +103,7 @@
 		return
 	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
 	if(istype(A,/obj/item/weapon/hammer))
-		strikes+=min(1, round(A.quality/2))
+		strikes+=max(1, round(A.quality/2))
 	else if(istype(A,/obj/item/weapon/storage/toolbox))
 		strikes+=0.25
 	if(strikes == strikes_required)
