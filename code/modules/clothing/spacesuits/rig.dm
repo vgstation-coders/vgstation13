@@ -300,6 +300,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
+	clothing_flags = PLASMAGUARD
 
 	wizard_garb = 1
 
@@ -318,6 +319,8 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
+	clothing_flags = PLASMAGUARD
+	slowdown = NO_SLOWDOWN
 
 	wizard_garb = 1
 
