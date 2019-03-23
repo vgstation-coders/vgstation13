@@ -495,8 +495,8 @@
 /obj/item/toy/snappop/virus
 	name = "unstable goo"
 	desc = "Your palm is oozing this stuff!"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "red slime extract"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "unstable_goo"
 	throwforce = 30.0
 	throw_speed = 10
 	throw_range = 30
@@ -1106,17 +1106,17 @@
 	name = "fingerbox"
 	desc = "A high quality fingerbox."
 	icon_state = "fingerbox"
-	
+
 /obj/item/toy/gasha/bangerboy
 	name = "toy Bangerboy"
 	icon_state = "bangerboy"
 	desc = "<B>BANG</B>"
-	
+
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
 	desc = "bodybag accessory not included"
-	
+
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
@@ -1776,4 +1776,3 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
-	

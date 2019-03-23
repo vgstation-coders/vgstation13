@@ -106,13 +106,14 @@
 		on = !on
 		if(on)
 			icon_state = "incubator_on"
-			if(dish && dish.virus2)
-				dish.virus2.log += "<br />[timestamp()] Incubation starting by [key_name(usr)] {food=[foodsupply],rads=[radiation]}"
+			if(dish && dish.contained_virus)
+				dish.contained_virus.log += "<br />[timestamp()] Incubation starting by [key_name(usr)] {food=[foodsupply],rads=[radiation]}"
 		else
 			icon_state = "incubator"
 	if (href_list["ejectdish"])
 		if(dish)
 			dish.forceMove(src.loc)
+			dish.update_icon()
 			dish = null
 	if (href_list["rad"])
 		radiation++
@@ -130,7 +131,7 @@
 				weaken = 0
 	if(href_list["target"])
 		effect_focus++
-		if(effect_focus > dish.virus2.effects.len)
+		if(effect_focus > dish.contained_virus.effects.len)
 			effect_focus = 0
 	if(href_list["virus"])
 		if (!dish)
@@ -142,9 +143,9 @@
 			else
 				if (!B.data["virus2"])
 					B.data["virus2"] = list()
-				var/datum/disease2/disease/D = dish.virus2.getcopy()
+				var/datum/disease2/disease/D = dish.contained_virus.getcopy()
 				D.log += "<br />[timestamp()] Injected into blood via [src] by [key_name(usr)]"
-				var/list/virus = list("[dish.virus2.uniqueID]" = D)
+				var/list/virus = list("[dish.contained_virus.uniqueID]" = D)
 				B.data["virus2"] += virus
 				say("Injection complete.")
 	if(href_list["toggle_view"])
@@ -200,7 +201,7 @@
 			on = FALSE
 			icon_state = "incubator"
 			change = TRUE
-		if (dish && dish.virus2)
+		if (dish && dish.contained_virus)
 			if(dish.growth >= INCUBATOR_MAX_SIZE)
 				if(icon_state != "incubator_fed")
 					icon_state = "incubator_fed"
@@ -214,25 +215,25 @@
 				change = TRUE
 			if(radiation && prob(mutatechance))
 				if(radiation == 1)
-					dish.virus2.minormutate(effect_focus)
+					dish.contained_virus.minormutate(effect_focus)
 				else if(radiation == 2)
-					dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
-					dish.virus2.majormutate()
+					dish.contained_virus.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
+					dish.contained_virus.majormutate()
 					if(dish.info && dish.analysed)
 						dish.info = "OUTDATED : [dish.info]"
 						dish.analysed = 0
 				alert_noise("beep")
 				flick("incubator_mut", src)
 			if(toxins && prob(mutatechance))
-				dish.virus2.infectionchance -= 1
+				dish.contained_virus.infectionchance -= 1
 				toxins--
 				change = TRUE
 			if(strength && prob(mutatechance))
-				dish.virus2.minorstrength(effect_focus)
+				dish.contained_virus.minorstrength(effect_focus)
 				strength--
 				change = TRUE
 			if(weaken && prob(mutatechance))
-				dish.virus2.minorweak(effect_focus)
+				dish.contained_virus.minorweak(effect_focus)
 				weaken--
 				change = TRUE
 	else

@@ -30,6 +30,8 @@
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	sterility = 100
+	clothing_flags = BLOCK_GAS_SMOKE_EFFECT
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"

@@ -1,26 +1,67 @@
+
 var/global/list/disease2_list = list()
 /datum/disease2/disease
-	var/form = "Virus"
-	var/infectionchance = 70
-	var/speed = 1
-	var/spreadtype = "Contact" // Can also be "Airborne" or "Blood"
-	var/stage = 1
-	var/stageprob = 10
-	var/dead = 0
-	var/clicks = 0
+	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
+	var/spread = SPREAD_BLOOD //if set to 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
 	var/uniqueID = 0
 	var/list/datum/disease2/effect/effects = list()
-	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
+
+	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
+	var/infectionchance = 70
+
+	//clicks increases by [speed] every time the disease activates. Drinking Virus Food also accelerates the process by 10.
+	var/clicks = 0
+	var/speed = 1
+
+	//stage increments if prob(stageprob) once there are enough clicks (100 per current stage), up to max_stage
+	var/stage = 1
 	var/max_stage = 4
+	var/stageprob = 10
+	//when spreading to another mob, that new carrier has the disease's stage reduced by stage_variance
 	var/stage_variance = -1
+
+	//16 bits describing the antigens, when one bit is set, antibodies with that bit can cure the disease
+	var/antigen = 0
+	//set to 1 once appropriate antibodies are applied to their carrier. curing the disease, removing it from the carrier
+	var/dead = 0
+
+	//logging
 	var/log = ""
 	var/logged_virusfood=0
+
+	//cosmetic
+	var/color
+	var/pattern = 1
+	var/pattern_color
+
+/datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
+	form = "Bacteria"
+	max_stage = 3
+	infectionchance = 90
+	stageprob = 30
+	stage_variance = -4
+
+/datum/disease2/disease/parasite//slower spread. stage preserved on spread
+	form = "Parasite"
+	infectionchance = 50
+	stageprob = 10
+	stage_variance = 0
+
+/datum/disease2/disease/prion//very fast progression, but very slow spread and resets to stage 1.
+	form = "Prion"
+	infectionchance = 10
+	stageprob = 80
+	stage_variance = -10
 
 /datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,10000)
 	log_debug("[form] [uniqueID] created with notes: [notes]")
 	log += "<br />[timestamp()] CREATED - [notes]<br>"
 	disease2_list["[uniqueID]"] = src
+	var/list/randomhexes = list("8","9","a","b","c","d","e")
+	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	pattern = rand(1,6)
+	pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	..()
 
 /datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0, var/old_effect)
@@ -53,7 +94,47 @@ var/global/list/disease2_list = list()
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
-	spreadtype = prob(40) ? "Airborne" : prob(40) ? "Blood" :"Contact" //Try for airborne then try for blood.
+	var/list/randomhexes = list("8","9","a","b","c","d","e")
+	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	pattern = rand(1,6)
+	pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	randomize_spread()
+
+
+/datum/disease2/disease/proc/randomize_spread()
+	spread = SPREAD_BLOOD	//without blood spread, the disease cannot be extracted or cured, we don't want that for regular diseases
+	if (prob(5))			//5% chance of spreading through both contact and the air.
+		spread |= SPREAD_CONTACT
+		spread |= SPREAD_AIRBORNE
+	else if (prob(40))		//38% chance of spreading through the air only.
+		spread |= SPREAD_AIRBORNE
+	else if (prob(60))		//34,2% chance of spreading through contact only.
+		spread |= SPREAD_CONTACT
+							//22,8% chance of staying in blood
+
+	//spread = prob(40) ? "Airborne" : prob(40) ? "Blood" :"Contact" //Try for airborne then try for blood.
+
+
+/datum/disease2/disease/proc/get_spread_string()
+	var/dat = ""
+	var/check = 0
+	if (spread & SPREAD_BLOOD)
+		dat += "Blood"
+		check += SPREAD_BLOOD
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_CONTACT)
+		dat += "Contact"
+		check += SPREAD_CONTACT
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_AIRBORNE)
+		dat += "Airborne"
+		//check += SPREAD_AIRBORNE
+		//if (spread > check)
+		//	dat += ", "
+
+	return dat
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -86,9 +167,13 @@ var/global/list/disease2_list = list()
 	//pick random antigens for the disease to have
 	D.antigen |= text2num(pick(ANTIGENS))
 	D.antigen |= text2num(pick(ANTIGENS))
-	D.spreadtype = input(C, "Select spread type", "Spread Type") as null | anything in list("Airborne", "Contact", "Blood") // select how the disease is spread
-	if (!D.spreadtype)
-		return 0
+	D.spread = 0
+	if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be very hard to cure!)",,"Yes","No") == "Yes")
+		D.spread |= SPREAD_BLOOD
+	if (alert("Can this virus spread by contact?",,"Yes","No") == "Yes")
+		D.spread |= SPREAD_CONTACT
+	if (alert("Can this virus spread by the air?",,"Yes","No") == "Yes")
+		D.spread |= SPREAD_AIRBORNE
 	infectedMob.virus2["[D.uniqueID]"] = D // assign the disease datum to the infectedMob/ selected user.
 	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
 	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
@@ -138,15 +223,6 @@ var/global/list/disease2_list = list()
 		if (e.can_run_effect(stage))
 			e.run_effect(mob)
 
-	//Short airborne spread
-	if(src.spreadtype == "Airborne")
-		for(var/mob/living/carbon/M in oview(1,mob))
-			if(airborne_can_reach(get_turf(mob), get_turf(M)))
-				infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
-		for(var/mob/living/simple_animal/mouse/MM in oview(1,mob))
-			if(airborne_can_reach(get_turf(mob), get_turf(MM)))
-				infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
-
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
 	clicks+=speed
@@ -156,6 +232,10 @@ var/global/list/disease2_list = list()
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
+	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
+	if (V && V.len <= 0)
+		infected_contact_mobs -= src
+
 
 /datum/disease2/disease/proc/minormutate(var/index)
 	//uniqueID = rand(0,10000)
@@ -189,24 +269,28 @@ var/global/list/disease2_list = list()
 		antigen = text2num(pick(ANTIGENS))
 		antigen |= text2num(pick(ANTIGENS))
 
-/datum/disease2/disease/proc/getcopy()
+/datum/disease2/disease/proc/getcopy()//called by infect_virus2()
 	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
 	disease.form=form
 	disease.log=log
 	disease.infectionchance = infectionchance
-	disease.spreadtype = spreadtype
+	disease.spread = spread
 	disease.stageprob = stageprob
 	disease.antigen   = antigen
 	disease.uniqueID = uniqueID
 	disease.speed = speed
-	disease.stage = Clamp(stage+stage_variance, 1, max_stage)
+	disease.stage = stage
 	disease.clicks = clicks
 	disease.max_stage = max_stage
 	disease.stage_variance = stage_variance
+	disease.color = color
+	disease.pattern = pattern
+	disease.pattern_color = pattern_color
 	for(var/datum/disease2/effect/e in effects)
 		disease.effects += e.getcopy(disease)
 	return disease
 
+/* candidate for deletion of obsolete procs
 /datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
 	var/list/types = list()
 	var/list/types2 = list()
@@ -224,6 +308,7 @@ var/global/list/disease2_list = list()
 	if (antigen != disease.antigen)
 		equal = 0
 	return equal
+*/
 
 /proc/virus_copylist(var/list/datum/disease2/disease/viruses)
 	var/list/res = list()
@@ -247,7 +332,7 @@ var/global/list/virusDB = list()
 /datum/disease2/disease/proc/get_info()
 	var/r = "GNAv2 [name()]"
 	r += "<BR>Infection rate : [infectionchance]"
-	r += "<BR>Spread form : [spreadtype]"
+	r += "<BR>Spread form : [get_spread_string()]"
 	r += "<BR>Progress Speed : [stageprob]"
 	for(var/datum/disease2/effect/e in effects)
 		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
@@ -265,51 +350,6 @@ var/global/list/virusDB = list()
 	v.fields["name"] = name()
 	v.fields["description"] = get_info()
 	v.fields["antigen"] = antigens2string(antigen)
-	v.fields["spread type"] = spreadtype
+	v.fields["spread type"] = get_spread_string()
 	virusDB["[uniqueID]"] = v
 	return 1
-
-proc/virus2_lesser_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_lesser(candidates[1])
-
-proc/virus2_greater_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_greater(candidates[1])
-
-/datum/disease2/disease/bacteria
-	form = "Bacteria"
-	max_stage = 3
-	infectionchance = 90
-	stageprob = 30
-	stage_variance = -4
-
-/datum/disease2/disease/parasite
-	form = "Parasite"
-	infectionchance = 50
-	stageprob = 10
-	stage_variance = 0
-
-/datum/disease2/disease/prion
-	form = "Prion"
-	infectionchance = 10
-	stageprob = 80
-	stage_variance = -10

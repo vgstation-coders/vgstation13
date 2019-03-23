@@ -6,7 +6,7 @@
 	invisibility = 101
 
 //	anim(target = src, a_icon = 'icons/mob/mob.dmi', /*flick_anim = "gibbed-r"*/, sleeptime = 15)
-	robogibs(loc, viruses)
+	robogibs(loc, virus2)
 
 	dead_mob_list -= src
 	qdel(src)

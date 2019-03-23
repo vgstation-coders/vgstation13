@@ -1,4 +1,4 @@
-
+/*
 datum/event/viral_infection
 	var/severity = 1
 
@@ -22,6 +22,7 @@ datum/event/viral_infection/start()
 	candidates = shuffle(candidates)//Incorporating Donkie's list shuffle
 
 	while(severity > 0 && candidates.len)
-		infect_mob_random_lesser(candidates[1])
+		//infect_mob_random_lesser(candidates[1])
 		candidates.Remove(candidates[1])
 		severity--
+*/

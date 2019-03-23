@@ -76,6 +76,7 @@
 	flags = FPRINT
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
+	sterility = 100
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
