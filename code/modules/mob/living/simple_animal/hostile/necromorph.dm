@@ -189,7 +189,7 @@
 	explosion(T, -1, 1, 4)
 
 /mob/living/simple_animal/hostile/necromorph/puker
-	desc = "A twisted, engorged husk of what was once human. It reaks of stomach acid."
+	desc = "A twisted, engorged husk of what was once human. It reeks of stomach acid."
 	icon_state = "nmorph_puker"
 	icon_living = "nmorph_puker"
 	icon_dead = "nmorph_puker_dead"
