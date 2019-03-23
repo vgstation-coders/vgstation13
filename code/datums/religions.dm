@@ -28,7 +28,7 @@
 	for (var/R in typesof(/datum/religion))
 		var/datum/religion/rel = new R
 		for (var/key in rel.keys)
-			if (lowertext(new_religion) == key)
+			if (lowertext(new_religion) == lowertext(key))
 				rel.equip_chaplain(H) // We do the misc things related to the religion
 				chaplain_religion = rel
 				B = new rel.bible_type(H)
