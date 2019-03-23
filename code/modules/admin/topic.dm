@@ -3461,10 +3461,10 @@
 				feedback_add_details("admin_secrets_fun_used","V")
 				var/answer = alert("Do you want this to be a greater disease or a lesser one?",,"Greater","Lesser")
 				if(answer=="Lesser")
-					virus2_lesser_infection()
+					//virus2_lesser_infection()
 					message_admins("[key_name_admin(usr)] has triggered a lesser virus outbreak.", 1)
 				else
-					virus2_greater_infection()
+					//virus2_greater_infection()
 					message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
 			if("retardify")
 				feedback_inc("admin_secrets_fun_used",1)

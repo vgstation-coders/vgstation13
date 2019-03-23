@@ -9,6 +9,19 @@
 	clear_fullscreens()
 	..()
 
+/mob/living/gib()
+	death(1)
+	monkeyizing = 1
+	canmove = 0
+	icon = null
+	invisibility = 101
+
+	gibs(loc, virus2, dna)
+
+	dead_mob_list -= src
+
+	qdel(src)
+
 /mob/living/proc/init_butchering_list()
 	if(butchering_drops && butchering_drops.len) //Already initialized
 		return

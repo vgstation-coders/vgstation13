@@ -60,14 +60,14 @@
 
 /obj/machinery/disease2/diseaseanalyser/proc/PrintPaper(var/obj/item/weapon/virusdish/D)
 	var/obj/item/weapon/paper/P = new(src.loc)
-	P.info = D.virus2.get_info()
-	P.name = "[D.virus2.form] #[D.virus2.uniqueID]"
+	P.info = D.contained_virus.get_info()
+	P.name = "[D.contained_virus.form] #[D.contained_virus.uniqueID]"
 	visible_message("\The [src.name] prints a sheet of paper.")
 
 /obj/machinery/disease2/diseaseanalyser/proc/Analyse(var/obj/item/weapon/virusdish/D)
-	dish.info = D.virus2.get_info()
+	dish.info = D.contained_virus.get_info()
 	dish.analysed = 1
-	if (D.virus2.addToDB())
+	if (D.contained_virus.addToDB())
 		say("Added new pathogen to database.")
 	dish.forceMove(src.loc)
 	dish = null
@@ -88,7 +88,7 @@
 		if(!dish)
 			dish = toscan[1] //Load next dish to analyse
 			toscan -= dish //Remove from scanlist
-		if(dish.virus2 && dish.growth > minimum_growth)
+		if(dish.contained_virus && dish.growth > minimum_growth)
 			dish.growth -= 10
 			scanning = process_time
 			icon_state = "analyser_processing"
@@ -139,22 +139,22 @@
 	<td>Options</td>
 "}
 		for(var/obj/item/weapon/virusdish/B in src.contents)
-			var/ID = B.virus2.uniqueID
+			var/ID = B.contained_virus.uniqueID
 			if("[ID]" in virusDB) //If it's in the DB they might have given it a name
 				var/datum/data/record/v = virusDB["[ID]"]
 				dat += "<tr><td>[v.fields["name"]]</td>"
 			else //Use ID instead
-				dat += "<tr><td>[B.virus2.name()]</td>"
-			dat += "<td>Infection rate: [B.virus2.infectionchance]<br>Progress speed: [B.virus2.stageprob]</td>"
+				dat += "<tr><td>[B.contained_virus.name()]</td>"
+			dat += "<td>Infection rate: [B.contained_virus.infectionchance]<br>Progress speed: [B.contained_virus.stageprob]</td>"
 			dat+="<td>"
 			if(!B.analysed)
 				dat += "Awaiting analysis.</td><td></td><td></td>"
 			else
-				for(var/datum/disease2/effect/e in B.virus2.effects)
+				for(var/datum/disease2/effect/e in B.contained_virus.effects)
 					dat += "<br>[e.name] (Strength: [e.multiplier] | Verosity: [e.chance])"
 				dat +="</td>"
-				dat += "<td>[antigens2string(B.virus2.antigen)]</td>"
-				dat += "<td>[(B.virus2.spreadtype)]</td>"
+				dat += "<td>[antigens2string(B.contained_virus.antigen)]</td>"
+				dat += "<td>[(B.contained_virus.get_spread_string())]</td>"
 			if(B == dish)
 				dat += "<td></td>"
 			else

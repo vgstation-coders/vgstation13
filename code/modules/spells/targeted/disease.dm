@@ -55,13 +55,13 @@
 	shutdown.infectionchance = 100
 	shutdown.antigen |= text2num(pick(ANTIGENS))
 	shutdown.antigen |= text2num(pick(ANTIGENS))
-	shutdown.spreadtype = "None"
+	shutdown.spread = 0//cannot be extracted
 	shutdown.uniqueID = rand(0,10000)
 	shutdown.effects += O
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185
-	infect_virus2(target,shutdown,0)
+	target.infect_disease2(shutdown, notes="(Spell, from [key_name(user)])")
 
 	var/datum/role/vampire/V = isvampire(user)
 	if(V)

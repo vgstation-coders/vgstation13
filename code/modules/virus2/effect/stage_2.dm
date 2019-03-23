@@ -34,17 +34,57 @@
 	mob.eye_blind = max(mob.eye_blind, 4)
 
 
-/datum/disease2/effect/cough
+/datum/disease2/effect/cough//creates pathogenic clouds that may contain even non-airborne viruses.
 	name = "Anima Syndrome"
 	desc = "Causes the infected to cough rapidly, infecting people in their surroundings."
 	stage = 2
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
 	mob.say("*cough")
-	for(var/mob/living/M in oview(2,mob))
-		if(can_be_infected(M))
-			spread_disease_to(mob, M)
 
+	var/datum/gas_mixture/breath
+	if (ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		breath = H.get_breath_from_internal(BREATH_VOLUME)
+	if (ismonkey(mob))
+		var/mob/living/carbon/monkey/M = mob
+		breath = M.get_breath_from_internal(BREATH_VOLUME)
+	if(!breath)//not wearing internals
+		var/head_block = 0
+		if (ishuman(mob))
+			var/mob/living/carbon/human/H = mob
+			if (H.head && (H.head.clothing_flags & BLOCK_BREATHING))
+				head_block = 1
+		if (ismonkey(mob))
+			var/mob/living/carbon/monkey/M = mob
+			if (M.hat && (M.hat.clothing_flags & BLOCK_BREATHING))
+				head_block = 1
+		if(!head_block)
+			if(!mob.wear_mask || !(mob.wear_mask.clothing_flags & BLOCK_BREATHING))
+				if(isturf(mob.loc))
+					var/list/blockers = list()
+					if (ishuman(mob))
+						var/mob/living/carbon/human/H = mob
+						blockers = list(H.wear_mask,H.glasses,H.head)
+					if (ismonkey(mob))
+						var/mob/living/carbon/monkey/M = mob
+						blockers = list(M.wear_mask,M.glasses,M.hat)
+					for (var/item in blockers)
+						var/obj/item/I = item
+						if (!istype(I))
+							continue
+						if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+							return
+					if(mob.check_airborne_sterility())
+						return
+					var/strength = 0
+					for (var/ID in mob.virus2)
+						var/datum/disease2/disease/V = mob.virus2[ID]
+						strength += V.infectionchance
+					strength = round(strength/mob.virus2.len)
+					while (strength > 0)//stronger viruses create more clouds at once
+						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), mob, virus_copylist(mob.virus2))
+						strength -= 30
 
 /datum/disease2/effect/hungry
 	name = "Appetiser Effect"
@@ -137,13 +177,15 @@
 
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
 	if (prob(30))
-		var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
-		if(D==null)
-			D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
-			D.New(D.loc)
-
-		D.virus2 |= virus_copylist(mob.virus2)
-
+		if (ishuman(mob))
+			var/mob/living/carbon/human/H = mob
+			H.drip(1)
+		else
+			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
+			if(D==null)
+				D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
+				D.New(D.loc)
+			D.virus2 |= virus_copylist(mob.virus2)
 
 /datum/disease2/effect/viralsputum
 	name = "Respiratory Putrification"
@@ -151,14 +193,12 @@
 	stage = 2
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
-
 	if (prob(30))
 		mob.say("*cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
 			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
 			D.New(D.loc)
-
 		D.virus2 |= virus_copylist(mob.virus2)
 
 

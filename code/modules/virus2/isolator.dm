@@ -4,7 +4,7 @@
 	anchored = 1
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "isolator"
-	var/datum/disease2/disease/virus2 = null
+	var/datum/disease2/disease/isolated_disease = null
 	var/isolating = 0
 	var/beaker = null
 
@@ -47,9 +47,10 @@
 			return
 		var/list/virus = virus_copylist(Blood.data["virus2"])
 		var/choice = text2num(href_list["isolate"])
-		for (var/datum/disease2/disease/V in virus)
+		for (var/ID in virus)
+			var/datum/disease2/disease/V = virus[ID]
 			if (V.uniqueID == choice)
-				virus2 = virus
+				isolated_disease = virus
 				isolating = 40
 				icon_state = "isolator_processing"
 		src.updateUsrDialog()
@@ -86,7 +87,8 @@
 			for(var/datum/reagent/blood/G in R.reagent_list)
 				if(G.data["virus2"])
 					var/list/virus = G.data["virus2"]
-					for (var/datum/disease2/disease/V in virus)
+					for (var/ID in virus)
+						var/datum/disease2/disease/V = virus[ID]
 						dat += "<li>[G.name]: <A href='?src=\ref[src];isolate=[V.uniqueID]'>Isolate pathogen #[V.uniqueID]</a></li>"
 				else
 					dat += "<li><em>No pathogen</em></li>"
@@ -99,6 +101,7 @@
 		isolating -= 1
 		if(isolating == 0)
 			var/obj/item/weapon/virusdish/d = new /obj/item/weapon/virusdish(src.loc)
-			d.virus2 = virus2.getcopy()
-			virus2 = null
+			d.contained_virus = isolated_disease.getcopy()
+			d.update_icon()
+			isolated_disease = null
 			icon_state = "isolator_in"

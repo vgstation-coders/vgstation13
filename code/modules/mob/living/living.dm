@@ -1416,6 +1416,10 @@ Thanks.
 	else
 		M = new meat_type(location)
 	meat_taken++
+
+	if (virus2?.len)
+		M.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
+
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
@@ -1565,7 +1569,7 @@ Thanks.
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)
-		return
+		return 0
 
 	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
 
@@ -1573,10 +1577,11 @@ Thanks.
 		to_chat(M, "You scoop up [src].")
 		to_chat(src, "[M] scoops you up.")
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
+		return 1
 	else
 		returnToPool(D)
 
-	return
+	return 0
 
 /mob/living/nuke_act() //Called when caught in a nuclear blast
 	health = 0
@@ -1883,3 +1888,116 @@ Thanks.
 	Knockdown(weaken_amount)
 	score["slips"]++
 	return 1
+
+///////////////////////DISEASE STUFF///////////////////////////////////////////////////////////////////
+
+//For when we've already gone through clothing protections
+/mob/living/proc/assume_contact_diseases(var/list/disease_list,var/atom/source,var/bleeding=0)
+	if (istype(disease_list) && disease_list.len > 0)
+		for(var/ID in disease_list)
+			var/datum/disease2/disease/V = disease_list[ID]
+			if (V.spread & SPREAD_CONTACT)
+				infect_disease2(V, notes="(Contact, from [source])")
+			else if (bleeding && (V.spread & SPREAD_BLOOD))
+				infect_disease2(V, notes="(Blood, from [source])")
+
+
+//Called in Life() by humans (in handle_virus_updates.dm), monkeys and mice
+/mob/living/proc/find_nearby_disease()//only tries to find Contact and Blood spread diseases. Airborne ones are handled by breath_airborne_diseases()
+	if(locked_to)//Riding a vehicle?
+		return
+	if(flying)//Flying?
+		return
+
+	var/turf/T = get_turf(src)
+
+	//Virus Dishes aren't toys, handle with care, especially when they're open.
+	for(var/obj/effect/decal/cleanable/virusdish/dish in T)
+		dish.infection_attempt(src)
+	for(var/obj/item/weapon/virusdish/dish in T)
+		if (dish.open && dish.contained_virus)
+			dish.infection_attempt(src,dish.contained_virus)
+	var/obj/item/weapon/virusdish/dish = locate() in held_items
+	if (dish && dish.open && dish.contained_virus)
+		dish.infection_attempt(src,dish.contained_virus)
+
+	//Now to check for stuff that's on the floor
+	var/block = 0
+	var/bleeding = 0
+	if (lying)
+		block = check_contact_sterility(FULL_TORSO)
+		bleeding = check_bodypart_bleeding(FULL_TORSO)
+	else
+		block = check_contact_sterility(FEET)
+		bleeding = check_bodypart_bleeding(FEET)
+
+	if (!block)
+		var/list/viral_cleanable_types = list(
+			/obj/effect/decal/cleanable/blood,
+			/obj/effect/decal/cleanable/mucus,
+			/obj/effect/decal/cleanable/vomit,
+			)
+
+		for(var/obj/effect/decal/cleanable/C in T)
+			if (is_type_in_list(C,viral_cleanable_types))
+				assume_contact_diseases(C.virus2,C,bleeding)
+
+		for(var/obj/effect/rune/R in T)
+			assume_contact_diseases(R.virus2,R,bleeding)
+	return 0
+
+//This one is used for one-way infections, such as getting splashed with someone's blood due to clobbering them to death
+/mob/living/proc/oneway_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
+	if (!block)
+		assume_contact_diseases(L.virus2,L,bleeding)
+
+//This one is used for two-ways infections, such as hand-shakes, hugs, punches, people bumping into each others, etc
+/mob/living/proc/share_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
+	if (!block)
+		L.assume_contact_diseases(virus2,src,bleeding)
+		assume_contact_diseases(L.virus2,L,bleeding)
+
+//Called in Life() by humans (in handle_breath.dm), monkeys and mice
+/mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
+	if (!check_airborne_sterility())//checking for sterile mouth protections
+		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
+			if (cloud.source != src && Adjacent(cloud))
+				for (var/ID in cloud.viruses)
+					var/datum/disease2/disease/V = cloud.viruses[ID]
+					//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+					infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+
+		var/turf/T = get_turf(src)
+		var/list/breathable_cleanable_types = list(
+			/obj/effect/decal/cleanable/blood,
+			/obj/effect/decal/cleanable/mucus,
+			/obj/effect/decal/cleanable/vomit,
+			)
+
+		for(var/obj/effect/decal/cleanable/C in T)
+			if (is_type_in_list(C,breathable_cleanable_types))
+				if(istype(C.virus2,/list) && C.virus2.len > 0)
+					for(var/ID in C.virus2)
+						var/datum/disease2/disease/V = C.virus2[ID]
+						if(V.spread & SPREAD_AIRBORNE)
+							infect_disease2(V, notes="(Airborne, from [C])")
+
+		for(var/obj/effect/rune/R in T)
+			if(istype(R.virus2,/list) && R.virus2.len > 0)
+				for(var/ID in R.virus2)
+					var/datum/disease2/disease/V = R.virus2[ID]
+					if(V.spread & SPREAD_AIRBORNE)
+						infect_disease2(V, notes="(Airborne, from [R])")
+
+		//spreading our own airborne viruses
+		if (virus2 && virus2.len > 0)
+			var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
+			if (airborne_viruses && airborne_viruses.len > 0)
+				var/strength = 0
+				for (var/ID in airborne_viruses)
+					var/datum/disease2/disease/V = airborne_viruses[ID]
+					strength += V.infectionchance
+				strength = round(strength/airborne_viruses.len)
+				while (strength > 0)//stronger viruses create more clouds at once
+					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+					strength -= 40

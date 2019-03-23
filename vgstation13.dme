@@ -2438,6 +2438,7 @@
 #include "code\modules\virus2\helpers.dm"
 #include "code\modules\virus2\isolator.dm"
 #include "code\modules\virus2\items_devices.dm"
+#include "code\modules\virus2\pathogen_cloud.dm"
 #include "code\modules\virus2\effect\effect.dm"
 #include "code\modules\virus2\effect\stage_1.dm"
 #include "code\modules\virus2\effect\stage_2.dm"

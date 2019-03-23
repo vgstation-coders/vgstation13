@@ -191,6 +191,10 @@
 	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if (virus2?.len)
+			for (var/ID in virus2)
+				var/datum/disease2/disease/D = virus2[ID]
+				eater.infect_disease2(D, 1, notes="(Ate an infected [src])")//eating infected food means 100% chance of infection.
 		if(reagentreference.total_volume)
 			reagentreference.reaction(eater, INGEST)
 			spawn() //WHY IS THIS SPAWN() HERE

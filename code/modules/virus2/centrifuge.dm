@@ -14,7 +14,7 @@
 	var/isolating
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/vial/sample = null
-	var/datum/disease2/disease/virus2 = null
+	var/datum/disease2/disease/isolated_disease = null
 	var/general_process_time = 40
 
 	light_color = null
@@ -171,7 +171,7 @@
 				var/list/virus = virus_copylist(B.data["virus2"])
 				var/choice = href_list["isolate"]
 				if (choice in virus)
-					virus2 = virus[choice]
+					isolated_disease = virus[choice]
 					isolating = general_process_time * 2
 					update_icon()
 				else
@@ -201,6 +201,7 @@
 
 /obj/machinery/centrifuge/proc/isolate()
 	var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
-	dish.virus2 = virus2
+	dish.contained_virus = isolated_disease
+	dish.update_icon()
 
 	alert_noise("ping")

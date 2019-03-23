@@ -110,6 +110,26 @@ BREATHALYZER
 			to_chat(user, "<span class='notice'>\The [src] glows [pick("red", "green", "blue", "pink")]! You wonder what that would mean.</span>")
 	src.add_fingerprint(user)
 
+
+/obj/item/device/healthanalyzer/afterattack(var/atom/A, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if (A.Adjacent(user) && isitem(A))
+		var/obj/item/I = A
+		if(I.virus2 && I.virus2.len > 0)
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+			for(var/ID in I.virus2)
+				if(ID in virusDB)
+					var/datum/data/record/V = virusDB[ID]
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]] detected on \the [src]. Known antigen : [V.fields["antigen"]]</span>")
+				else
+					to_chat(user,"<span class='warning'>Warning: Unknown pathogen detected on \the [src].</span>")
+		else
+			to_chat(user,"<span class='notice'>No pathogen detected on \the [src].</span>")
+
+
 /obj/item/device/healthanalyzer/attack_self(mob/living/user as mob)
 	. = ..()
 	if(.)

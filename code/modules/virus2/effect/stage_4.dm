@@ -329,6 +329,7 @@
 
 /datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
+	virus.virus2 = virus_copylist(mob.virus2)
 	mob.put_in_hands(virus)
 
 
