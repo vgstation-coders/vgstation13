@@ -54,7 +54,7 @@
 	abbreviation = "HS"
 	spawned_items = list(
 	/obj/item/clothing/shoes/sandal,\
-	/obj/item/clothing/gloves/purple,\
+	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
 	/obj/item/clothing/head/helmet/space/rig/wizard)
 
