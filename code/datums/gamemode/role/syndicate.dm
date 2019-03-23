@@ -41,7 +41,7 @@
 		AppendObjective(/datum/objective/freeform/syndicate)
 		return
 	if(istype(antag.current, /mob/living/silicon))
-		AppendObjective(/datum/objective/target/assassinate)
+		AppendObjective(/datum/objective/target/delayed/assassinate)
 
 		AppendObjective(/datum/objective/survive)
 
@@ -49,7 +49,7 @@
 			AppendObjective(/datum/objective/block)
 
 	else
-		AppendObjective(/datum/objective/target/assassinate)
+		AppendObjective(/datum/objective/target/delayed/assassinate)
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
