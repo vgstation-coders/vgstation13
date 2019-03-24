@@ -1024,7 +1024,6 @@
 	description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#0064C8" //rgb: 0, 100, 200
-	custom_metabolism = 2 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
 	specheatcap = 4.183
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
