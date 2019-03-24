@@ -24,7 +24,6 @@ var/list/threat_by_job = list(
 	var/list/latejoin_rules = list()
 	var/list/midround_rules = list()
 	var/list/second_rule_req = list(100,100,100,80,60,40,20,0,0,0)//requirements for extra round start rules
-	//var/list/second_rule_req = list(100,100,100,80,60,40,20,0,0,0)//requirements for extra round start rules
 	var/list/third_rule_req = list(100,100,100,100,100,70,50,30,10,0)
 	var/roundstart_pop_ready = 0
 	var/list/candidates = list()
@@ -120,6 +119,9 @@ var/list/threat_by_job = list(
 	midround_injection_cooldown = rand(600,1050)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
+	if (config.high_population_override)
+		message_admins("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
+		log_admin("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
@@ -185,15 +187,28 @@ var/list/threat_by_job = list(
 				drafted_rules[rule] = rule.weight
 
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
+	var/extra_rulesets_amount = 0
+
+	if (config.high_population_override)
+		if (threat_level > 50)
+			extra_rulesets_amount++
+			if (threat_level > 75)
+				extra_rulesets_amount++
+	else
+		if (threat_level >= second_rule_req[indice_pop])
+			extra_rulesets_amount++
+			if (threat_level >= third_rule_req[indice_pop])
+				extra_rulesets_amount++
+
 	message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with elligible candidates.")
 	if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
-		if (threat_level >= second_rule_req[indice_pop])//we've got enough population and threat for a second rulestart rule
+		if (extra_rulesets_amount > 0)//we've got enough population and threat for a second rulestart rule
 			for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
 				if (rule.cost > threat)
 					drafted_rules -= rule
 			message_admins("The current pop and threat level allow for a second round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
 			if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
-				if (threat_level >= third_rule_req[indice_pop])//we've got enough population and threat for a third rulestart rule
+				if (extra_rulesets_amount > 1)//we've got enough population and threat for a third rulestart rule
 					for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
 						if (rule.cost > threat)
 							drafted_rules -= rule
@@ -403,7 +418,8 @@ var/list/threat_by_job = list(
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0
-	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/5))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
+	//if the high pop override is in effect, we reduce the impact of population on the antag injection chance
+	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/(config.high_population_override ? 10 : 5)))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
 	if (!living_antags.len)
 		chance += 50//no antags at all? let's boost those odds!
 	else
