@@ -167,6 +167,7 @@
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
+	high_population_requirement = 10
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
@@ -222,6 +223,7 @@
 	weight = 1
 	cost = 35
 	requirements = list(101,101,80,70,60,60,50,50,40,40)
+	high_population_requirement = 65
 
 /datum/dynamic_ruleset/midround/malf/trim_candidates()
 	..()
@@ -271,6 +273,7 @@
 	weight = 1
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 50
 	logo = "raginmages-logo"
 	repeatable = TRUE
 
@@ -312,6 +315,7 @@
 	weight = 5
 	cost = 35
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	high_population_requirement = 60
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "nuke-logo"
 
@@ -353,6 +357,7 @@
 	weight = 3
 	cost = 15
 	requirements = list(90,60,40,40,40,40,30,20,15,15)
+	high_population_requirement = 70
 	logo = "blob-logo"
 
 	makeBody = FALSE
@@ -387,6 +392,7 @@
 	weight = 5
 	cost = 45
 	requirements = list(101,101,90,60,45,45,45,45,45,45)
+	high_population_requirement = 50
 	my_fac = /datum/faction/revolution
 	logo = "rev-logo"
 	var/required_heads = 3
@@ -424,6 +430,7 @@
 	weight = 4
 	cost = 10
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
+	high_population_requirement = 20
 	logo = "ninja-logo"
 	repeatable = TRUE
 
@@ -457,6 +464,7 @@
 	weight = 3
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+	high_population_requirement = 10
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
@@ -483,6 +491,7 @@
 	weight = 1
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
+	high_population_requirement = 0
 	logo = "catbeast-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
