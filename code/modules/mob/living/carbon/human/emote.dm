@@ -223,11 +223,9 @@
 	var/mob/living/carbon/human/H = user
 	if(!istype(H))
 		return
-	if(!(Holiday == APRIL_FOOLS_DAY))
-		if(!H.stunned && !H.restrained() && !iswizard(H))
-			H.visible_message("<span class = 'warning'><b>[H]</b> slaps themselves in the face.</span>")
-			H.apply_effects(10, 10, 10, 0, 10, 10, 0, 10, 0)
-		return
+	if(iswizard(H))
+		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
+		return FALSE
 	if(H.stunned || H.restrained())
 		return
 	if(world.time-H.lastDab >= 10 SECONDS)
