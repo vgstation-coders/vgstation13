@@ -634,6 +634,7 @@
 	name = "jury-rigged space-proof fire helmet"
 	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
 	icon_state = "ghettorig"
+	item_state = "ghettorig"
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
