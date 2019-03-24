@@ -112,7 +112,7 @@
 /obj/item/clothing/suit/space/rig/Destroy()
 	qdel(cell)
 	cell = null
-	if(H.loc == src || !H.loc)
+	if(H && (H.loc == src || !H.loc))
 		qdel(H)
 	H = null
 	for(var/obj/M in modules)
