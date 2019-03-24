@@ -125,7 +125,7 @@ var/list/threat_by_job = list(
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
-	if (threat_level == 66.6)
+	if (threat_level > 66.55 && threat_level < 66.65)
 		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/bloodcult()
 		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/vampire()
 		log_admin("666 threat override.")
