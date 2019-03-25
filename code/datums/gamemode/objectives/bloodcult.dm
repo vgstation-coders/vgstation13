@@ -200,7 +200,7 @@
 	log_admin("Blood Cult: ACT IV has begun.")
 	return TRUE
 
-/datum/objective/bloodcult_followers/extraInfo()
+/datum/objective/bloodcult_tearinreality/extraInfo()
 	if (NARSIE_HAS_RISEN && anchor)
 		explanation_text += " (The Anchor Blood Stone had [round((anchor.health/anchor.maxHealth)*100)]% health remaining)"
 
