@@ -305,7 +305,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (!injected || !our)
 		return
-	if(blood_incompatible(injected.data["blood_type"],our.data["blood_type"]) )
+
+	var/toxic = FALSE
+	if (istype(container,/obj/item/weapon/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
+		if (!iscultist(src))
+			toxic = TRUE
+	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]))
+		toxic = TRUE
+
+	if(toxic)
 		reagents.add_reagent(TOXIN,amount * 0.5)
 		reagents.update_total()
 	else

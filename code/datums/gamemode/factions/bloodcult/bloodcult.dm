@@ -178,6 +178,7 @@ var/veil_thickness = CULT_PROLOGUE
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
 	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
+	dat += "<br><a href='?src=\ref[src];cult_progress=1'>(debug) Cult Progression Skip</a>"
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
@@ -196,6 +197,14 @@ var/veil_thickness = CULT_PROLOGUE
 
 		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
+	if (href_list["cult_progress"])
+		if (alert(usr, "Skip to the next Act?","Cult Progression Skip","Yes","No") == "No")
+			return
+
+		stage(veil_thickness+1,forced=TRUE)
+
+		message_admins("Admin [key_name_admin(usr)] has advanced the Blood Cult to the next Act.")
+		log_admin("Admin [key_name_admin(usr)] has advanced the Blood Cult to the next Act.")
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
@@ -230,7 +239,7 @@ var/veil_thickness = CULT_PROLOGUE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
 */
 
-/datum/faction/bloodcult/stage(var/new_act,var/A)
+/datum/faction/bloodcult/stage(var/new_act,var/A,var/forced=FALSE)
 	//This proc is called to update the faction's current objectives, and veil thickness
 	if (veil_thickness == CULT_MENDED)
 		return//it's over, you lost
@@ -261,7 +270,7 @@ var/veil_thickness = CULT_PROLOGUE
 			var/datum/objective/bloodcult_followers/O = locate() in objective_holder.objectives
 			if (O)
 				O.conversions++
-				if (O.conversions >= O.convert_target)
+				if (O.conversions >= O.convert_target || forced)
 					veil_thickness = CULT_ACT_II
 					new_obj = new /datum/objective/bloodcult_sacrifice
 					for(var/datum/role/cultist/C in members)

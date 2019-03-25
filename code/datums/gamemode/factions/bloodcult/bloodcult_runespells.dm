@@ -276,18 +276,43 @@
 		abort(RITUALABORT_OUTPOST)
 		return FALSE
 
+	var/list/choices = list(
+		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
+		list("Spire (locked)", "radial_locked1", "Reach Act 1 to unlock the Spire."),
+		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge."),
+	)
 	if (veil_thickness == CULT_ACT_I)
-		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Spire")
-		if (spawnchoice == "Spire")
-			spawntype = /obj/structure/cult/spire
-
+		choices = list(
+		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
+		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
+		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge."),
+		)
 	else if (veil_thickness >= CULT_ACT_II)
-		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Forge","Spire")
-		switch (spawnchoice)
-			if ("Forge")
-				spawntype = /obj/structure/cult/forge
-			if ("Spire")
-				spawntype = /obj/structure/cult/spire
+		choices = list(
+		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
+		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
+		list("Forge", "radial_forge", "Enables the forging of cult blades and armor, as well as new construct shells. Raise the temperature of nearby creatures."),
+		)
+
+	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
+	if (!R.Adjacent(user) || !structure )
+		return
+
+	switch(structure)
+		if("Altar")
+			spawntype = /obj/structure/cult/altar
+		if("Spire")
+			spawntype = /obj/structure/cult/spire
+		if("Forge")
+			spawntype = /obj/structure/cult/forge
+		if("Spire (locked)")
+			to_chat(user,"Reach Act 1 to unlock the Spire. It allows human cultists to acquire Arcane Tattoos.")
+			abort()
+			return
+		if("Forge (locked)")
+			to_chat(user,"Reach Act 2 to unlock the Forge. It enables the forging of cult blades and armor, as well as new construct shells.")
+			abort()
+			return
 
 	loc_memory = spell_holder.loc
 	contributors.Add(user)
@@ -984,7 +1009,7 @@
 						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
-					
+
 		cult.send_flavour_text_refuse(victim, converter)
 		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")

@@ -1219,15 +1219,20 @@ var/list/arcane_tomes = list()
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
-	name = "cup"
-	desc = "A cup carved from a skull."
+	name = "haemato-chalice"
+	desc = "An obsidian cup in the shape of a skull. Used by the followers of Nar-Sie to collect the blood of their sacrifices."
 	icon_state = "cult"
 	item_state = "cult"
 	isGlass = 0
 	amount_per_transfer_from_this = 10
 	volume = 60
-	starting_materials = list(MAT_IRON = 500)
+	force = 5
+	throwforce = 7
 
+/obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
+	..()
+	if (iscultist(user))
+		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types.</span>")
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
