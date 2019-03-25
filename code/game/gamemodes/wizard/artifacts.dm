@@ -58,7 +58,7 @@
 	/obj/item/clothing/suit/space/rig/wizard,\
 	/obj/item/clothing/head/helmet/space/rig/wizard)
 
-/datum/spellbook_artifact/scrying/purchased(mob/living/carbon/human/H)
+/datum/spellbook_artifact/armor/purchased(mob/living/carbon/human/H)
 	..()
 	if(istype(H) && !H.mutations.Find(M_NO_BREATH))
 		H.mutations.Add(M_NO_BREATH)
