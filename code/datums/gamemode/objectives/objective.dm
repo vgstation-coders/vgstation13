@@ -17,6 +17,9 @@
 	Return: TRUE if succesful, FALSE otherwise
 */
 
+/datum/objective/proc/extraInfo()
+	return
+
 /datum/objective/proc/PostAppend()
 	return TRUE
 

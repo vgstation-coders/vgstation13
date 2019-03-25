@@ -146,6 +146,7 @@ var/list/factions_with_hud_icons = list()
 		score_results += "<ul>"
 		for (var/datum/objective/objective in objective_holder.GetObjectives())
 			var/successful = objective.IsFulfilled()
+			objective.extraInfo()
 			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
 			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
 			count++
