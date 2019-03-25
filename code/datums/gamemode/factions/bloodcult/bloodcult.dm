@@ -170,6 +170,9 @@ var/veil_thickness = CULT_PROLOGUE
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
+/datum/faction/bloodcult/IsSuccessful()
+	return cult_win
+
 /datum/faction/bloodcult/proc/fail()
 	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return

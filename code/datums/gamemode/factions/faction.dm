@@ -140,7 +140,6 @@ var/list/factions_with_hud_icons = list()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
 /datum/faction/proc/GetScoreboard()
-	var/win = 1
 	var/count = 1
 	var/score_results = ""
 	if(objective_holder.objectives.len > 0)
@@ -149,13 +148,11 @@ var/list/factions_with_hud_icons = list()
 			var/successful = objective.IsFulfilled()
 			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
 			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
-			if(!successful) //If one objective fails, then you did not win.
-				win = 0
 			count++
 			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
-		if (win)
+		if (IsSuccessful())
 			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 			feedback_add_details("[ID]_success","SUCCESS")
 		else
@@ -187,6 +184,14 @@ var/list/factions_with_hud_icons = list()
 			return
 		message_admins("[key_name(usr)] destroyed faction [name].")
 		Dismantle()
+
+/datum/faction/proc/IsSuccessful()
+	var/win = TRUE
+	if(objective_holder.objectives.len > 0)
+		for (var/datum/objective/objective in objective_holder.GetObjectives())
+			if(!objective.IsFulfilled())
+				win = FALSE
+	return win
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
