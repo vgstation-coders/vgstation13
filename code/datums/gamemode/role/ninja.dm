@@ -411,6 +411,7 @@ Helpers For Both Variants
 	name = "energy katana"
 	desc = "It makes you a little nervous even when it's off."
 	activeforce = 40
+	siemens_coefficient = 0
 	onsound = null
 	actions_types = list(/datum/action/item_action/toggle_teleport)
 
@@ -443,7 +444,7 @@ Helpers For Both Variants
 		examine(user)
 		return 1
 	else
-		..()
+		return ..()
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****
@@ -543,4 +544,4 @@ Helpers For Both Variants
 		examine(user)
 		return 1
 	else
-		..()
+		return ..()
