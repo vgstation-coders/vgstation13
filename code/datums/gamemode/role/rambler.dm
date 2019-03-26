@@ -59,7 +59,7 @@
 		..()
 
 /obj/item/device/instrument/recorder/shakashuri/OnPlayed(mob/user,mob/M)
-	if(user!=M)
+	if(user!=M && !M.reagents.has_reagent(CHILLWAX,1))
 		M.reagents.add_reagent(CHILLWAX,0.3)
 
 /obj/item/weapon/reagent_containers/food/snacks/quiche/frittata/New()
@@ -75,6 +75,8 @@
 	var/mob/living/suspect = null
 
 /obj/item/clothing/mask/necklace/crystal/attack_self(mob/user)
+	if(!isrambler(user))
+		return
 	var/mob/potential = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") as null|mob in get_list_of_elements(user.mind.heard_before)
 	if(!isliving(potential))
 		to_chat(user,"<span class='warning'>That is some kind of ghost or something!</span>")
