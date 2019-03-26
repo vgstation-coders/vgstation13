@@ -6,7 +6,7 @@
 	explanation_text = "Assassinate the [pick("data leaker","critical personnel","loved one of our enemy","mole","Nanotrasen asset","brilliant mind")]. We will have their identity in [delay/600] minutes."
 
 /datum/objective/target/delayed/assassinate/PostDelay()
-	if(auto_target)
+	if(auto_target && !target)
 		if(find_target())
 			explanation_text = format_explanation()
 			if(owner)
