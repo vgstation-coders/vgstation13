@@ -305,22 +305,22 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
-#define FACE			EYES|MOUTH|BEARD
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
 #define BEARD			32768
-#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
-#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
-#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
-#define ARMS			ARM_LEFT|ARM_RIGHT		//384
-#define HANDS			HAND_LEFT|HAND_RIGHT //1536
-#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -328,7 +328,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEFACE			FACE
 #define HIDEHEADHAIR 		EARS|HEAD
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
