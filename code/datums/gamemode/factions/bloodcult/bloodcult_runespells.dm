@@ -277,25 +277,26 @@
 		return FALSE
 
 	var/list/choices = list(
-		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
+		list("Altar", "radial_altar", "The nexus of a cult base. Has many uses. More runes will also become usable after the first altar has been raised."),
 		list("Spire (locked)", "radial_locked1", "Reach Act 1 to unlock the Spire."),
 		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge."),
 	)
 	if (veil_thickness == CULT_ACT_I)
 		choices = list(
-		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
-		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
+		list("Altar", "radial_altar", "The nexus of a cult base. It has many various uses, including checking the roster and status of all cultists, or asking Nar-Sie for guidance."),
+		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act."),
 		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge."),
 		)
 	else if (veil_thickness >= CULT_ACT_II)
 		choices = list(
-		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
-		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
-		list("Forge", "radial_forge", "Enables the forging of cult blades and armor, as well as new construct shells. Raise the temperature of nearby creatures."),
+		list("Altar", "radial_altar", "The nexus of a cult base. This is where the Sacrifice has to take place, but it has many other various uses."),
+		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act."),
+		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
 		)
 
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 	if (!R.Adjacent(user) || !structure )
+		abort()
 		return
 
 	switch(structure)
@@ -306,7 +307,7 @@
 		if("Forge")
 			spawntype = /obj/structure/cult/forge
 		if("Spire (locked)")
-			to_chat(user,"Reach Act 1 to unlock the Spire. It allows human cultists to acquire Arcane Tattoos.")
+			to_chat(user,"Reach Act 1 to unlock the Spire. It allows human cultists to acquire Arcane Tattoos, providing various buffs.")
 			abort()
 			return
 		if("Forge (locked)")
