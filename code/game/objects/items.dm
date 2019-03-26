@@ -333,8 +333,12 @@
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
 	return 1
+
 // called after an item is unequipped or stripped
 /obj/item/proc/unequipped(mob/user, var/from_slot = null)
+	for(var/x in actions)
+		var/datum/action/A = x
+		A.Remove(user)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
