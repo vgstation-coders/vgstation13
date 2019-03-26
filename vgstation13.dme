@@ -66,6 +66,7 @@
 #include "__DEFINES\unit_tests.dm"
 #include "__DEFINES\weapons.dm"
 #include "__DEFINES\world.dm"
+#include "__DEFINES\xenomorphs.dm"
 #include "__DEFINES\ZAS.dm"
 #include "code\_secrets.dm"
 #include "code\hub.dm"

@@ -836,7 +836,7 @@ var/list/cyborg_list = list()
 
 		if(I_DISARM)
 			if(!(lying))
-				if(prob(85))
+				if((M.combat_flags & STUNROBOT) && prob(M.disarm_chance))
 					Stun(7)
 					step(src,get_dir(M,src))
 					spawn(5) step(src,get_dir(M,src))

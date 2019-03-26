@@ -7,11 +7,13 @@
 	status_flags = CANPARALYSE
 	heal_rate = 5
 	plasma_rate = 20
+	disarm_chance = 80
+	combat_flags = STUNROBOT|STUNMOB
 
 /mob/living/carbon/alien/humanoid/queen/movement_tally_multiplier()
 	. = ..()
 	. *= 5 // Queens are slow as fuck
-	
+
 /mob/living/carbon/alien/humanoid/queen/feels_pain()
 	return FALSE // Queens are slow enough as they are
 
@@ -78,7 +80,8 @@
 	if(lying)
 		if(resting)
 			icon_state = "queen_sleep"
-		else						icon_state = "queen_l"
+		else
+			icon_state = "queen_l"
 		for(var/image/I in overlays_lying)
 			overlays += I
 	else

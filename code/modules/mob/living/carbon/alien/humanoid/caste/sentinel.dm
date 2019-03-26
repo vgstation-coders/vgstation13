@@ -7,6 +7,8 @@
 	max_plasma = 250
 	icon_state = "aliens_s"
 	plasma_rate = 10
+	disarm_chance = 60
+	combat_flags = STUNROBOT|STUNMOB
 
 //As far as movement goes, Sentinels are average
 

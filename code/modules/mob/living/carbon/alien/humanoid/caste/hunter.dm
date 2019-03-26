@@ -7,6 +7,8 @@
 	max_plasma = 150
 	icon_state = "alienh_s"
 	plasma_rate = 5
+	disarm_chance = 80
+	combat_flags = STUNMOB
 
 /mob/living/carbon/alien/humanoid/hunter/movement_tally_multiplier()
 	return ..() * 0.9 // Hunters are fast.

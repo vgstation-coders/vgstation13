@@ -6,7 +6,8 @@
 	var/obj/item/weapon/l_store = null
 	var/caste = ""
 	update_icon = TRUE
-
+	var/combat_flags = 0
+	var/disarm_chance = 50
 	species_type = /mob/living/carbon/alien/humanoid
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
