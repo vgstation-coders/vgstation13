@@ -26,6 +26,12 @@
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
+	antag.store_memory("A couple of runes appear clearly in your mind:")
+	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
+	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
+	antag.store_memory("<B>Summon Tome:</B> SEE, BLOOD, HELL.")
+	antag.store_memory("<hr>")
+
 /datum/role/cultist/RemoveFromRole(var/datum/mind/M)
 	antag.current.remove_language(LANGUAGE_CULT)
 	for(var/spell/cult/spell_to_remove in antag.current.spell_list)
@@ -135,6 +141,8 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
+	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
+
 
 	spawn(1)
 		if (faction)

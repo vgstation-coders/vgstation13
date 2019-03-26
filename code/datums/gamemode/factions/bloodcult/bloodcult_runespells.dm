@@ -75,6 +75,13 @@
 	//checking whether we're in the proper Act
 	if (Act_restriction > veil_thickness)
 		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+		switch (veil_thickness)
+			if (CULT_PROLOGUE)
+				to_chat(activator, "<span class='danger'>Raise an Altar.</span>")
+			if (CULT_ACT_I)
+				to_chat(activator, "<span class='danger'>Perform more conversions.</span>")
+			if (CULT_ACT_II)
+				to_chat(activator, "<span class='danger'>Perform the Sacrifice.</span>")
 		return
 	//checking whether we're casting from a rune or a talisman.
 	if (istype (spell_holder,/obj/effect/rune))
@@ -287,10 +294,16 @@
 		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act."),
 		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge."),
 		)
-	else if (veil_thickness >= CULT_ACT_II)
+	else if (veil_thickness == CULT_ACT_II)
 		choices = list(
 		list("Altar", "radial_altar", "The nexus of a cult base. This is where the Sacrifice has to take place, but it has many other various uses."),
 		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act."),
+		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
+		)
+	else if (veil_thickness >= CULT_ACT_III)
+		choices = list(
+		list("Altar", "radial_altar", "The nexus of a cult base. Can be used to locate the Blood Stones and other cult structures, among other things."),
+		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs."),
 		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
 		)
 

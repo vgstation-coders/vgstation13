@@ -253,6 +253,8 @@ var/veil_thickness = CULT_PROLOGUE
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
+		for (var/obj/effect/rune/R in rune_list)
+			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
 		return
