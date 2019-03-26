@@ -70,7 +70,7 @@
 
 /obj/item/clothing/mask/necklace/crystal
 	name = "crystal necklace"
-	desc = "Your final momento of a lost friend. Use it to decide on the killer."
+	desc = "Your final memento of a lost friend. Use it to decide on the killer."
 	icon_state = "tooth-necklace"
 	var/mob/living/suspect = null
 

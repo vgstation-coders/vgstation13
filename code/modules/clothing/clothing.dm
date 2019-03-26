@@ -147,15 +147,15 @@
 
 //BS12: Species-restricted clothing check.
 /obj/item/clothing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
+	if(!.)
+		return //Default return value is 0 - don't check for species
+
 	switch(role_check(M))
 		if(FALSE)
 			return CANNOT_EQUIP
 		if(ALWAYSTRUE)
 			return CAN_EQUIP
-
-	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
-	if(!.)
-		return //Default return value is 0 - don't check for species
 
 	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
@@ -220,6 +220,8 @@
 				return ALWAYSTRUE
 			if(FALSE)
 				return FALSE
+			if(TRUE)
+				continue
 	return TRUE //All roles true? Return true.
 
 /obj/item/clothing/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)

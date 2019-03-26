@@ -1,5 +1,5 @@
 /datum/objective/investigate
-	explanation_text = "Bring peace to the spirits of the dead by identifying one dangerous killer. Set your crystal necklace to the identity of the one responsible."
+	explanation_text = "Bring peace to the spirits of the dead by identifying one dangerous killer."
 	name = "Investigate Killing"
 
 /datum/objective/investigate/IsFulfilled()
