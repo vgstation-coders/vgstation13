@@ -698,3 +698,9 @@ a {
 
 /obj/proc/check_uplink_validity()
 	return TRUE
+
+//Return true if thrown object misses
+/obj/PreImpact(atom/movable/A, speed)
+	if(density && !throwpass)
+		return FALSE
+	return TRUE
