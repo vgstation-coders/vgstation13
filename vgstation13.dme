@@ -315,6 +315,7 @@
 #include "code\datums\gamemode\factions\malf.dm"
 #include "code\datums\gamemode\factions\vampire_faction.dm"
 #include "code\datums\gamemode\factions\wizard.dm"
+#include "code\datums\gamemode\factions\xeno.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_buildings.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_cultify_exceptions.dm"

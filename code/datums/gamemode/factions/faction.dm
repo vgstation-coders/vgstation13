@@ -84,7 +84,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			return 0
+			return R //They're already in
 	if(M.GetRole(initial_role))
 		WARNING("Mind already had a role of [initial_role]!")
 		return 0
@@ -97,7 +97,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			return 0
+			return R //They're already in
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
 		return 0
@@ -234,6 +234,17 @@ var/list/factions_with_hud_icons = list()
 		return
 	emergency_shuttle.incall()
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
+
+/datum/faction/proc/make_leader(var/datum/role/R)
+	if(leader)
+		return 0
+	leader = R
+	return 1
+
+/datum/faction/proc/message_all_members(var/message)
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current)
+			to_chat(R.antag.current, message)
 
 /datum/faction/proc/check_win()
 	return

@@ -24,6 +24,7 @@
 #define CULT "generic cult"
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
+#define XENO "xenomorph"
 // Role IDs
 #define TRAITOR "traitor"
 #define ROGUE "rogue agent"//double agents

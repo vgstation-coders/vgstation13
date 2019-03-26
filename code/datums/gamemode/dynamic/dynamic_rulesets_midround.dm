@@ -495,6 +495,42 @@
 
 //////////////////////////////////////////////
 //                                          //
+//         XENOS       (MIDROUND)           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenos
+	name = "Xenomorph infestation"
+	role_category = /datum/role/xeno
+	my_fac = /datum/faction/xeno_hive
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 35
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	logo = "xeno-logo"
+
+	makeBody = FALSE
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenos/acceptable(var/population=0,var/threat=0)
+	required_candidates = rand(1, 2)+round(mode.living_players.len/10)
+	..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenos/finish_setup(var/mob/new_character, var/index)
+	var/list/vents = list()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
+		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
+			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
+				vents += temp_vent
+	var/obj/vent = pick(vents)
+	var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
+	new_xeno.key = new_character.key
+	new_xeno << sound('sound/voice/alienspawn.ogg')
+	..(new_xeno,index)
+
+//////////////////////////////////////////////
+//                                          //
 //               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////

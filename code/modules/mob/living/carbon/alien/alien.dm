@@ -34,6 +34,11 @@
 	var/heat_protection = 0.5
 	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
 
+/mob/living/carbon/alien/Login()
+	..()
+
+
+
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
 	updatePlasmaHUD()
@@ -89,8 +94,7 @@ In all, this is a lot like the monkey code. /N
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,"#00ff00")
-		var/obj/effect/decal/cleanable/blood/xeno/X = getFromPool(/obj/effect/decal/cleanable/blood/xeno, src.loc) //new /obj/effect/decal/cleanable/blood/xeno(src.loc)
-		X.New(src.loc)
+		getFromPool(/obj/effect/decal/cleanable/blood/xeno, src.loc)
 
 /mob/living/carbon/alien/updatehealth()
 	if(status_flags & GODMODE)

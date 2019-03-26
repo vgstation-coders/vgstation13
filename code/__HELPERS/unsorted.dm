@@ -1586,6 +1586,12 @@ Game Mode config tags:
 		return null
 	return locate(faction_type) in ticker.mode.factions
 
+/proc/find_or_make_faction(var/faction_type)
+	var/datum/faction/F = find_active_faction_by_type(faction_type)
+	if(!F)
+		F = ticker.mode.CreateFaction(faction_type, 0, 1)
+	return F
+
 /proc/find_active_faction_by_member(var/datum/role/R, var/datum/mind/M)
 	if(!R)
 		return null

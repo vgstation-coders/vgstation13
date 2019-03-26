@@ -73,8 +73,6 @@ var/list/event_last_fired = list()
 	if(active_with_role["Security"] > 1)
 		if(!sent_spiders_to_station)
 			possibleEvents[/datum/event/spider_infestation] = 15
-		if(aliens_allowed && !sent_aliens_to_station)
-			possibleEvents[/datum/event/alien_infestation] = 10
 		possibleEvents[/datum/event/hostile_infestation] = 25
 	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
 		var/time_passed = world.time - event_last_fired[event_type]

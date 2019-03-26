@@ -11,27 +11,25 @@
 /mob/living/carbon/alien/humanoid/queen/movement_tally_multiplier()
 	. = ..()
 	. *= 5 // Queens are slow as fuck
-	
+
 /mob/living/carbon/alien/humanoid/queen/feels_pain()
 	return FALSE // Queens are slow enough as they are
 
 /mob/living/carbon/alien/humanoid/queen/New()
 	create_reagents(100)
-
-	//there should only be one queen
-	for(var/mob/living/carbon/alien/humanoid/queen/Q in living_mob_list)
-		if(Q == src)
-			continue
-		if(Q.stat == DEAD)
-			continue
-		if(Q.client)
-			name = "alien princess ([rand(1, 999)])"	//if this is too cutesy feel free to change it/remove it.
-			break
-
 	real_name = src.name
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
+
+/mob/living/carbon/alien/humanoid/queen/Login()
+	..()
+	//there should only be one queen if these are active
+	if(mind)
+		var/datum/faction/xenorole = find_or_make_faction(/datum/faction/xeno_hive)
+		var/datum/role/R = xenorole.HandleNewMind(mind)
+		if(!xenorole.make_leader(R))
+			name = "alien princess [rand(1,999)]"
 
 /mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
 	..()
@@ -42,29 +40,25 @@
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 	verbs -= /mob/living/carbon/alien/verb/ventcrawl
 
-/mob/living/carbon/alien/humanoid/queen
-
-	handle_regular_hud_updates()
-
-		..() //-Yvarov
-
-		if(src.healths)
-			if(src.stat != 2)
-				switch(health)
-					if(300 to INFINITY)
-						src.healths.icon_state = "health0"
-					if(200 to 300)
-						src.healths.icon_state = "health1"
-					if(125 to 200)
-						src.healths.icon_state = "health2"
-					if(75 to 125)
-						src.healths.icon_state = "health3"
-					if(0 to 75)
-						src.healths.icon_state = "health4"
-					else
-						src.healths.icon_state = "health5"
-			else
-				src.healths.icon_state = "health6"
+/mob/living/carbon/alien/humanoid/queen/handle_regular_hud_updates()
+	..()
+	if(src.healths)
+		if(src.stat != 2)
+			switch(health)
+				if(300 to INFINITY)
+					src.healths.icon_state = "health0"
+				if(200 to 300)
+					src.healths.icon_state = "health1"
+				if(125 to 200)
+					src.healths.icon_state = "health2"
+				if(75 to 125)
+					src.healths.icon_state = "health3"
+				if(0 to 75)
+					src.healths.icon_state = "health4"
+				else
+					src.healths.icon_state = "health5"
+		else
+			src.healths.icon_state = "health6"
 
 /mob/living/carbon/alien/humanoid/queen/large
 	icon = 'icons/mob/giantmobs.dmi'
