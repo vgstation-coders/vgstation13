@@ -36,7 +36,9 @@
 
 /mob/living/carbon/alien/Login()
 	..()
-
+	if(mind)
+		var/datum/faction/xenorole = find_or_make_faction(/datum/faction/xeno_hive)
+		xenorole.HandleNewMind(mind)
 
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
