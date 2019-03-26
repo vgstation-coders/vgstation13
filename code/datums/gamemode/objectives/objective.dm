@@ -20,6 +20,9 @@
 /datum/objective/proc/PostAppend()
 	return TRUE
 
+//1 is station, 2 is centcom
+/datum/objective/proc/ShuttleDocked(state)
+
 /datum/objective/proc/IsFulfilled()
 	if(force_success)
 		return TRUE
