@@ -8,6 +8,8 @@
 	if(..())
 		return TRUE //Covers dead, cyborgified, MMI'd, on away mission, no target, manual toggle
 	var/turf/T = get_turf(target.current)
+	if(!T)
+		return TRUE
 	if(T.z != STATION_Z)
 		if(istype(T.loc, /area/shuttle/escape/centcom))
 			return FALSE
