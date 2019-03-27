@@ -74,13 +74,13 @@ var/datum/blackbox/blackbox = new
 	log_startup_progress("Storing Black Box data...")
 	round_end_data_gathering() //round_end time logging and some other data processing
 	establish_db_connection()
-	if(!dbcon.IsConnected())
+	if(!SSdatabase.IsConnected())
 		return
 	var/round_id
 
 	var/nqueries = 0
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT MAX(round_id) AS round_id FROM erro_feedback")
+	var/datum/DBQuery/query = SSdatabase.NewQuery("SELECT MAX(round_id) AS round_id FROM erro_feedback")
 	query.Execute()
 	nqueries++
 	while(query.NextRow())
@@ -93,7 +93,7 @@ var/datum/blackbox/blackbox = new
 	/*
 	for(var/datum/feedback_variable/FV in feedback)
 		var/sql = "INSERT INTO erro_feedback VALUES (null, Now(), [round_id], \"[FV.get_variable()]\", [FV.get_value()], \"[FV.get_details()]\")"
-		var/DBQuery/query_insert = dbcon.NewQuery(sql)
+		var/datum/DBQuery/query_insert = SSdatabase.NewQuery(sql)
 		query_insert.Execute()
 		nqueries++
 		sleep(1) // Let other shit do things
@@ -106,7 +106,7 @@ var/datum/blackbox/blackbox = new
 			sql += ","
 		ninserts++
 		sql += "(null, Now(), [round_id], \"[FV.get_variable()]\", [FV.get_value()], \"[FV.get_details()]\")"
-	var/DBQuery/query_insert = dbcon.NewQuery(sql)
+	var/datum/DBQuery/query_insert = SSdatabase.NewQuery(sql)
 	query_insert.Execute()
 	nqueries++
 

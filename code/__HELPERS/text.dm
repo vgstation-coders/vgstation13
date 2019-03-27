@@ -32,7 +32,7 @@ forLineInText(text)
 	//var/sanitized_text = replacetext(t, "'", "\\'")
 	//sanitized_text = replacetext(sanitized_text, "\"", "\\\"")
 
-	var/sqltext = dbcon.Quote(t)
+	var/sqltext = SSdatabase.Quote(t)
 	//testing("sanitizeSQL(): BEFORE copytext(): [sqltext]")
 	sqltext = copytext(sqltext, 2, length(sqltext))//Quote() adds quotes around input, we already do that
 	//testing("sanitizeSQL(): AFTER copytext(): [sqltext]")

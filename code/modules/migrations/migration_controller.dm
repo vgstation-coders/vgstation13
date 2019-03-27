@@ -97,7 +97,7 @@
 	return TRUE
 
 /datum/migration_controller/proc/query(var/sql)
-	var/DBQuery/query = execute(sql)
+	var/datum/DBQuery/query = execute(sql)
 
 	var/list/rows=list()
 	while(query.NextRow())

@@ -3,7 +3,7 @@
 	set category = "Special Verbs"
 	if(!check_rights(R_POLLING))
 		return
-	if(!dbcon.IsConnected())
+	if(!SSdatabase.IsConnected())
 		src << "<span class='danger'>Failed to establish database connection.</span>"
 		return
 	var/polltype = input("Choose poll type.","Poll Type") in list("Single Option","Text Reply","Rating","Multiple Choice")
@@ -23,7 +23,7 @@
 	if(!endtime)
 		return
 	endtime = sanitizeSQL(endtime)
-	var/DBQuery/query_validate_time = dbcon.NewQuery("SELECT STR_TO_DATE('[endtime]','%Y-%c-%d %T')")
+	var/datum/DBQuery/query_validate_time = SSdatabase.NewQuery("SELECT STR_TO_DATE('[endtime]','%Y-%c-%d %T')")
 	if(!query_validate_time.Execute())
 		var/err = query_validate_time.ErrorMsg()
 		log_game("SQL ERROR validating endtime. Error : \[[err]\]\n")
@@ -33,7 +33,7 @@
 		if(!endtime)
 			to_chat(src, "Datetime entered is invalid.")
 			return
-	var/DBQuery/query_time_later = dbcon.NewQuery("SELECT DATE('[endtime]') < NOW()")
+	var/datum/DBQuery/query_time_later = SSdatabase.NewQuery("SELECT DATE('[endtime]') < NOW()")
 	if(!query_time_later.Execute())
 		var/err = query_time_later.ErrorMsg()
 		log_game("SQL ERROR comparing endtime to NOW(). Error : \[[err]\]\n")
@@ -56,13 +56,13 @@
 	if(!question)
 		return
 	question = sanitizeSQL(question)
-	var/DBQuery/query_polladd_question = dbcon.NewQuery("INSERT INTO erro_poll_question (polltype, starttime, endtime, question, adminonly, multiplechoiceoptions, createdby_ckey, createdby_ip) VALUES ('[polltype]', '[starttime]', '[endtime]', '[question]', '[adminonly]', '[choice_amount]', '[sql_ckey]', '[address]')")
+	var/datum/DBQuery/query_polladd_question = SSdatabase.NewQuery("INSERT INTO erro_poll_question (polltype, starttime, endtime, question, adminonly, multiplechoiceoptions, createdby_ckey, createdby_ip) VALUES ('[polltype]', '[starttime]', '[endtime]', '[question]', '[adminonly]', '[choice_amount]', '[sql_ckey]', '[address]')")
 	if(!query_polladd_question.Execute())
 		var/err = query_polladd_question.ErrorMsg()
 		log_game("SQL ERROR adding new poll question to table. Error : \[[err]\]\n")
 		return
 	var/pollid = 0
-	var/DBQuery/query_get_id = dbcon.NewQuery("SELECT id FROM erro_poll_question WHERE question = '[question]' AND starttime = '[starttime]' AND endtime = '[endtime]' AND createdby_ckey = '[sql_ckey]' AND createdby_ip = '[address]'")
+	var/datum/DBQuery/query_get_id = SSdatabase.NewQuery("SELECT id FROM erro_poll_question WHERE question = '[question]' AND starttime = '[starttime]' AND endtime = '[endtime]' AND createdby_ckey = '[sql_ckey]' AND createdby_ip = '[address]'")
 	if(!query_get_id.Execute())
 		var/err = query_get_id.ErrorMsg()
 		log_game("SQL ERROR obtaining id from poll_question table. Error : \[[err]\]\n")
@@ -113,7 +113,7 @@
 			descmax = input("Optional: Set description for maximum rating","Maximum rating description") as message
 			if(descmax)
 				descmax = sanitizeSQL(descmax)
-		var/DBQuery/query_polladd_option = dbcon.NewQuery("INSERT INTO erro_poll_option (pollid, text, percentagecalc, minval, maxval, descmin, descmid, descmax) VALUES ('[pollid]', '[option]', '[percentagecalc]', '[minval]', '[maxval]', '[descmin]', '[descmid]', '[descmax]')")
+		var/datum/DBQuery/query_polladd_option = SSdatabase.NewQuery("INSERT INTO erro_poll_option (pollid, text, percentagecalc, minval, maxval, descmin, descmid, descmax) VALUES ('[pollid]', '[option]', '[percentagecalc]', '[minval]', '[maxval]', '[descmin]', '[descmid]', '[descmax]')")
 		if(!query_polladd_option.Execute())
 			var/err = query_polladd_option.ErrorMsg()
 			log_game("SQL ERROR adding new poll option to table. Error : \[[err]\]\n")

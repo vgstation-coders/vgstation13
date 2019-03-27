@@ -48,7 +48,7 @@
 		//sql += " [query.toSQL()]"
 	// Pagination
 //	to_chat(world, sql)
-	var/DBQuery/_query = dbcon_old.NewQuery(sql)
+	var/datum/DBQuery/_query = SSdatabase.NewQuery(sql)
 	_query.Execute()
 	if(_query.ErrorMsg())
 		world.log << _query.ErrorMsg()
@@ -71,7 +71,7 @@
 	//if(query)
 		//sql += query.toSQL()
 
-	var/DBQuery/_query = dbcon_old.NewQuery(sql)
+	var/datum/DBQuery/_query = SSdatabase.NewQuery(sql)
 	_query.Execute()
 	while(_query.NextRow())
 		return text2num(_query.item[1])

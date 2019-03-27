@@ -1373,6 +1373,10 @@ var/proccalls = 1
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
 
+#define log_sql(text) world.log << "\[[time_stamp()]]SQL: [text]"
+#define log_query_debug(text) log_sql("DEBUG: [text]")
+
+
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
 
