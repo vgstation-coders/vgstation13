@@ -5,8 +5,8 @@ var/list/cyborg_list = list()
 	real_name = "Cyborg"
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "robot"
-	maxHealth = 300
-	health = 300
+	maxHealth = 200
+	health = 200
 	flashed = FALSE
 
 	var/sight_mode = 0
