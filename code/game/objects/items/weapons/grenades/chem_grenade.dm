@@ -10,7 +10,7 @@
 	var/path = 0
 	var/obj/item/device/assembly_holder/detonator = null
 	var/list/beakers = new/list()
-	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle, /obj/item/weapon/reagent_containers/food/drinks)
+	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers)
 	var/affected_area = 3
 	var/inserted_cores = 0
 	var/obj/item/slime_extract/firstExtract = null	//for large and Ex grenades
@@ -106,7 +106,7 @@
 				var/temp_reagents = new/list()
 				var/reagents_text = ""
 				for(var/obj/item/weapon/reagent_containers/G in beakers)
-					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker) || istype(G, /obj/item/weapon/reagent_containers/glass/bottle) || istype(G, /obj/item/weapon/reagent_containers/food/drinks))
+					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker))
 						temp_reagents += G.reagents.amount_cache
 						if(reagents_text)
 							reagents_text += " and ([english_list(temp_reagents)])"
@@ -304,7 +304,7 @@
 	name = "Large Chem Grenade"
 	desc = "An oversized grenade that affects a larger area."
 	icon_state = "large_grenade"
-	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract, /obj/item/weapon/reagent_containers/food/drinks)
+	allowed_containers = list(/obj/item/weapon/reagent_containers)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
@@ -312,7 +312,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	name = "EX Chem Grenade"
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
-	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract, /obj/item/weapon/reagent_containers/food/drinks)
+	allowed_containers = list(/obj/item/weapon/reagent_containers)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 
