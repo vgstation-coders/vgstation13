@@ -1,72 +1,17 @@
 /obj/item/clothing/head/helmet/tactical
-	actions_types = list(/datum/action/item_action/toggle_light)
-	light_power = 1.5
-	var/obj/item/device/flashlight/flashlight = null
 	var/preattached = FALSE
 	species_fit = list()
 
 /obj/item/clothing/head/helmet/tactical/New()
 	..()
 	if(preattached)
-		flashlight = new /obj/item/device/flashlight/tactical(src)
-	update_brightness()
-
-/obj/item/clothing/head/helmet/tactical/examine(mob/user)
-	..()
-	if(src.flashlight)
-		to_chat(user, "The helmet is mounted with a flashlight attachment, it is [flashlight.on ? "":"un"]lit.")
-
-/obj/item/clothing/head/helmet/tactical/attackby(var/obj/item/I, mob/user, params)
-	if(!src.flashlight && (I.type == /obj/item/device/flashlight || istype(I,/obj/item/device/flashlight/tactical))) //have to directly check for type because flashlights are the base type and not a child
-		user.drop_item(I, src)
-		flashlight = I
-
-		update_brightness()
-		user.update_action_buttons_icon()
-		user.update_inv_head()
-		return
-	if(isscrewdriver(I) && src.flashlight)
-		flashlight.forceMove(get_turf(src))
-		flashlight.update_brightness(user, playsound = FALSE)
-		flashlight = null
-
-		update_brightness()
-		user.update_action_buttons_icon()
-		user.update_inv_head()
-		return
-	return ..()
-
-obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
-	if(src.flashlight)
-		flashlight.on = !flashlight.on
-		if(get_turf(src))
-			if(flashlight.on)
-				playsound(src, flashlight.sound_on, 50, 1)
-			else
-				playsound(src, flashlight.sound_off, 50, 1)
-	update_brightness()
-	user.update_inv_head()
-
-/obj/item/clothing/head/helmet/tactical/proc/update_brightness()
-	if(flashlight && flashlight.on)
-		set_light(flashlight.brightness_on)
-	else
-		set_light(0)
-	update_icon()
-
-/obj/item/clothing/head/helmet/tactical/update_icon()
-	if(flashlight)
-		icon_state = "[initial(icon_state)]_[flashlight.on]"
-		actions_types = list(/datum/action/item_action/toggle_light)
-	else
-		icon_state = initial(icon_state)
-		actions_types = null
+		attach_accessory(new/obj/item/clothing/accessory/taclight(src))
 
 /obj/item/clothing/head/helmet/tactical/sec
 	name = "tactical helmet"
 	desc = "Standard Security gear. Protects the head from impacts. Can be attached with a flashlight."
 	icon_state = "helmet_sec"
-	//we don't actually have anything special here because our parent, /obj/item/clothing/head/helmet, is already the default sec helmet...
+
 /obj/item/clothing/head/helmet/tactical/sec/preattached
 	preattached = 1
 
