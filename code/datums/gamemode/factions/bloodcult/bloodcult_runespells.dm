@@ -1243,8 +1243,27 @@ var/list/blind_victims = list()
 	var/hallucination_radius=25
 
 /datum/rune_spell/blind/cast(var/duration = rune_duration)
+	new /obj/effect/cult_ritual/confusion(spell_holder,duration)
+	qdel(spell_holder)
+
+/datum/rune_spell/blind/cast_talisman()//talismans have the same range, but the effect lasts shorter.
+	cast(talisman_duration)
+
+/obj/effect/cult_ritual/confusion
+	anchored = 1
+	icon = 'icons/effects/64x64.dmi'
+	icon_state = ""
+	pixel_x = -WORLD_ICON_SIZE/2
+	pixel_y = -WORLD_ICON_SIZE/2
+	layer = NARSIE_GLOW
+	plane = LIGHTING_PLANE
+	mouse_opacity = 0
+	var/duration = 5
+
+/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/mob/specific_victim=null)
+	..()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
-	var/turf/T = get_turf(spell_holder)
+	var/turf/T = get_turf(src)
 	var/list/hallucinated_turfs = list()
 	playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
 	for(var/turf/U in range(T,hallucination_radius))
@@ -1266,38 +1285,40 @@ var/list/blind_victims = list()
 
 	//now let's round up our victims: any non-cultist with an unobstructed line of sight to the rune/talisman will be affected
 	var/list/victims = list()
-	for(var/mob/living/M in viewers(T))
-		if (iscarbon(M))//mite do something with silicons later
-			var/mob/living/carbon/C = M
-			if (iscultist(C))
-				continue
-			to_chat(C, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
-			shadow(C,T)//shadow trail moving from the spell_holder to the victim
-			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
-			if (!(C in blind_victims))
-				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
-				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
-				C.update_fullscreen_alpha("blindblack", 255, 5)
-			else
-				C.update_fullscreen_alpha("blindblack", 255, 5)
-			C.playsound_local(C, 'sound/effects/confusion.ogg', 50, 0, 0, 0, 0)
-			victims.Add(C)
-		if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
-			shadow(M,T)
-			M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
-			M.update_fullscreen_alpha("blindblack", 255, 5)
-			spawn(5)
-				M.clear_fullscreen("blindblack", animate = 0)
-				M.flash_eyes(visual = 1)
-
-	for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
-		shadow(C,T)
-		var/col = C.color
-		animate(C, color = col, time = 4)
-		animate(color = "black", time = 5)
-		animate(color = col, time = 5)
-		C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
-		C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
+	if (specific_victim)
+		victims += specific_victim
+	else
+		for(var/mob/living/M in viewers(T))
+			if (iscarbon(M))//mite do something with silicons later
+				var/mob/living/carbon/C = M
+				if (iscultist(C))
+					continue
+				to_chat(C, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
+				shadow(C,T)//shadow trail moving from the spell_holder to the victim
+				anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				if (!(C in blind_victims))
+					C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+					C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
+					C.update_fullscreen_alpha("blindblack", 255, 5)
+				else
+					C.update_fullscreen_alpha("blindblack", 255, 5)
+				C.playsound_local(C, 'sound/effects/confusion.ogg', 50, 0, 0, 0, 0)
+				victims.Add(C)
+			if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
+				shadow(M,T)
+				M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
+				M.update_fullscreen_alpha("blindblack", 255, 5)
+				spawn(5)
+					M.clear_fullscreen("blindblack", animate = 0)
+					M.flash_eyes(visual = 1)
+		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+			shadow(C,T)
+			var/col = C.color
+			animate(C, color = col, time = 4)
+			animate(color = "black", time = 5)
+			animate(color = col, time = 5)
+			C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
+			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
 	spawn(10)
 		for(var/mob/living/carbon/C in victims)
@@ -1338,11 +1359,7 @@ var/list/blind_victims = list()
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
-
-	qdel(spell_holder)
-
-/datum/rune_spell/blind/cast_talisman()//talismans have the same range, but the effect lasts shorter.
-	cast(talisman_duration)
+		qdel(src)
 
 /proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")//based on the holopad rays I made a few months ago
 	var/disty = C.y - T.y

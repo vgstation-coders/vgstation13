@@ -1219,7 +1219,7 @@ var/list/arcane_tomes = list()
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
-	name = "haemato-chalice"
+	name = "tempting goblet"
 	desc = "An obsidian cup in the shape of a skull. Used by the followers of Nar-Sie to collect the blood of their sacrifices."
 	icon_state = "cult"
 	item_state = "cult"
@@ -1232,7 +1232,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
 	if (iscultist(user))
-		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types.</span>")
+		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
@@ -1242,6 +1242,15 @@ var/list/arcane_tomes = list()
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
+	if(reagents.total_volume)
+		if (ishuman(hit_atom))
+			var/mob/living/carbon/human/H = hit_atom
+			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH))
+				reagents.reaction(M, INGEST)
+				reagents.trans_to(M, gulp_size)
+	transfer(get_turf(hit_atom), null, splashable_units = -1)
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 
