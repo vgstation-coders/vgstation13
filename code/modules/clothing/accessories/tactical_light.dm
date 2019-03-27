@@ -2,6 +2,7 @@
 	name = "tactical light"
 	desc = "This is attached to something."
 	icon_state = "taclight"
+	accessory_exclusion = LIGHT
 	inv_overlay
 	var/obj/item/device/flashlight/tactical/source_light
 
