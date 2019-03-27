@@ -1233,6 +1233,8 @@ var/list/arcane_tomes = list()
 	..()
 	if (iscultist(user))
 		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
+	else if (get_blood(reagents))
+		to_chat(user, "<span class='sinister'>Its contents look delicious though. Surely a sip won't hurt...</span>")
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
@@ -1247,9 +1249,10 @@ var/list/arcane_tomes = list()
 	if(reagents.total_volume)
 		if (ishuman(hit_atom))
 			var/mob/living/carbon/human/H = hit_atom
-			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH))
-				reagents.reaction(M, INGEST)
-				reagents.trans_to(M, gulp_size)
+			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH)))
+				H.visible_message("<span class='warning'>Some of \the [src]'s content spills into \the [H]'s mouth.</span>","<span class='danger'>Some of \the [src]'s content spills into your mouth.</span>")
+				reagents.reaction(H, INGEST)
+				reagents.trans_to(H, gulp_size)
 	transfer(get_turf(hit_atom), null, splashable_units = -1)
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////

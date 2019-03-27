@@ -315,7 +315,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	switch (toxic)
 		if (2)
-			new /obj/effect/cult_ritual/confusion(src,100,src)
+			new /obj/effect/cult_ritual/confusion(src,100,25,src)
 			reagents.add_reagent(TOXIN,amount * 0.5)
 			reagents.add_reagent(INCENSE_MOONFLOWERS,amount * 0.5)
 			hallucination = max(30,hallucination)
