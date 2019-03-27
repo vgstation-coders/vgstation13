@@ -23,7 +23,9 @@
 		M.update_action_buttons_icon()
 		M.regenerate_icons()
 		update_brightness(attached_to)
-		var/datum/action/makelight = new /datum/action/item_action/toggle_light(attached_to)
+		var/datum/action/item_action/toggle_taclight/makelight = new /datum/action/item_action/toggle_taclight(attached_to)
+		makelight.ownerlight = src
+		attached_to.actions_types += list(/datum/action/item_action/toggle_taclight)
 		if(ismob(attached_to.loc))
 			var/mob/user = attached_to.loc
 			makelight.Grant(user)
@@ -50,30 +52,32 @@
 	if(attached_to)
 		update_brightness(attached_to)
 			
-/obj/item/clothing/accessory/taclight/update_icon()
-	/*if (source_light)
-		icon_state = "[initial(icon_state)]_[flashlight.on]"*/
-	/*if(attached_to)
-		var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
-		attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
-		if(ismob(attached_to.loc))
-			var/mob/M = attached_to.loc
-			M.regenerate_icons()*/
-	..()	
-	
+/datum/action/item_action/toggle_taclight
+	name = "Toggle Tactical Light"
+	var/obj/item/clothing/accessory/taclight/ownerlight
+			
+/datum/action/item_action/toggle_taclight/Trigger()
+	/*//Find the light
+	//call update_brightness from the light with the attached_to as argument
+	to_chat(world, "<span class='boldannounce'>owner: [owner] src: [src] target: [target] </span>")
+	var/obj/item/clothing/C = target
+	var/list/A = C.accessories
+	var/obj/item/clothing/accessory/taclight/L = locate((/obj/item/clothing/accessory/taclight) in A)*/
+	to_chat(world, "<span class='boldannounce'>ownerlight: [ownerlight] attached_to: [ownerlight.attached_to]</span>")
+	ownerlight.attack_self()
+	ownerlight.update_brightness(ownerlight.attached_to)
 	
 /obj/item/clothing/accessory/taclight/on_removed(mob/user)
 	if(!attached_to)
 		return
-	//attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
 	attached_to.overlays -= inv_overlay
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
 		for(var/datum/action/A in attached_to.actions)
-			if(istype(A, /datum/action/item_action/toggle_light))
+			if(istype(A, /datum/action/item_action/toggle_taclight))
 				qdel(A)
-				attached_to.actions_types -= list(/datum/action/item_action/toggle_light)
+				attached_to.actions_types -= list(/datum/action/item_action/toggle_taclight)
 	if(source_light)
 		source_light.forceMove(get_turf(src))
 		if(user)
@@ -86,8 +90,11 @@
 	qdel(src)
 
 /obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
+	to_chat(world, "<span class='boldannounce'>calling update brightness on C: [C]</span>")
 	if(src.source_light && src.source_light.on)
 		C.set_light(src.source_light.brightness_on)
+		to_chat(world, "<span class='boldannounce'>1:[src.source_light] 2:[src.source_light.on]</span>")
 	else
 		C.set_light(0)
+		to_chat(world, "<span class='boldannounce'>1:[src.source_light] 2:[src.source_light.on]</span>")
 	update_icon()
