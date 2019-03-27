@@ -41,7 +41,6 @@
 			
 			
 /obj/item/clothing/accessory/taclight/attack_self(mob/user)
-	to_chat(world, "<span class='boldannounce'>Calling attack_self on [src]</span>")
 	if(source_light)
 		source_light.on = !source_light.on
 		if(get_turf(src))
@@ -57,13 +56,6 @@
 	var/obj/item/clothing/accessory/taclight/ownerlight
 			
 /datum/action/item_action/toggle_taclight/Trigger()
-	/*//Find the light
-	//call update_brightness from the light with the attached_to as argument
-	to_chat(world, "<span class='boldannounce'>owner: [owner] src: [src] target: [target] </span>")
-	var/obj/item/clothing/C = target
-	var/list/A = C.accessories
-	var/obj/item/clothing/accessory/taclight/L = locate((/obj/item/clothing/accessory/taclight) in A)*/
-	to_chat(world, "<span class='boldannounce'>ownerlight: [ownerlight] attached_to: [ownerlight.attached_to]</span>")
 	ownerlight.attack_self()
 	ownerlight.update_brightness(ownerlight.attached_to)
 	
@@ -93,8 +85,6 @@
 	to_chat(world, "<span class='boldannounce'>calling update brightness on C: [C]</span>")
 	if(src.source_light && src.source_light.on)
 		C.set_light(src.source_light.brightness_on)
-		to_chat(world, "<span class='boldannounce'>1:[src.source_light] 2:[src.source_light.on]</span>")
 	else
 		C.set_light(0)
-		to_chat(world, "<span class='boldannounce'>1:[src.source_light] 2:[src.source_light.on]</span>")
 	update_icon()
