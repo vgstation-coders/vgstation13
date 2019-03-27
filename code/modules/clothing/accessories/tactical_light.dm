@@ -10,10 +10,7 @@
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))
 
 /obj/item/clothing/accessory/taclight/on_attached(obj/item/clothing/C)
-	if(!istype(C))
-		return
-	attached_to = C
-	attached_to.actions_types += list(/datum/action/item_action/toggle_light)
+	..()
 	if(istype(attached_to, /obj/item/clothing/head))
 		icon_state = "[initial(icon_state)]_helmet"
 	else
