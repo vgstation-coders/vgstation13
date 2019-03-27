@@ -178,8 +178,7 @@ var/global/datum/money_account/trader_account
 		for(var/department in station_departments)
 			create_department_account(department, recieves_wage = 1)
 	if(!vendor_account)
-		create_department_account("Vendor")
-		vendor_account = department_accounts["Vendor"]
+		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"

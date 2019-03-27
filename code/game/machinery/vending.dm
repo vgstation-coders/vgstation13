@@ -93,7 +93,7 @@ var/global/num_vending_terminals = 1
 	var/amount = 0
 	var/price = 0
 	var/display_color = "blue"
-	var/category = CAT_NORMAL //available by default, contraband, or premium (requires a coin)
+	var/category = CAT_NORMAL //available by default, contraband, premium (requires a coin), or labor (GBP)
 	var/subcategory = null
 	var/mini_icon = null
 
@@ -157,7 +157,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/link_to_account()
 	reconnect_database()
-	linked_account = department_accounts["Cargo"]
+	linked_account = vendor_account
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -182,10 +182,14 @@ var/global/num_vending_terminals = 1
 			newpack.stock = products
 			newpack.secretstock = contraband
 			newpack.preciousstock = premium
-			newpack.targetvendomat = src.type
+			newpack.laborstock = labor_rewards
+
 			newpack.product_records = product_records
 			newpack.hidden_records = hidden_records
 			newpack.coin_records = coin_records
+			newpack.labor_records = labor_records
+
+			newpack.targetvendomat = src.type
 
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
@@ -220,6 +224,11 @@ var/global/num_vending_terminals = 1
 		if(!anchored)
 			to_chat(user, "<span class='warning'>You need to anchor the vending machine before you can refill it.</span>")
 			return
+		if(P.targetvendomat != type)
+			var/list/any_records = get_all_records()
+			if(any_records.len)
+				to_chat(user, "<span class='warning'>That vending machine is neither empty nor a matching type.</span>")
+				return
 		if(!pack)
 			if(is_being_filled)
 				to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
@@ -243,9 +252,11 @@ var/global/num_vending_terminals = 1
 					newmachine.products = P.stock
 					newmachine.contraband = P.secretstock
 					newmachine.premium = P.preciousstock
+					newmachine.labor_rewards = P.laborstock
 					newmachine.product_records = P.product_records
 					newmachine.hidden_records = P.hidden_records
 					newmachine.coin_records = P.coin_records
+					newmachine.labor_records = P.labor_records
 				qdel(P)
 				if(user.machine==src)
 					newmachine.attack_hand(user)
@@ -354,20 +365,25 @@ var/global/num_vending_terminals = 1
 				voucher_records += R
 			if(CAT_LABOR)
 				labor_records 	+= R
-		product_records.Add(R)
+			else
+				product_records.Add(R)
 
 		var/obj/item/initializer = typepath
 		if(!is_custom_machine)
 			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
-/obj/machinery/vending/proc/get_item_by_type(var/this_type)
+/obj/machinery/vending/proc/get_all_records()
 	var/list/datum_products = list()
 	datum_products |= hidden_records
 	datum_products |= coin_records
 	datum_products |= voucher_records
 	datum_products |= product_records
 	datum_products |= labor_records
+	return datum_products
+
+/obj/machinery/vending/proc/get_item_by_type(var/this_type)
+	var/list/datum_products = get_all_records()
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
 			return product
@@ -573,6 +589,9 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
 	if(!currently_vending)
 		return
+	if(currently_vending.category == CAT_LABOR)
+		to_chat(user,"<span class='warning'>That product must be paid for in GBP!</span>")
+		return
 	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>", "You hear a whirr.")
 	credits_held += cashmoney.get_total()
 	qdel(cashmoney)
@@ -609,6 +628,25 @@ var/global/num_vending_terminals = 1
 				playsound(src, 'sound/machines/alert.ogg', 50, 1)
 				visible_message("[bicon(src)] \The [src] buzzes.")
 
+/obj/machinery/vending/proc/pay_with_gbp(var/obj/item/weapon/card/C, mob/user)
+	if(!currently_vending)
+		return
+	if (istype(C, /obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/I = C
+		if(I.gbp>=currently_vending.price)
+			playsound(src, 'sound/machines/chime.ogg', 50, 1)
+			visible_message("[bicon(src)] \The [src] chimes.")
+			I.gbp -= currently_vending.price
+			vend(src.currently_vending, user)
+			currently_vending = null
+			updateUsrDialog()
+		else
+			playsound(src, 'sound/machines/alert.ogg', 50, 1)
+			visible_message("[bicon(src)] \The [src] buzzes.")
+			currently_vending = null
+			to_chat(user,"<span class='warning'>The scanned card did not have enough GBP!</span>")
+			updateUsrDialog()
+
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -616,12 +654,15 @@ var/global/num_vending_terminals = 1
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 
-/obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
+/obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P,var/labor = FALSE)
 	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
 	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
 		<b>[P.amount]</b> </font>"}
 	if(P.price)
-		dat += " <b>($[P.price])</b>"
+		if(!labor)
+			dat += " <b>($[P.price])</b>"
+		else
+			dat += " <b>([P.price]GBP)</b>"
 	if (P.amount > 0)
 		var/idx=GetProductIndex(P)
 		dat += " <a href='byond://?src=\ref[src];vend=[idx];cat=[P.category]'>(Vend)</A>"
@@ -645,6 +686,8 @@ var/global/num_vending_terminals = 1
 			plist=hidden_records
 		if(CAT_COIN)
 			plist=coin_records
+		if(CAT_LABOR)
+			plist=labor_records
 		else
 			warning("UNKNOWN CATEGORY [P.category] IN TYPE [P.product_path] INSIDE [type]!")
 	return plist.Find(P)
@@ -657,6 +700,8 @@ var/global/num_vending_terminals = 1
 			return hidden_records[pid]
 		if(CAT_COIN)
 			return coin_records[pid]
+		if(CAT_LABOR)
+			return labor_records[pid]
 		else
 			warning("UNKNOWN PRODUCT: PID: [pid], CAT: [category] INSIDE [type]!")
 			return null
@@ -670,8 +715,7 @@ var/global/num_vending_terminals = 1
 	src.visible_message("<span class='warning'>[src] goes off!</span>")
 
 	spawn(ticks)
-
-	power_change()
+		power_change()
 
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))
@@ -683,24 +727,24 @@ var/global/num_vending_terminals = 1
 		src.icon_state = "[initial(icon_state)]"
 
 /obj/machinery/vending/proc/damaged(var/coef=1)
-	src.health -= 4*coef
-	if(src.health <= 0)
+	health -= 4*coef
+	if(health <= 0)
 		stat |= BROKEN
-		src.update_vicon()
+		update_vicon()
 		return
-	if(prob(2*coef)) //Jackpot!
+	if(prob(2*coef) && stat)
 		malfunction()
-	if(prob(2*coef))
-		src.TurnOff(600) //A whole minute
-	/*if(prob(1))
-		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
-		user.audible_scream()
-		shake_camera(user, 2, 1)*/
+	if(prob(10*coef))
+		TurnOff(1 MINUTES)
 
 /obj/machinery/vending/kick_act(mob/living/carbon/human/user)
 	..()
 
 	damaged()
+	if(prob(1))
+		to_chat(user, "<span class='warning'>You injure your leg on \the [src]!</span>")
+		user.audible_scream()
+		shake_camera(user, 2, 1)
 
 /obj/machinery/vending/attack_construct(var/mob/user)
 	if (!Adjacent(user))
@@ -760,7 +804,7 @@ var/global/num_vending_terminals = 1
 	if (premium.len > 0)
 		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
 
-	if (src.product_records.len == 0)
+	if (!product_records.len && !labor_records.len)
 		dat += "<font color = 'red'>No products loaded!</font><br><br></TT>"
 	else
 		var/list/display_records = src.product_records.Copy()
@@ -810,6 +854,12 @@ var/global/num_vending_terminals = 1
 			dat += {"<B>&nbsp;&nbsp;premium</B>:<br>"}
 			for (var/datum/data/vending_product/R in coin_records)
 				dat += GetProductLine(R)
+			dat += "<br>"
+
+		if(labor_records.len)
+			dat += {"<B>&nbsp;&nbsp;labor rewards</B>:<br>"}
+			for (var/datum/data/vending_product/R in labor_records)
+				dat += GetProductLine(R,TRUE)
 			dat += "<br>"
 
 		dat += "</TT>"
@@ -948,7 +998,10 @@ var/global/num_vending_terminals = 1
 	else if (href_list["buy"])
 		var/obj/item/weapon/card/card = usr.get_card()
 		if(card)
-			connect_account(usr, card)
+			if(currently_vending.category == CAT_LABOR)
+				pay_with_gbp(card, usr)
+			else
+				connect_account(usr, card)
 		else
 			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
 
