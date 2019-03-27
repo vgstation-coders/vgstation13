@@ -8,7 +8,7 @@
 /datum/robot_component/var/electronics_damage = 0
 /datum/robot_component/var/vulnerability = 1
 /datum/robot_component/var/energy_consumption = 0
-/datum/robot_component/var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
+/datum/robot_component/var/max_damage = 15
 /datum/robot_component/var/mob/living/silicon/robot/owner
 
 // The actual device object that has to be installed for this.
@@ -77,18 +77,16 @@
 	name = "armour plating"
 	external_type = /obj/item/robot_parts/robot_component/armour
 	energy_consumption = 0
-	max_damage = 60
+	max_damage = 110
 
 /datum/robot_component/actuator
 	name = "actuator"
 	external_type = /obj/item/robot_parts/robot_component/actuator
 	energy_consumption = 0 // seeing as we can move without any charge...
-	max_damage = 50
 
 /datum/robot_component/cell
 	name = "power cell"
-	max_damage = 50
-
+	
 /datum/robot_component/cell/destroy()
 	..()
 	owner.cell = null
@@ -98,25 +96,21 @@
 	name = "radio"
 	external_type = /obj/item/robot_parts/robot_component/radio
 	energy_consumption = 1
-	max_damage = 40
 
 /datum/robot_component/binary_communication
 	name = "binary communication device"
 	external_type = /obj/item/robot_parts/robot_component/binary_communication_device
 	energy_consumption = 0
-	max_damage = 30
 
 /datum/robot_component/camera
 	name = "camera"
 	external_type = /obj/item/robot_parts/robot_component/camera
 	energy_consumption = 1
-	max_damage = 40
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
 	energy_consumption = 0
-	max_damage = 30
 
 /mob/living/silicon/robot/proc/initialize_components()
 	// This only initializes the components, it doesn't set them to installed.
