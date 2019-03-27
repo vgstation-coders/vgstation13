@@ -106,7 +106,7 @@
 				var/temp_reagents = new/list()
 				var/reagents_text = ""
 				for(var/obj/item/weapon/reagent_containers/G in beakers)
-					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker))
+					if(istype(G, /obj/item/weapon/reagent_containers))
 						temp_reagents += G.reagents.amount_cache
 						if(reagents_text)
 							reagents_text += " and ([english_list(temp_reagents)])"
