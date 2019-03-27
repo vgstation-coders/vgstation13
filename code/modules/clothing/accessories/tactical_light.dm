@@ -43,13 +43,11 @@
 /obj/item/clothing/accessory/taclight/attack_self(mob/user)
 	if(source_light)
 		source_light.on = !source_light.on
-		if(get_turf(src))
-			if(source_light.on)
-				playsound(src, source_light.sound_on, 50, 1)
-			else
-				playsound(src, source_light.sound_off, 50, 1)
+		source_light.update_brightness(user)
 	if(attached_to)
 		update_brightness(attached_to)
+		
+
 			
 /datum/action/item_action/toggle_taclight
 	name = "Toggle Tactical Light"
@@ -82,7 +80,6 @@
 	qdel(src)
 
 /obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
-	to_chat(world, "<span class='boldannounce'>calling update brightness on C: [C]</span>")
 	if(src.source_light && src.source_light.on)
 		C.set_light(src.source_light.brightness_on)
 	else
