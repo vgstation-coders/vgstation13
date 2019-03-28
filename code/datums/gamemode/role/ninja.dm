@@ -82,6 +82,22 @@
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 		//Sometimes things are thrown by objects like vending machines or pneumatic cannons
 
+/obj/item/stack/shuriken/Crossed(atom/movable/A)
+	if(!ishuman(A))
+		return
+	var/mob/living/carbon/human/H = A
+	if(!isninja(H))
+		return
+	var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in H.held_items
+	if(S)
+		to_chat(H,"<span class='notice'>You add the shuriken to the stack.</span>")
+		S.amount += amount
+		qdel(src)
+
+	else
+		to_chat(H,"<span class='notice'>You pick up the shuriken!</span>")
+		H.put_in_hands(src)
+
 //Shield
 /obj/item/weapon/substitutionhologram
 	name = "hologram projector"
@@ -270,19 +286,25 @@
 		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] to make that!</span>")
 
 /obj/item/clothing/gloves/ninja/proc/charge_sword(mob/user)
-	var/obj/item/weapon/katana/hesfast/oursword = locate(/obj/item/weapon/katana/hesfast) in user.held_items
-	if(oursword)
-		var/difference = (oursword.teleportcooldown-world.time)*CHARGE_COST_MULTIPLIER
-		if(difference<=0)
-			to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
-			return
-		var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
-		oursword.teleportcooldown -= to_subtract
-		reservoir -= to_subtract
-		if(oursword.teleportcooldown < world.time)
-			to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
-		else
-			to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((oursword.teleportcooldown - world.time)/10)] seconds.</span>")
+	var/obj/item/weapon/oursword = GetNinjaWeapon(user)
+	if(!oursword)
+		to_chat(user,"<span class='warning'>You need to hold the sword to channel power into it!</span>")
+		return
+	var/datum/daemon/teleport/T = oursword.daemon
+	if(!istype(T))
+		to_chat(user,"<span class='warning'>No power dwells within that blade!</span>")
+		return
+	var/difference = (T.cooldown-world.time)*CHARGE_COST_MULTIPLIER
+	if(difference<=0)
+		to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
+		return
+	var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
+	T.cooldown -= to_subtract/CHARGE_COST_MULTIPLIER
+	reservoir -= to_subtract
+	if(T.cooldown < world.time)
+		to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
+	else
+		to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((T.cooldown - world.time)/10)] seconds.</span>")
 
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
@@ -355,63 +377,74 @@
 		new poster_path(get_turf(src), serial_number)
 	qdel(src)
 
+/*=======
+Ninja Esword
+&
+Helpers For Both Variants
+=======*/
+/proc/GetNinjaWeapon(mob/M)
+	if(!istype(M))
+		return
+	else
+		var/obj/item/weapon/W = locate(/obj/item/weapon/melee/energy/sword/ninja) in M.held_items
+		if(W)
+			return W
+		else
+			return locate(/obj/item/weapon/katana/hesfast) in M.held_items
 
-//Special Katana. Main katana in weaponry.dm
-/obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
-	var/teleportcooldown = 600 //one minute cooldown
-	var/active = FALSE
-	var/activate_message = "Weakness."
+/datum/action/item_action/toggle_teleport
+	name = "Toggle Teleport"
+
+/datum/action/item_action/toggle_teleport/Trigger()
+	var/obj/item/weapon/W = GetNinjaWeapon(owner)
+	if(!istype(W))
+		return
+	if(!ismob(owner) || !isninja(owner))
+		return
+	if(W.daemon && istype(W.daemon,/datum/daemon/teleport))
+		W.daemon.activate()
+		to_chat(owner,"<span class='notice'>Teleportation is now [W.daemon.active ? "active" : "inactive"].</span>")
+		if(!W.daemon.active && istype(W,/obj/item/weapon/katana/hesfast))
+			owner.whisper("Not today, katana-san.")
+
+/obj/item/weapon/melee/energy/sword/ninja
+	name = "energy katana"
+	desc = "It makes you a little nervous even when it's off."
+	activeforce = 40
 	siemens_coefficient = 0
+	onsound = null
+	actions_types = list(/datum/action/item_action/toggle_teleport)
 
-/obj/item/weapon/katana/hesfast/IsShield()
-	return TRUE
-
-/obj/item/weapon/katana/hesfast/examine(mob/user)
+/obj/item/weapon/melee/energy/sword/ninja/New()
 	..()
-	if(!isninja(user))
-		return
-	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
-	var/message = "<span class='notice'>"
-	if(teleportcooldown < world.time)
-		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
+	daemon = new /datum/daemon/teleport(src,"Weakness",null)
+
+/obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
+	if(isninja(user))
+		..()
 	else
-		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
-		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+		..(user,"on")
 	if(active)
-		message += " Alt-click it to stop teleporting, just in case you enter a no-warp trap room like the ones in Aincrad.</span>"
+		cant_drop = TRUE
 	else
-		message += " Alt-click it to enable your teleportation, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
-	to_chat(user, "[message]")
+		cant_drop = FALSE
 
-/obj/item/weapon/katana/hesfast/AltClick(mob/user)
+/obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
+	..()
 	if(!isninja(user))
 		return
-	if(!active)
-		active = TRUE
-		to_chat(user, "<span class='notice'>You will teleport on attacks if you can.</span>")
-	else//i could return on the above but this is much more readable or something
-		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
-		active = FALSE
+	if(!daemon)
+		return
+	var/cc = max(round((daemon.cooldown - world.time)/10),0)
+	to_chat(user,"<span class='notice'>The hilt displays its status in the form of a cryptic readout.</span>")
+	to_chat(user,"<span class='notice'>TP: </span>[daemon.active ? "<span class='good'>I":"<span class='warning'>O"]</span><span class='notice'>; CD: [cc ? "[cc]s ([cc*10*CHARGE_COST_MULTIPLIER]J)</span>" : "</span><span class='warning'><B>X</B></span>"]")
 
-/obj/item/weapon/katana/hesfast/preattack(var/atom/A, mob/user)
-	if(!active || !isninja(user) || !ismob(A) || (A == user)) //sanity
-		return
-	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
-		return
-	var/mob/living/L = A
-	var/turf/SHHHHIIIING = get_step(L.loc, turn(L.dir, 180))
-	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm
-		return
-	teleportcooldown = initial(teleportcooldown) + world.time
-	playsound(src, "sound/weapons/shing.ogg",50,1)
-	user.forceMove(SHHHHIIIING)
-	user.dir = L.dir
-	user.say("[activate_message]")
-	..()
-
-/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
+/obj/item/weapon/melee/energy/sword/ninja/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(target == user)
+		examine(user)
+		return 1
+	else
+		return ..()
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****
@@ -447,9 +480,6 @@
 	activate_message = "Substitution no jutsu!"
 	reject_message = "You really, really don't want to pick that up."
 
-/obj/item/weapon/katana/hesfast/weeb
-	activate_message = "Pshh... nothing personnel... kid..."
-
 /obj/item/mounted/poster/stealth/anime
 	name = "rolled-up anime poster"
 	path = /obj/structure/sign/poster/stealth/anime
@@ -475,3 +505,43 @@
 			name = "EVA poster"
 		if("animeposter6")
 			name = "Mob Psycho poster"
+
+//Special Katana. Main katana in weaponry.dm
+/obj/item/weapon/katana/hesfast
+	siemens_coefficient = 0
+	cant_drop = TRUE
+	actions_types = list(/datum/action/item_action/toggle_teleport)
+
+/obj/item/weapon/katana/hesfast/New()
+	..()
+	daemon = new /datum/daemon/teleport(src,"sound/weapons/shing.ogg", "Pshh... nothing personnel... kid...")
+
+/obj/item/weapon/katana/hesfast/examine(mob/user)
+	..()
+	if(!isninja(user))
+		return
+	if(!daemon)
+		return
+	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
+	var/message = "<span class='notice'>"
+	if(daemon.cooldown < world.time)
+		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
+	else
+		var/cooldowncalculated = round((daemon.cooldown - world.time)/10)
+		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+	if(daemon.active)
+		message += " Your teleport is active, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
+	else
+		message += " Your teleport is inactive, just like a no-warp trap room in Aincrad.</span>"
+	to_chat(user, "[message]")
+
+/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
+	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
+
+/obj/item/weapon/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(target == user)
+		examine(user)
+		return 1
+	else
+		return ..()
