@@ -91,7 +91,7 @@
 	var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in H.held_items
 	if(S)
 		to_chat(H,"<span class='notice'>You add the shuriken to the stack.</span>")
-		S.amount++
+		S.amount += amount
 		qdel(src)
 
 	else
@@ -536,7 +536,7 @@ Helpers For Both Variants
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
