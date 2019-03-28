@@ -1,0 +1,76 @@
+"aa" = (/turf/space,/area)
+"ab" = (/turf/simulated/shuttle/wall{tag = "icon-swall_s6"; icon_state = "swall_s6"},/area/shuttle/eet_mothership)
+"ac" = (/turf/simulated/shuttle/wall{icon_state = "swallc1"},/area/shuttle/eet_mothership)
+"ad" = (/obj/structure/shuttle/engine/propulsion/right{dir = 1},/turf/space,/area/shuttle/eet_mothership)
+"ae" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/space,/area/shuttle/eet_mothership)
+"af" = (/obj/structure/shuttle/engine/propulsion/left{dir = 1},/turf/space,/area/shuttle/eet_mothership)
+"ag" = (/turf/simulated/shuttle/wall{icon_state = "swall2"},/area/shuttle/eet_mothership)
+"ah" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/shuttle/eet_mothership)
+"ai" = (/turf/simulated/shuttle/wall{icon_state = "swall15"},/area/shuttle/eet_mothership)
+"aj" = (/turf/simulated/shuttle/wall{icon_state = "swallc4"},/area/shuttle/eet_mothership)
+"ak" = (/obj/structure/shuttle/engine/heater{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor{tag = "icon-old_enginewarn"; icon_state = "old_enginewarn"},/area/shuttle/eet_mothership)
+"al" = (/turf/simulated/shuttle/wall{icon_state = "swallc3"},/area/shuttle/eet_mothership)
+"am" = (/turf/simulated/shuttle/wall{icon_state = "swall_s10"},/area/shuttle/eet_mothership)
+"an" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"ao" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/shuttle/eet_mothership)
+"ap" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aq" = (/turf/simulated/floor/plating,/area/shuttle/eet_mothership)
+"ar" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible/layered,/obj/machinery/atmospherics/pipe/simple/supply/visible/layered,/obj/machinery/atmospherics/pipe/simple/yellow/visible,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"},/turf/simulated/floor/plating,/area/shuttle/eet_mothership)
+"as" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"at" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/shuttle/eet_mothership)
+"au" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"av" = (/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"aw" = (/obj/structure/reagent_dispensers/eet_ship_core,/obj/effect/decal/warning_stripes/oldstyle,/turf/simulated/floor/plating,/area/shuttle/eet_mothership)
+"ax" = (/obj/structure/closet/secure_closet/vault,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"ay" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"az" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aA" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aB" = (/obj/machinery/vending/medical,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aC" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/shuttle/eet_mothership)
+"aD" = (/obj/machinery/door/airlock/glass,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aE" = (/turf/simulated/shuttle/wall{icon_state = "swallc2"},/area/shuttle/eet_mothership)
+"aF" = (/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aG" = (/obj/machinery/computer/security/eet,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aH" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"aI" = (/obj/structure/eet_continuum,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aJ" = (/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aK" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"aL" = (/obj/machinery/optable,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aM" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"aN" = (/obj/structure/table/reinforced,/obj/item/weapon/switchtool/surgery,/obj/item/organ/internal/lungs/filter,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aO" = (/obj/structure/table/reinforced,/obj/item/weapon/bonesetter,/obj/item/weapon/bonegel,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aP" = (/obj/structure/closet/secure_closet/medical2,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aQ" = (/turf/simulated/shuttle/wall{tag = "icon-swall_s5"; icon_state = "swall_s5"},/area/shuttle/eet_mothership)
+"aR" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/shuttle/eet_mothership)
+"aS" = (/turf/simulated/shuttle/wall,/area/shuttle/eet_mothership)
+"aT" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"aU" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+"aV" = (/turf/simulated/shuttle/wall{tag = "icon-swall_s9"; icon_state = "swall_s9"},/area/shuttle/eet_mothership)
+"aW" = (/obj/machinery/computer/eet_datacore,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aX" = (/obj/item/stack/cable_coil/random,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aY" = (/obj/machinery/smartfridge/eet_archive,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"aZ" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/yogurt,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"ba" = (/obj/structure/bed/chair/comfy,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"bb" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/energy/laser/retro,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"bc" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/yogurt{step_x = -3; step_y = 3},/obj/item/weapon/reagent_containers/food/snacks/yogurt{step_x = 3; step_y = -3},/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"bd" = (/obj/machinery/computer/shuttle_control,/obj/item/weapon/disk/shuttle_coords/free_move,/turf/simulated/floor{icon_state = "hotredfull"; tag = "icon-white"},/area/shuttle/eet_mothership)
+"be" = (/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/shuttle/eet_mothership)
+"bf" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/floor/engine,/area/shuttle/eet_mothership)
+
+(1,1,1) = {"
+aaaaaaaaaaabacadaeafagaaaaaaaa
+aaaaaaabahaiajakakakalamaaaaaa
+aaabahajanaoapaqaraqasatamaaaa
+aaauavavavauapaqawaqasaoalamaa
+aaaoaxaxaxaoayazazazaAaoaBalam
+abaCahahahaCahahaDaDaEajaFaGao
+aoavavaHaFaIaGaHaFaJaoaFaFaFao
+aoavavaKaFaFaFaKaFaFaDaFaLaFao
+aoavavaKaFaFaFaKaFaFaHaFaFaFao
+aoavavaMaFaFaFaMaFaFaMaNaOaPao
+aQahaRahahaDaDaSaDaDaSaTaUaEaV
+aaaaaoaWaFaFaFaFaXaFaFaGaEaVaa
+aaaaaoaYaFaFaZbabbaFaFaEaVaaaa
+aaaaaobcaFaFaWbdaGaFaFaoaaaaaa
+aaaabeahahahaTbfaUahahaVaaaaaa
+"}

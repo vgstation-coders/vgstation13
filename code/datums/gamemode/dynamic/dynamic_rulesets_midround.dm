@@ -547,3 +547,39 @@
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
 		return FALSE
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//        ENIGMATIC EXTARTERRESTRIAL        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//              Minor Role                  //
+//////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/eet
+	name = "Enigmatic Arrival"
+	role_category = /datum/role/eet
+	my_fac = /datum/faction/eet
+	required_candidates = 1
+	weight = 5
+	cost = 5
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 5
+	logo = "eet-logo"
+	repeatable = TRUE
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/eet/acceptable(var/population=0,var/threat=0)
+	var/datum/faction/F = find_active_faction_by_type(/datum/faction/eet)
+	if(F.members >= F.max_roles)
+		return 0
+	else
+		return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/eet/ready(var/forced = 0)
+	if(!eet_core || !eet_arch || !eet_cont)
+		message_admins("Could not ready Enigmatic Arrival. The mothership was damaged or missing.")
+		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/eet/setup_role(var/datum/role/new_role)
+	new_role.OnPostSetup() //Each individual role to show up gets a postsetup; this decides if they are PEET or HEET
+	..()

@@ -535,3 +535,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Wall Fungi"
 	alert_title = "Biohazard Alert"
 	message = "Harmful fungi detected on station. Station structures may be contaminated."
+
+/datum/command_alert/eets
+	name = "EETs Arrive"
+	alert_title = "Enigmatic Extraterrestrials"
+	message = "The unitary collective of aliens which top Nanotrasen xenologists hae dubbed \"enigmatic extraterrestrials\" has been spotted in your sector of space. Regard them with caution but not outright hostility. The aliens should be presumed friendly until proven otherwise. Good luck in establishing the future of our diplomacy with this little understood polity."

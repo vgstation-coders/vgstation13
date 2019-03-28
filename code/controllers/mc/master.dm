@@ -140,6 +140,10 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	to_chat(world, "<span class='boldannounce'>Initializations complete!</span>")
 	world.log << "Initializations complete."
 
+	if(!eet_cont)
+		message_admins("Map had no EET Mothership! Generating one on Z2...")
+		load_dungeon(/datum/map_element/dungeon/eetmothership)
+
 	// Sort subsystems by display setting for easy access.
 	sortTim(subsystems, /proc/cmp_subsystem_display)
 	// Set world options.

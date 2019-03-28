@@ -1,4 +1,4 @@
-// Camera mob, used by AI camera and blob.
+// Camera mob, used by AI camera, blob, and EET freeminds
 
 /mob/camera
 	name = "camera mob"
@@ -11,7 +11,3 @@
 
 /mob/camera/can_shuttle_move()
 	return 0
-
-/mob/camera/cultify()
-	return
-

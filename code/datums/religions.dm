@@ -136,6 +136,14 @@
 /datum/religion/proc/equip_chaplain(var/mob/living/carbon/human/H)
 	return TRUE // Nothing to see here, but redefined in some other religions !
 
+/proc/GetReligionIfActive(var/targetname)
+	if(!ticker.religions.len)
+		return null
+	for(var/datum/religion/R in ticker.religions)
+		if(R.name == targetname)
+			return R
+	return null
+
 /* ---- RELIGIOUS CONVERSION ----
  * convertAct() -> convertCeremony() -> convertCheck() -> convert()
  * Redefine 'convertCeremony' to play out your snowflake ceremony/interactions in your religion datum.
@@ -1276,3 +1284,12 @@
 	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 	bookstyle = "Creeper"
+
+/datum/religion/monolith
+	name = "Monolith"
+	deity_name = "Monolith"
+	bible_name = "Slab of the Stone"
+	male_adept = "Enigmatic One"
+	female_adept = "Enigmatic One"
+	keys = list() //Cannot be selected
+	bookstyle = "Slab"

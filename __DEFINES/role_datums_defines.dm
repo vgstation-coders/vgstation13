@@ -57,6 +57,7 @@
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
 #define RAMBLER "soul rambler"
+#define EET "enigmatic extraterrestrial"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -76,6 +77,9 @@
 
 #define GREET_REVSQUAD_CONVERTED "revsquad"
 #define GREET_PROVOC_CONVERTED	 "provocateur"
+
+#define GREET_PEET			"peet"
+#define GREET_HEET			"heet"
 
 
 ///////////////// FACTION STAGES //////////////////////
