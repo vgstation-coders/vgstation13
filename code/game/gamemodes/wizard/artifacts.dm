@@ -56,7 +56,8 @@
 	/obj/item/clothing/shoes/sandal,\
 	/obj/item/clothing/gloves/purple,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard)
+	/obj/item/clothing/head/helmet/space/rig/wizard,\
+	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
