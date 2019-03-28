@@ -26,6 +26,7 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 var/list/card_swipe_sound = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
 var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 'sound/effects/mop3.ogg', 'sound/effects/mop4.ogg', 'sound/effects/mop5.ogg')
 var/list/voice_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
+var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -204,5 +205,7 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(mop_sound)
 			if ("voice")
 				soundin = pick(voice_sound)
+			if ("windows error")
+				soundin = pick(windows_error)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin
