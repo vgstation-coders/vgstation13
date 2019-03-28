@@ -77,7 +77,7 @@
 	name = "armour plating"
 	external_type = /obj/item/robot_parts/robot_component/armour
 	energy_consumption = 0
-	max_damage = 110
+	max_damage = 120
 
 /datum/robot_component/actuator
 	name = "actuator"
