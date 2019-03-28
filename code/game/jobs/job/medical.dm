@@ -15,7 +15,7 @@
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
-	minimal_player_age = 7
+	minimal_player_age = 12
 
 
 	pdaslot=slot_belt
@@ -66,6 +66,7 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
 	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
+	minimal_player_age = 5
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
@@ -138,6 +139,7 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_chemistry)
 	alt_titles = list("Pharmacist")
+	minimal_player_age = 5
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/chemist
@@ -186,6 +188,7 @@
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_science)
+	minimal_player_age = 5
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/geneticist
@@ -231,6 +234,7 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
+	minimal_player_age = 5
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/viro
@@ -277,6 +281,7 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_psychiatrist)
 	minimal_access = list(access_medical, access_psychiatrist)
 	alt_titles = list("Psychologist")
+	minimal_player_age = 3
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)
