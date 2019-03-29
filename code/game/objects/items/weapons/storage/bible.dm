@@ -130,7 +130,7 @@
 			V.smitecounter += 10 //Better get out of here quickly before the problem shows. Ten hits and you are literal toast
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
-		if(T && isChaplain(user))
+		if(T && (isChaplain(user)||isReligiousLeader(user)))
 			T.Drop(TRUE) // Remove the thrall using the Drop() function to leave the role.
 			return 1 //That's it, game over
 
