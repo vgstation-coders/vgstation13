@@ -284,7 +284,7 @@
 
 				else
 					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions)
-						if(MALE)
+						if(H.gender == MALE)
 							sound = pick(science_sounds) //ACK
 					else
 						switch(H.gender)

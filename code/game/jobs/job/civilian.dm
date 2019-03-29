@@ -356,6 +356,12 @@
 	else
 		return "Rainbow Alert"
 
+/datum/job/clown/get_total_positions()
+	if(Holiday == APRIL_FOOLS_DAY)
+		return 99
+	else
+		..()
+
 /datum/job/mime
 	title = "Mime"
 	flag = MIME
