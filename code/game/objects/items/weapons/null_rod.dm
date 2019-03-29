@@ -48,7 +48,7 @@
 
 		var/datum/role/vampire/V = isvampire(H)
 
-		if(V && user.mind && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
+		if(V && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
 			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
@@ -94,7 +94,7 @@
 /obj/item/weapon/nullrod/attack_self(mob/user)
 	if(reskinned)
 		return
-	if(user.mind && isReligiousLeader(user)
+	if(isReligiousLeader(user)
 		reskin_holy_weapon(user)
 
 /obj/item/weapon/nullrod/proc/reskin_holy_weapon(mob/living/M)
