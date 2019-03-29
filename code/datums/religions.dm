@@ -14,7 +14,13 @@
 		return "Animal Jesus"
 	else
 		return "Faithless"
-
+		
+/proc/isReligiousLeader(var/mob/living/user)
+	for (var/R in typesof(/datum/religion))
+		if (user.mind && user.mind == R.religiousLeader)
+			return true
+	return false
+	
 //Proc for selecting a religion
 /proc/ChooseReligion(var/mob/living/carbon/human/H)
 	var/obj/item/weapon/storage/bible/B
