@@ -129,9 +129,6 @@
 		M.put_in_active_hand(holy_weapon)
 		qdel(src)
 		
-/obj/item/weapon/nullrod/proc/isReligiousLeader(var/mob/living/user)
-	return (user.mind && user.mind == my_rel.religiousLeader)
-
 /obj/item/weapon/nullrod/sword
 	name = "holy avenger"
 	desc = "DEUS VULT!"
