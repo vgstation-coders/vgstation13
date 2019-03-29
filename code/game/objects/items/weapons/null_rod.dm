@@ -50,7 +50,7 @@
 
 		var/datum/role/vampire/V = isvampire(H)
 
-		if(V && (isChaplain(user)||isReligiousLeader(user))) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
+		if(V && (isChaplain(user)||isReligiousLeader(user))) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
 			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
