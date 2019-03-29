@@ -73,7 +73,7 @@
 	if(amount > 0)
 		take_overall_damage(0, amount)
 		if(config.burn_damage_ash && amount >= config.burn_damage_ash)
-			dust()
+			dust(TRUE)
 			return
 	else
 		heal_overall_damage(0, -amount)

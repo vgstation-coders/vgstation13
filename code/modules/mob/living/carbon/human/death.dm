@@ -21,7 +21,7 @@
 	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
 
-/mob/living/carbon/human/dust()
+/mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -40,6 +40,8 @@
 		new /obj/effect/decal/remains/human/noskull(loc)
 	else
 		new /obj/effect/decal/remains/human(loc)
+	if(drop_everything)
+		drop_all()
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
