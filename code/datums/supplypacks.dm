@@ -2231,8 +2231,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Toy stack of packs"
 	group = "Vending Machine packs"
 
-
-/*
 /datum/supply_packs/sovietmachines
 	name = "Old and Forgotten stack of packs"
 	contains = list(/obj/structure/vendomatpack/sovietsoda,
@@ -2244,7 +2242,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Old and Forgotten stack of packs"
 	group = "Vending Machine packs"
 	hidden = 1
-*/
 
 /datum/supply_packs/magimachines
 	name = "Strange and Bright stack of packs"
