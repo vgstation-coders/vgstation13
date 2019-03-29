@@ -14,13 +14,7 @@
 		return "Animal Jesus"
 	else
 		return "Faithless"
-		
-/proc/isReligiousLeader(var/mob/living/user)
-	for (var/R in typesof(/datum/religion))
-		if (user.mind && user.mind == R.religiousLeader)
-			return 1
-	return 0
-	
+
 //Proc for selecting a religion
 /proc/ChooseReligion(var/mob/living/carbon/human/H)
 	var/obj/item/weapon/storage/bible/B
@@ -135,8 +129,14 @@
 		deity_name = pick(deity_names)*/
 	action_renounce = new /datum/action/renounce(src)
 
-/datum/religion/proc/isReligiousLeader(var/mob/living/user)
+/datum/religion/proc/leadsThisReligion(var/mob/living/user)
 	return (user.mind && user.mind == religiousLeader)
+	
+/proc/isReligiousLeader(var/mob/living/user)
+	for (var/datum/religion/rel in ticker.religions)
+		if (rel.isReligiousLeader(user))
+			return TRUE
+	return FALSE
 
 // Give the chaplain the basic gear, as well as a few misc effects.
 /datum/religion/proc/equip_chaplain(var/mob/living/carbon/human/H)
