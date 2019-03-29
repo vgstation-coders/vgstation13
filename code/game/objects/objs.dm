@@ -693,14 +693,6 @@ a {
 	gen_quality(additional_quality, min_quality)
 	if(quality > SUPERIOR)
 		gen_description()
-	if(material_type)
-		if(sharpness_flags && sharpness)
-			force = initial(force)*(material_type.sharpness_mod*(quality/NORMAL))
-			throwforce = initial(throwforce)*(material_type.sharpness_mod*(quality/NORMAL))
-			sharpness = initial(sharpness)*(material_type.sharpness_mod*(quality/NORMAL))
-		else
-			force = initial(force)*(material_type.brunt_damage_mod*(quality/NORMAL))
-			throwforce = initial(throwforce)*(material_type.brunt_damage_mod*(quality/NORMAL))
 	if(!findtext(lowertext(name), lowertext(mat.name)))
 		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 

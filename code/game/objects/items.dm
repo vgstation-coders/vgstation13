@@ -1339,10 +1339,3 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return
-
-/obj/item/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
-	.=..()
-	if(material_type)
-		armor["melee"] *= (material_type.armor_mod*(quality/NORMAL))
-		armor["bullet"]*= (material_type.armor_mod*(quality/NORMAL))
-		armor["laser"] *= (material_type.armor_mod*(quality/NORMAL))
