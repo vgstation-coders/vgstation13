@@ -1576,6 +1576,8 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
+	if(locked_to)
+		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
 	else
