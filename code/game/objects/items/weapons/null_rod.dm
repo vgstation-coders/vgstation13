@@ -1,5 +1,3 @@
-#define isChaplain(user) (user.mind && user.mind.assigned_role == "Chaplain")
-
 /obj/item/weapon/nullrod
 	name = "null rod"
 	desc = "A rod of pure obsidian, its very presence disrupts and dampens the powers of paranormal phenomenae."
@@ -50,7 +48,7 @@
 
 		var/datum/role/vampire/V = isvampire(H)
 
-		if(V && (isChaplain(user)||isReligiousLeader(user))) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
+		if(V && user.mind && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
 			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
@@ -85,7 +83,7 @@
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
-		if(isChaplain(user)||isReligiousLeader(user))
+		if(isReligiousLeader(user)
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
@@ -96,7 +94,7 @@
 /obj/item/weapon/nullrod/attack_self(mob/user)
 	if(reskinned)
 		return
-	if(isChaplain(user)||isReligiousLeader(user))
+	if(user.mind && isReligiousLeader(user)
 		reskin_holy_weapon(user)
 
 /obj/item/weapon/nullrod/proc/reskin_holy_weapon(mob/living/M)
