@@ -91,14 +91,17 @@ Obviously, requires DNA2.
 	desc = "Increases the subjects ability to see things from afar."
 	activation_messages = list("Your eyes focus.")
 	deactivation_messages = list("Your eyes return to normal.")
-	drug_activation_messages = list("The world becomes huge! You feel like an ant.")
-	drug_deactivation_messages = list("You no longer feel like an insect.")
-	spelltype = /spell/targeted/genetic/farsight
-	mutation = M_FARSIGHT
+	drug_activation_messages = list("You start feeling like an eagle, man!")
+	drug_deactivation_messages = list("You feel less like an eagle and more like the rabbit!")
+	spelltype = /spell/targeted/farsight
 
-/datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
+/datum/dna/gene/basic/grant_spell/farsight/New()
+	block = FARSIGHTBLOCK
+	..()
+
+/datum/dna/gene/basic/grant_spell/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
-	if((M.sdisabilities & BLIND) || (M.disabilities & NEARSIGHTED))
+	if((M.disabilities & BLIND) || (M.disabilities & NEARSIGHTED))
 		return 0
 	return ..(M,flags)
 
@@ -107,8 +110,8 @@ Obviously, requires DNA2.
 		if(M.client && M.client.view == world.view + 2)
 			M.client.changeView()
 
-/spell/targeted/genetic/farsight
-	name = "Enhanced Sight"
+/spell/targeted/farsight
+	name = "Far Sight"
 	desc = "Allows you to toggle farther vision at will."
 	user_type = USER_TYPE_GENETIC
 	panel = "Mutant Powers"
@@ -121,9 +124,9 @@ Obviously, requires DNA2.
 	hud_state = "wiz_sleepold"
 	var/active = 0
 
-/spell/targeted/genetic/farsight/cast(list/targets, mob/user)
+/spell/targeted/farsight/cast(list/targets, mob/user)
 	for(var/mob/living/carbon/human/F in targets)
-		if(active)
+		if(!active)
 			F.client.changeView(max(F.client.view, world.view+2))
 			to_chat(F, "<span class='notice'>You focus your eyes to see farther.</span>")
 			active = 1
