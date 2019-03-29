@@ -131,10 +131,10 @@
 
 /datum/religion/proc/leadsThisReligion(var/mob/living/user)
 	return (user.mind && user.mind == religiousLeader)
-	
+
 /proc/isReligiousLeader(var/mob/living/user)
 	for (var/datum/religion/rel in ticker.religions)
-		if (rel.isReligiousLeader(user))
+		if (rel.leadsThisReligion(user))
 			return TRUE
 	return FALSE
 
@@ -166,7 +166,7 @@
 	if (subject.mind.faith == src)
 		to_chat(preacher, "<span class='warning'>You and your target follow the same faith.</span>")
 		return FALSE
-	if (istype(subject.mind.faith) && subject.mind.faith.isReligiousLeader(subject))
+	if (istype(subject.mind.faith) && subject.mind.faith.leadsThisReligion(subject))
 		to_chat(preacher, "<span class='warning'>Your target is already the leader of another religion.</span>")
 		return FALSE
 	else
@@ -265,7 +265,7 @@
 	if (!R) // No religion, may as well be a good time to remove the icon if it's there
 		Remove(M)
 		return FALSE
-	if (R.isReligiousLeader(M))
+	if (R.leadsThisReligion(M))
 		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
 		return FALSE
 	if (alert("Do you wish to renounce [R.name]?","Renouncing a religion","Yes","No") != "Yes")
