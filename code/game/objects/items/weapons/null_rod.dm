@@ -83,7 +83,7 @@
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
-		if(isReligiousLeader(user)
+		if(isReligiousLeader(user))
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
@@ -94,7 +94,7 @@
 /obj/item/weapon/nullrod/attack_self(mob/user)
 	if(reskinned)
 		return
-	if(isReligiousLeader(user)
+	if(isReligiousLeader(user))
 		reskin_holy_weapon(user)
 
 /obj/item/weapon/nullrod/proc/reskin_holy_weapon(mob/living/M)
