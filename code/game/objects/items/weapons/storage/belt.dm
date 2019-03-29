@@ -281,6 +281,32 @@
  		"/obj/item/organ/external/head"
  	)
 
+/obj/item/weapon/storage/belt/silicon
+	name = "cyber trophy belt"
+	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
+	icon_state = "utilitybelt"
+	item_state = "utility"
+	fits_max_w_class = 4
+	max_combined_w_class = 28
+	can_only_hold = list(
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi"
+ 	)
+
+/obj/item/weapon/storage/belt/silicon/New()
+	..()
+	new /obj/item/device/aicard(src) //One freebie card
+
+/proc/RenderBeltChat(var/obj/B,var/mob/living/C,var/message)
+	if(!istype(B.loc,/mob))
+		return
+	var/mob/M = B.loc
+	to_chat(M,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
+	to_chat(C,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
+	var/turf/T = get_turf(B)
+	log_say("[key_name(C)] (@[T.x],[T.y],[T.z]) Trophy Belt: [message]")
+	for(var/mob/dead/D in observers)
+		to_chat(D,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
 
 /obj/item/weapon/storage/belt/mining
 	name = "mining gear belt"
