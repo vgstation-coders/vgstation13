@@ -67,7 +67,7 @@
 
 	var/datum/role/vampire/V = isvampire(user)
 
-	if (!isReligiousLeader(user)) //The user is not the leader of a religon. BLASPHEMY !
+	if (!leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(V) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
@@ -121,14 +121,14 @@
 	if(ishuman(M)) //Only humans can be vampires or cultists.
 		var/mob/living/carbon/human/H = M
 		V = isvampire(M)
-		if(V && (VAMP_MATURE in V.powers) && isReligiousLeader(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
+		if(V && (VAMP_MATURE in V.powers) && leadsThisReligion(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
 			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 				V.nullified = min(5, V.nullified + 2)
 			V.smitecounter += 10 //Better get out of here quickly before the problem shows. Ten hits and you are literal toast
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
-		if(T && isReligiousLeader(user))
+		if(T && leadsThisReligion(user))
 			T.Drop(TRUE) // Remove the thrall using the Drop() function to leave the role.
 			return 1 //That's it, game over
 
@@ -154,7 +154,7 @@
 	if(!proximity_flag)
 		return
 	user.delayNextAttack(5)
-	if(isReligiousLeader(user)) //Make sure we still are a religious leader, just in case
+	if(leadsThisReligion(user)) //Make sure we still are a religious leader, just in case
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
 			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
 			"<span class='notice'>You bless \the [A].</span>")
@@ -168,7 +168,7 @@
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
-	if(isReligiousLeader(user)) //We are the religious leader, yes we are
+	if(leadsThisReligion(user)) //We are the religious leader, yes we are
 		to_chat(user, "<span class ='notice'>You feel [my_rel.deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
@@ -180,7 +180,7 @@
 		if(C) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar-Sie protects you from its influence!</span>")
 
-/obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
+/obj/item/weapon/storage/bible/proc/leadsThisReligion(var/mob/living/user)
 	return (user.mind && user.mind == my_rel.religiousLeader)
 
 // Action : convert people
