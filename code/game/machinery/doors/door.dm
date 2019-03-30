@@ -107,7 +107,8 @@ var/list/all_doors = list()
 				H.Stun(stun_time)
 				H.Knockdown(knockdown_time)
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-				O.take_damage(damage) //Brute damage only
+				if(O)
+					O.take_damage(damage) //Brute damage only
 			return
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
