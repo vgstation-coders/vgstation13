@@ -442,6 +442,12 @@
 
 	turfdecals.len = 0
 
+/turf/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!(locate(/obj/effect/decal/cleanable/blueglow) in src))
+		new /obj/effect/decal/cleanable/blueglow(src)
+
 /turf/proc/get_underlying_turf()
 	var/area/A = loc
 	if(A.base_turf_type)

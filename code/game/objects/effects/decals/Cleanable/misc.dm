@@ -42,10 +42,32 @@
 	desc = "Jeez. I hope that's not for lunch."
 	gender = PLURAL
 	density = 0
-	anchored = 1
-	luminosity = 1
+	anchored = TRUE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "greenglow"
+
+/obj/effect/decal/cleanable/greenglow/New()
+	..()
+	set_light(1,2,LIGHT_COLOR_GREEN)
+
+/obj/effect/decal/cleanable/blueglow
+	name = "glowing luminol"
+	desc = "A smear of activated luminol."
+	gender = PLURAL
+	density = 0
+	anchored = TRUE
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "mfloor1"
+	//icon = 'icons/effects/tomatodecal.dmi'
+	//icon_state = "fruit_smudge1"
+	color = LIGHT_COLOR_CYAN
+
+/obj/effect/decal/cleanable/blueglow/New()
+	..()
+	icon_state = "mfloor[rand(1,7)]"
+	////icon_state = "[pick("m","")]floor[rand(1,3)]"
+	//icon_state = "fruit_smudge[rand(1,3)]"
+	set_light(1,2,LIGHT_COLOR_BLUE)
 
 /obj/effect/decal/cleanable/cobweb
 	name = "cobweb"
