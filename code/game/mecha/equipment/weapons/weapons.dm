@@ -137,7 +137,6 @@
 		M.stuttering += 20
 		M.ear_deaf += 30
 		M.Knockdown(3)
-		M.Stun(3)
 		if(prob(30))
 			M.Stun(10)
 			M.Paralyse(4)
