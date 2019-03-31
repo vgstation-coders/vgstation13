@@ -552,6 +552,7 @@
 			L << sound('sound/machines/click.ogg')
 			L << sound('sound/hallucinations/scary.ogg')
 			L.Knockdown(5)
+			L.Stun(5)
 
 			sleep(50)
 

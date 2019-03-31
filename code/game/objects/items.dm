@@ -1005,6 +1005,7 @@
 				M.eye_blurry += 10
 				M.Paralyse(1)
 				M.Knockdown(4)
+				M.Stun(4)
 			if (eyes.damage >= eyes.min_broken_damage)
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You go blind!</span>")

@@ -174,6 +174,7 @@ var/global/mulebot_count = 0
 			unload(0)
 			var/mob/living/rider = load
 			rider.Knockdown(2)
+			rider.Stun(2)
 			playsound(rider, "sound/effects/bodyfall.ogg", 50, 1)
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
 		. = ..()

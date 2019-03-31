@@ -91,6 +91,7 @@
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishigherbeing(user)) //This shouldn't be needed, but fucks sakes
 					user.Knockdown(5)
+					user.Stun(5)
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
@@ -276,6 +277,7 @@
 			unlock_atom(user)
 			activated = 0
 			user.Knockdown(5) //Only Weaken after unbuckling
+			user.Stun(5)
 		return
 	if(activated)
 		var/old_pos = get_turf(src)

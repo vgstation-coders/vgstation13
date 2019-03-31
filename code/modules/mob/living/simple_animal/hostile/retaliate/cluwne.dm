@@ -246,6 +246,7 @@
 		var/mob/living/L = target
 		if(prob(10))
 			L.Knockdown(5)
+			L.Stun(5)
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
 			return
 	return ..()

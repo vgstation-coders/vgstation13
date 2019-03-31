@@ -626,6 +626,7 @@
 
 		G.affecting.forceMove(src.loc)
 		G.affecting.Knockdown(5)
+		G.affecting.Stun(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return

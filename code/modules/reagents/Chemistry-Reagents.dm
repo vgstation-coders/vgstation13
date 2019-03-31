@@ -3055,6 +3055,7 @@
 	M.adjustOxyLoss(0.5 * REM)
 	M.adjustToxLoss(0.5 * REM)
 	M.Knockdown(10)
+	M.Stun(10)
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
@@ -5511,6 +5512,7 @@
 			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
 		else
 			H.Knockdown(10)
+			H.Stun(10)
 			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
@@ -6079,6 +6081,7 @@
 
 	M.adjustOxyLoss(1)
 	M.SetKnockdown(max(M.knockdown, 15))
+	M.SetStunned(max(M.stunned, 15))
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk
