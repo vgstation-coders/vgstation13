@@ -205,6 +205,9 @@
 		if(prob(chance))
 			knock_out_teeth(attacker)
 
+	if(isrambler(src) && ishuman(attacker))
+		attacker.say(pick("Take that!", "Taste the pain!"))
+
 	..()
 
 /mob/living/carbon/human/proc/perform_cpr(mob/living/target)
