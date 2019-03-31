@@ -832,7 +832,7 @@
 		activator.client.images |= progbar
 
 	//secondly, let's stun our victim and begin the ritual
-	to_chat(victim, "<span class='danger'>Occult energies surge from below your [issilicon(victim ? "actuators" : "feet"] and seep into your [issilicon(victim ? "chassis" : "body"].</span>")
+	to_chat(victim, "<span class='danger'>Occult energies surge from below your [issilicon(victim) ? "actuators" : "feet"] and seep into your [issilicon(victim) ? "chassis" : "body"].</span>")
 	victim.Silent(5)
 	victim.Knockdown(5)
 	victim.Stun(5)
