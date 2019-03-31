@@ -1018,6 +1018,10 @@
 				abort(RITUALABORT_CONVERT)
 				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
 				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
+				if (issilicon(victim))
+					var/mob/living/silicon/S = victim
+					S.laws = new /datum/ai_laws/cultimov
+					to_chat(S, "<span class='sinister'>Laws updated.</span>")
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
