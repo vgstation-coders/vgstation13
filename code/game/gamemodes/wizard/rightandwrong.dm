@@ -303,7 +303,7 @@
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
-	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
+	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
@@ -363,8 +363,6 @@
 			new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(src))
 		if("blind")
 			new /obj/item/weapon/spellbook/oneuse/blind(get_turf(src))
-		if("mindswap")
-			new /obj/item/weapon/spellbook/oneuse/mindswap(get_turf(src))
 		if("forcewall")
 			new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(src))
 		if("knock")
