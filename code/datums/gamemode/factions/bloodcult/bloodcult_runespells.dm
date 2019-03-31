@@ -812,6 +812,11 @@
 	var/list/targets = list()
 
 	//first lets check for a victim above
+	if (Holiday == APRIL_FOOLS_DAY)
+		for (var/mob/living/silicon/S in T) // Has science gone too far????
+			if (!iscultist(S))
+				targets.Add(S)
+			
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
 			targets.Add(C)
