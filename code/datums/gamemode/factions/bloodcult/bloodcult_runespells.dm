@@ -812,6 +812,11 @@
 	var/list/targets = list()
 
 	//first lets check for a victim above
+	if (Holiday == APRIL_FOOLS_DAY)
+		for (var/mob/living/silicon/S in T) // Has science gone too far????
+			if (!iscultist(S))
+				targets.Add(S)
+			
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
 			targets.Add(C)
@@ -827,7 +832,7 @@
 		activator.client.images |= progbar
 
 	//secondly, let's stun our victim and begin the ritual
-	to_chat(victim, "<span class='danger'>Occult energies surge from below your feet and seep into your body.</span>")
+	to_chat(victim, "<span class='danger'>Occult energies surge from below your [issilicon(victim) ? "actuators" : "feet"] and seep into your [issilicon(victim) ? "chassis" : "body"].</span>")
 	victim.Silent(5)
 	victim.Knockdown(5)
 	victim.Stun(5)
@@ -1013,6 +1018,14 @@
 				abort(RITUALABORT_CONVERT)
 				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
 				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
+				if (issilicon(victim))
+					var/mob/living/silicon/S = victim
+					S.laws = new /datum/ai_laws/cultimov
+					to_chat(S, "<span class='sinister'>Laws updated.</span>")
+					S << sound('sound/machines/lawsync.ogg')
+					if (isrobot(S))
+						var/mob/living/silicon/robot/robit = S
+						robit.disconnect_AI()
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
