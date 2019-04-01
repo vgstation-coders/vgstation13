@@ -349,6 +349,8 @@
 	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
 /datum/job/clown/reject_new_slots()
+	if(Holiday == APRIL_FOOLS_DAY)
+		return FALSE
 	if(!xtra_positions)
 		return FALSE
 	if(security_level == SEC_LEVEL_RAINBOW)
@@ -358,6 +360,7 @@
 
 /datum/job/clown/get_total_positions()
 	if(Holiday == APRIL_FOOLS_DAY)
+		spawn_positions = -1
 		return 99
 	else
 		..()
