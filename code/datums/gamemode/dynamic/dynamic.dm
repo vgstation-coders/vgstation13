@@ -108,8 +108,8 @@ var/list/threat_by_job = list(
 	. = ..()
 	send2mainirc("A round of [src.name] has ended - [living_players.len] survivors, [dead_players.len] ghosts.")
 	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts.")
-	send2mainirc("Dynamic mode threat: [threat_level], rulesets: [jointext(rules, ", ")].")
-	send2maindiscord("Dynamic mode threat: **[threat_level]**, rulesets: [jointext(rules, ", ")]")
+	send2mainirc("Dynamic mode Threat Level: [starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""], rulesets: [jointext(rules, ", ")].")
+	send2maindiscord("Dynamic mode Threat Level: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
