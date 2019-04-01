@@ -3,7 +3,7 @@
 		return "a voice"
 	if(H.mind.GetRole(CULTIST))
 		return "Nar-Sie"
-	else if(usr.mind.faith) // The user has a faith
+	else if(usr.mind && usr.mind.faith) // The user has a faith
 		var/datum/religion/R = usr.mind.faith
 		return R.deity_name
 	else if(usr.mind.assigned_role == "Clown")
