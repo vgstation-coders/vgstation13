@@ -164,7 +164,7 @@
 	max_chance = 60
 
 /datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span> class = 'notice'>You feel a little sore.</span>")
+	to_chat(mob, "<span class='notice'>You feel a little sore.</span>")
 
 
 /datum/disease2/effect/socialconfusion
