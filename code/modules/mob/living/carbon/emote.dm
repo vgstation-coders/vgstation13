@@ -283,9 +283,8 @@
 					sound = pick(birb_sounds)
 
 				else
-					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions)
-						if(H.gender == MALE)
-							sound = pick(science_sounds) //ACK
+					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions && H.gender == MALE)
+						sound = pick(science_sounds) //ACK
 					else
 						switch(H.gender)
 							if (MALE)
