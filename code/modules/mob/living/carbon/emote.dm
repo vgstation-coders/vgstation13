@@ -168,7 +168,6 @@
 	message_mime = "laughs silently!"
 	emote_type = EMOTE_AUDIBLE
 
-
 /datum/emote/living/carbon/gag
 	key = "gag"
 	key_third_person = "gags"
