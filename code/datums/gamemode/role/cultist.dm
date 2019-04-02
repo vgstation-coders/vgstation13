@@ -227,7 +227,7 @@
 	if (!istype(H))
 		return
 	var/unholy = H.checkTattoo(TATTOO_HOLY)
-	var/current_act = max(-1,min(5,veil_thickness))
+	var/current_act = Clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
 	if (reagent_id == INCENSE_HAREBELLS)
 		if (unholy)
 			H.eye_blurry = max(H.eye_blurry, 3)
