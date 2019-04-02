@@ -216,6 +216,11 @@ var/global/num_vending_terminals = 1
 		if(!anchored)
 			to_chat(user, "<span class='warning'>You need to anchor the vending machine before you can refill it.</span>")
 			return
+		if(P.targetvendomat != type)
+			var/list/any_records = get_all_records()
+			if(any_records.len)
+				to_chat(user, "<span class='warning'>That vending machine is neither empty nor a matching type.</span>")
+				return
 		if(!pack)
 			if(is_being_filled)
 				to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
@@ -358,12 +363,16 @@ var/global/num_vending_terminals = 1
 			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
-/obj/machinery/vending/proc/get_item_by_type(var/this_type)
+/obj/machinery/vending/proc/get_all_records()
 	var/list/datum_products = list()
 	datum_products |= hidden_records
 	datum_products |= coin_records
 	datum_products |= voucher_records
 	datum_products |= product_records
+	return datum_products
+
+/obj/machinery/vending/proc/get_item_by_type(var/this_type)
+	var/list/datum_products = get_all_records()
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
 			return product
@@ -666,8 +675,7 @@ var/global/num_vending_terminals = 1
 	src.visible_message("<span class='warning'>[src] goes off!</span>")
 
 	spawn(ticks)
-
-	power_change()
+		power_change()
 
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))
@@ -1108,6 +1116,10 @@ var/global/num_vending_terminals = 1
 		var/obj/throw_item
 		var/datum/data/vending_product/R = pick(throwables)
 
+		if(R.price)
+			tries--
+			continue //Don't give away stuff with a price
+
 		if(R.amount <= 0)
 			tries--
 			continue
@@ -1133,6 +1145,9 @@ var/global/num_vending_terminals = 1
 		src.visible_message("<span class='danger'>[src] launches [throw_item.name] at [target.name]!</span>")
 		src.updateUsrDialog()
 		return 1
+
+	if(shoot_inventory)
+		shoot_inventory = FALSE //We tried to shoot 10 times and failed, let's stop making shoot attempts.
 
 	return 0
 
