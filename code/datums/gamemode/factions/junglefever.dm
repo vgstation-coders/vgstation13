@@ -25,6 +25,7 @@
 	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
 	if(gameactivetime < 5 MINUTES)
 		return
+	var/alive = FALSE
 	for(var/datum/role/R in members)
 		var/mob/M = R.antag.current
 		if(M && M.stat && isbadmonkey(M))
