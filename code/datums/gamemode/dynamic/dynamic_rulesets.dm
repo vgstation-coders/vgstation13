@@ -196,7 +196,7 @@
 		if (!istype(P, required_type))
 			candidates.Remove(P) // Can be a new_player, etc.
 			continue
-		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
+		if (!P.client || !P.mind || !P.mind.assigned_role || P.mind.antag_roles.len)//are they connected? Are they an antag already?
 			candidates.Remove(P)
 			continue
 		if (!P.client.desires_role(role_id) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
