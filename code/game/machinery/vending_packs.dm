@@ -9,9 +9,11 @@
 	var/list/stock = list()
 	var/list/secretstock = list()
 	var/list/preciousstock = list()
+	var/list/laborstock = list()
 	var/list/product_records = list()
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
+	var/list/labor_records = list()
 
 //////CUSTOM PACKS///////
 
