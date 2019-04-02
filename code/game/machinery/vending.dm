@@ -36,7 +36,7 @@ var/global/num_vending_terminals = 1
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/list/vouched     = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
-	var/list/labor_rewards = list() //Just like products and contraband, but spends GBP from your ID.
+	var/list/labor_rewards = list() //Just like products and contraband, but spends labor points from your ID.
 
 	var/list/custom_stock = list() 	//Custom items are stored inside our contents, but we keep track of them here so we don't vend our component parts or anything.
 
@@ -93,7 +93,7 @@ var/global/num_vending_terminals = 1
 	var/amount = 0
 	var/price = 0
 	var/display_color = "blue"
-	var/category = CAT_NORMAL //available by default, contraband, premium (requires a coin), or labor (GBP)
+	var/category = CAT_NORMAL //available by default, contraband, premium (requires a coin), or labor (points)
 	var/subcategory = null
 	var/mini_icon = null
 
@@ -634,7 +634,7 @@ var/global/num_vending_terminals = 1
 			playsound(src, 'sound/machines/alert.ogg', 50, 1)
 			visible_message("[bicon(src)] \The [src] buzzes.")
 			currently_vending = null
-			to_chat(user,"<span class='warning'>The scanned card did not have enough GBP!</span>")
+			to_chat(user,"<span class='warning'>The scanned card did not have enough labor points!</span>")
 			updateUsrDialog()
 
 /obj/machinery/vending/attack_paw(mob/user as mob)
@@ -652,7 +652,7 @@ var/global/num_vending_terminals = 1
 		if(!labor)
 			dat += " <b>($[P.price])</b>"
 		else
-			dat += " <b>([P.price]GBP)</b>"
+			dat += " <b>([P.price] labor points)</b>"
 	if (P.amount > 0)
 		var/idx=GetProductIndex(P)
 		dat += " <a href='byond://?src=\ref[src];vend=[idx];cat=[P.category]'>(Vend)</A>"
