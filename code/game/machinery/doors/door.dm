@@ -69,9 +69,12 @@ var/list/all_doors = list()
 		return FALSE
 	if(operating || !density)
 		return FALSE
-	if(can_access(thing.GetAccess(), req_access, req_one_access))
-		open()
-		return TRUE
+	set_up_access()
+	if(!can_access(thing.GetAccess(), req_access, req_one_access))
+		denied()
+		return FALSE
+	open()
+	return TRUE
 
 /obj/machinery/door/Bumped(atom/AM)
 	if (ismob(AM))
