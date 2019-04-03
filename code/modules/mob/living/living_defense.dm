@@ -318,3 +318,9 @@
 	IgniteMob()
 
 //Mobs on Fire end
+
+//Return true if thrown object misses
+/mob/living/PreImpact(atom/movable/A, speed)
+	if(lying)
+		return TRUE
+	return FALSE

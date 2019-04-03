@@ -111,7 +111,7 @@
 /obj/item/weapon/substitutionhologram/IsShield()
 	return TRUE
 
-/obj/item/weapon/substitutionhologram/on_block(damage, attack_text = "the_attack")
+/obj/item/weapon/substitutionhologram/on_block(damage, atom/blocked)
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(H.mind.GetRole(NINJA))

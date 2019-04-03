@@ -928,10 +928,13 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, attack_text = "the attack")
+/obj/item/proc/on_block(damage, atom/blocked)
 	if(ismob(loc))
 		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>")
+			visible_message("<span class='danger'>[loc] blocks \the [blocked] with \the [src]!</span>")
+			if(isatommovable(blocked))
+				var/atom/movable/M = blocked
+				M.throwing = FALSE
 			return TRUE
 
 	return FALSE
