@@ -477,7 +477,7 @@
 						"/obj/item/weapon/hemostat/pico:hemostat" = null,
 						"/obj/item/weapon/retractor/manager:retractor" = null,
 						"/obj/item/weapon/bonesetter/bone_mender:bone setter" = null,
-						"/obj/item/weapon/FixOVein:fixovein" = null,
+						"/obj/item/weapon/FixOVein/clot:fixovein" = null,
 						"/obj/item/weapon/bonegel:bonegel" = null)
 
 /obj/item/weapon/switchtool/engineering
