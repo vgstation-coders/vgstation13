@@ -1150,7 +1150,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
 		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")
 	if(is_malfunctioning())
-		if(brute_dam + burn_dam > 14)
 			// owner.u_equip(c_hand, 1)
 			owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
 			spark(src, 5, FALSE)
