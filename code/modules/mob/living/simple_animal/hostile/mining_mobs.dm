@@ -491,6 +491,7 @@ obj/item/asteroid/basilisk_hide/New()
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
 		M.Knockdown(5)
+		M.Stun(5)
 		visible_message("<span class='warning'>\The [src] knocks \the [M] down!</span>")
 	qdel(src)
 

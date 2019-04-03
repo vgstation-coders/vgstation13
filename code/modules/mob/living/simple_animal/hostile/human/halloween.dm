@@ -222,6 +222,7 @@
 		C.Stun(distance_value)
 		if(distance_value > 1)
 			C.Knockdown(distance_value)
+			C.Stun(distance_value)
 		C.stuttering += 5+distance_value *2
 		if(!C.blinded)
 			C.blinded = 1

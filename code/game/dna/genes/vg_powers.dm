@@ -48,6 +48,7 @@ Obviously, requires DNA2.
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
 			M.Knockdown(3)
+			M.Stun(3)
 			M.emote("collapse")
 
 /spell/targeted/genetic/hulk
