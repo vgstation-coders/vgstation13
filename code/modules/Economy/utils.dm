@@ -125,7 +125,7 @@ var/global/no_pin_for_debit = TRUE
 				return CARD_CAPTURE_FAILURE_NO_CONNECTION
 			account = linked_db.get_account(card.associated_account_number)
 			if(!account)
-				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
+				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination or ID is not registered with Nanotrasen accounts database.</span>")
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 		else
 			to_chat(user, "[bicon(src)] <span class='warning'>Internal Error.</span>")
