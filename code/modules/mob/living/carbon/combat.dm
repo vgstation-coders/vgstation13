@@ -44,7 +44,7 @@
 		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
 		return FALSE
 
-	if((user != src) && check_shields(I.force, "the [I.name]"))
+	if((user != src) && check_shields(I.force, I))
 		return FALSE
 
 	user.do_attack_animation(src, I)
@@ -62,3 +62,19 @@
 	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 
 	return TRUE
+
+/mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)
+	if(!incapacitated())
+		for(var/obj/item/weapon/I in held_items)
+			if(I.IsShield() && I.on_block(damage, A))
+				return 1
+
+	return 0
+
+/mob/living/carbon/PreImpact(atom/movable/A, speed)
+	if(isobj(A))
+		var/obj/O = A
+		if(check_shields(O.throwforce*(speed/5),O))
+			return TRUE
+	else
+		return ..()
