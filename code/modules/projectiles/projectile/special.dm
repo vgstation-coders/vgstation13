@@ -139,6 +139,7 @@
 			if(prob(mutstrength*2))
 				M.apply_radiation((rand(30,80)),RAD_EXTERNAL)
 				M.Knockdown(5)
+				M.Stun(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))

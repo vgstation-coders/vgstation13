@@ -32,6 +32,7 @@
 				if(!H.shoes)
 					affecting = H.get_organ(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 					H.Knockdown(3)
+					H.Stun(3)
 			if(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
 				if(!H.gloves)
 					affecting = H.get_organ(type)

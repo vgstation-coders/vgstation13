@@ -65,8 +65,10 @@
 				M.Knockdown(4)
 			else if (get_dist(M, T) <= 5)
 				M.Knockdown(2)
+				M.Stun(2)
 			else
 				M.Knockdown(1)
+				M.Stun(1)
 
 //Now applying sound
 	if(!M.is_deaf())

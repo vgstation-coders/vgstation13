@@ -1063,7 +1063,9 @@ steam.start() -- spawns the effect
 			for(var/mob/M in viewers(1, location))
 				if (prob (50 * amount))
 					to_chat(M, "<span class='warning'>The explosion knocks you down.</span>")
-					M.Knockdown(rand(1,5))
+					var/incapacitation_duration = rand(1,5)
+					M.Knockdown(incapacitation_duration)
+					M.Stun(incapacitation_duration)
 			return
 		else
 			var/devastation = -1

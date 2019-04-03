@@ -126,6 +126,7 @@
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
 		user.Knockdown(stunforce)
+		user.Stun(stunforce)
 		playsound(loc, "sparks", 75, 1, -1)
 		deductcharge(hitcost)
 		return
@@ -151,6 +152,7 @@
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
 		user.Knockdown(stunforce)
+		user.Stun(stunforce)
 		deductcharge(hitcost)
 		return
 

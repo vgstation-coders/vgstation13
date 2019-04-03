@@ -125,6 +125,7 @@
 
 						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
+							H.Stun(3)
 						if(foot.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()

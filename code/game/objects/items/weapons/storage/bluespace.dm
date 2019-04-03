@@ -47,6 +47,7 @@
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
 	user.Knockdown(10)
+	user.Stun(10)
 	to_chat(user, "<span class = 'danger'>The Bluespace interfaces of the two devices catastrophically malfunction, throwing you to the ground in the process!</span>")
 	to_chat(user, "<span class='danger'>FUCK!</span>")
 	var/turf/T = get_turf(src)
