@@ -101,7 +101,7 @@ Obviously, requires DNA2.
 
 /datum/dna/gene/basic/grant_spell/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
-	if((M.disabilities & BLIND) || (M.disabilities & NEARSIGHTED))
+	if((M.sdisabilities & BLIND) || (M.disabilities & NEARSIGHTED))
 		return 0
 	return ..(M,flags)
 
