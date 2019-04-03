@@ -32,7 +32,18 @@
 	else
 		AppendObjective(/datum/objective/target/steal)
 
-	if(player_list.len<=15 && prob(10))
+	var/living = 0
+	for(var/mob/living/M in player_list)
+		if(!M.client)
+			continue
+		if(!iscarbon(M) && !issilicon(M))
+			continue
+		var/turf/T = get_turf(M)
+		if(T.z != STATION_Z)
+			continue
+		if(M.stat != DEAD)
+			living++
+	if(living<=16 && prob(25))
 		AppendObjective(/datum/objective/silence)
 	else
 		AppendObjective(/datum/objective/survive)
