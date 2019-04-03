@@ -32,11 +32,15 @@
 	var/icon/img		//Big photo image
 	var/scribble		//Scribble on the back.
 	var/blueprints = FALSE	//Does it include the blueprints?
+	var/list/mobs = list() //References to these mobs will last as long as the photo does, like the memory of those mobs
 	var/info 			//Info on the camera about mobs or some shit
 
 	autoignition_temperature = 530 // Kelvin
 	fire_fuel = TRUE
 
+/obj/item/weapon/photo/Destroy()
+	..()
+	mobs.Cut()
 
 /obj/item/weapon/photo/attack_self(mob/user)
 	show(user)
@@ -367,6 +371,13 @@
 
 	return res
 
+/obj/item/device/camera/proc/camera_get_mobrefs(turf/the_turf)
+	var/list/mobrefs
+	for(var/mob/living/A in the_turf)
+		if(A.invisibility)
+			continue
+		mobrefs += A
+	return mobrefs
 
 /obj/item/device/camera/proc/camera_get_mobs(turf/the_turf)
 	var/mob_detail
@@ -443,10 +454,11 @@
 	if(min_harm_label && harm_labeled >= min_harm_label)
 		var/icon/I = get_base_photo_icon("blocked")
 
-		printpicture(user, I, "You can't see a thing.", flag)
+		printpicture(user, I, "You can't see a thing.", list(), flag)
 		return
 
 	var/mobs = ""
+	var/list/mob_refs = list()
 	var/list/seen
 	if(!isAI(user)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
 		if(user.client)		//To make shooting through security cameras possible
@@ -464,6 +476,7 @@
 			else
 				turfs += T
 				mobs += camera_get_mobs(T)
+				mob_refs += camera_get_mobrefs(T)
 
 	var/icon/temp = get_base_photo_icon()
 
@@ -471,11 +484,11 @@
 	temp.Blend(camera_get_icon(turfs, target), ICON_OVERLAY)
 
 	if(!issilicon(user))
-		printpicture(user, temp, mobs, flag)
+		printpicture(user, temp, mobs, mob_refs, flag)
 	else
 		aipicture(user, temp, mobs, user, blueprints)
 
-/obj/item/device/camera/proc/printpicture(mob/user, icon/temp, mobs, flag) //Normal camera proc for creating photos
+/obj/item/device/camera/proc/printpicture(mob/user, icon/temp, mobs, mob_refs, flag) //Normal camera proc for creating photos
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	user.put_in_hands(P)
 	var/icon/small_img = icon(temp)
@@ -484,6 +497,7 @@
 	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
+	P.mobs = mob_refs
 	P.info = mobs
 	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
@@ -492,7 +506,7 @@
 		P.blueprints = TRUE
 		blueprints = FALSE
 
-/obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
+/obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, mob_refs, flag) //Creates photos in sepia
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	user.put_in_hands(P)
 	var/icon/small_img = icon(temp)

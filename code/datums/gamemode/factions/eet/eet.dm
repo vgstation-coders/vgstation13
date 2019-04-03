@@ -4,6 +4,8 @@ var/global/obj/structure/eet_continuum/eet_cont
 var/global/datum/religion/eet_rel
 var/global/datum/seed/eet_seeds
 var/global/datum/disease2/eet_virus
+var/global/list/eet_tracked_organs
+var/global/list/eet_tracked_implants
 
 /datum/faction/eet
 	name = "Enigmatic Extraterrestrials"

@@ -12,6 +12,13 @@
 	var/list/danger_objective = list(/datum/objective/eet/virus,/datum/objective/eet/data)
 	var/peaceful = TRUE
 
+	/***********************
+	*                      *
+	* Weird Stuff to Track *
+	*                      *
+	***********************/
+	var/nutriment_metabolized = 0
+
 /datum/role/eet/OnPostSetup()
 	..()
 	if(prob(50))
@@ -49,7 +56,6 @@
 /datum/role/eet/proc/SelectObjective(var/O) //Let O be an objective path
 	if(!ispath(O))
 		return
-	AppendObjective(O)
 	switch(O)
 		if(/datum/objective/eet/religion)
 			if(!eet_rel && eet_rel.religiousLeader)
@@ -67,6 +73,16 @@
 				B.my_rel = eet_rel
 				C.put_in_hands(B)
 				to_chat(antag.current,"<span class='good'>[eet_rel.religiousLeader] leads the Monolith faith and must handle conversions. You may assume leadership by using the Continuum if the old leader's mind is returned to it.</span>")
+		if(/datum/objective/eet/organs)
+			var/list/organs_list = list(/obj/item/organ/internal/heart/cell,/obj/item/organ/internal/lungs/filter,/obj/item/organ/internal/lungs/vox,
+										/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/eyes/grue,/obj/item/organ/internal/eyes/adv_1,
+										)
+			for(var/i = 1 to rand(4,6))
+				var/type = pick(organs_list)
+				var/obj/item/organ/org = new type
+				eet_tracked_organs += org
+				eet_arch.insert_item(org)
+	AppendObjective(O)
 
 /datum/role/eet/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -81,3 +97,8 @@
 		if(GREET_HEET)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'><font size='3'>You are a HEET, a Hostile Enigmatic Extraterrestrial!</font></span>")
 			to_chat(antag.current, "<B><span class='warning'>You are fully authorized to kill and destroy as necessary to complete your objectives.</warning></B>")
+
+/datum/role/eet/handle_reagent(var/reagent_id)
+	switch(reagent_id)
+		if(NUTRIMENT) //Many things give you nutrition, but we're only interested in nutriment
+			nutriment_metabolized += 15 * REAGENTS_METABOLISM

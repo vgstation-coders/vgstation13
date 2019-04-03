@@ -10,3 +10,6 @@
 	if(eet_core.reagents.has_reagent(FUEL,10000))
 		return TRUE
 	return FALSE
+
+/datum/objective/eet/fuel/DatacoreQuery()
+	return ..() + "; Fuel: [eet_core.reagents.get_reagent_amount(FUEL)]/10000"

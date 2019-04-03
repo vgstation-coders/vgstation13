@@ -336,10 +336,11 @@
 		H.update_body()
 
 /obj/item/organ/internal/proc/replaced(var/mob/living/target)
-	return
+	if(src in eet_tracked_organs)
+		eet_tracked_organs -= src
 
 /obj/item/organ/internal/eyes/replaced(var/mob/living/target)
-
+	..()
 	// Apply our eye colour to the target.
 	var/mob/living/carbon/human/H = target
 	if(istype(H) && eye_colour)

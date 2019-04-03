@@ -2,7 +2,42 @@
 	name = "\improper Extraterrestrial Mothership"
 	icon_state = "shuttle"
 
-/* Structures, Machines */
+/datum/map_element/dungeon/eetmothership
+	file_path = "maps/randomvaults/dungeons/eetmothership.dmm"
+	unique = TRUE
+
+    /***********************
+	*                      *
+	*        Items         *
+	*                      *
+	***********************/
+
+/obj/item/eet_implant
+	name = "enigmatic implant"
+	desc = "It's pulsing and warm..."
+
+/obj/item/device/mindchip
+	name = "enigmatic mindchip"
+	desc = "EETs use these to reclaim the minds of other dead EETs."
+	icon = 'icons/obj/eet.dmi'
+	icon_state = "mindchip"
+	var/datum/mind/mind
+
+/obj/item/device/mindchip/preattack(var/atom/A, mob/user)
+	if(ishuman(A) && !mind)
+		var/mob/living/carbon/human/H = A
+		if(H.stat == DEAD && H.mind.GetRole(EET))
+			mind = H.mind
+			to_chat(H,"<span class='danger'><font size='3'>Your mind has been backed up to a mindchip.</font></span>")
+			return 1
+	else
+		..()
+
+    /***********************
+	*                      *
+	*      Structures      *
+	*       Machines       *
+	***********************/
 
 /obj/structure/reagent_dispensers/eet_ship_core
 	name = "enigmatic engine core"
@@ -114,23 +149,6 @@
 		M.mind.current = E
 		M.mind = null
 		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
-
-/obj/item/device/mindchip
-	name = "enigmatic mindchip"
-	desc = "EETs use these to reclaim the minds of other dead EETs."
-	icon = 'icons/obj/eet.dmi'
-	icon_state = "mindchip"
-	var/datum/mind/mind
-
-/obj/item/device/mindchip/preattack(var/atom/A, mob/user)
-	if(ishuman(A) && !mind)
-		var/mob/living/carbon/human/H = A
-		if(H.stat == DEAD && H.mind.GetRole(EET))
-			mind = H.mind
-			to_chat(H,"<span class='danger'><font size='3'>Your mind has been backed up to a mindchip.</font></span>")
-			return 1
-	else
-		..()
 
 /obj/machinery/computer/eet_datacore
 	name = "Enigmatic Data Core"

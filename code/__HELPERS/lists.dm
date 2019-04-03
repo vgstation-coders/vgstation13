@@ -238,6 +238,13 @@
 			K += item
 	return K
 
+//Insert only if unique type
+/proc/unique_type_insert(var/list/L, var/atom/entry)
+	for(var/atom/item in L)
+		if(item.type == entry.type)
+			return FALSE
+	return (L+entry)
+
 //for sorting clients or mobs by ckey
 /proc/sortKey(list/L, order=1)
 	return sortTim(L, order >= 0 ? /proc/cmp_ckey_asc : /proc/cmp_ckey_dsc)

@@ -378,6 +378,7 @@
 #include "code\datums\gamemode\objectives\eet\books.dm"
 #include "code\datums\gamemode\objectives\eet\culture.dm"
 #include "code\datums\gamemode\objectives\eet\data.dm"
+#include "code\datums\gamemode\objectives\eet\eet.dm"
 #include "code\datums\gamemode\objectives\eet\food.dm"
 #include "code\datums\gamemode\objectives\eet\fuel.dm"
 #include "code\datums\gamemode\objectives\eet\implants.dm"
