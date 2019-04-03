@@ -87,9 +87,19 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		<div class="commit sansserif">
 
 			<h2 class="date">2019.04.03</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Undid a change that let people crawl out of knockdowns. Tabling, window smashing, neurotoxin, and more now properly stun their victims. You can still crawl if you're knocked down by pain.</li>
+			</ul>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">You can no longer use mannequins to remove undroppable items</li>
+				<li class="tweak">Department accounts lowered to 500 (750 for station account)</li>
+				<li class="rscdel">Some accounts can be hidden from accounts database (shoal, slot machines, vendors). Attempting to set an ID to use these accounts will cause an error, as will trying to set a wrong account number.</li>
+				<li class="tweak">Lowered the prices of the most expensive things in cargo that were balanced around department accounts</li>
+				<li class="bugfix">Fixed a bug where Cargo was the department attached to public vending machines instead of the (unused) vendor account. This means Cargo can't set prices or be 100% reimbursed for buying things anymore.</li>
+				<li class="bugfix">Improved error message for payment when your card does not have a linked bank account (mostly trader relevant)</li>
+				<li class="tweak">Shields and other blocking items (e.g.: katanas) now properly block thrown objects</li>
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
