@@ -33,7 +33,7 @@
 	return canmove
 
 /mob/living/carbon/brain/say(var/message)
-	if (container && istype(container, /obj/item/device/mmi/posibrain))
+	if (container && istype(container, /obj/item/device/mmi))
 		if(istype(container.loc,/obj/item/weapon/storage/belt/silicon))
 			RenderBeltChat(container.loc,src,message)
 			return

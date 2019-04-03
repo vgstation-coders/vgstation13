@@ -313,6 +313,7 @@
 		var/mob/M = B.loc
 		listeners += M
 	listeners += B.GetCyberbeltMobs()
+	listeners = uniquelist(listeners)
 	var/turf/T = get_turf(B)
 	log_say("[key_name(C)] (@[T.x],[T.y],[T.z]) Trophy Belt: [message]")
 	for(var/mob/L in listeners)
