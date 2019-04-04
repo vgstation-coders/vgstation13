@@ -295,19 +295,20 @@
 			R.holy_book.item_state = "scrapbook"
 		if("Creeper")
 			R.holy_book.icon_state = "creeper"
-			R.holy_book.item_state = "syringe_kit"
+			R.holy_book.item_state = "creeper"
 		if("White Bible")
 			R.holy_book.icon_state = "white"
-			R.holy_book.item_state = "syringe_kit"
+			R.holy_book.item_state = "white"
 		if("Holy Light")
 			R.holy_book.icon_state = "holylight"
-			R.holy_book.item_state = "syringe_kit"
+			R.holy_book.item_state = "holylight"
 		if("Athiest")
 			R.holy_book.icon_state = "athiest"
-			R.holy_book.item_state = "syringe_kit"
+			R.holy_book.item_state = "athiest"
 		if("Tome")
-			R.holy_book.icon_state = "tome"
-			R.holy_book.item_state = "syringe_kit"
+			R.holy_book.icon_state = "bible-tome"
+			R.holy_book.item_state = "bible-tome"
+			R.holy_book.desc = "A Nanotrasen-approved heavily revised interpretation of Nar-Sie's teachings. Apply to head repeatedly."
 		if("The King in Yellow")
 			R.holy_book.icon_state = "kingyellow"
 			R.holy_book.item_state = "kingyellow"
@@ -334,7 +335,8 @@
 			R.holy_book.item_state = "torah"
 		if("Burning")
 			R.holy_book.icon_state = "burning"
-			R.holy_book.item_state = "syringe_kit"
+			R.holy_book.item_state = "burning"
+			R.holy_book.damtype = BURN
 		if("Honk")
 			R.holy_book.icon_state = "honkbook"
 			R.holy_book.item_state = "honkbook"
@@ -355,6 +357,8 @@
 			//If christian bible, revert to default
 			R.holy_book.icon_state = "bible"
 			R.holy_book.item_state = "bible"
+			R.holy_book.desc = "Apply to head repeatedly."
+			R.holy_book.damtype = BRUTE
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/default
