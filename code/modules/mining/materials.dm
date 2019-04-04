@@ -190,7 +190,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/diamond
 	name="Diamond"
 	id=MAT_DIAMOND
-	value=1
+	value=4
 	cc_per_sheet = 1750
 	oretype=/obj/item/stack/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
@@ -224,7 +224,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/gold
 	name="Gold"
 	id=MAT_GOLD
-	value=0.25
+	value=1
 	oretype=/obj/item/stack/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
@@ -237,7 +237,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/silver
 	name="Silver"
 	id=MAT_SILVER
-	value=0.25
+	value=1
 	oretype=/obj/item/stack/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
@@ -251,7 +251,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/uranium
 	name="Uranium"
 	id=MAT_URANIUM
-	value=0.25
+	value=1
 	oretype=/obj/item/stack/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
@@ -272,7 +272,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown
 	name="Bananium"
 	id=MAT_CLOWN
-	value=0.4
+	value=1
 	oretype=/obj/item/stack/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
@@ -300,7 +300,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/phazon
 	name="Phazon"
 	id=MAT_PHAZON
-	value=0.4
+	value=1
 	cc_per_sheet = 1500
 	oretype=/obj/item/stack/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
@@ -384,7 +384,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/mythril
 	name="mythril"
 	id=MAT_MYTHRIL
-	value=0
+	value=1
 	oretype=/obj/item/stack/ore/mythril
 	sheettype=/obj/item/stack/sheet/mineral/mythril
 	cointype=/obj/item/weapon/coin/mythril
@@ -397,7 +397,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/telecrystal
 	name="telecrystal"
 	id=MAT_TELECRYSTAL
-	value=0
+	value=1
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null
