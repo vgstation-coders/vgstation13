@@ -1602,8 +1602,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		while(q.NextRow())
 			name_list[q.GetColumn(2)] = q.GetColumn(1)
 	else
-		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-		warning("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in open_load_dialog [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+		warning("Error in open_load_dialog [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	var/dat = "<center><b>Select a character slot to load</b><hr>"
 	var/counter = 1

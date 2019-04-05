@@ -47,8 +47,8 @@
 	var/database/query/q = new
 	q.Add("UPDATE client SET lastchangelog=? WHERE ckey=?",lastchangelog,ckey)
 	if(!q.Execute(db))
-		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in SetChangelog [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+		WARNING("Error in Setchangelog [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 /datum/preferences/proc/load_preferences_sqlite(var/ckey)
@@ -58,12 +58,12 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+			message_admins("Error in load_preferences_sqlite [__FILE__] ln:[__LINE__] #: [check.Error()] - [check.ErrorMsg()]")
+			WARNING("Error in load_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 			return 0
 	else
-		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in load_preferences_sqlite [__FILE__] ln:[__LINE__] #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in load_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	q.Add("SELECT * FROM client WHERE ckey = ?", ckey)
 	if(q.Execute(db))
@@ -72,8 +72,8 @@
 			for(var/a in row)
 				preference_list_client[a] = row[a]
 	else
-		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in load_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+		WARNING("Error in load_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	ooccolor 		=	preference_list_client["ooc_color"]
@@ -213,19 +213,19 @@
 			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
 			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume)
 			if(!q.Execute(db))
-				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
 			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, WHERE ckey = ?",\
 			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, ckey)
 			if(!q.Execute(db))
-				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 	else
-		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	to_chat(user, "Preferences Updated.")
 	lastPolled = world.timeofday
@@ -525,7 +525,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			var/list/row = q.GetRowData()
 			roles[row["role"]] = text2num(row["preference"])
 	else
-		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in load_save_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 		WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
 		return 0
 
@@ -671,8 +671,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		while(q.NextRow())
 			slot_list.Add(q.GetColumn(1))
 	else
-		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in random_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+		WARNING("Error in random_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	var/random_slot = pick(slot_list)
 	load_save_sqlite(ckey, user, random_slot)
@@ -745,21 +745,21 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?,             ?)",
 			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, bank_security, be_random_body)
 			if(!q.Execute(db))
-				message_admins("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
 			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,bank_security=?,random_body=?   WHERE player_ckey = ? AND player_slot = ?",\
 									  metadata,   real_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  bank_security,  be_random_body,       ckey,               slot)
 			if(!q.Execute(db))
-				message_admins("UpdatePlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("UpdatePlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Character")
 	else
-		message_admins("SelectPlayer: Error #:[check.Error()] - [check.ErrorMsg()]")
-		WARNING("SelectPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM body WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
@@ -769,21 +769,21 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			                 VALUES (?,           ?,           ?,        ?,          ?,         ?,          ?,            ?,           ?,         ?,               ?,                 ?,        ?,          ?,         ?,         ?)",
 			                         ckey,        slot,        r_hair,   g_hair,     b_hair,    r_facial,   g_facial,     b_facial,    s_tone,    h_style,         f_style,           r_eyes,   g_eyes,     b_eyes,    underwear, backbag)
 			if(!q.Execute(db))
-				message_admins("InsertBody: Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("InsertBody: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Body")
 		else
 			q.Add("UPDATE body SET hair_red=?, hair_green=?, hair_blue=?, facial_red=?, facial_green=?, facial_blue=?, skin_tone=?, hair_style_name=?, facial_style_name=?, eyes_red=?, eyes_green=?, eyes_blue=?, underwear=?, backbag=? WHERE player_ckey = ? AND player_slot = ?",\
 			                       r_hair,     g_hair,       b_hair,      r_facial,     g_facial,       b_facial,      s_tone,      h_style,           f_style,             r_eyes,     g_eyes,       b_eyes,      underwear,   backbag,        ckey,               slot)
 			if(!q.Execute(db))
-				message_admins("UpdateBody: Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("UpdateBody: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Body")
 	else
-		message_admins("SelectBody: Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("SelectBody: Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM jobs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
@@ -794,8 +794,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 					         VALUES (?,          ?,          ?,               ?,                ?,               ?,               ?,              ?,             ?,             ?,              ?,             ?)", \
 							        ckey,        slot,       alternate_option,job_civilian_high,job_civilian_med,job_civilian_low,job_medsci_high,job_medsci_med,job_medsci_low,job_engsec_high,job_engsec_med,job_engsec_low)
 			if(!q.Execute(db))
-				message_admins("InsertJob: Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("InsertJob: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Job list")
 		else
@@ -803,13 +803,13 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			q.Add("UPDATE jobs SET alternate_option=?,job_civilian_high=?,job_civilian_med=?,job_civilian_low=?,job_medsci_high=?,job_medsci_med=?,job_medsci_low=?,job_engsec_high=?,job_engsec_med=?,job_engsec_low=? WHERE player_ckey = ? AND player_slot = ?",\
 								   alternate_option,  job_civilian_high,  job_civilian_med,  job_civilian_low,  job_medsci_high,  job_medsci_med,  job_medsci_low,  job_engsec_high,  job_engsec_med,  job_engsec_low,        ckey,               slot)
 			if(!q.Execute(db))
-				message_admins("UpdateJob: Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("UpdateJob: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Job List")
 	else
-		message_admins("SelectJobs: Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("SelectJobs: Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in save_character_sqlite ln 790 #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in save_character_sqlite ln 790 #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM limbs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
@@ -817,27 +817,27 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		if(!check.NextRow())
 			q.Add("INSERT INTO limbs (player_ckey, player_slot) VALUES (?,?)", ckey, slot)
 			if(!q.Execute(db))
-				message_admins("InsertLimb: Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("InsertLimb: Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			for(var/stuff in organ_data)
 				q.Add("UPDATE limbs SET [stuff]=? WHERE player_ckey = ? AND player_slot = ?", organ_data[stuff], ckey, slot)
 				if(!q.Execute(db))
-					message_admins("UpdateLimb: Error #; [q.Error()] - [q.ErrorMsg()]")
-					WARNING("UpdateLimb: Error #:[q.Error()] - [q.ErrorMsg()]")
+					message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #; [q.Error()] - [q.ErrorMsg()]")
+					WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 					return 0
 			to_chat(user, "Created Limbs")
 		else
 			for(var/stuff in organ_data)
 				q.Add("UPDATE limbs SET [stuff] = ? WHERE player_ckey = ? AND player_slot = ?", organ_data[stuff], ckey, slot)
 				if(!q.Execute(db))
-					message_admins("UpdateOnlyLimb: Error #: [q.Error()] - [q.ErrorMsg()]")
-					WARNING("UpdateOnlyLimb: Error #:[q.Error()] - [q.ErrorMsg()]")
+					message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+					WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 					return 0
 			to_chat(user, "Updated Limbs")
 	else
-		message_admins("SelectPlayerLimbsForSave: Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("SelectPlayerLimbsForSave: Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	for(var/role_id in roles)
