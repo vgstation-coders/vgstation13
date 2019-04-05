@@ -530,6 +530,9 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["expert"] = "none"
 
 /datum/controller/gameticker/proc/declare_completion()
+	if(!ooc_allowed)
+		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
+		ooc_allowed = TRUE
 	scoreboard()
 	return 1
 
