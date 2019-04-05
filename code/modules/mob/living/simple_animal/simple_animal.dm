@@ -24,6 +24,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/speak_chance = 0
 	var/list/emote_hear = list()	//Hearable emotes
 	var/list/emote_see = list()		//Unlike speak_emote, the list of things in this variable only show by themselves with no spoken text. IE: Ian barks, Ian yaps
+	var/list/emote_sound = list()   //Plays a random sound when emote_hear activates
 
 	var/speak_override = FALSE
 
@@ -360,8 +361,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			switch(mode)
 				if(1)
 					say(pick(speak))
+					if(emote_sound.len)
+						playsound(loc, "[pick(emote_sound)]", 80, 1)
 				if(2)
 					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
+					if(emote_sound.len)
+						playsound(loc, "[pick(emote_sound)]", 80, 1)
 				if(3)
 					emote("me", MESSAGE_SEE, "[pick(emote_see)].")
 

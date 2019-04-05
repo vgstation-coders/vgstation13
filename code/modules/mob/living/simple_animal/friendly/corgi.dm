@@ -10,10 +10,11 @@
 	health = 30
 	maxHealth = 30
 	gender = MALE
-	speak = list("YAP", "Woof!", "Bark!", "AUUUUUU")
+	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
 	speak_emote = list("barks", "woofs")
-	emote_hear = list("barks", "woofs", "yaps","pants")
-	emote_see = list("shakes its head", "shivers")
+	emote_hear = list("barks", "woofs", "yaps")
+	emote_see = list("shakes its head", "shivers", "pants")
+	emote_sound = list("sound/voice/corgibark.ogg")
 	speak_chance = 1
 	turns_per_move = 10
 
@@ -435,10 +436,11 @@
 			if(inventory_head)
 				name = real_name
 				desc = initial(desc)
-				speak = list("YAP", "Woof!", "Bark!", "AUUUUUU")
+				speak = list("YAP!", "Woof!", "Bark!", "Arf!")
 				speak_emote = list("barks", "woofs")
-				emote_hear = list("barks", "woofs", "yaps","pants")
-				emote_see = list("shakes its head", "shivers")
+				emote_hear = list("barks", "woofs", "yaps")
+				emote_see = list("shakes its head", "shivers", "pants")
+				emote_sound = list("sound/voice/corgibark.ogg")
 				min_oxy = initial(min_oxy)
 				minbodytemp = initial(minbodytemp)
 				maxbodytemp = initial(maxbodytemp)
@@ -618,7 +620,9 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, "yaps happily.")
+				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 			if(I_HURT)
+				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
 
 
