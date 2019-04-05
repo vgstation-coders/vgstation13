@@ -217,7 +217,7 @@
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, WHERE ckey = ?",\
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=? WHERE ckey = ?",\
 			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, ckey)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
