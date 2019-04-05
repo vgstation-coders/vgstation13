@@ -611,6 +611,7 @@
 /mob/living/simple_animal/corgi/attack_hand(mob/living/carbon/human/M)
 	. = ..()
 	react_to_touch(M)
+	M.delayNextAttack(2 SECONDS)
 
 /mob/living/simple_animal/corgi/proc/react_to_touch(mob/M)
 	if(M && !isUnconscious())
