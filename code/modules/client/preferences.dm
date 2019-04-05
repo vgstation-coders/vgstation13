@@ -349,7 +349,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Play Ambience:</b>
 	<a href='?_src_=prefs;preference=ambience'><b>[(toggles & SOUND_AMBIENCE) ? "Yes" : "No"]</b></a><br>
 	[(toggles & SOUND_AMBIENCE)? \
-	"<b>Ambience Volume:</b><a href='?_src_=prefs;preference=ambience_volume<b>[ambience_volume]</b></a><br>":""]
+	"<b>Ambience Volume:</b><a href='?_src_=prefs;preference=ambience_volume'><b>[ambience_volume]</b></a><br>":""]
 	<b>Hear streamed media:</b>
 	<a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
 	<b>Streaming Program:</b>
@@ -1354,7 +1354,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(!(toggles & SOUND_AMBIENCE))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)
 				if("ambience_volume")
-					ambience_volume = Clamp(input(user, "Enter the new volume you wish to use. (0-100)","Ambience Volume Preferences", ambience_volume), 0, 100)
+					ambience_volume = min(max(input(user, "Enter the new volume you wish to use. (0-100)","Ambience Volume Preferences", ambience_volume), 0), 100)
 				if("jukebox")
 					toggles ^= SOUND_STREAMING
 
