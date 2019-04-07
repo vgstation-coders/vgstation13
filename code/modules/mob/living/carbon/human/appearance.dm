@@ -27,14 +27,14 @@
 /mob/living/carbon/human/
 	var/datum/human_appearance/my_appearance
 
-/mob/living/carbon/human/proc/switch_appearance(var/datum/huamn_appearance/new_looks)
+/mob/living/carbon/human/proc/switch_appearance(var/datum/human_appearance/new_looks)
 	if (!istype(new_looks))
 		return
 	my_appearance = new_looks
 	regenerate_icons()
 
 /mob/living/carbon/human/proc/randomise_appearance_for(var/new_gender)
-	var/datum/huamn_appearance/appearance = new
+	var/datum/human_appearance/appearance = new
 
 	if (new_gender)
 		appearance.gender = new_gender
