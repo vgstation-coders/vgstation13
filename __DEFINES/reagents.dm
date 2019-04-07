@@ -132,6 +132,7 @@
 #define FROSTOIL 			"frostoil"
 #define SODIUMCHLORIDE 			"sodiumchloride"
 #define CREATINE 			"creatine"
+#define LECTULOLIN 			"lectulolin"
 #define CARPPHEROMONES 			"carppheromones"
 #define BLACKPEPPER 			"blackpepper"
 #define CINNAMON 			"cinnamon"

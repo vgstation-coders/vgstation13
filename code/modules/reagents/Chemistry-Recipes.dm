@@ -3386,5 +3386,13 @@
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/hostile/carp/baby(location)
 
+/datum/chemical_reaction/lectulolin
+	name = "lectulolin"
+	id = LECTULOLIN
+	result = LECTULOLIN
+	required_reagents = list(DOCTORSDELIGHT = 1, SYNTHOCARISOL = 1, PEPTOBISMOL = 1, DERMALINE = 1)
+	required_catalysts = list(PLASMA = 5, DEXALINP = 1)
+	result_amount = 1
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

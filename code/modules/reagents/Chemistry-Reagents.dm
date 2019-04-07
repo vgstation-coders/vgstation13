@@ -2728,6 +2728,32 @@
 				OD.damage = max(0, OD.damage-0.4)
 
 
+/datum/reagent/lectulolin
+	name = "Lectulolin"
+	id = LECTULOLIN
+	description = "Lectulolin is an extremely potent but unstable curative. Effective only in extreme cases"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#993333"
+	density = 2.78
+	specheatcap = 0.90
+
+
+/datum/reagent/lectulolin/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.InCritical())
+		M.adjustOxyLoss(-3)
+		M.heal_organ_damage(3,3)
+		M.adjustToxLoss(-3)
+		if(!M.locked_to)
+			holder.remove_reagent("Lectulolin", 1/4)
+		else
+			M.adjustOxyLoss(-3)
+			M.heal_organ_damage(3,3)
+			M.adjustToxLoss(-3)
+
+
+
 /datum/reagent/bicaridine
 	name = "Bicaridine"
 	id = BICARIDINE
@@ -2737,7 +2763,6 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
-
 
 
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
