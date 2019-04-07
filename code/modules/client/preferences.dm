@@ -133,6 +133,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/language = "None"				//Secondary language
 	var/hear_instruments = 1
 	var/ambience_volume = 25
+	var/credits_volume = 75
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -394,6 +395,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=credits'><b>[credits]</b></a><br>
 	<b>Server Shutdown Jingle <span title='These jingles will only play if credits don&#39;t roll for you that round. &#39;Classics&#39; will only play &#39;APC Destroyed&#39; and &#39;Banging Donk&#39;, &#39;All&#39; will play the previous plus retro videogame sounds.'>(?):</span><b>
 	<a href='?_src_=prefs;preference=jingle'><b>[jingle]</b></a><br>
+	<b>Credits/Jingle Volume:</b>
+	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
   </div>
 </div>"}
 
@@ -1466,6 +1469,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							jingle = JINGLE_ALL
 						if(JINGLE_ALL)
 							jingle = JINGLE_NEVER
+
+				if("credits_volume")
+					credits_volume = min(max(input(user, "Enter the new volume you wish to use. (0-100, default is 75)","Credits/Jingle Volume", credits_volume), 0), 100)
 
 			if(user.client.holder)
 				switch(href_list["preference"])
