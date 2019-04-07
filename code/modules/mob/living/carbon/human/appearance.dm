@@ -66,10 +66,7 @@
 
 /mob/living/carbon/human/proc/randomize_hair_color(var/target = "hair")
 	if(prob (75) && target == "facial") // Chance to inherit hair color
-		my_appearance.r_facial = my_appearance.r_hair
-		my_appearance.g_facial = my_appearance.g_hair
-		my_appearance.b_facial = my_appearance.b_hair
-		return
+		return list(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair)
 
 	var/red
 	var/green
