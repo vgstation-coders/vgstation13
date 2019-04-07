@@ -23,55 +23,55 @@
 	..(new_loc, "Manifested")
 
 /mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Skrell Male Tentacles"
+	my_appearance.h_style = "Skrell Male Tentacles"
 	..(new_loc, "Skrell")
 
 /mob/living/carbon/human/tajaran/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Tajaran Ears"
+	my_appearance.h_style = "Tajaran Ears"
 	..(new_loc, "Tajaran")
 
 /mob/living/carbon/human/unathi/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Unathi Horns"
+	my_appearance.h_style = "Unathi Horns"
 	..(new_loc, "Unathi")
 
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Short Vox Quills"
+	my_appearance.h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Diona")
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Skellington", delay_ready_dna)
 
 /mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
 
 /mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Plasmaman")
 
 /mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Muton")
 
 /mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Grey")
 
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Golem")
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Grue")
 
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Slime")
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
@@ -79,8 +79,8 @@
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	f_style = pick(facial_hair_styles_list)
-	h_style = pick(hair_styles_list)
+	my_appearance.f_style = pick(facial_hair_styles_list)
+	my_appearance.h_style = pick(hair_styles_list)
 
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
 
@@ -95,11 +95,11 @@
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Mushroom")
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
+	my_appearance.h_style = "Bald"
 	..(new_loc, "Undead")
 
 /mob/living/carbon/human/generate_static_overlay()
@@ -123,8 +123,9 @@
 	static_overlays["cult"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
+	my_appearance = new // Initialise how they look.
 	if(new_species_name)
-		s_tone = random_skin_tone(new_species_name)
+		my_appearance.s_tone = random_skin_tone(new_species_name)
 	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
@@ -751,30 +752,30 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(r_facial,g_facial,b_facial)) as color
+	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
 	if(new_facial)
-		r_facial = hex2num(copytext(new_facial, 2, 4))
-		g_facial = hex2num(copytext(new_facial, 4, 6))
-		b_facial = hex2num(copytext(new_facial, 6, 8))
+		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
+		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
+		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(r_hair,g_hair,b_hair)) as color
+	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
 	if(new_facial)
-		r_hair = hex2num(copytext(new_hair, 2, 4))
-		g_hair = hex2num(copytext(new_hair, 4, 6))
-		b_hair = hex2num(copytext(new_hair, 6, 8))
+		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
+		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
+		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(r_eyes,g_eyes,b_eyes)) as color
+	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
 	if(new_eyes)
-		r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		b_eyes = hex2num(copytext(new_eyes, 6, 8))
+		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-s_tone]")  as text
+	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
 
 	if (!new_tone)
 		new_tone = 35
-	s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	s_tone =  -s_tone + 35
+	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+	my_appearance.s_tone =  -my_appearance.s_tone + 35
 
 	// hair
 	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -787,11 +788,11 @@
 		qdel(H) // delete the hair after it's all done
 		H = null
 
-	var/new_style = input("Please select hair style", "Character Generation",h_style)  as null|anything in hairs
+	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
 
 	// if new style selected (not cancel)
 	if (new_style)
-		h_style = new_style
+		my_appearance.h_style = new_style
 
 	// facial hair
 	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
@@ -803,10 +804,10 @@
 		qdel(H)
 		H = null
 
-	new_style = input("Please select facial style", "Character Generation",f_style)  as null|anything in fhairs
+	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
 
 	if(new_style)
-		f_style = new_style
+		my_appearance.f_style = new_style
 
 	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
@@ -1723,18 +1724,18 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"r_hair",
-		"g_hair",
-		"b_hair",
-		"h_style",
-		"r_facial",
-		"g_facial",
-		"b_facial",
-		"f_style",
-		"r_eyes",
-		"g_eyes",
-		"b_eyes",
-		"s_tone",
+		"my_appearance.r_hair",
+		"my_appearance.g_hair",
+		"my_appearance.b_hair",
+		"my_appearance.h_style",
+		"my_appearance.r_facial",
+		"my_appearance.g_facial",
+		"my_appearance.b_facial",
+		"my_appearance.f_style",
+		"my_appearance.r_eyes",
+		".my_appearance.g_eyes",
+		".my_appearance.b_eyes",
+		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",

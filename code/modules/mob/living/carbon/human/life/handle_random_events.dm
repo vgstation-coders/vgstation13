@@ -8,8 +8,8 @@
 
 		//No hair for radroaches
 		if(src.radiation >= 50)
-			src.h_style = "Bald"
-			src.f_style = "Shaved"
+			src.my_appearance.h_style = "Bald"
+			src.my_appearance.f_style = "Shaved"
 			src.update_hair()
 
 	//0.1% chance of playing a scary sound to someone who's in complete darkness
