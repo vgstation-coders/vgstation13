@@ -130,8 +130,14 @@
 	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
 /obj/item/weapon/disk
-	name = "disk"
-	icon = 'icons/obj/items.dmi'
+	name = "Corrupted Data Disk"
+	desc = "The data on this disk has decayed, and cannot be read by any computer anymore."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
+	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
@@ -394,6 +400,12 @@
 	w_type = RECYK_METAL
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
+	var/image/ied_overlay
+
+/obj/item/weapon/legcuffs/beartrap/New()
+	..()
+	ied_overlay = image('icons/obj/items.dmi')
+	ied_overlay.icon_state = "beartrap_ied"
 
 /obj/item/weapon/legcuffs/beartrap/armed
 	armed = 1
@@ -440,6 +452,7 @@
 					log_game(log_str)
 					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
 					desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
+					overlays.Add(ied_overlay)
 			else
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
@@ -449,6 +462,7 @@
 			IED.forceMove(get_turf(src.loc))
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
+			overlays.Remove(ied_overlay)
 			return
 	..()
 
@@ -493,6 +507,7 @@
 				var/mob/living/simple_animal/SA = AM
 				SA.health -= 20
 
+			overlays.Remove(ied_overlay)
 			update_icon()
 	..()
 

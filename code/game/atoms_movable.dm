@@ -149,8 +149,6 @@
 		glide_size = 0
 	else
 		glide_size = max(min, glide_size_override)
-	for(var/atom/movable/AM in contents)
-		AM.set_glide_size(glide_size, min, max)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -457,12 +455,15 @@
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
+
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
 	else if(client && hud_used)
 		var/client/C = client
 		C.update_special_views()
@@ -485,6 +486,11 @@
 		return 1
 	return 0
 
+//Called below in hit_check to see if it can be hit
+//Return TRUE if not hit.
+/atom/proc/PreImpact(atom/movable/A, speed)
+	return TRUE
+
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
@@ -493,21 +499,10 @@
 			if(A == src)
 				continue
 
-			if(isliving(A))
-				var/mob/living/L = A
-				if(L.lying)
-					continue
-				src.throw_impact(L, speed, user)
-
-				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
-					src.throwing = 0
-					. = 0
-
-			else if(isobj(A))
-				var/obj/O = A
-				if(O.density && !O.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(O, speed, user)
-					src.throwing = 0
+			if(!A.PreImpact(src,speed))
+				throw_impact(A,speed,user)
+				if(throwing==1)
+					throwing = 0
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!

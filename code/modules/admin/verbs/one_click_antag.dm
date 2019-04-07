@@ -166,7 +166,7 @@ client/proc/one_click_antag()
 	var/syndicate_leader_selected = 0 //when the leader is chosen. The last person spawned.
 
 	//Generates a list of commandos from active ghosts. Then the user picks which characters to respawn as the commandos.
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_COMMANDO, poll="Do you wish to be considered for an elite syndicate strike team being sent in?"))
+	for(var/mob/dead/observer/G in get_active_candidates(ROLE_STRIKE, poll="Do you wish to be considered for an elite syndicate strike team being sent in?"))
 		if(!jobban_isbanned(G, "operative") && !isantagbanned(G))
 			candidates += G
 

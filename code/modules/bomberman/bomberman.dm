@@ -661,7 +661,7 @@ obj/structure/bomberflame/Destroy()
 	name = "Bomberman's suit"
 	desc = "Doesn't actually make you immune to bombs!"
 	icon_state = "bomberman"
-	item_state = "bomberman"
+	item_state = "bomberman_suit"
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
@@ -690,7 +690,7 @@ obj/structure/bomberflame/Destroy()
 	name = "Bomberman head"
 	desc = "Terrorism has never looked so adorable."
 	icon_state = "bomberman"
-	item_state = "bomberman"
+	item_state = "bomberman_helmet"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	species_restricted = list("exclude")
@@ -752,9 +752,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/list/tools = list()		//clothes and bomb dispensers spawned by the arena.
 	var/auto_start = 60			//how long (in seconds) till the game automatically begins when at least two players have registered
 	var/counting = 0
-	var/obj/effect/landmark/bomberman_arena/our_landmark = null
 
-/datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user, var/obj/effect/landmark/bomberman_arena/landmark)
+/datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user)
 	if(!a_center)
 		return
 	if(!size)
@@ -772,11 +771,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		var/obj/structure/planner/spawnpoint/P = new(S.spawnpoint, src, S)
 		S.icon = P
 		planners += P
-	
-	if (landmark)
-		landmark.busy = TRUE
-		our_landmark = landmark
-
 
 /datum/bomberman_arena/Destroy()
 	..()
@@ -790,9 +784,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	swalls = null
 	gladiators = null
 	tools = null
-	if (our_landmark)
-		our_landmark.busy = FALSE
-		our_landmark = null
 
 /datum/bomberman_arena/proc/open(var/size,mob/user)
 	var/x = 1

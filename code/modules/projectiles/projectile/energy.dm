@@ -55,6 +55,7 @@
 				if(istype(taggun))
 					taggun.score()
 			M.Knockdown(5)
+			M.Stun(5)
 	return 1
 
 /obj/item/projectile/energy/tag/blue

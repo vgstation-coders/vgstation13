@@ -571,7 +571,7 @@ Status: []<BR>"},
 
 			if (E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
-					if ((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
+					if ((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*" || R.fields["criminal"] == "*High Threat*"))
 						threatcount = PERP_LEVEL_ARREST
 						break
 

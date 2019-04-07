@@ -120,6 +120,8 @@
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
 
+	var/voice_noises = 0
+
 	var/revival_pod_plants = 1
 	var/revival_cloning = 1
 	var/revival_brain_life = -1
@@ -185,6 +187,9 @@
 
 	// Weighted Votes
 	var/weighted_votes = 0
+
+	// Dynamic Mode
+	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
 /datum/configuration/New()
 	. = ..()
@@ -637,6 +642,8 @@
 					config.borer_takeover_immediately = 1
 				if("hardcore_mode")
 					hardcore_mode = value
+				if("humans_speak")
+					voice_noises = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

@@ -6,6 +6,7 @@
 	var/name = "Example syndrome"
 		// Try to have a self-descriptive name, eg. "Hearing Loss", "Toxin Sublimation".
 		// Failing that, call it "X syndrome". It's important that effect names are consistent.
+	var/desc = "This symptom is currently undocumented."
 	var/stage = -1
 		// Diseases start at stage 1. They slowly and cumulatively proceed their way up.
 		// Try to keep more severe effects in the later stages.

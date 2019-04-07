@@ -85,6 +85,15 @@
 /datum/dna/gene/basic/regenerate/New()
 	block=REGENERATEBLOCK
 
+/datum/dna/gene/basic/regenerate/activate(var/mob/living/carbon/human/H)
+	..()
+	H.calorie_burn_rate *= 2
+
+/datum/dna/gene/basic/regenerate/deactivate(var/mob/living/carbon/human/H)
+	if(..())
+		H.calorie_burn_rate /= 2
+
+
 /datum/dna/gene/basic/increaserun
 	name = "Super Speed"
 	activation_messages = list("Your leg muscles pulsate.")
@@ -274,7 +283,7 @@
 	block = XRAYBLOCK
 
 /datum/dna/gene/basic/tk
-	name = "Telekenesis"
+	name = "Telekinesis"
 	activation_messages = list("You feel smarter.")
 	deactivation_messages = list("You feel less smart.")
 

@@ -9,7 +9,8 @@ https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DF
 
 rigged_roundstart() is called instead if there are forced rules (e.g.: an admin set the mode)
 
-can_start() -> Setup() -> roundstart() OR rigged_roundstart() -> picking_roundstart_rule(drafted_rules)
+can_start() -> Setup() -> roundstart() OR rigged_roundstart() -> picking_roundstart_rule(drafted_rules) -> PostSetup()
+**All existing roles and factions ForgeObjectives in PostSetup()
 
 PROCESS (about every 2 sec)
 Calls all rule, faction, and role process()
@@ -56,6 +57,7 @@ picking_specific_rule(ruletype,forced) -> forced OR acceptable(living_players, t
 RULESET
 acceptable(population,threat) just checks if enough threat_level for population indice.
 **NOTE that we currently only send threat_level as the second arg, not threat.
+ready(forced) checks if enough candidates and calls the map's map_ruleset(dynamic_ruleset) at the parent level
 logo_state: if creating a non-faction role, name should be the same for both the role (for role_HUD_icons.dmi) and the ruleset (for logos.dmi) to prevent scoreboard bugs
 
 trim_candidates() varies significantly according to the ruleset type

@@ -1,8 +1,3 @@
-#define LOW_THREAT 1
-#define MEDIUM_THREAT 2
-#define HIGH_THREAT 3
-
-
 /proc/display_roundstart_logout_report()
 	var/msg = "<span class='notice'><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
@@ -108,28 +103,38 @@
 	command_alert(/datum/command_alert/enemy_comms_interception)
 
 /datum/gamemode/dynamic/send_intercept()
-	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
-<B> In case you have misplaced your copy, attached is a brief report on the star sector status:</br>"}
+	var/intercepttext = {"<html><style>
+						body {color: #000000; background: #EDD6B6;}
+						h1 {color: #000000; font-size:30px;}
+						</style><FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR></br>
+						<body>
+						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"><BR>"}
 
-	var/list/threat_detected = list(MEDIUM_THREAT)
+	var/list/threat_detected = round(starting_threat)
 
-	if (threat_level > 50)
-		threat_detected += HIGH_THREAT
+	switch(threat_detected)
+		if(0 to 19)
+			update_playercounts()
+			if(!living_antags.len)
+				intercepttext += "<b>Peaceful Waypoint</b></center><BR>"
+				intercepttext += "Your station orbits deep within controlled, core-sector systems and serves as a waypoint for routine traffic through Nanotrasen's trade empire. Due to the combination of high security, interstellar traffic, and low strategic value, it makes any direct threat of violence unlikely. Your primary enemies will be incompetence and bored crewmen: try to organize team-building events to keep staffers interested and productive."
+			else
+				intercepttext += "<b>Core Territory</b></center><BR>"
+				intercepttext += "Your station orbits within reliably mundane, secure space. Although Nanotrasen has a firm grip on security in your region, the valuable resources and strategic position aboard your station make it a potential target for infiltrations. Monitor crew for non-loyal behavior, but expect a relatively tame shift free of large-scale destruction. We expect great things from your station."
+		if(20 to 39)
+			intercepttext += "<b>Anomalous Exogeology</b></center><BR>"
+			intercepttext += "Although your station lies within what is generally considered Nanotrasen-controlled space, the course of its orbit has caused it to cross unusually close to exogeological features with anomalous readings. Although these features offer opportunities for our research department, it is known that these little understood readings are often correlated with increased activity from competing interstellar organizations and individuals, among them the Wizard Federation, Cult of the Geometer of Blood, and the remaining Vampire Lords - all known competitors for Anomaly Type B sites. Exercise elevated caution."
+		if(40 to 65)
+			intercepttext += "<b>Contested System</b></center><BR>"
+			intercepttext += "Your station's orbit passes along the edge of Nanotrasen's sphere of influence. While subversive elements remain the most likely threat against your station, hostile organizations are bolder here, where our grip is weaker. Exercise increased caution against elite Syndicate strike forces, or Executives forbid, some kind of ill-conceived unionizing attempt."
+		if(66 to 79)
+			intercepttext += "<b>Uncharted Space</b></center><BR>"
+			intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
+		if(80 to 100)
+			intercepttext += "<b>Black Orbit</b></center><BR>"
+			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
 
-	else
-		threat_detected += LOW_THREAT
-
-	var/detected = pick(threat_detected)
-
-	switch (detected)
-		if (LOW_THREAT)
-			intercepttext += "<b>NanoTrasen controlled territory.</b> The station is nested deep inside our area of control, and a major attack is unlikely. <br/>"
-
-		if (MEDIUM_THREAT)
-			intercepttext += "<b>Contested system.</b> This station lies on the edge of our sphere of influence; exercice increased caution. <br/>"
-
-		if (HIGH_THREAT)
-			intercepttext += "<b>Uncharted space.</b> Congratulations and thank you for participating in the NT 'Frontier' space program."
+	intercepttext += "</body></html>"
 
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
@@ -360,14 +365,35 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
+/proc/equip_ninja(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return 0
+	H.delete_all_equipped_items()
+	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/ninja)
 
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensors(H)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
+
+	H.see_in_dark_override = 8
+
+#define GREET_WEEB "weebgreet"
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
 		return 0
 	H.delete_all_equipped_items()
-	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
-	hayai.cant_drop = 1
-	H.put_in_hands(hayai)
+	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
@@ -376,24 +402,29 @@
 	disable_suit_sensors(H)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/nentendiepower, slot_gloves)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/anime, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
 
-/proc/name_weeaboo(var/mob/living/carbon/human/H)
-	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
+	H.see_in_dark_override = 8
+
+	var/datum/role/R = H.mind.GetRole(NINJA)
+	if(R)
+		R.Greet(GREET_WEEB)
+
+/proc/name_ninja(var/mob/living/carbon/human/H)
 	if(!isjusthuman(H))
 		H.set_species("Human", 1)
-	var/weeaboo_title = pick(ninja_titles)
-	var/weeaboo_name = pick(ninja_names)
-	var/randomname = "[weeaboo_title] [weeaboo_name]"
+	var/ninja_title = pick(ninja_titles)
+	var/ninja_name = pick(ninja_names)
+	var/randomname = "[ninja_title] [ninja_name]"
 	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space Weeaboo. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
+		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
 
 		if (!newname)
 			newname = randomname

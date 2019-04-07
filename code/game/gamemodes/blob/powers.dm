@@ -135,7 +135,7 @@
 		return
 
 
-	B.change_to(/obj/effect/blob/core, src)
+	B.change_to(/obj/effect/blob/core, src, TRUE)
 
 	return
 
@@ -283,8 +283,13 @@
 		to_chat(src, "There is no blob adjacent to you.")
 		return
 
+	if(attack_delayer.blocked())
+		return
+
 	if(!can_buy(BLOBATTCOST))
 		return
+
+	delayNextAttack(5)
 	OB.expand(T, 0) //Doesn't give source because we don't care about passive restraint
 	return
 

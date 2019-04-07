@@ -401,6 +401,15 @@
 			return "Always"
 	return "???"
 
+/client/proc/GetRolePrefs()
+	var/list/roleprefs = list()
+	for(var/role_id in antag_roles)
+		if(desires_role(role_id,FALSE))
+			roleprefs += role_id
+	if(!roleprefs.len)
+		return "none"
+	return english_list(roleprefs)
+
 /client/proc/desires_role(var/role_id, var/display_to_user=0)
 	var/role_desired = prefs.roles[role_id]
 	if(display_to_user && !(role_desired & ROLEPREF_PERSIST))
@@ -507,3 +516,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	for(Image in ViewFilter-newimages)
 		images -= Image
 	ViewFilter = newimages
+
+/client/proc/handle_hear_voice(var/mob/origin)
+	if(prefs.hear_voicesound)
+		mob.playsound_local(get_turf(origin), get_sfx("voice"),50,1)

@@ -246,12 +246,23 @@ var/list/arcane_tomes = list()
 		instance = T.spell_type
 		choices += list(list(T, talisman_image, initial(instance.desc_talisman), T.talisman_name()))
 		choice_to_talisman[initial(instance.name)] = T
+
+	if (state == TOME_CLOSED)
+		icon_state = "tome-open"
+		item_state = "tome-open"
+		flick("tome-flickopen",src)
+		state = TOME_OPEN
 	var/choice = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi', "radial-cult2")
 	if(!choice_to_talisman[choice])
 		return
 	var/obj/item/weapon/talisman/chosen_talisman = choice_to_talisman[choice]
 	if(!usr.held_items.Find(src))
 		return
+	if (state == TOME_OPEN)
+		icon_state = "tome"
+		item_state = "tome"
+		flick("tome-stun",src)
+		state = TOME_CLOSED
 	talismans.Remove(chosen_talisman)
 	usr.put_in_hands(chosen_talisman)
 
@@ -1208,15 +1219,22 @@ var/list/arcane_tomes = list()
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
-	name = "cup"
-	desc = "A cup carved from a skull."
+	name = "tempting goblet"
+	desc = "An obsidian cup in the shape of a skull. Used by the followers of Nar-Sie to collect the blood of their sacrifices."
 	icon_state = "cult"
 	item_state = "cult"
 	isGlass = 0
 	amount_per_transfer_from_this = 10
 	volume = 60
-	starting_materials = list(MAT_IRON = 500)
+	force = 5
+	throwforce = 7
 
+/obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
+	..()
+	if (iscultist(user))
+		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
+	else if (get_blood(reagents))
+		to_chat(user, "<span class='sinister'>Its contents look delicious though. Surely a sip won't hurt...</span>")
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
@@ -1226,6 +1244,16 @@ var/list/arcane_tomes = list()
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
+	if(reagents.total_volume)
+		if (ishuman(hit_atom))
+			var/mob/living/carbon/human/H = hit_atom
+			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH)))
+				H.visible_message("<span class='warning'>Some of \the [src]'s content spills into \the [H]'s mouth.</span>","<span class='danger'>Some of \the [src]'s content spills into your mouth.</span>")
+				reagents.reaction(H, INGEST)
+				reagents.trans_to(H, gulp_size)
+	transfer(get_turf(hit_atom), null, splashable_units = -1)
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 

@@ -1,6 +1,9 @@
 #define FED_PING_DELAY 40
 #define INCUBATOR_MAX_SIZE 100
 
+#define SCAN_COUNT_MIN_WEAKSTR 3
+#define SCAN_COUNT_MIN_TARGET 4
+
 /obj/machinery/disease2/incubator
 	name = "pathogenic incubator"
 	density = TRUE
@@ -24,12 +27,11 @@
 	var/mutatechance = 5
 	var/growthrate = 3
 	var/view_virus_info = FALSE
+	var/effect_focus = 0 //What effect of the disease are we focusing on?
 
-	var/virusing
+	var/fully_fed = FALSE
+	var/scancount //What level of scanner are we up to?
 
-	var/last_notice
-
-	var/scancount
 /obj/machinery/disease2/incubator/New()
 	. = ..()
 
@@ -126,7 +128,10 @@
 				strength = 0
 			if("wek")
 				weaken = 0
-
+	if(href_list["target"])
+		effect_focus++
+		if(effect_focus > dish.virus2.effects.len)
+			effect_focus = 0
 	if(href_list["virus"])
 		if (!dish)
 			say("No viral culture sample detected.")
@@ -156,12 +161,14 @@
 	dat += "Power status: <A href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"
 	dat += "<BR>"
 	dat += "Radiation setting: [radiation?(radiation==1?"Minor":"Major"):"Inactive"] (<A href='?src=\ref[src];rad=1'>Toggle radiation level</a>)"
+	if(scancount >= SCAN_COUNT_MIN_TARGET && dish)
+		dat += "<BR>Target individual symptom:<A href='?src=\ref[src];target=1'>[effect_focus==0?"inactive":effect_focus]</A>"
 	dat += "<BR>"
 	dat += "<hr>"
 	if(dish)
 		dat += "Pathogen dish: [dish]"
 		dat += "<br>Growth level: [dish.growth]"
-		if(scancount >= 3 && dish.analysed)
+		if(scancount >= SCAN_COUNT_MIN_WEAKSTR && dish.analysed)
 			if(view_virus_info)
 				dat += "<BR>[dish.info]"
 			dat += "<BR><A href='?src=\ref[src];toggle_view=1'>Toggle pathogen information</a>"
@@ -170,7 +177,7 @@
 		dat += "Please insert dish into the incubator.<BR>"
 	dat += "<hr>"
 	dat += "Toxins: [toxins]: <A href='?src=\ref[src];flush=tox'>Flush</a>"
-	if(scancount >= 3)
+	if(scancount >= SCAN_COUNT_MIN_WEAKSTR)
 		dat += "<BR>Strengthening agent: [strength]: <A href='?src=\ref[src];flush=str'>Flush</a>"
 		dat += "<BR>Weakening agent: [weaken]: <A href='?src=\ref[src];flush=wek'>Flush</a>"
 	dat += "<BR>Food supply: [foodsupply]: <A href='?src=\ref[src];flush=fud'>Flush</a>"
@@ -197,16 +204,17 @@
 			if(dish.growth >= INCUBATOR_MAX_SIZE)
 				if(icon_state != "incubator_fed")
 					icon_state = "incubator_fed"
-				if(last_notice + FED_PING_DELAY < world.time)
-					last_notice = world.time
+				if(!fully_fed)
+					fully_fed = TRUE
 					alert_noise("ping")
 			else if(foodsupply)
+				fully_fed = FALSE
 				foodsupply -= 1
 				dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
 				change = TRUE
 			if(radiation && prob(mutatechance))
 				if(radiation == 1)
-					dish.virus2.minormutate()
+					dish.virus2.minormutate(effect_focus)
 				else if(radiation == 2)
 					dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
 					dish.virus2.majormutate()
@@ -220,11 +228,11 @@
 				toxins--
 				change = TRUE
 			if(strength && prob(mutatechance))
-				dish.virus2.minorstrength()
+				dish.virus2.minorstrength(effect_focus)
 				strength--
 				change = TRUE
 			if(weaken && prob(mutatechance))
-				dish.virus2.minorweak()
+				dish.virus2.minorweak(effect_focus)
 				weaken--
 				change = TRUE
 	else
@@ -237,7 +245,7 @@
 		if(beaker.reagents.remove_any_reagents(TOXINS,1))
 			toxins += 1
 			change = TRUE
-		if(scancount >= 3)
+		if(scancount >= SCAN_COUNT_MIN_WEAKSTR)
 			if(!beaker.reagents.remove_reagent(CREATINE,1))
 				strength += 10
 				change = TRUE

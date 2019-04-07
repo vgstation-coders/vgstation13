@@ -28,6 +28,7 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/view_txt_log,	/*shows the server log (diary) for today*/
 	/datum/admins/proc/view_atk_log,	/*shows the server combat-log, doesn't do anything presently*/
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
+	/client/proc/cmd_admin_pm_context_special, /*Currently only for blobs*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/cmd_admin_subtle_message,	/*send an message to somebody as a 'voice in their head'*/
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
@@ -78,7 +79,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/watchdog_force_restart,	/*forces restart using watchdog feature*/
 	/client/proc/manage_religions,
 	/client/proc/set_veil_thickness,
-	/client/proc/credits_panel			/*allows you to customize the roundend credits before they happen*/
+	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
+	/client/proc/persistence_panel			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -278,6 +280,7 @@ var/list/admin_verbs_hideable = list(
 	)
 var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
+	/client/proc/cmd_admin_pm_context_special,
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
 	/datum/admins/proc/PlayerNotes,
@@ -1218,4 +1221,12 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.CreditsPanel()
 	feedback_add_details("admin_verb","CP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/persistence_panel()
+	set name = "Persistence Panel"
+	set category = "Admin"
+	if(holder)
+		holder.PersistencePanel()
+	feedback_add_details("admin_verb","PEP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

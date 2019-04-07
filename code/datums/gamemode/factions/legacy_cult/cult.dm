@@ -42,7 +42,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 	initroletype = /datum/role/legacy_cultist
 	roletype = /datum/role/legacy_cultist
-	required_pref = ROLE_LEGACY_CULTIST
+	required_pref = CULTIST
 
 /datum/faction/cult/narsie/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/logos.dmi', "cult-logo")

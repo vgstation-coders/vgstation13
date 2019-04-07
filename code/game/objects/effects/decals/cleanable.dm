@@ -17,11 +17,78 @@
 
 	var/on_wall = 0 //Wall on which this decal is placed on
 
-/obj/effect/decal/cleanable/New()
-	if(random_icon_states && length(src.random_icon_states) > 0)
+	var/persistence_type = SS_CLEANABLE
+	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
+	var/persistent_type_replacement //If defined, the persistent item generated from this will be of this type rather than our own.
+
+/obj/effect/decal/cleanable/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+	if(age)
+		setPersistenceAge(age)
+	if(icon_state)
+		src.icon_state = icon_state
+	else if(random_icon_states && length(src.random_icon_states) > 0)
 		src.icon_state = pick(src.random_icon_states)
+	if(color)
+		src.color = color
+	if(dir)
+		src.dir = dir
+	if(pixel_x)
+		src.pixel_x = pixel_x
+	if(pixel_y)
+		src.pixel_y = pixel_y
+
+	if(ticker)
+		initialize()
+
+	..(loc)
+
+	blood_list += src
+	update_icon()
+
+	if(counts_as_blood)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.add_bloody_floor(get_turf(src))
+		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(legacy_cult)
+			var/turf/T = get_turf(src)
+			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+				if(istype(T, /turf/simulated/floor) && !isspace(T.loc) && !istype(T.loc, /area/asteroid) && !istype(T.loc, /area/mine) && !istype(T.loc, /area/vault) && !istype(T.loc, /area/prison) && !istype(T.loc, /area/vox_trading_post))
+					if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
+						legacy_cult.bloody_floors += T
+						legacy_cult.bloody_floors[T] = T
+						if (legacy_cult.has_enough_bloody_floors())
+							legacy_cult.getNewObjective()
+		if(src.loc && isturf(src.loc))
+			for(var/obj/effect/decal/cleanable/C in src.loc)
+				if(C.type in absorbs_types && C != src)
+					// Transfer DNA, if possible.
+					if (transfers_dna && C.blood_DNA)
+						blood_DNA |= C.blood_DNA.Copy()
+					amount += C.amount
+					returnToPool(C)
+
+/obj/effect/decal/cleanable/initialize()
+	..()
+	if(persistence_type)
+		SSpersistence_map.track(src, persistence_type)
+
+/obj/effect/decal/cleanable/Destroy()
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
 	..()
 
+/obj/effect/decal/cleanable/getPersistenceAge()
+	return age
+/obj/effect/decal/cleanable/setPersistenceAge(nu)
+	age = nu
+	if(nu > 1)
+		counts_as_blood = FALSE
+
+/obj/effect/decal/cleanable/atom2mapsave()
+	. = ..()
+	if(persistent_type_replacement)
+		.["type"] = persistent_type_replacement
 
 /obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O,/obj/item/weapon/mop))
@@ -35,18 +102,12 @@
 		D.holder = null
 
 	if(counts_as_blood)
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
-			cult.remove_bloody_floor(get_turf(src))
-		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if(legacy_cult)
-			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))
-				legacy_cult.bloody_floors -= T
+		bloodspill_remove()
+
 	..()
 
-/obj/effect/decal/cleanable/proc/dry()
-	name = "dried [src.name]"
+/obj/effect/decal/cleanable/proc/dry(var/drying_age)
+	name = "dried [replacetext(initial(src.name), "wet ", "")]"
 	desc = "It's dry and crusty. Someone is not doing their job."
 	color = adjust_brightness(color, -50)
 	amount = 0
@@ -88,33 +149,6 @@
 	viruses = list()
 	virus2 = list()
 	blood_DNA = list()
-
-/obj/effect/decal/cleanable/New()
-	..()
-	blood_list += src
-	update_icon()
-
-	if(counts_as_blood)
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
-			cult.add_bloody_floor(get_turf(src))
-		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-		if(legacy_cult)
-			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
-					legacy_cult.bloody_floors += T
-					legacy_cult.bloody_floors[T] = T
-					if (legacy_cult.has_enough_bloody_floors())
-						legacy_cult.getNewObjective()
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/C in src.loc)
-				if(C.type in absorbs_types && C != src)
-					// Transfer DNA, if possible.
-					if (transfers_dna && C.blood_DNA)
-						blood_DNA |= C.blood_DNA.Copy()
-					amount += C.amount
-					returnToPool(C)
 
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
@@ -158,3 +192,35 @@
 		perp.feet_blood_color=basecolor
 
 	amount--
+
+
+
+///////////////////CULT BLOODSPILL STUFF/////////////////////////////////////
+
+/obj/effect/decal/cleanable/proc/bloodspill_add()
+	//new cult
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		cult.add_bloody_floor(get_turf(src))
+	//old cult
+	var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+	if(legacy_cult)
+		var/turf/T = get_turf(src)
+		if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+			if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
+				legacy_cult.bloody_floors |= T
+				legacy_cult.bloody_floors[T] = T
+				if (legacy_cult.has_enough_bloody_floors())
+					legacy_cult.getNewObjective()
+
+/obj/effect/decal/cleanable/proc/bloodspill_remove()
+	//new cult
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		cult.remove_bloody_floor(get_turf(src))
+	//old cult
+	var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+	if(legacy_cult)
+		var/turf/T = get_turf(src)
+		if(T && (T.z == map.zMainStation))
+			legacy_cult.bloody_floors -= T

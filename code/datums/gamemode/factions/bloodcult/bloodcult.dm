@@ -160,22 +160,28 @@ var/veil_thickness = CULT_PROLOGUE
 	logo_state = "cult-logo"
 	hud_icons = list("cult-logo")
 	var/list/bloody_floors = list()
-	var/target_change = FALSE
-	var/change_cooldown = 0
+	//var/target_change = FALSE
+	//var/change_cooldown = 0
 	var/cult_win = FALSE
 	var/warning = FALSE
 
+	var/list/cult_reminders = list()
+
 /datum/faction/bloodcult/check_win()
+	return cult_win
+
+/datum/faction/bloodcult/IsSuccessful()
 	return cult_win
 
 /datum/faction/bloodcult/proc/fail()
 	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
-	progress(CULT_MENDED)
+	stage(CULT_MENDED)
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
 	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
+	dat += "<br><a href='?src=\ref[src];cult_progress=1'>(debug) Cult Progression Skip</a>"
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
@@ -194,6 +200,14 @@ var/veil_thickness = CULT_PROLOGUE
 
 		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
+	if (href_list["cult_progress"])
+		if (alert(usr, "Skip to the next Act?","Cult Progression Skip","Yes","No") == "No")
+			return
+
+		stage(veil_thickness+1,forced=TRUE)
+
+		message_admins("Admin [key_name_admin(usr)] has advanced the Blood Cult to the next Act.")
+		log_admin("Admin [key_name_admin(usr)] has advanced the Blood Cult to the next Act.")
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
@@ -203,12 +217,13 @@ var/veil_thickness = CULT_PROLOGUE
 	initialize_cultwords()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
+/*
 /datum/faction/bloodcult/process()
 	..()
+
 	if (change_cooldown > 0)
 		change_cooldown -= 1 SECONDS
 		if (change_cooldown <= 0)
-			target_change = FALSE
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			if (O && !O.IsFulfilled())
 				O.failed_targets += O.sacrifice_target
@@ -223,24 +238,23 @@ var/veil_thickness = CULT_PROLOGUE
 								else if (iscultist(O.sacrifice_target))
 									to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
 	if (target_change)
+		target_change = FALSE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
+*/
 
-/datum/faction/bloodcult/proc/progress(var/new_act,var/A)
+/datum/faction/bloodcult/stage(var/new_act,var/A,var/forced=FALSE)
 	//This proc is called to update the faction's current objectives, and veil thickness
 	if (veil_thickness == CULT_MENDED)
 		return//it's over, you lost
 
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
-		spawn (5 SECONDS)
-			emergency_shuttle.shutdown = 0//The shuttle docks to the station immediately afterwards.
-			emergency_shuttle.online = 1
-			emergency_shuttle.shuttle_phase("station",0)
-		set_security_level("blue")
-		ticker.StopThematic()
+		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
+		for (var/obj/effect/rune/R in rune_list)
+			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
 		return
@@ -261,7 +275,7 @@ var/veil_thickness = CULT_PROLOGUE
 			var/datum/objective/bloodcult_followers/O = locate() in objective_holder.objectives
 			if (O)
 				O.conversions++
-				if (O.conversions >= O.convert_target)
+				if (O.conversions >= O.convert_target || forced)
 					veil_thickness = CULT_ACT_II
 					new_obj = new /datum/objective/bloodcult_sacrifice
 					for(var/datum/role/cultist/C in members)
@@ -277,11 +291,8 @@ var/veil_thickness = CULT_PROLOGUE
 				veil_thickness = CULT_ACT_III
 				emergency_shuttle.force_shutdown()//No shuttle calls until the cult either wins or fails.
 				spawn_bloodstones(A)
-				spawn(5 SECONDS)
-					command_alert(/datum/command_alert/bloodstones_raised)
-					ticker.StartThematic("endgame")
-					sleep(2 SECONDS)
-					set_security_level("red")
+				..()
+				command_alert(/datum/command_alert/bloodstones_raised)
 				new_obj = new /datum/objective/bloodcult_bloodbath
 		if (CULT_ACT_IV)
 			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
@@ -300,29 +311,36 @@ var/veil_thickness = CULT_PROLOGUE
 		AppendObjective(new_obj)
 		for(var/datum/role/cultist/C in members)
 			var/mob/M = C.antag.current
-			if (M)
+			if (M && iscultist(M))
 				to_chat(M,"<span class='danger'>[new_obj.name]</span><b>: [new_obj.explanation_text]</b>")
+				//ACT 1
+				if (istype(new_obj,/datum/objective/bloodcult_followers))
+					to_chat(M,"<b>As our ritual progresses through its Acts, the veil gets thinner, and dormant runes awaken. Summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
+				//ACT 2
 				if (istype(new_obj,/datum/objective/bloodcult_sacrifice))
 					var/datum/objective/bloodcult_sacrifice/O = new_obj
-					if (M == O.sacrifice_target)
-						to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie, but you may wait for another target to be selected should you be afraid of death.</b>")
-					else if (iscultist(O.sacrifice_target))
-						to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
+					if (O.sacrifice_target)
+						if (M == O.sacrifice_target)
+							to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie.</b>")
+						to_chat(M,"<b>Should the target's body be annihilated, or should they flee the station, you may commune with Nar-Sie at an altar to have him designate a new target.</b>")
+					else
+						to_chat(M,"<b>There are no elligible targets aboard the station, how did you guys even manage that one?</b>")//if there's literally no humans aboard the station
+						to_chat(M,"<b>Commune with Nar-Sie at an altar to have him designate a new target.</b>")
 
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
 
-		for (var/obj/structure/cult/spire/S in cult_spires)
+		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in rune_list)
+		for (var/obj/effect/rune/R in rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))
 			var/datum/objective/bloodcult_bloodbath/O = new_obj
 			O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
 			if (O.IsFulfilled())
-				progress(CULT_ACT_IV)
+				stage(CULT_ACT_IV)
 
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
@@ -336,7 +354,7 @@ var/veil_thickness = CULT_PROLOGUE
 			if (O && !O.IsFulfilled())
 				O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
 				if (O.IsFulfilled())
-					progress(CULT_ACT_IV)
+					stage(CULT_ACT_IV)
 
 
 /datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)
@@ -345,6 +363,13 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		B.update_icon()
 	bloody_floors -= T
+
+/datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
+	. = ..()
+	if (cult_reminders.len)
+		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
+	for (var/reminder in cult_reminders)
+		R.antag.store_memory("Cult reminder: [reminder].")
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))
@@ -675,6 +700,10 @@ var/veil_thickness = CULT_PROLOGUE
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HELD]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_HELD])
+		if (data[BLOODCOST_TARGET_BLOODPACK])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLOODPACK]
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_BLOODPACK]
+			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_BLOODPACK])
 		if (data[BLOODCOST_TARGET_CONTAINER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_CONTAINER]
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
@@ -701,7 +730,6 @@ var/veil_thickness = CULT_PROLOGUE
 		data[BLOODCOST_TOTAL] = max(data[BLOODCOST_TOTAL], total_needed)
 	data["blood"] = blood
 	return data
-
 
 /obj/item/proc/get_cult_power()
 	return 0

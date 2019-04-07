@@ -251,6 +251,12 @@
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
 
+/obj/item/clothing/head/helmet/knight/interrogator
+	name = "interrogator helmet"
+	desc = "A skull-shaped helmet, equipped red visors, marked by the oath of the dark angels."
+	icon_state = "interrogator"
+	item_state = "interrogator"
+
 /obj/item/clothing/head/helmet/neorussian
 	name = "neo-Russian helmet"
 	desc = "This piece of equipment can double as a pillow, a bowl, an emergency toilet, and sometimes as a helmet."

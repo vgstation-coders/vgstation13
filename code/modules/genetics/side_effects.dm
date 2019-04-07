@@ -87,7 +87,9 @@ proc/trigger_side_effect(mob/living/carbon/human/H)
 		spawn(20)
 			if(!istype(H))
 				return
-			H.Knockdown(rand(0, S.duration / 50))
+			var/incapacitation_duration = rand(0, S.duration / 50)
+			H.Knockdown(incapacitation_duration)
+			H.Stun(incapacitation_duration)
 		sleep(S.duration)
 
 		if(!istype(H))

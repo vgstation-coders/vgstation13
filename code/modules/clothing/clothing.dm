@@ -147,10 +147,15 @@
 
 //BS12: Species-restricted clothing check.
 /obj/item/clothing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-
 	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
 	if(!.)
 		return //Default return value is 0 - don't check for species
+
+	switch(role_check(M))
+		if(FALSE)
+			return CANNOT_EQUIP
+		if(ALWAYSTRUE)
+			return CAN_EQUIP
 
 	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
@@ -205,6 +210,19 @@
 			return CANNOT_EQUIP
 
 	//return ..()
+
+/obj/item/clothing/proc/role_check(mob/user)
+	if(!user || !user.mind || !user.mind.antag_roles.len)
+		return TRUE //No roles to check
+	for(var/datum/role/R in get_list_of_elements(user.mind.antag_roles))
+		switch(R.can_wear(src))
+			if(ALWAYSTRUE)
+				return ALWAYSTRUE
+			if(FALSE)
+				return FALSE
+			if(TRUE)
+				continue
+	return TRUE //All roles true? Return true.
 
 /obj/item/clothing/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	..()
@@ -475,6 +493,7 @@
 	flags = FPRINT|HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	body_parts_covered = FULL_HEAD|BEARD
@@ -489,6 +508,7 @@
 	desc = "A suit that protects against low pressure environments. Has a big \"13\" on the back."
 	icon_state = "space"
 	item_state = "s_suit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02

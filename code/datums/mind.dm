@@ -146,6 +146,8 @@
 
 	var/out = {"<TITLE>Role Panel</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""] - key=<b>[key]</b> [active?"(synced)":"(not synced)"]<br>
 		Assigned job: [assigned_role] - <a href='?src=\ref[src];job_edit=1'>(edit)</a><hr>"}
+	if(current.client)
+		out += "Desires roles: [current.client.GetRolePrefs()]<BR>"
 	out += "<font size='5'><b>Roles and Factions</b></font><br>"
 
 	if(!antag_roles.len)

@@ -210,3 +210,4 @@
 /spell/lightning/sith
 	basedamage = 25
 	invocation = "UNLIMITED POWER!"
+	user_type = USER_TYPE_OTHER

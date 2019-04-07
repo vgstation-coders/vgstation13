@@ -4,50 +4,44 @@
 #define SPECIAL_ROLES_SETUP 3
 
 var/list/preferences_datums = list()
-
 var/global/list/special_roles = list(
-	ROLE_ALIEN        	= 1, //always show
-	ROLE_BLOB         	= 1,
-	ROLE_BORER        	= 1,
-	ROLE_CHANGELING   	= 1,
-	ROLE_CULTIST      	= 1,
-	ROLE_LEGACY_CULTIST = 1,
-	ROLE_PLANT        	= 1,
-//	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
-	ROLE_MALF         	= 1,
-	//ROLE_NINJA        = 1,
-	ROLE_OPERATIVE    	= 1,
-	ROLE_PAI          	= 1, // -- TLE
-	ROLE_POSIBRAIN    	= 1,
-	ROLE_REV          	= 1,
-	ROLE_TRAITOR      	= 1,
-	ROLE_VAMPIRE      	= 1,
-	ROLE_VOXRAIDER    	= 1,
-	ROLE_WIZARD       	= 1,
-	ROLE_COMMANDO	  	= 1,
-	ROLE_GRINCH			= 1,
-	ROLE_WEEABOO		= 1,
-	ROLE_MINOR			= 1,
+	ROLE_ALIEN     	= 1,
+	BLOBOVERMIND   	= 1,
+	ROLE_BORER     	= 1,
+	CHANGELING   	= 1,
+	CULTIST      	= 1,
+	ROLE_PLANT     	= 1,
+	MALF         	= 1,
+	NUKE_OP	    	= 1,
+	ROLE_PAI        = 1,
+	ROLE_POSIBRAIN  = 1,
+	REV          	= 1,
+	TRAITOR      	= 1,
+	VAMPIRE      	= 1,
+	VOXRAIDER    	= 1,
+	WIZARD       	= 1,
+	ROLE_STRIKE	  	= 1,
+	GRINCH			= 1,
+	NINJA			= 1,
+	ROLE_MINOR		= 1,
 )
 
-var/list/antag_roles = list(
-	ROLE_ALIEN        	= 1,
-	ROLE_BLOB         	= 1,
-	ROLE_CHANGELING   	= 1,
-	ROLE_CULTIST      	= 1,
-	ROLE_LEGACY_CULTIST = 1,
-	ROLE_MALF         	= 1,
-	ROLE_OPERATIVE    	= 1,
-	ROLE_REV          	= 1,
-	ROLE_TRAITOR      	= 1,
-	ROLE_VAMPIRE      	= 1,
-	ROLE_VOXRAIDER    	= 1,
-	ROLE_WIZARD       	= 1,
-	ROLE_COMMANDO	  	= 1,
-//	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
-	ROLE_GRINCH			= 1,
-	ROLE_WEEABOO		= 1,
-	ROLE_MINOR			= 1,
+/var/list/antag_roles = list(
+	ROLE_ALIEN      = 1,
+	BLOBOVERMIND   	= 1,
+	CHANGELING   	= 1,
+	CULTIST      	= 1,
+	MALF         	= 1,
+	NUKE_OP	    	= 1,
+	REV          	= 1,
+	TRAITOR      	= 1,
+	VAMPIRE      	= 1,
+	VOXRAIDER    	= 1,
+	WIZARD       	= 1,
+	ROLE_STRIKE	  	= 1,
+	GRINCH			= 1,
+	NINJA			= 1,
+	ROLE_MINOR		= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -58,24 +52,24 @@ var/list/nonantag_roles = list(
 )
 
 var/list/role_wiki=list(
-	ROLE_ALIEN			= "Xenomorph",
-	ROLE_BLOB			= "Blob",
-	ROLE_BORER			= "Cortical_Borer",
-	ROLE_CHANGELING		= "Changeling",
-	ROLE_CULTIST		= "Cult 3.0",
-	ROLE_LEGACY_CULTIST = "Cult", // To change ! In the future we'll have a new page for Cult 3, and this one will go down in history
-	ROLE_PLANT			= "Dionaea",
-	ROLE_MALF			= "Guide_to_Malfunction",
-	ROLE_OPERATIVE		= "Nuclear_Agent",
-	ROLE_PAI			= "Personal_AI",
-	ROLE_POSIBRAIN		= "Guide_to_Silicon_Laws",
-	ROLE_REV			= "Revolution",
-	ROLE_TRAITOR		= "Traitor",
-	ROLE_VAMPIRE		= "Vampire",
-	ROLE_VOXRAIDER		= "Vox_Raider",
-	ROLE_WIZARD			= "Wizard",
-	ROLE_GRINCH			= "Grinch",
-	ROLE_MINOR			= "Minor_Roles",
+	ROLE_ALIEN				= "Xenomorph",
+	BLOBOVERMIND			= "Blob",
+	ROLE_BORER				= "Cortical_Borer",
+	CHANGELING				= "Changeling",
+	CULTIST					= "Cult",
+	ROLE_PLANT				= "Dionaea",
+	MALF					= "Guide_to_Malfunction",
+	NUKE_OP					= "Nuclear_Agent",
+	ROLE_PAI				= "Personal_AI",
+	ROLE_POSIBRAIN			= "Guide_to_Silicon_Laws",
+	REV						= "Revolution",
+	TRAITOR					= "Traitor",
+	VAMPIRE					= "Vampire",
+	VOXRAIDER				= "Vox_Raider",
+	WIZARD					= "Wizard",
+	GRINCH					= "Grinch",
+	NINJA					= "Space_Ninja",
+	ROLE_MINOR				= "Minor_Roles",
 )
 
 var/const/MAX_SAVE_SLOTS = 8
@@ -114,6 +108,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/special_popup = 0
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
+	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -136,6 +131,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/b_eyes = 0						//Eye color
 	var/species = "Human"
 	var/language = "None"				//Secondary language
+	var/hear_instruments = 1
+	var/ambience_volume = 25
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -156,7 +153,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/job_engsec_low = 0
 
 	//Keeps track of preferrence for not getting any wanted jobs
-	var/alternate_option = 0
+	var/alternate_option = RETURN_TO_LOBBY
 
 	var/used_skillpoints = 0
 	var/skill_specialization = null
@@ -275,7 +272,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
 	<b>Tertiary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
-	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
+	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"] - [skintone2racedescription(s_tone, species)]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'>Set</a><br>
 	<b>Limbs:</b> <a href='byond://?_src_=prefs;subsection=limbs;task=menu'>Set</a><br>
 	<b>Organs:</b> <a href='byond://?_src_=prefs;subsection=organs;task=menu'>Set</a><br>
@@ -351,12 +348,18 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
 	<b>Play Ambience:</b>
 	<a href='?_src_=prefs;preference=ambience'><b>[(toggles & SOUND_AMBIENCE) ? "Yes" : "No"]</b></a><br>
+	[(toggles & SOUND_AMBIENCE)? \
+	"<b>Ambience Volume:</b><a href='?_src_=prefs;preference=ambience_volume'><b>[ambience_volume]</b></a><br>":""]
 	<b>Hear streamed media:</b>
 	<a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
 	<b>Streaming Program:</b>
 	<a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
 	<b>Streaming Volume</b>
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
+	<b>Hear player voices</b>
+	<a href='?_src_=prefs;preference=hear_voicesound'><b>[(hear_voicesound) ? "Yes" : "No"]</b></a><br>
+	<b>Hear instruments</b>
+	<a href='?_src_=prefs;preference=hear_instruments'><b>[(hear_instruments) ? "Yes":"No"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
@@ -1231,23 +1234,12 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)
 							s_tone = 35 - max(min(round(new_s_tone),220),1)
+							to_chat(user,"You're now [skintone2racedescription(s_tone, species)].")
 					else if(species == "Vox")//Can't reference species flags here, sorry.
 						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
 						if(skin_c)
 							s_tone = max(min(round(skin_c),6),1)
-							switch(s_tone)
-								if(6)
-									to_chat(user,"Your vox will now be emerald.")
-								if(5)
-									to_chat(user,"Your vox will now be azure.")
-								if(4)
-									to_chat(user,"Your vox will now be light green.")
-								if(3)
-									to_chat(user,"Your vox will now be gray.")
-								if(2)
-									to_chat(user,"Your vox will now be brown.")
-								else
-									to_chat(user,"Your vox will now be green.")
+							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return
@@ -1361,7 +1353,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					toggles ^= SOUND_AMBIENCE
 					if(!(toggles & SOUND_AMBIENCE))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)
-
+				if("ambience_volume")
+					ambience_volume = min(max(input(user, "Enter the new volume you wish to use. (0-100)","Ambience Volume Preferences", ambience_volume), 0), 100)
 				if("jukebox")
 					toggles ^= SOUND_STREAMING
 
@@ -1381,6 +1374,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					progress_bars = !progress_bars
 				if("stumble")
 					stumble = !stumble
+				if("hear_voicesound")
+					hear_voicesound = !hear_voicesound
+				if("hear_instruments")
+					hear_instruments = !hear_instruments
 				if("pulltoggle")
 					pulltoggle = !pulltoggle
 
@@ -1605,8 +1602,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		while(q.NextRow())
 			name_list[q.GetColumn(2)] = q.GetColumn(1)
 	else
-		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-		warning("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in open_load_dialog [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
+		warning("Error in open_load_dialog [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	var/dat = "<center><b>Select a character slot to load</b><hr>"
 	var/counter = 1

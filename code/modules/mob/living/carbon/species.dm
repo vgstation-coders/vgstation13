@@ -519,6 +519,25 @@ var/global/list/whitelisted_species = list("Human")
 	speech_filter.addReplacement("god","gosh")
 	speech_filter.addWordReplacement("(ass|butt)", "rump")
 
+/datum/species/tajaran/handle_post_spawn(var/mob/living/carbon/human/H)
+	if(myhuman != H)
+		return
+	updatespeciescolor(H)
+	H.update_icon()
+
+/datum/species/tajaran/updatespeciescolor(var/mob/living/carbon/human/H)
+	switch(H.s_tone)
+		if(CATBEASTBLACK)
+			icobase = 'icons/mob/human_races/r_tajaranblack.dmi'
+			deform = 'icons/mob/human_races/r_def_tajaranblack.dmi'
+			tail = "tajtailb"
+			H.h_style = "Black Tajaran Ears"
+		else
+			icobase = 'icons/mob/human_races/r_tajaran.dmi'
+			deform = 'icons/mob/human_races/r_def_tajaran.dmi'
+			tail = "tajtail"
+			H.h_style = "Tajaran Ears"
+
 /datum/species/tajaran/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(15))
 		speech.message = ""
@@ -546,7 +565,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/grey // TODO
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS
+	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS | ACID4WATER
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
@@ -637,7 +656,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 
 	anatomy_flags = HAS_SWEAT_GLANDS
 

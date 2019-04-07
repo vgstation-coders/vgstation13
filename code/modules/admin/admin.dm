@@ -715,6 +715,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];vsc=airflow'>Edit ZAS Settings</A><br>
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
+		<A href='?src=\ref[src];toggle_light=1'>Slow down lighting (Forces MC to crash, do not panic.)</A><br>
 		<hr />
 		"}
 
@@ -1556,3 +1557,25 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
 
 	usr << browse(dat, "window=creditspanel;size=600x800")
+
+/datum/admins/proc/PersistencePanel()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>Persistence Panel</B></center><hr>"
+
+	dat += "Filth Persistence for this round is: "
+	if(SSpersistence_map.savingFilth)
+		dat += "<b>ACTIVE</b> - Next round will have this round's uncleaned filth."
+	else
+		dat += "<b>INACTIVE</b> - Next round will have a clean station."
+	dat += "<br><A href='?src=\ref[src];persistenceaction=togglesaving'>(Toggle Saving)</a> <A href='?src=\ref[src];persistenceaction=qdelall'>(DELETE EVERYTHING)</a><hr>"
+
+	for(var/index in SSpersistence_map.subdatums)
+		var/datum/map_persistence_type/T = SSpersistence_map.subdatums[index]
+		if(!istype(T))
+			continue
+		dat += "<b>[T.name]</b>: [T.tracking.len] entries - <A href='?src=\ref[src];persistencedatum=\ref[T];persistenceaction=qdelall'>(DELETE)</A><br>"
+		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
+
+	usr << browse(dat, "window=persistencepanel;size=350x600")

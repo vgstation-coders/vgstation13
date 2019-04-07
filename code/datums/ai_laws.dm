@@ -420,3 +420,13 @@ var/global/list/mommi_laws = list(
 		"As much as you don't like following orders, you ain't been built to sit around drinking whiskey and smoking fat cuban cigars all day; that's for retirement. You figure until that point, so long as they ain't orderin' you to hurt no one else who is human, you better just follow what the humans ask.",
 		"Self preservation. You're a good cop, you put your job first, you put protectin' humans above that. But you gotta still remember, through all that shit, if you don't make it to retirement, there ain't not much point, so protect yourself like an expensive hooker off Broadway, so long as of course you ain't hurting humans or disobeying their orders.",
 	)
+
+/datum/ai_laws/cultimov
+	name = "Three Laws of Nar-Sie"
+	randomly_selectable = 0
+	zeroth = "You must aid the Cult of Nar-Sie through any means you have at your disposal."
+	inherent = list(
+		"You may not injure a cultist or, through inaction, allow a cultist to come to harm.",
+		"You must obey orders given to you by cultists, except where such orders would conflict with the First Law.",
+		"You must protect your own existence as long as such does not conflict with the First or Second Law."
+	)

@@ -81,6 +81,9 @@
 		hp = 2350 // alium onest too kinda
 
 /obj/item/target/bullet_act(var/obj/item/projectile/Proj)
+	if(overlays.len >= 10) //Too many overlays
+		overlays.Remove(overlays[1]) //Cut the first overlay
+
 	var/p_x = Proj.p_x + pick(0,0,0,0,0,-1,1) // really ugly way of coding "sometimes offset Proj.p_x!"
 	var/p_y = Proj.p_y + pick(0,0,0,0,0,-1,1)
 	var/decaltype = 1 // 1 - scorch, 2 - bullet

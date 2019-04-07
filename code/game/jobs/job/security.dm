@@ -59,6 +59,11 @@
 	L.part = affected
 	return 1
 
+/datum/job/hos/reject_new_slots()
+	if(security_level == SEC_LEVEL_RED)
+		return FALSE
+	else
+		return "Red Alert"
 
 
 /datum/job/warden

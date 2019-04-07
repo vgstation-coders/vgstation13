@@ -13,7 +13,7 @@
 	response_harm   = "stomps on"
 	emote_see = list("jiggles", "bounces in place")
 	holder_type = /obj/item/weapon/holder/animal/slime
-	var/colour = "grey"
+	colour = "grey"
 	var/paralyzed = 0
 	can_butcher = FALSE
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime

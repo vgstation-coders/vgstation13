@@ -62,6 +62,22 @@
 	if(ismob(user))
 		shock(user, 60) //Give the user the benifit of the doubt
 
+/obj/structure/grille/hitby(AM as mob|obj)
+	. = ..()
+	if(.)
+		return
+	if(ismob(AM))
+		var/mob/M = AM
+		health -= 10
+		healthcheck(TRUE)
+		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
+		"<span class='danger'>You slam into \the [src].</span>")
+	else if(isobj(AM))
+		var/obj/item/I = AM
+		health -= I.throwforce
+		healthcheck(TRUE)
+		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+
 /obj/structure/grille/attack_paw(mob/user as mob)
 	attack_hand(user)
 

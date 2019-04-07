@@ -168,7 +168,6 @@
 	message_mime = "laughs silently!"
 	emote_type = EMOTE_AUDIBLE
 
-
 /datum/emote/living/carbon/gag
 	key = "gag"
 	key_third_person = "gags"
@@ -283,9 +282,8 @@
 					sound = pick(birb_sounds)
 
 				else
-					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions)
-						if(MALE)
-							sound = pick(science_sounds) //ACK
+					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions && H.gender == MALE)
+						sound = pick(science_sounds) //ACK
 					else
 						switch(H.gender)
 							if (MALE)

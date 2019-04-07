@@ -46,7 +46,6 @@ var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
 var/const/TRADER			=(1<<14)
 
-
 var/list/command_positions = list(
 	"Captain",
 	"Head of Personnel",
@@ -56,14 +55,12 @@ var/list/command_positions = list(
 	"Chief Medical Officer"
 )
 
-
 var/list/engineering_positions = list(
 	"Chief Engineer",
 	"Station Engineer",
 	"Atmospheric Technician",
 	"Mechanic"
 )
-
 
 var/list/medical_positions = list(
 	"Chief Medical Officer",
@@ -74,7 +71,6 @@ var/list/medical_positions = list(
 	"Paramedic",
 	"Chemist"
 )
-
 
 var/list/science_positions = list(
 	"Research Director",
@@ -122,6 +118,53 @@ var/list/nonhuman_positions = list(
 
 var/list/misc_positions = list(
 	"Trader",
+)
+
+var/list/all_jobs_txt = list(
+	"Captain",
+	"Head of Personnel",
+	"Head of Security",
+	"Chief Engineer",
+	"Research Director",
+	"Chief Medical Officer",
+	"Station Engineer",
+	"Atmospheric Technician",
+	"Mechanic",
+	"Medical Doctor",
+	"Geneticist",
+	"Virologist",
+//	"Psychiatrist",
+	"Paramedic",
+	"Chemist",
+	"Research Director",
+	"Scientist",
+	"Roboticist",
+	"Bartender",
+	"Botanist",
+	"Chef",
+	"Janitor",
+	"Librarian",
+	"Internal Affairs Agent",
+	"Chaplain",
+	"Clown",
+	"Mime",
+	"Assistant",
+	"Quartermaster",
+	"Cargo Technician",
+	"Shaft Miner",
+	"Warden",
+	"Detective",
+	"Security Officer",
+)
+
+var/list/departement_list = list(
+	"Command",
+	"Security",
+	"Cargo",
+	"Engineering",
+	"Medical",
+	"Science",
+	"Civilian",
 )
 
 /proc/guest_jobbans(var/job)

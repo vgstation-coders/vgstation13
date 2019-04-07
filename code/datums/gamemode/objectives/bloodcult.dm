@@ -28,6 +28,10 @@
 	log_admin("Blood Cult: ACT I has begun.")
 	return TRUE
 
+/datum/objective/bloodcult_followers/extraInfo()
+	if (!IsFulfilled())
+		explanation_text += " (Only [conversions] conversions were performed)"
+
 /datum/objective/bloodcult_followers/IsFulfilled()
 	if (..())
 		return TRUE
@@ -39,6 +43,7 @@
 	explanation_text = "The Sacrifice: Nar-Sie requires the flesh of X to breach reality. Sacrifice them at an altar using a cult blade."
 	name = "Blood Cult: ACT II"
 	var/mob/living/sacrifice_target = null
+	var/datum/mind/sacrifice_mind = null
 	var/target_sacrificed = FALSE
 	var/list/failed_targets = list()
 
@@ -47,36 +52,39 @@
 	if (sacrifice_target)
 		var/target_role = ""
 		if (sacrifice_target.mind)
+			sacrifice_mind = sacrifice_target.mind
 			target_role = (sacrifice_target.mind.assigned_role=="MODE") ? "" : ", the ([sacrifice_target.mind.assigned_role]),"
 		if (iscultist(sacrifice_target))
 			target_role = ", the cultist,"
-		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade."
+		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade. If you feel merciful for their soul, you may use an empty soul blade."
 		message_admins("Blood Cult: ACT II has begun, the sacrifice target is [sacrifice_target.real_name][target_role].")
 		log_admin("Blood Cult: ACT II has begun, the sacrifice target is [sacrifice_target.real_name][target_role].")
-		var/datum/faction/bloodcult/cult = faction
-		cult.target_change = TRUE
+		//var/datum/faction/bloodcult/cult = faction
+		//cult.target_change = TRUE
 		return TRUE
-	else
-		sleep(60 SECONDS)//kind of a failsafe should the entire server cooperate to cause this to occur, but that shouldn't logically ever happen anyway.
-		return PostAppend()
+//	else
+//		sleep(60 SECONDS)//kind of a failsafe should the entire server cooperate to cause this to occur, but that shouldn't logically ever happen anyway.
+//		return PostAppend()
 
-/datum/objective/bloodcult_sacrifice/proc/replace_target()
+/datum/objective/bloodcult_sacrifice/proc/replace_target(var/mob/M)
 	sacrifice_target = find_target()
 	if (sacrifice_target)
 		var/target_role = ""
 		if (sacrifice_target.mind)
+			sacrifice_mind = sacrifice_target.mind
 			target_role = (sacrifice_target.mind.assigned_role=="MODE") ? "" : ", the ([sacrifice_target.mind.assigned_role]),"
 		if (iscultist(sacrifice_target))
 			target_role = ", the cultist,"
-		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade."
-		message_admins("Blood Cult: The cult didn't sacrifice their target in time, a new target has been assigned, the new sacrifice target is [sacrifice_target.real_name][target_role].")
-		log_admin("Blood Cult: The cult didn't sacrifice their target in time, a new target has been assigned, the new sacrifice target is [sacrifice_target.real_name][target_role].")
-		var/datum/faction/bloodcult/cult = faction
-		cult.target_change = TRUE
+		explanation_text = "The Sacrifice: Nar-Sie requires the flesh of [sacrifice_target.real_name][target_role] to breach reality. Sacrifice them at an altar using a cult blade. If you feel merciful for their soul, you may use an empty soul blade."
+		message_admins("Blood Cult: [M ? "[key_name(M)] has communed with Nar-Sie about a missing sacrifice target. " : ""]A new sacrifice target has been assigned: [sacrifice_target.real_name][target_role].")
+		log_admin("Blood Cult: [M ? "[key_name(M)] has communed with Nar-Sie about a missing sacrifice target. " : ""]A new sacrifice target has been assigned: [sacrifice_target.real_name][target_role].")
+		//var/datum/faction/bloodcult/cult = faction
+		//cult.target_change = TRUE
 		return TRUE
-	else
-		sleep(60 SECONDS)//kind of a failsafe should the entire server cooperate to cause this to occur, but that shouldn't logically ever happen anyway.
-		return replace_target()
+	return FALSE
+//	else
+//		sleep(60 SECONDS)//kind of a failsafe should the entire server cooperate to cause this to occur, but that shouldn't logically ever happen anyway.
+//		return replace_target()
 
 /datum/objective/bloodcult_sacrifice/proc/find_target()
 	var/list/possible_targets = list()
@@ -128,6 +136,9 @@
 	message_admins("Blood Cult: ACT III has begun. The cult has to spill blood over [target_bloodspill] floor tiles, out of the station's [floor_count] floor tiles.")
 	log_admin("Blood Cult: ACT III has begun. The cult has to spill blood over [target_bloodspill] floor tiles, out of the station's [floor_count] floor tiles.")
 	return TRUE
+
+/datum/objective/bloodcult_bloodbath/extraInfo()
+	explanation_text += " (Highest bloody floor count reached: [max_bloodspill])"
 
 /datum/objective/bloodcult_bloodbath/IsFulfilled()
 	if (..())
@@ -188,6 +199,10 @@
 	message_admins("Blood Cult: ACT IV has begun.")
 	log_admin("Blood Cult: ACT IV has begun.")
 	return TRUE
+
+/datum/objective/bloodcult_tearinreality/extraInfo()
+	if (NARSIE_HAS_RISEN && anchor)
+		explanation_text += " (The Anchor Blood Stone had [round((anchor.health/anchor.maxHealth)*100)]% health remaining)"
 
 /datum/objective/bloodcult_tearinreality/IsFulfilled()
 	if (..())

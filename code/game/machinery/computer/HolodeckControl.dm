@@ -626,6 +626,7 @@
 
 		G.affecting.forceMove(src.loc)
 		G.affecting.Knockdown(5)
+		G.affecting.Stun(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return
@@ -639,7 +640,8 @@
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(50))
+		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
+		if(prob(50) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src.loc)
 			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
 		else

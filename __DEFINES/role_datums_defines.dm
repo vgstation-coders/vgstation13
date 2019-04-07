@@ -37,7 +37,7 @@
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
-#define WEEABOO "crazed weeaboo"
+#define NINJA "space ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"
@@ -47,6 +47,7 @@
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
+#define BLOBCEREBRATE "blob cerebrate"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
@@ -55,6 +56,7 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define RAMBLER "soul rambler"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -76,7 +78,15 @@
 #define GREET_PROVOC_CONVERTED	 "provocateur"
 
 
-//////////////////////////////////CULT STUFF////////////////////////////////////
+///////////////// FACTION STAGES //////////////////////
+#define FACTION_DEFEATED	-1
+#define FACTION_DORMANT		0
+#define FACTION_ACTIVE		1
+#define FACTION_ENDGAME		3
+#define FACTION_VICTORY		5
+
+#define MALF_CHOOSING_NUKE	4
+
 #define CULT_MENDED		-1
 #define CULT_PROLOGUE	0
 #define CULT_ACT_I		1
@@ -84,6 +94,9 @@
 #define CULT_ACT_III	3
 #define CULT_ACT_IV		4
 #define CULT_EPILOGUE	5
+
+
+//////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"
 #define BLOODCOST_AMOUNT_BLEEDER	"bleeder_amount"
@@ -130,7 +143,7 @@
 #define TATTOO_FAST		"Rapid Tracing"
 #define TATTOO_CHAT		"Dark Communication"
 #define TATTOO_MANIFEST	"Pale Body"
-#define TATTOO_MEMORIZE	"Arcane Knowledge"
+#define TATTOO_MEMORIZE	"Arcane Dimension"
 #define TATTOO_SHORTCUT	"Shortcut Tracer"
 
 #define	TOME_CLOSED	1
@@ -184,5 +197,5 @@
 
 // -- The paper
 
-#define INTERCEPT_TIME_LOW 60 SECONDS
-#define INTERCEPT_TIME_HIGH 180 SECONDS
+#define INTERCEPT_TIME_LOW 10 MINUTES
+#define INTERCEPT_TIME_HIGH 18 MINUTES

@@ -549,6 +549,7 @@
 				if(eye_safety < 1)
 					M.flash_eyes(visual = 1)
 					M.Knockdown(15)
+					M.Stun(15)
 			else if(get_dist(M, location) <= 5)
 				if(eye_safety < 1)
 					M.flash_eyes(visual = 1)

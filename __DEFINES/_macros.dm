@@ -277,7 +277,9 @@
 
 #define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
 
-#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+#define isninja(H) (H.mind && H.mind.GetRole(NINJA))
+
+#define isrambler(H) (H.mind && H.mind.GetRole(RAMBLER))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
@@ -320,7 +322,7 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
+#define Clamp(x, y, z) 	min(max(x, y), z)
 //x is the number you want to clamp
 //y is the minimum
 //z is the maximum
@@ -375,4 +377,5 @@ proc/get_space_area()
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits
+#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
+//Starts 0 credits, not sourced from any database, earns 0 credits, hidden

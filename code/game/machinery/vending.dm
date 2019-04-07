@@ -153,7 +153,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/link_to_account()
 	reconnect_database()
-	linked_account = department_accounts["Cargo"]
+	linked_account = vendor_account
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -430,7 +430,7 @@ var/global/num_vending_terminals = 1
 			power_change()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
-			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it first.</span>")
+			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it with reinforced glass first.</span>")
 			return
 	. = ..()
 	if(.)
@@ -2087,7 +2087,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/wizard/marisa = 5,
 		/obj/item/clothing/suit/wizrobe/marisa = 5,
 		/obj/item/clothing/suit/wizrobe/magician = 5,
-		/obj/item/clothing/head/wizard/magician = 5,
+		/obj/item/clothing/head/that/magic = 5,
 		/obj/item/clothing/head/wizard/necro = 5,
 		/obj/item/clothing/suit/wizrobe/necro = 5,
 		/obj/item/clothing/head/wizard/magus = 5,
@@ -2512,7 +2512,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/shield/riot/joe = 3,
 		/obj/item/clothing/under/darkholme = 3,
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
-		/obj/item/clothing/head/wizard/magician = 3,
+		/obj/item/clothing/head/that/magic = 3,
 		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
 		)
@@ -2963,6 +2963,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater = 1,
 		/obj/item/clothing/head/helmet/knight/templar = 2,
  		/obj/item/clothing/suit/armor/knight/templar = 5,
+		/obj/item/clothing/head/helmet/knight/interrogator = 2,
+ 		/obj/item/clothing/suit/armor/knight/interrogator = 2,
+ 		/obj/item/clothing/suit/armor/knight/interrogator/red = 2,
 		/obj/item/weapon/thurible = 1,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend

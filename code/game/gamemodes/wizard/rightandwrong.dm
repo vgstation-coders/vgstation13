@@ -9,17 +9,19 @@
 
 	switch (summon_type)
 		if ("swords")
-			survivor_type = /datum/role/traitor/survivor/crusader/
+			survivor_type = /datum/role/survivor/crusader/
 		if ("magic")
 			survivor_type = /datum/role/wizard/summon_magic/
 		else
-			survivor_type = /datum/role/traitor/survivor/
+			survivor_type = /datum/role/survivor/
 
 	for(var/mob/living/carbon/human/H in player_list)
 
-		if (prob(65) || iswizard(H))
+		if(H.stat == DEAD || !(H.client) || iswizard(H))
 			continue
-		if(H.stat == DEAD || !(H.client))
+
+		if (prob(65))
+			H.equip_survivor(survivor_type)
 			continue
 
 		var/datum/role/R = new survivor_type()
@@ -34,10 +36,17 @@
 
 
 
-/mob/living/carbon/human/proc/equip_survivor(var/datum/role/R)
-	var/summon_type = R.type
+/mob/living/carbon/human/proc/equip_survivor(var/R)
+	var/summon_type
+	if(istype(R,/datum/role))
+		var/datum/role/surv = R
+		summon_type = surv.type
+	else if(ispath(R))
+		summon_type = R
+	else
+		return
 	switch (summon_type)
-		if (/datum/role/traitor/survivor/crusader)
+		if (/datum/role/survivor/crusader)
 			return equip_swords(R)
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
@@ -147,8 +156,8 @@
 			new /obj/item/weapon/gun/projectile/shotgun/nt12(get_turf(src))
 		if ("automag")
 			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
-	var/datum/role/traitor/survivor/S = R
-	if(S)
+	var/datum/role/survivor/S = R
+	if(istype(S))
 		S.summons_received = randomizeguns
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 	score["gunsspawned"]++
@@ -288,17 +297,17 @@
 		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
 			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded/New, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
-	var/datum/role/traitor/survivor/crusader/S = R
-	if(S)
+	var/datum/role/survivor/crusader/S = R
+	if(istype(S))
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
-	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
+	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
-			new /obj/item/clothing/head/wizard/magician(get_turf(src))
+			new /obj/item/clothing/head/that/magic(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magician(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
 		if("magusred")
@@ -354,8 +363,6 @@
 			new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(src))
 		if("blind")
 			new /obj/item/weapon/spellbook/oneuse/blind(get_turf(src))
-		if("mindswap")
-			new /obj/item/weapon/spellbook/oneuse/mindswap(get_turf(src))
 		if("forcewall")
 			new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(src))
 		if("knock")
@@ -402,6 +409,8 @@
 			new /obj/item/weapon/spellbook/oneuse/push(get_turf(src))
 		if("pie")
 			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
+		if("ice_barrage")
+			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 	var/datum/role/wizard/summon_magic/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizemagic

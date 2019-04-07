@@ -176,7 +176,7 @@
 	return
 
 //Called after add_reagents creates a new reagent
-/datum/reagent/proc/on_new(var/data)
+/datum/reagent/proc/on_introduced(var/data)
 	return
 
 //Called when two reagents are mixing
@@ -192,6 +192,8 @@
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
+/datum/reagent/proc/OnTransfer()
+	return
 
 /datum/reagent/send_to_past(var/duration)
 	var/static/list/resettable_vars = list(
@@ -517,7 +519,7 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
+		if(H.species && H.species.anatomy_flags & ACID4WATER)
 			M.adjustToxLoss(REM)
 			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
@@ -548,29 +550,25 @@
 	if(isslime(M))
 		M.adjustToxLoss(rand(15, 20))
 
-	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(isgrey(H))
+		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
 			if(method == TOUCH)
-
 				if(H.check_body_part_coverage(EYES|MOUTH))
 					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
 					return
 
-				if(M.acidable())
-					if(prob(15) && volume >= 30)
-						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-						if(head_organ)
-							if(head_organ.take_damage(0, 25))
-								H.UpdateDamageIcon(1)
-							head_organ.disfigure("burn")
-							H.audible_scream()
-					else
-						M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+				if(prob(15) && volume >= 30)
+					var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+					if(head_organ)
+						if(head_organ.take_damage(0, 25))
+							H.UpdateDamageIcon(1)
+						head_organ.disfigure("burn")
+						H.audible_scream()
+				else
+					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
-				if(M.acidable())
-					M.take_organ_damage(0, min(15, volume * 2))
+				M.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
@@ -1411,13 +1409,9 @@
 	if(..())
 		return 1
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
-			return //Greys lurve dem some sacid
-
-	M.adjustFireLoss(REM)
-	M.take_organ_damage(0, REM)
+	if(M.acidable())
+		M.adjustFireLoss(REM)
+		M.take_organ_damage(0, REM)
 
 /datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1463,8 +1457,6 @@
 		if(M.acidable())
 			if(prob(15) && ishuman(M) && volume >= 30)
 				var/mob/living/carbon/human/H = M
-				if(H.species.name == "Grey")
-					return //Greys lurve dem some sacid
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ)
 					if(head_organ.take_damage(25, 0))
@@ -1475,10 +1467,6 @@
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
 		if(M.acidable())
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.name=="Grey")
-					return //Greys lurve dem some sacid
 			M.take_organ_damage(min(15, volume * 2))
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
@@ -3067,6 +3055,7 @@
 	M.adjustOxyLoss(0.5 * REM)
 	M.adjustToxLoss(0.5 * REM)
 	M.Knockdown(10)
+	M.Stun(10)
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
@@ -4277,7 +4266,7 @@
 	M.nutrition += nutriment_factor
 	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
 		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
-	
+
 /datum/reagent/flour
 	name = "flour"
 	id = FLOUR
@@ -5523,6 +5512,7 @@
 			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
 		else
 			H.Knockdown(10)
+			H.Stun(10)
 			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
@@ -6091,6 +6081,7 @@
 
 	M.adjustOxyLoss(1)
 	M.SetKnockdown(max(M.knockdown, 15))
+	M.SetStunned(max(M.stunned, 15))
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk
@@ -7129,7 +7120,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		//(the rapid healing is likely to land you in that "less than 30" club real quick if you're not careful...)
 		H.heal_organ_damage(3 * REM, 0)
 
-		if(H.getBruteLoss() >= 30)
+		if(H.getBruteLoss(TRUE) >= 30)
 			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
 				if((E.status & ORGAN_BROKEN) || !E.is_organic() || (E.min_broken_damage >= E.max_damage))
 					continue
@@ -7172,7 +7163,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 3.214
 	specheatcap = 1.34
 	color = "#E0D3D3" //rgb: 224, 211, 211
+	data = list("source" = null)
 
+/datum/reagent/incense/on_introduced(var/data)
+	..()
+	if(!src.data["source"]) //src is necessary because of this terrible var name, but consistency!
+		src.data["source"] = holder.my_atom
+
+/datum/reagent/incense/proc/OnDisperse(var/turf/location)
 
 /datum/reagent/incense/harebells//similar effects as holy water to cultists and vampires
 	name = "Holy Incense"
@@ -7213,7 +7211,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/incense/moonflowers//Basically mindbreaker
 	name = "Hallucinogenic Incense"
 	id = INCENSE_MOONFLOWERS
-	description = "This frangrance is so unsettling that it makes you question reality."
+	description = "This fragrance is so unsettling that it makes you question reality."
 	custom_metabolism = 0.15
 
 /datum/reagent/incense/moonflowers/on_mob_life(var/mob/living/M)
@@ -7225,7 +7223,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/incense/novaflowers//Converts itself to hyperzine, but makes you hungry
 	name = "Hyperactivity Incense"
 	id = INCENSE_NOVAFLOWERS
-	description = "This frangrance helps you focus and pull into your energy reserves to move quickly."
+	description = "This fragrance helps you focus and pull into your energy reserves to move quickly."
 	custom_metabolism = 0.15
 
 /datum/reagent/incense/novaflowers/on_mob_life(var/mob/living/M)
@@ -7234,3 +7232,90 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(holder.get_reagent_amount(HYPERZINE) < 2)
 		holder.add_reagent(HYPERZINE, 0.5)
 	M.nutrition--
+
+/datum/reagent/incense/banana
+	name = "Banana Incense"
+	id = INCENSE_BANANA
+	description = "This fragrance helps you be more clumsy, so you can laugh at yourself."
+
+/datum/reagent/incense/banana/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5))
+		to_chat(M,"<span class='warning'>[pick("You feel like giggling!", "You feel clumsy!", "You want to honk!")]</span>")
+
+/datum/reagent/incense/cabbage
+	name = "Leafy Incense"
+	id = INCENSE_LEAFY
+	description = "This fragrance smells of fresh greens, delicious to most animals."
+
+/datum/reagent/incense/cabbage/reagent_deleted()
+	if(..())
+		return 1
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+	walk(M,0) //Cancel walk if it ran out
+
+/datum/reagent/incense/cabbage/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(isanimal(M) || ismonkey(M))
+		if(istype(M,/mob/living/simple_animal/hostile))
+			var/mob/living/simple_animal/hostile/H = M
+			switch(H.stance)
+				if(HOSTILE_STANCE_ATTACK,HOSTILE_STANCE_ATTACKING)
+					if(istype(M,/mob/living/simple_animal/hostile/retaliate/goat))
+						var/mob/living/simple_animal/hostile/retaliate/goat/G = M
+						G.Calm()
+					else
+						return
+		M.start_walk_to(get_turf(data["source"]),1,6)
+
+/datum/reagent/incense/booze
+	name = "Alcoholic Incense"
+	id = INCENSE_BOOZE
+	description = "This fragrance is dense with the odor of ethanol."
+
+/datum/reagent/incense/booze/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.slurring < 22)
+		M.slurring += 10
+	if(M.eye_blurry < 22)
+		M.eye_blurry += 10
+
+/datum/reagent/incense/vapor
+	name = "Airy Incense"
+	id = INCENSE_VAPOR
+	description = "It burns your nostrils a little. The incense smells... clean."
+
+/datum/reagent/incense/vapor/OnDisperse(var/turf/location)
+	for(var/turf/simulated/T in view(2,location))
+		if(T.is_wet())
+			T.dry(TURF_WET_LUBE)
+			T.turf_animation('icons/effects/water.dmi',"dry_floor",0,0,TURF_LAYER)
+
+/datum/reagent/incense/dense
+	name = "Dense Incense"
+	id = INCENSE_DENSE
+	description = "This isn't really a fragrance so much as tactical smoke."
+	custom_metabolism = 0.25
+
+/datum/reagent/incense/dense/OnDisperse(var/turf/location)
+	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	smoke.set_up(2, 0, location) //Make 2 drifting clouds of smoke, direction
+	smoke.start()
+
+/datum/reagent/incense/dense/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5))
+		M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+
+/datum/reagent/incense/vale
+	name = "Sporty Incense"
+	id = INCENSE_CRAVE
+	description = "This has what you crave. Electrolytes."
+	sport = 5
+	custom_metabolism = 0.15

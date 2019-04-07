@@ -164,6 +164,7 @@ proc/process_adminbus_teleport_locs()
 	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/shuttle/holomapAlwaysDraw()
 	return 0
@@ -466,6 +467,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	has_gravity = 1
+	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
 // === end remove
 
@@ -482,6 +484,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE //Central Command is always squeaky clean yo
 
 /area/centcom/control
 	name = "\improper Centcom Control"
@@ -609,6 +612,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/syndicate_station/start
 	icon_state = "yellow"
@@ -971,6 +975,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Head of Personnel's Quarters"
 	icon_state = "head_quarters"
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/heads/rd
 	name = "\improper Research Director's Quarters"
@@ -996,12 +1002,16 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Courtroom"
 	icon_state = "courtroom"
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
+	holomap_marker = "courtroom"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/hop
 	name = "\improper Head of Personnel's Office"
 	icon_state = "head_quarters"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/mint
 	name = "\improper Mint"
@@ -1082,9 +1092,11 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Theatre"
 
 /area/library
- 	name = "\improper Library"
- 	icon_state = "library"
- 	shuttle_can_crush = FALSE
+	name = "\improper Library"
+	icon_state = "library"
+	shuttle_can_crush = FALSE
+	holomap_marker = "library"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel
 	shuttle_can_crush = FALSE
@@ -1093,6 +1105,8 @@ proc/process_adminbus_teleport_locs()
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
+	holomap_marker = "chapel"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel/office
 	name = "\improper Chapel Office"
@@ -1119,6 +1133,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Holodeck"
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
@@ -2325,6 +2340,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Strange Location"
 	icon_state = "away"
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/awaymission/example
 	name = "\improper Strange Station"
@@ -2435,15 +2451,15 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/snowplanet
 	name = "snowplanet"
 	icon_state = "mining_production"
-	
+
 /area/awaymission/articwasteland
 	name = "artic wasteland"
 	icon_state = "away"
-	
+
 /area/awaymission/articwasteland/gateway
 	name = "artic wasteland gateway shelter"
 	icon_state = "away2"
-	
+
 /////////////////////////////////////////////////////////////////////
 /*
  Lists of areas to be used with is_type_in_list.
@@ -2520,6 +2536,7 @@ var/list/the_station_areas = list (
 	requires_power = 0
 	var/sound/mysound = null
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /* We have a jukebox now, fuck that
 /area/beach/New()

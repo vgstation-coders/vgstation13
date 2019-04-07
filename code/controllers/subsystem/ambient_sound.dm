@@ -55,7 +55,7 @@ client/proc/handle_ambience()
 		if(prob(initial(picked_ambience_datum.prob_fire)))
 			ambience_buffer = world.timeofday+initial(picked_ambience_datum.length)
 			last_ambient_noise = initial(picked_ambience_datum.sound)
-			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, 25)
+			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, prefs.ambience_volume)
 
 /client/proc/get_ambience()
 	var/area/a = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.

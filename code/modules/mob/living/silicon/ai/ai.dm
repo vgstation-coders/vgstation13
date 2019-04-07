@@ -145,7 +145,10 @@ var/list/ai_list = list()
 			job = "AI"
 	ai_list += src
 	..()
-	playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
+	if(prob(25))
+		playsound(src, get_sfx("windows error"), 75, FALSE)
+	else
+		playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"

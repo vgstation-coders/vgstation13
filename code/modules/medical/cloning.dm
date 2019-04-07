@@ -73,11 +73,10 @@
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
 /obj/item/weapon/disk/data
-	name = "Cloning Data Disk"
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk0" //Gosh I hope syndies don't mistake them for the nuke disk.
-	item_state = "card-id"
-	w_class = W_CLASS_TINY
+	name = "cloning data disk"
+	desc = "A disk for storing DNA data, and to transfer it between a cloning console and a DNA modifier."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk_cloning" //Gosh I hope syndies don't mistake them for the nuke disk.
 	var/datum/dna2/record/buf=null
 	var/list/datum/block_label/labels[DNA_SE_LENGTH] //This is not related to cloning, these are colored tabs for Genetics machinery. Multipurpose floppies, why not?
 	var/read_only = 0 //Well,it's still a floppy disk
@@ -147,11 +146,6 @@
 	return selected
 
 //Disk stuff.
-/obj/item/weapon/disk/data/New()
-	..()
-	var/diskcolor = pick(0,1,2)
-	icon_state = "datadisk[diskcolor]"
-
 /obj/item/weapon/disk/data/attack_self(mob/user as mob)
 	read_only = !read_only
 	to_chat(user, "You flip the write-protect tab to [read_only ? "protected" : "unprotected"].")

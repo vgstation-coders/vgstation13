@@ -112,7 +112,7 @@
 /obj/item/clothing/suit/space/rig/Destroy()
 	qdel(cell)
 	cell = null
-	if(H.loc == src || !H.loc)
+	if(H && (H.loc == src || !H.loc))
 		qdel(H)
 	H = null
 	for(var/obj/M in modules)
@@ -196,7 +196,6 @@
 	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
 	icon_state = "rig0-mining"
 	item_state = "rig0-mining"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	_color = "mining"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -208,7 +207,6 @@
 	name = "mining hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
 	item_state = "rig-mining"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
@@ -636,6 +634,7 @@
 	name = "jury-rigged space-proof fire helmet"
 	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
 	icon_state = "ghettorig"
+	item_state = "ghettorig"
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)

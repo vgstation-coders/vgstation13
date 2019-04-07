@@ -205,6 +205,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define TIMELESS		32768 // Immune to time manipulation.
 
+#define SILENTCONTAINER	65536 //reactions inside make no noise
+
 #define ALL ~0
 #define NONE 0
 
@@ -215,12 +217,14 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 //sharpness flags
-#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
-#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
-#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
-#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
-#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
-#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define SHARP_TIP 		 1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		 2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	 4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
+#define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -301,22 +305,22 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
-#define FACE			EYES|MOUTH|BEARD
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
 #define BEARD			32768
-#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
-#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
-#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
-#define ARMS			ARM_LEFT|ARM_RIGHT		//384
-#define HANDS			HAND_LEFT|HAND_RIGHT //1536
-#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -324,7 +328,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEFACE			FACE
 #define HIDEHEADHAIR 		EARS|HEAD
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
@@ -590,10 +594,11 @@ var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons
 #define GRAB_KILL		5
 
 //Security levels
-#define SEC_LEVEL_GREEN	0
-#define SEC_LEVEL_BLUE	1
-#define SEC_LEVEL_RED	2
-#define SEC_LEVEL_DELTA	3
+#define SEC_LEVEL_RAINBOW	-1
+#define SEC_LEVEL_GREEN		0
+#define SEC_LEVEL_BLUE		1
+#define SEC_LEVEL_RED		2
+#define SEC_LEVEL_DELTA		3
 
 #define TRANSITIONEDGE	7 //Distance from edge to move to another z-level
 /*
@@ -855,28 +860,13 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      	"alien"
-#define ROLE_BLOB       	"blob"      // New!
-#define ROLE_BORER      	"borer"     // New!
-#define ROLE_CHANGELING 	"changeling"
-#define ROLE_COMMANDO   	"commando"  // New!
-#define ROLE_CULTIST    	"cultist"
-#define ROLE_LEGACY_CULTIST "legacy_cultist"
-#define ROLE_MALF       	"malf AI"
-#define ROLE_NINJA      	"ninja"
-#define ROLE_OPERATIVE  	"operative" // New!
+#define ROLE_BORER      	"borer"
 #define ROLE_PAI        	"pAI"
 #define ROLE_PLANT      	"Dionaea"
 #define ROLE_POSIBRAIN  	"posibrain"
-#define ROLE_REV        	"revolutionary"
-#define ROLE_STRIKE     	"Strike Team"
-#define ROLE_TRAITOR    	"traitor"
-#define ROLE_VAMPIRE    	"vampire"
-#define ROLE_VOXRAIDER  	"vox raider"
-#define ROLE_WIZARD     	"wizard"
-#define ROLE_GRINCH			"Grinch"
-#define ROLE_WEEABOO		"crazed weeaboo"
 #define ROLE_MINOR			"minor roles"
+#define ROLE_ALIEN			"xenomorph"
+#define ROLE_STRIKE			"striketeam"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -966,6 +956,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_BONES 512
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
+#define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1482,8 +1473,8 @@ var/proccalls = 1
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
 #define HONORABLE_HIGHLANDER 2
-#define HONORABLE_WEEABOO      4
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_WEEABOO
+#define HONORABLE_NINJA      4
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 

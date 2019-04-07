@@ -595,6 +595,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		heal_amt = heal_amt * wound_update_accuracy
 		//Configurable regen speed woo, no-regen hardcore or instaheal hugbox, choose your destiny
 		heal_amt = heal_amt * config.organ_regeneration_multiplier
+		if(M_REGEN in owner.mutations)
+			heal_amt = heal_amt * 2 // The heal rate is twice as much if you have regeneration
 		//Amount of healing is spread over all the wounds
 		heal_amt = heal_amt / (wounds.len + 1)
 		//Making it look prettier on scanners
@@ -1125,8 +1127,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
-	return (is_robotic() && ((status & ORGAN_MALFUNCTIONING) || prob(brute_dam + burn_dam)))
-
+	return (is_robotic() && (status & (ORGAN_MALFUNCTIONING) || (brute_dam + burn_dam > min_broken_damage/2 && prob(brute_dam + burn_dam))))
+	
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_PEG|ORGAN_CUT_AWAY))

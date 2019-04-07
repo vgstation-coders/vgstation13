@@ -2203,6 +2203,40 @@
 	else if(href_list["check_antagonist"])
 		check_antagonists()
 
+	else if(href_list["adjustthreat"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		var/threatadd = input("Specify how much threat to add (negative to subtract). This can inflate the threat level.", "Adjust Threat", 0) as null|num
+		if(!threatadd)
+			return
+		if(threatadd>0)
+			D.create_threat(threatadd)
+		else
+			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
+		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
+		check_antagonists()
+
+	else if(href_list["injectnow"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		switch(href_list["injectnow"])
+			if("1")
+				D.latejoin_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the latejoin injection timer to 0.")
+			if("2")
+				D.midround_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the midround injection timer to 0.")
+			else
+				message_admins("[key_name(usr)] attempted to set an unknown timer to 0.")
+		check_antagonists()
+
 	/*
 	else if(href_list["cult_nextobj"])
 		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
@@ -4116,6 +4150,15 @@
 	else if(href_list["xgm_panel"])
 		XGM.ui_interact(usr)
 
+	else if(href_list["toggle_light"])
+		if(!SSticker.initialized)
+			to_chat(usr, "<span class = 'notice'>Please wait for initialization to complete.</span>")
+			return
+		SSlighting.flags = SS_FIRE_IN_LOBBY //Purges the treat wait as ticks rather than DC
+		SSlighting.wait = 5
+		Master.make_runtime = TRUE
+
+
 	else if(href_list["toglang"])
 		if(check_rights(R_SPAWN))
 			var/mob/M = locate(href_list["toglang"])
@@ -4927,6 +4970,20 @@
 					end_credits.disclaimers.Swap(i,i+1)
 
 		CreditsPanel() //refresh!
+
+	if(href_list["persistenceaction"])
+		switch(href_list["persistenceaction"])
+			if("qdelall")
+				if(href_list["persistencedatum"])
+					var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
+					T.qdelAllTrackedItems(usr)
+				else
+					SSpersistence_map.qdelAllFilth(usr)
+			if("togglesaving")
+				SSpersistence_map.setSavingFilth(!SSpersistence_map.savingFilth, usr)
+
+
+		PersistencePanel() //refresh!
 
 
 	// ----- Religion and stuff

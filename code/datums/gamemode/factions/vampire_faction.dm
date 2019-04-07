@@ -2,7 +2,7 @@
 	name = "Vampire Lords"
 	desc = "Hailing from Space Transylvania."
 	ID = VAMPIRELORDS
-	required_pref = ROLE_VAMPIRE
+	required_pref = VAMPIRE
 	initial_role = VAMPIRE
 	late_role = VAMPIRE // Vampires do not change their role.
 	roletype = /datum/role/vampire

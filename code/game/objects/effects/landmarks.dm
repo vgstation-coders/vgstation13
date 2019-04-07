@@ -133,7 +133,5 @@
 /obj/effect/landmark/grinchstart
 	name = "grinchstart"
 
-/obj/effect/landmark/bomberman_arena
-	name = "bomberman arena"
-	invisibility = 101
-	var/busy = FALSE
+/obj/effect/landmark/xtra_cleanergrenades
+	name = "xtra_cleanergrenades"

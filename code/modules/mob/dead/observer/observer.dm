@@ -224,7 +224,7 @@ Works together with spawning an observer, noted above.
 	if(antagHUD)
 		var/list/target_list = list()
 		for(var/mob/living/target in oview(src))
-			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target)) )
+			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 				target_list += target
 		if(target_list.len)
 			assess_targets(target_list, src)
@@ -306,23 +306,36 @@ Works together with spawning an observer, noted above.
 			C.images += holder
 
 /mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
-	var/icon/tempHud = 'icons/mob/hud.dmi'
 	for(var/mob/living/target in target_list)
-		if(iscarbon(target))
-			for (var/R in target.mind.antag_roles)
-				var/datum/role/role = target.mind.antag_roles[R]
-				var/image/I = image('icons/role_HUD_icons.dmi', target, role.logo_state)
+		if(target.mind)
+			var/image/I
+			U.client.images -= target.hud_list[SPECIALROLE_HUD]
+			switch(target.mind.antag_roles.len)
+				if(0)
+					I = null
+				if(1)
+					for(var/R in target.mind.antag_roles)
+						var/datum/role/role = target.mind.antag_roles[R]
+						I = image('icons/role_HUD_icons.dmi', target, role.logo_state)
+				else
+					I = image('icons/role_HUD_icons.dmi', target, "multi-logo")
+			if(I)
 				I.pixel_x = 20 * PIXEL_MULTIPLIER
 				I.pixel_y = 20 * PIXEL_MULTIPLIER
 				I.plane = ANTAG_HUD_PLANE
+				target.hud_list[SPECIALROLE_HUD] = I
 				U.client.images += I
-		else if(issilicon(target))//If the silicon mob has no law datum, no inherent laws, or a law zero, add them to the hud.
+			else
+				target.hud_list[SPECIALROLE_HUD] = null
+
+
+		if(issilicon(target))//If the silicon mob has no law datum, no inherent laws, or a law zero, add them to the hud.
 			var/mob/living/silicon/silicon_target = target
 			if(!silicon_target.laws||(silicon_target.laws&&(silicon_target.laws.zeroth||!silicon_target.laws.inherent.len))||silicon_target.mind.special_role=="traitor")
 				if(isrobot(silicon_target))//Different icons for robutts and AI.
-					U.client.images += image(tempHud,silicon_target,"hudmalborg")
+					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
 				else
-					U.client.images += image(tempHud,silicon_target,"hudmalai")
+					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
 	return 1
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
@@ -1072,6 +1085,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 // -- Require at least 2 players to start.
 
+// Global variable on whether an arena is being created or not
+var/creating_arena = FALSE
+
 /mob/dead/observer/verb/request_bomberman()
 	set name = "Request a bomberman arena"
 	set category = "Ghost"
@@ -1086,10 +1102,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	to_chat(src, "<span class='notice'>Pooling other ghosts for a bomberman arena...</span>")
-	for (var/obj/effect/landmark/bomberman_arena/landmark in landmarks_list)
-		if (landmark.busy)
-			continue
-		var/datum/bomberman_arena/B = new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src, landmark)
-		arenas += B
+	if (!creating_arena)
+		new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
+		creating_arena = TRUE
 		return
-	to_chat(src, "<span class='notice'>There are unfortunatly no available arenas!</span>")
+	to_chat(src, "<span class='notice'>There were unfortunatly no available arenas.</span>")

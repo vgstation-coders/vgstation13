@@ -95,6 +95,18 @@ proc/adjust_brightness(var/color, var/value)
 	RGB[3] = Clamp(RGB[3]+value,0,255)
 	return rgb(RGB[1],RGB[2],RGB[3])
 
+proc/adjust_RGB(var/color, var/red, var/green, var/blue)
+	if (!color)
+		return "#FFFFFF"
+	if (!red && !green && !blue)
+		return color
+
+	var/list/RGB = ReadRGB(color)
+	RGB[1] = Clamp(RGB[1]+red,0,255)
+	RGB[2] = Clamp(RGB[2]+green,0,255)
+	RGB[3] = Clamp(RGB[3]+blue,0,255)
+	return rgb(RGB[1],RGB[2],RGB[3])
+
 /proc/ListColors(var/icon/I, var/ignoreGreyscale = 0)
 	var/list/colors = list()
 	for(var/x_pixel = 1 to I.Width())
@@ -151,7 +163,7 @@ proc/adjust_brightness(var/color, var/value)
 		if(found_state == wanted_state)
 			found = TRUE
 			break
-		
+
 	if(found)
 		return TRUE
 	else

@@ -7,6 +7,7 @@
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 	var/ctype = 1
+	var/holo = FALSE
 
 /obj/structure/curtain/closed/left
 	ctype = 2
@@ -53,8 +54,8 @@
 		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut \the [src] down.</span>")
-			var/obj/item/stack/sheet/mineral/plastic/A = getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src))
-			A.amount = 4
+			if(!holo)
+				getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 4)
 			qdel(src)
 		return 1
 	if(isscrewdriver(W))
@@ -67,6 +68,9 @@
 /obj/structure/curtain/black
 	name = "black curtain"
 	color = "#222222"
+
+/obj/structure/curtain/black/holo
+	holo = TRUE
 
 /obj/structure/curtain/medical
 	name = "plastic curtain"

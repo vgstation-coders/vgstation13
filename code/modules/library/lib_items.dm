@@ -204,6 +204,7 @@
 	var/forbidden = 0     // Prevent ordering of this book. (0=no, 1=yes, 2=emag only)
 	var/obj/item/store	// What's in the book?
 	var/runestun = 0	//Does it have a stun talisman in it?
+	var/occult = 0 //Does this book contain forbidden and occult writings?
 
 /obj/item/weapon/book/New()
 	..()
@@ -229,6 +230,8 @@
 		if(!isobserver(user))
 			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
 		onclose(user, "book")
+	if(occult)
+		to_chat(user, "<span class='sinister'>As you read the book, your mind is assaulted by foul, arcane energies!</span>")
 	else
 		to_chat(user, "This book is completely blank!")
 
@@ -246,10 +249,19 @@
 		M.Knockdown(25)
 		M.Stun(25)
 		runestun = 0
+	if(occult)
+		var/mob/living/carbon/human/M = user
+		M.flash_eyes(visual = 1)
+		M.Knockdown(15)
+		M.Stun(15)
+		var/datum/organ/internal/eyes/eyes = M.internal_organs_by_name["eyes"]
+		eyes.damage += rand(30,60)
+		M.adjustBrainLoss(rand(50,100))
+		M.hallucination = max(0, M.hallucination + rand(60,90))
 	read_a_motherfucking_book(user)
 
 /obj/item/weapon/book/examine(mob/user)
-	if(isobserver(user) && in_range(src,user))
+	if(isobserver(user) && in_range(src,user) && occult == 0)
 		read_a_motherfucking_book(user)
 	else
 		..()
@@ -260,6 +272,7 @@
 		if(do_after(user, src, 30 / W.sharpness))
 			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
 			carved = 1
+			occult = 0 //A book cannot be an occult book if it has no pages
 			return
 	if(carved)
 		if(!store)
@@ -338,7 +351,10 @@
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
 			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
-			return()
+			return
+		if(occult)
+			to_chat(user, "<span class='sinister'>You feel as if it would be a bad idea to add a talisman to this particular book.</span>")
+			return
 		if(talisman.imbue == "runestun")
 			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
 			qdel(talisman)
@@ -349,6 +365,25 @@
 	else
 		..()
 
+/*
+ * Traitor Ooccult Books
+ */
+
+
+/obj/item/weapon/book/occult
+	name = "The King in Yellow"
+	title = "The King in Yellow"
+	occult = 1
+	var/possible_names = list("The King in Yellow", "The Locksmith's Dream", "The Tantra of Worms", "Infinite Jest", "The Legacy of Totalitarianism in a Tundra", "The Rose of Hypatia",
+	"Gravity's Rainbow", "Aristotle's Poetics", "The Geminiad", "My Diary", "The War of the Roads", "The Courier's Tragedy", "The Burning of the Unburnt God", "Love's Labour's Won",
+	"The Necronomicon", "The Funniest Joke in the World", "Woody Got Wood", "Peggy's Revenge", "House of Leaves", "A True and Accurate History of the Shadowless Kings", "The Book of Nod",
+	"Atlas Shrugged", "The Serenity of the Black Wood", "The World Does Not Weep")
+
+/obj/item/weapon/book/occult/New()
+	..()
+	name = pick(possible_names)
+	title = name
+	icon_state = "book[rand(1, 9)]"
 
 /*
  * Barcode Scanner

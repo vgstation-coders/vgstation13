@@ -1,17 +1,18 @@
 /datum/role/cultist
-	id = ROLE_CULTIST
+	id = CULTIST
 	name = "Cultist"
-	required_pref = ROLE_CULTIST
+	required_pref = CULTIST
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
+	var/second_chance = 1
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
-	wikiroute = role_wiki[ROLE_CULTIST]
+	wikiroute = role_wiki[CULTIST]
 
 /datum/role/cultist/OnPostSetup()
 	. = ..()
@@ -25,6 +26,12 @@
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
+	antag.store_memory("A couple of runes appear clearly in your mind:")
+	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
+	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
+	antag.store_memory("<B>Summon Tome:</B> SEE, BLOOD, HELL.")
+	antag.store_memory("<hr>")
+
 /datum/role/cultist/RemoveFromRole(var/datum/mind/M)
 	antag.current.remove_language(LANGUAGE_CULT)
 	for(var/spell/cult/spell_to_remove in antag.current.spell_list)
@@ -36,19 +43,22 @@
 /datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
 	. = ..()
 	if (issilicon(new_character))
-		antag.antag_roles -= CULTIST
-		antag.current.remove_language(LANGUAGE_CULT)
-		for(var/spell/cult/spell_to_remove in antag.current.spell_list)
-			antag.current.remove_spell(spell_to_remove)
-		if (src in blood_communion)
-			blood_communion.Remove(src)
-		update_faction_icons()
-		return
+		antag.decult()
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
+/datum/mind/proc/decult()
+	antag_roles -= CULTIST
+	current.remove_language(LANGUAGE_CULT)
+	for(var/spell/cult/spell_to_remove in current.spell_list)
+		current.remove_spell(spell_to_remove)
+	var/datum/role/cultist/C = GetRole(CULTIST)
+	if (C in blood_communion)
+		blood_communion.Remove(C)
+	update_faction_icons()
 
 /datum/role/cultist/process()
 	..()
@@ -113,7 +123,8 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>[custom]</span>")
 		if (GREET_CONVERTED)
 			to_chat(antag.current, "<span class='sinister'>You feel like you've broken past the veil of reality, your mind has seen worlds from beyond this plane, you've listened to the words of the Geometer of Blood for what felt like both an instant and ages, and now share both his knowledge and his ambition.</span>")
-			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you. You remember the last three words that Nar-Sie spoke to you: <span class='danger'>See Blood Hell</span></span>")
+			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you.</span>")
+			to_chat(antag.current,"<b>The first thing you might want to do is to summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
 		if (GREET_PAMPHLET)
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		if (GREET_SOULSTONE)
@@ -130,6 +141,8 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
+	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
+
 
 	spawn(1)
 		if (faction)

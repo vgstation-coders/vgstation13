@@ -124,8 +124,9 @@
 	item_state = "dualsaber[wielded ? colorset : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
 	sharpness = wielded ? 1.5 : 0
+	armor_penetration = wielded ? 100 : 0
 	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
@@ -163,27 +164,11 @@
 	name = "banana bunch"
 	desc = "Potential for some serious chaos."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 3
-	throwforce = 5.0
-	throw_speed = 1
-	throw_range = 5
-	w_class = W_CLASS_SMALL
-	flags = FPRINT | TWOHANDABLE
-	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
 	..()
 	icon_state = "bananabunch[wielded ? 1 : 0]"
 	item_state = "bananabunch[wielded ? 1 : 0]"
-	force = wielded ? 30 : 3
-	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
-	sharpness = wielded ? 1.5 : 0
-	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
-	if(user)
-		user.update_inv_hands()
-	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
 	return
 
 /obj/item/weapon/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
@@ -226,7 +211,7 @@
 	throw_speed = 5
 	throw_range = 10
 	sharpness = 2
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK //it's a really sharp blade m'kay
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_FAIL
@@ -237,6 +222,7 @@
 	item_state = "hfrequency[wielded ? 1 : 0]"
 	force = wielded ? 200 : 50
 	sharpness = wielded ? 100 : 2
+	armor_penetration = wielded ? 100 : 50
 	if(user)
 		user.update_inv_hands()
 	return
@@ -342,7 +328,7 @@
 	throwforce = 3
 	throw_speed = 1
 	throw_range = 5
-	attack_delay = 25 // Heavy.
+	attack_delay = 15 // Heavy.//Come on man that makes it useless (reduced it)
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -356,8 +342,9 @@
 	icon_state = "bloodlust[wielded ? 1 : 0]"
 	item_state = icon_state
 	force = wielded ? 34 : initial(force)
-	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE : initial(sharpness_flags)
+	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE | CUT_WALL | CUT_AIRLOCK : initial(sharpness_flags)
 	sharpness = wielded ? 2 : initial(sharpness)
+	armor_penetration = wielded ? 100 : 50
 	to_chat(user, wielded ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, wielded ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
 	if(user)

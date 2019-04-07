@@ -21,6 +21,7 @@
 	if(isliving(A))
 		var/mob/living/M = A
 		M.Knockdown(5)
+		M.Stun(5)
 
 	forceMove(get_step(loc,dir))
 

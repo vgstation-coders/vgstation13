@@ -960,22 +960,37 @@ Thanks.
 			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				if(C.handcuffed)
-					C.delayNextAttack(100)
-					C.delayNextSpecial(100)
-					C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
-									  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
-									  self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
-					spawn(0)
-						if(do_after(usr, usr, 1200))
-							if(!C.locked_to)
-								return
-							C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
-								"<span class='notice'>You successfully unbuckle yourself.</span>",\
+					C.delayNextAttack(50)
+					C.delayNextSpecial(50)
+					if(isalienadult(C) || (M_HULK in usr.mutations))
+						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
+						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
+						spawn(0) // I have no idea what this is supposed to actually do but everything else has it so why not
+							if(do_after(C, C, 50))
+								if(!C.handcuffed || !C.locked_to)
+									return
+								C.visible_message("<span class='danger'>[C] manages to forcefully unbuckle!</span>",
+								                  "<span class='notice'>You successfully forcefully unbuckle.</span>")
+								C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+								B.manual_unbuckle(C)
+							else
+								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
+					else
+						C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
+						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
+						                   self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
+						spawn(0)
+							if(do_after(usr, usr, 1200))
+								if(!C.locked_to)
+									return
+								C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
+								                  "<span class='notice'>You successfully unbuckle yourself.</span>",\
 								self_drugged_message="<span class='notice'>You successfully regain control of your legs and stand up.</span>")
-							B.manual_unbuckle(C)
-						else
-							C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
-								"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
+								B.manual_unbuckle(C)
+							else
+								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
+									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
+
 			else
 				B.manual_unbuckle(L)
 		//release from kudzu
@@ -1074,7 +1089,8 @@ Thanks.
 	//putting out a fire
 		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
 			CM.fire_stacks -= 5
-			CM.SetKnockdown(3)
+			CM.Knockdown(3)
+			CM.Stun(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")

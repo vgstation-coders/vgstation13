@@ -250,7 +250,7 @@
 				if(rev)
 					var/result = rev.HandleRecruitedMind(M.mind)
 
-					if(result == 1)
+					if(istype(result, /datum/role)) //We got a role, this is considered a success
 						log_admin("[key_name(user)] has converted [key_name(M)] to the revolution at [formatLocation(M.loc)]")
 						limited_conversions--
 						if(limited_conversions == 0)

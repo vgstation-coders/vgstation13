@@ -128,7 +128,7 @@
 		result = first ^ second
 	return result
 
-//Pretends to pick an element based on its weight but really just seems to pick a random element.
+//Picks an element based on its weight
 /proc/pickweight(list/L)
 	if(!L || !L.len)
 		return
@@ -290,6 +290,12 @@
 			return key
 	return null
 
+//In an associative list, get only the elements and not the keys.
+/proc/get_list_of_elements(var/list/L)
+	var/list/elements = list()
+	for(var/key in L)
+		elements += L[key]
+	return elements
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0

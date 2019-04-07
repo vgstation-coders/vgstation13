@@ -7,7 +7,6 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -494,7 +493,7 @@
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
-		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*Arrest*", "Incarcerated", "Parolled", "Released")
+		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*High Threat*", "*Arrest*", "Incarcerated", "Parolled", "Released")
 		if(!setcriminal || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_SECURITY))
 			return
 		sec_record.fields["criminal"] = setcriminal
@@ -587,9 +586,6 @@
 		if (!t1 || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		med_record.add_comment(t1)
-	else if (href_list["lookitem"])
-		var/obj/item/I = locate(href_list["lookitem"])
-		usr.examination(I)
 	else if (href_list["listitems"])
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
@@ -1326,6 +1322,8 @@
 		var/datum/data/record/R = find_record("name", perpname, data_core.security)
 		if(R && R.fields["criminal"])
 			switch(R.fields["criminal"])
+				if("*High Threat*")
+					threatcount += 10
 				if("*Arrest*")
 					threatcount += 5
 				if("Incarcerated")
@@ -1432,16 +1430,16 @@
 
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
-	for(var/datum/organ/external/O in src.organs)
+	for(var/datum/organ/external/O in organs)
 		if(O.is_robotic())
-			O.status &= ~ORGAN_ROBOT
+			O.fleshify()
 	update_icons()
+	update_body()
 
 // Makes all robot internal organs organic.
 /mob/living/carbon/human/proc/make_robot_internals_organic()
-	for(var/datum/organ/internal/O in src.organs)
-		if(O.robotic)
-			O.robotic = 0
+	for(var/datum/organ/internal/O in internal_organs)
+		O.robotic = 0
 
 // Makes all robot organs, internal and external, organic.
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
@@ -1451,13 +1449,15 @@
 // Makes all limbs robotic.
 /mob/living/carbon/human/proc/make_organic_limbs_robotic()
 	for(var/datum/organ/external/O in organs)
-		O.robotize()
+		if(!O.is_robotic())
+			O.robotize()
 	update_icons()
+	update_body()
 
 // Makes all internal organs robotic.
 /mob/living/carbon/human/proc/make_organic_internals_robotic()
-	for(var/datum/organ/internal/O in organs)
-		O.robotic = TRUE
+	for(var/datum/organ/internal/O in internal_organs)
+		O.robotic = 2
 
 // Makes all organs, internal and external, robotic.
 /mob/living/carbon/human/proc/make_all_organic_parts_robotic()
@@ -1576,6 +1576,8 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
+	if(locked_to)
+		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
 	else
@@ -1680,6 +1682,10 @@ mob/living/carbon/human/isincrit()
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
 		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
+		var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+		if(L && !L.robotic)
+			L.gasses.Remove(locate(/datum/lung_gas/metabolizable) in L.gasses)
+			L.gasses.Add(new /datum/lung_gas/metabolizable(species.breath_type, min_pp = 16, max_pp = 140))
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
