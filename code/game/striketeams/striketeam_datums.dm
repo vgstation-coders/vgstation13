@@ -317,9 +317,7 @@ var/list/sent_strike_teams = list()
 				new_commando.setGender(FEMALE)
 	else
 		new_commando.setGender(pick(MALE, FEMALE))
-
-		var/datum/preferences/A = new()
-		A.randomize_appearance_for(new_commando)
+		new_commando.randomise_appearance_for(new_commando.gender)
 
 	//M.rebuild_appearance()
 	new_commando.update_hair()
