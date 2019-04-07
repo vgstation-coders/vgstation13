@@ -33,7 +33,7 @@
 	my_appearance = new_looks
 	regenerate_icons()
 
-/mob/living/carbon/human/proc/randomize_appearance_for(var/new_gender)
+/mob/living/carbon/human/proc/randomise_appearance_for(var/new_gender)
 	var/datum/huamn_appearance/appearance = new
 
 	if (new_gender)

@@ -33,7 +33,7 @@
 		return FALSE
 	user.visible_message("<span class='sinister'>\The [user] transforms!</span>")
 	user.real_name = user.generate_name() //random_name(M.current.gender)
-	user.randomize_appearance_for(user.gender)
+	user.randomise_appearance_for(user.gender)
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)
 		V.remove_blood(blood_cost)
