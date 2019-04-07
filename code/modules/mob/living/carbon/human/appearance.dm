@@ -2,7 +2,7 @@
 #define INDEX_GREEN 2
 #define INDEX_BLUE 3
 
-/datum/huamn_appearance
+/datum/human_appearance
 	// For identification.
 	var/name
 	var/gender
@@ -25,7 +25,7 @@
 	var/b_eyes
 
 /mob/living/carbon/human/
-	var/datum/huamn_appearance/my_appearance
+	var/datum/human_appearance/my_appearance
 
 /mob/living/carbon/human/proc/switch_appearance(var/datum/huamn_appearance/new_looks)
 	if (!istype(new_looks))
