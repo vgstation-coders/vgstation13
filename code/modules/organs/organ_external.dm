@@ -1128,7 +1128,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
 	return (is_robotic() && (status & (ORGAN_MALFUNCTIONING) || (brute_dam + burn_dam > min_broken_damage/2 && prob(brute_dam + burn_dam))))
-
+	
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_PEG|ORGAN_CUT_AWAY))
@@ -1151,11 +1151,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
-		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")	
-		spark(src, 5, FALSE)	
-		
+		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
+		spark(src, 5, FALSE)
 		owner.drop_item(c_hand)
-		
+
 /datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
 	if(!silent)
 		owner.visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
