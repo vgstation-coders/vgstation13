@@ -61,6 +61,7 @@
 	appearance.g_eyes = eye_colour[INDEX_GREEN]
 	appearance.b_eyes = eye_colour[INDEX_BLUE]
 	gender = appearance.gender
+	regenerate_icons()
 	return appearance
 
 /mob/living/carbon/human/proc/randomize_hair_color(var/target = "hair")
