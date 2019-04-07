@@ -79,13 +79,12 @@
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	my_appearance.f_style = pick(facial_hair_styles_list)
-	my_appearance.h_style = pick(hair_styles_list)
-
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
+	my_appearance.f_style = pick(facial_hair_styles_list)
+	my_appearance.h_style = pick(hair_styles_list)
 	gender = pick(MALE, FEMALE, NEUTER, PLURAL)
 	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
 
