@@ -380,7 +380,7 @@
 			for(var/mob/living/simple_animal/cow/C in shuttle)
 				cowcount += 1
 			if(cowcount > 1)
-				episode_names += new /datum/episode_name/rare("WHEN THE COWS COME HOME", "There were [cowcount] cows on the shuttle.", min(1500, cowcount*300))
+				episode_names += new /datum/episode_name/rare("'TIL THE COWS COME HOME", "There were [cowcount] cows on the shuttle.", min(1500, cowcount*300))
 
 			var/beecount = 0
 			for(var/mob/living/simple_animal/bee/B in shuttle)
