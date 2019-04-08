@@ -184,9 +184,16 @@
 									var/mob/living/carbon/human/H = C
 									if(H.species && H.species.flags & NO_BREATHE)//can they breath?
 										continue
+									if(H.wear_mask && H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+										continue
+									if(H.glasses && H.glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+										continue
+									if(H.head && H.head.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+										continue
 									if(H.internal)//are their internals off?
 										continue
 									potential_breathers += C
+
 					var/datum/reagent/incense/D = chemical_reagents_list[fragrance]
 					if(D)
 						D.OnDisperse(location)
