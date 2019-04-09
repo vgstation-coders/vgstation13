@@ -36,6 +36,7 @@ var/global/list/alien_whitelist = list()
 					alien_whitelist[species]=list()
 				if(!(ckey in alien_whitelist[species]))
 					alien_whitelist[species] += ckey
+	testing("Starting alien whitelist debug output")
 	for(var/species in alien_whitelist)
 		for(var/ckey in alien_whitelist[species])
 			testing("[ckey] - [species]")
