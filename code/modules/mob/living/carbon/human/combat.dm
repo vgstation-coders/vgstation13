@@ -205,7 +205,7 @@
 		if(prob(chance))
 			knock_out_teeth(attacker)
 
-	if(isrambler(src) && ishuman(attacker))
+	if(isrambler(src) && !(attacker == src)) //Redundant check for punching a soul rambler. Kicking is in carbon/human/human_attackhand.dm
 		attacker.say(pick("Take that!", "Taste the pain!"))
 
 	..()
