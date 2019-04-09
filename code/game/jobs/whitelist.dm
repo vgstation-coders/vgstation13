@@ -62,6 +62,8 @@ var/global/list/alien_whitelist = list()
 		return 1
 
 	// CKey is in whitelist
+	testing("Checking [M]/[M.ckey] for whitelisted species")
+	testing("[species] has [alien_whitelist[species]] and ([M.ckey] is [M.ckey in alien_whitelist[species] ? "in" : "not in"] the list)")
 	if((M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"]) || (current_species && current_species.conditional_whitelist()))
 		return 1
 
