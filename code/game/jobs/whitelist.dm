@@ -36,10 +36,10 @@ var/global/list/alien_whitelist = list()
 					alien_whitelist[species]=list()
 				if(!(ckey in alien_whitelist[species]))
 					alien_whitelist[species] += ckey
-	testing("Starting alien whitelist debug output")
+	/*testing("Starting alien whitelist debug output")
 	for(var/species in alien_whitelist)
 		for(var/ckey in alien_whitelist[species])
-			testing("[ckey] - [species]")
+			testing("[ckey] - [species]")*/
 
 //todo: admin aliens
 /proc/is_alien_whitelisted(mob/M, var/species)
@@ -62,9 +62,15 @@ var/global/list/alien_whitelist = list()
 		return 1
 
 	// CKey is in whitelist
-	testing("Checking [M]/[M.ckey] for whitelisted species")
-	testing("[species] has [alien_whitelist[species]] and ([M.ckey] is [M.ckey in alien_whitelist[species] ? "in" : "not in"] the list)")
-	if((M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"]) || (current_species && current_species.conditional_whitelist()))
+	/*testing("Checking [M]/[M.ckey] for whitelisted species [species]")
+	for(var/ckey in alien_whitelist[species])
+		testing(ckey)
+		testing(ckey in alien_whitelist[species])
+		testing(alien_whitelist[species].Find(ckey))
+		testing(M.ckey in alien_whitelist[species] + " " + alien_whitelist[species].Find(M.ckey))*/
+
+	//testing("[species] has [alien_whitelist[species]] and ([M.ckey] is [M.ckey in alien_whitelist[species] ? "in" : "not in"] the list)")
+	if((M.ckey in alien_whitelist[species]) || (M.ckey in alien_whitelist["all"]) || (current_species && current_species.conditional_whitelist()))
 		return 1
 
 	// Occupation is in whitelist (for lizard janitors :V)
