@@ -140,10 +140,9 @@
 
 /obj/item/delivery/attack_self(mob/user as mob)
 	user.drop_item(src, user.loc)
-	if(contents.len)
-		if(ishuman(user))
-			for(obj/item/M in contents)
-				user.put_in_hands(M)
+	if(ishuman(user))
+		for(obj/item/M in contents)
+			user.put_in_hands(M)
 	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
