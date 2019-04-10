@@ -149,18 +149,20 @@
 	src.overmind = B
 
 	var/datum/faction/blob_conglomerate/conglomerate = find_active_faction_by_type(/datum/faction/blob_conglomerate)
-	if(conglomerate)
-		var/ded = TRUE
-		if(conglomerate.members.len)
-			for(var/datum/role/R in conglomerate.members)
-				if (R.antag && R.antag.current && !(R.antag.current.isDead()))
-					ded = FALSE
-					break
-		if(ded)
-			conglomerate.HandleNewMind(B.mind)
-		else
-			conglomerate.HandleRecruitedMind(B.mind)
-	else
+	if(conglomerate) //Faction exists
+		if(!conglomerate.get_member_by_mind(B.mind)) //We are not a member yet
+			var/ded = TRUE
+			if(conglomerate.members.len)
+				for(var/datum/role/R in conglomerate.members)
+					if (R.antag && R.antag.current && !(R.antag.current.isDead()))
+						ded = FALSE
+						break
+			if(ded)
+				conglomerate.HandleNewMind(B.mind)
+			else
+				conglomerate.HandleRecruitedMind(B.mind)
+
+	else //No faction? Make one and you're the overmind.
 		conglomerate = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate)
 		if(conglomerate)
 			conglomerate.HandleNewMind(B.mind)
@@ -168,9 +170,6 @@
 	if (icon_state == "cerebrate")
 		icon_state = "core"
 		flick("morph_cerebrate",src)
-		var/datum/role/blob_overmind/BO = B.mind.GetRole(BLOBOVERMIND)
-		if (BO)
-			BO.logo_state = "cerebrate-logo"
 
 	B.special_blobs += src
 	B.hud_used.blob_hud()
@@ -180,12 +179,12 @@
 		var/new_name = "Blob Overmind ([rand(1, 999)])"
 		B.name = new_name
 		B.real_name = new_name
+		B.mind.name = new_name
 		for(var/mob/camera/blob/O in blob_overminds)
 			if(O != B)
 				to_chat(O,"<span class='notice'>[B] has appeared and just started a new blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
 
 		B.verbs += /mob/camera/blob/proc/create_core
-		/*HALLOWEEN
 		spawn()
 			var/can_choose_from = blob_looks_player
 			var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks_player[1]) as null|anything in can_choose_from
@@ -193,11 +192,12 @@
 				for(var/obj/effect/blob/nearby_blob in range(src,5))
 					nearby_blob.looks = chosen
 					nearby_blob.update_looks(1)
-		*/
+
 	else
 		var/new_name = "Blob Cerebrate ([rand(1, 999)])"
 		B.name = new_name
 		B.real_name = new_name
+		B.mind.name = new_name
 		B.gui_icons.blob_spawncore.icon_state = ""
 		B.gui_icons.blob_spawncore.name = ""
 		for(var/mob/camera/blob/O in blob_overminds)

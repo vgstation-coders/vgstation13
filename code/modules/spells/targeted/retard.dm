@@ -7,7 +7,7 @@
 	school = "evocation"
 	charge_max = 200 // 20 seconds
 	//Invocation is noted below
-	invocation_type = SpI_WHISPER //Wizard will whisper what they say instead of shouting
+	invocation_type = SpI_SHOUT //Wizard will shout what they say
 	range = 3 // Target anyone within 3 tiles of you
 	cooldown_min = 80 //Minimum of 8 seconds cooldown. Decreased by 4 seconds per rank (3 ranks)
 	amt_dam_brain = 30 //30 brain damage
@@ -25,7 +25,7 @@
 		if(0) //Not upgraded
 			name = "Brain Damage" //Nothing happens. Everything is already written above.
 		if(1) //Upgraded
-			name = "Brian Damage"
+			name = "Brian Damag"
 			desc = "Give an unlucky person A LOT of brain damage."
 			amt_dam_brain = 90 //90 brain damage
 			message = "<span class='danger'>Yu fell dumb dumb!1!!<span>" //Message changes when upgraded
@@ -38,5 +38,5 @@
 	return ..()
 
 /spell/targeted/retard/invocation() //Allows multiple possible messages for invocation
-	invocation = pick("SCRUN GL RITY", "BLO XYG EVO", "SAI AN SCRE", "PO NY NEEI", "MIE NIA PICE", "LOL 2 CAT") //Chooses between these messages at random
+	invocation = pick("SCRUN GL RITY", "BLO XYG EVO", "SAI AN SCRE", "PO NY NEEI", "MIE NIA PICE", "LOL 2 CAT", "OK R TARD") //Chooses between these messages at random
 	..() //Invocation proc from spell_code.dm is run normally, but invocation is overwritten with a message picked from above

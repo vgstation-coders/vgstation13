@@ -7,7 +7,6 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -1577,6 +1576,8 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
+	if(locked_to)
+		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
 	else
@@ -1681,6 +1682,10 @@ mob/living/carbon/human/isincrit()
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
 		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
+		var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+		if(L && !L.robotic)
+			L.gasses.Remove(locate(/datum/lung_gas/metabolizable) in L.gasses)
+			L.gasses.Add(new /datum/lung_gas/metabolizable(species.breath_type, min_pp = 16, max_pp = 140))
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
@@ -1871,7 +1876,7 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
 		return FALSE
-	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked() || status_flags & FAKEDEATH)
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)

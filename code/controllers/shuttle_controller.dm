@@ -228,6 +228,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				world << sound('sound/AI/shuttledock.ogg')
 			if(ticker)
 				ticker.shuttledocked_time = world.time / 10
+				ticker.mode.ShuttleDocked(1)
 				/*
 				if(universe.name == "Hell Rising")
 					to_chat(world, "___________________________________________________________________")
@@ -276,6 +277,9 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 			else
 				vote_preload()
 				location = 2
+
+			if(ticker)
+				ticker.mode.ShuttleDocked(2)
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle

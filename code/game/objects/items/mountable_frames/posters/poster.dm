@@ -58,7 +58,7 @@
 	var/ruined = 0
 
 
-/obj/structure/sign/poster/New(loc,var/serial)
+/obj/structure/sign/poster/New(loc,var/serial=0)
 
 	serial_number = serial
 	switch(serial_number)

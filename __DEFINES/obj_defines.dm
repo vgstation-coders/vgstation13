@@ -20,3 +20,7 @@ var/list/qualityByString = list(
 		EXCELLENT = "Excellent",
 		MASTERWORK = "Masterwork",
 		LEGENDARY = "Legendary")
+
+//Daemons
+#define DAEMON_EXAMINE 	1
+#define DAEMON_AFTATT	2

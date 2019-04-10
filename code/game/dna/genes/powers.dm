@@ -283,7 +283,7 @@
 	block = XRAYBLOCK
 
 /datum/dna/gene/basic/tk
-	name = "Telekenesis"
+	name = "Telekinesis"
 	activation_messages = list("You feel smarter.")
 	deactivation_messages = list("You feel less smart.")
 

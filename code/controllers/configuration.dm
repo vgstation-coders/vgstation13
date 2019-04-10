@@ -188,6 +188,9 @@
 	// Weighted Votes
 	var/weighted_votes = 0
 
+	// Dynamic Mode
+	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult

@@ -44,7 +44,7 @@
 /datum/faction/revolution/forgeObjectives()
 	var/list/heads = get_living_heads()
 	for(var/datum/mind/head_mind in heads)
-		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
+		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
 			AppendObjective(A, TRUE) // We will have more than one kill objective
 
@@ -83,13 +83,14 @@
 	for(var/datum/mind/head_mind in heads)
 		var/mob/M = head_mind.current
 		if (M)
-			return {"[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+			dat += {"[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
 				 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
 				 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 		else
-			return {"[name] [head_mind.name]/[M.key]<b><font color=red> - (DESTROYED)</font></b>
+			dat += {"[name] [head_mind.name]/[M.key]<b><font color=red> - (DESTROYED)</font></b>
 				 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
 				 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
+	return dat
 
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2
@@ -100,23 +101,24 @@
 		if(!(gameactivetime % 60))
 			message_admins("The revolution faction exists. [round(((5 MINUTES) - gameactivetime)/60)] minutes until win conditions begin checking.")
 		return //Don't bother checking for win before 5min
+	if(stage <= FACTION_DEFEATED)
+		return
 
 	// -- 2. Are all the heads dead ?
-	var/list/total_heads = get_living_heads()
-	var/incapacitated_heads = 0
+	var/remaining_targets = objective_holder.objectives.len
+	for(var/datum/objective/objective in objective_holder.GetObjectives())
+		if(objective.IsFulfilled())
+			remaining_targets--
 
-	for (var/datum/mind/M in total_heads)
-		var/turf/T = get_turf(M.current)
-		if (M.current.isDead() || T.z != STATION_Z)
-			incapacitated_heads++
-
-	if (incapacitated_heads >= total_heads.len)
-		return end(ALL_HEADS_DEAD)
-	if(stage < FACTION_ENDGAME)
-		if(incapacitated_heads == total_heads.len-1)
-			stage(FACTION_ENDGAME)
-			command_alert(/datum/command_alert/revolution)
-			//Only one head left!
+	switch(remaining_targets)
+		if(0)
+			if(stage < FACTION_VICTORY)
+				stage(FACTION_VICTORY)
+				return end(ALL_HEADS_DEAD)
+		if(1)
+			if(stage < FACTION_ENDGAME)
+				stage(FACTION_ENDGAME)
+				command_alert(/datum/command_alert/revolution)
 
 /datum/faction/revolution/process()
 	..()
@@ -140,7 +142,7 @@
 	ASSERT(args["rank"])
 	var/mob/living/L = args["character"]
 	if (args["rank"] in command_positions)
-		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
+		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
 		if(A.set_target(L.mind))
 			R.AppendObjective(A, TRUE) // We will have more than one kill objective
 

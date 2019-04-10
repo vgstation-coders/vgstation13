@@ -147,6 +147,15 @@
 	_color = "purple"
 	species_fit = list(VOX_SHAPED)
 
+//Wizard gloves
+/obj/item/clothing/gloves/purple/wizard //This is basically reskinned combat gloves
+	name = "enchanted purple gloves"
+	desc = "A pair of enchanted gloves. These will protect you from shocking and are quite cozy."
+	siemens_coefficient = 0
+	permeability_coefficient = 0.05
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+
 /obj/item/clothing/gloves/green
 	name = "green gloves"
 	desc = "A pair of gloves, they don't look special in any way."

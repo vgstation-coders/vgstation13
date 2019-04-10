@@ -91,6 +91,7 @@
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishigherbeing(user)) //This shouldn't be needed, but fucks sakes
 					user.Knockdown(5)
+					user.Stun(5)
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
@@ -276,6 +277,7 @@
 			unlock_atom(user)
 			activated = 0
 			user.Knockdown(5) //Only Weaken after unbuckling
+			user.Stun(5)
 		return
 	if(activated)
 		var/old_pos = get_turf(src)
@@ -324,7 +326,7 @@
 		return
 	reagents.remove_reagent(BANANA, BANANA_FOR_DRAWING)//"graffiti" and "rune" will draw graffiti and runes
 	if(printing_text == "graffiti" || printing_text == "rune") //"paint" will paint floor tiles with selected colour
-		new /obj/effect/decal/cleanable/crayon(pos, colour1, colour2, printing_text)
+		new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = printing_text)
 	else
 		if(printing_text == "paint")
 			var/tmp/turf/T = pos
@@ -343,7 +345,7 @@
 				if(printing_pos >= 0)
 					printing_pos = -length(printing_text)-1 //indian code magic
 			printing_pos++
-			new /obj/effect/decal/cleanable/crayon(pos, colour1, colour2, copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
+			new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
 			if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
 				printing_text = ""
 				printing_pos = 0

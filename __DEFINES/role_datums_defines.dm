@@ -47,6 +47,7 @@
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
+#define BLOBCEREBRATE "blob cerebrate"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
@@ -55,6 +56,7 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define RAMBLER "soul rambler"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

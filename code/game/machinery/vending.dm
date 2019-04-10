@@ -153,7 +153,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/link_to_account()
 	reconnect_database()
-	linked_account = department_accounts["Cargo"]
+	linked_account = vendor_account
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
