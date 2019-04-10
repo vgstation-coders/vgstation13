@@ -71,7 +71,7 @@
 		if(istype(our_legs))
 			icon_state = "[icon_dead][(our_legs.amount<8) ? our_legs.amount : ""]"
 
-// Checks pressure here vs. around us.
+// Checks pressure here vs. around us. Intended to make sure the spider doesn't breach to space while comfortable, or breach into a high pressure area
 /mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/loc)
 	var/turf/simulated/lT=loc
 	if(!istype(lT) || !lT.zone)
@@ -79,14 +79,19 @@
 	var/datum/gas_mixture/myenv=lT.return_air()
 	var/pressure=myenv.return_pressure()
 
-	for(var/dir in cardinal)
-		var/turf/simulated/T = get_step(loc, dir)
+	for(var/checkdir in cardinal)
+		var/turf/simulated/T = get_step(loc, checkdir)
 		if(T && istype(T) && T.zone)
 			var/datum/gas_mixture/environment = T.return_air()
 			var/pdiff = abs(pressure - environment.return_pressure())
 			if(pdiff > SPIDER_MAX_PRESSURE_DIFF)
 				return pdiff
 	return 0
+
+/mob/living/simple_animal/hostile/giant_spider/UnarmedAttack(var/atom/A)
+	if(istype(A,/obj/structure/window) && (!target || !ismob(target)) && performPressureCheck(get_turf(A)))
+		return 0
+	.=..()
 
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)
