@@ -366,7 +366,7 @@ Auto Patrol: []"},
 							if(istype(src.target,/mob/living/carbon) && !isalien(target))
 								C = target
 								if(!C.handcuffed)
-									C.handcuffed = new /obj/item/weapon/handcuffs(target)
+									C.handcuffed = new /obj/item/weapon/handcuffs/cable(target)
 									C.update_inv_handcuffed()	//update the handcuffs overlay
 
 							mode = SECBOT_IDLE
