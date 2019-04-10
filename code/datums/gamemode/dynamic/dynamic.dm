@@ -112,7 +112,27 @@ var/list/threat_by_job = list(
 	send2maindiscord("Dynamic mode threat: **[threat_level]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
-	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
+	//Old formula: rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
+	threat_level = rand(1,20)
+	if(prob(50))
+		threat_level += rand(1,20)
+		if(prob(50))
+			threat_level += rand(1,20)
+			if(prob(50))
+				threat_level += rand(1,20)
+				if(prob(50))
+					threat_level += rand(1,40)
+	/*CHANCES
+	1-10 threat: 21.80%
+	11-20 threat: 34.97%
+	21-30 threat: 22.74%
+	31-35 threat: 7.80%
+	36-40 threat: 3.67%
+	41-45 threat: 2.64%
+	46-60 threat: 4.09%
+	61-88 threat: 0.96%
+	89-100 threat: not statistically significant
+	*/
 	threat = threat_level
 	starting_threat = threat_level
 	latejoin_injection_cooldown = rand(330,510)
