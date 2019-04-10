@@ -141,7 +141,7 @@
 /obj/item/delivery/attack_self(mob/user as mob)
 	user.drop_item(src, user.loc)
 	if(ishuman(user))
-		for(obj/item/M in contents)
+		for(var/obj/item/M in contents)
 			user.put_in_hands(M)
 	qdel(src)
 
