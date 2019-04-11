@@ -73,6 +73,7 @@
 	for(var/i in objects_to_delete)
 		objects_to_delete.Remove(i)
 		qdel(i)
+	increment_threat(rand(5,10))
 
 /obj/item/device/chronocapture
 	name = "chronocapture device"
