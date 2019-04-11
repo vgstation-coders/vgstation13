@@ -140,9 +140,8 @@
 
 /obj/item/delivery/attack_self(mob/user as mob)
 	user.drop_item(src, user.loc)
-	if(ishuman(user))
-		for(var/obj/item/M in contents)
-			user.put_in_hands(M)
+	for(var/obj/item/M in contents)
+		user.put_in_hands(M) //if it fails, it'll drop on the ground. simple
 	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
