@@ -111,6 +111,10 @@
 
 	var/wikiroute
 
+	var/threat_generated = 0
+
+	var/threat_level_inflated = 0
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
 	faction=fac
@@ -513,6 +517,19 @@
 //Does the role have special clothign restrictions?
 /datum/role/proc/can_wear(var/obj/item/clothing/C)
 	return TRUE
+
+/datum/role/proc/increment_threat(var/amount)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(!istype(D))
+		return //It's not dynamic!
+	threat_generated += amount
+	if(D.threat >= D.threat_level)
+		D.create_threat(amount)
+		if(!threat_level_inflated) //Our first time raising the cap
+			D.threat_log += "[worldtime2text()]: [name] started increasing the threat cap."
+		threat_level_inflated += amount
+	else
+		D.refund_threat(amount)
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

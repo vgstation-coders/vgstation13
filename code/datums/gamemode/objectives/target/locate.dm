@@ -19,6 +19,7 @@
 	for(var/i = 0 to rand(3,potential_objects.len-1))
 		var/pick = pick(potential_objects)
 		objects_to_locate.Add(pick)
+		objects_to_locate[pick] = potential_objects[pick]
 		potential_objects.Remove(pick)
 	explanation_text = format_explanation()
 	return TRUE
@@ -28,12 +29,12 @@
 	if(objects_to_locate.len)
 		if(objects_to_locate.len > 1)
 			for(var/i in objects_to_locate)
-				if(objects_to_locate[i] != objects_to_locate[objects_to_locate.len])
-					explanation += "a [objects_to_locate[i]], "
+				if(i != objects_to_locate[objects_to_locate.len])
+					explanation += "\an [i], "
 				else
-					explanation += "& a [objects_to_locate[i]]."
+					explanation += "& \an [i]."
 		else
-			explanation += "a [objects_to_locate[1]]."
+			explanation += "\an [objects_to_locate[1]]."
 	else
 		explanation = "All items located."
 	return explanation
@@ -41,7 +42,7 @@
 /datum/objective/target/locate/proc/check(var/list/objects)
 	for(var/A in objects_to_locate)
 		if(is_type_in_list(objects_to_locate[A], objects))
-			var/atom/thing = A
+			var/atom/thing = objects_to_locate[A]
 			to_chat(owner.current, "[initial(thing.name)] located.")
 			objects_to_locate.Remove(A)
 	explanation_text = format_explanation()
