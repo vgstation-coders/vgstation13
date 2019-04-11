@@ -431,6 +431,46 @@
 
 		H.fully_replace_character_name(H.real_name, newname)
 
+/proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T)
+	H.delete_all_equipped_items()
+	var/under = new /obj/item/clothing/under/rank/scientist(H)
+	H.equip_to_slot_or_del(under, slot_w_uniform)
+	var/helmet = new /obj/item/clothing/head/helmet/space/time(H)
+	H.equip_to_slot_or_del(helmet, slot_head)
+	var/suit = new /obj/item/clothing/suit/space/time(H)
+	H.equip_to_slot_or_del(suit, slot_wear_suit)
+	var/mask = new /obj/item/clothing/mask/gas/death_commando(H)
+	H.equip_to_slot_or_del(mask, slot_wear_mask)
+	var/camera = new /obj/item/device/chronocapture(H)
+	H.equip_to_slot_or_del(camera, slot_l_store)
+	var/jump_charge = new /obj/item/device/jump_charge(H)
+	H.equip_to_slot_or_del(jump_charge, slot_r_store)
+	var/belt = new /obj/item/weapon/storage/belt/grenade/chrono(H)
+	H.equip_to_slot_or_del(belt, slot_belt)
+	var/gun = new /obj/item/weapon/gun/projectile/automatic/rewind(H)
+	H.put_in_hands(gun)
+	if(T)
+		T.objects_to_delete = list(under, helmet, suit, mask, camera, jump_charge, belt, gun)
+	H.fully_replace_character_name(newname = "John Beckett")
+	H.make_all_robot_parts_organic()
+
+/proc/spawn_rand_maintenance(var/mob/living/carbon/human/H)
+	var/list/potential_locations = list()
+	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+	var/placed = FALSE
+	while(!placed && potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!F.has_dense_content())
+				H.forceMove(F)
+				placed = TRUE
+				return TRUE
+	return FALSE
+
+
+
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
 		return 0

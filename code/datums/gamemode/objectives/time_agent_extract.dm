@@ -29,9 +29,10 @@
 
 /obj/effect/time_anomaly
 	name = "anomaly"
-	desc = "<span class = 'warning'>You can see yourself looking back on yourself a few minutes after looking into it.</span>"
+	desc = "A hole in time and space.<br><span class = 'sinister'>Looking into it is like looking at a picture of yourself looking at a picture of yourself ad infinitum. Looking further, you swear one or tow turn their head to look back at you.</span>"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "time_anomaly"
+	anchored = 1
 	var/last_effect
 
 /obj/effect/time_anomaly/New()
