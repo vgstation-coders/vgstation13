@@ -818,7 +818,7 @@ var/list/cyborg_list = list()
 	else
 		if(W.force > 0)
 			spark(src, 5, FALSE)
-		if(stat == DEAD && W.force >= 15)
+		if(stat == DEAD && W.force > 15)
 			visible_message("<span class='danger'>[user] begins ripping [src] apart with \the [W]!")
 			if(do_after(user, src, 3 SECONDS))
 				playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
