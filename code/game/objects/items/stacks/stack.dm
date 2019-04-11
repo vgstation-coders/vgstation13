@@ -318,9 +318,11 @@
 				if(user)
 					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
 				return S
-
-	var/obj/item/stack/S = new new_stack_type(loc)
-	S.amount = add_amount
+	var/obj/item/stack/S = new_stack_type
+	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
+		S = new new_stack_type(loc)
+		S.amount = min(add_amount, S.max_amount)
+		add_amount -= S.amount
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)
