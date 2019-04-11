@@ -724,7 +724,9 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/proc/assess_perp(mob/living/carbon/human/perp as mob)
 	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
 
-	if(perp.alpha <= 0) //perp is invisible, hence innocent
+	if(perp.alpha <= 1) //perp is invisible, hence innocent
+		return 0
+	if(see_invisible < perp.invisibility) // for future compatibility
 		return 0
 
 	if(src.emagged == 2)
