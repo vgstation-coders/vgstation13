@@ -443,7 +443,7 @@
 
 /spell/targeted/oathbreak/cast(list/targets)
 	for(var/mob/living/carbon/human/M in targets)
-		var/response = alert(M, "Are you -sure- you want to break your oath of silence?\n(This removes your ability to create invisible walls and cannot be undone!)","Are you sure you want to break your oath?","Yes","No")
+		var/response = alert(M, "Are you -sure- you want to break your oath of silence?\n(This removes your ability to create invisible walls, cannot be undone, and probably has adverse effects!)","Are you sure you want to break your oath?","Yes","No")
 		if(response != "Yes")
 			return
 		M.mind.miming=0
@@ -451,8 +451,9 @@
 			M.remove_spell(spell)
 		for(var/spell/targeted/oathbreak/spell in M.spell_list)
 			M.remove_spell(spell)
+		M.adjustBrainLoss(100)
 		message_admins("[M.name] ([M.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M]'>JMP</a>)")
-		to_chat(M, "<span class = 'notice'>An unsettling feeling surrounds you...</span>")
+		to_chat(M, "<span class = 'warning'>You feel about as stupid as breaking an oath is.</span>")
 		return
 
 /datum/job/janitor
