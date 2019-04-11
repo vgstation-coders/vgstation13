@@ -31,6 +31,7 @@
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
 #define SS_PRIORITY_COMPONENT      125
+#define SS_PRIORITY_CALLBACK       122
 #define SS_PRIORITY_NANOUI         120
 #define SS_PRIORITY_VOTE           110
 #define SS_PRIORITY_FAST_OBJECTS   105
@@ -53,6 +54,7 @@
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
+#define SS_WAIT_CALLBACK            1 SECONDS
 
 #define SS_DISPLAY_GARBAGE        -100
 #define SS_DISPLAY_AIR            -90
@@ -67,6 +69,7 @@
 #define SS_DISPLAY_PLANT          -25
 #define SS_DISPLAY_POWER          -20
 #define SS_DISPLAY_TICKER         -10
+#define SS_DISPLAY_CALLBACK       -9
 #define SS_DISPLAY_UNSPECIFIED     0
 #define SS_DISPLAY_SUN             10
 
