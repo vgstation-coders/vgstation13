@@ -115,7 +115,10 @@ CREATE TABLE client (
     attack_animation INTEGER,
     pulltoggle     INTEGER,
     credits        TEXT,
-    jingle         TEXT
+    jingle         TEXT,
+	hear_voicesound INTEGER,
+	hear_instruments INTEGER,
+	ambience_volume INTEGER
 );
 
 
