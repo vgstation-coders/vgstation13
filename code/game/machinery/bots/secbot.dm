@@ -726,8 +726,6 @@ Auto Patrol: []"},
 
 	if(perp.alpha <= 1) //perp is invisible, hence innocent
 		return 0
-	if(see_invisible < perp.invisibility) // for future compatibility
-		return 0
 
 	if(src.emagged == 2)
 		return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5) //Everyone is a criminal!
