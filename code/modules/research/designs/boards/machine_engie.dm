@@ -54,7 +54,6 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/cell_charger
 
-/*
 /datum/design/tracker_electronics
 	name = "Circuit Design (Tracker Electronics)"
 	desc = "Allows for the construction of circuit boards used to build a Solar Tracker."
@@ -64,7 +63,6 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/tracker_electronics
-*/
 
 //
 //P.A.C.M.A.N
