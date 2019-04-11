@@ -113,7 +113,7 @@
 
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
-	desc = "A window with a rod matrice. It looks more solid than the average window."
+	desc = "A window with a rod matrix. It looks more solid than the average window."
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
@@ -147,7 +147,7 @@
 
 /obj/structure/window/full/reinforced/plasma
 	name = "reinforced plasma window"
-	desc = "A window made out of a plasma-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
+	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow0"
 	base_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
@@ -166,7 +166,7 @@
 /obj/structure/window/full/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -175,7 +175,7 @@
 /obj/structure/window/full/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
 	icon_state = "fwindow0"
 	base_state = "fwindow"
 	health = 30
