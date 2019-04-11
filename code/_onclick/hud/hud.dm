@@ -20,7 +20,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 	var/obj/abstract/screen/lingchemdisplay
 	var/obj/abstract/screen/vampire_blood_display // /vg/
-	var/obj/abstract/screen/blob_countdown_display // /vg/
+	var/obj/abstract/screen/countdown_display // /vg/
 	var/obj/abstract/screen/cult_Act_display // /vg/
 	var/obj/abstract/screen/cult_tattoo_display // /vg/
 	var/list/obj/abstract/screen/hand_hud_objects = list()
