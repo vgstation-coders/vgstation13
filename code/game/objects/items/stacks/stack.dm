@@ -309,6 +309,8 @@
  */
 
 /proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
+	if(!ispath(new_stack_type, /obj/item/stack))
+		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
 		if(S.can_stack_with(new_stack_type))
 			if(S.max_amount >= S.amount + add_amount)
