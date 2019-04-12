@@ -504,12 +504,7 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
-		holder.del_reagent(GLYCEROL)
-		holder.del_reagent(PACID)
-		holder.del_reagent(SACID)
-	else
-		holder.clear_reagents()
+	holder.clear_reagents()
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
