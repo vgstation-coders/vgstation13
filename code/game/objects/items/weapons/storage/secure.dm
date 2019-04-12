@@ -31,6 +31,10 @@
 	..()
 	to_chat(user, "<span class='info'>The service panel is [src.open ? "open" : "closed"].</span>")
 
+/obj/item/weapon/storage/secure/AltClick()
+	if(!locked)
+		..()
+
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(locked)
 		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
