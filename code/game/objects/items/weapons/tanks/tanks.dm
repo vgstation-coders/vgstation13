@@ -125,7 +125,7 @@
 
 	ui_interact(user)
 
-/obj/item/weapon/tank/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/item/weapon/tank/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 
 	var/using_internal
 	if(istype(loc,/mob/living/carbon))
@@ -148,7 +148,7 @@
 			data["maskConnected"] = 1
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -218,13 +218,16 @@
 	if(!air_contents)
 		return null
 
-	var/tank_pressure = air_contents.return_pressure()
+	var/tank_pressure = air_contents.pressure
 	if(tank_pressure < distribute_pressure)
 		distribute_pressure = tank_pressure
 
-	var/moles_needed = distribute_pressure*volume_to_return/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	var/moles_needed = distribute_pressure * volume_to_return / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
 
-	return remove_air(moles_needed)
+	var/datum/gas_mixture/GM = remove_air(moles_needed)
+	GM.volume = volume_to_return
+	GM.update_values()
+	return GM
 
 /obj/item/weapon/tank/process()
 	//Allow for reactions
@@ -284,7 +287,7 @@
 			if(!T)
 				return
 			T.assume_air(air_contents)
-			playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
+			playsound(src, 'sound/effects/spray.ogg', 10, 1, -3)
 
 			qdel(src)
 

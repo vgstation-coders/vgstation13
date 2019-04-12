@@ -18,18 +18,14 @@ LINEN BINS
 	throw_range = 2
 	w_class = W_CLASS_TINY
 	_color = "white"
+	restraint_resist_time = 20 SECONDS
+	restraint_apply_sound = "rustle"
 
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
 	var/cut_time=0
-	if(istype(I, /obj/item/weapon/scalpel))
-		cut_time=20
-	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large) || istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch))
-		cut_time=40
-	else if(istype(I, /obj/item/weapon/shard))
-		cut_time=80
-	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/plastic))
-		cut_time=160
+	if(I.is_sharp())
+		cut_time = 60 / I.sharpness
 	if(cut_time)
 		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
 		if(do_after(user, src, cut_time))
@@ -75,7 +71,7 @@ LINEN BINS
 	_color = "red"
 
 /obj/item/weapon/bedsheet/red/redcoat
-		_color = "redcoat" //for denied stamp
+	_color = "redcoat" //for denied stamp
 
 /obj/item/weapon/bedsheet/yellow
 	icon_state = "sheetyellow"
@@ -88,6 +84,10 @@ LINEN BINS
 /obj/item/weapon/bedsheet/clown
 	icon_state = "sheetclown"
 	_color = "clown"
+
+/obj/item/weapon/bedsheet/black
+	icon_state = "sheetblack"
+	_color = "black"
 
 /obj/item/weapon/bedsheet/captain
 	icon_state = "sheetcaptain"
@@ -120,7 +120,6 @@ LINEN BINS
 /obj/item/weapon/bedsheet/brown/cargo
 	_color = "cargo"		//exists for washing machines, is not different from brown bedsheet in any way
 
-
 /obj/structure/bedsheetbin
 	name = "linen bin"
 	desc = "A linen bin. It looks rather cosy."
@@ -131,15 +130,24 @@ LINEN BINS
 	var/list/sheets = list()
 	var/obj/item/hidden = null
 
+/obj/structure/bedsheetbin/Destroy()
+	for(var/sheet in sheets)
+		qdel(sheet)
+	sheets.Cut()
+	if(hidden)
+		qdel(hidden)
+		hidden = null
+	..()
+
 
 /obj/structure/bedsheetbin/examine(mob/user)
 	..()
 	if(amount == 0)
-		to_chat(user, "<span class='info'>There are no bed sheets in the bin.</span>")
+		to_chat(user, "<span class='info'>There are no bed sheets in \the [src].</span>")
 	else if(amount == 1)
-		to_chat(user, "<span class='info'>There is one bed sheet in the bin.</span>")
+		to_chat(user, "<span class='info'>There is one bed sheet in \the [src].</span>")
 	else
-		to_chat(user, "<span class='info'>There are [amount] bed sheets in the bin.</span>")
+		to_chat(user, "<span class='info'>There are [amount] bed sheets in \the [src].</span>")
 
 
 /obj/structure/bedsheetbin/update_icon()
@@ -152,6 +160,30 @@ LINEN BINS
 
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswrench(I))
+		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+		return
+	if(iswelder(I))
+		if(anchored)
+			to_chat(user, "<span class='warning'>\The [src] is still secured to whatever surface it is on. Unsecure it first!</span>")
+			return
+		var/obj/item/weapon/weldingtool/W = I
+		if(W.remove_fuel(2,user))
+			to_chat(user, "<span class='notice'>You break \the [src] down into a pile of rods.</span>")
+			new /obj/item/stack/rods(get_turf(src),rand(3,5))
+			for(var/obj/sheet in sheets)
+				sheet.forceMove(loc)
+				amount--
+			sheets.Cut()
+			while(amount > 0)
+				new /obj/item/weapon/bedsheet(loc)
+				amount--
+			if(hidden)
+				to_chat(user, "<span class='notice'>\The [hidden] falls out of \the [src]!</span>")
+				hidden.forceMove(loc)
+				hidden = null
+			qdel(src)
+			return
 	if(istype(I, /obj/item/weapon/bedsheet))
 		if(user.drop_item(I, src))
 			sheets.Add(I)

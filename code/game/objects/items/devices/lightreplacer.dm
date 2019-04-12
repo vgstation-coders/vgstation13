@@ -33,12 +33,6 @@
 //
 // The explosion cannot insta-kill anyone with 30% or more health.
 
-#define LIGHT_OK 0
-#define LIGHT_EMPTY 1
-#define LIGHT_BROKEN 2
-#define LIGHT_BURNED 3
-
-
 /obj/item/device/lightreplacer
 
 	name = "light replacer"
@@ -115,10 +109,6 @@
 
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
-	if(istype(W,  /obj/item/weapon/card/emag) && emagged == 0)
-		Emag()
-		return
-
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
 		if(!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
 			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
@@ -190,6 +180,7 @@
 
 
 		<h3>Supply Container:</h3>"} //It's not clear here, but the argument to build is the part of the typepath after /obj/item/weapon/light/
+		dat += {"<b>Filled: </b>[supply.contents.len]/[supply.storage_slots]"}
 		var/list/light_types = new()
 		var/lightname
 		for(var/obj/item/weapon/light/L in supply)
@@ -260,6 +251,7 @@
 
 
 		<h3>Supply Container:</h3>"}
+		dat += {"<b>Filled: </b>[supply.contents.len]/[supply.storage_slots]"}
 		var/list/light_types = new()
 		var/lightname
 		for(var/obj/item/weapon/light/L in supply)
@@ -317,57 +309,46 @@
 	else if(!best_light)
 		to_chat(user, "<span class='warning'>\The [src] has no compatible light!</span>")
 		return
-	if(!is_light_better(best_light, target))
+	if(target.current_bulb && !is_light_better(best_light, target.current_bulb))
 		to_chat(user, "<span class='notice'>\The [src] has no light better than the one already in \the [target].</span>")
 		return
 
 
 	to_chat(user, "<span class='notice'>You replace the [target.fitting] with \the [src].</span>")
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(src, 'sound/machines/click.ogg', 50, 1)
 
 	supply.remove_from_storage(best_light)
 
-	if(target.status != LIGHT_EMPTY)
-		var/obj/item/weapon/light/L1 = new target.light_type(target.loc)
-		L1.status = target.status
-		L1.rigged = target.rigged
-		L1.brightness_range = target.brightness_range
-		L1.brightness_power = target.brightness_power
-		L1.brightness_color = target.brightness_color
-		L1.cost = target.cost
-		L1.base_state = target.base_state
-		L1.switchcount = target.switchcount
-		target.switchcount = 0
+	if(target.current_bulb)
+		var/obj/item/weapon/light/L1 = target.current_bulb
+		L1.forceMove(target.loc)
 		L1.update()
-		target.status = LIGHT_EMPTY
+		target.current_bulb = null
 		target.update()
 		if(!insert_if_possible(L1))
 			if(istype(waste))
 				to_chat(user, "<span class='warning'>\The [src]'s waste container is full and it drops the removed light on the floor!</span>")
 			else
 				to_chat(user, "<span class='warning'>\The [src] has no waste container and it drops the removed light on the floor!</span>")
-
-	target.status = best_light.status
-	target.switchcount = best_light.switchcount
-	target.rigged = emagged || best_light.rigged
-	target.brightness_range = best_light.brightness_range
-	target.brightness_power = best_light.brightness_power
-	target.brightness_color = best_light.brightness_color
-	target.cost = best_light.cost
-	target.base_state = best_light.base_state
-	target.light_type = best_light.type
+	if(emagged && !best_light.rigged)
+		to_chat(user, "<span class='warning'>\The [src] injects a small amount of plasma into \the [best_light].</span>")
+		best_light.rigged = TRUE
+		log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
+		message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode. [formatJumpTo(get_turf(target))]")
+	best_light.forceMove(target)
+	target.current_bulb = best_light
+	best_light = null
 	target.on = target.has_power()
 	target.update()
-	qdel(best_light)
-	best_light = null
-	if(target.on && target.rigged)
+	if(target.on && target.current_bulb.rigged)
 		target.explode()
 
 
-/obj/item/device/lightreplacer/proc/Emag()
+/obj/item/device/lightreplacer/emag_act(mob/user)
 	emagged = !emagged
-	playsound(get_turf(src), "sparks", 100, 1)
+	playsound(src, "sparks", 100, 1)
 	if(emagged)
+		to_chat(user, "<span class = 'warning'>As you emag \the [src], you unlock its true potential as the greatest hand-portable source of plasma imaginable. A shame the only use for this is injecting the plasma into the lights it deploys.</span>")
 		name = "Shortcircuited [initial(name)]"
 	else
 		name = initial(name)
@@ -423,18 +404,16 @@
 //Again, standard replacer just checks as follows:
 //HE light < standard light < no light < broken light = burned-out light
 //In normal operation, tested should never be no light and very rarely be a broken light.
-/obj/item/device/lightreplacer/proc/is_light_better(var/obj/tested, var/obj/comparison)
-	if(!(istype(tested, /obj/item/weapon/light) || istype(tested, /obj/machinery/light)) || !(istype(comparison, /obj/item/weapon/light) || istype(comparison, /obj/machinery/light)))
-		return
-	if(tested:status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
+/obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/weapon/light/tested, var/obj/item/weapon/light/comparison)
+	if(tested.status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
-	if(tested:status < comparison:status) //Is tested closer to functional than comparison? If so, it wins.
+	if(tested.status < comparison.status) //Is tested closer to functional than comparison? If so, it wins.
 		return 1
-	if(tested:status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
+	if(tested.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
 		return 0
 
 	//Now we know both work, so all that is left is to test if tested wins by being HE.
-	if(findtextEx(tested:base_state, "he", 1, 3) && !findtextEx(comparison:base_state, "he", 1, 3))
+	if(findtextEx(tested.base_state, "he", 1, 3) && !findtextEx(comparison.base_state, "he", 1, 3))
 		return 1
 	else
 		return 0
@@ -602,8 +581,3 @@
 
 /obj/item/device/lightreplacer/borg/restock()
 	Charge()
-
-#undef LIGHT_OK
-#undef LIGHT_EMPTY
-#undef LIGHT_BROKEN
-#undef LIGHT_BURNED

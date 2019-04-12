@@ -1,6 +1,10 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_disabilities()
+	if(disabilities & ASTHMA)
+		if(prob(0.2))
+			asthma_attack()
+
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
 			seizure(10, 1000)
@@ -39,7 +43,7 @@
 					"can u give me [pick("telikesis","halk","eppilapse")]?", \
 					"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
 					"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
-					"SOTP IT#", \
+					"SOTP IT#", "based and redpilled",\
 					"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
 				if(2)
 					say(pick("FUS RO DAH", \
@@ -61,6 +65,9 @@
 						"Don't tell Chase", \
 						"not so tough now huh", \
 						"WERE NOT BAY!!", \
+						"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+						"DONT TALK TO ME ABOUT BALANCE!!!!", \
+						"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
 						"BLAME HOSHI!!!", \
 						"ARRPEE IZ DED!!!", \
 						"THERE ALL JUS MEATAFRIENDS!", \
@@ -71,6 +78,7 @@
 						"try to live freely and automatically good bye", \
 						"why woud i take a pin pointner??", \
 						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
+						"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
 					emote("drool")

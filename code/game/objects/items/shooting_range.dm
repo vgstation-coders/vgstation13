@@ -14,11 +14,11 @@
 		for(var/obj/structure/target_stake/T in view(3,src))
 			if(T.pinned_target == src)
 				T.pinned_target = null
-				T.density = 1
+				T.setDensity(TRUE)
 				break
 		..() // delete target
 
-	Move()
+	Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 		..()
 		// After target moves, check for nearby stakes. If associated, move to target
 		for(var/obj/structure/target_stake/M in view(3,src))
@@ -33,7 +33,7 @@
 
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/weapon/weldingtool))
+		if (iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
 			if(WT.remove_fuel(0, user))
 				overlays.len = 0
@@ -51,8 +51,8 @@
 
 		if(stake)
 			if(stake.pinned_target)
-				stake.density = 1
-				density = 0
+				stake.setDensity(TRUE)
+				setDensity(FALSE)
 				layer = OBJ_LAYER
 				plane = OBJ_PLANE
 
@@ -81,6 +81,9 @@
 		hp = 2350 // alium onest too kinda
 
 /obj/item/target/bullet_act(var/obj/item/projectile/Proj)
+	if(overlays.len >= 10) //Too many overlays
+		overlays.Remove(overlays[1]) //Cut the first overlay
+
 	var/p_x = Proj.p_x + pick(0,0,0,0,0,-1,1) // really ugly way of coding "sometimes offset Proj.p_x!"
 	var/p_y = Proj.p_y + pick(0,0,0,0,0,-1,1)
 	var/decaltype = 1 // 1 - scorch, 2 - bullet

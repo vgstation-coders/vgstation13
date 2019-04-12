@@ -43,7 +43,7 @@
 	return "</table>"
 
 /datum/research_tree/proc/display(var/mob/user)
-	testing("Entering display...")
+//	testing("Entering display...")
 	var/html = "<h2>[title]</h2><p>[blurb]</p>"
 	html += start_table()
 	load_usable_unlocks()

@@ -19,12 +19,7 @@
 
 	//Get processable air sample and thermal info from environment
 
-	var/environment_moles = environment.total_moles()
-	var/transfer_moles = 0.25 * environment_moles
-	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
-
-	if(!external_removed)
-		return radiate()
+	var/environment_moles = environment.molar_density() * CELL_VOLUME
 
 	if(environment_moles < NO_GAS)
 		return radiate()
@@ -33,15 +28,15 @@
 
 	//Get same info from connected gas
 
-	var/internal_transfer_moles = 0.25 * air_contents.total_moles()
-	var/datum/gas_mixture/internal_removed = air_contents.remove(internal_transfer_moles)
+	var/datum/gas_mixture/internal_removed = air_contents.remove_ratio(0.25)
 
 	if (!internal_removed)
-		environment.merge(external_removed)
 		return
 
+	var/datum/gas_mixture/external_removed = environment.remove(0.25 * environment_moles)
+
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
-	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + external_removed.heat_capacity() * external_removed.temperature
+	var/combined_energy = internal_removed.thermal_energy() + external_removed.thermal_energy()
 
 	if(!combined_heat_capacity)
 		combined_heat_capacity = 1
@@ -70,14 +65,13 @@
 		air_contents.copy_from(network.radiate) //We can cut down on processing time by only calculating radiate() once and then applying the result
 		return
 
-	var/internal_transfer_moles = 0.25 * air_contents.total_moles()
-	var/datum/gas_mixture/internal_removed = air_contents.remove(internal_transfer_moles)
+	var/datum/gas_mixture/internal_removed = air_contents.remove_ratio(0.25)
 
 	if (!internal_removed)
 		return
 
 	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
-	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + (RADIATION_CAPACITY * 6.4)
+	var/combined_energy = internal_removed.thermal_energy() + (RADIATION_CAPACITY * 6.4)
 
 	var/final_temperature = combined_energy / combined_heat_capacity
 

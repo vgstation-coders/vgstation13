@@ -65,6 +65,7 @@
 	starting_materials = list(MAT_IRON = 5)
 	w_type=RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
+	glass = /obj/item/stack/sheet/metal
 
 /obj/item/weapon/shard/shrapnel/New()
 	..()
@@ -74,7 +75,7 @@
 /obj/item/weapon/shard/suicide_act(mob/user)
 		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the shard of glass! It looks like \he's trying to commit suicide.</span>", \
 							"<span class='danger'>[user] is slitting \his throat with the shard of glass! It looks like \he's trying to commit suicide.</span>"))
-		return (BRUTELOSS)
+		return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shard/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -107,12 +108,12 @@
 /obj/item/weapon/shard/Crossed(mob/living/AM)
 	if(istype(AM))
 		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
 		if(AM.flying) //We don't check for lying yet because it's intended to hurt
 			return
 		else //Stepping on the glass
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 			if(ishuman(AM))
 				var/mob/living/carbon/human/H = AM
 				var/danger = FALSE
@@ -124,6 +125,7 @@
 
 						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
+							H.Stun(3)
 						if(foot.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()

@@ -1,6 +1,6 @@
 
 /proc/EquipCustomItems(mob/living/carbon/human/M)
-	testing("\[CustomItem\] Checking for custom items for [M.ckey] ([M.real_name])...")
+//	testing("\[CustomItem\] Checking for custom items for [M.ckey] ([M.real_name])...")
 	if(!establish_db_connection())
 		return
 
@@ -26,7 +26,7 @@
 		var/path = text2path(query.item[1])
 		var/propadjust = query.item[2]
 		var/jobmask = query.item[3]
-		testing("\[CustomItem\] Setting up [path] for [M.ckey] ([M.real_name]).  jobmask=[jobmask];propadjust=[propadjust]")
+//		testing("\[CustomItem\] Setting up [path] for [M.ckey] ([M.real_name]).  jobmask=[jobmask];propadjust=[propadjust]")
 		var/ok=0
 		if(jobmask!="*")
 			var/allowed_jobs = splittext(jobmask,",")
@@ -35,12 +35,12 @@
 				if(!(M.mind.role_alt_title in allowed_jobs))
 					alt_blocked=1
 			if(!(M.mind.assigned_role in allowed_jobs) || alt_blocked)
-				testing("Failed to apply custom item for [M.ckey]: Role(s) [M.mind.assigned_role][M.mind.role_alt_title ? " (nor "+M.mind.role_alt_title+")" : ""] are not in allowed_jobs ([english_list(allowed_jobs)])")
+//				testing("Failed to apply custom item for [M.ckey]: Role(s) [M.mind.assigned_role][M.mind.role_alt_title ? " (nor "+M.mind.role_alt_title+")" : ""] are not in allowed_jobs ([english_list(allowed_jobs)])")
 				continue
 
 
 		var/obj/item/Item = new path()
-		testing("Adding new custom item [query.item[1]] to [key_name_admin(M)]...")
+//		testing("Adding new custom item [query.item[1]] to [key_name_admin(M)]...")
 		if(istype(Item,/obj/item/weapon/card/id))
 			var/obj/item/weapon/card/id/I = Item
 			for(var/obj/item/weapon/card/id/C in M)
@@ -58,24 +58,24 @@
 				C = null
 				ok = M.equip_if_possible(I, slot_wear_id, 0)	//if 1, last argument deletes on fail
 				break
-			testing("Replaced ID!")
+//			testing("Replaced ID!")
 		else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
 			Item.forceMove(M.back)
 			ok = 1
-			testing("Added to [M.back.name]!")
+//			testing("Added to [M.back.name]!")
 			to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [M.back.name].</span>")
 		else
 			for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
 				if (S.contents.len < S.storage_slots)
 					Item.forceMove(S)
 					ok = 1
-					testing("Added to [S]!")
+//					testing("Added to [S]!")
 					to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [S.name].</span>")
 					break
 
 		//skip:
 		if (ok == 0) // Finally, since everything else failed, place it on the ground
-			testing("Plopped onto the ground!")
+//			testing("Plopped onto the ground!")
 			Item.forceMove(get_turf(M.loc))
 
 		HackProperties(Item,propadjust)

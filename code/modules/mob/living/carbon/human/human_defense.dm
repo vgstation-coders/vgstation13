@@ -23,7 +23,7 @@ emp_act
 
 				return -1 // complete projectile permutation
 
-	if(check_shields(P.damage, "the [P.name]"))
+	if(check_shields(P.damage, P))
 		P.on_hit(src, 2)
 		return 2
 	return (..(P , def_zone))
@@ -45,6 +45,23 @@ emp_act
 		armorval += checkarmor(organ, type)
 		organnum++
 	return (armorval/max(organnum, 1))
+
+/mob/living/carbon/human/getarmorabsorb(var/def_zone, var/type)
+	var/armorval = 0
+	var/organnum = 0
+	if(def_zone)
+		if(isorgan(def_zone))
+			return checkarmorabsorb(def_zone, type)
+		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		return checkarmorabsorb(affecting, type)
+		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
+
+	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
+	for(var/datum/organ/external/organ in organs)
+		armorval += checkarmorabsorb(organ, type)
+		organnum++
+	return (armorval/max(organnum, 1))
+
 
 /mob/living/carbon/human/proc/get_siemens_coefficient_organ(var/datum/organ/external/def_zone)
 	if(!def_zone)
@@ -70,8 +87,30 @@ emp_act
 		if(bp && istype(bp ,/obj/item/clothing))
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
-				protection += C.armor[type]
+				protection += C.get_armor(type)
+			for(var/obj/item/clothing/accessory/A in C.accessories)
+				if(A.body_parts_covered & def_zone.body_part)
+					protection += A.get_armor(type)
+	if(istype(loc, /obj/mecha))
+		var/obj/mecha/M = loc
+		protection += M.rad_protection
 	return protection
+
+/mob/living/carbon/human/proc/checkarmorabsorb(var/datum/organ/external/def_zone, var/type)
+	if(!type)
+		return 0
+	var/protection = 0
+	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
+	for(var/bp in body_parts)
+		if(istype(bp, /obj/item/clothing))
+			var/obj/item/clothing/C = bp
+			if(C.body_parts_covered & def_zone.body_part)
+				protection += C.get_armor_absorb(type)
+			for(var/obj/item/clothing/accessory/A in C.accessories)
+				if(A.body_parts_covered & def_zone.body_part)
+					protection += A.get_armor_absorb(type)
+	return protection
+
 
 /mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
 	if(!body_part_flags)
@@ -110,19 +149,14 @@ emp_act
 		body_coverage &= ~(C.body_parts_covered)
 	return body_coverage
 
+/mob/living/carbon/human/check_shields(damage, atom/A)
+	if(..())
+		return 1
 
-/mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	if(!incapacitated())
-		for(var/obj/item/weapon/I in held_items)
-			if(I.IsShield() && I.on_block(damage, attack_text))
-				return 1
-
-	if(istype(wear_suit, /obj/item/)) //Check armor
+	if(istype(wear_suit, /obj/item)) //Check armor
 		var/obj/item/I = wear_suit
-		if(I.IsShield() && I.on_block(damage, attack_text))
+		if(I.IsShield() && I.on_block(damage, A))
 			return 1
-
-	return 0
 
 /mob/living/carbon/human/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -149,80 +183,49 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
-	. = 1
-	if(!I || !user)
-		return 0
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+	if(!..())
+		return
+
 	var/target_zone = null
-	if(originator)
+	if(def_zone)
+		target_zone = def_zone
+	else if(originator)
 		if(ismob(originator))
 			var/mob/M = originator
 			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
 	else
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
-	if(user == src) // Attacking yourself can't miss
-		target_zone = user.zone_sel.selecting
-	if(!target_zone && !src.stat)
-		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
-		return 0
-	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver) && src.stat == DEAD && user.a_intent == I_HURT)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
-		newmeat.name = src.real_name + newmeat.name
-		newmeat.subjectname = src.real_name
-		newmeat.subjectjob = src.job
-		newmeat.reagents.add_reagent (NUTRIMENT, (src.nutrition / 15) / 3)
-		src.reagents.trans_to (newmeat, round ((src.reagents.total_volume) / 3, 1))
-		src.loc.add_blood(src)
-		--src.meatleft
-		to_chat(user, "<span class='warning'>You hack off a chunk of meat from [src.name]</span>")
-		if(!src.meatleft)
-			src.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>[user]/[user.ckey]</b>"
-			user.attack_log += "\[[time_stamp()]\] Chopped up <b>[src]/[src.ckey]</b> into meat</b>"
-			msg_admin_attack("[user.name] ([user.ckey]) chopped up [src] ([src.ckey]) into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			if(!iscarbon(user))
-				LAssailant = null
-			else
-				LAssailant = user
-			qdel(src)
-			return
+
 	var/datum/organ/external/affecting = get_organ(target_zone)
 	if (!affecting)
-		return
+		return FALSE
 	if(affecting.status & ORGAN_DESTROYED)
 		if(originator)
 			to_chat(originator, "What [affecting.display_name]?")
 		else
 			to_chat(user, "What [affecting.display_name]?")
-		return
+		return FALSE
 	var/hit_area = affecting.display_name
-
-	if((user != src) && check_shields(I.force, "the [I.name]"))
-		return 0
 
 	if(istype(I,/obj/item/weapon/card/emag))
 		if(!(affecting.status & ORGAN_ROBOT))
 			to_chat(user, "<span class='warning'>That limb isn't robotic.</span>")
-			return 0
+			return FALSE
 		if(affecting.sabotaged)
-			to_chat(user, "<span class='warning'>[src]'s [affecting.display_name] is already sabotaged!</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
 		else
-			to_chat(user, "<span class='warning'>You sneakily slide [I] into the dataport on [src]'s [affecting.display_name] and short out the safeties.</span>")
-			affecting.sabotaged = 1
-		return 0
+			to_chat(user, "<span class='warning'>You sneakily slide [I] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
+			affecting.sabotaged = TRUE
+		return FALSE
 
-	user.do_attack_animation(src, I)
+
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
-			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")
+		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
+			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
 	else if(!(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
-			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
-
-	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
-	if(armor >= 2)
-		return 1 //We still connected
-	if(!I.force)
-		return 1
+		visible_message("<span class='danger'>\The [user] attacks \the [src] in \the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>\The [user] attacks you in \the [hit_area] with \the [I.name]!</span>")
 
 	//Knocking teeth out!
 	var/knock_teeth = 0
@@ -233,41 +236,40 @@ emp_act
 				knock_teeth = 1
 		else if(user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
 			knock_teeth = 1
-	else if(user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
+	else if(user.zone_sel && user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
 		knock_teeth = 1
+
+	var/armor = run_armor_check(affecting, "melee", quiet = 1)
+	var/final_force = run_armor_absorb(affecting, "melee", I.force)
 	if(knock_teeth) //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
-		if((!armor) && (I.force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
-			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
-			if(T && T.amount > 0) //If the guy has some teeth
-				var/chance = min(I.force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
-				if(prob(chance))
-					knock_out_teeth(user)
+		if((!armor) && (final_force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
+			var/chance = min(final_force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
+			if(prob(chance))
+				knock_out_teeth(user)
 
-	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
-
-	var/bloody = 0
-	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))
-		I.add_blood(src)	//Make the weapon bloody, not the person.
-//		if(user.hand)	user.update_inv_l_hand()	//updates the attacker's overlay for the (now bloodied) weapon
-//		else			user.update_inv_r_hand()	//removed because weapons don't have on-mob blood overlays
-		if(prob(33))
-			bloody = 1
-			var/turf/location = loc
-			if(istype(location, /turf/simulated))
-				location.add_blood(src)
-			if(ishuman(user))
-				var/mob/living/carbon/human/H = user
-				if(get_dist(H, src) <= 1) //people with TK won't get smeared with blood
-					H.bloody_body(src)
-					H.bloody_hands(src)
+	var/bloody = FALSE
+	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (final_force * 2)))
+		if(!(src.species.anatomy_flags & NO_BLOOD))
+			I.add_blood(src)	//Make the weapon bloody, not the person.
+			if(prob(33))
+				bloody = TRUE
+				var/turf/location = loc
+				if(istype(location, /turf/simulated))
+					location.add_blood(src)
+				if(ishuman(user))
+					var/mob/living/carbon/human/H = user
+					if(get_dist(H, src) <= 1) //people with TK won't get smeared with blood
+						H.bloody_body(src)
+						H.bloody_hands(src)
 
 		switch(hit_area)
 			if(LIMB_HEAD)//Harder to score a stun but if you do it lasts a bit longer
-				if(prob(I.force))
-					apply_effect(20, PARALYZE, armor)
-					visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
-					if(src != user && I.damtype == BRUTE)
-						ticker.mode.remove_revolutionary(mind)
+				if(prob(final_force))
+					if(apply_effect(20, PARALYZE, armor))
+						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
+						// if(src != user && I.damtype == BRUTE && isrev(src))
+						// 	ticker.mode.remove_revolutionary(mind)
+						// 	add_attacklogs(user, src, "de-converted from Revolutionary!")
 
 				if(bloody)//Apply blood
 					if(wear_mask)
@@ -281,26 +283,25 @@ emp_act
 						update_inv_glasses(0)
 
 			if(LIMB_CHEST)//Easier to score a stun but lasts less time
-				if(prob((I.force + 10)))
+				if(prob((final_force + 10)))
 					apply_effect(5, WEAKEN, armor)
 					visible_message("<span class='danger'>[src] has been knocked down!</span>")
 
 				if(bloody)
 					bloody_body(src)
-	return .
+	return TRUE
 
-/mob/living/carbon/human/proc/knock_out_teeth(mob/user)
-	var/mob/living/L = user
+/mob/living/carbon/human/proc/knock_out_teeth(var/mob/living/L)
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
 	if(!istype(T) || T.amount == 0)
-		return
+		return FALSE
 
 	var/datum/organ/external/head/head = get_organ(LIMB_HEAD)
 	if(!head || head.status & ORGAN_DESTROYED) //if they don't have a head then there's no teeth
-		return
+		return FALSE
 
 	var/amount = rand(1,3)
-	if(user)
+	if(L)
 		if(M_HULK in L.mutations) //just like the mountain
 			amount += 8
 
@@ -309,19 +310,19 @@ emp_act
 	var/turf/throw_to = get_step(get_turf(src), src.dir) //Throw them in the direction we're facing!
 	teeth.throw_at(throw_to, 2, 2)
 
-	if(user)
+	if(L)
 		src.visible_message(\
-			"<span class='danger'>[user] knocks [(amount < 3) ? "some" : "a bunch"] of [src]'s teeth out!</span>",\
-			"<span class='danger'>[user] knocks [(amount < 3) ? "some" : "a bunch"] of your teeth out!</span>",\
+			"<span class='danger'>\The [L] knocks [(amount < 3) ? "some" : "a bunch"] of \the [src]'s teeth out!</span>",\
+			"<span class='danger'>\The [L] knocks [(amount < 3) ? "some" : "a bunch"] of your teeth out!</span>",\
 
-			drugged_message = "<span class='info'>[user] starts brushing [src]'s teeth.</span>",\
-			self_drugged_message = "<span class='info'>[user] has removed some of your wisdom teeth.</span>")
+			drugged_message = "<span class='info'>\The [L] starts brushing \the [src]'s teeth.</span>",\
+			self_drugged_message = "<span class='info'>\The [L] has removed some of your wisdom teeth.</span>")
 	else
 		src.visible_message(\
-			"<span class='danger'>[(amount < 3) ? "Some" : "A bunch"] of [src]'s teeth fall out!</span>",\
+			"<span class='danger'>[(amount < 3) ? "Some" : "A bunch"] of \the [src]'s teeth fall out!</span>",\
 			"<span class='danger'>[(amount < 3) ? "Some" : "A bunch"] of your teeth fall out!</span>",\
 
-			drugged_message = "<span class='info'>The tooth fairy takes some of [src]'s teeth out!</span>",\
+			drugged_message = "<span class='info'>The tooth fairy takes some of \the [src]'s teeth out!</span>",\
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
 
 /mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 2)
@@ -343,9 +344,9 @@ emp_act
 		w_uniform.add_blood(source)
 		update_inv_w_uniform(update)
 
-/mob/living/carbon/human/ex_act(severity,var/noblind = FALSE)
+/mob/living/carbon/human/ex_act(var/severity, var/noblind = FALSE)
 	if(flags & INVULNERABLE)
-		return
+		return FALSE
 
 	if(!blinded && !noblind)
 		flash_eyes(visual = 1)
@@ -355,7 +356,7 @@ emp_act
 	var/f_loss = null
 
 	switch (severity)
-		if (1.0)
+		if (BLOB_ACT_STRONG)
 			b_loss += 500
 			if (!prob(getarmor(null, "bomb")))
 				gib()
@@ -367,7 +368,7 @@ emp_act
 //				var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
 				//user.throw_at(target, 200, 4)
 
-		if (2.0)
+		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
 				gib()
 				return
@@ -392,7 +393,7 @@ emp_act
 			if (prob(70) && !shielded)
 				Paralyse(10)
 
-		if(3.0)
+		if(BLOB_ACT_WEAK)
 			b_loss += 30
 			var/gotarmor = min(100,max(0,getarmor(null, "bomb")))
 
@@ -420,7 +421,7 @@ emp_act
 	damage_blocked |= (brute_resolved | burn_resolved)
 
 	if(damage_blocked)
-		return
+		return FALSE
 
 	var/update = 0
 
@@ -465,7 +466,7 @@ emp_act
 		return
 	if(cloneloss < 120)
 		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
-		if(stat == DEAD)
+		if(isDead(src))
 			..()
 			adjustCloneLoss(rand(5,25))
 		else
@@ -473,5 +474,9 @@ emp_act
 			show_message("<span class='warning'>The blob attacks you!</span>")
 			var/dam_zone = pick(organs_by_name)
 			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-			apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
+
+			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return
+
+/mob/living/carbon/human/acidable()
+	return !(species && species.anatomy_flags & ACID4WATER)

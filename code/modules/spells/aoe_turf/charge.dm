@@ -1,6 +1,7 @@
 /spell/aoe_turf/charge
 	name = "Charge"
 	desc = "This spell can be used to charge up spent magical artifacts, among other things."
+	user_type = USER_TYPE_SPELLBOOK
 
 	school = "transmutation"
 	charge_max = 600

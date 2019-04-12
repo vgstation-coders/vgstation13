@@ -69,6 +69,6 @@
 						if("Cyborg")
 							H.Robotize()
 						if("MoMMI")
-							H.MoMMIfy(1)
+							H.MoMMIfy()
 				else
 					affected_mob.death(1)

@@ -5,10 +5,10 @@
 */
 
 // What each index means:
-#define DNA_OFF_LOWERBOUND 0
-#define DNA_OFF_UPPERBOUND 1
-#define DNA_ON_LOWERBOUND  2
-#define DNA_ON_UPPERBOUND  3
+#define DNA_OFF_LOWERBOUND 1
+#define DNA_OFF_UPPERBOUND 2
+#define DNA_ON_LOWERBOUND  3
+#define DNA_ON_UPPERBOUND  4
 
 // Define block bounds (off-low,off-high,on-low,on-high)
 // Used in setupgame.dm
@@ -391,7 +391,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if(!isnum(value))
 		WARNING("Expected a number, got [value]")
 		return 0
-	return add_zero2(num2hex(value,1), 3)
+	return num2hex(value, 3)
 
 /datum/dna/proc/UpdateUI()
 	src.uni_identity=""

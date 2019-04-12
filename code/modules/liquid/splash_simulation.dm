@@ -138,7 +138,7 @@ obj/effect/liquid/proc/apply_calculated_effect()
 	new_volume = 0
 	update_icon2()
 
-obj/effect/liquid/Move()
+obj/effect/liquid/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
 obj/effect/liquid/Destroy()

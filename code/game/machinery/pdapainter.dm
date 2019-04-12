@@ -99,7 +99,7 @@ Feel free to do whatever with this if you think it lacks.
 /obj/machinery/pdapainter/attack_hand(mob/user as mob)
 	..()
 
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		return
 
 	src.add_fingerprint(user)
@@ -138,7 +138,7 @@ Feel free to do whatever with this if you think it lacks.
 	set category = "Object"
 	set src in oview(1)
 
-	if(!ishuman(usr))
+	if(!ishigherbeing(usr))
 		return
 
 	if(storedpda)
@@ -153,7 +153,7 @@ Feel free to do whatever with this if you think it lacks.
 	set category = "Object"
 	set src in oview(1)
 
-	if(!ishuman(usr))
+	if(!ishigherbeing(usr))
 		return
 	if(storedpda)
 		to_chat(usr, "You can't print a PDA while \the [storedpda] is loaded into \the [src].")

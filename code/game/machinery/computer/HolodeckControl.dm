@@ -12,6 +12,9 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+	var/holopeople_enabled = TRUE //Set this to true to allow observers become holodudes
+	var/list/connected_holopeople = list()
+	var/maximum_holopeople = 4
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -22,6 +25,37 @@
 /obj/machinery/computer/HolodeckControl/attack_paw(var/mob/user as mob)
 	return
 
+/obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
+	if (!istype(user) || user.stat != DEAD )
+		return
+	if(stat & (NOPOWER|BROKEN|MAINT))
+		return
+	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
+		return
+	if(!linkedholodeck)
+		return
+	if(connected_holopeople.len >= maximum_holopeople)
+		to_chat(user, "<span class='notice'>\The [src] cannot sustain any additional advanced holograms. Please try again when there are fewer advanced holograms on the holodeck.</span>")
+		return
+	var/turf/spawnturf
+	var/list/L = get_area_turfs(linkedholodeck.type)
+
+	spawnturf = pick_n_take(L)
+	while(is_blocked_turf(spawnturf) && L.len)
+		spawnturf = pick_n_take(L)
+
+	if(spawnturf)
+		user.forceMove(spawnturf)
+		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
+		connected_holopeople.Add(H)
+		H.connected_holoconsole = src
+		var/list/N = hologram_names.Copy()
+		for(var/mob/M in connected_holopeople)
+			N.Remove(M.name)
+		H.name = capitalize(pick(N))
+		H.real_name = H.name
+
 /obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
 
 	if(..())
@@ -29,8 +63,18 @@
 	user.set_machine(src)
 	var/dat
 
-	dat += {"<B>Holodeck Control System</B><BR>
-		<HR>Current Loaded Programs:<BR>
+	dat += {"<B>Holodeck Control System</B><BR>"}
+	if(isobserver(user))
+		if(holopeople_enabled)
+			dat += "<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"
+		else
+			dat += "<HR>\[Advanced Holograms Unavailable\]</font><BR>"
+	if(isAdminGhost(user))
+		dat += "<BR><b>ADMIN OPTIONS:</b><BR>"
+		dat += "Advanced hologram spawning is: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
+		dat += "<A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram (Admin)\]</font></A><HR>"
+
+	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
 		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
@@ -77,6 +121,7 @@
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
 
+
 		dat += {"<BR>
 			Safety Protocols are <font color=green> ENABLED </font><BR>"}
 	user << browse(dat, "window=computer;size=400x500")
@@ -84,11 +129,21 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)
+	usr.set_machine(src)
+
+	if(href_list["spawn_holoperson"])
+		if(holopeople_enabled || isAdminGhost(usr))
+			spawn_holoperson(usr)
+	if(href_list["toggle_holopeople"])
+		holopeople_enabled = !holopeople_enabled
+		src.updateUsrDialog()
+
+		message_admins("[key_name(usr)] has [holopeople_enabled ? "enabled" : "disabled"] advanced hologram spawning at [formatJumpTo(src)]")
+		to_chat(usr, "Advanced holograms are now [holopeople_enabled ? "enabled" : "disabled"].")
+
 	if(..())
 		return 1
 	else
-		usr.set_machine(src)
-
 		if(href_list["emptycourt"])
 			target = locate(/area/holodeck/source_emptycourt)
 			if(target)
@@ -247,11 +302,12 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	if(emagged)
 		return //No spamming
 	emagged = 1
-	visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
+	if(user)
+		visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
 	visible_message("<span class='warning'>Warning: Power surge detected. Automatic shutoff and derezing protocols have been corrupted. Please contact Nanotrasen maintenance and cease all operation immediately.</span>")
 	log_game("[key_name(usr)] emagged the Holodeck Control Computer")
 	src.updateUsrDialog()
@@ -297,9 +353,7 @@
 
 			for(var/turf/T in linkedholodeck)
 				if(prob(30))
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(2, 1, T)
-					s.start()
+					spark(src)
 				T.ex_act(3)
 				T.hotspot_expose(1000,500,1,surfaces=1)
 
@@ -342,9 +396,7 @@
 				if(L.name=="Atmospheric Test Start")
 					spawn(20)
 						var/turf/T = get_turf(L)
-						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-						s.set_up(2, 1, T)
-						s.start()
+						spark(T, 2)
 						if(T)
 							T.temperature = 5000
 							T.hotspot_expose(50000,50000,1,surfaces=1)
@@ -391,9 +443,7 @@
 			if(L.name=="Atmospheric Test Start")
 				spawn(20)
 					var/turf/T = get_turf(L)
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(2, 1, T)
-					s.start()
+					spark(T, 2)
 					if(T)
 						T.temperature = 5000
 						T.hotspot_expose(50000,50000,1,surfaces=1)
@@ -404,6 +454,8 @@
 	//Get rid of any items
 	for(var/item in holographic_items)
 		derez(item)
+	for(var/mob/living/simple_animal/hologram/advanced/H in connected_holopeople)
+		H.dissipate()
 	//Turn it back to the regular non-holographic room
 	target = locate(/area/holodeck/source_plating)
 	if(target)
@@ -574,6 +626,7 @@
 
 		G.affecting.forceMove(src.loc)
 		G.affecting.Knockdown(5)
+		G.affecting.Stun(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return
@@ -587,7 +640,8 @@
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(50))
+		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
+		if(prob(50) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src.loc)
 			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
 		else

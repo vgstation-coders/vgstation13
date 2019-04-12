@@ -7,14 +7,13 @@
 /obj/machinery/computer/message_monitor
 	name = "Message Monitor Console"
 	desc = "Used to Monitor the crew's messages, that are sent via PDA. Can also be used to view Request Console messages."
-	icon_state = "comm_logs"
-	var/hack_icon = "comm_logsc"
-	var/normal_icon = "comm_logs"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "message_monitor"
+	var/hack_icon = "message_monitor_hacked"
+	var/normal_icon = "message_monitor"
 	circuit = "/obj/item/weapon/circuitboard/message_monitor"
 	//Server linked to.
 	var/obj/machinery/message_server/linkedServer = null
-	//Sparks effect - For emag
-	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 	//Messages - Saves me time if I want to change something.
 	var/noserver = "<span class='alert'>ALERT: No server detected.</span>"
 	var/incorrectkey = "<span class='warning'>ALERT: Incorrect decryption key!</span>"
@@ -53,8 +52,7 @@
 			icon_state = hack_icon // An error screen I made in the computers.dmi
 			emagged = 1
 			screen = 2
-			spark_system.set_up(5, 0, src)
-			src.spark_system.start()
+			spark(src, 5, FALSE)
 			var/obj/item/weapon/paper/monitorkey/MK = new/obj/item/weapon/paper/monitorkey
 			MK.forceMove(src.loc)
 			// Will help make emagging the console not so easy to get away with.
@@ -62,7 +60,8 @@
 			spawn(100*length(src.linkedServer.decryptkey)) UnmagConsole()
 			message = rebootmsg
 		else
-			to_chat(user, "<span class='notice'>A 'no server' error appears on the screen.</span>")
+			if(user)
+				to_chat(user, "<span class='notice'>A 'no server' error appears on the screen.</span>")
 
 /obj/machinery/computer/message_monitor/update_icon()
 	..()
@@ -83,7 +82,7 @@
 /obj/machinery/computer/message_monitor/attack_hand(var/mob/living/user as mob)
 	if(stat & (NOPOWER|BROKEN))
 		return
-	if(!istype(user))
+	if(!istype(user) && !isAdminGhost(user))
 		return
 	//If the computer is being hacked or is emagged, display the reboot message.
 	if(hacking || emagged)

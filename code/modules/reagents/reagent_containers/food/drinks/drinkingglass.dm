@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	name = "drinking glass"
 	desc = "Your standard drinking glass."
@@ -14,9 +12,6 @@
 	smashname = "broken glass"
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
-
-//removed smashing - now uses smashing proc from drinks.dm - Hinaichigo
-//also now produces a broken glass when smashed instead of just a shard
 
 	on_reagent_change()
 		..()
@@ -39,6 +34,7 @@
 			//mrid = R.get_master_reagent_id()
 			isGlass = 1
 			item_state = "glass_empty"
+			origin_tech = ""
 			switch(reagents.get_master_reagent_id())
 				if(BEER)
 					icon_state = "beerglass"
@@ -130,6 +126,18 @@
 					icon_state = "wineglass"
 					name = "glass of wine"
 					desc = "A very classy looking drink."
+				if(WWINE)
+					icon_state = "wwineglass"
+					name = "glass of white wine"
+					desc = "A very classy looking drink."
+				if(BWINE)
+					icon_state = "bwineglass"
+					name = "glass of berry wine"
+					desc = "A particular favorite of doctors."
+				if(PLUMPHWINE)
+					icon_state = "plumphwineglass"
+					name = "glass of plump helmet wine"
+					desc = "An absolute staple to get through a day's work."
 				if(COGNAC)
 					icon_state = "cognacglass"
 					name = "glass of cognac"
@@ -547,6 +555,67 @@
 					item_state = "ginvodkaglass"
 					name = "glass of Grey vodka"
 					desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
+				if(PINTPOINTER)
+					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
+					if(reagents.last_ckey_transferred_to_this)
+						for(var/client/C in clients)
+							if(C.ckey == reagents.last_ckey_transferred_to_this)
+								var/mob/M = C.mob
+								P.creator = M
+					reagents.trans_to(P, reagents.total_volume)
+					spawn(1)
+						qdel(src)
+				if(SCIENTISTS_SERENDIPITY)
+					if(reagents.get_reagent_amount(SCIENTISTS_SERENDIPITY)<10) //You need at least 10u to get the tech bonus
+						icon_state = "scientists_surprise"
+						name = "\improper Scientist's Surprise"
+						desc = "There is as yet insufficient data for a meaningful answer."
+					else
+						icon_state = SCIENTISTS_SERENDIPITY
+						name = "\improper Scientist's Serendipity"
+						desc = "Knock back a cold glass of R&D."
+						origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
+				if(METABUDDY)
+					icon_state = METABUDDY
+					name = "\improper Metabuddy"
+					desc = "The glass is etched with the name of a very deserving spaceman. There's a special note etched in the bottom..."
+				if(SPIDERS)
+					icon_state = SPIDERS
+					name = "\improper This glass is full of spiders"
+					desc = "Seriously, dude, don't touch it."
+				if(WEED_EATER)
+					icon_state = WEED_EATER
+					name = "Weed Eater"
+					desc = "The vegetarian equivalant of a snake eater."
+				if(RAGSTORICHES)
+					icon_state = RAGSTORICHES
+					name = "\improper Rags to Riches"
+					desc = "The Spaceman Dream, incarnated as a cocktail."
+				if(WAIFU)
+					icon_state = WAIFU
+					name = "\improper Waifu"
+					desc = "Don't drink more than one waifu if you value your laifu."
+				if(BEEPSKY_CLASSIC)
+					name = "\improper Beepsky Classic"
+					icon_state = BEEPSKY_CLASSIC
+					desc = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
+				if(ELECTRIC_SHEEP)
+					icon_state = ELECTRIC_SHEEP
+					name = "\improper Electric Sheep"
+					desc = "Silicons dream about this."
+				if(SMOKYROOM)
+					icon_state = SMOKYROOM
+					name = "\improper Smoky Room"
+					desc = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
+				if(BAD_TOUCH)
+					icon_state = BAD_TOUCH
+					name = "\improper Bad Touch"
+					desc = "Somewhere on the scale of bad touches between 'fondled by clown' and 'brushed by supermatter shard'."
+				if(SUICIDE)
+					icon_state = SUICIDE
+					name = "\improper Suicide"
+					desc = "It's only tolerable because of the added alcohol."
+
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"
@@ -555,8 +624,6 @@
 					filling.icon += mix_color_from_reagents(reagents.reagent_list)
 					filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 					overlays += filling
-
-
 
 			if(reagents.has_reagent(BLACKCOLOR))
 				icon_state ="blackglass"
@@ -573,6 +640,11 @@
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
 
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
+	..()
+	if(reagents.get_master_reagent_id() == METABUDDY && istype(user) && user.client)
+		to_chat(user,"<span class='warning'>This one is made out to 'My very best friend, [user.client.ckey]'</span>")
+
 // for /obj/machinery/vending/sovietsoda
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda
 	New()
@@ -585,6 +657,11 @@
 		..()
 		reagents.add_reagent(COLA, 50)
 		on_reagent_change()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/toxinsspecial/New()
+	..()
+	reagents.add_reagent(TOXINSSPECIAL, 30)
+	on_reagent_change()
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 
@@ -713,17 +790,37 @@
 					icon_state = GREYTEA
 					name = "Tide"
 					desc = "This probably shouldn't be considered tea..."
+				if(TOMATOJUICE)
+					make_reagent_overlay()
+					name = "mug of tomato juice"
+					desc = "Are you sure this is tomato juice?"
+				if(BLOOD)
+					make_reagent_overlay()
+					name = "mug of tomato juice"
+					desc = "Are you sure this is tomato juice?"
+				if(HOT_COCO)
+					make_reagent_overlay()
+					name = "Hot Chocolate"
+					desc = "Choccy milk!"						
 
 
 
 
 
 				else
-					icon_state ="mug_what"
-					name = "mug of ..something?"
-					desc = "You aren't really sure what this is."
+					make_reagent_overlay()
+					get_reagent_name(src, TRUE)
 		else
+			overlays.len = 0
 			icon_state = "mug_empty"
 			name = "mug"
 			desc = "A simple mug."
 			return
+			
+/obj/item/weapon/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
+	overlays.len = 0
+	icon_state ="mug_empty"
+	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
+	filling.icon += mix_color_from_reagents(reagents.reagent_list)
+	filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+	overlays += filling

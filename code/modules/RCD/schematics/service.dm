@@ -21,7 +21,7 @@
 		return 1
 
 	to_chat(user, "Dispensing [lowertext(name)]")
-	playsound(get_turf(user), 'sound/machines/click.ogg', 10, 1)
+	playsound(user, 'sound/machines/click.ogg', 10, 1)
 	new spawn_type(get_turf(A))
 
 /datum/rcd_schematic/rsf/dosh
@@ -52,6 +52,10 @@
 /datum/rcd_schematic/rsf/cards
 	name		= "Deck of cards"
 	spawn_type	= /obj/item/toy/cards
+
+/datum/rcd_schematic/rsf/unecards
+	name		= "Deck of Une cards"
+	spawn_type	= /obj/item/toy/cards/une
 
 /datum/rcd_schematic/rsf/mug
 	name		= "Mug"
@@ -93,3 +97,15 @@
 /datum/rcd_schematic/rsf/fork
 	name		= "Fork"
 	spawn_type	= /obj/item/weapon/kitchen/utensil/fork
+
+/datum/rcd_schematic/rsf/vodka
+	name		= "Tunguska Triple Distilled"
+	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/bottle/vodka
+
+/datum/rcd_schematic/rsf/greyshit_vodka
+	name		= "Greyshit Vodka"
+	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka
+
+/datum/rcd_schematic/rsf/ushanka
+	name		= "Ushanka"
+	spawn_type	= /obj/item/clothing/head/ushanka

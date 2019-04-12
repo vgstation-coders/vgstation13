@@ -1,5 +1,5 @@
 /mob/living/carbon/proc/has_breathing_mask()
-	return istype(wear_mask, /obj/item/clothing/mask)
+	return is_wearing_item(/obj/item/clothing/mask, slot_wear_mask)
 
 /mob/living/carbon/proc/internals_candidates() //These are checked IN ORDER.
 	return get_all_slots() + held_items
@@ -55,6 +55,7 @@
 					to_chat(user, "<span class='warning'>\The [src] does not have \an [breathes] tank.</span>")
 				else
 					to_chat(user, "<span class='warning'>You don't have \an [breathes] tank.</span>")
+				return
 		internal = T
 		T.add_fingerprint(user)
 		if(internals)

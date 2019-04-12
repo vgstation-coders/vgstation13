@@ -37,9 +37,31 @@
 	syndie = 1
 	recalculateChannels()
 
+/obj/item/device/radio/headset/revsquad/New()
+	..()
+	keyslot2 = new /obj/item/device/encryptionkey/rev
+	syndie = 1 //prevents broadcast without key
+
+/obj/item/device/radio/headset/revsquad/emp_act()
+	return
+
 /obj/item/device/radio/headset/syndicate/commando/New()
 	..()
 	set_frequency(SYND_FREQ)
+
+/obj/item/device/radio/headset/raider
+//	origin_tech = Tc_SYNDICATE + "=3" birds dont have super sekrit spy radios like the syndies have
+/obj/item/device/radio/headset/raider/New()
+	..()
+	qdel(keyslot1)
+	keyslot1 = new /obj/item/device/encryptionkey/raider
+	raider = 1
+	recalculateChannels()
+
+/obj/item/device/radio/headset/raider/pretuned/New() // pre tuned radio to 1215 aka raider freq
+	..()
+	set_frequency(RAID_FREQ)
+
 
 /obj/item/device/radio/headset/binary
 	origin_tech = Tc_SYNDICATE + "=3"
@@ -253,7 +275,7 @@
 
 /obj/item/device/radio/headset/ert
 	name = "CentCom Response Team headset"
-	desc = "The headset of the boss's boss. Channels are as follows: :r - Response Team :c - command, :s - security, :e - engineering, :d - mining, :q - cargo, :m - medical, :n - science."
+	desc = "The headset of the boss's boss. Channels are as follows: ':-' - Response Team :c - command, :s - security, :e - engineering, :d - mining, :q - cargo, :m - medical, :n - science."
 	icon_state = "ert_headset"
 	item_state = "headset"
 	freerange = 1
@@ -321,6 +343,7 @@
 	src.translate_binary = 0
 	src.translate_hive = 0
 	src.syndie = 0
+	src.raider = 0
 
 	if(keyslot1)
 		for(var/ch_name in keyslot1.channels)
@@ -338,6 +361,9 @@
 		if(keyslot1.syndie)
 			src.syndie = 1
 
+		if(keyslot1.raider)
+			src.raider = 1
+
 	if(keyslot2)
 		for(var/ch_name in keyslot2.channels)
 			if(ch_name in src.channels)
@@ -353,6 +379,9 @@
 
 		if(keyslot2.syndie)
 			src.syndie = 1
+
+		if(keyslot2.raider)
+			src.raider = 1
 
 
 	for (var/ch_name in channels)

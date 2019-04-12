@@ -31,7 +31,7 @@
 	//anchored = 1
 	//use_power = 0
 	//idle_power_usage = 0
-	heatgen = 0
+	heating_power = 0
 	autolinkers = list("c_relay")
 
 //HUB

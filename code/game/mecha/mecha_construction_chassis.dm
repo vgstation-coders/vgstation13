@@ -25,7 +25,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/ripley(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "ripley0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	const_holder.overlays.len = 0
 	spawn()
 		qdel (src)
@@ -46,7 +46,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/firefighter(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "firefighter0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return
@@ -66,7 +66,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/combat/gygax(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "gygax0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return
@@ -87,7 +87,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/combat/durand(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "durand0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return
@@ -109,7 +109,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/combat/marauder(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "marauder0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return
@@ -130,7 +130,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/odysseus(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "odysseus0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return
@@ -152,7 +152,7 @@
 	const_holder.construct = new /datum/construction/reversible/mecha/phazon(const_holder)
 	const_holder.icon = 'icons/mecha/mech_construction.dmi'
 	const_holder.icon_state = "phazon0"
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return
@@ -171,7 +171,27 @@
 /datum/construction/mecha_chassis/honker/spawn_result(mob/user as mob)
 	var/obj/item/mecha_parts/chassis/const_holder = holder
 	const_holder.construct = new /datum/construction/reversible/mecha/honker(const_holder)
-	const_holder.density = 1
+	const_holder.setDensity(TRUE)
+	spawn()
+		qdel (src)
+	return
+
+//        CLARKE         //
+/datum/construction/mecha_chassis/clarke
+	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/clarke_torso),//1
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_head),//2
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_left_arm),//3
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_right_arm),//4
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_left_tread),//5
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_right_tread)//6
+					)
+
+/datum/construction/mecha_chassis/clarke/spawn_result(mob/user as mob)
+	var/obj/item/mecha_parts/chassis/const_holder = holder
+	const_holder.construct = new /datum/construction/reversible/mecha/clarke(const_holder)
+	const_holder.icon = 'icons/mecha/mech_construction.dmi'
+	const_holder.icon_state = "clarke0"
+	const_holder.setDensity(TRUE)
 	spawn()
 		qdel (src)
 	return

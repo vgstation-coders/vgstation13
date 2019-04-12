@@ -13,9 +13,12 @@
 	anchored = 1
 	layer = WIRE_TERMINAL_LAYER
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/power/terminal/supports_holomap()
+	return TRUE
 
+/obj/machinery/power/terminal/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/machinery/power/terminal/New()
 	..()
@@ -71,15 +74,13 @@
 		return 0
 
 	to_chat(user, "<span class='notice'>You start adding cable to \the [src].</span>")
-	playsound(get_turf(src), 'sound/items/zip.ogg', 100, 1)
+	playsound(src, 'sound/items/zip.ogg', 100, 1)
 	if (do_after(user, src, 100) && !T.intact && can_attach_terminal(user))
 
 		//Shock chance
 		var/obj/structure/cable/N = T.get_cable_node()
 		if (prob(50) && electrocute_mob(user, N, N))
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, src)
-			s.start()
+			spark(src, 5)
 			return 0
 
 		finalise_terminal(get_turf(user))

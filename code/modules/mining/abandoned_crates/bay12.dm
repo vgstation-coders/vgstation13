@@ -21,8 +21,7 @@
 /obj/structure/closet/crate/secure/loot/bay_04
 	New()
 		..()
-		for(var/i = 0, i < rand(10,20), i++)
-			new/obj/item/weapon/ore/diamond(src)
+		drop_stack(/obj/item/stack/ore/diamond, src, rand(10,20))
 
 /obj/structure/closet/crate/secure/loot/bay_05
 	New()
@@ -30,7 +29,7 @@
 		for(var/i = 0, i < 3, i++)
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = new(src)
 			tray.anchored = FALSE
-			
+
 /obj/structure/closet/crate/secure/loot/bay_06
 	New()
 		..()

@@ -34,7 +34,8 @@
 		/obj/item/weapon/match                = list(PHOSPHORUS, 2),
 
 		//Recipes must include both variables!
-		/obj/item/weapon/reagent_containers/food = list("generic",0)
+		/obj/item/weapon/reagent_containers/food = list("generic",0),
+		/obj/item/ice_crystal                = list(ICE, 10),
 	)
 
 

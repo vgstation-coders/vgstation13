@@ -96,7 +96,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 			returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval ? returnval : "null"]</font>")
+		if(isnull(returnval))
+			returnval = "null"
+		else if(returnval == "")
+			returnval = "\"\" (empty string)"
+		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
@@ -117,6 +121,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		if(!hascall(target, procname))
 			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
+			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
 		if(!argnum && (argnum!=0))
@@ -134,7 +139,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval ? returnval : "null"]</font>")
+		if(isnull(returnval))
+			returnval = "null"
+		else if(returnval == "")
+			returnval = "\"\" (empty string)"
+		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -152,11 +161,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	t += {"Nitrogen : [env.nitrogen]
-Oxygen : [env.oxygen]
-Plasma : [env.toxins]
-CO2: [env.carbon_dioxide]
-Pressure: [env.return_pressure()]"}
+	t += {"Nitrogen : [env[GAS_NITROGEN]]
+Oxygen : [env[GAS_OXYGEN]]
+Plasma : [env[GAS_PLASMA]]
+CO2: [env[GAS_CARBON]]
+Pressure: [env.pressure]"}
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -335,7 +344,7 @@ Pressure: [env.return_pressure()]"}
 		else
 			if(alert("Spawn that person a tome?",,"Yes","No")=="Yes")
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground.</span>")
-				new /obj/item/weapon/tome(M.loc)
+				new /obj/item/weapon/tome_legacy(M.loc)
 			else
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			var/glimpse=pick("1","2","3","4","5","6","7","8")
@@ -464,42 +473,42 @@ Pressure: [env.return_pressure()]"}
 	var/list/areas_with_camera = list()
 
 	for(var/area/A in areas)
-		if(!(A.type in areas_all))
+		if(A && !(A.type in areas_all))
 			areas_all.Add(A.type)
 
 	for(var/obj/machinery/power/apc/APC in power_machines)
 		var/area/A = get_area(APC)
-		if(!(A.type in areas_with_APC))
+		if(A && !(A.type in areas_with_APC))
 			areas_with_APC.Add(A.type)
 
 	for(var/obj/machinery/alarm/alarm in machines)
 		var/area/A = get_area(alarm)
-		if(!(A.type in areas_with_air_alarm))
+		if(A && !(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
 	for(var/obj/machinery/requests_console/RC in allConsoles)
 		var/area/A = get_area(RC)
-		if(!(A.type in areas_with_RC))
+		if(A && !(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
 
 	for(var/obj/machinery/light/L in alllights)
 		var/area/A = get_area(L)
-		if(!(A.type in areas_with_light))
+		if(A && !(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
 
 	for(var/obj/machinery/light_switch/LS in world)
 		var/area/A = get_area(LS)
-		if(!(A.type in areas_with_LS))
+		if(A && !(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
 
 	for(var/obj/item/device/radio/intercom/I in world)
 		var/area/A = get_area(I)
-		if(!(A.type in areas_with_intercom))
+		if(A && !(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
 
 	for(var/obj/machinery/camera/C in cameranet.cameras)
 		var/area/A = get_area(C)
-		if(!(A.type in areas_with_camera))
+		if(A && !(A.type in areas_with_camera))
 			areas_with_camera.Add(A.type)
 
 	var/list/areas_without_APC = areas_all - areas_with_APC
@@ -565,11 +574,11 @@ Pressure: [env.return_pressure()]"}
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 100 //Don't need to explain, space magic
+				Plasma.air_contents[GAS_PLASMA] = 100 //Don't need to explain, space magic
 				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
+				Plasma.air_contents.update_values()
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
-				Plasma.forceMove(Rad)
 
 			if(!Rad.active)
 				Rad.toggle_power()
@@ -736,7 +745,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	var/list/machineinstances = list()
 	for(var/atom/typepath in machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -749,7 +758,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	machineinstances.len = 0
 	for(var/atom/typepath in power_machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -819,7 +828,7 @@ var/global/blood_virus_spreading_disabled = 0
 	set desc = "Reload the Style Sheet (be careful)."
 
 	for(var/client/C in clients)
-		winset(C, null, "outputwindow.output.style=[config.world_style_config];")
+		winset(C, null, "window1.msay_output.style=[config.world_style_config];")
 	message_admins("The style sheet has been reloaded by [src.ckey]")
 
 /client/proc/reset_style_sheet()
@@ -828,7 +837,7 @@ var/global/blood_virus_spreading_disabled = 0
 	set desc = "Reset the Style Sheet (restore to default)."
 
 	for(var/client/C in clients)
-		winset(C, null, "outputwindow.output.style=[world_style];")
+		winset(C, null, "window1.msay_output.style=[world_style];")
 	config.world_style_config = world_style
 	message_admins("The style sheet has been reset by [src.ckey]")
 
@@ -1180,22 +1189,22 @@ client/proc/cure_disease()
 	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
 client/proc/check_convertables()
-	set name = "Check Convertables"
+	set name = "Check Convertables (Cult v2.0)"
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
 		return
-
+	var/datum/faction/cult/narsie = find_active_faction_by_type(/datum/faction/cult/narsie)
 	var/dat = ""
 	for(var/mob/M in player_list)
 		if(!M.mind)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=grey><b>NO MIND</b></font></br>"
 		else if(!istype(M,/mob/living/carbon/human))
 			dat += "[M.real_name]/([ckey(M.key)]): <b>NOT HUMAN</b></br>"
-		else if(!is_convertable_to_cult(M.mind))
+		else if(!is_convertable_to_cult_legacy(M.mind))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>UNCONVERTABLE</b></font></br>"
 		else if(jobban_isbanned(M, "cultist"))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>JOBBANNED</b></font></br>"
-		else if(M.mind in ticker.mode.cult)
+		else if(M.mind in narsie.members)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=blue><b>CULTIST</b></font></br>"
 		else
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=green><b>CONVERTABLE</b></font></br>"
@@ -1210,7 +1219,18 @@ client/proc/check_convertables()
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area)
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
+
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
+
+		object = copytext(object, 1, variables_start)
+
+
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1224,12 +1244,16 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen()
+	holder.marked_datum = new chosen
 
-	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum.</span>")
-
+	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
 	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+	if(varchanges.len)
+		_preloader = new(varchanges, chosen)
+		//_preloaded calls load() automatically on atom/New(). However, this proc can also create datums, which don't do that - call load() manually
+		_preloader.load(holder.marked_datum)
 
 /client/proc/vv_marked_datum()
 	set category	= "Debug"
@@ -1278,3 +1302,50 @@ client/proc/check_convertables()
 		return
 
 	error_cache.show_to(src)
+
+/client/proc/emergency_shuttle_panel()
+	set name = "Emergency Shuttle Panel"
+	set category = "Debug"
+	if(holder)
+		holder.emergency_shuttle_panel()
+		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
+	feedback_add_details("admin_verb","ESP")
+	return
+
+/client/proc/start_line_profiling()
+	set category = "Profile"
+	set name = "Start line profiling"
+	set desc = "Starts tracking line by line profiling for code lines that support it"
+
+	PROFILE_START
+
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
+	feedback_add_details("admin_verb","Start line profiling")
+	log_admin("[key_name(src)] started line by line profiling.")
+
+/client/proc/stop_line_profiling()
+	set category = "Profile"
+	set name = "Stop line profiling"
+	set desc = "Stops tracking line by line profiling for code lines that support it"
+
+	PROFILE_STOP
+
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
+	feedback_add_details("admin_verb","Stop line profiling")
+	log_admin("[key_name(src)] stopped line by line profiling.")
+
+/client/proc/show_line_profiling()
+	set category = "Profile"
+	set name = "Show line profiling"
+	set desc = "Shows tracked profiling info from code lines that support it"
+
+	var/sortlist = list(
+		"Avg time"		=	/proc/cmp_profile_avg_time_dsc,
+		"Total Time"	=	/proc/cmp_profile_time_dsc,
+		"Call Count"	=	/proc/cmp_profile_count_dsc
+	)
+	var/sort = input(src, "Sort type?", "Sort Type", "Avg time") as null|anything in sortlist
+	if (!sort)
+		return
+	sort = sortlist[sort]
+	profile_show(src, sort)

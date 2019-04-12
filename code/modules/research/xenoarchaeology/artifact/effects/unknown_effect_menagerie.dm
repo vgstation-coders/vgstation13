@@ -1,6 +1,6 @@
 /datum/artifact_effect/menagerie
 	effecttype = "menagerie"
-	effect = EFFECT_PULSE
+	effect = ARTIFACT_EFFECT_PULSE
 	effect_type = 5
 	var/static/list/possible_types = list()
 
@@ -25,13 +25,7 @@
 				var/transmog_time = rand(1 MINUTES, 5 MINUTES)
 				transmog_time *= multiplier
 				spawn(transmog_time)
-					var/mob/top_level = new_mob
-					if(top_level.transmogged_to)
-						while(top_level.transmogged_to)
-							top_level = top_level.transmogged_to
-					var/turf/T2 = get_turf(top_level)
-					while(top_level)
-						top_level = top_level.transmogrify()
+					var/turf/T2 = get_turf(new_mob.completely_untransmogrify())
 					if(T2)
 						playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
 			return 1

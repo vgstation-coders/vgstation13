@@ -11,7 +11,7 @@
 	var/amount = 0
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed != 0)
+		if(C.installed != COMPONENT_MISSING)
 			amount += C.brute_damage
 	return amount
 
@@ -19,35 +19,31 @@
 	var/amount = 0
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed != 0)
+		if(C.installed != COMPONENT_MISSING)
 			amount += C.electronics_damage
 	return amount
 
 /mob/living/silicon/robot/adjustBruteLoss(var/amount)
-
 	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
-		return 0
-
+		return FALSE
 	if(amount > 0)
 		take_overall_damage(amount, 0)
 	else
 		heal_overall_damage(-amount, 0)
 
 /mob/living/silicon/robot/adjustFireLoss(var/amount)
-
 	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
-		return 0
-
+		return FALSE
 	if(amount > 0)
 		take_overall_damage(0, amount)
 	else
 		heal_overall_damage(0, -amount)
 
-/mob/living/silicon/robot/proc/get_damaged_components(var/brute, var/burn, var/destroyed = 0)
+/mob/living/silicon/robot/proc/get_damaged_components(var/brute, var/burn, var/destroyed = FALSE)
 	var/list/datum/robot_component/parts = list()
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed == 1 || (C.installed == -1 && destroyed))
+		if(C.installed == COMPONENT_INSTALLED || (C.installed == COMPONENT_BROKEN && destroyed))
 			if((brute && C.brute_damage) || (burn && C.electronics_damage) || (!C.toggled) || (!C.powered && C.toggled))
 				parts += C
 	return parts
@@ -56,19 +52,17 @@
 	var/list/rval = new
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed == 1)
+		if(C.installed == COMPONENT_INSTALLED)
 			rval += C
 	return rval
 
 /mob/living/silicon/robot/proc/get_armour()
-
-
 	if(!components.len)
-		return 0
+		return FALSE
 	var/datum/robot_component/C = components["armour"]
-	if(C && C.installed == 1)
+	if(C && C.installed == COMPONENT_INSTALLED)
 		return C
-	return 0
+	return FALSE
 
 /mob/living/silicon/robot/heal_organ_damage(var/brute, var/burn)
 	var/list/datum/robot_component/parts = get_damaged_components(brute,burn)
@@ -144,6 +138,8 @@
 			brute -= absorb_brute
 			burn -= absorb_burn
 			to_chat(src, "<span class='warning'>Your shield absorbs some of the impact!</span>")
+
+	. = brute + burn
 
 	var/datum/robot_component/armour/A = get_armour()
 	if(A)

@@ -117,10 +117,10 @@
 			process(loc, what)
 				var/mob/living/carbon/monkey/O = what
 				if (O.client) //grief-proof
-					O.forceMove(loc)
-					O.visible_message("<span class='notice'>[O] suddenly jumps out of [src]!</span>", \
+					O.visible_message("<span class='notice'>[O] suddenly jumps out of \the [O.loc]!</span>", \
 							"You jump out from the processor", \
 							"You hear a slimy sound")
+					O.forceMove(loc)
 					return
 				var/obj/item/weapon/reagent_containers/glass/bucket/bucket_of_blood = new(loc)
 				O.take_blood(bucket_of_blood, 70)
@@ -152,7 +152,7 @@
 					target.canmove = 0
 					target.icon = null
 					target.invisibility = 101
-					target.density = 0
+					target.setDensity(FALSE)
 					var/throwzone = list()
 					for(var/turf/T in orange(loc,4))
 						throwzone += T
@@ -236,19 +236,24 @@
 		user.visible_message("<span class='notice'>[user] turns on [src]</span>.", \
 			"You turn on \a [src].", \
 			"You hear [src] start")
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(500)
 		sleep(P.time*time_coeff)
 		P.process(src.loc, O)
 		src.processing = 0
 	src.visible_message("<span class='notice'>[src] is done.</span>", \
-		"You hear [src] stop")
+		"You hear [src] stop.")
 
 /obj/machinery/processor/attack_ghost(mob/user as mob)
 	user.examination(src)
 
-/obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(user.incapacitated())
+/obj/machinery/processor/MouseDropTo(atom/movable/O, mob/user)
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
-
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
+		return
+	if(!ishigherbeing(user) && !isrobot(user))
+		return
 	attackby(O,user)

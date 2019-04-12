@@ -37,7 +37,7 @@
 	scanscrubbers()
 	return src.ui_interact(user)
 
-/obj/machinery/computer/area_atmos/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/area_atmos/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	var/data[0]
 	data["zone_text"] = zone_text
 	var/list/scrubbers = list()
@@ -53,7 +53,7 @@
 
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -127,7 +127,7 @@
 	var/turf/T = get_turf(src)
 	if(!T.loc)
 		return
-	var/area/A = get_area_master(T)
+	var/area/A = get_area(T)
 	for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in machines)
 		var/turf/T2 = get_turf(scrubber)
 		if(T2 && T2.loc)

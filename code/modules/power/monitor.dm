@@ -202,8 +202,9 @@
 
 
 				var/obj/machinery/power/apc/A = term.master
+				var/area/APC_area = get_area(A)
 				tbl += "<tr>"
-				tbl += "<td><span class=\"area\">["\The [A.areaMaster]"]</span></td>"
+				tbl += "<td><span class=\"area\">["\The [APC_area]"]</span></td>"
 				tbl += "<td>[S[A.equipment+1]]</span></td><td>[S[A.lighting+1]]</span></td><td>[S[A.environ+1]]</span></td>"
 				tbl += "<td align=\"right\">[A.lastused_total]</td>"
 				if(A.cell)

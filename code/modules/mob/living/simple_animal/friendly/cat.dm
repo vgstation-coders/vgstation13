@@ -16,6 +16,9 @@
 	turns_per_move = 5
 	see_in_dark = 6
 
+	speak_override = TRUE
+
+
 	can_breed = 1
 	species_type = /mob/living/simple_animal/cat
 	childtype = /mob/living/simple_animal/cat/kitten
@@ -42,6 +45,7 @@
 	icon_living = "cat"
 	icon_dead = "cat_dead"
 	gender = FEMALE
+	is_pet = TRUE
 
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
@@ -53,6 +57,7 @@
 	icon_living= "salem"
 	icon_dead= "salem_dead"
 	gender = FEMALE
+	holder_type = /obj/item/weapon/holder/animal/salem
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
@@ -71,9 +76,9 @@
 	if((src.loc) && isturf(src.loc))
 		if(!stat && !resting && !locked_to)
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
-				if(!M.stat)
+				if(!M.stat && Adjacent(M))
 					M.splat()
-					emote("<span class='warning'>[pick(kill_verbs)] \the [M]!</span>")
+					visible_message("<span class='warning'>\The [name] [pick(kill_verbs)] \the [M]!</span>")
 					movement_target = null
 					stop_automated_movement = 0
 					break
@@ -81,14 +86,14 @@
 	..()
 
 	for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
-		if(prob(15))
-			emote(pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
+		if(prob(15) && !snack.stat)
+			emote("me",, pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
 		break
 
 	if(!stat && !resting && !locked_to)
 		turns_since_scan++
 		if(turns_since_scan > 5)
-			walk_to(src,0)
+			start_walk_to(0)
 			turns_since_scan = 0
 			if((movement_target) && !(isturf(movement_target.loc) || ishuman(movement_target.loc) ))
 				movement_target = null
@@ -102,7 +107,7 @@
 						break
 			if(movement_target)
 				stop_automated_movement = 1
-				walk_to(src,movement_target,0,3)
+				start_walk_to(movement_target,0,3)
 
 
 /mob/living/simple_animal/cat/snek
@@ -126,8 +131,9 @@
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
+	density = 0
 
-var/list/wizard_snakes
+var/list/wizard_snakes = list()
 
 /mob/living/simple_animal/cat/snek/wizard
 	health = 5
@@ -135,15 +141,14 @@ var/list/wizard_snakes
 
 /mob/living/simple_animal/cat/snek/wizard/New(turf/T, var/spell_holder)	//For the snake spell
 	..(T)
-	if(!wizard_snakes)
-		wizard_snakes = list()
 	if(spell_holder)
 		wizard_snakes[src] = spell_holder
 
-/mob/living/simple_animal/cat/snek/wizard/Die()
+/mob/living/simple_animal/cat/snek/wizard/death(var/gibbed = FALSE)
 	if(!transmogrify())
 		visible_message("<span class='notice'>\The [src] vanishes!</span>")
 		qdel(src)
+	..(TRUE)
 
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
 	wizard_snakes[src] = null

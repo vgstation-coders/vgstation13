@@ -45,7 +45,7 @@ var/explosion_shake_message_cooldown = 0
 		score["explosions"]++ //For the scoreboard
 
 		var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
-		stat_collection.add_explosion_stat(epicenter, devastation_range, heavy_impact_range, light_impact_range, max_range)
+		stat_collection.add_explosion_stat(epicenter, devastation_range, heavy_impact_range, light_impact_range)
 //		playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(devastation_range*2,1) )
 //		playsound(epicenter, "explosion", 100, 1, round(devastation_range,1) )
 
@@ -130,6 +130,9 @@ var/explosion_shake_message_cooldown = 0
 					for (var/obj/machinery/door/D in Trajectory.contents)
 						if(D.density && D.explosion_block)
 							dist += D.explosion_block
+
+					for (var/obj/effect/forcefield/F in Trajectory.contents)
+						dist += F.explosion_block
 
 			if(dist < devastation_range)
 				dist = 1

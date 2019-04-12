@@ -22,7 +22,7 @@
 		flashlight = I
 
 		update_brightness()
-		user.update_action_buttons()
+		user.update_action_buttons_icon()
 		user.update_inv_head()
 		return
 	if(isscrewdriver(I) && src.flashlight)
@@ -31,7 +31,7 @@
 		flashlight = null
 
 		update_brightness()
-		user.update_action_buttons()
+		user.update_action_buttons_icon()
 		user.update_inv_head()
 		return
 	return ..()
@@ -41,9 +41,9 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 		flashlight.on = !flashlight.on
 		if(get_turf(src))
 			if(flashlight.on)
-				playsound(get_turf(src), flashlight.sound_on, 50, 1)
+				playsound(src, flashlight.sound_on, 50, 1)
 			else
-				playsound(get_turf(src), flashlight.sound_off, 50, 1)
+				playsound(src, flashlight.sound_off, 50, 1)
 	update_brightness()
 	user.update_inv_head()
 
@@ -100,7 +100,7 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 	flags = FPRINT
 	armor = list(melee = 82, bullet = 15, laser = 5,energy = 5, bomb = 5, bio = 2, rad = 0)
 	siemens_coefficient = 0.7
-	body_parts_covered = HEAD|MOUTH
+	body_parts_covered = FULL_HEAD
 	eyeprot = 1
 
 /obj/item/clothing/head/helmet/tactical/swat

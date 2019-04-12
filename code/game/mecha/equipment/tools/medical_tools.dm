@@ -28,7 +28,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/allow_drop()
 	return 0
 
-/obj/item/mecha_parts/mecha_equipment/tool/sleeper/destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
 	return ..()
@@ -114,17 +114,24 @@
 		return "[output] [temp]"
 	return
 
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/alt_action()
+	if(!occupant)
+		return
+	chassis.occupant << browse(get_occupant_stats(),"window=msleeper")
+	onclose(chassis.occupant, "msleeper")
+
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/Topic(href,href_list)
-	..()
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
-	if(filter.get("eject"))
+	if(..())
+		return TRUE
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
+	if(topic_filter.get("eject"))
 		go_out()
-	if(filter.get("view_stats"))
+	if(topic_filter.get("view_stats"))
 		chassis.occupant << browse(get_occupant_stats(),"window=msleeper")
 		onclose(chassis.occupant, "msleeper")
 		return
-	if(filter.get("inject"))
-		inject_reagent(filter.getType("inject",/datum/reagent),filter.getObj("source"))
+	if(topic_filter.get("inject"))
+		inject_reagent(topic_filter.getType("inject",/datum/reagent),topic_filter.getObj("source"))
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/proc/get_occupant_stats()
@@ -242,7 +249,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer //why the fuck is this under medical_tools?
 	name = "\improper Cable Layer"
 	icon_state = "mecha_wire"
-	var/datum/event/event
+	var/chassis_on_moved_key
 	var/turf/old_turf
 	var/obj/structure/cable/last_piece
 	var/obj/item/stack/cable_coil/cable
@@ -261,15 +268,14 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/attach()
 	..()
-	event = chassis.events.addEvent("onMove",src,"layCable")
-	return
+	chassis_on_moved_key = chassis.on_moved.Add(src, "layCable")
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/detach()
-	chassis.events.clearEvent("onMove",event)
+	chassis.on_moved.Remove(chassis_on_moved_key)
 	return ..()
 
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/destroy()
-	chassis.events.clearEvent("onMove",event)
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Destroy()
+	chassis.on_moved.Remove(chassis_on_moved_key)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
@@ -288,7 +294,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		set_ready_state(!equip_ready)
 		occupant_message("[src] [equip_ready?"dea":"a"]ctivated.")
@@ -353,7 +360,8 @@
 			T.make_plating()
 	return !new_turf.intact
 
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/proc/layCable(var/turf/new_turf)
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/proc/layCable(var/list/args)
+	var/turf/new_turf = args["loc"]
 	if(equip_ready || !istype(new_turf) || !dismantleFloor(new_turf))
 		return reset()
 	var/fdirn = turn(chassis.dir,180)
@@ -384,6 +392,12 @@
 	//NC.mergeConnectedNetworksOnTurf()
 	last_piece = NC
 	return 1
+
+
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/alt_action()
+	set_ready_state(!equip_ready)
+	occupant_message("[src] [equip_ready?"dea":"a"]ctivated.")
+	log_message("[equip_ready?"Dea":"A"]ctivated.")
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
 	name = "\improper Exosuit-Mounted Syringe Gun"
@@ -436,6 +450,11 @@
 	if(output)
 		return "[output] \[<a href=\"?src=\ref[src];toggle_mode=1\">[mode? "Analyze" : "Launch"]</a>\]<br />\[Syringes: [syringes.len]/[max_syringes] | Reagents: [reagents.total_volume]/[reagents.maximum_volume]\]<br /><a href='?src=\ref[src];show_reagents=1'>Reagents list</a>"
 	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/alt_action()
+	mode = !mode
+	occupant_message("[mode?"Analyze":"Fire"] mode enabled.")
+	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/action(atom/movable/target)
 	if(!action_checks(target))
@@ -498,20 +517,21 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/Topic(href,href_list)
-	..()
-	var/datum/topic_input/filter = new (href,href_list)
-	if(filter.get("toggle_mode"))
+	if(..())
+		return TRUE
+	var/datum/topic_input/topic_filter = new (href,href_list)
+	if(topic_filter.get("toggle_mode"))
 		mode = !mode
 		update_equip_info()
 		return
-	if(filter.get("select_reagents"))
+	if(topic_filter.get("select_reagents"))
 		processed_reagents.len = 0
 		var/m = 0
 		var/message
 		for(var/i=1 to known_reagents.len)
 			if(m>=synth_speed)
 				break
-			var/reagent = filter.get("reagent_[i]")
+			var/reagent = topic_filter.get("reagent_[i]")
 			if(reagent && (reagent in known_reagents))
 				message = "[m ? ", " : null][known_reagents[reagent]]"
 				processed_reagents += reagent
@@ -523,14 +543,14 @@
 			occupant_message("Reagent processing started.")
 			log_message("Reagent processing started.")
 		return
-	if(filter.get("show_reagents"))
+	if(topic_filter.get("show_reagents"))
 		chassis.occupant << browse(get_reagents_page(),"window=msyringegun")
-	if(filter.get("purge_reagent"))
-		var/reagent = filter.get("purge_reagent")
+	if(topic_filter.get("purge_reagent"))
+		var/reagent = topic_filter.get("purge_reagent")
 		if(reagent)
 			reagents.del_reagent(reagent)
 		return
-	if(filter.get("purge_all"))
+	if(topic_filter.get("purge_all"))
 		reagents.clear_reagents()
 		return
 	return

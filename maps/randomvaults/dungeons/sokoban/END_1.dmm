@@ -1,0 +1,32 @@
+"a" = (/obj/item/clothing/suit/armor/laserproof/advanced,/turf/simulated/floor,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman{color = "#CCFFFF"},/area/vault/sokoban/level)
+"c" = (/turf/simulated/floor{icon_state = "whitebluefull"},/area/vault/sokoban/level)
+"d" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "whitebluefull"},/area/vault/sokoban/level)
+"e" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "whitebluefull"},/area/vault/sokoban/level)
+"f" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "whitebluefull"},/area/vault/sokoban/level)
+"g" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"h" = (/obj/machinery/door/airlock/freezer,/turf/simulated/floor,/area/vault/sokoban/level)
+"i" = (/obj/machinery/door/airlock/freezer,/turf/simulated/floor{icon_state = "whitebluefull"},/area/vault/sokoban/level)
+"j" = (/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor{icon_state = "whitebluefull"},/area/vault/sokoban/level)
+
+(1,1,1) = {"
+ggggggggggggggggggggggggggg
+gbbbbbbbbbbbbbbbbbbbbbggggg
+gbbbccddddddddddddddddddccg
+gbbbccbbbbbbbbbbbbbbbbgggcg
+gbbbbcbbbbbbbbbbbbbbbggggcg
+gbccbebbbbbbcccbbbbbgggggcg
+gbcccccbbbbceccbbbbggggggcg
+gbceeccbccbccecbbbgggggggcg
+gbbcceebccceecbbbggggggggcg
+gbbeccecccbeccbbgggggggggcg
+gbbceecbccbccebbgggjjjcjgcg
+gbbcecebbbbcecbbgggcccccgcg
+gbbcccccccbccbbbgggjjjcjgcg
+gbbbbbceccbcbbbbgahcccccicg
+gbbbbbbbcbbcbbbbgggjjjcjggg
+gbbbbbbcecccbbbbgggcccccggg
+gbbbbbbfcbccbbbbgggjjjcjggg
+gbbbbbbbbbbbbbbbggggggggggg
+ggggggggggggggggggggggggggg
+"}

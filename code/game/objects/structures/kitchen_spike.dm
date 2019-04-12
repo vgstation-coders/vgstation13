@@ -9,7 +9,6 @@
 	anchored = 1
 
 	var/mob/living/occupant = null
-	var/meat_remaining = 0
 
 	var/list/allowed_mobs = list(
 		/mob/living/carbon/monkey/diona = "spikebloodynymph",
@@ -60,8 +59,6 @@
 				else
 					src.icon_state = "spikebloody"
 
-				src.meat_remaining = 1 + our_mob.size - our_mob.meat_taken
-
 				user.visible_message("<span class='warning'>[user] has forced [our_mob] onto the spike, killing it instantly!</span>")
 
 				add_attacklogs(user, our_mob, "meatspiked", admin_warn = FALSE)
@@ -76,29 +73,29 @@
 						C.drop_stomach_contents()
 						user.visible_message("<span class='warning'>\The [C]'s stomach contents drop to the ground!</span>")
 
+				occupant.meat_amount++
+
 				returnToPool(G)
 				return
 
-/obj/structure/kitchenspike/attack_hand(mob/user as mob)
+/obj/structure/kitchenspike/attack_hand(mob/user)
 	if(..())
 		return
 
-	if(src.occupant)
-		if(src.meat_remaining > 0)
-			src.meat_remaining--
-			src.occupant.drop_meat(get_turf(src))
+	if(occupant)
+		if(occupant.meat_amount > occupant.meat_taken)
+			occupant.drop_meat(get_turf(src))
 
-			if(src.meat_remaining)
-				to_chat(user, "You remove some meat from \the [src.occupant].")
+			if(occupant.meat_amount > occupant.meat_taken)
+				to_chat(user, "You remove some meat from \the [occupant].")
+				return
 			else
 				to_chat(user, "You remove the last piece of meat from \the [src]!")
-				src.clean()
-	else
-		src.clean()
+
+	clean()
 
 /obj/structure/kitchenspike/proc/clean()
 	icon_state = initial(icon_state)
 	if(occupant)
 		qdel(occupant)
 		occupant = null
-	meat_remaining = 0

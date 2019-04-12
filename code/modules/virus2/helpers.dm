@@ -31,6 +31,16 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 		var/mob/living/simple_animal/mouse/MM = M
 		if(MM.disease_carrier)
 			return 1
+
+	if(istype(M, /mob/living/carbon/complex/martian)) //Martians are incredibly susceptible to viruses
+		var/mob/living/carbon/complex/martian/MR = M
+		if (vector == "Airborne")
+			if(MR.head && istype(MR.head, /obj/item/clothing/head/helmet/space/martian))
+				score += 40
+				var/obj/item/clothing/head/helmet/space/martian/fishbowl = MR.head
+				if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
+					score += 60
+
 	if(prob((min(score, 100) - 100) ** 2 / 100))
 //		log_debug("Infection got through")
 		return 1
@@ -60,7 +70,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	if ("[disease.uniqueID]" in M.virus2)
 		return 0
 	// if one of the antibodies in the mob's body matches one of the disease's antigens, don't infect
-	if(M.antibodies & disease.antigen != 0)
+	if((M.antibodies & disease.antigen) != 0)
 		return 0
 
 
@@ -83,15 +93,23 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 
 //Infects mob M with random lesser disease, if he doesn't have one
 /proc/infect_mob_random_lesser(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D = new /datum/disease2/disease("infect_mob_random_lesser")
-	D.makerandom()
+	var/datum/disease2/disease/D
+	if(prob(70))
+		D = new /datum/disease2/disease/bacteria("infect_mob_random_lesser")
+	else
+		D = new /datum/disease2/disease("infect_mob_random_lesser")
+	D.makerandom(FALSE, TRUE)
 	D.infectionchance = 1
 	M.virus2["[D.uniqueID]"] = D
 
 //Infects mob M with random greated disease, if he doesn't have one
 /proc/infect_mob_random_greater(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D = new /datum/disease2/disease("infect_mob_random_greater")
-	D.makerandom(1)
+	var/datum/disease2/disease/D
+	if(prob(30))
+		D = new /datum/disease2/disease/parasite("infect_mob_random_greater")
+	else
+		D = new /datum/disease2/disease("infect_mob_random_greater")
+	D.makerandom(TRUE, TRUE)
 	M.virus2["[D.uniqueID]"] = D
 
 //Fancy prob() function.

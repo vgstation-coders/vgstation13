@@ -144,8 +144,6 @@ Class Procs:
 		simulated_turf_count++
 		S.update_air_properties()
 
-	processing_parts[SSAIR_EDGES] = edges //A temporary hack to make edges actually work before the later PR to add edge sleeping, etc.
-
 	to_chat(world, {"<span class='info'>Total Simulated Turfs: [simulated_turf_count]
 Total Zones: [zones.len]
 Total Edges: [edges.len]
@@ -353,33 +351,31 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	Z.needs_update = 1
 
 
-//The following is for a system update coming in a later PR.
+/datum/subsystem/air/proc/mark_edge_sleeping(connection_edge/E)
+	#ifdef ZASDBG
+	ASSERT(istype(E))
+	#endif
+	if(E.sleeping)
+		return
+	processing_parts[SSAIR_EDGES] -= E
+	E.sleeping = 1
 
-///datum/subsystem/air/proc/mark_edge_sleeping(connection_edge/E)
-//	#ifdef ZASDBG
-//	ASSERT(istype(E))
-//	#endif
-//	if(E.sleeping)
-//		return
-//	processing_parts[SSAIR_EDGES] -= E
-//	E.sleeping = 1
-//
-//
-///datum/subsystem/air/proc/mark_edge_active(connection_edge/E)
-//	#ifdef ZASDBG
-//	ASSERT(istype(E))
-//	#endif
-//	if(!E.sleeping)
-//		return
-//	processing_parts[SSAIR_EDGES] |= E
-//	E.sleeping = 0
-//	#ifdef ZASDBG
-//	if(istype(E, /connection_edge/zone/))
-//		var/connection_edge/zone/ZE = E
-//		world << "ZASDBG: Active edge! Areas: [get_area(pick(ZE.A.contents))] / [get_area(pick(ZE.B.contents))]"
-//	else
-//		world << "ZASDBG: Active edge! Area: [get_area(pick(E.A.contents))]"
-//	#endif
+
+/datum/subsystem/air/proc/mark_edge_active(connection_edge/E)
+	#ifdef ZASDBG
+	ASSERT(istype(E))
+	#endif
+	if(!E.sleeping)
+		return
+	processing_parts[SSAIR_EDGES] |= E
+	E.sleeping = 0
+	#ifdef ZASDBG
+	if(istype(E, /connection_edge/zone/))
+		var/connection_edge/zone/ZE = E
+		world << "ZASDBG: Active edge! Areas: [get_area(pick(ZE.A.contents))] / [get_area(pick(ZE.B.contents))]"
+	else
+		world << "ZASDBG: Active edge! Area: [get_area(pick(E.A.contents))]"
+	#endif
 
 
 /datum/subsystem/air/proc/equivalent_pressure(zone/A, zone/B)
@@ -394,7 +390,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 				return edge
 		var/connection_edge/edge = new/connection_edge/zone(A,B)
 		edges.Add(edge)
-//		edge.recheck()
+		edge.recheck()
 		return edge
 	else
 		for(var/connection_edge/unsimulated/edge in A.edges)
@@ -402,7 +398,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 				return edge
 		var/connection_edge/edge = new/connection_edge/unsimulated(A,B)
 		edges.Add(edge)
-//		edge.recheck()
+		edge.recheck()
 		return edge
 
 
@@ -422,8 +418,8 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 
 /datum/subsystem/air/proc/remove_edge(connection_edge/E)
 	edges.Remove(E)
-//	if(!E.sleeping)
-//		processing_parts[SSAIR_EDGES] -= E
+	if(!E.sleeping)
+		processing_parts[SSAIR_EDGES] -= E
 
 
 /datum/subsystem/air/proc/add_hotspot(var/obj/effect/fire/H)

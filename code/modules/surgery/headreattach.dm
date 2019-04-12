@@ -244,3 +244,38 @@
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging connectors on [target]'s neck!</span>", \
 	"<span class='warning'>Your hand slips, damaging connectors on [target]'s neck!</span>")
 	target.apply_damage(10, BRUTE, affected)
+
+
+/datum/surgery_step/head/attach_robot
+	allowed_tools = list(
+		/obj/item/robot_parts/head = 100,
+		)
+
+	can_infect = 0
+
+	min_duration = 80
+	max_duration = 100
+
+/datum/surgery_step/head/attach_robot/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/head = target.get_organ(target_zone)
+	return ..() && head.status & ORGAN_ATTACHABLE
+
+/datum/surgery_step/head/attach_robot/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	user.visible_message("[user] starts attaching [tool] to [target]'s reshaped neck.", \
+	"You start attaching [tool] to [target]'s reshaped neck.")
+
+/datum/surgery_step/head/attach_robot/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='notice'>[user] has attached \the [tool] to the body.</span>",	\
+	"<span class='notice'>You have attached \the [tool] to the bodies reshaped neck.</span>")
+	affected.attach(tool)
+	target.decapitated = null
+	affected.status = 0
+	affected.amputated = 0
+	affected.destspawn = 0
+
+/datum/surgery_step/head/attach_robot/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='warning'>[user]'s hand slips, damaging connectors on [target]'s neck!</span>", \
+	"<span class='warning'>Your hand slips, damaging connectors on [target]'s neck!</span>")
+	target.apply_damage(10, BRUTE, affected)

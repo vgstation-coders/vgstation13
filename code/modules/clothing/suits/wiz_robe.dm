@@ -62,14 +62,34 @@
 /obj/item/clothing/head/wizard/necro/fake
 	desc = "An elegant hood woven with child labor somewhere in Space China."
 	wizard_garb = 0
-
+/*
+//No longer required due to /obj/item/clothing/head/that/magic
 /obj/item/clothing/head/wizard/magician
 	name = "Magical Tophat"
 	desc = "A magical tophat perfect for any magical performance."
 	icon_state = "tophat"
 	item_state = "tophat"
 	siemens_coefficient = 0.8
+*/
+/obj/item/clothing/head/wizard/lich
+	name = "crown of the Lich"
+	desc = "Get the Lich a crown, Liches love crowns."
+	icon_state = "lichcrown_fancy"
+	item_state = "lichcrown_fancy"
+	siemens_coefficient = 0.8
 
+/obj/item/clothing/head/wizard/skelelich
+	name = "tarnished crown of the Lich"
+	desc = "Turns out you CAN take it with you."
+	icon_state = "lichcrown"
+	item_state = "lichcrown"
+	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/hallowiz
+	name = "orange wizard hat"
+	desc = "Pumpkins scream in the dead of night!"
+	icon_state = "hallowiz"
+	item_state = "hallowiz"
 
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"
@@ -162,3 +182,21 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
 
+
+/obj/item/clothing/suit/wizrobe/lich
+	name = "Lich robe"
+	desc = "A set of fancy purple robes. They smell slightly of formaldehyde."
+	icon_state = "lichrobe_fancy"
+	item_state = "lichrobe_fancy"
+
+/obj/item/clothing/suit/wizrobe/skelelich
+	name = "tattered Lich robe"
+	desc = "A threadbare grey robe. Even masters of the dead have laundry day."
+	icon_state = "lichrobe"
+	item_state = "lichrobe"
+
+/obj/item/clothing/suit/wizrobe/hallowiz
+	name = "orange wizard robe"
+	desc = "Boys and girls of every age, wouldn't you like to see something strange?"
+	icon_state = "hallowiz"
+	item_state = "hallowiz"

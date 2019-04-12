@@ -10,17 +10,18 @@
 	light_range = 5
 
 
-/obj/item/projectile/flare/New()
+/obj/item/projectile/flare/OnFired()
 	shotloc = get_turf(shot_from)
 	..()
 
 /obj/item/projectile/flare/to_bump()
-	..()
-	if(src)
+	if(loc)
 		var/newloc = get_step(src.loc, get_dir(src.loc, shotloc)) //basically puts it back one tile in its movement
 		var/obj/item/device/flashlight/flare/newflare = new(newloc)
 		newflare.Light() //to get the thing lit
 		qdel(src)
+
+	return ..()
 
 /*
 /obj/item/projectile/flare/on_hit(var/atom/hit)

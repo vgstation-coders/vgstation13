@@ -133,6 +133,20 @@
 	)
 	yieldtype = /obj/item/stack/sheet/cardboard
 
+/datum/smelting_recipe/mythril
+	name = "Mythril"
+	ingredients=list(
+		MAT_MYTHRIL = 1
+	)
+	yieldtype = /obj/item/stack/sheet/mineral/mythril
+
+/datum/smelting_recipe/telecrystal
+	name="Telecrystal"
+	ingredients=list(
+		MAT_TELECRYSTAL=1
+	)
+	yieldtype=/obj/item/bluespace_crystal
+
 /*
 /datum/smelting_recipe/pharosium
 	name="pharosium"
@@ -183,12 +197,6 @@
 	)
 	yieldtype=/obj/item/stack/sheet/mineral/cytine
 
-/datum/smelting_recipe/telecrystal
-	name="telecrystal"
-	ingredients=list(
-		"telecrystal"=1
-	)
-	yieldtype=/obj/item/stack/sheet/mineral/telecrystal
 
 /datum/smelting_recipe/mauxite
 	name="mauxite"

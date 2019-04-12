@@ -1,3 +1,5 @@
+// Remember to update the LOWEST_DENOMINATION define if you add a smaller denomination
+// WARNING: Update cash.dm's dispense_cash proc to permit denominations below $1, else it'll runtime. - CW
 var/global/list/moneytypes = list(
 	/obj/item/weapon/spacecash/c1000 = 1000,
 	/obj/item/weapon/spacecash/c100  = 100,
@@ -84,12 +86,12 @@ var/global/list/moneytypes = list(
 /obj/item/weapon/spacecash/examine(mob/user)
 	if(amount > 1)
 		setGender(PLURAL)
-		..()
-		to_chat(user, "It's a stack holding [amount] chips.")
-		to_chat(user, "<span class='info'>It's worth [worth*amount] credits.</span>")
 	else
 		setGender(NEUTER)
-		..()
+	..()
+	if(amount > 1)
+		to_chat(user, "It's a stack holding [amount] chips.")
+	to_chat(user, "<span class='info'>It's worth [worth*amount] credits.</span>")
 
 /obj/item/weapon/spacecash/update_icon()
 	icon_state = "cash[worth]"
@@ -144,13 +146,28 @@ var/global/list/moneytypes = list(
 	worth = 1000
 	stack_color = "#333333"
 
-/obj/structure/closet/cash_closet/New()
-	var/list/types = typesof(/obj/item/weapon/spacecash)
+/obj/structure/closet/cash_closet/spawn_contents()
+	var/list/types = typesof(/obj/item/weapon/spacecash)-/obj/item/weapon/spacecash/cN
 	for(var/i = 1 to rand(3,10))
 		var/typepath = pick(types)
 		new typepath(src)
+	..()
 
+/obj/item/weapon/spacecash/cN
+	icon_state = "cashN"
+	worth = 1
+	stack_color = "#FFD700"
+
+/obj/item/weapon/spacecash/cN/update_icon()
+	return //There's no going higher or lower
+
+// TODO: Allow denominations below $1
 /proc/dispense_cash(var/amount, var/loc)
+	if(amount > 100000)
+		var/obj/item/weapon/spacecash/SC = new /obj/item/weapon/spacecash/cN(loc, 1)
+		SC.worth = amount
+		SC.name = "[SC.worth] credit chip"
+		return
 	for(var/cashtype in moneytypes)
 		var/slice = moneytypes[cashtype]
 		var/dispense_count = Floor(amount/slice)

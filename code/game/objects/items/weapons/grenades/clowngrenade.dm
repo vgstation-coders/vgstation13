@@ -15,7 +15,7 @@
 
 /obj/item/weapon/grenade/clown_grenade/prime()
 	..()
-	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 25, -3)
+	playsound(src, 'sound/items/bikehorn.ogg', 25, -3)
 	/*
 	for(var/turf/simulated/floor/T in view(affected_area, src.loc))
 		if(prob(75))
@@ -75,7 +75,7 @@
 				"<span class='userdanger'>They're eating your back!</span>")
 			return
 		if(ishuman(M))
-			if(M.CheckSlip() < 1)
+			if(M.CheckSlip() != TRUE)
 				return
 			else
 				M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\
@@ -92,8 +92,9 @@
 			M.take_organ_damage(2) // Was 5 -- TLE
 			M.simple_message("<span class='notice'>You slipped on \the [name]!</span>",\
 				"<span class='userdanger'>Please, just end the pain!</span>")
-			playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 			M.Knockdown(10)
+			M.Stun(10)
 			M.take_overall_damage(0, burned)
 
 /obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)

@@ -1,6 +1,6 @@
 /datum/artifact_effect/timestop
 	effecttype = "timestop"
-	effect = list(EFFECT_TOUCH, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_PULSE)
 
 	var/mob/caster
 	var/spell/aoe_turf/fall/fall
@@ -11,7 +11,7 @@
 	..()
 	caster = new
 	caster.invisibility = 101
-	caster.density = 0
+	caster.setDensity(FALSE)
 	caster.anchored = 1
 	caster.flags = INVULNERABLE
 	fall = new /spell/aoe_turf/fall

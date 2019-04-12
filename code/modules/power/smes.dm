@@ -15,6 +15,9 @@ var/list/smes_list = list()
 
 	starting_terminal = 1
 
+/obj/machinery/power/battery/smes/pristine
+	charge = 0
+
 /obj/machinery/power/battery/smes/New()
 	. = ..()
 
@@ -46,9 +49,15 @@ var/list/smes_list = list()
 
 /obj/machinery/power/battery/smes/initialize()
 	..()
+	connect_to_network()
 	spawn(5)
 		if(!terminal)
 			stat |= BROKEN
+
+/obj/machinery/power/battery/smes/spawned_by_map_element()
+	..()
+
+	initialize()
 
 /obj/machinery/power/battery/smes/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob) //these can only be moved by being reconstructed, solves having to remake the powernet.
 	if(iscrowbar(W) && panel_open && terminal)
@@ -69,8 +78,8 @@ var/list/smes_list = list()
 				terminal.connect_to_network()
 
 				user.visible_message(\
-					"<span class='warning'>[user.name] has added cables to the SMES!</span>",\
-					"You added cables the SMES.")
+					"<span class='warning'>[user.name] made a terminal for the SMES.</span>",\
+					"You made a terminal for the SMES.")
 				src.stat = 0
 				return 1
 		else if(iswirecutter(W) && terminal)
@@ -78,13 +87,11 @@ var/list/smes_list = list()
 			if(T.intact)
 				to_chat(user, "<span class='warning'>You must remove the floor plating in front of the SMES first.</span>")
 				return
-			to_chat(user, "You begin to cut the cables...")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			to_chat(user, "You begin to dismantle the SMES terminal...")
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			if (do_after(user, src, 50) && panel_open && terminal && !T.intact)
 				if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(5, 1, src)
-					s.start()
+					spark(src, 5)
 					return
 				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 10)
 				user.visible_message(\

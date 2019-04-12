@@ -48,8 +48,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/oldnewavail = 0
 	var/oldload = 0
 
-	holomap      = TRUE
-	auto_holomap = TRUE
+/obj/structure/cable/supports_holomap()
+	return TRUE
 
 /obj/structure/cable/yellow
 	_color = "yellow"
@@ -100,6 +100,10 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list += src		//add it to the global cable list
 
+/obj/structure/cable/initialize()
+	..()
+	add_self_to_holomap()
+
 /obj/structure/cable/Destroy()			// called when a cable is deleted
 	if(powernet)
 		powernet.set_to_build()	// update the powernets
@@ -117,7 +121,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	attached = null
 	..()								// then go ahead and delete the cable
 
-/obj/structure/cable/forceMove()
+/obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	.=..()
 
 	if(powernet)
@@ -187,8 +191,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(T.intact)
 		return
 
-	if(iswirecutter(W))
-		if(shock(user, 50))
+	if(W.sharpness >= 1)
+		if(shock(user, 50, W.siemens_coefficient))
 			return
 		cut(user, T)
 		return
@@ -202,14 +206,14 @@ By design, d1 is the smallest direction and d2 is the highest
 			R.is_empty()
 	else if(istype(W, /obj/item/device/multitool))
 		if((powernet) && (powernet.avail > 0))		// is it powered?
-			to_chat(user, "<SPAN CLASS='warning'>[powernet.avail]W in power network.</SPAN>")
+			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [powernet.load]W - Available: [powernet.avail]W.</SPAN>")
 		else
 			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
 		shock(user, 5, 0.2)
 	else
 		if(src.d1 && W.is_conductor()) // d1 determines if this is a cable end
-			shock(user, 50, 0.7)
+			shock(user, 50, W.siemens_coefficient)
 
 	src.add_fingerprint(user)
 
@@ -265,9 +269,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			return 0
 
 		if(electrocute_mob(user, powernet, src, siemens_coeff))
-			var/datum/effect/effect/system/spark_spread/s = new
-			s.set_up(5,1,src)
-			s.start()
+			spark(src, 5)
 			return 1
 
 	return 0

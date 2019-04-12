@@ -50,3 +50,8 @@
 
 /obj/item/device/remote_button/proc/on_press(mob/user)
 	return
+
+
+
+
+

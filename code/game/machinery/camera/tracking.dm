@@ -40,90 +40,77 @@
 	var/list/others = list()
 	var/list/cameras = list()
 
-/mob/living/silicon/ai/proc/trackable_mobs()
+	var/list/mecha_names = list()
+	var/list/mecha_namecounts = list()
+	var/list/mechas = list()
 
-
+/mob/living/silicon/ai/proc/trackable_atoms()
 	track.names.len = 0
 	track.namecounts.len = 0
 	track.humans.len = 0
 	track.others.len = 0
 
+	track.mecha_names.len = 0
+	track.mecha_namecounts.len = 0
+	track.mechas.len = 0
+
 	if(stat == 2)
 		return list()
 
-	for(var/mob/living/M in mob_list)
-		// Easy checks first.
-		// Don't detect mobs on Centcom. Since the wizard den is on Centcomm, we only need this.
-		var/turf/T = get_turf(M)
-		if(!T)
-			continue
-		if(T.z == map.zCentcomm)
-			continue
-		if(T.z > 6)
-			continue
-		if(M == usr)
-			continue
-		if(see_invisible < M.invisibility) //cloaked
-			continue
-		if(M.alpha <= 1) //fully transparent
-			continue
-		if(M.digitalcamo)
+	for(var/mob/living/target_mob in mob_list)
+		if(!can_track_atom(target_mob))
 			continue
 
-		// Human check
-		var/human = 0
-		if(istype(M, /mob/living/carbon/human))
-			human = 1
-			var/mob/living/carbon/human/H = M
-			//Cameras can't track people wearing an agent card or a ninja hood.
-			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-				continue
-		//Skipping aliens because shit, that's OP
-		if(isalien(M))
-			continue
-		 // Now, are they viewable by a camera? (This is last because it's the most intensive check)
-		if(!near_camera(M))
-			continue
-
-		var/name = M.name
+		var/name = target_mob.name
 		if (name in track.names)
 			track.namecounts[name]++
 			name = text("[] ([])", name, track.namecounts[name])
 		else
 			track.names.Add(name)
 			track.namecounts[name] = 1
-		if(human)
-			track.humans[name] = M
+		if(ishuman(target_mob))
+			track.humans[name] = target_mob
 		else
-			track.others[name] = M
+			track.others[name] = target_mob
 
-	var/list/targets = sortList(track.humans) + sortList(track.others)
+	for(var/obj/mecha/target_mecha in mechas_list)
+		if(!can_track_atom(target_mecha))
+			continue
+
+		var/name = target_mecha.name
+		if(name in track.mecha_names)
+			track.mecha_namecounts[name]++
+			name = "[name] ([track.mecha_namecounts[name]])"
+		else
+			track.mecha_names.Add(name)
+			track.mecha_namecounts[name] = 1
+		track.mechas[name] = target_mecha
+
+	var/list/targets = sortList(track.humans) + sortList(track.mechas) + sortList(track.others)
 	return targets
 
-/mob/living/silicon/ai/verb/ai_camera_track(var/target_name as null|anything in trackable_mobs())
+/mob/living/silicon/ai/verb/ai_camera_track(var/target_name as null|anything in trackable_atoms())
 	set name = "track"
 	set hidden = 1 //Don't display it on the verb lists. This verb exists purely so you can type "track Oldman Robustin" and follow his ass
 
 	if(!target_name)
 		return
 
-	var/mob/target = (isnull(track.humans[target_name]) ? track.others[target_name] : track.humans[target_name])
-
-	ai_actual_track(target)
+	var/atom/target = track.humans[target_name]
+	if(isnull(target))
+		target = track.mechas[target_name]
+	if(isnull(target))
+		target = track.others[target_name]
+	if(isnull(target))
+		warning("AI tracking failed: target_name ([target_name]) was not found in any of the lists")
+	else
+		ai_actual_track(target)
 
 /mob/living/silicon/ai/proc/open_nearest_door(mob/living/target as mob)
 	if(!istype(target))
 		return
 	spawn(0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = target
-			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-				to_chat(src, "Unable to locate an airlock")
-				return
-			if(H.digitalcamo)
-				to_chat(src, "Unable to locate an airlock")
-				return
-		if (!near_camera(target))
+		if(!can_track_atom(target))
 			to_chat(src, "Target is not near any active cameras.")
 			return
 		var/obj/machinery/door/airlock/tobeopened
@@ -154,50 +141,73 @@
 		else
 			to_chat(src, "<span class='warning'>You've failed to open an airlock for [target]</span>")
 		return
-/mob/living/silicon/ai/proc/ai_actual_track(mob/living/target as mob)
+
+/mob/living/silicon/ai/proc/can_track_atom(var/atom/target)
+	if(target == src)
+		return FALSE
+
+	var/turf/T = get_turf(target)
+	if(!T)
+		return FALSE
+	if(T.z == map.zCentcomm || T.z > 6)
+		return FALSE
+
+	if(!check_HUD_visibility(target, src))
+		return FALSE
+
+	if(ismob(target))
+		var/mob/target_mob = target
+		if(target_mob.digitalcamo)
+			return FALSE
+
+		if(ishuman(target))
+			var/mob/living/carbon/human/target_human = target
+			if(target_human.wear_id && istype(target_human.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+				return FALSE
+			if(target_human.is_wearing_item(/obj/item/clothing/mask/gas/voice))
+				return FALSE
+			if(target_human.is_wearing_item(/obj/item/clothing/gloves/ninja))
+				return FALSE
+
+		if(isalien(target))
+			return FALSE
+
+		if(istype(target.loc, /obj/effect/dummy))
+			return FALSE
+
+	if(!near_camera(target))
+		return FALSE
+
+	return TRUE
+
+/mob/living/silicon/ai/proc/ai_actual_track(var/atom/target)
 	if(!istype(target))
 		return
-	var/mob/living/silicon/ai/U = usr
 
-	U.cameraFollow = target
-//	to_chat(U, text("Now tracking [] on camera.", target.name))
-	//if (U.machine == null)
-	//	U.machine = U
-	to_chat(U, "Now tracking [target.name] on camera.")
+	if(!can_track_atom(target))
+		to_chat(src, "Target is not near any active camera.")
+		return
+
+	cameraFollow = target
+
+	to_chat(src, "Now tracking [target.name] on camera.")
 
 	spawn (0)
-		while (U.cameraFollow == target)
-			if (U.cameraFollow == null)
+		while (cameraFollow == target)
+			if (cameraFollow == null)
 				return
 
-			if(target.digitalcamo || (see_invisible < target.invisibility) || target.alpha <= 1)
-				to_chat(U, "Follow camera mode terminated.")
-				U.cameraFollow = null
-				return
-
-			if(istype(target, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H = target
-				if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-					to_chat(U, "Follow camera mode terminated.")
-					U.cameraFollow = null
-					return
-
-			if(istype(target.loc,/obj/effect/dummy))
-				to_chat(U, "Follow camera mode terminated.")
-				U.cameraFollow = null
-				return
-
-			if (!near_camera(target))
-				to_chat(U, "Target is not near any active cameras.")
-				sleep(100)
+			if(!can_track_atom(target))
+				to_chat(src, "Target is not near any active camera.")
+				sleep(10 SECONDS)
 				continue
 
-			if(U.eyeobj)
-				U.eyeobj.forceMove(get_turf(target))
+			if(eyeobj)
+				eyeobj.forceMove(get_turf(target))
 			else
 				view_core()
 				return
-			sleep(10)
+			sleep(1 SECONDS)
 
 /proc/near_camera(var/mob/living/M)
 	if (!isturf(M.loc))

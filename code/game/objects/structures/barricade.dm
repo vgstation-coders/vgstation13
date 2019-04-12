@@ -14,6 +14,7 @@
 	anchored = 1
 	opacity = 1 //Wood isn't transparent, the last time I checked
 	health = 60 //Fairly strong
+	layer = ABOVE_DOOR_LAYER
 	var/busy = 0 //Oh god fucking do_after's
 	var/materialtype = /obj/item/stack/sheet/wood
 
@@ -32,7 +33,7 @@
 		to_chat(user, "It has most of its planks broken and is somewhat unstable.")
 	else
 		to_chat(user, "It has only one or two planks still in shape and is unstable.")
-		
+
 //Allows us to quickly check if we should break the barricade, can handle not having an user
 //Sound is technically deprecated, but barricades should really have a build sound
 /obj/structure/window/barricade/healthcheck(var/mob/M, var/sound = 1)
@@ -48,7 +49,7 @@
 		user.delayNextAttack(10)
 		health -= 2
 		healthcheck()
-		//playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		//playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
@@ -56,7 +57,7 @@
 	//Knock against it
 	else
 		user.delayNextAttack(10)
-		//playsound(get_turf(src), 'sound/effects/glassknock.ogg', 50, 1)
+		//playsound(src, 'sound/effects/glassknock.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")
@@ -103,9 +104,9 @@
 		return !density
 	return 1
 
-/obj/structure/window/barricade/Destroy()
+/obj/structure/window/barricade/Destroy(var/brokenup)
 
-	density = 0 //Sanity while we do the rest
+	setDensity(FALSE) //Sanity while we do the rest
 	getFromPool(materialtype, loc, sheetamount)
 
 	..()
@@ -135,7 +136,7 @@
 /obj/structure/window/barricade/full/New(loc)
 
 	..(loc)
-	flags &= ~ON_BORDER
+	flow_flags &= ~ON_BORDER
 
 /obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
 

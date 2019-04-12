@@ -4,7 +4,7 @@
 	id = "air_alarm"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/air_alarm
 
@@ -14,7 +14,7 @@
 	id = "fire_alarm"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/fire_alarm
 
@@ -24,7 +24,7 @@
 	id = "airlock"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/airlock
 
@@ -34,7 +34,7 @@
 	id = "intercom"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/intercom_electronics
 
@@ -44,7 +44,7 @@
 	id = "apc_board"
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/power_control
 
@@ -54,7 +54,7 @@
 	id = "station_map"
 	req_tech = list(Tc_MAGNETS = 2, Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/station_map
 
@@ -90,3 +90,33 @@
 	circuitboard/ecb/access_controller
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
+
+/datum/design/rigsuit_health
+	name = "Circuit Design (Rigsuit health display)"
+	desc = "When installed, allows for onlookers to see the health of a person wearing a rigsuit."
+	id = "rigsuit_health"
+	req_tech = list(Tc_PROGRAMMING = 3)
+	build_type = IMPRINTER
+	category = "Misc"
+	materials = list(MAT_GLASS = 1000, SACID = 15, MAT_SILVER = 150)
+	build_path = /obj/item/rig_module/health_readout
+
+/datum/design/rigsuit_autorefill
+	name = "Circuit Design (Rigsuit atmosphere syphoner)"
+	desc = "When installed, the user's internals are replenished from the atmosphere they reside within."
+	id = "rigsuit_autorefill"
+	req_tech = list(Tc_PROGRAMMING = 3)
+	build_type = IMPRINTER
+	category = "Misc"
+	materials = list(MAT_GLASS = 1000, SACID = 15, MAT_SILVER = 150)
+	build_path = /obj/item/rig_module/tank_refiller
+
+/datum/design/rigsuit_gottagofast
+	name = "Circuit Design (Rigsuit joint lubrication)"
+	desc = "When installed, the module makes use of internal power supplies to optimize rigsuit joints, for better maneuverability."
+	id = "rigsuit_lube"
+	req_tech = list(Tc_PROGRAMMING = 3)
+	build_type = IMPRINTER
+	category = "Misc"
+	materials = list(MAT_GLASS = 1000, SACID = 15, MAT_SILVER = 150)
+	build_path = /obj/item/rig_module/speed_boost

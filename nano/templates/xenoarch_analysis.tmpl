@@ -1,0 +1,50 @@
+<div class="item">
+	<div class="itemLabel">
+		Temperature:
+	</div>
+	{{:helper.displayBar(data.temperature, 273.15, data.max_temperature, data.temperature > data.safety_temperature ? "bad" : "good")}}
+	<div class="itemContent" style="width: 60px">
+		{{:helper.round(data.temperature)}} K
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Scan Status:
+	</div>
+	<div class="itemContent">
+		{{:helper.displayBar(data.scan_process-1, 0, data.target_ticks)}}
+		<div style="clear: both; padding-top: 4px;">
+			{{:helper.link("start", "check", {"begin": 1}, (data.scan_process || !data.beaker) ? "disabled" : null)}}
+			{{:helper.link("abort", "cancel", {"stop": 1}, data.scan_process ? null : "disabled", data.scan_process ? "redBackground" : null)}}
+		</div>
+	</div>
+</div>
+
+<h3>Holding Container Status</h3>
+{{if data.beaker}}
+	<div class="item">
+		<div class="itemLabel">
+			Container:
+		</div>
+		<div class="itemContent">
+			<div style="float: left; width: 180px;">{{:data.beaker_name}}</div> {{:helper.link('Eject', 'eject', {'eject' : 1}, data.scan_process ? "disabled" : null)}}
+		</div>
+	</div>
+
+	<div class="statusDisplay" style="min-height: 180px;">
+		<div class="item">
+			<div class="itemContent" style="width: 100%;">
+				{{for data.beaker_contents}}
+					<span class="highlight">{{:value.volume}} units of {{:value.name}}</span><br>
+				{{empty}}
+					<span class="bad">
+						Container is empty.
+					</span>
+				{{/for}}
+			</div>
+		</div>
+	</div>
+{{else}}
+	<div class="item"><span class="average"><i>No container inserted.</i></span></div>
+{{/if}}

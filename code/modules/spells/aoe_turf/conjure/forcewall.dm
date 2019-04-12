@@ -1,8 +1,8 @@
 /spell/aoe_turf/conjure/forcewall
 	name = "Forcewall"
 	desc = "Create a wall of pure energy at your location."
+	user_type = USER_TYPE_WIZARD
 	abbreviation = "FW"
-
 	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 300
 	charge_max = 10 SECONDS
@@ -19,6 +19,7 @@
 	name = "Invisible wall"
 	desc = "Create an invisible wall on your location."
 	school = "mime"
+	user_type = USER_TYPE_OTHER
 	panel = "Mime"
 	summon_type = list(/obj/effect/forcefield/mime)
 	invocation_type = SpI_EMOTE
@@ -39,6 +40,8 @@
 	density = 1
 	invisibility = 100
 
+	var/explosion_block = 20 //making this spell marginally more useful
+
 /obj/effect/forcefield/bullet_act(var/obj/item/projectile/Proj, var/def_zone)
 	var/turf/T = get_turf(src.loc)
 	if(T)
@@ -50,7 +53,7 @@
 	invisibility = 0
 
 /obj/effect/forcefield/mime
-	icon_state = "empty"
+	icon_state = "fuel"
 	name = "invisible wall"
 	desc = "You have a bad feeling about this."
 	invisibility = 0

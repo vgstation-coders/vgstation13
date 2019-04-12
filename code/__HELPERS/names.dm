@@ -76,7 +76,7 @@ var/religion_name = null
 				station_name += name + " "
 
 		//For special days like christmas, easter, new-years etc ~Carn
-		if("Friday the 13th")
+		if(FRIDAY_THE_13TH)
 			name = pick("Mike","Friday","Evil","Myers","Murder","Deathly","Stabby")
 			station_name += name + " "
 			random = 13

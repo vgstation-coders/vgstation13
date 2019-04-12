@@ -20,3 +20,17 @@
 			if(ismob(AM))
 				var/mob/M = AM
 				M.canmove=oldcanmove
+
+// Certain mob types have problems and should not be allowed to be controlled by players.
+// This proc is here to force coders to manually place their mob in this list, hopefully tested.
+// This also gives a place to explain -why- players shouldnt be turn into certain mobs and hopefully someone can fix them.
+/proc/safe_animal(var/MP)
+	if(!MP)
+		return FALSE	//Sanity, this should never happen.
+
+ 	//Bad mobs! - Remember to add a comment explaining what's wrong with the mob
+	if(is_type_in_list(MP, existing_typesof_list(blacklisted_mobs)))
+		return FALSE
+
+	//Not in here? Must be untested, but WHO CARES!
+	return TRUE

@@ -126,7 +126,7 @@
 
 /obj/item/toy/spinningtoy/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-	return (BRUTELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /*
@@ -397,6 +397,11 @@
 	attack_verb = list("pricked", "absorbed", "gored", "stung")
 	w_class = W_CLASS_MEDIUM
 
+/obj/item/toy/foamblade/suicide_act(mob/user)
+	user.visible_message("<span class='danger'>[user] is absorbing \himself! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/lingabsorbs.ogg', 50, 1)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
+
 /*
  * Clock bomb
  */
@@ -455,7 +460,7 @@
 
 /obj/item/toy/crayon/suicide_act(mob/user)
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
-	return (BRUTELOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
 
 /*
  * Snap pops
@@ -478,9 +483,7 @@
 			pop()
 
 /obj/item/toy/snappop/proc/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(2, 0, src)
-	s.start()
+	spark(src, 2, FALSE)
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -500,9 +503,7 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/virus/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -516,9 +517,7 @@
 	flags = FPRINT | NO_THROW_MSG
 
 /obj/item/toy/snappop/smokebomb/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(2, 0, src)
-	s.start()
+	spark(src, 2, FALSE)
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls
@@ -578,7 +577,7 @@
 		reagents.log_bad_reagents(user, src)
 		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 		src.reagents.trans_to(D, 1)
-		playsound(get_turf(src), 'sound/effects/spray3.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/spray3.ogg', 50, 1, -6)
 
 		spawn(0)
 			for(var/i=0, i<1, i++)
@@ -690,7 +689,7 @@
 
 /obj/item/toy/gooncode/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /obj/item/toy/minimeteor
@@ -719,10 +718,10 @@
 		if(user.client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class = 'warning'>You cannot speak in IC (muted).</span>")
 			return
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		to_chat(user, "<span class = 'warning'>You don't know how to use this!</span>")
 		return
-	if(user:miming || user.silent)
+	if(issilent(user) || user.is_mute())
 		to_chat(user, "<span class = 'warning'>You find yourself unable to speak at all.</span>")
 		return
 	if(spamcheck)
@@ -769,7 +768,7 @@
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
 
-		playsound(get_turf(src), 'sound/effects/kirakrik.ogg', 100, 1)
+		playsound(src, 'sound/effects/kirakrik.ogg', 100, 1)
 
 		sleep(50)
 		say("Someone pass the boombox.")
@@ -1107,6 +1106,21 @@
 	name = "fingerbox"
 	desc = "A high quality fingerbox."
 	icon_state = "fingerbox"
+	
+/obj/item/toy/gasha/bangerboy
+	name = "toy Bangerboy"
+	icon_state = "bangerboy"
+	desc = "<B>BANG</B>"
+	
+/obj/item/toy/gasha/femsec
+	name = "toy femsec"
+	icon_state = "femsec"
+	desc = "bodybag accessory not included"
+	
+/obj/item/toy/gasha/hoptard
+	name = "toy HoPtard"
+	icon_state = "hoptard"
+	desc = "uhhhhhhhh"
 
 	//I couldn't think of anywhere else to put this
 /obj/item/toy/canary
@@ -1175,22 +1189,9 @@
 			for(var/i in L.gasses)
 				if(istype(i, /datum/lung_gas/waste))
 					var/datum/lung_gas/waste/W = i
-					switch(W.id)
-						if("oxygen")
-							B.air_contents.adjust(o2 = 0.5)
-						if("carbon_dioxide")
-							B.air_contents.adjust(co2 = 0.5)
-						if("nitrogen")
-							B.air_contents.adjust(n2 = 0.5)
-						if("toxins")
-							B.air_contents.adjust(tx = 0.5)
-						if("/datum/gas/sleeping_agent")
-							var/datum/gas/sleeping_agent/S = new()
-							S.moles = 0.5
-							B.air_contents.adjust(traces = list(S))
+					B.air_contents.adjust_gas(W.id, 0.5)
 		else
-			B.air_contents.adjust(co2 = 0.5)
-		B.air_contents.update_values()
+			B.air_contents.adjust_gas(GAS_CARBON, 0.5)
 	else
 		var/moles = ONE_ATMOSPHERE*volume/(R_IDEAL_GAS_EQUATION*G.temperature)
 		B.air_contents = G.remove(moles)
@@ -1336,6 +1337,7 @@
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/decoy
 	volume = 120	//liters
+	origin_tech = Tc_MATERIALS + "=3"
 	var/decoy_phrase = null
 
 /obj/item/toy/balloon/decoy/verb/record_phrase()
@@ -1395,6 +1397,12 @@
 
 /obj/item/toy/balloon/inflated/decoy/attack_paw(mob/user)
 	return attack_hand(user)
+
+/obj/item/toy/balloon/inflated/decoy/attack_animal(mob/living/simple_animal/user)
+	if((user.melee_damage_lower && prob(30*user.melee_damage_lower)) || user.environment_smash_flags)
+		pop()
+	else
+		attack_hand(user)
 
 /obj/item/toy/balloon/long
 	name = "long balloon"
@@ -1768,3 +1776,4 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
+	

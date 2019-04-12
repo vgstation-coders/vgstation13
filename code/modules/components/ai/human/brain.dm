@@ -36,6 +36,7 @@
 
 	if(H.stat != CONSCIOUS || !H.canmove || !isturf(H.loc))
 		SendSignal(COMSIG_MOVE, list("dir" = 0))
+		return
 
 	current_target = target_holder.GetBestTarget(src, "target_evaluator")
 	if(!isnull(current_target))
@@ -59,7 +60,7 @@
 		return
 
 	if(!isnull(current_target))
-		container.SendSignalToFirst(/datum/component/ai, COMSIG_ATTACKING, list("target"=current_target))
+		SendSignal(COMSIG_ATTACKING, list("target"=current_target))
 		var/turf/T = get_turf(current_target)
 		if(T)
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
@@ -109,15 +110,19 @@
 
 /datum/component/ai/human_brain/proc/AttainExternalItemGoal(mob/living/carbon/human/H)
 	var/obj/item/goal = null
+	if(H.get_active_hand())
+		return //Hand is full
 	processing_desires:
 		for(var/D in desire_ranks)
 			if(D in personal_desires)
 				for(var/obj/item/I in view(H))
 					if(I in H.contents)
 						continue
+					if(I.anchored) //Odd cases such as intercoms
+						continue
 					switch(D)
 						if(DESIRE_HAVE_WEAPON)
-							if((!goal && I.force > 2) || (goal && (I.force > goal.force || (I.force == goal.force && I.sharpness > goal.sharpness))))
+							if(IsBetterWeapon(comparison = I))
 								goal = I
 						if(DESIRE_CONFLICT)
 							break processing_desires
@@ -154,8 +159,8 @@
 						if(DESIRE_ID)
 							if((I.slot_flags & SLOT_ID) && I.mob_can_equip(H, slot_wear_id))
 								goal = I
-			if(goal)
-				break
+					if(goal)
+						break processing_desires
 	return goal
 
 /datum/component/ai/human_brain/proc/AcquireItem(mob/living/carbon/human/H, obj/item/I)
@@ -176,6 +181,8 @@
 	return TRUE
 
 /datum/component/ai/human_brain/proc/WieldBestWeapon(mob/living/carbon/human/H, var/list/excluded)
+	if(H.isStunned()) //We're on the floor, nothing we can do
+		return 0
 	SendSignal(COMSIG_ACTVEMPTYHAND, list())
 	if(H.get_active_hand())
 		SendSignal(COMSIG_DROP, list())
@@ -201,10 +208,14 @@
 	else
 		return 0
 
-/datum/component/ai/human_brain/proc/IsBetterWeapon(mob/living/carbon/human/H, var/list/search_location)
-	if(!search_location)
-		search_location = view(H)
+/datum/component/ai/human_brain/proc/IsBetterWeapon(mob/living/carbon/human/H, var/list/search_location, var/obj/item/comparison)
 	var/obj/item/O = H.get_active_hand()
+	if(!search_location && !comparison)
+		search_location = view(H)
+	else if (comparison)
+		if((!O && comparison.force > 2) || (O && (comparison.force > O.force || (comparison.force == O.force && comparison.sharpness > O.sharpness))))
+			return 1
+		return 0
 	for(var/obj/item/I in search_location)
 		if((!O && I.force > 2) || (O && (I.force > O.force || (I.force == O.force && I.sharpness > O.sharpness))))
 			return 1

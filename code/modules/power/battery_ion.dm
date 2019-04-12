@@ -63,17 +63,17 @@
 		return connected_to.surplus()
 	return 0
 
-/obj/machinery/power/battery/portable/wrenchAnchor(mob/user)
-	if(..() == 1)
-		if(anchored)
-			var/obj/machinery/power/battery_port/port = locate() in src.loc
-			if(port)
-				port.connect_battery(src)
-		else
-			if(connected_to)
-				connected_to.disconnect_battery()
-		return 1
-	return -1
+/obj/machinery/power/battery/portable/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	if(anchored)
+		var/obj/machinery/power/battery_port/port = locate() in src.loc
+		if(port)
+			port.connect_battery(src)
+	else
+		if(connected_to)
+			connected_to.disconnect_battery()
 
 /obj/machinery/power/battery/portable/update_icon()
 	if(stat & BROKEN)
@@ -110,3 +110,8 @@
 
 	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
+
+/obj/machinery/power/battery/portable/get_terminal()
+	if(connected_to)
+		return connected_to.terminal
+	return null

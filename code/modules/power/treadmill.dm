@@ -11,7 +11,7 @@
 	desc = "A low-power device that generates power based on how quickly someone walks."
 	icon_state = "treadmill"
 	density = 1
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | EMAGGABLE
 	anchored = 1
 	use_power = 0
@@ -59,11 +59,10 @@
 	var/cached_temp = runner.bodytemperature
 	if(runner.burn_calories(HUNGER_FACTOR*2))
 		flick("treadmill-running", src)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
 		if(runner.reagents) //Sanity
-			for(var/datum/reagent/R in runner.reagents.reagent_list)
-				calc *= R.sport
+			calc *= runner.reagents.get_sportiness()
 		if(M_HULK in runner.mutations)
 			calc *= 5
 		count_power += calc
@@ -86,13 +85,9 @@
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			powerwalk(mover)
-			return !density
+	if((flow_flags & ON_BORDER) && (mover.dir == dir))
+		powerwalk(mover)
+		return !density
 	return 1
 
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -105,8 +100,10 @@
 	else
 		return 1
 
-/obj/machinery/power/treadmill/wrenchAnchor(mob/user)
-	..()
+/obj/machinery/power/treadmill/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
 	if(anchored)
 		connect_to_network()
 	else

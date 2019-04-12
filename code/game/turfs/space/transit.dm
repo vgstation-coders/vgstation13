@@ -9,6 +9,9 @@
 
 	update_icon()
 
+/turf/space/transit/initialize()
+	return
+
 /turf/space/transit/update_icon()
 	icon_state = ""
 

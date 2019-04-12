@@ -24,7 +24,7 @@
 "ax" = (/obj/structure/flora/ausbushes/ywflowers,/turf/simulated/floor/grass,/area/vault/biodome)
 "ay" = (/obj/structure/flora/ausbushes/reedbush,/turf/simulated/floor/grass,/area/vault/biodome)
 "az" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor/grass,/area/vault/biodome)
-"aA" = (/obj/machinery/power/solar/panel,/obj/structure/cable,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/turf/simulated/floor/plating/airless,/area/vault/biodome)
+"aA" = (/obj/machinery/power/solar/panel,/obj/structure/cable,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/vault/biodome)
 "aB" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/turf/simulated/floor/grass,/area/vault/biodome)
 "aC" = (/obj/structure/flora/ausbushes/ppflowers,/turf/simulated/floor/grass,/area/vault/biodome)
 "aD" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/airless,/area/vault/biodome)

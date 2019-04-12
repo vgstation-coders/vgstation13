@@ -122,7 +122,13 @@
 	return 1
 
 /mob/living/silicon/generate_static_overlay()
-	return
+	if(!istype(static_overlays,/list))
+		static_overlays = list()
+	static_overlays.Add(list("cult"))
+
+	var/image/static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/silicon/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -212,7 +218,8 @@
 	if(emergency_shuttle.online && emergency_shuttle.location < 2)
 		var/timeleft = emergency_shuttle.timeleft()
 		if (timeleft)
-			stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+			var/acronym = emergency_shuttle.location == 1 ? "ETD" : "ETA"
+			stat(null, "[acronym]-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 
 // This adds the basic clock, shuttle recall timer, and malf_ai info to all silicon lifeforms
@@ -222,7 +229,10 @@
 		show_station_time()
 		show_emergency_shuttle_eta()
 		show_system_integrity()
-		show_malf_ai()
+		for(var/datum/faction/F in ticker.mode.factions)
+			var/F_stat = F.get_statpanel_addition()
+			if(F_stat)
+				stat(null, "[F_stat]")
 
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()
@@ -253,9 +263,7 @@
 		if(prob(20))
 			Stun(2)
 
-		var/datum/effect/effect/system/spark_spread/SparkSpread = new
-		SparkSpread.set_up(5, 1, loc)
-		SparkSpread.start()
+		spark(loc, 5)
 
 		return damage
 
@@ -270,17 +278,24 @@
 /mob/living/silicon/can_speak_lang(datum/language/speaking)
 	return universal_speak || (speaking in src.speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
 
-/mob/living/silicon/add_language(var/language, var/can_speak=1)
-	if (..(language) && can_speak)
-		speech_synthesizer_langs |= (all_languages[language])
+/mob/living/silicon/add_language(var/language_name, var/can_speak=1)
+	var/var/datum/language/added_language = all_languages[language_name]
+	if(!added_language) //Are you trying to pull my leg? This language does not exist.
+		return
+
+	. = ..(language_name)
+	if(can_speak && (added_language in languages) && !(added_language in speech_synthesizer_langs)) //This got changed because we couldn't give borgs the ability to speak a language that they already understood. Bay's solution.
+		speech_synthesizer_langs |= added_language
 		return 1
 
-/mob/living/silicon/remove_language(var/rem_language)
-	..(rem_language)
+/mob/living/silicon/remove_language(var/rem_language, var/can_understand=0)
+	var/var/datum/language/removed_language = all_languages[rem_language]
+	if(!removed_language) //Oh, look. Now you're trying to remove what does not exist.
+		return
 
-	for (var/datum/language/L in speech_synthesizer_langs)
-		if (L.name == rem_language)
-			speech_synthesizer_langs -= L
+	if(!can_understand)
+		..(rem_language)
+	speech_synthesizer_langs -= removed_language
 
 /mob/living/silicon/check_languages()
 	set name = "Check Known Languages"

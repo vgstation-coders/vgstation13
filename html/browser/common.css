@@ -193,6 +193,14 @@ h4
 	color: #ff0000;
 }
 
+.redBackground {
+    background: #ea0000;
+}
+
+.yellowBackground {
+    background: #cacc00;
+}
+
 .highlight
 {
 	color: #8BA5C4;
@@ -331,6 +339,12 @@ div.notice
 	clear: both;
 }
 
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
 
 .charPreview{
 	-ms-interpolation-mode: nearest-neighbor;
@@ -338,23 +352,28 @@ div.notice
 	height:64px;
 }
 
-td.column {
+td.column
+{
     width: 60px;
     text-align: center;
 }
-td.clmNever {
+td.clmNever
+{
     background: #ffcccc;
 }
 
-td.clmNo {
+td.clmNo
+{
     background: #ffeeee;
 }
 
-td.clmYes {
+td.clmYes
+{
     background: #eeffee;
 }
 
-td.clmAlways {
+td.clmAlways
+{
     background: #ccffcc;
 }
 
@@ -363,4 +382,42 @@ label.fullsize
     width: 100%;
     height: 100%;
     display: inline-block;
+}
+
+.modal
+{
+    z-index: 1;
+    position: fixed;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content
+{
+    background-color: #dddddd;
+    color: #000000;
+	font-size: 16px;
+    margin: auto;
+    padding: 20px;
+    border: 2px solid #888;
+    width: 80%;
+}
+
+.modal-close
+{
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.modal-close:hover, .modal-close:focus
+{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }

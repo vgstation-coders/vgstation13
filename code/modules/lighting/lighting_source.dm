@@ -278,7 +278,8 @@
 	L = affecting_turfs - turfs // Now-gone turfs, remove us from the affecting lights.
 	affecting_turfs -= L
 	for (var/turf/T in L)
-		T.affecting_lights -= src
+		if(T.affecting_lights)
+			T.affecting_lights.Remove(src)
 
 	for (var/datum/lighting_corner/C in corners - effect_str) // New corners
 		C.affecting += src

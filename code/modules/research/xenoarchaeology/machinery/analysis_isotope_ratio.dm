@@ -38,7 +38,7 @@
 		var/accuracy = GetResultSpecifity(scanned_sample, carrier_name)
 		accuracy += 0.5 * (1 - accuracy) / scanned_sample.total_spread
 		if(!accuracy)
-			accuracy = rand(0.01, 0.5)
+			accuracy = rand(1, 50)/100
 		results = "Isotope decay analysis in carrier ([carrier_name]) indicates age ([100 * accuracy]% accuracy): <br><br>"
 
 		if(scanned_sample.age_billion)

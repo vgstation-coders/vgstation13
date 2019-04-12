@@ -8,7 +8,6 @@
 	var/temperature_alert = 0
 
 /mob/living/carbon/alien/humanoid/Life()
-	set invisibility = 0
 	//set background = 1
 
 	if(timestopped)
@@ -92,9 +91,8 @@
 
 
 	proc/breathe()
-		if(reagents)
-			if(reagents.has_reagent(LEXORIN))
-				return
+		if(reagents && reagents.has_any_reagents(LEXORINS))
+			return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 			return
 
@@ -121,16 +119,13 @@
 					var/obj/location_as_object = loc
 					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 				else if(istype(loc, /turf/))
-					var/breath_moles = 0
 					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 						// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
 						breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
 					else
 						*/
 						// Not enough air around, take a percentage of what's there to model this properly
-					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
-
-					breath = loc.remove_air(breath_moles)
+					breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 					// Handle chem smoke effect  -- Doohl
 					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
@@ -157,7 +152,8 @@
 		if(internal)
 			if(!contents.Find(internal))
 				internal = null
-			if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS) )
+			var/obj/item/mask = get_item_by_slot(slot_wear_mask)
+			if(!mask || !(mask.clothing_flags & MASKINTERNALS) )
 				internal = null
 			if(internal)
 				if(internals)
@@ -177,28 +173,30 @@
 			return 0
 
 		var/toxins_used = 0
-		var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+		breath.volume = BREATH_VOLUME
+		breath.update_values()
 
 		//Partial pressure of the toxins in our breath
-		var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+		var/Toxins_pp = breath.partial_pressure(GAS_PLASMA)
 
 		if(Toxins_pp) // Detect toxins in air
 
-			AdjustPlasma(breath.toxins*250)
+			AdjustPlasma(breath[GAS_PLASMA] * 250)
 			toxins_alert = max(toxins_alert, 1)
 
-			toxins_used = breath.toxins
+			toxins_used = breath[GAS_PLASMA]
 
 		else
 			toxins_alert = 0
 
 		//Breathe in toxins and out oxygen
-		breath.toxins -= toxins_used
-		breath.oxygen += toxins_used
+		breath.adjust_multi(
+			GAS_PLASMA, -toxins_used,
+			GAS_OXYGEN, toxins_used)
 
 		if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
 			if(prob(20))
-				to_chat(src, "<span class='warning'>You feel a searing heat in your lungs !</span>")
+				to_chat(src, "<span class='warning'>You feel a searing heat in your lungs!</span>")
 			fire_alert = max(fire_alert, 1)
 		else
 			fire_alert = 0
@@ -321,7 +319,7 @@
 				if( health <= 20 && prob(1) )
 					spawn(0)
 						emote("gasp")
-				if(!reagents.has_reagent(INAPROVALINE))
+				if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 					adjustOxyLoss(1)
 				Paralyse(3)
 
@@ -373,6 +371,9 @@
 			if(stuttering)
 				stuttering = max(stuttering-1, 0)
 
+			if(say_mute)
+				say_mute = max(say_mute-1, 0)
+
 			if(silent)
 				silent = max(silent-1, 0)
 
@@ -381,7 +382,7 @@
 		return 1
 
 
-	proc/handle_regular_hud_updates()
+	handle_regular_hud_updates()
 
 
 		if (stat == 2 || (M_XRAY in mutations))

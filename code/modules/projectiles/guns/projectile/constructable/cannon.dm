@@ -152,9 +152,7 @@
 		to_chat(user, "<span class='info'>There is \a [loaded_item] in the barrel.</span>")
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/attack_hand()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 
 	if(fuel_level)
 		if(!loaded_item)

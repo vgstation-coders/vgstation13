@@ -1,5 +1,5 @@
 /obj/item/weapon/cartridge
-	name = "generic cartridge"
+	name = "\improper Generic cartridge"
 	desc = "A data cartridge for portable microcomputers."
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "cart"
@@ -25,6 +25,7 @@
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
 	var/access_trader = 0
+	var/access_robotics = 0
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -55,38 +56,38 @@
 	..()
 
 /obj/item/weapon/cartridge/engineering
-	name = "Power-ON Cartridge"
+	name = "\improper Power-ON Cartridge"
 	icon_state = "cart-e"
 	access_engine = 1
 
 /obj/item/weapon/cartridge/atmos
-	name = "BreatheDeep Cartridge"
+	name = "\improper BreatheDeep Cartridge"
 	icon_state = "cart-a"
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/mechanic
-	name = "Screw-E Cartridge"
+	name = "\improper Screw-E Cartridge"
 	icon_state = "cart-mech"
 	access_mechanic = 1
 	access_engine = 1 //for the power monitor, but may remove later
 
 /obj/item/weapon/cartridge/medical
-	name = "Med-U Cartridge"
+	name = "\improper Med-U Cartridge"
 	icon_state = "cart-m"
 	access_medical = 1
 
 /obj/item/weapon/cartridge/chemistry
-	name = "ChemWhiz Cartridge"
+	name = "\improper ChemWhiz Cartridge"
 	icon_state = "cart-chem"
 	access_reagent_scanner = 1
 
 /obj/item/weapon/cartridge/chef
-	name = "ChefBuddy Cartridge"
+	name = "\improper ChefBuddy Cartridge"
 	icon_state = "cart-chef"
 	access_reagent_scanner = 1
 
 /obj/item/weapon/cartridge/security
-	name = "R.O.B.U.S.T. Cartridge"
+	name = "\improper R.O.B.U.S.T. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 
@@ -96,7 +97,7 @@
 		radio = new /obj/item/radio/integrated/beepsky(src)
 
 /obj/item/weapon/cartridge/detective
-	name = "D.E.T.E.C.T. Cartridge"
+	name = "\improper D.E.T.E.C.T. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 	access_medical = 1
@@ -104,43 +105,47 @@
 
 
 /obj/item/weapon/cartridge/janitor
-	name = "CustodiPRO Cartridge"
+	name = "\improper CustodiPRO Cartridge"
 	desc = "The ultimate in clean-room design."
 	icon_state = "cart-j"
 	access_janitor = 1
 
 /obj/item/weapon/cartridge/lawyer
-	name = "P.R.O.V.E. Cartridge"
+	name = "\improper P.R.O.V.E. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 
 /obj/item/weapon/cartridge/clown
-	name = "Honkworks 5.0"
+	name = "\improper Honkworks 5.0"
 	icon_state = "cart-clown"
 	access_clown = 1
 	var/honk_charges = 5
 
 /obj/item/weapon/cartridge/mime
-	name = "Gestur-O 1000"
+	name = "\improper Gestur-O 1000"
 	icon_state = "cart-mi"
 	access_mime = 1
 	var/mime_charges = 5
 /*
 /obj/item/weapon/cartridge/botanist
-	name = "Green Thumb v4.20"
+	name = "\improper Green Thumb v4.20"
 	icon_state = "cart-b"
 	access_flora = 1
 */
+/obj/item/weapon/cartridge/robotics
+	name = "\improper R.O.B.U.T.T. Cartridge"
+	desc = "Allows you to use your pda as a cyborg analyzer"
+	icon_state = "cart-robo"
+	access_robotics = 1
 
 /obj/item/weapon/cartridge/signal
-	name = "generic signaler cartridge"
+	name = "\improper Generic signaler cartridge"
 	desc = "A data cartridge with an integrated radio signaler module."
 
 /obj/item/weapon/cartridge/signal/toxins
-	name = "Signal Ace 2"
+	name = "\improper Signal Ace 2"
 	desc = "Complete with integrated radio signaler!"
 	icon_state = "cart-tox"
-	access_reagent_scanner = 1
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/signal/New()
@@ -149,10 +154,10 @@
 		radio = new /obj/item/radio/integrated/signal(src)
 
 /obj/item/weapon/cartridge/quartermaster
-		name = "Space Parts & Space Vendors Cartridge"
-		desc = "Perfect for the Quartermaster on the go!"
-		icon_state = "cart-q"
-		access_quartermaster = 1
+	name = "\improper Space Parts & Space Vendors Cartridge"
+	desc = "Perfect for the Quartermaster on the go!"
+	icon_state = "cart-q"
+	access_quartermaster = 1
 
 /obj/item/weapon/cartridge/quartermaster/New()
 	..()
@@ -160,13 +165,13 @@
 		radio = new /obj/item/radio/integrated/mule(src)
 
 /obj/item/weapon/cartridge/head
-	name = "Easy-Record DELUXE"
+	name = "\improper Easy-Record DELUXE"
 	icon_state = "cart-h"
 	access_manifest = 1
 	access_status_display = 1
 
 /obj/item/weapon/cartridge/hop
-	name = "HumanResources9001"
+	name = "\improper HumanResources9001"
 	icon_state = "cart-h"
 	access_manifest = 1
 	access_status_display = 1
@@ -180,7 +185,7 @@
 		radio = new /obj/item/radio/integrated/mule(src)
 
 /obj/item/weapon/cartridge/hos
-	name = "R.O.B.U.S.T. DELUXE"
+	name = "\improper R.O.B.U.S.T. DELUXE"
 	icon_state = "cart-hos"
 	access_manifest = 1
 	access_status_display = 1
@@ -192,7 +197,7 @@
 		radio = new /obj/item/radio/integrated/beepsky(src)
 
 /obj/item/weapon/cartridge/ce
-	name = "Power-On DELUXE"
+	name = "\improper Power-On DELUXE"
 	icon_state = "cart-ce"
 	access_manifest = 1
 	access_mechanic = 1
@@ -201,7 +206,7 @@
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/cmo
-	name = "Med-U DELUXE"
+	name = "\improper Med-U DELUXE"
 	icon_state = "cart-cmo"
 	access_manifest = 1
 	access_status_display = 1
@@ -209,11 +214,11 @@
 	access_medical = 1
 
 /obj/item/weapon/cartridge/rd
-	name = "Signal Ace DELUXE"
+	name = "\improper Signal Ace DELUXE"
 	icon_state = "cart-rd"
 	access_manifest = 1
 	access_status_display = 1
-	access_reagent_scanner = 1
+	access_robotics = 1
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/rd/New()
@@ -222,7 +227,7 @@
 		radio = new /obj/item/radio/integrated/signal(src)
 
 /obj/item/weapon/cartridge/captain
-	name = "Value-PAK Cartridge"
+	name = "\improper Value-PAK Cartridge"
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
 	access_manifest = 1
@@ -235,19 +240,19 @@
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/syndicate
-	name = "Detomatix Cartridge"
+	name = "\improper Detomatix Cartridge"
 	icon_state = "cart"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/shock_charges = 4
 
 /obj/item/weapon/cartridge/syndicatedoor
-	name = "Doorman Cartridge"
+	name = "\improper Doorman Cartridge"
 	access_remote_door = 1
 	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
 
 /obj/item/weapon/cartridge/trader
-	name = "Trader Cartridge"
+	name = "\improper Trader Cartridge"
 	icon_state = "cart-vox"
 	access_trader = 1
 
@@ -386,7 +391,8 @@ Code:
 					var/list/chg = list("N","C","F")
 
 					for(var/obj/machinery/power/apc/A in L)
-						menu += copytext(add_tspace(A.areaMaster.name, 30), 1, 30)
+						var/area/APC_area = get_area(A)
+						menu += copytext(add_tspace(APC_area.name, 30), 1, 30)
 						menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
 
 				menu += "</FONT></PRE>"
@@ -575,15 +581,15 @@ Code:
 
 			menu = {"<h4><img src=pda_crate.png> Supply Record Interlink</h4>
 				<BR><B>Supply shuttle</B><BR>
-				Location: [supply_shuttle.moving ? "Moving to station ([supply_shuttle.eta] Mins.)":supply_shuttle.at_station ? "Station":"Dock"]<BR>
+				Location: [SSsupply_shuttle.moving ? "Moving to station ([SSsupply_shuttle.eta] Mins.)":SSsupply_shuttle.at_station ? "Station":"Dock"]<BR>
 				Current approved orders: <BR><ol>"}
-			for(var/S in supply_shuttle.shoppinglist)
+			for(var/S in SSsupply_shuttle.shoppinglist)
 				var/datum/supply_order/SO = S
 				menu += "<li>#[SO.ordernum] - [SO.object.name] approved by [SO.orderedby] [SO.comment ? "([SO.comment])":""]</li>"
 
 			menu += {"</ol>
 				Current requests: <BR><ol>"}
-			for(var/S in supply_shuttle.requestlist)
+			for(var/S in SSsupply_shuttle.requestlist)
 				var/datum/supply_order/SO = S
 				menu += "<li>#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]</li>"
 			menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."
@@ -648,12 +654,16 @@ Code:
 			menu = "<h4><img src=pda_bucket.png> Persistent Custodial Object Locator</h4>"
 
 			var/turf/cl = get_turf(src)
-			if (cl)
+			if (!cl)
+				menu += "ERROR: Unable to determine current location."
+			else
+				menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
+				menu += "<br><A href='byond://?src=\ref[src];choice=49'>(Refresh Coordinates)</a><br>"
 
-				menu += {"Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>
-					<h4>Located Mops:</h4>"}
+				menu += "<h4>Located Mops:</h4>"
+
 				var/ldat
-				for (var/obj/item/weapon/mop/M in world)
+				for (var/obj/item/weapon/mop/M in mop_list)
 					var/turf/ml = get_turf(M)
 
 					if(ml)
@@ -670,7 +680,7 @@ Code:
 				menu += "<h4>Located Mop Buckets:</h4>"
 
 				ldat = null
-				for (var/obj/structure/mopbucket/B in world)
+				for (var/obj/structure/mopbucket/B in mopbucket_list)
 					var/turf/bl = get_turf(B)
 
 					if(bl)
@@ -687,7 +697,7 @@ Code:
 				menu += "<h4>Located Cleanbots:</h4>"
 
 				ldat = null
-				for (var/obj/machinery/bot/cleanbot/B in world)
+				for (var/obj/machinery/bot/cleanbot/B in cleanbot_list)
 					var/turf/bl = get_turf(B)
 
 					if(bl)
@@ -701,9 +711,38 @@ Code:
 				else
 					menu += "[ldat]"
 
-			else
-				menu += "ERROR: Unable to determine current location."
-			menu += "<br><br><A href='byond://?src=\ref[src];choice=49'>Refresh GPS Locator</a>"
+				menu += "<h4>Located Jani-Carts:</h4>"
+
+				ldat = null
+				for (var/obj/structure/bed/chair/vehicle/janicart/J in janicart_list)
+					var/turf/bl = get_turf(J)
+
+					if(bl)
+						if (bl.z != cl.z)
+							continue
+						var/direction = get_dir(src, J)
+						ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
+
+				if (!ldat)
+					menu += "None"
+				else
+					menu += "[ldat]"
+
+				ldat = null
+				for (var/obj/item/key/janicart/K in janikeys_list)
+					var/turf/bl = get_turf(K)
+
+					if(bl)
+						if (bl.z != cl.z)
+							continue
+						var/direction = get_dir(src, K)
+						ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b><br>"
+
+				if (!ldat)
+					menu += "None"
+				else
+					menu += "[ldat]"
+
 
 
 /obj/item/weapon/cartridge/Topic(href, href_list)

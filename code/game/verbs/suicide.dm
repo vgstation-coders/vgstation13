@@ -13,41 +13,28 @@
 	return 0
 
 //Attempt to perform suicide with an item in our hand
-//Return 0 if the suicide failed, return 1 if succesful. Returning 1 does not perform the default suicide afterwards
+//Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
 /mob/living/proc/attempt_item_suicide(var/obj/item/suicide_item)
 
 	if(suicide_item) //We need the item to be there to begin, otherwise abort
 		var/damagetype = suicide_item.suicide_act(src)
 		if(damagetype)
-			var/damage_mod = 1
-			switch(damagetype) //Sorry about the magic numbers.
-							   //brute = 1, burn = 2, tox = 4, oxy = 8
-				if(15) //4 damage types
-					damage_mod = 4
+			var/damage_mod = count_set_bitflags(damagetype) // How many damage types are to be applied
 
-				if(6, 11, 13, 14) //3 damage types
-					damage_mod = 3
-
-				if(3, 5, 7, 9, 10, 12) //2 damage types
-					damage_mod = 2
-
-				if(1, 2, 4, 8) //1 damage type
-					damage_mod = 1
-
-				else //No special suicide exists for this item or something fucked up, abort and go for a normal suicide instead
-					return
+			if(damagetype & SUICIDE_ACT_CUSTOM)
+				return 1
 
 			//Do 175 damage divided by the number of damage types applied.
-			if(damagetype & BRUTELOSS)
+			if(damagetype & SUICIDE_ACT_BRUTELOSS)
 				adjustBruteLoss(175/damage_mod)
 
-			if(damagetype & FIRELOSS)
+			if(damagetype & SUICIDE_ACT_FIRELOSS)
 				adjustFireLoss(175/damage_mod)
 
-			if(damagetype & TOXLOSS)
+			if(damagetype & SUICIDE_ACT_TOXLOSS)
 				adjustToxLoss(175/damage_mod)
 
-			if(damagetype & OXYLOSS)
+			if(damagetype & SUICIDE_ACT_OXYLOSS)
 				adjustOxyLoss(175/damage_mod)
 
 			updatehealth()
@@ -101,7 +88,7 @@
 
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -124,7 +111,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -162,7 +149,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -187,7 +174,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -205,7 +192,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -227,7 +214,7 @@
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -246,13 +233,13 @@
 	setCloneLoss(100)
 	updatehealth()
 
-//Default for all simple animals, using the Die() proc. Custom cases below
+//Default for all simple animals, using the death() proc. Custom cases below
 /mob/living/simple_animal/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 
-		if(!confirm == "Yes")
+		if(confirm != "Yes")
 			return
 
 		if(stat != CONSCIOUS)
@@ -266,4 +253,4 @@
 
 	visible_message(pick("<span class='danger'>[src] suddenly starts thrashing around wildly! It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] suddenly starts mauling \himself! It looks like \he's trying to commit suicide.</span>"))
-	Die()
+	death()

@@ -242,7 +242,7 @@
 	src.visible_message("<span class='warning'>\The [src] groans from the pressure!</span>");
 
 	// Need SFX for groaning metal.
-	//playsound(get_turf(src), 'sound/effects/groan.ogg', 25, 1)
+	//playsound(src, 'sound/effects/groan.ogg', 25, 1)
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
@@ -251,7 +251,7 @@
 	var/turf/T=get_turf(src)
 
 	message_admins("Pipe burst in area [formatJumpTo(T)]")
-	var/area/A=get_area_master(src)
+	var/area/A=get_area(src)
 	log_game("Pipe burst in area [A.name] ")
 
 	// Disconnect first.
@@ -349,7 +349,7 @@
 	if(!suppress_icon_check)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/simple/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
@@ -594,7 +594,7 @@
 	if(!skip_icon_update)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/manifold/scrubbers
 	name = "\improper Scrubbers pipe"
@@ -815,7 +815,7 @@
 	if(!skip_update_icon)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers
 	name = "\improper Scrubbers pipe"
@@ -937,7 +937,7 @@
 
 	var/list/layer_nodes = list()
 	var/obj/machinery/atmospherics/other_node = null
-	var/static/image/centre_image = image('icons/obj/atmospherics/pipe_manifold.dmi', "layer_center")
+	var/static/image/centre_image = image(icon = 'icons/obj/atmospherics/pipe_manifold.dmi', icon_state = "layer_center")
 
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
@@ -1063,7 +1063,7 @@
 	if(!skip_update_icon)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/layer_manifold/findAllConnections(var/connect_dirs)
 	for(var/direction in cardinal)
@@ -1148,8 +1148,6 @@
 	initialize_directions = NORTH|SOUTH
 
 	volume = 260 //6 averaged pipe segments
-
-	pipe_flags = ALL_LAYER
 
 	var/obj/machinery/atmospherics/layer_node = null
 	var/obj/machinery/atmospherics/mid_node = null
@@ -1246,7 +1244,7 @@
 	if(!skip_update_icon)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/layer_adapter/findAllConnections(var/connect_dirs)
 	for(var/direction in cardinal)
@@ -1279,11 +1277,6 @@
 					continue
 				layer_node = found
 
-/obj/machinery/atmospherics/pipe/layer_adapter/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	if(direction == dir)
-		return (given_layer == PIPING_LAYER_DEFAULT)
-	return ..()
-
 /obj/machinery/atmospherics/pipe/layer_adapter/getNodeType()
 	return PIPE_TYPE_STANDARD
 
@@ -1297,3 +1290,9 @@
 		user.ventcrawl_layer = (direction == dir) ? PIPING_LAYER_DEFAULT : piping_layer
 		to_chat(user, "You are redirected into the [user.ventcrawl_layer]\th piping layer.")
 		return ..()
+
+/obj/machinery/atmospherics/pipe/layer_adapter/get_layer_of_dir(var/direction)
+	if (direction == dir)
+		return PIPING_LAYER_DEFAULT // requested direction is our mid_node
+	else if (turn(direction, 180) == dir)
+		return piping_layer // requested direction is our layer_node

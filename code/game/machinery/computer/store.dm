@@ -25,6 +25,8 @@
 			/datum/storeitem/beachball,
 			/datum/storeitem/snap_pops,
 			/datum/storeitem/crayons,
+			///datum/storeitem/dorkcube,
+			/datum/storeitem/unecards,
 			),
 		"Clothing" = list(
 			/datum/storeitem/robotnik_labcoat,
@@ -39,7 +41,7 @@
 
 /obj/machinery/computer/merch/New()
 	..()
-	if(time2text(world.realtime, "MM/DD") == "02/14")
+	if(Holiday == VALENTINES_DAY)
 		var/valentines = list("Valentine's Day" = list(/datum/storeitem/valentinechocolatebar,),)
 		categories += valentines
 

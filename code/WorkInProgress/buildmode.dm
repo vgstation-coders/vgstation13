@@ -21,6 +21,7 @@
 			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
 				for(var/BM in M.client.buildmode_objs)
 					returnToPool(BM)
+				M.client.buildmode_objs.Cut()
 		else
 			log_admin("[key_name(usr)] has entered build mode.")
 			M.client.buildmode = 1
@@ -97,6 +98,7 @@
 				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
 				to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
 				to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
+				to_chat(usr, "<span class='notice'>Middle Mouse Button twice on a turf    = Area editing mode</span>")
 				to_chat(usr, "")
 				to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
 				to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
@@ -111,6 +113,7 @@
 				to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
 				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
 				to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
+				to_chat(usr, "<span class='notice'>Middle Mouse Button on turf/obj/mob    = Copy value from object</span>")
 				to_chat(usr, "<span class='notice'>***********************************************************</span>")
 			if(4)
 				to_chat(usr, "<span class='notice'>***********************************************************</span>")
@@ -152,6 +155,7 @@ obj/effect/bmode/buildholder/New()
 	..()
 	cl.screen -= list(builddir,buildhelp,buildmode,buildquit)
 	cl.buildmode_objs &= ~list(builddir,buildhelp,buildmode,buildquit,src)
+	cl.images -= buildmode.area_overlay
 	buildmodeholders -= src
 
 /obj/effect/bmode/buildmode
@@ -161,6 +165,12 @@ obj/effect/bmode/buildholder/New()
 	var/valueholder = "derp"
 	var/objholder = /obj/structure/closet
 	var/atom/copycat
+	var/image/area_overlay
+
+/obj/effect/bmode/buildmode/New()
+	..()
+
+	area_overlay = image('icons/turf/areas.dmi', "yellow")
 
 /obj/effect/bmode/buildmode/Click(location, control, params)
 	var/list/pa = params2list(params)
@@ -186,7 +196,13 @@ obj/effect/bmode/buildholder/New()
 				return 1
 			if(2)
 				copycat = null
-				objholder = text2path(input(usr,"Enter typepath:" ,"Typepath","/obj/structure/closet"))
+				var/partial_type = input(usr, "Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
+				if(isnull(partial_type))
+					return
+
+				var/list/matches = get_matching_types(partial_type, /atom)
+				objholder = input("Select type", "Typepath") as null|anything in matches
+
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
 					alert("That path is not allowed.")
@@ -204,8 +220,6 @@ obj/effect/bmode/buildholder/New()
 				if(edit_variable != "appearance") //Special case for appearance
 					master.buildmode.valueholder = variable_set(usr)
 	return 1
-/obj/effect/bmode/buildmode/DblClick(object,location,control,params)
-	return Click(object,location,control,params)
 
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
@@ -272,7 +286,6 @@ obj/effect/bmode/buildholder/New()
 					message_admins(msglog)
 					log_admin(msglog)
 					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-					var/turf_op = ispath(whatfill, /turf)
 					var/deletions = 0
 					for(var/turf/T in fillturfs)
 						if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
@@ -290,7 +303,8 @@ obj/effect/bmode/buildholder/New()
 								if(areaAction == MASS_DELETE)
 									T.ChangeTurf(get_base_turf(T.z))
 						else
-							if(turf_op)
+							if(ispath(whatfill, /area) || istype(holder.buildmode.copycat, /area))
+								//In case of a selective fill, make sure the turf fits into the criteria before changing it
 								if(areaAction == SELECTIVE_FILL)
 									if(strict)
 										if(T.type != chosen)
@@ -298,6 +312,23 @@ obj/effect/bmode/buildholder/New()
 									else
 										if(!istype(T, chosen))
 											continue
+
+								var/area/A
+								if(istype(holder.buildmode.copycat, /area))
+									A = holder.buildmode.copycat
+								else
+									A = locate(whatfill)
+
+								T.set_area(A)
+							else if(ispath(whatfill, /turf))
+								if(areaAction == SELECTIVE_FILL)
+									if(strict)
+										if(T.type != chosen)
+											continue
+									else
+										if(!istype(T, chosen))
+											continue
+
 								T.ChangeTurf(whatfill)
 							else
 								if(areaAction == SELECTIVE_FILL)
@@ -496,7 +527,7 @@ obj/effect/bmode/buildholder/New()
 							message_admins(msglog)
 							log_admin(msglog)
 							to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-							var/turf_op = ispath(holder.buildmode.objholder,/turf)
+
 							var/deletions = 0
 							for(var/turf/T in fillturfs)
 								if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
@@ -514,7 +545,8 @@ obj/effect/bmode/buildholder/New()
 										if(areaAction == MASS_DELETE)
 											T.ChangeTurf(get_base_turf(T.z))
 								else
-									if(turf_op)
+									if(ispath(holder.buildmode.objholder, /area) || istype(holder.buildmode.copycat, /area))
+										//In case of a selective fill, make sure the turf fits into the criteria before changing it
 										if(areaAction == SELECTIVE_FILL)
 											if(strict)
 												if(T.type != chosen)
@@ -522,6 +554,23 @@ obj/effect/bmode/buildholder/New()
 											else
 												if(!istype(T, chosen))
 													continue
+
+										var/area/A
+										if(istype(holder.buildmode.copycat, /area))
+											A = holder.buildmode.copycat
+										else
+											A = locate(holder.buildmode.objholder)
+
+										T.set_area(A)
+									else if(ispath(holder.buildmode.objholder, /turf))
+										if(areaAction == SELECTIVE_FILL)
+											if(strict)
+												if(T.type != chosen)
+													continue
+											else
+												if(!istype(T, chosen))
+													continue
+
 										T.ChangeTurf(holder.buildmode.objholder)
 									else
 										if(areaAction == SELECTIVE_FILL)
@@ -553,6 +602,10 @@ obj/effect/bmode/buildholder/New()
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
 							T.appearance = holder.buildmode.copycat.appearance
+					else if(isarea(holder.buildmode.copycat))
+						var/turf/T = get_turf(object)
+						T.set_area(holder.buildmode.copycat)
+						return
 					else
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
@@ -560,10 +613,14 @@ obj/effect/bmode/buildholder/New()
 							A.dir = holder.builddir.dir
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
-					if(ispath(holder.buildmode.objholder,/turf))
+					if(ispath(holder.buildmode.objholder,/turf)) //Handle turf changing
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.objholder)
-					else
+					else if(ispath(holder.buildmode.objholder,/area)) //Handle area changing
+						var/area/A = locate(holder.buildmode.objholder)
+						var/turf/T = get_turf(object)
+						T.set_area(A)
+					else //Handle object spawning
 						var/obj/A = new holder.buildmode.objholder (get_turf(object))
 						if(istype(A))
 							A.dir = holder.builddir.dir
@@ -580,23 +637,61 @@ obj/effect/bmode/buildholder/New()
 						holder.buildmode.copycat = object
 						to_chat(usr, "<span class='info'>You will now build a lookalike of [object] when clicking.</span>")
 					else
+						//Handle leaving area editing mode
+						if(istype(holder.buildmode.copycat, /area))
+							var/area/A = holder.buildmode.copycat
+							if(get_area(object) == A) //Leave area editing mode by copying an object from a different area
+								//Note: it would be much better to do this on any middle mouse button click
+								//I tried it, and it made this too sensitive, since after a double click, a THIRD mouse click was registered,
+								//so it would immediately leave area editing mode if you clicked on a turf too quickly
+
+								//Blame the old coders
+								return
+
+							holder.buildmode.copycat = null
+							user.client.images.Remove(holder.buildmode.area_overlay)
+							to_chat(usr, "<span class='info'>No longer editing area.</span>")
+							return
+
+						//Handle entering area editing mode
+						if(isturf(object))
+							//Middle mouse buttoning a turf twice will enter area editing mode for its area. Use the build-adv function to modify the area
+							if(holder.buildmode.copycat == object)
+								to_chat(usr, "<span class='info'>Modifying area of [object] ([formatJumpTo(object)]). Use the build-adv function to add tiles. Middle-click anywhere outside of the area to stop.</span>")
+								var/area/A = get_area(object)
+								holder.buildmode.copycat = A
+								holder.buildmode.area_overlay.loc = A
+								user.client.images.Add(holder.buildmode.area_overlay) //Enable area visualisation
+								return
+							else
+								holder.buildmode.copycat = object
+						else
+							//The copycat variable has priority over the objholder variable when deciding a left mouse button action
+							//Middle-clicking turfs sets them to copycat, middle-clicking objects doesn't
+							//Set copycat to null to allow copying objects
+							holder.buildmode.copycat = null
+
 						holder.buildmode.objholder = object.type
 						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")
 
 		if(3)
-			if(pa.Find("left")) //I cant believe this shit actually compiles.
-				if(!object.vars.Find(holder.buildmode.varholder))
-					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
-					return
+			if(!object.vars.Find(holder.buildmode.varholder))
+				to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
+				return
 
+			if(pa.Find("left")) //I cant believe this shit actually compiles.
 				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 0)
 
 			if(pa.Find("right"))
-				if(!object.vars.Find(holder.buildmode.varholder))
-					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
-					return
-
 				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 1) //Reset the var to its initial value
+
+			if(pa.Find("middle"))
+				if(holder.buildmode.varholder == "appearance") //Special case for appearance, as it doesn't behave like other varialbes
+					user.client.holder.marked_appearance = object
+				else
+					holder.buildmode.valueholder = object.vars[holder.buildmode.varholder]
+
+				to_chat(usr, "Copied '[holder.buildmode.varholder]' from [object].")
 
 		if(4)
 			if(pa.Find("left"))
@@ -634,10 +729,12 @@ obj/effect/bmode/buildholder/New()
 	if(!reset)
 		variable_set(usr, A, varname, value_override = varvalue, logging = log)
 	else
-		variable_set(usr, A, varname, value_override = initial(A.vars[varname]), logging = log)
+		var/init_value = initial(A.vars[varname])
+		if(varname == "appearance") //Appearance doesn't play by the rules
+			init_value = "initial"
 
-#undef BOTTOM_LEFT
-#undef TOP_RIGHT
+		variable_set(usr, A, varname, value_override = init_value, logging = log)
+
 #undef MASS_FILL
 #undef MASS_DELETE
 #undef SELECTIVE_DELETE

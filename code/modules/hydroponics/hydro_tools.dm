@@ -32,13 +32,13 @@
 	else if(istype(target,/obj/item/weapon/reagent_containers/food/snacks/grown))
 
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = target
-		grown_seed = plant_controller.seeds[G.plantname]
+		grown_seed = SSplant.seeds[G.plantname]
 		grown_reagents = G.reagents
 
 	else if(istype(target,/obj/item/weapon/grown))
 
 		var/obj/item/weapon/grown/G = target
-		grown_seed = plant_controller.seeds[G.plantname]
+		grown_seed = SSplant.seeds[G.plantname]
 		grown_reagents = G.reagents
 
 	else if(istype(target,/obj/item/seeds))
@@ -89,6 +89,8 @@
 
 	if(grown_seed.harvest_repeat)
 		dat += "This plant can be harvested repeatedly.<br>"
+		if(grown_seed.harvest_repeat > 1)
+			dat += "This plant harvests itself when ready.<br>"
 
 	if(grown_seed.immutable == -1)
 		dat += "This plant is highly mutable.<br>"
@@ -325,6 +327,8 @@
 	force = 5.0
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
 
@@ -364,50 +368,6 @@
 	toxicity = 8
 	weed_kill_str = 7
 
-
-// *************************************
-// Nutrient defines for hydroponics
-// *************************************
-
-/obj/item/weapon/reagent_containers/glass/fertilizer
-	name = "fertilizer bottle"
-	desc = "A small glass bottle. Can hold up to 10 units."
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT | OPENCONTAINER
-	possible_transfer_amounts = null
-	w_class = W_CLASS_SMALL
-
-	var/fertilizer //Reagent contained, if any.
-
-	//Like a shot glass!
-	amount_per_transfer_from_this = 10
-	volume = 10
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/New()
-	..()
-
-	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-
-	if(fertilizer)
-		reagents.add_reagent(fertilizer,10)
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/ez
-	name = "bottle of E-Z-Nutrient"
-	icon_state = "bottle16"
-	fertilizer = EZNUTRIENT
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/l4z
-	name = "bottle of Left 4 Zed"
-	icon_state = "bottle18"
-	fertilizer = LEFT4ZED
-
-/obj/item/weapon/reagent_containers/glass/fertilizer/rh
-	name = "bottle of Robust Harvest"
-	icon_state = "bottle15"
-	fertilizer = ROBUSTHARVEST
-
 //Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
 	name = "hatchet"
@@ -418,6 +378,8 @@
 	siemens_coefficient = 1
 	force = 12.0
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 5000)
+	w_type = RECYK_METAL
 	throwforce = 15.0
 	throw_speed = 4
 	throw_range = 4
@@ -457,9 +419,11 @@
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor))
+	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass))
 		for(var/obj/effect/plantsegment/B in range(user,1))
 			B.take_damage(src)
+		for(var/obj/effect/biomass/BM in range(user,1))
+			BM.adjust_health(rand(15,45))
 		user.delayNextAttack(10)
 		/*var/olddir = user.dir
 		spawn for(var/i=-2, i<=2, i++) //hheeeehehe i'm so dumb
@@ -489,11 +453,12 @@
 	throw_speed = 1
 	throw_range = 3
 	flags = FPRINT
+	var/being_potted = FALSE
 
 /obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
 	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
 		to_chat(user, "<span class='warning'>You have to transplant the plant into the pot directly from the hydroponic tray, using a spade.</span>")
-	else if(istype(O,/obj/item/weapon/pickaxe/shovel))
+	else if(isshovel(O))
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")
 	else
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")

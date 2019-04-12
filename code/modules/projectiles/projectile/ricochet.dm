@@ -176,7 +176,7 @@
 	bouncin = 1
 	var/obj/structure/ricochet_bump/bump = new(loc)
 	bump.dir = pos_to
-	playsound(get_turf(src), 'sound/items/metal_impact.ogg', 50, 1)
+	playsound(src, 'sound/items/metal_impact.ogg', 50, 1)
 	switch(pos_to)
 		if(NORTH)
 			if(pos_from == WEST)
@@ -219,7 +219,7 @@
 	playsound(impact, 'sound/weapons/pierce.ogg', 30, 1)
 
 	spawn()
-		density = 0
+		setDensity(FALSE)
 		invisibility = 101
 		returnToPool(src)
 		OnDeath()

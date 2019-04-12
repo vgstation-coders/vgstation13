@@ -10,9 +10,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 20
 	poison_per_bite = 5
-	// Hunters attack doors (jam them open)
 	wanted_objects = list(
-		/obj/machinery/door/airlock,
 		/obj/machinery/bot,          // Beepsky and friends
 		/obj/machinery/light,        // Bust out lights
 	)
@@ -21,14 +19,6 @@
 	wander = 1
 	ranged = 0
 	minimum_distance = 1
-
-/mob/living/simple_animal/hostile/giant_spider/hunter/proc/GiveUp(var/C)
-	spawn(100)
-		if(busy == MOVING_TO_TARGET)
-			if(target == C && get_dist(src,target) > 1)
-				target = null
-			busy = 0
-			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead
 	health = 0

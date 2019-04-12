@@ -236,9 +236,9 @@
 	interpreter.Run()
 
 	// Backwards-apply variables onto signal data
-	/* sanitize EVERYTHING. fucking players can't be trusted with SHIT */
+	/* sanitize (almost) EVERYTHING. fucking players can't be trusted with SHIT */
 
-	signal.data["message"] 	= interpreter.GetCleanVar("$content", signal.data["message"])
+	signal.data["message"] 	= interpreter.GetVar("$content")
 	signal.frequency 		= interpreter.GetCleanVar("$freq", signal.frequency)
 
 	var/setname = interpreter.GetCleanVar("$source", signal.data["name"])
@@ -293,8 +293,7 @@
 
 		connection.post_signal(S, signal)
 
-		var/time = time2text(world.realtime,"hh:mm:ss")
-		lastsignalers.Add("[time] <B>:</B> [S.id] sent a signal command, which was triggered by NTSL.<B>:</B> [format_frequency(freq)]/[code]")
+		S.investigation_log(I_WIRES, "NTSL-triggered signaler activated by [S.id] - [format_frequency(frequency)]/[code]")
 
 
 /datum/signal/proc/tcombroadcast(var/message, var/freq, var/source, var/job)

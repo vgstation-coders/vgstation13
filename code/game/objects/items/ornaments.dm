@@ -60,7 +60,7 @@
 	..()
 	src.visible_message("<span class='warning'>\The [src] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 	if(get_turf(src))
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
 		getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
 	qdel(src)

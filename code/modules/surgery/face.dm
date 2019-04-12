@@ -150,8 +150,9 @@
 	affected.open = 0
 	affected.status &= ~ORGAN_BLEEDING
 	if (target.op_stage.face == 3)
-		var/datum/organ/external/head/h = affected
-		h.disfigured = 0
+		var/datum/organ/external/head/head_organ = affected
+		head_organ.disfigured = FALSE
+		target.visible_message("<span class='notice'>[target]'s face has been repaired.</span>")
 	target.op_stage.face = 0
 	target.op_stage.tooth_replace = 0
 

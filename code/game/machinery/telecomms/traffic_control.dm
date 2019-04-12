@@ -1,6 +1,7 @@
 /obj/machinery/computer/telecomms/traffic
-	name = "Telecommunications Traffic Control"
-	icon_state = "computer_generic"
+	name = "telecommunications traffic control console"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "traffic_control"
 	circuit = "/obj/item/weapon/circuitboard/comm_traffic"
 
 	var/screen = 0				// the screen number:
@@ -18,7 +19,7 @@
 	var/list/access_log = list()
 	var/process = 0
 
-	light_color = LIGHT_COLOR_GREEN
+	light_color = LIGHT_COLOR_ORANGE
 
 	req_access = list(access_tcomsat)
 
@@ -279,9 +280,10 @@
 
 /obj/machinery/computer/telecomms/emag(mob/user)
 	if(!emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
+		if(user)
+			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 	src.updateUsrDialog()
 	return 1
 /obj/machinery/computer/telecomms/traffic/proc/canAccess(var/mob/user)

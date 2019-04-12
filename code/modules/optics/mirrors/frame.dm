@@ -16,25 +16,19 @@
 		if(do_after(user, src,20))
 			anchored=!anchored
 			user.visible_message("<span class='info'>You unfasten \the [src]'s bolts.</span>", "[user] unfastens the [src]'s bolts.","You hear a ratchet.")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0,user))
-			to_chat(user, "Now welding the [src]...")
-			if(do_after(user, src, 20))
-				if(!src || !WT.isOn())
-					return
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-				user.visible_message("<span class='warning'>[user] cuts the [src] apart.</span>", "<span class='warning'>You cut the [src] apart.</span>", "You hear welding.")
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-				M.amount = 5
-				qdel(src)
+		to_chat(user, "Now welding the [src]...")
+		if (WT.do_weld(user, src, 20, 0))
+			if(gcDestroyed)
 				return
-			else
-				to_chat(user, "<span class='notice'>The welding tool needs to be on to start this task.</span>")
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			user.visible_message("<span class='warning'>[user] cuts the [src] apart.</span>", "<span class='warning'>You cut the [src] apart.</span>", "You hear welding.")
+			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			M.amount = 5
+			qdel(src)
+			return
 
 	if(istype(W, /obj/item/stack/sheet/glass/plasmarglass))
 		var/obj/item/stack/sheet/glass/plasmarglass/stack = W

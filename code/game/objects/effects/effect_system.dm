@@ -42,7 +42,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 	..()
 
-/obj/effect/effect/water/Move(NewLoc,Dir=0,step_x=0,step_y=0)
+/obj/effect/effect/water/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	//var/turf/T = src.loc
 	//if (istype(T, /turf))
 	//	T.firelevel = 0 //TODO: FIX
@@ -172,7 +172,7 @@ steam.start() -- spawns the effect
 
 	..()
 
-/obj/effect/effect/sparks/Move()
+/obj/effect/effect/sparks/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
@@ -214,6 +214,13 @@ steam.start() -- spawns the effect
 		if(nextdir)
 			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
 			sparks.start(nextdir)
+
+// This sparks.
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE)
+	loc = get_turf(loc)
+	var/datum/effect/effect/system/spark_spread/S = new
+	S.set_up(amount, cardinals, loc)
+	S.start()
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -265,7 +272,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/smoke/bad
 	time_to_live = 200
 
-/obj/effect/effect/smoke/bad/Move()
+/obj/effect/effect/smoke/bad/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	for(var/mob/living/carbon/M in get_turf(src))
 		affect(M)
@@ -294,7 +301,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/smoke/sleepy
 
-/obj/effect/effect/smoke/sleepy/Move()
+/obj/effect/effect/smoke/sleepy/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	for(var/mob/living/carbon/M in get_turf(src))
 		affect(M)
@@ -319,7 +326,7 @@ steam.start() -- spawns the effect
 	name = "mustard gas"
 	icon_state = "mustard"
 
-/obj/effect/effect/smoke/mustard/Move()
+/obj/effect/effect/smoke/mustard/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	for(var/mob/living/carbon/human/R in get_turf(src))
 		affect(R)
@@ -333,7 +340,7 @@ steam.start() -- spawns the effect
 	R.burn_skin(0.75)
 	if (R.coughedtime != 1)
 		R.coughedtime = 1
-		R.emote("gasp")
+		R.emote("gasp", null, null, TRUE)
 		spawn (20)
 			R.coughedtime = 0
 	R.updatehealth()
@@ -409,7 +416,7 @@ steam.start() -- spawns the effect
 	. = ..()
 	create_reagents(500)
 
-/obj/effect/effect/smoke/chem/Move()
+/obj/effect/effect/smoke/chem/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	for(var/atom/A in view(2, src))
 		if(reagents.has_reagent(RADIUM)||reagents.has_reagent(URANIUM)||reagents.has_reagent(CARBON)||reagents.has_reagent(THERMITE)||reagents.has_reagent(BLEACH))//Prevents unholy radium spam by reducing the number of 'greenglows' down to something reasonable -Sieve
@@ -439,7 +446,8 @@ steam.start() -- spawns the effect
 			n = 20
 		number = n
 		cardinals = c
-		carry.copy_to(chemholder, carry.total_volume)
+		if(carry)
+			carry.copy_to(chemholder, carry.total_volume)
 
 
 		if(istype(loca, /turf/))
@@ -740,8 +748,8 @@ steam.start() -- spawns the effect
 		var/datum/gas_mixture/old_air = T.return_air()
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
-			var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
-			lowertemp.temperature = max( min(lowertemp.temperature-500,lowertemp.temperature / 2) ,0)
+			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
+			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 1) //Reaching exactly 0K causes problems
 			lowertemp.react()
 			T.assume_air(lowertemp)
 	spawn(3)
@@ -752,9 +760,9 @@ steam.start() -- spawns the effect
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
-		if((local_air.temperature  < lowest_temperature)&&(savedtemp > lowest_temperature)) //ie, we have over-chilled
+		if((local_air.temperature < lowest_temperature) && (savedtemp > lowest_temperature)) //ie, we have over-chilled
 			local_air.temperature = lowest_temperature
-		else if ((local_air.temperature  < lowest_temperature)&&(savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
+		else if((local_air.temperature < lowest_temperature) && (savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
 			local_air.temperature = savedtemp
 		sleep(5)
 		qdel(src)
@@ -973,6 +981,7 @@ steam.start() -- spawns the effect
 	icon_regular_floor = "foamedmetal"
 	icon_plating = "foamedmetal"
 	can_exist_under_lattice = 1
+	plane = PLATING_PLANE
 
 /turf/simulated/floor/foamedmetal/attack_hand(mob/living/user as mob)
 	user.delayNextAttack(10)
@@ -1047,16 +1056,16 @@ steam.start() -- spawns the effect
 
 	start()
 		if (amount <= 2)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 1, location)
-			s.start()
+			spark(location, 2)
 
 			for(var/mob/M in viewers(5, location))
 				to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 			for(var/mob/M in viewers(1, location))
 				if (prob (50 * amount))
 					to_chat(M, "<span class='warning'>The explosion knocks you down.</span>")
-					M.Knockdown(rand(1,5))
+					var/incapacitation_duration = rand(1,5)
+					M.Knockdown(incapacitation_duration)
+					M.Stun(incapacitation_duration)
 			return
 		else
 			var/devastation = -1
@@ -1066,9 +1075,9 @@ steam.start() -- spawns the effect
 			var/range = 0
 			// Clamp all values to MAX_EXPLOSION_RANGE
 			range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-			devastation = round(min(1, range * 0.25)) // clamps to 1 devestation for grenades
-			heavy = round(min(3, range * 0.5)) // clamps to 3 heavy range for grenades
-			light = min(6, range) // clamps to 6 light range for grenades
+			devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+			heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+			light = min(7, range) // clamps to 7 light range for grenades
 			flash = range * 1.5
 			/*
 			if (round(amount/12) > 0)

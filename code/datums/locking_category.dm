@@ -25,13 +25,17 @@
 	AM.anchored = TRUE
 
 	if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
-		owner.density = TRUE
+		owner.setDensity(TRUE)
 
 	AM.pixel_x += pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y += pixel_y_offset * PIXEL_MULTIPLIER
 
 	update_lock(AM)
 	AM.change_dir(owner.dir, owner)
+
+/datum/locking_category/proc/update_locks()
+	for(var/atom/A in locked)
+		update_lock(A)
 
 // Updates the position for AM.
 /datum/locking_category/proc/update_lock(var/atom/movable/AM)
@@ -68,7 +72,7 @@
 		if (newer_loc) // Edge (no pun intended) case for map borders.
 			new_loc = newer_loc
 
-	AM.forceMove(new_loc)
+	AM.forceMove(new_loc, 0, 0, owner.glide_size)
 
 // Modifies the atom to undo changes in lock().
 /datum/locking_category/proc/unlock(var/atom/movable/AM)
@@ -93,7 +97,7 @@
 				break
 
 	if (!found)
-		owner.density = initial(owner.density)
+		owner.setDensity(initial(owner.density))
 
 	if (ismob(AM))
 		var/mob/M = AM

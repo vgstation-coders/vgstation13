@@ -18,6 +18,7 @@
 	// 8 for toxins concentration
 	// 16 for nitrogen concentration
 	// 32 for carbon dioxide concentration
+	// 64 for nitrous oxide concentration
 
 	machine_flags = WRENCHMOVE | MULTITOOL_MENU
 
@@ -38,6 +39,7 @@
 		<li>Monitor Plasma Concentration: <a href="?src=\ref[src];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
 		<li>Monitor Nitrogen Concentration: <a href="?src=\ref[src];toggle_out_flag=16">[output&16 ? "Yes" : "No"]</a>
 		<li>Monitor Carbon Dioxide Concentration: <a href="?src=\ref[src];toggle_out_flag=32">[output&32 ? "Yes" : "No"]</a>
+		<li>Monitor Nitrous Oxide Concentration: <a href="?src=\ref[src];toggle_out_flag=64">[output&64 ? "Yes" : "No"]</a>
 	</ul>"}
 
 /obj/machinery/air_sensor/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
@@ -47,7 +49,7 @@
 
 	if("toggle_out_flag" in href_list)
 		var/bitflag_value = text2num(href_list["toggle_out_flag"])//this is a string normally
-		if(!test_bitflag(bitflag_value) && bitflag_value <= 32) //Here to prevent breaking the sensors with HREF exploits
+		if(!test_bitflag(bitflag_value) && bitflag_value <= 64) //Here to prevent breaking the sensors with HREF exploits
 			return 0
 		if(output&bitflag_value)//the bitflag is on ATM
 			output &= ~bitflag_value
@@ -74,22 +76,25 @@
 		if(output&2)
 			signal.data["temperature"] = round(air_sample.temperature,0.1)
 
-		if(output>4)
-			var/total_moles = air_sample.total_moles()
+		if(output>=4)
+			var/total_moles = air_sample.total_moles
 			if(total_moles > 0)
-				if(output&4)
-					signal.data["oxygen"] = round(100*air_sample.oxygen/total_moles,0.1)
-				if(output&8)
-					signal.data["toxins"] = round(100*air_sample.toxins/total_moles,0.1)
-				if(output&16)
-					signal.data["nitrogen"] = round(100*air_sample.nitrogen/total_moles,0.1)
-				if(output&32)
-					signal.data["carbon_dioxide"] = round(100*air_sample.carbon_dioxide/total_moles,0.1)
+				if(output & 4)
+					signal.data["oxygen"] = round(100 * air_sample[GAS_OXYGEN] / total_moles, 0.1)
+				if(output & 8)
+					signal.data["toxins"] = round(100 * air_sample[GAS_PLASMA] / total_moles, 0.1)
+				if(output & 16)
+					signal.data["nitrogen"] = round(100 * air_sample[GAS_NITROGEN] / total_moles, 0.1)
+				if(output & 32)
+					signal.data["carbon_dioxide"] = round(100 * air_sample[GAS_CARBON] / total_moles, 0.1)
+				if(output & 64)
+					signal.data["nitrous_oxide"] = round(100 * air_sample[GAS_SLEEPING] / total_moles, 0.1)
 			else
 				signal.data["oxygen"] = 0
 				signal.data["toxins"] = 0
 				signal.data["nitrogen"] = 0
 				signal.data["carbon_dioxide"] = 0
+				signal.data["nitrous_oxide"] = 0
 		signal.data["sigtype"]="status"
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
@@ -173,6 +178,8 @@
 						sensor_part += "<li>[data["carbon_dioxide"]]% CO<sub>2</sub></li>"
 					if(data["toxins"])
 						sensor_part += "<li>[data["toxins"]]% Plasma</li>"
+					if(data["nitrous_oxide"])
+						sensor_part += "<li>[data["nitrous_oxide"]]% N<sub>2</sub>O</li>"
 					sensor_part += "</ul></td></tr>"
 				sensor_part += "</table>"
 
@@ -274,7 +281,7 @@ font-weight:bold;
 		var/sensor = input(user, "Select a sensor:", "Sensor Data") as null|anything in sensor_list
 		if(!sensor)
 			return MT_ERROR
-		var/label = reject_bad_name( input(user, "Choose a sensor label:", "Sensor Label")  as text|null, allow_numbers=1)
+		var/label = stripped_input(user, "Choose a sensor label:", "Sensor Label")
 		if(!label)
 			return MT_ERROR
 
@@ -699,5 +706,3 @@ font-weight:bold;
 		)
 
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
-
-

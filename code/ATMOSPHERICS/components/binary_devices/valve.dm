@@ -4,11 +4,11 @@
 
 	name = "manual valve"
 	desc = "A pipe valve."
-	var/open = 0
+	var/open = FALSE
 	var/openDuringInit = 0
 
 /obj/machinery/atmospherics/binary/valve/open
-	open = 1
+	open = TRUE
 	icon_state = "hvalve1"
 
 /obj/machinery/atmospherics/binary/valve/update_icon(var/adjacent_procd,var/animation)
@@ -33,12 +33,10 @@
 	return null
 
 /obj/machinery/atmospherics/binary/valve/proc/open()
-
-
 	if(open)
 		return 0
 
-	open = 1
+	open = TRUE
 	update_icon()
 
 	if(network1&&network2)
@@ -53,12 +51,10 @@
 	return 1
 
 /obj/machinery/atmospherics/binary/valve/proc/close()
-
-
 	if(!open)
 		return 0
 
-	open = 0
+	open = FALSE
 	update_icon()
 
 	if(network1)
@@ -223,3 +219,17 @@
 	else
 		open()
 	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(L)]")
+
+/obj/machinery/atmospherics/binary/valve/toggle_status(var/mob/user)
+	if(!allowed(user))
+		to_chat(user, "<span class='warning'>Access denied.</span>")
+		return FALSE
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
+	if(open)
+		close()
+	else
+		open()
+	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(user)]")
+	return TRUE

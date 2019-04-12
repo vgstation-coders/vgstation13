@@ -65,6 +65,8 @@
 	for(var/obj/item/stack/sheet/hairlesshide/HH in contents)
 		var/obj/item/stack/sheet/wetleather/WL = new(src)
 		WL.amount = HH.amount
+		WL.source_string = HH.source_string
+		WL.name = HH.source_string ? "wet [HH.source_string] leather" : "wet leather"
 		qdel(HH)
 		HH = null
 

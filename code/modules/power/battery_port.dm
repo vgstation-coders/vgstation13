@@ -94,4 +94,3 @@
 		connected.update_icon()
 		connected = null
 		update_icon()
-

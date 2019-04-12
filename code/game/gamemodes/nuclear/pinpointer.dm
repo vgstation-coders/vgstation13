@@ -13,25 +13,39 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
 	var/obj/target = null // this can be used to override disk tracking on normal pinpointers (ie. for shunted malf ais)
-	var/active = 0
-	var/watches_nuke = 1
+	var/active = FALSE
+	var/watches_nuke = TRUE
+	var/pinpointable = TRUE//is it being tracked by the pinpointer pinpointer
+var/list/pinpointerpinpointer_list = list()
+
+/obj/item/weapon/pinpointer/New()
+	..()
+	pinpointer_list.Add(src)
+	if (pinpointable == TRUE)
+		pinpointerpinpointer_list.Add(src)
 
 /obj/item/weapon/pinpointer/Destroy()
+	fast_objects -= src
+	pinpointer_list.Remove(src)
+	pinpointerpinpointer_list.Remove(src)
+
 	..()
-	processing_objects -= src
+
+/obj/item/weapon/pinpointer/acidable()
+	return FALSE
 
 /obj/item/weapon/pinpointer/attack_self()
 	if(!active)
-		active = 1
+		active = TRUE
 		workdisk()
 		to_chat(usr,"<span class='notice'>You activate \the [src]</span>")
-		playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 30, 1)
-		processing_objects += src
+		playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
+		fast_objects += src
 	else
-		active = 0
+		active = FALSE
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate \the [src]</span>")
-		processing_objects -= src
+		fast_objects -= src
 
 /obj/item/weapon/pinpointer/proc/workdisk()
 	process()
@@ -89,17 +103,18 @@
 	desc = "A larger version of the normal pinpointer, this unit features a helpful quantum entanglement detection system to locate various objects that do not broadcast a locator signal."
 	var/mode = 0  // Mode 0 locates disk, mode 1 locates coordinates.
 	var/turf/location = null
-	watches_nuke = 0
+	watches_nuke = FALSE
+	pinpointable = FALSE
 
 /obj/item/weapon/pinpointer/advpinpointer/attack_self()
 	if(!active)
-		active = 1
-		processing_objects += src
+		active = TRUE
+		fast_objects += src
 		process()
 		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
 	else
-		processing_objects -= src
-		active = 0
+		fast_objects -= src
+		active = FALSE
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
 
@@ -117,7 +132,7 @@
 	set name = "Toggle Pinpointer Mode"
 	set src in view(1)
 
-	active = 0
+	active = FALSE
 	icon_state = "pinoff"
 	target=null
 	location = null
@@ -187,22 +202,23 @@
 /obj/item/weapon/pinpointer/nukeop
 	var/mode = 0	//Mode 0 locates disk, mode 1 locates the shuttle
 	var/obj/machinery/computer/shuttle_control/syndicate/home = null
+	pinpointable = FALSE
 
 
 /obj/item/weapon/pinpointer/nukeop/attack_self(mob/user as mob)
 	if(!active)
-		active = 1
+		active = TRUE
 		if(!mode)
 			to_chat(user,"<span class='notice'>Authentication Disk Locator active.</span>")
 		else
 			to_chat(user,"<span class='notice'>Shuttle Locator active.</span>")
 		process()
-		processing_objects += src
+		fast_objects += src
 	else
-		active = 0
+		active = FALSE
 		icon_state = "pinoff"
 		to_chat(user,"<span class='notice'>You deactivate the pinpointer.</span>")
-		processing_objects -= src
+		fast_objects -= src
 
 
 /obj/item/weapon/pinpointer/nukeop/process()
@@ -237,18 +253,19 @@
 /obj/item/weapon/pinpointer/pdapinpointer
 	name = "pda pinpointer"
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
-	var/used = 0
-	watches_nuke = 0
+	var/used = FALSE
+	watches_nuke = FALSE
+	pinpointable = FALSE
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
-		active = 1
+		active = TRUE
 		process()
-		processing_objects += src
+		fast_objects += src
 		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
 	else
-		active = 0
-		processing_objects -= src
+		active = FALSE
+		fast_objects -= src
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
 
@@ -267,7 +284,7 @@
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
-	for (var/obj/item/device/pda/P in world)
+	for (var/obj/item/device/pda/P in PDAs)
 		if(P.name != "\improper PDA")
 			L[text("([length]) [P.name]")] = P
 			length++
@@ -279,13 +296,40 @@
 	if(!target)
 		to_chat(usr,"Failed to locate [target]!")
 		return
-	active = 1
+	active = TRUE
 	point_at(target)
 	to_chat(usr,"You set the pinpointer to locate [target]")
-	used = 1
+	used = TRUE
 
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
 	if (target)
 		to_chat(user,"<span class='notice'>Tracking [target]</span>")
+
+//////////////////////////
+//pinpointer pinpointers//
+//////////////////////////
+
+/obj/item/weapon/pinpointer/pinpointerpinpointer
+	name = "pinpointer pinpointer"
+	desc = "Where did that darn pinpointer go? Hmmm... well, good thing I have this trusty pinpointer pinpointer to find it."
+	watches_nuke = FALSE
+	pinpointable = FALSE
+
+
+/obj/item/weapon/pinpointer/pinpointerpinpointer/New()
+	..()
+	overlays += "pinpointerpinpointer"
+
+/obj/item/weapon/pinpointer/pinpointerpinpointer/process()
+	var/closest_distance = INFINITY
+	var/turf/L = get_turf(src)
+	for(var/atom/P in pinpointerpinpointer_list)
+		var/turf/T = get_turf(P)
+		var/dist_P = abs(cheap_pythag((L.x - T.x), (L.y - T.y)))
+		if(dist_P < closest_distance)
+			closest_distance = dist_P
+			target = P
+	point_at(target)
+	..()

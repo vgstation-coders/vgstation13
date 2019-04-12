@@ -49,9 +49,7 @@
 
 
 /obj/structure/dispenser/attack_robot(mob/user as mob)
-	if(isMoMMI(user))
-		return attack_hand(user)
-	return ..()
+	return attack_hand(user)
 
 /obj/structure/dispenser/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -88,11 +86,11 @@
 	if(iswrench(I))
 		if(anchored)
 			to_chat(user, "<span class='notice'>You lean down and unwrench [src].</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 0
 		else
 			to_chat(user, "<span class='notice'>You wrench [src] into place.</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 1
 		return
 

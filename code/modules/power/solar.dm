@@ -51,14 +51,14 @@ var/list/solars_list = list()
 			anchored = 1
 			user.visible_message("<span class='notice'>[user] wrenches [src] down.</span>", \
 			"<span class='notice'>You wrench [src] down.</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 	else
 		if(iswrench(W))
 			anchored = 0
 			user.visible_message("<span class='notice'>[user] unwrenches [src] from the ground.</span>", \
 			"<span class='notice'>You unwrench [src] from the ground.</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 
 		if(istype(W, /obj/item/stack/sheet/glass))
@@ -66,7 +66,7 @@ var/list/solars_list = list()
 			if(S.amount >= 2)
 				glass_type = W.type
 				S.use(2)
-				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+				playsound(src, 'sound/machines/click.ogg', 50, 1)
 				user.visible_message("<span class='notice'>[user] carefully adds glass to [src].</span>", \
 				"<span class='notice'>You carefully add glass to [src].</span>")
 				if(tracker)

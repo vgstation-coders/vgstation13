@@ -1,0 +1,47 @@
+<!--
+Title: Starscreen shield capacitor
+Used In File(s): /code/WorkInProgress/Cael_Aislinn/ShieldGen/shield_capacitor.dm
+-->
+{{if data.locked}}
+	<div class="notice">Swipe card to unlock.</div>
+{{else}}
+	<div class="notice">Remember to lock with ID card after use.</div>
+    <div class="item">
+        <div class="itemLabelWide">Status:</div>
+        <div class="itemContents">{{:helper.link(data.active ? 'On' : 'Off', 'power', {'toggle_active' : '1'})}}</div>
+    </div>
+    <div class="item">
+        <div class="itemLabelWide">Stability:</div>
+        <div class="itemContents">
+        {{if data.stability}}
+            <span class="good">Stable</span>
+        {{else}}
+            <span class="bad">Warning, low charge!</span>
+        {{/if}}
+        </div>
+    </div>
+    <div class="item">
+        <div class="itemLabelWide">Charge:</div>
+        <div class="itemContents">
+            {{:helper.displayBar(data.charge, data.min_charge, data.max_charge)}}
+            <div style="clear: both; padding-top: 4px;">
+                <div style="float: left; text-align: center;">&nbsp;{{:Math.round(data.charge)}} kilowatts ({{:helper.precisionRound(data.charge_percentage, 1)}}%) &nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <div class="item">
+        <div class="itemLabelWide">Charge rate:</div>
+        <div class="itemContents">
+                {{:helper.displayBar(data.charge_rate, data.min_charge_rate, data.max_charge_rate)}}
+                <div style="clear: both; padding-top: 4px;">
+                    {{:helper.link('min', null, {'adjust_charge_rate' : -data.max_charge_rate}, (data.charge_rate > data.min_charge_rate) ? null : 'disabled')}}
+                    {{:helper.link('--', null, {'adjust_charge_rate' : -10000}, (data.charge_rate > data.min_charge_rate) ? null : 'disabled')}}
+                    {{:helper.link('-', null, {'adjust_charge_rate' : -1000}, (data.charge_rate > data.min_charge_rate) ? null : 'disabled')}}
+                    <div style="float: left; text-align: center;">&nbsp;{{:Math.round(data.charge_rate, 1)}} kilowatts/sec&nbsp;</div>
+                    {{:helper.link('+', null, {'adjust_charge_rate' : 1000}, (data.charge_rate < data.max_charge_rate) ? null : 'disabled')}}
+                    {{:helper.link('++', null, {'adjust_charge_rate' : 10000}, (data.charge_rate < data.max_charge_rate) ? null : 'disabled')}}
+                    {{:helper.link('max', null, {'adjust_charge_rate' : data.max_charge_rate}, (data.charge_rate < data.max_charge_rate) ? null : 'disabled')}}
+                </div>
+            </div>
+    </div>
+{{/if}}

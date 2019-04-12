@@ -112,11 +112,11 @@
 				"}
 
 /obj/item/weapon/book/manual/hydroponics_pod_people
-	name = "The Human Harvest - From seed to market"
+	name = "Growing Dionae and YOU! A book on growing your new best friends!"
 	icon_state ="bookHydroponicsPodPeople"
 	author = "Farmer John"
 	title = "The Human Harvest - From seed to market"
-	/*dat = {"<html>
+	dat = {"<html>
 				<head>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
@@ -127,24 +127,22 @@
 				</style>
 				</head>
 				<body>
-				<h3>Growing Humans</h3>
+				<h3>Growing Dionae</h3>
 
-				Why would you want to grow humans? Well I'm expecting most readers to be in the slave trade, but a few might actually
-				want to revive fallen comrades. Growing pod people is easy, but prone to disaster.
+				What are Dionae? These fun little plant people are something that every botanist needs to understand.
 				<p>
-				<ol>
-				<li>Find a dead person who is in need of cloning. </li>
-				<li>Take a blood sample with a syringe. </li>
-				<li>Inject a seed pack with the blood sample. </li>
-				<li>Plant the seeds. </li>
-				<li>Tend to the plants water and nutrition levels until it is time to harvest the cloned human.</li>
-				</ol>
+				Dionae nypmh pods will produce a single nymph. Most of the time the nymph dies out producing more seeds for replanting but when a nymph fully realizes it will start crawling about and now has some new abilties!<br>
+				Dionae can fertilze your crop, eat weeds and help around if they are willing.<br>
+				Among the Dionae nymphs needs is blood collection. They are likely to flick out their feelers at new people around itself nicking a sample of their blood. <br>
+				This blood sample is used by Dionae biology to gather the biological symbols from its source to garnish itself with new memories. They tend to mimic anything from their vocal patterns, languages, attitudes and opinons.<br>
+				However this does not mean that they necessarily need to follow your every whim. They tend to form their own wants and needs, and your green children do grow up fast. With enough collected memory they will evolve into adult Dionae.<br>
+				The Adult Dionae is not as capable a garden helper but they can apply to be a member of the station and to help you further as a normal botanist!<br>
+				Its important to keep track of all your green creations as they tend to get into trouble if left to their own devices. They choose weather they want to help around the plants but encourage it!
 				<p>
-				It really is that easy! Good luck!
 
 				</body>
 				</html>
-				"}*/
+				"}
 
 /obj/item/weapon/book/manual/medical_cloning
 	name = "Cloning techniques of the 26th century"
@@ -158,7 +156,7 @@
 	icon_state ="bookChemistry"
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
-	wiki_page = "Chemistry_101"
+	wiki_page = "Guide_to_Chemistry"
 
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
@@ -493,6 +491,7 @@
 	name = "Space Law"
 	desc = "A set of Nanotrasen guidelines for keeping law and order on their space stations."
 	icon_state = "bookSpaceLaw"
+	item_state = "bookSpaceLaw"
 	author = "Nanotrasen"
 	title = "Space Law"
 	wiki_page = "Space_Law"
@@ -508,6 +507,7 @@
 /obj/item/weapon/book/manual/chef_recipes
 	name = "Chef Recipes"
 	icon_state = "cooked_book"
+	item_state = "cooked_bookold"
 	author = "Lord Frenrir Cageth"
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
@@ -515,6 +515,7 @@
 /obj/item/weapon/book/manual/barman_recipes
 	name = "Barman Recipes"
 	icon_state = "barbook"
+	item_state = "barbook"
 	author = "Sir John Rose"
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
@@ -533,6 +534,13 @@
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
+
+/obj/item/weapon/book/manual/ship_building
+	name = "Dummies guide to Interstellar Flight"
+	title = "Dummies guide to Interstellar Flight"
+	icon_state = "bookDummy"
+	author = "David Alcubierre"
+	wiki_page = "Ship_Building"
 
 /obj/item/weapon/book/manual/mailing_guide
 	name = "Guide to disposal mailing system"

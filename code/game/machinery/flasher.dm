@@ -77,7 +77,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	if ((src.disable) || (src.last_flash && world.time < src.last_flash + 150))
 		return
 
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 	src.last_flash = world.time
 	use_power(1000)
 	if(harm_labeled >= min_harm_label)
@@ -89,7 +89,8 @@ var/list/obj/machinery/flasher/flashers = list()
 			continue
 		if (get_dist(src, O) > src.range)
 			continue
-
+		if(O.blinded)
+			continue
 		if (istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
 			continue
 		if(istype(O, /mob/living))
@@ -99,8 +100,10 @@ var/list/obj/machinery/flasher/flashers = list()
 			var/mob/living/carbon/C = O
 			if(C.eyecheck() <= 0) // Identical to handheld flash safety check
 				C.Knockdown(strength)
+				C.Stun(strength)
 		else
 			O.Knockdown(strength)
+			O.Stun(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)

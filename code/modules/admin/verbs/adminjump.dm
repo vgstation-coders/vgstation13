@@ -20,7 +20,8 @@
 		if(!T)
 			to_chat(src, "Nowhere to jump to!")
 			return
-		usr.forceMove(T)
+		usr.unlock_from()
+		usr.teleport_to(T)
 
 		log_admin("[key_name(usr)] jumped to [A]")
 		message_admins("[key_name_admin(usr)] jumped to [A]", 1)
@@ -37,7 +38,8 @@
 	if(config.allow_admin_jump)
 		log_admin("[key_name(usr)] jumped to [T.x],[T.y],[T.z] in [T.loc]")
 		message_admins("[key_name_admin(usr)] jumped to [T.x],[T.y],[T.z] in [T.loc]", 1)
-		usr.forceMove(T)
+		usr.unlock_from()
+		usr.teleport_to(T)
 		feedback_add_details("admin_verb","JT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else
 		alert("Admin jumping disabled")
@@ -59,7 +61,8 @@
 			var/turf/T = get_turf(M)
 			if(T && isturf(T))
 				feedback_add_details("admin_verb","JM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-				A.forceMove(T)
+				A.unlock_from()
+				A.teleport_to(T)
 			else
 				to_chat(A, "This mob is not located in the game world.")
 	else
@@ -75,6 +78,7 @@
 
 	if (config.allow_admin_jump)
 		if(src.mob)
+			src.mob.unlock_from()
 			var/mob/A = src.mob
 			A.x = tx
 			A.y = ty
@@ -105,7 +109,8 @@
 		var/mob/M = keys[selection]
 		log_admin("[key_name(usr)] jumped to [key_name(M)]")
 		message_admins("[key_name_admin(usr)] jumped to [key_name_admin(M)]", 1)
-		usr.forceMove(get_turf(M))
+		usr.unlock_from()
+		usr.teleport_to(M)
 		feedback_add_details("admin_verb","JK") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else
 		alert("Admin jumping disabled")
@@ -134,7 +139,8 @@
 			to_chat(src, "[V.file_path || V.name] doesn't have a location! Report this")
 			return
 
-		usr.forceMove(V.location)
+		usr.unlock_from()
+		usr.teleport_to(V.location)
 		feedback_add_details("admin_verb","JV")
 	else
 		alert("Admin jumping disabled")
@@ -149,6 +155,7 @@
 	if(config.allow_admin_jump)
 		log_admin("[key_name(usr)] teleported [key_name(M)]")
 		message_admins("[key_name_admin(usr)] teleported [key_name_admin(M)]", 1)
+		M.unlock_from()
 		M.teleport_to(usr)
 		feedback_add_details("admin_verb","GM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else
@@ -178,6 +185,7 @@
 		log_admin("[key_name(usr)] teleported [key_name(M)]")
 		message_admins("[key_name_admin(usr)] teleported [key_name(M)]", 1)
 		if(M)
+			M.unlock_from()
 			M.teleport_to(usr)
 			feedback_add_details("admin_verb","GK") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else
@@ -192,6 +200,7 @@
 	var/area/A = input(usr, "Pick an area.", "Pick an area") in sortedAreas
 	if(A)
 		if(config.allow_admin_jump)
+			M.unlock_from()
 			M.teleport_to(pick(get_area_turfs(A)))
 			feedback_add_details("admin_verb","SMOB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 

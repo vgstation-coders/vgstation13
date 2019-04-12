@@ -117,7 +117,8 @@ var/list/holomap_cache = list()
 		if(istype(A, /datum/action/item_action/toggle_minimap))
 			qdel(A)
 	..()
-	user.update_action_buttons()
+	if(user)
+		user.update_action_buttons_icon()
 
 /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
 	if(usr.isUnconscious())
@@ -155,12 +156,17 @@ var/list/holomap_cache = list()
 #define HOLOMAP_OTHER	2
 #define HOLOMAP_DEAD	3
 
+/obj/item/clothing/accessory/holomap_chip/proc/handle_sanity(var/turf/T)
+	if((!attached_to) || (!activator) || (activator.get_item_by_slot(slot_w_uniform) != attached_to) || (!activator.client) || (holoMiniMaps[T.z] == null))
+		return FALSE
+	return TRUE
+
 /obj/item/clothing/accessory/holomap_chip/proc/update_holomap()
 	var/turf/T = get_turf(src)
 	if(!T)//nullspace begone!
 		return
 
-	if((!attached_to) || (!activator) || (activator.get_item_by_slot(slot_w_uniform) != attached_to) || (!activator.client) || (holoMiniMaps[T.z] == null))
+	if(!handle_sanity(T))
 		deactivate_holomap()
 		return
 
@@ -229,6 +235,12 @@ var/list/holomap_cache = list()
 			mob_indicator = HOLOMAP_YOU
 		else if(istype(HC, /obj/item/clothing/accessory/holomap_chip/destroyed))
 			mob_indicator = HOLOMAP_DEAD
+		else if(isrobot(HC.loc) && (TU.z == T.z))
+			var/mob/living/silicon/robot/R = HC.loc
+			if(R.isDead())
+				mob_indicator = HOLOMAP_DEAD
+			else
+				mob_indicator = HOLOMAP_OTHER
 		else if(U && (TU.z == T.z) && ishuman(U.loc))
 			var/mob/living/carbon/human/H = U.loc
 			if(H.get_item_by_slot(slot_w_uniform) == U)

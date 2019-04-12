@@ -131,6 +131,7 @@ var/list/radiochannels = list(
 	"Service" = 1349,
 	"Supply" = 1347,
 	"Response Team" = 1345,
+	"Raider" = 1215,
 	"Syndicate" = 1213,
 	"DJ" = 1201
 )
@@ -138,6 +139,7 @@ var/list/radiochannels = list(
 var/list/radiochannelsreverse = list(
 	"1201" = "DJ",
 	"1213" = "Syndicate",
+	"1215" = "Raider",
 	"1345" = "Response Team",
 	"1347" = "Supply",
 	"1349" = "Service",
@@ -165,7 +167,9 @@ var/const/COMMON_FREQ = 1459
 var/list/CENT_FREQS = list(1345, 1441)
 
 var/const/COMM_FREQ = 1353 //command, colored gold in chat window
+var/const/REV_FREQ  = 1211
 var/const/SYND_FREQ = 1213
+var/const/RAID_FREQ = 1215 // for raiders
 
 // department channels
 var/const/SEC_FREQ = 1359
@@ -181,13 +185,13 @@ var/const/SER_FREQ = 1349
 /* filters */
 var/const/RADIO_TO_AIRALARM = "1"
 var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3" //deprecated
+var/const/RADIO_CHAT = "3" //deskbells and remote signallers
 var/const/RADIO_ATMOSIA = "4"
 var/const/RADIO_NAVBEACONS = "5"
 var/const/RADIO_AIRLOCK = "6"
 var/const/RADIO_SECBOT = "7"
 var/const/RADIO_MULEBOT = "8"
-var/const/RADIO_MAGNETS = "9"
+var/const/RADIO_MAGNETS = "9" //for the firing range "magnet" target mover
 var/const/RADIO_CONVEYORS = "10"
 
 var/global/datum/controller/radio/radio_controller
@@ -383,4 +387,4 @@ var/list/pointers = list()
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))
-			data[d] = strip_html_simple(val)
+			data[d] = utf8_sanitize(val)

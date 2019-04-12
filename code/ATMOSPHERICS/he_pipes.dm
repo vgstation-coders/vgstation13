@@ -66,41 +66,29 @@
 	if(!parent)
 		. = ..()
 
-	// Get gas from pipenet
-	var/datum/gas_mixture/internal = return_air()
-	var/remove_ratio = volume/internal.volume
-	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
-
 	//Get processable air sample and thermal info from environment
 	var/datum/gas_mixture/environment = loc.return_air()
-	var/environment_moles = environment.total_moles()
-	var/transfer_moles = 0.25 * environment_moles
-	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
+	var/environment_moles = environment.molar_density() * CELL_VOLUME //Moles per turf
 
-	// No environmental gas?  We radiate it, then.
-	if(!external_removed)
-		if(internal_removed)
-			internal.merge(internal_removed)
-		return radiate()
-
-	// Not enough gas in the air around us to care about.  Radiate. Less gas than airless tiles start with.
+	//Not enough gas in the air around us to care about. Radiate. Less gas than airless tiles start with.
 	if(environment_moles < NO_GAS)
-		if(internal_removed)
-			internal.merge(internal_removed)
-		environment.merge(external_removed)
 		return radiate()
-	// A tiny bit of air so this isn't really space, but its not worth activating exchange procs
+	//A tiny bit of air so this isn't really space, but it's not worth activating exchange procs
 	else if(environment_moles < SOME_GAS)
 		return 0
 
-	// No internal gas.  Screw this, we're out.
-	if(!internal_removed)
-		environment.merge(external_removed)
+	//Get gas from pipenet
+	var/datum/gas_mixture/internal = return_air()
+	if(!internal.total_moles)
 		return
+
+	var/datum/gas_mixture/external_removed = environment.remove(0.25 * environment_moles)
+	var/datum/gas_mixture/internal_removed = internal.remove_volume(volume)
+
 
 	//Get same info from connected gas
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
-	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + external_removed.heat_capacity() * external_removed.temperature
+	var/combined_energy = internal_removed.thermal_energy() + external_removed.thermal_energy()
 
 	if(!combined_heat_capacity)
 		combined_heat_capacity = 1
@@ -119,14 +107,13 @@
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate()
 	var/datum/gas_mixture/internal = return_air()
-	var/remove_ratio = volume/internal.volume
-	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
+	var/datum/gas_mixture/internal_removed = internal.remove_volume(volume)
 
 	if (!internal_removed)
 		return
 
 	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
-	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + (RADIATION_CAPACITY * ENERGY_MULT)
+	var/combined_energy = internal_removed.thermal_energy() + (RADIATION_CAPACITY * ENERGY_MULT)
 
 	var/final_temperature = combined_energy / combined_heat_capacity
 

@@ -7,7 +7,6 @@
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=2;" + Tc_PROGRAMMING + "=4"
 
 	var/searching = 0
-	var/askDelay = 10 * 60 * 1
 	//var/mob/living/carbon/brain/brainmob = null
 	var/list/ghost_volunteers[0]
 	req_access = list(access_robotics)
@@ -15,6 +14,7 @@
 	mecha = null//This does not appear to be used outside of reference in mecha.dm.
 	var/last_ping_time = 0
 	var/ping_cooldown = 50
+	var/datum/recruiter/recruiter = null
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/mmi/posibrain/test/New()
@@ -33,42 +33,45 @@
 	icon_state = "posibrain-searching"
 	ghost_volunteers.len = 0
 	src.searching = 1
-	src.request_player()
-	spawn(600)
-		if(ghost_volunteers.len)
-			var/mob/dead/observer/O = pick(ghost_volunteers)
-			if(istype(O) && O.client && O.key)
-				transfer_personality(O)
-		reset_search()
 
-/obj/item/device/mmi/posibrain/proc/request_player()
-	for(var/mob/dead/observer/O in get_active_candidates(ROLE_POSIBRAIN))
-		if(O.client)
-			if(check_observer(O))
-				to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>")
-				ghost_volunteers += O
+	if(!recruiter)
+		recruiter = new(src)
+		recruiter.display_name = "posibrain"
+		recruiter.role = ROLE_POSIBRAIN
+		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
+		recruiter.logging = TRUE
 
-/obj/item/device/mmi/posibrain/proc/check_observer(var/mob/dead/observer/O)
-	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
-		return 0
-	if(jobban_isbanned(O, ROLE_POSIBRAIN)) // Was pAI
-		return 0
-	if(O.client)
-		return 1
-	return 0
+		// A player has their role set to Yes or Always
+		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+		// ", but No or Never
+		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
 
-/obj/item/device/mmi/posibrain/proc/question(var/client/C)
-	spawn(0)
-		if(!C)
-			return
-		var/response = alert(C, "Someone is requesting a personality for \a [src]. Would you like to play as one?", "[src] request", "Yes", "No", "Never for this round")
-		if(!C || brainmob.key || 0 == searching)
-			return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
-		if(response == "Yes")
-			transfer_personality(C.mob)
+		recruiter.recruited.Add(src, "recruiter_recruited")
+
+	recruiter.request_player()
+
+
+/obj/item/device/mmi/posibrain/proc/recruiter_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. ([controls])</span>")
+	investigation_log(I_GHOST, "|| had a ghost automatically sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
+
+/obj/item/device/mmi/posibrain/proc/recruiter_not_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	if(O.client && get_role_desire_str(O.client.prefs.roles[ROLE_POSIBRAIN]) != "Never")
+		to_chat(O, "<span class=\"recruit\">Someone is requesting a personality for \a [src]. ([controls])</span>")
+
+/obj/item/device/mmi/posibrain/proc/recruiter_recruited(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	if(O)
+		transfer_personality(O)
+
+	reset_search()
+
 
 /obj/item/device/mmi/posibrain/proc/transfer_personality(var/mob/candidate)
-
 
 	src.searching = 0
 	//src.brainmob.mind = candidate.mind Causes issues with traitor overlays and traitor specific chat.
@@ -79,7 +82,7 @@
 
 	to_chat(src.brainmob, "<b>You are \a [src], brought into existence on [station_name()].</b>")
 	to_chat(src.brainmob, "<b>As a synthetic intelligence, you answer to all crewmembers, as well as the AI.</b>")
-	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>")
+	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm to the station or its crew.</b>")
 	src.brainmob.mind.assigned_role = "Positronic Brain"
 
 	var/turf/T = get_turf(src.loc)
@@ -87,6 +90,8 @@
 		M.show_message("<span class='notice'>\The [src] buzzes and beeps as it boots up.</span>")
 	playsound(src, 'sound/misc/buzzbeep.ogg', 50, 1)
 	icon_state = "posibrain-occupied"
+
+	investigation_log(I_GHOST, "|| has been occupied by: [key_name(brainmob)]")
 
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
@@ -99,31 +104,7 @@
 
 	var/turf/T = get_turf(src.loc)
 	for (var/mob/M in viewers(T))
-		M.show_message("<span class='notice'>The [src] buzzes quietly, and the golden lights fade away. Perhaps you could try again?</span>")
-
-/obj/item/device/mmi/posibrain/Topic(href,href_list)
-	if("signup" in href_list)
-		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O)
-			return
-		volunteer(O)
-
-/obj/item/device/mmi/posibrain/proc/volunteer(var/mob/dead/observer/O)
-	if(!searching)
-		to_chat(O, "Not looking for a ghost, yet.")
-		return
-	if(!istype(O))
-		to_chat(O, "<span class='warning'>NO.</span>")
-		return
-	if(O in ghost_volunteers)
-		to_chat(O, "<span class='notice'>Removed from registration list.</span>")
-		ghost_volunteers.Remove(O)
-		return
-	if(!check_observer(O))
-		to_chat(O, "<span class='warning'>You cannot be \a [src].</span>")
-		return
-	to_chat(O., "<span class='notice'>You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer.</span>")
-	ghost_volunteers.Add(O)
+		M.show_message("<span class='notice'>\The [src] buzzes quietly, and the golden lights fade away. Perhaps you could try again?</span>")
 
 /obj/item/device/mmi/posibrain/examine(mob/user)
 //	to_chat(user, "<span class='info'>*---------</span>*")
@@ -173,11 +154,16 @@
 
 /obj/item/device/mmi/posibrain/attack_ghost(var/mob/dead/observer/O)
 	if(searching)
-		volunteer(O)
+		recruiter.volunteer(O)
+		if(O in recruiter.currently_querying)
+			to_chat(O, "<span class='notice'>Click again to unvolunteer.</span>")
+		else
+			to_chat(O, "<span class='notice'>Click again to volunteer.</span>")
 	else
 		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
 			last_ping_time = world.time
 			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+			investigation_log(I_GHOST, "|| was pinged by [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 		else
 			to_chat(O, "[src] is recharging. Try again in a few moments.")
 

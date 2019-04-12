@@ -5,46 +5,42 @@
 
 //vg edit
 /mob/living/silicon/robot/proc/statelaws() // -- TLE
-//	set category = "AI Commands"
-//	set name = "State Laws"
-	src.say(";Current Active Laws:")
-	//src.laws_sanity_check()
-	//src.laws.show_laws(world)
+	say(";Current Active Laws:")
 	var/number = 1
 	sleep(10)
 
 
 
-	if (src.laws.zeroth)
-		if (src.lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
-			src.say(";0. [src.laws.zeroth]")
+	if (laws.zeroth)
+		if (lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
+			say(";0. [laws.zeroth]")
 			sleep(10)
 
-	for (var/index = 1, index <= src.laws.ion.len, index++)
-		var/law = src.laws.ion[index]
+	for (var/index = 1, index <= laws.ion.len, index++)
+		var/law = laws.ion[index]
 		var/num = ionnum()
 		if (length(law) > 0)
-			if (src.ioncheck[index] == "Yes")
-				src.say(";[num]. [law]")
+			if (ioncheck[index] == "Yes")
+				say(";[num]. [law]")
 				sleep(10)
 
-	for (var/index = 1, index <= src.laws.inherent.len, index++)
-		var/law = src.laws.inherent[index]
+	for (var/index = 1, index <= laws.inherent.len, index++)
+		var/law = laws.inherent[index]
 
 		if (length(law) > 0)
-			if (src.lawcheck[index+1] == "Yes")
-				src.say(";[number]. [law]")
+			if (lawcheck[index+1] == "Yes")
+				say(";[number]. [law]")
 				sleep(10)
 			number++
 
 
-	for (var/index = 1, index <= src.laws.supplied.len, index++)
-		var/law = src.laws.supplied[index]
+	for (var/index = 1, index <= laws.supplied.len, index++)
+		var/law = laws.supplied[index]
 
 		if (length(law) > 0)
-			if(src.lawcheck.len >= number+1)
-				if (src.lawcheck[number+1] == "Yes")
-					src.say(";[number]. [law]")
+			if(lawcheck.len >= number+1)
+				if (lawcheck[number+1] == "Yes")
+					say(";[number]. [law]")
 					sleep(10)
 				number++
 
@@ -56,41 +52,41 @@
 
 
 
-	if (src.laws.zeroth)
-		if (!src.lawcheck[1])
-			src.lawcheck[1] = "No" //Given Law 0's usual nature, it defaults to NOT getting reported. --NeoFite
-		list += {"<A href='byond://?src=\ref[src];lawc=0'>[src.lawcheck[1]] 0:</A> [src.laws.zeroth]<BR>"}
+	if (laws.zeroth)
+		if (!lawcheck[1])
+			lawcheck[1] = "No" //Given Law 0's usual nature, it defaults to NOT getting reported. --NeoFite
+		list += {"<A href='byond://?src=\ref[src];lawc=0'>[lawcheck[1]] 0:</A> [laws.zeroth]<BR>"}
 
-	for (var/index = 1, index <= src.laws.ion.len, index++)
-		var/law = src.laws.ion[index]
+	for (var/index = 1, index <= laws.ion.len, index++)
+		var/law = laws.ion[index]
 
 		if (length(law) > 0)
 
 
-			if (!src.ioncheck[index])
-				src.ioncheck[index] = "Yes"
-			list += {"<A href='byond://?src=\ref[src];lawi=[index]'>[src.ioncheck[index]] [ionnum()]:</A> [law]<BR>"}
-			src.ioncheck.len += 1
+			if (!ioncheck[index])
+				ioncheck[index] = "Yes"
+			list += {"<A href='byond://?src=\ref[src];lawi=[index]'>[ioncheck[index]] [ionnum()]:</A> [law]<BR>"}
+			ioncheck.len += 1
 
 	var/number = 1
-	for (var/index = 1, index <= src.laws.inherent.len, index++)
-		var/law = src.laws.inherent[index]
+	for (var/index = 1, index <= laws.inherent.len, index++)
+		var/law = laws.inherent[index]
 
 		if (length(law) > 0)
-			src.lawcheck.len += 1
+			lawcheck.len += 1
 
-			if (!src.lawcheck[number+1])
-				src.lawcheck[number+1] = "Yes"
-			list += {"<A href='byond://?src=\ref[src];lawc=[number]'>[src.lawcheck[number+1]] [number]:</A> [law]<BR>"}
+			if (!lawcheck[number+1])
+				lawcheck[number+1] = "Yes"
+			list += {"<A href='byond://?src=\ref[src];lawc=[number]'>[lawcheck[number+1]] [number]:</A> [law]<BR>"}
 			number++
 
-	for (var/index = 1, index <= src.laws.supplied.len, index++)
-		var/law = src.laws.supplied[index]
+	for (var/index = 1, index <= laws.supplied.len, index++)
+		var/law = laws.supplied[index]
 		if (length(law) > 0)
-			src.lawcheck.len += 1
-			if (!src.lawcheck[number+1])
-				src.lawcheck[number+1] = "Yes"
-			list += {"<A href='byond://?src=\ref[src];lawc=[number]'>[src.lawcheck[number+1]] [number]:</A> [law]<BR>"}
+			lawcheck.len += 1
+			if (!lawcheck[number+1])
+				lawcheck[number+1] = "Yes"
+			list += {"<A href='byond://?src=\ref[src];lawc=[number]'>[lawcheck[number+1]] [number]:</A> [law]<BR>"}
 			number++
 	list += {"<br><br><A href='byond://?src=\ref[src];laws=1'>State Laws</A>"}
 
@@ -128,7 +124,8 @@
 	else if (emagged)
 		to_chat(who, "<b>Remember, you are not required to listen to the AI.</b>")
 	else
-		to_chat(who, "<b>Remember, you are not bound to any AI, you are not required to listen to them.</b>")
+		if(ticker.current_state == GAME_STATE_PLAYING) //Only tell them this if the game has started. We might find an AI master for them before it starts if it hasn't.
+			to_chat(who, "<b>Remember, you are not bound to any AI, you are not required to listen to them.</b>")
 
 /mob/living/silicon/robot/proc/lawsync()
 	laws_sanity_check()
@@ -141,7 +138,7 @@
 			if (length(temp) > 0)
 				laws.ion[index] = temp
 
-		if (!is_special_character(src) || mind.original != src)
+		if(!laws.zeroth_lock)
 			if(master.zeroth_borg) //If the AI has a defined law zero specifically for its borgs, give it that one, otherwise give it the same one. --NEO
 				temp = master.zeroth_borg
 			else
@@ -159,7 +156,22 @@
 			temp = master.supplied[index]
 			if (length(temp) > 0)
 				laws.supplied[index] = temp
-	return
+
+		if(mind)
+			var/datum/role/mastermalf = connected_ai.mind.GetRole(MALF)
+			if(mastermalf)
+				var/datum/faction/my_new_faction = mastermalf.faction
+				my_new_faction.HandleRecruitedMind(mind)
+			else
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
+
+	else
+		if(mind)
+			var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+			if(MB)
+				MB.Drop()
 
 /mob/living/silicon/robot/proc/laws_sanity_check()
 	if (!laws)

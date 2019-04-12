@@ -29,12 +29,11 @@
 
 	attacktext = "punches"
 
-/mob/living/simple_animal/hostile/humanoid/frostgolem/Die()
+/mob/living/simple_animal/hostile/humanoid/frostgolem/death(var/gibbed = FALSE)
 	visible_message("<span class='danger'>\The [src] crumbles to snow!</span>")
 	for(var/i = 1 to rand(1,10))
 		new /obj/item/stack/sheet/snow(loc)
-
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/humanoid/frostgolem/AttackingTarget()
 	target.attack_animal(src)

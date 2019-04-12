@@ -27,7 +27,6 @@
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 30 //3 seconds between shots
-	var/datum/effect/effect/system/spark_spread/spark_system
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
@@ -38,9 +37,6 @@
 
 
 /obj/machinery/turret/New()
-	spark_system = new /datum/effect/effect/system/spark_spread
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
 //	targets = new
 	..()
 	return
@@ -103,7 +99,7 @@
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
 			if( !MC.stat )
-				if( !MC.lying || lasers ) //only shoots them while they're down if set to laser mode
+				if( !MC.isStunned() || lasers ) //only shoots them while they're down if set to laser mode
 					return 1
 		if(issilicon(T))
 			if(!shootsilicons || istype(T,/mob/living/silicon/ai))
@@ -135,7 +131,7 @@
 		if(!M.stat && !(M.flags & INVULNERABLE) && M.faction != faction)
 			if(iscarbon(M))
 				var/mob/living/carbon/C = M
-				if(!C.lying || lasers) //only shoots them while they're down if set to laser mode
+				if(!C.isStunned() || lasers) //only shoots them while they're down if set to laser mode
 					new_targets += C
 			else
 				new_targets += M
@@ -183,9 +179,9 @@
 
 		if(prob(15))
 			if(prob(50))
-				playsound(get_turf(src), 'sound/effects/turret/move1.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
-				playsound(get_turf(src), 'sound/effects/turret/move2.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else if(!isPopping())//else, pop down
 		if(!isDown())
 			popDown()
@@ -248,7 +244,7 @@
 	if ((!isPopping()) || src.popping==-1)
 		invisibility = 0
 		popping = 1
-		playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 		if (src.cover!=null)
 			flick("popup", src.cover)
 			src.cover.icon_state = "openTurretCover"
@@ -259,7 +255,7 @@
 /obj/machinery/turret/proc/popDown()
 	if ((!isPopping()) || src.popping==1)
 		popping = -1
-		playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 		if (src.cover!=null)
 			flick("popdown", src.cover)
 			src.cover.icon_state = "turretCover"
@@ -272,7 +268,7 @@
 	src.health -= Proj.damage
 	..()
 	if(prob(45) && Proj.damage > 0)
-		src.spark_system.start()
+		spark(src, 5, FALSE)
 
 	if (src.health <= 0)
 		src.die()
@@ -283,8 +279,8 @@
 	user.delayNextAttack(10)
 	if(..())
 		return 1
-	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
-	src.spark_system.start()
+	playsound(src, 'sound/weapons/smash.ogg', 60, 1)
+	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
 	visible_message("<span class='danger'>[user] attacked \the [src] with \the [W]!</span>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src] with [W]</font>")
@@ -306,7 +302,7 @@
 
 /obj/machinery/turret/proc/die()
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN
 	src.icon_state = "destroyed_target_prism"
 	if (cover!=null)
@@ -350,11 +346,12 @@
 
 /obj/machinery/turretid/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>You short out the turret controls' access analysis module.</span>")
 		emagged = 1
 		locked = 0
-		if(user.machine==src)
-			src.attack_hand(user)
+		if(user)
+			to_chat(user, "<span class='warning'>You short out the turret controls' access analysis module.</span>")
+			if(user.machine==src)
+				src.attack_hand(user)
 		return 1
 	return
 
@@ -386,14 +383,14 @@
 
 /obj/machinery/turretid/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
-	if(!ailock)
+	if(!ailock || isAdminGhost(user))
 		return attack_hand(user)
 	else
 		to_chat(user, "<span class='notice'>There seems to be a firewall preventing you from accessing this device.</span>")
 
 /obj/machinery/turretid/attack_hand(mob/user as mob)
 	if ( get_dist(src, user) > 0 )
-		if ( !issilicon(user) )
+		if ( !issilicon(user) && !isAdminGhost(user))
 			to_chat(user, "<span class='notice'>You are too far away.</span>")
 			user.unset_machine()
 			user << browse(null, "window=turretid")
@@ -409,7 +406,7 @@
 	var/area/area = loc
 	var/t = "<TT><B>Turret Control Panel</B> ([area.name])<HR>"
 
-	if(src.locked && (!istype(user, /mob/living/silicon)))
+	if(!isAdminGhost(user) && src.locked && (!istype(user, /mob/living/silicon)))
 		t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"
 	else
 		t += text("Turrets [] - <A href='?src=\ref[];toggleOn=1'>[]?</a><br>\n", src.enabled?"activated":"deactivated", src, src.enabled?"Disable":"Enable")
@@ -436,7 +433,7 @@
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
 		M.do_attack_animation(src, M)
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>[] has slashed at []!</span>", M, src)
 		src.health -= 15
 		if (src.health <= 0)
@@ -454,10 +451,10 @@
 	if(..())
 		return 1
 	if (src.locked)
-		if (!istype(usr, /mob/living/silicon))
+		if (!istype(usr, /mob/living/silicon) && !isAdminGhost(usr))
 			to_chat(usr, "Control panel is locked!")
 			return
-	if ( get_dist(src, usr) == 0 || issilicon(usr))
+	if ( get_dist(src, usr) == 0 || issilicon(usr) || isAdminGhost(usr))
 		if (href_list["toggleOn"])
 			src.enabled = !src.enabled
 			src.updateTurrets()
@@ -610,7 +607,7 @@
 	var/target = null
 	if(scan_for["human"])
 		for(var/mob/living/carbon/human/M in oview(scan_range,src))
-			if(M.stat || M.lying || M in exclude)
+			if(M.stat || M.isStunned() || M in exclude)
 				continue
 			pos_targets += M
 	if(scan_for["cyborg"])

@@ -5,7 +5,7 @@ var/list/fast_machines = list()
 
 /datum/subsystem/machinery/fast
 	name          = "Fast Machinery"
-	wait          = 0.7 SECONDS
+	wait          = SS_WAIT_FAST_MACHINERY
 	priority      = SS_PRIORITY_FAST_MACHINERY
 	display_order = SS_DISPLAY_FAST_MACHINERY
 

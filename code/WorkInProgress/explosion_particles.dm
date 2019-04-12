@@ -12,7 +12,7 @@
 		qdel(src)
 	return
 
-/obj/effect/expl_particles/Move()
+/obj/effect/expl_particles/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	return
 

@@ -239,7 +239,7 @@
 		/obj/item/device/fuse_bomb,
 		/obj/item/weapon/card/emag,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned,
-		/obj/item/weapon/tome,
+		/obj/item/weapon/tome_legacy,
 		)
 
 	var/obj/item/I = new gift_type(M)
@@ -313,3 +313,18 @@
 /obj/structure/strange_present/attack_hand(mob/user as mob)
 	to_chat(user, "<span class='warning'>[src] is too tightly bound to open without wirecutters!</span>")
 	return
+
+///Loot crate///
+/obj/item/weapon/winter_gift/dorkcube
+	name = "loot box"
+	desc = "Don't forget to shout the magic phrase when you open it! It has a tag on it: Made by GIBLOOTPLS."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "lootbox_purple"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
+	item_state = "lootbox_purple"
+
+/obj/item/weapon/winter_gift/dorkcube/attack_self(mob/user)
+	user.say("Loot get!")
+	playsound(src, 'sound/misc/achievement.ogg', 30, 1)
+	user.gib()
+	qdel(src)

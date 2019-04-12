@@ -4,46 +4,53 @@ datum/reagent/tungsten
 	name = "Tungsten"
 	id = TUNGSTEN
 	description = "A chemical element, and a strong oxidising agent."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#DCDCDC"  // rgb: 220, 220, 220, silver
+	density = 19.25
 
 datum/reagent/lithiumsodiumtungstate
 	name = "Lithium Sodium Tungstate"
 	id = LITHIUMSODIUMTUNGSTATE
 	description = "A reducing agent for geological compounds."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C0C0C0"  // rgb: 192, 192, 192, darker silver
+	density = 3.29
+	specheatcap = 3.99
 
 datum/reagent/ground_rock
 	name = "Ground Rock"
 	id = GROUND_ROCK
 	description = "A fine dust made of ground up rock."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#A0522D"   //rgb: 160, 82, 45, brown
 
 datum/reagent/density_separated_sample
 	name = "Density separated sample"
 	id = DENSITY_SEPARATED_SAMPLE
 	description = "A watery paste used in chemical analysis, there are some chunks floating in it."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEB887"   //rgb: 222, 184, 135, light brown
+	density = 3.79
+	specheatcap = 3.99
 
 datum/reagent/analysis_sample
 	name = "Analysis liquid"
 	id = ANALYSIS_SAMPLE
 	description = "A watery paste used in chemical analysis."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F5FFFA"   //rgb: 245, 255, 250, almost white
+	density = 4.74
+	specheatcap = 3.99
 
 datum/reagent/chemical_waste
 	name = "Chemical Waste"
 	id = CHEMICAL_WASTE
 	description = "A viscous, toxic liquid left over from many chemical processes."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ADFF2F"   //rgb: 173, 255, 47, toxic green
 
 
-	
+
 /datum/chemical_reaction/lithiumsodiumtungstate	//LiNa2WO4, not the easiest chem to mix
 	name = "Lithium Sodium Tungstate"
 	id = LITHIUMSODIUMTUNGSTATE
@@ -66,7 +73,7 @@ datum/reagent/chemical_waste
 	secondary_results = list(CHEMICAL_WASTE = 1)
 	required_reagents = list(DENSITY_SEPARATED_SAMPLE = 5)
 	result_amount = 4
-	requires_heating = 1
+	required_temp = 971.15 //Melting point of Sodium tungstate
 
 /obj/item/weapon/reagent_containers/glass/solution_tray
 	name = "solution tray"
@@ -97,34 +104,34 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/glass/solution_tray( src )
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/tungsten
 	name = "beaker 'tungsten'"
-	
+
 /obj/item/weapon/reagent_containers/glass/beaker/tungsten/New()
 	..()
 	reagents.add_reagent(TUNGSTEN,50)
 	update_icon()
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/oxygen
 	name = "beaker 'oxygen'"
-	
+
 /obj/item/weapon/reagent_containers/glass/beaker/oxygen/New()
 	..()
 	reagents.add_reagent(OXYGEN,50)
 	update_icon()
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/sodium
 	name = "beaker 'sodium'"
-	
+
 /obj/item/weapon/reagent_containers/glass/beaker/sodium/New()
 	..()
 	reagents.add_reagent(SODIUM,50)
 	update_icon()
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/lithium
 	name = "beaker 'lithium'"
@@ -133,16 +140,7 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	..()
 	reagents.add_reagent(LITHIUM,50)
 	update_icon()
-	
 
-/obj/item/weapon/reagent_containers/glass/beaker/water
-	name = "beaker 'water'"
-
-/obj/item/weapon/reagent_containers/glass/beaker/water/New()
-	..()
-	reagents.add_reagent(WATER,50)
-	update_icon()
-	
 
 /obj/item/weapon/reagent_containers/glass/beaker/water
 	name = "beaker 'water'"
@@ -152,7 +150,16 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	reagents.add_reagent(WATER,50)
 	update_icon()
 
-	
+
+/obj/item/weapon/reagent_containers/glass/beaker/water
+	name = "beaker 'water'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/water/New()
+	..()
+	reagents.add_reagent(WATER,50)
+	update_icon()
+
+
 /obj/item/weapon/reagent_containers/glass/beaker/fuel
 	name = "beaker 'fuel'"
 

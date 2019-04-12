@@ -572,8 +572,11 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/heavylaser
 	name = "heavy laser"
 	icon_state = "heavylaser"
-	damage = 40
+	damage = 60
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
+
+/obj/item/projectile/beam/heavylaser/lawgiver
+	damage = 40
 
 /obj/item/projectile/beam/xray
 	name = "xray beam"
@@ -620,30 +623,31 @@ var/list/beam_master = list()
 	damage_type = BURN
 	flag = "laser"
 	icon_state = "bluelaser"
-	var/list/enemy_vest_types = list(/obj/item/clothing/suit/redtag)
+	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
 /obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living/carbon/human))
-		var/mob/living/carbon/human/M = target
-		if(is_type_in_list(M.wear_suit, enemy_vest_types))
+	if(ismob(target))
+		var/mob/M = target
+		if(is_type_in_list(get_tag_armor(M), enemy_vest_types))
 			if(!M.lying) //Kick a man while he's down, will ya
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.score()
 			M.Knockdown(5)
+			M.Stun(5)
 	return 1
 
 /obj/item/projectile/beam/lasertag/blue
 	icon_state = "bluelaser"
-	enemy_vest_types = list(/obj/item/clothing/suit/redtag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
 /obj/item/projectile/beam/lasertag/red
 	icon_state = "laser"
-	enemy_vest_types = list(/obj/item/clothing/suit/bluetag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/bluetag)
 
 /obj/item/projectile/beam/lasertag/omni //A laser tag ray that stuns EVERYONE
 	icon_state = "omnilaser"
-	enemy_vest_types = list(/obj/item/clothing/suit/redtag, /obj/item/clothing/suit/bluetag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag, /obj/item/clothing/suit/tag/bluetag)
 
 
 
@@ -715,7 +719,8 @@ var/list/beam_master = list()
 				error -= dist_y
 
 			if(isnull(loc))
-				draw_ray(lastposition)
+				if(!isnull(lastposition))
+					draw_ray(lastposition)
 				return
 			if(lastposition == loc)
 				kill_count = 0
@@ -751,7 +756,8 @@ var/list/beam_master = list()
 				error -= dist_x
 
 			if(isnull(loc))
-				draw_ray(lastposition)
+				if(!isnull(lastposition))
+					draw_ray(lastposition)
 				return
 			if(lastposition == loc)
 				kill_count = 0
@@ -907,16 +913,6 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-/obj/item/projectile/beam/rainbow/braindamage
-	damage = 5
-	icon_state = "whitelaser"
-
-/obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
-	if(ishuman(target))
-		var/mob/living/carbon/human/victim = target
-		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
-			victim.adjustBrainLoss(20)
-			victim.hallucination += 20
 
 /obj/item/projectile/beam/bullwhip
 	name = "bullwhip"
@@ -945,7 +941,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/bullwhip/OnDeath()
 	if(!has_played_sound && get_turf(src))
-		playsound(get_turf(src), bounce_sound, 30, 1)
+		playsound(src, bounce_sound, 30, 1)
 		user.delayNextAttack(2)
 
 /obj/item/projectile/beam/liquid_stream

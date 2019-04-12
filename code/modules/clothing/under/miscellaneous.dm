@@ -715,3 +715,34 @@
 	icon_state = "franksuit"
 	item_state = "franksuit"
 	_color = "franksuit"
+
+/obj/item/clothing/under/elf
+	name = "elf uniform"
+	desc = "A festive suit for a festive elf!"
+	icon_state = "elf"
+	item_state = "elf"
+	_color = "elf"
+
+/obj/item/clothing/under/elf/stickymagic
+	canremove = 0
+
+/obj/item/clothing/under/police
+	name = "police uniform"
+	desc = "A policeman's lot is not a happy one."
+	icon_state = "britpolice"
+	item_state = "britpolice"
+	_color = "britpolice"
+
+/obj/item/clothing/under/inquisitor
+	name = "inquisitor's suit"
+	desc = "Historically, inquisitors were cathar detectives who investigated crimes both mundane and supernatural. They were known for traveling to remote parishes plagued by unexplained murders, and for exposing the wicked living among normal humans."
+	icon_state = "uni-church"
+	item_state = "uni-church"
+	_color = "uni-church"
+
+/obj/item/clothing/under/newclothes
+	name = "Emperor's new clothes"
+	desc = "The virtuous can see them."
+	icon_state = "newclothes"
+	_color = "newclothes"
+	item_state = "r_suit"

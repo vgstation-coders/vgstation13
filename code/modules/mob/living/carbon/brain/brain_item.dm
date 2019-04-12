@@ -26,7 +26,7 @@
 			brainmob.client.screen.len = null //clear the hud
 
 /obj/item/organ/internal/brain/proc/transfer_identity(var/mob/living/carbon/H)
-	name = "[H]'s brain"
+	name = "[H.real_name]'s brain"
 	brainmob = new(src)
 	brainmob.name = H.real_name
 	brainmob.real_name = H.real_name
@@ -45,12 +45,14 @@
 		if(brainmob.client)
 			to_chat(user, "<span class='notice'>You can feel the small spark of life still left in this one.</span>")
 			return
-		var/mob/dead/observer/ghost = get_ghost_from_mind(brainmob.mind)
-		if(ghost && ghost.client && ghost.can_reenter_corpse)
-			to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
+		var/mob/dead/observer/ghost = mind_can_reenter(brainmob.mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
+				return
+			to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
 			return
-		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
-		return
 
 /obj/item/organ/internal/brain/removed(var/mob/living/target,var/mob/living/user)
 
@@ -87,3 +89,11 @@
 
 /obj/item/organ/internal/brain/slime_core/process()
 	processing_objects -= src
+
+/obj/item/organ/internal/brain/mushroom
+	name = "plump helmet brain"
+	desc = "At first glance, it looks like a popular miner delicacy, but is in fact the primary function of thought for a mushroom person."
+	icon_state = "plump_pie"
+	icon = 'icons/obj/food.dmi'
+	health = 600
+	origin_tech = Tc_BIOTECH + "=4"

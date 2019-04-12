@@ -91,7 +91,7 @@
 		return 1
 	return 0
 
-/obj/item/device/deskbell/MouseDrop(mob/user as mob)
+/obj/item/device/deskbell/MouseDropFrom(mob/user as mob)
 	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
 		if(istype(user, /mob/living/carbon/human) || istype(user, /mob/living/carbon/monkey))
 			if(anchored)
@@ -191,14 +191,12 @@
 		signal.data["message"] = "ACTIVATE"			//there is no risk that one of the desk bells already there at round start could trigger a signaler
 		radio_connection.post_signal(src, signal)	//(unless it's been deconstructed-reconstructed of course)
 
-		var/time = time2text(world.realtime,"hh:mm:ss")
-		var/turf/T = get_turf(src)
 		if(usr)
 			var/mob/user = usr
 			if(user)
-				lastsignalers.Add("[time] <B>:</B> [user.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+				investigation_log(I_WIRES, "used as signaler by [key_name(user)] - [format_frequency(frequency)]/[code]")
 			else
-				lastsignalers.Add("[time] <B>:</B> (<span class='danger'>NO USER FOUND</span>) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+				investigation_log(I_WIRES, "used as signaler by UNKNOWN - [format_frequency(frequency)]/[code]")
 		return
 
 //////////////////
@@ -280,7 +278,7 @@
 			if(0)
 				if(iswrench(W))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					M.amount = 2
@@ -291,7 +289,7 @@
 					user.visible_message(
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",
 						"You add cables to \the [src].")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					C.use(1)
 					build_step++
 					update_icon()

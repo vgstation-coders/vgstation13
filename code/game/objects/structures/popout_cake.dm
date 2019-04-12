@@ -136,14 +136,12 @@
 
 	spawn(10)
 
-		playsound(get_turf(src), 'sound/effects/party_horn.ogg', 50, 1)
+		playsound(src, 'sound/effects/party_horn.ogg', 50, 1)
 
 		sleep(10)
 
 		//Idea for the future: put actual confetti here
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(6, 0, get_turf(src)) //6 sparks in all directions
-		s.start()
+		spark(src, 6, FALSE)
 
 		if(drop)
 			sleep(20)

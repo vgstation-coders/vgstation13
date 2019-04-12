@@ -190,7 +190,7 @@
 ///////ATTACH PLANK///////
 /datum/surgery_step/limb/attach_plank
 	allowed_tools = list(
-		/obj/item/stack/sheet/wood=100,
+		/obj/item/weapon/peglimb=100,
 		)
 
 	can_infect = 0

@@ -1,6 +1,7 @@
 /spell/targeted/buttbots_revenge
 	name = "Butt-Bot's Revenge"
 	desc = "This spell removes the target's ass in a firey explosion."
+	user_type = USER_TYPE_WIZARD
 	abbreviation = "AN"
 
 	school = "evocation"
@@ -34,9 +35,10 @@
 					B.transfer_buttdentity(C)
 				C.op_stage.butt = 4 //No having two butts.
 				to_chat(C, "<span class='warning'>Your ass just blew up!</span>")
-			playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
+			playsound(src, 'sound/effects/superfart.ogg', 50, 1)
 			C.apply_damage(40, BRUTE, LIMB_GROIN)
 			C.apply_damage(10, BURN, LIMB_GROIN)
+			score["assesblasted"]++
 	return
 
 /spell/targeted/buttbots_revenge/empower_spell()

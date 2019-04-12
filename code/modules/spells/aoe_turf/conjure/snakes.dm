@@ -1,6 +1,7 @@
 /spell/aoe_turf/conjure/snakes
 	name = "Become Snakes"
 	desc = "This spell transforms your body into a den of snakes."
+	user_type = USER_TYPE_WIZARD
 
 	summon_type = list(/mob/living/simple_animal/cat/snek/wizard)
 
@@ -30,7 +31,9 @@
 		user = holder
 	if(wizard_snakes)
 		for(var/mob/M in wizard_snakes)
-			if(wizard_snakes[M] == holder)
+			if(wizard_snakes[M] == user)
+				wizard_snakes[M] = null
+				wizard_snakes -= M
 				qdel(M)
 
 /spell/aoe_turf/conjure/snakes/choose_targets(mob/user = usr)

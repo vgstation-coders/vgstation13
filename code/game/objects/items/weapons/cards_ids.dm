@@ -215,11 +215,13 @@
 		user.show_message("The DNA hash on the card is [dna_hash].",1)
 		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
 
-/obj/item/weapon/card/id/attack_self(mob/user as mob)
-	user.visible_message("[user] shows you: [bicon(src)] [src.name]: assignment: [src.assignment]",\
-		"You flash your ID card: [bicon(src)] [src.name]: assignment: [src.assignment]")
-	src.add_fingerprint(user)
-	return
+/obj/item/weapon/card/id/attack_self(var/mob/user)
+	if(user.attack_delayer.blocked())
+		return
+	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
+	user.delayNextAttack(1 SECONDS)
+	add_fingerprint(user)
 
 /obj/item/weapon/card/id/GetAccess()
 	return (access | base_access)
@@ -619,7 +621,7 @@
 	registered_name = "Cargonian"
 	icon_state = "cargo"
 	desc = "ROH ROH! HEIL THE QUARTERMASTER!"
-	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
+	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
 
 /obj/item/weapon/card/id/engineering
 	name = "Engineering ID"
@@ -640,7 +642,7 @@
 	registered_name = "CMO"
 	icon_state = "CMO"
 	desc = "It gives off the faint smell of chloral hydrate, mixed with a backdraft of equipment abuse."
-	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
 
 /obj/item/weapon/card/id/rd
 	name = "Research Director ID"

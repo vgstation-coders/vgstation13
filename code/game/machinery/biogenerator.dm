@@ -156,6 +156,12 @@
 	name="Handgun Holster"
 	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
+/datum/biogen_recipe/leather/ammo_pouch
+	cost = 250
+	id="ammopouch"
+	name = "Ammo Pouch"
+	result=/obj/item/weapon/storage/bag/ammo_pouch
+
 /datum/biogen_recipe/paper
 	category="Paper"
 
@@ -235,6 +241,12 @@
 	name="Box of Crayons"
 	result=/obj/item/weapon/storage/fancy/crayons
 
+/datum/biogen_recipe/misc/rice_hat
+	name = "Rice Hat"
+	id = "rice_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat
+
 /datum/biogen_recipe/flooring
 	category="Flooring"
 
@@ -251,6 +263,18 @@
 	name="Piece of Arcade Carpet"
 	other_amounts=list(5,10,20)
 	result=/obj/item/stack/tile/arcade
+
+/datum/biogen_recipe/leather/secbelt
+	cost=400
+	id="secbelt"
+	name="Security Belt"
+	result=/obj/item/weapon/storage/belt/security
+
+/datum/biogen_recipe/leather/bandolier
+	cost = 300
+	id="bandolier"
+	name = "Bandolier"
+	result=/obj/item/clothing/accessory/storage/bandolier
 
 /obj/machinery/biogenerator
 	name = "Biogenerator"
@@ -477,7 +501,7 @@
 		processing = 1
 		update_icon()
 		updateUsrDialog()
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(S*30)
 		sleep(speed_coefficient*(S+15))
 		processing = 0

@@ -13,24 +13,24 @@
 			return "it cannot deconstruct reinforced walls!"
 
 		to_chat(user, "Deconstructing \the [T]...")
-		playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
+		playsound(master, 'sound/machines/click.ogg', 50, 1)
 
-		if(do_after(user, T, 40))
+		if(master.delay(user, T, 4 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
-			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			T.ChangeTurf(/turf/simulated/floor/plating)
 			return 0
 
 	else if(istype(A, /turf/simulated/floor))
 		var/turf/simulated/floor/T = A
 		to_chat(user, "Deconstructing \the [T]...")
-		if(do_after(user, T, 50))
+		if(master.delay(user, T, 5 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
-			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			add_gamelogs(user, "deconstructed \the [T] with \the [master]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
@@ -38,11 +38,11 @@
 	else if(istype(A, /obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/D = A
 		to_chat(user, "Deconstructing \the [D]...")
-		if(do_after(user, D, 50))
+		if(master.delay(user, D, 5 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
-			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			qdel(D)
 			return 0
 
@@ -64,7 +64,7 @@
 	var/turf/space/S = A
 
 	to_chat(user, "Building floor...")
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	S.ChangeTurf(/turf/simulated/floor/plating/airless)
 	return 0
 
@@ -81,12 +81,12 @@
 
 	var/turf/simulated/floor/T = A
 	to_chat(user, "Building wall")
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(do_after(user, A, 20))
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(master.delay(user, A, 2 SECONDS))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 
-		playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 		T.ChangeTurf(/turf/simulated/wall)
 		return 0
 
@@ -106,6 +106,9 @@
 
 	var/list/schematics			= list()
 	var/ready
+
+/datum/rcd_schematic/con_airlock/borg
+	energy_cost					= 30
 
 /datum/rcd_schematic/con_airlock/show(var/mob/living/user, close = 0)
 	if(!close)
@@ -338,7 +341,7 @@
 
 	to_chat(user, "Building airlock...")
 
-	if(!do_after(user, A, 50))
+	if(!master.delay(user, A, 5 SECONDS))
 		return 1
 
 	if(master.get_energy(user) < energy_cost)
@@ -347,7 +350,7 @@
 	for(var/obj/machinery/door/airlock/D in A)
 		return "there is already an airlock on this spot!"
 
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/machinery/door/airlock/D = new selected.build_type(A)
 	if(capitalize(selected_name) == selected_name)	//The name inputted is capitalized, so we add \improper.

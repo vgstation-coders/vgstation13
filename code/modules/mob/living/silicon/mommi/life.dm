@@ -1,5 +1,4 @@
 /mob/living/silicon/robot/mommi/Life()
-	set invisibility = 0
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -16,6 +15,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
+		update_action_buttons_icon()
 		update_items()
 	if (src.stat != DEAD) //still using power
 		use_power()
@@ -116,11 +116,13 @@
 
 	if (src.ear_deaf > 0)
 		src.ear_deaf--
+	if (say_mute > 0)
+		say_mute--
 	if (src.ear_damage < 25)
 		src.ear_damage -= 0.05
 		src.ear_damage = max(src.ear_damage, 0)
 
-	src.density = !( src.lying )
+	src.setDensity(!(src.lying))
 
 	if ((src.sdisabilities & BLIND))
 		src.blinded = 1
@@ -134,6 +136,9 @@
 	if (src.druggy > 0)
 		src.druggy--
 		src.druggy = max(0, src.druggy)
+
+	handle_dizziness()
+	handle_jitteriness()
 
 	return 1
 
@@ -165,20 +170,6 @@
 					src.healths.icon_state = "health6"
 		else
 			src.healths.icon_state = "health7"
-
-	if (src.syndicate && src.client)
-		if(ticker.mode.name == "traitor")
-			for(var/datum/mind/tra in ticker.mode.traitors)
-				if(tra.current)
-					var/I = image('icons/mob/mob.dmi', loc = tra.current, icon_state = "traitor")
-					src.client.images += I
-		if(src.connected_ai)
-			src.connected_ai.connected_robots -= src
-			src.connected_ai = null
-		if(src.mind)
-			if(!src.mind.special_role)
-				src.mind.special_role = "traitor"
-				ticker.mode.traitors += src.mind
 
 	if(!can_see_static()) //what lets us avoid the overlay
 		if(static_overlays && static_overlays.len)
@@ -276,11 +267,11 @@
 				mmi = null
 			gib()
 
-			
+
 /mob/living/silicon/robot/mommi/handle_pressure_damage(datum/gas_mixture/environment)
 	..()
-	
+
 /mob/living/silicon/robot/mommi/handle_heat_damage(datum/gas_mixture/environment)
 	..()
-			
+
 #undef MOMMI_LOW_POWER

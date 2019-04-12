@@ -4,6 +4,8 @@
 	icon_state = "labeler0"
 	item_state = "labeler0"
 	origin_tech = Tc_MATERIALS + "=1"
+	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 175)
+	w_type = RECYK_MISC
 	var/label = null
 	var/chars_left = 250 //Like in an actual label maker, uses an amount per character rather than per label.
 	var/mode = 0	//off or on.
@@ -114,6 +116,7 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "label_cart" //Placeholder image; recolored police tape
 	w_class = W_CLASS_TINY
+	restraint_resist_time = 5 SECONDS
 	var/left = 250
 
 /obj/item/device/label_roll/New(var/loc, var/amount=null)
@@ -161,12 +164,12 @@
 
 // Not really sure where to put this. This is a verb that lets you add a tiny label to the item without consuming label rolls or anything.
 // Used for pen-labeling pill bottles, beakers and whatnot.
-/atom/proc/set_tiny_label(var/mob/user, var/start_text = " (", var/end_text = ")")
+/atom/proc/set_tiny_label(var/mob/user, var/start_text = " (", var/end_text = ")", var/maxlength=16)
 	var/tmp_label = sanitize(input(user, "Enter a label for \the [src]","Label",copytext(labeled, length(start_text)+1, length(labeled)-length(end_text)+1)) as text|null)
 	if (!Adjacent(user) || user.incapacitated() || !tmp_label || !length(tmp_label))
 		return FALSE
-	if(length(tmp_label) > 16)
-		to_chat(user, "<span class='warning'>The label can be at most 16 characters long.</span>")
+	if(length(tmp_label) > maxlength)
+		to_chat(user, "<span class='warning'>The label can be at most [maxlength] characters long.</span>")
 		return FALSE
 	to_chat(user, "<span class='notice'>You set the label to \"[tmp_label]\".</span>")
 	set_labeled(tmp_label, start_text, end_text)

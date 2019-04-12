@@ -30,20 +30,24 @@
 	qdel(user)
 
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	. = ..()
+	if(!.)
+		return
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
+	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
+		return
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
 	if(H)
 		singulocreate(H, user)
 		return
 	if(istype(W, /obj/item/weapon/storage/backpack/holding))
 		singulocreate(W, user)
-		return
-	. = ..()
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
 	user.Knockdown(10)
+	user.Stun(10)
 	to_chat(user, "<span class = 'danger'>The Bluespace interfaces of the two devices catastrophically malfunction, throwing you to the ground in the process!</span>")
 	to_chat(user, "<span class='danger'>FUCK!</span>")
 	var/turf/T = get_turf(src)

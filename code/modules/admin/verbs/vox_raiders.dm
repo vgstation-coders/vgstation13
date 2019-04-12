@@ -3,8 +3,8 @@ var/global/vox_tick = 1
 /mob/living/carbon/human/proc/equip_vox_raider()
 
 
-	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/syndicate(src)
-	R.set_frequency(SYND_FREQ) //Same frequency as the syndicate team in Nuke mode.
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
+	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
 	equip_to_slot_or_del(R, slot_ears)
 
 	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)

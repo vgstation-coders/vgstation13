@@ -18,5 +18,6 @@ var/list/adjectives = file2list("config/names/adjectives.txt")
 var/list/vox_name_syllables = list("cha","chi","ha","hi","ka","kah","ki","ta","ti","ya","ya","yi")
 var/list/golem_names = file2list("config/names/golem.txt")
 var/list/borer_names = file2list("config/names/borer.txt")
+var/list/hologram_names = file2list("config/names/hologram.txt")
 
 var/list/autoborg_silly_names = file2listExceptComments("config/names/autoborg_silly.txt")

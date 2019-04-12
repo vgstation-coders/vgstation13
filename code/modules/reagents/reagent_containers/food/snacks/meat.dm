@@ -7,6 +7,7 @@
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 	var/subjectname = ""
 	var/subjectjob = null
+	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 	New()
@@ -18,7 +19,7 @@
 	..(A)
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
-			name = "[M.name] meat"
+			name = "[M.name] [meatword]"
 		subjectname = M.name
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
@@ -69,6 +70,11 @@
 	name = "leafy meat"
 	desc = "It's got an awful lot of protein for a vegetable."
 	icon_state = "diona_meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
+	name = "vox meat"
+	desc = "Considering its Avian origin, tastes unsurprisingly like chicken."
+	icon_state = "meat_vox"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 	name = "chicken meat"
@@ -161,23 +167,34 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(ROACHSHELL, rand(5,12))
+	reagents.add_reagent(NUTRIMENT, 0.5)
+	reagents.add_reagent(ROACHSHELL, rand(2,6))
 	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	desc = "A chunk of meat from an above-average sized cockroach."
+	icon_state = "bigroachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, 16)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
 	icon_state = "rottenmeat"
+	var/transformed = FALSE
 
-	New()
-		..()
-		reagents.add_reagent(SPACE_DRUGS, rand(0,8))
-		reagents.add_reagent(MINDBREAKER, rand(0,2))
-		reagents.add_reagent(NUTRIMENT, rand(0,8))
-		bitesize = 5
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/New()
+	..()
+	reagents.add_reagent(SPACE_DRUGS, rand(0,4))
+	reagents.add_reagent(MINDBREAKER, rand(0,2))
+	reagents.add_reagent(NUTRIMENT, rand(0,4))
+	reagents.add_reagent(TOXIN, rand(0,2))
+	bitesize = 5
 
-		shapeshift()
+	shapeshift()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
 	visible_message("<span class='info'>\The [src] starts fizzling!</span>")
@@ -191,17 +208,63 @@
 
 var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/before_consume(mob/target)
+	if(transformed)
+		//Reference to that winnie pooh comic
+		to_chat(target, "<span class='danger'>Sweet Jesus[target.hallucinating() ? ", Pooh" : ""]! That's not [name]!</span>")
+		revert()
+
+		spawn(10)
+			to_chat(target, "<span class='danger'>You're eating [name]!</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/preattack(atom/movable/target, mob/user, proximity_flag)
+	if(!proximity_flag)
+		return
+
+	//Forbid creation of custom foods with mimic meat
+	if(transformed)
+		if(istype(target, /obj/item/trash/plate) || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+			to_chat(user, "<span class='danger'>\The [name] shapeshifts as it touches \the [target]!</span>")
+			revert()
+
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+	if(transformed && istype(destination, /obj/machinery/cooking))
+		revert()
+
+	return ..()
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/proc/shapeshift(atom/atom_to_copy = null)
 	if(!atom_to_copy)
 		atom_to_copy = pick(valid_random_food_types)
 
-	src.appearance = initial(atom_to_copy.appearance) //This works!
+	//Prevent layering issues when items are held in hands
+	var/prev_layer = src.layer
+	var/prev_plane = src.plane
+
+	appearance = initial(atom_to_copy.appearance)
+
+	layer = prev_layer
+	plane = prev_plane
+
+	transformed = TRUE
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/proc/revert()
+	shapeshift(/obj/item/weapon/reagent_containers/food/snacks/meat/mimic)
+	transformed = FALSE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/box
 	name = "box meat"
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	name = "pork"
+	desc = "A slab of pig meat."
+	icon_state = "meat"
+	gender = PLURAL
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive
 	name = "alien tissue"
@@ -229,3 +292,28 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 	reagents.add_reagent(PETRITRICIN, 3)
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
+	name = "strange meat"
+	desc = "Doesn't look very appetizing, but if you're considerably hungry..."
+	icon_state = "wendigo_meat"
+	bitesize = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, rand(10,25))
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
+	. = ..()
+	if(ishuman(eater))
+		eater.contract_disease(new /datum/disease/wendigo_transformation)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	name = "gelatin"
+	desc = "A slab of gelatin. It has a similar composition to regular meat but with a bit more jelly."
+	icon_state = "slime_meat"
+	meatword = "gelatin"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 10)

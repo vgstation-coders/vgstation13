@@ -9,8 +9,6 @@
 	var/chem_volume = 35
 	var/replacement_chem_volume = 15
 	var/image/color_overlay
-	var/explosive = FALSE
-	var/explosion_timer = 5 SECONDS
 	var/atom/target = null
 
 /obj/item/gum/New()
@@ -54,24 +52,6 @@
 /obj/item/gum/preattack(atom/A, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
-	if(chewed)
-		if(explosive)
-			if(ismob(A) || istype(A, /turf/unsimulated) || istype(A, /turf/simulated/shuttle) || istype(A, /obj/item/weapon/storage/))
-				return
-			target = A
-
-			if(user.Adjacent(target))
-				if(!user.drop_item(src))
-					to_chat(user, "<span class='danger'>\The [src] is stuck to your hands!</span>")
-					target = user
-					user.drop_item(src, force_drop = 1)
-				else
-					user.visible_message("\The [user] sticks \his [name] to \the [target].","You stick your [name] to \the [target].")
-
-				forceMove(null)
-
-				add_gamelogs(user, "planted explosive [name] on [target.name]", tp_link = TRUE)
-				return 1
 	return ..()
 
 /obj/item/gum/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user, flag)
@@ -122,18 +102,12 @@
 		chewed = TRUE
 	user.visible_message("\The [user] puts \the [src] in \his mouth.","You start chewing \the [src].")
 	update_icon()
-	if(explosive)
-		spawn(explosion_timer)
-			if(target)
-				explode(get_turf(target))
-			else
-				explode(get_turf(src))
 
 /obj/item/gum/process()
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -189,11 +163,52 @@
 	else
 		H.feet_blood_color = "#FFB2C4"
 	to_chat(H, "<span class='warning'>As you step in \the [src], it sticks to your [H.shoes ? H.shoes.name : "feet"]!</span>")
-	if(explosive)
-		forceMove(null)
-		target = H
-	else
-		qdel(src)
+	qdel(src)
 
+// Explosive gums
 /obj/item/gum/explosive
-	explosive = TRUE
+	var/explosion_timer = 5 SECONDS
+
+/obj/item/gum/explosive/preattack(atom/A, mob/user, proximity_flag, click_parameters)
+	if (!proximity_flag)
+		return 0
+	if (chewed)
+		if(ismob(A) || istype(A, /turf/unsimulated) || istype(A, /turf/simulated/shuttle) || istype(A, /obj/item/weapon/storage/))
+			return
+		target = A
+
+		if(user.Adjacent(target))
+			if(!user.drop_item(src))
+				to_chat(user, "<span class='danger'>\The [src] is stuck to your hands!</span>")
+				target = user
+				user.drop_item(src, force_drop = 1)
+			else
+				user.visible_message("\The [user] sticks \his [name] to \the [target].","You stick your [name] to \the [target].")
+
+			forceMove(null)
+
+			add_gamelogs(user, "planted explosive [name] on [target.name]", tp_link = TRUE)
+			return 1
+	return ..()
+
+/obj/item/gum/explosive/chew()
+	. = ..()
+	spawn(explosion_timer)
+		if(target)
+			explode(get_turf(target))
+		else
+			explode(get_turf(src))
+
+/obj/item/gum/explosive/gum_shoes(mob/living/carbon/human/H)
+	. = ..()
+	forceMove(null)
+	target = H
+
+/obj/item/gum/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(replacement_chem_volume <= 0)
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	var/tx_amount = min(tool.amount_per_transfer_from_this, tool.reagents.total_volume)
+	tx_amount = transfer_some_reagents(tool, tx_amount, TRUE, user)
+	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. \The [tool] now contains [tool.reagents.total_volume] units.</span>")
+	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
