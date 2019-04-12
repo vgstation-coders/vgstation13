@@ -24,7 +24,7 @@
 		SHC = (for(components of recipe) total_SHC *= component SHC)
 
 
-*/..
+*/
 
 /datum/reagent
 	var/name = "Reagent"
