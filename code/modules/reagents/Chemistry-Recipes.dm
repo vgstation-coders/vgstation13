@@ -80,15 +80,9 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
-		holder.del_reagent(POTASSIUM)
-		holder.del_reagent(WATER)
-		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
-		holder.add_reagent(HYDROGEN, created_volume * REM)
-	else
-		holder.clear_reagents()
-		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
-		holder.add_reagent(HYDROGEN, created_volume * REM)
+	holder.clear_reagents()
+	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+	holder.add_reagent(HYDROGEN, created_volume * REM)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
