@@ -17,7 +17,6 @@
 	blocks_air = 1
 	//temperature = TCMB
 	var/mineral/mineral
-	var/mined_ore = 0
 	var/last_act = 0
 	var/datum/geosample/geologic_data
 	var/excavation_level = 0
@@ -438,8 +437,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 */
 /turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if (mineral && mineral.result_amount)
-		for (var/i = 1 to mineral.result_amount - mined_ore)
-			DropMineral()
+		DropMineral()
 	switch(rockernaut)
 		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
