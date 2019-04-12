@@ -239,7 +239,7 @@
 	var/mob/living/carbon/human/H = user
 	if(!istype(H))
 		return
-	if((Holiday == APRIL_FOOLS_DAY))
+	if(Holiday == APRIL_FOOLS_DAY)
 		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
 		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
 		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
