@@ -47,7 +47,7 @@
 			to_chat(user, "You short out the lock on [src].")
 			return
 
-		if (isscrewdriver(W))
+		if (W.can_be_used_as_screwdriver(user))
 			if (do_after(user, src, 20))
 				src.open =! src.open
 				user.show_message(text("<span class='notice'>You [] the service panel.</span>", (src.open ? "open" : "close")))

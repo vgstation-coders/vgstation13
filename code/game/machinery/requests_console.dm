@@ -431,7 +431,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 			else
 				icon_state="req_comp_rewired"
-	if (isscrewdriver(O))
+	if (O.can_be_used_as_screwdriver(user))
 		if(open)
 			if(!hackState)
 				hackState = 1

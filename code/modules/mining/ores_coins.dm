@@ -354,6 +354,9 @@
 	rec.addAmount(material, 0.2) // 5 coins per sheet.
 	return w_type
 
+/obj/item/weapon/coin/can_be_used_as_screwdriver(var/mob/user)
+	return TRUE
+
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
 	name = "Gold coin"

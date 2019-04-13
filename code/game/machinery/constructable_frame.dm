@@ -81,7 +81,7 @@
 					build_state--
 					icon_state = "box_glass"
 					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
-				if(isscrewdriver(P) && C)
+				if(P.can_be_used_as_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
 					C.forceMove(new_display_case)
@@ -171,7 +171,7 @@
 					req_components = null
 					components = null
 				else
-					if(isscrewdriver(P))
+					if(P.can_be_used_as_screwdriver(user))
 						if(istype(get_turf(src), /turf/simulated/shuttle))
 							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
 							return

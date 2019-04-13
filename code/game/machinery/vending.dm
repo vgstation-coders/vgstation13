@@ -1739,7 +1739,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
 		if(0) // Empty hull
-			if(isscrewdriver(W))
+			if(W.can_be_used_as_screwdriver(user))
 				to_chat(usr, "You begin removing screws from \the [src] backplate...")
 				if(do_after(user, src, 50))
 					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
@@ -1801,7 +1801,7 @@ var/global/num_vending_terminals = 1
 					build--
 					update_icon()
 				return 1
-			if(isscrewdriver(W))
+			if(W.can_be_used_as_screwdriver(user))
 				to_chat(user, "You begin to complete \the [src]...")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 20))
@@ -1814,7 +1814,7 @@ var/global/num_vending_terminals = 1
 						"You finish \the [src].")
 				return 1
 		if(3) // Waiting for a recharge pack
-			if(isscrewdriver(W))
+			if(W.can_be_used_as_screwdriver(user))
 				to_chat(user, "You begin to unscrew \the [src]...")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 30))

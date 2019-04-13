@@ -396,7 +396,7 @@ var/list/one_way_windows
 
 			if(WINDOWSECURE) //Reinforced, fully secured
 
-				if(isscrewdriver(W))
+				if(W.can_be_used_as_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 					"<span class='notice'>You unfasten \the [src] from its frame.</span>")
@@ -405,7 +405,7 @@ var/list/one_way_windows
 
 			if(WINDOWUNSECUREFRAME)
 
-				if(isscrewdriver(W))
+				if(W.can_be_used_as_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 					"<span class='notice'>You fasten \the [src] to its frame.</span>")
@@ -428,7 +428,7 @@ var/list/one_way_windows
 					d_state = WINDOWUNSECUREFRAME
 					return
 
-				if(isscrewdriver(W))
+				if(W.can_be_used_as_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src]'s frame from the floor.</span>", \
 					"<span class='notice'>You unfasten \the [src]'s frame from the floor.</span>")
@@ -452,7 +452,7 @@ var/list/one_way_windows
 
 			if(WINDOWLOOSE)
 
-				if(isscrewdriver(W))
+				if(W.can_be_used_as_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
@@ -486,7 +486,7 @@ var/list/one_way_windows
 
 	else if(!reinforced) //Normal window steps
 
-		if(isscrewdriver(W))
+		if(W.can_be_used_as_screwdriver(user))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 			user.visible_message("<span class='[d_state ? "warning":"notice"]'>[user] [d_state ? "un":""]fastens \the [src].</span>", \
 			"<span class='notice'>You [d_state ? "un":""]fasten \the [src].</span>")

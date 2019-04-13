@@ -490,7 +490,7 @@ Class Procs:
 	spillContents(destroy_chance)
 	qdel(src)
 
-/obj/machinery/proc/togglePanelOpen(var/obj/toggleitem, var/mob/user)
+/obj/machinery/proc/togglePanelOpen(var/obj/item/toggleitem, var/mob/user)
 	panel_open = !panel_open
 	if(panel_open)
 		if(icon_state_open)
@@ -499,7 +499,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(isscrewdriver(toggleitem))
+	if(toggleitem.can_be_used_as_screwdriver(user))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 	update_icon()
 	return 1
@@ -566,7 +566,7 @@ Class Procs:
 /obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
 	return emag_cost
 
-/obj/machinery/attackby(var/obj/O, var/mob/user)
+/obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
@@ -588,7 +588,7 @@ Class Procs:
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
 
-	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
+	if(O.can_be_used_as_screwdriver(user) && machine_flags & SCREWTOGGLE)
 		if(machine_flags & SECUREDPANEL)
 			return toggleSecuredPanelOpen(O, user)
 		return togglePanelOpen(O, user)

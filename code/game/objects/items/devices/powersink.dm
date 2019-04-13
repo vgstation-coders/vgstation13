@@ -24,7 +24,7 @@
 	var/obj/structure/cable/attached		// the attached cable
 
 	attackby(var/obj/item/I, var/mob/user)
-		if(isscrewdriver(I))
+		if(I.can_be_used_as_screwdriver(user))
 			if(mode == 0)
 				var/turf/T = loc
 				if(isturf(T) && !T.intact)

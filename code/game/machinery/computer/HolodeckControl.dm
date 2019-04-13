@@ -518,7 +518,7 @@
 	return
 
 /obj/structure/window/reinforced/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.can_be_used_as_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
 
@@ -531,7 +531,7 @@
 	return
 
 /obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)
-	if(isscrewdriver(W))
+	if(W.can_be_used_as_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
 

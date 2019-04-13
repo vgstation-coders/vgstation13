@@ -161,6 +161,9 @@
 			to_chat(usr, "<span class='warning'>You cannot do that.</span>")
 	else
 		..()
+
+/obj/item/weapon/screwdriver/can_be_used_as_screwdriver(var/mob/user)
+	return TRUE
 /*
  * Wirecutters
  */
