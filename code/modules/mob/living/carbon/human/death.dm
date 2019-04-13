@@ -66,6 +66,7 @@
 		qdel(vessel)
 		vessel = null
 
+	my_appearance = null
 
 	..()
 
