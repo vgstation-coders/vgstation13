@@ -118,7 +118,8 @@ CREATE TABLE client (
     jingle         TEXT,
     hear_voicesound INTEGER,
     hear_instruments INTEGER,
-    ambience_volume INTEGER
+    ambience_volume INTEGER,
+    credits_volume INTEGER
 );
 
 
