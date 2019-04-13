@@ -798,7 +798,7 @@
 	if(..())
 		return 1
 
-	M.adjustFireLoss(REM)
+	M.adjustFireLoss(1.5 * REM)
 
 //Quiet and lethal, needs at least 4 units in the person before they'll die
 /datum/reagent/chefspecial
