@@ -322,7 +322,7 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#define Clamp(x, y, z) 	min(max(x, y), z)
+#define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
 //x is the number you want to clamp
 //y is the minimum
 //z is the maximum

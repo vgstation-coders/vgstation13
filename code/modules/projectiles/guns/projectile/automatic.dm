@@ -319,9 +319,6 @@
 		mag_type = null
 	update_icon()
 
-/obj/item/weapon/gun/projectile/automatic/vector/lockbox
-	spawn_mag = FALSE
-
 //Vector receivers.
 /obj/item/weapon/vectorreceiver
 	name = "vector receiver"
@@ -333,8 +330,6 @@
 	var/caliber = ".380AUTO" //Its not a list but IT WORKS ON MY MACHINE.
 	var/ammo_type = "/obj/item/ammo_casing/c380auto"
 	var/mag_type = "/obj/item/ammo_storage/magazine/m380auto"
-	var/list/mag_blacklist = list(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/ammo_storage/magazine/a12ga, /obj/item/ammo_storage/magazine/a357)
-	//Insert unacceptable mags here ^^. The lawgiver makes error gas so always exclude it.
 
 /obj/item/weapon/vectorreceiver/New()
 	..()
@@ -346,7 +341,7 @@
 /obj/item/weapon/vectorreceiver/attackby(obj/item/used_item, mob/user)
 	..()
 	if(istype(used_item, /obj/item/ammo_storage/magazine) && !istype(used_item, text2path(mag_type)))
-		if(!is_type_in_list(used_item, mag_blacklist))
+		if(!istype(used_item, /obj/item/ammo_storage/magazine/lawgiver)) //Insert unacceptable mags here.
 			to_chat(user, "<span class='notice'>You insert \the [used_item] into \the [src] for a moment and it begins calibrating.</span>")
 			if (do_after(user, src, 10 SECONDS))
 				if(!src)
@@ -363,17 +358,8 @@
 		else
 			to_chat(user, "<span class='warning'>You're unable to insert \the [used_item] into \the [src]!</span>")
 
-//Unrestricted versions.
-/obj/item/weapon/gun/projectile/automatic/vector/unlimited
-
-/obj/item/weapon/gun/projectile/automatic/vector/unlimited/New()
-	..()
-	qdel(receiver)
-	receiver = new /obj/item/weapon/vectorreceiver/unlimited(src)
-	update_receiver()
-
-/obj/item/weapon/vectorreceiver/unlimited
-	mag_blacklist = list(/obj/item/ammo_storage/magazine/lawgiver)
+/obj/item/weapon/gun/projectile/automatic/vector/lockbox
+	spawn_mag = FALSE
 
 /* The thing I found with guns in ss13 is that they don't seem to simulate the rounds in the magazine in the gun.
    Afaik, since projectile.dm features a revolver, this would make sense since the magazine is part of the gun.

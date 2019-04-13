@@ -234,7 +234,6 @@ var/list/threat_by_job = list(
 
 		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
 			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
-			spend_threat(starting_rule.cost)
 			return pick_delay(starting_rule)
 
 		spend_threat(starting_rule.cost)

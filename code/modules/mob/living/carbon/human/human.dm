@@ -1876,7 +1876,7 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
 		return FALSE
-	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked() || status_flags & FAKEDEATH)
 		return FALSE
 	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)

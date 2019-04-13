@@ -142,9 +142,6 @@
 		visible_message("<span class='danger'>[M] weakens [src]!</span>")
 		apply_effect(3, WEAKEN, armorblock)
 
-	if(isrambler(src) && !(M == src)) //Redundant check for kicking a soul rambler. Punching is in carbon/human/combat.dm
-		M.say(pick("Take that!", "Taste the pain!"))
-
 	apply_damage(damage, BRUTE, affecting)
 
 	if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying

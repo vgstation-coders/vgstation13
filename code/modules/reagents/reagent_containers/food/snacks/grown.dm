@@ -693,7 +693,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
 	name = "ghost pepper"
-	desc = "This pepper is haunted. And pretty spicy, too."
+	desc = "This pepper is hainted. And pretty spicy, too."
 	icon_state = "ghostpepper"
 	potency = 20
 	filling_color = "#66CEED"

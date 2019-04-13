@@ -112,19 +112,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		var/amount = getAmount(id)
 		if(amount)
 			var/datum/material/mat = getMaterial(id)
-			drop_stack(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
-
-/datum/materials/proc/makeOre(var/atom/loc)
-	for(var/id in storage)
-		var/amount = getAmount(id)
-		if(amount)
-			var/datum/material/mat = getMaterial(id)
-			drop_stack(mat.oretype, loc, amount)
-
-/datum/materials/proc/makeAndRemoveOre(var/atom/loc)
-	makeOre(loc)
-	for(var/id in storage)
-		removeAmount(id, storage[id])
+			getFromPool(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
 
 //HOOKS//
 /atom/proc/onMaterialChange(matID, amount)
