@@ -44,6 +44,8 @@ var/list/factions_with_hud_icons = list()
 	var/list/faction_scoreboard_data = list()
 	var/stage = FACTION_DORMANT //role_datums_defines.dm
 
+	var/minor_victory = FALSE
+
 /datum/faction/New()
 	..()
 	objective_holder = new
@@ -158,6 +160,9 @@ var/list/factions_with_hud_icons = list()
 		if (IsSuccessful())
 			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 			feedback_add_details("[ID]_success","SUCCESS")
+		else if (minor_victory)
+			score_results += "<br><font color='green'><B>\The [name] has achieved a minor victory.</B> [minorVictoryText()]</font>"
+			feedback_add_details("[ID]_success","MINOR_VICTORY")
 		else
 			score_results += "<br><font color='red'><B>\The [name] has failed.</B></font>"
 			feedback_add_details("[ID]_success","FAIL")
@@ -243,6 +248,9 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/proc/check_win()
 	return
+
+/datum/faction/proc/minorVictoryText()
+	return ""
 
 //updating every icons at the same time allows their animate() to be sync'd, so we can alternate the one on top without any additional proc calls.
 /proc/update_faction_icons()
