@@ -189,7 +189,7 @@ For vending packs, see vending_packs.dm*/
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
 		return
-	if(I.can_be_used_as_screwdriver(user))
+	if(I.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)

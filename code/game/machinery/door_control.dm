@@ -54,7 +54,7 @@
 	..()
 	..()
 	/* For later implementation
-	if (W.can_be_used_as_screwdriver(user))
+	if (W.is_screwdriver(user))
 	{
 		if(wiresexposed)
 			icon_state = "doorctrl0"

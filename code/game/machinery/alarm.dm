@@ -817,7 +817,7 @@
 
 	switch(buildstage)
 		if(2)
-			if(W.can_be_used_as_screwdriver(user))  // Opening that Air Alarm up.
+			if(W.is_screwdriver(user))  // Opening that Air Alarm up.
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
@@ -1013,7 +1013,7 @@ FIRE ALARM
 		update_icon()
 		return
 
-	if (W.can_be_used_as_screwdriver(user) && buildstage == 2)
+	if (W.is_screwdriver(user) && buildstage == 2)
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)

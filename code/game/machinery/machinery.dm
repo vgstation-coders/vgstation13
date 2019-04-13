@@ -499,7 +499,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(toggleitem.can_be_used_as_screwdriver(user))
+	if(toggleitem.is_screwdriver(user))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 	update_icon()
 	return 1
@@ -588,7 +588,7 @@ Class Procs:
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
 
-	if(O.can_be_used_as_screwdriver(user) && machine_flags & SCREWTOGGLE)
+	if(O.is_screwdriver(user) && machine_flags & SCREWTOGGLE)
 		if(machine_flags & SECUREDPANEL)
 			return toggleSecuredPanelOpen(O, user)
 		return togglePanelOpen(O, user)

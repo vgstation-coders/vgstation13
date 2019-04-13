@@ -78,7 +78,7 @@
 	else if(iswrench(used_atom))
 		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
 
-	else if(used_atom.can_be_used_as_screwdriver(user))
+	else if(used_atom.is_screwdriver(user))
 		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	else if(iswirecutter(used_atom))

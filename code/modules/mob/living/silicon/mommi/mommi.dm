@@ -151,12 +151,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.can_be_used_as_screwdriver(user) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(W.can_be_used_as_screwdriver(user) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else

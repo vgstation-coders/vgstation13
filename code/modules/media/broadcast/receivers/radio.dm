@@ -152,7 +152,7 @@
 			else
 				return ..()
 		if(SYSTEMISKINDADONE)
-			if(W.can_be_used_as_screwdriver(user))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
 					on = 1

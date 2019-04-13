@@ -173,7 +173,7 @@
 		to_chat(user, "<span class='info'>You remove the power cell</span>")
 
 /obj/machinery/suspension_gen/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (W.can_be_used_as_screwdriver(user))
+	if (W.is_screwdriver(user))
 		if(!open)
 			if(screwed)
 				screwed = 0

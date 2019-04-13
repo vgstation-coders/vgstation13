@@ -757,14 +757,14 @@ var/list/cyborg_list = list()
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.can_be_used_as_screwdriver(user) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
-	else if(W.can_be_used_as_screwdriver(user) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 			if(can_diagnose())

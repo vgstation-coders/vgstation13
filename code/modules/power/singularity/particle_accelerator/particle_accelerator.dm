@@ -233,12 +233,12 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 				user.visible_message("[user.name] removes some wires from the [src.name].", \
 					"You remove some wires.")
 				temp_state--
-			else if(O.can_be_used_as_screwdriver(user))
+			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 					"You close the access panel.")
 				temp_state++
 		if(3)
-			if(O.can_be_used_as_screwdriver(user))
+			if(O.is_screwdriver(user))
 				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 					"You open the access panel.")
 				temp_state--
@@ -376,12 +376,12 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 				user.visible_message("[user.name] removes some wires from the [src.name].", \
 					"You remove some wires.")
 				temp_state--
-			else if(O.can_be_used_as_screwdriver(user))
+			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 					"You close the access panel.")
 				temp_state++
 		if(3)
-			if(O.can_be_used_as_screwdriver(user))
+			if(O.is_screwdriver(user))
 				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 					"You open the access panel.")
 				temp_state--

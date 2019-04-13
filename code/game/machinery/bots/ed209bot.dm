@@ -1051,7 +1051,7 @@ Auto Patrol: []"},
 			qdel(W)
 
 		if(8)
-			if( W.can_be_used_as_screwdriver(user) )
+			if( W.is_screwdriver(user) )
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")

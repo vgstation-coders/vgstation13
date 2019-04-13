@@ -116,7 +116,7 @@ var/global/list/igniters = list()
 /obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
-	if (W.can_be_used_as_screwdriver(user))
+	if (W.is_screwdriver(user))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)

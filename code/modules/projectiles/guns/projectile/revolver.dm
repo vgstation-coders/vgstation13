@@ -42,7 +42,7 @@
 
 	attackby(var/obj/item/A as obj, mob/user as mob)
 		..()
-		if(A.can_be_used_as_screwdriver(user) || istype(A, /obj/item/weapon/conversion_kit))
+		if(A.is_screwdriver(user) || istype(A, /obj/item/weapon/conversion_kit))
 			var/obj/item/weapon/conversion_kit/CK
 			if(istype(A, /obj/item/weapon/conversion_kit))
 				CK = A

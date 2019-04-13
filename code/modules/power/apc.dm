@@ -450,7 +450,7 @@
 					"You insert the power cell.")
 				chargecount = 0
 				update_icon()
-	else if	(W.can_be_used_as_screwdriver(user))	// haxing
+	else if	(W.is_screwdriver(user))	// haxing
 		if(opened)
 			if (cell)
 				to_chat(user, "<span class='warning'>Close the APC first.</span>")//Less hints more mystery!

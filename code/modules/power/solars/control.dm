@@ -82,7 +82,7 @@
 	updateDialog()
 
 /obj/machinery/power/solar/control/attackby(obj/item/I as obj, mob/user as mob)
-	if(I.can_be_used_as_screwdriver(user))
+	if(I.is_screwdriver(user))
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if(src.stat & BROKEN)

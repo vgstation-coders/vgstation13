@@ -18,10 +18,10 @@
 /obj/item/device/radio/borg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
 	user.set_machine(src)
-	if (!( W.can_be_used_as_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
+	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return
 
-	if(W.can_be_used_as_screwdriver(user))
+	if(W.is_screwdriver(user))
 		if(keyslot)
 
 

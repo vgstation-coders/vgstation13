@@ -457,7 +457,7 @@
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(I.can_be_used_as_screwdriver(user))
+	if(I.is_screwdriver(user))
 		if(IED)
 			IED.forceMove(get_turf(src.loc))
 			IED = null

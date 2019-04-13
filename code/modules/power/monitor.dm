@@ -141,7 +141,7 @@
 
 //copied from computer.dm
 /obj/machinery/power/monitor/attackby(obj/item/I as obj, mob/user as mob)
-	if(I.can_be_used_as_screwdriver(user) && circuit)
+	if(I.is_screwdriver(user) && circuit)
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user,src,20))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )

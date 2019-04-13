@@ -540,7 +540,7 @@ turf/simulated/floor/update_icon()
 		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 
 		return
-	else if(C.can_be_used_as_screwdriver(user))
+	else if(C.is_screwdriver(user))
 		if(is_wood_floor())
 			if(broken || burnt)
 				return

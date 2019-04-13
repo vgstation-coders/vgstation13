@@ -51,7 +51,7 @@
 	if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
 		update_icon()
-	else if(O.can_be_used_as_screwdriver(user) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
+	else if(O.is_screwdriver(user) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
 		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
 		return
 	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent

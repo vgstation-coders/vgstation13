@@ -44,7 +44,7 @@
 	return .
 
 /obj/item/weapon/plastique/attackby(var/obj/item/I, var/mob/user)
-	if(I.can_be_used_as_screwdriver(user))
+	if(I.is_screwdriver(user))
 		open_panel = !open_panel
 		to_chat(user, "<span class='notice'>You [open_panel ? "open" : "close"] the wire panel.</span>")
 	else if(iswiretool(I))

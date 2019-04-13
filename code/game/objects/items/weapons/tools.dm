@@ -162,7 +162,7 @@
 	else
 		..()
 
-/obj/item/weapon/screwdriver/can_be_used_as_screwdriver(var/mob/user)
+/obj/item/weapon/screwdriver/is_screwdriver(var/mob/user)
 	return TRUE
 /*
  * Wirecutters

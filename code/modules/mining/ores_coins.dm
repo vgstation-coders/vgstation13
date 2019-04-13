@@ -354,7 +354,7 @@
 	rec.addAmount(material, 0.2) // 5 coins per sheet.
 	return w_type
 
-/obj/item/weapon/coin/can_be_used_as_screwdriver(var/mob/user)
+/obj/item/weapon/coin/is_screwdriver(var/mob/user)
 	return user.a_intent == I_HURT
 
 /obj/item/weapon/coin/gold
