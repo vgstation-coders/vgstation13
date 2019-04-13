@@ -505,6 +505,16 @@
 	bald
 		name = "Bald"
 		icon_state = "bald"
+
+	slime_short
+		name = "Slime Protrusions"
+		icon_state = "hair_slime_short"
+		species_allowed = list("Evolved Slime")
+
+	slime_long
+		name = "Slime Mantle"
+		icon_state = "hair_slime_long"
+		species_allowed = list("Evolved Slime")
 /*
 ///////////////////////////////////
 /  =---------------------------=  /

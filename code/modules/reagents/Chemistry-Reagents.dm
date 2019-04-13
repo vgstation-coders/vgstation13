@@ -856,9 +856,15 @@
 		var/mob/living/carbon/human/human = M
 		if(!isslimeperson(human))
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
+			var/gender = human.gender
 			human.set_species("Evolved Slime")
+			human.r_hair = round(human.multicolor_skin_r * 0.8, 1)
+			human.g_hair = round(human.multicolor_skin_g * 0.8, 1)
+			human.b_hair = round(human.multicolor_skin_b * 0.8, 1)
+			human.h_style = "Slime Mantle"
 			human.regenerate_icons()
 			M.setCloneLoss(0)
+			
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"
