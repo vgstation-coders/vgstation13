@@ -355,7 +355,7 @@
 	return w_type
 
 /obj/item/weapon/coin/can_be_used_as_screwdriver(var/mob/user)
-	return TRUE
+	return user.a_intent == I_HURT
 
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
