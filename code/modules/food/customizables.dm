@@ -396,9 +396,6 @@
 	name = "flavored chocolate coin"
 	icon_state = "coincustom"
 
-/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/is_screwdriver(var/mob/user)
-	return user.a_intent == I_HURT
-
 // Customizable Drinks /////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable
