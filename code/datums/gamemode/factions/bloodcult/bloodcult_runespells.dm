@@ -2627,6 +2627,21 @@ var/list/bloodcult_exitportals = list()
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
 
+// RUNE XXI
+/datum/rune_spell/ward
+	name = "Warding"
+	desc = "Create a rune that will alert you if someone tresspass."
+	Act_restriction = CULT_ACT_I
+	invocation = "Wardiwch eich jyngl! Nid yw'n anodd."
+	word1 = /datum/cultword/see
+	word2 = /datum/cultword/other
+	word3 = /datum/cultword/join
+	page = "This rune will alert us if any unbeliever crosses it. It will also reveal his position for a short."
+
+/datum/rune_spell/ward/cast()
+	var/obj/effect/rune/R = spell_holder
+	new /obj/effect/rune/ward(R)
+	qdel(R)
 
 /*
 	if((word1 == cultwords["travel"] && word2 == cultwords["self"]))

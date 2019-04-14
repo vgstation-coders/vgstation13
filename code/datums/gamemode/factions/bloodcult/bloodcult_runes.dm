@@ -494,4 +494,33 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			if (src && loc)
 				conceal_cooldown = 0
 		return 1
-	return 0
+	return 
+
+// -- Warding runes, detect ennemies
+/obj/effect/rune/ward/
+
+/obj/effect/rune/ward/New()
+	conceal()
+	return ..()
+
+/obj/effect/rune/ward/Crossed(var/atom/movable/mover)
+	// Triggers if a living non-cultist mob crosses the rune.
+	if (!isliving(mover))
+		return
+	var/mob/living/L = mover
+	if (!iscultist(L))
+		for (var/mob/living/seer in range(7, src))
+			if (iscultist(seer) && seer.client && seer.client.screen)
+				seer.client.screen += mover // see the mover for a set period of time
+				seer.client.screen += anim(location = get_turf(seer), target = mover, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)		
+		var/count = 10
+
+		spawn()
+			do
+				sleep(1)
+				count--
+			while(!mover.gcDestroyed && count)
+
+			for (var/mob/M in player_list)
+				if (M.client)
+					M.client.screen -= mover
