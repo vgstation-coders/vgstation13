@@ -17,6 +17,7 @@
 	var/holomap_filter //HOLOMAP_FILTER_CREW
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
+	var/mod = -8
 
 /obj/machinery/computer/crew/New()
 	..()
@@ -39,7 +40,7 @@
 
 /obj/machinery/computer/crew/update_icon()
 	if(stat & BROKEN)
-		icon_state = "crewb"
+		icon_state = "[initial(icon_state)]b"
 	else
 		if(stat & NOPOWER)
 			src.icon_state = "c_unpowered"
@@ -89,20 +90,27 @@
 		if(H.iscorpse)
 			continue
 
-		addCrewMarker(get_turf(H),H)
+		var/name
+		var/assignment
+		var/life_status
+		var/dam1
+		var/dam2
+		var/dam3
+		var/dam4
+		//var/area/player_area = get_area(H) for textview later on
 
 		// z == 0 means mob is inside object, check is they are wearing a uniform
-		/*if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
+		if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
 			var/obj/item/clothing/under/U = H.w_uniform
 
 			if (U.has_sensor && U.sensor_mode)
-				var/tuf/pos = H.z == 0 || U.sensor_mode == 3 ? get_turf(H) : null
+				var/turf/pos = H.z == 0 || U.sensor_mode == 3 ? get_turf(H) : null
 
 				// Special case: If the mob is inside an object confirm the z-level on turf level.
 				if (H.z == 0 && (!pos || pos.z != z))
 					continue
 
-				I = H.wear_id ? H.wear_id.GetID() : null
+				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
 
 				if (I)
 					name = I.registered_name
@@ -123,7 +131,9 @@
 					dam1 = null
 					dam2 = null
 					dam3 = null
-					dam4 = null*/
+					dam4 = null
+
+				addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4))
 
 /obj/abstract/screen/interface/tooltip
 	var/title
@@ -143,28 +153,39 @@
 /obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
 	closeToolTip(activator)
 
-/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat, var/list/damage = list(0,0,0,0))
+/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0))
+	if(!TU || !H)
+		return
+
 	var/mob_indicator = 2 //HOLOMAP_OTHER
 	var/holomap_marker = "marker_\ref[H]_ert_[mob_indicator]"
 
 	if(!(holomap_marker in holomap_cache))
 		holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"ert[mob_indicator]")
 
-	var/obj/abstract/screen/interface/tooltip/I = new (null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
-	I.setInfo("a test","lorem ipsum", activator)
+	var/title = name + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
+	var/content = damage.Join(" | ")
+	var/pixel_x
+	var/pixel_y
 
-	if(!I.pixel_x || !I.pixel_y)
-		if(map.holomap_offset_x.len >= holomap_z)
-			I.pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32) + map.holomap_offset_x[holomap_z]
-			I.pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32) + map.holomap_offset_y[holomap_z]
-		else
-			I.pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32)
-			I.pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32)
-
+	//if(!pixel_x || !pixel_y)
+	if(holomap_z in map.holomap_offset_x)
+		pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/ + map.holomap_offset_x[holomap_z]
+		pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/ + map.holomap_offset_y[holomap_z]
+	else
+		pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/
+		pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/
+	/*else
 		if(map.holomap_offset_x.len >= holomap_z)
 			animate(I,alpha = 255, pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32) + map.holomap_offset_x[holomap_z], pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32) + map.holomap_offset_y[holomap_z], time = 5, loop = -1, easing = LINEAR_EASING)
 		else
-			animate(I,alpha = 255, pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32), pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32), time = 5, loop = -1, easing = LINEAR_EASING)
+			animate(I,alpha = 255, pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32), pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32), time = 5, loop = -1, easing = LINEAR_EASING)*/
+
+	var/nomod_x = round(TU.x / 32)
+	var/nomod_y = round(TU.y / 32)
+	var/obj/abstract/screen/interface/tooltip/I = new (null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]","WEST+[nomod_x]:[TU.x%32 + mod],SOUTH+[nomod_y]:[TU.y%32 + mod]")
+
+	I.setInfo(title,content, activator)
 
 	holomap_tooltips += I
 
@@ -195,7 +216,8 @@
 	bgmap = holomap_cache[holomap_bgmap]
 	bgmap.plane = HUD_PLANE
 	bgmap.layer = HUD_BASE_LAYER
-	bgmap.color = holomap_color
+	if(holomap_z != STATION_Z)
+		bgmap.color = holomap_color
 	bgmap.loc = activator.hud_used.holomap_obj
 	bgmap.overlays.len = 0
 
