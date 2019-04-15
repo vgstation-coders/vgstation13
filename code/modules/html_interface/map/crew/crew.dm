@@ -15,6 +15,8 @@
 	var/list/holomap_images = list()
 	var/holomap_color = "#0B74B4"
 	var/holomap_filter //HOLOMAP_FILTER_CREW
+	var/holomap_z = 1
+	var/list/holomap_tooltips = list()
 
 /obj/machinery/computer/crew/New()
 	..()
@@ -55,6 +57,7 @@
 		animate(I)
 
 	holomap_images.len = 0
+	holomap_tooltips.len = 0 //does this remove them?
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
 /obj/machinery/computer/crew/proc/togglemap(mob/user)
@@ -79,6 +82,93 @@
 	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[T.z] == null))
 		return FALSE
 	return TRUE
+
+/obj/machinery/computer/crew/proc/addCrewToHolomap(var/turf/T)
+	for(var/mob/living/carbon/human/H in mob_list)
+		if(H.iscorpse)
+			continue
+
+		addCrewMarker(T,get_turf(H),H)
+
+		// z == 0 means mob is inside object, check is they are wearing a uniform
+		if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
+			var/obj/item/clothing/under/U = H.w_uniform
+
+			if (U.has_sensor && U.sensor_mode)
+				var/tuf/pos = H.z == 0 || U.sensor_mode == 3 ? get_turf(H) : null
+
+				// Special case: If the mob is inside an object confirm the z-level on turf level.
+				/*if (H.z == 0 && (!pos || pos.z != z))
+					continue
+
+				I = H.wear_id ? H.wear_id.GetID() : null
+
+				if (I)
+					name = I.registered_name
+					assignment = I.assignment
+				else
+					name = "<i>Unknown</i>"
+					assignment = ""
+
+				if (U.sensor_mode >= 1)
+					life_status = H.stat //CONSCIOUS, UNCONSCIOUS, DEAD
+
+				if (U.sensor_mode >= 2)
+					dam1 = round(H.getOxyLoss(),1)
+					dam2 = round(H.getToxLoss(),1)
+					dam3 = round(H.getFireLoss(),1)
+					dam4 = round(H.getBruteLoss(),1)
+				else
+					dam1 = null
+					dam2 = null
+					dam3 = null
+					dam4 = null*/
+
+/image/tooltip
+	var/title
+	var/content
+	var/mob/activator
+
+/image/tooltip/proc/setInfo(var/T, var/C, var/mob/A)
+	title = T
+	content = C
+	activator = A
+
+//this method might mess with other tooltips
+/image/tooltip/MouseEntered(location,control,params)
+	to_chat(activator, "mouseentered");
+	openToolTip(activator, src, null, title, content)
+
+/image/tooltip/MouseExited(location,control,params)
+	to_chat(activator, "mouseexited");
+	closeToolTip(activator)
+
+/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/T, var/turf/TU, var/mob/M)
+	var/mob_indicator = 2 //HOLOMAP_OTHER
+	var/holomap_marker = "marker_\ref[M]_ert_[mob_indicator]"
+
+	if(!(holomap_marker in holomap_cache))
+		holomap_cache[holomap_marker] = new /image/tooltip('icons/holomap_markers.dmi',"ert[mob_indicator]")
+
+	var/image/tooltip/I = holomap_cache[holomap_marker]
+	I.plane = HUD_PLANE
+	I.layer = HUD_ITEM_LAYER
+	I.loc = activator.hud_used.holomap_obj
+
+	I.setInfo("a test","lorem ipsum", activator)
+
+	//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
+
+	//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
+	if(!I.pixel_x || !I.pixel_y)
+		I.pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
+		I.pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
+	animate(I,alpha = 255, pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
+	animate(alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
+	animate(alpha = 0, time = 5, easing = SINE_EASING)
+	animate(alpha = 255, time = 2, easing = SINE_EASING)
+
+	holomap_images += I
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/update_holomap()
 /obj/machinery/computer/crew/proc/update_holomap()
@@ -142,5 +232,7 @@
 		animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 
 	holomap_images += bgmap
+
+	addCrewToHolomap(T)
 
 	activator.client.images |= holomap_images
