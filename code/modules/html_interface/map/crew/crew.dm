@@ -165,21 +165,6 @@
 
 	var/title = name + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
 	var/content = damage.Join(" | ")
-	var/pixel_x
-	var/pixel_y
-
-	//if(!pixel_x || !pixel_y)
-	if(holomap_z in map.holomap_offset_x)
-		pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/ + map.holomap_offset_x[holomap_z]
-		pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/ + map.holomap_offset_y[holomap_z]
-	else
-		pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/
-		pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE /*+ 8 * (WORLD_ICON_SIZE / 32)*/
-	/*else
-		if(map.holomap_offset_x.len >= holomap_z)
-			animate(I,alpha = 255, pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32) + map.holomap_offset_x[holomap_z], pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32) + map.holomap_offset_y[holomap_z], time = 5, loop = -1, easing = LINEAR_EASING)
-		else
-			animate(I,alpha = 255, pixel_x = TU.x + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32), pixel_y = TU.y + activator.client.view * WORLD_ICON_SIZE + 8 * (WORLD_ICON_SIZE / 32), time = 5, loop = -1, easing = LINEAR_EASING)*/
 
 	var/nomod_x = round(TU.x / 32)
 	var/nomod_y = round(TU.y / 32)
