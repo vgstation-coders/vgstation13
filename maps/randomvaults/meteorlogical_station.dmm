@@ -20,7 +20,7 @@
 "au" = (/obj/machinery/computer/mech_bay_power_console,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "av" = (/obj/structure/table/glass,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aw" = (/obj/machinery/computer/security,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
-"ax" = (/obj/machinery/computer/crew{name = "Syndie crew monitoring computer"; track_special_role = "Syndicate"},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ax" = (/obj/machinery/computer/crew{name = "Syndie crew monitoring computer"; holomap_filter = HOLOMAP_FILTER_NUKEOPS},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "ay" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets{pixel_x = 3; pixel_y = 3},/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "az" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/weapon/storage/belt/slim,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aA" = (/obj/effect/decal/mecha_wreckage/phazon,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)

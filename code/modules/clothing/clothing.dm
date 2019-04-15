@@ -544,12 +544,6 @@
 	var/displays_id = 1
 	clothing_flags = CANEXTINGUISH
 
-/obj/item/clothing/under/Destroy()
-	for(var/obj/machinery/computer/crew/C in machines)
-		if(C && src in C.tracked)
-			C.tracked -= src
-	..()
-
 /obj/item/clothing/under/examine(mob/user)
 	..()
 	var/mode

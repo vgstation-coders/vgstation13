@@ -127,18 +127,12 @@
 	return(prob_slip)
 
 /mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	var/old_z = src.z
-
 	. = ..()
 
 	/*if(status_flags & FAKEDEATH)
 		return 0*/
 
 	if(.)
-		if (old_z != src.z)
-			crewmonitor.queueUpdate(old_z)
-		crewmonitor.queueUpdate(src.z)
-
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
