@@ -155,7 +155,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 		var/turf/pos = get_turf(B)
 		if(pos && pos.z != CENTCOMM_Z && (pos.z == holomap_z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			to_chat(activator, "Z: [pos.z]")
 			addSiliconMarker(pos, B)
 
 //interface with tooltip on mouseover
@@ -226,12 +225,18 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(damage.len == 4)
 		content = "<span style='color: #0000FF'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
 
+	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
+		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
+		cmc_holomap_cache[CMC_CACHE_CREW][uid].transform *= 1.2
+
+	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
+
 	var/icon = "0"
 	if(stat != 2)
 		var/health = 0
 		for(var/dam in damage)
 			health += dam
-		health = round(100 - (health / 4))
+		health = round(100 - (health / 2))
 		switch (health)
 			if(80 to 99)
 				icon = "1"
@@ -241,16 +246,14 @@ var/list/cmc_holomap_cache = list(list(), list())
 				icon = "3"
 			if(20 to 39)
 				icon = "4"
-			if(0 to 19)
+			else if(health != 100)
 				icon = "5"
+				animate(I, alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
+				animate(alpha = 0, time = 5, easing = SINE_EASING)
+				animate(alpha = 255, time = 2, easing = SINE_EASING)
 	else
 		icon = "6"
-
-
-	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi',"sensor_health[icon]")
-
-	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
+	I.icon_state = "sensor_health[icon]"
 
 	//modulo magic for position
 	var/nomod_x = round(TU.x / 32)
@@ -270,7 +273,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 		return
 
 	if(freeze)
-		to_chat(activator, "freeze enabled")
 		return
 
 	activator.client.images -= holomap_images
@@ -286,10 +288,10 @@ var/list/cmc_holomap_cache = list(list(), list())
 	holomap_bgmap = "background_\ref[src]_[holomap_z]"
 
 	if(!(holomap_bgmap in holomap_cache))
-		if(holomap_z == STATION_Z)
+		/*if(holomap_z == STATION_Z)
 			holomap_cache[holomap_bgmap] = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[holomap_z]"])
-		else
-			holomap_cache[holomap_bgmap] = image(holoMiniMaps[holomap_z])
+		else*/
+		holomap_cache[holomap_bgmap] = image(holoMiniMaps[holomap_z])
 
 	bgmap = holomap_cache[holomap_bgmap]
 	bgmap.plane = HUD_PLANE
@@ -298,7 +300,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 		bgmap.color = holomap_color
 	bgmap.loc = activator.hud_used.holomap_obj
 	bgmap.overlays.len = 0
-	bgmap.alpha = 200
 
 	//don't have markers, yet?
 	/*for(var/marker in holomap_markers)
@@ -316,7 +317,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 			markerImage.appearance_flags = RESET_COLOR
 			bgmap.overlays += markerImage*/
 
-	animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
+	animate(bgmap, alpha = 200, time = 5, easing = LINEAR_EASING)
 	holomap_images += bgmap
 
 	addCrewToHolomap()
@@ -328,7 +329,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 /obj/machinery/computer/crew/proc/updateUI()
 	if(cmc_holomap_cache[CMC_CACHE_UI].len == 0)
-		to_chat(activator, "creating ui")
 		cmc_holomap_cache[CMC_CACHE_UI] |= list(new /obj/abstract/screen/interface(null,activator,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+8,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"1",'icons/cmc/buttons.dmi',"button_1","WEST+9,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"3",'icons/cmc/buttons.dmi',"button_3","WEST+10,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"4",'icons/cmc/buttons.dmi',"button_4","WEST+11,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"5",'icons/cmc/buttons.dmi',"button_5","WEST+12,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13"))
 
 	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI]
