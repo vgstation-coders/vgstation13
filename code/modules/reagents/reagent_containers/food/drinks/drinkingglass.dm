@@ -220,7 +220,7 @@
 					icon_state = "manlydorfglass"
 					item_state = "manlydorfglass"
 					name = "The Manly Dorf"
-					desc = "A dwarfy concotion made from ale and beer. Intended for stout dwarves only."
+					desc = "A dwarfy concoction made from ale and beer. Intended for stout dwarves only."
 				if(IRISHCREAM)
 					icon_state = "irishcreamglass"
 					name = "irish cream"
