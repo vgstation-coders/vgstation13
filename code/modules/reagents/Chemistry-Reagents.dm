@@ -848,7 +848,7 @@
 	if(..())
 		return 1
 
-	if(istype(M, /mob/living/carbon/human/manifested))
+	if(ismanifested(M))
 		to_chat(M, "<span class='warning'>You can feel intriguing reagents seeping into your body, but they don't seem to react at all.</span>")
 		M.reagents.del_reagent("mutationtoxin")
 
@@ -879,7 +879,7 @@
 
 		var/mob/living/carbon/C = M
 
-		if(istype(C, /mob/living/carbon/human/manifested))
+		if(ismanifested(C))
 			to_chat(C, "<span class='warning'>You can feel intriguing reagents seeping into your body, but they don't seem to react at all.</span>")
 			C.reagents.del_reagent("amutationtoxin")
 

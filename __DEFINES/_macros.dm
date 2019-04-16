@@ -12,6 +12,8 @@
 
 #define ishigherbeing(A) (ishuman(A) || ismartian(A) || (ismonkey(A) && A.dexterity_check()))
 
+#define ismanifested(A) (ishuman(A) && istype(A:species, /datum/species/manifested))
+
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))

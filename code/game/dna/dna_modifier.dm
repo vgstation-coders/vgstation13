@@ -150,7 +150,7 @@
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
 		to_chat(usr, "<span class='notice'>You cannot enter \the [src].</span>")
 		return
-	if (istype(usr, /mob/living/carbon/human/manifested))
+	if (ismanifested(usr))
 		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read your genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 
 		return
@@ -186,7 +186,7 @@
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
-	if(istype(O, /mob/living/carbon/human/manifested))
+	if(ismanifested(O))
 		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read that person's genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 
 		return
