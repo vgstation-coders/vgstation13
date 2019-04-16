@@ -186,7 +186,7 @@
 				if(MARTINI)
 					icon_state = "martiniglass"
 					name = "classic martini"
-					desc = "Damn, the bartender even stirred, not shook it."
+					desc = "Shaken, not stirred."
 				if(VODKAMARTINI)
 					icon_state = "martiniglass"
 					name = "vodka martini"
