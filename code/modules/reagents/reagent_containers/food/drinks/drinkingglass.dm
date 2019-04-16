@@ -518,7 +518,7 @@
 				if(ARNOLDPALMER)
 					icon_state = "arnoldpalmer"
 					name = "\improper Arnold Palmer"
-					desc = "Known as half and half to some. A mix of ice tea and lemonade"
+					desc = "Known as half and half to some. A mix of ice tea and lemonade."
 				if(MILKSHAKE)
 					icon_state = "milkshake"
 					item_state = "milkshake"
