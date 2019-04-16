@@ -36,11 +36,11 @@ var/list/cmc_holomap_cache = list(list(), list())
 	attack_hand(user)
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
-	/*. = ..()
+	. = ..()
 	if(.)
 		return
 	if(stat & (BROKEN|NOPOWER))
-		return*/
+		return
 	togglemap(user)
 
 /obj/machinery/computer/crew/update_icon()
