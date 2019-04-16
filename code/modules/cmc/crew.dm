@@ -82,7 +82,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 		activator = user
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
-		if(holoMiniMaps[holomap_z] == null) to_chat(user, "yaya") //for testing
 
 /obj/machinery/computer/crew/process()
 	update_holomap()
@@ -317,9 +316,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI]
 
 /obj/machinery/computer/crew/interface_act(mob/user, action)
-	if(action == "")
-		return
-
 	if(action == "exit")
 		deactivate_holomap()
 		return
@@ -328,5 +324,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 		to_chat(activator, "add the textview already")
 		return
 
-	holomap_z = text2num(action)
+	if(text2num(action) != null)
+		holomap_z = text2num(action)
 	update_holomap() //for that nice ui feedback uhhhh
