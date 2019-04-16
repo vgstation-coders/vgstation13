@@ -334,7 +334,7 @@
 					icon_state = "berryjuice"
 					item_state = "berryjuice"
 					name = "glass of berry juice"
-					desc = "Berry juice. Or maybe its jam. Who cares?"
+					desc = "Berry juice. Or maybe it's jam. Who cares?"
 				if(POISONBERRYJUICE)
 					icon_state = "poisonberryjuice"
 					item_state = "poisonberryjuice"
