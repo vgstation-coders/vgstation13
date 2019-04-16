@@ -226,7 +226,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
-		cmc_holomap_cache[CMC_CACHE_CREW][uid].transform *= 1.2
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
 
