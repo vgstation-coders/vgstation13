@@ -171,6 +171,7 @@
 	var/obj/abstract/screen/interface/tooltip/I = new (null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]","WEST+[nomod_x]:[TU.x%32 + mod],SOUTH+[nomod_y]:[TU.y%32 + mod]")
 
 	I.setInfo(title, content, activator)
+	I.name = name
 
 	holomap_tooltips += I
 
@@ -227,5 +228,27 @@
 
 	addCrewToHolomap()
 
+	updateUI()
+
 	activator.client.images |= holomap_images
 	activator.client.screen |= holomap_tooltips
+
+/obj/machinery/computer/crew/proc/updateUI()
+	var/obj/abstract/screen/interface/z1 = new (null,activator,src,"1",'icons/misc/debug_rebuild.dmi',"1","WEST+8,SOUTH+13")
+	var/obj/abstract/screen/interface/z3 = new (null,activator,src,"3",'icons/misc/debug_rebuild.dmi',"3","WEST+9,SOUTH+13")
+	var/obj/abstract/screen/interface/z4 = new (null,activator,src,"4",'icons/misc/debug_rebuild.dmi',"4","WEST+10,SOUTH+13")
+	var/obj/abstract/screen/interface/z5 = new (null,activator,src,"5",'icons/misc/debug_rebuild.dmi',"5","WEST+11,SOUTH+13")
+	var/obj/abstract/screen/interface/X = new (null,activator,src,"exit",'icons/misc/buildmode.dmi',"buildquit","WEST+13,SOUTH+13")
+
+	holomap_tooltips += z1
+	holomap_tooltips += z3
+	holomap_tooltips += z4
+	holomap_tooltips += z5
+	holomap_tooltips += X
+
+/obj/machinery/computer/crew/interface_act(mob/user, action)
+	if(action == "exit")
+		deactivate_holomap()
+		return
+
+	holomap_z = text2num(action)
