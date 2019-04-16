@@ -236,7 +236,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 		var/health = 0
 		for(var/dam in damage)
 			health += dam
-		health = round(100 - (health / 2))
+		health = round(100 - health)
 		switch (health)
 			if(80 to 99)
 				icon = "1"
@@ -248,9 +248,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 				icon = "4"
 			else if(health != 100)
 				icon = "5"
-				animate(I, alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
-				animate(alpha = 0, time = 5, easing = SINE_EASING)
-				animate(alpha = 255, time = 2, easing = SINE_EASING)
 	else
 		icon = "6"
 	I.icon_state = "sensor_health[icon]"
