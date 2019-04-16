@@ -5363,7 +5363,7 @@
 		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
 			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
 			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
-			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that�d make you dizzy. Wouldn�t give her name, said she was related to the captain",
+			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that'd make you dizzy. Wouldn't give her name, said she was related to the captain.",
 			"Judging by the boys at the lab, the perp took a sander to the tooth profiles, but did a sloppy job. Lab report came in early this morning. Guess my vacation is on pause.",
 			"The blacktop was baking that day, and the broads working 19th and Main were wearing even less than usual.",
 			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
