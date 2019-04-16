@@ -550,7 +550,7 @@
 					icon_state = "dans_whiskey"
 					item_state = "dans_whiskey"
 					name = "\improper Discount Dan's 'Malt' Whiskey"
-					desc = "The cheapest way to liver failure."
+					desc = "The cheapest path to liver failure."
 				if(GREYVODKA)
 					icon_state = "ginvodkaglass"
 					item_state = "ginvodkaglass"
