@@ -65,7 +65,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
-	to_chat(activator, "aaaaaa")
 	freeze = 0
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
@@ -83,6 +82,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 		activator = user
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
+		if(holoMiniMaps[holomap_z] == null) to_chat(user, "yaya")
 
 /obj/machinery/computer/crew/process()
 	update_holomap()
@@ -93,6 +93,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	return TRUE
 
 /obj/machinery/computer/crew/proc/addCrewToHolomap()
+	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
 		if(H.iscorpse)
 			continue
@@ -145,6 +146,18 @@ var/list/cmc_holomap_cache = list(list(), list())
 				else
 					to_chat(activator, "You need to add a Textview, Paul. Someone doesn't have tracking on.")
 
+	for(var/mob/living/carbon/brain/B in mob_list)
+		var/obj/item/device/mmi/M = B.loc
+		//var/area/parea = get_area(B)
+
+		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
+			continue
+
+		var/turf/pos = get_turf(B)
+		if(pos && pos.z != CENTCOMM_Z && (pos.z == z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
+			to_chat(activator, "Z: [pos.z]")
+			addSiliconMarker(pos, B)
+
 //interface with tooltip on mouseover
 /obj/abstract/screen/interface/tooltip
 	var/title
@@ -177,11 +190,32 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(CMC) CMC.freeze = 0
 	..()
 
+/obj/machinery/computer/crew/proc/addSiliconMarker(var/turf/TU, var/mob/living/carbon/brain/B)
+	if(!TU || !B)
+		return
+
+	var/uid = "\ref[B]"
+
+	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
+		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/holomap_markers.dmi',"ert1")
+
+	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
+
+	//modulo magic for position
+	var/nomod_x = round(TU.x / 32)
+	var/nomod_y = round(TU.y / 32)
+	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
+
+	I.setInfo("[B]", "[B.emp_damage]", activator)
+	I.setCMC(src)
+	I.name = "[B]"
+
+	holomap_tooltips += I
+
 /obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0))
 	if(!TU || !H)
 		return
 
-	var/mob_indicator = 2 //HOLOMAP_OTHER
 	var/uid = "\ref[H]"
 
 	//creating the title with name | job - Dead/Alive
@@ -192,9 +226,29 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(damage.len == 4)
 		content = "<span style='color: #0000FF'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
 
+	var/icon = "0"
+	if(stat != 2)
+		var/health = 0
+		for(dam in damage)
+			health += dam
+		health = round(100 - (health / 4))
+		switch (health)
+			if(80 to 99)
+				icon = "1"
+			if(60 to 79)
+				icon = "2"
+			if(40 to 59)
+				icon = "3"
+			if(20 to 39)
+		 		icon = "4"
+			if(0 to 19)
+				icon = "5"
+	else
+		icon = "6"
+
+
 	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		to_chat(activator, "creating crew")
-		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
+		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi',"sensor_health[icon]")
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
 
@@ -203,7 +257,8 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo(title, content, activator, src)
+	I.setInfo(title, content, activator)
+	I.setCMC(src)
 	I.name = name
 
 	holomap_tooltips += I
@@ -243,6 +298,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 		bgmap.color = holomap_color
 	bgmap.loc = activator.hud_used.holomap_obj
 	bgmap.overlays.len = 0
+	bgmap.alpha = 200
 
 	//don't have markers, yet?
 	/*for(var/marker in holomap_markers)
@@ -273,13 +329,17 @@ var/list/cmc_holomap_cache = list(list(), list())
 /obj/machinery/computer/crew/proc/updateUI()
 	if(cmc_holomap_cache[CMC_CACHE_UI].len == 0)
 		to_chat(activator, "creating ui")
-		cmc_holomap_cache[CMC_CACHE_UI] |= list(new /obj/abstract/screen/interface(null,activator,src,"1",'icons/misc/debug_rebuild.dmi',"1","WEST+8,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"3",'icons/misc/debug_rebuild.dmi',"3","WEST+9,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"4",'icons/misc/debug_rebuild.dmi',"4","WEST+10,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"5",'icons/misc/debug_rebuild.dmi',"5","WEST+11,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/misc/buildmode.dmi',"buildquit","WEST+13,SOUTH+13"))
+		cmc_holomap_cache[CMC_CACHE_UI] |= list(new /obj/abstract/screen/interface(null,activator,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+8,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"1",'icons/cmc/buttons.dmi',"button_1","WEST+9,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"3",'icons/cmc/buttons.dmi',"button_3","WEST+10,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"4",'icons/cmc/buttons.dmi',"button_4","WEST+11,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"5",'icons/cmc/buttons.dmi',"button_5","WEST+12,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13"))
 
 	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI]
 
 /obj/machinery/computer/crew/interface_act(mob/user, action)
 	if(action == "exit")
 		deactivate_holomap()
+		return
+
+	if(action == "text")
+		to_chat(activator, "add the textview already")
 		return
 
 	holomap_z = text2num(action)
