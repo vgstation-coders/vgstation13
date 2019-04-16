@@ -29,14 +29,14 @@
 			if(absorb_text)
 				show_message("[absorb_text]")
 			else
-				show_message("<span class='warning'>Your armor absorbs the blow!</span>")
+				show_message("<span class='notice'>Your armor ABSORBS the blow!</span>")
 		return 2
 	if(absorb == 1)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)
 			else
-				show_message("<span class='warning'>Your armor softens the blow!</span>")
+				show_message("<span class='notice'>Your armor SOFTENS the blow!</span>")
 		return 1
 	return 0
 
