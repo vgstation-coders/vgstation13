@@ -145,25 +145,37 @@ var/list/cmc_holomap_cache = list(list(), list())
 				else
 					to_chat(activator, "You need to add a Textview, Paul. Someone doesn't have tracking on.")
 
-/obj/abstract/screen/interface/CMC_marker
+//interface with tooltip on mouseover
+/obj/abstract/screen/interface/tooltip
 	var/title
 	var/content
 	var/mob/activator
-	var/obj/machinery/computer/crew/CMC
 
-/obj/abstract/screen/interface/CMC_marker/proc/setInfo(var/T, var/C, var/mob/A, var/obj/machinery/computer/crew/CM)
+/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/mob/A)
 	title = T
 	content = C
 	activator = A
-	CMC = CM
 
-/obj/abstract/screen/interface/CMC_marker/MouseEntered(location,control,params)
-	if(CMC) CMC.freeze = 1
+/obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
 	openToolTip(activator, src, params, title = title, content = content)
 
-/obj/abstract/screen/interface/CMC_marker/MouseExited(location,control,params)
-	if(CMC) CMC.freeze = 0
+/obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
 	closeToolTip(activator)
+
+//so we can freeze on mouseover
+/obj/abstract/screen/interface/tooltip/CrewIcon
+	var/obj/machinery/computer/crew/CMC
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/proc/setCMC(var/obj/machinery/computer/crew/CM)
+	CMC = CM
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
+	if(CMC) CMC.freeze = 1
+	..()
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
+	if(CMC) CMC.freeze = 0
+	..()
 
 /obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0))
 	if(!TU || !H)
@@ -180,11 +192,11 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(damage.len == 4)
 		content = "<span style='color: #0000FF'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
 
-	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/CMC_marker))
+	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		to_chat(activator, "creating crew")
-		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/CMC_marker(null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
+		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
 
-	var/obj/abstract/screen/interface/CMC_marker/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
+	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
 
 	//modulo magic for position
 	var/nomod_x = round(TU.x / 32)
