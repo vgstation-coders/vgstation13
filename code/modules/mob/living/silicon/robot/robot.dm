@@ -290,7 +290,7 @@ var/list/cyborg_list = list()
 		braintype = "Robot"
 	else
 		if(istype(mmi, /obj/item/device/mmi/posibrain))
-			braintype = "Android"
+			braintype = "Droid"
 		else
 			braintype = "Cyborg"
 
