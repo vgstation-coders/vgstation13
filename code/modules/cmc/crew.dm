@@ -19,14 +19,13 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/mob/activator
 	var/list/holomap_images = list()
 	var/holomap_color = "#5FFF28"
-	var/holomap_filter //HOLOMAP_FILTER_CREW
+	var/holomap_filter = HOLOMAP_FILTER_CREW //gotta use that, or not whatever
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
 	var/freeze = 0
 
 /obj/machinery/computer/crew/New()
 	..()
-	holomap_filter = !holomap_filter ? HOLOMAP_FILTER_CREW : holomap_filter
 
 /obj/machinery/computer/crew/Destroy()
 	deactivate_holomap()
@@ -65,6 +64,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
+	activator.hud_used.holomap_obj.icon_state = "blank"
 	freeze = 0
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
@@ -82,7 +82,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 		activator = user
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
-		if(holoMiniMaps[holomap_z] == null) to_chat(user, "yaya")
+		if(holoMiniMaps[holomap_z] == null) to_chat(user, "yaya") //for testing
 
 /obj/machinery/computer/crew/process()
 	update_holomap()
@@ -298,21 +298,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	bgmap.loc = activator.hud_used.holomap_obj
 	bgmap.overlays.len = 0
 
-	//don't have markers, yet?
-	/*for(var/marker in holomap_markers)
-		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == holomap_z && holomarker.filter & holomap_filter)
-			var/image/markerImage = image(holomarker.icon,holomarker.id)
-			markerImage.plane = FLOAT_PLANE
-			markerImage.layer = FLOAT_LAYER
-			if(map.holomap_offset_x.len >= holomap_z)
-				markerImage.pixel_x = holomarker.x+holomarker.offset_x+map.holomap_offset_x[holomap_z]
-				markerImage.pixel_y = holomarker.y+holomarker.offset_y+map.holomap_offset_y[holomap_z]
-			else
-				markerImage.pixel_x = holomarker.x+holomarker.offset_x
-				markerImage.pixel_y = holomarker.y+holomarker.offset_y
-			markerImage.appearance_flags = RESET_COLOR
-			bgmap.overlays += markerImage*/
+	activator.hud_used.holomap_obj.icon_state = "stationmap"
 
 	animate(bgmap, alpha = 200, time = 5, easing = LINEAR_EASING)
 	holomap_images += bgmap
@@ -331,6 +317,9 @@ var/list/cmc_holomap_cache = list(list(), list())
 	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI]
 
 /obj/machinery/computer/crew/interface_act(mob/user, action)
+	if(action == "")
+		return
+
 	if(action == "exit")
 		deactivate_holomap()
 		return
