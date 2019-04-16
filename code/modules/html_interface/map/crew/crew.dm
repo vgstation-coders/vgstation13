@@ -163,14 +163,14 @@
 	if(!(holomap_marker in holomap_cache))
 		holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"ert[mob_indicator]")
 
-	var/title = name + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
+	var/title = "[name]" + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
 	var/content = damage.Join(" | ")
 
 	var/nomod_x = round(TU.x / 32)
 	var/nomod_y = round(TU.y / 32)
 	var/obj/abstract/screen/interface/tooltip/I = new (null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]","WEST+[nomod_x]:[TU.x%32 + mod],SOUTH+[nomod_y]:[TU.y%32 + mod]")
 
-	I.setInfo(title,content, activator)
+	I.setInfo(title, content, activator)
 
 	holomap_tooltips += I
 
