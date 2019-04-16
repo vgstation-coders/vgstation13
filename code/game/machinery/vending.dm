@@ -1199,6 +1199,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/wine = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/cognac = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/kahlua = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/sake = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/beer = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/ale = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/orangejuice = 4,
