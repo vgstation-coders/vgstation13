@@ -86,7 +86,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	update_holomap()
 
 /obj/machinery/computer/crew/proc/handle_sanity()
-	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null))
+	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & NOPOWER) || (stat & BROKEN))
 		return FALSE
 	return TRUE
 
