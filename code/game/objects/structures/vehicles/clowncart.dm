@@ -243,7 +243,7 @@
 				colour1 = "#1CA800"
 				colour2 = "#238E0E"
 				to_chat(user, "Selected color: Green Access")
-			else if(istype(W, /obj/item/weapon/stamp/hos))
+			else if(istype(W, /obj/item/weapon/stamp/hos) || istype(W, /obj/item/weapon/stamp/warden))
 				colour1 = "#7F4D21"
 				colour2 = "#B24611"
 				to_chat(user, "Selected color: Shitcurity Brown")
