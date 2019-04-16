@@ -400,7 +400,7 @@
 				if(RED_MEAD)
 					icon_state = "red_meadglass"
 					name = "red mead"
-					desc = "A crimson beverage consumed by space vikings. The coloring is from berries... you hope."
+					desc = "A crimson beverage consumed by space vikings. The coloration is from berries... you hope."
 				if(MEAD)
 					icon_state = "meadglass"
 					name = "mead"
