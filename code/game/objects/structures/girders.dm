@@ -47,7 +47,7 @@
 				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 					"<span class='notice'>You dissasemble \the [src].</span>")
-					getFromPool(material, get_turf(src))
+					getFromPool(material, get_turf(src), 2)
 					qdel(src)
 			else if(!anchored) //Unanchored, anchor it
 				if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
