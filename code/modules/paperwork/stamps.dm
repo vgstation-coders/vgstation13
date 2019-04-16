@@ -30,6 +30,11 @@
 	icon_state = "stamp-hop"
 	_color = "hop"
 
+/obj/item/weapon/stamp/iaa
+	name = "internal affairs rubber stamp"
+	icon_state = "stamp-iaa"
+	_color = "lightblue"
+
 /obj/item/weapon/stamp/hos
 	name = "head of security's rubber stamp"
 	icon_state = "stamp-hos"
