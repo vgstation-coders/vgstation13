@@ -54,6 +54,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 			stat &= ~NOPOWER
 
 /obj/machinery/computer/crew/proc/deactivate_holomap()
+	activator.hud_used.holomap_obj.icon_state = "blank"
 	if(activator && activator.client)
 		activator.client.images -= holomap_images
 		activator.client.screen -= holomap_tooltips
@@ -64,7 +65,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
-	activator.hud_used.holomap_obj.icon_state = "blank"
 	freeze = 0
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
