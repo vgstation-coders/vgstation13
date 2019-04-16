@@ -151,11 +151,11 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/mob/activator
 	var/obj/machinery/computer/crew/CMC
 
-/obj/abstract/screen/interface/CMC_marker/proc/setInfo(var/T, var/C, var/mob/A, var/obj/machinery/computer/crew/C)
+/obj/abstract/screen/interface/CMC_marker/proc/setInfo(var/T, var/C, var/mob/A, var/obj/machinery/computer/crew/CM)
 	title = T
 	content = C
 	activator = A
-	CMC = C
+	CMC = CM
 
 /obj/abstract/screen/interface/CMC_marker/MouseEntered(location,control,params)
 	if(CMC) CMC.freeze = 1
