@@ -22,6 +22,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/holomap_filter //HOLOMAP_FILTER_CREW
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
+	var/freeze = 0
 
 /obj/machinery/computer/crew/New()
 	..()
@@ -64,7 +65,8 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
-	cmc_holomap_cache = list(list(), list())
+	to_chat(activator, "aaaaaa")
+	freeze = 0
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
 /obj/machinery/computer/crew/proc/togglemap(mob/user)
@@ -143,22 +145,24 @@ var/list/cmc_holomap_cache = list(list(), list())
 				else
 					to_chat(activator, "You need to add a Textview, Paul. Someone doesn't have tracking on.")
 
-/obj/abstract/screen/interface/tooltip
+/obj/abstract/screen/interface/CMC_marker
 	var/title
 	var/content
 	var/mob/activator
-	//mouse_opacity = 1
+	var/obj/machinery/computer/crew/CMC
 
-/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/mob/A)
+/obj/abstract/screen/interface/CMC_marker/proc/setInfo(var/T, var/C, var/mob/A, var/obj/machinery/computer/crew/C)
 	title = T
 	content = C
 	activator = A
+	CMC = C
 
-//this method might mess with other tooltips
-/obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
+/obj/abstract/screen/interface/CMC_marker/MouseEntered(location,control,params)
+	if(CMC) CMC.freeze = 1
 	openToolTip(activator, src, params, title = title, content = content)
 
-/obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
+/obj/abstract/screen/interface/CMC_marker/MouseExited(location,control,params)
+	if(CMC) CMC.freeze = 0
 	closeToolTip(activator)
 
 /obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0))
@@ -176,17 +180,18 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(damage.len == 4)
 		content = "<span style='color: #0000FF'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
 
-	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip))
-		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip(null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
+	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/CMC_marker))
+		to_chat(activator, "creating crew")
+		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/CMC_marker(null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
 
-	var/obj/abstract/screen/interface/tooltip/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
+	var/obj/abstract/screen/interface/CMC_marker/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
 
 	//modulo magic for position
 	var/nomod_x = round(TU.x / 32)
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo(title, content, activator)
+	I.setInfo(title, content, activator, src)
 	I.name = name
 
 	holomap_tooltips += I
@@ -195,6 +200,10 @@ var/list/cmc_holomap_cache = list(list(), list())
 /obj/machinery/computer/crew/proc/update_holomap()
 	if(!handle_sanity())
 		deactivate_holomap()
+		return
+
+	if(freeze)
+		to_chat(activator, "freeze enabled")
 		return
 
 	activator.client.images -= holomap_images
@@ -251,6 +260,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 /obj/machinery/computer/crew/proc/updateUI()
 	if(cmc_holomap_cache[CMC_CACHE_UI].len == 0)
+		to_chat(activator, "creating ui")
 		cmc_holomap_cache[CMC_CACHE_UI] |= list(new /obj/abstract/screen/interface(null,activator,src,"1",'icons/misc/debug_rebuild.dmi',"1","WEST+8,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"3",'icons/misc/debug_rebuild.dmi',"3","WEST+9,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"4",'icons/misc/debug_rebuild.dmi',"4","WEST+10,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"5",'icons/misc/debug_rebuild.dmi',"5","WEST+11,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/misc/buildmode.dmi',"buildquit","WEST+13,SOUTH+13"))
 
 	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI]
