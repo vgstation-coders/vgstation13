@@ -70,6 +70,11 @@
 	icon_state = "stamp-clown"
 	_color = "clown"
 
+/obj/item/weapon/stamp/chaplain
+	name = "chaplain's seal"
+	icon_state = "stamp-chaplain"
+	_color = "red"
+
 
 /obj/item/weapon/stamp/attack_paw(mob/user as mob)
 	return attack_hand(user)

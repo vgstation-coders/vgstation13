@@ -255,6 +255,10 @@
 				colour1 = "#D22EF7"
 				colour2 = "#D312E5"
 				to_chat(user, "Selected color: Plasma Purple")
+			else if(istype(W, /obj/item/weapon/stamp/chaplain))
+				colour1 = "#9B1C31"
+				colour2 = "#FFD700"
+				to_chat(user, "Selected color: Reverend Red")
 			else
 				colour1 = "#000000"
 				colour2 = "#6D6D6D"
