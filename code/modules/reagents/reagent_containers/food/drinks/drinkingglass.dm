@@ -329,7 +329,7 @@
 					icon_state = "glass_white"
 					item_state = "glass_white"
 					name = "glass of soy milk"
-					desc = "Milked from free range sissies."
+					desc = "White and nutritious soy goodness!"
 				if(BERRYJUICE)
 					icon_state = "berryjuice"
 					item_state = "berryjuice"
