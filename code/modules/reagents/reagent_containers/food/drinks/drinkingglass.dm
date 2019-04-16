@@ -357,7 +357,7 @@
 				if(SINGULO)
 					icon_state = "singulo"
 					name = "\improper Singulo"
-					desc = "A blue-space beverage."
+					desc = "IT'S LOOSE!"
 				if(ALLIESCOCKTAIL)
 					icon_state = "alliescocktail"
 					name = "\improper Allies Cocktail"
