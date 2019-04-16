@@ -1,3 +1,8 @@
+var/list/cmc_holomap_cache = list(list(), list())
+
+#define CMC_CACHE_CREW 1
+#define CMC_CACHE_UI 2
+
 /obj/machinery/computer/crew
 	name = "Crew monitoring computer"
 	desc = "Used to monitor active health sensors built into most of the crew's uniforms."
@@ -17,7 +22,6 @@
 	var/holomap_filter //HOLOMAP_FILTER_CREW
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
-	var/mod = -8
 
 /obj/machinery/computer/crew/New()
 	..()
@@ -60,6 +64,7 @@
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
+	cmc_holomap_cache = list(list(), list())
 
 //modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
 /obj/machinery/computer/crew/proc/togglemap(mob/user)
@@ -116,7 +121,7 @@
 					name = I.registered_name
 					assignment = I.assignment
 				else
-					name = "<i>Unknown</i>"
+					name = "Unknown"
 					assignment = ""
 
 				if (U.sensor_mode >= 1)
@@ -133,7 +138,10 @@
 					dam3 = null
 					dam4 = null
 
-				addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4))
+				if(pos)
+					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4))
+				else
+					to_chat(activator, "You need to add a Textview, Paul. Someone doesn't have tracking on.")
 
 /obj/abstract/screen/interface/tooltip
 	var/title
@@ -158,17 +166,25 @@
 		return
 
 	var/mob_indicator = 2 //HOLOMAP_OTHER
-	var/holomap_marker = "marker_\ref[H]_ert_[mob_indicator]"
+	var/uid = "\ref[H]"
 
-	if(!(holomap_marker in holomap_cache))
-		holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"ert[mob_indicator]")
-
+	//creating the title with name | job - Dead/Alive
 	var/title = "[name]" + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
-	var/content = damage.Join(" | ")
 
+	//creating the content with damage and some css coloring
+	var/content = "Damage not available"
+	if(damage.len == 4)
+		content = "<span style='color: #0000FF'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
+
+	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip))
+		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip(null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]")
+
+	var/obj/abstract/screen/interface/tooltip/I = cmc_holomap_cache[CMC_CACHE_CREW][uid]
+
+	//modulo magic for position
 	var/nomod_x = round(TU.x / 32)
 	var/nomod_y = round(TU.y / 32)
-	var/obj/abstract/screen/interface/tooltip/I = new (null,activator,src,null,'icons/holomap_markers.dmi',"ert[mob_indicator]","WEST+[nomod_x]:[TU.x%32 + mod],SOUTH+[nomod_y]:[TU.y%32 + mod]")
+	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
 	I.setInfo(title, content, activator)
 	I.name = name
@@ -234,17 +250,10 @@
 	activator.client.screen |= holomap_tooltips
 
 /obj/machinery/computer/crew/proc/updateUI()
-	var/obj/abstract/screen/interface/z1 = new (null,activator,src,"1",'icons/misc/debug_rebuild.dmi',"1","WEST+8,SOUTH+13")
-	var/obj/abstract/screen/interface/z3 = new (null,activator,src,"3",'icons/misc/debug_rebuild.dmi',"3","WEST+9,SOUTH+13")
-	var/obj/abstract/screen/interface/z4 = new (null,activator,src,"4",'icons/misc/debug_rebuild.dmi',"4","WEST+10,SOUTH+13")
-	var/obj/abstract/screen/interface/z5 = new (null,activator,src,"5",'icons/misc/debug_rebuild.dmi',"5","WEST+11,SOUTH+13")
-	var/obj/abstract/screen/interface/X = new (null,activator,src,"exit",'icons/misc/buildmode.dmi',"buildquit","WEST+13,SOUTH+13")
+	if(cmc_holomap_cache[CMC_CACHE_UI].len == 0)
+		cmc_holomap_cache[CMC_CACHE_UI] |= list(new /obj/abstract/screen/interface(null,activator,src,"1",'icons/misc/debug_rebuild.dmi',"1","WEST+8,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"3",'icons/misc/debug_rebuild.dmi',"3","WEST+9,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"4",'icons/misc/debug_rebuild.dmi',"4","WEST+10,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"5",'icons/misc/debug_rebuild.dmi',"5","WEST+11,SOUTH+13"), new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/misc/buildmode.dmi',"buildquit","WEST+13,SOUTH+13"))
 
-	holomap_tooltips += z1
-	holomap_tooltips += z3
-	holomap_tooltips += z4
-	holomap_tooltips += z5
-	holomap_tooltips += X
+	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI]
 
 /obj/machinery/computer/crew/interface_act(mob/user, action)
 	if(action == "exit")
