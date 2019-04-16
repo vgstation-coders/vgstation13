@@ -252,3 +252,4 @@
 		return
 
 	holomap_z = text2num(action)
+	update_holomap() //for that nice ui feedback uhhhh
