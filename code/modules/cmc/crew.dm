@@ -154,7 +154,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 			continue
 
 		var/turf/pos = get_turf(B)
-		if(pos && pos.z != CENTCOMM_Z && (pos.z == z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
+		if(pos && pos.z != CENTCOMM_Z && (pos.z == holomap_z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
 			to_chat(activator, "Z: [pos.z]")
 			addSiliconMarker(pos, B)
 
@@ -229,7 +229,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/icon = "0"
 	if(stat != 2)
 		var/health = 0
-		for(dam in damage)
+		for(var/dam in damage)
 			health += dam
 		health = round(100 - (health / 4))
 		switch (health)
@@ -240,7 +240,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 			if(40 to 59)
 				icon = "3"
 			if(20 to 39)
-		 		icon = "4"
+				icon = "4"
 			if(0 to 19)
 				icon = "5"
 	else
