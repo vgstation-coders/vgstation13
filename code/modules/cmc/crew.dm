@@ -1,7 +1,6 @@
-var/list/cmc_holomap_cache = list(list(), list())
+var/list/cmc_holomap_cache = list()
 
-#define CMC_CACHE_CREW 1
-#define CMC_CACHE_UI 2
+///proc/create_progress_bar_on(var/atom/target) from unsorted.dm
 
 /obj/machinery/computer/crew
 	name = "Crew monitoring computer"
@@ -99,9 +98,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 					background.overlays += station_outline
 					background.alpha = 0
 				holomap_cache[holomap_bgmap] = background
-		var/person = "\ref[activator]"
-		if(!cmc_holomap_cache[CMC_CACHE_CREW][person]) cmc_holomap_cache[CMC_CACHE_CREW][person] = list()
-		if(!cmc_holomap_cache[CMC_CACHE_UI][person]) cmc_holomap_cache[CMC_CACHE_UI][person] = list()
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
@@ -233,13 +229,12 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(!TU || !B)
 		return
 
-	var/uid = "\ref[B]"
-	var/person = "\ref[activator]"
+	var/uid = "crewmarker_\ref[B]_\ref[activator]"
 
-	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][person][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		cmc_holomap_cache[CMC_CACHE_CREW][person][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/holomap_markers.dmi',"ert1")
+	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
+		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/holomap_markers.dmi',"ert1")
 
-	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][person][uid]
+	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
 	//modulo magic for position
 	var/nomod_x = round(TU.x / 32)
@@ -256,8 +251,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(!TU || !H)
 		return
 
-	var/uid = "\ref[H]"
-	var/person = "\ref[activator]"
+		var/uid = "crewmarker_\ref[H]_\ref[activator]"
 
 	//creating the title with name | job - Dead/Alive
 	var/title = "[name]" + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
@@ -269,10 +263,10 @@ var/list/cmc_holomap_cache = list(list(), list())
 
 	content += "<br>[player_area]"
 
-	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][person][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		cmc_holomap_cache[CMC_CACHE_CREW][person][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
+	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
+		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
 
-	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[CMC_CACHE_CREW][person][uid]
+	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
 	var/icon = "0"
 	if(stat != 2)
@@ -342,18 +336,18 @@ var/list/cmc_holomap_cache = list(list(), list())
 	activator.client.screen |= holomap_tooltips
 
 /obj/machinery/computer/crew/proc/updateUI()
-	var/person = "\ref[activator]"
-	if(cmc_holomap_cache[CMC_CACHE_UI][person].len == 0)
-		var/list/all_ui_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped)
+	var/uid = "ui_btns_\ref[activator]_\ref[src]"
+	if(cmc_holomap_cache[uid].len == 0)
+		var/list/all_ui_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
 		var/ui_offset = 12-all_ui_z_levels.len
 		var/list/ui_btns = list(new /obj/abstract/screen/interface(null,activator,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+[ui_offset],SOUTH+13"))
 		for (var/z_level in all_ui_z_levels)
 			ui_offset += 1
 			ui_btns += new /obj/abstract/screen/interface(null,activator,src,"[z_level]",'icons/cmc/buttons.dmi',"button_[z_level]","WEST+[ui_offset],SOUTH+13")
 		ui_btns += new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13")
-		cmc_holomap_cache[CMC_CACHE_UI][person] = ui_btns
+		cmc_holomap_cache[uid] = ui_btns
 
-	holomap_tooltips += cmc_holomap_cache[CMC_CACHE_UI][person]
+	holomap_tooltips += cmc_holomap_cache[uid]
 
 /obj/machinery/computer/crew/interface_act(mob/user, action)
 	if(action == "exit")
