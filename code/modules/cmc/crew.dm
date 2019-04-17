@@ -54,7 +54,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 			stat &= ~NOPOWER
 
 /obj/machinery/computer/crew/proc/deactivate_holomap()
-	activator.hud_used.holomap_obj.icon_state = "blank"
 	if(activator && activator.client)
 		activator.client.images -= holomap_images
 		activator.client.screen -= holomap_tooltips
@@ -293,13 +292,13 @@ var/list/cmc_holomap_cache = list(list(), list())
 	bgmap.layer = HUD_BASE_LAYER
 	if(holomap_z != STATION_Z)
 		bgmap.color = holomap_color
-	bgmap.loc = activator.hud_used.holomap_obj
 	bgmap.overlays.len = 0
 
-	activator.hud_used.holomap_obj.icon_state = "stationmap"
-
 	animate(bgmap, alpha = 200, time = 5, easing = LINEAR_EASING)
-	holomap_images += bgmap
+	var/image/background = image('icons/480x480.dmi', "stationmap")
+	background.loc = activator.hud_used.holomap_obj
+	background.overlays |= bgmap
+	holomap_images += background
 
 	addCrewToHolomap()
 
