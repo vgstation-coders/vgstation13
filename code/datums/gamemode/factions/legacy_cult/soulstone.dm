@@ -25,7 +25,7 @@
 	if(!istype(M, /mob/living/carbon) && !istype(M, /mob/living/simple_animal))
 		return ..()
 	if(ismanifested(M))
-		to_chat(user, "\The [src] shard seems unable to pull the soul out of that powerful body.")
+		to_chat(user, "\The [src] seems unable to pull the soul out of that powerful body.")
 		return
 	add_logs(user, M, "captured [M.name]'s soul", object=src)
 
