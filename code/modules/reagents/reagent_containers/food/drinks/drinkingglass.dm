@@ -198,7 +198,7 @@
 				if(BRAVEBULL)
 					icon_state = "bravebullglass"
 					name = "\improper Brave Bull"
-					desc = "Tequila and coffee liquor, brought together in a mouthwatering mixture. Drink up."
+					desc = "Tequila and coffee liqueur. Kicks like a bull."
 				if(TEQUILASUNRISE)
 					icon_state = "tequilasunriseglass"
 					name = "\improper Tequila Sunrise"
@@ -211,7 +211,7 @@
 					icon_state = "beepskysmashglass"
 					item_state = "beepskysmashglass"
 					name = "\improper Beepsky Smash"
-					desc = "Heavy, hot and strong. Just like the iron fist of the LAW."
+					desc = "Heavy, hot and strong. Best drank with your hands behind your back."
 				if(DOCTORSDELIGHT)
 					icon_state = "doctorsdelightglass"
 					name = "\improper Doctor's Delight"
@@ -275,7 +275,7 @@
 				if(IRISHCOFFEE)
 					icon_state = "irishcoffeeglass"
 					name = "irish coffee"
-					desc = "Coffee and alcohol. More fun in the morning than a mimosa."
+					desc = "Coffee served with irish cream. Regular cream just isn't the same."
 				if(HOOCH)
 					icon_state = "glass_brown2"
 					item_state = "glass_brown2"
@@ -536,7 +536,7 @@
 				if(REWRITER)
 					icon_state = "rewriter"
 					name = "\improper Rewriter"
-					desc = "The librarian's special."
+					desc = "This will cure your dyslexia and cause your arrhythmia."
 				if(PINACOLADA)
 					icon_state = "pinacolada"
 					name = "\improper Pina Colada"
