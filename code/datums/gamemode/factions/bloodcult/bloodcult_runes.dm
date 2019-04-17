@@ -494,7 +494,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			if (src && loc)
 				conceal_cooldown = 0
 		return 1
-	return 
+	return 0
 
 // -- Warding runes, detect ennemies
 /obj/effect/rune/ward/
