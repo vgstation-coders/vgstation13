@@ -526,7 +526,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				ims += image_intruder
 				seers += seer
 				seer << image_intruder // see the mover for a set period of time
 				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)		
