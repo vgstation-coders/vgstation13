@@ -203,7 +203,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo("[B]", "[B.emp_damage]\n[get_area(B)]", activator)
+	I.setInfo("[B]", "[B.emp_damage]<br>[get_area(B)]", activator)
 	I.setCMC(src)
 	I.name = "[B]"
 
@@ -223,7 +223,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(damage.len == 4)
 		content = "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
 
-	content += "\n[player_area]"
+	content += "<br>[player_area]"
 
 	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
