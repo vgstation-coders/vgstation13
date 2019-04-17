@@ -103,7 +103,6 @@ var/list/cmc_holomap_cache = list(list(), list())
 		var/dam2
 		var/dam3
 		var/dam4
-		//var/area/player_area = get_area(H) for textview later on
 
 		// z == 0 means mob is inside object, check is they are wearing a uniform
 		if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
@@ -140,7 +139,8 @@ var/list/cmc_holomap_cache = list(list(), list())
 					dam4 = null
 
 				if(pos)
-					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4))
+					var/area/player_area = get_area(H)
+					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
 				else
 					to_chat(activator, "You need to add a Textview, Paul. Someone doesn't have tracking on.")
 
@@ -203,13 +203,13 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo("[B]", "[B.emp_damage]", activator)
+	I.setInfo("[B]", "[B.emp_damage]\n[get_area(B)]", activator)
 	I.setCMC(src)
 	I.name = "[B]"
 
 	holomap_tooltips += I
 
-/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0))
+/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
 	if(!TU || !H)
 		return
 
@@ -222,6 +222,8 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/content = "Damage not available"
 	if(damage.len == 4)
 		content = "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
+
+	content += "\n[player_area]"
 
 	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
