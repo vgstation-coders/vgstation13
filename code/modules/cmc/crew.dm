@@ -206,6 +206,9 @@ var/list/cmc_holomap_cache = list()
 
 /obj/abstract/screen/interface/tooltip/Click(location,control,params)
 	..()
+	parseToChat()
+
+/obj/abstract/screen/interface/tooltip/proc/parseToChat()
 	to_chat(user, title)
 	to_chat(user, content)
 	to_chat(user, parseAdd)
@@ -216,6 +219,9 @@ var/list/cmc_holomap_cache = list()
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/proc/setCMC(var/obj/machinery/computer/crew/CM)
 	CMC = CM
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/Click(location,control,params)
+	parseToChat()
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
 	if(CMC) CMC.freeze = 1
@@ -251,7 +257,7 @@ var/list/cmc_holomap_cache = list()
 	if(!TU || !H)
 		return
 
-		var/uid = "crewmarker_\ref[H]_\ref[activator]"
+	var/uid = "crewmarker_\ref[H]_\ref[activator]"
 
 	//creating the title with name | job - Dead/Alive
 	var/title = "[name]" + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
