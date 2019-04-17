@@ -97,14 +97,21 @@ var/list/cmc_holomap_cache = list()
 						station_areas.alpha = 150
 						background.overlays += station_areas
 						background.overlays += station_outline
-					if(z_level == CENTCOMM_Z && holomap_filter)
-						var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"]
-						station_outline.color = "#DEE7FF"
-						station_outline.alpha = 200
-						background.overlays += station_outline
-					//add cases for other z-levels?
 				background.alpha = 0
 				holomap_cache[holomap_bgmap] = background
+
+		//z2 override if nukeops or voxraider
+		if(holomap_filter == (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
+			var/holomap_bgmap = "cmc_\ref[src]_2"
+			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+			var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
+			station_outline.color = "#DEE7FF"
+			station_outline.alpha = 200
+			background.overlays += station_outline
+			background.alpha = 0
+			holomap_cache[holomap_bgmap] = background
+			holomap_z_levels_unmapped |= CENTCOMM_Z
+
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
