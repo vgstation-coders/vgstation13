@@ -55,85 +55,22 @@ var/list/cmc_holomap_cache = list()
 			icon_state = initial(icon_state)
 			stat &= ~NOPOWER
 
-/obj/machinery/computer/crew/proc/deactivate_holomap()
-	if(activator && activator.client)
-		activator.client.images -= holomap_images
-		activator.client.screen -= holomap_tooltips
-	activator = null
-
-	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
-	if(holomap_bgmap in holomap_cache)
-		var/image/bgmap = holomap_cache[holomap_bgmap]
-		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
-
-	holomap_images.len = 0
-	holomap_tooltips.len = 0
-	freeze = 0
-
-//modified version of /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
-/obj/machinery/computer/crew/proc/togglemap(mob/user)
-	if(user.isUnconscious())
+/obj/machinery/computer/crew/interface_act(mob/user, action)
+	if(action == "exit")
+		deactivate_holomap()
 		return
 
-	if(activator)
-		if(activator != user)
-			to_chat(user, "<span class='notice'>Someone is already using the holomap.</span>")
-			return
-		deactivate_holomap()
-		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
-	else
-		activator = user
-		var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
-		for(var/z_level in all_ui_z_levels)
-			var/holomap_bgmap = "cmc_\ref[src]_[z_level]"
-			if(!(holomap_bgmap in holomap_cache))
-				var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-				if(z_level in holomap_z_levels_mapped)
-					if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
-						var/image/station_outline = image(holoMiniMaps[z_level])
-						station_outline.color = "#DEE7FF"
-						station_outline.alpha = 200
-						var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
-						station_areas.alpha = 150
-						background.overlays += station_areas
-						background.overlays += station_outline
-				background.alpha = 0
-				holomap_cache[holomap_bgmap] = background
+	if(action == "text")
+		to_chat(activator, "add the textview already")
+		return
 
-		//z2 override if nukeops or voxraider
-		if(holomap_filter == (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
-			var/holomap_bgmap = "cmc_\ref[src]_2"
-			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-			var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
-			station_outline.color = "#DEE7FF"
-			station_outline.alpha = 200
-			background.overlays += station_outline
-			background.alpha = 0
-			holomap_cache[holomap_bgmap] = background
-			holomap_z_levels_unmapped |= CENTCOMM_Z
+	if(text2num(action) != null)
+		holomap_z = text2num(action)
+	update_holomap() //for that nice ui feedback uhhhh
 
-		process()
-		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
-
-/obj/machinery/computer/crew/process()
-	update_holomap()
-
-/obj/machinery/computer/crew/proc/handle_sanity()
-	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)))
-		return FALSE
-	return TRUE
-
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
-	var/list/string = list("[name] | [job]"+ ((stat == 2) ? " - DEAD" : " - ALIVE"))
-	string += damage ? "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>" : "Damage not available"
-	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
-	textview += string.Join(" <=> ")
-
-/obj/machinery/computer/crew/proc/addSiliconToTextview(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
-	var/list/string = list("[B]")
-	string += emp_damage ? "[emp_damage]" : "Damage not available"
-	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
-
+/*
+	Adding Crew
+*/
 /obj/machinery/computer/crew/proc/addCrewToHolomap()
 	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -201,49 +138,16 @@ var/list/cmc_holomap_cache = list()
 			addSiliconMarker(pos, B, parea, B.emp_damage)
 			addSiliconToTextview(pos, B, parea, B.emp_damage)
 
-//interface with tooltip on mouseover
-/obj/abstract/screen/interface/tooltip
-	var/title
-	var/content
-	var/parseAdd //Additional stuff to parse to chat
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
+	var/list/string = list("[name] | [job]"+ ((stat == 2) ? " - DEAD" : " - ALIVE"))
+	string += damage ? "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>" : "Damage not available"
+	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
+	textview += string.Join(" <=> ")
 
-/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A)
-	title = T
-	content = C
-	parseAdd = A
-
-/obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
-	openToolTip(user, src, params, title = title, content = content)
-
-/obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
-	closeToolTip(user)
-
-/obj/abstract/screen/interface/tooltip/Click(location,control,params)
-	..()
-	parseToChat()
-
-/obj/abstract/screen/interface/tooltip/proc/parseToChat()
-	to_chat(user, title)
-	to_chat(user, content)
-	to_chat(user, parseAdd)
-
-//so we can freeze on mouseover
-/obj/abstract/screen/interface/tooltip/CrewIcon
-	var/obj/machinery/computer/crew/CMC
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/proc/setCMC(var/obj/machinery/computer/crew/CM)
-	CMC = CM
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/Click(location,control,params)
-	parseToChat()
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
-	if(CMC) CMC.freeze = 1
-	..()
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
-	if(CMC) CMC.freeze = 0
-	..()
+/obj/machinery/computer/crew/proc/addSiliconToTextview(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
+	var/list/string = list("[B]")
+	string += emp_damage ? "[emp_damage]" : "Damage not available"
+	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
 
 /obj/machinery/computer/crew/proc/addSiliconMarker(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
 	if(!TU || !B)
@@ -322,7 +226,76 @@ var/list/cmc_holomap_cache = list()
 
 	holomap_tooltips += I
 
-//modified version of /obj/item/clothing/accessory/holomap_chip/proc/update_holomap()
+/*
+	holomap stuff
+*/
+/obj/machinery/computer/crew/proc/deactivate_holomap()
+	if(activator && activator.client)
+		activator.client.images -= holomap_images
+		activator.client.screen -= holomap_tooltips
+	activator = null
+
+	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
+	if(holomap_bgmap in holomap_cache)
+		var/image/bgmap = holomap_cache[holomap_bgmap]
+		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
+
+	holomap_images.len = 0
+	holomap_tooltips.len = 0
+	freeze = 0
+
+/obj/machinery/computer/crew/proc/togglemap(mob/user)
+	if(user.isUnconscious())
+		return
+
+	if(activator)
+		if(activator != user)
+			to_chat(user, "<span class='notice'>Someone is already using the holomap.</span>")
+			return
+		deactivate_holomap()
+		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
+	else
+		activator = user
+		var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+		for(var/z_level in all_ui_z_levels)
+			var/holomap_bgmap = "cmc_\ref[src]_[z_level]"
+			if(!(holomap_bgmap in holomap_cache))
+				var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+				if(z_level in holomap_z_levels_mapped)
+					if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
+						var/image/station_outline = image(holoMiniMaps[z_level])
+						station_outline.color = "#DEE7FF"
+						station_outline.alpha = 200
+						var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
+						station_areas.alpha = 150
+						background.overlays += station_areas
+						background.overlays += station_outline
+				background.alpha = 0
+				holomap_cache[holomap_bgmap] = background
+
+		//z2 override if nukeops or voxraider
+		if(holomap_filter == (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
+			var/holomap_bgmap = "cmc_\ref[src]_2"
+			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+			var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
+			station_outline.color = "#DEE7FF"
+			station_outline.alpha = 200
+			background.overlays += station_outline
+			background.alpha = 0
+			holomap_cache[holomap_bgmap] = background
+			holomap_z_levels_unmapped |= CENTCOMM_Z
+
+		process()
+		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
+
+/obj/machinery/computer/crew/process()
+	update_holomap()
+
+/obj/machinery/computer/crew/proc/handle_sanity()
+	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)))
+		return FALSE
+	return TRUE
+
 /obj/machinery/computer/crew/proc/update_holomap()
 	if(!handle_sanity())
 		deactivate_holomap()
@@ -371,15 +344,47 @@ var/list/cmc_holomap_cache = list()
 
 	holomap_tooltips += cmc_holomap_cache[uid]
 
-/obj/machinery/computer/crew/interface_act(mob/user, action)
-	if(action == "exit")
-		deactivate_holomap()
-		return
+/*
+	Tooltip interface
+*/
+/obj/abstract/screen/interface/tooltip
+	var/title
+	var/content
+	var/parseAdd //Additional stuff to parse to chat
 
-	if(action == "text")
-		to_chat(activator, "add the textview already")
-		return
+/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A)
+	title = T
+	content = C
+	parseAdd = A
 
-	if(text2num(action) != null)
-		holomap_z = text2num(action)
-	update_holomap() //for that nice ui feedback uhhhh
+/obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
+	openToolTip(user, src, params, title = title, content = content)
+
+/obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
+	closeToolTip(user)
+
+/obj/abstract/screen/interface/tooltip/Click(location,control,params)
+	..()
+	parseToChat()
+
+/obj/abstract/screen/interface/tooltip/proc/parseToChat()
+	to_chat(user, title)
+	to_chat(user, content)
+	to_chat(user, parseAdd)
+
+/obj/abstract/screen/interface/tooltip/CrewIcon
+	var/obj/machinery/computer/crew/CMC
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/proc/setCMC(var/obj/machinery/computer/crew/CM)
+	CMC = CM
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/Click(location,control,params)
+	parseToChat()
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
+	if(CMC) CMC.freeze = 1
+	..()
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
+	if(CMC) CMC.freeze = 0
+	..()
