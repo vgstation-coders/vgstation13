@@ -22,7 +22,7 @@
 
 /obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
 	if (ismanifested(X))
-		X.visible_message("<span class='danger'>\The [X] seems to completely ignore \the [src] that hit him.</span>","<span class='warning'>You can barely feel at all \the [src]'s electrical discharge.</span>")
+		X.visible_message("<span class='danger'>\The [X] seems to completely ignore \the [src] that hit them.</span>","<span class='warning'>You can barely feel at all \the [src]'s electrical discharge.</span>")
 		return
 	spawn(13)
 		X.apply_effects(stun, weaken, blocked = blocked)
