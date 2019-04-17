@@ -519,7 +519,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		uses--
 		last_threshold = world.time
 		var/list/seers = list()
-		var/list/ims = list()
 		for (var/mob/living/seer in range(7, src))
 			if (iscultist(seer) && seer.client && seer.client.screen)
 				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
@@ -531,9 +530,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 				seers += seer
 				seer << image_intruder // see the mover for a set period of time
 				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)		
-		sleep(1)
-		for (var/image/I in ims)
-			del I
+				spawn(3)
+					del image_intruder
 		var/count = 60
 		do
 			for (var/mob/living/seer in seers)
@@ -547,8 +545,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
 				ims += image_intruder
 				seer << image_intruder
-			sleep(3)
-			for (var/image/I in ims)
-				del I
+				spawn(3)
+					del image_intruder
 			count--
 		while (count && seers.len)
