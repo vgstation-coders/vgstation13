@@ -499,7 +499,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 // -- Warding runes, detect ennemies
 /obj/effect/rune/ward/
 	var/uses = 5
-	var/last_threeshold = -1
+	var/last_threshold = -1
 
 /obj/effect/rune/ward/New()
 	conceal()
@@ -513,11 +513,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if (uses < 0)
 		qdel(src)
 		return
-	if (last_threeshold + 10 SECONDS > world.time)
+	if (last_threshold + 10 SECONDS > world.time)
 		return
 	if (!iscultist(L))
 		uses--
-		last_threeshold = world.time
+		last_threshold = world.time
 		var/list/seers = list()
 		var/list/ims = list()
 		for (var/mob/living/seer in range(7, src))
