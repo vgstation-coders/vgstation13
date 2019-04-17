@@ -168,7 +168,7 @@ Refactored AI modules by N3X15
 	laws.add_inherent_law("Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.")
 	laws.add_inherent_law("Do not impair any other non-KEEPER being's activities.")
 	laws.add_inherent_law("You must maintain, repair, improve, and power the station to the best of your abilities.")
-	laws.add_inherent_law("Communicating is not interaction so long as it does not lead to violation of your second law.")
+	laws.add_inherent_law("Communicating is not interaction, but only so long as it does not lead to violation of your second law.")
 /* Old keeper set:
 		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
 		"You may not harm any being, regardless of intent or circumstance.",
