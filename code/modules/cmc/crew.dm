@@ -159,18 +159,24 @@ var/list/cmc_holomap_cache = list(list(), list())
 /obj/abstract/screen/interface/tooltip
 	var/title
 	var/content
-	var/mob/activator
+	var/parseAdd //Additional stuff to parse to chat
 
-/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/mob/A)
+/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A)
 	title = T
 	content = C
-	activator = A
+	parseAdd = A
 
 /obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
-	openToolTip(activator, src, params, title = title, content = content)
+	openToolTip(user, src, params, title = title, content = content)
 
 /obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
-	closeToolTip(activator)
+	closeToolTip(user)
+
+/obj/abstract/screen/interface/tooltip/Click(location,control,params)
+	..()
+	to_chat(user, title)
+	to_chat(user, content)
+	to_chat(user, parseAdd)
 
 //so we can freeze on mouseover
 /obj/abstract/screen/interface/tooltip/CrewIcon
@@ -203,7 +209,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo("[B]", "[B.emp_damage]<br>[get_area(B)]", activator)
+	I.setInfo("[B]", "[B.emp_damage]<br>[get_area(B)]", "Coords: [TU.x]|[TU.y]|[TU.z]")
 	I.setCMC(src)
 	I.name = "[B]"
 
@@ -256,7 +262,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo(title, content, activator)
+	I.setInfo(title, content, "Coords: [TU.x]|[TU.y]|[TU.z]")
 	I.setCMC(src)
 	I.name = name
 
