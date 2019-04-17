@@ -23,6 +23,7 @@ var/list/cmc_holomap_cache = list()
 	var/list/holomap_tooltips = list()
 	var/freeze = 0
 	var/list/textview = list()
+	var/textview_updatequeued = 0
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z)
 	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z)
 
@@ -61,7 +62,7 @@ var/list/cmc_holomap_cache = list()
 		return
 
 	if(action == "text")
-		to_chat(activator, "add the textview already")
+		openTextview()
 		return
 
 	if(text2num(action) != null)
@@ -139,15 +140,18 @@ var/list/cmc_holomap_cache = list()
 			addSiliconToTextview(pos, B, parea, B.emp_damage)
 
 /obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
-	var/list/string = list("[name] | [job]"+ ((stat == 2) ? " - DEAD" : " - ALIVE"))
+	var/list/string = list("[name] | [job]")
 	string += damage ? "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>" : "Damage not available"
 	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
-	textview += string.Join(" <=> ")
+	var/actualstring = "<tr><td>" + string.Join("</td><td>") + "</td></tr>"
+	textview += actualstring
 
 /obj/machinery/computer/crew/proc/addSiliconToTextview(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
 	var/list/string = list("[B]")
 	string += emp_damage ? "[emp_damage]" : "Damage not available"
 	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
+	var/actualstring = "<tr><td>" + string.Join("</td><td>") + "</td></tr>"
+	textview += actualstring
 
 /obj/machinery/computer/crew/proc/addSiliconMarker(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
 	if(!TU || !B)
@@ -230,6 +234,7 @@ var/list/cmc_holomap_cache = list()
 	holomap stuff
 */
 /obj/machinery/computer/crew/proc/deactivate_holomap()
+	closeTextview()
 	if(activator && activator.client)
 		activator.client.images -= holomap_images
 		activator.client.screen -= holomap_tooltips
@@ -242,6 +247,7 @@ var/list/cmc_holomap_cache = list()
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
+	textview.len = 0
 	freeze = 0
 
 /obj/machinery/computer/crew/proc/togglemap(mob/user)
@@ -309,6 +315,7 @@ var/list/cmc_holomap_cache = list()
 
 	holomap_images.len = 0
 	holomap_tooltips.len = 0
+	textview.len = 0
 
 	var/image/bgmap
 	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
@@ -324,6 +331,10 @@ var/list/cmc_holomap_cache = list()
 	holomap_images += bgmap
 
 	addCrewToHolomap()
+
+	if(textview_updatequeued)
+		openTextview()
+		textview_updatequeued = 0
 
 	updateUI()
 
@@ -388,3 +399,30 @@ var/list/cmc_holomap_cache = list()
 /obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
 	if(CMC) CMC.freeze = 0
 	..()
+
+/*
+	Textview procs
+*/
+/obj/machinery/computer/crew/Topic(href, href_list)
+	if(href_list["close"] )
+		closeTextview()
+		return
+
+/obj/machinery/computer/crew/proc/openTextview()
+	textview_updatequeued = 1
+	//title
+	var/t = "<KBD><B>Crew Monitoring</B><HR>"
+	//table head
+	t += "<BR><A href='?src=\ref[src];close=1'>Close</A><BR><table style='text-align: center;'><tr><th>Name</th><th>Vitals</th><th>Position</th></tr>"
+
+	//adding table rows
+	for(var/entry in textview)
+		t += entry
+
+	t += "</table></KBD>"
+
+	activator << browse(t, "window=crewcomp;size=900x600")
+
+/obj/machinery/computer/crew/proc/closeTextview()
+	textview_updatequeued = 0
+	activator << browse(null, "window=crewcomp")
