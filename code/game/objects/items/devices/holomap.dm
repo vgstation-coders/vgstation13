@@ -24,6 +24,8 @@
 	if (viewing)
 		viewing.mob.on_logout.Remove("\ref[src]:mob_logout")
 
+	..()
+
 /obj/item/device/holomap/examine(var/mob/M)
 	..()
 	if (panel)

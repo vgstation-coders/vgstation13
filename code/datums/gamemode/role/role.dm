@@ -527,15 +527,6 @@
 
 //________________________________________________
 
-
-/datum/role/madmonkey
-	name = MADMONKEY
-	id = MADMONKEY
-	special_role = MADMONKEY
-	logo_state = "monkey-logo"
-
-//________________________________________________
-
 /datum/role/bomberman
 	name = BOMBERMAN
 	id = BOMBERMAN

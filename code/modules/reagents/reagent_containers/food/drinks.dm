@@ -38,10 +38,9 @@
 	else
 		viewcontents = 1
 
-/obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
 		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
-
 		return 0
 
 	else if(!src.reagents.total_volume || !src)
@@ -51,6 +50,12 @@
 	else
 		imbibe(user)
 		return 0
+
+/obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user)
+	try_consume(user)
+
+/obj/item/weapon/reagent_containers/food/drinks/bite_act(mob/user)
+	return try_consume(user)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	var/datum/reagents/R = src.reagents

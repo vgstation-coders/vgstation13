@@ -18,10 +18,50 @@
 		name_ninja(antag.current)
 
 /datum/role/ninja/ForgeObjectives()
-	AppendObjective(/datum/objective/target/steal)
-	AppendObjective(/datum/objective/target/delayed/assassinate)
-	AppendObjective(/datum/objective/target/skulls)
-	AppendObjective(/datum/objective/escape)
+
+	if(cyborg_list.len)
+		AppendObjective(/datum/objective/target/killsilicons)
+	else
+		if(prob(70))
+			AppendObjective(/datum/objective/target/delayed/assassinate)
+		else
+			AppendObjective(/datum/objective/target/skulls)
+
+	if(ai_list.len)
+		AppendObjective(/datum/objective/killorstealAI)
+	else
+		AppendObjective(/datum/objective/target/steal)
+
+	var/living = 0
+	for(var/mob/living/M in player_list)
+		if(!M.client)
+			continue
+		if(!iscarbon(M) && !issilicon(M))
+			continue
+		var/turf/T = get_turf(M)
+		if(T.z != STATION_Z)
+			continue
+		if(M.stat != DEAD)
+			living++
+	if(living<=16 && prob(25))
+		AppendObjective(/datum/objective/silence)
+	else
+		AppendObjective(/datum/objective/survive)
+
+/datum/role/ninja/extraPanelButtons()
+	var/dat = ""
+	if(istype(GetNinjaWeapon(antag.current),/obj/item/weapon/katana/hesfast))
+		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];toggleweeb=ninja;'>(Make ninja)</a><br>"
+	else
+		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];toggleweeb=weeb;'>(Make weeaboo)</a><br>"
+	return dat
+
+/datum/role/ninja/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	if(href_list["toggleweeb"])
+		if(href_list["toggleweeb"]=="ninja")
+			equip_ninja(antag.current)
+		else
+			equip_weeaboo(antag.current)
 
 /datum/role/ninja/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -423,6 +463,7 @@ Helpers For Both Variants
 	if(isninja(user))
 		..()
 	else
+		to_chat(user,"<span class='warning'>You can't locate the off button.</span>")
 		..(user,"on")
 	if(active)
 		cant_drop = TRUE
