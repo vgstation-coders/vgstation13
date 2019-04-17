@@ -221,7 +221,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	//creating the content with damage and some css coloring
 	var/content = "Damage not available"
 	if(damage.len == 4)
-		content = "<span style='color: #0000FF'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
+		content = "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
 
 	if(!istype(cmc_holomap_cache[CMC_CACHE_CREW][uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[CMC_CACHE_CREW][uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
@@ -276,29 +276,28 @@ var/list/cmc_holomap_cache = list(list(), list())
 	holomap_tooltips.len = 0
 
 	var/image/bgmap
-	var/holomap_bgmap
-
-
-	holomap_bgmap = "background_\ref[src]_[holomap_z]"
+	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
 
 	if(!(holomap_bgmap in holomap_cache))
-		/*if(holomap_z == STATION_Z)
-			holomap_cache[holomap_bgmap] = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[holomap_z]"])
-		else*/
-		holomap_cache[holomap_bgmap] = image(holoMiniMaps[holomap_z])
+		var/image/background = image('icons/480x480.dmi', "stationmap")
+		if(holomap_z == STATION_Z || holomap_z == ASTEROID_Z || holomap_z == map.zDerelict)
+			var/image/station_outline = image(holoMiniMaps[holomap_z])
+			station_outline.alpha = 200
+			var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[holomap_z]"])
+			station_areas.alpha = 100
+			background.overlays += station_areas
+			background.overlays += station_outline
+		holomap_cache[holomap_bgmap] = background
 
 	bgmap = holomap_cache[holomap_bgmap]
+	//bgmap.color = holomap_color
 	bgmap.plane = HUD_PLANE
 	bgmap.layer = HUD_BASE_LAYER
-	if(holomap_z != STATION_Z)
-		bgmap.color = holomap_color
-	bgmap.overlays.len = 0
+	bgmap.loc = activator.hud_used.holomap_obj
 
 	animate(bgmap, alpha = 200, time = 5, easing = LINEAR_EASING)
-	var/image/background = image('icons/480x480.dmi', "stationmap")
-	background.loc = activator.hud_used.holomap_obj
-	background.overlays |= bgmap
-	holomap_images += background
+
+	holomap_images += bgmap
 
 	addCrewToHolomap()
 
