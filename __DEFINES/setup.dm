@@ -1021,6 +1021,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STATION_Z  1
 #define CENTCOMM_Z 2
 #define TELECOMM_Z 3
+#define DERELICT_Z 4
 #define ASTEROID_Z 5
 
 // canGhost(Read|Write) flags
