@@ -115,6 +115,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 		var/dam2
 		var/dam3
 		var/dam4
+		var/area/player_area
 
 		// z == 0 means mob is inside object, check is they are wearing a uniform
 		if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
@@ -150,8 +151,9 @@ var/list/cmc_holomap_cache = list(list(), list())
 					dam3 = null
 					dam4 = null
 
+
 				if(pos)
-					var/area/player_area = get_area(H)
+					player_area = get_area(H)
 					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
 				addCrewToTextview(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
 
