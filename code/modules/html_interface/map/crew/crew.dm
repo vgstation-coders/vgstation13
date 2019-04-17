@@ -216,6 +216,8 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 						results[++results.len] = list(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, pos_x, pos_y, H.monitor_check(), see_pos_x, see_pos_y)
 			for(var/mob/living/carbon/brain/B in mob_list)
 				var/obj/item/device/mmi/M = B.loc
+				if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
+					continue
 				pos = get_turf(B)
 				if(pos && pos.z != CENTCOMM_Z && (pos.z == z) && istype(M) && M.brainmob == B && !isrobot(M.loc) )
 
