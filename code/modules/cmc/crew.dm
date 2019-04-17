@@ -141,7 +141,7 @@ var/list/cmc_holomap_cache = list()
 
 /obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
 	var/list/string = list("[name] | [job]")
-	string += damage ? "<span style='background-color: #0080ff' title='Oxygen'> [damage[1]] </span>| <span style='background-color: #00CD00' title='Toxin'>[damage[2]]</span> | <span style='background-color: #ffa500' title='Fire'>[damage[3]]</span> | <span style='background-color: #ff0000' title='Brute'>[damage[4]]</span>" : "Damage not available"
+	string += damage ? "<b><span style='color: #0080ff' title='Oxygen'> [damage[1]] </span>|<span style='color: #00CD00' title='Toxin'> [damage[2]] </span>|<span style='color: #ffa500' title='Fire'> [damage[3]] </span>|<span style='color: #ff0000' title='Brute'> [damage[4]] </span></b>" : "Damage not available"
 	string += TU ? "[TU.x]|[TU.y]|[TU.z]" : "Position not available"
 	string += player_area ? "[player_area]" : "Area not available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
@@ -439,4 +439,7 @@ var/list/cmc_holomap_cache = list()
 	activator << browse(null, "window=crewcomp")
 
 /obj/machinery/computer/crew/proc/parseFromTextview(var/index)
-	to_chat(activator, textview[index])
+	to_chat(activator, "test")
+	var/string = replacetext(textview[index], "<td>", "")
+	string = replacetext(textview[index], "</td>", "")
+	to_chat(activator, string)
