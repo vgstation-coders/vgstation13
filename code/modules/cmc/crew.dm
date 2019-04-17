@@ -18,7 +18,7 @@ var/list/cmc_holomap_cache = list()
 	var/mob/activator
 	var/list/holomap_images = list()
 	var/holomap_color = "#5FFF28"
-	var/holomap_filter = HOLOMAP_FILTER_CREW //gotta use that, or not whatever
+	var/holomap_filter
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
 	var/freeze = 0
@@ -89,14 +89,21 @@ var/list/cmc_holomap_cache = list()
 			if(!(holomap_bgmap in holomap_cache))
 				var/image/background = image('icons/480x480.dmi', "stationmap_blue")
 				if(z_level in holomap_z_levels_mapped)
-					var/image/station_outline = image(holoMiniMaps[z_level])
-					station_outline.color = "#DEE7FF"
-					station_outline.alpha = 200
-					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
-					station_areas.alpha = 150
-					background.overlays += station_areas
-					background.overlays += station_outline
-					background.alpha = 0
+					if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
+						var/image/station_outline = image(holoMiniMaps[z_level])
+						station_outline.color = "#DEE7FF"
+						station_outline.alpha = 200
+						var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
+						station_areas.alpha = 150
+						background.overlays += station_areas
+						background.overlays += station_outline
+					if(z_level == CENTCOMM_Z && holomap_filter)
+						var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"]
+						station_outline.color = "#DEE7FF"
+						station_outline.alpha = 200
+						background.overlays += station_outline
+					//add cases for other z-levels?
+				background.alpha = 0
 				holomap_cache[holomap_bgmap] = background
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
@@ -239,6 +246,7 @@ var/list/cmc_holomap_cache = list()
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/holomap_markers.dmi',"ert1")
+		cmc_holomap_cache[uid].layer = ABOVE_HUD_LAYER
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
@@ -271,6 +279,7 @@ var/list/cmc_holomap_cache = list()
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
+		cmc_holomap_cache[uid].layer = ABOVE_HUD_LAYER
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
@@ -343,7 +352,7 @@ var/list/cmc_holomap_cache = list()
 
 /obj/machinery/computer/crew/proc/updateUI()
 	var/uid = "ui_btns_\ref[activator]_\ref[src]"
-	if(cmc_holomap_cache[uid].len == 0)
+	if(!cmc_holomap_cache[uid])
 		var/list/all_ui_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
 		var/ui_offset = 12-all_ui_z_levels.len
 		var/list/ui_btns = list(new /obj/abstract/screen/interface(null,activator,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+[ui_offset],SOUTH+13"))
