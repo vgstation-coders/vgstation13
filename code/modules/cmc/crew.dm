@@ -84,12 +84,13 @@ var/list/cmc_holomap_cache = list(list(), list())
 		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
 	else
 		activator = user
-		for(var/z_level in holomap_z_levels_mapped)
+		var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+		for(var/z_level in all_ui_z_levels)
 			var/holomap_bgmap = "cmc_\ref[src]_[z_level]"
 			if(!(holomap_bgmap in holomap_cache))
 				var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-				if(holomap_z == STATION_Z || holomap_z == ASTEROID_Z || holomap_z == map.zDerelict)
-					var/image/station_outline = image(holoMiniMaps[holomap_z])
+				if(z_level in holomap_z_levels_mapped)
+					var/image/station_outline = image(holoMiniMaps[z_level])
 					station_outline.color = "#DEE7FF"
 					station_outline.alpha = 200
 					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
@@ -98,6 +99,9 @@ var/list/cmc_holomap_cache = list(list(), list())
 					background.overlays += station_outline
 					background.alpha = 0
 				holomap_cache[holomap_bgmap] = background
+		var/person = "\ref[activator]"
+		if(!cmc_holomap_cache[CMC_CACHE_CREW][person]) cmc_holomap_cache[CMC_CACHE_CREW][person] = list()
+		if(!cmc_holomap_cache[CMC_CACHE_UI][person]) cmc_holomap_cache[CMC_CACHE_UI][person] = list()
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
@@ -340,7 +344,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 /obj/machinery/computer/crew/proc/updateUI()
 	var/person = "\ref[activator]"
 	if(cmc_holomap_cache[CMC_CACHE_UI][person].len == 0)
-		var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+		var/list/all_ui_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped)
 		var/ui_offset = 12-all_ui_z_levels.len
 		var/list/ui_btns = list(new /obj/abstract/screen/interface(null,activator,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+[ui_offset],SOUTH+13"))
 		for (var/z_level in all_ui_z_levels)
