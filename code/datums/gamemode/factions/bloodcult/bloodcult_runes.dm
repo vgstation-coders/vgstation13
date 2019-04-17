@@ -498,6 +498,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 // -- Warding runes, detect ennemies
 /obj/effect/rune/ward/
+	var/uses = 5
+	var/last_threeshold = -1
 
 /obj/effect/rune/ward/New()
 	conceal()
@@ -508,19 +510,45 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if (!isliving(mover))
 		return
 	var/mob/living/L = mover
+	if (uses < 0)
+		qdel(src)
+		return
+	if (last_threeshold + 10 SECONDS > world.time)
+		return
 	if (!iscultist(L))
+		uses--
+		last_threeshold = world.time
+		var/list/seers = list()
+		var/list/ims = list()
 		for (var/mob/living/seer in range(7, src))
 			if (iscultist(seer) && seer.client && seer.client.screen)
-				seer.client.screen += mover // see the mover for a set period of time
-				seer.client.screen += anim(location = get_turf(seer), target = mover, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)		
-		var/count = 10
-
-		spawn()
-			do
-				sleep(1)
-				count--
-			while(!mover.gcDestroyed && count)
-
-			for (var/mob/M in player_list)
-				if (M.client)
-					M.client.screen -= mover
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				ims += image_intruder
+				seers += seer
+				seer << image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)		
+		sleep(1)
+		for (var/image/I in ims)
+			del I
+		var/count = 60
+		do
+			for (var/mob/living/seer in seers)
+				if (seer.gcDestroyed)
+					seers -= seer
+					continue
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				ims += image_intruder
+				seer << image_intruder
+			sleep(3)
+			for (var/image/I in ims)
+				del I
+			count--
+		while (count && seers.len)

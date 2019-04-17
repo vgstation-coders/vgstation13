@@ -2629,14 +2629,15 @@ var/list/bloodcult_exitportals = list()
 
 // RUNE XXI
 /datum/rune_spell/ward
-	name = "Warding"
+	name = "Unholy threeshold"
 	desc = "Create a rune that will alert you if someone tresspass."
 	Act_restriction = CULT_ACT_I
+	talisman_absorb = 0 // No absorbing.
 	invocation = "Wardiwch eich jyngl! Nid yw'n anodd."
 	word1 = /datum/cultword/see
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/join
-	page = "This rune will alert us if any unbeliever crosses it. It will also reveal his position for a short."
+	page = "This rune will alert us if any unbeliever crosses it. It will also reveal his position for a short duration."
 
 /datum/rune_spell/ward/cast()
 	var/obj/effect/rune/R = spell_holder
