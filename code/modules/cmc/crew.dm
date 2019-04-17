@@ -23,6 +23,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
 	var/freeze = 0
+	var/list/textview = list()
 
 /obj/machinery/computer/crew/New()
 	..()
@@ -90,6 +91,17 @@ var/list/cmc_holomap_cache = list(list(), list())
 		return FALSE
 	return TRUE
 
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
+	var/list/string = list("[name] | [job]"+ ((stat == 2) ? " - DEAD" : " - ALIVE"))
+	string += damage ? "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>" : "Damage not available"
+	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
+	textview += string.Join(" <=> ")
+
+/obj/machinery/computer/crew/proc/addSiliconToTextview(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
+	var/list/string = list("[B]")
+	string += emp_damage ? "[emp_damage]" : "Damage not available"
+	string += TU ? "[TU.x]|[TU.y]|[TU.z] | [player_area]" : "Position not available"
+
 /obj/machinery/computer/crew/proc/addCrewToHolomap()
 	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -141,19 +153,19 @@ var/list/cmc_holomap_cache = list(list(), list())
 				if(pos)
 					var/area/player_area = get_area(H)
 					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
-				else
-					to_chat(activator, "You need to add a Textview, Paul. Someone doesn't have tracking on.")
+				addCrewToTextview(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		//var/area/parea = get_area(B)
+		var/area/parea = get_area(B)
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
 
 		var/turf/pos = get_turf(B)
 		if(pos && pos.z != CENTCOMM_Z && (pos.z == holomap_z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			addSiliconMarker(pos, B)
+			addSiliconMarker(pos, B, parea, B.emp_damage)
+			addSiliconToTextview(pos, B, parea, B.emp_damage)
 
 //interface with tooltip on mouseover
 /obj/abstract/screen/interface/tooltip
@@ -193,7 +205,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	if(CMC) CMC.freeze = 0
 	..()
 
-/obj/machinery/computer/crew/proc/addSiliconMarker(var/turf/TU, var/mob/living/carbon/brain/B)
+/obj/machinery/computer/crew/proc/addSiliconMarker(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
 	if(!TU || !B)
 		return
 
@@ -209,7 +221,7 @@ var/list/cmc_holomap_cache = list(list(), list())
 	var/nomod_y = round(TU.y / 32)
 	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
-	I.setInfo("[B]", "[B.emp_damage]<br>[get_area(B)]", "Coords: [TU.x]|[TU.y]|[TU.z]")
+	I.setInfo("[B]", "[emp_damage]<br>[player_area]", "Coords: [TU.x]|[TU.y]|[TU.z]")
 	I.setCMC(src)
 	I.name = "[B]"
 
