@@ -694,6 +694,7 @@ var/list/one_way_windows
 
 
 // Used on Packed ; smartglassified roundstart
+// TODO: Remove this snowflake stuff.
 /obj/structure/window/reinforced/plasma/interogation_room/initialize()
 	smartwindow = new(src)
 	smartwindow.id_tag = "InterogationRoomIDTag"
@@ -736,6 +737,80 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/clockwork/loose
 	anchored = 0
 	d_state = 0
+
+// Smartglass for mappers, smartglassified on roundstart.
+//the id_tag of the actual pane itself is passed to the smartglass electronics on initialization, it's not used for anything else
+/obj/structure/window/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/reinforced/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/reinforced/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/reinforced/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/reinforced/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/reinforced/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/reinforced/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/reinforced/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/reinforced/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
 
 /obj/structure/window/send_to_past(var/duration)
 	..()

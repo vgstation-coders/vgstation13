@@ -204,6 +204,7 @@
 	icon_state = "launcherbtt"
 	active = 0
 
+// TODO: Remove this snowflake stuff.
 /obj/machinery/door_control/mapped/interogation_room
 	name = "smartglass control"
 	desc = "Toogle smartglass"
