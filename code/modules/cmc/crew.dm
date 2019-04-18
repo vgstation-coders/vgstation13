@@ -165,11 +165,14 @@ var/list/cmc_holomap_cache = list()
 					dam3 = null
 					dam4 = null
 
+				var/list/damage
+				if(!dam1 && !dam2 && !dam3 && !dam4)
+					damage = list(dam1, dam2, dam3, dam4)
 
 				if(pos)
 					player_area = get_area(H)
-					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
-				addCrewToTextview(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area, ijob)
+					addCrewMarker(pos, H, name, assignment, life_status, damage, player_area)
+				addCrewToTextview(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
