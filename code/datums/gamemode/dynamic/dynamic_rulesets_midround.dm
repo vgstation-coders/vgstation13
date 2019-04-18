@@ -486,11 +486,11 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
 	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
-	var/datum/preferences/A = new()
-	A.randomize_appearance_for(new_frank)
+	var/gender = pick(MALE, FEMALE)
+	new_frank.randomise_appearance_for(gender)			
 	new_frank.key = applicant.key
 	new_frank.dna.ready_dna(new_frank)
-	new_frank.setGender(pick(MALE, FEMALE))
+	new_frank.setGender(gender)
 	return new_frank
 
 //////////////////////////////////////////////

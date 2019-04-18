@@ -526,17 +526,17 @@ var/global/list/whitelisted_species = list("Human")
 	H.update_icon()
 
 /datum/species/tajaran/updatespeciescolor(var/mob/living/carbon/human/H)
-	switch(H.s_tone)
+	switch(H.my_appearance.s_tone)
 		if(CATBEASTBLACK)
 			icobase = 'icons/mob/human_races/r_tajaranblack.dmi'
 			deform = 'icons/mob/human_races/r_def_tajaranblack.dmi'
 			tail = "tajtailb"
-			H.h_style = "Black Tajaran Ears"
+			H.my_appearance.h_style = "Black Tajaran Ears"
 		else
 			icobase = 'icons/mob/human_races/r_tajaran.dmi'
 			deform = 'icons/mob/human_races/r_def_tajaran.dmi'
 			tail = "tajtail"
-			H.h_style = "Tajaran Ears"
+			H.my_appearance.h_style = "Tajaran Ears"
 
 /datum/species/tajaran/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(15))
@@ -835,7 +835,7 @@ var/global/list/whitelisted_species = list("Human")
 	H.update_icon()
 
 /datum/species/vox/updatespeciescolor(var/mob/living/carbon/human/H)
-	switch(H.s_tone)
+	switch(H.my_appearance.s_tone)
 		if(6)
 			icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxemrl.dmi'

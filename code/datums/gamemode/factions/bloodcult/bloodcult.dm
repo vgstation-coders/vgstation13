@@ -371,6 +371,13 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Cult reminder: [reminder].")
 
+/datum/faction/bloodcult/GetScoreboard()
+	.=..()
+	if(veil_thickness == CULT_EPILOGUE)
+		var/obj/machinery/singularity/narsie/large/L = locate() in narsie_list //There should only be one
+		if(L.wounded)
+			. += "<BR><font color = 'green'><B>Though defeated, the crew managed to deal [L.wounded] damaging blows to \the [L].</B></font>"
+
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))
 		return 0

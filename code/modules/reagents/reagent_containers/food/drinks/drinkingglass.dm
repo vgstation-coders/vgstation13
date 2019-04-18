@@ -115,9 +115,9 @@
 					name = "glass of vodka"
 					desc = "The glass contain wodka. Xynta."
 				if(SAKE)
-					icon_state = "ginvodkaglass"
+					icon_state = "sakeglass"
 					name = "glass of sake"
-					desc = "A glass of Sake."
+					desc = "A glass of sake."
 				if(GOLDSCHLAGER)
 					icon_state = "ginvodkaglass"
 					name = "glass of Goldschlager"
@@ -190,6 +190,10 @@
 					icon_state = "martiniglass"
 					name = "vodka martini"
 					desc ="A bastardisation of the classic martini. Still great."
+				if(SAKEMARTINI)
+					icon_state = "martiniglass"
+					name = "sake martini"
+					desc = "An oriental spin on the martini, mixed with sake instead of vermouth."
 				if(GARGLEBLASTER)
 					icon_state = "gargleblasterglass"
 					name = "\improper Pan-Galactic Gargle Blaster"

@@ -177,7 +177,7 @@
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
-	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
+	else if((W.is_screwdriver(user)) && (istype(loc, /turf/simulated) || anchored))
 		if(!shock(user, 90, W.siemens_coefficient))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			anchored = !anchored

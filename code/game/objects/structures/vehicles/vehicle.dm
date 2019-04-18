@@ -126,7 +126,7 @@
 					to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
-	else if(isscrewdriver(W) && !heldkey)
+	else if(W.is_screwdriver(user) && !heldkey)
 		var/mob/living/carbon/human/H = user
 		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
 		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
