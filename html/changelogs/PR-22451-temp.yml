@@ -1,5 +1,0 @@
----
-author: brndd
-changes:
-  - tweak: Genetics machines now refill their injector banks twice as fast.
-delete-after: true

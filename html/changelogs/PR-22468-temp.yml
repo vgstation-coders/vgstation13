@@ -1,7 +1,0 @@
----
-author: brndd
-changes:
-  - rscadd: "Sake now has a bottle sprite and a glass sprite, courtesy of basil."
-  - rscadd: Sake is now available in the booze-o-mat and the booze dispenser.
-  - rscadd: "Added the sake martini cocktail, mixed with equal parts gin and sake."
-delete-after: true

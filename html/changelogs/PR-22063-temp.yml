@@ -1,7 +1,0 @@
----
-author: jknpj
-changes:
-  - rscadd: Adds the security cyborg H.O.S. upgrade to the tradervend. A powerful upgrade that requires the target cyborg to already have both N.O.I.R. and W.A.T.C.H. installed first... Good luck trying to get all of them in a single round!
-  - tweak: Cyborgs with the W.A.T.C.H. upgrade now recover from flashes faster than normal silicons.
-  - tweak: Cyborgs with the H.O.N.K. upgrade may now blow their own guns if they try to use any.(Can only happens to Hugborgs)
-delete-after: true

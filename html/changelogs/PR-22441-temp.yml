@@ -1,5 +1,0 @@
----
-author: PaulRitter
-changes:
-  - bugfix: "the blob objective should no longer say \"failed\" if actually accomplished"
-delete-after: true

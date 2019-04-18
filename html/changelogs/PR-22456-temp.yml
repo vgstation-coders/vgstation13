@@ -1,6 +1,0 @@
----
-author: brndd
-changes:
-  - rscadd: "MetaStation bar now has booze, soda and coffee dispensers."
-  - bugfix: MetaStation bar shutters button now requires bar access instead of kitchen access.
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - tweak: "Pale Beings no longer scream or jitter when hit by electrode since they don't feel pain, and a custom message is displayed to highlight the elctrode's ineffectiveness."
-delete-after: true

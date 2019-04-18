@@ -1,5 +1,0 @@
----
-author: PaulRitter
-changes:
-  - bugfix: holomaps (the one showing pipes) are now longer invincible
-delete-after: true

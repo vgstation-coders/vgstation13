@@ -1,5 +1,0 @@
----
-author: SirSkeleto
-changes:
-  - tweak: deconstructing table parts will not annihilate the materials used to make em
-delete-after: true

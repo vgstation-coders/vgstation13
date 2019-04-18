@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - rscadd: "If enabled by the host. If somebody takes enough instantaneous burn damage, they will turn to dust, leaving their belongings behind."
-delete-after: true

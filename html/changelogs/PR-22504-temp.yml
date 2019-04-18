@@ -1,6 +1,0 @@
----
-author: GeneralVeers25
-changes:
-  - rscadd: "RoidStation bar now has a soda dispenser. The equipment has been shuffled around slightly to accommodate it. The dispensers are no longer inside a wall. There's a wrench in the bar backroom now."
-  - rscadd: "Roidstation: A new tunnel has been dug connecting the Chapel with the abandoned Loading Dock in the Fore Port side of the station."
-delete-after: true
