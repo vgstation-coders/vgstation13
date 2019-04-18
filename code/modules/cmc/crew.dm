@@ -26,6 +26,47 @@ var/list/cmc_holomap_cache = list()
 	var/textview_updatequeued = 0
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z)
 	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z)
+	var/list/jobs = list(
+		"Captain" = 00,
+		"Head of Personnel" = 50,
+		"Head of Security" = 10,
+		"Warden" = 11,
+		"Security Officer" = 12,
+		"Detective" = 13,
+		"Chief Medical Officer" = 20,
+		"Chemist" = 21,
+		"Geneticist" = 22,
+		"Virologist" = 23,
+		"Medical Doctor" = 24,
+		"Paramedic" = 25,
+		"Research Director" = 30,
+		"Scientist" = 31,
+		"Roboticist" = 32,
+		"Chief Engineer" = 40,
+		"Station Engineer" = 41,
+		"Atmospheric Technician" = 42,
+		"Mechanic" = 43,
+		"Quartermaster" = 51,
+		"Shaft Miner" = 52,
+		"Cargo Technician" = 53,
+		"Bartender" = 61,
+		"Chef" = 62,
+		"Botanist" = 63,
+		"Librarian" = 64,
+		"Chaplain" = 65,
+		"Clown" = 66,
+		"Mime" = 67,
+		"Janitor" = 68,
+		"Internal Affairs Agent" = 69,
+		"Admiral" = 200,
+		"Centcom Commander" = 210,
+		"Emergency Response Team Commander" = 220,
+		"Security Response Officer" = 221,
+		"Engineer Response Officer" = 222,
+		"Medical Response Officer" = 223,
+		"Assistant" = 999 //Unknowns/custom jobs should appear after civilians, and before assistants
+	)
+
 
 /obj/machinery/computer/crew/New()
 	..()
@@ -86,6 +127,7 @@ var/list/cmc_holomap_cache = list()
 		var/dam3
 		var/dam4
 		var/area/player_area
+		var/ijob
 
 		// z == 0 means mob is inside object, check is they are wearing a uniform
 		if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
@@ -103,9 +145,11 @@ var/list/cmc_holomap_cache = list()
 				if (I)
 					name = I.registered_name
 					assignment = I.assignment
+					ijob = jobs[I.rank]
 				else
 					name = "Unknown"
 					assignment = ""
+					ijob = 80
 
 				if (U.sensor_mode >= 1)
 					life_status = H.stat //CONSCIOUS, UNCONSCIOUS, DEAD
@@ -125,7 +169,7 @@ var/list/cmc_holomap_cache = list()
 				if(pos)
 					player_area = get_area(H)
 					addCrewMarker(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
-				addCrewToTextview(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area)
+				addCrewToTextview(pos, H, name, assignment, life_status, list(dam1, dam2, dam3, dam4), player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
@@ -139,19 +183,34 @@ var/list/cmc_holomap_cache = list()
 			addSiliconMarker(pos, B, parea, B.emp_damage)
 			addSiliconToTextview(pos, B, parea, B.emp_damage)
 
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
-	var/list/string = list("[name] | [job]")
-	string += damage ? "<b><span style='color: #0080ff' title='Oxygen'> [damage[1]] </span>|<span style='color: #00CD00' title='Toxin'> [damage[2]] </span>|<span style='color: #ffa500' title='Fire'> [damage[3]] </span>|<span style='color: #ff0000' title='Brute'> [damage[4]] </span></b>" : "Damage not available"
-	string += TU ? "[TU.x]|[TU.y]|[TU.z]" : "Position not available"
-	string += player_area ? "[player_area]" : "Area not available"
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available", var/ijob = 9999)
+	var/role
+	switch(ijob)
+		if(0)	role = "cap" // captain
+		if(10 to 19) role = "sec" // security
+		if(20 to 29) role = "med" // medical
+		if(30 to 39) role = "sci"	 // science
+		if(40 to 49) role = "eng" // engineering
+		if(50 to 59) role = "car" // cargo
+		if(200 to 229) role = "cent"
+		else role = "unk"
+
+	var/icon
+	if(stat != 2)
+		icon = getLifeIcon(damage)
+	else
+		icon = "6"
+
+	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
+	string += damage ? "<img src='cmc_[icon].png' height='11' width='11'/>(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available"
+	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
 /obj/machinery/computer/crew/proc/addSiliconToTextview(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
-	var/list/string = list("[B]")
-	string += emp_damage ? "<span title='Emp Damage'> [emp_damage] </span>" : "Damage not available"
-	string += TU ? "[TU.x]|[TU.y]|[TU.z]" : "Position not available"
-	string += player_area ? "[player_area]" : "Area not available"
+	var/list/string = list("<span class='name silicon'>[B]</span>")
+	string += emp_damage ? "<img src='cmc_7.png' height='11' width='11'/><span class='emp'>[emp_damage]</span>" : "Not Available"
+	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
@@ -200,23 +259,9 @@ var/list/cmc_holomap_cache = list()
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
-	var/icon = "0"
+	var/icon
 	if(stat != 2)
-		var/health = 0
-		for(var/dam in damage)
-			health += dam
-		health = round(100 - health)
-		switch (health)
-			if(80 to 99)
-				icon = "1"
-			if(60 to 79)
-				icon = "2"
-			if(40 to 59)
-				icon = "3"
-			if(20 to 39)
-				icon = "4"
-			else if(health != 100)
-				icon = "5"
+		icon = getLifeIcon(damage)
 	else
 		icon = "6"
 	I.icon_state = "sensor_health[icon]"
@@ -231,6 +276,25 @@ var/list/cmc_holomap_cache = list()
 	I.name = name
 
 	holomap_tooltips += I
+
+/obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
+	var/health = 0
+	for(var/dam in damage)
+		health += dam
+	health = round(100 - health)
+	switch (health)
+		if(80 to 99)
+			return "1"
+		if(60 to 79)
+			return "2"
+		if(40 to 59)
+			return "3"
+		if(20 to 39)
+			return "4"
+		else if(health != 100)
+			return "5"
+		else
+			return "0"
 
 /*
 	holomap stuff
@@ -408,9 +472,6 @@ var/list/cmc_holomap_cache = list()
 	if(href_list["close"])
 		closeTextview()
 		return
-	if(href_list["parse"])
-		parseFromTextview(href_list["parse"])
-		return
 	if(href_list["toggle"])
 		textview_updatequeued = textview_updatequeued ? 0 : 1
 		updateTextView()
@@ -418,28 +479,25 @@ var/list/cmc_holomap_cache = list()
 
 /obj/machinery/computer/crew/proc/openTextview()
 	textview_updatequeued = 1
+	if(activator.client)
+		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
+		send_asset_list(activator.client, C.assets)
 	updateTextView()
 
 /obj/machinery/computer/crew/proc/updateTextView()
 	//styles
-	var/t = "<style> body { text-align: center; } table { background-color: grey; border: 1px solid black; } tr { background-color: rgb(182, 179, 164); } td, th { border-left: 1px solid black; border-right: 1px solid black; padding-left: 10px; padding-right: 10px; text-align: center; } </style>"
+	var/t = "<html><head><title>Crew Monitor</title><link rel='stylesheet' type='text/css' href='cmc.css'/></head><body>"
 
-	t += "<kbd><b>Crew Monitoring</b> <a href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a> <a href='?src=\ref[src];close=1'>Close</a> <hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th><th><u>Area</u></th></tr>"
+	t += "<kbd><b class='fuckbyond'>Crew Monitoring</b><a class='fuckbyond' href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><a class='fuckbyond' href='?src=\ref[src];close=1'>Close</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
 
 	//adding table rows
 	for(var/i=1, i<=textview.len, i++)
-		t += "<tr>" + textview[i] + "<td><A href='?src=\ref[src];parse=[i]'>Parse</A></td></tr>"
+		t += "<tr>" + textview[i] + "</tr>"
 
-	t += "</table></KBD>"
+	t += "</table></kbd></body></html>"
 
 	activator << browse(t, "window=crewcomp;size=900x600")
 
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
 	activator << browse(null, "window=crewcomp")
-
-/obj/machinery/computer/crew/proc/parseFromTextview(var/index)
-	to_chat(activator, "test")
-	var/string = replacetext(textview[index], "<td>", "")
-	string = replacetext(textview[index], "</td>", "")
-	to_chat(activator, string)
