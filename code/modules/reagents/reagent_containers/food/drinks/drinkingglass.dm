@@ -211,7 +211,7 @@
 					icon_state = "beepskysmashglass"
 					item_state = "beepskysmashglass"
 					name = "\improper Beepsky Smash"
-					desc = "Heavy, hot and strong. Best drank with your hands behind your back."
+					desc = "Heavy, hot and strong. Best enjoyed with your hands behind your back."
 				if(DOCTORSDELIGHT)
 					icon_state = "doctorsdelightglass"
 					name = "\improper Doctor's Delight"
