@@ -4553,7 +4553,7 @@
 /datum/reagent/drink/limejuice
 	name = "Lime Juice"
 	id = LIMEJUICE
-	description = "The sweet-sour juice of the lime fruit."
+	description = "The sweet-sour juice of limes."
 	color = "#BBB943" //rgb: 187, 185, 67
 	alpha = 170
 	nutriment_factor = 5 * REAGENTS_METABOLISM
