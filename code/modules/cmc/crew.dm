@@ -180,10 +180,10 @@ var/list/cmc_holomap_cache = list()
 
 		var/turf/pos = get_turf(B)
 		if(pos && pos.z != CENTCOMM_Z && (pos.z == holomap_z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			addSiliconMarker(pos, B, parea, B.emp_damage)
-			addSiliconToTextview(pos, B, parea, B.emp_damage)
+			addCrewMarker(pos, B, "[B]", "MMI", null, null, parea)
+			addCrewToTextview(pos, B, "[B]", "MMI", null, null, parea, 60)
 
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available", var/ijob = 9999)
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available", var/ijob = 9999)
 	var/role
 	switch(ijob)
 		if(0)	role = "cap" // captain
@@ -192,14 +192,18 @@ var/list/cmc_holomap_cache = list()
 		if(30 to 39) role = "sci"	 // science
 		if(40 to 49) role = "eng" // engineering
 		if(50 to 59) role = "car" // cargo
+		if(60 to 69) role = "silicon" //silicon
 		if(200 to 229) role = "cent"
 		else role = "unk"
 
 	var/icon
-	if(stat != 2)
-		icon = getLifeIcon(damage)
+	if(istype(H, /mob/living/carbon/human))
+		if(stat != 2)
+			icon = getLifeIcon(damage)
+		else
+			icon = "6"
 	else
-		icon = "6"
+		icon = "7"
 
 	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
 	string += damage ? "<img src='cmc_[icon].png' height='11' width='11'/>(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available"
@@ -207,49 +211,19 @@ var/list/cmc_holomap_cache = list()
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
-/obj/machinery/computer/crew/proc/addSiliconToTextview(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
-	var/list/string = list("<span class='name silicon'>[B]</span>")
-	string += emp_damage ? "<img src='cmc_7.png' height='11' width='11'/><span class='emp'>[emp_damage]</span>" : "Not Available"
-	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
-	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
-	textview += actualstring
-
-/obj/machinery/computer/crew/proc/addSiliconMarker(var/turf/TU, var/mob/living/carbon/brain/B, var/area/player_area, var/emp_damage)
-	if(!TU || !B)
-		return
-
-	var/uid = "crewmarker_\ref[B]_\ref[activator]"
-
-	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi',"sensor_health7")
-		cmc_holomap_cache[uid].layer = ABOVE_HUD_LAYER
-
-	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
-
-	//modulo magic for position
-	var/nomod_x = round(TU.x / 32)
-	var/nomod_y = round(TU.y / 32)
-	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
-
-	I.setInfo("[B]", "[emp_damage]<br>[player_area]", "Coords: [TU.x]|[TU.y]|[TU.z]")
-	I.setCMC(src)
-	I.name = "[B]"
-
-	holomap_tooltips += I
-
-/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/human/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
+/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
 	if(!TU || !H)
 		return
 
 	var/uid = "crewmarker_\ref[H]_\ref[activator]"
 
 	//creating the title with name | job - Dead/Alive
-	var/title = "[name]" + ((job != "") ? " | [job]" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
+	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
 
 	//creating the content with damage and some css coloring
-	var/content = "Damage not available"
+	var/content = "Not Available"
 	if(damage.len == 4)
-		content = "<span style='color: #0080ff'>[damage[1]]</span> | <span style='color: #00CD00'>[damage[2]]</span> | <span style='color: #ffa500'>[damage[3]]</span> | <span style='color: #ff0000'>[damage[4]]</span>"
+		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
 
 	content += "<br>[player_area]"
 
@@ -260,10 +234,13 @@ var/list/cmc_holomap_cache = list()
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
 	var/icon
-	if(stat != 2)
-		icon = getLifeIcon(damage)
+	if(istype(H, /mob/living/carbon/human))
+		if(stat != 2)
+			icon = getLifeIcon(damage)
+		else
+			icon = "6"
 	else
-		icon = "6"
+		icon = "7"
 	I.icon_state = "sensor_health[icon]"
 
 	//modulo magic for position
@@ -428,7 +405,7 @@ var/list/cmc_holomap_cache = list()
 	var/content
 	var/parseAdd //Additional stuff to parse to chat
 
-/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A)
+/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A = "")
 	title = T
 	content = C
 	parseAdd = A
@@ -444,8 +421,6 @@ var/list/cmc_holomap_cache = list()
 	parseToChat()
 
 /obj/abstract/screen/interface/tooltip/proc/parseToChat()
-	to_chat(user, title)
-	to_chat(user, content)
 	to_chat(user, parseAdd)
 
 /obj/abstract/screen/interface/tooltip/CrewIcon
