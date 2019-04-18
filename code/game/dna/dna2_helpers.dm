@@ -139,19 +139,19 @@
 			src.dna.UpdateUI()
 		dna.check_integrity()
 		var/mob/living/carbon/human/H = src
-		H.r_hair   = dna.GetUIValueRange(DNA_UI_HAIR_R,    255)
-		H.g_hair   = dna.GetUIValueRange(DNA_UI_HAIR_G,    255)
-		H.b_hair   = dna.GetUIValueRange(DNA_UI_HAIR_B,    255)
+		H.my_appearance.r_hair   = dna.GetUIValueRange(DNA_UI_HAIR_R,    255)
+		H.my_appearance.g_hair   = dna.GetUIValueRange(DNA_UI_HAIR_G,    255)
+		H.my_appearance.b_hair   = dna.GetUIValueRange(DNA_UI_HAIR_B,    255)
 
-		H.r_facial = dna.GetUIValueRange(DNA_UI_BEARD_R,   255)
-		H.g_facial = dna.GetUIValueRange(DNA_UI_BEARD_G,   255)
-		H.b_facial = dna.GetUIValueRange(DNA_UI_BEARD_B,   255)
+		H.my_appearance.r_facial = dna.GetUIValueRange(DNA_UI_BEARD_R,   255)
+		H.my_appearance.g_facial = dna.GetUIValueRange(DNA_UI_BEARD_G,   255)
+		H.my_appearance.b_facial = dna.GetUIValueRange(DNA_UI_BEARD_B,   255)
 
-		H.r_eyes   = dna.GetUIValueRange(DNA_UI_EYES_R,    255)
-		H.g_eyes   = dna.GetUIValueRange(DNA_UI_EYES_G,    255)
-		H.b_eyes   = dna.GetUIValueRange(DNA_UI_EYES_B,    255)
+		H.my_appearance.r_eyes   = dna.GetUIValueRange(DNA_UI_EYES_R,    255)
+		H.my_appearance.g_eyes   = dna.GetUIValueRange(DNA_UI_EYES_G,    255)
+		H.my_appearance.b_eyes   = dna.GetUIValueRange(DNA_UI_EYES_B,    255)
 
-		H.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, 220) // Value can be negative.
+		H.my_appearance.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, 220) // Value can be negative.
 		H.setGender(MALE)
 		if (dna.GetUIState(DNA_UI_GENDER))
 			H.setGender(FEMALE)
@@ -161,12 +161,12 @@
 		//Hair
 		var/hair = dna.GetUIValueRange(DNA_UI_HAIR_STYLE,hair_styles_list.len)
 		if((0 < hair) && (hair <= hair_styles_list.len))
-			H.h_style = hair_styles_list[hair]
+			H.my_appearance.h_style = hair_styles_list[hair]
 
 		//Facial Hair
 		var/beard = dna.GetUIValueRange(DNA_UI_BEARD_STYLE,facial_hair_styles_list.len)
 		if((0 < beard) && (beard <= facial_hair_styles_list.len))
-			H.f_style = facial_hair_styles_list[beard]
+			H.my_appearance.f_style = facial_hair_styles_list[beard]
 
 		H.update_body(0)
 		H.update_hair()

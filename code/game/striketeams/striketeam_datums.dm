@@ -265,28 +265,28 @@ var/list/sent_strike_teams = list()
 	if(can_customize_appearance)
 		var/new_facial = input(user, "Please select facial hair color.", "Character Generation") as color
 		if(new_facial)
-			new_commando.r_facial = hex2num(copytext(new_facial, 2, 4))
-			new_commando.g_facial = hex2num(copytext(new_facial, 4, 6))
-			new_commando.b_facial = hex2num(copytext(new_facial, 6, 8))
+			new_commando.my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
+			new_commando.my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
+			new_commando.my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
 
 		var/new_hair = input(user, "Please select hair color.", "Character Generation") as color
 		if(new_facial)
-			new_commando.r_hair = hex2num(copytext(new_hair, 2, 4))
-			new_commando.g_hair = hex2num(copytext(new_hair, 4, 6))
-			new_commando.b_hair = hex2num(copytext(new_hair, 6, 8))
+			new_commando.my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
+			new_commando.my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
+			new_commando.my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
 
 		var/new_eyes = input(user, "Please select eye color.", "Character Generation") as color
 		if(new_eyes)
-			new_commando.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-			new_commando.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-			new_commando.b_eyes = hex2num(copytext(new_eyes, 6, 8))
+			new_commando.my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+			new_commando.my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+			new_commando.my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
 		var/new_tone = input(user, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
 
 		if (!new_tone)
 			new_tone = 35
-		new_commando.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-		new_commando.s_tone =  -new_commando.s_tone + 35
+		new_commando.my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+		new_commando.my_appearance.s_tone =  -new_commando.my_appearance.s_tone + 35
 
 		// hair
 		var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -302,12 +302,12 @@ var/list/sent_strike_teams = list()
 		//hair
 		var/new_hstyle = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
 		if(new_hstyle)
-			new_commando.h_style = new_hstyle
+			new_commando.my_appearance.h_style = new_hstyle
 
 		// facial hair
 		var/new_fstyle = input(user, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
 		if(new_fstyle)
-			new_commando.f_style = new_fstyle
+			new_commando.my_appearance.f_style = new_fstyle
 
 		var/new_gender = alert(user, "Please select gender.", "Character Generation", "Male", "Female")
 		if (new_gender)
@@ -317,9 +317,7 @@ var/list/sent_strike_teams = list()
 				new_commando.setGender(FEMALE)
 	else
 		new_commando.setGender(pick(MALE, FEMALE))
-
-		var/datum/preferences/A = new()
-		A.randomize_appearance_for(new_commando)
+		new_commando.randomise_appearance_for(new_commando.gender)
 
 	//M.rebuild_appearance()
 	new_commando.update_hair()

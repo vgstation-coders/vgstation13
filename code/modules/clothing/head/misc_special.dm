@@ -186,7 +186,7 @@
 	if(!istype(user) || !haircolored)
 		return
 	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
-	wear_override.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)
