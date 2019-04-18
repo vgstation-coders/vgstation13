@@ -213,6 +213,7 @@ var/list/ai_list = list()
 		return
 	var/static/list/possible_icon_states = list(
  		"Alien" = "ai-alien",
+		"Alien" = "ai-alien",
 		"Angel" = "ai-angel",
 		"Angry" = "ai-angryface",
 		"Bliss" = "ai-bliss",

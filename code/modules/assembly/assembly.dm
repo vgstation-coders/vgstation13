@@ -275,7 +275,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		if((!A.secured) && (!secured))
 			attach_assembly(A,user)
 			return
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(toggle_secure())
 			to_chat(user, "<span class='notice'>\The [src] is ready!</span>")
 		else

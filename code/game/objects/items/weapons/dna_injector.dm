@@ -71,7 +71,7 @@
 		return buf.dna.SetUIValue(real_block,val)
 
 /obj/item/weapon/dnainjector/proc/inject(mob/M as mob, mob/user as mob)
-	if(istype(M,/mob/living/carbon/human/manifested))
+	if(ismanifested(M))
 		to_chat(M, "<span class='warning'> Apparently it didn't work.</span>")
 		if(M != user)
 			to_chat(user, "<span class='warning'> Apparently it didn't work.</span>")

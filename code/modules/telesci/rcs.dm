@@ -25,7 +25,7 @@
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(stage == 0)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You unscrew the telepad's tracking beacon.</span>")
