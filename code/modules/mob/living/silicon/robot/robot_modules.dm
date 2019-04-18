@@ -599,7 +599,7 @@
 	modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
 	modules += new /obj/item/borg/combat/shield(src)
 	modules += new /obj/item/borg/combat/mobility(src)
-	modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?
+	modules += new /obj/item/weapon/wrench(src) //Is a combat machine really going to be stopped by a chair?
 	emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
