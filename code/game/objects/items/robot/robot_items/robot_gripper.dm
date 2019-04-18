@@ -208,6 +208,7 @@
 	can_hold = list(
 		/obj/item/weapon/reagent_containers/food/drinks,
 		/obj/item/clothing/head/fedora,
+		/obj/item/weapon/broken_bottle,
 		/obj/item/trash
 		)
 
