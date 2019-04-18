@@ -12,6 +12,8 @@
 
 #define ishigherbeing(A) (ishuman(A) || ismartian(A) || (ismonkey(A) && A.dexterity_check()))
 
+#define ismanifested(A) (ishuman(A) && istype(A:species, /datum/species/manifested))
+
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
@@ -149,8 +151,6 @@
 #define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
-
-#define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
 
 #define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
 

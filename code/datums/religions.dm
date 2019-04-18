@@ -1215,8 +1215,8 @@
 
 /datum/religion/art/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/mounted/frame/painting)
-	H.h_style = "Big Afro"
-	H.f_style = "Full Beard"
+	H.my_appearance.h_style = "Big Afro"
+	H.my_appearance.f_style = "Full Beard"
 	H.update_hair()
 
 /datum/religion/clean
@@ -1230,8 +1230,8 @@
 
 /datum/religion/clean/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/mop)
-	H.h_style = "Bald"
-	H.f_style = "Shaved"
+	H.my_appearance.h_style = "Bald"
+	H.my_appearance.f_style = "Shaved"
 	H.update_hair()
 
 /datum/religion/guns

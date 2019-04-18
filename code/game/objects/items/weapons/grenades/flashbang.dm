@@ -54,15 +54,30 @@
 			ear_safety += 1
 
 //Flashing everyone
+	var/mob/living/silicon/robot/R = null //Yes. I KNOW.
+	if(isrobot(M))
+		R = M
 	if(eye_safety < 1 && !M.blinded)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
-		if (get_dist(M, T) <= 3)
-			M.Stun(8)
-			M.Knockdown(8)
+		if(get_dist(M, T) <= 3)
+			var/strength = 8
+			if(R && (HAS_MODULE_QUIRK(R, MODULE_HAS_FLASH_RES)))
+				strength = strength/2
+			if(R && (HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF)))
+				strength = null
+			if(strength)
+				M.Stun(strength)
+				M.Knockdown(strength)
 		else
-			if (issilicon(M))
-				M.Stun(4)
-				M.Knockdown(4)
+			if(issilicon(M))
+				var/salt = 4//The amount of salt we're going to generate.
+				if(R && (HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF)))
+					salt = salt/2 //Half as much.
+				if(R && (HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF)))
+					salt = null //No salt.
+				if(salt)
+					M.Stun(salt)
+					M.Knockdown(salt)
 			else if (get_dist(M, T) <= 5)
 				M.Knockdown(2)
 				M.Stun(2)

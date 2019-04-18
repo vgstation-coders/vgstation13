@@ -100,8 +100,8 @@
 			O.real_name = randomname
 			i++
 	O.UpdateAppearance()
-	O.h_style = random_hair_style(O.gender,O.species.name)
-	O.f_style = random_facial_hair_style(O.gender,O.species.name)
+	O.my_appearance.h_style = random_hair_style(O.gender,O.species.name)
+	O.my_appearance.f_style = random_facial_hair_style(O.gender,O.species.name)
 	O.update_hair()
 	O.take_overall_damage(M.getBruteLoss(), M.getFireLoss())
 	O.adjustToxLoss(M.getToxLoss())

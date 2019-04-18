@@ -48,7 +48,7 @@
 /obj/structure/catwalk/attackby(obj/item/C as obj, mob/user as mob)
 	if(!C || !user)
 		return 0
-	if(isscrewdriver(C))
+	if(C.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You begin undoing the screws holding the catwalk together.</span>")
 		playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
 		if(do_after(user, src, 30) && src)

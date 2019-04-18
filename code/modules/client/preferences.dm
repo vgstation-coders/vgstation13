@@ -1523,22 +1523,22 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.setGender(gender)
 	character.age = age
 
-	character.r_eyes = r_eyes
-	character.g_eyes = g_eyes
-	character.b_eyes = b_eyes
+	character.my_appearance.r_eyes = r_eyes
+	character.my_appearance.g_eyes = g_eyes
+	character.my_appearance.b_eyes = b_eyes
 
-	character.r_hair = r_hair
-	character.g_hair = g_hair
-	character.b_hair = b_hair
+	character.my_appearance.r_hair = r_hair
+	character.my_appearance.g_hair = g_hair
+	character.my_appearance.b_hair = b_hair
 
-	character.r_facial = r_facial
-	character.g_facial = g_facial
-	character.b_facial = b_facial
+	character.my_appearance.r_facial = r_facial
+	character.my_appearance.g_facial = g_facial
+	character.my_appearance.b_facial = b_facial
 
-	character.s_tone = s_tone
+	character.my_appearance.s_tone = s_tone
 
-	character.h_style = h_style
-	character.f_style = f_style
+	character.my_appearance.h_style = h_style
+	character.my_appearance.f_style = f_style
 
 
 	character.skills = skills

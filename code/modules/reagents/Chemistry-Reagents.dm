@@ -848,7 +848,7 @@
 	if(..())
 		return 1
 
-	if(istype(M, /mob/living/carbon/human/manifested))
+	if(ismanifested(M))
 		to_chat(M, "<span class='warning'>You can feel intriguing reagents seeping into your body, but they don't seem to react at all.</span>")
 		M.reagents.del_reagent("mutationtoxin")
 
@@ -879,7 +879,7 @@
 
 		var/mob/living/carbon/C = M
 
-		if(istype(C, /mob/living/carbon/human/manifested))
+		if(ismanifested(C))
 			to_chat(C, "<span class='warning'>You can feel intriguing reagents seeping into your body, but they don't seem to react at all.</span>")
 			C.reagents.del_reagent("amutationtoxin")
 
@@ -1400,7 +1400,7 @@
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
-	custom_metabolism = 1
+	custom_metabolism = 0.5
 	density = 1.84
 	specheatcap = 1.38
 
@@ -1492,7 +1492,7 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
-	custom_metabolism = 1
+	custom_metabolism = 0.5
 	density = 1.98
 	specheatcap = 1.39
 
@@ -5713,6 +5713,13 @@
 	name = "Vodka Martini"
 	id = VODKAMARTINI
 	description = "Vodka with gin. Not quite how 007 enjoyed it, but still delicious."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#664300" //rgb: 102, 67, 0
+
+/datum/reagent/ethanol/deadrum/sakemartini
+	name = "Sake Martini"
+	id = SAKEMARTINI
+	description = "A martini mixed with sake instead of vermouth. Has a fruity, oriental flavor."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 

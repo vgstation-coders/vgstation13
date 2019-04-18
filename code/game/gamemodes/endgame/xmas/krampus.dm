@@ -28,7 +28,7 @@
 	status_flags = GODMODE|CANPUSH
 
 	New(var/new_loc)
-		h_style = "Bald"
+		my_appearance.h_style = "Bald"
 		..(new_loc, "Krampus")
 		maxHealth=999999
 		health=999999

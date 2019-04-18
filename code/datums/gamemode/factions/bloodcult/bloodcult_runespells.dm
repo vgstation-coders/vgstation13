@@ -2577,15 +2577,15 @@ var/list/bloodcult_exitportals = list()
 		vessel.ckey = ghost.ckey
 		qdel(husk)
 
-		vessel.r_hair = 90
-		vessel.g_hair = 90
-		vessel.b_hair = 90
-		vessel.r_facial = 90
-		vessel.g_facial = 90
-		vessel.b_facial = 90
-		vessel.r_eyes = 255
-		vessel.g_eyes = 0
-		vessel.b_eyes = 0
+		vessel.my_appearance.r_hair = 90
+		vessel.my_appearance.g_hair = 90
+		vessel.my_appearance.b_hair = 90
+		vessel.my_appearance.r_facial = 90
+		vessel.my_appearance.g_facial = 90
+		vessel.my_appearance.b_facial = 90
+		vessel.my_appearance.r_eyes = 255
+		vessel.my_appearance.g_eyes = 0
+		vessel.my_appearance.b_eyes = 0
 		vessel.status_flags &= ~GODMODE
 		vessel.regenerate_icons()
 		//Let's not forget to make them cultists as well

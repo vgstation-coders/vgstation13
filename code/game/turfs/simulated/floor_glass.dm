@@ -280,14 +280,14 @@
 		return // Do nothing. (preattack based)
 	switch(construction_state)
 		if(2) // intact
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
 				user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 				"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(1)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
 				user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 				"<span class='notice'>You fasten \the [src] to its frame.</span>")

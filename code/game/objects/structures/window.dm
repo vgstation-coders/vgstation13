@@ -396,7 +396,7 @@ var/list/one_way_windows
 
 			if(WINDOWSECURE) //Reinforced, fully secured
 
-				if(isscrewdriver(W))
+				if(W.is_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 					"<span class='notice'>You unfasten \the [src] from its frame.</span>")
@@ -405,7 +405,7 @@ var/list/one_way_windows
 
 			if(WINDOWUNSECUREFRAME)
 
-				if(isscrewdriver(W))
+				if(W.is_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 					"<span class='notice'>You fasten \the [src] to its frame.</span>")
@@ -428,7 +428,7 @@ var/list/one_way_windows
 					d_state = WINDOWUNSECUREFRAME
 					return
 
-				if(isscrewdriver(W))
+				if(W.is_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src]'s frame from the floor.</span>", \
 					"<span class='notice'>You unfasten \the [src]'s frame from the floor.</span>")
@@ -452,7 +452,7 @@ var/list/one_way_windows
 
 			if(WINDOWLOOSE)
 
-				if(isscrewdriver(W))
+				if(W.is_screwdriver(user))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
@@ -486,7 +486,7 @@ var/list/one_way_windows
 
 	else if(!reinforced) //Normal window steps
 
-		if(isscrewdriver(W))
+		if(W.is_screwdriver(user))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 			user.visible_message("<span class='[d_state ? "warning":"notice"]'>[user] [d_state ? "un":""]fastens \the [src].</span>", \
 			"<span class='notice'>You [d_state ? "un":""]fasten \the [src].</span>")
@@ -694,6 +694,7 @@ var/list/one_way_windows
 
 
 // Used on Packed ; smartglassified roundstart
+// TODO: Remove this snowflake stuff.
 /obj/structure/window/reinforced/plasma/interogation_room/initialize()
 	smartwindow = new(src)
 	smartwindow.id_tag = "InterogationRoomIDTag"
@@ -736,6 +737,80 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/clockwork/loose
 	anchored = 0
 	d_state = 0
+
+// Smartglass for mappers, smartglassified on roundstart.
+//the id_tag of the actual pane itself is passed to the smartglass electronics on initialization, it's not used for anything else
+/obj/structure/window/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/reinforced/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/reinforced/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/reinforced/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/reinforced/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/reinforced/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/reinforced/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/structure/window/full/reinforced/plasma/smart
+	var/id_tag = null
+	var/frequency = 1449
+
+/obj/structure/window/full/reinforced/plasma/smart/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
 
 /obj/structure/window/send_to_past(var/duration)
 	..()
