@@ -267,6 +267,8 @@ var/list/ai_list = list()
 		"Drink It!" = "ai-silveryferret",
 		"Metaclub" = "ai-terminal",
 		"Jack Frost" = "ai-jack",
+		"Butt Co." = "ai-malfbutt",
+		"Wooden" = "ai-wood",
 	)
 	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
 	if(!selected)
