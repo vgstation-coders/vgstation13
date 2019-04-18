@@ -183,7 +183,7 @@ var/list/cmc_holomap_cache = list()
 			addCrewMarker(pos, B, "[B]", "MMI", null, null, parea)
 			addCrewToTextview(pos, B, "[B]", "MMI", null, null, parea, 60)
 
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available", var/ijob = 9999)
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/area/player_area = "Mot Available", var/ijob = 9999)
 	var/role
 	switch(ijob)
 		if(0)	role = "cap" // captain
@@ -199,19 +199,22 @@ var/list/cmc_holomap_cache = list()
 	var/icon
 	if(istype(H, /mob/living/carbon/human))
 		if(stat != 2)
-			icon = getLifeIcon(damage)
+			if(damage)
+				icon = getLifeIcon(damage)
+			else
+				icon = "0"
 		else
 			icon = "6"
 	else
 		icon = "7"
 
 	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
-	string += damage ? "<img src='cmc_[icon].png' height='11' width='11'/>(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available"
+	string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
 	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
-/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage = list(0,0,0,0), var/area/player_area = "Area not available")
+/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/area/player_area = "Not Available")
 	if(!TU || !H)
 		return
 
@@ -229,7 +232,7 @@ var/list/cmc_holomap_cache = list()
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
-		cmc_holomap_cache[uid].layer = ABOVE_HUD_LAYER
+		cmc_holomap_cache[uid].plane = ABOVE_HUD_PLANE
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
@@ -320,10 +323,11 @@ var/list/cmc_holomap_cache = list()
 						background.overlays += station_areas
 						background.overlays += station_outline
 				background.alpha = 0
+				background.layer = ABOVE_HUD_LAYER
 				holomap_cache[holomap_bgmap] = background
 
 		//z2 override if nukeops or voxraider
-		if(holomap_filter == (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
+		if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
 			var/holomap_bgmap = "cmc_\ref[src]_2"
 			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
 			var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
@@ -331,6 +335,7 @@ var/list/cmc_holomap_cache = list()
 			station_outline.alpha = 200
 			background.overlays += station_outline
 			background.alpha = 0
+			background.layer = ABOVE_HUD_LAYER
 			holomap_cache[holomap_bgmap] = background
 			holomap_z_levels_unmapped |= CENTCOMM_Z
 
