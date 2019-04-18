@@ -1,0 +1,5 @@
+---
+author: PaulRitter
+changes:
+  - tweak: weldingmask now spawn opened. on your head and on the ground
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: bathosbathtime
+changes:
+  - rscadd: Pacid and Sacid now have a custom metabolism of 0.5 from 1.0
+delete-after: true

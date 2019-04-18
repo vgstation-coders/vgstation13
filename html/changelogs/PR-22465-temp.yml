@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - bugfix: smartglass on windoors now works as intended
+delete-after: true

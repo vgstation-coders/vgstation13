@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - tweak: eswords can now open firelocks when on Harm intent.
+delete-after: true

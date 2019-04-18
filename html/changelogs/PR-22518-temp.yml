@@ -1,0 +1,5 @@
+---
+author: I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE
+changes:
+  - bugfix: Fixes secure safe UI not updating
+delete-after: true

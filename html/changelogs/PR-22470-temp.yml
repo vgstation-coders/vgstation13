@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - bugfix: "the washing machine can now dye jumpsuits even if they're missing inhand sprites"
+delete-after: true

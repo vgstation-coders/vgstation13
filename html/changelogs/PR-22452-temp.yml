@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - tweak: spiderbots can now tablecrawl.
+delete-after: true

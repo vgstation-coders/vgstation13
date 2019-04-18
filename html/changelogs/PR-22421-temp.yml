@@ -1,0 +1,5 @@
+---
+author: SirSkeleto
+changes:
+  - tweak: deconstructing girders will not annihilate the materials used to make em
+delete-after: true
