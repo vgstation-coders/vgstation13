@@ -47,6 +47,8 @@
 		AppendObjective(/datum/objective/silence)
 	else
 		AppendObjective(/datum/objective/survive)
+	if(prob(15))
+		AppendObjective(/datum/objective/stealsake)
 
 /datum/role/ninja/extraPanelButtons()
 	var/dat = ""
@@ -73,7 +75,7 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>[custom]</span>")
 		if(GREET_WEEB)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Crazed Weeaboo.<br>The crew has insulted glorious Space Nippon. Equipped with your authentic Space Kimono, your Space Katana that was folded over a million times, and your honobru bushido code, you must implore them to reconsider!</span>")
-			to_chat(antag.current, "<span class='danger'>Remember that guns are not honobru, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
+			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
 
