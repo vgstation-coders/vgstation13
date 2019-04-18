@@ -225,7 +225,7 @@ var/list/cmc_holomap_cache = list()
 
 	//creating the content with damage and some css coloring
 	var/content = "Not Available"
-	if(damage.len == 4)
+	if(damage)
 		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
 
 	content += "<br>[player_area]"
