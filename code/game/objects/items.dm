@@ -1343,3 +1343,6 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return
+
+/obj/item/proc/is_screwdriver(var/mob/user)
+	return FALSE

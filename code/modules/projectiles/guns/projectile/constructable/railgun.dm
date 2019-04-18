@@ -159,7 +159,7 @@
 		to_chat(user, "You insert \the [W] into the barrel of \the [src].")
 		rails = W
 
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(rails)
 			if(rails_secure)
 				to_chat(user, "You loosen the rail assembly within \the [src].")

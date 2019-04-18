@@ -71,14 +71,14 @@
 		return steps.len
 	return 0
 
-/datum/construction/proc/custom_action(step, used_atom, user)
+/datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
 	if(iswelder(used_atom))
 		playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
 
 	else if(iswrench(used_atom))
 		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
 
-	else if(isscrewdriver(used_atom))
+	else if(used_atom.is_screwdriver(user))
 		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	else if(iswirecutter(used_atom))
@@ -251,7 +251,7 @@
 		assembling = 0
 	return 0
 
-/datum/construction/reversible/custom_action(index, diff, used_atom, user)
+/datum/construction/reversible/custom_action(index, diff, obj/item/used_atom, mob/user)
 	. = ..(index,used_atom,user)
 
 	if(.)

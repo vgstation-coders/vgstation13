@@ -239,7 +239,7 @@
 	borgprint()
 
 /obj/item/device/camera/attackby(obj/item/I, mob/user)
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		to_chat(user, "You [panelopen ? "close" : "open"] the panel on the side of \the [src].")
 		panelopen = !panelopen
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)

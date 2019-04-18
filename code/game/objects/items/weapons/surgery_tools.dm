@@ -217,7 +217,7 @@
 		to_chat(user, "\The [src] is in cautery mode.")
 
 /obj/item/weapon/scalpel/laser/attackby(var/obj/item/used_item, mob/user)
-	if(isscrewdriver(used_item) && cauterymode)
+	if(used_item.is_screwdriver(user) && cauterymode)
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1)

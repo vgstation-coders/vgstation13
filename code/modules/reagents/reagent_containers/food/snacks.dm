@@ -4512,6 +4512,9 @@
 	icon_state = "chococoin_wrapped"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped/is_screwdriver(var/mob/user)
+	return user.a_intent == I_HURT
+
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -4529,6 +4532,9 @@
 	desc = "A thin wafer of milky, chocolatey, melt-in-your-mouth goodness. That alone is already worth a hoard."
 	to_chat(user, "<span class='notice'>You remove the golden foil from \the [src].</span>")
 	wrapped = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/is_screwdriver(var/mob/user)
+	return user.a_intent == I_HURT
 
 /obj/item/weapon/reagent_containers/food/snacks/eucharist
 	name = "\improper Eucharist Wafer"

@@ -58,7 +58,7 @@
 	interact(user)
 
 /obj/item/device/destTagger/attackby(obj/item/W, mob/user)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
@@ -199,7 +199,7 @@
 	if(!I || !user)
 		return
 
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(c_mode==0)
 			c_mode=1
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)

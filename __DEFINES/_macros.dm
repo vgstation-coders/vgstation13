@@ -152,8 +152,6 @@
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
-#define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
-
 #define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
 
 #define ispowercell(A) istype(A, /obj/item/weapon/cell)
