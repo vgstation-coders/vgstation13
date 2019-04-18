@@ -1,6 +1,6 @@
 /datum/objective/stealsake
     name = "\[Ninja\] Steal a bottle of sake"
-    explanation_text = "You have gone without a drink for far too long. Steal a bottle of sake, the only drink worthy of your consumption."
+    explanation_text = "You have gone without a drink for far too long. Steal a bottle of sake, the only beverage worthy of your consumption."
 
 /datum/objective/stealsake/IsFulfilled()
     if(..())
