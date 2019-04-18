@@ -5712,6 +5712,13 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/ethanol/deadrum/sakemartini
+	name = "Sake Martini"
+	id = SAKEMARTINI
+	description = "A martini mixed with sake instead of vermouth. Has a fruity, oriental flavor."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#664300" //rgb: 102, 67, 0
+
 /datum/reagent/ethanol/deadrum/white_russian
 	name = "White Russian"
 	id = WHITERUSSIAN
