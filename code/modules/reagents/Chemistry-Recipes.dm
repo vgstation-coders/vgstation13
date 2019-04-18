@@ -3035,7 +3035,7 @@
 	result_amount = 10
 
 /datum/chemical_reaction/seccoffee
-	name = "Wake up call"
+	name = "Wake-Up Call"
 	id = SECCOFFEE
 	result = SECCOFFEE
 	required_reagents = list(COFFEE = 5, SPRINKLES = 1, BEEPSKYSMASH = 5)
