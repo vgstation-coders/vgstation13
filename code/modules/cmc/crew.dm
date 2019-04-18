@@ -462,6 +462,8 @@ var/list/cmc_holomap_cache = list()
 	if(activator.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
 		send_asset_list(activator.client, C.assets)
+	activator << browse("", "window=crewcomp;size=900x600")
+	onclose(activator, "crewcomp")
 	updateTextView()
 
 /obj/machinery/computer/crew/proc/updateTextView()
