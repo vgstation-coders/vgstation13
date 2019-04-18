@@ -1400,7 +1400,7 @@
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
-	custom_metabolism = 1
+	custom_metabolism = 0.5
 	density = 1.84
 	specheatcap = 1.38
 
@@ -1492,7 +1492,7 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
-	custom_metabolism = 1
+	custom_metabolism = 0.5
 	density = 1.98
 	specheatcap = 1.39
 
