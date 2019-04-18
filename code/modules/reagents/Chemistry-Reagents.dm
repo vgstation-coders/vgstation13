@@ -7152,12 +7152,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/luminol
 	name = "Luminol"
 	id = LUMINOL
-	description = "Luminol."
+	description = "A chmical that exhibits chemiluminescence in the presence of blood due to the iron and copper in the hemoglobin."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-//	var/light_intensity = 4
-	density = 3.46
-	specheatcap = 512.3
 
 /datum/reagent/luminol/reaction_mob(var/mob/living/M, var/method = TOUCH)
 	if(ishuman(M) && (method == TOUCH))

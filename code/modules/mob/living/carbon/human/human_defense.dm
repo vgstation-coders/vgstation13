@@ -353,7 +353,7 @@ emp_act
 		w_uniform.add_blood(source)
 		update_inv_w_uniform(update)
 
-/mob/living/carbon/human/apply_luminol(var/update = FALSE) //Dispite what you might think with FALSE this will update things as normal.
+/mob/living/carbon/human/apply_luminol(var/update = FALSE) //Despite what you might think with FALSE this will update things as normal.
 	if(wear_suit)
 		wear_suit.apply_luminol()
 		update_inv_wear_suit(update)

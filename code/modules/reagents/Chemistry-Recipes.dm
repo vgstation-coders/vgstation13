@@ -995,8 +995,10 @@
 	id = LUMINOL
 	result = LUMINOL
 	required_reagents = list(CLEANER = 3, CARBON = 8)
-	result_amount = 3
-	secondary_results = list(WATER = 1, HYDROGEN = 6)
+	result_amount = 10
+	//"Realistic" results.
+	//result_amount = 3
+	//secondary_results = list(WATER = 1, HYDROGEN = 6)
 
 //Botany chemicals
 
