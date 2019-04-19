@@ -94,12 +94,14 @@
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Mushroom")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Undead")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
