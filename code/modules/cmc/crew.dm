@@ -333,6 +333,9 @@ var/list/cmc_holomap_cache = list()
 /obj/machinery/computer/crew/process()
 	update_holomap()
 
+	if(textview_updatequeued && (src == activator.machine))
+		updateTextView()
+
 /obj/machinery/computer/crew/proc/handle_sanity()
 	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)))
 		return FALSE
@@ -367,9 +370,6 @@ var/list/cmc_holomap_cache = list()
 	holomap_images += bgmap
 
 	addCrewToHolomap()
-
-	if(textview_updatequeued)
-		updateTextView()
 
 	updateUI()
 
@@ -447,6 +447,7 @@ var/list/cmc_holomap_cache = list()
 
 /obj/machinery/computer/crew/proc/openTextview()
 	textview_updatequeued = 1
+	activator.set_machine(src)
 	if(activator.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
 		send_asset_list(activator.client, C.assets)
@@ -472,4 +473,5 @@ var/list/cmc_holomap_cache = list()
 
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
+	activator.unset_machine()
 	activator << browse(null, "window=cmc_textview;size=900x600")
