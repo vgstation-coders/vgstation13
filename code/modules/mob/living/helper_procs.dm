@@ -33,6 +33,7 @@ default behaviour is:
 
 	strength += (M_HULK in src.mutations)
 	strength += (M_STRONG in src.mutations)
+	strength += (reagents.has_reagent(ADRENALINE))
 
 	. = strength
 

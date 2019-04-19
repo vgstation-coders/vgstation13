@@ -1922,6 +1922,7 @@
 #include "code\modules\organs\organ_objects.dm"
 #include "code\modules\organs\pain.dm"
 #include "code\modules\organs\wound.dm"
+#include "code\modules\organs\internal\adrenal\adrenal_gland.dm"
 #include "code\modules\organs\internal\eyes\eyes.dm"
 #include "code\modules\organs\internal\heart\heart.dm"
 #include "code\modules\organs\internal\kidney\filter.dm"

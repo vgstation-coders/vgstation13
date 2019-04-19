@@ -1822,6 +1822,21 @@
 							"<span class='numb'>Hello?... Is there anybody in there?...</span>", \
 							"<span class='numb'>You feel... comfortably numb.</span>"))
 
+/datum/reagent/adrenaline
+	name = "Adrenaline"
+	id = ADRENALINE
+	description = "Prepares the body for fight or flight."
+	reagent_state = REAGENT_STATE_LIQUID
+	density = 1.283
+
+/datum/reagent/adrenaline/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		C.pain_numb = min(5, C.pain_numb+rand(2,4))
+
 /datum/reagent/virus_food
 	name = "Virus Food"
 	id = VIRUSFOOD

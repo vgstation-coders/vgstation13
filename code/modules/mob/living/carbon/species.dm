@@ -127,6 +127,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
+		"adrenal gland" = /datum/organ/internal/adrenal_gland,
 		"eyes" =     /datum/organ/internal/eyes
 		)
 
@@ -174,6 +175,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.organs.len=0
 	if(H.internal_organs)
 		for(var/datum/organ/I in H.internal_organs)
+			I.Remove(H)
 			qdel(I)
 		H.internal_organs.len=0
 	if(H.organs_by_name)
@@ -182,6 +184,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.organs_by_name.len=0
 	if(H.internal_organs_by_name)
 		for(var/datum/organ/I in H.internal_organs_by_name)
+			I.Remove(H)
 			qdel(I)
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
@@ -493,6 +496,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
+		"adrenal gland" = /datum/organ/internal/adrenal_gland,
 		"eyes" =     /datum/organ/internal/eyes/tajaran
 	)
 
@@ -593,6 +597,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
+		"adrenal gland" = /datum/organ/internal/adrenal_gland,
 		"eyes" =     /datum/organ/internal/eyes/grey
 	)
 
@@ -699,6 +704,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
+		"adrenal gland" = /datum/organ/internal/adrenal_gland,
 		"eyes" =     /datum/organ/internal/eyes/vox
 	)
 

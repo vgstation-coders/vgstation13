@@ -129,22 +129,11 @@
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
 
-	if(!src.species)
-		if(new_species_name)
-			src.set_species(new_species_name)
-		else
-			src.set_species()
 
-	movement_speed_modifier = species.move_speed_multiplier
 
 	default_language = get_default_language()
 
 	create_reagents(1000)
-
-	if(!dna)
-		dna = new /datum/dna(null)
-		dna.species=species.name
-		dna.b_type = random_blood_type()
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
@@ -182,6 +171,20 @@
 	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/abstract/Overlays/targeted_layer)
 
 	..()
+
+	if(!src.species)
+		if(new_species_name)
+			src.set_species(new_species_name)
+		else
+			src.set_species()
+
+	movement_speed_modifier = species.move_speed_multiplier
+
+	if(!dna)
+		dna = new /datum/dna(null)
+		dna.species=species.name
+		dna.b_type = random_blood_type()
+
 
 	if(dna)
 		dna.real_name = real_name

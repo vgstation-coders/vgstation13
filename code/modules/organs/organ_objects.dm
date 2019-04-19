@@ -289,6 +289,9 @@
 /obj/item/organ/internal/appendix
 	name = "appendix"
 
+/obj/item/organ/internal/adrenal
+	name = "adrenal gland"
+
 /obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)
 		return
