@@ -1,7 +1,7 @@
-var/datum/subsystem/sun/SSsun
+var/datum/subsystem/solar_system/SSsun
 
 
-/datum/subsystem/sun
+/datum/subsystem/solar_system
 	name          = "Sun"
 	init_order    = SS_INIT_SUN
 	display_order = SS_DISPLAY_SUN
@@ -10,15 +10,15 @@ var/datum/subsystem/sun/SSsun
 	flags         = SS_NO_TICK_CHECK
 
 
-/datum/subsystem/sun/New()
+/datum/subsystem/solar_system/New()
 	NEW_SS_GLOBAL(SSsun)
 
 
-/datum/subsystem/sun/Initialize(timeofday)
+/datum/subsystem/solar_system/Initialize(timeofday)
 	sun = new
-
+	gas_giant = new
 	..()
 
 
-/datum/subsystem/sun/fire(resumed = FALSE)
+/datum/subsystem/solar_system/fire(resumed = FALSE)
 	sun.calc_position()

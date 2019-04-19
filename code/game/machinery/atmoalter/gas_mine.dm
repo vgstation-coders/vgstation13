@@ -173,3 +173,10 @@
 	air_contents.adjust_multi(
 		GAS_OXYGEN, O2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
 		GAS_NITROGEN, N2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+
+/obj/machinery/atmospherics/miner/planet
+	name = "\improper Atmospheric Scoop"
+	overlay_color = "#8788FF" //135, 139, 255
+
+/obj/machinery/atmospherics/miner/planet/AddAir()
+	air_contents = gas_giant.return_air()
