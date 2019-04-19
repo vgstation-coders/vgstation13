@@ -33,6 +33,23 @@
 	my_appearance = new_looks
 	regenerate_icons()
 
+/datum/human_appearance/proc/Copy()
+	var/datum/human_appearance/new_looks = new
+	new_looks.name = name
+	new_looks.gender = gender
+	new_looks.s_tone = s_tone
+	new_looks.h_style = h_style
+	new_looks.r_hair = r_hair
+	new_looks.g_hair = g_hair
+	new_looks.f_style = f_style
+	new_looks.r_facial = r_facial
+	new_looks.g_facial = g_facial
+	new_looks.b_facial = b_facial
+	new_looks.r_eyes = r_eyes
+	new_looks.g_eyes = g_eyes
+	new_looks.b_eyes = b_eyes
+	return new_looks
+
 /mob/living/carbon/human/proc/randomise_appearance_for(var/new_gender)
 	var/datum/human_appearance/appearance = new
 
