@@ -268,10 +268,10 @@ var/list/cmc_holomap_cache = list()
 	holomap stuff
 */
 /obj/machinery/computer/crew/proc/deactivate_holomap()
-	closeTextview()
 	if(activator && activator.client)
 		activator.client.images -= holomap_images
 		activator.client.screen -= holomap_tooltips
+		closeTextview()
 	activator = null
 
 	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
