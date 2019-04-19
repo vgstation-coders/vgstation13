@@ -122,10 +122,7 @@ var/list/cmc_holomap_cache = list()
 		var/name
 		var/assignment
 		var/life_status
-		var/dam1
-		var/dam2
-		var/dam3
-		var/dam4
+		var/list/damage
 		var/area/player_area
 		var/ijob
 
@@ -155,19 +152,7 @@ var/list/cmc_holomap_cache = list()
 					life_status = H.stat //CONSCIOUS, UNCONSCIOUS, DEAD
 
 				if (U.sensor_mode >= 2)
-					dam1 = round(H.getOxyLoss(),1)
-					dam2 = round(H.getToxLoss(),1)
-					dam3 = round(H.getFireLoss(),1)
-					dam4 = round(H.getBruteLoss(),1)
-				else
-					dam1 = null
-					dam2 = null
-					dam3 = null
-					dam4 = null
-
-				var/list/damage
-				if(!dam1 && !dam2 && !dam3 && !dam4)
-					damage = list(dam1, dam2, dam3, dam4)
+					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
 				if(pos)
 					player_area = get_area(H)
@@ -465,8 +450,8 @@ var/list/cmc_holomap_cache = list()
 	if(activator.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
 		send_asset_list(activator.client, C.assets)
-	activator << browse("", "window=crewcomp;size=900x600")
-	onclose(activator, "crewcomp")
+	activator << browse("", "window=cmc_textview;size=900x600")
+	onclose(activator, "cmc_textview")
 	updateTextView()
 
 /obj/machinery/computer/crew/proc/updateTextView()
@@ -481,8 +466,8 @@ var/list/cmc_holomap_cache = list()
 
 	t += "</table></kbd></body></html>"
 
-	activator << browse(t, "window=crewcomp;size=900x600")
+	activator << browse(t, "window=cmc_textview;size=900x600")
 
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
-	activator << browse(null, "window=crewcomp")
+	activator << browse(null, "window=cmc_textview;size=900x600")
