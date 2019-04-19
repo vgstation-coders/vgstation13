@@ -22,13 +22,10 @@
 		W.material_type.on_use(W, src, user)
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
-	if(!no_delay)
+	if(!no_delay && istype(user))
 		user.delayNextAttack(10)
-	if(istype(I) && ismob(user))
-		if(originator)
-			I.attack(src, user, def_zone, originator)
-		else
-			I.attack(src, user, def_zone)
+	if(istype(I))
+		I.attack(src, user, def_zone, originator)
 	if(BrainContainer)
 		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
 
@@ -72,7 +69,7 @@ obj/item/proc/get_clamped_volume()
 		if (do_surgery(M,user,I))
 			return 1
 
-	if (user.is_pacified(VIOLENCE_DEFAULT,M))
+	if (istype(user) && user.is_pacified(VIOLENCE_DEFAULT,M))
 		return 0
 
 	//if (istype(M,/mob/living/carbon/brain))
@@ -84,7 +81,8 @@ obj/item/proc/get_clamped_volume()
 			M.lastattacker = originator
 			add_logs(originator, M, "attacked", object=I.name, addition="(INTENT: [uppertext(originator.a_intent)]) (DAMTYE: [uppertext(I.damtype)])")
 	else
-		user.lastattacked = M
+		if(istype(user))
+			user.lastattacked = M
 		M.lastattacker = user
 		add_logs(user, M, "attacked", object=I.name, addition="(INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(I.damtype)])")
 
@@ -93,7 +91,7 @@ obj/item/proc/get_clamped_volume()
 	/////////////////////////
 
 	var/power = I.force
-	if(M_HULK in user.mutations)
+	if(istype(user) && M_HULK in user.mutations)
 		power *= 2
 
 	if(!istype(M, /mob/living/carbon/human))
@@ -244,7 +242,7 @@ obj/item/proc/get_clamped_volume()
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
-	if (!user.gcDestroyed)
+	if (istype(user) && !user.gcDestroyed)
 		user.do_attack_animation(attacked, src)
 		user.delayNextAttack(attack_delay)
 	if(hitsound)

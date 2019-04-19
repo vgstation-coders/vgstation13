@@ -254,6 +254,14 @@
 					if(2)
 						msg_admin_attack("space vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 
+	if(harvest && seed.hostile == 2 && !(isnull(seed.products) || !seed.products.len || seed.yield <= 0))
+		var/area/A = get_area(src)
+		for(var/mob/living/M in A)
+			if(!M.isDead() && M.m_intent == "run" && get_dist(src, M) <= seed.potency/5)
+				visible_message("<span class = 'warning'>|the [seed.display_name] catapults something at \the [M]!</span>")
+				seed.generate_product(T).throw_at(M, seed.potency/5, seed.potency/10)
+				after_harvest()
+				break
 	check_level_sanity()
 	if(update_icon_after_process)
 		update_icon()

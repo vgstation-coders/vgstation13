@@ -56,6 +56,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/ligneous = 0				// If 1, requires sharp instrument to harvest. Kudzu with this trait resists sharp items better.
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
+	var/hostile = 0					// 0 = no, 1 = melees people in proximity with their produce, 2 = spits produce at people
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics.dmi'// DMI  to use for the plant growing in the tray.
@@ -168,6 +169,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		juicy = 2
 	else if(juicy_prob < 10)
 		juicy = 1
+
+	if(prob(5))
+		hostile = 1
+		if(prob(5))
+			hostile = 2
 
 	endurance = rand(60,100)
 	yield = rand(2,15)
@@ -401,13 +407,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					weed_tolerance 		= gene.values[3]
 					lifespan 			= gene.values[4]
 					endurance			= gene.values[5]
+					hostile				= gene.values[6]
 				if(GENEGUN_MODE_SPLICE)
 					toxins_tolerance 	= round(mix(gene.values[1], toxins_tolerance,	rand(40, 60)/100), 0.1)
 					pest_tolerance 		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
 					weed_tolerance 		= round(mix(gene.values[3], weed_tolerance, 	rand(40, 60)/100), 0.1)
 					lifespan 			= round(mix(gene.values[4], lifespan, 			rand(40, 60)/100), 0.1)
 					endurance			= round(mix(gene.values[5], endurance, 			rand(40, 60)/100), 0.1)
-
+					hostile 			= max(gene.values[6],hostile)
 		if(GENE_METABOLISM)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
@@ -498,7 +505,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(pest_tolerance       	? pest_tolerance      	: 0),
 				(weed_tolerance       	? weed_tolerance      	: 0),
 				(lifespan      			? lifespan				: 0),
-				(endurance       		? endurance       		: 0)
+				(endurance       		? endurance       		: 0),
+				(hostile				? hostile				: 0)
 			)
 		if(GENE_METABOLISM)
 			P.values = list(
@@ -541,9 +549,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	else
 		to_chat(user, "You harvest from the [display_name].")
 
-		generate_product(get_turf(user), yield_mod)
+		generate_products(get_turf(user), yield_mod)
 
-/datum/seed/proc/generate_product(var/turf/T, yield_mod)
+/datum/seed/proc/generate_products(var/turf/T, yield_mod)
 	add_newline_to_controller()
 
 	var/total_yield = 0
@@ -557,45 +565,50 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	currently_querying = list()
 	for(var/i = 0;i<total_yield;i++)
-		var/product_type = pick(products)
+		generate_product(T)
 
-		var/obj/item/product
+/datum/seed/proc/generate_product(var/turf/T)
+	var/product_type = pick(products)
 
-		if(ispath(product_type, /obj/item/stack))
-			product = drop_stack(product_type, T, 1, null)
-		else
-			product = new product_type(T)
+	var/obj/item/product
 
-		score["stuffharvested"] += 1 //One point per product unit
+	if(ispath(product_type, /obj/item/stack))
+		product = drop_stack(product_type, T, 1, null)
+	else
+		product = new product_type(T)
 
-		if(mysterious)
-			product.name += "?"
-			product.desc += " On second thought, something about this one looks strange."
+	score["stuffharvested"] += 1 //One point per product unit
 
-		if(biolum)
-			if(biolum_colour)
-				product.light_color = biolum_colour
-			//product.set_light(1+round(potency/50))
-			product.set_light(2)
+	if(mysterious)
+		product.name += "?"
+		product.desc += " On second thought, something about this one looks strange."
 
-		//Handle spawning in living, mobile products (like dionaea).
-		if(istype(product,/mob/living))
+	if(biolum)
+		if(biolum_colour)
+			product.light_color = biolum_colour
+		//product.set_light(1+round(potency/50))
+		product.set_light(2)
 
-			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
-			handle_living_product(product)
+	//Handle spawning in living, mobile products (like dionaea).
+	if(istype(product,/mob/living))
 
-		// Make sure the product is inheriting the correct seed type reference.
-		else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
-			current_product.plantname = name
-		else if(istype(product,/obj/item/weapon/grown))
-			var/obj/item/weapon/grown/current_product = product
-			current_product.plantname = name
+		product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
+		handle_living_product(product)
+
+	// Make sure the product is inheriting the correct seed type reference.
+	else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
+		current_product.plantname = name
+	else if(istype(product,/obj/item/weapon/grown))
+		var/obj/item/weapon/grown/current_product = product
+		current_product.plantname = name
+
+	return product
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
 	if(T && (!isnull(products)) && products.len && (yield > 0))
-		generate_product(T, yield_mod)
+		generate_products(T, yield_mod)
 
 /datum/seed/proc/check_harvest(var/mob/user, var/obj/machinery/portable_atmospherics/hydroponics/tray)
 	var/success = 1
@@ -712,6 +725,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.ligneous =             ligneous
 	new_seed.teleporting =          teleporting
 	new_seed.juicy =        	    juicy
+	new_seed.hostile =				hostile
 	new_seed.plant_icon =           plant_icon
 	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon

@@ -412,6 +412,18 @@
 			seed.juicy = seed.juicy ? 0 : 1
 			generic_mutation_message("wobbles!")
 
+		if("trait_hostile")
+			if(seed.hostile)
+				seed.hostile = 0
+				generic_mutation_message("calms down.")
+			else
+				seed.hostile = 1
+				if(prob(25))
+					seed.hostile = 2
+					generic_mutation_message("recoils its fruit slightly.")
+				else
+					generic_mutation_message("winds itself up.")
+
 		if("trait_slippery")
 			switch(seed.juicy)
 				if(0 to 1)

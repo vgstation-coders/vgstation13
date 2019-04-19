@@ -531,22 +531,33 @@
 	update_name()
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
-	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
-		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
-			spawn(10)
-				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
-					return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
-				visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
-				if(M.health > 0)
-					M.death()
-				lock_atom(M, /datum/locking_category/hydro_tray)
-				spawn(30)
-					if(M && M.loc == get_turf(src))
-						unlock_atom(M)
-						M.gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
-						nutrilevel += 6
-						check_level_sanity()
-						update_icon()
+	if(seed && !dead)
+		if(seed.carnivorous == 2 && age > seed.maturation)
+			if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
+				spawn(10)
+					if(!M || !Adjacent(M) || M.locked_to || M.anchored)
+						return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
+					visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
+					if(M.health > 0)
+						M.death()
+					lock_atom(M, /datum/locking_category/hydro_tray)
+					spawn(30)
+						if(M && M.loc == get_turf(src))
+							unlock_atom(M)
+							M.gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
+							nutrilevel += 6
+							check_level_sanity()
+							update_icon()
+
+		if(harvest && seed.hostile == 1 && !(isnull(seed.products) || !seed.products.len || seed.yield <= 0) && !M.isDead() && M.m_intent == "run") //We're angry, and something is nearby.
+			visible_message("<span class='warning'>\The [seed.display_name] lashes out at \the [M]!</span>")
+			playsound(src, "sound/weapons/whip_crack.ogg", 30, 1)
+			var/obj/item/I = seed.generate_product()
+			I.preattack(M, src, 1)
+			M.attackby(I, src, 1)
+			I.afterattack(M, src, 1)
+			qdel(I)
+			after_harvest()
 
 /obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
 

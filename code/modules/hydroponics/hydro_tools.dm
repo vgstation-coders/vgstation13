@@ -201,6 +201,12 @@
 		if(2)
 			dat	+= "<br>Its fruit is excessively soft and juicy."
 
+	switch(grown_seed.hostile)
+		if(1)
+			dat += "<br>It shows territorial tendencies."
+		if(2)
+			dat += "<br>It shows <b>extreme</b> territorial tendencies."
+
 	if(grown_seed.biolum)
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
 
