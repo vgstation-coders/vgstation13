@@ -447,21 +447,7 @@ var/global/mr_clean_targets = list(
 	update_icon()
 
 /obj/machinery/singularity/narsie/large/clean/consume(const/atom/A)
-
-	if (istype(A, /mob/living/))
-
-		var/mob/living/L = A
-		if(L.flags & INVULNERABLE)
-			return 0
-
-		if (isrobot(L))
-			var/mob/living/silicon/robot/R = L
-
-			if (R.mmi)
-				qdel(R.mmi) // Nuke MMI.
-				R.mmi = null
-		qdel(L) // Just delete it.
-	else if (is_type_in_list(A, mr_clean_targets))
+	if (is_type_in_list(A, mr_clean_targets))
 		qdel(A)
 	else if (isturf(A))
 		var/turf/T = A
