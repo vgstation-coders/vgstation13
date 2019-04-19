@@ -23,56 +23,69 @@
 	..(new_loc, "Manifested")
 
 /mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Skrell Male Tentacles"
 	..(new_loc, "Skrell")
+	my_appearance.h_style = "Skrell Male Tentacles"
+	regenerate_icons()
 
 /mob/living/carbon/human/tajaran/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Tajaran Ears"
 	..(new_loc, "Tajaran")
+	my_appearance.h_style = "Tajaran Ears"
+	regenerate_icons()
 
 /mob/living/carbon/human/unathi/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Unathi Horns"
 	..(new_loc, "Unathi")
+	my_appearance.h_style = "Unathi Horns"
+	regenerate_icons()
 
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
+	my_appearance.h_style = "Short Vox Quills"
+	regenerate_icons()
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Diona")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Skellington", delay_ready_dna)
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Plasmaman")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Muton")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Grey")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Golem")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Grue")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Slime")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
