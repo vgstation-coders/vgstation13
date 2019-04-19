@@ -261,6 +261,10 @@ var/list/arcane_pockets = list()
 	..()
 	arcane_pockets.Add(src)
 
+/spell/cult/arcane_dimension/Destroy()
+	arcane_pockets.Remove(src)
+	..()
+
 /spell/cult/arcane_dimension/choose_targets(var/mob/user = usr)
 	return list(user)
 
