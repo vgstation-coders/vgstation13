@@ -59,6 +59,8 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 		if(SEC_LEVEL_RED)
 			pickable_modules += alert_nanotrasen_robot_modules
 			pickable_modules += emergency_nanotrasen_robot_modules
+		if(SEC_LEVEL_DELTA)
+			pickable_modules += alert_nanotrasen_robot_modules
 	return pickable_modules
 
 
