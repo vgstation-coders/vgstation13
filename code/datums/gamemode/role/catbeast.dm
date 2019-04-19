@@ -17,6 +17,7 @@
 /datum/role/catbeast/OnPostSetup()
 	var/mob/living/carbon/human/H = antag.current
 	H.set_species("Tajaran", force_organs=1)
+	H.my_appearance.s_tone = CATBEASTBLACK
 	H.dna.ResetUI()
 	equip_catbeast(H)
 	H.regenerate_icons()

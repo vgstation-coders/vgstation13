@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/list/hud_list = list()
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
@@ -291,7 +290,7 @@ var/list/cyborg_list = list()
 		braintype = "Robot"
 	else
 		if(istype(mmi, /obj/item/device/mmi/posibrain))
-			braintype = "Android"
+			braintype = "Droid"
 		else
 			braintype = "Cyborg"
 
@@ -758,14 +757,14 @@ var/list/cyborg_list = list()
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(isscrewdriver(W) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
-	else if(isscrewdriver(W) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 			if(can_diagnose())
@@ -819,6 +818,25 @@ var/list/cyborg_list = list()
 	else
 		if(W.force > 0)
 			spark(src, 5, FALSE)
+		if(stat == DEAD && W.force > 15)
+			visible_message("<span class='danger'>[user] begins ripping [src] apart with \the [W]!")
+			if(do_after(user, src, 3 SECONDS))
+				playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
+				if(prob(max((W.force/7.5)**3,25))) //15-21f - 25% chance, 22f - 27%, 30f - 64%, 35f - 99%
+					visible_message("<span class='danger'>[user] tore [src] apart with \the [W]!")
+					if(prob(25))
+						new /obj/item/robot_parts/l_leg(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/r_leg(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/l_arm(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/r_arm(loc)
+					gib()
+				else
+					visible_message("<span class='danger'>[src] groans under the force of \the [W]!")
+					shake(1, 3)
+				return
 		return ..()
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)

@@ -1,6 +1,6 @@
 /obj/structure/grille
 	name = "grille"
-	desc = "A matrice of metal rods, usually used as a support for window bays, with screws to secure it to the floor."
+	desc = "A matrix of metal rods, usually used as a support for window bays, with screws to secure it to the floor."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille"
 	density = 1
@@ -61,6 +61,22 @@
 /obj/structure/grille/Bumped(atom/user)
 	if(ismob(user))
 		shock(user, 60) //Give the user the benifit of the doubt
+
+/obj/structure/grille/hitby(AM as mob|obj)
+	. = ..()
+	if(.)
+		return
+	if(ismob(AM))
+		var/mob/M = AM
+		health -= 10
+		healthcheck(TRUE)
+		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
+		"<span class='danger'>You slam into \the [src].</span>")
+	else if(isobj(AM))
+		var/obj/item/I = AM
+		health -= I.throwforce
+		healthcheck(TRUE)
+		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
 
 /obj/structure/grille/attack_paw(mob/user as mob)
 	attack_hand(user)
@@ -161,7 +177,7 @@
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
-	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
+	else if((W.is_screwdriver(user)) && (istype(loc, /turf/simulated) || anchored))
 		if(!shock(user, 90, W.siemens_coefficient))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			anchored = !anchored
@@ -262,7 +278,7 @@
 /obj/structure/grille/cult //Used to get rid of those ugly fucking walls everywhere while still blocking air
 
 	name = "cult grille"
-	desc = "A matrice built out of an unknown material, with some sort of force field blocking air around it"
+	desc = "A matrix built out of an unknown material, with some sort of force field blocking air around it"
 	icon_state = "grillecult"
 	health = 40 //Make it strong enough to avoid people breaking in too easily
 

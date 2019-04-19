@@ -410,7 +410,7 @@
 	if(istype(subject, /mob/living/slime_pile))
 		var/mob/living/slime_pile/S = subject
 		subject = S.slime_person
-	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
+	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
 	if(!subject.has_brain())

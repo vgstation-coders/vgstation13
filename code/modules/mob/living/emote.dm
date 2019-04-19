@@ -36,6 +36,7 @@
 	if(. && isliving(user))
 		var/mob/living/L = user
 		L.Knockdown(10)
+		L.Stun(10)
 
 /datum/emote/living/dance
 	key = "dance"
@@ -212,6 +213,7 @@
 	if(. && isliving(user))
 		var/mob/living/L = user
 		L.Knockdown(10)
+		L.Stun(10)
 
 /datum/emote/living/sway
 	key = "sway"

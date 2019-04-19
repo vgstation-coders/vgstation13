@@ -390,3 +390,68 @@
 
 /mob/living/simple_animal/hostile/retaliate/box/pig/target_check(atom/A)
 	return TRUE	//Will attack anyone.
+
+//Rabbits
+/mob/living/simple_animal/rabbit
+	name = "rabbit"
+	desc = "Their behavior has attracted the attention of space law enforcement and are considered illegal in many sectors of the galaxy." //"Breed like rabbits" and ERP being illegal joke.
+	icon_state = "rabbit_white"
+	icon_living = "rabbit_white"
+	icon_dead = "rabbit_white_dead"
+	speak = list("...","..!","..?")
+	speak_emote = list("sniffles","grunts")
+	emote_hear = list("sniffles","grunts")
+	emote_see = list("hops","twitches it's ears")
+	speak_chance = 2
+	turns_per_move = 3
+	response_help = "pets"
+	response_disarm = "flips"
+	response_harm = "kicks"
+	attacktext = "kicks"
+	health = 10
+	pass_flags = PASSTABLE
+	size = SIZE_SMALL
+	speak_override = TRUE
+	var/body_type = "rabbit"
+	can_breed = TRUE
+	childtype = /mob/living/simple_animal/rabbit/bunny
+	species_type = /mob/living/simple_animal/rabbit
+
+
+/mob/living/simple_animal/rabbit/New()
+	if(!colour)
+		colour = pick(list("white","grey","brown"))
+	update_icon()
+	if(can_breed)
+		gender = pick(MALE, FEMALE)
+	..()
+
+/mob/living/simple_animal/rabbit/Life()
+	if(timestopped)
+		return FALSE
+	..()
+
+/mob/living/simple_animal/rabbit/update_icon()
+	icon_state = "[body_type]_[colour]"
+	icon_living = "[body_type]_[colour]"
+	icon_dead = "[body_type]_[colour]_dead"
+
+
+/mob/living/simple_animal/rabbit/bunny
+	name = "bunny"
+	desc = "Seeing them makes you feel hoppy on the inside."
+	icon_state = "bunny_white"
+	icon_living = "bunny_white"
+	icon_dead = "bunny_white_dead"
+	health = 5
+	size = SIZE_TINY
+	body_type = "bunny"
+	can_breed = FALSE
+	var/amount_grown = 0
+
+/mob/living/simple_animal/rabbit/bunny/Life()
+	..()
+	if(!stat && !ckey)
+		amount_grown += rand(1,5)
+		if(amount_grown >= 100)
+			grow_up()

@@ -133,6 +133,14 @@
 		sound.play();
 	}
 
+	function setVolume(newVolume){
+		var volume = 75;
+		if(newVolume !== undefined) {volume = parseInt(newVolume)}
+
+		var sound = document.getElementById("soundplayer");
+		sound.volume = volume/100; //HTML takes a value from 0 to 1.
+	}
+
 	function startCredits(){
 		if(started == 1 || initialized == 0)
 			return;

@@ -18,7 +18,7 @@
 /datum/faction/syndicate/nuke_op/GetScoreboard()
 	. = ..()
 	if(faction_scoreboard_data)
-		. += "The operatives bought:<BR>"
+		. += "<BR>The operatives bought:<BR>"
 		for(var/entry in faction_scoreboard_data)
 			. += "[entry]<BR>"
 

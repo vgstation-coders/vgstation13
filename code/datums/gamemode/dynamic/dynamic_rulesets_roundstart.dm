@@ -12,9 +12,10 @@
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 3
+	weight = 5
 	cost = 10
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	high_population_requirement = 10
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
@@ -54,6 +55,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
 	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -84,6 +86,7 @@
 	weight = 2
 	cost = 25
 	requirements = list(80,60,50,30,20,10,10,10,10,10)
+	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
 	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -115,6 +118,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
 	var/list/roundstart_wizards = list()
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
@@ -139,6 +143,57 @@
 		newWizard.Greet(GREET_ROUNDSTART)
 	return 1
 
+//////////////////////////////////////////////
+//                                          //
+//         CIVIL WAR OF CASTERS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/cwc
+	name = "Civil War of Casters"
+	role_category = /datum/role/wizard
+	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
+	enemy_jobs = list("Security Officer","Detective","Warden","Head of Security", "Captain")
+	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
+	required_candidates = 1
+	weight = 2
+	cost = 45
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
+	persistent = 1
+	var/wizard_cd = 210 //7 minutes
+	var/total_wizards = 4
+
+/datum/dynamic_ruleset/roundstart/cwc/process()
+	..()
+	if (wizard_cd)
+		wizard_cd--
+	else
+		wizard_cd = initial(wizard_cd)
+		var/sent_wizards = 1 + count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
+		if(sent_wizards>=total_wizards)
+			return
+		var/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/RM = new()
+		if(sent_wizards % 2) //An odd number of wizards have been sent
+			RM.my_fac = /datum/faction/wizard/civilwar/pfw
+		else
+			RM.my_fac = /datum/faction/wizard/civilwar/wpf
+		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
+		RM.cost = 0
+		mode.picking_specific_rule(RM,TRUE) //forced
+
+/datum/dynamic_ruleset/roundstart/cwc/execute()
+	var/mob/M = pick(candidates)
+	if (M)
+		assigned += M
+		candidates -= M
+		var/datum/role/wizard/newWizard = new
+		newWizard.AssignToRole(M.mind,1)
+		var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
+		ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
+		WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
+		newWizard.Greet(GREET_MIDROUND)
+	return 1
 
 //////////////////////////////////////////////
 //                                          //
@@ -150,12 +205,13 @@
 	name = "Blood Cult"
 	role_category = /datum/role/cultist
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer","Warden", "Detective","Head of Security", "Captain", "Chaplain")
+	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
 	weight = 3
-	cost = 25
+	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
+	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
@@ -203,6 +259,7 @@
 	weight = 3
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
 
 /datum/dynamic_ruleset/roundstart/cult_legacy/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
@@ -236,9 +293,10 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
-	weight = 5
-	cost = 30
+	weight = 3
+	cost = 40
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	high_population_requirement = 60
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 
 
@@ -292,9 +350,10 @@
 	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
-	weight = 3
-	cost = 35
+	weight = 2
+	cost = 40
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
+	high_population_requirement = 65
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
@@ -342,15 +401,16 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/roundstart/blob
-	name = "Blob conglomerate"
+	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
 	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 1
-	weight = 5
-	cost = 30
+	weight = 3
+	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	high_population_requirement = 70
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
@@ -362,6 +422,14 @@
 		blob_fac.HandleNewMind(M.mind)
 		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
+		switch(M.mind.assigned_role)
+			if("Clown")
+				blob_looks_player["clownscape"] = 32
+			if("Station Engineer","Atmospheric Technician","Chief Engineer")
+				blob_looks_player["AME"] = 32
+				blob_looks_player["AME_new"] = 64
+			if("Chaplain")
+				blob_looks_player["skelleton"] = 64
 	return 1
 
 //////////////////////////////////////////////
@@ -380,6 +448,7 @@
 	weight = 3
 	cost = 0
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+	high_population_requirement = 101
 
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
@@ -400,8 +469,9 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 3
 	weight = 2
-	cost = 45
+	cost = 35
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	high_population_requirement = 50
 	delay = 5 MINUTES
 	var/required_heads = 3
 
@@ -453,6 +523,7 @@
 	weight = 3
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)

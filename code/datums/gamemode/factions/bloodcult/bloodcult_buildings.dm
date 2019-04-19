@@ -476,7 +476,7 @@
 					var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
 					if (O && is_locking(lock_type))
 						var/mob/victim = get_locked(lock_type)[1]
-						if (victim == O.sacrifice_target)
+						if (victim == O.sacrifice_target || (victim.mind && victim.mind == O.sacrifice_mind))
 							altar_task = ALTARTASK_SACRIFICE
 							timeleft = 30
 							timetotal = timeleft
@@ -603,7 +603,7 @@
 									if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
 										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
 										if (choice == "Yes")
-											replace_target()
+											replace_target(user)
 											return
 									else
 										to_chat(user,"<b>\The [O.sacrifice_target] is still aboard the station.</b>")
@@ -636,12 +636,12 @@
 					var/obj/item/device/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
 
-/obj/structure/cult/altar/proc/replace_target()
+/obj/structure/cult/altar/proc/replace_target(var/mob/user)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
 		if (O && !O.IsFulfilled())
-			if (O.replace_target())
+			if (O.replace_target(user))
 				for(var/datum/role/cultist/C in cult.members)
 					var/mob/M = C.antag.current
 					if (M && iscultist(M))
@@ -758,7 +758,7 @@
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.progress(CULT_ACT_III,T)
+			cult.stage(CULT_ACT_III,T)
 		else
 			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 		qdel(src)
@@ -1571,6 +1571,7 @@ var/list/bloodstone_list = list()
 	if (!gcDestroyed && loc)
 		new /obj/machinery/singularity/narsie/large(src.loc)
 		stat_collection.cult_narsie_summoned = TRUE
+		SSpersistence_map.setSavingFilth(FALSE)
 	return 1
 
 /obj/structure/cult/bloodstone/ex_act(var/severity)

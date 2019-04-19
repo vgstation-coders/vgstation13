@@ -305,12 +305,29 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (!injected || !our)
 		return
-	if(blood_incompatible(injected.data["blood_type"],our.data["blood_type"]) )
-		reagents.add_reagent(TOXIN,amount * 0.5)
-		reagents.update_total()
-	else
-		vessel.add_reagent(BLOOD, amount, injected.data)
-		vessel.update_total()
+
+	var/toxic = 0
+	if (istype(container,/obj/item/weapon/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
+		if (!iscultist(src))
+			toxic = 2
+	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]))
+		toxic = 1
+
+	switch (toxic)
+		if (2)
+			new /obj/effect/cult_ritual/confusion(src,100,25,src)
+			reagents.add_reagent(TOXIN,amount * 0.5)
+			reagents.add_reagent(INCENSE_MOONFLOWERS,amount * 0.5)
+			hallucination = max(30,hallucination)
+			Dizzy(10)
+			Jitter(10)
+			reagents.update_total()
+		if (1)
+			reagents.add_reagent(TOXIN,amount * 0.5)
+			reagents.update_total()
+		else
+			vessel.add_reagent(BLOOD, amount, injected.data)
+			vessel.update_total()
 	..()
 
 //Gets human's own blood.

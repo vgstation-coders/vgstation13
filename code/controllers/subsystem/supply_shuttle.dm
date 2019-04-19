@@ -229,10 +229,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			[shoppinglist.len] PACKAGES IN THIS SHIPMENT<br>
 			CONTENTS:<br><ul>"}
 		//spawn the stuff, finish generating the manifest while you're at it
-		if(SP.access)
+		if(SP.access && istype(A, /obj/structure/closet))
 			A:req_access = SP.access
 
-		if(SP.one_access)
+		if(SP.one_access && istype(A, /obj/structure/closet))
 			A:req_one_access = SP.one_access
 
 		var/list/contains

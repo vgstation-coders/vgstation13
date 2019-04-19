@@ -313,7 +313,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		adjust_multi(
 			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio),
 			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
-			GAS_CARBON, max(2 * total_fuel, 0),
+			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio, 0),
 			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
 
 		if(can_use_turf)
@@ -324,7 +324,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 					A.burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 
 		//calculate the energy produced by the reaction and then set the new temperature of the mix
-		temperature = (starting_energy + zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release) * total_fuel) / heat_capacity()
+		temperature = (starting_energy + zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release) * total_fuel * used_reactants_ratio) / heat_capacity()
 
 		update_values()
 		value = total_reactants * used_reactants_ratio

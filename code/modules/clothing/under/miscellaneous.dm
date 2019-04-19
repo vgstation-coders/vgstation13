@@ -739,3 +739,10 @@
 	icon_state = "uni-church"
 	item_state = "uni-church"
 	_color = "uni-church"
+
+/obj/item/clothing/under/newclothes
+	name = "Emperor's new clothes"
+	desc = "The virtuous can see them."
+	icon_state = "newclothes"
+	_color = "newclothes"
+	item_state = "r_suit"

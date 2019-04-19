@@ -15,4 +15,4 @@
     if (..())
         return TRUE
     else
-        return (blobs >= target)
+        return (blobs.len >= (target * 0.95))

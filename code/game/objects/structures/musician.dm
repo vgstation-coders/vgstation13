@@ -28,7 +28,7 @@
 // note is a number from 1-7 for A-G
 // acc is either "b", "n", or "#"
 // oct is 1-8 (or 9 for C)
-/datum/song/proc/playnote(note, acc as text, oct)
+/datum/song/proc/playnote(note, acc as text, oct, mob/user)
 	// handle accidental -> B<>C of E<>F
 	if(acc == "b" && (note == 3 || note == 6)) // C or F
 		if(note == 3)
@@ -62,7 +62,11 @@
 	for(var/mob/M in get_hearers_in_view(15, source))
 		if(!M.client)
 			continue
-		M.playsound_local(source, soundfile, 100, falloff = 5)
+		if(M.client.prefs.hear_instruments)
+			M.playsound_local(source, soundfile, 100, falloff = 5)
+		if(istype(instrumentObj,/obj/item/device/instrument))
+			var/obj/item/device/instrument/INS = instrumentObj
+			INS.OnPlayed(user,M)
 
 /datum/song/proc/updateDialog(mob/user)
 	instrumentObj.updateDialog()		// assumes it's an object in world, override if otherwise
@@ -112,7 +116,7 @@
 								cur_acc[cur_note] = "#" // so shift is never required
 						else
 							cur_oct[cur_note] = text2num(ni)
-					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note])
+					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
 				if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
 				else

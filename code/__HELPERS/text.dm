@@ -1,5 +1,5 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
-
+#define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 //Loops through every line in (text). The 'line' variable holds the current line
 //Example use:
 /*

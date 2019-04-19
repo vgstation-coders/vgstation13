@@ -64,6 +64,8 @@
 	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
+	var/datum/daemon/daemon
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -193,6 +195,8 @@
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(daemon && daemon.flags & DAEMON_EXAMINE)
+		daemon.examine(user)
 
 
 /obj/item/attack_ai(mob/user as mob)
@@ -333,8 +337,12 @@
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
 	return 1
+
 // called after an item is unequipped or stripped
 /obj/item/proc/unequipped(mob/user, var/from_slot = null)
+	for(var/x in actions)
+		var/datum/action/A = x
+		A.Remove(user)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
@@ -824,6 +832,8 @@
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
+	if(prepickup(user))
+		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
 	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) && !isgrinch(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
@@ -918,10 +928,13 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, attack_text = "the attack")
+/obj/item/proc/on_block(damage, atom/blocked)
 	if(ismob(loc))
 		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>")
+			visible_message("<span class='danger'>[loc] blocks \the [blocked] with \the [src]!</span>")
+			if(isatommovable(blocked))
+				var/atom/movable/M = blocked
+				M.throwing = FALSE
 			return TRUE
 
 	return FALSE
@@ -995,6 +1008,7 @@
 				M.eye_blurry += 10
 				M.Paralyse(1)
 				M.Knockdown(4)
+				M.Stun(4)
 			if (eyes.damage >= eyes.min_broken_damage)
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You go blind!</span>")
@@ -1329,3 +1343,6 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return
+
+/obj/item/proc/is_screwdriver(var/mob/user)
+	return FALSE

@@ -179,6 +179,7 @@
 					"You hear metal clanking.")
 
 			M.Knockdown(5)
+			M.Stun(5)
 		else
 			to_chat(user, "You can't buckle [M.name] to [src], They just fell out!")
 

@@ -46,16 +46,11 @@
 				message_admins("[success] number of wizards made.")
 				to_chat(usr, "<span class='notice'>[success] number of wizards made.</span>")
 			if("7")
-				message_admins("[key_name(usr)] has spawned a nuke team.")
-				var/success = makeAntag(null, /datum/faction/syndicate/nuke_op, count, FROM_GHOSTS)
-				message_admins("[success] number of nuclear operatives made.")
-				to_chat(usr, "<span class='notice'>[success] number of nuclear operatives made.</span>")
-			if("8")
 				message_admins("[key_name(usr)] has attempted to spawn [count] vampires.")
 				var/success = makeAntag(/datum/role/vampire, null, count, FROM_PLAYERS)
 				message_admins("[success] number of vampires made.")
 				to_chat(usr, "<span class='notice'>[success] number of vampires made.</span>")
-			if("9")
+			if("8")
 				message_admins("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
 					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
@@ -1557,6 +1552,39 @@
 			mode.picking_specific_rule(midround_rules[added_rule],1)
 
 
+	else if(href_list["f_dynamic_roundstart_centre"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A negative value will give a more peaceful round ; a positive value, a round with higher threat. Any number between -5 and +5 is allowed.", "Change curve centre", null) as num
+		if (new_centre < -5 || new_centre > 5)
+			return alert(usr, "Only values between -5 and +5 are allowed.", null, null, null, null)
+
+		log_admin("[key_name(usr)] changed the distribution curve center to [new_centre].")
+		message_admins("[key_name(usr)] changed the distribution curve center to [new_centre]", 1)
+		dynamic_curve_centre = new_centre
+
+	else if(href_list["f_dynamic_roundstart_width"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/new_width = input(usr,"Change the width of the dynamic mode threat curve. A higher value will favour extreme rounds ; a lower value, a round closer to the average. Any Number between 0.5 and 4 are allowed.", "Change curve width", null) as num
+		if (new_width < 0.5 || new_width > 4)
+			return alert(usr, "Only values between 0.5 and +2.5 are allowed.", null, null, null, null)
+
+		log_admin("[key_name(usr)] changed the distribution curve width to [new_width].")
+		message_admins("[key_name(usr)] changed the distribution curve width to [new_width]", 1)
+		dynamic_curve_width = new_width
 
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
@@ -2201,6 +2229,40 @@
 		emergency_shuttle_panel()
 
 	else if(href_list["check_antagonist"])
+		check_antagonists()
+
+	else if(href_list["adjustthreat"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		var/threatadd = input("Specify how much threat to add (negative to subtract). This can inflate the threat level.", "Adjust Threat", 0) as null|num
+		if(!threatadd)
+			return
+		if(threatadd>0)
+			D.create_threat(threatadd)
+		else
+			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
+		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
+		check_antagonists()
+
+	else if(href_list["injectnow"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		switch(href_list["injectnow"])
+			if("1")
+				D.latejoin_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the latejoin injection timer to 0.")
+			if("2")
+				D.midround_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the midround injection timer to 0.")
+			else
+				message_admins("[key_name(usr)] attempted to set an unknown timer to 0.")
 		check_antagonists()
 
 	/*
@@ -3378,7 +3440,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","DF")
 				for(var/mob/living/carbon/human/B in mob_list)
-					B.f_style = "Dward Beard"
+					B.my_appearance.f_style = "Dward Beard"
 					B.update_hair()
 				message_admins("[key_name_admin(usr)] activated dorf mode")
 			if("ionstorm")
@@ -4115,6 +4177,15 @@
 
 	else if(href_list["xgm_panel"])
 		XGM.ui_interact(usr)
+
+	else if(href_list["toggle_light"])
+		if(!SSticker.initialized)
+			to_chat(usr, "<span class = 'notice'>Please wait for initialization to complete.</span>")
+			return
+		SSlighting.flags = SS_FIRE_IN_LOBBY //Purges the treat wait as ticks rather than DC
+		SSlighting.wait = 5
+		Master.make_runtime = TRUE
+
 
 	else if(href_list["toglang"])
 		if(check_rights(R_SPAWN))
@@ -4927,6 +4998,20 @@
 					end_credits.disclaimers.Swap(i,i+1)
 
 		CreditsPanel() //refresh!
+
+	if(href_list["persistenceaction"])
+		switch(href_list["persistenceaction"])
+			if("qdelall")
+				if(href_list["persistencedatum"])
+					var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
+					T.qdelAllTrackedItems(usr)
+				else
+					SSpersistence_map.qdelAllFilth(usr)
+			if("togglesaving")
+				SSpersistence_map.setSavingFilth(!SSpersistence_map.savingFilth, usr)
+
+
+		PersistencePanel() //refresh!
 
 
 	// ----- Religion and stuff

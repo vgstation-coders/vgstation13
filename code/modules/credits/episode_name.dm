@@ -214,7 +214,7 @@
 					voxcount++
 				if(isdiona(H))
 					dionacount++
-				if(isjusthuman(H) && (H.h_style == "Bald" || H.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
+				if(isjusthuman(H) && (H.my_appearance.h_style == "Bald" || H.my_appearance.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
 					baldycount++
 				if(M_FAT in H.mutations)
 					fattycount++
@@ -376,6 +376,12 @@
 			if(piggycount > 3)
 				episode_names += new /datum/episode_name/rare("BRINGING HOME THE BACON", "[piggycount] little piggies went to the shuttle...", min(1500, piggycount*200))
 
+			var/cowcount = 0
+			for(var/mob/living/simple_animal/cow/C in shuttle)
+				cowcount += 1
+			if(cowcount > 1)
+				episode_names += new /datum/episode_name/rare("'TIL THE COWS COME HOME", "There were [cowcount] cows on the shuttle.", min(1500, cowcount*300))
+
 			var/beecount = 0
 			for(var/mob/living/simple_animal/bee/B in shuttle)
 				beecount += B.bees.len
@@ -419,7 +425,7 @@
 						adjectives |= "BLOOD-SUCKING"
 					if(isrev(M))
 						adjectives |= "REVOLTING"
-					if(isweeaboo(M))
+					if(isninja(M))
 						adjectives |= "CRAZED"
 					if(issurvivor(M))
 						adjectives |= "PARANOID"

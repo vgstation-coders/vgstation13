@@ -153,7 +153,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/link_to_account()
 	reconnect_database()
-	linked_account = department_accounts["Cargo"]
+	linked_account = vendor_account
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -430,7 +430,7 @@ var/global/num_vending_terminals = 1
 			power_change()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
-			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it first.</span>")
+			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it with reinforced glass first.</span>")
 			return
 	. = ..()
 	if(.)
@@ -1199,6 +1199,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/wine = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/cognac = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/kahlua = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/sake = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/beer = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/ale = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/orangejuice = 4,
@@ -1739,7 +1740,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
 		if(0) // Empty hull
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(usr, "You begin removing screws from \the [src] backplate...")
 				if(do_after(user, src, 50))
 					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
@@ -1801,7 +1802,7 @@ var/global/num_vending_terminals = 1
 					build--
 					update_icon()
 				return 1
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You begin to complete \the [src]...")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 20))
@@ -1814,7 +1815,7 @@ var/global/num_vending_terminals = 1
 						"You finish \the [src].")
 				return 1
 		if(3) // Waiting for a recharge pack
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You begin to unscrew \the [src]...")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 30))
@@ -2087,7 +2088,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/wizard/marisa = 5,
 		/obj/item/clothing/suit/wizrobe/marisa = 5,
 		/obj/item/clothing/suit/wizrobe/magician = 5,
-		/obj/item/clothing/head/wizard/magician = 5,
+		/obj/item/clothing/head/that/magic = 5,
 		/obj/item/clothing/head/wizard/necro = 5,
 		/obj/item/clothing/suit/wizrobe/necro = 5,
 		/obj/item/clothing/head/wizard/magus = 5,
@@ -2512,7 +2513,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/shield/riot/joe = 3,
 		/obj/item/clothing/under/darkholme = 3,
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
-		/obj/item/clothing/head/wizard/magician = 3,
+		/obj/item/clothing/head/that/magic = 3,
 		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
 		)

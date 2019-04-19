@@ -18,8 +18,7 @@
 
 	new_commando.gender = pick(MALE, FEMALE)
 
-	var/datum/preferences/A = new()//Randomize appearance for the commando.
-	A.randomize_appearance_for(new_commando)
+	new_commando.randomise_appearance_for(new_commando.gender)
 
 	new_commando.real_name = "[!leader_selected ? commando_rank : commando_leader_rank] [!leader_selected ? commando_name : "Creed"]"
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)

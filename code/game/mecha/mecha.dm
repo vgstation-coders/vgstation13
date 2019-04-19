@@ -892,7 +892,7 @@
 			else
 				to_chat(user, "There's not enough wire to finish the task.")
 		return
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(hasInternalDamage(MECHA_INT_TEMP_CONTROL))
 			clearInternalDamage(MECHA_INT_TEMP_CONTROL)
 			to_chat(user, "You repair the damaged temperature controller.")
@@ -1464,6 +1464,7 @@
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
 		occupant.Knockdown(10)
+		occupant.Stun(10)
 		spawn(10)
 		emergency_eject()
 

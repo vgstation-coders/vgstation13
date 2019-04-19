@@ -217,12 +217,14 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 //sharpness flags
-#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
-#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
-#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
-#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
-#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
-#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define SHARP_TIP 		 1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		 2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	 4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
+#define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -303,22 +305,22 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
-#define FACE			EYES|MOUTH|BEARD
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
 #define BEARD			32768
-#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
-#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
-#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
-#define ARMS			ARM_LEFT|ARM_RIGHT		//384
-#define HANDS			HAND_LEFT|HAND_RIGHT //1536
-#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -326,7 +328,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEFACE			FACE
 #define HIDEHEADHAIR 		EARS|HEAD
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
@@ -954,6 +956,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_BONES 512
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
+#define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1464,14 +1467,13 @@ var/proccalls = 1
 #define EVENT_OBJECT_INDEX "o"
 #define EVENT_PROC_INDEX "p"
 
-#define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
 #define HONORABLE_HIGHLANDER 2
-#define HONORABLE_WEEABOO      4
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_WEEABOO
+#define HONORABLE_NINJA      4
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 

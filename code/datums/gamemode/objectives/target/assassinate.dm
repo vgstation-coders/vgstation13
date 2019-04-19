@@ -1,7 +1,6 @@
 /datum/objective/target/assassinate
 	name = "Assassinate <target>"
 
-
 /datum/objective/target/assassinate/find_target()
 	..()
 	if(target && target.current)
@@ -39,8 +38,6 @@
 		if(possible_target != owner && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
 			possible_targets += possible_target
 	return possible_targets
-
-
 
 /datum/objective/target/assassinate/IsFulfilled()
 	if (..())

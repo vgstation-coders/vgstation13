@@ -311,6 +311,13 @@
 				var/t2 = modify
 				if ((modify == t2 && (in_range(src, usr) || (istype(usr, /mob/living/silicon))) && istype(loc, /turf)))
 					var/account_num = text2num(href_list["account"])
+					var/datum/money_account/MA = get_money_account(account_num)
+					if(!MA)
+						to_chat(usr, "<span class='warning'>That account number was invalid.</span>")
+						return
+					if(MA.hidden)
+						to_chat(usr, "<span class='warning'>That account number is reserved.</span>")
+						return
 					modify.associated_account_number = account_num
 			nanomanager.update_uis(src)
 

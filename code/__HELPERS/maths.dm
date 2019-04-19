@@ -13,6 +13,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
                           8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10)
 */
 
+
+// Returns y so that y/x = a/b.
+#define RULE_OF_THREE(a, b, x) ((a*x)/b)
+#define tan(x) (sin(x)/cos(x))
+
 /proc/Atan2(x, y)
 	if (!x && !y)
 		return 0
@@ -34,6 +39,20 @@ proc/arctan(x)
 		return -1
 	else
 		return 0
+
+// -- Returns a Lorentz-distributed number.
+// -- The probability density function has centre x0 and width s.
+
+/proc/lorentz_distribution(var/x0, var/s)
+	var/x = rand()
+	var/y = s*tan_rad(PI*(x-0.5)) + x0
+	return y
+
+// -- Returns the Lorentz cummulative distribution of the real x.
+
+/proc/lorentz_cummulative_distribution(var/x, var/x0, var/s)
+	var/y = (1/PI)*ToRadians(arctan((x-x0)/s)) + 1/2
+	return y
 
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
@@ -188,8 +207,12 @@ proc/arctan(x)
 /*
  * Tangent.
  */
-/proc/Tan(const/x)
+/proc/Tan(const/x) 
 	return sin(x) / cos(x)
+
+/proc/tan_rad(const/x) // This one assumes that x is in radians.
+	return Tan(ToDegrees(x))
+
 
 /proc/ToDegrees(const/radians)
 					// 180 / Pi

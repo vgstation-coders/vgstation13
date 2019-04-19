@@ -567,6 +567,9 @@ a {
 
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
 		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA)
 	return 0
 
@@ -697,4 +700,10 @@ a {
 		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
+	return TRUE
+
+//Return true if thrown object misses
+/obj/PreImpact(atom/movable/A, speed)
+	if(density && !throwpass)
+		return FALSE
 	return TRUE

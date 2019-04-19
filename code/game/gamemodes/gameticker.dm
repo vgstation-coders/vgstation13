@@ -63,6 +63,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/starman.ogg",
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
+		"sound/music/twilight.ogg",
 		))
 
 	if(SNOW_THEME)
@@ -530,6 +531,9 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["expert"] = "none"
 
 /datum/controller/gameticker/proc/declare_completion()
+	if(!ooc_allowed)
+		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
+		ooc_allowed = TRUE
 	scoreboard()
 	return 1
 

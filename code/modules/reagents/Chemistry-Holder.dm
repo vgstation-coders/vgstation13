@@ -391,6 +391,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 								continue
 							total_matching_reagents++
 							multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
+							break
 					else
 						if(!has_reagent(B, C.required_reagents[B]))
 							break

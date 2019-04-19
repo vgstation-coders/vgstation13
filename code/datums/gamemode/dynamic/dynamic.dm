@@ -1,16 +1,55 @@
 var/list/forced_roundstart_ruleset = list()
 
 var/list/threat_by_job = list(
-	"Captain" = 15,
-	"Head of Security" = 15,
-	"Head of Personnel" = 10,
-	"Warden" = 10,
-	"Security Officer" = 10,
-	"Detective" = 10,
+	"Captain" = 12,
+	"Head of Security" = 10,
+	"Head of Personnel" = 8,
+	"Warden" = 8,
+	"Security Officer" = 4,
+	"Detective" = 3,
 )
+
+var/dynamic_curve_centre = 0
+var/dynamic_curve_width = 1.8
 
 #define BASE_SOLO_REFUND 10
 
+/proc/lorentz2threat(var/x)
+	var/y
+	switch (x)
+		// Left end of the tail, the lowest bound is -inf.
+		// 0 to 10.
+		if (-INFINITY to -20)
+			y = rand(0, 10)
+		// Porportional conversion from the lorentz variable to the threa.
+
+		// First, we use a rule of three to get a number from -40 to -30.
+		// Then we shift it by 50 to get a number from 10 to 20. 
+		// The same process is done for other intervalls.
+		if (-20 to -10)
+			y = RULE_OF_THREE(-40, -20, x) + 50
+		if (-10 to -5)
+			y = RULE_OF_THREE(-30, -10, x) + 50
+		if (-5 to -2.5)
+			y = RULE_OF_THREE(-20, -5, x) + 50
+		if (-2.5 to -0)
+			y = RULE_OF_THREE(-10, -2.5, x) + 50
+		if (0 to 2.5)
+			y = RULE_OF_THREE(10, 2.5, x) + 50
+		if (2.5 to 5)
+			y = RULE_OF_THREE(20, 5, x) + 50
+		if (5 to 10)
+			y = RULE_OF_THREE(30, 10, x) + 50
+		if (10 to 20)
+			y = RULE_OF_THREE(40, 20, x) + 50
+
+		// Right end of the tail, higher bound is +inf.
+
+		if (20 to INFINITY)
+			y = rand(90, 100)
+	
+	return y
+			
 /datum/gamemode/dynamic
 	name = "Dynamic Mode"
 
@@ -23,8 +62,7 @@ var/list/threat_by_job = list(
 	var/list/roundstart_rules = list()
 	var/list/latejoin_rules = list()
 	var/list/midround_rules = list()
-	var/list/second_rule_req = list(0,0,0,80,60,40,20,0,0,0)//requirements for extra round start rules
-	//var/list/second_rule_req = list(100,100,100,80,60,40,20,0,0,0)//requirements for extra round start rules
+	var/list/second_rule_req = list(100,100,100,80,60,40,20,0,0,0)//requirements for extra round start rules
 	var/list/third_rule_req = list(100,100,100,100,100,70,50,30,10,0)
 	var/roundstart_pop_ready = 0
 	var/list/candidates = list()
@@ -44,11 +82,20 @@ var/list/threat_by_job = list(
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 	var/pop_last_updated = 0
 
+	var/relative_threat = 0 // Relative threat, Lorentz-distributed.
+	var/curve_centre_of_round = 0
+	var/curve_width_of_round = 1.8
+
+	var/peaceful_percentage = 50
+
 /datum/gamemode/dynamic/AdminPanelEntry()
 	var/dat = list()
-	dat += "Threat : <b>[threat_level]</b><br/>"
-	dat += "Threat availaible : <b>[threat]</b> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
-	dat += "Executed rulesets : "
+	dat += "Dynamic Mode <a href='?_src_=vars;Vars=\ref[src]'>\[VV\]</A><BR>"
+	dat += "Threat Level: <b>[threat_level]</b><br/>"
+	dat += "Threat to Spend: <b>[threat]</b> <a href='?_src_=holder;adjustthreat=1'>\[Adjust\]</A> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
+	dat += "Parameters: centre = [curve_centre_of_round] ; width = [curve_width_of_round].<br/>"
+	dat += "<i>On average, <b>[peaceful_percentage]</b>% of the rounds are more peaceful.</i><br/>"
+	dat += "Executed rulesets: "
 	if (executed_rules.len > 0)
 		dat += "<br/>"
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
@@ -61,7 +108,10 @@ var/list/threat_by_job = list(
 				ruletype = "Midround"
 			dat += "[ruletype] - <b>[DR.name]</b><br>"
 	else
-		dat += "none."
+		dat += "none.<br>"
+	dat += "<br>Injection Timers: (<b>[GetInjectionChance()]%</b> chance)<BR>"
+	dat += "Latejoin: [latejoin_injection_cooldown>60 ? "[round(latejoin_injection_cooldown/60,0.1)] minutes" : "[latejoin_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
+	dat += "Midround: [midround_injection_cooldown>60 ? "[round(midround_injection_cooldown/60,0.1)] minutes" : "[midround_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
 	return jointext(dat, "")
 
 /datum/gamemode/dynamic/proc/show_threatlog(mob/admin)
@@ -109,17 +159,37 @@ var/list/threat_by_job = list(
 	send2maindiscord("Dynamic mode threat: **[threat_level]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
-	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
+
+	// Old equation.
+	//threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
+
+	// New equation : https://docs.google.com/spreadsheets/d/1qnQm5hDdwZoyVmBCtf6-jwwHKEaCnYa3ljmYPs7gkSE/edit#gid=0
+	relative_threat = lorentz_distribution(dynamic_curve_centre, dynamic_curve_width)
+	threat_level = lorentz2threat(relative_threat)
+	threat = round(threat, 0.1)
+	peaceful_percentage = round(lorentz_cummulative_distribution(relative_threat, curve_centre_of_round, curve_width_of_round), 0.01)*100
+
+	curve_centre_of_round = dynamic_curve_centre
+	curve_width_of_round = dynamic_curve_width
+
 	threat = threat_level
 	starting_threat = threat_level
+
 	latejoin_injection_cooldown = rand(330,510)
 	midround_injection_cooldown = rand(600,1050)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
+
+	message_admins("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
+	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
+
+	if (config.high_population_override)
+		message_admins("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
+		log_admin("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
-	if (threat_level == 66.6)
+	if (round(threat_level, 0.1) == 66.6)
 		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/bloodcult()
 		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/vampire()
 		log_admin("666 threat override.")
@@ -181,12 +251,31 @@ var/list/threat_by_job = list(
 				drafted_rules[rule] = rule.weight
 
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
+	var/extra_rulesets_amount = 0
+
+	if (config.high_population_override)
+		if (threat_level > 50)
+			extra_rulesets_amount++
+			if (threat_level > 75)
+				extra_rulesets_amount++
+	else
+		if (threat_level >= second_rule_req[indice_pop])
+			extra_rulesets_amount++
+			if (threat_level >= third_rule_req[indice_pop])
+				extra_rulesets_amount++
+
 	message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with elligible candidates.")
 	if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
-		if (threat >= second_rule_req[indice_pop])//we've got enough population and threat for a second rulestart rule
+		if (extra_rulesets_amount > 0)//we've got enough population and threat for a second rulestart rule
+			for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
+				if (rule.cost > threat)
+					drafted_rules -= rule
 			message_admins("The current pop and threat level allow for a second round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
 			if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
-				if (threat >= third_rule_req[indice_pop])//we've got enough population and threat for a third rulestart rule
+				if (extra_rulesets_amount > 1)//we've got enough population and threat for a third rulestart rule
+					for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
+						if (rule.cost > threat)
+							drafted_rules -= rule
 					message_admins("The current pop and threat level allow for a third round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
 					if (!drafted_rules.len > 0 || !picking_roundstart_rule(drafted_rules))
 						message_admins("The mode failed to pick a third ruleset.")
@@ -209,6 +298,7 @@ var/list/threat_by_job = list(
 
 		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
 			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
+			spend_threat(starting_rule.cost)
 			return pick_delay(starting_rule)
 
 		spend_threat(starting_rule.cost)
@@ -239,7 +329,7 @@ var/list/threat_by_job = list(
 				current_rules += rule
 		else
 			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
-	return 0
+	return 1
 
 
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
@@ -280,7 +370,14 @@ var/list/threat_by_job = list(
 	return 0
 
 /datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
-	var/datum/dynamic_ruleset/midround/new_rule = new ruletype()//you should only use it to call midround rules though.
+	var/datum/dynamic_ruleset/midround/new_rule
+	if(ispath(ruletype))
+		new_rule = new ruletype()//you should only use it to call midround rules though.
+	else if(istype(ruletype,/datum/dynamic_ruleset))
+		new_rule = ruletype
+	else
+		message_admins("The specific ruleset failed beacuse a type other than a path or rule was sent.")
+		return
 	update_playercounts()
 	var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
@@ -384,9 +481,10 @@ var/list/threat_by_job = list(
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
 
-/datum/gamemode/dynamic/proc/injection_attempt()//will need to gather stats to refine those values later
+/datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0
-	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/5))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
+	//if the high pop override is in effect, we reduce the impact of population on the antag injection chance
+	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/(config.high_population_override ? 10 : 5)))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
 	if (!living_antags.len)
 		chance += 50//no antags at all? let's boost those odds!
 	else
@@ -401,7 +499,10 @@ var/list/threat_by_job = list(
 		chance += 15
 	if (threat < 30)
 		chance -= 15
-	chance = round(max(0,chance))
+	return round(max(0,chance))
+
+/datum/gamemode/dynamic/proc/injection_attempt()//will need to gather stats to refine those values later
+	var/chance = GetInjectionChance()
 	message_admins("DYNAMIC MODE: Chance of injection with the current player numbers and threat level is...[chance]%.")
 	log_admin("DYNAMIC MODE: Chance of injection with the current player numbers and threat level is...[chance]%.")
 	if (prob(chance))
@@ -439,7 +540,7 @@ var/list/threat_by_job = list(
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
 				if (rule.ready())
-					drafted_rules[rule] = rule.weight
+					drafted_rules[rule] = rule.get_weight()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls

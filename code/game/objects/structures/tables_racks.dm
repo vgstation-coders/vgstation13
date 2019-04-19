@@ -366,6 +366,7 @@
 		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
+		M.Stun(1)
 		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 		else
@@ -387,6 +388,7 @@
 					G.affecting.forceMove(loc)
 					if (prob(15))
 						M.Knockdown(5)
+						M.Stun(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -396,6 +398,7 @@
 			else
 				G.affecting.forceMove(loc)
 				G.affecting.Knockdown(5)
+				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 			return
@@ -635,6 +638,7 @@
 					user.do_attack_animation(src, W)
 					if (prob(15))
 						M.Knockdown(5)
+						M.Stun(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -648,6 +652,7 @@
 			else
 				G.affecting.forceMove(loc)
 				G.affecting.Knockdown(5)
+				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 

@@ -540,9 +540,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.key = key		//Manually transfer the key to log them in
 
-	var/datum/religion/R = ticker.chap_rel
-	if(R && R.converts_everyone && !R.isReligiousLeader(new_character))
-		R.convert(new_character,null,TRUE,TRUE)
+	for(var/datum/religion/R in ticker.religions)
+		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
+			R.convert(new_character,null,TRUE,TRUE)
+			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
 	return new_character
 

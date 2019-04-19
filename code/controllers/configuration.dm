@@ -113,12 +113,15 @@
 	var/health_threshold_softcrit = 0
 	var/health_threshold_crit = 0
 	var/health_threshold_dead = -100
+	var/burn_damage_ash = 0
 
 	var/organ_health_multiplier = 1
 	var/organ_regeneration_multiplier = 1
 
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
+
+	var/voice_noises = 0
 
 	var/revival_pod_plants = 1
 	var/revival_cloning = 1
@@ -185,6 +188,9 @@
 
 	// Weighted Votes
 	var/weighted_votes = 0
+
+	// Dynamic Mode
+	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
 /datum/configuration/New()
 	. = ..()
@@ -601,6 +607,8 @@
 					config.health_threshold_softcrit = value
 				if("health_threshold_dead")
 					config.health_threshold_dead = value
+				if("burn_damage_ash")
+					config.burn_damage_ash = value
 				if("revival_pod_plants")
 					config.revival_pod_plants = value
 				if("revival_cloning")
@@ -637,6 +645,8 @@
 					config.borer_takeover_immediately = 1
 				if("hardcore_mode")
 					hardcore_mode = value
+				if("humans_speak")
+					voice_noises = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

@@ -46,6 +46,12 @@
 	var/RolesSuccess = CreateRoles()
 	return FactionSuccess && RolesSuccess
 
+//1 = station, 2 = centcomm
+/datum/gamemode/proc/ShuttleDocked(var/state)
+	for(var/datum/faction/F in factions)
+		F.ShuttleDocked(state)
+	for(var/datum/role/R in orphaned_roles)
+		R.ShuttleDocked(state)
 
 /*===FACTION RELATED STUFF===*/
 
