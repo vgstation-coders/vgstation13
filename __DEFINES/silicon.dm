@@ -21,10 +21,13 @@ var/global/list/default_nanotrasen_robot_modules = list(
 	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
 	SUPPLY_MODULE 			= /obj/item/weapon/robot_module/miner,
 	MEDICAL_MODULE			= /obj/item/weapon/robot_module/medical,
-	SECURITY_MODULE			= /obj/item/weapon/robot_module/security,
 	ENGINEERING_MODULE		= /obj/item/weapon/robot_module/engineering,
 	JANITOR_MODULE			= /obj/item/weapon/robot_module/janitor,
     )
+	
+var/global/list/alert_nanotrasen_robot_modules = list(
+	SECURITY_MODULE			= /obj/item/weapon/robot_module/security
+	)
 
 var/global/list/emergency_nanotrasen_robot_modules = list(
 	COMBAT_MODULE 			= /obj/item/weapon/robot_module/combat
@@ -50,8 +53,12 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 
 /proc/getAvailableRobotModules()
 	var/list/pickable_modules = default_nanotrasen_robot_modules.Copy()
-	if(security_level == SEC_LEVEL_RED)
-		pickable_modules += emergency_nanotrasen_robot_modules
+	switch(security_level)
+		if(SEC_LEVEL_BLUE)
+			pickable_modules += alert_nanotrasen_robot_modules
+		if(SEC_LEVEL_RED)
+			pickable_modules += alert_nanotrasen_robot_modules
+			pickable_modules += emergency_nanotrasen_robot_modules
 	return pickable_modules
 
 
