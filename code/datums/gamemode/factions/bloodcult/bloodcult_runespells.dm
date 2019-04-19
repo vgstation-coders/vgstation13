@@ -588,17 +588,24 @@
 			var/list/valid_tomes = list()
 			var/i = 0
 			for (var/obj/item/weapon/tome/T in arcane_tomes)
-				i++
-				var/mob/M = T.loc
+				var/mob/M = T.loc//pockets? hands?
 				if (!M)	continue
 				if (!istype(M))
-					M = M.loc
+					M = M.loc//backpack?
 				if (!istype(M))
-					M = M.loc
+					M = M.loc//box in backpack?
+				if (!istype(M))
+					M = M.loc//lol, webbings
 				if (!istype(M))
 					continue
 				else
+					i++
 					valid_tomes["[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = T
+			for (var/spell/cult/arcane_dimension/A in arcane_pockets)
+				if (A.holder && A.holder.loc && ismob(A.holder) && A.stored_tome)
+					i++
+					var/mob/M = A.holder
+					valid_tomes["[i] - Tome in [M.real_name]'s arcane dimension ([A.stored_tome.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = A.stored_tome
 			if (valid_tomes.len <= 0)
 				to_chat(user, "<span class='warning'>No cultists are currently carrying a tome.</span>")
 				qdel(src)
@@ -984,7 +991,7 @@
 						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
-					
+
 		cult.send_flavour_text_refuse(victim, converter)
 		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
