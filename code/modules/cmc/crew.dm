@@ -456,7 +456,7 @@ var/list/cmc_holomap_cache = list()
 
 /obj/machinery/computer/crew/proc/updateTextView()
 	//styles
-	var/t = "<html><head><title>Crew Monitor</title><link rel='stylesheet' type='text/css' href='cmc.css'/></head><body>"
+	var/list/t = "<html><head><title>Crew Monitor</title><link rel='stylesheet' type='text/css' href='cmc.css'/></head><body>"
 
 	t += "<kbd><b class='fuckbyond'>Crew Monitoring</b><a class='fuckbyond' href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><a class='fuckbyond' href='?src=\ref[src];close=1'>Close</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
 
@@ -466,7 +466,9 @@ var/list/cmc_holomap_cache = list()
 
 	t += "</table></kbd></body></html>"
 
-	activator << browse(t, "window=cmc_textview;size=900x600")
+	var/texttest = jointext(t, "")
+
+	activator << browse(texttest, "window=cmc_textview;size=900x600")
 
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
