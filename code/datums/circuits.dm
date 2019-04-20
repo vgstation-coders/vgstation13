@@ -15,7 +15,21 @@
 /datum/circuits
 	var/atom/holder = null //Which specific board are we pointing at?
 	var/list/fuse_point_names = list("Alpha" = ALPHA, "Beta" = BETA, "Gamma" = GAMMA, "Delta" = DELTA, "Eta" = ETA, "Theta" = THETA, "Iota" = IOTA)
-	var/list/possible_boards = list(/obj/item/weapon/circuitboard/autolathe,/obj/item/weapon/circuitboard/seed_extractor,/obj/item/weapon/circuitboard/air_alarm,/obj/item/weapon/circuitboard/fire_alarm,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/power_control,/obj/item/weapon/circuitboard/station_map,/obj/item/weapon/circuitboard/vendomat,/obj/item/weapon/circuitboard/microwave)
+	var/list/possible_boards = list(
+		/obj/item/weapon/circuitboard/autolathe,
+		/obj/item/weapon/intercom_electronics,
+		/obj/item/weapon/circuitboard/air_alarm,
+		/obj/item/weapon/circuitboard/fire_alarm,
+		/obj/item/weapon/circuitboard/airlock,
+		/obj/item/weapon/circuitboard/power_control,
+		/obj/item/weapon/circuitboard/vendomat,
+		/obj/item/weapon/circuitboard/microwave,
+		/obj/item/weapon/circuitboard/station_map,
+		/obj/item/weapon/circuitboard/cell_charger,
+		/obj/item/weapon/circuitboard/recharger,
+		/obj/item/weapon/circuitboard/fishtank,
+		/obj/item/weapon/circuitboard/fishwall,
+		/obj/item/weapon/circuitboard/oven)
 	var/global/list/assigned_boards = list()
 	//Each bitflag points to a board!
 	var/localbit = 0 //What are WE programmed to? Always start as 0
