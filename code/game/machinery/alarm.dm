@@ -110,7 +110,7 @@
 			apply_preset(1) // Only this air alarm should send a cycle.
 
 	TLV[GAS_OXYGEN] =			list(16, 19, 135, 140) // Partial pressure, kpa
-	TLV[GAS_OXYGEN] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
+	TLV[GAS_NITROGEN] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
 	TLV[GAS_CARBON] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
 	TLV[GAS_PLASMA] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 	TLV[GAS_SLEEPING] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
@@ -120,7 +120,7 @@
 	target_temperature = T0C+20
 	switch(preset)
 		if(AALARM_PRESET_VOX) // Same as usual, s/nitrogen/oxygen
-			TLV[GAS_OXYGEN] = 		list(16, 19, 135, 140) // Vox use same partial pressure values for N2 as humans do for O2.
+			TLV[GAS_NITROGEN] = 		list(16, 19, 135, 140) // Vox use same partial pressure values for N2 as humans do for O2.
 			TLV[GAS_OXYGEN] =			list(-1.0, -1.0, 0.5, 1.0) // Under 1 kPa (PP), vox don't notice squat (vox_oxygen_max)
 		if(AALARM_PRESET_SERVER) // Cold as fuck.
 			TLV[GAS_OXYGEN] =			list(-1.0, -1.0,-1.0,-1.0)
@@ -177,7 +177,7 @@
 	// breathable air according to human/Life()
 	/*
 	TLV[GAS_OXYGEN] =			list(16, 19, 135, 140) // Partial pressure, kpa
-	TLV[GAS_OXYGEN] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
+	TLV[GAS_NITROGEN] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
 	TLV[GAS_CARBON] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
 	TLV[GAS_PLASMA] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
@@ -292,7 +292,7 @@
 
 	var/pressure_dangerlevel = get_danger_level(environment.pressure, TLV["pressure"])
 	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), TLV[GAS_OXYGEN])
-	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), TLV[GAS_OXYGEN])
+	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), TLV[GAS_NITROGEN])
 	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), TLV[GAS_CARBON])
 	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), TLV[GAS_PLASMA])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
@@ -539,7 +539,7 @@
 	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), current_settings)
 	var/oxygen_percent = round(environment[GAS_OXYGEN] / total * 100, 2)
 
-	current_settings = TLV[GAS_OXYGEN]
+	current_settings = TLV[GAS_NITROGEN]
 	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), current_settings)
 	var/nitrogen_percent = round(environment[GAS_NITROGEN] / total * 100, 2)
 
@@ -577,8 +577,8 @@
 
 	var/percentages[0]
 	percentages[GAS_OXYGEN]=oxygen_percent
-	percentages[GAS_OXYGEN]=nitrogen_percent
-	percentages["co2"]=co2_percent
+	percentages[GAS_NITROGEN]=nitrogen_percent
+	percentages[GAS_CARBON]=co2_percent
 	percentages[GAS_PLASMA]=plasma_percent
 	percentages[GAS_SLEEPING]=n2o_percent
 	percentages["other"]=other_percent
@@ -588,8 +588,8 @@
 	danger["pressure"]=pressure_dangerlevel
 	danger["temperature"]=temperature_dangerlevel
 	danger[GAS_OXYGEN]=oxygen_dangerlevel
-	danger[GAS_OXYGEN]=nitrogen_dangerlevel
-	danger["co2"]=co2_dangerlevel
+	danger[GAS_NITROGEN]=nitrogen_dangerlevel
+	danger[GAS_CARBON]=co2_dangerlevel
 	danger[GAS_PLASMA]=plasma_dangerlevel
 	danger[GAS_SLEEPING]=n2o_dangerlevel
 	danger["other"]=other_dangerlevel
