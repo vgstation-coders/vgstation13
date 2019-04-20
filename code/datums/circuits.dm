@@ -68,6 +68,10 @@
                   //eg 0000 ^ 1000 = 1000
 	return
 
+/datum/circuits/proc/get_circuit_name(var/path)
+	var/obj/O = path
+	return initial(O.name)
+
 /datum/circuits/proc/Interact(var/mob/living/user)
 	if(!istype(user))
 		return 0
@@ -93,6 +97,7 @@
 		<td[row_options2]>
 		<A href='?src=\ref[src];action=1;fuse=[fuse_point_names[fusepoint]]'>[checkfuse(text2num(fuse_point_names[fusepoint])) ? "Melt" :  "Fuse"]</A></td></tr>"}
 	html += "</table>"
+	html += "<br>Result: [assigned_boards["[localbit]"]?"<font color='green'>[get_circuit_name(assigned_boards["[localbit]"])]":"<font color='red'>X"]</font>"
 	html += "</div>"
 
 	return html

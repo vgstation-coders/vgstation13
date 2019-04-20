@@ -563,6 +563,7 @@
 #include "code\game\machinery\bees_apiary.dm"
 #include "code\game\machinery\biogenerator.dm"
 #include "code\game\machinery\bioprinter.dm"
+#include "code\game\machinery\blank_circuitboard.dm"
 #include "code\game\machinery\buttons.dm"
 #include "code\game\machinery\buynsell.dm"
 #include "code\game\machinery\candymachine.dm"
