@@ -588,17 +588,8 @@
 			var/list/valid_tomes = list()
 			var/i = 0
 			for (var/obj/item/weapon/tome/T in arcane_tomes)
-				var/mob/M = T.loc//pockets? hands?
-				if (!M)	continue
-				if (!istype(M))
-					M = M.loc//backpack?
-				if (!istype(M))
-					M = M.loc//box in backpack?
-				if (!istype(M))
-					M = M.loc//lol, webbings
-				if (!istype(M))
-					continue
-				else
+				var/mob/M = get_holder_of_type(T,/mob/living)
+				if (M && iscultist(M))
 					i++
 					valid_tomes["[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = T
 			for (var/spell/cult/arcane_dimension/A in arcane_pockets)
