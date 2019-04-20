@@ -283,7 +283,7 @@ var/global/list/alert_overlays_global = list()
 		force_open(user, C)
 		return
 	
-	if((C.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT)
+	if(C && (C.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT)
 		if(!density)
 			return
 		if(blocked)
