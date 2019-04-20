@@ -27,7 +27,7 @@
 	else if(iswelder(O))
 		var/obj/item/weapon/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
-			drop_stack(/obj/item/stack/sheet/glass, get_turf(src), 1) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
+			drop_stack(/obj/item/stack/sheet/glass, get_turf(src), 1)
 			returnToPool(src)
 			return
 	else
