@@ -44,15 +44,11 @@
 
 /obj/item/stack/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
+	var/turf/T //turf to extinguish
 	if(isturf(hit_atom))
 		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
 			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
-		for(var/atom/atm in hit_atom) //extinguishing things
-			if(isliving(atm)) // For extinguishing mobs on fire
-				var/mob/living/M = atm
-				M.ExtinguishMob()
-			if(atm.on_fire) // For extinguishing objects on fire
-				atm.extinguish()
+		T = hit_atom
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
@@ -65,6 +61,15 @@
 			H.eye_blind = max(H.eye_blind, rand(1,3))
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[hit_atom] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
+	else
+		T = get_turf(hit_atom)
+
+	for(var/atom/atm in T) //extinguishing things
+		if(isliving(atm)) // For extinguishing mobs on fire
+			var/mob/living/M = atm
+			M.ExtinguishMob()
+		if(atm.on_fire) // For extinguishing objects on fire
+			atm.extinguish()
 
 /obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
