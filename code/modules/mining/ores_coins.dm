@@ -64,12 +64,13 @@
 	else
 		T = get_turf(hit_atom)
 
-	for(var/atom/atm in T) //extinguishing things
-		if(isliving(atm)) // For extinguishing mobs on fire
-			var/mob/living/M = atm
-			M.ExtinguishMob()
-		if(atm.on_fire) // For extinguishing objects on fire
-			atm.extinguish()
+	if(T)
+		for(var/atom/atm in T) //extinguishing things
+			if(isliving(atm)) // For extinguishing mobs on fire
+				var/mob/living/M = atm
+				M.ExtinguishMob()
+			if(atm.on_fire) // For extinguishing objects on fire
+				atm.extinguish()
 
 /obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
