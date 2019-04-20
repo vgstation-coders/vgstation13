@@ -109,24 +109,24 @@
 			AA.preset=preset
 			apply_preset(1) // Only this air alarm should send a cycle.
 
-	TLV["oxygen"] =			list(16, 19, 135, 140) // Partial pressure, kpa
-	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
-	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
-	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
-	TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
+	TLV[GAS_OXYGEN] =			list(16, 19, 135, 140) // Partial pressure, kpa
+	TLV[GAS_OXYGEN] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
+	TLV[GAS_CARBON] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
+	TLV[GAS_PLASMA] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+	TLV[GAS_SLEEPING] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
 	TLV["temperature"] =	list(T0C-30, T0C, T0C+40, T0C+70) // K
 	target_temperature = T0C+20
 	switch(preset)
 		if(AALARM_PRESET_VOX) // Same as usual, s/nitrogen/oxygen
-			TLV["nitrogen"] = 		list(16, 19, 135, 140) // Vox use same partial pressure values for N2 as humans do for O2.
-			TLV["oxygen"] =			list(-1.0, -1.0, 0.5, 1.0) // Under 1 kPa (PP), vox don't notice squat (vox_oxygen_max)
+			TLV[GAS_OXYGEN] = 		list(16, 19, 135, 140) // Vox use same partial pressure values for N2 as humans do for O2.
+			TLV[GAS_OXYGEN] =			list(-1.0, -1.0, 0.5, 1.0) // Under 1 kPa (PP), vox don't notice squat (vox_oxygen_max)
 		if(AALARM_PRESET_SERVER) // Cold as fuck.
-			TLV["oxygen"] =			list(-1.0, -1.0,-1.0,-1.0)
-			TLV["carbon_dioxide"] = list(-1.0, -1.0,   5,  10) // Partial pressure, kpa
-			TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
-			TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
+			TLV[GAS_OXYGEN] =			list(-1.0, -1.0,-1.0,-1.0)
+			TLV[GAS_CARBON] = list(-1.0, -1.0,   5,  10) // Partial pressure, kpa
+			TLV[GAS_PLASMA] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+			TLV[GAS_SLEEPING] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 			TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 			TLV["pressure"] =		list(0,ONE_ATMOSPHERE*0.10,ONE_ATMOSPHERE*1.40,ONE_ATMOSPHERE*1.60) /* kpa */
 			TLV["temperature"] =	list(20, 40, 140, 160) // K
@@ -176,10 +176,10 @@
 
 	// breathable air according to human/Life()
 	/*
-	TLV["oxygen"] =			list(16, 19, 135, 140) // Partial pressure, kpa
-	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
-	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
-	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+	TLV[GAS_OXYGEN] =			list(16, 19, 135, 140) // Partial pressure, kpa
+	TLV[GAS_OXYGEN] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
+	TLV[GAS_CARBON] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
+	TLV[GAS_PLASMA] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
 	TLV["temperature"] =	list(T0C-26, T0C, T0C+40, T0C+66) // K
@@ -291,12 +291,12 @@
 
 
 	var/pressure_dangerlevel = get_danger_level(environment.pressure, TLV["pressure"])
-	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), TLV["oxygen"])
-	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), TLV["nitrogen"])
-	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), TLV["carbon_dioxide"])
-	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), TLV["plasma"])
+	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), TLV[GAS_OXYGEN])
+	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), TLV[GAS_OXYGEN])
+	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), TLV[GAS_CARBON])
+	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), TLV[GAS_PLASMA])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
-	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), TLV["n2o"])
+	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), TLV[GAS_SLEEPING])
 	var/other_dangerlevel = get_danger_level(other_moles / environment.total_moles * environment.pressure, TLV["other"])
 
 	return max(
@@ -434,7 +434,7 @@
 	switch(mode)
 		if(AALARM_MODE_SCRUBBING)
 			for(var/device_id in this_area.air_scrub_names)
-				send_signal(device_id, list("power"= 1, "co2_scrub"= 1, "o2_scrub"=(preset==AALARM_PRESET_VOX), "n2_scrub"=0, "scrubbing"= 1, "panic_siphon"= 0) )
+				send_signal(device_id, list("power"= 1, "scrub_list" = list(GAS_CARBON = TRUE,GAS_OXYGEN=(preset==AALARM_PRESET_VOX),GAS_SLEEPING=FALSE), "scrubbing"= 1, "panic_siphon"= 0) )
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
@@ -535,23 +535,23 @@
 	var/list/current_settings = TLV["pressure"]
 	var/pressure_dangerlevel = get_danger_level(environment.pressure, current_settings)
 
-	current_settings = TLV["oxygen"]
+	current_settings = TLV[GAS_OXYGEN]
 	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), current_settings)
 	var/oxygen_percent = round(environment[GAS_OXYGEN] / total * 100, 2)
 
-	current_settings = TLV["nitrogen"]
+	current_settings = TLV[GAS_OXYGEN]
 	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), current_settings)
 	var/nitrogen_percent = round(environment[GAS_NITROGEN] / total * 100, 2)
 
-	current_settings = TLV["carbon_dioxide"]
+	current_settings = TLV[GAS_CARBON]
 	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), current_settings)
 	var/co2_percent = round(environment[GAS_CARBON] / total * 100, 2)
 
-	current_settings = TLV["plasma"]
+	current_settings = TLV[GAS_PLASMA]
 	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), current_settings)
 	var/plasma_percent = round(environment[GAS_PLASMA] / total * 100, 2)
 
-	current_settings = TLV["n2o"]
+	current_settings = TLV[GAS_SLEEPING]
 	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), current_settings)
 	var/n2o_percent = round(environment[GAS_SLEEPING] / total * 100, 2)
 
@@ -576,22 +576,22 @@
 	data["temperature_c"]=round(environment.temperature - T0C, 0.1)
 
 	var/percentages[0]
-	percentages["oxygen"]=oxygen_percent
-	percentages["nitrogen"]=nitrogen_percent
+	percentages[GAS_OXYGEN]=oxygen_percent
+	percentages[GAS_OXYGEN]=nitrogen_percent
 	percentages["co2"]=co2_percent
-	percentages["plasma"]=plasma_percent
-	percentages["n2o"]=n2o_percent
+	percentages[GAS_PLASMA]=plasma_percent
+	percentages[GAS_SLEEPING]=n2o_percent
 	percentages["other"]=other_percent
 	data["contents"]=percentages
 
 	var/danger[0]
 	danger["pressure"]=pressure_dangerlevel
 	danger["temperature"]=temperature_dangerlevel
-	danger["oxygen"]=oxygen_dangerlevel
-	danger["nitrogen"]=nitrogen_dangerlevel
+	danger[GAS_OXYGEN]=oxygen_dangerlevel
+	danger[GAS_OXYGEN]=nitrogen_dangerlevel
 	danger["co2"]=co2_dangerlevel
-	danger["plasma"]=plasma_dangerlevel
-	danger["n2o"]=n2o_dangerlevel
+	danger[GAS_PLASMA]=plasma_dangerlevel
+	danger[GAS_SLEEPING]=n2o_dangerlevel
 	danger["other"]=other_dangerlevel
 	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,plasma_dangerlevel,other_dangerlevel,temperature_dangerlevel)
 	data["danger"]=danger
@@ -697,11 +697,6 @@
 				"adjust_external_pressure",
 				"set_external_pressure",
 				"checks",
-				"co2_scrub",
-				"tox_scrub",
-				"n2o_scrub",
-				"o2_scrub",
-				"n2_scrub",
 				"panic_siphon",
 				"scrubbing")
 				var/val
@@ -770,7 +765,9 @@
 
 				apply_mode()
 				return 1
-
+			if("scrub_list")
+				//TODO don't forget to copypaste to atmos_control.dm
+				return 1
 	if(href_list["screen"])
 		screen = text2num(href_list["screen"])
 		return 1
