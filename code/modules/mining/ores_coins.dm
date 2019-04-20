@@ -47,6 +47,12 @@
 	if(isturf(hit_atom))
 		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
 			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
+		for(var/atom/atm in hit_atom) //extinguishing things
+			if(isliving(atm)) // For extinguishing mobs on fire
+				var/mob/living/M = atm
+				M.ExtinguishMob()
+			if(atm.on_fire) // For extinguishing objects on fire
+				atm.extinguish()
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
