@@ -12,6 +12,9 @@
 * You can increase the number of fuses needed by editing CHOOSE_FUSES. Increase the number of fuse options by adding fuse_point_names in the datum and newhash proc
 * You can easily change the possible boards by adding, changing, or subtracting from the possible boards list, but if you go over the combination max (default 21), it will cause an infinite loop.
 */
+
+var/global/list/assigned_boards_T1 = list()
+
 /datum/circuits
 	var/atom/holder = null //Which specific board are we pointing at?
 	var/list/fuse_point_names = list("Alpha" = ALPHA, "Beta" = BETA, "Gamma" = GAMMA, "Delta" = DELTA, "Eta" = ETA, "Theta" = THETA, "Iota" = IOTA)
@@ -30,7 +33,6 @@
 		/obj/item/weapon/circuitboard/fishtank,
 		/obj/item/weapon/circuitboard/fishwall,
 		/obj/item/weapon/circuitboard/oven)
-	var/global/list/assigned_boards = list()
 	//Each bitflag points to a board!
 	var/localbit = 0 //What are WE programmed to? Always start as 0
 
@@ -43,15 +45,16 @@
 /datum/circuits/New(var/atom/homeboard)
 	..()
 	holder = homeboard
-	if(!(assigned_boards.len))
-		generate_schema()
+	generate_schema()
 
 /datum/circuits/proc/generate_schema()
+	if(assigned_boards_T1.len)
+		return
 	for(var/C in possible_boards)
 		var/newbit = newhash(CHOOSE_FUSES)
 		while(!check_config(newbit))
 			newbit = newhash(CHOOSE_FUSES)
-		assigned_boards["[newbit]"] = C
+		assigned_boards_T1["[newbit]"] = C
 	return
 
 /datum/circuits/proc/check_config(var/proposed)
