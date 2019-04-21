@@ -156,13 +156,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
 				if(pos)
-					player_area = get_area(H)
+					player_area = "\the " +	replacetext(get_area(H).name, "ÿ", "")
 					if(holomap_enabled) addCrewMarker(pos, H, name, assignment, life_status, damage, player_area)
+
 				addCrewToTextview(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		var/area/parea = get_area(B)
+		var/area/parea = "\the " +	replacetext(get_area(B).name, "ÿ", "")
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
@@ -173,7 +174,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			addCrewToTextview(pos, B, "[B]", "MMI", null, null, parea, 60)
 
 //adding crew to textview list
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/area/player_area = "Not Available", var/ijob = 9999)
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/ijob = 9999)
 	var/role
 	switch(ijob)
 		if(0)	role = "cap" // captain
@@ -198,16 +199,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	else
 		icon = "7"
 
-	var/areaname = replacetext(player_area.name, "ÿ", "")
-
 	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
 	string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
-	string += TU ? "\the [areaname] ([TU.x],[TU.y])" : "Not Available"
+	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
 //create actual marker for crew with sensors on 3
-/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/area/player_area = "Not Available")
+/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available")
 	if(!TU || !H)
 		return
 
@@ -221,7 +220,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(damage)
 		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
 
-	content += "<br>\the " + replacetext(player_area.name, "ÿ", "")
+	content += "<br>\the [player_area]"
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
