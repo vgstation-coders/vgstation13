@@ -1783,6 +1783,6 @@ Game Mode config tags:
         var/mob/M = C
         if(M.client)
             C = M.client
-    if(!C || (!C.prefs.window_flashing && !ignorepref))
+    if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
