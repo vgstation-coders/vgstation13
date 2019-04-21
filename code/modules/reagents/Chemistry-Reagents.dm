@@ -7152,7 +7152,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/luminol
 	name = "Luminol"
 	id = LUMINOL
-	description = "A chmical that exhibits chemiluminescence in the presence of blood due to the iron and copper in the hemoglobin."
+	description = "A chemical that exhibits chemiluminescence in the presence of blood due to the iron and copper in the hemoglobin."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
 
