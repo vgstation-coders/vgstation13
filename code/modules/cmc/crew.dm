@@ -270,7 +270,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/closeHolomap()
 	activator.client.images -= holomap_images
-	activator.client.screen -= holomap_tooltips
 
 	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
 	if(holomap_bgmap in holomap_cache)
@@ -286,6 +285,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(activator && activator.client)
 		closeHolomap()
 		closeTextview()
+		activator.client.screen -= holomap_tooltips //remove btns
 	activator = null
 
 //initializes the holomap
@@ -397,7 +397,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		var/list/ui_btns = list()
 
 		//holomap btn
-		var/obj/abstract/screen/interface/holo_btn = new /obj/abstract/screen/interface(null,activator,src,"holo",'icons/cmc/buttons.dmi',"button_blank","WEST+[ui_offset],SOUTH+13")
+		var/obj/abstract/screen/interface/holo_btn = new /obj/abstract/screen/interface(null,activator,src,"holo",'icons/cmc/buttons.dmi',"blank","WEST+[ui_offset],SOUTH+13")
 		holo_btn.overlays += image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_1"])
 		ui_btns += holo_btn
 
