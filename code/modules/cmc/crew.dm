@@ -504,6 +504,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
-	textview_popup.close()
+	if(textview_popup)
+		textview_popup.close()
 	activator.unset_machine()
 	textview.len = 0
