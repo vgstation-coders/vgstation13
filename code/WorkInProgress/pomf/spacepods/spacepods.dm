@@ -504,7 +504,10 @@
 
 	process(var/obj/spacepod/spacepod)
 		if(spacepod.battery && spacepod.lights_enabled)
-			spacepod.battery.use(SPACEPOD_LIGHTS_CONSUMPTION)
+			if(spacepod.battery.charge > 0)
+				spacepod.battery.use(SPACEPOD_LIGHTS_CONSUMPTION)
+			else
+				spacepod.toggle_lights()
 		return
 
 /obj/spacepod/proc/toggle_lights()
