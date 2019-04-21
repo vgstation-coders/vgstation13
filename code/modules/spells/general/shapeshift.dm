@@ -1,6 +1,6 @@
 /spell/shapeshift
 	name = "Shapeshift (1)"
-	desc = "Changes your name and appearance and has a cooldown of 3 minutes."
+	desc = "Changes your name and appearance, either to someone in view or randomly. Has a cooldown of 3 minutes."
 	abbreviation = "SS"
 
 	school = "vampire"
@@ -48,7 +48,6 @@
 		var/name = user.generate_name() //random_name(M.current.gender)
 		var/datum/human_appearance/new_looks = user.randomise_appearance_for(user.gender)
 		new_looks.name = name
-		user.switch_appearance(new_looks)
 		V.saved_appearances += new_looks
 	else
 		user.switch_appearance(choices[choice])
