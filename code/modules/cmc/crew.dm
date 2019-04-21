@@ -338,6 +338,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
+	if(!handle_sanity())
+		deactivate()
+		return
+
 	if(activator.machine != src && !holomap) deactivate() //neither textview or holomap are open
 
 	update()
@@ -353,10 +357,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //updates textview list as well as crewmarkers
 /obj/machinery/computer/crew/proc/update()
-	if(!handle_sanity())
-		deactivate()
-		return
-
 	activator.client.images -= holomap_images
 
 	holomap_images.len = 0
