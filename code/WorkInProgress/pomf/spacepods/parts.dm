@@ -62,7 +62,7 @@
 	if(istype(O, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = O
 		if(R.amount < 10)
-			to_chat(user, "<span class='notice'>You need 10 rods to do this!")
+			to_chat(user, "<span class='notice'>You need 10 rods to do this!</span>")
 			return
 		var/list/linkedparts = find_square()
 		if(!linkedparts)
