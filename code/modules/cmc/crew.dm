@@ -278,7 +278,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
 
 	holomap_images.len = 0
-	holomap_tooltips.len = 0
 	freeze = 0
 
 // called whenever activator leaves, disables both holomap and textview
@@ -287,6 +286,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		closeHolomap()
 		closeTextview()
 		activator.client.screen -= holomap_tooltips //remove btns
+		holomap_tooltips.len = 0
 	activator = null
 
 //initializes the holomap
@@ -344,10 +344,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		deactivate()
 		return
 
-	if(!textview_popup && !holomap)
-		deactivate() //neither textview or holomap are open
-		return
-
 	update()
 
 	if(textview_updatequeued && !!textview_popup)
@@ -355,7 +351,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity()
-	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)))
+	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)) || (!textview_popup && !holomap))
 		return FALSE
 	return TRUE
 
