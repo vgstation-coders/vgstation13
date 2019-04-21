@@ -3,6 +3,7 @@
 #define FIRE			2
 
 #define SPACEPOD_MOVEDELAY_FAST 0.4
+#define SPACEPOD_MOVEDELAY_MEDIUM 1
 #define SPACEPOD_MOVEDELAY_SLOW 3
 #define SPACEPOD_MOVEDELAY_DEFAULT SPACEPOD_MOVEDELAY_FAST
 
@@ -36,6 +37,8 @@
 	var/list/pod_overlays
 	var/health = 400
 	var/maxHealth = 400
+	light_power = 2
+	light_range = 8
 	appearance_flags = LONG_GLIDE
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
@@ -677,9 +680,12 @@
 	if(movement_delay == SPACEPOD_MOVEDELAY_FAST)
 		movement_delay = SPACEPOD_MOVEDELAY_SLOW
 		to_chat(usr, "<span class='notice'>Thrusters strength: low.</span>")
-	else
+	else if(movement_delay == SPACEPOD_MOVEDELAY_MEDIUM)
 		movement_delay = SPACEPOD_MOVEDELAY_FAST
 		to_chat(usr, "<span class='notice'>Thrusters strength: high.</span>")
+	else
+		movement_delay = SPACEPOD_MOVEDELAY_MEDIUM
+		to_chat(usr, "<span class='notice'>Thrusters strength: medium.</span>")
 
 /obj/spacepod/proc/toggle_passenger_guns()
 	if(usr!=get_pilot())
@@ -705,6 +711,7 @@
 #undef FIRE
 
 #undef SPACEPOD_MOVEDELAY_FAST
+#undef SPACEPOD_MOVEDELAY_MEDIUM
 #undef SPACEPOD_MOVEDELAY_SLOW
 #undef SPACEPOD_MOVEDELAY_DEFAULT
 
