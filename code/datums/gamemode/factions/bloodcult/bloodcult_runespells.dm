@@ -2404,6 +2404,7 @@ var/list/bloodcult_exitportals = list()
 	step(astral,NORTH)
 	astral.dir = SOUTH
 	astral.movespeed = 0.375//twice the default ghost move speed
+	astral.see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 	if (astral.client)
 		for (var/image/I in antag_icons)
