@@ -51,6 +51,9 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
+	if (user.locked_to)
+		to_chat(user, "<span class='warning'>We are restrained!</span>")
+		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
@@ -62,6 +65,10 @@
 	return turfs
 
 /spell/aoe_turf/blink/vamp/cast(var/list/targets, var/mob/user)
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		for (var/datum/organ/external/O in H.organs)
+			O.release_restraints()
 	. = ..()
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)
