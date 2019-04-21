@@ -111,7 +111,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	if(text2num(action) != null)
 		holomap_z = text2num(action)
-	update() //for that nice ui feedback uhhhh
+	process() //for that nice ui feedback uhhhh
 
 //iterating over crew and adding the to textview/holomap
 /obj/machinery/computer/crew/proc/addCrew(var/holomap_enabled = 1)
