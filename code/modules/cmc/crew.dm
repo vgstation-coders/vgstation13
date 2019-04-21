@@ -1,7 +1,8 @@
 var/list/cmc_holomap_cache = list()
 
-///proc/create_progress_bar_on(var/atom/target) from unsorted.dm
-
+/*
+Crew Monitor by Paul, based on the holomaps by Deity
+*/
 /obj/machinery/computer/crew
 	name = "Crew monitoring computer"
 	desc = "Used to monitor active health sensors built into most of the crew's uniforms."
@@ -17,7 +18,6 @@ var/list/cmc_holomap_cache = list()
 	//for the holomap
 	var/mob/activator
 	var/list/holomap_images = list()
-	var/holomap_color = "#5FFF28"
 	var/holomap_filter
 	var/holomap_z = STATION_Z
 	var/list/holomap_tooltips = list()
@@ -68,10 +68,6 @@ var/list/cmc_holomap_cache = list()
 		"Assistant" = 999 //Unknowns/custom jobs should appear after civilians, and before assistants
 	)
 
-
-/obj/machinery/computer/crew/New()
-	..()
-
 /obj/machinery/computer/crew/Destroy()
 	deactivate_holomap()
 	..()
@@ -111,9 +107,7 @@ var/list/cmc_holomap_cache = list()
 		holomap_z = text2num(action)
 	update_holomap() //for that nice ui feedback uhhhh
 
-/*
-	Adding Crew
-*/
+//iterating over crew and adding the to textview/holomap
 /obj/machinery/computer/crew/proc/addCrewToHolomap()
 	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
@@ -172,6 +166,7 @@ var/list/cmc_holomap_cache = list()
 			addCrewMarker(pos, B, "[B]", "MMI", null, null, parea)
 			addCrewToTextview(pos, B, "[B]", "MMI", null, null, parea, 60)
 
+//adding crew to textview list
 /obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/area/player_area = "Not Available", var/ijob = 9999)
 	var/role
 	switch(ijob)
@@ -203,6 +198,7 @@ var/list/cmc_holomap_cache = list()
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
+//create actual marker for crew with sensors on 3
 /obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/area/player_area = "Not Available")
 	if(!TU || !H)
 		return
@@ -246,6 +242,7 @@ var/list/cmc_holomap_cache = list()
 
 	holomap_tooltips += I
 
+//helper to get healthstate
 /obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
 	var/health = 0
 	for(var/dam in damage)
@@ -265,9 +262,7 @@ var/list/cmc_holomap_cache = list()
 		else
 			return "0"
 
-/*
-	holomap stuff
-*/
+// called whenever activator leaves, disables both holomap and textview
 /obj/machinery/computer/crew/proc/deactivate_holomap()
 	if(activator && activator.client)
 		activator.client.images -= holomap_images
@@ -285,6 +280,7 @@ var/list/cmc_holomap_cache = list()
 	textview.len = 0
 	freeze = 0
 
+//toggles open the holomap
 /obj/machinery/computer/crew/proc/togglemap(mob/user)
 	if(user.isUnconscious())
 		return
@@ -331,17 +327,20 @@ var/list/cmc_holomap_cache = list()
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
+//ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
 	update_holomap()
 
 	if(textview_updatequeued && (src == activator.machine))
 		updateTextView()
 
+//ahhh
 /obj/machinery/computer/crew/proc/handle_sanity()
 	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)))
 		return FALSE
 	return TRUE
 
+//updates textview list as well as crewmarkers
 /obj/machinery/computer/crew/proc/update_holomap()
 	if(!handle_sanity())
 		deactivate_holomap()
@@ -361,7 +360,6 @@ var/list/cmc_holomap_cache = list()
 	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
 
 	bgmap = holomap_cache[holomap_bgmap]
-	//bgmap.color = holomap_color
 	bgmap.plane = HUD_PLANE
 	bgmap.layer = HUD_BASE_LAYER
 	bgmap.loc = activator.hud_used.holomap_obj
@@ -377,6 +375,7 @@ var/list/cmc_holomap_cache = list()
 	activator.client.images |= holomap_images
 	activator.client.screen |= holomap_tooltips
 
+//updates the ui-btns
 /obj/machinery/computer/crew/proc/updateUI()
 	var/uid = "ui_btns_\ref[activator]_\ref[src]"
 	if(!cmc_holomap_cache[uid])
@@ -417,6 +416,7 @@ var/list/cmc_holomap_cache = list()
 /obj/abstract/screen/interface/tooltip/proc/parseToChat()
 	to_chat(user, parseAdd)
 
+//subclass to do some cmc-specific stuff like setting freeze and parsing to chat without supercall
 /obj/abstract/screen/interface/tooltip/CrewIcon
 	var/obj/machinery/computer/crew/CMC
 
@@ -424,7 +424,7 @@ var/list/cmc_holomap_cache = list()
 	CMC = CM
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/Click(location,control,params)
-	parseToChat()
+	parseToChat() //no supercall so we don't trigger interface_act (we don't want that)
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
 	if(CMC) CMC.freeze = 1
@@ -446,6 +446,7 @@ var/list/cmc_holomap_cache = list()
 		updateTextView()
 		return
 
+//initializes textview, only called once
 /obj/machinery/computer/crew/proc/openTextview()
 	textview_updatequeued = 1
 	activator.set_machine(src)
@@ -458,13 +459,10 @@ var/list/cmc_holomap_cache = list()
 	onclose(activator, "cmc_textview", src)
 	updateTextView()
 
+//updates the textview, called every process() when enabled
 /obj/machinery/computer/crew/proc/updateTextView()
 	//styles
-	var/list/t = "<html><head><title>Crew Monitor</title>"
-
-	t += "</head><body>"
-
-	t += "<kbd><a href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
+	var/list/t = "<html><head><title>Crew Monitor</title></head><body><kbd><a href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
 
 	//adding table rows
 	for(var/i=1, i<=textview.len, i++)
@@ -475,6 +473,7 @@ var/list/cmc_holomap_cache = list()
 	textview_popup.set_content(jointext(t, ""))
 	textview_popup.open()
 
+//taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
 	activator.unset_machine()
