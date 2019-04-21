@@ -333,6 +333,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			holomap_z_levels_unmapped |= CENTCOMM_Z
 
 		holomap = 1
+		textview_active = 0
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
@@ -342,11 +343,13 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		deactivate()
 		return
 
-	if(activator.machine != src && !holomap) deactivate() //neither textview or holomap are open
+	if(!textview_popup && !holomap)
+		deactivate() //neither textview or holomap are open
+		return
 
 	update()
 
-	if(textview_updatequeued && (src == activator.machine))
+	if(textview_updatequeued && !!textview_popup)
 		updateTextView()
 
 //ahhh
@@ -480,7 +483,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //initializes textview, only called once
 /obj/machinery/computer/crew/proc/openTextview()
 	textview_updatequeued = 1
-	activator.set_machine(src)
 	if(activator.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
 		send_asset_list(activator.client, C.assets)
@@ -509,5 +511,5 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	textview_updatequeued = 0
 	if(textview_popup)
 		textview_popup.close()
-	activator.unset_machine()
+		textview_popup = null
 	textview.len = 0
