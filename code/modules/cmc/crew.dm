@@ -124,7 +124,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		var/assignment
 		var/life_status
 		var/list/damage
-		var/area/player_area
+		var/player_area
 		var/ijob
 
 		// z == 0 means mob is inside object, check is they are wearing a uniform
@@ -156,14 +156,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
 				if(pos)
-					player_area = "\the " +	replacetext(get_area(H).name, "ÿ", "")
+					player_area = "\the " + format_text(get_area(H).name)
 					if(holomap_enabled) addCrewMarker(pos, H, name, assignment, life_status, damage, player_area)
 
 				addCrewToTextview(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		var/area/parea = "\the " +	replacetext(get_area(B).name, "ÿ", "")
+		var/parea = "\the " + format_text(get_area(B).name)
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
@@ -220,7 +220,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(damage)
 		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
 
-	content += "<br>\the [player_area]"
+	content += "<br>[player_area]"
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
