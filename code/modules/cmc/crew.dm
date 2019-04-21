@@ -357,11 +357,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //updates textview list as well as crewmarkers
 /obj/machinery/computer/crew/proc/update()
-	activator.client.images -= holomap_images
-
-	holomap_images.len = 0
 
 	if(holomap && !freeze) // we only repopulate user.client.images if holomap is enabled
+		activator.client.images -= holomap_images
+		holomap_images.len = 0
 
 		var/image/bgmap
 		var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
@@ -374,6 +373,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
 		holomap_images += bgmap
+	else if(!holomap)
+		activator.client.images -= holomap_images
+		holomap_images.len = 0
+
 
 	activator.client.screen -= holomap_tooltips
 
