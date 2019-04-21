@@ -71,3 +71,12 @@
 	..()
 	var/obj/spacepod/S = target
 	S.change_speed()
+
+/datum/action/spacepod/pilot/toggle_lights
+	name = "Toggle lights"
+	button_icon_state = "toggle_lights"
+
+/datum/action/spacepod/pilot/toggle_lights/Trigger()
+	..()
+	var/obj/spacepod/S = target
+	S.toggle_lights()
