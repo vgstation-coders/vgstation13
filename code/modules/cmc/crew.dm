@@ -198,9 +198,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	else
 		icon = "7"
 
+	var/areaname = replacetext(player_area.name, "ÿ", "")
+
 	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
 	string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
-	string += TU ? "[player_area.name] ([TU.x],[TU.y])" : "Not Available"
+	string += TU ? "\the [areaname] ([TU.x],[TU.y])" : "Not Available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
@@ -219,7 +221,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(damage)
 		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
 
-	content += "<br>[player_area.name]"
+	content += "<br>\the " + replacetext(player_area.name, "ÿ", "")
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
@@ -333,7 +335,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			holomap_z_levels_unmapped |= CENTCOMM_Z
 
 		holomap = 1
-		textview_active = 0
+		textview_popup = null
 		process()
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
