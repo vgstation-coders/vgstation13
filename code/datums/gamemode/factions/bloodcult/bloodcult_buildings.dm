@@ -687,6 +687,7 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
+		var/mob/M_ckey = usr.ckey
 		if(!isobserver(M) || !iscultist(M))
 			return
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
@@ -704,8 +705,7 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
-		/*
-		shadeMob.ckey = usr.ckey
+		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
 			shadeMob.real_name = pick(shade_names)
@@ -727,6 +727,9 @@
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
 		cult_risk()//risk of exposing the cult early if too many soul blades created
+
+		spawn(1)
+			shadeMob.ckey = M_ckey
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual

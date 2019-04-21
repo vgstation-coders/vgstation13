@@ -458,6 +458,8 @@
 	if (!istype(user)) // Ghosts
 		return
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
+	if (!reminder)
+		return
 	reminder = utf8_sanitize(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
@@ -816,7 +818,7 @@
 		for (var/mob/living/silicon/S in T) // Has science gone too far????
 			if (!iscultist(S))
 				targets.Add(S)
-			
+
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
 			targets.Add(C)
@@ -2401,6 +2403,7 @@ var/list/bloodcult_exitportals = list()
 
 	step(astral,NORTH)
 	astral.dir = SOUTH
+	astral.movespeed = 0.375//twice the default ghost move speed
 
 	if (astral.client)
 		for (var/image/I in antag_icons)
