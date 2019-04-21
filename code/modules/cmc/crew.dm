@@ -23,6 +23,7 @@ var/list/cmc_holomap_cache = list()
 	var/list/holomap_tooltips = list()
 	var/freeze = 0
 	var/list/textview = list()
+	var/datum/browser/textview_popup
 	var/textview_updatequeued = 0
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z)
 	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z)
@@ -171,7 +172,7 @@ var/list/cmc_holomap_cache = list()
 			addCrewMarker(pos, B, "[B]", "MMI", null, null, parea)
 			addCrewToTextview(pos, B, "[B]", "MMI", null, null, parea, 60)
 
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/area/player_area = "Mot Available", var/ijob = 9999)
+/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/area/player_area = "Not Available", var/ijob = 9999)
 	var/role
 	switch(ijob)
 		if(0)	role = "cap" // captain
@@ -198,7 +199,7 @@ var/list/cmc_holomap_cache = list()
 
 	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
 	string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
-	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
+	string += TU ? "[player_area.name] ([TU.x],[TU.y])" : "Not Available"
 	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 	textview += actualstring
 
@@ -216,7 +217,7 @@ var/list/cmc_holomap_cache = list()
 	if(damage)
 		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
 
-	content += "<br>[player_area]"
+	content += "<br>[player_area.name]"
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
 		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
@@ -448,18 +449,22 @@ var/list/cmc_holomap_cache = list()
 /obj/machinery/computer/crew/proc/openTextview()
 	textview_updatequeued = 1
 	activator.set_machine(src)
-	/*if(activator.client)
+	if(activator.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
-		send_asset_list(activator.client, C.assets)*/
-	activator << browse("", "window=cmc_textview;size=900x600")
+		send_asset_list(activator.client, C.assets)
+	textview_popup = new(activator, "cmc_textview", "Crew Monitoring", 900, 600, src)
+	textview_popup.add_stylesheet("cmc", 'html/browser/cmc.css')
+	textview_popup.open()
 	onclose(activator, "cmc_textview", src)
 	updateTextView()
 
 /obj/machinery/computer/crew/proc/updateTextView()
 	//styles
-	var/list/t = "<html><head><title>Crew Monitor</title><link rel='stylesheet' type='text/css' href='cmc.css'/></head><body>"
+	var/list/t = "<html><head><title>Crew Monitor</title>"
 
-	t += "<kbd><b class='fuckbyond'>Crew Monitoring</b><a class='fuckbyond' href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><a class='fuckbyond' href='?src=\ref[src];close=1'>Close</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
+	t += "</head><body>"
+
+	t += "<kbd><a href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
 
 	//adding table rows
 	for(var/i=1, i<=textview.len, i++)
@@ -467,11 +472,9 @@ var/list/cmc_holomap_cache = list()
 
 	t += "</table></kbd></body></html>"
 
-	var/texttest = jointext(t, "")
-
-	activator << browse(texttest, "window=cmc_textview;size=900x600")
+	textview_popup.set_content(jointext(t, ""))
+	textview_popup.open()
 
 /obj/machinery/computer/crew/proc/closeTextview()
 	textview_updatequeued = 0
 	activator.unset_machine()
-	activator << browse(null, "window=cmc_textview;size=900x600")

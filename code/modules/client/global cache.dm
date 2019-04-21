@@ -339,7 +339,7 @@
 
 /datum/asset/simple/cmc_css_icons
 	assets = list(
-		"cmc.css" = 'html/browser/cmc.css',
+		//"cmc.css" = 'html/browser/cmc.css',
 		"cmc_background.png" = 'icons/cmc/css_icons/background.png',
 		"cmc_0.png" = 'icons/cmc/css_icons/0.png',
 		"cmc_1.png" = 'icons/cmc/css_icons/1.png',
