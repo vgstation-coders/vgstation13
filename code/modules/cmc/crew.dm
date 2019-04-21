@@ -156,14 +156,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
 				if(pos)
-					player_area = "\the " + format_text(get_area(H).name)
+					player_area = format_text(get_area(H).name)
 					if(holomap_enabled) addCrewMarker(pos, H, name, assignment, life_status, damage, player_area)
 
 				addCrewToTextview(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		var/parea = "\the " + format_text(get_area(B).name)
+		var/parea = format_text(get_area(B).name)
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
