@@ -441,18 +441,18 @@ var/list/cmc_holomap_cache = list()
 		closeTextview()
 		return
 	if(href_list["toggle"])
-		textview_updatequeued = textview_updatequeued ? 0 : 1
+		textview_updatequeued = !textview_updatequeued
 		updateTextView()
 		return
 
 /obj/machinery/computer/crew/proc/openTextview()
 	textview_updatequeued = 1
 	activator.set_machine(src)
-	if(activator.client)
+	/*if(activator.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
-		send_asset_list(activator.client, C.assets)
+		send_asset_list(activator.client, C.assets)*/
 	activator << browse("", "window=cmc_textview;size=900x600")
-	onclose(activator, "cmc_textview")
+	onclose(activator, "cmc_textview", src)
 	updateTextView()
 
 /obj/machinery/computer/crew/proc/updateTextView()
