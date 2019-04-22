@@ -14,12 +14,12 @@
 	invocation_type = SpI_SHOUT
 	spell_flags = NEEDSCLOTHES
 	hud_state = "wiz_doppelganger"
-	var/spell_duration = 8 MINUTES
+	var/spell_duration = 1 MINUTES
 
 
 var/list/doppelgangers_count_by_wizards = list()
 var/list/doppelgangers = list()
-#define MAX_DOPPLES 15
+#define MAX_DOPPLES 5
 
 // Sanity : don't copy more than one guy
 /spell/aoe_turf/conjure/doppelganger/cast_check(skipcharge = 0,mob/user = usr)
