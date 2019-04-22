@@ -53,6 +53,7 @@
 	ranged_cooldown_cap = 2
 	retreat_distance = 5
 	minimum_distance = 5
+	health = 40
 	attack_sound = "punch"
 	var/mob/creator
 	var/spell/spell
