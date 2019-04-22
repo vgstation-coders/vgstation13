@@ -199,3 +199,11 @@
 
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
+
+// -- Injection delays (in ticks, ie, * 2 byond seconds)
+
+#define LATEJOIN_DELAY_MIN 600
+#define LATEJOIN_DELAY_MAX 2000
+
+#define MIDROUND_DELAY_MIN 1000
+#define MIDROUND_DELAY_MAX 3000

@@ -175,8 +175,8 @@ var/dynamic_curve_width = 1.8
 	threat = threat_level
 	starting_threat = threat_level
 
-	latejoin_injection_cooldown = rand(330,510)
-	midround_injection_cooldown = rand(600,1050)
+	latejoin_injection_cooldown = rand(LATEJOIN_DELAY_MIN,LATEJOIN_DELAY_MAX)
+	midround_injection_cooldown = rand(MIDROUND_DELAY_MIN,MIDROUND_DELAY_MAX)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
 
