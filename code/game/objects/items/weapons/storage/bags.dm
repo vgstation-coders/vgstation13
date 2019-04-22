@@ -138,8 +138,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		user.on_moved.Remove(T, "mob_moved")
 		T.event_key = null
 
-/obj/item/weapon/storage/bag/ore/auto/proc/auto_collect()
-	var/atom/collect_loc = get_turf(loc)
+/obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
 		preattack(collect_loc, src, TRUE)
 		break
@@ -159,11 +158,11 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	if(isrobot(holder))
 		var/mob/living/silicon/robot/S = holder
 		if(locate(src) in S.get_all_slots())
-			auto_collect()
+			auto_collect(get_turf(src))
 			auto_fill(holder)
 	else
 		if(holder.is_holding_item(src))
-			auto_collect()
+			auto_collect(get_turf(src))
 			auto_fill(holder)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)

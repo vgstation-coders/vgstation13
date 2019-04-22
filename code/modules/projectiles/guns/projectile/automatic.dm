@@ -278,7 +278,7 @@
 		return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/vector/attackby(obj/item/used_item, mob/user)
-	if(isscrewdriver(used_item) && receiver)
+	if(used_item.is_screwdriver(user) && receiver)
 		if(stored_magazine)
 			to_chat(user, "<span class='warning'>You need to remove the magazine first!</span>")
 		else

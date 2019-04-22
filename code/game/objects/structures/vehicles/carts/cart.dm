@@ -51,7 +51,7 @@
 		return
 
 	if (next_cart)
-		next_cart.Move(oldloc)
+		next_cart.Move(oldloc, glide_size_override = src.glide_size)
 
 	if (next_cart) //This one is really unlikely to happen
 		if (get_dist(next_cart, src) > 1.99) //This is a nasty nasty hack but IT WORKS SO DON'T TOUCH IT

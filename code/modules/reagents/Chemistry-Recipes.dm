@@ -80,15 +80,8 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
-		holder.del_reagent(POTASSIUM)
-		holder.del_reagent(WATER)
-		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
-		holder.add_reagent(HYDROGEN, created_volume * REM)
-	else
-		holder.clear_reagents()
-		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
-		holder.add_reagent(HYDROGEN, created_volume * REM)
+	holder.clear_reagents()
+	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
@@ -510,12 +503,7 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
-		holder.del_reagent(GLYCEROL)
-		holder.del_reagent(PACID)
-		holder.del_reagent(SACID)
-	else
-		holder.clear_reagents()
+	holder.clear_reagents()
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
@@ -2516,6 +2504,13 @@
 	required_reagents = list(VODKA = 2, VERMOUTH = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/sakemartini
+	name = "Sake Martini"
+	id = SAKEMARTINI
+	result = SAKEMARTINI
+	required_reagents = list(SAKE = 1, GIN = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/white_russian
 	name = "White Russian"
 	id = WHITERUSSIAN
@@ -3040,7 +3035,7 @@
 	result_amount = 10
 
 /datum/chemical_reaction/seccoffee
-	name = "Wake up call"
+	name = "Wake-Up Call"
 	id = SECCOFFEE
 	result = SECCOFFEE
 	required_reagents = list(COFFEE = 5, SPRINKLES = 1, BEEPSKYSMASH = 5)

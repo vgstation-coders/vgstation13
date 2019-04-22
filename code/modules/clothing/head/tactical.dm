@@ -25,7 +25,7 @@
 		user.update_action_buttons_icon()
 		user.update_inv_head()
 		return
-	if(isscrewdriver(I) && src.flashlight)
+	if(I.is_screwdriver(user) && src.flashlight)
 		flashlight.forceMove(get_turf(src))
 		flashlight.update_brightness(user, playsound = FALSE)
 		flashlight = null

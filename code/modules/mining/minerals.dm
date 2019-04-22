@@ -32,13 +32,10 @@ mineral
 		T.UpdateMineral()
 
 mineral/proc/DropMineral(var/turf/unsimulated/mineral/T)
-	var/obj/item/O
-	if(ispath(O,/obj/item/stack))
-		O = drop_stack(ore, T, 1)
-	else
-		O = new ore(T)
-	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
-	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
+	var/obj/item/O = drop_stack(ore, T, result_amount)
+	if(O.pixel_x != 0 && O.pixel_y != 0) //give it a little jiggle
+		O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
+		O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O, /obj/item/stack/ore))
 		var/obj/item/stack/ore/OR = O
 		if(!T.geologic_data)

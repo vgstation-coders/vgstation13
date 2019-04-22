@@ -403,7 +403,7 @@
 /obj/item/weapon/storage/box/monkeycubes/New()
 	..()
 	if(src.type == /obj/item/weapon/storage/box/monkeycubes)
-		for(var/i = 1; i <= 5; i++)
+		for(var/i = 1; i <= 6; i++)
 			new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src)
 
 /obj/item/weapon/storage/box/monkeycubes/farwacubes

@@ -30,10 +30,20 @@
 	icon_state = "stamp-hop"
 	_color = "hop"
 
+/obj/item/weapon/stamp/iaa
+	name = "internal affairs rubber stamp"
+	icon_state = "stamp-iaa"
+	_color = "lightblue"
+
 /obj/item/weapon/stamp/hos
 	name = "head of security's rubber stamp"
 	icon_state = "stamp-hos"
 	_color = "hosred"
+
+/obj/item/weapon/stamp/warden
+	name = "warden's rubber stamp"
+	icon_state = "stamp-warden"
+	_color = "darkred"
 
 /obj/item/weapon/stamp/ce
 	name = "chief engineer's rubber stamp"
@@ -59,6 +69,11 @@
 	name = "clown's rubber stamp"
 	icon_state = "stamp-clown"
 	_color = "clown"
+
+/obj/item/weapon/stamp/chaplain
+	name = "chaplain's seal"
+	icon_state = "stamp-chaplain"
+	_color = "red"
 
 
 /obj/item/weapon/stamp/attack_paw(mob/user as mob)

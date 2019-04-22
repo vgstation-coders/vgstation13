@@ -358,9 +358,9 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
 	required_enemies = list(3,2,2,1,1,1,0,0,0,0)
 	required_candidates = 1
-	weight = 3
-	cost = 15
-	requirements = list(90,60,40,40,40,40,30,20,15,15)
+	weight = 2
+	cost = 30
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
 	logo = "blob-logo"
 
@@ -486,11 +486,11 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
 	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
-	var/datum/preferences/A = new()
-	A.randomize_appearance_for(new_frank)
+	var/gender = pick(MALE, FEMALE)
+	new_frank.randomise_appearance_for(gender)			
 	new_frank.key = applicant.key
 	new_frank.dna.ready_dna(new_frank)
-	new_frank.setGender(pick(MALE, FEMALE))
+	new_frank.setGender(gender)
 	return new_frank
 
 //////////////////////////////////////////////
