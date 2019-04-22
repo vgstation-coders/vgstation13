@@ -10,6 +10,7 @@ nanoui is used to open and update nano browser uis
 #define STATUS_INTERACTIVE 2 // GREEN Visability
 #define STATUS_UPDATE 1 // ORANGE Visability
 #define STATUS_DISABLED 0 // RED Visability
+#define STATUS_CLOSE -1 // Close the window
 /datum/nanoui
 	// the user who opened this ui
 	var/mob/user
@@ -56,6 +57,8 @@ nanoui is used to open and update nano browser uis
 	var/is_auto_updating = 0
 	// the current status/visibility of the ui
 	var/status = STATUS_INTERACTIVE
+	// the proc to set the status
+	var/status_proc
 
 	// Only allow users with a certain user.stat to get updates. Defaults to 0 (concious)
 	var/allowed_user_stat = 0 // -1 = ignore, 0 = alive, 1 = unconcious or alive, 2 = dead concious or alive
@@ -75,12 +78,13 @@ nanoui is used to open and update nano browser uis
   *
   * @return /nanoui new nanoui object
   */
-/datum/nanoui/New(nuser, nsrc_object, nui_key, ntemplate_filename, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null, ignore_distance = 0)
+/datum/nanoui/New(nuser, nsrc_object, nui_key, ntemplate_filename, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null, ignore_distance = 0, nstatus_proc = /datum/nanoui/proc/default_status_proc)
 	user = nuser
 	src_object = nsrc_object
 	ui_key = nui_key
 	window_id = "[ui_key]\ref[src_object]"
 	distance_check = !ignore_distance
+	status_proc = nstatus_proc
 	// add the passed template filename as the "main" template, this is required
 	add_template("main", ntemplate_filename)
 
@@ -156,6 +160,24 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/update_status(var/push_update = 0)
+		var/status = call(status_proc)(src_object)(user)(allowed_user_stat)
+
+		if(status == STATUS_CLOSE)
+			close()
+			return
+
+		set_status(status, push_update)
+
+	/**
+   * The default proc to be called by update_status()
+   *
+	 * @param nsrc_object /obj|/mob The obj or mob which this ui belongs to
+	 * @param nuser /mob The mob who has opened/owns this ui
+	 * @param allowed_user_state int (bool) Only allow users with a certain user.stat to get updates
+   *
+   * @return nothing
+   */
+/datum/nanoui/proc/default_status_proc(var/src_object, var/mob/user, var/allowed_user_stat)
 	if (check_interactive())
 		set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
 	else
@@ -168,31 +190,29 @@ nanoui is used to open and update nano browser uis
 				if(A.ghost_write)
 					ghost_flags |= PERMIT_ALL
 				if(canGhostWrite(O,A,"",ghost_flags) || isAdminGhost(O))
-					set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
-					return
+					return STATUS_INTERACTIVE // interactive (green visibility)
 				else if(canGhostRead(O,A,ghost_flags))
-					set_status(STATUS_UPDATE, push_update)
-					return
-			dist = get_dist(src_object, user)
+					return STATUS_UPDATE
+			dist = get_dist(src_obj, user)
 
 		if (dist > 4)
-			close()
-			return
+			return STATUS_CLOSE
 
 		if ((allowed_user_stat > -1) && (user.stat > allowed_user_stat))
-			set_status(STATUS_DISABLED, push_update) // no updates, completely disabled (red visibility)
+			return STATUS_DISABLED // no updates, completely disabled (red visibility)
 		else if (user.restrained() || user.lying)
-			set_status(STATUS_UPDATE, push_update) // update only (orange visibility)
+			return STATUS_UPDATE // update only (orange visibility)
 		else if (istype(src_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
-			set_status(STATUS_INTERACTIVE, push_update)	     // Will build in distance checks on the topics for sanity.
+			return STATUS_INTERACTIVE // Will build in distance checks on the topics for sanity.
 		else if (!(src_object in view(4, user))) // If the src object is not in visable, set status to 0
-			set_status(STATUS_DISABLED, push_update) // interactive (green visibility)
+			return STATUS_DISABLED // interactive (green visibility)
 		else if (dist <= 1)
-			set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
+			return STATUS_INTERACTIVE // interactive (green visibility)
 		else if (dist <= 2)
-			set_status(STATUS_UPDATE, push_update) // update only (orange visibility)
+			return STATUS_UPDATE // update only (orange visibility)
 		else if (dist <= 4)
-			set_status(STATUS_DISABLED, push_update) // no updates, completely disabled (red visibility)
+			return STATUS_DISABLED // no updates, completely disabled (red visibility)
+
 
  /**
   * Set the ui to auto update (every master_controller tick)
