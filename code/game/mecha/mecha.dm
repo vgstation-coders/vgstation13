@@ -782,6 +782,10 @@
 	user.delayNextAttack(8)
 	user.do_attack_animation(src, W)
 	src.log_message("Attacked by [W]. Attacker - [user]")
+
+	if (istype(W, /obj/item/weapon/talisman/)) // Terribly snowflake but fuck you mech code
+		return W.attack(src, user)
+
 	if(prob(src.deflect_chance))
 		to_chat(user, "<span class='attack'>The [W] bounces off [src.name] armor.</span>")
 		src.log_append_to_last("Armor saved.")

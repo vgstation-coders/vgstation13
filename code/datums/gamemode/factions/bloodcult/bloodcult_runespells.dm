@@ -1162,14 +1162,29 @@
 	new/obj/effect/cult_ritual/stun(T,2)
 	qdel(src)
 
-/datum/rune_spell/stun/cast_touch(var/mob/M)
-	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+/datum/rune_spell/stun/cast_touch(var/atom/movable/A)
+	anim(target = A, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
 	if (prob(15))//for old times' sake
 		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
 		invoke(activator,invocation,1)
+	
+	if (!ismob(A))
+		if (ismecha(A))
+			var/obj/mecha/mech = A
+			mech.emp_act(3) // Visible effect of a small EMP
+			if (ishuman(mech.occupant)) // Not quite as much as the real thing
+				var/mob/living/carbon/human/H = mech.occupant
+				to_chat(H, "<span class='warning'>The chassis suddenly violently shakes and you feel a sudden sensation of falling.</span>")
+				H.Stun(5)
+				H.stuttering += 60
+				H.Jitter(30)
+			qdel(src)
+		return
+			
+	var/mob/M = A
 
 	if(issilicon(M))
 		to_chat(M, "<span class='danger'>WARNING: Short-circuits detected, Rebooting...</span>")
