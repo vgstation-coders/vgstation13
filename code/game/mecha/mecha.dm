@@ -93,6 +93,10 @@
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -699,9 +703,9 @@
 	return
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
-	if(prob(src.deflect_chance))
+	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))
 		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		src.visible_message("The [src.name] armor deflects the projectile")
+		src.visible_message("<span class='warning'>\The [src.name] armor deflects the projectile.</span>")
 		src.log_append_to_last("Armor saved.")
 		return
 	var/ignore_threshold
