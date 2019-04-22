@@ -268,47 +268,6 @@ proc/move_mining_shuttle()
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
 
-/obj/item/weapon/pickaxe/plasmacutter/accelerator
-	digspeed = 5
-	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
-	var/plasma_ammo = 15
-
-obj/item/weapon/pickaxe/plasmacutter/accelerator/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
-	if(proximity_flag)
-		return
-	if(user.is_pacified(VIOLENCE_SILENT,A,src))
-		return
-	if(plasma_ammo >0)
-		plasma_ammo--
-		var/turf/starting = get_turf(user)
-		var/turf/target = get_turf(A)
-		var/obj/item/projectile/kinetic/BS = new (starting)
-		BS.firer = user
-		BS.original = target
-		BS.target = target
-		BS.current = starting
-		BS.starting = starting
-		BS.yo = target.y - starting.y
-		BS.xo = target.x - starting.x
-		user.delayNextAttack(4)
-		if(user.zone_sel)
-			BS.def_zone = user.zone_sel.selecting
-		else
-			BS.def_zone = LIMB_CHEST
-		BS.OnFired()
-		playsound(starting, 'sound/weapons/Taser.ogg', 50, 1)
-		BS.process()
-	else
-		src.visible_message("*click click*")
-		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
-
-obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && istype(target, /obj/item/weapon/plasma_cartridge))
-		var/obj/item/weapon/plasma_cartridge/A = target
-		if(A.has_plasma)
-			plasma_ammo = 15
-			A.has_plasma = FALSE
-
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
 	icon_state = "dpickaxe"
@@ -992,26 +951,3 @@ obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user,
 	desc = "A sign that warns would-be space travellers of hostile alien life in the vicinity."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "xeno_warning"
-
-/**********************Plasma Cartridge**********************/
-/obj/item/weapon/plasma_cartridge
-	name = "Plasma Catridge"
-	desc = "A small box capable of storing heated plasma"
-	icon = 'icons/obj/mining.dmi'//plaac
-	icon_state = "xeno_warning"
-	var/has_plasma = TRUE
-
-/obj/item/weapon/plasma_cartridge/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && istype(target, /obj/item/stack/sheet))
-		var/obj/item/stack/sheet/A = target
-		if(A.mat_type == MAT_PLASMA && A.amount >= 15)
-			if(has_plasma == FALSE)
-				has_plasma = TRUE
-				A.amount = A.amount - 15
-			else
-				to_chat(user, "The [src] is already loaded")
-		else
-			if(!A.mat_type == MAT_PLASMA)
-				to_chat(user, "The [src] cannot load that")
-			else
-				to_chat(user, "That is not enough to load the [src]")
