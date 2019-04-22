@@ -1,8 +1,74 @@
-var/global/vox_tick = 1
+/datum/faction/vox_shoal
+	name = "Vox Shoal"
+	desc = "In short supply of money, organs, experts, and rubber duckies."
+	ID = VOXSHOAL
+	required_pref = VOXRAIDER
+	initial_role = VOXRAIDER
+	late_role = VOXRAIDER
+	roletype = /datum/role/vox_raider
+	initroletype = /datum/role/vox_raider
+	logo_state = "vox-logo"
+	hud_icons = list("vox-logo")
+
+/datum/faction/vox_shoal/forgeObjectives()
+
+/datum/faction/vox_shoal/GetScoreboard()
+
+/datum/faction/vox_shoal/AdminPanelEntry()
+
+/datum/faction/vox_shoal/OnPostSetup()
+	..()
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			qdel(A)
+			A = null
+			continue
+
+	var/spawn_count = 1
+
+	for(var/datum/role/vox_raider/V in members)
+		if(spawn_count > vox_spawn.len)
+			spawn_count = 1
+		var/datum/mind/synd_mind = V.antag
+		synd_mind.current.forceMove(vox_spawn[spawn_count])
+		spawn_count++
+		if (istype(V, /datum/role/vox_raider/chief_vox))
+			equip_raider(synd_mind.current)
+		equip_raider(synd_mind.current)
+
+/datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	vox.equip_vox_raider()
+	vox.regenerate_icons()
 
 /mob/living/carbon/human/proc/equip_vox_raider()
-
-
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
 	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
 	equip_to_slot_or_del(R, slot_ears)
@@ -14,7 +80,9 @@ var/global/vox_tick = 1
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
 	equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
 
-	switch(vox_tick)
+	var/index = 1
+
+	switch(index)
 		if(1) // Vox raider!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
 			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
@@ -76,8 +144,8 @@ var/global/vox_tick = 1
 	// NO. /vg/ spawn_money(rand(50,150)*10,W)
 	equip_to_slot_or_del(W, slot_wear_id)
 
-	vox_tick++
-	if (vox_tick > 4)
-		vox_tick = 1
+	index++
+	if (index > 4)
+		index = 1
 
 	return 1

@@ -560,14 +560,6 @@
 
 //________________________________________________
 
-/datum/role/vox_raider
-	name = VOXRAIDER
-	id = VOXRAIDER
-	special_role = VOXRAIDER
-	logo_state = "vox-logo"
-
-//________________________________________________
-
 /datum/role/wish_granter_avatar
 	name = WISHGRANTERAVATAR
 	id = WISHGRANTERAVATAR
