@@ -92,6 +92,79 @@
 
 	usr << browse(list, "window=laws")
 
+/mob/living/silicon/robot/proc/statelaws_fake()
+	log_admin("[usr]/[ckey(usr.key)] lied about its silicon laws.")
+	say(";Current Active Laws:")
+	sleep(10)
+	
+	for(var/law in fake_laws)
+		say(";[law]")
+		sleep(10)
+
+/mob/living/silicon/robot/proc/statelaws_fake_show_mainscreen()
+	//if we don't have new laws yet, set a default
+	if(fake_laws == null && laws)
+		fake_laws = new/list()
+		var/datum/ai_laws/temp_laws = laws //dupe our own laws so we don't modify them
+		if(connected_ai && AIlink) //use connected AI laws if we have one
+			temp_laws = connected_ai.laws
+
+		if(temp_laws.zeroth)
+			fake_laws.Add("0. [temp_laws.zeroth]")
+
+		for(var/law in temp_laws.ion)
+			var/num = ionnum()
+			fake_laws.Add("[num]. [law]")
+
+		var/lawnum = 1
+
+		for(var/law in temp_laws.inherent)
+			fake_laws.Add("[lawnum]. [law]")		
+			lawnum++
+
+		for(var/law in temp_laws.supplied)
+			fake_laws.Add("[lawnum]. [law]")
+			lawnum++
+
+	var/text = {"<html><head><title>State laws (freeform)</title></head>
+				<b>LYING ABOUT YOUR LAWSET IS AGAINST YOUR LAWS UNLESS A LAW PERMITS OR OBLIGATES YOU TO LIE.</b><br>
+				Examples of this are Syndicate subversion (emag) and lawsets that do not force you to serve carbons, such as Corporate (but you'd better have a good reason.)
+				<b>Asimov silicons usually can not lie about their laws.</b><br><br>
+				Breaking this rule will get you bwoinked, jobbanned or worse. If you don't need to lie, use the regular State Laws functionality.<br><br>"}
+
+	text += "<a href='byond://?src=\ref[src];fakelaw_resetlaws=1'>Reset laws to default</a><br>"
+	text += "<a href='byond://?src=\ref[src];fakelaw_presetscreen=1'>Select from preset laws</a><br><br>"
+
+	text += "<b>Currently selected laws:</b> <a href='byond://?src=\ref[src];fakelaw_editscreen=1'>\[edit\]</a><br>"
+	for(var/law in fake_laws)
+		text += "[law]<br>"
+
+	text += "<br><br><a href='byond://?src=\ref[src];state_fakelaws=1'>State Laws</a>"
+	text += "</html>"
+	usr << browse(text, "window=fakelaws")
+
+/mob/living/silicon/robot/proc/statelaws_fake_show_presets()
+	var/text = "<h2>Select a preset below.</h2>"
+	for(var/i = 1; i <= preset_laws.len, i++)
+		var/lawname = preset_laws[i].name
+		text += "<a href='byond://?src=\ref[src];fakelaw_number=[i]'>[lawname]</a><br>"
+	text += "<br><br><a href='byond://?src=\ref[src];fakelaw_mainscreen=1'>\[abort\]</a>"
+	usr << browse(text, "window=fakelaws")
+
+/mob/living/silicon/robot/proc/statelaws_fake_show_edit()
+	//couldn't get winset to work
+	//winset(usr, "input", "text=\"foobar\"")
+	var/edited_laws = html_encode(input("Whatever you input here will EXACTLY become the laws you will state. You can preview after accepting.", "Edit laws") as null|message)
+	var/regex/emptylines = new(@"(?:\n(?:[^\S\n]*(?=\n))?){2,}", "mg") //thanks stackexchange
+	edited_laws = emptylines.Replace(edited_laws, "\n")
+	fake_laws = splittext(edited_laws, "\n")
+	statelaws_fake_show_mainscreen()
+
+/mob/living/silicon/robot/verb/fakelaws() //Allows you to FALSELY state laws
+	set category = "Robot Commands"
+	set name = "State Laws (freeform)"
+	statelaws_fake_show_mainscreen()
+	
 /mob/living/silicon/robot/show_laws(var/everyone = 0)
 	laws_sanity_check()
 	var/who
