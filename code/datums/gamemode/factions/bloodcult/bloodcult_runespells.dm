@@ -1516,6 +1516,9 @@ var/list/blind_victims = list()
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/hide
 	page = "This rune (whose words are the same as the Conceal rune in reverse) lets you reveal every rune and structures in a circular 7 tile range around it. Each revealed rune will stun non-cultists in a 3 tile range around them, stunning and muting them for 2 seconds, up to a total of 10 seconds. Affects through walls. The stun ends if the victims are moved away from where they stand, unless they get knockdown first, so you might want to follow up with a Stun talisman. "
+	
+	walk_effect = TRUE
+	
 	var/effect_range=7
 	var/shock_range=3
 	var/shock_per_obj=2
@@ -2678,7 +2681,7 @@ var/list/bloodcult_exitportals = list()
 	layer = SHADOW_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
-	
+
 /*
 	if((word1 == cultwords["travel"] && word2 == cultwords["self"]))
 		return "Travel Self"
