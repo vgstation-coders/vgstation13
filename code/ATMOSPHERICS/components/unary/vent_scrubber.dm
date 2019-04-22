@@ -13,12 +13,13 @@
 
 	var/on				= 0
 	var/scrubbing		= 1 //0 = siphoning, 1 = scrubbing
-	var/scrub_CO2		= 1
-	var/scrub_Toxins	= 1
-	var/scrub_N2O		= 0
-	var/scrub_O2		= 0
-	var/scrub_N2		= 0
-
+	var/list/scrub_list = list(
+		GAS_OXYGEN = FALSE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = TRUE,
+		GAS_CARBON = TRUE,
+		GAS_SLEEPING = TRUE
+		)
 	var/volume_rate		= 1000 // 120
 	var/panic			= 0 //is this scrubber panicked?
 	var/welded			= 0
@@ -31,6 +32,15 @@
 
 	ex_node_offset = 3
 
+/obj/machinery/atmospherics/unary/vent_scrubber/no_P_no_CO2
+	scrub_list = list(
+		GAS_OXYGEN = FALSE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = FALSE,
+		GAS_CARBON = FALSE,
+		GAS_SLEEPING = TRUE
+		)
+
 /obj/machinery/atmospherics/unary/vent_scrubber/on
 	on					= 1
 	icon_state			= "on"
@@ -41,8 +51,53 @@
 	frequency			= 1449
 	id_tag				= "inc_out"
 
-	scrub_Toxins		= 0
+	scrub_list = list(
+		GAS_OXYGEN = FALSE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = FALSE,
+		GAS_CARBON = TRUE,
+		GAS_SLEEPING = TRUE
+		)
 
+/obj/machinery/atmospherics/unary/vent_scrubber/on/sme
+	frequency = 1449
+	id_tag = "sme_scrubber"
+	scrub_list = list(
+		GAS_OXYGEN = TRUE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = TRUE,
+		GAS_CARBON = TRUE,
+		GAS_SLEEPING = TRUE
+		)
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/no_CO2
+	scrub_list = list(
+		GAS_OXYGEN = FALSE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = FALSE,
+		GAS_CARBON = FALSE,
+		GAS_SLEEPING = TRUE
+		)
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/no_p
+	scrub_list = list(
+		GAS_OXYGEN = FALSE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = FALSE,
+		GAS_CARBON = TRUE,
+		GAS_SLEEPING = TRUE
+		)
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/vox_outpost
+	name = "\improper Outpost Air Scrubber"
+	frequency = 1331
+	scrub_list = list(
+		GAS_OXYGEN = TRUE,
+		GAS_NITROGEN = FALSE,
+		GAS_PLASMA = TRUE,
+		GAS_CARBON = TRUE,
+		GAS_SLEEPING = TRUE
+		)
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	..()
 	var/area/this_area = get_area(src)
@@ -67,7 +122,7 @@
 		var/state = ""
 		if (scrubbing)
 			state = "on"
-			if (scrub_O2)
+			if (scrub_list[GAS_OXYGEN] == TRUE)
 				state += "1"
 		else
 			state = "in"
@@ -109,11 +164,7 @@
 		"power" = on,
 		"scrubbing" = scrubbing,
 		"panic" = panic,
-		"filter_co2" = scrub_CO2,
-		"filter_tox" = scrub_Toxins,
-		"filter_n2o" = scrub_N2O,
-		"filter_o2" = scrub_O2,
-		"filter_n2" = scrub_N2,
+		"scrub_list" = scrub_list,
 		"sigtype" = "status"
 	)
 	if(frequency == 1439)
@@ -156,12 +207,12 @@
 
 	if(scrubbing)
 		// Are we scrubbing gasses that are present?
-		if(\
-			(scrub_Toxins && environment[GAS_PLASMA] > 0) ||\
-			(scrub_CO2 && environment[GAS_CARBON] > 0) ||\
-			(scrub_N2O && environment[GAS_SLEEPING] > 0) ||\
-			(scrub_O2 && environment[GAS_OXYGEN] > 0) ||\
-			(scrub_N2 && environment[GAS_NITROGEN] > 0))
+		var/gas_found
+		for(var/i in scrub_list)
+			if(scrub_list[i] == TRUE && environment[i])
+				gas_found = TRUE
+				break
+		if(gas_found)
 			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 
 			//Take a gas sample
@@ -174,22 +225,9 @@
 			filtered_out.temperature = removed.temperature
 
 			#define FILTER(g) filtered_out.adjust_gas((g), removed[g], FALSE)
-			if(scrub_Toxins)
-				FILTER(GAS_PLASMA)
-
-			if(scrub_CO2)
-				FILTER(GAS_CARBON)
-
-			if(scrub_O2)
-				FILTER(GAS_OXYGEN)
-
-			if(scrub_N2)
-				FILTER(GAS_NITROGEN)
-
-			if(scrub_N2O)
-				FILTER(GAS_SLEEPING)
-
-			FILTER(GAS_OXAGENT) //Apparently this is always scrubbed, even though it doesn't seem to appear in-game anywhere
+			for(var/i in scrub_list)
+				if(scrub_list[i] == TRUE)
+					FILTER(i)
 
 			filtered_out.update_values()
 			removed.subtract(filtered_out)
@@ -258,30 +296,12 @@
 	if(signal.data["toggle_scrubbing"])
 		scrubbing = !scrubbing
 
-	if(signal.data["co2_scrub"] != null)
-		scrub_CO2 = text2num(signal.data["co2_scrub"])
-	if(signal.data["toggle_co2_scrub"])
-		scrub_CO2 = !scrub_CO2
-
-	if(signal.data["tox_scrub"] != null)
-		scrub_Toxins = text2num(signal.data["tox_scrub"])
-	if(signal.data["toggle_tox_scrub"])
-		scrub_Toxins = !scrub_Toxins
-
-	if(signal.data["n2o_scrub"] != null)
-		scrub_N2O = text2num(signal.data["n2o_scrub"])
-	if(signal.data["toggle_n2o_scrub"])
-		scrub_N2O = !scrub_N2O
-
-	if(signal.data["o2_scrub"] != null)
-		scrub_O2 = text2num(signal.data["o2_scrub"])
-	if(signal.data["toggle_o2_scrub"])
-		scrub_O2 = !scrub_O2
-
-	if(signal.data["n2_scrub"] != null)
-		scrub_N2 = text2num(signal.data["n2_scrub"])
-	if(signal.data["toggle_n2_scrub"])
-		scrub_N2 = !scrub_N2
+	if(signal.data["scrub_list"])
+		var/list/L = signal.data["scrub_list"]
+		if(!istype(L))
+			return
+		for(var/i in L)
+			scrub_list[i] = L[i]
 
 	if(signal.data["init"] != null)
 		name = signal.data["init"]
