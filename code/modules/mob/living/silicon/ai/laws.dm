@@ -183,7 +183,7 @@
 
 	text += "<b>Currently selected laws:</b> <a href='byond://?src=\ref[src];fakelaw_editscreen=1'>\[edit\]</a><br>"
 	for(var/law in fake_laws)
-		text += "[law]<br>"
+		text += "[html_encode(law)]<br>"
 
 	text += "<br><br><a href='byond://?src=\ref[src];state_fakelaws=1'>State Laws</a>"
 	text += "</html>"
@@ -199,8 +199,8 @@
 
 /mob/living/silicon/ai/proc/statelaws_fake_show_edit()
 	//couldn't get winset to work
-	//winset(usr, "input", "text=\"foobar\"")
-	var/edited_laws = html_encode(input("Whatever you input here will EXACTLY become the laws you will state. You can preview after accepting.", "Edit laws") as null|message)
+	//winset(usr, "Input", "text=\"foobar\"")
+	var/edited_laws = input("Whatever you input here will EXACTLY become the laws you will state. You can preview after accepting.", "Edit laws") as null|message
 	var/regex/emptylines = new(@"(?:\n(?:[^\S\n]*(?=\n))?){2,}", "mg") //thanks stackexchange
 	edited_laws = emptylines.Replace(edited_laws, "\n")
 	fake_laws = splittext(edited_laws, "\n")
