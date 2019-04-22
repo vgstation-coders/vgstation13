@@ -10,11 +10,20 @@
 	logo_state = "vox-logo"
 	hud_icons = list("vox-logo")
 
+	var/time_left = 30 MINUTES
+	var/completed = FALSE
+
+	var/results = "The Shoal didn't return yet."
+
+	var/total_points = 0
+	var/list/our_bounty_lockers = list()
+
 /datum/faction/vox_shoal/forgeObjectives()
 
 /datum/faction/vox_shoal/GetScoreboard()
 
 /datum/faction/vox_shoal/AdminPanelEntry()
+	. = ..()
 
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
@@ -68,6 +77,54 @@
 	vox.equip_vox_raider()
 	vox.regenerate_icons()
 
+/datum/faction/vox_shoal/process()
+	if (completed)
+		return
+	..()
+	time_left -= 2
+	if (vox_shuttle.returned_home)
+		completed =  TRUE
+		var/area/end_area = locate(/area/shuttle/vox/station)
+		// -- First, are we late ? -100 points for every minute over the clock.
+		if (time_left < 0)
+			for (var/datum/role/R in members)
+				to_chat(R.antag.current, "<span class='warning'>The raid took too long.</span>")
+			total_points -= RULE_OF_THREE(-60, 100, time_left)
+
+		// -- Secondly, add points if everyone is alive and well, and send back our prisonners to the mainstation in a shelter.
+		for (var/mob/living/H in end_area)
+			if (isvoxraider(H))
+				if (H.stat)
+					to_chat(H, "<span class='notice'>The raid has been concluded, but you were critically injured. The shoal will remember you.</span>")
+					total_points += 250
+				else
+					to_chat(H, "<span class='notice'>The raid has been concluded, and you returned safe. This will greatly helps us.</span>")
+					total_points += 500
+				qdel(H) // They get deleted and go back as ghosts.
+			else
+				H.count_score(src)
+				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is far from ideal still, however.")
+				H.send_back_to_main_station()
+
+		for (var/obj/structure/closet/loot in our_bounty_lockers)
+			for (var/obj/O in loot)
+				count_score(O)
+
+		// -- Thirdly : announce and save score.
+		// To finish...
+
+
+/datum/faction/vox_shoal/proc/count_score(var/obj/item/O)
+	// To finish...
+
+// -- Mobs procs --
+
+/mob/living/proc/count_score()
+	// To finish...
+			
+/mob/living/proc/send_back_to_main_station()
+	// To finish...
+		
 /mob/living/carbon/human/proc/equip_vox_raider()
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
 	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
