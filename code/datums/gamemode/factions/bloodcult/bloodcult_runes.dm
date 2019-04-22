@@ -294,6 +294,13 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		T.imbue(user,src)
 	return
 
+/obj/effect/rune/Crossed(var/atom/movable/mover)
+	if (ismob(mover))
+		var/mob/user = mover
+		var/datum/rune_spell/rune_effect = get_rune_spell(user, src, "walk" , word1, word2, word3)
+		if (rune_effect)
+			rune_effect.Added(mover)
+
 /obj/effect/rune/Uncrossed(var/atom/movable/mover)
 	if (active_spell && ismob(mover))
 		active_spell.Removed(mover)
@@ -495,55 +502,3 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 				conceal_cooldown = 0
 		return 1
 	return 0
-
-// -- Warding runes, detect ennemies
-/obj/effect/rune/ward/
-	var/uses = 5
-	var/last_threshold = -1
-
-/obj/effect/rune/ward/New()
-	conceal()
-	return ..()
-
-/obj/effect/rune/ward/Crossed(var/atom/movable/mover)
-	// Triggers if a living non-cultist mob crosses the rune.
-	if (!isliving(mover))
-		return
-	var/mob/living/L = mover
-	if (uses < 0)
-		qdel(src)
-		return
-	if (last_threshold + 10 SECONDS > world.time)
-		return
-	if (!iscultist(L))
-		uses--
-		last_threshold = world.time
-		var/list/seers = list()
-		for (var/mob/living/seer in range(7, src))
-			if (iscultist(seer) && seer.client && seer.client.screen)
-				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
-				var/delta_x = (L.x - seer.x)
-				var/delta_y = (L.y - seer.y)
-				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
-				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				seers += seer
-				seer << image_intruder // see the mover for a set period of time
-				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)		
-				spawn(3)
-					del image_intruder
-		var/count = 60
-		do
-			for (var/mob/living/seer in seers)
-				if (seer.gcDestroyed)
-					seers -= seer
-					continue
-				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
-				var/delta_x = (L.x - seer.x)
-				var/delta_y = (L.y - seer.y)
-				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
-				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				seer << image_intruder
-				spawn(3)
-					del image_intruder
-			count--
-		while (count && seers.len)

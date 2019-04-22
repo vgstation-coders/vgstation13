@@ -39,6 +39,8 @@
 	var/list/ingredients_found = list()//items that should be on the rune for it to work
 	var/constructs_can_use = 1
 
+	var/walk_effect = 0 //if set to 1, procs Added() when step over
+
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
 	activator = user
@@ -107,6 +109,8 @@
 		return 0
 	else
 		return 1
+
+/datum/rune_spell/proc/Added(var/mob/M)
 
 /datum/rune_spell/proc/Removed(var/mob/M)
 
@@ -232,6 +236,11 @@
 					return new subtype(user, spell_holder, use)
 				if ("examine")
 					return instance
+				if ("walk")
+					if (initial(instance.walk_effect))
+						return new subtype(user, spell_holder, use)
+					else
+						return null
 				if ("imbue")
 					return subtype
 			return new subtype(user, spell_holder, use)
@@ -816,7 +825,7 @@
 		for (var/mob/living/silicon/S in T) // Has science gone too far????
 			if (!iscultist(S))
 				targets.Add(S)
-			
+
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
 			targets.Add(C)
@@ -1511,6 +1520,8 @@ var/list/blind_victims = list()
 	var/shock_range=3
 	var/shock_per_obj=2
 	var/max_shock=10
+	var/last_threshold = -1
+	var/total_uses = 5
 
 /datum/rune_spell/reveal/cast()
 	var/turf/T = get_turf(spell_holder)
@@ -1567,6 +1578,47 @@ var/list/blind_victims = list()
 			L.clear_fullscreen("shockborder", animate = 0)
 
 	qdel(spell_holder)
+
+/datum/rune_spell/reveal/Added(var/mob/mover)
+	if (total_uses <= 0)
+		return
+	if (!isliving(mover))
+		return
+	var/mob/living/L = mover
+	if (last_threshold + 20 SECONDS > world.time)
+		return
+	if (!iscultist(L))
+		total_uses--
+		last_threshold = world.time
+		var/list/seers = list()
+		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
+			if (iscultist(seer) && seer.client && seer.client.screen)
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				seers += seer
+				seer << image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				spawn(3)
+					del image_intruder
+		var/count = 10 SECONDS
+		do
+			for (var/mob/living/seer in seers)
+				if (seer.gcDestroyed)
+					seers -= seer
+					continue
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				seer << image_intruder
+				spawn(3)
+					del image_intruder
+			count--
+		while (count && seers.len)
 
 /datum/rune_spell/reveal/cast_talisman()
 	shock_per_obj = 1.5
@@ -2626,24 +2678,7 @@ var/list/bloodcult_exitportals = list()
 	layer = SHADOW_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
-
-// RUNE XXI
-/datum/rune_spell/ward
-	name = "Unholy threshold"
-	desc = "Create a rune that will alert you if someone tresspasses."
-	Act_restriction = CULT_ACT_I
-	talisman_absorb = 0 // No absorbing.
-	invocation = "Wardiwch eich jyngl! Nid yw'n anodd."
-	word1 = /datum/cultword/see
-	word2 = /datum/cultword/other
-	word3 = /datum/cultword/join
-	page = "This rune will alert us if any unbeliever crosses it. It will also reveal their position for a short duration."
-
-/datum/rune_spell/ward/cast()
-	var/obj/effect/rune/R = spell_holder
-	new /obj/effect/rune/ward(R)
-	qdel(R)
-
+	
 /*
 	if((word1 == cultwords["travel"] && word2 == cultwords["self"]))
 		return "Travel Self"
