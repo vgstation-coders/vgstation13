@@ -1177,7 +1177,7 @@
 			mech.emp_act(3) // Visible effect of a small EMP
 			if (ishuman(mech.occupant)) // Not quite as much as the real thing
 				var/mob/living/carbon/human/H = mech.occupant
-				to_chat(H, "<span class='warning'>The chassis suddenly violently shakes and you feel a sudden sensation of falling.</span>")
+				to_chat(H, "<span class='warning'>The chassis shakes and sparks violently and you feel a sudden sensation of falling.</span>")
 				H.Stun(5)
 				H.stuttering += 60
 				H.Jitter(30)
