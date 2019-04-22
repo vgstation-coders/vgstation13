@@ -107,7 +107,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 5, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
 	reliability_base = 71
-	materials = list(MAT_IRON = 50, MAT_GLASS = 50, MAT_GOLD = 20)
+	materials = list(MAT_PLASTIC = 300)
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/capacitor/adv/super
 
@@ -118,7 +118,7 @@
 	id = "phasic_sensor"
 	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 50, MAT_GLASS = 20, MAT_SILVER = 10)
+	materials = list(MAT_PLASTIC = 300)
 	reliability_base = 72
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/scanning_module/adv/phasic
@@ -129,7 +129,7 @@
 	id = "pico_mani"
 	req_tech = list(Tc_MATERIALS = 5, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 40, MAT_PLASMA = 40)
+	materials = list(MAT_PLASTIC = 300)
 	reliability_base = 73
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/manipulator/nano/pico
@@ -140,7 +140,7 @@
 	id = "ultra_micro_laser"
 	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 5)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10, MAT_GLASS = 20, MAT_URANIUM = 10)
+	materials = list(MAT_PLASTIC = 300)
 	reliability_base = 70
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/micro_laser/high/ultra
@@ -151,11 +151,11 @@
 	id = "super_matter_bin"
 	req_tech = list(Tc_MATERIALS = 5)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 80)
+	materials = list(MAT_PLASTIC = 300)
 	reliability_base = 75
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/matter_bin/adv/super
-	
+
 /datum/design/bluespace_matter_bin
 	name = "Bluespace Matter Bin"
 	desc = "A stock part used to link material storage space between machines."
