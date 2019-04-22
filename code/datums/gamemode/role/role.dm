@@ -501,7 +501,7 @@
 
 //Actions to be taken when antag.current is completely destroyed
 /datum/role/proc/RoleMobDestroyed(var/destruction = TRUE)
-	sleep(GRACE_PERIOD_DESTROY)
+	sleep(rand(GRACE_PERIOD_DESTROY_LOW, GRACE_PERIOD_DESTROY_HIGH))
 	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
 		var/datum/gamemode/dynamic/D = ticker.mode
 		if(destruction)
