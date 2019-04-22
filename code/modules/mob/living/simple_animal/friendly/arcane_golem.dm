@@ -8,8 +8,8 @@
 	treadmill_speed = 0
 
 	mob_property_flags = MOB_CONSTRUCT
-	health = 50
-	maxHealth = 50
+	health = 200
+	maxHealth = 200
 
 	speak = list("Servio.", "Magister?", "Ego enim arcana.")
 	speak_emote = list("vocalizes")
