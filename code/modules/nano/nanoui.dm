@@ -136,23 +136,6 @@ nanoui is used to open and update nano browser uis
 				push_data(null, 1) // Update the UI, force the update in case the status is 0, data is null so that previous data is used
 
  /**
-  * Checks if the nanoui user can ignore distance checks.
-  *
-  * @param nothing
-  *
-  * @return Bool True if they can interact from any range
-  */
-
-/datum/nanoui/proc/check_interactive()
-	if(user.mutations && user.mutations.len)
-		if(M_TK in user.mutations)
-			return 1
-	if(isrobot(user))
-		if(src_object in view(7, user))
-			return 1
-	return (isAI(user) || !distance_check || isAdminGhost(user))
-
- /**
   * Update the status (visibility) of this ui based on the user's status
   *
   * @param push_update int (bool) Push an update to the ui to update it's status. This is set to 0/false if an update is going to be pushed anyway (to avoid unnessary updates)
@@ -160,32 +143,42 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/update_status(var/push_update = 0)
-		var/status = call(status_proc)(src_object)(user)(allowed_user_stat)
+	var/status = call(status_proc)(src_object,user,allowed_user_stat,distance_check)
 
-		if(status == STATUS_CLOSE)
-			close()
-			return
+	if(status == STATUS_CLOSE)
+		close()
+		return
 
-		set_status(status, push_update)
+	set_status(status, push_update)
 
 	/**
    * The default proc to be called by update_status()
    *
-	 * @param nsrc_object /obj|/mob The obj or mob which this ui belongs to
-	 * @param nuser /mob The mob who has opened/owns this ui
-	 * @param allowed_user_state int (bool) Only allow users with a certain user.stat to get updates
+	 * @param asrc_object /obj|/mob The obj or mob which this ui belongs to
+	 * @param auser /mob The mob who has opened/owns this ui
+	 * @param a_allowed_user_stat int (bool) Only allow users with a certain user.stat to get updates
    *
    * @return nothing
    */
-/datum/nanoui/proc/default_status_proc(var/src_object, var/mob/user, var/allowed_user_stat)
-	if (check_interactive())
-		set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
+/datum/nanoui/proc/default_status_proc(var/asrc_object, var/mob/auser, var/a_allowed_user_stat, var/a_distancecheck)
+	var/can_interactive = 0
+	if(auser.mutations && auser.mutations.len)
+		if(M_TK in auser.mutations)
+			can_interactive = 1
+	else if(isrobot(auser))
+		if(asrc_object in view(7, auser))
+			can_interactive = 1
+	else
+		can_interactive = (isAI(auser) || !a_distancecheck || isAdminGhost(auser))
+
+	if (can_interactive)
+		return STATUS_INTERACTIVE // interactive (green visibility)
 	else
 		var/dist = 0
-		if(istype(src_object, /atom))
-			var/atom/A = src_object
-			if(isobserver(user))
-				var/mob/dead/observer/O = user
+		if(istype(asrc_object, /atom))
+			var/atom/A = asrc_object
+			if(isobserver(auser))
+				var/mob/dead/observer/O = auser
 				var/ghost_flags = 0
 				if(A.ghost_write)
 					ghost_flags |= PERMIT_ALL
@@ -193,18 +186,18 @@ nanoui is used to open and update nano browser uis
 					return STATUS_INTERACTIVE // interactive (green visibility)
 				else if(canGhostRead(O,A,ghost_flags))
 					return STATUS_UPDATE
-			dist = get_dist(src_obj, user)
+			dist = get_dist(asrc_object, auser)
 
 		if (dist > 4)
 			return STATUS_CLOSE
 
-		if ((allowed_user_stat > -1) && (user.stat > allowed_user_stat))
+		if ((a_allowed_user_stat > -1) && (auser.stat > a_allowed_user_stat))
 			return STATUS_DISABLED // no updates, completely disabled (red visibility)
-		else if (user.restrained() || user.lying)
+		else if (auser.restrained() || auser.lying)
 			return STATUS_UPDATE // update only (orange visibility)
-		else if (istype(src_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
+		else if (istype(asrc_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
 			return STATUS_INTERACTIVE // Will build in distance checks on the topics for sanity.
-		else if (!(src_object in view(4, user))) // If the src object is not in visable, set status to 0
+		else if (!(asrc_object in view(4, auser))) // If the src object is not in visable, set status to 0
 			return STATUS_DISABLED // interactive (green visibility)
 		else if (dist <= 1)
 			return STATUS_INTERACTIVE // interactive (green visibility)
