@@ -134,6 +134,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/hear_instruments = 1
 	var/ambience_volume = 25
 	var/credits_volume = 75
+	var/window_flashing = 1
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -397,6 +398,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=jingle'><b>[jingle]</b></a><br>
 	<b>Credits/Jingle Volume:</b>
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
+	<b>Window Flashing</b>
+	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
   </div>
 </div>"}
 
@@ -1472,6 +1475,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("credits_volume")
 					credits_volume = min(max(input(user, "Enter the new volume you wish to use. (0-100, default is 75)","Credits/Jingle Volume", credits_volume), 0), 100)
+
+				if("window_flashing")
+					window_flashing = !window_flashing
 
 			if(user.client.holder)
 				switch(href_list["preference"])
