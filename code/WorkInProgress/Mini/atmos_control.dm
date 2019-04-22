@@ -156,6 +156,11 @@ var/global/list/atmos_controllers = list()
 					"power",
 					"adjust_external_pressure",
 					"checks",
+					"co2_scrub",
+					"tox_scrub",
+					"n2o_scrub",
+					"o2_scrub",
+					"n2_scrub",
 					"panic_siphon",
 					"scrubbing"
 				)
@@ -225,9 +230,6 @@ var/global/list/atmos_controllers = list()
 						if(current.target_temperature > selected[3])
 							current.target_temperature = selected[3]
 					return TRUE
-				if("scrub_list")
-					//TODO, don't forget to copypaste to alarm.dm
-					return 1
 		if(href_list["screen"])
 			current.screen = text2num(href_list["screen"])
 			return TRUE
