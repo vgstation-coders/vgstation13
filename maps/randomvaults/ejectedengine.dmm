@@ -100,7 +100,7 @@
 "bV" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
 "bW" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
 "bX" = (/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"bY" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/no_CO2{dir = 4; on = 0},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
+"bY" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 4; on = 0; scrub_CO2 = 0; scrub_Toxins = 0},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
 "bZ" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/item/weapon/crowbar,/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "ca" = (/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "cb" = (/obj/machinery/light/burnt{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/generator)
