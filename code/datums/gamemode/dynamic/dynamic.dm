@@ -155,8 +155,8 @@ var/dynamic_curve_width = 1.8
 	. = ..()
 	send2mainirc("A round of [src.name] has ended - [living_players.len] survivors, [dead_players.len] ghosts.")
 	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts.")
-	send2mainirc("Dynamic mode threat: [threat_level], rulesets: [jointext(rules, ", ")].")
-	send2maindiscord("Dynamic mode threat: **[threat_level]**, rulesets: [jointext(rules, ", ")]")
+	send2mainirc("Dynamic mode Threat Level: [starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""], rulesets: [jointext(rules, ", ")].")
+	send2maindiscord("Dynamic mode Threat Level: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
 
@@ -189,7 +189,7 @@ var/dynamic_curve_width = 1.8
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
-	if (round(threat_level, 0.1) == 66.6)
+	if (round(threat_level*10) == 666)
 		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/bloodcult()
 		forced_roundstart_ruleset += new /datum/dynamic_ruleset/roundstart/vampire()
 		log_admin("666 threat override.")
