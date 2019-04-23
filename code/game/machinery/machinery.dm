@@ -702,12 +702,12 @@ Class Procs:
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
+		if(shouldplaysound)
+			W.play_rped_sound()
 		else
 			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
 			for(var/var/obj/item/C in component_parts)
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
-		if(shouldplaysound)
-			W.play_rped_sound()
 		return 1
 	return 0
 
