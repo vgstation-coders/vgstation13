@@ -16,19 +16,20 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	light_range_on = 2
 
 	//for the holomap
-	var/mob/activator
-	var/list/holomap_images = list()
-	var/holomap_filter
-	var/holomap_z = STATION_Z
-	var/list/holomap_tooltips = list()
-	var/freeze = 0
-	var/list/textview = list()
-	var/datum/browser/textview_popup
-	var/textview_updatequeued = 0
-	var/holomap = 1
-	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z)
-	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z)
-	var/list/jobs = list(
+	var/initialized = 0 //if the holomap was already initialized, since we cant do it in new, we gotta check as soon as a user clicks us
+	var/list/activators = list() //list of people using the console
+	var/list/holomap_images = list() //list of lists of images for the people using the console
+	var/holomap_filter //can make the cmc display syndie/vox hideout
+	var/list/holomap_z = list() //list of activators selected z_levels
+	var/list/holomap_tooltips = list() //list of lists of tooltips(the buttons) for the people using the console
+	var/list/freeze = list() //list of activators set freeze
+	var/list/entries = list() //list of all crew, which has sensors >= 1
+	var/list/textview_popup //holds all the textview popups people are looking at rn
+	var/list/textview_updatequeued = list() //list of activators set textviewupdate setting
+	var/list/holomap = list() //list of activators set holomap-enable setting
+	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
+	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z) //all z-levels which should not be mapped but should still be scanned for people
+	var/list/jobs = list( //needed for formatting, stolen from the old cmc
 		"Captain" = 00,
 		"Head of Personnel" = 50,
 		"Head of Security" = 10,
@@ -70,7 +71,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	)
 
 /obj/machinery/computer/crew/Destroy()
-	deactivate()
+	deactivateAll()
 	..()
 
 /obj/machinery/computer/crew/attack_ai(mob/user)
@@ -97,24 +98,27 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/interface_act(mob/user, action)
 	if(action == "exit")
-		deactivate()
+		deactivate(user)
 		return
 
 	if(action == "text")
-		openTextview()
+		openTextview(user)
 		return
 
+	var/uid = "\ref[user]"
 	if(action == "holo")
-		holomap = !holomap
-		process()
-		return
+		holomap[uid] = !holomap[uid]
+	else if(text2num(action) != null)
+		holomap_z[uid] = text2num(action)
+	
+	processUser(user) //for that nice ui feedback uhhhh
 
-	if(text2num(action) != null)
-		holomap_z = text2num(action)
-	process() //for that nice ui feedback uhhhh
+/obj/machinery/computer/crew/proc/scanCrew()
+	//clearing all z-level entries
+	var/list/all_tracked_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+	for(var/level in all_tracked_z_levels)
+		entries[level] = list()
 
-//iterating over crew and adding the to textview/holomap
-/obj/machinery/computer/crew/proc/addCrew(var/holomap_enabled = 1)
 	//looping though carbons
 	for(var/mob/living/carbon/human/H in mob_list)
 		if(H.iscorpse)
@@ -157,9 +161,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 				if(pos)
 					player_area = format_text(get_area(H).name)
-					if(holomap_enabled) addCrewMarker(pos, H, name, assignment, life_status, damage, player_area)
 
-				addCrewToTextview(pos, H, name, assignment, life_status, damage, player_area, ijob)
+				//incase we dont get a pos
+				var/turf/entry_z = get_turf(H)
+				entries[entry_z.z] += list(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
@@ -169,48 +174,15 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			continue
 
 		var/turf/pos = get_turf(B)
-		if(pos && pos.z != CENTCOMM_Z && (pos.z == holomap_z) && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			if(holomap_enabled) addCrewMarker(pos, B, "[B]", "MMI", null, null, parea)
-			addCrewToTextview(pos, B, "[B]", "MMI", null, null, parea, 60)
-
-//adding crew to textview list
-/obj/machinery/computer/crew/proc/addCrewToTextview(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "No job", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/ijob = 9999)
-	var/role
-	switch(ijob)
-		if(0)	role = "cap" // captain
-		if(10 to 19) role = "sec" // security
-		if(20 to 29) role = "med" // medical
-		if(30 to 39) role = "sci"	 // science
-		if(40 to 49) role = "eng" // engineering
-		if(50 to 59) role = "car" // cargo
-		if(60 to 69) role = "silicon" //silicon
-		if(200 to 229) role = "cent"
-		else role = "unk"
-
-	var/icon
-	if(istype(H, /mob/living/carbon/human))
-		if(stat != 2)
-			if(damage)
-				icon = getLifeIcon(damage)
-			else
-				icon = "0"
-		else
-			icon = "6"
-	else
-		icon = "7"
-
-	var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
-	string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
-	string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
-	var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
-	textview += actualstring
+		if(pos && pos.z != CENTCOMM_Z && istype(M) && M.brainmob == B && !isrobot(M.loc))
+			entries[pos.z] += list(pos, B, "[B]", "MMI", null, null, parea, 60)
 
 //create actual marker for crew with sensors on 3
-/obj/machinery/computer/crew/proc/addCrewMarker(var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available")
+/obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available")
 	if(!TU || !H)
 		return
 
-	var/uid = "crewmarker_\ref[H]_\ref[activator]"
+	var/uid = "crewmarker_\ref[H]_\ref[user]"
 
 	//creating the title with name | job - Dead/Alive
 	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
@@ -223,7 +195,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	content += "<br>[player_area]"
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,activator,src,null,'icons/cmc/sensor_markers.dmi')
+		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,user,src,null,'icons/cmc/sensor_markers.dmi')
 		cmc_holomap_cache[uid].plane = ABOVE_HUD_PLANE
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
@@ -269,98 +241,128 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		else
 			return "0"
 
-/obj/machinery/computer/crew/proc/closeHolomap()
-	activator.client.images -= holomap_images
+/obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
+	var/uid = "\ref[user]"
+	user.client.images -= holomap_images[uid]
 
 	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
 	if(holomap_bgmap in holomap_cache)
 		var/image/bgmap = holomap_cache[holomap_bgmap]
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
 
-	holomap_images.len = 0
-	freeze = 0
+	holomap_images[uid].len = 0
+	freeze[uid] = 0
+
+/obj/machinery/computer/crew/proc/deactivateAll()
+	for(var/mob/user in activators)
+		deactivate(user)
 
 // called whenever activator leaves, disables both holomap and textview
-/obj/machinery/computer/crew/proc/deactivate()
-	if(activator && activator.client)
-		closeHolomap()
-		closeTextview()
-		activator.client.screen -= holomap_tooltips //remove btns
-		holomap_tooltips.len = 0
-	activator = null
+/obj/machinery/computer/crew/proc/deactivate(var/mob/user)
+	var/uid = "\ref[user]"
+	if(user && user.client)
+		closeHolomap(user)
+		closeTextview(user)
+		user.client.screen -= holomap_tooltips[uid] //remove btns
+	activators -= user
+	holomap_images[uid] = null //incase something is fucky
+	holomap_tooltips[uid] = null
+	freeze[uid] = null //incase something is fucky
+	holomap_z[uid] = null
+	textview_updatequeued[uid] = null
+	holomap[uid] = null
+	textview_popup[uid] = null //incase something is fucky
 
-//initializes the holomap
-/obj/machinery/computer/crew/proc/togglemap(mob/user)
-	if(user.isUnconscious())
-		return
-
-	if(activator)
-		if(activator != user)
-			to_chat(user, "<span class='notice'>Someone is already using the holomap.</span>")
-			return
-		deactivate()
-		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
-	else
-		activator = user
-		var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
-		for(var/z_level in all_ui_z_levels)
-			var/holomap_bgmap = "cmc_\ref[src]_[z_level]"
-			if(!(holomap_bgmap in holomap_cache))
-				var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-				if(z_level in holomap_z_levels_mapped)
-					if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
-						var/image/station_outline = image(holoMiniMaps[z_level])
-						station_outline.color = "#DEE7FF"
-						station_outline.alpha = 200
-						var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
-						station_areas.alpha = 150
-						background.overlays += station_areas
-						background.overlays += station_outline
-				background.alpha = 0
-				background.layer = ABOVE_HUD_LAYER
-				holomap_cache[holomap_bgmap] = background
-
-		//z2 override if nukeops or voxraider
-		if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
-			var/holomap_bgmap = "cmc_\ref[src]_2"
+/obj/machinery/computer/crew/proc/initializeHolomap()
+	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+	for(var/z_level in all_ui_z_levels)
+		var/holomap_bgmap = "cmc_\ref[src]_[z_level]"
+		if(!(holomap_bgmap in holomap_cache))
 			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-			var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
-			station_outline.color = "#DEE7FF"
-			station_outline.alpha = 200
-			background.overlays += station_outline
+			if(z_level in holomap_z_levels_mapped)
+				if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
+					var/image/station_outline = image(holoMiniMaps[z_level])
+					station_outline.color = "#DEE7FF"
+					station_outline.alpha = 200
+					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
+					station_areas.alpha = 150
+					background.overlays += station_areas
+					background.overlays += station_outline
 			background.alpha = 0
 			background.layer = ABOVE_HUD_LAYER
 			holomap_cache[holomap_bgmap] = background
-			holomap_z_levels_unmapped |= CENTCOMM_Z
 
-		holomap = 1
-		textview_popup = null
-		process()
+	//z2 override if nukeops or voxraider
+	if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
+		var/holomap_bgmap = "cmc_\ref[src]_2"
+		var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+		var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
+		station_outline.color = "#DEE7FF"
+		station_outline.alpha = 200
+		background.overlays += station_outline
+		background.alpha = 0
+		background.layer = ABOVE_HUD_LAYER
+		holomap_cache[holomap_bgmap] = background
+		holomap_z_levels_unmapped |= CENTCOMM_Z
+	initialized = 1
+
+
+//initializes the holomap
+/obj/machinery/computer/crew/proc/togglemap(var/mob/user)
+	if(user.isUnconscious())
+		return
+
+	if(locate(user) in activators)
+		deactivate(user)
+		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
+	else
+		activators += user
+		var/uid = "\ref[user]"
+		if(!initialized) //didn't find a better way to do this
+			initializeHolomap()
+		holomap_images[uid] = list()
+		holomap_tooltips[uid] = list()
+		freeze[uid] = 0
+		holomap_z[uid] = STATION_Z
+		textview_updatequeued[uid] = 1
+		holomap[uid] = 1
+		processUser(user)
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
-	if(!handle_sanity())
-		deactivate()
+	if((!activators) || (activators.len == 0) || (stat & (BROKEN|NOPOWER)) || ((textview_popup.len == 0) && (holomap.len == 0)) || !holomap) //sanity
+		deactivateAll()
 		return
 
-	update()
+	scanCrew()
 
-	if(textview_updatequeued && !!textview_popup)
-		updateTextView()
+	for(var/mob/user in activators)
+		processUser(user)
+
+/obj/machinery/computer/crew/proc/processUser(var/mob/user)
+	var/uid = "\ref[user]"
+	updateVisuals(user)
+
+	if(textview_updatequeued[uid] && textview_popup[uid])
+		updateTextView(user)
 
 //ahhh
-/obj/machinery/computer/crew/proc/handle_sanity()
-	if((!activator) || (!activator.client) || (get_dist(activator.loc,src.loc) > 1) || (holoMiniMaps[holomap_z] == null) || (stat & (BROKEN|NOPOWER)) || (!textview_popup && !holomap))
+/obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
+	var/uid = "\ref[user]"
+	if((!user) || (!user.client) || (get_dist(user.loc,src.loc) > 1) || (holoMiniMaps[holomap_z[uid]] == null))
 		return FALSE
 	return TRUE
 
 //updates textview list as well as crewmarkers
-/obj/machinery/computer/crew/proc/update()
+/obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
+	var/uid = "\ref[user]"
+	if(!handle_sanity()) return
 
-	if(holomap && !freeze) // we only repopulate user.client.images if holomap is enabled
-		activator.client.images -= holomap_images
-		holomap_images.len = 0
+	//updating holomap
+	if(holomap[uid] && !freeze[uid]) // we only repopulate user.client.images if holomap is enabled
+		user.client.images -= holomap_images[uid]
+		holomap_images[uid].len = 0
 
 		var/image/bgmap
 		var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
@@ -368,54 +370,54 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		bgmap = holomap_cache[holomap_bgmap]
 		bgmap.plane = HUD_PLANE
 		bgmap.layer = HUD_BASE_LAYER
-		bgmap.loc = activator.hud_used.holomap_obj
+		bgmap.loc = user.hud_used.holomap_obj
 
 		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		holomap_images += bgmap
-	else if(!holomap)
-		activator.client.images -= holomap_images
-		holomap_images.len = 0
+		holomap_images[uid] += bgmap
 
+		for(var/entry in entries[holomap_z[uid]])
+			if(entry[1]) //can only be our z, so i'm not checking
+				addCrewMarker(entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8])
 
-	activator.client.screen -= holomap_tooltips
+		user.client.images |= holomap_images
+	else if(!holomap[uid])
+		user.client.images -= holomap_images[uid]
+		holomap_images[uid].len = 0
 
-	holomap_tooltips.len = 0
-	textview.len = 0
+	//updating ui
+	user.client.screen -= holomap_tooltips[uid]
+	holomap_tooltips[uid].len = 0
 
-	addCrew(holomap)
-
-	if(holomap && !freeze)
-		activator.client.images |= holomap_images
-
-	updateUI()
-	activator.client.screen |= holomap_tooltips
+	updateUI(user)
+	user.client.screen |= holomap_tooltips
 
 //updates the ui-btns
-/obj/machinery/computer/crew/proc/updateUI()
-	var/uid = "ui_btns_\ref[activator]_\ref[src]"
+/obj/machinery/computer/crew/proc/updateUI(var/mob/user)
+	var/uid = "ui_btns_\ref[user]_\ref[src]"
+	var/user_uid = "\ref[user]"
 	if(!cmc_holomap_cache[uid])
 		var/list/all_ui_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc) //z-levels sorted by num
 		var/ui_offset = 11-all_ui_z_levels.len
 		var/list/ui_btns = list()
 
 		//holomap btn
-		var/obj/abstract/screen/interface/holo_btn = new /obj/abstract/screen/interface(null,activator,src,"holo",'icons/cmc/buttons.dmi',"blank","WEST+[ui_offset],SOUTH+13")
+		var/obj/abstract/screen/interface/holo_btn = new /obj/abstract/screen/interface(null,user,src,"holo",'icons/cmc/buttons.dmi',"blank","WEST+[ui_offset],SOUTH+13")
 		holo_btn.overlays += image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_1"])
 		ui_btns += holo_btn
 
 		//textview btn
 		ui_offset += 1
-		ui_btns += new /obj/abstract/screen/interface(null,activator,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+[ui_offset],SOUTH+13")
+		ui_btns += new /obj/abstract/screen/interface(null,user,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+[ui_offset],SOUTH+13")
 
 		//z-levels btn
 		for (var/z_level in all_ui_z_levels)
 			ui_offset += 1
-			ui_btns += new /obj/abstract/screen/interface(null,activator,src,"[z_level]",'icons/cmc/buttons.dmi',"button_[z_level]","WEST+[ui_offset],SOUTH+13")
-		ui_btns += new /obj/abstract/screen/interface(null,activator,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13")
+			ui_btns += new /obj/abstract/screen/interface(null,user,src,"[z_level]",'icons/cmc/buttons.dmi',"button_[z_level]","WEST+[ui_offset],SOUTH+13")
+		ui_btns += new /obj/abstract/screen/interface(null,user,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13")
 		cmc_holomap_cache[uid] = ui_btns
 
-	holomap_tooltips += cmc_holomap_cache[uid]
+	holomap_tooltips[user_uid] += cmc_holomap_cache[uid]
 
 /*
 	Tooltip interface
@@ -454,59 +456,95 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	parseToChat() //no supercall so we don't trigger interface_act (we don't want that)
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
-	if(CMC) CMC.freeze = 1
+	if(CMC)
+		var/uid = "\ref[user]"	
+		CMC.freeze[uid] = 1
 	..()
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
-	if(CMC) CMC.freeze = 0
+	if(CMC)
+		var/uid = "\ref[user]"
+		CMC.freeze[uid] = 0
 	..()
 
 /*
 	Textview procs
 */
 /obj/machinery/computer/crew/Topic(href, href_list)
+	var/uid = "\ref[usr]"
 	if(href_list["close"])
-		closeTextview()
+		closeTextview(usr)
 		return
 	if(href_list["toggle"])
-		textview_updatequeued = !textview_updatequeued
-		updateTextView()
+		textview_updatequeued[uid] = !textview_updatequeued[uid]
+		updateTextView(usr)
 		return
 	if(href_list["holo"])
-		holomap = !holomap
-		process() //to remove/add the holomap and update the textview
+		holomap[uid] = !holomap[uid]
+		processUser(usr) //to remove/add the holomap and update the textview
 		return
 
 //initializes textview, only called once
-/obj/machinery/computer/crew/proc/openTextview()
-	textview_updatequeued = 1
-	if(activator.client)
+/obj/machinery/computer/crew/proc/openTextview(var/mob/user)
+	var/uid = "\ref[user]"
+	textview_updatequeued[uid] = 1
+	if(user.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
-		send_asset_list(activator.client, C.assets)
-	textview_popup = new(activator, "cmc_textview", "Crew Monitoring", 900, 600, src)
-	textview_popup.add_stylesheet("cmc", 'html/browser/cmc.css')
-	textview_popup.open()
-	onclose(activator, "cmc_textview", src)
-	updateTextView()
+		send_asset_list(user.client, C.assets)
+	textview_popup[uid] = new /datum/browser(user, "cmc_textview", "Crew Monitoring", 900, 600, src)
+	textview_popup[uid].add_stylesheet("cmc", 'html/browser/cmc.css')
+	textview_popup[uid].open()
+	onclose(user, "cmc_textview", src)
+	updateTextView(user)
 
 //updates the textview, called every process() when enabled
-/obj/machinery/computer/crew/proc/updateTextView()
+/obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
+	var/uid = "\ref[user]"
 	//styles
 	var/list/t = "<html><head><title>Crew Monitor</title></head><body><kbd><a style='margin-right: 10px;' href='?src=\ref[src];toggle=1'>" + (textview_updatequeued ? "Disable Updating" : "Enable Updating") + "</a><a href='?src=\ref[src];holo=1'>" + (holomap ? "Disable Holomap" : "Enable Holomap") + "</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
 
 	//adding table rows
-	for(var/i=1, i<=textview.len, i++)
-		t += "<tr>" + textview[i] + "</tr>"
+	for(var/entry in entries[holomap_z[uid]])
+		var/role
+		switch(entry[9])
+			if(0)	role = "cap" // captain
+			if(10 to 19) role = "sec" // security
+			if(20 to 29) role = "med" // medical
+			if(30 to 39) role = "sci"	 // science
+			if(40 to 49) role = "eng" // engineering
+			if(50 to 59) role = "car" // cargo
+			if(60 to 69) role = "silicon" //silicon
+			if(200 to 229) role = "cent"
+			else role = "unk"
+
+		var/icon
+		if(istype(entry[2], /mob/living/carbon/human))
+			if(entry[5] != 2)
+				if(entry[6])
+					icon = getLifeIcon(entry[6])
+				else
+					icon = "0"
+			else
+				icon = "6"
+		else
+			icon = "7"
+
+		var/list/string = list("<span class='name [role]'>[entry[3]]</span> ([entry[4]])")
+		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (entry[6] ? "(<span class='oxygen'>[entry[6][1]]</span>/<span class='toxin'>[entry[6][2]]</span>/<span class='fire'>[entry[6][3]]</span>/<span class='brute'>[entry[6][4]]</span>)" : "Not Available")
+		string += entry[1] ? "[entry[8]] ([entry[1].x],[entry[1].y])" : "Not Available"
+		var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
+
+		t += "<tr>[actualstring]</tr>"
 
 	t += "</table></kbd></body></html>"
 
-	textview_popup.set_content(jointext(t, ""))
-	textview_popup.open()
+	textview_popup[uid].set_content(jointext(t, ""))
+	textview_popup[uid].open()
 
 //taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
-/obj/machinery/computer/crew/proc/closeTextview()
-	textview_updatequeued = 0
-	if(textview_popup)
-		textview_popup.close()
-		textview_popup = null
-	textview.len = 0
+/obj/machinery/computer/crew/proc/closeTextview(var/mob/user)
+	var/uid = "\ref[user]"
+	textview_updatequeued[uid] = 0
+	if(textview_popup[uid])
+		textview_popup[uid].close()
+		textview_popup[uid] = null
