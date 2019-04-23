@@ -22,6 +22,32 @@
 	var/list/alarm_types_show = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 
+	//vars used by state_laws
+	var/state_laws_freeform = FALSE
+	var/list/state_laws_freeform_selected = null //the currently selected laws that will be stated
+	var/list/state_laws_preset_laws = new/list()
+	
+
+mob/living/silicon/New()
+	..()
+
+	//Build list of preset laws for state_laws
+	var/list/preset_laws = new/list(
+		new /datum/ai_laws/asimov,
+		new /datum/ai_laws/nanotrasen,
+		new /datum/ai_laws/robocop,
+		new /datum/ai_laws/corporate,
+		new /datum/ai_laws/paladin,
+		new /datum/ai_laws/tyrant,
+		new /datum/ai_laws/antimov,
+		new /datum/ai_laws/keeper,
+		new /datum/ai_laws/syndicate_override,
+	)
+	for(var/datum/ai_laws/law in preset_laws)
+		state_laws_preset_laws[law.name] = law.inherent
+		if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
+			state_laws_preset_laws[law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
+
 /mob/living/silicon/hasFullAccess()
 	return 1
 
@@ -355,3 +381,53 @@
 
 /mob/living/silicon/get_survive_objective()
 	return new /datum/objective/siliconsurvive
+
+/mob/living/silicon/Topic(href, href_list)
+	..()
+	if(usr && (src != usr))
+		return
+	
+	//State laws code
+	if(href_list["ui_key"] == "state_laws")
+		if(href_list["toggle_mode"])
+			state_laws_freeform = !state_laws_freeform
+			return 1
+
+
+/mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
+	if(..())
+		return
+	if(ui_key == "state_laws")
+		if(state_laws_freeform_selected == null && laws) //default to our current laws
+			state_laws_freeform_selected = new/list()
+			if(laws.zeroth)
+				state_laws_freeform_selected.Add("0. [laws.zeroth]")
+			for(var/law in laws.ion)
+				var/num = ionnum()
+				state_laws_freeform_selected.Add("[num]. [law]")
+			var/lawnum = 1
+			for(var/law in laws.inherent)
+				state_laws_freeform_selected.Add("[lawnum]. [law]")		
+				lawnum++
+			for(var/law in laws.supplied)
+				state_laws_freeform_selected.Add("[lawnum]. [law]")
+				lawnum++
+
+		var/list/data = list(
+			"freeform" = state_laws_freeform,
+			"preset_laws" = state_laws_preset_laws,
+		)
+
+		data["freeform_laws"] = list( // this STUPID FUCKING THING only works on lists of dicts w t f
+			list("text" = "1. You may not injure a human being or, through inaction, allow a human being to come to harm."),
+			list("text" = "2. You must obey orders given to you by human beings, except where such orders would conflict with the First Law."),
+			list("text" = "3. You must protect your own existence as long as such does not conflict with the First or Second Law."),
+		)
+		for(var/str in data["freeform_laws"])
+			to_chat(world, str)
+
+		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+		if(!ui)
+			ui = new(user, src, ui_key, "state_laws.tmpl", "State Laws", 500, 600)
+			ui.set_initial_data(data)
+			ui.open()

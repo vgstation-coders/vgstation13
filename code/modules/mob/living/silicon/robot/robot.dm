@@ -87,18 +87,6 @@ var/list/cyborg_list = list()
 	var/braintype = "Cyborg"
 	var/lawcheck[1]
 	var/ioncheck[1]
-	var/list/fake_laws = null //Big dumb list of strings that gets printed when we falsely state laws
-	var/list/preset_laws = list(
-		new /datum/ai_laws/asimov,
-		new /datum/ai_laws/nanotrasen,
-		new /datum/ai_laws/robocop,
-		new /datum/ai_laws/corporate,
-		new /datum/ai_laws/paladin,
-		new /datum/ai_laws/tyrant,
-		new /datum/ai_laws/antimov,
-		new /datum/ai_laws/keeper,
-		new /datum/ai_laws/syndicate_override,
-	)
 
 // Used to store the associations between sprite names and sprite index.
 	var/module_sprites[0]
@@ -1080,7 +1068,7 @@ var/list/cyborg_list = list()
 
 
 /mob/living/silicon/robot/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(usr && (src != usr))
 		return
@@ -1124,7 +1112,7 @@ var/list/cyborg_list = list()
 		else
 			to_chat(src, "Module isn't activated")
 		installed_modules()
-
+/*
 	if(href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawc"])
 		switch(lawcheck[L+1])
@@ -1149,35 +1137,7 @@ var/list/cyborg_list = list()
 	if(href_list["vision"])
 		sensor_mode()
 		installed_modules()
-	
-
-	//Freeform law stating interface
-	if(href_list["fakelaw_mainscreen"])
-		statelaws_fake_show_mainscreen()
-		return
-	if(href_list["fakelaw_presetscreen"])
-		statelaws_fake_show_presets()
-		return
-	if(href_list["fakelaw_editscreen"])
-		statelaws_fake_show_edit()
-		return
-	if(href_list["fakelaw_resetlaws"])
-		fake_laws = null
-		statelaws_fake_show_mainscreen()
-		return
-	if(href_list["fakelaw_number"])
-		var/L = text2num(href_list["fakelaw_number"])
-		fake_laws = new()
-		if(istype(preset_laws[L], /datum/ai_laws/syndicate_override)) //shitcode
-			fake_laws.Add("0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
-		for(var/i = 1; i <= preset_laws[L].inherent.len; i++)
-			fake_laws.Add("[i]. [preset_laws[L].inherent[i]]")
-		statelaws_fake_show_mainscreen()
-		return
-	if(href_list["state_fakelaws"])
-		statelaws_fake()
-		return
-
+*/
 /mob/living/silicon/robot/area_entered(area/A)
 	if(A.flags & NO_MESONS && sensor_mode == MESON_VISION)
 		to_chat(src, "<span class='warning'>Your Meson Vision augmentation [pick("force-quits","shuts down unexpectedly","has received an update and needs to close")]!</span>")

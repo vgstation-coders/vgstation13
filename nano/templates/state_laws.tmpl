@@ -1,0 +1,43 @@
+<div class="item">
+    <div class="itemLabel">Mode:</div>
+    {{if data.freeform}}
+        <div class="itemContent">Freeform</div>
+    {{else}}
+        <div class="itemContent">Standard</div>
+    {{/if}}
+    {{:helper.link("Toggle mode", "gear", {"ui_key": "state_laws", "toggle_mode": 1}, null, 'floatRight')}}
+</div>
+{{if data.freeform}}
+    <div class="item">
+        <div class="item">
+            <div class="statusDisplay">
+                <p><font color="red"><b>LYING ABOUT YOUR LAWSET IS AGAINST YOUR LAWS UNLESS A LAW PERMITS OR OBLIGATES YOU TO LIE</b></font></p>
+                <p>
+                    Examples of this are Syndicate subversion (emag) and lawsets that do not force you to serve carbons,
+                    such as Corporate (but you'd better have a good reason.)
+                    <b>Asimov silicons usually can not lie about their laws.</b>
+                </p>
+                <p>Breaking this rule will get you bwoinked, jobbanned or worse. If you don't need to lie, use the regular State Laws functionality.</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="line">
+                <h3>Currently selected laws</h3>
+            </div>
+            <div class="statusDisplay">
+                {{for data.freeform_laws}}
+                    <div class="line">
+                        <div class="statusValue">
+                            {{:value.text}}
+                        </div>
+                    </div>
+                {{empty}}
+                    <div class="line">
+                        <div class="statusValue dark">(no laws selected)</div>
+                    </div>
+                {{/for}}
+            </div>
+        </div>
+    </div>
+{{/if}}

@@ -44,6 +44,11 @@
 					sleep(10)
 				number++
 
+/mob/living/silicon/state_laws()
+	set category = "Robot Commands"
+	. = ..()
+
+/*
 /mob/living/silicon/robot/verb/checklaws() //Gives you a link-driven interface for deciding what laws the statelaws() proc will share with the crew. --NeoFite
 	set category = "Robot Commands"
 	set name = "State Laws"
@@ -91,7 +96,8 @@
 	list += {"<br><br><A href='byond://?src=\ref[src];laws=1'>State Laws</A>"}
 
 	usr << browse(list, "window=laws")
-
+*/
+/*
 /mob/living/silicon/robot/proc/statelaws_fake()
 	log_admin("[usr]/[ckey(usr.key)] lied about its silicon laws.")
 	say(";Current Active Laws:")
@@ -164,7 +170,7 @@
 	set category = "Robot Commands"
 	set name = "State Laws (freeform)"
 	statelaws_fake_show_mainscreen()
-	
+*/	
 /mob/living/silicon/robot/show_laws(var/everyone = 0)
 	laws_sanity_check()
 	var/who
