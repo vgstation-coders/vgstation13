@@ -846,6 +846,6 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/stationary
 	emagged = 1
 
-	New()
-		installed = new/obj/item/weapon/gun/energy/laser(src)
-		..()
+/obj/machinery/porta_turret/stationary/New()
+	installed = new/obj/item/weapon/gun/energy/laser(src)
+	..()

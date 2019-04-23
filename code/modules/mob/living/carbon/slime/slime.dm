@@ -1122,7 +1122,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		spawn()
 			Life()
 
-	proc/Life()
+/obj/item/slime_core/proc/Life()
 		while(src)
 			if(timestopped)
 				while(timestopped)

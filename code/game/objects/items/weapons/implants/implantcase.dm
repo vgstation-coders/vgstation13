@@ -59,11 +59,10 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
 
-	New()
+/obj/item/weapon/implantcase/tracking/New()
 		src.imp = new /obj/item/weapon/implant/tracking( src )
 		..()
 		return
-
 
 /obj/item/weapon/implantcase/explosive
 	name = "Glass Case- 'Explosive'"
@@ -71,7 +70,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-r"
 
-	New()
+/obj/item/weapon/implantcase/explosive/New()
 		src.imp = new /obj/item/weapon/implant/explosive( src )
 		..()
 		return
@@ -84,7 +83,6 @@
 	icon_state = "implantcase-b"
 
 /obj/item/weapon/implantcase/chem/New()
-
 	src.imp = new /obj/item/weapon/implant/chem( src )
 	..()
 	return
@@ -97,10 +95,10 @@
 	icon_state = "implantcase-r"
 
 
-	New()
-		src.imp = new /obj/item/weapon/implant/loyalty( src )
-		..()
-		return
+/obj/item/weapon/implantcase/loyalty/New()
+	src.imp = new /obj/item/weapon/implant/loyalty( src )
+	..()
+	return
 
 
 /obj/item/weapon/implantcase/death_alarm
@@ -109,11 +107,10 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
 
-	New()
-		src.imp = new /obj/item/weapon/implant/death_alarm( src )
-		..()
-		return
-
+/obj/item/weapon/implantcase/death_alarm/New()
+	src.imp = new /obj/item/weapon/implant/death_alarm( src )
+	..()
+	return
 
 /obj/item/weapon/implantcase/peace
 	name = "glass case- 'Pax'"

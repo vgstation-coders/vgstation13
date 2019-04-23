@@ -12,15 +12,15 @@
 	var/turf/turf //The turf which will get ex_act called on it
 	var/max_power //The largest amount of power the turf sustained
 
-	New()
-		..()
-		max_power = 0
+/datum/explosion_turf/New()
+	..()
+	max_power = 0
 
-	proc/save_power_if_larger(power)
-		if(power > max_power)
-			max_power = power
-			return 1
-		return 0
+/datum/explosion_turf/proc/save_power_if_larger(power)
+	if(power > max_power)
+		max_power = power
+		return 1
+	return 0
 
 var/list/datum/explosion_turf/explosion_turfs = list()
 var/explosion_in_progress = 0

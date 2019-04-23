@@ -23,13 +23,13 @@ mineral
 	///Path to the resultant ore.
 	var/ore
 
-	New()
-		. = ..()
-		if(!display_name)
-			display_name = name
+mineral/New()
+	. = ..()
+	if(!display_name)
+		display_name = name
 
-	proc/UpdateTurf(var/turf/unsimulated/mineral/T)
-		T.UpdateMineral()
+mineral/proc/UpdateTurf(var/turf/unsimulated/mineral/T)
+	T.UpdateMineral()
 
 mineral/proc/DropMineral(var/turf/unsimulated/mineral/T)
 	var/obj/item/O = drop_stack(ore, T, result_amount)
@@ -202,7 +202,8 @@ mineral/cave
 	result_amount = 1
 	spread = 1
 	ore = null
-	UpdateTurf(var/turf/T)
+
+mineral/cave/UpdateTurf(var/turf/T)
 		if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
 			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
 		else
@@ -211,7 +212,8 @@ mineral/cave
 mineral/cave/ice
 	display_name = "Ice Cave"
 	name = "Ice Cave"
-	UpdateTurf(var/turf/T)
+	
+mineral/cave/ice/UpdateTurf(var/turf/T)
 		if(!istype(T,/turf/unsimulated/floor/asteroid/cave/permafrost))
 			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/permafrost)
 		else

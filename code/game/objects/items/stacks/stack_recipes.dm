@@ -13,17 +13,18 @@
 	var/on_floor = 0
 	var/start_unanchored = 0
 	var/list/other_reqs = list()
-	New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list())
-		src.title = title
-		src.result_type = result_type
-		src.req_amount = req_amount
-		src.res_amount = res_amount
-		src.max_res_amount = max_res_amount
-		src.time = time
-		src.one_per_turf = one_per_turf
-		src.on_floor = on_floor
-		src.start_unanchored = start_unanchored
-		src.other_reqs = other_reqs
+
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list())
+	src.title = title
+	src.result_type = result_type
+	src.req_amount = req_amount
+	src.res_amount = res_amount
+	src.max_res_amount = max_res_amount
+	src.time = time
+	src.one_per_turf = one_per_turf
+	src.on_floor = on_floor
+	src.start_unanchored = start_unanchored
+	src.other_reqs = other_reqs
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -123,10 +124,11 @@
 	var/title = "ERROR"
 	var/list/recipes = null
 	var/req_amount = 1
-	New(title, recipes, req_amount = 1)
-		src.title = title
-		src.recipes = recipes
-		src.req_amount = req_amount
+
+/datum/stack_recipe_list/New(title, recipes, req_amount = 1)
+	src.title = title
+	src.recipes = recipes
+	src.req_amount = req_amount
 
 /* =====================================================================
 							METAL RECIPES
