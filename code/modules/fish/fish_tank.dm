@@ -153,7 +153,7 @@
 		set_light(0)
 
 //////////////////////////////
-//		NEW() PROCS			//
+//		/NEW() PROCS			//
 //////////////////////////////
 
 /obj/machinery/fishtank/New()

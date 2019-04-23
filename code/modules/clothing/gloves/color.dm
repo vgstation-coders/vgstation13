@@ -203,10 +203,10 @@
 	else
 		to_chat(M, "<span class ='warning'>You need to regain your focus before channeling another gun!</span>")
 
-/obj/item/clothing/gloves/white/stunglove // For Clown Planet's mimes. - N3X
-	New()
-		..()
-		cell = new /obj/item/weapon/cell/crap/empty(src)
+// For Clown Planet's mimes. - N3X
+/obj/item/clothing/gloves/white/stunglove/New()
+	..()
+	cell = new /obj/item/weapon/cell/crap/empty(src)
 
 /obj/item/clothing/gloves/grey
 	name = "grey gloves"

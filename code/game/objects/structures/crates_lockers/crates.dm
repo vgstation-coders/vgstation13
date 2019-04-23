@@ -388,13 +388,12 @@
 	for(var/i=0;i<count;i++)
 		new /obj/item/weapon/tank/plasma(src)
 
-/obj/structure/closet/crate/hydroponics/prespawned
-	//This exists so the prespawned hydro crates spawn with their contents.
-	New()
-		..()
-		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
-		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
-		new /obj/item/weapon/minihoe(src)
+//This exists so the prespawned hydro crates spawn with their contents.
+/obj/structure/closet/crate/hydroponics/prespawned/New()
+	..()
+	new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
+	new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
+	new /obj/item/weapon/minihoe(src)
 
 
 /obj/structure/closet/crate/secure/New()

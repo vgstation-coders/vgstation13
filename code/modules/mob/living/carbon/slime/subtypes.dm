@@ -24,12 +24,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/purple
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/darkpurple
-		slime_mutation[2] = /mob/living/carbon/slime/darkblue
-		slime_mutation[3] = /mob/living/carbon/slime/green
-		slime_mutation[4] = /mob/living/carbon/slime/purple
+/mob/living/carbon/slime/adult/purple/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/darkpurple
+	slime_mutation[2] = /mob/living/carbon/slime/darkblue
+	slime_mutation[3] = /mob/living/carbon/slime/green
+	slime_mutation[4] = /mob/living/carbon/slime/purple
 
 
 /mob/living/carbon/slime/metal
@@ -47,12 +47,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/metal
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/silver
-		slime_mutation[2] = /mob/living/carbon/slime/yellow
-		slime_mutation[3] = /mob/living/carbon/slime/gold
-		slime_mutation[4] = /mob/living/carbon/slime/metal
+/mob/living/carbon/slime/adult/metal/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/silver
+	slime_mutation[2] = /mob/living/carbon/slime/yellow
+	slime_mutation[3] = /mob/living/carbon/slime/gold
+	slime_mutation[4] = /mob/living/carbon/slime/metal
 
 
 /mob/living/carbon/slime/orange
@@ -70,12 +70,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/orange
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/red
-		slime_mutation[2] = /mob/living/carbon/slime/darkpurple
-		slime_mutation[3] = /mob/living/carbon/slime/yellow
-		slime_mutation[4] = /mob/living/carbon/slime/orange
+/mob/living/carbon/slime/adult/orange/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/red
+	slime_mutation[2] = /mob/living/carbon/slime/darkpurple
+	slime_mutation[3] = /mob/living/carbon/slime/yellow
+	slime_mutation[4] = /mob/living/carbon/slime/orange
 
 
 /mob/living/carbon/slime/blue
@@ -93,12 +93,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/blue
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/darkblue
-		slime_mutation[2] = /mob/living/carbon/slime/pink
-		slime_mutation[3] = /mob/living/carbon/slime/silver
-		slime_mutation[4] = /mob/living/carbon/slime/blue
+/mob/living/carbon/slime/adult/blue/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/darkblue
+	slime_mutation[2] = /mob/living/carbon/slime/pink
+	slime_mutation[3] = /mob/living/carbon/slime/silver
+	slime_mutation[4] = /mob/living/carbon/slime/blue
 
 //Tier 3
 
@@ -117,12 +117,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/darkblue
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/purple
-		slime_mutation[2] = /mob/living/carbon/slime/cerulean
-		slime_mutation[3] = /mob/living/carbon/slime/blue
-		slime_mutation[4] = /mob/living/carbon/slime/darkblue
+/mob/living/carbon/slime/adult/darkblue/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/purple
+	slime_mutation[2] = /mob/living/carbon/slime/cerulean
+	slime_mutation[3] = /mob/living/carbon/slime/blue
+	slime_mutation[4] = /mob/living/carbon/slime/darkblue
 
 
 /mob/living/carbon/slime/darkpurple
@@ -140,12 +140,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/darkpurple
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/purple
-		slime_mutation[2] = /mob/living/carbon/slime/sepia
-		slime_mutation[3] = /mob/living/carbon/slime/orange
-		slime_mutation[4] = /mob/living/carbon/slime/darkpurple
+/mob/living/carbon/slime/adult/darkpurple/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/purple
+	slime_mutation[2] = /mob/living/carbon/slime/sepia
+	slime_mutation[3] = /mob/living/carbon/slime/orange
+	slime_mutation[4] = /mob/living/carbon/slime/darkpurple
 
 
 /mob/living/carbon/slime/yellow
@@ -163,12 +163,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/yellow
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/metal
-		slime_mutation[2] = /mob/living/carbon/slime/bluespace
-		slime_mutation[3] = /mob/living/carbon/slime/orange
-		slime_mutation[4] = /mob/living/carbon/slime/yellow
+/mob/living/carbon/slime/adult/yellow/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/metal
+	slime_mutation[2] = /mob/living/carbon/slime/bluespace
+	slime_mutation[3] = /mob/living/carbon/slime/orange
+	slime_mutation[4] = /mob/living/carbon/slime/yellow
 
 
 /mob/living/carbon/slime/silver
@@ -186,12 +186,12 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/silver
 	maxcolorcount = 4
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/metal
-		slime_mutation[2] = /mob/living/carbon/slime/pyrite
-		slime_mutation[3] = /mob/living/carbon/slime/blue
-		slime_mutation[4] = /mob/living/carbon/slime/silver
+/mob/living/carbon/slime/adult/silver/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/metal
+	slime_mutation[2] = /mob/living/carbon/slime/pyrite
+	slime_mutation[3] = /mob/living/carbon/slime/blue
+	slime_mutation[4] = /mob/living/carbon/slime/silver
 
 
 /mob/living/carbon/slime/pink
@@ -209,10 +209,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/pink
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/lightpink
-		slime_mutation[2] = /mob/living/carbon/slime/pink
+/mob/living/carbon/slime/adult/pink/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/lightpink
+	slime_mutation[2] = /mob/living/carbon/slime/pink
 
 
 /mob/living/carbon/slime/red
@@ -230,11 +230,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/red
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/oil
-		slime_mutation[2] = /mob/living/carbon/slime/red
-
+/mob/living/carbon/slime/adult/red/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/oil
+	slime_mutation[2] = /mob/living/carbon/slime/red
 
 /mob/living/carbon/slime/gold
 	colour = "gold"
@@ -251,11 +250,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/gold
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/adamantine
-		slime_mutation[2] = /mob/living/carbon/slime/gold
-
+/mob/living/carbon/slime/adult/gold/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/adamantine
+	slime_mutation[2] = /mob/living/carbon/slime/gold
 
 /mob/living/carbon/slime/green
 	colour = "green"
@@ -272,10 +270,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/green
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/black
-		slime_mutation[2] = /mob/living/carbon/slime/green
+/mob/living/carbon/slime/adult/green/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/black
+	slime_mutation[2] = /mob/living/carbon/slime/green
 
 // Tier 4
 
@@ -294,11 +292,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/lightpink
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/lightpink
-		slime_mutation[2] = /mob/living/carbon/slime/lightpink
-
+/mob/living/carbon/slime/adult/lightpink/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/lightpink
+	slime_mutation[2] = /mob/living/carbon/slime/lightpink
 
 /mob/living/carbon/slime/oil
 	icon_state = "oil baby slime"
@@ -315,10 +312,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/oil
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/oil
-		slime_mutation[2] = /mob/living/carbon/slime/oil
+/mob/living/carbon/slime/adult/oil/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/oil
+	slime_mutation[2] = /mob/living/carbon/slime/oil
 
 
 /mob/living/carbon/slime/black
@@ -336,10 +333,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/black
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/black
-		slime_mutation[2] = /mob/living/carbon/slime/black
+/mob/living/carbon/slime/adult/black/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/black
+	slime_mutation[2] = /mob/living/carbon/slime/black
 
 
 /mob/living/carbon/slime/adamantine
@@ -357,10 +354,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/adamantine
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/adamantine
-		slime_mutation[2] = /mob/living/carbon/slime/adamantine
+/mob/living/carbon/slime/adult/adamantine/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/adamantine
+	slime_mutation[2] = /mob/living/carbon/slime/adamantine
 
 
 /mob/living/carbon/slime/bluespace
@@ -378,10 +375,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/bluespace
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/bluespace
-		slime_mutation[2] = /mob/living/carbon/slime/bluespace
+/mob/living/carbon/slime/adult/bluespace/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/bluespace
+	slime_mutation[2] = /mob/living/carbon/slime/bluespace
 
 
 /mob/living/carbon/slime/pyrite
@@ -399,10 +396,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/pyrite
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/pyrite
-		slime_mutation[2] = /mob/living/carbon/slime/pyrite
+/mob/living/carbon/slime/adult/pyrite/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/pyrite
+	slime_mutation[2] = /mob/living/carbon/slime/pyrite
 
 
 /mob/living/carbon/slime/cerulean
@@ -420,10 +417,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/cerulean
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/cerulean
-		slime_mutation[2] = /mob/living/carbon/slime/cerulean
+/mob/living/carbon/slime/adult/cerulean/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/cerulean
+	slime_mutation[2] = /mob/living/carbon/slime/cerulean
 
 
 /mob/living/carbon/slime/sepia
@@ -441,10 +438,10 @@ This allows two random colors of slimes, one of it's own color for sure, and fin
 	coretype = /obj/item/slime_extract/sepia
 	maxcolorcount = 2
 
-	New()
-		..()
-		slime_mutation[1] = /mob/living/carbon/slime/sepia
-		slime_mutation[2] = /mob/living/carbon/slime/sepia
+/mob/living/carbon/slime/adult/sepia/New()
+	..()
+	slime_mutation[1] = /mob/living/carbon/slime/sepia
+	slime_mutation[2] = /mob/living/carbon/slime/sepia
 
 ////////////////Other
 

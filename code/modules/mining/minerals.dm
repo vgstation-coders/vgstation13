@@ -204,20 +204,20 @@ mineral/cave
 	ore = null
 
 mineral/cave/UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
-			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
-		else
-			..()
+	if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
+		T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
+	else
+		..()
 
 mineral/cave/ice
 	display_name = "Ice Cave"
 	name = "Ice Cave"
-	
+
 mineral/cave/ice/UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/floor/asteroid/cave/permafrost))
-			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/permafrost)
-		else
-			..()
+	if(!istype(T,/turf/unsimulated/floor/asteroid/cave/permafrost))
+		T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/permafrost)
+	else
+		..()
 
 mineral/mythril
 	display_name = "Silver"

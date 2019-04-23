@@ -37,8 +37,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment
 	name = "nutriment snack bar"
 
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 10)
-		update_icon()
-		update_name()
+/obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	update_icon()
+	update_name()
