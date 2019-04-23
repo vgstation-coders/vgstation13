@@ -445,6 +445,10 @@
 	name = "spellbook of [spellname]" //Note, desc doesn't change by design
 	..()
 
+/obj/item/weapon/spellbook/oneuse/mindswap/recoil(var/mob/user)
+	qdel(src)
+
+/*
 /obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
 	..()
 	if(stored_swap in dead_mob_list)
@@ -486,7 +490,7 @@
 	to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
 	to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
 	stored_swap = null
-
+*/
 /obj/item/weapon/spellbook/oneuse/forcewall
 	spell = /spell/aoe_turf/conjure/forcewall
 	spellname = "forcewall"
