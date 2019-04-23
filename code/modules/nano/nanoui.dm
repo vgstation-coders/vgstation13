@@ -78,7 +78,7 @@ nanoui is used to open and update nano browser uis
   *
   * @return /nanoui new nanoui object
   */
-/datum/nanoui/New(nuser, nsrc_object, nui_key, ntemplate_filename, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null, ignore_distance = 0, nstatus_proc = /datum/nanoui/proc/default_status_proc)
+/datum/nanoui/New(nuser, nsrc_object, nui_key, ntemplate_filename, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null, ignore_distance = 0, nstatus_proc = /proc/nanoui_default_status_proc)
 	user = nuser
 	src_object = nsrc_object
 	ui_key = nui_key
@@ -143,7 +143,7 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/update_status(var/push_update = 0)
-	var/status = call(status_proc)(src_object,user,allowed_user_stat,distance_check)
+	var/status = call(status_proc)(src)
 
 	if(status == STATUS_CLOSE)
 		close()
@@ -154,31 +154,29 @@ nanoui is used to open and update nano browser uis
 	/**
    * The default proc to be called by update_status()
    *
-	 * @param asrc_object /obj|/mob The obj or mob which this ui belongs to
-	 * @param auser /mob The mob who has opened/owns this ui
-	 * @param a_allowed_user_stat int (bool) Only allow users with a certain user.stat to get updates
+   * @param nano /datum/nanoui/ The nanoui datum to perform default_status_proc for
    *
    * @return nothing
    */
-/datum/nanoui/proc/default_status_proc(var/asrc_object, var/mob/auser, var/a_allowed_user_stat, var/a_distancecheck)
+/proc/nanoui_default_status_proc(var/datum/nanoui/nano)
 	var/can_interactive = 0
-	if(auser.mutations && auser.mutations.len)
-		if(M_TK in auser.mutations)
+	if(nano.user.mutations && nano.user.mutations.len)
+		if(M_TK in nano.user.mutations)
 			can_interactive = 1
-	else if(isrobot(auser))
-		if(asrc_object in view(7, auser))
+	else if(isrobot(nano.user))
+		if(nano.src_object in view(7, nano.user))
 			can_interactive = 1
 	else
-		can_interactive = (isAI(auser) || !a_distancecheck || isAdminGhost(auser))
+		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user))
 
 	if (can_interactive)
 		return STATUS_INTERACTIVE // interactive (green visibility)
 	else
 		var/dist = 0
-		if(istype(asrc_object, /atom))
-			var/atom/A = asrc_object
-			if(isobserver(auser))
-				var/mob/dead/observer/O = auser
+		if(istype(nano.src_object, /atom))
+			var/atom/A = nano.src_object
+			if(isobserver(nano.user))
+				var/mob/dead/observer/O = nano.user
 				var/ghost_flags = 0
 				if(A.ghost_write)
 					ghost_flags |= PERMIT_ALL
@@ -186,18 +184,18 @@ nanoui is used to open and update nano browser uis
 					return STATUS_INTERACTIVE // interactive (green visibility)
 				else if(canGhostRead(O,A,ghost_flags))
 					return STATUS_UPDATE
-			dist = get_dist(asrc_object, auser)
+			dist = get_dist(nano.src_object, nano.user)
 
 		if (dist > 4)
 			return STATUS_CLOSE
 
-		if ((a_allowed_user_stat > -1) && (auser.stat > a_allowed_user_stat))
+		if ((nano.allowed_user_stat > -1) && (nano.user.stat > nano.allowed_user_stat))
 			return STATUS_DISABLED // no updates, completely disabled (red visibility)
-		else if (auser.restrained() || auser.lying)
+		else if (nano.user.restrained() || nano.user.lying)
 			return STATUS_UPDATE // update only (orange visibility)
-		else if (istype(asrc_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
+		else if (istype(nano.src_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
 			return STATUS_INTERACTIVE // Will build in distance checks on the topics for sanity.
-		else if (!(asrc_object in view(4, auser))) // If the src object is not in visable, set status to 0
+		else if (!(nano.src_object in view(4, nano.user))) // If the src object is not in visable, set status to 0
 			return STATUS_DISABLED // interactive (green visibility)
 		else if (dist <= 1)
 			return STATUS_INTERACTIVE // interactive (green visibility)
