@@ -1114,7 +1114,7 @@
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/storage/box/emps,
 		/obj/item/weapon/card/id/captains_spare,
-		/obj/item/clothing/accessory/medal,
+/*		/obj/item/clothing/accessory/medal,
 		/obj/item/clothing/accessory/medal/conduct,
 		/obj/item/clothing/accessory/medal/bronze_heart,
 		/obj/item/clothing/accessory/medal/nobel_science,
@@ -1123,7 +1123,7 @@
 		/obj/item/clothing/accessory/medal/silver/security,
 		/obj/item/clothing/accessory/medal/gold,
 		/obj/item/clothing/accessory/medal/gold/captain,
-		/obj/item/clothing/accessory/medal/gold/heroism,
+		/obj/item/clothing/accessory/medal/gold/heroism,*/ //Medals will still be spawned by the medal spawner
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/suit/armor/laserproof,
 		/obj/item/clothing/accessory/holster,
@@ -1190,8 +1190,8 @@
 	/obj/item/weapon/melee/energy/axe/rusty,
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
-	/obj/item/weapon/gun/stickybomb,
-	/obj/item/weapon/gun/siren
+	/obj/item/weapon/gun/stickybomb
+//	/obj/item/weapon/gun/siren // If you want to uncomment this don't forget to add a , at the end of stickybomb
 )
 
 /obj/abstract/map/spawner/safe/clothing
