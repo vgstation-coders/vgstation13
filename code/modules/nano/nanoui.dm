@@ -500,7 +500,7 @@ nanoui is used to open and update nano browser uis
 
 	var/list/send_data = get_send_data(data)
 
-//	to_chat(user, data ? list2json(data) : "null")// used for debugging
+//	to_chat(user, json_encode(data))// used for debugging
 
 	user << output(list2params(list(json_encode(send_data))),"[window_id].browser:receiveUpdateData")
 
