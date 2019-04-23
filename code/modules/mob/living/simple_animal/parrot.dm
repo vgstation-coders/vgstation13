@@ -858,7 +858,7 @@
 /mob/living/simple_animal/parrot/Poly
 	name = "Poly"
 	desc = "Poly the Parrot. An expert on quantum cracker theory."
-	speak = list("Poly wanna cracker!", ":e Check the singlo, you chucklefucks!",":e Wire the solars, you lazy bums!",":e WHO TOOK THE DAMN HARDSUITS?",":e OH GOD ITS FREE CALL THE SHUTTLE")
+	speak = list("Poly wanna cracker!", ":e Check the singulo, you chucklefucks!",":e Wire the solars, you lazy bums!",":e WHO TOOK THE DAMN HARDSUITS?",":e OH GOD IT'S LOOSE CALL THE SHUTTLE",":e How do I set up the. SHow do I set u p the Singu how do I set up the SCo I do I set up. how I the scrungulartiy????")
 	is_pet = TRUE
 
 /mob/living/simple_animal/parrot/Poly/New()
