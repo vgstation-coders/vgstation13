@@ -17,17 +17,17 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//for the holomap
 	var/initialized = 0 //if the holomap was already initialized, since we cant do it in new, we gotta check as soon as a user clicks us
-	var/list/activators = list() //list of people using the console
+	var/list/_using = list() //list of people using the console
 	var/list/holomap_images = list() //list of lists of images for the people using the console
 	var/holomap_filter //can make the cmc display syndie/vox hideout
-	var/list/holomap_z = list() //list of activators selected z_levels
+	var/list/holomap_z = list() //list of _using selected z_levels
 	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
 	var/list/ui_tooltips = list() //list of lists of the buttons
-	var/list/freeze = list() //list of activators set freeze
+	var/list/freeze = list() //list of _using set freeze
 	var/list/entries = list() //list of all crew, which has sensors >= 1
 	var/list/textview_popup = list()//holds all the textview popups people are looking at rn
-	var/list/textview_updatequeued = list() //list of activators set textviewupdate setting
-	var/list/holomap = list() //list of activators set holomap-enable setting
+	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
+	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
 	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z) //all z-levels which should not be mapped but should still be scanned for people
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
@@ -261,7 +261,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	freeze[uid] = 0
 
 /obj/machinery/computer/crew/proc/deactivateAll()
-	for(var/mob/user in activators)
+	for(var/mob/user in _using)
 		deactivate(user)
 
 // called whenever activator leaves, disables both holomap and textview
@@ -271,7 +271,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		closeHolomap(user)
 		closeTextview(user)
 		user.client.screen -= ui_tooltips[uid] //remove ui
-	activators -= user
+	_using -= user
 	holomap_images[uid].len = 0 //incase something is fucky
 	holomap_tooltips[uid].len = 0 //incase something is fucky
 	ui_tooltips[uid].len = 0
@@ -320,11 +320,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(user.isUnconscious())
 		return
 
-	if(locate(user) in activators)
-		deactivate(user)
-		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
-	else
-		activators += user
+	if(!(user in _using))
+		_using += user
 		var/uid = "\ref[user]"
 		if(!initialized) //didn't find a better way to do this
 			initializeHolomap()
@@ -342,13 +339,13 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
-	if((!activators) || (activators.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
+	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
 		deactivateAll()
 		return
 
 	scanCrew()
 
-	for(var/mob/user in activators)
+	for(var/mob/user in _using)
 		processUser(user)
 
 /obj/machinery/computer/crew/proc/processUser(var/mob/user)
