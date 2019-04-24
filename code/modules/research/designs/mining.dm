@@ -39,8 +39,8 @@
 	reliability_base = 79
 	category = "Mining"
 	build_path = /obj/item/device/modkit/plasmacutter
-/
-datum/design/pick_diamond
+
+/datum/design/pick_diamond
 	name = "Diamond Pickaxe"
 	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
 	id = "pick_diamond"
