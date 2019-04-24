@@ -307,6 +307,20 @@ obj/item/projectile/kinetic/New()
 			if(!(original in permutated))
 				to_bump(original)
 
+/obj/item/projectile/kinetic/plasma
+	name = "plasma bolt"
+
+obj/item/projectile/kinetic/plasma/New()
+	var/turf/proj_turf = get_turf(src)
+	if(!istype(proj_turf, /turf))
+		return
+	var/datum/gas_mixture/environment = proj_turf.return_air()
+	var/pressure = environment.return_pressure()
+	if(pressure < 50)
+		name = "full strength plasma bolt"
+		damage = 40
+	..()
+
 /obj/item/projectile/portalgun
 	name = "portal gun shot"
 	icon = 'icons/obj/projectiles_experimental.dmi'
