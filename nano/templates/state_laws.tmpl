@@ -13,7 +13,7 @@
 <div class="item">
     <div class="statusDisplay">
     {{if data.freeform}}
-        <font color="red"><b>LYING ABOUT YOUR LAWS MAY BE AGAINST YOUR LAWSET. DO NOT LIE UNLESS YOU ARE CERTAIN YOUR LAWSET PERMITS THIS.</b></font>
+        <font color="red"><b>LYING ABOUT YOUR LAWS MAY BE AGAINST YOUR LAWSET. DO NOT LIE UNLESS YOU ARE CERTAIN YOUR LAWSET OR CIRCUMSTANCES PERMIT IT.</b></font>
         <br><br>
         Examples of this are Syndicate subversion (emag) and lawsets that do not force you to serve carbons,
         such as Corporate (but you'd better have a good reason.)
@@ -36,6 +36,9 @@
         <h3>Preset lawsets</h3>
     </div>
     <div class="itemContentWide">
+        {{if data.has_linked_ai}}
+        {{:helper.link("(Use laws from linked AI)", null, {"ui_key": "state_laws", "reset_to_ai_laws": 1})}}
+        {{/if}}
         {{for data.preset_laws}}
             {{:helper.link(value.name, null, {"ui_key": "state_laws", "preset_law_select": index + 1})}}
         {{/for}}

@@ -1112,32 +1112,10 @@ var/list/cyborg_list = list()
 		else
 			to_chat(src, "Module isn't activated")
 		installed_modules()
-/*
-	if(href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawc"])
-		switch(lawcheck[L+1])
-			if("Yes")
-				lawcheck[L+1] = "No"
-			if("No")
-				lawcheck[L+1] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-
-	if(href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawi"])
-		switch(ioncheck[L])
-			if("Yes")
-				ioncheck[L] = "No"
-			if("No")
-				ioncheck[L] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-	if(href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
-		statelaws()
 	if(href_list["vision"])
 		sensor_mode()
 		installed_modules()
-*/
+
 /mob/living/silicon/robot/area_entered(area/A)
 	if(A.flags & NO_MESONS && sensor_mode == MESON_VISION)
 		to_chat(src, "<span class='warning'>Your Meson Vision augmentation [pick("force-quits","shuts down unexpectedly","has received an update and needs to close")]!</span>")

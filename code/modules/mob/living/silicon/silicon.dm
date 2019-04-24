@@ -30,6 +30,8 @@
 		"freeform_editing_unlocked" = FALSE,
 		"preset_laws" = null, //list of preset law data
 		"radio_key" = ";", //radio key to output to, default is general radio
+		"has_linked_ai" = FALSE,
+		"use_laws_from_ai" = FALSE,
 	)
 
 /mob/living/silicon/hasFullAccess()
@@ -367,7 +369,7 @@
 	return new /datum/objective/siliconsurvive
 
 /mob/living/silicon/verb/state_laws()
-	set name = "State Laws (WIP)"
+	set name = "State Laws"
 	set category = "Robot Commands"
 	ui_interact(usr, "state_laws")
 
@@ -410,6 +412,10 @@
 			state_laws_ui["selected_laws"] = tmplist
 			nanomanager.update_user_uis(usr, null, "state_laws")
 			return 1
+		if(href_list["reset_to_ai_laws"])
+			state_laws_ui["use_laws_from_ai"] = TRUE
+			state_laws_ui["selected_laws"] = null
+			return 1
 		if(href_list["preset_law_select"])
 			var/index = text2num(href_list["preset_law_select"])
 			var/list/tmplist = new/list()
@@ -423,7 +429,7 @@
 			return 1
 		if(href_list["radio_key"])
 			var/key = href_list["radio_key"]
-			var/regex/onlykey = new(@":[0\-abcdemnpstuw]|;") //find a valid key in the input, assuming there is one, stopping at first match
+			var/regex/onlykey = new(@":[0\-abcdemnpstuw]|;") //find a valid key in the input, if there is one, stopping at first match
 			var/index = onlykey.Find(key)
 			//shitcode
 			if(index && key[index] == ";")
@@ -437,33 +443,42 @@
 			return 1
 		if(href_list["speak_laws"])
 			nanomanager.close_user_uis(usr, null, "state_laws")
+			if(state_laws_ui["freeform"])
+				log_admin("[usr]/[ckey(usr.key)] freeform-stated its silicon laws.")
 			speak_laws(state_laws_ui["selected_laws"], state_laws_ui["radio_key"])
 			return 1
-
-
 
 /mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
 	if(..())
 		return
 	if(ui_key == "state_laws")
-		if(state_laws_ui["selected_laws"] == null && laws) //default to our current laws
-			//in case you're wondering why this is a list of pointless dicts,
-			//it's because fucking nanoui only wants to iterate over lists of dicts. Regular lists won't work.
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			if(R.connected_ai)
+				state_laws_ui["has_linked_ai"] = TRUE
+			else
+				state_laws_ui["has_linked_ai"] = FALSE
+		if(state_laws_ui["selected_laws"] == null)
+			var/datum/ai_laws/temp_laws = laws //duplicate the laws so we don't edit them
+			if(isrobot(user) && state_laws_ui["has_linked_ai"] && state_laws_ui["use_laws_from_ai"])
+				var/mob/living/silicon/robot/R = user
+				temp_laws = R.connected_ai.laws
+				state_laws_ui["use_laws_from_ai"] = FALSE
 			var/list/tmplist = new/list()
-			if(laws.zeroth)
-				tmplist[++tmplist.len] = list("text" = "0. [laws.zeroth]", "enabled" = TRUE) //oh dear this syntax
-			for(var/law in laws.ion)
+			if(temp_laws.zeroth)
+				tmplist[++tmplist.len] = list("text" = "0. [temp_laws.zeroth]", "enabled" = TRUE) //oh dear this syntax
+			for(var/law in temp_laws.ion)
 				var/num = ionnum()
 				tmplist[++tmplist.len] = list("text" = "[num]. [law]", "enabled" = TRUE) //trust me, this is the Right Way
 			var/lawnum = 1
-			for(var/law in laws.inherent)
+			for(var/law in temp_laws.inherent)
 				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
 				lawnum++
-			for(var/law in laws.supplied)
+			for(var/law in temp_laws.supplied)
 				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
 				lawnum++
 			state_laws_ui["selected_laws"] = tmplist
-		
+
 		if(state_laws_ui["freeform"] == null)
 			state_laws_ui["freeform"] = FALSE
 		if(state_laws_ui["freeform_editing_unlocked"] == null)
@@ -506,6 +521,7 @@
 			"selected_laws" = state_laws_ui["selected_laws"],
 			"preset_laws" = state_laws_ui["preset_laws"],
 			"radio_key" = state_laws_ui["radio_key"],
+			"has_linked_ai" = state_laws_ui["has_linked_ai"]
 		)
 
 		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
