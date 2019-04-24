@@ -16,6 +16,8 @@
 	if(can_butcher && !meat_amount)
 		meat_amount = size
 
+	immune_system = new (src)
+
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)

@@ -87,3 +87,4 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/antibodies = 0
 	var/image/pathogen
+	var/datum/immune_system/immune_system

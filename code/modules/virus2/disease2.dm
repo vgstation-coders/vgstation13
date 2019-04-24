@@ -9,19 +9,24 @@ var/global/list/disease2_list = list()
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
 	var/infectionchance = 70
 
-	//clicks increases by [speed] every time the disease activates. Drinking Virus Food also accelerates the process by 10.
-	var/clicks = 0
+	//ticks increases by [speed] every time the disease activates. Drinking Virus Food also accelerates the process by 10.
+	var/ticks = 0
 	var/speed = 1
 
-	//stage increments if prob(stageprob) once there are enough clicks (100 per current stage), up to max_stage
+	//stage increments if prob(stageprob) once there are enough ticks (100 per current stage), up to max_stage
 	var/stage = 1
 	var/max_stage = 4
 	var/stageprob = 10
 	//when spreading to another mob, that new carrier has the disease's stage reduced by stage_variance
 	var/stage_variance = -1
 
-	//16 bits describing the antigens, when one bit is set, antibodies with that bit can cure the disease
-	var/antigen = 0
+	var/strength = 100
+	var/robustness = 100
+
+	var/max_bodytemperature = 406
+	var/min_bodytemperature = 0
+
+	var/list/antigen = list()
 	//set to 1 once appropriate antibodies are applied to their carrier. curing the disease, removing it from the carrier
 	var/dead = 0
 
@@ -92,8 +97,11 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
-	antigen |= text2num(pick(ANTIGENS))
-	antigen |= text2num(pick(ANTIGENS))
+	antigen = pick(all_antigens)
+	antigen |= pick(all_antigens)
+
+
+	//cosmetic petri dish stuff
 	var/list/randomhexes = list("8","9","a","b","c","d","e")
 	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	pattern = rand(1,6)
@@ -165,8 +173,8 @@ var/global/list/disease2_list = list()
 	if(!D.infectionchance || D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
 	//pick random antigens for the disease to have
-	D.antigen |= text2num(pick(ANTIGENS))
-	D.antigen |= text2num(pick(ANTIGENS))
+	D.antigen = pick(all_antigens)
+	D.antigen |= pick(all_antigens)
 	D.spread = 0
 	if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be very hard to cure!)",,"Yes","No") == "Yes")
 		D.spread |= SPREAD_BLOOD
@@ -179,15 +187,19 @@ var/global/list/disease2_list = list()
 	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
 	return 1
 
-/datum/disease2/disease/proc/activate(var/mob/living/carbon/mob)
-	if(dead)
+/datum/disease2/disease/proc/activate(var/mob/living/carbon/mob,var/starved = FALSE)
+	if(mob.stat == DEAD)
+		return
+
+	if(mob.bodytemperature > max_bodytemperature || mob.bodytemperature < min_bodytemperature)
+		cure(mob,1)
+		return
+
+	if(!mob.immune_system.CanInfect(src))
 		cure(mob)
 		return
 
-
-	if(mob.stat == 2) //Dead, brown bread
-		return
-/*
+/*	TODO: readd in a non-retarded way
 	if(mob.radiation > 50)
 		if(prob(1))
 			majormutate()
@@ -204,31 +216,57 @@ var/global/list/disease2_list = list()
 		if(!logged_virusfood)
 			log += "<br />[timestamp()] Virus Fed ([mob.reagents.get_reagent_amount(VIRUSFOOD)]U)"
 			logged_virusfood=1
-		clicks += 10
+		ticks += 10
 	else
 		logged_virusfood=0
 
 	//Moving to the next stage
-	if(clicks > stage*100 && prob(stageprob) && stage < max_stage)
+	if(ticks > stage*100 && prob(stageprob) && stage < max_stage)
 		stage++
 		log += "<br />[timestamp()] NEXT STAGE ([stage])"
-		clicks = 0
+		ticks = 0
 
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
-	if(prob(100 - (100 / mob.virus2.len)))
+	if(!starved)
 		return
 
 	//Do nasty effects
+	var/effective_stage = GetEffectiveStage()
+
 	for(var/datum/disease2/effect/e in effects)
-		if (e.can_run_effect(stage))
+		if (e.can_run_effect(effective_stage))
 			e.run_effect(mob)
 
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
-	clicks+=speed
 
-/datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
-	log_debug("[form] [uniqueID] in [key_name(mob)] has been cured and is being removed from their body.")
+	ticks += speed
+
+/datum/disease2/disease/proc/GetEffectiveStage()
+	if (!mob.immune_system)
+		return stage
+
+	var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
+	var/lowest_stage = stage
+
+	//for each antigen, we measure the corresponding antibody concentration in the carrier's immune system
+	//the less robust the pathogen, the more likely that further stages' effects won't activate at a given concentration
+	for (var/A in antigen)
+		var/concentration = mob.immune_system.antibodies[A]
+		var/i = lowest_stage
+		while (i > 0)
+			if (concentration > (strength - i * subdivision))
+				lowest_stage = i-1
+			i--
+
+	return lowest_stage
+
+/datum/disease2/disease/proc/cure(var/mob/living/carbon/mob,var/condition=0)
+	switch (condition)
+		if (0)
+			log_debug("[form] [uniqueID] in [key_name(mob)] has been cured, and is being removed from their body.")
+		if (1)
+			log_debug("[form] [uniqueID] in [key_name(mob)] has died from extreme temperature inside their host, and is being removed from their body.")
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
@@ -266,8 +304,8 @@ var/global/list/disease2_list = list()
 	log_debug("[form] [uniqueID] has major mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
 	if (prob(5))
-		antigen = text2num(pick(ANTIGENS))
-		antigen |= text2num(pick(ANTIGENS))
+		antigen = pick(all_antigens)
+		antigen |= pick(all_antigens)
 
 /datum/disease2/disease/proc/getcopy()//called by infect_virus2()
 	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
@@ -280,7 +318,7 @@ var/global/list/disease2_list = list()
 	disease.uniqueID = uniqueID
 	disease.speed = speed
 	disease.stage = stage
-	disease.clicks = clicks
+	disease.ticks = ticks
 	disease.max_stage = max_stage
 	disease.stage_variance = stage_variance
 	disease.color = color
@@ -338,7 +376,7 @@ var/global/list/virusDB = list()
 		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
 		r += "<BR>[e.desc]"
 
-	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
+	r += "<BR>Antigen pattern: [antigen]"
 	return r
 
 /datum/disease2/disease/proc/addToDB()
@@ -349,7 +387,7 @@ var/global/list/virusDB = list()
 	v.fields["form"] = form
 	v.fields["name"] = name()
 	v.fields["description"] = get_info()
-	v.fields["antigen"] = antigens2string(antigen)
+	v.fields["antigen"] = antigen
 	v.fields["spread type"] = get_spread_string()
 	virusDB["[uniqueID]"] = v
 	return 1
