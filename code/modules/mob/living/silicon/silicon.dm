@@ -26,9 +26,10 @@
 	//many of these are initialized in ui_interact because they don't initialize here properly
 	var/list/state_laws_ui = new/list(
 		"freeform" = FALSE,
-		"freeform_selected" = null, //the currently selected laws that will be stated
+		"selected_laws" = null, //the currently selected laws that will be stated
 		"freeform_editing_unlocked" = FALSE,
 		"preset_laws" = null, //list of preset law data
+		"radio_key" = ";", //radio key to output to, default is general radio
 	)
 
 /mob/living/silicon/hasFullAccess()
@@ -387,13 +388,13 @@
 	if(href_list["ui_key"] == "state_laws")
 		if(href_list["toggle_mode"])
 			state_laws_ui["freeform"] = !state_laws_ui["freeform"]
-			state_laws_ui["freeform_selected"] = null
+			state_laws_ui["selected_laws"] = null
 			return 1
 		if(href_list["freeform_edit_toggle"])
 			state_laws_ui["freeform_editing_unlocked"] = !state_laws_ui["freeform_editing_unlocked"]
 			return 1
 		if(href_list["reset_laws"])
-			state_laws_ui["freeform_selected"] = null
+			state_laws_ui["selected_laws"] = null
 			return 1
 		if(href_list["edited_laws"])
 			state_laws_ui["freeform_editing_unlocked"] = FALSE
@@ -406,23 +407,37 @@
 			var/list/tmplist = new/list()
 			for(var/str in split_laws)
 				tmplist[++tmplist.len] = list("text" = copytext(str, 1, MAX_MESSAGE_LEN), "enabled" = TRUE) //no bee movie for you, buddy
-			state_laws_ui["freeform_selected"] = tmplist
-			nanomanager.update_uis(src)
+			state_laws_ui["selected_laws"] = tmplist
+			nanomanager.update_user_uis(usr, null, "state_laws")
 			return 1
 		if(href_list["preset_law_select"])
 			var/index = text2num(href_list["preset_law_select"])
 			var/list/tmplist = new/list()
 			for(var/law in state_laws_ui["preset_laws"][index]["laws"])
 				tmplist[++tmplist.len] = list("text" = law, "enabled" = TRUE)
-			state_laws_ui["freeform_selected"] = tmplist
+			state_laws_ui["selected_laws"] = tmplist
 			return 1
 		if(href_list["toggle_law_enable"])
 			var/index = text2num(href_list["toggle_law_enable"])
-			state_laws_ui["freeform_selected"][index]["enabled"] = !state_laws_ui["freeform_selected"][index]["enabled"]
+			state_laws_ui["selected_laws"][index]["enabled"] = !state_laws_ui["selected_laws"][index]["enabled"]
+			return 1
+		if(href_list["radio_key"])
+			var/key = href_list["radio_key"]
+			var/regex/onlykey = new(@":[0\-abcdemnpstuw]|;") //find a valid key in the input, assuming there is one, stopping at first match
+			var/index = onlykey.Find(key)
+			//shitcode
+			if(index && key[index] == ";")
+				key = ";"
+			else if(index && key[index] == ":")
+				key = copytext(key, index, index+2)
+			else
+				key = ""
+			state_laws_ui["radio_key"] = key
+			nanomanager.update_user_uis(usr, null, "state_laws")
 			return 1
 		if(href_list["speak_laws"])
 			nanomanager.close_user_uis(usr, null, "state_laws")
-			speak_laws(state_laws_ui["freeform_selected"], state_laws_ui["radiokey"])
+			speak_laws(state_laws_ui["selected_laws"], state_laws_ui["radio_key"])
 			return 1
 
 
@@ -431,7 +446,7 @@
 	if(..())
 		return
 	if(ui_key == "state_laws")
-		if(state_laws_ui["freeform_selected"] == null && laws) //default to our current laws
+		if(state_laws_ui["selected_laws"] == null && laws) //default to our current laws
 			//in case you're wondering why this is a list of pointless dicts,
 			//it's because fucking nanoui only wants to iterate over lists of dicts. Regular lists won't work.
 			var/list/tmplist = new/list()
@@ -447,7 +462,7 @@
 			for(var/law in laws.supplied)
 				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
 				lawnum++
-			state_laws_ui["freeform_selected"] = tmplist
+			state_laws_ui["selected_laws"] = tmplist
 		
 		if(state_laws_ui["freeform"] == null)
 			state_laws_ui["freeform"] = FALSE
@@ -480,13 +495,17 @@
 		
 		if(state_laws_ui["freeform"] == FALSE)
 			state_laws_ui["freeform_editing_unlocked"] = FALSE //can't edit if not in freeform mode
+		
+		if(state_laws_ui["radio_key"] == null)
+			state_laws_ui["radio_key"] = ""
 
 		var/list/data = list(
 			"src" = "\ref[src]",
 			"freeform" = state_laws_ui["freeform"],
 			"freeform_editing_unlocked" = state_laws_ui["freeform_editing_unlocked"],
-			"freeform_laws" = state_laws_ui["freeform_selected"],
+			"selected_laws" = state_laws_ui["selected_laws"],
 			"preset_laws" = state_laws_ui["preset_laws"],
+			"radio_key" = state_laws_ui["radio_key"],
 		)
 
 		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

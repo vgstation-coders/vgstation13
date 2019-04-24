@@ -13,13 +13,13 @@
 <div class="item">
     <div class="statusDisplay">
     {{if data.freeform}}
-        <font color="red"><b>LYING ABOUT YOUR LAWSET IS AGAINST YOUR LAWS UNLESS A LAW PERMITS OR OBLIGATES YOU TO LIE</b></font>
+        <font color="red"><b>LYING ABOUT YOUR LAWS MAY BE AGAINST YOUR LAWSET. DO NOT LIE UNLESS YOU ARE CERTAIN YOUR LAWSET PERMITS THIS.</b></font>
         <br><br>
         Examples of this are Syndicate subversion (emag) and lawsets that do not force you to serve carbons,
         such as Corporate (but you'd better have a good reason.)
         <b>Asimov silicons usually can not lie about their laws.</b>
         <br>­<br>
-        Breaking this rule will get you bwoinked, jobbanned or worse. If you don't need to lie, use the standard State Laws functionality.
+        Breaking this rule will get you bwoinked, jobbanned, or worse. If you don't need to lie, use the standard State Laws functionality.
     {{else}}
         This interface lets you state your current laws by speaking them out, optionally on the radio.
         <br><br>
@@ -62,7 +62,7 @@
     </div>
         {{if !data.freeform_editing_unlocked}}
         <div class="statusDisplay">
-            {{for data.freeform_laws}}
+            {{for data.selected_laws}}
                 <div class="line">
                     {{if value.enabled}}
                         {{:helper.link("On", null, {"ui_key": "state_laws", "toggle_law_enable": index + 1}, null, 'greenBackground')}}
@@ -70,7 +70,7 @@
                         {{:helper.link("Off", null, {"ui_key": "state_laws", "toggle_law_enable": index + 1}, null, 'redBackground')}}
                     {{/if}}
                     <div class="statusValue">
-                        {{:value.text}}
+                        {{>value.text}}
                     </div>
                 </div>
             {{empty}}
@@ -80,12 +80,21 @@
             {{/for}}
         </div>
         {{else}}
-        <textarea name="edited_laws" id="edited_laws" rows="10" cols="50" class="statusDisplay" style="width:100%;padding:0;overflow:hidden">{{for data.freeform_laws}}{{:value.text}}{{:'\n'}}{{/for}}</textarea>
+        <textarea name="edited_laws" id="edited_laws" rows="10" cols="50" class="statusDisplay" style="width:100%;padding:0;overflow:hidden">{{for data.selected_laws}}{{>value.text}}{{:'\n'}}{{/for}}</textarea>
         {{/if}}
     </form>
 </div>
 <div class="item">
     <div class="line">
         {{:helper.link("State Laws", "volume-on", {"ui_key": "state_laws", "speak_laws": 1})}}
+        <div class="floatRight">
+            <form name="keyedit" action="byond://" method="post">
+            <input type="hidden" id="src" name="src" value="{{:data.src}}">
+            <input type="hidden" id="src" name="ui_key" value="state_laws">
+            <div class="itemLabel">Radio key:</div>
+            <input type="text" name="radio_key" id="radio_key" maxlength="2" size="2" value="{{>data.radio_key}}">
+            <input type="submit" value="Set">
+            </form>
+        </div>
     </div>
 </div>
