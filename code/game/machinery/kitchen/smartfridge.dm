@@ -268,7 +268,7 @@
 /obj/machinery/smartfridge/bloodbank/filled/New()
 	. = ..()
 
-	for(var/i = 1 to 5)
+	for(var/i = 0 to 4)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
