@@ -74,7 +74,7 @@ var/list/role_wiki=list(
 
 var/const/MAX_SAVE_SLOTS = 8
 
-#define POLLED_LIMIT	300
+#define POLLED_LIMIT	100
 
 /datum/preferences
 	var/list/subsections
@@ -1409,7 +1409,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					toggles ^= CHAT_LOOC
 
 				if("save")
-					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+					if(world.timeofday >= (lastPolled + POLLED_LIMIT) || user.client.holder)
 						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
