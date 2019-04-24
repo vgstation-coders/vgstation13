@@ -27,30 +27,9 @@
 	var/list/state_laws_ui = new/list(
 		"freeform" = FALSE,
 		"freeform_selected" = null, //the currently selected laws that will be stated
-		"preset_laws" = new/list(),
-		"window_mode" = "main",
+		"freeform_editing_unlocked" = FALSE,
+		"preset_laws" = null, //list of preset law data
 	)
-	
-
-mob/living/silicon/New()
-	..()
-
-	//Build list of preset laws for state_laws
-	var/list/preset_laws = new/list(
-		new /datum/ai_laws/asimov,
-		new /datum/ai_laws/nanotrasen,
-		new /datum/ai_laws/robocop,
-		new /datum/ai_laws/corporate,
-		new /datum/ai_laws/paladin,
-		new /datum/ai_laws/tyrant,
-		new /datum/ai_laws/antimov,
-		new /datum/ai_laws/keeper,
-		new /datum/ai_laws/syndicate_override,
-	)
-	for(var/datum/ai_laws/law in preset_laws)
-		state_laws_ui["preset_laws"][law.name] = law.inherent
-		if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
-			state_laws_ui["preset_laws"][law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
 
 /mob/living/silicon/hasFullAccess()
 	return 1
@@ -391,17 +370,29 @@ mob/living/silicon/New()
 	if(usr && (src != usr))
 		return
 	to_chat(world, "DEBUG: topic call")
+	for(var/key in href_list)
+		to_chat(world, "DEBUG: topic call [key] == [href_list[key]]")
 	//State laws code
 	if(href_list["ui_key"] == "state_laws")
-		to_chat(world, "DEBUG: ui_key matches")
 		if(href_list["toggle_mode"])
 			state_laws_ui["freeform"] = !state_laws_ui["freeform"]
 			return 1
-		if(href_list["window_mode"])
-			state_laws_ui["window_mode"] = href_list["window_mode"]
+		if(href_list["freeform_edit_toggle"])
+			state_laws_ui["freeform_editing_unlocked"] = !state_laws_ui["freeform_editing_unlocked"]
 			return 1
 		if(href_list["edited_laws"])
-			to_chat(world, "Law edit GET")
+			state_laws_ui["freeform_editing_unlocked"] = FALSE
+			var/edited_laws = href_list["edited_laws"]
+			var/regex/emptylines = new(@"(?:\n(?:[^\S\n]*(?=\n))?){2,}", "mg") //thanks stackexchange
+			edited_laws = emptylines.Replace(edited_laws, "\n")
+			edited_laws = replacetext(edited_laws, "\n", "", length(edited_laws)) //remove trailing newline
+			var/list/split_laws = splittext(edited_laws, "\n")
+			var/list/tmplist = new/list()
+			for(var/str in split_laws)
+				to_chat(world, "DEBUG: [str]")
+				tmplist[++tmplist.len] = list("text" = str, "enabled" = TRUE)
+			state_laws_ui["freeform_selected"] = tmplist
+			nanomanager.update_uis(src)
 			return 1
 
 
@@ -414,30 +405,50 @@ mob/living/silicon/New()
 			//it's because fucking nanoui only wants to iterate over lists of dicts. Regular lists won't work.
 			var/list/tmplist = new/list()
 			if(laws.zeroth)
-				tmplist[++tmplist.len] = list("text" = "0. [laws.zeroth]") //oh dear this syntax
+				tmplist[++tmplist.len] = list("text" = "0. [laws.zeroth]", "enabled" = TRUE) //oh dear this syntax
 			for(var/law in laws.ion)
 				var/num = ionnum()
-				tmplist[++tmplist.len] = list("text" = "[num]. [law]") //trust me, this is the Right Way
+				tmplist[++tmplist.len] = list("text" = "[num]. [law]", "enabled" = TRUE) //trust me, this is the Right Way
 			var/lawnum = 1
 			for(var/law in laws.inherent)
-				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]")
+				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
 				lawnum++
 			for(var/law in laws.supplied)
-				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]")
+				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
 				lawnum++
 			state_laws_ui["freeform_selected"] = tmplist
 		
-		if(state_laws_ui["window_mode"] == null)
-			state_laws_ui["window_mode"] = "main"
 		if(state_laws_ui["freeform"] == null)
 			state_laws_ui["freeform"] = FALSE
+		if(state_laws_ui["freeform_editing_unlocked"] == null)
+			state_laws_ui["freeform_editing_unlocked"] = FALSE
+		if(state_laws_ui["preset_laws"] == null)
+			state_laws_ui["preset_laws"] = new/list()
+			//Build list of preset laws for state_laws
+			var/list/preset_laws = new/list(
+				new /datum/ai_laws/asimov,
+				new /datum/ai_laws/nanotrasen,
+				new /datum/ai_laws/robocop,
+				new /datum/ai_laws/corporate,
+				new /datum/ai_laws/paladin,
+				new /datum/ai_laws/tyrant,
+				new /datum/ai_laws/antimov,
+				new /datum/ai_laws/keeper,
+				new /datum/ai_laws/syndicate_override,
+			)
+			for(var/datum/ai_laws/law in preset_laws)
+				var/tmplist = new/list()
+				state_laws_ui["preset_laws"][law.name] = law.inherent.Copy
+				if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
+					state_laws_ui["preset_laws"][law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
+
 
 		var/list/data = list(
 			"src" = "\ref[src]",
 			"freeform" = state_laws_ui["freeform"],
+			"freeform_editing_unlocked" = state_laws_ui["freeform_editing_unlocked"],
 			"freeform_laws" = state_laws_ui["freeform_selected"],
 			"preset_laws" = state_laws_ui["preset_laws"],
-			"window_mode" = state_laws_ui["window_mode"],
 		)
 		to_chat(world, "DEBUG: window_mode: [data["window_mode"]]")
 		to_chat(world, "DEBUG: original window_mode: [state_laws_ui["window_mode"]]")
