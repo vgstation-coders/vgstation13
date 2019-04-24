@@ -437,7 +437,7 @@
 				new /datum/ai_laws/syndicate_override,
 			)
 			for(var/datum/ai_laws/law in preset_laws)
-				var/tmplist = new/list()
+				//var/tmplist = new/list()
 				state_laws_ui["preset_laws"][law.name] = law.inherent.Copy
 				if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
 					state_laws_ui["preset_laws"][law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
