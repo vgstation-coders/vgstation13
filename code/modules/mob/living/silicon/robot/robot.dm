@@ -1112,6 +1112,7 @@ var/list/cyborg_list = list()
 		else
 			to_chat(src, "Module isn't activated")
 		installed_modules()
+
 	if(href_list["vision"])
 		sensor_mode()
 		installed_modules()

@@ -500,7 +500,7 @@
 		if("State Laws")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.checklaws()
+				AI.state_laws()
 
 		if("PDA - Send Message")
 			if(isAI(usr))

@@ -383,7 +383,7 @@
         sleep(10)
 
 /mob/living/silicon/Topic(href, href_list)
-	..()
+	. = ..()
 	if(usr && (src != usr))
 		return
 	//State laws code

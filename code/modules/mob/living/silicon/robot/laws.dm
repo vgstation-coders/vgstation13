@@ -3,47 +3,6 @@
 	set name = "Show Laws"
 	show_laws()
 
-//vg edit
-/mob/living/silicon/robot/proc/statelaws() // -- TLE
-	say(";Current Active Laws:")
-	var/number = 1
-	sleep(10)
-
-
-
-	if (laws.zeroth)
-		if (lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
-			say(";0. [laws.zeroth]")
-			sleep(10)
-
-	for (var/index = 1, index <= laws.ion.len, index++)
-		var/law = laws.ion[index]
-		var/num = ionnum()
-		if (length(law) > 0)
-			if (ioncheck[index] == "Yes")
-				say(";[num]. [law]")
-				sleep(10)
-
-	for (var/index = 1, index <= laws.inherent.len, index++)
-		var/law = laws.inherent[index]
-
-		if (length(law) > 0)
-			if (lawcheck[index+1] == "Yes")
-				say(";[number]. [law]")
-				sleep(10)
-			number++
-
-
-	for (var/index = 1, index <= laws.supplied.len, index++)
-		var/law = laws.supplied[index]
-
-		if (length(law) > 0)
-			if(lawcheck.len >= number+1)
-				if (lawcheck[number+1] == "Yes")
-					say(";[number]. [law]")
-					sleep(10)
-				number++
-
 /mob/living/silicon/robot/show_laws(var/everyone = 0)
 	laws_sanity_check()
 	var/who
