@@ -21,7 +21,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/holomap_images = list() //list of lists of images for the people using the console
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of activators selected z_levels
-	var/list/holomap_tooltips = list() //list of lists of tooltips(the buttons) for the people using the console
+	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
+	var/list/ui_tooltips = list() //list of lists of the buttons
 	var/list/freeze = list() //list of activators set freeze
 	var/list/entries = list() //list of all crew, which has sensors >= 1
 	var/list/textview_popup = list()//holds all the textview popups people are looking at rn
@@ -166,7 +167,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 				//incase we dont get a pos
 				var/turf/entry_z = get_turf(H)
 				if(entry_z.z in all_tracked_z_levels)
-					entries[entry_z.z][++entries[entry_z.z]] = list(pos, H, name, assignment, life_status, damage, player_area, ijob)
+					entries[entry_z.z][++entries[entry_z.z].len] = list(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
@@ -177,7 +178,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		var/turf/pos = get_turf(B)
 		if((pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			entries[pos.z][++entries[pos.z]] = list(pos, B, "[B]", "MMI", null, null, parea, 60)
+			entries[pos.z][++entries[pos.z].len] = list(pos, B, "[B]", "MMI", null, null, parea, 60)
 
 //create actual marker for crew with sensors on 3
 /obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available")
@@ -185,6 +186,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		return
 
 	var/uid = "crewmarker_\ref[H]_\ref[user]"
+	var/user_uid = "\ref[user]"
 
 	//creating the title with name | job - Dead/Alive
 	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
@@ -221,7 +223,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	I.setCMC(src)
 	I.name = name
 
-	holomap_tooltips[uid][++holomap_tooltips[uid].len] = I
+	holomap_tooltips[user_uid] |= I
 
 //helper to get healthstate
 /obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
@@ -246,6 +248,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 /obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
 	var/uid = "\ref[user]"
 	user.client.images -= holomap_images[uid]
+	user.client.screen -= holomap_tooltips[uid]
 
 	var/z = holomap_z["\ref[user]"]
 	var/holomap_bgmap = "cmc_\ref[src]_[z]"
@@ -254,6 +257,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
 
 	holomap_images[uid].len = 0
+	holomap_tooltips[uid].len = 0
 	freeze[uid] = 0
 
 /obj/machinery/computer/crew/proc/deactivateAll()
@@ -263,13 +267,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 // called whenever activator leaves, disables both holomap and textview
 /obj/machinery/computer/crew/proc/deactivate(var/mob/user)
 	var/uid = "\ref[user]"
-	if(user && user.client)
+	if(user && user.client) //incase something is fucky
 		closeHolomap(user)
 		closeTextview(user)
-		user.client.screen -= holomap_tooltips[uid] //remove btns
+		user.client.screen -= ui_tooltips[uid] //remove ui
 	activators -= user
 	holomap_images[uid].len = 0 //incase something is fucky
-	holomap_tooltips[uid].len = 0
+	holomap_tooltips[uid].len = 0 //incase something is fucky
+	ui_tooltips[uid].len = 0
 	freeze[uid] = null //incase something is fucky
 	holomap_z[uid] = null
 	textview_updatequeued[uid] = null
@@ -325,17 +330,19 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			initializeHolomap()
 		holomap_images[uid] = list()
 		holomap_tooltips[uid] = list()
+		ui_tooltips[uid] = list()
 		freeze[uid] = 0
 		holomap_z[uid] = STATION_Z
 		textview_updatequeued[uid] = 1
 		holomap[uid] = 1
 		textview_popup[uid] = null
+		scanCrew() //else the first user has to wait for process to fire
 		processUser(user)
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
-	if((!activators) || (activators.len == 0) || (stat & (BROKEN|NOPOWER)) || ((textview_popup.len == 0) && (holomap.len == 0)) || !holomap) //sanity
+	if((!activators) || (activators.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
 		deactivateAll()
 		return
 
@@ -346,6 +353,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/processUser(var/mob/user)
 	var/uid = "\ref[user]"
+	if(!textview_popup[uid] && (holomap[uid] == 0))
+		deactivate(user)
+		return
+
 	updateVisuals(user)
 
 	if(textview_updatequeued[uid] && textview_popup[uid])
@@ -366,7 +377,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	//updating holomap
 	if(holomap[uid] && !freeze[uid]) // we only repopulate user.client.images if holomap is enabled
 		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
 		holomap_images[uid].len = 0
+		holomap_tooltips[uid].len = 0
 
 		var/image/bgmap
 		var/z = holomap_z[uid]
@@ -379,24 +392,26 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		holomap_images[uid][++holomap_images[uid].len] = bgmap
+		holomap_images[uid] |= bgmap
 
 		for(var/entry in entries[holomap_z[uid]])
-			to_chat(user, "[entry]")
-			if(entry[1]) //can only be our z, so i'm not checking
-				addCrewMarker(entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8])
+			//can only be our z, so i'm not checking that, only if we have a pos
+			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8])
 
-		user.client.images |= holomap_images
+		user.client.images |= holomap_images[uid]
+		user.client.screen |= holomap_tooltips[uid]
 	else if(!holomap[uid])
 		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
 		holomap_images[uid].len = 0
+		holomap_tooltips[uid].len = 0
 
 	//updating ui
-	user.client.screen -= holomap_tooltips[uid]
-	holomap_tooltips[uid].len = 0
+	user.client.screen -= ui_tooltips[uid]
+	ui_tooltips[uid].len = 0
 
 	updateUI(user)
-	user.client.screen |= holomap_tooltips
+	user.client.screen |= ui_tooltips[uid]
 
 //updates the ui-btns
 /obj/machinery/computer/crew/proc/updateUI(var/mob/user)
@@ -423,7 +438,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		ui_btns += new /obj/abstract/screen/interface(null,user,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13")
 		cmc_holomap_cache[uid] = ui_btns
 
-	holomap_tooltips[user_uid][++holomap_tooltips[user_uid].len] = cmc_holomap_cache[uid]
+	ui_tooltips[user_uid] |= cmc_holomap_cache[uid]
 
 /*
 	Tooltip interface
@@ -511,8 +526,17 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//adding table rows
 	for(var/entry in entries[holomap_z[uid]])
+		var/turf/TU = entry[1]
+		var/mob/living/carbon/H = entry[2]
+		var/name = entry[3]
+		var/job = entry[4]
+		var/stat = entry[5]
+		var/list/damage = entry[6]
+		var/player_area = entry[7]
+		var/ijob = entry[8]
+
 		var/role
-		switch(entry[9])
+		switch(ijob)
 			if(0)	role = "cap" // captain
 			if(10 to 19) role = "sec" // security
 			if(20 to 29) role = "med" // medical
@@ -524,10 +548,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			else role = "unk"
 
 		var/icon
-		if(istype(entry[2], /mob/living/carbon/human))
-			if(entry[5] != 2)
-				if(entry[6])
-					icon = getLifeIcon(entry[6])
+		if(istype(H, /mob/living/carbon/human))
+			if(stat != 2)
+				if(damage)
+					icon = getLifeIcon(damage)
 				else
 					icon = "0"
 			else
@@ -535,9 +559,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		else
 			icon = "7"
 
-		var/list/string = list("<span class='name [role]'>[entry[3]]</span> ([entry[4]])")
-		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (entry[6] ? "(<span class='oxygen'>[entry[6][1]]</span>/<span class='toxin'>[entry[6][2]]</span>/<span class='fire'>[entry[6][3]]</span>/<span class='brute'>[entry[6][4]]</span>)" : "Not Available")
-		string += entry[1] ? "[entry[8]] ([entry[1].x],[entry[1].y])" : "Not Available"
+		var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
+		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
+		string += TU ? "[player_area] ([TU.x],[TU.y])" : "Not Available"
 		var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 
 		t += "<tr>[actualstring]</tr>"
