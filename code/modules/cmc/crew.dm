@@ -17,7 +17,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//for the holomap
 	var/initialized = 0 //if the holomap was already initialized, since we cant do it in new, we gotta check as soon as a user clicks us
-	var/list/_using = list() //list of people using the console
 	var/list/holomap_images = list() //list of lists of images for the people using the console
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
