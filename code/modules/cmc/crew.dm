@@ -14,6 +14,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 2
+	_using = new()
 
 	//for the holomap
 	var/initialized = 0 //if the holomap was already initialized, since we cant do it in new, we gotta check as soon as a user clicks us
