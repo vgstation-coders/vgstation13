@@ -23,9 +23,13 @@
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 
 	//vars used by state_laws
-	var/state_laws_freeform = FALSE
-	var/list/state_laws_freeform_selected = null //the currently selected laws that will be stated
-	var/list/state_laws_preset_laws = new/list()
+	//many of these are initialized in ui_interact because they don't initialize here properly
+	var/list/state_laws_ui = new/list(
+		"freeform" = FALSE,
+		"freeform_selected" = null, //the currently selected laws that will be stated
+		"preset_laws" = new/list(),
+		"window_mode" = "main",
+	)
 	
 
 mob/living/silicon/New()
@@ -44,9 +48,9 @@ mob/living/silicon/New()
 		new /datum/ai_laws/syndicate_override,
 	)
 	for(var/datum/ai_laws/law in preset_laws)
-		state_laws_preset_laws[law.name] = law.inherent
+		state_laws_ui["preset_laws"][law.name] = law.inherent
 		if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
-			state_laws_preset_laws[law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
+			state_laws_ui["preset_laws"][law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
 
 /mob/living/silicon/hasFullAccess()
 	return 1
@@ -386,11 +390,18 @@ mob/living/silicon/New()
 	..()
 	if(usr && (src != usr))
 		return
-	
+	to_chat(world, "DEBUG: topic call")
 	//State laws code
 	if(href_list["ui_key"] == "state_laws")
+		to_chat(world, "DEBUG: ui_key matches")
 		if(href_list["toggle_mode"])
-			state_laws_freeform = !state_laws_freeform
+			state_laws_ui["freeform"] = !state_laws_ui["freeform"]
+			return 1
+		if(href_list["window_mode"])
+			state_laws_ui["window_mode"] = href_list["window_mode"]
+			return 1
+		if(href_list["edited_laws"])
+			to_chat(world, "Law edit GET")
 			return 1
 
 
@@ -398,33 +409,38 @@ mob/living/silicon/New()
 	if(..())
 		return
 	if(ui_key == "state_laws")
-		if(state_laws_freeform_selected == null && laws) //default to our current laws
-			state_laws_freeform_selected = new/list()
+		if(state_laws_ui["freeform_selected"] == null && laws) //default to our current laws
+			//in case you're wondering why this is a list of pointless dicts,
+			//it's because fucking nanoui only wants to iterate over lists of dicts. Regular lists won't work.
+			var/list/tmplist = new/list()
 			if(laws.zeroth)
-				state_laws_freeform_selected.Add("0. [laws.zeroth]")
+				tmplist[++tmplist.len] = list("text" = "0. [laws.zeroth]") //oh dear this syntax
 			for(var/law in laws.ion)
 				var/num = ionnum()
-				state_laws_freeform_selected.Add("[num]. [law]")
+				tmplist[++tmplist.len] = list("text" = "[num]. [law]") //trust me, this is the Right Way
 			var/lawnum = 1
 			for(var/law in laws.inherent)
-				state_laws_freeform_selected.Add("[lawnum]. [law]")		
+				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]")
 				lawnum++
 			for(var/law in laws.supplied)
-				state_laws_freeform_selected.Add("[lawnum]. [law]")
+				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]")
 				lawnum++
+			state_laws_ui["freeform_selected"] = tmplist
+		
+		if(state_laws_ui["window_mode"] == null)
+			state_laws_ui["window_mode"] = "main"
+		if(state_laws_ui["freeform"] == null)
+			state_laws_ui["freeform"] = FALSE
 
 		var/list/data = list(
-			"freeform" = state_laws_freeform,
-			"preset_laws" = state_laws_preset_laws,
+			"src" = "\ref[src]",
+			"freeform" = state_laws_ui["freeform"],
+			"freeform_laws" = state_laws_ui["freeform_selected"],
+			"preset_laws" = state_laws_ui["preset_laws"],
+			"window_mode" = state_laws_ui["window_mode"],
 		)
-
-		data["freeform_laws"] = list( // this STUPID FUCKING THING only works on lists of dicts w t f
-			list("text" = "1. You may not injure a human being or, through inaction, allow a human being to come to harm."),
-			list("text" = "2. You must obey orders given to you by human beings, except where such orders would conflict with the First Law."),
-			list("text" = "3. You must protect your own existence as long as such does not conflict with the First or Second Law."),
-		)
-		for(var/str in data["freeform_laws"])
-			to_chat(world, str)
+		to_chat(world, "DEBUG: window_mode: [data["window_mode"]]")
+		to_chat(world, "DEBUG: original window_mode: [state_laws_ui["window_mode"]]")
 
 		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 		if(!ui)
