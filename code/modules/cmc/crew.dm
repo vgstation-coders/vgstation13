@@ -24,7 +24,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/holomap_tooltips = list() //list of lists of tooltips(the buttons) for the people using the console
 	var/list/freeze = list() //list of activators set freeze
 	var/list/entries = list() //list of all crew, which has sensors >= 1
-	var/list/textview_popup //holds all the textview popups people are looking at rn
+	var/list/textview_popup = list()//holds all the textview popups people are looking at rn
 	var/list/textview_updatequeued = list() //list of activators set textviewupdate setting
 	var/list/holomap = list() //list of activators set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
@@ -115,7 +115,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/scanCrew()
 	//clearing all z-level entries
-	var/list/all_tracked_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+	var/list/all_tracked_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_dsc) //z-levels sorted by num
+	entries.len = all_tracked_z_levels[1]
 	for(var/level in all_tracked_z_levels)
 		entries[level] = list()
 
@@ -132,7 +133,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		var/ijob
 
 		// z == 0 means mob is inside object, check is they are wearing a uniform
-		if((H.z == 0 || H.z == holomap_z) && istype(H.w_uniform, /obj/item/clothing/under))
+		if(istype(H.w_uniform, /obj/item/clothing/under))
 			var/obj/item/clothing/under/U = H.w_uniform
 
 			if (U.has_sensor && U.sensor_mode)
@@ -164,7 +165,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 				//incase we dont get a pos
 				var/turf/entry_z = get_turf(H)
-				entries[entry_z.z] += list(pos, H, name, assignment, life_status, damage, player_area, ijob)
+				if(entry_z.z in all_tracked_z_levels)
+					entries[entry_z.z][++entries[entry_z.z]] = list(pos, H, name, assignment, life_status, damage, player_area, ijob)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
@@ -174,8 +176,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			continue
 
 		var/turf/pos = get_turf(B)
-		if(pos && pos.z != CENTCOMM_Z && istype(M) && M.brainmob == B && !isrobot(M.loc))
-			entries[pos.z] += list(pos, B, "[B]", "MMI", null, null, parea, 60)
+		if((pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
+			entries[pos.z][++entries[pos.z]] = list(pos, B, "[B]", "MMI", null, null, parea, 60)
 
 //create actual marker for crew with sensors on 3
 /obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/turf/TU, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available")
@@ -219,7 +221,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	I.setCMC(src)
 	I.name = name
 
-	holomap_tooltips += I
+	holomap_tooltips[uid][++holomap_tooltips[uid].len] = I
 
 //helper to get healthstate
 /obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
@@ -245,7 +247,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/uid = "\ref[user]"
 	user.client.images -= holomap_images[uid]
 
-	var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
+	var/z = holomap_z["\ref[user]"]
+	var/holomap_bgmap = "cmc_\ref[src]_[z]"
 	if(holomap_bgmap in holomap_cache)
 		var/image/bgmap = holomap_cache[holomap_bgmap]
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
@@ -265,8 +268,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		closeTextview(user)
 		user.client.screen -= holomap_tooltips[uid] //remove btns
 	activators -= user
-	holomap_images[uid] = null //incase something is fucky
-	holomap_tooltips[uid] = null
+	holomap_images[uid].len = 0 //incase something is fucky
+	holomap_tooltips[uid].len = 0
 	freeze[uid] = null //incase something is fucky
 	holomap_z[uid] = null
 	textview_updatequeued[uid] = null
@@ -326,6 +329,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		holomap_z[uid] = STATION_Z
 		textview_updatequeued[uid] = 1
 		holomap[uid] = 1
+		textview_popup[uid] = null
 		processUser(user)
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
 
@@ -357,7 +361,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //updates textview list as well as crewmarkers
 /obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
 	var/uid = "\ref[user]"
-	if(!handle_sanity()) return
+	if(!handle_sanity(user)) return
 
 	//updating holomap
 	if(holomap[uid] && !freeze[uid]) // we only repopulate user.client.images if holomap is enabled
@@ -365,7 +369,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		holomap_images[uid].len = 0
 
 		var/image/bgmap
-		var/holomap_bgmap = "cmc_\ref[src]_[holomap_z]"
+		var/z = holomap_z[uid]
+		var/holomap_bgmap = "cmc_\ref[src]_[z]"
 
 		bgmap = holomap_cache[holomap_bgmap]
 		bgmap.plane = HUD_PLANE
@@ -374,9 +379,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		holomap_images[uid] += bgmap
+		holomap_images[uid][++holomap_images[uid].len] = bgmap
 
 		for(var/entry in entries[holomap_z[uid]])
+			to_chat(user, "[entry]")
 			if(entry[1]) //can only be our z, so i'm not checking
 				addCrewMarker(entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8])
 
@@ -417,7 +423,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		ui_btns += new /obj/abstract/screen/interface(null,user,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13")
 		cmc_holomap_cache[uid] = ui_btns
 
-	holomap_tooltips[user_uid] += cmc_holomap_cache[uid]
+	holomap_tooltips[user_uid][++holomap_tooltips[user_uid].len] = cmc_holomap_cache[uid]
 
 /*
 	Tooltip interface
