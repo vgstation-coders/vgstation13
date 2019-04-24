@@ -224,6 +224,7 @@
 #define WHISKEYCOLA 			"whiskeycola"
 #define MARTINI 			"martini"
 #define VODKAMARTINI 			"vodkamartini"
+#define SAKEMARTINI         "sakemartini"
 #define WHITERUSSIAN 			"whiterussian"
 #define SCREWDRIVERCOCKTAIL 			"screwdrivercocktail"
 #define BOOGER 			"booger"

@@ -53,7 +53,7 @@
 					circuit = P
 					state = UNSECURED_CIRCUITBOARD
 		if(UNSECURED_CIRCUITBOARD)
-			if(isscrewdriver(P) && circuit)
+			if(P.is_screwdriver(user) && circuit)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
@@ -64,7 +64,7 @@
 				circuit.forceMove(loc)
 				circuit = null
 		if(SECURED_CIRCUITBOARD)
-			if(isscrewdriver(P) && circuit)
+			if(P.is_screwdriver(user) && circuit)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
@@ -133,7 +133,7 @@
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)
-			else if(isscrewdriver(P))
+			else if(P.is_screwdriver(user))
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )

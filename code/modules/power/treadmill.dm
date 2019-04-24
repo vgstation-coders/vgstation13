@@ -114,3 +114,24 @@
 	emagged = 1
 	name = "\improper DREADMILL"
 	desc = "FEEL THE BURN"
+
+/obj/machinery/power/treadmill/verb/rotate_clock()
+	set category = "Object"
+	set name = "Rotate Treadmill (Clockwise)"
+	set src in view(1)
+
+	if (usr.isUnconscious() || usr.restrained()  || anchored)
+		return
+
+	src.dir = turn(src.dir, -90)
+
+/obj/machinery/power/treadmill/verb/rotate_anticlock()
+	set category = "Object"
+	set name = "Rotate Treadmill (Counterclockwise)"
+	set src in view(1)
+
+	if (usr.isUnconscious() || usr.restrained()  || anchored)
+		to_chat(usr, "It is fastened to the floor!")
+		return
+
+	src.dir = turn(src.dir, 90)

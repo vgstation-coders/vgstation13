@@ -283,6 +283,31 @@ var/global/list/alert_overlays_global = list()
 		force_open(user, C)
 		return
 
+	if(C && (C.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT)
+		if(!density)
+			return
+		if(blocked)
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+								"<span class='notice'>You begin slicing through \the [src].</span>", \
+								"<span class='warning'>You hear slicing noises.</span>")
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			if(do_after(user, src, 50))
+				if(!istype(src))
+					return
+				user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+									"<span class='notice'>You slice through \the [src].</span>", \
+									"<span class='warning'>You hear slicing noises.</span>")
+				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+				blocked = !blocked
+				open()
+			return
+		else
+			user.visible_message("<span class='warning'>[user] swiftly slices \the [src] open!</span>",\
+								"You slice \the [src] open in one clean cut!",\
+								"You hear the sound of a swift, sharp slice.")
+			open()
+			return
+
 	if(istype(C, /obj/item/weapon/wrench))
 		if(blocked)
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
@@ -318,13 +343,13 @@ var/global/list/alert_overlays_global = list()
 
 	var/access_granted = 0
 	var/users_name
-	if(!istype(C, /obj)) //If someone hit it with their hand.  We need to see if they are allowed.
-		if(allowed(user))
-			access_granted = 1
-		if(ishuman(user))
-			users_name = FindNameFromID(user)
-		else
-			users_name = "Unknown"
+
+	if(allowed(user))
+		access_granted = 1
+	if(ishuman(user))
+		users_name = FindNameFromID(user)
+	else
+		users_name = "Unknown"
 
 	if( ishuman(user) &&  !stat && ( istype(C, /obj/item/weapon/card/id) || istype(C, /obj/item/device/pda) ) )
 		var/obj/item/weapon/card/id/ID = C

@@ -363,7 +363,7 @@
 		spawn_positions = -1
 		return 99
 	else
-		..()
+		return ..()
 
 /datum/job/mime
 	title = "Mime"

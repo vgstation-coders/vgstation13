@@ -1392,7 +1392,7 @@
 	maturation = 6
 	production = 6
 	yield = 3
-	potency = 1
+	potency = 10
 	water_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8

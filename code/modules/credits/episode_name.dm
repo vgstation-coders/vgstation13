@@ -214,7 +214,7 @@
 					voxcount++
 				if(isdiona(H))
 					dionacount++
-				if(isjusthuman(H) && (H.h_style == "Bald" || H.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
+				if(isjusthuman(H) && (H.my_appearance.h_style == "Bald" || H.my_appearance.h_style == "Skinhead") && !H.check_body_part_coverage(HEAD))
 					baldycount++
 				if(M_FAT in H.mutations)
 					fattycount++
