@@ -365,6 +365,20 @@
 /mob/living/silicon/get_survive_objective()
 	return new /datum/objective/siliconsurvive
 
+/mob/living/silicon/verb/state_laws()
+	set name = "State Laws (WIP)"
+	set category = "Robot Commands"
+	ui_interact(usr, "state_laws")
+
+/mob/living/silicon/proc/speak_laws(var/list/to_state, var/radiokey)
+    say("[radiokey]Current Active Laws:")
+    sleep(10)
+    for(var/law in to_state)
+        if(!law["enabled"])
+            continue
+        say("[radiokey][law["text"]]")
+        sleep(10)
+
 /mob/living/silicon/Topic(href, href_list)
 	..()
 	if(usr && (src != usr))
@@ -373,9 +387,13 @@
 	if(href_list["ui_key"] == "state_laws")
 		if(href_list["toggle_mode"])
 			state_laws_ui["freeform"] = !state_laws_ui["freeform"]
+			state_laws_ui["freeform_selected"] = null
 			return 1
 		if(href_list["freeform_edit_toggle"])
 			state_laws_ui["freeform_editing_unlocked"] = !state_laws_ui["freeform_editing_unlocked"]
+			return 1
+		if(href_list["reset_laws"])
+			state_laws_ui["freeform_selected"] = null
 			return 1
 		if(href_list["edited_laws"])
 			state_laws_ui["freeform_editing_unlocked"] = FALSE
@@ -383,7 +401,8 @@
 			var/regex/emptylines = new(@"(?:\n(?:[^\S\n]*(?=\n))?){2,}", "mg") //thanks stackexchange
 			edited_laws = emptylines.Replace(edited_laws, "\n")
 			edited_laws = replacetext(edited_laws, "\n", "", length(edited_laws)) //remove trailing newline
-			var/list/split_laws = splittext(edited_laws, "\n").Copy(1, 51) //no more than 50 laws permitted
+			var/list/split_laws = splittext(edited_laws, "\n")
+			split_laws = split_laws.Copy(1, min(split_laws.len + 1, 51)) //no more than 50 laws permitted
 			var/list/tmplist = new/list()
 			for(var/str in split_laws)
 				tmplist[++tmplist.len] = list("text" = copytext(str, 1, MAX_MESSAGE_LEN), "enabled" = TRUE) //no bee movie for you, buddy
@@ -397,6 +416,15 @@
 				tmplist[++tmplist.len] = list("text" = law, "enabled" = TRUE)
 			state_laws_ui["freeform_selected"] = tmplist
 			return 1
+		if(href_list["toggle_law_enable"])
+			var/index = text2num(href_list["toggle_law_enable"])
+			state_laws_ui["freeform_selected"][index]["enabled"] = !state_laws_ui["freeform_selected"][index]["enabled"]
+			return 1
+		if(href_list["speak_laws"])
+			nanomanager.close_user_uis(usr, null, "state_laws")
+			speak_laws(state_laws_ui["freeform_selected"], state_laws_ui["radiokey"])
+			return 1
+
 
 
 /mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
@@ -442,21 +470,16 @@
 			for(var/datum/ai_laws/law in preset_laws) //again having to deal with nanoui shitcode
 				var/list/tmplist = list()
 				tmplist["name"] = law.name
-				to_chat(world, "DEBUG: added law [tmplist["name"]]")
-				// tmplist["laws"] = list()
-				// for(var/i = 1; i <= law.inherent.len; i++)
-				// 	var/clause = law.inherent[i]
-				// 	tmplist["laws"].Add("[i]. [clause]")
-				// if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
-				// 	tmplist["laws"].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
-				// to_chat(world, "DEBUG: added [tmplist["laws"].len] clauses to the law.")
+				tmplist["laws"] = list()
+				for(var/i = 1; i <= law.inherent.len; i++)
+					var/clause = law.inherent[i]
+					tmplist["laws"].Add("[i]. [clause]")
+				if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
+					tmplist["laws"].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
 				state_laws_ui["preset_laws"][++state_laws_ui["preset_laws"].len] = tmplist.Copy()
-		to_chat(world, "DEBUG: preset_laws length: [state_laws_ui["preset_laws"].len]")
-		for(var/list/law in state_laws_ui["preset_laws"])
-			to_chat(world, "DEBUG: preset law found: [law["name"]]. It's clauses are:")
-			for(var/clause in law["laws"])
-				to_chat(world, clause)
-			
+		
+		if(state_laws_ui["freeform"] == FALSE)
+			state_laws_ui["freeform_editing_unlocked"] = FALSE //can't edit if not in freeform mode
 
 		var/list/data = list(
 			"src" = "\ref[src]",

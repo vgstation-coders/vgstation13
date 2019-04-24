@@ -44,10 +44,6 @@
 					sleep(10)
 				number++
 
-/mob/living/silicon/state_laws()
-	set category = "Robot Commands"
-	. = ..()
-
 /*
 /mob/living/silicon/robot/verb/checklaws() //Gives you a link-driven interface for deciding what laws the statelaws() proc will share with the crew. --NeoFite
 	set category = "Robot Commands"

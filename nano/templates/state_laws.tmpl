@@ -10,38 +10,47 @@
         </div>
     </div>
 </div>
-{{if data.freeform}}
 <div class="item">
     <div class="statusDisplay">
+    {{if data.freeform}}
         <font color="red"><b>LYING ABOUT YOUR LAWSET IS AGAINST YOUR LAWS UNLESS A LAW PERMITS OR OBLIGATES YOU TO LIE</b></font>
         <br><br>
         Examples of this are Syndicate subversion (emag) and lawsets that do not force you to serve carbons,
         such as Corporate (but you'd better have a good reason.)
         <b>Asimov silicons usually can not lie about their laws.</b>
         <br>­<br>
-        Breaking this rule will get you bwoinked, jobbanned or worse. If you don't need to lie, use the regular State Laws functionality.
+        Breaking this rule will get you bwoinked, jobbanned or worse. If you don't need to lie, use the standard State Laws functionality.
+    {{else}}
+        This interface lets you state your current laws by speaking them out, optionally on the radio.
+        <br><br>
+        Select the laws you wish to state below, then choose the radio channel you wish to output on and click on <i>State Laws</i> to speak them out.
+        Note that some radio channels may not be available to you: if this is the case, you will state your laws off-radio.
+        <br><br>
+        If you require more advanced control over which laws to state and how, use the Freeform mode by toggling it in the top right.
+    {{/if}}
     </div>
 </div>
-
+{{if data.freeform}}
 <div class="item">
     <div class="line">
         <h3>Preset lawsets</h3>
     </div>
     <div class="itemContentWide">
         {{for data.preset_laws}}
-            LAW{{:helper.link(value.name, null, {"ui_key": "state_laws", "preset_law_select": index})}}
+            {{:helper.link(value.name, null, {"ui_key": "state_laws", "preset_law_select": index + 1})}}
         {{/for}}
     </div>
 </div>
-
+{{/if}}
 <div class="item">
     <form name="lawedit" action="byond://" method="post">
     <input type="hidden" id="src" name="src" value="{{:data.src}}">
     <input type="hidden" id="src" name="ui_key" value="state_laws">
     <div class="line">
-        {{if !data.freeform_editing_unlocked}}
+        {{:helper.link("Reset", "arrowreturn-1-w", {"ui_key": "state_laws", "reset_laws": 1}, null, 'floatRight')}}
+        {{if data.freeform && !data.freeform_editing_unlocked}}
         {{:helper.link("Edit", "gear", {"ui_key": "state_laws", "freeform_edit_toggle": 1}, null, 'floatRight')}}
-        {{else}}
+        {{else data.freeform && data.freeform_editing_unlocked}}
         <!-- doesn't work thanks to IE
         <button type="submit" style="float: right;text-align: center;color: #ffffff;text-decoration: none;background: #40628a;border: 1px solid #161616;padding: 0px 4px 4px 0px;margin: 0 2px 2px 0;cursor: default;white-space: nowrap;">
             <i class="uiIcon16 icon-disk floatRight" style="display:block"></i> Save
@@ -55,13 +64,18 @@
         <div class="statusDisplay">
             {{for data.freeform_laws}}
                 <div class="line">
+                    {{if value.enabled}}
+                        {{:helper.link("On", null, {"ui_key": "state_laws", "toggle_law_enable": index + 1}, null, 'greenBackground')}}
+                    {{else}}
+                        {{:helper.link("Off", null, {"ui_key": "state_laws", "toggle_law_enable": index + 1}, null, 'redBackground')}}
+                    {{/if}}
                     <div class="statusValue">
                         {{:value.text}}
                     </div>
                 </div>
             {{empty}}
                 <div class="line">
-                    <div class="statusValue dark">(no laws selected)</div>
+                    <div class="statusValue dark">(no laws found)</div>
                 </div>
             {{/for}}
         </div>
@@ -70,4 +84,8 @@
         {{/if}}
     </form>
 </div>
-{{/if}}
+<div class="item">
+    <div class="line">
+        {{:helper.link("State Laws", "volume-on", {"ui_key": "state_laws", "speak_laws": 1})}}
+    </div>
+</div>
