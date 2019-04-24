@@ -24,6 +24,17 @@
 </div>
 
 <div class="item">
+    <div class="line">
+        <h3>Preset lawsets</h3>
+    </div>
+    <div class="itemContentWide">
+        {{for data.preset_laws}}
+            LAW{{:helper.link(value.name, null, {"ui_key": "state_laws", "preset_law_select": index})}}
+        {{/for}}
+    </div>
+</div>
+
+<div class="item">
     <form name="lawedit" action="byond://" method="post">
     <input type="hidden" id="src" name="src" value="{{:data.src}}">
     <input type="hidden" id="src" name="ui_key" value="state_laws">
@@ -31,7 +42,7 @@
         {{if !data.freeform_editing_unlocked}}
         {{:helper.link("Edit", "gear", {"ui_key": "state_laws", "freeform_edit_toggle": 1}, null, 'floatRight')}}
         {{else}}
-        <!-- doesn't work (yet)
+        <!-- doesn't work thanks to IE
         <button type="submit" style="float: right;text-align: center;color: #ffffff;text-decoration: none;background: #40628a;border: 1px solid #161616;padding: 0px 4px 4px 0px;margin: 0 2px 2px 0;cursor: default;white-space: nowrap;">
             <i class="uiIcon16 icon-disk floatRight" style="display:block"></i> Save
         </button>

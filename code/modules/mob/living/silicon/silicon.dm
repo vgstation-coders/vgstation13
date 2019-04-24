@@ -369,9 +369,6 @@
 	..()
 	if(usr && (src != usr))
 		return
-	to_chat(world, "DEBUG: topic call")
-	for(var/key in href_list)
-		to_chat(world, "DEBUG: topic call [key] == [href_list[key]]")
 	//State laws code
 	if(href_list["ui_key"] == "state_laws")
 		if(href_list["toggle_mode"])
@@ -386,13 +383,19 @@
 			var/regex/emptylines = new(@"(?:\n(?:[^\S\n]*(?=\n))?){2,}", "mg") //thanks stackexchange
 			edited_laws = emptylines.Replace(edited_laws, "\n")
 			edited_laws = replacetext(edited_laws, "\n", "", length(edited_laws)) //remove trailing newline
-			var/list/split_laws = splittext(edited_laws, "\n")
+			var/list/split_laws = splittext(edited_laws, "\n").Copy(1, 51) //no more than 50 laws permitted
 			var/list/tmplist = new/list()
 			for(var/str in split_laws)
-				to_chat(world, "DEBUG: [str]")
-				tmplist[++tmplist.len] = list("text" = str, "enabled" = TRUE)
+				tmplist[++tmplist.len] = list("text" = copytext(str, 1, MAX_MESSAGE_LEN), "enabled" = TRUE) //no bee movie for you, buddy
 			state_laws_ui["freeform_selected"] = tmplist
 			nanomanager.update_uis(src)
+			return 1
+		if(href_list["preset_law_select"])
+			var/index = text2num(href_list["preset_law_select"])
+			var/list/tmplist = new/list()
+			for(var/law in state_laws_ui["preset_laws"][index]["laws"])
+				tmplist[++tmplist.len] = list("text" = law, "enabled" = TRUE)
+			state_laws_ui["freeform_selected"] = tmplist
 			return 1
 
 
@@ -425,7 +428,7 @@
 		if(state_laws_ui["preset_laws"] == null)
 			state_laws_ui["preset_laws"] = new/list()
 			//Build list of preset laws for state_laws
-			var/list/preset_laws = new/list(
+			var/list/preset_laws = list(
 				new /datum/ai_laws/asimov,
 				new /datum/ai_laws/nanotrasen,
 				new /datum/ai_laws/robocop,
@@ -436,12 +439,24 @@
 				new /datum/ai_laws/keeper,
 				new /datum/ai_laws/syndicate_override,
 			)
-			for(var/datum/ai_laws/law in preset_laws)
-				//var/tmplist = new/list()
-				state_laws_ui["preset_laws"][law.name] = law.inherent.Copy
-				if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
-					state_laws_ui["preset_laws"][law.name].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
-
+			for(var/datum/ai_laws/law in preset_laws) //again having to deal with nanoui shitcode
+				var/list/tmplist = list()
+				tmplist["name"] = law.name
+				to_chat(world, "DEBUG: added law [tmplist["name"]]")
+				// tmplist["laws"] = list()
+				// for(var/i = 1; i <= law.inherent.len; i++)
+				// 	var/clause = law.inherent[i]
+				// 	tmplist["laws"].Add("[i]. [clause]")
+				// if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
+				// 	tmplist["laws"].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
+				// to_chat(world, "DEBUG: added [tmplist["laws"].len] clauses to the law.")
+				state_laws_ui["preset_laws"][++state_laws_ui["preset_laws"].len] = tmplist.Copy()
+		to_chat(world, "DEBUG: preset_laws length: [state_laws_ui["preset_laws"].len]")
+		for(var/list/law in state_laws_ui["preset_laws"])
+			to_chat(world, "DEBUG: preset law found: [law["name"]]. It's clauses are:")
+			for(var/clause in law["laws"])
+				to_chat(world, clause)
+			
 
 		var/list/data = list(
 			"src" = "\ref[src]",
@@ -450,8 +465,6 @@
 			"freeform_laws" = state_laws_ui["freeform_selected"],
 			"preset_laws" = state_laws_ui["preset_laws"],
 		)
-		to_chat(world, "DEBUG: window_mode: [data["window_mode"]]")
-		to_chat(world, "DEBUG: original window_mode: [state_laws_ui["window_mode"]]")
 
 		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 		if(!ui)
