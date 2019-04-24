@@ -319,7 +319,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(user.isUnconscious())
 		return
 
-	if(!(user in _using))
+	if(user in _using)
+		deactivate(user)
+		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
+	else
 		_using += user
 		var/uid = "\ref[user]"
 		if(!initialized) //didn't find a better way to do this
@@ -368,7 +371,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //updates textview list as well as crewmarkers
 /obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
 	var/uid = "\ref[user]"
-	if(!handle_sanity(user)) return
+	if(!handle_sanity(user))
+		deactivate(user)
+		return
 
 	//updating holomap
 	if(holomap[uid] && !freeze[uid]) // we only repopulate user.client.images if holomap is enabled
