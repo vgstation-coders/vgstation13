@@ -439,6 +439,7 @@
 			else
 				key = ""
 			state_laws_ui["radio_key"] = key
+			to_chat(world, "DEBUG: new radio key: [key]")
 			nanomanager.update_user_uis(usr, null, "state_laws")
 			return 1
 		if(href_list["speak_laws"])

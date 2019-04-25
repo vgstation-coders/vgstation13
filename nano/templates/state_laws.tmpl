@@ -89,15 +89,16 @@
 </div>
 <div class="item">
     <div class="line">
-        {{:helper.link("State Laws", "volume-on", {"ui_key": "state_laws", "speak_laws": 1})}}
-        <div class="floatRight">
-            <form name="keyedit" action="byond://" method="post">
+        <!-- {{:helper.link("State Laws", "volume-on", {"ui_key": "state_laws", "speak_laws": 1})}} -->
+        <form id="keyedit" name="keyedit" action="byond://" method="post">
+            {{:helper.submitButton("State Laws", "volume-on")}}
             <input type="hidden" id="src" name="src" value="{{:data.src}}">
             <input type="hidden" id="src" name="ui_key" value="state_laws">
-            <div class="itemLabel">Radio key:</div>
-            <input type="text" name="radio_key" id="radio_key" maxlength="2" size="2" value="{{>data.radio_key}}">
-            <input type="submit" value="Set">
-            </form>
-        </div>
+            <div class="floatRight">
+                <div class="itemLabel">Radio key:</div>
+                <input type="text" name="radio_key" id="radio_key" maxlength="2" size="2" value="{{>data.radio_key}}" onblur="this.form.submit()">
+                <input type="submit" value="Set">
+            </div>
+        </form>
     </div>
 </div>
