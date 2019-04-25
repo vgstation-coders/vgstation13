@@ -1298,7 +1298,10 @@ var/list/WALLITEMS = list(
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	var icon/base = icon(file, state)
 
-	var w, h, w2, h2
+	var/w
+	var/h,
+	var/w2
+	var/h2
 
 	if(aa)
 		aa ++
@@ -1307,7 +1310,8 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 		h = base.Height()
 		h2 = h * aa
 
-	var icon{result = icon(base); temp}
+	var/icon/result = icon(base)
+	var/icon/temp
 
 	for(var/angle in 0 to 360 step step)
 		if(angle == 0  )
