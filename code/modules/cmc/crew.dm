@@ -78,7 +78,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	attack_hand(user)
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
-	var/uid = "\ref[user]"
 	. = ..()
 	if(.)
 		return
@@ -280,7 +279,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	textview_updatequeued[uid] = null
 	holomap[uid] = null
 	textview_popup[uid] = null //incase something is fucky
-	is_ai[uid] = 0
 
 /obj/machinery/computer/crew/proc/initializeHolomap(var/mob/user)
 	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
@@ -365,7 +363,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
 	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (!(isAI(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
 		return FALSE
 	return TRUE
 
