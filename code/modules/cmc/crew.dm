@@ -18,7 +18,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//for the holomap
 	var/list/holomap_images = list() //list of lists of images for the people using the console
-	var/list/is_ai = list() // is ai????
+	var/list/is_ai = list() // is ai???? ignores said mob when checking for distance
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
 	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
@@ -80,8 +80,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	attack_hand(user)
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
-	if(!("\ref[user]" in is_ai))
-		is_ai["\ref[user]"] = 0 //no ai
+	var/uid = "\ref[user]"
+	if(!(uid in is_ai) && issilicon(user))
+		is_ai[uid] = 1 //is silicon
+	else
+		is_ai[uid] = 0
 	. = ..()
 	if(.)
 		return
