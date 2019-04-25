@@ -21,7 +21,10 @@
 	if(istype(attached_to, /obj/item/clothing/head))
 		icon_state = "[initial(icon_state)]_helmet"
 	else
-		icon_state = "[initial(icon_state)]_armor"
+		if(istype(attached_to, /obj/item/clothing/suit/armor))
+			icon_state = "[initial(icon_state)]_armor"
+		else
+			icon_state = null
 	update_brightness(attached_to)
 	var/datum/action/item_action/toggle_taclight/makelight = new /datum/action/item_action/toggle_taclight(attached_to)
 	makelight.ownerlight = src
@@ -33,21 +36,30 @@
 	else
 		attached_to.actions_types += list(/datum/action/item_action/toggle_taclight)
 		//attached_to.actions += makelight
-
-	if (attached_to.overlays)
-		attached_to.overlays -= inv_overlay //I feel like this doesn't make any sense
-	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[icon_state]")
-	attached_to.overlays += inv_overlay
-	attached_to.update_icon()
 	if(ishuman(attached_to.loc))
 		var/mob/living/carbon/human/H = attached_to.loc
 		H.update_inv_by_slot(attached_to.slot_flags)
 		
+/obj/item/clothing/accessory/taclight/update_icon()
+	if(!attached_to)
+		return
+	if(attached_to.overlays.len)
+		attached_to.overlays -= inv_overlay			
+	if(icon_state)
+		inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[icon_state]")
+		if (attached_to.overlays.len)
+			attached_to.overlays -= inv_overlay
+		attached_to.overlays += inv_overlay	
+	if(ishuman(attached_to.loc))
+		var/mob/living/carbon/human/H = attached_to.loc
+		H.update_inv_by_slot(attached_to.slot_flags)
+	
+	attached_to.update_icon()
+		
 /obj/item/clothing/accessory/taclight/on_removed(mob/user)
 	if(!attached_to)
 		return
-	if (attached_to.overlays)
-		attached_to.overlays -= inv_overlay
+	icon_state = null
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.regenerate_icons()
@@ -62,7 +74,6 @@
 		transfer_fingerprints(src,source_light)
 		source_light = null
 	update_brightness(attached_to)
-	attached_to.update_icon()
 	attached_to = null
 	qdel(src)
 			

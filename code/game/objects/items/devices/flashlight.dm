@@ -126,7 +126,6 @@
 			C.attach_accessory(TL)
 			transfer_fingerprints(src,TL)
 			forceMove(TL)
-			TL.update_icon()
 		return 1
 	return ..()	
 
