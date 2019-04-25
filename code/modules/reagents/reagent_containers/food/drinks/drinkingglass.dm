@@ -40,16 +40,17 @@
 				icon_state = "beerglass"
 				item_state = "beerglass"
 				name = "beer glass"
-				desc = "A freezing pint of beer."
+				desc = "A cold pint of pale lager."
 			if(BEER2)
 				icon_state = "beerglass"
+				item_state = "beerglass"
 				name = "beer glass"
-				desc = "A freezing pint of beer."
+				desc = "A cold pint of pale lager."
 			if(ALE)
 				icon_state = "aleglass"
 				item_state = "aleglass"
 				name = "ale glass"
-				desc = "A freezing pint of delicious ale."
+				desc = "A cold pint of delicious ale."
 			if(MILK)
 				icon_state = "glass_white"
 				item_state = "glass_white"
@@ -59,7 +60,7 @@
 				icon_state  = "glass_white"
 				item_state = "glass_white"
 				name = "glass of cream"
-				desc = "Ew..."
+				desc = "Like milk, but thicker."
 			if("chocolate")
 				icon_state  = "chocolateglass"
 				item_state  = "chocolateglass"
@@ -78,7 +79,7 @@
 			if(NUKA_COLA)
 				icon_state = "nuka_colaglass"
 				name = "\improper Nuka Cola"
-				desc = "Don't cry, Don't raise your eye, It's only nuclear wasteland"
+				desc = "Don't cry. Don't raise your eye. It's only nuclear wasteland."
 			if(ORANGEJUICE)
 				icon_state = "glass_orange"
 				item_state = "glass_orange"
@@ -121,15 +122,15 @@
 			if(GOLDSCHLAGER)
 				icon_state = "ginvodkaglass"
 				name = "glass of Goldschlager"
-				desc = "100 proof that teen girls will drink anything with gold in it."
+				desc = "A schnapps with tiny flakes of gold floating in it."
 			if(WINE)
 				icon_state = "wineglass"
-				name = "glass of wine"
-				desc = "A very classy looking drink."
+				name = "glass of red wine"
+				desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
 			if(WWINE)
 				icon_state = "wwineglass"
 				name = "glass of white wine"
-				desc = "A very classy looking drink."
+				desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
 			if(BWINE)
 				icon_state = "bwineglass"
 				name = "glass of berry wine"
@@ -141,11 +142,11 @@
 			if(COGNAC)
 				icon_state = "cognacglass"
 				name = "glass of cognac"
-				desc = "Damn, you feel like some kind of French aristocrat just by holding this."
+				desc = "You feel aristocratic just holding this."
 			if (KAHLUA)
 				icon_state = "kahluaglass"
-				name = "glass of RR coffee liquor"
-				desc = "DAMN, THIS THING LOOKS ROBUST"
+				name = "glass of coffee liqueur"
+				desc = "DAMN, THIS STUFF LOOKS ROBUST."
 			if(VERMOUTH)
 				icon_state = "vermouthglass"
 				name = "glass of vermouth"
@@ -161,7 +162,7 @@
 			if(RUM)
 				icon_state = "rumglass"
 				name = "glass of rum"
-				desc = "Now you want to Pray for a pirate suit, don't you?"
+				desc = "Now you want to pray for a pirate suit, don't you?"
 			if(GINTONIC)
 				icon_state = "gintonicglass"
 				name = "gin and tonic"
@@ -169,7 +170,7 @@
 			if(WHISKEYCOLA)
 				icon_state = "whiskeycolaglass"
 				name = "whiskey cola"
-				desc = "An innocent-looking mixture of cola and Whiskey. Delicious."
+				desc = "An innocent-looking mixture of cola and whiskey. Delicious."
 			if(WHITERUSSIAN)
 				icon_state = "whiterussianglass"
 				name = "\improper White Russian"
@@ -177,19 +178,19 @@
 			if(SCREWDRIVERCOCKTAIL)
 				icon_state = "screwdriverglass"
 				name = "\improper Screwdriver"
-				desc = "A simple, yet superb mixture of Vodka and orange juice. Just the thing for the tired engineer."
+				desc = "A simple, yet superb mixture of vodka and orange juice. Just the thing for the tired engineer."
 			if(BLOODYMARY)
 				icon_state = "bloodymaryglass"
 				name = "\improper Bloody Mary"
-				desc = "Tomato juice, mixed with Vodka and a lil' bit of lime. Tastes like liquid murder."
+				desc = "Tomato juice, mixed with vodka and a lil' bit of lime. Tastes like liquid murder."
 			if(MARTINI)
 				icon_state = "martiniglass"
 				name = "classic martini"
-				desc = "Damn, the bartender even stirred it, not shook it."
+				desc = "Shaken, not stirred."
 			if(VODKAMARTINI)
 				icon_state = "martiniglass"
 				name = "vodka martini"
-				desc ="A bastardisation of the classic martini. Still great."
+				desc = "A bastardisation of the classic martini. Still great."
 			if(SAKEMARTINI)
 				icon_state = "martiniglass"
 				name = "sake martini"
@@ -201,7 +202,7 @@
 			if(BRAVEBULL)
 				icon_state = "bravebullglass"
 				name = "\improper Brave Bull"
-				desc = "Tequila and coffee liquor, brought together in a mouthwatering mixture. Drink up."
+				desc = "Tequila and coffee liqueur. Kicks like a bull."
 			if(TEQUILASUNRISE)
 				icon_state = "tequilasunriseglass"
 				name = "\improper Tequila Sunrise"
@@ -214,19 +215,19 @@
 				icon_state = "beepskysmashglass"
 				item_state = "beepskysmashglass"
 				name = "\improper Beepsky Smash"
-				desc = "Heavy, hot and strong. Just like the Iron fist of the LAW."
+				desc = "Heavy, hot and strong. Best enjoyed with your hands behind your back."
 			if(DOCTORSDELIGHT)
 				icon_state = "doctorsdelightglass"
 				name = "\improper Doctor's Delight"
-				desc = "A healthy mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
+				desc = "A rejuvenating mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
 			if(MANLYDORF)
 				icon_state = "manlydorfglass"
 				item_state = "manlydorfglass"
 				name = "The Manly Dorf"
-				desc = "A manly concotion made from Ale and Beer. Intended for true men only."
+				desc = "A dwarfy concoction made from ale and beer. Intended for stout dwarves only."
 			if(IRISHCREAM)
 				icon_state = "irishcreamglass"
-				name = "\improper Irish Cream"
+				name = "irish cream"
 				desc = "It's cream, mixed with whiskey. What else would you expect from the Irish?"
 			if(CUBALIBRE)
 				icon_state = "cubalibreglass"
@@ -235,26 +236,26 @@
 			if(B52)
 				icon_state = "b52glass"
 				name = "\improper B-52"
-				desc = "Kahlua, Irish Cream, and congac. You will get bombed."
+				desc = "Kahlua, irish cream, and cognac. You will get bombed."
 				light_color = "#000080"
 				if(!lit)
 					flammable = 1
 			if(ATOMICBOMB)
 				icon_state = "atomicbombglass"
 				name = "\improper Atomic Bomb"
-				desc = "Nanotrasen cannot take legal responsibility for your actions after imbibing."
+				desc = "NanoTrasen does not take legal responsibility for your actions after imbibing."
 			if(LONGISLANDICEDTEA)
 				icon_state = "longislandicedteaglass"
 				name = "\improper Long Island Iced Tea"
 				desc = "The liquor cabinet, brought together in a delicious mix. Intended for middle-aged alcoholic women only."
 			if(THREEMILEISLAND)
 				icon_state = "threemileislandglass"
-				name = "\improper Three Mile Island Ice Tea"
-				desc = "A glass of this is sure to prevent a meltdown."
+				name = "\improper Three Mile Island Iced Tea"
+				desc = "A glass of this is sure to prevent a meltdown. Or cause one."
 			if(MARGARITA)
 				icon_state = "margaritaglass"
-				name = "\improper Margarita"
-				desc = "On the rocks with salt on the rim. Arriba~!"
+				name = "margarita"
+				desc = "On the rocks with salt on the rim. Arriba!"
 			if(BLACKRUSSIAN)
 				icon_state = "blackrussianglass"
 				name = "\improper Black Russian"
@@ -267,22 +268,22 @@
 				icon_state = "manhattanglass"
 				name = "\improper Manhattan"
 				desc = "The Detective's undercover drink of choice. He never could stomach gin..."
-			if("manhattan_proj")
+			if(MANHATTAN_PROJ)
 				icon_state = "proj_manhattanglass"
 				name = "\improper Manhattan Project"
-				desc = "A scienitst drink of choice, for thinking how to blow up the station."
+				desc = "A scientist's drink of choice, for thinking about how to blow up the station."
 			if(GINFIZZ)
 				icon_state = "ginfizzglass"
 				name = "\improper Gin Fizz"
 				desc = "Refreshingly lemony, deliciously dry."
 			if(IRISHCOFFEE)
 				icon_state = "irishcoffeeglass"
-				name = "\improper Irish Coffee"
-				desc = "Coffee and alcohol. More fun than a Mimosa to drink in the morning."
+				name = "irish coffee"
+				desc = "Coffee served with irish cream. Regular cream just isn't the same."
 			if(HOOCH)
 				icon_state = "glass_brown2"
 				item_state = "glass_brown2"
-				name = "\improper Hooch"
+				name = "hooch"
 				desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 			if(WHISKEYSODA)
 				icon_state = "whiskeysodaglass2"
@@ -292,7 +293,7 @@
 				icon_state = "glass_clear"
 				item_state = "glass_clear"
 				name = "glass of tonic water"
-				desc = "Quinine tastes funny, but at least it'll keep that Space Malaria away."
+				desc = "Quinine tastes funny, but at least it'll keep that space malaria away."
 			if(SODAWATER)
 				icon_state = "glass_clear"
 				item_state = "glass_clear"
@@ -312,7 +313,7 @@
 				icon_state = "thirteen_loko_glass"
 				item_state = "thirteen_loko_glass"
 				name = "glass of Thirteen Loko"
-				desc = "This is a glass of Thirteen Loko, it appears to be of the highest quality. The drink, not the glass."
+				desc = "This is a glass of Thirteen Loko. It appears to be of the highest quality. The drink, not the glass."
 			if(DR_GIBB)
 				icon_state = "dr_gibb_glass"
 				item_state = "dr_gibb_glass"
@@ -326,7 +327,7 @@
 			if(MOONSHINE)
 				icon_state = "glass_clear"
 				item_state = "glass_clear"
-				name = "\improper Moonshine"
+				name = "moonshine"
 				desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 			if(SOYMILK)
 				icon_state = "glass_white"
@@ -334,40 +335,40 @@
 				name = "glass of soy milk"
 				desc = "White and nutritious soy goodness!"
 			if(BERRYJUICE)
-				icon_state = BERRYJUICE
-				item_state = BERRYJUICE
+				icon_state = "berryjuice"
+				item_state = "berryjuice"
 				name = "glass of berry juice"
-				desc = "Berry juice. Or maybe its jam. Who cares?"
+				desc = "Berry juice. Or maybe it's jam. Who cares?"
 			if(POISONBERRYJUICE)
-				icon_state = POISONBERRYJUICE
-				item_state = POISONBERRYJUICE
+				icon_state = "poisonberryjuice"
+				item_state = "poisonberryjuice"
 				name = "glass of poison berry juice"
-				desc = "A glass of deadly juice."
+				desc = "Drinking this may not be a good idea."
 			if(CARROTJUICE)
-				icon_state = CARROTJUICE
-				item_state = CARROTJUICE
-				name = "glass of  carrot juice"
-				desc = "It is just like a carrot but without crunching."
+				icon_state = "carrotjuice"
+				item_state = "carrotjuice"
+				name = "glass of carrot juice"
+				desc = "It's like a carrot, but less crunchy."
 			if(BANANA)
-				icon_state = BANANA
-				item_state = BANANA
+				icon_state = "banana"
+				item_state = "banana"
 				name = "glass of banana juice"
 				desc = "The raw essence of a banana. HONK"
 			if(BAHAMA_MAMA)
-				icon_state = BAHAMA_MAMA
+				icon_state = "bahama_mama"
 				name = "\improper Bahama Mama"
-				desc = "Tropic cocktail."
+				desc = "A delicious tropical cocktail."
 			if(SINGULO)
-				icon_state = SINGULO
+				icon_state = "singulo"
 				name = "\improper Singulo"
-				desc = "A blue-space beverage."
+				desc = "IT'S LOOSE!"
 			if(ALLIESCOCKTAIL)
-				icon_state = ALLIESCOCKTAIL
+				icon_state = "alliescocktail"
 				name = "\improper Allies Cocktail"
-				desc = "A drink made from your allies."
+				desc = "A cocktail of spirits from three historical Terran nations, symbolizing their alliance in a great war."
 			if(ANTIFREEZE)
-				icon_state = ANTIFREEZE
-				item_state = ANTIFREEZE
+				icon_state = "antifreeze"
+				item_state = "antifreeze"
 				name = "\improper Anti-freeze"
 				desc = "The ultimate refreshment."
 			if(BAREFOOT)
@@ -375,109 +376,109 @@
 				name = "\improper Barefoot"
 				desc = "Barefoot and pregnant."
 			if(DEMONSBLOOD)
-				icon_state = DEMONSBLOOD
+				icon_state = "demonsblood"
 				name = "\improper Demon's Blood"
-				desc = "Just looking at this thing makes the hair at the back of your neck stand up."
+				desc = "Just looking at this thing makes the hair on the back of your neck stand up."
 			if(BOOGER)
-				icon_state = BOOGER
-				item_state = BOOGER
+				icon_state = "booger"
+				item_state = "booger"
 				name = "\improper Booger"
-				desc = "Eww..."
+				desc = "The color reminds you of something that came out of the clown's nose."
 			if(SNOWWHITE)
-				icon_state = SNOWWHITE
-				item_state = SNOWWHITE
+				icon_state = "snowwhite"
+				item_state = "snowwhite"
 				name = "\improper Snow White"
-				desc = "A cold refreshment."
+				desc = "Pale lager mixed with lemon-lime soda. Refreshing and sweet."
 			if(ALOE)
-				icon_state = ALOE
-				name = ALOE
-				desc = "Very, very, very good."
+				icon_state = "aloe"
+				name = "\improper Aloe"
+				desc = "Watermelon juice and irish cream. Contains no actual aloe."
 			if(ANDALUSIA)
-				icon_state = ANDALUSIA
+				icon_state = "andalusia"
 				name = "\improper Andalusia"
-				desc = "A nice, strange named drink."
+				desc = "A strong cocktail named after a historical Terran land."
 			if(SBITEN)
 				icon_state = "sbitenglass"
-				name = "\improper Sbiten"
+				name = "sbiten"
 				desc = "A spicy mix of vodka and spice. Very hot."
 			if(RED_MEAD)
 				icon_state = "red_meadglass"
 				name = "red mead"
-				desc = "A True Vikings Beverage, though its color is strange."
+				desc = "A crimson beverage consumed by space vikings. The coloration is from berries... you hope."
 			if(MEAD)
 				icon_state = "meadglass"
-				name = MEAD
-				desc = "A Vikings Beverage, though a cheap one."
+				name = "mead"
+				desc = "A beverage consumed by space vikings on their long raids and rowdy festivities."
 			if(ICED_BEER)
 				icon_state = "iced_beerglass"
 				item_state = "iced_beerglass"
-				name = "iced Beer"
-				desc = "A beer so frosty, the air around it freezes."
+				name = "iced beer"
+				desc = "A beer so frosty the air around it freezes."
 			if(GROG)
 				icon_state = "grogglass"
-				name = GROG
-				desc = "A fine and cepa drink for Space."
+				name = "grog"
+				desc = "The favorite of pirates everywhere."
 			if(SOY_LATTE)
-				icon_state = SOY_LATTE
-				item_state = SOY_LATTE
+				icon_state = "soy_latte"
+				item_state = "soy_latte"
 				name = "soy latte"
-				desc = "A nice and refreshing beverage while you are reading."
+				desc = "The hipster version of the classic cafe latte."
 			if(CAFE_LATTE)
-				icon_state = CAFE_LATTE
-				item_state = CAFE_LATTE
+				icon_state = "cafe_latte"
+				item_state = "cafe_latte"
 				name = "cafe latte"
-				desc = "A nice, strong and refreshing beverage while you are reading."
+				desc = "A true classic: steamed milk, some espresso, and foamed milk to top it all off."
 			if(ACIDSPIT)
 				icon_state = "acidspitglass"
 				item_state = "acidspitglass"
 				name = "\improper Acid Spit"
-				desc = "A drink from Nanotrasen. Made from live aliens."
+				desc = "Bites like a xeno queen."
 			if(AMASEC)
 				icon_state = "amasecglass"
 				name = "\improper Amasec"
-				desc = "Always handy before Tc_COMBAT!!!"
+				desc = "A grim and dark drink that knows only war."
 			if(NEUROTOXIN)
 				icon_state = "neurotoxinglass"
 				name = "\improper Neurotoxin"
-				desc = "A drink that is guaranteed to knock you silly."
+				desc = "Guaranteed to knock you silly."
 			if(HIPPIESDELIGHT)
 				icon_state = "hippiesdelightglass"
 				name = "\improper Hippie's Delight"
-				desc = "A drink enjoyed by people during the 1960's."
+				desc = "A drink popular in the 1960s."
 			if(BANANAHONK)
 				icon_state = "bananahonkglass"
 				name = "\improper Banana Honk"
-				desc = "A drink from banana heaven."
+				desc = "A cocktail from the clown planet."
 			if(SILENCER)
 				icon_state = "silencerglass"
 				item_state = "silencerglass"
 				name = "\improper Silencer"
-				desc = "A drink from mime heaven."
+				desc = "The mime's favorite, though you won't hear him ask for it."
 			if(NOTHING)
-				icon_state = NOTHING
-				item_state = NOTHING
-				name = NOTHING
+				icon_state = "nothing"
+				item_state = "nothing"
+				name = "nothing"
 				desc = "Absolutely nothing."
 			if(DEVILSKISS)
-				icon_state = DEVILSKISS
-				name = "\improper Devils Kiss"
+				icon_state = "devilskiss"
+				name = "\improper Devil's Kiss"
 				desc = "Creepy time!"
 			if(CHANGELINGSTING)
-				icon_state = CHANGELINGSTING
+				icon_state = "changelingsting"
 				name = "\improper Changeling Sting"
-				desc = "A stingy drink."
+				desc = "Stings, but not deadly."
 			if(IRISHCARBOMB)
-				icon_state = IRISHCARBOMB
-				item_state = IRISHCARBOMB
+				icon_state = "irishcarbomb"
+				item_state = "irishcarbomb"
 				name = "\improper Irish Car Bomb"
-				desc = "An irish car bomb."
+				desc = "Something about this drink troubles you."
 			if(SYNDICATEBOMB)
-				icon_state = SYNDICATEBOMB
+				icon_state = "syndicatebomb"
 				name = "\improper Syndicate Bomb"
-				desc = "A syndicate bomb."
+				desc = "Somebody set us up the bomb!"
 				isGlass = 0//blablabla hidden features, blablabla joke material
 			if(ERIKASURPRISE)
-				icon_state = ERIKASURPRISE
+				icon_state = "erikasurprise"
 				name = "\improper Erika Surprise"
 				desc = "The surprise is, it's green!"
 			if(DRIESTMARTINI)
@@ -492,73 +493,73 @@
 			if(ICECOFFEE)
 				icon_state = "icedcoffeeglass"
 				item_state = "icedcoffeeglass"
-				name = "iced Coffee"
-				desc = "A drink to perk you up and refresh you!"
+				name = "iced coffee"
+				desc = "For when you need a coffee without the warmth."
 			if(COFFEE)
 				icon_state = "glass_brown"
 				item_state = "glass_brown"
 				name = "glass of coffee"
-				desc = "Don't drop it, or you'll send scalding liquid and glass shards everywhere."
+				desc = "Careful, it's hot!"
 			if(BILK)
 				icon_state = "glass_brown"
 				item_state = "glass_brown"
 				name = "glass of bilk"
-				desc = "A brew of milk and beer. For those alcoholics who fear osteoporosis."
+				desc = "A brew of milk and beer. For alcoholics who fear osteoporosis."
 			if(FUEL)
 				icon_state = "dr_gibb_glass"
 				name = "glass of welder fuel"
 				desc = "Unless you are an industrial tool, this is probably not safe for consumption."
 			if(BROWNSTAR)
-				icon_state = BROWNSTAR
-				item_state = BROWNSTAR
+				icon_state = "brownstar"
+				item_state = "brownstar"
 				name = "\improper Brown Star"
-				desc = "Its not what it sounds like..."
+				desc = "It's not what it sounds like..."
 			if(ICETEA)
-				icon_state = ICETEA
-				item_state = ICETEA
+				icon_state = "icetea"
+				item_state = "icetea"
 				name = "iced tea"
-				desc = "No relation to a certain rap artist/ actor."
+				desc = "Like tea, but refreshes rather than relaxes."
 			if(ARNOLDPALMER)
-				icon_state = ARNOLDPALMER
-				name = "Arnold Palmer"
-				desc = "Known as half and half to some.  A mix of ice tea and lemonade"
+				icon_state = "arnoldpalmer"
+				name = "\improper Arnold Palmer"
+				desc = "Known as half and half to some. A mix of ice tea and lemonade."
 			if(MILKSHAKE)
-				icon_state = MILKSHAKE
-				item_state = MILKSHAKE
-				name = MILKSHAKE
-				desc = "Glorious brainfreezing mixture."
+				icon_state = "milkshake"
+				item_state = "milkshake"
+				name = "milkshake"
+				desc = "Brings all the boys to the yard."
 			if(LEMONADE)
-				icon_state = LEMONADE
-				item_state = LEMONADE
-				name = LEMONADE
-				desc = "Oh the nostalgia..."
+				icon_state = "lemonade"
+				item_state = "lemonade"
+				name = "lemonade"
+				desc = "Oh, the nostalgia..."
 			if(KIRASPECIAL)
-				icon_state = KIRASPECIAL
+				icon_state = "kiraspecial"
 				name = "\improper Kira Special"
 				desc = "Long live the guy who everyone had mistaken for a girl. Baka!"
 			if(REWRITER)
-				icon_state = REWRITER
+				icon_state = "rewriter"
 				name = "\improper Rewriter"
-				desc = "The secert of the sanctuary of the Libarian..."
+				desc = "This will cure your dyslexia and cause your arrhythmia."
 			if(PINACOLADA)
-				icon_state = PINACOLADA
+				icon_state = "pinacolada"
 				name = "\improper Pina Colada"
 				desc = "If you like this and getting caught in the rain, come with me and escape."
 			if(SANGRIA)
-				icon_state = SANGRIA
-				item_state = SANGRIA
+				icon_state = "sangria"
+				item_state = "sangria"
 				name = "\improper Sangria"
-				desc = "So sweet, you won't feel the alcohol until you're wasted."
+				desc = "So sweet you won't notice the alcohol until you're wasted."
 			if(DANS_WHISKEY)
-				icon_state = DANS_WHISKEY
-				item_state = DANS_WHISKEY
-				name = "Discount Dan's 'Malt' Whiskey"
-				desc = "The very cheapest and most sickening method of liver failure."
+				icon_state = "dans_whiskey"
+				item_state = "dans_whiskey"
+				name = "\improper Discount Dan's 'Malt' Whiskey"
+				desc = "The cheapest path to liver failure."
 			if(GREYVODKA)
 				icon_state = "ginvodkaglass"
 				item_state = "ginvodkaglass"
-				name = "glass of Grey vodka"
-				desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
+				name = "glass of greyshirt vodka"
+				desc = "A questionable concoction of ingredients found within maintenance. Tastes just like you'd expect."
 			if(PINTPOINTER)
 				var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
 				if(reagents.last_ckey_transferred_to_this)
@@ -575,48 +576,48 @@
 					name = "\improper Scientist's Surprise"
 					desc = "There is as yet insufficient data for a meaningful answer."
 				else
-					icon_state = SCIENTISTS_SERENDIPITY
+					icon_state = "scientists_serendipity"
 					name = "\improper Scientist's Serendipity"
 					desc = "Knock back a cold glass of R&D."
 					origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
 			if(METABUDDY)
-				icon_state = METABUDDY
+				icon_state = "metabuddy"
 				name = "\improper Metabuddy"
 				desc = "The glass is etched with the name of a very deserving spaceman. There's a special note etched in the bottom..."
 			if(SPIDERS)
-				icon_state = SPIDERS
+				icon_state = "spiders"
 				name = "\improper This glass is full of spiders"
 				desc = "Seriously, dude, don't touch it."
 			if(WEED_EATER)
-				icon_state = WEED_EATER
-				name = "Weed Eater"
+				icon_state = "weed_eater"
+				name = "\improper Weed Eater"
 				desc = "The vegetarian equivalant of a snake eater."
 			if(RAGSTORICHES)
-				icon_state = RAGSTORICHES
+				icon_state = "ragstoriches"
 				name = "\improper Rags to Riches"
 				desc = "The Spaceman Dream, incarnated as a cocktail."
 			if(WAIFU)
-				icon_state = WAIFU
+				icon_state = "waifu"
 				name = "\improper Waifu"
 				desc = "Don't drink more than one waifu if you value your laifu."
 			if(BEEPSKY_CLASSIC)
+				icon_state = "beepsky_classic"
 				name = "\improper Beepsky Classic"
-				icon_state = BEEPSKY_CLASSIC
 				desc = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
 			if(ELECTRIC_SHEEP)
-				icon_state = ELECTRIC_SHEEP
+				icon_state = "electric_sheep"
 				name = "\improper Electric Sheep"
-				desc = "Silicons dream about this."
+				desc = "Silicons dream of this."
 			if(SMOKYROOM)
-				icon_state = SMOKYROOM
+				icon_state = "smokyroom"
 				name = "\improper Smoky Room"
 				desc = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
 			if(BAD_TOUCH)
-				icon_state = BAD_TOUCH
+				icon_state = "bad_touch"
 				name = "\improper Bad Touch"
-				desc = "Somewhere on the scale of bad touches between 'fondled by clown' and 'brushed by supermatter shard'."
+				desc = "On the scale of bad touches, somewhere between 'fondled by clown' and 'brushed by supermatter shard'."
 			if(SUICIDE)
-				icon_state = SUICIDE
+				icon_state = "suicide"
 				name = "\improper Suicide"
 				desc = "It's only tolerable because of the added alcohol."
 
