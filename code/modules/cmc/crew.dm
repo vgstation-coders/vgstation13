@@ -17,7 +17,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	_using = new()
 
 	//for the holomap
-	var/initialized = 0 //if the holomap was already initialized, since we cant do it in new, we gotta check as soon as a user clicks us
 	var/list/holomap_images = list() //list of lists of images for the people using the console
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
@@ -247,14 +246,16 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
 	var/uid = "\ref[user]"
-	user.client.images -= holomap_images[uid]
-	user.client.screen -= holomap_tooltips[uid]
+	to_chat(user, "DEBUG: HOLOMAP CLOSED")
 
 	var/z = holomap_z["\ref[user]"]
-	var/holomap_bgmap = "cmc_\ref[src]_[z]"
+	var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
 	if(holomap_bgmap in holomap_cache)
 		var/image/bgmap = holomap_cache[holomap_bgmap]
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
+
+	user.client.images -= holomap_images[uid]
+	user.client.screen -= holomap_tooltips[uid]
 
 	holomap_images[uid].len = 0
 	holomap_tooltips[uid].len = 0
@@ -281,10 +282,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	holomap[uid] = null
 	textview_popup[uid] = null //incase something is fucky
 
-/obj/machinery/computer/crew/proc/initializeHolomap()
+/obj/machinery/computer/crew/proc/initializeHolomap(var/mob/user)
 	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
 	for(var/z_level in all_ui_z_levels)
-		var/holomap_bgmap = "cmc_\ref[src]_[z_level]"
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z_level]"
 		if(!(holomap_bgmap in holomap_cache))
 			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
 			if(z_level in holomap_z_levels_mapped)
@@ -297,23 +298,23 @@ Crew Monitor by Paul, based on the holomaps by Deity
 					background.overlays += station_areas
 					background.overlays += station_outline
 			background.alpha = 0
-			background.layer = ABOVE_HUD_LAYER
+			background.plane = HUD_PLANE
+			background.layer = HUD_BASE_LAYER
 			holomap_cache[holomap_bgmap] = background
 
 	//z2 override if nukeops or voxraider
 	if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
-		var/holomap_bgmap = "cmc_\ref[src]_2"
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_2"
 		var/image/background = image('icons/480x480.dmi', "stationmap_blue")
 		var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
 		station_outline.color = "#DEE7FF"
 		station_outline.alpha = 200
 		background.overlays += station_outline
 		background.alpha = 0
-		background.layer = ABOVE_HUD_LAYER
+		background.plane = HUD_PLANE
+		background.layer = HUD_BASE_LAYER
 		holomap_cache[holomap_bgmap] = background
 		holomap_z_levels_unmapped |= CENTCOMM_Z
-	initialized = 1
-
 
 //initializes the holomap
 /obj/machinery/computer/crew/proc/togglemap(var/mob/user)
@@ -326,8 +327,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	else
 		_using += user
 		var/uid = "\ref[user]"
-		if(!initialized) //didn't find a better way to do this
-			initializeHolomap()
+		initializeHolomap(user)
 		holomap_images[uid] = list()
 		holomap_tooltips[uid] = list()
 		ui_tooltips[uid] = list()
@@ -385,11 +385,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		var/image/bgmap
 		var/z = holomap_z[uid]
-		var/holomap_bgmap = "cmc_\ref[src]_[z]"
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
 
 		bgmap = holomap_cache[holomap_bgmap]
-		bgmap.plane = HUD_PLANE
-		bgmap.layer = HUD_BASE_LAYER
 		bgmap.loc = user.hud_used.holomap_obj
 
 		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
