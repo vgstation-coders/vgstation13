@@ -7,11 +7,11 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	charge_type = Sp_RECHARGE
-	charge_max = 5 MINUTES
+	charge_max = 3 MINUTES
 	invocation_type = SpI_NONE
 	range = 4
 	spell_flags = STATALLOWED | NEEDSHUMAN
-	cooldown_min = 5 MINUTES
+	cooldown_min = 3 MINUTES
 
 	override_base = "vamp"
 	hud_state = "vampire_screech"
@@ -26,7 +26,7 @@
 		return FALSE
 
 /spell/aoe_turf/screech/choose_targets(var/mob/user = usr)
-	
+
 	var/list/targets = list()
 
 	for(var/mob/living/carbon/C in hearers(user, 4))
@@ -39,7 +39,7 @@
 			if(!C.vampire_affected(user.mind))
 				continue
 			targets += C
-	
+
 	if (!targets.len)
 		to_chat(user, "<span class='warning'>There are no targets.</span>")
 		return FALSE

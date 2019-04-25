@@ -7,12 +7,12 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	charge_type = Sp_RECHARGE
-	charge_max = 3 MINUTES
+	charge_max = 2 MINUTES
 	invocation_type = SpI_NONE
 	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN
-	cooldown_min = 3 MINUTES
+	cooldown_min = 2 MINUTES
 	selection_type = "range"
 
 	amt_paralysis = 20

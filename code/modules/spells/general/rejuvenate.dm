@@ -7,11 +7,11 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	charge_type = Sp_RECHARGE
-	charge_max = 3 MINUTES
+	charge_max = 30 SECONDS
 	invocation_type = SpI_NONE
 	range = 0
 	spell_flags = STATALLOWED | NEEDSHUMAN
-	cooldown_min = 3 MINUTES
+	cooldown_min = 30 SECONDS
 
 	override_base = "vamp"
 	hud_state = "vampire_rejuv"
