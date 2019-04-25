@@ -63,6 +63,6 @@
 	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	var/datum/role/vampire/V = isvampire(user)
-	if (V)
+	if (!V)
 		return FALSE
 	V.remove_blood(blood_cost)
