@@ -430,7 +430,7 @@
 		if(href_list["speak_laws"])
 			nanomanager.close_user_uis(usr, null, "state_laws")
 			var/key = href_list["radio_key"]
-			var/regex/onlykey = new(@":[0\-abcdemnpstuw]|;") //find a valid key in the input, if there is one, stopping at first match
+			var/regex/onlykey = new(@":[0\-abcdeimnpstuw]|;") //find a valid key in the input, if there is one, stopping at first match
 			var/index = onlykey.Find(key)
 			//shitcode
 			if(index && key[index] == ";")
