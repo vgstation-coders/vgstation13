@@ -30,7 +30,7 @@
 		accessory.emp_act(severity)
 	..()
 
-/obj/item/clothing/attackby(obj/item/I, mob/user)
+/obj/item/clothing/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/clothing/accessory))
 		var/obj/item/clothing/accessory/A = I
 		if(check_accessory_overlap(A))
@@ -47,6 +47,10 @@
 			var/mob/living/carbon/human/H = loc
 			H.update_inv_by_slot(slot_flags)
 		return 1
+	if(istype(I, /obj/item/weapon/screwdriver))
+		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
+			if(accessory.attackby(I, user))
+				return 1
 	for(var/obj/item/clothing/accessory/accessory in priority_accessories())
 		if(accessory.attackby(I, user))
 			return 1
@@ -64,9 +68,14 @@
 					delayed.Add(A)
 				else
 					continue
+		var/ignorecounter = 0
 		for(var/obj/item/clothing/accessory/A in delayed)
-			if(A.on_accessory_interact(user, 1))
+			if(A.ignoreinteract)
+				ignorecounter += 1
+			if(!(A.ignoreinteract) && A.on_accessory_interact(user, 1))
 				return 1
+		if(ignorecounter == accessories.len)
+			return ..()
 		return
 	return ..()
 

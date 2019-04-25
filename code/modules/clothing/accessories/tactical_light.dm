@@ -4,6 +4,7 @@
 	icon_state = "taclight"
 	accessory_exclusion = LIGHT
 	var/obj/item/device/flashlight/tactical/source_light
+	ignoreinteract = TRUE
 	
 /obj/item/clothing/accessory/taclight/New()
 	..()
@@ -21,7 +22,6 @@
 		icon_state = "[initial(icon_state)]_armor"
 	if(source_light && source_light.on)
 		icon_state = "[icon_state]_on"
-	to_chat(world, "[icon_state]")
 		
 /obj/item/clothing/accessory/taclight/can_attach_to(obj/item/clothing/C)
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))
@@ -82,8 +82,6 @@
 		source_light = null
 	update_brightness(attached_to)
 	attached_to = null
-	generate_icon_state()
-	update_icon()
 	qdel(src)
 			
 /obj/item/clothing/accessory/taclight/attack_self(mob/user)
@@ -94,7 +92,15 @@
 		update_brightness(attached_to)
 		update_icon()
 		attached_to.update_icon()
+
+/obj/item/clothing/accessory/taclight/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I, /obj/item/weapon/screwdriver) && attached_to)
+		to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
+		attached_to.remove_accessory(user, src)	
 		
+/obj/item/clothing/accessory/taclight/on_accessory_interact()
+	return -1	
+	
 /datum/action/item_action/toggle_taclight
 	name = "Toggle Tactical Light"
 	var/obj/item/clothing/accessory/taclight/ownerlight

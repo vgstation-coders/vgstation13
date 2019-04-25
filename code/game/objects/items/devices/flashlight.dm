@@ -107,7 +107,7 @@
 
 /obj/item/device/flashlight/tactical
 	name = "tactical light"
-	desc = "A compact, helmet-mounted flashlight attachment."
+	desc = "A compact, tactical flashlight with automatic self-attaching screws. Fits on armor and headgear."
 	icon_state = "tacticoollight"
 	item_state = ""
 	
@@ -127,6 +127,8 @@
 			transfer_fingerprints(src,TL)
 			forceMove(TL)
 		return 1
+	else
+		to_chat(user, "<span class='notice'>\The [src] cannot be attached to that.</span>")
 	return ..()	
 
 
