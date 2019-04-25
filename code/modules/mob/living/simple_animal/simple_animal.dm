@@ -24,7 +24,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/speak_chance = 0
 	var/list/emote_hear = list()	//Hearable emotes
 	var/list/emote_see = list()		//Unlike speak_emote, the list of things in this variable only show by themselves with no spoken text. IE: Ian barks, Ian yaps
-	var/list/emote_sound = list()   //Plays a random sound when emote_hear activates
+	var/list/emote_sound = list()   //Plays a random sound if the mob triggers speak or emote_hear
+	var/last_speech_time = 0 //When did they last talk?
 
 	var/speak_override = FALSE
 
@@ -323,6 +324,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(speak_emote && speak_emote.len)
 		var/emote = pick(speak_emote)
 		if(emote)
+			if(world.time > last_speech_time + 10) //Delay before next sound
+				playsound(loc, "[pick(emote_sound)]", 80, 1)
+				last_speech_time = world.time
 			return "[emote], [text]"
 	return "says, [text]";
 

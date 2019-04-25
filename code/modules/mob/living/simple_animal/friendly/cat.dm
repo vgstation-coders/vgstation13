@@ -12,7 +12,7 @@
 	speak_emote = list("purrs", "meows")
 	emote_hear = list("meows", "mews")
 	emote_see = list("shakes its head", "shivers")
-	emote_sound = list("sound/voice/catmeow.ogg","sound/voice/catpurr.ogg")
+	emote_sound = list("sound/voice/catmeow.ogg")
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
