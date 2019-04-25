@@ -18,7 +18,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//for the holomap
 	var/list/holomap_images = list() //list of lists of images for the people using the console
-	var/list/is_ai = list() // is ai???? ignores said mob when checking for distance
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
 	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
@@ -76,15 +75,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	..()
 
 /obj/machinery/computer/crew/attack_ai(mob/user)
-	is_ai["\ref[user]"] = 1 //is ai
 	attack_hand(user)
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
 	var/uid = "\ref[user]"
-	if(!(uid in is_ai) && issilicon(user))
-		is_ai[uid] = 1 //is silicon
-	else
-		is_ai[uid] = 0
 	. = ..()
 	if(.)
 		return
@@ -371,7 +365,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
 	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (!is_ai[uid] && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (!(isAI(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
 		return FALSE
 	return TRUE
 
