@@ -11,6 +11,18 @@
 		source_light = new /obj/item/device/flashlight/tactical/
 		source_light.forceMove(src)
 
+/obj/item/clothing/accessory/taclight/proc/generate_icon_state()
+	if(!attached_to || !icon_state)
+		return
+	icon_state = null
+	if(istype(attached_to, /obj/item/clothing/head))
+		icon_state = "[initial(icon_state)]_helmet"
+	if(istype(attached_to, /obj/item/clothing/suit/armor))
+		icon_state = "[initial(icon_state)]_armor"
+	if(source_light && source_light.on)
+		icon_state = "[icon_state]_on"
+	to_chat(world, "[icon_state]")
+		
 /obj/item/clothing/accessory/taclight/can_attach_to(obj/item/clothing/C)
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))
 
@@ -18,13 +30,7 @@
 	if(!istype(C))
 		return
 	attached_to = C
-	if(istype(attached_to, /obj/item/clothing/head))
-		icon_state = "[initial(icon_state)]_helmet"
-	else
-		if(istype(attached_to, /obj/item/clothing/suit/armor))
-			icon_state = "[initial(icon_state)]_armor"
-		else
-			icon_state = null
+	generate_icon_state()
 	update_brightness(attached_to)
 	var/datum/action/item_action/toggle_taclight/makelight = new /datum/action/item_action/toggle_taclight(attached_to)
 	makelight.ownerlight = src
@@ -43,6 +49,7 @@
 /obj/item/clothing/accessory/taclight/update_icon()
 	if(!attached_to)
 		return
+	generate_icon_state()
 	if(attached_to.overlays.len)
 		attached_to.overlays -= inv_overlay			
 	if(icon_state)
@@ -75,6 +82,8 @@
 		source_light = null
 	update_brightness(attached_to)
 	attached_to = null
+	generate_icon_state()
+	update_icon()
 	qdel(src)
 			
 /obj/item/clothing/accessory/taclight/attack_self(mob/user)
@@ -83,6 +92,8 @@
 		source_light.update_brightness(user)
 	if(attached_to)
 		update_brightness(attached_to)
+		update_icon()
+		attached_to.update_icon()
 		
 /datum/action/item_action/toggle_taclight
 	name = "Toggle Tactical Light"
