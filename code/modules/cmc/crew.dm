@@ -18,6 +18,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//for the holomap
 	var/list/holomap_images = list() //list of lists of images for the people using the console
+	var/list/is_ai = list() // is ai????
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
 	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
@@ -75,9 +76,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	..()
 
 /obj/machinery/computer/crew/attack_ai(mob/user)
+	is_ai["\ref[user]"] = 1 //is ai
 	attack_hand(user)
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
+	if(!("\ref[user]" in is_ai))
+		is_ai["\ref[user]"] = 0 //no ai
 	. = ..()
 	if(.)
 		return
@@ -246,8 +250,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
 	var/uid = "\ref[user]"
-	to_chat(user, "DEBUG: HOLOMAP CLOSED")
-
 	var/z = holomap_z["\ref[user]"]
 	var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
 	if(holomap_bgmap in holomap_cache)
@@ -281,6 +283,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	textview_updatequeued[uid] = null
 	holomap[uid] = null
 	textview_popup[uid] = null //incase something is fucky
+	is_ai[uid] = 0
 
 /obj/machinery/computer/crew/proc/initializeHolomap(var/mob/user)
 	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
@@ -365,7 +368,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
 	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (get_dist(user.loc,src.loc) > 1) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (!is_ai[uid] && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
 		return FALSE
 	return TRUE
 
