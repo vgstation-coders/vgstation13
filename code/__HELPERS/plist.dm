@@ -90,12 +90,19 @@ plist/proc/Cut(start = 1, end = 0)
     return _list.Cut(start, end)
 
 plist/proc/Find(B)
-
+    //TODO
 
 plist/proc/Insert(B)
+    //TODO
+
 plist/proc/Join(B)
+    //TODO
+
 plist/proc/Remove(B)
+    //TODO
+
 plist/proc/Swap(B)
+    //TODO
 
 /*
 =================
@@ -107,14 +114,8 @@ plist/proc/Append(B)
     _list.Add(B)
 
 //needs testing
-plist/proc/hasElement(B)
-    for(for(i=1, i<_list.len, i++))
-        if(_list[i] == B) return i
-    return FALSE
-
-//needs testing
 plist/proc/hasIndex(I)
     if(I > _list.len) return FALSE //catch runtimes
-    if(_list[I])
+    if(_list[I]) //this will handle both strings and nums
         return TRUE
     return FALSE
