@@ -51,7 +51,7 @@ NanoBaseHelpers = function ()
 				return '<div unselectable="on" class="link linkActive ' + iconClass + ' ' + elementClass + '" data-href="' + NanoUtility.generateHref(parameters) + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 			},
 			//generate a submit button styled like a link
-			submitButton: function( text, icon, status, elementClass, elementId) {
+			submitButton: function( text, icon, formid, status, elementClass, elementId) {
 
 				var iconHtml = '';
 				var iconClass = 'noIcon';
@@ -77,7 +77,7 @@ NanoBaseHelpers = function ()
 					return '<div unselectable="on" class="button ' + iconClass + ' ' + elementClass + ' ' + status + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 				}
 
-				return '<div unselectable="on" class="button buttonActive ' + iconClass + ' ' + elementClass + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
+				return '<div unselectable="on" class="button buttonActive ' + iconClass + ' ' + elementClass + '" data-formid="' + formid + '" ' + elementIdHtml + '>' + iconHtml + text + '</div>';
 			},
 			// Since jsrender breaks the ^ operator
 			xor: function(number,bit) {

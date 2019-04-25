@@ -427,7 +427,8 @@
 			var/index = text2num(href_list["toggle_law_enable"])
 			state_laws_ui["selected_laws"][index]["enabled"] = !state_laws_ui["selected_laws"][index]["enabled"]
 			return 1
-		if(href_list["radio_key"])
+		if(href_list["speak_laws"])
+			nanomanager.close_user_uis(usr, null, "state_laws")
 			var/key = href_list["radio_key"]
 			var/regex/onlykey = new(@":[0\-abcdemnpstuw]|;") //find a valid key in the input, if there is one, stopping at first match
 			var/index = onlykey.Find(key)
@@ -439,14 +440,9 @@
 			else
 				key = ""
 			state_laws_ui["radio_key"] = key
-			to_chat(world, "DEBUG: new radio key: [key]")
-			nanomanager.update_user_uis(usr, null, "state_laws")
-			return 1
-		if(href_list["speak_laws"])
-			nanomanager.close_user_uis(usr, null, "state_laws")
 			if(state_laws_ui["freeform"])
 				log_admin("[usr]/[ckey(usr.key)] freeform-stated its silicon laws.")
-			speak_laws(state_laws_ui["selected_laws"], state_laws_ui["radio_key"])
+			speak_laws(state_laws_ui["selected_laws"], key)
 			return 1
 
 /mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)

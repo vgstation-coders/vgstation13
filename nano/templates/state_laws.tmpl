@@ -46,7 +46,7 @@
 </div>
 {{/if}}
 <div class="item">
-    <form name="lawedit" action="byond://" method="post">
+    <form id="lawedit" name="lawedit" action="byond://" method="post">
     <input type="hidden" id="src" name="src" value="{{:data.src}}">
     <input type="hidden" id="src" name="ui_key" value="state_laws">
     <div class="line">
@@ -54,12 +54,7 @@
         {{if data.freeform && !data.freeform_editing_unlocked}}
         {{:helper.link("Edit", "gear", {"ui_key": "state_laws", "freeform_edit_toggle": 1}, null, 'floatRight')}}
         {{else data.freeform && data.freeform_editing_unlocked}}
-        <!-- doesn't work thanks to IE
-        <button type="submit" style="float: right;text-align: center;color: #ffffff;text-decoration: none;background: #40628a;border: 1px solid #161616;padding: 0px 4px 4px 0px;margin: 0 2px 2px 0;cursor: default;white-space: nowrap;">
-            <i class="uiIcon16 icon-disk floatRight" style="display:block"></i> Save
-        </button>
-        -->
-        <input type="submit" value="Save" class="floatRight">
+        {{:helper.submitButton("Save", "disk", "lawedit", null, "floatRight")}}
         {{/if}}
         <h3 style="clear:left;display:inline">Currently selected laws</h3>
     </div>
@@ -88,17 +83,15 @@
     </form>
 </div>
 <div class="item">
-    <div class="line">
-        <!-- {{:helper.link("State Laws", "volume-on", {"ui_key": "state_laws", "speak_laws": 1})}} -->
-        <form id="keyedit" name="keyedit" action="byond://" method="post">
-            {{:helper.submitButton("State Laws", "volume-on")}}
-            <input type="hidden" id="src" name="src" value="{{:data.src}}">
-            <input type="hidden" id="src" name="ui_key" value="state_laws">
-            <div class="floatRight">
-                <div class="itemLabel">Radio key:</div>
-                <input type="text" name="radio_key" id="radio_key" maxlength="2" size="2" value="{{>data.radio_key}}" onblur="this.form.submit()">
-                <input type="submit" value="Set">
-            </div>
-        </form>
-    </div>
+    <form id="keyedit" name="keyedit" action="byond://" method="post">
+        <input type="hidden" id="src" name="src" value="{{:data.src}}">
+        <input type="hidden" id="ui_key" name="ui_key" value="state_laws">
+        <input type="hidden" id="speak_laws" name="speak_laws" value="1">
+        <div class="line">
+            {{:helper.submitButton("State Laws", "volume-on", "keyedit")}}
+        </div>
+        <div class="line">
+            Radio key: <input type="text" name="radio_key" id="radio_key" maxlength="2" size="2" value="{{>data.radio_key}}">
+        </div>
+    </form>
 </div>

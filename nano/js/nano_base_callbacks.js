@@ -61,7 +61,7 @@ NanoBaseCallbacks = function ()
 				.off('click')
 				.on('click', function (event) {
 					event.preventDefault();
-					var form = $(this).form;
+					var form = document.getElementById($(this).data('formid'));
 					if (form != null && _canClick)
 					{
 						_canClick = false;
