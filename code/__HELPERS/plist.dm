@@ -6,18 +6,115 @@
 plist
     var/list/_list = list()
 
+/*
+=================
+    OPERATORS
+=================
+*/
+//return at idx TODO maybe sanitize. list["[var]" fix that somehow
 plist/proc/operator[](var/idx)
-    //return at idx, maybe sanitize. list["[var]" fix that somehow
+    return _list[idx]
 
+//check if list needs to be extended, so if idx is num and > then len. if idx is str we dont care
+//if idx is null, append
 plist/proc/operator[]=(idx, B)
-    //check if list needs to be extended, so if idx is num and > then len. if idx is str we dont care
-    //if idx is null, append
+    if(!idx)
+        src += B //append
+
+    if(isnum(idx))
+        if(idx > _list.len)
+            list.len = idx
+        _list[idx] = B
+    else if(istext(idx))
+        _list[idx] = B
+    else
+        _list["[idx]"] = B // \ref ????
+
+//actually add list as an element, not add all elements, also add everything else properly
+plist/proc/operator+(B)
 
 plist/proc/operator+=(B)
-    //actually add list as an element, not add all elements
+    return "TODO"
+
+//append all items when list, basically what += would do, so people can still use it, but its not default
+plist/proc/operator*(B)
+    return _list + B
 
 plist/proc/operator*=(B)
-    //append all items when list, basically what += would do
+    _list += B
+
+//behaviour is fine
+plist/proc/operator-(B)
+    return _list - B
 
 plist/proc/operator-=(B)
-    //doesn't need to be changed much, has good behaviour
+    _list -= B
+
+//behaviour is fine
+plist/proc/operator|(B)
+    return _list | B
+
+plist/proc/operator|=(B)
+    _list |= B
+
+//behaviour is fine
+plist/proc/operator&(B)
+    return _list & B
+
+plist/proc/operator&=(B)
+    _list &= B
+
+//behaviour is fine
+plist/proc/operator^(B)
+    return _list ^ B
+
+plist/proc/operator^=(B)
+    _list ^= B
+
+/*
+=================
+   LIST PROCS
+=================
+*/
+plist/proc/Add(B)
+    _list += B
+
+plist/proc/Copy(start = 1, end = 0)
+    if(!end) end = _list.len
+    if(start > end) return FALSE
+    return _list.Copy(start, end)
+
+plist/proc/Cut(start = 1, end = 0)
+    if(!end) end = _list.len
+    if(start > end) return FALSE
+    return _list.Cut(start, end)
+
+plist/proc/Find(B)
+
+
+plist/proc/Insert(B)
+plist/proc/Join(B)
+plist/proc/Remove(B)
+plist/proc/Swap(B)
+
+/*
+=================
+   HELPER PROCS
+=================
+*/
+//replaces old add
+plist/proc/Append(B)
+    _list.Add(B)
+
+//needs testing
+plist/proc/hasElement(B)
+    for(for(i=1, i<_list.len, i++))
+        if(_list[i] == B) return i
+    return FALSE
+
+//needs testing
+plist/proc/hasIndex(I)
+    if(I > _list.len) return FALSE //catch runtimes
+    if(_list[I])
+        return TRUE
+    return FALSE
