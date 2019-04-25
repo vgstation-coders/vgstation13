@@ -119,7 +119,7 @@
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
 	user_type = USER_TYPE_GENETIC
-	desc = "Drops the bodytemperature of another person."
+	desc = "Drops the body temperature of another person."
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE

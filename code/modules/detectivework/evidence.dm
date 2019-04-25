@@ -7,7 +7,10 @@
 	icon_state = "evidenceobj"
 	item_state = ""
 	use_to_pickup = TRUE
+	allow_quick_empty = TRUE
+	collection_mode = FALSE
 	w_class = W_CLASS_TINY
+	fits_max_w_class = W_CLASS_MEDIUM
 	storage_slots = 1
 
 /obj/item/weapon/storage/evidencebag/update_icon()

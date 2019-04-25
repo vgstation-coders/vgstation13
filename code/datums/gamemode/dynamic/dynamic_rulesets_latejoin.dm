@@ -57,16 +57,8 @@
 	weight = 7
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	high_population_requirement = 10
 	repeatable = TRUE
-
-/datum/dynamic_ruleset/latejoin/infiltrator/acceptable(var/population=0,var/threat=0)
-	var/player_count = mode.living_players.len
-	var/antag_count = mode.living_antags.len
-	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))//adding traitors if the antag population is getting low
-		return ..()
-	else
-		return 0
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(candidates)
@@ -93,6 +85,7 @@
 	weight = 1
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/latejoin/raginmages/ready(var/forced = 0)
@@ -132,18 +125,10 @@
 	weight = 4
 	cost = 10
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
+	high_population_requirement = 20
 	logo = "ninja-logo"
 
 	repeatable = TRUE
-
-/datum/dynamic_ruleset/latejoin/ninja/acceptable(var/population=0,var/threat=0)
-	var/player_count = mode.living_players.len
-	var/antag_count = mode.living_antags.len
-	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))
-		return ..()
-	else
-		return 0
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
@@ -173,6 +158,7 @@
 	cost = 20
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)
+	high_population_requirement = 50
 
 /datum/dynamic_ruleset/latejoin/provocateur/ready(var/forced=FALSE)
 	if (forced)

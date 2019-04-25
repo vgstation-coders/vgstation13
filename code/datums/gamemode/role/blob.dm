@@ -32,8 +32,8 @@
 		else if (countdown <= 0)
 			burst()
 	if (antag && antag.current.hud_used)
-		if(antag.current.hud_used.blob_countdown_display)
-			antag.current.hud_used.blob_countdown_display.overlays.len = 0
+		if(antag.current.hud_used.countdown_display)
+			antag.current.hud_used.countdown_display.overlays.len = 0
 			var/first = round(countdown/10)
 			var/second = countdown%10
 			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
@@ -42,10 +42,10 @@
 			I2.pixel_x += 17 * PIXEL_MULTIPLIER
 			I1.pixel_y -= 11 * PIXEL_MULTIPLIER
 			I2.pixel_y -= 11 * PIXEL_MULTIPLIER
-			antag.current.hud_used.blob_countdown_display.overlays += I1
-			antag.current.hud_used.blob_countdown_display.overlays += I2
+			antag.current.hud_used.countdown_display.overlays += I1
+			antag.current.hud_used.countdown_display.overlays += I2
 		else
-			antag.current.hud_used.blob_infected_hud()
+			antag.current.hud_used.countdown_hud()
 
 /datum/role/blob_overmind/proc/burst()
 	if(!antag || istype(antag.current,/mob/camera/blob))

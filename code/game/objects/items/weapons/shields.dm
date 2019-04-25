@@ -47,7 +47,7 @@
 /obj/item/weapon/shield/riot/buckler/IsShield()
 	return prob(33) //Only attempt to block 1/3 of attacks
 
-/obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack")
+/obj/item/weapon/shield/riot/buckler/on_block(damage, atom/blocked)
 	if(damage > 10)
 		if(prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
 			var/turf/T = get_turf(src)

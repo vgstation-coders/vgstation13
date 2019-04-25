@@ -16,6 +16,14 @@
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
 
+/obj/item/clothing/shoes/magboots/verb/toggle_magboots()
+	set src in usr
+	set name = "Toggle Magboots"
+	set category = "Object"
+	if (!usr || loc != usr)
+		return
+	return toggle(usr) // Sanity is handled there.
+
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
 	if(!stomp_attack_power)
 		return

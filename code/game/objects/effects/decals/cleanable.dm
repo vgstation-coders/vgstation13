@@ -53,11 +53,12 @@
 		if(legacy_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
-					legacy_cult.bloody_floors += T
-					legacy_cult.bloody_floors[T] = T
-					if (legacy_cult.has_enough_bloody_floors())
-						legacy_cult.getNewObjective()
+				if(istype(T, /turf/simulated/floor) && !isspace(T.loc) && !istype(T.loc, /area/asteroid) && !istype(T.loc, /area/mine) && !istype(T.loc, /area/vault) && !istype(T.loc, /area/prison) && !istype(T.loc, /area/vox_trading_post))
+					if(!(locate("\ref[T]") in legacy_cult.bloody_floors))
+						legacy_cult.bloody_floors += T
+						legacy_cult.bloody_floors[T] = T
+						if (legacy_cult.has_enough_bloody_floors())
+							legacy_cult.getNewObjective()
 		if(src.loc && isturf(src.loc))
 			for(var/obj/effect/decal/cleanable/C in src.loc)
 				if(C.type in absorbs_types && C != src)

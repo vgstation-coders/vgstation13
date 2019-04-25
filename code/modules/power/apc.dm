@@ -450,7 +450,7 @@
 					"You insert the power cell.")
 				chargecount = 0
 				update_icon()
-	else if	(isscrewdriver(W))	// haxing
+	else if	(W.is_screwdriver(user))	// haxing
 		if(opened)
 			if (cell)
 				to_chat(user, "<span class='warning'>Close the APC first.</span>")//Less hints more mystery!
@@ -917,7 +917,7 @@
 
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/malfai = usr
-		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(get_malf_status(malfai)==1)
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
@@ -965,7 +965,7 @@
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
 	if(malfai)
-		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(M && STATION_Z == z)
 			operating ? M.apcs++ : M.apcs--
 
@@ -1295,7 +1295,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(M && STATION_Z == z)
 			M.apcs--
 	stat |= BROKEN
@@ -1326,7 +1326,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
 		if(malfai && operating)
-			var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 			if (M && STATION_Z == z)
 				M.apcs--
 		this_area.power_light = 0

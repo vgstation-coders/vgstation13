@@ -464,6 +464,10 @@
 // USE THIS INSTEAD (global)
 /datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 
+/datum/role/proc/ShuttleDocked(state)
+	if(objectives.objectives.len)
+		for(var/datum/objective/O in objectives.objectives)
+			O.ShuttleDocked(state)
 
 /datum/role/proc/AnnounceObjectives()
 	var/text = ""
@@ -506,6 +510,10 @@
 			D.spend_threat(refund_value)
 			D.threat_log += "[worldtime2text()]: [name] cost [refund_value] after being undestroyed."
 
+//Does the role have special clothign restrictions?
+/datum/role/proc/can_wear(var/obj/item/clothing/C)
+	return TRUE
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 
@@ -516,15 +524,6 @@
 	id = WIZAPP
 	special_role = WIZAPP
 	logo_state = "apprentice-logo"
-
-//________________________________________________
-
-
-/datum/role/madmonkey
-	name = MADMONKEY
-	id = MADMONKEY
-	special_role = MADMONKEY
-	logo_state = "monkey-logo"
 
 //________________________________________________
 

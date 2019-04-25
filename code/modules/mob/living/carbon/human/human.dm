@@ -7,7 +7,6 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -24,69 +23,81 @@
 	..(new_loc, "Manifested")
 
 /mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Skrell Male Tentacles"
 	..(new_loc, "Skrell")
+	my_appearance.h_style = "Skrell Male Tentacles"
+	regenerate_icons()
 
 /mob/living/carbon/human/tajaran/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Tajaran Ears"
 	..(new_loc, "Tajaran")
+	my_appearance.h_style = "Tajaran Ears"
+	regenerate_icons()
 
 /mob/living/carbon/human/unathi/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Unathi Horns"
 	..(new_loc, "Unathi")
+	my_appearance.h_style = "Unathi Horns"
+	regenerate_icons()
 
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
+	my_appearance.h_style = "Short Vox Quills"
+	regenerate_icons()
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Diona")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Skellington", delay_ready_dna)
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Plasmaman")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Muton")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Grey")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Golem")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Grue")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Slime")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	f_style = pick(facial_hair_styles_list)
-	h_style = pick(hair_styles_list)
-
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
+	my_appearance.f_style = pick(facial_hair_styles_list)
+	my_appearance.h_style = pick(hair_styles_list)
 	gender = pick(MALE, FEMALE, NEUTER, PLURAL)
 	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
 
@@ -96,12 +107,14 @@
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Mushroom")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Undead")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
@@ -124,8 +137,9 @@
 	static_overlays["cult"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
+	my_appearance = new // Initialise how they look.
 	if(new_species_name)
-		s_tone = random_skin_tone(new_species_name)
+		my_appearance.s_tone = random_skin_tone(new_species_name)
 	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
@@ -752,30 +766,30 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(r_facial,g_facial,b_facial)) as color
+	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
 	if(new_facial)
-		r_facial = hex2num(copytext(new_facial, 2, 4))
-		g_facial = hex2num(copytext(new_facial, 4, 6))
-		b_facial = hex2num(copytext(new_facial, 6, 8))
+		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
+		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
+		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(r_hair,g_hair,b_hair)) as color
+	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
 	if(new_facial)
-		r_hair = hex2num(copytext(new_hair, 2, 4))
-		g_hair = hex2num(copytext(new_hair, 4, 6))
-		b_hair = hex2num(copytext(new_hair, 6, 8))
+		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
+		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
+		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(r_eyes,g_eyes,b_eyes)) as color
+	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
 	if(new_eyes)
-		r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		b_eyes = hex2num(copytext(new_eyes, 6, 8))
+		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-s_tone]")  as text
+	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
 
 	if (!new_tone)
 		new_tone = 35
-	s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	s_tone =  -s_tone + 35
+	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+	my_appearance.s_tone =  -my_appearance.s_tone + 35
 
 	// hair
 	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -788,11 +802,11 @@
 		qdel(H) // delete the hair after it's all done
 		H = null
 
-	var/new_style = input("Please select hair style", "Character Generation",h_style)  as null|anything in hairs
+	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
 
 	// if new style selected (not cancel)
 	if (new_style)
-		h_style = new_style
+		my_appearance.h_style = new_style
 
 	// facial hair
 	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
@@ -804,10 +818,10 @@
 		qdel(H)
 		H = null
 
-	new_style = input("Please select facial style", "Character Generation",f_style)  as null|anything in fhairs
+	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
 
 	if(new_style)
-		f_style = new_style
+		my_appearance.f_style = new_style
 
 	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
@@ -1577,6 +1591,8 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
+	if(locked_to)
+		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
 	else
@@ -1681,6 +1697,10 @@ mob/living/carbon/human/isincrit()
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
 		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
+		var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+		if(L && !L.robotic)
+			L.gasses.Remove(locate(/datum/lung_gas/metabolizable) in L.gasses)
+			L.gasses.Add(new /datum/lung_gas/metabolizable(species.breath_type, min_pp = 16, max_pp = 140))
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
@@ -1718,18 +1738,18 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"r_hair",
-		"g_hair",
-		"b_hair",
-		"h_style",
-		"r_facial",
-		"g_facial",
-		"b_facial",
-		"f_style",
-		"r_eyes",
-		"g_eyes",
-		"b_eyes",
-		"s_tone",
+		"my_appearance.r_hair",
+		"my_appearance.g_hair",
+		"my_appearance.b_hair",
+		"my_appearance.h_style",
+		"my_appearance.r_facial",
+		"my_appearance.g_facial",
+		"my_appearance.b_facial",
+		"my_appearance.f_style",
+		"my_appearance.r_eyes",
+		".my_appearance.g_eyes",
+		".my_appearance.b_eyes",
+		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1871,7 +1891,7 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
 		return FALSE
-	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked() || status_flags & FAKEDEATH)
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)

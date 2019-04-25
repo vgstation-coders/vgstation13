@@ -72,10 +72,10 @@
 /datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.h_style == "Bald") && !(H.h_style == "Balding Hair"))
+		if(H.species.name == "Human" && !(H.my_appearance.h_style == "Bald") && !(H.my_appearance.h_style == "Balding Hair"))
 			to_chat(H, "<span class='danger'>Your hair starts to fall out in clumps...</span>")
 			spawn(50)
-				H.h_style = "Balding Hair"
+				H.my_appearance.h_style = "Balding Hair"
 				H.update_hair()
 
 
@@ -123,10 +123,10 @@
 /datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.f_style == "Full Beard"))
+		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Full Beard"))
 			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
 			spawn(50)
-				H.f_style = "Full Beard"
+				H.my_appearance.f_style = "Full Beard"
 				H.update_hair()
 
 

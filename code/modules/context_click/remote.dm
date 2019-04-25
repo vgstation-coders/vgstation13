@@ -70,7 +70,7 @@ Remotes have procs for when attack_self() is called to handle which button is pr
 /datum/context_click/remote_control/action(obj/item/used_item, mob/user, params)
 	if(used_item)
 
-		if(isscrewdriver(used_item)) //Button removal - click a valid button with a screwdriver to pop it out
+		if(used_item.is_screwdriver(user)) //Button removal - click a valid button with a screwdriver to pop it out
 			var/button_id = return_clicked_id_by_params(params)
 			if(get_button_by_id(button_id))
 				var/obj/item/device/remote_button/removed = remove_button(button_id)

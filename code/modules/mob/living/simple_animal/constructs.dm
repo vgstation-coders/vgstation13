@@ -39,8 +39,6 @@
 
 	var/list/construct_spells = list()
 
-	var/list/hud_list = list()
-
 	var/list/healers = list()
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)

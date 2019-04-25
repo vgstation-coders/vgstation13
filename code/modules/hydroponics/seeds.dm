@@ -501,8 +501,8 @@
 
 /datum/seed/chili/ice
 	name = "icechili"
-	seed_name = "ice pepper"
-	display_name = "ice-pepper plants"
+	seed_name = "chilly pepper"
+	display_name = "chilly pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper)
 	chems = list(FROSTOIL = list(3,5), NUTRIMENT = list(1,50))
@@ -1392,7 +1392,7 @@
 	maturation = 6
 	production = 6
 	yield = 3
-	potency = 1
+	potency = 10
 	water_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8

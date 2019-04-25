@@ -16,15 +16,15 @@
 /obj/item/clothing/head/welding
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
-	icon_state = "welding"
+	icon_state = "weldingup"
 	flags = FPRINT
 	item_state = "welding"
 	starting_materials = list(MAT_IRON = 3000, MAT_GLASS = 1000)
 	w_type = RECYK_MISC
-	var/up = 0
-	eyeprot = 3
+	var/up = 1
+	eyeprot = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = FACE
+	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED)
@@ -41,12 +41,12 @@
 			src.up = !src.up
 			src.body_parts_covered = FACE
 			eyeprot = 3
-			icon_state = initial(icon_state)
+			icon_state = "welding"
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
 			src.body_parts_covered = HEAD
-			icon_state = "[initial(icon_state)]up"
+			icon_state = "weldingup"
 			eyeprot = 0
 			to_chat(usr, "You push the [src] up out of your face.")
 		usr.update_inv_head()	//so our mob-overlays update
@@ -186,7 +186,7 @@
 	if(!istype(user) || !haircolored)
 		return
 	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
-	wear_override.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)

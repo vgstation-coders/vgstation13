@@ -74,7 +74,8 @@
 	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
-	/obj/item/clothing/mask/necklace/xeno_claw
+	/obj/item/clothing/mask/necklace/xeno_claw,
+	/obj/item/clothing/under/newclothes
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
@@ -251,6 +252,8 @@
 		to_chat(usr, "<span class='warning'>Your DNA does not match the stored DNA sample.</span>")
 		return CANNOT_EQUIP
 	else
+		if(!H.head)
+			return CAN_EQUIP
 		if(H.head.canremove)
 			return CAN_EQUIP_BUT_SLOT_TAKEN
 		return CAN_EQUIP

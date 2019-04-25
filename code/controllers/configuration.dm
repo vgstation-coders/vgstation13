@@ -113,6 +113,7 @@
 	var/health_threshold_softcrit = 0
 	var/health_threshold_crit = 0
 	var/health_threshold_dead = -100
+	var/burn_damage_ash = 0
 
 	var/organ_health_multiplier = 1
 	var/organ_regeneration_multiplier = 1
@@ -187,6 +188,9 @@
 
 	// Weighted Votes
 	var/weighted_votes = 0
+
+	// Dynamic Mode
+	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
 /datum/configuration/New()
 	. = ..()
@@ -603,6 +607,8 @@
 					config.health_threshold_softcrit = value
 				if("health_threshold_dead")
 					config.health_threshold_dead = value
+				if("burn_damage_ash")
+					config.burn_damage_ash = value
 				if("revival_pod_plants")
 					config.revival_pod_plants = value
 				if("revival_cloning")

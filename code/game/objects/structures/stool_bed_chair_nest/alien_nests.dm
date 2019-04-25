@@ -17,6 +17,9 @@
 	..()
 
 /obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
+	if( user.restrained() || istype(user, /mob/living/silicon/pai) ) //added istype(user, /mob/living/silicon/pai) cause it was in buckle_mob, dunno why tho
+		return
+
 	if(is_locking(/datum/locking_category/buckle/bed/nest))
 		var/mob/M = get_locked(/datum/locking_category/buckle/bed/nest)[1]
 		if(M != user)

@@ -32,3 +32,5 @@
 #define CIVILIAN_POSITIONS list("Head of Personnel", "Bartender", "Botanist", "Chef", "Janitor", "Librarian", "Internal Affairs Agent", "Chaplain", "Clown", "Mime", "Assistant")
 #define CARGO_POSITIONS list("Head of Personnel", "Quartermaster", "Cargo Technician", "Shaft Miner")
 #define SECURITY_POSITIONS list("Head of Security", "Warden", "Detective", "Security Officer")
+
+#define ALWAYSTRUE 2

@@ -28,6 +28,10 @@
 	log_admin("Blood Cult: ACT I has begun.")
 	return TRUE
 
+/datum/objective/bloodcult_followers/extraInfo()
+	if (!IsFulfilled())
+		explanation_text += " (Only [conversions] conversions were performed)"
+
 /datum/objective/bloodcult_followers/IsFulfilled()
 	if (..())
 		return TRUE
@@ -133,6 +137,9 @@
 	log_admin("Blood Cult: ACT III has begun. The cult has to spill blood over [target_bloodspill] floor tiles, out of the station's [floor_count] floor tiles.")
 	return TRUE
 
+/datum/objective/bloodcult_bloodbath/extraInfo()
+	explanation_text += " (Highest bloody floor count reached: [max_bloodspill])"
+
 /datum/objective/bloodcult_bloodbath/IsFulfilled()
 	if (..())
 		return TRUE
@@ -192,6 +199,10 @@
 	message_admins("Blood Cult: ACT IV has begun.")
 	log_admin("Blood Cult: ACT IV has begun.")
 	return TRUE
+
+/datum/objective/bloodcult_tearinreality/extraInfo()
+	if (NARSIE_HAS_RISEN && anchor)
+		explanation_text += " (The Anchor Blood Stone had [round((anchor.health/anchor.maxHealth)*100)]% health remaining)"
 
 /datum/objective/bloodcult_tearinreality/IsFulfilled()
 	if (..())

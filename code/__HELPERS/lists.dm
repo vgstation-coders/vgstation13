@@ -290,6 +290,12 @@
 			return key
 	return null
 
+//In an associative list, get only the elements and not the keys.
+/proc/get_list_of_elements(var/list/L)
+	var/list/elements = list()
+	for(var/key in L)
+		elements += L[key]
+	return elements
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0

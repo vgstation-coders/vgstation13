@@ -754,7 +754,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/secway
 	name = "Secway"
 	contains = list(/obj/structure/bed/chair/vehicle/secway)
-	cost = 500
+	cost = 150
 	containertype = /obj/structure/closet/crate/secure/large
 	containername = "secway crate"
 	access = list(access_security)
@@ -1546,7 +1546,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/radiation_suit
 	name = "Radiation suit"
 	contains = list()
-	cost = 500
+	cost = 150
 	containertype = /obj/structure/closet/crate/radiation
 	containername = "radiation suit crate"
 	group = "Engineering"
@@ -1555,7 +1555,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "DIY Shuttle Engine kit"
 	contains = list(/obj/structure/shuttle/engine/propulsion/DIY,
 					/obj/structure/shuttle/engine/heater/DIY)
-	cost = 650
+	cost = 250
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "\improper Shuttle engines crate"
 	group = "Engineering"
@@ -1565,7 +1565,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/shuttle_license,
 					/obj/item/weapon/book/manual/ship_building)
 
-	cost = 3000
+	cost = 750
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "secure shuttle permit crate"
 	group = "Engineering"
@@ -1573,7 +1573,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/suit_modification_station
 	name = "suit modification station"
 	contains = list()
-	cost = 400
+	cost = 200
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
@@ -1661,7 +1661,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
 					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
 					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje)
-	cost = 1000
+	cost = 50
 	containertype = /obj/structure/largecrate
 	containername = "blood donation drive crate"
 	group = "Medical"
@@ -2231,8 +2231,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Toy stack of packs"
 	group = "Vending Machine packs"
 
-
-/*
 /datum/supply_packs/sovietmachines
 	name = "Old and Forgotten stack of packs"
 	contains = list(/obj/structure/vendomatpack/sovietsoda,
@@ -2244,7 +2242,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Old and Forgotten stack of packs"
 	group = "Vending Machine packs"
 	hidden = 1
-*/
 
 /datum/supply_packs/magimachines
 	name = "Strange and Bright stack of packs"

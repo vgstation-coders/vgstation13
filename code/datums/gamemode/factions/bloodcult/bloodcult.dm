@@ -170,6 +170,9 @@ var/veil_thickness = CULT_PROLOGUE
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
+/datum/faction/bloodcult/IsSuccessful()
+	return cult_win
+
 /datum/faction/bloodcult/proc/fail()
 	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
@@ -178,6 +181,7 @@ var/veil_thickness = CULT_PROLOGUE
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
 	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
+	dat += "<br><a href='?src=\ref[src];cult_progress=1'>(debug) Cult Progression Skip</a>"
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
@@ -196,6 +200,14 @@ var/veil_thickness = CULT_PROLOGUE
 
 		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
+	if (href_list["cult_progress"])
+		if (alert(usr, "Skip to the next Act?","Cult Progression Skip","Yes","No") == "No")
+			return
+
+		stage(veil_thickness+1,forced=TRUE)
+
+		message_admins("Admin [key_name_admin(usr)] has advanced the Blood Cult to the next Act.")
+		log_admin("Admin [key_name_admin(usr)] has advanced the Blood Cult to the next Act.")
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
@@ -230,7 +242,7 @@ var/veil_thickness = CULT_PROLOGUE
 		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
 */
 
-/datum/faction/bloodcult/stage(var/new_act,var/A)
+/datum/faction/bloodcult/stage(var/new_act,var/A,var/forced=FALSE)
 	//This proc is called to update the faction's current objectives, and veil thickness
 	if (veil_thickness == CULT_MENDED)
 		return//it's over, you lost
@@ -241,6 +253,8 @@ var/veil_thickness = CULT_PROLOGUE
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
+		for (var/obj/effect/rune/R in rune_list)
+			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
 		return
@@ -261,7 +275,7 @@ var/veil_thickness = CULT_PROLOGUE
 			var/datum/objective/bloodcult_followers/O = locate() in objective_holder.objectives
 			if (O)
 				O.conversions++
-				if (O.conversions >= O.convert_target)
+				if (O.conversions >= O.convert_target || forced)
 					veil_thickness = CULT_ACT_II
 					new_obj = new /datum/objective/bloodcult_sacrifice
 					for(var/datum/role/cultist/C in members)
@@ -356,6 +370,13 @@ var/veil_thickness = CULT_PROLOGUE
 		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Cult reminder: [reminder].")
+
+/datum/faction/bloodcult/GetScoreboard()
+	.=..()
+	if(veil_thickness == CULT_EPILOGUE)
+		var/obj/machinery/singularity/narsie/large/L = locate() in narsie_list //There should only be one
+		if(L.wounded)
+			. += "<BR><font color = 'green'><B>Though defeated, the crew managed to deal [L.wounded] damaging blows to \the [L].</B></font>"
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))

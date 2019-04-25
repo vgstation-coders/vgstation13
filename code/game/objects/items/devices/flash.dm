@@ -36,7 +36,7 @@
 	times_used = max(0,round(times_used)) //sanity
 
 
-/obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob)
+/obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob) //flash_act when?
 	var/length
 	if(!user || !M) //sanity
 		return
@@ -103,17 +103,24 @@
 				Subject.Stun(Subject.eyecheck() * 5 * -1 +10)
 
 	else if(issilicon(M))
-		var/mob/living/silicon/R = M
+		var/mob/living/silicon/S = M
+		var/mob/living/silicon/robot/R = null //This is stupid and i hate it but i'm not going to fix this whole mess now.
+		if(isrobot(S))
+			R = S
+		if(R && (HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF)))
+			flashfail = TRUE
 		if(flashfail)
-			user.visible_message("<span class='notice'>[user] fails to overload [R]'s sensors with the flash!</span>")
+			user.visible_message("<span class='notice'>[user] fails to overload [S]'s sensors with the flash!</span>")
 		else
 			length = rand(5,10)
-			R.Knockdown(length)
-			R.flashed = 1
-			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
+			if(R && (HAS_MODULE_QUIRK(R, MODULE_HAS_FLASH_RES)))
+				length = length/2
+			S.Knockdown(length)
+			S.flashed = 1
+			user.visible_message("<span class='warning'>[user] overloads [S]'s sensors with the flash!</span>")
 			spawn(length SECONDS)
-				if (R.flashed)
-					R.flashed = 0
+				if (S.flashed)
+					S.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		return
@@ -250,7 +257,7 @@
 				if(rev)
 					var/result = rev.HandleRecruitedMind(M.mind)
 
-					if(result == 1)
+					if(istype(result, /datum/role)) //We got a role, this is considered a success
 						log_admin("[key_name(user)] has converted [key_name(M)] to the revolution at [formatLocation(M.loc)]")
 						limited_conversions--
 						if(limited_conversions == 0)

@@ -45,7 +45,7 @@
 /obj/item/weapon/shard/plasma
 	name = "plasma shard"
 	desc = "A shard of plasma glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."
-	force = 8.0
+	force = 9.0
 	throwforce = 15.0
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
@@ -125,6 +125,7 @@
 
 						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
+							H.Stun(3)
 						if(foot.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()

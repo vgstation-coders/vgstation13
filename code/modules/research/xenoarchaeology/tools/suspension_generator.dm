@@ -35,6 +35,7 @@
 		if(field_type == "carbon")
 			for(var/mob/living/carbon/M in T)
 				M.SetKnockdown(max(M.knockdown, 3))
+				M.SetStunned(max(M.stunned, 3))
 				cell.charge -= power_use
 				if(prob(5))
 					to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -42,6 +43,7 @@
 		if(field_type == "iron")
 			for(var/mob/living/silicon/M in T)
 				M.SetKnockdown(max(M.knockdown, 3))
+				M.SetStunned(max(M.stunned, 3))
 				cell.charge -= power_use
 				if(prob(5))
 					to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -54,6 +56,7 @@
 
 		for(var/mob/living/simple_animal/M in T)
 			M.SetKnockdown(max(M.knockdown, 3))
+			M.SetStunned(max(M.stunned, 3))
 			cell.charge -= power_use
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -170,7 +173,7 @@
 		to_chat(user, "<span class='info'>You remove the power cell</span>")
 
 /obj/machinery/suspension_gen/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (isscrewdriver(W))
+	if (W.is_screwdriver(user))
 		if(!open)
 			if(screwed)
 				screwed = 0
@@ -311,6 +314,7 @@
 	for(var/mob/M in T)
 		to_chat(M, "<span class='info'>You no longer feel like floating.</span>")
 		M.SetKnockdown(min(M.knockdown, 3))
+		M.SetStunned(min(M.stunned, 3))
 
 	src.visible_message("<span class='notice'>[bicon(src)] \the [src] deactivates with a gentle shudder.</span>")
 	qdel(suspension_field)
@@ -357,7 +361,7 @@
 
 /obj/machinery/suspension_gen/AltClick(mob/user)
 	toggle(user)
-	
+
 /obj/machinery/suspension_gen/proc/toggle(mob/user)
 	if(user.incapacitated() || !user.Adjacent(get_turf(src)) || locked)
 		return

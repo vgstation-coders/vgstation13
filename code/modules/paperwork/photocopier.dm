@@ -343,7 +343,7 @@
 				copy.forceMove(src.loc)
 				copy = null
 			updateUsrDialog()
-	else if(isscrewdriver(O))
+	else if(O.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "[src] needs to be unanchored.")
 			return

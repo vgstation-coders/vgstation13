@@ -15,6 +15,7 @@
 	weight = 5
 	cost = 10
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	high_population_requirement = 10
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
@@ -54,6 +55,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
 	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -84,6 +86,7 @@
 	weight = 2
 	cost = 25
 	requirements = list(80,60,50,30,20,10,10,10,10,10)
+	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
 	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -115,6 +118,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
 	var/list/roundstart_wizards = list()
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
@@ -155,6 +159,7 @@
 	weight = 2
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
 	persistent = 1
 	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
@@ -174,6 +179,7 @@
 		else
 			RM.my_fac = /datum/faction/wizard/civilwar/wpf
 		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
+		RM.cost = 0
 		mode.picking_specific_rule(RM,TRUE) //forced
 
 /datum/dynamic_ruleset/roundstart/cwc/execute()
@@ -205,6 +211,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
+	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
@@ -252,6 +259,7 @@
 	weight = 3
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	high_population_requirement = 40
 
 /datum/dynamic_ruleset/roundstart/cult_legacy/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
@@ -288,6 +296,7 @@
 	weight = 3
 	cost = 40
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	high_population_requirement = 60
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 
 
@@ -344,6 +353,7 @@
 	weight = 2
 	cost = 40
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
+	high_population_requirement = 65
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
@@ -400,6 +410,7 @@
 	weight = 3
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	high_population_requirement = 70
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
@@ -437,6 +448,7 @@
 	weight = 3
 	cost = 0
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+	high_population_requirement = 101
 
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
@@ -459,6 +471,7 @@
 	weight = 2
 	cost = 35
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
+	high_population_requirement = 50
 	delay = 5 MINUTES
 	var/required_heads = 3
 
@@ -510,6 +523,7 @@
 	weight = 3
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)

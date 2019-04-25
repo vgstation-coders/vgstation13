@@ -704,6 +704,12 @@
 		species_allowed = list("Tajaran")
 		do_colouration = 0
 
+	taj_ears_black
+		name = "Black Tajaran Ears"
+		icon_state = "ears_black"
+		species_allowed = list("Tajaran")
+		do_colouration = 0
+
 	taj_ears_clean
 		name = "Tajara Clean"
 		icon_state = "hair_clean"

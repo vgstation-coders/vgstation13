@@ -600,7 +600,11 @@
 									return
 								else
 									var/turf/T = get_turf(O.sacrifice_target)
-									if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
+									var/datum/shuttle/S = is_on_shuttle(T)
+									if ((T.z == CENTCOMM_Z) && (emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S)))
+										to_chat(user,"<b>\The [O.sacrifice_target] has fled the station along with the rest of the crew. Unless we can bring them back in time with a Path rune or sacrifice him where he stands, it's over.</b>")
+										return
+									else if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
 										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
 										if (choice == "Yes")
 											replace_target(user)
