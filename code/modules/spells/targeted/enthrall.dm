@@ -18,7 +18,7 @@
 	override_base = "vamp"
 	hud_state = "vampire_enthrall"
 
-	var/blood_cost = 150
+	var/blood_cost = 75
 
 /spell/targeted/enthrall/cast_check(skipcharge = 0,mob/user = usr)
 	. = ..()
@@ -43,14 +43,14 @@
 /spell/targeted/enthrall/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
 		return FALSE
-		
+
 	var/mob/living/target = targets[1]
 
 	var/datum/role/vampire/V = isvampire(user)
 
 	if (!V)
 		return FALSE
-	
+
 	user.visible_message("<span class='warning'>[user] bites \the [target]'s neck!</span>", "<span class='warning'>You bite \the [target]'s neck and begin the flow of power.</span>")
 	to_chat(target, "<span class='sinister'>You feel the tendrils of evil [(VAMP_CHARISMA in V.powers) ? "aggressively" : "slowly"] invade your mind.</span>")
 
