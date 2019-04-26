@@ -28,11 +28,9 @@
 	status_flags = GODMODE|CANPUSH
 
 	New(var/new_loc)
-		my_appearance.h_style = "Bald"
 		..(new_loc, "Krampus")
 		maxHealth=999999
 		health=999999
-
 
 // I'M THE KRAMPUS, BITCH
 /mob/living/carbon/human/krampus/Stun(amount)
