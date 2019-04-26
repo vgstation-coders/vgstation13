@@ -382,6 +382,7 @@
 #include "code\datums\gamemode\objectives\ninja\destroyservers.dm"
 #include "code\datums\gamemode\objectives\ninja\dominateAI.dm"
 #include "code\datums\gamemode\objectives\ninja\dominatesilicons.dm"
+#include "code\datums\gamemode\objectives\ninja\stealsake.dm"
 #include "code\datums\gamemode\objectives\target\assassinate.dm"
 #include "code\datums\gamemode\objectives\target\debrain.dm"
 #include "code\datums\gamemode\objectives\target\delayedassassinate.dm"

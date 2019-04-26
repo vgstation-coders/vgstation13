@@ -5576,6 +5576,27 @@
 	description = "Anime's favorite drink."
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/ethanol/deadrum/sake/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.mind.GetRole(NINJA))
+			M.nutrition += nutriment_factor
+			if(M.getOxyLoss() && prob(50))
+				M.adjustOxyLoss(-2)
+			if(M.getBruteLoss() && prob(60))
+				M.heal_organ_damage(2, 0)
+			if(M.getFireLoss() && prob(50))
+				M.heal_organ_damage(0, 2)
+			if(M.getToxLoss() && prob(50))
+				M.adjustToxLoss(-2)
+			if(M.dizziness != 0)
+				M.dizziness = max(0, M.dizziness - 15)
+			if(M.confused != 0)
+				M.confused = max(0, M.confused - 5)
+
 /datum/reagent/ethanol/deadrum/tequila
 	name = "Tequila"
 	id = TEQUILA
