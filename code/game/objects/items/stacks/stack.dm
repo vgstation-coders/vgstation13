@@ -164,6 +164,9 @@
 /obj/item/stack/proc/use(var/amount)
 	ASSERT(isnum(src.amount))
 
+	if (src.amount <= 0)
+		qdel(src) // We don't have anything left
+
 	if(src.amount>=amount)
 		src.amount-=amount
 		update_materials()
@@ -320,6 +323,8 @@
 				return S
 	var/obj/item/stack/S = new_stack_type
 	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
+		if (!add_amount)
+			continue
 		S = new new_stack_type(loc)
 		S.amount = min(add_amount, S.max_amount)
 		add_amount -= S.amount
