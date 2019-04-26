@@ -324,7 +324,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(speak_emote && speak_emote.len)
 		var/emote = pick(speak_emote)
 		if(emote)
-			if(world.time > last_speech_time + 10) //Delay before next sound
+			if(emote_sound.len && world.time > last_speech_time + 10) //Delay before next sound
 				playsound(loc, "[pick(emote_sound)]", 80, 1)
 				last_speech_time = world.time
 			return "[emote], [text]"
