@@ -88,7 +88,7 @@ plist/proc/Insert(idx, B)
 
     if(isnum(idx))
         if(idx > _list.len)
-            list.len = idx
+            _list.len = idx
         _list[idx] = B
     else if(istext(idx))
         _list[idx] = B
