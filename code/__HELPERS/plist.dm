@@ -32,6 +32,7 @@ plist/proc/operator[]=(idx, B)
 
 //actually add list as an element, not add all elements, also add everything else properly
 plist/proc/operator+(B)
+    return "TODO"
 
 plist/proc/operator+=(B)
     return "TODO"
