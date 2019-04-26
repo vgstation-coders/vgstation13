@@ -22,8 +22,9 @@ plist/proc/operator[]=(idx, B)
 
 //actually add list as an element, not add all elements, also add everything else properly
 plist/proc/operator+(B)
-    src += B
-    return _list
+    var/plist/t_list = src.Copy()
+    t_list += B
+    return t_list._list
 
 //append
 plist/proc/operator+=(B)
@@ -73,15 +74,12 @@ plist/proc/Add(B)
     _list += B
 
 plist/proc/Copy(start = 1, end = 0)
-    if(start > end) return FALSE
     return _list.Copy(start, end)
 
 plist/proc/Cut(start = 1, end = 0)
-    if(start > end) return FALSE
     _list.Cut(start, end)
 
 plist/proc/Find(B, start = 1, end = 0)
-    if(start > end) return FALSE
     return _list.Find(B, start, end)
 
 plist/proc/Insert(idx, B)
@@ -99,7 +97,6 @@ plist/proc/Insert(idx, B)
     return idx
 
 plist/proc/Join(B, start = 1, end = 0)
-    if(start > end) return FALSE
     return _list.Join(B, start, end)
 
 plist/proc/Remove(B)
