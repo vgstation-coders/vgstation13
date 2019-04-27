@@ -299,6 +299,9 @@
 		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
 		return
 
+	if(stopped)
+		return
+
 	src.being_built = new part.build_path(src)
 
 	src.busy = 1
@@ -340,6 +343,11 @@
 		src.being_built = null
 		last_made = part
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
+		if(queue.len) //If there is still a queue, it will immediately start working on a new item with no delay
+			var/datum/design/D = queue_pop()
+			src.build_part(D)
+			src.updateUsrDialog()
+			return 1
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
