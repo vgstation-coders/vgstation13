@@ -199,3 +199,17 @@
 
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
+
+// -- Rulesets flags
+
+#define HIGHLANDER_RULESET 1
+#define TRAITOR_RULESET 2
+#define MINOR_RULESET 4
+
+// -- Distribution "modes"
+
+#define LORENTZ "Lorentz distribution"
+#define GAUSS "Normal distribution"
+#define DIRAC "Rigged threat number"
+#define EXPONENTIAL "Peaceful bias"
+#define UNIFORM "Uniform distribution"
