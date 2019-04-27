@@ -15,7 +15,7 @@ var/dynamic_curve_width = 1.8
 var/dynamic_chosen_mode = LORENTZ
 
 // -- Dynamic tweaks chosen prior to roundstart --
-var/dynamic_no_stacking = 1 // NO STACKING : only one "round-ender", except if we're above 80 threat
+var/dynamic_no_stacking = 0 // NO STACKING : only one "round-ender", except if we're above 80 threat
 var/dynamic_classic_secret = 0 // Only one roundstart ruleset, and only autotraitor + minor rules allowed
 var/dynamic_high_pop_limit = 45 // Will switch to "high pop override" if the roundstart population is above this
 var/dynamic_forced_extended = 0 // No rulesets will be drated, ever

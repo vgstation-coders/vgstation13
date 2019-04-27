@@ -744,7 +744,7 @@ var/global/floorIsLava = 0
 		<a href='?src=\ref[src];classic_secret=1'>Classic secret mode</a> <br/>
 		<b>Description:</b> Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. This option is currently <b>[dynamic_classic_secret ? "on" : "off"]</b>. <br/>
 		<a href='?src=\ref[src];high_pop_limit=1'>High population limit</a> <br/>
-		<b>Description:</b>The threshold at which "high pipulation overide" will be in effect. The current value is <b>[dynamic_classic_secret ? "on" : "off"]</b>. <br/>
+		<b>Description:</b>The threshold at which "high pipulation overide" will be in effect. The current value is <b>[dynamic_high_pop_limit]</b>. <br/>
 		<h4>Advanced parameters</h4>
 		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
 		Glossary : <br/>
