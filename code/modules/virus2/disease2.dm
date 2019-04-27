@@ -39,6 +39,8 @@ var/global/list/disease2_list = list()
 	var/pattern = 1
 	var/pattern_color
 
+	var/fever_warning = 0
+
 /datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
 	form = "Bacteria"
 	max_stage = 3
@@ -230,36 +232,55 @@ var/global/list/disease2_list = list()
 	if(!starved)
 		return
 
-	//Do nasty effects
-	var/effective_stage = GetEffectiveStage()
+	var/list/immune_data = GetImmuneData()
 
 	for(var/datum/disease2/effect/e in effects)
-		if (e.can_run_effect(effective_stage))
+		if (e.can_run_effect(immune_data[0]))
 			e.run_effect(mob)
 
-	//fever
-	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
+	//fever is a reaction of the body's immune system to the infection. The higher the antibody concentration (and the disease still not cured), the higher the fever
+	if (mob.bodytemperature < BODYTEMP_HEAT_DAMAGE_LIMIT)//but we won't go all the way to burning up just because of a fever, probably
+		var/fever = round((robustness / 100) * (immune_data[1] / 10) * (stage / max_stage))
+		mob.bodytemperature += fever
+		if (fever > 0  && prob(3))
+			switch (fever_warning)
+				if (0)
+					to_chat(H, "<span class='warning'>You feel a fever coming on, your body warms up and your head hurts a bit.</span>")
+					fever_warning++
+				if (1)
+					if (mob.bodytemperature > 320)
+						to_chat(H, "<span class='warning'>Your palms are sweaty.</span>")
+						fever_warning++
+				if (2)
+					if (mob.bodytemperature > 335)
+						to_chat(H, "<span class='warning'>Your palms are sweaty.</span>")
+						fever_warning++
+				if (3)
+					if (mob.bodytemperature > 350)
+						to_chat(H, "<span class='warning'>Your palms are sweaty.</span>")
+						fever_warning++
+
 
 	ticks += speed
 
-/datum/disease2/disease/proc/GetEffectiveStage()
-	if (!mob.immune_system)
-		return stage
-
-	var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
+/datum/disease2/disease/proc/GetImmuneData()
 	var/lowest_stage = stage
+	var/highest_concentration = 0
 
-	//for each antigen, we measure the corresponding antibody concentration in the carrier's immune system
-	//the less robust the pathogen, the more likely that further stages' effects won't activate at a given concentration
-	for (var/A in antigen)
-		var/concentration = mob.immune_system.antibodies[A]
-		var/i = lowest_stage
-		while (i > 0)
-			if (concentration > (strength - i * subdivision))
-				lowest_stage = i-1
-			i--
+	if (mob.immune_system)
+		var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
+		//for each antigen, we measure the corresponding antibody concentration in the carrier's immune system
+		//the less robust the pathogen, the more likely that further stages' effects won't activate at a given concentration
+		for (var/A in antigen)
+			var/concentration = mob.immune_system.antibodies[A]
+			highest_concentration = max(highest_concentration,concentration)
+			var/i = lowest_stage
+			while (i > 0)
+				if (concentration > (strength - i * subdivision))
+					lowest_stage = i-1
+				i--
 
-	return lowest_stage
+	return list(lowest_stage,highest_concentration)
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob,var/condition=0)
 	switch (condition)
@@ -267,6 +288,8 @@ var/global/list/disease2_list = list()
 			log_debug("[form] [uniqueID] in [key_name(mob)] has been cured, and is being removed from their body.")
 		if (1)
 			log_debug("[form] [uniqueID] in [key_name(mob)] has died from extreme temperature inside their host, and is being removed from their body.")
+		if (2)
+			log_debug("[form] [uniqueID] in [key_name(mob)] has been wiped out by an immunity overload.")
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")

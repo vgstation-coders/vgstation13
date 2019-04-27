@@ -368,7 +368,7 @@
 		"resistances" = null,
 		"trace_chem" = null,
 		"virus2" = null,
-		"antibodies" = null,
+		"immunity" = null,
 		)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -404,8 +404,9 @@
 								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
-		if(self.data && self.data["antibodies"]) //And curing
-			L.antibodies |= self.data["antibodies"]
+		//TODO: VIROLOGY REWRITE PART 2
+		//if(self.data && self.data["antibodies"]) //And curing
+		//	L.antibodies |= self.data["antibodies"]
 
 		if(ishuman(L) && (method == TOUCH))
 			var/mob/living/carbon/human/H = L
@@ -484,33 +485,6 @@
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
-
-//Data must contain virus type
-/datum/reagent/vaccine
-	name = "Vaccine"
-	id = VACCINE
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C81040" //rgb: 200, 16, 64
-	density = 1.05
-	specheatcap = 3.49
-
-/datum/reagent/vaccine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
-
-	var/datum/reagent/vaccine/self = src
-	if(..())
-		return 1
-
-	if(self.data && method == INGEST)
-		for(var/datum/disease/D in M.viruses)
-			if(istype(D, /datum/disease/advance))
-				var/datum/disease/advance/A = D
-				if(A.GetDiseaseID() == self.data)
-					D.cure()
-			else
-				if(D.type == self.data)
-					D.cure()
-
-		M.resistances += self.data
 
 /datum/reagent/water
 	name = "Water"
@@ -1629,17 +1603,13 @@
 		return 1
 
 	M.apply_radiation(2 * REM, RAD_INTERNAL)
-	//Radium may increase your chances to cure a disease
-	if(iscarbon(M)) //Make sure to only use it on carbon mobs
-		var/mob/living/carbon/C = M
-		if(C.virus2.len)
-			for(var/ID in C.virus2)
-				var/datum/disease2/disease/V = C.virus2[ID]
-				if(prob(5))
-					if(prob(50))
-						C.apply_radiation(50, RAD_INTERNAL) //Curing it that way may kill you instead
-						C.adjustToxLoss(100)
-					C.antibodies |= V.antigen
+
+	if (!M.immune_system.overloaded && M.virus2.len)
+		for(var/ID in M.virus2)
+			var/datum/disease2/disease/V = M.virus2[ID]
+			if (prob(V.strength / 2))//the stronger the virus, the better higher the chance to trigger
+				M.immune_system.Overload()
+				return
 
 /datum/reagent/radium/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -3022,7 +2992,7 @@
 
 //lol homeopathy, surely I'll find somewhere to spawn these
 /datum/reagent/antipathogenic
-	name = "Placebo Antipathogenic"
+	name = "Placebo"
 	id = PLACEBO
 	description = "Highly ineffective, don't bet on those to keep you healthy."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -3033,6 +3003,11 @@
 	specheatcap = 0.68
 	var/threshold = 0
 
+/datum/reagent/antipathogenic/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.immune_system.ApplyAntipathogenics(threshold)
+
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
 	name = "Allicin"
@@ -3041,6 +3016,11 @@
 	color = "#F1DEB4" //rgb: 241, 222, 180
 	overdose_am = REAGENTS_OVERDOSE//30u
 	threshold = 30
+
+/datum/reagent/antipathogenic/allicin/on_overdose(var/mob/living/M)
+	if (prob(30))
+		M.say("*cough")
+	M.Dizzy(5)
 
 //brewed from cryptobiolins and inaprovaline, wards off from most diseases
 /datum/reagent/antipathogenic/spaceacillin
@@ -3051,16 +3031,39 @@
 	overdose_am = REAGENTS_OVERDOSE / 2//15u
 	threshold = 50
 
+/datum/reagent/antipathogenic/spaceacillin/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(0.2)
+	M.Dizzy(5)
+
 //brewed from spaceacillin and nanobots, can cure any diseases given enough time, but has to be taken in very low quantities.
 /datum/reagent/antipathogenic/nanofloxacin
 	name = "Nanofloxacin"
-	description = "An extremely powerful antipathogenic. To take in equally extremely small doses, or face a variety of ill effects."
+	description = "An extremely powerful antipathogenic. To take in equally extremely small doses, or face a variety of adverse effects."
 	id = NANOFLOXACIN
 	color = "#BDBDBD" //rgb: 189, 189, 189
 	overdose_am = REAGENTS_OVERDOSE / 10//3u
 	threshold = 95
 
+/datum/reagent/antipathogenic/nanofloxacin/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	M.adjustBrainLoss(5)
+	M.hallucination += 100
+	M.dizziness += 100
 
+//Data must contain virus type
+/datum/reagent/vaccine
+	name = "Vaccine"
+	description: "A subunit vaccine, introduces antigens without pathogenic particles to the body, allowing the immune system to produce enough antibodies to prevent any future infection."
+	id = VACCINE
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C81040" //rgb: 200, 16, 64
+	density = 1.05
+	specheatcap = 3.49
+
+/datum/reagent/vaccine/reaction_mob(var/mob/living/M)
+	if(..())
+		return 1
+	M.immune_system.ApplyVaccine(threshold)
 
 
 
