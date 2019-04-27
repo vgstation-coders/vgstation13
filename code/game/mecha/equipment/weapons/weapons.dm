@@ -400,13 +400,13 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang//Because I am a heartless bastard -Sieve
 	name = "\improper SOP-6 Grenade Launcher"
 	projectile = /obj/item/weapon/grenade/flashbang/clusterbang
-
+/* These two lines of code have been commented out by an even more heartless bastard
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/get_equip_info()//Limited version of the clusterbang launcher that can't reload
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]\[[src.projectiles]\]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/rearm()
 	return//Extra bit of security
-
+*/
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
 	name = "\improper Metal Foam Grenade Launcher"
 	desc = "An exosuit-mounted Metal Foam Grenade Launcher. (Can be attached to: Engineering exosuits)"
