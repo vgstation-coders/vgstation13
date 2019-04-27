@@ -36,7 +36,7 @@ var/list/alien_antigens = list(
 	ANTIGEN_Z,
 )
 
-
+/*
 // pure concentrated antibodies
 datum/reagent/antibodies
 	data = list("antibodies"=0)
@@ -60,3 +60,4 @@ datum/reagent/antibodies
 	var/code = ""
 	for(var/V in ANTIGENS) if(text2num(V) & antigens) code += ANTIGENS[V]
 	return code
+*/
