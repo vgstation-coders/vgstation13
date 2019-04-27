@@ -393,9 +393,13 @@
 		return
 	if(!Adjacent(usr) || !Adjacent(over))
 		return
-	if(!occupants.Find(usr))
-		return ..() //Handle mousedrop T
 	var/turf/T = get_turf(over)
+	if(!occupants.Find(usr))
+		visible_message("<span class='notice'>[usr] start pulling [get_pilot().name] out of \the [src].</span>")
+		if(do_after(usr, src, 4 SECONDS))
+			move_outside(get_pilot(), T)
+			return
+		//return ..() //Handle mousedrop T
 	if(!Adjacent(T) || T.density)
 		return
 	for(var/atom/movable/A in T.contents)
