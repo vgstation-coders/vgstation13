@@ -166,6 +166,7 @@
 
 	if (src.amount <= 0)
 		qdel(src) // We don't have anything left
+		return
 
 	if(src.amount>=amount)
 		src.amount-=amount
