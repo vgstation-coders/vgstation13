@@ -736,7 +736,7 @@ var/global/floorIsLava = 0
 		<center><B><h3>Dynamic Mode Options</h3></B></center><hr>
 		<br/> 
 		<h4>Common options</h4>
-		<i>All thse options can be changed midround.</i> <br/>
+		<i>All these options can be changed midround.</i> <br/>
 		<a href='?src=\ref[src];force_extended=1'>Force extended</a> <br/>
 		<b>Description:</b> This will force the round to be extended. No rulesets will be drafted. This option is currently <b>[dynamic_forced_extended ? "on" : "off"]</b>. <br/>
 		<a href='?src=\ref[src];no_stacking=1'>No stacking</a> <br/>
@@ -744,7 +744,7 @@ var/global/floorIsLava = 0
 		<a href='?src=\ref[src];classic_secret=1'>Classic secret mode</a> <br/>
 		<b>Description:</b> Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. This option is currently <b>[dynamic_classic_secret ? "on" : "off"]</b>. <br/>
 		<a href='?src=\ref[src];high_pop_limit=1'>High population limit</a> <br/>
-		<b>Description:</b>The threshold at which "high pipulation overide" will be in effect. The current value is <b>[dynamic_high_pop_limit]</b>. <br/>
+		<b>Description:</b>The threshold at which "high population override" will be in effect. The current value is <b>[dynamic_high_pop_limit]</b>. <br/>
 		<h4>Advanced parameters</h4>
 		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
 		Glossary : <br/>
