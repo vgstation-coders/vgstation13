@@ -119,7 +119,6 @@ var/list/freqtoname = list(
 		filtered_speech = speech
 
 	var/atom/movable/source = speech.speaker.GetSource()
-	var/istraitor = 0
 	say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
 	if(!say_understands(source, speech.language))
 		say_testing(speech.speaker," We don't understand this fuck, adding stars().")
