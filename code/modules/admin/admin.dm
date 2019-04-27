@@ -737,23 +737,23 @@ var/global/floorIsLava = 0
 		<br/> 
 		<h4>Common options</h4>
 		<i>All these options can be changed midround.</i> <br/>
-		<a href='?src=\ref[src];force_extended=1'>Force extended</a> <br/>
-		<b>Description:</b> This will force the round to be extended. No rulesets will be drafted. This option is currently <b>[dynamic_forced_extended ? "on" : "off"]</b>. <br/>
-		<a href='?src=\ref[src];no_stacking=1'>No stacking</a> <br/>
-		<b>Description:</b> Unless the threat goes above 90, only one "round-ender" ruleset will be drafted. This option is currently <b>[dynamic_no_stacking ? "on" : "off"]</b>. <br/>
-		<a href='?src=\ref[src];classic_secret=1'>Classic secret mode</a> <br/>
-		<b>Description:</b> Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. This option is currently <b>[dynamic_classic_secret ? "on" : "off"]</b>. <br/>
-		<a href='?src=\ref[src];high_pop_limit=1'>High population limit</a> <br/>
-		<b>Description:</b>The threshold at which "high population override" will be in effect. The current value is <b>[dynamic_high_pop_limit]</b>. <br/>
+		<br/>
+		<b>Force extended:</b> This will force the round to be extended. No rulesets will be drafted. This option is currently <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "on" : "off"]</b></a>. <br/>
+		<br/>
+		<b>No stacking:</b> Unless the threat goes above 90, only one "round-ender" ruleset will be drafted. This option is currently <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "on" : "off"]</b></a>. <br/>
+		<br/>
+		<b>Classic secret mode:</b> Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. This option is currently <a href='?src=\ref[src];classic_secret=1'> <b>[dynamic_classic_secret ? "on" : "off"]</b></a>. <br/>
+		<br/>
+		<b>High population limit:</b>The threshold at which "high population override" will be in effect. The current value is <b>[dynamic_high_pop_limit].</b> <a href='?src=\ref[src];high_pop_limit=1'><b>Change.</b></a>. <br/>
 		<h4>Advanced parameters</h4>
 		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
 		Glossary : <br/>
 		<ul>
-			<li> "Lorentz distribution" : default mode. Heavily weighted towards the chosen centre, but still allows extreme to happen. A wider curve means extreme are more likely.</li>
-			<li> "Normal distribution" : similar to Lorentz, but extremes are much less likely to happen. </li>
-			<li> "Rigged threat number" : the threat level will be the chosen centre.</li>
-			<li> "Peaceful bias" : heavily weighted towards more peaceful rounds. </li>
-			<li> "Uniform distribution" : a random uniformally distributed number between 1 and 100.</li>
+			<li> <b>Lorentz distribution</b> : default mode. Heavily weighted towards the chosen centre, but still allows extreme to happen. A wider curve means extreme are more likely.</li>
+			<li> <b>Normal distribution</b> : similar to Lorentz, but extremes are much less likely to happen. </li>
+			<li> <b>Rigged threat number</b> : the threat level will be the chosen centre.</li>
+			<li> <b>Peaceful bias</b> : heavily weighted towards more peaceful rounds. </li>
+			<li> <b>Uniform distribution</b> : a random uniformally distributed number between 1 and 100.</li>
 		</ul>
 		<A href='?src=\ref[src];change_distrib=1'>Change distribution mode</a> <br/>
 		Curve centre: <A href='?src=\ref[src];f_dynamic_roundstart_centre=1'>-> [dynamic_curve_centre] <-</A><br>

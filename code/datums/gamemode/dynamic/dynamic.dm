@@ -74,6 +74,9 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 	dat += "Threat to Spend: <b>[threat]</b> <a href='?_src_=holder;adjustthreat=1'>\[Adjust\]</A> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
 	dat += "Parameters: centre = [curve_centre_of_round] ; width = [curve_width_of_round].<br/>"
 	dat += "<i>On average, <b>[peaceful_percentage]</b>% of the rounds are more peaceful.</i><br/>"
+	dat += "Forced extended: <a href='?src=\ref[src];forced_extended=1'><b>[forced_extended ? "On" : "Off"]</b></a><br/>"
+	dat += "No stacking (only one round-ender): <a href='?src=\ref[src];no_stacking=1'><b>[no_stacking ? "On" : "Off"]</b></a><br/>"
+	dat += "Classic secret (only autotraitor): <a href='?src=\ref[src];classic_secret=1'><b>[classic_secret ? "On" : "Off"]</b></a><br/>"
 	dat += "Executed rulesets: "
 	if (executed_rules.len > 0)
 		dat += "<br/>"
@@ -92,6 +95,23 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 	dat += "Latejoin: [latejoin_injection_cooldown>60 ? "[round(latejoin_injection_cooldown/60,0.1)] minutes" : "[latejoin_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
 	dat += "Midround: [midround_injection_cooldown>60 ? "[round(midround_injection_cooldown/60,0.1)] minutes" : "[midround_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
 	return jointext(dat, "")
+
+/datum/gamemode/dynamic/Topic(href, href_list)
+	if (..()) // Sanity, maybe ?
+		return
+	if(!usr.client || !usr.check_rights(R_ADMIN))
+		return
+	if (href_list["forced_extended"])
+		forced_extended =! forced_extended
+		message_admins("[key_name(usr)] has set 'forced extended' to [forced_extended].")
+	else if (href_list["no_stacking"])
+		no_stacking =! no_stacking
+		message_admins("[key_name(usr)] has set 'no stacking' to [no_stacking].")
+	else if (href_list["classic_secret"])
+		classic_secret =! classic_secret
+		message_admins("[key_name(usr)] has set 'classic secret' to [classic_secret].")
+
+	usr.client.holder.check_antagonists() // Refreshes the window
 
 /datum/gamemode/dynamic/proc/show_threatlog(mob/admin)
 	if(!ticker || !ticker.mode)
@@ -227,6 +247,13 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 	var/list/drafted_rules = list()
 	var/i = 0
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
+		var/skip_ruleset = 0
+		for (var/datum/dynamic_ruleset/roundstart/DR in drafted_rules)
+			if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
+				skip_ruleset = 1
+				break
+		if (skip_ruleset)
+			continue
 		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
 			i++																			//we check whether we've got elligible players
 			rule.candidates = candidates.Copy()
@@ -441,7 +468,7 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 								skip_ruleset = 1
 								break
 						if (skip_ruleset)
-							message_admins("[rule] was refused because we already have a forced ruleset.")
+							message_admins("[rule] was refused because we already have a round-ender ruleset.")
 							continue
 					rule.candidates = list()
 					rule.candidates = current_players.Copy()
@@ -555,7 +582,7 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 							skip_ruleset = 1
 							break
 					if (skip_ruleset)
-						message_admins("[rule] was refused because we already have a forced ruleset.")
+						message_admins("[rule] was refused because we already have a round-ender ruleset.")
 						continue
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
@@ -589,3 +616,120 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 //Expend threat, but do not fall below 0.
 /datum/gamemode/dynamic/proc/spend_threat(var/cost)
 	threat = max(threat-cost,0)
+
+// -- For the purpose of testing & simulation.
+/datum/gamemode/dynamic/proc/simulate_roundstart(var/mob/user = usr)
+	// Picking part
+	var/done = 0
+	var/list/rules_to_simulate = list()
+	var/list/choices = list()
+	for (var/datum/dynamic_ruleset/roundstart/DR in roundstart_rules)
+		choices[DR.name] = DR
+	choices["None"] = null
+	while (!done)
+		var/choice = input(user, "Which rule to you want to add to the simulated list? It has currently [rules_to_simulate.len] items.", "Midround rules to simulate") as null|anything in choices
+		if (!choice || choice == "None")
+			done = 1
+		var/datum/dynamic_ruleset/to_test = choices[choice]
+		if (threat < 90 && no_stacking)
+			var/skip_ruleset = 0
+			for (var/datum/dynamic_ruleset/roundstart/DR in rules_to_simulate)
+				if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
+					skip_ruleset = 1
+					message_admins("Skipping ruleset")
+					break
+			if (skip_ruleset)
+				message_admins("The rule was not added, because we already have a round-ender.")
+			else 
+				message_admins("The rule was accepted.")
+				rules_to_simulate += to_test
+		else 
+			message_admins("The rule was accepted (no-stacking not active.)")
+			rules_to_simulate += to_test
+
+/datum/gamemode/dynamic/proc/simulate_midround_injection(var/mob/user = usr)
+	// Picking part
+	var/done = 0
+	var/list/rules_to_simulate = list()
+	var/list/choices_a = list()
+	for (var/datum/dynamic_ruleset/DR in midround_rules + roundstart_rules)
+		choices_a[DR.name] = DR
+	choices_a["None"] = null
+	while (!done)
+		var/choice = input(user, "Which rule to you want to add to the simulated list? It has currently [rules_to_simulate.len] items.", "Midround rules to simulate") as null|anything in choices_a
+		if (!choice || choice == "None")
+			done = 1
+		else
+			rules_to_simulate += choices_a[choice]
+
+	var/list/choices_b = list()
+	for (var/datum/dynamic_ruleset/midround/DR in midround_rules)
+		choices_b[DR.name] = DR
+	choices_b["None"] = null
+
+	var/name_to_test = input(user, "What rule to you want to test?", "Midround rule to test") as null|anything in choices_b
+	if (!name_to_test || name_to_test == "None")
+		return
+
+	var/datum/dynamic_ruleset/midround/to_test = choices_b[name_to_test]
+
+	// Concrete testing
+
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
+		message_admins("[to_test] was refused because we're on classic secret mode.")
+		return
+	// No stacking : only one round-enter, unless > 90 threat.
+	if (threat < 90 && no_stacking)
+		var/skip_ruleset = 0
+		for (var/datum/dynamic_ruleset/DR in rules_to_simulate)
+			if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
+				skip_ruleset = 1
+			if (skip_ruleset)
+				message_admins("[to_test] was refused because we already have a round-ender ruleset.")
+				return
+	
+	message_admins("The rule was accepted.")
+
+/datum/gamemode/dynamic/proc/simulate_latejoin_injection(var/mob/user = usr)
+	// Picking part
+	var/done = 0
+	var/list/rules_to_simulate = list()
+	var/list/choices_a = list()
+	for (var/datum/dynamic_ruleset/DR in midround_rules + roundstart_rules)
+		choices_a[DR.name] = DR
+	choices_a["None"] = null
+	while (!done)
+		var/choice = input(user, "Which rule to you want to add to the simulated list? It has currently [rules_to_simulate.len] items.", "Midround rules to simulate") as null|anything in choices_a
+		if (!choice || choice == "None")
+			done = 1
+		else
+			rules_to_simulate += choices_a[choice]
+
+	var/list/choices_b = list()
+	for (var/datum/dynamic_ruleset/latejoin/DR in latejoin_rules)
+		choices_b[DR.name] = DR
+	choices_b["None"] = null
+
+	var/name_to_test = input(user, "What rule to you want to test?", "Midround rule to test") as null|anything in choices_b
+	if (!name_to_test || name_to_test == "None")
+		return
+
+	var/datum/dynamic_ruleset/latejoin/to_test = choices_b[name_to_test]
+
+	// Concrete testing
+
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
+		message_admins("[to_test] was refused because we're on classic secret mode.")
+		return
+	// No stacking : only one round-enter, unless > 90 threat.
+	if (threat < 90 && no_stacking)
+		var/skip_ruleset = 0
+		for (var/datum/dynamic_ruleset/DR in rules_to_simulate)
+			if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
+				skip_ruleset = 1
+				break
+		if (skip_ruleset)
+			message_admins("[to_test] was refused because we already have a round-ender ruleset.")
+			return
+	
+	message_admins("The rule was accepted.")
