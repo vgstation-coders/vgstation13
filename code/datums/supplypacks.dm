@@ -327,6 +327,23 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_mining)
 	group = "Supplies"
 
+/datum/supply_packs/firefighting
+	name = "Firefighting equipment"
+	contains = list(/obj/item/clothing/suit/fire/firefighter,
+					/obj/item/clothing/suit/fire/firefighter,
+					/obj/item/clothing/mask/gas,
+					/obj/item/clothing/mask/gas,
+					/obj/item/clothing/head/hardhat/red,
+					/obj/item/clothing/head/hardhat/red,
+					// /obj/item/weapon/fireaxe,
+					/obj/item/weapon/extinguisher,
+					/obj/item/weapon/extinguisher,
+					/obj/item/weapon/extinguisher/foam)
+	cost = 20
+	containertype = /obj/structure/closet/crate/basic
+	containername = "firefighting equipment crate"
+	group = "Supplies"
+
 /datum/supply_packs/artscrafts
 	name = "Arts and Crafts supplies"
 	contains = list(/obj/item/weapon/storage/fancy/crayons,
