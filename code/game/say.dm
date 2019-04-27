@@ -119,6 +119,7 @@ var/list/freqtoname = list(
 		filtered_speech = speech
 
 	var/atom/movable/source = speech.speaker.GetSource()
+	var/istraitor = 0
 	say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
 	if(!say_understands(source, speech.language))
 		say_testing(speech.speaker," We don't understand this fuck, adding stars().")
@@ -131,12 +132,7 @@ var/list/freqtoname = list(
 			var/mob/M = src
 			if(M.mind.GetRole(TRAITOR) || M.mind.GetRole(NUKE_OP))
 				//is tator
-				for(var/T in syndicate_code_phrase)
-					filtered_speech.message = replacetext(filtered_speech.message, T, "<b style='color: red;'>[T]</b>")
-
-				for(var/T in syndicate_code_response)
-					filtered_speech.message = replacetext(filtered_speech.message, T, "<i style='color: red;'>[T]</i>")
-
+				istraitor = 1
 
 #ifdef SAY_DEBUG
 	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
@@ -154,7 +150,7 @@ var/list/freqtoname = list(
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message(istraitor)]</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
 		returnToPool(filtered_speech)
