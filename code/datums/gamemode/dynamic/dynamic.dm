@@ -80,7 +80,7 @@ var/stacking_limit = 90
 	dat += "Forced extended: <a href='?src=\ref[src];forced_extended=1'><b>[forced_extended ? "On" : "Off"]</b></a><br/>"
 	dat += "No stacking (only one round-ender): <a href='?src=\ref[src];no_stacking=1'><b>[no_stacking ? "On" : "Off"]</b></a><br/>"
 	dat += "Classic secret (only autotraitor): <a href='?src=\ref[src];classic_secret=1'><b>[classic_secret ? "On" : "Off"]</b></a><br/>"
-	dat += "Stacking limits: <a href='?src=\ref[usr.client.holder];stacking_limit=1'>[stacking_limit]</a>"
+	dat += "Stacking limit: <a href='?src=\ref[usr.client.holder];stacking_limit=1'>[stacking_limit]</a>"
 	dat += "<br/>"
 	dat += "Executed rulesets: "
 	if (executed_rules.len > 0)
