@@ -343,6 +343,7 @@
 		src.being_built = null
 		last_made = part
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
+		sleep(2)
 		if(queue.len) //If there is still a queue, it will immediately start working on a new item with no delay
 			var/datum/design/D = queue_pop()
 			src.build_part(D)
