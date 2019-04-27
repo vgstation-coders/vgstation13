@@ -178,8 +178,7 @@ var/list/syndicate_code_response //Code response for traitors.
 
 /proc/generate_code_phrase()//Proc is used for phrase and response in master_controller.dm
 
-
-	var/code_phrase = ""//What is returned when the proc finishes.
+	var/list/code_phrase = list()//What is returned when the proc finishes.
 	var/words = pick(//How many words there will be. Minimum of two. 2, 4 and 5 have a lesser chance of being selected. 3 is the most likely.
 		50; 2,
 		200; 3,
@@ -197,6 +196,7 @@ var/list/syndicate_code_response //Code response for traitors.
 		names += t.fields["name"]
 
 	var/maxwords = words//Extra var to check for duplicates.
+	code_phrase.len = words
 
 	for(words,words>0,words--)//Randomly picks from one of the choices below.
 
@@ -212,9 +212,7 @@ var/list/syndicate_code_response //Code response for traitors.
 						if(names.len&&prob(70))
 							code_phrase += pick(names)
 						else
-							code_phrase += pick(pick(first_names_male,first_names_female))
-							code_phrase += " "
-							code_phrase += pick(last_names)
+							code_phrase += pick(pick(first_names_male,first_names_female))+" "+pick(last_names)
 					if(2)
 						code_phrase += pick(get_all_jobs())//Returns a job.
 				safety -= 1
@@ -233,10 +231,6 @@ var/list/syndicate_code_response //Code response for traitors.
 						code_phrase += pick(adjectives)
 					if(3)
 						code_phrase += pick(verbs)
-		if(words==1)
-			code_phrase += "."
-		else
-			code_phrase += ", "
 
 	return code_phrase
 

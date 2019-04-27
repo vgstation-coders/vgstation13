@@ -131,7 +131,7 @@ var/list/freqtoname = list(
 			//is tator
 			var/list/thingsToCheck = syndicate_code_phrase + syndicate_code_response
 			for(var/T in thingsToCheck)
-			speech.message = replacetext(speech.message, T, "<span style='color: red;'>[T]</span>")
+				speech.message = replacetext(speech.message, T, "<span style='color: red;'>[T]</span>")
 
 
 #ifdef SAY_DEBUG
