@@ -129,7 +129,7 @@ var/list/freqtoname = list(
 		//checking for syndie codephrases if person is a tator
 		if(istype(src, /mob/living))
 			var/mob/M = src
-			if(M.mind.special_role == TRAITOR || M.mind.special_role == NUKE_OP)
+			if(M.mind.GetRole(TRAITOR) || M.mind.GetRole(NUKE_OP))
 				//is tator
 				var/list/thingsToCheck = syndicate_code_phrase + syndicate_code_response
 				for(var/T in thingsToCheck)
