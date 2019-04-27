@@ -20,6 +20,8 @@ var/dynamic_classic_secret = 0 // Only one roundstart ruleset, and only autotrai
 var/dynamic_high_pop_limit = 45 // Will switch to "high pop override" if the roundstart population is above this
 var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 
+var/stacking_limit = 90
+
 #define BASE_SOLO_REFUND 10
 
 /datum/gamemode/dynamic
@@ -72,11 +74,14 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 	dat += "Dynamic Mode <a href='?_src_=vars;Vars=\ref[src]'>\[VV\]</A><BR>"
 	dat += "Threat Level: <b>[threat_level]</b><br/>"
 	dat += "Threat to Spend: <b>[threat]</b> <a href='?_src_=holder;adjustthreat=1'>\[Adjust\]</A> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
+	dat += "<br/>"
 	dat += "Parameters: centre = [curve_centre_of_round] ; width = [curve_width_of_round].<br/>"
 	dat += "<i>On average, <b>[peaceful_percentage]</b>% of the rounds are more peaceful.</i><br/>"
 	dat += "Forced extended: <a href='?src=\ref[src];forced_extended=1'><b>[forced_extended ? "On" : "Off"]</b></a><br/>"
 	dat += "No stacking (only one round-ender): <a href='?src=\ref[src];no_stacking=1'><b>[no_stacking ? "On" : "Off"]</b></a><br/>"
 	dat += "Classic secret (only autotraitor): <a href='?src=\ref[src];classic_secret=1'><b>[classic_secret ? "On" : "Off"]</b></a><br/>"
+	dat += "Stacking limits: <a href='?src=\ref[usr.client.holder];stacking_limit=1'>[stacking_limit]</a>"
+	dat += "<br/>"
 	dat += "Executed rulesets: "
 	if (executed_rules.len > 0)
 		dat += "<br/>"
@@ -168,7 +173,7 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 		message_admins("The round will be forced to extended.")
 	no_stacking = dynamic_no_stacking
 	if (no_stacking)
-		message_admins("Round-ending rulesets won't stack, unless the threat is above 90.")
+		message_admins("Round-ending rulesets won't stack, unless the threat is above stacking_limit ([stacking_limit]).")
 	classic_secret = dynamic_classic_secret
 	if (classic_secret)
 		message_admins("Classic secret mode active: only autotraitors will spawn, and we will only have one roundstart ruleset.")
@@ -460,8 +465,8 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 					if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 						message_admins("[rule] was refused because we're on classic secret mode.")
 						continue
-					// No stacking : only one round-enter, unless > 90 threat.
-					if (threat < 90 && no_stacking)
+					// No stacking : only one round-enter, unless > stacking_limit threat.
+					if (threat < stacking_limit && no_stacking)
 						var/skip_ruleset = 0
 						for (var/datum/dynamic_ruleset/DR in executed_rules)
 							if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
@@ -574,8 +579,8 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 				if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 					message_admins("[rule] was refused because we're on classic secret mode.")
 					continue
-				// No stacking : only one round-enter, unless > 90 threat.
-				if (threat < 90 && no_stacking)
+				// No stacking : only one round-enter, unless > stacking_limit threat.
+				if (threat < stacking_limit && no_stacking)
 					var/skip_ruleset = 0
 					for (var/datum/dynamic_ruleset/DR in executed_rules)
 						if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
@@ -631,7 +636,7 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 		if (!choice || choice == "None")
 			done = 1
 		var/datum/dynamic_ruleset/to_test = choices[choice]
-		if (threat < 90 && no_stacking)
+		if (threat < stacking_limit && no_stacking)
 			var/skip_ruleset = 0
 			for (var/datum/dynamic_ruleset/roundstart/DR in rules_to_simulate)
 				if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
@@ -678,8 +683,8 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
 		message_admins("[to_test] was refused because we're on classic secret mode.")
 		return
-	// No stacking : only one round-enter, unless > 90 threat.
-	if (threat < 90 && no_stacking)
+	// No stacking : only one round-enter, unless > stacking_limit threat.
+	if (threat < stacking_limit && no_stacking)
 		var/skip_ruleset = 0
 		for (var/datum/dynamic_ruleset/DR in rules_to_simulate)
 			if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
@@ -721,8 +726,8 @@ var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
 		message_admins("[to_test] was refused because we're on classic secret mode.")
 		return
-	// No stacking : only one round-enter, unless > 90 threat.
-	if (threat < 90 && no_stacking)
+	// No stacking : only one round-enter, unless > stacking_limit threat.
+	if (threat < stacking_limit && no_stacking)
 		var/skip_ruleset = 0
 		for (var/datum/dynamic_ruleset/DR in rules_to_simulate)
 			if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))

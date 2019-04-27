@@ -733,19 +733,21 @@ var/global/floorIsLava = 0
 
 /datum/admins/proc/dynamic_mode_options(mob/user)
 	var/dat = {"
-		<center><B><h3>Dynamic Mode Options</h3></B></center><hr>
+		<center><B><h2>Dynamic Mode Options</h2></B></center><hr>
 		<br/> 
-		<h4>Common options</h4>
+		<h3>Common options</h3>
 		<i>All these options can be changed midround.</i> <br/>
 		<br/>
 		<b>Force extended:</b> This will force the round to be extended. No rulesets will be drafted. This option is currently <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "on" : "off"]</b></a>. <br/>
 		<br/>
-		<b>No stacking:</b> Unless the threat goes above 90, only one "round-ender" ruleset will be drafted. This option is currently <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "on" : "off"]</b></a>. <br/>
+		<b>No stacking:</b> Unless the threat goes above [stacking_limit], only one "round-ender" ruleset will be drafted. This option is currently <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "on" : "off"]</b></a>. <br/>
 		<br/>
 		<b>Classic secret mode:</b> Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. This option is currently <a href='?src=\ref[src];classic_secret=1'> <b>[dynamic_classic_secret ? "on" : "off"]</b></a>. <br/>
 		<br/>
-		<b>High population limit:</b>The threshold at which "high population override" will be in effect. The current value is <b>[dynamic_high_pop_limit].</b> <a href='?src=\ref[src];high_pop_limit=1'><b>Change.</b></a>. <br/>
-		<h4>Advanced parameters</h4>
+		<b>High population limit:</b>The threshold at which "high population override" will be in effect. The current value is <a href='?src=\ref[src];high_pop_limit=1'><b>[dynamic_high_pop_limit]</b></a>. <br/>
+		<br/>
+		<b>Stacking threeshold:</b>The threshold at which "round-ender" rulesets will stack. A value higher than 100 ensure this never happens. The current value is <a href='?src=\ref[src];stacking_limit=1'><b>[stacking_limit]</b></a>. <br/>
+		<h3>Advanced parameters</h3>
 		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
 		Glossary : <br/>
 		<ul>

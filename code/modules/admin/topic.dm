@@ -1646,6 +1646,18 @@
 		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
 		dynamic_mode_options(usr)
 
+	else if(href_list["stacking_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		
+		stacking_limit = input(usr,"Change the threat limit at which round-endings rulesets will start to stack.", "Change stacking limit", null) as num
+		log_admin("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		message_admins("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		dynamic_mode_options(usr)	
+
 	else if(href_list["high_pop_limit"])
 		if(!check_rights(R_ADMIN))
 			return
