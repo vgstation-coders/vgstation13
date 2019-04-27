@@ -132,10 +132,10 @@ var/list/freqtoname = list(
 			if(M.mind.GetRole(TRAITOR) || M.mind.GetRole(NUKE_OP))
 				//is tator
 				for(var/T in syndicate_code_phrase)
-					speech.message = replacetext(speech.message, T, "<span style='color: red;'><b>[T]</b></span>")
+					filtered_speech.message = replacetext(filtered_speech.message, T, "<b style='color: red;'>[T]</b>")
 
-				for(var/T in syndicate_code_phrase)
-					speech.message = replacetext(speech.message, T, "<span style='color: red;'><i>[T]</i></span>")
+				for(var/T in syndicate_code_response)
+					filtered_speech.message = replacetext(filtered_speech.message, T, "<i style='color: red;'>[T]</i>")
 
 
 #ifdef SAY_DEBUG

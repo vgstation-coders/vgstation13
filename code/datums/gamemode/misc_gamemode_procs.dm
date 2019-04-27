@@ -445,7 +445,7 @@
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
-		var/response = syndicate_code_phrase.Join(", ")
+		var/response = syndicate_code_response.Join(", ")
 		words += "<span class='warning'>Code Response: </span>[response].<br>"
 		agent.mind.store_memory("<b>Code Response</b>: [response].")
 	else

@@ -196,7 +196,6 @@ var/list/syndicate_code_response //Code response for traitors.
 		names += t.fields["name"]
 
 	var/maxwords = words//Extra var to check for duplicates.
-	code_phrase.len = words
 
 	for(words,words>0,words--)//Randomly picks from one of the choices below.
 
@@ -210,27 +209,27 @@ var/list/syndicate_code_response //Code response for traitors.
 				switch(rand(1,2))//Mainly to add more options later.
 					if(1)
 						if(names.len&&prob(70))
-							code_phrase += pick(names)
+							code_phrase.Insert(0, pick(names))
 						else
-							code_phrase += pick(pick(first_names_male,first_names_female))+" "+pick(last_names)
+							code_phrase.Insert(0, pick(pick(first_names_male,first_names_female))+" "+pick(last_names))
 					if(2)
-						code_phrase += pick(get_all_jobs())//Returns a job.
+						code_phrase.Insert(0, pick(get_all_jobs()))
 				safety -= 1
 			if(2)
 				switch(rand(1,2))//Places or things.
 					if(1)
-						code_phrase += pick(drinks)
+						code_phrase.Insert(0, pick(drinks))
 					if(2)
-						code_phrase += pick(locations)
+						code_phrase.Insert(0, pick(locations))
 				safety -= 2
 			if(3)
 				switch(rand(1,3))//Nouns, adjectives, verbs. Can be selected more than once.
 					if(1)
-						code_phrase += pick(nouns)
+						code_phrase.Insert(0, pick(nouns))
 					if(2)
-						code_phrase += pick(adjectives)
+						code_phrase.Insert(0, pick(adjectives))
 					if(3)
-						code_phrase += pick(verbs)
+						code_phrase.Insert(0, pick(verbs))
 
 	return code_phrase
 
