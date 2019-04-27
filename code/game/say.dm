@@ -127,11 +127,13 @@ var/list/freqtoname = list(
 	else
 		say_testing(speech.speaker," We <i>do</i> understand this gentle\[wo\]man.")
 		//checking for syndie codephrases if person is a tator
-		if(istype(src, /mob/living) && (src.mind.special_role == TRAITOR || src.mind.special_role == NUKE_OP)) //will this cause runtimes?
-			//is tator
-			var/list/thingsToCheck = syndicate_code_phrase + syndicate_code_response
-			for(var/T in thingsToCheck)
-				speech.message = replacetext(speech.message, T, "<span style='color: red;'>[T]</span>")
+		if(istype(src, /mob/living))
+			var/mob/M = src
+			if(M.mind.special_role == TRAITOR || M.mind.special_role == NUKE_OP)
+				//is tator
+				var/list/thingsToCheck = syndicate_code_phrase + syndicate_code_response
+				for(var/T in thingsToCheck)
+					speech.message = replacetext(speech.message, T, "<span style='color: red;'>[T]</span>")
 
 
 #ifdef SAY_DEBUG
