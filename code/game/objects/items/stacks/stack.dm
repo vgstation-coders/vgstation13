@@ -324,7 +324,7 @@
 				return S
 	var/obj/item/stack/S = new_stack_type
 	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
-		if (!add_amount)
+		if (add_amount <= 0)
 			continue
 		S = new new_stack_type(loc)
 		S.amount = min(add_amount, S.max_amount)
