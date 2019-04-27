@@ -632,7 +632,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Space suit"
 	contains = list(/obj/item/clothing/suit/space,
 					/obj/item/clothing/head/helmet/space)
-	cost = 200
+	cost = 150
 	containertype = /obj/structure/closet/crate/basic
 	containername = "space suit crate"
 	group = "Clothing"
@@ -712,6 +712,73 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 150
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
+	group = "Clothing"
+
+/datum/supply_packs/hardsuit_engineering
+	name = "Hardsuit (engineering)"
+	contains = list(/obj/item/clothing/suit/space/rig,
+					/obj/item/clothing/shoes/magboots,
+					/obj/item/clothing/mask/breath)
+	cost = 250
+	access = list(access_engine)
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "engineering hardsuit crate"
+	group = "Clothing"
+
+/datum/supply_packs/hardsuit_atmos
+	name = "Hardsuit (atmospherics)"
+	contains = list(/obj/item/clothing/suit/space/rig/atmos,
+					/obj/item/clothing/shoes/magboots/atmos,
+					/obj/item/clothing/mask/breath)
+	cost = 250
+	access = list(access_atmospherics)
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "atmospherics hardsuit crate"
+	group = "Clothing"
+
+/datum/supply_packs/hardsuit_mining
+	name = "Hardsuit (mining)"
+	contains = list(/obj/item/clothing/suit/space/rig/mining,
+					/obj/item/clothing/shoes/magboots,
+					/obj/item/clothing/mask/breath)
+	cost = 250
+	access = list(access_mining)
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "mining hardsuit crate"
+	group = "Clothing"
+
+/datum/supply_packs/hardsuit_medical
+	name = "Hardsuit (medical)"
+	contains = list(/obj/item/clothing/suit/space/rig/medical,
+					/obj/item/clothing/shoes/magboots,
+					/obj/item/clothing/mask/breath)
+	cost = 250
+	access = list(access_medical)
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "medical hardsuit crate"
+	group = "Clothing"
+
+/datum/supply_packs/hardsuit_security
+	name = "Hardsuit (security)"
+	contains = list(/obj/item/clothing/suit/space/rig/security,
+					/obj/item/clothing/shoes/magboots,
+					/obj/item/clothing/mask/breath)
+	cost = 250
+	access = list(access_armory)
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "security hardsuit crate"
+	group = "Clothing"
+
+/datum/supply_packs/paramedicsuit
+	name = "Space suit (paramedic)"
+	contains = list(/obj/item/clothing/head/helmet/space/paramedic,
+					/obj/item/clothing/suit/space/paramedic,
+					/obj/item/clothing/shoes/magboots/para,
+					/obj/item/clothing/mask/breath)
+	cost = 200
+	access = list(access_paramedic)
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "paramedic space suit crate"
 	group = "Clothing"
 
 //////SECURITY//////
