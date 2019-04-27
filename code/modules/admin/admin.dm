@@ -738,15 +738,20 @@ var/global/floorIsLava = 0
 		<h3>Common options</h3>
 		<i>All these options can be changed midround.</i> <br/>
 		<br/>
-		<b>Force extended:</b> This will force the round to be extended. No rulesets will be drafted. This option is currently <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "on" : "off"]</b></a>. <br/>
+		<b>Force extended:</b> - Option is <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "ON" : "OFF"]</a></b>.
+		<br/>This will force the round to be extended. No rulesets will be drafted. <br/>
 		<br/>
-		<b>No stacking:</b> Unless the threat goes above [stacking_limit], only one "round-ender" ruleset will be drafted. This option is currently <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "on" : "off"]</b></a>. <br/>
+		<b>No stacking:</b> - Option is <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "ON" : "OFF"]</b></a>.
+		<br/>Unless the threat goes above [stacking_limit], only one "round-ender" ruleset will be drafted. <br/>
 		<br/>
-		<b>Classic secret mode:</b> Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. This option is currently <a href='?src=\ref[src];classic_secret=1'> <b>[dynamic_classic_secret ? "on" : "off"]</b></a>. <br/>
+		<b>Classic secret mode:</b> - Option is <a href='?src=\ref[src];classic_secret=1'> <b>[dynamic_classic_secret ? "ON" : "OFF"]</b></a>.
+		<br/>Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. <br/>
 		<br/>
-		<b>High population limit:</b>The threshold at which "high population override" will be in effect. The current value is <a href='?src=\ref[src];high_pop_limit=1'><b>[dynamic_high_pop_limit]</b></a>. <br/>
+		<b>High population limit:</b> Current value : <a href='?src=\ref[src];high_pop_limit=1'><b>[dynamic_high_pop_limit]</b></a>.
+		<br/>The threshold at which "high population override" will be in effect. <br/>
 		<br/>
-		<b>Stacking threeshold:</b>The threshold at which "round-ender" rulesets will stack. A value higher than 100 ensure this never happens. The current value is <a href='?src=\ref[src];stacking_limit=1'><b>[stacking_limit]</b></a>. <br/>
+		<b>Stacking threeshold:</b> Current value : <a href='?src=\ref[src];stacking_limit=1'><b>[stacking_limit]</b></a>.
+		<br/>The threshold at which "round-ender" rulesets will stack. A value higher than 100 ensure this never happens. <br/>
 		<h3>Advanced parameters</h3>
 		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
 		Glossary : <br/>
