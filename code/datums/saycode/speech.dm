@@ -68,7 +68,7 @@
 /datum/speech/proc/render_message_classes(var/sep=" ")
 	return jointext(message_classes, sep)
 
-/datum/speech/proc/render_message(var/istraitor = 0)
+/datum/speech/proc/render_message()
 #ifdef SAY_DEBUG
 	to_chat(speaker, "[type]/render_message(): message_classes = {[jointext(message_classes, ", ")]}")
 #endif
@@ -78,13 +78,6 @@
 		lquote="\""
 	if(!rquote)
 		rquote="\""
-
-	if(istraitor)
-		for(var/T in syndicate_code_phrase)
-			rendered = replacetext(rendered, T, "<b style='color: red;'>[T]</b>")
-
-		for(var/T in syndicate_code_response)
-			rendered = replacetext(rendered, T, "<i style='color: red;'>[T]</i>")
 
 	rendered="<span class='[jointext(message_classes, " ")]'>[lquote][rendered][rquote]</span>"
 	if(language)

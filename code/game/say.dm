@@ -127,12 +127,6 @@ var/list/freqtoname = list(
 		pooled=1
 	else
 		say_testing(speech.speaker," We <i>do</i> understand this gentle\[wo\]man.")
-		//checking for syndie codephrases if person is a tator
-		if(istype(src, /mob/living))
-			var/mob/M = src
-			if(M.mind.GetRole(TRAITOR) || M.mind.GetRole(NUKE_OP))
-				//is tator
-				istraitor = 1
 
 #ifdef SAY_DEBUG
 	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
@@ -150,7 +144,7 @@ var/list/freqtoname = list(
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message(istraitor)]</span>"
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
 		returnToPool(filtered_speech)
