@@ -201,7 +201,6 @@
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			blood_total += blood
 			blood_usable += blood
-			target.adjustCloneLoss(10) // beep boop 10 damage
 		else
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
 			blood_total += blood
