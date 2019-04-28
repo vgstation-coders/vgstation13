@@ -153,7 +153,7 @@
 				for(var/datum/disease2/effect/e in B.contained_virus.effects)
 					dat += "<br>[e.name] (Strength: [e.multiplier] | Verosity: [e.chance])"
 				dat +="</td>"
-				dat += "<td>[antigens2string(B.contained_virus.antigen)]</td>"
+				dat += "<td>[B.contained_virus.antigen]</td>"
 				dat += "<td>[(B.contained_virus.get_spread_string())]</td>"
 			if(B == dish)
 				dat += "<td></td>"

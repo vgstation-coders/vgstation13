@@ -2403,6 +2403,7 @@
 #include "code\modules\virus2\diseasesplicer.dm"
 #include "code\modules\virus2\dishincubator.dm"
 #include "code\modules\virus2\helpers.dm"
+#include "code\modules\virus2\immune_system.dm"
 #include "code\modules\virus2\isolator.dm"
 #include "code\modules\virus2\items_devices.dm"
 #include "code\modules\virus2\pathogen_cloud.dm"

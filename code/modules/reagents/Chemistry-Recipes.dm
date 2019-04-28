@@ -457,6 +457,20 @@
 	required_reagents = list(CRYPTOBIOLINS = 1, INAPROVALINE = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/nanofloxacin
+	name = "Nanofloxacin"
+	id = NANOFLOXACIN
+	result = NANOFLOXACIN
+	required_reagents = list(NANOBOTS = 1, SPACEACILLIN = 5, FLUORINE = 5)
+	result_amount = 2.5
+
+/datum/chemical_reaction/vaccine
+	name = "Vaccine"
+	id = VACCINE
+	result = VACCINE
+	required_reagents = list(ALUMINUM = 1, SUGAR = 1, WATER = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/imidazoline
 	name = IMIDAZOLINE
 	id = IMIDAZOLINE
