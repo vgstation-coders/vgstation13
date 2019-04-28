@@ -1356,7 +1356,7 @@
 		return
 	if(usr != occupant)
 		visible_message("<span class='notice'>[usr] start pulling [occupant.name] out of \the [src].</span>")
-		if(do_after(usr, src, 4 SECONDS))
+		if(do_after(usr, src, 10 SECONDS))
 			go_out(over_location)
 			add_fingerprint(usr)
 		return
