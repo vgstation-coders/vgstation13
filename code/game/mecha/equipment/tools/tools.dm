@@ -811,6 +811,9 @@
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 	is_activateable = 0
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -839,9 +842,9 @@
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(!action_checks(src))
 		return chassis.dynbulletdamage(Proj)
-	if(prob(chassis.deflect_chance*deflect_coeff))
+	if(prob(chassis.deflect_chance*deflect_coeff) && !is_type_in_list(Proj, never_deflect))
 		chassis.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		chassis.visible_message("The [chassis.name] armor deflects the projectile")
+		chassis.visible_message("<span class='warning'>\The [chassis.name] armor deflects the projectile!</span>")
 		chassis.log_append_to_last("Armor saved.")
 	else
 		chassis.take_damage(round(Proj.damage*src.damage_coeff),Proj.flag)
