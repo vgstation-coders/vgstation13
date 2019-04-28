@@ -95,13 +95,16 @@
 			else if(istype(body.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				tally += 1.5
 
-			if (disease.antigen[A] < threshold)
-				disease.antigen[A] = min(disease.antigen[A] + tally, threshold)//no overshooting here
+			if (antibodies[A] < threshold)
+				antibodies[A] = min(antibodies[A] + tally, threshold)//no overshooting here
 			else
-				if (prob(threshold) && prob(tally * 10) && prob((100 - disease.antigen[A])*100/(100-threshold)))//smaller and smaller chance for further increase
-					disease.antigen[A] += 1
+				if (prob(threshold) && prob(tally * 10) && prob((100 - antibodies[A])*100/(100-threshold)))//smaller and smaller chance for further increase
+					antibodies[A] = min(antibodies[A] + 1, 100)
 
 
-/datum/immune_system/proc/ApplyVaccine(var/threshold)
+/datum/immune_system/proc/ApplyVaccine(var/list/antigen)
 	if (overloaded)
 		return
+
+	for (var/A in antigen)
+		antibodies[A] = min(antibodies[A] + 20, 100)

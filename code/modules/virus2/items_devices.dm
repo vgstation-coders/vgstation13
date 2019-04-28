@@ -14,12 +14,14 @@
 	if(!istype(M))
 		to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
 		return
-	var/mob/living/carbon/C = M
+	/* var/mob/living/carbon/C = M
+	TODO: VIRO REWRITE PART 2
 	if(!C.antibodies)
 		to_chat(user, "<span class='notice'>Unable to detect antibodies.</span>")
 		return
 	var/code = antigens2string(M.antibodies)
 	to_chat(user, "<span class='notice'>[bicon(src)] \The [src] displays a cryptic set of data: [code]</span>")
+	*/
 
 ///////////////VIRUS DISH///////////////
 

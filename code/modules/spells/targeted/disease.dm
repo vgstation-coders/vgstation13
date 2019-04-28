@@ -53,14 +53,15 @@
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
 	O.chance = 10
 	shutdown.infectionchance = 100
-	shutdown.antigen |= text2num(pick(ANTIGENS))
-	shutdown.antigen |= text2num(pick(ANTIGENS))
+	//TODO: VIRO REWRITE PART 2
+	//shutdown.antigen |= text2num(pick(ANTIGENS))
+	//shutdown.antigen |= text2num(pick(ANTIGENS))
 	shutdown.spread = 0//cannot be extracted
 	shutdown.uniqueID = rand(0,10000)
 	shutdown.effects += O
 	shutdown.speed = 1
 	shutdown.stage = 2
-	shutdown.clicks = 185
+	shutdown.ticks = 185
 	target.infect_disease2(shutdown, notes="(Spell, from [key_name(user)])")
 
 	var/datum/role/vampire/V = isvampire(user)

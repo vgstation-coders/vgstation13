@@ -3046,12 +3046,14 @@
 	overdose_am = 0
 	density = 1.44
 	specheatcap = 0.68
-	var/threshold = 0
+	data = list(
+		"threshold" = 0,
+		)
 
 /datum/reagent/antipathogenic/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.immune_system.ApplyAntipathogenics(threshold)
+	M.immune_system.ApplyAntipathogenics(data["threshold"])
 
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
@@ -3060,7 +3062,9 @@
 	description = "A natural antipathogenic."
 	color = "#F1DEB4" //rgb: 241, 222, 180
 	overdose_am = REAGENTS_OVERDOSE//30u
-	threshold = 30
+	data = list(
+		"threshold" = 30,
+		)
 
 /datum/reagent/antipathogenic/allicin/on_overdose(var/mob/living/M)
 	if (prob(30))
@@ -3072,9 +3076,11 @@
 	name = "Spaceacillin"
 	description = "A generic antipathogenic agent."
 	id = SPACEACILLIN
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C81040" //rgb: 200, 16, 64
 	overdose_am = REAGENTS_OVERDOSE / 2//15u
-	threshold = 50
+	data = list(
+		"threshold" = 50,
+		)
 
 /datum/reagent/antipathogenic/spaceacillin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(0.2)
@@ -3085,9 +3091,11 @@
 	name = "Nanofloxacin"
 	description = "An extremely powerful antipathogenic. To take in equally extremely small doses, or face a variety of adverse effects."
 	id = NANOFLOXACIN
-	color = "#BDBDBD" //rgb: 189, 189, 189
+	color = "#969696" //rgb: 189, 189, 189
 	overdose_am = REAGENTS_OVERDOSE / 10//3u
-	threshold = 95
+	data = list(
+		"threshold" = 95,
+		)
 
 /datum/reagent/antipathogenic/nanofloxacin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
@@ -3095,20 +3103,24 @@
 	M.hallucination += 100
 	M.dizziness += 100
 
-//Data must contain virus type
 /datum/reagent/vaccine
 	name = "Vaccine"
-	description: "A subunit vaccine, introduces antigens without pathogenic particles to the body, allowing the immune system to produce enough antibodies to prevent any future infection."
+	description = "A subunit vaccine. Introduces antigens without pathogenic particles to the body, allowing the immune system to produce enough antibodies to prevent any current or future infection."
 	id = VACCINE
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C81040" //rgb: 200, 16, 64
+	color = "#A6A6A6" //rgb: 166, 166, 166
+	alpha = 128
 	density = 1.05
 	specheatcap = 3.49
+	custom_metabolism = 1
+	data = list(
+		"antigen" = list(),
+		)
 
 /datum/reagent/vaccine/reaction_mob(var/mob/living/M)
 	if(..())
 		return 1
-	M.immune_system.ApplyVaccine(threshold)
+	M.immune_system.ApplyVaccine(data["antigen"])
 
 
 

@@ -89,7 +89,7 @@
 				dat += "Sample inserted."
 				if (B.data["antibodies"])
 					dat += "</td></tr><tr><td>"
-					dat += "Antibodies: [antigens2string(B.data["antibodies"])]"
+					dat += "Antibodies: [B.data["antibodies"]]"
 					dat += "</td><td><A href='?src=\ref[src];action=antibody'>Isolate</a>"
 
 				var/list/virus = B.data["virus2"]

@@ -189,7 +189,7 @@ var/global/list/disease2_list = list()
 	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
 	return 1
 
-/datum/disease2/disease/proc/activate(var/mob/living/carbon/mob,var/starved = FALSE)
+/datum/disease2/disease/proc/activate(var/mob/living/mob,var/starved = FALSE)
 	if(mob.stat == DEAD)
 		return
 
@@ -232,7 +232,7 @@ var/global/list/disease2_list = list()
 	if(!starved)
 		return
 
-	var/list/immune_data = GetImmuneData()
+	var/list/immune_data = GetImmuneData(mob)
 
 	for(var/datum/disease2/effect/e in effects)
 		if (e.can_run_effect(immune_data[0]))
@@ -245,25 +245,25 @@ var/global/list/disease2_list = list()
 		if (fever > 0  && prob(3))
 			switch (fever_warning)
 				if (0)
-					to_chat(H, "<span class='warning'>You feel a fever coming on, your body warms up and your head hurts a bit.</span>")
+					to_chat(mob, "<span class='warning'>You feel a fever coming on, your body warms up and your head hurts a bit.</span>")
 					fever_warning++
 				if (1)
 					if (mob.bodytemperature > 320)
-						to_chat(H, "<span class='warning'>Your palms are sweaty.</span>")
+						to_chat(mob, "<span class='warning'>Your palms are sweaty.</span>")
 						fever_warning++
 				if (2)
 					if (mob.bodytemperature > 335)
-						to_chat(H, "<span class='warning'>Your palms are sweaty.</span>")
+						to_chat(mob, "<span class='warning'>Your knees are weak.</span>")
 						fever_warning++
 				if (3)
 					if (mob.bodytemperature > 350)
-						to_chat(H, "<span class='warning'>Your palms are sweaty.</span>")
+						to_chat(mob, "<span class='warning'>Your arms are heavy.</span>")
 						fever_warning++
 
 
 	ticks += speed
 
-/datum/disease2/disease/proc/GetImmuneData()
+/datum/disease2/disease/proc/GetImmuneData(var/mob/living/mob)
 	var/lowest_stage = stage
 	var/highest_concentration = 0
 
