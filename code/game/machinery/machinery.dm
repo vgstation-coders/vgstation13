@@ -574,7 +574,7 @@ Class Procs:
 		qdel(O)
 		return
 	if(vga)
-		if(istype(O, /obj/item/vgc_obj)) //maybe add a flag to toggle this
+		if(istype(O, /obj/item/vgc_obj))
 			vga._vgcs += O.vgc
 			to_chat(user, "You install \the [O] into the [vga].")
 			qdel(O)

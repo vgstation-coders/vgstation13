@@ -109,16 +109,17 @@ datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
     saved_access = ID.GetAccess()
 
 datum/vgcomponent/doorController/main(var/signal)
-    if(!istype(_assembly, /obj/machinery/door))
+    if(!istype(_assembly._parent, /obj/machinery/door))
         return //no parent or not a door, however that happened
 
-    if(_assembly.check_access_list(saved_access()))
+    var/obj/machinery/door/D = _assembly._parent
+    if(D.check_access_list(saved_access()))
         if(signal)
-            _assembly.open()
+            D.open()
         else
-            _assembly.close()
+            D.close()
     else
-        _assembly.denied()
+        D.denied()
 
 /*
 Debugger
