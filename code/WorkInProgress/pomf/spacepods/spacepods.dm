@@ -398,7 +398,8 @@
 		visible_message("<span class='notice'>[usr] start pulling [get_pilot().name] out of \the [src].</span>")
 		if(do_after(usr, src, 4 SECONDS))
 			move_outside(get_pilot(), T)
-			return
+			add_fingerprint(usr)
+		return
 		//return ..() //Handle mousedrop T
 	if(!Adjacent(T) || T.density)
 		return
