@@ -198,17 +198,17 @@
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
 		if(target.stat < DEAD) //alive
-			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
+			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			blood_total += blood
 			blood_usable += blood
 			target.adjustCloneLoss(10) // beep boop 10 damage
 		else
-			blood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
+			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
 			blood_total += blood
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,25)
+		target.vessel.remove_reagent(BLOOD,50)
 		update_vamp_hud()
 
 	draining = null
