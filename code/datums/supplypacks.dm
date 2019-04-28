@@ -335,10 +335,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/mask/gas,
 					/obj/item/clothing/head/hardhat/red,
 					/obj/item/clothing/head/hardhat/red,
-					// /obj/item/weapon/fireaxe,
 					/obj/item/weapon/extinguisher,
-					/obj/item/weapon/extinguisher,
-					/obj/item/weapon/extinguisher/foam)
+					/obj/item/weapon/extinguisher,)
 	cost = 20
 	containertype = /obj/structure/closet/crate/basic
 	containername = "firefighting equipment crate"
@@ -1558,6 +1556,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/closet/crate/engi
 	containername = "inflatable structures crate"
+	group = "Engineering"
+
+/datum/supply_packs/firefighting_advanced
+	name = "Advanced firefighting equipment"
+	contains = list (/obj/item/weapon/fireaxe,
+					/obj/item/weapon/extinguisher/foam,
+					/obj/item/weapon/extinguisher/foam)
+	cost = 25
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "advanced firefighting equipment crate"
+	access = list(access_atmospherics)
 	group = "Engineering"
 
 /datum/supply_packs/radiation_suit
