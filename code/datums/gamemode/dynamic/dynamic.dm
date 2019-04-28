@@ -9,47 +9,21 @@ var/list/threat_by_job = list(
 	"Detective" = 3,
 )
 
+// -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
 var/dynamic_curve_width = 1.8
+var/dynamic_chosen_mode = LORENTZ
+
+// -- Dynamic tweaks chosen prior to roundstart --
+var/dynamic_no_stacking = 0 // NO STACKING : only one "round-ender", except if we're above 80 threat
+var/dynamic_classic_secret = 0 // Only one roundstart ruleset, and only autotraitor + minor rules allowed
+var/dynamic_high_pop_limit = 45 // Will switch to "high pop override" if the roundstart population is above this
+var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
+
+var/stacking_limit = 90
 
 #define BASE_SOLO_REFUND 10
 
-/proc/lorentz2threat(var/x)
-	var/y
-	switch (x)
-		// Left end of the tail, the lowest bound is -inf.
-		// 0 to 10.
-		if (-INFINITY to -20)
-			y = rand(0, 10)
-		// Porportional conversion from the lorentz variable to the threa.
-
-		// First, we use a rule of three to get a number from -40 to -30.
-		// Then we shift it by 50 to get a number from 10 to 20. 
-		// The same process is done for other intervalls.
-		if (-20 to -10)
-			y = RULE_OF_THREE(-40, -20, x) + 50
-		if (-10 to -5)
-			y = RULE_OF_THREE(-30, -10, x) + 50
-		if (-5 to -2.5)
-			y = RULE_OF_THREE(-20, -5, x) + 50
-		if (-2.5 to -0)
-			y = RULE_OF_THREE(-10, -2.5, x) + 50
-		if (0 to 2.5)
-			y = RULE_OF_THREE(10, 2.5, x) + 50
-		if (2.5 to 5)
-			y = RULE_OF_THREE(20, 5, x) + 50
-		if (5 to 10)
-			y = RULE_OF_THREE(30, 10, x) + 50
-		if (10 to 20)
-			y = RULE_OF_THREE(40, 20, x) + 50
-
-		// Right end of the tail, higher bound is +inf.
-
-		if (20 to INFINITY)
-			y = rand(90, 100)
-	
-	return y
-			
 /datum/gamemode/dynamic
 	name = "Dynamic Mode"
 
@@ -82,19 +56,32 @@ var/dynamic_curve_width = 1.8
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 	var/pop_last_updated = 0
 
+	var/distribution_mode = LORENTZ
 	var/relative_threat = 0 // Relative threat, Lorentz-distributed.
 	var/curve_centre_of_round = 0
 	var/curve_width_of_round = 1.8
 
 	var/peaceful_percentage = 50
 
+	// -- Special tweaks --
+	var/no_stacking = 1
+	var/classic_secret = 0
+	var/high_pop_limit = 45
+	var/forced_extended = 0
+
 /datum/gamemode/dynamic/AdminPanelEntry()
 	var/dat = list()
 	dat += "Dynamic Mode <a href='?_src_=vars;Vars=\ref[src]'>\[VV\]</A><BR>"
 	dat += "Threat Level: <b>[threat_level]</b><br/>"
 	dat += "Threat to Spend: <b>[threat]</b> <a href='?_src_=holder;adjustthreat=1'>\[Adjust\]</A> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
+	dat += "<br/>"
 	dat += "Parameters: centre = [curve_centre_of_round] ; width = [curve_width_of_round].<br/>"
 	dat += "<i>On average, <b>[peaceful_percentage]</b>% of the rounds are more peaceful.</i><br/>"
+	dat += "Forced extended: <a href='?src=\ref[src];forced_extended=1'><b>[forced_extended ? "On" : "Off"]</b></a><br/>"
+	dat += "No stacking (only one round-ender): <a href='?src=\ref[src];no_stacking=1'><b>[no_stacking ? "On" : "Off"]</b></a><br/>"
+	dat += "Classic secret (only autotraitor): <a href='?src=\ref[src];classic_secret=1'><b>[classic_secret ? "On" : "Off"]</b></a><br/>"
+	dat += "Stacking limit: <a href='?src=\ref[usr.client.holder];stacking_limit=1'>[stacking_limit]</a>"
+	dat += "<br/>"
 	dat += "Executed rulesets: "
 	if (executed_rules.len > 0)
 		dat += "<br/>"
@@ -113,6 +100,23 @@ var/dynamic_curve_width = 1.8
 	dat += "Latejoin: [latejoin_injection_cooldown>60 ? "[round(latejoin_injection_cooldown/60,0.1)] minutes" : "[latejoin_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
 	dat += "Midround: [midround_injection_cooldown>60 ? "[round(midround_injection_cooldown/60,0.1)] minutes" : "[midround_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
 	return jointext(dat, "")
+
+/datum/gamemode/dynamic/Topic(href, href_list)
+	if (..()) // Sanity, maybe ?
+		return
+	if(!usr.client || !usr.check_rights(R_ADMIN))
+		return
+	if (href_list["forced_extended"])
+		forced_extended =! forced_extended
+		message_admins("[key_name(usr)] has set 'forced extended' to [forced_extended].")
+	else if (href_list["no_stacking"])
+		no_stacking =! no_stacking
+		message_admins("[key_name(usr)] has set 'no stacking' to [no_stacking].")
+	else if (href_list["classic_secret"])
+		classic_secret =! classic_secret
+		message_admins("[key_name(usr)] has set 'classic secret' to [classic_secret].")
+
+	usr.client.holder.check_antagonists() // Refreshes the window
 
 /datum/gamemode/dynamic/proc/show_threatlog(mob/admin)
 	if(!ticker || !ticker.mode)
@@ -159,21 +163,23 @@ var/dynamic_curve_width = 1.8
 	send2maindiscord("Dynamic mode Threat Level: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
-
-	// Old equation.
-	//threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
-
-	// New equation : https://docs.google.com/spreadsheets/d/1qnQm5hDdwZoyVmBCtf6-jwwHKEaCnYa3ljmYPs7gkSE/edit#gid=0
-	relative_threat = lorentz_distribution(dynamic_curve_centre, dynamic_curve_width)
-	threat_level = lorentz2threat(relative_threat)
-	threat = round(threat, 0.1)
-	peaceful_percentage = round(lorentz_cummulative_distribution(relative_threat, curve_centre_of_round, curve_width_of_round), 0.01)*100
-
+	distribution_mode = dynamic_chosen_mode
+	message_admins("Distribution mode is : [dynamic_chosen_mode].")
 	curve_centre_of_round = dynamic_curve_centre
 	curve_width_of_round = dynamic_curve_width
+	message_admins("Curve centre and curve width are : [curve_centre_of_round], [curve_width_of_round]")
+	forced_extended = dynamic_forced_extended
+	if (forced_extended)
+		message_admins("The round will be forced to extended.")
+	no_stacking = dynamic_no_stacking
+	if (no_stacking)
+		message_admins("Round-ending rulesets won't stack, unless the threat is above stacking_limit ([stacking_limit]).")
+	classic_secret = dynamic_classic_secret
+	if (classic_secret)
+		message_admins("Classic secret mode active: only autotraitors will spawn, and we will only have one roundstart ruleset.")
+	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")
 
-	threat = threat_level
-	starting_threat = threat_level
+	generate_threat()
 
 	latejoin_injection_cooldown = rand(330,510)
 	midround_injection_cooldown = rand(600,1050)
@@ -183,7 +189,7 @@ var/dynamic_curve_width = 1.8
 	message_admins("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
-	if (config.high_population_override)
+	if (player_list.len >= high_pop_limit)
 		message_admins("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
 		log_admin("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
 	dynamic_stats = new
@@ -198,6 +204,7 @@ var/dynamic_curve_width = 1.8
 	return 1
 
 /datum/gamemode/dynamic/Setup()
+	dynamic_stats.roundstart_pop = candidates.len
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
@@ -211,7 +218,6 @@ var/dynamic_curve_width = 1.8
 			roundstart_pop_ready++
 			candidates.Add(player)
 	message_admins("Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
-	dynamic_stats.roundstart_pop = candidates.len
 	if (candidates.len <= 0)
 		message_admins("Not a single player readied-up. The round will begin without any roles assigned.")
 		return 1
@@ -240,9 +246,19 @@ var/dynamic_curve_width = 1.8
 			picking_roundstart_rule(list(rule))
 
 /datum/gamemode/dynamic/proc/roundstart()
+	if (forced_extended)
+		message_admins("Starting a round of forced extended.")
+		return 1
 	var/list/drafted_rules = list()
 	var/i = 0
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
+		var/skip_ruleset = 0
+		for (var/datum/dynamic_ruleset/roundstart/DR in drafted_rules)
+			if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
+				skip_ruleset = 1
+				break
+		if (skip_ruleset)
+			continue
 		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
 			i++																			//we check whether we've got elligible players
 			rule.candidates = candidates.Copy()
@@ -253,16 +269,19 @@ var/dynamic_curve_width = 1.8
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
 	var/extra_rulesets_amount = 0
 
-	if (config.high_population_override)
-		if (threat_level > 50)
-			extra_rulesets_amount++
-			if (threat_level > 75)
-				extra_rulesets_amount++
+	if (classic_secret) // Classic secret experience : one & only one roundstart ruleset
+		extra_rulesets_amount = 0
 	else
-		if (threat_level >= second_rule_req[indice_pop])
-			extra_rulesets_amount++
-			if (threat_level >= third_rule_req[indice_pop])
+		if (player_list.len > high_pop_limit)
+			if (threat_level > 50)
 				extra_rulesets_amount++
+				if (threat_level > 75)
+					extra_rulesets_amount++
+		else
+			if (threat_level >= second_rule_req[indice_pop])
+				extra_rulesets_amount++
+				if (threat_level >= third_rule_req[indice_pop])
+					extra_rulesets_amount++
 
 	message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with elligible candidates.")
 	if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
@@ -421,6 +440,8 @@ var/dynamic_curve_width = 1.8
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
+		if (forced_extended)
+			return
 		//time to inject some threat into the round
 		if(emergency_shuttle.departed)//unless the shuttle is gone
 			return
@@ -440,6 +461,21 @@ var/dynamic_curve_width = 1.8
 			current_players[CURRENT_OBSERVERS] = list_observers.Copy()
 			for (var/datum/dynamic_ruleset/midround/rule in midround_rules)
 				if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
+					// Classic secret : only autotraitor/minor roles
+					if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
+						message_admins("[rule] was refused because we're on classic secret mode.")
+						continue
+					// No stacking : only one round-enter, unless > stacking_limit threat.
+					if (threat < stacking_limit && no_stacking)
+						var/skip_ruleset = 0
+						for (var/datum/dynamic_ruleset/DR in executed_rules)
+							if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
+								skip_ruleset = 1
+								break
+						if (skip_ruleset)
+							message_admins("[rule] was refused because we already have a round-ender ruleset.")
+							continue
+					rule.candidates = list()
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
@@ -520,6 +556,8 @@ var/dynamic_curve_width = 1.8
 	return rule_list
 
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
+	if (forced_extended)
+		return
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left
 		return
 
@@ -537,6 +575,20 @@ var/dynamic_curve_width = 1.8
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
 			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
+				// Classic secret : only autotraitor/minor roles
+				if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
+					message_admins("[rule] was refused because we're on classic secret mode.")
+					continue
+				// No stacking : only one round-enter, unless > stacking_limit threat.
+				if (threat < stacking_limit && no_stacking)
+					var/skip_ruleset = 0
+					for (var/datum/dynamic_ruleset/DR in executed_rules)
+						if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
+							skip_ruleset = 1
+							break
+					if (skip_ruleset)
+						message_admins("[rule] was refused because we already have a round-ender ruleset.")
+						continue
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
 				if (rule.ready())
@@ -569,3 +621,120 @@ var/dynamic_curve_width = 1.8
 //Expend threat, but do not fall below 0.
 /datum/gamemode/dynamic/proc/spend_threat(var/cost)
 	threat = max(threat-cost,0)
+
+// -- For the purpose of testing & simulation.
+/datum/gamemode/dynamic/proc/simulate_roundstart(var/mob/user = usr)
+	// Picking part
+	var/done = 0
+	var/list/rules_to_simulate = list()
+	var/list/choices = list()
+	for (var/datum/dynamic_ruleset/roundstart/DR in roundstart_rules)
+		choices[DR.name] = DR
+	choices["None"] = null
+	while (!done)
+		var/choice = input(user, "Which rule to you want to add to the simulated list? It has currently [rules_to_simulate.len] items.", "Midround rules to simulate") as null|anything in choices
+		if (!choice || choice == "None")
+			done = 1
+		var/datum/dynamic_ruleset/to_test = choices[choice]
+		if (threat < stacking_limit && no_stacking)
+			var/skip_ruleset = 0
+			for (var/datum/dynamic_ruleset/roundstart/DR in rules_to_simulate)
+				if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
+					skip_ruleset = 1
+					message_admins("Skipping ruleset")
+					break
+			if (skip_ruleset)
+				message_admins("The rule was not added, because we already have a round-ender.")
+			else 
+				message_admins("The rule was accepted.")
+				rules_to_simulate += to_test
+		else 
+			message_admins("The rule was accepted (no-stacking not active.)")
+			rules_to_simulate += to_test
+
+/datum/gamemode/dynamic/proc/simulate_midround_injection(var/mob/user = usr)
+	// Picking part
+	var/done = 0
+	var/list/rules_to_simulate = list()
+	var/list/choices_a = list()
+	for (var/datum/dynamic_ruleset/DR in midround_rules + roundstart_rules)
+		choices_a[DR.name] = DR
+	choices_a["None"] = null
+	while (!done)
+		var/choice = input(user, "Which rule to you want to add to the simulated list? It has currently [rules_to_simulate.len] items.", "Midround rules to simulate") as null|anything in choices_a
+		if (!choice || choice == "None")
+			done = 1
+		else
+			rules_to_simulate += choices_a[choice]
+
+	var/list/choices_b = list()
+	for (var/datum/dynamic_ruleset/midround/DR in midround_rules)
+		choices_b[DR.name] = DR
+	choices_b["None"] = null
+
+	var/name_to_test = input(user, "What rule to you want to test?", "Midround rule to test") as null|anything in choices_b
+	if (!name_to_test || name_to_test == "None")
+		return
+
+	var/datum/dynamic_ruleset/midround/to_test = choices_b[name_to_test]
+
+	// Concrete testing
+
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
+		message_admins("[to_test] was refused because we're on classic secret mode.")
+		return
+	// No stacking : only one round-enter, unless > stacking_limit threat.
+	if (threat < stacking_limit && no_stacking)
+		var/skip_ruleset = 0
+		for (var/datum/dynamic_ruleset/DR in rules_to_simulate)
+			if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
+				skip_ruleset = 1
+			if (skip_ruleset)
+				message_admins("[to_test] was refused because we already have a round-ender ruleset.")
+				return
+	
+	message_admins("The rule was accepted.")
+
+/datum/gamemode/dynamic/proc/simulate_latejoin_injection(var/mob/user = usr)
+	// Picking part
+	var/done = 0
+	var/list/rules_to_simulate = list()
+	var/list/choices_a = list()
+	for (var/datum/dynamic_ruleset/DR in midround_rules + roundstart_rules)
+		choices_a[DR.name] = DR
+	choices_a["None"] = null
+	while (!done)
+		var/choice = input(user, "Which rule to you want to add to the simulated list? It has currently [rules_to_simulate.len] items.", "Midround rules to simulate") as null|anything in choices_a
+		if (!choice || choice == "None")
+			done = 1
+		else
+			rules_to_simulate += choices_a[choice]
+
+	var/list/choices_b = list()
+	for (var/datum/dynamic_ruleset/latejoin/DR in latejoin_rules)
+		choices_b[DR.name] = DR
+	choices_b["None"] = null
+
+	var/name_to_test = input(user, "What rule to you want to test?", "Midround rule to test") as null|anything in choices_b
+	if (!name_to_test || name_to_test == "None")
+		return
+
+	var/datum/dynamic_ruleset/latejoin/to_test = choices_b[name_to_test]
+
+	// Concrete testing
+
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
+		message_admins("[to_test] was refused because we're on classic secret mode.")
+		return
+	// No stacking : only one round-enter, unless > stacking_limit threat.
+	if (threat < stacking_limit && no_stacking)
+		var/skip_ruleset = 0
+		for (var/datum/dynamic_ruleset/DR in rules_to_simulate)
+			if ((DR.flags & HIGHLANDER_RULESET) && (to_test.flags & HIGHLANDER_RULESET))
+				skip_ruleset = 1
+				break
+		if (skip_ruleset)
+			message_admins("[to_test] was refused because we already have a round-ender ruleset.")
+			return
+	
+	message_admins("The rule was accepted.")

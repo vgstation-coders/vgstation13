@@ -172,6 +172,7 @@
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
 	high_population_requirement = 10
+	flags = TRAITOR_RULESET
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
@@ -228,6 +229,7 @@
 	cost = 35
 	requirements = list(101,101,80,70,60,60,50,50,40,40)
 	high_population_requirement = 65
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/midround/malf/trim_candidates()
 	..()
@@ -322,6 +324,7 @@
 	high_population_requirement = 60
 	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "nuke-logo"
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
 	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
@@ -363,6 +366,7 @@
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
 	logo = "blob-logo"
+	flags = HIGHLANDER_RULESET
 
 	makeBody = FALSE
 
@@ -399,6 +403,8 @@
 	high_population_requirement = 50
 	my_fac = /datum/faction/revolution
 	logo = "rev-logo"
+	flags = HIGHLANDER_RULESET
+
 	var/required_heads = 3
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
@@ -469,6 +475,7 @@
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	logo = "rambler-logo"
 	repeatable = FALSE //Listen, this psyche is not big enough for two metaphysical seekers.
+	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/acceptable(var/population=0,var/threat=0)
 	if(!mode.executed_rules)
@@ -510,6 +517,7 @@
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
+	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
@@ -538,6 +546,7 @@
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 0
 	logo = "catbeast-logo"
+	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
 	if(mode.threat>50) //We're threatening enough!

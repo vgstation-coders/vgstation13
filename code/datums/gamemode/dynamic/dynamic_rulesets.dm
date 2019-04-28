@@ -16,6 +16,8 @@
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
 
+	var/flags = 0
+
 	//for midround polling
 	var/list/applicants = list()
 	var/searching = 0

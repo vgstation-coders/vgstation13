@@ -303,6 +303,7 @@
 #include "code\datums\gamemode\vampire_gamemode.dm"
 #include "code\datums\gamemode\wizard.dm"
 #include "code\datums\gamemode\dynamic\dynamic.dm"
+#include "code\datums\gamemode\dynamic\dynamic_maths.dm"
 #include "code\datums\gamemode\dynamic\dynamic_readme.dm"
 #include "code\datums\gamemode\dynamic\dynamic_rulesets.dm"
 #include "code\datums\gamemode\dynamic\dynamic_rulesets_latejoin.dm"
