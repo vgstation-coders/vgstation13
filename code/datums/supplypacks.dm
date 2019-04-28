@@ -632,7 +632,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Space suit"
 	contains = list(/obj/item/clothing/suit/space,
 					/obj/item/clothing/head/helmet/space)
-	cost = 150
+	cost = 200
 	containertype = /obj/structure/closet/crate/basic
 	containername = "space suit crate"
 	group = "Clothing"
@@ -719,7 +719,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/rig,
 					/obj/item/clothing/shoes/magboots,
 					/obj/item/clothing/mask/breath)
-	cost = 250
+	cost = 350
 	access = list(access_engine)
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "engineering hardsuit crate"
@@ -730,7 +730,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/rig/atmos,
 					/obj/item/clothing/shoes/magboots/atmos,
 					/obj/item/clothing/mask/breath)
-	cost = 250
+	cost = 400
 	access = list(access_atmospherics)
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "atmospherics hardsuit crate"
@@ -741,7 +741,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/rig/mining,
 					/obj/item/clothing/shoes/magboots,
 					/obj/item/clothing/mask/breath)
-	cost = 250
+	cost = 350
 	access = list(access_mining)
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "mining hardsuit crate"
@@ -752,7 +752,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/rig/medical,
 					/obj/item/clothing/shoes/magboots,
 					/obj/item/clothing/mask/breath)
-	cost = 250
+	cost = 350
 	access = list(access_medical)
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "medical hardsuit crate"
@@ -763,7 +763,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/rig/security,
 					/obj/item/clothing/shoes/magboots,
 					/obj/item/clothing/mask/breath)
-	cost = 250
+	cost = 350
 	access = list(access_armory)
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "security hardsuit crate"
@@ -775,7 +775,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/space/paramedic,
 					/obj/item/clothing/shoes/magboots/para,
 					/obj/item/clothing/mask/breath)
-	cost = 200
+	cost = 300
 	access = list(access_paramedic)
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "paramedic space suit crate"
