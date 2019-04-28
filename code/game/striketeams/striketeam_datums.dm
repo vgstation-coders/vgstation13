@@ -348,6 +348,3 @@ var/list/sent_strike_teams = list()
 	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando
-
-/datum/striketeam/custom/extras()
-	//stuff
