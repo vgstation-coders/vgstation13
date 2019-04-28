@@ -286,7 +286,7 @@
 			H.alphas["vampire_cloak"] = round((255 * 0.80))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
-	if(H.stat != DEAD)
+	if(H.stat == DEAD)
 		ismenacing = FALSE
 	if(!ismenacing)
 		return FALSE
@@ -303,7 +303,10 @@
 	for(var/mob/living/carbon/C in oviewers(radius, M))
 		if(prob(35))
 			continue //to prevent fearspam
-		if(!C.vampire_affected(antag))
+		var/datum/role/thrall/role_thrall = isthrall(C)
+		if (role_thrall && role_thrall.master == src)
+			continue // We don't terrify our underlings
+		if (!C.vampire_affected(antag))
 			continue
 		C.stuttering += 20
 		C.Jitter(20)
@@ -518,8 +521,6 @@
 /*
  -- Thralls --
  */
-
-#define THRALL "thrall" // Should be moved somewhere else
 
 /datum/role/thrall
 	id = THRALL
