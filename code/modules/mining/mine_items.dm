@@ -285,7 +285,7 @@ proc/move_mining_shuttle()
 		current_ammo--
 		var/turf/starting = get_turf(user)
 		var/turf/target = get_turf(A)
-		var/obj/item/projectile/kinetic/BS = new (starting)
+		var/obj/item/projectile/kinetic/cutter/BS = new (starting)
 		BS.firer = user
 		BS.original = target
 		BS.target = target
