@@ -1346,13 +1346,19 @@
 	lock_dir = !lock_dir
 
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(usr != src.occupant || usr.incapacitated())
-		return
-	if(istype(occupant, /mob/living/carbon/brain))
+	if(!Adjacent(over_location))
 		return
 	if(!istype(over_location) || over_location.density)
 		return
-	if(!Adjacent(over_location))
+	if(istype(occupant, /mob/living/carbon/brain))
+		return
+	if(usr.incapacitated())
+		return
+	if(usr != occupant)
+		visible_message("<span class='notice'>[usr] start pulling [occupant.name] out of \the [src].</span>")
+		if(do_after(usr, src, 4 SECONDS))
+			go_out(over_location)
+			add_fingerprint(usr)
 		return
 	for(var/atom/movable/A in over_location.contents)
 		if(A.density)
