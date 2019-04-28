@@ -193,7 +193,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
+		visible_message("<span class='bnotice'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
@@ -233,7 +233,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] attempts to kick \the [src]!</span>")
+		visible_message("<span class='bnotice'>\The [M] attempts to kick \the [src]!</span>")
 		return 0
 
 	//Handle shoes
