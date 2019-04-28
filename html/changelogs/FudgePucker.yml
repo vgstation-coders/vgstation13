@@ -1,4 +1,4 @@
 author: FudgePucker
 delete-after: True
 changes: 
-- rscadd: Lets MoMMIs cook.
+- rscadd: MoMMIs can now use cooking machines. The microwave, and the bartending dispensers (Booze, Soda, and cafe).
