@@ -1137,24 +1137,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/cafe
 	name = "Cafe equipment"
-	contains = list(/obj/item/weapon/circuitboard/chem_dispenser/brewer,
+	contains = list(/obj/structure/closet/crate/flatpack/brewer,
 	/obj/item/weapon/storage/box/mugs,
 	/obj/item/weapon/storage/box/mugs,
 	/obj/item/weapon/reagent_containers/glass/kettle/red)
 	cost = 20
-	containertype = /obj/structure/closet/crate/basic
+	containertype = /obj/structure/largecrate
 	containername = "cafe equipment crate"
 	group = "Hospitality"
 
 /datum/supply_packs/bar
 	name = "Advanced bartending equipment"
-	contains = list(/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser,
-	/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser,
+	contains = list(/obj/structure/closet/crate/flatpack/soda_dispenser,
+	/obj/structure/closet/crate/flatpack/booze_dispenser,
 	/obj/item/weapon/storage/box/drinkingglasses,
 	/obj/item/weapon/storage/box/drinkingglasses,
 	/obj/item/weapon/reagent_containers/food/drinks/discount_shaker)
 	cost = 40
-	containertype = /obj/structure/closet/crate/basic
+	containertype = /obj/structure/largecrate
 	containername = "bartending equipment crate"
 	group = "Hospitality"
 
