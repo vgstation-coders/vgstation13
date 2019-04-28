@@ -73,6 +73,7 @@ var/list/sent_strike_teams = list()
 			continue
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
+		to_chat(O, "[bicon(team_logo)]<span class='recruit'>Their mission: [mission]</span>")
 
 	spawn(1 MINUTES)
 		searching = FALSE
