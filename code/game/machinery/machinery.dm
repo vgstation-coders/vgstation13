@@ -568,6 +568,21 @@ Class Procs:
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
+	if(!vga && istype(O, /obj/item/vgc_assembly))
+		vga = O.vga
+		to_chat(user, "You install \the [O] into \the [src].")
+		qdel(O)
+		return
+	if(vga)
+		if(istype(O, /obj/item/vgc_obj)) //maybe add a flag to toggle this
+			vga._vgcs += O.vgc
+			to_chat(user, "You install \the [O] into the [vga].")
+			qdel(O)
+			return
+		if(istype(O, /obj/item/vgc_logictool))
+			vga.showCurcuit(user)
+			to_chat(user, "You bring up the curcuit on \the [O].")
+			return
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))

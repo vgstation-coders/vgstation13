@@ -2419,6 +2419,8 @@
 #include "code\modules\telesci\telesci_computer.dm"
 #include "code\modules\tooltip\tooltip.dm"
 #include "code\modules\unit_tests\__unit_test_includes.dm"
+#include "code\modules\vgcomponents\vgc.dm"
+#include "code\modules\vgcomponents\vgc_objs.dm"
 #include "code\modules\virus2\analyser.dm"
 #include "code\modules\virus2\antibodies.dm"
 #include "code\modules\virus2\centrifuge.dm"
