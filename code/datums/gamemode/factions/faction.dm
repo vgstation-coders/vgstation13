@@ -404,7 +404,12 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/emergency_responder
 	logo_state = "ert-logo"
 	hud_icons = list("ert-logo")
-
+	
+/datum/faction/strike_team/ert/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
+	
 //________________________________________________
 
 /datum/faction/strike_team/deathsquad
@@ -414,6 +419,11 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/death_commando
 	logo_state = "death-logo"
 	hud_icons = list("death-logo","creed-logo")
+	
+/datum/faction/strike_team/deathsquad/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
 
 //________________________________________________
 
@@ -424,11 +434,23 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
 
+/datum/faction/strike_team/syndiesquad/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
+	
+//________________________________________________
+	
 /datum/faction/strike_team/custom
 	name = "Custom Strike Team"
 
 /datum/faction/strike_team/custom/New()
 	..()
 	ID = rand(1,999)
+	
+/datum/faction/strike_team/custom/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
 
 //________________________________________________
