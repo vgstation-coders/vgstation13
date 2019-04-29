@@ -28,6 +28,8 @@
 	var/being_butchered = 0 //To prevent butchering an animal almost instantly
 	var/list/butchering_drops //See code/datums/butchering.dm, stuff like skinning goes here
 
+	var/mob_property_flags
+
 	var/list/image/static_overlays
 
 	var/t_plasma = null
@@ -66,8 +68,8 @@
 	var/species_type
 	var/holder_type = /obj/item/weapon/holder/animal	//When picked up, put us into a holder of this type. Dionae use /obj/item/weapon/holder/diona, others - the default one
 														//Set to null to prevent people from picking this mob up!
-	//
-	var/list/callOnLife = list() //
+
+	var/event/on_life
 	var/obj/abstract/screen/schematics_background
 	var/shown_schematics_background = 0
 
@@ -77,6 +79,6 @@
 	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
 
-/mob/living/proc/unsubLife(datum/sub)
-	while("\ref[sub]" in callOnLife)
-		callOnLife -= "\ref[sub]"
+	var/datum/component_container/BrainContainer
+
+	var/list/hud_list = list()

@@ -44,7 +44,7 @@
 			if(usr.drop_item(I, src))
 				inserted_id = I
 
-/obj/machinery/mineral/ore_redemption/proc/process_sheet(var/obj/item/weapon/ore/O)
+/obj/machinery/mineral/ore_redemption/proc/process_sheet(var/obj/item/stack/ore/O)
 	var/obj/item/stack/sheet/processed_sheet = SmeltMineral(O)
 	if(processed_sheet)
 		var/datum/material/mat = materials.getMaterial(O.material)
@@ -56,14 +56,14 @@
 	var/turf/T = get_turf(input)
 	var/i
 	if(T)
-		if(locate(/obj/item/weapon/ore) in T)
+		if(locate(/obj/item/stack/ore) in T)
 			for(i = 0; i < 10; i++)
-				var/obj/item/weapon/ore/O = locate() in T
-				if(istype(O,/obj/item/weapon/ore/slag))
+				var/obj/item/stack/ore/O = locate() in T
+				if(istype(O,/obj/item/stack/ore/slag))
 					continue //Skip slag for now.
 				if(O)
 					process_sheet(O)
-					score["oremined"] += 1
+					score["oremined"] += O.amount
 				else
 					break
 		else
@@ -76,10 +76,10 @@
 					credits += mat.value * B.materials.storage[mat_id] //Gimme my fucking credits
 					B.materials.removeAmount(mat_id, B.materials.storage[mat_id])
 
-/obj/machinery/mineral/ore_redemption/proc/SmeltMineral(var/obj/item/weapon/ore/O)
+/obj/machinery/mineral/ore_redemption/proc/SmeltMineral(var/obj/item/stack/ore/O)
 	if(O.material)
 		var/datum/material/mat = materials.getMaterial(O.material)
-		var/obj/item/stack/sheet/M = getFromPool(mat.sheettype, (src))
+		var/obj/item/stack/sheet/M = getFromPool(mat.sheettype, (src), O.amount)
 		M.redeemed = 1
 		//credits += mat.value //Old behavior
 		return M

@@ -1,8 +1,3 @@
-#define MEGAWATT 1000000
-#define TEN_MEGAWATTS 10000000
-#define HUNDRED_MEGAWATTS 100000000
-#define GIGAWATT 1000000000
-
 /obj/item/weapon/gun/projectile/railgun
 	name = "railgun"
 	desc = "A weapon that uses the Lorentz force to propel an armature carrying a projectile to incredible velocities."
@@ -98,12 +93,15 @@
 
 	if(!rod_loaded)
 		return
-
-	var/obj/item/stack/rods/R = new(null)
-	R.forceMove(usr.loc)
-	usr.put_in_hands(R)
+	var/obj/item/I
+	if(rod_loaded == "Holy")
+		I = new /obj/item/weapon/nullrod(null)
+	else
+		I = new /obj/item/stack/rods(null)
+	I.forceMove(usr.loc)
+	usr.put_in_hands(I)
 	rod_loaded = 0
-	to_chat(usr, "You remove \the [R] from the barrel of \the [src].")
+	to_chat(usr, "You remove \the [I] from the barrel of \the [src].")
 
 	update_icon()
 	update_verbs()
@@ -161,17 +159,17 @@
 		to_chat(user, "You insert \the [W] into the barrel of \the [src].")
 		rails = W
 
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(rails)
 			if(rails_secure)
 				to_chat(user, "You loosen the rail assembly within \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			else
 				to_chat(user, "You tighten the rail assembly inside \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			rails_secure = !rails_secure
 
-	else if(istype(W, /obj/item/stack/rods))
+	else if(istype(W, /obj/item/stack/rods) || istype(W, /obj/item/weapon/nullrod))
 		if(!rails)
 			to_chat(user, "\The [src] needs a set of rails before it can hold a rod.")
 			return
@@ -182,9 +180,13 @@
 			to_chat(user, "There is already a rod in the barrel of \the [src].")
 			return
 		to_chat(user, "You load a rod into the barrel of \the [src].")
-		var/obj/item/stack/rods/R = W
-		rod_loaded = 1
-		R.use(1)
+		if(istype(W, /obj/item/stack/rods))
+			var/obj/item/stack/rods/R = W
+			R.use(1)
+			rod_loaded = 1
+		else if(istype(W, /obj/item/weapon/nullrod))
+			qdel(W)
+			rod_loaded = "Holy"
 
 	else if(istype(W, /obj/item/weapon/stock_parts/capacitor))
 		if(capacitor)
@@ -209,7 +211,7 @@
 		else
 			to_chat(user, "<span class='warning'>\The [C] is not charged.</span>")
 	if(rod_loaded)
-		to_chat(user, "<span class='info'>There is \a metal rod loaded into the barrel.</span>")
+		to_chat(user, "<span class='info'>There is a [rod_loaded == "Holy"? "null rod":"metal rod"] loaded into the barrel.</span>")
 	if(!rails)
 		to_chat(user, "<span class='warning'>\The [src] is missing a set of rails.</span>")
 	if(!rails_secure && rails)
@@ -286,13 +288,15 @@
 		strength = 135
 	else if(shot_charge >= (HUNDRED_MEGAWATTS * 9) && shot_charge < (GIGAWATT))
 		strength = 150
-	else if(shot_charge == GIGAWATT)
+	else if(shot_charge >= GIGAWATT)
 		strength = 200
 
 	if(strength)
 		var/obj/item/projectile/bullet/APS/B = new(null)
 		B.damage = strength
 		B.kill_count += strength
+		if(rod_loaded == "Holy")
+			B.blessed = TRUE
 		if(strength >= 50)
 			B.stun = 3
 			B.weaken = 3
@@ -302,7 +306,7 @@
 			B.penetration = (20 + (strength - 100))
 			if(strength == 101)
 				B.penetration -= 1
-			B.superspeed = 1
+			B.projectile_speed = 0.66
 		else if(strength == 90)
 			B.penetration = 10
 		in_chamber = B
@@ -339,8 +343,11 @@
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
 		return
-
-	var/obj/item/object = new /obj/item/stack/rods(get_turf(user.loc))
+	var/obj/item/object
+	if(rod_loaded == "Holy")
+		object = new /obj/item/weapon/nullrod(get_turf(user.loc))
+	else
+		object = new /obj/item/stack/rods(get_turf(user.loc))
 	var/speed = 6
 
 	var/distance = 10

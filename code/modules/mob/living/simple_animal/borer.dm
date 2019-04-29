@@ -28,7 +28,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_dead = "brainslug_dead"
 	speed = 6
 
-	size = SIZE_SMALL
+	size = W_CLASS_TINY
 
 	min_tox = 0
 	max_tox = 0
@@ -41,7 +41,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	friendly = "prods"
 	wander = 0
 	pass_flags = PASSTABLE
-	canEnterVentWith = "/mob/living/captive_brain=0&/obj/item/verbs/borer=0"
 	universal_understand=1
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
@@ -94,6 +93,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/name_prefix_index = 1
 	held_items = list()
 
+/mob/living/simple_animal/borer/whisper()
+	return FALSE
+
+/mob/living/simple_animal/borer/canEnterVentWith()
+	var/static/list/allowed_items = list(
+		/mob/living/captive_brain,
+		/obj/item/verbs/borer,
+	)
+	return allowed_items
+
 /mob/living/simple_animal/borer/defected_borer
 	name = "special borer"
 	real_name = "special borer"
@@ -115,7 +124,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(name == initial(name)) // Easier reporting of griff.
 		name = "[name] ([rand(1, 1000)])"
 		real_name = name
-
 	update_verbs(BORER_MODE_DETACHED)
 
 	research = new (src)
@@ -139,10 +147,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 
+/*
 /mob/living/simple_animal/borer/Login()
 	..()
 	if(mind)
-		RemoveAllFactionIcons(mind)
+		RemoveAllFactionIcons(mind)*/
 
 /mob/living/simple_animal/borer/Life()
 	if(timestopped)
@@ -194,7 +203,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	else
 		clear_fullscreen("damage")
 
-/mob/living/simple_animal/borer/proc/update_verbs(var/mode)
+/mob/living/simple_animal/borer/proc/update_verbs(var/mode,var/monkey_host=FALSE)
 	if(verb_holders.len>0)
 		for(var/VH in verb_holders)
 			qdel(VH)
@@ -236,6 +245,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			avail_chems += unlocked_chems_leg
 	for(var/verbtype in verbtypes)
 		verb_holders+=new verbtype(src)
+	verbs -= /mob/living/simple_animal/borer/proc/bond_brain
+	if (monkey_host)
+		verbs += /mob/living/simple_animal/borer/proc/bond_brain
 
 /mob/living/simple_animal/borer/player_panel_controls(var/mob/user)
 	var/html="<h2>[src] Controls</h2>"
@@ -273,7 +285,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			if(isnull(chemID))
 				return
 			var/datum/borer_chem/C = new /datum/borer_chem()
-			C.name=chemID
+			C.id=chemID
+			var/datum/reagent/chem = chemical_reagents_list[C.id]
+			C.name = chem.name
 			C.cost=0
 			avail_chems[C.name]=C
 			to_chat(usr, "ADDED!")
@@ -301,7 +315,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 
 	if (copytext(message, 1, 2) == "*")
-		return emote(copytext(message, 2))
+		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
+		return
 
 	if (copytext(message, 1, 2) == ";") //Brain borer hivemind.
 		return borer_speak(copytext(message,2))
@@ -351,7 +366,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
 				if (timeleft)
-					stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+					var/acronym = emergency_shuttle.location == 1 ? "ETD" : "ETA"
+					stat(null, "[acronym]-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 		stat("Health", health)
 		stat("Chemicals", chemicals)
@@ -374,6 +390,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set name = "Borer Speak"
 	set desc = "Communicate with your brethren."
 	if(!message)
+		return
+	if(src.stat)
+		to_chat(src, "<span class='warning'>You cannot transmit over the cortical hivemind in your current state.</span>")
 		return
 
 	var/turf/T = get_turf(src)
@@ -418,16 +437,17 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!host || host.stat==DEAD || !src || controlling || research.unlocking)
 		return
 
-	to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
-	to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
+	if (rptext)
+		to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
+		to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
 
 	host_brain.ckey = host.ckey
 	host_brain.name = host.real_name
 	host.ckey = src.ckey
 	controlling = 1
 
-	/* Broken
 	host.verbs += /mob/living/carbon/proc/release_control
+	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
 	host.verbs += /mob/living/carbon/proc/spawn_larvae
 	*/
@@ -493,11 +513,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!check_can_do())
 		return
 
-	var/chemID = input("Select a chemical to secrete.", "Chemicals") as null|anything in avail_chems
-	if(!chemID)
+	var/chem_name = input("Select a chemical to secrete.", "Chemicals") as null|anything in avail_chems
+	if(!chem_name)
 		return
 
-	var/datum/borer_chem/chem = avail_chems[chemID]
+	var/datum/borer_chem/chem = avail_chems[chem_name]
 
 	var/max_amount = 50
 	if(chem.cost>0)
@@ -519,31 +539,31 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "<span class='warning'>You don't have enough energy to synthesize this much!</span>")
 		return
 
-	var/datum/reagent/C = chemical_reagents_list[chemID] //we need to get the datum for this reagent to read the overdose threshold
-	if(units >= C.overdose - host.reagents.get_reagent_amount(chemID) && C.overdose > 0)
-		if(alert("Secreting that much [chemID] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
+	var/datum/reagent/C = chemical_reagents_list[chem.id] //we need to get the datum for this reagent to read the overdose threshold
+	if(units >= C.overdose_am - host.reagents.get_reagent_amount(chem.id) && C.overdose_am > 0)
+		if(alert("Secreting that much [chem.name] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
 			return
-		add_gamelogs(src, "intentionally overdosed \the [host] with '[chemID]'", admin = TRUE, tp_link = TRUE, span_class = "danger")
+		add_gamelogs(src, "intentionally overdosed \the [host] with '[chem.id]' ([chem.name])", admin = TRUE, tp_link = TRUE, span_class = "danger")
 
 	if(!host || controlling || !src || stat) //Sanity check.
 		return
 
-	if(chem.name == BLOOD)
+	if(chem.id == BLOOD)
 		if(istype(host, /mob/living/carbon/human) && !(host.species.anatomy_flags & NO_BLOOD))
-			host.vessel.add_reagent(chem.name, units)
+			host.vessel.add_reagent(chem.id, units)
 		else
 			to_chat(src, "<span class='notice'>Your host seems to be a species that doesn't use blood.<span>")
 			return
 	else
-		host.reagents.add_reagent(chem.name, units)
+		host.reagents.add_reagent(chem.id, units)
 
 	to_chat(src, "<span class='info'>You squirt a measure of [chem.name] from your reservoirs into [host]'s bloodstream.</span>")
-	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
+	add_gamelogs(src, "secreted [units]U of '[chem.id]' ([chem.name]) into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
 
 	chemicals -= chem.cost*units
 
 // We've been moved to someone's head.
-/mob/living/simple_animal/borer/proc/infest_limb(var/obj/item/weapon/organ/limb)
+/mob/living/simple_animal/borer/proc/infest_limb(var/obj/item/organ/external/limb)
 	detach()
 	limb.borer=src
 	forceMove(limb)
@@ -555,7 +575,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set name = "Abandon Host"
 	set desc = "Slither out of your host."
 
-	var/severed = istype(loc, /obj/item/weapon/organ)
+	var/severed = istype(loc, /obj/item/organ/external)
 	if(!host && !severed)
 		to_chat(src, "<span class='warning'>You are not inside a host body.</span>")
 		return
@@ -584,7 +604,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(severed)
-		if(istype(loc, /obj/item/weapon/organ/head))
+		if(istype(loc, /obj/item/organ/external/head))
 			to_chat(src, "<span class='info'>You begin disconnecting from \the [loc]'s synapses and prodding at its internal ear canal.</span>")
 		else
 			to_chat(src, "<span class='info'>You begin disconnecting from \the [loc]'s nerve endings and prodding at the surface of its skin.</span>")
@@ -620,7 +640,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 
 		if(severed)
-			if(istype(loc, /obj/item/weapon/organ/head))
+			if(istype(loc, /obj/item/organ/external/head))
 				to_chat(src, "<span class='info'>You wiggle out of the ear of \the [loc] and plop to the ground.</span>")
 			else
 				to_chat(src, "<span class='info'>You wiggle out of \the [loc] and plop to the ground.</span>")
@@ -881,7 +901,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "You cannot infest a target in your current state.")
 		return
 
-	if(M.stat == 2)
+	if(M.isDead())
 		to_chat(src, "That is not an appropriate target.")
 		return
 
@@ -905,7 +925,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	hostlimb = body_region
 
-	update_verbs(limb_to_mode(hostlimb)) // Must be called before being removed from turf. (BYOND verb transfer bug)
+	update_verbs(limb_to_mode(hostlimb),ismonkey(M)) // Must be called before being removed from turf. (BYOND verb transfer bug)
 
 	src.host = M
 	src.forceMove(M)
@@ -929,6 +949,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	// /vg/ - Our users are shit, so we start with control over host.
 	if(config.borer_takeover_immediately)
 		do_bonding(rptext=1)
+	else if (ismonkey(M))
+		do_bonding(0)
+		M.do_release_control(0)
+		//look, I know, but for some reason the borer won't get the Assume Control verb without that.
 
 	extend_o_arm.forceMove(host)
 
@@ -1032,12 +1056,12 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			//testing("Client of [G] inexistent")
 			continue
 
-		//#warning Uncomment me.
+		//#warn Uncomment me.
 		/*if(G.client.holder)
 			//testing("Client of [G] is admin.")
 			continue*/
 
-		if(jobban_isbanned(G, "Syndicate"))
+		if(isantagbanned(G))
 			//testing("[G] is jobbanned.")
 			continue
 
@@ -1065,9 +1089,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(src.mind)
 		src.mind.assigned_role = "Borer"
 
-		// Assign objectives
-		//forge_objectives()
-
 		// tl;dr
 		to_chat(src, "<span class='danger'>You are a Borer!</span>")
 		to_chat(src, "<span class='info'>You are a small slug-like symbiote that attaches to your host's body.  Your only goals are to survive and procreate. However, there are those who would like to destroy you, and hosts don't take kindly to jerks.  Being as helpful to your host as possible is the best option for survival.</span>")
@@ -1075,23 +1096,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "<span class='info'><b>New:</b> To get new abilities for you and your host, use <em>Evolve</em> to unlock things.  Borers are now symbiotic biological pAIs.</span>")
 		if(config.borer_takeover_immediately)
 			to_chat(src, "<span class='info'><b>Important:</b> While you receive full control at the start, <em>it is asked that you release control at some point so your host has a chance to play.</em>  If they misbehave, you are permitted to kill them.</span>")
-
-		//var/obj_count = 1
-		//for(var/datum/objective/objective in mind.objectives)
-//			to_chat(src, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-		//	obj_count++
-
-/mob/living/simple_animal/borer/proc/forge_objectives()
-	var/datum/objective/survive/survive_objective = new
-	survive_objective.owner = mind
-	mind.objectives += survive_objective
-
-	/*
-	var/datum/objective/multiply/multiply_objective = new
-	multiply_objective.owner = mind
-	mind.objectives += multiply_objective
-	*/
-
 
 
 /mob/living/simple_animal/borer/proc/analyze_host()
@@ -1186,6 +1190,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 /mob/living/simple_animal/borer/ClickOn( var/atom/A, var/params )
 	..()
+	if(params2list(params)["shift"])
+		return
 	if(host)
 		if(extend_o_arm_unlocked)
 			if(hostlimb == LIMB_RIGHT_ARM || hostlimb == LIMB_LEFT_ARM)

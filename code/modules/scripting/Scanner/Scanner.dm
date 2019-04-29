@@ -26,7 +26,7 @@
 	Loads source code.
 */
 /datum/n_Scanner/proc/LoadCode(var/c)
-	code=c
+	code=strict_ascii(c)
 
 /*
 	Proc: LoadCodeFromFile

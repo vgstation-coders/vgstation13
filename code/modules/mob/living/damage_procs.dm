@@ -11,9 +11,7 @@
 /mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null, ignore_events = 0)
 	if(!damage || (blocked >= 2))
 		return 0
-
 	var/damage_done = damage/(blocked+1)
-
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage_done)
@@ -112,3 +110,10 @@
 
 /mob/living/ashify()
 	return //let's not go ashy, shall we?
+
+/mob/living/proc/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(application == RAD_EXTERNAL) //Supermatter, PA particles, jukebox, transmitter
+		return apply_effect(rads, IRRADIATE)
+	if(application == RAD_INTERNAL) //
+		radiation += rads
+		return rads

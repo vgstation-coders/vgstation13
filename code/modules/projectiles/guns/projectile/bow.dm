@@ -57,6 +57,9 @@
 	var/obj/item/weapon/arrow = null      // Nocked arrow.
 	var/obj/item/weapon/cell/cell = null  // Used for firing special projectiles like rods.
 
+/obj/item/weapon/crossbow/get_cell()
+	return cell
+
 /obj/item/weapon/crossbow/attackby(obj/item/W as obj, mob/user as mob)
 	if(!arrow)
 		if (istype(W,/obj/item/weapon/arrow))
@@ -101,7 +104,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] already has a cell installed.</span>")
 
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(cell)
 			var/obj/item/C = cell
 			C.forceMove(get_turf(user))
@@ -212,3 +215,93 @@
 		arrow = null
 		tension = 0
 		icon_state = "crossbow"
+
+
+
+/* construction*/
+/obj/item/crossbowframe
+	name = "crossbow frame"
+	desc = "A half-finished crossbow."
+	icon_state = "crossbowframe0"
+	item_state = "crossbow-solid"
+
+	var/buildstate = 0
+
+/obj/item/crossbowframe/update_icon()
+	icon_state = "crossbowframe[buildstate]"
+
+/obj/item/crossbowframe/examine(mob/user)
+	. = ..()
+	switch(buildstate)
+		if(1) to_chat(user, "It has a loose rod frame in place.")
+		if(2) to_chat(user, "It has a steel backbone welded in place.")
+		if(3) to_chat(user, "It has a steel backbone and a cell mount installed.")
+		if(4) to_chat(user, "It has a steel backbone, plastic lath and a cell mount installed.")
+		if(5) to_chat(user, "It has a steel cable loosely strung across the lath.")
+
+/obj/item/crossbowframe/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/stack/rods))
+		if(buildstate == 0)
+			var/obj/item/stack/rods/R = W
+			if(R.use(3))
+				to_chat(user, "<span class='notice'>You assemble a backbone of rods around the wooden stock.</span>")
+				buildstate++
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You need at least three rods to complete this task.</span>")
+			return
+	else if(iswelder(W))
+		if(buildstate == 1)
+			var/obj/item/weapon/weldingtool/T = W
+			if(T.remove_fuel(0,user))
+				if(!src || !T.isOn()) return
+				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
+				to_chat(user, "<span class='notice'>You weld the rods into place.</span>")
+			buildstate++
+			update_icon()
+		return
+	else if(istype(W,/obj/item/stack/cable_coil))
+		var/obj/item/stack/cable_coil/C = W
+		if(buildstate == 2)
+			if(C.use(5))
+				to_chat(user, "<span class='notice'>You wire a crude cell mount into the top of the crossbow.</span>")
+				buildstate++
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You need at least five segments of cable coil to complete this task.</span>")
+			return
+		else if(buildstate == 4)
+			if(C.use(5))
+				to_chat(user, "<span class='notice'>You string a steel cable across the crossbow's lath.</span>")
+				buildstate++
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You need at least five segments of cable coil to complete this task.</span>")
+			return
+
+	else if(istype(W,/obj/item/stack/sheet/mineral/plastic))
+		if(buildstate == 3)
+			var/obj/item/stack/sheet/mineral/plastic/P = W
+			if(P.use(3))
+				to_chat(user, "<span class='notice'>You assemble and install a heavy plastic lath onto the crossbow.</span>")
+				buildstate++
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You need at least three plastic sheets to complete this task.</span>")
+	/*else if(istype(W,/obj/item/stack/sheet/mineral/plastic) && W.get_material_name() == "plastic")
+		if(buildstate == 3)
+			to_chat(user, "<span class='notice'>You assemble and install a heavy plastic lath onto the crossbow.</span>")
+			buildstate++
+			update_icon()
+			else
+				to_chat(user, "<span class='notice'>You need at least three plastic sheets to complete this task.</span>")
+			return*/
+	else if(istype(W,/obj/item/weapon/screwdriver))
+		if(buildstate == 5)
+			to_chat(user, "<span class='notice'>You secure the crossbow's various parts.</span>")
+			new /obj/item/weapon/crossbow(get_turf(src))
+			qdel(src)
+		return
+	else
+		..()
+

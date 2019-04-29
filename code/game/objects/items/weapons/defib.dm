@@ -7,26 +7,24 @@
 	desc = "Used to restore fibrillating patients."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "defib_full"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "defib"
 	w_class = W_CLASS_MEDIUM
 	force = 5
 	throwforce = 5
 	origin_tech = Tc_BIOTECH + "=3"
 
-	var/datum/effect/effect/system/spark_spread/sparks = new
 	var/charges = 10
 	var/ready = 0
 	var/emagged = 0
 
 /obj/item/weapon/melee/defibrillator/New()
-	sparks.set_up(5,0,src)
-	sparks.attach(src)
 	return ..()
 
 /obj/item/weapon/melee/defibrillator/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='warning'>[user] is putting the live paddles on \his chest! It looks like \he's trying to commit suicide.</span>")
-	playsound(get_turf(src),'sound/items/defib.ogg',50,1)
-	return (FIRELOSS)
+	playsound(src,'sound/items/defib.ogg',50,1)
+	return (SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/melee/defibrillator/update_icon()
 	icon_state = "defib"
@@ -49,9 +47,10 @@
 	if(charges || ready)
 		if(clumsy_check(user) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
-			sparks.start()
-			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+			spark(src, 5)
+			playsound(src,'sound/items/defib.ogg',50,1)
 			user.Knockdown(5)
+			user.Stun(5)
 			var/mob/living/carbon/human/H = user
 			if(ishuman(user))
 				H.apply_damage(20, BURN)
@@ -60,7 +59,7 @@
 		else
 			ready = !ready
 			to_chat(user, "<span class='notice'>You turn [src] [ready? "on and take the paddles out" : "off and put the paddles back in"].</span>")
-			playsound(get_turf(src),"sparks",75,1,-1)
+			playsound(src,"sparks",75,1,-1)
 			update_icon()
 	else
 		to_chat(user, "<span class='warning'>[src] is out of charges.</span>")
@@ -106,12 +105,15 @@
 	return
 
 /obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
-	var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
+	var/datum/organ/internal/heart/heart = target.get_heart()
+	if(heart)
+		heart.damage += rand(5,60)
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
-	target.Knockdown(rand(6,12))
+	var/incapacitation_duration = rand(6, 12)
+	target.Knockdown(incapacitation_duration)
+	target.Stun(incapacitation_duration)
 	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
-	heart.damage += rand(5,60)
-	target.emote("scream",,, 1) //If we're going this route, it kinda hurts
+	target.audible_scream() //If we're going this route, it kinda hurts
 	target.updatehealth()
 	spawn() //Logging
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
@@ -121,47 +123,60 @@
 			target.LAssailant = null
 		else
 			target.LAssailant = user
-	sparks.start()
-	playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+	spark(src, 5, FALSE)
+	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
 	return
 
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
-	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest</span>", \
+	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
 	if(do_after(user,target,30))
-		sparks.start()
-		playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+		spark(src, 5, FALSE)
+		playsound(src,'sound/items/defib.ogg',50,1)
 		charges--
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
-		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
-		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations || !target.has_brain() || target.suiciding == 1)
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
-			return
-		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here
-			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+		var/datum/organ/internal/heart/heart = target.get_heart()
+		if(!heart)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
-		if(target.w_uniform && istype(target.w_uniform,/obj/item/clothing/under) && prob(50))
-			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
+		if(!head || head.status & ORGAN_DESTROYED)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
+			return
+		if((M_HUSK in target.mutations) && (M_NOCLONE in target.mutations))
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
+			return
+		if(!target.has_brain())
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
+			return
+		if(target.suiciding)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
+			return
+		if(istype(target.wear_suit,/obj/item/clothing/suit/armor) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(95)) //75 ? Let's stay realistic here
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+			return
+		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
-			var/mob/dead/observer/ghost = get_ghost_from_mind(target.mind)
-			if(ghost && ghost.client && ghost.can_reenter_corpse)
-				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to revive your body. Return to it if you want to be resurrected!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
-				return
+			var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					ghostmob << 'sound/effects/adminhelp.ogg'
+					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to revive your body. Return to it if you want to be resurrected!</span> \
+						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
+					return
 			//we couldn't find a suitable ghost.
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brainwaves detected.</span>")
 			return
-		var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
-		if(prob(25))
-			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
@@ -179,6 +194,7 @@
 			target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumb "pounce back up" behavior
 			target.apply_effect(10, PARALYZE)
 			target.update_canmove()
+			has_been_shade.Remove(target.mind)
 			to_chat(target, "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>")
 		else
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")

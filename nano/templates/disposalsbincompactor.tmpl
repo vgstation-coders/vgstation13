@@ -1,0 +1,31 @@
+<!--
+Title: Compactor UI
+ -->
+{{if !data.isAI}}
+<div class='item'>
+	<div class='itemLabel'>Compression:</div>
+	<div class='itemContent'>
+		{{:helper.link('Engage', 'power', {'compact' : 1}, data.flush ? 'selected' : null)}}
+	</div>
+</div>
+
+<div class='item'>
+	<div class='itemLabel'>Contents:</div>
+	<div class='itemContent'>
+		{{:helper.link('Eject', 'eject', {'eject' : 1})}}
+	</div>
+</div>
+{{/if}}
+
+<div class='item'>
+	<div class='itemLabel'>Charge:</div>
+	<div class='itemContent'>
+		{{:helper.displayBar(data.charge, 0, 100, data.charge == 100 ? 'good' : 'average')}}
+		{{if data.charge == 100}}
+			<span class='good'>
+		{{else}}
+			<span class='average'>
+		{{/if}}
+		{{:data.charge}}%</span>
+	</div>
+</div>

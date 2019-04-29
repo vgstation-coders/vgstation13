@@ -6,7 +6,7 @@
 
 /obj/item/weapon/storage/box/samplebags/New()
 	for(var/i=0, i<7, i++)
-		var/obj/item/weapon/evidencebag/S = new(src)
+		var/obj/item/weapon/storage/evidencebag/S = new(src)
 		S.name = "sample bag"
 		S.desc = "a bag for holding research samples."
 	..()
@@ -25,7 +25,7 @@
 	//slot_flags = SLOT_BELT
 	var/sampled_turf = ""
 	var/num_stored_bags = 10
-	var/obj/item/weapon/evidencebag/filled_bag
+	var/obj/item/weapon/storage/evidencebag/filled_bag
 
 /obj/item/device/core_sampler/examine(mob/user)
 	..()
@@ -33,7 +33,7 @@
 		to_chat(user, "<span class='info'>This one is [sampled_turf ? "full" : "empty"], and has [num_stored_bags] bag[num_stored_bags != 1 ? "s" : ""] remaining.</span>")
 
 /obj/item/device/core_sampler/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/evidencebag))
+	if(istype(W,/obj/item/weapon/storage/evidencebag))
 		if(num_stored_bags < 10)
 			to_chat(user, "<span class='notice'>You insert the [W] into the core sampler.</span>")
 			qdel(W)
@@ -62,7 +62,7 @@
 			to_chat(user, "<span class='warning'>The core sampler is out of sample bags!</span>")
 		else
 			//create a new sample bag which we'll fill with rock samples
-			filled_bag = new /obj/item/weapon/evidencebag(src)
+			filled_bag = new /obj/item/weapon/storage/evidencebag(src)
 			filled_bag.name = "sample bag"
 			filled_bag.desc = "a bag for holding research samples."
 

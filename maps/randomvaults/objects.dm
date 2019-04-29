@@ -10,6 +10,16 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+	//Used for bizarre/odd/reference vaults, entering them causes the wild wasteland sound to play
+	var/mysterious = FALSE
+
+/area/vault/New()
+	..()
+
+	if(mysterious)
+		//Create a narrator object to play a sound to everybody who enters the area
+		narrator = new /obj/effect/narration/mystery_sound(null)
+
 /area/vault/holomapAlwaysDraw()
 	return 0
 
@@ -30,9 +40,7 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
-/area/vault/automap/no_light
-	icon_state = "ME_vault_lit"
-	dynamic_lighting = FALSE
+
 
 /area/vault/icetruck
 
@@ -41,7 +49,7 @@
 /area/vault/tommyboyasteroid
 	requires_power = 1
 
-/area/vault/satelite
+/area/vault/satellite
 
 /area/vault/factory
 
@@ -66,6 +74,8 @@
 /area/vault/ioufort
 
 /area/vault/hive_shuttle
+
+/area/vault/syndiecargo
 
 //prison vault
 
@@ -163,8 +173,8 @@
 	name = "\improper Engine Gas Storage"
 	icon_state = "engine_storage"
 
-/area/vault/ejectedengine/monitering
-	name = "Engine Monitering"
+/area/vault/ejectedengine/monitoring
+	name = "Engine Monitoring"
 	icon_state = "engiaux"
 
 /area/vault/ejectedengine/burnroom
@@ -243,8 +253,57 @@
 /area/vault/icecomet
 	jammed = 2
 
+/area/vault/assistantlair
+	jammed = 2
+
 
 /area/vault/research
+	requires_power = 1
+	name = "\improper Medical Research Facility"
+
+/obj/machinery/power/apc/frame/research_vault
+	make_alerts = FALSE
+
+/obj/docking_port/destination/vault/research
+	valid_random_destination = FALSE
+	areaname = "Medicial Research Facility"
+
+/obj/item/weapon/disk/shuttle_coords/vault/research
+	destination = /obj/docking_port/destination/vault/research
+
+/obj/item/weapon/gun/projectile/pistol/empty
+	max_shells = 0
+	spawn_mag = FALSE
+
+/obj/item/ammo_casing/c9mm/empty
+	projectile_type = null
+
+/area/vault/satelite
+
+/area/vault/spy_sat
+	name = "\improper Donk Co. Comm-sniffer satellite C-VI"
+
+/area/vault/spy_sat/deployment
+	name = "\improper Undocumented interstellar satellite deployment"
+
+
+/area/vault/rattlemebones
+	jammed = 2
+
+/area/vault/zathura
+
+/area/vault/zathura/surroundings
+	dynamic_lighting = FALSE
+	mysterious = TRUE
+
+/area/vault/ironchef
+	name = "Kitchen Coliseum" //Not improper
+
+/obj/effect/narration/mystery_sound
+	play_sound = 'sound/effects/wildwasteland.ogg'
+
+
+/area/vault/beach_party
 
 
 /obj/machinery/door/poddoor/droneship
@@ -373,6 +432,10 @@
 			And there's nothing I can do.
 			"}
 
+/obj/item/weapon/paper/asteroidfield
+	name = "dear diary"
+	info = {"It's all HONKING HONKED.  I left for bananium and it HONKED itself to pieces!  Our planet is HONKED!  What am I going to do?"}
+
 /obj/machinery/atmospherics/binary/msgs/rust_vault
 	name = "\improper Magnitno Priostanovleno Blok Khraneniya Gaza"
 
@@ -481,10 +544,8 @@
 	corpseback = /obj/item/weapon/storage/backpack
 	corpsebelt = null
 
-/obj/machinery/light/burnt/New()
-	status = LIGHT_BURNED
-	update(0)
-	..()
+/obj/machinery/light/burnt
+	spawn_with_bulb = /obj/item/weapon/light/tube/burned
 
 /obj/structure/closet/welded/New()
 	..()
@@ -528,7 +589,7 @@
 
 /obj/machinery/portable_atmospherics/canister/old/plasma/New(loc)
 	..(loc)
-	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_PLASMA, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/old/oxygen
@@ -539,11 +600,11 @@
 
 /obj/machinery/portable_atmospherics/canister/old/oxygen/New(loc)
 	..(loc)
-	air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_OXYGEN, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/vault
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	speak_chance = 1
 
 /obj/machinery/atmospherics/unary/vent/visible
@@ -579,3 +640,302 @@
 	name = "\improper Firelock"
 	desc = "Emergency air-tight shutter, for keeping fires contained."
 	icon = 'icons/obj/doors/Doorfire.dmi'
+
+/obj/effect/landmark/stonefier
+	name = "STONIFIER"
+	desc = "Turns all mobs on this turf into statues forever. Used for map editing!"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "statue"
+
+	layer = 100
+	plane = 100
+	//So that it's more visible in the map editor
+
+/obj/effect/landmark/stonefier/New()
+	var/turf/T = get_turf(src)
+
+	spawn()
+		for(var/mob/living/L in T)
+			L.turn_into_statue(1, 1)
+
+	qdel(src)
+
+/obj/item/weapon/paper/feeding_schedule
+	name = "note"
+	info = {"
+	Reminder to wear full body coverage when being anywhere near the cockatrice pen. As Forrest has already shown you (may he forever bloom in the black peat), shorts are NOT a substitute for pants - borrow your friend's if yours are damaged or lost.
+	<br>
+	And remember to update the computer database after feeding!<br>
+	"}
+
+/obj/effect/trap/cockatrice_notice //When triggered, cockatrices turn and hiss at you
+	name = "cockatrice trigger"
+
+/obj/effect/trap/cockatrice_notice/can_activate(atom/movable/AM)
+	if(istype(AM, /mob/living/simple_animal/hostile/retaliate/cockatrice))
+		return 0
+
+	return ..()
+
+/obj/effect/trap/cockatrice_notice/activate(atom/movable/AM)
+	for(var/mob/living/simple_animal/hostile/retaliate/cockatrice/CO in view(7))
+		if(CO.isDead())
+			continue
+
+		CO.face_atom(AM)
+		CO.visible_message("<span class='notice'>\The [CO] looks at \the [AM] and hisses angrily!</span>")
+
+
+/* Spy Sat stuff */
+
+/obj/machinery/power/magtape_deck
+	name = "magnetic tape drive"
+	desc = "A primitive way of storing information. Used because of its longevity over most digital counterparts."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "blackbox"
+
+	active_power_usage = 500
+	density = 1
+
+/obj/machinery/power/magtape_deck/New()
+	..()
+	connect_to_network()
+
+/obj/machinery/power/magtape_deck/process()
+	if(stat & BROKEN)
+		return
+	var/powered = 1
+
+	if(surplus() < active_power_usage)
+		powered = 0
+
+	if(powered && stat & NOPOWER)
+		stat &= ~NOPOWER
+		update_icon()
+	else if (!powered && !(stat & NOPOWER))
+		stat |= NOPOWER
+		update_icon()
+
+/obj/machinery/power/magtape_deck/update_icon()
+	if(stat & (BROKEN|NOPOWER))
+		icon_state = "[initial(icon_state)]0"
+	else
+		icon_state = "[initial(icon_state)]1"
+
+/obj/machinery/power/magtape_deck/emp_act(severity)
+	if(prob(50/severity))
+		set_broken()
+
+/obj/machinery/power/magtape_deck/ex_act(severity)
+	switch(severity)
+		if(1)
+			qdel(src)
+		if(2)
+			if (prob(50))
+				set_broken()
+		if(3)
+			if (prob(25))
+				set_broken()
+
+/obj/machinery/power/magtape_deck/proc/set_broken()
+	if(stat & BROKEN)
+		return
+	stat |= BROKEN
+	update_icon()
+
+/obj/machinery/power/magtape_deck/blob_act()
+	if (prob(75))
+		set_broken()
+
+
+/obj/machinery/power/magtape_deck/syndicate
+	desc = "A primitive way of storing information. Used because of its longevity over most digital counterparts.\
+	It appears to have a microphone and speaker attached."
+	var/codephrase
+	var/list/potential_codewords = list()
+	var/encrypted_codephrase
+	var/triggered
+	flags = FPRINT | HEAR
+
+/obj/machinery/power/magtape_deck/syndicate/New()
+	..()
+	potential_codewords = adjectives.Copy()
+	for(var/i in potential_codewords)
+		if(length(i) > 6)
+			potential_codewords.Remove(i)
+			continue
+		var/noti = lowertext(i)
+		for(var/ii = 1 to length(noti))
+			var/asciichar = text2ascii(noti,ii)
+			if(asciichar < 97 && asciichar > 122)
+				potential_codewords.Remove(i)
+				break
+	generate_codephrase()
+
+/obj/machinery/power/magtape_deck/syndicate/proc/generate_codephrase()
+	triggered = 0
+	codephrase = lowertext(pick(potential_codewords)) //Picks a word, long or short
+	encrypted_codephrase = ""
+	var/offset = rand(1,5) //Picks the offset
+	for(var/i = 1 to length(codephrase)) //Goes through each character
+		var/char_value = text2ascii(codephrase,i)-97 //Find the value of the character at that point, between a and z respectively (Converts to lower case)
+		var/new_char = ascii2text(((char_value+offset)%26)+97) //Adds the offset to the value, then converts it back to a character
+		encrypted_codephrase += new_char //Then adds it to the codephrase
+
+/obj/machinery/power/magtape_deck/syndicate/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if(speech.speaker && !speech.frequency)
+		if(findtext(speech.message, codephrase))
+			if(!triggered)
+				triggered = TRUE
+				say("Codephrase accepted. Welcome, Agent. Releasing gathered information and current co-ordinates of home base.")
+				new /obj/item/weapon/disk/tech_disk/random(get_turf(src))
+				new /obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment(get_turf(src))
+
+/obj/machinery/power/magtape_deck/syndicate/attack_hand(mob/user)
+	if(stat & (BROKEN|NOPOWER))
+		return
+	say(encrypted_codephrase)
+
+
+/obj/machinery/power/magtape_deck/syndicate/attack_ghost(mob/user)
+	if(isjustobserver(user))
+		return
+	..()
+
+/obj/item/weapon/disk/tech_disk/random/New()
+	..()
+	var/possible_research = pick(subtypesof(/datum/tech))
+	stored = new possible_research
+	stored.level = rand(1,stored.max_level)
+
+/obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment
+	destination = /obj/docking_port/destination/vault/satellite_deployment
+
+/obj/docking_port/destination/vault/satellite_deployment
+	areaname = "satellite deployment base"
+
+
+/obj/machinery/door/poddoor/satellite_deployment
+	id_tag = "spacetime"
+
+/obj/machinery/door/poddoor/preopen/satellite_deployment
+	id_tag = "spacetime"
+
+/obj/machinery/door_control/satellite_deployment
+	id_tag = "spacetime"
+
+/obj/item/weapon/paper/satellite_deployment/no_smoking
+	name = "Note to all would-be smokers"
+	info = {"If you'll take a minute to look around, you'll notice we don't have<br>
+			any regular atmospheric regulation like most station, and due to our predicament of <br>
+			being on an asteroid lodged in bluespace, we can't afford to install atmospheric regulation.<br>
+			So from now on smoking is prohibited except for in the pod bay<br>
+			When you're done, toggle the pod bay doors to get that stink out of here.<br>
+			<br>
+			P.S. Make sure there's nobody still standing in the pod bay when you do vent it.<br>
+			We can't afford regular replacement staff, so try not to kill one another.<br>
+			~ Ensign Willhelm
+			"}
+
+/obj/item/weapon/paper/satellite_deployment/space_saving
+	name = "Discussion on space allocation"
+	info = {"As you are aware we don't have much in the ways of room, but the engineer insists that<br>
+		despite engineering consisting of 2 glorified petrol engines and an SMES, he needs all the space<br>
+		he can get.<br>
+		For now, let's just focus on the feng-shui of the place. I've placed an order for some nice carpets,<br>
+		and plant pots for the relaxation rooms.<br>
+		~ Ensign Willhelm
+		"}
+
+/obj/item/weapon/paper/satellite_deployment/complaints
+	name = "Complaints"
+	info = {"Getting real tired of Willhelm's shit.<br>
+		The pod bay doors only have a button on the outside, how does he expect us to trust one another smoking?<br>
+		Engineering is bigger than most other rooms and it has barely anything functional in it<br>
+		Medical is undersupplied as fuck, we don't even have a defibrilator<br>
+		Where the hell are we supposed to sleep anyway? We've got two break rooms and no beds!<br>
+		And don't get me started on the fucking weapon distribution.<br>
+		Why does the chef get a minigun while medical gets a syringe gun?
+		"}
+
+/obj/item/weapon/paper/satellite_deployment/complaints_reply
+	name = "Regarding complaints"
+	info = {"Complaining is not good for crew morale.<br>
+		It draws unwanted attention towards the negative side of serving here. Look on the bright side.<br>
+		After an extended investigation, the station medical doctor has been forced to resign over his outburst<br>
+		and all paper-usage is now under lockdown.<br>
+		Let's keep working. Comms are offline for the time-being as we pass close to NT space.<br>
+		~ Ensign Willhelm
+		"}
+
+/obj/item/weapon/paper/satellite_deployment/further_complaints
+	name = "Further complaints"
+	info = {"It wasn't the medical doctor, you half-witted clown.<br>
+		Now what do we do if somebody gets hurt?<br>
+		You'd best watch your step around the pod bay, Ensign. Lest you find out.
+		"}
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
+	name = "acid pie"
+	desc = "Tangy tasting"
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
+	..()
+	reagents.clear_reagents()
+	var/room_remaining = reagents.maximum_volume
+	var/poly_to_add = rand(room_remaining/10,room_remaining/2)
+	reagents.add_reagent(PACID, poly_to_add)
+	room_remaining -= poly_to_add
+	var/sulph_to_add = rand(room_remaining/10,room_remaining/2)
+	reagents.add_reagent(SACID, sulph_to_add)
+	room_remaining -= sulph_to_add
+	reagents.add_reagent(NUTRIMENT, room_remaining)
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/lube/New()
+	..()
+	reagents.add_reagent(LUBE, rand(50,volume))
+
+/obj/effect/decal/cleanable/blood/stattrack //Not the same as tracks. Less nonsense required, for aesthetic purposes only
+	icon_state = "tracks"
+	random_icon_states = null
+
+//Iron Chef
+
+/obj/item/weapon/disk/shuttle_coords/vault/ironchef
+	destination = /obj/docking_port/destination/vault/ironchef
+
+/obj/docking_port/destination/vault/ironchef
+	areaname = "Kitchen Coliseum"
+
+/obj/item/clothing/gloves/ironchefgauntlets
+	name = "Iron Chef gauntlets"
+	desc = "Awarded to one whose confection achieves perfection, to one whose cuisine reigns supreme, to one whose foodstuff is the goodstuff."
+	icon_state = "powerfist"
+	siemens_coefficient = 0
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	pressure_resistance = 200 * ONE_ATMOSPHERE
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor
+	name = "essence of pure flavor"
+	desc = "This will really knock any dish up a notch. Bam!"
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor/New()
+	..()
+	reagents.add_reagent(MINDBREAKER, 25)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/radium/New()
+	..()
+	reagents.add_reagent(RADIUM, 25)
+
+/obj/machinery/microwave/upgraded
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra,\
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+

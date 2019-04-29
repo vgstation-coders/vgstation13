@@ -66,7 +66,7 @@
 	if(stat & (NOPOWER|BROKEN) || !active)//can update the icons even without power
 		return
 
-	if(!fueljar)//No fuel but we are on, shutdown
+	if(!fueljar || fueljar.fuel <= 0)//No fuel but we are on, shutdown
 		toggle_power()
 		//Angry buzz or such here
 		return
@@ -84,7 +84,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/produce_power()
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+	playsound(src, 'sound/effects/bang.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
 	if(core_power <= 0)
 		return 0//Something is wrong
@@ -105,7 +105,7 @@
 		for(var/obj/machinery/am_shielding/AMS in linked_cores)
 			AMS.stability -= core_damage
 			AMS.check_stability(1)
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 50, 1)
+		playsound(src, 'sound/effects/bang.ogg', 50, 1)
 	return
 
 
@@ -126,8 +126,10 @@
 /obj/machinery/power/am_control_unit/blob_act()
 	stability -= 20
 	if(prob(100-stability))//Might infect the rest of the machine
+		for(var/obj/machinery/am_shielding/AMS in linked_cores)
+			AMS.blob_act(2)
 		for(var/obj/machinery/am_shielding/AMS in linked_shielding)
-			AMS.blob_act()
+			AMS.blob_act(1)
 		qdel(src)
 		return
 	check_stability()
@@ -171,7 +173,7 @@
 		return
 	if(iswrench(W))
 		if(!anchored)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] secures the [src.name] to the floor.", \
 				"You secure the anchor bolts to the floor.", \
 				"You hear a ratchet")
@@ -180,7 +182,7 @@
 			check_shield_icons()
 			connect_to_network()
 		else if(!linked_shielding.len > 0)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] unsecures the [src.name].", \
 				"You remove the anchor bolts.", \
 				"You hear a ratchet")
@@ -321,7 +323,7 @@
 
 
 
-/obj/machinery/power/am_control_unit/ui_interact(mob/user, ui_key = "main")
+/obj/machinery/power/am_control_unit/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!user)
 		return
 
@@ -345,7 +347,7 @@
 		"siliconUser" = istype(user, /mob/living/silicon),
 	)
 
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, ui_key)
+	ui = nanomanager.get_open_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
 		ui = new(user, src, ui_key, "ame.tmpl", "Antimatter Control Unit", 500, data["siliconUser"] ? 465 : 390)
@@ -354,10 +356,6 @@
 		ui.open()
 		// Auto update every Master Controller tick
 		ui.set_auto_update(1)
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
 
 
 /obj/machinery/power/am_control_unit/Topic(href, href_list)

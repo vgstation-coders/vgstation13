@@ -2,7 +2,7 @@
 	name = "wheelchair"
 	nick = "cripplin' ride"
 	desc = "A chair with fitted wheels. Used by handicapped to make life easier, however it still requires hands to drive."
-	icon = 'icons/obj/objects.dmi'
+	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "wheelchair"
 
 	anchored = 0
@@ -19,7 +19,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
-	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
+	wheel_overlay = image("icons/obj/vehicles.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
 	wheel_overlay.plane = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
@@ -35,13 +35,11 @@
 /obj/structure/bed/chair/vehicle/wheelchair/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 1
-	animate_movement = initial(animate_movement)
 	update_icon()
 
 /obj/structure/bed/chair/vehicle/wheelchair/lock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 0
-	animate_movement = SYNC_STEPS
 	update_icon()
 
 /obj/structure/bed/chair/vehicle/wheelchair/update_icon()
@@ -52,7 +50,7 @@
 		overlays -= wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
-	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
 	return 1
 
@@ -155,10 +153,13 @@
 /obj/structure/bed/chair/vehicle/wheelchair/emp_act(severity)
 	return
 
-/obj/structure/bed/chair/vehicle/wheelchair/update_mob()
-	if(occupant)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/wheelchair/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
@@ -177,7 +178,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
 	//Same as parent's, but no occupant check!
-	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
+	if(M != user || !Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
 		return 0
 	return 1
 
@@ -202,6 +203,8 @@
 	var/const/default_cell_path = /obj/item/weapon/cell/high
 	var/obj/item/weapon/cell/internal_battery = null
 
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/get_cell()
+	return internal_battery
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/New()
 	..()
@@ -214,14 +217,14 @@
 	else
 		to_chat(user, "<span class='warning'>The 'check battery' light is blinking.</span>")
 
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/Move()
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(internal_battery)
-		internal_battery.use(2) //Example use: 100 charge to get from the cargo desk to medbay side entrance
+		internal_battery.use(min(2, internal_battery.charge)) //Example use: 100 charge to get from the cargo desk to medbay side entrance
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/getMovementDelay()
 	if(internal_battery && internal_battery.charge)
-		return 0
+		return 1
 	else
 		return (..() * 2) //It's not designed to move this way!
 
@@ -232,7 +235,7 @@
 		return ..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		user.visible_message("<span class='notice'>[user] screws [maintenance ? "closed" : "open"] \the [src]'s battery compartment.</span>", "<span class='notice'>You screw [maintenance ? "closed" : "open"] the battery compartment.</span>", "You hear screws being loosened.")
 		maintenance = !maintenance
 	else if(iscrowbar(W)&&maintenance)
@@ -257,7 +260,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
 	return (..() + 1) //Somewhat slower
 
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/Bump(var/atom/A)
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
 		if(isrobot(L))
@@ -276,7 +279,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+	playsound(src, 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,10) //We're not as heavy as a MULE. Where it does 30-90 damage, we do 15-30 damage
 	H.apply_damage(damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)
@@ -288,7 +291,7 @@
 /obj/item/syndicate_wheelchair_kit
 	name = "Compressed Wheelchair Kit"
 	desc = "Collapsed parts, prepared to immediately spring into the shape of a wheelchair. One use. The Syndicate is not responsible for injury related to the use of this product."
-	icon = 'icons/obj/objects.dmi'
+	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "wheelchair-item"
 	item_state = "syringe_kit" //This is just a grayish square
 	w_class = W_CLASS_LARGE

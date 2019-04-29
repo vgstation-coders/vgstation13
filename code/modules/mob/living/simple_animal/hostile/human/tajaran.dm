@@ -17,3 +17,6 @@
 	mutantrace = "Tajaran"
 
 	corpseuniform = /obj/item/clothing/under/stripper/mankini
+
+/mob/living/simple_animal/hostile/humanoid/tajaran/dancer
+	icon_state = "tajaran2"

@@ -50,10 +50,6 @@ var/list/alldepartments = list("Central Command")
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
 
-/obj/machinery/faxmachine/attack_ghost(mob/user as mob)
-	to_chat(usr, "<span class='warning'>Nope.</span>")
-	return 0
-
 /obj/machinery/faxmachine/attack_ai(mob/user as mob)
 	return attack_hand(user)
 
@@ -80,7 +76,7 @@ var/list/alldepartments = list("Central Command")
 
 	dat += "<hr>"
 
-	if(authenticated)
+	if(authenticated || isAdminGhost(user))
 		dat += "<b>Logged in to:</b> Central Command Quantum Entanglement Network<br><br>"
 
 		if(tofax)
@@ -133,7 +129,7 @@ var/list/alldepartments = list("Central Command")
 							new /obj/item/mounted/poster(src.loc,-1)
 
 			else
-				SendFax(tofax.info, tofax.name, usr, dpt)
+				SendFax(tofax.info, tofax.name, usr, dpt, 0, tofax.display_x, tofax.display_y)
 			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
 			to_chat(usr, "Message transmitted successfully.")
 			faxtime = world.timeofday + cooldown_time
@@ -208,7 +204,7 @@ var/list/alldepartments = list("Central Command")
 /proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender)
 
 //why the fuck doesnt the thing show as orange
-	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
+	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
 	for (var/client/C in admins)
 		if(C.prefs.special_popup)
 			C << output(msg, "window1.msay_output")//if i get told to make this a proc imma be fuckin mad
@@ -216,7 +212,7 @@ var/list/alldepartments = list("Central Command")
 			to_chat(C, msg)
 		C << 'sound/effects/fax.ogg'
 
-proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
+proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
 
 	var/faxed = null
 	for(var/obj/machinery/faxmachine/F in allfaxes)
@@ -233,18 +229,16 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 				else//probably a
 					P.name = "[sentname]"
 				P.info = "[sent]"
+				if(xdim)
+					P.display_x = xdim
+				if(ydim)
+					P.display_y = ydim
 				P.update_icon()
 
 				playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
 
 				if(centcomm)
-					var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-					stampoverlay.icon_state = "paper_stamp-cent"
-					if(!P.stamped)
-						P.stamped = new
-					P.stamped += /obj/item/weapon/stamp
-					P.overlays += stampoverlay
-					P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
+					CentcommStamp(P)
 
 				// give the sprite some time to flick
 				spawn(20)
@@ -252,3 +246,23 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 
 				faxed = P //doesn't return here in case there's multiple faxes in the department
 	return faxed
+
+/proc/CentcommStamp(var/obj/item/weapon/paper/P)
+	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+	stampoverlay.icon_state = "paper_stamp-cent"
+	if(!P.stamped)
+		P.stamped = new
+	P.stamped += /obj/item/weapon/stamp
+	P.overlays += stampoverlay
+	P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
+
+/proc/SendMerchantFax(mob/living/carbon/human/merchant)
+	var/obj/item/weapon/paper/merchantreport/P
+	for(var/obj/machinery/faxmachine/F in allfaxes)
+		if(F.department == "Internal Affairs" && !F.stat)
+			flick("faxreceive", F)
+			playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
+			P = new /obj/item/weapon/paper/merchantreport(F,merchant)
+			spawn(2 SECONDS)
+				P.forceMove(F.loc)
+	return P

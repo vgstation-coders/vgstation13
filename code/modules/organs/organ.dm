@@ -122,11 +122,23 @@
 		var/datum/organ/internal/liver = internal_organs_by_name["liver"]
 		if(!liver || liver.status & ORGAN_CUT_AWAY)
 			reagents.add_reagent(TOXIN, rand(1, 3))
+		else
+			liver.process()
 
 	if(species.has_organ["kidneys"])
 		var/datum/organ/internal/kidney = internal_organs_by_name["kidneys"]
 		if(!kidney || kidney.status & ORGAN_CUT_AWAY)
 			reagents.add_reagent(TOXIN, rand(1, 3))
+
+
+	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+	if(eyes)
+		eyes.process()
+
+
+	for(var/datum/organ/internal/I in internal_organs)
+		if(!(I.status & ORGAN_CUT_AWAY))
+			I.Life()
 
 	if(!force_process && !bad_external_organs.len) //Nothing to update, just drop it
 		return
@@ -162,51 +174,28 @@
 	//We risk falling because stuff is broken bad
 	if(stand_broken && !paralysis && !(lying || resting) && prob(5))
 		if(feels_pain())
-			emote("scream", , , 1)
+			audible_scream()
 		emote("collapse")
 		Paralyse(10)
 
-	//Check arms and legs for existence
-	var/canstand_l = 1
-	var/canstand_r = 1
-	var/legispeg_l = 0
-	var/legispeg_r = 0
-	var/hasleg_l =   1 //Have left leg
-	var/hasleg_r =   1 //Have right leg
-	var/hasarm_l =   1 //Have left arm
-	var/hasarm_r =   1 //Have right arm
-	//var/datum/organ/external/E = organs_by_name[LIMB_LEFT_FOOT]
-	var/datum/organ/external/E
-	E = organs_by_name[LIMB_LEFT_LEG]
-	if(!E.is_usable()) //The leg is missing, that's going to throw a wrench into our plans
-		canstand_l = 0
-		hasleg_l = 0
-	legispeg_l = E.is_peg() //Need to check this here for the feet
+	can_stand = check_stand_ability()
+	has_limbs = check_crawl_ability()
 
-	E = organs_by_name[LIMB_RIGHT_LEG]
-	if(!E.is_usable())
-		canstand_r = 0
-		hasleg_r = 0
-	legispeg_r = E.is_peg()
+/mob/living/carbon/human/proc/check_stand_ability()
+	//All legs must be usable in order for a human to stand
+	for(var/datum/organ/external/leg in get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
+		if(!leg.can_stand())
+			return FALSE
 
-	//We can stand if we're on a peg leg, otherwise same logic.
-	E = organs_by_name[LIMB_LEFT_FOOT]
-	if(!E.is_usable() && !legispeg_l)
-		canstand_l = 0
-	E = organs_by_name[LIMB_RIGHT_FOOT]
-	if(!E.is_usable() && !legispeg_r)
-		canstand_r = 0
-	E = organs_by_name[LIMB_LEFT_ARM]
-	if(!E.is_usable())
-		hasarm_l = 0
-	E = organs_by_name[LIMB_RIGHT_ARM]
-	if(!E.is_usable())
-		hasarm_r = 0
+	return TRUE
 
-	//Can stand if we have both of our legs (with leg and foot parts present, or an entire pegleg)
-	//Has limbs to move around if at least one arm or leg is at least partially there
-	can_stand = (canstand_l && canstand_r)
-	has_limbs = hasleg_l || hasleg_r || hasarm_l || hasarm_r
+/mob/living/carbon/human/proc/check_crawl_ability()
+	//At least one limb has to be usable for a human to crawl
+	for(var/datum/organ/external/limb in get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_ARM, LIMB_RIGHT_ARM))
+		if(limb.is_usable())
+			return TRUE
+
+	return FALSE
 
 //Cancer, right now adminbus only
 //When triggered, cancer starts growing inside the affected organ. Once it grows worse enough, you start having really serious effects

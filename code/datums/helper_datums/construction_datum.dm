@@ -71,14 +71,14 @@
 		return steps.len
 	return 0
 
-/datum/construction/proc/custom_action(step, used_atom, user)
+/datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
 	if(iswelder(used_atom))
 		playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
 
 	else if(iswrench(used_atom))
 		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
 
-	else if(isscrewdriver(used_atom))
+	else if(used_atom.is_screwdriver(user))
 		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	else if(iswirecutter(used_atom))
@@ -87,7 +87,7 @@
 	else if(istype(used_atom,/obj/item/weapon/circuitboard))
 		playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
 
-	else if(iswire(used_atom))
+	else if(iscablecoil(used_atom))
 		playsound(holder, 'sound/items/zip.ogg', 50, 1)
 
 	construct_message(step, user)
@@ -127,7 +127,7 @@
 
 /datum/construction/proc/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		new result(get_turf(holder))
 		spawn()
@@ -175,7 +175,7 @@
 				return 0
 			stack.use(amount)
 		// WELDER
-		else if(istype(used_atom,/obj/item/weapon/weldingtool) && !(Co_TAKE in given_step))
+		else if(iswelder(used_atom) && !(Co_TAKE in given_step))
 			var/obj/item/weapon/weldingtool/welder=used_atom
 			if(!welder.isOn())
 				to_chat(user, "<span class='notice'>You tap \the [holder] with your unlit welder.  [pick("Ding","Dong")].</span>")
@@ -251,7 +251,7 @@
 		assembling = 0
 	return 0
 
-/datum/construction/reversible/custom_action(index, diff, used_atom, user)
+/datum/construction/reversible/custom_action(index, diff, obj/item/used_atom, mob/user)
 	. = ..(index,used_atom,user)
 
 	if(.)
@@ -348,7 +348,7 @@
 				return 0
 			stack.use(amount)
 		// WELDER
-		else if(istype(used_atom,/obj/item/weapon/weldingtool) && !(Co_TAKE in given_step))
+		else if(iswelder(used_atom) && !(Co_TAKE in given_step))
 			var/obj/item/weapon/weldingtool/welder=used_atom
 			if(!welder.isOn())
 				to_chat(user, "<span class='notice'>You tap \the [holder] with your unlit welder.  [pick("Ding","Dong")].</span>")
@@ -375,11 +375,6 @@
 	else
 		var/list/spawn_step
 		var/new_index = (diff == FORWARD ? index - 1 : index + 1)
-		if(new_index == 0)
-			message_admins("Holy shit [src]/([src.type]) is trying to set its new index to 0! how the fuck did this happen? I don't know, our direction is [diff==FORWARD?"forward":"backward"] old index was [index]. User is [formatPlayerPanel(user,user.ckey)], itemused [used_atom], step [given_step]")
-			spawn_result(user)
-			return 1
-			//CRASH("Holy shit [src]/([src.type]) is trying to set its new index to 0! how the fuck did this happen? I don't know, our direction is [diff==FORWARD?"forward":"backward"] old index was [index]. User is [user], itemused [used_atom], step [given_step]")
 		if(diff == FORWARD)
 			spawn_step = get_backward_step(new_index)
 		else if(diff == BACKWARD)
@@ -393,7 +388,7 @@
 		else if(Co_AMOUNT in spawn_step)
 			var/to_create = (islist(spawn_step[Co_KEY]) ? pick(spawn_step[Co_KEY]) : spawn_step[Co_KEY])
 			var/test = new to_create
-			if(istype(test, /obj/item/weapon/weldingtool) && !(Co_TAKE in spawn_step))
+			if(iswelder(test) && !(Co_TAKE in spawn_step))
 				qdel(test)
 			else if(istype(test, /obj/item/stack) && !(Co_TAKE in spawn_step))
 				var/obj/item/stack/S = test

@@ -22,30 +22,43 @@
 	var/flush_every_ticks = 30 //Every 30 ticks it will look whether it is ready to flush
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
+	var/template_path = "disposalsbin.tmpl"
+	var/deconstructable = TRUE	//Set to FALSE for disposal machinery that can be used for transporting players or things, but not tinkered with by players.
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/disposal/supports_holomap()
+	return TRUE
+
+/obj/machinery/disposal/initialize()
+	..()
+	add_self_to_holomap()
+
+/obj/machinery/disposal/no_deconstruct
+	deconstructable = FALSE
 
 // create a new disposal
 // find the attached trunk (if present) and init gas resvr.
 /obj/machinery/disposal/New()
 	..()
 	spawn(5)
-		for(var/obj/structure/disposalpipe/trunk/O in loc.contents)//This is more efficient than locate()
-			trunk = O
+		handle_trunk()
 
-		if(trunk)
-			if(trunk.disposal != src)
-				trunk.disposal = src
 
-			if(trunk.linked != trunk.disposal)
-				trunk.linked = trunk.disposal
-		else
-			mode = 0
-			flush = 0
+/obj/machinery/disposal/proc/handle_trunk()
+	for(var/obj/structure/disposalpipe/trunk/O in loc.contents)//This is more efficient than locate()
+		trunk = O
 
-		air_contents = new/datum/gas_mixture()
-		//gas.volume = 1.05 * CELLSTANDARD
+	if(trunk)
+		if(trunk.disposal != src)
+			trunk.disposal = src
+
+		if(trunk.linked != trunk.disposal)
+			trunk.linked = trunk.disposal
+	else
+		mode = 0
+		flush = 0
+
+	air_contents = new/datum/gas_mixture()
+	//gas.volume = 1.05 * CELLSTANDARD
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
@@ -78,7 +91,7 @@
 
 // attack by item places it in to disposal
 /obj/machinery/disposal/attackby(var/obj/item/I, var/mob/user)
-	if(stat & BROKEN || !I || !user)
+	if(stat & BROKEN || !I || !user || !deconstructable)
 		return
 
 	if(!user.has_hand_check())
@@ -87,46 +100,40 @@
 
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
-		if(isscrewdriver(I))
+		if(I.is_screwdriver(user))
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
 			if(mode==0) // It's off but still not unscrewed
 				mode=-1 // Set it to doubleoff l0l
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You remove the screws around the power connection.")
 				return
 			else if(mode==-1)
 				mode=0
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
-		else if(istype(I,/obj/item/weapon/weldingtool) && mode==-1)
+		else if(iswelder(I) && mode==-1)
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
 			var/obj/item/weapon/weldingtool/W = I
-			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-				to_chat(user, "You start slicing the floorweld off the disposal unit.")
+			to_chat(user, "You start slicing the floorweld off the disposal unit.")
+			if(W.do_weld(user, src,20, 0))
+				if(gcDestroyed)
+					return
+				to_chat(user, "You sliced the floorweld off the disposal unit.")
+				var/obj/structure/disposalconstruct/C = new (src.loc)
+				src.transfer_fingerprints_to(C)
+				C.ptype = 6 // 6 = disposal unit
+				C.anchored = 1
+				C.setDensity(TRUE)
+				C.update()
+				qdel(src)
+			return
 
-				if(do_after(user, src,20))
-					if(gcDestroyed || !W.isOn())
-						return
-					to_chat(user, "You sliced the floorweld off the disposal unit.")
-					var/obj/structure/disposalconstruct/C = new (src.loc)
-					src.transfer_fingerprints_to(C)
-					C.ptype = 6 // 6 = disposal unit
-					C.anchored = 1
-					C.density = 1
-					C.update()
-					qdel(src)
-				return
-			else
-				to_chat(user, "You need more welding fuel to complete this task.")
-				return
-
-	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !istype(user,/mob/living/silicon/robot/mommi) )
+	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
 
 	if(istype(I, /obj/item/weapon/storage/bag/))
@@ -217,20 +224,22 @@
 	ui_interact(user)
 
 // user interaction
-/obj/machinery/disposal/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/disposal/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	var/list/data[0]
 
-	data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
+	if(air_contents)
+		data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
 	data["flush"] = flush
 	data["mode"] = mode
 	data["isAI"] = isAI(user)
+	data["charge"] = round(100 * flush_count / flush_every_ticks) //This is only used by the compactor
 
 	// update the ui with data if it exists, returns null if no ui is passed/found or if force_open is 1/true
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
 		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "disposalsbin.tmpl", "Waste Disposal Unit", 430, 150)
+		ui = new(user, src, ui_key, template_path, "Waste Disposal Unit", 430, 150)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -353,7 +362,7 @@
 	var/pressure_delta = (SEND_PRESSURE*1.01) - air_contents.return_pressure()
 
 	if(env.temperature > 0)
-		var/transfer_moles = 0.1 * pressure_delta*air_contents.volume/(env.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = 0.1 * pressure_delta * air_contents.volume / (env.temperature * R_IDEAL_GAS_EQUATION)
 
 		//Actually transfer the gas
 		var/datum/gas_mixture/removed = env.remove(transfer_moles)
@@ -376,8 +385,9 @@
 	var/wrapcheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 										// travels through the pipes.
-	for(var/obj/item/delivery/O in src)
-		wrapcheck = 1
+	for(var/obj/item/I in src)
+		if(istype(I, /obj/item/delivery) || istype(I, /obj/item/weapon/paper/envelope))
+			wrapcheck = 1
 
 	if(wrapcheck == 1)
 		H.tomail = 1
@@ -419,6 +429,9 @@
 	var/turf/target
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 	if(H) // Somehow, someone managed to flush a window which broke mid-transit and caused the disposal to go in an infinite loop trying to expel null, hopefully this fixes it
+		if(H.destinationTag)
+			playsound(src, 'sound/misc/yougotmail.wav', 50, 0, 0)
+			visible_message("[bicon(src)]<span class='notice'><font size=4><i>You've got mail!</i></font></span>")
 		H.active = 0 // Stop disposalholder's move() processing so we don't call the trunk's expel() too
 		for(var/atom/movable/AM in H)
 			target = get_offset_target_turf(src.loc, rand(5)-rand(5), rand(5)-rand(5))
@@ -437,7 +450,8 @@
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(75))
+		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
+		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("\the [I] lands in \the [src].", 1)
@@ -448,13 +462,18 @@
 	else
 		return ..(mover, target, height, air_group)
 
-/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+/obj/machinery/disposal/proc/can_load_crates()
+	return TRUE
+
+/obj/machinery/disposal/MouseDropTo(atom/movable/dropping, mob/user)
 
 	if(isAI(user))
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
 	if(user.restrained() || !user.canmove)
+		return
+	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
@@ -464,6 +483,14 @@
 				return
 
 			attackby(dropping, user)
+		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
+			if(do_after(user,src,20))
+				if(dropping.locked_to || user.restrained() || !user.canmove)
+					return
+				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
+				add_fingerprint(user)
+				dropping.forceMove(src)
+				update_icon()
 		return
 
 	//From there, we are working on a mob (as our target, user is supposed to be a mob)
@@ -524,11 +551,27 @@
 	var/active = 0	// true if the holder is moving, otherwise inactive
 	dir = 0
 	var/count = 1000	//*** can travel 1000 steps before going inactive (in case of loops)
-	var/has_fat_guy = 0	// true if contains a fat person
-	var/destinationTag = "DISPOSALS"// changes if contains a delivery container
+	var/destinationTag = DISP_DISPOSALS // changes if contains a delivery container
 	var/tomail = 0 //changes if contains wrapped package
 	var/hasmob = 0 //If it contains a mob
 
+/obj/structure/disposalholder/proc/has_fat_guy()
+	for(var/mob/living/carbon/human/H in src)
+		if(H.is_fat() || H.is_bulky())
+			return TRUE
+
+// Dislodge players whenever they're no longer fat or the holder is active for some reason.
+/obj/structure/disposalholder/proc/until_skinny()
+	spawn while(1) // Checking this is not a priority. Check whenever the server has a moment.
+		if(!has_fat_guy() || active) // If the person is no longer fat or something made the holder active again.
+			for(var/mob/living/carbon/human/H in src)
+				to_chat(H, "You become dislodged from the grip of the pipe!")
+			active = 1
+			move()
+			break
+		else
+			sleep(10) // Probably unwise to keep constantly checking, so just wait some time before doing it again.
+	return
 
 	// initialize a holder from the contents of a disposal unit
 /obj/structure/disposalholder/proc/init(var/obj/machinery/disposal/D)
@@ -552,16 +595,15 @@
 	// note AM since can contain mobs or objs
 	for(var/atom/movable/AM in D)
 		AM.forceMove(src)
-		if(istype(AM, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = AM
-			if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)		// is a human and fat?
-				has_fat_guy = 1			// set flag on holder
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM
 			src.destinationTag = T.sortTag
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
 			src.destinationTag = T.sortTag
+		if(istype(AM, /obj/item/weapon/paper/envelope) && !hasmob)
+			var/obj/item/weapon/paper/envelope/E = AM
+			src.destinationTag = E.sortTag
 
 // start the movement process
 // argument is the disposal unit the holder started in
@@ -586,12 +628,19 @@
 				H.take_overall_damage(20, 0, "Blunt Trauma")//horribly maim any living creature jumping down disposals.  c'est la vie
 				*/
 
-		if(has_fat_guy && prob(2)) // chance of becoming stuck per segment if contains a fat guy
-			active = 0
+		if(prob(2)) // chance of becoming stuck per segment if contains a fat guy
+			if(has_fat_guy())
+				active = 0
 			// find the fat guys
-			for(var/mob/living/carbon/human/H in src)
-
-			break
+				for(var/mob/living/carbon/human/H in src)
+					if(H.is_fat())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own fat holding onto the pipe!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else if(H.is_bulky())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own bulky anatomy!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else
+						to_chat(H, "<span class='danger'>You suddenly stop by the fatass with you!</span> <span class='warning'>You hope something knocks you free.</span>")
+				until_skinny()
+				break
 		sleep(1)		// was 1
 		if(!loc || isnull(loc))
 			qdel(src)
@@ -627,15 +676,19 @@
 // merge two holder objects
 // used when a a holder meets a stuck holder
 /obj/structure/disposalholder/proc/merge(var/obj/structure/disposalholder/other)
+	if(src.destinationTag == DISP_DISPOSALS && other.destinationTag != DISP_DISPOSALS)
+		// Lets make sure we don't accidentally dispose of stuff.
+		// Of course, if this happened before the cargo office this is a non-issue but if someone jammed the pipe after the office, then it's a problem.
+		src.destinationTag = other.destinationTag
 	for(var/atom/movable/AM in other)
 		AM.forceMove(src)		// move everything in other holder to this one
 		if(ismob(AM))
 			var/mob/M = AM
 			if(M.client)	// if a client mob, update eye to follow this holder
 				M.client.eye = src
+				if(!other.active)
+					to_chat(M, "Something hits and dislodges you from the pipe!")
 
-	if(other.has_fat_guy)
-		has_fat_guy = 1
 	qdel(other)
 
 
@@ -653,7 +706,7 @@
 			//testing("SENDING CLONG")
 			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
-	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
+	playsound(src, 'sound/effects/clang.ogg', 50, 0, 0)
 
 /obj/machinery/disposal/is_airtight() //No polyacid smoke while inside the pipes. The disposals bins, inlets/outlets and such aren't counted for this purpose
 	return 1
@@ -672,8 +725,6 @@
 	anchored = 1
 	density = 0
 
-	holomap = TRUE
-	auto_holomap = TRUE
 	level = LEVEL_BELOW_FLOOR			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
@@ -681,8 +732,16 @@
 	layer = DISPOSALS_PIPE_LAYER
 	plane = ABOVE_PLATING_PLANE
 	var/base_icon_state	// initial icon state on map
+	var/deconstructable = TRUE
 
-	// new pipe, set the icon_state as on map
+/obj/structure/disposalpipe/supports_holomap()
+	return TRUE
+
+/obj/structure/disposalpipe/initialize()
+	..()
+	add_self_to_holomap()
+
+// new pipe, set the icon_state as on map
 /obj/structure/disposalpipe/New()
 	..()
 	base_icon_state = icon_state
@@ -898,20 +957,16 @@
 	if(T.intact) 	//has a floortile attached
 		return		// prevent interaction with T-scanner revealed pipes
 
+	if(!deconstructable)
+		return
 	src.add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
-
-		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the disposal pipe.")
-			if(do_after(user, src, 3 SECONDS))
-				if(gcDestroyed || !W.isOn())
-					return
-				welded()
-		else
-			to_chat(user, "You need more welding fuel to cut the pipe.")
-			return
+		to_chat(user, "You start slicing the disposal pipe.")
+		if(W.do_weld(user, src, 3 SECONDS, 0))
+			if(gcDestroyed)
+				return
+			welded()
 
 // called when pipe is cut with welder
 /obj/structure/disposalpipe/proc/welded()
@@ -937,7 +992,7 @@
 			C.ptype = 10
 	src.transfer_fingerprints_to(C)
 	C.change_dir(dir)
-	C.density = 0
+	C.setDensity(FALSE)
 	C.anchored = 1
 	C.update()
 
@@ -952,6 +1007,9 @@
 /obj/structure/disposalpipe/segment
 	icon_state = "pipe-s"
 
+/obj/structure/disposalpipe/segment/no_deconstruct
+	deconstructable = FALSE
+
 /obj/structure/disposalpipe/segment/New()
 	..()
 	if(icon_state == "pipe-s")
@@ -964,6 +1022,9 @@
 //a three-way junction with dir being the dominant direction
 /obj/structure/disposalpipe/junction
 	icon_state = "pipe-j1"
+
+/obj/structure/disposalpipe/junction/no_deconstruct
+	deconstructable = FALSE
 
 /obj/structure/disposalpipe/junction/New()
 	..()
@@ -1049,7 +1110,7 @@
 
 		if(O.currTag)// Tag set
 			sort_tag = uppertext(O.destinations[O.currTag])
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			to_chat(user, "<span class='notice'>Changed filter to [sort_tag]</span>")
 			updatedesc()
 		return 1
@@ -1324,6 +1385,9 @@
 	var/obj/structure/disposaloutlet/disposaloutlet
 	var/obj/linked
 
+/obj/structure/disposalpipe/trunk/no_deconstruct
+	deconstructable = FALSE
+
 /obj/structure/disposalpipe/trunk/New()
 	. = ..()
 	dpdir = dir
@@ -1392,20 +1456,16 @@
 	var/turf/T = src.loc
 	if(T.intact)
 		return		// prevent interaction with T-scanner revealed pipes
+	if(!deconstructable)
+		return
 	src.add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
-
-		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the disposal pipe.")
-			if(do_after(user, src, 3 SECONDS))
-				if(gcDestroyed || !W.isOn())
-					return
-				welded()
-		else
-			to_chat(user, "You need more welding fuel to cut the pipe.")
-			return
+		to_chat(user, "You start slicing the disposal pipe.")
+		if(W.do_weld(user, src, 3 SECONDS))
+			if(gcDestroyed)
+				return
+			welded()
 
 	// would transfer to next pipe segment, but we are in a trunk
 	// if not entering from disposal bin,
@@ -1471,9 +1531,17 @@
 	var/turf/target	// this will be where the output objects are 'thrown' to.
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
+	var/deconstructable = TRUE
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/structure/disposaloutlet/supports_holomap()
+	return TRUE
+
+/obj/structure/disposaloutlet/initialize()
+	..()
+	add_self_to_holomap()
+
+/obj/structure/disposaloutlet/no_deconstruct
+	deconstructable = FALSE
 
 /obj/structure/disposaloutlet/New()
 	. = ..()
@@ -1524,40 +1592,34 @@
 		qdel(H)
 
 /obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
-	if(!I || !user)
+	if(!I || !user || !deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(mode==0)
 			mode=1
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(mode==1)
 			mode=0
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
-	else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
+	else if(iswelder(I) && mode==1)
 		var/obj/item/weapon/weldingtool/W = I
-		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
-			if(do_after(user, src, 20))
-				if(gcDestroyed || !W.isOn())
-					return
-				to_chat(user, "You sliced the floorweld off the disposal outlet.")
-				var/obj/structure/disposalconstruct/C = new (src.loc)
-				src.transfer_fingerprints_to(C)
-				C.ptype = 7 // 7 =  outlet
-				C.update()
-				C.anchored = 1
-				C.density = 1
-				qdel(src)
-			return
-		else
-			to_chat(user, "You need more welding fuel to complete this task.")
-			return
+		to_chat(user, "You start slicing the floorweld off the disposal outlet.")
+		if(W.do_weld(user, src, 20, 0))
+			if(gcDestroyed)
+				return
+			to_chat(user, "You sliced the floorweld off the disposal outlet.")
+			var/obj/structure/disposalconstruct/C = new (src.loc)
+			src.transfer_fingerprints_to(C)
+			C.ptype = 7 // 7 =  outlet
+			C.update()
+			C.anchored = 1
+			C.setDensity(TRUE)
+			qdel(src)
 
 
 

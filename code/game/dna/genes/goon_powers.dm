@@ -1,64 +1,46 @@
-#define EAT_MOB_DELAY 300 // 30s
+#define EAT_MOB_DELAY 30 SECONDS
 
 // WAS: /datum/bioEffect/alcres
 /datum/dna/gene/basic/sober
-	name="Sober"
-	activation_messages=list("You feel unusually sober.")
+	name = "Sober"
+	activation_messages = list("You feel unusually sober.")
 	deactivation_messages = list("You feel like you could use a stiff drink.")
 
-	mutation=M_SOBER
+	mutation = M_SOBER
 
-	New()
-		block=SOBERBLOCK
+/datum/dna/gene/basic/sober/New()
+	block = SOBERBLOCK
 
 //WAS: /datum/bioEffect/psychic_resist
 /datum/dna/gene/basic/psychic_resist
-	name="Psy-Resist"
+	name = "Psy-Resist"
 	desc = "Boosts efficiency in sectors of the brain commonly associated with meta-mental energies."
 	activation_messages = list("Your mind feels closed.")
 	deactivation_messages = list("You feel oddly exposed.")
 
-	mutation=M_PSY_RESIST
+	mutation = M_PSY_RESIST
 
-	New()
-		block=PSYRESISTBLOCK
+/datum/dna/gene/basic/psychic_resist/New()
+	block = PSYRESISTBLOCK
 
 /////////////////////////
 // Stealth Enhancers
 /////////////////////////
 
 /datum/dna/gene/basic/stealth
-	can_activate(var/mob/M, var/flags)
-		// Can only activate one of these at a time.
-		if(is_type_in_list(/datum/dna/gene/basic/stealth,M.active_genes))
-			testing("Cannot activate [type]: /datum/dna/gene/basic/stealth in M.active_genes.")
-			return 0
-		return ..(M,flags)
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			M.alphas -= "chameleon_stealth"
-			M.handle_alpha()
+/datum/dna/gene/basic/stealth/can_activate(var/mob/M, var/flags)
+	// Can only activate one of these at a time.
+	if(is_type_in_list(/datum/dna/gene/basic/stealth,M.active_genes))
+		testing("Cannot activate [type]: /datum/dna/gene/basic/stealth in M.active_genes.")
+		return 0
+	return ..(M,flags)
 
-// WAS: /datum/bioEffect/darkcloak
-/*/datum/dna/gene/basic/stealth/darkcloak
-	name = "Cloak of Darkness"
-	desc = "Enables the subject to bend low levels of light around themselves, creating a cloaking effect."
-	activation_messages = list("You begin to fade into the shadows.")
-	deactivation_messages = list("You become fully visible.")
+/datum/dna/gene/basic/stealth/deactivate(var/mob/M, var/connected, var/flags)
+	if(..(M,connected,flags))
+		M.alphas -= "chameleon_stealth"
+		M.handle_alpha()
 
-	New()
-		block=SHADOWBLOCK
-
-	OnMobLife(var/mob/M)
-		var/turf/simulated/T = get_turf(M)
-		if(!istype(T))
-			return
-		if(T.lighting_lumcount <= 2)
-			M.alpha -= 25
-		else
-			M.alpha = round(255 * 0.80)
-*/
 //WAS: /datum/bioEffect/chameleon
 /datum/dna/gene/basic/stealth/chameleon
 	name = "Chameleon"
@@ -66,14 +48,14 @@
 	activation_messages = list("You feel one with your surroundings.")
 	deactivation_messages = list("You feel oddly exposed.")
 
-	New()
-		block=CHAMELEONBLOCK
+/datum/dna/gene/basic/stealth/chameleon/New()
+	block = CHAMELEONBLOCK
 
-	OnMobLife(var/mob/M)
-		if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
-			M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
-		else
-			M.alphas["chameleon_stealth"] = round(255 * 0.80)
+/datum/dna/gene/basic/stealth/chameleon/OnMobLife(var/mob/M)
+	if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
+		M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
+	else
+		M.alphas["chameleon_stealth"] = round(255 * 0.80)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -81,42 +63,42 @@
 	var/spell/spelltype
 	var/list/granted_spells
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		var/spell/granted = new spelltype
-		M.add_spell(granted, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
-		if(!granted_spells)
-			granted_spells = list()
-		granted_spells += granted
-		//testing("[M] added [granted.name] from [name]")
-		return 1
+/datum/dna/gene/basic/grant_spell/activate(var/mob/M, var/connected, var/flags)
+	..()
+	var/spell/granted = new spelltype
+	M.add_spell(granted, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
+	if(!granted_spells)
+		granted_spells = list()
+	granted_spells += granted
+	//testing("[M] added [granted.name] from [name]")
+	return 1
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			for(var/spell/S in M.spell_list)
-				if(S in granted_spells)
-					M.remove_spell(S)
-					granted_spells -= S
-					//testing("[M] removed [S.name] from [name]")
-					qdel(S)
-			return 1
+/datum/dna/gene/basic/grant_spell/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
 		return 0
+	for(var/spell/S in M.spell_list)
+		if(S in granted_spells)
+			M.remove_spell(S)
+			granted_spells -= S
+			//testing("[M] removed [S.name] from [name]")
+			qdel(S)
+	return 1
 
 /datum/dna/gene/basic/grant_verb
 	var/verbtype
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		M.verbs += verbtype
-		//testing("[M] added [verbtype] from [name]")
-		return 1
+/datum/dna/gene/basic/grant_verb/activate(var/mob/M, var/connected, var/flags)
+	..()
+	M.verbs += verbtype
+	//testing("[M] added [verbtype] from [name]")
+	return 1
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			M.verbs -= verbtype
-			//testing("[M] removed [verbtype] from [name]")
-			return 1
+/datum/dna/gene/basic/grant_verb/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
 		return 0
+	M.verbs -= verbtype
+	//testing("[M] removed [verbtype] from [name]")
+	return 1
 
 // WAS: /datum/bioEffect/cryokinesis
 /datum/dna/gene/basic/grant_spell/cryo
@@ -130,13 +112,14 @@
 
 	spelltype = /spell/targeted/cryokinesis
 
-	New()
-		..()
-		block = CRYOBLOCK
+/datum/dna/gene/basic/grant_spell/cryo/New()
+	..()
+	block = CRYOBLOCK
 
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
-	desc = "Drops the bodytemperature of another person."
+	user_type = USER_TYPE_GENETIC
+	desc = "Drops the body temperature of another person."
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -169,7 +152,7 @@
 											"<span class='notice'>A cloud of fine ice crystals cover your [H.head]'s visor.</span>")
 					else
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
-											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!.</span>")
+											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!</span>")
 						H.bodytemperature = max(T0C + 31, H.bodytemperature - 3)
 						H.adjustFireLoss(5)
 		if(!handle_suit)
@@ -190,18 +173,19 @@
 	activation_messages = list("You feel hungry.")
 	deactivation_messages = list("You don't feel quite so hungry anymore.")
 
-	drug_activation_messages=list("You are getting the munchies.")
-	drug_deactivation_messages=list("You no longer getting the munchies.")
+	drug_activation_messages = list("You are getting the munchies.")
+	drug_deactivation_messages = list("You no longer getting the munchies.")
 
-	spelltype=	/spell/targeted/eat
+	spelltype = /spell/targeted/eat
 
-	New()
-		..()
-		block = EATBLOCK
+/datum/dna/gene/basic/grant_spell/mattereater/New()
+	..()
+	block = EATBLOCK
 
 /spell/targeted/eat
 	name = "Eat"
 	desc = "Eat just about anything!"
+	user_type = USER_TYPE_GENETIC
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -211,7 +195,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | CAN_CHANNEL_RESTRAINED
 
 	override_base = "genetic"
 	hud_state = "gen_eat"
@@ -232,7 +216,7 @@
 		/mob/living/simple_animal/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
-		/mob/living/simple_animal/lizard,
+		/mob/living/simple_animal/hostile/lizard,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/spiderbot
 		)
@@ -240,14 +224,9 @@
 /spell/targeted/eat/proc/doHeal(var/mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H=user
-		for(var/name in H.organs_by_name)
-			var/datum/organ/external/affecting = null
-			if(!H.organs[name])
-				continue
-			affecting = H.organs[name]
-			if(!istype(affecting, /datum/organ/external))
-				continue
+		for(var/datum/organ/external/affecting in H.organs)
 			affecting.heal_damage(4, 0)
+
 		H.UpdateDamageIcon()
 		H.updatehealth()
 
@@ -349,7 +328,7 @@
 	var/atom/movable/the_item = targets[1]
 	if(!the_item || !the_item.Adjacent(user))
 		return
-	// if(istype(the_item, /obj/item/weapon/organ/head))
+	// if(istype(the_item, /obj/item/organ/external/head))
 	// 	to_chat(user, "<span class='warning'>You try to put the [the_item] in your mouth, but the ears tickle your throat!</span>")
 	// 	return 0
 	// else if(isbrain(the_item))
@@ -385,14 +364,14 @@
 		else
 			user.visible_message("<span class='danger'>[user] eats [the_item]'s [limb.display_name].</span>", \
 			"<span class='danger'>You eat [the_item]'s [limb.display_name].</span>")
-			playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+			playsound(user, 'sound/items/eatfood.ogg', 50, 0)
 			message_admins("[user] ate [the_item]'s [limb]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 			log_game("[user] ate \the [the_item]'s [limb] at [user.x], [user.y], [user.z]")
 			limb.droplimb("override" = 1, "spawn_limb" = 0)
 			doHeal(user)
 	else
 		user.visible_message("<span class='warning'>[usr] eats \the [the_item].")
-		playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+		playsound(user, 'sound/items/eatfood.ogg', 50, 0)
 		message_admins("[user] ate \the [the_item]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 		log_game("[user] ate \the [the_item] at [user.x], [user.y], [user.z]")
 		qdel(the_item)
@@ -405,23 +384,23 @@
 /datum/dna/gene/basic/grant_spell/jumpy
 	name = "Jumpy"
 	desc = "Allows the subject to leap great distances.</span>"
-	//cooldown = 30
 	activation_messages = list("Your leg muscles feel taut and strong.")
 	deactivation_messages = list("Your leg muscles shrink back to normal.")
 
-	drug_activation_messages=list()
-	drug_deactivation_messages=list()
+	drug_activation_messages = list()
+	drug_deactivation_messages = list()
 
-	spelltype =/spell/targeted/leap
+	spelltype = /spell/targeted/leap
 
-	New()
-		..()
-		block = JUMPBLOCK
+/datum/dna/gene/basic/grant_spell/jumpy/New()
+	..()
+	block = JUMPBLOCK
 
 /spell/targeted/leap
 	name = "Jump"
 	desc = "Leap great distances!"
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
@@ -437,7 +416,8 @@
 	hud_state = "gen_leap"
 	override_base = "genetic"
 
-/spell/targeted/leap/cast(list/targets, mob/user)
+/spell/targeted/leap/cast(list/targets)
+	set waitfor = FALSE
 	for(var/mob/living/target in targets)
 		if (istype(target.loc,/mob/) || target.lying || target.stunned || target.locked_to)
 			to_chat(target, "<span class='warning'>You can't jump right now!</span>")
@@ -445,6 +425,20 @@
 
 		var/failed_leap = 0
 		if (istype(target.loc,/turf/))
+
+			if(istype(target.loc, /turf/space))
+				var/spaced = 1
+				for(var/turf/T in oview(1,target))
+					if(T.has_gravity(target))
+						spaced = 0
+						break
+					for(var/obj/O in T.contents)
+						if((O) && (O.density) && (O.anchored))
+							spaced = 0
+							break
+				if(spaced)
+					to_chat(target, "<span class='warning'>There is nothing to leap off of!</span>")
+					return
 
 			if(target.restrained())//Why being pulled while cuffed prevents you from moving
 				for(var/mob/M in range(target, 1))
@@ -505,8 +499,6 @@
 
 	return
 
-////////////////////////////////////////////////////////////////////////
-
 // WAS: /datum/bioEffect/polymorphism
 
 /datum/dna/gene/basic/grant_spell/polymorph
@@ -514,21 +506,21 @@
 	desc = "Enables the subject to reconfigure their appearance to mimic that of others."
 
 	spelltype = /spell/targeted/polymorph
-	//cooldown = 1800
 	activation_messages = list("You don't feel entirely like yourself somehow.")
 	deactivation_messages = list("You feel secure in your identity.")
 
-	drug_activation_messages=list()
-	drug_deactivation_messages=list()
+	drug_activation_messages = list()
+	drug_deactivation_messages = list()
 
-	New()
-		..()
-		block = POLYMORPHBLOCK
+/datum/dna/gene/basic/grant_spell/polymorph/New()
+	..()
+	block = POLYMORPHBLOCK
 
 /spell/targeted/polymorph
 	name = "Polymorph"
 	desc = "Mimic the appearance of others!"
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 	charge_max = 1800
 
 	spell_flags = 0
@@ -569,14 +561,15 @@
 	drug_activation_messages=list("You feel more social!")
 	drug_deactivation_messages=list("You feel less social.")
 
-	New()
-		..()
-		block = EMPATHBLOCK
+/datum/dna/gene/basic/grant_spell/empath/New()
+	..()
+	block = EMPATHBLOCK
 
 /spell/targeted/empath
 	name = "Read Mind"
 	desc = "Read the minds of others for information."
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 
 	range = 7
 	max_targets = 1
@@ -609,7 +602,7 @@
 		to_chat(user, "<span class='warning'>You can't see into [M.name]'s mind at all!</span>")
 		return 1
 
-	if (M.stat == 2)
+	if (M.isDead())
 		to_chat(user, "<span class='warning'>[M.name] is dead and cannot have their mind read.</span>")
 		return 1
 	if (M.health < 0)
@@ -622,7 +615,7 @@
 	var/list/randomthoughts = list("what to have for lunch","the future","the past","money",
 	"their hair","what to do next","their job","space","amusing things","sad things",
 	"annoying things","happy things","something incoherent","something they did wrong",
-	"getting those valids","burning catpeople","something spooky","somethng lewd","odd things",
+	"getting those valids","burning catpeople","something spooky","something lewd","odd things",
 	"dumb things","lighting things on fire","lighting themselves on fire","blowing things up",
 	"blowing themeselves up","shooting everyone","shooting themselves")
 	var/thoughts = "thinking about [pick(randomthoughts)]"
@@ -691,9 +684,9 @@
 
 	mutation = M_SUPER_FART
 
-	New()
-		..()
-		block = SUPERFARTBLOCK
+/datum/dna/gene/basic/superfart/New()
+	..()
+	block = SUPERFARTBLOCK
 
 // WAS: /datum/bioEffect/strong
 /datum/dna/gene/basic/strong
@@ -705,6 +698,6 @@
 
 	mutation = M_STRONG
 
-	New()
-		..()
-		block=STRONGBLOCK
+/datum/dna/gene/basic/strong/New()
+	..()
+	block = STRONGBLOCK

@@ -3,7 +3,7 @@
 	holder_type = /mob/living/silicon/robot/mommi
 	wire_count = 3 // No lawsync, nor AI control.
 
-/datum/wires/robot/mommi/UpdateCut(var/index, var/mended)
+/datum/wires/robot/mommi/UpdateCut(var/index, var/mended, var/mob/user)
 
 	var/mob/living/silicon/robot/R = holder
 	switch(index)
@@ -24,7 +24,7 @@
 		if (BORG_WIRE_CAMERA)
 			if(!isnull(R.camera) && !R.scrambledcodes)
 				R.camera.status = mended
-				R.camera.deactivate(usr, 0) // Will kick anyone who is watching the Cyborg's camera.
+				R.camera.deactivate(user, 0) // Will kick anyone who is watching the Cyborg's camera.
 
 		//if(BORG_WIRE_LAWCHECK)	//Forces a law update if the borg is set to receive them. Since an update would happen when the borg checks its laws anyway, not much use, but eh
 		//	if (R.lawupdate)

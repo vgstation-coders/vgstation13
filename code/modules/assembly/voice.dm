@@ -17,7 +17,7 @@
 
 	accessible_values = list(\
 		VALUE_RECORDING = "listening;"+VT_NUMBER,\
-		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_NUMBER,\
+		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_TEXT,\
 		VALUE_MUTED = "muted;"+VT_NUMBER)
 
 /obj/item/device/assembly/voice/Hear(var/datum/speech/speech, var/rendered_speech="")
@@ -27,12 +27,20 @@
 		recorded = speech.message
 		listening = 0
 		say("Activation message is '[html_encode(speech.message)]'.")
+		var/mob/living/user = speech.speaker
+		investigation_log(I_WIRES, "activation message set to \"[recorded]\" by [key_name(user)]")
 	else
 		if(!recorded || findtext(speech.message, recorded))
+			var/mob/living/L = speech.speaker
+			if(istype(L) && L.stuttering)
+				return
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
-				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
+				playsound(src, 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else
 				pulse(0)
+				var/mob/living/speaker = speech.speaker
+				investigation_log(I_WIRES, "activated by the keyword \"[recorded]\", said by [key_name(speaker)]")
+
 
 /obj/item/device/assembly/voice/attackby(obj/item/W, mob/user)
 	if(ismultitool(W))

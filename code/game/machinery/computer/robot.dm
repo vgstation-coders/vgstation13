@@ -80,6 +80,7 @@
 						dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
 
 				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
+					<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
 					<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
 					<BR>"}
 			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
@@ -161,24 +162,59 @@
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
 				if(R)
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							return
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							return
+					if(R.scrambledcodes)
+						return
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-							if(R.mind && R.mind.special_role && R.emagged)
-								to_chat(R, "Extreme danger.  Termination codes detected.  Scrambling security codes and automatic AI unlink triggered.")
-								R.ResetSecurityCodes()
-
-							else
+							if(R.self_destruct())
 								message_admins("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
 								log_game("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
-								R.self_destruct()
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
+		else if (href_list["lockbot"])
+			if(src.allowed(usr))
+				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
+				if(R && istype(R))
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							return
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							return
+					if(R.scrambledcodes)
+						return
+					var/choice = input("Are you certain you wish to [R.modulelock ? "module-unlock" : "module-lock"] [R.name]?") in list("Confirm", "Abort")
+					if(choice == "Confirm")
+						if(R && istype(R))
+							message_admins("<span class='notice'>[key_name_admin(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!</span>")
+							log_game("[key_name(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!")
+							R.toggle_modulelock()
+							if (R.modulelock)
+								to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely locked!</span>")
+							else
+								to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely unlocked!</span>")
 
+			else
+				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["stopbot"])
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
 				if(R && istype(R)) // Extra sancheck because of input var references
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							return
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							return
+					if(R.scrambledcodes)
+						return
 					var/choice = input("Are you certain you wish to [R.canmove ? "lock down" : "release"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
@@ -200,7 +236,14 @@
 		else if (href_list["magbot"])
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-
+				if(istype(usr, /mob/living/silicon/ai))
+					if (R.connected_ai != usr)
+						return
+				if(istype(usr, /mob/living/silicon/robot))
+					if (R != usr)
+						return
+				if(R.scrambledcodes)
+					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
 				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
@@ -236,4 +279,5 @@
 /obj/machinery/computer/robotics/emag(mob/user)
 	..()
 	req_access = list()
-	to_chat(user, "You disable the console's access requirement.")
+	if(user)
+		to_chat(user, "You disable the console's access requirement.")

@@ -11,11 +11,6 @@ var/list/event_last_fired = list()
 		message_admins("Too early to trigger random event, aborting.")
 		return
 
-	var/living = 0
-	for(var/mob/living/M in player_list)
-		if(M.stat == CONSCIOUS)
-			living++
-
 	if(universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting random event spawn.")
 		return
@@ -50,6 +45,7 @@ var/list/event_last_fired = list()
 	possibleEvents[/datum/event/communications_blackout] = 25
 	possibleEvents[/datum/event/thing_storm/meaty_gore] = 25
 	possibleEvents[/datum/event/unlink_from_centcomm] = 10
+	possibleEvents[/datum/event/centcomm_order] = 25
 
 	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
 		possibleEvents[/datum/event/ionstorm] = 30
@@ -64,10 +60,7 @@ var/list/event_last_fired = list()
 		possibleEvents[/datum/event/meteor_wave] = 15
 		possibleEvents[/datum/event/meteor_shower] = 40
 		possibleEvents[/datum/event/immovable_rod] = 15
-		possibleEvents[/datum/event/thing_storm/blob_shower] = 15//Blob Cluster
-
-	if((active_with_role["Engineer"] > 1) && (active_with_role["Security"] > 1) && (living >= BLOB_CORE_PROPORTION))
-		possibleEvents[/datum/event/thing_storm/blob_storm] = 10//Blob Conglomerate
+		possibleEvents[/datum/event/thing_storm/blob_shower] = 15//Blob Cluster - shower has no overminds, storm does
 
 	possibleEvents[/datum/event/radiation_storm] = 50
 	if(active_with_role["Medical"] > 1)

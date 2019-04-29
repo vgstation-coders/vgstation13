@@ -3,6 +3,11 @@
 	desc = "Looks stable, but still, best to test it with the clown first."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "portal0"
+	var/mask = "portal_mask"
+	var/open_sound = 'sound/effects/portal_open.ogg'
+	var/close_sound = 'sound/effects/portal_close.ogg'
+	var/enter_sound = 'sound/effects/portal_enter.ogg'
+	var/exit_sound = 'sound/effects/portal_exit.ogg'
 	density = 0
 	var/obj/target = null
 	var/obj/item/weapon/creator = null
@@ -10,12 +15,15 @@
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/undergoing_deletion = 0
+	var/atmos_connected = FALSE
+	var/connection/atmos_connection
 
 	var/list/exit_beams = list()
 
-/obj/effect/portal/attack_hand(var/mob/user)
-	spawn()
-		src.teleport(user)
+/obj/effect/portal/attack_hand(var/mob/user, params, proximity)
+	if(proximity)
+		spawn()
+			src.teleport(user)
 
 /obj/effect/portal/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if(O == creator)
@@ -46,7 +54,7 @@
 
 /obj/effect/portal/New(turf/loc,var/lifespan=300)
 	..()
-	playsound(loc,'sound/effects/portal_open.ogg',60,1)
+	playsound(loc,open_sound,60,1)
 
 	var/area/A = get_area(src)
 	if(A.flags & NO_PORTALS)
@@ -55,14 +63,44 @@
 		qdel(src)
 		return
 
+	spawn(5)
+		connect_atmospheres()
+
+	make_lifespan(lifespan)
+
+/obj/effect/portal/proc/make_lifespan(var/lifespan)
 	spawn(lifespan)
 		qdel(src)
+
+/obj/effect/portal/proc/connect_atmospheres()
+	if(!atmos_connected)
+		if(target)
+			if(istype(target, /obj/effect/portal))
+				var/obj/effect/portal/P = target
+				if(get_turf(src) && get_turf(P))
+					var/valid_connection = FALSE
+					if(SSair.has_valid_zone(get_turf(src)))
+						atmos_connection = new (get_turf(src), get_turf(P))
+						valid_connection = TRUE
+					if(SSair.has_valid_zone(get_turf(P)))
+						P.atmos_connection = new (get_turf(P), get_turf(src))
+						valid_connection = TRUE
+					if(valid_connection)
+						P.atmos_connected = TRUE
+						atmos_connected = TRUE
+
+/obj/effect/portal/proc/disconnect_atmospheres()
+	atmos_connected = FALSE
+	if(atmos_connection)
+		atmos_connection.erase()
+		atmos_connection = null
 
 /obj/effect/portal/Destroy()
 	if(undergoing_deletion)
 		return
 	undergoing_deletion = 1
-	playsound(loc,'sound/effects/portal_close.ogg',60,1)
+	playsound(loc,close_sound,60,1)
+	disconnect_atmospheres()
 
 	purge_beams()
 	owner = null
@@ -83,9 +121,7 @@
 			else if(src == P.red_portal)
 				P.red_portal = null
 				P.sync_portals()
-	var/datum/effect/effect/system/spark_spread/aeffect = new
-	aeffect.set_up(5, 1, loc)
-	aeffect.start()
+	spark(loc, 5)
 	..()
 
 /obj/effect/portal/cultify()
@@ -103,18 +139,18 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/blend_icon(var/obj/effect/portal/P)
 	var/turf/T = P.loc
 
-	if(!("icon[initial(T.icon)]_iconstate[T.icon_state]" in portal_cache))//If the icon has not been added yet
-		var/icon/I1 = icon(icon,"portal_mask")//Generate it.
+	if(!("icon[initial(T.icon)]_iconstate[T.icon_state]_[type]" in portal_cache))//If the icon has not been added yet
+		var/icon/I1 = icon(icon,mask)//Generate it.
 		var/icon/I2 = icon(initial(T.icon),T.icon_state)
 		I1.Blend(I2,ICON_MULTIPLY)
-		portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]"] = I1 //And cache it!
+		portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]_[type]"] = I1 //And cache it!
 
-	overlays += portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]"]
+	overlays += portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]_[type]"]
 
 /obj/effect/portal/proc/teleport(atom/movable/M as mob|obj)
 	if(istype(M, /obj/effect)) //sparks don't teleport
 		return
-	if (M.anchored&&istype(M, /obj/mecha))
+	if (M.anchored && !istype(M, /obj/mecha) && !istype(M, /obj/item/projectile))
 		return
 	if (!target)
 		visible_message("<span class='warning'>The portal fails to find a destination and dissipates into thin air.</span>")
@@ -126,7 +162,7 @@ var/list/portal_cache = list()
 			visible_message("<span class='sinister'>A dark form vaguely ressembling a hand reaches through the portal and tears it apart before anything can go through.</span>")
 			qdel(src)
 		else
-			do_teleport(M, target, 0, 1, 1, 1, 'sound/effects/portal_enter.ogg', 'sound/effects/portal_exit.ogg')
+			do_teleport(M, target, 0, 1, 1, 1, enter_sound, exit_sound)
 			if(ismob(M))
 				var/mob/target = M
 				if(target.mind && owner)
@@ -173,3 +209,23 @@ var/list/portal_cache = list()
 		beam.steps = BE.steps+1
 		beam.emit(spawn_by=spawners)
 		PE.exit_beams += beam
+
+/obj/effect/portal/tear
+	name = "tear in space"
+	desc = "This probably isn't supposed to be here."
+	icon_state = "tear"
+	mask = "tear_mask"
+	open_sound = 'sound/weapons/bloodyslice.ogg'
+	close_sound = 'sound/weapons/electriczap.ogg'
+	enter_sound = 'sound/effects/fall2.ogg'
+	exit_sound = 'sound/effects/fall2.ogg'
+
+
+/obj/effect/portal/permanent
+	name = "stabilized portal"
+	desc = "The event horizon is held through magnetic forces, and potentially duct tape."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "tele1"
+
+/obj/effect/portal/permanent/make_lifespan()
+	return

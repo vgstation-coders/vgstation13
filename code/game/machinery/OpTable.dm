@@ -38,7 +38,7 @@
 				return
 		if(3.0)
 			if (prob(25))
-				src.density = 0
+				setDensity(FALSE)
 		else
 	return
 
@@ -53,7 +53,7 @@
 	if (M_HULK in usr.mutations)
 		to_chat(usr, text("<span class='notice'>You destroy the table.</span>"))
 		visible_message("<span class='warning'>[usr] destroys the operating table!</span>")
-		src.density = 0
+		setDensity(FALSE)
 		qdel(src)
 
 /obj/machinery/optable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -66,35 +66,32 @@
 		return 0
 
 
-/obj/machinery/optable/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-
-	if ((( istype(O, /obj/item/weapon) ) || user.get_active_hand() == O))
-
-		if(user.drop_item(O))
-			if (O.loc != src.loc)
-				step(O, get_dir(O, src))
+/obj/machinery/optable/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(!ismob(O)) //humans only
 		return
-	else
-		if(!ismob(O)) //humans only
-			return
-		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
-			return
-		if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
-			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src)) // is the mob anchored, too far away from you, or are you too far away from the source
-			return
-		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
-			return
-		if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
-			return
-		if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
-			return
-		var/mob/living/L = O
-		if(!istype(L) || L.locked_to || L == user)
-			return
-
-		take_victim(L, user)
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if(!Adjacent(user) || !user.Adjacent(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
+		return
+	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
+		return
+	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+		return
+	var/mob/living/carbon/human/L = O
+	if(!istype(L))
+		return
+
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
+	take_victim(L, user)
+	return
 
 /obj/machinery/optable/proc/check_victim()
 	if (victim)
@@ -139,21 +136,11 @@
 
 	add_fingerprint(user)
 
-/obj/machinery/optable/verb/climb_on()
-	set name = "Climb On Table"
-	set category = "Object"
-	set src in oview(1)
-
-	if(usr.isUnconscious() || !ishuman(usr) || usr.locked_to || usr.restrained())
-		return
-
-	take_victim(usr, usr)
-
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 40))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			switch(rating)
 				if(1)
 					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
@@ -172,4 +159,31 @@
 	if(isrobot(user))
 		return
 	//user.drop_item(W, src.loc) why?
-	return
+
+/obj/machinery/optable/npc_tamper_act(mob/living/user)
+	//Messages are overridden for this proc
+	. = NPC_TAMPER_ACT_NOMSG
+
+	if(!victim)
+		return
+
+	var/list/pickable_items = list()
+
+	for(var/obj/item/I in adjacent_atoms(user))
+		pickable_items.Add(I)
+
+	if(!pickable_items.len)
+		user.visible_message("<span class='notice'>\The [user] tries to think of a way to screw \the [victim] up without any tools nearby, but fails miserably.</span>")
+		return
+
+	var/obj/item/tool = pick(pickable_items)
+
+	user.visible_message(pick(
+	"<span class='danger'>\The [user] grabs \a nearby [tool] and contemplates using it on \the [victim]!</span>",
+	"<span class='danger'>\The [user]'s eyes light up as \he tries to use \the [tool] to operate on \the [victim]</span>",
+	"<span class='danger'>\The [user] rubs its hands devilishly and attempts to operate on \the [victim] with \the [tool].</span>"))
+	if(isgremlin(user))
+		var/mob/living/simple_animal/hostile/gremlin/G = user
+		G.stand_still(4)
+
+	global.do_surgery(victim, user, tool)

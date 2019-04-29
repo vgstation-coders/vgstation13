@@ -256,7 +256,7 @@
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	if(istype(AM,/obj/effect/beam))
-		src.Bump(AM)
+		src.to_bump(AM)
 		return
 	spawn()
 		if (src.engaged)
@@ -268,9 +268,13 @@
 	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(l.x - 2, l.y, l.z))
 	if (!com)
 		return
-	if (!com.locked)
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+	if (!com.locked || com.locked.gcDestroyed)
+		com.locked = null
+		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+		return
+	var/list/contents_of_M = get_contents_in_object(M)
+	if(locate(com.locked) in contents_of_M)
+		visible_message("<span class = 'warning'>Infinite loop prevention: Attempted to teleport locked object to locked object.</span>")
 		return
 	if (istype(M, /atom/movable))
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
@@ -282,10 +286,7 @@
 			com.one_time_use = 0
 			com.locked = null
 	else
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
-
+		spark(src, 5)
 
 
 /obj/machinery/teleport/station
@@ -410,11 +411,11 @@ obj/machinery/teleport/station/New()
 	return
 
 
-/obj/effect/laser/Bump()
+/obj/effect/laser/to_bump()
 	src.range--
 	return
 
-/obj/effect/laser/Move()
+/obj/effect/laser/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	src.range--
 	return
 

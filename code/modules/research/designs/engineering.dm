@@ -5,7 +5,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 1)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 50)
-	build_path = /obj/item/weapon/cell
+	build_path = /obj/item/weapon/cell/empty
 	category = "Engineering"
 
 /datum/design/high_cell
@@ -15,7 +15,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 60)
-	build_path = /obj/item/weapon/cell/high
+	build_path = /obj/item/weapon/cell/high/empty
 	category = "Engineering"
 
 /datum/design/super_cell
@@ -26,7 +26,7 @@
 	reliability_base = 75
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 70)
-	build_path = /obj/item/weapon/cell/super
+	build_path = /obj/item/weapon/cell/super/empty
 	category = "Engineering"
 
 /datum/design/hyper_cell
@@ -37,7 +37,40 @@
 	reliability_base = 70
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 150, MAT_SILVER = 150, MAT_GLASS = 70)
-	build_path = /obj/item/weapon/cell/hyper
+	build_path = /obj/item/weapon/cell/hyper/empty
+	category = "Engineering"
+
+/datum/design/ultra_cell
+	name = "Ultra-Capacity Power Cell"
+	desc = "A power cell that holds 50000 units of energy"
+	id = "ultra_cell"
+	req_tech = list(Tc_POWERSTORAGE = 8, Tc_MATERIALS = 6)
+	reliability_base = 70
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100)
+	build_path = /obj/item/weapon/cell/ultra/empty
+	category = "Engineering"
+
+/datum/design/rad_cell
+	name = "Radio-isotope thermoelectric cell"
+	desc = "A power cell that does not hold much charge, but recharges over time."
+	id = "rad_cell"
+	req_tech = list(Tc_POWERSTORAGE = 7, Tc_MATERIALS = 5)
+	reliability_base = 70
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_URANIUM = 150)
+	build_path = /obj/item/weapon/cell/rad/empty
+	category = "Engineering"
+
+/datum/design/phazon_cell
+	name = "Phazon decay thermoelectic cell"
+	desc = "Using the power of weird science, we've made a cell that uses the rarest material known."
+	id = "phazon_cell"
+	req_tech = list(Tc_POWERSTORAGE = 9, Tc_MATERIALS = 9)
+	reliability_base = 70
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_PHAZON = 200)
+	build_path = /obj/item/weapon/cell/rad/large/empty
 	category = "Engineering"
 
 /datum/design/light_replacer
@@ -99,8 +132,18 @@
 	id = "rped"
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 60000, MAT_GLASS = 30000)
+	materials = list(MAT_IRON = 7000, MAT_GLASS = 3500, MAT_GOLD = 600)
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
+	category = "Engineering"
+
+/datum/design/DBRPED
+	name = "Prototype Bluespace Rapid Part Exchange Device"
+	desc = "An upgrade over the RPED that holds twice as many components and doesn't need to open wire panels to function."
+	id = "dbrped"
+	req_tech = list(Tc_ENGINEERING = 5, Tc_MATERIALS = 6, Tc_PROGRAMMING = 3, Tc_BLUESPACE = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 9000, MAT_GLASS = 5500, MAT_GOLD = 1200, MAT_DIAMOND = 3000)
+	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
 	category = "Engineering"
 
 /datum/design/mat_synth
@@ -159,7 +202,7 @@
 	id = "pray_scanner"
 	req_tech = list(Tc_ENGINEERING = 3, Tc_MAGNETS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	build_path = /obj/item/device/t_scanner/advanced
 	category = "Engineering"
 

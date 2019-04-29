@@ -1,4 +1,4 @@
-/obj/item/organ
+/obj/item/organ/internal
 	name = "organ"
 	desc = "It looks like it probably just plopped out."
 	icon = 'icons/obj/surgery.dmi'
@@ -16,15 +16,16 @@
 	var/prosthetic_icon                       // Icon for robotic organ.
 	var/is_printed = FALSE                    // Used for heist.
 	var/had_mind = FALSE                      // Owner had a mind at some point. (heist)
+	var/stabilized = FALSE
 
-/obj/item/organ/attack_self(mob/user as mob)
+/obj/item/organ/internal/attack_self(mob/user as mob)
 
 	// Convert it to an edible form, yum yum.
 	if(!robotic && user.a_intent == I_HELP && user.zone_sel.selecting == "mouth")
 		bitten(user)
 		return
 
-/obj/item/organ/New()
+/obj/item/organ/internal/New()
 	..()
 	create_reagents(5)
 	if(!robotic)
@@ -32,24 +33,24 @@
 	spawn(1)
 		update()
 
-/obj/item/organ/Del()
+/obj/item/organ/internal/Del()
 	if(!robotic)
 		processing_objects -= src
 	..()
 
-/obj/item/organ/examine(var/mob/user, var/size = "")
+/obj/item/organ/internal/examine(var/mob/user, var/size = "")
 	..()
 	if(is_printed)
 		user.simple_message("<span class='warning'>This organ has a barcode identifying it as printed from a bioprinter.</span>","<span class='warning'>It's got spaghetti sauce on it. Ew.</span>")
 	else
 		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
-		
+
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
-		user.simple_message("<span class='info'>The organ seems to be full of life!</span>","<span class='info'>It's making happy little cooing noises at you. Aw.</span>")
+		user.simple_message("<span class='info'>The organ seems [health ? "to be full of life!" : "like it was full of life once."]</span>","<span class='info'>It's making [health ? "happy" : "spooky"] little cooing noises at you. Aw.</span>")
 
-/obj/item/organ/process()
+/obj/item/organ/internal/process()
 
 	if(robotic)
 		processing_objects -= src
@@ -58,6 +59,17 @@
 	// Don't process if we're in a freezer, an MMI or a stasis bag. //TODO: ambient temperature?
 	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
 		return
+
+
+	if(istype(loc,/obj/item/weapon/reagent_containers/glass/jar))
+		var/obj/item/weapon/reagent_containers/glass/jar/J = loc
+		if(J.safe_holder())
+			return
+
+	//We're stabilized somehow.
+	if(stabilized)
+		return
+
 
 	if(fresh && prob(40))
 		fresh--
@@ -68,16 +80,25 @@
 	if(health <= 0)
 		die()
 
-/obj/item/organ/proc/die()
+/obj/item/organ/internal/proc/die()
 	name = "dead [initial(name)]"
 	if(dead_icon)
 		icon_state = dead_icon
+	var/icon/original = icon(icon, icon_state)
+	original.GrayScale()
+	icon = original
 	health = 0
 	processing_objects -= src
-	//TODO: Grey out the icon state.
 	//TODO: Inject an organ with peridaxon to make it alive again.
 
-/obj/item/organ/proc/roboticize()
+/obj/item/organ/internal/proc/revive()
+	name = initial(name)
+	icon_state = initial(icon_state)
+	icon = initial(icon)
+	health = 1
+	processing_objects += src
+
+/obj/item/organ/internal/proc/roboticize()
 
 
 	robotic = (organ_data && organ_data.robotic) ? organ_data.robotic : 1
@@ -90,7 +111,7 @@
 	else
 		//TODO: convert to greyscale.
 
-/obj/item/organ/proc/update()
+/obj/item/organ/internal/proc/update()
 
 
 	if(!organ_tag || !organ_type)
@@ -106,7 +127,7 @@
 		roboticize()
 
 // Brain is defined in brain_item.dm.
-/obj/item/organ/heart
+/obj/item/organ/internal/heart
 	name = "heart"
 	icon_state = "heart-on"
 	prosthetic_name = "circulatory pump"
@@ -116,7 +137,35 @@
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
 
-/obj/item/organ/lungs
+/obj/item/organ/internal/heart/cell
+	name = "biocharger"
+	icon_state = "heart-cell"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/heart/cell
+	robotic=2
+
+/obj/item/organ/internal/heart/cell/get_cell()
+	if(organ_data)
+		var/datum/organ/internal/heart/cell/C = organ_data
+		return C.cell
+
+/obj/item/organ/internal/heart/cell/attack_self(mob/user)
+	if(get_cell())
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You remove \the [C.cell] from \the [src].</span>")
+		user.put_in_hands(C.cell)
+		C.cell = null
+
+/obj/item/organ/internal/heart/cell/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/cell) && !get_cell() && organ_data && user.drop_item(I, src))
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
+		C.cell = I
+		return
+	..()
+
+/obj/item/organ/internal/lungs
 	name = "human lungs"
 	icon_state = "lungs"
 	prosthetic_name = "gas exchange system"
@@ -124,19 +173,19 @@
 	organ_tag = "lungs"
 	organ_type = /datum/organ/internal/lungs
 
-/obj/item/organ/lungs/vox
+/obj/item/organ/internal/lungs/vox
 	name = "vox lungs"
 	icon_state = "vox-lungs"
 	prosthetic_name = "vox gas exchange system"
 	organ_type = /datum/organ/internal/lungs/vox
 
-/obj/item/organ/lungs/plasmaman
+/obj/item/organ/internal/lungs/plasmaman
 	name = "weird pink lungs"
 	icon_state = "plasmaman-lungs"
 	prosthetic_name = "plasmaman gas exchange system"
 	organ_type = /datum/organ/internal/lungs/plasmaman
 
-/obj/item/organ/lungs/filter
+/obj/item/organ/internal/lungs/filter
 	name = "advanced lungs"
 	icon_state = "filter-lungs"
 	prosthetic_name = null
@@ -144,7 +193,7 @@
 	organ_type = /datum/organ/internal/lungs/filter
 	robotic=2
 
-/obj/item/organ/kidneys
+/obj/item/organ/internal/kidneys
 	name = "kidneys"
 	icon_state = "kidneys"
 	prosthetic_name = "prosthetic kidneys"
@@ -152,7 +201,15 @@
 	organ_tag = "kidneys"
 	organ_type = /datum/organ/internal/kidney
 
-/obj/item/organ/eyes
+/obj/item/organ/internal/kidneys/filter
+	name = "toxin filters"
+	icon_state = "advanced-kidneys"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/kidney/filter
+	robotic=2
+
+/obj/item/organ/internal/eyes
 	name = "eyeballs"
 	icon_state = "eyes"
 	prosthetic_name = "visual prosthesis"
@@ -162,37 +219,37 @@
 
 	var/eye_colour
 
-/obj/item/organ/eyes/tajaran
+/obj/item/organ/internal/eyes/tajaran
 	name = "tajaran eyeballs"
 	icon_state = "eyes-tajaran"
 	prosthetic_name = "tajaran visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/tajaran
 
-/obj/item/organ/eyes/muton
+/obj/item/organ/internal/eyes/muton
 	name = "muton eyeballs"
 	icon_state = "eyes-muton"
 	prosthetic_name = "muton visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/muton
 
-/obj/item/organ/eyes/grey
+/obj/item/organ/internal/eyes/grey
 	name = "grey eyeballs"
 	icon_state = "eyes-grey"
 	prosthetic_name = "grey visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grey
 
-/obj/item/organ/eyes/vox
+/obj/item/organ/internal/eyes/vox
 	name = "vox eyeballs"
 	icon_state = "eyes-vox"
 	prosthetic_name = "vox visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/vox
 
-/obj/item/organ/eyes/grue
+/obj/item/organ/internal/eyes/grue
 	name = "grue eyeballs"
 //	icon_state = "eyes"
 	prosthetic_name = "grue visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grue
 
-/obj/item/organ/eyes/adv_1
+/obj/item/organ/internal/eyes/adv_1
 	name = "advanced prosthesis eyeballs"
 	robotic = 2
 	prosthetic_name = null
@@ -200,39 +257,39 @@
 	icon_state = "eyes-adv_1"
 	organ_type = /datum/organ/internal/eyes/adv_1
 
-/obj/item/organ/liver
+/obj/item/organ/internal/liver
 	name = "liver"
 	icon_state = "liver"
-	prosthetic_name = "toxin filter"
+	prosthetic_name = "artificial metabolizer"
 	prosthetic_icon = "liver-prosthetic"
 	organ_tag = "liver"
 	organ_type = /datum/organ/internal/liver
 
-/obj/item/organ/appendix
+/obj/item/organ/internal/appendix
 	name = "appendix"
 	icon_state = "appendix"
 	organ_tag = "appendix"
 
 //These are here so they can be printed out via the fabricator.
-/obj/item/organ/heart/prosthetic
+/obj/item/organ/internal/heart/prosthetic
 	robotic = 2
 
-/obj/item/organ/lungs/prosthetic
+/obj/item/organ/internal/lungs/prosthetic
 	robotic = 2
 
-/obj/item/organ/kidneys/prosthetic
+/obj/item/organ/internal/kidneys/prosthetic
 	robotic = 2
 
-/obj/item/organ/eyes/prosthetic
+/obj/item/organ/internal/eyes/prosthetic
 	robotic = 2
 
-/obj/item/organ/liver/prosthetic
+/obj/item/organ/internal/liver/prosthetic
 	robotic = 2
 
-/obj/item/organ/appendix
+/obj/item/organ/internal/appendix
 	name = "appendix"
 
-/obj/item/organ/proc/removed(var/mob/living/target,var/mob/living/user)
+/obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)
 		return
 
@@ -244,7 +301,7 @@
 
 	had_mind=!isnull(target.mind)
 
-/obj/item/organ/appendix/removed(var/mob/living/target,var/mob/living/user)
+/obj/item/organ/internal/appendix/removed(var/mob/living/target,var/mob/living/user)
 
 	..()
 
@@ -258,7 +315,7 @@
 		icon_state = "appendixinflamed"
 		name = "inflamed appendix"
 
-/obj/item/organ/eyes/removed(var/mob/living/target,var/mob/living/user)
+/obj/item/organ/internal/eyes/removed(var/mob/living/target,var/mob/living/user)
 
 	if(!eye_colour)
 		eye_colour = list(0,0,0)
@@ -267,31 +324,31 @@
 	var/mob/living/carbon/human/H = target
 	if(istype(H))
 		eye_colour = list(
-			H.r_eyes ? H.r_eyes : 0,
-			H.g_eyes ? H.g_eyes : 0,
-			H.b_eyes ? H.b_eyes : 0
+			H.my_appearance.r_eyes ? H.my_appearance.r_eyes : 0,
+			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
+			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
 
 		// Leave bloody red pits behind!
-		H.r_eyes = 128
-		H.g_eyes = 0
-		H.b_eyes = 0
+		H.my_appearance.r_eyes = 128
+		H.my_appearance.g_eyes = 0
+		H.my_appearance.b_eyes = 0
 		H.update_body()
 
-/obj/item/organ/proc/replaced(var/mob/living/target)
+/obj/item/organ/internal/proc/replaced(var/mob/living/target)
 	return
 
-/obj/item/organ/eyes/replaced(var/mob/living/target)
+/obj/item/organ/internal/eyes/replaced(var/mob/living/target)
 
 	// Apply our eye colour to the target.
 	var/mob/living/carbon/human/H = target
 	if(istype(H) && eye_colour)
-		H.r_eyes = eye_colour[1]
-		H.g_eyes = eye_colour[2]
-		H.b_eyes = eye_colour[3]
+		H.my_appearance.r_eyes = eye_colour[1]
+		H.my_appearance.g_eyes = eye_colour[2]
+		H.my_appearance.b_eyes = eye_colour[3]
 		H.update_body()
 
-/obj/item/organ/proc/bitten(mob/user)
+/obj/item/organ/internal/proc/bitten(mob/user)
 
 
 	if(robotic)

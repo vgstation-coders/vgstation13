@@ -20,6 +20,7 @@
 	var/list/channels = list() //see communications.dm for full list. First channes is a "default" for :h
 	var/subspace_transmission = 0
 	var/syndie = 0//Holder to see if it's a syndicate encrpyed radio
+	var/raider = 0//same as above but for raiders
 	var/maxf = 1499
 //			"Example" = FREQ_LISTENING|FREQ_BROADCASTING
 	flags = FPRINT | HEAR
@@ -77,6 +78,8 @@
 /obj/item/device/radio/AltClick()
 	if(!usr.incapacitated() && is_holder_of(usr, src))
 		attack_self(usr)
+	else
+		return ..()
 
 /obj/item/device/radio/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -99,7 +102,7 @@
 				Frequency:
 				<A href='byond://?src=\ref[src];freq=-10'>-</A>
 				<A href='byond://?src=\ref[src];freq=-2'>-</A>
-				[format_frequency(frequency)]
+				<A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a>
 				<A href='byond://?src=\ref[src];freq=2'>+</A>
 				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 				"}
@@ -123,12 +126,17 @@
 			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
+/obj/item/device/radio/proc/check_traitor_uplink(frequency)
+	if(hidden_uplink)
+		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
+			usr << browse(null, "window=radio")
+			return 1
+
 /obj/item/device/radio/Topic(href, href_list)
-	//..()
-	if (usr.stat || !on)
+	if (!isAdminGhost(usr) && (usr.stat || !on))
 		return
 
-	if (!(issilicon(usr) || (usr.contents.Find(src) || ( in_range(src, usr) && istype(loc, /turf) ))))
+	if(!in_range(src,usr) && !isAdminGhost(usr) && !issilicon(usr)) //Not adjacent/have telekinesis/a silicon/an aghost? Close it.
 		usr << browse(null, "window=radio")
 		return
 	usr.set_machine(src)
@@ -163,15 +171,21 @@
 
 		return
 
-	else if (href_list["freq"])
-		var/new_frequency = (frequency + text2num(href_list["freq"]))
-		if (!freerange || (frequency < 1200 || frequency > 1600))
-			new_frequency = sanitize_frequency(new_frequency, maxf)
+	else if("set_freq" in href_list)
+		var/new_frequency
+		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
+		new_frequency = sanitize_frequency(new_frequency, maxf)
 		set_frequency(new_frequency)
-		if(hidden_uplink)
-			if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
-				usr << browse(null, "window=radio")
-				return
+		if (check_traitor_uplink(frequency))
+			return
+
+	else if (href_list["freq"])
+		var/new_frequency
+		new_frequency = (frequency + text2num(href_list["freq"]))
+		new_frequency = sanitize_frequency(new_frequency, maxf)
+		set_frequency(new_frequency)
+		if (check_traitor_uplink(frequency))
+			return
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
@@ -304,7 +318,7 @@
 		speech.job = "Personal AI"
 
 	// --- Cold, emotionless machines. ---
-	else if(isobj(speech.speaker))
+	else if(isobj(speech.speaker) || istype(speech.speaker, /mob/living/simple_animal/spiderbot))
 		speech.job = "Machine"
 
 	// --- Unidentifiable mob ---
@@ -477,6 +491,9 @@
 	if(freq == SYND_FREQ)
 		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
+	if(freq == RAID_FREQ)
+		if(!(src.raider))//Checks to see if it's allowed on that frequency, based on the encryption keys, bird edition
+			return -1
 	if (!on)
 		return -1
 	if (!freq) //received on main frequency
@@ -512,7 +529,7 @@
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
-	if (!( isscrewdriver(W) ))
+	if (!( W.is_screwdriver(user) ))
 		return
 	b_stat = !( b_stat )
 	if (b_stat)
@@ -520,6 +537,7 @@
 	else
 		user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
 	updateDialog()
+	update_icon()
 	add_fingerprint(user)
 
 /obj/item/device/radio/emp_act(severity)

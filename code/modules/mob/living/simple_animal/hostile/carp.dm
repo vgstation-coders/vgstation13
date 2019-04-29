@@ -86,7 +86,7 @@
 /mob/living/simple_animal/hostile/carp/FindTarget()
 	. = ..()
 	if(.)
-		emote("nashes at [.]")
+		emote("me",, "gnashes at [.]!")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
 	if(!target)
@@ -101,6 +101,7 @@
 	if(istype(L))
 		if(prob(15))
 			L.Knockdown(3)
+			L.Stun(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/carp/baby
@@ -145,7 +146,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
-			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 			user.drop_item(F, force_drop = 1)
 
@@ -194,9 +195,11 @@
 	species_type = /mob/living/simple_animal/hostile/carp/holocarp
 	can_breed = 0
 	pheromones_act = PHEROMONES_NO_EFFECT
+	mob_property_flags = MOB_HOLOGRAPHIC
 	holder_type = null
 
-/mob/living/simple_animal/hostile/carp/holocarp/Die()
+/mob/living/simple_animal/hostile/carp/holocarp/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)
 
 #undef PHEROMONES_NO_EFFECT

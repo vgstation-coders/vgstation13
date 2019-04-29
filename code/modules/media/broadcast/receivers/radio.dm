@@ -99,8 +99,12 @@
 	volume=0.25 // 25% of user's set volume.
 	var/buildstage = 0
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/media/receiver/boombox/wallmount/supports_holomap()
+	return TRUE
+
+/obj/machinery/media/receiver/boombox/wallmount/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/machinery/media/receiver/boombox/wallmount/New(turf/loc,var/ndir=0,var/building=2)
 	..()
@@ -139,7 +143,7 @@
 		if(SYSTEMISDONE)
 			if(iscrowbar(W))
 				to_chat(user, "<span class='notice'>You pry the cover off [src].</span>")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISDONE)
 					on = 0
 					buildstage = SYSTEMISKINDADONE
@@ -148,8 +152,8 @@
 			else
 				return ..()
 		if(SYSTEMISKINDADONE)
-			if(isscrewdriver(W))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			if(W.is_screwdriver(user))
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
 					on = 1
 					buildstage = SYSTEMISDONE
@@ -158,14 +162,14 @@
 					update_on(TRUE)
 				return 1
 			else if(iswirecutter(W))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
 					getFromPool(/obj/item/stack/cable_coil,get_turf(src),5)
 					buildstage = SYSTEMISNOTDONE
 					update_icon()
 
 		if(SYSTEMISNOTDONE)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 5)
 					to_chat(user, "<span class='warning'>You need more cable for this!</span>")
@@ -177,7 +181,7 @@
 				return 1
 			if(iswrench(W))
 				to_chat(user, "<span class='notice'>You remove the securing bolts...</span>")
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISNOTDONE)
 					new /obj/item/mounted/frame/soundsystem(get_turf(src))
 					to_chat(user, "<span class='notice'>The frame pops off.</span>")
@@ -186,7 +190,8 @@
 	return 0
 
 /obj/machinery/media/receiver/boombox/wallmount/proc/relay_area_configuration()
-	for(var/obj/machinery/media/receiver/boombox/wallmount/W in areaMaster)
+	var/area/this_area = get_area(src)
+	for(var/obj/machinery/media/receiver/boombox/wallmount/W in this_area)
 		W.on = src.on
 		W.media_frequency=src.media_frequency
 		W.volume = src.volume

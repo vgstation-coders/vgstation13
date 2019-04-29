@@ -110,8 +110,8 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/clothing/accessory/medal/gold/captain = 1500,
 /obj/item/device/radio/headset/headset_earmuffs = 125,
 /obj/item/device/detective_scanner = 200,
-/obj/item/device/mass_spectrometer/adv = 150,
-/obj/item/device/mass_spectrometer = 100,
+/obj/item/device/reagent_scanner/adv = 150,
+/obj/item/device/reagent_scanner = 100,
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 200,
 /obj/item/weapon/solder = 10,
@@ -188,12 +188,12 @@ var/list/shop_prices = list( //Cost in space credits
 	..()
 
 	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
-	S.initialize()
+	S.setup()
 
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite) //What in the world could go wrong
+var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
@@ -226,7 +226,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	jammed = 2
 	icon_state = "red"
 
-/area/vault/supermarket/shop/proc/initialize()
+/area/vault/supermarket/shop/proc/setup()
 	spawn()
 		/*
 		looping:
@@ -343,6 +343,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/robot/New()
 	..()
@@ -350,9 +351,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	if(icon == 'icons/mob/robots.dmi')
 		overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-[src.icon_state]"))
 
-/mob/living/simple_animal/robot/Die()
-	..()
-
+/mob/living/simple_animal/robot/death(var/gibbed = FALSE)
+	..(TRUE)
 	robogibs(get_turf(src))
 	qdel(src)
 
@@ -380,7 +380,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	desc = "The light inside is out, but it still works."
 
 	icon = 'icons/mob/robots.dmi'
-	icon_state = "Service"
+	icon_state = "servbot_f"
 
 	anchored = 1
 
@@ -450,12 +450,12 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/loaded_cash = 0
 	var/help_cd = 0
 
-/mob/living/simple_animal/robot/robot_cashier/Die()
+/mob/living/simple_animal/robot/robot_cashier/death(var/gibbed = FALSE)
 	var/area/vault/supermarket/shop/A = get_area(src)
 	if(istype(A))
 		A.on_robot_kill()
 
-	return ..()
+	..(gibbed)
 
 /mob/living/simple_animal/robot/robot_cashier/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
@@ -658,6 +658,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	minbodytemp = 0
 
 	faction = "spessmart"
+	mob_property_flags = MOB_ROBOTIC
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
 
@@ -666,13 +667,16 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Die()
+/mob/living/simple_animal/hostile/spessmart_guardian/Life()
+	EscapeConfinement()
 	..()
 
+/mob/living/simple_animal/hostile/spessmart_guardian/death(var/gibbed = FALSE)
+	..(TRUE)
 	robogibs(get_turf(src))
 	qdel(src)
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Move()
+/mob/living/simple_animal/hostile/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(alert_on_movement && !canmove)
 		Retaliate()
 

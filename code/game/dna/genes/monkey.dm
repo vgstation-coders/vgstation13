@@ -1,9 +1,9 @@
 /datum/dna/gene/monkey
-	name="Monkey"
+	name = "Monkey"
 	flags = GENE_UNNATURAL
 
 /datum/dna/gene/monkey/New()
-	block=MONKEYBLOCK
+	block = MONKEYBLOCK
 
 /datum/dna/gene/monkey/can_activate(var/mob/M,var/flags)
 	return istype(M, /mob/living/carbon/human) || istype(M,/mob/living/carbon/monkey)
@@ -27,7 +27,7 @@
 //Monkey to human
 /datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected, var/flags)
 	if(!istype(M,/mob/living/carbon/monkey))
-		testing("Cannot humanize [M], type is [M.type].")
+//		testing("Cannot humanize [M], type is [M.type].")
 		return
 	var/mob/living/carbon/monkey/Mo = M
 	Mo.monkeyizing = 1
@@ -46,7 +46,11 @@
 		animation.master = null
 		qdel(animation)
 
-	var/mob/living/carbon/human/O = new( src )
+	for (var/mob/living/simple_animal/borer/borer in Mo)
+		if (borer.controlling)
+			Mo.do_release_control(0)
+
+	var/mob/living/carbon/human/O = new(src)
 	if(Mo.greaterform)
 		O.set_species(Mo.greaterform)
 	Mo.transferImplantsTo(O)
@@ -58,7 +62,7 @@
 
 	if (M)
 		if (M.dna)
-			O.dna = M.dna.Clone()
+			O.dna = M.dna
 			M.dna = null
 
 		if (M.suiciding)
@@ -74,14 +78,13 @@
 	//	del(T)
 
 	O.forceMove(M.loc)
-
+	Mo.transferBorers(O)
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 
 
 	for(var/obj/item/W in (Mo.contents))
 		Mo.drop_from_inventory(W)
-	Mo.transferBorers(O)
 	if (connected) //inside dna thing
 		var/obj/machinery/dna_scannernew/C = connected
 		O.forceMove(C)
@@ -97,8 +100,8 @@
 			O.real_name = randomname
 			i++
 	O.UpdateAppearance()
-	O.h_style = random_hair_style(O.gender,O.species.name)
-	O.f_style = random_facial_hair_style(O.gender,O.species.name)
+	O.my_appearance.h_style = random_hair_style(O.gender,O.species.name)
+	O.my_appearance.f_style = random_facial_hair_style(O.gender,O.species.name)
 	O.update_hair()
 	O.take_overall_damage(M.getBruteLoss(), M.getFireLoss())
 	O.adjustToxLoss(M.getToxLoss())

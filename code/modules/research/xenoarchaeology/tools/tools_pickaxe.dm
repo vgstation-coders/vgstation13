@@ -3,7 +3,7 @@
 // Excavation pickaxes - sorted in order of delicacy. Players will have to choose the right one for each part of excavation.
 
 /obj/item/weapon/pickaxe/brush
-	name = "brush"
+	name = "1 cm brush"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick_brush"
 	item_state = "syringe_0"
@@ -15,7 +15,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/one_pick
-	name = "1/6 pick"
+	name = "2 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick1"
 	item_state = "syringe_0"
@@ -27,7 +27,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/two_pick
-	name = "1/3 pick"
+	name = "4 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick2"
 	item_state = "syringe_0"
@@ -39,7 +39,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/three_pick
-	name = "1/2 pick"
+	name = "6 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick3"
 	item_state = "syringe_0"
@@ -51,7 +51,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/four_pick
-	name = "2/3 pick"
+	name = "8 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick4"
 	item_state = "syringe_0"
@@ -63,7 +63,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/five_pick
-	name = "5/6 pick"
+	name = "10 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick5"
 	item_state = "syringe_0"
@@ -75,7 +75,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/six_pick
-	name = "1/1 pick"
+	name = "12 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick6"
 	item_state = "syringe_0"

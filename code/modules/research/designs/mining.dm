@@ -50,6 +50,17 @@
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/drill/diamond
 
+/datum/design/auto_ore
+	name = "Automatic Ore Loader"
+	desc = "Used to automatically pick up ore"
+	id = "auto_ore"
+	req_tech = list(Tc_MATERIALS = 6, Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1500, MAT_GLASS = 1000, MAT_SILVER = 200, MAT_GOLD = 200)
+	reliability_base = 79
+	category = "Mining"
+	build_path = /obj/item/weapon/storage/bag/ore/auto
+
 /datum/design/mesons
 	name = "Optical Meson Scanners"
 	desc = "Used for seeing walls, floors, and stuff through anything."
@@ -62,10 +73,20 @@
 
 /datum/design/excavationdrill
 	name = "Excavation Drill"
-	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 30 cms."
+	desc = "Basic archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The tip is adjustable from 1 to 30 cms."
 	id = "excavationdrill"
-	req_tech = list(Tc_MATERIALS = 6, Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3, Tc_BLUESPACE = 4)
+	req_tech = list(Tc_MATERIALS = 2, Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3, Tc_BLUESPACE = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 4000, MAT_GLASS = 1000, MAT_SILVER = 1000, MAT_DIAMOND = 500)
+	materials = list(MAT_IRON = 6000, MAT_GLASS = 1000)
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/excavationdrill
+
+/datum/design/Dexcavationdrill
+	name = "Diamond Excavation Drill"
+	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 100 cms."
+	id = "Dexcavationdrill"
+	req_tech = list(Tc_MATERIALS = 6, Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3, Tc_BLUESPACE = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_SILVER = 1000, MAT_DIAMOND = 750)
+	category = "Mining"
+	build_path = /obj/item/weapon/pickaxe/excavationdrill/adv

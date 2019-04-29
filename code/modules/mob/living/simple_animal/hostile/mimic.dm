@@ -46,8 +46,8 @@
 	.=..()
 	apply_disguise()
 
-/mob/living/simple_animal/hostile/mimic/Die()
-	..()
+/mob/living/simple_animal/hostile/mimic/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'><b>[src]</b> stops moving!</span>")
 	qdel(src)
 
@@ -136,7 +136,8 @@ var/global/list/crate_mimic_disguises = list(\
 
 	..()
 
-	drop_meat(src) //Fill the mimic up with its own meat
+	drop_meat(src)
+	meat_taken--
 	initialize() //Collect all items from its turf!
 
 /mob/living/simple_animal/hostile/mimic/crate/Life()
@@ -232,7 +233,9 @@ var/global/list/crate_mimic_disguises = list(\
 		icon_state = initial(icon_state)
 
 /mob/living/simple_animal/hostile/mimic/crate/hitby() //This is called when the mimic is hit by a thrown object
-	..()
+	. = ..()
+	if(.)
+		return
 
 	if(!angry)
 		anger(berserk = 1) //Go berserk because some asshole tried to snipe us
@@ -245,7 +248,7 @@ var/global/list/crate_mimic_disguises = list(\
 		if(!angry)
 			anger(berserk = 1)
 			visible_message("<span class='danger'>\The [src] roars in rage!</span>")
-			playsound(get_turf(src), 'sound/hallucinations/growl1.ogg', 50, 1)
+			playsound(src, 'sound/hallucinations/growl1.ogg', 50, 1)
 
 // Chest mimic - more robust than crate mimic
 // Does more damage, has a robust tongue that it uses to grab things
@@ -269,11 +272,11 @@ var/global/list/crate_mimic_disguises = list(\
 
 	var/can_grab = 1
 
-/mob/living/simple_animal/hostile/mimic/crate/chest/Die()
+/mob/living/simple_animal/hostile/mimic/crate/chest/death(var/gibbed = FALSE)
 	for(var/atom/movable/A in get_locked(/datum/locking_category/mimic))
 		unlock_atom(A)
 		visible_message("<span class='notice'>\The [src] lets go of \the [A]!</span>")
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/AttackingTarget()
 	..()
@@ -290,6 +293,7 @@ var/global/list/crate_mimic_disguises = list(\
 			if(prob(20))
 				to_chat(H, "<span class='danger'>You feel very weak!</span>")
 				H.Knockdown(3)
+				H.Stun(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
 	if(target in get_locked(/datum/locking_category/mimic))
@@ -364,11 +368,11 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/weapon/coin/clown,\
 				/obj/item/weapon/dice/d4, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d20, /obj/item/weapon/gun/gravitywell, /obj/item/weapon/harpoon), //Medbay and some common items
 
-	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome,\
+	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome_legacy,\
 				/obj/item/weapon/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
 				/obj/item/weapon/handcuffs, /obj/item/weapon/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/weapon/gun/osipr, /obj/item/weapon/gun/energy/staff/animate,\
 				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/laser/cannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
-				/obj/item/weapon/melee/cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
+				/obj/item/weapon/melee/legacy_cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
 
 	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
 
@@ -376,7 +380,7 @@ var/global/list/item_mimic_disguises = list(
 					/obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack/security, /obj/item/device/maracas, /obj/item/device/multitool,\
 					/obj/item/clothing/gloves/yellow, /obj/item/weapon/hand_tele, /obj/item/weapon/card/id/captains_spare, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/gun/portalgun), //Focus on breath masks, jetpacks/oxygen tanks and generally useful stuff
 
-	"lowhealth" = list(/obj/item/weapon/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
+	"lowhealth" = list(/obj/item/trash/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
 
 	//All foods except for customizable stuff
 	"kitchen" = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
@@ -433,9 +437,9 @@ var/global/list/item_mimic_disguises = list(
 	if(desc)
 		to_chat(user, desc)
 
-/mob/living/simple_animal/hostile/mimic/crate/item/Die()
+/mob/living/simple_animal/hostile/mimic/crate/item/death(var/gibbed = FALSE)
 	copied_object = meat_type //Without this line, mimics would spawn items they're disguised as. Since they're relatively weak and can appear as gatling guns, this is required!
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/attack_hand(mob/user)
 	if(angry)
@@ -450,13 +454,13 @@ var/global/list/item_mimic_disguises = list(
 	overlays += mouth_overlay
 	visible_message("<span class='danger'>\The [src] comes to life!</span>")
 	name = "[initial(copied_object.name)] mimic"
-	density = 1
+	setDensity(TRUE)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/calm_down()
 	..(change_icon = 0)
 	overlays -= mouth_overlay
 	visible_message("<span class='notice'>\The [src] falls to the ground, lifeless.</span>")
-	density = 0
+	setDensity(FALSE)
 
 	//Disguise as something else for bonus stealth points
 	environment_disguise()
@@ -530,17 +534,17 @@ var/global/list/protected_objects = list(
 
 	// Die after a specified time limit
 	if(time_to_die && world.time >= time_to_die)
-		Die()
+		death()
 		return
 	for(var/mob/living/M in contents) //a fix for animated statues from the flesh to stone spell
-		Die()
+		death()
 		return
 
-/mob/living/simple_animal/hostile/mimic/copy/Die()
+/mob/living/simple_animal/hostile/mimic/copy/death(var/gibbed = FALSE)
 
 	for(var/atom/movable/M in src)
 		M.forceMove(get_turf(src))
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/mimic/copy/ListTargets()
 	// Return a list of targets that isn't the creator
@@ -630,6 +634,7 @@ var/global/list/protected_objects = list(
 		if(istype(L))
 			if(prob(15))
 				L.Knockdown(1)
+				L.Stun(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 

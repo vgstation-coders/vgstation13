@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Boxstation
 //**************************************************************
@@ -8,7 +8,7 @@
 	nameLong = "Box Station"
 	map_dir = "boxstation"
 	tDomeX = 128
-	tDomeY = 69
+	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
@@ -33,6 +33,9 @@
 	holomap_offset_x = list(0,0,0,86,4,0,0,)
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
+	center_x = 226
+	center_y = 254
+
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "tgstation.dmm"
+#endif

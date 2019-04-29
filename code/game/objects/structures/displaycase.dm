@@ -1,65 +1,4 @@
-/obj/structure/displaycase_frame
-	name = "display case frame"
-	icon = 'icons/obj/stock_parts.dmi'
-	icon_state="box_glass"
-	var/obj/item/weapon/circuitboard/airlock/circuit=null
-	var/state=0
-
-/obj/structure/displaycase_frame/Destroy()
-	..()
-	if(circuit)
-		qdel(circuit)
-		circuit = null
-
-/obj/structure/displaycase_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	var/pstate=state
-	var/turf/T=get_turf(src)
-	switch(state)
-		if(0)
-			if(istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
-				if(user.drop_item(W, src))
-					circuit=W
-					circuit.installed = 1
-					state++
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-			if(iscrowbar(W))
-				var/obj/machinery/constructable_frame/machine_frame/MF = new /obj/machinery/constructable_frame/machine_frame(T)
-				MF.state = 1
-				MF.set_build_state(1)
-				new /obj/item/stack/sheet/glass/glass(T)
-				qdel(src)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				return
-
-		if(1)
-			if(isscrewdriver(W))
-				var/obj/structure/displaycase/C=new(T)
-				if(circuit.one_access)
-					C.req_access = null
-					C.req_one_access = circuit.conf_access
-				else
-					C.req_access = circuit.conf_access
-					C.req_one_access = null
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				qdel(src)
-				return
-			if(iscrowbar(W))
-				circuit.forceMove(T)
-				circuit.installed = 0
-				circuit=null
-				state--
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-	if(pstate!=state)
-		pstate=state
-		update_icon()
-
-/obj/structure/displaycase_frame/update_icon()
-	switch(state)
-		if(1)
-			icon_state="box_glass_circuit"
-		else
-			icon_state="box_glass"
-
+//Construction handled in code/game/machinery/constructable_frame.dm
 
 /obj/structure/displaycase
 	name = "display case"
@@ -75,6 +14,12 @@
 	var/ue=null
 	var/image/occupant_overlay=null
 	var/obj/item/weapon/circuitboard/airlock/circuit
+	var/pickup = 0//for mapping purposes
+
+/obj/structure/displaycase/New()
+	..()
+	setContent()
+	update_icon()
 
 /obj/structure/displaycase/Destroy()
 	..()
@@ -83,27 +28,40 @@
 		circuit = null
 	dump()
 
-/obj/structure/displaycase/captains_laser/New()
-	..()
+/obj/structure/displaycase/proc/setContent()
+	if (pickup)
+		var/obj/item/I = locate() in get_turf(src)
+		if (I)
+			occupant = I
+			I.forceMove(src)
+			locked=1
+			update_icon()
+
+/obj/structure/displaycase/captains_laser/setContent()
 	occupant=new /obj/item/weapon/gun/energy/laser/captain(src)
 	locked=1
 	req_access=list(access_captain)
 	update_icon()
 
-/obj/structure/displaycase/gooncode/New()
-	..()
+/obj/structure/displaycase/gooncode/setContent()
 	occupant=new /obj/item/toy/gooncode(src)
 	desc = "The glass is cracked and there are traces of something leaking out."
 	locked=1
 	req_access=list(access_captain)
 	update_icon()
 
-/obj/structure/displaycase/lamarr/New()
-	..()
-	occupant=new /obj/item/clothing/mask/facehugger/lamarr(src)
+/obj/structure/displaycase/lamarr/setContent()
+	if(Holiday == APRIL_FOOLS_DAY && prob(50))
+		occupant=new /obj/item/clothing/shoes/magboots/funk(src)
+	else
+		occupant=new /obj/item/clothing/mask/facehugger/lamarr(src)
 	locked=1
 	req_access=list(access_rd)
 	update_icon()
+
+/obj/structure/displaycase/specops/setContent()
+	..()
+	req_access=list(access_cent_specops)
 
 /obj/structure/displaycase/examine(mob/user)
 	..()
@@ -155,13 +113,13 @@
 /obj/structure/displaycase/proc/healthcheck()
 	if (src.health <= 0)
 		if (!( src.destroyed ))
-			src.density = 0
+			setDensity(FALSE)
 			src.destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 70, 1)
+			playsound(src, "shatter", 70, 1)
 			update_icon()
 	else
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	return
 
 /obj/structure/displaycase/update_icon()
@@ -201,30 +159,35 @@
 		user.visible_message("[user.name] pries \the [src] apart.", \
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
-		var/turf/T=get_turf(src)
-		playsound(T, 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 		dump()
-		var/obj/item/weapon/circuitboard/airlock/C=circuit
+
+		var/obj/item/weapon/circuitboard/airlock/C = circuit
 		if(!C)
-			C=new (src)
+			C = new (src)
 			C.installed = 1
 		C.one_access=!(req_access && req_access.len>0)
 		if(!C.one_access)
 			C.conf_access=req_access
 		else
 			C.conf_access=req_one_access
+
 		if(!destroyed)
-			var/obj/structure/displaycase_frame/F=new(T)
-			F.state=1
-			F.circuit=C
-			F.circuit.forceMove(F)
-			F.update_icon()
+			var /obj/machinery/constructable_frame/machine_frame/new_machine_frame = new(get_turf(src))
+			new_machine_frame.build_path = 1
+			new_machine_frame.build_state = 2
+			new_machine_frame.circuit = C
+			C.forceMove(new_machine_frame)
+			circuit = null
+			C = null
+			new_machine_frame.icon_state="box_glass_circuit"
 		else
-			C.forceMove(T)
+			C.forceMove(get_turf(src))
 			C.installed = 0
-			circuit=null
-			new /obj/machinery/constructable_frame/machine_frame(T)
+			new /obj/machinery/constructable_frame/machine_frame(get_turf(src))
 		qdel(src)
+		return
+
 	else if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		src.health -= W.force
@@ -286,10 +249,10 @@
 
 
 /obj/structure/displaycase/broken
-	name = "display case"
+	name = "broken display case"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "glassbox2b"
-	desc = "A display case for prized possessions."
+	desc = "A display case for prized possessions. It seems to be broken."
 	density = 0
 	health = 0
 	destroyed = 1

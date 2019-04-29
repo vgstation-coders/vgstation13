@@ -75,7 +75,7 @@
 	//When the shuttle moves, if stable is 0 then all unbuckled mobs will be stunned
 	var/stable = 0
 
-	var/password = 28011
+	var/password = null
 	var/can_link_to_computer = LINK_FORBIDDEN
 
 	//Whether the shuttle gibs or displaces stuff. Change this to COLLISION_DISPLACE to make all shuttles displace stuff by default
@@ -101,8 +101,8 @@
 
 	if(istype(linked_area) && linked_area.contents.len) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
-
-	password = rand(10000,99999)
+	if(password)
+		password = rand(10000,99999)
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
@@ -190,6 +190,20 @@
 
 	return D
 
+//The reverse
+/datum/shuttle/proc/remove_dock(var/D)
+	if(ispath(D))
+		for(var/obj/docking_port/destination/dock in all_docking_ports)
+			if(istype(dock,D))
+				dock.unlink_from_shuttle(src)
+				return dock
+	else if(istype(D,/obj/docking_port/destination))
+		var/obj/docking_port/destination/dock = D
+		dock.unlink_from_shuttle(src)
+		return dock
+
+	return D
+
 //Adds a docking port as a transit area, accepts path or the port itself
 /datum/shuttle/proc/set_transit_dock(var/D)
 	if(ispath(D))
@@ -212,6 +226,9 @@
 	var/atom/A = linked_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
 	if(A)
 		return A
+	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
+		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+			return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
@@ -251,6 +268,17 @@
 			to_chat(user, "The shuttle can't move ([D.areaname] is used by another shuttle)")
 		return 0
 
+	if(D.require_admin_permission && !isAdminGhost(user))
+		if(broadcast)
+			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
+		else if(user)
+			to_chat(user, "Waiting for permission...")
+		var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
+		message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
+	else
+		actually_travel_to(D, broadcast, user)
+
+/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	//Handle the message
 	var/time = "as soon as possible"
 	switch(pre_flight_delay)
@@ -278,8 +306,8 @@
 			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 				spawn()
 					P.shoot_exhaust()
-
-	current_port.start_warning_lights()
+	if(current_port)
+		current_port.start_warning_lights()
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
@@ -304,6 +332,8 @@
 				moving = 0
 				destination_port = null
 				return 0
+			for(var/atom/AA in linked_area)
+				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -499,6 +529,17 @@
 	var/obj/docking_port/destination/target = pick(possible_locations)
 
 	travel_to(target,,user)
+
+/datum/shuttle/proc/get_occupants(var/find_stowaways)
+	var/list/occupants = list()
+	if(!find_stowaways)
+		for(var/mob/living/L in linked_area) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
+			occupants.Add(L)
+	else
+		for(var/mob/living/L in mob_list)
+			if(get_area(src) == linked_area)
+				occupants.Add(L)
+	return occupants
 
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad
@@ -778,6 +819,7 @@
 //Custom shuttles
 /datum/shuttle/custom
 	name = "custom shuttle"
+	can_link_to_computer = LINK_FREE
 
 /datum/shuttle/proc/show_outline(var/mob/user, var/turf/centered_at)
 	if(!user)

@@ -20,7 +20,7 @@ var/global/list/cached_icons = list()
 
 /obj/item/weapon/reagent_containers/glass/paint/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is taking \his hand and eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/glass/paint/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
@@ -180,6 +180,8 @@ datum/reagent/paint
 	description = "Floor paint is used to color floor tiles."
 	reagent_state = 2
 	color = "#808080"
+	density = 1.808
+	specheatcap = 0.85
 
 	reaction_turf(var/turf/T, var/volume)
 		if(!istype(T) || istype(T, /turf/space))

@@ -10,6 +10,7 @@
 	var/reject_antag_hud = 1
 	var/alien_whitelist_id = null // "Diona"
 	var/recruitment_timeout = 600
+	var/logging = FALSE
 
 	// Called when a volunteer has been added.
 	// Args:
@@ -63,11 +64,13 @@
 		O = pick(currently_querying)
 		while(currently_querying.len && !check_observer(O)) //While we the list has something and
 			currently_querying -= O				//Remove them from the list if they don't get checked properly
-			O = pick(currently_querying)
+			if(currently_querying.len)
+				O = pick(currently_querying)
 
 		if(!check_observer(O))
 			INVOKE_EVENT(recruited, list("player"=null))
 		else
+			paiController.was_recruited(O)
 			INVOKE_EVENT(recruited, list("player"=O))
 
 /datum/recruiter/Topic(var/href, var/list/href_list)
@@ -90,9 +93,14 @@
 	if(O in currently_querying)
 		to_chat(O, "<span class='notice'>Removed from registration list.</span>")
 		currently_querying -= O
+		if(logging)
+			subject.investigation_log(I_GHOST, "|| had a ghost abandon an attempt to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
+
 	else
 		to_chat(O, "<span class='notice'>Added to registration list.</span>")
 		currently_querying += O
+		if(logging)
+			subject.investigation_log(I_GHOST, "|| had a ghost sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 
 /datum/recruiter/proc/check_observer(var/mob/dead/observer/O)
 	if(reject_antag_hud && O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)

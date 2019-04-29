@@ -129,17 +129,17 @@
 		special_assembly.Crossed(AM)
 
 
-/obj/item/device/assembly_holder/on_found(mob/finder as mob)
+/obj/item/device/assembly_holder/on_found(mob/wearer, mob/finder as mob)
 	if(a_left)
-		a_left.on_found(finder)
+		a_left.on_found(wearer, finder)
 	if(a_right)
-		a_right.on_found(finder)
+		a_right.on_found(wearer, finder)
 	if(special_assembly)
 		if(istype(special_assembly, /obj/item))
 			var/obj/item/S = special_assembly
-			S.on_found(finder)
+			S.on_found(wearer, finder)
 
-/obj/item/device/assembly_holder/Move()
+/obj/item/device/assembly_holder/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(a_left && a_right)
 		a_left.holder_movement()
@@ -159,7 +159,7 @@
 
 
 /obj/item/device/assembly_holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>BUG:Assembly part missing, please report this!</span>")
 			return
@@ -174,7 +174,7 @@
 		return
 	else if(W.IsSpecialAssembly())
 		attach_special(W, user)
-	else if(istype(W,/obj/item/weapon/weldingtool))
+	else if(iswelder(W))
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>BUG:Assembly part missing, please report this!</span>")
 			return
@@ -182,22 +182,14 @@
 			to_chat(user, "<span class='warning'>You can't make an igniter without an igniting component!</span>")
 			return
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-			to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
-			if (do_after(user, src, 40))
-				var/obj/machinery/igniter/igniter=new(src.loc)
-				igniter.assembly=src
-				src.forceMove(igniter)
-				to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
-		else
-			:
-			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
-			return
-
-	else
-		..()
-	return
+		to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
+		if (WT.do_weld(user, src, 40, 0))
+			var/obj/machinery/igniter/igniter=new(src.loc)
+			igniter.assembly=src
+			src.forceMove(igniter)
+			to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
+		return
+	..()
 
 
 /obj/item/device/assembly_holder/attack_self(mob/user as mob)
@@ -244,7 +236,6 @@
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()
 		else
-			:
 			if(a_right != D)
 				a_right.pulsed(0)
 			if(a_left != D)

@@ -1,15 +1,15 @@
 /mob/living/carbon/alien/humanoid/disarm_mob(mob/living/target)
 	if(target.disarmed_by(src))
 		return
-
-	if(prob(80))
+	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
+	var/disarm_chance_modifier = target.run_armor_check(affecting, "melee", quiet = 1)
+	if(prob(80/(disarm_chance_modifier == 0 ? 1 : disarm_chance_modifier)))
 		do_attack_animation(target, src)
 		playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
-		target.Knockdown(rand(3,4))
-
+		target.apply_effect(4, WEAKEN, target.run_armor_check(affecting, "melee"))
 		visible_message("<span class='danger'>[src] has tackled down [target]!</span>")
 
-	else if (prob(80))
+	else if (prob(80/(disarm_chance_modifier == 0 ? 1 : disarm_chance_modifier)))
 		do_attack_animation(target, src)
 		playsound(loc, get_unarmed_hit_sound(), 25, 1, -1)
 		target.drop_item()
@@ -35,7 +35,7 @@
 
 	return "slashes at"
 
-/mob/living/carbon/alien/humanoid/get_unarmed_damage(mob/living/target)
+/mob/living/carbon/alien/humanoid/get_unarmed_damage(var/atom/target)
 	if(isalien(target))
 		return rand(1,3)
 
@@ -57,4 +57,4 @@
 	if(iscarbon(target) && !isslime(target))
 		if(damage > 25)
 			visible_message("<span class='danger'>[src] has wounded [target]!</span>")
-			target.apply_effect(rand(0.5,3), WEAKEN, armor)
+			target.apply_effect(rand(5,30)/10, WEAKEN, armor)

@@ -145,3 +145,37 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/research_facility
 	file_path = "maps/randomvaults/research_facility.dmm"
+
+/datum/map_element/vault/zoo_truck
+	file_path = "maps/randomvaults/zoo_truck.dmm"
+
+/datum/map_element/vault/syndiecargo
+	file_path = "maps/randomvaults/syndiecargo.dmm"
+
+/datum/map_element/vault/skeleton_den
+	file_path = "maps/randomvaults/rattlemebones.dmm"
+
+/datum/map_element/vault/beach_party
+	file_path = "maps/randomvaults/beach_party.dmm"
+
+/datum/map_element/vault/zathura
+	file_path = "maps/randomvaults/house.dmm"
+
+/datum/map_element/vault/spy_sat
+	file_path = "maps/randomvaults/spy_satellite.dmm"
+
+/datum/map_element/vault/spy_sat/pre_load()
+	load_dungeon(/datum/map_element/dungeon/satellite_deployment)
+
+/datum/map_element/dungeon/satellite_deployment
+	file_path = "maps/randomvaults/dungeons/satellite_deployment.dmm"
+
+/datum/map_element/vault/ironchef
+	file_path = "maps/randomvaults/ironchef.dmm"
+
+/datum/map_element/vault/assistantslair
+	file_path = "maps/randomvaults/assistantslair.dmm"
+
+/datum/map_element/vault/asteroidfield
+	file_path = "maps/randomvaults/asteroidfield.dmm"
+

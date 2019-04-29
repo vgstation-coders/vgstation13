@@ -12,17 +12,19 @@
 	var/hydroflags = 0 // HYDRO_*, used for no-fruit exclusion lists, at the moment.
 
 /obj/item/seeds/New()
-	while(!plant_controller)
-		sleep(30)
-	update_seed()
 	..()
 	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+/obj/item/seeds/initialize()
+	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
-	if(!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])
-		seed = plant_controller.seeds[seed_type]
+	if(!seed && seed_type && !isnull(SSplant.seeds) && SSplant.seeds[seed_type])
+		seed = SSplant.seeds[seed_type]
 	update_appearance()
 
 //Updates strings and icon appropriately based on seed datum.
@@ -53,15 +55,20 @@
 	seed_type = null
 
 /obj/item/seeds/random/New()
-	seed = plant_controller.create_random_seed()
+	seed = SSplant.create_random_seed()
 	seed_type = seed.name
-	update_seed()
+	..()
 
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
 /obj/item/seeds/dionanode
 	name = "packet of diona nodes"
 	seed_type = "diona"
+	vending_cat = "sentient"
+
+/obj/item/seeds/mushroommanspore
+	name = "packet of mushrom spores"
+	seed_type = "moshrum"
 	vending_cat = "sentient"
 
 /obj/item/seeds/poppyseed
@@ -118,6 +125,11 @@
 /obj/item/seeds/bananaseed
 	name = "packet of banana seeds"
 	seed_type = "banana"
+	vending_cat = "fruits"
+
+/obj/item/seeds/bluespacebananaseed
+	name = "packet of bluespace banana seeds"
+	seed_type = "bluespacebanana"
 	vending_cat = "fruits"
 
 /obj/item/seeds/eggplantseed
@@ -437,6 +449,35 @@
 	vending_cat = "Vox hydroponics"
 	hydroflags = HYDRO_VOX
 
+/obj/item/seeds/avocadoseed
+	name = "packet of avocado seeds"
+	seed_type = "avocado"
+	vending_cat = "fruits"
+
+/obj/item/seeds/avocadoseed/whole
+	name = "avocado seed"
+	desc = "The pit of an avocado."
+	seed_type = "avocado"
+	vending_cat = "fruits"
+	icon_state = "avocado_pit"
+
+/obj/item/seeds/avocadoseed/whole/update_appearance()
+	if(!seed)
+		return
+	icon_state = "avocado_pit"
+
+/obj/item/seeds/pearseed
+	name = "packet of pear seeds"
+	seed_type = "pear"
+	vending_cat = "fruits"
+
+/obj/item/seeds/silverpearseed
+	name = "packet of pear seeds"
+	seed_type = "silverpear"
+	vending_cat = "fruits"
+
+
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -460,8 +501,8 @@
 
 /datum/seed/chili/ice
 	name = "icechili"
-	seed_name = "ice pepper"
-	display_name = "ice-pepper plants"
+	seed_name = "chilly pepper"
+	display_name = "chilly pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper)
 	chems = list(FROSTOIL = list(3,5), NUTRIMENT = list(1,50))
@@ -477,7 +518,7 @@
 	display_name = "ghost pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper)
-	chems = list(CONDENSEDCAPSAICIN = list(3,4), NEUROTOXIN = list(0,40))
+	chems = list(CONDENSEDCAPSAICIN = list(3,4), CURARE = list(0,40))
 	packet_icon = "seed-ghostpepper"
 	plant_icon = "chilighost"
 
@@ -531,7 +572,7 @@
 	mutants = list("deathberries")
 	packet_icon = "seed-poisonberry"
 	plant_icon = "poisonberry"
-	chems = list(NUTRIMENT = list(1), TOXIN = list(3,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,5))
 
 /datum/seed/berry/poison/death
 	name = "deathberries"
@@ -541,7 +582,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
 	packet_icon = "seed-deathberry"
 	plant_icon = "deathberry"
-	chems = list(NUTRIMENT = list(1), TOXIN = list(3,3), LEXORIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5))
 
 	yield = 3
 	potency = 50
@@ -556,7 +597,7 @@
 	packet_icon = "seed-nettle"
 	plant_icon = "nettle"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1,50), SACID = list(0,1))
+	chems = list(NUTRIMENT = list(1,50), FORMIC_ACID = list(0,1))
 	lifespan = 30
 	maturation = 6
 	production = 6
@@ -572,7 +613,7 @@
 	mutants = null
 	packet_icon = "seed-deathnettle"
 	plant_icon = "deathnettle"
-	chems = list(NUTRIMENT = list(1,50), PACID = list(0,1))
+	chems = list(NUTRIMENT = list(1,50), PHENOL = list(0,1))
 
 	maturation = 8
 	yield = 2
@@ -731,7 +772,7 @@
 	packet_icon = "seed-ambrosiavulgaris"
 	plant_icon = "ambrosiavulgaris"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1), SPACE_DRUGS = list(1,8), KELOTANE = list(1,8,1), BICARIDINE = list(1,10,1), TOXIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5))
 
 	lifespan = 60
 	maturation = 6
@@ -755,7 +796,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), SPACE_DRUGS = list(1,8), KELOTANE = list(1,8,1), BICARIDINE = list(1,10,1), TOXIN = list(1,5), spiritbreaker = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10))
 
 
 /datum/seed/ambrosia/deus
@@ -766,7 +807,7 @@
 	mutants = null
 	packet_icon = "seed-ambrosiadeus"
 	plant_icon = "ambrosiadeus"
-	chems = list(NUTRIMENT = list(1), BICARIDINE = list(1,8), SYNAPTIZINE = list(1), HYPERZINE = list(1,10,1), SPACE_DRUGS = list(1,10))
+	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), CYTISINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -826,7 +867,7 @@
 	mutants = list("libertycap","glowshroom")
 	packet_icon = "mycelium-reishi"
 	plant_icon = "reishi"
-	chems = list(NUTRIMENT = list(1), STOXIN = list(3,3), SPACE_DRUGS = list(1,25))
+	chems = list(NUTRIMENT = list(1), VALERENIC_ACID = list(3,3), MESCALINE = list(1,25))
 
 	maturation = 10
 	production = 5
@@ -873,11 +914,11 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel)
 	packet_icon = "mycelium-angel"
 	plant_icon = "angel"
-	chems = list(NUTRIMENT = list(1,50), AMATOXIN = list(13,3), PSILOCYBIN = list(1,25))
+	chems = list(NUTRIMENT = list(1,50), AMANATIN = list(1,3))
 
 	maturation = 12
 	yield = 2
-	potency = 35
+	potency = 15
 
 /datum/seed/mushroom/towercap
 	name = "towercap"
@@ -966,7 +1007,7 @@
 	packet_icon = "seed-poppy"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/poppy)
 	plant_icon = "poppy"
-	chems = list(NUTRIMENT = list(1,20), BICARIDINE = list(1,10))
+	chems = list(NUTRIMENT = list(1,20), OPIUM = list(1,10))
 
 	lifespan = 25
 	potency = 20
@@ -1023,6 +1064,7 @@
 	packet_icon = "seed-novaflower"
 	products = list(/obj/item/weapon/grown/novaflower)
 	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "novaflower"
 	chems = list(NUTRIMENT = list(1), CAPSAICIN = list(1,5))
 
@@ -1065,7 +1107,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
 	mutants = null
 	plant_icon = "greengrape"
-	chems = list(NUTRIMENT = list(1,10), KELOTANE = list(3,5))
+	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(3,5))
 
 //Everything else
 /datum/seed/peanuts
@@ -1111,7 +1153,7 @@
 	packet_icon = "seed-shand"
 	products = list(/obj/item/stack/medical/bruise_pack/tajaran)
 	plant_icon = "shand"
-	chems = list(BICARIDINE = list(0,10))
+	chems = list(OPIUM = list(0,10))
 
 	lifespan = 50
 	maturation = 3
@@ -1127,7 +1169,7 @@
 	packet_icon = "seed-mtear"
 	products = list(/obj/item/stack/medical/ointment/tajaran)
 	plant_icon = "mtear"
-	chems = list(HONEY = list(1,10), KELOTANE = list(3,5))
+	chems = list(HONEY = list(1,10), TANNIC_ACID = list(3,5))
 
 	lifespan = 50
 	maturation = 3
@@ -1144,7 +1186,8 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana)
 	plant_icon = "banana"
 	harvest_repeat = 1
-	chems = list(BANANA = list(1,10))
+	chems = list(BANANA = list(1,10), POTASSIUMCARBONATE = list(0.1,30))
+	mutants = list("bluespacebanana")
 
 	lifespan = 50
 	maturation = 6
@@ -1153,6 +1196,15 @@
 	ideal_light = 9
 	water_consumption = 6
 	ideal_heat = 298
+
+/datum/seed/banana/bluespace
+	name = "bluespacebanana"
+	seed_name = "bluespacebanana"
+	display_name = "bluespace banana tree"
+	packet_icon = "seed-bluespacebanana"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
+	plant_icon = "banana"
+	mutants = null
 
 /datum/seed/corn
 	name = "corn"
@@ -1267,7 +1319,7 @@
 	packet_icon = "seed-carrot"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
 	plant_icon = "carrot"
-	chems = list(NUTRIMENT = list(1,20), IMIDAZOLINE = list(3,5))
+	chems = list(NUTRIMENT = list(1,20), ZEAXANTHIN = list(3,5))
 
 	lifespan = 25
 	maturation = 10
@@ -1340,7 +1392,7 @@
 	maturation = 6
 	production = 6
 	yield = 3
-	potency = 1
+	potency = 10
 	water_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8
@@ -1422,7 +1474,7 @@
 	seed_name = "grass"
 	display_name = "grass"
 	packet_icon = "seed-grass"
-	products = list(/obj/item/stack/tile/grass)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grass)
 	plant_icon = "grass"
 	harvest_repeat = 1
 
@@ -1501,7 +1553,7 @@
 	packet_icon = "seed-kudzu"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod)
 	plant_icon = "kudzu"
-	chems = list(NUTRIMENT = list(1,50), ANTI_TOXIN = list(2,10))
+	chems = list(NUTRIMENT = list(1,50), ALLICIN = list(2,10))
 
 	lifespan = 20
 	maturation = 6
@@ -1523,6 +1575,7 @@
 	plant_icon = "dionanode"
 	mob_drop = /obj/item/seeds/dionanode
 	product_requires_player = 1
+	product_kill_inactive = FALSE
 	immutable = 1
 
 	lifespan = 50
@@ -1548,6 +1601,28 @@
 	production = 1
 	yield = 10
 	potency = 30
+
+/datum/seed/moshrum
+	name = "moshrum"
+	seed_name = "moshrum"
+	seed_noun = "nodules"
+	display_name = "moshrum nodes"
+	packet_icon = "mycelium-walkingmushroom"
+	plant_icon = "walkingmushroom"
+	products = list(/mob/living/carbon/monkey/mushroom)
+	mob_drop = /obj/item/seeds/mushroommanspore
+	product_requires_player = TRUE
+	product_kill_inactive = FALSE
+	immutable = TRUE
+
+	lifespan = 50
+	endurance = 35
+	maturation = 5
+	production = 10
+	yield = 2
+	potency = 30
+	ideal_light = 0
+
 
 /datum/seed/test
 	name = "test"
@@ -1589,6 +1664,61 @@
 	nutrient_consumption = 1
 	growth_stages = 4
 
+/datum/seed/avocado
+	name = "avocado"
+	seed_name = "avocado"
+	display_name = "avocado tree"
+	packet_icon = "seed-avocado"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/avocado)
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	plant_icon = "avocado"
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,20))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 2
+	potency = 10
+	ideal_light = 8
+	large = 0
+
+
+/datum/seed/pear
+	name = "pear"
+	seed_name = "pear"
+	display_name = "pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pear)
+	mutants = list("silverpear")
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-pear"
+	plant_icon = "pear"
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
+	potency = 10
+	ideal_light = 6
+	large = 0
+
+/datum/seed/pear/silver
+	name = "silverpear"
+	seed_name = "silver pear"
+	display_name = "silver pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear)
+	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-silverpear"
+	plant_icon = "silverpear"
+	chems = list(NUTRIMENT = list(1,10), SILVER = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
+
 // Vox Food
 
 /datum/seed/mushroom/chicken
@@ -1601,7 +1731,7 @@
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "chickenshroom"
 	chems = list(NUTRIMENT = list(2,10))
-	consume_gasses = list("nitrogen"=20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
+	consume_gasses = list(GAS_NITROGEN = 20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
 
 	lifespan = 30
 	growth_stages = 3
@@ -1654,7 +1784,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/garlic)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "garlic"
-	chems = list(HOLYWATER = list(1,25),NUTRIMENT = list(1,10))
+	chems = list(HOLYWATER = list(1,25),NUTRIMENT = list(1,10), ALLICIN = list(5,10))
 
 	potency = 15
 	lifespan = 200
@@ -1673,7 +1803,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "pitcher"
-	chems = list(SACID = list(1,25))
+	chems = list(FORMIC_ACID = list(1,25))
 
 	potency = 10
 	lifespan = 50
@@ -1696,7 +1826,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "aloe"
-	chems = list(DERMALINE = list(1,10)) //Not as good as poppy's bicaridine for speedy heals, but general purpose.
+	chems = list(KATHALAI = list(1,10)) //Not as good as poppy's opium for speedy heals, but general purpose.
 
 	lifespan = 30
 	maturation = 6

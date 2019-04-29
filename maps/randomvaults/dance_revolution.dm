@@ -24,6 +24,7 @@
 	var/list/instruction_effects = list()
 
 	var/process_delay = 15 //in deciseconds
+	var/min_process_delay = 10
 
 	//Stats!
 	var/attempts = 0
@@ -63,28 +64,29 @@
 		winner = "[dancer]"
 
 	stop_game()
-	playsound(get_turf(src), 'sound/machines/ding2.ogg', 50)
+	playsound(src, 'sound/machines/ding2.ogg', 50)
 
 	wins++
 
 	spawn()
-		for(var/obj/effect/ddr_loot/E in range(7, src))
-			var/turf/T = get_turf(E)
-			T.visible_message("<span class='danger'>\The [T] melts away!</span>")
-			T.ChangeTurf(/turf/simulated/floor/plating)
-			qdel(E)
+		for(var/turf/T in trange(2, src))
+			if(T.density)
+				T.visible_message("<span class='danger'>\The [T] melts away!</span>")
+				T.ChangeTurf(/turf/simulated/floor/plating)
+
 			sleep(10)
 
 /obj/structure/dance_dance_revolution/proc/lose()
 	to_chat(dancer, "<span class='userdanger'>You lose! Your muscles hurt from all the dancing.</span>")
 	visible_message("<span class='notice'>A red screen briefly flashes on \the [src].</span>")
 	dancer.Knockdown(5)
+	dancer.Stun(5)
 
 	for(var/i=0 to rand(1,5))
 		dancer.adjustBruteLoss(rand(1,5))
 
 	stop_game()
-	playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50)
+	playsound(src, 'sound/machines/buzz-sigh.ogg', 50)
 
 /obj/structure/dance_dance_revolution/proc/update_effects()
 	for(var/obj/effect/E in direction_effects)
@@ -126,7 +128,7 @@
 		return win()
 
 	if((progress_counter % 10) == 0)
-		process_delay = max(process_delay-1, 10)
+		process_delay = max(process_delay-1, min_process_delay)
 		visible_message("<span class='info'>\The [src] speeds up!</span>")
 
 	//Give new task
@@ -153,22 +155,27 @@
 	if(dancer)
 		to_chat(user, "<span class='info'>It's [dancer]'s turn! Wait until \he is done dancing.</span>")
 		return
+	var/obj/machinery/media/jukebox/juke = locate(/obj/machinery/media/jukebox) in range(2)
+	if(istype(juke))
+		if(!juke.playing)
+			to_chat(user, "<span class='info'>It's no fun dancing without music. Turn on that [juke]!</span>")
+			return
 
 	dancer = user
 	user.visible_message("<span class='notice'>[user] activates \the [src]!</span>", "<span class='info'>You activate \the [src].</span>")
 
 	spawn(10)
 		visible_message("<span class='danger'>3...</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50)
+		playsound(src, 'sound/machines/click.ogg', 50)
 		sleep(10)
 		visible_message("<span class='danger'>2...</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50)
+		playsound(src, 'sound/machines/click.ogg', 50)
 		sleep(10)
 		visible_message("<span class='danger'>1...</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50)
+		playsound(src, 'sound/machines/click.ogg', 50)
 		sleep(10)
 		visible_message("<span class='userdanger'>Go!</span>")
-		playsound(get_turf(src), 'sound/machines/chime.ogg', 50)
+		playsound(src, 'sound/machines/chime.ogg', 50)
 		start_game()
 
 /obj/effect/ddr_direction //Direction in which you should be facing

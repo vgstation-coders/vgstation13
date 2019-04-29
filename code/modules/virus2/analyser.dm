@@ -1,11 +1,11 @@
 /obj/machinery/disease2/diseaseanalyser
-	name = "Disease Analyser"
+	name = "disease analyser"
 	desc = "For analysing and storing viral samples."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "analyser"
-	anchored = 1
-	density = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	anchored = TRUE
+	density = TRUE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	var/scanning = 0
 	var/pause = 0
@@ -39,7 +39,9 @@
 	process_time = round((initial(process_time) - lasercount))
 
 /obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		var/obj/item/weapon/virusdish/D = I
@@ -59,7 +61,7 @@
 /obj/machinery/disease2/diseaseanalyser/proc/PrintPaper(var/obj/item/weapon/virusdish/D)
 	var/obj/item/weapon/paper/P = new(src.loc)
 	P.info = D.virus2.get_info()
-	P.name = "Virus #[D.virus2.uniqueID]"
+	P.name = "[D.virus2.form] #[D.virus2.uniqueID]"
 	visible_message("\The [src.name] prints a sheet of paper.")
 
 /obj/machinery/disease2/diseaseanalyser/proc/Analyse(var/obj/item/weapon/virusdish/D)
@@ -74,6 +76,7 @@
 
 /obj/machinery/disease2/diseaseanalyser/process()
 	if(stat & (NOPOWER|BROKEN))
+		icon_state = "analyser"
 		return
 	use_power(500)
 
@@ -100,26 +103,41 @@
 /obj/machinery/disease2/diseaseanalyser/Topic(href, href_list)
 	if(..())
 		return 1
-	if(usr)
-		usr.set_machine(src)
+	if(href_list["close"])
+		usr << browse(null, "\ref[src]")
+		usr.unset_machine()
+		return 1
+
+	usr.set_machine(src)
 	if(href_list["eject"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
-			if("[O.virus2.uniqueID]" == href_list["name"])
-				O.forceMove(src.loc)
-				if(toscan["O"])
-					toscan -= O
+		var/obj/item/weapon/virusdish/O = locate(href_list["dishI"])
+		if(O && O in contents)
+			O.forceMove(loc)
+			if(O in toscan)
+				toscan -= O
 		src.updateUsrDialog()
 	else if(href_list["print"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
-			if("[O.virus2.uniqueID]" == href_list["name"])
-				PrintPaper(O)
+		var/obj/item/weapon/virusdish/O = locate(href_list["dishI"])
+		if(O && O in contents)
+			PrintPaper(O)
 
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user as mob)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	var/dat = list()
 	dat += "Currently stored samples: [src.contents.len]<br><hr>"
 	if (src.contents.len > 0)
-		dat += "<table cellpadding='1' style='width: 100%;text-align:center;'><td>Name</td><td>Symptoms</td><td>Antibodies</td><td>Transmission</td><td>Options</td>"
+		dat += {"
+<table cellpadding='1' style='width: 100%;text-align:center; white-space: nowrap;'>
+	<td>Name</td>
+	<td>Details</td>
+	<td>Symptoms</td>
+	<td>Antibodies</td>
+	<td>Transmission</td>
+	<td>Options</td>
+"}
 		for(var/obj/item/weapon/virusdish/B in src.contents)
 			var/ID = B.virus2.uniqueID
 			if("[ID]" in virusDB) //If it's in the DB they might have given it a name
@@ -127,24 +145,24 @@
 				dat += "<tr><td>[v.fields["name"]]</td>"
 			else //Use ID instead
 				dat += "<tr><td>[B.virus2.name()]</td>"
+			dat += "<td>Infection rate: [B.virus2.infectionchance]<br>Progress speed: [B.virus2.stageprob]</td>"
 			dat+="<td>"
 			if(!B.analysed)
 				dat += "Awaiting analysis.</td><td></td><td></td>"
 			else
 				for(var/datum/disease2/effect/e in B.virus2.effects)
-					dat += "<br>[e.name]"
+					dat += "<br>[e.name] (Strength: [e.multiplier] | Verosity: [e.chance])"
 				dat +="</td>"
 				dat += "<td>[antigens2string(B.virus2.antigen)]</td>"
 				dat += "<td>[(B.virus2.spreadtype)]</td>"
 			if(B == dish)
 				dat += "<td></td>"
 			else
-				dat += "<td><A href='?src=\ref[src];eject=1;name=["[ID]"];'>Eject</a>"
-				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;name=["[ID]"];'>Print</a>" : ""]</td>"
+				dat += "<td><A href='?src=\ref[src];eject=1;dishI=\ref[B];'>Eject</a>"
+				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;dishI=\ref[B];'>Print</a>" : ""]</td>"
 			dat += "</tr>"
 		dat += "</table>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "disease_analyzer", "Viral Storage & Analysis Unit", 600, 350, src)
+	var/datum/browser/popup = new(user, "\ref[src]", "Viral Storage & Analysis Unit", 800, 350, src)
 	popup.set_content(dat)
 	popup.open()
-	onclose(user, "disease_analyzer")

@@ -15,7 +15,7 @@
 
 /obj/item/weapon/phone/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /*/obj/item/weapon/syndicate_uplink
 	name = "station bounced radio"
@@ -58,10 +58,11 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	var/potency = 0
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/corncob
 	name = "corn cob"
@@ -97,6 +98,9 @@
 	desc = "An untrustworthy bar of soap. Smells of fear."
 	icon_state = "soapsyndie"
 
+/obj/item/weapon/soap/holo
+	name = "UV sterilizer"
+	desc = "This shouldn't exist."
 
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
@@ -126,8 +130,14 @@
 	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
 /obj/item/weapon/disk
-	name = "disk"
-	icon = 'icons/obj/items.dmi'
+	name = "Corrupted Data Disk"
+	desc = "The data on this disk has decayed, and cannot be read by any computer anymore."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
+	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
@@ -190,27 +200,24 @@
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
 	var/trip_prob = 90
-	var/thrown_from
+
+/obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	user.throw_item(target)
 
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
 	if(!throw_range)
 		return //divide by zero, also you throw like a girl
-	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
-		if(istype(usr, /mob/living/carbon/human)) //if the user is human
-			var/mob/living/carbon/human/H = usr
-			if(clumsy_check(H) && prob(50))
-				to_chat(H, "<span class='warning'>You smack yourself in the face while swinging the [src]!</span>")
-				H.Stun(2)
-				H.drop_item(src)
-				return
-	if (!thrown_from && usr) //if something hasn't set it already (like a mech does when it launches)
-		thrown_from = usr //then the user must have thrown it
-	if (!istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas))
-		playsound(src, throw_sound, 20, 1) //because mechs play the sound anyways
+	if(istype(usr, /mob/living/carbon/human)) //if the user is human
+		var/mob/living/carbon/human/H = usr
+		if(clumsy_check(H) && prob(50))
+			to_chat(H, "<span class='warning'>You smack yourself in the face while swinging the [src]!</span>")
+			H.Stun(2)
+			H.drop_item(src)
+			return
 	var/turf/target = get_turf(A)
 	var/atom/movable/adjtarget = new /atom/movable
 	var/xadjust = 0
@@ -229,7 +236,6 @@
 		adjtarget.y = src.y
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
 	..(get_turf(adjtarget), throw_range, throw_speed)
-	thrown_from = null
 
 /obj/item/weapon/legcuffs/bolas/throw_impact(atom/hit_atom) //Pomf was right, I was wrong - Comic
 	if(isliving(hit_atom) && hit_atom != usr) //if the target is a live creature other than the thrower
@@ -261,12 +267,13 @@
 			throw_failed()
 			return
 
-/obj/item/weapon/legcuffs/bolas/proc/throw_failed() //called when the throw doesn't entangle
-	//log_admin("Logged as [thrown_from]")
-	if(!thrown_from || !istype(thrown_from, /mob/living)) //in essence, if we don't know whether a person threw it
-		qdel(src) //destroy it, to stop infinite bolases
+/obj/item/weapon/legcuffs/bolas/proc/throw_failed() // Empty, overriden on mechs
+	return
 
-/obj/item/weapon/legcuffs/bolas/Bump()
+/obj/item/weapon/legcuffs/bolas/mech/throw_failed() // To avoid infinite Bolas
+	qdel(src)
+
+/obj/item/weapon/legcuffs/bolas/to_bump()
 	..()
 	throw_failed() //allows a mech bolas to be destroyed
 
@@ -389,8 +396,16 @@
 	layer = OPEN_DOOR_LAYER
 	icon_state = "beartrap0"
 	desc = "A trap used to catch bears and other legged creatures."
+	starting_materials = list(MAT_IRON = 50000)
+	w_type = RECYK_METAL
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
+	var/image/ied_overlay
+
+/obj/item/weapon/legcuffs/beartrap/New()
+	..()
+	ied_overlay = image('icons/obj/items.dmi')
+	ied_overlay.icon_state = "beartrap_ied"
 
 /obj/item/weapon/legcuffs/beartrap/armed
 	armed = 1
@@ -398,7 +413,7 @@
 
 /obj/item/weapon/legcuffs/beartrap/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/legcuffs/beartrap/update_icon()
 	icon_state = "beartrap[armed]"
@@ -437,15 +452,17 @@
 					log_game(log_str)
 					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
 					desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
+					overlays.Add(ied_overlay)
 			else
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(IED)
 			IED.forceMove(get_turf(src.loc))
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
+			overlays.Remove(ied_overlay)
 			return
 	..()
 
@@ -490,6 +507,7 @@
 				var/mob/living/simple_animal/SA = AM
 				SA.health -= 20
 
+			overlays.Remove(ied_overlay)
 			update_icon()
 	..()
 
@@ -510,6 +528,32 @@
 	force = 15
 	throw_speed = 1
 	throw_range = 3
+
+/obj/item/weapon/batteringram/attackby(var/obj/item/I, mob/user as mob)
+	if(istype(I,/obj/item/weapon/ram_kit))
+		flags &= ~MUSTTWOHAND //Retains FPRINT and TWOHANDABLE
+		icon_state = "ram-upgraded"
+		qdel(I)
+	else
+		..()
+
+/obj/item/weapon/batteringram/proc/can_ram(mob/user)
+	if(ishuman(user))
+		if(wielded)
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>\The [src] must be wielded!</span>")
+			return FALSE
+	else if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(HAS_MODULE_QUIRK(R,MODULE_IS_THE_LAW))
+			return TRUE
+		else
+			to_chat(user,"<span class='warning'>You are not compatible with \the [src]!</span>")
+			return FALSE
+	else
+		to_chat(user,"<span class='warning'>\The [src] is too bulky!</span>")
+		return FALSE
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
@@ -532,9 +576,6 @@
 
 /obj/item/weapon/caution/proximity_sign/attack_self(mob/user as mob)
 	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.mind.assigned_role != "Janitor")
-			return
 		if(armed)
 			armed = 0
 			to_chat(user, "<span class='notice'>You disarm \the [src].</span>")
@@ -545,7 +586,7 @@
 		else
 			armed = 0
 			timepassed = 0
-		to_chat(H, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
+		to_chat(user, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
 
 /obj/item/weapon/caution/proximity_sign/process()
 	if(!timing)
@@ -568,48 +609,30 @@
 					qdel(src)
 
 /obj/item/weapon/caution/proximity_sign/proc/dead_legs(mob/living/carbon/human/H as mob)
-	var/datum/organ/external/l = H.organs_by_name[LIMB_LEFT_LEG]
-	var/datum/organ/external/r = H.organs_by_name[LIMB_RIGHT_LEG]
-	if(l && !(l.status & ORGAN_DESTROYED))
-		l.status |= ORGAN_DESTROYED
-	if(r && !(r.status & ORGAN_DESTROYED))
-		r.status |= ORGAN_DESTROYED
+	for(var/datum/organ/external/OE in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
+		OE.droplimb()
 
 /obj/item/weapon/caution/cone
 	desc = "This cone is trying to warn you of something!"
 	name = "warning cone"
+	icon = 'icons/obj/janitor.dmi'
 	icon_state = "cone"
+	item_state = "cone"
 
-/obj/item/weapon/rack_parts
-	name = "rack parts"
-	desc = "Parts of a rack."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "rack_parts"
-	flags = FPRINT
-	siemens_coefficient = 1
-	starting_materials = list(MAT_IRON = 3750)
-	w_type = RECYK_METAL
-	melt_temperature=MELTPOINT_STEEL
+	species_fit = list(VOX_SHAPED)
 
-/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/weapon/weldingtool))
-		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
-			to_chat(user, "You begin slicing through \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(do_after(user, src, 60))
-				to_chat(user, "You cut \the [src] into a gun stock.")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
-					user.put_in_hands(I)
-					qdel(src)
-				else
-					new /obj/item/weapon/metal_gun_stock(get_turf(src.loc))
-					qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+	flags = HIDEHAIRCOMPLETELY
+	body_parts_covered = FULL_HEAD
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_HEAD
+
+/obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswirecutter(I))
+		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
+		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
+		qdel(src)
+		return
+	return ..()
 
 /obj/item/weapon/SWF_uplink
 	name = "station-bounced radio"
@@ -713,58 +736,6 @@
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 
-/obj/item/weapon/table_parts
-	name = "table parts"
-	desc = "Parts of a table. Poor table."
-	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "table_parts"
-	starting_materials = list(MAT_IRON = 3750)
-	w_type = RECYK_METAL
-	melt_temperature=MELTPOINT_STEEL
-	flags = FPRINT
-	siemens_coefficient = 1
-	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
-
-/obj/item/weapon/table_parts/cultify()
-	new /obj/item/weapon/table_parts/wood(loc)
-	..()
-
-/obj/item/weapon/table_parts/reinforced
-	name = "reinforced table parts"
-	desc = "Hard table parts. Well...harder..."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "reinf_tableparts"
-	starting_materials = list(MAT_IRON = 7500)
-	w_type = RECYK_METAL
-	melt_temperature=MELTPOINT_STEEL
-	flags = FPRINT
-	siemens_coefficient = 1
-
-/obj/item/weapon/table_parts/glass
-	name = "glass table parts"
-	desc = "Glass table parts for the spaceman with style."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "glass_tableparts"
-	starting_materials = list(MAT_GLASS = 3750)
-	w_type = RECYK_GLASS
-	melt_temperature=MELTPOINT_GLASS
-	flags = FPRINT
-	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
-
-/obj/item/weapon/table_parts/wood
-	name = "wooden table parts"
-	desc = "Keep away from fire."
-	icon_state = "wood_tableparts"
-	flags = 0
-
-/obj/item/weapon/table_parts/wood/poker
-	name = "gambling table parts"
-	icon_state = "gambling_tableparts"
-
-/obj/item/weapon/table_parts/wood/cultify()
-	return
-
 /obj/item/weapon/wire
 	desc = "This is just a simple piece of regular insulated wire."
 	name = "wire"
@@ -780,7 +751,7 @@
 
 /obj/item/weapon/wire/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (OXYLOSS)
+	return (SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/module
 	icon = 'icons/obj/module.dmi'
@@ -801,12 +772,14 @@
 	name = "power control module"
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."
+	board_type = OTHER
 
 /obj/item/weapon/circuitboard/station_map
 	icon = 'icons/obj/module.dmi'
 	name = "holomap module"
 	icon_state = "card_mod"
 	desc = "Holographic circuits for station holomaps."
+	board_type = OTHER
 
 /obj/item/weapon/module/id_auth
 	name = "\improper ID authentication module"
@@ -899,35 +872,34 @@
 //	to_chat(world, "[angle] [(get_dist(user, A) - 1)]")
 	user.Beam(A, "lightning", 'icons/obj/zap.dmi', 50, 15)
 /*Testing
-proc
     //  creates an /icon object with 360 states of rotation
-    rotate_icon(file, state, step = 1, aa = FALSE)
-        var icon/base = icon(file, state)
+proc/rotate_icon(file, state, step = 1, aa = FALSE)
+	var icon/base = icon(file, state)
 
-        var w, h, w2, h2
-        if(aa)
-            aa ++
-            w = base.Width()
-            w2 = w * aa
-            h = base.Height()
-            h2 = h * aa
+	var w, h, w2, h2
+	if(aa)
+		aa ++
+		w = base.Width()
+		w2 = w * aa
+		h = base.Height()
+		h2 = h * aa
 
-        var icon{result = icon(base); temp}
+	var icon{result = icon(base); temp}
 
-        for(var/angle in 0 to 360 step step)
-            if(angle == 0  )
-            	continue
-            if(angle == 360)
-            	continue
+	for(var/angle in 0 to 360 step step)
+		if(angle == 0  )
+			continue
+		if(angle == 360)
+			continue
 
-            temp = icon(base)
+		temp = icon(base)
 
-            if(aa)
-            	temp.Scale(w2, h2)
-            temp.Turn(angle)
-            if(aa)
-            	temp.Scale(w,   h)
+		if(aa)
+			temp.Scale(w2, h2)
+		temp.Turn(angle)
+		if(aa)
+			temp.Scale(w,   h)
 
-            result.Insert(temp, "[angle]")
+		result.Insert(temp, "[angle]")
 
-        return result*/
+	return result*/

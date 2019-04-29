@@ -104,11 +104,19 @@
 	mymob.throw_icon.name = "store"
 	mymob.throw_icon.screen_loc = ui_mommi_store
 
-	// Temp
+	//Temp
 	mymob.bodytemp = getFromPool(/obj/abstract/screen)
+	mymob.bodytemp.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.bodytemp.icon_state = "temp0"
-	mymob.bodytemp.name = "body temperature"
-	mymob.bodytemp.screen_loc = ui_temp
+	mymob.bodytemp.name = "environment temperature"
+	mymob.bodytemp.screen_loc = ui_borg_temp
+	
+	//Pressure
+	mymob.pressure = getFromPool(/obj/abstract/screen)
+	mymob.pressure.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.pressure.icon_state = "pressure0"
+	mymob.pressure.name = "environment pressure"
+	mymob.pressure.screen_loc = ui_borg_pressure
 
 	// Oxygen
 	mymob.oxygen = getFromPool(/obj/abstract/screen)
@@ -140,5 +148,5 @@
 	// Reset the client's screen
 	mymob.client.reset_screen()
 	// Add everything to their screen
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin) //, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.pressure, mymob.bodytemp, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen )
 	mymob.client.screen += src.adding + src.other

@@ -56,7 +56,7 @@ effective or pretty fucking useless.
 			else
 				to_chat(M, "<span class='danger'>You feel a sudden, electric jolt travel through your head.</span>")
 
-	playsound(get_turf(src), 'sound/misc/interference.ogg', 50, 1)
+	playsound(src, 'sound/misc/interference.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You trigger [src].</span>")
 	times_used += 1
 	if(times_used >= max_uses)

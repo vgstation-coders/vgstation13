@@ -10,7 +10,7 @@ but it is possible to add tech to the game that DON'T start in it (example: Xeno
 with these since they should be the default version of the datums. They're actually stored in a list rather then using typesof to
 refer to them since it makes it a bit easier to search through them for specific information.
 - know_tech is the companion list to possible_tech. It's the tech you can actually research and improve. Until it's added to this
-list, it can't be improved. All the tech in this list are visible to the player.
+list, it can't be improved. All the tech in this list are visible to the player. Formatted as known_tech[tech.id] = tech
 - possible_designs is functionally identical to possbile_tech except it's for /datum/design.
 - known_designs is functionally identical to known_tech except it's for /datum/design
 
@@ -58,8 +58,9 @@ var/global/list/hidden_tech = list(
 
 /datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
 	if(!tech_list.len)
-		for(var/T in typesof(/datum/tech) - hidden_tech)
-			tech_list += new T()
+		for(var/inst in typesof(/datum/tech) - hidden_tech)
+			var/datum/tech/T = new inst()
+			tech_list[T.id] = T
 	if(!design_list.len)
 		for(var/D in typesof(/datum/design) - /datum/design)
 			design_list += new D()
@@ -74,14 +75,20 @@ var/global/list/hidden_tech = list(
 		return 1
 	var/matches = 0
 	for(var/req in T.req_tech)
-		for(var/datum/tech/known in known_tech)
-			if((req == known.id) && (known.level >= T.req_tech[req]))
-				matches++
-				break
+		var/datum/tech/known = GetKTechByID(req)
+		if(known && (known.level >= T.req_tech[req]))
+			matches++
+			break
 	if(matches == T.req_tech.len)
 		return 1
 	else
 		return 0
+
+
+/datum/research/proc/GetKTechByID(var/id)
+	if(known_tech[id])
+		return known_tech[id]
+
 
 //Checks to see if design has all the required pre-reqs.
 //Input: datum/design; Output: 0/1 (false/true)
@@ -90,7 +97,8 @@ var/global/list/hidden_tech = list(
 		return 1
 	var/matches = 0
 	var/list/k_tech = list()
-	for(var/datum/tech/known in known_tech)
+	for(var/ID in known_tech)
+		var/datum/tech/known = known_tech[ID]
 		k_tech[known.id] = known.level
 	for(var/req in D.req_tech)
 		if(!isnull(k_tech[req]) && k_tech[req] >= D.req_tech[req])
@@ -99,32 +107,16 @@ var/global/list/hidden_tech = list(
 		return 1
 	else
 		return 0
-/*
-//Checks to see if design has all the required pre-reqs.
-//Input: datum/design; Output: 0/1 (false/true)
-/datum/research/proc/DesignHasReqs(var/datum/design/D)
-	if(D.req_tech.len == 0)
-		return 1
-	var/matches = 0
-	for(var/req in D.req_tech)
-		for(var/datum/tech/known in known_tech)
-			if((req == known.id) && (known.level >= D.req_tech[req]))
-				matches++
-				break
-	if(matches == D.req_tech.len)
-		return 1
-	else
-		return 0
-*/
+
 //Adds a tech to known_tech list. Checks to make sure there aren't duplicates and updates existing tech's levels if needed.
 //Input: datum/tech; Output: Null
 /datum/research/proc/AddTech2Known(var/datum/tech/T)
-	for(var/datum/tech/known in known_tech)
-		if(T.id == known.id)
-			if(T.level > known.level)
-				known.level = T.level
-			return 1
-	known_tech += T
+	var/datum/tech/known = GetKTechByID(T.id)
+	if(known)
+		if(T.level > known.level)
+			known.level = T.level
+		return 1
+	known_tech[T.id] = T
 	return 2
 
 /datum/research/proc/AddDesign2Known(var/datum/design/D)
@@ -140,14 +132,16 @@ var/global/list/hidden_tech = list(
 //Refreshes known_tech and known_designs list. Then updates the reliability vars of the designs in the known_designs list.
 //Input/Output: n/a
 /datum/research/proc/RefreshResearch()
-	for(var/datum/tech/PT in tech_list)
+	for(var/ID in tech_list)
+		var/datum/tech/PT = tech_list[ID]
 		if(TechHasReqs(PT))
 			AddTech2Known(PT)
 	for(var/datum/design/PD in design_list)
 		if(DesignHasReqs(PD))
 			AddDesign2Known(PD)
-	for(var/datum/tech/T in known_tech)
-		T = Clamp(T.level, 1, 20)
+	for(var/ID in known_tech)
+		var/datum/tech/T = known_tech[ID]
+		T.level = Clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
 	return
@@ -155,10 +149,9 @@ var/global/list/hidden_tech = list(
 //Refreshes the levels of a given tech.
 //Input: Tech's ID and Level; Output: null
 /datum/research/proc/UpdateTech(var/ID, var/level)
-	for(var/datum/tech/KT in known_tech)
-		if(KT.id == ID)
-			if(KT.level <= level)
-				KT.level = max((KT.level + 1), (level - 1))
+	var/datum/tech/KT = GetKTechByID(ID)
+	if(KT && KT.level <= level)
+		KT.level = max((KT.level + 1), (level - 1))
 	return
 
 /datum/research/proc/UpdateDesign(var/path)
@@ -298,14 +291,9 @@ datum/tech/robotics
 
 
 /obj/item/weapon/disk/tech_disk
-	name = "Technology Disk"
+	name = "technology data disk"
 	desc = "A disk for storing technology data for further research."
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk2"
-	item_state = "card-id"
-	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
-	w_type = RECYK_ELECTRONIC
+	icon_state = "disk_tech"
 	var/datum/tech/stored
 
 /obj/item/weapon/disk/tech_disk/New()

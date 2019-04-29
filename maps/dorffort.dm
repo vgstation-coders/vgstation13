@@ -25,7 +25,8 @@
 			name = "spacePirateShip" ;
 			},
 		)
-	New()
+
+/datum/map/active/New()
 
 /proc/make_dorf_secret()
 	var/turf/T = null
@@ -40,7 +41,7 @@
 	while(1)
 		sanity++
 		if(sanity > 100)
-			testing("Tried to place complex too many times.  Aborting.")
+			//testing("Tried to place complex too many times.  Aborting.")
 			return 0
 
 		T=pick(turfs)
@@ -58,7 +59,7 @@
 // Departmental Mining Surprises! -- Dorf Fort
 //**************************************************************
 /obj/item/toy/gooncode
-	origin_tech = MATERIALS + "=10;" + PLASMATECH + "=5;" + SYNDICATE + "=3;" + PROGRAMMING + "=10;" + BLUESPACE + "=5;" + POWERSTORAGE + "=5"
+	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=5;" + Tc_SYNDICATE + "=3;" + Tc_PROGRAMMING + "=10;" + Tc_BLUESPACE + "=5;" + Tc_POWERSTORAGE + "=5"
 
 
 
@@ -78,7 +79,7 @@
 		/obj/machinery/chem_master						= 6,
 		/obj/machinery/atmospherics/unary/cryo_cell		= 5,
 		/obj/machinery/dna_scannernew					= 5,
-		/obj/machinery/clonepod							= 1,
+		/obj/machinery/cloning/clonepod							= 1,
 		/obj/machinery/bioprinter						= 2,
 		/obj/machinery/computer/cloning					= 3,
 		/obj/machinery/bot/medbot/mysterious			= 1,
@@ -93,7 +94,7 @@
 		/obj/structure/closet/secure_closet/medical3	= 2,
 		/obj/structure/closet/secure_closet/medical2	= 2,
 		/obj/structure/bed/roller					= 3,
-		/obj/item/device/mass_spectrometer/adv			= 1,
+		/obj/item/device/reagent_scanner/adv			= 1,
 		/obj/item/clothing/glasses/hud/health			= 1,
 	)
 
@@ -101,27 +102,28 @@
 	room_size_max = 10
 	flags = CONTIGUOUS_WALLS
 
-	postProcessComplex()
-		..()
-		for(var/surprise_room/room in rooms)
-			var/list/w_cand=room.GetTurfs(TURF_FLOOR)
-			for(var/turf/simulated/floor/airless/F in w_cand)
-				if(!istype(F))
-					continue
-				F.icon_state = "barber"
+/mining_surprise/dorf/medbay/postProcessComplex()
+	..()
+	for(var/surprise_room/room in rooms)
+		var/list/w_cand=room.GetTurfs(TURF_FLOOR)
+		for(var/turf/simulated/floor/airless/F in w_cand)
+			if(!istype(F))
+				continue
+			F.icon_state = "barber"
 
 /obj/structure/closet/crate/secure/engisec/PA
 	name = "Particle Accelerator crate"
 	req_access = list(access_engine)
-	New()
-		new /obj/structure/particle_accelerator/fuel_chamber(src)
-		new /obj/machinery/particle_accelerator/control_box(src)
-		new /obj/structure/particle_accelerator/particle_emitter/center(src)
-		new /obj/structure/particle_accelerator/particle_emitter/left(src)
-		new /obj/structure/particle_accelerator/particle_emitter/right(src)
-		new /obj/structure/particle_accelerator/power_box(src)
-		new /obj/structure/particle_accelerator/end_cap(src)
-		..()
+/obj/structure/closet/crate/secure/engisec/PA/New()
+	new /obj/structure/particle_accelerator/fuel_chamber(src)
+	new /obj/machinery/particle_accelerator/control_box(src)
+	new /obj/structure/particle_accelerator/particle_emitter/center(src)
+	new /obj/structure/particle_accelerator/particle_emitter/left(src)
+	new /obj/structure/particle_accelerator/particle_emitter/right(src)
+	new /obj/structure/particle_accelerator/power_box(src)
+	new /obj/structure/particle_accelerator/end_cap(src)
+	..()
+
 /mining_surprise/dorf/engineering
 	name= "Abandoned Engine Room"
 	max_richness = 9
@@ -151,8 +153,8 @@
 		/obj/item/weapon/circuitboard/smes								= 1,
 		/obj/structure/closet/secure_closet/engineering_electrical		= 1,
 		/obj/structure/closet/secure_closet/engineering_welding			= 2,
-		/obj/item/weapon/rcd											= 1,
-		/obj/item/weapon/pipe_dispenser									= 1,
+		/obj/item/device/rcd											= 1,
+		/obj/item/device/rcd/rpd									= 1,
 	)
 
 	complex_max_size=2

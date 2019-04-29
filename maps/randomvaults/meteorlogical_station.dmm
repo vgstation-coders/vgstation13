@@ -2,11 +2,10 @@
 "ab" = (/turf/space,/area)
 "ac" = (/turf/unsimulated/mineral/random,/area/vault/meteorlogical)
 "ad" = (/obj/item/stack/sheet/animalhide/xeno,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ae" = (/obj/item/weapon/ore/phazon,/obj/item/weapon/ore/phazon,/obj/item/weapon/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"ae" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "af" = (/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ag" = (/obj/item/weapon/ore/glass,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"ag" = (/obj/item/stack/ore/glass,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "ah" = (/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ai" = (/turf/unsimulated/floor/asteroid,/area)
 "aj" = (/obj/structure/hanging_lantern,/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "ak" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "al" = (/turf/simulated/wall/invulnerable,/area/vault/meteorlogical)
@@ -21,7 +20,7 @@
 "au" = (/obj/machinery/computer/mech_bay_power_console,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "av" = (/obj/structure/table/glass,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aw" = (/obj/machinery/computer/security,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
-"ax" = (/obj/machinery/computer/crew{name = "Syndie crew monitoring computer"; track_special_role = "Syndicate"},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ax" = (/obj/machinery/computer/crew{name = "Syndie crew monitoring computer"; holomap_filter = HOLOMAP_FILTER_NUKEOPS},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "ay" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets{pixel_x = 3; pixel_y = 3},/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "az" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/weapon/storage/belt/slim,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aA" = (/obj/effect/decal/mecha_wreckage/phazon,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
@@ -33,7 +32,7 @@
 "aG" = (/obj/machinery/vending/snack,/obj/machinery/light{dir = 4},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aH" = (/obj/machinery/light,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aI" = (/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aJ" = (/obj/item/weapon/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"aJ" = (/obj/item/stack/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "aK" = (/obj/machinery/door/airlock/external{req_access_txt = "150"},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aL" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/obj/item/weapon/bedsheet/red,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aM" = (/obj/item/weapon/legcuffs/beartrap{armed = 1},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
@@ -79,7 +78,7 @@ aaaaabababababacacaaaaaaacacacacacacacacacabababaa
 aaaaaaacacacabacacacacacacacacacacacacacacaaacabaa
 aaaaabacacacacacacacadaeaeafagafagacacacacaaacabaa
 aaababacacacacacacacahafafafafagafacacacacacababaa
-abaiaiacacacacacacahajafafafafakafacacacacacababaa
+abafafacacacacacacahajafafafafakafacacacacacababaa
 abafacacacalalalalalalalalalalalalalalacacacacabaa
 aaafafacacalamanaoapaqarasatauavawaxalacacacacabab
 ababafacacalayananananazaAaBanananaCalacacacacacac
@@ -88,15 +87,15 @@ aaabacacacalanananananaHanaIananananalacacaJacabab
 aaabacacacalaKalalalalalalalalalalaLalacacafafabaa
 aaaaafacacalaMalaNaNaNaNaNaNaNaNaNalalacacacababaa
 aaaOafafacalanalaNaPaQaRaSaTaNaNaNaUalacacacaaaaaa
-aiabafacacalanalaNaVaVaWaXaIaYaNaNaNalacacacabaaab
+afabafacacalanalaNaVaVaWaXaIaYaNaNaNalacacacabaaab
 ababacacacalanalaNaZaVaVaVaVaVbabbaNaNacacacababab
 ababacacacalananbcbdbeaNbfbgbhaNbibjaNacacacacabab
 abaaafacacalbkalaNblblbmbnbnbnbobpbqaNacacacaaaaab
 aaacafacacalalalaNaNaNaNbrbnbsaNaNaNaNacacacaaaaaa
-abaiacafacacacacacacacacbtbnbuacacacacacacacaaaaaa
+abafacafacacacacacacacacbtbnbuacacacacacacacaaaaaa
 ababafafacacacacacacacacacafafacacacacacacacaaaaaa
 ababacacafacacbvacacacacacababacacacababacaaacabab
 aaaaafacabacacafafafafacacababababacacabababacabab
-aaabaaaaabafaaaaafaiabaiacababacacacacabacabacacaa
+aaabaaaaabafaaaaafafabafacababacacacacabacabacacaa
 ababaaabababaaabababaaaaabababafababababaaaaacafaa
 "}

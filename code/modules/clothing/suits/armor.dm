@@ -1,5 +1,21 @@
 /obj/item/clothing/suit/armor
-	allowed = list(/obj/item/weapon/gun/energy,/obj/item/weapon/reagent_containers/spray/pepper,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/gun/lawgiver,/obj/item/weapon/gun/siren,/obj/item/weapon/gun/mahoguny)
+	allowed = list(
+		/obj/item/weapon/gun/energy,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/weapon/gun/projectile,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/gun/lawgiver,
+		/obj/item/weapon/gun/siren,
+		/obj/item/weapon/gun/mahoguny,
+		/obj/item/weapon/gun/grenadelauncher,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/device/hailer,
+		)
 	body_parts_covered = FULL_TORSO
 	flags = FPRINT
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
@@ -15,6 +31,13 @@
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/armor/vest/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/weapon/grenade))
+		for(var/obj/item/clothing/accessory/bangerboy/B in accessories)
+			B.attackby(I,user)
+	else
+		..()
 
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
@@ -34,6 +57,13 @@
 	icon_state = "nr_vest"
 	item_state = "nr_vest"
 
+/obj/item/clothing/suit/armor/vest/chainmail
+	name = "chainmail"
+	desc = "A series of chains linked together in a way to look like a suit."
+	icon_state = "chainmail_torso"
+	item_state = "chainmail_torso"
+	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
+
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."
@@ -46,33 +76,47 @@
 
 
 /obj/item/clothing/suit/armor/knight
- 	name = "plate armour"
- 	desc = "A classic suit of plate armour, highly effective at stopping melee attacks."
- 	icon_state = "knight_green"
- 	item_state = "knight_green"
- 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
- 	slowdown = HARDSUIT_SLOWDOWN_LOW
- 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
+	name = "plate armour"
+	desc = "A classic suit of plate armour, highly effective at stopping melee attacks."
+	icon_state = "knight_green"
+	item_state = "knight_green"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
+	clothing_flags = GOLIATHREINFORCE
 
 
 /obj/item/clothing/suit/armor/knight/yellow
- 	icon_state = "knight_yellow"
- 	item_state = "knight_yellow"
+	icon_state = "knight_yellow"
+	item_state = "knight_yellow"
 
 /obj/item/clothing/suit/armor/knight/blue
- 	icon_state = "knight_blue"
- 	item_state = "knight_blue"
+	icon_state = "knight_blue"
+	item_state = "knight_blue"
 
 /obj/item/clothing/suit/armor/knight/red
- 	icon_state = "knight_red"
- 	item_state = "knight_red"
+	icon_state = "knight_red"
+	item_state = "knight_red"
 
 /obj/item/clothing/suit/armor/knight/templar
- 	name = "crusader armour"
- 	desc = "God wills it!"
- 	icon_state = "knight_templar"
- 	item_state = "knight_templar"
+	name = "crusader armour"
+	desc = "God wills it!"
+	icon_state = "knight_templar"
+	item_state = "knight_templar"
 
+/obj/item/clothing/suit/armor/knight/plain
+	icon_state = "knight_grey"
+	item_state = "knight_grey"
+
+/obj/item/clothing/suit/armor/knight/interrogator
+	name = "interrogator armour"
+	desc = "A fancy suit of plate armour, marked by the oath of the dark angels."
+	icon_state = "interrogator-green"
+	item_state = "interrogator-green"
+
+/obj/item/clothing/suit/armor/knight/interrogator/red
+	icon_state = "interrogator-red"
+	item_state = "interrogator-red"
 
 /obj/item/clothing/suit/armor/xcomsquaddie
 	name = "Squaddie Armor"
@@ -119,6 +163,17 @@
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	var/basereflectchance = 60
+
+/obj/item/clothing/suit/armor/laserproof/advanced
+	name = "Vest of Reflection"
+	desc = "This modified version of a common ablative armor vest is guaranteed to reflect every single energy projectile coming your way. As a slight tradeoff though, it doesn't provide any protection."
+	icon_state = "armor_reflec_adv"
+	item_state = "armor_reflec_adv"
+
+	//Reflect literally everything
+	basereflectchance = 300
+
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/laserproof/become_defective()
 	if(!defective)
@@ -178,7 +233,7 @@
 		src.add_fingerprint(user)
 	return
 
-/obj/item/clothing/suit/armor/reactive/on_block(damage, attack_text)
+/obj/item/clothing/suit/armor/reactive/on_block(damage, atom/blocked)
 	if(!prob(35))
 		return 0 //35% chance
 
@@ -206,9 +261,9 @@
 	if(!isturf(picked))
 		return
 
-	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of [attack_text]!</span>", "<span class='notice'>The reactive teleport system flings you clear of [attack_text].</span>")
+	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of \the [blocked]!</span>", "<span class='notice'>The reactive teleport system flings you clear of \the [blocked].</span>")
 
-	playsound(get_turf(L), 'sound/effects/teleport.ogg', 30, 1)
+	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
 
 	L.forceMove(picked)
 

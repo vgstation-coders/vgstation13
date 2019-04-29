@@ -34,6 +34,7 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror
 	name = "cyber horror"
 	desc = "What was once a man, twisted and warped by machine."
+	icon = 'icons/mob/cyber_horror.dmi'
 	icon_state = "cyber_horror"
 	icon_dead = "cyber_horror_dead"
 	icon_gib = "cyber_horror_dead"
@@ -80,15 +81,14 @@
 	var/mob/living/L = target
 	if(L.reagents)
 		if(prob(nanobot_chance))
-			visible_message("<b><span class='warning'>[src] injects something from its flailing arm!</span>")
+			visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
 			L.reagents.add_reagent(MEDNANOBOTS, 2)
 
-/mob/living/simple_animal/hostile/monster/cyber_horror/Die()
-	..()
+/mob/living/simple_animal/hostile/monster/cyber_horror/death(var/gibbed = FALSE)
+	..(gibbed)
 	visible_message("<b>[src]</b> blows apart!")
 	new /obj/effect/gibspawner/robot(src.loc)
 	qdel(src)
-	return
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/Vox
 	name = "vox cyber horror"
@@ -116,3 +116,43 @@
 	name = "plasmaman cyber horror"
 	desc = "What was once the suit of a plasmaman, filled with roiling nanobots."
 	icon_state = "plasma_cyber_horror"
+
+/mob/living/simple_animal/hostile/monster/cyber_horror/monster/New(loc, var/mob/living/who_we_were)
+	name = who_we_were.name+" cyber horror"
+	desc = "What was once \a [who_we_were], twisted by machine."
+	var/multiplier = who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1
+	var/has_robo_icon = FALSE
+	if(isanimal(who_we_were))
+		var/mob/living/simple_animal/S = who_we_were
+		if(has_icon(icon, S.icon_living))
+			has_robo_icon = TRUE
+			icon_state = S.icon_living
+			icon_living = S.icon_living
+	if(!has_robo_icon)
+		var/icon/original = icon(who_we_were.icon, who_we_were.icon_state)
+		original.ColorTone("#71E3E0")
+		icon = original
+	if(isanimal(who_we_were))
+		var/mob/living/simple_animal/SA = who_we_were
+		melee_damage_lower = max(1,max(1,SA.melee_damage_lower)*rand(multiplier/3,multiplier))
+		melee_damage_upper = max(melee_damage_lower,max(melee_damage_lower,SA.melee_damage_upper)*rand(multiplier/2,multiplier))
+		speed = SA.speed
+		speak = list()
+		for(var/i in SA.speak)
+			i = uppertext(i)
+			/*var/regex/replace = new("A|E|I|O|U|R|S|T") //All vowels, and the 3 most common consonants
+			i = replace.ReplaceAll(i,pick("@","!","$","%","#"))*/
+			for(var/ii in list("A","E","I","O","U","R","S","T"))
+				i = replacetextEx(i,ii,pick("@","!","$","%","#"))
+			speak.Add(i)
+		if(istype(SA, /mob/living/simple_animal/hostile))
+			var/mob/living/simple_animal/hostile/H = SA
+			move_to_delay = H.move_to_delay
+
+	if(iscarbon(who_we_were))
+		var/mob/living/carbon/C = who_we_were
+		melee_damage_lower = C.get_unarmed_damage()*rand(multiplier/3,multiplier)
+		melee_damage_upper = C.get_unarmed_damage()*rand(multiplier/2,multiplier)
+	maxHealth = who_we_were.maxHealth*rand(multiplier/2,multiplier*2)
+	health = maxHealth
+	..()

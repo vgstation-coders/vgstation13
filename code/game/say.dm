@@ -35,6 +35,7 @@ var/list/freqtospan = list(
 	"1213" = "syndradio",
 	"1441" = "dsquadradio",
 	"1345" = "resteamradio",
+	"1215" = "raiderradio",
 	)
 
 var/list/freqtoname = list(
@@ -50,6 +51,7 @@ var/list/freqtoname = list(
 	"1349" = "Service",
 	"1447" = "AI Private",
 	"1345" = "Response Team",
+	"1215" = "Raider",
 )
 
 /atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class) //so we can force nonmobs to speak a certain language
@@ -75,8 +77,14 @@ var/list/freqtoname = list(
 	if(isnull(range))
 		range = 7
 	var/rendered = render_speech(speech)
-	for(var/atom/movable/AM in get_hearers_in_view(range, src))
+	var/list/listeners = get_hearers_in_view(range, src)
+	if(speech.speaker.GhostsAlwaysHear())
+		listeners |= observers
+	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+
+/atom/movable/proc/GhostsAlwaysHear()
+	return FALSE
 
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)
@@ -100,11 +108,8 @@ var/list/freqtoname = list(
 /atom/movable/proc/render_speech(var/datum/speech/speech)
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
-	var/radioicon = ""
 	if(speech.frequency)
-		if(speech.radio)
-			radioicon = "[bicon(speech.radio)]"
-		freqpart = " [radioicon]\[[get_radio_name(speech.frequency)]\]"
+		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
 	var/pooled=0
 	var/datum/speech/filtered_speech
@@ -345,7 +350,16 @@ var/global/resethearers = 0
 		return
 
 	for(var/mob/virtualhearer/VH in hearers(R, T))
-		. += VH.attached
+		var/can_hear = 1
+		if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
+			var/mob/M = VH.attached
+			if(M.client)						//The mob has a client.
+				var/client/C = M.client
+				if(C.ObscuredTurfs.len)			//The client is in range of something that is artificially obscuring its view.
+					if(T in C.ObscuredTurfs)	//The source's turf is one that is being artificially obscured.
+						can_hear = 0
+		if(can_hear)
+			. += VH.attached
 
 /**
  * Returns a list of mobs who can hear any of the radios given in @radios.

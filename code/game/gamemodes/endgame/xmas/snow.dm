@@ -6,6 +6,9 @@
 
 #define TICK_JIGGLE(X) rand(((X)-((X)*0.1)),((X)+((X)*0.1)))
 
+var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
+
+
 /obj/structure/snow
 	name = "snow"
 	layer = SNOW_LAYER
@@ -33,13 +36,14 @@
 		"snowgrassall3",
 		)
 
+
 /obj/structure/snow/New()
 	..()
 	if(prob(17))
 		overlays += image('icons/obj/flora/snowflora.dmi',pick(foliage))
 
 /obj/structure/snow/attackby(obj/item/W,mob/user)
-	if(istype(W,/obj/item/weapon/pickaxe/shovel))//using a shovel or spade harvests some snow and let's you click on the lower layers
+	if(isshovel(W))//using a shovel or spade harvests some snow and let's you click on the lower layers
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		snow_amount = SNOWCOVERING_LITTLE
 		icon_state = "snow_dug"
@@ -70,11 +74,16 @@
 			processing_objects.Remove(src)
 	next_update=world.time + TICK_JIGGLE(300) // 30 seconds
 
+/obj/structure/snow/Crossed(mob/user)
+	..()
+	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
+		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
+
 
 /obj/structure/snow/attack_hand(mob/user)
 	if(snow_amount != SNOWCOVERING_FULL)
 		return
-	playsound(get_turf(src), "rustle", 50, 1)
+	playsound(src, "rustle", 50, 1)
 	to_chat(user, "<span class='notice'>You start digging the snow with your hands.</span>")
 	if(do_after(user, src, 30))
 		snow_amount = SNOWCOVERING_MEDIUM
@@ -617,6 +626,18 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 		for(var/i=1,i<=rand(1,3),i++)
 			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(T,5)
+
+
+/obj/structure/snow_flora/tree/pine/xmas/vg/New()
+	..()
+	icon_state = "spessmastree"
+
+/obj/item/ice_crystal
+	name = "ice crystal"
+	desc = "crystallized water. Take a chunk or two off to cool down your liquor."
+	icon_state = "ice_crystal"
+	melt_temperature = MELTPOINT_SNOW
+	w_class = W_CLASS_TINY
 
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM

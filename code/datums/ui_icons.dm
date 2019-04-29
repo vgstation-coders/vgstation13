@@ -56,3 +56,7 @@
 	var/obj/abstract/screen/specialblob/blob_ping = null
 	var/obj/abstract/screen/specialblob/blob_rally = null
 	var/obj/abstract/screen/specialblob/blob_taunt = null
+
+	var/obj/abstract/screen/soulblade_bgLEFT = null
+	var/obj/abstract/screen/soulblade_coverLEFT = null
+	var/obj/abstract/screen/soulblade_bloodbar = null

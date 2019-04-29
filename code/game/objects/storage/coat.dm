@@ -39,24 +39,12 @@
 	hold.emp_act(severity)
 	..()
 
-/obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
-	if(ishuman(usr) || ismonkey(usr))
-		var/mob/M = usr
-		if (!( istype(over_object, /obj/abstract/screen/inventory) ))
-			return ..()
+/obj/item/clothing/suit/storage/on_mousedrop_to_inventory_slot()
+	playsound(src, "rustle", 50, 1, -5)
 
-		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
-			return
-
-		playsound(get_turf(src), "rustle", 50, 1, -5)
-		if (!M.incapacitated())
-			var/obj/abstract/screen/inventory/OI = over_object
-
-			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
-				M.u_equip(src, 0)
-				M.put_in_hand(OI.hand_index, src)
-				M.update_inv_wear_suit()
-				src.add_fingerprint(usr)
-			return
-
-		usr.attack_hand(src)
+/obj/item/clothing/suit/storage/MouseDropFrom(atom/over_object)
+	if(over_object == usr) //show container to user
+		return hold.MouseDropFrom(over_object)
+	else if(istype(over_object, /obj/structure/table)) //empty on table
+		return hold.MouseDropFrom(over_object)
+	return ..()

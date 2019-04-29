@@ -57,7 +57,7 @@
 			return //If he has no head, you can't see whether he has teeth or not!
 
 		var/obj/item/clothing/mask/M = H.wear_mask
-		if(istype(M) && is_slot_hidden(M,MOUTH))
+		if(istype(M) && is_slot_hidden(M.body_parts_covered,MOUTH))
 			return //If his mouth is covered, we can't see his teeth
 
 	var/pronoun = "Its"
@@ -129,11 +129,47 @@
 /datum/butchering_product/skin/cat
 	result = /obj/item/stack/sheet/animalhide/cat
 
+/datum/butchering_product/skin/cat/lots
+	amount = 3
+
 /datum/butchering_product/skin/corgi
 	result = /obj/item/stack/sheet/animalhide/corgi
 
 /datum/butchering_product/skin/lizard
 	result = /obj/item/stack/sheet/animalhide/lizard
+
+/datum/butchering_product/skin/lizard/lots
+	amount = 3
+
+/datum/butchering_product/skin/human
+	result = /obj/item/stack/sheet/animalhide/human
+	amount = 3
+
+/datum/butchering_product/skin/gondola
+	result = /obj/item/stack/sheet/animalhide/gondola
+	amount = 2
+
+/datum/butchering_product/skin/human/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	if(ishuman(parent))
+		var/mob/living/carbon/human/H = parent
+
+		var/obj/item/stack/sheet/animalhide/A = new result(location)
+
+		if(!isjusthuman(H) && H.species) //Grey skin, unathi skin, etc.
+			A.name = H.species.name ? "[lowertext(H.species.name)] skin" : A.name
+			A.source_string = H.species.name ? lowertext(H.species.name) : A.source_string
+		else
+			if(H.mind && H.mind.assigned_role && H.mind.assigned_role != "MODE") //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
+				A.name = "[lowertext(H.mind.assigned_role)] skin"
+				A.source_string = lowertext(H.mind.assigned_role)
+
+/datum/butchering_product/skin/deer
+	result = /obj/item/stack/sheet/animalhide/deer
+	amount = 3
+	initial_amount = 3
 
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
@@ -211,6 +247,55 @@
 	if(!amount)
 		return "Its core has been taken. "
 
+
+//======deer head
+
+/datum/butchering_product/deer_head
+	result = /obj/item/deer_head
+	verb_name = "remove head"
+	verb_gerund = "removing the head from"
+	amount = 1
+	butcher_time = 15
+
+/datum/butchering_product/deer_head/desc_modifier()
+	if(!amount)
+		return "Its head has been taken. "
+
+/datum/butchering_product/deer_head/spawn_result(location, mob/parent)
+	if(isliving(parent))
+		var/mob/living/L = parent
+		L.update_icons()
+		L.mob_property_flags |= MOB_NO_LAZ
+
+	if(amount > 0)
+		amount--
+		var/obj/I = new result(location)
+
+		if(istype(parent, /mob/living/simple_animal/hostile/deer))
+			var/mob/living/simple_animal/hostile/deer/D = parent
+
+			if(D.icon_living == "deer_flower")
+				I.icon_state = "deer-head-flower"
+			else if(istype(D, /mob/living/simple_animal/hostile/deer/flesh))
+				I.icon_state = "deer-head-flesh"
+
+//======Rabbits
+
+/datum/butchering_product/rabbit_ears
+	result = /obj/item/clothing/head/rabbitears
+	verb_name = "remove ears"
+	verb_gerund = "removing the ears from"
+	amount = 1
+	butcher_time = 10
+
+/datum/butchering_product/rabbit_foot
+	result = /obj/item/clothing/accessory/rabbit_foot
+	verb_name = "remove foot"
+	verb_gerund = "removing the foot from"
+	amount = 1 //Only the back left foot is considered lucky.
+	butcher_time = 10
+
+
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
 #define TEETH_LOTS		/datum/butchering_product/teeth/lots	//16-24
@@ -219,7 +304,7 @@
 var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/cat						= list(/datum/butchering_product/skin/cat),
 	/mob/living/simple_animal/corgi						= list(/datum/butchering_product/skin/corgi, TEETH_FEW),
-	/mob/living/simple_animal/lizard					= list(/datum/butchering_product/skin/lizard),
+	/mob/living/simple_animal/hostile/lizard			= list(/datum/butchering_product/skin/lizard),
 	/mob/living/simple_animal/hostile/asteroid/goliath	= list(/datum/butchering_product/skin/goliath, TEETH_LOTS),
 	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
 	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
@@ -230,15 +315,19 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk
 	/mob/living/simple_animal/hostile/creature			= list(TEETH_LOTS),
 	/mob/living/simple_animal/hostile/frog				= list(/datum/butchering_product/frog_leg),
+	/mob/living/simple_animal/hostile/deer				= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
+	/mob/living/simple_animal/hostile/deer/flesh		= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
+	/mob/living/simple_animal/rabbit					= list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot),
 
-	/mob/living/carbon/human							= list(TEETH_HUMAN),
-	/mob/living/carbon/human/unathi						= list(TEETH_LOTS),
+	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
+	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),
 	/mob/living/carbon/human/skrell						= list(TEETH_LOTS),
 	/mob/living/carbon/human/skellington				= list(TEETH_HUMAN),
-	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN),
+	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN, /datum/butchering_product/skin/cat/lots),
 	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),
 
+	/mob/living/carbon/complex/gondola				= list(/datum/butchering_product/skin/gondola, TEETH_FEW),
 )
 
 #undef TEETH_FEW

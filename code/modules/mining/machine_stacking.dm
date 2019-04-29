@@ -3,8 +3,8 @@
 /obj/machinery/computer/stacking_unit
 	name = "stacking machine console"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "computer_generic"
-	light_color = LIGHT_COLOR_GREEN
+	icon_state = "stacking_machine_console"
+	light_color = LIGHT_COLOR_BLUE
 	circuit = "/obj/item/weapon/circuitboard/stacking_machine_console"
 
 	var/stacker_tag//The ID of the stacker this console should control
@@ -210,7 +210,7 @@
 
 			stacks["[stackA.type]"] = stack
 			returnToPool(stackA)
-		//else if (istype(O, /obj/item/weapon/ore/slag))
+		//else if (istype(O, /obj/item/stack/ore/slag))
 		//	returnToPool(O)
 		else
 			A.forceMove(out_T)

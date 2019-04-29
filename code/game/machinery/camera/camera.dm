@@ -1,3 +1,7 @@
+#define CAMERA_MAX_HEALTH 120
+#define CAMERA_DEACTIVATE_HEALTH 45
+#define CAMERA_MIN_WEAPON_DAMAGE 5
+
 var/list/camera_names=list()
 /obj/machinery/camera
 	name = "security camera"
@@ -8,9 +12,10 @@ var/list/camera_names=list()
 	idle_power_usage = 5
 	active_power_usage = 10
 	plane = ABOVE_HUMAN_PLANE
+	flags = FPRINT
 
 	var/datum/wires/camera/wires = null // Wires datum
-	var/list/network = list("SS13")
+	var/list/network = list(CAMERANET_SS13)
 	var/c_tag = null
 	var/c_tag_order = 999
 	var/status = 1.0
@@ -34,6 +39,7 @@ var/list/camera_names=list()
 	var/hear_voice = 0
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
+	var/health = CAMERA_MAX_HEALTH
 
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
@@ -77,13 +83,19 @@ var/list/camera_names=list()
 		ASSERT(src.network)
 		ASSERT(src.network.len > 0)
 
+	//allow mappers to use the name field for the camera instead of c_tag
+	//this helps organize the camera object list in DreamMaker
+	if(name != initial(name) && !c_tag)
+		c_tag = name
+		name = initial(name)
 	if(!c_tag)
 		name_camera()
 	..()
 	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
-		adv_camera.update(z, 0, src, adding=1)
-
+		adv_camera.update(z, TRUE, list(src))
 	update_hear()
+	cameranet.cameras += src // This is different from addCamera. addCamera() cares about visibility.
+	cameranet.addCamera(src)
 
 /obj/machinery/camera/proc/name_camera()
 	var/area/A=get_area(src)
@@ -112,6 +124,7 @@ var/list/camera_names=list()
 		qdel(assembly)
 		assembly = null
 	wires = null
+	cameranet.cameras -= src
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
 	if(adv_camera)
 		for(var/key in adv_camera.camerasbyzlevel)
@@ -126,6 +139,7 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
+		adv_camera.update(z, TRUE, list(src))
 		set_light(0)
 		triggerCameraAlarm()
 		update_icon()
@@ -136,7 +150,7 @@ var/list/camera_names=list()
 			update_icon()
 			if(can_use())
 				cameranet.addCamera(src)
-				adv_camera.update(z, 0, src, adding=1)
+				adv_camera.update(z, TRUE, list(src))
 		for(var/mob/O in mob_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
@@ -161,11 +175,6 @@ var/list/camera_names=list()
 	src.view_range = num
 	cameranet.updateVisibility(src, 0)
 
-/obj/machinery/camera/shock(var/mob/living/user)
-	if(!istype(user))
-		return
-	user.electrocute_act(10, src)
-
 /obj/machinery/camera/attack_paw(mob/living/carbon/alien/humanoid/user as mob)
 	if(!istype(user))
 		return
@@ -175,16 +184,33 @@ var/list/camera_names=list()
 	update_icon()
 	user.do_attack_animation(src, user)
 	visible_message("<span class='warning'>\The [user] slashes at [src]!</span>")
-	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/slash.ogg', 100, 1)
 	add_hiddenprint(user)
 	deactivate(user,0)
 
+#define MAX_CAMERA_MESSAGES 15
 var/list/camera_messages = list()
 
-/obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
+/obj/machinery/camera/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damtype == HALLOSS)
+		return
+
+	take_damage(Proj.damage)
+
+/obj/machinery/camera/proc/dismantle()
+	if(assembly)
+		assembly.anchored = TRUE
+		assembly.state = 1
+		assembly.forceMove(loc)
+		transfer_fingerprints(src, assembly)
+		assembly.update_icon()
+		assembly = null
+	qdel(src)
+
+/obj/machinery/camera/attackby(obj/item/W, mob/living/user)
 
 	// DECONSTRUCTION
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 //		to_chat(user, "<span class='notice'>You start to [panel_open ? "close" : "open"] the camera's panel.</span>")
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
 		togglePanelOpen(W, user, icon_state, icon_state)
@@ -192,14 +218,9 @@ var/list/camera_messages = list()
 	else if(panel_open && iswiretool(W))
 		wires.Interact(user)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
+	else if(iswelder(W) && wires.CanDeconstruct())
 		if(weld(W, user))
-			if(assembly)
-				assembly.state = 1
-				assembly.forceMove(src.loc)
-				assembly = null
-
-			qdel(src)
+			dismantle()
 
 	// Upgrades!
 	else if(is_type_in_list(W, assembly.possible_upgrades)) // Is a possible upgrade
@@ -239,7 +260,7 @@ var/list/camera_messages = list()
 			var/obj/U = locate(/obj) in assembly.upgrades
 			if(U)
 				to_chat(user, "You unattach \the [U] from the camera.")
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 				U.forceMove(get_turf(src))
 				assembly.upgrades -= U
 				update_upgrades()
@@ -256,7 +277,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold \a [W] up to the camera ...")
+		to_chat(U, "You hold [W] up to the camera ...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
@@ -266,38 +287,67 @@ var/list/camera_messages = list()
 			var/obj/item/device/pda/P = W
 			info = P.notehtml
 
-		camera_messages["[html_encode(W.name)]"] = info
+		var/key = "\ref[W]"
+		if(camera_messages.len > MAX_CAMERA_MESSAGES)
+			camera_messages.Cut(1, 2) // Removes the oldest element
+		camera_messages[key] = list("text" = info, "title" = W.name)
 
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
 			if(U.name == "Unknown")
-				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'>[U]</span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 			else
-				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
+					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
-	return
+		add_fingerprint(user)
+		user.delayNextAttack(8)
+		if(user.a_intent == I_HELP)
+			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
+			return
+		W.on_attack(src, user)
+		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
+			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
+			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
+			return
+		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		take_damage(W.force)
+
+/obj/machinery/camera/proc/take_damage(var/amount)
+	if(amount <= 0)
+		return
+	triggerCameraAlarm()
+	health -= amount
+	if(health <= CAMERA_DEACTIVATE_HEALTH && status)
+		deactivate()
+	if(health <= 0)
+		spark(src)
+		dismantle()
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())
 		return 1
 
-	if(href_list["picturename"])
-		var/picturename = href_list["picturename"]
-		var/pictureinfo = camera_messages[picturename]
-		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", picturename, pictureinfo), text("window=[]", picturename))
+	if(href_list["message_id"])
+		var/message_id = href_list["message_id"]
+		var/list/pictureinfo = camera_messages[message_id]
+		usr << browse("<HTML><HEAD><TITLE>[pictureinfo["title"]]</TITLE></HEAD><BODY><TT>[pictureinfo["text"]]</TT></BODY></HTML>", "window=[message_id]")
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)
 
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
+	vision_flags = SEE_SELF
+	if(assembly)
+		update_upgrades()
+	cameranet.addCamera(src)
 	if(choice==1)
 		status = !( src.status )
 		update_icon()
@@ -307,7 +357,7 @@ var/list/camera_messages = list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \The [src] deactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 			add_hiddenprint(user)
 		else
 			if(user)
@@ -315,7 +365,7 @@ var/list/camera_messages = list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \The [src] reactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 			add_hiddenprint(user)
 		cameranet.updateVisibility(src, 0)
 	// now disconnect anyone using the camera
@@ -328,25 +378,22 @@ var/list/camera_messages = list()
 				O.unset_machine()
 				O.reset_view(null)
 				to_chat(O, "The screen bursts into static.")
-	if(choice && can_use()) //camera reactivated
-		adv_camera.update(z, 0, src, adding=1)
-	else //either deactivated OR being destroyed
-		adv_camera.update(z, 0, src, adding=2)
+	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/triggerCameraAlarm()
-	if(!alarm_on)
-		adv_camera.update(z, 0, src, adding=4) //1 is alarming, 0 is nothing wrong
 	alarm_on = 1
+	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
-		S.triggerAlarm("Camera", areaMaster, list(src), src)
+		S.triggerAlarm("Camera", this_area, list(src), src)
+	adv_camera.update(z, TRUE, list(src))
 
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
-	if(alarm_on)
-		adv_camera.update(z, 0, src, adding=4) //1 is alarming, 0 is nothing wrong
 	alarm_on = 0
+	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
-		S.cancelAlarm("Camera", areaMaster, src)
+		S.cancelAlarm("Camera", this_area, src)
+	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/can_use()
 	if(!status)
@@ -399,18 +446,12 @@ var/list/camera_messages = list()
 
 	if(busy)
 		return 0
-	if(!WT.isOn())
-		return 0
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to weld the [src].</span>")
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-	WT.eyecheck(user)
 	busy = 1
-	if(do_after(user, src, 100))
+	if(WT.do_weld(user, src, 100, 0))
 		busy = 0
-		if(!WT.isOn())
-			return 0
 		return 1
 	busy = 0
 	return 0
@@ -423,27 +464,26 @@ var/list/camera_messages = list()
 		return 1
 	return 0
 
-/obj/machinery/camera/proc/tv_message(var/atom/movable/hearer, var/datum/speech/speech)
+/obj/machinery/camera/proc/tv_message(var/datum/speech/speech)
 	speech.wrapper_classes.Add("tv")
-	hearer.Hear(speech)
-
+	return speech
 	/*
 	var/namepart =  "[speaker.GetVoice()][speaker.get_alt_name()] "
 	var/messagepart = "<span class='message'>[hearer.lang_treat(speaker, speaking, raw_message)]</span>"
-
 	return "<span class='game say'><span class='name'>[namepart]</span>[messagepart]</span>"
 	*/
 
 /obj/machinery/camera/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(isHearing())
+		var/datum/speech/copy = speech.clone()
+		tv_message(copy)
 		for(var/obj/machinery/computer/security/S in tv_monitors)
 			if(S.current == src)
-				if(istype(S, /obj/machinery/computer/security/telescreen))
-					for(var/mob/M in viewers(world.view,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
-				else
-					for(var/mob/M in viewers(1,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
+				var/range = (istype(S, /obj/machinery/computer/security/telescreen) ? world.view : 1)
+				for (var/mob/virtualhearer/VH in viewers(range, S))
+					if (!ismob(VH.attached))
+						continue
+					VH.Hear(copy, "[bicon(S)] [rendered_speech]")
 
 /obj/machinery/camera/arena
 	name = "arena camera"
@@ -462,8 +502,8 @@ var/list/camera_messages = list()
 	upgradeXRay()
 	upgradeHearing()
 
-/obj/machinery/camera/arena/attackby(W as obj, mob/living/user as mob)
-	if(isscrewdriver(W))
+/obj/machinery/camera/arena/attackby(obj/item/W as obj, mob/living/user as mob)
+	if(W.is_screwdriver(user))
 		to_chat(user, "<span class='warning'>There aren't any visible screws to unscrew.</span>")
 	else
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W] but it doesn't seem to affect it in the least.</span>","<span class='warning'>You hit \the [src] with \the [W] but it doesn't seem to affect it in the least</span>")
@@ -494,6 +534,9 @@ var/list/camera_messages = list()
 /obj/machinery/camera/arena/attack_pai(mob/user as mob)
 	return
 
+/obj/machinery/camera/arena/bullet_act(var/obj/item/projectile/Proj)
+	return
+
 /obj/machinery/camera/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
@@ -506,3 +549,7 @@ var/list/camera_messages = list()
 		togglePanelOpen(null, L)
 	if(wires)
 		wires.npc_tamper(L)
+
+#undef CAMERA_MAX_HEALTH
+#undef CAMERA_DEACTIVATE_HEALTH
+#undef CAMERA_MIN_WEAPON_DAMAGE

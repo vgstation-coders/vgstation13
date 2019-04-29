@@ -12,6 +12,7 @@
 	maxHealth = 25
 	health = 25
 	size = SIZE_SMALL
+	mob_property_flags = MOB_CONSTRUCT
 
 	harm_intent_damage = 8
 	melee_damage_lower = 15
@@ -62,7 +63,7 @@
 /mob/living/simple_animal/hostile/balloon/FindTarget()
 	. = ..()
 	if(.)
-		emote("squeaks at [.]")
+		emote("me",,"squeaks at [.].")
 
 /mob/living/simple_animal/hostile/balloon/AttackingTarget()
 	if(!target)
@@ -73,6 +74,7 @@
 	if(istype(L))
 		if(prob(15))
 			L.Knockdown(3)
+			L.Stun(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/balloon/attackby(obj/item/W, mob/user)
@@ -90,8 +92,8 @@
 		for(var/obj/item/toy/balloon/inflated/long/shaped/B in living_balloons)
 			if(get_turf(src) in view(B))
 				B.live()
-	Die()
+	death()
 
-/mob/living/simple_animal/hostile/balloon/Die()
-	..()
+/mob/living/simple_animal/hostile/balloon/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)

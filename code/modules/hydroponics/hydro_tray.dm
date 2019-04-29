@@ -43,7 +43,8 @@
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
 
-	var/bees = 0				//Are there currently bees above the tray?
+	var/pollination = 0
+	var/bees = 0				//Are the trays currently affected by the bees' pollination?
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
 	var/weed_coefficient = 1    //Coefficient to the chance of weeds appearing
@@ -120,8 +121,6 @@
 
 //Harvests the product of a plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/harvest(var/mob/user)
-
-
 	//Harvest the product of the plant,
 	if(!seed || !harvest || !user)
 		return
@@ -134,6 +133,17 @@
 		return
 
 	seed.harvest(user,yield_mod)
+	after_harvest()
+	return
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/autoharvest()
+	if(!seed || !harvest)
+		return
+
+	seed.autoharvest(get_turf(src))
+	after_harvest()
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
 	// Reset values.
 	harvest = 0
@@ -169,7 +179,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -239,12 +249,16 @@
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && istype(O, /obj/item/weapon/pickaxe/shovel))
+	else if(seed && isshovel(O))
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
 			return
+		if(C.being_potted)
+			to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
+			return
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		C.being_potted = TRUE
 		if(do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
@@ -279,7 +293,8 @@
 
 			check_level_sanity()
 			update_icon()
-
+		else
+			C.being_potted = FALSE
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
@@ -306,12 +321,13 @@
 
 		// Bookkeeping.
 		check_level_sanity()
+		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
 
 		return
 
-	else if (istype(O, /obj/item/weapon/minihoe))
+	else if (ishoe(O))
 
 		if(weedlevel > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
@@ -370,6 +386,11 @@
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
+
+	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
+		to_chat(user, "You use \the [O] as compost for \the [src].")
+		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+		qdel(O)
 
 	else
 		return ..()
@@ -511,13 +532,13 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
 	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
-		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/lizard) && !M.locked_to && !M.anchored)
+		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
 				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
 					return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
 				visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
 				if(M.health > 0)
-					M.Die()
+					M.death()
 				lock_atom(M, /datum/locking_category/hydro_tray)
 				spawn(30)
 					if(M && M.loc == get_turf(src))
@@ -553,5 +574,8 @@
 			return
 
 	..()
+
+/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+	close_lid()
 
 /datum/locking_category/hydro_tray

@@ -6,15 +6,15 @@
 		var/mob/living/M=container.holder
 		//testing("Got command: \[[message_type]\]: [json_encode(args)]")
 		switch(message_type)
-			if(COMSIG_MOVE) // list("loc"=turf)
-	               // list("dir"=NORTH)
-				if("loc" in args)
-					//walk_to(src, target, minimum_distance, delay)
-					//testing("Walking towards [args["loc"]] with walk_delay=[walk_delay]")
-					walk_to(M, args["loc"], 1, walk_delay)
-				if("dir" in args)
-					// walk(M, get_dir(src,M), MISSILE_SPEED)
-					walk(M, args["dir"], walk_delay)
+			if(COMSIG_CLICKON)
+				var/atom/A = args["target"]
+				var/params
+				if(args["def_zone"])
+					var/list/L = list("def_zone" = args["def_zone"])
+					params = list2params(L)
+				M.ClickOn(A, params)
+			if(COMSIG_STEP)
+				step(M, args["dir"], walk_delay)
 
 			if(COMSIG_ADJUST_BODYTEMP) // list("temp"=TEMP_IN_KELVIN)
 				M.bodytemperature += args["temp"]

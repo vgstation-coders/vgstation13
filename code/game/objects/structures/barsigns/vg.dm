@@ -77,3 +77,9 @@
 	name = "Honking Clown"
 	icon = "clown"
 	desc = "Bananas not included."
+
+/datum/barsign/vg/progressive
+	name = "A Modern and Progressive Tavern"
+	icon = "progressive"
+	desc = "Whatever that means."
+	pixel_y = -64

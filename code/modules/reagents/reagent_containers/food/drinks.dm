@@ -38,10 +38,9 @@
 	else
 		viewcontents = 1
 
-/obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
 		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
-
 		return 0
 
 	else if(!src.reagents.total_volume || !src)
@@ -51,6 +50,12 @@
 	else
 		imbibe(user)
 		return 0
+
+/obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user)
+	try_consume(user)
+
+/obj/item/weapon/reagent_containers/food/drinks/bite_act(mob/user)
+	return try_consume(user)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	var/datum/reagents/R = src.reagents
@@ -210,26 +215,7 @@
 		return
 
 	// Attempt to transfer from our glass
-	var/refill_id = reagents.get_master_reagent_id()
-	var/refill_name = reagents.get_master_reagent_name()
-	var/datum/reagent/R = reagents.get_reagent(refill_id)
-
-	var/sent_amount = transfer(target, user, can_send = TRUE, can_receive = FALSE)
-
-	// Service borgs regenerate the amount transferred after a while
-	// TODO Why doesn't the borg module handle this nonsense?
-	if (sent_amount > 0 && isrobot(user) && R.dupeable)
-		var/mob/living/silicon/robot/borg = user
-		if (!istype(borg.module, /obj/item/weapon/robot_module/butler) || !borg.cell)
-			return
-
-		var/charge_amount = max(30, 4*sent_amount)
-		borg.cell.use(charge_amount)
-
-		to_chat(user, "Now synthesizing [sent_amount] units of [refill_name]...")
-		spawn(300)
-			reagents.add_reagent(refill_id, sent_amount)
-			to_chat(user, "<span class='notice'>Cyborg [src] refilled with [refill_name] ([sent_amount] units).</span>")
+	transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
 
@@ -358,10 +344,20 @@
 /obj/item/weapon/reagent_containers/food/drinks/ice
 	name = "Ice Cup"
 	desc = "Careful, cold ice, do not chew."
-	icon_state = "coffee"
+	icon_state = "icecup"
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
 	..()
-	reagents.add_reagent(ICE, 30)
+	reagents.add_reagent(ICE, 30, reagtemp = T0C)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup
+	name = "Tomato Soup"
+	desc = "Tomato Soup! In a cup!"
+	icon_state = "tomatosoup"
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup/New()
+	..()
+	reagents.add_reagent(TOMATO_SOUP, 30, reagtemp = T0C + 80)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -378,11 +374,21 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
 	name = "Cup Ramen"
-	desc = "Just add 10ml water, self heats! A taste that reminds you of your school years."
+	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
 	..()
 	reagents.add_reagent(DRY_RAMEN, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
+	name = "Cup Ramen"
+	desc = "Just add 12ml water, self heats!"
+	icon_state = "ramen"
+/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
+	..()
+	reagents.add_reagent(CALCIUMOXIDE, 2)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -404,7 +410,7 @@
 			desc = "Cold in a can. Er, bottle."
 			icon_state += "_cold"
 			reagents.add_reagent(FROSTOIL, 10)
-			reagents.add_reagent(ICE, 10)
+			reagents.add_reagent(ICE, 10, reagtemp = T0C)
 		if(3)
 			name = "Groans Soda: Zero Calories"
 			desc = "Zero Point Calories. That's right, we fit even MORE nutriment in this thing."
@@ -469,7 +475,7 @@
 		if(3)
 			name = "Grifeo: Crystallic"
 			reagents.add_reagent(SUGAR, 20)
-			reagents.add_reagent(ICE, 20)
+			reagents.add_reagent(ICE, 20, reagtemp = T0C)
 			reagents.add_reagent(SPACE_DRUGS, 20)
 		if(4)
 			name = "Grifeo: Rich"
@@ -619,6 +625,7 @@
 		flags |= OPENCONTAINER
 		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 		playsound(user, pick(open_sounds), 50, 1)
+		overlays += image(icon = icon, icon_state = "soda_open")
 		return
 	return ..()
 
@@ -688,6 +695,10 @@
 	icon_state = "starkist"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist/New()
 	..()
+	if(prob(30))
+		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lemon_lime(get_turf(src))
+		qdel(src) //You wanted ORANGE. It gave you lemon lime!
+		return
 	reagents.add_reagent(COLA, 15)
 	reagents.add_reagent(ORANGEJUICE, 15)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
@@ -793,6 +804,83 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+//Beer cans for the Off Licence
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser
+	name = "Blebweiser"
+	desc = "Based on an American classic, this lager has seen little improvement over the years."
+	icon_state = "blebweiser"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser/New()
+	..()
+	reagents.add_reagent(BEER, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon
+	name = "Bluespace Ribbon"
+	desc = "A cheap lager brewed in enormous bluespace pockets, the brewing process has done little for the flavour."
+	icon_state = "bluespaceribbon"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon/New()
+	..()
+	reagents.add_reagent(BEER, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone
+	name = "Code One"
+	desc = "The Code One Brewery prides itself on creating the very best beer for cracking open with the boys."
+	icon_state = "codeone"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone/New()
+	..()
+	reagents.add_reagent(BEER, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness
+	name = "Gibness"
+	desc = "Derived from a classic Irish recipe, there's a strong taste of starch in this dry stout."
+	icon_state = "gibness"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness/New()
+	..()
+	reagents.add_reagent(BEER, 25)
+	reagents.add_reagent(POTATO, 25)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka
+	name = "Greyshit Vodka"
+	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
+	icon_state = "greyshitvodka"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka/New()
+	..()
+	reagents.add_reagent(GREYVODKA, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides
+	name = "Orchard Tides"
+	desc = "A sweet apple cider that might quench that kleptomania if only for a while."
+	icon_state = "orchardtides"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides/New()
+	..()
+	reagents.add_reagent(BEER, 20)
+	reagents.add_reagent(APPLEJUICE, 30)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
+	name = "Sleimiken"
+	desc = "This Belgium original has been enhanced over the years with the delicious taste of DNA-dissolving slime extract."
+	icon_state = "sleimiken"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken/New()
+	..()
+	reagents.add_reagent(BEER, 45)
+	reagents.add_reagent(SLIMEJELLY, 5)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow
+	name = "Strong-eBow"
+	desc = "A Syndicate favourite, the sharp flavour of this Cider has been compared to getting shot by an Energy Bow."
+	icon_state = "strongebow"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow/New()
+	..()
+	reagents.add_reagent(BEER, 30)
+	reagents.add_reagent(APPLEJUICE, 20)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
+	name = "Kiririn FIRE"
+	desc = "Fine, sweet coffee, easy to drink in any scene."
+	icon_state = "cannedcoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee/New()
+	..()
+	reagents.add_reagent(CAFE_LATTE, 50)
+
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
@@ -806,6 +894,53 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
+	flags = FPRINT  | OPENCONTAINER | NOREACT | SILENTCONTAINER
+	var/shaking = FALSE
+	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/New()
+	..()
+	if (flags & NOREACT)
+		reaction = new(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/Destroy()
+	if (reaction)
+		qdel(reaction)
+	..()
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/attack_self(var/mob/user)
+	if (reagents.is_empty())
+		to_chat(user, "<span class='warning'>You won't shake an empty shaker now, will you?</span>")
+		return
+	if (!shaking)
+		shaking = TRUE
+		var/adjective = pick("furiously","passionately","with vigor","with determination","like a devil","with care and love","like there is no tomorrow")
+		user.visible_message("<span class='notice'>\The [user] shakes \the [src] [adjective]!</span>","<span class='notice'>You shake \the [src] [adjective]!</span>")
+		icon_state = "shaker-shake"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+		playsound(user, 'sound/items/boston_shaker.ogg', 80, 1)
+		if(do_after(user, src, 30))
+			reagents.trans_to(reaction,volume)
+			reaction.reagents.trans_to(reagents,volume)
+		icon_state = "shaker"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+		shaking = FALSE
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
+	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
+
+/obj/item/weapon/reagent_containers/food/drinks/discount_shaker
+	name = "\improper discount shaker"
+	desc = "A metal shaker to mix drinks in."
+	icon_state = "shaker"
+	origin_tech = Tc_MATERIALS + "=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+	flags = FPRINT  | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
 	name = "\improper Thermos"
@@ -980,14 +1115,20 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing
 	name = "Bottle of Nothing"
-	desc = "A bottle filled with nothing"
 	icon_state = "bottleofnothing"
+	desc = ""
 	isGlass = 1
 	molotov = -1
 	smashtext = ""
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing/New()
 	..()
-	reagents.add_reagent(NOTHING, 100)
+	if(Holiday == APRIL_FOOLS_DAY)
+		name = "Bottle of Something"
+		desc = "A bottle filled with something"
+		reagents.add_reagent(pick(BEER, VOMIT, ZOMBIEPOWDER, SOYSAUCE, KETCHUP, HONEY, BANANA, ABSINTHE, SALTWATER, WATER, BLOOD, LUBE, MUTATIONTOXIN, AMUTATIONTOXIN, GOLD, TRICORDRAZINE, GRAVY), 100)
+	else
+		desc = "A bottle filled with nothing"
+		reagents.add_reagent(NOTHING, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron
 	name = "Wrapp Artiste Patron"
@@ -1066,6 +1207,19 @@
 	..()
 	reagents.add_reagent(WINE, 100)
 
+/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine
+	name = "Vintage 2018 Special Reserve"
+	desc = "Fermented during tumultuous years, and aged to perfection over several centuries."
+	icon_state = "pwinebottle"
+	vending_cat = "fermented" //doesn't actually matter, will appear under premium
+	bottleheight = 30
+	molotov = -1
+	isGlass = 1
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine/New()
+	..()
+	reagents.add_reagent(PWINE, 100)
+
 /obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe
 	name = "Jailbreaker Verte"
 	desc = "One sip of this and you just know you're gonna have a good time."
@@ -1076,6 +1230,17 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe/New()
 	..()
 	reagents.add_reagent(ABSINTHE, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/sake
+	name = "Uchuujin Junmai Ginjo Sake"
+	desc = "An exotic rice wine from the land of the space ninjas."
+	icon_state = "sakebottle"
+	vending_cat = "fermented"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/sake/New()
+	..()
+	reagents.add_reagent(SAKE, 100)
 
 //////////////////////////JUICES AND STUFF ///////////////////////
 
@@ -1174,14 +1339,20 @@
 	qdel(src)
 
 //smashing when thrown
-/obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom)
+/obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(isGlass)
 		isGlass = 0 //to avoid it from hitting the wall, then hitting the floor, which would cause two broken bottles to appear
 		src.visible_message("<span  class='warning'>The [smashtext][src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		if(reagents.total_volume)
-			src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
+			if(molotov == 1 || reagents.has_reagent(FUEL))
+				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
+				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
+				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
+			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
+			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
+				src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
 			spawn(5) src.reagents.clear_reagents()  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
@@ -1229,15 +1400,17 @@
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
 		qdel(I)
 		I = null //??
-		molotov = 1
-		flags ^= OPENCONTAINER
-		name = "incendiary cocktail"
-		smashtext = ""
-		desc = "A rag stuffed into a bottle."
+		var/obj/item/weapon/reagent_containers/food/drinks/dummy = /obj/item/weapon/reagent_containers/food/drinks/molotov
+		molotov = initial(dummy.molotov)
+		flags = initial(dummy.flags)
+		name = initial(dummy.name)
+		smashtext = initial(dummy.smashtext)
+		desc = initial(dummy.desc)
+		slot_flags = initial(dummy.slot_flags)
 		update_icon()
-		slot_flags = SLOT_BELT
 		return 1
 	else if(I.is_hot())
+		attempt_heating(I, user)
 		light(user,I)
 		update_brightness(user)
 	else if(istype(I, /obj/item/device/assembly/igniter))
@@ -1250,6 +1423,21 @@
 		if(reagents.total_volume)
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
+
+/obj/item/weapon/reagent_containers/food/drinks/molotov
+	name = "incendiary cocktail"
+	smashtext = ""
+	desc = "A rag stuffed into a bottle."
+	slot_flags = SLOT_BELT
+	flags = FPRINT
+	molotov = 1
+	isGlass = 1
+	icon_state = "vodkabottle" //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
+
+/obj/item/weapon/reagent_containers/food/drinks/molotov/New()
+	..()
+	reagents.add_reagent(FUEL, 100) //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/light(mob/user,obj/item/I)
 	var/flavor_text = "<span  class='rose'>[user] lights \the [name] with \the [I].</span>"

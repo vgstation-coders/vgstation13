@@ -10,7 +10,7 @@
 	opacity = 0
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
-	pass_flags = PASSTABLE | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	//mouse_opacity = 2
 
 	var/health = 10
@@ -20,7 +20,7 @@
 	var/datum/seed/seed
 	var/sampled = 0
 	var/spread_chance
-	var/spread_distance
+	var/spread_distance_limit //Maximum distance allowed to grow from the tile from which we were born (radius, not diameter). If 0, no limit. Set in New()
 	var/mature_time
 	var/tmp/last_tick = 0
 	var/tmp/last_special = 0
@@ -36,10 +36,12 @@
 	spread_chance = 0
 
 /obj/effect/plantsegment/Destroy()
-	if(plant_controller)
-		plant_controller.remove_plant(src)
+	SSplant.remove_plant(src)
 	for(var/obj/effect/plantsegment/neighbor in range(1,src)) //i ded, tell my neighbors to wake up so they can take up my space
-		plant_controller.add_plant(neighbor)
+		SSplant.add_plant(neighbor)
+	if(is_locking_type(/mob, /datum/locking_category/plantsegment))
+		var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
+		unlock_atom(V)
 	..()
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
@@ -50,15 +52,12 @@
 	else
 		epicenter = newepicenter
 
-	if(!plant_controller)
-		sleep(250) // ugly hack, should mean roundstart plants are fine.
-	if(!plant_controller)
-		error("<span class='danger'>Plant controller does not exist and [src] requires it. Aborting.</span>")
+	if(!SSplant)
 		qdel(src)
-		return
+		CRASH("<span class='danger'>SSplant does not exist and [type] requires it. Aborting.</span>")
 
 	if(!istype(newseed))
-		newseed = plant_controller.seeds[DEFAULT_SEED]
+		newseed = SSplant.seeds[DEFAULT_SEED]
 	seed = newseed
 	if(!seed)
 		qdel(src)
@@ -70,7 +69,7 @@
 		limited_growth = 1
 	mature_time = Ceiling(seed.maturation/2)
 	spread_chance = round(40 + triangular_seq(seed.potency*2, 30)) // Diminishing returns formula, see maths.dm
-	spread_distance = limited_growth ? (CREEPER_GROWTH_DISTANCE) : round(spread_chance*0.2)
+	spread_distance_limit = limited_growth ? (CREEPER_GROWTH_DISTANCE) : 0
 	update_icon()
 
 	if(start_fully_mature)
@@ -78,9 +77,10 @@
 		mature_time = 0
 
 	spawn(1) // Plants will sometimes be spawned in the turf adjacent to the one they need to end up in, for the sake of correct dir/etc being set.
-		plant_controller.add_plant(src)
+		SSplant.add_plant(src)
+		score["kudzugrowth"]++
 		// Some plants eat through plating.
-		if(seed.chems && !isnull(seed.chems[PACID]))
+		if(seed.chems && !isnull(seed.chems[PHENOL]))
 			var/turf/T = get_turf(src)
 			T.ex_act(prob(80) ? 3 : 2)
 
@@ -98,7 +98,7 @@
 	if(seed.ligneous)
 		traits += "It's a tough and hard vine that can't be easily cut. "
 	if(seed.hematophage)
-		traits += "It's roots are blood red... "
+		traits += "Its roots are blood red... "
 	if(src.harvest)
 		traits += "It has some [seed.seed_name]s ready to grab."
 	if(traits)
@@ -117,11 +117,13 @@
 	else
 		arbitrary_measurement_of_how_lush_I_am_right_now = 1
 
-	var/at_fringe = get_dist(src,epicenter)
-	if(at_fringe >= round(spread_distance*0.9))
-		arbitrary_measurement_of_how_lush_I_am_right_now--
-	if(at_fringe >= round(spread_distance*0.7))
-		arbitrary_measurement_of_how_lush_I_am_right_now--
+	if(spread_distance_limit)
+		var/at_fringe = get_dist(src,epicenter)
+		if(at_fringe >= round(spread_distance_limit*0.9))
+			arbitrary_measurement_of_how_lush_I_am_right_now--
+		if(at_fringe >= round(spread_distance_limit*0.7))
+			arbitrary_measurement_of_how_lush_I_am_right_now--
+
 	if(health < max_health)
 		arbitrary_measurement_of_how_lush_I_am_right_now -= round(-(health - max_health)/(max_health/3))
 
@@ -169,7 +171,7 @@
 		seed.spawn_seed_packet(get_turf(user))
 		health -= (rand(3,5)*5)
 		sampled = 1
-		plant_controller.add_plant(src)
+		SSplant.add_plant(src)
 	else if (istype(W, /obj/item/weapon/storage/bag/plants))
 		attack_hand(user)
 		var/obj/item/weapon/storage/bag/plants/S = W

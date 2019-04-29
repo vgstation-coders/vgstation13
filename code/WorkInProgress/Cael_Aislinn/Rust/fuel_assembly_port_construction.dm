@@ -45,7 +45,7 @@
 	if (iscrowbar(W))
 		if(opened)
 			if(has_electronics & 1)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
 
 				if(do_after(user, src, 50))
@@ -74,7 +74,7 @@
 			to_chat(user, "<span class='warning'>You need more wires.</span>")
 			return
 		to_chat(user, "You start adding cables to the frame...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 20) && C.amount >= 10)
 			C.use(10)
 			user.visible_message(\
@@ -85,7 +85,7 @@
 
 	else if (iswirecutter(W) && opened && (has_electronics & 2))
 		to_chat(user, "You begin to cut the cables...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 50))
 			new /obj/item/stack/cable_coil(loc,10)
 			user.visible_message(\
@@ -96,23 +96,17 @@
 
 	else if (istype(W, /obj/item/weapon/module/rust_fuel_port) && opened && !(has_electronics & 1))
 		to_chat(user, "You try to insert the port control board into the frame...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 10))
 			has_electronics &= 1
 			to_chat(user, "You place the port control board inside the frame.")
 			qdel(W)
 		return
 
-	else if (istype(W, /obj/item/weapon/weldingtool) && opened && !has_electronics)
+	else if (iswelder(W) && opened && !has_electronics)
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.get_fuel() < 3)
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return
 		to_chat(user, "You start welding the port frame...")
-		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-		if(do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
-				return
+		if (WT.do_weld(user, src, 50, 3))
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\
 				"<span class='warning'>[src] has been cut away from the wall by [user.name].</span>",\

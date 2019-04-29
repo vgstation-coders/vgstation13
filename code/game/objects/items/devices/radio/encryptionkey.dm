@@ -5,9 +5,11 @@
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "cypherkey"
 	item_state = ""
+	w_class = W_CLASS_TINY
 	var/translate_binary = 0
 	var/translate_hive = 0
 	var/syndie = 0
+	var/raider = 0
 	var/list/channels = list()
 
 /obj/item/device/encryptionkey/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -17,6 +19,19 @@
 	channels = list("Syndicate" = 1)
 	origin_tech = Tc_SYNDICATE + "=3"
 	syndie = 1//Signifies that it de-crypts Syndicate transmissions
+
+/obj/item/device/encryptionkey/rev
+	icon_state = "cypherkey"
+	channels = list("Revolution" = 1)
+	origin_tech = Tc_SYNDICATE + "=3"
+	syndie = 1
+
+/obj/item/device/encryptionkey/raider
+	icon_state = "cypherkey"
+	channels = list("Raider" = 1)
+	//origin_tech = Tc_SYNDICATE + "=3"
+	raider = 1//Signifies that it de-crypts bird pirate transmissions
+
 
 /obj/item/device/encryptionkey/binary
 	icon_state = "cypherkey"
@@ -74,11 +89,10 @@
 /obj/item/device/encryptionkey/syndicate/hacked
 	name = "Standard Encryption Key"
 	desc = "An encryption key for a radio headset.  Has no special codes in it. Looks more sophisticated than usual."
-	channels = list("Command" = 0, "Security" = 0, "Engineering" = 0, "Science" = 0, "Medical" = 0, "Supply" = 0, "Service" = 0)
+	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1)
 
 /obj/item/device/encryptionkey/syndicate/hacked/full
-	desc = "An encryption key for a radio headset.  Has no special codes in it. Looks way more sophisticated than usual."
-	channels = list("Command" = 0, "Security" = 0, "Engineering" = 0, "Science" = 0, "Medical" = 0, "Supply" = 0, "Service" = 0, "Deathsquad" = 0, "Response Team" = 0)
+	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1, "Deathsquad" = 1, "Response Team" = 1)
 
 /obj/item/device/encryptionkey/heads/rd
 	name = "Research Director's Encryption Key"

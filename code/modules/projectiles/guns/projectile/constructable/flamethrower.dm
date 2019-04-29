@@ -111,7 +111,7 @@
 	var/pressure = tank_gas.return_pressure()
 	var/total_moles = tank_gas.total_moles()
 	if(total_moles)
-		var/o2_concentration = tank_gas.oxygen/total_moles
+		var/o2_concentration = tank_gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else
@@ -153,7 +153,7 @@
 		qdel(src)
 		return
 
-	if(isscrewdriver(W) && igniter && !lit)
+	if(W.is_screwdriver(user) && igniter && !lit)
 		status = !status
 		to_chat(user, "<span class='notice'>[igniter] is now [status ? "secured" : "unsecured"]!</span>")
 		update_icon()
@@ -205,6 +205,8 @@
 		onclose(user, "flamethrower", src)
 
 /obj/item/weapon/gun/projectile/flamethrower/Topic(href,href_list[])
+	if (..())
+		return
 	if(href_list["close"])
 		usr << browse(null, "window=flamethrower")
 		usr.unset_machine()
@@ -251,7 +253,6 @@
 	..()
 	ptank = new /obj/item/weapon/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
-	gas_tank.toxins = 29.1
-	gas_tank.update_values()
+	gas_tank.adjust_gas(GAS_PLASMA, 29.1)
 	update_icon()
 	return

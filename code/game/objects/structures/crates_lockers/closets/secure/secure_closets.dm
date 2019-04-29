@@ -7,6 +7,7 @@
 	opened = 0
 	large = 1
 	locked = 1
+	has_electronics = 1
 	icon_closed = "secure"
 	var/icon_locked = "secure1"
 	icon_opened = "secureopen"
@@ -14,6 +15,9 @@
 	var/icon_off = "secureoff"
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
+
+/obj/structure/closet/secure_closet/basic
+	has_lockless_type = /obj/structure/closet/basic
 
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
@@ -83,7 +87,7 @@
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
 		update_icon()
 	else
-		if(istype(W, /obj/item/weapon/weldingtool))
+		if(iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
 			if(!WT.remove_fuel(0,user))
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -92,6 +96,9 @@
 			src.update_icon()
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+		if(istype(W, /obj/item/weapon/screwdriver) && !src.locked && src.has_lockless_type)
+			remove_lock(user)
+			return
 		else
 			togglelock(user)
 
@@ -109,8 +116,8 @@
 				M.client.perspective = MOB_PERSPECTIVE
 		src.icon_state = src.icon_opened
 		src.opened = 1
-		src.density = 0
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+		setDensity(FALSE)
+		playsound(src, 'sound/machines/click.ogg', 15, 1, -3)
 	else
 		if(!can_open())
 			to_chat(user, "<span class='notice'>It won't budge!</span>")

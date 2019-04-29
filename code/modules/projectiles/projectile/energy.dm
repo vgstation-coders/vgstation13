@@ -16,7 +16,26 @@
 	stun = 10
 	weaken = 10
 	stutter = 10
+	jittery = 20
+	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
+
+/obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
+	if (ismanifested(X))
+		X.visible_message("<span class='danger'>\The [X] seems to completely ignore \the [src] that hit them.</span>","<span class='warning'>You can barely feel at all \the [src]'s electrical discharge.</span>")
+		return
+	spawn(13)
+		X.apply_effects(stun, weaken, blocked = blocked)
+	X.apply_effects(stutter = stutter, blocked = blocked, agony = agony)
+	X.audible_scream()
+	if(X.tazed == 0)
+		X.movement_speed_modifier -= 0.75
+		spawn(30)
+			X.movement_speed_modifier += 0.75
+	X.tazed = 1
+	spawn(30)
+		X.tazed = 0
+
 
 /*/vg/ EDIT
 	agony = 40
@@ -28,26 +47,27 @@
 	name = "tag electrode"
 	icon_state = "sparkblue"
 	nodamage = 1
-	var/list/enemy_vest_types = list(/obj/item/clothing/suit/redtag)
+	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
 /obj/item/projectile/energy/tag/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living/carbon/human))
-		var/mob/living/carbon/human/M = target
-		if(is_type_in_list(M.wear_suit, enemy_vest_types))
+	if(ismob(target))
+		var/mob/M = target
+		if(is_type_in_list(get_tag_armor(M), enemy_vest_types))
 			if(!M.lying) //Kick a man while he's down, will ya
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.score()
 			M.Knockdown(5)
+			M.Stun(5)
 	return 1
 
 /obj/item/projectile/energy/tag/blue
 	icon_state = "sparkblue"
-	enemy_vest_types = list(/obj/item/clothing/suit/redtag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
 /obj/item/projectile/energy/tag/red
 	icon_state = "sparkred"
-	enemy_vest_types = list(/obj/item/clothing/suit/bluetag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/bluetag)
 
 
 
@@ -59,12 +79,14 @@
 	damage_type = CLONE
 	irradiate = 40
 	fire_sound = 'sound/weapons/pulse3.ogg'
+	linear_movement = 0
 
 /obj/item/projectile/energy/bolt
 	name = "bolt"
 	icon_state = "cbbolt"
 	damage = 10
 	damage_type = TOX
+	stun = 10
 	nodamage = 0
 	weaken = 10
 	stutter = 10
@@ -143,7 +165,7 @@
 			scramble(1, H, 100) // Scramble all UIs
 			scramble(null, H, 5) // Scramble SEs, 5% chance for each block
 
-			H.apply_effect((rand(50, 250)),IRRADIATE)
+			H.apply_radiation((rand(50, 250)),RAD_EXTERNAL)
 
 /obj/item/projectile/energy/buster
 	name = "buster shot"
@@ -179,8 +201,11 @@
 
 /obj/item/projectile/energy/osipr/Destroy()
 	var/turf/T = loc
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(4, 0, T)
-	s.start()
+	spark(T, 4, FALSE)
 	T.turf_animation('icons/obj/projectiles_impacts.dmi',"dark_explosion",0, 0, 13, 'sound/weapons/osipr_altexplosion.ogg')
 	..()
+
+/obj/item/projectile/energy/whammy
+	name = "double whammy shot"
+	icon_state = "bluelaser_old"
+	damage = 30

@@ -34,3 +34,6 @@
 /obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
 	name = "Embedded Controller Board (Advanced)"
 	build_path = /obj/machinery/embedded_controller/radio/advanced_airlock_controller
+/obj/item/weapon/circuitboard/ecb/embedded_controller/radio/pressure_regulator
+	name = "Embedded Controller Board (Pressure Regulator)"
+	build_path = /obj/machinery/embedded_controller/radio/pressure_regulator

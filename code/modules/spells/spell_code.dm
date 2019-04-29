@@ -9,6 +9,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/panel = "Spells"//What panel the proc holder needs to go on.
 
 	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
+	var/user_type = USER_TYPE_NOUSER // What kind of mob uses this spell
 
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
 
@@ -65,6 +66,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/delay_reduc = 0
 	var/cooldown_min = 0 //minimum possible cooldown for a charging spell
 
+	var/spell_aspect_flags
+	//Flags for what this spell is 'based' upon, for interacting with other spells
+	//For instance, a fire-based spell would have the FIRE flag
+
 	var/overlay = 0
 	var/overlay_icon = 'icons/obj/wizard.dmi'
 	var/overlay_icon_state = "spell"
@@ -79,13 +84,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/cast_delay = 1
 	var/cast_sound = ""
+	var/use_progress_bar = FALSE
 
 	var/hud_state = "" //name of the icon used in generating the spell hud object
+	var/override_icon = ""
 	var/override_base = ""
+	var/icon_direction = SOUTH //Needs override_icon to be not null
 
 	var/obj/abstract/screen/spell/connected_button
 	var/currently_channeled = 0
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
+
+	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
+	var/block = 0//prevents some spells from being spamed
+	var/obj/delay_animation = null
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -96,6 +108,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	//still_recharging_msg = "<span class='notice'>[name] is still recharging.</span>"
 	charge_counter = charge_max
+
+/spell/proc/set_holder(var/new_holder)
+	if(holder == new_holder)
+		world.log << "[src] is trying to set its holder to the same holder!"
+	holder = new_holder
 
 /spell/proc/process()
 	spawn while(charge_counter < charge_max)
@@ -129,7 +146,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
 	if(!holder)
-		holder = user //just in case
+		set_holder(user) //just in case
 
 	var/list/targets = target_override
 
@@ -146,7 +163,15 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
+		block = 0
+		if (delay_animation)
+			qdel(delay_animation)
+		delay_animation = null
 		return
+	block = 0
+	if (delay_animation)
+		qdel(delay_animation)
+	delay_animation = null
 	if(before_target(user))
 		return
 
@@ -175,18 +200,23 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 //This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!holder)
-		holder = user //just in case
+		set_holder(user) //just in case
 	if(!force_remove && !currently_channeled)
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
 		user.spell_channeling = user.on_uattack.Add(src, "channeled_spell")
+		if(spell_flags & CAN_CHANNEL_RESTRAINED)
+			user.spell_channeling = user.on_ruattack.Add(src, "channeled_spell")
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
 		var/event/E = user.on_uattack
 		E.handlers.Remove(user.spell_channeling)
+		var/event/ER = user.on_ruattack
+		if(ER)
+			ER.handlers.Remove(user.spell_channeling)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
@@ -290,7 +320,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spell.icon = overlay_icon
 			spell.icon_state = overlay_icon_state
 			spell.anchored = 1
-			spell.density = 0
+			spell.setDensity(FALSE)
 			spawn(overlay_lifespan)
 				qdel(spell)
 				spell = null
@@ -302,9 +332,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(istype(target,/mob/living) && message)
 			to_chat(target, text("[message]"))
 		if(sparks_spread)
-			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-			sparks.set_up(sparks_amt, 0, location) //no idea what the 0 is
-			sparks.start()
+			spark(location, sparks_amt, FALSE)
 		if(smoke_spread)
 			if(smoke_spread == 1)
 				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
@@ -506,18 +534,48 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
-		return 1
+		return 0
 
 	var/delayfraction = round(delay/numticks)
-	var/Location = user.loc
 	var/originalstat = user.stat
 
-	for(var/i = 0, i<numticks, i++)
+	var/Location = user.loc
+	var/image/progbar
+	if(user && user.client && user.client.prefs.progress_bars)
+		if(!progbar)
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
+			progbar.pixel_z = WORLD_ICON_SIZE
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
+			progbar.appearance_flags = RESET_COLOR
+
+	for (var/i = 1 to numticks)
+		if(user && user.client && user.client.prefs.progress_bars)
+			if(!progbar)
+				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
+				progbar.pixel_z = WORLD_ICON_SIZE
+				progbar.plane = HUD_PLANE
+				progbar.layer = HUD_ABOVE_ITEM_LAYER
+				progbar.appearance_flags = RESET_COLOR
+			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			user.client.images |= progbar
+
 		sleep(delayfraction)
 
-
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
+
+	if(user && user.client)
+		user.client.images -= progbar
+	if(progbar)
+		progbar.loc = null
 	return 1
 
 //UPGRADES
@@ -549,3 +607,49 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/on_removed(mob/user)
 	return
+
+/spell/proc/on_holder_death(mob/user)
+	return
+
+//To batch-remove wizard spells. Linked to mind.dm.
+/mob/proc/spellremove(var/mob/M as mob)
+	for(var/spell/spell_to_remove in src.spell_list)
+		remove_spell(spell_to_remove)
+
+// Does this clothing slot count as wizard garb? (Combines a few checks)
+/proc/is_wiz_garb(var/obj/item/clothing/C)
+	return C && C.wizard_garb
+
+/*Checks if the wizard is wearing the proper attire.
+Made a proc so this is not repeated 14 (or more) times.*/
+/mob/proc/wearing_wiz_garb()
+	to_chat(src, "Silly creature, you're not a human. Only humans can cast this spell.")
+	return 0
+
+// Humans can wear clothes.
+/mob/living/carbon/human/wearing_wiz_garb()
+	if(!is_wiz_garb(src.wear_suit))
+		to_chat(src, "<span class='warning'>I don't feel strong enough without my robe.</span>")
+		return 0
+	if(!is_wiz_garb(src.shoes))
+		to_chat(src, "<span class='warning'>I don't feel strong enough without my sandals.</span>")
+		return 0
+	if(!is_wiz_garb(src.head))
+		to_chat(src, "<span class='warning'>I don't feel strong enough without my hat.</span>")
+		return 0
+	return 1
+
+// So can monkeys (FIXME)
+/*
+/mob/living/carbon/monkey/wearing_wiz_garb()
+	if(!is_wiz_garb(src.wear_suit))
+		to_chat(src, "<span class='warning'>I don't feel strong enough without my robe.</span>")
+		return 0
+	if(!is_wiz_garb(src.shoes))
+		to_chat(src, "<span class='warning'>I don't feel strong enough without my sandals.</span>")
+		return 0
+	if(!is_wiz_garb(src.head))
+		to_chat(src, "<span class='warning'>I don't feel strong enough without my hat.</span>")
+		return 0
+	return 1
+*/

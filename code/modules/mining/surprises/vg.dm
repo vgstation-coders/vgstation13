@@ -131,3 +131,10 @@
 			var/turf/egg_turf = pick(all_floors)
 			if(egg_turf && !(locate(/obj/effect/alien) in egg_turf))
 				new /obj/effect/alien/egg(egg_turf)
+
+
+/datum/map_element/mining_surprise/angie
+	name = "Angie's lair"
+	desc = "From within this rich soil, the stone gathers moss."
+
+	file_path = "maps/randomvaults/mining/angie_lair.dmm"

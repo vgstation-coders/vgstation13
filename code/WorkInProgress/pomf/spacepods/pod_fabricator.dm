@@ -7,7 +7,8 @@
 	desc = "Used for producing all the spacepod goodies."
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "fab"
-	build_number = 32
+	build_number = PODFAB
+	build_time = 1
 	nano_file = "podfab.tmpl"
 	research_flags = NANOTOUCH | HASOUTPUT | HASMAT_OVER | TAKESMATIN | ACCESS_EMAG | LOCKBOXES
 
@@ -19,7 +20,8 @@
 			/obj/item/pod_parts/pod_frame/aft_starboard
 		),
 		"Pod_Armor" = list(
-			/obj/item/pod_parts/armor
+			/obj/item/pod_parts/armor/civ,
+			/obj/item/pod_parts/armor/taxi,
 		),
 		"Pod_Parts" = list(
 			/obj/item/pod_parts/core

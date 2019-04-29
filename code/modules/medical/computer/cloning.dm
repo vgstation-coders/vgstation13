@@ -35,7 +35,10 @@
 		scanner.connected = null
 		scanner = null
 	if(diskette)
-		qdel(diskette)
+		if(loc)
+			diskette.forceMove(loc)
+		else
+			qdel(diskette)
 		diskette = null
 	records.Cut()
 	active_record = null
@@ -44,7 +47,8 @@
 
 /obj/machinery/computer/cloning/initialize()
 	pod1 = findcloner()
-	pod1.connected = src
+	if(pod1 && !pod1.connected)
+		pod1.connected = src
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -66,7 +70,8 @@
 
 /obj/machinery/computer/cloning/proc/updatemodules()
 	scanner = findscanner()
-	scanner.connected = src
+	if(scanner && !scanner.connected)
+		scanner.connected = src
 
 /obj/machinery/computer/cloning/proc/findscanner()
 	var/obj/machinery/dna_scannernew/scannerf = null
@@ -108,7 +113,8 @@
 /obj/machinery/computer/cloning/emag(mob/user)
 	if(!emagged)
 		emagged = 1
-		user.visible_message("<span class='warning'>[user] slides something into \the [src]'s card-reader.</span>","<span class='warning'>You disable \the [src]'s safety overrides.</span>")
+		if(user)
+			user.visible_message("<span class='warning'>[user] slides something into \the [src]'s card-reader.</span>","<span class='warning'>You disable \the [src]'s safety overrides.</span>")
 
 /obj/machinery/computer/cloning/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -169,7 +175,7 @@
 			// Database
 
 			dat += {"<h4>Database Functions</h4>
-				<a href='byond://?src=\ref[src];menu=2'>View Records</a><br>"}
+				<a href='byond://?src=\ref[src];menu=2'>View Records[records.len?"([records.len])":""]</a><br>"}
 			if (src.diskette)
 				dat += "<a href='byond://?src=\ref[src];disk=eject'>Eject Disk</a>"
 
@@ -318,7 +324,7 @@
 			return
 
 		// DNA2 makes things a little simpler.
-		src.diskette.buf=src.active_record
+		src.diskette.buf=src.active_record.Clone() //Copy the record, not just the reference to it
 		src.diskette.buf.types=0
 		switch(href_list["save_disk"]) //Save as Ui/Ui+Ue/Se
 			if("ui")
@@ -404,7 +410,7 @@
 	if(istype(subject, /mob/living/slime_pile))
 		var/mob/living/slime_pile/S = subject
 		subject = S.slime_person
-	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
+	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
 	if(!subject.has_brain())
@@ -419,9 +425,11 @@
 		if(subject.client)
 			to_chat(subject, "<span class='warning'>Someone is trying to clone your corpse, but you may not be revived as you committed suicide.</span>")
 		else
-			var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
-			if(ghost && ghost.client)
-				to_chat(ghost, "<span class='warning'>Someone is trying to clone your corpse, but you may not be revived as you committed suicide.</span>")
+			var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(ghostmob, "<span class='warning'>Someone is trying to clone your corpse, but you may not be revived as you committed suicide.</span>")
 		return
 
 	if(M_NOCLONE in subject.mutations) //We cannot clone this guy because he's a husk, but maybe we can give a more informative message.
@@ -431,26 +439,30 @@
 				You cannot be cloned as your body has been husked. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
 			return
 		else
-			var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
-			if(ghost && ghost.client && ghost.can_reenter_corpse)
-				scantemp = "Error: Unable to locate valid genetic data. Additionally, subject's brain is not responding to scanning stimuli."
-				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
-					You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				return
+			var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					scantemp = "Error: Unable to locate valid genetic data. Additionally, subject's brain is not responding to scanning stimuli."
+					ghostmob << 'sound/effects/adminhelp.ogg'
+					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
+						You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					return
 			else
 				scantemp = "Error: Unable to locate valid genetic data. Additionally, mental interface failed to initialize."
 				return
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
-		var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
-		if(ghost && ghost.client && ghost.can_reenter_corpse) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
-			scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
-			ghost << 'sound/effects/adminhelp.ogg'
-			to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
-				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-			return
+		var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
+				scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				return
 		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
 			scantemp = "Error: Mental interface failure."
 			return
@@ -474,14 +486,16 @@
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
 	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
-		R.dna = Brain.owner_dna
+		R.dna = Brain.owner_dna.Clone()
 	else
-		R.dna=subject.dna
+		R.dna=subject.dna.Clone()
 	R.ckey = subject.ckey
 	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name
 	R.types=DNA2_BUF_UI|DNA2_BUF_UE|DNA2_BUF_SE
 	R.languages = subject.languages.Copy()
+	R.times_cloned = subject.times_cloned
+	R.talkcount = subject.talkcount
 
 	//Add an implant if needed
 	var/obj/item/weapon/implant/health/imp = locate(/obj/item/weapon/implant/health, subject)

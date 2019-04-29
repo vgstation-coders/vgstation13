@@ -3,7 +3,7 @@
 
 /obj/machinery/sweet
 	name = "\improper Sweet Machine"
-	desc = "Insert coin, recieve a sweet!"
+	desc = "Insert coin, receive a pack of sweets!"
 	icon = 'icons/obj/candymachine.dmi'
 	icon_state = "sweetmachine"
 	anchored = 1
@@ -50,7 +50,6 @@
 		return ..()
 
 /obj/machinery/sweet/emag(mob/user)
-	if(emagged == 0)
-		user.simple_message("<span class='warning'>You inexplicably short out the [src.name].</span>")
-		emagged = 1
-	return
+	if(!emagged && user)
+		to_chat(user, "<span class='warning'>You inexplicably short out the [src.name].</span>")
+	emagged = !emagged

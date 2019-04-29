@@ -22,7 +22,7 @@
 	minimum_distance = 3
 	projectilesound = 'sound/weapons/punchmiss.ogg'
 	projectiletype = /obj/item/projectile/snowball
-	environment_smash = 0
+	environment_smash_flags = 0
 
 	can_butcher = 0
 
@@ -110,7 +110,7 @@
 	weaken = 1
 	stutter = 1
 
-/obj/item/projectile/snowball/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/snowball/to_bump(atom/A as mob|obj|turf|area)
 	.=..()
 	if(.)
 		playsound(A.loc, "swing_hit", 50, 1)

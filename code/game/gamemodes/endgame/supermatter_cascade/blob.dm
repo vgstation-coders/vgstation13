@@ -69,6 +69,8 @@
 			// Nom.
 			for(var/atom/movable/A in T)
 				if(A)
+					if(istype(A, /obj/machinery/singularity))
+						continue
 					if(istype(A,/mob/living))
 						qdel(A)
 						A = null
@@ -136,7 +138,6 @@
 /turf/unsimulated/wall/supermatter/proc/Consume(atom/AM)
 	if(istype(AM, /mob/dead/observer))
 		return
-
 	return AM.supermatter_act(src)
 
 /turf/unsimulated/wall/supermatter/singularity_act()

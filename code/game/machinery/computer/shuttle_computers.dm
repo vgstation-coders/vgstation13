@@ -3,8 +3,8 @@
 /obj/item/weapon/disk/shuttle_coords
 	name = "shuttle destination disk"
 	desc = "A small disk containing encrypted coordinates and tracking data."
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk0"
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk_shuttle"
 
 	var/obj/docking_port/destination/destination //Docking port linked to this disk.
 	//If this variable contains a path like (/obj/structure/docking_port/destination/my_dungeon), the disk will find a destination docking port of that type and automatically link to it
@@ -13,14 +13,26 @@
 	var/header = "SDC Data Disk" //Name of the disk, shown on the console. SDC stands Shuttle Destination Coordinates
 
 	var/list/allowed_shuttles = list() //List of allowed shuttles. Accepts paths (for example /datum/shuttle/arrival). If empty, all shuttles are allowed
-
+	starting_materials = list(MAT_GLASS = 1250)
 //Example:
 /obj/item/weapon/disk/shuttle_coords/station_arrivals
 	destination = /obj/docking_port/destination/transport/station
 	header = "station arrivals"
 
+/obj/item/weapon/disk/shuttle_coords/station_auxillary
+	name = "auxillary docking disk"
+	header = "station auxillary docking"
+	destination = /obj/docking_port/destination/salvage/arrivals
+	allowed_shuttles = list(/datum/shuttle/custom)
+
+/obj/item/weapon/disk/shuttle_coords/disk_jockey
+	name = "Russian propaganda station destination disk"
+	header = "DJ station"
+	destination = /obj/docking_port/destination/salvage/dj
+	starting_materials = list(MAT_GLASS = 1250, MAT_GOLD = 1250)
+
 /obj/item/weapon/disk/shuttle_coords/vault
-	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research)
+	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research, /datum/shuttle/security)
 
 ///obj/item/weapon/disk/shuttle_coords/vault/random -> leads to a random vault with a docking port!
 /obj/item/weapon/disk/shuttle_coords/vault/random/initialize()
@@ -73,6 +85,17 @@
 	destination = null
 	header = "ERROR"
 
+/obj/item/weapon/disk/shuttle_coords/free_move
+	name = "shuttle free-movement driver"
+	desc = "This disk contains a piece of software which converts coordinates into subspace trajectories, which shuttle computers are able to use."
+	header = "FREE-MOVE DRIVER"
+
+/obj/item/weapon/disk/shuttle_coords/free_move/initialize()
+	..()
+	header = initial(header)
+
+/obj/docking_port/destination/coord //Specific subtype to hunt for when doing cleanup
+
 /obj/item/weapon/card/shuttle_pass
 	name = "shuttle pass"
 	desc = "A one-use shuttle activation pass, for limited access to high-security transportation."
@@ -94,7 +117,7 @@
 /obj/item/weapon/card/shuttle_pass/Destroy()
 	destination = null
 
-/obj/item/weapon/card/shuttle_pass/ERT
+/obj/item/weapon/card/shuttle_pass/ert
 	name = "\improper ERT shuttle pass"
 	destination = /obj/docking_port/destination/transport/station
 	allowed_shuttle = /datum/shuttle/transport
@@ -123,6 +146,12 @@
 								//used for admin-only shuttles so that borgs cant hijack 'em
 
 	var/obj/item/weapon/disk/shuttle_coords/disk
+
+	//Variables used for custom destinations
+	var/custom_x = 0
+	var/custom_y = 0
+	var/custom_z = 0
+	var/custom_rot = 0
 
 /obj/machinery/computer/shuttle_control/New()
 	if(shuttle)
@@ -157,9 +186,6 @@
 		span_s = "<i>"
 		span_e = "</i>"
 
-	if(shuttle && !shuttle.linked_port)
-		span_s = ""
-		span_e = ""
 
 	return "[span_s][name][span_e]"
 
@@ -195,12 +221,10 @@
 				dat += "Additional information has not been provided."
 		else if(!shuttle.linked_area)
 			dat = "<h2><font color='red'>UNABLE TO FIND [uppertext(shuttle.name)]</font></h2>"
-		else if(!shuttle.linked_port)
-			dat += {"<h2><font color='red'>This shuttle has no docking port specified.</font></h2><br>
-				<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a>"}
 		else if(shuttle.moving)
 			dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
 		else
+			dat += {"<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a><br>"}
 			if(shuttle.current_port)
 				dat += "Location: <b>[shuttle.current_port.areaname]</b><br>"
 			else
@@ -235,6 +259,14 @@
 			dat += " |<BR>"
 			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
 			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
+
+			if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+				dat += {"<div align=\"left\"><b>COORDINATE INPUTS</b>:<br>
+				<a href='?src=\ref[src];custom_coord=x'>X Offset:</a> [custom_x]</a><br>
+				<a href='?src=\ref[src];custom_coord=y'>Y Offset:</a> [custom_y]</a><br>
+				<a href='?src=\ref[src];custom_coord=z'>Z Destination:</a> [custom_z]</a><br>
+				<a href='?src=\ref[src];custom_coord=a'>Rotate by:</a> [custom_rot]<br><br>
+				<a href='?src=\ref[src];process_custom_coord=1'><b>Calculate Course</b></a></div>"}
 	else //No shuttle
 		dat = "<h1>NO SHUTTLE LINKED</h1><br>"
 		dat += "<a href='?src=\ref[src];link_to_shuttle=1'>Link to a shuttle</a>"
@@ -265,6 +297,7 @@
 	src.add_fingerprint(usr)
 	if(href_list["move"])
 		if(!shuttle)
+			to_chat(usr, "<span class = 'warning'>No shuttle detected.</span>")
 			return
 		if(!allowed(usr))
 			to_chat(usr, "<font color='red'>Access denied.</font>")
@@ -277,9 +310,11 @@
 		if(!allow_selecting_all && !(selected_port in shuttle.docking_ports))
 			//Check disks too
 			if(!disk || !disk.compactible(shuttle) || (disk.destination != selected_port))
+				to_chat(usr, "<span class = 'warning'>[!disk?"No disk detected":!disk.compactible(shuttle)?"Current disk not conpatable with current shuttle.":"Currently selected docking port not valid."]</span>")
 				return
 
 		if(selected_port.docked_with) //If used by another shuttle, don't try to move this shuttle
+			to_chat(usr, "<span class = 'warning'>Selected port is currently in use.</span>")
 			return
 
 		//Send a message to the shuttle to move
@@ -330,13 +365,15 @@
 			return
 		var/list/L = list()
 		for(var/datum/shuttle/S in shuttles)
-			var/name = S.name
-			switch(S.can_link_to_computer)
-				if(LINK_PASSWORD_ONLY)
-					name = "[name] (requires password)"
-				if(LINK_FORBIDDEN)
-					continue
-
+			var/name
+			if(S.can_link_to_computer == LINK_FORBIDDEN)
+				continue
+			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+				name = S.name
+			else if(S.password)
+				name = "[S.name] (requires password)"
+			else
+				continue
 			L += name
 			L[name] = S
 
@@ -346,7 +383,7 @@
 		if(L[choice] && istype(L[choice],/datum/shuttle))
 			var/datum/shuttle/S = L[choice]
 
-			if(S.can_link_to_computer == LINK_PASSWORD_ONLY)
+			if(S.password)
 				var/password_attempt = input(usr,"Please input [capitalize(S.name)]'s interface password:", "Shuttle control console", 00000) as num
 
 				if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
@@ -362,6 +399,43 @@
 			to_chat(usr, "Successfully linked [src] to [capitalize(S.name)]!")
 			src.updateUsrDialog()
 
+	if(href_list["custom_coord"])
+		switch(href_list["custom_coord"])
+			if("x")
+				custom_x = input("Enter new X drift", "Course Plotting", custom_x) as num
+			if("y")
+				custom_y = input("Enter new Y drift", "Course Plotting", custom_y) as num
+			if("z")
+				custom_z = input("Enter new Z drift", "Course Plotting", custom_z) as num
+			if("a")
+				custom_rot=input("Enter rotation angle", "Course Plotting", custom_rot) as num
+
+		src.updateUsrDialog()
+
+	if(href_list["process_custom_coord"])
+		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+			var/turf/dest = locate(\
+			shuttle.linked_port.x + custom_x,\
+			shuttle.linked_port.y + custom_y,\
+			shuttle.linked_port.z + custom_z
+			)
+
+			if(!dest || dest.z == CENTCOMM_Z || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
+				to_chat(usr, "Error! Bad coordinates.")
+				return
+			if(istype(disk.destination, /obj/docking_port/destination/coord))
+				if(shuttle.current_port == disk.destination)
+					shuttle.current_port = null
+				qdel(disk.destination)
+				disk.destination = null
+			disk.destination = new /obj/docking_port/destination/coord(dest)
+			disk.destination.dir = angle2dir( dir2angle(shuttle.linked_port.dir) + custom_rot + 180)
+			//For instance, COURSE:06:06:2600:12:00
+			disk.destination.areaname = "COURSE:[time2text(world.timeofday, "MM:DD")]:[game_year]:[worldtime2text()]"
+
+			to_chat(usr, "Destination calculated!")
+
+		src.updateUsrDialog()
 
 	if(href_list["admin_link_to_shuttle"])
 		if(!isAdminGhost(usr))
@@ -370,13 +444,15 @@
 
 		var/list/L = list()
 		for(var/datum/shuttle/S in shuttles)
-			var/name = S.name
-			switch(S.can_link_to_computer)
-				if(LINK_PASSWORD_ONLY)
-					name = "[name] (password)"
-				if(LINK_FORBIDDEN)
-					name = "[name] (private)"
-
+			var/name
+			if(S.can_link_to_computer == LINK_FORBIDDEN)
+				continue
+			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+				name = S.name
+			else if(S.password)
+				name = "[S.name] (requires password)"
+			else
+				continue
 			L += name
 			L[name] = S
 
@@ -458,18 +534,24 @@
 
 /obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)
-		to_chat(usr, "<span class='info'>\The [src] is unresponsive.</span>")
+		to_chat(user, "<span class='info'>\The [src] is unresponsive.</span>")
 		return
 
 	if(!istype(SC))
 		if(istype(SC, /obj/item/weapon/disk)) //It's a disk, but not a compactible one
-			to_chat(usr, "<span class='info'>The disk is rejected by \the [src].</span>")
+			to_chat(user, "<span class='info'>The disk is rejected by \the [src].</span>")
 
 		return
 
+	if(disk)
+		//An old disk is already inserted.
+		to_chat(user, "<span class='warning'>The old [disk.name] pops out of the disk slot!</span>")
+		disk.forceMove(src.loc)
+		disk = null
+
 	if(user.drop_item(SC, src))
 		disk = SC
-		to_chat(usr, "<span class='info'>You insert \the [SC] into \the [src].</span>")
+		to_chat(user, "<span class='info'>You insert \the [SC] into \the [src].</span>")
 		src.updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/weapon/card/shuttle_pass/P, mob/user)
@@ -502,6 +584,7 @@
 /obj/machinery/computer/shuttle_control/emag(mob/user as mob)
 	..()
 	src.req_access = list()
-	to_chat(usr, "You disable the console's access requirement.")
+	if(user)
+		to_chat(user, "You disable the console's access requirement.")
 
 #undef MAX_SHUTTLE_NAME_LEN

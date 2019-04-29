@@ -52,7 +52,7 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(attached)
-		attached.Hear(args)
+		attached.Hear(arglist(args))
 	else
 		returnToPool(src)
 
@@ -77,8 +77,12 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		sight = copying
 	if(adding)
 		sight |= adding
+		if(adding & SEE_TURFS)
+			sight &= ~SEE_BLACKNESS
 	if(removing)
 		sight &= ~removing
+		if(removing & SEE_TURFS)
+			sight |= SEE_BLACKNESS
 	if(sight != oldsight)
 		var/mob/virtualhearer/VH = mob_hearers[src]
 		if(VH)

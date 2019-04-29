@@ -65,7 +65,7 @@
 	src.throw_at(get_turf(target),7,1)
 	return 1
 
-/mob/living/simple_animal/hostile/necromorph/leaper/Bump(atom/A)
+/mob/living/simple_animal/hostile/necromorph/leaper/to_bump(atom/A)
 	if(throwing && isliving(A) && CanAttack(A))
 		attach(A)
 	..()
@@ -93,7 +93,7 @@
 					else
 						if(prob(30))
 							step_towards(src, vent)//Step towards it
-							if(environment_smash)
+							if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 								EscapeConfinement()
 						break
 
@@ -157,7 +157,10 @@
 
 		if(prob(10))
 			to_chat(L, "<span class='userdanger'>\The [src] throws you to the ground!</span>")
-			L.Knockdown(rand(2,5))
+			var/incapacitation_duration = rand(2, 5)
+			L.Knockdown(incapacitation_duration)
+			L.Stun(incapacitation_duration)
+
 
 /mob/living/simple_animal/hostile/necromorph/leaper/adjustBruteLoss(amount)
 	.=..()
@@ -178,17 +181,18 @@
 
 /mob/living/simple_animal/hostile/necromorph/exploder/AttackingTarget()
 	visible_message("<span class='warning'>\The [src] hits \the [target] with their left arm!</span>")
-	Die()
+	death()
 
-/mob/living/simple_animal/hostile/necromorph/exploder/Die()
+/mob/living/simple_animal/hostile/necromorph/exploder/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'>\The [src] explodes!</span>")
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/generic(T)
-	explosion(T, -1, 1, 4)
 	qdel(src)
+	explosion(T, -1, 1, 4)
 
 /mob/living/simple_animal/hostile/necromorph/puker
-	desc = "A twisted, engorged husk of what was once human. It reaks of stomach acid."
+	desc = "A twisted, engorged husk of what was once human. It reeks of stomach acid."
 	icon_state = "nmorph_puker"
 	icon_living = "nmorph_puker"
 	icon_dead = "nmorph_puker_dead"
@@ -207,6 +211,9 @@
 /obj/item/projectile/puke/New()
 	..()
 	create_reagents(500)
+	make_reagents()
+
+/obj/item/projectile/puke/proc/make_reagents()
 	var/room_remaining = 500
 	var/poly_to_add = rand(100,200)
 	reagents.add_reagent(PACID, poly_to_add)
@@ -215,6 +222,9 @@
 	reagents.add_reagent(SACID, sulph_to_add)
 	room_remaining -= sulph_to_add
 	reagents.add_reagent(VOMIT, room_remaining)
+
+/obj/item/projectile/puke/clear/make_reagents()
+	return
 
 
 /obj/item/projectile/puke/on_hit(var/atom/atarget, var/blocked = 0)

@@ -16,7 +16,7 @@
 
 	global.total_runtimes++
 
-	var/erroruid = "[e.file][e.line]"
+	var/erroruid = "[e.file][e.line]:[e]"
 	var/last_seen = global.error_last_seen[erroruid]
 	var/cooldown = global.error_cooldown[erroruid] || 0
 	if (last_seen == null) // A new error!
@@ -59,7 +59,7 @@
 			var/skipcount = abs(global.error_cooldown[erroruid]) - 1
 			global.error_cooldown[erroruid] = 0
 			if (skipcount > 0)
-				world.log << "\[[time_stamp()]] Skipped [skipcount] runtimes in [e.file],[e.line]."
+				world.log << "\[[time_stamp()]] Skipped [skipcount] runtimes in [e.file],[e.line]: [e]"
 				error_cache.log_error(e, skip_count = skipcount)
 
 	global.error_last_seen[erroruid] = world.time
@@ -101,12 +101,18 @@
 		desclines += "  (This error will now be silenced for [configured_error_silence_time / 600] minutes)"
 
 	// Now to actually output the error info...
-	world.log << "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"
+	var/main_line = "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"
+	world.log << main_line
 
 	for (var/line in desclines)
 		world.log << line
 
 	if (global.error_cache)
 		global.error_cache.log_error(e, desclines)
+
+#if UNIT_TESTS_ENABLED
+	if(global.current_test)
+		global.current_test.fail("[main_line]\n[desclines.Join("\n")]")
+#endif
 
 #endif

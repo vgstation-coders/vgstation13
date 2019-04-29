@@ -38,6 +38,7 @@
 	name = "skeleton chicken"
 	voice_name = "chicken skeleton"
 	icon_state = "chickenskeleton"
+	flag = NO_BREATHE
 
 /mob/living/carbon/monkey/vox/skeletal/New()
 

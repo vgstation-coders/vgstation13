@@ -8,7 +8,7 @@
 	flag = "energy"
 	fire_sound = 'sound/weapons/ion.ogg'
 
-/obj/item/projectile/ion/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ion/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
 		empulse(get_turf(A), 1, 1)
 	..()
@@ -23,7 +23,7 @@
 	flag = "energy"
 	fire_sound = 'sound/weapons/ion.ogg'
 
-/obj/item/projectile/ionsmall/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ionsmall/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
 		empulse(src, 0, 1)
 	..()
@@ -34,7 +34,7 @@
 	damage = 50
 	flag = "bullet"
 
-/obj/item/projectile/bullet/gyro/Bump(var/atom/target) //The bullets lose their ability to penetrate (which was pitiful for these ones) but now explode when hitting anything instead of only some things.
+/obj/item/projectile/bullet/gyro/to_bump(var/atom/target) //The bullets lose their ability to penetrate (which was pitiful for these ones) but now explode when hitting anything instead of only some things.
 	explosion(target, -1, 0, 2)
 	qdel(src)
 
@@ -116,7 +116,7 @@
 	nodamage = 1
 	flag = "bullet"
 
-/obj/item/projectile/simple_fireball/Bump(atom/A)
+/obj/item/projectile/simple_fireball/to_bump(atom/A)
 	explosion(get_turf(src), -1, -1, 2, 2)
 	return qdel(src)
 
@@ -137,8 +137,9 @@
 		var/mob/living/carbon/human/H = M
 		if((H.species.flags & IS_PLANT))
 			if(prob(mutstrength*2))
-				M.apply_effect((rand(30,80)),IRRADIATE)
+				M.apply_radiation((rand(30,80)),RAD_EXTERNAL)
 				M.Knockdown(5)
+				M.Stun(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))
@@ -240,7 +241,7 @@ obj/item/projectile/kinetic/New()
 	new /obj/item/effect/kinetic_blast(target_turf)
 	..(target,blocked)
 
-/obj/item/projectile/kinetic/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/kinetic/to_bump(atom/A as mob|obj|turf|area)
 	if(!loc)
 		return
 	if(A == firer)
@@ -284,13 +285,13 @@ obj/item/projectile/kinetic/New()
 	var/obj/item/stickybomb/sticky = null
 
 
-/obj/item/projectile/stickybomb/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/stickybomb/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return 0
 	bumped = 1
 
 	if(A)
-		density = 0
+		setDensity(FALSE)
 		invisibility = 101
 		kill_count = 0
 		if(isliving(A))
@@ -304,7 +305,7 @@ obj/item/projectile/kinetic/New()
 	if(!bumped)
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 
 /obj/item/projectile/portalgun
 	name = "portal gun shot"
@@ -319,9 +320,9 @@ obj/item/projectile/kinetic/New()
 	if(!bumped)
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 
-/obj/item/projectile/portalgun/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/portalgun/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return
 	bumped = 1
@@ -362,6 +363,9 @@ obj/item/projectile/kinetic/New()
 	var/pressure = ONE_ATMOSPHERE * 4.5
 	var/temperature = T0C + 175
 	var/fire_duration
+
+/obj/item/projectile/fire_breath/straight
+	fire_blast_type = /obj/effect/fire_blast/no_spread
 
 /obj/item/projectile/fire_breath/New(turf/T, var/direction, var/F_Dam, var/P, var/T, var/F_Dur)
 	..(T,direction)
@@ -426,7 +430,7 @@ obj/item/projectile/kinetic/New()
 	flag = "bio"
 	fire_sound = 'sound/weapons/rocket.ogg'
 
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 
 	var/fire_damage = 5
 	var/pressure = ONE_ATMOSPHERE * 4.5
@@ -435,3 +439,19 @@ obj/item/projectile/kinetic/New()
 
 /obj/item/projectile/napalm_bomb/on_hit(var/atom/target, var/blocked = 0)
 	new /obj/effect/fire_blast/blue(get_turf(target), fire_damage, 0, 1, pressure, temperature, fire_duration)
+
+
+/obj/item/projectile/swap
+	name = "bolt of swapping"
+	icon_state = "sparkblue"
+	damage = 0
+	nodamage = 1
+	fire_sound = 'sound/weapons/osipr_altfire.ogg'
+
+/obj/item/projectile/swap/on_hit(var/atom/target, var/blocked = 0)
+	var/turf/T = get_turf(target)
+	do_teleport(target, firer.loc)
+	do_teleport(firer, T)
+
+/obj/item/projectile/swap/advanced
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE

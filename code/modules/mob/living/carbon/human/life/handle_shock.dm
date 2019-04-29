@@ -27,22 +27,22 @@
 		stuttering = max(stuttering, 5)
 
 	if(pain_shock_stage == 40)
-		to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
+		to_chat(src, "<span class='danger'>[pick("The pain is excruciating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
 
 	if(pain_shock_stage >= 60)
 		if(pain_shock_stage == 60)
 			if(!isUnconscious())
 				visible_message("<B>[src]</B>'s body becomes limp.")
 		if(prob(2))
-			to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
+			to_chat(src, "<span class='danger'>[pick("The pain is excruciating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
 			Knockdown(20)
 
-	if(pain_shock_stage >= 80)
+	if(pain_shock_stage >= 80 && pain_shock_stage < 150)
 		if(prob(5))
-			to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
+			to_chat(src, "<span class='danger'>[pick("The pain is excruciating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
 			Knockdown(20)
 
-	if(pain_shock_stage >= 120)
+	if(pain_shock_stage >= 120 && pain_shock_stage < 150)
 		if(prob(2))
 			to_chat(src, "<span class='danger'>[pick("You black out!", "You feel like you could die any moment now.", "You're about to lose consciousness.")]</span>")
 			Paralyse(5)
@@ -53,4 +53,6 @@
 		Knockdown(20)
 
 	if(pain_shock_stage >= 150)
-		Knockdown(20)
+		if((life_tick % 8) == 0)
+			if(prob(80))
+				Knockdown(9)

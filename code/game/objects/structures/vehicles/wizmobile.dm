@@ -50,35 +50,25 @@
 	return 1
 */
 
-/obj/structure/bed/chair/vehicle/wizmobile/update_mob()
-	if(!occupant)
-		return
-
-	switch(dir)
-		if(SOUTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
-			occupant.pixel_x = 3 * PIXEL_MULTIPLIER// 13
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
-			occupant.pixel_x = -3 * PIXEL_MULTIPLIER// -13
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/wizmobile/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 3 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER),//13
+		"[NORTH]" = list("x" = 0, "y" = 4 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = -3 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER)//-13
+		)
 
 /obj/structure/bed/chair/vehicle/wizmobile/handle_layer()
 	return
 
-/obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/wizmobile/to_bump(var/atom/obstacle)
 	if(throwing)
 		return ..()
 	else
 		return obstacle.bumped_by_firebird(src) //Yep
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
-/obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/wizmobile/to_bump(var/atom/obstacle)
 	if(can_move)
 		can_move = 0
 		alpha=128

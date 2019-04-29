@@ -58,8 +58,8 @@
 /datum/surgery_step/internal/fix_organ
 	allowed_tools = list(
 		/obj/item/stack/medical/advanced/bruise_pack= 100,
-		/obj/item/stack/medical/bruise_pack = 50,
-		/obj/item/stack/medical/bruise_pack/tajaran = 75,
+		/obj/item/stack/medical/bruise_pack = 75,
+		/obj/item/stack/medical/bruise_pack/tajaran = 100,
 		)
 
 	min_duration = 70
@@ -409,29 +409,10 @@
 
 	// Extract the organ!
 	if(target.op_stage.current_organ)
+		var/datum/organ/external/affectedarea = target.get_organ(target_zone)
+		var/datum/organ/internal/targetorgan = target.internal_organs_by_name[target.op_stage.current_organ]
 
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
-
-		var/obj/item/organ/O
-		if(I && istype(I))
-			O = I.remove(user)
-			if(O && istype(O))
-
-				// Stop the organ from continuing to reject.
-				O.organ_data.rejecting = null
-
-				// Transfer over some blood data, if the organ doesn't have data.
-				var/datum/reagent/blood/organ_blood = O.reagents.reagent_list[BLOOD]
-				if(!organ_blood || !organ_blood.data["blood_DNA"])
-					target.vessel.trans_to(O, 5, 1, 1)
-
-				// Kinda redundant, but I'm getting some buggy behavior.
-				target.internal_organs_by_name[target.op_stage.current_organ] = null
-				target.internal_organs_by_name -= target.op_stage.current_organ
-				target.internal_organs -= O.organ_data
-				affected.internal_organs -= O.organ_data
-				O.removed(target,user)
+		target.remove_internal_organ(user, targetorgan, affectedarea)
 
 		target.op_stage.current_organ = null
 
@@ -446,7 +427,7 @@
 /////REPLACE ORGAN//////
 /datum/surgery_step/internal/replace_organ
 	allowed_tools = list(
-		/obj/item/organ = 100,
+		/obj/item/organ/internal = 100,
 		)
 
 	min_duration = 60
@@ -454,7 +435,7 @@
 
 /datum/surgery_step/internal/replace_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	var/obj/item/organ/O = tool
+	var/obj/item/organ/internal/O = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
 	var/organ_compatible
@@ -488,6 +469,9 @@
 		else
 			to_chat(user, "<span class='warning'>\The [O.organ_tag] [o_do] normally go in \the [affected.display_name].</span>")
 			return 0
+
+		if(!O.organ_data.CanInsert(target, user))
+			return 0
 	else
 		to_chat(user, "<span class='warning'>\A [target.species.name] doesn't normally have [o_a][O.organ_tag].</span>")
 		return 0
@@ -506,7 +490,7 @@
 	user.visible_message("<span class='notice'>[user] has transplanted \the [tool] into [target]'s [affected.display_name].</span>", \
 	"<span class='notice'>You have transplanted \the [tool] into [target]'s [affected.display_name].</span>")
 	user.drop_item()
-	var/obj/item/organ/O = tool
+	var/obj/item/organ/internal/O = tool
 
 	if(istype(O))
 
@@ -528,15 +512,18 @@
 		affected.internal_organs |= O.organ_data
 		target.internal_organs_by_name[O.organ_tag] = O.organ_data
 		O.organ_data.status |= ORGAN_CUT_AWAY
+		O.organ_data.Insert(target, user)
 		O.replaced(target)
-
-	qdel(O)
+	var/datum/organ/internal/I = target.internal_organs_by_name[O.organ_tag]
+	I.removed_type = O
+	O.stabilized = TRUE
+	O.loc = null
 	O = null
 
 /datum/surgery_step/internal/replace_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging \the [tool]!</span>", \
 	"<span class='warning'>Your hand slips, damaging \the [tool]!</span>")
-	var/obj/item/organ/I = tool
+	var/obj/item/organ/internal/I = tool
 	if(istype(I))
 		I.organ_data.take_damage(rand(3,5),0)
 

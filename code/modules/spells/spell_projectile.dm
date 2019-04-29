@@ -27,7 +27,7 @@
 			var/obj/effect/overlay/trail = getFromPool(/obj/effect/overlay, src.loc)
 			trail.icon = proj_trail_icon
 			trail.icon_state = proj_trail_icon_state
-			trail.density = 0
+			trail.setDensity(FALSE)
 			spawn(proj_trail_lifespan)
 				returnToPool(trail)
 	return
@@ -38,7 +38,7 @@
 		qdel(src)
 	return
 
-/obj/item/projectile/spell_projectile/Bump(var/atom/A)
+/obj/item/projectile/spell_projectile/to_bump(var/atom/A)
 	if(loc)
 		prox_cast(choose_prox_targets(user = carried.holder, spell_holder = src))
 	return

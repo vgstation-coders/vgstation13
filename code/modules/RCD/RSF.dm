@@ -18,6 +18,7 @@
 	/datum/rcd_schematic/rsf/candle,
 	/datum/rcd_schematic/rsf/dice,
 	/datum/rcd_schematic/rsf/cards,
+	/datum/rcd_schematic/rsf/unecards,
 	/datum/rcd_schematic/rsf/cardboard,
 	/datum/rcd_schematic/rsf/zippo,
 	/datum/rcd_schematic/rsf/camera,
@@ -49,6 +50,7 @@
 	/datum/rcd_schematic/rsf/candle,
 	/datum/rcd_schematic/rsf/dice,
 	/datum/rcd_schematic/rsf/cards,
+	/datum/rcd_schematic/rsf/unecards,
 	/datum/rcd_schematic/rsf/cardboard,
 	/datum/rcd_schematic/rsf/zippo,
 	/datum/rcd_schematic/rsf/camera,
@@ -68,3 +70,15 @@
 		afterattack(A,user) //If it's a table call afterattack now, and return 1 so it doesn't call the table attackby proc.
 		return 1
 	return 0 //Otherwise proceed as normal.
+
+/obj/item/device/rcd/borg/rsf/soviet
+	name	= "\improper Rapid-Soviet-Fabricator"
+	desc	= "A device used to rapidly deploy essential soviet items."
+	cell_power_per_energy = 100
+	schematics	= list(
+	/datum/rcd_schematic/rsf/glass,
+	/datum/rcd_schematic/rsf/flask,
+	/datum/rcd_schematic/rsf/ushanka,
+	/datum/rcd_schematic/rsf/vodka,
+	/datum/rcd_schematic/rsf/greyshit_vodka
+	)

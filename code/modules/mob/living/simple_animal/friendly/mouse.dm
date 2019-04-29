@@ -2,8 +2,8 @@
 #define MOUSEFAT 600
 #define MOUSESTARVE 25
 #define MOUSEHUNGRY 100
-#define MOVECOST 1
-#define STANDCOST 0.5
+#define MOUSEMOVECOST 1
+#define MOUSESTANDCOST 0.5
 
 /mob/living/simple_animal/mouse
 	name = "mouse"
@@ -33,6 +33,7 @@
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 	universal_speak = 0
 	treadmill_speed = 0.2 //You can still do it, but you're not going to generate much power.
+	speak_override = FALSE
 
 	size = SIZE_TINY
 	holder_type = /obj/item/weapon/holder/animal/mouse
@@ -44,7 +45,6 @@
 
 	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
 	var/antibodies = 0
-
 
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
@@ -67,7 +67,7 @@
 			wander = 1
 			speak_chance = initial(speak_chance)
 		else if(prob(5))
-			emote("snuffles")
+			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
 		visible_message("<span class = 'warning'>\The [src] explodes!</span>")
@@ -77,11 +77,11 @@
 	if(nutrition >= MOUSEFAT && is_fat == 0)
 		is_fat = 1
 		speed = 6
-		meat_amount = initial(meat_amount) + 1
+		meat_amount += 1
 	else if ((nutrition <= MOUSEFAT-25 && is_fat == 1) || (nutrition > MOUSEHUNGRY && is_fat == 0))
 		is_fat = 0
 		speed = initial(speed)
-		meat_amount = initial(meat_amount)
+		meat_amount = size //What it is on living/New(),
 	if(nutrition <= MOUSESTARVE && prob(5) && client)
 		to_chat(src, "<span class = 'warning'>You are starving!</span>")
 		health -= 1
@@ -99,7 +99,7 @@
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
-		if(!(food_target in can_see))
+		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
 			step_towards(src, food_target)
@@ -132,14 +132,14 @@
 					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
 
-		nutrition = max(0, nutrition - STANDCOST)
+		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
-/mob/living/simple_animal/mouse/Move()
+/mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/multiplier = 1
 	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement
 		multiplier = 2.5
-	nutrition = max(0, nutrition - MOVECOST*multiplier)
+	nutrition = max(0, nutrition - MOUSEMOVECOST*multiplier)
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -184,8 +184,7 @@
 			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 
 /mob/living/simple_animal/mouse/proc/splat()
-	src.health = 0
-	src.stat = DEAD
+	death()
 	src.icon_dead = "mouse_[_color]_splat"
 	src.icon_state = "mouse_[_color]_splat"
 	if(client)
@@ -258,10 +257,10 @@
 			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
-/mob/living/simple_animal/mouse/Die()
+/mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
 	if(client)
 		client.time_died_as_mouse = world.time
-	..()
+	..(gibbed)
 
 /*
  * Mouse types

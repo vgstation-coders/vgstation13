@@ -2,13 +2,14 @@
 /datum/organ/internal/liver
 	name = "liver"
 	parent_organ = LIMB_CHEST
+	organ_type = "liver"
 	var/process_accuracy = 10
 	var/efficiency = 1
 
 	var/reagent_efficiencies=list(
 		// REAGENT = 2,
 	)
-	removed_type = /obj/item/organ/liver
+	removed_type = /obj/item/organ/internal/liver
 
 /datum/organ/internal/liver/Copy()
 	var/datum/organ/internal/liver/I = ..()
@@ -29,7 +30,7 @@
 			src.damage = 0
 
 		//High toxins levels are dangerous
-		if(owner.getToxLoss() >= 60 && !owner.reagents.has_reagent(ANTI_TOXIN))
+		if(owner.getToxLoss() >= 60 && !owner.reagents.has_any_reagents(ANTI_TOXINS))
 			//Healthy liver suffers on its own
 			if (src.damage < min_broken_damage)
 				src.damage += 0.2 * process_accuracy
@@ -40,7 +41,7 @@
 					O.damage += 0.2  * process_accuracy
 
 		//Detox can heal small amounts of damage
-		if (src.damage && src.damage < src.min_bruised_damage && owner.reagents.has_reagent(ANTI_TOXIN))
+		if (src.damage && src.damage < src.min_bruised_damage && owner.reagents.has_any_reagents(ANTI_TOXINS))
 			src.damage -= 0.2 * process_accuracy
 
 		// Damaged liver means some chemicals are very dangerous
@@ -51,7 +52,7 @@
 					owner.adjustToxLoss(0.1 * process_accuracy)
 
 			// Can't cope with toxins at all
-			for(var/toxin in list(TOXIN, PLASMA, SACID, PACID, CYANIDE, LEXORIN, AMATOXIN, CHLORALHYDRATE, CARPOTOXIN, ZOMBIEPOWDER, MINDBREAKER))
+			for(var/toxin in list(PLASMA, CYANIDE, AMATOXIN, CHLORALHYDRATE, CARPOTOXIN, ZOMBIEPOWDER, MINDBREAKER)+SACIDS+PACIDS+LEXORINS+TOXINS+LEXORINS)
 				if(owner.reagents.has_reagent(toxin))
 					owner.adjustToxLoss(0.3 * process_accuracy)
 

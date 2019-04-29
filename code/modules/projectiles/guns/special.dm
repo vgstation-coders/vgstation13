@@ -98,6 +98,8 @@
 			blue_portal.overlays.len = 0
 			blue_portal.target = null
 		return
+	red_portal.disconnect_atmospheres()
+	blue_portal.disconnect_atmospheres()
 
 	//connecting the portals
 	blue_portal.target = red_portal
@@ -112,3 +114,6 @@
 	red_portal.purge_beams()
 	blue_portal.add_beams()
 	red_portal.add_beams()
+
+	//updating their atmos connection
+	blue_portal.connect_atmospheres()

@@ -1,10 +1,3 @@
-#define DECORATION	0
-#define HOLSTER		1
-#define STORAGE		2
-#define ARMBAND		4
-#define TIE			8
-#define HOLOMAP		16
-
 /obj/item/clothing/accessory
 	name = "tie"
 	desc = "A neosilk clip-on tie."
@@ -19,6 +12,7 @@
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
+	var/ignoreinteract = FALSE //for accessories that should not come off when attached to object is touched
 
 /obj/item/clothing/accessory/New()
 	..()
@@ -28,6 +22,8 @@
 	if(attached_to)
 		attached_to.overlays -= inv_overlay
 	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	if(color)
+		inv_overlay.color = color
 	if(attached_to)
 		attached_to.overlays += inv_overlay
 		if(ishuman(attached_to.loc))
@@ -46,6 +42,7 @@
 /obj/item/clothing/accessory/proc/on_removed(mob/user as mob)
 	if(!attached_to)
 		return
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to.overlays -= inv_overlay
 	attached_to = null
 	forceMove(get_turf(user || src))
@@ -95,6 +92,10 @@
 /obj/item/clothing/accessory/pinksquare/can_attach_to(obj/item/clothing/C)
 	return 1
 
+/obj/item/clothing/accessory/tie
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
+
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
 		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
@@ -124,6 +125,8 @@
 	icon_state = "stethoscope"
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -175,6 +178,10 @@
 /obj/item/clothing/accessory/medal/conduct
 	name = "distinguished conduct medal"
 	desc = "A bronze medal awarded for distinguished conduct. Whilst a great honor, this is most basic award given by Nanotrasen. It is often awarded by a captain to a member of his crew."
+
+/obj/item/clothing/accessory/medal/participation
+	name = "super participation medal"
+	desc = "On closer inspection, this one is dated 2551..."
 
 /obj/item/clothing/accessory/medal/bronze_heart
 	name = "bronze heart medal"
@@ -263,7 +270,7 @@
 			var/obj/item/device/pda/pda = O
 			id_card = pda.id
 
-		if(access_security in id_card.access || emagged)
+		if ((access_security in id_card.access) || emagged)
 			to_chat(user, "You imprint your ID details onto the badge.")
 			stored_name = id_card.registered_name
 			name = "holobadge ([stored_name])"
@@ -277,3 +284,123 @@
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
 
+/obj/item/clothing/accessory/lasertag
+	name = "laser tag vest"
+	desc = "A vest for player laser tag."
+	icon = null
+	icon_state = null
+	accessory_exclusion = LASERTAG
+	inv_overlay
+	var/obj/item/clothing/suit/tag/source_vest
+
+/obj/item/clothing/accessory/lasertag/can_attach_to(obj/item/clothing/C)
+	return ..() || istype(C, /obj/item/clothing/monkeyclothes)
+
+/obj/item/clothing/accessory/lasertag/update_icon()
+	if(source_vest)
+		appearance = source_vest.appearance
+		if(attached_to)
+			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
+			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
+			if(ismob(attached_to.loc))
+				var/mob/M = attached_to.loc
+				M.regenerate_icons()
+	..()
+
+/obj/item/clothing/accessory/lasertag/on_removed(mob/user)
+	if(!attached_to)
+		return
+	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
+	attached_to.overlays -= inv_overlay
+	if(ismob(attached_to.loc))
+		var/mob/M = attached_to.loc
+		M.regenerate_icons()
+	attached_to = null
+	if(source_vest)
+		source_vest.forceMove(get_turf(src))
+		if(user)
+			user.put_in_hands(source_vest)
+		add_fingerprint(user)
+		transfer_fingerprints(src,source_vest)
+		source_vest = null
+	qdel(src)
+
+
+/obj/item/clothing/accessory/rad_patch
+	name = "radiation detection patch"
+	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
+	icon_state = "rad_patch"
+	var/rad_absorbed = 0
+	var/rad_threshold = 45
+	var/triggered = FALSE
+	var/event_key
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
+	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+
+/obj/item/clothing/accessory/rad_patch/proc/check_rads(list/arguments)
+	if(triggered)
+		return
+	var/mob/user = arguments["user"]
+	var/rads = arguments["rads"]
+	rad_absorbed += rads
+
+	if(rad_absorbed > rad_threshold)
+		triggered = TRUE
+		update_icon()
+		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
+		user.on_irradiate.Remove(event_key)
+		event_key = null
+
+/obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
+	..()
+	if(ismob(C.loc) && !triggered)
+		var/mob/user = C.loc
+		event_key = user.on_irradiate.Add(src, "check_rads")
+
+/obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
+	..()
+	if(event_key)
+		user.on_irradiate.Remove(event_key)
+		event_key = null
+
+/obj/item/clothing/accessory/rad_patch/examine(mob/user)
+	..(user)
+	if(triggered)
+		to_chat(user, "<span class = 'warning'>It is a deep dark color!</span>")
+
+/obj/item/clothing/accessory/rad_patch/update_icon()
+	if(triggered)
+		icon_state = "patch_1"
+	else
+		icon_state = "patch_0"
+	..()
+
+/obj/item/clothing/accessory/rabbit_foot
+	name = "rabbit's foot"
+	desc = "The hind left foot from a rabbit. It makes you feel lucky."
+	icon_state = "rabbit_foot"
+	_color = "rabbit_foot"
+	var/thisvarmakesyoulucky = TRUE //Note: Luck is a mental construct and doesn't actually exist.
+	var/wired = FALSE
+
+/obj/item/clothing/accessory/rabbit_foot/attackby(obj/item/I, mob/user)
+	..()
+	if(iscablecoil(I))
+		var/obj/item/stack/cable_coil/C = I
+		if(wired)
+			to_chat(user, "<span class='info'>\The [src] already has a loop on it.</span>")
+			//break
+		else if(C.use(5))
+			wired = TRUE
+			overlays += image("icon" = 'icons/obj/clothing/accessories.dmi', "icon_state" = "rabbit_foot_loop")
+			to_chat(user, "<span class='info'>You add a loop to \the [src].</span>")
+		else
+			to_chat(user, "<span class='info'>You need at least 5 lengths of cable to add a loop to this.</span>")
+
+/obj/item/clothing/accessory/rabbit_foot/can_attach_to(obj/item/clothing/C)
+	if(wired)
+		return istype(C, /obj/item/clothing/under)
+	else
+		return FALSE

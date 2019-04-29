@@ -15,8 +15,9 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
+		var/datum/role/vampire/V = isvampire(H)
 		if(isvampire(H))
-			if(!(VAMP_MATURE in H.mind.vampire.powers))
+			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 		if(user.hallucinating())
@@ -24,10 +25,11 @@
 				if(1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 					H.Knockdown(4)
+					H.Stun(4)
 					return
 				if(21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-					H.emote("scream",,, 1)
+					H.audible_scream()
 					H.dir = turn(H.dir, 180)
 					return
 				if(41 to 50)
@@ -45,7 +47,7 @@
 			if(userloc != H.loc)
 				return	//no tele-grooming
 			if(new_style)
-				H.f_style = new_style
+				H.my_appearance.f_style = new_style
 				H.update_hair()
 
 		//handle normal hair
@@ -55,7 +57,7 @@
 			if(userloc != H.loc)
 				return	//no tele-grooming
 			if(new_style)
-				H.h_style = new_style
+				H.my_appearance.h_style = new_style
 				H.update_hair()
 
 
@@ -86,19 +88,19 @@
 			stack.use(2)
 			shattered = 0
 			icon_state = "mirror"
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
 	else
 		user.do_attack_animation(src, I)
 		if(shattered)
-			playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 			return
 		else if(prob(I.force * 2))
 			visible_message("<span class='warning'>[user] smashes [src] with [I]!</span>")
 			shatter()
 		else
 			visible_message("<span class='warning'>[user] hits [src] with [I]!</span>")
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 70, 1)
 
 
 /obj/structure/mirror/attack_alien(mob/living/user as mob)
@@ -106,7 +108,7 @@
 		return
 	user.do_attack_animation(src, user)
 	if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()
@@ -120,7 +122,7 @@
 		return
 	user.do_attack_animation(src, user)
 	if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()
@@ -131,7 +133,7 @@
 		return
 	user.do_attack_animation(src, user)
 	if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()

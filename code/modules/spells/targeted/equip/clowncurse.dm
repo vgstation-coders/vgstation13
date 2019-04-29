@@ -2,6 +2,7 @@
 	name = "The Clown Curse"
 	desc = "A curse that will turn its victim into a miserable clown."
 	abbreviation = "CC"
+	user_type = USER_TYPE_WIZARD
 
 	school = "evocation"
 	charge_max = 300
@@ -43,3 +44,20 @@
 		var/obj/item/clothing/shoes/clown_shoes/M = new_item
 		M.wizard_garb = 1  // This means that wizards who are clown cursed can still cast robed spells.
 	return new_item
+
+
+/spell/targeted/equip_item/clowncurse/christmas //elves for santa's workshop
+	name = "The Elf Curse"
+	desc = "A curse that will turn its victim into a miserable christmas elf."
+	abbreviation = "EC"
+	holiday_required = list(XMAS)
+
+	hud_state = "wiz_elf"
+
+	invocation = "MAK'N T'YS!"
+
+/spell/targeted/equip_item/clowncurse/christmas/New()
+	..()
+	equipped_summons = list("[slot_head]" = /obj/item/clothing/head/elfhat/stickymagic,
+							"[slot_w_uniform]" = /obj/item/clothing/under/elf/stickymagic,
+							"[slot_shoes]" = /obj/item/clothing/shoes/clown_shoes/elf/stickymagic)

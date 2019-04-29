@@ -35,7 +35,8 @@
 /obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
-		user.Knockdown(3 * force)
+		user.Knockdown(8)
+		user.Stun(8)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -52,7 +53,7 @@
 	if (user.a_intent == I_HURT)
 		if(!..())
 			return
-		playsound(get_turf(src), "swing_hit", 50, 1, -1)
+		playsound(src, "swing_hit", 50, 1, -1)
 		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 			M.stuttering = 8
 		M.Stun(8)
@@ -61,7 +62,7 @@
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 	else
-		playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
+		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 		M.Stun(5)
 		M.Knockdown(5)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
@@ -120,7 +121,7 @@
 		w_class = initial(w_class)
 		force = initial(force) //not so robust now
 		attack_verb = list("hits", "punches")
-	playsound(get_turf(src), 'sound/weapons/empty.ogg', 50, 1)
+	playsound(src, 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
 	if(!blood_overlays["[type][icon_state]"])
@@ -145,7 +146,8 @@
 			user.simple_message("<span class='warning'>You club yourself over the head.</span>",
 				"<span class='danger'>The fishing rod goes mad!</span>")
 
-			user.Knockdown(3 * force)
+			user.Knockdown(4)
+			user.Stun(4)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -156,12 +158,13 @@
 			if(!..())
 				return
 			if(!isrobot(target))
-				playsound(get_turf(src), "swing_hit", 50, 1, -1)
+				playsound(src, "swing_hit", 50, 1, -1)
 				//target.Stun(4)	//naaah
 				target.Knockdown(4)
 		else
-			playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Knockdown(2)
+			target.Stun(2)
 			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [target.name] ([target.ckey])</font>")
 			log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
@@ -207,6 +210,7 @@
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 		src.sharpness_flags = SHARP_BLADE | HOT_EDGE
+		src.armor_penetration = 100
 	else
 		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
 		src.force = initial(src.force)
@@ -214,6 +218,7 @@
 		src.w_class = initial(src.w_class)
 		src.sharpness = initial(src.sharpness)
 		src.sharpness_flags = initial(src.sharpness_flags)
+		src.armor_penetration = initial(armor_penetration)
 	src.add_fingerprint(user)
 	return
 
@@ -238,7 +243,7 @@
 
 /obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
 	..(A)
@@ -272,3 +277,11 @@
 	else
 		parent_borer.chemicals -= 5
 		sleep(10)
+
+/obj/item/weapon/melee/training_sword
+	name = "training sword"
+	desc = "A blunt object in the shape of a one handed sword."
+	icon_state = "grey_sword"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	item_state = "grey_sword"
+	force = 4

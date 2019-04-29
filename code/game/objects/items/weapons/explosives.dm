@@ -27,25 +27,24 @@
 	..()
 
 /obj/item/weapon/plastique/suicide_act(var/mob/user)
-	. = (BRUTELOSS)
+	. = (SUICIDE_ACT_BRUTELOSS)
 	to_chat(viewers(user), "<span class='danger'>[user] activates the C4 and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	var/message_say = "FOR NO RAISIN!"
-	if(user.mind)
-		if(user.mind.special_role)
-			var/role = lowertext(user.mind.special_role)
-			if(role == "traitor" || role == "syndicate")
-				message_say = "FOR THE SYNDICATE!"
-			else if(role == "changeling")
-				message_say = "FOR THE HIVE!"
-			else if(role == "cultist")
-				message_say = "FOR NAR-SIE!"
+
+	if(istraitor(user) || isnukeop(user))
+		message_say = "FOR THE SYNDICATE!"
+	else if(ischangeling(user))
+		message_say = "FOR THE HIVE!"
+	else if(isanycultist(user))
+		message_say = "FOR NAR-SIE!"
+
 	user.say(message_say)
 	target = user
 	explode(get_turf(user))
 	return .
 
 /obj/item/weapon/plastique/attackby(var/obj/item/I, var/mob/user)
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		open_panel = !open_panel
 		to_chat(user, "<span class='notice'>You [open_panel ? "open" : "close"] the wire panel.</span>")
 	else if(iswiretool(I))
@@ -98,7 +97,7 @@
 			else
 				user.visible_message("<span class='warning'>[user] found \himself unable to drop \the [src] after setting the timer on them!</span>")
 
-			playsound(get_turf(target), 'sound/weapons/c4armed.ogg', 60, 1)
+			playsound(target, 'sound/weapons/c4armed.ogg', 60, 1)
 			if(!iscarbon(user))
 				M.LAssailant = null
 			else
@@ -124,10 +123,10 @@
 			target:dismantle_wall(1)
 		else
 			target.ex_act(1)
-		if (isobj(target))
-			if (target)
-				qdel(target)
-				target = null
+		//if (isobj(target))
+		//	if (target)
+		//		qdel(target)	If it survives ex_act(1) it's possible that it's not something that's meant to be destroyable.
+		//		target = null
 	qdel(src)
 
 /obj/item/weapon/plastique/attack(mob/M as mob, mob/user as mob, def_zone)

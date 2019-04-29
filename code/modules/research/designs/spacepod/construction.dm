@@ -26,7 +26,17 @@
 	id = "podarmor_civ"
 	build_type = PODFAB
 	req_tech = list(Tc_MATERIALS = 3, Tc_PLASMATECH = 3)
-	build_path = /obj/item/pod_parts/armor
+	build_path = /obj/item/pod_parts/armor/civ
+	category = "Pod_Armor"
+	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PLASMA=10000)
+
+/datum/design/pod_armor_taxi
+	name = "Pod Armor (taxi)"
+	desc = "Allows for the construction of spacepod armor. This is the civilian transport version."
+	id = "podarmor_taxi"
+	build_type = PODFAB
+	req_tech = list(Tc_MATERIALS = 3, Tc_PLASMATECH = 3)
+	build_path = /obj/item/pod_parts/armor/taxi
 	category = "Pod_Armor"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PLASMA=10000)
 

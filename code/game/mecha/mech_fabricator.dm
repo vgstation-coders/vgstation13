@@ -19,6 +19,7 @@
 #define	MECH_SCREEN_HONK		35
 #define	MECH_SCREEN_PHAZON		36
 #define	MECH_SCREEN_NANOTRASEN	37
+#define	MECH_SCREEN_CLARKE		38
 
 #define	MECH_SCREEN_MISC		41
 
@@ -49,6 +50,8 @@
 		"Ripley"=list(
 		),
 		"Odysseus"=list(
+		),
+		"Clarke"=list(
 		),
 		"Gygax"=list(
 		),

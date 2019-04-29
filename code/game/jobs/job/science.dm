@@ -17,7 +17,7 @@
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
 			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic)
-	minimal_player_age = 7
+	minimal_player_age = 20
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/rd
@@ -37,8 +37,8 @@
 	H.equip_or_collect(new /obj/item/device/radio/headset/heads/rd(H), slot_ears)
 	H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 	H.equip_or_collect(new /obj/item/clothing/under/rank/research_director(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
-	H.put_in_hands(new /obj/item/weapon/clipboard(H))
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/rd(H), slot_wear_suit)
+	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 	if(H.backbag == 1)
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
@@ -147,3 +147,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	return 1
+
+/datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/device/flash/synthetic(H.back), slot_in_backpack)

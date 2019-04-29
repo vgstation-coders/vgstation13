@@ -8,7 +8,6 @@
 
 
 /mob/living/carbon/slime/Life()
-	set invisibility = 0
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -84,7 +83,7 @@
 			break
 
 
-		if(Target.health <= -70 || Target.stat == 2)
+		if(Target.health <= -70 || Target.isDead())
 			Target = null
 			AIproc = 0
 //			to_chat(world, "break 3")
@@ -271,7 +270,7 @@
 		// if(src.health <= 20 && prob(1)) spawn(0) emote("gasp")
 
 		//if(!src.rejuv) src.oxyloss++
-		if(!src.reagents.has_reagent(INAPROVALINE))
+		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			src.adjustOxyLoss(10)
 
 		if(src.stat != DEAD)
@@ -321,7 +320,10 @@
 	if (src.ear_damage < 25)
 		src.ear_damage = 0
 
-	src.density = !( src.lying )
+	if(say_mute)
+		say_mute = 0
+
+	src.setDensity(!src.lying)
 
 	if (src.sdisabilities & BLIND)
 		src.blinded = 1
@@ -366,12 +368,16 @@
 	if(amount_grown >= 10 && !Victim && !Target)
 		if(istype(src, /mob/living/carbon/slime/adult))
 			if(!client)
-				for(var/i=1,i<=4,i++)
+				for(var/i = 1 to 4)
 					var/newslime
-					if(prob(70))
-						newslime = primarytype
-					else
-						newslime = slime_mutation[rand(1,4)]
+					switch(i)
+						if(1 to 2)
+							newslime = slime_mutation[rand(1,maxcolorcount)]
+						if(3)
+							newslime = primarytype
+						if(4)
+							newslime = slime_mutation[rand(1,(maxcolorcount-1))]
+//For an explination on how and why this is what it is go to 'code\modules\mob\living\carbon\slime\subtypes.dm' and see the READ ME at the top.
 
 					var/mob/living/carbon/slime/M = new newslime(loc)
 					M.powerlevel = round(powerlevel/4)
@@ -385,6 +391,8 @@
 
 		else
 			if(!client)
+				if(adulttype == null)
+					return
 				var/mob/living/carbon/slime/adult/A = new adulttype(src.loc)
 				A.nutrition = nutrition
 //				A.nutrition += 100

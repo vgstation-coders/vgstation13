@@ -19,6 +19,9 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["middle"] && modifiers["shift"])
+		MiddleShiftClickOn(A)
+		return
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
@@ -39,12 +42,10 @@
 		return
 	face_atom(A) // change direction to face what you clicked on
 
-	/*
-	cyborg restrained() currently does nothing
-	if(restrained())
-		RestrainedClickOn(A)
+	if(aicamera.in_camera_mode) //Cyborg picture taking
+		aicamera.toggle_camera_mode(src)
+		aicamera.captureimage(A, src)
 		return
-	*/
 
 	var/obj/item/W = get_active_hand()
 
@@ -52,10 +53,6 @@
 	if(!W)
 		A.add_hiddenprint(src)
 		A.attack_robot(src)
-		return
-
-	// locked_to cannot prevent machine interlinking but stops arm movement
-	if(locked_to)
 		return
 
 	if(W == A)
@@ -66,7 +63,15 @@
 		W.attack_self(src, params)
 		return
 
-	if(!isturf(loc) && !is_holder_of(src, A)) // Can't touch anything from inside a locker/cyborg recharging station etc, unless it's inside our inventory.
+	//Handling grippercreep
+	if (isgripper(W))
+		var/obj/item/weapon/gripper/G = W
+		//If the gripper contains something, then we will use its contents to attack
+		if (G.wrapped && (G.wrapped.loc == G))
+			GripperClickOn(A, params, G)
+			return
+
+	if(!isturf(loc) && !is_holder_of(src, A)) // Can't touch anything from inside things, unless it's inside our inventory.
 		return
 
 	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
@@ -90,6 +95,34 @@
 		return
 	return
 
+//Gripper Handling
+//This is used when a gripper is used on anything. It does all the handling for it.
+//Lots of sanity checking because i don't want runtimes.
+
+/mob/living/silicon/robot/proc/GripperClickOn(var/atom/A, var/params, var/obj/item/weapon/gripper/G)
+	if(!gripper_sanity_check(G))
+		return
+	if(A.Adjacent(src, MAX_ITEM_DEPTH) && isturf(loc))
+		G.force_holder = G.wrapped.force
+		G.wrapped.force = 0
+		var/resolved = G.wrapped.preattack(A, src, 1, params)
+		if(!gripper_sanity_check(G))//Check if the thing inside our gripper is still there, just to be sure.
+			return
+		if(!resolved && A && G.wrapped)
+			resolved = A.attackby(G.wrapped,src,params)
+			if(ismob(A) || istype(A, /obj/mecha))
+				delayNextAttack(10)
+			if(!gripper_sanity_check(G))//Check it, again.
+				return
+			if(!resolved && A && G.wrapped)
+				G.wrapped.afterattack(A,src,TRUE,params)//TRUE indicates adjacency.
+			else
+				delayNextAttack(10)
+			if(!gripper_sanity_check(G))//If we're parsing again, we're checking it again.
+				return
+			G.wrapped.force = G.force_holder
+			G.update_icon()
+
 //Middle click cycles through selected modules.
 /mob/living/silicon/robot/MiddleClickOn(var/atom/A)
 	cycle_modules()
@@ -111,20 +144,6 @@
 		return
 	A.RobotAltClick(src)
 	return
-
-/mob/living/silicon/robot/ShiftClickOn(var/atom/A)
-	//Borgs can into doors as well
-	if(istype(A, /obj/machinery/door/airlock))
-		A.AIShiftClick(src)
-		return
-	..()
-
-/mob/living/silicon/robot/CtrlClickOn(var/atom/A)
-	//Borgs can into doors as well
-	if(istype(A, /obj/machinery/door/airlock))
-		A.AICtrlClick(src)
-		return
-	..()
 
 /*
 	As with AI, these are not used in click code,

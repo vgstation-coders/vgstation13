@@ -1,6 +1,7 @@
 /obj/machinery/iv_drip
 	name = "\improper IV drip"
 	icon = 'icons/obj/iv_drip.dmi'
+	icon_state = "unhooked_inject"
 	anchored = 0
 	density = 0 //Tired of these blocking up the station
 
@@ -11,9 +12,9 @@
 
 /obj/machinery/iv_drip/update_icon()
 	if(src.attached)
-		icon_state = "hooked"
+		icon_state = "hooked[mode ? "_inject" : "_draw"]"
 	else
-		icon_state = ""
+		icon_state = "unhooked[mode ? "_inject" : "_draw"]"
 
 	overlays = null
 
@@ -42,21 +43,23 @@
 			filling.icon += mix_color_from_reagents(reagents.reagent_list)
 			overlays += filling
 
-/obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
-	..()
+/obj/machinery/iv_drip/MouseDropFrom(over_object, src_location, over_location)
 	if(isobserver(usr))
-		return
+		return ..()
 	if(usr.incapacitated()) // Stop interacting with shit while dead pls
-		return
+		return ..()
 	if(isanimal(usr))
-		return
+		return ..()
+	if(!usr.Adjacent(src))
+		return ..()
+
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src]")
 		src.attached = null
 		src.update_icon()
 		return
 
-	if(in_range(src, usr) && ishuman(over_object) && get_dist(over_object, src) <= 1)
+	if(ishuman(over_object) && get_dist(over_object, src) <= 1)
 		var/mob/living/carbon/human/H = over_object
 		if(H.species && (H.species.chem_flags & NO_INJECT))
 			H.visible_message("<span class='warning'>[usr] struggles to place the IV into [H] but fails.</span>","<span class='notice'>[usr] tries to place the IV into your arm but is unable to.</span>")
@@ -71,7 +74,7 @@
 	if(user.stat)
 		return
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
@@ -115,7 +118,7 @@
 			if(beaker.volume > 0)
 				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
 					// speed up transfer if the container has ONLY blood
-					beaker.reagents.trans_to(attached, 4)
+					beaker.reagents.trans_to(attached, 12)
 				else
 					// otherwise: transfer a little bit of all reagents to the patient. the reason why we don't transfer a set amount is because 0.2u of 10 different reagents is 0.02u of each, which is entirely too little.
 					for(var/datum/reagent/reagent in beaker.reagents.reagent_list)
@@ -125,7 +128,7 @@
 		// Take blood
 		else
 			var/amount = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			amount = min(amount, 4)
+			amount = min(amount, 12)
 			// If the beaker is full, ping
 			if(amount == 0)
 				if(prob(5))
@@ -138,7 +141,7 @@
 				return
 			if(!T.dna)
 				return
-			if(M_NOCLONE in T.mutations)
+			if(M_HUSK in T.mutations)
 				return
 
 			// If the human is losing too much blood, beep.
@@ -151,7 +154,7 @@
 			if(B)
 				update_icon()
 
-/obj/machinery/iv_drip/attack_hand(mob/user as mob)
+/obj/machinery/iv_drip/attack_hand(mob/user)
 	if(isobserver(usr) || user.incapacitated())
 		return
 	if(attached)
@@ -160,21 +163,20 @@
 		src.update_icon()
 	else if(src.beaker)
 		src.beaker.forceMove(get_turf(src))
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-			borgbeak.return_to_modules()
 		src.beaker = null
 		update_icon()
 	else
 		return ..()
 
+/obj/machinery/iv_drip/attack_ai(mob/living/user)
+	attack_hand(user)
 
 /obj/machinery/iv_drip/verb/toggle_mode()
 	set name = "Toggle Mode"
 	set category = "Object"
 	set src in view(1)
 
-	if(!istype(usr, /mob/living))
+	if(!istype(usr, /mob/living) || istype(usr, /mob/living/simple_animal))
 		to_chat(usr, "<span class='warning'>You can't do that.</span>")
 		return
 
@@ -183,6 +185,7 @@
 
 	mode = !mode
 	to_chat(usr, "<span class='info'>The [src] is now [mode ? "injecting" : "taking blood"].</span>")
+	update_icon()
 
 /obj/machinery/iv_drip/AltClick()
 	if(!usr.isUnconscious() && Adjacent(usr))

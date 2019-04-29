@@ -175,7 +175,7 @@ For the main html chat area
 			//Uh oh this fucker has a history of playing on a banned account!!
 			if (found.len > 0)
 				//TODO: add a new evasion ban for the CURRENT client details, using the matched row details
-				message_admins("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
+				message_admins("<span class='danger big'>[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])</span>")
 				log_admin("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
 
 	cookieSent = 1
@@ -221,10 +221,10 @@ For the main html chat area
 
 	// Either an atom or somebody fucked up and is gonna get a runtime, which I'm fine with.
 	var/atom/A = obj
-	var/key = "[istype(A.icon, /icon) ? "\ref[A.icon]" : A.icon]:[A.icon_state]"
+	var/key = ("[A.icon]" || "\ref[A.icon]")+":[A.icon_state]"
 	if (!bicon_cache[key]) // Doesn't exist, make it.
-		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1)
-		if (ishuman(obj)) // Shitty workaround for a BYOND issue.
+		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1, 0)
+		if (!"[A.icon]") // Shitty workaround for a BYOND issue.
 			var/icon/temp = I
 			I = icon()
 			I.Insert(temp, dir = SOUTH)
@@ -250,12 +250,19 @@ For the main html chat area
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
+	if (istype(target, /datum/zLevel)) //Passing it to an entire z level
+		for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
+			if(!istype(get_z_level(M),target))
+				continue
+			to_chat(M, message)
+		return
+
 	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
+
 		target << message
 		if (!isatom(target)) // Really easy to mix these up, and not having to make sure things are mobs makes the code cleaner.
 			CRASH("DEBUG: Boutput called with invalid message")
 		return
-
 	//Otherwise, we're good to throw it at the user
 	else if (istext(message))
 		if (istext(target))

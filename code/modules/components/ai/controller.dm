@@ -17,7 +17,7 @@
 		SendSignal(COMSIG_BUMPED, list("movable"=AM))
 
 // Called when we bump another movable atom.
-/datum/component/controller/proc/OnBump(var/atom/A)
+/datum/component/controller/proc/Onto_bump(var/atom/A)
 	if(istype(A, /atom/movable))
 		var/atom/movable/AM = A
 		SendSignal(COMSIG_BUMP, list("movable"=AM))

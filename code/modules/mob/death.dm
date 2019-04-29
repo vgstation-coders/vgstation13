@@ -37,12 +37,17 @@
 
 /mob/proc/death(gibbed)
 	timeofdeath = world.time
-
+	INVOKE_EVENT(on_death, list("user" = src,"body_destroyed" = gibbed))
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
+	if(client)
+		client.color = initial(client.color)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
+	if(spell_masters && spell_masters.len)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
+			spell_master.on_holder_death(src)
 	if(transmogged_from)
 		var/obj/transmog_body_container/C = transmogged_from
 		var/mob/living/L = C.contained_mob

@@ -51,7 +51,7 @@
 
 /obj/item/weapon/gun/stickybomb/attack_self(mob/user)
 	if(fired.len)
-		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
+		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		for(var/obj/item/stickybomb/B in fired)
 			spawn()
 				if(B.live)
@@ -93,7 +93,9 @@
 		return 1
 	return 0
 
-
+/obj/item/weapon/gun/stickybomb/can_discharge()
+	return loaded.len
+	
 /obj/item/stickybomb
 	name = "anti-personnel stickybomb"
 	desc = "Ammo for a stickybomb launcher. Only affects living beings, produces a decent amount of knockback."

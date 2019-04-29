@@ -3,6 +3,18 @@
 
 /mob
 	plane = MOB_PLANE
+	var/said_last_words = 0 // All mobs can now whisper as they die
+
+/mob/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("stat")
+			if((old_value == 2) && (new_value < 2))//Bringing the dead back to life
+				resurrect()
+			else if((old_value < 2) && (new_value == 2))//Kill he
+				living_mob_list.Remove(src)
+				dead_mob_list.Add(src)
 
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
@@ -18,8 +30,14 @@
 		on_spellcast.holder = null
 	if(on_uattack)
 		on_uattack.holder = null
+	if(on_ruattack)
+		on_ruattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
+	if(on_irradiate)
+		on_irradiate.holder = null
+	if(on_death)
+		on_death.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -61,13 +79,19 @@
 	on_moved = null
 	qdel(on_spellcast)
 	qdel(on_uattack)
+	qdel(on_ruattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
+	qdel(on_irradiate)
+	qdel(on_death)
 
 	on_spellcast = null
 	on_uattack = null
+	on_ruattack = null
 	on_damaged = null
 	on_clickon = null
+	on_irradiate = null
+	on_death = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -75,7 +99,17 @@
 	if(transmogged_to)
 		qdel(transmogged_to)
 		transmogged_to = null
+	if(control_object.len)
+		for(var/A in control_object)
+			qdel(A)
+		control_object = null
+	if(orient_object.len)
+		for(var/A in orient_object)
+			qdel(A)
+		orient_object = null
 
+	if (ticker && ticker.mode)
+		ticker.mode.mob_destroyed(src)
 	..()
 
 /mob/projectile_check()
@@ -223,7 +257,40 @@
 			client.screen -= zone_sel
 		zone_sel = null
 
+	if(iscultist(src) && hud_used)
+		if(hud_used.cult_Act_display)
+			returnToPool(hud_used.cult_Act_display)
+			if(client)
+				client.screen -= hud_used.cult_Act_display
+			hud_used.cult_Act_display = null
+		if(hud_used.cult_tattoo_display)
+			returnToPool(hud_used.cult_tattoo_display)
+			if(client)
+				client.screen -= hud_used.cult_tattoo_display
+			hud_used.cult_tattoo_display = null
+		if (isshade(src) && gui_icons)
+			if(gui_icons.soulblade_bgLEFT)
+				returnToPool(gui_icons.soulblade_bgLEFT)
+				if(client)
+					client.screen -= gui_icons.soulblade_bgLEFT
+				gui_icons.soulblade_bgLEFT = null
+			if(gui_icons.soulblade_bloodbar)
+				returnToPool(gui_icons.soulblade_bloodbar)
+				if(client)
+					client.screen -= gui_icons.soulblade_bloodbar
+				gui_icons.soulblade_bloodbar = null
+			if(gui_icons.soulblade_coverLEFT)
+				returnToPool(gui_icons.soulblade_coverLEFT)
+				if(client)
+					client.screen -= gui_icons.soulblade_coverLEFT
+				gui_icons.soulblade_coverLEFT = null
+
+
+
 /mob/proc/cultify()
+	return
+
+/mob/proc/clockworkify()
 	return
 
 /mob/New()
@@ -238,16 +305,19 @@
 	store_position()
 	on_spellcast = new(owner = src)
 	on_uattack = new(owner = src)
+	on_ruattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
+	on_irradiate = new(owner = src)
+	on_death = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
 
-	update_colour(0,1)
+	update_colour(0)
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
@@ -289,13 +359,9 @@
 
 	var/t = "<span class='notice'> Coordinates: [x],[y] \n</span>"
 
-	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>
-<span class='notice'> Nitrogen: [environment.nitrogen] \n</span>
-<span class='notice'> Oxygen: [environment.oxygen] \n</span>
-<span class='notice'> Plasma : [environment.toxins] \n</span>
-<span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
-	for(var/datum/gas/trace_gas in environment.trace_gases)
-		to_chat(usr, "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>")
+	t += "<span class='warning'> Temperature: [environment.temperature] \n</span>"
+	for(var/g in environment.gas)
+		to_chat(usr, "<span class='notice'> [XGM.name[g]]: [environment.gas[g]] \n</span>")
 
 	usr.show_message(t, 1)
 
@@ -360,7 +426,7 @@
 // blind_drugged_message (optional) is shown to blind hallucinating people
 // ignore_self (optional) won't show the message to the mob sending the message
 
-/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0)
+/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0, var/range = 7)
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
@@ -376,7 +442,7 @@
 	if(!ignore_self)
 		show_message( msg, 1, msg2, 2)
 
-	..(message, blind_message, drugged_message, blind_drugged_message)
+	..(message, blind_message, drugged_message, blind_drugged_message, range)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(see_invisible < A.invisibility || src == A)
@@ -396,11 +462,23 @@
 // message is output to anyone who can see, e.g. "The [src] does something!"
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 
-/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
+/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
 	if(world.time>resethearers)
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(location))
+	for(var/mob/virtualhearer/hearer in viewers(range, location))
+		var/mob/M
+		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/holo = hearer.attached
+			if(holo.master)
+				M = holo.master
+		if(istype(hearer.attached, /mob))
+			M = hearer.attached
+		if(M)
+			if(M.client)
+				var/client/C = M.client
+				if(get_turf(src) in C.ObscuredTurfs)
+					continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
@@ -622,15 +700,17 @@ var/list/slot_equipment_priority = list( \
 
 //puts the item "W" into an appropriate slot in a human's inventory
 //returns 0 if it cannot, 1 if successful
-/mob/proc/equip_to_appropriate_slot(obj/item/W)
+/mob/proc/equip_to_appropriate_slot(obj/item/W, var/override = FALSE)
 	if(!istype(W))
 		return 0
 
 	for(var/slot in slot_equipment_priority)
+		if(!is_holding_item(W) && !override)
+			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
 			return S.quick_store(W)
-		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 1)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
+		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
 
 	return 0
@@ -644,6 +724,58 @@ var/list/slot_equipment_priority = list( \
 			openslot = 1
 			break
 	return openslot
+
+/mob/proc/unequip_everything()
+	var/list/unequipped_items = list()
+	for(var/slot in slot_equipment_priority)
+		var/obj/item/I = get_item_by_slot(slot)
+		if(I)
+			unequipped_items.Add(I)
+			u_equip(I)
+	return unequipped_items
+
+/mob/proc/recursive_list_equip(list/L)	//Used for equipping a list of items to a mob without worrying about the order (like needing to put a jumpsuit before a belt)
+	if(!L || !L.len)
+		return
+
+	for(var/obj/item/O in L)
+		O.forceMove(get_turf(src))	//At the very least, all the stuff should be on our tile
+
+	var/has_succeeded_once = TRUE
+	while(has_succeeded_once)
+		has_succeeded_once = FALSE
+		for(var/obj/item/I in L)
+			if(equip_to_appropriate_slot(I, TRUE)) // The proc wants the item to be in our hands, like in the case of a quick-equip
+				has_succeeded_once = TRUE
+				L.Remove(I)
+	if(L.len)
+		var/obj/item/weapon/storage/B = back
+		for(var/obj/item/I in L)
+			if(istype(B))
+				B.handle_item_insertion(I,1)
+	regenerate_icons()
+
+/mob/proc/equip_loadout(var/type, var/unequip_current = TRUE)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
+	if(type)
+		if(ispath(type, /obj/abstract/loadout))
+			new type(get_turf(src), src, unequip_current)
+	else
+		var/turf/T = get_turf(usr)
+		if(T)
+			if(unequip_current)
+				unequip_everything()	//unequip everything before equipping loadout
+			var/list/to_equip = list()
+			for(var/obj/item/I in T.contents)
+				to_equip.Add(new I.type(get_turf(src)))
+			recursive_list_equip(to_equip)
+			var/loadout_list = ""
+			for(var/obj/item/O in to_equip)
+				if(O == to_equip[to_equip.len])
+					loadout_list += "[O.type]"
+				else
+					loadout_list += "[O.type], "
+			log_admin("[key_name(src)] has been equipped with a custom loadout consisting of [loadout_list].")
+
 
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M)
@@ -905,11 +1037,22 @@ var/list/slot_equipment_priority = list( \
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view())
+/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+
+	if((usr.isUnconscious() && !isobserver(src)) || !(get_turf(src))|| attack_delayer.blocked())
+		return 0
+
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
+	if(isitem(A) && is_holding_item(A))
+		var/obj/item/I = A
+		I.showoff(src)
+		return 0
+
+	if(!(A in (view(get_turf(src)) + get_all_slots())))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -928,6 +1071,8 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
+	point.pixel_x = A.pixel_x
+	point.pixel_y = A.pixel_y
 	spawn(20)
 		if(point)
 			qdel(point)
@@ -939,7 +1084,11 @@ var/list/slot_equipment_priority = list( \
 
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
-	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+	if ( !AM || !src || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the object being pulled is inside something: abort!
+		return
+
+	if(AM == src) //trying to pull yourself is a convenient shortcut for "stop pulling"
+		stop_pulling()
 		return
 
 	if(!has_hand_check())
@@ -948,24 +1097,30 @@ var/list/slot_equipment_priority = list( \
 
 	var/atom/movable/P = AM
 
-	if (ismob(AM))
+	if(ismob(AM))
 		var/mob/M = AM
-		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
+		if(M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
-	if (!P.anchored)
+	if(!P.anchored)
 		P.add_fingerprint(src)
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
 		if(pulling)
-			// Are we trying to pull something we are already pulling? Then just stop here, no need to continue
-			var/temp_P = pulling
-			stop_pulling()
-			if(P == temp_P)
-				return
+			// Are we trying to pull something we are already pulling?
+			// Then we want to either toggle pulling (stop pulling and quit), or keep pulling (just quit) if client preferences want otherwise.
+			if(pulling == P)
+				if(client && !client.prefs.pulltoggle)
+					return
+				else
+					stop_pulling()
+					return
+			else
+				stop_pulling()
 
 		src.pulling = P
 		P.pulledby = src
+		AM.on_pull_start(src)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
@@ -973,13 +1128,6 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
-				/*if(ishuman(AM))
-					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage())
-						if (HM.isincrit())
-							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
-							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
-// Commented out till I can figure out how to fix people still pulling when they're pulled --snx
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1066,13 +1214,17 @@ var/list/slot_equipment_priority = list( \
 		memory()
 
 //mob verbs are faster than object verbs. See http://www.byond.com/forum/?post=1326139&page=2#comment8198716 for why this isn't atom/verb/examine()
-/mob/verb/examination(atom/A as mob|obj|turf in view()) //It used to be oview(12), but I can't really say why
+/mob/verb/examination(atom/A as mob|obj|turf in view(src)) //It used to be oview(12), but I can't really say why
 	set name = "Examine"
 	set category = "IC"
 
 //	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
 	if(is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
+		return
+
+	if(get_dist(A,client.eye) > client.view)
+		to_chat(src, "<span class='notice'>It is too far away to make out.</span>")
 		return
 
 	face_atom(A)
@@ -1085,6 +1237,23 @@ var/list/slot_equipment_priority = list( \
 
 	face_atom(I)
 	I.verb_pickup(src)
+
+// See carbon/human
+/mob/proc/can_show_flavor_text()
+	return FALSE
+
+/mob/proc/print_flavor_text()
+	if(!flavor_text)
+		return
+	if(!can_show_flavor_text())
+		return
+	var/msg = utf8_sanitize(flavor_text)
+	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
+		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
+	if(length(msg) <= 32)
+		return "<font color='#ffa000'><b>[msg]</b></font>"
+	else
+		return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];show_flavor_text=1'>More</a></b></font>"
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"
@@ -1150,7 +1319,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1201,38 +1370,28 @@ var/list/slot_equipment_priority = list( \
 	var/list/namecounts = list()
 	var/list/creatures = list()
 
-	for(var/obj/O in world)				//EWWWWWWWWWWWWWWWWWWWWWWWW ~needs to be optimised
-		if(!O.loc)
-			continue
-		if(istype(O, /obj/item/weapon/disk/nuclear))
-			var/name = "Nuclear Disk"
-			if (names.Find(name))
-				namecounts[name]++
-				name = "[name] ([namecounts[name]])"
-			else
-				names.Add(name)
-				namecounts[name] = 1
-			creatures[name] = O
 
-		if(istype(O, /obj/machinery/singularity))
-			var/name = "Singularity"
-			if (names.Find(name))
-				namecounts[name]++
-				name = "[name] ([namecounts[name]])"
-			else
-				names.Add(name)
-				namecounts[name] = 1
-			creatures[name] = O
+	creatures["Nuclear Disk"] = nukedisk // There can be only one !
 
-		if(istype(O, /obj/machinery/bot))
-			var/name = "BOT: [O.name]"
-			if (names.Find(name))
-				namecounts[name]++
-				name = "[name] ([namecounts[name]])"
-			else
-				names.Add(name)
-				namecounts[name] = 1
-			creatures[name] = O
+	for (var/obj/machinery/singularity/S in power_machines)
+		var/name = "Singularity"
+		if (names.Find(name))
+			namecounts[name]++
+			name = "[name] ([namecounts[name]])"
+		else
+			names.Add(name)
+			namecounts[name] = 1
+		creatures[name] = S
+
+	for (var/obj/machinery/bot/B in bots_list)
+		var/name = "BOT: [B.name]"
+		if (names.Find(name))
+			namecounts[name]++
+			name = "[name] ([namecounts[name]])"
+		else
+			names.Add(name)
+			namecounts[name] = 1
+		creatures[name] = B
 
 
 	for(var/mob/M in sortNames(mob_list))
@@ -1268,7 +1427,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/cancel_camera()
 	set name = "Cancel Camera View"
-	set category = "OOC" //Why the fuck?
+	set category = "IC"
 	unset_machine()
 	reset_view(null)
 	if(istype(src, /mob/living))
@@ -1278,6 +1437,9 @@ var/list/slot_equipment_priority = list( \
 		if(istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
+
+	for (var/datum/action/camera/action_cam in actions)
+		action_cam.Remove(src)
 
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
@@ -1296,21 +1458,25 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
+	else if (href_list["lookitem"])
+		var/obj/item/I = locate(href_list["lookitem"])
+		usr.examination(I)
+	else
+		return ..()
 	//if (href_list["joinresponseteam"])
 	//	if(usr.client)
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
 
-/mob/MouseDrop(mob/M as mob)
-	..()
+/mob/MouseDropFrom(mob/M as mob)
 	if(M != usr)
-		return
+		return ..()
 	if(usr == src)
-		return
+		return ..()
 	if(!Adjacent(usr))
-		return
+		return ..()
 	if(istype(M,/mob/living/silicon/ai))
-		return
+		return ..()
 	show_inv(usr)
 
 
@@ -1360,6 +1526,8 @@ var/list/slot_equipment_priority = list( \
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
 				for(var/atom/A in listed_turf)
+					if(!A.mouse_opacity && !A.name)
+						continue
 					if(A.invisibility > see_invisible)
 						continue
 					statpanel(listed_turf.name, null, A)
@@ -1422,10 +1590,10 @@ var/list/slot_equipment_priority = list( \
 
 	reset_layer() //Handles layer setting in hiding
 	if(lying)
-		density = 0
+		setDensity(FALSE)
 		drop_hands()
 	else
-		density = 1
+		setDensity(TRUE)
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
@@ -1443,6 +1611,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/eastface()
 	set hidden = 1
+	if(loc && loc.relayface(src, EAST))
+		return 1
+	if(locked_to && locked_to.relayface(src, EAST))
+		return 1
 	if(!canface())
 		return 0
 	dir = EAST
@@ -1453,6 +1625,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/westface()
 	set hidden = 1
+	if(loc && loc.relayface(src, WEST))
+		return 1
+	if(locked_to && locked_to.relayface(src, WEST))
+		return 1
 	if(!canface())
 		return 0
 	dir = WEST
@@ -1463,6 +1639,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/northface()
 	set hidden = 1
+	if(loc && loc.relayface(src, NORTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, NORTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = NORTH
@@ -1473,6 +1653,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/southface()
 	set hidden = 1
+	if(loc && loc.relayface(src, SOUTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, SOUTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = SOUTH
@@ -1482,13 +1666,13 @@ var/list/slot_equipment_priority = list( \
 
 
 /mob/proc/Facing()
-    var/datum/listener
-    for(. in src.callOnFace)
-        listener = locate(.)
-        if(listener)
-            call(listener,src.callOnFace[.])(src)
-        else
-            src.callOnFace -= .
+	var/datum/listener
+	for(. in src.callOnFace)
+		listener = locate(.)
+		if(listener)
+			call(listener,src.callOnFace[.])(src)
+		else
+			src.callOnFace -= .
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -1511,6 +1695,15 @@ var/list/slot_equipment_priority = list( \
 	if(status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
 	return
+
+/mob/proc/Deafen(amount)
+	ear_deaf = max(max(ear_deaf,amount),0)
+
+/mob/proc/Mute(amount)
+	say_mute = max(max(say_mute,amount),0)
+
+/mob/proc/AdjustMute(amount)
+	say_mute = max(say_mute + amount,0)
 
 /mob/proc/Knockdown(amount)
 	if(status_flags & CANKNOCKDOWN)
@@ -1536,6 +1729,8 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
+/mob/proc/AdjustDizzy(amount)
+	dizziness = max(dizziness+amount, 0)
 
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
@@ -1691,6 +1886,11 @@ mob/proc/on_foot()
 		return 1
 	return 0
 
+/mob/proc/is_mute()
+	if(sdisabilities & MUTE || say_mute)
+		return 1
+	return 0
+
 /mob/proc/is_deaf()
 	if(sdisabilities & DEAF || ear_deaf)
 		return 1
@@ -1779,6 +1979,11 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/get_view_range()
+	if(client)
+		return client.view
+	return world.view
+
 /mob/proc/apply_vision_overrides()
 	if(see_in_dark_override)
 		see_in_dark = see_in_dark_override
@@ -1821,14 +2026,12 @@ mob/proc/on_foot()
 		"bhunger",
 		"druggy",
 		"confused",
-		"antitoxs",
 		"sleeping",
 		"resting",
 		"lying",
 		"lying_prev",
 		"canmove",
 		"candrop",
-		"lastpuke",
 		"cpr_time",
 		"bodytemperature",
 		"drowsyness",
@@ -1893,10 +2096,33 @@ mob/proc/on_foot()
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
-		var/spell/change_back = new /spell/aoe_turf/revert_form
+		var/spell/change_back
+		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
+			change_back = new offer_revert_spell
+		else
+			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
 	C.set_contained_mob(src)
 	timestopped = 1
+	return M
+
+/mob/proc/completely_untransmogrify()	//Reverts a mob through all layers of transmogrification, back down to the base mob. Returns this mob.
+	var/mob/top_level = get_top_transmogrification()
+	while(top_level)
+		top_level = top_level.transmogrify()
+		if(top_level)
+			. = top_level
+
+/mob/proc/get_top_transmogrification()	//Returns the mob at the highest level of transmogrification, the one which contains the player.
+	var/mob/M = src
+	while(M.transmogged_to)
+		M = M.transmogged_to
+	return M
+
+/mob/proc/get_bottom_transmogrification()	//Returns the mob at the lowest level of transmogrification, the original mob.
+	var/mob/M = src
+	while(M.transmogged_from)
+		M = M.transmogged_from.contained_mob
 	return M
 
 /spell/aoe_turf/revert_form
@@ -1913,6 +2139,9 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/spell/aoe_turf/revert_form/no_z2 //Used if you don't want it reverting on Z2. So far only important for ghosts.
+	spell_flags = GHOSTCAST | Z2NOCAST
 
 /obj/transmog_body_container
 	name = "transmog body container"
@@ -1939,6 +2168,59 @@ mob/proc/on_foot()
 
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
+
+/mob/make_invisible(var/source_define, var/time, var/include_clothing)
+	if(..() || !source_define)
+		return
+	alpha = 1	//to cloak immediately instead of on the next Life() tick
+	alphas[source_define] = 1
+	if(time > 0)
+		spawn(time)
+			if(src)
+				alpha = initial(alpha)
+				alphas.Remove(source_define)
+
+/mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(!(status_flags & PACIFIABLE))
+		return 0
+	if (reagents && (reagents.has_reagent(CHILLWAX) || (reagents.has_reagent(INCENSE_POPPIES) && prob(50))))
+		switch (message)
+			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
+				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
+			if (VIOLENCE_GUN)//gun, projectile weapon
+				to_chat(src, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [weapon] at \the [target].","Peace, my [gender == FEMALE ? "girl" : "man"]...")]</span>")
+		return 1
+
+	for (var/obj/item/weapon/implant/peace/target_implant in src.contents)
+		if (!target_implant.malfunction && target_implant.imp_alive && target_implant.imp_in == src)
+			if (message != VIOLENCE_SILENT)
+				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
+			return 1
+
+	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
+		if(P.isDead())
+			continue
+		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
+		return 1
+
+
+	return 0
+
+/mob/proc/handle_regular_hud_updates()
+	return
+
+/mob/proc/update_antag_huds()
+	if (mind)
+		for (var/role in mind.antag_roles)
+			var/datum/role/R = mind.antag_roles[role]
+			R.update_antag_hud()
+
+/mob/proc/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return FALSE
+
+// Returns TRUE on success
+/mob/proc/attempt_crawling(var/turf/target)
+	return FALSE
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

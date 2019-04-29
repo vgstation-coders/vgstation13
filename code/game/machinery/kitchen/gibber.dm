@@ -126,7 +126,7 @@ obj/machinery/gibber/New()
 		returnToPool(G)
 		update_icon()
 
-/obj/machinery/gibber/MouseDrop_T(mob/target, mob/user)
+/obj/machinery/gibber/MouseDropTo(mob/target, mob/user)
 	if(target != user || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
 		return
 	if(!anchored)
@@ -207,8 +207,12 @@ obj/machinery/gibber/New()
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat = new occupant.meat_type(null, occupant)
-		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+		var/obj/item/weapon/newmeat
+		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
+			newmeat = new occupant.meat_type(null, occupant)
+			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+		else
+			newmeat = new occupant.meat_type()
 
 		if(src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
@@ -231,6 +235,7 @@ obj/machinery/gibber/New()
 	src.occupant = null
 
 	spawn(src.gibtime)
+		var/no_more_gibs = FALSE
 		operating = 0
 		for (var/i=1 to totalslabs)
 			var/obj/item/meatslab = allmeat[i]
@@ -238,8 +243,12 @@ obj/machinery/gibber/New()
 			meatslab.forceMove(src.loc)
 			meatslab.throw_at(Tx,i,3)
 			if (!Tx.density)
-				var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
-				O.New(Tx,i)
+				if(!no_more_gibs)
+					getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx, i)
+			else
+				no_more_gibs = TRUE
+				if(i == 1)
+					getFromPool(/obj/effect/decal/cleanable/blood/gibs, get_turf(src), i)
 		src.operating = 0
 		update_icon()
 
@@ -309,7 +318,7 @@ obj/machinery/gibber/New()
 	log_attack("<B>[src]</B> auto-gibbed <B>[key_name(victim)]</B>")
 	victim.death(1)
 	if(ishuman(victim) || ismonkey(victim) || isalien(victim))
-		var/obj/item/organ/brain/B = new(src.loc)
+		var/obj/item/organ/internal/brain/B = new(src.loc)
 		B.transfer_identity(victim)
 		var/turf/Tx = locate(src.x - 2, src.y, src.z)
 		B.forceMove(src.loc)
@@ -323,7 +332,7 @@ obj/machinery/gibber/New()
 	else
 		victim.ghostize(0)
 	qdel(victim)
-	playsound(get_turf(src), 'sound/effects/gib2.ogg', 50, 1)
+	playsound(src, 'sound/effects/gib2.ogg', 50, 1)
 	for (var/i=1 to totalslabs)
 		var/obj/item/meatslab = allmeat[i]
 		var/turf/Tx = locate(src.x - i, src.y, src.z)

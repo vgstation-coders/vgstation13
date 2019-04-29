@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/implantcase
 	name = "Glass Case"
 	desc = "A case containing an implant."
@@ -9,53 +7,48 @@
 	throw_range = 5
 	w_class = W_CLASS_TINY
 	var/obj/item/weapon/implant/imp = null
-	proc
-		update()
 
+/obj/item/weapon/implantcase/proc/update()
+	if (src.imp)
+		src.icon_state = text("implantcase-[]", src.imp._color)
+	else
+		src.icon_state = "implantcase-0"
+	return
 
-	update()
-		if (src.imp)
-			src.icon_state = text("implantcase-[]", src.imp._color)
+/obj/item/weapon/implantcase/attackby(obj/item/weapon/I as obj, mob/user as mob)
+	..()
+	if (istype(I, /obj/item/weapon/pen))
+		set_tiny_label(user, " - '", "'")
+	else if(istype(I, /obj/item/weapon/reagent_containers/syringe))
+		if(!src.imp)
+			return
+		if(!src.imp.allow_reagents)
+			return
+		if(src.imp.reagents.total_volume >= src.imp.reagents.maximum_volume)
+			to_chat(user, "<span class='warning'>[src] is full.</span>")
 		else
-			src.icon_state = "implantcase-0"
-		return
-
-
-	attackby(obj/item/weapon/I as obj, mob/user as mob)
-		..()
-		if (istype(I, /obj/item/weapon/pen))
-			set_tiny_label(user, " - '", "'")
-		else if(istype(I, /obj/item/weapon/reagent_containers/syringe))
-			if(!src.imp)
+			spawn(5)
+				I.reagents.trans_to(src.imp, 5)
+				to_chat(user, "<span class='notice'>You inject 5 units of the solution. The syringe now contains [I.reagents.total_volume] units.</span>")
+	else if (istype(I, /obj/item/weapon/implanter))
+		if (I:imp)
+			if ((src.imp || I:imp.implanted))
 				return
-			if(!src.imp.allow_reagents)
-				return
-			if(src.imp.reagents.total_volume >= src.imp.reagents.maximum_volume)
-				to_chat(user, "<span class='warning'>[src] is full.</span>")
-			else
-				spawn(5)
-					I.reagents.trans_to(src.imp, 5)
-					to_chat(user, "<span class='notice'>You inject 5 units of the solution. The syringe now contains [I.reagents.total_volume] units.</span>")
-		else if (istype(I, /obj/item/weapon/implanter))
-			if (I:imp)
-				if ((src.imp || I:imp.implanted))
+			I:imp.forceMove(src)
+			src.imp = I:imp
+			I:imp = null
+			src.update()
+			I:update()
+		else
+			if (src.imp)
+				if (I:imp)
 					return
-				I:imp.forceMove(src)
-				src.imp = I:imp
-				I:imp = null
-				src.update()
-				I:update()
-			else
-				if (src.imp)
-					if (I:imp)
-						return
-					src.imp.forceMove(I)
-					I:imp = src.imp
-					src.imp = null
-					update()
-				I:update()
-		return
-
+				src.imp.forceMove(I)
+				I:imp = src.imp
+				src.imp = null
+				update()
+			I:update()
+	return
 
 
 /obj/item/weapon/implantcase/tracking
@@ -64,13 +57,10 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
 
-
-	New()
+/obj/item/weapon/implantcase/tracking/New()
 		src.imp = new /obj/item/weapon/implant/tracking( src )
 		..()
 		return
-
-
 
 /obj/item/weapon/implantcase/explosive
 	name = "Glass Case- 'Explosive'"
@@ -78,12 +68,10 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-r"
 
-
-	New()
+/obj/item/weapon/implantcase/explosive/New()
 		src.imp = new /obj/item/weapon/implant/explosive( src )
 		..()
 		return
-
 
 
 /obj/item/weapon/implantcase/chem
@@ -91,8 +79,8 @@
 	desc = "A case containing a chemical implant."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
-/obj/item/weapon/implantcase/chem/New()
 
+/obj/item/weapon/implantcase/chem/New()
 	src.imp = new /obj/item/weapon/implant/chem( src )
 	..()
 	return
@@ -105,10 +93,10 @@
 	icon_state = "implantcase-r"
 
 
-	New()
-		src.imp = new /obj/item/weapon/implant/loyalty( src )
-		..()
-		return
+/obj/item/weapon/implantcase/loyalty/New()
+	src.imp = new /obj/item/weapon/implant/loyalty( src )
+	..()
+	return
 
 
 /obj/item/weapon/implantcase/death_alarm
@@ -117,7 +105,17 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
 
-	New()
-		src.imp = new /obj/item/weapon/implant/death_alarm( src )
-		..()
-		return
+/obj/item/weapon/implantcase/death_alarm/New()
+	src.imp = new /obj/item/weapon/implant/death_alarm( src )
+	..()
+	return
+
+/obj/item/weapon/implantcase/peace
+	name = "glass case- 'Pax'"
+	desc = "A case containing a peace-inducing implant."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "implantcase-b"
+
+/obj/item/weapon/implantcase/peace/New()
+	src.imp = new /obj/item/weapon/implant/peace(src)
+	..()

@@ -215,11 +215,13 @@
 		user.show_message("The DNA hash on the card is [dna_hash].",1)
 		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
 
-/obj/item/weapon/card/id/attack_self(mob/user as mob)
-	user.visible_message("[user] shows you: [bicon(src)] [src.name]: assignment: [src.assignment]",\
-		"You flash your ID card: [bicon(src)] [src.name]: assignment: [src.assignment]")
-	src.add_fingerprint(user)
-	return
+/obj/item/weapon/card/id/attack_self(var/mob/user)
+	if(user.attack_delayer.blocked())
+		return
+	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
+	user.delayNextAttack(1 SECONDS)
+	add_fingerprint(user)
 
 /obj/item/weapon/card/id/GetAccess()
 	return (access | base_access)
@@ -619,7 +621,7 @@
 	registered_name = "Cargonian"
 	icon_state = "cargo"
 	desc = "ROH ROH! HEIL THE QUARTERMASTER!"
-	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
+	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
 
 /obj/item/weapon/card/id/engineering
 	name = "Engineering ID"
@@ -640,7 +642,7 @@
 	registered_name = "CMO"
 	icon_state = "CMO"
 	desc = "It gives off the faint smell of chloral hydrate, mixed with a backdraft of equipment abuse."
-	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
 
 /obj/item/weapon/card/id/rd
 	name = "Research Director ID"
@@ -692,3 +694,105 @@
 	icon_state = "trader"
 	access = list(access_trade)
 	base_access = list(access_trade)
+
+/obj/item/weapon/card/id/tunnel_clown
+	name = "Tunnel Clown ID card"
+	assignment = "Tunnel Clown!"
+
+/obj/item/weapon/card/id/tunnel_clown/New()
+	..()
+	access = get_all_accesses()
+
+/obj/item/weapon/card/id/syndicate/assassin
+	name = "Reaper ID card"
+	assignment = "Reaper"
+
+/obj/item/weapon/card/id/syndicate/assassin/New()
+	..()
+	access = get_all_accesses()
+
+/obj/item/weapon/card/id/death_commando
+	name = "Reaper ID card"
+	assignment = "Death Commando"
+	icon_state = "deathsquad"
+
+/obj/item/weapon/card/id/death_commando/New()
+	..()
+	access = get_centcom_access("Death Commando")
+
+/obj/item/weapon/card/id/syndicate/commando
+	name = "Syndicate Commando ID card"
+	assignment = "Syndicate Commando"
+	icon_state = "id"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	access = get_all_accesses()
+	access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)
+
+/obj/item/weapon/card/id/nt_rep
+	name = "Nanotrasen Navy Representative ID card"
+	assignment = "Nanotrasen Navy Representative"
+	icon_state = "centcom"
+	item_state = "id_inv"
+
+/obj/item/weapon/card/id/nt_rep/New()
+	..()
+	access = get_all_accesses()
+	access += list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer")
+
+/obj/item/weapon/card/id/centcom/nt_officer
+	name = "Nanotrasen Navy Officer ID card"
+	assignment = "Nanotrasen Navy Officer"
+
+/obj/item/weapon/card/id/centcom/nt_officer/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/centcom/nt_captain
+	name = "Nanotrasen Navy Captain ID card"
+	assignment = "Nanotrasen Navy Captain"
+
+/obj/item/weapon/card/id/centcom/nt_captain/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/admin/nt_supreme
+	name = "Nanotrasen Supreme Commander ID card"
+	assignment = "Nanotrasen Supreme Commander"
+
+/obj/item/weapon/card/id/admin/nt_supreme/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/emergency_responder
+	name = "Emergency Responder ID card"
+	assignment = "Emergency Responder"
+	icon_state = "ERT_empty"
+
+/obj/item/weapon/card/id/emergency_responder/New()
+	..()
+	access = get_centcom_access("Emergency Responder")
+
+/obj/item/weapon/card/id/special_operations
+	name = "Special Operations Officer ID card"
+	assignment = "Special Operations Officer"
+	icon_state = "centcom"
+
+/obj/item/weapon/card/id/special_operations/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/soviet_admiral
+	name = "Admiral ID card"
+	assignment = "Admiral"
+	icon_state = "centcom"
+
+/obj/item/weapon/card/id/soviet_admiral/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()

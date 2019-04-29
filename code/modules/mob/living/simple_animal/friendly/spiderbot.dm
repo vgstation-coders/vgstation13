@@ -20,9 +20,12 @@
 	icon_living = "spiderbot-chassis"
 	icon_dead = "spiderbot-smashed"
 	wander = 0
+	voice_name = "synthesized voice"
 
 	health = 10
 	maxHealth = 10
+
+	mob_property_flags = MOB_ROBOTIC
 
 	attacktext = "shocks"
 	melee_damage_lower = 1
@@ -33,15 +36,22 @@
 	response_harm   = "stomps on"
 
 	var/obj/item/held_item = null //Storage for single item they can hold.
+	var/lob_range = 3
 	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
-	//pass_flags = PASSTABLE      //Maybe griefy?
+	pass_flags = PASSTABLE
 	speak_emote = list("beeps","clicks","chirps")
-	canEnterVentWith = "/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/obj/item/device/mmi=0"
-
 	size = SIZE_SMALL
 	meat_type = null
+
+/mob/living/simple_animal/spiderbot/canEnterVentWith()
+	var/static/list/allowed_items = list(
+		/obj/item/device/radio/borg,
+		/obj/machinery/camera,
+		/obj/item/device/mmi,
+	)
+	return allowed_items
 
 /mob/living/simple_animal/spiderbot/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
@@ -75,7 +85,7 @@
 		src.update_icon()
 		return 1
 
-	if (istype(O, /obj/item/weapon/weldingtool))
+	if (iswelder(O))
 		var/obj/item/weapon/weldingtool/WT = O
 		if (WT.remove_fuel(0))
 			if(health < maxHealth)
@@ -143,7 +153,7 @@
 			M.show_message("<span class='warning'>[src] makes an odd warbling noise, fizzles, and explodes.</span>")
 	explosion(get_turf(loc), -1, -1, 3, 5)
 	eject_brain()
-	Die()
+	death()
 
 /mob/living/simple_animal/spiderbot/update_icon()
 	if(mmi)
@@ -178,15 +188,12 @@
 	radio = new /obj/item/device/radio/borg(src)
 	camera = new /obj/machinery/camera(src)
 	camera.c_tag = "Spiderbot-[real_name]"
-	camera.network = list("SS13")
+	camera.network = list(CAMERANET_SS13)
 
 	..()
 
-/mob/living/simple_animal/spiderbot/Die()
-
-	living_mob_list -= src
-	dead_mob_list += src
-
+/mob/living/simple_animal/spiderbot/death(var/gibbed = FALSE)
+	..(TRUE)
 	if(camera)
 		camera.status = 0
 	if(held_item && !isnull(held_item))
@@ -195,6 +202,23 @@
 
 	robogibs(src.loc, viruses)
 	qdel(src)
+
+/mob/living/simple_animal/spiderbot/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return ..()
+
+	switch(severity)
+		if(1)
+			if(prob(5))
+				explode()
+				return
+			adjustBruteLoss(rand(4,5))
+		if(2)
+			adjustBruteLoss(rand(2,3))
+	flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
+	to_chat(src, "<span class='danger'>*BZZZT*</span>")
+	to_chat(src, "<span class='warning'>Warning: Electromagnetic pulse detected.</span>")
+	..()
 
 //copy paste from alien/larva, if that func is updated please update this one also
 /mob/living/simple_animal/spiderbot/verb/ventcrawl()
@@ -225,7 +249,7 @@
 	set category = "Spiderbot"
 	set desc = "Drop the item you're holding."
 
-	if(stat)
+	if(incapacitated())
 		return
 
 	if(!held_item)
@@ -235,8 +259,19 @@
 	if(istype(held_item, /obj/item/weapon/grenade))
 		visible_message("<span class='warning'>[src] launches \the [held_item]!</span>", "<span class='warning'>You launch \the [held_item]!</span>", "You hear a skittering noise and a thump!")
 		var/obj/item/weapon/grenade/G = held_item
-		G.forceMove(src.loc)
-		G.prime()
+
+		//Make a dumbfire throw
+		var/turf/lob_target
+		var/lob_dir = dir
+		var/turf/start_turf = get_turf(src)
+		var/current_turf = start_turf
+		for(var/i in 1 to lob_range)
+			current_turf = get_step(current_turf, lob_dir)
+		lob_target = current_turf
+
+		throw_item(lob_target, G)
+
+		G.activate(src)
 		held_item = null
 		return 1
 
@@ -254,7 +289,7 @@
 	set category = "Spiderbot"
 	set desc = "Allows you to take a nearby small item."
 
-	if(stat)
+	if(incapacitated())
 		return -1
 
 	if(held_item)
@@ -271,6 +306,9 @@
 	if(selection)
 		for(var/obj/item/I in view(1, src))
 			if(selection == I)
+				if(selection.anchored)
+					to_chat(src, "<span class='warning'>It's fastened down!</span>")
+					return 0
 				held_item = selection
 				selection.forceMove(src)
 				visible_message("<span class='notice'>[src] scoops up \the [held_item]!</span>", "<span class='notice'>You grab \the [held_item]!</span>", "You hear a skittering noise and a clink.")
@@ -285,5 +323,24 @@
 	if(src.held_item)
 		to_chat(user, "It is carrying \a [src.held_item] [bicon(src.held_item)].")
 
-/mob/living/simple_animal/spiderbot/CheckSlip()
-	return -1
+/mob/living/simple_animal/spiderbot/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return SLIP_HAS_MAGBOOTS
+
+/mob/living/simple_animal/spiderbot/say(var/message)
+	return ..(message, "R")
+
+/mob/living/simple_animal/spiderbot/treat_speech(var/datum/speech/speech, genesay = 0)
+	..(speech)
+	speech.message_classes.Add("siliconsay")
+
+/mob/living/simple_animal/spiderbot/verb/Toggle_Listening()
+	set name = "Toggle Listening"
+	set desc = "Toggle listening channel on or off."
+	set category = "Spiderbot"
+
+	if(incapacitated())
+		to_chat(src, "Can't do that while incapacitated or dead.")
+		return
+
+	radio.listening = !radio.listening
+	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : "no longer "]receiving broadcasts.</span>")

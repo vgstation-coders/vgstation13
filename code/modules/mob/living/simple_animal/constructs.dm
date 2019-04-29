@@ -29,7 +29,9 @@
 	flying = 1
 	treadmill_speed = 0 //It floats!
 	var/nullblock = 0
+	mutations = list(M_NO_SHOCK)
 
+	mob_property_flags = MOB_CONSTRUCT
 	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
 	mob_push_flags = ALLMOBS
 
@@ -37,11 +39,23 @@
 
 	var/list/construct_spells = list()
 
+	var/list/healers = list()
+
+/mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
+	. = ..()
+	if (healers.len > 0)
+		for (var/mob/living/simple_animal/construct/builder/perfect/P in healers)
+			P.move_ray()
+
+/mob/living/simple_animal/construct/say(var/message)
+	. = ..(message, "C")
+
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return
-
-	if(mind in ticker.mode.cult)
+	if(find_active_faction_by_member(mind.GetRole(CULTIST)))
+		return 1
+	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1
 
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
@@ -71,24 +85,32 @@
 
 /mob/living/simple_animal/construct/New()
 	..()
-	name = text("[initial(name)] ([rand(1, 1000)])")
-	real_name = name
+	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
-		src.add_spell(new spell, "const_spell_ready")
-	updateicon()
+		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	setupglow()
 
-/mob/living/simple_animal/construct/Die()
-	..()
+/mob/living/simple_animal/construct/death(var/gibbed = FALSE)
+	..(TRUE) //If they qdel, they gib regardless
 	for(var/i=0;i<3;i++)
 		new /obj/item/weapon/ectoplasm (src.loc)
 	for(var/mob/M in viewers(src, null))
 		if((M.client && !( M.blinded )))
 			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
-	ghostize()
+	if(client && iscultist(src))
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/shade = new (T)
+			shade.name = "[real_name] the Shade"
+			shade.real_name = "[real_name]"
+			mind.transfer_to(shade)
+			update_faction_icons()
+			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
+	else
+		ghostize()
 	qdel (src)
-	return
 
 /mob/living/simple_animal/construct/examine(mob/user)
 	var/msg = "<span cass='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
@@ -99,17 +121,31 @@
 		else
 			msg += "<B>It looks severely dented!</B>\n"
 		msg += "</span>"
+	if(!client)
+		msg += "<span class='warning'>The spirit animating it seems to be dormant.</span>\n"
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)
 
+/mob/living/simple_animal/construct/attack_construct(var/mob/user)
+	if(istype(user,/mob/living/simple_animal/construct/builder/perfect) && get_dist(user,src)<=2)
+		attack_animal(user)
+		return 1
+	return 0
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M)
-	if(istype(M, /mob/living/simple_animal/construct/builder))
+	if(istype(M, /mob/living/simple_animal/construct/builder/perfect))
 		if(src.health >= src.maxHealth)
-			to_chat(M, "<span class='notice'>[src] has nothing to mend.</span>")
+			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
+			return
+		var/mob/living/simple_animal/construct/builder/perfect/P = M
+		P.start_ray(src)
+	else if(istype(M, /mob/living/simple_animal/construct/builder))
+		if(src.health >= src.maxHealth)
+			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 	else
 		M.unarmed_attack_mob(src)
@@ -120,11 +156,11 @@
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
 			damage = 0
-		if(istype(O,/obj/item/weapon/nullrod))
+		if(isholyweapon(O))
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
-		user.do_attack_animation(src, O)
+		O.on_attack(src, user)
 		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
@@ -151,32 +187,19 @@
 	melee_damage_upper = 30
 	attacktext = "smashes their armoured gauntlet into"
 	speed = 4
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	user.delayNextAttack(8)
-	if(O.force)
-		if(O.force >= 11)
-			var/damage = O.force
-			if (O.damtype == HALLOSS)
-				damage = 0
-			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>\The [src] has been attacked with [O] by [user]. </span>")
-		else
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
-	else
-		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
+	if(O.force && O.force < 11)
+		user.delayNextAttack(8)
 		for(var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='warning'>[user] gently taps \the [src] with [O]. </span>")
-
+				M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
+	else
+		..()
 
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
@@ -212,11 +235,13 @@
 	melee_damage_upper = 25
 	attacktext = "slashes"
 	speed = 1
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
+/mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
+	return 1.5
 
 
 /////////////////////////////Artificer/////////////////////////
@@ -238,7 +263,7 @@
 	melee_damage_upper = 5
 	attacktext = "rams"
 	speed = 1
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/aoe_turf/conjure/construct/lesser,
 							/spell/aoe_turf/conjure/wall,
@@ -252,7 +277,7 @@
 /////////////////////////////Behemoth/////////////////////////
 
 
-/mob/living/simple_animal/construct/behemoth
+/mob/living/simple_animal/construct/armoured/behemoth
 	name = "\improper Behemoth"
 	real_name = "\improper Behemoth"
 	desc = "The pinnacle of occult technology, Behemoths are the ultimate weapon in the Cult of Nar-Sie's arsenal."
@@ -268,32 +293,12 @@
 	melee_damage_upper = 50
 	attacktext = "brutally crushes"
 	speed = 6
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
-	var/energy = 0
-	var/max_energy = 1000
+	//var/energy = 0
+	//var/max_energy = 1000
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
-/mob/living/simple_animal/construct/behemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	user.delayNextAttack(8)
-	if(O.force)
-		if(O.force >= 11)
-			var/damage = O.force
-			if (O.damtype == HALLOSS)
-				damage = 0
-			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>\The [src] has been attacked with [O] by [user]. </span>")
-		else
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>\The [O] bounces harmlessly off of [src]. </span>")
-	else
-		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='warning'>[user] gently taps \the [src] with [O]. </span>")
 
 
 ////////////////////////Harvester////////////////////////////////
@@ -313,7 +318,7 @@
 	melee_damage_upper = 25
 	attacktext = "violently stabs"
 	speed = 1
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
 
@@ -328,7 +333,7 @@
 	change_sight(adding = SEE_MOBS)
 
 ////////////////Glow//////////////////
-/mob/living/simple_animal/construct/proc/updateicon()
+/mob/living/simple_animal/construct/proc/setupglow()
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
@@ -340,6 +345,12 @@
 	glow.plane = overlay_plane
 	overlays += glow
 
+
+////////////////Float//////////////////
+/mob/living/simple_animal/construct/proc/setupfloat()
+	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
+
 ////////////////Powers//////////////////
 
 
@@ -348,7 +359,7 @@
 	set category = "Behemoth"
 	set name = "Summon Cultist (300)"
 	set desc = "Teleport a cultist to your location"
-	if (istype(usr,/mob/living/simple_animal/constructbehemoth))
+	if (istype(usr,/mob/living/simple_animal/construct/armoured/behemoth))
 
 		if(usr.energy<300)
 			to_chat(usr, "<span class='warning'>You do not have enough power stored!</span>")
@@ -421,7 +432,7 @@
 				healths.icon_state = "juggernaut_health7"
 
 
-/mob/living/simple_animal/construct/behemoth/regular_hud_updates()
+/mob/living/simple_animal/construct/armoured/behemoth/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)
@@ -444,6 +455,9 @@
 
 /mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
+
+	process_construct_hud(src)
+
 	if(healths)
 		switch(health)
 			if(50 to INFINITY)

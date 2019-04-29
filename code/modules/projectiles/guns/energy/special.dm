@@ -41,7 +41,7 @@
 
 /obj/item/weapon/gun/energy/decloner/failure_check(var/mob/living/carbon/human/M)
 	if(prob(15))
-		M.apply_effect(rand(15,30), IRRADIATE)
+		M.apply_radiation(rand(15,30), RAD_EXTERNAL)
 		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
 		return 1
 	if(prob(15))
@@ -49,7 +49,7 @@
 		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
 		return 1
 	if(prob(3))
-		M.apply_effect(rand(60,80), IRRADIATE)
+		M.apply_radiation(rand(60,80), RAD_EXTERNAL)
 		M.adjustCloneLoss(rand(30,50))
 		to_chat(M, "<span class='danger'>\The [src] breaks apart!.</span>")
 		M.drop_item(src, force_drop = 1)
@@ -59,9 +59,6 @@
 
 /obj/item/weapon/gun/energy/decloner/isHandgun()
 	return TRUE
-
-var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry","frankenstein")
-#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 
 /obj/item/weapon/gun/energy/staff
 	name = "staff of change"
@@ -79,8 +76,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	origin_tech = null
 	clumsy_check = 0
 	var/charge_tick = 0
-	var/changetype=null
-	var/next_changetype=0
+
 
 /obj/item/weapon/gun/energy/staff/New()
 	..()
@@ -105,7 +101,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/staff/update_icon()
 	return
 
-/obj/item/weapon/gun/energy/staff/process_chambered()
+/obj/item/weapon/gun/energy/staff/change
+	var/changetype=null
+	var/next_changetype=0
+
+/obj/item/weapon/gun/energy/staff/change/process_chambered()
 	if(!..())
 		return 0
 	var/obj/item/projectile/change/P=in_chamber
@@ -113,7 +113,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		P.changetype=changetype
 	return 1
 
-/obj/item/weapon/gun/energy/staff/attack_self(var/mob/living/user)
+/obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -126,7 +126,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		to_chat(user, "<span class='danger'>You monster.</span>")
 	else
 		to_chat(user, "<span class='info'>You have selected to make your next victim have a [selected] form.</span>")
-
+	add_gamelogs(user, "set \the [src] to \ [selected]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "warning")
 	switch(selected)
 		if("random")
 			changetype=null
@@ -143,9 +143,9 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	projectile_type = "/obj/item/projectile/animate"
 	charge_cost = 100
 
-#define ZOMBIE 0
-#define SKELETON 1
-//#define FAITHLESS 2
+#define RAISE_TYPE_ZOMBIE 0
+#define RAISE_TYPE_SKELETON 1
+//#define RAISE_TYPE_FAITHLESS 2
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
@@ -178,10 +178,10 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	if(next_change > world.timeofday)
 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
 		return
-	/*if(raisetype < FAITHLESS)
+	/*if(raisetype < RAISE_TYPE_FAITHLESS)
 		raisetype = !raisetype
 	else
-		raisetype = ZOMBIE*/
+		raisetype = RAISE_TYPE_ZOMBIE*/
 	raisetype = !raisetype
 
 	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
@@ -191,7 +191,8 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
 		return 0
 	var/mob/living/carbon/human/H = target
-	if(!H.stat || H.health > config.health_threshold_crit)
+	if(!H.stat || (H.stat < DEAD && H.health > config.health_threshold_crit))
+		to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
 		return 0
 
 	//Pretty particles
@@ -208,17 +209,17 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		"YOUR TIME HAS NOT COME, YET.",\
 		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 
-	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+	playsound(src, get_sfx("soulstone"), 50,1)
 
 	switch(raisetype)
-		if(ZOMBIE)
-			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H.mind)
+		if(RAISE_TYPE_ZOMBIE)
+			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H)
 			T.get_clothes(H, T)
 			T.name = H.real_name
 			T.host = H
 			H.loc = null
-		if(SKELETON)
-			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
+		if(RAISE_TYPE_SKELETON)
+			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H)
 			H.gib()
 	charges--
 
@@ -227,8 +228,8 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
 	afterattack(target,user,1)
 
-#undef ZOMBIE
-#undef SKELETON
+#undef RAISE_TYPE_ZOMBIE
+#undef RAISE_TYPE_SKELETON
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
@@ -315,7 +316,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 				else
 					var/turf/simulated/wall/W = target
 					W.dismantle_wall(1,1)
-			else if(istype(target, /turf/simulated/floor))
+			else if(istype(target, /turf/simulated/floor) || istype(target, /turf/simulated/shuttle))
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 				return
 			else
@@ -328,6 +329,26 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 			qdel(target)
 	else
 		to_chat(user, "<span class='warning'>[src] is not ready to fire again!</span>")
+
+/obj/item/weapon/gun/energy/staff/swapper
+	name = "staff of swip-swap"
+	desc = "The head and handle of this strange device keep switching places."
+	icon = 'icons/obj/wizard.dmi'
+	inhand_states = list(
+	"left_hand" = 'icons/mob/in-hand/left/guns.dmi',
+	"right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	item_state = "staffswap"
+	icon_state = "staff_swap"
+	projectile_type = "/obj/item/projectile/swap"
+	flags = FPRINT | TWOHANDABLE
+
+/obj/item/weapon/gun/energy/staff/swapper/update_wield(mob/user)
+	..()
+	to_chat(user, "<span class = 'notice'>[wielded?"Holding \the [src] in both hands grants it more power!":"As you hold \the [src] in one hand, it sighs."]</span>")
+	if(wielded)
+		projectile_type = "/obj/item/projectile/swap/advanced"
+	else
+		projectile_type = initial(projectile_type)
 
 /obj/item/weapon/gun/energy/floragun
 	name = "floral somatoray"
@@ -380,17 +401,17 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		if(0)
 			mode = 1
 			charge_cost = 100
-			to_chat(user, "<span class='warning'>The [src.name] is now set to improve harvests.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is now set to improve harvests.</span>")
 			projectile_type = "/obj/item/projectile/energy/florayield"
 			modifystate = "florayield"
 		if(1)
 			mode = 0
 			charge_cost = mutstrength * 10
-			to_chat(user, "<span class='warning'>The [src.name] is now set to induce mutations.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is now set to induce mutations.</span>")
 			projectile_type = "/obj/item/projectile/energy/floramut"
 			modifystate = "floramut"
 		if(2)
-			to_chat(user, "<span class='warning'>The [src.name] appears to be locked into one mode.</span>")
+			to_chat(user, "<span class='warning'>\The [src] appears to be locked into one mode.</span>")
 			return
 	update_icon()
 	return
@@ -416,7 +437,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 			projectile_type = "/obj/item/projectile/energy/floramut/emag"
 			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
 			desc += " It seems to have it's safety features de-activated."
-			playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, 1)
+			playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
 			modifystate = "floraemag"
 			update_icon()
 
@@ -507,6 +528,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
+	icon_charge_multiple = 20
 	var/overheat = 0
 	var/recent_reload = 1
 /*
@@ -524,10 +546,6 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	recent_reload = 1
 	update_icon()
-	return
-
-// /vg/ - Broken until we update to /tg/ guncode.
-/obj/item/weapon/gun/energy/kinetic_accelerator/update_icon()
 	return
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
@@ -627,7 +645,7 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 
 /obj/item/weapon/gun/energy/bison
 	name = "\improper Righteous Bison"
-	desc = "A replica of Lord Cockswain's very own personnal ray gun."
+	desc = "A replica of Lord Cockswain's very own personal ray gun."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "bison"
 	item_state = null
@@ -654,10 +672,10 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 	pumping = 1
 	power_supply.charge = min(power_supply.charge + 200,power_supply.maxcharge)
 	if(power_supply.charge >= power_supply.maxcharge)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 25, 1)
+		playsound(src, 'sound/machines/click.ogg', 25, 1)
 		to_chat(user, "<span class='rose'>You pull the pump at the back of the gun. Looks like the inner battery is fully charged now.</span>")
 	else
-		playsound(get_turf(src), 'sound/weapons/bison_reload.ogg', 25, 1)
+		playsound(src, 'sound/weapons/bison_reload.ogg', 25, 1)
 		to_chat(user, "<span class='rose'>You pull the pump at the back of the gun.</span>")
 	sleep(5)
 	pumping = 0
@@ -699,7 +717,7 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 
 /obj/item/weapon/gun/energy/polarstar/New()
 	..()
-	playsound(get_turf(src), 'sound/weapons/spur_spawn.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
+	playsound(src, 'sound/weapons/spur_spawn.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
 
 /obj/item/weapon/gun/energy/polarstar/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	levelChange()

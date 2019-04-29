@@ -1,18 +1,252 @@
 var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
-										/obj/machinery/blackbox_recorder,	//Prevents people messing with feedback gathering
+										/datum/blackbox,	//Prevents people messing with feedback gathering
 										/datum/feedback_variable,			//Prevents people messing with feedback gathering
-										/datum/configuration,	//prevents people from fucking with logging.
 									)
 
-/*
-/client/proc/cmd_modify_object_variables(obj/O as obj|mob|turf|area in world)
-	set category = "Debug"
-	set name = "Edit Variables"
-	set desc="(target) Edit a target item's variables"
-	src.modify_variables(O)
-	feedback_add_details("admin_verb","EDITV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-*/
+//Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
+//If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
+//If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
+
+// acceptsLists : if we're setting a variable in a list
+/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE, var/acceptsLists = TRUE)
+	var/client/C
+
+	if(ismob(user))
+		C = user.client
+	else if(isclient(user))
+		C = user
+
+	if(!C || !C.holder)
+		return
+
+	if(!C.can_edit_var(edited_variable, edited_datum?.type))
+		return
+
+	//Special case for "appearance", because appearance values can't be stored anywhere.
+	//It's impossible for this proc to return an appearance value, so just set it directly here
+	if((isimage(edited_datum) || isatom(edited_datum)) && edited_variable == "appearance")
+		if(!C.holder.marked_appearance)
+			to_chat(usr, "You don't have a saved appearance!")
+			return
+		else
+			var/atom/A = edited_datum
+			if(value_override == "initial")
+				if(logging)
+					log_admin("[key_name(usr)] reset [edited_datum]'s appearance")
+
+				A.appearance = initial(A.appearance)
+				to_chat(usr, "Reset [edited_datum]'s appearance")
+
+			else
+				if(logging)
+					log_admin("[key_name(usr)] modified [edited_datum]'s appearance to [C.holder.marked_appearance]")
+
+				A.appearance = C.holder.marked_appearance.appearance
+				to_chat(usr, "Changed [edited_datum]'s appearance to [C.holder.marked_appearance]")
+			return
+
+	#define V_MARKED_DATUM "marked_datum"
+	#define V_RESET "reset"
+	#define V_TEXT "text"
+	#define V_NUM "num"
+	#define V_TYPE "type"
+	#define V_LIST_EMPTY "empty_list"
+	#define V_LIST "list"
+	#define V_OBJECT "object"
+	#define V_ICON "icon"
+	#define V_FILE "file"
+	#define V_CLIENT "client"
+	#define V_NULL "null"
+	#define V_CANCEL "cancel"
+	#define V_MATRIX "matrix"
+
+	var/new_variable_type
+	var/old_value = null //Old value of the variable
+	var/new_value = value_override //New value of the variable
+
+	if(edited_datum && edited_variable)
+		//Check if the variable actually exists
+		if(!edited_datum.vars.Find(edited_variable))
+			return
+
+		old_value = edited_datum.vars[edited_variable]
+
+	if(isnull(new_value))
+		if(autoselect_var_type)
+			if(isnull(old_value))
+				to_chat(usr, "Unable to determine variable type.")
+			else if(isnum(old_value))
+				to_chat(usr, "Variable appears to be <b>NUM</b>.")
+				new_variable_type = V_NUM
+			else if(istext(old_value))
+				to_chat(usr, "Variable appears to be <b>TEXT</b>.")
+				new_variable_type = V_TEXT
+			else if(isloc(old_value))
+				to_chat(usr, "Variable appears to be <b>REFERENCE</b>. Selecting from nearby objects...")
+				new_variable_type = V_OBJECT
+			else if(isicon(old_value))
+				to_chat(usr, "Variable appears to be <b>ICON</b>.")
+				new_variable_type = V_ICON
+			else if(ispath(old_value))
+				to_chat(usr, "Variable appears to be <b>TYPE</b>.")
+				new_variable_type = V_TYPE
+			else if(istype(old_value,/client))
+				to_chat(usr, "Variable appears to be <b>CLIENT</b>.")
+				new_variable_type = V_CLIENT
+			else if(isfile(old_value))
+				to_chat(usr, "Variable appears to be <b>FILE</b>.")
+				new_variable_type = V_FILE
+			else if(islist(old_value))
+				to_chat(usr, "Variable appears to be <b>LIST</b>.")
+				new_value = C.mod_list(old_value) //Use a custom interface for list editing
+			else if(ismatrix(old_value))
+				to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+				new_value = C.modify_matrix_menu(old_value) //Use a custom interface for matrix editing
+
+
+	if(isnull(new_value)) //If a custom interface hasn't already set the value
+		//Build the choices list
+		var/list/choices = list(\
+		"text" = V_TEXT,
+		"num"  = V_NUM,
+		"type" = V_TYPE,
+		"empty list"      = V_LIST_EMPTY,
+		"list"  = V_LIST,
+		"object (nearby)" = V_OBJECT,
+		"icon"   = V_ICON,
+		"file"   = V_FILE,
+		"client" = V_CLIENT,
+		"matrix" = V_MATRIX,
+		"null"   = V_NULL,
+		)
+
+		if (!acceptsLists)
+			choices -= V_LIST
+			choices -= V_LIST_EMPTY
+
+		if(C.holder.marked_datum) //Add the marked datum option
+			var/list_item_name
+			if(isdatum(C.holder.marked_datum))
+				list_item_name = "marked datum ([C.holder.marked_datum.type])"
+			else if(isfile(C.holder.marked_datum))
+				list_item_name = "marked datum (file)"
+			else if(isicon(C.holder.marked_datum))
+				list_item_name = "marked datum (icon)"
+			else
+				list_item_name = "marked datum ([C.holder.marked_datum])"
+			choices[list_item_name] = V_MARKED_DATUM
+
+		if(edited_datum && edited_variable) //Add the restore to default option
+			choices["restore to default"] = V_RESET
+
+		//Add the cancel option
+		choices["CANCEL"] = V_CANCEL
+
+		if(!new_variable_type)
+			new_variable_type = input("What kind of variable?","Variable Type") as null|anything in choices
+		var/selected_type = choices[new_variable_type]
+		var/window_title = "Varedit [edited_datum]"
+
+		switch(selected_type)
+			if(V_CANCEL)
+				return
+
+			if(V_TEXT)
+				new_value = input("Enter new text:", window_title, old_value) as text
+
+			if(V_NUM)
+				new_value = input("Enter new number:", window_title, old_value) as num
+
+			if(V_TYPE)
+				var/partial_type = input("Enter type, or leave blank to see all types", window_title, "[old_value]") as text|null
+
+				var/list/matches = get_matching_types(partial_type, /datum)
+				new_value = input("Select type", window_title) as null|anything in matches
+
+			if(V_LIST_EMPTY)
+				if (acceptsLists)
+					new_value = list()
+
+			if(V_LIST)
+				if (acceptsLists)
+					new_value = C.populate_list()
+
+			if(V_OBJECT)
+				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
+
+			if(V_FILE)
+				new_value = input("Pick file:", window_title) as file
+
+			if(V_ICON)
+				new_value = input("Pick icon:", window_title) as icon
+
+			if(V_CLIENT)
+				var/list/keys = list()
+				for(var/mob/M in mob_list)
+					if(M.client)
+						keys += M.client
+
+				new_value = input("Please, select a player!", window_title, null, null) as null|anything in keys
+
+			if(V_MARKED_DATUM)
+				new_value = C.holder.marked_datum
+
+			if(V_RESET)
+				if(edited_datum && edited_variable)
+					new_value = initial(edited_datum.vars[edited_variable])
+
+					edited_datum.vars[edited_variable] = new_value
+					to_chat(user, "Restored '[edited_variable]' to original value - [new_value]")
+
+			if(V_NULL)
+				new_value = null
+
+			if(V_MATRIX)
+				new_value = matrix()
+
+			else
+				to_chat(user, "Unknown type: [selected_type]")
+
+	switch(edited_variable)
+		if("bound_width", "bound_height", "bound_x", "bound_y")
+			if(new_value % world.icon_size) //bound_width/height must be a multiple of 32, otherwise movement breaks - BYOND issue
+				to_chat(usr, "[edited_variable] can only be a multiple of [world.icon_size]!")
+				return
+
+	if(edited_datum && edited_variable)
+		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
+		//variable_edited() can block the edit in case there's special behavior for a variable (for example, updating lights after they're changed)
+			new_value = edited_datum.vars[edited_variable]
+		else
+			edited_datum.vars[edited_variable] = new_value
+
+		if(logging)
+			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
+
+	return new_value
+
+	#undef V_MARKED_DATUM
+	#undef V_RESET
+	#undef V_TEXT
+	#undef V_NUM
+	#undef V_TYPE
+	#undef V_LIST_EMPTY
+	#undef V_LIST
+	#undef V_OBJECT
+	#undef V_ICON
+	#undef V_FILE
+	#undef V_CLIENT
+	#undef V_NULL
+
+/client/proc/populate_list()
+	var/to_continue = TRUE
+	var/list/things_to_return = list()
+	while (to_continue)
+		things_to_return += variable_set(src, acceptsLists = FALSE)
+		to_continue = (alert("Do you want to add another item to the list? It has currently [things_to_return.len] items.", "Filling a list", "Yes", "No") == "Yes")
+
+	return things_to_return
 
 /client/proc/cmd_modify_ticker_variables()
 	set category = "Debug"
@@ -21,579 +255,41 @@ var/list/forbidden_varedit_object_types = list(
 	if (ticker == null)
 		to_chat(src, "Game hasn't started yet.")
 	else
-		src.modify_variables(ticker)
+		debug_variables(ticker)
 		feedback_add_details("admin_verb","ETV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/mod_list_add_ass() //haha
-
-
-	var/class = "text"
-	if(src.holder && src.holder.marked_datum)
-		class = input("What kind of variable?","Variable Type") as null|anything in list("text",
-			"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
-	else
-		class = input("What kind of variable?","Variable Type") as null|anything in list("text",
-			"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default")
-
-	if(!class)
-		return
-
-	if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-		class = "marked datum"
-
-	var/var_value = null
-
-	switch(class)
-
-		if("text")
-			var_value = input("Enter new text:","Text") as null|message
-
-		if("num")
-			var_value = input("Enter new number:","Num") as null|num
-
-		if("type")
-			var_value = input("Enter type:","Type") as null|anything in typesof(/obj,/mob,/area,/turf)
-
-		if("reference")
-			var_value = input("Select reference:","Reference") as null|mob|obj|turf|area in world
-
-		if("mob reference")
-			var_value = input("Select reference:","Reference") as null|mob in world
-
-		if("file")
-			var_value = input("Pick file:","File") as null|file
-
-		if("icon")
-			var_value = input("Pick icon:","Icon") as null|icon
-
-		if("marked datum")
-			var_value = holder.marked_datum
-
-	if(!var_value)
-		return
-
-	return var_value
-
-
+//Select and add a value to list L
 /client/proc/mod_list_add(var/list/L)
-
-
-	var/class = "text"
-	if(src.holder && src.holder.marked_datum)
-		class = input("What kind of variable?","Variable Type") as null|anything in list("text",
-			"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
-	else
-		class = input("What kind of variable?","Variable Type") as null|anything in list("text",
-			"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default")
-
-	if(!class)
+	if(!check_rights(R_VAREDIT))
 		return
 
-	if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-		class = "marked datum"
-
-	var/var_value = null
-
-	switch(class)
-
-		if("text")
-			var_value = input("Enter new text:","Text") as message
-
-		if("num")
-			var_value = input("Enter new number:","Num") as num
-
-		if("type")
-			var_value = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
-
-		if("reference")
-			var_value = input("Select reference:","Reference") as mob|obj|turf|area in world
-
-		if("mob reference")
-			var_value = input("Select reference:","Reference") as mob in world
-
-		if("file")
-			var_value = input("Pick file:","File") as file
-
-		if("icon")
-			var_value = input("Pick icon:","Icon") as icon
-
-		if("marked datum")
-			var_value = holder.marked_datum
-
-	if(!var_value)
-		return
+	var/added_value = variable_set(src, L)
 
 	switch(alert("Would you like to associate a var with the list entry?",,"Yes","No"))
 		if("Yes")
-			L += var_value
-			L[var_value] = mod_list_add_ass() //haha
-		if("No")
-			L += var_value
+			L[added_value] = variable_set(src, L) //haha
+		else
+			L.Add(added_value)
 
+//Modify a list - either add or remove a balue
 /client/proc/mod_list(var/list/L)
 	if(!check_rights(R_VAREDIT))
 		return
 
-	if(!istype(L,/list))
-		if(alert("Make a new list?", "Not a List.", "Yes", "No") == "No")
-			return
-		else
-			L = list()
+	//var/list/names = sortList(L)
+	//Don't sort the list - item order is important in some lists
 
-	var/list/names = sortList(L)
-
-	var/variable = input("Which var?","Var") as null|anything in names + "(ADD VAR)"
-
-	if(variable == "(ADD VAR)")
-		mod_list_add(L)
-		return
+	var/variable = input("Select a variable to remove from the list, or select (ADD VAR) to add a new one","Var") as null|anything in L + "(ADD VAR)"
 
 	if(!variable)
-		return
-
-	var/default
-
-	var/dir
-
-	if(!can_edit_var(variable))
-		return
-
-	if(isnull(variable))
-		to_chat(usr, "Unable to determine variable type.")
-
-	else if(isnum(variable))
-		to_chat(usr, "Variable appears to be <b>NUM</b>.")
-		default = "num"
-		dir = 1
-
-	else if(istext(variable))
-		to_chat(usr, "Variable appears to be <b>TEXT</b>.")
-		default = "text"
-
-	else if(isloc(variable))
-		to_chat(usr, "Variable appears to be <b>REFERENCE</b>.")
-		default = "reference"
-
-	else if(isicon(variable))
-		to_chat(usr, "Variable appears to be <b>ICON</b>.")
-		variable = "[bicon(variable)]"
-		default = "icon"
-
-	else if(istype(variable,/atom) || istype(variable,/datum))
-		to_chat(usr, "Variable appears to be <b>TYPE</b>.")
-		default = "type"
-
-	else if(istype(variable,/list))
-		to_chat(usr, "Variable appears to be <b>LIST</b>.")
-		default = "list"
-
-	else if(istype(variable,/client))
-		to_chat(usr, "Variable appears to be <b>CLIENT</b>.")
-		default = "cancel"
-
+		return L
+	else if(variable == "(ADD VAR)")
+		mod_list_add(L)
+		return L
 	else
-		to_chat(usr, "Variable appears to be <b>FILE</b>.")
-		default = "file"
+		L[variable] = variable_set(src, L)
 
-	to_chat(usr, "Variable contains: [variable]")
-	if(dir)
-		switch(variable)
-			if(1)
-				dir = "NORTH"
-			if(2)
-				dir = "SOUTH"
-			if(4)
-				dir = "EAST"
-			if(8)
-				dir = "WEST"
-			if(5)
-				dir = "NORTHEAST"
-			if(6)
-				dir = "SOUTHEAST"
-			if(9)
-				dir = "NORTHWEST"
-			if(10)
-				dir = "SOUTHWEST"
-			else
-				dir = null
-
-		if(dir)
-			to_chat(usr, "If a direction, direction is: [dir]")
-
-	var/class = "text"
-	if(src.holder && src.holder.marked_datum)
-		class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-			"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])", "DELETE FROM LIST")
-	else
-		class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-			"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default", "DELETE FROM LIST")
-
-	if(!class)
-		return
-
-	if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-		class = "marked datum"
-
-	switch(class) //Spits a runtime error if you try to modify an entry in the contents list. Dunno how to fix it, yet.
-
-		if("list")
-			mod_list(variable)
-
-		if("restore to default")
-			L[L.Find(variable)]=initial(variable)
-
-		if("edit referenced object")
-			modify_variables(variable)
-
-		if("DELETE FROM LIST")
-			L -= variable
-			return
-
-		if("text")
-			var/thing = L["[variable]"]
-			var/newText = input("Enter new text:","Text") as null|message
-			if(!newText)
-				return
-			if(!isnull(thing))
-				L["[variable]"] = newText
-			else
-				L[L.Find(variable)] = newText
-
-		if("num")
-			var/thing = L["[variable]"]
-			var/newNum = input("Enter new number:","Num") as null|num
-			if(!newNum)
-				return
-			if(!isnull(thing))
-				L["[variable]"] = newNum
-			else
-				L[L.Find(variable)] = newNum
-
-		if("type")
-			var/thing = L["[variable]"]
-			var/newType = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
-			if(!isnull(thing))
-				L["[variable]"] = newType
-			else
-				L[L.Find(variable)] = newType
-
-		if("reference")
-			var/thing = L["[variable]"]
-			var/newRef = input("Select reference:","Reference") as null|mob|obj|turf|area in world
-			if(!newRef)
-				return
-			if(!isnull(thing))
-				L["[variable]"] = newRef
-			else
-				L[L.Find(variable)] = newRef
-
-		if("mob reference")
-			var/thing = L["[variable]"]
-			var/newMob = input("Select reference:","Reference") as null|mob in world
-			if(!newMob)
-				return
-			if(!isnull(thing))
-				L["[variable]"] = newMob
-			else
-				L[L.Find(variable)] = newMob
-
-		if("file")
-			var/thing = L["[variable]"]
-			var/newFile = input("Pick file:","File") as file
-			if(!isnull(thing))
-				L["[variable]"] = newFile
-			else
-				L[L.Find(variable)] = newFile
-
-		if("icon")
-			var/thing = L["[variable]"]
-			var/newIcon = input("Pick icon:","Icon") as icon
-			if(!isnull(thing))
-				L["[variable]"] = newIcon
-			else
-				L[L.Find(variable)] = newIcon
-
-		if("marked datum")
-			var/thing = L["[variable]"]
-			var/newThing = holder.marked_datum
-			if(!isnull(thing))
-				L["[variable]"] = newThing
-			else
-				L[L.Find(variable)] = newThing
-
-
-/client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-	if(!check_rights(R_VAREDIT))
-		return
-
-	if(holder && !(holder.rights & (R_PERMISSIONS)))
-		for(var/p in forbidden_varedit_object_types)
-			if( istype(O,p) )
-				to_chat(usr, "<span class='warning'>It is forbidden to edit this object's variables.</span>")
-				return
-
-	var/class
-	var/variable
-	var/var_value
-
-	if(param_var_name)
-		if(!param_var_name in O.vars)
-			to_chat(src, "A variable with this name ([param_var_name]) doesn't exist in this atom ([O])")
-			return
-
-		variable = param_var_name
-
-		if(!can_edit_var(variable))
-			return
-
-		var_value = O.vars[variable]
-
-		if(autodetect_class)
-			if(isnull(var_value))
-				to_chat(usr, "Unable to determine variable type.")
-				class = null
-				autodetect_class = null
-			else if(isnum(var_value))
-				to_chat(usr, "Variable appears to be <b>NUM</b>.")
-				class = "num"
-				dir = 1
-
-			else if(istext(var_value))
-				to_chat(usr, "Variable appears to be <b>TEXT</b>.")
-				class = "text"
-
-			else if(isloc(var_value))
-				to_chat(usr, "Variable appears to be <b>REFERENCE</b>.")
-				class = "reference"
-
-			else if(isicon(var_value))
-				to_chat(usr, "Variable appears to be <b>ICON</b>.")
-				var_value = "[bicon(var_value)]"
-				class = "icon"
-
-			else if(ismatrix(var_value))
-				to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
-				class = "matrix"
-
-			else if(istype(var_value,/atom) || istype(var_value,/datum))
-				to_chat(usr, "Variable appears to be <b>TYPE</b>.")
-				class = "type"
-
-			else if(istype(var_value,/list))
-				to_chat(usr, "Variable appears to be <b>LIST</b>.")
-				class = "list"
-
-			else if(istype(var_value,/client))
-				to_chat(usr, "Variable appears to be <b>CLIENT</b>.")
-				class = "cancel"
-
-			else
-				to_chat(usr, "Variable appears to be <b>FILE</b>.")
-				class = "file"
-
-	else
-
-		var/list/names = list()
-		for (var/V in O.vars)
-			names += V
-
-		names = sortList(names)
-
-		variable = input("Which var?","Var") as null|anything in names
-		if(!variable)
-			return
-		var_value = O.vars[variable]
-
-		if(!can_edit_var(variable))
-			return
-
-	if(!autodetect_class)
-
-		var/dir
-		var/default
-		if(isnull(var_value))
-			to_chat(usr, "Unable to determine variable type.")
-
-		else if(isnum(var_value))
-			to_chat(usr, "Variable appears to be <b>NUM</b>.")
-			default = "num"
-			dir = 1
-
-		else if(istext(var_value))
-			to_chat(usr, "Variable appears to be <b>TEXT</b>.")
-			default = "text"
-
-		else if(isloc(var_value))
-			to_chat(usr, "Variable appears to be <b>REFERENCE</b>.")
-			default = "reference"
-
-		else if(isicon(var_value))
-			to_chat(usr, "Variable appears to be <b>ICON</b>.")
-			var_value = "[bicon(var_value)]"
-			default = "icon"
-
-		else if(ismatrix(var_value))
-			to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
-			default = "matrix"
-
-		else if(istype(var_value,/atom) || istype(var_value,/datum))
-			to_chat(usr, "Variable appears to be <b>TYPE</b>.")
-			default = "type"
-
-		else if(istype(var_value,/list))
-			to_chat(usr, "Variable appears to be <b>LIST</b>.")
-			default = "list"
-
-		else if(istype(var_value,/client))
-			to_chat(usr, "Variable appears to be <b>CLIENT</b>.")
-			default = "cancel"
-
-		else
-			to_chat(usr, "Variable appears to be <b>FILE</b>.")
-			default = "file"
-
-		to_chat(usr, "Variable contains: [var_value]")
-		if(dir)
-			switch(var_value)
-				if(1)
-					dir = "NORTH"
-				if(2)
-					dir = "SOUTH"
-				if(4)
-					dir = "EAST"
-				if(8)
-					dir = "WEST"
-				if(5)
-					dir = "NORTHEAST"
-				if(6)
-					dir = "SOUTHEAST"
-				if(9)
-					dir = "NORTHWEST"
-				if(10)
-					dir = "SOUTHWEST"
-				else
-					dir = null
-			if(dir)
-				to_chat(usr, "If a direction, direction is: [dir]")
-
-		if(src.holder && src.holder.marked_datum)
-			class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-				"num","type","reference","mob reference", "icon","file","list","matrix","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
-		else
-			class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-				"num","type","reference","mob reference", "icon","file","list","matrix","edit referenced object","restore to default")
-
-		if(!class)
-			return
-
-	var/original_name
-
-	if (!istype(O, /atom))
-		original_name = "\ref[O] ([O])"
-	else
-		original_name = O:name
-
-	if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-		class = "marked datum"
-
-	switch(class)
-
-		if("list")
-			mod_list(O.vars[variable])
-			return
-
-		if("restore to default")
-			O.vars[variable] = initial(O.vars[variable])
-
-		if("edit referenced object")
-			return .(O.vars[variable])
-
-		if("text")
-			if(variable == "light_color")
-				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
-				if(var_new==null)
-					return
-				O.set_light(l_color = var_new)
-			else
-				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
-				if(var_new==null)
-					return
-				O.vars[variable] = var_new
-
-		if("num")
-			if(variable=="light_range")
-				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null)
-					return
-				O.set_light(var_new)
-
-			else if(variable=="light_power")
-				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null)
-					return
-				O.set_light(l_power = var_new)
-
-			else if(variable=="stat")
-				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null)
-					return
-				if((O.vars[variable] == 2) && (var_new < 2))//Bringing the dead back to life
-					if(ismob(O))
-						var/mob/M = O
-						M.resurrect()
-				if((O.vars[variable] < 2) && (var_new == 2))//Kill he
-					living_mob_list -= O
-					dead_mob_list += O
-				O.vars[variable] = var_new
-			else
-				var/var_new =  input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new==null)
-					return
-				O.vars[variable] = var_new
-
-		if("type")
-			var/var_new = input("Enter type:","Type",O.vars[variable]) as null|anything in typesof(/obj,/mob,/area,/turf)
-			if(var_new==null)
-				return
-			O.vars[variable] = var_new
-
-		if("reference")
-			var/var_new = input("Select reference:","Reference",O.vars[variable]) as null|mob|obj|turf|area in world
-			if(var_new==null)
-				return
-			O.vars[variable] = var_new
-
-		if("mob reference")
-			var/var_new = input("Select reference:","Reference",O.vars[variable]) as null|mob in world
-			if(var_new==null)
-				return
-			O.vars[variable] = var_new
-
-		if("file")
-			var/var_new = input("Pick file:","File",O.vars[variable]) as null|file
-			if(var_new==null)
-				return
-			O.vars[variable] = var_new
-
-		if("icon")
-			var/var_new = input("Pick icon:","Icon",O.vars[variable]) as null|icon
-			if(var_new==null)
-				return
-			O.vars[variable] = var_new
-
-		if("marked datum")
-			O.vars[variable] = holder.marked_datum
-
-		if("matrix")
-			var/matrix/var_new = modify_matrix_menu(O.vars[variable])
-			if (!var_new)
-				return
-
-			O.vars[variable] = var_new
-
-	world.log << "### VarEdit by [src]: [O.type] [variable]=[html_encode("[O.vars[variable]]")]"
-	log_admin("[key_name(src)] modified [original_name]'s [variable] to [O.vars[variable]]")
-	message_admins("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1)
+	return L
 
 /client/proc/modify_matrix_menu(var/matrix/M = matrix(), var/verbose = TRUE)
 	if (verbose)
@@ -642,9 +338,17 @@ var/list/forbidden_varedit_object_types = list(
 
 	return M
 
-/client/proc/can_edit_var(var/tocheck)
+/client/proc/can_edit_var(var/tocheck, var/type_to_check)
 	if(tocheck in nevervars)
 		to_chat(usr, "Editing this variable is forbidden.")
+		return FALSE
+
+	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
+		to_chat(usr, "Editing this variable is forbidden.")
+		return FALSE
+
+	if(tocheck == "bounds")
+		to_chat(usr, "Editing this variable is forbidden. Edit bound_width or bound_height instead.")
 		return FALSE
 
 	if(tocheck in lockedvars)

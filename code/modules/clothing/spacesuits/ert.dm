@@ -7,26 +7,25 @@
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
-	var/obj/machinery/camera/camera
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	var/id_suffix = "ERT_empty"
 
-/obj/item/clothing/head/helmet/space/ert/attack_self(mob/user)
-	if(camera)
-		..(user)
-	else
-		camera = new /obj/machinery/camera(src)
-		camera.network = list("ERT")
-		cameranet.removeCamera(camera)
-		camera.c_tag = user.name
-		to_chat(user, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")
+/obj/item/clothing/head/helmet/space/ert/equipped(var/mob/M)
+	if (!isERT(M) || !ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
 
-/obj/item/clothing/head/helmet/space/ert/examine(mob/user)
-	..()
-	if(get_dist(user,src) <= 1)
-		to_chat(user, "This helmet has a built-in camera. It's [camera ? "" : "in"]active.")
+	var/datum/role/emergency_responder/R = M.mind.GetRole(RESPONDER)
+	R.logo_state = "[id_suffix]-logo"
+
+	if(H.get_item_by_slot(slot_head) == src)
+		var/obj/item/weapon/card/id/worn_id = H.get_item_by_slot(slot_wear_id)
+		if(istype(worn_id))
+			if(findtextEx(worn_id.icon_state,"ERT_")!=0)
+				worn_id.icon_state = id_suffix
 
 /obj/item/clothing/suit/space/ert
 	name = "emergency response team suit"
@@ -55,6 +54,7 @@
 	item_state = "helm-command"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	id_suffix = "ERT_leader"
 
 /obj/item/clothing/suit/space/ert/commander
 	name = "emergency response team commander suit"
@@ -71,6 +71,7 @@
 	item_state = "syndicate-helm-black-red"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	id_suffix = "ERT_security"
 
 /obj/item/clothing/suit/space/ert/security
 	name = "emergency response team security suit"
@@ -86,6 +87,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 50, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 100)
+	id_suffix = "ERT_engineering"
 
 /obj/item/clothing/suit/space/ert/engineer
 	name = "emergency response team engineer suit"
@@ -100,8 +102,13 @@
 	icon_state = "ert_medical"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	id_suffix = "ERT_medical"
 
 /obj/item/clothing/suit/space/ert/medical
 	name = "emergency response team medical suit"
 	desc = "A suit worn by the medical members of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_medical"
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/crowbar, \
+	/obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, /obj/item/device/multitool, \
+	/obj/item/device/radio, /obj/item/device/analyzer, /obj/item/weapon/gun/energy/laser, /obj/item/weapon/gun/energy/pulse_rifle, \
+	/obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/gun/energy/gun, /obj/item/roller)

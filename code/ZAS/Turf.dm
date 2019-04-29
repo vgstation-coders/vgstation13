@@ -1,36 +1,14 @@
 /turf/simulated/var/zone/zone
 /turf/simulated/var/open_directions
-/turf/simulated/var/list/gasGraphics
 
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
-/turf/simulated/proc/set_graphic(const/newGraphics)
-	if (!isnum(newGraphics))
-		return
-
-	if (!newGraphics) // Clear overlay, or simply 0.
-		if (gasGraphics)
-			overlays -= gasGraphics
-			gasGraphics = null
-
-		return
-
-	var/list/overlayGraphics = list()
-
-	if (GRAPHICS_PLASMA & newGraphics)
-		overlayGraphics += plmaster
-
-	if (GRAPHICS_N2O & newGraphics)
-		overlayGraphics += slmaster
-
-	if (overlayGraphics.len)
-		if (gasGraphics)
-			overlays -= gasGraphics
-			gasGraphics = null
-
-		overlays += overlayGraphics
-		gasGraphics = overlayGraphics.Copy()
+/turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
+	if(graphic_add && graphic_add.len)
+		overlays += graphic_add
+	if(graphic_remove && graphic_remove.len)
+		overlays -= graphic_remove
 
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
@@ -63,9 +41,9 @@
 		if(istype(unsim, /turf/simulated))
 
 			var/turf/simulated/sim = unsim
-			if(air_master.has_valid_zone(sim))
+			if(SSair.has_valid_zone(sim))
 
-				air_master.connect(sim, src)
+				SSair.connect(sim, src)
 
 /turf/simulated/update_air_properties()
 	if(zone && zone.invalid)
@@ -135,7 +113,7 @@
 		if(istype(unsim, /turf/simulated))
 
 			var/turf/simulated/sim = unsim
-			if(air_master.has_valid_zone(sim))
+			if(SSair.has_valid_zone(sim))
 
 				//Might have assigned a zone, since this happens for each direction.
 				if(!zone)
@@ -167,7 +145,7 @@
 					to_chat(if(verbose) world, "Connecting to [sim.zone]")
 					#endif
 
-					air_master.connect(src, sim)
+					SSair.connect(src, sim)
 
 
 			#ifdef ZASDBG
@@ -183,7 +161,7 @@
 				postponed = list()
 			postponed.Add(unsim)
 
-	if(!air_master.has_valid_zone(src)) //Still no zone, make a new one.
+	if(!SSair.has_valid_zone(src)) //Still no zone, make a new one.
 		var/zone/newzone = new/zone()
 		newzone.add(src)
 
@@ -196,7 +174,7 @@
 	//At this point, a zone should have happened. If it hasn't, don't add more checks, fix the bug.
 
 	for(var/turf/T in postponed)
-		air_master.connect(src, T)
+		SSair.connect(src, T)
 
 /turf/proc/post_update_air_properties()
 	if(connections)
@@ -207,12 +185,12 @@
 
 /turf/return_air()
 	//Create gas mixture to hold data for passing
-	var/datum/gas_mixture/GM = new
+	var/datum/gas_mixture/unsimulated/GM = new
 
-	GM.oxygen = oxygen
-	GM.carbon_dioxide = carbon_dioxide
-	GM.nitrogen = nitrogen
-	GM.toxins = toxins
+	GM[GAS_OXYGEN] = oxygen
+	GM[GAS_CARBON] = carbon_dioxide
+	GM[GAS_NITROGEN] = nitrogen
+	GM[GAS_PLASMA] = toxins
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -224,10 +202,10 @@
 
 	var/sum = oxygen + carbon_dioxide + nitrogen + toxins
 	if(sum>0)
-		GM.oxygen = (oxygen/sum)*amount
-		GM.carbon_dioxide = (carbon_dioxide/sum)*amount
-		GM.nitrogen = (nitrogen/sum)*amount
-		GM.toxins = (toxins/sum)*amount
+		GM[GAS_OXYGEN] = (oxygen/sum)*amount
+		GM[GAS_CARBON] = (carbon_dioxide/sum)*amount
+		GM[GAS_NITROGEN] = (nitrogen/sum)*amount
+		GM[GAS_PLASMA] = (toxins/sum)*amount
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -245,11 +223,9 @@
 /turf/simulated/return_air()
 	if(zone)
 		if(!zone.invalid)
-			air_master.mark_zone_update(zone)
+			SSair.mark_zone_update(zone)
 			return zone.air
 		else
-			if(!air)
-				make_air()
 			c_copy_air()
 			return air
 	else
@@ -260,16 +236,14 @@
 /turf/proc/make_air()
 	air = new/datum/gas_mixture
 	air.temperature = temperature
-	air.adjust(oxygen, carbon_dioxide, nitrogen, toxins)
-	air.group_multiplier = 1
 	air.volume = CELL_VOLUME
+	air.adjust_multi(
+		GAS_OXYGEN, oxygen,
+		GAS_CARBON, carbon_dioxide,
+		GAS_NITROGEN, nitrogen,
+		GAS_PLASMA, toxins)
 
 /turf/simulated/proc/c_copy_air()
 	if(!air)
 		air = new/datum/gas_mixture
 	air.copy_from(zone.air)
-	air.group_multiplier = 1
-
-
-/turf/attack_hand(mob/user as mob)
-	user.Move_Pulled(src)

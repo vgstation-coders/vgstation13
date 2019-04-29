@@ -1,0 +1,104 @@
+"aa" = (/turf/space,/area)
+"ab" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f6"; icon_state = "bswall_f6"},/area/vault/syndiecargo)
+"ac" = (/obj/structure/shuttle/engine/propulsion/burst{tag = "icon-burst_l (NORTH)"; icon_state = "burst_l"; dir = 1},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"ad" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f10"; icon_state = "bswall_f10"},/area/vault/syndiecargo)
+"ae" = (/turf/simulated/shuttle/wall{tag = "icon-bswall3"; icon_state = "bswall3"},/area/vault/syndiecargo)
+"af" = (/obj/structure/shuttle/engine/heater{tag = "icon-heater (NORTH)"; icon_state = "heater"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"ag" = (/obj/structure/shuttle/engine/heater{tag = "icon-heater (NORTH)"; icon_state = "heater"; dir = 1},/obj/structure/window/reinforced/plasma,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"ah" = (/obj/structure/shuttle/engine/heater{tag = "icon-heater (NORTH)"; icon_state = "heater"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"ai" = (/turf/simulated/shuttle/wall{tag = "icon-bswall7"; icon_state = "bswall7"},/area/vault/syndiecargo)
+"aj" = (/turf/simulated/shuttle/wall{tag = "icon-bswall12"; icon_state = "bswall12"},/area/vault/syndiecargo)
+"ak" = (/turf/simulated/shuttle/wall{tag = "icon-bswall11"; icon_state = "bswall11"},/area/vault/syndiecargo)
+"al" = (/obj/structure/closet/toolcloset,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"am" = (/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"an" = (/obj/machinery/vending/tool,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"ao" = (/obj/structure/rack,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/ammo_storage/magazine/a12mm/ops,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"ap" = (/obj/machinery/light/small{tag = "icon-lbulb1 (NORTH)"; icon_state = "lbulb1"; dir = 1},/obj/machinery/nuclearbomb,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aq" = (/obj/structure/safe,/obj/item/weapon/gun/projectile/deagle/camo,/obj/item/toy/syndicateballoon,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"ar" = (/obj/structure/closet/crate/trashcart,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"as" = (/obj/structure/closet/crate/internals,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"at" = (/obj/structure/closet/crate,/obj/abstract/map/spawner/misc/syndiecargo,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"au" = (/obj/machinery/light/small{tag = "icon-lbulb1 (EAST)"; icon_state = "lbulb1"; dir = 4},/obj/item/toy/foamblade,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"av" = (/obj/structure/rack,/obj/item/weapon/gun/projectile/colt,/obj/item/ammo_storage/speedloader/a357,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aw" = (/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"ax" = (/obj/structure/rack,/obj/item/ammo_storage/magazine/a50,/obj/item/ammo_storage/magazine/a50,/obj/item/ammo_storage/box/a357,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"ay" = (/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"az" = (/obj/machinery/vending/engineering,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"aA" = (/turf/simulated/shuttle/wall{tag = "icon-bswall13"; icon_state = "bswall13"},/area/vault/syndiecargo)
+"aB" = (/obj/structure/closet/hydrant,/turf/simulated/shuttle/wall{tag = "icon-bswall8"; icon_state = "bswall8"},/area/vault/syndiecargo)
+"aC" = (/obj/machinery/door/airlock/external,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"aD" = (/turf/simulated/shuttle/wall{tag = "icon-bswall4"; icon_state = "bswall4"},/area/vault/syndiecargo)
+"aE" = (/turf/simulated/shuttle/wall{tag = "icon-bswall8"; icon_state = "bswall8"},/area/vault/syndiecargo)
+"aF" = (/obj/machinery/door/airlock/vault{name = "Armory"},/obj/machinery/door/poddoor{id_tag = 350; name = "Armory Shutters"},/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aG" = (/turf/simulated/shuttle/floor{tag = "icon-bswall13"; icon_state = "bswall13"},/area/vault/syndiecargo)
+"aH" = (/obj/machinery/vending/cigarette,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aI" = (/obj/machinery/light{tag = "icon-ltube1 (NORTH)"; icon_state = "ltube1"; dir = 1},/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aJ" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (NORTH)"; icon_state = "plasmarwindow"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/full/reinforced/plasma,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"aK" = (/obj/machinery/vending/coffee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aL" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/box/donkpockets/random_amount{pixel_x = 10; pixel_y = 5},/obj/item/weapon/storage/box/donkpockets/random_amount,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aM" = (/obj/structure/table/reinforced,/obj/abstract/map/spawner/misc/syndiecargo,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aN" = (/obj/machinery/vending/groans,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aO" = (/obj/item/trash/bustanuts,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aP" = (/obj/machinery/door/airlock/glass_security{name = "Security Door"},/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aQ" = (/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aR" = (/obj/structure/table/reinforced,/obj/item/weapon/phone,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aS" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (NORTH)"; icon_state = "plasmarwindow"; dir = 1},/obj/structure/window/full/reinforced/plasma,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"aT" = (/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aU" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/full/reinforced/plasma,/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"aV" = (/obj/structure/flora/pottedplant/random,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aW" = (/obj/machinery/light,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aX" = (/mob/living/simple_animal/hostile/humanoid/syndicate/ranged,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"aY" = (/turf/simulated/shuttle/wall{tag = "icon-bswallc2"; icon_state = "bswallc2"},/area/vault/syndiecargo)
+"aZ" = (/turf/simulated/shuttle/wall{tag = "icon-bswall14"; icon_state = "bswall14"},/area/vault/syndiecargo)
+"ba" = (/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bb" = (/turf/simulated/shuttle/wall{tag = "icon-bswall1"; icon_state = "bswall1"},/area/vault/syndiecargo)
+"bc" = (/obj/machinery/vending/medical,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"bd" = (/obj/structure/table,/obj/item/weapon/switchtool/surgery,/obj/item/clothing/accessory/stethoscope,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"be" = (/obj/structure/closet/crate/freezer/surgery,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"bf" = (/obj/machinery/light{tag = "icon-ltube1 (WEST)"; icon_state = "ltube1"; dir = 8},/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bg" = (/obj/machinery/door/airlock/glass_medical{name = "Medical Area"},/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bh" = (/obj/machinery/light{tag = "icon-ltube1 (EAST)"; icon_state = "ltube1"; dir = 4},/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bi" = (/obj/structure/sign/double/map/left,/obj/structure/table/reinforced,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bj" = (/obj/structure/sign/double/map/right,/obj/structure/table/reinforced,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bk" = (/obj/item/trash/syndi_cakes,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bl" = (/obj/structure/sign/redcross,/turf/simulated/shuttle/wall{tag = "icon-bswall2"; icon_state = "bswall2"},/area/vault/syndiecargo)
+"bm" = (/obj/structure/closet/crate/medical,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bn" = (/obj/machinery/vending/wallmed1,/turf/simulated/shuttle/wall{tag = "icon-bswall3"; icon_state = "bswall3"},/area/vault/syndiecargo)
+"bo" = (/obj/machinery/computer/security/telescreen,/turf/simulated/shuttle/wall{tag = "icon-bswall3"; icon_state = "bswall3"},/area/vault/syndiecargo)
+"bp" = (/obj/structure/sign/vacuum,/turf/simulated/shuttle/wall{tag = "icon-bswall8"; icon_state = "bswall8"},/area/vault/syndiecargo)
+"bq" = (/obj/structure/sign/vacuum,/turf/simulated/shuttle/wall{tag = "icon-bswall4"; icon_state = "bswall4"},/area/vault/syndiecargo)
+"br" = (/obj/machinery/sleeper,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"bs" = (/obj/machinery/optable,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"bt" = (/obj/structure/bed/chair/office/dark,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bu" = (/obj/structure/bed/chair/office/dark,/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bv" = (/obj/machinery/door_control{id_tag = 350; name = "Shutter Controll"; pixel_x = 32},/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bw" = (/obj/structure/closet/crate/bin,/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"bx" = (/obj/structure/closet/emcloset,/obj/machinery/light/small{tag = "icon-lbulb1 (EAST)"; icon_state = "lbulb1"; dir = 4},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"by" = (/obj/machinery/computer/message_monitor,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bz" = (/obj/machinery/computer/crew,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bA" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bB" = (/obj/machinery/computer/security/advanced,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bC" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f5"; icon_state = "bswall_f5"},/area/vault/syndiecargo)
+"bD" = (/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"bE" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f9"; icon_state = "bswall_f9"},/area/vault/syndiecargo)
+"bF" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (NORTH)"; icon_state = "plasmarwindow"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/full/reinforced/plasma,/obj/machinery/door/poddoor{id_tag = 350; name = "Shutters"},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+
+(1,1,1) = {"
+aaabacacacadaaaaaaabacacacadaa
+aaaeafagahaiajajajakafagahaeaa
+aaaealamanaeaoapaqaearamasaeaa
+aaaeatamauaeavawaxaeayamazaeaa
+abaAaBaCaDaAaEaFaDaGaEaCaDaAad
+aeaHawawaIaJawawaKaLawawaIaMae
+aeaNaOawawaPawawawawaQawawaRae
+aeawawawawaSawaTawawawawawaMae
+aeawawawawaUaVawawaWawaXawawae
+aeaMawawawaYajajajaZaEbaawaDae
+aeaMawaXawbbbcbdbeaeaIawawaIae
+aebfawawawbgawawbhaeawbibjawae
+aeawawbkawblbmawawbnawawawawae
+aeaVawawaVaeawawawboaQawaTawae
+aibpaCaCbqakbrbrbsaebtbubtbvae
+aebwamambxaiajajajakbybzbAbBae
+bCaEbDbDajbEaaaaaabCbFbFbFbFbE
+"}

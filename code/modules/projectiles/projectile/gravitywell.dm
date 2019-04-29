@@ -14,13 +14,14 @@
 	else
 		return 0
 
-/obj/item/projectile/gravitywell/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/gravitywell/to_bump(atom/A as mob|obj|turf|area)
 	if(loc == target)
 		spawnGravityWell()
 
 	if(isliving(A))
 		var/mob/living/M = A
 		M.Knockdown(5)
+		M.Stun(5)
 
 	forceMove(get_step(loc,dir))
 
@@ -41,7 +42,7 @@
 	if(!bumped)
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 
 /obj/item/projectile/gravitywell/cultify()
 	return
@@ -105,7 +106,8 @@
 		if(istype(A,/atom/movable) && (size >= 4) && (get_dist(src,A) == 1))
 			A.singularity_pull(src, (pull_force * 3), 1)
 			var/atom/movable/AM = A
-			AM.forceMove(loc)//KATAMARI DAMACYYyyYYyyYY
+			if (z != map.zCentcomm || emergency_shuttle.location == 2)//preventing exploits, unless the round is over
+				AM.forceMove(loc)//KATAMARI DAMACYYyyYYyyYY
 		else if(get_dist(src,A) >= 1)
 			if(dist <= size)
 				A.singularity_pull(src, (pull_force * 3), 1)

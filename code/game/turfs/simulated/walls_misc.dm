@@ -8,6 +8,8 @@
 
 /turf/simulated/wall/cult/cultify()
 	return
+/turf/simulated/wall/cult/clockworkify()
+	return
 
 /turf/simulated/wall/cult/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
@@ -24,6 +26,7 @@
 			P.roll_and_drop(src)
 
 	ChangeTurf(dismantle_type)
+	update_near_walls()
 
 /turf/simulated/wall/cult/attack_construct(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/construct/builder) && user.Adjacent(src))

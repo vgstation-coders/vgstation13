@@ -24,71 +24,50 @@
 			return "cultchat"
 		if(MODE_ANCIENT)
 			return "ancientchat"
+		if(MODE_MUSHROOM)
+			return "sporechat"
 		else
 			return "Unknown"
 var/list/department_radio_keys = list(
-	  ":0" = "Deathsquad",	"#0" = "Deathsquad",	".0" = "Deathsquad",
-
-	  ":r" = "right ear",	"#r" = "right ear",		".r" = "right ear", "!r" = "fake right ear",
-	  ":l" = "left ear",	"#l" = "left ear",		".l" = "left ear",  "!l" = "fake left ear",
-	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
-	  ":h" = "department",	"#h" = "department",	".h" = "department",
-	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
-	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
-	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
-	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
-	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
-	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
-	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
+	  ":0" = "Deathsquad",	 "#0" = "Deathsquad",	".0" = "Deathsquad",
+	  //1 Used by LANGUAGE_GALACTIC_COMMON
+	  //2 Used by LANGUAGE_TRADEBAND
+	  //3 Used by LANGUAGE_GUTTER
+	  //4 Used by LANGUAGE_XENO
+	  //5 Used by LANGUAGE_CULT
+	  //6 Used by LANGUAGE_MONKEY
+	  //7 Used by LANGUAGE_HUMAN
+	  //8 Used by LANGUAGE_GOLEM
+	  //9 Used by LANGUAGE_MOUSE
+	  ":-" = "Response Team","#-" = "Response Team",".-" = "Response Team",
 	  ":a" = "alientalk",	"#a" = "alientalk",		".a" = "alientalk",
-	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
-	  ":r" = "Response Team","#r" = "Response Team",".r" = "Response Team",
-	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
+	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
+	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
 	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
+	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
+	  //f Used by LANGUAGE_SLIME
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
+	  ":h" = "department",	"#h" = "department",	".h" = "department",
+	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
+	  //j Used by LANGUAGE_TAJARAN
+	  //k Used by LANGUAGE_SKRELLIAN and LANGUAGE_GREY
+	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
+	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
+	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
+	  //o Used by LANGUAGE_UNATHI
+	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
+	  //q Used by LANGUAGE_ROOTSPEAK
+	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
+	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
+	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
+	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
+	  //v Used by LANGUAGE_VOX
+	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
-	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
-
-	  ":R" = "right ear",	"#R" = "right ear",		".R" = "right ear", "!R" = "fake right ear",
-	  ":L" = "left ear",	"#L" = "left ear",		".L" = "left ear",  "!L" = "fake left ear",
-	  ":I" = "intercom",	"#I" = "intercom",		".I" = "intercom",
-	  ":H" = "department",	"#H" = "department",	".H" = "department",
-	  ":C" = "Command",		"#C" = "Command",		".C" = "Command",
-	  ":N" = "Science",		"#N" = "Science",		".N" = "Science",
-	  ":M" = "Medical",		"#M" = "Medical",		".M" = "Medical",
-	  ":E" = "Engineering",	"#E" = "Engineering",	".E" = "Engineering",
-	  ":S" = "Security",	"#S" = "Security",		".S" = "Security",
-	  ":W" = "whisper",		"#W" = "whisper",		".W" = "whisper",
-	  ":B" = "binary",		"#B" = "binary",		".B" = "binary",
-	  ":A" = "alientalk",	"#A" = "alientalk",		".A" = "alientalk",
-	  ":T" = "Syndicate",	"#T" = "Syndicate",		".T" = "Syndicate",
-	  ":R" = "Response Team","#R" = "Response Team",".R" = "Response Team",
-	  ":U" = "Supply",		"#U" = "Supply",		".U" = "Supply",
-	  ":D" = "Service",     "#D" = "Service",       ".D" = "Service",
-	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
-	  ":X" = "cultchat",	"#X" = "cultchat",		".X" = "cultchat",
-	  ":Y" = "ancientchat",	"#Y" = "ancientchat", 	".Y" = "ancientchat",
-	  ":P" = "AI Private",	"#P" = "AI Private",	".P" = "AI Private",
-
-	  //kinda localization -- rastaf0
-	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right ear",	"#ê" = "right ear",		".ê" = "right ear",
-	  ":ä" = "left ear",	"#ä" = "left ear",		".ä" = "left ear",
-	  ":ø" = "intercom",	"#ø" = "intercom",		".ø" = "intercom",
-	  ":ð" = "department",	"#ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",		"#ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",		"#ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",		"#ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "Engineering",	"#ó" = "Engineering",	".ó" = "Engineering",
-	  ":û" = "Security",	"#û" = "Security",		".û" = "Security",
-	  ":ö" = "whisper",		"#ö" = "whisper",		".ö" = "whisper",
-	  ":è" = "binary",		"#è" = "binary",		".è" = "binary",
-	  ":ô" = "alientalk",	"#ô" = "alientalk",		".ô" = "alientalk",
-	  ":å" = "Syndicate",	"#å" = "Syndicate",		".å" = "Syndicate",
-	  ":é" = "Supply",		"#é" = "Supply",		".é" = "Supply",
-	  ":â" = "Service",     "#â" = "Service",       ".â" = "Service",
-	  ":ï" = "changeling",	"#ï" = "changeling",	".ï" = "changeling"
+	  //z Used by LANGUAGE_CLATTER
+	  //@ Used by LANGUAGE_MARTIAN
+	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
 )
 
 /mob/living/proc/get_default_language()
@@ -101,7 +80,7 @@ var/list/department_radio_keys = list(
 	if (isalien(src))
 		return 1
 	if (!ishuman(src))
-		return
+		return 0
 	var/mob/living/carbon/human/H = src
 	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
@@ -138,13 +117,13 @@ var/list/department_radio_keys = list(
 		say_testing(src, "ur ded kid")
 		say_dead(message)
 		return
+	if(check_emote(message))
+		say_testing(src, "Emoted")
+		return
 	if (stat) // Unconcious.
 		if(message_mode == MODE_WHISPER) //Lets us say our last words.
 			say_testing(src, "message mode was whisper.")
 			whisper(copytext(message, 3))
-		return
-	if(check_emote(message))
-		say_testing(src, "Emoted")
 		return
 	if(!can_speak_basic(message))
 		say_testing(src, "we aren't able to talk")
@@ -155,7 +134,8 @@ var/list/department_radio_keys = list(
 		message = copytext(message, 2)
 	else if(message_mode)
 		say_testing(src, "Message mode is [message_mode]")
-		message = copytext(message, 3)
+		if(message_mode != MODE_HOLOPAD)
+			message = copytext(message, 3)
 
 	// SAYCODE 90.0!
 	// We construct our speech object here.
@@ -195,20 +175,25 @@ var/list/department_radio_keys = list(
 
 	var/message_range = 7
 	treat_speech(speech)
-	var/radio_return = radio(speech, message_mode)
+
+	var/radio_return = get_speech_flags(message_mode)
 	if(radio_return & NOPASS) //There's a whisper() message_mode, no need to continue the proc if that is called
+		whisper(speech.message, speech.language)
 		returnToPool(speech)
 		return
 
-	if(radio_return & ITALICS)
-		speech.message_classes.Add("italics")
 	if(radio_return & REDUCE_RANGE)
 		message_range = 1
 	if(copytext(text, length(text)) == "!")
 		message_range++
 
-
-	send_speech(speech, message_range, bubble_type)
+	if(radio_return & ITALICS)
+		speech.message_classes.Add("italics")
+		send_speech(speech, message_range, bubble_type)
+		speech.message_classes.Remove("italics") //Wow, this is really hacky, but not as bad as creating a separate speech object with one differing var.
+	else
+		send_speech(speech, message_range, bubble_type)
+	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
 	returnToPool(speech)
@@ -252,10 +237,19 @@ var/list/department_radio_keys = list(
 
 	var/rendered = render_speech(speech)
 
-	for (var/atom/movable/listener in listeners)
-		listener.Hear(speech, rendered)
+	var/list/listening_nonmobs = listeners.Copy()
+	for(var/mob/M in listeners)
+		listening_nonmobs -= M
+		M.Hear(speech, rendered)
 
 	send_speech_bubble(speech.message, bubble_type, listeners)
+
+	for (var/atom/movable/listener in listening_nonmobs)
+		listener.Hear(speech, rendered)
+
+/mob/living/carbon/human/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type)
+	talkcount++
+	. = ..()
 
 /mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
@@ -287,7 +281,7 @@ var/list/department_radio_keys = list(
 	if(!message)
 		return
 
-	if(sdisabilities & MUTE)
+	if(is_mute())
 		return
 
 	if(is_muzzled())
@@ -299,7 +293,7 @@ var/list/department_radio_keys = list(
 	return 1
 
 /mob/living/proc/check_emote(message)
-	if(copytext(message, 1, 2) == "*")
+	if(copytext(message, 1, 2) == "*" && is_letter(text2ascii(message, 2)))
 		emote(copytext(message, 2))
 		return 1
 
@@ -308,15 +302,18 @@ var/list/department_radio_keys = list(
 	if(copytext(message, 1, 2) == ";")
 		return MODE_HEADSET
 	else if(length(message) > 2)
-		return department_radio_keys[copytext(message, 1, 3)]
+		return department_radio_keys[lowertext(copytext(message, 1, 3))]
 
 /mob/living/proc/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
 		if(MODE_CHANGELING)
 			if(lingcheck())
 				var/turf/T = get_turf(src)
-				log_say("[mind.changeling.changelingID]/[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [html_encode(speech.message)]")
-				var/themessage = text("<i><font color=#800080><b>[]:</b> []</font></i>",mind.changeling.changelingID,html_encode(speech.message))
+				var/datum/role/changeling/C = mind.GetRole(CHANGELING)
+				if(!C)
+					return 0
+				log_say("[C.changelingID]/[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [html_encode(speech.message)]")
+				var/themessage = text("<i><font color=#800080><b>[]:</b> []</font></i>",C.changelingID,html_encode(speech.message))
 				for(var/mob/M in player_list)
 					if(M.lingcheck() || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
@@ -349,6 +346,17 @@ var/list/department_radio_keys = list(
 						if(!istype(M,/mob/new_player))
 							handle_render(M,themessage,src)
 					return 1
+		if(MODE_MUSHROOM)
+			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.name, html_encode(speech.message))
+			var/turf/T = get_turf(src)
+			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Spore chat: [html_encode(speech.message)]")
+			for(var/mob/M in player_list)
+				if(iscarbon(M))
+					var/mob/living/carbon/human/H = M
+					if(ismushroom(H))
+						handle_render(M, message,src)
+				if((M in dead_mob_list) && !istype(M, /mob/new_player))
+					handle_render(M, message,src)
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
@@ -357,6 +365,19 @@ var/list/department_radio_keys = list(
 
 	if(stuttering || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)) )
 		speech.message = stutter(speech.message)
+
+/mob/living/proc/get_speech_flags(var/message_mode)
+	switch(message_mode)
+		if(MODE_WHISPER, SPEECH_MODE_FINAL)
+			return NOPASS
+		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
+			return ITALICS | REDUCE_RANGE //most cases
+		if("robot")
+			return REDUCE_RANGE
+	if(message_mode in radiochannels)
+		return ITALICS | REDUCE_RANGE //for borgs and polly
+
+	return 0
 
 /mob/living/proc/radio(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
@@ -389,20 +410,29 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/lingcheck()
-	if(mind && mind.changeling && !issilicon(src))
+	if(ischangeling(src) && !issilicon(src))
 		return 1
+	return 0
 
 /mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
 	if(!mind)
 		return
-
 	if(setting == 0) //overridden for constructs
 		return
-	if(setting == 1)
-		if(mind in ticker.mode.cult && universal_cult_chat == 1)
+
+	if (iscultist(src))
+		if(setting == 1)
+			if (checkTattoo(TATTOO_CHAT))
+				return 1
+		if(setting == 2)
 			return 1
-	if(setting == 2)
-		if(mind in ticker.mode.cult)
+
+	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
+	if(cult)
+		if(setting == 1)
+			if(universal_cult_chat == 1)
+				return 1
+		if(setting == 2)
 			return 1
 
 /mob/living/say_quote()
@@ -430,7 +460,7 @@ var/list/department_radio_keys = list(
 			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), tracking_speech_bubble_recipients)
 
 /proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist)
-	speech_bubble.plane = BASE_PLANE
+	speech_bubble.plane = ABOVE_LIGHTING_PLANE
 	speech_bubble.appearance_flags = RESET_COLOR
 	flick_overlay(speech_bubble, clientlist, 30)
 
@@ -440,6 +470,92 @@ var/list/department_radio_keys = list(
 		spawn(30)
 			if(client)
 				client.images -= speech_bubble
+
+/mob/living/whisper(message as text)
+	if(!IsVocal())
+		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
+		return
+
+#ifdef SAY_DEBUG
+	var/oldmsg = message
+#endif
+
+	if (isDead() || (stat == UNCONSCIOUS && health > 0))
+		return
+
+	if(say_disabled)	//This is here to try to identify lag problems
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
+		return
+
+	var/datum/speech/speech = create_speech(message)
+	speech.language = parse_language(speech.message)
+	speech.mode = SPEECH_MODE_WHISPER
+	speech.message_classes.Add("whisper")
+
+	if(istype(speech.language))
+		speech.message = copytext(speech.message,2+length(speech.language.key))
+	else
+		if(!isnull(speech.language))
+			var/n = speech.language
+			speech.message = copytext(speech.message,1+length(n))
+			say_testing(src, "We tried to speak a language we don't have length = [length(n)], oldmsg = [oldmsg] parsed message = [speech.message]")
+			speech.language = null
+		speech.language = get_default_language()
+
+	speech.message = trim(speech.message)
+
+	if(!can_speak(message))
+		return
+
+	speech.message = "[message]"
+
+	if (client && client.prefs.muted & MUTE_IC)
+		to_chat(src, "<span class='danger'>You cannot whisper (muted).</span>")
+		return
+
+
+	var/whispers = "whispers"
+	var/critical = InCritical()
+
+	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
+	treat_speech(speech)
+
+	// If whispering your last words, limit the whisper based on how close you are to death.
+	if(critical && !said_last_words)
+		var/health_diff = round(-config.health_threshold_dead + health)
+		// If we cut our message short, abruptly end it with a-..
+		var/message_len = length(speech.message)
+		speech.message = copytext(speech.message, 1, health_diff) + "[message_len > health_diff ? "-.." : "..."]"
+		speech.message = Ellipsis(speech.message, 10, 1)
+		speech.mode= SPEECH_MODE_FINAL
+		whispers = "whispers with their final breath"
+		said_last_words = src.stat
+	treat_speech(speech)
+
+
+	var/listeners = get_hearers_in_view(1, src) | observers
+	var/eavesdroppers = get_hearers_in_view(2, src) - listeners
+	var/watchers = hearers(5, src) - listeners - eavesdroppers
+	var/rendered = render_speech(speech)
+
+	for (var/atom/movable/listener in listeners)
+		listener.Hear(speech, rendered)
+
+	speech.message = stars(speech.message)
+	rendered = render_speech(speech)
+
+	for (var/atom/movable/eavesdropper in eavesdroppers)
+		eavesdropper.Hear(speech, rendered)
+
+	rendered = "<span class='game say'><span class='name'>[src.name]</span> [whispers] something.</span>"
+
+	for (var/mob/watcher in watchers)
+		watcher.show_message(rendered, 2)
+
+	if (said_last_words) // dying words
+		succumb_proc(0)
+
+	returnToPool(speech)
 
 /obj/effect/speech_bubble
 	var/mob/parent

@@ -148,7 +148,15 @@ var/paperwork_library
 					sleep(1) //too much for us.
 		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-	return "<span style=\"[style];color:[P.color]\">[t]</span>"
+
+	var/text_color
+	if(istype(P, /obj/item/weapon/pen))
+		text_color = P.color
+	else if(istype(P, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = P
+		text_color = C.colour
+
+	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
 	addReplacement(REG_BBTAG("\\*"), "<li>")
@@ -236,8 +244,8 @@ var/paperwork_library
 		return style.Format(text,src,user,P)
 
 /obj/item/weapon/pen/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user]is jamming the [src.name]into \his ear! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/pen/blue
 	desc = "It's a normal blue ink pen."
@@ -254,6 +262,9 @@ var/paperwork_library
 	icon_state = "pen"
 	colour = "white"
 
+/obj/item/weapon/pen/NT
+	name = "promotional Nanotrasen pen"
+	desc = "Just a cheap plastic pen. It reads: \"For our most valued customers\". They probably meant 'employees'."
 
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
 	if(!ismob(M))

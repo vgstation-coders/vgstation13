@@ -31,6 +31,10 @@
 	..()
 	to_chat(user, "<span class='info'>The service panel is [src.open ? "open" : "closed"].</span>")
 
+/obj/item/weapon/storage/secure/AltClick()
+	if(!locked)
+		..()
+
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(locked)
 		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
@@ -43,7 +47,7 @@
 			to_chat(user, "You short out the lock on [src].")
 			return
 
-		if (isscrewdriver(W))
+		if (W.is_screwdriver(user))
 			if (do_after(user, src, 20))
 				src.open =! src.open
 				user.show_message(text("<span class='notice'>You [] the service panel.</span>", (src.open ? "open" : "close")))
@@ -73,7 +77,7 @@
 	. = ..()
 
 
-/obj/item/weapon/storage/secure/MouseDrop(over_object, src_location, over_location)
+/obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (locked)
 		if(Adjacent(usr))
 			src.add_fingerprint(usr)
@@ -124,11 +128,7 @@
 				if (length(src.code) > 5)
 					src.code = "ERROR"
 		src.add_fingerprint(usr)
-		for(var/mob/M in viewers(1, src.loc))
-			if ((M.client && M.machine == src))
-				src.attack_self(M)
-			return
-	return
+		updateUsrDialog()
 
 // -----------------------------
 //        Secure Briefcase
@@ -156,7 +156,7 @@
 	if ((src.loc == user) && (src.locked == 1))
 		to_chat(usr, "<span class='warning'>[src] is locked and cannot be opened!</span>")
 	else if ((src.loc == user) && (!src.locked))
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(src, "rustle", 50, 1, -5)
 		if (user.s_active)
 			user.s_active.close(user) //Close and re-open
 		src.show_to(user)
@@ -223,6 +223,15 @@
 					H.eye_blurry += 3
 
 		return*/
+
+/obj/item/weapon/storage/secure/briefcase/assassin/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/weapon/spacecash/c1000(src)
+	new /obj/item/weapon/gun/energy/crossbow(src)
+	new /obj/item/weapon/gun/projectile/mateba(src)
+	new /obj/item/ammo_storage/box/a357(src)
+	new /obj/item/weapon/plastique(src)
 
 // -----------------------------
 //        Secure Safe

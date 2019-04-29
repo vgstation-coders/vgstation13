@@ -181,13 +181,12 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Continue</A><BR>")
 
 			if(8)	//view messages
-				for (var/obj/machinery/requests_console/Console in allConsoles)
-					if (Console.department == department)
-						Console.newmessagepriority = 0
-						Console.icon_state = "req_comp0"
-						Console.set_light(1)
-				newmessagepriority = 0
-				icon_state = "req_comp0"
+				if(!isAdminGhost(user)) //Do not clear if admin
+					for (var/obj/machinery/requests_console/Console in allConsoles)
+						if (Console.department == department)
+							Console.newmessagepriority = 0
+							Console.icon_state = "req_comp0"
+							Console.set_light(1)
 				for(var/msg in messages)
 					dat += text("[msg]<BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
@@ -255,6 +254,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				else
 					priority = -1
 		else
+			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
 			dpt = "";
 			msgVerified = ""
 			msgStamped = ""
@@ -271,6 +271,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				else
 					priority = -1
 		else
+			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
 			message = ""
 			announceAuth = 0
 			screen = 0
@@ -295,6 +296,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				if(!MS.is_functioning())
 					continue
 				MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
+				log_rc("[key_name(usr)] sent a message through \the [src] ([department]) to [href_list["department"]]. Message: \"[log_msg]\". Stamped: [msgStamped || "No"]. Verified: [msgVerified || "No"]. Prority: [priority]")
 				pass = 1
 
 			if(pass)
@@ -429,7 +431,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 			else
 				icon_state="req_comp_rewired"
-	if (isscrewdriver(O))
+	if (O.is_screwdriver(user))
 		if(open)
 			if(!hackState)
 				hackState = 1
@@ -441,7 +443,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			to_chat(user, "You can't do much with that.")
 	if(iswrench(O) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return

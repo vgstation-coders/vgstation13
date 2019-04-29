@@ -66,14 +66,15 @@
 /var/const/access_psychiatrist = 64 // Psychiatrist's office
 /var/const/access_salvage_captain = 65 // Salvage ship captain's quarters
 /var/const/access_weapons = 66 //Weapon authorization for secbots
-/var/const/access_taxi = 67 // Taxi drivers
+
 /var/const/access_shop = 68
+/var/const/access_biohazard = 69 // Virology crates
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
 /var/const/Mostly for admin fun times.*/
 /var/const/access_cent_general = 101//General facilities.
 /var/const/access_cent_thunder = 102//Thunderdome.
-/var/const/access_cent_specops = 103//Death Commando.
+/var/const/access_cent_specops = 103//Deathsquad.
 /var/const/access_cent_medical = 104//Medical/Research
 /var/const/access_cent_living = 105//Living quarters.
 /var/const/access_cent_storage = 106//Generic storage areas.
@@ -105,7 +106,7 @@
 	set_up_access()
 	if(!M || !istype(M))
 		return 0 // I guess?  This seems to happen when AIs use something.
-	if(M.hasFullAccess()) // AI, robots, adminghosts, etc.
+	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
 	return can_access(ACL,req_access,req_one_access)
@@ -235,10 +236,10 @@
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi)
+	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_biohazard)
 
 /proc/get_absolutely_all_accesses()
-	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain)
+	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain + access_trade)
 
 /proc/get_all_centcom_access()
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_creed, access_cent_captain)
@@ -264,7 +265,7 @@
 		if(1) //security
 			return list(access_sec_doors, access_weapons, access_security, access_brig, access_armory, access_forensics_lockers, access_court, access_hos)
 		if(2) //medbay
-			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_cmo)
+			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_biohazard, access_cmo)
 		if(3) //research
 			return list(access_science, access_rnd, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
 		if(4) //engineering and maintenance
@@ -274,7 +275,7 @@
 		if(6) //station general
 			return list(access_shop, access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer, access_clown, access_mime)
 		if(7) //supply
-			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
+			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
 
 /proc/get_region_accesses_name(var/code)
 	switch(code)
@@ -378,6 +379,8 @@
 			return "Robotics"
 		if(access_virology)
 			return "Virology"
+		if(access_biohazard)
+			return "Biohazard"
 		if(access_psychiatrist)
 			return "Psychiatrist's Office"
 		if(access_cmo)
@@ -433,8 +436,6 @@
 			return "Paramedic Station"
 		if(access_weapons)
 			return "Weapon Permit"
-		if(access_taxi)
-			return "Taxi Shuttle"
 		if(access_mechanic)
 			return "Mechanics Workshop"
 
@@ -512,4 +513,4 @@ proc/FindNameFromID(var/mob/living/carbon/human/H)
 			return ID.registered_name
 
 proc/get_all_job_icons() //For all existing HUD icons
-	return get_all_jobs() + list("Prisoner")
+	return get_all_jobs() + list("Prisoner", "visitor")

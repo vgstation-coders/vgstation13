@@ -16,7 +16,7 @@ Class Procs:
 		Preferable to accessing the connection directly because it checks validity.
 
 	place(connection/c, d)
-		Called by air_master.connect(). Sets the connection in the specified direction to c.
+		Called by SSair.connect(). Sets the connection in the specified direction to c.
 
 	update_all()
 		Called after turf/update_air_properties(). Updates the validity of all connections on this turf.

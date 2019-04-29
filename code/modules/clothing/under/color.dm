@@ -182,6 +182,7 @@
 	_color = "blpants"
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
+	body_parts_covered = LOWER_TORSO|LEGS
 
 /obj/item/clothing/under/redpants
 	name = "red pants"
@@ -189,6 +190,7 @@
 	_color = "rpants"
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
+	body_parts_covered = LOWER_TORSO|LEGS
 
 /obj/item/clothing/under/bluepants
 	name = "blue pants"
@@ -196,6 +198,7 @@
 	_color = "bpants"
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
+	body_parts_covered = LOWER_TORSO|LEGS
 
 /obj/item/clothing/under/greypants
 	name = "grey pants"
@@ -203,3 +206,4 @@
 	_color = "gpants"
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
+	body_parts_covered = LOWER_TORSO|LEGS

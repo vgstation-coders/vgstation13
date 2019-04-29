@@ -61,6 +61,14 @@ var/list/map_dimension_cache = list()
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
+	//If this is true, the lag is reduced at the cost of slower loading speed, and tiny atmos leaks during loading
+	var/remove_lag
+	if(map_element.load_at_once)
+		remove_lag = FALSE
+	else if(ticker && ticker.current_state > GAME_STATE_PREGAME)
+		//Lag doesn't matter before the game
+		remove_lag = TRUE
+
 	var/list/spawned_atoms = list()
 
 	var/quote = ascii2text(34)
@@ -127,7 +135,7 @@ var/list/map_dimension_cache = list()
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
-				spawned_atoms += parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
 			if(map_element)
 				map_element.width = xcrd - x_offset
 
@@ -137,11 +145,17 @@ var/list/map_dimension_cache = list()
 
 			ycrd--
 
-			sleep(-1)
+			if(remove_lag)
+				CHECK_TICK
+			else
+				sleep(-1)
 
 		if(map_element)
 			map_element.height = y_depth
-			map_element.location = locate(x_offset + 1, y_offset + 1, z_offset) //Set location to the upper left corner
+
+			if(!map_element.location)
+				//Set location to the lower left corner, if it hasn't already been set
+				map_element.location = locate(x_offset + 1, y_offset + 1, z_offset)
 
 		//reached End Of File
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
@@ -231,7 +245,7 @@ var/list/map_dimension_cache = list()
 
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
-		spawned_atoms |= instance
+		spawned_atoms.Add(instance)
 
 	if(_preloader && instance)
 		_preloader.load(instance)
@@ -275,7 +289,8 @@ var/list/map_dimension_cache = list()
 
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
-		spawned_atoms.Add(instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd))
+		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd)
+		spawned_atoms.Add(new_atom)
 
 	return spawned_atoms
 
@@ -304,7 +319,7 @@ var/list/map_dimension_cache = list()
 
 //text trimming (both directions) helper proc
 //optionally removes quotes before and after the text (for variable name)
-/dmm_suite/proc/trim_text(var/what as text,var/trim_quotes=0)
+/proc/trim_text(var/what as text,var/trim_quotes=0)
 	while(length(what) && (findtext(what," ",1,2)))
 		what=copytext(what,2,0)
 	while(length(what) && (findtext(what," ",length(what),0)))
@@ -318,7 +333,7 @@ var/list/map_dimension_cache = list()
 
 //find the position of the next delimiter,skipping whatever is comprised between opening_escape and closing_escape
 //returns 0 if reached the last delimiter
-/dmm_suite/proc/find_next_delimiter_position(var/text as text,var/initial_position as num, var/delimiter=",",var/opening_escape=quote,var/closing_escape=quote)
+/proc/find_next_delimiter_position(var/text as text,var/initial_position as num, var/delimiter=",",var/opening_escape=quote,var/closing_escape=quote)
 	var/position = initial_position
 	var/next_delimiter = findtext(text,delimiter,position,0)
 	var/next_opening = findtext(text,opening_escape,position,0)
@@ -333,7 +348,7 @@ var/list/map_dimension_cache = list()
 
 //build a list from variables in text form (e.g {var1="derp"; var2; var3=7} => list(var1="derp", var2, var3=7))
 //return the filled list
-/dmm_suite/proc/readlist(var/text as text,var/delimiter=",")
+/proc/readlist(var/text as text,var/delimiter=",")
 
 
 	var/list/to_return = list()
@@ -386,7 +401,7 @@ var/list/map_dimension_cache = list()
 //simulates the DM multiple turfs on one tile underlaying
 /dmm_suite/proc/add_underlying_turf(var/turf/placed,var/turf/underturf, var/list/turfs_underlays)
 	if(underturf.density)
-		placed.density = 1
+		placed.setDensity(TRUE)
 	if(underturf.opacity)
 		placed.opacity = 1
 	placed.underlays += turfs_underlays

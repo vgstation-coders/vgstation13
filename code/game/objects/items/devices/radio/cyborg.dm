@@ -11,13 +11,17 @@
 	keyslot = key
 	recalculateChannels()
 
+/obj/item/device/radio/borg/proc/reset_key()
+	keyslot = initial(keyslot)
+	recalculateChannels()
+
 /obj/item/device/radio/borg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
 	user.set_machine(src)
-	if (!( isscrewdriver(W) || (istype(W, /obj/item/device/encryptionkey/ ))))
+	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(keyslot)
 
 

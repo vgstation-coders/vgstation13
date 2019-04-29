@@ -33,13 +33,13 @@
 
 /datum/action/item_action/change_appearance_shoes
 	name = "Change Shoes Appearance"
-	
+
 /datum/action/item_action/change_appearance_shoes/Trigger()
 	var/obj/item/clothing/shoes/syndigaloshes/T = target
 	if(!istype(T))
 		return
 	T.change()
-	
+
 /obj/item/clothing/shoes/syndigaloshes/proc/change()
 	var/obj/item/clothing/shoes/A
 	A = input("Select Colour to change it to", "BOOYEA", A) as null|anything in clothing_choices
@@ -57,7 +57,7 @@
 	_color = A._color
 	step_sound = A.step_sound
 	usr.update_inv_w_uniform()	//so our overlays update.
-	
+
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"
 	icon_state = "mime"
@@ -143,6 +143,16 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/clothing/shoes/clown_shoes/elf
+	desc = "Jolly shoes for a jolly little elf!"
+	name = "elf shoes"
+	icon_state = "elf_shoes"
+	item_state = "elf_shoes"
+	_color = "elf_shoes"
+
+/obj/item/clothing/shoes/clown_shoes/elf/stickymagic
+	canremove = 0
+
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
 /obj/item/clothing/shoes/clown_shoes/advanced
@@ -165,6 +175,7 @@
 		"Taser" = 'sound/weapons/Taser.ogg',
 		"Male scream" = "malescream",
 		"Female scream" = "femalescream",
+		"Vox shriek" = 'sound/misc/shriek1.ogg',
 		"Male cough" = "malecough",
 		"Female cough" = "femalecough",
 		"Sad trombone" = 'sound/misc/sadtrombone.ogg',
@@ -183,8 +194,8 @@
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
 
-/obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/user)
-	if(user.mind && user.mind.assigned_role != "Clown")
+/obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
+	if(user.mind && !clumsy_check(user))
 		to_chat(user, "<span class='danger'>These shoes are too powerful for you to handle!</span>")
 		if(prob(25))
 			if(ishuman(user))
@@ -224,7 +235,7 @@
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 
-		if(H.mind && H.mind.assigned_role != "Clown")
+		if(H.mind && !clumsy_check(H))
 			if( ( H.mind.assigned_role == "Mime" ) )
 				H.Slip(3, 2, 1)
 
@@ -284,8 +295,9 @@
 	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
 	icon_state = "nr_boots"
 	item_state = "nr_boots"
+	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/shoes/cult
+/obj/item/clothing/shoes/cult_legacy
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
 	icon_state = "cult"
@@ -295,7 +307,7 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 
-/obj/item/clothing/shoes/cult/cultify()
+/obj/item/clothing/shoes/cult_legacy/cultify()
 	return
 
 /obj/item/clothing/shoes/cyborg
@@ -412,3 +424,57 @@
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/frankshoes
+	name = "Dr. Frank's leggings"
+	desc = "Perfect for wearing out to a late night double feature."
+	icon_state = "frankshoes"
+	item_state = "frankshoes"
+
+/obj/item/clothing/shoes/clockwork_boots
+	name = "clockwork boots"
+	desc = "A pair of boots worn by the followers of Ratvar."
+	icon_state = "clockwork"
+	item_state = "clockwork"
+
+/obj/item/clothing/shoes/knifeboot
+	name = "laceup shoes"
+	desc = "The height of fashion, and they're pre-polished!"
+	icon_state = "laceups"
+	item_state = "laceups"
+	species_fit = list(VOX_SHAPED)
+	actions_types = list(/datum/action/item_action/generic_toggle)
+	var/toggle = FALSE
+
+/obj/item/clothing/shoes/knifeboot/attack_self()
+	toggle = !toggle
+	to_chat(usr, "<span class = 'notice'>You toggle \the [src]'s hidden knife [toggle?"out":"in"].</span>")
+	update_icon()
+	..()
+
+/obj/item/clothing/shoes/knifeboot/update_icon()
+	if(toggle)
+		icon_state = "[initial(icon_state)]_1"
+	else
+		icon_state = initial(icon_state)
+	item_state = icon_state
+
+/obj/item/clothing/shoes/knifeboot/on_kick(mob/living/carbon/human/user, mob/living/victim)
+	if(istype(victim) && toggle)
+		var/datum/organ/external/affecting = victim.get_organ(ran_zone(user.zone_sel.selecting))
+		//Sharpness 1.5, force 10, edge = SHARP_TIP | SHARP_BLADE
+		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
+
+/obj/item/clothing/shoes/lich_king
+	name = "old knight greaves"
+	desc = "Battered by time, and questionably comfortable."
+	icon_state = "lichking_boots"
+	item_state = "lichking_boots"
+	wizard_garb = 1
+
+/obj/item/clothing/shoes/jackboots/inquisitor
+	name = "noble boots"
+	desc = "A pair of high quality black leather boots."
+	icon_state = "noble-boots"
+	item_state = "noble-boots"
+	wizard_garb = TRUE

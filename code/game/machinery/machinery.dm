@@ -115,6 +115,7 @@ Class Procs:
 	var/icon_state_open = ""
 
 	w_type = NOT_RECYCLABLE
+	layer = MACHINERY_LAYER
 
 	penetration_dampening = 5
 
@@ -155,9 +156,9 @@ Class Procs:
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
-		/obj/structure/cult/talisman,
-		/obj/structure/cult/forge,
-		/obj/structure/cult/tome
+		/obj/structure/cult_legacy/talisman,
+		/obj/structure/cult_legacy/forge,
+		/obj/structure/cult_legacy/tome
 		)
 	var/I = pick(random_structure)
 	new I(loc)
@@ -382,6 +383,7 @@ Class Procs:
 				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
 				return 1
 		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
 		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
@@ -474,7 +476,7 @@ Class Procs:
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 		dropFrame()
 		spillContents()
 		user.visible_message(	"<span class='notice'>[user] successfully pries out the circuitboard from \the [src]!</span>",
@@ -488,18 +490,33 @@ Class Procs:
 	spillContents(destroy_chance)
 	qdel(src)
 
-/obj/machinery/proc/togglePanelOpen(var/obj/toggleitem, var/mob/user)
+/obj/machinery/proc/togglePanelOpen(var/obj/item/toggleitem, var/mob/user)
 	panel_open = !panel_open
-	if(!icon_state_open)
-		icon_state_open = icon_state
 	if(panel_open)
-		icon_state = icon_state_open
+		if(icon_state_open)
+			icon_state = icon_state_open
 	else
-		icon_state = initial(icon_state)
+		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
+			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(isscrewdriver(toggleitem))
+	if(toggleitem.is_screwdriver(user))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 	update_icon()
+	return 1
+
+/obj/machinery/proc/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
+	if(!linked_account || panel_open)
+		togglePanelOpen(toggleitem, user)
+		return 1
+	if(!user.Adjacent(src))
+		return 0
+	var/account_try = input(user,"Please enter the already connected account number to unlock the panel","Security measure") as null|num
+	if(!user.Adjacent(src))
+		return 0
+	if(account_try != linked_account.account_number)
+		to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account. This incident will be reported.</span>")
+		return 0
+	togglePanelOpen(toggleitem, user)
 	return 1
 
 /obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
@@ -507,26 +524,24 @@ Class Procs:
 		state = 0 //since this might be wrong, we go sanity
 		to_chat(user, "You need to secure \the [src] before it can be welded.")
 		return -1
-	if (WT.remove_fuel(0,user))
-		playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-		user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
-				"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
-				"You hear welding.")
-		if (do_after(user, src,20))
-			if(!src || !WT.isOn())
+	user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
+		"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
+		"You hear welding.")
+	if (WT.do_weld(user, src,20, 0))
+		if(gcDestroyed)
+			return -1
+		switch(state)
+			if(0)
+				to_chat(user, "You have to keep \the [src] secure before it can be welded down.")
 				return -1
-			switch(state)
-				if(0)
-					to_chat(user, "You have to keep \the [src] secure before it can be welded down.")
-					return -1
-				if(1)
-					state = 2
-				if(2)
-					state = 1
-			user.visible_message(	"[user.name] [state - 1 ? "weld" : "unweld"]s \the [src] [state - 1 ? "to" : "from"] the floor.",
-									"[bicon(src)] You [state - 1 ? "weld" : "unweld"] \the [src] [state - 1 ? "to" : "from"] the floor."
-								)
-			return 1
+			if(1)
+				state = 2
+			if(2)
+				state = 1
+		user.visible_message(	"[user.name] [state - 1 ? "weld" : "unweld"]s \the [src] [state - 1 ? "to" : "from"] the floor.",
+								"[bicon(src)] You [state - 1 ? "weld" : "unweld"] \the [src] [state - 1 ? "to" : "from"] the floor."
+							)
+		return 1
 	else
 		to_chat(user, "<span class='rose'>You need more welding fuel to complete this task.</span>")
 		return -1
@@ -551,7 +566,7 @@ Class Procs:
 /obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
 	return emag_cost
 
-/obj/machinery/attackby(var/obj/O, var/mob/user)
+/obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
@@ -565,8 +580,7 @@ Class Procs:
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
 				return -1 //state set to 2, can't do it
 			else
-				// wrenchAnchor returns -1 on check failures, for some reason.
-				if(wrenchAnchor(user) == 1 && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+				if(wrenchAnchor(user) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
 					return 1
@@ -574,7 +588,9 @@ Class Procs:
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
 
-	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
+	if(O.is_screwdriver(user) && machine_flags & SCREWTOGGLE)
+		if(machine_flags & SECUREDPANEL)
+			return toggleSecuredPanelOpen(O, user)
 		return togglePanelOpen(O, user)
 
 	if(iswelder(O) && machine_flags & WELD_FIXED && canAffixHere(user))
@@ -620,9 +636,7 @@ Class Procs:
 		return 0
 	if(!prob(prb))
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start()
+	spark(src, 5)
 	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
 		siemenspassed = 0.7
 	if (electrocute_mob(user, get_area(src), src, siemenspassed))
@@ -648,13 +662,13 @@ Class Procs:
 	switch(notice_state)
 		if("ping")
 			src.visible_message("<span class='notice'>[bicon(src)] \The [src] pings.</span>")
-			playsound(get_turf(src), 'sound/machines/notify.ogg', 50, 0)
+			playsound(src, 'sound/machines/notify.ogg', 50, 0)
 		if("beep")
 			src.visible_message("<span class='notice'>[bicon(src)] \The [src] beeps.</span>")
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 		if("buzz")
 			src.visible_message("<span class='notice'>[bicon(src)] \The [src] buzzes.</span>")
-			playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
+			playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 
 /obj/machinery/proc/check_rebuild()
 	return
@@ -668,12 +682,11 @@ Class Procs:
 /obj/machinery/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
 	var/shouldplaysound = 0
 	if(component_parts)
-		if(panel_open)
+		if(panel_open || W.bluespace)
 			var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
 			var/P
 			for(var/obj/item/A in component_parts)
 				for(var/D in CB.req_components)
-					D = text2path(D) //For some stupid reason these are strings by default.
 					if(ispath(A.type, D))
 						P = D
 						break
@@ -689,18 +702,23 @@ Class Procs:
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
+		if(shouldplaysound)
+			W.play_rped_sound()
 		else
 			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
 			for(var/var/obj/item/C in component_parts)
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
-		if(shouldplaysound)
-			W.play_rped_sound()
 		return 1
 	return 0
 
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
-	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
+	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)
+		var/obj/O = H.locked_to
+		if(O.onBuckledUserKick(H, src))
+			return //don't return 1! we will do the normal "touch" action if so!
+
+	playsound(src, 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src].</span>", "<span class='danger'>You kick \the [src].</span>")
 	if(prob(70))
@@ -728,3 +746,6 @@ Class Procs:
 			scan.forceMove(get_turf(src))
 			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
 			scan = null
+
+/obj/machinery/proc/is_operational()
+	return !(stat & (NOPOWER|BROKEN|MAINT))

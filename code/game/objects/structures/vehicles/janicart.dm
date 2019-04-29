@@ -3,6 +3,14 @@
 	desc = "A keyring with a small steel key, and a pink fob reading \"Pussy Wagon\"."
 	icon_state = "jani_keys"
 
+/obj/item/key/janicart/New()
+	..()
+	janikeys_list.Add(src)
+
+/obj/item/key/janicart/Destroy()
+	janikeys_list.Remove(src)
+	..()
+
 /obj/item/mecha_parts/janicart_upgrade
 	name = "Janicart Cleaner Upgrade"
 	desc = "This device upgrades the janicart to automatically clean surfaces when driving."
@@ -25,6 +33,11 @@
 /obj/structure/bed/chair/vehicle/janicart/New()
 	. = ..()
 	create_reagents(100)
+	janicart_list.Add(src)
+
+/obj/structure/bed/chair/vehicle/janicart/Destroy()
+	janicart_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/janicart/examine(mob/user)
 	..()
@@ -64,7 +77,7 @@
 		if(reagents.total_volume >= 2)
 			reagents.trans_to(M, 3)
 			to_chat(user, "<span class='notice'>You wet the mop in \the [nick].</span>")
-			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		if(reagents.total_volume < 1)
 			to_chat(user, "<span class='notice'>\The [nick] is out of water!</span>")
 	return 1
@@ -103,7 +116,7 @@
 		return
 	..()
 
-/obj/structure/bed/chair/vehicle/janicart/Move()
+/obj/structure/bed/chair/vehicle/janicart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(upgraded)
 		var/turf/tile = loc
@@ -111,7 +124,7 @@
 			tile.clean_blood()
 			for(var/A in tile)
 				if(istype(A, /obj/effect))
-					if(istype(A, /obj/effect/rune) || istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/overlay))
+					if(iscleanaway(A))
 						qdel(A)
 				else if(istype(A, /obj/item))
 					var/obj/item/cleaned_item = A

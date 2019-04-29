@@ -92,7 +92,7 @@
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"
-	desc = "A bandolier designed with eight pouches for diffrent ammunition types."
+	desc = "A bandolier designed with eight pouches for different ammunition types."
 	icon_state = "bandolier"
 	_color = "bandolier"
 	storage_slots = 8

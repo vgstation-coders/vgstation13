@@ -10,6 +10,7 @@ nanoui is used to open and update nano browser uis
 #define STATUS_INTERACTIVE 2 // GREEN Visability
 #define STATUS_UPDATE 1 // ORANGE Visability
 #define STATUS_DISABLED 0 // RED Visability
+#define STATUS_CLOSE -1 // Close the window
 /datum/nanoui
 	// the user who opened this ui
 	var/mob/user
@@ -56,6 +57,8 @@ nanoui is used to open and update nano browser uis
 	var/is_auto_updating = 0
 	// the current status/visibility of the ui
 	var/status = STATUS_INTERACTIVE
+	// the proc to set the status
+	var/status_proc
 
 	// Only allow users with a certain user.stat to get updates. Defaults to 0 (concious)
 	var/allowed_user_stat = 0 // -1 = ignore, 0 = alive, 1 = unconcious or alive, 2 = dead concious or alive
@@ -75,12 +78,13 @@ nanoui is used to open and update nano browser uis
   *
   * @return /nanoui new nanoui object
   */
-/datum/nanoui/New(nuser, nsrc_object, nui_key, ntemplate_filename, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null, ignore_distance = 0)
+/datum/nanoui/New(nuser, nsrc_object, nui_key, ntemplate_filename, ntitle = 0, nwidth = 0, nheight = 0, var/atom/nref = null, ignore_distance = 0, nstatus_proc = /proc/nanoui_default_status_proc)
 	user = nuser
 	src_object = nsrc_object
 	ui_key = nui_key
 	window_id = "[ui_key]\ref[src_object]"
 	distance_check = !ignore_distance
+	status_proc = nstatus_proc
 	// add the passed template filename as the "main" template, this is required
 	add_template("main", ntemplate_filename)
 
@@ -132,23 +136,6 @@ nanoui is used to open and update nano browser uis
 				push_data(null, 1) // Update the UI, force the update in case the status is 0, data is null so that previous data is used
 
  /**
-  * Checks if the nanoui user can ignore distance checks.
-  *
-  * @param nothing
-  *
-  * @return Bool True if they can interact from any range
-  */
-
-/datum/nanoui/proc/check_interactive()
-	if(user.mutations && user.mutations.len)
-		if(M_TK in user.mutations)
-			return 1
-	if(isrobot(user))
-		if(src_object in view(7, user))
-			return 1
-	return (isAI(user) || !distance_check || isAdminGhost(user))
-
- /**
   * Update the status (visibility) of this ui based on the user's status
   *
   * @param push_update int (bool) Push an update to the ui to update it's status. This is set to 0/false if an update is going to be pushed anyway (to avoid unnessary updates)
@@ -156,43 +143,67 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/update_status(var/push_update = 0)
-	if (check_interactive())
-		set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
+	var/status = call(status_proc)(src)
+
+	if(status == STATUS_CLOSE)
+		close()
+		return
+
+	set_status(status, push_update)
+
+	/**
+   * The default proc to be called by update_status()
+   *
+   * @param nano /datum/nanoui/ The nanoui datum to perform default_status_proc for
+   *
+   * @return nothing
+   */
+/proc/nanoui_default_status_proc(var/datum/nanoui/nano)
+	var/can_interactive = 0
+	if(nano.user.mutations && nano.user.mutations.len)
+		if(M_TK in nano.user.mutations)
+			can_interactive = 1
+	else if(isrobot(nano.user))
+		if(nano.src_object in view(7, nano.user))
+			can_interactive = 1
+	else
+		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user))
+
+	if (can_interactive)
+		return STATUS_INTERACTIVE // interactive (green visibility)
 	else
 		var/dist = 0
-		if(istype(src_object, /atom))
-			var/atom/A = src_object
-			if(isobserver(user))
-				var/mob/dead/observer/O = user
+		if(istype(nano.src_object, /atom))
+			var/atom/A = nano.src_object
+			if(isobserver(nano.user))
+				var/mob/dead/observer/O = nano.user
 				var/ghost_flags = 0
 				if(A.ghost_write)
 					ghost_flags |= PERMIT_ALL
 				if(canGhostWrite(O,A,"",ghost_flags) || isAdminGhost(O))
-					set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
-					return
+					return STATUS_INTERACTIVE // interactive (green visibility)
 				else if(canGhostRead(O,A,ghost_flags))
-					set_status(STATUS_UPDATE, push_update)
-					return
-			dist = get_dist(src_object, user)
+					return STATUS_UPDATE
+			dist = get_dist(nano.src_object, nano.user)
 
 		if (dist > 4)
-			close()
-			return
+			return STATUS_CLOSE
 
-		if ((allowed_user_stat > -1) && (user.stat > allowed_user_stat))
-			set_status(STATUS_DISABLED, push_update) // no updates, completely disabled (red visibility)
-		else if (user.restrained() || user.lying)
-			set_status(STATUS_UPDATE, push_update) // update only (orange visibility)
-		else if (istype(src_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
-			set_status(STATUS_INTERACTIVE, push_update)	     // Will build in distance checks on the topics for sanity.
-		else if (!(src_object in view(4, user))) // If the src object is not in visable, set status to 0
-			set_status(STATUS_DISABLED, push_update) // interactive (green visibility)
+		if ((nano.allowed_user_stat > -1) && (nano.user.stat > nano.allowed_user_stat))
+			return STATUS_DISABLED // no updates, completely disabled (red visibility)
+		else if (nano.user.restrained() || nano.user.lying)
+			return STATUS_UPDATE // update only (orange visibility)
+		else if (istype(nano.src_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
+			return STATUS_INTERACTIVE // Will build in distance checks on the topics for sanity.
+		else if (!(nano.src_object in view(4, nano.user))) // If the src object is not in visable, set status to 0
+			return STATUS_DISABLED // interactive (green visibility)
 		else if (dist <= 1)
-			set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
+			return STATUS_INTERACTIVE // interactive (green visibility)
 		else if (dist <= 2)
-			set_status(STATUS_UPDATE, push_update) // update only (orange visibility)
+			return STATUS_UPDATE // update only (orange visibility)
 		else if (dist <= 4)
-			set_status(STATUS_DISABLED, push_update) // no updates, completely disabled (red visibility)
+			return STATUS_DISABLED // no updates, completely disabled (red visibility)
+
 
  /**
   * Set the ui to auto update (every master_controller tick)
@@ -396,12 +407,12 @@ nanoui is used to open and update nano browser uis
 
 	var/template_data_json = "{}" // An empty JSON object
 	if (templates.len > 0)
-		template_data_json = list2json(templates)
+		template_data_json = replacetext(json_encode(templates), "'", "&#39;")
 
 	var/list/send_data = get_send_data(initial_data)
-	var/initial_data_json = list2json(send_data)
+	var/initial_data_json = replacetext(json_encode(send_data), "'", "&#39;")
 
-	var/url_parameters_json = list2json(list("src" = "\ref[src]"))
+	var/url_parameters_json = json_encode(list("src" = "\ref[src]"))
 
 	return {"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -455,6 +466,15 @@ nanoui is used to open and update nano browser uis
 	nanomanager.ui_opened(src)
 
  /**
+  * Move window up front.
+  *
+  * @return nothing
+  */
+/datum/nanoui/proc/focus()
+	winset(user, window_id, "focus=true")
+	winset(user, "mapwindow.map", "focus=true") // return keyboard focus to map
+
+ /**
   * Close this UI
   *
   * @return nothing
@@ -471,11 +491,13 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/on_close_winset()
-	if(!user)
-		return
-	var/params = "\ref[src]"
-
-	winset(user, window_id, "on-close=\"nanoclose [params]\"")
+	set waitfor = FALSE // winexists sleeps
+	for(var/i in 1 to WINSET_MAX_ATTEMPTS)
+		if(user && winexists(user, window_id))
+			var/params = "\ref[src]"
+			winset(user, window_id, "on-close=\"nanoclose [params]\"")
+			return
+	close()
 
  /**
   * Push data to an already open UI window
@@ -489,9 +511,9 @@ nanoui is used to open and update nano browser uis
 
 	var/list/send_data = get_send_data(data)
 
-//	to_chat(user, list2json(data))// used for debugging
+//	to_chat(user, json_encode(data))// used for debugging
 
-	user << output(list2params(list(list2json(send_data))),"[window_id].browser:receiveUpdateData")
+	user << output(list2params(list(json_encode(send_data))),"[window_id].browser:receiveUpdateData")
 
  /**
   * This Topic() proc is called whenever a user clicks on a link within a Nano UI
@@ -552,3 +574,14 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/update(var/force_open = 0)
 	src_object.ui_interact(user, ui_key, src, force_open)
+
+/mob/verb/fix_nanoui()
+	set name = "Fix NanoUI"
+	set category = "OOC"
+
+	world.log << "[key_name(src)] used the Fix NanoUI verb. Open UIs: [length(open_uis)]"
+	for(var/datum/nanoui/ui in open_uis)
+		CHECK_TICK
+		world.log << url_decode(winget(ui.user, ui.window_id, "*"))
+		ui.close()
+	to_chat(src, "<span class='notice'>All Nano UIs should be closed now.</span>")

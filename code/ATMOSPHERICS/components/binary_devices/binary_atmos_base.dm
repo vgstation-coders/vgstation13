@@ -14,6 +14,7 @@
 
 	var/activity_log = ""
 	layer = BINARY_PIPE_LAYER
+	var/on = FALSE
 
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
@@ -46,6 +47,26 @@
 /obj/machinery/atmospherics/binary/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2)
 	..(adjacent_procd,node_list)
+
+// Returns TRUE if successful
+/obj/machinery/atmospherics/binary/proc/toggle_status(var/mob/user)
+	if(!allowed(user))
+		to_chat(user, "<span class='warning'>Access denied.</span>")
+		return FALSE
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
+	on = !on
+	investigation_log(I_ATMOS, "was turned [on ? "on" : "off"] by [key_name(user)].")
+	update_icon()
+	return TRUE
+
+/obj/machinery/atmospherics/binary/AltClick(var/mob/user)
+	if(user.incapacitated() || (!issilicon(user) && !Adjacent(user)))
+		..()
+		return
+	if(!toggle_status(user)) // Subtypes returning FALSE do not allow alt-clicking to toggle power
+		..()
 
 /obj/machinery/atmospherics/binary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
@@ -99,13 +120,14 @@
 	if(node1 && node2)
 		return
 
+	// While other pipes/atmos machinery can use whatever node for any other pipe,
+	// most binary pumps must specifically have the succ end on node1, and the blow
+	// end on node2.
 	node1 = findConnecting(turn(dir, 180))
 	node2 = findConnecting(dir)
 
 	update_icon()
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)

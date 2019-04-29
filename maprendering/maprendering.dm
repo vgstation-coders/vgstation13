@@ -69,41 +69,16 @@
 						if(!allturfcontents.len)
 							continue
 
-						//Initializing our layer sorting variables
-						var/list/sorting = list()
-						var/atom/currentAtom = allturfcontents[1]
-						var/currentLayer
-						sorting[allturfcontents[1]] = currentAtom.layer
-						allturfcontents -= currentAtom
-						var/currentIndex = 1
-						var/compareIndex = 1
-
-						if(allturfcontents.len)
-							//Simple insertion sort, simple variant of the form in getflaticon
-							while(currentIndex <= allturfcontents.len)
-								currentAtom = allturfcontents[currentIndex]
-								currentLayer = currentAtom.layer
-
-								for(compareIndex=1,compareIndex<=sorting.len,compareIndex++)
-									if(currentLayer < sorting[sorting[compareIndex]])
-										sorting.Insert(compareIndex,currentAtom)
-										sorting[currentAtom] = currentLayer
-										break
-								if(compareIndex>sorting.len)
-									sorting[currentAtom]=currentLayer
-
-								currentIndex++
-
 						//Preparing to blend get flat icon of
-						for(var/atom/A in sorting)
-							var/icon/icontoblend = getFlatIcon(A = A, dir = A.dir, cache = 0)
+						for(var/A in plane_layer_sort(allturfcontents))
+							var/icon/icontoblend = getFlatIcon(A,A:dir, cache = 0)
 							map_icon.Blend(icontoblend, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 						sleep(-1)
 
-				for(var/atom/A in pixel_shift_objects)
-					var/icon/icontoblend = getFlatIcon(A = A, dir = A.dir, cache = 0)
+				for(var/A in pixel_shift_objects)
+					var/icon/icontoblend = getFlatIcon(A, A:dir, cache = 0)
 					//This part is tricky since we've skipped a and b, since these are map objects they have valid x,y. a and b should be the modulo'd value of x,y with icon_size
-					map_icon.Blend(icontoblend, ICON_OVERLAY, (((A.x % icon_size)-1)*WORLD_ICON_SIZE)+1+A.pixel_x, (((A.y % icon_size)-1)*WORLD_ICON_SIZE)+1+A.pixel_y)
+					map_icon.Blend(icontoblend, ICON_OVERLAY, (((A:x % icon_size)-1)*WORLD_ICON_SIZE)+1+A:pixel_x, (((A:y % icon_size)-1)*WORLD_ICON_SIZE)+1+A:pixel_y)
 
 				if(y >= world.maxy)
 					map_icon.DrawBox(rgb(255,255,255,255), x1 = 1, y1 = 1, x2 = WORLD_ICON_SIZE*icon_size, y2 = WORLD_ICON_SIZE*(icon_size-world.maxy % icon_size))
@@ -119,3 +94,5 @@
 				if(fexists(resultpath))
 					fdel(resultpath)
 				fcopy(result_icon, resultpath)
+	to_chat(world, "<b>The map has been rendered successfully<b>")
+	src << sound('sound/effects/maprendercomplete.ogg')

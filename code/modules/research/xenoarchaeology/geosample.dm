@@ -105,7 +105,7 @@
 
 	//loop over finds, grab any relevant stuff
 	for(var/datum/find/F in container.finds)
-		var/responsive_reagent = get_responsive_reagent(F.find_type)
+		var/responsive_reagent = F.responsive_reagent
 		find_presence[responsive_reagent] = F.dissonance_spread
 
 	//loop over again to reset values to percentages

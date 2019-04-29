@@ -75,6 +75,8 @@
 			for(var/mob/living/L in get_turf(src))
 				if(issilicon(L))
 					continue
+				if(L.mutations.Find(M_UNBURNABLE))
+					continue
 
 				if(!L.on_fire)
 					L.adjust_fire_stacks(0.5)
@@ -99,8 +101,10 @@
 			for(var/obj/effect/E in get_turf(A))
 				if(istype(E, /obj/effect/blob))
 					var/obj/effect/blob/B = E
-					B.health -= (adjusted_fire_damage/10)
+					B.health -= (adjusted_fire_damage/2)
 					B.update_icon()
+					B.update_health()
+
 			var/turf/T2 = get_turf(src)
 			T2.hotspot_expose((blast_temperature * 2) + 380,500)
 			sleep(2)
@@ -114,6 +118,9 @@
 	..(T, damage, current_step, age, pressure, blast_temperature, fire_duration)
 	spread_start = 0
 	spread_chance = 30
+
+/obj/effect/fire_blast/no_spread
+	spread = 0
 
 /obj/effect/gas_puff
 	name = "gas puff"

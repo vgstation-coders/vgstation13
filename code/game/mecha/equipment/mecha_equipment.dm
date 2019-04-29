@@ -15,6 +15,8 @@
 	var/range = MELEE //bitflags
 	reliability = 1000
 	var/salvageable = 1
+	var/is_activateable = 1
+	var/spell/mech/linked_spell //Default action is to make the make it the active equipment
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/do_after_cooldown(target=1, delay_mult=1)
@@ -42,7 +44,7 @@
 		return 1
 	return
 
-/obj/item/mecha_parts/mecha_equipment/proc/destroy()//missiles detonating, teleporter creating singularity?
+/obj/item/mecha_parts/mecha_equipment/Destroy()//missiles detonating, teleporter creating singularity?
 	if(chassis)
 		chassis.equipment -= src
 		listclearnulls(chassis.equipment)
@@ -55,9 +57,7 @@
 			chassis.occupant << sound('sound/mecha/weapdestr.ogg',volume=50)
 		else
 			chassis.occupant << sound('sound/mecha/critdestr.ogg',volume=50)
-	spawn
-		qdel (src)
-	return
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/proc/critfail()
 	if(chassis)
@@ -74,7 +74,6 @@
 
 /obj/item/mecha_parts/mecha_equipment/proc/is_melee()
 	return (range&MELEE)
-
 
 /obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
 	if(!target)
@@ -106,6 +105,9 @@
 	if(!M.selected)
 		M.selected = src
 	src.update_chassis_page()
+	if(is_activateable)
+		linked_spell = new /spell/mech(M, src)
+	M.refresh_spells()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
@@ -117,13 +119,17 @@
 		chassis.selected = null
 	update_chassis_page()
 	chassis.log_message("[src] removed from equipment.")
+	chassis.refresh_spells()
 	chassis = null
+	linked_spell = null
 	set_ready_state(1)
 	return
 
 
 /obj/item/mecha_parts/mecha_equipment/Topic(href,href_list)
-	testing("[src] topic")
+	if(usr.incapacitated() || usr != chassis.occupant)
+		return TRUE
+//	testing("[src] topic")
 	if(href_list["detach"])
 		detach()
 	return
@@ -135,12 +141,23 @@
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	return
 
-/obj/item/mecha_parts/mecha_equipment/proc/occupant_message(message)
+/obj/item/mecha_parts/mecha_equipment/proc/occupant_message(var/message, var/prevent_spam = FALSE)
 	if(chassis)
-		chassis.occupant_message("[bicon(src)] [message]")
-	return
+		chassis.occupant_message("[bicon(src)] [message]", prevent_spam)
 
 /obj/item/mecha_parts/mecha_equipment/proc/log_message(message)
 	if(chassis)
 		chassis.log_message("<i>[src]:</i> [message]")
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/on_mech_step()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/on_mech_turn()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/activate()
+	chassis.equip_module(src)
+
+/obj/item/mecha_parts/mecha_equipment/proc/alt_action()
 	return

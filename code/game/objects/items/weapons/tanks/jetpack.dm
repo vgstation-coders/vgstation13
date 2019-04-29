@@ -86,7 +86,7 @@
 
 /obj/item/weapon/tank/jetpack/void/New()
 	. = ..()
-	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+	air_contents.adjust_gas(GAS_OXYGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/oxygen
 	name = "Jetpack (Oxygen)"
@@ -96,7 +96,7 @@
 
 /obj/item/weapon/tank/jetpack/oxygen/New()
 	. = ..()
-	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+	air_contents.adjust_gas(GAS_OXYGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/oxygen/nukeops
 	desc = "A tank of compressed oxygen for use as propulsion in zero-gravity areas. This one is unusually heavy."
@@ -110,7 +110,7 @@
 
 /obj/item/weapon/tank/jetpack/nitrogen/New()
 	. = ..()
-	air_contents.adjust(, , (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+	air_contents.adjust_gas(GAS_NITROGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/carbondioxide
 	name = "Jetpack (Carbon Dioxide)"
@@ -121,7 +121,7 @@
 
 /obj/item/weapon/tank/jetpack/carbondioxide/New()
 	. = ..()
-	air_contents.adjust(, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+	air_contents.adjust_gas(GAS_CARBON, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
 /obj/item/weapon/tank/jetpack/carbondioxide/silicon
 	actions_types = list(/datum/action/item_action/jetpack_stabilization,/datum/action/item_action/toggle_jetpack)

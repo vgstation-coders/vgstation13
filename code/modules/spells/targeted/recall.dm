@@ -1,6 +1,7 @@
 /spell/targeted/bound_object
 	name = "Bound Object"
 	desc = "This spell allows a wizard to bind an object to themselves, then teleport it to them at will. Middle click the spell icon or use the 'Unbind' spell to select a new object."
+	user_type = USER_TYPE_WIZARD
 	abbreviation = "BO"
 
 	school = "abjuration"
@@ -41,10 +42,6 @@
 		/obj/structure/closet/secure_closet/brig,				//brig cell closets
 		/obj/machinery/disposal,								//disposal bins
 		/obj/machinery/light,									//light bulbs and tubes
-		/obj/machinery/sleep_console,							//sleeper consoles
-		/obj/machinery/sleeper,									//sleepers
-		/obj/machinery/body_scanconsole,						//body scanner consoles
-		/obj/machinery/bodyscanner,								//body scanners
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
 		)
@@ -87,9 +84,7 @@
 				user.put_in_hands(I)
 			else
 				bound.forceMove(get_turf(user))
-			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-			sparks.set_up(3, 0, oldloc)
-			sparks.start()
+			spark(oldloc, 3, FALSE)
 			take_charge(user)
 		return 1
 	return 0

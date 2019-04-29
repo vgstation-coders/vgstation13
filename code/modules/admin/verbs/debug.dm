@@ -82,50 +82,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		var/i
 		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-
-			// Make a list with each index containing one variable, to be given to the proc
-			class = input("What kind of variable?","Variable Type") in list("text","num","type","reference","mob reference","icon","file","client","mob's area", holder.marked_datum ? "marked datum ([holder.marked_datum.type])" : null, "CANCEL")
-
-			if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-				class = "marked_datum"
-
-			switch(class)
-				if("CANCEL")
-					return
-
-				if("text")
-					lst[i] = input("Enter new text:","Text",null) as text
-
-				if("num")
-					lst[i] = input("Enter new number:","Num",0) as num
-
-				if("type")
-					lst[i] = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
-
-				if("reference")
-					lst[i] = input("Select reference:","Reference",src) as mob|obj|turf|area in world
-
-				if("mob reference")
-					lst[i] = input("Select reference:","Reference",usr) as mob in world
-
-				if("file")
-					lst[i] = input("Pick file:","File") as file
-
-				if("icon")
-					lst[i] = input("Pick icon:","Icon") as icon
-
-				if("client")
-					var/list/keys = list()
-					for(var/mob/M in mob_list)
-						keys += M.client
-					lst[i] = input("Please, select a player!", "Selection", null, null) as null|anything in keys
-
-				if("mob's area")
-					var/mob/temp = input("Select mob", "Selection", usr) as mob in world
-					lst[i] = temp.loc
-
-				if("marked_datum")
-					lst[i] = holder.marked_datum
+			lst[i] = variable_set(src)
 
 		if(targetselected)
 			if(!target)
@@ -139,7 +96,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 			returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval ? returnval : "null"]</font>")
+		if(isnull(returnval))
+			returnval = "null"
+		else if(returnval == "")
+			returnval = "\"\" (empty string)"
+		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
@@ -153,7 +114,6 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		var/lst[] // List reference
 		lst = new/list() // Make the list
 		var/returnval = null
-		var/class = null
 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 		if(!procname)
@@ -161,6 +121,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		if(!hascall(target, procname))
 			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
+			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
 		if(!argnum && (argnum!=0))
@@ -173,55 +134,16 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		var/i
 		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-
-			// Make a list with each index containing one variable, to be given to the proc
-			class = input("What kind of variable?","Variable Type") in list("text", "num", "type", "reference", "mob reference", "icon", "file", "client", "mob's area", holder.marked_datum ? "marked datum ([holder.marked_datum.type])" : null, "CANCEL")
-
-			if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-				class = "marked_datum"
-
-			switch(class)
-				if("CANCEL")
-					return
-
-				if("text")
-					lst[i] = input("Enter new text:","Text",null) as text
-
-				if("num")
-					lst[i] = input("Enter new number:","Num",0) as num
-
-				if("type")
-					lst[i] = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
-
-				if("reference")
-					lst[i] = input("Select reference:","Reference",src) as mob|obj|turf|area in world
-
-				if("mob reference")
-					lst[i] = input("Select reference:","Reference",usr) as mob in world
-
-				if("file")
-					lst[i] = input("Pick file:","File") as file
-
-				if("icon")
-					lst[i] = input("Pick icon:","Icon") as icon
-
-				if("client")
-					var/list/keys = list()
-					for(var/mob/M in mob_list)
-						keys += M.client
-					lst[i] = input("Please, select a player!", "Selection", null, null) as null|anything in keys
-
-				if("mob's area")
-					var/mob/temp = input("Select mob", "Selection", usr) as mob in world
-					lst[i] = temp.loc
-
-				if("marked_datum")
-					lst[i] = holder.marked_datum
+			lst[i] = variable_set(src)
 
 		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval ? returnval : "null"]</font>")
+		if(isnull(returnval))
+			returnval = "null"
+		else if(returnval == "")
+			returnval = "\"\" (empty string)"
+		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -239,11 +161,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	t += {"Nitrogen : [env.nitrogen]
-Oxygen : [env.oxygen]
-Plasma : [env.toxins]
-CO2: [env.carbon_dioxide]
-Pressure: [env.return_pressure()]"}
+	t += {"Nitrogen : [env[GAS_NITROGEN]]
+Oxygen : [env[GAS_OXYGEN]]
+Plasma : [env[GAS_PLASMA]]
+CO2: [env[GAS_CARBON]]
+Pressure: [env.pressure]"}
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -422,7 +344,7 @@ Pressure: [env.return_pressure()]"}
 		else
 			if(alert("Spawn that person a tome?",,"Yes","No")=="Yes")
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground.</span>")
-				new /obj/item/weapon/tome(M.loc)
+				new /obj/item/weapon/tome_legacy(M.loc)
 			else
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			var/glimpse=pick("1","2","3","4","5","6","7","8")
@@ -551,42 +473,42 @@ Pressure: [env.return_pressure()]"}
 	var/list/areas_with_camera = list()
 
 	for(var/area/A in areas)
-		if(!(A.type in areas_all))
+		if(A && !(A.type in areas_all))
 			areas_all.Add(A.type)
 
 	for(var/obj/machinery/power/apc/APC in power_machines)
 		var/area/A = get_area(APC)
-		if(!(A.type in areas_with_APC))
+		if(A && !(A.type in areas_with_APC))
 			areas_with_APC.Add(A.type)
 
 	for(var/obj/machinery/alarm/alarm in machines)
 		var/area/A = get_area(alarm)
-		if(!(A.type in areas_with_air_alarm))
+		if(A && !(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
 	for(var/obj/machinery/requests_console/RC in allConsoles)
 		var/area/A = get_area(RC)
-		if(!(A.type in areas_with_RC))
+		if(A && !(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
 
 	for(var/obj/machinery/light/L in alllights)
 		var/area/A = get_area(L)
-		if(!(A.type in areas_with_light))
+		if(A && !(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
 
 	for(var/obj/machinery/light_switch/LS in world)
 		var/area/A = get_area(LS)
-		if(!(A.type in areas_with_LS))
+		if(A && !(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
 
 	for(var/obj/item/device/radio/intercom/I in world)
 		var/area/A = get_area(I)
-		if(!(A.type in areas_with_intercom))
+		if(A && !(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
 
 	for(var/obj/machinery/camera/C in cameranet.cameras)
 		var/area/A = get_area(C)
-		if(!(A.type in areas_with_camera))
+		if(A && !(A.type in areas_with_camera))
 			areas_with_camera.Add(A.type)
 
 	var/list/areas_without_APC = areas_all - areas_with_APC
@@ -625,486 +547,6 @@ Pressure: [env.return_pressure()]"}
 	for(var/areatype in areas_without_camera)
 		to_chat(world, "* [areatype]")
 
-/client/proc/cmd_admin_dress(var/mob/living/carbon/human/M in mob_list)
-	set category = "Fun"
-	set name = "Select equipment"
-
-	if(!check_rights(R_SPAWN))
-		return
-
-	if(!ishuman(M))
-		alert("Invalid mob")
-		return
-
-	var/list/dresspacks = list(
-		"strip",
-		"Engineer RIG",
-		"CE RIG",
-		"Mining RIG",
-		"Syndi RIG",
-		"Wizard RIG",
-		"Medical RIG",
-		"Atmos RIG",
-		"standard space gear",
-		"tournament standard red",
-		"tournament standard green",
-		"tournament gangster",
-		"tournament chef",
-		"tournament janitor",
-		"pirate",
-		"space pirate",
-		"soviet admiral",
-		"tunnel clown",
-		"masked killer",
-		"assassin",
-		"death commando",
-		"syndicate commando",
-		"special ops officer",
-		"blue wizard",
-		"red wizard",
-		"marisa wizard",
-		"emergency response team",
-		"nanotrasen representative",
-		"nanotrasen officer",
-		"nanotrasen captain",
-		"nanotrasen supreme commander",
-		"Bomberman",
-		"Bomberman(arena)",
-		)
-
-	var/dostrip = input("Do you want to strip [M] before equipping them? (0=no, 1=yes)", "STRIPTEASE") as null|anything in list(0,1)
-	if(isnull(dostrip))
-		return
-	var/dresscode = input("Select dress for [M]", "Robust quick dress shop") as null|anything in dresspacks
-	if (isnull(dresscode))
-		return
-	feedback_add_details("admin_verb","SEQ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	if(dostrip)
-		for (var/obj/item/I in M)
-			if (istype(I, /obj/item/weapon/implant))
-				continue
-			qdel(I)
-	switch(dresscode)
-		if ("strip")
-			//do nothing
-		if ("standard space gear")
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/color/grey(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space(M), slot_head)
-			var /obj/item/weapon/tank/jetpack/J = new /obj/item/weapon/tank/jetpack/oxygen(M)
-			M.equip_to_slot_or_del(J, slot_back)
-			J.toggle()
-			M.equip_to_slot_or_del(new /obj/item/clothing/mask/breath(M), slot_wear_mask)
-			J.Topic(null, list("stat" = 1))
-		if ("Engineer RIG","CE RIG","Mining RIG","Syndi RIG","Wizard RIG","Medical RIG","Atmos RIG")
-			if(dresscode=="Engineer RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig(M), slot_head)
-			else if(dresscode=="CE RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/elite(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/elite(M), slot_head)
-			else if(dresscode=="Mining RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/mining(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/mining(M), slot_head)
-			else if(dresscode=="Syndi RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi(M), slot_head)
-			else if(dresscode=="Wizard RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/wizard(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/wizard(M), slot_head)
-			else if(dresscode=="Medical RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/medical(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/medical(M), slot_head)
-			else if(dresscode=="Atmos RIG")
-				M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/atmos(M), slot_wear_suit)
-				M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/atmos(M), slot_head)
-			var /obj/item/weapon/tank/jetpack/J = new /obj/item/weapon/tank/jetpack/oxygen(M)
-			M.equip_to_slot_or_del(J, slot_back)
-			J.toggle()
-			M.equip_to_slot_or_del(new /obj/item/clothing/mask/breath(M), slot_wear_mask)
-			J.Topic(null, list("stat" = 1))
-
-		if ("tournament standard red","tournament standard green") //we think stunning weapon is too overpowered to use it on tournaments. --rastaf0
-			if (dresscode=="tournament standard red")
-				M.equip_to_slot_or_del(new /obj/item/clothing/under/color/red(M), slot_w_uniform)
-			else
-				M.equip_to_slot_or_del(new /obj/item/clothing/under/color/green(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/vest(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/thunderdome(M), slot_head)
-
-			M.put_in_hands(new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(M))
-			M.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(M))
-			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/smokebomb(M), slot_r_store)
-
-
-		if ("tournament gangster") //gangster are supposed to fight each other. --rastaf0
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/det(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/det_suit(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/det_hat(M), slot_head)
-
-			M.equip_to_slot_or_del(new /obj/item/weapon/cloaking_device(M), slot_r_store)
-
-			M.put_in_hands(new /obj/item/weapon/gun/projectile(M))
-			M.equip_to_slot_or_del(new /obj/item/ammo_storage/box/a357(M), slot_l_store)
-
-		if ("tournament chef") //Steven Seagal FTW
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/chef(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/chef(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/chefhat(M), slot_head)
-
-			M.put_in_hands(new /obj/item/weapon/kitchen/rollingpin(M))
-			M.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(M))
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_s_store)
-
-		if ("tournament janitor")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/janitor(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-			var/obj/item/weapon/storage/backpack/backpack = new(M)
-			for(var/obj/item/I in backpack)
-				qdel(I)
-			M.equip_to_slot_or_del(backpack, slot_back)
-
-			M.put_in_hands(new /obj/item/weapon/mop(M))
-			var/obj/item/weapon/reagent_containers/glass/bucket/bucket = new(M)
-			bucket.reagents.add_reagent(WATER, 70)
-			M.put_in_hands(bucket)
-
-			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/chem_grenade/cleaner(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/chem_grenade/cleaner(M), slot_l_store)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-			M.equip_to_slot_or_del(new /obj/item/stack/tile/plasteel(M), slot_in_backpack)
-
-		if ("pirate")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/pirate(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/bandana(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/eyepatch(M), slot_glasses)
-			M.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(M))
-
-		if ("space pirate")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/pirate(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/pirate(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/pirate(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/eyepatch(M), slot_glasses)
-
-			M.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(M))
-
-		if ("soviet soldier")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/soviet(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/ushanka(M), slot_head)
-
-		if("tunnel clown")//Tunnel clowns rule!
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/clown(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/clown_shoes(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/black(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/clown_hat(M), slot_wear_mask)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/chaplain_hood(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/chaplain_hoodie(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(M), slot_l_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/bikehorn(M), slot_r_store)
-
-			var/obj/item/weapon/card/id/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.access = get_all_accesses()
-			W.assignment = "Tunnel Clown!"
-			W.registered_name = M.real_name
-			M.equip_to_slot_or_del(W, slot_wear_id)
-
-			var/obj/item/weapon/fire_axe = new(M)
-			M.put_in_hands(fire_axe)
-
-		if("masked killer")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/overalls(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/white(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/latex(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/clothing/mask/surgical(M), slot_wear_mask)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/welding(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/apron(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_l_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/scalpel(M), slot_r_store)
-
-			var/obj/item/weapon/fire_axe = new(M)
-			M.put_in_hands(fire_axe)
-
-			for(var/obj/item/carried_item in M.contents)
-				if(!istype(carried_item, /obj/item/weapon/implant))//If it's not an implant.
-					carried_item.add_blood(M)//Oh yes, there will be blood...
-
-		if("assassin")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/suit_jacket(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/black(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/wcoat(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword(M), slot_l_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/cloaking_device(M), slot_r_store)
-
-			var/obj/item/weapon/storage/secure/briefcase/sec_briefcase = new(M)
-			for(var/obj/item/briefcase_item in sec_briefcase)
-				qdel(briefcase_item)
-			for(var/i=3, i>0, i--)
-				sec_briefcase.contents += new /obj/item/weapon/spacecash/c1000
-			sec_briefcase.contents += new /obj/item/weapon/gun/energy/crossbow
-			sec_briefcase.contents += new /obj/item/weapon/gun/projectile/mateba
-			sec_briefcase.contents += new /obj/item/ammo_storage/box/a357
-			sec_briefcase.contents += new /obj/item/weapon/plastique
-			M.put_in_hands(sec_briefcase)
-
-			var/obj/item/device/pda/heads/pda = new(M)
-			pda.owner = M.real_name
-			pda.ownjob = "Reaper"
-			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
-
-			M.equip_to_slot_or_del(pda, slot_belt)
-
-			var/obj/item/weapon/card/id/syndicate/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.access = get_all_accesses()
-			W.assignment = "Reaper"
-			W.registered_name = M.real_name
-			M.equip_to_slot_or_del(W, slot_wear_id)
-
-		if("death commando")//Was looking to add this for a while.
-			M.equip_death_commando()
-
-		if("syndicate commando")
-			M.equip_syndicate_commando()
-
-		if("nanotrasen representative")
-			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/representative(M), slot_w_uniform)
-			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
-			M.equip_if_possible(new /obj/item/clothing/gloves/white(M), slot_gloves)
-			M.equip_if_possible(new /obj/item/device/radio/headset/heads/hop(M), slot_ears)
-
-			var/obj/item/device/pda/heads/pda = new(M)
-			pda.owner = M.real_name
-			pda.ownjob = "Nanotrasen Navy Representative"
-			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
-
-			M.equip_if_possible(pda, slot_r_store)
-			M.equip_if_possible(new /obj/item/clothing/glasses/sunglasses(M), slot_l_store)
-			M.equip_if_possible(new /obj/item/weapon/clipboard(M), slot_belt)
-
-			var/obj/item/weapon/card/id/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.icon_state = "centcom"
-			W.item_state = "id_inv"
-			W.access = get_all_accesses()
-			W.access += list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer")
-			W.assignment = "Nanotrasen Navy Representative"
-			W.registered_name = M.real_name
-			M.equip_if_possible(W, slot_wear_id)
-
-		if("nanotrasen officer")
-			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/officer(M), slot_w_uniform)
-			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
-			M.equip_if_possible(new /obj/item/clothing/gloves/white(M), slot_gloves)
-			M.equip_if_possible(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
-			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/officer(M), slot_head)
-
-			var/obj/item/device/pda/heads/pda = new(M)
-			pda.owner = M.real_name
-			pda.ownjob = "Nanotrasen Navy Officer"
-			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
-
-			M.equip_if_possible(pda, slot_r_store)
-			M.equip_if_possible(new /obj/item/clothing/glasses/sunglasses(M), slot_l_store)
-			M.equip_if_possible(new /obj/item/weapon/gun/energy(M), slot_belt)
-
-			var/obj/item/weapon/card/id/centcom/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
-			W.assignment = "Nanotrasen Navy Officer"
-			W.registered_name = M.real_name
-			M.equip_if_possible(W, slot_wear_id)
-
-		if("nanotrasen captain")
-			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/captain(M), slot_w_uniform)
-			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
-			M.equip_if_possible(new /obj/item/clothing/gloves/white(M), slot_gloves)
-			M.equip_if_possible(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
-			M.equip_if_possible(new /obj/item/clothing/head/beret/centcom/captain(M), slot_head)
-
-			var/obj/item/device/pda/heads/pda = new(M)
-			pda.owner = M.real_name
-			pda.ownjob = "Nanotrasen Navy Captain"
-			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
-
-			M.equip_if_possible(pda, slot_r_store)
-			M.equip_if_possible(new /obj/item/clothing/glasses/sunglasses(M), slot_l_store)
-			M.equip_if_possible(new /obj/item/weapon/gun/energy(M), slot_belt)
-
-			var/obj/item/weapon/card/id/centcom/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
-			W.assignment = "Nanotrasen Navy Captain"
-			W.registered_name = M.real_name
-			M.equip_if_possible(W, slot_wear_id)
-
-		if("nanotrasen supreme commander")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom/captain(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/centcom(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/centhat(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/centcomm(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/laser/captain(M), slot_belt)
-
-			var/obj/item/device/pda/heads/pda = new(M)
-			pda.owner = M.real_name
-			pda.ownjob = "Nanotrasen Supreme Commander"
-			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
-
-			M.equip_to_slot_or_del(pda, slot_r_store)
-
-			var/obj/item/weapon/card/id/admin/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
-			W.assignment = "Nanotrasen Supreme Commander"
-			W.registered_name = M.real_name
-			M.equip_to_slot_or_del(W, slot_wear_id)
-
-		if("emergency response team")
-			M.equip_response_team()
-
-		if("special ops officer")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/combat(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/swat/officer(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/combat(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/eyepatch(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/clothing/mask/cigarette/cigar/havana(M), slot_wear_mask)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/beret/centcom(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle/M1911(M), slot_belt)
-			M.equip_to_slot_or_del(new /obj/item/weapon/lighter/zippo(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
-
-			var/obj/item/weapon/card/id/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.icon_state = "centcom"
-			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
-			W.assignment = "Special Operations Officer"
-			W.registered_name = M.real_name
-			M.equip_to_slot_or_del(W, slot_wear_id)
-
-		if("blue wizard")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.put_in_hands(new /obj/item/weapon/spellbook(M))
-			M.put_in_hands(new /obj/item/weapon/staff(M))
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
-
-		if("red wizard")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.put_in_hands(new /obj/item/weapon/spellbook(M))
-			M.put_in_hands(new /obj/item/weapon/staff(M))
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
-
-		if("marisa wizard")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/marisa(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal/marisa(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/marisa(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.put_in_hands(new /obj/item/weapon/spellbook(M))
-			M.put_in_hands(new /obj/item/weapon/staff(M))
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
-		if("soviet admiral")
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/hgpiratecap(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/combat(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
-			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/eyepatch(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/hgpirate(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(M), slot_back)
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/mateba(M), slot_belt)
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/soviet(M), slot_w_uniform)
-			var/obj/item/weapon/card/id/W = new(M)
-			W.name = "[M.real_name]'s ID Card"
-			W.icon_state = "centcom"
-			W.access = get_all_accesses()
-			W.access += get_all_centcom_access()
-			W.assignment = "Admiral"
-			W.registered_name = M.real_name
-			M.equip_to_slot_or_del(W, slot_wear_id)
-		if("Bomberman")
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/darkblue(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/purple(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
-			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/purple(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
-		if("Bomberman(arena)")	//they have a random color, cannot remove their clothes, and their initial speed is slightly lowered by their suit.
-			M.equip_to_slot_or_del(new /obj/item/clothing/under/darkblue(M), slot_w_uniform)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/purple(M), slot_shoes)
-			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
-			var/obj/item/clothing/suit/space/bomberman/bombsuit = new /obj/item/clothing/suit/space/bomberman(M)
-			M.equip_to_slot_or_del(bombsuit, slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/purple(M), slot_gloves)
-			M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
-			bombsuit.slowdown = HARDSUIT_SLOWDOWN_LOW
-			var/list/randomhexes = list(
-				"7",
-				"8",
-				"9",
-				"a",
-				"b",
-				"c",
-				"d",
-				"e",
-				"f",
-				)
-			M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
-			for(var/obj/item/clothing/C in M)
-				C.canremove = 0
-			M.name = "Bomberman #[rand(1,999)]"
-
-	M.regenerate_icons()
-
-	log_admin("[key_name(usr)] changed the equipment of [key_name(M)] to [dresscode].")
-	message_admins("<span class='notice'>[key_name_admin(usr)] changed the equipment of [key_name_admin(M)] to [dresscode]..</span>", 1)
-	return
-
 /client/proc/startSinglo()
 	set category = "Debug"
 	set name = "Start Singularity"
@@ -1132,11 +574,11 @@ Pressure: [env.return_pressure()]"}
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 100 //Don't need to explain, space magic
+				Plasma.air_contents[GAS_PLASMA] = 100 //Don't need to explain, space magic
 				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
+				Plasma.air_contents.update_values()
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
-				Plasma.forceMove(Rad)
 
 			if(!Rad.active)
 				Rad.toggle_power()
@@ -1303,7 +745,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	var/list/machineinstances = list()
 	for(var/atom/typepath in machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -1316,7 +758,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	machineinstances.len = 0
 	for(var/atom/typepath in power_machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -1386,7 +828,7 @@ var/global/blood_virus_spreading_disabled = 0
 	set desc = "Reload the Style Sheet (be careful)."
 
 	for(var/client/C in clients)
-		winset(C, null, "outputwindow.output.style=[config.world_style_config];")
+		winset(C, null, "window1.msay_output.style=[config.world_style_config];")
 	message_admins("The style sheet has been reloaded by [src.ckey]")
 
 /client/proc/reset_style_sheet()
@@ -1395,7 +837,7 @@ var/global/blood_virus_spreading_disabled = 0
 	set desc = "Reset the Style Sheet (restore to default)."
 
 	for(var/client/C in clients)
-		winset(C, null, "outputwindow.output.style=[world_style];")
+		winset(C, null, "window1.msay_output.style=[world_style];")
 	config.world_style_config = world_style
 	message_admins("The style sheet has been reset by [src.ckey]")
 
@@ -1747,22 +1189,22 @@ client/proc/cure_disease()
 	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
 client/proc/check_convertables()
-	set name = "Check Convertables"
+	set name = "Check Convertables (Cult v2.0)"
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
 		return
-
+	var/datum/faction/cult/narsie = find_active_faction_by_type(/datum/faction/cult/narsie)
 	var/dat = ""
 	for(var/mob/M in player_list)
 		if(!M.mind)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=grey><b>NO MIND</b></font></br>"
 		else if(!istype(M,/mob/living/carbon/human))
 			dat += "[M.real_name]/([ckey(M.key)]): <b>NOT HUMAN</b></br>"
-		else if(!is_convertable_to_cult(M.mind))
+		else if(!is_convertable_to_cult_legacy(M.mind))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>UNCONVERTABLE</b></font></br>"
 		else if(jobban_isbanned(M, "cultist"))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>JOBBANNED</b></font></br>"
-		else if(M.mind in ticker.mode.cult)
+		else if(M.mind in narsie.members)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=blue><b>CULTIST</b></font></br>"
 		else
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=green><b>CONVERTABLE</b></font></br>"
@@ -1777,11 +1219,18 @@ client/proc/check_convertables()
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches[0]
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
 
-	for(var/path in typesof(/datum) - typesof(/turf))
-		if(findtext("[path]", object))
-			matches += path
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
+
+		object = copytext(object, 1, variables_start)
+
+
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1795,12 +1244,16 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen()
+	holder.marked_datum = new chosen
 
-	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum.</span>")
-
+	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
 	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+	if(varchanges.len)
+		_preloader = new(varchanges, chosen)
+		//_preloaded calls load() automatically on atom/New(). However, this proc can also create datums, which don't do that - call load() manually
+		_preloader.load(holder.marked_datum)
 
 /client/proc/vv_marked_datum()
 	set category	= "Debug"
@@ -1828,6 +1281,18 @@ client/proc/check_convertables()
 	else
 		spiral_block(epicenter,max_range,0,1)
 
+/client/proc/check_striketeams()
+	set name = "Check StrikeTeams"
+	set category = "Debug"
+
+	if(!sent_strike_teams || sent_strike_teams.len <= 0)
+		to_chat(usr, "<span class='warning'>No strike teams have been sent so far!</span>")
+		return
+
+	var/teamToDebug = input(usr,"Choose a Strike Team.", "Check StrikeTeams") in sent_strike_teams
+
+	debug_variables(sent_strike_teams[teamToDebug])
+
 /client/proc/view_runtimes()
 	set category = "Debug"
 	set name = "View Runtimes"
@@ -1837,3 +1302,50 @@ client/proc/check_convertables()
 		return
 
 	error_cache.show_to(src)
+
+/client/proc/emergency_shuttle_panel()
+	set name = "Emergency Shuttle Panel"
+	set category = "Debug"
+	if(holder)
+		holder.emergency_shuttle_panel()
+		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
+	feedback_add_details("admin_verb","ESP")
+	return
+
+/client/proc/start_line_profiling()
+	set category = "Profile"
+	set name = "Start line profiling"
+	set desc = "Starts tracking line by line profiling for code lines that support it"
+
+	PROFILE_START
+
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
+	feedback_add_details("admin_verb","Start line profiling")
+	log_admin("[key_name(src)] started line by line profiling.")
+
+/client/proc/stop_line_profiling()
+	set category = "Profile"
+	set name = "Stop line profiling"
+	set desc = "Stops tracking line by line profiling for code lines that support it"
+
+	PROFILE_STOP
+
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
+	feedback_add_details("admin_verb","Stop line profiling")
+	log_admin("[key_name(src)] stopped line by line profiling.")
+
+/client/proc/show_line_profiling()
+	set category = "Profile"
+	set name = "Show line profiling"
+	set desc = "Shows tracked profiling info from code lines that support it"
+
+	var/sortlist = list(
+		"Avg time"		=	/proc/cmp_profile_avg_time_dsc,
+		"Total Time"	=	/proc/cmp_profile_time_dsc,
+		"Call Count"	=	/proc/cmp_profile_count_dsc
+	)
+	var/sort = input(src, "Sort type?", "Sort Type", "Avg time") as null|anything in sortlist
+	if (!sort)
+		return
+	sort = sortlist[sort]
+	profile_show(src, sort)

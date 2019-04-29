@@ -20,17 +20,12 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	screen_loc = "CENTER,CENTER"
 	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX
+	plane = SPACE_PARALLAX_PLANE
 	globalscreen = 1
 	var/parallax_speed = 0
 
-/obj/abstract/screen/plane_master
-	appearance_flags = PLANE_MASTER
-	screen_loc = "CENTER,CENTER"
-	globalscreen = 1
-
 /obj/abstract/screen/plane_master/parallax_master
-	plane = PLANE_SPACE_PARALLAX
+	plane = SPACE_PARALLAX_PLANE
 	blend_mode = BLEND_MULTIPLY
 	color = list(
 	1,0,0,0,
@@ -40,7 +35,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	0,0,0,1)
 
 /obj/abstract/screen/plane_master/parallax_spacemaster //Turns space white, causing the parallax to only show in areas with opacity. Somehow
-	plane = PLANE_SPACE_BACKGROUND
+	plane = SPACE_BACKGROUND_PLANE
 	color = list(
 	0,0,0,0,
 	0,0,0,0,
@@ -54,7 +49,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		universe.convert_parallax(src)
 
 /obj/abstract/screen/plane_master/parallax_dustmaster
-	plane = PLANE_SPACE_DUST
+	plane = SPACE_DUST_PLANE
 	color = list(0,0,0,0)
 
 /datum/hud/proc/update_parallax_existence()
@@ -120,8 +115,8 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	var/client/C = mymob.client
 	if(!parallax_initialized)
 		return
-
-	if(!(locate(/turf/space) in trange(C.view,get_turf(C.eye))))
+	var/list/everything_in_sight = trange(C.view,get_turf(C.eye))
+	if(!(locate(/turf/space) in everything_in_sight) && !(locate(/turf/simulated/floor/glass) in everything_in_sight))
 		return
 
 	//ACTUALLY MOVING THE PARALLAX

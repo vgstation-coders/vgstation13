@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile
 	faction = "hostile"
 	stop_automated_movement_when_pulled = 0
-	environment_smash = 1 //Set to 1 to break closets,tables,racks, etc; 2 for walls; 3 for rwalls
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS	//defines are in simple_animal_defines.dm
 
 	var/stance = HOSTILE_STANCE_IDLE	//Used to determine behavior
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
@@ -11,7 +11,7 @@
 	var/projectiletype
 	var/projectilesound
 	var/casingtype
-	var/move_to_delay = 2 //delay for the automated movement.
+	var/move_to_delay = 2 //delay for the movement when chasing a target. higher = slower movement.
 	var/list/friends = list()
 	var/vision_range = 9 //How big of an area to search for targets in, a vision of 9 attempts to find targets as soon as they walk into screen view
 
@@ -28,11 +28,29 @@
 	var/stat_exclusive = 0 //Mobs with this set to 1 will exclusively attack things defined by stat_attack, stat_attack 2 means they will only attack corpses
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
+	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
+
+	var/list/target_rules = list()
+
+/mob/living/simple_animal/hostile/New()
+	..()
+	initialize_rules()
+
+/mob/living/simple_animal/hostile/proc/initialize_rules()
+	target_rules.Add(new /datum/fuzzy_ruling/is_mob)
+	target_rules.Add(new /datum/fuzzy_ruling/is_obj{weighting = 0.5})
+	var/datum/fuzzy_ruling/distance/D = new /datum/fuzzy_ruling/distance
+	D.set_source(src)
+	target_rules.Add(D)
 
 /mob/living/simple_animal/hostile/resetVariables()
-	..("wanted_objects", "friends", args)
+	..("wanted_objects", "friends", "target_rule", args)
 	wanted_objects = list()
 	friends = list()
+	target_rules = list()
+
+/mob/living/simple_animal/hostile/whisper()
+	return FALSE
 
 /mob/living/simple_animal/hostile/Life()
 	if(timestopped)
@@ -40,7 +58,7 @@
 	. = ..()
 	//Cooldowns
 	if(ranged)
-		ranged_cooldown--
+		ranged_cooldown = max(0,ranged_cooldown-1)
 
 	if(istype(loc, /obj/item/device/mobcapsule))
 		return 0
@@ -52,14 +70,15 @@
 	if(!stat)
 		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
 			var/mob/living/L = loc.loc
-			if(!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
+			if(!istype(L) || (L.faction != src.faction && CanAttack(L))) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction AND we're being held by a mob whom we consider a valid target!
 				returnToPool(loc)
 			else
 				return 0
-
+		if(is_pacified())
+			return 0
 		switch(stance)
 			if(HOSTILE_STANCE_IDLE)
-				if(environment_smash)
+				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
@@ -79,16 +98,13 @@
 
 /mob/living/simple_animal/hostile/proc/ListTargets()//Step 1, find out what we can see
 	var/list/L = new()
-
 	if (!search_objects)
 		L.Add(ohearers(vision_range, src))
-
 		for (var/obj/mecha/M in mechas_list)
 			if (get_dist(M, src) <= vision_range && can_see(src, M, vision_range))
 				L.Add(M)
 	else
 		L.Add(oview(vision_range, src))
-
 	return L
 
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
@@ -104,7 +120,8 @@
 			Targets += A
 			continue
 	Target = PickTarget(Targets)
-	return Target //We now have a target
+	if(Target)
+		return Target //We now have a target
 
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
@@ -118,7 +135,8 @@
 				Targets -= A
 	if(!Targets.len)//We didnt find nothin!
 		return
-	var/chosen_target = pick(Targets)//Pick the remaining targets (if any) at random
+	Targets = evaluate_list(Targets, target_rules)
+	var/chosen_target = Targets[1]//Pick the top target, as it would be highest priority
 	return chosen_target
 
 /mob/living/simple_animal/hostile/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
@@ -165,6 +183,11 @@
 			if(M.occupant)//Just so we don't attack empty mechs
 				if(CanAttack(M.occupant))
 					return 1
+		if((environment_smash_flags & OPEN_DOOR_STRONG) && istype(the_target, /obj/machinery/door/airlock))
+			var/obj/machinery/door/airlock/A = the_target
+			if(!A.density || A.operating || A.locked || A.welded)
+				return 0
+			return 1
 	return 0
 
 /mob/living/simple_animal/hostile/proc/GiveTarget(var/new_target)//Step 4, give us our selected target
@@ -196,12 +219,12 @@
 			return
 
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
-		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
+		if(FindHidden(target) && (environment_smash_flags & SMASH_LIGHT_STRUCTURES))//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
 			if(canmove && space_check())
 				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
-				A.attack_animal(src)
+				UnarmedAttack(A, Adjacent(A))
 			return
 		else
 			LostTarget()
@@ -210,7 +233,7 @@
 	LostTarget()
 
 /mob/living/simple_animal/hostile/proc/Goto(var/target, var/delay, var/minimum_distance)
-	walk_to(src, target, minimum_distance, delay)
+	start_walk_to(target, minimum_distance, delay)
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
@@ -242,7 +265,7 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	target.attack_animal(src)
+	UnarmedAttack(target, Adjacent(target))
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -250,6 +273,7 @@
 /mob/living/simple_animal/hostile/proc/LoseAggro()
 	stop_automated_movement = 0
 	vision_range = idle_vision_range
+	search_objects = initial(search_objects)
 
 /mob/living/simple_animal/hostile/proc/LoseTarget()
 	stance = HOSTILE_STANCE_IDLE
@@ -264,10 +288,10 @@
 
 //////////////END HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
-/mob/living/simple_animal/hostile/Die()
+/mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
-	..()
 	walk(src, 0)
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
 	..()
@@ -298,8 +322,10 @@
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
+		if(ckey)
+			add_attacklogs(src, target, "[ranged_message ? ranged_message : "shot"] at")
 		if(casingtype)
-			new casingtype(get_turf(src))
+			new casingtype(get_turf(src),1)// empty casing
 
 /mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(target == start)
@@ -327,12 +353,13 @@
 		returnToPool(fC)
 	//Friendly Fire check - End
 
-	var/obj/item/projectile/A = new projectiletype(user.loc)
+	var/obj/item/projectile/A = create_projectile(user)
 
 	if(!A)
 		return 0
 
-	playsound(user, projectilesound, 100, 1)
+	if(projectilesound)
+		playsound(user, projectilesound, 100, 1)
 
 	A.current = target
 
@@ -350,8 +377,11 @@
 
 	return 1
 
+/mob/living/simple_animal/hostile/proc/create_projectile(var/mob/user)
+	return new projectiletype(user.loc)
+
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
-	if(environment_smash)
+	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		EscapeConfinement()
 		var/list/smash_dirs = list(0)
 		if(!target || !CanAttack(target))
@@ -362,19 +392,34 @@
 		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
-				T.attack_animal(src)
+				UnarmedAttack(T, Adjacent(T))
 			for(var/atom/A in T)
-				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
-					A.attack_animal(src)
+				var/static/list/destructible_objects = list(/obj/structure/window,
+					 /obj/structure/closet,
+					 /obj/structure/table,
+					 /obj/structure/grille,
+					 /obj/structure/rack,
+					 /obj/machinery/door/window,
+					 /obj/item/tape,
+					 /obj/item/toy/balloon/inflated/decoy,
+					 /obj/machinery/door/airlock)
+				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
+					if(istype(A, /obj/machinery/door/airlock))
+						var/obj/machinery/door/airlock/AIR = A
+						if(!AIR.density || AIR.locked || AIR.welded || AIR.operating)
+							continue
+					UnarmedAttack(A, Adjacent(A))
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(locked_to)
-		locked_to.attack_animal(src)
+		UnarmedAttack(locked_to, Adjacent(locked_to))
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
-		A.attack_animal(src)//Bang on it till we get out
-	return
+		UnarmedAttack(A, Adjacent(A)) //Bang on it till we get out
+	if(environment_smash_flags & SMASH_ASTEROID)
+		for(var/turf/unsimulated/mineral/M in range(src, 1))
+			UnarmedAttack(M, Adjacent(M))
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
 	if(istype(target.loc, /obj/structure/closet) || istype(target.loc, /obj/machinery/disposal) || istype(target.loc, /obj/machinery/sleeper))
@@ -394,3 +439,6 @@
 		OpenFire(A)
 
 	return ..()
+
+/mob/living/simple_animal/hostile/get_armor_modifier(mob/living/target)
+	return armor_modifier

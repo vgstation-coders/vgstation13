@@ -37,6 +37,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	maxbodytemp = T0C+1768 //Melting point of platinum
 
 	wander = 0
+	mob_property_flags = MOB_CONSTRUCT
 
 	var/following //Who are we following
 	var/scan_time = 3 SECONDS
@@ -74,6 +75,10 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 /mob/living/simple_animal/hostile/glow_orb/AttackingTarget()
 	return
 
+/mob/living/simple_animal/hostile/glow_orb/Process_Spacemove(var/check_drift = 0)
+	return 1
+
+
 /mob/living/simple_animal/hostile/glow_orb/attack_hand(mob/living/carbon/human/M)
 	if(M.a_intent == I_HELP)
 		if(M != following)
@@ -86,16 +91,16 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 			set_light(4, 1, "#0068B2")
 			walk(src,0)
 	else
-		Die()
+		death()
 
 	..()
 
-/mob/living/simple_animal/hostile/glow_orb/Die()
-	..()
+/mob/living/simple_animal/hostile/glow_orb/death(var/gibbed = FALSE)
+	..(gibbed)
 	visible_message("<span class = 'notice'>\The [src] grows dim as it falls to the ground.</span>")
 	flick("glow_stone_deactivate", src)
 	spawn(10)
-		playsound(get_turf(src), 'sound/weapons/orb_deactivate.ogg', 50,1)
+		playsound(src, 'sound/weapons/orb_deactivate.ogg', 50,1)
 		set_light(0)
 		new/obj/item/weapon/glow_orb(get_turf(src))
 		qdel(src)
@@ -117,7 +122,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	..()
 /mob/living/simple_animal/hostile/glow_orb/proc/detonate()
 	unstable = 1
-	playsound(get_turf(src),'sound/weapons/inc_tone.ogg', 50, 1)
+	playsound(src,'sound/weapons/inc_tone.ogg', 50, 1)
 	flick("glow_stone_critical", src)
 	status_flags &= ~GODMODE
 	spawn(2 SECONDS)
@@ -154,10 +159,10 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 			//Now applying sound
 			if(!ear_safety)
 				to_chat(M, "<span class='userdanger'>BANG</span>")
-				playsound(get_turf(src), 'sound/effects/bang.ogg', 60, 1)
+				playsound(src, 'sound/effects/bang.ogg', 60, 1)
 			else
 				to_chat(M, "<span class='danger'>BANG</span>")
-				playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+				playsound(src, 'sound/effects/bang.ogg', 25, 1)
 
 			if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
 				if(ear_safety > 0)

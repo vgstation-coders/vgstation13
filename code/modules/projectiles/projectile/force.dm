@@ -5,37 +5,35 @@
 	damage = 25
 	flag = "energy"
 	fire_sound = 'sound/weapons/radgun.ogg'
+	weaken = 1
+	var/forceprob = 50
+	var/throw_distance = 10
+	var/throwdir
 
 /obj/item/projectile/forcebolt/strong
 	name = "force bolt"
+	damage = 30
+	weaken = 2
+	forceprob = 75
+	throw_distance = 15
 
 /obj/item/projectile/forcebolt/on_hit(var/atom/target, var/blocked = 0)
-
-	var/obj/T = target
-	var/throwdir = get_dir(firer,target)
-	if(prob(50))
-		if(istype(target, /mob/living/carbon/))
-			var/mob/living/carbon/MM = target
-			MM.apply_effect(1, WEAKEN)
-			to_chat(MM, "<span class='warning'>The force knocks you off your feet!</span>")
-	T.throw_at(get_edge_target_turf(target, throwdir),10,1)
+	if(!throwdir)
+		throwdir = get_dir(firer,target)
+	if(prob(forceprob))
+		if(isliving(target))
+			..()
+			to_chat(target, "<span class='warning'>The force knocks you off your feet!</span>")
+	if(isatommovable(target))
+		var/atom/movable/AM = target
+		AM.throw_at(get_edge_target_turf(target, throwdir),throw_distance,1)
 	return 1
 
 
 /obj/item/projectile/forcebolt/strong/on_hit(var/atom/target, var/blocked = 0)
-	damage = 30
-	// NONE OF THIS WORKS. DO NOT USE.
-	var/throwdir = null
-
-	for(var/mob/M in hearers(1, src))
+	throwdir = get_dir(firer,target)
+	for(var/mob/M in range(1, target))
 		if(M == firer)
 			continue
-		if(M.loc != src.loc)
-			throwdir = get_dir(src,target)
-			if(prob(75))
-				if(istype(M, /mob/living/carbon/))
-					var/mob/living/carbon/MM = M
-					MM.apply_effect(2, WEAKEN)
-					to_chat(MM, "<span class='warning'>The force knocks you off your feet!</span>")
-			M.throw_at(get_edge_target_turf(M, throwdir),15,1)
-	return ..()
+		..(M, blocked)
+	return 1

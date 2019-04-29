@@ -2,12 +2,13 @@
 	name = "item"
 	icon = 'icons/obj/items.dmi'
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
-	var/abstract = 0
+	var/abstract = FALSE
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
+	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
 	var/w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
@@ -34,10 +35,12 @@
 	siemens_coefficient = 1 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
 	var/slowdown = NO_SLOWDOWN // How much each piece of clothing is slowing you down. Works as a MULTIPLIER, i.e. 0.8 slowdown makes you go 20% faster, 1.5 slowdown makes you go 50% slower.
 
-	var/canremove = 1 //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
-	var/cant_drop = 0 //If 1, can't drop it from hands!
+	var/canremove = TRUE //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
+	var/cant_drop = FALSE //If 1, can't drop it from hands!
+	var/cant_drop_msg = " sticks to your hand!"
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
@@ -56,9 +59,15 @@
 
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
+	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
+	var/restraint_apply_time = 3 SECONDS
+	var/restraint_apply_sound = null
+	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/hides_identity = HIDES_IDENTITY_DEFAULT
+	var/datum/daemon/daemon
 
 /obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/New()
 	..()
@@ -66,8 +75,8 @@
 		new path(src)
 
 /obj/item/Destroy()
-	if(istype(src.loc, /mob))
-		var/mob/H = src.loc
+	if(istype(loc, /mob))
+		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	if(hasvar(src, "holder"))
 		src:holder = null
@@ -86,6 +95,13 @@
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
+
+/obj/item/proc/is_hidden_identity()
+	switch(hides_identity)
+		if(HIDES_IDENTITY_ALWAYS)
+			return TRUE
+		if(HIDES_IDENTITY_DEFAULT)
+			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
 /obj/item/ex_act(severity)
 	switch(severity)
@@ -113,16 +129,16 @@
 		return
 
 	if(usr.incapacitated())
-		return 1
+		return TRUE
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 1
+		return TRUE
 	if (!in_range(src, usr))
-		return 1
+		return TRUE
 
-	src.add_fingerprint(usr)
-	src.add_hiddenprint(usr)
-	return 0
+	add_fingerprint(usr)
+	add_hiddenprint(usr)
+	return FALSE
 
 /obj/item/proc/restock() //used for borg recharging
 	return
@@ -132,10 +148,10 @@
 
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
-//BRUTELOSS = 1
-//FIRELOSS = 2
-//TOXLOSS = 4
-//OXYLOSS = 8
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
@@ -145,49 +161,54 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!istype(src.loc, /turf) || usr.isUnconscious() || usr.restrained())
+	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
 		return
 
-	var/turf/T = src.loc
+	var/turf/T = loc
 
-	src.forceMove(null)
+	forceMove(null)
 
-	src.forceMove(T)
+	forceMove(T)
 
-/obj/item/examine(mob/user)
-	var/size
-	switch(src.w_class)
-		if(1.0)
-			size = "tiny"
-		if(2.0)
-			size = "small"
-		if(3.0)
-			size = "normal-sized"
-		if(4.0)
-			size = "bulky"
-		if(5.0 to INFINITY)
-			size = "huge"
+/obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
+	if(!size)
+		switch(w_class)
+			if(W_CLASS_TINY)
+				size = "tiny"
+			if(W_CLASS_SMALL)
+				size = "small"
+			if(W_CLASS_MEDIUM)
+				size = "normal-sized"
+			if(W_CLASS_LARGE)
+				size = "bulky"
+			if(W_CLASS_HUGE to INFINITY)
+				size = "huge"
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
-	if (src.gender == PLURAL)
+	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	..(user, " [pronoun] a [size] item.")
-	if((cant_drop > 0) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
-		user << "<span class='danger'>It's stuck to your hands!</span>"
+	size = " [pronoun] a [size] item."
+	..(user, size, show_name)
+	if(price && price > 0)
+		to_chat(user, "You read '[price] space bucks' on the tag.")
+	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
+		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(daemon && daemon.flags & DAEMON_EXAMINE)
+		daemon.examine(user)
 
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
 	if(isMoMMI(user))
-		var/in_range = in_range(src, user) || src.loc == user
+		var/in_range = in_range(src, user) || loc == user
 		if(in_range)
 			if(src == user:tool_state)
-				return 0
+				return FALSE
 			attack_hand(user)
 	else if(isrobot(user))
-		if(!istype(src.loc, /obj/item/weapon/robot_module))
+		if(!istype(loc, /obj/item/weapon/robot_module))
 			return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
@@ -197,54 +218,45 @@
 	if (!user)
 		return
 
-	if (istype(src.loc, /obj/item/weapon/storage))
+	if (istype(loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
-		var/obj/item/weapon/storage/S = src.loc
-		S.remove_from_storage(src, user)
+		var/obj/item/weapon/storage/S = loc
+		if(!S.remove_from_storage(src, user))
+			return
 
-	src.throwing = 0
-	if (src.loc == user)
+	throwing = FALSE
+	if (loc == user)
 		if(src == user.get_inactive_hand())
-			if(src.flags & TWOHANDABLE)
-				return src.wield(user)
+			if(flags & TWOHANDABLE)
+				return wield(user)
 			if(!user.put_in_hand_check(src, user.get_active_hand()))
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(!src.canremove)
+		if(!canremove)
 			return
 
-		user.u_equip(src,0)
+		user.u_equip(src,FALSE)
 	else
-		if(isliving(src.loc))
+		if(isliving(loc))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	if(!user.put_in_active_hand(src))
+	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	return
 
 /obj/item/requires_dexterity(mob/user)
-	return 1
+	return TRUE
 
 /obj/item/attack_paw(mob/user as mob)
-
-	if(isalien(user)) // -- TLE
-		var/mob/living/carbon/alien/A = user
-
-		if(!A.has_fine_manipulation || w_class >= W_CLASS_LARGE)
-			if(src in A.contents) // To stop Aliens having items stuck in their pockets
-				A.drop_from_inventory(src)
-			to_chat(user, "Your claws aren't capable of such fine manipulation.")
-			return
-
-	if (istype(src.loc, /obj/item/weapon/storage))
-		for(var/mob/M in range(1, src.loc))
-			if (M.s_active == src.loc)
+	if (istype(loc, /obj/item/weapon/storage))
+		for(var/mob/M in range(1, loc))
+			if (M.s_active == loc)
 				if (M.client)
 					M.client.screen -= src
-	src.throwing = 0
-	if (src.loc == user)
+	throwing = FALSE
+	if (loc == user)
 		if(!user.put_in_hand_check(src, user.get_active_hand()))
 			return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
@@ -253,7 +265,7 @@
 		else
 			user.u_equip(src,0)
 	else
-		if(istype(src.loc, /mob/living))
+		if(istype(loc, /mob/living))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 
@@ -278,6 +290,7 @@
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
@@ -304,7 +317,7 @@
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
-/obj/item/proc/on_found(mob/finder as mob)
+/obj/item/proc/on_found(mob/wearer, mob/finder)
 	return
 
 // called after an item is placed in an equipment slot
@@ -315,7 +328,7 @@
 /obj/item/proc/equipped(var/mob/user, var/slot, hand_index = 0)
 	if(cant_drop) //Item can't be dropped
 		if(hand_index) //Item was equipped in a hand slot
-			to_chat(user, "<span class='notice'>\The [src] sticks to your hand!</span>")
+			to_chat(user, "<span class='notice'>\The [src][cant_drop_msg]</span>")
 	for(var/X in actions)
 		var/datum/action/A = X
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
@@ -324,8 +337,12 @@
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
 	return 1
+
 // called after an item is unequipped or stripped
 /obj/item/proc/unequipped(mob/user, var/from_slot = null)
+	for(var/x in actions)
+		var/datum/action/A = x
+		A.Remove(user)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
@@ -645,7 +662,7 @@
 					if(!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return CANNOT_EQUIP
-				if(src.w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
+				if(w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return CANNOT_EQUIP
@@ -733,19 +750,6 @@
 		//START ALIEN HUMANOID
 		var/mob/living/carbon/alien/humanoid/AH = M
 		switch(slot)
-			//Maybe when someone sprites an "alien lying down" version of every exosuit and hat in the game.
-			/*if(slot_head)
-				if(AH.head)
-					return CANNOT_EQUIP
-				if( !(slot_flags & SLOT_HEAD) )
-					return CANNOT_EQUIP
-				return CAN_EQUIP
-			if(slot_wear_suit)
-				if(AH.wear_suit)
-					return CANNOT_EQUIP
-				if( !(slot_flags & SLOT_OCLOTHING) )
-					return CANNOT_EQUIP
-				return CAN_EQUIP*/
 			if(slot_l_store)
 				if(slot_flags & SLOT_DENYPOCKET)
 					return CANNOT_EQUIP
@@ -765,6 +769,31 @@
 		return CANNOT_EQUIP //Unsupported slot
 		//END ALIEN HUMANOID
 
+	else if(ishologram(M))
+		//START HOLOGRAM
+		var/mob/living/simple_animal/hologram/advanced/HM = M
+		switch(slot)
+			if(slot_head)
+				if(HM.head)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_HEAD) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+			if(slot_w_uniform)
+				if(HM.w_uniform)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_ICLOTHING) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+			if(slot_wear_suit)
+				if(HM.wear_suit)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_OCLOTHING) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+		return CANNOT_EQUIP //Unsupported slot
+		//END HOLOGRAM
+
 	else if(isMoMMI(M))
 		//START MOMMI ALSO THIS SO FUCKING SILLY
 		var/mob/living/silicon/robot/mommi/MoM = M
@@ -776,20 +805,47 @@
 		return CANNOT_EQUIP //Unsupported slot
 		//END MOMMI
 
+	else if(ismartian(M))
+		//why
+		var/mob/living/carbon/complex/martian/MA = M
+		switch(slot)
+			if(slot_head)
+				if(MA.head)
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+
+		return CANNOT_EQUIP
+
+	else if(isgrinch(M))
+		//START GRINCH
+		var/mob/living/simple_animal/hostile/gremlin/grinch/G = M
+		switch(slot)
+			if(slot_back)
+				if(G.back)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_BACK) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+		return CANNOT_EQUIP //Unsupported slot
+		//END GRINCH
+
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
-		return 0
+		return FALSE
+	if(prepickup(user))
+		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
-		return 0
-	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
+		return FALSE
+	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) && !isgrinch(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
 		to_chat(user, "You can't pick things up!")
-	if(src.anchored) //Object isn't anchored
+		return FALSE
+	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
-		return 0
-	if(!istype(src.loc, /turf)) //Object is not on a turf
+		return FALSE
+	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /obj/item/verb_pickup(mob/living/user)
 	//set src in oview(1)
@@ -797,7 +853,7 @@
 	//set name = "Pick up"
 
 	if(!can_pickup(user))
-		return 0
+		return FALSE
 
 	if(user.get_active_hand())
 		to_chat(user, "<span class='warning'>Your [user.get_index_limb_name(user.active_hand)] is full.</span>")
@@ -814,18 +870,18 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/h_user = user
 		if(h_user.can_use_hand())
-			src.attack_hand(h_user)
+			attack_hand(h_user)
 		else
-			src.attack_stump(h_user)
+			attack_stump(h_user)
 	if(istype(user, /mob/living/carbon/alien))
-		src.attack_alien(user)
+		attack_alien(user)
 	if(istype(user, /mob/living/carbon/monkey))
-		src.attack_paw(user)
+		attack_paw(user)
 	return
 
 //Used in twohanding
-/obj/item/proc/wield(mob/user, var/inactive = 0)
-	if(!user.can_wield())
+/obj/item/proc/wield(mob/user, var/inactive = FALSE)
+	if(!user.can_wield(src))
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
 
@@ -841,7 +897,7 @@
 		//The second half is the same, except that the proc assumes that the wielded item is held in the INACTIVE hand. So the INACTIVE hand is checked for holding either nothing or wielded item.
 		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
 
-		for(var/i = 1 to user.held_items.len)
+		for(var/i = TRUE to user.held_items.len)
 			if(user.held_items[i])
 				continue
 			if(user.active_hand == i)
@@ -850,7 +906,7 @@
 			if(user.put_in_hand(i, wielded))
 				wielded.attach_to(src)
 				update_wield(user)
-				return 1
+				return TRUE
 
 		unwield(user)
 		return
@@ -869,16 +925,19 @@
 /obj/item/proc/update_wield(mob/user)
 
 /obj/item/proc/IsShield()
-	return 0
+	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, attack_text = "the attack")
+/obj/item/proc/on_block(damage, atom/blocked)
 	if(ismob(loc))
 		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>")
-			return 1
+			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
+			if(isatommovable(blocked))
+				var/atom/movable/M = blocked
+				M.throwing = FALSE
+			return TRUE
 
-	return 0
+	return FALSE
 
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
@@ -902,16 +961,16 @@
 		to_chat(user, "<span class='warning'>You cannot locate any eyes on [M]!</span>")
 		return
 
-	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
-	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
+	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 	if(!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
 	//	M = user
 		/*
@@ -949,6 +1008,7 @@
 				M.eye_blurry += 10
 				M.Paralyse(1)
 				M.Knockdown(4)
+				M.Stun(4)
 			if (eyes.damage >= eyes.min_broken_damage)
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You go blind!</span>")
@@ -971,7 +1031,7 @@
 
 /obj/item/add_blood(mob/living/carbon/human/M as mob)
 	if (!..())
-		return 0
+		return FALSE
 	if(istype(src, /obj/item/weapon/melee/energy))
 		return
 
@@ -993,9 +1053,9 @@
 	if(!M)
 		return
 	if(blood_DNA[M.dna.unique_enzymes])
-		return 0 //already bloodied with this blood. Cannot add more.
+		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
-	return 1 //we applied blood to the item
+	return TRUE //we applied blood to the item
 
 var/global/list/image/blood_overlays = list()
 /obj/item/proc/generate_blood_overlay()
@@ -1010,6 +1070,9 @@ var/global/list/image/blood_overlays = list()
 
 
 /obj/item/proc/showoff(mob/user)
+	if(abstract)
+		return
+
 	for (var/mob/M in view(user))
 		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
 
@@ -1017,8 +1080,12 @@ var/global/list/image/blood_overlays = list()
 	set name = "Show Held Item"
 	set category = "Object"
 
+	if(attack_delayer.blocked())
+		return
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
 	var/obj/item/I = get_active_hand()
-	if(I && !I.abstract)
+	if(I)
 		I.showoff(src)
 
 // /vg/ Affects wearers.
@@ -1035,7 +1102,7 @@ var/global/list/image/blood_overlays = list()
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
 		if(anchored)
 			if(current_size >= STAGE_FIVE)
-				anchored = 0
+				anchored = FALSE
 			else
 				return
 		if(current_size >= STAGE_FOUR)
@@ -1050,7 +1117,7 @@ var/global/list/image/blood_overlays = list()
 
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
-	return 0
+	return FALSE
 
 // Like the above, but used for RPED sorting of parts.
 /obj/item/proc/rped_rating()
@@ -1066,7 +1133,7 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/kick_dir = get_dir(H, src)
-	if(H.loc == src.loc)
+	if(H.loc == loc)
 		kick_dir = H.dir
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
@@ -1108,7 +1175,7 @@ var/global/list/image/blood_overlays = list()
 	if(shrapnel_type)
 		return new shrapnel_type(src)
 	else
-		return 0
+		return FALSE
 
 
 // IMPORTANT DISTINCTION FROM MouseWheel:
@@ -1127,3 +1194,155 @@ var/global/list/image/blood_overlays = list()
 
 	spawn(duration + 1)
 		hud_layerise()
+
+/obj/item/proc/restraint_apply_intent_check(mob/user)
+	if(user.a_intent == I_GRAB)
+		return TRUE
+
+/obj/item/proc/restraint_apply_check(mob/living/carbon/M, mob/user)
+	if(!istype(M))
+		return
+
+	if(!restraint_apply_intent_check(user))
+		return
+
+	if(!user.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+
+	if(M.handcuffed)
+		return
+
+	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been restrained (attempt) by [user.name] ([user.ckey]) with \the [src].</span>")
+	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to restrain [M.name] ([M.ckey]) with \the [src].</span>")
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
+
+	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
+	return TRUE
+
+/obj/item/proc/attempt_apply_restraints(mob/living/carbon/C, mob/user)
+	if(!istype(C)) //Sanity doesn't hurt, right ?
+		return FALSE
+
+	if(ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if (!H.has_organ_for_slot(slot_handcuffed))
+			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
+			return FALSE
+
+	if(restraint_apply_sound)
+		playsound(src, restraint_apply_sound, 30, 1, -2)
+	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
+						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
+
+	if(do_after(user, C, restraint_apply_time))
+		if(C.handcuffed)
+			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
+			return FALSE
+		feedback_add_details("handcuffs", "[name]")
+
+		if(clumsy_check(user) && prob(50))
+			to_chat(user, "<span class='warning'>Uh... how is this done?!</span>")
+			C = user
+
+		user.visible_message("<span class='danger'>\The [user] has restrained \the [C] with \the [src]!</span>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has restrained [C.name] ([C.ckey]) with \the [src].</font>")
+		C.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [user.name] ([user.ckey])</font>")
+		log_attack("[user.name] ([user.ckey]) has restrained [C.name] ([C.ckey]) with \the [src]")
+
+		var/obj/item/cuffs = src
+		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
+			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(user))
+		else
+			user.drop_from_inventory(cuffs)
+		C.equip_to_slot(cuffs, slot_handcuffed)
+		cuffs.on_restraint_apply(C)
+		return TRUE
+
+/obj/item/proc/on_restraint_removal(var/mob/living/carbon/C) //Needed for syndicuffs
+	return
+
+/obj/item/proc/on_restraint_apply(var/mob/living/carbon/C)
+	return
+
+//Called when user clicks on an object while looking through a camera (passed to the proc as [eye])
+/obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
+	return
+
+/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+	return TRUE
+
+/obj/item/proc/on_mousedrop_to_inventory_slot()
+	return
+
+/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
+	return TRUE
+
+/obj/item/MouseDropFrom(var/obj/over_object)
+	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
+		if(loc == over_object.loc) //Swapping to another object in the same storage item
+			var/obj/item/weapon/storage/storageobj = loc
+			if(usr in storageobj.is_seeing)
+				//Almost none of BYOND's list procs work with contents because contents is a snowflake list and BYOND hates you, so enter the kludge.
+				//And yes, this is Lummox-sanctioned kludge: http://www.byond.com/forum/?post=271125
+				var/temp_index = storageobj.contents.Find(over_object)
+				var/list/temp_contents = storageobj.contents.Copy()
+				temp_contents -= src
+				temp_contents.Insert(temp_index, src)
+				storageobj.contents = temp_contents
+
+				storageobj.orient2hud(usr)
+				return
+		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
+			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
+			var/obj/abstract/screen/storage/screenobj = over_object
+			var/obj/item/weapon/storage/storageobj = screenobj.master
+			if(storageobj == loc && usr in storageobj.is_seeing)
+				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
+				storageobj.contents -= src
+				storageobj.contents += src
+
+				storageobj.orient2hud(usr)
+				return
+	if(!istype(over_object, /obj/abstract/screen/inventory))
+		return ..()
+	if(!ishuman(usr) && !ismonkey(usr))
+		return ..()
+	if(!usr.is_wearing_item(src) || !canremove)
+		return ..()
+	if(usr.incapacitated())
+		return ..()
+
+	var/obj/abstract/screen/inventory/OI = over_object
+	on_mousedrop_to_inventory_slot()
+
+	if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index) && !src.prepickup(usr))
+		usr.u_equip(src, TRUE)
+		usr.put_in_hand(OI.hand_index, src)
+		add_fingerprint(usr)
+
+/obj/item/proc/pre_throw()
+	return
+
+/**
+	Attempt to heat this object from a presumed heat source.
+	@args:
+		A: Atom: The source of the heat
+		user: mob: Whomever may be trying to heat this object
+
+	@return:
+		TRUE if succesful
+		FALSE if not succesful
+		NULL if override not defined
+**/
+/obj/item/proc/attempt_heating(atom/A, mob/user)
+	return
+
+/obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
+	return
+
+/obj/item/proc/is_screwdriver(var/mob/user)
+	return FALSE

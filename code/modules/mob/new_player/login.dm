@@ -28,6 +28,7 @@
 	new_player_panel()
 	if(ckey in deadmins)
 		client.verbs += /client/proc/readmin
+#if SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN
 	spawn(0)
 		if(client)
 			//If the changelog has changed, show it to them
@@ -59,3 +60,4 @@
 				client.prefs.save_preferences()
 				winset(client, "rpane.changelog", "background-color=none;font-style=;")
 			client.playtitlemusic()
+#endif

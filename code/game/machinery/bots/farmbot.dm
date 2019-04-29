@@ -67,15 +67,18 @@
 		if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
 			tank = new /obj/structure/reagent_dispensers/watertank(src)
 
-/obj/machinery/bot/farmbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/farmbot/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	if (istype(mover,/mob/living/simple_animal/bee))
+		return 1
+	return ..()
+
+/obj/machinery/bot/farmbot/to_bump(M as mob|obj) //Leave no door unopened!
 	spawn(0)
 		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 			var/obj/machinery/door/D = M
-			if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
+			if (!istype(D, /obj/machinery/door/firedoor) && !istype(D, /obj/machinery/door/poddoor) && D.check_access(src.botcard))
 				D.open()
 				src.frustration = 0
-		return
-	return
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
@@ -94,7 +97,7 @@
 
 /obj/machinery/bot/farmbot/proc/get_total_ferts()
 	var total_fert = 0
-	for (var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents)
+	for(var/obj/item/weapon/reagent_containers/glass/fert in contents)
 		total_fert++
 	return total_fert
 
@@ -159,7 +162,7 @@
 		setting_ignoreEmpty = !setting_ignoreEmpty
 	else if (href_list["eject"] )
 		flick("[src.icon_initial]_hatch",src)
-		for (var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents)
+		for (var/obj/item/weapon/reagent_containers/glass/fert in contents)
 			fert.forceMove(get_turf(src))
 
 	src.updateUsrDialog()
@@ -174,7 +177,7 @@
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
-	else if (istype(W, /obj/item/weapon/reagent_containers/glass/fertilizer))
+	else if (istype(W, /obj/item/weapon/reagent_containers/glass))
 		if ( get_total_ferts() >= Max_Fertilizers )
 			to_chat(user, "The fertilizer storage is full!")
 			return
@@ -216,16 +219,14 @@
 	if ( tank )
 		tank.forceMove(Tsec)
 
-	for ( var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents )
+	for ( var/obj/item/weapon/reagent_containers/glass/fert in contents )
 		if ( prob(50) )
 			fert.forceMove(Tsec)
 
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
 
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	qdel(src)
 	return
 
@@ -278,8 +279,8 @@
 
 	if ( mode == FARMBOT_MODE_FERTILIZE )
 		//Find which fertilizer to use
-		var/obj/item/weapon/reagent_containers/glass/fertilizer/fert
-		for ( var/obj/item/weapon/reagent_containers/glass/fertilizer/nut in contents )
+		var/obj/item/weapon/reagent_containers/glass/fert
+		for ( var/obj/item/weapon/reagent_containers/glass/nut in contents )
 			fert = nut
 			break
 		if ( !fert )
@@ -303,7 +304,7 @@
 /obj/machinery/bot/farmbot/proc/find_target()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
-			if (human.stat == 2)
+			if (human.isDead())
 				continue
 
 			var list/options = list(FARMBOT_MODE_WEED)
@@ -380,7 +381,7 @@
 					mode = 0
 		return
 
-	if(src.path.len > 0 && src.target)
+	if(src.path.len > 0 && src.target && isturf(loc))
 		step_to(src, src.path[1])
 		src.path -= src.path[1]
 		spawn(3)
@@ -392,7 +393,7 @@
 		src.frustration++
 
 
-/obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fertilizer/fert)
+/obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fert)
 	if ( !fert )
 		target = null
 		mode = 0
@@ -472,7 +473,7 @@
 	if ( emagged ) // warning, humans are thirsty!
 		var splashAmount = min(70,tank.reagents.total_volume)
 		src.visible_message("<span class='warning'>[src] splashes [target] with a bucket of water!</span>")
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		if ( prob(50) )
 			tank.reagents.reaction(target, TOUCH) //splash the human!
 		else
@@ -491,7 +492,7 @@
 				b_amount = 100 - tray.waterlevel
 			tank.reagents.remove_reagent(WATER, b_amount)
 			tray.adjust_water(b_amount)
-			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 		//tray.updateicon()
 		mode = FARMBOT_MODE_WAITING
@@ -505,13 +506,13 @@
 		return
 
 	mode = FARMBOT_MODE_WAITING
-	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+	playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 	src.visible_message("<span class='notice'>[src] starts filling it's tank from [target].</span>")
 	spawn(300)
 		src.visible_message("<span class='notice'>[src] finishes filling it's tank.</span>")
 		src.mode = 0
 		tank.reagents.add_reagent(WATER, tank.reagents.maximum_volume - tank.reagents.total_volume )
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 
 /obj/item/weapon/farmbot_arm_assembly
@@ -523,12 +524,12 @@
 	var/created_name = "Farmbot" //To preserve the name if it's a unique farmbot I guess
 	w_class = W_CLASS_MEDIUM
 
-	New()
-		..()
-		spawn(4) // If an admin spawned it, it won't have a watertank it, so lets make one for em!
-			var tank = locate(/obj/structure/reagent_dispensers/watertank) in contents
-			if( !tank )
-				new /obj/structure/reagent_dispensers/watertank(src)
+/obj/item/weapon/farmbot_arm_assembly/New()
+	..()
+	spawn(4) // If an admin spawned it, it won't have a watertank it, so lets make one for em!
+		var tank = locate(/obj/structure/reagent_dispensers/watertank) in contents
+		if( !tank )
+			new /obj/structure/reagent_dispensers/watertank(src)
 
 
 /obj/structure/reagent_dispensers/watertank/attackby(var/obj/item/robot_parts/S, mob/user as mob)

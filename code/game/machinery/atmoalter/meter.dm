@@ -7,7 +7,7 @@
 	var/target_layer = PIPING_LAYER_DEFAULT
 	anchored = 1.0
 	power_channel = ENVIRON
-	var/frequency = 0
+	var/frequency = 1439
 	var/id_tag
 	use_power = 1
 	idle_power_usage = 2
@@ -72,7 +72,7 @@
 	else
 		icon_state = "meter4"
 
-	if(frequency)
+	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
 		if(!radio_connection)
@@ -89,12 +89,12 @@
 			"sigtype" = "status"
 		)
 
-		var/total_moles = environment.total_moles()
+		var/total_moles = environment.total_moles
 		if(total_moles > 0)
-			signal.data["oxygen"] = round(100*environment.oxygen/total_moles,0.1)
-			signal.data["toxins"] = round(100*environment.toxins/total_moles,0.1)
-			signal.data["nitrogen"] = round(100*environment.nitrogen/total_moles,0.1)
-			signal.data["carbon_dioxide"] = round(100*environment.carbon_dioxide/total_moles,0.1)
+			signal.data["oxygen"] = round(100*environment[GAS_OXYGEN]/total_moles,0.1)
+			signal.data["toxins"] = round(100*environment[GAS_PLASMA]/total_moles,0.1)
+			signal.data["nitrogen"] = round(100*environment[GAS_NITROGEN]/total_moles,0.1)
+			signal.data["carbon_dioxide"] = round(100*environment[GAS_CARBON]/total_moles,0.1)
 		else
 			signal.data["oxygen"] = 0
 			signal.data["toxins"] = 0
@@ -152,7 +152,7 @@
 	if (!iswrench(W))
 		return ..()
 
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \

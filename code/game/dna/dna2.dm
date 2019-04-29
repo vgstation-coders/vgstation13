@@ -5,10 +5,10 @@
 */
 
 // What each index means:
-#define DNA_OFF_LOWERBOUND 0
-#define DNA_OFF_UPPERBOUND 1
-#define DNA_ON_LOWERBOUND  2
-#define DNA_ON_UPPERBOUND  3
+#define DNA_OFF_LOWERBOUND 1
+#define DNA_OFF_UPPERBOUND 2
+#define DNA_ON_LOWERBOUND  3
+#define DNA_ON_UPPERBOUND  4
 
 // Define block bounds (off-low,off-high,on-low,on-high)
 // Used in setupgame.dm
@@ -126,6 +126,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	var/b_type = "A+"  // Should probably change to an integer => string map but I'm lazy.
 	var/mutantrace = null  // The type of mutant race the player is, if applicable (i.e. potato-man)
 	var/real_name          // Stores the real name of the person who originally got this dna datum. Used primarily for changelings,
+	var/flavor_text
 
 	// New stuff
 	var/species = "Human"
@@ -138,6 +139,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	new_dna.b_type=b_type
 	new_dna.mutantrace=mutantrace
 	new_dna.real_name=real_name
+	new_dna.flavor_text=flavor_text
 	new_dna.species=species
 	for(var/b=1;b<=DNA_SE_LENGTH;b++)
 		new_dna.SE[b]=SE[b]
@@ -170,28 +172,28 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ResetUI(1)
 	// Hair
 	// FIXME:  Species-specific defaults pls
-	if(!character.h_style)
-		character.h_style = "Skinhead"
-	var/hair = hair_styles_list.Find(character.h_style)
+	if(!character.my_appearance.h_style)
+		character.my_appearance.h_style = "Skinhead"
+	var/hair = hair_styles_list.Find(character.my_appearance.h_style)
 
 	// Facial Hair
-	if(!character.f_style)
-		character.f_style = "Shaved"
-	var/beard	= facial_hair_styles_list.Find(character.f_style)
+	if(!character.my_appearance.f_style)
+		character.my_appearance.f_style = "Shaved"
+	var/beard	= facial_hair_styles_list.Find(character.my_appearance.f_style)
 
-	SetUIValueRange(DNA_UI_HAIR_R,    character.r_hair,    255,    1)
-	SetUIValueRange(DNA_UI_HAIR_G,    character.g_hair,    255,    1)
-	SetUIValueRange(DNA_UI_HAIR_B,    character.b_hair,    255,    1)
+	SetUIValueRange(DNA_UI_HAIR_R,    character.my_appearance.r_hair,    255,    1)
+	SetUIValueRange(DNA_UI_HAIR_G,    character.my_appearance.g_hair,    255,    1)
+	SetUIValueRange(DNA_UI_HAIR_B,    character.my_appearance.b_hair,    255,    1)
 
-	SetUIValueRange(DNA_UI_BEARD_R,   character.r_facial,  255,    1)
-	SetUIValueRange(DNA_UI_BEARD_G,   character.g_facial,  255,    1)
-	SetUIValueRange(DNA_UI_BEARD_B,   character.b_facial,  255,    1)
+	SetUIValueRange(DNA_UI_BEARD_R,   character.my_appearance.r_facial,  255,    1)
+	SetUIValueRange(DNA_UI_BEARD_G,   character.my_appearance.g_facial,  255,    1)
+	SetUIValueRange(DNA_UI_BEARD_B,   character.my_appearance.b_facial,  255,    1)
 
-	SetUIValueRange(DNA_UI_EYES_R,    character.r_eyes,    255,    1)
-	SetUIValueRange(DNA_UI_EYES_G,    character.g_eyes,    255,    1)
-	SetUIValueRange(DNA_UI_EYES_B,    character.b_eyes,    255,    1)
+	SetUIValueRange(DNA_UI_EYES_R,    character.my_appearance.r_eyes,    255,    1)
+	SetUIValueRange(DNA_UI_EYES_G,    character.my_appearance.g_eyes,    255,    1)
+	SetUIValueRange(DNA_UI_EYES_B,    character.my_appearance.b_eyes,    255,    1)
 
-	SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.s_tone, 220,    1) // Value can be negative.
+	SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1) // Value can be negative.
 
 	SetUIState(DNA_UI_GENDER,         character.gender!=MALE,        1)
 
@@ -389,7 +391,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if(!isnum(value))
 		WARNING("Expected a number, got [value]")
 		return 0
-	return add_zero2(num2hex(value,1), 3)
+	return num2hex(value, 3)
 
 /datum/dna/proc/UpdateUI()
 	src.uni_identity=""

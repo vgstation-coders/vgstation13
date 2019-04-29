@@ -97,10 +97,11 @@
 	var/honk_delay = 20
 	var/last_honk_time = 0
 	var/vary_pitch = 1
+	var/can_honk_baton = 1
 
 /obj/item/weapon/bikehorn/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
-	playsound(get_turf(user), hitsound, 100, vary_pitch)
+	playsound(user, hitsound, 100, vary_pitch)
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
@@ -132,7 +133,7 @@
 /obj/item/weapon/bikehorn/proc/honk()
 	if(world.time - last_honk_time >= honk_delay)
 		last_honk_time = world.time
-		playsound(get_turf(src), hitsound, 50, vary_pitch)
+		playsound(src, hitsound, 50, vary_pitch)
 		return 1
 	return 0
 
@@ -145,6 +146,53 @@
 	attack_verb = list("quacks")
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
+	can_honk_baton = 0
+
+/obj/item/weapon/bikehorn/baton
+	name = "honk baton"
+	desc = "A stun baton for honking people with."
+	icon = 'icons/obj/weapons.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "honkbaton"
+	item_state = "honkbaton"
+	can_honk_baton = 0
+
+#define TELE_COOLDOWN 5 SECONDS
+
+/obj/item/weapon/bikehorn/rubberducky/quantum
+	desc = "A quantum quacker."
+	var/teleport_range = 5
+	var/last_teleport
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/process()
+	if(world.time > last_teleport + TELE_COOLDOWN)
+		var/visible = FALSE
+
+		for (var/mob/living/M in viewers(src))
+			if(!M.isUnconscious() && !is_blind(M))
+				visible = TRUE
+				break
+
+		if(!visible)
+			do_teleport(src, get_turf(src), teleport_range, asoundin = hitsound)
+			last_teleport = world.time
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/equipped(var/mob/user, var/slot, hand_index = 0)
+	to_chat(user, "<span class = 'warning'>\The [src] disappears from your grasp!</span>")
+	user.drop_item(src)
+	do_teleport(src, get_turf(src), teleport_range, asoundout = hitsound)
+	last_teleport = world.time
+
+#undef TELE_COOLDOWN
+
 
 #define GLUE_WEAROFF_TIME -1 //was 9000: 15 minutes, or 900 seconds. Negative values = infinite glue
 
@@ -168,7 +216,7 @@
 	..()
 	icon_state = "glue[spent]"
 
-/obj/item/weapon/glue/afterattack(obj/item/target, mob/user, proximity_flag, click_parameters)
+/obj/item/weapon/glue/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
 
@@ -176,15 +224,21 @@
 		to_chat(user,"<span class='warning'>There's no glue left in the bottle.</span>")
 		return
 
-	if(!istype(target)) //Can only apply to items!
+	var/static/list/allowed_types = list(
+		/obj/item,
+		/obj/structure/bed,
+	)
+	if(!is_type_in_list(target, allowed_types))
 		to_chat(user,"<span class='warning'>That would be such a waste of glue.</span>")
 		return
-	else
-		if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
-			to_chat(user,"<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>")
-			return
 
-		if(target.abstract) //Can't glue TK grabs, grabs, offhands!
+	if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
+		to_chat(user,"<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>")
+		return
+
+	if(isitem(target))
+		var/obj/item/target_item = target
+		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
 
 	to_chat(user,"<span class='info'>You gently apply the whole [src] to \the [target].</span>")
@@ -192,7 +246,10 @@
 	update_icon()
 	apply_glue(target)
 
-/obj/item/proc/glue_act() //proc for when glue is used on something
+/obj/proc/glue_act() //proc for when glue is used on something
+	return
+
+/obj/item/glue_act()
 	cant_drop++
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
@@ -203,6 +260,12 @@
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			canremove++
+
+/obj/structure/bed/glue_act()
+	glued = TRUE
+	if(GLUE_WEAROFF_TIME > 0)
+		spawn(GLUE_WEAROFF_TIME)
+			glued = FALSE
 
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
 	src = null

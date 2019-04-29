@@ -24,11 +24,11 @@
 
 /obj/machinery/atmospherics/unary/heat_exchanger/process()
 	. = ..()
-	if(!partner || !air_master || air_master.current_cycle <= update_cycle)
+	if(!partner || !SS_READY(SSair) || SSair.current_cycle <= update_cycle)
 		return
 
-	update_cycle = air_master.current_cycle
-	partner.update_cycle = air_master.current_cycle
+	update_cycle = SSair.current_cycle
+	partner.update_cycle = SSair.current_cycle
 
 	var/air_heat_capacity = air_contents.heat_capacity()
 	var/other_air_heat_capacity = partner.air_contents.heat_capacity()

@@ -5,9 +5,10 @@
 	var/projectile
 	var/fire_sound
 
-/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
+
+/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
 	if(..())
-		if(istype(M))
+		if(istype(M) || override)
 			return 1
 	return 0
 
@@ -125,6 +126,8 @@
 	playsound(chassis, 'sound/items/AirHorn.ogg', 100, 1)
 	chassis.occupant_message("<font color='red' size='5'>HONK</font>")
 	for(var/mob/living/carbon/M in ohearers(6, chassis))
+		if(M.is_deaf())
+			continue
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			if(H.earprot())
@@ -168,6 +171,7 @@
 	..()
 	projectiles = max_projectiles
 
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/attackby(obj/item/weapon/MGC as obj, mob/user as mob)
 	if(isMGC(MGC))
 		if (!defective)
@@ -187,6 +191,11 @@
 		else
 			to_chat(user, "<span class='danger'>\The [src] is defective!</span>")
 	
+
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/alt_action()
+	rearm()
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)
 		..()
@@ -214,10 +223,12 @@
 			chassis.use_power(projectile_energy_cost)
 	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	log_message("Rearmed [src.name].")
+	to_chat(chassis.occupant, "<span class='notice'>Rearmed [src.name].</span>")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if (href_list["rearm"])
 		src.rearm()
 	return
@@ -227,9 +238,9 @@
 	name = "\improper LBX AC 10 \"Scattershot\""
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
-	projectile = /obj/item/projectile/bullet/midbullet
+	projectile = /obj/item/projectile/bullet/buckshot
 	fire_sound = 'sound/weapons/shotgun.ogg'
-	max_projectiles = 40
+	max_projectiles = 20
 	projectile_energy_cost = 25
 	projectiles_per_shot = 4
 //	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
@@ -379,23 +390,32 @@
 	projectile_energy_cost = 800
 	equip_cooldown = 60
 	var/det_time = 20
+	var/obj/item/weapon/grenade/grenade
+	var/can_pre_detonate = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
+	if(can_pre_detonate && grenade)
+		grenade.prime()
+		grenade = null
+		return
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/grenade/flashbang/F = new projectile(chassis.loc)
+	var/obj/item/weapon/grenade/G = new projectile(chassis.loc)
+	grenade = G
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
 		target = get_inaccuracy(originaltarget, 3, chassis)
-	F.throw_at(target, missile_range, missile_speed)
+	G.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	spawn(det_time)
-		F.prime()
+		if(grenade)
+			grenade = null
+			G.prime()
 	do_after_cooldown()
 	return
 
@@ -408,6 +428,74 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/rearm()
 	return//Extra bit of security
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
+	name = "\improper Metal Foam Grenade Launcher"
+	desc = "An exosuit-mounted Metal Foam Grenade Launcher. (Can be attached to: Engineering exosuits)"
+	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
+	can_pre_detonate = TRUE
+	equip_cooldown = 30
+	range = RANGED | MELEE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
+	if(istype(M))
+		return ..(M,TRUE)
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
+	name = "\improper Inflatable Barrier Launcher"
+	desc = "An exosuit-mounted Inflatable Barrier Launcher. (Can be attached to: Engineering exosuits)"
+	projectile = /obj/item/weapon/grenade/inflatable
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=1;" + Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
+	can_pre_detonate = TRUE
+	equip_cooldown = 10
+	range = RANGED | MELEE
+	var/mode = 0
+	var/inflatable_type = 0
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["inflatable_type"])
+		inflatable_type = !inflatable_type
+		if(inflatable_type)
+			projectile = /obj/item/weapon/grenade/inflatable/door
+			occupant_message("Now set to launch inflatable doors.")
+		else
+			projectile = /obj/item/weapon/grenade/inflatable
+			occupant_message("Now set to launch inflatable walls.")
+	if(href_list["mode"])
+		mode = !mode
+		if(mode)
+			occupant_message("Now set to deflate inflatable barriers.")
+		else
+			occupant_message("Now set to deploy inflatable barriers.")
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/get_equip_info()
+	return "[..()] \n[mode ? "" : "Current projectile: inflatable [inflatable_type ? "door" : "wall"]\[<a href='?src=\ref[src];inflatable_type=0'>change</a>\]"]\[<a href='?src=\ref[src];mode=0'>switch to [mode ? "deploy" : "deflate"] mode</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/action(target)
+	if(mode)
+		if(istype(target, /obj/structure/inflatable))
+			if(!chassis.Adjacent(target))
+				occupant_message("You must be next to \the [target] in order to deflate it.")
+				return
+			var/obj/structure/inflatable/I = target
+			I.deflate()
+		return
+	else if(chassis.Adjacent(target))
+		if(istype(target, /obj/structure/inflatable/door))
+			var/obj/structure/inflatable/door/D = target
+			D.toggle(chassis.occupant)
+		if(isturf(target))
+			..()
+		return
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/clarke/M)
+	if(istype(M))
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"
@@ -504,7 +592,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
 	name = "\improper PCMK-6 Bolas Launcher"
 	icon_state = "mecha_bolas"
-	projectile = /obj/item/weapon/legcuffs/bolas
+	projectile = /obj/item/weapon/legcuffs/bolas/mech
 	fire_sound = 'sound/weapons/whip.ogg'
 	max_projectiles = 10
 	missile_speed = 1
@@ -517,13 +605,13 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/legcuffs/bolas/M = new projectile(chassis.loc)
+	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
 		target = get_inaccuracy(originaltarget, 1, chassis)
-	M.thrown_from = src
 	M.throw_at(target, missile_range, missile_speed)
+	playsound(src,'sound/weapons/whip.ogg', 20, 1) //because mechs play the sound anyways
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
@@ -554,7 +642,7 @@
 				to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
 				return
 
-		playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+		playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 		user.visible_message("<span class='danger'>\The [M] is trying to handcuff \the [C]!</span>",
 							 "<span class='danger'>You try to handcuff \the [C]!</span>")
 

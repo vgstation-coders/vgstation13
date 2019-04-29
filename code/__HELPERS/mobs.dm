@@ -67,6 +67,8 @@ proc/random_skin_tone(species = "Human")
 	else if(species == "Vox")
 		. = rand(1,6)
 		return .
+	else if(species == "Tajaran")
+		return 1
 	else
 		return 0
 
@@ -93,18 +95,24 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "unknown"
 	else if(species == "Vox")
 		switch(tone)
-			if(6)
+			if(VOXEMERALD)
 				return "emerald"
-			if(5)
+			if(VOXAZURE)
 				return "azure"
-			if(4)
+			if(VOXLGREEN)
 				return "light green"
-			if(2)
+			if(VOXBROWN)
 				return "brown"
-			if(3)
+			if(VOXGRAY)
 				return "gray"
 			else
 				return "green"
+	else if(species == "Tajaran")
+		switch(tone)
+			if(CATBEASTBLACK)
+				return "black"
+			else
+				return "brown"
 	else
 		return "unknown"
 
@@ -152,6 +160,40 @@ proc/RoundHealth(health)
 		else
 			return "health-100"
 	return "0"
+
+/proc/cyborg_health_to_icon_state(var/health_ratio)
+	switch(health_ratio)
+		if(1.00 to INFINITY)
+			return "huddiagmax"
+		if(0.80 to 1.00)
+			return "huddiaggood"
+		if(0.60 to 0.80)
+			return "huddiaghigh"
+		if(0.40 to 0.60)
+			return "huddiagmed"
+		if(0.20 to 0.40)
+			return "huddiaglow"
+		if(0.00 to 0.20)
+			return "huddiagcrit"
+		if(-100.0 to 0.00)
+			return "huddiagdead"
+	return "huddiagmax"
+
+/proc/power_cell_charge_to_icon_state(var/charge_ratio)
+	switch(charge_ratio)
+		if(0.95 to INFINITY)
+			return "hudbattmax"
+		if(0.80 to 0.95)
+			return "hudbattgood"
+		if(0.60 to 0.80)
+			return "hudbatthigh"
+		if(0.40 to 0.60)
+			return "hudbattmed"
+		if(0.20 to 0.40)
+			return "hudbattlow"
+		if(0.10 to 0.20)
+			return "hudbattcrit"
+	return "hudbattdead"
 
 /*
 Proc for attack log creation, because really why not
@@ -247,5 +289,14 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 		for(var/organ in L)
 			L |= (H.get_organ(organ))
 			L.Remove(organ)
+
+	return L
+
+/proc/adjacent_atoms(atom/center)
+	var/list/L = list()
+
+	for(var/atom/A in range(1, center))
+		if(center.Adjacent(A))
+			L.Add(A)
 
 	return L

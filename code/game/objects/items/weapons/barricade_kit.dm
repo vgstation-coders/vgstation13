@@ -87,7 +87,7 @@
 			kit_uses--
 			if(kit_uses < 1)
 				qdel(src) //Get rid of it
-		return 0 //Don't fire attack, please
+		return TRUE //Don't fire attack, please
 
 /obj/item/weapon/barricade_kit/attack(var/atom/A, mob/user as mob)
 

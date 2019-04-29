@@ -41,6 +41,8 @@
 	emote_hear = list("squawks","bawks")
 	emote_see = list("flutters its wings")
 
+	speak_override = FALSE
+
 	speak_chance = 1 //1% (1 in 100) chance every tick; So about once per 150 seconds, assuming an average tick is 1.5s
 	turns_per_move = 5
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/cracker/
@@ -114,10 +116,12 @@
 		"It prefers kippin' on it's back.", \
 		"It's a beautiful bird, lovely plumage, innit?")
 
+	var/has_headset = 1 //excluding parrotmorph parrots from gaining headsets when a mob is transformed into a parrot via wizard.
+
 
 /mob/living/simple_animal/parrot/New()
 	..()
-	if(!ears)
+	if(!ears && has_headset)
 		var/headset = pick(/obj/item/device/radio/headset/headset_sec, \
 						/obj/item/device/radio/headset/headset_eng, \
 						/obj/item/device/radio/headset/headset_med, \
@@ -147,12 +151,12 @@
 			times_examined_while_dead = 0
 	..()
 
-/mob/living/simple_animal/parrot/Die()
+/mob/living/simple_animal/parrot/death(var/gibbed = FALSE)
 	if(held_item)
 		held_item.forceMove(src.loc)
 		held_item = null
 	walk(src,0)
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/parrot/Stat()
 	..()
@@ -459,7 +463,7 @@
 			//Search for item to steal
 			parrot_interest = search_for_item()
 			if(parrot_interest)
-				emote("looks in [parrot_interest]'s direction and takes flight")
+				emote("me",,"looks in [parrot_interest]'s direction and takes flight.")
 				parrot_state = PARROT_SWOOP | PARROT_STEAL
 				icon_state = "parrot_fly"
 			return
@@ -481,7 +485,7 @@
 			if(AM)
 				if(istype(AM, /obj/item) || isliving(AM))	//If stealable item
 					parrot_interest = AM
-					emote("turns and flies towards [parrot_interest]")
+					emote("me",,"turns and flies towards [parrot_interest].")
 					parrot_state = PARROT_SWOOP | PARROT_STEAL
 					return
 				else	//Else it's a perch
@@ -529,7 +533,7 @@
 			parrot_state = PARROT_SWOOP | PARROT_RETURN
 			return
 
-		walk_to(src, parrot_interest, 1, parrot_speed)
+		start_walk_to(parrot_interest, 1, parrot_speed)
 		if(isStuck())
 			return
 
@@ -550,7 +554,7 @@
 			icon_state = "parrot_sit"
 			return
 
-		walk_to(src, parrot_perch, 1, parrot_speed)
+		start_walk_to(parrot_perch, 1, parrot_speed)
 		if(isStuck())
 			return
 
@@ -604,7 +608,7 @@
 			L.attack_animal(src)//Time for the hurt to begin!
 		//Otherwise, fly towards the mob!
 		else
-			walk_to(src, parrot_interest, 1, parrot_speed)
+			start_walk_to(parrot_interest, 1, parrot_speed)
 			if(isStuck())
 				return
 
@@ -792,7 +796,7 @@
 		held_item = null
 		if(health < maxHealth)
 			adjustBruteLoss(-10)
-		emote("[src] eagerly downs the cracker")
+		emote("me",,"eagerly downs the cracker.")
 		playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 		return 1
 
@@ -854,7 +858,8 @@
 /mob/living/simple_animal/parrot/Poly
 	name = "Poly"
 	desc = "Poly the Parrot. An expert on quantum cracker theory."
-	speak = list("Poly wanna cracker!", ":e Check the singlo, you chucklefucks!",":e Wire the solars, you lazy bums!",":e WHO TOOK THE DAMN HARDSUITS?",":e OH GOD ITS FREE CALL THE SHUTTLE")
+	speak = list("Poly wanna cracker!", ":e Check the singulo, you chucklefucks!",":e Wire the solars, you lazy bums!",":e WHO TOOK THE DAMN HARDSUITS?",":e OH GOD IT'S LOOSE CALL THE SHUTTLE",":e How do I set up the. SHow do I set u p the Singu how do I set up the SCo I do I set up. how I the scrungulartiy????")
+	is_pet = TRUE
 
 /mob/living/simple_animal/parrot/Poly/New()
 	ears = new /obj/item/device/radio/headset/headset_eng(src)

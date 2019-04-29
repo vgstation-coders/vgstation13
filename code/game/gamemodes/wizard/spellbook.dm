@@ -5,47 +5,43 @@
 	desc = "The legendary book of spells of the wizard."
 	icon = 'icons/obj/library.dmi'
 	icon_state ="spellbook"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
+	item_state = "book"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/list/available_spells = list(
-	/spell/targeted/projectile/magic_missile,
-	/spell/targeted/projectile/dumbfire/fireball,
-	/spell/targeted/projectile/dumbfire/fireball/firebreath,
-	/spell/lightning,
-	/spell/aoe_turf/ring_of_fire,
-	/spell/aoe_turf/disable_tech,
-	/spell/aoe_turf/smoke,
-	/spell/targeted/genetic/blind,
-	/spell/targeted/disorient,
-	/spell/targeted/mind_transfer,
-	/spell/aoe_turf/conjure/forcewall,
-	/spell/aoe_turf/blink,
-	/spell/area_teleport,
-	/spell/targeted/genetic/mutate,
-	/spell/targeted/ethereal_jaunt,
-	/spell/aoe_turf/fall,
-	/spell/mirror_of_pain,
-	/spell/aoe_turf/knock,
-	/spell/targeted/equip_item/horsemask,
-	/spell/targeted/equip_item/clowncurse,
-	/spell/targeted/equip_item/frenchcurse,
-	/spell/targeted/shoesnatch,
-	/spell/targeted/equip_item/robesummon,
-	/spell/targeted/flesh_to_stone,
-	/spell/targeted/buttbots_revenge,
-	/spell/aoe_turf/conjure/pontiac,
-	/spell/aoe_turf/conjure/arcane_golem,
-	/spell/targeted/bound_object,
-	/spell/aoe_turf/conjure/snakes,
-	/spell/targeted/push,
-	/spell/noclothes
-	)
+	var/list/available_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/list/available_artifacts = list()
+	var/static/list/available_artifacts = list()
+
+	var/static/list/available_potions = list(
+		/obj/item/potion/healing = Sp_BASE_PRICE,
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
+		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
@@ -61,6 +57,13 @@
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
 
+	for(var/type_S in getAllWizSpells())
+		var/spell/S = new type_S // Because initial doesn't work with lists
+		if (!S.holiday_required.len)
+			available_spells += type_S // We're giving types
+		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
+			available_spells += type_S // We're giving types
+
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
 		available_artifacts.Remove(T) //Remove the path from the list
@@ -72,6 +75,9 @@
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
 
+/obj/item/weapon/spellbook/proc/get_available_potions()
+	return available_potions
+/*
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
@@ -82,12 +88,12 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
-
+*/
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
-/obj/item/weapon/spellbook/attack_self(mob/user = usr)
+/obj/item/weapon/spellbook/attack_self(var/mob/user)
 	if(!user)
 		return
 
@@ -178,7 +184,7 @@
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy())
+		if(!A.can_buy(user))
 			continue
 
 		var/artifact_name = A.name
@@ -191,6 +197,17 @@
 
 		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
+
+	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+
+	for(var/P in get_available_potions())
+		var/obj/item/potion/potion = P
+		var/potion_name = initial(potion.name)
+		var/potion_desc = initial(potion.desc)
+		var/potion_price = available_potions[P]
+
+		dat += "<strong>[potion_name]</strong> ([buy_href_link(P, potion_price, "buy for [potion_price] point\s")])<br>"
+		dat += "<em>[potion_desc]</em><br><br>"
 
 	dat += "</body>"
 
@@ -288,12 +305,20 @@
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
 
+		else if(ispath(buy_type, /obj/item/potion))
+			if(buy_type in get_available_potions())
+				if(use(available_potions[buy_type]))
+					new buy_type(get_turf(usr))
+					feedback_add_details("wizard_spell_learned", "PT")
+
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price))
+				if(SA.can_buy(usr) && use(SA.price))
 					SA.purchased(usr)
+					if(SA.one_use)
+						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
 		attack_self(usr)
@@ -420,47 +445,51 @@
 	name = "spellbook of [spellname]" //Note, desc doesn't change by design
 	..()
 
-/obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
-	..()
-	if(stored_swap in dead_mob_list)
-		stored_swap = null
-	if(!stored_swap)
-		stored_swap = user
-		to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
-		return
-	if(stored_swap == user)
-		to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
-		return
+/obj/item/weapon/spellbook/oneuse/mindswap/recoil(var/mob/user)
+	qdel(src)
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs -= V
+///obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
+	// ..()
+	// if(stored_swap in dead_mob_list)
+	// 	stored_swap = null
+	// if(!stored_swap)
+	// 	stored_swap = user
+	// 	to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
+	// 	return
+	// if(stored_swap == user)
+	// 	to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
+	// 	return
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in stored_swap.mind.special_verbs)
-			stored_swap.verbs -= V
+	// if(user.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs -= V
 
-	var/mob/dead/observer/ghost = stored_swap.ghostize(0)
-	ghost.spell_list = stored_swap.spell_list
+	// if(stored_swap.mind.special_verbs.len)
+	// 	for(var/V in stored_swap.mind.special_verbs)
+	// 		stored_swap.verbs -= V
 
-	user.mind.transfer_to(stored_swap)
-	stored_swap.spell_list = user.spell_list
+	// var/mob/dead/observer/ghost = stored_swap.ghostize(0)
+	// ghost.spell_list = stored_swap.spell_list
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs += V
+	// user.mind.transfer_to(stored_swap)
+	// stored_swap.spell_list = user.spell_list
 
-	ghost.mind.transfer_to(user)
-	user.key = ghost.key
-	user.spell_list = ghost.spell_list
+	// if(stored_swap.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs += V
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs += V
+	// ghost.mind.transfer_to(user)
+	// user.key = ghost.key
+	// user.spell_list = ghost.spell_list
 
-	to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
-	to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
-	stored_swap = null
+	// if(user.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs += V
+
+	// to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
+	// to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
+	// stored_swap = null
+
 
 /obj/item/weapon/spellbook/oneuse/forcewall
 	spell = /spell/aoe_turf/conjure/forcewall
@@ -641,12 +670,12 @@
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		var/mob/living/carbon/human/h = user
+		var/mob/living/carbon/human/H = user
 		user.flash_eyes(visual = 1)
-		for(var/datum/organ/external/l_leg/E in h.organs)
+
+		for(var/datum/organ/external/E in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 			E.droplimb(1)
-		for(var/datum/organ/external/r_leg/E in h.organs)
-			E.droplimb(1)
+
 		to_chat(user, "<span class = 'warning'>Your legs fall off!</span>")
 		qdel(src)
 
@@ -671,7 +700,7 @@
 			B.transfer_buttdentity(C)
 			C.op_stage.butt = 4
 			to_chat(user, "<span class='warning'>Your ass just blew up!</span>")
-		playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
+		playsound(src, 'sound/effects/superfart.ogg', 50, 1)
 		C.apply_damage(40, BRUTE, LIMB_GROIN)
 		C.apply_damage(10, BURN, LIMB_GROIN)
 		qdel(src)
@@ -687,6 +716,11 @@
 		user.apply_damage(25, BURN, LIMB_RIGHT_HAND)
 		to_chat(user, "<span class = 'warning'>The book heats up and burns your hands!</span>")
 		qdel(src)
+
+/obj/item/weapon/spellbook/oneuse/lightning/sith
+	spell = /spell/lightning/sith
+	spellname = "sith lightning"
+	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
@@ -782,8 +816,17 @@
 	desc = "This book seems like it moves away as you get closer to it."
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
+	user.drop_item(src, force_drop = 1)	//no taking the transportation device with you
 	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
-	var/area/thearea = pick(areas)
+	var/area/thearea
+	var/area/prospective = pick(areas)
+	while(!thearea)
+		if(prospective.type != /area)
+			var/turf/T = pick(get_area_turfs(prospective.type))
+			if(T.z != 2)
+				thearea = prospective
+				break
+		prospective = pick(areas)
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)
@@ -810,3 +853,60 @@
 			break
 	if(!success)
 		user.forceMove(pick(L))
+
+/obj/item/weapon/spellbook/oneuse/pie
+	spell = /spell/targeted/projectile/pie
+	spellname = "Summon Pastry"
+	icon_state = "cooked_bookold"
+	desc = "This book smells lightly of lemon meringue."
+
+/obj/item/weapon/spellbook/oneuse/pie/recoil(mob/living/carbon/user)
+	..()
+	var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
+	var/turf/T = get_turf(pick(oview(1, user)))
+	var/obj/pie = new pie_to_spawn(T)
+	spawn()
+		pie.throw_at(user, get_dist(pie,user),rand(40,90))
+
+/obj/item/weapon/spellbook/oneuse/ice_barrage
+	spell = /spell/targeted/ice_barrage
+	spellname = "Ice Barrage"
+	desc = "Cold to the touch."
+	icon_state = "bookAncient"
+
+/obj/item/weapon/spellbook/oneuse/ice_barrage/recoil(mob/living/carbon/user)
+	..()
+	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
+	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
+
+
+///// ANCIENT SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	spell = null
+	icon_state = "book"
+	desc = "A book of lost and forgotten knowledge"
+	spellname = "forgotten knowledge"
+
+/obj/item/weapon/spellbook/oneuse/ancient/New()
+	..()
+	spell = pick(possible_spells)
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal ancient knowledge!</span>")
+	user.gib()
+	qdel(src)
+
+///// WINTER SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be available at christmas
+	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
+	icon_state = "winter"
+	desc = "A book of festive knowledge"
+	spellname = "winter"
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+	user.gib()
+	qdel(src)

@@ -3,6 +3,13 @@
 	~Sayu
 */
 
+//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+/client/Click(object, location, control, params)
+	var/list/p = params2list(params)
+	if(p["drag"])
+		return
+	..()
+
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
 	remove istype() spaghetti code, but requires the addition of other handler procs to simplify it.
@@ -14,6 +21,14 @@
 */
 /atom/Click(location,control,params)
 	usr.ClickOn(src, params)
+
+/mob/living/Click()
+	if(isAI(usr))
+		var/mob/living/silicon/ai/A = usr
+		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
+			return
+	..()
+
 /atom/DblClick(location,control,params)
 	usr.DblClickOn(src,params)
 
@@ -43,7 +58,7 @@
 		return
 	click_delayer.setDelay(1)
 
-	if(client.buildmode)
+	if(client && client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
 
@@ -53,7 +68,10 @@
 		"target" = A
 	))
 	if(modifiers["middle"])
-		MiddleClickOn(A)
+		if(modifiers["shift"])
+			MiddleShiftClickOn(A)
+		else
+			MiddleClickOn(A)
 		return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
@@ -63,6 +81,9 @@
 		return
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
+		return
+
+	if(attempt_crawling(A))
 		return
 
 	if(isStunned())
@@ -87,58 +108,82 @@
 		throw_item(A)
 		return
 
-	var/obj/item/W = get_active_hand()
+	var/obj/item/held_item = get_active_hand()
 	var/item_attack_delay = 0
 
-	if(W == A)
-		/*next_move = world.time + 6
-		if(W.flags&USEDELAY)
-			next_move += 5*/
-		W.attack_self(src, params)
+	if(held_item == A)
+		held_item.attack_self(src, params)
 		update_inv_hand(active_hand)
 
 		return
 
 	if(!isturf(loc) && !is_holder_of(src, A))
 		if(loc == A) //Can attack_hand our holder (a locked closet, for example) from inside, but can't hit it with a tool
-			if(W)
+			if(held_item)
 				return
 		else
 			return
 
-	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
+	//Clicked on an adjacent atom
+	// - Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
 	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
-		if(W)
-			item_attack_delay = W.attack_delay
-			var/resolved = W.preattack(A, src, 1, params)
+		if(held_item)
+			item_attack_delay = held_item.attack_delay
+			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
-				resolved = A.attackby(W,src, params)
-				if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
-					delayNextAttack(item_attack_delay)
-				if(!resolved && A && W)
-					W.afterattack(A,src,1,params) // 1 indicates adjacency
+				if(ismob(A) && modifiers["def_zone"])
+					var/mob/M = A
+					var/def_zone
+					def_zone = modifiers["def_zone"]
+					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
 				else
+					resolved = A.attackby(held_item, src, params)
+				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
+				if(!resolved && A && !A.gcDestroyed && held_item)
+					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
-			if(ismob(A) || istype(W, /obj/item/weapon/grab))
+			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
 			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
-		return
-	else // non-adjacent click
-		if(W)
-			if(ismob(A))
-				delayNextAttack(item_attack_delay)
-			if(!W.preattack(A, src, 0,  params))
-				W.afterattack(A,src,0,params) // 0: not Adjacent
+
+	//Clicked on a non-adjacent atom
+	else
+		//If the player's view is not centered on the mob, check how far the clicked object is from the mob
+		//This is to prevent abuse with remote view / camera consoles
+		if(client && client.eye && client.eye != client.mob)
+			var/view_range = get_view_range() + 2 //Extend clickable zone by 2 tiles to allow clicking on the edge of the screen while the camera is moving
+			var/atom_distance = get_dist(A, src)  //Distance from the player's mob to the clicked atom
+
+			if(atom_distance <= view_range)
+				//Clicked on a non-adjacent atom in view
+				RangedClickOn(A, params, held_item)
+			else
+				//Clicked on a non-adjacent atom that is not in view
+				RemoteClickOn(A, params, held_item, client.eye)
 		else
-			if(ismob(A))
-				delayNextAttack(10)
-			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
-				return
-			RangedAttack(A, params)
-	return
+			RangedClickOn(A, params, held_item)
+
+/mob/proc/RangedClickOn(atom/A, params, obj/item/held_item)
+	if(held_item)
+		if(ismob(A))
+			delayNextAttack(held_item.attack_delay)
+
+		if(!held_item.preattack(A, src, 0,  params))
+			held_item.afterattack(A,src,0,params) // 0: not Adjacent
+	else
+		if(ismob(A))
+			delayNextAttack(10)
+		if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+			return
+		RangedAttack(A, params)
+
+//By default, do nothing if clicked on something that is not in view
+/mob/proc/RemoteClickOn(atom/A, params, obj/item/held_item, atom/movable/eye)
+	if(held_item)
+		held_item.remote_attack(A, src, eye)
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
@@ -195,7 +240,8 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	return
+	if(INVOKE_EVENT(on_ruattack,list("atom"=A))) //This returns 1 when doing an action intercept
+		return
 
 /*
 	Middle click
@@ -211,6 +257,9 @@
 /atom/proc/MiddleClick(var/mob/M as mob)
 	return
 */
+
+/mob/proc/MiddleShiftClickOn(var/atom/A)
+	pointed(A)
 
 /*
 	Shift click
@@ -250,9 +299,6 @@
 	return
 
 /atom/proc/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && ishuman(src) && user.Adjacent(src))
-		src:give_item(user)
-		return
 	var/turf/T = get_turf(src)
 	if(T && T.Adjacent(user))
 		if(user.listed_turf == T)
@@ -260,7 +306,12 @@
 		else
 			user.listed_turf = T
 			user.client.statpanel = T.name
-	return
+
+/mob/living/carbon/AltClick(var/mob/user)
+	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
+		src.give_item(user)
+		return
+	..()
 
 /*
 	Misc helpers

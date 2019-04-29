@@ -13,19 +13,22 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	var/obj/abstract/screen/disarm_intent
 	var/obj/abstract/screen/help_intent
 
-	var/hud_shown = 1			//Used for the HUD toggle (F12)
-	var/inventory_shown = 1		//the inventory
-	var/show_intent_icons = 0
-	var/hotkey_ui_hidden = 0	//This is to hide the buttons that can be used via hotkeys. (hotkeybuttons list of buttons)
+	var/hud_shown = TRUE			//Used for the HUD toggle (F12)
+	var/inventory_shown = TRUE		//the inventory
+	var/show_intent_icons = FALSE
+	var/hotkey_ui_hidden = FALSE	//This is to hide the buttons that can be used via hotkeys. (hotkeybuttons list of buttons)
 
 	var/obj/abstract/screen/lingchemdisplay
 	var/obj/abstract/screen/vampire_blood_display // /vg/
+	var/obj/abstract/screen/countdown_display // /vg/
+	var/obj/abstract/screen/cult_Act_display // /vg/
+	var/obj/abstract/screen/cult_tattoo_display // /vg/
 	var/list/obj/abstract/screen/hand_hud_objects = list()
 	var/obj/abstract/screen/action_intent
 	var/obj/abstract/screen/move_intent
 
 	var/obj/abstract/screen/movable/action_button/hide_toggle/hide_actions_toggle
-	var/action_buttons_hidden = 0
+	var/action_buttons_hidden = FALSE
 
 	var/list/adding
 	var/list/other
@@ -34,19 +37,22 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud/New(mob/owner)
 	mymob = owner
-	instantiate()
+
 	hide_actions_toggle = new
-	hide_actions_toggle.InitialiseIcon(mymob)
+	hide_actions_toggle.InitialiseIcon(src)
+
+	instantiate()
 	..()
 
 /datum/hud/Destroy()
-	..()
 	grab_intent = null
 	hurt_intent = null
 	disarm_intent = null
 	help_intent = null
 	lingchemdisplay = null
 	vampire_blood_display = null
+	cult_Act_display = null
+	cult_tattoo_display = null
 	hand_hud_objects = null
 	action_intent = null
 	move_intent = null
@@ -55,6 +61,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	hide_actions_toggle = null
 	hotkeybuttons = null
 	mymob = null
+
+	return ..()
 
 
 /datum/hud/proc/hidden_inventory_update()
@@ -172,6 +180,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 			adding -= IN
 			mymob.client.screen -= IN
 
+		hand_hud_objects -= IN
 		returnToPool(IN)
 
 	if(mymob.client)
@@ -181,9 +190,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud/proc/instantiate()
 	if(!ismob(mymob))
-		return 0
+		return FALSE
 	if(!mymob.client)
-		return 0
+		return FALSE
 
 
 	var/ui_style
@@ -218,8 +227,6 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		robot_hud()
 	else if(isobserver(mymob))
 		ghost_hud()
-	else if(isshade(mymob))
-		shade_hud()
 	else if(isslime(mymob))
 		slime_hud()
 	else if(isborer(mymob))
@@ -228,6 +235,12 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		construct_hud()
 	else if(ispAI(mymob))
 		pai_hud()
+	else if(ismartian(mymob))
+		martian_hud()
+	else if(ishologram(mymob))
+		hologram_hud()
+	else if(isgrinch(mymob))
+		grinch_hud()
 
 	if(isliving(mymob))
 		var/obj/abstract/screen/using
@@ -249,13 +262,12 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	mymob.client.screen += src.holomap_obj
 
 	reload_fullscreen()
-	mymob.update_action_buttons(1)
 	update_parallax_existence()
 
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)
 /mob/verb/button_pressed_F12()
 	set name = "F12"
-	set hidden = 1
+	set hidden = TRUE
 
 	if(hud_used && client)
 		if(ishuman(src))
@@ -263,7 +275,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 				return
 
 			if(hud_used.hud_shown)
-				hud_used.hud_shown = 0
+				hud_used.hud_shown = FALSE
 				if(src.hud_used.adding)
 					src.client.screen -= src.hud_used.adding
 				if(src.hud_used.other)
@@ -281,7 +293,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 				src.client.screen -= src.zone_sel	//zone_sel is a mob variable for some reason.
 
 			else
-				hud_used.hud_shown = 1
+				hud_used.hud_shown = TRUE
 				if(src.hud_used.adding)
 					src.client.screen += src.hud_used.adding
 				if(src.hud_used.other && src.hud_used.inventory_shown)
@@ -295,7 +307,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 			hud_used.hidden_inventory_update()
 			hud_used.persistant_inventory_update()
-			update_action_buttons(1)
+			update_action_buttons(TRUE)
 		else
 			to_chat(usr, "<span class='warning'>Inventory hiding is currently only supported for human mobs, sorry.</span>")
 	else
@@ -373,5 +385,5 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		L.client.screen -= L.schematics_background
 		L.client.screen -= R.closer
 		if(clear && override && override.len)
-			L.shown_schematics_background = 1
+			L.shown_schematics_background = TRUE
 			.(override, 0, R)

@@ -75,7 +75,7 @@ return value:
 	if(old_schematic)
 		old_schematic.deselect(user, src)
 
-	master.spark()
+	master.do_spark()
 
 	master.selected = src
 

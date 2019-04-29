@@ -125,20 +125,19 @@
 
 		return 1
 
-/obj/structure/closet/crate/flatpack/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
+/obj/structure/closet/crate/flatpack/MouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
 	if(istype(over_object, /obj/structure/closet/crate/flatpack))
-		var/obj/structure/closet/crate/flatpack/flatpack = over_object
-		return flatpack.MouseDrop_T(src,usr)
+		return //MouseDropTo() will handle this
 	var/mob/user = usr
 	if(user.incapacitated() || user.lying)
 		return //Validate mob status
 	if(!isturf(user.loc) || !isturf(over_location) || !Adjacent(user) || !user.Adjacent(over_location))
 		return //Validate location, and distance to location and object
-	if(!ishuman(user) && !isrobot(user))
+	if(!ishigherbeing(user) && !isrobot(user))
 		return //Validate mob type
 	unstack(user, params, over_location)
 
-/obj/structure/closet/crate/flatpack/MouseDrop_T(atom/dropping, mob/user)
+/obj/structure/closet/crate/flatpack/MouseDropTo(atom/dropping, mob/user)
 	if(istype(dropping, /obj/structure/closet/crate/flatpack) && dropping != src)
 		var/obj/structure/closet/crate/flatpack/stacking = dropping
 /*		if(assembling || stacking.assembling)
@@ -149,9 +148,9 @@
 			return
 		if(user.incapacitated() || user.lying) //make sure they can interact with it
 			return
-		if(!ishuman(user) && !isrobot(user)) //check mob type
+		if(!ishigherbeing(user) && !isrobot(user)) //check mob type
 			return
-		if(!user.can_MouseDrop(src, user)) //make sure it's adjacent and whatnot
+		if(!user.Adjacent(src) || !user.Adjacent(dropping))
 			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
@@ -265,3 +264,9 @@
 
 #undef Fl_ACTION
 */
+
+
+/obj/structure/closet/crate/flatpack/suit_modifier/New()
+	..()
+	machine = new /obj/machinery/suit_modifier(src)
+	new /obj/item/rig_module/health_readout(src)

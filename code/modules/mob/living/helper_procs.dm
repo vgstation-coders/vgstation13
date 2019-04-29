@@ -38,3 +38,7 @@ default behaviour is:
 
 /mob/living/proc/feels_pain()
 	return TRUE
+
+/mob/living/proc/isDeadorDying()	//returns 1 if dead or in crit
+	if(stat == DEAD || health <= config.health_threshold_crit)
+		return TRUE

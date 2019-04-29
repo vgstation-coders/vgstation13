@@ -53,8 +53,6 @@
 		qdel(reagents)
 	..()
 
-var/global/tracking_implants = list() //fuck me
-
 /obj/item/weapon/implant/tracking
 	name = "tracking"
 	desc = "Track with this."
@@ -101,7 +99,8 @@ Implant Specifics:<BR>"}
 	spawn(delay)
 		malfunction--
 
-//BS12 Explosive
+
+
 /obj/item/weapon/implant/explosive
 	name = "explosive implant"
 	desc = "A military grade micro bio-explosive. Highly dangerous."
@@ -202,6 +201,8 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/explosive/nuclear/emp_act(severity)
 	return
 
+
+
 /obj/item/weapon/implant/chem
 	name = "chem"
 	desc = "Injects things."
@@ -224,6 +225,14 @@ Can only be loaded while still in its original case.<BR>
 <b>Integrity:</b> Implant will last so long as the subject is alive. However, if the subject suffers from malnutrition,<BR>
 the implant may become unstable and either pre-maturely inject the subject or simply break."}
 		return dat
+
+/obj/item/weapon/implant/chem/New()
+	..()
+	chemical_implants.Add(src)
+
+/obj/item/weapon/implant/chem/Destroy()
+	chemical_implants.Remove(src)
+	..()
 
 /obj/item/weapon/implant/chem/trigger(emote, source as mob)
 	if(emote == "deathgasp")
@@ -285,13 +294,25 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
-	if(H.mind in ticker.mode.head_revolutionaries)
-		H.visible_message("[H] seems to resist the implant!", "You feel the corporate tendrils of Nanotrasen try to invade your mind!")
+	for(var/obj/item/weapon/implant/I in H)
+		if(istype(I, /obj/item/weapon/implant/traitor))
+			if(I.imp_in == H)
+				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
+				return 0
+	if(isrevhead(H) || (iscultist(H) && veil_thickness >= CULT_ACT_II))
+		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		return 0
-	else if(H.mind in ticker.mode:revolutionaries)
-		ticker.mode:remove_revolutionary(H.mind)
+	if(isrevnothead(H))
+		var/datum/role/R = H.mind.GetRole(REV)
+		R.Drop()
+	if(H.mind && H.mind.GetRole(IMPLANTSLAVE))
+		var/datum/role/R = H.mind.GetRole(IMPLANTSLAVE)
+		R.Drop()
+
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
+
+
 
 /obj/item/weapon/implant/traitor
 	name = "Greytide Implant"
@@ -312,11 +333,11 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return dat
 
 /obj/item/weapon/implant/traitor/implanted(mob/M, mob/user)
-	var/list/implanters
-	var/ref = "\ref[user.mind]"
 	if(!iscarbon(M))
+		to_chat(user, "<span class='danger'>The implant doesn't seem to be compatible with [M]!</span>")
 		return 0
 	if(!M.mind)
+		to_chat(user, "<span class='danger'>[M] lacks a mind to affect!</span>")
 		return 0
 	var/mob/living/carbon/H = M
 	if(M == user)
@@ -324,36 +345,35 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		if(isliving(user))
 			user:brainloss += 10
 		return
-	if(locate(/obj/item/weapon/implant/traitor) in H.contents || locate(/obj/item/weapon/implant/loyalty) in H.contents)
-		H.visible_message("[H] seems to resist the implant!", "You feel a strange sensation in your head that quickly dissipates.")
-		return 0
-	else if(H.mind in ticker.mode.traitors)
-		H.visible_message("[H] seems to resist the implant!", "You feel a familiar sensation in your head that quickly dissipates.")
+	for(var/obj/item/weapon/implant/I in H)
+		if(istype(I, /obj/item/weapon/implant/traitor) || istype(I, /obj/item/weapon/implant/loyalty))
+			if(I.imp_in == H)
+				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
+				return 0
+	if(istraitor(H))
+		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
 		return 0
 	H.implanting = 1
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards [user.name].</span>")
-	if(!(user.mind in ticker.mode:implanter))
-		ticker.mode:implanter[ref] = list()
-	implanters = ticker.mode:implanter[ref]
-	implanters.Add(H.mind)
-	ticker.mode.implanted.Add(H.mind)
-	ticker.mode.implanted[H.mind] = user.mind
-	//ticker.mode:implanter[user.mind] += H.mind
-	ticker.mode:implanter[ref] = implanters
-	ticker.mode.traitors += H.mind
-	H.mind.special_role = "traitor"
-	to_chat(H, "<B><span class = 'warning'>You've been shown the Greytide by [user.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")
-	var/datum/objective/protect/p = new
-	p.owner = H.mind
-	p.target = user:mind
-	p.explanation_text = "Protect [user:real_name], the [user:mind:assigned_role=="MODE" ? (user:mind:special_role) : (user:mind:assigned_role)]."
-	H.mind.objectives += p
-	for(var/datum/objective/objective in H.mind.objectives)
-		to_chat(H, "<B>Objective #1</B>: [objective.explanation_text]")
-	ticker.mode.update_traitor_icons_added(H.mind)
-	ticker.mode.update_traitor_icons_added(user.mind)
+
+	var/datum/faction/F = find_active_faction_by_typeandmember(/datum/faction/syndicate/greytide, null, user.mind)
+	if(!F)
+		F = ticker.mode.CreateFaction(/datum/faction/syndicate/greytide, 0, 1)
+		F.HandleNewMind(user.mind)
+
+	var/success = F.HandleRecruitedMind(H.mind)
+	if(!success)
+		visible_message("<span class = 'warning'>The head of \the [H] begins to glow a deep red. It is going to explode!</span>")
+		spawn(3 SECONDS)
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			head_organ.explode()
+		return 0
+	to_chat(H, "<B><span class = 'big warning'>You've been shown the Greytide by [user.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")
+	F.forgeObjectives()
+	update_faction_icons()
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin"
 	desc = "Removes all stuns and knockdowns."
@@ -372,7 +392,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 <b>Integrity:</b> Implant can only be used three times before the nanobots are depleted."}
 		return dat
 
-
 /obj/item/weapon/implant/adrenalin/trigger(emote, mob/source as mob)
 	if (src.uses < 1)
 		return 0
@@ -385,11 +404,12 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 	return
 
-
 /obj/item/weapon/implant/adrenalin/implanted(mob/source)
 		source.mind.store_memory("A implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
 		to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
 		return 1
+
+
 
 
 /obj/item/weapon/implant/death_alarm
@@ -420,7 +440,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			if(loc:timestopped)
 				return
 		activate()
-	else if(M.stat == 2)
+	else if(M.isDead())
 		if(M.timestopped)
 			return
 		activate("death")
@@ -474,6 +494,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	processing_objects.Add(src)
 	return 1
 
+
+
 /obj/item/weapon/implant/compressed
 	name = "compressed matter implant"
 	desc = "Based on compressed matter technology, can store a single item."
@@ -520,6 +542,73 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/compressed/islegal()
 	return 0
 
+
+
 /obj/item/weapon/implant/cortical
 	name = "cortical stack"
 	desc = "A fist-sized mass of biocircuits and chips."
+
+
+
+/obj/item/weapon/implant/peace
+	name = "pax implant"
+	desc = "A bean-shaped implant with a single embossed word - PAX - on it."
+	var/imp_alive = 0
+	var/imp_msg_debounce = 0
+	var/imp_data = {"
+<b>Implant Specifications:</b><BR>
+<b>Name:</b> Pax Implant<BR>
+<b>Manufacturer:</b> Ouroboros Medical<BR>
+<b>Effect:</b> Makes the host incapable of committing violent acts.
+<b>Important Notes:</b> Effect accomplished by paralyzing parts of the brain. This effect is neutralized by 15u or greater of Methylin.<BR>
+<b>Life:</b> Sustained as long as it remains within a host. Survives on the host's nutrition. Dies upon removal.<BR>
+"}
+
+/obj/item/weapon/implant/peace/meltdown()
+	visible_message("<span class='warning'>\The [src] releases a dying hiss as it denatures!</span>")
+	name = "denatured implant"
+	desc = "A dead, hollow implant. Wonder what it used to be..."
+	icon_state = "implant_melted"
+	malfunction = MALFUNCTION_PERMANENT
+
+/obj/item/weapon/implant/peace/process()
+	var/mob/living/carbon/host = imp_in
+
+	if (isnull(host) && imp_alive)
+		malfunction = MALFUNCTION_PERMANENT
+
+	if (malfunction == MALFUNCTION_PERMANENT)
+		meltdown()
+		processing_objects.Remove(src)
+		return
+
+	if (!isnull(host) && !imp_alive)
+		imp_alive = 1
+
+	if (host.nutrition <= 0 || host.reagents.has_reagent(METHYLIN, 15))
+		malfunction = MALFUNCTION_TEMPORARY
+	else
+		malfunction = 0
+
+	if (!imp_msg_debounce && malfunction == MALFUNCTION_TEMPORARY)
+		imp_msg_debounce = 1
+		to_chat(host, "<span class = 'warning'>Your rage bubbles, \the [src] inside you is being suppressed!</span>")
+
+	if (imp_msg_debounce && !malfunction)
+		imp_msg_debounce = 0
+		to_chat(host, "<span class = 'warning'>Your rage cools, \the [src] inside you is active!</span>")
+
+	if (!malfunction)
+		host.nutrition = max(host.nutrition - 0.15,0)
+
+
+/obj/item/weapon/implant/peace/implanted(mob/host)
+	if (!imp_alive && !malfunction)
+		processing_objects.Add(src)
+		to_chat(host, "<span class = 'warning'>You feel your desire to harm anyone slowly drift away...</span>")
+		return 1
+	else
+		return 0
+
+/obj/item/weapon/implant/peace/get_data()
+	return imp_data

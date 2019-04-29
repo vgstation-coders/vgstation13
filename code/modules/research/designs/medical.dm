@@ -20,7 +20,7 @@
 
 /datum/design/adv_bruise_pack
 	name = "Advanced trauma kit"
-	desc = "Used to treat those nasty burns."
+	desc = "Used to treat those nasty bruises."
 	id = "adv_bruise_pack"
 	req_tech = list(Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
@@ -38,17 +38,16 @@
 	category = "Medical"
 	build_path = /obj/item/stack/medical/advanced/ointment
 
-/datum/design/mass_spectrometer
-	name = "Mass-Spectrometer"
-	desc = "A device for analyzing chemicals in the blood."
-	id = "mass_spectrometer"
-	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 2)
+/datum/design/adv_reagent_scanner
+	name = "Advanced Reagent Scanner"
+	desc = "A hand-held reagent scanner which identifies chemical agents."
+	id = "adv_mass_spectrometer"
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 20)
-	reliability_base = 76
 	category = "Medical"
-	build_path = /obj/item/device/mass_spectrometer
-
+	build_path = /obj/item/device/reagent_scanner/adv
+/*
 /datum/design/adv_mass_spectrometer
 	name = "Advanced Mass-Spectrometer"
 	desc = "A device for analyzing chemicals in the blood and their quantities."
@@ -59,7 +58,7 @@
 	reliability_base = 74
 	category = "Medical"
 	build_path = /obj/item/device/mass_spectrometer/adv
-
+*/
 /datum/design/defibrillator
 	name = "Defibrillator"
 	desc = "A handheld emergency defibrillator, used to bring people back from the brink of death or put them there."
@@ -80,35 +79,15 @@
 	category = "Medical"
 	build_path = /obj/item/device/healthanalyzer
 
-/datum/design/laserscalpel1
-	name = "Laser Scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
-	id = "laserscalpel1"
-	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
+/datum/design/electricthermometer
+	name = "Electronic thermometer"
+	desc = "An electronic thermal probe used to accurately read the temperature of an object."
+	id = "electricthermometer"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
+	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
 	category = "Medical"
-	build_path = /obj/item/weapon/scalpel/laser/tier1
-
-/datum/design/laserscalpel2
-	name = "High Precision Laser Scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
-	id = "laserscalpel2"
-	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 500)
-	category = "Medical"
-	build_path = /obj/item/weapon/scalpel/laser/tier2
-
-/datum/design/incisionmanager
-	name = "Surgical Incision Manager"
-	desc = "A true extension of the surgeon's body, this marvel instantly cuts the organ, clamp any bleeding, and retract the skin, allowing for the immediate commencement of therapeutic steps."
-	id = "incisionmanager"
-	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250, MAT_SILVER = 500)
-	category = "Medical"
-	build_path = /obj/item/weapon/retractor/manager
+	build_path = /obj/item/weapon/thermometer/electronic
 
 /datum/design/health_hud
 	name = "Health Scanner HUD"
@@ -140,12 +119,12 @@
 	category = "Medical"
 	build_path = /obj/item/device/antibody_scanner
 
-/datum/design/switchtool
-	name = "Surgeon's Switchtool"
-	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
-	id = "switchtool"
-	req_tech = list(Tc_MATERIALS = 5, Tc_BLUESPACE = 3, Tc_BIOTECH = 3)
+/datum/design/plasmabeaker
+	name = "Plasma Beaker"
+	desc = "A beaker designed to act as a catalyst in some reactions."
+	id = "plasmabeaker"
+	req_tech = list(Tc_PLASMATECH = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
+	materials = list(MAT_IRON = 3750, MAT_PLASMA = 8000)
 	category = "Medical"
-	build_path = /obj/item/weapon/switchtool/surgery
+	build_path = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma

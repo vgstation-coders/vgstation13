@@ -11,7 +11,7 @@ var/global/list/outbreak_level_words=list(
 	command_alert(/datum/command_alert/biohazard_alert)
 
 /*
-#warning TELL N3X15 TO COMMENT THIS SHIT OUT
+#warn TELL N3X15 TO COMMENT THIS SHIT OUT
 /mob/verb/test_biohazard()
 	biohazard_alert()
 */

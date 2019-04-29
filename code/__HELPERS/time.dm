@@ -23,8 +23,9 @@
 	return wtime + (time_offset + wusage) * world.tick_lag
 
 //Returns the world time in english
-/proc/worldtime2text(timestamp = world.time)
-	return "[(round(timestamp / 36000) + 12) % 24]:[(timestamp / 600 % 60) < 10 ? add_zero(timestamp / 600 % 60, 1) : timestamp / 600 % 60]"
+/proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
+	return "[(round(timestamp / 36000) + 12) % 24]:[(timestamp / 600 % 60) < 10 ? add_zero(timestamp / 600 % 60, 1) : timestamp / 600 % 60]\
+	[give_seconds ? ":[(timestamp / 10 % 60) < 10 ? add_zero(timestamp / 10 % 60, 1) : timestamp / 10 % 60]" : ""]"
 
 
 /proc/formatTimeDuration(var/deciseconds)

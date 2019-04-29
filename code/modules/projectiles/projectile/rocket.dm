@@ -25,7 +25,7 @@
 			pixel_y = PixelY
 		sleep(picked_up_speed)
 
-/obj/item/projectile/rocket/Bump(var/atom/A)
+/obj/item/projectile/rocket/to_bump(var/atom/A)
 	explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
 	if(!gcDestroyed)
 		qdel(src)
@@ -59,10 +59,9 @@
 		var/mob/living/carbon/C = nikita.loc
 		if(C.get_active_hand() == nikita)
 			mob = C
-			mob.client.perspective = EYE_PERSPECTIVE
-			mob.client.eye = src
-			mob.orient_object = src
-			mob.canmove = 0
+			var/datum/control/new_control = new /datum/control/lock_move(mob, src)
+			mob.orient_object.Add(new_control)
+			new_control.take_control()
 
 	dir = get_dir_cardinal(starting,original)
 	last_dir = dir
@@ -88,7 +87,7 @@
 		nikita.fired = null
 	..()
 
-/obj/item/projectile/nikita/Bump(var/atom/A)
+/obj/item/projectile/nikita/to_bump(var/atom/A)
 	if(bumped)
 		return
 	if(emagged && (A == mob))
@@ -107,10 +106,9 @@
 			var/mob/living/carbon/C = nikita.loc
 			if(C.get_active_hand() == nikita)
 				mob = C
-				mob.client.perspective = EYE_PERSPECTIVE
-				mob.client.eye = src
-				mob.orient_object = src
-				mob.canmove = 0
+				var/datum/control/new_control = new /datum/control/lock_move(mob, src)
+				mob.orient_object.Add(new_control)
+				new_control.take_control()
 
 	if(src.loc)
 		var/atom/step = get_step(src, dir)
@@ -149,7 +147,7 @@
 /obj/item/projectile/nikita/proc/check_user()
 	if(!mob || !mob.client)
 		return 0
-	if(mob.stat || (mob.get_active_hand() != src))
+	if(mob.stat || (mob.get_active_hand() != nikita))
 		reset_view()
 		return 0
 	return 1
@@ -160,9 +158,7 @@
 		qdel(src)
 
 /obj/item/projectile/nikita/proc/reset_view()
-	if(mob && mob.client)
-		mob.client.eye = mob.client.mob
-		mob.client.perspective = MOB_PERSPECTIVE
-		mob.orient_object = null
-		mob.canmove = 1
-		mob = null
+	var/datum/control/C = mob.orient_object[src]
+	if(C)
+		C.break_control()
+		qdel(C)

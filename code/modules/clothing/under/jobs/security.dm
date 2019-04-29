@@ -74,6 +74,12 @@
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/under/det/noir
+	desc = "This suit's stayed with you for years, like an old friend. Sure, it's seen better days, but it ain't shabby; after all, you can afford a blemish on your character, but not on your clothes."
+	icon_state = "sl_suit"
+	item_state = "detective_noir"
+	_color = "detective_noir"
+
 
 /obj/item/clothing/head/det_hat
 	name = "hat"

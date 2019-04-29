@@ -16,15 +16,15 @@
 /obj/item/clothing/head/welding
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
-	icon_state = "welding"
+	icon_state = "weldingup"
 	flags = FPRINT
 	item_state = "welding"
 	starting_materials = list(MAT_IRON = 3000, MAT_GLASS = 1000)
 	w_type = RECYK_MISC
-	var/up = 0
-	eyeprot = 3
+	var/up = 1
+	eyeprot = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = FACE
+	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED)
@@ -41,12 +41,12 @@
 			src.up = !src.up
 			src.body_parts_covered = FACE
 			eyeprot = 3
-			icon_state = initial(icon_state)
+			icon_state = "welding"
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
 			src.body_parts_covered = HEAD
-			icon_state = "[initial(icon_state)]up"
+			icon_state = "weldingup"
 			eyeprot = 0
 			to_chat(usr, "You push the [src] up out of your face.")
 		usr.update_inv_head()	//so our mob-overlays update
@@ -112,22 +112,30 @@
 /obj/item/clothing/head/ushanka
 	name = "ushanka"
 	desc = "Perfect for winter in Siberia, da?"
-	icon_state = "ushankadown"
-	item_state = "ushankadown"
+	icon_state = "ushanka"
+	item_state = "ushanka"
+	flags = HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
-	if(src.icon_state == "ushankadown")
-		src.icon_state = "ushankaup"
-		src.item_state = "ushankaup"
+	var/initial_icon_state = initial(icon_state)
+	if(icon_state == initial_icon_state)
+		icon_state = "[initial_icon_state]up"
+		item_state = "[initial_icon_state]up"
 		body_parts_covered = HEAD
-		to_chat(user, "You raise the ear flaps on the ushanka.")
+		to_chat(user, "You raise the ear flaps on \the [src].")
 	else
-		src.icon_state = "ushankadown"
-		src.item_state = "ushankadown"
-		to_chat(user, "You lower the ear flaps on the ushanka.")
+		icon_state = initial_icon_state
+		item_state = initial_icon_state
+		to_chat(user, "You lower the ear flaps on \the [src].")
 		body_parts_covered = EARS|HEAD
 
+/obj/item/clothing/head/ushanka/security
+	name = "security ushanka"
+	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
+	icon_state = "ushankared"
+	item_state = "ushankared"
 /*
  * Pumpkin head
  */
@@ -164,25 +172,24 @@
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
 	flags = FPRINT
-	var/icon/mob
-	var/icon/mob2
+	var/haircolored = 1
 	siemens_coefficient = 1.5
-
-	update_icon(var/mob/living/carbon/human/user)
-		if(!istype(user))
-			return
-		mob = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
-		mob2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty2")
-		mob.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
-		mob2.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
-
-		var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
-		var/icon/earbit2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner2")
-		mob.Blend(earbit, ICON_OVERLAY)
-		mob2.Blend(earbit2, ICON_OVERLAY)
 
 /obj/item/clothing/head/kitty/cursed
 	canremove = 0
+
+/obj/item/clothing/head/kitty/collectable
+	desc = "A pair of black kitty ears. Meow!"
+	haircolored = 0
+
+/obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
+	if(!istype(user) || !haircolored)
+		return
+	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
+	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
+
+	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
+	wear_override.Blend(earbit, ICON_OVERLAY)
 
 /obj/item/clothing/head/butt
 	name = "butt"
@@ -234,3 +241,12 @@
 		if(~initial(user.species.flags) & HYPOTHERMIA_IMMUNE)
 			user.species.flags &= ~HYPOTHERMIA_IMMUNE
 		user.faction = initial(user.faction)
+
+/obj/item/clothing/head/beret/sec/ocelot
+	name = "Ocelot's beret"
+	desc = "Ocelot's signature red beret"
+
+/obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
+	if(wearer.get_item_by_slot(slot_head) == src)
+		if(prob(5))
+			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))

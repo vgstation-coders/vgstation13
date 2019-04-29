@@ -65,6 +65,8 @@
 	for(var/obj/item/stack/sheet/hairlesshide/HH in contents)
 		var/obj/item/stack/sheet/wetleather/WL = new(src)
 		WL.amount = HH.amount
+		WL.source_string = HH.source_string
+		WL.name = HH.source_string ? "wet [HH.source_string] leather" : "wet leather"
 		qdel(HH)
 		HH = null
 
@@ -167,7 +169,7 @@
 				qdel(test)
 				test = null
 
-			if(new_jumpsuit_icon_state && new_jumpsuit_item_state && new_jumpsuit_name)
+			if(new_jumpsuit_icon_state && new_jumpsuit_name)
 				for(var/obj/item/clothing/under/J in contents)
 //					to_chat(world, "DEBUG: YUP! FOUND IT!")
 					J.item_state = new_jumpsuit_item_state
@@ -175,7 +177,7 @@
 					J._color = color
 					J.name = new_jumpsuit_name
 					J.desc = new_desc
-			if(new_glove_icon_state && new_glove_item_state && new_glove_name)
+			if(new_glove_icon_state && new_glove_name)
 				for(var/obj/item/clothing/gloves/G in contents)
 //					to_chat(world, "DEBUG: YUP! FOUND IT!")
 					G.item_state = new_glove_item_state

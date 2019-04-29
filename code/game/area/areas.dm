@@ -11,10 +11,14 @@ var/area/space_area
 	var/list/area_turfs
 	var/turret_protected = 0
 	var/list/turretTargets = list()
-	plane = BASE_PLANE
-	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
+	plane = ABOVE_LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
+	var/project_shadows = FALSE
+	var/obj/effect/narration/narrator = null
+
+	flags = 0
 
 /area/New()
 	area_turfs = list()
@@ -31,6 +35,9 @@ var/area/space_area
 		power_equip = 0
 		power_environ = 0
 		space_area = src
+		for(var/datum/d in ambient_sounds)//can't think of a better way to do this.
+			qdel(d)
+		ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
 //		lighting_state = 4
 		//has_gravity = 0    // Space has gravity.  Because.. because.
 
@@ -43,6 +50,11 @@ var/area/space_area
 
 //	spawn(15)
 	power_change()		// all machines set to current power level, also updates lighting icon
+
+/area/spawned_by_map_element(datum/map_element/ME, list/objects)
+	..()
+
+	power_change()
 
 /area/Destroy()
 	..()
@@ -96,9 +108,9 @@ var/area/space_area
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
 				if(state == 1)
-					C.network.Remove("Power Alarms")
+					C.network.Remove(CAMERANET_POWERALARMS)
 				else
-					C.network.Add("Power Alarms")
+					C.network.Add(CAMERANET_POWERALARMS)
 			for (var/mob/living/silicon/aiPlayer in player_list)
 				if(aiPlayer.z == source.z)
 					if (state == 1)
@@ -145,7 +157,7 @@ var/area/space_area
 			//updateicon()
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
-				C.network.Add("Atmosphere Alarms")
+				C.network.Add(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.triggerAlarm("Atmosphere", src, cameras, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -156,7 +168,7 @@ var/area/space_area
 		// Dropping from danger level 2.
 		else if (atmosalm == 2)
 			for(var/obj/machinery/camera/C in src)
-				C.network.Remove("Atmosphere Alarms")
+				C.network.Remove(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.cancelAlarm("Atmosphere", src, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -201,7 +213,7 @@ var/area/space_area
 	for(var/obj/machinery/door/firedoor/D in all_doors)
 		if(!D.blocked)
 			if(D.operating)
-				D.nextstate = CLOSED
+				D.nextstate = FD_CLOSED
 			else if(!D.density)
 				spawn()
 					D.close()
@@ -213,7 +225,7 @@ var/area/space_area
 	for(var/obj/machinery/door/firedoor/D in all_doors)
 		if(!D.blocked)
 			if(D.operating)
-				D.nextstate = OPEN
+				D.nextstate = FD_OPEN
 			else if(D.density)
 				spawn()
 					D.open()
@@ -234,7 +246,7 @@ var/area/space_area
 		var/list/cameras = list()
 		for (var/obj/machinery/camera/C in src)
 			cameras.Add(C)
-			C.network.Add("Fire Alarms")
+			C.network.Add(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.triggerAlarm("Fire", src, cameras, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -251,7 +263,7 @@ var/area/space_area
 		mouse_opacity = 0
 		updateicon()
 		for (var/obj/machinery/camera/C in src)
-			C.network.Remove("Fire Alarms")
+			C.network.Remove(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.cancelAlarm("Fire", src, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -404,52 +416,26 @@ var/area/space_area
 			used_environ += amount
 
 /area/Entered(atom/movable/Obj, atom/OldLoc)
-	var/area/oldArea = Obj.areaMaster
-	Obj.areaMaster = src
+	var/area/oldArea = get_area(OldLoc)
+
+	if(project_shadows)
+		Obj.update_shadow()
+	else if(istype(oldArea) && oldArea.project_shadows)
+		Obj.underlays -= Obj.shadow
+
+	Obj.area_entered(src)
+	for(var/atom/movable/thing in get_contents_in_object(Obj))
+		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
+
+		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
 	var/mob/M = Obj
-
-	if(M && istype(M))
-		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
-		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
-			M.client.ambience_playing = 1
-			var/sound = 'sound/ambience/shipambience.ogg'
-
-			if(prob(35))
-				//Ambience goes down here -- make sure to list each area seperately for ease of adding things in later, thanks!
-				//Note: areas adjacent to each other should have the same sounds to prevent cutoff when possible.- LastyScratch.
-				//TODO: This is dumb - N3X.
-				if(istype(src, /area/chapel))
-					sound = pick('sound/ambience/ambicha1.ogg', 'sound/ambience/ambicha2.ogg', 'sound/ambience/ambicha3.ogg', 'sound/ambience/ambicha4.ogg')
-				else if(istype(src, /area/medical/morgue))
-					sound = pick('sound/ambience/ambimo1.ogg', 'sound/ambience/ambimo2.ogg', 'sound/music/main.ogg')
-				else if(isspace(src))
-					sound = pick('sound/ambience/ambispace.ogg', 'sound/music/space.ogg', 'sound/music/main.ogg', 'sound/music/traitor.ogg', 'sound/ambience/spookyspace1.ogg', 'sound/ambience/spookyspace2.ogg')
-				else if(istype(src, /area/engineering))
-					sound = pick('sound/ambience/ambisin1.ogg', 'sound/ambience/ambisin2.ogg', 'sound/ambience/ambisin3.ogg', 'sound/ambience/ambisin4.ogg')
-				else if(istype(src, /area/AIsattele) || istype(src, /area/turret_protected/ai) || istype(src, /area/turret_protected/ai_upload) || istype(src, /area/turret_protected/ai_upload_foyer))
-					sound = pick('sound/ambience/ambimalf.ogg')
-				else if(istype(src, /area/maintenance/ghettobar))
-					sound = pick('sound/ambience/ghetto.ogg')
-				else if(istype(src, /area/shuttle/salvage/derelict))
-					sound = pick('sound/ambience/derelict1.ogg', 'sound/ambience/derelict2.ogg', 'sound/ambience/derelict3.ogg', 'sound/ambience/derelict4.ogg')
-				else if(istype(src, /area/mine/explored) || istype(src, /area/mine/unexplored))
-					sound = pick('sound/ambience/ambimine.ogg', 'sound/ambience/song_game.ogg', 'sound/music/torvus.ogg')
-				else if(istype(src, /area/maintenance/fsmaint2) || istype(src, /area/maintenance/port) || istype(src, /area/maintenance/aft) || istype(src, /area/maintenance/asmaint))
-					sound = pick('sound/ambience/spookymaint1.ogg', 'sound/ambience/spookymaint2.ogg')
-				else if(istype(src, /area/tcommsat) || istype(src, /area/turret_protected/tcomwest) || istype(src, /area/turret_protected/tcomeast) || istype(src, /area/turret_protected/tcomfoyer) || istype(src, /area/turret_protected/tcomsat))
-					sound = pick('sound/ambience/ambisin2.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/ambigen10.ogg')
-				else
-					sound = pick('sound/ambience/ambigen1.ogg', 'sound/ambience/ambigen3.ogg', 'sound/ambience/ambigen4.ogg', 'sound/ambience/ambigen5.ogg', 'sound/ambience/ambigen6.ogg', 'sound/ambience/ambigen7.ogg', 'sound/ambience/ambigen8.ogg', 'sound/ambience/ambigen9.ogg', 'sound/ambience/ambigen10.ogg', 'sound/ambience/ambigen11.ogg', 'sound/ambience/ambigen12.ogg', 'sound/ambience/ambigen14.ogg')
-
-			M << sound(sound, 0, 0, CHANNEL_AMBIENCE, 25)
-
-			spawn(600) // Ewww - this is very very bad.
-				if(M && M.client)
-					M.client.ambience_playing = 0
+	if(istype(M))
+		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
+		if(narrator)
+			narrator.Crossed(M)
 
 	if(turret_protected)
 		if(isliving(Obj))
@@ -553,7 +539,7 @@ var/area/space_area
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(old_area,src)
 
-var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
+var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
 var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 
@@ -661,7 +647,7 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 						// Spawn a new shuttle corner object
 						var/obj/corner = new()
 						corner.forceMove(X)
-						corner.density = 1
+						corner.setDensity(TRUE)
 						corner.anchored = 1
 						corner.icon = X.icon
 						corner.icon_state = replacetext(X.icon_state, "_s", "_f")
@@ -733,18 +719,18 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 			for(var/obj/machinery/door/D2 in T1)
 				doors += D2
 			/*if(T1.parent)
-				air_master.groups_to_rebuild += T1.parent
+				SSair.groups_to_rebuild += T1.parent
 			else
-				air_master.mark_for_update(T1)*/
+				SSair.mark_for_update(T1)*/
 
 	if(fromupdate.len)
 		for(var/turf/simulated/T2 in fromupdate)
 			for(var/obj/machinery/door/D2 in T2)
 				doors += D2
 			/*if(T2.parent)
-				air_master.groups_to_rebuild += T2.parent
+				SSair.groups_to_rebuild += T2.parent
 			else
-				air_master.mark_for_update(T2)*/
+				SSair.mark_for_update(T2)*/
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()

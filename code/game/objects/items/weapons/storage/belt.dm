@@ -7,6 +7,8 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 /obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
@@ -22,6 +24,9 @@
 	w_class = W_CLASS_LARGE
 	storage_slots = 14
 	max_combined_w_class = 200 //This actually doesn't matter as long as it is arbitrarily high, bar will be set by storage slots
+	fits_ignoring_w_class = list(
+		"/obj/item/device/lightreplacer"
+		)
 	can_only_hold = list(
 		"/obj/item/weapon/crowbar",
 		"/obj/item/weapon/screwdriver",
@@ -35,13 +40,16 @@
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
 		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/syndie/engineering",
 		"/obj/item/taperoll/atmos",
+		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
-		"/obj/item/device/silicate_sprayer"
+		"/obj/item/device/silicate_sprayer",
+		"/obj/item/device/geiger_counter"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
@@ -92,7 +100,9 @@
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
 		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/syndie/engineering",
 		"/obj/item/taperoll/atmos",
+		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/device/rcd/matter/engineering",
 		"/obj/item/device/rcd/rpd",
@@ -105,6 +115,7 @@
 		"/obj/item/device/device_analyser",
 		"/obj/item/weapon/rcl",
 		"/obj/item/device/silicate_sprayer",
+		"/obj/item/device/geiger_counter",
 		"/obj/item/weapon/inflatable_dispenser"
 		)
 
@@ -131,6 +142,11 @@
 	desc = "Can hold various medical equipment."
 	icon_state = "medicalbelt"
 	item_state = "medical"
+	storage_slots = 21
+	max_combined_w_class = 21
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	use_to_pickup = TRUE
 	can_only_hold = list(
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
@@ -147,11 +163,14 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-        "/obj/item/weapon/reagent_containers/hypospray/autoinjector",
+		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
+		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
-		"/obj/item/weapon/switchtool/surgery"
+		"/obj/item/weapon/switchtool/surgery",
+		"/obj/item/weapon/grenade/chem_grenade",
+		"/obj/item/weapon/electrolyzer"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -159,6 +178,15 @@
 	desc = "Grey belt that holds less and matches certain jumpsuits.  It looks like it can fit in a backpack."
 	icon_state = "greybelt"
 	item_state = "grey"
+
+/obj/item/weapon/storage/belt/slim/pro/New()
+	..()
+	new /obj/item/weapon/screwdriver(src)
+	new /obj/item/weapon/wrench(src)
+	new /obj/item/weapon/weldingtool(src)
+	new /obj/item/weapon/crowbar(src)
+	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/device/multitool(src)
 
 /obj/item/weapon/storage/belt/security
 	name = "security belt"
@@ -189,13 +217,17 @@
 		"/obj/item/device/radio/headset",
 		"/obj/item/weapon/melee/baton",
 		"/obj/item/taperoll/police",
+		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/gun/energy/stunrevolver",
 		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
 		"obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
-		"/obj/item/clothing/accessory/holobadge"
+		"/obj/item/clothing/accessory/holobadge",
+		"/obj/item/weapon/autocuffer",
+		"/obj/item/weapon/depocket_wand",
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
@@ -246,9 +278,46 @@
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/weapon/organ/head"
+ 		"/obj/item/organ/external/head"
  	)
 
+/obj/item/weapon/storage/belt/silicon
+	name = "cyber trophy belt"
+	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
+	icon_state = "utilitybelt"
+	item_state = "utility"
+	fits_max_w_class = 4
+	max_combined_w_class = 28
+	can_only_hold = list(
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi"
+ 	)
+
+/obj/item/weapon/storage/belt/silicon/New()
+	..()
+	new /obj/item/device/aicard(src) //One freebie card
+
+/obj/item/weapon/storage/belt/silicon/proc/GetCyberbeltMobs()
+	var/list/mobs = list()
+	for(var/obj/item/device/mmi/M in contents)
+		if(M.brainmob)
+			mobs += M.brainmob
+	for(var/obj/item/device/aicard/A in contents)
+		for(var/mob/living/silicon/ai/AI in A)
+			mobs += AI
+	return mobs
+
+/proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
+	var/list/listeners = observers
+	if(istype(B.loc,/mob))
+		var/mob/M = B.loc
+		listeners += M
+	listeners += B.GetCyberbeltMobs()
+	listeners = uniquelist(listeners)
+	var/turf/T = get_turf(B)
+	log_say("[key_name(C)] (@[T.x],[T.y],[T.z]) Trophy Belt: [message]")
+	for(var/mob/L in listeners)
+		to_chat(L,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
 
 /obj/item/weapon/storage/belt/mining
 	name = "mining gear belt"
@@ -312,24 +381,25 @@
 	if(amount != contents.len)
 		update_icon()
 
-/obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location)
-	..()
+/obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+	. = ..()
 	update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/antag
 	icon_state = "lazarusbelt"
 
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
-	var/blocked = list(
-	/mob/living/simple_animal/hostile/hivebot/tele,
-	)
-	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
+
+	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)) // list of possible hostile mobs
 	critters = shuffle(critters)
 	while(contents.len < 6)
 		var/obj/item/device/mobcapsule/MC = new /obj/item/device/mobcapsule(src)
 		var/chosen = pick(critters)
 		critters -= chosen
 		var/mob/living/simple_animal/hostile/NM = new chosen(MC)
+		if(istype(NM, /mob/living/simple_animal/hostile/humanoid))
+			var/mob/living/simple_animal/hostile/humanoid/H = NM
+			H.items_to_drop = list()
 		NM.faction = "lazarus \ref[user]"
 		NM.friends += user
 		MC.contained_mob = NM

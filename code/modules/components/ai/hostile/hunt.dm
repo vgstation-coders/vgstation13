@@ -1,7 +1,7 @@
 // Hunting controller from spiders
 /datum/component/ai/hunt
 	var/last_dir=0 // cardinal direction
-	var/last_was_bumped=0 // Boolean, indicates whether the last movement resulted in a Bump().
+	var/last_was_bumped=0 // Boolean, indicates whether the last movement resulted in a to_bump().
 	var/life_tick=0
 
 	var/movement_range=20 // Maximum range of points we move to (20 in spiders)

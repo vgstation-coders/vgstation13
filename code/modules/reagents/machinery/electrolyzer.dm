@@ -8,17 +8,8 @@
 	force = 2.0
 	var/list/beakers = new/list()
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/)
-	var/datum/effect/effect/system/spark_spread/spark_system
 
 /obj/item/weapon/electrolyzer/New()
-	. = ..()
-	spark_system = new
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
-
-/obj/item/weapon/electrolyzer/Destroy()
-	qdel(spark_system)
-	spark_system	= null
 	. = ..()
 
 /obj/item/weapon/electrolyzer/attack_self(mob/user as mob)
@@ -104,14 +95,18 @@
 		var/amount_to_electrolyze = total_reactions*unreaction.result_amount
 		active.reagents.remove_reagent(unreaction.result,amount_to_electrolyze) //This moves over the reactive bulk, and leaves behind the amount too small to react
 		for(var/E in unreaction.required_reagents)
+			var/reagent_ID = E
+			if(islist(E))
+				var/list/L = E
+				reagent_ID = L[1] //the first element should be the synthetic version of the chemical. why don't the lists start at 0?
 			if(primary)
-				active.reagents.add_reagent(E, unreaction.required_reagents[E]*total_reactions) //Put component amount * reaction count back in primary
+				active.reagents.add_reagent(reagent_ID, unreaction.required_reagents[E]*total_reactions) //Put component amount * reaction count back in primary
 				primary = 0
 			else
-				empty.reagents.add_reagent(E, unreaction.required_reagents[E]*total_reactions)
+				empty.reagents.add_reagent(reagent_ID, unreaction.required_reagents[E]*total_reactions)
 		investigation_log(I_CHEMS, "was used by [key_name(user)] to electrolyze [amount_to_electrolyze]u of [unreaction.result].")
 		to_chat(user, "<span class='warning'>The system electrolyzes!</span>")
-		spark_system.start()
+		spark(src, 5, FALSE)
 	else
 		..()
 

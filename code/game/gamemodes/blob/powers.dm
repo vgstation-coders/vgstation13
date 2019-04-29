@@ -48,6 +48,11 @@
 		to_chat(src, "There is no blob here!")
 		return
 
+	if(istype(B, /obj/effect/blob/core))
+		if(B.overmind == src)
+			restrain_blob()
+			return
+
 	if(!istype(B, /obj/effect/blob/normal))
 		to_chat(src, "Unable to use this blob, find a normal one.")
 		return
@@ -130,7 +135,7 @@
 		return
 
 
-	B.change_to(/obj/effect/blob/core, src)
+	B.change_to(/obj/effect/blob/core, src, TRUE)
 
 	return
 
@@ -278,9 +283,14 @@
 		to_chat(src, "There is no blob adjacent to you.")
 		return
 
+	if(attack_delayer.blocked())
+		return
+
 	if(!can_buy(BLOBATTCOST))
 		return
-	OB.expand(T, 0)
+
+	delayNextAttack(5)
+	OB.expand(T, 0) //Doesn't give source because we don't care about passive restraint
 	return
 
 
@@ -313,17 +323,23 @@
 /mob/camera/blob/verb/telepathy_power()
 	set category = "Blob"
 	set name = "Psionic Message"
-	set desc = "Give a psionic message to all creatures on and around the station."
-	telepathy()
+	set desc = "Give a psionic message to all creatures on and around your 'local' vicinity."
+	var/text = input(src, "What message should we send?", "Message") as null|text
+	if (text)
+		telepathy(text)
 
 /mob/camera/blob/proc/telepathy(message as text)
 
 	if(!can_buy(BLOBTAUNTCOST))
 		return
 
-
-	to_chat(world, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
+	var/current_zlevel = get_z_level(src)
+	to_chat(current_zlevel, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
 	spawn(5)
-	to_chat(world, "<span class='blob'>[message]</span>")
+	to_chat(current_zlevel, "<span class='blob'>[message]</span>") //Only sends messages to things on its own z level
 	add_gamelogs(src, "used blob telepathy to convey \"[message]\"", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")
+
+/mob/camera/blob/proc/restrain_blob()
+	restrain_blob = !restrain_blob
+	to_chat(src,"<span class='notice'>You will [restrain_blob ? "now" : "not"] restrain your blobs from passively spreading into walls.</span>")

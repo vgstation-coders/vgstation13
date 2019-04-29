@@ -13,7 +13,7 @@
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
 	throwforce = 15.0
-	
+
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
@@ -45,7 +45,7 @@
 /obj/item/weapon/shard/plasma
 	name = "plasma shard"
 	desc = "A shard of plasma glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."
-	force = 8.0
+	force = 9.0
 	throwforce = 15.0
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
@@ -65,6 +65,7 @@
 	starting_materials = list(MAT_IRON = 5)
 	w_type=RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
+	glass = /obj/item/stack/sheet/metal
 
 /obj/item/weapon/shard/shrapnel/New()
 	..()
@@ -74,7 +75,7 @@
 /obj/item/weapon/shard/suicide_act(mob/user)
 		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the shard of glass! It looks like \he's trying to commit suicide.</span>", \
 							"<span class='danger'>[user] is slitting \his throat with the shard of glass! It looks like \he's trying to commit suicide.</span>"))
-		return (BRUTELOSS)
+		return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shard/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -83,7 +84,7 @@
 /obj/item/weapon/shard/resetVariables()
 	..("icon_state", "pixel_y", "pixel_x")
 
-/obj/item/weapon/shard/Bump()
+/obj/item/weapon/shard/to_bump()
 
 	spawn( 0 )
 		if (prob(20))
@@ -107,24 +108,25 @@
 /obj/item/weapon/shard/Crossed(mob/living/AM)
 	if(istype(AM))
 		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
 		if(AM.flying) //We don't check for lying yet because it's intended to hurt
 			return
 		else //Stepping on the glass
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 			if(ishuman(AM))
 				var/mob/living/carbon/human/H = AM
 				var/danger = FALSE
 
-				if(!H.mutations.Find(M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
-					var/datum/organ/external/affecting = H.get_organ(pick(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
-					if(affecting.is_organic())
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
 						danger = TRUE
 
 						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
-						if(affecting.take_damage(5, 0))
+							H.Stun(3)
+						if(foot.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()
 

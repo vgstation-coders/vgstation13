@@ -27,6 +27,8 @@
 	var/obj/abstract/screen/bodytemp = null
 	var/obj/abstract/screen/healths = null
 	var/obj/abstract/screen/throw_icon = null
+	var/obj/abstract/screen/camera_icon = null
+	var/obj/abstract/screen/album_icon = null
 	var/obj/abstract/screen/nutrition_icon = null
 	var/obj/abstract/screen/pressure = null
 	var/obj/abstract/screen/damageoverlay = null
@@ -81,10 +83,12 @@
 	var/eye_blind = null	//Carbon
 	var/eye_blurry = null	//Carbon
 	var/ear_deaf = null		//Carbon
+	var/say_mute = null
 	var/ear_damage = null	//Carbon
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
 	var/real_name = null
+	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -93,14 +97,13 @@
 	var/obj/effect/rune/ajourn
 	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
-	var/antitoxs = null
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
 	var/lying = 0
 	var/lying_prev = 0
 	var/canmove = 1
 	var/candrop = 1
-	var/lastpuke = 0
+	var/tazed = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -144,15 +147,21 @@
 	var/m_intent = "run"//Living
 	var/lastKnownIP = null
 
+	//Tank used as internals
+	var/obj/item/weapon/tank/internal = null
+
+	//Active storage item (i.e. the backpack or cardboard box that you're looking inside of)
+	var/obj/item/weapon/storage/s_active = null
+
+	//Inventory
+
 	var/active_hand = 1 //Current active hand. Contains an index of the held_items list
 	var/list/obj/item/held_items = list(null, null) //Contains items held in hands
 
-	var/obj/item/weapon/back = null//Human/Monkey
-	var/obj/item/weapon/tank/internal = null//Human/Monkey
-	var/obj/item/weapon/storage/s_active = null//Carbon
-	var/obj/item/clothing/mask/wear_mask = null//Carbon
+	var/obj/item/weapon/back = null
+	var/obj/item/clothing/mask/wear_mask = null
 
-	var/seer = 0 //for cult//Carbon, probably Human
+	var/seer = 0 // Legacy Cult
 
 	var/datum/hud/hud_used = null
 	var/datum/ui_icons/gui_icons = null
@@ -163,8 +172,6 @@
 	var/list/mapobjs = list()
 
 	var/in_throw_mode = 0
-
-	var/coughedtime = null
 
 	var/job = null//Living
 
@@ -217,7 +224,7 @@
 
 //List of active diseases
 
-	var/viruses = list() // replaces var/datum/disease/virus
+	var/list/datum/disease/viruses = list() // replaces var/datum/disease/virus
 	var/list/resistances = list()
 
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
@@ -233,11 +240,9 @@
 
 	var/force_compose = 0 //If this is nonzero, the mob will always compose it's own hear message instead of using the one given in the arguments.
 
+	var/list/control_object = list()	//Used by admins to possess objects. All mobs should have this var
 
-
-	var/obj/control_object = null	//Used by admins to possess objects. All mobs should have this var
-
-	var/obj/orient_object = null	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
+	var/list/orient_object = list()	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
 
 	//Whether or not mobs can understand other mobtypes. These stay in /mob so that ghosts can hear everything.
 	var/universal_speak = 0 // Set to 1 to enable the mob to speak to everyone -- TLE
@@ -247,8 +252,6 @@
 
 	var/has_limbs = 1 //Whether this mob have any limbs he can move with
 	var/can_stand = 1 //Whether this mob have ability to stand
-
-	var/immune_to_ssd = 0
 
 	var/turf/listed_turf = null  //the current turf being examined in the stat panel
 
@@ -274,8 +277,11 @@
 	var/list/languages[0]
 	var/event/on_spellcast
 	var/event/on_uattack
+	var/event/on_ruattack	//on restrained unarmed attack
 	var/event/on_logout
 	var/event/on_damaged
+	var/event/on_irradiate
+	var/event/on_death
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
@@ -289,7 +295,10 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 /mob/resetVariables()
-	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", "attack_log", "speak_emote", args)
+	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
+	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "special_delayer", \
+	"clong_delayer", args)
+
 	callOnFace = list()
 	pinned = list()
 	embedded = list()
@@ -304,3 +313,15 @@
 	radar_blips = list()
 	active_genes = list()
 	attack_log = list()
+	speak_emote = list()
+	alphas = list()
+	heard_by = list()
+	control_object = list()
+	orient_object = list()
+	actions = list()
+	held_items = list()
+
+	click_delayer   = new (1,ARBITRARILY_LARGE_NUMBER)
+	attack_delayer  = new (1,ARBITRARILY_LARGE_NUMBER)
+	special_delayer = new (1,ARBITRARILY_LARGE_NUMBER)
+	clong_delayer   = new (10,ARBITRARILY_LARGE_NUMBER)

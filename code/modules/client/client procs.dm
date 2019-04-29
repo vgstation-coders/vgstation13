@@ -127,8 +127,7 @@
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
 	if(config)
-		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
-		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
+		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
 		to_chat(src, "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>")
 
@@ -186,6 +185,7 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
+
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
@@ -215,6 +215,8 @@
 
 	//Set map label to correct map name
 	winset(src, "rpane.map", "text=\"[map.nameLong]\"")
+
+	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	// Notify scanners.
 	INVOKE_EVENT(on_login,list(
@@ -371,16 +373,17 @@
 
 	// Preload the crew monitor. This needs to be done due to BYOND bug http://www.byond.com/forum/?post=1487244
 	//The above bug report thing doesn't exist anymore so uh, whatever.
-	spawn
-		send_html_resources()
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			send_html_resources()
 
 	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			nanomanager.send_resources(src)
 
 
 /client/proc/send_html_resources()
-	if(crewmonitor && minimapinit)
-		crewmonitor.sendResources(src)
 	if(adv_camera && minimapinit)
 		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
@@ -398,6 +401,15 @@
 		if(ROLEPREF_ALWAYS)
 			return "Always"
 	return "???"
+
+/client/proc/GetRolePrefs()
+	var/list/roleprefs = list()
+	for(var/role_id in antag_roles)
+		if(desires_role(role_id,FALSE))
+			roleprefs += role_id
+	if(!roleprefs.len)
+		return "none"
+	return english_list(roleprefs)
 
 /client/proc/desires_role(var/role_id, var/display_to_user=0)
 	var/role_desired = prefs.roles[role_id]
@@ -454,3 +466,58 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
+
+/client/proc/update_special_views()
+	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
+		if(parallax_initialized)
+			mob.hud_used.update_parallax_values()
+
+	if(!istype(mob, /mob/dead/observer) && !(M_XRAY in mob.mutations))	//If they are neither an observer nor someone with X-ray vision
+		for(var/obj/structure/window/W in one_way_windows)
+			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
+				break
+
+/client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
+	var/Image										//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
+	var/turf/Oneway
+	var/obj/structure/window/W
+	var/list/newimages = list()
+	var/list/onewaylist = list()
+
+	if(!v)
+		return
+
+	ObscuredTurfs.len = 0
+
+	for(W in view(view,mob))
+		if(W.one_way)
+			if(W.dir & get_dir(W,mob))
+				Oneway = get_turf(W)
+				Oneway.opacity = 1
+				onewaylist += Oneway
+
+	if(onewaylist.len)
+		var/list/List = v - view(view,mob)
+		List += onewaylist
+		for(var/turf/T in List)
+			T.viewblock = image('icons/turf/overlays.dmi',T,"black_box",10)
+			if(T in onewaylist)
+				for(W in T.contents)
+					if(W.one_way)
+						T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",10)
+			T.viewblock.plane = FULLSCREEN_PLANE
+			src << T.viewblock
+			newimages += T.viewblock
+			ObscuredTurfs += T
+
+		for(var/turf/I in onewaylist)
+			I.opacity = 0
+
+	for(Image in ViewFilter-newimages)
+		images -= Image
+	ViewFilter = newimages
+
+/client/proc/handle_hear_voice(var/mob/origin)
+	if(prefs.hear_voicesound)
+		mob.playsound_local(get_turf(origin), get_sfx("voice"),50,1)

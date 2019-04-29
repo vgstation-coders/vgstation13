@@ -141,6 +141,8 @@ var/syndicate_elite_shuttle_timeleft = 0
 			explosion(T,4,6,8,10,0)
 
 	sleep(40)
+	
+	//what the fuck is that \/
 //	proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, adminlog = 1)
 
 */
@@ -186,8 +188,8 @@ var/syndicate_elite_shuttle_timeleft = 0
 	return attack_hand(user)
 
 /obj/machinery/computer/syndicate_elite_shuttle/emag(mob/user as mob)
-	to_chat(user, "<span class='notice'>The electronic systems in this console are far too advanced for your primitive hacking peripherals.</span>")
-	return
+	if(user)
+		to_chat(user, "<span class='notice'>The electronic systems in this console are far too advanced for your primitive hacking peripherals.</span>")
 
 /obj/machinery/computer/syndicate_elite_shuttle/attack_hand(var/mob/user as mob)
 	if(!allowed(user))

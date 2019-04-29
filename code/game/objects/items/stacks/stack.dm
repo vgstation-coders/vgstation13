@@ -26,7 +26,7 @@
 	if (amount)
 		src.amount=amount
 	update_materials()
-	return
+	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
@@ -47,64 +47,87 @@
 
 /obj/item/stack/proc/list_recipes(mob/user as mob, recipes_sublist)
 	ASSERT(isnum(amount))
-	if (!recipes)
+	if(!recipes)
 		return
-	if (!src || amount<=0)
+	if(!src || amount <= 0)
 		user << browse(null, "window=stack")
 	user.set_machine(src) //for correct work of onclose
 	var/list/recipe_list = recipes
-	if (recipes_sublist && recipe_list[recipes_sublist] && istype(recipe_list[recipes_sublist], /datum/stack_recipe_list))
+	if(recipes_sublist && recipe_list[recipes_sublist] && istype(recipe_list[recipes_sublist], /datum/stack_recipe_list))
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
-	var/t1 = text("<HTML><HEAD><title>Constructions from []</title></HEAD><body><TT>Amount Left: []<br>", src, src.amount)
-	for(var/i=1;i<=recipe_list.len,i++)
+	var/t1 = "<HTML><HEAD><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
+	for(var/i = 1;i <= recipe_list.len,i++)
 		var/E = recipe_list[i]
-		if (isnull(E))
+		if(isnull(E))
 			t1 += "<hr>"
 			continue
 
-		if (i>1 && !isnull(recipe_list[i-1]))
-			t1+="<br>"
+		if(i > 1 && !isnull(recipe_list[i-1]))
+			t1 += "<br>"
 
-		if (istype(E, /datum/stack_recipe_list))
+		if(istype(E, /datum/stack_recipe_list))
 			var/datum/stack_recipe_list/srl = E
 
 			var/stack_name = (irregular_plural && srl.req_amount > 1) ? irregular_plural : "[singular_name]\s"
-			if (src.amount >= srl.req_amount)
+			if(src.amount >= srl.req_amount)
 				t1 += "<a href='?src=\ref[src];sublist=[i]'>[srl.title] ([srl.req_amount] [stack_name])</a>"
 			else
 				t1 += "[srl.title] ([srl.req_amount] [stack_name]\s)<br>"
 
-		if (istype(E, /datum/stack_recipe))
+		if(istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
 			var/max_multiplier = round(src.amount / R.req_amount)
 			var/title as text
 			var/can_build = 1
 			can_build = can_build && (max_multiplier>0)
-			/*
-			if (R.one_per_turf)
-				can_build = can_build && !(locate(R.result_type) in usr.loc)
-			if (R.on_floor)
-				can_build = can_build && istype(usr.loc, /turf/simulated/floor)
-			*/
-			if (R.res_amount>1)
-				title+= "[R.res_amount]x [R.title]\s"
-			else
-				title+= "[R.title]"
-			//title+= " ([R.req_amount] [src.singular_name]\s)"
-			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
 
-			if (can_build)
-				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
+			if(R.res_amount > 1)
+				title += "[R.res_amount]x [R.title]\s"
 			else
-				t1 += text("[]", title)
+				title += "[R.title]"
+
+			title += " ([R.req_amount] [CORRECT_STACK_NAME(src)])"
+			if(R.other_reqs.len)
+				for(var/ii = 1 to R.other_reqs.len)
+					can_build = 0
+					var/obj/looking_for = R.other_reqs[ii]
+					var/req_amount
+					if(ispath(looking_for, /obj/item/stack))
+						var/obj/item/stack/S = new looking_for
+						req_amount = R.other_reqs[looking_for]
+						title += ", [req_amount] [CORRECT_STACK_NAME(S)]"
+					else
+						title += ", [initial(looking_for.name)] required in vicinity"
+					if(ispath(user.get_inactive_hand(), looking_for))
+						if(req_amount)
+							var/obj/item/stack/S = user.get_inactive_hand()
+							if(S.amount >= req_amount)
+								can_build = 1
+								continue
+					if(!can_build)
+						for(var/obj/I in range(get_turf(src),1))
+							if(ispath(looking_for, I))
+								if(req_amount) //It's of a stack/sheet subtype
+									var/obj/item/stack/S = I
+									if(S.amount >= req_amount)
+										can_build = 1
+										continue
+								else
+									can_build = 1
+									continue
+					break
+			if(can_build)
+				t1 += "<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>"
+			else
+				t1 += "[title]"
 				continue
-			if (R.max_res_amount>1 && max_multiplier>1)
+			if(R.max_res_amount > 1 && max_multiplier > 1)
 				max_multiplier = min(max_multiplier, round(R.max_res_amount/R.res_amount))
 				t1 += " |"
-				var/list/multipliers = list(5,10,25)
-				for (var/n in multipliers)
-					if (max_multiplier>=n)
+				var/list/multipliers = list(5, 10, 25)
+				for(var/n in multipliers)
+					if(max_multiplier>=n)
 						t1 += " <A href='?src=\ref[src];make=[i];multiplier=[n]'>[n*R.res_amount]x</A>"
 				if (!(max_multiplier in multipliers))
 					t1 += " <A href='?src=\ref[src];make=[i];multiplier=[max_multiplier]'>[max_multiplier*R.res_amount]x</A>"
@@ -131,55 +154,7 @@
 			recipes_list = srl.recipes
 		var/datum/stack_recipe/R = recipes_list[text2num(href_list["make"])]
 		var/multiplier = text2num(href_list["multiplier"])
-		if (!multiplier)
-			multiplier = 1
-		if (src.amount < R.req_amount*multiplier)
-			if (R.req_amount*multiplier>1)
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.req_amount*multiplier] [R.title]\s!</span>")
-			else
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.title]!</span>")
-			return
-		if (!R.can_build_here(usr, usr.loc))
-			return
-		if (R.time)
-			to_chat(usr, "<span class='notice'>Building [R.title] ...</span>")
-			if (!do_after(usr, get_turf(src), R.time))
-				return
-		if (src.amount < R.req_amount*multiplier)
-			return
-
-		var/atom/O
-		if(ispath(R.result_type, /obj/item/stack))
-			O = drop_stack(R.result_type, usr.loc, (R.max_res_amount>1 ? R.res_amount*multiplier : 1), usr)
-			var/obj/item/stack/S = O
-			S.update_materials()
-		else
-			O = new R.result_type( usr.loc )
-
-		O.dir = usr.dir
-		if(R.start_unanchored)
-			var/obj/A = O
-			A.anchored = 0
-		R.finish_building(usr, src, O)
-
-		//if (R.max_res_amount>1)
-		//	var/obj/item/stack/new_item = O
-		//	new_item.amount = R.res_amount*multiplier
-		//	//new_item.add_to_stacks(usr)
-
-		src.use(R.req_amount*multiplier)
-		if (src.amount<=0)
-			var/oldsrc = src
-			//src = null //dont kill proc after del()
-			usr.before_take_item(oldsrc)
-			returnToPool(oldsrc)
-			if (istype(O,/obj/item))
-				usr.put_in_hands(O)
-		O.add_fingerprint(usr)
-		//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
-		if ( istype(O, /obj/item/weapon/storage) )
-			for (var/obj/item/I in O)
-				qdel(I)
+		R.build(usr, src, multiplier)
 	if (src && usr.machine==src) //do not reopen closed window
 		spawn( 0 )
 			src.interact(usr)
@@ -188,6 +163,10 @@
 
 /obj/item/stack/proc/use(var/amount)
 	ASSERT(isnum(src.amount))
+
+	if (src.amount <= 0)
+		qdel(src) // We don't have anything left
+		return
 
 	if(src.amount>=amount)
 		src.amount-=amount
@@ -229,6 +208,8 @@
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
 	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
 		return
+	if(!can_stack_with(S))
+		return
 	var/transfer = min(amount, S.max_amount - S.amount)
 	if(transfer <= 0)
 		return
@@ -257,6 +238,7 @@
 	if (user.get_inactive_hand() == src)
 		var/obj/item/stack/F = new src.type( user, amount=1)
 		F.copy_evidences(src)
+		F.material_type = material_type
 		user.put_in_hands(F)
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)
@@ -300,9 +282,11 @@
 	return ..()
 
 /obj/item/stack/hitby(atom/movable/AM) //Doesn't seem to ever be called since stacks are not dense but whatever
+	. = ..()
+	if(.)
+		return
 	if(src != AM && istype(AM, src.type))
 		merge(AM)
-	return ..()
 
 /obj/item/stack/proc/copy_evidences(obj/item/stack/from as obj)
 	src.blood_DNA = from.blood_DNA
@@ -328,17 +312,23 @@
 
  */
 
-/proc/drop_stack(new_stack_type = /obj/item/stack, turf/loc, add_amount = 1, mob/user)
+/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
+	if(!ispath(new_stack_type, /obj/item/stack))
+		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
 		if(S.can_stack_with(new_stack_type))
 			if(S.max_amount >= S.amount + add_amount)
 				S.add(add_amount)
-
-				to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
+				if(user)
+					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
 				return S
-
-	var/obj/item/stack/S = getFromPool(new_stack_type, loc)
-	S.amount = add_amount
+	var/obj/item/stack/S = new_stack_type
+	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
+		if (add_amount <= 0)
+			continue
+		S = new new_stack_type(loc)
+		S.amount = min(add_amount, S.max_amount)
+		add_amount -= S.amount
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

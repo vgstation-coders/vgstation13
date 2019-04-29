@@ -11,7 +11,7 @@
 
 	var/list/datum/design/research_queue = list()//all the designs we are waiting to research
 	var/list/datum/design/ready_queue = list()//all the designs we HAVE researched, and are ready to print
-	var/max_queue_len = 0 as num //maximum number of items in the research queue
+	var/max_queue_len = 0 //maximum number of items in the research queue
 
 	var/scan_rating = 1 //the scanner rating
 	var/cap_rating = 1 //the capacitor rating
@@ -72,7 +72,7 @@
 					if(!AddDesign(loop_design, DA.loaded_designs, user))
 						break
 					i++
-				to_chat(user, "Sucessfully transferred [i] design\s.")
+				to_chat(user, "Successfully transferred [i] design\s.")
 				return 1
 		return
 	if(istype(O, /obj/item/device/pda))
@@ -120,7 +120,8 @@
 		//message_admins("We have a techlist and a linked_console")
 		for(var/checktech in techlist)
 			//message_admins("Looking at [checktech] with value of [techlist[checktech]]")
-			for(var/datum/tech/pointed_tech in tech_list) //if we find that technology
+			for(var/ID in tech_list) //if we find that technology
+				var/datum/tech/pointed_tech = tech_list[ID]
 				if(pointed_tech.id == checktech)
 					if(techlist[checktech] > pointed_tech.level) //if the machine board's research level is higher than the one on the console
 						//message_admins("Found a difference of [techlist[checktech] - pointed_tech.level]")
@@ -187,7 +188,7 @@
 		src.visible_message("You need to link this machine to a research console first!")
 
 
-/obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(src.stat & (BROKEN|NOPOWER))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user) || !Adjacent(user))
@@ -210,7 +211,7 @@
 	data["research_queue"] = todo_queue
 	data["ready_queue"] = done_queue
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "rev-engine.tmpl", name, REV_ENG_WIDTH, REV_ENG_HEIGHT)
 		ui.set_initial_data(data)

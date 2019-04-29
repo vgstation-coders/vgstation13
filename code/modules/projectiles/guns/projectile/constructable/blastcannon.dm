@@ -42,6 +42,7 @@
 		bomb_appearance = null
 		name = "pipe gun"
 		desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
+		w_class = W_CLASS_MEDIUM
 	update_icon()
 
 /obj/item/weapon/gun/projectile/blastcannon/pickup(mob/user as mob)
@@ -83,6 +84,7 @@
 		user.visible_message("[user] attaches \the [W] to \the [src].","You attach \the [W] to \the [src].")
 		name = "blast cannon"
 		desc = "A weapon of devastating force, the explosive power from the tank transfer valve is funneled straight out of its barrel."
+		w_class = W_CLASS_LARGE
 	update_icon()
 
 /obj/item/weapon/gun/projectile/blastcannon/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
@@ -144,9 +146,9 @@
 				range = min(range, MAX_EXPLOSION_RANGE)
 			var/turf/epicenter = get_turf(loc)
 
-			var/transfer_moles1 = (bomb.tank_one.air_contents.return_pressure() * bomb.tank_one.air_contents.volume)/(bomb.tank_one.air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			var/transfer_moles1 = (bomb.tank_one.air_contents.return_pressure() * bomb.tank_one.air_contents.volume) / (bomb.tank_one.air_contents.temperature * R_IDEAL_GAS_EQUATION)
 			bomb.tank_one.air_contents.remove(transfer_moles1)
-			var/transfer_moles2 = (bomb.tank_two.air_contents.return_pressure() * bomb.tank_two.air_contents.volume)/(bomb.tank_two.air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			var/transfer_moles2 = (bomb.tank_two.air_contents.return_pressure() * bomb.tank_two.air_contents.volume) / (bomb.tank_two.air_contents.temperature * R_IDEAL_GAS_EQUATION)
 			bomb.tank_two.air_contents.remove(transfer_moles2)
 
 			bomb_air_contents_1 = null

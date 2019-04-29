@@ -29,6 +29,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 		"Data" = list(),
 		"Engineering" = list(),
 		"Medical" = list(),
+		"Surgery" = list(),
 		"Mining" = list(),
 		"Robotics" = list(),
 		"Weapons" = list(),
@@ -52,6 +53,8 @@ it creates. All the menus and other manipulation commands are in the R&D console
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
 	)
 
 	RefreshParts()

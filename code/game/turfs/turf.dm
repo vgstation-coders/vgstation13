@@ -64,6 +64,10 @@
 	// Map element which spawned this turf
 	var/datum/map_element/map_element
 
+	var/image/viewblock
+
+	var/junction = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -83,16 +87,6 @@
 			src.Entered(AM)
 			return
 
-/turf/proc/initialize()
-	return
-
-/turf/DblClick()
-	if(istype(usr, /mob/living/silicon/ai))
-		return move_camera_by_click()
-	if(usr.stat || usr.restrained() || usr.lying)
-		return ..()
-	return ..()
-
 /turf/ex_act(severity)
 	return 0
 
@@ -109,12 +103,56 @@
 	..()
 	return 0
 
-/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
+/turf/Exit(atom/movable/mover, atom/target)
 	if(!mover)
 		return 1
-	. = ..()
-	if(.)
-		return !density //Nothing found to block so return success!
+	// First, make sure it can leave its square
+	if(mover.loc == src)
+		// Nothing but border objects stop you from leaving a tile, only one loop is needed
+		for(var/obj/obstacle in src)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
+			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
+				/*if(ismob(mover) && mover:client)
+					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
+				mover.to_bump(obstacle, 1)
+				return 0
+	return 1
+
+/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
+	if (!mover)
+		return 1
+
+	var/list/large_dense = list()
+	//Next, check objects to block entry that are on the border
+	for(var/atom/movable/border_obstacle in src)
+		if(border_obstacle.flow_flags&ON_BORDER)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>ENTER</span>Target(border): checking Cross of [border_obstacle]"*/
+			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
+				/*if(ismob(mover) && mover:client)
+					world << "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]"*/
+				mover.to_bump(border_obstacle, 1)
+				return 0
+		else
+			large_dense += border_obstacle
+
+	//Then, check the turf itself
+	if (!src.Cross(mover, src))
+		mover.to_bump(src, 1)
+		return 0
+
+	//Finally, check objects/mobs to block entry that are not on the border
+	for(var/atom/movable/obstacle in large_dense)
+		/*if(ismob(mover) && mover:client)
+			world << "<span class='danger'>ENTER</span>target(large_dense): [mover] checking Cross of [obstacle]"*/
+		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]"*/
+			mover.to_bump(obstacle, 1)
+			return 0
+	return 1 //Nothing found to block so return success!
+
 
 /turf/Entered(atom/movable/A as mob|obj)
 	if(movement_disabled)
@@ -131,7 +169,7 @@
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
-		for(var/atom/Obj as mob|obj|turf|area in range(1))
+		for(var/atom/Obj in range(1, src))
 			if(objects > loopsanity)
 				break
 			objects++
@@ -176,14 +214,14 @@
 
 			var/move_to_z = src.z
 
-			// Prevent MoMMIs from leaving the derelict.
-			for(var/mob/living/silicon/robot/mommi in contents_brought)
-				if(mommi.locked_to_z != 0)
-					if(src.z == mommi.locked_to_z)
+			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
+			for(var/mob/living/L in contents_brought)
+				if(L.locked_to_z != 0)
+					if(src.z == L.locked_to_z)
 						locked_to_current_z = map.zMainStation
 					else
-						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
-						move_to_z = mommi.locked_to_z
+						to_chat(L, "<span class='warning'>You find your way back.</span>")
+						move_to_z = L.locked_to_z
 
 			var/safety = 1
 
@@ -198,6 +236,9 @@
 			if(!move_to_z)
 				return
 
+			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/AA in contents_brought)
+				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -223,9 +264,14 @@
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
 					A.loc.Entered(A)
+				if (istype(A,/obj/item/projectile))
+					var/obj/item/projectile/P = A
+					P.reset()//fixing linear projectile movement
 
 /turf/proc/is_plating()
 	return 0
+/turf/proc/can_place_cables()
+	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
 /turf/proc/is_plasteel_floor()
@@ -287,27 +333,6 @@
 	if (!N || !allow)
 		return
 
-#ifdef ENABLE_TRI_LEVEL
-// Fuck this, for now - N3X
-///// Z-Level Stuff ///// This makes sure that turfs are not changed to space when one side is part of a zone
-	if(N == /turf/space)
-		var/turf/controller = locate(1, 1, src.z)
-		for(var/obj/effect/landmark/zcontroller/c in controller)
-			if(c.down)
-				var/turf/below = locate(src.x, src.y, c.down_target)
-				if((air_master.has_valid_zone(below) || air_master.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
-					var/turf/W = src.ChangeTurf(/turf/simulated/floor/open)
-					var/list/temp = list()
-					temp += W
-					c.add(temp,3,1) // report the new open space to the zcontroller
-
-					if(opacity != initialOpacity)
-						UpdateAffectingLights()
-
-					return W
-///// Z-Level Stuff
-#endif
-
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
@@ -359,8 +384,8 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(air_master)
-			air_master.mark_for_update(src)
+		if(SS_READY(SSair))
+			SSair.mark_for_update(src)
 
 		W.levelupdate()
 
@@ -373,12 +398,13 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
+		W.initialize()
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(air_master)
-			air_master.mark_for_update(src)
+		if(SS_READY(SSair))
+			SSair.mark_for_update(src)
 
 		W.levelupdate()
 
@@ -416,58 +442,6 @@
 
 	turfdecals.len = 0
 
-
-//Commented out by SkyMarshal 5/10/13 - If you are patching up space, it should be vacuum.
-//  If you are replacing a wall, you have increased the volume of the room without increasing the amount of gas in it.
-//  As such, this will no longer be used.
-
-//////Assimilate Air//////
-/*
-/turf/simulated/proc/Assimilate_Air()
-	var/aoxy = 0//Holders to assimilate air from nearby turfs
-	var/anitro = 0
-	var/aco = 0
-	var/atox = 0
-	var/atemp = 0
-	var/turf_count = 0
-
-	for(var/direction in cardinal)//Only use cardinals to cut down on lag
-		var/turf/T = get_step(src,direction)
-		if(istype(T,/turf/space))//Counted as no air
-			turf_count++//Considered a valid turf for air calcs
-			continue
-		else if(istype(T,/turf/simulated/floor))
-			var/turf/simulated/S = T
-			if(S.air)//Add the air's contents to the holders
-				aoxy += S.air.oxygen
-				anitro += S.air.nitrogen
-				aco += S.air.carbon_dioxide
-				atox += S.air.toxins
-				atemp += S.air.temperature
-			turf_count ++
-	air.oxygen = (aoxy/max(turf_count,1))//Averages contents of the turfs, ignoring walls and the like
-	air.nitrogen = (anitro/max(turf_count,1))
-	air.carbon_dioxide = (aco/max(turf_count,1))
-	air.toxins = (atox/max(turf_count,1))
-	air.temperature = (atemp/max(turf_count,1))//Trace gases can get bant
-	air.update_values()
-
-	//cael - duplicate the averaged values across adjacent turfs to enforce a seamless atmos change
-	for(var/direction in cardinal)//Only use cardinals to cut down on lag
-		var/turf/T = get_step(src,direction)
-		if(istype(T,/turf/space))//Counted as no air
-			continue
-		else if(istype(T,/turf/simulated/floor))
-			var/turf/simulated/S = T
-			if(S.air)//Add the air's contents to the holders
-				S.air.oxygen = air.oxygen
-				S.air.nitrogen = air.nitrogen
-				S.air.carbon_dioxide = air.carbon_dioxide
-				S.air.toxins = air.toxins
-				S.air.temperature = air.temperature
-				S.air.update_values()
-*/
-
 /turf/proc/get_underlying_turf()
 	var/area/A = loc
 	if(A.base_turf_type)
@@ -491,8 +465,9 @@
 		spawn(0)
 			M.take_damage(100, "brute")
 
-/turf/proc/Bless()
-	turf_flags |= NOJAUNT
+/turf/bless()
+	holy = 1
+	..()
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
@@ -601,6 +576,9 @@
 		return
 	ChangeTurf(get_base_turf(src.z))
 
+/turf/proc/clockworkify()
+	return
+
 /turf/projectile_check()
 	return PROJREACT_WALLS
 
@@ -614,6 +592,7 @@
 			if(O.invisibility == 101)
 				O.singularity_act()
 	ChangeTurf(get_underlying_turf())
+	score["turfssingulod"]++
 	return(2)
 
 //Return a lattice to allow catwalk building
@@ -666,11 +645,6 @@
 		holomap_data = list()
 	holomap_data += I
 
-// Calls the above, but only if the game has not yet started.
-/turf/proc/soft_add_holomap(var/atom/movable/AM)
-	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-		add_holomap(AM)
-
 // Goddamnit BYOND.
 // So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
 //   (For some reason the existance of underlays prevented the main icon and overlays to render)
@@ -693,7 +667,7 @@
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)
-	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+	if(istype(M) && M.CheckSlip() == SLIP_HAS_MAGBOOTS) //Wearing magboots - good enough
 		return 1
 
 	var/area/A = loc
@@ -713,9 +687,10 @@
 		return FALSE
 
 	var/area/old_area = loc
-
+	old_area.contents.Remove(src)
+	old_area.area_turfs.Remove(src)
 	A.contents.Add(src)
-
+	A.area_turfs.Add(src)
 	if(old_area)
 		change_area(old_area, A)
 		for(var/atom/AM in contents)
@@ -733,3 +708,8 @@
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
 
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)
+
+/turf/proc/remove_rot()
+	return

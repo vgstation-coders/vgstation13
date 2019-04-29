@@ -146,7 +146,7 @@
 							L.pixel_y = 4 * PIXEL_MULTIPLIER
 			L.dir = dir
 
-/obj/structure/bed/chair/vehicle/adminbus/Move()
+/obj/structure/bed/chair/vehicle/adminbus/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/turf/T = get_turf(src)
 	..()
 	update_lightsource()
@@ -253,7 +253,7 @@
 /obj/structure/bed/chair/vehicle/adminbus/HealthCheck()
 	health = 9001//THE ADMINBUS HAS NO BRAKES
 
-/obj/structure/bed/chair/vehicle/adminbus/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/adminbus/to_bump(var/atom/obstacle)
 	if(istype(obstacle,/obj/machinery/teleport/hub))
 		var/obj/machinery/teleport/hub/H = obstacle
 		spawn()

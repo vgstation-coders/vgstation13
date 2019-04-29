@@ -2,7 +2,7 @@
 	name = "rocket"
 	desc = "Explosive supplement to the syndicate's rocket launcher."
 	icon_state = "rpground"
-	caliber = "rpg"
+	caliber = ROCKETGRENADE
 	projectile_type = "/obj/item/projectile/rocket"
 	starting_materials = list(MAT_IRON = 15000)
 	w_type = RECYK_METAL

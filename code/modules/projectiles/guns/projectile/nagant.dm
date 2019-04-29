@@ -11,7 +11,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = list("7.62x55" = 1)
+	caliber = list(POINT762X55 = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type ="/obj/item/ammo_casing/a762x55"
 	var/recentpump = 0 // to prevent spammage
@@ -93,9 +93,7 @@
 /obj/item/weapon/gun/projectile/nagant/obrez/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
-		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-		sparks.set_up(3, 0, get_turf(user)) //no idea what the 0 is
-		sparks.start()
+		spark(user, 3, FALSE)
 
 		var/turf/target_turf = get_turf(target)
 		if(target_turf)

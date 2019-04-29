@@ -40,9 +40,6 @@
 		return
 
 	switch (controller)
-		if ("Supply Shuttle")
-			supply_shuttle.process()
-			feedback_add_details("admin_verb","RSupply")
 		if ("Master")
 			new/datum/controller/master()
 			feedback_add_details("admin_verb","RMC")
@@ -54,7 +51,7 @@
 
 
 
-/client/proc/debug_controller(controller in list("Air", "Cameras", "Configuration", "Emergency Shuttle", "failsafe", "Garbage", "Jobs", "Master", "pAI", "Radio", "Sun", "Supply Shuttle", "Ticker", "Vote"))
+/client/proc/debug_controller(controller in list("Air", "Cameras", "Configuration", "Emergency Shuttle", "failsafe", "Garbage", "Jobs", "Master", "pAI", "Radio", "Sun", "Ticker", "Vote"))
 	set category = "Debug"
 	set name = "debug controller"
 	set desc = "debug the various periodic loop controllers for the game (be careful!)."
@@ -73,7 +70,7 @@
 			debug_variables(ticker)
 			feedback_add_details("admin_verb","DTicker")
 		if("Air")
-			debug_variables(air_master)
+			debug_variables(SSair)
 			feedback_add_details("admin_verb","DAir")
 		if("Jobs")
 			debug_variables(job_master)
@@ -84,9 +81,6 @@
 		if("Radio")
 			debug_variables(radio_controller)
 			feedback_add_details("admin_verb","DRadio")
-		if("Supply Shuttle")
-			debug_variables(supply_shuttle)
-			feedback_add_details("admin_verb","DSupply")
 		if("Emergency Shuttle")
 			debug_variables(emergency_shuttle)
 			feedback_add_details("admin_verb","DEmergency")

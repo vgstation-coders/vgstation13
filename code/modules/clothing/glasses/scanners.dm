@@ -33,14 +33,14 @@
 		if(iscarbon(M))
 			apply_color(M)
 	..()
-	
+
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
 			if(iscarbon(user))
 				remove_color(user)
 	..()
-	
+
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
 
@@ -103,11 +103,9 @@
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	color_matrix = list(0.33,0.33,0.33,0,
-						0.33,0.33,0.33,0,
-				 		0.33,0.33,0.33,0,
-				 		0,0,0,1,
-				 		-0.2,0,-0.2,0)
+	color_matrix = list(0.8, 0, 0  ,\
+						0  , 1, 0  ,\
+						0  , 0, 0.8) //equivalent to #CCFFCC
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_invisible = initial(see_invisible)
@@ -130,10 +128,14 @@
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	actions_types = list(/datum/action/item_action/toggle_goggles)
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
-	eyeprot = 2
+	var/area/A = get_area(src)
+	if(A.flags & NO_MESONS)
+		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
+		return
+	eyeprot = initial(eyeprot)
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
 //	body_parts_covered |= EYES
@@ -145,6 +147,11 @@
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	..()
+
+/obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
+	if(A.flags & NO_MESONS && on)
+		visible_message("<span class = 'warning'>\The [src] sputter out.</span>")
+		disable()
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"

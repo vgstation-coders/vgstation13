@@ -23,9 +23,7 @@
 					streak.New(streak.loc)
 					streak.update_icon()
 				else if (prob(10))
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(3, 1, src)
-					s.start()
+					spark(src)
 			if (step_to(src, get_step(src, direction), 0))
 				break
 

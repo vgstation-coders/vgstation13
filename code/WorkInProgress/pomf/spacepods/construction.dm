@@ -15,9 +15,14 @@
 	bound_width = 64
 	bound_height = 64
 
-	construct = new /datum/construction/reversible/pod(src)
+	construct = new /datum/construction/reversible/pod/chassis(src)
 
 	dir = EAST
+
+/obj/structure/spacepod_frame/Destroy()
+	qdel(construct)
+	construct = null
+	..()
 
 /obj/structure/spacepod_frame/attackby(obj/item/W as obj, mob/user as mob)
 	if(!construct || !construct.action(W, user))
@@ -27,53 +32,31 @@
 /obj/structure/spacepod_frame/attack_hand()
 	return
 
+/obj/structure/spacepod_frame/unarmored
+	name = "unarmored spacepod"
+	desc = "A space pod with unwelded bulkhead panelling exposed."
+	icon_state = "pod_9"
+
+/obj/structure/spacepod_frame/unarmored/New()
+	..()
+	qdel(construct)
+	construct = null
+
+/obj/structure/spacepod_frame/attackby(obj/item/W, mob/user)
+	if(!construct)
+		if(istype(W,/obj/item/pod_parts/armor/civ))
+			construct = new /datum/construction/reversible/pod/unarmored/civ(src)
+		else if(istype(W, /obj/item/pod_parts/armor/taxi))
+			construct = new /datum/construction/reversible/pod/unarmored/taxi(src)
+	..()
+
 /////////////////////////////////
 // CONSTRUCTION STEPS
 /////////////////////////////////
-/datum/construction/reversible/pod
-	result = /obj/spacepod/civilian
+/datum/construction/reversible/pod/chassis
+	result = /obj/structure/spacepod_frame/unarmored
 	//taskpath = /datum/job_objective/make_pod
 	steps = list(
-				// 12. Bolted-down armor
-				list(
-					Co_DESC = "A space pod with unsecured armor.",
-					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/weapon/wrench,
-						Co_VIS_MSG  = "{USER} unsecure{s} {HOLDER}'s armor."
-					),
-					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/weapon/weldingtool,
-						Co_VIS_MSG  = "{USER} weld{s} {HOLDER}'s armor.",
-						Co_AMOUNT = 3
-					)
-				),
-				// 11. Loose armor
-				list(
-					Co_DESC = "A space pod with unsecured armor.",
-					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/weapon/crowbar,
-						Co_VIS_MSG  = "{USER} prie{s} off {HOLDER}'s armor."
-					),
-					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/weapon/wrench,
-						Co_VIS_MSG  = "{USER} bolt{s} down {HOLDER}'s armor."
-					)
-				),
-				// 10. Welded bulkhead
-				list(
-					Co_DESC = "A space pod with sealed bulkhead panelling exposed.",
-					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/weapon/weldingtool,
-						Co_VIS_MSG  = "{USER} cut{s} {HOLDER}'s bulkhead panelling loose.",
-						Co_AMOUNT   = 3
-					),
-					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/pod_parts/armor,
-						Co_VIS_MSG  = "{USER} install{s} {HOLDER}'s armor plating.",
-						Co_AMOUNT   = 1,
-						Co_KEEP
-					)
-				),
 				// 9. Bulkhead secured with bolts
 				list(
 					Co_DESC = "A space pod with unwelded bulkhead panelling exposed.",
@@ -192,7 +175,7 @@
 	feedback_inc("spacepod_created",1)
 	return
 
-/datum/construction/reversible/pod/custom_action(index, diff, atom/used_atom, mob/user)
+/datum/construction/reversible/pod/chassis/custom_action(index, diff, atom/used_atom, mob/user)
 	if(!..())
 		return 0
 
@@ -202,3 +185,106 @@
 
 /datum/construction/reversible/pod/action(atom/used_atom,mob/user)
 	return check_step(used_atom,user)
+
+/////////////////////////////////
+// PODS
+/////////////////////////////////
+/datum/construction/reversible/pod/unarmored/custom_action(index, diff, atom/used_atom, mob/user)
+	if(!..())
+		return 0
+
+	holder.icon_state = "pod_[9 + (steps.len - index + 1 - diff)]"
+	return 1
+
+
+/datum/construction/reversible/pod/unarmored/civ
+	result = /obj/spacepod/civilian
+	//taskpath = /datum/job_objective/make_pod
+	steps = list(
+				// 3. Bolted-down armor
+				list(
+					Co_DESC = "A space pod with unsecured armor.",
+					Co_BACKSTEP = list(
+						Co_KEY      = /obj/item/weapon/wrench,
+						Co_VIS_MSG  = "{USER} unsecure{s} {HOLDER}'s armor."
+					),
+					Co_NEXTSTEP = list(
+						Co_KEY      = /obj/item/weapon/weldingtool,
+						Co_VIS_MSG  = "{USER} weld{s} {HOLDER}'s armor.",
+						Co_AMOUNT = 3
+					)
+				),
+				// 2. Loose armor
+				list(
+					Co_DESC = "A space pod with unsecured armor.",
+					Co_BACKSTEP = list(
+						Co_KEY      = /obj/item/weapon/crowbar,
+						Co_VIS_MSG  = "{USER} remove{s} {HOLDER}'s armor."
+					),
+					Co_NEXTSTEP = list(
+						Co_KEY      = /obj/item/weapon/wrench,
+						Co_VIS_MSG  = "{USER} bolt{s} down {HOLDER}'s armor."
+					)
+				),
+				// 1. Welded bulkhead
+				list(
+					Co_DESC = "A space pod with sealed bulkhead panelling exposed.",
+					Co_BACKSTEP = list(
+						Co_KEY      = /obj/item/weapon/weldingtool,
+						Co_VIS_MSG  = "{USER} cut{s} {HOLDER}'s bulkhead panelling loose.",
+						Co_AMOUNT   = 3
+					),
+					Co_NEXTSTEP = list(
+						Co_KEY      = /obj/item/pod_parts/armor/civ,
+						Co_VIS_MSG  = "{USER} install{s} {HOLDER}'s armor plating.",
+						Co_AMOUNT   = 1,
+						Co_KEEP
+					)
+			)
+		)
+
+/datum/construction/reversible/pod/unarmored/taxi
+	result = /obj/spacepod/taxi
+	//taskpath = /datum/job_objective/make_pod
+	steps = list(
+				// 3. Bolted-down armor
+				list(
+					Co_DESC = "A space pod with unsecured armor.",
+					Co_BACKSTEP = list(
+						Co_KEY      = /obj/item/weapon/wrench,
+						Co_VIS_MSG  = "{USER} unsecure{s} {HOLDER}'s armor."
+					),
+					Co_NEXTSTEP = list(
+						Co_KEY      = /obj/item/weapon/weldingtool,
+						Co_VIS_MSG  = "{USER} weld{s} {HOLDER}'s armor.",
+						Co_AMOUNT = 3
+					)
+				),
+				// 2. Loose armor
+				list(
+					Co_DESC = "A space pod with unsecured armor.",
+					Co_BACKSTEP = list(
+						Co_KEY      = /obj/item/weapon/crowbar,
+						Co_VIS_MSG  = "{USER} remove{s} {HOLDER}'s armor."
+					),
+					Co_NEXTSTEP = list(
+						Co_KEY      = /obj/item/weapon/wrench,
+						Co_VIS_MSG  = "{USER} bolt{s} down {HOLDER}'s armor."
+					)
+				),
+				// 1. Welded bulkhead
+				list(
+					Co_DESC = "A space pod with sealed bulkhead panelling exposed.",
+					Co_BACKSTEP = list(
+						Co_KEY      = /obj/item/weapon/weldingtool,
+						Co_VIS_MSG  = "{USER} cut{s} {HOLDER}'s bulkhead panelling loose.",
+						Co_AMOUNT   = 3
+					),
+					Co_NEXTSTEP = list(
+						Co_KEY      = /obj/item/pod_parts/armor/taxi,
+						Co_VIS_MSG  = "{USER} install{s} {HOLDER}'s armor plating.",
+						Co_AMOUNT   = 1,
+						Co_KEEP
+					)
+			)
+		)

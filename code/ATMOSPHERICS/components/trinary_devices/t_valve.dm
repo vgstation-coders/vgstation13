@@ -185,6 +185,39 @@
 	var/datum/radio_frequency/radio_connection
 
 	mirror = /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored
+	machine_flags = MULTITOOL_MENU
+
+/obj/machinery/atmospherics/trinary/tvalve/digital/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+	return {"
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag","set_id")]</a></li>
+	</ul>
+	"}
+
+/obj/machinery/atmospherics/trinary/tvalve/digital/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
+	if("set_id" in href_list)
+		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
+		if(newid)
+			id_tag = newid
+			initialize()
+		return MT_UPDATE
+		
+	if("set_freq" in href_list)
+		var/newfreq=frequency
+		if(href_list["set_freq"]!="-1")
+			newfreq=text2num(href_list["set_freq"])
+		else
+			newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
+		if(newfreq)
+			if(findtext(num2text(newfreq), "."))
+				newfreq *= 10 // shift the decimal one place
+			if(newfreq < 10000)
+				frequency = newfreq
+				initialize()
+		return MT_UPDATE
+
+	return ..()
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -213,25 +246,14 @@
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
 		return 0
 
-	var/state_changed=0
+	var/old_state = 0
 	switch(signal.data["command"])
-		if("valve_open")
-			if(!state)
+		if("valve_set")
+			if(signal.data["state"])
 				go_to_side()
-				state_changed=1
-
-		if("valve_close")
-			if(state)
-				go_straight()
-				state_changed=1
-
-		if("valve_toggle")
-			if(state)
-				go_straight()
 			else
-				go_to_side()
-			state_changed=1
-	if(state_changed)
+				go_straight()
+	if(old_state != state)
 		investigation_log(I_ATMOS,"was [(state ? "opened (side)" : "closed (straight) ")] by a signal")
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored

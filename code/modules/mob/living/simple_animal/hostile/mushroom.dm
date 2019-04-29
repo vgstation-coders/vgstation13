@@ -21,7 +21,7 @@
 	attack_same = 2
 	attacktext = "chomps"
 	faction = "mushroom"
-	environment_smash = 0
+	environment_smash_flags = 0
 	stat_attack = 2
 	speed = 2
 	var/powerlevel = 0 //Tracks our general strength level gained from eating other shrooms
@@ -90,9 +90,9 @@
 	icon_state = "mushroom_color"
 	UpdateMushroomCap()
 
-/mob/living/simple_animal/hostile/mushroom/Die()
+/mob/living/simple_animal/hostile/mushroom/death(var/gibbed = FALSE)
 	visible_message("<span class='notice'>[src] fainted.</span>")
-	..()
+	..(gibbed)
 	UpdateMushroomCap()
 
 /mob/living/simple_animal/hostile/mushroom/proc/UpdateMushroomCap()
@@ -146,7 +146,9 @@
 		Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/hitby(atom/movable/AM)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(istype(AM, /obj/item))
 		var/obj/item/T = AM
 		if(T.throwforce)

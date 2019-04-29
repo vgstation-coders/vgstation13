@@ -1,12 +1,9 @@
-
-
 /mob/living/carbon/brain
 	var/obj/item/container = null
 	var/timeofhostdeath = 0
 	var/emp_damage = 0//Handles a type of MMI damage
 	var/alert = null
 	can_butcher = 0
-	immune_to_ssd = 1
 	use_me = 0 //Can't use the me verb, it's a freaking immobile brain
 	hasmouth=0 // Can't feed it.
 	icon = 'icons/obj/surgery.dmi'
@@ -34,6 +31,15 @@
 	else
 		canmove = 0
 	return canmove
+
+/mob/living/carbon/brain/say(var/message)
+	if (container && istype(container, /obj/item/device/mmi))
+		if(istype(container.loc,/obj/item/weapon/storage/belt/silicon))
+			RenderBeltChat(container.loc,src,message)
+			return
+		else
+			return ..(message, "R")
+	return ..(message)
 
 /mob/living/carbon/brain/say_understands(var/atom/movable/other)//Goddamn is this hackish, but this say code is so odd
 	if(other)
@@ -69,3 +75,6 @@
 
 /mob/living/carbon/brain/proc/brain_dead_chat()
 	return !(container && (istype(container, /obj/item/device/mmi)))
+
+/mob/living/carbon/brain/dexterity_check()
+	return 1 //This is so certain mech tools work for MMIs and posibrains.

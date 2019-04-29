@@ -2,12 +2,21 @@
 #define XENOARCH_SPREAD_CHANCE 15
 #define ARTIFACT_SPAWN_CHANCE 20
 
-proc/SetupXenoarch()
+/proc/SetupXenoarch()
+	for(var/i in subtypesof(/datum/digsite))
+		var/datum/digsite/D = new i
+		digsite_types[D.digsite_ID] = D
+
+	for(var/i in subtypesof(/datum/find))
+		var/datum/find/F = i
+		archaeo_types[initial(F.find_ID)] = i
+
 	for(var/turf/unsimulated/mineral/M in mineral_turfs)
-		if(!prob(XENOARCH_SPAWN_CHANCE))
+		if(M.no_finds || !prob(XENOARCH_SPAWN_CHANCE))
 			continue
 
-		var/digsite = get_random_digsite_type()
+
+		var/datum/digsite/D = get_random_digsite_type()
 		var/list/processed_turfs = list()
 		var/list/turfs_to_process = list(M)
 
@@ -29,15 +38,15 @@ proc/SetupXenoarch()
 
 			if(!archeo_turf.finds || !archeo_turf.finds.len)
 
-				if(prob(50))
-					archeo_turf.finds.Add(new /datum/find(digsite, rand(5,95)))
-				else if(prob(75))
-					archeo_turf.finds.Add(new /datum/find(digsite, rand(5,45)))
-					archeo_turf.finds.Add(new /datum/find(digsite, rand(55,95)))
-				else
-					archeo_turf.finds.Add(new /datum/find(digsite, rand(5,30)))
-					archeo_turf.finds.Add(new /datum/find(digsite, rand(35,75)))
-					archeo_turf.finds.Add(new /datum/find(digsite, rand(75,95)))
+				if(prob(50)) //Single find
+					archeo_turf.finds.Add(D.gen_find(rand(5,95)))
+				else if(prob(75)) //Two finds
+					archeo_turf.finds.Add(D.gen_find(rand(5,45)))
+					archeo_turf.finds.Add(D.gen_find(rand(55,95)))
+				else //Three finds!
+					archeo_turf.finds.Add(D.gen_find(rand(5,30)))
+					archeo_turf.finds.Add(D.gen_find(rand(35,75)))
+					archeo_turf.finds.Add(D.gen_find(rand(75,95)))
 
 				//sometimes a find will be close enough to the surface to show
 				var/datum/find/F = archeo_turf.finds[1]
@@ -46,8 +55,7 @@ proc/SetupXenoarch()
 					archeo_turf.archaeo_overlay = "overlay_archaeo[rand(1,3)]"
 					archeo_turf.overlays += archeo_turf.archaeo_overlay
 
-		//dont create artifact machinery in animal or plant digsites, or if we already have one
-		if(!M.artifact_find && digsite != 1 && digsite != 2 && prob(ARTIFACT_SPAWN_CHANCE))
+		if(!M.artifact_find && !D.gen_large_artifacts && prob(ARTIFACT_SPAWN_CHANCE))
 			M.artifact_find = new()
 			SSxenoarch.artifact_spawning_turfs.Add(M)
 

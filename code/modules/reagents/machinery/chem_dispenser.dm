@@ -2,8 +2,8 @@
 
 /obj/machinery/chem_dispenser
 	name = "\improper Chem Dispenser"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "dispenser"
 	use_power = 1
@@ -13,17 +13,37 @@
 	var/rechargerate = 2
 	var/amount = 30
 	var/obj/item/weapon/reagent_containers/container = null
+	var/beaker_height
 	var/recharged = 0
 	var/custom = 0
 	var/useramount = 30 // Last used amount
-	var/list/dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,
-	SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,CHLORINE,POTASSIUM,IRON,
-	COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN)
+	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
+	var/list/dispensable_reagents = list(
+		HYDROGEN,
+		LITHIUM,
+		CARBON,
+		NITROGEN,
+		OXYGEN,
+		FLUORINE,
+		SODIUM,
+		ALUMINUM,
+		SILICON,
+		PHOSPHORUS,
+		SULFUR,
+		CHLORINE,
+		POTASSIUM,
+		IRON,
+		COPPER,
+		MERCURY,
+		RADIUM,
+		WATER,
+		ETHANOL,
+		SUGAR,
+		SACID,
+		TUNGSTEN
+		)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-
-	var/targetMoveKey = null //To prevent borgs from leaving without their beakers.
-
 
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
@@ -72,20 +92,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	//Who even knows what to use the scanning module for
 */
 
-/obj/machinery/chem_dispenser/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -104,12 +110,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
-		return 0
-	else
-		if(!isMoMMI(R))
-			targetMoveKey =  R.on_moved.Add(src, "user_moved")
-		return 1
+	if(!R)
+		return FALSE
+
+	if(HAS_MODULE_QUIRK(R, required_quirk))
+		return TRUE
+
+	to_chat(R, "Your programming forbids interaction with this device.")
+	return FALSE
 
 /obj/machinery/chem_dispenser/process()
 	if(recharged < 0)
@@ -143,7 +151,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
   *
   * @return nothing
   */
-/obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained())
@@ -180,7 +188,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			chemicals.Add(list(list("title" = copytext(temp.name,1,FORMAT_DISPENSER_NAME), "id" = temp.id, "commands" = list("dispense" = temp.id)))) // list in a list because Byond merges the first list...
 	data["chemicals"] = chemicals
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -235,8 +243,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				B = null
 				return
 		var/space = R.maximum_volume - R.total_volume
-
-		R.add_reagent(reagent, min(amount, energy * 10, space))
+		var/reagent_temperature = dispensable_reagents[reagent] ? dispensable_reagents[reagent] : T0C+20
+		R.add_reagent(reagent, min(amount, energy * 10, space), reagtemp = reagent_temperature)
 		energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 
 /obj/machinery/chem_dispenser/kick_act(mob/living/H)
@@ -245,15 +253,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		detach()
 
 /obj/machinery/chem_dispenser/proc/detach()
-	targetMoveKey=null
-
 	if(container)
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
-		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = container
-			borgbeak.return_to_modules()
 		container = null
+		update_icon()
 		return 1
 
 /obj/machinery/chem_dispenser/AltClick()
@@ -275,7 +279,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(isrobot(user))
 		if(!can_use(user))
-			to_chat(user, "Your programming forbids interaction with this device.")
 			return
 
 	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
@@ -290,12 +293,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")
 				return
 
-			src.container =  D
-			if(user.type == /mob/living/silicon/robot)
-				var/mob/living/silicon/robot/R = user
-				R.uneq_active()
-
+			container =  D
 			to_chat(user, "You add \the [D] to the machine!")
+			update_icon()
 
 			nanomanager.update_uis(src) // update all UIs attached to src
 			return 1
@@ -314,13 +314,47 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(stat & BROKEN)
 		return
 
+	if(isrobot(user))
+		if(!can_use(user))
+			return
+
 	ui_interact(user)
+
+/obj/machinery/chem_dispenser/update_icon()
+
+	overlays.len = 0
+
+	if(container)
+	
+		var/image/overlay
+
+		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay2")
+		else
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay1")
+
+		overlay.pixel_y = beaker_height * PIXEL_MULTIPLIER //used for children
+		overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
+		overlays += overlay
+
 //Cafe stuff
 
 /obj/machinery/chem_dispenser/brewer/
 	name = "Space-Brewery"
 	icon_state = "brewer"
-	dispensable_reagents = list(TEA,GREENTEA,REDTEA, COFFEE,MILK,CREAM,WATER,HOT_COCO, SOYMILK)
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	dispensable_reagents = list(
+		TEA,
+		GREENTEA,
+		REDTEA,
+		COFFEE,
+		MILK,
+		CREAM,
+		WATER,
+		HOT_COCO,
+		SOYMILK
+		)
+
 /obj/machinery/chem_dispenser/brewer/New()
 	. = ..()
 	component_parts = newlist(
@@ -340,19 +374,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	max_energy = 100
 	energy = 100
 
-/obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		targetMoveKey =  R.on_moved.Add(src, "user_moved")
-		return 1
-	else
-		return 0
-
 //Soda/booze dispensers.
 
 /obj/machinery/chem_dispenser/soda_dispenser/
 	name = "Soda Dispenser"
 	icon_state = "soda_dispenser"
-	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE, TONIC)
+	beaker_height = -5
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
+
 /obj/machinery/chem_dispenser/soda_dispenser/New()
 	. = ..()
 	component_parts = newlist(
@@ -372,17 +402,35 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	max_energy = 100
 	energy = 100
 
-/obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		targetMoveKey =  R.on_moved.Add(src, "user_moved")
-		return 1
-	else
-		return 0
-
 /obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
 	icon_state = "booze_dispenser"
-	dispensable_reagents = list(BEER, WHISKEY, TEQUILA, VODKA, VERMOUTH, RUM, COGNAC, WINE, KAHLUA, ALE, ICE, WATER, GIN, SODAWATER, COLA, CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC)
+	beaker_height = -6
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	dispensable_reagents = list(
+		BEER,
+		WHISKEY,
+		TEQUILA,
+		VODKA,
+		VERMOUTH,
+		RUM,
+		COGNAC,
+		WINE,
+		SAKE,
+		KAHLUA,
+		ALE,
+		ICE = T0C,
+		WATER,
+		GIN,
+		SODAWATER,
+		COLA,
+		CREAM,
+		TOMATOJUICE,
+		ORANGEJUICE,
+		LIMEJUICE,
+		TONIC
+		)
+
 /obj/machinery/chem_dispenser/booze_dispenser/New()
 	. = ..()
 	component_parts = newlist(
@@ -401,13 +449,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/mapping
 	max_energy = 100
 	energy = 100
-
-/obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		targetMoveKey =  R.on_moved.Add(src, "user_moved")
-		return 1
-	else
-		return 0
 
 #undef FORMAT_DISPENSER_NAME
 

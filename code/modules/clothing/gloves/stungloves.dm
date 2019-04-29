@@ -72,8 +72,12 @@
 	if(prox == TRUE)//Stungloves. ANY contact will stun the alien.
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
+			var/datum/organ/external/S = H.get_organ(H.zone_sel.selecting)
+
 			if(H.check_body_part_coverage(HANDS,src)) //can't touch someone if something is on top of them
 				return
+			else if((H.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (H.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
+				return //attempt to stun handshake
 		visible_message("<span class='danger'>\The [A] has been touched with the stun gloves by [user]!</span>")
 
 		if(cell.charge >= STUNGLOVES_CHARGE_COST)

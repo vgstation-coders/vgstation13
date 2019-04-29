@@ -9,12 +9,20 @@
 	idle_power_usage = 200
 	active_power_usage = 5000
 
+	var/obj/machinery/computer/telescience/linked
+
 	// Bluespace crystal!
 	var/obj/item/bluespace_crystal/amplifier=null
 	var/opened=0
 
+/obj/machinery/telepad/Destroy()
+	if (linked)
+		linked.telepad = null
+		linked = null
+	..()
+
 /obj/machinery/telepad/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(opened)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You secure the access port on \the [src].</span>")

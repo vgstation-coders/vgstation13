@@ -82,15 +82,16 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 
 		var/mob/living/carbon/human/vox = raider.current
 		vox.age = rand(12,20)
-		vox.s_tone = random_skin_tone("Vox")
+		vox.my_appearance.s_tone = random_skin_tone("Vox")
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
 		vox.fully_replace_character_name(vox.real_name, vox.generate_name())
 		//vox.languages = HUMAN // Removing language from chargen.
+		vox.flavor_text = ""
 		vox.add_language(LANGUAGE_VOX)
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
-		vox.h_style = "Short Vox Quills"
-		vox.f_style = "Shaved"
+		vox.my_appearance.h_style = "Short Vox Quills"
+		vox.my_appearance.f_style = "Shaved"
 		for(var/datum/organ/external/limb in vox.organs)
 			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT)
 		vox.equip_vox_raider()
@@ -155,11 +156,15 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	objs += new /datum/objective/heist/inviolate_crew
 	objs += new /datum/objective/heist/inviolate_death */
 
-	if(prob(25)) // This is an asspain.
-		raid_objectives += new /datum/objective/heist/kidnap
-	raid_objectives += new /datum/objective/steal/heist
-	//raid_objectives += new /datum/objective/steal/salvage
-	raid_objectives += new /datum/objective/heist/inviolate_crew
+
+	if(prob(50))
+		raid_objectives += new/datum/objective/heist/kidnap
+	else
+		raid_objectives += new/datum/objective/steal/heist_easy
+		raid_objectives += new/datum/objective/steal/heist_easy
+	raid_objectives += new/datum/objective/steal/heist_hard
+	//raid_objectives += new/datum/objective/steal/salvage
+	raid_objectives += new/datum/objective/heist/inviolate_crew
 	raid_objectives += new /datum/objective/heist/inviolate_death
 
 	for(var/datum/objective/heist/O in raid_objectives)

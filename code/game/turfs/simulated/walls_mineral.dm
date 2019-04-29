@@ -28,10 +28,8 @@
 
 /turf/simulated/wall/mineral/wood/ex_act(var/severity)
 	if(severity < 3)
-		ChangeTurf(get_underlying_turf())
 		getFromPool(/obj/item/stack/sheet/wood, src, 2)
-	else
-		dismantle_wall()
+	..()
 
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"
@@ -103,7 +101,7 @@
 		if(world.time > last_event+15)
 			active = 1
 			for(var/mob/living/L in range(3,src))
-				L.apply_effect(12,IRRADIATE,0)
+				L.apply_radiation(12,RAD_EXTERNAL)
 			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
 			last_event = world.time
@@ -149,8 +147,8 @@
 			target_tile.parent.suspend_group_processing()*/
 		var/datum/gas_mixture/napalm = new
 		var/toxinsToDeduce = 20
-		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 400+T0C
+		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 		target_tile.assume_air(napalm)
 		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
@@ -181,9 +179,7 @@
 /*
 /turf/simulated/wall/mineral/proc/shock()
 	if (electrocute_mob(user, C, src))
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
+		spark(src, 5)
 		return 1
 	else
 		return 0
@@ -193,3 +189,18 @@
 		if(shocked)
 			shock()
 */
+
+/turf/simulated/wall/mineral/clockwork
+	name = "clockwork wall"
+	desc = "A huge chunk of warm metal. The clanging of machinery emanates from within."
+	icon_state = "clock"
+	walltype = "clock"
+	mineral = "brass"
+//	dismantle_type = /turf/simulated/floor/engine/clockwork // SOON
+	girder_type = /obj/structure/girder/clockwork
+
+/turf/simulated/wall/mineral/clockwork/cultify()
+	return
+
+/turf/simulated/wall/mineral/clockwork/clockworkify()
+	return

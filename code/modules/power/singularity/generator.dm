@@ -27,9 +27,6 @@
 	new /obj/machinery/singularity(get_turf(src), 50)
 	qdel(src)
 
-/obj/machinery/the_singularitygen/wrenchAnchor(mob/user)
+/obj/machinery/the_singularitygen/wrenchAnchor(var/mob/user)
 	src.add_hiddenprint(user)
-	return ..()
-
-/obj/machinery/the_singularitygen/attackby(obj/item/W, mob/user)
-	return ..()
+	. = ..()

@@ -32,7 +32,7 @@
 
 /obj/item/key/lightcycle/attack_self(mob/user)
 	..()
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		to_chat(user, "\The [src] refuses to break. You don't think you could fit on a light cycle anyway.")
 		return
 	if(cycle_active)
@@ -182,7 +182,7 @@
 
 	update_mob()
 
-/obj/structure/bed/chair/vehicle/lightcycle/Bump(atom/A)
+/obj/structure/bed/chair/vehicle/lightcycle/to_bump(atom/A)
 	if(occupant)
 		occupant.visible_message("<span class=\"warning\">\The [src] crashes into \the [A] and dissolves into nothing as its rider is blown apart!</span>",\
 		"<span class=\"warning\">As you collide with \the [A], you are blown to pieces.</span>")
@@ -199,11 +199,13 @@
 /obj/structure/bed/chair/vehicle/lightcycle/handle_layer()
 	return
 
-/obj/structure/bed/chair/vehicle/lightcycle/update_mob()
-	if(!occupant)
-		return
-
-	occupant.pixel_y = 2 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/lightcycle/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 2 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0, "y" = 2 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 2 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0, "y" = 2 * PIXEL_MULTIPLIER)
+		)
 
 /obj/effect/lightribbon
 	name = "light ribbon"

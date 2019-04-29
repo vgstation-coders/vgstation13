@@ -15,6 +15,7 @@
 	maxHealth = 20
 	health = 20
 	flying = 1
+	mob_property_flags = MOB_SWARM
 
 	harm_intent_damage = 8
 	melee_damage_lower = 10
@@ -35,34 +36,39 @@
 
 	holder_type = null //Can't pick a SWARM OF BATS up
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	size = SIZE_TINY
 
 	faction = "scarybat"
-	var/mob/living/owner
+	var/datum/faction/vamp_fac
 	held_items = list()
-
-/mob/living/simple_animal/hostile/scarybat/New(loc, mob/living/L as mob)
-	..()
-	if(istype(L))
-		owner = L
 
 /mob/living/simple_animal/hostile/scarybat/Process_Spacemove(var/check_drift = 0)
 	return 1
 
 /mob/living/simple_animal/hostile/scarybat/CanAttack(var/atom/the_target)
-	if(the_target == owner)
-		return 0
-	return ..(the_target)
+	if (!istype(the_target, /mob/living))
+		return ..()
+	var/mob/living/L = the_target
+	if (L.mind && vamp_fac)
+		for (var/R in L.mind.antag_roles)
+			if (L.mind.antag_roles[R] in vamp_fac.members)
+				return FALSE
+	return ..()
 
 /mob/living/simple_animal/hostile/scarybat/FindTarget()
 	. = ..()
 	if(.)
-		emote("flutters towards [.]")
+		emote("me",, "flutters towards [.]!")
 
-/mob/living/simple_animal/hostile/scarybat/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
-	if(istype(A) && A == owner)
-		return 0
+/mob/living/simple_animal/hostile/scarybat/Found(var/atom/A) //This is here as a potential override to pick a specific target if available
+	if(!istype(A, /mob/living))
+		return FALSE
+	var/mob/living/L = A
+	if (L.mind && vamp_fac)
+		for (var/R in L.mind.antag_roles)
+			if (L.mind.antag_roles[R] in vamp_fac.members)
+				return FALSE
 	return ..()
 
 /mob/living/simple_animal/hostile/scarybat/AttackingTarget()
@@ -80,10 +86,22 @@
 
 	supernatural = 1
 
+
+/mob/living/simple_animal/hostile/scarybat/cult/Found(var/atom/the_target)
+	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
+	return ..(the_target)
+
+
 /mob/living/simple_animal/hostile/scarybat/cult/CanAttack(var/atom/the_target)
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
-	if(iscultist(the_target))
-		return 0
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/scarybat/cult/cultify()
@@ -118,7 +136,7 @@
 			var/obj/machinery/door/D = A
 			if(D.density)
 				D.open()
-		else if(istype(A,/obj/structure/cult/pylon))
+		else if(istype(A,/obj/structure/cult_legacy/pylon))
 			A.attack_animal(src)
 		else if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 			A.attack_animal(src)
@@ -174,7 +192,7 @@ mob/living/simple_animal/hostile/scarybat/book/New()
 	icon_dead = "bookbat_woody_dead"
 	icon_gib = "bookbat_woody_dead"
 	book_cover = "woody"
-	environment_smash = 0
+	environment_smash_flags = 0
 	harm_intent_damage = 0
 	melee_damage_lower = 0
 	melee_damage_upper = 0

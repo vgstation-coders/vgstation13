@@ -27,22 +27,22 @@
 	size = SIZE_SMALL
 	meat_type = null
 	held_items = list()
+	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/viscerator/Life()
 	..()
 	if(stat == CONSCIOUS)
 		animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 15, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/viscerator/Die()
-	..()
+/mob/living/simple_animal/hostile/viscerator/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'><b>[src]</b> is smashed into pieces!</span>")
 	qdel (src)
-	return
 
 /mob/living/simple_animal/hostile/viscerator/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
 		var/mob/mob_target = the_target
-		if(isnukeop(mob_target) && faction == "syndicate")
+		if((isnukeop(mob_target) && faction == "syndicate") || (iswizard(mob_target) && faction == "wizard"))
 			return 0
 	return ..(the_target)
 
@@ -71,8 +71,40 @@
 	attacktext = "bites"
 
 	faction = "mummy"
+	mob_property_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/hostile/viscerator/flying_skull/AttackingTarget()
 	flick("flying_skull_bite", src)
 
+	..()
+
+
+/mob/living/simple_animal/hostile/viscerator/butterfly
+	icon = 'icons/obj/butterfly.dmi'
+	icon_state = "knifefly"
+	icon_living = "knifefly"
+	health = 25
+	maxHealth = 25
+	melee_damage_lower = 22
+	melee_damage_upper = 28
+	var/autodie = FALSE //So you can spawn the butterfly by other means and have it not selfdestruct.
+
+/mob/living/simple_animal/hostile/viscerator/butterfly/Life()
+	..()
+	if(autodie && life_tick > 10)
+		death()
+
+/mob/living/simple_animal/hostile/viscerator/butterfly/magic
+	name = "crystal butterfly"
+	desc = "A magic crystal butterfly with razor sharp wings. This butterfly isn't too friendly."
+	icon_state = "crystal_butterfly"
+	icon_living = "crystal_butterfly"
+	melee_damage_lower = 20
+	melee_damage_upper = 25
+	faction = "wizard"
+
+/mob/living/simple_animal/hostile/viscerator/butterfly/magic/AttackingTarget()
+	if(istype(target, /mob/living/carbon))
+		var/mob/living/carbon/M = target
+		M.adjustCloneLoss(rand(5,10)) //scp-553 LORE.
 	..()

@@ -49,7 +49,7 @@
 /obj/effect/landmark/sc_bible_spawner/New()
 	var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible/booze(src.loc)
 	B.name = "The Holy book of the Geometer"
-	B.deity_name = "Narsie"
+	B.my_rel = new /datum/religion/cult
 	B.icon_state = "melted"
 	B.item_state = "melted"
 	new /obj/item/weapon/paper/sc_safehint_paper_bible(B)
@@ -164,10 +164,10 @@ var/sc_safecode5 = "[rand(0,9)]"
 	l_set = 1
 	new /obj/item/weapon/gun/energy/mindflayer(src)
 	new /obj/item/device/soulstone(src)
-	new /obj/item/clothing/head/helmet/space/cult(src)
-	new /obj/item/clothing/suit/space/cult(src)
+	new /obj/item/clothing/head/helmet/space/legacy_cult(src)
+	new /obj/item/clothing/suit/space/legacy_cult(src)
 	//new /obj/item/weapon/teleportation_scroll(src)
-	new /obj/item/weapon/ore/diamond(src)
+	drop_stack(/obj/item/stack/ore/diamond, src)
 
 /**
  * Modified Nar-Sie.

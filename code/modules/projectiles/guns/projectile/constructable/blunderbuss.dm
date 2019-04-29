@@ -101,7 +101,7 @@
 		if(istype(W, /obj/item/stack))
 			var/obj/item/stack/S = W
 			S.use(1)
-			var/Y = new W.type(src)
+			var/Y = new W.type(src, 1)
 			loaded_item = Y
 		else
 			if(!user.drop_item(W, src))
@@ -232,7 +232,7 @@
 	if (!istype(targloc) || !istype(curloc))
 		return
 
-	var/fire_force = fuel_level + (fuel_level * (1/(fuel_level/10)))
+	var/fire_force = fuel_level + 10
 
 	var/speed
 	if(loaded_item.w_class > W_CLASS_TINY)

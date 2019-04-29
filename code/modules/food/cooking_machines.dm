@@ -62,13 +62,12 @@ var/global/ingredientLimit = 10
 // Base (Oven) /////////////////////////////////////////////////
 
 /obj/machinery/cooking
-	name = "oven"
+	name = "Waffle Inc. Ez-bake FUN oven"
 	desc = "Cookies are ready, dear."
 	icon = 'icons/obj/cooking_machines.dmi'
 	icon_state = "oven_off"
 	var/icon_state_on = "oven_on"
 	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -87,7 +86,7 @@ var/global/ingredientLimit = 10
 	var/cks_max_volume = 50
 
 /obj/machinery/cooking/cultify()
-	new /obj/structure/cult/talisman(loc)
+	new /obj/structure/cult_legacy/talisman(loc)
 	..()
 
 /obj/machinery/cooking/New()
@@ -113,7 +112,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/is_open_container()
 	if(cooks_in_reagents)
-		return 1
+		return TRUE
 
 // Interactions ////////////////////////////////////////////////
 
@@ -127,7 +126,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/attack_hand(mob/user)
 	if(isobserver(user))
 		to_chat(user, "Your ghostly hand goes straight through.")
-	else if(issilicon(user))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
 	else if(src.active)
@@ -154,11 +153,11 @@ var/global/ingredientLimit = 10
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
 	else if(..())
-		return 1
+		return TRUE
 	else if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
-	else if(istype(user,/mob/living/silicon))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
@@ -169,6 +168,9 @@ var/global/ingredientLimit = 10
 	set name = "Remove ingredients"
 	set category = "Object"
 	set src in oview(1)
+
+	if(isjustobserver(usr) || ismouse(usr))
+		return
 
 	if(cooks_in_reagents)
 		if(do_after(usr, src, src.reagents.total_volume / 10))
@@ -190,8 +192,8 @@ var/global/ingredientLimit = 10
 		. = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
-	else if(istype(I,/obj/item/organ))
-		var/obj/item/organ/organ = I
+	else if(istype(I,/obj/item/organ/internal))
+		var/obj/item/organ/internal/organ = I
 		if(organ.robotic)
 			. = "That's a prosthetic. It wouldn't taste very good."
 		else
@@ -207,17 +209,17 @@ var/global/ingredientLimit = 10
 	if(. == "valid")
 		if(src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != I) && !force_cook))
-			return 0
+		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
+			return FALSE
 
 		if(user.drop_item(I, src))
 			src.ingredient = I
 			spawn() src.cook(.)
 			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
-			return 1
+			return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
-	return 0
+	return FALSE
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
 	var/obj/item/target_food
@@ -239,15 +241,15 @@ var/global/ingredientLimit = 10
 	for (var/i = 1 to numticks)
 		sleep(delayfraction)
 		if (!src.ingredient || !active || get_turf(src.ingredient)!=get_turf(src))
-			return 0
-	return 1
+			return FALSE
+	return TRUE
 
 /obj/machinery/cooking/proc/cook(var/foodType)
 	src.active = 1
 	src.icon_state = src.icon_state_on
 	if (cook_after(src.cookTime, 25))
 		src.makeFood(foodType)
-		playsound(get_turf(src),src.cookSound,100,1)
+		playsound(src,src.cookSound,100,1)
 	src.active = 0
 	src.icon_state = initial(src.icon_state)
 	return
@@ -397,7 +399,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "fryer_on"
-		playsound(get_turf(src),'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+		playsound(src,'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < DEEPFRY_MINOIL)
 		icon_state = "fryer_empty"
 	else
@@ -466,7 +468,7 @@ var/global/ingredientLimit = 10
 	//Deepfry a random nearby item
 	var/list/pickable_items = list()
 
-	for(var/obj/item/I in range(1, L))
+	for(var/obj/item/I in adjacent_atoms(L))
 		pickable_items.Add(I)
 
 	if(!pickable_items.len)
@@ -528,7 +530,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "confectionator_on"
-		playsound(get_turf(src),'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+		playsound(src,'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
 		icon_state = "confectionator_empty"
 	else
@@ -603,7 +605,7 @@ var/global/ingredientLimit = 10
 			if (cook_after(src.cookTime/3, 14))
 				src.makeFood()
 				if(use_power)
-					playsound(get_turf(src),src.cookSound,100,1)
+					playsound(src,src.cookSound,100,1)
 				else
 					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
 	src.icon_state = initial(src.icon_state)
@@ -629,8 +631,6 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
-	for(var/obj/item/embedded  in src.ingredient.contents)
-		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
 
@@ -676,3 +676,104 @@ var/global/ingredientLimit = 10
 					. = "The campfire isn't lit."
 		if(!campfirefound)
 			. = "There's no campfire to cook on!"
+
+
+//=====Actual fucking sensible cooking machines that don't magic bullshit out of thin air
+
+/obj/machinery/oven
+	name = "oven"
+	desc = "For the chef that has everything."
+	icon = 'icons/obj/cooking_machines.dmi'
+	icon_state = "oven_off"
+	var/icon_state_on = "oven_on"
+	idle_power_usage = 200
+	active_power_usage = 5000
+	heat_production = 1500
+	source_temperature = T0C+180
+	density = 1
+	anchored = 1
+	use_power = 1
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	var/obj/item/weapon/reagent_containers/within
+
+/obj/machinery/oven/New()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/oven,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
+
+	..()
+
+/obj/machinery/oven/Destroy()
+	qdel(within)
+	within = null
+	..()
+
+/obj/machinery/oven/RefreshParts()
+	var/T = 1
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating-1
+	active_power_usage = initial(active_power_usage)/T
+	T = 1
+	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+		T += M.rating-1
+	heat_production = initial(heat_production)*T
+	source_temperature = initial(source_temperature)+(T>1 ? T*10: 0)
+
+/obj/machinery/oven/attackby(obj/item/I, mob/user)
+	..()
+	if(istype(I,/obj/item/weapon/reagent_containers) && !within)
+		if(user.drop_item(I,src))
+			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
+			within = I
+			toggle(user)
+		return 1 //Return 1 when handling reagent containers so they don't splash stuff everywhere
+	if(istype(I, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = I
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			user.visible_message("<span class = 'warning'>\The [user] begins to slam \the [M]'s head into \the [src]!</span>",
+		"<span class = 'warning'>You begin to slam \the [M]'s head into \the [src].</span>")
+			if(do_after_many(user, list(src, M), 1 SECONDS))
+				playsound(src, 'sound/effects/clang.ogg', 50, 1)
+				user.visible_message("<span class = 'warning'>\The [user] slams \the [M]'s head into \the [src]!</span>")
+				M.apply_damage(10, BRUTE, LIMB_HEAD, used_weapon = "Concussive slamming by something on a hinge.")
+				if(use_power == 2)
+					M.apply_damage((source_temperature-T0C)/10, BURN, LIMB_HEAD, used_weapon = "Contact with heating element.")
+
+
+/obj/machinery/oven/attack_hand(mob/user)
+	if(isjustobserver(user))
+		to_chat(user, "<span class = 'warning'>There will be no spooking in my fucking kitchen!</span>")
+		return
+	if(use_power == 1 && within)
+		if(user.put_in_active_hand(within))
+			to_chat(user, "<span class = 'notice'>You take \the [within] from \the [src].</span>")
+			within = null
+	else if(use_power == 2)
+		toggle(user)
+
+/obj/machinery/oven/proc/toggle(mob/user)
+	if(use_power == 1)
+		icon_state = icon_state_on
+		use_power = 2
+		processing_objects.Add(src)
+	else if(use_power == 2)
+		icon_state = initial(icon_state)
+		use_power = 1
+		processing_objects.Remove(src)
+	if(user)
+		to_chat(user, use_power ? "<span class = 'notice'>You turn \the [src] [use_power == 2 ? "on" : "off"].</span>" : "<span class = 'warning'>\The [src] doesn't seem to be plugged in!</span>")
+
+/obj/machinery/oven/process()
+	if(!use_power)
+		toggle()
+	if(within)
+		within.attempt_heating(src)

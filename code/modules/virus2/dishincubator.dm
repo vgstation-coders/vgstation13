@@ -1,14 +1,17 @@
 #define FED_PING_DELAY 40
 #define INCUBATOR_MAX_SIZE 100
 
+#define SCAN_COUNT_MIN_WEAKSTR 3
+#define SCAN_COUNT_MIN_TARGET 4
+
 /obj/machinery/disease2/incubator
-	name = "Pathogenic incubator"
-	density = 1
-	anchored = 1
+	name = "pathogenic incubator"
+	density = TRUE
+	anchored = TRUE
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "incubator"
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	var/obj/item/weapon/virusdish/dish
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
@@ -19,12 +22,16 @@
 
 	var/foodsupply = 0
 	var/toxins = 0
+	var/strength = 0
+	var/weaken = 0
 	var/mutatechance = 5
 	var/growthrate = 3
+	var/view_virus_info = FALSE
+	var/effect_focus = 0 //What effect of the disease are we focusing on?
 
-	var/virusing
+	var/fully_fed = FALSE
+	var/scancount //What level of scanner are we up to?
 
-	var/last_notice
 /obj/machinery/disease2/incubator/New()
 	. = ..()
 
@@ -41,7 +48,7 @@
 	RefreshParts()
 
 /obj/machinery/disease2/incubator/RefreshParts()
-	var/scancount = 0
+	scancount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
@@ -52,44 +59,44 @@
 	growthrate = initial(growthrate) + lasercount
 
 /obj/machinery/disease2/incubator/attackby(var/obj/B as obj, var/mob/user as mob)
-	..()
+	. = ..()
+	if(.)
+		return
+	if(!is_operational())
+		return FALSE
 	if(istype(B, /obj/item/weapon/reagent_containers/glass) || istype(B,/obj/item/weapon/reagent_containers/syringe))
-
-		if(src.beaker)
-			if(istype(beaker,/obj/item/weapon/reagent_containers/syringe))
-				to_chat(user, "A syringe is already loaded into the machine.")
-			else
-				to_chat(user, "A beaker is already loaded into the machine.")
-			return
+		if(beaker)
+			to_chat(user, "\A [beaker] is already loaded into the machine.")
+			return FALSE
 
 		if(user.drop_item(B, src))
-			src.beaker =  B
-
-			if(istype(B,/obj/item/weapon/reagent_containers/syringe))
-				to_chat(user, "You add the syringe to the machine!")
-				src.updateUsrDialog()
-			else
-				to_chat(user, "You add the beaker to the machine!")
-				src.updateUsrDialog()
+			beaker =  B
+			to_chat(user, "You add \the [B] to \the [src]!")
+			updateUsrDialog()
+			return TRUE
 	else
 		if(istype(B,/obj/item/weapon/virusdish))
-			if(src.dish)
+			if(dish)
 				to_chat(user, "A dish is already loaded into the machine.")
-				return
+				return FALSE
 
 			if(user.drop_item(B, src))
-				src.dish =  B
+				dish =  B
+				to_chat(user, "You add the dish to \the [src]!")
+				updateUsrDialog()
+				return TRUE
 
-				if(istype(B,/obj/item/weapon/virusdish))
-					to_chat(user, "You add the dish to the machine!")
-					src.updateUsrDialog()
 
 /obj/machinery/disease2/incubator/Topic(href, href_list)
 	if(..())
 		return 1
 
-	if(usr)
-		usr.set_machine(src)
+	if(href_list["close"])
+		usr << browse(null, "\ref[src]")
+		usr.unset_machine()
+		return 1
+
+	usr.set_machine(src)
 
 	if (href_list["ejectchem"])
 		if(beaker)
@@ -108,12 +115,23 @@
 			dish.forceMove(src.loc)
 			dish = null
 	if (href_list["rad"])
-		radiation += 10
+		radiation++
+		if(radiation == 3)
+			radiation = 0
 	if (href_list["flush"])
-		radiation = 0
-		toxins = 0
-		foodsupply = 0
-
+		switch(href_list["flush"])
+			if("fud")
+				foodsupply = 0
+			if("tox")
+				toxins = 0
+			if("str")
+				strength = 0
+			if("wek")
+				weaken = 0
+	if(href_list["target"])
+		effect_focus++
+		if(effect_focus > dish.virus2.effects.len)
+			effect_focus = 0
 	if(href_list["virus"])
 		if (!dish)
 			say("No viral culture sample detected.")
@@ -129,88 +147,112 @@
 				var/list/virus = list("[dish.virus2.uniqueID]" = D)
 				B.data["virus2"] += virus
 				say("Injection complete.")
+	if(href_list["toggle_view"])
+		view_virus_info = !view_virus_info
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
 
 /obj/machinery/disease2/incubator/attack_hand(mob/user as mob)
-	if(stat & BROKEN)
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
-	var/dat = list()
-	if(!dish)
-		dat += "Please insert dish into the incubator.<BR>"
-	var/string = "Off"
-	if(on)
-		string = "On"
-	dat += "Power status: <A href='?src=\ref[src];power=1'>[string]</a>"
+	var/dat = ""
+	dat += "Power status: <A href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"
 	dat += "<BR>"
-	dat += "Food supply: [foodsupply]"
+	dat += "Radiation setting: [radiation?(radiation==1?"Minor":"Major"):"Inactive"] (<A href='?src=\ref[src];rad=1'>Toggle radiation level</a>)"
+	if(scancount >= SCAN_COUNT_MIN_TARGET && dish)
+		dat += "<BR>Target individual symptom:<A href='?src=\ref[src];target=1'>[effect_focus==0?"inactive":effect_focus]</A>"
 	dat += "<BR>"
-	dat += "Radiation levels: [radiation] RADS (<A href='?src=\ref[src];rad=1'>Radiate</a>)"
-	dat += "<BR>"
-	dat += "Toxins: [toxins]"
+	dat += "<hr>"
 	if(dish)
-		dat += "<BR>"
-		dat += "Growth level: [dish.growth]"
-	dat += "<BR><BR>"
+		dat += "Pathogen dish: [dish]"
+		dat += "<br>Growth level: [dish.growth]"
+		if(scancount >= SCAN_COUNT_MIN_WEAKSTR && dish.analysed)
+			if(view_virus_info)
+				dat += "<BR>[dish.info]"
+			dat += "<BR><A href='?src=\ref[src];toggle_view=1'>Toggle pathogen information</a>"
+		dat += "<BR>Eject pathogen dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
+	else
+		dat += "Please insert dish into the incubator.<BR>"
+	dat += "<hr>"
+	dat += "Toxins: [toxins]: <A href='?src=\ref[src];flush=tox'>Flush</a>"
+	if(scancount >= SCAN_COUNT_MIN_WEAKSTR)
+		dat += "<BR>Strengthening agent: [strength]: <A href='?src=\ref[src];flush=str'>Flush</a>"
+		dat += "<BR>Weakening agent: [weaken]: <A href='?src=\ref[src];flush=wek'>Flush</a>"
+	dat += "<BR>Food supply: [foodsupply]: <A href='?src=\ref[src];flush=fud'>Flush</a>"
 	if(beaker)
+		dat += "<BR>"
 		dat += "Eject chemicals: <A href='?src=\ref[src];ejectchem=1'> Eject</a>"
 		dat += "<BR>"
-	if(dish)
-		dat += "Eject Virus dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
-		dat += "<BR>"
-		if(beaker)
+		if(dish)
 			dat += "Breed viral culture in beaker: <A href='?src=\ref[src];virus=1'> Start</a>"
 			dat += "<BR>"
-	dat += "<br><hr><A href='?src=\ref[src];flush=1'>Flush system</a><BR>"
-	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "dish_incubator", "Pathogenic Incubator", 575, 400, src)
+	var/datum/browser/popup = new(user, "\ref[src]", "Pathogenic Incubator", 575, 400, src)
 	popup.set_content(dat)
 	popup.open()
-	onclose(user, "dish_incubator")
 
 /obj/machinery/disease2/incubator/process()
+	var/change = FALSE
 	if(on)
 		use_power(50,EQUIP)
 		if(!powered(EQUIP))
-			on = 0
+			on = FALSE
 			icon_state = "incubator"
+			change = TRUE
 		if (dish && dish.virus2)
 			if(dish.growth >= INCUBATOR_MAX_SIZE)
 				if(icon_state != "incubator_fed")
 					icon_state = "incubator_fed"
-				if(last_notice + FED_PING_DELAY < world.time)
-					last_notice = world.time
+				if(!fully_fed)
+					fully_fed = TRUE
 					alert_noise("ping")
-			if(foodsupply)
+			else if(foodsupply)
+				fully_fed = FALSE
 				foodsupply -= 1
 				dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
-			if(radiation)
-				if(radiation > 50 & prob(mutatechance))
+				change = TRUE
+			if(radiation && prob(mutatechance))
+				if(radiation == 1)
+					dish.virus2.minormutate(effect_focus)
+				else if(radiation == 2)
 					dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
 					dish.virus2.majormutate()
 					if(dish.info && dish.analysed)
 						dish.info = "OUTDATED : [dish.info]"
 						dish.analysed = 0
-					alert_noise("beep")
-					flick("incubator_mut", src)
-
-				else if(prob(mutatechance))
-					dish.virus2.minormutate()
-				radiation -= 1
-			if(toxins && prob(5))
+				alert_noise("beep")
+				flick("incubator_mut", src)
+			if(toxins && prob(mutatechance))
 				dish.virus2.infectionchance -= 1
-			if(toxins > 50)
-				dish.virus2 = null
+				toxins--
+				change = TRUE
+			if(strength && prob(mutatechance))
+				dish.virus2.minorstrength(effect_focus)
+				strength--
+				change = TRUE
+			if(weaken && prob(mutatechance))
+				dish.virus2.minorweak(effect_focus)
+				weaken--
+				change = TRUE
 	else
 		icon_state = "incubator"
 
 	if(beaker)
 		if(!beaker.reagents.remove_reagent(VIRUSFOOD,5))
 			foodsupply += 10
-		if(!beaker.reagents.remove_reagent(TOXIN,1))
+			change = TRUE
+		if(beaker.reagents.remove_any_reagents(TOXINS,1))
 			toxins += 1
-
-	src.updateUsrDialog()
+			change = TRUE
+		if(scancount >= SCAN_COUNT_MIN_WEAKSTR)
+			if(!beaker.reagents.remove_reagent(CREATINE,1))
+				strength += 10
+				change = TRUE
+			if(!beaker.reagents.remove_reagent(SPACEACILLIN,1))
+				weaken += 10
+				change = TRUE
+	if(change)
+		updateUsrDialog()
 
 #undef INCUBATOR_MAX_SIZE

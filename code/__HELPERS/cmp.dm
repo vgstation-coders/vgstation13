@@ -46,3 +46,12 @@ var/atom/cmp_dist_origin=null
 	
 /proc/cmp_dist_desc(var/atom/a, var/atom/b)
 	return get_dist_squared(cmp_dist_origin, b) - get_dist_squared(cmp_dist_origin, a)
+
+/proc/cmp_profile_avg_time_dsc(var/list/a, var/list/b)
+	return (b[PROFILE_ITEM_TIME]/(b[PROFILE_ITEM_COUNT] || 1)) - (a[PROFILE_ITEM_TIME]/(a[PROFILE_ITEM_COUNT] || 1))
+ 
+/proc/cmp_profile_time_dsc(var/list/a, var/list/b)
+	return b[PROFILE_ITEM_TIME] - a[PROFILE_ITEM_TIME]
+
+/proc/cmp_profile_count_dsc(var/list/a, var/list/b)
+	return b[PROFILE_ITEM_COUNT] - a[PROFILE_ITEM_COUNT]

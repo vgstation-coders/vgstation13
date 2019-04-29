@@ -31,7 +31,7 @@
 	//anchored = 1
 	//use_power = 0
 	//idle_power_usage = 0
-	heatgen = 0
+	heating_power = 0
 	autolinkers = list("c_relay")
 
 //HUB
@@ -62,11 +62,11 @@
 	autolinkers = list("receiverB") // link to relay
 	freq_listening = list(1345, 1353, 1357, 1359) //ert, command, engineering, security
 
-	//Common and other radio frequencies for people to freely use
-	New()
-		for(var/i = 1441, i < 1489, i += 2)
-			freq_listening |= i
-		..()
+//Common and other radio frequencies for people to freely use
+/obj/machinery/telecomms/receiver/preset_right/New()
+	for(var/i = 1441, i < 1489, i += 2)
+		freq_listening |= i
+	..()
 
 /obj/machinery/telecomms/receiver/preset_complete
 	name = "Receiver"

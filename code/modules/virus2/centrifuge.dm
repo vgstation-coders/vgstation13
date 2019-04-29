@@ -1,12 +1,13 @@
 /obj/machinery/centrifuge
-	name = "Isolation Centrifuge"
+	name = "isolation centrifuge"
 	desc = "Used to separate things with different weight. Spin 'em round, round, right round."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "centrifuge"
-	density = 1
+	density = TRUE
+	anchored = TRUE
 	idle_power_usage = 10
 	active_power_usage = 500
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	var/base_state = "centrifuge"
 	var/curing
@@ -36,18 +37,23 @@
 			manipcount += SP.rating
 	general_process_time = round((initial(general_process_time) / manipcount))
 
-/obj/machinery/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
-	if(!istype(I))
-		return ..()
+/obj/machinery/centrifuge/attackby(var/obj/item/I, var/mob/user)
+	. = ..()
+	if(.)
+		return
+	if(!is_operational())
+		return FALSE
+	if(!istype(I, /obj/item/weapon/reagent_containers/glass/beaker/vial) || !iscarbon(user))
+		return FALSE
 
 	var/mob/living/carbon/C = user
 	if(!sample)
 		if(!C.drop_item(I, src))
-			return 1
-
+			return FALSE
 		sample = I
 
-	attack_hand(user)
+	updateUsrDialog()
+	return TRUE
 
 //Also handles luminosity
 /obj/machinery/centrifuge/update_icon()
@@ -65,7 +71,8 @@
 		set_light(0)
 
 /obj/machinery/centrifuge/attack_hand(var/mob/user as mob)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	var/dat = list()
@@ -98,10 +105,9 @@
 		dat += "</td></tr></table><br>"
 		dat += "<hr>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "iso_centrifuge", "Isolation Centrifuge", 400, 300, src)
+	var/datum/browser/popup = new(user, "\ref[src]", "Isolation Centrifuge", 400, 300, src)
 	popup.set_content(dat)
 	popup.open()
-	onclose(user, "iso_centrifuge")
 
 /obj/machinery/centrifuge/process()
 
@@ -136,8 +142,12 @@
 	if(..())
 		return 1
 
-	if(usr)
-		usr.set_machine(src)
+	if(href_list["close"])
+		usr << browse(null, "\ref[src]")
+		usr.unset_machine()
+		return 1
+
+	usr.set_machine(src)
 
 	switch(href_list["action"])
 		if("antibody")
@@ -152,7 +162,7 @@
 
 			else
 				curing = delay
-				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 				update_icon()
 
 		if("isolate")

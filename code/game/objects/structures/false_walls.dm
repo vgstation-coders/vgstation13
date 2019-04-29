@@ -11,7 +11,7 @@
 * around us, then checks the difference.
 */
 /proc/getOPressureDifferential(var/turf/loc)
-	var/minp=16777216; //What is even the significance of this number?
+	var/minp=SHORT_REAL_LIMIT;
 	var/maxp=0;
 	for(var/dir in cardinal)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
@@ -33,8 +33,8 @@
 * around us, then checks the difference.
 */
 /proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
-	var/minp=16777216; //What is even the significance of this number?
-	var/maxp=0;
+	var/minp=SHORT_REAL_LIMIT; // Lowest recorded pressure.
+	var/maxp=0;        // Highest recorded pressure.
 	for(var/turf/simulated/T in turf_list)
 		var/cp = 0
 		if(T.zone)
@@ -43,9 +43,9 @@
 		else
 			if(istype(T,/turf/simulated))
 				continue
-		if(cp<minp)
-			minp=cp
-		if(cp>maxp)
+		if(cp<minp) // If lower than the lowest pressure we've seen,
+			minp=cp   // set it to our lowest recorded pressure
+		if(cp>maxp) // Same, but for highest pressure.
 			maxp=cp
 	return abs(minp-maxp)
 
@@ -101,7 +101,13 @@
 	var/opening = 0
 
 	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
-	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
+/obj/structure/falsewall/canSmoothWith()
+	var/static/list/smoothables = list(
+		/turf/simulated/wall,
+		/obj/structure/falsewall,
+		/obj/structure/falserwall,
+	)
+	return smoothables
 
 /obj/structure/falsewall/closed
 	density = 1
@@ -150,14 +156,14 @@
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
 		sleep(15)
-		src.density = 0
+		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
 		icon_state = "[mineral]0"
-		density = 1
+		setDensity(TRUE)
 		sleep(15)
 		set_opacity(1)
 		src.relativewall()
@@ -181,7 +187,7 @@
 		if(T.density)
 			to_chat(user, "<span class='warning'>The wall is blocked!</span>")
 			return
-		if(isscrewdriver(W))
+		if(W.is_screwdriver(user))
 			user.visible_message("[user] tightens some bolts on the wall.", "You tighten the bolts on the wall.")
 			if(!mineral || mineral == "metal")
 				T.ChangeTurf(/turf/simulated/wall)
@@ -189,9 +195,9 @@
 				T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
 			qdel(src)
 
-		if( istype(W, /obj/item/weapon/weldingtool) )
+		if( iswelder(W) )
 			var/obj/item/weapon/weldingtool/WT = W
-			if( WT:welding )
+			if(WT.welding )
 				if(!mineral)
 					T.ChangeTurf(/turf/simulated/wall)
 				else
@@ -239,14 +245,19 @@
 	anchored = 1
 	var/mineral = "metal"
 	var/opening = 0
-
-	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
-	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
+// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
+/obj/structure/falserwall/canSmoothWith()
+	var/static/list/smoothables = list(
+		/turf/simulated/wall,
+		/obj/structure/falsewall,
+		/obj/structure/falserwall,
+	)
+	return smoothables
 
 /obj/structure/falserwall/New()
+	..()
 	relativewall()
 	relativewall_neighbours()
-	..()
 
 
 /obj/structure/falserwall/attack_ai(mob/user as mob)
@@ -264,14 +275,14 @@
 		icon_state = "frwall_open"
 		flick("frwall_opening", src)
 		sleep(15)
-		density = 0
+		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
 	else
 		opening = 1
 		icon_state = "r_wall"
 		flick("frwall_closing", src)
-		density = 1
+		setDensity(TRUE)
 		sleep(15)
 		set_opacity(1)
 		relativewall()
@@ -290,13 +301,13 @@
 		to_chat(user, "<span class='warning'>You must wait until the door has stopped moving.</span>")
 		return
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		var/turf/T = get_turf(src)
 		user.visible_message("[user] tightens some bolts on the r wall.", "You tighten the bolts on the wall.")
 		T.ChangeTurf(/turf/simulated/wall/r_wall) //Why not make rwall?
 		qdel(src)
 
-	if( istype(W, /obj/item/weapon/weldingtool) )
+	if( iswelder(W) )
 		var/obj/item/weapon/weldingtool/WT = W
 		if( WT.remove_fuel(0,user) )
 			var/turf/T = get_turf(src)
@@ -341,7 +352,7 @@
 		if(world.time > last_event+15)
 			active = 1
 			for(var/mob/living/L in range(3,src))
-				L.apply_effect(12,IRRADIATE,0)
+				L.apply_radiation(12,RAD_EXTERNAL)
 			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
 			last_event = world.time

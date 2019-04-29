@@ -106,14 +106,56 @@
 					if(!istype(L))
 						return
 					qdel(L)
-					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					build(T)
 					use(1)
 					return
 				if(BUILD_IGNORE)
-					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					build(T)
 					use(1)
 				if(BUILD_FAILURE)
 					to_chat(user, "<span class='warning'>The plating is going to need some support.</span>")
 					return
+
+
+/obj/item/stack/glass_tile/rglass/afterattack(atom/target, mob/user, adjacent, params)
+	if(adjacent)
+		if(isturf(target) || istype(target, /obj/structure/lattice))
+			var/turf/T = get_turf(target)
+			switch(T.canBuildPlating())
+				if(BUILD_SUCCESS)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+					build(T)
+					use(1)
+
+/obj/item/stack/glass_tile/rglass
+	name = "glass tile"
+	desc = "A relatively clear reinforced glass tile."
+	icon_state = "tile_rglass"
+	max_amount = 60
+
+/obj/item/stack/glass_tile/rglass/proc/build(turf/S as turf)
+	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
+	if(istype(L))
+		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+		if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
+			S.ChangeTurf(/turf/simulated/floor/glass/airless)
+		else
+			S.ChangeTurf(/turf/simulated/floor/glass)
+		qdel(L)
+
+/obj/item/stack/glass_tile/rglass/plasma
+	name = "plasma glass tile"
+	desc = "A relatively clear reinforced plasma glass tile."
+	icon_state = "tile_plasmarglass"
+
+/obj/item/stack/glass_tile/rglass/plasma/build(turf/S as turf)
+	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
+	if(istype(L))
+		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+		if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
+			S.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
+		else
+			S.ChangeTurf(/turf/simulated/floor/glass/plasma)
+		qdel(L)

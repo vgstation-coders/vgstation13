@@ -4,6 +4,8 @@ var/global/list/falltempoverlays = list()
 /spell/aoe_turf/fall
 	name = "Time Stop"
 	desc = "This spell temporarily stops time for everybody around you, except for you. The spell lasts 3 seconds, and upgrading its power can further increase the duration."
+	user_type = USER_TYPE_WIZARD
+
 	abbreviation = "MS"
 
 	spell_flags = NEEDSCLOTHES
@@ -31,14 +33,11 @@ var/global/list/falltempoverlays = list()
 	if(!can_improve(Sp_POWER))
 		return 0
 	spell_levels[Sp_POWER]++
-	var/temp = ""
 	range++
 	sleeptime += duration_increase_per_level
-	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-		if(2)
-			temp = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
+	var/upgrade_desc = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
 
-	return temp
+	return upgrade_desc
 
 /spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
@@ -72,7 +71,7 @@ var/global/list/falltempoverlays = list()
 
 /spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE) //if recharge is started is important for the trigger spells
 	if(!holder)
-		holder = user //just in case
+		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
@@ -226,7 +225,7 @@ var/global/list/falltempoverlays = list()
 	var/mob/caster = new
 	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
 	caster.invisibility = 101
-	caster.density = 0
+	caster.setDensity(FALSE)
 	caster.anchored = 1
 	caster.flags = INVULNERABLE
 	caster.add_spell(fall)

@@ -12,8 +12,8 @@
 	idle_power_usage = 20
 	active_power_usage = 5000
 
-	var/time_coeff = 1.5 //can be upgraded with research
-	var/resource_coeff = 1.5 //can be upgraded with research
+	var/time_coeff = 1 //can be upgraded with research
+	var/resource_coeff = 1 //can be upgraded with research
 	max_material_storage = 562500 //All this could probably be done better with a list but meh.
 
 	var/datum/research/files
@@ -29,8 +29,10 @@
 	var/screen = 0
 	var/temp
 	var/list/part_sets = list()
-
+	var/datum/design/last_made
 	var/start_end_anims = 0
+	var/min_cap_C = 0.1 //The minimum cap used to how much cost coeff can be improved
+	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
@@ -62,24 +64,16 @@
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
 
 	T = 0
+	var/datum/tech/Tech = files.known_tech["materials"]
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
- 	T += Ma.rating //T is the ammount of stock parts grade. 1 tier 1 part is a  T=1,  2 tier 2 parts is a T=4, 1 tier 1 and 1 tier 3 part is a T=5
- 	if(T >= 2) // this removes 1 part tier level. This is to account for the fact that machines like the protolathe have 1 micro manip in them by default which means 1 tier level
- 		T -= 2
-
-	var/diff
-	diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
-	if(resource_coeff!=diff)
-		resource_coeff = diff
+		T += Ma.rating - 1
+	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((Tech.level - 1)+(T * 2)))/25,0.01), min_cap_C)
 
 	T = 0
+	Tech = files.known_tech["programming"]
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-		T += Ml.rating
-	if(T>= 2)  // same idea for the formula for above
-		T -= 2
-	diff = round(initial(time_coeff) - (initial(time_coeff)*(T *5))/25,0.01)
-	if(time_coeff!=diff)
-		time_coeff = diff
+		T += Ml.rating - 1
+	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
@@ -166,8 +160,14 @@
 
 /obj/machinery/r_n_d/fabricator/process()
 	..()
-	if(busy || stopped || being_built)
+	if(busy || being_built || stat&(NOPOWER|BROKEN))
 		return
+	if(stopped)
+		if(auto_make && last_made && !queue.len)
+			add_to_queue(last_made)
+			start_processing_queue()
+		else
+			return
 	if(queue.len==0)
 		stopped=1
 		return
@@ -234,19 +234,52 @@
 	for(var/M in part.materials)
 		if(copytext(M,1,2) == "$" && !(research_flags & IGNORE_MATS))
 			materials.removeAmount(M, get_resource_cost_w_coeff(part, M))
+
 		else if(!(research_flags & IGNORE_CHEMS))
-			reagents.remove_reagent(M, get_resource_cost_w_coeff(part, M))
+			var/left_to_remove = get_resource_cost_w_coeff(part, M)
+			for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+				var/remove_amount = min(RC.reagents.get_reagent_amount(M), left_to_remove)
+				RC.reagents.remove_reagent(M, remove_amount)
+				left_to_remove -= remove_amount
+				if(left_to_remove <= 0)
+					break
+			update_buffer_size()
+
 	return 1
+
+/obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
+	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
+	//return (I in component_parts)
+	return locate(I,src.component_parts)
+
+//steals mats from other fabricators, then calls remove_materials again
+/obj/machinery/r_n_d/fabricator/proc/bluespace_materials(var/datum/design/part)
+	if(!has_bluespace_bin())
+		return 0
+
+	for (var/obj/machinery/r_n_d/fabricator/gibmats in machines)
+		if(gibmats.has_bluespace_bin())
+			for(var/gib in part.materials)
+				if (gibmats.check_mat(part,gib) && !src.check_mat(part,gib))//they have what we need && we don't need more
+					if(copytext(gib,1,2) == "$" && !(research_flags & IGNORE_MATS))
+						var/bluespaceamount = src.get_resource_cost_w_coeff(part, gib)
+						gibmats.materials.removeAmount(gib,bluespaceamount)
+						src.materials.addAmount(gib,bluespaceamount)
+	return remove_materials(part)
+
 
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
 		if(src.research_flags & IGNORE_MATS)
 			return 1
-		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M), 1)
+		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M))
 	else
 		if(src.research_flags & IGNORE_CHEMS)
 			return 1
-		return round(reagents.get_reagent_amount(M) / get_resource_cost_w_coeff(being_built, M), 1)
+		var/reagent_total = 0
+		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			reagent_total += RC.reagents.get_reagent_amount(M)
+		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
 	return 0
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
@@ -261,7 +294,7 @@
 		src.visible_message("<font color='blue'>The [src.name] buzzes, \"Safety procedures prevent current queued item from being built.\"</font>")
 		return
 
-	if(!remove_materials(part))
+	if(!remove_materials(part) && !bluespace_materials(part))
 		stopped = 1
 		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
 		return
@@ -302,8 +335,11 @@
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
+		being_built.anchored = 0
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
+		last_made = part
+		wires.SignalIndex(RND_WIRE_JOBFINISHED)
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
@@ -391,30 +427,25 @@
 	if(!files)
 		return
 	var/output
-	for(var/datum/tech/T in files.known_tech)
-		if(T && T.level > 1)
-			var/diff
-			switch(T.id) //bad, bad formulas
-				if("materials")
-					var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
-					for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-						pmat += Ml.rating
-					if(pmat >= 1)
-						pmat -= 1//So the equations don't have to be reworked, upgrading a single part from T1 to T2 is == to 1 tech level
-					diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+pmat))/25,0.01)
-					if(resource_coeff!=diff)
-						resource_coeff = diff
-						output+="Production efficiency increased.<br>"
-				if("programming")
-					var/ptime = 0
-					for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
-						ptime += Ma.rating
-					if(ptime >= 2)
-						ptime -= 2
-					diff = round(initial(time_coeff) - (initial(time_coeff)*(T.level+ptime))/25,0.1)
-					if(time_coeff!=diff)
-						time_coeff = diff
-						output+="Production routines updated.<br>"
+	var/diff
+	var/datum/tech/T = files.known_tech["materials"]
+	if(T && T.level > 1)
+		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
+		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+			pmat += Ma.rating - 1
+		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((T.level - 1)+(pmat*2)))/25,0.01), min_cap_C)
+		if(resource_coeff!=diff)
+			resource_coeff = diff
+			output+="Production efficiency increased.<br>"
+	T = files.known_tech["programming"]
+	if(T && T.level > 1)
+		var/ptime = 0
+		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
+			ptime += Ml.rating - 1
+		diff = max(round(initial(time_coeff) - (initial(time_coeff)*((T.level - 1)+(ptime*3)))/25,0.1), min_cap_T)
+		if(time_coeff!=diff)
+			time_coeff = diff
+			output+="Production routines updated.<br>"
 	return output
 
 
@@ -430,7 +461,8 @@
 	else
 		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
 	if(console)
-		for(var/datum/tech/T in console.files.known_tech)
+		for(var/ID in console.files.known_tech)
+			var/datum/tech/T = console.files.known_tech[ID]
 			if(T)
 				files.AddTech2Known(T)
 		for(var/datum/design/D in console.files.known_designs)
@@ -477,10 +509,10 @@
 /obj/machinery/r_n_d/fabricator/proc/get_construction_time_w_coeff(var/datum/design/part as obj, var/roundto=1)
 	return round(/*TechTotal(part)*/(part.MatTotal()/FAB_MAT_BASEMOD)*build_time*time_coeff, roundto)
 
-/obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	if(user.stat || user.restrained())
+	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return
 	if(!allowed(user) && !emagged)
 		return
@@ -516,7 +548,7 @@
 		parts_list[set_name] = set_name_list
 	data["parts"] = parts_list // assigning the parts data to the data sent to UI
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, nano_file, name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
 		ui.set_initial_data(data)
@@ -544,10 +576,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
 
 	if(href_list["remove_from_queue"])
-		remove_from_queue(filter.getNum("remove_from_queue"))
+		remove_from_queue(topic_filter.getNum("remove_from_queue"))
 		return 1
 
 	if(href_list["eject"])
@@ -620,7 +652,7 @@
 	build_part(new_design)
 
 /obj/machinery/r_n_d/fabricator/attack_hand(mob/user as mob)
-	if(user.stat || user.restrained()) //allowed is later on, so we don't check it
+	if(!isAdminGhost(user) && (user.stat || user.restrained())) //allowed is later on, so we don't check it
 		return
 
 	var/turf/exit = get_output()
@@ -653,8 +685,8 @@
 		src.screen = href_list["screen"]
 
 	if(href_list["queue_move"] && href_list["index"])
-		var/index = filter.getNum("index")
-		var/new_index = index + filter.getNum("queue_move")
+		var/index = topic_filter.getNum("index")
+		var/new_index = index + topic_filter.getNum("queue_move")
 		if(isnum(index) && isnum(new_index))
 			if(IsInRange(new_index,1,queue.len))
 				queue.Swap(index,new_index)
@@ -671,7 +703,7 @@
 			src.sync()
 		return update_queue_on_page()
 	if(href_list["part_desc"])
-		var/obj/part = filter.getObj("part_desc")
+		var/obj/part = topic_filter.getObj("part_desc")
 
 		// critical exploit prevention, do not remove unless you replace it -walter0o
 		if(src.exploit_prevention(part, usr, 1))
@@ -713,3 +745,6 @@
 			mats.forceMove(src.loc)
 		return total_amount
 	return 0
+
+/obj/machinery/r_n_d/fabricator/proc/update_buffer_size()
+	return

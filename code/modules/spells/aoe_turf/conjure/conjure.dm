@@ -24,7 +24,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 
 /spell/aoe_turf/conjure/cast(list/targets, mob/user)
 	if(!isnull(cast_sound))
-		playsound(get_turf(user), cast_sound, 50, 1)
+		playsound(user, cast_sound, 50, 1)
 
 	var/placed_successfully = 0
 	for(var/i=1,i <= summon_amt,i++)
@@ -69,7 +69,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 
 		var/atom/movable/overlay/animation = new /atom/movable/overlay(spawn_place)
 		animation.name = "conjure"
-		animation.density = 0
+		animation.setDensity(FALSE)
 		animation.anchored = 1
 		animation.icon = 'icons/effects/effects.dmi'
 		animation.layer = OBJ_LAYER

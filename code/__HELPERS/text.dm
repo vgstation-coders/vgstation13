@@ -1,4 +1,17 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
+#define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
+//Loops through every line in (text). The 'line' variable holds the current line
+//Example use:
+/*
+var/text = {"Line 1
+Line 2
+Line 3
+"}
+forLineInText(text)
+	world.log << line
+*/
+#define forLineInText(text) for({var/__index=1;var/line=copytext(text, __index, findtext(text, "\n", __index))} ; {__index != 0} ; {__index = findtext(text, "\n", __index+1) ; line = copytext(text, __index+1, findtext(text, "\n", __index+1))})
+
 /*
  * Holds procs designed to help with filtering text
  * Contains groups:
@@ -126,8 +139,8 @@
 
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
-	var/name = input(user, message, title, default)
-	return strip_html_simple(name, max_length)
+	var/name = input(user, message, title, default) as null|text
+	return utf8_sanitize(name, user, max_length)
 
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
@@ -291,9 +304,21 @@ proc/checkhtml(var/t)
 
 	return ""
 
+//Returns a string with double spaces removed
+/proc/trimcenter(text)
+	var/regex/trimcenterregex = regex("\\s{2,}","g")
+	return trimcenterregex.Replace(text," ")
+
 //Returns a string with reserved characters and spaces before the first word and after the last word removed.
 /proc/trim(text)
 	return trim_left(trim_right(text))
+
+//Returns the first word in a string.
+/proc/get_first_word(text)
+	for(var/i = 1 to length(text))
+		if(text2ascii(text, i) == 32)
+			return copytext(text, 1, i)
+	return text
 
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
@@ -375,18 +400,36 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
-/proc/format_watts(var/number)
-	if(number<0)
-		return "-[format_watts(number)]"
-	if(number==0)
-		return "0 W"
 
+/**
+ * Formats unites with their suffixes
+ * Should be good for J, W, and stuff
+ */
+var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
+
+/proc/format_units(var/number)
+	if (number<0)
+		return "-[format_units(abs(number))]"
+	if (number==0)
+		return "0 "
+
+	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
-	return "[format_num(number)] [watt_suffixes[i]]"
+		if (i == max_unit_suffix)
+			break
+
+	return "[format_num(number)] [unit_suffixes[i]]"
+
+
+/**
+ * Old unit formatter, the TEG used to use this
+ */
+/proc/format_watts(var/number)
+	return "[format_units(number)]W"
+
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
@@ -445,6 +488,9 @@ var/list/number_units=list(
 	"billion"
 )
 
+// The " character
+var/quote = ascii2text(34)
+
 /proc/num2words(var/number, var/zero="zero", var/minus="minus", var/hundred="hundred", var/list/digits=number_digits, var/list/tens=number_tens, var/list/units=number_units, var/recursion=0)
 	if(!isnum(number))
 		warning("num2words fed a non-number: [number]")
@@ -464,6 +510,8 @@ var/list/number_units=list(
 		if(hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
+			if(number == 0)
+				return out
 
 	if(number < 100)
 		// Teens
@@ -495,3 +543,29 @@ var/list/number_units=list(
 
 ///mob/verb/test_num2words(var/number as num)
 //	to_chat(usr, "\"[jointext(num2words(number), " ")]\"")
+
+// Sanitize inputs to avoid SQL injection attacks
+proc/sql_sanitize_text(var/text)
+	text = replacetext(text, "'", "''")
+	text = replacetext(text, ";", "")
+	text = replacetext(text, "&", "")
+	return text
+
+/proc/is_letter(var/thing) // Thing is an ascii number
+    return (thing >= 65 && thing <= 122)
+
+/proc/buttbottify(var/message)
+	var/list/split_phrase = splittext(message," ") // Split it up into words.
+
+	var/list/prepared_words = split_phrase.Copy()
+	var/i = rand(1,3)
+	for(,i > 0,i--) //Pick a few words to change.
+
+		if (!prepared_words.len)
+			break
+		var/word = pick(prepared_words)
+		prepared_words -= word //Remove from unstuttered words so we don't stutter it again.
+		var/index = split_phrase.Find(word) //Find the word in the split phrase so we can replace it.
+
+		split_phrase[index] = "butt"
+	return jointext(split_phrase," ") // No longer need to sanitize, speech is automatically html_encoded at render-time.

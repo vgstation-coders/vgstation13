@@ -1,0 +1,72 @@
+{{if data.awaiting_ID}}
+	<h3>Preparing for Dump</h3>
+	<div class="item">
+		<div class="itemLabel">
+			Maintenance:
+		</div>
+		<div class="itemContent">
+			{{:helper.link('Dump', 'trash', {'dump_contents' : 1})}}
+			{{:helper.link('Force Reaction', 'transferthick-e-w', {'force' : 1})}}
+			{{:helper.link('Back', 'eject', {'prepare_dump' : 1})}}
+		</div>
+	</div>
+{{else}}
+	<div class="notice">The vaporizer can be {{:data.unlocked ? "locked" : "unlocked"}} with a valid ID card.</div>
+	<h3>Machinery Status</h3>
+	<div class="item">
+		<div class="itemLabel">
+			Power Status:
+		</div>
+		<div class="itemContent">
+			{{:data.powered ? '<span class="good">Good</span>' : '<span class="average">No External Power</span>'}}
+		</div>
+	</div>
+	<div class="item">
+		<div class="itemLabel">
+			Power Consumption:
+		</div>
+		<div class="itemContent">
+			{{:data.powerConsumption}} watts
+		</div>
+	</div>
+
+	<h3>Reservoir Status</h3>
+	<div class="item">
+		<div class="itemLabel">
+			Current Volume:
+		</div>
+		<div class="itemContent">
+			{{:data.tankVolume}} units {{:helper.link('Maintenance', 'key', {'prepare_dump' : 1})}}
+			{{:helper.link('Collapse', 'suitcase', {'collapse' : 1})}}
+		</div>
+	</div>
+
+
+	<h3>Mixing Valve Status</h3>
+	<div class="item">
+		<div class="itemLabel">
+			Mix Rate:
+		</div>
+		<div class="itemContent">
+			{{:helper.displayBar(data.mixrate, 0, 50)}}
+			{{:helper.link(data.mixrate+" units", 'carat-2-n-s', {'set_mixrate': 1})}}
+		</div>
+		<div class="itemLabel">
+			Mix Ratio:
+		</div>
+		<div class="itemContent">
+			{{:helper.link(data.mixratio+"% Oxygen", 'carat-2-n-s', {'set_mixratio': 1})}}
+		</div>
+		
+	</div>
+
+	<div class="item">
+		<div class="itemLabel">
+			Mixing Valve:
+		</div>
+		<div class="itemContent">
+			{{:data.valveOpen ? '<span class="good">Open</span>' : '<span class="average">Closed</span>'}}
+			{{:helper.link('Toggle Valve', 'valveOpen', {'toggle' : 1})}}
+		</div>
+	</div>
+{{/if}}

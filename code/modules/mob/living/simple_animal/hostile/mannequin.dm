@@ -32,12 +32,13 @@
 	max_n2 = 0
 	minbodytemp = 0
 
+	mob_property_flags = MOB_CONSTRUCT
 	faction = "mannequin"
 
 	var/list/clothing = list()
 
-/mob/living/simple_animal/hostile/mannequin/Die()
-	..()
+/mob/living/simple_animal/hostile/mannequin/death(var/gibbed = FALSE)
+	..(TRUE)
 	breakDown()
 	qdel(src)
 
@@ -129,8 +130,10 @@
 	..()
 
 /mob/living/simple_animal/hostile/mannequin/cult/CanAttack(var/atom/the_target)
-	if(iscultist(the_target))
-		return 0
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/mannequin/cult/New()

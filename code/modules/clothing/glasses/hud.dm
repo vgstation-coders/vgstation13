@@ -7,8 +7,8 @@
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 	var/list/icon/current = list() //the current hud icons
 
-	proc
-		process_hud(var/mob/M)	return
+/obj/item/clothing/glasses/hud/proc/process_hud(var/mob/M)
+	return
 
 /obj/item/clothing/glasses/hud/harm_label_update()
 	return
@@ -49,3 +49,15 @@
 /obj/item/clothing/glasses/hud/security/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
 		process_sec_hud(M,1)
+
+/obj/item/clothing/glasses/hud/diagnostic
+	name = "diagnostic HUD"
+	icon_state = "diagnostichud"
+	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
+
+/obj/item/clothing/glasses/hud/diagnostic/prescription
+	prescription = TRUE
+
+/obj/item/clothing/glasses/hud/diagnostic/process_hud(var/mob/M)
+	if(harm_labeled < min_harm_label)
+		process_diagnostic_hud(M)

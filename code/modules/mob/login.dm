@@ -1,5 +1,17 @@
 //handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
 /mob/proc/update_Login_details()
+	if(!client)
+		WARNING("update_Login_details(): client for [src] is [client]!")
+		message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client (BYOND issue, not malicious)!</span>", 1)
+
+	else
+		if(!client.address)
+			WARNING("update_Login_details(): client.address for [src] is [client.address]!")
+			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client.address (BYOND issue, not malicious)!</span>", 1)
+		if(!client.computer_id)
+			WARNING("update_Login_details(): client.computer_id for [src] is [client.computer_id]!")
+			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client.computer_id (BYOND issue, not malicious)!</span>", 1)
+
 	//Multikey checks and logging
 	lastKnownIP	= client.address
 	computer_id	= client.computer_id
@@ -16,7 +28,9 @@
 					if(matches)
 						matches += " and "
 					matches += "ID ([client.computer_id])"
+#if WARN_FOR_CLIENTS_SHARING_IP
 					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
+#endif
 				if(matches)
 					if(M.client)
 						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>.</font>", 1)
@@ -25,6 +39,9 @@
 						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </font>", 1)
 						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)] (no longer logged in).")
 
+// Do not call ..()
+// If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
+// See http://www.byond.com/docs/ref/info.html#/mob/proc/Login and http://www.byond.com/forum/?post=2151126
 /mob/Login()
 	player_list |= src
 	update_Login_details()
@@ -43,17 +60,22 @@
 	hud_used = new /datum/hud(src)
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
+	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
+	client.screen += clickmaster_dummy // honestly fuck you lummox
+	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
 
 	regular_hud_updates()
+
+	update_antag_huds()
+
+	update_action_buttons(TRUE)
 
 	if(round_end_info == "")
 		winset(client, "rpane.round_end", "is-visible=false")
 
 	delayNextMove(0)
 
-	change_sight(adding = SEE_SELF)
-
-	..()
+	change_sight(adding = (SEE_SELF|SEE_BLACKNESS))
 
 	reset_view()
 
@@ -92,9 +114,6 @@
 		client.changeView()
 		client.haszoomed = 0
 
-	if(bad_changing_colour_ckeys["[client.ckey]"] == 1)
-		client.updating_colour = 0
-		bad_changing_colour_ckeys["[client.ckey]"] = 0
 	update_colour()
 
 	if(client)

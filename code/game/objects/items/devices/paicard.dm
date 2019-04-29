@@ -15,6 +15,7 @@
 /obj/item/device/paicard/New()
 	..()
 	overlays += image(icon=icon, icon_state = "pai-off")
+	paicard_list.Add(src)
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/paicard/test/New()
@@ -23,6 +24,7 @@
 #endif
 
 /obj/item/device/paicard/Destroy()
+	paicard_list.Remove(src)
 	//Will stop people throwing friend pAIs into the singularity so they can respawn
 	if(!isnull(pai))
 		pai.death(0)
@@ -78,7 +80,7 @@
 
 /obj/item/device/paicard/Topic(href, href_list)
 
-	if(!usr || usr.stat)
+	if(!usr || usr.stat || !in_range(src, usr))
 		return
 
 	if(href_list["setdna"])
@@ -92,7 +94,9 @@
 			pai.master = M.real_name
 			pai.master_dna = dna.unique_enzymes
 			to_chat(pai, "<font color = red><h3>You have been bound to a new master: [pai.master].</h3></font>")
+		attack_self(usr)
 	if(href_list["request"])
+		usr << browse(null, "window=paicard")
 		src.looking_for_personality = 1
 		paiController.findPAI(src, usr)
 	if(href_list["wipe"])
@@ -105,10 +109,12 @@
 				to_chat(M, "<font color = #ffc4c4><h5>oblivion... </h5></font>")
 				M.death(0)
 			removePersonality()
+		attack_self(usr)
 	if(href_list["wires"])
 		var/t1 = text2num(href_list["wires"])
 		if(pai.radio)
 			pai.radio.wires.CutWireIndex(t1)
+		attack_self(usr)
 	if(href_list["setlaws"])
 		var/newlaws = copytext(sanitize(input("Enter any additional directives you would like your pAI personality to follow. Note that these directives will not override the personality's allegiance to its imprinted master. Conflicting directives will be ignored.", "pAI Directive Configuration", pai.pai_laws) as message),1,MAX_MESSAGE_LEN)
 		if(newlaws)
@@ -116,7 +122,7 @@
 			to_chat(pai, "Your supplemental directives have been updated. Your new directives are:")
 			to_chat(pai, "Prime Directive : <br>[pai.pai_law0]")
 			to_chat(pai, "Supplemental Directives: <br>[pai.pai_laws]")
-	attack_self(usr)
+		attack_self(usr)
 
 // 		WIRE_SIGNAL = 1
 //		WIRE_RECEIVE = 2
@@ -124,6 +130,7 @@
 
 /obj/item/device/paicard/proc/setPersonality(mob/living/silicon/pai/personality)
 	src.pai = personality
+	src.overlays.len = 0
 	src.overlays += image(icon=icon, icon_state = "pai-happy")
 
 /obj/item/device/paicard/proc/removePersonality()
@@ -132,57 +139,54 @@
 	src.overlays += image(icon=icon, icon_state = "pai-off")
 
 /obj/item/device/paicard/proc/setEmotion(var/emotion)
-	if(pai)
-		var/face = "pai-happy"
-		src.overlays.len = 0
-		pai.overlays.len = 0
-		switch(emotion)
-			if(1)
-				face = "pai-happy"
-			if(2)
-				face = "pai-cat"
-			if(3)
-				face = "pai-extremely-happy"
-			if(4)
-				face = "pai-face"
-			if(5)
-				face = "pai-laugh"
-			if(6)
-				face = "pai-off"
-			if(7)
-				face = "pai-sad"
-			if(8)
-				face = "pai-angry"
-			if(9)
-				face = "pai-what"
-			if(10)
-				face = "pai-longface"
-			if(11)
-				face = "pai-sick"
-			if(12)
-				face = "pai-high"
-			if(13)
-				face = "pai-love"
-			if(14)
-				face = "pai-electric"
-			if(15)
-				face = "pai-pissed"
-			if(16)
-				face = "pai-nose"
-			if(17)
-				face = "pai-kawaii"
-			if(18)
-				face = "pai-cry"
-		src.overlays += image(icon=icon, icon_state = "[face]")
-		pai.overlays += image(icon=icon, icon_state = "[face]")//we also update the mob's overlay so it appears properly on the scoreboard.
+	var/static/list/possible_choices = list(
+		"Happy" = "pai-happy",
+		"Cat" = "pai-cat",
+		"Extremely happy" = "pai-extremely-happy",
+		"Face" = "pai-face",
+		"Off" = "pai-off",
+		"Sad" = "pai-sad",
+		"Angry" = "pai-angry",
+		"What" = "pai-what",
+		"Longface" = "pai-longface",
+		"Sick" = "pai-sick",
+		"High" = "pai-high",
+		"Love" = "pai-love",
+		"Electric" = "pai-electric",
+		"Pissed" = "pai-pissed",
+		"Nose" = "pai-nose",
+		"Kawaii" = "pai-kawaii",
+		"Cry" = "pai-cry",
+		"Thinking" = "pai-thinking",
+	)
+	var/selected = input(pai, "Select your new display image:", "Display image", "Happy") in null|possible_choices
+	if(!selected)
+		return
+	var/chosen_icon_state = possible_choices[selected]
+	ASSERT(chosen_icon_state)
+
+	var/image/new_overlay = image(icon = icon, icon_state = chosen_icon_state)
+	src.overlays.len = 0
+	src.overlays += new_overlay
+	//we also update the mob's overlay so it appears properly on the scoreboard.
+	pai.overlays.len = 0
+	pai.overlays += new_overlay
 
 /obj/item/device/paicard/proc/alertUpdate()
 	var/turf/T = get_turf(src.loc)
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
 		playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
+		src.overlays += image(icon=icon, icon_state = "pai-off-notify")
+
+/obj/item/device/paicard/proc/removeNotification()
+	src.overlays.len = 0
 
 /obj/item/device/paicard/emp_act(severity)
 	for(var/mob/M in src)
 		M.emp_act(severity)
 	..()
+
+/obj/item/device/paicard/dropped(mob/user)
+	if(pai && pai.holomap_device)
+		pai.holomap_device.stopWatching()

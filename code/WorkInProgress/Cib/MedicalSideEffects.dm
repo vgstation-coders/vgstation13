@@ -62,7 +62,7 @@
 		if(11 to 30)
 			H.custom_pain("You feel a throbbing pain in your head!",1)
 		if(31 to 50)
-			H.custom_pain("You feel an excrutiating pain in your head!",1)
+			H.custom_pain("You feel an excruciating pain in your head!",1)
 			H.adjustBrainLoss(1)
 		if(51 to INFINITY)
 			H.custom_pain("It feels like your head is about to split open!",1)
@@ -94,7 +94,7 @@
 			H.vomit()
 
 /datum/medical_effect/bad_stomach/cure(mob/living/carbon/human/H)
-	if(H.reagents.has_reagent(ANTI_TOXIN))
+	if(H.reagents.has_any_reagents(ANTI_TOXINS))
 		to_chat(H, "<span class='warning'>Your stomach feels a little better now..</span>")
 		return 1
 	return 0

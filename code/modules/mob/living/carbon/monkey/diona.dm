@@ -1,7 +1,4 @@
-/*
-  Tiny babby plant critter plus procs.
-*/
-
+//  Tiny babby plant critter plus procs.
 //Holders have been moved to code/modules/mob/living/holders.dm
 
 //Mob defines.
@@ -13,13 +10,15 @@
 	species_type = /mob/living/carbon/monkey/diona
 	holder_type = /obj/item/weapon/holder/diona
 	var/list/donors = list()
-	var/ready_evolve = 0
-	canWearHats = 1
-	canWearClothes = 0
-	canWearGlasses = 0
+	var/ready_evolve = FALSE
+	canWearHats = TRUE
+	canWearClothes = FALSE
+	canWearGlasses = FALSE
 	burn_damage_modifier = 2.5 //TREEEEEES
 	languagetoadd = LANGUAGE_ROOTSPEAK
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
+	flag = NO_BREATHE
+	canPossess = TRUE
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -35,7 +34,7 @@
 	setGender(NEUTER)
 	dna.mutantrace = "plant"
 	greaterform = "Diona"
-	alien = 1
+	alien = TRUE
 
 //Verbs after this point.
 
@@ -90,7 +89,7 @@
 
 	if(!is_alien_whitelisted(src, "Diona") && config.usealienwhitelist)
 		to_chat(src, alert("You are currently not whitelisted to play an adult Diona."))
-		return 0
+		return FALSE
 
 	if(stat == DEAD)
 		to_chat(src, "You cannot evolve if you are dead!")
@@ -133,7 +132,7 @@
 	if (istype(other, /mob/living/carbon/human))
 		if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 			if(donors.len >= 2) // They have sucked down some blood.
-				return 1
+				return TRUE
 	return ..()
 
 /mob/living/carbon/monkey/diona/can_read()
@@ -147,7 +146,7 @@
 	set desc = "Take a blood sample from a suitable donor to help understand those around you and evolve."
 
 	var/list/choices = list()
-	for(var/mob/living/carbon/C in view(1,src))
+	for(var/mob/living/carbon/human/C in view(1,src))
 		if(C.real_name != real_name)
 			choices += C
 
@@ -157,6 +156,11 @@
 		return
 	if(!Adjacent(M))
 		return
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species && H.species.anatomy_flags & NO_BLOOD)
+			to_chat(src, "<span class='warning'>That donor has no blood!</span>")
+			return
 	if(donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
 		return
@@ -171,7 +175,7 @@
 
 	switch(progress) //Stop them from skipping levels
 		if(5)
-			ready_evolve = 1
+			ready_evolve = TRUE
 			to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
 		if(4)
 			to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
@@ -186,12 +190,12 @@
 			to_chat(src, "<span class='good'>The blood seeps into your small form, and you draw out the echoes of memories and personality from it, working them into your budding mind.</span>")
 
 /mob/living/carbon/monkey/diona/dexterity_check()
-	return 0
+	return FALSE
 
 /mob/living/carbon/monkey/diona/update_icons()
 	update_hud()
 	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
-	overlays.len = 0
+	overlays.Cut()
 	var/matrix/M = matrix()
 	for(var/image/I in overlays_standing)
 		overlays += I

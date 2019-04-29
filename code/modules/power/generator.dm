@@ -215,16 +215,16 @@
 		return
 
 	if(src.dir & (EAST|WEST))
-		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
+		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
 		if(circ1 && !circ1.anchored)
 			circ1 = null
 
-		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
+		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
 		if(circ2 && !circ2.anchored)
 			circ2 = null
 
 		if(circ1 && circ2)
-			if(circ1.dir != SOUTH || circ2.dir != NORTH)
+			if(circ1.dir != NORTH || circ2.dir != SOUTH)
 				circ1 = null
 				circ2 = null
 
@@ -247,6 +247,8 @@
 
 /obj/machinery/power/generator/wrenchAnchor()
 	. = ..()
+	if(!.)
+		return
 	reconnect()
 
 /obj/machinery/power/generator/proc/operable()
@@ -280,6 +282,12 @@
 			var/energy_transfer = delta_temperature * air2_heat_capacity * air1_heat_capacity / (air2_heat_capacity + air1_heat_capacity)
 			var/heat = energy_transfer * (1 - thermal_efficiency)
 			last_gen = energy_transfer * thermal_efficiency * 0.05
+
+			//If our circulators are lubed get extra power
+			if(circ1.reagents.get_reagent_amount(LUBE)>=1)
+				last_gen *= 1 + (circ1.volume_capacity_used/16.5) //Up to x3 if flow capacity is 33%
+			if(circ2.reagents.get_reagent_amount(LUBE)>=1)
+				last_gen *= 1 + (circ2.volume_capacity_used/16.5)
 
 			if(air2.temperature > air1.temperature)
 				air2.temperature = air2.temperature - energy_transfer/air2_heat_capacity
@@ -336,8 +344,8 @@
 	if(dir & (NORTH | SOUTH))
 		vertical = 1
 
-	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "right"])")
-	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "left"])")
+	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "left"])")
+	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "right"])")
 
 	interface.updateContent("total_out", format_watts(last_gen))
 
@@ -379,7 +387,7 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	src.dir = turn(src.dir, -90)
 
 /obj/machinery/power/generator/verb/rotate_anticlock()
 	set category = "Object"
@@ -389,4 +397,4 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	src.dir = turn(src.dir, 90)

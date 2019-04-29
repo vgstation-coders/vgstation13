@@ -1,7 +1,7 @@
 //DEATH SQUAD
 
 /datum/striketeam/deathsquad
-	striketeam_name = "Death Squad"
+	striketeam_name = TEAM_DEATHSQUAD
 	faction_name = "Nanotrasen"
 	mission = "Clean up the Station of all enemies of Nanotrasen. Avoid damage to Nanotrasen assets, unless you judge it necessary."
 	team_size = 6
@@ -18,8 +18,7 @@
 
 	new_commando.gender = pick(MALE, FEMALE)
 
-	var/datum/preferences/A = new()//Randomize appearance for the commando.
-	A.randomize_appearance_for(new_commando)
+	new_commando.randomise_appearance_for(new_commando.gender)
 
 	new_commando.real_name = "[!leader_selected ? commando_rank : commando_leader_rank] [!leader_selected ? commando_name : "Creed"]"
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
@@ -30,20 +29,33 @@
 	new_commando.mind_initialize()
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Death Commando"
-	ticker.mode.traitors |= new_commando.mind//Adds them to current traitor list. Which is really the extra antagonist list.
+	var/datum/faction/deathsquad = find_active_faction_by_type(/datum/faction/strike_team/deathsquad)
+	if(deathsquad)
+		deathsquad.HandleRecruitedMind(new_commando.mind)
+	else
+		deathsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/deathsquad)
+		deathsquad.forgeObjectives(mission)
+		if(deathsquad)
+			deathsquad.HandleNewMind(new_commando.mind) //First come, first served
+	if (leader_selected)
+		var/datum/role/death_commando/D = new_commando.mind.GetRole(DEATHSQUADIE)
+		D.logo_state = "creed-logo"
 	new_commando.equip_death_commando(leader_selected)
 
-	ticker.mode.deathsquad += new_commando.mind
 	return new_commando
 
 /datum/striketeam/deathsquad/greet_commando(var/mob/living/carbon/human/H)
+	H << 'sound/music/deathsquad.ogg'
 	if(H.key == leader_key)
 		to_chat(H, "<span class='notice'>You are [H.real_name], a tactical genius and the leader of the Death Squad, in the service of Nanotrasen.</span>")
 	else
 		to_chat(H, "<span class='notice'>You are [H.real_name], a Death Squad commando, in the service of Nanotrasen.</span>")
 		if (leader_key != "")
 			to_chat(H, "<span class='notice'>Follow directions from your superior, Creed.</span>")
-	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	//to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /mob/living/carbon/human/proc/equip_death_commando(leader = 0)
 	//Special radio setup
@@ -51,7 +63,7 @@
 
 	//Adding Camera Network
 	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = "CREED"
+	camera.network = list(CAMERANET_CREED)
 	camera.c_tag = real_name
 
 	//Basic Uniform
