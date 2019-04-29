@@ -1059,14 +1059,16 @@
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
-/*	proc/dynusepower(amount)
+/*
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/proc/dynusepower(amount)
 	if(!equip_ready) //enabled
 		var/area/A = get_area(chassis)
 		var/pow_chan = get_power_channel(A)
 		if(pow_chan)
 			A.master.use_power(amount*coeff, pow_chan)
 			return 1
-	return chassis.dynusepower(amount)*/
+	return chassis.dynusepower(amount)
+*/
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/activate()
 	if(pr_energy_relay.toggle())

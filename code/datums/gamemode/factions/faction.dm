@@ -395,6 +395,11 @@ var/list/factions_with_hud_icons = list()
 	ID = CUSTOMSQUAD
 	logo_state = "nano-logo"
 
+/datum/faction/strike_team/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
+	
 //________________________________________________
 
 /datum/faction/strike_team/ert
@@ -404,7 +409,7 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/emergency_responder
 	logo_state = "ert-logo"
 	hud_icons = list("ert-logo")
-
+	
 //________________________________________________
 
 /datum/faction/strike_team/deathsquad
@@ -423,7 +428,9 @@ var/list/factions_with_hud_icons = list()
 	initroletype = /datum/role/syndicate_elite_commando
 	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
-
+	
+//________________________________________________
+	
 /datum/faction/strike_team/custom
 	name = "Custom Strike Team"
 

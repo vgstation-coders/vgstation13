@@ -5,60 +5,60 @@
 	has_fine_manipulation = 1
 	var/xcom_state
 
-	New()
+/mob/living/carbon/alien/humanoid/special/New()
+	..()
+	spawn (1)
+		var/datum/reagents/R = new/datum/reagents(100)
+		reagents = R
+		R.my_atom = src
+
+		mind = new()
+		mind.key = key
+		mind.special_role = "Special Xeno"
+
+		name = "[name] ([rand(1, 1000)])"
+		real_name = name
+
+		src.stand_icon = new /icon('xcomalien.dmi', xcom_state)
+		src.lying_icon = new /icon('xcomalien.dmi', xcom_state)
+		src.icon = src.stand_icon
+
+		remove_special_verbs()
+
+
+		rebuild_appearance()
+
+/mob/living/carbon/alien/humanoid/special/death(gibbed)
+	..()
+	spawn(5)
+		gib()
+
+/mob/living/carbon/alien/humanoid/special/Stat()
+	if(statpanel("Status"))
+		if(src.client && src.client.holder)
+			stat(null, "([x], [y], [z])")
+
+		stat(null, "Intent: [src.a_intent]")
+		stat(null, "Move Mode: [src.m_intent]")
+
+		if (src.internal)
+			if (!src.internal.air_contents)
+				qdel(src.internal)
+				src.internal = null
+			else
+				stat("Internal Atmosphere Info", src.internal.name)
+				stat("Tank Pressure", src.internal.air_contents.return_pressure())
+				stat("Distribution Pressure", src.internal.distribute_pressure)
+	return
+
+/mob/living/carbon/alien/humanoid/special/alien_talk()
+	if(istype(src, /mob/living/carbon/alien/humanoid/special/etheral))
 		..()
-		spawn (1)
-			var/datum/reagents/R = new/datum/reagents(100)
-			reagents = R
-			R.my_atom = src
-
-			mind = new()
-			mind.key = key
-			mind.special_role = "Special Xeno"
-
-			name = "[name] ([rand(1, 1000)])"
-			real_name = name
-
-			src.stand_icon = new /icon('xcomalien.dmi', xcom_state)
-			src.lying_icon = new /icon('xcomalien.dmi', xcom_state)
-			src.icon = src.stand_icon
-
-			remove_special_verbs()
-
-
-			rebuild_appearance()
-
-	death(gibbed)
+		return
+	if(istype(src, /mob/living/carbon/alien/humanoid/special/sectoid))
 		..()
-		spawn(5)
-			gib()
-
-	Stat()
-		if(statpanel("Status"))
-			if(src.client && src.client.holder)
-				stat(null, "([x], [y], [z])")
-
-			stat(null, "Intent: [src.a_intent]")
-			stat(null, "Move Mode: [src.m_intent]")
-
-			if (src.internal)
-				if (!src.internal.air_contents)
-					qdel(src.internal)
-					src.internal = null
-				else
-					stat("Internal Atmosphere Info", src.internal.name)
-					stat("Tank Pressure", src.internal.air_contents.return_pressure())
-					stat("Distribution Pressure", src.internal.distribute_pressure)
 		return
-
-	alien_talk()
-		if(istype(src, /mob/living/carbon/alien/humanoid/special/etheral))
-			..()
-			return
-		if(istype(src, /mob/living/carbon/alien/humanoid/special/sectoid))
-			..()
-			return
-		return
+	return
 
 /mob/living/carbon/alien/humanoid/special/proc/xcom_attack()
 	return

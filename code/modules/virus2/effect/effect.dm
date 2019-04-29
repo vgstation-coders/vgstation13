@@ -35,15 +35,15 @@
 	var/datum/disease2/disease/virus
 		// Parent virus. Plans to generalize these are underway.
 
-	proc/activate(var/mob/living/carbon/mob)
-		// The actual guts of the effect. Has a prob(chance)% to get called per tick.
-	proc/deactivate(var/mob/living/carbon/mob)
-		// If activation makes any permanent changes to the effect, this is where you undo them.
-		// Will not get called if the virus has never been activated.
-	proc/affect_mob_voice(var/datum/speech/speech)
-		// Called by /mob/living/carbon/human/treat_speech
-	proc/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
-		// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
+/datum/disease2/effect/proc/activate(var/mob/living/carbon/mob)
+	// The actual guts of the effect. Has a prob(chance)% to get called per tick.
+/datum/disease2/effect/proc/deactivate(var/mob/living/carbon/mob)
+	// If activation makes any permanent changes to the effect, this is where you undo them.
+	// Will not get called if the virus has never been activated.
+/datum/disease2/effect/proc/affect_mob_voice(var/datum/speech/speech)
+	// Called by /mob/living/carbon/human/treat_speech
+/datum/disease2/effect/proc/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+	// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
 /datum/disease2/effect/New(var/datum/disease2/disease/D)

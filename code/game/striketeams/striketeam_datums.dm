@@ -73,6 +73,7 @@ var/list/sent_strike_teams = list()
 			continue
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
+		to_chat(O, "[bicon(team_logo)]<span class='recruit'>Their mission: [mission]</span>[bicon(team_logo)]")
 
 	spawn(1 MINUTES)
 		searching = FALSE
@@ -142,7 +143,6 @@ var/list/sent_strike_teams = list()
 				new_commando.key = applicant.key
 
 				new_commando.update_action_buttons_icon()
-				new_commando.mind.store_memory("<B>Mission:</B> <span class='warning'>[mission].</span>")
 
 				greet_commando(new_commando)
 		extras()
@@ -153,7 +153,9 @@ var/list/sent_strike_teams = list()
 
 /datum/striketeam/proc/greet_commando(var/mob/living/carbon/human/H)
 	to_chat(H, "<span class='notice'>You are a [striketeam_name] commando, in the service of [faction_name].</span>")
-	to_chat(H, "<span class='notice'>Your current mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /datum/striketeam/Topic(var/href, var/list/href_list)
 	if(href_list["signup"])
@@ -342,7 +344,8 @@ var/list/sent_strike_teams = list()
 		customsquad.HandleRecruitedMind(new_commando.mind)
 	else
 		customsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/custom)
+		customsquad.forgeObjectives(mission)
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
-	
+
 	return new_commando
