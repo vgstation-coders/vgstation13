@@ -772,17 +772,7 @@
 	name = "Plastic"
 	id = "solidplastic"
 	result = null
-	required_reagents = list(PACIDS = 10, PLASTICIDE = 20)
-	result_amount = 10
-
-/datum/chemical_reaction/solidification/plastic/product_to_spawn()
-	return /obj/item/stack/sheet/mineral/plastic
-
-/datum/chemical_reaction/solidification/plastic2
-	name = "Plastic"
-	id = "solidplastic"
-	result = null
-	required_reagents = list(PHENOL = 10, PLASTICIDE = 20)
+	required_reagents = list(PLASTICIDE = 20, PACIDS = 10)
 	result_amount = 10
 
 /datum/chemical_reaction/solidification/plastic/product_to_spawn()
