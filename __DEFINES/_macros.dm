@@ -206,6 +206,8 @@
 
 #define ismecha(A) (istype(A, /obj/mecha))
 
+#define isMGC(A) istype(A, /obj/item/weapon/gun/MechaGunConverter)
+
 #define isID(A) (istype(A, /obj/item/weapon/card/id))
 
 #define isRoboID(A) (istype(A, /obj/item/weapon/card/robot))
