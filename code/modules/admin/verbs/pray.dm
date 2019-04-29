@@ -31,6 +31,11 @@
 		usr.whisper(orig_message)
 	to_chat(usr, "Your prayers have been received by the gods.")
 
+	for(var/datum/religion/R in ticker.religions)
+		if(findtext(lowertext(R.deity_name), "buttbot") || findtext(lowertext(R.deity_name), "butt bot"))
+			get_subtle_message(buttbottify(orig_message), R.deity_name)
+			playsound_local(src,'sound/misc/fart.ogg', 50, 1)
+
 	feedback_add_details("admin_verb", "PR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /proc/Centcomm_announce(var/text , var/mob/Sender)

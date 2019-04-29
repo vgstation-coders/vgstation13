@@ -51,21 +51,7 @@ Here it is: Buttbot.
 	var/language = speech.language
 	if(prob(buttchance) && !findtext(message,"butt"))
 		sleep(rand(1,3))
-		var/list/split_phrase = splittext(message," ") // Split it up into words.
-
-		var/list/prepared_words = split_phrase.Copy()
-		var/i = rand(1,3)
-		for(,i > 0,i--) //Pick a few words to change.
-
-			if (!prepared_words.len)
-				break
-			var/word = pick(prepared_words)
-			prepared_words -= word //Remove from unstuttered words so we don't stutter it again.
-			var/index = split_phrase.Find(word) //Find the word in the split phrase so we can replace it.
-
-			split_phrase[index] = "butt"
-
-		say(jointext(split_phrase," "), language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		say(buttbottify(message), language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
 		fart()
 		score["buttbotfarts"]++
 
