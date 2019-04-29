@@ -1283,6 +1283,7 @@
 #include "code\modules\clothing\accessories\holomap.dm"
 #include "code\modules\clothing\accessories\holster.dm"
 #include "code\modules\clothing\accessories\storage.dm"
+#include "code\modules\clothing\accessories\tactical_light.dm"
 #include "code\modules\clothing\back\cape.dm"
 #include "code\modules\clothing\glasses\glasses.dm"
 #include "code\modules\clothing\glasses\hud.dm"
