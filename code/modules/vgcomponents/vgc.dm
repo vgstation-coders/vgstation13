@@ -12,8 +12,8 @@ datum/vgassembly/proc/rebuild()
     for(var/vgc in _vgcs)
         vgc.rebuildOutputs()
 
-datum/vgassembly/proc/showCurcuit(var/mob/user)
-    //show the curcuit via browser, manipulate components via topic
+datum/vgassembly/proc/showCircuit(var/mob/user)
+    //show the circuit via browser, manipulate components via topic
     return
 
 datum/vgcomponent
