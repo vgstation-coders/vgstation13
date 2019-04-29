@@ -1883,6 +1883,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,
 		/obj/item/weapon/storage/box/evidence = 6,
 		/obj/item/weapon/legcuffs/bolas = 8,
+		/obj/item/taperoll/police = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses/security = 2,
@@ -2238,6 +2239,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
+		/obj/item/taperoll/engineering = 5,
+		/obj/item/taperoll/atmos = 5,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
