@@ -344,6 +344,7 @@ var/list/sent_strike_teams = list()
 		customsquad.HandleRecruitedMind(new_commando.mind)
 	else
 		customsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/custom)
+		customsquad.name = striketeam_name
 		customsquad.forgeObjectives(mission)
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
