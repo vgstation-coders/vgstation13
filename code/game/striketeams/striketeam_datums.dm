@@ -347,6 +347,5 @@ var/list/sent_strike_teams = list()
 		customsquad.forgeObjectives(mission)
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
-	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando
