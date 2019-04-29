@@ -34,6 +34,7 @@
 		deathsquad.HandleRecruitedMind(new_commando.mind)
 	else
 		deathsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/deathsquad)
+		deathsquad.forgeObjectives(mission)
 		if(deathsquad)
 			deathsquad.HandleNewMind(new_commando.mind) //First come, first served
 	if (leader_selected)
@@ -51,7 +52,10 @@
 		to_chat(H, "<span class='notice'>You are [H.real_name], a Death Squad commando, in the service of Nanotrasen.</span>")
 		if (leader_key != "")
 			to_chat(H, "<span class='notice'>Follow directions from your superior, Creed.</span>")
-	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	//to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /mob/living/carbon/human/proc/equip_death_commando(leader = 0)
 	//Special radio setup

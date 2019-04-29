@@ -1,6 +1,7 @@
 /datum/objective/custom
 	name = "Custom objective"
 	explanation_text = "Just be yourself"
+	force_success = TRUE
 
 /datum/objective/custom/New(var/text,var/auto_target = TRUE, var/mob/user)
 	if (!user)
