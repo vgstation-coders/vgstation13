@@ -40,7 +40,8 @@
     if(!istype(W, /obj/item/weapon/card/id))
         return
     
-    vgc.setAccess(W) //might cause runtime
+    var/datum/vgcomponent/doorController/DC = vgc
+    DC.setAccess(W)
 
 /obj/item/vgc_obj/debugger
     name="debugger"

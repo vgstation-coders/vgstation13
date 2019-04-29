@@ -575,7 +575,8 @@ Class Procs:
 		return
 	if(vga)
 		if(istype(O, /obj/item/vgc_obj))
-			vga._vgcs += O.vgc
+			var/obj/item/vgc_obj/CO = O
+			vga._vgcs += CO.vgc
 			to_chat(user, "You install \the [O] into the [vga].")
 			qdel(O)
 			return
