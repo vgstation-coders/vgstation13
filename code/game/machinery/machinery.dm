@@ -580,8 +580,8 @@ Class Procs:
 			qdel(O)
 			return
 		if(istype(O, /obj/item/vgc_logictool))
-			vga.showCurcuit(user)
-			to_chat(user, "You bring up the curcuit on \the [O].")
+			vga.showCircuit(user)
+			to_chat(user, "You bring up the circuit on \the [O].")
 			return
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
