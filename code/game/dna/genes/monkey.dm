@@ -78,7 +78,6 @@
 	//	del(T)
 
 	O.forceMove(M.loc)
-	Mo.transferBorers(O)
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 
