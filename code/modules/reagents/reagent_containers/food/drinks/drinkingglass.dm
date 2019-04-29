@@ -684,129 +684,129 @@
 	if (reagents.reagent_list.len > 0)
 		item_state = "mug_empty"
 		switch(reagents.get_master_reagent_id())
-		if(TEA)
-			icon_state = "tea"
-			name = "tea"
-			desc = "A warm mug of tea."
-		if(GREENTEA)
-			icon_state = "greentea"
-			name = "green tea"
-			desc = "Green Tea served in a traditional Japanese tea cup, just like in your Chinese cartoons!"
-		if(REDTEA)
-			icon_state = "redtea"
-			name = "red tea"
-			desc = "Red Tea served in a traditional Chinese tea cup, just like in your Malaysian movies!"
-		if(ACIDTEA)
-			icon_state = "acidtea"
-			name = "\improper Earl's Grey tea"
-			desc = "A sizzling mug of tea made just for Greys."
-		if(YINYANG)
-			icon_state = "yinyang"
-			name = "zen tea"
-			desc = "Enjoy inner peace and ignore the watered down taste"
-		if(DANTEA)
-			icon_state = "dantea"
-			name = "\improper Discount Dan's Green Flavor Tea"
-			desc = "Tea probably shouldn't be sizzling like that..."
-		if(SINGULARITEA)
-			icon_state = "singularitea"
-			name = "\improper Singularitea"
-			desc = "Brewed under intense radiation to be extra flavorful!"
-		if(MINT)
-			icon_state = "mint"
-			name = "\improper Groans Tea: Minty Delight Flavor"
-			desc = "Groans knows mint might not be the kind of flavor our fans expect from us, but we've made sure to give it that patented Groans zing."
-		if(CHAMOMILE)
-			icon_state = "chamomile"
-			name = "\improper Groans Tea: Chamomile Flavor"
-			desc = "Groans presents the perfect cure for insomnia: Chamomile!"
-		if(EXCHAMOMILE)
-			icon_state = "exchamomile"
-			name = "\improper Groans Banned Tea: EXTREME Chamomile Flavor"
-			desc = "Banned literally everywhere."
-		if(FANCYDAN)
-			icon_state = "fancydan"
-			name = "\improper Groans Banned Tea: Fancy Dan Flavor"
-			desc = "Banned literally everywhere."
-		if(GYRO)
-			icon_state = "gyro"
-			name = "\improper Gyro"
-			desc = "Nyo ho ho~"
-		if(CHIFIR)
-			icon_state = "chifir"
-			name = "chifir"
-			desc = "A Russian kind of tea. Not for those with weak stomachs."
-		if(PLASMATEA)
-			icon_state = "plasmatea"
-			name = "Plasma Pekoe"
-			desc = "You can practically taste the science. Or maybe that's just the horrible plasma burns."
-		if(COFFEE)
-			icon_state = "coffee"
-			name = "coffee"
-			desc = "A warm mug of coffee."
-		if(CAFE_LATTE)
-			icon_state = "latte"
-			name = "cafe latte"
-			desc = "A true classic: steamed milk, some espresso, and foamed milk to top it all off."
-		if(SOY_LATTE)
-			icon_state = "soylatte"
-			name = "soy latte"
-			desc = "The hipster version of the classic cafe latte."
-		if(ESPRESSO)
-			icon_state = "espresso"
-			name = "espresso"
-			desc = "A thick blend of coffee made by forcing near-boiling pressurized water through finely ground coffee beans."
-		if(CAPPUCCINO)
-			icon_state = "cappuccino"
-			name = "cappuccino"
-			desc = "The stronger big brother of the cafe latte, cappuccino contains more espresso in proportion to milk."
-		if(DOPPIO)
-			icon_state = "doppio"
-			name = "\improper Doppio"
-			desc = "Ring ring ring ring."
-		if(TONIO)
-			icon_state = "tonio"
-			name = "\improper Tonio"
-			desc = "Delicious, and may help you get out of a Jam."
-		if(PASSIONE)
-			icon_state = "passione"
-			name = "\improper Passione"
-			desc = "Sometimes referred to as a 'Vento Aureo'."
-		if(SECCOFFEE)
-			icon_state = "seccoffee"
-			name = "\improper Wake-Up Call"
-			desc = "The perfect start for any Sec officer's day."
-		if(MEDCOFFEE)
-			icon_state = "medcoffee"
-			name = "\improper Lifeline"
-			desc = "Some days, the only thing that keeps you going is cryo and caffeine."
-		if(DETCOFFEE)
-			icon_state = "detcoffee"
-			name = "\improper Joe"
-			desc = "The lights, the smoke, the grime... the station itself felt alive that day when I stepped into my office, mug in hand. It had been one of those damn days. Some nurse got smoked in the tunnels, and it came down to me to catch the son of a bitch that did it. The dark, stale air of the tunnels sucks the soul out of a man -- sometimes literally -- and I was no closer to finding the killer than when the nurse was still alive. I hobbled over to my desk, reached for the flask in my pocket, and topped off my coffee with its contents. I had barely gotten settled in my chair when an officer burst through the door. Another body in the tunnels, an assistant this time. I grumbled and downed what was left of my joe. This stuff used to taste great when I was a rookie, but now it was like boiled dirt. I guess that's how the station changes you. I set the mug back down on my desk and lit my last cigar. My fingers instinctively sought out the comforting grip of the .44 snub in my coat as I stepped out into the bleak halls of the station. The case was not cold yet."
-		if(ETANK)
-			icon_state = "etank"
-			name = "\improper Recharger"
-			desc = "Helps you get back on your feet after a long day of robot maintenance. Can also be used as a substitute for motor oil."
-		if(GREYTEA)
-			icon_state = "greytea"
-			name = "\improper Tide"
-			desc = "This probably shouldn't be considered tea..."
-		if(TOMATOJUICE)
-			make_reagent_overlay()
-			name = "mug of tomato juice"
-			desc = "Are you sure this is tomato juice?"
-		if(BLOOD)
-			make_reagent_overlay()
-			name = "mug of tomato juice"
-			desc = "Are you sure this is tomato juice?"
-		if(HOT_COCO)
-			make_reagent_overlay()
-			name = "hot chocolate"
-			desc = "A delicious warm brew of milk and chocolate."						
-		else
-			make_reagent_overlay()
-			get_reagent_name(src, TRUE)
+			if(TEA)
+				icon_state = "tea"
+				name = "tea"
+				desc = "A warm mug of tea."
+			if(GREENTEA)
+				icon_state = "greentea"
+				name = "green tea"
+				desc = "Green Tea served in a traditional Japanese tea cup, just like in your Chinese cartoons!"
+			if(REDTEA)
+				icon_state = "redtea"
+				name = "red tea"
+				desc = "Red Tea served in a traditional Chinese tea cup, just like in your Malaysian movies!"
+			if(ACIDTEA)
+				icon_state = "acidtea"
+				name = "\improper Earl's Grey tea"
+				desc = "A sizzling mug of tea made just for Greys."
+			if(YINYANG)
+				icon_state = "yinyang"
+				name = "zen tea"
+				desc = "Enjoy inner peace and ignore the watered down taste"
+			if(DANTEA)
+				icon_state = "dantea"
+				name = "\improper Discount Dan's Green Flavor Tea"
+				desc = "Tea probably shouldn't be sizzling like that..."
+			if(SINGULARITEA)
+				icon_state = "singularitea"
+				name = "\improper Singularitea"
+				desc = "Brewed under intense radiation to be extra flavorful!"
+			if(MINT)
+				icon_state = "mint"
+				name = "\improper Groans Tea: Minty Delight Flavor"
+				desc = "Groans knows mint might not be the kind of flavor our fans expect from us, but we've made sure to give it that patented Groans zing."
+			if(CHAMOMILE)
+				icon_state = "chamomile"
+				name = "\improper Groans Tea: Chamomile Flavor"
+				desc = "Groans presents the perfect cure for insomnia: Chamomile!"
+			if(EXCHAMOMILE)
+				icon_state = "exchamomile"
+				name = "\improper Groans Banned Tea: EXTREME Chamomile Flavor"
+				desc = "Banned literally everywhere."
+			if(FANCYDAN)
+				icon_state = "fancydan"
+				name = "\improper Groans Banned Tea: Fancy Dan Flavor"
+				desc = "Banned literally everywhere."
+			if(GYRO)
+				icon_state = "gyro"
+				name = "\improper Gyro"
+				desc = "Nyo ho ho~"
+			if(CHIFIR)
+				icon_state = "chifir"
+				name = "chifir"
+				desc = "A Russian kind of tea. Not for those with weak stomachs."
+			if(PLASMATEA)
+				icon_state = "plasmatea"
+				name = "Plasma Pekoe"
+				desc = "You can practically taste the science. Or maybe that's just the horrible plasma burns."
+			if(COFFEE)
+				icon_state = "coffee"
+				name = "coffee"
+				desc = "A warm mug of coffee."
+			if(CAFE_LATTE)
+				icon_state = "latte"
+				name = "cafe latte"
+				desc = "A true classic: steamed milk, some espresso, and foamed milk to top it all off."
+			if(SOY_LATTE)
+				icon_state = "soylatte"
+				name = "soy latte"
+				desc = "The hipster version of the classic cafe latte."
+			if(ESPRESSO)
+				icon_state = "espresso"
+				name = "espresso"
+				desc = "A thick blend of coffee made by forcing near-boiling pressurized water through finely ground coffee beans."
+			if(CAPPUCCINO)
+				icon_state = "cappuccino"
+				name = "cappuccino"
+				desc = "The stronger big brother of the cafe latte, cappuccino contains more espresso in proportion to milk."
+			if(DOPPIO)
+				icon_state = "doppio"
+				name = "\improper Doppio"
+				desc = "Ring ring ring ring."
+			if(TONIO)
+				icon_state = "tonio"
+				name = "\improper Tonio"
+				desc = "Delicious, and may help you get out of a Jam."
+			if(PASSIONE)
+				icon_state = "passione"
+				name = "\improper Passione"
+				desc = "Sometimes referred to as a 'Vento Aureo'."
+			if(SECCOFFEE)
+				icon_state = "seccoffee"
+				name = "\improper Wake-Up Call"
+				desc = "The perfect start for any Sec officer's day."
+			if(MEDCOFFEE)
+				icon_state = "medcoffee"
+				name = "\improper Lifeline"
+				desc = "Some days, the only thing that keeps you going is cryo and caffeine."
+			if(DETCOFFEE)
+				icon_state = "detcoffee"
+				name = "\improper Joe"
+				desc = "The lights, the smoke, the grime... the station itself felt alive that day when I stepped into my office, mug in hand. It had been one of those damn days. Some nurse got smoked in the tunnels, and it came down to me to catch the son of a bitch that did it. The dark, stale air of the tunnels sucks the soul out of a man -- sometimes literally -- and I was no closer to finding the killer than when the nurse was still alive. I hobbled over to my desk, reached for the flask in my pocket, and topped off my coffee with its contents. I had barely gotten settled in my chair when an officer burst through the door. Another body in the tunnels, an assistant this time. I grumbled and downed what was left of my joe. This stuff used to taste great when I was a rookie, but now it was like boiled dirt. I guess that's how the station changes you. I set the mug back down on my desk and lit my last cigar. My fingers instinctively sought out the comforting grip of the .44 snub in my coat as I stepped out into the bleak halls of the station. The case was not cold yet."
+			if(ETANK)
+				icon_state = "etank"
+				name = "\improper Recharger"
+				desc = "Helps you get back on your feet after a long day of robot maintenance. Can also be used as a substitute for motor oil."
+			if(GREYTEA)
+				icon_state = "greytea"
+				name = "\improper Tide"
+				desc = "This probably shouldn't be considered tea..."
+			if(TOMATOJUICE)
+				make_reagent_overlay()
+				name = "mug of tomato juice"
+				desc = "Are you sure this is tomato juice?"
+			if(BLOOD)
+				make_reagent_overlay()
+				name = "mug of tomato juice"
+				desc = "Are you sure this is tomato juice?"
+			if(HOT_COCO)
+				make_reagent_overlay()
+				name = "hot chocolate"
+				desc = "A delicious warm brew of milk and chocolate."						
+			else
+				make_reagent_overlay()
+				get_reagent_name(src, TRUE)
 	else
 		overlays.len = 0
 		icon_state = "mug_empty"
