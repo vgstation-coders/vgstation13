@@ -8,6 +8,11 @@ datum/vgassembly
     var/_parent
     var/list/_vgcs //list of vgcs contained inside
 
+datum/vgassembly/Destroy()
+    ..()
+    _parent = null
+    _vgcs = null
+
 datum/vgassembly/proc/rebuild()
     for(var/vgc in _vgcs)
         vgc.rebuildOutputs()
@@ -31,10 +36,10 @@ datum/vgcomponent/New()
     )
 
 datum/vgcomponent/Destroy()
+    ..()
     _assembly = null
     _input = null
     _output = null
-    ..()
 
 datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
     if(_assembly)
