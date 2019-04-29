@@ -213,6 +213,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("mirror frame",   /obj/structure/mirror_frame,                       5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("turret frame",   /obj/machinery/porta_turret_construct,             5, time = 25, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("solar assembly",   /obj/machinery/power/solar_assembly,             5, time = 25),
 	null,
 	new/datum/stack_recipe_list("chairs and beds",list(
 		new/datum/stack_recipe/chair("dark office chair",  /obj/structure/bed/chair/office/dark,  1, one_per_turf = 1, on_floor = 1),

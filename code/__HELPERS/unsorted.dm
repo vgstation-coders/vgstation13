@@ -1780,3 +1780,13 @@ Game Mode config tags:
 		return M.mind.key
 	else
 		return null
+
+//Ported from TG
+/proc/window_flash(client/C, ignorepref = FALSE)
+    if(ismob(C))
+        var/mob/M = C
+        if(M.client)
+            C = M.client
+    if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
+        return
+    winset(C, "mainwindow", "flash=5")

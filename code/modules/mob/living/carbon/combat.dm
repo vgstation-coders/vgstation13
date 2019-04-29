@@ -41,7 +41,7 @@
 	if(user == src) // Attacking yourself can't miss
 		target_zone = user.zone_sel.selecting
 	if(!target_zone && !src.stat)
-		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
+		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		return FALSE
 
 	if((user != src) && check_shields(I.force, I))

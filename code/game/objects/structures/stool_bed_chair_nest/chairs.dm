@@ -557,6 +557,7 @@
 	desc = "A collapsed folding chair that can be carried around."
 	icon = 'icons/obj/stools-chairs-beds.dmi'
 	icon_state = "folded_chair"
+	force = 13
 	w_class = W_CLASS_LARGE
 	var/obj/structure/bed/chair/folding/unfolded
 

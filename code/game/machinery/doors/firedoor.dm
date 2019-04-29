@@ -282,8 +282,8 @@ var/global/list/alert_overlays_global = list()
 	if( iscrowbar(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
 		force_open(user, C)
 		return
-	
-	if((C.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT)
+
+	if(C && (C.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT)
 		if(!density)
 			return
 		if(blocked)
@@ -343,13 +343,13 @@ var/global/list/alert_overlays_global = list()
 
 	var/access_granted = 0
 	var/users_name
-	if(!istype(C, /obj)) //If someone hit it with their hand.  We need to see if they are allowed.
-		if(allowed(user))
-			access_granted = 1
-		if(ishuman(user))
-			users_name = FindNameFromID(user)
-		else
-			users_name = "Unknown"
+
+	if(allowed(user))
+		access_granted = 1
+	if(ishuman(user))
+		users_name = FindNameFromID(user)
+	else
+		users_name = "Unknown"
 
 	if( ishuman(user) &&  !stat && ( istype(C, /obj/item/weapon/card/id) || istype(C, /obj/item/device/pda) ) )
 		var/obj/item/weapon/card/id/ID = C

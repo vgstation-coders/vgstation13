@@ -69,6 +69,8 @@
 	desc = "A wrench intended to be wrenchier than other wrenches. It's the wrenchiest."
 	icon_state = "socket_wrench"
 	w_class = W_CLASS_LARGE //big shit, to balance its power
+	force = 15.0
+	throwforce = 12.0
 
 /*
  * Screwdriver

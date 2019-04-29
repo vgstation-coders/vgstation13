@@ -59,6 +59,7 @@
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	repeatable = TRUE
+	flags = TRAITOR_RULESET
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(candidates)
@@ -159,6 +160,7 @@
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)
 	high_population_requirement = 50
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/latejoin/provocateur/ready(var/forced=FALSE)
 	if (forced)

@@ -980,7 +980,7 @@ Thanks.
 						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
 						                   self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
 						spawn(0)
-							if(do_after(usr, usr, 1200))
+							if(do_after(usr, usr, 1 MINUTES))
 								if(!C.locked_to)
 									return
 								C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
