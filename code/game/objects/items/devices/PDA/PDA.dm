@@ -2505,7 +2505,7 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(8, 5))
+		if (M.Slip(8, 5, 1))
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
 
 			if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))

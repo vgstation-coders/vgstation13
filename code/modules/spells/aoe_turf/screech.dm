@@ -26,7 +26,7 @@
 		return FALSE
 
 /spell/aoe_turf/screech/choose_targets(var/mob/user = usr)
-	
+
 	var/list/targets = list()
 
 	for(var/mob/living/carbon/C in hearers(user, 4))
@@ -39,7 +39,7 @@
 			if(!C.vampire_affected(user.mind))
 				continue
 			targets += C
-	
+
 	if (!targets.len)
 		to_chat(user, "<span class='warning'>There are no targets.</span>")
 		return FALSE
@@ -63,5 +63,6 @@
 	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	var/datum/role/vampire/V = isvampire(user)
-	if (V)
+	if (!V)
 		return FALSE
+	V.remove_blood(blood_cost)

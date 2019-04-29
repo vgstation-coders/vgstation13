@@ -118,7 +118,7 @@
 			if(beaker.volume > 0)
 				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
 					// speed up transfer if the container has ONLY blood
-					beaker.reagents.trans_to(attached, 4)
+					beaker.reagents.trans_to(attached, 12)
 				else
 					// otherwise: transfer a little bit of all reagents to the patient. the reason why we don't transfer a set amount is because 0.2u of 10 different reagents is 0.02u of each, which is entirely too little.
 					for(var/datum/reagent/reagent in beaker.reagents.reagent_list)
@@ -128,7 +128,7 @@
 		// Take blood
 		else
 			var/amount = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			amount = min(amount, 4)
+			amount = min(amount, 12)
 			// If the beaker is full, ping
 			if(amount == 0)
 				if(prob(5))
