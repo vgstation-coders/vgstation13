@@ -51,7 +51,7 @@ Here it is: Buttbot.
 	var/language = speech.language
 	if(prob(buttchance) && !findtext(message,"butt"))
 		sleep(rand(1,3))
-		say(buttbottify(message), language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		say(buttbottify(message), language)
 		fart()
 		score["buttbotfarts"]++
 

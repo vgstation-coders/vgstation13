@@ -568,4 +568,4 @@ proc/sql_sanitize_text(var/text)
 		var/index = split_phrase.Find(word) //Find the word in the split phrase so we can replace it.
 
 		split_phrase[index] = "butt"
-	return jointext(split_phrase," ")
+	return jointext(split_phrase," ") // No longer need to sanitize, speech is automatically html_encoded at render-time.

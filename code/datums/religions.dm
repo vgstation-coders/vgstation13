@@ -274,6 +274,11 @@
 	R.renounce(owner)
 	Remove(owner)
 
+// interceptPrayer: Called when anyone (not necessarily one of our adepts!) whispers a prayer.
+// Return 1 to CANCEL THAT GUY'S PRAYER (!!!), or return null and just do something fun.
+/datum/religion/proc/interceptPrayer(var/mob/living/L, var/deity, var/prayer_message)
+	return
+
 /proc/chooseBible(var/datum/religion/R, var/mob/user, var/noinput = FALSE) //Noinput if they just wanted the defaults
 
 	if (!istype(R) || !user)
@@ -640,7 +645,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
+	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
 	convert_method = "standing both next to a table."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
@@ -1286,3 +1291,19 @@
 	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 	bookstyle = "Creeper"
+
+/datum/religion/buttbot
+	name = "Buttbot"
+	deity_name = "Buttbot"
+	bible_name = "Guide to Robuttics"
+	male_adept = "Roboticist"
+	female_adept = "Roboticist"
+	keys = list("buttbot", "butt bot", "butt", "ass", "poo", "server crash", "comms spam")
+
+/datum/religion/buttbot/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/butt(H), slot_head)
+
+/datum/religion/buttbot/interceptPrayer(var/mob/living/L, var/deity, var/prayer_message)
+	spawn(rand(1,3))
+		L.get_subtle_message(buttbottify(prayer_message), src.deity_name)
+		L.playsound_local(src,'sound/misc/fart.ogg', 50, 1)
