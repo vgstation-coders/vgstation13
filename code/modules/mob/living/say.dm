@@ -347,7 +347,7 @@ var/list/department_radio_keys = list(
 							handle_render(M,themessage,src)
 					return 1
 		if(MODE_MUSHROOM)
-			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.name, html_encode(speech.message))
+			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.real_name, html_encode(speech.message))
 			var/turf/T = get_turf(src)
 			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Spore chat: [html_encode(speech.message)]")
 			for(var/mob/M in player_list)
