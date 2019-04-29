@@ -306,17 +306,19 @@
 		var/masked = 0
 
 		if(head)
-			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
 				var/enable_mask = TRUE
 
 				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
 
 				if(action)
 					enable_mask = !action.up
-				else
+				else if(istype(head, /obj/item/clothing/head/welding))
 					var/obj/item/clothing/head/welding/O = head
 					enable_mask = !O.up
-
+				else if(istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen))
+					var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/O = head
+					enable_mask = !O.up
 				if(enable_mask && tinted_weldhelh)
 					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 					masked = 1
@@ -328,9 +330,6 @@
 				masked = 1
 
 		var/clear_tint = !masked
-		if (istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen/))
-			var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/mushhelmet = head
-			clear_tint = !mushhelmet.up
 
 		if(clear_tint)
 			clear_fullscreen("tint")
