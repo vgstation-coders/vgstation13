@@ -280,7 +280,7 @@ obj/item/projectile/kinetic/New()
 
 /obj/item/projectile/kinetic/cutter
 
-/obj/item/projectile/kinetic/cutter/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/kinetic/cutter/to_bump(atom/A)
 	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
 		damage += 15
 	..()
@@ -292,7 +292,7 @@ obj/item/projectile/kinetic/New()
 	var/obj/item/stickybomb/sticky = null
 
 
-/obj/item/projectile/stickybomb/to_bump(atom/A)
+/obj/item/projectile/stickybomb/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return 0
 	bumped = 1
