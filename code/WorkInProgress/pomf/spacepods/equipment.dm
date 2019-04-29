@@ -53,7 +53,7 @@
 
 /datum/spacepod/equipment
 	var/obj/spacepod/my_atom
-	var/movement_charge = 3
+	var/movement_charge = 2
 	var/weapons_allowed = 1
 	var/obj/item/device/spacepod_equipment/weaponry/weapon_system // weapons system
 	//var/obj/item/device/spacepod_equipment/engine/engine_system // engine system

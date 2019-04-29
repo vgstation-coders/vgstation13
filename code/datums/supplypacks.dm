@@ -1725,6 +1725,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/glass/beaker,
 					/obj/item/weapon/reagent_containers/glass/beaker,
 					/obj/item/weapon/stock_parts/scanning_module,
+					/obj/item/weapon/stock_parts/micro_laser,
+					/obj/item/weapon/stock_parts/micro_laser,
 					/obj/item/weapon/stock_parts/micro_laser)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/scisec

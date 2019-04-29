@@ -92,10 +92,9 @@
 	icon_state = "satchel"
 	item_state = "satchel"
 
-/obj/item/weapon/storage/backpack/satchel/withwallet
-	New()
-		..()
-		new /obj/item/weapon/storage/wallet/random( src )
+/obj/item/weapon/storage/backpack/satchel/withwallet/New()
+	..()
+	new /obj/item/weapon/storage/wallet/random( src )
 
 /obj/item/weapon/storage/backpack/satchel_norm
 	name = "satchel"
