@@ -38,7 +38,7 @@
 
 /obj/effect/rust_particle_catcher/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag != "bullet" && parent)
-		parent.AddEnergy(Proj.damage * 20, 0, 1)
+		parent.AddEnergy(Proj.damage * 100, 0, 1)
 		update_icon()
 	return 0
 

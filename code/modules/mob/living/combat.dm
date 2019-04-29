@@ -82,7 +82,7 @@
 	if(miss_sound)
 		playsound(loc, miss_sound, 25, 1, -1)
 
-	visible_message("<span class='danger'>[src] misses [target]!</span>")
+	visible_message("<span class='borange'>[src] misses [target]!</span>")
 	return TRUE
 
 /mob/living/proc/get_attack_message(mob/living/target, attack_verb)

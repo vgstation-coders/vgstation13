@@ -1551,6 +1551,17 @@
 			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
 			mode.picking_specific_rule(midround_rules[added_rule],1)
 
+	// -- Opens up the option window --
+	else if (href_list["f_dynamic_options"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_mode_options(usr)
 
 	else if(href_list["f_dynamic_roundstart_centre"])
 		if(!check_rights(R_ADMIN))
@@ -1561,13 +1572,25 @@
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
 
-		var/new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A negative value will give a more peaceful round ; a positive value, a round with higher threat. Any number between -5 and +5 is allowed.", "Change curve centre", null) as num
-		if (new_centre < -5 || new_centre > 5)
-			return alert(usr, "Only values between -5 and +5 are allowed.", null, null, null, null)
+		var/new_centre
+
+		if (dynamic_chosen_mode == DIRAC)
+			new_centre = input(usr,"Change the threat level this round will have.", "Change threat level.", null) as num
+			if (new_centre <= 0 || new_centre >= 100)
+				return alert(usr, "Only values between 0 and 100 are allowed.", null, null, null, null)
+		else if (dynamic_chosen_mode == EXPONENTIAL)
+			new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A lower value will give a more peaceful round ; a higher value, a round with higher threat. Any number between 0 and +5 is allowed.", "Change curve centre", null) as num
+			if (new_centre < 0 || new_centre > 5)
+				return alert(usr, "Only values between 0 and +5 are allowed.", null, null, null, null)
+		else
+			new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A negative value will give a more peaceful round ; a positive value, a round with higher threat. Any number between -5 and +5 is allowed.", "Change curve centre", null) as num
+			if (new_centre < -5 || new_centre > 5)
+				return alert(usr, "Only values between -5 and +5 are allowed.", null, null, null, null)
 
 		log_admin("[key_name(usr)] changed the distribution curve center to [new_centre].")
 		message_admins("[key_name(usr)] changed the distribution curve center to [new_centre]", 1)
 		dynamic_curve_centre = new_centre
+		dynamic_mode_options(usr)
 
 	else if(href_list["f_dynamic_roundstart_width"])
 		if(!check_rights(R_ADMIN))
@@ -1585,6 +1608,107 @@
 		log_admin("[key_name(usr)] changed the distribution curve width to [new_width].")
 		message_admins("[key_name(usr)] changed the distribution curve width to [new_width]", 1)
 		dynamic_curve_width = new_width
+		dynamic_mode_options(usr)
+
+	else if(href_list["force_extended"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+				
+		dynamic_forced_extended = !dynamic_forced_extended
+		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
+		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["no_stacking"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+				
+		dynamic_no_stacking = !dynamic_no_stacking
+		log_admin("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
+		message_admins("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["classic_secret"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+				
+		dynamic_classic_secret = !dynamic_classic_secret
+		log_admin("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
+		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["stacking_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		
+		stacking_limit = input(usr,"Change the threat limit at which round-endings rulesets will start to stack.", "Change stacking limit", null) as num
+		log_admin("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		message_admins("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		dynamic_mode_options(usr)	
+
+	else if(href_list["high_pop_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+				
+		var/new_value = input(usr, "Enter the high-pop override threshold for dynamic mode.", "High pop override") as num
+		if (new_value < 0)
+			return alert(usr, "Only positive values allowed!", null, null, null, null)
+		dynamic_high_pop_limit = new_value
+
+		log_admin("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
+		message_admins("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
+		dynamic_mode_options(usr)	
+
+	else if(href_list["change_distrib"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+				
+		var/list/possible_choices = list(
+			"[LORENTZ]",
+			"[GAUSS]",
+			"[DIRAC]",
+			"[EXPONENTIAL]",
+			"[UNIFORM]",
+		)
+
+		var/new_mode = input("Select a new distribution mode. BE SURE TO READ THE GLOSSARY BEFORE.") as null|anything in possible_choices
+		if (!new_mode)
+			return
+		dynamic_chosen_mode = new_mode
+		if (new_mode == DIRAC) // Rigged threat mode.
+			dynamic_curve_centre = 50
+			to_chat(usr, "<span class='notice'>You've chosen to rig the starting threat level. Remember to set the 'curve center' to the desire threat level. The default value is 50.</span>")
+		else if (new_mode == EXPONENTIAL)
+			dynamic_curve_centre = 1
+		else
+			dynamic_curve_centre = 0
+		log_admin("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
+		message_admins("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
+		dynamic_mode_options(usr)	
 
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
@@ -2998,7 +3122,7 @@
 				log_admin("[key_name(usr)] created a link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] created a link with central command</span>", 1)
 				link_to_centcomm()
-			/*if("traitor_all")
+			if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
 					return
@@ -3008,31 +3132,29 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TA([objective])")
 				for(var/mob/living/carbon/human/H in player_list)
-					if(H.stat == 2 || !H.client || !H.mind)
+					if(H.isDead() || !H.client || !H.mind)
 						continue
 					if(is_special_character(H))
 						continue
 					//traitorize(H, objective, 0)
-					ticker.mode.traitors += H.mind
-					H.mind.special_role = "traitor"
 					var/datum/objective/new_objective = new
-					new_objective.owner = H
 					new_objective.explanation_text = objective
-					H.mind.objectives += new_objective
-					ticker.mode.greet_traitor(H.mind)
-					//ticker.mode.forge_traitor_objectives(H.mind)
-					ticker.mode.finalize_traitor(H.mind)
+					var/datum/role/traitor/T = new(H.mind, override = TRUE)
+					if (T)
+						T.AppendObjective(new_objective)
+						T.Greet(GREET_AUTOTATOR) // Mission specifications etc
 				for(var/mob/living/silicon/A in player_list)
-					ticker.mode.traitors += A.mind
-					A.mind.special_role = "traitor"
+					if(A.isDead() || !A.client || !A.mind)
+						continue
 					var/datum/objective/new_objective = new
-					new_objective.owner = A
 					new_objective.explanation_text = objective
-					A.mind.objectives += new_objective
-					ticker.mode.greet_traitor(A.mind)
-					ticker.mode.finalize_traitor(A.mind)
+					var/datum/role/traitor/T = new(A.mind, override = TRUE)
+					if (T)
+						T.AppendObjective(new_objective)
+						T.Greet(GREET_AUTOTATOR)
+
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
-				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")*/
+				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
 			if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
