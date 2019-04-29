@@ -363,10 +363,10 @@
 	if(usr && (src != usr))
 		return
 	if(href_list["ui_key"] == "state_laws")
-		state_laws_Topic(href, href_list) //state_laws.dm
+		return state_laws_Topic(href, href_list) //state_laws.dm
 
 /mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
 	if(..())
 		return
 	if(ui_key == "state_laws")
-		state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm
+		return state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm
