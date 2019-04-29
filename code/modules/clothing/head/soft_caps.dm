@@ -8,30 +8,30 @@
 	var/flipped = 0
 	siemens_coefficient = 0.9
 
-	proc/flip(var/mob/user as mob)
-		if(!user.incapacitated())
-			src.flipped = !src.flipped
-			if(src.flipped)
-				icon_state = "[_color]soft_flipped"
-				to_chat(user, "You flip the hat backwards.")
-			else
-				icon_state = "[_color]soft"
-				to_chat(user, "You flip the hat back in normal position.")
-			user.update_inv_head()	//so our mob-overlays update
+/obj/item/clothing/head/soft/proc/flip(var/mob/user as mob)
+	if(!user.incapacitated())
+		src.flipped = !src.flipped
+		if(src.flipped)
+			icon_state = "[_color]soft_flipped"
+			to_chat(user, "You flip the hat backwards.")
+		else
+			icon_state = "[_color]soft"
+			to_chat(user, "You flip the hat back in normal position.")
+		user.update_inv_head()	//so our mob-overlays update
 
-	attack_self(var/mob/user as mob)
-		flip(user)
+/obj/item/clothing/head/soft/attack_self(var/mob/user as mob)
+	flip(user)
 
-	verb/flip_cap()
-		set category = "Object"
-		set name = "Flip cap"
-		set src in usr
-		flip(usr)
+/obj/item/clothing/head/soft/verb/flip_cap()
+	set category = "Object"
+	set name = "Flip cap"
+	set src in usr
+	flip(usr)
 
-	dropped()
-		src.icon_state = "[_color]soft" //because of this line and 15 and 18, the icon_state will end up blank if you were to try allowing heads to dye caps with their stamps
-		src.flipped=0
-		..()
+/obj/item/clothing/head/soft/dropped()
+	src.icon_state = "[_color]soft" //because of this line and 15 and 18, the icon_state will end up blank if you were to try allowing heads to dye caps with their stamps
+	src.flipped=0
+	..()
 
 /obj/item/clothing/head/soft/red
 	name = "red cap"
