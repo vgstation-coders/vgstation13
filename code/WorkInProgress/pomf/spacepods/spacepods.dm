@@ -400,7 +400,6 @@
 			move_outside(get_pilot(), T)
 			add_fingerprint(usr)
 		return
-		//return ..() //Handle mousedrop T
 	if(!Adjacent(T) || T.density)
 		return
 	for(var/atom/movable/A in T.contents)
