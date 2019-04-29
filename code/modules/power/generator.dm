@@ -281,7 +281,7 @@
 		if(delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
 			var/energy_transfer = delta_temperature * air2_heat_capacity * air1_heat_capacity / (air2_heat_capacity + air1_heat_capacity)
 			var/heat = energy_transfer * (1 - thermal_efficiency)
-			last_gen = energy_transfer * thermal_efficiency * 0.05
+			last_gen = energy_transfer * thermal_efficiency * 0.5
 
 			//If our circulators are lubed get extra power
 			if(circ1.reagents.get_reagent_amount(LUBE)>=1)
