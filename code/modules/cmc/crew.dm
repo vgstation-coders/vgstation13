@@ -170,7 +170,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 				//incase we dont get a pos
 				var/turf/entry_z = get_turf(H)
 				if(entry_z.z in all_tracked_z_levels)
-					entries[entry_z.z][++entries[entry_z.z].len] = list(see_x, see_y, H, name, assignment, life_status, damage, player_area, ijob)
+					entries[entry_z.z][++entries[entry_z.z].len] = list(see_x, see_y, H, name, assignment, life_status, damage, player_area, ijob, pos)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
@@ -183,11 +183,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		if((pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
 			var/see_x = pos.x - WORLD_X_OFFSET[pos.z]
 			var/see_y = pos.y - WORLD_Y_OFFSET[pos.z]
-			entries[pos.z][++entries[pos.z].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60)
+			entries[pos.z][++entries[pos.z].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos)
 
 //create actual marker for crew with sensors on 3
-/obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/see_x, var/see_y, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available")
-	if(!H || !see_x || !see_y)
+/obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/see_x, var/see_y, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/turf/TU)
+	if(!TU || !H || !see_x || !see_y)
 		return
 
 	var/uid = "crewmarker_\ref[H]_\ref[user]"
@@ -220,9 +220,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	I.icon_state = "sensor_health[icon]"
 
 	//modulo magic for position
-	var/nomod_x = round(see_x / 32)
-	var/nomod_y = round(see_y / 32)
-	I.screen_loc = "WEST+[nomod_x]:[see_x%32 - 8],SOUTH+[nomod_y]:[see_y%32 - 8]" //- 8 cause the icon is 16px wide
+	var/nomod_x = round(TU.x / 32)
+	var/nomod_y = round(TU.y / 32)
+	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
 
 	I.setInfo(title, content, "Coords: [see_x]|[see_y]")
 	I.setCMC(src)
@@ -400,7 +400,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[9])
+			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[9], entry[10])
 
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
