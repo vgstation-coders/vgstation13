@@ -85,7 +85,7 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
-	var/mob/living/L = O
+	var/mob/living/carbon/human/L = O
 	if(!istype(L))
 		return
 
