@@ -22,17 +22,7 @@
 	var/list/alarm_types_show = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 
-	//vars used by state_laws
-	//many of these are initialized in ui_interact because they don't initialize here properly
-	var/list/state_laws_ui = new/list(
-		"freeform" = FALSE,
-		"selected_laws" = null, //the currently selected laws that will be stated
-		"freeform_editing_unlocked" = FALSE,
-		"preset_laws" = null, //list of preset law data
-		"radio_key" = ";", //radio key to output to, default is general radio
-		"has_linked_ai" = FALSE,
-		"use_laws_from_ai" = FALSE,
-	)
+	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
 
 /mob/living/silicon/hasFullAccess()
 	return 1
@@ -368,161 +358,15 @@
 /mob/living/silicon/get_survive_objective()
 	return new /datum/objective/siliconsurvive
 
-/mob/living/silicon/verb/state_laws()
-	set name = "State Laws"
-	set category = "Robot Commands"
-	ui_interact(usr, "state_laws")
-
-/mob/living/silicon/proc/speak_laws(var/list/to_state, var/radiokey)
-    say("[radiokey]Current Active Laws:")
-    sleep(10)
-    for(var/law in to_state)
-        if(!law["enabled"])
-            continue
-        say("[radiokey][law["text"]]")
-        sleep(10)
-
 /mob/living/silicon/Topic(href, href_list)
 	. = ..()
 	if(usr && (src != usr))
 		return
-	//State laws code
 	if(href_list["ui_key"] == "state_laws")
-		if(href_list["toggle_mode"])
-			state_laws_ui["freeform"] = !state_laws_ui["freeform"]
-			state_laws_ui["selected_laws"] = null
-			return 1
-		if(href_list["freeform_edit_toggle"])
-			state_laws_ui["freeform_editing_unlocked"] = !state_laws_ui["freeform_editing_unlocked"]
-			return 1
-		if(href_list["reset_laws"])
-			state_laws_ui["selected_laws"] = null
-			return 1
-		if(href_list["edited_laws"])
-			state_laws_ui["freeform_editing_unlocked"] = FALSE
-			var/edited_laws = href_list["edited_laws"]
-			var/regex/emptylines = new(@"(?:\n(?:[^\S\n]*(?=\n))?){2,}", "mg") //thanks stackexchange
-			edited_laws = emptylines.Replace(edited_laws, "\n")
-			edited_laws = replacetext(edited_laws, "\n", "", length(edited_laws)) //remove trailing newline
-			var/list/split_laws = splittext(edited_laws, "\n")
-			split_laws = split_laws.Copy(1, min(split_laws.len + 1, 51)) //no more than 50 laws permitted
-			var/list/tmplist = new/list()
-			for(var/str in split_laws)
-				tmplist[++tmplist.len] = list("text" = copytext(str, 1, MAX_MESSAGE_LEN), "enabled" = TRUE) //no bee movie for you, buddy
-			state_laws_ui["selected_laws"] = tmplist
-			nanomanager.update_user_uis(usr, null, "state_laws")
-			return 1
-		if(href_list["reset_to_ai_laws"])
-			state_laws_ui["use_laws_from_ai"] = TRUE
-			state_laws_ui["selected_laws"] = null
-			return 1
-		if(href_list["preset_law_select"])
-			var/index = text2num(href_list["preset_law_select"])
-			var/list/tmplist = new/list()
-			for(var/law in state_laws_ui["preset_laws"][index]["laws"])
-				tmplist[++tmplist.len] = list("text" = law, "enabled" = TRUE)
-			state_laws_ui["selected_laws"] = tmplist
-			return 1
-		if(href_list["toggle_law_enable"])
-			var/index = text2num(href_list["toggle_law_enable"])
-			state_laws_ui["selected_laws"][index]["enabled"] = !state_laws_ui["selected_laws"][index]["enabled"]
-			return 1
-		if(href_list["speak_laws"])
-			nanomanager.close_user_uis(usr, null, "state_laws")
-			var/key = href_list["radio_key"]
-			var/regex/onlykey = new(@":[0\-abcdeimnpstuw]|;") //find a valid key in the input, if there is one, stopping at first match
-			var/index = onlykey.Find(key)
-			//shitcode
-			if(index && key[index] == ";")
-				key = ";"
-			else if(index && key[index] == ":")
-				key = copytext(key, index, index+2)
-			else
-				key = ""
-			state_laws_ui["radio_key"] = key
-			if(state_laws_ui["freeform"])
-				log_admin("[usr]/[ckey(usr.key)] freeform-stated its silicon laws.")
-			speak_laws(state_laws_ui["selected_laws"], key)
-			return 1
+		state_laws_Topic(href, href_list) //state_laws.dm
 
 /mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
 	if(..())
 		return
 	if(ui_key == "state_laws")
-		if(isrobot(user))
-			var/mob/living/silicon/robot/R = user
-			if(R.connected_ai)
-				state_laws_ui["has_linked_ai"] = TRUE
-			else
-				state_laws_ui["has_linked_ai"] = FALSE
-		if(state_laws_ui["selected_laws"] == null)
-			var/datum/ai_laws/temp_laws = laws //duplicate the laws so we don't edit them
-			if(isrobot(user) && state_laws_ui["has_linked_ai"] && state_laws_ui["use_laws_from_ai"])
-				var/mob/living/silicon/robot/R = user
-				temp_laws = R.connected_ai.laws
-				state_laws_ui["use_laws_from_ai"] = FALSE
-			var/list/tmplist = new/list()
-			if(temp_laws.zeroth)
-				tmplist[++tmplist.len] = list("text" = "0. [temp_laws.zeroth]", "enabled" = TRUE) //oh dear this syntax
-			for(var/law in temp_laws.ion)
-				var/num = ionnum()
-				tmplist[++tmplist.len] = list("text" = "[num]. [law]", "enabled" = TRUE) //trust me, this is the Right Way
-			var/lawnum = 1
-			for(var/law in temp_laws.inherent)
-				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
-				lawnum++
-			for(var/law in temp_laws.supplied)
-				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
-				lawnum++
-			state_laws_ui["selected_laws"] = tmplist
-
-		if(state_laws_ui["freeform"] == null)
-			state_laws_ui["freeform"] = FALSE
-		if(state_laws_ui["freeform_editing_unlocked"] == null)
-			state_laws_ui["freeform_editing_unlocked"] = FALSE
-		if(state_laws_ui["preset_laws"] == null)
-			state_laws_ui["preset_laws"] = new/list()
-			//Build list of preset laws for state_laws
-			var/list/preset_laws = list(
-				new /datum/ai_laws/asimov,
-				new /datum/ai_laws/nanotrasen,
-				new /datum/ai_laws/robocop,
-				new /datum/ai_laws/corporate,
-				new /datum/ai_laws/paladin,
-				new /datum/ai_laws/tyrant,
-				new /datum/ai_laws/antimov,
-				new /datum/ai_laws/keeper,
-				new /datum/ai_laws/syndicate_override,
-			)
-			for(var/datum/ai_laws/law in preset_laws) //again having to deal with nanoui shitcode
-				var/list/tmplist = list()
-				tmplist["name"] = law.name
-				tmplist["laws"] = list()
-				for(var/i = 1; i <= law.inherent.len; i++)
-					var/clause = law.inherent[i]
-					tmplist["laws"].Add("[i]. [clause]")
-				if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
-					tmplist["laws"].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
-				state_laws_ui["preset_laws"][++state_laws_ui["preset_laws"].len] = tmplist.Copy()
-		
-		if(state_laws_ui["freeform"] == FALSE)
-			state_laws_ui["freeform_editing_unlocked"] = FALSE //can't edit if not in freeform mode
-		
-		if(state_laws_ui["radio_key"] == null)
-			state_laws_ui["radio_key"] = ""
-
-		var/list/data = list(
-			"src" = "\ref[src]",
-			"freeform" = state_laws_ui["freeform"],
-			"freeform_editing_unlocked" = state_laws_ui["freeform_editing_unlocked"],
-			"selected_laws" = state_laws_ui["selected_laws"],
-			"preset_laws" = state_laws_ui["preset_laws"],
-			"radio_key" = state_laws_ui["radio_key"],
-			"has_linked_ai" = state_laws_ui["has_linked_ai"]
-		)
-
-		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
-		if(!ui)
-			ui = new(user, src, ui_key, "state_laws.tmpl", "State Laws", 500, 600)
-			ui.set_initial_data(data)
-			ui.open()
+		state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm
