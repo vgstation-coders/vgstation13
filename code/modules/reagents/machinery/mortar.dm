@@ -34,7 +34,8 @@
 		/obj/item/weapon/match                = list(PHOSPHORUS, 2),
 
 		//Recipes must include both variables!
-		/obj/item/weapon/reagent_containers/food = list("generic",0)
+		/obj/item/weapon/reagent_containers/food = list("generic",0),
+		/obj/item/ice_crystal                = list(ICE, 10),
 	)
 
 
@@ -46,7 +47,7 @@
 	. = ..()
 
 /obj/item/weapon/reagent_containers/glass/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (isscrewdriver(O))
+	if (O.is_screwdriver(user))
 		if(crushable)
 			crushable.forceMove(user.loc)
 		new /obj/item/stack/sheet/metal(user.loc)

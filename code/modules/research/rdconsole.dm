@@ -30,7 +30,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 
 */
-#define RESEARCH_MAX_Q_LEN 30
+#define RESEARCH_MAX_Q_LEN 50
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
 	icon_state = "rdcomp"
@@ -110,7 +110,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 /obj/machinery/computer/rdconsole/proc/Maximize()
 	files.known_tech = tech_list.Copy()
-	for(var/datum/tech/KT in files.known_tech)
+	for(var/ID in files.known_tech)
+		var/datum/tech/KT = files.known_tech[ID]
 		if(KT.level < KT.max_level)
 			KT.level=KT.max_level
 
@@ -175,7 +176,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 //Have it automatically push research to the centcomm server so wild griffins can't fuck up R&D's work --NEO
 /obj/machinery/computer/rdconsole/proc/griefProtection()
 	for(var/obj/machinery/r_n_d/server/centcom/C in machines)
-		for(var/datum/tech/T in files.known_tech)
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
 			C.files.AddTech2Known(T)
 		for(var/datum/design/D in files.known_designs)
 			C.files.AddDesign2Known(D)
@@ -228,6 +230,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 
 /obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
+	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item)
+		return
+	if(isLocked() || (linked_destroy.stat & (NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN)))
+		return
 	linked_destroy.busy = 1
 	screen = 0.1
 	updateUsrDialog()
@@ -281,7 +287,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	add_fingerprint(usr)
 
+	if(isLocked() && !allowed(usr))
+		to_chat(usr, "Unauthorized Access.")
+		return
+
 	usr.set_machine(src)
+
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
 		if(temp_screen <= 1.1 || (2 <= temp_screen && 4.9 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
@@ -323,7 +334,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		screen = 1.0
 
 	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
-		for(var/datum/tech/T in files.known_tech)
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
 			if(href_list["copy_tech_ID"] == T.id)
 				t_disk.stored = T
 				break
@@ -365,9 +377,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
 		if(linked_destroy)
-			if(!src.allowed(usr))
-				to_chat(usr, "Unauthorized Access.")
-				return
 			if(linked_destroy.busy)
 				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
 			else
@@ -396,14 +405,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						if(S.disabled)
 							continue
 						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
-							for(var/datum/tech/T in files.known_tech)
+							for(var/ID in files.known_tech)
+								var/datum/tech/T = files.known_tech[ID]
 								S.files.AddTech2Known(T)
 							for(var/datum/design/D in files.known_designs)
 								S.files.AddDesign2Known(D)
 							S.files.RefreshResearch()
 							server_processed = 1
 						if(((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom)) || S.hacked)
-							for(var/datum/tech/T in S.files.known_tech)
+							for(var/ID in S.files.known_tech)
+								var/datum/tech/T = S.files.known_tech[ID]
 								files.AddTech2Known(T)
 							for(var/datum/design/D in S.files.known_designs)
 								files.AddDesign2Known(D)
@@ -712,8 +723,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(1.1) //Research viewer
 			dat += "Current Research Levels:<BR><BR>"
-			for(var/datum/tech/T in files.known_tech)
-
+			for(var/ID in files.known_tech)
+				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]<BR>
 					* Level: [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
@@ -744,8 +755,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += {"<BR><A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
 				<A href='?src=\ref[src];menu=1.2'>Return to Disk Operations</A><HR>
 				Load Technology to Disk:<BR><BR>"}
-			for(var/datum/tech/T in files.known_tech)
-
+			for(var/ID in files.known_tech)
+				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]
 					<A href='?src=\ref[src];copy_tech=1;copy_tech_ID=[T.id]'>(Copy to Disk)</A><BR>"}
 		if(1.4) //Design Disk menu.
@@ -1026,10 +1037,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
 	onclose(user, "rdconsole")
 
+/obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
+	return screen == 0.2
+
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that
-	if(linked_destroy && linked_destroy.loaded_item)
-		deconstruct_item(L)
+	deconstruct_item(L)
 
 /obj/machinery/computer/rdconsole/mommi
 	name = "MoMMI R&D Console"

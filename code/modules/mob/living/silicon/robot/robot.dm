@@ -1,3 +1,5 @@
+var/list/cyborg_list = list()
+
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"
@@ -7,7 +9,6 @@
 	health = 300
 	flashed = FALSE
 
-	var/list/hud_list = list()
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
@@ -78,8 +79,8 @@
 
 	var/killswitch = FALSE
 	var/killswitch_time = 60
-	var/weapon_lock = FALSE
-	var/weaponlock_time = 120
+	var/modulelock = FALSE
+	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
@@ -99,7 +100,10 @@
 	var/list/req_access = list(access_robotics) //Access needed to open cover
 	var/list/robot_access = list(access_ai_upload, access_robotics, access_maint_tunnels, access_external_airlocks) //Our current access
 
-/mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
+	var/last_tase_timeofday
+	var/last_high_damage_taken_timeofday
+
+/mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
 
@@ -111,20 +115,19 @@
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
 
 	if(AIlink)
-		connected_ai = select_active_ai_with_fewest_borgs()
+		if(malfAI)
+			connect_AI(malfAI)
+		else
+			connect_AI(select_active_ai_with_fewest_borgs())
 
-	if(connected_ai)
-		connected_ai.connected_robots += src
-		lawsync()
-		lawupdate = TRUE
-	else
-		lawupdate = FALSE
+	track_globally()
 
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
 		if(!scrambledcodes)
 			camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
+			cyborg_cams[CAMERANET_ROBOTS] += camera
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -166,6 +169,23 @@
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
+/mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
+	if(istype(new_AI))
+		connected_ai = new_AI
+		connected_ai.connected_robots += src
+		lawsync()
+		lawupdate = TRUE
+	else
+		lawupdate = FALSE
+
+/mob/living/silicon/robot/proc/disconnect_AI()
+	if(connected_ai)
+		connected_ai.connected_robots -= src
+		connected_ai = null
+
+/mob/living/silicon/robot/proc/track_globally()
+	cyborg_list += src
+
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
 	if(!rbPDA)
@@ -184,20 +204,6 @@
 				qdel(C.wrapped)
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
-
-//If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
-//Improved /N
-/mob/living/silicon/robot/Destroy()
-	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
-		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)
-			mmi.forceMove(T)
-		if(mind)
-			mind.transfer_to(mmi.brainmob)
-		if(mmi.brainmob)
-			mmi.brainmob.locked_to_z = locked_to_z
-		mmi = null
-	..()
 
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
@@ -284,7 +290,7 @@
 		braintype = "Robot"
 	else
 		if(istype(mmi, /obj/item/device/mmi/posibrain))
-			braintype = "Android"
+			braintype = "Droid"
 		else
 			braintype = "Cyborg"
 
@@ -375,15 +381,15 @@
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
 	..()
-	if(ticker.mode.name == "AI malfunction")
-		var/datum/game_mode/malfunction/malf = ticker.mode
-		for (var/datum/mind/malfai in malf.malf_ai)
-			if(connected_ai)
-				if(connected_ai.mind == malfai)
-					if(malf.apcs >= 3)
-						stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-			else if(ticker.mode:malf_mode_declared)
-				stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+	if(connected_ai && connected_ai.mind)
+		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		if(!malf)
+			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
+			var/malf_stat = malf.get_statpanel_addition()
+			if(malf_stat && malf_stat != null)
+				stat(null, malf_stat)
+		if(malf.apcs >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel
@@ -472,10 +478,22 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
+	if(!HAS_MODULE_QUIRK(src, MODULE_HAS_PROJ_RES))
+		if(istype(Proj, /obj/item/projectile/energy/electrode))
+			last_tase_timeofday = world.timeofday
+			if(can_diagnose())
+				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
+		if(Proj.damage >= SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD)
+			last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	return 2
 
+/mob/living/silicon/robot/emp_act(severity)
+	..()
+	if(prob(50/severity))
+		modulelock_time = rand(10,60)
+		modulelock = TRUE
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -543,7 +561,7 @@
 					SetEmagged(TRUE)
 					SetLockdown(TRUE)
 					lawupdate = FALSE
-					connected_ai = null
+					disconnect_AI()
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)]. Laws overidden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
@@ -739,14 +757,14 @@
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(isscrewdriver(W) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
-	else if(isscrewdriver(W) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 			if(can_diagnose())
@@ -800,6 +818,25 @@
 	else
 		if(W.force > 0)
 			spark(src, 5, FALSE)
+		if(stat == DEAD && W.force > 15)
+			visible_message("<span class='danger'>[user] begins ripping [src] apart with \the [W]!")
+			if(do_after(user, src, 3 SECONDS))
+				playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
+				if(prob(max((W.force/7.5)**3,25))) //15-21f - 25% chance, 22f - 27%, 30f - 64%, 35f - 99%
+					visible_message("<span class='danger'>[user] tore [src] apart with \the [W]!")
+					if(prob(25))
+						new /obj/item/robot_parts/l_leg(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/r_leg(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/l_arm(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/r_arm(loc)
+					gib()
+				else
+					visible_message("<span class='danger'>[src] groans under the force of \the [W]!")
+					shake(1, 3)
+				return
 		return ..()
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
@@ -999,10 +1036,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return
@@ -1158,7 +1191,8 @@
 								cleaned_human.update_inv_shoes(0)
 							cleaned_human.clean_blood()
 							to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
-		return
+	if (station_holomap)
+		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(mind && mind.special_role && emagged)
@@ -1170,7 +1204,7 @@
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
-		connected_ai = null
+		disconnect_AI()
 	lawupdate = FALSE
 	lockcharge = FALSE
 	canmove = TRUE
@@ -1318,3 +1352,10 @@
 
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
+
+/mob/living/silicon/robot/get_cell()
+	return cell
+
+/mob/living/silicon/robot/proc/toggle_modulelock()
+	modulelock = !modulelock
+	return modulelock

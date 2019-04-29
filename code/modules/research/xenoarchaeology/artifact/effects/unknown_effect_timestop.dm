@@ -1,6 +1,6 @@
 /datum/artifact_effect/timestop
 	effecttype = "timestop"
-	effect = list(EFFECT_TOUCH, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_PULSE)
 
 	var/mob/caster
 	var/spell/aoe_turf/fall/fall

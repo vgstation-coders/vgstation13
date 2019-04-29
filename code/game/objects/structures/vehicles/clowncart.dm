@@ -91,6 +91,7 @@
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishigherbeing(user)) //This shouldn't be needed, but fucks sakes
 					user.Knockdown(5)
+					user.Stun(5)
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
@@ -242,7 +243,11 @@
 				colour1 = "#1CA800"
 				colour2 = "#238E0E"
 				to_chat(user, "Selected color: Green Access")
-			else if(istype(W, /obj/item/weapon/stamp/hos))
+			else if(istype(W, /obj/item/weapon/stamp/iaa))
+				colour1 = "#004DCE"
+				colour2 = "#0BB5FF"
+				to_chat(user, "Selected color: Legal Blue")
+			else if(istype(W, /obj/item/weapon/stamp/hos) || istype(W, /obj/item/weapon/stamp/warden))
 				colour1 = "#7F4D21"
 				colour2 = "#B24611"
 				to_chat(user, "Selected color: Shitcurity Brown")
@@ -250,6 +255,10 @@
 				colour1 = "#D22EF7"
 				colour2 = "#D312E5"
 				to_chat(user, "Selected color: Plasma Purple")
+			else if(istype(W, /obj/item/weapon/stamp/chaplain))
+				colour1 = "#9B1C31"
+				colour2 = "#FFD700"
+				to_chat(user, "Selected color: Reverend Red")
 			else
 				colour1 = "#000000"
 				colour2 = "#6D6D6D"
@@ -259,6 +268,13 @@
 	if(user.incapacitated())
 		unlock_atom(user)
 		return
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
+	if(!T.has_gravity())
+		// Block relaymove() if needed.
+		if(!Process_Spacemove(0))
+			return 0
 	if(empstun > 0)
 		if(user && can_warn())
 			to_chat(user, "<span class='warning'>[src]'s banana essence battery has been shorted out.</span>")
@@ -269,6 +285,7 @@
 			unlock_atom(user)
 			activated = 0
 			user.Knockdown(5) //Only Weaken after unbuckling
+			user.Stun(5)
 		return
 	if(activated)
 		var/old_pos = get_turf(src)
@@ -317,7 +334,7 @@
 		return
 	reagents.remove_reagent(BANANA, BANANA_FOR_DRAWING)//"graffiti" and "rune" will draw graffiti and runes
 	if(printing_text == "graffiti" || printing_text == "rune") //"paint" will paint floor tiles with selected colour
-		new /obj/effect/decal/cleanable/crayon(pos, colour1, colour2, printing_text)
+		new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = printing_text)
 	else
 		if(printing_text == "paint")
 			var/tmp/turf/T = pos
@@ -336,7 +353,7 @@
 				if(printing_pos >= 0)
 					printing_pos = -length(printing_text)-1 //indian code magic
 			printing_pos++
-			new /obj/effect/decal/cleanable/crayon(pos, colour1, colour2, copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
+			new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
 			if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
 				printing_text = ""
 				printing_pos = 0

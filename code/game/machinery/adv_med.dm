@@ -7,7 +7,7 @@
 	idle_power_usage = 125
 	active_power_usage = 250
 	var/scanning = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/fullbodyscanner,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -437,6 +437,7 @@
 		var/internal_bleeding = ""
 		var/lung_ruptured = ""
 		var/e_cancer = ""
+		var/bone_strengthened = ""
 
 		dat += "<tr>"
 
@@ -456,6 +457,11 @@
 			robot = "Prosthetic:"
 		if(e.open)
 			open = "Open:"
+		if(e.min_broken_damage != initial(e.min_broken_damage))
+			var/difference = e.min_broken_damage - initial(e.min_broken_damage)
+			if(difference > 0)
+				difference = "+[difference]"
+			bone_strengthened = "Altered bone strength ([difference]g/cm<sup>2</sup>)"
 
 		switch (e.germ_level)
 			if (INFECTION_LEVEL_ONE to INFECTION_LEVEL_ONE + 200)
@@ -496,7 +502,7 @@
 		if(!AN && !open && !infected && !e_cancer & !imp)
 			AN = "None:"
 		if(!(e.status & ORGAN_DESTROYED))
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured]</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 		dat += "</tr>"

@@ -21,6 +21,7 @@
 	var/mind=null
 	var/list/languages = list()
 	var/times_cloned=0
+	var/talkcount
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -67,7 +68,7 @@
 	var/locked = 0
 	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
-	var/injector_cooldown = 300 //Used by attachment
+	var/injector_cooldown = 150 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	var/obj/machinery/computer/connected
 	var/last_message // Used by go_out()
@@ -93,7 +94,7 @@
 /obj/machinery/dna_scannernew/RefreshParts()
 	var/efficiency = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts) efficiency += SP.rating-1
-	injector_cooldown = initial(injector_cooldown) - 30*(efficiency)
+	injector_cooldown = initial(injector_cooldown) - 15*(efficiency)
 
 /obj/machinery/dna_scannernew/allow_drop()
 	return 0
@@ -149,7 +150,7 @@
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
 		to_chat(usr, "<span class='notice'>You cannot enter \the [src].</span>")
 		return
-	if (istype(usr, /mob/living/carbon/human/manifested))
+	if (ismanifested(usr))
 		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read your genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 
 		return
@@ -185,7 +186,7 @@
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
-	if(istype(O, /mob/living/carbon/human/manifested))
+	if(ismanifested(O))
 		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read that person's genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 
 		return
@@ -970,7 +971,11 @@
 				databuf.types = DNA2_BUF_UI // DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier"
 				src.buffers[bufferId] = databuf
@@ -985,7 +990,11 @@
 				databuf.types = DNA2_BUF_UI|DNA2_BUF_UE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier + Unique Enzymes"
 				src.buffers[bufferId] = databuf
@@ -1000,7 +1009,11 @@
 				databuf.types = DNA2_BUF_SE
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
-					databuf.dna.real_name=connected.occupant.name
+					var/datum/data/record/med_record = data_core.find_medical_record_by_dna(connected.occupant.dna.unique_enzymes)
+					if(med_record)
+						databuf.dna.real_name = med_record.fields["name"]
+					else
+						databuf.dna.real_name=connected.occupant.name
 				databuf.name = "Structural Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1

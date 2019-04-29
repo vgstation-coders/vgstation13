@@ -20,3 +20,8 @@
 #define PULSE "pulse"
 #define GAUGE12 "12 gauge"
 #define GAUGEFLARE "flare"
+
+/* Lawgiver */
+#define LAWGIVER_MODE_KIND_ENERGY "energy"
+#define LAWGIVER_MODE_KIND_BULLET "bullet"
+#define LAWGIVER_MAX_AMMO 5

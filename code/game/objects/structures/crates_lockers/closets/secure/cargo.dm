@@ -8,16 +8,14 @@
 	icon_broken = "securecargobroken"
 	icon_off = "securecargooff"
 
-	New()
-		..()
-		sleep(2)
-		new /obj/item/clothing/under/rank/cargotech(src)
-		new /obj/item/clothing/shoes/black(src)
-		new /obj/item/device/radio/headset/headset_cargo(src)
-		new /obj/item/clothing/gloves/black(src)
-		new /obj/item/clothing/head/soft(src)
-//		new /obj/item/weapon/cartridge/quartermaster(src)
-		return
+/obj/structure/closet/secure_closet/cargotech/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/rank/cargotech,
+		/obj/item/clothing/shoes/black,
+		/obj/item/device/radio/headset/headset_cargo,
+		/obj/item/clothing/gloves/black,
+		/obj/item/clothing/head/soft,
+	)
 
 /obj/structure/closet/secure_closet/quartermaster
 	name = "Quartermaster's Locker"
@@ -29,18 +27,16 @@
 	icon_broken = "secureqmbroken"
 	icon_off = "secureqmoff"
 
-	New()
-		..()
-		sleep(2)
-		new /obj/item/clothing/under/rank/cargo(src)
-		new /obj/item/clothing/shoes/brown(src)
-		new /obj/item/device/radio/headset/headset_cargo(src)
-		new /obj/item/clothing/gloves/black(src)
-//		new /obj/item/weapon/cartridge/quartermaster(src)
-		new /obj/item/clothing/suit/fire/firefighter(src)
-		new /obj/item/weapon/tank/emergency_oxygen(src)
-		new /obj/item/clothing/mask/gas(src)
-		new /obj/item/clothing/glasses/scanner/meson(src)
-		new /obj/item/clothing/head/soft(src)
-		new /obj/item/weapon/card/debit/preferred/department(src, "Cargo")
-		return
+/obj/structure/closet/secure_closet/quartermaster/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/rank/cargo,
+		/obj/item/clothing/shoes/brown,
+		/obj/item/device/radio/headset/headset_cargo,
+		/obj/item/clothing/gloves/black,
+		/obj/item/clothing/suit/fire/firefighter,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/clothing/mask/gas,
+		/obj/item/clothing/glasses/scanner/meson,
+		/obj/item/clothing/head/soft,
+		/obj/item/weapon/card/debit/preferred/department/cargo,
+	)

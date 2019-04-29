@@ -12,8 +12,8 @@
 	idle_power_usage = 20
 	active_power_usage = 5000
 
-	var/time_coeff = 1.5 //can be upgraded with research
-	var/resource_coeff = 1.5 //can be upgraded with research
+	var/time_coeff = 1 //can be upgraded with research
+	var/resource_coeff = 1 //can be upgraded with research
 	max_material_storage = 562500 //All this could probably be done better with a list but meh.
 
 	var/datum/research/files
@@ -31,6 +31,8 @@
 	var/list/part_sets = list()
 	var/datum/design/last_made
 	var/start_end_anims = 0
+	var/min_cap_C = 0.1 //The minimum cap used to how much cost coeff can be improved
+	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
@@ -62,14 +64,16 @@
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
 
 	T = 0
+	var/datum/tech/Tech = files.known_tech["materials"]
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
-	resource_coeff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
+	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((Tech.level - 1)+(T * 2)))/25,0.01), min_cap_C)
 
 	T = 0
+	Tech = files.known_tech["programming"]
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 		T += Ml.rating - 1
-	time_coeff = round(initial(time_coeff) - (initial(time_coeff)*(T * 5))/25,0.01)
+	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
@@ -243,6 +247,27 @@
 
 	return 1
 
+/obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
+	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
+	//return (I in component_parts)
+	return locate(I,src.component_parts)
+
+//steals mats from other fabricators, then calls remove_materials again
+/obj/machinery/r_n_d/fabricator/proc/bluespace_materials(var/datum/design/part)
+	if(!has_bluespace_bin())
+		return 0
+
+	for (var/obj/machinery/r_n_d/fabricator/gibmats in machines)
+		if(gibmats.has_bluespace_bin())
+			for(var/gib in part.materials)
+				if (gibmats.check_mat(part,gib) && !src.check_mat(part,gib))//they have what we need && we don't need more
+					if(copytext(gib,1,2) == "$" && !(research_flags & IGNORE_MATS))
+						var/bluespaceamount = src.get_resource_cost_w_coeff(part, gib)
+						gibmats.materials.removeAmount(gib,bluespaceamount)
+						src.materials.addAmount(gib,bluespaceamount)
+	return remove_materials(part)
+
+
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
 		if(src.research_flags & IGNORE_MATS)
@@ -269,7 +294,7 @@
 		src.visible_message("<font color='blue'>The [src.name] buzzes, \"Safety procedures prevent current queued item from being built.\"</font>")
 		return
 
-	if(!remove_materials(part))
+	if(!remove_materials(part) && !bluespace_materials(part))
 		stopped = 1
 		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
 		return
@@ -310,6 +335,7 @@
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
+		being_built.anchored = 0
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
 		last_made = part
@@ -401,30 +427,25 @@
 	if(!files)
 		return
 	var/output
-	for(var/datum/tech/T in files.known_tech)
-		if(T && T.level > 1)
-			var/diff
-			switch(T.id) //bad, bad formulas
-				if("materials")
-					var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
-					for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-						pmat += Ml.rating
-					if(pmat >= 1)
-						pmat -= 1//So the equations don't have to be reworked, upgrading a single part from T1 to T2 is == to 1 tech level
-					diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+pmat))/25,0.01)
-					if(resource_coeff!=diff)
-						resource_coeff = diff
-						output+="Production efficiency increased.<br>"
-				if("programming")
-					var/ptime = 0
-					for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
-						ptime += Ma.rating
-					if(ptime >= 2)
-						ptime -= 2
-					diff = round(initial(time_coeff) - (initial(time_coeff)*(T.level+ptime))/25,0.1)
-					if(time_coeff!=diff)
-						time_coeff = diff
-						output+="Production routines updated.<br>"
+	var/diff
+	var/datum/tech/T = files.known_tech["materials"]
+	if(T && T.level > 1)
+		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
+		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+			pmat += Ma.rating - 1
+		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((T.level - 1)+(pmat*2)))/25,0.01), min_cap_C)
+		if(resource_coeff!=diff)
+			resource_coeff = diff
+			output+="Production efficiency increased.<br>"
+	T = files.known_tech["programming"]
+	if(T && T.level > 1)
+		var/ptime = 0
+		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
+			ptime += Ml.rating - 1
+		diff = max(round(initial(time_coeff) - (initial(time_coeff)*((T.level - 1)+(ptime*3)))/25,0.1), min_cap_T)
+		if(time_coeff!=diff)
+			time_coeff = diff
+			output+="Production routines updated.<br>"
 	return output
 
 
@@ -440,7 +461,8 @@
 	else
 		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
 	if(console)
-		for(var/datum/tech/T in console.files.known_tech)
+		for(var/ID in console.files.known_tech)
+			var/datum/tech/T = console.files.known_tech[ID]
 			if(T)
 				files.AddTech2Known(T)
 		for(var/datum/design/D in console.files.known_designs)

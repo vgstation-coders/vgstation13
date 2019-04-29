@@ -31,9 +31,9 @@
 		attached_device.Crossed(AM)
 	..()
 
-/obj/item/device/transfer_valve/on_found(AM as mob|obj)
+/obj/item/device/transfer_valve/on_found(wearer, AM as mob|obj)
 	if(attached_device)
-		attached_device.on_found(AM)
+		attached_device.on_found(wearer, AM)
 	..()
 
 /obj/item/device/transfer_valve/attackby(obj/item/item, mob/user)
@@ -225,6 +225,10 @@
 		// Delete ourselves.
 		qdel(src)
 
+
+/obj/item/device/transfer_valve/blob_act()
+	toggle_valve()
+	qdel(src)
 
 // this doesn't do anything but the timer etc. expects it to be here
 // eventually maybe have it update icon to show state (timer, prox etc.) like old bombs

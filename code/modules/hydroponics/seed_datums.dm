@@ -89,12 +89,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	if(prob(5))
 		consume_gasses = list()
-		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+		var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 		consume_gasses[gas] = rand(3,9)
 
 	if(prob(5))
 		exude_gasses = list()
-		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+		var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 		exude_gasses[gas] = rand(3,9)
 
 	chems = list()
@@ -202,6 +202,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		DEXALINP = 75,
 		HYRONALIN = 100,
 		BLOOD = 100,
+		PHYTOSINE = 100,
+		PHYTOCARISOL = 100,
 		// Misc Poisons
 		PHYSOSTIGMINE = 100,
 		MERCURY = 100,
@@ -220,6 +222,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		NOTHING = 50,
 		MINDBREAKER = 100,
 		MINTTOXIN = 60,
+		DEFALEXORIN = 100,
 		// Things of Dubious Use
 		SUGAR = 100,
 		ETHYLREDOXRAZINE = 100,
@@ -298,6 +301,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		list("seed-cocoapod",           "cocoapod",				5),
 		list("seed-cherry",             "cherry",				5),
 		list("seed-kudzu",              "kudzu",				4),
+		list("seed-pear",               "pear", 				6),
 		))
 
 	if (change_packet)
@@ -626,6 +630,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 										H.vessel.remove_reagent(BLOOD, drawing)
 										tray.reagents.add_reagent(BLOOD, drawing)
 	if(ligneous && success)
+		success = 0
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			for(var/obj/item/I in M.held_items)

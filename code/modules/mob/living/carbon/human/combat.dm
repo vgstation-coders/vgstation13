@@ -47,7 +47,6 @@
 	if(target.disarmed_by(src))
 		return
 
-	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
 	if(prob(40)) //40% miss chance
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
@@ -56,7 +55,7 @@
 	do_attack_animation(target, src)
 
 	if(prob(40)) //True chance of something happening per click is hit_chance*event_chance, so in this case the stun chance is actually 0.6*0.4=24%
-		target.apply_effect(4, WEAKEN, target.run_armor_check(affecting, "melee"))
+		target.apply_effect(4, WEAKEN)
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		visible_message("<span class='danger'>[src] has pushed [target]!</span>")
 		add_logs(src, target, "pushed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
@@ -126,7 +125,7 @@
 		return HALLOSS
 	return ..()
 
-/mob/living/carbon/human/get_unarmed_damage(mob/victim)
+/mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = rand(0, S.max_hurt_damage)
@@ -159,6 +158,7 @@
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
 	var/base_chance = 8
 
+	base_chance += min(reagents.get_sportiness(),5)
 	if(mutations.Find(M_HULK))
 		base_chance += 12
 	if(istype(gloves))
@@ -205,11 +205,16 @@
 		if(prob(chance))
 			knock_out_teeth(attacker)
 
+	if(isrambler(src) && !(attacker == src)) //Redundant check for punching a soul rambler. Kicking is in carbon/human/human_attackhand.dm
+		attacker.say(pick("Take that!", "Taste the pain!"))
+
 	..()
 
 /mob/living/carbon/human/proc/perform_cpr(mob/living/target)
+	if(target == src)
+		return 0
 	if(!get_lungs())
-		to_chat(src, "<span class='notice'><B>You have no lungs with which to perform CPR with!</B></span>")
+		to_chat(src, "<span class='notice'><B>You have no lungs with which to perform CPR!</B></span>")
 		return 0
 	if(src.species && src.species.flags & NO_BREATHE)
 		to_chat(src, "<span class='notice'><B>You don't breathe, so you can't help \the [target]!</B></span>")

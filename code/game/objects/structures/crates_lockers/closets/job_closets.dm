@@ -14,23 +14,18 @@
 	icon_state = "black"
 	icon_closed = "black"
 
-/obj/structure/closet/gmcloset/New()
-	..()
-	new /obj/item/clothing/head/that(src)
-	new /obj/item/clothing/head/that(src)
-	new /obj/item/clothing/head/hairflower
-	new /obj/item/clothing/under/sl_suit(src)
-	new /obj/item/clothing/under/sl_suit(src)
-	new /obj/item/clothing/under/rank/bartender(src)
-	new /obj/item/clothing/under/rank/bartender(src)
-	new /obj/item/clothing/under/dress/dress_saloon
-	new /obj/item/clothing/suit/wcoat(src)
-	new /obj/item/clothing/suit/wcoat(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/clothing/monkeyclothes(src)
-	new /obj/item/clothing/monkeyclothes(src)
-	new /obj/item/weapon/reagent_containers/food/drinks/coloring(src)
+/obj/structure/closet/gmcloset/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/head/that = 2,
+		/obj/item/clothing/head/hairflower,
+		/obj/item/clothing/under/sl_suit = 2,
+		/obj/item/clothing/under/rank/bartender = 2,
+		/obj/item/clothing/under/dress/dress_saloon,
+		/obj/item/clothing/suit/wcoat = 2,
+		/obj/item/clothing/shoes/black = 2,
+		/obj/item/clothing/monkeyclothes = 2,
+		/obj/item/weapon/reagent_containers/food/drinks/coloring,
+	)
 
 /*
  * Janitor
@@ -41,25 +36,20 @@
 	icon_state = "mixed"
 	icon_closed = "mixed"
 
-/obj/structure/closet/jcloset/New()
-	..()
-	new /obj/item/clothing/under/rank/janitor(src)
-	new /obj/item/weapon/cartridge/janitor(src)
-	new /obj/item/device/flashlight(src)
-	new /obj/item/clothing/shoes/galoshes(src)
-	new /obj/item/weapon/caution(src)
-	new /obj/item/weapon/caution(src)
-	new /obj/item/weapon/caution(src)
-	new /obj/item/weapon/caution(src)
-	new /obj/item/weapon/caution(src)
-	new /obj/item/weapon/caution(src)
-	new /obj/item/weapon/storage/bag/trash(src)
-	new /obj/item/device/lightreplacer/loaded/mixed(src)
-	new /obj/item/clothing/gloves/black(src)
-	new /obj/item/clothing/head/soft/purple(src)
-	new /obj/item/weapon/storage/box/lights/he(src)
-	new /obj/item/weapon/storage/box/lights/he(src)
-	new /obj/item/weapon/storage/belt/janitor(src)
+/obj/structure/closet/jcloset/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/rank/janitor,
+		/obj/item/weapon/cartridge/janitor,
+		/obj/item/device/flashlight,
+		/obj/item/clothing/shoes/galoshes,
+		/obj/item/weapon/caution = 6,
+		/obj/item/weapon/storage/bag/trash,
+		/obj/item/device/lightreplacer/loaded/mixed,
+		/obj/item/clothing/gloves/black,
+		/obj/item/clothing/head/soft/purple,
+		/obj/item/weapon/storage/box/lights/he = 2,
+		/obj/item/weapon/storage/belt/janitor,
+	)
 
 /*
  * Lawyer
@@ -70,20 +60,19 @@
 	icon_state = "blue"
 	icon_closed = "blue"
 
-/obj/structure/closet/lawcloset/New()
-	..()
-	new /obj/item/clothing/under/cia(src)
-	new /obj/item/clothing/under/lawyer/female(src)
-	new /obj/item/clothing/under/lawyer/black(src)
-	new /obj/item/clothing/under/lawyer/red(src)
-	new /obj/item/clothing/under/lawyer/bluesuit(src)
-	new /obj/item/clothing/suit/storage/lawyer/bluejacket(src)
-	new /obj/item/clothing/under/lawyer/purpsuit(src)
-	new /obj/item/clothing/suit/storage/lawyer/purpjacket(src)
-	new /obj/item/clothing/shoes/brown(src)
-	new /obj/item/clothing/shoes/black(src)
-
-	//Paramedic
+/obj/structure/closet/lawcloset/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/cia,
+		/obj/item/clothing/under/lawyer/female,
+		/obj/item/clothing/under/lawyer/black,
+		/obj/item/clothing/under/lawyer/red,
+		/obj/item/clothing/under/lawyer/bluesuit,
+		/obj/item/clothing/suit/storage/lawyer/bluejacket,
+		/obj/item/clothing/under/lawyer/purpsuit,
+		/obj/item/clothing/suit/storage/lawyer/purpjacket,
+		/obj/item/clothing/shoes/brown,
+		/obj/item/clothing/shoes/black,
+	)
 
 /obj/structure/closet/paramedic
 	name = "Paramedic Wardrobe"
@@ -92,23 +81,15 @@
 	icon_closed = "blue"
 
 
-/obj/structure/closet/paramedic/New()
-	..()
-	new /obj/item/clothing/under/rank/medical/paramedic(src)
-	new /obj/item/clothing/under/rank/medical/paramedic(src)
-	new /obj/item/device/radio/headset/headset_med(src)
-	new /obj/item/device/radio/headset/headset_med(src)
-	new /obj/item/clothing/head/soft/paramedic(src)
-	new /obj/item/clothing/head/soft/paramedic(src)
-	new /obj/item/clothing/gloves/latex(src)
-	new /obj/item/clothing/gloves/latex(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/clothing/suit/storage/paramedic(src)
-	new /obj/item/clothing/suit/storage/paramedic(src)
-	new /obj/item/weapon/storage/box/inflatables(src)
-	new /obj/item/weapon/storage/box/inflatables(src)
-	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
-	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
-	new /obj/item/device/gps/paramedic(src)
-	new /obj/item/device/gps/paramedic(src)
+/obj/structure/closet/paramedic/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/rank/medical/paramedic = 2,
+		/obj/item/device/radio/headset/headset_med = 2,
+		/obj/item/clothing/head/soft/paramedic = 2,
+		/obj/item/clothing/gloves/latex = 2,
+		/obj/item/clothing/shoes/black = 2,
+		/obj/item/clothing/suit/storage/paramedic = 2,
+		/obj/item/weapon/storage/box/inflatables = 2,
+		/obj/item/weapon/tank/emergency_oxygen/engi = 2,
+		/obj/item/device/gps/paramedic = 2,
+	)

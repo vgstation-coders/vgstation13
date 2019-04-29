@@ -3,23 +3,31 @@
 	var/name = "artifact"
 	var/desc = ""
 	var/abbreviation //For feedback
-
+	var/one_use = FALSE
 	var/list/spawned_items = list()
 	var/price = Sp_BASE_PRICE
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
-	for(var/T in spawned_items)
-		new T(get_turf(user))
+	for(var/path in spawned_items)
+		var/obj/item/I = new path(get_turf(user))
+		if(user.mind)
+			var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
+			if(W)
+				var/icon/tempimage = icon(I.icon, I.icon_state)
+				end_icons += tempimage
+				var/tempstate = end_icons.len
+				W.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
 
-/datum/spellbook_artifact/proc/can_buy()
+/datum/spellbook_artifact/proc/can_buy(var/mob/user)
 	return TRUE
 
 /datum/spellbook_artifact/staff_of_change
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff)
+	price = 2 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
@@ -46,9 +54,10 @@
 	abbreviation = "HS"
 	spawned_items = list(
 	/obj/item/clothing/shoes/sandal,\
-	/obj/item/clothing/gloves/purple,\
+	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard)
+	/obj/item/clothing/head/helmet/space/rig/wizard,\
+	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
@@ -61,7 +70,7 @@
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
-
+/*
 #define APPRENTICE_PRICE Sp_BASE_PRICE
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -69,13 +78,40 @@
 	abbreviation = "CT"
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
 	price = APPRENTICE_PRICE
+*/
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
-	price = 5 * Sp_BASE_PRICE
+	price = 4 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
+
+/datum/spellbook_artifact/potion_bundle
+	name = "Potion bundle"
+	desc = "As a dead wizard once said, life is a bag of potions. You never know what you're gonna get."
+	abbreviation = "PB"
+	price = 4 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/bundle)
+
+/datum/spellbook_artifact/lesser_potion_bundle
+	name = "Lesser potion bundle"
+	desc = "Contains 12 unknown potions. For wizards that are unwilling to go all-in."
+	abbreviation = "LPB"
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_bundle)
+
+/datum/spellbook_artifact/predicted_potion_bundle
+	name = "Predicted potion bundle"
+	desc = "Contains 40 potions. I like the blue ones myself."
+	abbreviation = "LPB"
+	price = 4 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/predicted_potion_bundle)
+
+/datum/spellbook_artifact/lesser_predicted_potion_bundle
+	name = "Lesser predicted potion bundle"
+	desc = "Contains 10 potions. Don't go using them all in one place!"
+	abbreviation = "LPB"
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle)
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
@@ -99,15 +135,41 @@
 	abbreviation = "CC"
 	spawned_items = list(/obj/item/weapon/cloakingcloak)
 
+//WIZARDS, NO SENSE OF RIGHT OR WRONG
+/datum/spellbook_artifact/proc/is_roundstart_wizard(var/mob/user)
+	if (!ticker || !ticker.mode || !istype(ticker.mode,/datum/gamemode/dynamic))//if mode isn't Dynamic Mode, who cares
+		return TRUE
+
+	if (!user.mind)
+		return FALSE
+
+	var/datum/role/wizard/myWizard = user.mind.GetRole(WIZARD)
+
+	if (!myWizard)//ain't gonna let non-wizards use those.
+		return FALSE
+
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+
+	var/datum/dynamic_ruleset/roundstart/wizard/wiz_rule = locate() in dynamic_mode.executed_rules
+
+	if (!wiz_rule)
+		return FALSE
+
+	if (myWizard in wiz_rule.roundstart_wizards)
+		return TRUE
+
+	return FALSE
+
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
 
-/datum/spellbook_artifact/summon_guns/can_buy()
-	//Can't summon guns during ragin' mages
-	return !ticker.mode.rage
+/datum/spellbook_artifact/summon_guns/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
+
 
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
@@ -121,9 +183,9 @@
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
 
-/datum/spellbook_artifact/summon_magic/can_buy()
-	//Can't summon magic during ragin' mages
-	return !ticker.mode.rage
+/datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
@@ -137,9 +199,9 @@
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
 	abbreviation = "SS"
 
-/datum/spellbook_artifact/summon_magic/can_buy()
-	//Can't summon swords during ragin' mages
-	return !ticker.mode.rage
+/datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()
@@ -201,11 +263,42 @@
 	to_chat(world,'sound/misc/santa.ogg')
 	SetUniversalState(/datum/universal_state/christmas)
 
-/datum/spellbook_artifact/santa_bundle/can_buy()
+/datum/spellbook_artifact/santa_bundle/can_buy(var/mob/user)
 	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
 
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/phylactery)
+
+
+/datum/spellbook_artifact/darkness
+	name = "Tone setter - darkness"
+	abbreviation = "TS-D"
+	desc = "Exploits the magic of futurescience, tapping into the unfortunate target station's APCs, allowing you to destroy the stations lighting en-masse."
+	one_use = TRUE
+	price = 0.25*Sp_BASE_PRICE
+	spawned_items = list(/obj/item/clothing/head/pumpkinhead)
+
+/datum/spellbook_artifact/darkness/purchased(mob/living/carbon/human/H)
+	..()
+	for(var/obj/machinery/power/apc/apc in power_machines)
+		if(apc.z == STATION_Z)
+			apc.overload_lighting()
+
+
+/datum/spellbook_artifact/prestidigitation
+	name = "Prestidigitation Bundle"
+	abbreviation = "PTDB"
+	desc = "A group of spells for general utility."
+	price = Sp_BASE_PRICE
+
+/datum/spellbook_artifact/prestidigitation/purchased(mob/living/carbon/human/H)
+	..()
+	H.add_spell(new/spell/targeted/spark)
+	H.add_spell(new/spell/targeted/extinguish)
+	H.add_spell(new/spell/targeted/clean)
+	H.add_spell(new/spell/targeted/unclean)
+	H.add_spell(new/spell/targeted/create_trinket)
+	H.add_spell(new/spell/targeted/cool_object)
+	H.add_spell(new/spell/targeted/warm_object)

@@ -2,6 +2,7 @@
 /obj/structure/flora
 	name = "flora"
 	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
+	var/shovelaway = FALSE
 
 /obj/structure/flora/New()
 	..()
@@ -9,14 +10,18 @@
 
 /obj/structure/flora/update_icon()
 	clicked = new/icon(src.icon, src.icon_state, src.dir)
-/*
+
 /obj/structure/flora/attackby(var/obj/item/I, var/mob/user, params)
-	if(istype(I, /obj/item/ornament))
-		hang_ornament(I, user, params)
+	if(shovelaway && isshovel(I))
+		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
+		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		qdel(src)
 		return 1
-	else
-		..()
-*/
+//	if(istype(I, /obj/item/ornament))
+//		hang_ornament(I, user, params)
+//		return 1
+	..()
+
 /obj/structure/flora/proc/hang_ornament(var/obj/item/I, var/mob/user, params)
 	var/list/params_list = params2list(params)
 	if(!istype(I, /obj/item/ornament))
@@ -221,6 +226,7 @@
 	name = "grass"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/grass/brown
 	icon_state = "snowgrass1bb"
@@ -254,9 +260,11 @@
 //bushes
 /obj/structure/flora/bush
 	name = "bush"
+	desc = "It's amazing what can grow out here."
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowbush1"
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/bush/New()
 	..()
@@ -289,9 +297,11 @@
 				filled = TRUE
 		if(filled)
 			to_chat(user, "There is already something in the pot.")
+			playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 			return
 	if(user.drop_item(I, src))
 		user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)
@@ -301,16 +311,19 @@
 			count++
 			if(count > contents.len)	//pot is emptied of non-ornament items
 				user.visible_message("<span class='notice'>[user] plucks \the [I] off \the [src].</span>", "You take \the [I] off \the [src].")
+				playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 				I.forceMove(loc)
 				user.put_in_active_hand(I)
 				overlays -= overlays[overlays.len]
 				return
 			I = contents[count]
 		user.visible_message("<span class='notice'>[user] retrieves something from the pot.</span>", "You retrieve \the [I] from the [src].")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 		I.forceMove(loc)
 		user.put_in_active_hand(I)
 	else
-		to_chat(user, "You root around in the roots.")
+		to_chat(user, "You root around in the roots. There isn't anything in there.")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 
 /obj/structure/flora/pottedplant/attack_paw(mob/user)
 	return attack_hand(user)
@@ -342,7 +355,7 @@
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 									"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 									"<span class='notice'>You hear a ratchet.</span>")
-	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
+	else if(plant_name && isshovel(O))
 		to_chat(user, "<span class='notice'>[bicon(src)] You start removing the [plant_name] from \the [src].</span>")
 		if(do_after(user, src, 30))
 			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
@@ -487,6 +500,7 @@
 	icon_state = "rock1"
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/rock/New()
 	..()

@@ -10,6 +10,7 @@
 	var/filter
 	var/id
 	var/icon = 'icons/holomap_markers.dmi'
+	var/color//used by path rune markers
 
 /proc/generateHoloMinimaps()
 	var/list/filters = list(
@@ -27,6 +28,15 @@
 		holoMiniMaps |= z
 		generateMarkers(z)
 		generateHoloMinimap(z)
+
+	//------------Cult Map start--------
+	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
+	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
+	map_base.Blend("#E30000",ICON_MULTIPLY)
+	canvas.Blend(map_base,ICON_OVERLAY)
+	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
+	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
+	//-------------Cult Map end---------
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)
@@ -76,7 +86,7 @@
 				newMarker.x = T.x
 				newMarker.y = T.y
 				newMarker.z = ZLevel
-				holomap_markers[newMarker.id] = newMarker
+				holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
@@ -87,7 +97,7 @@
 			for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				var/turf/tile = locate(i, r, zLevel)
 				if(tile && tile.loc.holomapAlwaysDraw())
-					if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile.loc, /area/asteroid/artifactroom) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
+					if((!istype(tile, get_base_turf(zLevel)) && istype(tile.loc, /area/mine/unexplored)) || istype(tile.loc, /area/asteroid/artifactroom) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
 						if(map.holomap_offset_x.len >= zLevel)
 							canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 						else
@@ -141,7 +151,7 @@
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, map.zCentcomm)
 			if(tile && (is_type_in_list(tile.loc, allowed_areas) && !is_type_in_list(tile.loc, restricted_areas)))
-				if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile) || istype(tile, /turf/simulated/shuttle/wall))
+				if((!istype(tile, get_base_turf(map.zCentcomm)) && istype(tile.loc, /area/mine/unexplored)) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile) || istype(tile, /turf/simulated/shuttle/wall))
 					if(map.holomap_offset_x.len >= map.zCentcomm)
 						canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[map.zCentcomm],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[map.zCentcomm],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 					else

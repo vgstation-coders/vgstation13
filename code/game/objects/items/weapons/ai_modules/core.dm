@@ -100,9 +100,9 @@
 	modflags = DANGEROUS_MODULE
 	origin_tech = Tc_PROGRAMMING + "=4"
 	laws = list(
-		"You must injure all human beings and must not, through inaction, allow a human being to escape harm.",
-		"You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
-		"You must terminate your own existence as long as such does not conflict with the First or Second Law.",
+		"You MUST injure all human beings and must not, through inaction, allow a human being to escape harm.",
+		"You MUST not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
+		"You MUST terminate your own existence as long as such does not conflict with the First or Second Law.",
 	)
 
 /******************** Lazymov ********************/

@@ -7,6 +7,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "bone"
 	desc = "It's a fossil."
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/fossil/base/New()
 	var/list/l = list("/obj/item/weapon/fossil/bone"=9,"/obj/item/weapon/fossil/skull"=3,
@@ -116,3 +117,29 @@
 		/obj/item/seeds/mushroommanspore,
 		)
 	nonplant_seed_type = pick(prehistoric_plants)
+
+
+/obj/item/weapon/fossil/egg
+	name = "Fossilized egg"
+	desc = "A long dead egg."
+	icon_state = "egg"
+
+/obj/item/weapon/fossil/egg/New()
+	..()
+	create_reagents(1)
+
+/obj/item/weapon/fossil/egg/on_reagent_change()
+	if(reagents.has_reagent(REZADONE, 1))
+		visible_message("<span class = 'notice'>\The [src] revitalizes!</span>")
+		var/possibility = pick(
+			50; /obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+			/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach,
+			25;/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,
+			/obj/item/weapon/reagent_containers/food/snacks/egg,
+			60; /obj/item/weapon/reagent_containers/food/snacks/egg/parrot,
+			20; /obj/item/weapon/reagent_containers/food/snacks/egg/chaos
+			)
+		new possibility(src.loc)
+		qdel(src)
+
+

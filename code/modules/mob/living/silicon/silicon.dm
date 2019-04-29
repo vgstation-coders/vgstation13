@@ -122,7 +122,13 @@
 	return 1
 
 /mob/living/silicon/generate_static_overlay()
-	return
+	if(!istype(static_overlays,/list))
+		static_overlays = list()
+	static_overlays.Add(list("cult"))
+
+	var/image/static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/silicon/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -223,7 +229,10 @@
 		show_station_time()
 		show_emergency_shuttle_eta()
 		show_system_integrity()
-		show_malf_ai()
+		for(var/datum/faction/F in ticker.mode.factions)
+			var/F_stat = F.get_statpanel_addition()
+			if(F_stat)
+				stat(null, "[F_stat]")
 
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()

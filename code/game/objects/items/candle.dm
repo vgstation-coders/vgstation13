@@ -41,7 +41,7 @@
 	wax--
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		src.lit = 0
 		set_light(0)
 		processing_objects.Remove(src)
@@ -72,3 +72,10 @@
 	if(lit)
 		return source_temperature
 	return 0
+
+/obj/item/candle/Crossed(var/obj/Proj)
+	if(isbeam(Proj))
+		//Can also be an obj/effect, but they both have the damage var
+		var/obj/item/projectile/beam/P = Proj
+		if(P.damage != 0)
+			light("", 1)

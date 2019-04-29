@@ -28,7 +28,7 @@
 	return 0
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
-	if(node)
+	if(node1)
 		if(on && !(stat & NOPOWER))
 			icon_state = "hon"
 		else
@@ -145,7 +145,7 @@
 	update_icon()
 
 /obj/machinery/atmospherics/unary/outlet_injector/hide(var/i) //to make the little pipe section invisible, the icon changes.
-	if(node)
+	if(node1)
 		if(on)
 			icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]on"
 		else

@@ -79,18 +79,12 @@
 			user.visible_message("<span class='notice'>[user] burns the fungi away with \the [W].</span>", \
 			"<span class='notice'>You burn the fungi away with \the [W].</span>")
 			playsound(src, 'sound/items/Welder.ogg', 10, 1)
-			for(var/obj/effect/E in src) //WHYYYY
-				if(E.name == "Wallrot") //WHYYYYYYYYY
-					qdel(E)
-			rotting = 0
+			remove_rot()
 			return
 		if(istype(W,/obj/item/weapon/soap))
 			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
 			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
-			for(var/obj/effect/E in src)
-				if(E.name == "Wallrot")
-					qdel(E)
-			rotting = 0
+			remove_rot()
 			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
 			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \
@@ -126,7 +120,7 @@
 				return
 
 		if(WALLCOVEREXPOSED)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				user.visible_message("<span class='warning'>[user] begins unsecuring \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
@@ -167,7 +161,7 @@
 
 				return
 			//Re-secure external cover, unsurprisingly exact same step as above
-			else if(isscrewdriver(W))
+			else if(W.is_screwdriver(user))
 				user.visible_message("<span class='notice'>[user] begins securing \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin securing \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)

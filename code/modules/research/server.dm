@@ -67,7 +67,8 @@
 		griefProtection() //I dont like putting this in process() but it's the best I can do without re-writing a chunk of rd servers.
 		files.known_designs = list()
 		var/changed=0
-		for(var/datum/tech/T in files.known_tech)
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
 			if(prob(1))
 				T.level = 0 // This never happens, so make it dramatic. T.level--
 				changed=1
@@ -101,7 +102,8 @@
 //Backup files to centcomm to help admins recover data after greifer attacks
 /obj/machinery/r_n_d/server/proc/griefProtection()
 	for(var/obj/machinery/r_n_d/server/centcom/C in machines)
-		for(var/datum/tech/T in files.known_tech)
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
 			C.files.AddTech2Known(T)
 		for(var/datum/design/D in files.known_designs)
 			C.files.AddDesign2Known(D)
@@ -215,10 +217,8 @@
 	else if(href_list["reset_tech"])
 		var/choice = alert("Technology Data Rest", "Are you sure you want to reset this technology to its default data? Data lost cannot be recovered.", "Continue", "Cancel")
 		if(choice == "Continue")
-			for(var/datum/tech/T in temp_server.files.known_tech)
-				if(T.id == href_list["reset_tech"])
-					T.level = 1
-					break
+			var/datum/tech/T = temp_server.files.GetKTechByID(href_list["reset_tech"])
+			T.level = 1
 		temp_server.files.RefreshResearch()
 
 	else if(href_list["reset_design"])
@@ -280,8 +280,8 @@
 
 			dat += {"[temp_server.name] Data Management<BR><BR>
 				Known Technologies<BR>"}
-			for(var/datum/tech/T in temp_server.files.known_tech)
-
+			for(var/ID in temp_server.files.known_tech)
+				var/datum/tech/T = temp_server.files.known_tech[ID]
 				dat += {"* [T.name]
 					<A href='?src=\ref[src];reset_tech=[T.id]'>(Reset)</A><BR>"} //FYI, these are all strings
 			dat += "Known Designs<BR>"
@@ -303,7 +303,7 @@
 	return
 
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
-	if(isscrewdriver(D))
+	if(D.is_screwdriver(user))
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
@@ -332,7 +332,7 @@
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
+		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 	src.updateUsrDialog()
 	return
 

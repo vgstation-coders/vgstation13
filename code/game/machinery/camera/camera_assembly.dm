@@ -5,7 +5,7 @@
 	icon_state = "cameracase"
 	w_class = W_CLASS_SMALL
 	anchored = 0
-
+	flags = FPRINT
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 300)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
@@ -81,10 +81,10 @@
 
 		if(3)
 			// State 3
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
-				var/input = strip_html(input(usr, "Which networks would you like to connect this camera to? seperate networks with a comma. No Spaces!\nFor example: SS13,Security,Secret ", "Set Network", CAMERANET_SS13))
+				var/input = stripped_input(usr, "Which networks would you like to connect this camera to? seperate networks with a comma. No Spaces!\nFor example: SS13,Security,Secret ", "Set Network", CAMERANET_SS13)
 				if(!input)
 					to_chat(usr, "No input found, please hang up and try your call again.")
 					return

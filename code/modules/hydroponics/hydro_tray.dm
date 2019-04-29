@@ -179,7 +179,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -249,12 +249,16 @@
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && istype(O, /obj/item/weapon/pickaxe/shovel))
+	else if(seed && isshovel(O))
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
 			return
+		if(C.being_potted)
+			to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
+			return
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		C.being_potted = TRUE
 		if(do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
@@ -289,7 +293,8 @@
 
 			check_level_sanity()
 			update_icon()
-
+		else
+			C.being_potted = FALSE
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
@@ -316,12 +321,13 @@
 
 		// Bookkeeping.
 		check_level_sanity()
+		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
 
 		return
 
-	else if (istype(O, /obj/item/weapon/minihoe))
+	else if (ishoe(O))
 
 		if(weedlevel > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
@@ -380,6 +386,11 @@
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
+
+	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
+		to_chat(user, "You use \the [O] as compost for \the [src].")
+		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+		qdel(O)
 
 	else
 		return ..()

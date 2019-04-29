@@ -22,3 +22,8 @@ cargo build --release --target $target
 Where `$target` is `i686-pc-windows-msvc` on Windows or `i686-unknown-linux-gnu` on Linux.
 
 The binary will then be placed in `target/$target/release/`, which you can copy next to the root project. On Linux it's incorrectly named as `liblibvg.so`, so make sure to rename it to `libvg.so` when you do!
+
+# Troubleshooting
+
+#### I get this error when compiling: `/usr/bin/ld: cannot find crti.o: No such file or directory`
+You likely only have the 64bit version of gcc installed.  Install `gcc-multilib` so you can build for other architectures.

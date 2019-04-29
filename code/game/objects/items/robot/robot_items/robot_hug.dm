@@ -1,7 +1,7 @@
-#define HUGS 0
-#define BEAR 1
-#define SHOCK 2
-#define CRUSH 3
+#define HUGMODE_HUGS 0
+#define HUGMODE_BEAR 1
+#define HUGMODE_SHOCK 2
+#define HUGMODE_CRUSH 3
 
 //Hugborg's hugging module
 /obj/item/borg/cyborghug
@@ -9,7 +9,7 @@
 	icon_state = "hugmodule"
 	icon = 'icons/obj/borg_items.dmi'
 	desc = "For when a someone really needs a hug."
-	var/mode = HUGS
+	var/mode = HUGMODE_HUGS
 	var/crush_cooldown = 0
 	var/shock_cooldown = 0
 
@@ -17,29 +17,29 @@
 	if(isrobot(user))
 		var/mob/living/silicon/robot/P = user
 		if(P.emagged)
-			if(mode < CRUSH)
+			if(mode < HUGMODE_CRUSH)
 				mode++
 			else
-				mode = HUGS
-		else if(mode < BEAR)
+				mode = HUGMODE_HUGS
+		else if(mode < HUGMODE_BEAR)
 			mode++
 		else
-			mode = HUGS
+			mode = HUGMODE_HUGS
 	switch(mode)
-		if(HUGS)
+		if(HUGMODE_HUGS)
 			to_chat(user,"Power reset. Hugs!")
-		if(BEAR)
+		if(HUGMODE_BEAR)
 			to_chat(user,"Power increased!")
-		if(SHOCK)
+		if(HUGMODE_SHOCK)
 			to_chat(user,"BZZT. Electrifying arms...")
-		if(CRUSH)
+		if(HUGMODE_CRUSH)
 			to_chat(user, "ERROR: ARM ACTUATORS OVERLOADED.")
 
 /obj/item/borg/cyborghug/attack(mob/living/M, mob/living/silicon/robot/user)
 	if(M == user)
 		return
 	switch(mode)
-		if(HUGS)
+		if(HUGMODE_HUGS)
 			if(M.health >= 0)
 				if(user.zone_sel.selecting == "head")
 					user.visible_message("<span class='notice'>[user] playfully boops [M] on the head!</span>", \
@@ -60,7 +60,7 @@
 					user.visible_message("<span class='notice'>[user] pets [M]!</span>", \
 							"<span class='notice'>You pet [M]!</span>")
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		if(BEAR)
+		if(HUGMODE_BEAR)
 			if(M.health >= 0)
 				if(ishuman(M))
 					if(M.lying)
@@ -79,7 +79,7 @@
 					user.visible_message("<span class='warning'>[user] bops [M] on the head!</span>", \
 							"<span class='warning'>You bop [M] on the head!</span>")
 				playsound(loc, 'sound/weapons/tap.ogg', 50, 1, -1)
-		if(SHOCK)
+		if(HUGMODE_SHOCK)
 			if(!shock_cooldown)
 				if(ishuman(M)||ismonkey(M))
 					M.electrocute_act(15, user, 1)
@@ -101,7 +101,7 @@
 				shock_cooldown = TRUE
 				spawn(2 SECONDS)
 				shock_cooldown = FALSE
-		if(CRUSH)
+		if(HUGMODE_CRUSH)
 			if(!crush_cooldown)
 				if(ishuman(M))
 					user.visible_message("<span class='danger'>[user] crushes [M] in their grip!</span>", \

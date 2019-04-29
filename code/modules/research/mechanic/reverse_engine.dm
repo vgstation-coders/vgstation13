@@ -120,7 +120,8 @@
 		//message_admins("We have a techlist and a linked_console")
 		for(var/checktech in techlist)
 			//message_admins("Looking at [checktech] with value of [techlist[checktech]]")
-			for(var/datum/tech/pointed_tech in tech_list) //if we find that technology
+			for(var/ID in tech_list) //if we find that technology
+				var/datum/tech/pointed_tech = tech_list[ID]
 				if(pointed_tech.id == checktech)
 					if(techlist[checktech] > pointed_tech.level) //if the machine board's research level is higher than the one on the console
 						//message_admins("Found a difference of [techlist[checktech] - pointed_tech.level]")

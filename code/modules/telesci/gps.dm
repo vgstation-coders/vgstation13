@@ -17,11 +17,9 @@ var/list/SPS_list = list()
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
 	var/transmitting = FALSE
+	var/list/gps_list // Set in New to be either global.GPS_list or global.SPS_list
 
-/obj/item/device/gps/proc/gen_id()
-	return GPS_list.len
-
-/obj/item/device/gps/proc/get_list()
+/obj/item/device/gps/proc/get_gps_list()
 	return GPS_list
 
 /obj/item/device/gps/proc/update_name()
@@ -29,42 +27,34 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/New()
 	..()
-	gpstag = "[base_tag][gen_id()]"
+	gps_list = get_gps_list()
+	gpstag = "[base_tag][gps_list.len]"
+	gps_list += src
 	update_name()
-	handle_list()
-
-/obj/item/device/gps/proc/handle_list()
-	GPS_list.Add(src)
+	update_icon()
 
 /obj/item/device/gps/Destroy()
-	if(istype(src,/obj/item/device/gps/secure))
-		SPS_list.Remove(src)
-	else
-		GPS_list.Remove(src)
+	gps_list -= src
 	..()
+
+/obj/item/device/gps/update_icon()
+	overlays.Cut()
+	if(emped)
+		overlays += image(icon, "emp")
+		return
+	if(transmitting)
+		overlays += image(icon, "working")
 
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
 	transmitting = FALSE
-	overlays -= image(icon = icon, icon_state = "working")
-	overlays += image(icon = icon, icon_state = "emp")
+	update_icon()
 	spawn(30 SECONDS)
-		overlays -= image(icon = icon, icon_state = "emp")
 		emped = FALSE
+		update_icon()
 
 /obj/item/device/gps/attack_self(mob/user)
-	if (emped)
-		return
-	else if (!transmitting)
-		switch(alert(user,"Would you like to turn on the GPS?",,"Yes","No"))
-			if ("Yes")
-				if(!emped && !transmitting && Adjacent(user) && !user.incapacitated())
-					transmitting = TRUE
-					to_chat(user, "<span class = 'notice'>You activate \the [src].</span>")
-					overlays += image(icon = icon, icon_state = "working")
-					ui_interact(user)
-	else
-		ui_interact(user)
+	ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
 	if(Adjacent(user) || isobserver(user))
@@ -89,19 +79,19 @@ var/list/SPS_list = list()
 	var/data[0]
 	if(emped)
 		data["emped"] = TRUE
-	else if (transmitting)
-		data["gpstag"] = gpstag
-		data["autorefresh"] = autorefreshing
-		data["location_text"] = get_location_name()
-		var/list/devices = list()
-		for(var/D in get_list())
-			var/obj/item/device/gps/G = D
-			if(G.transmitting && src != G)
-				var/device_data[0]
-				device_data["tag"] = G.gpstag
-				device_data["location_text"] = G.get_location_name()
-				devices += list(device_data)
-		data["devices"] = devices
+	data["transmitting"] = transmitting
+	data["gpstag"] = gpstag
+	data["autorefresh"] = autorefreshing
+	data["location_text"] = get_location_name()
+	var/list/devices = list()
+	for(var/D in gps_list)
+		var/obj/item/device/gps/G = D
+		if(G.transmitting && src != G)
+			var/device_data[0]
+			device_data["tag"] = G.gpstag
+			device_data["location_text"] = G.get_location_name()
+			devices += list(device_data)
+	data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -111,6 +101,12 @@ var/list/SPS_list = list()
 	ui.set_auto_update(autorefreshing)
 
 /obj/item/device/gps/Topic(href, href_list)
+	if(href_list["turn_on"])
+		if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
+			return FALSE
+		transmitting = TRUE
+		update_icon()
+		return TRUE
 	if(href_list["tag"])
 		if(isobserver(usr))
 			to_chat(usr, "No way.")
@@ -161,12 +157,14 @@ var/list/SPS_list = list()
 	icon_state = "gps-b"
 	base_tag = "BORG"
 	builtin = TRUE
+	transmitting = TRUE
 
 /obj/item/device/gps/pai
 	base_name = "pAI positioning system"
 	icon_state = "gps-b"
 	base_tag = "PAI"
 	builtin = TRUE
+	transmitting = TRUE
 
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
@@ -174,13 +172,7 @@ var/list/SPS_list = list()
 	icon_state = "sps"
 	base_tag = "SEC"
 
-/obj/item/device/gps/secure/handle_list()
-	SPS_list.Add(src)
-
-/obj/item/device/gps/secure/gen_id()
-	return SPS_list.len
-
-/obj/item/device/gps/secure/get_list()
+/obj/item/device/gps/secure/get_gps_list()
 	return SPS_list
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
@@ -188,19 +180,19 @@ var/list/SPS_list = list()
 		return
 
 	var/channel_index = 0
-	var/sps_index = SPS_list.Find(src)
-	for(var/E in SPS_list)
+	var/sps_index = gps_list.Find(src)
+	for(var/E in gps_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
 		S.announce(wearer, src, "has detected the death of their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index, dead = TRUE)
 		channel_index++
 
-/obj/item/device/gps/secure/stripped(mob/wearer)
+/obj/item/device/gps/secure/stripped(mob/wearer, mob/stripper)
 	if(!transmitting)
 		return
 	. = ..()
-	var/sps_index = SPS_list.Find(src)
+	var/sps_index = gps_list.Find(src)
 	var/channel_index = 0
-	for(var/E in SPS_list)
+	for(var/E in gps_list)
 		var/obj/item/device/gps/secure/S = E
 		S.announce(wearer, src, "has been stripped from their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index)
 		channel_index++
@@ -242,7 +234,7 @@ var/const/DEATHSOUND_CHANNEL = 300
 		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(SPS_list.Find(src),sound_channel,src)
+			playnum(gps_list.Find(src),sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)

@@ -187,7 +187,7 @@
 		if(T.density)
 			to_chat(user, "<span class='warning'>The wall is blocked!</span>")
 			return
-		if(isscrewdriver(W))
+		if(W.is_screwdriver(user))
 			user.visible_message("[user] tightens some bolts on the wall.", "You tighten the bolts on the wall.")
 			if(!mineral || mineral == "metal")
 				T.ChangeTurf(/turf/simulated/wall)
@@ -252,11 +252,12 @@
 		/obj/structure/falsewall,
 		/obj/structure/falserwall,
 	)
+	return smoothables
 
 /obj/structure/falserwall/New()
+	..()
 	relativewall()
 	relativewall_neighbours()
-	..()
 
 
 /obj/structure/falserwall/attack_ai(mob/user as mob)
@@ -300,7 +301,7 @@
 		to_chat(user, "<span class='warning'>You must wait until the door has stopped moving.</span>")
 		return
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		var/turf/T = get_turf(src)
 		user.visible_message("[user] tightens some bolts on the r wall.", "You tighten the bolts on the wall.")
 		T.ChangeTurf(/turf/simulated/wall/r_wall) //Why not make rwall?

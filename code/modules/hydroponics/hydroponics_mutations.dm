@@ -226,7 +226,7 @@
 			hardcap_values = list(5,  3.5, 2,  1,   0.75, 0)
 			deviation = severity * (rand(8, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.maturation)
 			//Deviation per 10u Mutagen before cap: 0.8-1.2
-			seed.maturation = Clamp(seed.maturation - deviation, 1, 30)
+			seed.maturation = Clamp(seed.maturation - deviation, 1.1, 30)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_heat&pressure_tolerance")
@@ -293,12 +293,12 @@
 			generic_mutation_message("shakes!")
 
 		if("breathe_aliengas") //This is honestly awful and pretty unfun. It just guarantees that the user will have to apply a new enviro gene. But for now I'm leaving it in
-			var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+			var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.consume_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 
 		if("exude_dangerousgas")
-			var/gas = pick("nitrogen","plasma","carbon_dioxide")
+			var/gas = pick(GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.exude_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 

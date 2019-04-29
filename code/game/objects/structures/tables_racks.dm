@@ -33,6 +33,9 @@
 /obj/structure/table/cultify()
 	new /obj/structure/table/woodentable(loc) //See New() for qdel
 
+/obj/structure/table/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/table/reinforced/clockwork, CLOCKWORK_GENERIC_GLOW)
+
 /obj/structure/table/New()
 	..()
 	for(var/obj/structure/table/T in src.loc)
@@ -363,6 +366,7 @@
 		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
+		M.Stun(1)
 		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 		else
@@ -384,6 +388,7 @@
 					G.affecting.forceMove(loc)
 					if (prob(15))
 						M.Knockdown(5)
+						M.Stun(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -393,6 +398,7 @@
 			else
 				G.affecting.forceMove(loc)
 				G.affecting.Knockdown(5)
+				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 			return
@@ -564,7 +570,8 @@
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinftable"
 	parts = /obj/item/weapon/table_parts/reinforced
-	var/status = 2
+	var/status = 2 //DARE YOU ENTER MY MAGICAL NUMBER REALM?
+	var/can_optable = TRUE
 
 /obj/structure/table/reinforced/can_disassemble()
 	return status != 2
@@ -576,7 +583,7 @@
 		return ..()
 
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
-	if(istype(W,/obj/item/weapon/stock_parts/scanning_module))
+	if(istype(W,/obj/item/weapon/stock_parts/scanning_module) && can_optable)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
@@ -594,18 +601,19 @@
 
 	else if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
-		if(WT.do_weld(user, src, 50, 0))
-			if(src.status == 2)
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>Table weakened.</span>")
-				src.status = 1
-			else
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>Table strengthened.</span>")
-				src.status = 2
+		if(WT.isOn())
+			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
+			if(WT.do_weld(user, src, 50, 0))
+				if(src.status == 2)
+					if(gcDestroyed)
+						return
+					to_chat(user, "<span class='notice'>Table weakened.</span>")
+					src.status = 1
+				else
+					if(gcDestroyed)
+						return
+					to_chat(user, "<span class='notice'>Table strengthened.</span>")
+					src.status = 2
 			return
 	return ..()
 
@@ -630,6 +638,7 @@
 					user.do_attack_animation(src, W)
 					if (prob(15))
 						M.Knockdown(5)
+						M.Stun(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -643,6 +652,7 @@
 			else
 				G.affecting.forceMove(loc)
 				G.affecting.Knockdown(5)
+				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 
@@ -659,9 +669,22 @@
 		..()
 
 
+/*
+ * Brass
+ */
 
+/obj/structure/table/reinforced/clockwork
+	name = "brass table"
+	desc = "A solid, slightly beveled brass table."
+	icon_state = "clock_table"
+	parts = /obj/item/weapon/table_parts/clockwork
+	can_optable = FALSE
 
+/obj/structure/table/reinforced/clockwork/cultify()
+	return
 
+/obj/structure/table/reinforced/clockwork/clockworkify()
+	return
 
 /*
  * Racks

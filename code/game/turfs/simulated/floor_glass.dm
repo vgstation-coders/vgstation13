@@ -9,6 +9,7 @@
 	plane = SPACE_BACKGROUND_PLANE
 	dynamic_lighting = 0
 	luminosity = 1
+	intact = 0 // make pipes appear above space
 
 	var/health=40 // same as rwindow.
 	var/sheetamount = 1 //Number of sheets needed to build this floor (determines how much shit is spawned via Destroy())
@@ -279,14 +280,14 @@
 		return // Do nothing. (preattack based)
 	switch(construction_state)
 		if(2) // intact
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
 				user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 				"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(1)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
 				user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 				"<span class='notice'>You fasten \the [src] to its frame.</span>")
@@ -355,6 +356,7 @@
 				visible_message("<span class='danger'>\The [user] slams \the [M] into \the [src]!</span>", \
 				"<span class='danger'>You slam \the [M] into \the [src]!</span>")
 			if(GRAB_NECK to GRAB_KILL)
+				M.Stun(3)
 				M.Knockdown(3) //Almost certainly shoved head or face-first, you're going to need a bit for the lights to come back on
 				M.apply_damage(20) //That got to fucking hurt, you were basically flung into a window, most likely a shattered one at that
 				health -= 20 //Window won't like that

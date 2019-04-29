@@ -175,6 +175,7 @@
 		"Taser" = 'sound/weapons/Taser.ogg',
 		"Male scream" = "malescream",
 		"Female scream" = "femalescream",
+		"Vox shriek" = 'sound/misc/shriek1.ogg',
 		"Male cough" = "malecough",
 		"Female cough" = "femalecough",
 		"Sad trombone" = 'sound/misc/sadtrombone.ogg',
@@ -193,8 +194,8 @@
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
 
-/obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/user)
-	if(user.mind && user.mind.assigned_role != "Clown")
+/obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
+	if(user.mind && !clumsy_check(user))
 		to_chat(user, "<span class='danger'>These shoes are too powerful for you to handle!</span>")
 		if(prob(25))
 			if(ishuman(user))
@@ -234,7 +235,7 @@
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 
-		if(H.mind && H.mind.assigned_role != "Clown")
+		if(H.mind && !clumsy_check(H))
 			if( ( H.mind.assigned_role == "Mime" ) )
 				H.Slip(3, 2, 1)
 
@@ -296,7 +297,7 @@
 	item_state = "nr_boots"
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/shoes/cult
+/obj/item/clothing/shoes/cult_legacy
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
 	icon_state = "cult"
@@ -306,7 +307,7 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 
-/obj/item/clothing/shoes/cult/cultify()
+/obj/item/clothing/shoes/cult_legacy/cultify()
 	return
 
 /obj/item/clothing/shoes/cyborg
@@ -470,3 +471,10 @@
 	icon_state = "lichking_boots"
 	item_state = "lichking_boots"
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/jackboots/inquisitor
+	name = "noble boots"
+	desc = "A pair of high quality black leather boots."
+	icon_state = "noble-boots"
+	item_state = "noble-boots"
+	wizard_garb = TRUE

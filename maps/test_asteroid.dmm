@@ -1396,7 +1396,7 @@
 "AR" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor{icon_state = "bar"},/area/mine/living_quarters)
 "AS" = (/obj/machinery/camera{c_tag = "Crew Area"; dir = 1; network = list("MINE")},/turf/simulated/floor{icon_state = "bar"},/area/mine/living_quarters)
 "AT" = (/obj/machinery/light,/obj/machinery/computer/security/telescreen/entertainment{pixel_x = 0; pixel_y = -32},/turf/simulated/floor{icon_state = "bar"},/area/mine/living_quarters)
-"AU" = (/obj/item/weapon/cigbutt,/turf/simulated/floor{icon_state = "bar"},/area/mine/living_quarters)
+"AU" = (/obj/item/trash/cigbutt,/turf/simulated/floor{icon_state = "bar"},/area/mine/living_quarters)
 "AV" = (/obj/machinery/alarm{pixel_y = 24},/turf/simulated/floor,/area/mine/living_quarters)
 "AW" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/mine/living_quarters)
 "AX" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/turf/simulated/floor,/area/mine/living_quarters)

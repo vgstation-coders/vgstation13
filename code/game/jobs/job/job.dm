@@ -17,6 +17,7 @@
 
 	//How many players can be this job
 	var/total_positions = 0
+	var/xtra_positions = 0
 
 	//How many players can spawn in as this job
 	var/spawn_positions = 0
@@ -60,7 +61,26 @@
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 
+	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
+
+/datum/job/proc/get_total_positions()
+	return Clamp(total_positions + xtra_positions, 0, 99)
+
+/datum/job/proc/set_total_positions(var/nu)
+	total_positions = nu
+
+/datum/job/proc/bump_position_limit()
+	xtra_positions++
+
+/datum/job/proc/reject_new_slots()
+	return FALSE
+
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
+	return 1
+
+/datum/job/proc/priority_reward_equip(var/mob/living/carbon/human/H)
+	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+	H.equip_or_collect(new /obj/item/weapon/storage/box/priority_care(H.back), slot_in_backpack)
 	return 1
 
 /datum/job/proc/get_access()

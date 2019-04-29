@@ -100,7 +100,7 @@
 
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
-		if(isscrewdriver(I))
+		if(I.is_screwdriver(user))
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
@@ -450,7 +450,8 @@
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(75))
+		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
+		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("\the [I] lands in \the [src].", 1)
@@ -558,7 +559,7 @@
 	for(var/mob/living/carbon/human/H in src)
 		if(H.is_fat() || H.is_bulky())
 			return TRUE
-	
+
 // Dislodge players whenever they're no longer fat or the holder is active for some reason.
 /obj/structure/disposalholder/proc/until_skinny()
 	spawn while(1) // Checking this is not a priority. Check whenever the server has a moment.
@@ -1594,7 +1595,7 @@
 	if(!I || !user || !deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(mode==0)
 			mode=1
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)

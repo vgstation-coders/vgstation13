@@ -10,10 +10,11 @@
 	health = 30
 	maxHealth = 30
 	gender = MALE
-	speak = list("YAP", "Woof!", "Bark!", "AUUUUUU")
+	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
 	speak_emote = list("barks", "woofs")
-	emote_hear = list("barks", "woofs", "yaps","pants")
-	emote_see = list("shakes its head", "shivers")
+	emote_hear = list("barks", "woofs", "yaps")
+	emote_see = list("shakes its head", "shivers", "pants")
+	emote_sound = list("sound/voice/corgibark.ogg")
 	speak_chance = 1
 	turns_per_move = 10
 
@@ -238,7 +239,7 @@
 	//Various hats and items (worn on his head) change Ian's behaviour. His attributes are reset when a hat is removed.
 	switch(item_to_add.type)
 		if( /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/head/that, /obj/item/clothing/head/collectable/paper,
-				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/weapon/paper )
+				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/weapon/p_folded/hat )
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/helmet/tactical/sec/preattached)
@@ -435,10 +436,11 @@
 			if(inventory_head)
 				name = real_name
 				desc = initial(desc)
-				speak = list("YAP", "Woof!", "Bark!", "AUUUUUU")
+				speak = list("YAP!", "Woof!", "Bark!", "Arf!")
 				speak_emote = list("barks", "woofs")
-				emote_hear = list("barks", "woofs", "yaps","pants")
-				emote_see = list("shakes its head", "shivers")
+				emote_hear = list("barks", "woofs", "yaps")
+				emote_see = list("shakes its head", "shivers", "pants")
+				emote_sound = list("sound/voice/corgibark.ogg")
 				min_oxy = initial(min_oxy)
 				minbodytemp = initial(minbodytemp)
 				maxbodytemp = initial(maxbodytemp)
@@ -472,6 +474,7 @@
 	response_disarm = "bops"
 	response_harm   = "kicks"
 	spin_emotes = list("dances around","chases his tail")
+	is_pet = TRUE
 
 /mob/living/simple_animal/corgi/Ian/santa
 	name = "Santa's Corgi Helper"
@@ -608,6 +611,7 @@
 /mob/living/simple_animal/corgi/attack_hand(mob/living/carbon/human/M)
 	. = ..()
 	react_to_touch(M)
+	M.delayNextAttack(2 SECONDS)
 
 /mob/living/simple_animal/corgi/proc/react_to_touch(mob/M)
 	if(M && !isUnconscious())
@@ -617,7 +621,9 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, "yaps happily.")
+				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 			if(I_HURT)
+				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
 
 
@@ -631,6 +637,7 @@
 	icon_living = "doby"
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around","chases her nub of a tail")
+	is_pet = TRUE
 
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal

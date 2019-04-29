@@ -1,3 +1,5 @@
+#define INVERT_ANIM_TIME 50
+
 /spell/targeted/genetic/invert_eyes
 	name = "Invert eyesight"
 	desc = "Inverts the colour spectrum you see, letting you see clearly in the dark, but not in the light."
@@ -26,5 +28,6 @@
 	else
 		colourmatrix = default_colour_matrix
 	for(var/mob/living/carbon/human/M in targets)
-		M.update_colour(50,0,colourmatrix)
+		M.update_colour(INVERT_ANIM_TIME, colourmatrix)
 	toggle = !toggle
+#undef INVERT_ANIM_TIME

@@ -141,7 +141,7 @@
 
 /obj/item/weapon/gun/projectile/sec
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds."
 	icon = 'icons/obj/biggun.dmi'
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
@@ -166,6 +166,9 @@
 	..()
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
+/obj/item/weapon/gun/projectile/sec/lockbox
+	spawn_mag = FALSE
+
 /obj/item/weapon/gun/projectile/luger
 	name = "\improper Luger P08"
 	desc = "The wrath of the SS"
@@ -185,6 +188,10 @@
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
 
+/obj/item/weapon/gun/projectile/luger/small
+	desc = "The wrath of the SS. Now in extra-concealed size for civilian uses!"
+	w_class = W_CLASS_SMALL
+
 /obj/item/weapon/gun/projectile/beretta
 	name = "\improper Beretta 92FS"
 	desc = "The classic wonder nine and favorite of the undercover cop. Kong whiskey not included."
@@ -202,3 +209,29 @@
 /obj/item/weapon/gun/projectile/beretta/update_icon()
 	..()
 	icon_state = "beretta[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag
+	name = "\improper Automag VI"
+	desc = "It also doubles as a fingerprint removal tool."
+	icon_state = "automag"
+	max_shells = 7
+	caliber = list(POINT357 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_SYNDICATE + "=3"
+	ammo_type = "/obj/item/ammo_casing/a357"
+	mag_type = "/obj/item/ammo_storage/magazine/a357"
+	load_method = 2
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/automag/update_icon()
+	..()
+	icon_state = "automag[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag/prestige
+	name = "\improper Prestige Automag VI"
+	desc = "It also doubles as a fingerprint removal tool. This one is made to look more like the original AutomagIV from the 20th century."
+	icon_state = "automag-prestige"
+
+/obj/item/weapon/gun/projectile/automag/prestige/update_icon()
+	..()
+	icon_state = "automag-prestige[chambered ? "" : "-e"]"

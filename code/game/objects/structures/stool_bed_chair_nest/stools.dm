@@ -56,6 +56,7 @@
 
 		var/mob/living/T = M
 		T.Knockdown(10)
+		T.Stun(10)
 		T.apply_damage(20)
 		return
 

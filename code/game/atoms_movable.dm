@@ -149,8 +149,6 @@
 		glide_size = 0
 	else
 		glide_size = max(min, glide_size_override)
-	for(var/atom/movable/AM in contents)
-		AM.set_glide_size(glide_size, min, max)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -290,6 +288,12 @@
 	category = get_lock_cat(category)
 	if (!category) // String category which didn't exist.
 		return 0
+
+	if (istype(AM, /mob/living)) //checks if the atom is a mob, and removes any grabs from the mob to prevent !!FUN!!
+		var/mob/living/M = AM
+		for(var/obj/item/weapon/grab/G in M.grabbed_by)
+			if (istype(G, /obj/item/weapon/grab))
+				returnToPool(G)
 
 	AM.locked_to = src
 
@@ -451,21 +455,25 @@
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
+
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
 	else if(client && hud_used)
 		var/client/C = client
 		C.update_special_views()
 
 /atom/movable/proc/forceEnter(atom/destination)
+	var/atom/movable/old_loc = loc
 	if(destination)
-		if(loc)
-			loc.Exited(src)
 		loc = destination
+		if(old_loc)
+			old_loc.Exited(src)
 		loc.Entered(src)
 		if(isturf(destination))
 			var/area/A = get_area(destination)
@@ -478,6 +486,11 @@
 		return 1
 	return 0
 
+//Called below in hit_check to see if it can be hit
+//Return TRUE if not hit.
+/atom/proc/PreImpact(atom/movable/A, speed)
+	return TRUE
+
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
@@ -486,24 +499,14 @@
 			if(A == src)
 				continue
 
-			if(isliving(A))
-				var/mob/living/L = A
-				if(L.lying)
-					continue
-				src.throw_impact(L, speed, user)
-
-				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
-					src.throwing = 0
-					. = 0
-
-			else if(isobj(A))
-				var/obj/O = A
-				if(O.density && !O.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(O, speed, user)
-					src.throwing = 0
+			if(!A.PreImpact(src,speed))
+				throw_impact(A,speed,user)
+				if(throwing==1)
+					throwing = 0
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+	set waitfor = FALSE
 	if(!target || !src)
 		return 0
 	if(override)
@@ -526,6 +529,13 @@
 		var/obj/mecha/M = src
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
+
+	var/afterimage = 0
+	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
+		var/mob/living/simple_animal/construct/armoured/perfect/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+		afterimage = 1
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -565,6 +575,8 @@
 			if(kinetic_acceleration>kinetic_sum)
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -604,6 +616,8 @@
 			if(kinetic_acceleration>0)
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -707,7 +721,7 @@
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
-	for(var/turf/turf in oview(1,src))
+	for(var/turf/turf in orange(1,src))
 		if(!turf.has_gravity(src))
 			continue
 
@@ -1002,3 +1016,6 @@
 	if(Lag > 0)
 		set_glide_size(DELAY2GLIDESIZE(Lag))
 	walk_to(src,Trg,Min,Lag,Speed)
+
+/atom/movable/proc/can_be_pushed(mob/user)
+	return 1

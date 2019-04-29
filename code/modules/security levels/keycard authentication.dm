@@ -80,6 +80,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(screen == 1)
 
 		dat += {"Select an event to trigger:<ul>
+			<li><A href='?src=\ref[src];triggerevent=Rainbow alert'>Rainbow alert</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
@@ -170,6 +171,9 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 
 /obj/machinery/keycard_auth/proc/trigger_event()
 	switch(event)
+		if("Rainbow alert")
+			set_security_level(SEC_LEVEL_RAINBOW)
+			feedback_inc("alert_keycard_auth_rainbow",1)
 		if("Red alert")
 			set_security_level(SEC_LEVEL_RED)
 			feedback_inc("alert_keycard_auth_red",1)

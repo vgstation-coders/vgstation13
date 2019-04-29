@@ -14,7 +14,7 @@
 
 /obj/item/weapon/banhammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
@@ -31,7 +31,7 @@
 
 /obj/item/weapon/sord/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -61,10 +61,10 @@
 
 /obj/item/weapon/claymore/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
-	new /obj/item/weapon/melee/cultblade(loc)
+	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
 
 /obj/item/weapon/katana
@@ -86,24 +86,30 @@
 
 /obj/item/weapon/katana/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
-		return 1
+	return 1
+
+//Special weeb katana in ninja.dm
 
 /obj/item/weapon/katana/magic
-	name = "enchanted sword"
+	name = "moonlight-enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
-	icon_state = "cultblade"
-	item_state = "cultblade"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "enchanted"
+	item_state = "enchanted"
+	w_class = W_CLASS_GIANT//don't want it stored anywhere"
 
 /obj/item/weapon/katana/magic/dropped(mob/user)
 	..()
 	qdel(src)
 
-/obj/item/weapon/katana/magic/equipped(mob/living/carbon/human/H, slot)
-	if(slot)
-		qdel(src)
+/obj/item/weapon/katana/magic/Destroy()
+	var/turf/T = get_turf(src)
+	if (T)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "empdisable")
+	..()
 
 /obj/item/weapon/harpoon
 	name = "harpoon"
@@ -209,6 +215,13 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	icon_state = "tacknife"
 	item_state = "knife"
 	force = 10
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
+	slowdown = 0.999
+
+/obj/item/weapon/kitchen/utensil/knife/tactical/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		slowdown = 0.8
 
 /obj/item/weapon/kitchen/utensil/knife/skinning
 	name = "skinning knife"
@@ -244,7 +257,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
 	user.delayNextAttack(50) //five times the regular attack delay
@@ -466,3 +479,12 @@ obj/item/weapon/banhammer/admin
 //		base_overlay.appearance = appearance
 //		base_overlay.plane = FLOAT_PLANE
 //		overlays += base_overlay
+
+
+/obj/item/weapon/hammer
+	name = "smithing hammer"
+	desc = "for those with a predeliction for applying concussive maintenance"
+	icon_state = "hammer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	force = 8
+	hitsound = 'sound/weapons/toolbox.ogg'

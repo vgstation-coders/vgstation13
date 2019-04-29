@@ -211,6 +211,9 @@
 /mob/living/silicon/pai/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	return //Pais do not do this
 
+/mob/living/silicon/pai/pointToMessage(var/pointer, var/pointed_at)
+	return "<b>\The [pointer]</b> points its laser sight at <b>\the [pointed_at]</b>."
+
 /mob/living/silicon/pai/proc/switchCamera(var/obj/machinery/camera/C)
 	usr:cameraFollow = null
 	if (!C)
@@ -328,12 +331,16 @@
 		var/obj/O = card.loc
 		if(O.integratedpai == card)
 			O.pAImove(src, dir)
+	if (holomap_device)
+		holomap_device.update_holomap()
 
 /atom/proc/attack_pai(mob/user as mob)
 	return
 
 /mob/living/silicon/pai/teleport_to(var/atom/A)
 	card.forceMove(get_turf(A))
+	if (holomap_device)
+		holomap_device.update_holomap()
 
 /mob/living/silicon/pai/hasHUD(var/hud_kind)
 	switch(hud_kind)

@@ -45,7 +45,7 @@
 /obj/item/weapon/shard/plasma
 	name = "plasma shard"
 	desc = "A shard of plasma glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."
-	force = 8.0
+	force = 9.0
 	throwforce = 15.0
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
@@ -75,7 +75,7 @@
 /obj/item/weapon/shard/suicide_act(mob/user)
 		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the shard of glass! It looks like \he's trying to commit suicide.</span>", \
 							"<span class='danger'>[user] is slitting \his throat with the shard of glass! It looks like \he's trying to commit suicide.</span>"))
-		return (BRUTELOSS)
+		return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shard/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -125,6 +125,7 @@
 
 						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
+							H.Stun(3)
 						if(foot.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()

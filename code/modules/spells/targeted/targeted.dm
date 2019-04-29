@@ -24,6 +24,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/amt_dam_brute = 0
 	var/amt_dam_oxy = 0
 	var/amt_dam_tox = 0
+	var/amt_dam_brain = 0
 
 	var/amt_eye_blind = 0
 	var/amt_eye_blurry = 0
@@ -157,6 +158,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.adjustFireLoss(amt_dam_fire)
 	target.adjustToxLoss(amt_dam_tox)
 	target.adjustOxyLoss(amt_dam_oxy)
+	target.adjustBrainLoss(amt_dam_brain)
 	//disabling
 	target.Knockdown(amt_knockdown)
 	target.Paralyse(amt_paralysis)

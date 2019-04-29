@@ -100,6 +100,9 @@
 
 	machine_flags = WIREJACK
 
+/obj/machinery/power/apc/get_cell()
+	return cell
+
 /obj/machinery/power/apc/supports_holomap()
 	return TRUE
 
@@ -383,14 +386,14 @@
 /obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
 
 	src.add_fingerprint(user)
-	
+
 	if (iswiretool(W) && wiresexposed)
 		wires.Interact(user)
 		return
-		
+
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
-		
+
 	if (iscrowbar(W) && opened)
 		if (has_electronics==1)
 			if (terminal)
@@ -419,6 +422,8 @@
 		if(coverlocked && !(stat & MAINT))
 			to_chat(user, "<span class='warning'>The cover is locked and cannot be opened.</span>")
 			return
+		else if (wiresexposed)
+			to_chat(user, "<span class='warning'>Unexpose the wires first!</span>")
 		else
 			opened = 1
 			update_icon()
@@ -445,7 +450,7 @@
 					"You insert the power cell.")
 				chargecount = 0
 				update_icon()
-	else if	(isscrewdriver(W))	// haxing
+	else if	(W.is_screwdriver(user))	// haxing
 		if(opened)
 			if (cell)
 				to_chat(user, "<span class='warning'>Close the APC first.</span>")//Less hints more mystery!
@@ -466,19 +471,18 @@
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
 					return
 				update_icon()
-		else if(emagged)
-			to_chat(user, "The interface is broken.")
-		else if(has_electronics == 2)
-			wiresexposed = !wiresexposed
-			to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-			update_icon()
 		else
-			to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
-			return
+			if(has_electronics == 2 && !(stat & BROKEN))
+				wiresexposed = !wiresexposed
+				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				update_icon()
+			else
+				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
+				return
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(emagged)
-			to_chat(user, "The interface is broken.")
+			to_chat(user, "The lock seems broken.")
 		else if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else if(wiresexposed)
@@ -611,10 +615,6 @@
 		else
 			if (istype(user, /mob/living/silicon))
 				return src.attack_hand(user)
-			if (!opened && wiresexposed && \
-				(istype(W, /obj/item/device/multitool) || \
-				iswirecutter(W) || istype(W, /obj/item/device/assembly/signaler)))
-				return src.attack_hand(user)
 			/*user.visible_message("<span class='warning'>The [src.name] has been hit with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You hit the [src.name] with your [W.name]!</span>", \
 				"You hear bang")*/
@@ -623,12 +623,7 @@
 // attack with hand - remove cell (if cover open) or interact with the APC
 
 /obj/machinery/power/apc/attack_hand(mob/user)
-//	if (!can_use(user)) This already gets called in interact() and in topic()
-//		return
-	if(!user)
-		return
-	if(wiresexposed && !issilicon(user))
-		to_chat(user, "Unexpose the wires first!")
+	if (!can_use(user))
 		return
 	if(!isobserver(user))
 		src.add_fingerprint(user)
@@ -666,12 +661,13 @@
 
 	var/allcut = wires.IsAllCut()
 
-	if(beenhit >= pick(3, 4) && wiresexposed != 1)
+	if(beenhit >= pick(3, 4) && (!wiresexposed && !opened))
+		beenhit = 0
 		wiresexposed = 1
 		src.update_icon()
 		src.visible_message("<span class='warning'>The [src.name]'s cover flies open, exposing the wires!</span>")
 
-	else if(wiresexposed == 1 && allcut == 0)
+	else if((wiresexposed || opened) && allcut == 0)
 		wires.CutAll()
 		src.update_icon()
 		src.visible_message("<span class='warning'>The [src.name]'s wires are shredded!</span>")
@@ -684,7 +680,7 @@
 	if(in_use)
 		var/list/nearby = viewers(1, src)
 		var/is_in_use = 0
-		for(var/mob/M in _using) 
+		for(var/mob/M in _using)
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)
 				continue
@@ -697,19 +693,19 @@
 			else
 				interact(M)
 		in_use = is_in_use
-	
+
 /obj/machinery/power/apc/interact(mob/user)
 	if (!user)
 		return
-	
+
 	if (stat & (BROKEN | MAINT | EMPED))
 		return
-		
+
 	ui_interact(user)
 
-/obj/machinery/power/apc/proc/get_malf_status(mob/user)
-	if (ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
-		if (src.malfai == (user:parent ? user:parent : user))
+/obj/machinery/power/apc/proc/get_malf_status(var/mob/living/silicon/ai/user)
+	if (istype(user) && find_active_faction_by_member(user.mind.GetRole(MALF)))
+		if (src.malfai == (user.parent ? user.parent : user))
 			if (src.occupant == user)
 				return 3 // 3 = User is shunted in this APC
 			else if (istype(user.loc, /obj/machinery/power/apc))
@@ -807,6 +803,8 @@
 
 
 /obj/machinery/power/apc/proc/can_use(mob/user as mob, var/loud = 0) //used by attack_hand() and Topic()
+	if(!user)
+		return 0
 	if (user.stat && !isobserver(user))
 		to_chat(user, "<span class='warning'>You must be conscious to use this [src]!</span>")
 		return 0
@@ -845,11 +843,11 @@
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
 				nanomanager.close_user_uis(user, src)
 			return 0
-	
+
 	else
 		if ((!in_range(src, user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
-			
+
 		if (wiresexposed)
 			to_chat(user, "<span class='warning'>Unexpose the wires first!</span>")
 			nanomanager.close_user_uis(user, src)
@@ -919,6 +917,7 @@
 
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/malfai = usr
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(get_malf_status(malfai)==1)
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
@@ -932,15 +931,13 @@
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
-					if (ticker.mode.config_tag == "malfunction")
-						if (STATION_Z == z)
-							ticker.mode:apcs++
+					if(M && STATION_Z == z)
+						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					src.malflocked = 1
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control.")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					update_icon()
 
 	else if (href_list["occupyapc"])
@@ -958,7 +955,7 @@
 			else
 				locked = !locked
 				update_icon()
-				
+
 	else if (href_list["malflock"])
 		if(get_malf_status(usr))
 			malflocked = !malflocked
@@ -967,11 +964,10 @@
 
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
-
 	if(malfai)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				operating ? ticker.mode:apcs++ : ticker.mode:apcs--
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
+		if(M && STATION_Z == z)
+			operating ? M.apcs++ : M.apcs--
 
 	src.update()
 	update_icon()
@@ -1016,14 +1012,13 @@
 		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
-		qdel(src.occupant)
-		src.occupant = null
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
-				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
-					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
-					if(A.stat != DEAD)
-						point.target = A //The pinpointer tracks the AI back into its core.
+				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
+				if(A.stat != DEAD)
+					point.target = A //The pinpointer tracks the AI back into its core.
+		qdel(src.occupant)
+		src.occupant = null
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
@@ -1300,11 +1295,13 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				ticker.mode:apcs--
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
+		if(M && STATION_Z == z)
+			M.apcs--
 	stat |= BROKEN
 	operating = 0
+	wiresexposed = 0
+	opened = 0
 	if(occupant)
 		malfvacate(1)
 	update_icon()
@@ -1329,10 +1326,9 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
 		if(malfai && operating)
-			if (ticker.mode.config_tag == "malfunction")
-				if (STATION_Z == z)
-					var/datum/game_mode/malfunction/M = ticker.mode
-					M.apcs--
+			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
+			if (M && STATION_Z == z)
+				M.apcs--
 		this_area.power_light = 0
 		this_area.power_equip = 0
 		this_area.power_environ = 0

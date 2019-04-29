@@ -67,7 +67,7 @@ var/datum/blackbox/blackbox = new
 	if(!feedback)
 		return
 
-	//#warning Blackbox recording disabled.  Please remove warning once this has been determined to be the problem.
+	//#warn Blackbox recording disabled.  Please remove warning once this has been determined to be the problem.
 	//return
 
 	var/watch = start_watch()

@@ -93,7 +93,7 @@
 	name = "Lamarr"
 	desc = "The worst she might do is attempt to... couple with your head."//hope we don't get sued over a harmless reference, rite?
 	sterile = 1
-	setGender(FEMALE)
+	gender = FEMALE
 
 /obj/item/clothing/mask/facehugger/lamarr/New()
 	..()
@@ -123,3 +123,8 @@
 	if(!istype(W, /obj/item/weapon/reagent_containers/syringe))
 		..(W, user)
 
+/obj/item/clothing/mask/facehugger/lamarr/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(!user.is_holding_item(src) && stat != DEAD)
+		to_chat(user, "<span class='warning'>[src] is squirming around too much. She needs to be held still.</span>")
+		return INJECTION_RESULT_FAIL
+	return ..()

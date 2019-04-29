@@ -140,7 +140,7 @@
 		else
 			dir=4
 	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
+		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
 /obj/structure/morgue/relaymove(mob/user as mob)
@@ -162,9 +162,9 @@
 	update()
 
 /obj/structure/morgue/Destroy()
-	. = ..()
 	if(connected)
-		qdel(connected) //references get cleared in the tray's Destroy()
+		qdel(connected)
+	. = ..()
 
 /*
  * Morgue tray
@@ -236,6 +236,7 @@
 
 /obj/structure/crematorium/Destroy()
 	crematorium_list.Remove(src)
+	..()
 
 /obj/structure/crematorium/proc/update()
 	if (cremating)
@@ -309,7 +310,7 @@
 
 /obj/structure/crematorium/attackby(P as obj, mob/user as mob)
 	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
+		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
 /obj/structure/crematorium/relaymove(mob/user as mob)

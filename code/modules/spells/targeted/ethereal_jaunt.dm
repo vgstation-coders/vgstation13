@@ -37,7 +37,7 @@
 		return
 	target.unlock_from()
 	//Begin jaunting with an animation
-	anim(location = mobloc, target = target, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = "water")
+	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	if(mist)
 		target.ExtinguishMob()
 		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
@@ -69,7 +69,7 @@
 	target.delayNextMove(25)
 	target.dir = SOUTH
 	sleep(20)
-	anim(location = mobloc, target = target, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = "water")
+	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	sleep(5)
 
 	//Forcemove him onto the tile and make him visible and vulnerable
@@ -138,3 +138,56 @@
 	enteranim = "phase_shift"
 	exitanim = "phase_shift2"
 	mist = 0
+
+/spell/targeted/ethereal_jaunt/shift/alt
+	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
+	charge_max = 170
+	hud_state = "const_phase"
+	enteranim = "wraith2_phaseenter"
+	exitanim = "wraith2_phaseexit"
+	override_base = "cult"
+
+/spell/targeted/ethereal_jaunt/vamp
+	name = "Mist Form (20)"
+	desc = "This spell allows you to pass through walls and other dense objects."
+	user_type = USER_TYPE_VAMPIRE
+
+	spell_flags = Z2NOCAST | INCLUDEUSER
+
+	charge_max = 1 MINUTES
+	invocation_type = SpI_NONE
+	range = SELFCAST
+	duration = 50 //in deciseconds
+
+	override_base = "vamp"
+	hud_state = "vamp_mistform"
+
+	enteranim = "batify"
+	exitanim = "debatify"
+	mist = TRUE
+
+	var/blood_cost = 20
+
+/spell/targeted/ethereal_jaunt/vamp/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
+	if (user.locked_to)
+		to_chat(user, "<span class='warning'>We are restrained!</span>")
+		return FALSE
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
+		return FALSE
+
+/spell/targeted/ethereal_jaunt/vamp/cast(list/targets, var/mob/user)
+	var/datum/role/vampire/V = isvampire(user)
+	var/mob/living/simple_animal/hostile/scarybat/SB = new(get_turf(user))
+	SB.vamp_fac = V.faction
+	V.faction.members += SB
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		for (var/datum/organ/external/O in H.organs)
+			O.release_restraints()
+	..()
+	if (!V)
+		return FALSE
+	V.remove_blood(blood_cost)

@@ -93,6 +93,13 @@
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
+
+/obj/mecha/get_cell()
+	return cell
+
 /obj/mecha/New()
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
@@ -115,7 +122,44 @@
 	return
 
 /obj/mecha/Destroy()
-	src.go_out(loc, TRUE)
+	go_out(loc, TRUE)
+	var/turf/T = get_turf(src)
+	tag = "\ref[src]" //better safe then sorry
+	if(istype(src, /obj/mecha/working/))
+		var/obj/mecha/working/W = src
+		if(W.cargo)
+			for(var/obj/O in W.cargo) //Dump contents of stored cargo
+				O.forceMove(T)
+				W.cargo -= O
+				T.Entered(O)
+
+	if(prob(30))
+		explosion(T, 0, 0, 1, 3)
+	if(wreckage)
+		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
+		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
+			if(E.salvageable && prob(30))
+				WR.crowbar_salvage += E
+				E.forceMove(WR)
+				E.equip_ready = 1
+				E.reliability = round(rand(E.reliability/3,E.reliability))
+			else
+				E.forceMove(T)
+				qdel(E)
+		if(cell)
+			WR.crowbar_salvage += cell
+			cell.forceMove(WR)
+			cell.charge = rand(0, cell.charge)
+			cell = null
+		if(internal_tank)
+			WR.crowbar_salvage += internal_tank
+			internal_tank.forceMove(WR)
+			internal_tank = null
+	else
+		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
+			E.forceMove(T)
+			qdel(E)
+	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -148,9 +192,6 @@
 	if(pr_internal_damage)
 		qdel(pr_internal_damage)
 		pr_internal_damage = null
-	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
-		qdel(eq)
-	equipment = null
 	selected = null
 	..()
 
@@ -186,8 +227,9 @@
 	cabin_air = new
 	cabin_air.temperature = T20C
 	cabin_air.volume = 200
-	cabin_air.oxygen = O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	cabin_air.nitrogen = N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
+	cabin_air.adjust_multi(
+		GAS_OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature),
+		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	return cabin_air
 
 /obj/mecha/proc/add_radio()
@@ -428,10 +470,7 @@
 		else if(istype(obstacle, /obj/structure/grille/))
 			var/obj/structure/grille/G = obstacle
 			G.health = (0.25*initial(G.health))
-			G.broken = 1
-			G.icon_state = "[initial(G.icon_state)]-b"
-			G.setDensity(FALSE)
-			getFromPool(/obj/item/stack/rods, get_turf(G.loc))
+			G.healthcheck()
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/table))
@@ -518,7 +557,7 @@
 		if(ignore_threshold || src.health*100/initial(src.health)<src.internal_damage_threshold)
 			var/obj/item/mecha_parts/mecha_equipment/destr = safepick(equipment)
 			if(destr)
-				destr.destroy()
+				qdel(destr)
 	return
 
 /obj/mecha/proc/hasInternalDamage(int_dam_flag=null)
@@ -568,11 +607,13 @@
 	if(src.health > 0)
 		spark(src, 2, FALSE)
 	else
-		src.destroy()
-	return
+		qdel(src)
 
-/obj/mecha/attack_hand(mob/living/user as mob)
-	src.log_message("Attack by hand/paw. Attacker - [user].",1)
+/obj/mecha/attack_hand(mob/living/user as mob, monkey = FALSE)
+	if(monkey)
+		src.log_message("Attack by paw. Attacker - [user].",1)
+	else
+		src.log_message("Attack by hand. Attacker - [user].",1)
 	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
@@ -585,7 +626,7 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return src.attack_hand(user, TRUE)
 
 
 /obj/mecha/attack_alien(mob/living/user as mob)
@@ -662,9 +703,9 @@
 	return
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
-	if(prob(src.deflect_chance))
+	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))
 		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		src.visible_message("The [src.name] armor deflects the projectile")
+		src.visible_message("<span class='warning'>\The [src.name] armor deflects the projectile.</span>")
 		src.log_append_to_last("Armor saved.")
 		return
 	var/ignore_threshold
@@ -678,52 +719,6 @@
 	Proj.on_hit(src)
 	return
 
-/obj/mecha/proc/destroy()
-	spawn()
-		go_out(loc, TRUE)
-		var/turf/T = get_turf(src)
-		tag = "\ref[src]" //better safe then sorry
-		if(loc)
-			loc.Exited(src)
-		loc = null
-		if(T)
-			if(istype(src, /obj/mecha/working/))
-				var/obj/mecha/working/W = src
-				if(W.cargo)
-					for(var/obj/O in W.cargo) //Dump contents of stored cargo
-						O.forceMove(T)
-						W.cargo -= O
-						T.Entered(O)
-
-			if(prob(30))
-				explosion(T, 0, 0, 1, 3)
-			spawn(0)
-				if(wreckage)
-					var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
-					for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
-						if(E.salvageable && prob(30))
-							WR.crowbar_salvage += E
-							E.forceMove(WR)
-							E.equip_ready = 1
-							E.reliability = round(rand(E.reliability/3,E.reliability))
-						else
-							E.forceMove(T)
-							E.destroy()
-					if(cell)
-						WR.crowbar_salvage += cell
-						cell.forceMove(WR)
-						cell.charge = rand(0, cell.charge)
-					if(internal_tank)
-						WR.crowbar_salvage += internal_tank
-						internal_tank.forceMove(WR)
-				else
-					for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
-						E.forceMove(T)
-						E.destroy()
-		spawn(0)
-			qdel(src)
-	return
-
 /obj/mecha/ex_act(severity)
 	src.log_message("Affected by explosion of severity: [severity].",1)
 	if(prob(src.deflect_chance))
@@ -731,16 +726,16 @@
 		src.log_append_to_last("Armor saved, changing severity to [severity].")
 	switch(severity)
 		if(1.0)
-			src.destroy()
+			qdel(src)
 		if(2.0)
 			if (prob(30))
-				src.destroy()
+				qdel(src)
 			else
 				src.take_damage(initial(src.health)/2)
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 		if(3.0)
 			if (prob(5))
-				src.destroy()
+				qdel(src)
 			else
 				src.take_damage(initial(src.health)/5)
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
@@ -873,12 +868,18 @@
 				return
 			switch(remove)
 				if ("power cell")
+					if(!cell)
+						return
 					cell.forceMove(src.loc)
 					cell = null
 				if ("exosuit tracking beacon")
+					if(!tracking)
+						return
 					tracking.forceMove(src.loc)
 					tracking = null
 				if ("electropack")
+					if(!electropack)
+						return
 					electropack.forceMove(src.loc)
 					electropack = null
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -895,7 +896,7 @@
 			else
 				to_chat(user, "There's not enough wire to finish the task.")
 		return
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(hasInternalDamage(MECHA_INT_TEMP_CONTROL))
 			clearInternalDamage(MECHA_INT_TEMP_CONTROL)
 			to_chat(user, "You repair the damaged temperature controller.")
@@ -1227,8 +1228,7 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-
-		// -- Mode/mind specific stuff goes here
+		/* -- Mode/mind specific stuff goes here
 		if(H.mind)
 			if(isrev(H) || isrevhead(H))
 				ticker.mode.update_all_rev_icons()
@@ -1239,6 +1239,7 @@
 			if(iswizard(H) || isapprentice(H))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
+		*/
 
 		return 1
 	else
@@ -1332,7 +1333,8 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+
+	if(usr != occupant)
 		return
 	src.go_out()
 	add_fingerprint(usr)
@@ -1349,6 +1351,8 @@
 
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
+		return
+	if(istype(occupant, /mob/living/carbon/brain))
 		return
 	if(!istype(over_location) || over_location.density)
 		return
@@ -1436,7 +1440,7 @@
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
 
-		// -- Mode/mind specific stuff goes here
+		/* -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
 			if(isrev(src.occupant) || isrevhead(src.occupant))
 				ticker.mode.update_all_rev_icons()
@@ -1447,6 +1451,7 @@
 			if(iswizard(src.occupant) || isapprentice(src.occupant))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
+		*/
 
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"
@@ -1463,6 +1468,7 @@
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
 		occupant.Knockdown(10)
+		occupant.Stun(10)
 		spawn(10)
 		emergency_eject()
 
@@ -1480,17 +1486,19 @@
 /////////////////////////
 
 /obj/mecha/proc/operation_allowed(mob/living/carbon/human/H)
-	for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-		if(src.check_access(ID,src.operation_req_access))
-			return 1
-	return 0
+	if(istype(H))
+		for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
+			if(src.check_access(ID,src.operation_req_access))
+				return 1
+		return 0
 
 
 /obj/mecha/proc/internals_access_allowed(mob/living/carbon/human/H)
-	for(var/atom/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-		if(src.check_access(ID,src.internals_req_access))
-			return 1
-	return 0
+	if(istype(H))
+		for(var/atom/ID in list(H.get_active_hand(), H.wear_id, H.belt))
+			if(src.check_access(ID,src.internals_req_access))
+				return 1
+		return 0
 
 
 /obj/mecha/check_access(obj/item/weapon/card/id/I, list/access_list)
@@ -1720,7 +1728,8 @@
 						<body>
 						[add_req_access?"<a href='?src=\ref[src];req_access=1;id_card=\ref[id_card];user=\ref[user]'>Edit operation keycodes</a>":null]
 						[maint_access?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>[state ? "Terminate" : "Initiate"] maintenance protocol</a>":null]
-						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>":null]
+						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>\
+						<a href='?src=\ref[src];eject=1'>Eject Occupant</a>":null]
 						</body>
 						</html>"}
 	user << browse(output, "window=exosuit_maint_console")
@@ -1785,10 +1794,9 @@
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 		return
 	if(href_list["eject"])
-		if(usr != src.occupant)
+		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
 			return
-		src.eject()
-		return
+		go_out()
 	if(href_list["toggle_lights"])
 		if(usr != src.occupant)
 			return
@@ -1850,7 +1858,7 @@
 	if (href_list["change_name"])
 		if(usr != src.occupant)
 			return
-		var/newname = strip_html_simple(input(occupant,"Choose new exosuit name","Rename exosuit",initial(name)) as text, MAX_NAME_LEN)
+		var/newname = stripped_input(occupant,"Choose new exosuit name","Rename exosuit",initial(name),MAX_NAME_LEN)
 		if(newname && trim(newname))
 			name = newname
 		else

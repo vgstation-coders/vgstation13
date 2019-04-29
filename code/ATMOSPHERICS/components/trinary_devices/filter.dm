@@ -83,39 +83,26 @@ obj/machinery/atmospherics/trinary/filter/process()
 		var/datum/gas_mixture/filtered_out = new
 		filtered_out.temperature = removed.temperature
 
+		#define FILTER(g) filtered_out.adjust_gas((g), removed[g])
 		switch(filter_type)
 			if(0) //removing hydrocarbons
-				filtered_out.toxins = removed.toxins
-				removed.toxins = 0
-
-				if(removed.trace_gases.len>0)
-					for(var/datum/gas/trace_gas in removed.trace_gases)
-						if(istype(trace_gas, /datum/gas/oxygen_agent_b))
-							removed.trace_gases -= trace_gas
-							filtered_out.trace_gases += trace_gas
+				FILTER(GAS_PLASMA)
+				FILTER(GAS_OXAGENT)
 
 			if(1) //removing O2
-				filtered_out.oxygen = removed.oxygen
-				removed.oxygen = 0
+				FILTER(GAS_OXYGEN)
 
 			if(2) //removing N2
-				filtered_out.nitrogen = removed.nitrogen
-				removed.nitrogen = 0
+				FILTER(GAS_NITROGEN)
 
 			if(3) //removing CO2
-				filtered_out.carbon_dioxide = removed.carbon_dioxide
-				removed.carbon_dioxide = 0
+				FILTER(GAS_CARBON)
 
 			if(4)//removing N2O
-				if(removed.trace_gases.len>0)
-					for(var/datum/gas/trace_gas in removed.trace_gases)
-						if(istype(trace_gas, /datum/gas/sleeping_agent))
-							removed.trace_gases -= trace_gas
-							filtered_out.trace_gases += trace_gas
+				FILTER(GAS_SLEEPING)
 
-			else
-				filtered_out = null
-
+		removed.subtract(filtered_out)
+		#undef FILTER
 
 		air2.merge(filtered_out)
 		air3.merge(removed)

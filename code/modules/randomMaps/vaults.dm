@@ -21,7 +21,7 @@
 //#define SPAWN_MAX_VAULTS //Uncomment to spawn as many vaults as the code supports
 
 #ifdef SPAWN_MAX_VAULTS
-#warning Spawning maximum amount of vaults!
+#warn Spawning maximum amount of vaults!
 #undef MINIMUM_VAULT_AMOUNT
 #define MINIMUM_VAULT_AMOUNT MAXIMUM_VAULT_AMOUNT
 #endif
@@ -32,6 +32,7 @@
 	name = "random vault area"
 	desc = "Spawn a vault in there somewhere"
 	icon_state = "random_vault"
+	flags = NO_PERSISTENCE
 
 //This a random vault spawns somewhere in this area. Then this area is replaced with space!
 /area/random_vault
@@ -70,7 +71,7 @@
 	var/vault_number = rand(MINIMUM_VAULT_AMOUNT, min(list_of_vaults.len, MAXIMUM_VAULT_AMOUNT))
 
 	#ifdef SPAWN_ALL_VAULTS
-	#warning Spawning ALL vaults!
+	#warn Spawning ALL vaults!
 	vault_number = list_of_vaults.len
 	#endif
 

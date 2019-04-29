@@ -109,6 +109,18 @@
 	airlock_type = "/vault"
 	glass = -1
 
+/obj/structure/door_assembly/clockwork
+	base_icon_state = "clockwork"
+	base_name = "Clockwork Airlock"
+	airlock_type = "/clockwork"
+	glass = -1
+
+/obj/structure/door_assembly/clockwork/cultify()
+	return
+
+/obj/structure/door_assembly/clockwork/clockworkify()
+	return
+
 /obj/structure/door_assembly/multi_tile/
 	icon = 'icons/obj/doors/door_assembly2x1.dmi'
 	dir = EAST
@@ -311,7 +323,7 @@
 							glass = "[M]"
 				busy = 0
 
-	else if(isscrewdriver(W) && state == 2 )
+	else if(W.is_screwdriver(user) && state == 2 )
 		busy = 1
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
@@ -362,3 +374,6 @@
 		if(2)
 			name = "Near Finished "
 	name += "[glass == 1 ? "Window " : ""][istext(glass) ? "[glass] Airlock" : base_name] Assembly"
+
+/obj/structure/door_assembly/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/door_assembly/clockwork, CLOCKWORK_DOOR_GLOW)

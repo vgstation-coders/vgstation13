@@ -43,6 +43,7 @@
 				imp = null
 				update()
 
+
 /obj/item/weapon/implanter/New()
 	if(imp_type)
 		imp = new imp_type(src)
@@ -53,6 +54,7 @@
 	name = "greytide conversion kit"
 	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."
 	imp_type = /obj/item/weapon/implant/traitor
+
 
 /obj/item/weapon/implanter/loyalty
 	name = "implanter-loyalty"

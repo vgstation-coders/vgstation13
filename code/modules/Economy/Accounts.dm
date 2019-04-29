@@ -26,7 +26,7 @@ var/global/datum/money_account/trader_account
 		var/datum/transaction/T = new()
 		T.target_name = station_account.owner_name
 		T.purpose = "Account creation"
-		T.amount = 5000
+		T.amount = 750
 		T.date = "2nd April, [game_year]"
 		T.time = "11:24"
 		T.source_terminal = "Biesel GalaxyNet Terminal #277"
@@ -64,8 +64,7 @@ var/global/datum/money_account/trader_account
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0)
-
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE)
 
 	//create a new account
 	var/datum/money_account/M = new()
@@ -73,6 +72,8 @@ var/global/datum/money_account/trader_account
 	M.remote_access_pin = rand(1111, 9999)
 	M.money = starting_funds
 	M.wage_gain = wage_payout
+	M.security_level = security_pref
+	M.hidden = makehidden
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -136,6 +137,7 @@ var/global/datum/money_account/trader_account
 	var/virtual = 0
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
 	var/disabled = 0
+	var/hidden = FALSE
 	// 0 Unlocked
 	// 1 User locked
 	// 2 Admin locked
@@ -176,8 +178,7 @@ var/global/datum/money_account/trader_account
 		for(var/department in station_departments)
 			create_department_account(department, recieves_wage = 1)
 	if(!vendor_account)
-		create_department_account("Vendor")
-		vendor_account = department_accounts["Vendor"]
+		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
@@ -275,6 +276,8 @@ var/global/datum/money_account/trader_account
 						<table border=1 style='width:100%'>"}
 					for(var/i=1, i<=all_money_accounts.len, i++)
 						var/datum/money_account/D = all_money_accounts[i]
+						if(D.hidden)
+							continue
 
 						dat += {"<tr>
 							<td>#[D.account_number]</td>
@@ -300,7 +303,7 @@ var/global/datum/money_account/trader_account
 
 				if(access_cent_captain in idcard.access)
 					access_level = 2
-				else if(access_hop in idcard.access || access_captain in idcard.access)
+				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
 
 /obj/machinery/account_database/emag(mob/user)
@@ -311,7 +314,7 @@ var/global/datum/money_account/trader_account
 			var/obj/item/weapon/card/id/C = held_card
 			if(access_cent_captain in C.access)
 				access_level = 2
-			else if(access_hop in C.access || access_captain in C.access)
+			else if((access_hop in C.access) || (access_captain in C.access))
 				access_level = 1
 		attack_hand(user)
 		to_chat(user, "<span class='notice'>You re-enable the security checks of [src].</span>")
@@ -368,7 +371,7 @@ var/global/datum/money_account/trader_account
 							if(access_level < 3)
 								if(access_cent_captain in C.access)
 									access_level = 2
-								else if(access_hop in C.access || access_captain in C.access)
+								else if((access_hop in C.access) || (access_captain in C.access))
 									access_level = 1
 			if("view_account_detail")
 				var/index = text2num(href_list["account_index"])

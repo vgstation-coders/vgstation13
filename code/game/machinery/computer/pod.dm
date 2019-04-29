@@ -301,12 +301,3 @@
 	name = "Magix System IV"
 	desc = "An arcane artifact that holds much magic. Running E-Knock 2.2: Sorceror's Edition"
 	circuit = /obj/item/weapon/circuitboard/swfdoor
-
-
-//The automatic mass driver control in taxi's delivery office, controls the disposals network.
-/obj/machinery/computer/pod/disposal
-	name = "Disposal Network Mass Driver Control Computer"
-	default_loop = 1
-	default_time = 10
-	default_timings = 1
-	id_tags = list("disposal_network")

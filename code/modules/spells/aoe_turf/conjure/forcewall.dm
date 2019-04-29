@@ -40,6 +40,8 @@
 	density = 1
 	invisibility = 100
 
+	var/explosion_block = 20 //making this spell marginally more useful
+
 /obj/effect/forcefield/bullet_act(var/obj/item/projectile/Proj, var/def_zone)
 	var/turf/T = get_turf(src.loc)
 	if(T)
@@ -51,7 +53,7 @@
 	invisibility = 0
 
 /obj/effect/forcefield/mime
-	icon_state = "empty"
+	icon_state = "fuel"
 	name = "invisible wall"
 	desc = "You have a bad feeling about this."
 	invisibility = 0

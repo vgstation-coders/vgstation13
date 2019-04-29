@@ -2,8 +2,8 @@
 #define MOUSEFAT 600
 #define MOUSESTARVE 25
 #define MOUSEHUNGRY 100
-#define MOVECOST 1
-#define STANDCOST 0.5
+#define MOUSEMOVECOST 1
+#define MOUSESTANDCOST 0.5
 
 /mob/living/simple_animal/mouse
 	name = "mouse"
@@ -99,7 +99,7 @@
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
-		if(!(food_target in can_see))
+		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
 			step_towards(src, food_target)
@@ -132,14 +132,14 @@
 					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
 
-		nutrition = max(0, nutrition - STANDCOST)
+		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
 /mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/multiplier = 1
 	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement
 		multiplier = 2.5
-	nutrition = max(0, nutrition - MOVECOST*multiplier)
+	nutrition = max(0, nutrition - MOUSEMOVECOST*multiplier)
 
 /mob/living/simple_animal/mouse/New()
 	..()

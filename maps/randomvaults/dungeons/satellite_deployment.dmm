@@ -62,7 +62,7 @@
 "bj" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/syndicate,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "bk" = (/obj/structure/table/reinforced,/obj/abstract/map/spawner/engi/materials,/obj/item/weapon/storage/box/inflatables,/obj/abstract/map/spawner/assistant/tools,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "bl" = (/obj/effect/step_trigger/thrower{tag = "icon-arrows (EAST)"; icon_state = "arrows"; dir = 4},/turf/space/transit/east,/area)
-"bm" = (/obj/item/weapon/cigbutt,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"bm" = (/obj/item/trash/cigbutt,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
 "bn" = (/obj/structure/spacepod_frame/unarmored,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
 "bo" = (/obj/structure/painting/random,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
 "bp" = (/obj/machinery/light/small{tag = "icon-lbulb1 (EAST)"; icon_state = "lbulb1"; dir = 4},/turf/simulated/floor,/area/vault/spy_sat/deployment)

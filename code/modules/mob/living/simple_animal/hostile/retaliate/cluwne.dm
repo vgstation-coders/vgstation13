@@ -246,11 +246,16 @@
 		var/mob/living/L = target
 		if(prob(10))
 			L.Knockdown(5)
+			L.Stun(5)
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
 			return
 	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	var/currenthealth = health
+	..()
+	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+	health = currenthealth
 	//only knowledge can kill a cluwne
 	if(istype(O,/obj/item/weapon/book))
 		gib()

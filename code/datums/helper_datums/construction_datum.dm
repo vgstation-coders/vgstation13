@@ -71,14 +71,14 @@
 		return steps.len
 	return 0
 
-/datum/construction/proc/custom_action(step, used_atom, user)
+/datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
 	if(iswelder(used_atom))
 		playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
 
 	else if(iswrench(used_atom))
 		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
 
-	else if(isscrewdriver(used_atom))
+	else if(used_atom.is_screwdriver(user))
 		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	else if(iswirecutter(used_atom))
@@ -251,7 +251,7 @@
 		assembling = 0
 	return 0
 
-/datum/construction/reversible/custom_action(index, diff, used_atom, user)
+/datum/construction/reversible/custom_action(index, diff, obj/item/used_atom, mob/user)
 	. = ..(index,used_atom,user)
 
 	if(.)
@@ -375,11 +375,6 @@
 	else
 		var/list/spawn_step
 		var/new_index = (diff == FORWARD ? index - 1 : index + 1)
-		if(new_index == 0)
-			message_admins("Holy shit [src]/([src.type]) is trying to set its new index to 0! how the fuck did this happen? I don't know, our direction is [diff==FORWARD?"forward":"backward"] old index was [index]. User is [formatPlayerPanel(user,user.ckey)], itemused [used_atom], step [given_step]")
-			spawn_result(user)
-			return 1
-			//CRASH("Holy shit [src]/([src.type]) is trying to set its new index to 0! how the fuck did this happen? I don't know, our direction is [diff==FORWARD?"forward":"backward"] old index was [index]. User is [user], itemused [used_atom], step [given_step]")
 		if(diff == FORWARD)
 			spawn_step = get_backward_step(new_index)
 		else if(diff == BACKWARD)

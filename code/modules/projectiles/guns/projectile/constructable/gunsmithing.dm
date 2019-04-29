@@ -149,10 +149,10 @@
 			to_chat(user, "You wrap cable around the base of \the [src], creating a grip.")
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/sword/I = new (get_turf(user))
+				var/obj/item/weapon/sword/weaponcraft/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/sword(get_turf(src.loc))
+				new /obj/item/weapon/sword/weaponcraft(get_turf(src.loc))
 			C.use(5)
 			qdel(src)
 	if(iswelder(W))
@@ -171,6 +171,25 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "rail_assembly"
 	var/durability = 100 //After a certain number of shots, the rails will degrade and will need to be replaced.
+	var/stage = 0
+
+/obj/item/weapon/rail_assembly/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/newspaper))
+		to_chat(user, "You add \the [W] to \the [src] as padding.")
+		stage = 1
+		desc = "A set of metal rails with some newspaper stuck on it. With some extra cables, this could work as a splint."
+		icon = 'icons/obj/items.dmi'
+		icon_state = "ghettosplint"
+		qdel(W)
+	if(istype(W,/obj/item/weapon/handcuffs/cable) && stage == 1)
+		to_chat(user,"<span class='notice'>You tie up \the [src] with \the [W], creating a ghetto splint!</span>")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/stack/medical/splint/ghetto/I = new (get_turf(user))
+			user.put_in_hands(I)
+		else
+			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
+		qdel(W)
 
 /obj/item/weapon/cylinder
 	name = "beaker"
@@ -440,7 +459,7 @@
 				update_assembly()
 				qdel(W)
 		if("blunderbuss_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(src.loc == user)
@@ -454,7 +473,7 @@
 
 //RAILGUN BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_capacitorbank_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_capacitorbank"
@@ -472,7 +491,7 @@
 				state = "stock_capacitorbank_barrel_assembly"
 				update_assembly()
 				qdel(W)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_capacitorbank_assembly"
@@ -492,7 +511,7 @@
 				update_assembly()
 				qdel(W)
 		if("railgun_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(src.loc == user)
@@ -562,7 +581,7 @@
 				update_assembly()
 				qdel(W)
 		if("stock_ansible_amplifier_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_ansible_amplifier"
@@ -574,7 +593,7 @@
 				update_assembly()
 				qdel(W)
 		if("stock_ansible_amplifier_transmitter_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "subspacetunneler_assembly"
@@ -730,6 +749,7 @@
 	icon_state = "secured_capacitor"
 	density = 0
 	state = 1
+	ghost_read = FALSE
 	var/charge = 0
 	var/charging = 0
 	var/list/power_states = list()
@@ -750,12 +770,20 @@
 	icon_state = "secured_capacitor_adv_super"
 	maxcharge = 1000000000
 
+/obj/machinery/power/secured_capacitor/adv/super/ultra
+	name = "ultra capacitor"
+	icon_state = "secured_capacitor_adv_super_ultra"
+	maxcharge = 5000000000
+
 /obj/machinery/power/secured_capacitor/attack_hand(mob/user as mob)
+	if(user.lying)
+		return
 	if(!charging)
 		attempt_connect(user)
 	else
 		disconnect_capacitor()
 		to_chat(user, "<span class='notice'>You halt \the [src.name]'s charging process.</span>")
+	add_fingerprint(user)
 
 /obj/machinery/power/secured_capacitor/examine(mob/user)
 	..()

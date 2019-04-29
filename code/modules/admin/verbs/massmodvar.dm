@@ -118,4 +118,3 @@
 			CHECK_TICK
 
 	#undef is_valid_atom
-	#undef perform

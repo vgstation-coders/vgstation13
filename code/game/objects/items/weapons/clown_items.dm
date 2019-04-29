@@ -156,7 +156,7 @@
 	icon_state = "honkbaton"
 	item_state = "honkbaton"
 	can_honk_baton = 0
-	
+
 #define TELE_COOLDOWN 5 SECONDS
 
 /obj/item/weapon/bikehorn/rubberducky/quantum
@@ -216,7 +216,7 @@
 	..()
 	icon_state = "glue[spent]"
 
-/obj/item/weapon/glue/afterattack(obj/item/target, mob/user, proximity_flag, click_parameters)
+/obj/item/weapon/glue/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
 
@@ -224,15 +224,21 @@
 		to_chat(user,"<span class='warning'>There's no glue left in the bottle.</span>")
 		return
 
-	if(!istype(target)) //Can only apply to items!
+	var/static/list/allowed_types = list(
+		/obj/item,
+		/obj/structure/bed,
+	)
+	if(!is_type_in_list(target, allowed_types))
 		to_chat(user,"<span class='warning'>That would be such a waste of glue.</span>")
 		return
-	else
-		if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
-			to_chat(user,"<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>")
-			return
 
-		if(target.abstract) //Can't glue TK grabs, grabs, offhands!
+	if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
+		to_chat(user,"<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>")
+		return
+
+	if(isitem(target))
+		var/obj/item/target_item = target
+		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
 
 	to_chat(user,"<span class='info'>You gently apply the whole [src] to \the [target].</span>")
@@ -240,7 +246,10 @@
 	update_icon()
 	apply_glue(target)
 
-/obj/item/proc/glue_act() //proc for when glue is used on something
+/obj/proc/glue_act() //proc for when glue is used on something
+	return
+
+/obj/item/glue_act()
 	cant_drop++
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
@@ -251,6 +260,12 @@
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			canremove++
+
+/obj/structure/bed/glue_act()
+	glued = TRUE
+	if(GLUE_WEAROFF_TIME > 0)
+		spawn(GLUE_WEAROFF_TIME)
+			glued = FALSE
 
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
 	src = null

@@ -25,10 +25,14 @@
 	overlays += image('icons/obj/vending_pack.dmi',"emptypack")
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
-	if(istype(O))
-		if(istype(O, /obj/item/weapon/disk/nuclear))
-			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
-		user.drop_item(O, src)
+	var/list/nuke_disks = O.search_contents_for(/obj/item/weapon/disk/nuclear)
+	if(nuke_disks.len) //There's something, it's a nuke disk, no need to recheck
+		to_chat(user, "<span class='warning'>Suddenly your hand stops responding. You can't put that in, something forbidden is within it.</span>")
+		return
+	if(istype(O, /obj/item/weapon/disk/nuclear)) //Need to check separately if it's the thing you're shoving in
+		to_chat(user, "<span class='warning'>Suddenly your hand stops responding. You can't put that in a vending machine.</span>")
+		return
+	user.drop_item(O, src)
 
 /obj/structure/vendomatpack/custom/attack_hand(mob/user)
 	var/selected_item = input("Select an item to remove", "[src]") as null|anything in contents
@@ -36,7 +40,7 @@
 	if(I != null && loc)
 		if(!Adjacent(user))
 			return
-		I.forceMove(get_turf(src))
+		user.put_in_hands(I)
 
 /obj/structure/vendomatpack/undefined
 	//a placeholder for vending machines that don't have their own recharge packs

@@ -1,12 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Syringes.
 ////////////////////////////////////////////////////////////////////////////////
-#define SYRINGE_DRAW 0
-#define SYRINGE_INJECT 1
-#define SYRINGE_BROKEN 2
-
-#define INJECTION_BODY 0
-#define INJECTION_SUIT_PORT 1
 
 /obj/item/weapon/reagent_containers/syringe
 	name = "syringe"
@@ -37,11 +31,17 @@
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
 	                            /obj/item/clothing/mask/facehugger/lamarr,
 	                            /obj/item/asteroid/hivelord_core,
-										 /obj/item/weapon/reagent_containers/blood)
+								/obj/item/weapon/reagent_containers/blood,
+								/obj/item/weapon/light,
+								/obj/item/weapon/fossil/egg)
+
+/obj/item/weapon/reagent_containers/syringe/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		set_tiny_label(user)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/syringe/on_reagent_change()
 	update_icon()
@@ -78,7 +78,7 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(!target.reagents)
+	if(!target.reagents && !is_type_in_list(target, injectable_types))
 		return
 
 	if(mode == SYRINGE_BROKEN)
@@ -177,7 +177,7 @@
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
 	// Drawing from objects draws their contents
 	else if (isobj(target))
-		if (!target.is_open_container() && !istype(target, /obj/structure/reagent_dispensers) && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
+		if (!target.is_open_container() && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from this object.")
 			return
 
@@ -203,77 +203,26 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/proc/handle_inject(var/atom/target, var/mob/user)
-	if (src.is_empty())
+	if(is_empty())
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		if(H.species && (H.species.chem_flags & NO_INJECT))
-			user.visible_message("<span class='warning'>\The [user] attempts to poke \the [H] with \the [src] but it won't go in!</span>", "<span class='notice'>You fail to pierce \the [H] with \the [src].</span>")
-			return
-
-	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr))
-		var/obj/item/clothing/mask/facehugger/lamarr/L = target
-		if(!user.is_holding_item(target))
-			if(L.stat != DEAD)
-				to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
-				return
-
 	// TODO Remove snowflake
-	if (!ismob(target) && !target.is_open_container() && !is_type_in_list(target, injectable_types))
+	if(!ismob(target) && !target.is_open_container() && !is_type_in_list(target, injectable_types))
 		to_chat(user, "<span class='warning'>You cannot directly fill this object.</span>")
 		return
 
-	if(istype(target, /obj/item/gum))
-		var/obj/item/gum/G = target
-		if(G.replacement_chem_volume <= 0)
-			to_chat(user, "<span class='warning'>\The [target] is full.</span>")
-			return
-	else if (target.reagents.total_volume >= target.reagents.maximum_volume)
-		to_chat(user, "<span class='warning'>\The [target] is full.</span>")
+	var/injection_result = target.on_syringe_injection(user, src)
+	if(injection_result == INJECTION_RESULT_FAIL)
 		return
 
-	if (istype(target, /obj/item/weapon/reagent_containers/blood))
-		var/obj/item/weapon/reagent_containers/blood/L = target
-		if (L.mode == BLOODPACK_CUT)
-			to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
-			return
-
-	// Attempting to inject someone else takes time
-	if (ismob(target) && target != user)
-		if (get_injection_action(target) == INJECTION_SUIT_PORT)
-			user.visible_message("<span class='warning'>[user] begins hunting for an injection port \the [src] on [target]'s suit!</span>",
-								 "<span class='warning'>You begin hunting for an injection port for \the [src] on [target]'s suit!</span>")
-		else
-			user.visible_message("<span class='warning'>[user] is trying to inject [target] with \the [src]!</span>",
-								 "<span class='warning'>You try to inject [target] with \the [src]!</span>")
-
-		if (!do_mob(user, target, get_injection_time(target)))
-			return
-
-		user.visible_message("<span class='warning'>[user] injects [target] with the \the [src]!</span>",
-							 "<span class='warning'>You inject [target] with \the [src]!</span>")
-
-		if (istype(target, /mob/living))
-			var/reagent_names = english_list(get_reagent_names())
-			add_attacklogs(user, target, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
-
-	// Handle transfers and mob reactions
-	var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
-	if (ismob(target))
-		// TODO Every reagent reacts with the full volume instead of being scaled accordingly
-		// TODO which is pretty irrelevant now but should be fixed
-		reagents.reaction(target, INGEST)
-
-	if(istype(target, /obj/item/gum))
-		var/obj/item/gum/G = target
-		tx_amount = G.transfer_some_reagents(src, tx_amount, TRUE, user)
-	else
+	// The assumption is that on_syringe_injection did it
+	if(injection_result != INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER)
+		var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
 		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
-	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
+		to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
 
-	if (src.is_empty())
+	if(is_empty())
 		mode = SYRINGE_DRAW
 		update_icon()
 
@@ -305,7 +254,7 @@
 			return
 
 		var/hit_area = affecting.display_name
-		if((user != target) && H.check_shields(7, "the [src.name]"))
+		if((user != target) && H.check_shields(7, src))
 			return
 
 		// Check for protection on the targeted area and show messages
@@ -340,6 +289,11 @@
 		mode = 0 //SYRINGE_DRAW
 		update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/broken
+	desc = "A syringe. It is broken."
+	icon_state = "broken"
+	mode = SYRINGE_BROKEN
+
 /obj/item/weapon/reagent_containers/syringe/giant
 	name = "giant syringe"
 	desc = "A syringe commonly used for lethal injections."
@@ -349,6 +303,13 @@
 
 	can_draw_blood = FALSE
 	can_stab = FALSE
+
+/obj/item/weapon/reagent_containers/syringe/giant/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/gisy = matrix()
+	gisy.Scale(1.2,1.2)
+	transform = gisy
 
 /obj/item/weapon/reagent_containers/syringe/giant/get_injection_time(var/mob/target)
 	if (istype(target, /mob/living/carbon/human))
@@ -373,7 +334,7 @@
 
 
 /obj/item/weapon/reagent_containers/syringe/inaprovaline
-	name = "Syringe (inaprovaline)"
+	name = "syringe (inaprovaline)"
 	desc = "Contains inaprovaline - used to stabilize patients."
 /obj/item/weapon/reagent_containers/syringe/inaprovaline/New()
 	..()
@@ -382,7 +343,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/antitoxin
-	name = "Syringe (anti-toxin)"
+	name = "syringe (anti-toxin)"
 	desc = "Contains anti-toxins."
 /obj/item/weapon/reagent_containers/syringe/antitoxin/New()
 	..()
@@ -391,7 +352,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/antiviral
-	name = "Syringe (spaceacillin)"
+	name = "syringe (spaceacillin)"
 	desc = "Contains antiviral agents."
 /obj/item/weapon/reagent_containers/syringe/antiviral/New()
 	..()
@@ -400,7 +361,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/charcoal
-	name = "Syringe (Activated Charcoal)"
+	name = "syringe (activated charcoal)"
 	desc = "Contains activated charcoal - used to treat overdoses."
 /obj/item/weapon/reagent_containers/syringe/charcoal/New()
 	..()
@@ -409,7 +370,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/giant/chloral
-	name = "Lethal Injection Syringe"
+	name = "lethal injection syringe"
 	desc = "Puts people into a sleep they'll never wake up from."
 /obj/item/weapon/reagent_containers/syringe/giant/chloral/New()
 	..()
@@ -421,7 +382,7 @@
 //Robot syringes
 //Not special in any way, code wise. They don't have added variables or procs.
 /obj/item/weapon/reagent_containers/syringe/robot/antitoxin
-	name = "Syringe (anti-toxin)"
+	name = "syringe (anti-toxin)"
 	desc = "Contains anti-toxins."
 /obj/item/weapon/reagent_containers/syringe/robot/antitoxin/New()
 	..()
@@ -430,7 +391,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/robot/inoprovaline
-	name = "Syringe (inoprovaline)"
+	name = "syringe (inoprovaline)"
 	desc = "Contains inaprovaline - used to stabilize patients."
 /obj/item/weapon/reagent_containers/syringe/robot/inoprovaline/New()
 	..()
@@ -439,7 +400,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/robot/charcoal
-	name = "Syringe (Activated Charcoal)"
+	name = "syringe (activated charcoal)"
 	desc = "Contains activated charcoal - used to treat overdoses."
 /obj/item/weapon/reagent_containers/syringe/robot/charcoal/New()
 	..()
@@ -448,7 +409,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/robot/mixed
-	name = "Syringe (mixed)"
+	name = "syringe (mixed)"
 	desc = "Contains inaprovaline & anti-toxins."
 /obj/item/weapon/reagent_containers/syringe/robot/mixed/New()
 	..()

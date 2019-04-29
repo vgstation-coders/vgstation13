@@ -245,7 +245,7 @@ var/paperwork_library
 
 /obj/item/weapon/pen/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/pen/blue
 	desc = "It's a normal blue ink pen."
@@ -262,6 +262,9 @@ var/paperwork_library
 	icon_state = "pen"
 	colour = "white"
 
+/obj/item/weapon/pen/NT
+	name = "promotional Nanotrasen pen"
+	desc = "Just a cheap plastic pen. It reads: \"For our most valued customers\". They probably meant 'employees'."
 
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
 	if(!ismob(M))

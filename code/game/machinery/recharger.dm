@@ -59,7 +59,12 @@
 
 /obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
 	if(issilicon(user))
-		return 1
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+				return 1
+		else
+			return 1
 	. = ..()
 	if(.)
 		return
@@ -70,6 +75,9 @@
 		to_chat(user, "You can't insert anything into \the [src] while the maintenance panel is open.</span>")
 		return 1
 	if(charging)
+		if(isgripper(G) && isrobot(user))
+			attack_hand(user)
+			return 1
 		to_chat(user, "<span class='warning'>There's \a [charging] already charging inside!</span>")
 		return 1
 	if(!anchored)
@@ -115,7 +123,14 @@
 	update_icon()
 
 /obj/machinery/recharger/attack_hand(mob/user)
-	if(issilicon(user) || ..())
+	if(issilicon(user))
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+				return 1
+		else
+			return 1
+	if(..())
 		return 1
 
 	add_fingerprint(user)
@@ -152,6 +167,8 @@
 		return
 
 	if(charging)
+		if(istype(charging, /obj/item))
+			charging.recharger_process(src)
 		var/charge_unit
 		if(istype(charging, /obj/item/weapon/gun/energy)) // Original values: 100e charged, 150e wasted,
 			var/obj/item/weapon/gun/energy/E = charging
@@ -181,33 +198,6 @@
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/ammo_storage/magazine/lawgiver)) // Original values: lawgiver charges 1/5 of of one ammo type for 200e, 100e + 100e excess sounds palatable
-			var/obj/item/ammo_storage/magazine/lawgiver/L = charging
-			if(!L.isFull())
-				var/charged_amount
-				if(L.stuncharge != 100)
-					charged_amount = 20 * charging_speed_modifier
-					L.stuncharge = min(L.stuncharge + charged_amount, 100)
-				else if(L.lasercharge != 100)
-					charged_amount = 20 * charging_speed_modifier
-					L.lasercharge = min(L.lasercharge + charged_amount, 100)
-				else if(L.rapid_ammo_count != 5)
-					charged_amount = charging_speed_modifier
-					L.rapid_ammo_count = min(L.rapid_ammo_count + charged_amount, 5)
-				else if(L.flare_ammo_count != 5)
-					charged_amount = charging_speed_modifier
-					L.flare_ammo_count = min(L.flare_ammo_count + charged_amount, 5)
-				else if(L.ricochet_ammo_count != 5)
-					charged_amount = charging_speed_modifier
-					L.ricochet_ammo_count = min(L.ricochet_ammo_count + charged_amount, 5)
-				icon_state = "recharger1"
-				if(!self_powered)
-					use_power(100 * charging_speed_modifier + 100 * charging_speed_modifier * efficiency_modifier) // could make this more compressed but didn't for better readability
-				update_icon()
-			else
-				update_icon()
-				icon_state = "recharger2"
-			return
 		else if(istype(charging, /obj/item/weapon/melee/baton)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
 			var/obj/item/weapon/melee/baton/B = charging
 			if(B.bcell)
@@ -231,6 +221,11 @@
 					icon_state = "recharger2"
 			else
 				icon_state = "recharger0"
+
+/obj/machinery/recharger/proc/try_use_power(var/amount)
+	if(self_powered)
+		return
+	use_power(amount)
 
 /obj/machinery/recharger/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN) || !anchored)

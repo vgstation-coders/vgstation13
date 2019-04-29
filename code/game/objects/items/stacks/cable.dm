@@ -39,7 +39,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 /obj/item/stack/cable_coil/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/stack/cable_coil/New(loc, amount, var/param_color = null)
 	..()

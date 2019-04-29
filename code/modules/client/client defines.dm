@@ -22,6 +22,7 @@
 	var/area			= null
 	var/time_died_as_mouse = null //when the client last died as a mouse
 	var/datum/tooltip/tooltips //datum that controls the displaying and hiding of tooltips
+	var/list/radial_menus = list() //keeping track of open menus so we're not gonna have several on top of each other.
 
 		///////////////
 		//SOUND STUFF//
@@ -58,7 +59,6 @@
 
 	var/filling = 0 //SOME STUPID SHIT POMF IS DOING
 	var/haszoomed = 0
-	var/updating_colour = 0
 
 	// Their chat window, sort of important.
 	// See /goon/code/datums/browserOutput.dm
@@ -83,6 +83,14 @@
 	//One-way windows
 	var/list/ViewFilter = list()
 	var/list/ObscuredTurfs = list()
+
+	//ambience
+	var/last_ambient_noise //no repeats.
+	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
+
+	var/received_credits = FALSE
+	var/received_roundend_audio = FALSE
+
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

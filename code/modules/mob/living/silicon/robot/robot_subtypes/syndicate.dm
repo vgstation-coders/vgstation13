@@ -23,6 +23,9 @@
 		holochip = new /obj/item/clothing/accessory/holomap_chip/syndicate_robot(src)
 		holochip.equipped(src)
 
+/mob/living/silicon/robot/syndie/setup_PDA()
+	return
+
 /mob/living/silicon/robot/syndie/blitz/New()
 	..()
 	pick_module(SYNDIE_BLITZ_MODULE)

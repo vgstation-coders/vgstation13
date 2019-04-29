@@ -13,10 +13,11 @@
 			break
 	if(!server)
 		return
-	for(var/datum/tech/T in tech_list)
+	for(var/ID in tech_list)
+		var/datum/tech/T = tech_list[ID]
 		if(T.goal_level==0) // Ignore illegal tech, etc
 			continue
-		var/datum/tech/KT  = locate(T.type, server.files.known_tech)
+		var/datum/tech/KT = server.files.GetKTechByID(ID)
 		tech_level_total += KT.level
 	return tech_level_total
 
@@ -55,8 +56,8 @@
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
 			d.assigned_role = M.mind.assigned_role
-		if(M.mind.special_role && M.mind.special_role != "")
-			d.special_role = M.mind.special_role
+		// if(M.mind.special_role && M.mind.special_role != "")
+		// 	d.special_role = M.mind.special_role
 		if(M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
@@ -102,8 +103,8 @@
 	var/was_traitor = TRUE
 	if(ticker.current_state != GAME_STATE_PLAYING) return
 
-	if(user.mind && user.mind.special_role != "traitor")
-		was_traitor = FALSE
+	// if(user.mind && user.mind.special_role != "traitor")
+	// 	was_traitor = FALSE
 
 	if(istype(bundle, /datum/uplink_item/badass/bundle))
 		var/datum/stat/uplink_badass_bundle_stat/BAD = new
@@ -115,32 +116,32 @@
 		BAD.purchaser_is_traitor = was_traitor
 		badass_bundles.Add(BAD)
 	else
-		var/datum/stat/uplink_purchase_stat/UP = new
+		var/datum/stat/uplink_purchase_stat/PUR = new
 		if(istype(bundle, /datum/uplink_item/badass/random))
-			UP.itemtype = resulting_item.type
+			PUR.itemtype = resulting_item.type
 		else
-			UP.itemtype = bundle.item
-		UP.bundle = bundle.type
-		UP.purchaser_key = ckey(user.mind.key)
-		UP.purchaser_name = STRIP_NEWLINE(user.mind.name)
-		UP.purchaser_is_traitor = was_traitor
-		uplink_purchases.Add(UP)
+			PUR.itemtype = bundle.item
+		PUR.bundle = bundle.type
+		PUR.purchaser_key = ckey(user.mind.key)
+		PUR.purchaser_name = STRIP_NEWLINE(user.mind.name)
+		PUR.purchaser_is_traitor = was_traitor
+		uplink_purchases.Add(PUR)
 
 /datum/stat_collector/proc/add_objectives(var/datum/mind/M)
-	if(M.objectives.len)
-		for(var/datum/objective/O in M.objectives)
-			var/datum/stat/antag_objective/AO = new
-			AO.key = ckey(M.key)
-			AO.realname = STRIP_NEWLINE(M.name)
-			AO.special_role = M.special_role
-			AO.objective_type = O.type
-			AO.objective_desc = O.explanation_text
-			AO.objective_succeeded = O.check_completion()
-			if(O.target)
-				AO.target_name = STRIP_NEWLINE(O.target.name)
-				AO.target_role = O.target.assigned_role
-
-			antag_objectives.Add(AO)
+	// if(M.objectives.len)
+	// 	for(var/datum/objective/O in M.objectives)
+	// 		var/datum/stat/antag_objective/AO = new
+	// 		AO.key = ckey(M.key)
+	// 		AO.realname = STRIP_NEWLINE(M.name)
+	// 		AO.special_role = M.special_role
+	// 		AO.objective_type = O.type
+	// 		AO.objective_desc = O.explanation_text
+	// 		AO.objective_succeeded = O.check_completion()
+	// 		if(O.target)
+	// 			AO.target_name = STRIP_NEWLINE(O.target.name)
+	// 			AO.target_role = O.target.assigned_role
+    //
+	// 		antag_objectives.Add(AO)
 
 
 /datum/stat/population_stat/New(pop as num)
@@ -155,20 +156,15 @@
 	mapname = map.nameLong
 	mastermode = master_mode // this is stored as a string in game
 	tickermode = ticker.mode.name
-	nuked = ticker.mode.station_was_nuked
+	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
 	stationname = station_name()
-	if(istype(ticker.mode, /datum/game_mode/mixed))
-		var/datum/game_mode/mixed/mixy = ticker.mode
-		for(var/datum/game_mode/GM in mixy.modes)
-			mixed_gamemodes.Add(GM.name)
 
 	for(var/datum/mind/M in ticker.minds)
 		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
-			if(M.special_role == "Cultist")
-				cult_surviving_cultists++
+
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")

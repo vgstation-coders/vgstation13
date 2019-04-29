@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = " "
-	var/base_name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
@@ -14,7 +13,8 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
-
+	layer = ABOVE_OBJ_LAYER
+	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
 	var/list/can_be_placed_into = list(
@@ -55,7 +55,6 @@
 
 /obj/item/weapon/reagent_containers/glass/New()
 	..()
-	base_name = name
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
 /obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
@@ -175,7 +174,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(reagents.total_volume)
+	if(!opaque && reagents && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -226,9 +225,7 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
-
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/update_icon()
-	return
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -248,9 +245,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
-
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace/update_icon()
-	return
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -277,23 +272,17 @@
 
 	reagents.add_reagent(URANIUM, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
+	..()
+	reagents.add_reagent(CRYOXADONE, 30)
 
-	New()
-		..()
-		reagents.add_reagent(CRYOXADONE, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
+	..()
+	reagents.add_reagent(SACID, 50)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric
-
-	New()
-		..()
-		reagents.add_reagent(SACID, 50)
-
-/obj/item/weapon/reagent_containers/glass/beaker/slime
-
-	New()
-		..()
-		reagents.add_reagent(SLIMEJELLY, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
@@ -358,11 +347,27 @@
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
+		return
 	attempt_heating(D, user)
+
+/obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bucket/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)
+	update_icon()
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
@@ -408,9 +413,9 @@
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
 
-	New()
-		..()
-		reagents.add_reagent(FLUOROSURFACTANT, 20)
+/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
+	..()
+	reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 

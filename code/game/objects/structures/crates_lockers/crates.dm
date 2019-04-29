@@ -16,6 +16,9 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
+/obj/structure/closet/crate/basic
+	has_lock_type = /obj/structure/closet/crate/secure/basic
+
 /obj/structure/closet/pcrate
 	name = "plastic crate"
 	desc = "A rectangular plastic crate."
@@ -96,6 +99,7 @@
 	density = 1
 	icon_opened = "medicalcrateopen"
 	icon_closed = "medicalcrate"
+	has_lock_type = /obj/structure/closet/crate/secure/medsec
 
 /obj/structure/closet/crate/rcd
 	desc = "A crate for the storage of the RCD."
@@ -105,6 +109,7 @@
 	density = 1
 	icon_opened = "crateopen"
 	icon_closed = "crate"
+	has_lock_type = /obj/structure/closet/crate/secure/basic
 
 /obj/structure/closet/crate/freezer
 	desc = "A freezer."
@@ -148,6 +153,7 @@
 	density = 1
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
+
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(iswrench(W) && wrenchable())
         return wrenchAnchor(user)
@@ -200,6 +206,7 @@
 	density = 1
 	icon_opened = "hydrosecurecrateopen"
 	icon_closed = "hydrosecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/hydroponics
 
 /obj/structure/closet/crate/secure/bin
 	desc = "A secure bin."
@@ -211,6 +218,7 @@
 	greenlight = "largebing"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
+
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(iswrench(W) && wrenchable())
         return wrenchAnchor(user)
@@ -228,6 +236,7 @@
 	icon_closed = "largemetal"
 	redlight = "largemetalr"
 	greenlight = "largemetalg"
+	has_lockless_type = /obj/structure/closet/crate/large
 
 /obj/structure/closet/crate/secure/large/close()
 	//we can hold up to one large item
@@ -265,7 +274,11 @@
 	var/emag = "securecrateemag"
 	broken = 0
 	locked = 1
+	has_electronics = 1
 	health = 1000
+
+/obj/structure/closet/crate/secure/basic
+	has_lockless_type = /obj/structure/closet/crate/basic
 
 /obj/structure/closet/crate/secure/anti_tamper
 	name = "Extra-secure crate"
@@ -290,6 +303,7 @@
 	icon_state = "largemetal"
 	icon_opened = "largemetalopen"
 	icon_closed = "largemetal"
+	has_lock_type = /obj/structure/closet/crate/secure/large
 
 /obj/structure/closet/crate/large/close()
 	//we can hold up to one large item
@@ -316,6 +330,7 @@
 	icon_opened = "hydrocrateopen"
 	icon_closed = "hydrocrate"
 	density = 1
+	has_lock_type = /obj/structure/closet/crate/secure/hydrosec
 
 /obj/structure/closet/crate/sci
 	desc = "A science crate."
@@ -325,6 +340,7 @@
 	density = 1
 	icon_opened = "scicrateopen"
 	icon_closed = "scicrate"
+	has_lock_type = /obj/structure/closet/crate/secure/scisec
 
 /obj/structure/closet/crate/secure/scisec
 	desc = "A secure science crate."
@@ -334,6 +350,7 @@
 	density = 1
 	icon_opened = "scisecurecrateopen"
 	icon_closed = "scisecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/sci
 
 /obj/structure/closet/crate/engi
 	desc = "An engineering crate."
@@ -343,6 +360,7 @@
 	density = 1
 	icon_opened = "engicrateopen"
 	icon_closed = "engicrate"
+	has_lock_type = /obj/structure/closet/crate/secure/engisec
 
 /obj/structure/closet/crate/secure/engisec
 	desc = "A secure engineering crate."
@@ -352,6 +370,17 @@
 	density = 1
 	icon_opened = "engisecurecrateopen"
 	icon_closed = "engisecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/engi
+
+/obj/structure/closet/crate/secure/medsec
+	desc = "A secure medical crate."
+	name = "secure medical crate"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "medicalsecurecrate"
+	density = 1
+	icon_opened = "medicalsecurecrateopen"
+	icon_closed = "medicalsecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/medical
 
 /obj/structure/closet/crate/secure/plasma/prefilled
 	var/count=10
@@ -359,23 +388,17 @@
 	for(var/i=0;i<count;i++)
 		new /obj/item/weapon/tank/plasma(src)
 
-/obj/structure/closet/crate/hydroponics/prespawned
-	//This exists so the prespawned hydro crates spawn with their contents.
-	New()
-		..()
-		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
-		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
-		new /obj/item/weapon/minihoe(src)
+//This exists so the prespawned hydro crates spawn with their contents.
+/obj/structure/closet/crate/hydroponics/prespawned/New()
+	..()
+	new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
+	new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
+	new /obj/item/weapon/minihoe(src)
 
 
 /obj/structure/closet/crate/secure/New()
 	..()
-	if(locked)
-		overlays.len = 0
-		overlays += redlight
-	else
-		overlays.len = 0
-		overlays += greenlight
+	update_icon()
 
 /obj/structure/closet/crate/rcd/New()
 	..()
@@ -479,23 +502,28 @@
 		if (allowed(user))
 			to_chat(user, "<span class='notice'>You unlock [src].</span>")
 			src.locked = 0
-			overlays.len = 0
-			overlays += greenlight
+			update_icon()
 			return
 		else
-			to_chat(user, "<span class='notice'>[src] is locked.</span>")
+			to_chat(user, "<span class='notice'>Access Denied.</span>")
 			return
 	else
 		..()
 
+/obj/structure/closet/crate/secure/proc/togglelock(mob/user)
+	if(src.allowed(user))
+		src.locked = !src.locked
+		if (src.locked)
+			to_chat(user, "<span class='notice'>You lock \the [src].</span>")
+			update_icon()
+		else
+			to_chat(user, "<span class='notice'>You unlock [src].</span>")
+			update_icon()
+	else
+		to_chat(user, "<span class='notice'>Access Denied.</span>")
+
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
-		to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-		src.locked = 1
-		overlays.len = 0
-		overlays += redlight
-		return
-	else if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
 		overlays.len = 0
 		overlays += emag
 		overlays += sparks
@@ -505,7 +533,51 @@
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
 		return
+	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
+		togglelock(user)
+		return
+	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
+		remove_lock(user)
+		return
 	return ..()
+
+/obj/structure/closet/crate/secure/verb/verb_togglelock()
+	set src in oview(1) // One square distance
+	set category = "Object"
+	set name = "Toggle Lock"
+
+	if(usr.incapacitated()) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
+		return
+
+	if(!Adjacent(usr) || usr.loc == src)
+		return
+
+	if(src.broken)
+		return
+
+	if (ishuman(usr))
+		if (!opened)
+			togglelock(usr)
+			return 1
+	else
+		to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
+
+/obj/structure/closet/crate/secure/AltClick()
+	if(verb_togglelock())
+		return
+	return ..()
+
+/obj/structure/closet/crate/secure/update_icon()
+	if(opened)
+		icon_state = icon_opened
+	else
+		icon_state = icon_closed
+		if (!broken)
+			overlays.len = 0
+			if(locked)
+				overlays += redlight
+			else
+				overlays += greenlight
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -513,6 +585,9 @@
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened)
 		return ..()
+	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type)
+		add_lock(W, user)
+		return
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
@@ -546,8 +621,7 @@
 	if(!broken && !opened  && prob(50/severity))
 		if(!locked)
 			src.locked = 1
-			overlays.len = 0
-			overlays += redlight
+			update_icon()
 		else
 			overlays.len = 0
 			overlays += emag
@@ -572,6 +646,12 @@
 			qdel(src)
 			return
 		if(2.0)
+			broken = 1
+			if(has_electronics)
+				if (prob(50))
+					dump_electronics()
+				else
+					qdel(electronics)
 			for(var/obj/O in src.contents)
 				if(prob(50))
 					qdel(O)
@@ -579,6 +659,9 @@
 			return
 		if(3.0)
 			if (prob(50))
+				broken = 1
+				if(has_electronics)
+					dump_electronics()
 				qdel(src)
 			return
 		else

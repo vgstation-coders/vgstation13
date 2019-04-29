@@ -1,7 +1,7 @@
 ///////////////ANTIBODY SCANNER///////////////
 
 /obj/item/device/antibody_scanner
-	name = "Antibody Scanner"
+	name = "antibody scanner"
 	desc = "Used to scan living beings for antibodies in their blood."
 	icon_state = "antibody"
 	w_class = W_CLASS_SMALL
@@ -19,12 +19,12 @@
 		to_chat(user, "<span class='notice'>Unable to detect antibodies.</span>")
 		return
 	var/code = antigens2string(M.antibodies)
-	to_chat(user, "<span class='notice'>[src] The antibody scanner displays a cryptic set of data: [code]</span>")
+	to_chat(user, "<span class='notice'>[bicon(src)] \The [src] displays a cryptic set of data: [code]</span>")
 
 ///////////////VIRUS DISH///////////////
 
 /obj/item/weapon/virusdish
-	name = "Virus containment/growth dish"
+	name = "virus containment/growth dish"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
 	var/datum/disease2/disease/virus2 = null
@@ -33,11 +33,12 @@
 	var/analysed = 0
 
 /obj/item/weapon/virusdish/random
-	name = "Virus Sample"
+	name = "virus sample"
 
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
-	virus2 = new /datum/disease2/disease
+	var/virus_choice = pick(typesof(/datum/disease2/disease))
+	virus2 = new virus_choice
 	virus2.makerandom()
 	growth = rand(5, 50)
 
@@ -71,13 +72,19 @@
 
 ///////////////GNA DISK///////////////
 
-/obj/item/weapon/diseasedisk
-	name = "Blank GNA disk"
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk0"
+/obj/item/weapon/disk/disease
+	name = "blank GNA disk"
+	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk_virus"
 	var/datum/disease2/effect/effect = null
 	var/stage = 1
 
-/obj/item/weapon/diseasedisk/premade/New()
-	name = "Blank GNA disk (stage: [stage])"
+/obj/item/weapon/disk/disease/premade/New()
+	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
+
+/obj/item/weapon/disk/disease/zombie
+	name = "\improper Stubborn Brain Syndrome (Stage 4)"
+	effect = new /datum/disease2/effect/zombie
+	stage = 4

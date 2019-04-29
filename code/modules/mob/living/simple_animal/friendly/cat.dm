@@ -12,6 +12,7 @@
 	speak_emote = list("purrs", "meows")
 	emote_hear = list("meows", "mews")
 	emote_see = list("shakes its head", "shivers")
+	emote_sound = list("sound/voice/catmeow.ogg")
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
@@ -45,6 +46,7 @@
 	icon_living = "cat"
 	icon_dead = "cat_dead"
 	gender = FEMALE
+	is_pet = TRUE
 
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
@@ -108,6 +110,26 @@
 				stop_automated_movement = 1
 				start_walk_to(movement_target,0,3)
 
+/mob/living/simple_animal/cat/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	react_to_touch(M)
+	M.delayNextAttack(2 SECONDS)
+
+/mob/living/simple_animal/cat/proc/react_to_touch(mob/M)
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 20)
+				emote("me", EMOTE_AUDIBLE, "purrs.")
+				playsound(loc, 'sound/voice/catpurr.ogg', 80, 1)
+			if(I_HURT)
+				playsound(loc, 'sound/voice/cathiss.ogg', 80, 1)
+				emote("me", EMOTE_AUDIBLE, "hisses.")
+
+/mob/living/simple_animal/cat/snek/react_to_touch(mob/M)
+	return 0 // SNAKES DO NOT MEOW. WHY ARE THEY A CAT SUBTYPE?
 
 /mob/living/simple_animal/cat/snek
 	name = "snake"
@@ -120,6 +142,7 @@
 	speak_emote = list("hisses")
 	emote_hear = list("hisses")
 	emote_see = list("slithers")
+	emote_sound = list() // stops snakes purring
 	kill_verbs = list("strikes at", "splats", "bites", "lunges at")
 	growl_verbs = list("hisses")
 

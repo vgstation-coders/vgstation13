@@ -35,6 +35,7 @@
 	if(BrainContainer)
 		qdel(BrainContainer)
 		BrainContainer = null
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -92,17 +93,9 @@
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
 
-	//handles "call on life", allowing external life-related things to be processed
-	for(var/toCall in src.callOnLife)
-		if(locate(toCall) && callOnLife[toCall])
-			try
-				call(locate(toCall),callOnLife[toCall])()
-			catch(var/exception/e)
-				stack_trace(e)
-		else
-			callOnLife -= toCall
+	INVOKE_EVENT(on_life, list())
 
-	if(mind)
+	/*if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting)
 				return 0
@@ -112,7 +105,7 @@
 			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
 //				to_chat(world, "doesn't have an implant")
 				ticker.mode.remove_traitor_mind(mind, head)
-				/*
+
 				if((head in ticker.mode.implanters))
 					ticker.mode.implanter[head] -= src.mind
 				ticker.mode.implanted -= src.mind
@@ -121,8 +114,6 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_LIFE,list())
 	return 1
 
 // Apply connect damage
@@ -143,36 +134,35 @@
 		apply_beam_damage(B)
 
 /mob/living/cultify()
-	if(iscultist(src) && client)
+	if(islegacycultist(src) && client)
 		var/mob/living/simple_animal/construct/harvester/C = new /mob/living/simple_animal/construct/harvester(get_turf(src))
 		mind.transfer_to(C)
 		to_chat(C, "<span class='sinister'>The Geometer of Blood is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the shell of an Harvester.<br>Your tendrils can use and draw runes without need for a tome, your eyes can see beings through walls, and your mind can open any door. Use these assets to serve Nar-Sie and bring him any remaining living human in the world.<br>You can teleport yourself back to Nar-Sie along with any being under yourself at any time using your \"Harvest\" spell.</span>")
 		dust()
-	else if(client)
-		var/mob/dead/G = (ghostize())
-		G.icon = 'icons/mob/mob.dmi'
-		G.icon_state = "ghost-narsie"
-		G.overlays = 0
-		if(istype(G.mind.current, /mob/living/carbon/human/))
-			var/mob/living/carbon/human/H = G.mind.current
-			G.overlays += H.obj_overlays[ID_LAYER]
-			G.overlays += H.obj_overlays[EARS_LAYER]
-			G.overlays += H.obj_overlays[SUIT_LAYER]
-			G.overlays += H.obj_overlays[GLASSES_LAYER]
-			G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-			G.overlays += H.obj_overlays[BELT_LAYER]
-			G.overlays += H.obj_overlays[BACK_LAYER]
-			G.overlays += H.obj_overlays[HEAD_LAYER]
-			G.overlays += H.obj_overlays[HANDCUFF_LAYER]
-		G.invisibility = 0
-		to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
-
-		if(ticker.mode.name == "cult")
-			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			mode_ticker.harvested++
-
-	else
-		dust()
+	else if(!iscultist(src))
+		if(client)
+			var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
+			if (cult_fact)
+				cult_fact.harvested++
+			var/mob/dead/G = (ghostize())
+			G.icon = 'icons/mob/mob.dmi'
+			G.icon_state = "ghost-narsie"
+			G.overlays = 0
+			if(istype(G.mind.current, /mob/living/carbon/human/))
+				var/mob/living/carbon/human/H = G.mind.current
+				G.overlays += H.obj_overlays[ID_LAYER]
+				G.overlays += H.obj_overlays[EARS_LAYER]
+				G.overlays += H.obj_overlays[SUIT_LAYER]
+				G.overlays += H.obj_overlays[GLASSES_LAYER]
+				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.obj_overlays[BELT_LAYER]
+				G.overlays += H.obj_overlays[BACK_LAYER]
+				G.overlays += H.obj_overlays[HEAD_LAYER]
+				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+			G.invisibility = 0
+			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
+		spawn(1)
+			dust()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -189,10 +179,15 @@
 
 /mob/living/verb/succumb()
 	set hidden = 1
+	succumb_proc(0)
+
+/mob/living/proc/succumb_proc(var/gibbed = 0, var/from_deathgasp = FALSE)
 	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
 		src.apply_damage(maxHealth + src.health, OXY)
-		death(0)
+		if (!from_deathgasp)
+			emote("deathgasp", message = TRUE)
+		death(gibbed)
 		to_chat(src, "<span class='info'>You have given up life and succumbed to death.</span>")
 
 
@@ -569,6 +564,8 @@ Thanks.
 	eye_blurry = 0
 	ear_deaf = 0
 	ear_damage = 0
+	say_mute = 0
+	mutations &= ~M_HUSK
 	if(!reagents)
 		create_reagents(1000)
 	else
@@ -724,46 +721,6 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-
-							/* Drag damage is here!*/
-							var/mob/living/carbon/human/HM = M
-							var/list/damaged_organs = HM.get_broken_organs()
-							var/list/bleeding_organs = HM.get_bleeding_organs()
-							if (T.has_gravity() && HM.lying)
-
-								if (damaged_organs.len)
-									if(!HM.isincrit())
-										if(prob(HM.getBruteLoss() / 5)) //Chance for damage based on current damage
-											for(var/datum/organ/external/damagedorgan in damaged_organs)
-												if((damagedorgan.brute_dam) < damagedorgan.max_damage) //To prevent organs from accruing thousands of damage
-													HM.apply_damage(2, BRUTE, damagedorgan)
-													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
-													HM.UpdateDamageIcon()
-									else
-										if(prob(15))
-											for(var/datum/organ/external/damagedorgan in damaged_organs)
-												if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-													HM.apply_damage(4, BRUTE, damagedorgan)
-													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
-													add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
-													HM.UpdateDamageIcon()
-
-								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
-									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
-									/*Sometimes species with NO_BLOOD get blood, hence weird check*/
-									if(blood_volume > 0)
-										if(isturf(HM.loc))
-											if(!HM.isincrit())
-												if(prob(blood_volume / 89.6)) //Chance to bleed based on blood remaining
-													blood_splatter(HM.loc,HM)
-													HM.vessel.remove_reagent("blood",4)
-													HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
-											else
-												if(prob(blood_volume / 44.8)) //Crit mode means double chance of blood loss
-													blood_splatter(HM.loc,HM,1)
-													HM.vessel.remove_reagent("blood",8)
-													HM.visible_message("<span class='danger'>\The [HM] loses a lot of blood from being dragged!</span>")
-													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
@@ -821,16 +778,19 @@ Thanks.
 				hook.override_target_X--
 
 /mob/living
-    var/event/on_resist
+	var/event/on_resist
 
 /mob/living/New()
-    . = ..()
-    on_resist = new(owner = src)
+	. = ..()
+	on_resist = new(owner = src)
+	on_life = new(owner = src)
 
 /mob/living/Destroy()
-    . = ..()
-    qdel(on_resist)
-    on_resist = null
+	. = ..()
+	qdel(on_resist)
+	on_resist = null
+	qdel(on_life)
+	on_life = null
 
 /mob/living/verb/resist()
 	set name = "Resist"
@@ -1000,22 +960,37 @@ Thanks.
 			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				if(C.handcuffed)
-					C.delayNextAttack(100)
-					C.delayNextSpecial(100)
-					C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
-									  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
-									  self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
-					spawn(0)
-						if(do_after(usr, usr, 1200))
-							if(!C.locked_to)
-								return
-							C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
-								"<span class='notice'>You successfully unbuckle yourself.</span>",\
+					C.delayNextAttack(50)
+					C.delayNextSpecial(50)
+					if(isalienadult(C) || (M_HULK in usr.mutations))
+						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
+						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
+						spawn(0) // I have no idea what this is supposed to actually do but everything else has it so why not
+							if(do_after(C, C, 50))
+								if(!C.handcuffed || !C.locked_to)
+									return
+								C.visible_message("<span class='danger'>[C] manages to forcefully unbuckle!</span>",
+								                  "<span class='notice'>You successfully forcefully unbuckle.</span>")
+								C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+								B.manual_unbuckle(C)
+							else
+								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
+					else
+						C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
+						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
+						                   self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
+						spawn(0)
+							if(do_after(usr, usr, 1 MINUTES))
+								if(!C.locked_to)
+									return
+								C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
+								                  "<span class='notice'>You successfully unbuckle yourself.</span>",\
 								self_drugged_message="<span class='notice'>You successfully regain control of your legs and stand up.</span>")
-							B.manual_unbuckle(C)
-						else
-							C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
-								"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
+								B.manual_unbuckle(C)
+							else
+								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
+									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
+
 			else
 				B.manual_unbuckle(L)
 		//release from kudzu
@@ -1112,9 +1087,10 @@ Thanks.
 	else if(iscarbon(L))
 		var/mob/living/carbon/CM = L
 	//putting out a fire
-		if(CM.on_fire && CM.canmove)
+		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
 			CM.fire_stacks -= 5
-			CM.SetKnockdown(3)
+			CM.Knockdown(3)
+			CM.Stun(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
@@ -1251,19 +1227,22 @@ Thanks.
 	return
 
 //same as above
-/mob/living/pointed(atom/A as mob|obj|turf in view())
+/mob/living/pointed(atom/A as mob|obj|turf in view(get_turf(src)))
 	if(src.incapacitated())
 		return 0
 	if(!..())
 		return 0
-	usr.visible_message("<b>[src]</b> points to [A]")
+	var/turf/T = get_turf(src)
+	T.visible_message("[pointToMessage(src, A)]")
 	return 1
 
+/mob/living/proc/pointToMessage(var/pointer, var/pointed_at)
+	return "<b>\The [pointer]</b> points at <b>\the [pointed_at]</b>."
 
 /mob/living/proc/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter"))
+	static_overlays.Add(list("static", "blank", "letter", "cult"))
 	var/image/static_overlay = image(getStaticIcon(new/icon(src.icon, src.icon_state)), loc = src)
 	static_overlay.override = 1
 	static_overlays["static"] = static_overlay
@@ -1275,6 +1254,10 @@ Thanks.
 	static_overlay = getLetterImage(src)
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
+
+	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
@@ -1363,7 +1346,7 @@ Thanks.
 			if (!now_pushing)
 				now_pushing = 1
 
-				if (!AM.anchored)
+				if (!AM.anchored && AM.can_be_pushed(src))
 					var/t = get_dir(src, AM)
 					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
@@ -1556,9 +1539,6 @@ Thanks.
 	health = 0
 	stat = DEAD
 
-/mob/proc/CheckSlip()
-	return 0
-
 /mob/living/proc/turn_into_statue(forever = 0, force)
 	if(!force)
 		if(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))
@@ -1598,6 +1578,8 @@ Thanks.
 		eye_blurry = rand(0,100)
 	if(prob(5))
 		ear_deaf = rand(0,100)
+	if(prob(5))
+		say_mute = rand(0,100)
 	brute_damage_modifier += rand(-5,5)/10
 	burn_damage_modifier += rand(-5,5)/10
 	tox_damage_modifier += rand(-5,5)/10
@@ -1698,11 +1680,13 @@ Thanks.
 				returnToPool(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
+	if(isitem(item))
+		var/obj/item/I = item
+		if(I.cant_drop > 0)
+			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
+			return FAILED_THROW
 
-	var/obj/item/I = item
-	if(istype(I) && I.cant_drop > 0)
-		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
-		return FAILED_THROW
+		I.pre_throw()
 
 	remove_from_mob(item)
 
@@ -1727,7 +1711,7 @@ Thanks.
 		if(istype(src,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H=src
 			throw_mult = H.species.throw_mult
-			if(M_HULK in H.mutations || M_STRONG in H.mutations)
+			if((M_HULK in H.mutations) || (M_STRONG in H.mutations))
 				throw_mult+=0.5
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
 		return THREW_SOMETHING
@@ -1815,3 +1799,41 @@ Thanks.
 			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+
+/mob/living/proc/Silent(amount)
+	silent = max(max(silent,amount),0)
+
+/mob/living/proc/SetSilent(amount)
+	silent = max(amount,0)
+
+/mob/living/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(src == user)
+		return ..()
+	// Attempting to inject someone else takes time
+	if(tool.get_injection_action(src) == INJECTION_SUIT_PORT)
+		user.visible_message("<span class='warning'>[user] begins hunting for an injection port for \the [tool] on [src]'s suit!</span>",
+							 "<span class='warning'>You begin hunting for an injection port for \the [tool] on [src]'s suit!</span>")
+	else
+		user.visible_message("<span class='warning'>[user] is trying to inject [src] with \the [tool]!</span>",
+							 "<span class='warning'>You try to inject [src] with \the [tool]!</span>")
+	if(!do_mob(user, src, tool.get_injection_time(src)))
+		return INJECTION_RESULT_FAIL
+	user.visible_message("<span class='warning'>[user] injects [src] with the \the [tool]!</span>",
+						 "<span class='warning'>You inject [src] with \the [tool]!</span>")
+	var/reagent_names = english_list(tool.get_reagent_names())
+	add_attacklogs(user, src, "injected", object = tool, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
+
+	// TODO Every reagent reacts with the full volume instead of being scaled accordingly
+	// TODO which is pretty irrelevant now but should be fixed
+	tool.reagents.reaction(src, INGEST)
+	return ..()
+
+/mob/living/proc/ApplySlip(var/obj/effect/overlay/puddle/P)
+	return on_foot() // Check if we have legs, gravity, etc. Checked by the children.
+
+/mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_with_magbooties = 0)
+	stop_pulling()
+	Stun(stun_amount)
+	Knockdown(weaken_amount)
+	score["slips"]++
+	return 1

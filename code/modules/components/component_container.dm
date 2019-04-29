@@ -15,6 +15,15 @@
 /datum/component_container/New(var/atom/holder_atom)
 	holder=holder_atom
 
+/datum/component_container/Destroy()
+	for(var/i in components)
+		qdel(i)
+	components.Cut()
+
+	holder = null
+	unregister_for_updates()
+	..()
+
 /datum/component_container/proc/AddComponentsByType(var/list/new_types)
 	var/list/newtypes=list()
 	for(var/new_type in new_types)
@@ -109,3 +118,10 @@
 		if(istype(C, desired_type))
 			. += C
 	return .
+
+
+/datum/component_container/proc/register_for_updates()
+	active_component_containers.Add(src)
+
+/datum/component_container/proc/unregister_for_updates()
+	active_component_containers.Remove(src)

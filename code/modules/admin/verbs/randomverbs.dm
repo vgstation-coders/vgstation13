@@ -66,7 +66,9 @@
 	if (isnull(msg))
 		return
 
-	var/deity = input("Deity: The current chosen deity is [ticker.Bible_deity_name]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), ticker.Bible_deity_name) as null | text
+	var/predicted_deity = DecidePrayerGod(M)
+
+	var/deity = input("Deity: The current chosen deity is [predicted_deity]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), predicted_deity) as null | text
 
 	if(isnull(deity)) //Hit the cancel button
 		return
@@ -494,8 +496,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.age = record_found.fields["age"]
 	else
 		new_character.setGender(pick(MALE,FEMALE))
-		var/datum/preferences/A = new()
-		A.randomize_appearance_for(new_character)
+		new_character.randomise_appearance_for(new_character.gender)
 		new_character.real_name = G_found.real_name
 
 	if(!new_character.real_name)
@@ -536,7 +537,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	//Two variables to properly announce later on.
 	var/admin = key_name_admin(src)
 	var/player_key = G_found.key
-
+	/*
 	//Now for special roles and equipment.
 	switch(new_character.mind.special_role)
 		if("traitor")
@@ -568,7 +569,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 				//Add aliens.
 				else
 					job_master.EquipRank(new_character, new_character.mind.assigned_role, 1)//Or we simply equip them.
-
+	*/
 	//Announces the character on all the systems, based on the record.
 	if(!issilicon(new_character))//If they are not a cyborg/AI.
 		if(!record_found&&new_character.mind.assigned_role!="MODE")//If there are no records for them. If they have a record, this info is already in there. MODE people are not announced anyway.
@@ -706,7 +707,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 	if(job_master)
 		for(var/datum/job/job in job_master.occupations)
-			to_chat(src, "[job.title]: [job.total_positions]")
+			to_chat(src, "[job.title]: [job.get_total_positions()]")
 	feedback_add_details("admin_verb","LFS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_explosion(atom/O as obj|mob|turf in world)
@@ -878,37 +879,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			to_chat(usr, "[bicon(content)] [content]")
 
 	feedback_add_details("admin_verb","CC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/* This proc is DEFERRED. Does not do anything.
-/client/proc/cmd_admin_remove_plasma()
-	set category = "Debug"
-	set name = "Stabilize Atmos."
-	if(!holder)
-		to_chat(src, "Only administrators may use this command.")
-		return
-	feedback_add_details("admin_verb","STATM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-// DEFERRED
-	spawn(0)
-		for(var/turf/T in view())
-			T.poison = 0
-			T.oldpoison = 0
-			T.tmppoison = 0
-			T.oxygen = 755985
-			T.oldoxy = 755985
-			T.tmpoxy = 755985
-			T.co2 = 14.8176
-			T.oldco2 = 14.8176
-			T.tmpco2 = 14.8176
-			T.n2 = 2.844e+006
-			T.on2 = 2.844e+006
-			T.tn2 = 2.844e+006
-			T.tsl_gas = 0
-			T.osl_gas = 0
-			T.sl_gas = 0
-			T.temp = 293.15
-			T.otemp = 293.15
-			T.ttemp = 293.15
-*/
 
 /client/proc/toggle_view_range()
 	set category = "Special Verbs"

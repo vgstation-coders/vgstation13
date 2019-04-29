@@ -511,7 +511,7 @@
 		/obj/item/weapon/bucket_sensor,
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
-		/obj/item/weapon/cigbutt/cigarbutt,
+		/obj/item/trash/cigbutt/cigarbutt,
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
@@ -819,6 +819,7 @@
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
+
 /obj/abstract/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
  	name = "trader spacesuit spawner"
  	icon_state = "space_supply"
@@ -839,7 +840,6 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
-
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/mobs/carp
@@ -894,6 +894,13 @@
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		)
+
+/obj/abstract/map/spawner/mobs/deer
+	name = "deer spawner"
+	icon_state = "mob_deer"
+	amount = 5
+	to_spawn = list(/mob/living/simple_animal/hostile/deer)
+
 /obj/abstract/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"

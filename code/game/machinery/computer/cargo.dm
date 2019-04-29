@@ -24,7 +24,7 @@ For vending packs, see vending_packs.dm*/
 		if(ACCOUNT_DB_OFFLINE)
 			MENTION_DB_OFFLINE
 			return
-		
+
 		var/datum/money_account/bank_account
 		if(REQUISITION)
 			bank_account = department_accounts["Cargo"]
@@ -79,7 +79,7 @@ For vending packs, see vending_packs.dm*/
 			USE_CARGO_ACCOUNT
 		else
 			USE_ACCOUNT_ON_ID
-	
+
 	return acc_info
 
 #undef ACCOUNT_DB_OFFLINE
@@ -94,7 +94,7 @@ For vending packs, see vending_packs.dm*/
 		REQUESTED BY: [account_information["idname"]]<br>"}
 	if(account_information["authorized_name"] != "")
 		info += "USING DEBIT AS: [account_information["authorized_name"]]<br>"
-	
+
 	info+= {"RANK: [account_information["idrank"]]<br>
 		REASON: [reason]<br>
 		SUPPLY CRATE TYPE: [pack.name]<br>
@@ -174,7 +174,7 @@ For vending packs, see vending_packs.dm*/
 
 	if(..())
 		return
-	
+
 	current_acct = get_account_info(user, linked_db)
 
 	user.set_machine(src)
@@ -184,12 +184,12 @@ For vending packs, see vending_packs.dm*/
 
 	onclose(user, "computer")
 
-/obj/machinery/computer/supplycomp/attackby(I as obj, user as mob)
+/obj/machinery/computer/supplycomp/attackby(obj/item/I as obj, user as mob)
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
 		return
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)
@@ -279,7 +279,7 @@ For vending packs, see vending_packs.dm*/
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "supply_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
+		ui = new(user, src, ui_key, "supply_console.tmpl", name, 600, 660)
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -335,11 +335,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
-		
+
 		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
 			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
 			return
-		
+
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
@@ -359,7 +359,7 @@ For vending packs, see vending_packs.dm*/
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = copytext(sanitize(strict_ascii(input(usr, "Reason:", "Why do you require this item?", "") as null|text)), 1, REASON_LEN)
+		var/reason = stripped_input(usr,"Reason:","Why do you require this item?","",REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -527,7 +527,7 @@ For vending packs, see vending_packs.dm*/
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "order_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
+		ui = new(user, src, ui_key, "order_console.tmpl", name, 600, 660)
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -559,11 +559,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
-		
+
 		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
 			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
 			return
-		
+
 		var/crates = 1
 		if(multi)
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
@@ -584,7 +584,7 @@ For vending packs, see vending_packs.dm*/
 			var/max_crates = round((account.money - total_money_req) / P.cost)
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = copytext(sanitize(strict_ascii(input(usr,"Reason:","Why do you require this item?","") as null|text)),1,REASON_LEN)
+		var/reason = stripped_input(usr,"Reason:","Why do you require this item?","",REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)

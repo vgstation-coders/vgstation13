@@ -13,6 +13,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
                           8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10)
 */
 
+
+// Returns y so that y/x = a/b.
+#define RULE_OF_THREE(a, b, x) ((a*x)/b)
+#define tan(x) (sin(x)/cos(x))
+
 /proc/Atan2(x, y)
 	if (!x && !y)
 		return 0
@@ -34,6 +39,39 @@ proc/arctan(x)
 		return -1
 	else
 		return 0
+
+// -- Returns a Lorentz-distributed number.
+// -- The probability density function has centre x0 and width s.
+
+/proc/lorentz_distribution(var/x0, var/s)
+	var/x = rand()
+	var/y = s*tan_rad(PI*(x-0.5)) + x0
+	return y
+
+// -- Returns the Lorentz cummulative distribution of the real x.
+
+/proc/lorentz_cummulative_distribution(var/x, var/x0, var/s)
+	var/y = (1/PI)*ToRadians(arctan((x-x0)/s)) + 1/2
+	return y
+
+// -- Returns an exponentially-distributed number.
+// -- The probability density function has mean lambda
+
+/proc/exp_distribution(var/lambda)
+	if (lambda <= 0)
+		lambda = 1 // Let's not allow that to happen
+	var/x = rand()
+	while (x == 1)
+		x = rand()
+	var/y = -(1/lambda)*log(1-x)
+	return y
+	
+// -- Returns the Lorentz cummulative distribution of the real x, with mean lambda
+
+/proc/exp_cummulative_distribution(var/x, var/lambda)
+	var/y = 1 - E**(lambda*x)
+	return y
+
 
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
@@ -188,15 +226,19 @@ proc/arctan(x)
 /*
  * Tangent.
  */
-/proc/Tan(const/x)
+/proc/Tan(const/x) 
 	return sin(x) / cos(x)
 
+/proc/tan_rad(const/x) // This one assumes that x is in radians.
+	return Tan(ToDegrees(x))
+
+
 /proc/ToDegrees(const/radians)
-					// 180 / Pi
+	// 180 / Pi
 	return radians * 57.2957795
 
 /proc/ToRadians(const/degrees)
-					// Pi / 180
+	// Pi / 180
 	return degrees * 0.0174532925
 
 // min is inclusive, max is exclusive
@@ -259,3 +301,25 @@ proc/arctan(x)
 	var/mult = input/scale
 	var/trinum = (sqrt(8 * mult + 1) - 1 ) / 2
 	return trinum * scale
+
+// Input: a number
+// Returns: the number of bits set
+/proc/count_set_bitflags(var/input)
+	. = 0
+	while(input)
+		input &= (input - 1)
+		.++
+
+#if UNIT_TESTS_ENABLED
+/datum/unit_test/count_set_bitflags/start()
+	assert_eq(count_set_bitflags(0), 0)
+	assert_eq(count_set_bitflags(1|2|4|8|16|32|64|128|256|512|1024|2048|4096|8192|16384|32768|65535|131072|262144|524288|1048576|2097152|4194304|8388608), 23)
+	assert_eq(count_set_bitflags(1), 1)
+	assert_eq(count_set_bitflags(2), 1)
+	assert_eq(count_set_bitflags(3), 2)
+	assert_eq(count_set_bitflags(1|2), 2)
+	assert_eq(count_set_bitflags(1|4), 2)
+	assert_eq(count_set_bitflags(1|65536), 2)
+	assert_eq(count_set_bitflags(65536|32768), 2)
+	assert_eq(count_set_bitflags(1|4|16), 3)
+#endif

@@ -10,6 +10,18 @@
 	cmd_admin_pm(M.client,null)
 	feedback_add_details("admin_verb","APMM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+//For blobs
+/client/proc/cmd_admin_pm_context_special(var/obj/effect/blob/core/C in blob_cores)
+	set category = null
+	set name = "Admin PM Overmind"
+	if(!holder)
+		to_chat(src, "<font color='red'>Error: Admin-PM-Context: Only administrators may use this command.</font>")
+		return
+	if(!istype(C) || !C.overmind || !C.overmind.client)
+		return
+	cmd_admin_pm(C.overmind.client,null)
+	feedback_add_details("admin_verb","APMCS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
 //shows a list of clients we could send PMs to, then forwards our choice to cmd_admin_pm
 /client/proc/cmd_admin_pm_panel()
 	set category = "Admin"
@@ -60,7 +72,7 @@
 
 	//get message text, limit it's length.and clean/escape html
 	if(!msg)
-		msg = input(src, "Message:", "Private message to [key_name(C, 0, 0)]", "") as text | null
+		msg = input(src, "Message:", "Private message to [key_name(C, 0, 0, showantag = FALSE)]", "") as text | null
 
 		if(!msg)
 			return

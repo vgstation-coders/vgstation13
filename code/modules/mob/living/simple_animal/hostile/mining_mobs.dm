@@ -22,6 +22,7 @@
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
 	held_items = list()
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|PACIFIABLE
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()
@@ -120,11 +121,7 @@ obj/item/asteroid/basilisk_hide
 	icon_state = "Diamond ore"
 
 obj/item/asteroid/basilisk_hide/New()
-	var/counter
-	for(counter=0, counter<2, counter++)
-		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(src.loc)
-		D.plane = MOB_PLANE
-		D.layer = MOB_LAYER + 0.001
+	drop_stack(/obj/item/stack/ore/diamond, loc, 2)
 	..()
 	qdel(src)
 
@@ -152,8 +149,8 @@ obj/item/asteroid/basilisk_hide/New()
 	throw_message = "sinks in slowly, before being pushed out of "
 	status_flags = CANPUSH
 	search_objects = 1
-	wanted_objects = list(/obj/item/weapon/ore/diamond, /obj/item/weapon/ore/gold, /obj/item/weapon/ore/silver,
-						  /obj/item/weapon/ore/uranium)
+	wanted_objects = list(/obj/item/stack/ore/diamond, /obj/item/stack/ore/gold, /obj/item/stack/ore/silver,
+						  /obj/item/stack/ore/uranium)
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_ASTEROID
 	var/list/ore_types_eaten = list()
@@ -164,7 +161,7 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/goldgrub/GiveTarget(var/new_target)
 	target = new_target
 	if(target != null)
-		if(istype(target, /obj/item/weapon/ore))
+		if(istype(target, /obj/item/stack/ore))
 			visible_message("<span class='notice'>\The [src] looks at \the [target] with hungry eyes.</span>")
 			stance = HOSTILE_STANCE_ATTACK
 			return
@@ -177,18 +174,16 @@ obj/item/asteroid/basilisk_hide/New()
 			Burrow()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/AttackingTarget()
-	if(istype(target, /obj/item/weapon/ore))
+	if(istype(target, /obj/item/stack/ore))
 		EatOre(target)
 		return
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/EatOre(var/atom/targeted_ore)
-	for(var/obj/item/weapon/ore/O in targeted_ore.loc)
+	for(var/obj/item/stack/ore/O in targeted_ore.loc)
 		ore_eaten++
-		if(!(O.type in ore_types_eaten))
-			ore_types_eaten += O.type
-		qdel(O)
-		O = null
+		ore_types_eaten[O.type]++
+		O.use(1)
 	if(ore_eaten > 5)//Limit the scope of the reward you can get, or else things might get silly
 		ore_eaten = 5
 	visible_message("<span class='notice'>\The [targeted_ore] was swallowed whole!</span>")
@@ -223,10 +218,8 @@ obj/item/asteroid/basilisk_hide/New()
 	if(!ore_eaten || ore_types_eaten.len == 0)
 		return
 	visible_message("<span class='danger'>\The [src] spits up the contents of its stomach before dying!</span>")
-	var/counter
 	for(var/R in ore_types_eaten)
-		for(counter=0, counter < ore_eaten, counter++)
-			new R(src.loc)
+		drop_stack(R, loc, ore_types_eaten[R])
 	ore_types_eaten.len = 0
 	ore_eaten = 0
 
@@ -498,6 +491,7 @@ obj/item/asteroid/basilisk_hide/New()
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
 		M.Knockdown(5)
+		M.Stun(5)
 		visible_message("<span class='warning'>\The [src] knocks \the [M] down!</span>")
 	qdel(src)
 
@@ -521,7 +515,7 @@ obj/item/asteroid/basilisk_hide/New()
 		if(!isturf(C.loc))
 			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
 			return
-		if(C.goliath_reinforce)
+		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
@@ -670,11 +664,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/magmaw/CanAttack(var/atom/the_target)
 	if(world.time < fire_time)
 		return
-	if(istype(the_target, /obj/item/weapon/ore/plasma) || istype(the_target, /obj/item/stack/sheet/mineral/plasma))
+	if(istype(the_target, /obj/item/stack/ore/plasma) || istype(the_target, /obj/item/stack/sheet/mineral/plasma))
 		return 1
 	if(istype(the_target, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = the_target
-		if(M.mineral && istype(M.mineral.ore, /obj/item/weapon/ore/plasma))
+		if(M.mineral && istype(M.mineral.ore, /obj/item/stack/ore/plasma))
 			return 1
 	return 0
 
@@ -686,7 +680,7 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/magmaw/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	if(proximity == 0)
 		return
-	var/is_ore = istype(A, /obj/item/weapon/ore/plasma)
+	var/is_ore = istype(A, /obj/item/stack/ore/plasma)
 	var/is_sheet = istype(A, /obj/item/stack/sheet/mineral/plasma)
 	if(is_ore || is_sheet)
 		visible_message("<span class = 'warning'>\The [src] eats \the [A]!</span>")
@@ -696,11 +690,8 @@ obj/item/asteroid/basilisk_hide/New()
 		else if(is_sheet)
 			fire_time = world.time + 90 SECONDS
 			fire_extremity = 2
-		if(is_sheet)
-			var/obj/item/stack/sheet/S = A
-			S.use(1)
-		else
-			qdel(A)
+		var/obj/item/stack/sheet/S = A
+		S.use(1)
 		return
 	return ..()
 
@@ -765,7 +756,7 @@ obj/item/asteroid/basilisk_hide/New()
 		new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
 
 	for(var/i = 0 to rand(0,3))
-		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+		new /obj/item/weapon/strangerock(src.loc, get_random_find())
 	new /obj/structure/boulder(src.loc)
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/attack_icon()
@@ -781,6 +772,7 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_lower = 35
 	melee_damage_upper = 50
 	ranged = 1
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/charging = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
@@ -798,7 +790,7 @@ obj/item/asteroid/basilisk_hide/New()
 	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
 
 	for(var/i = 0 to rand(5,13))
-		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+		new /obj/item/weapon/strangerock(src.loc, get_random_find())
 	new /obj/item/clothing/gloves/mining(src.loc)
 	new /obj/structure/boulder(src.loc)
 
@@ -849,3 +841,34 @@ obj/item/asteroid/basilisk_hide/New()
 		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
 			T = get_edge_target_turf(M, dir)
 		M.throw_at(T,100,move_to_delay)
+
+
+/mob/living/simple_animal/hostile/asteroid/pillow
+	name = "pillow bug"
+	desc = "An odd creature, bearing a resemblance to the common earth tick, but with flicks of light blue fur."
+	health = 20
+	maxHealth = 20
+	melee_damage_lower = 0
+	melee_damage_upper = 0
+	icon_state = "pillow"
+	icon_aggro = "pillow"
+	icon_living = "pillow"
+	icon_dead = "pillow_dead"
+	holder_type = /obj/item/weapon/holder/animal/pillow
+	size = SIZE_SMALL
+	var/image/eyes
+
+/mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
+	..()
+	if(!isDead())
+		to_chat(user, "<span class = 'notice'>It looks so comforting, you feel like the world, at least in the general vicinity, is at peace.</span>")
+
+/mob/living/simple_animal/hostile/asteroid/pillow/New()
+	..()
+	eyes = image(icon,"pillow_eyes", ABOVE_LIGHTING_LAYER)
+	eyes.plane = ABOVE_LIGHTING_PLANE
+	overlays += eyes
+
+/mob/living/simple_animal/hostile/asteroid/pillow/death()
+	overlays.Cut()
+	..()

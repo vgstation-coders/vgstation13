@@ -15,7 +15,8 @@
 	icon_new = "factory"
 	icon_classic = "blob_factory"
 
-/obj/effect/blob/factory/New(loc,newlook = "new")
+//obj/effect/blob/factory/New(loc,newlook = "new") HALLOWEEN
+/obj/effect/blob/factory/New(loc,newlook = null)
 	..()
 	if(icon_size == 64)
 		flick("morph_factory",src)

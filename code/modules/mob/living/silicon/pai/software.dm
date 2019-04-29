@@ -146,49 +146,7 @@
 			radio.attack_self(src)
 
 		if("image")
-			var/newImage = input("Select your new display image.", "Display Image", "Happy") in list("Happy", "Cat", "Extremely Happy",
-								 "Face", "Laugh", "Off", "Sad", "Angry", "What", "longface", "sick", "high", "love", "electric", "pissed",
-								 "nose", "kawaii", "cry")
-			var/pID = 1
-
-			switch(newImage)
-				if("Happy")
-					pID = 1
-				if("Cat")
-					pID = 2
-				if("Extremely Happy")
-					pID = 3
-				if("Face")
-					pID = 4
-				if("Laugh")
-					pID = 5
-				if("Off")
-					pID = 6
-				if("Sad")
-					pID = 7
-				if("Angry")
-					pID = 8
-				if("What")
-					pID = 9
-				if("longface")
-					pID = 10
-				if("sick")
-					pID = 11
-				if("high")
-					pID = 12
-				if("love")
-					pID = 13
-				if("electric")
-					pID = 14
-				if("pissed")
-					pID = 15
-				if("nose")
-					pID = 16
-				if("kawaii")
-					pID = 17
-				if("cry")
-					pID = 18
-			card.setEmotion(pID)
+			card.setEmotion()
 
 		if("signaller")
 
@@ -512,25 +470,11 @@
 				M = M.loc
 				if(istype(M, /turf))
 					temp = "Error: No biological host found. <br>"
+					dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 					subscreen = 0
 					return dat
-		dat += {"Bioscan Results for [M]: <br>
-		Overall Status: [M.stat > 1 ? "dead" : "[M.health]% healthy"] <br>
-		Scan Breakdown: <br>
-		Respiratory: [M.getOxyLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getOxyLoss()]</font><br>
-		Toxicology: [M.getToxLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getToxLoss()]</font><br>
-		Burns: [M.getFireLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getFireLoss()]</font><br>
-		Structural Integrity: [M.getBruteLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getBruteLoss()]</font><br>
-		Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)<br>
-		"}
-		for(var/datum/disease/D in M.viruses)
-			dat += {"<h4>Infection Detected.</h4><br>
-					 Name: [D.name]<br>
-					 Type: [D.spread]<br>
-					 Stage: [D.stage]/[D.max_stages]<br>
-					 Possible Cure: [D.cure]<br>
-					"}
-		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
+				dat += healthanalyze(M, src, TRUE)
+		dat += "<br/><a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 	return dat
 
 // Security Records
@@ -596,10 +540,10 @@
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
 			if (total_moles)
-				var/o2_level = environment.oxygen/total_moles
-				var/n2_level = environment.nitrogen/total_moles
-				var/co2_level = environment.carbon_dioxide/total_moles
-				var/plasma_level = environment.toxins/total_moles
+				var/o2_level = environment[GAS_OXYGEN]/total_moles
+				var/n2_level = environment[GAS_NITROGEN]/total_moles
+				var/co2_level = environment[GAS_CARBON]/total_moles
+				var/plasma_level = environment[GAS_PLASMA]/total_moles
 				var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
 				dat += {"Nitrogen: [round(n2_level*100)]%<br>
@@ -630,13 +574,6 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
 	if(M)
 		hacktarget = M
-	var/turf/T = get_turf(loc)
-	if(prob(10))
-		for(var/mob/living/silicon/ai/AI in player_list)
-			if(T.loc)
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
-			else
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>")
 	while(hackprogress < 100)
 		if(hacktarget && get_dist(src, hacktarget) <= 1)
 			hackprogress += rand(10, 20)

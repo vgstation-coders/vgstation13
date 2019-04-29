@@ -110,8 +110,8 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/clothing/accessory/medal/gold/captain = 1500,
 /obj/item/device/radio/headset/headset_earmuffs = 125,
 /obj/item/device/detective_scanner = 200,
-/obj/item/device/mass_spectrometer/adv = 150,
-/obj/item/device/mass_spectrometer = 100,
+/obj/item/device/reagent_scanner/adv = 150,
+/obj/item/device/reagent_scanner = 100,
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 200,
 /obj/item/weapon/solder = 10,
@@ -666,6 +666,10 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	..()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
+
+/mob/living/simple_animal/hostile/spessmart_guardian/Life()
+	EscapeConfinement()
+	..()
 
 /mob/living/simple_animal/hostile/spessmart_guardian/death(var/gibbed = FALSE)
 	..(TRUE)

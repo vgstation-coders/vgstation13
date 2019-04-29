@@ -18,11 +18,10 @@
 	return list(user)
 
 /spell/rune_write/cast(null, mob/user = usr)
-	if(!cultwords["travel"])
-		runerandom()
 	var/list/runes = list("Teleport", "Teleport Other", "Spawn a Tome", "Change Construct Type", "Convert", "EMP", "Drain Blood", "See Invisible", "Resurrect", "Hide Runes", "Reveal Runes", "Astral Journey", "Manifest a Ghost", "Imbue Talisman", "Sacrifice", "Wall", "Free Cultist", "Summon Cultist", "Deafen", "Blind", "BloodBoil", "Communicate", "Stun")
 	var/r = input(user, "Choose a rune to scribe", "Rune Scribing") in runes //not cancellable.
-	var/obj/effect/rune/R = new /obj/effect/rune(user.loc)
+	var/obj/effect/rune_legacy/R = new /obj/effect/rune_legacy(user.loc)
+	var/list/cultwords = R.cultwords
 	if(istype(user.loc,/turf))
 		switch(r)
 			if("Teleport")
@@ -171,4 +170,3 @@
 					R.check_icon()
 	else
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
-	return

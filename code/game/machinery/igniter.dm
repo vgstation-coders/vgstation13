@@ -75,7 +75,6 @@ var/global/list/igniters = list()
 			qdel(src)
 			return
 		else
-			:
 			to_chat(user, "<span class='warning'>You need more welding fuel to do that.</span>")
 			return 1
 
@@ -117,7 +116,7 @@ var/global/list/igniters = list()
 /obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
-	if (isscrewdriver(W))
+	if (W.is_screwdriver(user))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)

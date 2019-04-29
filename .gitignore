@@ -61,6 +61,9 @@ players2.sqlite
 # Round-end statistics
 /data/statfiles/*
 
+# Persistence files
+/data/persistence/*
+
 cfg
 
 .vscode
@@ -70,3 +73,5 @@ cfg
 # Thumbs.db (windows image caching)
 Thumbs.db
 
+# Linux users can compile this themselves
+libvg.so

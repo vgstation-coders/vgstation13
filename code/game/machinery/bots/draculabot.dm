@@ -70,7 +70,7 @@
 	dat += "<TT><B>Acula-class Blood Donation Bot v1.0</B></TT><BR><BR>"
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		var/datum/reagent/blood/B = H.get_blood(H.vessel)
+		var/datum/reagent/blood/B = get_blood(H.vessel)
 		if(B && B.data && B.data["virus2"])
 			dat += "WARNING: Viral agent detected. Ineligible for blood donation.<BR>"
 		else if(!B)
@@ -145,6 +145,7 @@
 				to_chat(user, "<span class='warning'>ERROR</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
+		return
 
 	if(istype(W,/obj/item/weapon/reagent_containers/blood))
 		var/obj/item/weapon/reagent_containers/blood/B = W
@@ -157,9 +158,10 @@
 			speak("Thanks, nurse! Now I've got [contained_bags.len]!")
 			update_icon()
 			updateUsrDialog()
-	if(health < maxhealth && !isscrewdriver(W) && W.force && !emagged) //Retreat if we're not hostile and we're under attack
-		step_to(src, get_step_away(src,user))
-	..()
+		return
+	. = ..()
+	if(. && !emagged && isturf(loc)) //Retreat if we're not hostile and we're under attack
+		step_away(src,user)
 
 /obj/machinery/bot/bloodbot/Emag(mob/user as mob)
 	if(!locked)
@@ -177,7 +179,7 @@
 	if(!emagged) //In a normal situation, the bloodbot just loiters around instead of seeking out targets
 		if(!quiet && prob(5))
 			speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C'mon! We know you've got it in you!","Hey -- you're somebody's type!"))
-		if(!currently_drawing_blood && prob(5)) //Wander
+		if(!currently_drawing_blood && prob(5) && isturf(loc)) //Wander
 			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 			Move(get_step(src, pick(cardinal)))
 	else //First priority: drink an adjacent target. Otherwise, pick a target and move toward it if we have none.
@@ -220,7 +222,7 @@
 			return
 		//look for our last used bag and see if it's still valid.
 		var/obj/item/weapon/reagent_containers/blood/B = null
-		var/datum/reagent/blood/target_blood = H.get_blood(H.vessel)
+		var/datum/reagent/blood/target_blood = get_blood(H.vessel)
 		if(last_bag && !last_bag.reagents.is_full() && last_bag.blood_type == target_blood.data["blood_type"])
 			B = last_bag
 		else

@@ -111,6 +111,7 @@ What is the naming convention for planes or layers?
 	#define MOUSETRAP_LAYER 			14
 	#define FIREAXE_LOCKER_LAYER		15
 	#define BLOOD_LAYER					16
+	#define GIBS_OVERLAY_LAYER			17 //Holy fuck I'm so fucking mad it took me this long to figure it out. If you suspect an overlay isn't showing TRY GIVING IT A REALLY HIGH LAYER
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		3		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
@@ -146,19 +147,15 @@ What is the naming convention for planes or layers?
 
 #define HUMAN_PLANE 			9			// For Humans that are standing up.
 
-// TODO: STOP HUD PLANES BEING CLIENT IMAGES, INSTEAD MAKING THEM CONTROLLED BY PLANESMASTERS
-
 #define VAMP_ANTAG_HUD_PLANE	10
 
-#define CULT_ANTAG_HUD_PLANE	11
+#define METABUDDY_HUD_PLANE	11
 
-#define SYNDIE_ANTAG_HUD_PLANE 	12
+#define ANTAG_HUD_PLANE		 	12
 
-#define REV_ANTAG_HUD_PLANE		13
+//#define THIS_SPACE_FOR_RENT!	13
 
-#define WIZ_ANTAG_HUD_PLANE 	14
-
-// SERIOUSLY THAT'D BE KINDA COOL - I THINK THAT THE UPDATE PROCS FOR THESE ARE PRETTY HAZARDLY CODED AND THIS'D BE SUPER SIMPLE, CLIENTSIDED AND EFFICIENT.
+//#define THIS_SPACE_FOR_RENT! 	14
 
 #define MOB_PLANE 				15			// For Mobs.
 
@@ -234,6 +231,10 @@ What is the naming convention for planes or layers?
 	#define HUD_BASE_LAYER		 	1
 	#define HUD_ITEM_LAYER 			2
 	#define HUD_ABOVE_ITEM_LAYER 	3
+	#define ABOVE_HUD_LAYER 		4
+
+#define ABOVE_HUD_PLANE 				25		// For being above the Head-Up Display
+
 
 /atom/proc/hud_layerise()
 	plane = HUD_PLANE

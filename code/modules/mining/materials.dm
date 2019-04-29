@@ -11,10 +11,12 @@
 */
 
 proc/initialize_materials()
-	for(var/matdata in typesof(/datum/material) - /datum/material)
+	for(var/matdata in subtypesof(/datum/material))
 		var/datum/material/mat = new matdata
 		material_list += list(mat.id = mat)
-		initial_materials += list(mat.id = 0)
+		if (!mat.sheettype)
+			continue
+		initial_materials += list(mat.id = 0) // This is for machines in r&d who have a material holder. If you can't make sheets of the material, you can't put in an r_n_d machine to begin with.
 
 var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
 var/global/list/initial_materials	//Stores all the matids = 0 in helping New
@@ -110,7 +112,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		var/amount = getAmount(id)
 		if(amount)
 			var/datum/material/mat = getMaterial(id)
-			getFromPool(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
+			drop_stack(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
+
+/datum/materials/proc/makeOre(var/atom/loc)
+	for(var/id in storage)
+		var/amount = getAmount(id)
+		if(amount)
+			var/datum/material/mat = getMaterial(id)
+			drop_stack(mat.oretype, loc, amount)
+
+/datum/materials/proc/makeAndRemoveOre(var/atom/loc)
+	makeOre(loc)
+	for(var/id in storage)
+		removeAmount(id, storage[id])
 
 //HOOKS//
 /atom/proc/onMaterialChange(matID, amount)
@@ -134,6 +148,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/brunt_damage_mod = 1
 	var/sharpness_mod = 1
 	var/quality_mod = 1
+	var/melt_temperature = MELTPOINT_STEEL
+	var/armor_mod = 1
+
 
 /datum/material/New()
 	if(processed_name=="")
@@ -150,13 +167,14 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_IRON
 	value=1
 	cc_per_sheet=CC_PER_SHEET_METAL
-	oretype=/obj/item/weapon/ore/iron
+	oretype=/obj/item/stack/ore/iron
 	sheettype=/obj/item/stack/sheet/metal
 	cointype=/obj/item/weapon/coin/iron
 	color = "#666666" //rgb: 102, 102, 102
 	brunt_damage_mod = 1.1
 	sharpness_mod = 0.8
 	quality_mod = 1.1
+	melt_temperature = MELTPOINT_STEEL
 
 /datum/material/glass
 	name="Sand"
@@ -164,12 +182,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_GLASS
 	value=1
 	cc_per_sheet=CC_PER_SHEET_GLASS
-	oretype=/obj/item/weapon/ore/glass
+	oretype=/obj/item/stack/ore/glass
 	sheettype=/obj/item/stack/sheet/glass/glass
 	color = "#6E8DA2" //rgb: 110, 141, 162
 	alpha = 122
 	brunt_damage_mod = 0.7
 	sharpness_mod = 1.4
+	melt_temperature = MELTPOINT_GLASS
 
 /datum/material/glass/on_use(obj/source)
 	if(!..())
@@ -185,7 +204,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_DIAMOND
 	value=40
 	cc_per_sheet = 1750
-	oretype=/obj/item/weapon/ore/diamond
+	oretype=/obj/item/stack/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
 	color = "#74C6C6" //rgb: 116, 198, 198
@@ -193,12 +212,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.6
 	quality_mod = 2
+	melt_temperature = MELTPOINT_CARBON
 
 /datum/material/plasma
 	name="Plasma"
 	id=MAT_PLASMA
 	value=40
-	oretype=/obj/item/weapon/ore/plasma
+	oretype=/obj/item/stack/ore/plasma
 	sheettype=/obj/item/stack/sheet/mineral/plasma
 	cointype=/obj/item/weapon/coin/plasma
 	color = "#500064" //rgb: 80, 0, 100
@@ -217,38 +237,41 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Gold"
 	id=MAT_GOLD
 	value=20
-	oretype=/obj/item/weapon/ore/gold
+	oretype=/obj/item/stack/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
 	color = "#F7C430" //rgb: 247, 196, 48
 	brunt_damage_mod = 0.5
 	sharpness_mod = 0.5
 	quality_mod = 1.7
+	melt_temperature = MELTPOINT_GOLD
 
 /datum/material/silver
 	name="Silver"
 	id=MAT_SILVER
 	value=20
-	oretype=/obj/item/weapon/ore/silver
+	oretype=/obj/item/stack/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
 	color = "#D0D0D0" //rgb: 208, 208, 208
 	brunt_damage_mod = 0.7
 	sharpness_mod = 0.7
 	quality_mod = 1.5
+	melt_temperature = MELTPOINT_SILVER
 
 
 /datum/material/uranium
 	name="Uranium"
 	id=MAT_URANIUM
 	value=20
-	oretype=/obj/item/weapon/ore/uranium
+	oretype=/obj/item/stack/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
 	color = "#247124" //rgb: 36, 113, 36
 	brunt_damage_mod = 1.8
 	sharpness_mod = 0.2
 	quality_mod = 1.4
+	melt_temperature = MELTPOINT_URANIUM
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
@@ -262,9 +285,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Bananium"
 	id=MAT_CLOWN
 	value=100
-	oretype=/obj/item/weapon/ore/clown
+	oretype=/obj/item/stack/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
+	melt_temperature = MELTPOINT_POTASSIUM
 
 /datum/material/clown/New()
 	if(!..())
@@ -282,7 +306,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
 	if(!..())
 		return
-	if(prob(2*source.quality))
+	if(prob(10*source.quality))
 		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
 
 /datum/material/phazon
@@ -290,18 +314,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_PHAZON
 	value=200
 	cc_per_sheet = 1500
-	oretype=/obj/item/weapon/ore/phazon
+	oretype=/obj/item/stack/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
 	cointype=/obj/item/weapon/coin/phazon
 	color = "#5E02F8" //rgb: 94, 2, 248
 	brunt_damage_mod = 1.4
 	sharpness_mod = 1.8
 	quality_mod = 2.2
+	melt_temperature = MELTPOINT_PLASMA
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
 		return
-	if(prob(0.5*source.quality))
+	if(prob(5*source.quality))
 		switch(rand(1,2))
 			if(1) //EMP
 				empulse(get_turf(pick(source,target,user)), 0.25*source.quality, 0.5*source.quality, 1)
@@ -350,6 +375,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype = null
 	cc_per_sheet = CC_PER_SHEET_METAL
 	color = "#A97F1B"
+	melt_temperature = MELTPOINT_BRASS
 
 /datum/material/ralloy
 	name = "Replicant Alloy"
@@ -361,21 +387,48 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet = CC_PER_SHEET_METAL
 	color = "#363636"
 
+/datum/material/ice
+	name = "Ice"
+	id = MAT_ICE
+	value = 0
+	oretype = /obj/item/ice_crystal
+
+/datum/material/mythril
+	name="mythril"
+	id=MAT_MYTHRIL
+	value=50
+	oretype=/obj/item/stack/ore/mythril
+	sheettype=/obj/item/stack/sheet/mineral/mythril
+	cointype=/obj/item/weapon/coin/mythril
+	color = "#FFEDD2" //rgb: 255,237,238
+	brunt_damage_mod = 1.4
+	sharpness_mod = 0.6
+	quality_mod = 1.5
+	armor_mod = 1.75
+
+/datum/material/telecrystal
+	name="telecrystal"
+	id=MAT_TELECRYSTAL
+	value=200
+	oretype=/obj/item/stack/ore/telecrystal
+	sheettype=/obj/item/bluespace_crystal
+	cointype=null
+
+
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"
 	id="pharosium"
 	value=10
-	oretype=/obj/item/weapon/ore/pharosium
+	oretype=/obj/item/stack/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	cointype=null
-
 
 /datum/material/char
 	name="Char"
 	id="char"
 	value=5
-	oretype=/obj/item/weapon/ore/char
+	oretype=/obj/item/stack/ore/char
 	sheettype=/obj/item/stack/sheet/mineral/char
 	cointype=null
 
@@ -384,7 +437,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Claretine"
 	id="claretine"
 	value=50
-	oretype=/obj/item/weapon/ore/claretine
+	oretype=/obj/item/stack/ore/claretine
 	sheettype=/obj/item/stack/sheet/mineral/claretine
 	cointype=null
 
@@ -393,7 +446,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Bohrum"
 	id="bohrum"
 	value=50
-	oretype=/obj/item/weapon/ore/bohrum
+	oretype=/obj/item/stack/ore/bohrum
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
 	cointype=null
 
@@ -402,7 +455,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Syreline"
 	id="syreline"
 	value=70
-	oretype=/obj/item/weapon/ore/syreline
+	oretype=/obj/item/stack/ore/syreline
 	sheettype=/obj/item/stack/sheet/mineral/syreline
 	cointype=null
 
@@ -411,7 +464,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Erebite"
 	id="erebite"
 	value=50
-	oretype=/obj/item/weapon/ore/erebite
+	oretype=/obj/item/stack/ore/erebite
 	sheettype=/obj/item/stack/sheet/mineral/erebite
 	cointype=null
 
@@ -420,7 +473,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Cytine"
 	id="cytine"
 	value=30
-	oretype=/obj/item/weapon/ore/cytine
+	oretype=/obj/item/stack/ore/cytine
 	sheettype=/obj/item/stack/sheet/mineral/cytine
 	cointype=null
 
@@ -429,17 +482,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Uqill"
 	id="uqill"
 	value=90
-	oretype=/obj/item/weapon/ore/uqill
+	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
-	cointype=null
-
-
-/datum/material/telecrystal
-	name="Telecrystal"
-	id="telecrystal"
-	value=30
-	oretype=/obj/item/weapon/ore/telecrystal
-	sheettype=/obj/item/stack/sheet/mineral/telecrystal
 	cointype=null
 
 
@@ -447,7 +491,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Mauxite"
 	id="mauxite"
 	value=5
-	oretype=/obj/item/weapon/ore/mauxite
+	oretype=/obj/item/stack/ore/mauxite
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
 	cointype=null
 
@@ -456,7 +500,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Cobryl"
 	id="cobryl"
 	value=30
-	oretype=/obj/item/weapon/ore/cobryl
+	oretype=/obj/item/stack/ore/cobryl
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
 	cointype=null
 
@@ -465,7 +509,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Cerenkite"
 	id="cerenkite"
 	value=50
-	oretype=/obj/item/weapon/ore/cerenkite
+	oretype=/obj/item/stack/ore/cerenkite
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
 	cointype=null
 
@@ -473,7 +517,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Molitz"
 	id="molitz"
 	value=10
-	oretype=/obj/item/weapon/ore/molitz
+	oretype=/obj/item/stack/ore/molitz
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	cointype=null
 */

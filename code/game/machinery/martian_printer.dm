@@ -9,10 +9,16 @@
 	idle_power_usage = 20
 	active_power_usage = 5000
 	var/building = 0
+	var/cooldown_duration = 10 MINUTES
+	var/cooldown_time = 0
+	var/cooldown_active = 0
 	var/print_path = /mob/living/carbon/complex/martian
 
 /obj/machinery/mob_printer/attack_ghost(var/mob/dead/observer/O)
 	if(!canSpawn())
+		return
+	if(cooldown_active)
+		to_chat(O, "<span class='warning'>Error: printer still recharging. Time left: [round((cooldown_time - world.time + 20)/10)] seconds.</span>")
 		return
 
 	if(O.can_reenter_corpse)
@@ -27,6 +33,17 @@
 		return
 
 	make_mob(O)
+
+	// Activate the cooldown
+	cooldown_active = 1
+	cooldown_time = world.time + cooldown_duration
+
+/obj/machinery/mob_printer/process()
+	..()
+	if(world.time >= cooldown_time)
+		if (cooldown_active)
+			cooldown_active = 0
+			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/mob_printer/power_change()
 	if (powered())

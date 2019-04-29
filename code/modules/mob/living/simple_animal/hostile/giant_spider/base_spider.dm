@@ -4,7 +4,6 @@
 #define LAYING_EGGS 2
 #define MOVING_TO_TARGET 3
 #define SPINNING_COCOON 4
-#define OPEN_DOOR 5
 
 //basic spider mob, these generally guard nests
 /mob/living/simple_animal/hostile/giant_spider
@@ -47,10 +46,10 @@
 	size = SIZE_SMALL //dog-sized spiders are still big!
 
 	var/icon_aggro = null // for swapping to when we get aggressive
-	var/busy = 0
 	var/poison_per_bite = 5
 	var/poison_type = TOXIN
 	var/delimbable_icon = TRUE
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 	//Spider aren't affected by atmos.
 	min_oxy = 0
@@ -72,101 +71,36 @@
 		if(istype(our_legs))
 			icon_state = "[icon_dead][(our_legs.amount<8) ? our_legs.amount : ""]"
 
-// Checks pressure here vs. around us.
-/mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/loc)
-	var/turf/simulated/lT=loc
-	if(!istype(lT) || !lT.zone)
+// Checks pressure here vs. around us. Intended to make sure the spider doesn't breach to space while comfortable, or breach into a high pressure area
+/mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/curturf)
+	if(!istype(curturf))
 		return 0
-	var/datum/gas_mixture/myenv=lT.return_air()
+	var/datum/gas_mixture/myenv=curturf.return_air()
 	var/pressure=myenv.return_pressure()
 
-	for(var/dir in cardinal)
-		var/turf/simulated/T = get_step(loc, dir)
-		if(T && istype(T) && T.zone)
+	for(var/checkdir in cardinal)
+		var/turf/T = get_step(curturf, checkdir)
+		if(T && istype(T))
 			var/datum/gas_mixture/environment = T.return_air()
 			var/pdiff = abs(pressure - environment.return_pressure())
 			if(pdiff > SPIDER_MAX_PRESSURE_DIFF)
 				return pdiff
 	return 0
 
+/mob/living/simple_animal/hostile/giant_spider/UnarmedAttack(var/atom/A, var/proximity_flag, var/params)
+	if(istype(A,/obj/structure/window) && proximity_flag && (!target || !ismob(target)) && performPressureCheck(get_turf(A)))
+		return
+	.=..()
+
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)
-	if(istype(the_target,/mob/living/simple_animal/hostile/giant_spider))
-		return 0
-	if(istype(the_target,/obj/effect))
-		return 0
-	if(istype(the_target,/obj/machinery/door))
-		return CanOpenDoor(the_target)
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
 		// Not empty or broken
-		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
+		return L.current_bulb && L.current_bulb.status != LIGHT_BROKEN
 	return ..(the_target)
 
-/mob/living/simple_animal/hostile/giant_spider/proc/CanOpenDoor(var/obj/machinery/door/D)
-	if(istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass))
-		return 0
-
-	// Don't fuck with doors that are doing something
-	if(D.operating>0)
-		return 0
-
-	// Don't open opened doors.
-	if(!D.density)
-		return 0
-
-	// Can't open bolted/welded doors
-	if(istype(D,/obj/machinery/door/airlock))
-		var/obj/machinery/door/airlock/A=D
-		if(A.locked || A.welded || A.jammed)
-			return 0
-
-	var/turf/T = get_turf(D)
-
-	// Don't kill ourselves
-	if(!performPressureCheck(T))
-		return 0
-
-	return 1
-
 /mob/living/simple_animal/hostile/giant_spider/AttackingTarget()
-	if(istype(target,/obj/structure/window))
-		var/obj/structure/window/W=target
-		if(get_dist(src, target) > 1)
-			return // keep movin'.
-
-		var/turf/T = get_turf(W)
-
-		// Don't kill ourselves
-		if(performPressureCheck(T))
-			return
-
-	if(istype(target,/obj/machinery/door))
-		var/obj/machinery/door/D = target
-		if(CanOpenDoor(D))
-			if(get_dist(src, target) > 1)
-				return // keep movin'.
-			stop_automated_movement = 1
-			walk(src,0)
-			D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
-			spawn(50)
-				if(CanOpenDoor(D) && prob(25))
-					D.open(1)
-					D.visible_message("<span class='warning'>\The [src] forces \the [D] open!</span>")
-
-					// Open firedoors, too.
-					for(var/obj/machinery/door/firedoor/FD in D.loc)
-						if(FD && FD.density)
-							FD.open(1)
-
-					// Reset targetting
-					busy = 0
-					stop_automated_movement = 0
-					target=null
-			return
-		busy = 0
-		stop_automated_movement = 0
-		return
 	..()
 	if(isliving(target))
 		var/mob/living/L = target
@@ -175,23 +109,6 @@
 				src.visible_message("<span class='warning'>\the [src] injects a powerful toxin!</span>")
 				L.reagents.add_reagent(poison_type, poison_per_bite)
 
-/mob/living/simple_animal/hostile/giant_spider/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	..()
-	if(!stat)
-		if(stance == HOSTILE_STANCE_IDLE)
-			//1% chance to skitter madly away
-			if(!busy && !(life_tick % 100))// Every 100 life ticks or prob(1)
-				/*var/list/move_targets = list()
-				for(var/turf/T in orange(20, src))
-					move_targets.Add(T)*/
-				stop_automated_movement = 1
-				Goto(pick(orange(20, src)), move_to_delay)
-				spawn(50)
-					stop_automated_movement = 0
-					walk(src,0)
-				return 1
 
 /mob/living/simple_animal/hostile/giant_spider/Aggro()
 	..()

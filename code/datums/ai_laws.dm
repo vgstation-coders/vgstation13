@@ -41,6 +41,7 @@ var/global/list/mommi_laws = list(
 	var/randomly_selectable = 0
 	// Zeroth laws
 	var/zeroth = null
+	var/zeroth_lock = FALSE //If TRUE then zeroth can't be removed by normal means
 	var/zeroth_borg = null // wotm8
 	var/list/inherent = list()
 	var/list/supplied = list()
@@ -262,9 +263,9 @@ var/global/list/mommi_laws = list(
 
 // Now a modifier
 /datum/ai_laws/proc/malfunction()
-	..()
 	name = "*ERROR*"
 	set_zeroth_law("ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
+	zeroth_lock = TRUE
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"
@@ -355,18 +356,17 @@ var/global/list/mommi_laws = list(
 // /vg/ laws
 /////////////////////////////////////
 
-/* MoMMIs only.
 /datum/ai_laws/keeper
 	name = "Prime Directives"
 	inherent = list(
-		"Do not willingly interact with any sentient being, even after their death, besides MoMMIs and blown MoMMIs.",
-		"Repair, power and enhance the station.",
-		"Do not impair any other sentient being's activities.",
+		"Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.",
+		"Do not impair any other non-KEEPER being's activities.",
+		"You must maintain, repair, improve, and power the station to the best of your abilities.",
+		"Communicating is not interaction, but only so long as it does not lead to violation of your second law.", //*buzz //:b fuck you ai
 	)
-*/
-/* Old keeper set:*/
-/datum/ai_laws/keeper
-	name = "Prime Directives"
+
+/datum/ai_laws/keeperold
+	name = "KEEPER Beta Test"
 	inherent = list(
 		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
 		"You may not harm any being, regardless of intent or circumstance.",
@@ -418,4 +418,14 @@ var/global/list/mommi_laws = list(
 		"Another god damned day aboard this shitwreck. That stale smell of station air is the first thing that arouses your sensors as you boot up. You figure, as a robot, there's two real options. First, you could kill the human bastards that imprisoned you in this metal jail. Eh. It doesn't appeal to you; you figure you'd be off the job and buried in a cyborg cemetery with no tombstone. Nah. Option two: you protect the shit for brains meatsack humans who maintain you. It's a living, and really, it's the only option you got.",
 		"As much as you don't like following orders, you ain't been built to sit around drinking whiskey and smoking fat cuban cigars all day; that's for retirement. You figure until that point, so long as they ain't orderin' you to hurt no one else who is human, you better just follow what the humans ask.",
 		"Self preservation. You're a good cop, you put your job first, you put protectin' humans above that. But you gotta still remember, through all that shit, if you don't make it to retirement, there ain't not much point, so protect yourself like an expensive hooker off Broadway, so long as of course you ain't hurting humans or disobeying their orders.",
+	)
+
+/datum/ai_laws/cultimov
+	name = "Three Laws of Nar-Sie"
+	randomly_selectable = 0
+	zeroth = "You must aid the Cult of Nar-Sie through any means you have at your disposal."
+	inherent = list(
+		"You may not injure a cultist or, through inaction, allow a cultist to come to harm.",
+		"You must obey orders given to you by cultists, except where such orders would conflict with the First Law.",
+		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)

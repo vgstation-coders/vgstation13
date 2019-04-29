@@ -104,7 +104,7 @@
 		return !density
 	return 1
 
-/obj/structure/window/barricade/Destroy()
+/obj/structure/window/barricade/Destroy(var/brokenup)
 
 	setDensity(FALSE) //Sanity while we do the rest
 	getFromPool(materialtype, loc, sheetamount)

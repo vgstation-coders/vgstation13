@@ -26,14 +26,14 @@
 			to_chat(user, "<span class='notice'>The account number on the card reads: [associated_account_number]</span>")
 		else
 			to_chat(user, "<span class='warning'>The account number appears to be scratched off.</span>")
-		
+
 		if(authorized_name)
 			to_chat(user, "<span class='notice'>The authorized user on the card reads: [authorized_name]</span>")
 		else
 			to_chat(user, "<span class='notice'>The authorized user field on the card is blank.</span>")
 
 /obj/item/weapon/card/debit/proc/change_authorized_name(var/desired_authorized_name)
-	authorized_name = uppertext(sanitize_simple(strip_html_simple(desired_authorized_name, DEBIT_MAX_AUTHORIZED_NAME_LENGTH)))
+	authorized_name = uppertext(sanitize_simple(utf8_sanitize(desired_authorized_name, length = DEBIT_MAX_AUTHORIZED_NAME_LENGTH)))
 
 /obj/item/weapon/card/debit/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
@@ -55,7 +55,7 @@
 			user.visible_message("<span class='warning'>\The [user] melts \the [src] with \the [item], destroying it.</span>", "<span class='warning'>You destroy \the [src] with \the [item]</span>")
 			qdel(src)
 			return
-		
+
 /obj/item/weapon/card/debit/trader
 	name = "\improper Trader Shoal debit card"
 
@@ -128,5 +128,26 @@
 	starting_materials = list(MAT_IRON = 20)
 	to_cut = 1.5
 	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
+
+/obj/item/weapon/card/debit/preferred/department/cargo/New(var/new_loc, var/desired_department = "Cargo", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/engineering/New(var/new_loc, var/desired_department = "Engineering", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/medical/New(var/new_loc, var/desired_department = "Medical", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/science/New(var/new_loc, var/desired_department = "Science", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/elite/command/New(var/new_loc, var/desired_department = "Command", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/civilian/New(var/new_loc, var/desired_department = "Civilian", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/security/New(var/new_loc, var/desired_department = "Security", var/desired_authorized_name)
+	..()
 
 #undef DEBIT_MAX_AUTHORIZED_NAME_LENGTH

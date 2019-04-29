@@ -9,7 +9,7 @@
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
 						"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
-	return (BRUTELOSS|FIRELOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/melee/energy/is_hot()
 	if(active)
@@ -35,11 +35,12 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
+	armor_penetration = 50
 
 
 /obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS|FIRELOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/melee/energy/axe/rusty
 	name = "rusty energy axe"
@@ -47,6 +48,7 @@
 	force = 3
 	active_force = 30
 	throwforce = 5
+	armor_penetration = 50
 
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
@@ -56,6 +58,8 @@
 	var/active_state = ""
 	sharpness_flags = 0 //starts inactive
 	force = 3
+	var/activeforce = 30
+	var/onsound = 'sound/weapons/saberon.ogg'
 	throwforce = 5
 	throw_speed = 1
 	throw_range = 5
@@ -71,7 +75,8 @@
 	force = 30
 	w_class = W_CLASS_LARGE
 	sharpness = sharpness_on
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK
+	armor_penetration = 100
 	hitsound = "sound/weapons/blade1.ogg"
 	update_icon()
 
@@ -106,19 +111,23 @@
 		else
 			active = !active
 	if (active)
-		force = 30
+		force = activeforce
 		w_class = W_CLASS_LARGE
 		sharpness = sharpness_on
-		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
+		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK
+		armor_penetration = 100
 		hitsound = "sound/weapons/blade1.ogg"
-		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
+		if(onsound)
+			playsound(user, onsound, 50, 1)
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")
 	else
 		force = 3
 		w_class = W_CLASS_SMALL
 		sharpness = 0
 		sharpness_flags = 0
-		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+		armor_penetration = initial(armor_penetration)
+		if(onsound)
+			playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		hitsound = "sound/weapons/empty.ogg"
 		to_chat(user, "<span class='notice'> [src] can now be concealed.</span>")
 	update_icon()
@@ -146,15 +155,6 @@
 	base_state = "bsword0"
 	active_state = "bsword1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 3
-	throwforce = 5
-	throw_speed = 1
-	throw_range = 5
-	w_class = W_CLASS_SMALL
-	flags = FPRINT
-	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-
 
 /obj/item/weapon/melee/energy/sword/bsword/update_icon()
 	if(active)
@@ -205,6 +205,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
+	armor_penetration = 50
 	var/event_key
 
 /obj/item/weapon/melee/energy/hfmachete/update_icon()
@@ -227,7 +228,8 @@
 		throwforce = 6
 		throw_speed = 3
 		sharpness = 1.7
-		sharpness_flags += HOT_EDGE
+		sharpness_flags += HOT_EDGE | CUT_WALL | CUT_AIRLOCK
+		armor_penetration = 100
 		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
 		event_key = user.on_moved.Add(src, "mob_moved")
@@ -237,6 +239,7 @@
 		throw_speed = initial(throw_speed)
 		sharpness = initial(sharpness)
 		sharpness_flags = initial(sharpness_flags)
+		armor_penetration = initial(armor_penetration)
 		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
 		user.on_moved.Remove(event_key)
@@ -298,6 +301,7 @@
 	throw_speed = 3
 	sharpness = 1.7
 	w_class = W_CLASS_LARGE
-	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE | CUT_WALL | CUT_AIRLOCK
+	armor_penetration = 100
 	hitsound = get_sfx("machete_hit")
 	update_icon()

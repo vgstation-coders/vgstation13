@@ -110,7 +110,7 @@
 	if (global.error_cache)
 		global.error_cache.log_error(e, desclines)
 
-#ifdef UNIT_TESTS
+#if UNIT_TESTS_ENABLED
 	if(global.current_test)
 		global.current_test.fail("[main_line]\n[desclines.Join("\n")]")
 #endif

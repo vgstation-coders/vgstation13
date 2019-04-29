@@ -7,7 +7,7 @@
 /var/chosen_dir = 1
 
 //Call above constants to change
-/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types = null)
+/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types = null, var/offset_origin = 0, var/offset_dest = 0)
 
 	if(!ticker || meteor_wave_active)
 		return
@@ -26,7 +26,7 @@
 			var/meteor_type = null
 			if(types != null)
 				meteor_type = pick(types)
-			spawn_meteor(chosen_dir, meteor_type)
+			spawn_meteor(chosen_dir, meteor_type, offset_origin, offset_dest)
 		sleep(50) //Five seconds for the chat to scroll
 		meteor_wave_active = 0
 	return chosen_dir
@@ -64,7 +64,7 @@
 		if(bhangmeter && !bhangmeter.stat)
 			bhangmeter.say("Detected: [wave_name], containing [wave_size] objects up to [meteor_l_size] size and incoming from the [wave_l_dir], will strike in [meteor_delay/10] seconds.")
 
-/proc/spawn_meteor(var/chosen_dir, var/meteorpath = null)
+/proc/spawn_meteor(var/chosen_dir, var/meteorpath = null, var/offset_origin = 0, var/offset_dest = 0)
 
 	var/startx
 	var/starty
@@ -79,26 +79,26 @@
 
 			if(1) //North, along the y = max edge
 				starty = world.maxy - (TRANSITIONEDGE + 2)
-				startx = rand((TRANSITIONEDGE + 2), world.maxx - (TRANSITIONEDGE + 2))
+				startx = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxx - (TRANSITIONEDGE + 2 + offset_origin))
 				endy = TRANSITIONEDGE
-				endx = rand(TRANSITIONEDGE, world.maxx - TRANSITIONEDGE)
+				endx = rand(TRANSITIONEDGE + offset_dest, world.maxx - TRANSITIONEDGE - offset_dest)
 
 			if(2) //South, along the y = 0 edge
 				starty = (TRANSITIONEDGE + 2)
-				startx = rand((TRANSITIONEDGE + 2), world.maxx - (TRANSITIONEDGE + 2))
+				startx = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxx - (TRANSITIONEDGE + 2 + offset_origin))
 				endy = world.maxy - (TRANSITIONEDGE + 2)
-				endx = rand(TRANSITIONEDGE, world.maxx - TRANSITIONEDGE)
+				endx = rand(TRANSITIONEDGE + offset_dest, world.maxx - TRANSITIONEDGE - offset_dest)
 
 			if(4) //East, along the x = max edge
-				starty = rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2))
+				starty = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxy - (TRANSITIONEDGE + 2 + offset_origin))
 				startx = world.maxx - (TRANSITIONEDGE + 2)
-				endy = rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE)
+				endy = rand(TRANSITIONEDGE + offset_dest, world.maxy - TRANSITIONEDGE - offset_dest)
 				endx = (TRANSITIONEDGE + 2)
 
 			if(8) //West, along the x = 0 edge
-				starty = rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2))
+				starty = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxy - (TRANSITIONEDGE + 2 + offset_origin))
 				startx = (TRANSITIONEDGE + 2)
-				endy = rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE)
+				endy = rand(TRANSITIONEDGE + offset_dest, world.maxy - TRANSITIONEDGE - offset_dest)
 				endx = world.maxx - (TRANSITIONEDGE + 2)
 
 		pickedstart = locate(startx, starty, 1)
@@ -106,11 +106,10 @@
 		max_i--
 		if(max_i <= 0)
 			return
-
 	while(!istype(pickedstart, /turf/space))
 
 	if(meteorpath)
-		new meteorpath(pickedstart, pickedgoal)
+		return new meteorpath(pickedstart, pickedgoal)
 	else
 		var/list/possible_meteors = list()
 		if(!max_meteor_size || max_meteor_size >= 1) //Small waves
@@ -123,7 +122,7 @@
 			possible_meteors[/obj/item/projectile/meteor/big] = 10
 			possible_meteors[/obj/item/projectile/meteor/big/cluster] = 1
 		var/chosen = pick(possible_meteors)
-		new chosen(pickedstart, pickedgoal)
+		return new chosen(pickedstart, pickedgoal)
 
 /*
  * Below are all meteor types
@@ -409,25 +408,19 @@ var/list/blob_candidates = list()
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorcore"
 	var/client/blob_candidate = null
+	var/could_reenter_corpse = FALSE
 
-/obj/item/projectile/meteor/blob/core/New()
-	..()
-	var/list/candidates = list()
-
-	candidates = get_candidates(ROLE_BLOB)
-
-	for(var/client/C in candidates)
-		if(istype(C.eye,/obj/item/projectile/meteor/blob/core))
-			candidates -= C
-
-	if(candidates.len)
-		blob_candidate = pick(candidates)
-		blob_candidates += blob_candidate
-
+/obj/item/projectile/meteor/blob/core/proc/AssignMob(var/mob/M)
+	blob_candidate = M.client
 	if(blob_candidate)
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src
 		blob_candidate.mob.see_invisible = SEE_INVISIBLE_MINIMUM
+		if(isobserver(M))
+			var/mob/dead/observer/O = M
+			if(O.can_reenter_corpse)
+				O.can_reenter_corpse = FALSE
+				could_reenter_corpse = TRUE
 
 /obj/item/projectile/meteor/blob/core/Destroy()
 	if(blob_candidate)
@@ -435,6 +428,9 @@ var/list/blob_candidates = list()
 		blob_candidate.eye = blob_candidate.mob
 		blob_candidates -= blob_candidate
 		blob_candidate = null
+		if(isobserver(blob_candidate.mob))
+			var/mob/dead/observer/O = blob_candidate.mob
+			O.can_reenter_corpse = could_reenter_corpse
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)

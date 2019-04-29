@@ -40,7 +40,7 @@
 	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
-	//pass_flags = PASSTABLE      //Maybe griefy?
+	pass_flags = PASSTABLE
 	speak_emote = list("beeps","clicks","chirps")
 	size = SIZE_SMALL
 	meat_type = null
@@ -323,8 +323,8 @@
 	if(src.held_item)
 		to_chat(user, "It is carrying \a [src.held_item] [bicon(src.held_item)].")
 
-/mob/living/simple_animal/spiderbot/CheckSlip()
-	return -1
+/mob/living/simple_animal/spiderbot/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return SLIP_HAS_MAGBOOTS
 
 /mob/living/simple_animal/spiderbot/say(var/message)
 	return ..(message, "R")

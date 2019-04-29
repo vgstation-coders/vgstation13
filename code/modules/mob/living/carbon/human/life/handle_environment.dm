@@ -64,7 +64,7 @@
 		else
 			pressure_alert = -1
 
-	if((environment.toxins / environment.volume * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
+	if(environment.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 		pl_effects()
 
 // Helper proc to map body temperatures to its corresponding heat/cold damage value

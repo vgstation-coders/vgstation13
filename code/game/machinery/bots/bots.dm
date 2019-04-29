@@ -28,6 +28,7 @@
 	for(var/datum/event/ionstorm/I in events)
 		if(istype(I) && I.active)
 			I.bots += src
+	bots_list += src
 	..()
 
 /obj/machinery/bot/Destroy()
@@ -35,6 +36,7 @@
 	if(botcard)
 		qdel(botcard)
 		botcard = null
+	bots_list -= src
 
 /obj/machinery/bot/proc/turn_on()
 	if(stat)
@@ -125,17 +127,24 @@
 			huduser.show_message(declare_message,1)
 
 
-/obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/machinery/bot/attackby(obj/item/weapon/W, mob/living/user)
 	if(flags & INVULNERABLE)
 		return
-	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
-		open = !open
-		to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
-	else if(iswelder(W))
+	user.delayNextAttack(W.attack_delay)
+	if((W.is_screwdriver(user) || iscrowbar(W)) && user.a_intent != I_HURT)
+		if(locked)
+			to_chat(user, "<span class='notice'>[src]'s maintenance panel is locked tight.</span>")
+		else
+			open = !open
+			to_chat(user, "<span class='notice'>Maintenance panel is now [open ? "opened" : "closed"].</span>")
+			updateUsrDialog()
+	else if(iswelder(W) && user.a_intent != I_HURT)
 		if(health < maxhealth)
 			if(open)
-				health = min(maxhealth, health+10)
-				user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
+				var/obj/item/weapon/weldingtool/WT = W
+				if(WT.remove_fuel(0))
+					health = min(maxhealth, health+10)
+					user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
 			else
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
@@ -144,7 +153,8 @@
 		Emag(user)
 	else
 		if(hasvar(W,"force") && hasvar(W,"damtype"))
-			user.do_attack_animation(src, W)
+			W.on_attack(src, user)
+			visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 			switch(W.damtype)
 				if("fire")
 					src.health -= W.force * fire_dam_coeff
@@ -152,6 +162,7 @@
 					src.health -= W.force * brute_dam_coeff
 			..()
 			healthcheck()
+			return W.force
 		else
 			..()
 

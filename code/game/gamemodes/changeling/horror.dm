@@ -5,7 +5,7 @@
 	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "smashes"
 	flags = NO_BREATHE /*| NON_GENDERED*/ | NO_PAIN | HYPOTHERMIA_IMMUNE
-	anatomy_flags = HAS_SWEAT_GLANDS
+	anatomy_flags = HAS_SWEAT_GLANDS | NO_BLOOD
 	pressure_resistance = 30 * ONE_ATMOSPHERE /*No longer will our ascent be foiled by depressurization!*/
 	//h_style = null
 
@@ -38,6 +38,6 @@
 
 
 /datum/species/horror/handle_post_spawn(var/mob/living/carbon/human/H)
-	H.h_style = "Bald"
-	H.f_style = "Shaved"
+	H.my_appearance.h_style = "Bald"
+	H.my_appearance.f_style = "Shaved"
 	H.update_hair()

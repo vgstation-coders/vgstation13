@@ -41,7 +41,12 @@ var/const/INGEST = 2
 
 			if(D.required_reagents && D.required_reagents.len)
 				for(var/reaction in D.required_reagents)
-					reaction_ids += reaction
+					if(islist(reaction))
+						var/list/L = reaction
+						for(var/content in L)
+							reaction_ids += content
+					else
+						reaction_ids += reaction
 
 			// Create filters based on each reagent id in the required reagents list
 			for(var/id in reaction_ids)
@@ -49,6 +54,7 @@ var/const/INGEST = 2
 					chemical_reactions_list[id] = list()
 				chemical_reactions_list[id] += D
 				break // Don't bother adding ourselves to other reagent ids, it is redundant.
+
 
 /datum/reagents/proc/remove_any(var/amount=1)
 	var/total_transfered = 0
@@ -143,7 +149,6 @@ var/const/INGEST = 2
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
 				adminwarn_message += "[current_reagent_transfer]u of <span class='warning'>[current_reagent.name]</span>"
-
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
 		src.remove_reagent(current_reagent.id, current_reagent_transfer)
 
@@ -253,10 +258,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/trans_id_to(var/obj/target, var/reagent, var/amount=1, var/preserve_data=1)//Not sure why this proc didn't exist before. It does now! /N
 	if (!target)
 		return
-	if (!target.reagents || src.is_empty() || !src.get_reagent_amount(reagent))
+	if (src.is_empty() || !src.get_reagent_amount(reagent))
 		return
-
-	var/datum/reagents/R = target.reagents
+	var/datum/reagents/R
+	if(istype(target, /datum/reagents))
+		R = target
+	else
+		if(!target.reagents)
+			return
+		R = target.reagents
 	if(src.get_reagent_amount(reagent)<amount)
 		amount = src.get_reagent_amount(reagent)
 	amount = min(amount, R.maximum_volume-R.total_volume)
@@ -354,7 +364,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		reaction_occured = 0
 		for(var/datum/reagent/R in reagent_list) // Usually a small list
 			for(var/reaction in chemical_reactions_list[R.id]) // Was a big list but now it should be smaller since we filtered it with our reagent id
-
 				if(!reaction)
 					continue
 
@@ -375,10 +384,19 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					multipliers += 1 //Only once
 
 				for(var/B in C.required_reagents)
-					if(!has_reagent(B, C.required_reagents[B]))
-						break
-					total_matching_reagents++
-					multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
+					if(islist(B))
+						var/list/L = B
+						for(var/D in L)
+							if(!has_reagent(D, C.required_reagents[B]))
+								continue
+							total_matching_reagents++
+							multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
+							break
+					else
+						if(!has_reagent(B, C.required_reagents[B]))
+							break
+						total_matching_reagents++
+						multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
 				for(var/B in C.required_catalysts)
 					if(!has_reagent(B, C.required_catalysts[B]))
 						break
@@ -413,9 +431,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					var/multiplier = min(multipliers)
 					var/preserved_data = null
 					for(var/B in C.required_reagents)
-						if(!preserved_data)
-							preserved_data = get_data(B)
-						remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
+						if(islist(B))
+							var/list/L = B
+							for(var/D in L)
+								if(!preserved_data)
+									preserved_data = get_data(D)
+								remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
+						else
+							if(!preserved_data)
+								preserved_data = get_data(B)
+							remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
 					chem_temp += C.reaction_temp_change
 
@@ -450,7 +475,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							ME2.name = "used slime extract"
 							ME2.desc = "This extract has been used up."
 
-					if(!quiet)
+					if(!quiet && !(my_atom.flags & SILENTCONTAINER))
 						playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
 
 					C.on_reaction(src, created_volume)
@@ -539,6 +564,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
 		return 0
+	if(!amount)
+		return 0
 	if(!isnum(amount))
 		return 1
 	update_total()
@@ -580,6 +607,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.color = data["blood_colour"]
 			else
 				R.data = data
+		R.on_introduced()
 
 		update_total()
 		my_atom.on_reagent_change()
@@ -610,6 +638,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(has_reagent(id))
 			remove_reagent(id, amount, safety)
 	return 1
+
+/datum/reagents/proc/remove_any_reagents(var/list/reagent_list, var/amount, var/safety)
+	if(!isnum(amount))
+		return 0
+	for(var/id in reagent_list)
+		if(has_reagent(id))
+			amount -= remove_reagent(id, amount, safety)
+			if(amount <= 0)
+				return 1
+	return 0
 
 /datum/reagents/proc/remove_reagent_by_type(var/reagent_type, var/amount, var/safety)
 	if(!isnum(amount))
@@ -726,6 +764,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		else
 			stuff += A.id
 	return english_list(stuff, "no reagents")
+
+/datum/reagents/proc/get_sportiness()
+	var/sportiness = 1
+	for(var/datum/reagent/R in reagent_list)
+		sportiness *= R.sport
+	return sportiness
 
 /datum/reagents/proc/remove_all_type(var/reagent_type, var/amount, var/strict = 0, var/safety = 1) // Removes all reagent of X type. @strict set to 1 determines whether the childs of the type are included.
 	if(!isnum(amount))

@@ -15,7 +15,7 @@
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
 
 	artifact_find_type = pick(
-	5;/obj/machinery/syndicate_beacon,
+	//5;/obj/machinery/syndicate_beacon,
 	5;/obj/item/clothing/mask/stone,
 	5;/obj/item/changeling_vial,
 	10;/obj/structure/constructshell,
@@ -24,8 +24,10 @@
 	100;/obj/machinery/auto_cloner,
 	100;/obj/structure/bed/chair/vehicle/gigadrill,
 	100;/obj/mecha/working/hoverpod,
+	100;/obj/structure/essence_printer,
 	100;/obj/machinery/replicator,
 	100;/obj/machinery/communication,
+	100;/mob/living/simple_animal/hostile/roboduck,
 	1000;/obj/machinery/artifact)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +57,7 @@
 	excavation_level = rand(5,50)
 
 /obj/structure/boulder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/device/core_sampler))
+	if (istype(W, /obj/item/device/core_sampler) && geological_data)
 		src.geological_data.artifact_distance = rand(-100,100) / 100
 		src.geological_data.artifact_id = artifact_find.artifact_id
 
@@ -114,6 +116,16 @@
 			busy = 0
 		return
 
+/obj/structure/boulder/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(loc, 'sound/weapons/heavysmash.ogg', 75, 1)
+		if(do_after(user, src, 20))
+			returnToPool(src)
+		return 1
+	return 0
+
 /obj/structure/boulder/Bumped(AM)
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
@@ -132,3 +144,6 @@
 		var/obj/mecha/M = AM
 		if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.selected.action(src)
+
+	else if(istype(AM,/mob/living/simple_animal/construct/armoured))
+		attack_construct(AM)

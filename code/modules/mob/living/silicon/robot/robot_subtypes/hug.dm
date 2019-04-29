@@ -23,6 +23,13 @@
 	laws = new /datum/ai_laws/robocop() //I. AM. THE. LAW.
 	install_upgrade(src, /obj/item/borg/upgrade/warden)
 
+/mob/living/silicon/robot/hugborg/hos/New()
+	..()
+	laws = new /datum/ai_laws/ntmov()
+	install_upgrade(src, /obj/item/borg/upgrade/noir)
+	install_upgrade(src, /obj/item/borg/upgrade/warden)
+	install_upgrade(src, /obj/item/borg/upgrade/hos)
+
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()
 	set_module_sprites(list("Omoikane" = "omoikane"))

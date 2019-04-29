@@ -422,6 +422,7 @@ proc/move_mining_shuttle()
 	if(isliving(M))
 		var/mob/living/L = M
 		L.Knockdown(3)
+		L.Stun(3)
 		if(ishuman(L))
 			shake_camera(L, 20, 1)
 			spawn(20)
@@ -569,7 +570,7 @@ proc/move_mining_shuttle()
 	ranged_cooldown_cap = 3
 	projectiletype = /obj/item/projectile/beam
 	projectilesound = 'sound/weapons/Laser.ogg'
-	wanted_objects = list(/obj/item/weapon/ore)
+	wanted_objects = list(/obj/item/stack/ore)
 	meat_type = null
 	mob_property_flags = MOB_ROBOTIC
 
@@ -596,7 +597,7 @@ proc/move_mining_shuttle()
 		if(!P.pai)
 			to_chat(user, "<span class = 'warning'>\The [P] has no intelligence within it.</span>")
 			return
-		var/response = alert(user, "Are you sure you want to put \the [P] into \the [src]? This can not be undone.","Yes","No")
+		var/response = alert(user, "Are you sure you want to put \the [P] into \the [src]? This can not be undone.","Insert \the [P]?","Yes","No")
 		if(response != "Yes")
 			return
 		if(do_after(user, src, 30))
@@ -660,13 +661,13 @@ proc/move_mining_shuttle()
 		to_chat(src, "<span class='info' style=\"font-family:Courier\">Combat mode active.</span>")
 
 /mob/living/simple_animal/hostile/mining_drone/AttackingTarget()
-	if(istype(target, /obj/item/weapon/ore))
+	if(istype(target, /obj/item/stack/ore))
 		CollectOre()
 		return
 	..()
 
 /mob/living/simple_animal/hostile/mining_drone/proc/CollectOre()
-	var/obj/item/weapon/ore/O
+	var/obj/item/stack/ore/O
 	for(O in src.loc)
 		O.forceMove(src)
 	for(var/dir in alldirs)
@@ -678,7 +679,7 @@ proc/move_mining_shuttle()
 /mob/living/simple_animal/hostile/mining_drone/proc/DropOre()
 	if(!contents.len)
 		return
-	for(var/obj/item/weapon/ore/O in contents)
+	for(var/obj/item/stack/ore/O in contents)
 		contents -= O
 		O.forceMove(src.loc)
 	if(client)
@@ -706,7 +707,7 @@ proc/move_mining_shuttle()
 
 /mob/living/simple_animal/hostile/mining_drone/UnarmedAttack(atom/A)
 	. = ..()
-	if(client && search_objects == 2 && (istype(A, /obj/item/weapon/ore) || isturf(A)) && !attack_delayer.blocked())
+	if(client && search_objects == 2 && (istype(A, /obj/item/stack/ore) || isturf(A)) && !attack_delayer.blocked())
 		delayNextAttack(8)
 		CollectOre()
 

@@ -81,9 +81,9 @@
 	if(bombassembly)
 		bombassembly.Crossed(AM)
 
-/obj/item/device/onetankbomb/on_found(mob/finder as mob)
+/obj/item/device/onetankbomb/on_found(mob/wearer, mob/finder as mob)
 	if(bombassembly)
-		bombassembly.on_found(finder)
+		bombassembly.on_found(wearer, finder)
 
 // ---------- Procs below are for tanks that are used exclusively in 1-tank bombs ----------
 
@@ -114,7 +114,7 @@
 	return
 
 /obj/item/weapon/tank/proc/detonate()	//This happens when a bomb is told to explode
-	var/fuel_moles = air_contents.toxins + air_contents.oxygen/6
+	var/fuel_moles = air_contents[GAS_PLASMA] + air_contents[GAS_OXYGEN]/6
 	var/strength = 1
 
 	var/turf/ground_zero = get_turf(loc)

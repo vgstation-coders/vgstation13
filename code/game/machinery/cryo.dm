@@ -52,16 +52,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	initialize_directions = dir
 	initialize()
 	build_network()
-	if (node)
-		node.initialize()
-		node.build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
-	if(node)
+	if(node1)
 		return
 	for(var/cdir in cardinal)
-		node = findConnecting(cdir)
-		if(node)
+		node1 = findConnecting(cdir)
+		if(node1)
 			break
 	update_icon()
 
@@ -152,7 +152,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(stat & NOPOWER)
 		on = 0
 
-	if(!node)
+	if(!node1)
 		return
 	if(!on)
 		updateUsrDialog()
@@ -362,7 +362,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
 	if(iswrench(G))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
-	if(isscrewdriver(G))
+	if(G.is_screwdriver(user))
 		if(occupant || on)
 			to_chat(user, "<span class='notice'>The maintenance panel is locked.</span>")
 			return
@@ -479,9 +479,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
 			occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
-			if(istype(guy) && guy.species && guy.species.breath_type != "oxygen")
+			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-			if(air_contents.oxygen > 2)
+			if(air_contents[GAS_OXYGEN] > 2)
 				if(occupant.getOxyLoss())
 					occupant.adjustOxyLoss(-1)
 			else
@@ -585,7 +585,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return*/
 	if(M.locked_to)
 		M.unlock_from()
-	if(!node)
+	if(!node1)
 		to_chat(usr, "<span class='warning'>The cell is not correctly connected to its pipe network!</span>")
 		return
 	if(usr.pulling == M)

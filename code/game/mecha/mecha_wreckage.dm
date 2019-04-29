@@ -52,7 +52,7 @@
 		E.reliability = round(rand(E.reliability/3,E.reliability))
 	else
 		E.forceMove(get_turf(src))
-		E.destroy()
+		qdel(E)
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
 	return

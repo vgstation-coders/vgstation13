@@ -272,6 +272,7 @@ mob/living/carbon/proc/handle_hallucinations()
 
 				if(prob(20))
 					src.Knockdown(10)
+					src.Stun(10)
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))

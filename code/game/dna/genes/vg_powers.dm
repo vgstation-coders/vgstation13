@@ -48,6 +48,7 @@ Obviously, requires DNA2.
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
 			M.Knockdown(3)
+			M.Stun(3)
 			M.emote("collapse")
 
 /spell/targeted/genetic/hulk
@@ -86,38 +87,58 @@ Obviously, requires DNA2.
 		message_admins("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
 	return
 
-/datum/dna/gene/basic/farsight
+/datum/dna/gene/basic/grant_spell/farsight
 	name = "Farsight"
 	desc = "Increases the subjects ability to see things from afar."
 	activation_messages = list("Your eyes focus.")
 	deactivation_messages = list("Your eyes return to normal.")
+	drug_activation_messages = list("You start feeling like an eagle, man!")
+	drug_deactivation_messages = list("You feel less like an eagle and more like the rabbit!")
+	spelltype = /spell/targeted/farsight
 
-	drug_activation_messages = list("The world becomes huge! You feel like an ant.")
-	drug_deactivation_messages = list("You no longer feel like an insect.")
-
-	mutation = M_FARSIGHT
-
-/datum/dna/gene/basic/farsight/New()
+/datum/dna/gene/basic/grant_spell/farsight/New()
 	block = FARSIGHTBLOCK
 	..()
 
-/datum/dna/gene/basic/farsight/activate(var/mob/M)
-	..()
-	if(M.client)
-		M.client.changeView(max(M.client.view, world.view+1))
-
-/datum/dna/gene/basic/farsight/deactivate(var/mob/M,var/connected,var/flags)
-	if(..())
-		if(M.client && M.client.view == world.view + 1)
-			M.client.changeView()
-
-/datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
+/datum/dna/gene/basic/grant_spell/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
 	if((M.sdisabilities & BLIND) || (M.disabilities & NEARSIGHTED))
 		return 0
 	return ..(M,flags)
 
+/datum/dna/gene/basic/grant_spell/farsight/deactivate(var/mob/M,var/connected,var/flags)
+	if(..())
+		if(M.client && M.client.view == world.view + 2)
+			M.client.changeView()
+
+/spell/targeted/farsight
+	name = "Far Sight"
+	desc = "Allows you to toggle farther vision at will."
+	user_type = USER_TYPE_GENETIC
+	panel = "Mutant Powers"
+	range = SELFCAST
+	charge_type = Sp_RECHARGE
+	charge_max = 50
+	invocation_type = SpI_NONE
+	spell_flags = INCLUDEUSER
+	override_base = "genetic"
+	hud_state = "wiz_sleepold"
+	var/active = 0
+
+/spell/targeted/farsight/cast(list/targets, mob/user)
+	for(var/mob/living/carbon/human/F in targets)
+		if(!active)
+			F.client.changeView(max(F.client.view, world.view+2))
+			to_chat(F, "<span class='notice'>You focus your eyes to see farther.</span>")
+			active = 1
+		else
+			F.client.changeView()
+			to_chat(F, "<span class='notice'>You no longer focus your eyes.</span>")
+			active = 0
+
 // NOIR
+
+#define NOIR_ANIM_TIME 170
 
 /datum/dna/gene/basic/noir
 	name = "Noir"
@@ -133,12 +154,13 @@ Obviously, requires DNA2.
 
 /datum/dna/gene/basic/noir/activate(var/mob/M)
 	..()
-	M.update_colour()
+	M.update_colour(NOIR_ANIM_TIME)
 	if(M.client) // wow it's almost like non-client mobs can get mutations!
 		M.client.screen += noir_master
+		M << sound('sound/misc/noirdarkcoffee.ogg')
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
-		M.update_colour()
+		M.update_colour(NOIR_ANIM_TIME)
 		if(M.client)
 			M.client.screen -= noir_master

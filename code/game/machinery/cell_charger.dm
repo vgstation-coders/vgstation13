@@ -21,6 +21,9 @@
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 
+/obj/machinery/cell_charger/get_cell()
+	return charging
+
 /obj/machinery/cell_charger/New()
 	. = ..()
 
@@ -207,6 +210,9 @@
 	origin_tech = Tc_POWERSTORAGE + "=2"
 	var/obj/item/weapon/cell/stored = null
 	var/state = 0 //0 if up, 1 if down; only used for icons
+
+/obj/item/device/crank_charger/get_cell()
+	return stored
 
 /obj/item/device/crank_charger/update_icon()
 	if(stored)

@@ -102,7 +102,8 @@
 				var/mob/living/carbon/C = user
 				C.throw_mode_on()
 			spawn(det_time)
-				prime()
+				if(!gcDestroyed)
+					prime()
 
 
 /obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
@@ -124,8 +125,8 @@
 
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
-	explosion(get_turf(src.loc),-1,0,2)
 	process_shrapnel()
+	explosion(get_turf(src.loc),-1,0,2)
 
 	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
 		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
@@ -138,6 +139,7 @@
 
 				qdel(H.legcuffed)
 				H.legcuffed = null
+				boomtrap.IED = null
 	qdel(src)
 
 

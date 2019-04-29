@@ -95,5 +95,5 @@
 	return library_catalog.getBookByID(id)
 
 /obj/machinery/computer/library/cultify()
-	new /obj/structure/cult/tome(loc)
+	new /obj/structure/cult_legacy/tome(loc)
 	..()

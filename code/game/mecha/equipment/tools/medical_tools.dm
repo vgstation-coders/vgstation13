@@ -28,7 +28,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/allow_drop()
 	return 0
 
-/obj/item/mecha_parts/mecha_equipment/tool/sleeper/destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
 	return ..()
@@ -274,7 +274,7 @@
 	chassis.on_moved.Remove(chassis_on_moved_key)
 	return ..()
 
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Destroy()
 	chassis.on_moved.Remove(chassis_on_moved_key)
 	return ..()
 

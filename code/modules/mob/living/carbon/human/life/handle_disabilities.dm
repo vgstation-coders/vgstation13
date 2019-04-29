@@ -43,7 +43,7 @@
 					"can u give me [pick("telikesis","halk","eppilapse")]?", \
 					"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
 					"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
-					"SOTP IT#", \
+					"SOTP IT#", "based and redpilled",\
 					"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
 				if(2)
 					say(pick("FUS RO DAH", \
@@ -78,6 +78,7 @@
 						"try to live freely and automatically good bye", \
 						"why woud i take a pin pointner??", \
 						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
+						"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
 					emote("drool")

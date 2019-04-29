@@ -1,6 +1,6 @@
 //#define DEBUG_SLOT_MACHINES
 #ifdef DEBUG_SLOT_MACHINES
-	#warning Slot machines are being debugged! Turn this off in code/game/machinery/computer/slot_machine.dm
+	#warn Slot machines are being debugged! Turn this off in code/game/machinery/computer/slot_machine.dm
 #endif
 
 #define SEVEN		1
@@ -53,7 +53,7 @@
 
 	id = rand(1,99999)
 
-	our_money_account = create_account("slot machine ([id])", rand(30000,50000))
+	our_money_account = create_account("slot machine ([id])", rand(30000,50000), null, 0, 1, TRUE)
 	radio = new(src)
 
 	update_icon()

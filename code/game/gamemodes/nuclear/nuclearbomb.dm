@@ -225,11 +225,13 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 					else
 						src.icon_state = "nuclearbomb1"
 						bomb_set = 0
+						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
 				if (href_list["safety"])
 					src.safety = !( src.safety )
 					if(safety)
 						src.timing = 0
 						bomb_set = 0
+						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
 				if (href_list["anchor"])
 
 					if(removal_stage == 5)
@@ -270,8 +272,8 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	src.safety = 1
 	src.icon_state = "nuclearbomb3"
 	playsound(src,'sound/machines/Alarm.ogg',100,0,5)
-	if (ticker && ticker.mode)
-		ticker.mode.explosion_in_progress = 1
+	if (ticker)
+		ticker.explosion_in_progress = 1
 	sleep(100)
 
 	enter_allowed = 0
@@ -288,45 +290,14 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	else
 		off_station = 2
 	forceMove(null)
-	if(ticker)
-		if(ticker.mode && ticker.mode.name == "nuclear emergency")
-			var/datum/game_mode/nuclear/GM = ticker.mode
-			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
-			if(syndie_location)
-				GM.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
-			GM.nuke_off_station = off_station
-		ticker.station_explosion_cinematic(off_station,null)
-		if(ticker.mode)
-			ticker.mode.explosion_in_progress = 0
-			if(ticker.mode.name == "nuclear emergency")
-				var/datum/game_mode/nuclear/GM = ticker.mode
-				GM.nukes_left --
-			else
-				to_chat(world, "<B>The station was destroyed by the nuclear blast!</B>")
+	ticker.station_explosion_cinematic(off_station,null)
+	ticker.explosion_in_progress = FALSE
+	to_chat(world, "<B>The station was destroyed by the nuclear blast!</B>")
 
-			ticker.mode.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
-															//kinda shit but I couldn't  get permission to do what I wanted to do.
-			stat_collection.nuked++
-
-			if(!ticker.mode.check_finished())//If the mode does not deal with the nuke going off so just reboot because everyone is stuck as is
-				to_chat(world, "<B>Resetting in 30 seconds!</B>")
-
-				feedback_set_details("end_error","nuke - unhandled ending")
-
-				if(blackbox)
-					blackbox.save_all_data_to_sql()
-
-				CallHook("Reboot",list())
-
-				if (watchdog.waiting)
-					to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
-					watchdog.signal_ready()
-					return
-				sleep(300)
-				log_game("Rebooting due to nuclear detonation")
-				world.Reboot()
-				return
-	return
+	ticker.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
+													//kinda shit but I couldn't  get permission to do what I wanted to do.
+	SSpersistence_map.setSavingFilth(FALSE)
+	stat_collection.nuked++
 
 /obj/machinery/nuclearbomb/send_to_past(var/duration)
 	..()
@@ -341,14 +312,11 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
 	return TRUE
-
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
-	icon_state = "nucleardisk"
-	item_state = "card-id"
+	icon_state = "disk_nuke"
 	flags = FPRINT | TIMELESS
-	w_class = W_CLASS_TINY
 	var/respawned = 0
 
 /obj/item/weapon/disk/nuclear/New()
@@ -392,4 +360,3 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in a non-authorised z-Level somehow, and has been replaced.[loc ? " It was contained in [A] when it was moved." : ""]")
 		qdel(src)
-

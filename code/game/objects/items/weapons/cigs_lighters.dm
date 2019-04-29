@@ -28,6 +28,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
+	autoignition_temperature = AUTOIGNITION_PAPER
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -43,6 +44,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	. = ..()
 
 	processing_objects -= src
+
+/obj/item/weapon/match/ignite(temperature)
+	. = ..()
+	light()
+
+/obj/item/weapon/match/proc/light()
+	lit = 1
+	update_brightness()
 
 /obj/item/weapon/match/examine(mob/user)
 	..()
@@ -94,7 +103,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		lit = -1
 		update_brightness()
 		return
-	if(env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		lit = -1
 		update_brightness()
 		if(M)
@@ -118,16 +127,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		return ..()
 
-/*
 /obj/item/weapon/match/attackby(obj/item/weapon/W as obj, mob/user as mob)
-
-	if(W.is_hot())
-		lit = 1
-		update_brightness()
+	if(W.is_hot() >= autoignition_temperature)
+		light()
 		user.visible_message("[user] lights \the [src] with \the [W].", \
 		"You light \the [src] with \the [W].")
 	..()
-*/
 
 /obj/item/weapon/match/strike_anywhere
 	name = "strike-anywhere match"
@@ -144,8 +149,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	if(istype(target, /obj) || istype(target, /turf))
-		lit = 1
-		update_brightness()
+		light()
 		user.visible_message("[user] strikes \the [src] on \the [target].", \
 		"You strike \the [src] on \the [target].")
 
@@ -170,7 +174,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK|SLOT_EARS
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
-	var/type_butt = /obj/item/weapon/cigbutt
+	var/type_butt = /obj/item/trash/cigbutt
 	var/lastHolder = null
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a boring old cigarette
 	var/smoketime = 300
@@ -272,31 +276,31 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
 	return
 
-/obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob)
+/obj/item/clothing/mask/cigarette/afterattack(obj/reagentholder, mob/user as mob)
 	..()
-	if(istype(glass))	//You can dip cigarettes into beakers and beaker subtypes
-		if(glass.reagents.has_reagent(SACID) || glass.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
-			var/atom/new_butt = new type_butt(get_turf(glass))
+	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+		if(reagentholder.reagents.has_reagent(SACID) || reagentholder.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
+			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
 			processing_objects.Remove(src)
-			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [glass].</span>")
+			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [reagentholder].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		if(glass.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
-			var/atom/new_butt = new type_butt(get_turf(glass))
+		if(reagentholder.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
+			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
 			processing_objects.Remove(src)
-			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [glass].</span>")
+			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [reagentholder].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		var/transfered = glass.reagents.trans_to(src, chem_volume)
+		var/transfered = reagentholder.reagents.trans_to(src, chem_volume)
 		if(transfered)	//If reagents were transfered, show the message
-			to_chat(user, "<span class='notice'>You dip \the [src] into \the [glass].</span>")
+			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder].</span>")
 		else	//If not, either the beaker was empty, or the cigarette was full
-			if(!glass.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell a cigarette is "full"
-				to_chat(user, "<span class='warning'>\The [glass] is empty.</span>")
+			if(!reagentholder.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell a cigarette is "full"
+				to_chat(user, "<span class='warning'>\The [reagentholder] is empty.</span>")
 				return
 
 /obj/item/clothing/mask/cigarette/proc/light(var/flavor_text = "[usr] lights \the [src].")
@@ -328,6 +332,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	lit = 1 //All checks that could have stopped the cigarette are done, let us begin
+	score["tobacco"]++
 
 	flags &= ~NOREACT //Allow reagents to react after being lit
 	clothing_flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
@@ -355,14 +360,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(smoketime <= 0 | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
 		lit = 0 //Actually unlight the cigarette so that the lighting can update correctly
 		update_brightness()
 		if(ismob(loc))
-			if(env.oxygen < 5)
+			if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 				to_chat(M, "<span class='notice'>\The [src] suddenly goes out in a weak fashion.</span>")
 			else
 				to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
@@ -374,7 +379,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -428,7 +433,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "cigarlit"
 	flags = FPRINT
 	slot_flags = SLOT_MASK
-	type_butt = /obj/item/weapon/cigbutt/cigarbutt
+	type_butt = /obj/item/trash/cigbutt/cigarbutt
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 25
@@ -448,15 +453,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	smoketime = 7200
 	chem_volume = 30
 
-/obj/item/weapon/cigbutt
+/obj/item/trash/cigbutt
 	name = "cigarette butt"
 	desc = "A manky old cigarette butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "cigbutt"
 	w_class = W_CLASS_TINY
 	throwforce = 1
+	autoignition_temperature = 0 //The filter doesn't burn
 
-/obj/item/weapon/cigbutt/cigarbutt
+/obj/item/trash/cigbutt/cigarbutt
 	name = "cigar butt"
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
@@ -480,7 +486,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A special homemade cigar. Light it up and pass it around."
 	icon_state = "blunt"
 	overlay_on = "bluntlit"
-	type_butt = /obj/item/weapon/cigbutt/bluntbutt
+	type_butt = /obj/item/trash/cigbutt/bluntbutt
 	item_state = "blunt"
 	slot_flags = SLOT_MASK
 	species_fit = list(GREY_SHAPED)
@@ -524,7 +530,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/blunt/deus/rolled
 
-/obj/item/weapon/cigbutt/bluntbutt
+/obj/item/trash/cigbutt/bluntbutt
 	name = "blunt butt"
 	desc = "A manky old blunt butt."
 	icon = 'icons/obj/clothing/masks.dmi'
@@ -550,6 +556,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
 		lit = 1
+		score["tobacco"]++
 		damtype = BURN
 		update_brightness()
 		var/turf/T = get_turf(src)
@@ -614,6 +621,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter
 	name = "cheap lighter"
+	var/initial_name	//a lighter that gets renamed for flavor needs to keep its name
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter"
@@ -653,6 +661,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	color_suffix = "-y"
 /obj/item/weapon/lighter/green
 	color_suffix = "-g"
+/obj/item/weapon/lighter/NT
+	desc = "A limited edition, super-exclusive Nanotrasen-colored cheap lighter. You're not thrilled."
+	color_suffix = "-nt"
 
 /obj/item/weapon/lighter/random/New()
 	color_suffix = "-[pick("r","c","y","g")]"
@@ -666,13 +677,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/update_icon()
 	switch(lit)
 		if(1)
-			name = "lit [initial(name)]"
+			initial_name = name
+			name = "lit [initial_name]"
 			item_state = "[initial(item_state)][color_suffix]on"
 			icon_state = "[initial(icon_state)][color_suffix]-on"
 			damtype = BURN
 			attack_verb = lit_attack_verb
 		if(0)
-			name = "[initial(name)]"
+			if(!initial_name)
+				initial_name = name
+			name = "[initial_name]"
 			item_state = "[initial(item_state)][color_suffix]off"
 			icon_state = "[initial(icon_state)][color_suffix]"
 			damtype = BRUTE
@@ -701,7 +715,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(!fuel | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
@@ -758,7 +772,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
 	var/datum/gas_mixture/env = location.return_air()
-	if(env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		lit = 0
 		update_brightness()
 		visible_message("<span class='warning'>Without warning, the flame on \the [src] suddenly goes out in a weak fashion.</span>")
@@ -781,7 +795,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(!fuel | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return

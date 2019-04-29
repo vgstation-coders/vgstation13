@@ -8,6 +8,8 @@
 
 /turf/simulated/wall/cult/cultify()
 	return
+/turf/simulated/wall/cult/clockworkify()
+	return
 
 /turf/simulated/wall/cult/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)

@@ -42,7 +42,7 @@
 				var/datum/find/F = M.finds[1]
 				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
 				D.clearance = F.clearance_range * 2
-				D.material = get_responsive_reagent(F.find_type)
+				D.material = get_responsive_reagent(F.find_ID)
 			/*
 			if(M.excavation_minerals.len)
 				if(M.excavation_minerals[1] < D.depth)
@@ -73,7 +73,7 @@
 			positive_locations.Add(D)
 
 			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!.</span>")
+				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
 
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
 	return src.interact(user)

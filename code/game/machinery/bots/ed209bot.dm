@@ -34,13 +34,6 @@
 
 	var/mode = 0
 	bot_type = SEC_BOT
-#define SECBOT_IDLE 		0		// idle
-#define SECBOT_HUNT 		1		// found target, hunting
-#define SECBOT_PREP_ARREST 	2		// at target, preparing to arrest
-#define SECBOT_ARREST		3		// arresting target
-#define SECBOT_START_PATROL	4		// start patrol
-#define SECBOT_PATROL		5		// patrolling
-#define SECBOT_SUMMON		6		// summoned by PDA
 
 	var/auto_patrol = 0		// set to make bot automatically patrol
 
@@ -219,28 +212,28 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
-/obj/machinery/bot/ed209/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/ed209/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (src.allowed(user) && !open && !emagged)
-			src.locked = !src.locked
+		if (allowed(user) && !open && !emagged)
+			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [src.locked ? "locked" : "unlocked"].</span>")
+			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='notice'>Access denied.</span>")
 	else
-		..()
-		if (!isscrewdriver(W) && (!src.target))
-			if(hasvar(W,"force") && W.force)//If force is defined and non-zero
-				threatlevel = user.assess_threat(src)
-				threatlevel += PERP_LEVEL_ARREST_MORE
-				if(threatlevel > 0)
-					src.target = user
-					src.shootAt(user)
-					src.mode = SECBOT_HUNT
+		. = ..()
+		if (. && !target)
+			threatlevel = user.assess_threat(src)
+			threatlevel += PERP_LEVEL_ARREST_MORE
+			if(threatlevel > 0)
+				target = user
+				shootAt(user)
+				mode = SECBOT_HUNT
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()
@@ -470,6 +463,8 @@ Auto Patrol: []"},
 // perform a single patrol step
 
 /obj/machinery/bot/ed209/proc/patrol_step()
+	if(!isturf(loc))
+		return
 
 
 	if(loc == patrol_target)		// reached target
@@ -796,6 +791,9 @@ Auto Patrol: []"},
 
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
+					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*High Threat*"))
+						threatcount = PERP_LEVEL_TERMINATE
+						break
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
 						threatcount = PERP_LEVEL_ARREST
 						break
@@ -1053,7 +1051,7 @@ Auto Patrol: []"},
 			qdel(W)
 
 		if(8)
-			if( isscrewdriver(W) )
+			if( W.is_screwdriver(user) )
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")

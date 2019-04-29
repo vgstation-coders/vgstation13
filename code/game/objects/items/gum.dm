@@ -107,7 +107,7 @@
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -203,3 +203,12 @@
 	. = ..()
 	forceMove(null)
 	target = H
+
+/obj/item/gum/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(replacement_chem_volume <= 0)
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	var/tx_amount = min(tool.amount_per_transfer_from_this, tool.reagents.total_volume)
+	tx_amount = transfer_some_reagents(tool, tx_amount, TRUE, user)
+	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. \The [tool] now contains [tool.reagents.total_volume] units.</span>")
+	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER

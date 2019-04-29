@@ -237,11 +237,11 @@ var/global/list/ghdel_profiling = list()
 
 /*//Convenience proc to see whether a container can be accessed in a certain way.
 
-	proc/can_subract_container()
-		return flags & EXTRACT_CONTAINER
+/atom/proc/can_subract_container()
+	return flags & EXTRACT_CONTAINER
 
-	proc/can_add_container()
-		return flags & INSERT_CONTAINER
+/atom/proc/can_add_container()
+	return flags & INSERT_CONTAINER
 */
 
 /atom/proc/allow_drop()
@@ -512,11 +512,14 @@ its easier to just keep the beam vertical.
 /atom/proc/can_mech_drill()
 	return acidable()
 
-/atom/proc/blob_act(destroy = 0)
+/atom/proc/blob_act(destroy = 0,var/obj/effect/blob/source = null)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
 		return
-	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
+	if (source)
+		anim(target = loc, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	else
+		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 	return
 
 /*
@@ -923,4 +926,45 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
+	return
+
+/atom/proc/get_cell()
+	return
+
+/atom/proc/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(!reagents)
+		return INJECTION_RESULT_FAIL
+	if(reagents.is_full())
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	return INJECTION_RESULT_SUCCESS
+
+/atom/proc/is_hot()
+	return
+
+/atom/proc/thermal_energy_transfer()
+	return
+
+//Used for map persistence. Returns an associative list with some of our most pertinent variables. This list will be used ad-hoc by our relevant map_persistence_type datum to reconstruct this atom from scratch.
+/atom/proc/atom2mapsave()
+	. = list()
+	.["x"] = x
+	.["y"] = y
+	.["z"] = z
+	.["type"] = type
+	.["pixel_x"] = pixel_x
+	.["pixel_y"] = pixel_y
+	.["dir"] = dir
+	.["icon_state"] = icon_state
+	.["color"] = color
+	.["age"] = getPersistenceAge() + 1
+
+//We were just created using nothing but this associative list's ["x"], ["y"], ["z"] and ["type"]. OK, what else?
+/atom/proc/post_mapsave2atom(var/list/L)
+	return
+
+//Behold, my shitty attempt at an interface in DM. Or at least skimping on 1 atom-level variable so I don't get blamed for wasting RAM.
+/atom/proc/getPersistenceAge()
+	return 1
+/atom/proc/setPersistenceAge()
 	return

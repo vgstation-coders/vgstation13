@@ -2,7 +2,7 @@
 	name = "wheelchair"
 	nick = "cripplin' ride"
 	desc = "A chair with fitted wheels. Used by handicapped to make life easier, however it still requires hands to drive."
-	icon = 'icons/obj/objects.dmi'
+	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "wheelchair"
 
 	anchored = 0
@@ -19,7 +19,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
-	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
+	wheel_overlay = image("icons/obj/vehicles.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
 	wheel_overlay.plane = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
@@ -35,13 +35,11 @@
 /obj/structure/bed/chair/vehicle/wheelchair/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 1
-	animate_movement = initial(animate_movement)
 	update_icon()
 
 /obj/structure/bed/chair/vehicle/wheelchair/lock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 0
-	animate_movement = SYNC_STEPS
 	update_icon()
 
 /obj/structure/bed/chair/vehicle/wheelchair/update_icon()
@@ -155,10 +153,13 @@
 /obj/structure/bed/chair/vehicle/wheelchair/emp_act(severity)
 	return
 
-/obj/structure/bed/chair/vehicle/wheelchair/update_mob()
-	if(occupant)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/wheelchair/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
@@ -202,6 +203,8 @@
 	var/const/default_cell_path = /obj/item/weapon/cell/high
 	var/obj/item/weapon/cell/internal_battery = null
 
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/get_cell()
+	return internal_battery
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/New()
 	..()
@@ -217,7 +220,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(internal_battery)
-		internal_battery.use(2) //Example use: 100 charge to get from the cargo desk to medbay side entrance
+		internal_battery.use(min(2, internal_battery.charge)) //Example use: 100 charge to get from the cargo desk to medbay side entrance
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/getMovementDelay()
 	if(internal_battery && internal_battery.charge)
@@ -232,7 +235,7 @@
 		return ..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		user.visible_message("<span class='notice'>[user] screws [maintenance ? "closed" : "open"] \the [src]'s battery compartment.</span>", "<span class='notice'>You screw [maintenance ? "closed" : "open"] the battery compartment.</span>", "You hear screws being loosened.")
 		maintenance = !maintenance
 	else if(iscrowbar(W)&&maintenance)
@@ -288,7 +291,7 @@
 /obj/item/syndicate_wheelchair_kit
 	name = "Compressed Wheelchair Kit"
 	desc = "Collapsed parts, prepared to immediately spring into the shape of a wheelchair. One use. The Syndicate is not responsible for injury related to the use of this product."
-	icon = 'icons/obj/objects.dmi'
+	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "wheelchair-item"
 	item_state = "syringe_kit" //This is just a grayish square
 	w_class = W_CLASS_LARGE

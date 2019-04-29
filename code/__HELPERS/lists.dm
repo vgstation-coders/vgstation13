@@ -128,8 +128,10 @@
 		result = first ^ second
 	return result
 
-//Pretends to pick an element based on its weight but really just seems to pick a random element.
+//Picks an element based on its weight
 /proc/pickweight(list/L)
+	if(!L || !L.len)
+		return
 	var/total = 0
 	var/item
 	for (item in L)
@@ -137,13 +139,13 @@
 			L[item] = 1
 		total += L[item]
 
-	total = rand(1, total)
+	total = rand()*total
 	for (item in L)
 		total -=L [item]
 		if (total <= 0)
 			return item
 
-	return null
+	return L[L.len]
 
 //Pick a random element from the list and remove it from the list.
 /proc/pick_n_take(list/L)
@@ -157,6 +159,21 @@
 	if(L.len)
 		. = L[L.len]
 		L.len--
+
+//Puts an item on the end of a list
+/proc/push(list/L, thing)
+	L += thing
+
+//Shift/Unshift works on a FIFO system unlike pop/push working on FILO
+//Returns the bottom(first) element from the list and removes it from the list
+/proc/shift(list/L)
+	if(L.len)
+		. = L[1]
+		L.Cut(1,2)
+
+//Puts an item at the beginning of the list
+/proc/unshift(list/L, thing)
+	L.Insert(1,thing)
 
 /proc/sorted_insert(list/L, thing, comparator)
 	var/pos = L.len
@@ -273,6 +290,12 @@
 			return key
 	return null
 
+//In an associative list, get only the elements and not the keys.
+/proc/get_list_of_elements(var/list/L)
+	var/list/elements = list()
+	for(var/key in L)
+		elements += L[key]
+	return elements
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0

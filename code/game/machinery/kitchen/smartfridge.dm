@@ -7,6 +7,7 @@
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
 	density = 1
+	opacity = 1
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 5
@@ -25,7 +26,7 @@
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE
 
 	light_color = LIGHT_COLOR_CYAN
 	power_change()
@@ -81,10 +82,15 @@
 
 	RefreshParts()
 
+	update_nearby_tiles()
+
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
 		returnToPool(piles[key])
 	piles.Cut()
+
+	update_nearby_tiles()
+
 	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
@@ -262,16 +268,14 @@
 /obj/machinery/smartfridge/bloodbank/filled/New()
 	. = ..()
 
-	insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
-	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	for(var/i = 0 to 4)
+		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 
 /obj/machinery/smartfridge/power_change()
@@ -299,16 +303,19 @@
 		insert_item(O)
 		user.visible_message(	"<span class='notice'>[user] has added \the [O] to \the [src].", \
 								"<span class='notice'>You add \the [O] to \the [src].")
+		updateUsrDialog()
 		return TRUE
 	else
 		return dump_bag(O, user)
 
 /obj/machinery/smartfridge/proc/insert_item(var/obj/item/O)
-	var/datum/fridge_pile/thisPile = piles[O.name]
+	var/formatted_name = format_text(O.name)
+	var/datum/fridge_pile/thisPile = piles[formatted_name]
 	if(istype(thisPile))
 		thisPile.addAmount(1)
 	else
-		piles[O.name] = new/datum/fridge_pile(O.name, src, 1, costly_bicon(O))
+		piles[formatted_name] = new/datum/fridge_pile(formatted_name, src, 1, costly_bicon(O))
+
 
 /obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
 	if(!istype(B))
@@ -326,14 +333,21 @@
 							"<span class='notice'>You load \the [src] with \the [B].</span>")
 		if(B.contents.len > 0)
 			to_chat(user, "<span class='notice'>Some items are refused.</span>")
+	updateUsrDialog()
 	return TRUE
 
+//Unwrenching a SmartFridge is especially longer to make it much easier to intervene
+/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/time_to_wrench = 10 SECONDS)
+
+	. = ..()
+	if(.)
+		update_nearby_tiles()
+
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
+	if(..())
+		return 1
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
-		return 1
-
-	if(..())
 		return 1
 	if(contents.len >= MAX_N_OF_ITEMS)
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
@@ -451,10 +465,10 @@
 
 	usr.set_machine(src)
 
-	var/N = href_list["pile"]
+	var/formatted_name = format_text(href_list["pile"])
 	if(href_list["amount"])
 		var/amount = text2num(href_list["amount"])
-		var/datum/fridge_pile/thisPile = piles[N]
+		var/datum/fridge_pile/thisPile = piles[formatted_name]
 		if(!istype(thisPile)) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
 			return
 
@@ -462,14 +476,14 @@
 
 		var/i = amount
 		for(var/obj/O in contents)
-			if(O.name == N)
+			if(format_text(O.name) == formatted_name)
 				O.forceMove(src.loc)
 				i--
 				if(i <= 0)
 					break
 
 	else if(href_list["shelf"])
-		var/datum/fridge_pile/thisPile = piles[N]
+		var/datum/fridge_pile/thisPile = piles[formatted_name]
 		if(href_list["shelf"] == "up" && thisPile.shelf > 1)
 			thisPile.shelf -= 1
 		else if(href_list["shelf"] == "down" && thisPile.shelf < MAX_SHELVES)
@@ -485,6 +499,21 @@
 				display_miniicons = MINIICONS_ON
 
 	src.updateUsrDialog()
+
+/obj/machinery/smartfridge/proc/update_nearby_tiles(var/turf/T)
+    if(!SS_READY(SSair))
+        return 0
+
+    if(!T)
+        T = get_turf(src)
+    if(isturf(T))
+        SSair.mark_for_update(T)
+    return 1
+
+/obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(!istype(mover))
+		return !anchored
+	return ..()
 
 #undef MAX_SHELVES
 #undef MINIICONS_ON

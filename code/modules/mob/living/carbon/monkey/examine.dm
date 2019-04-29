@@ -38,9 +38,6 @@
 			msg += "It isn't responding to anything around it; it seems to be asleep.\n"
 		msg += "</span>"
 
-	if (src.digitalcamo)
-		msg += "It is repulsively uncanny!\n"
-
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 	if(butchering_drops && butchering_drops.len)
 		for(var/datum/butchering_product/B in butchering_drops)

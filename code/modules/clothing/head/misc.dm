@@ -22,15 +22,38 @@
 	item_state = "pwig"
 
 /obj/item/clothing/head/that
-	name = "top-hat"
+	name = "top hat"
 	desc = "It's an amish looking hat."
 	icon_state = "tophat"
 	item_state = "that"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
+	var/timer
+
+/obj/item/clothing/head/that/New()
+	..()
+	if(prob(wizard_garb))
+		desc = "It's a magic looking hat."
+		wizard_garb = TRUE
+	else
+		wizard_garb = FALSE
+
+/obj/item/clothing/head/that/attackby(obj/item/W, mob/user)
+	if(wizard_garb)
+		var/static/list/allowed_wands = list(/obj/item/item_handle, /obj/item/weapon/cane, /obj/item/weapon/nullrod, /obj/item/weapon/staff)
+		if(is_type_in_list(W, allowed_wands))
+			if(world.time - timer >= 20 SECONDS)
+				timer = world.time
+				user.visible_message("<span class='notice'>[user] taps \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>","<span class='notice'>You tap \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>")
+				new/mob/living/simple_animal/rabbit(get_turf(src))
+	..()
+
+/obj/item/clothing/head/that/magic
+	wizard_garb = 100
 
 /obj/item/clothing/head/that/armored
-	name = "armored top-hat"
+	name = "armored top hat"
 	desc = "It's an amish looking top hat. This one looks sturdier."
 	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
 
@@ -58,7 +81,7 @@
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 
 /obj/item/clothing/head/nursehat
@@ -157,6 +180,13 @@
 	icon_state = "bandana"
 	item_state = "bandana"
 
+/obj/item/clothing/head/sith
+	name = "Sith Cowl"
+	desc = "UNLIMITED POWER!"
+	icon_state = "sith"
+	item_state = "sith"
+	wizard_garb = 1 //Allows lightning to be used
+
 //stylish bs12 hats
 
 /obj/item/clothing/head/bowlerhat
@@ -239,7 +269,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 2.0
 
@@ -257,7 +287,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 2.0
 
@@ -467,3 +497,11 @@
 	desc = "Welcome to the rice fields, motherfucker."
 	icon_state = "rice_hat"
 	item_state = "rice_hat"
+
+/obj/item/clothing/head/inquisitor
+	name = "cappello romano"
+	desc = "A round wide-brimmed hat worn by more traditional Roman Catholic clergy."
+	icon_state = "brim-hat"
+	item_state = "brim-hat"
+	wizard_garb = TRUE
+	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)

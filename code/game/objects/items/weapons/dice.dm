@@ -90,6 +90,7 @@
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
 		H.Knockdown(3)
+		H.Stun(3)
 
 /obj/item/weapon/dice/update_icon()
 	overlays.len = 0
@@ -302,6 +303,7 @@
 									new /obj/item/clothing/under/officeruniform(user.loc, user)
 									new /obj/item/clothing/suit/officercoat(user.loc, user)
 									new /obj/item/clothing/head/naziofficer(user.loc, user)
+									new /obj/item/clothing/shoes/jackboots(user.loc, user)
 								if(3)
 									new /obj/item/clothing/head/helmet/richard(user.loc, user)
 									new /obj/item/clothing/under/jacketsuit(user.loc, user)

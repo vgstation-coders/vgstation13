@@ -239,7 +239,7 @@
 		/obj/item/device/fuse_bomb,
 		/obj/item/weapon/card/emag,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned,
-		/obj/item/weapon/tome,
+		/obj/item/weapon/tome_legacy,
 		)
 
 	var/obj/item/I = new gift_type(M)

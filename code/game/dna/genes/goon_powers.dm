@@ -119,7 +119,7 @@
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
 	user_type = USER_TYPE_GENETIC
-	desc = "Drops the bodytemperature of another person."
+	desc = "Drops the body temperature of another person."
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -195,7 +195,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | CAN_CHANNEL_RESTRAINED
 
 	override_base = "genetic"
 	hud_state = "gen_eat"
@@ -615,7 +615,7 @@
 	var/list/randomthoughts = list("what to have for lunch","the future","the past","money",
 	"their hair","what to do next","their job","space","amusing things","sad things",
 	"annoying things","happy things","something incoherent","something they did wrong",
-	"getting those valids","burning catpeople","something spooky","somethng lewd","odd things",
+	"getting those valids","burning catpeople","something spooky","something lewd","odd things",
 	"dumb things","lighting things on fire","lighting themselves on fire","blowing things up",
 	"blowing themeselves up","shooting everyone","shooting themselves")
 	var/thoughts = "thinking about [pick(randomthoughts)]"

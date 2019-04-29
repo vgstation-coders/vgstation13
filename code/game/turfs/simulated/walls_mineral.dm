@@ -147,8 +147,8 @@
 			target_tile.parent.suspend_group_processing()*/
 		var/datum/gas_mixture/napalm = new
 		var/toxinsToDeduce = 20
-		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 400+T0C
+		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 		target_tile.assume_air(napalm)
 		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
@@ -199,5 +199,8 @@
 //	dismantle_type = /turf/simulated/floor/engine/clockwork // SOON
 	girder_type = /obj/structure/girder/clockwork
 
-/turf/simulated/wall/clockwork/cultify()
+/turf/simulated/wall/mineral/clockwork/cultify()
+	return
+
+/turf/simulated/wall/mineral/clockwork/clockworkify()
 	return

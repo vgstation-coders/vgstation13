@@ -24,6 +24,9 @@
 /obj/item/weapon/robot_spawner/attack_self(mob/user)
 	request_borg(user)
 
+/obj/item/weapon/robot_spawner/check_uplink_validity()
+	return charge > 0 ? TRUE : FALSE
+
 /obj/item/weapon/robot_spawner/attack_ghost(var/mob/dead/observer/O)
 	if(last_ping_time + ping_cooldown <= world.time)
 		last_ping_time = world.time
@@ -89,24 +92,26 @@
 		return
 	if(faction)
 		R.faction = faction
+	R.Namepick()
 
 //Syndicate robot spawner
 /obj/item/weapon/robot_spawner/syndicate
 	name = "syndicate robot teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot on the field."
 	borg_type = /mob/living/silicon/robot/syndie
-	role = ROLE_OPERATIVE
+	role = NUKE_OP
 	jobban_roles = list("Syndicate", "AI", "Cyborg", "Mobile MMI")
 	faction = "syndicate"
 
-/obj/item/weapon/robot_spawner/syndicate/check_uplink_validity()
-	return charge
-
 /obj/item/weapon/robot_spawner/syndicate/post_recruited(mob/living/silicon/robot/R)
 	..()
-	ticker.mode.syndicates += R.mind
-	ticker.mode.update_synd_icons_added(R.mind)
-	R.mind.special_role = "syndicate"
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(nuclear)
+		var/datum/role/nuclear_operative/newCop = new
+		newCop.AssignToRole(R.mind,1)
+		nuclear.HandleRecruitedRole(newCop)
+		newCop.Greet(GREET_MIDROUND)
+
 
 //Strange spawner, a xenoarchaeology find.
 /obj/item/weapon/robot_spawner/strange

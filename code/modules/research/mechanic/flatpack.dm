@@ -264,3 +264,9 @@
 
 #undef Fl_ACTION
 */
+
+
+/obj/structure/closet/crate/flatpack/suit_modifier/New()
+	..()
+	machine = new /obj/machinery/suit_modifier(src)
+	new /obj/item/rig_module/health_readout(src)

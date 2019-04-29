@@ -386,6 +386,13 @@ div.notice {
     clear: both;
 }
 
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 .inactive, a.inactive:link, a.inactive:visited, a.inactive:active, a.inactive:hover {
     color: #ffffff;
     background: #999999;

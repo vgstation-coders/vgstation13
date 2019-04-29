@@ -20,7 +20,7 @@
 		/obj/item/delivery,
 		/obj/item/weapon/gift,
 		/obj/item/weapon/winter_gift,
-		/obj/item/weapon/evidencebag,
+		/obj/item/weapon/storage/evidencebag,
 		/obj/item/weapon/legcuffs/bolas,
 		/obj/item/weapon/storage
 		)
@@ -140,9 +140,8 @@
 
 /obj/item/delivery/attack_self(mob/user as mob)
 	user.drop_item(src, user.loc)
-	if(contents.len)
-		if(ishuman(user))
-			user.put_in_hands(contents[1])
+	for(var/obj/item/I in contents)
+		user.put_in_hands(I) //if it fails, it'll drop on the ground. simple
 	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)

@@ -23,7 +23,7 @@ emp_act
 
 				return -1 // complete projectile permutation
 
-	if(check_shields(P.damage, "the [P.name]"))
+	if(check_shields(P.damage, P))
 		P.on_hit(src, 2)
 		return 2
 	return (..(P , def_zone))
@@ -149,22 +149,13 @@ emp_act
 		body_coverage &= ~(C.body_parts_covered)
 	return body_coverage
 
-
-/mob/living/carbon/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	if(!incapacitated())
-		for(var/obj/item/weapon/I in held_items)
-			if(I.IsShield() && I.on_block(damage, attack_text))
-				return 1
-
-	return 0
-
-/mob/living/carbon/human/check_shields(damage, attack_text = "the attack")
+/mob/living/carbon/human/check_shields(damage, atom/A)
 	if(..())
 		return 1
 
 	if(istype(wear_suit, /obj/item)) //Check armor
 		var/obj/item/I = wear_suit
-		if(I.IsShield() && I.on_block(damage, attack_text))
+		if(I.IsShield() && I.on_block(damage, A))
 			return 1
 
 /mob/living/carbon/human/emp_act(severity)
@@ -276,9 +267,9 @@ emp_act
 				if(prob(final_force))
 					if(apply_effect(20, PARALYZE, armor))
 						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
-						if(src != user && I.damtype == BRUTE && isrev(src))
-							ticker.mode.remove_revolutionary(mind)
-							add_attacklogs(user, src, "de-converted from Revolutionary!")
+						// if(src != user && I.damtype == BRUTE && isrev(src))
+						// 	ticker.mode.remove_revolutionary(mind)
+						// 	add_attacklogs(user, src, "de-converted from Revolutionary!")
 
 				if(bloody)//Apply blood
 					if(wear_mask)
@@ -486,3 +477,6 @@ emp_act
 
 			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return
+
+/mob/living/carbon/human/acidable()
+	return !(species && species.anatomy_flags & ACID4WATER)

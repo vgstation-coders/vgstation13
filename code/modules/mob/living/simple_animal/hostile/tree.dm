@@ -50,6 +50,7 @@
 	if(istype(L))
 		if(prob(15))
 			L.Knockdown(3)
+			L.Stun(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/tree/death(var/gibbed = FALSE)

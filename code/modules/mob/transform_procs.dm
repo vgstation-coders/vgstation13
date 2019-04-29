@@ -145,10 +145,10 @@
 	if(del_mob)
 		qdel(src)
 
-/mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE)
+/mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return
-	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src))
+	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src), malfAI)
 	. = O
 	if(mind)		//TODO
 		mind.transfer_to(O)
@@ -308,13 +308,13 @@
 	return new_mob
 
 /mob/living/carbon/human/proc/GALize()
-	s_tone = -100 //Nichi saro ni itte hada o yaku
+	my_appearance.s_tone = -100 //Nichi saro ni itte hada o yaku
 	update_body()
-	if(gender == MALE && h_style != "Toriyama 2")
-		h_style = "Toriyama 2" //Yeah, gyaru otoko sengen
-	r_facial = r_hair = 255
-	g_facial = g_hair = 255
-	b_facial = b_hair = 0
+	if(gender == MALE && my_appearance.h_style != "Toriyama 2")
+		my_appearance.h_style = "Toriyama 2" //Yeah, gyaru otoko sengen
+	my_appearance.r_facial = my_appearance.r_hair = 255
+	my_appearance.g_facial = my_appearance.g_hair = 255
+	my_appearance.b_facial = my_appearance.b_hair = 0
 	update_hair()
 	playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
 

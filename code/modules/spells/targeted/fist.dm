@@ -10,6 +10,7 @@
 	invocation = "I CAST FIST"
 	invocation_type = SpI_SHOUT
 	max_targets = 3
+	spell_flags = NEEDSCLOTHES|LOSE_IN_TRANSFER
 
 	compatible_mobs = list(/mob/living)
 
@@ -17,7 +18,7 @@
 
 /spell/targeted/fist/cast(var/list/targets)
 	var/mob/living/L = holder
-	if(istype(L))
+	if(istype(L) && L.has_hand_check()) //Can't punch if you have no haaands
 		for(var/mob/living/target in targets)
 			if (L.is_pacified(1,target))
 				return

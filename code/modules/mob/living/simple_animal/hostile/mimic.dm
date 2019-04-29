@@ -136,7 +136,8 @@ var/global/list/crate_mimic_disguises = list(\
 
 	..()
 
-	drop_meat(src) //Fill the mimic up with its own meat
+	drop_meat(src)
+	meat_taken--
 	initialize() //Collect all items from its turf!
 
 /mob/living/simple_animal/hostile/mimic/crate/Life()
@@ -292,6 +293,7 @@ var/global/list/crate_mimic_disguises = list(\
 			if(prob(20))
 				to_chat(H, "<span class='danger'>You feel very weak!</span>")
 				H.Knockdown(3)
+				H.Stun(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
 	if(target in get_locked(/datum/locking_category/mimic))
@@ -366,11 +368,11 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/weapon/coin/clown,\
 				/obj/item/weapon/dice/d4, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d20, /obj/item/weapon/gun/gravitywell, /obj/item/weapon/harpoon), //Medbay and some common items
 
-	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome,\
+	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome_legacy,\
 				/obj/item/weapon/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
 				/obj/item/weapon/handcuffs, /obj/item/weapon/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/weapon/gun/osipr, /obj/item/weapon/gun/energy/staff/animate,\
 				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/laser/cannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
-				/obj/item/weapon/melee/cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
+				/obj/item/weapon/melee/legacy_cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
 
 	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
 
@@ -378,7 +380,7 @@ var/global/list/item_mimic_disguises = list(
 					/obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack/security, /obj/item/device/maracas, /obj/item/device/multitool,\
 					/obj/item/clothing/gloves/yellow, /obj/item/weapon/hand_tele, /obj/item/weapon/card/id/captains_spare, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/gun/portalgun), //Focus on breath masks, jetpacks/oxygen tanks and generally useful stuff
 
-	"lowhealth" = list(/obj/item/weapon/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
+	"lowhealth" = list(/obj/item/trash/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
 
 	//All foods except for customizable stuff
 	"kitchen" = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
@@ -632,6 +634,7 @@ var/global/list/protected_objects = list(
 		if(istype(L))
 			if(prob(15))
 				L.Knockdown(1)
+				L.Stun(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 

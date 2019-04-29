@@ -30,7 +30,7 @@
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>A dark forcefield prevents you from entering the area.<span>")
 		else
-			if(targetloc.holy && ((src.invisibility == 0) || iscult(src)))
+			if(targetloc.holy && ((src.invisibility == 0) || isanycultist(src)))
 				to_chat(usr, "<span class='warning'>These are sacred grounds, you cannot go there!</span>")
 			else
 				forceEnter(targetloc)
@@ -67,6 +67,9 @@
 
 // We don't need a fucking toggle.
 /mob/dead/observer/ShiftClickOn(var/atom/A)
+	if(isAdminGhost(src))
+		A.ShiftClick(src)
+		return
 	examination(A)
 
 /atom/proc/attack_ghost(mob/user as mob)

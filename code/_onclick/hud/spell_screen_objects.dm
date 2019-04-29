@@ -206,6 +206,13 @@
 
 	screen_loc = ui_alien_master
 
+/obj/abstract/screen/movable/spell_master/bloodcult
+	name = "Blood Magic"
+	icon_state = "cult_spell_ready"
+
+	open_state = "cult_open"
+	closed_state = "cult_closed"
+
 /obj/abstract/screen/movable/spell_master/mech
 	name = "Mech Modules"
 	icon_state = "mech_spell_ready"

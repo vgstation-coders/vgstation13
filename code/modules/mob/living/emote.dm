@@ -36,6 +36,7 @@
 	if(. && isliving(user))
 		var/mob/living/L = user
 		L.Knockdown(10)
+		L.Stun(10)
 
 /datum/emote/living/dance
 	key = "dance"
@@ -56,10 +57,19 @@
 	stat_allowed = UNCONSCIOUS
 	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can deathgasp
 
-/datum/emote/living/deathgasp/run_emote(mob/user, params)
+/datum/emote/living/deathgasp/run_emote(mob/living/user, params)
+	if(/datum/dna/gene/disability/elvis in user.active_genes)
+		user.emote("fart", ignore_status = 1)
+		message = "has left the building..."
+	if(!issilent(user) && (M_HARDCORE in user.mutations))
+		message = "whispers with their final breath, <i>'i told u i was hardcore..'</i>"
 	. = ..()
 	if(. && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
+	if (. && user.stat == UNCONSCIOUS && !params)
+		user.succumb_proc(0, 1)
+	message = initial(message)
+
 
 /datum/emote/living/carbon/drool
 	key = "drool"
@@ -75,7 +85,7 @@
 	. = ..()
 	if(. && isliving(user))
 		var/mob/living/L = user
-		L.SetSleeping(200)
+		L.sleeping += 10 // You can't faint when you're asleep.
 
 /datum/emote/living/flap
 	key = "flap"
@@ -203,6 +213,7 @@
 	if(. && isliving(user))
 		var/mob/living/L = user
 		L.Knockdown(10)
+		L.Stun(10)
 
 /datum/emote/living/sway
 	key = "sway"

@@ -1,18 +1,14 @@
 /mob/proc/isUnconscious() //Returns 1 if unconscious, dead or faking death
-	if(stat || (status_flags & FAKEDEATH))
-		return 1
+	return stat == UNCONSCIOUS || isDead()
 
 /mob/proc/isDead() //Returns 1 if dead or faking death
-	if(stat == DEAD || (status_flags & FAKEDEATH))
-		return 1
+	return stat == DEAD || (status_flags & FAKEDEATH)
 
 /mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
-	if(isUnconscious() || paralysis || stunned || knockdown)
-		return 1
+	return isUnconscious() || paralysis > 0 || stunned > 0 || knockdown > 0
 
 /mob/proc/incapacitated()
-	if(isStunned() || restrained())
-		return 1
+	return isStunned() || restrained()
 
 /mob/proc/get_screen_colour()
 	if(!client)
@@ -44,9 +40,6 @@ mob/proc/get_heart()
 /mob/proc/get_appendix()
 	return null
 
-/mob/proc/get_stomach()
-	return null
-
 mob/proc/remove_internal_organ()
 	return null
 
@@ -74,8 +67,6 @@ mob/proc/remove_internal_organ()
 	. = ..()
 	if(.)
 		return .
-	else if(has_reagent_in_blood(DETCOFFEE))
-		return NOIRMATRIX
 	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(/obj/item/clothing/glasses/scanner, slot_glasses)
 	if(S && S.on && S.color_matrix)
 		return S.color_matrix
@@ -85,37 +76,17 @@ mob/proc/remove_internal_organ()
 	else
 		return default_colour_matrix
 
-/mob/proc/update_colour(var/time = 50,var/forceupdate = 0, var/list/colour_to_apply)
-	if(!client || (client.updating_colour && !forceupdate))
+/mob/proc/update_colour(var/time = 50, var/list/colour_to_apply)
+	if(!client)
 		return
 	if(!colour_to_apply)
 		colour_to_apply = get_screen_colour()
-	var/list/difference = list()
-	if(client.color)
-		difference = difflist(client.color,colour_to_apply)
-	if(!difference) // otherwise !difference.len throws a runtime since null.len isn't a thing
-		return
-	else if(!difference.len)
-		client.updating_colour = 1
-		var/cached_ckey = client.ckey
-		if(forceupdate)
-			time = 0
-		else if(colour_to_apply == NOIRMATRIX)
-			time = 170
-			src << sound('sound/misc/noirdarkcoffee.ogg')
+	// We can't compare client.color directly because Byond will force set client.color to null
+	// when assigning the default_colour_matrix to it
+	var/list/colour_initial = (client.color ? client.color : default_colour_matrix)
+	if(colour_initial ~! colour_to_apply)
 		client.colour_transition(colour_to_apply,time = time)
-		spawn(time)
-			if(client && client.mob != src)
-				return
-			if(client)
-				client.color = colour_to_apply
-				client.updating_colour = 0
-				difference = difflist(client.color,get_screen_colour())
-				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(0,1,colour_to_apply)
-			else
-				bad_changing_colour_ckeys["[cached_ckey]"] = 1
-
+/*
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
 	ticker.mode.update_rev_icons_removed(M)
@@ -123,7 +94,7 @@ mob/proc/remove_internal_organ()
 
 /proc/ClearRoles(var/datum/mind/M)
 	ticker.mode.remove_revolutionary(M)
-
+*/
 /proc/isAdminGhost(A)
 	if(isobserver(A))
 		var/mob/dead/observer/O = A
@@ -542,15 +513,17 @@ proc/is_blind(A)
 
 /**
 * Honor check
-* Returns TRUE if user is BOMBERMAN, HIGHLANDER...
+* Returns TRUE if user is BOMBERMAN, HIGHLANDER, NINJA...
 * Respects honorable.
 */
 /proc/is_honorable(var/mob/living/user, var/honorable = HONORABLE_ALL)
 	if(istype(user))
 		if(user.mind)
-			if(user.mind.special_role == BOMBERMAN && (honorable & HONORABLE_BOMBERMAN))
+			if(isbomberman(user) && (honorable & HONORABLE_BOMBERMAN))
 				return TRUE
-			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
+			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
+				return TRUE
+			if(isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
 	return FALSE
 

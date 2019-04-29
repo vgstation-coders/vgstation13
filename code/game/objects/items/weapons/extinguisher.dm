@@ -100,7 +100,7 @@
 				flags &= ~OPENCONTAINER
 		return
 
-	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/evidencebag))
+	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/storage/evidencebag))
 		if(W.is_open_container())
 			return //We're probably trying to fill it
 		if(W.w_class > W_CLASS_TINY)

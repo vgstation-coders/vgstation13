@@ -41,7 +41,6 @@ var/CHAVBLOCK = 0
 var/SWEDEBLOCK = 0
 var/SCRAMBLEBLOCK = 0
 var/TOXICFARTBLOCK = 0
-var/STRONGBLOCK = 0
 var/HORNSBLOCK = 0
 var/SMILEBLOCK = 0
 var/ELVISBLOCK = 0
@@ -49,6 +48,7 @@ var/ELVISBLOCK = 0
 // Powers
 var/SOBERBLOCK = 0
 var/PSYRESISTBLOCK = 0
+var/STRONGBLOCK = 0
 //var/SHADOWBLOCK = 0
 var/FARSIGHTBLOCK = 0
 var/CHAMELEONBLOCK = 0
@@ -130,10 +130,10 @@ var/LACTOSEBLOCK = 0
 	INCREASERUNBLOCK   = getAssignedBlock("INCREASERUN",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	REMOTETALKBLOCK    = getAssignedBlock("REMOTETALK",    numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	MORPHBLOCK         = getAssignedBlock("MORPH",         numsToAssign, DNA_HARDER_BOUNDS, good=1)
-	COLDBLOCK          = getAssignedBlock("COLD",          numsToAssign, good=1)
+	COLDBLOCK          = getAssignedBlock("COLD",          numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	HALLUCINATIONBLOCK = getAssignedBlock("HALLUCINATION", numsToAssign)
 	NOPRINTSBLOCK      = getAssignedBlock("NOPRINTS",      numsToAssign, DNA_HARD_BOUNDS, good=1)
-	SHOCKIMMUNITYBLOCK = getAssignedBlock("SHOCKIMMUNITY", numsToAssign, good=1)
+	SHOCKIMMUNITYBLOCK = getAssignedBlock("SHOCKIMMUNITY", numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SMALLSIZEBLOCK     = getAssignedBlock("SMALLSIZE",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 
 	//
@@ -148,14 +148,13 @@ var/LACTOSEBLOCK = 0
 	CHAVBLOCK      = getAssignedBlock("CHAV",       numsToAssign)
 	SWEDEBLOCK     = getAssignedBlock("SWEDE",      numsToAssign)
 	SCRAMBLEBLOCK  = getAssignedBlock("SCRAMBLE",   numsToAssign)
-	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, good=1)
-	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, good=1)
+	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, DNA_HARD_BOUNDS, good=1) //Why the hell does this have "good" if it's a disability?
 	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
 	SMILEBLOCK     = getAssignedBlock("SMILE",      numsToAssign)
 	ELVISBLOCK     = getAssignedBlock("ELVIS",      numsToAssign)
 
 	// Powers
-	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, good=1)
+	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, DNA_HARD_BOUNDS, good=1)
 	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
 	//SHADOWBLOCK  = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	FARSIGHTBLOCK  = getAssignedBlock("FARSIGHT",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
@@ -163,8 +162,9 @@ var/LACTOSEBLOCK = 0
 	CRYOBLOCK      = getAssignedBlock("CRYO",       numsToAssign, DNA_HARD_BOUNDS, good=1)
 	EATBLOCK       = getAssignedBlock("EAT",        numsToAssign, DNA_HARD_BOUNDS, good=1)
 	JUMPBLOCK      = getAssignedBlock("JUMP",       numsToAssign, DNA_HARD_BOUNDS, good=1)
-	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign, good=1)
-	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign)
+	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, DNA_HARD_BOUNDS, good=1)
+	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign, DNA_HARD_BOUNDS, good=1)
+	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign, DNA_HARD_BOUNDS, good=1)
 	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
@@ -233,19 +233,3 @@ var/LACTOSEBLOCK = 0
 
 			if(species.default_blocks.len)
 				all_species[name]=species
-
-
-/proc/setupfactions()
-	// Populate the factions list:
-	for(var/x in typesof(/datum/faction))
-		var/datum/faction/F = new x
-		if(!F.name)
-			del(F)
-			continue
-		else
-			ticker.factions.Add(F)
-			ticker.availablefactions.Add(F)
-
-	// Populate the syndicate coalition:
-	for(var/datum/faction/syndicate/S in ticker.factions)
-		ticker.syndicate_coalition.Add(S)

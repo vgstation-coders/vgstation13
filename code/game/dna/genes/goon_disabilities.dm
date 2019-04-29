@@ -366,7 +366,8 @@
 	panel = "Mutant Powers"
 	user_type = USER_TYPE_GENETIC
 
-	charge_type = Sp_CHARGES
+	charge_type = Sp_RECHARGE
+	charge_max = 200
 
 	spell_flags = INCLUDEUSER | STATALLOWED
 	invocation_type = SpI_NONE

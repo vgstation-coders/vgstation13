@@ -112,6 +112,7 @@
 
 		spawn()
 			zapmuthafucka(user, L, bounces)
+		score["lightningwiz"]++
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target
@@ -205,3 +206,8 @@
 					return "Allow the spell to arc up to 5 targets."
 		else
 			return ..()
+
+/spell/lightning/sith
+	basedamage = 25
+	invocation = "UNLIMITED POWER!"
+	user_type = USER_TYPE_OTHER

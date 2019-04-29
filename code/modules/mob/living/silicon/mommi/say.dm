@@ -8,6 +8,11 @@
 
 	return "states, [text]";
 
+/mob/living/silicon/robot/mommi/whisper(message as text)
+	if (!keeper)
+		return ..()
+	return FALSE
+
 /mob/living/silicon/robot/mommi/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	. = ..()
 	if(.)

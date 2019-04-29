@@ -147,6 +147,15 @@
 	_color = "purple"
 	species_fit = list(VOX_SHAPED)
 
+//Wizard gloves
+/obj/item/clothing/gloves/purple/wizard //This is basically reskinned combat gloves
+	name = "enchanted purple gloves"
+	desc = "A pair of enchanted gloves. These will protect you from shocking and are quite cozy."
+	siemens_coefficient = 0
+	permeability_coefficient = 0.05
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+
 /obj/item/clothing/gloves/green
 	name = "green gloves"
 	desc = "A pair of gloves, they don't look special in any way."
@@ -194,10 +203,10 @@
 	else
 		to_chat(M, "<span class ='warning'>You need to regain your focus before channeling another gun!</span>")
 
-/obj/item/clothing/gloves/white/stunglove // For Clown Planet's mimes. - N3X
-	New()
-		..()
-		cell = new /obj/item/weapon/cell/crap/empty(src)
+// For Clown Planet's mimes. - N3X
+/obj/item/clothing/gloves/white/stunglove/New()
+	..()
+	cell = new /obj/item/weapon/cell/crap/empty(src)
 
 /obj/item/clothing/gloves/grey
 	name = "grey gloves"

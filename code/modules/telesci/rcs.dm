@@ -25,7 +25,7 @@
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(stage == 0)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You unscrew the telepad's tracking beacon.</span>")
@@ -78,8 +78,12 @@
 	var/mode    = MODE_NORMAL
 	var/emagged = FALSE
 	var/send_cost = 1500
+	var/send_note = FALSE
 	var/tmp/teleporting = FALSE
 	starting_materials	= list(MAT_IRON = 50000)
+
+/obj/item/weapon/rcs/get_cell()
+	return cell
 
 /obj/item/weapon/rcs/New()
 	..()
@@ -113,6 +117,10 @@
 
 /obj/item/weapon/rcs/preattack(var/obj/structure/closet/crate/target, var/mob/user, var/proximity_flag, var/click_parameters)
 	if (!istype(target) || target.opened || !proximity_flag || !cell || teleporting)
+		return
+
+	if (send_note && user.z == STATION_Z)
+		to_chat(user, "<span class='warning'>The safety prevents the sending of crates from the viscinity of Nanotrasen Station.</span>")
 		return
 
 	if (cell.charge < send_cost)
@@ -150,19 +158,40 @@
 	else if (mode == MODE_RANDOM)
 		teleport_target = locate(rand(50, 450), rand(50, 450), 6)
 
+	var/obj/item/weapon/paper/P
+
+	if(send_note)
+		var/note = input("Would you like to attach a note?", "Autoletter") as null|text
+		if(note)
+			P = new(null) //This will be deleted if the teleport doesn't complete. Avoids generating extra notes.
+			P.name = "letter from [user]"
+			P.info = note
+
 	playsound(src, 'sound/machines/click.ogg', 50, 1)
 	to_chat(user, "<span class='notic'>Teleporting \the [target]...</span>")
 	teleporting = TRUE
 	if (!do_after(user, target, 50))
 		teleporting = FALSE
+		if(P)
+			qdel(P)
 		return 1
 
 	teleporting = FALSE
 	do_teleport(target, teleport_target)
+	if(P)
+		P.forceMove(target)
 	/*spark(src, 5)*/
 	cell.use(send_cost)
-	to_chat(user, "<span class='notice'>Teleport successful. [round(cell.charge / send_cost)] charge\s left.</span>")
+	to_chat(user, "<span class='notice'>Teleport successful. [send_cost ? "[round(cell.charge / send_cost)] charge\s left." : "Caw."]</span>")
 	return 1
+
+/obj/item/weapon/rcs/salvage
+	name = "salvage-crate-sender (SCS)"
+	desc = "An old RCS model that has been modified for longterm use."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "dest_tagger_p"
+	send_cost = 0
+	send_note = TRUE
 
 #undef MODE_NORMAL
 #undef MODE_RANDOM

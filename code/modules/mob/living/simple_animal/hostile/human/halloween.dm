@@ -222,6 +222,7 @@
 		C.Stun(distance_value)
 		if(distance_value > 1)
 			C.Knockdown(distance_value)
+			C.Stun(distance_value)
 		C.stuttering += 5+distance_value *2
 		if(!C.blinded)
 			C.blinded = 1
@@ -439,6 +440,9 @@
 	search_objects = 1
 	var/obj/item/weapon/cell/cell = null
 	var/latched = 0
+
+/mob/living/simple_animal/hostile/syphoner/get_cell()
+	return cell
 
 /mob/living/simple_animal/hostile/syphoner/New()
 	..()

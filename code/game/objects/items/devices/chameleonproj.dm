@@ -14,7 +14,7 @@
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
 	var/obj/effect/dummy/chameleon/active_dummy = null
-	var/saved_item = /obj/item/weapon/cigbutt
+	var/saved_item = /obj/item/trash/cigbutt
 	var/saved_icon = 'icons/obj/clothing/masks.dmi'
 	var/saved_icon_state = "cigbutt"
 	var/saved_overlays
@@ -51,7 +51,7 @@
 			saved_item = target.type
 			saved_icon = target.icon
 			saved_icon_state = target.icon_state
-			saved_overlays = target.overlays
+			saved_overlays = target.overlays.Copy()
 			return 1
 
 /obj/item/device/chameleon/proc/toggle()
@@ -143,7 +143,18 @@
 /obj/effect/dummy/chameleon/attack_hand()
 	disrupt()
 
-/obj/effect/dummy/chameleon/ex_act()
+/obj/effect/dummy/chameleon/ex_act(severity)
+	for(var/mob/M in src)
+		ex_act(severity)
+	disrupt()
+
+/obj/effect/dummy/chameleon/emp_act(severity)
+	for(var/mob/M in src)
+		emp_act(severity)
+	disrupt()
+
+/obj/effect/dummy/chameleon/blob_act()
+	..()
 	disrupt()
 
 /obj/effect/dummy/chameleon/bullet_act()

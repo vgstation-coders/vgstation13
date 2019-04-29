@@ -39,11 +39,23 @@
 
 	var/list/construct_spells = list()
 
+	var/list/healers = list()
+
+/mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
+	. = ..()
+	if (healers.len > 0)
+		for (var/mob/living/simple_animal/construct/builder/perfect/P in healers)
+			P.move_ray()
+
+/mob/living/simple_animal/construct/say(var/message)
+	. = ..(message, "C")
+
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return
-
-	if(mind in ticker.mode.cult)
+	if(find_active_faction_by_member(mind.GetRole(CULTIST)))
+		return 1
+	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1
 
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
@@ -73,13 +85,12 @@
 
 /mob/living/simple_animal/construct/New()
 	..()
-	name = text("[initial(name)] ([rand(1, 1000)])")
-	real_name = name
+	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
-		src.add_spell(new spell, "const_spell_ready")
-	updateicon()
+		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	setupglow()
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -88,7 +99,17 @@
 	for(var/mob/M in viewers(src, null))
 		if((M.client && !( M.blinded )))
 			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
-	ghostize()
+	if(client && iscultist(src))
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/shade = new (T)
+			shade.name = "[real_name] the Shade"
+			shade.real_name = "[real_name]"
+			mind.transfer_to(shade)
+			update_faction_icons()
+			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
+	else
+		ghostize()
 	qdel (src)
 
 /mob/living/simple_animal/construct/examine(mob/user)
@@ -106,13 +127,25 @@
 
 	to_chat(user, msg)
 
+/mob/living/simple_animal/construct/attack_construct(var/mob/user)
+	if(istype(user,/mob/living/simple_animal/construct/builder/perfect) && get_dist(user,src)<=2)
+		attack_animal(user)
+		return 1
+	return 0
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M)
-	if(istype(M, /mob/living/simple_animal/construct/builder))
+	if(istype(M, /mob/living/simple_animal/construct/builder/perfect))
 		if(src.health >= src.maxHealth)
-			to_chat(M, "<span class='notice'>[src] has nothing to mend.</span>")
+			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
+			return
+		var/mob/living/simple_animal/construct/builder/perfect/P = M
+		P.start_ray(src)
+	else if(istype(M, /mob/living/simple_animal/construct/builder))
+		if(src.health >= src.maxHealth)
+			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 	else
 		M.unarmed_attack_mob(src)
@@ -123,7 +156,7 @@
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
 			damage = 0
-		if(istype(O,/obj/item/weapon/nullrod))
+		if(isholyweapon(O))
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
@@ -202,11 +235,13 @@
 	melee_damage_upper = 25
 	attacktext = "slashes"
 	speed = 1
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
+/mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
+	return 1.5
 
 
 /////////////////////////////Artificer/////////////////////////
@@ -298,7 +333,7 @@
 	change_sight(adding = SEE_MOBS)
 
 ////////////////Glow//////////////////
-/mob/living/simple_animal/construct/proc/updateicon()
+/mob/living/simple_animal/construct/proc/setupglow()
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
@@ -309,6 +344,12 @@
 	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
+
+
+////////////////Float//////////////////
+/mob/living/simple_animal/construct/proc/setupfloat()
+	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 
 ////////////////Powers//////////////////
 
@@ -414,6 +455,9 @@
 
 /mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
+
+	process_construct_hud(src)
+
 	if(healths)
 		switch(health)
 			if(50 to INFINITY)

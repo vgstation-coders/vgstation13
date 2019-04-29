@@ -24,29 +24,7 @@
 	return attack(user, user) //Dealt with in attack code
 
 /obj/item/weapon/reagent_containers/pill/attack(mob/M as mob, mob/user as mob, def_zone)
-	// Feeding others needs time to succeed
-	if (user != M && (ishuman(M) || ismonkey(M)))
-		user.visible_message("<span class='warning'>[user] attempts to force [M] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [M] to swallow \the [src].</span>")
-
-		if (!do_mob(user, M))
-			return 1
-
-		user.visible_message("<span class='warning'>[user] forces [M] to swallow \the [src].</span>", "<span class='notice'>You force [M] to swallow \the [src].</span>")
-		add_attacklogs(user, M, "fed", object = src, addition = "Reagents: [english_list(list(reagentlist(src)))]", admin_warn = TRUE)
-	else if (user == M)
-		user.visible_message("<span class='notice'>[user] swallows \the [src].</span>", "<span class='notice'>You swallow \the [src].</span>")
-	else
-		return 0
-
-	user.drop_from_inventory(src) // Update icon
-	if (ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.species.chem_flags & NO_EAT)
-			src.forceMove(get_turf(H))
-			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
-			return 0
-	ingest(M)
-	return 1
+	return try_feed(M, user)
 
 // Handles pill dissolving in containers
 /obj/item/weapon/reagent_containers/pill/afterattack(var/obj/item/weapon/reagent_containers/target, var/mob/user, var/adjacency_flag, var/click_params)
@@ -66,6 +44,33 @@
 			to_chat(user, "<span class='notice'>You [target_was_empty ? "crush partially" : "partially dissolve"] the pill into \the [target], filling it.</span>")
 	else
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
+
+/obj/item/weapon/reagent_containers/pill/proc/try_feed(mob/target, mob/user)
+	// Feeding others needs time to succeed
+	if (user != target && (ishuman(target) || ismonkey(target)))
+		user.visible_message("<span class='warning'>[user] attempts to force [target] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [target] to swallow \the [src].</span>")
+
+		if (!do_mob(user, target))
+			return 1
+
+		user.visible_message("<span class='warning'>[user] forces [target] to swallow \the [src].</span>", "<span class='notice'>You force [target] to swallow \the [src].</span>")
+		add_attacklogs(user, target, "fed", object = src, addition = "Reagents: [english_list(list(reagentlist(src)))]", admin_warn = TRUE)
+	else if (user == target)
+		user.visible_message("<span class='notice'>[user] swallows \the [src].</span>", "<span class='notice'>You swallow \the [src].</span>")
+	else
+		return 0
+
+	user.drop_from_inventory(src) // Update icon
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species.chem_flags & NO_EAT)
+			src.forceMove(get_turf(H))
+			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
+			return
+	ingest(target)
+
+/obj/item/weapon/reagent_containers/pill/bite_act(mob/user)
+	try_feed(user, user)
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)

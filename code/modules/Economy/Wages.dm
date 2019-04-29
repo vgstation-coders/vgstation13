@@ -8,7 +8,7 @@ var/global/roundstart_enable_wages = 0
 
 /datum/command_alert/wages
 	name = "wage payout"
-	message = "Payroll has been processed. All accounts eligible have have received their paycheck as a direct deposit, including department accounts."
+	message = "Payroll has been processed. All accounts eligible have received their paycheck as a direct deposit, including department accounts."
 	noalert = 1
 
 /proc/wagePayout()

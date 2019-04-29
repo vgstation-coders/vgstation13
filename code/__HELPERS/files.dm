@@ -16,11 +16,11 @@
 	var/list/maps = list()
 	var/recursion_limit = 20 //lots of maps waiting to be played, feels like TF2
 	//Get our potential maps
-	//testing("starting in [root]")
+	testing("starting in [root]")
 	for(var/potential in flist(root))
 		if(copytext(potential,-1,0 != "/"))
 			continue // Not a directory, ignore it.
-		//testing("Inside [root + potential]")
+		testing("Inside [root + potential]")
 		if(!recursion_limit)
 			break
 		//our current working directory
@@ -32,14 +32,16 @@
 		var/max = -1
 		var/skipping = 0
 		for(var/binaries in flist(path))
-			//testing("Checking file [binaries]")
-			if(copytext(binaries,-15,0 == "playercount.txt"))
+			testing("Checking file [binaries]")
+			if(copytext(binaries,-15,0) == "playercount.txt")
 				var/list/lines = file2list(path+binaries)
 				for(var/line in lines)
 					if(findtext(line,"max"))
 						max = text2num(copytext(line,5,0))
+						testing("[path] maximum players is [line] found [max]")
 					else if(findtext(line,"min"))
 						min = text2num(copytext(line,5,0))
+						testing("[path] minimum players is [line] found [min]")
 					else
 						warning("Our file had excessive lines, skipping.")
 				if(!isnull(min) && !isnull(max))
@@ -54,8 +56,8 @@
 				binary = binaries
 				continue
 		if(skipping)
-			message_admins("Skipping map [binary] due to [skipping == 1 ? "not enough players." : "too many players."]")
-			warning("Skipping map [binary] due to [skipping == 1 ? "not enough players." : "too many players."]")
+			message_admins("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")
+			warning("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")
 			binary = null
 			continue
 		if(!binary)

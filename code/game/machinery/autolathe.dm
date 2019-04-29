@@ -94,6 +94,7 @@
 		new /obj/item/ammo_casing/shotgun/blank(), \
 		new /obj/item/ammo_casing/shotgun/beanbag(), \
 		new /obj/item/ammo_casing/shotgun/flare(), \
+		new /obj/item/ammo_storage/speedloader/shotgun(),
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/toy/ammo/gun(), \
@@ -126,6 +127,7 @@
 		new /obj/item/stack/rods(), \
 		new /obj/item/weapon/storage/box/ornaments(), \
 		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
+		new /obj/item/weapon/disk/shuttle_coords/station_auxillary(),\
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/gun/projectile/flamethrower/full(), \
@@ -176,7 +178,7 @@
 	if(..())
 		return 1
 
-	else if(I.materials)
+	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1
@@ -199,6 +201,6 @@
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
-								"You put \the [I] in \the [src]'s reycling unit.")
+								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
 		return 1

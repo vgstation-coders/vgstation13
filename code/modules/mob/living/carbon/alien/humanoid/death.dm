@@ -4,7 +4,7 @@
 	if(healths)
 		healths.icon_state = "health6"
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 	stat = DEAD
 
 	if(!gibbed)

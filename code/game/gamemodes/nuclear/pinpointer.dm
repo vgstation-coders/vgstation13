@@ -15,14 +15,20 @@
 	var/obj/target = null // this can be used to override disk tracking on normal pinpointers (ie. for shunted malf ais)
 	var/active = FALSE
 	var/watches_nuke = TRUE
+	var/pinpointable = TRUE//is it being tracked by the pinpointer pinpointer
+var/list/pinpointerpinpointer_list = list()
 
 /obj/item/weapon/pinpointer/New()
 	..()
 	pinpointer_list.Add(src)
+	if (pinpointable == TRUE)
+		pinpointerpinpointer_list.Add(src)
 
 /obj/item/weapon/pinpointer/Destroy()
 	fast_objects -= src
 	pinpointer_list.Remove(src)
+	pinpointerpinpointer_list.Remove(src)
+
 	..()
 
 /obj/item/weapon/pinpointer/acidable()
@@ -98,6 +104,7 @@
 	var/mode = 0  // Mode 0 locates disk, mode 1 locates coordinates.
 	var/turf/location = null
 	watches_nuke = FALSE
+	pinpointable = FALSE
 
 /obj/item/weapon/pinpointer/advpinpointer/attack_self()
 	if(!active)
@@ -195,6 +202,7 @@
 /obj/item/weapon/pinpointer/nukeop
 	var/mode = 0	//Mode 0 locates disk, mode 1 locates the shuttle
 	var/obj/machinery/computer/shuttle_control/syndicate/home = null
+	pinpointable = FALSE
 
 
 /obj/item/weapon/pinpointer/nukeop/attack_self(mob/user as mob)
@@ -247,6 +255,7 @@
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
 	var/used = FALSE
 	watches_nuke = FALSE
+	pinpointable = FALSE
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
@@ -297,3 +306,30 @@
 	..()
 	if (target)
 		to_chat(user,"<span class='notice'>Tracking [target]</span>")
+
+//////////////////////////
+//pinpointer pinpointers//
+//////////////////////////
+
+/obj/item/weapon/pinpointer/pinpointerpinpointer
+	name = "pinpointer pinpointer"
+	desc = "Where did that darn pinpointer go? Hmmm... well, good thing I have this trusty pinpointer pinpointer to find it."
+	watches_nuke = FALSE
+	pinpointable = FALSE
+
+
+/obj/item/weapon/pinpointer/pinpointerpinpointer/New()
+	..()
+	overlays += "pinpointerpinpointer"
+
+/obj/item/weapon/pinpointer/pinpointerpinpointer/process()
+	var/closest_distance = INFINITY
+	var/turf/L = get_turf(src)
+	for(var/atom/P in pinpointerpinpointer_list)
+		var/turf/T = get_turf(P)
+		var/dist_P = abs(cheap_pythag((L.x - T.x), (L.y - T.y)))
+		if(dist_P < closest_distance)
+			closest_distance = dist_P
+			target = P
+	point_at(target)
+	..()

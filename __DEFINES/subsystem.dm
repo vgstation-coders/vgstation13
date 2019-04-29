@@ -10,6 +10,7 @@
 #define SS_INIT_PLANT              21.5
 #define SS_INIT_HUMANS             21
 #define SS_INIT_MAP                20
+#define SS_INIT_COMPONENT          19.5
 #define SS_INIT_POWER              19
 #define SS_INIT_OBJECT             18
 #define SS_INIT_PIPENET            17.5
@@ -23,10 +24,13 @@
 #define SS_INIT_TICKER            -21
 #define SS_INIT_FINISH            -22
 #define SS_INIT_MINIMAP           -23
+#define SS_INIT_PERSISTENCE_MAP	  -98
+#define SS_INIT_PERSISTENCE_MISC  -99
 
 
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
+#define SS_PRIORITY_COMPONENT      125
 #define SS_PRIORITY_NANOUI         120
 #define SS_PRIORITY_VOTE           110
 #define SS_PRIORITY_FAST_OBJECTS   105
@@ -41,6 +45,7 @@
 #define SS_PRIORITY_PLANT          40
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
+#define SS_PRIORITY_AMBIENCE	   19
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
@@ -53,6 +58,7 @@
 #define SS_DISPLAY_AIR            -90
 #define SS_DISPLAY_LIGHTING       -80
 #define SS_DISPLAY_MOB            -70
+#define SS_DISPLAY_COMPONENT      -69
 #define SS_DISPLAY_FAST_OBJECTS   -65
 #define SS_DISPLAY_OBJECTS        -60
 #define SS_DISPLAY_MACHINERY      -50
@@ -63,3 +69,9 @@
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0
 #define SS_DISPLAY_SUN             10
+
+#define SS_TRASH                  "trash"
+#define SS_CLEANABLE              "cleanable_decals"
+#define SS_BLOOD                  "blood"
+#define SS_GIBS                   "gibs"
+#define SS_TRACKS                 "tracks"

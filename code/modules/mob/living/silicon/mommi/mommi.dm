@@ -53,6 +53,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	remove_static_overlays()
 	..()
 
+/mob/living/silicon/robot/mommi/track_globally()
+	return //don't track
+
 /mob/living/silicon/robot/mommi/remove_screen_objs()
 	..()
 	if(inv_tool)
@@ -85,6 +88,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	//If KEEPER is enabled, disable it.
 	if(keeper)
 		keeper = FALSE
+
+	//and maybe some more freedoms like staying up past bedtime, littering, and jaywalking :)
+	if(!HAS_MODULE_QUIRK(src, MODULE_CAN_HANDLE_FOOD))
+		module.quirk_flags |= MODULE_CAN_HANDLE_FOOD
 
 /mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
@@ -144,12 +151,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(isscrewdriver(W) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(isscrewdriver(W) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
@@ -227,9 +234,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		picked_icon = TRUE
 
 /mob/living/silicon/robot/mommi/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='warning'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
 	if(!module)
 		pick_module()
 		return

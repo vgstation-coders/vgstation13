@@ -47,7 +47,7 @@
 				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 					"<span class='notice'>You dissasemble \the [src].</span>")
-					getFromPool(material, get_turf(src))
+					getFromPool(material, get_turf(src), 2)
 					qdel(src)
 			else if(!anchored) //Unanchored, anchor it
 				if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
@@ -89,7 +89,7 @@
 			getFromPool(material, get_turf(src))
 			qdel(src)
 
-	else if(isscrewdriver(W) && state == 2) //Unsecuring support struts, stage 2 to 1
+	else if(W.is_screwdriver(user) && state == 2) //Unsecuring support struts, stage 2 to 1
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
@@ -101,7 +101,7 @@
 			state = 1
 			update_icon()
 
-	else if(isscrewdriver(W) && state == 1) //Securing support struts, stage 1 to 2
+	else if(W.is_screwdriver(user) && state == 1) //Securing support struts, stage 1 to 2
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
@@ -290,6 +290,22 @@
 
 		add_hiddenprint(usr)
 
+	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
+		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+		"<span class='notice'>You begin slicing through \the [src].</span>", \
+		"<span class='warning'>You hear slicing noises.</span>")
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+
+		if(do_after(user, src, 60))
+			if(!istype(src))
+				return
+			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+			"<span class='notice'>You slice through \the [src].</span>", \
+			"<span class='warning'>You hear slicing noises.</span>")
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			getFromPool(material, get_turf(src), 2)
+			qdel(src)
+
 	//Wait, what, WHAT ?
 	else if(istype(W, /obj/item/pipe))
 		var/obj/item/pipe/P = W
@@ -322,7 +338,7 @@
 				qdel(src) //No scraps
 			return
 		if(2.0)
-			if(prob(30))
+			if(prob(50))
 				if(state == 2)
 					state = 1
 					update_icon()
@@ -374,6 +390,9 @@
 /obj/structure/girder/projectile_check()
 	return PROJREACT_WALLS
 
+/obj/structure/girder/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/girder/clockwork, CLOCKWORK_GENERIC_GLOW)
+
 /obj/structure/girder/displaced
 	name = "displaced girder"
 	icon_state = "displaced"
@@ -390,6 +409,9 @@
 	icon_state = "cultgirder"
 	anchored = 1
 	density = 1
+
+/obj/structure/cultgirder/clockworkify()
+	return
 
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswrench(W))
@@ -466,8 +488,12 @@
 	name = "clockwork girder"
 	icon_state = "cog"
 	material = /obj/item/stack/sheet/brass
+	construction_length = 80
 
 /obj/structure/girder/clockwork/cultify()
+	return
+
+/obj/structure/girder/clockwork/clockworkify()
 	return
 
 /obj/structure/girder/clockwork/update_icon()

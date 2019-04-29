@@ -142,8 +142,9 @@
 	if(!istype(W))
 		return
 
+	..()
+
 	if(slot == slot_head)
 		head = W
 		update_inv_head(redraw_mob)
 
-	..()

@@ -95,7 +95,7 @@ var/global/no_pin_for_debit = TRUE
 		transaction_log.Add(T)
 		return 1
 	else
-		to_chat(usr, "[bicon(src)] <span class='warning'>Not enough funds in account.</span>")
+		to_chat(usr, "<span class='warning'>Not enough funds in account.</span>")
 		return 0
 
 // Charging cards is an absolute mess so let's make it consistent.
@@ -125,7 +125,7 @@ var/global/no_pin_for_debit = TRUE
 				return CARD_CAPTURE_FAILURE_NO_CONNECTION
 			account = linked_db.get_account(card.associated_account_number)
 			if(!account)
-				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
+				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination or ID is not registered with Nanotrasen accounts database.</span>")
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 		else
 			to_chat(user, "[bicon(src)] <span class='warning'>Internal Error.</span>")
@@ -140,9 +140,9 @@ var/global/no_pin_for_debit = TRUE
 		to_chat(user, "[bicon(src)] <span class='warning'>Account disabled.</span>")
 		return CARD_CAPTURE_ACCOUNT_DISABLED
 	switch(account.security_level)
-		if(0)
+		if (0, 1)
 			return CARD_CAPTURE_SUCCESS
-		if(1 to 2)
+		if(2) // Only checking it at max level, this is too annoying otherwise...
 			var/user_loc = user.loc
 			if(account.security_level >= 2 && !card)
 				// Security level is 2 and the card is not present, fail.
@@ -226,11 +226,11 @@ var/global/no_pin_for_debit = TRUE
 		// We have to have a destination to charge to.
 		to_chat(user, "[bicon(src)] <span class='warning'>No destination account.</span>")
 		return CARD_CAPTURE_FAILURE_NO_DESTINATION
-	
+
 	if(dest.disabled)
 		to_chat(user, "[bicon(src)] <span class='warning'>Destination account disabled.</span>")
 		return CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT
-	
+
 	if(istype(card, /obj/item/weapon/card))
 		// The card is present, so we can fetch the account information ourselves.
 		visible_message("<span class='info'>[user] swipes a card through [src].</span>")
@@ -261,10 +261,10 @@ var/global/no_pin_for_debit = TRUE
 					transaction_amount_primary -= transaction_amount_secondary
 					// Adjust the primary.
 					to_chat(user, "[bicon(src)] <span class='notice'>Using remaining virtual wallet on \the [bicon(card)] [card] with a balance of $[num2septext(transaction_amount_secondary)]</span>")
-				
+
 				primary_money_account = null
 				// We need another source.
-		
+
 		if(!primary_money_account)
 			// There wasn't enough funds in the virtual wallet, so lets get the bank account.
 			primary_money_account = linked_db.get_account(card.associated_account_number)
@@ -273,14 +273,14 @@ var/global/no_pin_for_debit = TRUE
 				// Couldn't find a matching account so fail.
 				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
-	else 
+	else
 		// The card was not found, so prompt the user for account information.
 		var/account_number = input(user, "Enter account number", "Card Transaction") as null|num
 		// Get the account number from the user.
 		if(user_loc != user.loc)
 			to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
 			return CARD_CAPTURE_FAILURE_USER_CANCELED
-			
+
 		if(account_number == null)
 			// If the user canceled, fail.
 			visible_message("<span class='info'>[user] firmly presses 'CANCEL' on \the [src]'s PIN pad.</span>")
@@ -308,12 +308,16 @@ var/global/no_pin_for_debit = TRUE
 		var/security_check = charge_flow_verify_security(null, card, user, primary_money_account)
 		if(security_check != CARD_CAPTURE_SUCCESS)
 			return security_check
-	
-	if( !PRIMARY_SAME_AS_DEST && SECONDARY_NO_FUNDS || secondary_money_account && !SECONDARY_SAME_AS_DEST && PRIMARY_NO_FUNDS )
-		// Verify that all applicable payment methods still have the required amount of money in case a race condition happened while getting information, otherwise fail.
+
+	if(!secondary_money_account && PRIMARY_NO_FUNDS && !PRIMARY_SAME_AS_DEST)
+		//If we aren't using a secondary account, make sure we've got enough money in the primary (assuming it's not our destination)
 		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
-	
+	if(secondary_money_account && SECONDARY_NO_FUNDS && !SECONDARY_SAME_AS_DEST)
+		//Secondary only exists if partially paying with both. If that's the case, make sure they can cover the remaining balance there.
+		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+
 	if(card && istype(card, /obj/item/weapon/card/debit))
 		// Using debit, find the authorized name.
 		var/obj/item/weapon/card/debit/debit_card = card

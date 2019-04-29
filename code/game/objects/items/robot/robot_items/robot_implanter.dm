@@ -3,9 +3,10 @@
 //Warden upgrade's implanter
 /obj/item/weapon/implanter/cyborg
 	name = "cyborg implanter"
+	desc = "Can be refilled in about sixty seconds at any cyborg recharging station."
 	imp_type = /obj/item/weapon/implant/loyalty
 	var/charge = 0
-	
+
 /obj/item/weapon/implanter/cyborg/update()
 	..()
 	name = "[initial(name)][imp? " - [imp.name]":""]"

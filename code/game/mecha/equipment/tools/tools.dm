@@ -56,11 +56,11 @@
 				FD.force_open(chassis.occupant, src)
 			return
 		if(!O.anchored)
-			if(istype(O, /obj/item/weapon/ore) && W.ore_box)
+			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
-				for(var/obj/item/weapon/ore/I in get_turf(target))
+				for(var/obj/item/stack/ore/I in get_turf(target))
 					if(I.material)
-						W.ore_box.materials.addAmount(I.material, 1)
+						W.ore_box.materials.addAmount(I.material, I.amount)
 						returnToPool(I)
 						count++
 				if(count)
@@ -169,15 +169,15 @@
 		if(do_after_cooldown(target, 1/MECHDRILL_ROCK_SPEED) && C == chassis.loc && src == chassis.selected)
 			for(var/turf/unsimulated/mineral/M in range(chassis,1))
 				if(get_dir(chassis,M)&chassis.dir)
-					M.GetDrilled()
+					M.GetDrilled(safety_override = TRUE, driller = src)
 			log_message("Drilled through [target]")
 			if(istype(chassis, /obj/mecha/working))
 				var/obj/mecha/working/W = chassis
 				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
-					for(var/obj/item/weapon/ore/ore in range(chassis,1))
+					for(var/obj/item/stack/ore/ore in range(chassis,1))
 						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							W.ore_box.materials.addAmount(ore.material,1)
+							W.ore_box.materials.addAmount(ore.material,ore.amount)
 							returnToPool(ore)
 							count++
 					if(count)
@@ -196,8 +196,8 @@
 				if(get_dir(chassis,M)&chassis.dir || istype(src, /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill)) //Only dig frontmost 1x3 unless the drill is diamond
 					M.gets_dug()
 					if(hydraulic_clamp && ore_box)
-						for(var/obj/item/weapon/ore/glass/sandore in get_turf(M))
-							ore_box.materials.addAmount(sandore.material,1)
+						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
+							ore_box.materials.addAmount(sandore.material,sandore.amount)
 							returnToPool(sandore)
 							count++
 			log_message("Drilled through [target]")
@@ -530,6 +530,7 @@
 	RPD = new(src)
 	RCD = new(src)
 	sock = new(src)
+	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
@@ -538,6 +539,7 @@
 	RCD = null
 	qdel(sock)
 	sock = null
+	red_tool_list -= src
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
@@ -809,6 +811,9 @@
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 	is_activateable = 0
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -837,9 +842,9 @@
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(!action_checks(src))
 		return chassis.dynbulletdamage(Proj)
-	if(prob(chassis.deflect_chance*deflect_coeff))
+	if(prob(chassis.deflect_chance*deflect_coeff) && !is_type_in_list(Proj, never_deflect))
 		chassis.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		chassis.visible_message("The [chassis.name] armor deflects the projectile")
+		chassis.visible_message("<span class='warning'>\The [chassis.name] armor deflects the projectile!</span>")
 		chassis.log_append_to_last("Armor saved.")
 	else
 		chassis.take_damage(round(Proj.damage*src.damage_coeff),Proj.flag)
@@ -897,7 +902,7 @@
 	linked_spell = new /spell/mech/repair(M, src)
 	return
 
-/obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
+/obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
 	qdel(pr_repair_droid)
 	pr_repair_droid = null
@@ -1054,14 +1059,16 @@
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
-/*	proc/dynusepower(amount)
+/*
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/proc/dynusepower(amount)
 	if(!equip_ready) //enabled
 		var/area/A = get_area(chassis)
 		var/pow_chan = get_power_channel(A)
 		if(pow_chan)
 			A.master.use_power(amount*coeff, pow_chan)
 			return 1
-	return chassis.dynusepower(amount)*/
+	return chassis.dynusepower(amount)
+*/
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/activate()
 	if(pr_energy_relay.toggle())
@@ -1215,13 +1222,13 @@
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
 		GM.temperature = 1500+T0C //should be enough to start a fire
+		GM.adjust_gas(GAS_PLASMA, 100)
 		T.visible_message("The [src] suddenly disgorges a cloud of heated plasma.")
-		destroy()
+		qdel(src)
 	else
-		GM.toxins += 5
 		GM.temperature = istype(T) ? T.air.temperature : T20C
+		GM.adjust_gas(GAS_PLASMA, 5)
 		T.visible_message("The [src] suddenly disgorges a cloud of plasma.")
 	T.assume_air(GM)
 	return
@@ -1559,7 +1566,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/collector/get_equip_info()
 	if(!collector.P)
 		return "[..()] No tank loaded."
-	if(collector.P.air_contents.toxins <= 0)
+	if(collector.P.air_contents[GAS_PLASMA] <= 0)
 		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 

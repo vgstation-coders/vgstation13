@@ -22,6 +22,7 @@
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 	var/table_type = /obj/structure/table
 	sheet_type = /obj/item/stack/sheet/metal
+	var/sheet_amount = 2
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
@@ -30,7 +31,7 @@
 /obj/item/weapon/table_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if (iswrench(W))
-		drop_stack(sheet_type, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
 	if (istype(W, /obj/item/stack/rods))
@@ -58,6 +59,9 @@
 	new table_type(user.loc)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
+
+/obj/item/weapon/table_parts/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/item/weapon/table_parts/clockwork, CLOCKWORK_GENERIC_GLOW)
 
 /obj/item/weapon/table_parts/reinforced
 	name = "reinforced table parts"
@@ -133,6 +137,21 @@
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
+/obj/item/weapon/table_parts/clockwork
+	name = "brass table parts"
+	desc = "Parts of a slightly beveled brass table."
+	icon_state = "brass_tableparts"
+	starting_materials = list(MAT_BRASS = 15000)
+	table_type = /obj/structure/table/reinforced/clockwork
+	sheet_type = /obj/item/stack/sheet/brass
+	sheet_amount = 4
+
+/obj/item/weapon/table_parts/clockwork/cultify()
+	return
+
+/obj/item/weapon/table_parts/clockwork/clockworkify()
+	return
+
 /obj/item/weapon/rack_parts
 	name = "rack parts"
 	desc = "Parts of a rack."
@@ -143,11 +162,12 @@
 	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
+	var/sheet_amount = 1
 
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if (iswrench(W))
-		drop_stack(sheet_type, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
 	if(iswelder(W))

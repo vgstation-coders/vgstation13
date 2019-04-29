@@ -5,8 +5,6 @@
 #define SUPPLY_DOCKZ 2          //Z-level of the Dock.
 #define SUPPLY_STATIONZ 1       //Z-level of the Station.
 
-#define SCREEN_WIDTH 480 // Dimensions of supply computer windows
-#define SCREEN_HEIGHT 590
 #define REASON_LEN 140 // max length for reason message, nanoui appears to not like long strings.
 
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
@@ -15,7 +13,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	name       = "Supply Shuttle"
 	init_order = SS_INIT_SUPPLY_SHUTTLE
 	flags      = SS_NO_TICK_CHECK
-	wait       = 30 SECONDS
+	wait       = 1 SECONDS
 	//supply points have been replaced with MONEY MONEY MONEY - N3X
 	var/credits_per_slip = 2
 	var/credits_per_crate = 5
@@ -231,10 +229,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			[shoppinglist.len] PACKAGES IN THIS SHIPMENT<br>
 			CONTENTS:<br><ul>"}
 		//spawn the stuff, finish generating the manifest while you're at it
-		if(SP.access)
+		if(SP.access && istype(A, /obj/structure/closet))
 			A:req_access = SP.access
 
-		if(SP.one_access)
+		if(SP.one_access && istype(A, /obj/structure/closet))
 			A:req_one_access = SP.one_access
 
 		var/list/contains

@@ -129,15 +129,15 @@
 		special_assembly.Crossed(AM)
 
 
-/obj/item/device/assembly_holder/on_found(mob/finder as mob)
+/obj/item/device/assembly_holder/on_found(mob/wearer, mob/finder as mob)
 	if(a_left)
-		a_left.on_found(finder)
+		a_left.on_found(wearer, finder)
 	if(a_right)
-		a_right.on_found(finder)
+		a_right.on_found(wearer, finder)
 	if(special_assembly)
 		if(istype(special_assembly, /obj/item))
 			var/obj/item/S = special_assembly
-			S.on_found(finder)
+			S.on_found(wearer, finder)
 
 /obj/item/device/assembly_holder/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
@@ -159,7 +159,7 @@
 
 
 /obj/item/device/assembly_holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>BUG:Assembly part missing, please report this!</span>")
 			return
@@ -236,7 +236,6 @@
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()
 		else
-			:
 			if(a_right != D)
 				a_right.pulsed(0)
 			if(a_left != D)

@@ -7,7 +7,7 @@
 
 /datum/artifact_trigger/gas/New()
 	..()
-	trigger_gas = pick("TOXINS", "CARBON_DIOXIDE", "NITROGEN", "OXYGEN")
+	trigger_gas = pick("PLASMA", "CARBON_DIOXIDE", "NITROGEN", "OXYGEN") //TODO: See if these can be replaced with the defines without fucking up
 
 
 /datum/artifact_trigger/gas/CheckTrigger()

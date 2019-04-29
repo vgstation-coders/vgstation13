@@ -46,13 +46,12 @@
 			body += debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)
 		#endif
 
-	var/icon/sprite
+	var/sprite
 
 	if(istype(D,/atom))
 		var/atom/AT = D
 		if(AT.icon && AT.icon_state)
-			sprite = new /icon(AT.icon, AT.icon_state)
-			usr << browse_rsc(sprite, "view_vars_sprite.png")
+			sprite = 1
 
 	title = "[D] (\ref[D]) = [D.type]"
 
@@ -60,7 +59,7 @@
 		<div align='center'><table width='100%'><tr><td width='50%'>
 		<table align='center' width='100%'><tr><td>"}
 	if(sprite)
-		body += "<img src='view_vars_sprite.png'></td><td>"
+		body += "[bicon(D)]</td><td>"
 
 	body += "<div align='center'>"
 
@@ -385,26 +384,18 @@ function loadPage(list) {
 
 	else if (isicon(value))
 		#ifdef VARSICON
-		var/icon/I = new/icon(value)
-		var/rnd = rand(1,10000)
-		var/rname = "tmp\ref[I][rnd].png"
-		usr << browse_rsc(I, rname)
-		html += "[name] = (<span class='value'>[value]</span>) <img class=icon src=\"[rname]\">"
+		html += "[name] = /icon (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
 		html += "[name] = /icon (<span class='value'>[value]</span>)"
 		#endif
 
-/*		else if (istype(value, /image))
+	else if(istype(value, /image))
 		#ifdef VARSICON
-		var/rnd = rand(1, 10000)
-		var/image/I = value
-
-		src << browse_rsc(I.icon, "tmp\ref[value][rnd].png")
-		html += "[name] = <img src=\"tmp\ref[value][rnd].png\">"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
-		html += "[name] = /image (<span class='value'>[value]</span>)"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>)"
 		#endif
-*/
+
 	else if (isfile(value))
 		html += "[name] = <span class='value'>'[value]'</span>"
 
@@ -781,13 +772,16 @@ function loadPage(list) {
 		if(!istype(A))
 			to_chat(usr, "This can only be done to instances of movable atoms.")
 			return
-
+		
+		var/turf/origin = get_turf(A)
 		var/turf/T = get_turf(usr)
+		
 		if(istype(A,/mob))
 			var/mob/M = A
 			M.teleport_to(T)
 		else
 			A.forceMove(T)
+		log_admin("[key_name(usr)] has teleported [A] from [formatLocation(origin)] to [formatLocation(T)].")
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
@@ -1072,12 +1066,6 @@ function loadPage(list) {
 			message_admins("<span class='notice'>[key_name(usr)] dealt [amount] amount of [Text] damage to [L] </span>")
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
-	else if(href_list["datumrefresh"])
-		var/datum/DAT = locate(href_list["datumrefresh"])
-		if(!istype(DAT, /datum))
-			return
-		src.debug_variables(DAT)
-
 	else if(href_list["proc_call"])
 		if(!check_rights(R_DEBUG))
 			return
@@ -1143,3 +1131,11 @@ function loadPage(list) {
 		message_admins("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
 
 		L -= L[index]
+		href_list["datumrefresh"] = href_list["datum"]
+
+	// No else, as it must be checked separatly, and at the end.
+	if(href_list["datumrefresh"])
+		var/datum/DAT = locate(href_list["datumrefresh"])
+		if(!istype(DAT, /datum))
+			return
+		src.debug_variables(DAT)

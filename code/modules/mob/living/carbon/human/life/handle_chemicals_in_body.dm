@@ -48,7 +48,7 @@
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 
-	if(species.flags & REQUIRE_DARK)
+	if(species.flags & REQUIRE_DARK && !(head && head.islightshielded()))
 		var/light_amount = 0
 		if(isturf(loc))
 			var/turf/T = loc
@@ -100,10 +100,10 @@
 
 	//Nutrition decrease
 	if(stat != DEAD)
-		var/reduce_nutrition_by = HUNGER_FACTOR
+		var/reduce_nutrition_by_final = calorie_burn_rate
 		if(sleeping)
-			reduce_nutrition_by *= 0.75 //Reduce hunger factor by 25%
-		burn_calories(reduce_nutrition_by,1)
+			reduce_nutrition_by_final *= 0.75 //Reduce hunger factor by 25%
+		burn_calories(reduce_nutrition_by_final,1)
 
 	if(nutrition > OVEREAT_THRESHOLD)
 		if(overeatduration < 600) //capped so people don't take forever to unfat
@@ -142,14 +142,4 @@
 
 	handle_trace_chems()
 
-	var/datum/organ/internal/liver/liver = internal_organs_by_name["liver"]
-	if(liver)
-		liver.process()
-
-	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
-	if(eyes)
-		eyes.process()
-
 	updatehealth()
-
-	return //TODO: DEFERRED

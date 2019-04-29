@@ -70,6 +70,9 @@
 		for(var/datum/data/record/E in data_core.general)
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
+					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*High Threat*"))
+						holder.icon_state = "hudterminate"
+						break
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
 						holder.icon_state = "hudwanted"
 						break
@@ -106,7 +109,7 @@
 		hud_list[IMPLOYAL_HUD] = holder2
 		hud_list[IMPCHEM_HUD] = holder3
 
-	if(hud_updateflag & 1 << SPECIALROLE_HUD)
+	/*if(hud_updateflag & 1 << SPECIALROLE_HUD)
 		var/image/holder = hud_list[SPECIALROLE_HUD]
 		holder.icon_state = "hudblank"
 
@@ -129,5 +132,5 @@
 				if("Vampire") // TODO: Check this
 					holder.icon_state = "hudvampire"
 
-			hud_list[SPECIALROLE_HUD] = holder
+			hud_list[SPECIALROLE_HUD] = holder*/
 	hud_updateflag = 0

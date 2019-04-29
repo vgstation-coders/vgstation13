@@ -1,5 +1,5 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
-
+#define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 //Loops through every line in (text). The 'line' variable holds the current line
 //Example use:
 /*
@@ -140,7 +140,7 @@ forLineInText(text)
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
-	return strip_html_simple(name, max_length)
+	return utf8_sanitize(name, user, max_length)
 
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
@@ -313,6 +313,13 @@ proc/checkhtml(var/t)
 /proc/trim(text)
 	return trim_left(trim_right(text))
 
+//Returns the first word in a string.
+/proc/get_first_word(text)
+	for(var/i = 1 to length(text))
+		if(text2ascii(text, i) == 32)
+			return copytext(text, 1, i)
+	return text
+
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
 	return uppertext(copytext(t, 1, 2)) + copytext(t, 2)
@@ -393,22 +400,36 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
-/proc/format_watts(var/number)
-	if (number<0)
-		return "-[format_watts(abs(number))]"
-	if (number==0)
-		return "0 W"
 
-	var/max_watt_suffix = watt_suffixes.len
+/**
+ * Formats unites with their suffixes
+ * Should be good for J, W, and stuff
+ */
+var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
+
+/proc/format_units(var/number)
+	if (number<0)
+		return "-[format_units(abs(number))]"
+	if (number==0)
+		return "0 "
+
+	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
-		if (i == max_watt_suffix)
+		if (i == max_unit_suffix)
 			break
 
-	return "[format_num(number)] [watt_suffixes[i]]"
+	return "[format_num(number)] [unit_suffixes[i]]"
+
+
+/**
+ * Old unit formatter, the TEG used to use this
+ */
+/proc/format_watts(var/number)
+	return "[format_units(number)]W"
+
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
@@ -489,6 +510,8 @@ var/quote = ascii2text(34)
 		if(hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
+			if(number == 0)
+				return out
 
 	if(number < 100)
 		// Teens
@@ -527,3 +550,22 @@ proc/sql_sanitize_text(var/text)
 	text = replacetext(text, ";", "")
 	text = replacetext(text, "&", "")
 	return text
+
+/proc/is_letter(var/thing) // Thing is an ascii number
+    return (thing >= 65 && thing <= 122)
+
+/proc/buttbottify(var/message)
+	var/list/split_phrase = splittext(message," ") // Split it up into words.
+
+	var/list/prepared_words = split_phrase.Copy()
+	var/i = rand(1,3)
+	for(,i > 0,i--) //Pick a few words to change.
+
+		if (!prepared_words.len)
+			break
+		var/word = pick(prepared_words)
+		prepared_words -= word //Remove from unstuttered words so we don't stutter it again.
+		var/index = split_phrase.Find(word) //Find the word in the split phrase so we can replace it.
+
+		split_phrase[index] = "butt"
+	return jointext(split_phrase," ") // No longer need to sanitize, speech is automatically html_encoded at render-time.

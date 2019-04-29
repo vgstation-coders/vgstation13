@@ -7,7 +7,6 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -24,69 +23,81 @@
 	..(new_loc, "Manifested")
 
 /mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Skrell Male Tentacles"
 	..(new_loc, "Skrell")
+	my_appearance.h_style = "Skrell Male Tentacles"
+	regenerate_icons()
 
 /mob/living/carbon/human/tajaran/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Tajaran Ears"
 	..(new_loc, "Tajaran")
+	my_appearance.h_style = "Tajaran Ears"
+	regenerate_icons()
 
 /mob/living/carbon/human/unathi/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Unathi Horns"
 	..(new_loc, "Unathi")
+	my_appearance.h_style = "Unathi Horns"
+	regenerate_icons()
 
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
+	my_appearance.h_style = "Short Vox Quills"
+	regenerate_icons()
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Diona")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Skellington", delay_ready_dna)
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Plasmaman")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Muton")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Grey")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Golem")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Grue")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Slime")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	f_style = pick(facial_hair_styles_list)
-	h_style = pick(hair_styles_list)
-
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
+	my_appearance.f_style = pick(facial_hair_styles_list)
+	my_appearance.h_style = pick(hair_styles_list)
 	gender = pick(MALE, FEMALE, NEUTER, PLURAL)
 	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
 
@@ -96,17 +107,19 @@
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Mushroom")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
 	..(new_loc, "Undead")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter"))
+	static_overlays.Add(list("static", "blank", "letter", "cult"))
 	var/image/static_overlay = image(icon('icons/effects/effects.dmi', "static"), loc = src)
 	static_overlay.override = 1
 	static_overlays["static"] = static_overlay
@@ -119,9 +132,14 @@
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
 
+	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
+
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
+	my_appearance = new // Initialise how they look.
 	if(new_species_name)
-		s_tone = random_skin_tone(new_species_name)
+		my_appearance.s_tone = random_skin_tone(new_species_name)
 	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
@@ -145,6 +163,7 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -186,7 +205,7 @@
 	prev_gender = gender // Debug for plural genders
 	make_blood()
 	init_butchering_list() // While animals only generate list of their teeth/skins on death, humans generate it when they're born.
-
+	my_appearance.name = real_name
 	// Set up DNA.
 	if(!delay_ready_dna)
 		dna.ready_dna(src)
@@ -200,7 +219,7 @@
 				to_chat(src, "<b>You must eat to survive. Starvation for extended periods of time will kill you!</b>")
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
-	update_colour(0,1)
+	update_colour(0)
 
 	spawn()
 		update_mutantrace()
@@ -230,9 +249,10 @@
 	if(statpanel("Status"))
 		stat(null, "Intent: [a_intent]")
 		stat(null, "Move Mode: [m_intent]")
-		if(ticker && ticker.mode && ticker.mode.name == "AI malfunction")
-			if(ticker.mode:malf_mode_declared)
-				stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+		for(var/datum/faction/F in ticker.mode.factions)
+			var/F_stat = F.get_statpanel_addition()
+			if(F_stat && F_stat != null)
+				stat(null, "[F_stat]")
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
@@ -248,10 +268,10 @@
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)
-		if(mind)
+		/*if(mind)
 			if(mind.changeling)
 				stat("Chemical Storage", mind.changeling.chem_charges)
-				stat("Genetic Damage Time", mind.changeling.geneticdamage)
+				stat("Genetic Damage Time", mind.changeling.geneticdamage)*/
 
 		if(istype(loc, /obj/spacepod)) // Spacdpods!
 			var/obj/spacepod/S = loc
@@ -350,7 +370,8 @@
 		return get_id_name("Unknown")
 	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
-	if(mind && mind.vampire && (VAMP_SHADOW in mind.vampire.powers) && mind.vampire.ismenacing)
+	var/datum/role/vampire/V = isvampire(src)
+	if(V && (VAMP_SHADOW in V.powers) && V.ismenacing)
 		return get_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
@@ -487,7 +508,7 @@
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
-		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*Arrest*", "Incarcerated", "Parolled", "Released")
+		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*High Threat*", "*Arrest*", "Incarcerated", "Parolled", "Released")
 		if(!setcriminal || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_SECURITY))
 			return
 		sec_record.fields["criminal"] = setcriminal
@@ -580,9 +601,6 @@
 		if (!t1 || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		med_record.add_comment(t1)
-	else if (href_list["lookitem"])
-		var/obj/item/I = locate(href_list["lookitem"])
-		usr.examination(I)
 	else if (href_list["listitems"])
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
@@ -595,7 +613,7 @@
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
 			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
-			popup.set_content(strip_html(flavor_text))
+			popup.set_content(utf8_sanitize(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
@@ -748,30 +766,30 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(r_facial,g_facial,b_facial)) as color
+	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
 	if(new_facial)
-		r_facial = hex2num(copytext(new_facial, 2, 4))
-		g_facial = hex2num(copytext(new_facial, 4, 6))
-		b_facial = hex2num(copytext(new_facial, 6, 8))
+		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
+		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
+		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(r_hair,g_hair,b_hair)) as color
+	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
 	if(new_facial)
-		r_hair = hex2num(copytext(new_hair, 2, 4))
-		g_hair = hex2num(copytext(new_hair, 4, 6))
-		b_hair = hex2num(copytext(new_hair, 6, 8))
+		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
+		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
+		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(r_eyes,g_eyes,b_eyes)) as color
+	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
 	if(new_eyes)
-		r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		b_eyes = hex2num(copytext(new_eyes, 6, 8))
+		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-s_tone]")  as text
+	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
 
 	if (!new_tone)
 		new_tone = 35
-	s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	s_tone =  -s_tone + 35
+	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+	my_appearance.s_tone =  -my_appearance.s_tone + 35
 
 	// hair
 	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -784,11 +802,11 @@
 		qdel(H) // delete the hair after it's all done
 		H = null
 
-	var/new_style = input("Please select hair style", "Character Generation",h_style)  as null|anything in hairs
+	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
 
 	// if new style selected (not cancel)
 	if (new_style)
-		h_style = new_style
+		my_appearance.h_style = new_style
 
 	// facial hair
 	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
@@ -800,10 +818,10 @@
 		qdel(H)
 		H = null
 
-	new_style = input("Please select facial style", "Character Generation",f_style)  as null|anything in fhairs
+	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
 
 	if(new_style)
-		f_style = new_style
+		my_appearance.f_style = new_style
 
 	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
@@ -1319,6 +1337,8 @@
 		var/datum/data/record/R = find_record("name", perpname, data_core.security)
 		if(R && R.fields["criminal"])
 			switch(R.fields["criminal"])
+				if("*High Threat*")
+					threatcount += 10
 				if("*Arrest*")
 					threatcount += 5
 				if("Incarcerated")
@@ -1425,16 +1445,16 @@
 
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
-	for(var/datum/organ/external/O in src.organs)
+	for(var/datum/organ/external/O in organs)
 		if(O.is_robotic())
-			O.status &= ~ORGAN_ROBOT
+			O.fleshify()
 	update_icons()
+	update_body()
 
 // Makes all robot internal organs organic.
 /mob/living/carbon/human/proc/make_robot_internals_organic()
-	for(var/datum/organ/internal/O in src.organs)
-		if(O.robotic)
-			O.robotic = 0
+	for(var/datum/organ/internal/O in internal_organs)
+		O.robotic = 0
 
 // Makes all robot organs, internal and external, organic.
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
@@ -1444,13 +1464,15 @@
 // Makes all limbs robotic.
 /mob/living/carbon/human/proc/make_organic_limbs_robotic()
 	for(var/datum/organ/external/O in organs)
-		O.robotize()
+		if(!O.is_robotic())
+			O.robotize()
 	update_icons()
+	update_body()
 
 // Makes all internal organs robotic.
 /mob/living/carbon/human/proc/make_organic_internals_robotic()
-	for(var/datum/organ/internal/O in organs)
-		O.robotic = TRUE
+	for(var/datum/organ/internal/O in internal_organs)
+		O.robotic = 2
 
 // Makes all organs, internal and external, robotic.
 /mob/living/carbon/human/proc/make_all_organic_parts_robotic()
@@ -1505,9 +1527,8 @@
 
 	//Need at least two teeth or a beak to bite
 
-	if(check_body_part_coverage(MOUTH))
-		if(!isvampire(src)) //Vampires can bite through masks
-			return 0
+	if(check_body_part_coverage(MOUTH) && !isvampire(src))
+		return 0
 
 	if(M_BEAK in mutations)
 		return 1
@@ -1570,6 +1591,8 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
+	if(locked_to)
+		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
 	else
@@ -1633,9 +1656,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/get_appendix()
 	return internal_organs_by_name["appendix"]
 
-/mob/living/carbon/human/get_stomach()
-	return internal_organs_by_name["stomach"]
-
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
@@ -1676,7 +1696,11 @@ mob/living/carbon/human/isincrit()
 		species.punch_damage = rand(1,5)
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
-		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
+		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
+		var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+		if(L && !L.robotic)
+			L.gasses.Remove(locate(/datum/lung_gas/metabolizable) in L.gasses)
+			L.gasses.Add(new /datum/lung_gas/metabolizable(species.breath_type, min_pp = 16, max_pp = 140))
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
@@ -1699,6 +1723,8 @@ mob/living/carbon/human/isincrit()
 	species.burn_mod *= rand(5,20)/10
 	species.tox_mod *= rand(5,20)/10
 
+	var/can_be_fat = species.anatomy_flags & CAN_BE_FAT	//removing this flag causes gamebreaking things like invisible fat aliens to happen
+
 	if(prob(5))
 		species.flags = rand(0,65535)
 	if(prob(5))
@@ -1706,21 +1732,24 @@ mob/living/carbon/human/isincrit()
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
 
+	if(!can_be_fat)
+		species.anatomy_flags &= ~CAN_BE_FAT
+
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"r_hair",
-		"g_hair",
-		"b_hair",
-		"h_style",
-		"r_facial",
-		"g_facial",
-		"b_facial",
-		"f_style",
-		"r_eyes",
-		"g_eyes",
-		"b_eyes",
-		"s_tone",
+		"my_appearance.r_hair",
+		"my_appearance.g_hair",
+		"my_appearance.b_hair",
+		"my_appearance.h_style",
+		"my_appearance.r_facial",
+		"my_appearance.g_facial",
+		"my_appearance.b_facial",
+		"my_appearance.f_style",
+		"my_appearance.r_eyes",
+		".my_appearance.g_eyes",
+		".my_appearance.b_eyes",
+		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1745,6 +1774,7 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1774,6 +1804,7 @@ mob/living/carbon/human/isincrit()
 	BrainContainer.AddComponent(/datum/component/controller/mob)
 	BrainContainer.AddComponent(/datum/component/ai/hand_control)
 	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
+	BrainContainer.register_for_updates()
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
@@ -1831,3 +1862,52 @@ mob/living/carbon/human/isincrit()
 				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
+
+/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	ASSERT(species)
+	if(species.chem_flags & NO_INJECT)
+		user.visible_message(
+			"<span class='warning'>\The [user] tries to pierce [src] with \the [tool] but it won't go in!</span>",
+			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
+		return INJECTION_RESULT_FAIL
+	return ..()
+
+/mob/living/carbon/human/get_cell()
+	var/datum/organ/internal/heart/cell/C = get_heart()
+	if(istype(C))
+		return C.cell
+
+// Returns null on failure, the butt on success.
+/mob/living/carbon/human/proc/remove_butt(var/where = loc)
+	if(op_stage.butt == SURGERY_NO_BUTT)
+		return
+	var/obj/item/clothing/head/butt/donkey = new(where)
+	donkey.transfer_buttdentity(src)
+	op_stage.butt = SURGERY_NO_BUTT
+	return donkey
+
+/mob/living/carbon/human/attempt_crawling(var/turf/target)
+	if(!lying)
+		return FALSE
+	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
+		return FALSE
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
+		return FALSE
+	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
+	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
+	delayNextMove(crawldelay, additive=1)
+
+/mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
+	..()
+	if(!mind.faith || speech.frequency || speech.speaker == src || !ishuman(speech.speaker) || length(speech.message) < 20)
+		return
+	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
+		var/mob/living/carbon/human/H = speech.speaker
+		if(H.mind == mind.faith.religiousLeader)
+			AdjustDizzy(rand(-8,-10))
+			stuttering = max(0,stuttering-rand(8,10))
+			jitteriness = max(0,jitteriness-rand(8,10))
+			hallucination = max(0,hallucination-rand(8,10))
+			confused = max(0,confused-rand(8,10))
+			drowsyness = max(0, drowsyness-rand(8,10))
+			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))

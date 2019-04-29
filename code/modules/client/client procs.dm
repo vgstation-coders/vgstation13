@@ -185,6 +185,7 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
+
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
@@ -214,6 +215,8 @@
 
 	//Set map label to correct map name
 	winset(src, "rpane.map", "text=\"[map.nameLong]\"")
+
+	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	// Notify scanners.
 	INVOKE_EVENT(on_login,list(
@@ -370,16 +373,17 @@
 
 	// Preload the crew monitor. This needs to be done due to BYOND bug http://www.byond.com/forum/?post=1487244
 	//The above bug report thing doesn't exist anymore so uh, whatever.
-	spawn
-		send_html_resources()
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			send_html_resources()
 
 	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			nanomanager.send_resources(src)
 
 
 /client/proc/send_html_resources()
-	if(crewmonitor && minimapinit)
-		crewmonitor.sendResources(src)
 	if(adv_camera && minimapinit)
 		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
@@ -397,6 +401,15 @@
 		if(ROLEPREF_ALWAYS)
 			return "Always"
 	return "???"
+
+/client/proc/GetRolePrefs()
+	var/list/roleprefs = list()
+	for(var/role_id in antag_roles)
+		if(desires_role(role_id,FALSE))
+			roleprefs += role_id
+	if(!roleprefs.len)
+		return "none"
+	return english_list(roleprefs)
 
 /client/proc/desires_role(var/role_id, var/display_to_user=0)
 	var/role_desired = prefs.roles[role_id]
@@ -459,7 +472,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
-	if(!istype(mob, /mob/dead/observer))	//If they are neither an observer nor someone with X-ray vision
+	if(!istype(mob, /mob/dead/observer) && !(M_XRAY in mob.mutations))	//If they are neither an observer nor someone with X-ray vision
 		for(var/obj/structure/window/W in one_way_windows)
 			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
 				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
@@ -504,3 +517,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	for(Image in ViewFilter-newimages)
 		images -= Image
 	ViewFilter = newimages
+
+/client/proc/handle_hear_voice(var/mob/origin)
+	if(prefs.hear_voicesound)
+		mob.playsound_local(get_turf(origin), get_sfx("voice"),50,1)

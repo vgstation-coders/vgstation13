@@ -97,6 +97,8 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
+	initialize_cultwords()
+
 	for(var/x in typesof(/datum/bee_species))
 		var/datum/bee_species/species = new x
 		bees_species[species.common_name] = species
@@ -224,6 +226,7 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -240,8 +243,6 @@ var/savefile/panicfile
 		..()
 		return
 
-	for(var/datum/html_interface/D in html_interfaces)
-		D.closeAll()
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
@@ -264,29 +265,26 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
+	pre_shutdown()
+
+	..()
+
+/world/proc/pre_shutdown()
+	for(var/datum/html_interface/D in html_interfaces)
+		D.closeAll()
+
 	Master.Shutdown()
 	paperwork_stop()
 
-	spawn()
-		world << sound(pick(
-			'sound/AI/newroundsexy.ogg',
-			'sound/misc/RoundEndSounds/apcdestroyed.ogg',
-			'sound/misc/RoundEndSounds/bangindonk.ogg',
-			'sound/misc/RoundEndSounds/slugmissioncomplete.ogg',
-			'sound/misc/RoundEndSounds/bayojingle.ogg',
-			'sound/misc/RoundEndSounds/gameoveryeah.ogg',
-			'sound/misc/RoundEndSounds/rayman.ogg',
-			'sound/misc/RoundEndSounds/marioworld.ogg',
-			'sound/misc/RoundEndSounds/soniclevelcomplete.ogg',
-			'sound/misc/RoundEndSounds/calamitytrigger.ogg',
-			'sound/misc/RoundEndSounds/duckgame.ogg',
-			'sound/misc/RoundEndSounds/FTLvictory.ogg',
-			'sound/misc/RoundEndSounds/tfvictory.ogg',
-			'sound/misc/RoundEndSounds/megamanX.ogg',
-			'sound/misc/RoundEndSounds/castlevania.ogg',
-			)) // random end sounds!! - LastyBatsy
+	stop_all_media()
 
-	sleep(5)//should fix the issue of players not hearing the restart sound.
+	end_credits.on_world_reboot_start()
+	testing("[time_stamp()] - World reboot is now sleeping.")
+
+	sleep(max(10, end_credits.audio_post_delay))
+
+	testing("[time_stamp()] - World reboot is done sleeping.")
+	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -294,10 +292,6 @@ var/savefile/panicfile
 
 		else
 			C << link("byond://[world.address]:[world.port]")
-
-
-	..()
-
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()

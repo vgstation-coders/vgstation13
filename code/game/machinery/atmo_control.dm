@@ -77,20 +77,18 @@
 			signal.data["temperature"] = round(air_sample.temperature,0.1)
 
 		if(output>=4)
-			var/total_moles = air_sample.total_moles()
+			var/total_moles = air_sample.total_moles
 			if(total_moles > 0)
-				if(output&4)
-					signal.data["oxygen"] = round(100*air_sample.oxygen/total_moles,0.1)
-				if(output&8)
-					signal.data["toxins"] = round(100*air_sample.toxins/total_moles,0.1)
-				if(output&16)
-					signal.data["nitrogen"] = round(100*air_sample.nitrogen/total_moles,0.1)
-				if(output&32)
-					signal.data["carbon_dioxide"] = round(100*air_sample.carbon_dioxide/total_moles,0.1)
-				if(output&64)
-					var/datum/gas/sleeping_agent/G = locate(/datum/gas/sleeping_agent) in air_sample.trace_gases
-					var/n2o_moles = G ? G.moles : 0
-					signal.data["nitrous_oxide"] = round(100 *n2o_moles/total_moles,0.1)
+				if(output & 4)
+					signal.data["oxygen"] = round(100 * air_sample[GAS_OXYGEN] / total_moles, 0.1)
+				if(output & 8)
+					signal.data["toxins"] = round(100 * air_sample[GAS_PLASMA] / total_moles, 0.1)
+				if(output & 16)
+					signal.data["nitrogen"] = round(100 * air_sample[GAS_NITROGEN] / total_moles, 0.1)
+				if(output & 32)
+					signal.data["carbon_dioxide"] = round(100 * air_sample[GAS_CARBON] / total_moles, 0.1)
+				if(output & 64)
+					signal.data["nitrous_oxide"] = round(100 * air_sample[GAS_SLEEPING] / total_moles, 0.1)
 			else
 				signal.data["oxygen"] = 0
 				signal.data["toxins"] = 0
@@ -283,7 +281,7 @@ font-weight:bold;
 		var/sensor = input(user, "Select a sensor:", "Sensor Data") as null|anything in sensor_list
 		if(!sensor)
 			return MT_ERROR
-		var/label = strip_html(input(user, "Choose a sensor label:", "Sensor Label") as text|null)
+		var/label = stripped_input(user, "Choose a sensor label:", "Sensor Label")
 		if(!label)
 			return MT_ERROR
 
@@ -708,5 +706,3 @@ font-weight:bold;
 		)
 
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
-
-

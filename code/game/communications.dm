@@ -167,6 +167,7 @@ var/const/COMMON_FREQ = 1459
 var/list/CENT_FREQS = list(1345, 1441)
 
 var/const/COMM_FREQ = 1353 //command, colored gold in chat window
+var/const/REV_FREQ  = 1211
 var/const/SYND_FREQ = 1213
 var/const/RAID_FREQ = 1215 // for raiders
 
@@ -386,4 +387,4 @@ var/list/pointers = list()
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))
-			data[d] = strip_html_simple(val)
+			data[d] = utf8_sanitize(val)

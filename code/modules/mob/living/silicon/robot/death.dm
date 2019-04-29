@@ -37,12 +37,14 @@
 	if(stat == DEAD)
 		return
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 	stat = DEAD
 	update_canmove()
 	if(!gibbed)
 		updateicon() //Don't call updateicon if you're already null.
-		locked = FALSE //Cover unlocks.
+		if (locked)
+			locked = FALSE //Cover unlocks.
+			visible_message("A click sounds from <span class='name'>[src]</span>, indicating the automatic cover release failsafe.")
 	if(camera)
 		camera.status = FALSE
 	if(station_holomap)
@@ -66,3 +68,22 @@
 	sql_report_cyborg_death(src)
 
 	return ..(gibbed)
+
+//If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
+/mob/living/silicon/robot/Destroy()
+	cyborg_list -= src
+	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
+		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
+		if(T)
+			mmi.forceMove(T)
+		if(mmi.brainmob)
+			if(mind)
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
+				mind.transfer_to(mmi.brainmob)
+			mmi.brainmob.locked_to_z = locked_to_z
+		else
+			ghostize() //Somehow their MMI has no brainmob or something even worse happened. Let's just save their soul from this hell.
+		mmi = null
+	..()

@@ -155,6 +155,17 @@
 	reliability_base = 75
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/matter_bin/adv/super
+	
+/datum/design/bluespace_matter_bin
+	name = "Bluespace Matter Bin"
+	desc = "A stock part used to link material storage space between machines."
+	id = "bluespace_matter_bin"
+	req_tech = list(Tc_MATERIALS = 5, Tc_BLUESPACE = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 80, MAT_SILVER = 20, MAT_GOLD = 20)
+	reliability_base = 75
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
 
 /datum/design/subspace_ansible
 	name = "Subspace Ansible"

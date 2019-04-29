@@ -84,11 +84,11 @@
 	var/skin = null //Same as medbot, set to tox or ointment for the respective kits.
 	w_class = W_CLASS_MEDIUM
 
-	New()
-		..()
-		spawn(5)
-			if(skin)
-				overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
+/obj/item/weapon/firstaid_arm_assembly/New()
+	..()
+	spawn(5)
+		if(skin)
+			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
 
 /obj/machinery/bot/medbot/New()
@@ -223,7 +223,7 @@
 	updateUsrDialog()
 	return
 
-/obj/machinery/bot/medbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/medbot/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !open && !emagged)
 			locked = !locked
@@ -232,7 +232,7 @@
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
@@ -256,9 +256,9 @@
 			return
 
 	else
-		..()
-		if (health < maxhealth && !isscrewdriver(W) && W.force)
-			step_to(src, (get_step_away(src,user)))
+		. = ..()
+		if (. && isturf(loc))
+			step_away(src,user)
 
 /obj/machinery/bot/medbot/Emag(mob/user as mob)
 	..()
@@ -367,7 +367,7 @@
 				last_found = world.time
 		return
 
-	if(path.len > 0 && patient)
+	if(path.len > 0 && patient && isturf(loc))
 		step_to(src, path[1])
 		path -= path[1]
 		spawn(3)
@@ -727,6 +727,8 @@
 	if(!on)
 		return
 	if(!..())
+		return
+	if(!isturf(loc))
 		return
 	step(src, dir)
 

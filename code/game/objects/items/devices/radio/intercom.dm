@@ -15,8 +15,8 @@
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE
 
-/obj/item/device/radio/intercom/universe/New()
-	return ..()
+/obj/item/device/radio/intercom/universe/GhostsAlwaysHear()
+	return TRUE
 
 /obj/item/device/radio/intercom/initialize()
 	..()
@@ -95,7 +95,7 @@
 			else
 				return ..()
 		if(2)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					update_icon()

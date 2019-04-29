@@ -87,58 +87,45 @@ var/global/list/atmos_controllers = list()
 	return ..()
 
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(user.stat && !isobserver(user))
-		return
-
 	if(user.client)
-		for (var/z = 1 to world.maxz)
-			if(z == CENTCOMM_Z)
-				continue
-			user.client << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
+		var/datum/asset/simple/nanoui_maps/asset_datum = new
+		send_asset_list(user.client, asset_datum.assets)
 
 	var/list/data[0]
 	data["alarm"]=null
 	if(current)
 		data += current.get_nano_data(user,TRUE)
 		data["alarm"] = "\ref[current]"
+		data["name"] = current.name
+	else
+		var/list/alarms=list()
+		for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
+			var/area/alarm_area = get_area(alarm)
+			if(!is_in_filter(alarm_area.type))
+				continue // NO ACCESS 4 U
+			var/turf/pos = get_turf(alarm)
+			var/list/alarm_data=list()
+			alarm_data["ID"]="\ref[alarm]"
+			alarm_data["danger"] = max(alarm.local_danger_level, alarm_area.atmosalm-1)
+			alarm_data["name"] = "[alarm]"
+			alarm_data["area"] = get_area(alarm)
+			alarm_data["x"] = pos.x
+			alarm_data["y"] = pos.y
+			alarm_data["z"] = pos.z
+			alarms+=list(alarm_data)
+		data["alarms"]=alarms
 
-	var/list/alarms=list()
-	for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
-		var/area/alarm_area = get_area(alarm)
-		if(!is_in_filter(alarm_area.type))
-			continue // NO ACCESS 4 U
-		var/turf/pos = get_turf(alarm)
-		var/list/alarm_data=list()
-		alarm_data["ID"]="\ref[alarm]"
-		alarm_data["danger"] = max(alarm.local_danger_level, alarm_area.atmosalm-1)
-		alarm_data["name"] = "[alarm]"
-		alarm_data["area"] = get_area(alarm)
-		alarm_data["x"] = pos.x
-		alarm_data["y"] = pos.y
-		alarm_data["z"] = pos.z
-		alarms+=list(alarm_data)
-	data["alarms"]=alarms
-
-	if (!ui) // no ui has been passed, so we'll search for one
-		ui = nanomanager.get_open_ui(user, src, ui_key, ui, data, force_open)
-
-	if (!ui)
-		// the ui does not exist, so we'll create a new one
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if(!ui)
 		ui = new(user, src, ui_key, "atmos_control.tmpl", name, 900, 800)
 		// adding a template with the key "mapContent" enables the map ui functionality
 		ui.add_template("mapContent", "atmos_control_map_content.tmpl")
 		// adding a template with the key "mapHeader" replaces the map header content
 		ui.add_template("mapHeader", "atmos_control_map_header.tmpl")
-		// When the UI is first opened this is the data it will use
-		// we want to show the map by default
-		ui.set_show_map(1)
-
+		ui.set_show_map(TRUE)
 		ui.set_initial_data(data)
-
 		ui.open()
-		// Auto update every Master Controller tick
-		if(current)
-			ui.set_auto_update(1)
+	ui.set_auto_update(!!current)
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
 	if(!filter)
@@ -155,10 +142,11 @@ var/global/list/atmos_controllers = list()
 
 	if(href_list["reset"])
 		current = null
+		return TRUE
 
 	if(href_list["alarm"])
 		current = locate(href_list["alarm"])
-		//updateUsrDialog()
+		return TRUE
 
 	if(current)
 		if(href_list["command"])
@@ -185,6 +173,7 @@ var/global/list/atmos_controllers = list()
 							return 1
 						val = newval
 					current.send_signal(device_id, list (href_list["command"] = val))
+					return TRUE
 				//if("adjust_threshold") //was a good idea but required very wide window
 				if("set_threshold")
 					var/env = href_list["env"]
@@ -240,11 +229,10 @@ var/global/list/atmos_controllers = list()
 							current.target_temperature = selected[2]
 						if(current.target_temperature > selected[3])
 							current.target_temperature = selected[3]
-
+					return TRUE
 		if(href_list["screen"])
 			current.screen = text2num(href_list["screen"])
-			//spawn(1)
-			//	updateUsrDialog()
+			return TRUE
 
 		if(href_list["atmos_unlock"])
 			switch(href_list["atmos_unlock"])
@@ -252,35 +240,27 @@ var/global/list/atmos_controllers = list()
 					current.air_doors_close(1)
 				if("1")
 					current.air_doors_open(1)
-
+			return TRUE
 		if(href_list["atmos_alarm"])
 			current.alarmActivated=1
 			var/area/current_area = get_area(current)
 			current_area.updateDangerLevel()
-			//spawn(1)
-				//src.updateUsrDialog()
 			current.update_icon()
-
+			return TRUE
 		if(href_list["atmos_reset"])
 			current.alarmActivated=0
 			var/area/current_area = get_area(current)
 			current_area.updateDangerLevel()
-			//spawn(1)
-				//src.updateUsrDialog()
 			current.update_icon()
-
+			return TRUE
 		if(href_list["mode"])
 			current.mode = text2num(href_list["mode"])
 			current.apply_mode()
-			//spawn(5)
-				//src.updateUsrDialog()
-
+			return TRUE
 		if(href_list["preset"])
 			current.preset = text2num(href_list["preset"])
 			current.apply_preset()
-			//spawn(5)
-				//src.updateUsrDialog()
-
+			return TRUE
 		if(href_list["temperature"])
 			var/list/selected = current.TLV["temperature"]
 			var/max_temperature = min(selected[3] - T0C, MAX_TEMPERATURE)
@@ -292,3 +272,4 @@ var/global/list/atmos_controllers = list()
 				to_chat(usr, "Temperature must be between [min_temperature]C and [max_temperature]C")
 			else
 				current.target_temperature = input_temperature + T0C
+			return TRUE

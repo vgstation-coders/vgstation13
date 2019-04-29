@@ -78,8 +78,8 @@ obj/structure/transit_tube_pod/ex_act(severity)
 /obj/structure/transit_tube_pod/New()
 	. = ..()
 	air_contents.adjust_multi_temp(
-		"oxygen", MOLES_O2STANDARD, T20C,
-		"nitrogen", MOLES_N2STANDARD, T20C)
+		GAS_OXYGEN, MOLES_O2STANDARD, T20C,
+		GAS_NITROGEN, MOLES_N2STANDARD, T20C)
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
@@ -92,7 +92,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		init_dirs()
 
 /obj/structure/transit_tube/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(get_exit(get_dir(src, mover)))
+	if(test_blocked(get_dir(src, mover)))
 		return ..() //If there's an opening on the side they're trying to enter, only let them do so if they can normally pass dense structures.
 	return TRUE //Otherwise, whatever.
 
@@ -316,6 +316,9 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			near_dir = direction
 
 	return near_dir
+
+/obj/structure/transit_tube/proc/test_blocked(in_dir)	//You can now only squeeze under transit tubes if you can go out the same way you came in.
+	return (get_exit(in_dir) || get_exit(turn(in_dir, 180)))
 
 
 

@@ -143,6 +143,15 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
+/datum/recipe/gelatinburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slime)
+	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin
+
+/datum/recipe/gelatinburger/alt
+//Uses gelatin from cooking.
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/gelatin)
+
 /datum/recipe/veggieburger
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
@@ -152,9 +161,14 @@
 	reagents = list(FLOUR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
+
+/datum/recipe/caramelburger
+	reagents = list(FLOUR = 5, CARAMEL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/caramelburger
 
 // Burger sliders //////////////////////////////////////////////
 
@@ -342,6 +356,11 @@
 	reagents = list(FLOUR = 5, SUGAR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sugarcookie
+
+/datum/recipe/caramelcookie
+	reagents = list(FLOUR = 5, CARAMEL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/caramelcookie
 
 /datum/recipe/gingerbread_man
 	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
@@ -658,6 +677,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
 	result = /obj/item/weapon/reagent_containers/food/snacks/candiedapple
 
+/datum/recipe/caramelapple
+	reagents = list(WATER = 5, CARAMEL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
+	result = /obj/item/weapon/reagent_containers/food/snacks/caramelapple
+
 // Cakes ///////////////////////////////////////////////////////
 
 /datum/recipe/carrotcake
@@ -765,6 +789,15 @@
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
+
+/datum/recipe/caramelcake
+	reagents = list(MILK = 5, FLOUR = 15, CARAMEL = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 
 /datum/recipe/buchedenoel
 	reagents = list(MILK = 5, FLOUR = 15, CREAM = 10)
@@ -892,6 +925,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mincepie
+
+/datum/recipe/caramelpie
+	reagents = list(FLOUR = 10, CARAMEL = 10)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
 
 // Kebabs //////////////////////////////////////////////////////
 
@@ -1112,7 +1150,7 @@
 	reagents = list(WATER = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/weapon/ore/clown,
+		/obj/item/stack/ore/clown,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/clownstears
 
@@ -1322,7 +1360,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/aesirsalad
-	reagents_forbidden = list(SYNAPTIZINE)
+	reagents_forbidden = SYNAPTIZINES
 
 /datum/recipe/validsalad
 	items = list(
@@ -1557,6 +1595,11 @@
 
 // Misc ////////////////////////////////////////////////////////
 
+/datum/recipe/caramel
+	reagents = list(SUGAR = 50)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/condiment/caramel
+
 /datum/recipe/chiliconcarne
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
@@ -1596,7 +1639,7 @@
 
 /datum/recipe/bruschetta
 	reagents = list(SODIUMCHLORIDE = 2, FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
@@ -1609,6 +1652,13 @@
 				)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pannacotta
 
+/datum/recipe/pannacotta/alt
+//Uses gelatin from butchered slime people
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
+				/obj/item/weapon/reagent_containers/food/snacks/yogurt
+				)
+
 /datum/recipe/yogurt
 	reagents = list(CREAM = 10, VIRUSFOOD = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
@@ -1618,6 +1668,10 @@
 	reagents = list(WATER = 10)
 	items = list(/obj/item/stack/teeth)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gelatin
+
+/datum/recipe/jectie
+	reagents = list(CHERRYJELLY = 5, SUGAR = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/jectie
 
 /datum/recipe/ramen
 	reagents = list(FLOUR = 5)
@@ -2021,7 +2075,7 @@
 /datum/recipe/claypot//it just works
 	reagents = list(WATER = 10)
 	items = list(
-		/obj/item/weapon/ore/glass,
+		/obj/item/stack/ore/glass,
 		)
 	result = /obj/item/claypot
 
@@ -2218,7 +2272,7 @@
 	return ..()
 
 /datum/recipe/reclaimed
-	reagents = list(VOMIT = 5, ANTI_TOXIN = 1)
+	reagents = list(VOMIT = 5, ANTI_TOXINS = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/reclaimed
 
 /datum/recipe/bruisepack
@@ -2226,7 +2280,7 @@
 	result = /obj/item/stack/medical/bruise_pack
 
 /datum/recipe/ointment
-	reagents = list(DERMALINE = 5)
+	reagents = list(DERMALINES = 5)
 	result = /obj/item/stack/medical/ointment
 
 /datum/recipe/poachedaloe
@@ -2313,8 +2367,8 @@
 /datum/recipe/mud_pie
 	reagents = list(WATER = 25)
 	items = list(
-		/obj/item/weapon/ore/glass,
-		/obj/item/weapon/ore/glass,
+		/obj/item/stack/ore/glass,
+		/obj/item/stack/ore/glass,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
 
@@ -2565,24 +2619,77 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
-	
 /datum/recipe/butterfingers_r
 	items = list(/obj/item/organ/external/r_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
- 
 /datum/recipe/butterfingers_l
 	items = list(/obj/item/organ/external/l_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/
- 
+
 /datum/recipe/butteredtoast
 	reagents = list(LIQUIDBUTTER = 2)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+
+/datum/recipe/pierogi
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/pierogi
+
+/datum/recipe/sauerkraut
+	reagents = list(SODIUMCHLORIDE = 2, WATER = 15)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+
+/datum/recipe/pickledpears
+	reagents = list(VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
+
+/datum/recipe/bulgogi
+	reagents = list(SOYSAUCE = 10, SUGAR =5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bulgogi
+
+/datum/recipe/candiedpear
+	reagents = list(CARAMEL = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/candiedpear
+
+/datum/recipe/bakedpears
+	reagents = list(CINNAMON = 5, SUGAR = 5, CREAM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bakedpears
+
+/datum/recipe/winepear
+	reagents = list(CINNAMON = 5, WINE = 5, CREAM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/winepear

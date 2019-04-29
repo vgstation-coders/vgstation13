@@ -94,7 +94,7 @@
 	build_path = /obj/item/device/robotanalyzer
 
 /datum/design/diagnostic_hud
-	name = "diagnostic HUD"
+	name = "Diagnostic HUD"
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 	id = "diagnostic_hud"
 	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 3)
