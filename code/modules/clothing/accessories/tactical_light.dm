@@ -12,6 +12,10 @@
 		source_light = new /obj/item/device/flashlight/tactical/
 		source_light.forceMove(src)
 
+/obj/item/clothing/accessory/taclight/Destroy()
+	source_light = null
+	..()
+		
 /obj/item/clothing/accessory/taclight/proc/generate_icon_state()
 	if(!attached_to || !icon_state)
 		return
@@ -99,7 +103,7 @@
 		attached_to.remove_accessory(user, src)	
 		
 /obj/item/clothing/accessory/taclight/on_accessory_interact()
-	return -1	
+	return -1 //override priority check since you can't pull it off anyway
 	
 /datum/action/item_action/toggle_taclight
 	name = "Toggle Tactical Light"

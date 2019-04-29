@@ -30,7 +30,7 @@
 		accessory.emp_act(severity)
 	..()
 
-/obj/item/clothing/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/clothing/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/clothing/accessory))
 		var/obj/item/clothing/accessory/A = I
 		if(check_accessory_overlap(A))
@@ -70,8 +70,9 @@
 					continue
 		var/ignorecounter = 0
 		for(var/obj/item/clothing/accessory/A in delayed)
-			if(A.ignoreinteract)
-				ignorecounter += 1
+			//if(A.ignoreinteract)
+				//ignorecounter += 1
+			ignorecounter += A.ignoreinteract
 			if(!(A.ignoreinteract) && A.on_accessory_interact(user, 1))
 				return 1
 		if(ignorecounter == accessories.len)
