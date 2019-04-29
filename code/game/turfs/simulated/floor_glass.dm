@@ -260,6 +260,8 @@
 
 					getFromPool(sheettype, src, sheetamount)
 					src.ReplaceWithLattice()
+	if(ishuman(user) && user.a_intent != I_HURT)
+		return
 	unhandled_attackby(W, user)
 
 /turf/simulated/floor/glass/proc/unhandled_attackby(var/obj/item/W, var/mob/user)
