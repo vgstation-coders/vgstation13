@@ -292,7 +292,7 @@ obj/item/projectile/kinetic/New()
 	var/obj/item/stickybomb/sticky = null
 
 
-/obj/item/projectile/stickybomb/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/stickybomb/to_bump(atom/A)
 	if(bumped)
 		return 0
 	bumped = 1

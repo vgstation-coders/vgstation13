@@ -311,11 +311,11 @@ proc/move_mining_shuttle()
 		if(A.mat_type == MAT_PLASMA)
 			if(current_ammo < max_ammo)
 				var/loading_ammo = max_ammo - current_ammo
-				A.amount = A.amount - loading_ammo
+				A.amount -= loading_ammo
 				current_ammo = current_ammo + loading_ammo
-				to_chat(user, "You load [src].")
+				to_chat(user, <spanclass='notice'> "You load [src]." </spanclass='notice'>)
 			else
-				to_chat(user, "[src] is already loaded")
+				to_chat(user, <spanclass='notice'>"[src] is already loaded."</spanclass='notice'>)
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
