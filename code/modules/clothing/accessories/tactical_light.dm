@@ -98,7 +98,7 @@
 		attached_to.update_icon()
 
 /obj/item/clothing/accessory/taclight/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I, /obj/item/weapon/screwdriver) && attached_to)
+	if(I.is_screwdriver(user) && attached_to)
 		to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 		attached_to.remove_accessory(user, src)	
 		

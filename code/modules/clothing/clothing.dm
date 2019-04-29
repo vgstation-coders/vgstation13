@@ -47,7 +47,7 @@
 			var/mob/living/carbon/human/H = loc
 			H.update_inv_by_slot(slot_flags)
 		return 1
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(I.is_screwdriver(user))
 		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
 			if(accessory.attackby(I, user))
 				return 1
