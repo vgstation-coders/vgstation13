@@ -5,7 +5,7 @@
 	name = "Isotope ratio spectrometer"
 	desc = "A specialised, complex analysis machine."
 	icon = 'icons/obj/virology.dmi'
-	icon_state = "analyser"
+	icon_state = "analyser_old"
 
 /obj/machinery/anomaly/isotope_ratio/New()
 	. = ..()
