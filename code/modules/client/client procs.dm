@@ -384,8 +384,6 @@
 
 
 /client/proc/send_html_resources()
-	if(crewmonitor && minimapinit)
-		crewmonitor.sendResources(src)
 	if(adv_camera && minimapinit)
 		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)

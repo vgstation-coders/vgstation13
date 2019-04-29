@@ -234,11 +234,11 @@ proc/arctan(x)
 
 
 /proc/ToDegrees(const/radians)
-					// 180 / Pi
+	// 180 / Pi
 	return radians * 57.2957795
 
 /proc/ToRadians(const/degrees)
-					// Pi / 180
+	// Pi / 180
 	return degrees * 0.0174532925
 
 // min is inclusive, max is exclusive

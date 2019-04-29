@@ -272,23 +272,17 @@
 
 	reagents.add_reagent(URANIUM, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
+	..()
+	reagents.add_reagent(CRYOXADONE, 30)
 
-	New()
-		..()
-		reagents.add_reagent(CRYOXADONE, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
+	..()
+	reagents.add_reagent(SACID, 50)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric
-
-	New()
-		..()
-		reagents.add_reagent(SACID, 50)
-
-/obj/item/weapon/reagent_containers/glass/beaker/slime
-
-	New()
-		..()
-		reagents.add_reagent(SLIMEJELLY, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
@@ -419,9 +413,9 @@
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
 
-	New()
-		..()
-		reagents.add_reagent(FLUOROSURFACTANT, 20)
+/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
+	..()
+	reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 

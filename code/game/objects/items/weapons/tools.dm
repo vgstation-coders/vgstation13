@@ -69,6 +69,8 @@
 	desc = "A wrench intended to be wrenchier than other wrenches. It's the wrenchiest."
 	icon_state = "socket_wrench"
 	w_class = W_CLASS_LARGE //big shit, to balance its power
+	force = 15.0
+	throwforce = 12.0
 
 /*
  * Screwdriver
@@ -684,17 +686,17 @@
 	origin_tech = Tc_COMBAT + "=2"
 	var/open = 0
 
-	New()
-		..()
-		update_icon()
-
+/obj/item/weapon/conversion_kit/New()
+	..()
 	update_icon()
-		icon_state = "[initial(icon_state)]_[open]"
 
-	attack_self(mob/user as mob)
-		open = !open
-		to_chat(user, "<span class='notice'>You [open?"open" : "close"] the conversion kit.</span>")
-		update_icon()
+/obj/item/weapon/conversion_kit/update_icon()
+	icon_state = "[initial(icon_state)]_[open]"
+
+/obj/item/weapon/conversion_kit/attack_self(mob/user as mob)
+	open = !open
+	to_chat(user, "<span class='notice'>You [open?"open" : "close"] the conversion kit.</span>")
+	update_icon()
 
 /*
  * Soldering Iron
