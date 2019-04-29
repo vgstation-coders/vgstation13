@@ -10,6 +10,10 @@
     vga = null
     ..()
 
+/obj/item/vgc_assembly/examine(mob/user, size, show_name)
+    . = ..()
+    vga.showCircuit(user)
+
 /obj/item/vgc_obj //basically holds a parentless component
     name = "vg-station component"
     desc = "used to make logic happen"
@@ -26,10 +30,22 @@
     name="door controller"
     desc="controls doors"
 
+/obj/item/vgc_obj/door_controller/attackby(obj/item/weapon/W, mob/user) //setting access
+    if(!vgc) 
+        return //how
+    
+    if(!istype(vgc, /datum/vgcomponent/doorController))
+        return
+
+    if(!istype(W, /obj/item/weapon/card/id))
+        return
+    
+    vgc.setAccess(W) //might cause runtime
+
 /obj/item/vgc_obj/debugger
     name="debugger"
     desc="you should not have this"
 
 /obj/item/vgc_logictool
     name="logictool"
-    desc="to look at embedded assemblies TODO"
+    desc="to look at embedded assemblies"
