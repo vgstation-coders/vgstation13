@@ -14,7 +14,7 @@ datum/vgassembly/Destroy()
     _vgcs = null
 
 datum/vgassembly/proc/rebuild()
-    for(var/vgc in _vgcs)
+    for(var/datum/vgcomponent/vgc in _vgcs)
         vgc.rebuildOutputs()
 
 datum/vgassembly/proc/showCircuit(var/mob/user)
@@ -22,14 +22,14 @@ datum/vgassembly/proc/showCircuit(var/mob/user)
     return
 
 datum/vgcomponent
-    var/_assembly //obj component is attached to
+    var/datum/vgassembly/_assembly //obj component is attached to
     var/list/_input //input to select from
     var/list/_output //list of outputs to assign
     var/_busy = 0 //if machine is busy, for components who need time to properly function
 
 datum/vgcomponent/New()
     _input = list(
-        "main" = ./proc/main() //save all your procs you want to be accessed here
+        "main" = "main" //save all your procs you want to be accessed here
     )
     _output = list(
         "main" = null //list(0 => ref to component, 1 => target), as can be seen in setOutput
@@ -45,18 +45,18 @@ datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
     if(_assembly)
         return 0 //how
     
-    if(!O || O.vgc)
+    if(!A)
         return 0 //more plausible
 
-    _assembly = O
-    _assembly.vgcs += src
+    _assembly = A
+    _assembly._vgcs += src
     return 1
 
 datum/vgcomponent/proc/Uninstall() //don't override
     if(!_assembly)
         return
 
-    _assembly.vgcs -= src
+    _assembly._vgcs -= src
     _assembly.rebuild()
     rebuildOutputs() //call it for use since we are no longer part of the assembly
     var/phy = getPhysical()
@@ -69,7 +69,7 @@ datum/vgcomponent/proc/rebuildOutputs()
             _output[O] = null
 
 datum/vgcomponent/proc/getPhysical() //do override with wanted type
-    return new obj/item/vgc_obj(src)
+    return new /obj/item/vgc_obj(src)
 
 datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
     if(!_output[target])
@@ -82,7 +82,7 @@ datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
         _output[target] = null
         return
 
-    call(_output[target][0]._input[_output[target[1]]])(signal) //oh boy
+    call(src, _output[target][0]._input[_output[target[1]]])(signal) //oh boy what a line
 
 //default input path
 datum/vgcomponent/proc/main(var/signal)
@@ -108,7 +108,7 @@ datum/vgcomponent/doorController
     var/list/saved_access = null //ID.GetAccess()
 
 datum/vgcomponent/doorController/getPhysical()
-    return new obj/item/vgc_obj/door_controller(src)
+    return new /obj/item/vgc_obj/door_controller(src)
 
 datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
     saved_access = ID.GetAccess()
@@ -118,7 +118,7 @@ datum/vgcomponent/doorController/main(var/signal)
         return //no parent or not a door, however that happened
 
     var/obj/machinery/door/D = _assembly._parent
-    if(D.check_access_list(saved_access()))
+    if(D.check_access_list(saved_access))
         if(signal)
             D.open()
         else
@@ -134,7 +134,7 @@ idea shamelessly copied from nexus
 	var/spam = 1
 
 datum/vgcomponent/doorController/getPhysical()
-    return new obj/item/vgc_obj/debugger(src)
+    return new /obj/item/vgc_obj/debugger(src)
 
 /datum/vgcomponent/debugger/main(var/signal)
 	if(spam)
