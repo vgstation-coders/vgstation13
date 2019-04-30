@@ -1235,7 +1235,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/cell/high,
 					/obj/item/weapon/cell/high)
 	cost = 15
-	containertype = /obj/structure/closet/crate/engi
+	containertype = /obj/structure/closet/crate/secure/engisec
+	access = list(access_engine)
 	containername = "electrical maintenance crate"
 	group = "Engineering"
 
