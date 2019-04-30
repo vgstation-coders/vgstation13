@@ -230,9 +230,9 @@
 /obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
 	if(!user.incapacitated())
 		if(src.up)
-			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incomming light.</span>")
+			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incoming light.</span>")
 		else
-			to_chat(user, "<span class='notice'>You disengage \the [src] light protection visor.</span>")
+			to_chat(user, "<span class='notice'>You disengage \the [src]'s light protection visor.</span>")
 		src.up = !src.up
 
 /obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
