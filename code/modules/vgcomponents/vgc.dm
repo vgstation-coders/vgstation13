@@ -127,7 +127,7 @@ datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 
 datum/vgcomponent/doorController/main(var/signal)
 	if(!istype(_assembly._parent, /obj/machinery/door))
-		return //no parent or not a door, however that happened
+		return 0 //no parent or not a door, however that happened
 
 	var/obj/machinery/door/D = _assembly._parent
 	if(D.check_access_list(saved_access))
@@ -135,8 +135,11 @@ datum/vgcomponent/doorController/main(var/signal)
 			D.open()
 		else
 			D.close()
+		return 1
 	else
 		D.denied()
+	
+	return 0
 
 /*
 Debugger

@@ -585,6 +585,7 @@ Class Procs:
 	add_fingerprint(user)
 	if(!vga && istype(O, /obj/item/vgc_assembly))
 		vga = O.vga
+		vga._parent = src
 		to_chat(user, "You install \the [O] into \the [src].")
 		qdel(O)
 		return
