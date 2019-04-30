@@ -6,7 +6,7 @@ obj
 
 datum/vgassembly
 	var/_parent
-	var/list/_vgcs //list of vgcs contained inside
+	var/list/_vgcs = list()//list of vgcs contained inside
 
 datum/vgassembly/Destroy()
 	..()
@@ -37,8 +37,12 @@ datum/vgcomponent
 
 datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/outputs
 	//_input["nameThatUserSees"] = "procname"
-	_input["main"] = "main" //can be called by multiple components, save all your procs you want to be accessed here
-	_output["main"] = null //can only point to one component, list(0 => ref to component, 1 => target), as can be seen in setOutput
+	_input += list( //can be called by multiple components, save all your procs you want to be accessed here
+		"main" => "main"
+	)
+	_output += list( //can only point to one component: list(0 => ref to component, 1 => target), as can be seen in setOutput
+		"main" => null
+	) 
 
 datum/vgcomponent/Destroy()
 	..()
