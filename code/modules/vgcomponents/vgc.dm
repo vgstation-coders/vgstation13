@@ -38,10 +38,10 @@ datum/vgcomponent
 datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/outputs
 	//_input["nameThatUserSees"] = "procname"
 	_input += list( //can be called by multiple components, save all your procs you want to be accessed here
-		"main" => "main"
+		"main" = "main"
 	)
 	_output += list( //can only point to one component: list(0 => ref to component, 1 => target), as can be seen in setOutput
-		"main" => null
+		"main" = null
 	) 
 
 datum/vgcomponent/Destroy()
@@ -175,7 +175,7 @@ datum/vgcomponent/signaler/New()
 		"send" = "send" //sends
 	)
 	_output += list(
-		"signalled"
+		"signaled" = null
 	)
 	_signaler = new ()
 	_signaler.fingerprintslast = "VGAssembly" //for the investigation log TODO
@@ -208,6 +208,6 @@ datum/vgcomponent/signaler/New()
 /datum/vgcomponent/signaler/proc/send()
 	_signaler.signal()
 
-//signalled output
+//signaled output
 /datum/vgcomponent/signaler/proc/signalled()
-	handleOutput("signalled", 1)
+	handleOutput("signaled", 1)
