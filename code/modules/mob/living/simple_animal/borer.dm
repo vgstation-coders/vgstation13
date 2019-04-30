@@ -242,9 +242,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		verb_holders+=new /obj/item/verbs/borer/special(src)
 	for(var/verbtype in verbtypes)
 		verb_holders+=new verbtype(src)
-	verbs -= /mob/living/simple_animal/borer/proc/bond_brain
-	if (monkey_host)
-		verbs += /mob/living/simple_animal/borer/proc/bond_brain
 
 /mob/living/simple_animal/borer/player_panel_controls(var/mob/user)
 	var/html="<h2>[src] Controls</h2>"
@@ -390,7 +387,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	to_chat(src, "You begin delicately adjusting your connection to the host brain...")
 
-	var/mod = 100 - host.brainloss/2 >= 0 ? 100 - host.brainloss/2 : 0 //braindamaged hosts are overwhelmed faster
+	var/mod = max(300 - host.brainloss/2, 0) //braindamaged hosts are overwhelmed faster
 	spawn(mod)
 		if(!host || !src || controlling)
 			return
