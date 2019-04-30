@@ -4,6 +4,7 @@
 #define BORER_MODE_ATTACHED_CHEST 3
 #define BORER_MODE_ATTACHED_ARM 4
 #define BORER_MODE_ATTACHED_LEG 5
+#define BORER_CAN_ASSUME_CONTROL TRUE
 
 var/global/borer_chem_types_head = typesof(/datum/borer_chem/head) - /datum/borer_chem - /datum/borer_chem/head
 var/global/borer_chem_types_chest = typesof(/datum/borer_chem/chest) - /datum/borer_chem - /datum/borer_chem/chest
@@ -237,7 +238,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(!C.unlockable)
 					avail_chems[C.name]=C
 			avail_chems += unlocked_chems_leg
-	if(host && ismonkey(host)) //allow borers to control monkeys
+	if(host && ismonkey(host) && BORER_CAN_ASSUME_CONTROL) //allow borers to control monkeys
 		to_chat(src, "<span class='danger'>This host appears sufficiently simple for you to assume control.</span>")
 		verb_holders+=new /obj/item/verbs/borer/special(src)
 	for(var/verbtype in verbtypes)
@@ -1242,3 +1243,5 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 /mob/living/simple_animal/borer/proc/set_attack_cooldown()
 	host.delayNextAttack(10)
+
+#undef BORER_CAN_ASSUME_CONTROL
