@@ -163,8 +163,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			if(health < 20)
 				health += 0.5
 			if(chemicals < 250 && !channeling)
-				var/new_chemicals = chemicals + 2
-				chemicals = min(250, new_chemicals)
+				chemicals = min(250, chemicals + 2)
 			if(controlling)
 				if(prob(5))
 					host.adjustBrainLoss(rand(1,2))
