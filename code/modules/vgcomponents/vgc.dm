@@ -145,7 +145,7 @@ idea shamelessly copied from nexus
 /datum/vgcomponent/debugger
 	var/spam = 1
 
-datum/vgcomponent/doorController/getPhysical()
+/datum/vgcomponent/debugger/getPhysical()
 	return new /obj/item/vgc_obj/debugger(src)
 
 /datum/vgcomponent/debugger/main(var/signal)
