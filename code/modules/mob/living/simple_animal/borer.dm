@@ -164,12 +164,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				health += 0.5
 			if(chemicals < 250 && !channeling)
 				chemicals++
-			// if(controlling)
-			// 	if(prob(5))
-			// 		host.adjustBrainLoss(rand(1,2))
-
-			// 	if(prob(host.brainloss/20))
-			// 		host.say("*[pick(list("blink","blink_r","choke","aflap","drool","twitch","twitch_s","gasp"))]")
 
 	if(client)
 		regular_hud_updates()
