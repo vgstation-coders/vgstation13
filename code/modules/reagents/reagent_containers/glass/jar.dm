@@ -13,6 +13,7 @@
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
 	var/obj/held_item = null
+	var/list/forbidden_items = list(/obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/syringe, /obj/item/weapon/reagent_containers/glass/jar)
 
 /obj/item/weapon/reagent_containers/glass/jar/New()
 	..()
@@ -56,9 +57,9 @@
 
 /obj/item/weapon/reagent_containers/glass/jar/attackby(obj/item/I, mob/user, params)
 	..()
-	if(I.w_class <= w_class && !held_item)
+	if(!held_item && I.w_class <= w_class && !I.is_open_container() && !is_type_in_list(I, forbidden_items))
 		if(user.drop_item(I, src))
-			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src]</span>")
+			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 			held_item = I
 			update_icon()
 
