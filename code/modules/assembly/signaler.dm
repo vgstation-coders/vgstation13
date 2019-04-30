@@ -21,6 +21,7 @@
 	var/datum/wires/connected = null
 	var/datum/radio_frequency/radio_connection
 	var/deadman = 0
+	var/datum/vgcomponent/signaler/vgc = null //we need this to hook into receive_update, only used for the internal signaller of /datum/vgcomponent/signaller
 
 	accessible_values = list(\
 		VALUE_CODE = "code;"+VT_NUMBER+";1;100",\
@@ -174,6 +175,8 @@
 	if(!(src.wires & WIRE_RADIO_RECEIVE))
 		return 0
 	pulse(1)
+	if(vgc)	
+		vgc.signalled()
 
 	if(!holder)
 		for(var/mob/O in hearers(1, src.loc))
