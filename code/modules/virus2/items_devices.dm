@@ -79,6 +79,8 @@
 		overlays += I2
 		var/image/I4 = image(icon,src,"virusdish-reflection")
 		overlays += I4
+	if (analysed)
+		overlays += "virusdish-label"
 
 /obj/item/weapon/virusdish/attack_hand(var/mob/user)
 	..()
