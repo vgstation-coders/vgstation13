@@ -22,6 +22,7 @@
 	var/turf/T = pick(targets)
 	var/turf/starting = get_turf(user)
 	if(T)
+		unlock_from()
 		user.teleport_to(T)
 		makeAnimation(T, starting)
 	return
