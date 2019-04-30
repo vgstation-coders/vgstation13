@@ -197,7 +197,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	else
 		clear_fullscreen("damage")
 
-/mob/living/simple_animal/borer/proc/update_verbs(var/mode,var/monkey_host=FALSE)
+/mob/living/simple_animal/borer/proc/update_verbs(var/mode)
 	if(verb_holders.len>0)
 		for(var/VH in verb_holders)
 			qdel(VH)
@@ -237,7 +237,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(!C.unlockable)
 					avail_chems[C.name]=C
 			avail_chems += unlocked_chems_leg
-	if(host && istype(host, /mob/living/carbon/monkey)) //allow borers to control monkeys
+	if(host && ismonkey(host)) //allow borers to control monkeys
 		to_chat(src, "<span class='danger'>This host appears sufficiently simple for you to assume control.</span>")
 		verb_holders+=new /obj/item/verbs/borer/special(src)
 	for(var/verbtype in verbtypes)
@@ -907,7 +907,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	hostlimb = body_region
 	src.host = M
 
-	update_verbs(limb_to_mode(hostlimb),ismonkey(M)) // Must be called before being removed from turf. (BYOND verb transfer bug)
+	update_verbs(limb_to_mode(hostlimb)) // Must be called before being removed from turf. (BYOND verb transfer bug)
 
 	src.forceMove(M)
 
@@ -930,10 +930,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	// /vg/ - Our users are shit, so we start with control over host.
 	if(config.borer_takeover_immediately)
 		do_bonding(rptext=1)
-	else if (ismonkey(M))
-		do_bonding(0)
-		M.do_release_control(0)
-		//look, I know, but for some reason the borer won't get the Assume Control verb without that.
 
 	extend_o_arm.forceMove(host)
 
