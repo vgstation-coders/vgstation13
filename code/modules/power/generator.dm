@@ -15,7 +15,7 @@
 
 	var/tmp/last_gen    = 0
 	var/tmp/lastgenlev  = 0 // Used in update_icon()
-	var/const/max_power = 500000 // Amount of W produced at which point the meter caps.
+	var/const/max_power = 3000000 // Amount of W produced at which point the meter caps.
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
