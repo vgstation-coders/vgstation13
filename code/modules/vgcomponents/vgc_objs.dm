@@ -35,7 +35,7 @@
 	desc="controls doors"
 
 /obj/item/vgc_obj/door_controller/attackby(obj/item/weapon/W, mob/user) //setting access
-	if(!vgc) 
+	if(!vgc)
 		return //how
 	
 	if(!istype(vgc, /datum/vgcomponent/doorController))
@@ -60,11 +60,11 @@
 	desc="to look at embedded assemblies"
 
 /obj/item/vgc_assembly/doorTest/New()
-    var/datum/vgassembly/A = new ()
-    ..(A)
-    var/datum/vgcomponent/doorController/D = new ()
-    var/datum/vgcomponent/signaler/S = new ()
-    D.Install(vga)
-    D.saved_access = get_absolutely_all_accesses()
-    S.Install(vga) //default 1457 30
-    S.setOutput("signalled", D)
+	var/datum/vgassembly/A = new ()
+	..(A)
+	var/datum/vgcomponent/doorController/D = new ()
+	var/datum/vgcomponent/signaler/S = new ()
+	D.Install(vga)
+	D.saved_access = get_absolutely_all_accesses()
+	S.Install(vga) //default 1457 30
+	S.setOutput("signalled", D)
