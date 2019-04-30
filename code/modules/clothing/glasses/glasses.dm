@@ -258,10 +258,10 @@ BLIND     // can't see anything
 	var/obj/item/clothing/glasses/hud/security/hud = null
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
-	New()
-		..()
-		src.hud = new/obj/item/clothing/glasses/hud/security(src)
-		return
+/obj/item/clothing/glasses/sunglasses/sechud/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
 
 /obj/item/clothing/glasses/sunglasses/sechud/become_defective()
 	if(!defective)

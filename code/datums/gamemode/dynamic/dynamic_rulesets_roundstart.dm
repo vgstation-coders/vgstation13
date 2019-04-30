@@ -213,6 +213,7 @@
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
@@ -354,6 +355,7 @@
 	cost = 40
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
 	high_population_requirement = 65
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
@@ -411,6 +413,7 @@
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
@@ -474,6 +477,7 @@
 	high_population_requirement = 50
 	delay = 5 MINUTES
 	var/required_heads = 3
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
 	if (forced)
@@ -524,6 +528,7 @@
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
+	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)

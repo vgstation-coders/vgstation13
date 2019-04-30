@@ -99,7 +99,7 @@
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
-		if(!(food_target in can_see))
+		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
 			step_towards(src, food_target)

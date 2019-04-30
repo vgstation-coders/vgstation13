@@ -126,11 +126,12 @@
 	name = "\improper empty bloodpack"
 	desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	icon_state = "bloodpack"
-	New()
-		..()
-		blood_type = null
-		reagents.clear_reagents()
-		update_icon()
+
+/obj/item/weapon/reagent_containers/blood/empty/New()
+	..()
+	blood_type = null
+	reagents.clear_reagents()
+	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/chemo
 	name = "\improper phalanximine IV kit"
@@ -143,11 +144,11 @@
 //not needed anymore
 //	icon = 'icons/obj/chemopack.dmi'
 ////////////////////////////////////////
-	New()
-		..()
-		reagents.clear_reagents()
-		reagents.add_reagent(PHALANXIMINE, 200)
-		update_icon()
+/obj/item/weapon/reagent_containers/blood/chemo/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(PHALANXIMINE, 200)
+	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/attackby(obj/item/W as obj, mob/user as mob)
 	var/turf/T = get_turf(src)

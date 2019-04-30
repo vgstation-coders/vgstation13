@@ -210,7 +210,9 @@
 						"/obj/item/weapon/cautery:cautery" = null,
 						"/obj/item/weapon/hemostat:hemostat" = null,
 						"/obj/item/weapon/retractor:retractor" = null,
-						"/obj/item/weapon/bonesetter:bone setter" = null)
+						"/obj/item/weapon/bonesetter:bone setter" = null,
+						"/obj/item/weapon/FixOVein:fixovein" = null,
+						"/obj/item/weapon/bonegel:bonegel"= null)
 
 /obj/item/weapon/switchtool/surgery/undeploy()
 	playsound(src, undeploy_sound, 10, 1)
@@ -474,8 +476,9 @@
 						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
 						"/obj/item/weapon/hemostat/pico:hemostat" = null,
 						"/obj/item/weapon/retractor/manager:retractor" = null,
-						"/obj/item/weapon/bonesetter/bone_mender:bone setter" = null
-						)
+						"/obj/item/weapon/bonesetter/bone_mender:bone setter" = null,
+						"/obj/item/weapon/FixOVein/clot:fixovein" = null,
+						"/obj/item/weapon/bonegel:bonegel" = null)
 
 /obj/item/weapon/switchtool/engineering
 	name = "\improper Engineering switchtool"
