@@ -1930,10 +1930,11 @@ mob/proc/on_foot()
 		alpha = lowest_alpha
 
 /mob/proc/teleport_to(var/atom/A)
-	can_slip = FALSE
+	var/last_slip_value = can_slip
 	unlock_from()
+	can_slip = FALSE
 	forceMove(get_turf(A))
-	can_slip = TRUE
+	can_slip = last_slip_value
 
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
