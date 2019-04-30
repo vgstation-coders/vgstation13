@@ -115,7 +115,7 @@
 /obj/item/device/camera
 	name = "camera"
 	icon = 'icons/obj/items.dmi'
-	desc = "A polaroid camera."
+	desc = "A polaroid camera. This model uses space technology to expand polaroids to an appropriate size."
 	icon_state = "polaroid"
 	item_state = "polaroid"
 	w_class = W_CLASS_SMALL
@@ -156,7 +156,7 @@
 
 /obj/item/device/camera/sepia
 	name = "camera"
-	desc = "This one takes pictures in sepia."
+	desc = "This polaroid camera takes pictures in sepia. It's for the aesthetic."
 	icon_state = "sepia-polaroid"
 	item_state = "sepia-polaroid"
 	icon_on = "sepia-camera"
