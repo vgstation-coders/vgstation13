@@ -387,7 +387,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	to_chat(src, "You begin delicately adjusting your connection to the host brain...")
 
-	var/mod = max(300 - host.brainloss/2, 0) //braindamaged hosts are overwhelmed faster
+	var/mod = max(300 - host.brainloss, 0) //braindamaged hosts are overwhelmed faster
 	spawn(mod)
 		if(!host || !src || controlling)
 			return
