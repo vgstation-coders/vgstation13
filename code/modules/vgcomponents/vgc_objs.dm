@@ -58,3 +58,13 @@
 /obj/item/vgc_logictool
 	name="logictool"
 	desc="to look at embedded assemblies"
+
+/obj/item/vgc_assembly/doorTest/New()
+    var/datum/vgassembly/A = new ()
+    ..(A)
+    var/datum/vgcomponent/doorController/D = new ()
+    var/datum/vgcomponent/signaler/S = new ()
+    D.Install(vga)
+    D.saved_access = get_absolutely_all_accesses()
+    S.Install(vga) //default 1457 30
+    S.setOutput("signalled", D)

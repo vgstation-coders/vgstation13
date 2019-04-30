@@ -72,23 +72,23 @@ datum/vgcomponent/proc/getPhysical() //do override with wanted type
 //basically removes all assigned outputs which aren't in the assembly anymore
 datum/vgcomponent/proc/rebuildOutputs()
 	for(var/O in _output)
-		if(_output[O][0]._assembly != src._assembly)
+		if(_output[O][1]._assembly != src._assembly)
 			_output[O] = null
 
 datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 	if(!_output[target])
 		return
 
-	if(_output[target][0]._busy)
+	if(_output[target][1]._busy)
 		return
 
-	if(_assembly._vgcs.Find(_output[target][0])) //component no longer in vga apparently
+	if(_assembly._vgcs.Find(_output[target][1])) //component no longer in vga apparently
 		_output[target] = null
 		return
 
-	call(src, _output[target][0]._input[_output[target[1]]])(signal) //oh boy what a line
+	call(src, _output[target][1]._input[_output[target[2]]])(signal) //oh boy what a line
 
-datum/vgcomponent/proc/setOutput(var/datum/vgcomponent/vgc, var/target = "main", var/out = "main")
+datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
 		return 0
 
