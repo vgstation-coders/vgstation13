@@ -36,6 +36,9 @@
 			/obj/item/weapon/gun/projectile/rocketlauncher = 1,
 			/obj/item/ammo_casing/rocket_rpg = 3,
 		)
+	return list(
+		/obj/item/weapon/gun/projectile/rocketlauncher = 1,
+  		)
 
 /obj/structure/closet/secure_closet/vault/armory/lawgiver/New()
 	..()
