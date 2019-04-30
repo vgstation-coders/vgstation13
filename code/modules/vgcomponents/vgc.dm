@@ -64,9 +64,7 @@ datum/vgcomponent/proc/Uninstall() //don't override
 	_assembly._vgcs -= src
 	_assembly.rebuild()
 	rebuildOutputs() //call it for use since we are no longer part of the assembly
-	var/phy = getPhysical()
-	forceMove(phy) //dunno if this works
-	return phy
+	return getPhysical()
 
 datum/vgcomponent/proc/getPhysical() //do override with wanted type
 	return new /obj/item/vgc_obj(src)
