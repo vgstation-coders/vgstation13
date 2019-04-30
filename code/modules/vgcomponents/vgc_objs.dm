@@ -67,4 +67,4 @@
 	D.Install(vga)
 	D.saved_access = get_absolutely_all_accesses()
 	S.Install(vga) //default 1457 30
-	S.setOutput("signalled", D)
+	S.setOutput("signaled", D)
