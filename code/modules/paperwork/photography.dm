@@ -302,6 +302,8 @@
 	blinder.decon_path = type
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
+	var/tickspersleep = 10; 
+	var/iterator = 0;
 	var/atoms[] = list()
 	for(var/turf/T in turfs)
 		atoms.Add(T)
@@ -313,6 +315,9 @@
 	var/icon/res = get_base_photo_icon()
 
 	for(var/atom/A in plane_layer_sort(atoms))
+		iterator++
+		if(iterator % tickspersleep == 0)
+			sleep(1)
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
@@ -329,11 +334,6 @@
 		if(istype(A, /obj/item/blueprints/primary))
 			blueprints = 1
 
-	/*
-	for(var/turf/T in turfs)
-		res.Blend(getFlatIcon(T.loc), blendMode2iconMode(T.blend_mode), 32 * (T.x - center.x) + 33, 32 * (T.y - center.y) + 33)
-	//Turfs are atoms as well, duh, they render perfectly well without that part of the code. Plus that part was causing tiles with colored lightning to appear all white.
-	*/
 
 	return res
 
