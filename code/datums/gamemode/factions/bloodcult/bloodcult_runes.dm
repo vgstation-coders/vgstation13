@@ -294,6 +294,13 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		T.imbue(user,src)
 	return
 
+/obj/effect/rune/Crossed(var/atom/movable/mover)
+	if (ismob(mover))
+		var/mob/user = mover
+		var/datum/rune_spell/rune_effect = get_rune_spell(user, src, "walk" , word1, word2, word3)
+		if (rune_effect)
+			rune_effect.Added(mover)
+
 /obj/effect/rune/Uncrossed(var/atom/movable/mover)
 	if (active_spell && ismob(mover))
 		active_spell.Removed(mover)

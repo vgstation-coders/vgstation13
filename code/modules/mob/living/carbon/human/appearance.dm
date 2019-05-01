@@ -10,7 +10,7 @@
 	// "Proper" to the appearance datum.
 	var/s_tone
 
-	var/h_style
+	var/h_style = "Bald"
 	var/r_hair
 	var/g_hair
 	var/b_hair
@@ -33,40 +33,61 @@
 	my_appearance = new_looks
 	regenerate_icons()
 
-/mob/living/carbon/human/proc/randomise_appearance_for(var/new_gender)
-	var/datum/human_appearance/appearance = new
+/datum/human_appearance/proc/Copy()
+	var/datum/human_appearance/new_looks = new
+	new_looks.name = name
+	new_looks.gender = gender
+	new_looks.s_tone = s_tone
+	new_looks.h_style = h_style
+	new_looks.r_hair = r_hair
+	new_looks.g_hair = g_hair
+	new_looks.f_style = f_style
+	new_looks.r_facial = r_facial
+	new_looks.g_facial = g_facial
+	new_looks.b_facial = b_facial
+	new_looks.r_eyes = r_eyes
+	new_looks.g_eyes = g_eyes
+	new_looks.b_eyes = b_eyes
+	return new_looks
 
+/datum/human_appearance/proc/randomise(var/new_gender, var/species)
 	if (new_gender)
-		appearance.gender = new_gender
+		gender = new_gender
 	else
-		appearance.gender = pick(MALE, FEMALE)
+		gender = pick(MALE, FEMALE)
 	
-	appearance.s_tone = random_skin_tone(species)
-	appearance.h_style = random_hair_style(gender, species)
-	appearance.f_style = random_facial_hair_style(gender, species)
+	s_tone = random_skin_tone(species)
+	h_style = random_hair_style(gender, species)
+	f_style = random_facial_hair_style(gender, species)
 
 	var/list/hair_colour = randomize_hair_color("hair")
 	var/list/facial_hair_colour = randomize_hair_color("facial")
 	var/list/eye_colour = randomize_eyes_color()
 
-	appearance.r_hair = hair_colour[INDEX_RED]
-	appearance.g_hair = hair_colour[INDEX_GREEN]
-	appearance.b_hair = hair_colour[INDEX_BLUE]
+	r_hair = hair_colour[INDEX_RED]
+	g_hair = hair_colour[INDEX_GREEN]
+	b_hair = hair_colour[INDEX_BLUE]
 
-	appearance.r_facial = facial_hair_colour[INDEX_RED]
-	appearance.g_facial = facial_hair_colour[INDEX_GREEN]
-	appearance.b_facial = facial_hair_colour[INDEX_BLUE]
+	r_facial = facial_hair_colour[INDEX_RED]
+	g_facial = facial_hair_colour[INDEX_GREEN]
+	b_facial = facial_hair_colour[INDEX_BLUE]
 
-	appearance.r_eyes = eye_colour[INDEX_RED]
-	appearance.g_eyes = eye_colour[INDEX_GREEN]
-	appearance.b_eyes = eye_colour[INDEX_BLUE]
-	gender = appearance.gender
+	r_eyes = eye_colour[INDEX_RED]
+	g_eyes = eye_colour[INDEX_GREEN]
+	b_eyes = eye_colour[INDEX_BLUE]
+
+/mob/living/carbon/human/proc/randomise_appearance_for(var/new_gender)
+	var/datum/human_appearance/new_looks = new
+
+	new_looks.randomise(new_gender, species.name)
+	my_appearance = new_looks
 	regenerate_icons()
-	return appearance
 
-/mob/living/carbon/human/proc/randomize_hair_color(var/target = "hair")
+	return new_looks
+
+/datum/human_appearance/proc/randomize_hair_color(var/target = "hair")
 	if(prob (75) && target == "facial") // Chance to inherit hair color
-		return list(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair)
+		return list(r_hair, g_hair, b_hair)
 
 	var/red
 	var/green
@@ -113,7 +134,7 @@
 
 	return list(red, green, blue)
 
-/mob/living/carbon/human/proc/randomize_eyes_color()
+/datum/human_appearance/proc/randomize_eyes_color()
 	var/red
 	var/green
 	var/blue

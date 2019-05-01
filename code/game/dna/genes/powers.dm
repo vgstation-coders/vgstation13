@@ -206,7 +206,10 @@
 		return 1
 
 /datum/dna/gene/basic/heat_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	return "cold[fat]_s"
+	if(isvox(M) || isskelevox(M))	
+		return "coldvox_s"
+	else	
+		return "cold[fat]_s"
 
 /datum/dna/gene/basic/cold_resist
 	name = "Cold Resistance"
@@ -232,7 +235,10 @@
 		return 1
 
 /datum/dna/gene/basic/cold_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	return "fire[fat]_s"
+	if(isvox(M) || isskelevox(M))
+		return "firevox_s"
+	else
+		return "fire[fat]_s"
 
 /datum/dna/gene/basic/noprints
 	name = "No Prints"
@@ -297,4 +303,7 @@
 	block = TELEBLOCK
 
 /datum/dna/gene/basic/tk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	return "telekinesishead[fat]_s"
+	if(isvox(M) || isskelevox(M))	
+		return "telekinesisheadvox_s"
+	else	
+		return "telekinesishead[fat]_s"

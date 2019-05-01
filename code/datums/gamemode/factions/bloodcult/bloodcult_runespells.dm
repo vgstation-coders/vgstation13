@@ -39,6 +39,8 @@
 	var/list/ingredients_found = list()//items that should be on the rune for it to work
 	var/constructs_can_use = 1
 
+	var/walk_effect = 0 //if set to 1, procs Added() when step over
+
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
 	activator = user
@@ -107,6 +109,8 @@
 		return 0
 	else
 		return 1
+
+/datum/rune_spell/proc/Added(var/mob/M)
 
 /datum/rune_spell/proc/Removed(var/mob/M)
 
@@ -232,6 +236,11 @@
 					return new subtype(user, spell_holder, use)
 				if ("examine")
 					return instance
+				if ("walk")
+					if (initial(instance.walk_effect))
+						return new subtype(user, spell_holder, use)
+					else
+						return null
 				if ("imbue")
 					return subtype
 			return new subtype(user, spell_holder, use)
@@ -627,17 +636,15 @@
 			var/list/valid_tomes = list()
 			var/i = 0
 			for (var/obj/item/weapon/tome/T in arcane_tomes)
-				i++
-				var/mob/M = T.loc
-				if (!M)	continue
-				if (!istype(M))
-					M = M.loc
-				if (!istype(M))
-					M = M.loc
-				if (!istype(M))
-					continue
-				else
+				var/mob/M = get_holder_of_type(T,/mob/living)
+				if (M && iscultist(M))
+					i++
 					valid_tomes["[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = T
+			for (var/spell/cult/arcane_dimension/A in arcane_pockets)
+				if (A.holder && A.holder.loc && ismob(A.holder) && A.stored_tome)
+					i++
+					var/mob/M = A.holder
+					valid_tomes["[i] - Tome in [M.real_name]'s arcane dimension ([A.stored_tome.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = A.stored_tome
 			if (valid_tomes.len <= 0)
 				to_chat(user, "<span class='warning'>No cultists are currently carrying a tome.</span>")
 				qdel(src)
@@ -816,7 +823,7 @@
 		for (var/mob/living/silicon/S in T) // Has science gone too far????
 			if (!iscultist(S))
 				targets.Add(S)
-			
+
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
 			targets.Add(C)
@@ -1507,10 +1514,15 @@ var/list/blind_victims = list()
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/hide
 	page = "This rune (whose words are the same as the Conceal rune in reverse) lets you reveal every rune and structures in a circular 7 tile range around it. Each revealed rune will stun non-cultists in a 3 tile range around them, stunning and muting them for 2 seconds, up to a total of 10 seconds. Affects through walls. The stun ends if the victims are moved away from where they stand, unless they get knockdown first, so you might want to follow up with a Stun talisman. "
+	
+	walk_effect = TRUE
+	
 	var/effect_range=7
 	var/shock_range=3
 	var/shock_per_obj=2
 	var/max_shock=10
+	var/last_threshold = -1
+	var/total_uses = 5
 
 /datum/rune_spell/reveal/cast()
 	var/turf/T = get_turf(spell_holder)
@@ -1567,6 +1579,47 @@ var/list/blind_victims = list()
 			L.clear_fullscreen("shockborder", animate = 0)
 
 	qdel(spell_holder)
+
+/datum/rune_spell/reveal/Added(var/mob/mover)
+	if (total_uses <= 0)
+		return
+	if (!isliving(mover))
+		return
+	var/mob/living/L = mover
+	if (last_threshold + 20 SECONDS > world.time)
+		return
+	if (!iscultist(L))
+		total_uses--
+		last_threshold = world.time
+		var/list/seers = list()
+		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
+			if (iscultist(seer) && seer.client && seer.client.screen)
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				seers += seer
+				seer << image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				spawn(3)
+					del image_intruder
+		var/count = 10 SECONDS
+		do
+			for (var/mob/living/seer in seers)
+				if (seer.gcDestroyed)
+					seers -= seer
+					continue
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				seer << image_intruder
+				spawn(3)
+					del image_intruder
+			count--
+		while (count && seers.len)
 
 /datum/rune_spell/reveal/cast_talisman()
 	shock_per_obj = 1.5
@@ -2626,7 +2679,6 @@ var/list/bloodcult_exitportals = list()
 	layer = SHADOW_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
-
 
 /*
 	if((word1 == cultwords["travel"] && word2 == cultwords["self"]))

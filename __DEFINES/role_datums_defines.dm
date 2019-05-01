@@ -29,6 +29,7 @@
 #define ROGUE "rogue agent"//double agents
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
+#define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
 #define LEGACY_CULTIST "legacy cultist"
@@ -200,10 +201,24 @@
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
 
-// -- Injection delays (in ticks, ie, * 2 byond seconds)
+// -- Injection delays (in ticks, ie, you need the /2 to get the real result)
 
-#define LATEJOIN_DELAY_MIN 600
-#define LATEJOIN_DELAY_MAX 2000
+#define LATEJOIN_DELAY_MIN (5 MINUTES)/2
+#define LATEJOIN_DELAY_MAX (30 MINUTES)/2
 
-#define MIDROUND_DELAY_MIN 1000
-#define MIDROUND_DELAY_MAX 3000
+#define MIDROUND_DELAY_MIN (15 MINUTES)/2
+#define MIDROUND_DELAY_MAX (50 MINUTES)/2
+
+// -- Rulesets flags
+
+#define HIGHLANDER_RULESET 1
+#define TRAITOR_RULESET 2
+#define MINOR_RULESET 4
+
+// -- Distribution "modes"
+
+#define LORENTZ "Lorentz distribution"
+#define GAUSS "Normal distribution"
+#define DIRAC "Rigged threat number"
+#define EXPONENTIAL "Peaceful bias"
+#define UNIFORM "Uniform distribution"

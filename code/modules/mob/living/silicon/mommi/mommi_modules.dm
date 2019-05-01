@@ -1,7 +1,7 @@
 
 /obj/item/weapon/robot_module/mommi
 	name = "mobile mmi robot module"
-	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE
 	languages = list()
 	sprites = list("Basic" = "mommi")
 	respawnables = list (/obj/item/stack/cable_coil)
