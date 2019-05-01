@@ -520,7 +520,8 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0
 	//if the high pop override is in effect, we reduce the impact of population on the antag injection chance
-	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/(config.high_population_override ? 10 : 5)))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
+	var/high_pop_factor = (player_list.len >= high_pop_limit)
+	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players.len/(high_pop_factor ? 10 : 5)))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
 	if (!living_antags.len)
 		chance += 50//no antags at all? let's boost those odds!
 	else
