@@ -388,7 +388,8 @@ to destroy them and players will be able to make replacements.
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 2,
-							/obj/item/weapon/stock_parts/manipulator = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/circuit_imprinter
 	name = "Circuit board (Circuit Imprinter)"
