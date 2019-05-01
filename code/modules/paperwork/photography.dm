@@ -313,7 +313,6 @@
 	var/icon/res = get_base_photo_icon()
 
 	for(var/atom/A in plane_layer_sort(atoms))
-		iterator++
 		CHECK_TICK
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
