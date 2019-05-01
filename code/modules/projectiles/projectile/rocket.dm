@@ -46,7 +46,6 @@
 	damage_type = BRUTE
 	nodamage = 0
 	flag = "bullet"
-	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/lowyield/process_step()
 	if(src.loc)
@@ -79,7 +78,6 @@
 	damage_type = BRUTE
 	nodamage = 0
 	flag = "bullet"
-	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/foam/process_step()
 	if(src.loc)
@@ -112,7 +110,6 @@
 	damage_type = BRUTE
 	nodamage = 0
 	flag = "bullet"
-	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/emp/process_step()
 	if(src.loc)
