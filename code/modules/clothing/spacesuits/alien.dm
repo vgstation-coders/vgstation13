@@ -209,7 +209,7 @@
 // -- Mushroom,traders --
 
 /obj/item/clothing/suit/space/vox/civ/mushmen
-	name = "mushmen space suit"
+	name = "mushmen pressure suit"
 	icon_state = "mushroom-pressure"
 	item_state = "mushroom-pressure"
 	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
