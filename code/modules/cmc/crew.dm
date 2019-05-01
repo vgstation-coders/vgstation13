@@ -400,7 +400,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[9], entry[10])
+			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[10])
 
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
