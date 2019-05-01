@@ -67,9 +67,10 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 		if(!(ticks_survived % 10) && ticks_survived < 150) //every 20 seconds, for 5 minutes
 			increment_threat(SURVIVAL_THREAT)
 		if(!(A in areas_defiled))
-			increment_threat(DEFILE_THREAT)
 			areas_defiled.Add(A)
 			to_chat(antag.current,"<span class='notice'>You have defiled [A.name] with your presence.")
+			if (threat_generated < 30)
+				increment_threat(DEFILE_THREAT)
 
 /datum/role/catbeast/proc/OnStation()
 	if(antag.current.z != STATION_Z)
