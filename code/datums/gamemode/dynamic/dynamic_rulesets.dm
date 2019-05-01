@@ -60,7 +60,7 @@
 	if (!map.map_ruleset(src))
 		return 0
 
-	if (player_list.len >= high_pop_limit)
+	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
 		var/indice_pop = min(10,round(population/5)+1)
