@@ -9,6 +9,7 @@
 	flag = "bullet"
 	var/embed = 1
 	var/picked_up_speed = 5
+	var/explosive = 1
 	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/process_step()
@@ -26,7 +27,111 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
-	explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+	if(explosive == 1)
+		explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+		if(!gcDestroyed)
+			qdel(src)
+	else
+		..()
+		if(!gcDestroyed)
+			qdel(src)
+
+/obj/item/projectile/rocket/lowyield
+	name = "low yield rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 30
+	stun = 5
+	weaken = 5
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+	fire_sound = 'sound/weapons/rocket.ogg'
+
+/obj/item/projectile/rocket/lowyield/process_step()
+	if(src.loc)
+		if(picked_up_speed > 1)
+			picked_up_speed--
+		if(dist_x > dist_y)
+			bresenham_step(dist_x,dist_y,dx,dy)
+		else
+			bresenham_step(dist_y,dist_x,dy,dx)
+		if(linear_movement)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+		sleep(picked_up_speed)
+
+/obj/item/projectile/rocket/lowyield/to_bump(var/atom/A)
+	explosion(A, -1, 0, 3, 5) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+	..()
+	if(!gcDestroyed)
+		qdel(src)
+
+/obj/item/projectile/rocket/foam
+	name = "foam rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 5
+	stun = 5
+	weaken = 10
+	agony = 10
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+	fire_sound = 'sound/weapons/rocket.ogg'
+
+/obj/item/projectile/rocket/foam/process_step()
+	if(src.loc)
+		if(picked_up_speed > 1)
+			picked_up_speed--
+		if(dist_x > dist_y)
+			bresenham_step(dist_x,dist_y,dx,dy)
+		else
+			bresenham_step(dist_y,dist_x,dy,dx)
+		if(linear_movement)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+		sleep(picked_up_speed)
+
+/obj/item/projectile/rocket/foam/to_bump(var/atom/A)
+	explosion(A, -1, 0, 0, 0)
+	..()
+	if(!gcDestroyed)
+		qdel(src)
+
+/obj/item/projectile/rocket/emp
+	name = "EMP rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 5
+	stun = 5
+	weaken = 10
+	agony = 30
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+	fire_sound = 'sound/weapons/rocket.ogg'
+
+/obj/item/projectile/rocket/emp/process_step()
+	if(src.loc)
+		if(picked_up_speed > 1)
+			picked_up_speed--
+		if(dist_x > dist_y)
+			bresenham_step(dist_x,dist_y,dx,dy)
+		else
+			bresenham_step(dist_y,dist_x,dy,dx)
+		if(linear_movement)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+		sleep(picked_up_speed)
+
+/obj/item/projectile/rocket/emp/to_bump(var/atom/A)
+	explosion(A, -1, 0, 0, 0)
+	empulse(A, 3, 5)
+	..()
 	if(!gcDestroyed)
 		qdel(src)
 

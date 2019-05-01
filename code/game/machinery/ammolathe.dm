@@ -25,6 +25,9 @@
 		new /obj/item/ammo_casing/shotgun/stunshell(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
+		new /obj/item/ammo_casing/rocket_rpg/lowyield(),\
+		new /obj/item/ammo_casing/rocket_rpg/foam(),\
+		new /obj/item/ammo_casing/rocket_rpg/emp(),\
 		),
 		"Box_ammunition"=list(
 		new /obj/item/ammo_storage/box/b380auto(), \

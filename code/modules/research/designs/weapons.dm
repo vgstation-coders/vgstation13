@@ -283,6 +283,30 @@
 
 //Single ammunition
 
+/datum/design/rocket_rpg/lowyield
+	name = "low yield rocket"
+	desc = "Explosive supplement to Nanotrasen's rocket launchers."
+	id = "lowyield_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 20000)
+	build_path = /obj/item/ammo_casing/rocket_rpg/lowyield
+
+/datum/design/rocket_rpg/foam
+	name = "foam rocket"
+	desc = "Foam supplement to Nanotrasen's rocket launchers."
+	id = "foam_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 100)
+	build_path = /obj/item/ammo_casing/rocket_rpg/foam
+
+/datum/design/rocket_rpg/emp
+	name = "emp rocket"
+	desc = "EMP causing explosive supplement to Nanotrasen's rocket launchers."
+	id = "emp_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 20000, MAT_URANIUM = 500)
+	build_path = /obj/item/ammo_casing/rocket_rpg/emp
+
 //Box ammunition
 /datum/design/ammo_b380auto
 	name = "Ammunition Box (.380AUTO)"
