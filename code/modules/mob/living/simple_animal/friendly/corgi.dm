@@ -470,6 +470,7 @@
 	desc = "It's a corgi."
 	var/turns_since_scan = 0
 	var/obj/movement_target
+	var/last_pointer //Last target someone pointed at in Ian sight
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
@@ -494,10 +495,12 @@
 
 	..()
 
-	//Feeding, chasing food, FOOOOODDDD
-	if(!stat && !resting && !locked_to && (ckey == null))
+	var/list/can_see = view(src, vision_range)
+	point_listen(can_see)
+	
+	if(!stat && !resting && !locked_to && (ckey == null)) //Behavior mechanisms (FOOD)
 		turns_since_scan++
-		if(turns_since_scan > 5)
+		if(turns_since_scan > -1)
 			turns_since_scan = 0
 			if((movement_target) && !(isturf(movement_target.loc) || ishuman(movement_target.loc) ))
 				movement_target = null
@@ -534,9 +537,40 @@
 							movement_target.attack_animal(src)
 						else if(ishuman(movement_target.loc) )
 							if(prob(20))
-								emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face")
-//PC stuff-Sieve
+								emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")
 
+/mob/living/simple_animal/corgi/Ian/proc/point_listen(var/list/can_see)
+	for(var/obj/effect/decal/point/pointer in can_see)
+		if(pointer == last_pointer)
+			return
+		last_pointer = pointer
+		var/atom/target = pointer.target
+
+
+/*		if(istype (target, /obj/structure/window) || istype (target, /obj/structure/grille))
+			alpha_stance = WOLF_ALPHAATTACK
+			alpha_target = target*/
+			
+		if(ismob(target))
+			var/mob/living/M = target
+			if(M == pack_alpha)
+				alpha_stance = WOLF_ALPHAFOLLOW
+				return
+			if(M == src)
+				return 
+			if(istype(M, /mob/living/simple_animal/hostile/wolf))
+				var/mob/living/simple_animal/hostile/wolf/PP = target
+				if(PP.pack_alpha == pack_alpha)//Member of our pack
+					return //Probably doing something in regards to pointed_at
+			if(M.isDead())
+				if(hunger_status == WOLF_WELLFED)
+					return
+
+			stance = HOSTILE_STANCE_ATTACK
+			alpha_stance = WOLF_ALPHAATTACK
+			alpha_target = target
+			
+			
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()
 
