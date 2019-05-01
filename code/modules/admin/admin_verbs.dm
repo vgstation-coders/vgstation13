@@ -119,6 +119,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/mommi_static,
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
+	/client/proc/set_teleport_pref,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -183,7 +184,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/mob_list,
 	/client/proc/cure_disease,
 	/client/proc/check_bomb,
-	/client/proc/set_teleport_pref,
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
 	/client/proc/check_striketeams,
