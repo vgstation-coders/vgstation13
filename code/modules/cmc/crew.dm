@@ -1,4 +1,14 @@
 var/list/cmc_holomap_cache = list()
+#define ENTRY_SEE_X 1
+#define ENTRY_SEE_Y 2
+#define ENTRY_MOB 3
+#define ENTRY_NAME 4
+#define ENTRY_ASSIGNMENT 5
+#define ENTRY_STAT 6
+#define ENTRY_DAMAGE 7
+#define ENTRY_AREA 8
+#define ENTRY_IJOB 9
+#define ENTRY_POS 10
 
 /*
 Crew Monitor by Paul, based on the holomaps by Deity
@@ -400,7 +410,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[9], entry[10])
+			if(entry[1]) addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
 
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
@@ -530,15 +540,15 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//adding table rows
 	for(var/entry in entries[holomap_z[uid]])
-		var/see_x = entry[1]
-		var/see_y = entry[2]
-		var/mob/living/carbon/H = entry[3]
-		var/name = entry[4]
-		var/job = entry[5]
-		var/stat = entry[6]
-		var/list/damage = entry[7]
-		var/player_area = entry[8]
-		var/ijob = entry[9]
+		var/see_x = entry[ENTRY_SEE_X]
+		var/see_y = entry[ENTRY_SEE_Y]
+		var/mob/living/carbon/H = entry[ENTRY_MOB]
+		var/name = entry[ENTRY_NAME]
+		var/job = entry[ENTRY_ASSIGNMENT]
+		var/stat = entry[ENTRY_STAT]
+		var/list/damage = entry[ENTRY_DAMAGE]
+		var/player_area = entry[ENTRY_AREA]
+		var/ijob = entry[ENTRY_POS]
 
 		var/role
 		switch(ijob)
