@@ -230,6 +230,7 @@
 	var/cooldown = 0
 	var/reservoir = 0
 	var/shuriken_icon = "radial_print"
+	actions_types = list(/datum/action/item_action/make_shuriken, /datum/action/item_action/charge_sword)
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
@@ -287,6 +288,33 @@
 
 #define MAKE_SHURIKEN_COST 1000
 #define CHARGE_COST_MULTIPLIER 4
+
+/datum/action/item_action/make_shuriken
+	name = "Make Shuriken"
+	desc = "Fabricate a new shuriken."
+	icon_icon = 'icons/obj/weapons.dmi'
+	button_icon_state = "shuriken"
+
+/datum/action/item_action/make_shuriken/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.make_shuriken(owner)
+
+/datum/action/item_action/charge_sword
+	name = "Charge Sword"
+	desc = "Reset the cooldown on your blade's teleport."
+	icon_icon = 'icons/obj/weapons.dmi'
+	button_icon_state = "katana"
+
+/datum/action/item_action/charge_sword/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.charge_sword(owner)
+
 /obj/item/clothing/gloves/ninja/AltClick(mob/user)
 	if(!user.Adjacent(src) || user.stat)
 		return
