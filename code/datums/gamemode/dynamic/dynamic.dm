@@ -10,8 +10,8 @@ var/list/threat_by_job = list(
 )
 
 // -- Distribution parameters chosen prior to roundstart --
-var/dynamic_curve_centre = 0
-var/dynamic_curve_width = 1.8
+var/dynamic_curve_centre = -3
+var/dynamic_curve_width = 1
 var/dynamic_chosen_mode = LORENTZ
 
 // -- Dynamic tweaks chosen prior to roundstart --
