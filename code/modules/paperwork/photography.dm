@@ -302,8 +302,6 @@
 	blinder.decon_path = type
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
-	var/tickspersleep = 10; 
-	var/iterator = 0;
 	var/atoms[] = list()
 	for(var/turf/T in turfs)
 		atoms.Add(T)
@@ -316,8 +314,7 @@
 
 	for(var/atom/A in plane_layer_sort(atoms))
 		iterator++
-		if(iterator % tickspersleep == 0)
-			sleep(1)
+		CHECK_TICK
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
