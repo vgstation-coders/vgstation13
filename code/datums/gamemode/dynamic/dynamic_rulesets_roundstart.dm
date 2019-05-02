@@ -34,7 +34,7 @@
 		if (i > max_traitors && (mode.threat_level > additional_cost))
 			mode.spend_threat(additional_cost)
 		else
-			return 1
+			break
 	return 1
 
 /datum/dynamic_ruleset/roundstart/traitor/process()
@@ -111,7 +111,7 @@
 		if (i > max_vampires && (mode.threat_level > additional_cost))
 			mode.spend_threat(additional_cost)
 		else
-			return 1
+			break
 	update_faction_icons()
 	return 1
 
