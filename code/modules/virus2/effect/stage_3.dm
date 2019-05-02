@@ -3,6 +3,7 @@
 	desc = "Inhibits the infected's ability to process natural toxins, producing a buildup of said toxins."
 	stage = 3
 	max_multiplier = 3
+	badness = 4
 
 /datum/disease2/effect/toxins/activate(var/mob/living/carbon/mob)
 	mob.adjustToxLoss((2*multiplier))
@@ -13,6 +14,7 @@
 	desc = "Attacks the infected's motor output, giving them a sense of vertigo."
 	stage = 3
 	max_multiplier = 3
+	badness = 3
 
 /datum/disease2/effect/shakey/activate(var/mob/living/carbon/mob)
 	shake_camera(mob,5*multiplier)
@@ -22,6 +24,7 @@
 	name = "Telepathy Syndrome"
 	desc = "Unlocks a portion of the infected's brain that allows for telepathic communication."
 	stage = 3
+	badness = 0
 
 /datum/disease2/effect/telepathic/activate(var/mob/living/carbon/mob)
 	mob.dna.check_integrity()
@@ -32,6 +35,7 @@
 	name = "Lazy Mind Syndrome"
 	desc = "Rots the infected's brain."
 	stage = 3
+	badness = 4
 
 /datum/disease2/effect/mind/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -47,6 +51,7 @@
 	name = "Hallucinational Syndrome"
 	desc = "Induces hallucination in the infected."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/hallucinations/activate(var/mob/living/carbon/mob)
 	mob.hallucination += 25
@@ -56,6 +61,7 @@
 	name = "Hard of Hearing Syndrome"
 	desc = "Attacks the infected's aural senses."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
 	mob.ear_deaf = 5
@@ -65,6 +71,7 @@
 	name = "Uncontrolled Laughter Effect"
 	desc = "Gives the infected a sense of humor."
 	stage = 3
+	badness = 1
 
 /datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob)
 	mob.say("*giggle")
@@ -74,6 +81,7 @@
 	name = "Chicken Pox"
 	desc = "Causes the infected to begin coughing up eggs of the poultry variety."
 	stage = 3
+	badness = 2
 
 /datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob)
 	if (prob(30))
@@ -88,6 +96,7 @@
 	name = "Topographical Cretinism"
 	desc = "Attacks the infected's ability to differentiate left and right."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/confusion/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You have trouble telling right and left apart all of a sudden.</span>")
@@ -98,6 +107,7 @@
 	name = "DNA Degradation"
 	desc = "Attacks the infected's DNA, causing it to break down."
 	stage = 3
+	badness = 5
 
 /datum/disease2/effect/mutation/activate(var/mob/living/carbon/mob)
 	mob.apply_damage(2, CLONE)
@@ -107,6 +117,7 @@
 	name = "Groaning Syndrome"
 	desc = "Causes the infected to groan randomly."
 	stage = 3
+	badness = 1
 
 /datum/disease2/effect/groan/activate(var/mob/living/carbon/mob)
 	mob.say("*groan")
@@ -116,6 +127,7 @@
 	name = "Hyper-perspiration Effect"
 	desc = "Causes the infected's sweat glands to go into overdrive."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/sweat/activate(var/mob/living/carbon/mob)
 	if(prob(30))
@@ -130,6 +142,7 @@
 	name = "Elvisism"
 	desc = "Makes the infected the king of rock and roll."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/elvis/activate(var/mob/living/carbon/mob)
 	if(!istype(mob))
@@ -172,6 +185,7 @@
 	name = "Pierrot's Throat"
 	desc = "Overinduces a sense of humor in the infected, causing them to be overcome by the spirit of a clown."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/pthroat/activate(var/mob/living/carbon/mob)
 	//
@@ -191,6 +205,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Horse Throat"
 	desc = "Inhibits communication from the infected through spontaneous generation of a horse mask."
 	stage = 3
+	badness = 3
 
 /datum/disease2/effect/horsethroat/activate(var/mob/living/carbon/mob)
 
@@ -216,6 +231,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	var/given_katana = 0
 	affect_voice = 1
 	max_multiplier = 4
+	badness = 2
 
 /datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
@@ -320,6 +336,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
 	desc = "Causes the infected to synthesize industrial grade lubrication from their feet."
 	stage = 3
 	max_multiplier = 9.5 //Potential for 95% lube chance per step
+	badness = 4
 	var/triggered
 
 /datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob)
@@ -362,6 +379,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	desc = "Inhibits the strength of the infected's skin, causing it to tear on contact."
 	stage = 3
 	max_count = 1
+	badness = 4
 	var/skip = FALSE
 
 /datum/disease2/effect/butterfly_skin/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -406,6 +424,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	name = "Hyper-Fibrinogenesis"
 	desc = "Causes the infected to oversynthesize coagulant."
 	stage = 3
+	badness = 0
 	var/skip = FALSE
 
 /datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob)
@@ -429,6 +448,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	name = "Teratoma Syndrome"
 	desc = "Causes the infected to oversynthesize stem cells engineered towards organ generation. Said generated organs are expelled from the body upon completion."
 	stage = 3
+	badness = 1
 
 /datum/disease2/effect/teratoma/activate(var/mob/living/carbon/mob)
 	var/organ_type = pick(existing_typesof(/obj/item/organ/internal) + /obj/item/stack/teeth)
@@ -440,6 +460,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	desc = "Causes the infected to oversynthesize stem cells engineered towards limb generation. This results in additional grasping organs sprouting from the infected."
 	stage = 3
 	max_multiplier = 3
+	badness = 0
 	var/activated = FALSE
 
 /datum/disease2/effect/multiarm/activate(var/mob/living/carbon/mob)
@@ -479,6 +500,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	max_count = 9
 	chance = 7
 	max_chance = 14
+	badness = 0
 	var/night_vision_strength = 0
 
 /datum/disease2/effect/catvision/activate(var/mob/living/carbon/mob)

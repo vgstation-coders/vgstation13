@@ -2,6 +2,7 @@
 	name = "Loudness Syndrome"
 	desc = "Causes the infected to scream at random."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
 	mob.audible_scream()
@@ -11,6 +12,7 @@
 	name = "Automated Sleeping Syndrome"
 	desc = "Makes the infected feel more drowsy."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
 	mob.drowsyness += 10
@@ -20,6 +22,7 @@
 	name = "Resting Syndrome"
 	desc = "Causes the infected to collapse in random fits of narcolepsy"
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
 	mob.say("*collapse")
@@ -29,6 +32,7 @@
 	name = "Blackout Syndrome"
 	desc = "Inhibits the infected's ability to see."
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
 	mob.eye_blind = max(mob.eye_blind, 4)
@@ -38,6 +42,7 @@
 	name = "Anima Syndrome"
 	desc = "Causes the infected to cough rapidly, infecting people in their surroundings."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
 	mob.say("*cough")
@@ -90,6 +95,7 @@
 	name = "Appetiser Effect"
 	desc = "Starves the infected."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
 	mob.nutrition = max(0, mob.nutrition - 200)
@@ -108,6 +114,7 @@
 	name = "Hair Loss"
 	desc = "Causes rapid hairloss in the infected."
 	stage = 2
+	badness = 1
 
 /datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -123,6 +130,7 @@
 	name = "Adrenaline Extra"
 	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
 	stage = 2
+	badness = 0
 
 /datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
@@ -136,6 +144,7 @@
 	name = "Glasgow Syndrome"
 	desc = "Causes the infected to synthesize pure ethanol."
 	stage = 2
+	badness = 4
 
 /datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
@@ -147,6 +156,7 @@
 	name = "Gaben Syndrome"
 	desc = "Makes the infected incredibly fat."
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
@@ -159,6 +169,7 @@
 	name = "Bearding"
 	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
+	badness = 1
 
 /datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -172,14 +183,16 @@
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
-	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed that acts as a valid pathogen carrier. (Note: Does not affect the users blood pressure.)"
+	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed, potentially carrying the pathogen."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
 	if (prob(30))
 		if (ishuman(mob))
 			var/mob/living/carbon/human/H = mob
-			H.drip(1)
+			if (!(species.anatomy_flags & NO_BLOOD))
+				H.drip(1)
 		else
 			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 			if(D==null)
@@ -189,8 +202,9 @@
 
 /datum/disease2/effect/viralsputum
 	name = "Respiratory Putrification"
-	desc = "Causes the infected to cough up viral sputum, which acts as a valid pathogen carrier."
+	desc = "Causes the infected to cough up viral sputum over the floor, which acts as a pathogen carrier."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
 	if (prob(30))
@@ -206,6 +220,7 @@
 	name = "Lantern Syndrome"
 	desc = "Causes the infected to glow."
 	stage = 2
+	badness = 0
 
 /datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
 	mob.set_light(4)
@@ -218,6 +233,7 @@
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
+	badness = 3
 
 /datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob)
 //Add filters to change a,A,e,E,i,I,o,O,u,U to _
@@ -249,6 +265,7 @@
 	chance = 25
 	max_chance = 75
 	max_multiplier = 2
+	badness = 2
 
 /datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
 	if(istype(H))
@@ -280,6 +297,7 @@
 	stage = 2
 	affect_voice = 1
 	max_count = 1
+	badness = 3
 	var/list/virus_opposite_word_list
 
 /datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -332,6 +350,7 @@
 	desc = "Causes the infected to generate keratin spines along their skin."
 	stage = 2
 	max_count = 1
+	badness = 3
 	var/skip = FALSE
 
 /datum/disease2/effect/spiky_skin/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -397,6 +416,7 @@
 /datum/disease2/effect/vegan
 	name = "Vegan Syndrome"
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/vegan/activate(var/mob/living/carbon/mob)
 	mob.dna.check_integrity()
@@ -408,6 +428,7 @@
 	desc = "The infected emanates a field that kills off plantlife. Lethal to species descended from plants."
 	stage = 2
 	max_multiplier = 3
+	badness = 3
 
 /datum/disease2/effect/famine/activate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
@@ -449,6 +470,7 @@
 	multiplier = 1.5
 	max_multiplier = 4
 	var/activated = FALSE
+	badness = 3
 
 /datum/disease2/effect/calorieburn/activate(var/mob/living/carbon/mob)
 	if(!activated)
@@ -469,6 +491,7 @@
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
+	badness = 3
 	var/activated = FALSE
 
 /datum/disease2/effect/calorieconserve/activate(var/mob/living/carbon/mob)
@@ -491,6 +514,7 @@
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
+	badness = 2
 
 /datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
 	if(!triggered)

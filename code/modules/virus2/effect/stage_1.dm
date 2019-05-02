@@ -2,6 +2,7 @@
 	name = "Waiting Syndrome"
 	desc = "A self-defeating symptom that doesn't seem to do anything in particular."
 	stage = 1
+	badness = 0
 
 /datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
 	return
@@ -9,8 +10,9 @@
 
 /datum/disease2/effect/sneeze
 	name = "Coldingtons Effect"
-	desc = "Makes the infected sneeze every so often."
+	desc = "Makes the infected sneeze every so often, leaving some infected mucus on the floor."
 	stage = 1
+	badness = 2
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
 	mob.say("*sneeze")
@@ -28,6 +30,7 @@
 	name = "Flemmingtons"
 	desc = "Causes a sensation of mucous running down the infected's throat."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
@@ -37,6 +40,7 @@
 	name = "Saliva Effect"
 	desc = "Causes the infected to drool."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
 	mob.say("*drool")
@@ -46,6 +50,7 @@
 	name = "Twitcher"
 	desc = "Causes the infected to twitch."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
 	mob.say("*twitch")
@@ -55,6 +60,7 @@
 	name = "Headache"
 	desc = "Gives the infected a headache."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
@@ -63,6 +69,7 @@
 /datum/disease2/effect/itching
 	name = "Itching"
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
 	var/mob/living/carbon/human/H = mob
@@ -76,6 +83,7 @@
 	name = "Drained Feeling"
 	desc = "Gives the infected a drained sensation."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='warning'>You feel drained.</span>")
@@ -85,6 +93,7 @@
 	name = "Watery Eyes"
 	desc = "Causes the infected's tear ducts to overact."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<SPAN CLASS='warning'>Your eyes sting and water!</SPAN>")
@@ -94,6 +103,7 @@
 	name = "Wheezing"
 	desc = "Inhibits the infected's ability to breathe slightly, causing them to wheeze."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
 	mob.emote("me",1,"wheezes.")
@@ -103,6 +113,7 @@
 	name = "Full Glass Syndrome"
 	desc = "Gives a feeling of optimism to the infected."
 	stage = 1
+	badness = 0
 
 /datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
@@ -114,6 +125,7 @@
 	name = "Gyroscopic Manipulation Syndrome"
 	desc = "Makes the infected spin at random."
 	stage = 1
+	badness = 3
 
 /datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
 	if (mob.reagents.get_reagent_amount(GYRO) < 1)
@@ -123,6 +135,7 @@
 	name = "Melisso-Emeto Syndrome"
 	desc = "Converts the lungs of the infected into a bee-hive, giving the infected a steady drip of honey in exchange of vomiting up a bee every so often."
 	stage = 1
+	badness = 2
 	max_multiplier = 10
 
 /datum/disease2/effect/bee_vomit/activate(var/mob/living/carbon/mob)
@@ -149,6 +162,7 @@
 	chance = 10
 	max_chance = 40
 	max_count = 10
+	badness = 0
 
 /datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
 	if(mob.reagents.get_reagent_amount(HYRONALIN) < 15)
@@ -162,6 +176,7 @@
 	stage = 1
 	chance = 5
 	max_chance = 60
+	badness = 1
 
 /datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span> class = 'notice'>You feel a little sore.</span>")
@@ -173,6 +188,7 @@
 	stage = 1
 	chance = 5
 	max_chance = 25
+	badness = 1
 
 /datum/disease2/effect/socialconfusion/activate(var/mob/living/carbon/mob)
 	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)
