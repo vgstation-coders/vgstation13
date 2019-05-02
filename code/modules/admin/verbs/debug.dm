@@ -1140,7 +1140,7 @@ client/proc/check_bomb()
 	set name = "Set Teleport-Here Preferences"
 	set category = "Fun"
 
-	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discret way?","Teleport-Here Preferences", "Flashy","Stealthy")
+	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discreet way?","Teleport-Here Preferences", "Flashy","Stealthy")
 
 	switch(teleport_here_pref)
 		if("Flashy")
