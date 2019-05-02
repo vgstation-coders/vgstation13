@@ -31,8 +31,8 @@
 	icon_state = "virusdish"
 	w_class = W_CLASS_SMALL
 	var/growth = 0
-	var/info = 0
-	var/analysed = 0
+	var/info = ""
+	var/analysed = FALSE
 	var/datum/disease2/disease/contained_virus
 	var/open = FALSE
 
@@ -169,15 +169,17 @@
 				strength -= 40
 	qdel(src)
 
-/obj/item/weapon/virusdish/examine(mob/user)
+/obj/item/weapon/virusdish/examine(var/mob/user)
 	..()
 	if(open)
 		to_chat(user, "<span class='notice'>Its lid is open!</span>")
 	else
 		to_chat(user, "<span class='notice'>Its lid is closed!</span>")
-	if(src.info)
-		to_chat(user, "<span class='info'>It has the following information about its contents</span>")
-		to_chat(user, src.info)
+	if(info)
+		to_chat(user, "<span class='info'>There is a sticker with some printed information on it.</span>")
+		var/datum/browser/popup = new(user, "\ref[src]", name, 600, 300, src)
+		popup.set_content(info)
+		popup.open()
 
 
 /obj/item/weapon/virusdish/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D)

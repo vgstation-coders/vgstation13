@@ -2,6 +2,7 @@
 	name = "Creosote Syndrome"
 	desc = "Causes the infected to synthesize a wafer thin mint."
 	stage = 4
+	badness = 4
 
 /datum/disease2/effect/minttoxin/activate(var/mob/living/carbon/mob)
 	if(istype(mob) && mob.reagents.get_reagent_amount(MINTTOXIN) < 5)
@@ -13,7 +14,7 @@
 	name = "Gibbingtons Syndrome"
 	desc = "Causes the infected to spontaneously explode in a shower of gore."
 	stage = 4
-	badness = 2
+	badness = 5
 
 /datum/disease2/effect/gibbingtons/activate(var/mob/living/carbon/mob)
 	mob.gib()
@@ -24,6 +25,7 @@
 	desc = "Causes the infected to generate strange protein, that begins radioactive decay in the denser material held within the infected's body, causing radioactive exposure."
 	stage = 4
 	max_multiplier = 3
+	badness = 5
 
 /datum/disease2/effect/radian/activate(var/mob/living/carbon/mob)
 	mob.radiation += (2*multiplier)
@@ -33,6 +35,7 @@
 	name = "Dead Ear Syndrome"
 	desc = "Kills the infected's aural senses."
 	stage = 4
+	badness = 3
 
 /datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
 	mob.ear_deaf += 20
@@ -42,7 +45,7 @@
 	name = "Monkism Syndrome"
 	desc = "Causes the infected to rapidly devolve to a lower form of life."
 	stage = 4
-	badness = 2
+	badness = 4
 
 /datum/disease2/effect/monkey/activate(var/mob/living/carbon/mob)
 	if(istype(mob,/mob/living/carbon/human))
@@ -54,7 +57,7 @@
 	name = "Kingston Syndrome"
 	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Tajaran."
 	stage = 4
-	badness = 2
+	badness = 5
 
 /datum/disease2/effect/catbeast/activate(var/mob/living/carbon/mob)
 	if(istype(mob,/mob/living/carbon/human))
@@ -79,7 +82,7 @@
 	name = "Vox Pox"
 	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Vox."
 	stage = 4
-	badness = 2
+	badness = 3
 
 /datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob)
 	if(istype(mob,/mob/living/carbon/human))
@@ -93,7 +96,7 @@
 	name = "Suicidal Syndrome"
 	desc = "Induces clinical depression in the infected, causing them to attempt to take their own life on the spot."
 	stage = 4
-	badness = 2
+	badness = 5
 
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob)
 
@@ -106,6 +109,7 @@
 	name = "Toxification Syndrome"
 	desc = "A more advanced version of Hyperacidity, causing the infected to rapidly generate toxins."
 	stage = 4
+	badness = 5
 
 /datum/disease2/effect/killertoxins/activate(var/mob/living/carbon/mob)
 	mob.adjustToxLoss(15*multiplier)
@@ -115,6 +119,7 @@
 	name = "Reverse Pattern Syndrome"
 	desc = "Attacks the infected's DNA, causing rapid spontaneous mutation, and inhibits the ability for the infected to be affected by cryogenics."
 	stage = 4
+	badness = 5
 
 /datum/disease2/effect/dna/activate(var/mob/living/carbon/mob)
 	mob.bodytemperature = max(mob.bodytemperature, 350)
@@ -126,6 +131,7 @@
 	name = "Shutdown Syndrome"
 	desc = "Attacks the infected's limbs, causing them to shut down. Also inhibits toxin processing, causing toxin buildup."
 	stage = 4
+	badness = 5
 
 /datum/disease2/effect/organs/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -160,6 +166,7 @@
 	name = "Longevity Syndrome"
 	desc = "Grants functional immortality to the infected so long as the symptom is active. Heals broken bones and healing external damage. Creates a backlash if cured."
 	stage = 4
+	badness = 0
 
 /datum/disease2/effect/immortal/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -184,6 +191,7 @@
 	name = "Fragile Bones Syndrome"
 	desc = "Attacks the infected's bone structure, making it more porous and fragile."
 	stage = 4
+	badness = 3
 
 /datum/disease2/effect/bones/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -202,6 +210,7 @@
 	name = "Spontaneous Cellular Collapse"
 	desc = "Converts the infected's internal toxin treatment to synthesize Polyacid, as well as cause the infected's skin to break, and their bones to fracture."
 	stage = 4
+	badness = 4
 
 /datum/disease2/effect/scc/activate(var/mob/living/carbon/mob)
 	//
@@ -223,6 +232,7 @@
 	name = "Necrosis"
 	desc = "Attacks the cell structure of the infected, causing the infected's skin and flesh to slough off rapidly."
 	stage = 4
+	badness = 5
 
 /datum/disease2/effect/necrosis/activate(var/mob/living/carbon/mob)
 
@@ -283,8 +293,9 @@
 
 /datum/disease2/effect/fizzle
 	name = "Fizzle Effect"
-	desc = "Causes an ill sensation in the infected's throat."
+	desc = "Causes an ill, though harmless, sensation in the infected's throat."
 	stage = 4
+	badness = 0
 
 /datum/disease2/effect/fizzle/activate(var/mob/living/carbon/mob)
 	mob.emote("me",1,pick("sniffles...", "clears their throat..."))
@@ -294,6 +305,7 @@
 	name = "Delightful Effect"
 	desc = "A more powerful version of Full Glass. Makes the infected feel delightful."
 	stage = 4
+	badness = 3
 
 /datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>You feel delightful!</span>")
@@ -305,6 +317,7 @@
 	name = "Arachnogenesis Effect"
 	desc = "Converts the infected's stomach to begin producing creatures of the arachnid variety."
 	stage = 4
+	badness = 3
 	var/spawn_type=/mob/living/simple_animal/hostile/giant_spider/spiderling
 	var/spawn_name="spiderling"
 
@@ -318,6 +331,7 @@
 	name = "Blattogenesis Effect"
 	desc = "Converts the infected's stomach to begin producing creatures of the blattid variety."
 	stage = 4
+	badness = 3
 	spawn_type=/mob/living/simple_animal/cockroach
 	spawn_name="cockroach"
 
@@ -326,6 +340,7 @@
 	name = "Biolobulin Effect"
 	desc = "Converts the infected's pores of their palm to begin synthesizing a gelatenous substance, that explodes upon reaching a high velocity."
 	stage = 4
+	badness = 0
 
 /datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
@@ -337,6 +352,7 @@
 	name = "Toxin Sublimation"
 	desc = "Converts the infected's pores and respiratory organs to synthesize Plasma gas."
 	stage = 4
+	badness = 4
 
 /datum/disease2/effect/plasma/activate(var/mob/living/carbon/mob)
 	//var/src = mob
@@ -362,6 +378,7 @@
 	desc = "Confuses the infected's brain, causing them to speak a different language."
 	stage = 4
 	max_count = 1
+	badness = 3
 
 	var/list/original_languages = list()
 
@@ -398,6 +415,7 @@
 	name = "Gregarious Impetus"
 	desc = "Infests the social structures of the infected's brain, causing them to feel better in crowds of other potential victims, and punishing them for being alone."
 	stage = 4
+	badness = 3
 	max_chance = 25
 	max_multiplier = 4
 
@@ -428,6 +446,7 @@
 	stage = 4
 	max_multiplier = 100
 	chance = 10
+	badness = 4
 	var/skip = FALSE
 	var/brute_mod_subtracted = 0
 	var/therm_loss_mod_subtracted = 0
@@ -528,6 +547,7 @@
 	name = "Heart Attack Syndrome"
 	desc = "Infests the infected's heart, causing it to burst forth from the infected and attack them."
 	stage = 4
+	badness = 5
 	max_count = 1
 
 /datum/disease2/effect/heart_attack/activate(var/mob/living/carbon/mob)

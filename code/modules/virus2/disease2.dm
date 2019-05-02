@@ -23,8 +23,8 @@ var/global/list/disease2_list = list()
 	var/strength = 100
 	var/robustness = 100
 
-	var/max_bodytemperature = 406
-	var/min_bodytemperature = 0
+	var/max_bodytemperature = 1000
+	var/min_bodytemperature = 120
 
 	var/list/antigen = list()
 	//set to 1 once appropriate antibodies are applied to their carrier. curing the disease, removing it from the carrier
@@ -193,7 +193,8 @@ var/global/list/disease2_list = list()
 	if(mob.stat == DEAD)
 		return
 
-	if(mob.bodytemperature > max_bodytemperature || mob.bodytemperature < min_bodytemperature)
+	//Searing body temperatures cure diseases, on top of killing you.
+	if(mob.bodytemperature > max_bodytemperature)
 		cure(mob,1)
 		return
 
@@ -208,8 +209,8 @@ var/global/list/disease2_list = list()
 			log += "<br />[timestamp()] MAJORMUTATE (rads)!"
 */
 
-	//Space antibiotics stop disease completely (temporary)
-	if(mob.reagents.has_reagent(SPACEACILLIN))
+	//Freezing body temperatures halt diseases completely
+	if(mob.bodytemperature < min_bodytemperature)
 		return
 
 	//Virus food speeds up disease progress
@@ -391,15 +392,18 @@ var/global/list/virusDB = list()
 		.= V.fields["name"]
 
 /datum/disease2/disease/proc/get_info()
-	var/r = "GNAv2 [name()]"
-	r += "<BR>Infection rate : [infectionchance]"
-	r += "<BR>Spread form : [get_spread_string()]"
-	r += "<BR>Progress Speed : [stageprob]"
+	var/r = "GNAv3 [name()]"
+	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b>"
+	r += "<BR>Infectability : <b>[infectionchance]%</b>"
+	r += "<BR>Spread forms : <b>[get_spread_string()]</b>"
+	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
+	r += "<dl>"
 	for(var/datum/disease2/effect/e in effects)
-		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
-		r += "<BR>[e.desc]"
-
+		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurence: <b>[e.chance]%</b>.</dt>"
+		r += "<dd>[e.desc]</dd>"
+	r += "</dl>"
 	r += "<BR>Antigen pattern: [antigen]"
+	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
 	return r
 
 /datum/disease2/disease/proc/addToDB()

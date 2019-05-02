@@ -124,8 +124,12 @@
 		alert_noise()
 		dish.info = dish.contained_virus.get_info()
 		last_scan_name = "[dish.contained_virus.form] #[dish.contained_virus.uniqueID]"
+		dish.name = "Petri Dish ([last_scan_name])"
 		last_scan_info = dish.info
-		dish.analysed = 1
+		var/datum/browser/popup = new(user, "\ref[dish]", dish.name, 600, 500, src)
+		popup.set_content(dish.info)
+		popup.open()
+		dish.analysed = TRUE
 		dish.update_icon()
 		if (dish.contained_virus.addToDB())
 			say("Added new pathogen to database.")
