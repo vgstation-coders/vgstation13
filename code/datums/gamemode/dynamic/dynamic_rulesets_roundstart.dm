@@ -473,8 +473,8 @@
 	required_candidates = 3
 	weight = 2
 	cost = 35
-	requirements = list(101,101,70,40,30,20,10,10,10,10)
-	high_population_requirement = 50
+	requirements = list(101,101,101,101,101,101,101,101,101,101) //won't roll naturally
+	high_population_requirement = 101
 	delay = 5 MINUTES
 	var/required_heads = 3
 	flags = HIGHLANDER_RULESET
