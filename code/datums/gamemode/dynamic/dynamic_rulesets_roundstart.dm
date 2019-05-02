@@ -14,7 +14,7 @@
 	required_candidates = 1
 	weight = 5
 	cost = 10
-	var/max_traitors = 3
+	var/traitor_threshold = 3
 	var/additional_cost = 5 
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
@@ -31,7 +31,7 @@
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
 		// Above 3 traitors, we start to cost a bit more.
-		if (i > max_traitors && (mode.threat_level > additional_cost))
+		if (i > max_traitors && (mode.threat > additional_cost))
 			mode.spend_threat(additional_cost)
 		else
 			break
@@ -92,7 +92,7 @@
 	required_candidates = 1
 	weight = 2
 	cost = 25
-	var/max_vampires = 2
+	var/vampire_threshold = 2
 	var/additional_cost = 15
 	requirements = list(80,60,50,30,20,10,10,10,10,10)
 	high_population_requirement = 30
@@ -108,7 +108,7 @@
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
 		// Above 2 vampires, we start to cost a bit more.
-		if (i > max_vampires && (mode.threat_level > additional_cost))
+		if (i > max_vampires && (mode.threat > additional_cost))
 			mode.spend_threat(additional_cost)
 		else
 			break
