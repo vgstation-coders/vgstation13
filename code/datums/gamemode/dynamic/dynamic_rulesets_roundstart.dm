@@ -31,7 +31,7 @@
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
 		// Above 3 traitors, we start to cost a bit more.
-		if (i > max_traitors && (mode.threat > additional_cost))
+		if (i > traitor_threshold && (mode.threat > additional_cost))
 			mode.spend_threat(additional_cost)
 		else
 			break
@@ -108,7 +108,7 @@
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
 		// Above 2 vampires, we start to cost a bit more.
-		if (i > max_vampires && (mode.threat > additional_cost))
+		if (i > vampire_threshold && (mode.threat > additional_cost))
 			mode.spend_threat(additional_cost)
 		else
 			break
