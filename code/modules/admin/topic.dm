@@ -4942,7 +4942,7 @@
 		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
 		var/obj_type = available_objectives[new_obj]
 
-		var/datum/objective/new_objective = new obj_type(null,FALSE)
+		var/datum/objective/new_objective = new obj_type(null, FALSE, FALSE, obj_holder.faction)
 
 		if (new_objective.flags & FACTION_OBJECTIVE)
 			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
@@ -4995,6 +4995,31 @@
 		objective.force_success = !objective.force_success
 		check_antagonists()
 		log_admin("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+	if (href_list["obj_announce"])
+		var/text = ""
+		var/owner = locate(href_list["obj_owner"])
+		if (istype(owner, /datum/faction))
+			var/datum/faction/F = owner
+			for (var/datum/role/member in F.members)
+				to_chat(member.antag.current, "<span class='notice'>Your faction objectives are:</span>")
+				if (member.faction.objective_holder.objectives.len)
+					text += "<b>Faction objectives are:</b><ul>"
+					var/obj_count = 1
+					for(var/datum/objective/O in member.faction.objective_holder.objectives)
+						text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
+					text += "</ul>"
+				to_chat(member.antag.current, text)
+
+
+	if(href_list["obj_gen"])
+		var/owner = locate(href_list["obj_owner"])
+		var/datum/faction/F = owner
+		F.forgeObjectives()
+		for (var/datum/objective/objective in F.objective_holder.objectives)
+			// message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+		check_antagonists()	
 
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))

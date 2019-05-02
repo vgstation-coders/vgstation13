@@ -304,7 +304,7 @@
 			return
 		var/obj_type = available_objectives[new_obj]
 
-		var/datum/objective/new_objective = new obj_type(null,FALSE, usr)
+		var/datum/objective/new_objective = new obj_type(null, FALSE, FALSE, obj_holder.faction)
 
 		if (new_objective.flags & FACTION_OBJECTIVE)
 			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
@@ -366,6 +366,8 @@
 		else if(istype(owner, /datum/faction))
 			var/datum/faction/F = owner
 			F.forgeObjectives()
+			for (var/datum/objective/objective in F.objective_holder.objectives)
+				log_admin("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
 
 	else if(href_list["role"]) //Something role specific
 		var/datum/role/R = locate(href_list["role"])
