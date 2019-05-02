@@ -203,6 +203,16 @@
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
 
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
+	name = "small erlenmeyer flask"
+	desc = "It's like a cute little snub-nosed beaker. Can hold up to 50 units."
+	icon_state = "erlenmeyersmall"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer
+	name = "erlenmeyer flask"
+	desc = "Colloquially known as the 'long beaker'. Can hold up to 100 units."
+	icon_state = "erlenmeyerlarge"
+
 /obj/item/weapon/reagent_containers/glass/beaker/large
 	name = "large beaker"
 	desc = "A large beaker. Can hold up to 100 units."

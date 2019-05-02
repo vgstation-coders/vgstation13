@@ -1,6 +1,6 @@
 /obj/item/weapon/reagent_containers/glass/jar
 	name = "jar"
-	desc = "A large jar."
+	desc = "A large jar. Holds 250 units."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "jar"
 	amount_per_transfer_from_this = 10
@@ -124,3 +124,8 @@
 			held_item = null
 		getFromPool(/obj/item/weapon/shard, loc)
 		qdel(src)
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer
+	name = "comically large erlenmeyer flask"
+	desc = "Careful, they don't even make these anymore. Can hold 250 units."
+	icon_state = "erlenmeyerhuge"
