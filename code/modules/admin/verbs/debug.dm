@@ -1138,7 +1138,7 @@ client/proc/check_bomb()
 
 /client/proc/set_teleport_pref()
 	set name = "Set Teleport-Here Preferences"
-	set category = "Debug"
+	set category = "Fun"
 
 	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discret way?","Teleport-Here Preferences", "Flashy","Stealthy")
 
