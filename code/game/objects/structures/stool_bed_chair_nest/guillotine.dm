@@ -6,7 +6,7 @@
 	density = 1
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
-	lock_type = /datum/locking_category/buckle/guillotine
+	mob_lock_type = /datum/locking_category/buckle/guillotine
 	var/open = TRUE
 	var/bladedown = FALSE
 	var/mob/living/carbon/human/victim
@@ -61,14 +61,14 @@
 	flags = CANT_BE_MOVED_BY_LOCKED_MOBS
 
 /obj/structure/bed/guillotine/manual_unbuckle(mob/user)
-	if(!is_locking(lock_type))
+	if(!is_locking(mob_lock_type))
 		return
 
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
-	var/mob/M = get_locked(lock_type)[1]
+	var/mob/M = get_locked(mob_lock_type)[1]
 	if(M != user)
 		if(!open)
 			to_chat(user, "<span class='warning'>You can't pull \the [M] out of \the [src] while its stocks are closed.</span>")
@@ -109,7 +109,7 @@
 			to_chat(user, "<span class='warning'>You can't place \the [M] into \the [src] while its stocks are closed.</span>")
 		return
 
-	for(var/mob/living/L in get_locked(lock_type))
+	for(var/mob/living/L in get_locked(mob_lock_type))
 		if(L.stat)
 			to_chat(user, "<span class='warning'>There is still a body inside \the [src].</span>")
 		else
@@ -142,7 +142,7 @@
 				return
 	add_fingerprint(user)
 
-	lock_atom(M, lock_type)
+	lock_atom(M, mob_lock_type)
 
 /obj/structure/bed/guillotine/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
 	. = ..()
