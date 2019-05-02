@@ -33,6 +33,8 @@
 		// Above 3 traitors, we start to cost a bit more.
 		if (i > max_traitors && (mode.threat_level > additional_cost))
 			mode.spend_threat(additional_cost)
+		else
+			return 1
 	return 1
 
 /datum/dynamic_ruleset/roundstart/traitor/process()
@@ -108,6 +110,8 @@
 		// Above 2 vampires, we start to cost a bit more.
 		if (i > max_vampires && (mode.threat_level > additional_cost))
 			mode.spend_threat(additional_cost)
+		else
+			return 1
 	update_faction_icons()
 	return 1
 
