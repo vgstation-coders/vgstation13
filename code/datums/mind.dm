@@ -79,6 +79,9 @@
 	if(!istype(new_character))
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
+	new_character.attack_logs += current.attack_logs
+	new_character.attack_logs += "\[[time_stamp()]\] mind transfer from [current]/([current.real_name]) to [old_character]/([old_character.real_name])"
+
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PreMindTransfer(current)
