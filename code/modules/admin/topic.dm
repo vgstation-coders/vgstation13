@@ -4942,11 +4942,14 @@
 		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
 		var/obj_type = available_objectives[new_obj]
 
-		var/datum/objective/new_objective = new obj_type(null, FALSE, FALSE, obj_holder.faction)
+		var/datum/objective/new_objective = new obj_type(usr, obj_holder.faction)
 
 		if (new_objective.flags & FACTION_OBJECTIVE)
 			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
 			fac.handleNewObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			check_antagonists()
 			return TRUE // It's a faction objective, let's not move any further.
 
 		if (obj_holder.owner)//so objectives won't target their owners.
@@ -4965,23 +4968,23 @@
 			alert("Couldn't set-up a proper target.", "New Objective")
 			return
 
-		if (obj_holder.faction)
+		if (obj_holder.faction || (istype(new_objective, /datum/objective/custom) && new_objective.faction)) //if its an explicit faction obj OR a custom objective with a faction modifier
 			obj_holder.faction.AppendObjective(new_objective)
-			check_antagonists()
-			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+			message_admins("[key_name_admin(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+		check_antagonists()
 
 	if (href_list["obj_delete"])
 		var/datum/objective/objective = locate(href_list["obj_delete"])
 		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
 
 		ASSERT(istype(objective) && istype(obj_holder))
-
-		check_antagonists()
 		if (obj_holder.faction)
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 			objective.faction.handleRemovedObjective(objective)
 
 		obj_holder.objectives.Remove(objective)
+		check_antagonists()
 
 	if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
@@ -4994,6 +4997,7 @@
 
 		objective.force_success = !objective.force_success
 		check_antagonists()
+		message_admins("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 		log_admin("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 
 	if (href_list["obj_announce"])
@@ -5003,10 +5007,9 @@
 			var/datum/faction/F = owner
 			for (var/datum/role/member in F.members)
 				to_chat(member.antag.current, "<span class='notice'>Your faction objectives are:</span>")
-				if (member.faction.objective_holder.objectives.len)
-					text += "<b>Faction objectives are:</b><ul>"
+				if (member.faction.objective_holder.GetObjectives().len)
 					var/obj_count = 1
-					for(var/datum/objective/O in member.faction.objective_holder.objectives)
+					for(var/datum/objective/O in member.faction.GetObjectives())
 						text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
 					text += "</ul>"
 				to_chat(member.antag.current, text)
@@ -5015,9 +5018,11 @@
 	if(href_list["obj_gen"])
 		var/owner = locate(href_list["obj_owner"])
 		var/datum/faction/F = owner
+		var/list/prev_objectives = F.GetObjectives().Copy()
 		F.forgeObjectives()
-		for (var/datum/objective/objective in F.objective_holder.objectives)
-			// message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
+		for (var/datum/objective/objective in unique_objectives)
+			message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
 			log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
 		check_antagonists()	
 
