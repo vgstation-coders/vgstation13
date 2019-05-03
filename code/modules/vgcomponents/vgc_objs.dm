@@ -6,7 +6,10 @@
 	icon_state = "infrared"
 
 /obj/item/vgc_assembly/New(var/datum/vgassembly/nvga)
-	vga = nvga
+	if(!nvga)
+		vga = new ()
+	else
+		vga = nvga
 
 /obj/item/vgc_assembly/Destroy()
 	vga = null
@@ -63,6 +66,16 @@
 	var/datum/vgassembly/A = new ()
 	..(A)
 	var/datum/vgcomponent/doorController/D = new ()
+	var/datum/vgcomponent/signaler/S = new ()
+	D.Install(vga)
+	D.saved_access = get_absolutely_all_accesses()
+	S.Install(vga) //default 1457 30
+	S.setOutput("signaled", D)
+
+/obj/item/vgc_assembly/debugTest/New()
+	var/datum/vgassembly/A = new ()
+	..(A)
+	var/datum/vgcomponent/debugger/D = new ()
 	var/datum/vgcomponent/signaler/S = new ()
 	D.Install(vga)
 	D.saved_access = get_absolutely_all_accesses()

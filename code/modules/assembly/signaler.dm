@@ -176,7 +176,7 @@
 		return 0
 	pulse(1)
 	if(vgc)	
-		vgc.signalled()
+		vgc.was_signaled()
 
 	if(!holder)
 		for(var/mob/O in hearers(1, src.loc))
