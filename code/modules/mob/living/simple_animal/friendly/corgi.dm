@@ -302,7 +302,7 @@
 			valid = 1
 
 		if(/obj/item/clothing/head/ushanka)
-			name = "[pick("товарищ","Vladmir","Chairman")] [real_name]"
+			name = "[pick("товарищ","Vladimir","Chairman")] [real_name]"
 			desc = "A follower of Karl Barx."
 			emote_see = list("contemplates the failings of the capitalist economic model.", "ponders the pros and cons of vangaurdism.", "plans out methods to equally redistribute capital.", "articulates an argument for the primacy of the bourgeoisie.")
 			valid = 1
@@ -343,7 +343,7 @@
 		if(/obj/item/clothing/head/soft)
 			name = "Corgi Tech [real_name]"
 			desc = "The reason your yellow gloves have chew-marks."
-			emote_see = list("orders emitter crates.", "declares independence from Nanotrasen.", "")
+			emote_see = list("orders emitter crates.", "declares independence from Nanotrasen.", "acquires insulated gloves.")
 			valid = 1
 
 		if(/obj/item/clothing/head/fedora)
@@ -494,6 +494,11 @@
 
 	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
 	regenerate_icons()
+	
+/mob/living/simple_animal/corgi/Ian/Destroy()
+	..()
+	master = null
+	pointer_caller = null
 
 /mob/living/simple_animal/corgi/Ian/Life()
 	if(timestopped)
@@ -510,17 +515,14 @@
 			ian_status = FOOD_HUNTING
 			spawn(0) // Separate process
 				stop_automated_movement = 1
-				var/failedsteps
-				while(1)
+				var/failedsteps = 0
+				while(failedsteps <= 3)
 					if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
-						break
-					var/stepsuccess = step_towards(src,movement_target,1)
-					if(!stepsuccess)
+						failedsteps = 4
+					if(!step_towards(src,movement_target,1))
 						failedsteps++
-					if(failedsteps > 3)
-						break
-					sleep(4)
-
+					sleep(6)
+					
 				if(movement_target)		
 					if (movement_target.loc.x < src.x)
 						dir = WEST
@@ -541,19 +543,16 @@
 							
 		else if(ian_status == BEGIN_POINTER_FOLLOWING)
 			ian_status = POINTER_FOLLOWING
-			if(prob(35) || pointer_caller == master)
+			if(prob(35) || (master != null && pointer_caller == master))
 				spawn(0) // Separate process
 					stop_automated_movement = 1
-					var/failedsteps
-					while(1)
+					var/failedsteps = 0
+					while(failedsteps <= 3)
 						if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
 							break
-						var/stepsuccess = step_towards(src,movement_target,1)
-						if(!stepsuccess)
+						if(!step_towards(src,movement_target,1))
 							failedsteps++
-						if(failedsteps > 3)
-							break
-						sleep(4)
+						sleep(6)
 						
 					if(movement_target)		
 						if (movement_target.loc.x < src.x)
@@ -700,7 +699,7 @@
 	
 	if(M && !isUnconscious() && M.a_intent == I_HELP && prob(5))
 		master = M
-		to_chat(M, "Ian seems closer to you now. At least until somebody else gives him food, anyway.")
+		to_chat(M, "Ian seems closer to you now. At least until somebody else gives him attention, anyway.")
 
 //Sasha isn't even a corgi you dummy!
 /mob/living/simple_animal/corgi/sasha
