@@ -4,7 +4,6 @@
 /mob
 	plane = MOB_PLANE
 	var/said_last_words = 0 // All mobs can now whisper as they die
-	var/can_slip = TRUE
 
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
@@ -1930,10 +1929,7 @@ mob/proc/on_foot()
 		alpha = lowest_alpha
 
 /mob/proc/teleport_to(var/atom/A)
-	var/last_slip_value = can_slip
-	can_slip = FALSE
 	forceMove(get_turf(A))
-	can_slip = last_slip_value
 
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
