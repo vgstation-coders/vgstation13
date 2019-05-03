@@ -410,7 +410,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[1])
+			if(entry[ENTRY_POS])
 				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
         
 		user.client.images |= holomap_images[uid]
@@ -549,7 +549,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		var/stat = entry[ENTRY_STAT]
 		var/list/damage = entry[ENTRY_DAMAGE]
 		var/player_area = entry[ENTRY_AREA]
-		var/ijob = entry[ENTRY_POS]
+		var/ijob = entry[ENTRY_IJOB]
 
 		var/role
 		switch(ijob)
