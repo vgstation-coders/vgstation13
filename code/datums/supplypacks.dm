@@ -1025,9 +1025,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/bio_hood/security,
 					/obj/item/clothing/suit/bio_suit/security,
 					/obj/item/clothing/suit/bio_suit/security,
-					/obj/item/clothing/suit/bio_suit/security,
+					/obj/item/clothing/suit/bio_suit/security)
 	cost = 35
-	containertype = /obj/structure/closet/crate/secure/basic
+	containertype = /obj/structure/closet/crate/secure/gear
 	containername = "Security Biosuits"
 	group = "Security"
 
@@ -1733,7 +1733,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/bio_hood,
 					/obj/item/clothing/suit/bio_suit,
 					/obj/item/clothing/suit/bio_suit,
-					/obj/item/clothing/suit/bio_suit,
+					/obj/item/clothing/suit/bio_suit)
 	cost = 35
 	containertype = /obj/structure/closet/crate/medical
 	containername = "Regular Biosuits"
