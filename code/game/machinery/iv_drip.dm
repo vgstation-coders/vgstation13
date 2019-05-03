@@ -78,8 +78,7 @@
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
-			src.beaker.forceMove(get_turf(src))
-			src.beaker = null
+			src.remove_container()
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
@@ -162,11 +161,14 @@
 		src.attached = null
 		src.update_icon()
 	else if(src.beaker)
-		src.beaker.forceMove(get_turf(src))
-		src.beaker = null
-		update_icon()
+		remove_container()
 	else
 		return ..()
+
+/obj/machinery/iv_drip/proc/remove_container()
+	src.beaker.forceMove(get_turf(src))
+	src.beaker = null
+	update_icon()
 
 /obj/machinery/iv_drip/attack_ai(mob/living/user)
 	attack_hand(user)
