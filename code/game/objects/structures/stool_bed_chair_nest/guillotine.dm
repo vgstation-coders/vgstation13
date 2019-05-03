@@ -74,6 +74,7 @@
 			to_chat(user, "<span class='warning'>You can't pull \the [M] out of \the [src] while its stocks are closed.</span>")
 			return
 		else
+			add_attacklogs(user, M, "unbuckled from a guillotine. (@[user.x], [user.y], [user.z])", src, admin_warn = FALSE)
 			M.visible_message("<span class='notice'>\The [user] pulls [M] out of \the [src]!</span>",\
 								"[user] pulls you out of \the [src].")
 	else
@@ -127,7 +128,9 @@
 		M.visible_message("<span class='notice'>\The [M] climbs into \the [src]!</span>",\
 							"You climb into \the [src].")
 	else
+		add_attacklogs(user, M, "dragged to a guillotine. (@[user.x], [user.y], [user.z])", src, admin_warn = FALSE)
 		if(do_after_done)
+			add_attacklogs(user, M, "SUCCESFULLY dragged and bucked to a guillotine. (@[user.x], [user.y], [user.z])", src, admin_warn = TRUE)
 			M.visible_message("<span class='warning'>\The [M] is placed in \the [src] by \the [user]!</span>",\
 								"<span class='danger'>You are placed in \the [src] by \the [user].</span>")
 		else
@@ -194,6 +197,9 @@
 	update_icon()
 
 /obj/structure/bed/guillotine/proc/untie_blade(mob/user)
+	user.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
+	victim.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
+	message_admins("\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]. @[formatJumpTo(src)]")
 	user.visible_message("<span class='danger'>\The [user] begins untying the rope holding \the [src]'s blade!</span>",\
 							"You begin untying the rope holding \the [src]'s blade.")
 	if(do_after(user, src, 100))
@@ -203,6 +209,7 @@
 		flick("[current_icon_state]_dropping_1", src)
 		spawn(4)
 			if(victim)
+				add_attacklogs(user, victim, "executed with a guillotine.", src, admin_warn = TRUE)
 				if(victim.organs_by_name)
 					var/datum/organ/external/head/H = victim.get_organ(LIMB_HEAD)
 					if(istype(H) && ~H.status & ORGAN_DESTROYED)
