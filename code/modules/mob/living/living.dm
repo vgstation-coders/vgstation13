@@ -1832,6 +1832,8 @@ Thanks.
 	return on_foot() // Check if we have legs, gravity, etc. Checked by the children.
 
 /mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_with_magbooties = 0)
+	if (!src.can_slip)
+		return 0
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
