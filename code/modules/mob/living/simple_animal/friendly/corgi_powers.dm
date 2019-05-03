@@ -1,5 +1,5 @@
 /mob/living/simple_animal/corgi/verb/chasetail()
-	set name = "Chase your tail"
+	set name = "Chase your tail!"
 	set desc = "d'awwww."
 	set category = "Corgi"
 	to_chat(src, text("[pick("You dance around","You chase your tail")]."))
