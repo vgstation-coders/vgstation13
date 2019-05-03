@@ -20,7 +20,6 @@
 		icon_state = "pill[rand(1,20)]"
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
-
 	return attack(user, user) //Dealt with in attack code
 
 /obj/item/weapon/reagent_containers/pill/attack(mob/M as mob, mob/user as mob, def_zone)
@@ -85,6 +84,10 @@
 
 /obj/item/weapon/reagent_containers/pill/fits_in_iv_drip()
 	return 1
+
+/obj/item/weapon/reagent_containers/pill/on_reagent_change()
+	if(src.is_empty())
+		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Pills. END

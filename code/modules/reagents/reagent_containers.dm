@@ -77,6 +77,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
+/obj/item/weapon/reagent_containers/Destroy()
+	if(istype(loc, /obj/machinery/iv_drip))
+		var/obj/machinery/iv_drip/holder = loc
+		holder.remove_container()
+ . = ..()
+
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
 
