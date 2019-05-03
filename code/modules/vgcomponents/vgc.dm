@@ -90,7 +90,8 @@ datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 		_output[target] = null
 		return
 
-	call(src, _output[target][1]._input[_output[target[2]]])(signal) //oh boy what a line
+	var/proc_string = _output[target][1]._input[_output[target[2]]]
+	call(_output[target][1], proc_string)(signal) //oh boy what a line
 
 datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
@@ -104,12 +105,14 @@ datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, va
 
 	_output[out] = list(vgc, target)
 
+//opens window to configure settings
 datum/vgcomponent/proc/openSettings(var/mob/user)
 	to_chat(user, "the component has no settings to configure")
 	return
 
 //default input path
 datum/vgcomponent/proc/main(var/signal)
+	to_chat(world, "somehow [src]'s default input got called, altough it was never set.'") //yes i know dont judge me, i am working with datums here
 	return
 
 /*
@@ -209,5 +212,5 @@ datum/vgcomponent/signaler/New()
 	_signaler.signal()
 
 //signaled output
-/datum/vgcomponent/signaler/proc/signalled()
+/datum/vgcomponent/signaler/proc/was_signaled()
 	handleOutput("signaled", 1)
