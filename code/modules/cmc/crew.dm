@@ -10,6 +10,11 @@ var/list/cmc_holomap_cache = list()
 #define ENTRY_IJOB 9
 #define ENTRY_POS 10
 
+#define DAMAGE_OXYGEN 1
+#define DAMAGE_TOXIN 2
+#define DAMAGE_FIRE 3
+#define DAMAGE_BRUTE 4
+
 /*
 Crew Monitor by Paul, based on the holomaps by Deity
 */
@@ -204,12 +209,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/user_uid = "\ref[user]"
 
 	//creating the title with name | job - Dead/Alive
-	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
+	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == DEAD) ? " - DEAD" : " - ALIVE")
 
 	//creating the content with damage and some css coloring
 	var/content = "Not Available"
 	if(damage)
-		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
+		content = "(<span style='color: #0080ff'>[damage[DAMAGE_OXYGEN]]</span>/<span style='color: #00CD00'>[damage[DAMAGE_TOXIN]]</span>/<span style='color: #ffa500'>[damage[DAMAGE_FIRE]]</span>/<span style='color: #ff0000'>[damage[DAMAGE_BRUTE]]</span>)"
 
 	content += "<br>[player_area]"
 
@@ -221,7 +226,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	var/icon
 	if(istype(H, /mob/living/carbon/human))
-		if(stat != 2)
+		if(stat != DEAD)
 			icon = getLifeIcon(damage)
 		else
 			icon = "6"
@@ -573,7 +578,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			icon = "7"
 
 		var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
-		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
+		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[DAMAGE_OXYGEN]]</span>/<span class='toxin'>[damage[DAMAGE_TOXIN]]</span>/<span class='fire'>[damage[DAMAGE_FIRE]]</span>/<span class='brute'>[damage[DAMAGE_BRUTE]]</span>)" : "Not Available")
 		string += (see_x && see_y) ? "[player_area] ([see_x],[see_y])" : "Not Available"
 		var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 
@@ -591,3 +596,18 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(textview_popup[uid])
 		textview_popup[uid].close()
 		textview_popup[uid] = null
+
+#undef ENTRY_SEE_X
+#undef ENTRY_SEE_Y
+#undef ENTRY_MOB
+#undef ENTRY_NAME
+#undef ENTRY_ASSIGNMENT
+#undef ENTRY_STAT
+#undef ENTRY_DAMAGE
+#undef ENTRY_AREA
+#undef ENTRY_IJOB
+#undef ENTRY_POS
+#undef DAMAGE_OXYGEN
+#undef DAMAGE_TOXIN
+#undef DAMAGE_FIRE
+#undef DAMAGE_BRUTE
