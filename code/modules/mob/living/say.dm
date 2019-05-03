@@ -222,6 +222,16 @@ var/list/department_radio_keys = list(
 	var/atom/movable/AM = speech.speaker.GetSource()
 	if(!say_understands((istype(AM) ? AM : speech.speaker),speech.language)|| force_compose) //force_compose is so AIs don't end up without their hrefs.
 		rendered_message = render_speech(speech)
+	
+	//checking for syndie codephrases if person is a tator
+	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
+		//is tator
+		for(var/T in syndicate_code_phrase)
+			rendered_message = replacetext(rendered_message, T, "<b style='color: red;'>[T]</b>")
+
+		for(var/T in syndicate_code_response)
+			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
+
 	show_message(rendered_message, type, deaf_message, deaf_type)
 	return rendered_message
 

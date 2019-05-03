@@ -439,13 +439,15 @@
 		return 0
 	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
 	if (syndicate_code_phrase)
-		words += "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]<br>"
-		agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
+		var/phrases = syndicate_code_phrase.Join(", ")
+		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
+		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
-		words += "<span class='warning'>Code Response: </span>[syndicate_code_response]<br>"
-		agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
+		var/response = syndicate_code_response.Join(", ")
+		words += "<span class='warning'>Code Response: </span>[response].<br>"
+		agent.mind.store_memory("<b>Code Response</b>: [response].")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 
