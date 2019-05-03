@@ -332,9 +332,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //initializes the holomap
 /obj/machinery/computer/crew/proc/togglemap(var/mob/user)
-	if(user.isUnconscious())
-		return
-
 	if(user in _using)
 		deactivate(user)
 		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
@@ -379,7 +376,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
 	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
 		return FALSE
 	return TRUE
 
