@@ -2393,7 +2393,10 @@ var/list/bloodcult_exitportals = list()
 	var/turf/T = get_turf(spell_holder)
 	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
 	T.hotspot_expose(700,125,surfaces=1)
-	empulse(T, 1, 3)
+	spawn(0)
+		for(var/i = 0; i < 3; i++)
+			empulse(T, 1, 3)
+			sleep(20)
 	qdel(spell_holder)
 
 //RUNE XIX
