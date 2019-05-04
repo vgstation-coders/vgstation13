@@ -1,3 +1,5 @@
+//Note, the spell could permanently ruin someone's viewport if combined with the hallucination that turns client direction. Fixed by reconnecting.
+
 /spell/targeted/disorient
 	name = "Disorient"
 	desc = "This spell temporarily disorients a target."
@@ -9,6 +11,7 @@
 	invocation = "DII ODA BAJI"
 	invocation_type = SpI_WHISPER
 	message = "<span class='danger'>You suddenly feel completely overwhelmed!<span>"
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 
 	max_targets = 1
 
@@ -20,3 +23,28 @@
 	spell_flags = WAIT_FOR_CLICK
 
 	hud_state = "wiz_disorient"
+	var/empowered = 0
+
+/spell/targeted/disorient/cast(var/list/targets)
+	..()
+	if(empowered)
+		for(var/mob/target in targets)
+			var/angle = pick(90, 180, 270)
+			var/client/C = target.client
+			if(C)
+				C.dir = turn(C.dir, angle)
+				spawn(30 SECONDS) //This will confuse someone for a while and end up very annoying
+				if(C)
+					C.dir = turn(C.dir, -angle)
+
+/spell/targeted/disorient/empower_spell()
+	spell_levels[Sp_POWER]++
+	empowered++
+	name = "Empowered Disorient"
+	desc = "This spell will very thoroughly disorient a target for 30 seconds."
+	return "You have upgraded the spell to turn the target's perception in another direction, further debilitating them."
+
+/spell/targeted/buttbots_revenge/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Gives an additional effect to the spell that turns the target's view of reality in a direction, debilitating them a lot."
+	return ..()
