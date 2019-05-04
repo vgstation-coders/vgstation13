@@ -1,6 +1,6 @@
 /obj/item/weapon/gun/energy/ionrifle
 	name = "ion rifle"
-	desc = "A man portable anti-armor weapon designed to disable mechanical threats"
+	desc = "A man portable anti-armor weapon designed to disable mechanical threats."
 	icon_state = "ionrifle"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -18,7 +18,7 @@
 
 /obj/item/weapon/gun/energy/ionrifle/ionpistol
 	name = "ion pistol"
-	desc = "A small, low capacity ion weapon designed to disable mechanical threats"
+	desc = "A small, low capacity ion weapon designed to disable mechanical threats."
 	icon_state = "ionpistol"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
@@ -62,7 +62,7 @@
 
 /obj/item/weapon/gun/energy/staff
 	name = "staff of change"
-	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself"
+	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "staffofchange"
 	item_state = "staffofchange"
