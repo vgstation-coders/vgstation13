@@ -2387,7 +2387,7 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
-	page = "This rune triggers a short-range EMP that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
+	page = "This rune triggers a series of short-range EMPs that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
