@@ -281,7 +281,49 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
+/datum/design/rocketlauncher
+	name = "rocket launcher"
+	desc = "Watch the backblast, you idiot."
+	id = "RPG"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 50000, MAT_GLASS = 50000)
+	build_path = /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 //Single ammunition
+
+/datum/design/rocket_rpg/lowyield
+	name = "low yield rocket"
+	desc = "Explosive supplement to Nanotrasen's rocket launchers."
+	id = "lowyield_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 20000)
+	build_path = /obj/item/ammo_casing/rocket_rpg/lowyield
+
+/datum/design/rocket_rpg/blank
+	name = "blank rocket"
+	desc = "This rocket left intentionally blank."
+	id = "blank_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 100)
+	build_path = /obj/item/ammo_casing/rocket_rpg/blank
+
+/datum/design/rocket_rpg/emp
+	name = "EMP rocket"
+	desc = "EMP rocket for the Nanotrasen rocket launcher"
+	id = "emp_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 20000, MAT_URANIUM = 500)
+	build_path = /obj/item/ammo_casing/rocket_rpg/emp
+
+/datum/design/rocket_rpg/stun
+	name = "stun rocket"
+	desc = "Stun rocket for the Nanotrasen rocket launcher. Not a flashbang."
+	id = "emp_rocket"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 20000, MAT_SILVER = 1000)
+	build_path = /obj/item/ammo_casing/rocket_rpg/stun
 
 //Box ammunition
 /datum/design/ammo_b380auto
