@@ -347,8 +347,7 @@
 		if(queue.len) //If there is still a queue, it will immediately start working on a new item with no delay
 			var/datum/design/D = queue_pop()
 			src.build_part(D)
-			src.updateUsrDialog()
-			return 1
+			return 1 //Currently a bug where if item is unavailable to be built it disappears. Alternatives did not work. Please fix it yourself - B2MTTF
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
