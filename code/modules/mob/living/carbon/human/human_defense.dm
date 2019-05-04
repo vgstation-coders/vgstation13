@@ -464,19 +464,17 @@ emp_act
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if(cloneloss < 120)
-		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
-		if(isDead(src))
-			..()
-			adjustCloneLoss(rand(5,25))
-		else
-			..()
-			show_message("<span class='warning'>The blob attacks you!</span>")
-			var/dam_zone = pick(organs_by_name)
-			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
+	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
+	if(isDead(src) && bruteloss >= 200) //Did you already receive an extreme amount of battering?
+		..()
+		gib(src)
+	else
+		..()
+		show_message("<span class='warning'>The blob attacks you!</span>")
+		var/dam_zone = pick(organs_by_name)
+		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
 
-			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
-	return
+		apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 
 /mob/living/carbon/human/acidable()
 	return !(species && species.anatomy_flags & ACID4WATER)
