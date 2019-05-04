@@ -94,6 +94,18 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
+/datum/design/ionrifle
+	name = "Ion Rifle"
+	desc = "A man portable anti-armor weapon designed to disable mechanical threats."
+	id = "ionrifle"
+	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_MAGNETS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/energy/ionrifle
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 /datum/design/xcomar
 	name = "Assault Rifle"
 	desc = "An Assault Rifle."
