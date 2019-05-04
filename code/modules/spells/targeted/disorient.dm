@@ -1,5 +1,3 @@
-//Note, the spell could permanently ruin someone's viewport if combined with the hallucination that turns client direction. Fixed by reconnecting.
-
 /spell/targeted/disorient
 	name = "Disorient"
 	desc = "This spell temporarily disorients a target."
@@ -44,7 +42,7 @@
 	desc = "This spell will very thoroughly disorient a target for 30 seconds."
 	return "You have upgraded the spell to turn the target's perception in another direction, further debilitating them."
 
-/spell/targeted/buttbots_revenge/get_upgrade_info(upgrade_type, level) //I don't know what this does, and it doesn't seem to do anything, just copypasted
+/spell/targeted/disorient/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
 		return "Gives an additional effect to the spell that turns the target's view of reality in a direction, debilitating them a lot."
 	return ..()
