@@ -97,7 +97,7 @@
 
 /obj/machinery/bunsen_burner/proc/load_item(obj/item/weapon/W)
 	held_container = W
-	var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_x" = 2, "pixel_y" = 22 * PIXEL_MULTIPLIER - empty_Y_space(new /icon(W.icon, W.icon_state)))
+	var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_x" = 2 * PIXEL_MULTIPLIER, "pixel_y" = 22 * PIXEL_MULTIPLIER - empty_Y_space(new /icon(W.icon, W.icon_state)))
 	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 	overlays += I
 	overlays += I2
