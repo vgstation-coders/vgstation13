@@ -270,7 +270,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/Topic(href, href_list)
-	..()
+	. = ..()
 	if(usr && (src != usr))
 		return
 
