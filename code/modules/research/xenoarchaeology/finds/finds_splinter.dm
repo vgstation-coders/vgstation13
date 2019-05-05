@@ -12,6 +12,8 @@
 	name = "supermatter splinter"
 	desc = "A superdense chunk of supermatter. It hums ever so slightly, with swirls of semi-absorbed matter orbiting it. <b>It doesn't look very safe to touch.</b>"
 	icon = 'icons/obj/shards.dmi'
+	origin_tech = Tc_ENGINEERING + "=7;" + Tc_MATERIALS + "=10;" + Tc_ANOMALY + "=5" //It is impossible to pick up, so technically you can't put it inside the DA. I guess this will make it scannable
+
 
 /obj/item/supermatter_splinter/New()
 	..()
