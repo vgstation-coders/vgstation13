@@ -29,7 +29,6 @@
 	modules += new /obj/item/device/material_synth/robot/mommi(src)
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/device/lightreplacer/borg(src)
-	modules += new /obj/item/weapon/soap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/borg/fire_shield
@@ -60,7 +59,9 @@
 		"Hover" = "hovermommi"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
-
+/obj/item/weapon/robot_module/mommi/nt/New(var/mov/living/silicon/robot/R)
+	..()
+	modules += new /obj/item/weapon/soap(src)
 //Derelict MoMMI
 /obj/item/weapon/robot_module/mommi/soviet
 	name = "russian remont robot module"
@@ -78,6 +79,7 @@
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/device/rcd/borg/rsf/soviet(src)
+	modules += new /obj/item/weapon/soap/syndie(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 
