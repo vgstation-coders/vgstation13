@@ -16,16 +16,22 @@
 /obj/item/weapon/gun/energy/ionrifle/emp_act(severity)
 	return
 
-/obj/item/weapon/gun/energy/ionrifle/ionpistol
-	name = "ion pistol"
-	desc = "A small, low capacity ion weapon designed to disable mechanical threats."
-	icon_state = "ionpistol"
+/obj/item/weapon/gun/energy/ionrifle/ioncarbine
+	name = "ion carbine"
+	desc = "A stopgap ion weapon designed to disable smaller mechanical threats."
+	icon_state = "ioncarbine"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
-	cell_type = "/obj/item/weapon/cell/crap"
+	cell_type = "/obj/item/weapon/cell/crap/better"
 	projectile_type = "/obj/item/projectile/ionsmall"
 
-/obj/item/weapon/gun/energy/ionrifle/ionpistol/isHandgun()
+/obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol
+	name = "ion pistol"
+	desc = "A small, low capacity ion weapon designed to disrupt smaller mechanical threats."
+	icon_state = "ionpistol"
+	cell_type = "/obj/item/weapon/cell/crap"
+
+/obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol/isHandgun()
 	return TRUE
 
 /obj/item/weapon/gun/energy/decloner

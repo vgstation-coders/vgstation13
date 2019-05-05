@@ -41,6 +41,10 @@
 	..()
 	charge = 0
 
+/obj/item/weapon/cell/crap/better
+	name = "\improper Nanotrasen brand rechargeable D battery"
+	maxcharge = 700 //for the ion carbine
+
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
