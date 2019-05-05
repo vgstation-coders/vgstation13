@@ -108,7 +108,7 @@
 				continue
 			if(tincan.syndicate)
 				continue
-			bot[tincan.name] = "Cyborg"
+			bot[tincan.name] = tincan.braintype
 			isactive[tincan.name] = (tincan.client?.inactivity > 10 * 60 * 10) ? "Active" : "Inactive"
 	for(var/datum/data/record/t in sortRecord(data_core.general))
 		var/name = t.fields["name"]
