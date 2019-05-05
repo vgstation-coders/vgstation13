@@ -59,9 +59,10 @@
 		"Hover" = "hovermommi"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
-/obj/item/weapon/robot_module/mommi/nt/New(var/mov/living/silicon/robot/R)
+/obj/item/weapon/robot_module/mommi/nt/New(var/mob/living/silicon/robot/R)
 	..()
 	modules += new /obj/item/weapon/soap(src)
+
 //Derelict MoMMI
 /obj/item/weapon/robot_module/mommi/soviet
 	name = "russian remont robot module"
