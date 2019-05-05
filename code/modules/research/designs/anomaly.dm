@@ -48,6 +48,16 @@
 	category = "Anomaly"
 	build_path = /obj/item/clothing/accessory/glowstick/phazon
 
+/datum/design/supermatter_splinter //You shouldn't be able to normally print this from the protolathe
+	name = "Supermatter Splinter"
+	desc = "A superdense chunk of supermatter. It hums ever so slightly, with swirls of semi-absorbed matter orbiting it. <b>It doesn't look very safe to touch.</b>"
+	id = "supermatter_splinter"
+	req_tech = list(Tc_MATERIALS = 10, Tc_ANOMALY = 7, Tc_ENGINEERING =8) //Haha good luck getting these
+	build_type = PROTOLATHE
+	materials = list(MAT_PLASMA=40000, MAT_PHAZON=6000, MAT_DIAMOND=10000) //20 plasma sheets, 3 phazon sheets, 5 diamond sheets
+	category = "Anomaly"
+	build_path = /obj/item/supermatter_splinter
+
 /*
 /datum/design/ano_scanner
 	name = "Alden-Saraspova Counter"
