@@ -610,7 +610,7 @@
 /obj/abstract/map/spawner/floorpill
 	name = "floor pill spawner"
 	icon_state = "maint"
-	chance = 30
+	chance = 20
 	to_spawn = list(
 		/obj/item/weapon/reagent_containers/pill/random/maintenance
 	)
