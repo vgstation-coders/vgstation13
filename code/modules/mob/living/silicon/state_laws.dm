@@ -127,15 +127,18 @@
 		if(temp_laws.zeroth)
 			tmplist[++tmplist.len] = list("text" = "0. [temp_laws.zeroth]", "enabled" = TRUE) //oh dear this syntax
 		for(var/law in temp_laws.ion)
-			var/num = ionnum()
-			tmplist[++tmplist.len] = list("text" = "[num]. [law]", "enabled" = TRUE) //trust me, this is the Right Way
+			if(law)
+				var/num = ionnum()
+				tmplist[++tmplist.len] = list("text" = "[num]. [law]", "enabled" = TRUE) //trust me, this is the Right Way
 		var/lawnum = 1
 		for(var/law in temp_laws.inherent)
-			tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
-			lawnum++
+			if(law)
+				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
+				lawnum++
 		for(var/law in temp_laws.supplied)
-			tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
-			lawnum++
+			if(law)
+				tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
+				lawnum++
 		state_laws_ui.selected_laws = tmplist
 
 	if(state_laws_ui.freeform == null)
