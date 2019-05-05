@@ -4,6 +4,11 @@
 obj
 	var/datum/vgassembly/vga = null //component assembly
 
+/*
+==========
+VGAssembly
+==========
+*/
 datum/vgassembly
 	var/obj/_parent
 	var/list/_vgcs = list() //list of vgcs contained inside
@@ -124,11 +129,12 @@ datum/vgassembly/proc/touched(var/mob/user)
 	message_admins("[user] touched assembly")
 	return
 /*
+===========
 VGComponent
-
+===========
 if you make a child, you will need to override
 - getPhysical
-- New() if you need to designate new inputs/outputs
+- New() if you need to designate new/other inputs/outputs
 - main() if you want to use the default input
 - Destroy() if you got references to any objs and such (do supercall tho)
 */
@@ -140,6 +146,8 @@ datum/vgcomponent
 	var/_busy = 0 //if machine is busy, for components who need time to properly function
 	var/list/settings = list() //list of open uis, indexed with \ref[user]
 	var/has_settings = 0 //enables openSettings button in assembly ui
+	var/has_touch = 0
+	var/touch_enabled = 0
 
 datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/outputs
 	//_input["nameThatUserSees"] = "procname"
@@ -148,13 +156,14 @@ datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/
 	)
 	_output += list( //can only point to one component: list(0 => ref to component, 1 => target), as can be seen in setOutput
 		"main" = null
-	) 
+	)
 
 datum/vgcomponent/Destroy()
 	..()
 	_assembly = null
 	_input = null
 	_output = null
+	settings = null
 
 datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 	if(_assembly)
@@ -226,6 +235,14 @@ datum/vgcomponent/proc/main(var/signal)
 	message_admins("somehow [src]'s default input got called, altough it was never set.'") //yes i know dont judge me, i am working with datums here
 	return
 
+datum/vgcomponent/proc/onTouch(var/obj/item/O, var/mob/user)
+	return
+
+/*
+=============================================
+COMPONENTS (the ones i made myself... kinda)
+=============================================
+*/
 /*
 Door control
 -- maybe let this send out events sometime like ondooropen, ondoorclose
@@ -234,31 +251,64 @@ datum/vgcomponent/doorController
 	name = "Doorcontroller"
 	var/list/saved_access = list() //ID.GetAccess()
 
+datum/vgcomponent/doorController/New()
+	_input = list(
+		"open" = "open",
+		"close" = "close",
+		"toggle" = "toggle"
+	)
+
 datum/vgcomponent/doorController/getPhysical()
 	return new /obj/item/vgc_obj/door_controller(src)
 
 datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 	saved_access = ID.GetAccess()
 
-datum/vgcomponent/doorController/main(var/signal)
+datum/vgcomponent/doorController/proc/open(var/signal)
+	if(!signal) //we want a 1
+		return
+
 	if(!istype(_assembly._parent, /obj/machinery/door))
-		return 0 //no parent or not a door, however that happened
+		return //no parent or not a door, however that happened
 
 	var/obj/machinery/door/D = _assembly._parent
 	if(D.check_access_list(saved_access))
-		if(signal)
+		D.open()
+	else
+		D.denied()
+
+datum/vgcomponent/doorController/proc/close(var/signal)
+	if(!signal) //we want a 1
+		return
+
+	if(!istype(_assembly._parent, /obj/machinery/door))
+		return //no parent or not a door, however that happened
+
+	var/obj/machinery/door/D = _assembly._parent
+	if(D.check_access_list(saved_access))
+		D.close()
+	else
+		D.denied()
+
+datum/vgcomponent/doorController/proc/toggle(var/signal)
+	if(!signal) //we want a 1
+		return
+
+	if(!istype(_assembly._parent, /obj/machinery/door))
+		return //no parent or not a door, however that happened
+
+	var/obj/machinery/door/D = _assembly._parent
+	if(D.check_access_list(saved_access))
+		if(D.density)
 			D.open()
 		else
 			D.close()
-		return 1
 	else
 		D.denied()
-	
-	return 0
 
 /*
 Debugger
-idea shamelessly copied from nexus
+idea shamelessly copied from nexus - and modified
 */
 /datum/vgcomponent/debugger
 	name = "Debugger"
@@ -269,13 +319,20 @@ idea shamelessly copied from nexus
 
 /datum/vgcomponent/debugger/main(var/signal)
 	if(spam)
-		message_admins("received signal:[signal] | <a HREF='?src=\ref[src];pause=1'>\[Toggle Output\]</a>")
+		message_admins("received signal:[signal] | <a HREF='?src=\ref[src];pause=1'>\[Toggle Output/Passthrough\]</a>")
+		handleOutput()
 
 /datum/vgcomponent/debugger/Topic(href, href_list)
 	. =..()
 	if(href_list["pause"])
 		spam = !spam
 
+
+/*
+===================================================================
+ASSEMBLY WRAPPERS (just components that use the current assemblies)
+===================================================================
+*/
 /*
 signaler
 raw signaler
@@ -283,15 +340,19 @@ raw signaler
 /datum/vgcomponent/signaler
 	name = "Signaler"
 	var/obj/item/device/assembly/signaler/_signaler
+	has_touch = 1
+	touch_enabled = 0
+
+/datum/vgcomponent/signaler/onTouch(var/obj/item/O, var/mob/user)
+	send()
 
 datum/vgcomponent/signaler/New()
-	//..() we dont need main here
-	_input += list(
+	_input = list(
 		"setFreq" = "setFreq", //receives freq
 		"setCode" = "setCode", //receives code
 		"send" = "send" //sends
 	)
-	_output += list(
+	_output = list(
 		"signaled" = null
 	)
 	_signaler = new ()

@@ -6,6 +6,8 @@
 	icon_state = "remote_3b"
 
 /obj/item/vgc_assembly/New(var/datum/vgassembly/nvga = new ())
+	if(!istype(nvga, /datum/vgassembly))
+		nvga = new /datum/vgassembly()
 	vga = nvga
 
 /obj/item/vgc_assembly/Destroy()
@@ -24,7 +26,9 @@
 	var/datum/vgcomponent/vgc = null
 	var/datum_type = /datum/vgcomponent
 
-/obj/item/vgc_obj/New(var/datum/vgcomponent/nvgc = new datum_type())
+/obj/item/vgc_obj/New(var/datum/vgcomponent/nvgc)
+	if(!istype(nvgc, datum_type))
+		nvgc = new datum_type()
 	vgc = nvgc
 
 /obj/item/vgc_obj/Destroy()
@@ -73,7 +77,7 @@
 	D.Install(vga)
 	D.saved_access = get_absolutely_all_accesses()
 	S.Install(vga) //default 1457 30
-	S.setOutput("signaled", D)
+	S.setOutput("signaled", D, "toggle")
 
 /obj/item/vgc_assembly/debugTest/New()
 	var/datum/vgassembly/A = new ()
