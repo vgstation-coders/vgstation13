@@ -1634,6 +1634,9 @@ Thanks.
 #define THREW_NOTHING -1
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
+	if (src.throw_delayer.blocked())
+		return
+	src.delayNextThrow(20)
 	src.throw_mode_off()
 	if(src.stat || !target)
 		return FAILED_THROW
