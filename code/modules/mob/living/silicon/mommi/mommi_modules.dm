@@ -25,11 +25,11 @@
 	modules += new /obj/item/weapon/extinguisher/foam(src)
 	modules += new /obj/item/device/rcd/rpd(src)
 	modules += new /obj/item/device/rcd/tile_painter(src)
-	modules += new /obj/item/device/lightreplacer/borg(src)
 	modules += new /obj/item/blueprints/mommiprints(src)
 	modules += new /obj/item/device/material_synth/robot/mommi(src)
 	modules += new /obj/item/device/holomap(src)
-	modules += new /obj/item/weapon/soap/syndie(src)
+	modules += new /obj/item/device/lightreplacer/borg(src)
+	modules += new /obj/item/weapon/soap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/borg/fire_shield
