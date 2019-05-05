@@ -39,7 +39,7 @@
 	var/datum/delay_controller/click_delayer   = new (1,ARBITRARILY_LARGE_NUMBER) // (Handled in Click())
 	var/datum/delay_controller/attack_delayer  = new (1,ARBITRARILY_LARGE_NUMBER) // delayNextAttack() See setup.dm, 12
 	var/datum/delay_controller/special_delayer = new (1,ARBITRARILY_LARGE_NUMBER) // delayNextSpecial()
-	var/datum/delay_controller/throw_delayer = new (10,ARBITRARILY_LARGE_NUMBER) // delayNextThrow()
+	var/datum/delay_controller/throw_delayer = new (15,ARBITRARILY_LARGE_NUMBER) // delayNextThrow()
 	var/datum/delay_controller/clong_delayer   = new (10,ARBITRARILY_LARGE_NUMBER) // CLONG, clong!
 
 // Convenience procs.

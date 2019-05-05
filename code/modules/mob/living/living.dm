@@ -1636,7 +1636,7 @@ Thanks.
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
 	if (src.throw_delayer.blocked())
 		return
-	src.delayNextThrow(10)
+	src.delayNextThrow(15)
 	src.throw_mode_off()
 	if(src.stat || !target)
 		return FAILED_THROW
