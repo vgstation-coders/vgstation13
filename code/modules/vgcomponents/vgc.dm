@@ -5,8 +5,9 @@ obj
 	var/datum/vgassembly/vga = null //component assembly
 
 datum/vgassembly
-	var/_parent
-	var/list/_vgcs = list()//list of vgcs contained inside
+	var/obj/_parent
+	var/list/_vgcs = list() //list of vgcs contained inside
+	var/list/windows = list() //list of open uis, indexed with \ref[user]
 
 datum/vgassembly/Destroy()
 	..()
@@ -19,6 +20,104 @@ datum/vgassembly/proc/rebuild()
 
 datum/vgassembly/proc/showCircuit(var/mob/user)
 	//show the circuit via browser, manipulate components via topic
+	var/uid = "\ref[user]"
+	if(!windows[uid])
+		var/datum/browser/W = new (user, "curcuitView", "[src]", nref = src)
+		windows[uid] = W
+	updateCurcuit(user)
+
+datum/vgassembly/proc/updateCurcuit(var/mob/user)
+	var/uid = "\ref[user]"
+	if(!windows[uid])
+		return
+
+	var/datum/browser/W = windows[uid]
+	var/content = "Components:<br>"
+	for(var/datum/vgcomponent/vgc in _vgcs)
+		content += "[vgc] \ref[vgc]"
+		if(vgc.has_settings)
+			content += "<a HREF='?src=\ref[src];openC=\ref[vgc]'>\[Open Settings\]</a>"
+		content += "<a HREF='?src=\ref[src];detach=\ref[vgc]'>\[Detach\]</a><br>"
+
+		if(vgc._input.len > 0)
+			content += "Inputs:<tab id=\ref[vgc]_inputs><br>"
+			for(var/vin in vgc._input)
+				content += "<tab to=\ref[vgc]_inputs>[vin]<br>"
+		else
+			content += "No Inputs<br>"
+
+		if(vgc._output.len > 0)
+			content += "Outputs:<tab id=\ref[vgc]_outputs><br>"
+			for(var/out in vgc._output)
+				content += "<tab to=\ref[vgc]_outputs>[out] "
+				if(vgc._output[out])
+					var/tar = vgc._output[out][2]
+					var/tar_obj = vgc._output[out][1]
+					content += "assigned to [tar] of \ref[tar_obj] <a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Reassign\]</a>"
+				else
+					content += "<a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Assign\]</a>"
+				content += "<br>"
+		else
+			content += "No Outputs<br>"
+
+	if(_parent)
+		content += "<a HREF='?src=\ref[src];detach=\ref[src]'>\[Detach From Object\]</a> "
+	content += "<a HREF='?src=\ref[src];close=1'>\[Close\]</a>"
+	W.set_content(content)
+	W.open()
+
+datum/vgassembly/Topic(href,href_list)
+	if(href_list["close"]) //close curcuitview
+		var/uid = "\ref[usr]"
+		if(windows[uid])
+			var/datum/browser/W = windows[uid]
+			W.close()
+			windows["\ref[usr]"] = null
+	else if(href_list["detach"]) //detach either obj or whole assembly
+		var/target = locate(href_list["detach"])
+		if(!target)
+			return
+
+		if(target == src) //detach assembly
+			_parent.vga = null
+			_parent = null
+			var/obj/item/vgc_assembly/NewAss = new (src)
+			usr.put_in_hands(NewAss)
+		else //detach object
+			var/datum/vgcomponent/T = target
+			var/obj/item/vgc_obj/NewObj = T.Uninstall()
+			usr.put_in_hands(NewObj)
+		updateCurcuit(usr)
+	else if(href_list["openC"]) //open settings of selected obj
+		var/datum/vgcomponent/vgc = locate(href_list["openC"])
+		if(!vgc)
+			return
+		vgc.openSettings(usr)
+	else if(href_list["setO"])
+		var/datum/vgcomponent/out = locate(href_list["setO"])
+		if(!out)
+			return
+
+		if(!(href_list["output"] in out._output))
+			return
+
+		var/list/refs = list()
+		for(var/datum/vgc in _vgcs)
+			if(vgc == out)
+				continue //dont wanna assign to ourself, or do we?
+			refs += "\ref[vgc]"
+		var/target = input("Select which component you want to output to.", "Select Target Component", 0) in refs
+		if(!target || locate(target))
+			return
+		
+		var/input = input("Select which input you want to target.", "Select Target Input", "main") in locate(target)._input
+
+		out.setOutput(href_list["output"], locate(target), input)
+
+
+datum/vgassembly/proc/touched(var/mob/user)
+	//execute touch events for components if they are enabled
+	message_admins("[user] touched assembly")
 	return
 /*
 VGComponent
@@ -30,10 +129,13 @@ if you make a child, you will need to override
 - Destroy() if you got references to any objs and such (do supercall tho)
 */
 datum/vgcomponent
+	var/name = "VGComponent" //used in the ui
 	var/datum/vgassembly/_assembly //obj component is attached to
 	var/list/_input //input to select from
 	var/list/_output //list of outputs to assign
 	var/_busy = 0 //if machine is busy, for components who need time to properly function
+	var/list/settings = list() //list of open uis, indexed with \ref[user]
+	var/has_settings = 0 //enables openSettings button in assembly ui
 
 datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/outputs
 	//_input["nameThatUserSees"] = "procname"
@@ -65,9 +167,11 @@ datum/vgcomponent/proc/Uninstall() //don't override
 	if(!_assembly)
 		return
 
-	_assembly._vgcs -= src
-	_assembly.rebuild()
-	rebuildOutputs() //call it for use since we are no longer part of the assembly
+	
+	var/datum/vgassembly/A = _assembly
+	_assembly = null //needs to be null for rebuild to work for other components
+	A.rebuild()
+	A._vgcs -= src //now that we rebuilt, we can remove ourselves
 	return getPhysical()
 
 datum/vgcomponent/proc/getPhysical() //do override with wanted type
@@ -108,7 +212,6 @@ datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, va
 
 //opens window to configure settings
 datum/vgcomponent/proc/openSettings(var/mob/user)
-	to_chat(user, "the component has no settings to configure")
 	return
 
 //default input path
@@ -121,6 +224,7 @@ Door control
 -- maybe let this send out events sometime like ondooropen, ondoorclose
 */
 datum/vgcomponent/doorController
+	name = "Doorcontroller"
 	var/list/saved_access = list() //ID.GetAccess()
 
 datum/vgcomponent/doorController/getPhysical()
@@ -150,6 +254,7 @@ Debugger
 idea shamelessly copied from nexus
 */
 /datum/vgcomponent/debugger
+	name = "Debugger"
 	var/spam = 1
 
 /datum/vgcomponent/debugger/getPhysical()
@@ -169,6 +274,7 @@ signaler
 raw signaler
 */
 /datum/vgcomponent/signaler
+	name = "Signaler"
 	var/obj/item/device/assembly/signaler/_signaler
 
 datum/vgcomponent/signaler/New()

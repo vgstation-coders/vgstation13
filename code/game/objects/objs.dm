@@ -87,6 +87,25 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	verbs += /obj/proc/remove_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
+	if(!vga && istype(W, /obj/item/vgc_assembly))
+		vga = W.vga
+		vga._parent = src
+		to_chat(user, "You install \the [W] into \the [src].")
+		qdel(W)
+		return 1
+	if(vga && istype(vga, /datum/vgassembly))
+		if(istype(W, /obj/item/vgc_obj))
+			var/obj/item/vgc_obj/CO = W
+			vga._vgcs += CO.vgc
+			to_chat(user, "You install \the [W] into the [vga].")
+			qdel(W)
+			return 1
+		else if(istype(W, /obj/item/vgc_logictool))
+			vga.showCircuit(user)
+			to_chat(user, "You bring up the circuit on \the [W].")
+			return 1
+		else
+			vga.touched(user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
