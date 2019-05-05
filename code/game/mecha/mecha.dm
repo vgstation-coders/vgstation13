@@ -1354,9 +1354,11 @@
 		return
 	if(usr.incapacitated())
 		return
-	if(usr != occupant)
+	if(usr != occupant && occupant.isUnconscious())
 		visible_message("<span class='notice'>[usr] start pulling [occupant.name] out of \the [src].</span>")
-		if(do_after(usr, src, 30 SECONDS))
+		if(do_after(30 SECONDS))
+			if(!occupant.isUnconscious())
+				return
 			go_out(over_location)
 			add_fingerprint(usr)
 		return
