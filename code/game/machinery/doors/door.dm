@@ -69,8 +69,7 @@ var/list/all_doors = list()
 		return FALSE
 	if(operating || !density)
 		return FALSE
-	set_up_access()
-	if(!can_access(thing.GetAccess(), req_access, req_one_access))
+	if(!check_access(thing))
 		denied()
 		return FALSE
 	open()
