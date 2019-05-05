@@ -305,16 +305,77 @@
 /obj/item/weapon/reagent_containers/pill/random
 	name = "unknown pill"
 	desc = "Dare you enter my chemical realm?"
-
-/obj/item/weapon/reagent_containers/pill/random/New()
-	..()
-	var/chemical = pick(HYPERZINE, OXYCODONE, DOCTORSDELIGHT, LEXORIN, LEPORAZINE, MUTAGEN, RYETALYN, PACID, CORNOIL, TONIO, SPACE_DRUGS,ZOMBIEPOWDER)
-	reagents.add_reagent(chemical, 10)
 	/* Possible choices:
 	Good: Hyperzine, Oxycodone, Doctor's Delight, Leporazine
 	Neutral: Corn Oil, Ryetalyn, Tonio, Space Drugs
 	Bad: Mutagen, Polytrinic Acid, Lexorin, Zombie Powder
 	*/
+	var/list/possible_combinations = list(
+		list(HYPERZINE = 10),
+		list(OXYCODONE = 10),
+		list(DOCTORSDELIGHT = 10),
+		list(LEPORAZINE = 10),
+		list(CORNOIL = 10),
+		list(RYETALYN = 10),
+		list(TONIO = 10),
+		list(SPACE_DRUGS = 10),
+		list(MUTAGEN = 10),
+		list(PACID = 10),
+		list(LEXORIN = 10),
+		list(ZOMBIEPOWDER = 10)
+	)
+
+/obj/item/weapon/reagent_containers/pill/random/New()
+	. = ..()
+	var/list/to_spawn = pickweight(possible_combinations)
+	for(var/index in to_spawn)
+		reagents.add_reagent(index, to_spawn[index])
+
+
+/obj/item/weapon/reagent_containers/pill/random/maintenance
+	flags = FPRINT | NOREACT
+	possible_combinations = list(
+		list(MINDBREAKER = 10, SPACE_DRUGS = 10) = 3, // = 3 means 3 times as common
+		list(HYPERZINE = 14),
+		list(TRICORDRAZINE = 30),
+		list(SYNTHOCARISOL = 10, BICARIDINE = 10),
+		list(KELOTANE = 10, DERMALINE = 10),
+		list(AMINOCYPRINIDOL = 1, NUTRIMENT = 10),
+		list(IMPEDREZENE = 10),
+		list(RADIUM = 10),
+		list(IMIDAZOLINE = 10),
+		list(LITHOTORCRAZINE = 20, GREYVODKA = 20),
+		list(OXYCODONE = 15),
+		list(STOXIN = 20),
+		list(CHILLWAX = 20),
+		list(CRYPTOBIOLIN = 10),
+		list(HEMOSCYANINE = 20),
+		list(MUTAGEN = 10),
+		list(ZOMBIEPOWDER = 10),
+		list(FROSTOIL = 15),
+		list(REZADONE = 7),
+		list(ANTHRACENE = 25),
+		list(NEUROTOXIN = 15),
+		list(NUKA_COLA = 15),
+		list(PHAZON = 10),
+		list(SILENCER = 10),
+		list(DISCOUNT = 50),
+		list(IRON = 25, URANIUM = 25),
+		list(PHOSPHORUS = 10, POTASSIUM = 10, SUGAR = 10),
+		list(LUBE = 10, FLUOROSURFACTANT = 10, WATER = 10),
+		list(SPIDERS = 10) = 0.5, // = 0.5 means 50% as common
+		list(FISHBLEACH = 5) = 0.5,
+		list(DETCOFFEE = 5) = 0.5, // you can hear it just by reading this
+		list(POTASSIUM = 15, WATER = 15) = 0.25,
+		list(BLEACH = 10, AMMONIA = 10) = 0.25,
+		list(DEGENERATECALCIUM = 3) = 0.25
+	)
+
+/obj/item/weapon/reagent_containers/pill/random/maintenance/New()
+	. = ..()
+	name = "[pick(300;"floor", "funny", "mystery", "adventure", "suspicious", "happy happy", "double-dog dare")] pill"
+	desc = pick(300;"A strange pill found in the depths of maintenance.", "Just what the doctor ordered.", "Hey, look! Free healthcare!", "For best results, take one as close to noon as possible.")
+	icon_state = "pill[rand(20,40)]"
 
 /obj/item/weapon/reagent_containers/pill/nanobot
 	name = "nanobot pill"
