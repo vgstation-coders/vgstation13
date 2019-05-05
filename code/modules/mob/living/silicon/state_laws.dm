@@ -132,6 +132,7 @@
 			var/mob/living/silicon/robot/R = user
 			temp_laws = R.connected_ai.laws
 			state_laws_ui.use_laws_from_ai = FALSE
+			hash = state_laws_ui.compute_hash(temp_laws) //use the AI's laws' hash instead
 		var/list/tmplist = new/list()
 		if(temp_laws.zeroth)
 			tmplist[++tmplist.len] = list("text" = "0. [temp_laws.zeroth]", "enabled" = TRUE) //oh dear this syntax
