@@ -99,26 +99,24 @@ datum/vgassembly/Topic(href,href_list)
 	else if(href_list["setO"])
 		var/datum/vgcomponent/out = locate(href_list["setO"])
 		if(!out)
-			message_admins("no out")
 			return
 
 		if(!(href_list["output"] in out._output))
-			message_admins("inv output")
 			return
 
 		var/list/refs = list()
-		for(var/datum/vgc in _vgcs)
+		for(var/datum/vgcomponent/vgc in _vgcs)
 			if(vgc == out)
 				continue //dont wanna assign to ourself, or do we?
 			refs += "\ref[vgc]"
-		var/target = input("Select which component you want to output to.", "Select Target Component", 0) in refs
-		if(!target || locate(target))
-			message_admins("no target")
+		var/target = input(usr, "Select which component you want to output to.", "Select Target Component", 0) in refs
+		if(!target || !locate(target))
 			return
 		
 		var/input = input("Select which input you want to target.", "Select Target Input", "main") in locate(target)._input
 
 		out.setOutput(href_list["output"], locate(target), input)
+		updateCurcuit(usr)
 
 
 datum/vgassembly/proc/touched(var/mob/user)

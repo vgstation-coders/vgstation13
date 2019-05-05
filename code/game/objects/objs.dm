@@ -86,37 +86,38 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
 
-/obj/attackby(obj/item/weapon/W, mob/user)
-	if(!vga && istype(W, /obj/item/vgc_assembly))
-		vga = W.vga
+/obj/attackby(obj/item/O, mob/user)
+	if(!vga && istype(O, /obj/item/vgc_assembly))
+		vga = O.vga
 		vga._parent = src
-		to_chat(user, "You install \the [W] into \the [src].")
-		qdel(W)
+		to_chat(user, "You install \the [O] into \the [src].")
+		qdel(O)
 		return 1
 	if(vga && istype(vga, /datum/vgassembly))
-		if(istype(W, /obj/item/vgc_obj))
-			var/obj/item/vgc_obj/CO = W
+		if(istype(O, /obj/item/vgc_obj))
+			var/obj/item/vgc_obj/CO = O
 			vga._vgcs += CO.vgc
-			to_chat(user, "You install \the [W] into the [vga].")
-			qdel(W)
+			to_chat(user, "You install \the [O] into the [vga].")
+			qdel(O)
 			return 1
-		else if(istype(W, /obj/item/vgc_logictool))
+		else if(istype(O, /obj/item/vgc_logictool))
 			vga.showCircuit(user)
-			to_chat(user, "You bring up the circuit on \the [W].")
+			to_chat(user, "You bring up the circuit on \the [O].")
 			return 1
 		else
-			vga.touched(user)
-	if(can_take_pai && istype(W, /obj/item/device/paicard))
+			vga.touched(O, user)
+	if(can_take_pai && istype(O, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
 			return
 
-		if(user.drop_item(W))
-			to_chat(user, "You insert \the [W] into a slot in \the [src].")
-			install_pai(W)
-			state_controls_pai(W)
+		if(user.drop_item(O))
+			to_chat(user, "You insert \the [O] into a slot in \the [src].")
+			install_pai(O)
+			state_controls_pai(O)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
-	if(W)
+	if(O)
+		var/obj/item/weapon/W = O
 		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 		if(W.material_type)
 			W.material_type.on_use(W, src, user)
