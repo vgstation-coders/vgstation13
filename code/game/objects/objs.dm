@@ -96,7 +96,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(vga && istype(vga, /datum/vgassembly))
 		if(istype(O, /obj/item/vgc_obj))
 			var/obj/item/vgc_obj/CO = O
-			vga._vgcs += CO.vgc
+			CO.vgc.Install(vga)
 			to_chat(user, "You install \the [O] into the [vga].")
 			qdel(O)
 			return 1

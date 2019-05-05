@@ -6,6 +6,7 @@
 	icon_state = "remote_3b"
 
 /obj/item/vgc_assembly/New(var/datum/vgassembly/nvga = new ())
+	..()
 	if(!istype(nvga, /datum/vgassembly))
 		nvga = new /datum/vgassembly()
 	vga = nvga
@@ -27,6 +28,7 @@
 	var/datum_type = /datum/vgcomponent
 
 /obj/item/vgc_obj/New(var/datum/vgcomponent/nvgc)
+	..()
 	if(!istype(nvgc, datum_type))
 		nvgc = new datum_type()
 	vgc = nvgc
