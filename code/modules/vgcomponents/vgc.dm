@@ -81,17 +81,18 @@ datum/vgcomponent/proc/rebuildOutputs()
 
 datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 	if(!_output[target])
-		return
+		return 0
 
 	if(_output[target][1]._busy)
-		return
+		return 0
 
-	if(_assembly._vgcs.Find(_output[target][1])) //component no longer in vga apparently
+	if(!_assembly._vgcs.Find(_output[target][1])) //component no longer in vga apparently
 		_output[target] = null
-		return
+		return 0
 
-	var/proc_string = _output[target][1]._input[_output[target[2]]]
+	var/proc_string = _output[target][1]._input[_output[target][2]]
 	call(_output[target][1], proc_string)(signal) //oh boy what a line
+	return 1
 
 datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
@@ -112,7 +113,7 @@ datum/vgcomponent/proc/openSettings(var/mob/user)
 
 //default input path
 datum/vgcomponent/proc/main(var/signal)
-	to_chat(world, "somehow [src]'s default input got called, altough it was never set.'") //yes i know dont judge me, i am working with datums here
+	message_admins("somehow [src]'s default input got called, altough it was never set.'") //yes i know dont judge me, i am working with datums here
 	return
 
 /*
@@ -156,7 +157,7 @@ idea shamelessly copied from nexus
 
 /datum/vgcomponent/debugger/main(var/signal)
 	if(spam)
-		to_chat(world, "received signal:[signal] | <a HREF='?src=\ref[src];pause=1'>\[Toggle Output\]</a>")
+		message_admins("received signal:[signal] | <a HREF='?src=\ref[src];pause=1'>\[Toggle Output\]</a>")
 
 /datum/vgcomponent/debugger/Topic(href, href_list)
 	. =..()
