@@ -21,6 +21,7 @@
 /datum/state_laws_ui
 	var/freeform = FALSE //whether the UI is in freeform mode
 	var/list/selected_laws = null //list of currently selected laws
+	var/laws_hash = null //a hash of the last laws used to form our default laws, to keep track of law changes
 	var/freeform_editing_unlocked = FALSE //whether the freeform editing textarea is active
 	var/list/preset_laws = null //list of preset lawsets
 	var/radio_key = ";" //string prefixed to our say() messages to send them on radio channels, sanity checked
@@ -51,6 +52,9 @@
 		if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
 			tmplist["laws"].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
 		preset_laws[++preset_laws.len] = tmplist
+
+/datum/state_laws_ui/proc/compute_hash(var/datum/ai_laws/laws)
+	return md5("[laws.zeroth][laws.ion.Join("")][laws.inherent.Join("")][laws.supplied.Join("")]")
 
 /mob/living/silicon/proc/state_laws_Topic(href, href_list)
 	if(href_list["toggle_mode"])
@@ -117,6 +121,10 @@
 			state_laws_ui.has_linked_ai = TRUE
 		else
 			state_laws_ui.has_linked_ai = FALSE
+	var/hash = state_laws_ui.compute_hash(laws)
+	if(state_laws_ui.laws_hash != hash) //if our laws changed since last check
+		state_laws_ui.selected_laws = null
+		state_laws_ui.laws_hash = hash
 	if(state_laws_ui.selected_laws == null)
 		var/datum/ai_laws/temp_laws = laws //duplicate the laws so we don't edit them
 		if(isrobot(user) && state_laws_ui.has_linked_ai && state_laws_ui.use_laws_from_ai)
