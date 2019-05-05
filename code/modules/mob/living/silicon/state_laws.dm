@@ -121,10 +121,11 @@
 			state_laws_ui.has_linked_ai = TRUE
 		else
 			state_laws_ui.has_linked_ai = FALSE
+
 	var/hash = state_laws_ui.compute_hash(laws)
 	if(state_laws_ui.laws_hash != hash) //if our laws changed since last check
 		state_laws_ui.selected_laws = null
-		state_laws_ui.laws_hash = hash
+
 	if(state_laws_ui.selected_laws == null)
 		var/datum/ai_laws/temp_laws = laws //duplicate the laws so we don't edit them
 		if(isrobot(user) && state_laws_ui.has_linked_ai && state_laws_ui.use_laws_from_ai)
@@ -145,6 +146,7 @@
 			tmplist[++tmplist.len] = list("text" = "[lawnum]. [law]", "enabled" = TRUE)
 			lawnum++
 		state_laws_ui.selected_laws = tmplist
+		state_laws_ui.laws_hash = hash //update hash to match the reset laws
 
 	if(state_laws_ui.freeform == null)
 		state_laws_ui.freeform = FALSE
