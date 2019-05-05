@@ -2,14 +2,11 @@
 /obj/item/vgc_assembly
 	name = "vg-station component assembly"
 	desc = "holds alot of components" //maybe make this show the circuit someday
-	icon = 'icons/obj/assemblies/new_assemblies.dmi'
-	icon_state = "infrared"
+	icon = 'icons/obj/remote.dmi'
+	icon_state = "remote_3b"
 
-/obj/item/vgc_assembly/New(var/datum/vgassembly/nvga)
-	if(!nvga)
-		vga = new ()
-	else
-		vga = nvga
+/obj/item/vgc_assembly/New(var/datum/vgassembly/nvga = new ())
+	vga = nvga
 
 /obj/item/vgc_assembly/Destroy()
 	vga = null
@@ -25,8 +22,9 @@
 	icon = 'icons/obj/assemblies/new_assemblies.dmi'
 	icon_state = "circuit_+"
 	var/datum/vgcomponent/vgc = null
+	var/datum_type = /datum/vgcomponent
 
-/obj/item/vgc_obj/New(var/datum/vgcomponent/nvgc)
+/obj/item/vgc_obj/New(var/datum/vgcomponent/nvgc = new datum_type())
 	vgc = nvgc
 
 /obj/item/vgc_obj/Destroy()
@@ -36,12 +34,13 @@
 /obj/item/vgc_obj/door_controller
 	name="door controller"
 	desc="controls doors"
+	datum_type = /datum/vgcomponent/doorController
 
 /obj/item/vgc_obj/door_controller/attackby(obj/item/weapon/W, mob/user) //setting access
 	if(!vgc)
 		return //how
 	
-	if(!istype(vgc, /datum/vgcomponent/doorController))
+	if(!istype(vgc, datum_type))
 		return
 
 	if(!istype(W, /obj/item/weapon/card/id))
@@ -53,14 +52,18 @@
 /obj/item/vgc_obj/debugger
 	name="debugger"
 	desc="you should not have this"
+	datum_type = /datum/vgcomponent/debugger
 
 /obj/item/vgc_obj/signaler
 	name="signaler"
 	desc="receives and sends signals"
+	datum_type = /datum/vgcomponent/signaler
 
 /obj/item/vgc_logictool
 	name="logictool"
 	desc="to look at embedded assemblies"
+	icon = 'icons/obj/pipe-item.dmi'
+	icon_state = "meter"
 
 /obj/item/vgc_assembly/doorTest/New()
 	var/datum/vgassembly/A = new ()
@@ -78,6 +81,5 @@
 	var/datum/vgcomponent/debugger/D = new ()
 	var/datum/vgcomponent/signaler/S = new ()
 	D.Install(vga)
-	D.saved_access = get_absolutely_all_accesses()
 	S.Install(vga) //default 1457 30
 	S.setOutput("signaled", D)
