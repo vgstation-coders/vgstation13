@@ -1096,9 +1096,16 @@
 
 // Safe /////////////////////////////////////////////////////
 //Does not come with a safe.
-/obj/abstract/map/spawner/safe/any
-	name = "safe any spawner "
+
+/obj/abstract/map/spawner/safe
+	name = "safe template spawner"
 	icon_state = "safe"
+	amount = 1
+	chance = 100
+	jiggle = 0
+
+/obj/abstract/map/spawner/safe/any
+	name = "safe any spawner"
 	to_spawn = list(
 		/obj/item/weapon/storage/pill_bottle/creatine,
 		/obj/item/weapon/storage/pill_bottle/nanobot,
@@ -1145,10 +1152,26 @@
 		/obj/item/mounted/frame/painting
 )
 
+/obj/abstract/map/spawner/safe/any/box
+	name = "safe any spawner (boxstation)"
+
+/obj/abstract/map/spawner/safe/any/packed
+	name = "safe any spawner (packed)"
+
+/obj/abstract/map/spawner/safe/any/deff
+	name = "safe any spawner (defficiency)"
+
+/obj/abstract/map/spawner/safe/any/meta
+	name = "safe any spawner (metaclub)"
+
+/obj/abstract/map/spawner/safe/any/roid
+	name = "safe any spawner (asteroid)"
+
+/obj/abstract/map/spawner/safe/any/bagel
+	name = "safe any spawner (bagel)"
 
 /obj/abstract/map/spawner/safe/medical
 	name = "safe medical spawner"
-	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/storage/pill_bottle/creatine,
 	/obj/item/weapon/storage/pill_bottle/nanobot,
 	/obj/item/weapon/storage/firstaid/adv,
@@ -1160,10 +1183,31 @@
 	/obj/item/voucher/free_item/medical_safe
 )
 
+/obj/abstract/map/spawner/safe/medical/box
+	name = "safe medical spawner (boxstation)"
+	chance = 75
+
+/obj/abstract/map/spawner/safe/medical/packed
+	name = "safe medical spawner (packed)"
+	chance = 75
+
+/obj/abstract/map/spawner/safe/medical/deff
+	name = "safe medical spawner (defficiency)"
+	chance = 75
+
+/obj/abstract/map/spawner/safe/medical/meta
+	name = "safe medical spawner (metaclub)"
+	chance = 75
+
+/obj/abstract/map/spawner/safe/medical/roid
+	name = "safe medical spawner (asteroid)"
+
+/obj/abstract/map/spawner/safe/medical/bagel
+	name = "safe medical spawner (bagel)"
+
 
 /obj/abstract/map/spawner/safe/food
 	name = "safe food spawner"
-	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 	/obj/item/voucher/free_item/snack,
 	/obj/item/voucher/free_item/hot_drink,
@@ -1177,9 +1221,27 @@
 	/obj/item/weapon/reagent_containers/food/snacks/potentham
 )
 
+/obj/abstract/map/spawner/safe/food/box
+	name = "safe food spawner (boxstation)"
+
+/obj/abstract/map/spawner/safe/food/packed
+	name = "safe food spawner (packed)"
+
+/obj/abstract/map/spawner/safe/food/deff
+	name = "safe food spawner (defficiency)"
+
+/obj/abstract/map/spawner/safe/food/meta
+	name = "safe food spawner (metaclub)"
+
+/obj/abstract/map/spawner/safe/food/roid
+	name = "safe food spawner (asteroid)"
+
+/obj/abstract/map/spawner/safe/food/bagel
+	name = "safe food spawner (bagel)"
+
+
 /obj/abstract/map/spawner/safe/weapon
 	name = "safe weapon spawner"
-	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/shield/energy,
 	/obj/item/weapon/gun/energy/gun/nuclear,
 	/obj/item/weapon/gun/projectile/mateba,
@@ -1194,9 +1256,31 @@
 	/obj/item/weapon/gun/siren
 )
 
+/obj/abstract/map/spawner/safe/weapon/box
+	name = "safe weapon spawner (boxstation)"
+	chance = 50
+
+/obj/abstract/map/spawner/safe/weapon/packed
+	name = "safe weapon spawner (packed)"
+	chance = 50
+
+/obj/abstract/map/spawner/safe/weapon/deff
+	name = "safe weapon spawner (defficiency)"
+	chance = 50
+
+/obj/abstract/map/spawner/safe/weapon/meta
+	name = "safe weapon spawner (metaclub)"
+	chance = 50
+
+/obj/abstract/map/spawner/safe/weapon/roid
+	name = "safe weapon spawner (asteroid)"
+
+/obj/abstract/map/spawner/safe/weapon/bagel
+	name = "safe weapon spawner (bagel)"
+
+
 /obj/abstract/map/spawner/safe/clothing
 	name = "safe clothing spawner"
-	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/shield/energy,
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
@@ -1213,9 +1297,27 @@
 	/obj/abstract/loadout/dredd_gear
 )
 
+/obj/abstract/map/spawner/safe/clothing/box
+	name = "safe clothing spawner (boxstation)"
+
+/obj/abstract/map/spawner/safe/clothing/packed
+	name = "safe clothing spawner (packed)"
+
+/obj/abstract/map/spawner/safe/clothing/deff
+	name = "safe clothing spawner (defficiency)"
+
+/obj/abstract/map/spawner/safe/clothing/meta
+	name = "safe clothing spawner (metaclub)"
+
+/obj/abstract/map/spawner/safe/clothing/roid
+	name = "safe clothing spawner (asteroid)"
+
+/obj/abstract/map/spawner/safe/clothing/bagel
+	name = "safe clothing spawner (bagel)"
+
+
 /obj/abstract/map/spawner/safe/medal
 	name = "safe medal spawner"
-	icon_state = "safe"
 	to_spawn = list(/obj/item/clothing/accessory/medal,
 	/obj/item/clothing/accessory/medal/conduct,
 	/obj/item/clothing/accessory/medal/bronze_heart,
@@ -1227,6 +1329,26 @@
 	/obj/item/clothing/accessory/medal/gold/captain,
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
+
+/obj/abstract/map/spawner/safe/medal/box
+	name = "safe medal spawner (boxstation)"
+
+/obj/abstract/map/spawner/safe/medal/packed
+	name = "safe medal spawner (packed)"
+
+/obj/abstract/map/spawner/safe/medal/deff
+	name = "safe medal spawner (defficiency)"
+
+/obj/abstract/map/spawner/safe/medal/meta
+	name = "safe medal spawner (metaclub)"
+
+/obj/abstract/map/spawner/safe/medal/roid
+	name = "safe medal spawner (asteroid)"
+
+/obj/abstract/map/spawner/safe/medal/bagel
+	name = "safe medal spawner (bagel)"
+
+
 //Food spawners////////////////////////////////////
 /obj/abstract/map/spawner/food/voxfood //spawns food for the vox raiders
 	name = "vox food spawner"
