@@ -207,7 +207,7 @@
 	var/mob/M = src.loc
 
 	if(!M || !ismob(M))
-		if(prob(90))
+		if(prob(5))
 			signal()
 		deadman = 0
 		processing_objects.Remove(src)
