@@ -32,34 +32,37 @@ datum/vgassembly/proc/updateCurcuit(var/mob/user)
 		return
 
 	var/datum/browser/W = windows[uid]
-	var/content = "Components:<br>"
+	var/content = "Components:<br><dl>"
 	for(var/datum/vgcomponent/vgc in _vgcs)
-		content += "[vgc] \ref[vgc]"
+		content += "<dt>[vgc] \ref[vgc]"
 		if(vgc.has_settings)
 			content += "<a HREF='?src=\ref[src];openC=\ref[vgc]'>\[Open Settings\]</a>"
-		content += "<a HREF='?src=\ref[src];detach=\ref[vgc]'>\[Detach\]</a><br>"
+		content += "<a HREF='?src=\ref[src];detach=\ref[vgc]'>\[Detach\]</a></dt><dd>"
 
+		content += "<dl>"
 		if(vgc._input.len > 0)
-			content += "Inputs:<tab id=\ref[vgc]_inputs><br>"
+			content += "<dt>Inputs:</dt>"
 			for(var/vin in vgc._input)
-				content += "<tab to=\ref[vgc]_inputs>[vin]<br>"
+				content += "<dd>[vin]</dd>"
 		else
-			content += "No Inputs<br>"
+			content += "<dt>No Inputs</dt>"
 
 		if(vgc._output.len > 0)
-			content += "Outputs:<tab id=\ref[vgc]_outputs><br>"
+			content += "<dt>Outputs:</dt>"
 			for(var/out in vgc._output)
-				content += "<tab to=\ref[vgc]_outputs>[out] "
+				content += "<dd>[out] "
 				if(vgc._output[out])
 					var/tar = vgc._output[out][2]
 					var/tar_obj = vgc._output[out][1]
 					content += "assigned to [tar] of \ref[tar_obj] <a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Reassign\]</a>"
 				else
 					content += "<a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Assign\]</a>"
-				content += "<br>"
+				content += "</dd>"
 		else
 			content += "No Outputs<br>"
+		content += "</dl></dd>"
 
+	content += "</dl>"
 	if(_parent)
 		content += "<a HREF='?src=\ref[src];detach=\ref[src]'>\[Detach From Object\]</a> "
 	content += "<a HREF='?src=\ref[src];close=1'>\[Close\]</a>"
@@ -96,9 +99,11 @@ datum/vgassembly/Topic(href,href_list)
 	else if(href_list["setO"])
 		var/datum/vgcomponent/out = locate(href_list["setO"])
 		if(!out)
+			message_admins("no out")
 			return
 
 		if(!(href_list["output"] in out._output))
+			message_admins("inv output")
 			return
 
 		var/list/refs = list()
@@ -108,6 +113,7 @@ datum/vgassembly/Topic(href,href_list)
 			refs += "\ref[vgc]"
 		var/target = input("Select which component you want to output to.", "Select Target Component", 0) in refs
 		if(!target || locate(target))
+			message_admins("no target")
 			return
 		
 		var/input = input("Select which input you want to target.", "Select Target Input", "main") in locate(target)._input
@@ -180,6 +186,9 @@ datum/vgcomponent/proc/getPhysical() //do override with wanted type
 //basically removes all assigned outputs which aren't in the assembly anymore
 datum/vgcomponent/proc/rebuildOutputs()
 	for(var/O in _output)
+		if(!_output[O])
+			continue
+
 		if(_output[O][1]._assembly != src._assembly)
 			_output[O] = null
 
