@@ -32,8 +32,8 @@
 			if(C)
 				C.dir = turn(C.dir, angle)
 				spawn(30 SECONDS) //This will confuse someone for a while and end up very annoying
-				if(C)
-					C.dir = turn(C.dir, -angle)
+					if(C)
+						C.dir = turn(C.dir, -angle)
 
 /spell/targeted/disorient/empower_spell()
 	spell_levels[Sp_POWER]++
