@@ -29,6 +29,8 @@
 	var/blood_usable = STARTING_BLOOD
 	var/blood_total = STARTING_BLOOD
 
+	var/list/feeders = list()
+
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
@@ -197,17 +199,29 @@
 		if(!target.vessel.get_reagent_amount(BLOOD))
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
+		if (!(target in feeders))
+			feeders[target] = 0
 		if(target.stat < DEAD) //alive
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
-			blood_total += blood
+			if (feeders[target] < 100)
+				blood_total += blood
+			else
+				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
 			blood_usable += blood
+			target.adjustBruteLoss(1)
+			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
+			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
-			blood_total += blood
+			if (feeders[target] < 100)
+				blood_total += blood
+			else
+				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
+		feeders[target] += blood
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,50)
+		target.vessel.remove_reagent(BLOOD,30)
 		update_vamp_hud()
 
 	draining = null
