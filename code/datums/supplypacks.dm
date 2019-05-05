@@ -1018,6 +1018,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_security)
 	group = "Security"
 
+/datum/supply_packs/secbiosuits
+	name = "Biohazard Emergency Biosuits"
+	contains = list(/obj/item/clothing/head/bio_hood/security,
+					/obj/item/clothing/head/bio_hood/security,
+					/obj/item/clothing/head/bio_hood/security,
+					/obj/item/clothing/suit/bio_suit/security,
+					/obj/item/clothing/suit/bio_suit/security,
+					/obj/item/clothing/suit/bio_suit/security)
+	cost = 85
+	containertype = /obj/structure/closet/crate/secure/gear
+	containername = "Security Biosuits"
+	group = "Security"
+
 //////HOSPITALITY//////
 
 /datum/supply_packs/food
@@ -1711,6 +1724,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/largecrate/skele_stand
 	containername = "hanging skeleton model crate"
+	group = "Medical"
+
+/datum/supply_packs/biosuits
+	name = "Biosuits"
+	contains = list(/obj/item/clothing/head/bio_hood,
+					/obj/item/clothing/head/bio_hood,
+					/obj/item/clothing/head/bio_hood,
+					/obj/item/clothing/suit/bio_suit,
+					/obj/item/clothing/suit/bio_suit,
+					/obj/item/clothing/suit/bio_suit)
+	cost = 85
+	containertype = /obj/structure/closet/crate/medical
+	containername = "Regular Biosuits"
 	group = "Medical"
 
 //////SCIENCE//////
