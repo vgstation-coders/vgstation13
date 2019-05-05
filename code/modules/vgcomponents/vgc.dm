@@ -42,7 +42,9 @@ datum/vgassembly/proc/updateCurcuit(var/mob/user)
 		content += "<dt>[vgc] \ref[vgc]"
 		if(vgc.has_settings)
 			content += "<a HREF='?src=\ref[src];openC=\ref[vgc]'>\[Open Settings\]</a>"
-		content += "<a HREF='?src=\ref[src];detach=\ref[vgc]'>\[Detach\]</a></dt><dd>"
+		if(vgc.has_touch)
+			content += "<a HREF='?src=\ref[src];touch=\ref[vgc]'>\[[vgc.touch_enabled ? "Disable" : "Enable"] Touch\]</a>"
+		content += "<a HREF='?src=\ref[src];detach=\ref[vgc]'>\[Detach\]</a></dt><dd>" //add an ontouch toggle TODO
 
 		content += "<dl>"
 		if(vgc._input.len > 0)
@@ -122,6 +124,12 @@ datum/vgassembly/Topic(href,href_list)
 
 		out.setOutput(href_list["output"], locate(target), input)
 		updateCurcuit(usr)
+	else if(href_list["touch"])
+		var/datum/vgcomponent/vgc = locate(href_list["touch"])
+		if(!vgc || !vgc.has_touch)
+			return
+		
+		vgc.touch_enabled = !vgc.touch_enabled
 
 
 datum/vgassembly/proc/touched(var/mob/user)
@@ -141,8 +149,8 @@ if you make a child, you will need to override
 datum/vgcomponent
 	var/name = "VGComponent" //used in the ui
 	var/datum/vgassembly/_assembly //obj component is attached to
-	var/list/_input //input to select from
-	var/list/_output //list of outputs to assign
+	var/list/_input = list()//input to select from
+	var/list/_output = list()//list of outputs to assign
 	var/_busy = 0 //if machine is busy, for components who need time to properly function
 	var/list/settings = list() //list of open uis, indexed with \ref[user]
 	var/has_settings = 0 //enables openSettings button in assembly ui
@@ -221,7 +229,7 @@ datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, va
 	if(!(target in vgc._input))
 		return 0
 
-	if(!_assembly._vgcs.Find(vgc))
+	if(!_assembly || !_assembly._vgcs.Find(vgc))
 		return //how
 
 	_output[out] = list(vgc, target)
