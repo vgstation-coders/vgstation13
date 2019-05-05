@@ -331,7 +331,11 @@
 			obj_holder.AddObjective(new_objective, src)
 			message_admins("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
 			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
-		else if (obj_holder.faction || (istype(new_objective, /datum/objective/custom) && new_objective.faction)) //if its an explicit faction obj OR a custom objective with a faction modifier
+		else if (new_objective.faction && istype(new_objective, /datum/objective/custom)) //is it a custom objective with a faction modifier?
+			new_objective.faction.AppendObjective(new_objective)
+			message_admins("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction) //or is it just an explicit faction obj? 
 			obj_holder.faction.AppendObjective(new_objective)
 			message_admins("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
@@ -370,16 +374,22 @@
 			var/list/prev_objectives = R.objectives.objectives.Copy()
 			R.ForgeObjectives()
 			var/list/unique_objectives_role = find_unique_objectives(R.objectives.objectives, prev_objectives)
-			for (var/datum/objective/objective in unique_objectives_role)
-				log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [objective.explanation_text]")
+			if (!unique_objectives_role.len)
+				alert(usr, "No new objectives generated.", "Alert", "OK")
+			else
+				for (var/datum/objective/objective in unique_objectives_role)
+					log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [objective.explanation_text]")
 		else if(istype(owner, /datum/faction))
 			var/datum/faction/F = owner
 			var/list/prev_objectives = F.GetObjectives().Copy()
 			F.forgeObjectives()
 			var/list/unique_objectives_faction = find_unique_objectives(F.GetObjectives(), prev_objectives)
-			for (var/datum/objective/objective in unique_objectives_faction)
-				message_admins("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
-				log_admin("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
+			if (!unique_objectives_faction.len)
+				alert(usr, "No new objectives generated.", "Alert", "OK")
+			else 
+				for (var/datum/objective/objective in unique_objectives_faction)
+					message_admins("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
+					log_admin("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
 
 	else if(href_list["role"]) //Something role specific
 		var/datum/role/R = locate(href_list["role"])

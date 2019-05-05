@@ -4968,7 +4968,11 @@
 			alert("Couldn't set-up a proper target.", "New Objective")
 			return
 
-		if (obj_holder.faction || (istype(new_objective, /datum/objective/custom) && new_objective.faction)) //if its an explicit faction obj OR a custom objective with a faction modifier
+		if (new_objective.faction && istype(new_objective, /datum/objective/custom)) //is it a custom objective with a faction modifier?
+			new_objective.faction.AppendObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction) //or is it just an explicit faction obj? 
 			obj_holder.faction.AppendObjective(new_objective)
 			message_admins("[key_name_admin(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[key_name(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
@@ -5021,9 +5025,12 @@
 		var/list/prev_objectives = F.GetObjectives().Copy()
 		F.forgeObjectives()
 		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
-		for (var/datum/objective/objective in unique_objectives)
-			message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
-			log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+		if (!unique_objectives.len)
+			alert(usr, "No new objectives generated.", "", "OK")
+		else 
+			for (var/datum/objective/objective in unique_objectives)
+				message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+				log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
 		check_antagonists()	
 
 	if(href_list["wages_enabled"])

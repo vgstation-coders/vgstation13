@@ -75,6 +75,6 @@
 		else if (faction)
 			dat += "<b> Manage faction: </b> <br/>"
 			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add faction objective)</a> <br/>"
-		dat += "<a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(generate objectives)</a> <br/>"
-		dat += "<a href='?src=\ref[M];obj_announce=1;[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(annouce objectives)</a><br/>"
+		dat += "<a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];obj_owner=[faction?"\ref[faction]":"\ref[R]"]'>(generate objectives)</a> <br/>"
+		dat += "<a href='?src=\ref[M];obj_announce=1;obj_owner=[faction?"\ref[faction]":"\ref[R]"]'>(annouce objectives)</a><br/>"
 	return dat
