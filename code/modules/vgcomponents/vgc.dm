@@ -10,6 +10,7 @@ VGAssembly
 ==========
 */
 datum/vgassembly
+	var/name = "VGAssembly"
 	var/obj/_parent
 	var/list/_vgcs = list() //list of vgcs contained inside
 	var/list/windows = list() //list of open uis, indexed with \ref[user]
@@ -51,7 +52,7 @@ datum/vgassembly/proc/updateCurcuit(var/mob/user)
 		if(vgc._input.len > 0)
 			content += "<dt>Inputs:</dt>"
 			for(var/vin in vgc._input)
-				content += "<dd>[vin]</dd>"
+				content += "<dd>[vin] <a HREF=?src=\ref[src];debug=\ref[vgc];input=[vin]>\[Pulse\]</a></dd>"
 		else
 			content += "<dt>No Inputs</dt>"
 
@@ -62,7 +63,7 @@ datum/vgassembly/proc/updateCurcuit(var/mob/user)
 				if(vgc._output[out])
 					var/tar = vgc._output[out][2]
 					var/tar_obj = vgc._output[out][1]
-					content += "assigned to [tar] of \ref[tar_obj] <a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Reassign\]</a>"
+					content += "assigned to [tar] of \ref[tar_obj] <a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Reassign\]</a> <a HREF='?src=\ref[src];clear=\ref[vgc];output=[out]'>\[Clear\]</a>"
 				else
 					content += "<a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Assign\]</a>"
 				content += "</dd>"
@@ -90,12 +91,14 @@ datum/vgassembly/Topic(href,href_list)
 			return
 
 		if(target == src) //detach assembly
+			to_chat(usr, "You detach \the [src.name] from \the [_parent.name].")
 			_parent.vga = null
 			_parent = null
 			var/obj/item/vgc_assembly/NewAss = new (src)
 			usr.put_in_hands(NewAss)
 		else //detach object
 			var/datum/vgcomponent/T = target
+			to_chat(usr, "You detach \the [T.name] from \the [src.name].")
 			var/obj/item/vgc_obj/NewObj = T.Uninstall()
 			usr.put_in_hands(NewObj)
 		updateCurcuit(usr)
@@ -103,6 +106,7 @@ datum/vgassembly/Topic(href,href_list)
 		var/datum/vgcomponent/vgc = locate(href_list["openC"])
 		if(!vgc)
 			return
+		to_chat(usr, "You open \the [vgc.name]'s settings.")
 		vgc.openSettings(usr)
 	else if(href_list["setO"])
 		var/datum/vgcomponent/out = locate(href_list["setO"])
@@ -123,7 +127,9 @@ datum/vgassembly/Topic(href,href_list)
 		
 		var/input = input("Select which input you want to target.", "Select Target Input", "main") in locate(target)._input
 
-		out.setOutput(href_list["output"], locate(target), input)
+		var/datum/vgcomponent/vgc = locate(target)
+		to_chat(usr, "You connect \the [out.name]'s [href_list["output"]] with \the [vgc.name]'s [input].")
+		out.setOutput(href_list["output"], vgc, input)
 		updateCurcuit(usr)
 	else if(href_list["touch"])
 		var/datum/vgcomponent/vgc = locate(href_list["touch"])
@@ -132,11 +138,31 @@ datum/vgassembly/Topic(href,href_list)
 		
 		vgc.touch_enabled = !vgc.touch_enabled
 		updateCurcuit(usr)
+	else if(href_list["debug"])
+		var/datum/vgcomponent/vgc = locate(href_list["debug"])
+		if(!vgc)
+			return
+
+		if(!href_list["input"] || !(href_list["input"] in vgc._input))
+			return
+
+		to_chat(usr, "You pulse [href_list["input"]] of [vgc.name].")
+		call(vgc, href_list["input"])(1)
+	else if(href_list["clear"])
+		var/datum/vgcomponent/vgc = locate(href_list["clear"])
+		if(!vgc)
+			return
+
+		if(!(href_list["output"] in vgc._output))
+			return
+
+		to_chat(usr, "You clear [href_list["output"]] of [vgc.name].")
+		vgc._output[href_list["output"]] = null
 
 
 datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
 	//execute touch events for components if they are enabled
-	for(var/vgc in _vgcs)
+	for(var/datum/vgcomponent/vgc in _vgcs)
 		if(!vgc.has_touch)
 			continue
 		
@@ -367,26 +393,6 @@ Button
 /datum/vgcomponent/button/toggle
 	name = "Togglebutton"
 	toggle = 1
-
-/*
-Radio receiver/sender
-embedded headset you can install/deinstall encryption keys into
-*/
-
-/*
-Speaker
-Yells received signals
-*/
-
-/*
-Sound synth
-plays selected sound on signal
-*/
-
-/*
-Movement Component
-make assemblies move??? - would only work on assemblies/specific subclasses
-*/
 
 /*
 ===================================================================
