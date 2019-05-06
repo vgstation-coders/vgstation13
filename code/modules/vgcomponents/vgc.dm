@@ -10,6 +10,14 @@ Doing my TODO here since i am offline
 obj
 	var/datum/vgassembly/vga = null //component assembly
 
+obj/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("timestopped")
+			if(vga)
+				vga.setTimestop(new_value)
+
 /*
 Base Assembly
 */
@@ -208,6 +216,10 @@ datum/vgassembly/proc/canAdd(var/datum/vgcomponent/vgc)
 				return 0
 	return 1
 
+datum/vgassembly/proc/setTimestop(var/timestop)
+	for(var/datum/vgcomponent/vgc in _vgcs)
+		vgc.timestopped = timestop
+
 /*
 Base Component
 */
@@ -227,6 +239,7 @@ datum/vgcomponent
 	var/has_touch = 0
 	var/touch_enabled = 0
 	var/obj_path = /obj/item/vgc_obj
+	var/timestopped = 0 //needed for processingobjs
 
 datum/vgcomponent/Destroy()
 	..()
@@ -269,6 +282,9 @@ datum/vgcomponent/proc/rebuildOutputs()
 			_output[O] = null
 
 datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
+	if(timestopped)
+		return 0
+
 	if(!_output[target])
 		return 0
 
