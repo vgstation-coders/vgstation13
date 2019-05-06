@@ -299,9 +299,6 @@
 		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
 		return
 
-	if(stopped)
-		return
-
 	src.being_built = new part.build_path(src)
 
 	src.busy = 1
@@ -343,11 +340,6 @@
 		src.being_built = null
 		last_made = part
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
-		sleep(2)
-		if(queue.len) //If there is still a queue, it will immediately start working on a new item with no delay
-			var/datum/design/D = queue_pop()
-			src.build_part(D)
-			return 1 //Currently a bug where if item is unavailable to be built it disappears. Alternatives did not work. Please fix it yourself - B2MTTF
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
