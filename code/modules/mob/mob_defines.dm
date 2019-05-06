@@ -325,4 +325,4 @@
 	attack_delayer  = new (1,ARBITRARILY_LARGE_NUMBER)
 	special_delayer = new (1,ARBITRARILY_LARGE_NUMBER)
 	clong_delayer   = new (10,ARBITRARILY_LARGE_NUMBER)
-	throw_delayer = new (0.3, ARBITRARILY_LARGE_NUMBER)
+	throw_delayer = new (3, ARBITRARILY_LARGE_NUMBER)
