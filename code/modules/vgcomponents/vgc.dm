@@ -4,6 +4,7 @@ Doing my TODO here since i am offline
 - add a list iterator components: if it receives a list, it will iterate over the contents sending them out
 - add a component to store vars
 - add a component that relays a signal and then sends one onFail or onSuccess
+- dunno if this is already online, but add a timer
 */
 
 obj
@@ -466,6 +467,8 @@ Keyboard
 	desc = "used to type stuff"
 	obj_path = /obj/item/vgc_obj/keyboard
 	_input = list()
+	has_touch = 1
+	touch_enabled = 1
 
 /datum/vgcomponent/keyboard/onTouch(var/obj/item/O, var/mob/user)
 	if(!user)
