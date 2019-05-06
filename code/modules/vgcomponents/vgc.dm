@@ -351,7 +351,32 @@ idea shamelessly copied from nexus - and modified
 	if(href_list["pause"])
 		spam = !spam
 
+/*
+Button
+*/
+/datum/vgcomponent/button
+	name = "Button"
+	var/toggle = 0
+	var/state = 1
 
+/datum/vgcomponent/New()
+	_output = list(
+		"main" = null
+	)
+
+/datum/vgcomponent/button/getPhysical()
+	return new /obj/item/vgc_obj/button(src)
+
+/datum/vgcomponent/button/onTouch(obj/item/O, mob/user)
+	handleOutput(signal = state)
+	if(toggle)
+		state = !state
+
+//togglebutton
+/datum/vgcomponent/button/toggle
+	name = "Togglebutton"
+	toggle = 1
+	
 /*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assemblies)
