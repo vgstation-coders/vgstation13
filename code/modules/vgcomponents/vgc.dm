@@ -157,7 +157,7 @@ datum/vgassembly/Topic(href,href_list)
 			return
 
 		to_chat(usr, "You clear [href_list["output"]] of [vgc.name].")
-		vgc._output[href_list["output"]] = null 
+		vgc._output[href_list["output"]] = null
 
 
 datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
@@ -188,23 +188,18 @@ VGComponent
 datum/vgcomponent
 	var/name = "VGComponent" //used in the ui
 	var/datum/vgassembly/_assembly //obj component is attached to
-	var/list/_input = list()//input to select from
-	var/list/_output = list()//list of outputs to assign
+	var/list/_input = list( //can be called by multiple components, save all your procs you want to be accessed here
+		"main" = "main"
+	)
+	var/list/_output = list( //can only point to one component: list(0 => ref to component, 1 => target), as can be seen in setOutput
+		"main" = null
+	)
 	var/_busy = 0 //if machine is busy, for components who need time to properly function
 	var/list/settings = list() //list of open uis, indexed with \ref[user]
 	var/has_settings = 0 //enables openSettings button in assembly ui
 	var/has_touch = 0
 	var/touch_enabled = 0
 	var/obj_path = /obj/item/vgc_obj
-
-datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/outputs
-	//_input["nameThatUserSees"] = "procname"
-	_input += list( //can be called by multiple components, save all your procs you want to be accessed here
-		"main" = "main"
-	)
-	_output += list( //can only point to one component: list(0 => ref to component, 1 => target), as can be seen in setOutput
-		"main" = null
-	)
 
 datum/vgcomponent/Destroy()
 	..()
@@ -298,8 +293,6 @@ datum/vgcomponent/doorController
 	name = "Doorcontroller"
 	var/list/saved_access = list() //ID.GetAccess()
 	obj_path = /obj/item/vgc_obj/door_controller
-
-datum/vgcomponent/doorController/New()
 	_input = list(
 		"open" = "open",
 		"close" = "close",
@@ -378,11 +371,7 @@ Button
 	var/toggle = 0
 	var/state = 1
 	obj_path = /obj/item/vgc_obj/button
-
-/datum/vgcomponent/New()
-	_output = list(
-		"main" = null
-	)
+	_input = list()
 
 /datum/vgcomponent/button/onTouch(obj/item/O, mob/user)
 	handleOutput(signal = state)
@@ -409,11 +398,6 @@ raw signaler
 	has_touch = 1
 	touch_enabled = 0
 	obj_path = /obj/item/vgc_obj/signaler
-
-/datum/vgcomponent/signaler/onTouch(var/obj/item/O, var/mob/user)
-	send()
-
-datum/vgcomponent/signaler/New()
 	_input = list(
 		"setFreq" = "setFreq", //receives freq
 		"setCode" = "setCode", //receives code
@@ -422,6 +406,11 @@ datum/vgcomponent/signaler/New()
 	_output = list(
 		"signaled" = null
 	)
+
+/datum/vgcomponent/signaler/onTouch(var/obj/item/O, var/mob/user)
+	send()
+
+datum/vgcomponent/signaler/New()
 	_signaler = new ()
 	_signaler.fingerprintslast = "VGAssembly" //for the investigation log TODO
 	_signaler.vgc = src //so we can hook into receive_signal
