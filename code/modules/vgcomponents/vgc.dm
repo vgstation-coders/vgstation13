@@ -15,6 +15,9 @@ datum/vgassembly
 	var/list/_vgcs = list() //list of vgcs contained inside
 	var/list/windows = list() //list of open uis, indexed with \ref[user]
 	var/size = ARBITRARILY_LARGE_NUMBER
+	//you can only use one or the other
+	var/list/allowed_components = list() // keep list empty to disable
+	var/list/banned_components = list() // keep list empty to disable
 
 datum/vgassembly/Destroy()
 	..()
@@ -180,6 +183,25 @@ datum/vgassembly/proc/UI_Update()
 
 datum/vgassembly/proc/hasSpace()
 	return ((size - _vgcs.len) > 0)
+
+datum/vgassembly/proc/canAdd(var/datum/vgcomponent/vgc)
+	if(!hasSpace())
+		return 0
+	
+	if(!vgc)
+		return 0
+	
+	if(allowed_components.len > 0)
+		for(var/c_type in allowed_components)
+			if(c_type == x.type)
+				return 1
+		return 0
+	else if(banned_components.len > 0)
+		for(var/c_type in banned_components)
+			if(c_type == x.type)
+				return 0
+	return 1
+
 /*
 ===========
 VGComponent
@@ -212,7 +234,7 @@ datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 	if(_assembly)
 		return 0 //how
 	
-	if(!A || !A.hasSpace())
+	if(!A || !A.canAdd(src))
 		return 0 //more plausible
 
 	_assembly = A
