@@ -54,6 +54,7 @@
 	
 	var/datum/vgcomponent/doorController/DC = vgc
 	DC.setAccess(W)
+	to_chat(user, "you set the doorcontroller's access")
 
 /obj/item/vgc_obj/debugger
 	name="debugger"
@@ -64,6 +65,11 @@
 	name="signaler"
 	desc="receives and sends signals"
 	datum_type = /datum/vgcomponent/signaler
+
+/obj/item/vgc_obj/button
+	name="button"
+	desc="press to send a signal"
+	datum_type = /datum/vgcomponent/button
 
 /obj/item/vgc_logictool
 	name="logictool"
