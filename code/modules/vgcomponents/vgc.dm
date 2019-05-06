@@ -13,6 +13,7 @@ datum/vgassembly
 	var/obj/_parent
 	var/list/_vgcs = list() //list of vgcs contained inside
 	var/list/windows = list() //list of open uis, indexed with \ref[user]
+	var/size = ARBITRARILY_LARGE_NUMBER
 
 datum/vgassembly/Destroy()
 	..()
@@ -150,6 +151,9 @@ datum/vgassembly/proc/UI_Update()
 			continue
 		
 		updateCurcuit(user)
+
+datum/vgassembly/proc/hasSpace()
+	return ((size - _vgcs.len) > 0)
 /*
 ===========
 VGComponent
@@ -187,7 +191,7 @@ datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 	if(_assembly)
 		return 0 //how
 	
-	if(!A)
+	if(!A || !A.hasSpace())
 		return 0 //more plausible
 
 	_assembly = A
@@ -363,7 +367,27 @@ Button
 /datum/vgcomponent/button/toggle
 	name = "Togglebutton"
 	toggle = 1
-	
+
+/*
+Radio receiver/sender
+embedded headset you can install/deinstall encryption keys into
+*/
+
+/*
+Speaker
+Yells received signals
+*/
+
+/*
+Sound synth
+plays selected sound on signal
+*/
+
+/*
+Movement Component
+make assemblies move??? - would only work on assemblies/specific subclasses
+*/
+
 /*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assemblies)
