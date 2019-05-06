@@ -154,11 +154,6 @@ datum/vgassembly/proc/UI_Update()
 ===========
 VGComponent
 ===========
-if you make a child, you will need to override
-- getPhysical
-- New() if you need to designate new/other inputs/outputs
-- main() if you want to use the default input
-- Destroy() if you got references to any objs and such (do supercall tho)
 */
 datum/vgcomponent
 	var/name = "VGComponent" //used in the ui
@@ -170,6 +165,7 @@ datum/vgcomponent
 	var/has_settings = 0 //enables openSettings button in assembly ui
 	var/has_touch = 0
 	var/touch_enabled = 0
+	var/obj_path = /obj/item/vgc_obj
 
 datum/vgcomponent/New() //ALWAYS supercall else you wont have the default input/outputs
 	//_input["nameThatUserSees"] = "procname"
@@ -209,10 +205,7 @@ datum/vgcomponent/proc/Uninstall() //don't override
 	A.rebuild()
 	A._vgcs -= src //now that we rebuilt, we can remove ourselves
 	A.UI_Update()
-	return getPhysical()
-
-datum/vgcomponent/proc/getPhysical() //do override with wanted type
-	return new /obj/item/vgc_obj(src)
+	return new obj_path(src)
 
 //basically removes all assigned outputs which aren't in the assembly anymore
 datum/vgcomponent/proc/rebuildOutputs()
@@ -274,6 +267,7 @@ Door control
 datum/vgcomponent/doorController
 	name = "Doorcontroller"
 	var/list/saved_access = list() //ID.GetAccess()
+	obj_path = /obj/item/vgc_obj/door_controller
 
 datum/vgcomponent/doorController/New()
 	_input = list(
@@ -281,9 +275,6 @@ datum/vgcomponent/doorController/New()
 		"close" = "close",
 		"toggle" = "toggle"
 	)
-
-datum/vgcomponent/doorController/getPhysical()
-	return new /obj/item/vgc_obj/door_controller(src)
 
 datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 	saved_access = ID.GetAccess()
@@ -337,9 +328,7 @@ idea shamelessly copied from nexus - and modified
 /datum/vgcomponent/debugger
 	name = "Debugger"
 	var/spam = 1
-
-/datum/vgcomponent/debugger/getPhysical()
-	return new /obj/item/vgc_obj/debugger(src)
+	obj_path = /obj/item/vgc_obj/debugger
 
 /datum/vgcomponent/debugger/main(var/signal)
 	if(spam)
@@ -358,14 +347,12 @@ Button
 	name = "Button"
 	var/toggle = 0
 	var/state = 1
+	obj_path = /obj/item/vgc_obj/button
 
 /datum/vgcomponent/New()
 	_output = list(
 		"main" = null
 	)
-
-/datum/vgcomponent/button/getPhysical()
-	return new /obj/item/vgc_obj/button(src)
 
 /datum/vgcomponent/button/onTouch(obj/item/O, mob/user)
 	handleOutput(signal = state)
@@ -391,6 +378,7 @@ raw signaler
 	var/obj/item/device/assembly/signaler/_signaler
 	has_touch = 1
 	touch_enabled = 0
+	obj_path = /obj/item/vgc_obj/signaler
 
 /datum/vgcomponent/signaler/onTouch(var/obj/item/O, var/mob/user)
 	send()
@@ -407,9 +395,6 @@ datum/vgcomponent/signaler/New()
 	_signaler = new ()
 	_signaler.fingerprintslast = "VGAssembly" //for the investigation log TODO
 	_signaler.vgc = src //so we can hook into receive_signal
-
-/datum/vgcomponent/signaler/getPhysical()
-	return new /obj/item/vgc_obj/signaler(src)
 
 /datum/vgcomponent/signaler/proc/setFreq(var/signal)
 	if(!isnum(signal))
