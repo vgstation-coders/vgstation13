@@ -454,8 +454,8 @@ Speaker
 	_output = list()
 
 /datum/vgcomponent/speaker/main(var/signal)
-	if(signal == 1)
-		signal = pick("YEET","WAAAA","REEEEE","meep","hello","help","good evening","m'lady")
+	/*if(signal == 1)
+		signal = pick("YEET","WAAAA","REEEEE","meep","hello","help","good evening","m'lady")*/
 	_assembly._parent.say(signal)
 	return 1
 
