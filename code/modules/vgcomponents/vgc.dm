@@ -1,13 +1,8 @@
-//needs a way to
-//- prevent endless loops
-
 obj
 	var/datum/vgassembly/vga = null //component assembly
 
 /*
-==========
-VGAssembly
-==========
+Base Assembly
 */
 datum/vgassembly
 	var/name = "VGAssembly"
@@ -88,6 +83,7 @@ datum/vgassembly/Topic(href,href_list)
 			var/datum/browser/W = windows[uid]
 			W.close()
 			windows["\ref[usr]"] = null
+		return
 	else if(href_list["detach"]) //detach either obj or whole assembly
 		var/target = locate(href_list["detach"])
 		if(!target)
@@ -99,18 +95,19 @@ datum/vgassembly/Topic(href,href_list)
 			_parent = null
 			var/obj/item/vgc_assembly/NewAss = new (src)
 			usr.put_in_hands(NewAss)
+			return
 		else //detach object
 			var/datum/vgcomponent/T = target
 			to_chat(usr, "You detach \the [T.name] from \the [src.name].")
 			var/obj/item/vgc_obj/NewObj = T.Uninstall()
 			usr.put_in_hands(NewObj)
-		updateCurcuit(usr)
 	else if(href_list["openC"]) //open settings of selected obj
 		var/datum/vgcomponent/vgc = locate(href_list["openC"])
 		if(!vgc)
 			return
 		to_chat(usr, "You open \the [vgc.name]'s settings.")
 		vgc.openSettings(usr)
+		return
 	else if(href_list["setO"])
 		var/datum/vgcomponent/out = locate(href_list["setO"])
 		if(!out)
@@ -133,14 +130,12 @@ datum/vgassembly/Topic(href,href_list)
 		var/datum/vgcomponent/vgc = locate(target)
 		to_chat(usr, "You connect \the [out.name]'s [href_list["output"]] with \the [vgc.name]'s [input].")
 		out.setOutput(href_list["output"], vgc, input)
-		updateCurcuit(usr)
 	else if(href_list["touch"])
 		var/datum/vgcomponent/vgc = locate(href_list["touch"])
 		if(!vgc || !vgc.has_touch)
 			return
 		
 		vgc.touch_enabled = !vgc.touch_enabled
-		updateCurcuit(usr)
 	else if(href_list["debug"])
 		var/datum/vgcomponent/vgc = locate(href_list["debug"])
 		if(!vgc)
@@ -151,6 +146,7 @@ datum/vgassembly/Topic(href,href_list)
 
 		to_chat(usr, "You pulse [href_list["input"]] of [vgc.name].")
 		call(vgc, href_list["input"])(1)
+		return
 	else if(href_list["clear"])
 		var/datum/vgcomponent/vgc = locate(href_list["clear"])
 		if(!vgc)
@@ -161,6 +157,7 @@ datum/vgassembly/Topic(href,href_list)
 
 		to_chat(usr, "You clear [href_list["output"]] of [vgc.name].")
 		vgc._output[href_list["output"]] = null
+	updateCurcuit(usr)
 
 
 datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
@@ -193,19 +190,17 @@ datum/vgassembly/proc/canAdd(var/datum/vgcomponent/vgc)
 	
 	if(allowed_components.len > 0)
 		for(var/c_type in allowed_components)
-			if(c_type == x.type)
+			if(c_type == vgc.type)
 				return 1
 		return 0
 	else if(banned_components.len > 0)
 		for(var/c_type in banned_components)
-			if(c_type == x.type)
+			if(c_type == vgc.type)
 				return 0
 	return 1
 
 /*
-===========
-VGComponent
-===========
+Base Component
 */
 datum/vgcomponent
 	var/name = "VGComponent" //used in the ui
@@ -394,6 +389,8 @@ Button
 	var/state = 1
 	obj_path = /obj/item/vgc_obj/button
 	_input = list()
+	has_touch = 1
+	touch_enabled = 1
 
 /datum/vgcomponent/button/onTouch(obj/item/O, mob/user)
 	handleOutput(signal = state)
@@ -407,7 +404,7 @@ Button
 
 /*
 ===================================================================
-ASSEMBLY WRAPPERS (just components that use the current assemblies)
+ASSEMBLY WRAPPERS (just components that use the current assembly objs)
 ===================================================================
 */
 /*
