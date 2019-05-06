@@ -26,8 +26,6 @@ Base Assembly
 Base Component
 */
 /obj/item/vgc_obj
-	name = "vg-station component"
-	desc = "used to make logic happen"
 	icon = 'icons/obj/assemblies/new_assemblies.dmi'
 	icon_state = "circuit_+"
 	var/datum/vgcomponent/vgc = null
@@ -38,6 +36,8 @@ Base Component
 	if(!istype(nvgc, datum_type))
 		nvgc = new datum_type()
 	vgc = nvgc
+	name = vgc.name
+	desc = vgc.desc
 
 /obj/item/vgc_obj/Destroy()
 	vgc = null
@@ -47,8 +47,6 @@ Base Component
 Components
 */
 /obj/item/vgc_obj/door_controller
-	name="door controller"
-	desc="controls doors"
 	datum_type = /datum/vgcomponent/doorController
 
 /obj/item/vgc_obj/door_controller/attackby(obj/item/weapon/W, mob/user) //setting access
@@ -63,22 +61,19 @@ Components
 	
 	var/datum/vgcomponent/doorController/DC = vgc
 	DC.setAccess(W)
-	to_chat(user, "you set the doorcontroller's access")
+	to_chat(user, "You set \the [src.name]'s access")
 
 /obj/item/vgc_obj/debugger
-	name="debugger"
-	desc="you should not have this"
 	datum_type = /datum/vgcomponent/debugger
 
 /obj/item/vgc_obj/signaler
-	name="signaler"
-	desc="receives and sends signals"
 	datum_type = /datum/vgcomponent/signaler
 
 /obj/item/vgc_obj/button
-	name="button"
-	desc="press to send a signal"
 	datum_type = /datum/vgcomponent/button
+
+/obj/item/vgc_obj/splitter
+	datum_type = /datum/vgcomponent/splitter
 
 /*
 Logictool
