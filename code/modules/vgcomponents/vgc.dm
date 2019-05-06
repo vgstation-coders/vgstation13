@@ -1,6 +1,8 @@
 /*
 Doing my TODO here since i am offline
 - add locking mechanism that blocks people from editing the assembly/pulsing the components
+- add a list iterator components: if it receives a list, it will iterate over the contents sending them out
+- add a component to store vars -- return call()() in handleoutput to achieve feedback like isSet???
 */
 
 obj
@@ -416,7 +418,7 @@ Splitter
 */
 /datum/vgcomponent/splitter
 	name = "Splitter"
-	desk = "splits signals"
+	desc = "splits signals"
 	obj_path = /obj/item/vgc_obj/splitter
 	_output = list(
 		"channel1" = null,
@@ -436,7 +438,7 @@ Speaker
 */
 /datum/vgcomponent/speaker
 	name = "Speaker"
-	desk = "speaks"
+	desc = "speaks"
 	obj_path = /obj/item/vgc_obj/speaker
 	_output = list()
 
@@ -496,7 +498,7 @@ Keyboard
 	if(active)
 		deactivate()
 	else
-		active()
+		activate()
 
 /datum/vgcomponent/prox_sensor/proc/setRange(var/signal)
 	if(!isnum(signal))
