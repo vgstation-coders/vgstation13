@@ -102,14 +102,14 @@
 	if(OOC)
 		for(var/mob/living/silicon/ai/dooropener in mob_list)
 			bot[dooropener.name] = "AI"
-			isactive[dooropener.name] = (dooropener.client?.inactivity > 10 * 60 * 10) ? "Active" : "Inactive"
+			isactive[dooropener.name] = (dooropener.client && dooropener.client.inactivity <= 10 * 60 * 10) ? "Active" : "Inactive"
 		for(var/mob/living/silicon/robot/tincan in mob_list)
 			if(isMoMMI(tincan))
 				continue
 			if(tincan.syndicate)
 				continue
 			bot[tincan.name] = tincan.braintype
-			isactive[tincan.name] = (tincan.client?.inactivity > 10 * 60 * 10) ? "Active" : "Inactive"
+			isactive[tincan.name] = (tincan.client && tincan.client.inactivity <= 10 * 60 * 10) ? "Active" : "Inactive"
 	for(var/datum/data/record/t in sortRecord(data_core.general))
 		var/name = t.fields["name"]
 		var/rank = t.fields["rank"]
