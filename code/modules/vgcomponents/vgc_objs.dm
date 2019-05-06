@@ -13,6 +13,7 @@ Base Assembly
 	if(!istype(nvga, datum_type))
 		nvga = new datum_type()
 	vga = nvga
+	vga._parent = src
 
 /obj/item/vgc_assembly/Destroy()
 	vga = null
@@ -74,6 +75,9 @@ Components
 
 /obj/item/vgc_obj/splitter
 	datum_type = /datum/vgcomponent/splitter
+
+/obj/item/vgc_obj/speaker
+	datum_type = /datum/vgcomponent/speaker
 
 /*
 Logictool
