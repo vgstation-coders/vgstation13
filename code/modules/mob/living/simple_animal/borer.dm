@@ -410,7 +410,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	//Let borers namepick when assuming control
 	var/newname
 	for(var/i = 1 to 3)
-		newname = trimcenter(trim(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		newname = reject_bad_name(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 		if(!newname || newname == "")
 			if(alert(src,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
 				break
