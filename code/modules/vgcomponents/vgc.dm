@@ -157,7 +157,7 @@ datum/vgassembly/Topic(href,href_list)
 			return
 
 		to_chat(usr, "You clear [href_list["output"]] of [vgc.name].")
-		vgc._output[href_list["output"]] = null
+		vgc._output[href_list["output"]] = null 
 
 
 datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
