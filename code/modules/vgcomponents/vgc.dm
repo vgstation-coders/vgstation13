@@ -1,3 +1,8 @@
+/*
+Doing my TODO here since i am offline
+- add locking mechanism that blocks people from editing the assembly/pulsing the components
+*/
+
 obj
 	var/datum/vgassembly/vga = null //component assembly
 
@@ -458,6 +463,85 @@ Keyboard
 		return
 
 	handleOutput("main", output)
+
+/datum/vgcomponent/prox_sensor
+	name = "Proximity Sensor"
+	desc = "detects fast movement"
+	obj_path = /obj/item/vgc_obj/prox_sensor
+	_input = list(
+		"activate" = "activate",
+		"deactivate" = "deactivate",
+		"toggle" = "toggle",
+		"setRange" = "setRange",
+		"setTimer" = "setTimer",
+		"startTimer" = "start_process",
+		"stopTimer" = "stop_process"
+	)
+	_output = list(
+		"sense" = null
+	)
+	var/active = 0
+	var/timer = 0
+	var/range = 2
+
+/datum/vgcomponent/prox_sensor/proc/activate()
+	active = 1
+	start_process()
+
+/datum/vgcomponent/prox_sensor/proc/deactivate()
+	active = 0
+	stop_process()
+
+/datum/vgcomponent/prox_sensor/proc/toggle()
+	if(active)
+		deactivate()
+	else
+		active()
+
+/datum/vgcomponent/prox_sensor/proc/setRange(var/signal)
+	if(!isnum(signal))
+		signal = text2num(signal)
+		if(!signal) //wasn't a number
+			return
+
+	if(!(signal in (1 to 5)))
+		return
+
+	range = signal
+
+/datum/vgcomponent/prox_sensor/proc/setTimer(var/signal)
+	if(!isnum(signal))
+		signal = text2num(signal)
+		if(!signal) //wasn't a number
+			return
+	
+	timer = signal
+	deactivate()
+
+/datum/vgcomponent/prox_sensor/proc/start_process()
+	if(!(src in processing_objects))
+		processing_objects.Add(src)
+
+/datum/vgcomponent/prox_sensor/proc/stop_process()
+	if(src in processing_objects)
+		processing_objects.Remove(src)
+
+/datum/vgcomponent/prox_sensor/proc/process()
+	if(!_assembly)
+		deactivate()
+		return
+
+	if(!active)
+		if(--timer <= 0)
+			activate()
+		return
+	
+	//sense for people
+	var/turf/loc = get_turf(_assembly._parent)
+	for(var/mob/living/A in range(range,loc))
+		if(A.move_speed < 12)
+			handleOutput("sense")
+			return //to prevent the spam
 
 /*
 ===================================================================
