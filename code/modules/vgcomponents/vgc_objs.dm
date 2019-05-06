@@ -1,14 +1,17 @@
-//ma physical forms
+/*
+Base Assembly
+*/
 /obj/item/vgc_assembly
 	name = "vg-station component assembly"
 	desc = "holds alot of components" //maybe make this show the circuit someday
 	icon = 'icons/obj/remote.dmi'
 	icon_state = "remote_3b"
+	var/datum_type = /datum/vgassembly
 
-/obj/item/vgc_assembly/New(var/datum/vgassembly/nvga = new ())
+/obj/item/vgc_assembly/New(var/datum/vgassembly/nvga)
 	..()
-	if(!istype(nvga, /datum/vgassembly))
-		nvga = new /datum/vgassembly()
+	if(!istype(nvga, datum_type))
+		nvga = new datum_type()
 	vga = nvga
 
 /obj/item/vgc_assembly/Destroy()
@@ -19,7 +22,10 @@
 	. = ..()
 	vga.showCircuit(user)
 
-/obj/item/vgc_obj //basically holds a parentless component
+/*
+Base Component
+*/
+/obj/item/vgc_obj
 	name = "vg-station component"
 	desc = "used to make logic happen"
 	icon = 'icons/obj/assemblies/new_assemblies.dmi'
@@ -37,6 +43,9 @@
 	vgc = null
 	..()
 
+/*
+Components
+*/
 /obj/item/vgc_obj/door_controller
 	name="door controller"
 	desc="controls doors"
@@ -71,12 +80,18 @@
 	desc="press to send a signal"
 	datum_type = /datum/vgcomponent/button
 
+/*
+Logictool
+*/
 /obj/item/vgc_logictool
 	name="logictool"
 	desc="to look at embedded assemblies"
 	icon = 'icons/obj/pipe-item.dmi'
 	icon_state = "meter"
 
+/*
+Testing stuff
+*/
 /obj/item/vgc_assembly/doorTest/New()
 	var/datum/vgassembly/A = new ()
 	..(A)
