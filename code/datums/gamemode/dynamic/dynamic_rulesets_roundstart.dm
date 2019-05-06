@@ -91,9 +91,7 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 2
-	cost = 25
-	var/vampire_threshold = 2
-	var/additional_cost = 15
+	cost = 15
 	requirements = list(80,60,50,30,20,10,10,10,10,10)
 	high_population_requirement = 30
 
@@ -108,8 +106,8 @@
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
 		// Above 2 vampires, we start to cost a bit more.
-		if (i > vampire_threshold && (mode.threat > additional_cost))
-			mode.spend_threat(additional_cost)
+		if (i >= 2 && (mode.threat > cost))
+			mode.spend_threat(cost)
 		else
 			break
 	update_faction_icons()
