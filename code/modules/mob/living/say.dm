@@ -232,7 +232,7 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
-	show_message(rendered_message, type, deaf_message, deaf_type)
+	show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
@@ -542,12 +542,10 @@ var/list/department_radio_keys = list(
 		said_last_words = src.stat
 	treat_speech(speech)
 
-
 	var/listeners = get_hearers_in_view(1, src) | observers
 	var/eavesdroppers = get_hearers_in_view(2, src) - listeners
 	var/watchers = hearers(5, src) - listeners - eavesdroppers
 	var/rendered = render_speech(speech)
-
 	for (var/atom/movable/listener in listeners)
 		listener.Hear(speech, rendered)
 
