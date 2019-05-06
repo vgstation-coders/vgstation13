@@ -70,7 +70,7 @@ datum/vgassembly/proc/updateCurcuit(var/mob/user)
 		content += "</dl></dd>"
 
 	content += "</dl>"
-	if(_parent)
+	if(_parent && !istype(_parent, /obj/item/vgc_assembly))
 		content += "<a HREF='?src=\ref[src];detach=\ref[src]'>\[Detach From Object\]</a> "
 	content += "<a HREF='?src=\ref[src];close=1'>\[Close\]</a>"
 	W.set_content(content)
@@ -411,6 +411,7 @@ Splitter
 */
 /datum/vgcomponent/splitter
 	name = "Splitter"
+	desk = "splits signals"
 	obj_path = /obj/item/vgc_obj/splitter
 	_output = list(
 		"channel1" = null,
@@ -426,9 +427,19 @@ Splitter
 	return
 
 /*
-
+Speaker
 */
+/datum/vgcomponent/speaker
+	name = "Speaker"
+	desk = "speaks"
+	obj_path = /obj/item/vgc_obj/speaker
+	_output = list()
 
+/datum/vgcomponent/speaker/main(var/signal)
+	if(signal == 1)
+		signal = pick("YEET","WAAAA","REEEEE","meep","hello","help","good evening","m'lady")
+	_assembly._parent.say(signal)
+	
 /*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assembly objs)
