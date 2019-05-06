@@ -218,6 +218,9 @@
 	if (!user)
 		return
 
+	if(vga)
+		vga.touched(null, user)
+
 	if (istype(loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
 		var/obj/item/weapon/storage/S = loc

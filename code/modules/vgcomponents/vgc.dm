@@ -130,12 +130,26 @@ datum/vgassembly/Topic(href,href_list)
 			return
 		
 		vgc.touch_enabled = !vgc.touch_enabled
+		updateCurcuit(usr)
 
 
-datum/vgassembly/proc/touched(var/mob/user)
+datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
 	//execute touch events for components if they are enabled
-	message_admins("[user] touched assembly")
+	for(var/vgc in _vgcs)
+		if(!vgc.has_touch)
+			continue
+		
+		vgc.onTouch(O, user)
 	return
+
+datum/vgassembly/proc/UI_Update()
+	for(var/ref in windows)
+		var/mob/user = locate(ref)
+		if(!user)
+			windows[ref] = null
+			continue
+		
+		updateCurcuit(user)
 /*
 ===========
 VGComponent
@@ -182,6 +196,7 @@ datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 
 	_assembly = A
 	_assembly._vgcs += src
+	_assembly.UI_Update()
 	return 1
 
 datum/vgcomponent/proc/Uninstall() //don't override
@@ -193,6 +208,7 @@ datum/vgcomponent/proc/Uninstall() //don't override
 	_assembly = null //needs to be null for rebuild to work for other components
 	A.rebuild()
 	A._vgcs -= src //now that we rebuilt, we can remove ourselves
+	A.UI_Update()
 	return getPhysical()
 
 datum/vgcomponent/proc/getPhysical() //do override with wanted type
