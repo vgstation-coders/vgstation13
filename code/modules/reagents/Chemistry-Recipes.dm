@@ -3382,5 +3382,18 @@
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/hostile/carp/baby(location)
 
+/datum/chemical_reaction/synthparrot
+	name = "Synthparrot"
+	id = "synthparrot"
+	result = null
+	required_reagents = list(NUTRIMENT = 1, AMINOMICIN = 1)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/food/snacks/cracker
+
+/datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /mob/living/simple_animal/parrot(location)
+	qdel(holder.my_atom)
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

@@ -60,6 +60,21 @@ var/list/all_doors = list()
 	else
 		return PROJREACT_WINDOWS
 
+/obj/machinery/door/hitby(atom/movable/AM)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/thing = AM
+	if(!istype(thing))
+		return FALSE
+	if(operating || !density)
+		return FALSE
+	if(!check_access(thing))
+		denied()
+		return FALSE
+	open()
+	return TRUE
+
 /obj/machinery/door/Bumped(atom/AM)
 	if (ismob(AM))
 		var/mob/M = AM
