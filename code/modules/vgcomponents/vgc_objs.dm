@@ -79,6 +79,9 @@ Components
 /obj/item/vgc_obj/speaker
 	datum_type = /datum/vgcomponent/speaker
 
+/obj/item/vgc_obj/keyboard
+	datum_type = /datum/vgcomponent/keyboard
+
 /*
 Logictool
 */

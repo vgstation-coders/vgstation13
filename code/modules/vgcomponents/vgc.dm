@@ -439,7 +439,26 @@ Speaker
 	if(signal == 1)
 		signal = pick("YEET","WAAAA","REEEEE","meep","hello","help","good evening","m'lady")
 	_assembly._parent.say(signal)
-	
+
+/*
+Keyboard
+*/
+/datum/vgcomponent/keyboard
+	name = "Keyboard"
+	desc = "used to type stuff"
+	obj_path = /obj/item/vgc_obj/keyboard
+	_input = list()
+
+/datum/vgcomponent/keyboard/onTouch(var/obj/item/O, var/mob/user)
+	if(!user)
+		return
+
+	var/output = input("What do you want to type?", "Write Message", null)
+	if(!output)
+		return
+
+	handleOutput("main", output)
+
 /*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assembly objs)
