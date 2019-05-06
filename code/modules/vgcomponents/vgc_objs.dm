@@ -82,6 +82,9 @@ Components
 /obj/item/vgc_obj/keyboard
 	datum_type = /datum/vgcomponent/keyboard
 
+/obj/item/vgc_obj/prox_sensor
+	datum_type = /datum/vgcomponent/prox_sensor
+
 /*
 Logictool
 */
