@@ -2,7 +2,8 @@
 Doing my TODO here since i am offline
 - add locking mechanism that blocks people from editing the assembly/pulsing the components
 - add a list iterator components: if it receives a list, it will iterate over the contents sending them out
-- add a component to store vars -- return call()() in handleoutput to achieve feedback like isSet???
+- add a component to store vars
+- add a component that relays a signal and then sends one onFail or onSuccess
 */
 
 obj
