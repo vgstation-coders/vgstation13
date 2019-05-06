@@ -96,9 +96,9 @@ datum/vgassembly/Topic(href,href_list)
 			var/obj/item/vgc_assembly/NewAss = new (src)
 			usr.put_in_hands(NewAss)
 			return
-		else //detach object
+		else //uninstall component
 			var/datum/vgcomponent/T = target
-			to_chat(usr, "You detach \the [T.name] from \the [src.name].")
+			to_chat(usr, "You uninstall \the [T.name] from \the [src.name].")
 			var/obj/item/vgc_obj/NewObj = T.Uninstall()
 			usr.put_in_hands(NewObj)
 	else if(href_list["openC"]) //open settings of selected obj
@@ -204,6 +204,7 @@ Base Component
 */
 datum/vgcomponent
 	var/name = "VGComponent" //used in the ui
+	var/desc = "used to make logic happen"
 	var/datum/vgassembly/_assembly //obj component is attached to
 	var/list/_input = list( //can be called by multiple components, save all your procs you want to be accessed here
 		"main" = "main"
@@ -308,6 +309,7 @@ Door control
 */
 datum/vgcomponent/doorController
 	name = "Doorcontroller"
+	desc="controls doors"
 	var/list/saved_access = list() //ID.GetAccess()
 	obj_path = /obj/item/vgc_obj/door_controller
 	_input = list(
@@ -367,6 +369,7 @@ idea shamelessly copied from nexus - and modified
 */
 /datum/vgcomponent/debugger
 	name = "Debugger"
+	desc="you should not have this"
 	var/spam = 1
 	obj_path = /obj/item/vgc_obj/debugger
 
@@ -385,6 +388,7 @@ Button
 */
 /datum/vgcomponent/button
 	name = "Button"
+	desc="press to send a signal"
 	var/toggle = 0
 	var/state = 1
 	obj_path = /obj/item/vgc_obj/button
@@ -403,6 +407,29 @@ Button
 	toggle = 1
 
 /*
+Splitter
+*/
+/datum/vgcomponent/splitter
+	name = "Splitter"
+	obj_path = /obj/item/vgc_obj/splitter
+	_output = list(
+		"channel1" = null,
+		"channel2" = null
+	)
+
+/datum/vgcomponent/splitter/main(var/signal)
+	for(var/out in _output)
+		handleOutput(out, signal)
+
+/datum/vgcomponent/splitter/openSettings(var/mob/user)
+	to_chat(user, "here you will be able to add new channels, altough that is TODO")
+	return
+
+/*
+
+*/
+
+/*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assembly objs)
 ===================================================================
@@ -413,6 +440,7 @@ raw signaler
 */
 /datum/vgcomponent/signaler
 	name = "Signaler"
+	desc="receives and sends signals"
 	var/obj/item/device/assembly/signaler/_signaler
 	has_touch = 1
 	touch_enabled = 0
