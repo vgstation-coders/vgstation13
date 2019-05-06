@@ -278,7 +278,7 @@ datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 		return 0
 
 	var/proc_string = _output[target][1]._input[_output[target][2]]
-	call(_output[target][1], proc_string)(signal) //oh boy what a line
+	return call(_output[target][1], proc_string)(signal) //oh boy what a line
 	return 1
 
 datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
@@ -330,36 +330,40 @@ datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 
 datum/vgcomponent/doorController/proc/open(var/signal)
 	if(!signal) //we want a 1
-		return
+		return 0
 
 	if(!istype(_assembly._parent, /obj/machinery/door))
-		return //no parent or not a door, however that happened
+		return 0//no parent or not a door, however that happened
 
 	var/obj/machinery/door/D = _assembly._parent
 	if(D.check_access_list(saved_access))
 		D.open()
+		return 1
 	else
 		D.denied()
+	return 0
 
 datum/vgcomponent/doorController/proc/close(var/signal)
 	if(!signal) //we want a 1
-		return
+		return 0
 
 	if(!istype(_assembly._parent, /obj/machinery/door))
-		return //no parent or not a door, however that happened
+		return 0//no parent or not a door, however that happened
 
 	var/obj/machinery/door/D = _assembly._parent
 	if(D.check_access_list(saved_access))
 		D.close()
+		return 1
 	else
 		D.denied()
+	return 0
 
 datum/vgcomponent/doorController/proc/toggle(var/signal)
 	if(!signal) //we want a 1
-		return
+		return 0
 
 	if(!istype(_assembly._parent, /obj/machinery/door))
-		return //no parent or not a door, however that happened
+		return 0//no parent or not a door, however that happened
 
 	var/obj/machinery/door/D = _assembly._parent
 	if(D.check_access_list(saved_access))
@@ -367,8 +371,10 @@ datum/vgcomponent/doorController/proc/toggle(var/signal)
 			D.open()
 		else
 			D.close()
+		return 1
 	else
 		D.denied()
+	return 0
 
 /*
 Debugger
@@ -384,6 +390,8 @@ idea shamelessly copied from nexus - and modified
 	if(spam)
 		message_admins("received signal:[signal] | <a HREF='?src=\ref[src];pause=1'>\[Toggle Output/Passthrough\]</a>")
 		handleOutput()
+		return 1
+	return 0
 
 /datum/vgcomponent/debugger/Topic(href, href_list)
 	. =..()
@@ -428,6 +436,7 @@ Splitter
 /datum/vgcomponent/splitter/main(var/signal)
 	for(var/out in _output)
 		handleOutput(out, signal)
+	return 1
 
 /datum/vgcomponent/splitter/openSettings(var/mob/user)
 	to_chat(user, "here you will be able to add new channels, altough that is TODO")
@@ -446,6 +455,7 @@ Speaker
 	if(signal == 1)
 		signal = pick("YEET","WAAAA","REEEEE","meep","hello","help","good evening","m'lady")
 	_assembly._parent.say(signal)
+	return 1
 
 /*
 Keyboard
@@ -489,44 +499,51 @@ Keyboard
 /datum/vgcomponent/prox_sensor/proc/activate()
 	active = 1
 	start_process()
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/deactivate()
 	active = 0
 	stop_process()
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/toggle()
 	if(active)
 		deactivate()
 	else
 		activate()
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/setRange(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal) //wasn't a number
-			return
+			return 0
 
 	if(!(signal in (1 to 5)))
-		return
+		return 0
 
 	range = signal
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/setTimer(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal) //wasn't a number
-			return
+			return 0
 	
 	timer = signal
 	deactivate()
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/start_process()
 	if(!(src in processing_objects))
 		processing_objects.Add(src)
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/stop_process()
 	if(src in processing_objects)
 		processing_objects.Remove(src)
+	return 1
 
 /datum/vgcomponent/prox_sensor/proc/process()
 	if(!_assembly)
@@ -582,25 +599,30 @@ datum/vgcomponent/signaler/New()
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal) //wasn't a number
-			return
+			return 0
+
 	if(!(signal in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
-		return
+		return 0
 
 	_signaler.set_frequency(signal)
+	return 1
 
 /datum/vgcomponent/signaler/proc/setCode(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal) //wasn't a number
-			return
+			return 0
 
 	if(!(signal in (1 to 100)))
-		return
+		return 0
 
 	_signaler.code = signal
+	return 1
 
 /datum/vgcomponent/signaler/proc/send()
 	_signaler.signal()
+	return 1
+
 
 //signaled output
 /datum/vgcomponent/signaler/proc/was_signaled()
