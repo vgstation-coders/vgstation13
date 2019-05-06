@@ -2222,5 +2222,37 @@ mob/proc/on_foot()
 /mob/proc/attempt_crawling(var/turf/target)
 	return FALSE
 
+/mob/proc/can_mind_interact(mob/living/carbon/target)
+	//to_chat(world, "Starting can interact on [target]")
+	if(!iscarbon(target))
+		return 0 //Can't see non humans with your fancy human mind.
+	//to_chat(world, "[target] is a human")
+	var/turf/target_turf = get_turf(target)
+	var/turf/our_turf = get_turf(src)
+	if(!target_turf)
+		//to_chat(world, "[target] is in null space")
+		return 0
+	if((target_turf.z != our_turf.z) || target.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
+		//to_chat(world, "[(target_turf.z != our_turf.z) ? "not on the same zlevel as [target]" : "[target] is not concious"]")
+		if(target_turf.z != map.zCentcomm)
+			to_chat(src, "The target mind is too faint...")//Prevent "The mind of Admin is too faint..."
+
+		return 0
+	if(M_PSY_RESIST in target.mutations)
+		//to_chat(world, "[target] has psy resist")
+		to_chat(src, "The target mind is resisting!")
+		return 0
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(H.is_wearing_item(/obj/item/clothing/head/tinfoil, slot_head))
+			to_chat(src, "Interference is disrupting the connection with the target mind.")
+			return 0
+	if(ismartian(target))
+		var/mob/living/carbon/complex/martian/MR = target
+		if(MR.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian, /obj/item/clothing/head/tinfoil), slot_head))
+			to_chat(src, "Interference is disrupting the connection with the target mind.")
+			return 0
+	return 1
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
