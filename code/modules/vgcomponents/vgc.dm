@@ -5,6 +5,10 @@ Doing my TODO here since i am offline
 - add a component to store vars
 - add a component that relays a signal and then sends one onFail or onSuccess
 - dunno if this is already online, but add a timer
+- fix the timer on prox_sensor
+- ## DEBUG: Tue May 07 00:22:29 2019 MC restarted
+what does that mean cause it triggered when i made an endless loop
+- make setoutput cancellable
 */
 
 obj
@@ -162,7 +166,7 @@ datum/vgassembly/Topic(href,href_list)
 			return
 
 		to_chat(usr, "You pulse [href_list["input"]] of [vgc.name].")
-		call(vgc, href_list["input"])(1)
+		call(vgc, vgc._input[href_list["input"]])(1)
 		return
 	else if(href_list["clear"])
 		var/datum/vgcomponent/vgc = locate(href_list["clear"])
@@ -342,6 +346,7 @@ datum/vgcomponent/doorController
 		"close" = "close",
 		"toggle" = "toggle"
 	)
+	_output = list()
 
 datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 	saved_access = ID.GetAccess()
@@ -450,6 +455,7 @@ Splitter
 		"channel1" = null,
 		"channel2" = null
 	)
+	has_settings = 1
 
 /datum/vgcomponent/splitter/main(var/signal)
 	for(var/out in _output)
@@ -490,7 +496,7 @@ Keyboard
 	if(!user)
 		return
 
-	var/output = input("What do you want to type?", "Write Message", null)
+	var/output = input("What do you want to type?", "Write Message", null) as null|text
 	if(!output)
 		return
 
@@ -515,6 +521,7 @@ Keyboard
 	var/active = 0
 	var/timer = 0
 	var/range = 2
+	has_settings = 1
 
 /datum/vgcomponent/prox_sensor/proc/activate()
 	active = 1
@@ -606,6 +613,7 @@ raw signaler
 	_output = list(
 		"signaled" = null
 	)
+	has_settings = 1
 
 /datum/vgcomponent/signaler/onTouch(var/obj/item/O, var/mob/user)
 	send()
