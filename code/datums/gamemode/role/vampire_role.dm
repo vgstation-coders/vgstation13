@@ -31,7 +31,7 @@
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
-	var/image/null_rod_wearer = null
+	var/list/image/cached_images = list()
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
