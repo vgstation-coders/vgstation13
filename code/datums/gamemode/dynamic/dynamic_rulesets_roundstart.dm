@@ -468,11 +468,11 @@
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain", "Warden")
+	required_enemies = list(3,3,3,3,3,2,2,1,0,0)
 	required_candidates = 3
 	weight = 2
-	cost = 35
+	cost = 40
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
 	delay = 5 MINUTES
