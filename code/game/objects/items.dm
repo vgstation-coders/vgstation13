@@ -1060,7 +1060,7 @@ var/global/list/image/blood_overlays = list()
 		return FALSE
 	if(!blood_overlays[type]) //Blood overlay generation if it lacks one.
 		generate_blood_overlay()
-	if(blood_overlay != null)
+	if(blood_overlay)
 		overlays.Remove(blood_overlay)
 	else
 		blood_overlay = blood_overlays[type]

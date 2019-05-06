@@ -753,16 +753,11 @@ its easier to just keep the beam vertical.
 
 //Atomic level procs to be used elsewhere.
 /atom/proc/apply_luminol(var/atom/A)
-	if(had_blood)
-		return TRUE
-	else
-		return FALSE
+	return had_blood
 
 /atom/proc/clear_luminol(var/atom/A)
-	if(had_blood)
-		return TRUE
-	else
-		return FALSE
+	return had_blood
+
 
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(mob/living/carbon/human/M as mob)
