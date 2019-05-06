@@ -6,6 +6,7 @@
 	cell_type = /obj/item/weapon/cell/hyper
 	startup_sound = 'sound/mecha/nominalsyndi.ogg'
 	startup_vary = FALSE
+	syndicate = TRUE
 	var/obj/item/clothing/accessory/holomap_chip/holochip = null
 
 /mob/living/silicon/robot/syndie/getModules()
