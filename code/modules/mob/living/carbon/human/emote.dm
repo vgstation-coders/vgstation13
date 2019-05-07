@@ -211,6 +211,19 @@
 //Ayy lmao
 
 
+/datum/emote/me/run_emote(mob/user, params, m_type)
+	var/regex/R = new("(\\bd *?(a|@) *?b)(?!bl)","gi") // dab prevention, very thorough, but does not include biodegradable or dabbles for example
+	if(R.Find(params) && Holiday != APRIL_FOOLS_DAY)
+		var/datum/emote/E
+		E = E.emote_list["*dab"]
+		message = "<span class='danger'>[user] looks like \he's trying to commit suicide as \he [params]!</span>"
+		if(E.can_run_emote(user) && E.run_emote(user,dabmessage=message))
+			var/turf/T = get_turf(user)
+			var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+			log_emote("[user.name]/[user.key] (@[location]): [message]")
+	else
+		. = ..()
+
 /datum/emote/living/carbon/human/dab
 	key = "dab"
 	key_third_person = "*dab"
@@ -233,7 +246,7 @@
 		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
 
-/datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
+/datum/emote/living/carbon/human/dab/run_emote(mob/user, params = null, ignore_status = FALSE,dabmessage = null)
 	if(!(can_run_emote(user, !ignore_status)))
 		return FALSE
 	var/mob/living/carbon/human/H = user
@@ -247,7 +260,9 @@
 		if(confirm != "Yes")
 			return
 		H.suiciding = 1
-		H.visible_message("<span class='danger'>[H] holds one arm up and slams \his other arm into \his face! It looks like \he's trying to commit suicide.</span>",)
+		if(!dabmessage)
+			dabmessage = "<span class='danger'>[H] holds one arm up and slams \his other arm into \his face! It looks like \he's trying to commit suicide.</span>"
+		H.visible_message(dabmessage,)
 		for(var/datum/organ/external/breakthis in H.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_HEAD))
 			H.apply_damage(50, BRUTE, breakthis)
 			if(!(H.species.anatomy_flags & NO_BONES))
