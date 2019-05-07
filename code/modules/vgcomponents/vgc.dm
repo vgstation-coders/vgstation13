@@ -590,7 +590,7 @@ Keyboard
 
 	if(!active)
 		return
-	
+
 	//sense for people
 	var/turf/loc = get_turf(_assembly._parent)
 	for(var/mob/living/A in range(range,loc))
@@ -611,7 +611,7 @@ Algorithmic components
 	)
 	var/num = 0
 
-/datum/vgcomponent/setNum(var/signal)
+/datum/vgcomponent/proc/setNum(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal)
@@ -619,7 +619,7 @@ Algorithmic components
 
 	num = signal
 
-/datum/vgcomponent/doCalc(var/signal)
+/datum/vgcomponent/proc/doCalc(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal)
@@ -627,7 +627,7 @@ Algorithmic components
 
 	calc(signal)
 
-/datum/vgcomponent/calc(var/signal)
+/datum/vgcomponent/proc/calc(var/signal)
 	return
 
 // ADD
@@ -730,10 +730,12 @@ Index getter
 	if(!istype(signal, /list))
 		return
 	
-	if(index > signal.len)
+	var/list/L = signal
+	
+	if(index > L.len)
 		return
 
-	handleOutput("element", signal[index])
+	handleOutput("element", L[index])
 
 /*
 List iterator
@@ -750,6 +752,51 @@ datum/vgcomponent/list_iterator/main(var/signal)
 	for(var/E in signal)
 		handleOutput(signal = E)
 
+/*
+Typecheck
+*/
+#define TYPE_NUM 1
+#define TYPE_TEXT 2
+#define TYPE_LIST 3
+#define TYPE_MOB 4
+#define TYPE_COSTUM 5
+
+/datum/vgcomponent/typecheck
+	name = "Typechecker"
+	desc = "checks types"
+	obj_path = /obj/item/vgc_obj/typecheck
+	has_settings = 1 //type setting set over well... settings
+	var/costum_type
+	var/type_check = TYPE_NUM
+	var/waitingForType = 0
+
+/datum/vgcomponent/typecheck/main(var/signal)
+	switch(type_check)
+		if(TYPE_NUM)
+			if(isnum(signal))
+				handleOutput()
+		if(TYPE_TEXT)
+			if(istext(signal))
+				handleOutput()
+		if(TYPE_LIST)
+			if(istype(signal, /list))
+				handleOutput()
+		if(TYPE_MOB)
+			if(istype(signal, /mob))
+				handleOutput()
+		if(TYPE_COSTUM)
+			if(!costum_type || waitingForType)
+				return
+
+			if(istype(signal, costum_type))
+				handleOutput()
+
+
+#undef TYPE_NUM
+#undef TYPE_TEXT
+#undef TYPE_LIST
+#undef TYPE_MOB
+#undef TYPE_COSTUM
 /*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assembly objs)
