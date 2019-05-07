@@ -40,9 +40,9 @@
 	name = "low yield rocket"
 	icon_state = "rpground"
 	explosive = 0
-	damage = 30
-	stun = 5
-	weaken = 5
+	damage = 45
+	stun = 10
+	weaken = 10
 	damage_type = BRUTE
 	nodamage = 0
 	flag = "bullet"
@@ -75,7 +75,7 @@
 	name = "EMP rocket"
 	icon_state = "rpground"
 	explosive = 0
-	damage = 5
+	damage = 10
 	stun = 5
 	weaken = 10
 	agony = 30
@@ -94,7 +94,7 @@
 	name = "stun rocket"
 	icon_state = "rpground"
 	explosive = 0
-	damage = 60
+	damage = 15
 	stun = 20
 	weaken = 20
 	agony = 30
@@ -103,7 +103,7 @@
 	flag = "bullet"
 
 /obj/item/projectile/rocket/stun/to_bump(var/atom/A)
-	explosion(A, -1, 0, 1, 1)
+	explosion(A, -1, 0, 0, 0)
 	flashbangprime(TRUE, FALSE, FALSE)
 	..()
 	if(!gcDestroyed)

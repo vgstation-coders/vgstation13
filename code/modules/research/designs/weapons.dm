@@ -286,7 +286,7 @@
 	desc = "Watch the backblast, you idiot."
 	id = "RPG"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 50000, MAT_GLASS = 50000)
+	materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
 	build_path = /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)

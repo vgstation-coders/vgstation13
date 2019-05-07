@@ -62,7 +62,7 @@
 	item_state = "rpg_nt"
 	max_shells = 1
 	w_class = W_CLASS_LARGE
-	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000)
+	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
 	w_type = RECYK_METAL
 	force = 10
 	recoil = 5
