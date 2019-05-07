@@ -15,7 +15,7 @@ obj
 	var/datum/vgassembly/vga = null //component assembly
 
 obj/variable_edited(var_name, old_value, new_value)
-	.=..()
+	. =..()
 
 	switch(var_name)
 		if("timestopped")
@@ -141,12 +141,21 @@ datum/vgassembly/Topic(href,href_list)
 		for(var/datum/vgcomponent/vgc in _vgcs)
 			if(vgc == out)
 				continue //dont wanna assign to ourself, or do we?
-			refs += "\ref[vgc]"
-		var/target = input(usr, "Select which component you want to output to.", "Select Target Component", 0) in refs
-		if(!target || !locate(target))
+			var/i = 1
+			while(1)
+				if(!refs["[vgc.name]_[i]"])
+					refs["[vgc.name]_[i]"] = "\ref[vgc]"
+					break
+				i++
+		var/target = input(usr, "Select which component you want to output to.", "Select Target Component", 0) as null|anything in refs
+		if(!target)
 			return
 		
-		var/input = input("Select which input you want to target.", "Select Target Input", "main") in locate(target)._input
+		target = refs["[target]"]
+		if(!locate(target))
+			return
+		
+		var/input = input("Select which input you want to target.", "Select Target Input", "main") as null|anything in locate(target)._input
 
 		var/datum/vgcomponent/vgc = locate(target)
 		to_chat(usr, "You connect \the [out.name]'s [href_list["output"]] with \the [vgc.name]'s [input].")
@@ -301,7 +310,6 @@ datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 
 	var/proc_string = _output[target][1]._input[_output[target][2]]
 	return call(_output[target][1], proc_string)(signal) //oh boy what a line
-	return 1
 
 datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
