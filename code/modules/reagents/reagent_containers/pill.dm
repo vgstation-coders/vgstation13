@@ -382,7 +382,19 @@
 
 /obj/item/weapon/reagent_containers/pill/random/maintenance/New()
 	. = ..()
-	name = "[pick(300;"floor", "funny", "mystery", "adventure", "suspicious", "happy happy", "double-dog dare")] pill"
+	name = "\improper [pick( \
+		3000;"floor", 1000;"funny", 1000;"mystery", 1000;"adventure", 1000;"double-dog dare", 1000;"suspicious", 1000;"happy happy", 500;"heal", 500;"handmade", \
+		"the cure part 1", "Werewolf Serum (10 units)", "help me", "5u Of Everything", "Quadcordrazine", "Delicious candy", "EAT IF YOU", "Anticarisol (10 units)", "Fix And Fun", \
+		"FUN TIME - ONLY TAKE 1", "violent suicide", "STRONG BONES PILL CONSULT YOUR DOCTOR BEFORE USING", "SKELETON+3 arms (CAUTION!!!)", "Tricordrazine (1.5 units)", \
+		"pill for big mistakes", "ANTIBODIES 5 OH GOD OG FUCK", "Antibodies for the Horrible Spider Plague", "Antibodies for beard growing disease pill", "antibodies for the beneficial virus", \
+		"antibodies for virus that makes your legs go bad please take one", "antibodies for weird disease thing", "Antibodies for your body disintegrating (1 units)", "antibodies hopefully", \
+		"Antibodies to being vegan (5 mg)", "Cure for  Optimism", "IT FUCKING CURES THE VIRUS BUDDY, EAT IT NOW", "The Doctor", "Bleach (HIGHLY USELESS AND TOXIC)", \
+		"Blood Of Unknown Type (49.9996 units)", "crayo mix", "Drift to Sleep. (THIS IS GOING TO KILL YOU PLEASE DO NOT EAT UNLESS YOU WANT TO DIE)", "dude (16.3333 units)", \
+		"get well soon(15.1667 units with antitoxin)", "I want to die", "If you want to suffer, eat this (10.8889 units)", "Just eat these until you feel better (4.5911 units)", \
+		"now i cant even fucking see (10.7919 units)", "Problem Fixer(5 units)", "Rapid Limb Regrowth", "Runfast (29.8817 units)", "Sleeping Dragon Suicide Pill", \
+		"Special pill only for You", "Test Batch #001 (25 units)", "The Utlimate trip", "Tumor and Cancer (5 units)", "turns you into a slime", "Unfuck me pill", \
+		"Unstable mutagen (0 units)", "VERY FUN DO NOT CONSUME", "Very Healthy!(may cause side effects)", "Wild Ride enhancer", "MORE TAN 1 IS DEADLY", "Oh Fuck My Blood pills", \
+		"Emergency Pain Relief", "Blood Strengthening Pill (10 units)", "Literal Death", "Makes You Into The Captain", "plese send help stuck in chemistry")] pill"
 	desc = pick(300;"A strange pill found in the depths of maintenance.", "Just what the doctor ordered.", "Hey, look! Free healthcare!", "For best results, take one as close to noon as possible.")
 	icon_state = "pill[rand(20,40)]"
 
