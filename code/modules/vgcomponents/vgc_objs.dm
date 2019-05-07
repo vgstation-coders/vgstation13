@@ -73,6 +73,9 @@ Components
 /obj/item/vgc_obj/button
 	datum_type = /datum/vgcomponent/button
 
+/obj/item/vgc_obj/button/toggle
+	datum_type = /datum/vgcomponent/button/toggle
+
 /obj/item/vgc_obj/splitter
 	datum_type = /datum/vgcomponent/splitter
 
