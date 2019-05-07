@@ -88,6 +88,22 @@ Components
 /obj/item/vgc_obj/prox_sensor
 	datum_type = /datum/vgcomponent/prox_sensor
 
+/obj/item/vgc_obj/add
+	datum_type = /datum/vgcomponent/algorithmic/add
+
+/obj/item/vgc_obj/sub
+	datum_type = /datum/vgcomponent/algorithmic/sub
+
+/obj/item/vgc_obj/mult
+	datum_type = /datum/vgcomponent/algorithmic/mult
+
+/obj/item/vgc_obj/div1
+	datum_type = /datum/vgcomponent/algorithmic/div1
+
+/obj/item/vgc_obj/div2
+	datum_type = /datum/vgcomponent/algorithmic/div2
+
+
 /*
 Logictool
 */
