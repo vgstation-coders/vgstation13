@@ -35,6 +35,7 @@ datum/vgassembly
 	var/list/allowed_components = list() // keep list empty to disable
 	var/list/banned_components = list() // keep list empty to disable
 	var/list/output_queue = list() //list of outputs to fire, indexed by \ref[vgc]
+	var/timestopped = 0
 
 datum/vgassembly/New()
 	vg_assemblies += src
@@ -235,37 +236,40 @@ datum/vgassembly/proc/canAdd(var/datum/vgcomponent/vgc)
 	return 1
 
 datum/vgassembly/proc/setTimestop(var/timestop)
+	timestopped = timestop
 	for(var/datum/vgcomponent/vgc in _vgcs)
 		vgc.timestopped = timestop
 
 datum/vgassembly/proc/fireOutputs()
-	for(var/ref in output_queue)
+	if(timestopped)
+		return
+
+	while(output_queue.len)
+		var/list/Q = output_queue[output_queue.len]
+		output_queue.len--
+		var/ref = Q[1]
+		var/target = Q[2]
+		var/signal = Q[3]
+
 		var/datum/vgcomponent/vgc = locate(ref)
 		if(!vgc)
-			output_queue["[ref]"] = null
 			continue
-		
-		for(var/Q in output_queue["[ref]"])
-			var/target = Q[1]
-			var/signal = Q[2]
-			if(vgc.timestopped)
-				continue
 
-			if(!vgc._output[target])
-				output_queue["[ref]"]["[Q]"] = null
+		if(vgc.timestopped)
+			continue
 
-			if(vgc._output[target][1]._busy)
-				output_queue["[ref]"]["[Q]"] = null
-				continue
+		if(!vgc._output[target])
+			continue
 
-			if(!_vgcs.Find(vgc._output[target][1])) //component no longer in vga apparently
-				output_queue["[ref]"]["[Q]"] = null
-				vgc._output[target] = null
-				continue
+		if(vgc._output[target][1]._busy)
+			continue
 
-			var/proc_string = vgc._output[target][1]._input[_output[target][2]]
-			call(vgc._output[target][1], proc_string)(signal) //oh boy what a line
-			output_queue["[ref]"]["[Q]"] = null
+		if(!_vgcs.Find(vgc._output[target][1])) //component no longer in vga apparently
+			vgc._output[target] = null
+			continue
+
+		var/proc_string = vgc._output[target][1]._input[vgc._output[target][2]]
+		call(vgc._output[target][1], proc_string)(signal) //oh boy what a line
 
 /*
 Base Component
@@ -331,8 +335,11 @@ datum/vgcomponent/proc/rebuildOutputs()
 datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 	if(!_assembly)
 		return
-	
-	_assembly.output_queue["\ref[src]"][++_assembly.output_queue["\ref[src]"].len] = list(target, signal)
+
+	if(!_assembly.output_queue["\ref[src]"])
+		_assembly.output_queue["\ref[src]"] = list()
+
+	_assembly.output_queue[++_assembly.output_queue.len] = list("\ref[src]", target, signal)
 
 datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
@@ -352,7 +359,7 @@ datum/vgcomponent/proc/openSettings(var/mob/user)
 
 //default input path
 datum/vgcomponent/proc/main(var/signal)
-	message_admins("somehow [src]'s default input got called, altough it was never set.'") //yes i know dont judge me, i am working with datums here
+	message_admins("somehow [src]'s default input got called, altough it was never set.'")
 	return
 
 datum/vgcomponent/proc/onTouch(var/obj/item/O, var/mob/user)
@@ -474,6 +481,7 @@ Button
 /datum/vgcomponent/button/toggle
 	name = "Togglebutton"
 	toggle = 1
+	obj_path = /obj/item/vgc_obj/button/toggle
 
 /*
 Splitter

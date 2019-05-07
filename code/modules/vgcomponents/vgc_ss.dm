@@ -1,13 +1,13 @@
 var/datum/subsystem/circuits/SScircuit
 
-var/list/datum/vgassemblies/vg_assemblies = list()
+var/list/vg_assemblies = list()
 
 /datum/subsystem/circuits
 	name          	= "Circuits"
 	flags    		= SS_NO_INIT
 	display_order 	= SS_DISPLAY_CIRCUIT
 	priority      	= SS_PRIORITY_CIRCUIT
-	wait          	= 0.5 SECONDS
+	wait          	= 0.2 SECONDS
 
 	var/list/currentrun
 
@@ -26,6 +26,8 @@ var/list/datum/vgassemblies/vg_assemblies = list()
 	while (currentrun.len)
 		var/datum/vgassembly/A = currentrun[currentrun.len]
 		currentrun.len--
+		if(!istype(A, /datum/vgassembly))
+			continue //outta here
 
 		if (!A || A.gcDestroyed || A.disposed || A.timestopped)
 			continue
