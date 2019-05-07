@@ -103,6 +103,14 @@ Components
 /obj/item/vgc_obj/div2
 	datum_type = /datum/vgcomponent/algorithmic/div2
 
+/obj/item/vgc_obj/appender
+	datum_type = /datum/vgcomponent/appender
+
+/obj/item/vgc_obj/index_getter
+	datum_type = /datum/vgcomponent/index_getter
+
+/obj/item/vgc_obj/list_iterator
+	datum_type = /datum/vgcomponent/list_iterator
 
 /*
 Logictool
