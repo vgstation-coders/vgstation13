@@ -34,11 +34,16 @@ datum/vgassembly
 	//you can only use one or the other
 	var/list/allowed_components = list() // keep list empty to disable
 	var/list/banned_components = list() // keep list empty to disable
+	var/list/output_queue = list() //list of outputs to fire, indexed by \ref[vgc]
+
+datum/vgassembly/New()
+	vg_assemblies += src
 
 datum/vgassembly/Destroy()
-	..()
+	vg_assemblies -= src
 	_parent = null
 	_vgcs = null
+	..()
 
 datum/vgassembly/proc/rebuild()
 	for(var/datum/vgcomponent/vgc in _vgcs)
@@ -233,6 +238,35 @@ datum/vgassembly/proc/setTimestop(var/timestop)
 	for(var/datum/vgcomponent/vgc in _vgcs)
 		vgc.timestopped = timestop
 
+datum/vgassembly/proc/fireOutputs()
+	for(var/ref in output_queue)
+		var/datum/vgcomponent/vgc = locate(ref)
+		if(!vgc)
+			output_queue["[ref]"] = null
+			continue
+		
+		for(var/Q in output_queue["[ref]"])
+			var/target = Q[1]
+			var/signal = Q[2]
+			if(vgc.timestopped)
+				continue
+
+			if(!vgc._output[target])
+				output_queue["[ref]"]["[Q]"] = null
+
+			if(vgc._output[target][1]._busy)
+				output_queue["[ref]"]["[Q]"] = null
+				continue
+
+			if(!_vgcs.Find(vgc._output[target][1])) //component no longer in vga apparently
+				output_queue["[ref]"]["[Q]"] = null
+				vgc._output[target] = null
+				continue
+
+			var/proc_string = vgc._output[target][1]._input[_output[target][2]]
+			call(vgc._output[target][1], proc_string)(signal) //oh boy what a line
+			output_queue["[ref]"]["[Q]"] = null
+
 /*
 Base Component
 */
@@ -295,21 +329,10 @@ datum/vgcomponent/proc/rebuildOutputs()
 			_output[O] = null
 
 datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
-	if(timestopped)
-		return 0
-
-	if(!_output[target])
-		return 0
-
-	if(_output[target][1]._busy)
-		return 0
-
-	if(!_assembly._vgcs.Find(_output[target][1])) //component no longer in vga apparently
-		_output[target] = null
-		return 0
-
-	var/proc_string = _output[target][1]._input[_output[target][2]]
-	return call(_output[target][1], proc_string)(signal) //oh boy what a line
+	if(!_assembly)
+		return
+	
+	_assembly.output_queue["\ref[src]"][++_assembly.output_queue["\ref[src]"].len] = list(target, signal)
 
 datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
