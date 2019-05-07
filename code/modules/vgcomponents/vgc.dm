@@ -611,7 +611,7 @@ Algorithmic components
 	)
 	var/num = 0
 
-/datum/vgcomponent/proc/setNum(var/signal)
+/datum/vgcomponent/algorithmic/proc/setNum(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal)
@@ -619,7 +619,7 @@ Algorithmic components
 
 	num = signal
 
-/datum/vgcomponent/proc/doCalc(var/signal)
+/datum/vgcomponent/algorithmic/proc/doCalc(var/signal)
 	if(!isnum(signal))
 		signal = text2num(signal)
 		if(!signal)
@@ -627,7 +627,7 @@ Algorithmic components
 
 	calc(signal)
 
-/datum/vgcomponent/proc/calc(var/signal)
+/datum/vgcomponent/algorithmic/proc/calc(var/signal)
 	return
 
 // ADD

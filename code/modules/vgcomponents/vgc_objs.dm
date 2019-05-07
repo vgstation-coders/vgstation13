@@ -44,6 +44,13 @@ Base Component
 	vgc = null
 	..()
 
+/obj/item/vgc_obj/attack_self(mob/user)
+	if(!vgc)
+		return
+
+	if(vgc.has_settings)
+		vgc.openSettings(user)
+
 /*
 Components
 */
@@ -125,11 +132,13 @@ Components
 	if(proximity_flag != 1)
 		return
 
-	if(!vgc.waitingForType)
+	var/datum/vgcomponent/typecheck/V = vgc 
+
+	if(!V.waitingForType)
 		return
 	
-	vgc.costum_type = A.type
-	vgc.waitingForType = 0
+	V.costum_type = A.type
+	V.waitingForType = 0
 	to_chat(user, "You copied \the [A]'s type into \the [src.name]'s memory")
 
 /*
@@ -163,7 +172,7 @@ Testing stuff
 	S.Install(vga) //default 1457 30
 	S.setOutput("signaled", D)
 
-/obj/item/vgc_assembly/full_house/New()
+/obj/item/vgc_assembly/debugkit/New()
 	var/datum/vgassembly/A = new ()
 	..(A)
 	for(var/T in typesof(/datum/vgcomponent))
@@ -173,4 +182,4 @@ Testing stuff
 		C.Install(vga)
 
 	//spawn utilities
-	var/obj/item/vgc_logictool/tool = new (get_turf(src))
+	new /obj/item/vgc_logictool(get_turf(src))
