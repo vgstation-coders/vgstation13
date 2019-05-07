@@ -42,6 +42,7 @@
 #define SS_PRIORITY_EVENT          65
 #define SS_PRIORITY_DISEASE        60
 #define SS_PRIORITY_FAST_MACHINERY 55
+#define SS_PRIORITY_CIRCUIT        50
 #define SS_PRIORITY_PLANT          40
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
@@ -64,6 +65,7 @@
 #define SS_DISPLAY_MACHINERY      -50
 #define SS_DISPLAY_PIPENET        -40
 #define SS_DISPLAY_FAST_MACHINERY -30
+#define SS_DISPLAY_CIRCUIT        -29
 #define SS_DISPLAY_PLANT          -25
 #define SS_DISPLAY_POWER          -20
 #define SS_DISPLAY_TICKER         -10
