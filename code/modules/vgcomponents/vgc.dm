@@ -186,7 +186,7 @@ datum/vgassembly/Topic(href,href_list)
 datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
 	//execute touch events for components if they are enabled
 	for(var/datum/vgcomponent/vgc in _vgcs)
-		if(!vgc.has_touch)
+		if(!vgc.has_touch && !vgc.touch_enabled)
 			continue
 		
 		vgc.onTouch(O, user)
@@ -274,8 +274,8 @@ datum/vgcomponent
 	var/_busy = 0 //if machine is busy, for components who need time to properly function
 	var/list/settings = list() //list of open uis, indexed with \ref[user]
 	var/has_settings = 0 //enables openSettings button in assembly ui
-	var/has_touch = 0
-	var/touch_enabled = 0
+	var/has_touch = 0 //if the person has the ability to toggle touch behaviour
+	var/touch_enabled = 0 //if touch will fire
 	var/obj_path = /obj/item/vgc_obj
 	var/timestopped = 0 //needed for processingobjs
 
@@ -456,7 +456,6 @@ Button
 	var/state = 1
 	obj_path = /obj/item/vgc_obj/button
 	_input = list()
-	has_touch = 1
 	touch_enabled = 1
 
 /datum/vgcomponent/button/onTouch(obj/item/O, mob/user)
