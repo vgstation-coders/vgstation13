@@ -599,6 +599,71 @@ Keyboard
 			return //to prevent the spam, only output once per process
 
 /*
+Algorithmic components
+*/
+/datum/vgcomponent/algorithmic
+	_input = list(
+		"setNum" = "setNum"
+		"calculate" = "calc"
+	)
+	_output = list(
+		"result"
+	)
+	var/num = 0
+
+/datum/vgcomponent/setNum(var/signal)
+	num = signal
+
+/datum/vgcomponent/calc(var/signal)
+	return
+
+// ADD
+/datum/vgcomponent/algorithmic/add
+	name = "Add"
+	desc = "adds onto numbers"
+	obj_path = /obj/item/vgc_obj/add
+
+/datum/vgcomponent/algorithmic/add/calc(var/signal)
+	handleOutput("result", signal+num)
+
+//SUBTRACT
+/datum/vgcomponent/algorithmic/sub
+	name = "Subtract"
+	desc = "subtracts of numbers"
+	obj_path = /obj/item/vgc_obj/sub
+
+/datum/vgcomponent/algorithmic/sub/calc(var/signal)
+	handleOutput("result", signal-num)
+
+//MULTIPLY
+/datum/vgcomponent/algorithmic/mult
+	name = "Multiply"
+	desc = "multiply numbers"
+	obj_path = /obj/item/vgc_obj/mult
+
+/datum/vgcomponent/algorithmic/mult/calc(var/signal)
+	handleOutput("result", signal*num)
+
+//DIVIDE X/NUM
+/datum/vgcomponent/algorithmic/div1
+	name = "Divide 1"
+	desc = "divide numbers with X/NUM"
+	obj_path = /obj/item/vgc_obj/div1
+
+/datum/vgcomponent/algorithmic/div1/calc(var/signal)
+	if(!signal)
+		return
+	handleOutput("result", signal/num)
+
+//DIVIDE NUM/X
+/datum/vgcomponent/algorithmic/div2
+	name = "Divide 2"
+	desc = "divide numbers with NUM/X"
+	obj_path = /obj/item/vgc_obj/div2
+
+/datum/vgcomponent/algorithmic/div2/calc(var/signal)
+	handleOutput("result", num/signal)
+/*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assembly objs)
 ===================================================================
