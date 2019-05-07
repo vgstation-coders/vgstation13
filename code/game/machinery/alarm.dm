@@ -163,6 +163,21 @@
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 0, "n2o" = 0)
 
+/datum/airalarm_preset/vacuum
+	name = "Vacuum"
+	desc = "For rooms to be kept under vacuum"
+	core = TRUE
+	oxygen = list(-1, -1, 0.5, 1)
+	nitrogen = list(-1, -1, 0.5, 1)
+	carbon_dioxide = list(-1, -1, 0.5, 1)
+	plasma = list(-1, -1, 0.5, 1)
+	n2o = list(-1, -1, 0.5, 1)
+	other = list(-1, -1, 0.5, 1)
+	pressure = list(-1, -1, ONE_ATMOSPHERE*0.01, ONE_ATMOSPHERE*0.05)
+	temperature = list(-1, -1, -1, -1)
+	target_temperature = T0C+20
+	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
+
 //these are used for the UIs and new ones can be added and existing ones edited at the CAC
 var/global/list/airalarm_presets = list(
 	"Human" = new /datum/airalarm_preset/human,
@@ -233,6 +248,9 @@ var/global/list/airalarm_presets = list(
 	preset = "Vox"
 	req_one_access = list()
 	req_access = list(access_trade)
+
+/obj/machinery/alarm/vacuum
+	preset = "Vacuum"
 
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
 	var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
