@@ -3,11 +3,11 @@ var/datum/subsystem/circuits/SScircuit
 var/list/datum/vgassemblies/vg_assemblies = list()
 
 /datum/subsystem/circuits
-	name          = "Circuits"
-	init_order    = SS_NO_INIT
-	display_order = SS_DISPLAY_OBJECTS
-	priority      = SS_PRIORITY_OBJECTS
-	wait          = 0.5 SECONDS
+	name          	= "Circuits"
+	flags    		= SS_NO_INIT
+	display_order 	= SS_DISPLAY_CIRCUIT
+	priority      	= SS_PRIORITY_CIRCUIT
+	wait          	= 0.5 SECONDS
 
 	var/list/currentrun
 
