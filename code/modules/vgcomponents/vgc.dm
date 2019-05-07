@@ -1,16 +1,3 @@
-/*
-Doing my TODO here since i am offline
-- add locking mechanism that blocks people from editing the assembly/pulsing the components
-- add a list iterator components: if it receives a list, it will iterate over the contents sending them out
-- add a component to store vars
-- add a component that relays a signal and then sends one onFail or onSuccess
-- dunno if this is already online, but add a timer
-- fix the timer on prox_sensor
-- ## DEBUG: Tue May 07 00:22:29 2019 MC restarted
-what does that mean cause it triggered when i made an endless loop
-- make setoutput cancellable
-*/
-
 obj
 	var/datum/vgassembly/vga = null //component assembly
 
@@ -550,15 +537,11 @@ Keyboard
 		"deactivate" = "deactivate",
 		"toggle" = "toggle",
 		"setRange" = "setRange",
-		"setTimer" = "setTimer",
-		"startTimer" = "start_process",
-		"stopTimer" = "stop_process"
 	)
 	_output = list(
 		"sense" = null
 	)
 	var/active = 0
-	var/timer = 0
 	var/range = 2
 	has_settings = 1
 
@@ -591,16 +574,6 @@ Keyboard
 	range = signal
 	return 1
 
-/datum/vgcomponent/prox_sensor/proc/setTimer(var/signal)
-	if(!isnum(signal))
-		signal = text2num(signal)
-		if(!signal) //wasn't a number
-			return 0
-	
-	timer = signal
-	deactivate()
-	return 1
-
 /datum/vgcomponent/prox_sensor/proc/start_process()
 	if(!(src in processing_objects))
 		processing_objects.Add(src)
@@ -617,8 +590,6 @@ Keyboard
 		return
 
 	if(!active)
-		if(--timer <= 0)
-			activate()
 		return
 	
 	//sense for people
@@ -626,7 +597,7 @@ Keyboard
 	for(var/mob/living/A in range(range,loc))
 		if(A.move_speed < 12)
 			handleOutput("sense")
-			return //to prevent the spam
+			return //to prevent the spam, only output once per process
 
 /*
 ===================================================================
