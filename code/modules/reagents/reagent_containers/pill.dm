@@ -394,7 +394,8 @@
 		"now i cant even fucking see (10.7919 units)", "Problem Fixer(5 units)", "Rapid Limb Regrowth", "Runfast (29.8817 units)", "Sleeping Dragon Suicide Pill", \
 		"Special pill only for You", "Test Batch #001 (25 units)", "The Utlimate trip", "Tumor and Cancer (5 units)", "turns you into a slime", "Unfuck me pill", \
 		"Unstable mutagen (0 units)", "VERY FUN DO NOT CONSUME", "Very Healthy!(may cause side effects)", "Wild Ride enhancer", "MORE TAN 1 IS DEADLY", "Oh Fuck My Blood pills", \
-		"Emergency Pain Relief", "Blood Strengthening Pill (10 units)", "Literal Death", "Makes You Into The Captain", "plese send help stuck in chemistry")] pill"
+		"Emergency Pain Relief", "Blood Strengthening Pill (10 units)", "Literal Death", "Makes You Into The Captain", "plese send help stuck in chemistry", \
+		"antiubodies for the disease that makes you scream.", "Xenomicrobes (1 unit)", "Miracle butt heal", "lesser death", "All-Natural", "still fucking hurts doc")] pill"
 	desc = pick(300;"A strange pill found in the depths of maintenance.", "Just what the doctor ordered.", "Hey, look! Free healthcare!", "For best results, take one as close to noon as possible.")
 	icon_state = "pill[rand(20,40)]"
 
