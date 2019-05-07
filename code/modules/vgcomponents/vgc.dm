@@ -535,7 +535,7 @@ Keyboard
 		"activate" = "activate",
 		"deactivate" = "deactivate",
 		"toggle" = "toggle",
-		"setRange" = "setRange",
+		"setRange" = "setRange"
 	)
 	_output = list(
 		"sense" = null
@@ -603,8 +603,8 @@ Algorithmic components
 */
 /datum/vgcomponent/algorithmic
 	_input = list(
-		"setNum" = "setNum"
-		"calculate" = "calc"
+		"setNum" = "setNum",
+		"calculate" = "doCalc"
 	)
 	_output = list(
 		"result"
@@ -612,7 +612,20 @@ Algorithmic components
 	var/num = 0
 
 /datum/vgcomponent/setNum(var/signal)
+	if(!isnum(signal))
+		signal = text2num(signal)
+		if(!signal)
+			return//wasn't a number
+
 	num = signal
+
+/datum/vgcomponent/doCalc(var/signal)
+	if(!isnum(signal))
+		signal = text2num(signal)
+		if(!signal)
+			return//wasn't a number
+
+	calc(signal)
 
 /datum/vgcomponent/calc(var/signal)
 	return
@@ -663,6 +676,80 @@ Algorithmic components
 
 /datum/vgcomponent/algorithmic/div2/calc(var/signal)
 	handleOutput("result", num/signal)
+
+/*
+String Appender
+*/
+/datum/vgcomponent/appender
+	name = "Appender"
+	desc = "appends to string"
+	obj_path = /obj/item/vgc_obj/appender
+	_input = list(
+		"setPhrase" = "setPhrase",
+		"append" = "append"
+	)
+	var/phrase = ""
+
+/datum/vgcomponent/appender/proc/setPhrase(var/signal)
+	if(!istext(signal))
+		signal = "[signal]"
+
+	phrase = signal
+
+/datum/vgcomponent/appender/proc/append(var/signal)
+	handleOutput(signal = "[signal][phrase]")
+
+/*
+LIST OPERATORS
+*/
+/*
+Index getter
+*/
+/datum/vgcomponent/index_getter
+	name = "List Index Grabber"
+	desc = "grabs specified index from list"
+	obj_path = /obj/item/vgc_obj/index_getter
+	_input = list(
+		"setIndex" = "setIndex",
+		"grab" = "grab"
+	)
+	_output = list(
+		"element" = null
+	)
+	var/index = 1
+
+/datum/vgcomponent/index_getter/proc/setIndex(var/signal)
+	if(!isnum(signal))
+		signal = text2num(signal)
+		if(!signal)
+			return//wasn't a number
+		
+	index = signal
+
+/datum/vgcomponent/index_getter/proc/grab(var/signal)
+	if(!istype(signal, /list))
+		return
+	
+	if(index > signal.len)
+		return
+
+	handleOutput("element", signal[index])
+
+/*
+List iterator
+*/
+/datum/vgcomponent/list_iterator
+	name = "List iterator"
+	desc = "iterates over the list given to it"
+	obj_path = /obj/item/vgc_obj/list_iterator
+
+datum/vgcomponent/list_iterator/main(var/signal)
+	if(!istype(signal, /list))
+		return
+
+	for(var/E in signal)
+		handleOutput(signal = E)
+
 /*
 ===================================================================
 ASSEMBLY WRAPPERS (just components that use the current assembly objs)
