@@ -355,7 +355,7 @@
 		list(BAD_TOUCH = 15, STOXIN = 10), // hallucination damage!
 		list(SUICIDE = 20, DISCOUNT = 30), // makes you vomit a lot
 		list(LIPOZINE = 25), // makes you hungry as hell
-		list(DANSWHISKEY = 30),
+		list(DANS_WHISKEY = 30),
 		list(CRYPTOBIOLIN = 10),
 		list(SILENCER = 20),
 		list(ZOMBIEPOWDER = 10),
