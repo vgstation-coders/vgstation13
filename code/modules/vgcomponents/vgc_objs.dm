@@ -177,8 +177,8 @@ Testing stuff
 	..(A)
 	for(var/T in typesof(/datum/vgcomponent))
 		var/datum/vgcomponent/C = new T()
-		if(!C.name) //unspawnable components tend to have no name
-			return
+		if(C.name == "VGComponent") //its the default one! BAIL
+			continue
 		C.Install(vga)
 
 	//spawn utilities

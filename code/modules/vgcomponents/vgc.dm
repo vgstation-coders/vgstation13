@@ -185,11 +185,17 @@ datum/vgassembly/Topic(href,href_list)
 
 datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
 	//execute touch events for components if they are enabled
+	var/list/touchables = list()
 	for(var/datum/vgcomponent/vgc in _vgcs)
 		if(!vgc.has_touch && !vgc.touch_enabled)
 			continue
-		
-		vgc.onTouch(O, user)
+		touchables += list("[vgc.name]" = vgc)
+
+	var/input = input("What component do you want to interact with?", "Select Component", null) as null|anything in touchables
+	if(!input)
+		return
+	
+	touchables[input].onTouch(O, user)
 	return
 
 datum/vgassembly/proc/UI_Update()
@@ -689,6 +695,8 @@ String Appender
 		"append" = "append"
 	)
 	var/phrase = ""
+	var/dir = 1
+	has_settings = 1 //for setting the phrase, and dir
 
 /datum/vgcomponent/appender/proc/setPhrase(var/signal)
 	if(!istext(signal))
@@ -697,7 +705,10 @@ String Appender
 	phrase = signal
 
 /datum/vgcomponent/appender/proc/append(var/signal)
-	handleOutput(signal = "[signal][phrase]")
+	if(dir)
+		handleOutput(signal = "[signal][phrase]")
+	else
+		handleOutput(signal = "[phrase][signal]")
 
 /*
 LIST OPERATORS
@@ -717,6 +728,7 @@ Index getter
 		"element" = null
 	)
 	var/index = 1
+	has_settings = 1 //for setting the index
 
 /datum/vgcomponent/index_getter/proc/setIndex(var/signal)
 	if(!isnum(signal))
