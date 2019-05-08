@@ -2,7 +2,7 @@
  -- Vampires --
  */
 
-#define MAX_BLOOD_PER_TARGET 400
+#define MAX_BLOOD_PER_TARGET 200
 
 /datum/role/vampire
 	id = VAMPIRE
