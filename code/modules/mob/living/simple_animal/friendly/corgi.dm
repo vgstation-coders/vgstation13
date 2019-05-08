@@ -700,7 +700,7 @@
 	..()
 
 	if(!incapacitated() && !resting && !locked_to && !client)
-		var/list/can_see() = view(src, 6) //Might need tweaking.
+		var/list/can_see = view(src, 6) //Might need tweaking.
 		if(victim && (!IsVictim(victim) || !(victim.loc in can_see)))
 			victim = null
 			stop_automated_movement = FALSE

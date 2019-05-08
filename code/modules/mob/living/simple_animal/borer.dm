@@ -1045,7 +1045,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	else
 		to_chat(src, "You do not have enough chemicals stored to reproduce.")
-		return()
+		return
 
 //Procs for grabbing players.
 /mob/living/simple_animal/borer/proc/request_player()

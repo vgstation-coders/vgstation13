@@ -509,7 +509,7 @@
 		shuttle_list += name
 		shuttle_list[name]=S
 
-	var/my_shuttle = input(usr, message, title) in shuttle_list as text|null
+	var/my_shuttle = input(usr, message, title) as null|anything in shuttle_list
 
 	if( my_shuttle && shuttle_list[my_shuttle] && istype(shuttle_list[my_shuttle], /datum/shuttle) )
 		return shuttle_list[my_shuttle]

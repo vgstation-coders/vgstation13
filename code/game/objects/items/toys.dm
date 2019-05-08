@@ -513,7 +513,7 @@
  * Syndie stealthy smokebombs!
  */
  /obj/item/toy/snappop/smokebomb
- 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1";
+ 	origin_tech = "[Tc_COMBAT]=1;[Tc_SYNDICATE]=1";
 	flags = FPRINT | NO_THROW_MSG
 
 /obj/item/toy/snappop/smokebomb/pop()
