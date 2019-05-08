@@ -41,6 +41,10 @@ var/list/camera_names=list()
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 	var/health = CAMERA_MAX_HEALTH
 
+/obj/machinery/camera/initialize()
+	if(prob(15))
+		deactivate()
+
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
 	var/deactivated = !status
