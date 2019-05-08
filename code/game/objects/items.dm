@@ -1024,6 +1024,8 @@
 	. = ..()
 	if(blood_overlay)
 		overlays.Remove(blood_overlay)
+	if(had_blood)
+		clear_luminol()
 	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
@@ -1047,14 +1049,13 @@
 	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
 	blood_overlay.color = blood_color
 	overlays += blood_overlay
-
 	//if this blood isn't already in the list, add it
-
 	if(!M)
 		return
 	if(blood_DNA[M.dna.unique_enzymes])
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
 var/global/list/image/blood_overlays = list()
@@ -1068,6 +1069,34 @@ var/global/list/image/blood_overlays = list()
 
 	blood_overlays[type] = image(I)
 
+/obj/item/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!blood_overlays[type]) //Blood overlay generation if it lacks one.
+		generate_blood_overlay()
+	if(blood_overlay)
+		overlays.Remove(blood_overlay)
+	else
+		blood_overlay = blood_overlays[type]
+	var/image/luminol_overlay = blood_overlay
+	luminol_overlay.color = LIGHT_COLOR_CYAN
+	overlays += luminol_overlay
+	var/obj/effect/decal/cleanable/blueglow/BG
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		BG = had_blood
+		BG.set_light(1,2,LIGHT_COLOR_BLUE)
+	else
+		had_blood = null
+		BG = new /obj/effect/decal/cleanable/blueglow(src)
+		had_blood = BG
+
+/obj/item/clear_luminol()
+	if(!..())
+		return FALSE
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		var/obj/effect/decal/cleanable/blueglow/BG
+		BG = had_blood
+		BG.set_light(0)
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)

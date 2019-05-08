@@ -949,7 +949,7 @@
 	required_reagents = list(LITHIUM = 1, HYDROGEN = 1)
 	result_amount = 1
 
-//Synthesizing these three chemicals is pretty complex in real life, but fuck it, it's just a game!
+//Synthesizing these three(+) chemicals is pretty complex in real life, but fuck it, it's just a game!
 /datum/chemical_reaction/ammonia
 	name = "Ammonia"
 	id = AMMONIA
@@ -977,6 +977,17 @@
 	result = BLEACH
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
 	result_amount = 1
+
+//This one isn't even close the the real life reaction but will have to do to avoid conflicts with the above reactions.
+/datum/chemical_reaction/luminol
+	name = "Luminol"
+	id = LUMINOL
+	result = LUMINOL
+	required_reagents = list(CLEANER = 3, CARBON = 8)
+	result_amount = 10
+	//"Realistic" results.
+	//result_amount = 3
+	//secondary_results = list(WATER = 1, HYDROGEN = 6)
 
 //Botany chemicals
 
