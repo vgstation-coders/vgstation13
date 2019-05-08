@@ -1,6 +1,9 @@
 var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
+
+#define HOLYWATER_DURATION 8 MINUTES 
+
 /atom
 
 	var/ghost_read  = 1 // All ghosts can read
