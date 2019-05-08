@@ -607,6 +607,17 @@
 		/obj/item/weapon/gun/projectile/russian,
 	)
 
+/obj/abstract/map/spawner/floorpill
+	name = "floor pill spawner"
+	icon_state = "maint"
+	chance = 20
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/random/maintenance
+	)
+
+/obj/abstract/map/spawner/floorpill/guaranteed
+	chance = 100
+
 // Space ///////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/space/weapons

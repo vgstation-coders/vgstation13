@@ -1096,6 +1096,7 @@
 #include "code\game\objects\structures\stool_bed_chair_nest\bed.dm"
 #include "code\game\objects\structures\stool_bed_chair_nest\chairs.dm"
 #include "code\game\objects\structures\stool_bed_chair_nest\guillotine.dm"
+#include "code\game\objects\structures\stool_bed_chair_nest\rollerbed.dm"
 #include "code\game\objects\structures\stool_bed_chair_nest\stools.dm"
 #include "code\game\objects\structures\universal_generators\cellular_automata.dm"
 #include "code\game\objects\structures\universal_generators\radial_generator.dm"

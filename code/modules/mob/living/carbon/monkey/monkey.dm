@@ -534,3 +534,6 @@
 	..()
 	if(statpanel("Status"))
 		stat(null, "Growth completing: [growth]%")
+
+/mob/living/carbon/monkey/mushroom/passive_emote()
+	emote(pick("scratch","jump","roll"))

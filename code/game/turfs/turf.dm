@@ -194,7 +194,7 @@
 
 			if(istype(A, /obj/structure/bed/chair/vehicle))
 				var/obj/structure/bed/chair/vehicle/B = A
-				if(B.is_locking(B.lock_type))
+				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.

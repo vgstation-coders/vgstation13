@@ -14,6 +14,8 @@
 	required_candidates = 1
 	weight = 5
 	cost = 10
+	var/traitor_threshold = 3
+	var/additional_cost = 5 
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
@@ -28,6 +30,11 @@
 		var/datum/role/traitor/newTraitor = new
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
+		// Above 3 traitors, we start to cost a bit more.
+		if (i > traitor_threshold && (mode.threat > additional_cost))
+			mode.spend_threat(additional_cost)
+		else
+			break
 	return 1
 
 /datum/dynamic_ruleset/roundstart/traitor/process()
@@ -84,7 +91,7 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 2
-	cost = 25
+	cost = 15
 	requirements = list(80,60,50,30,20,10,10,10,10,10)
 	high_population_requirement = 30
 
@@ -98,6 +105,11 @@
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
+		// Above 2 vampires, we start to cost a bit more.
+		if (i >= 2 && (mode.threat > cost))
+			mode.spend_threat(cost)
+		else
+			break
 	update_faction_icons()
 	return 1
 

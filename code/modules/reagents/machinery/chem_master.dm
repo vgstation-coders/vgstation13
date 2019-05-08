@@ -17,7 +17,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
 	var/mode = 1 //1 = from buffer to beaker. 0 = from buffer to disposals.
 	var/slurpmode = 0 //1 = from obj to beaker. 0 = from obj to buffer.
-	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
+	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket,
+		/obj/item/weapon/reagent_containers/glass/jar, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
