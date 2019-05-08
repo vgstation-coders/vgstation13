@@ -7,6 +7,7 @@ var/global/list/disease2_list = list()
 	var/list/datum/disease2/effect/effects = list()
 
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
+	//Ignored if infected materials are ingested (injected with infected blood, eating infected meat)
 	var/infectionchance = 70
 
 	//ticks increases by [speed] every time the disease activates. Drinking Virus Food also accelerates the process by 10.
@@ -20,26 +21,31 @@ var/global/list/disease2_list = list()
 	//when spreading to another mob, that new carrier has the disease's stage reduced by stage_variance
 	var/stage_variance = -1
 
+	//the antibody concentration at which the disease will fully exit the body
 	var/strength = 100
+
+	//the percentage of the strength at which effects will start getting disabled by antibodies.
 	var/robustness = 100
 
+	//chance to cure the disease at every proc when the body is getting cooked alive.
 	var/max_bodytemperature = 1000
+
+	//very low temperatures will stop the disease from activating/progressing
 	var/min_bodytemperature = 120
 
+	//the disease's antigens, that the body's immune_system will read to produce corresponding antibodies. Without antigens, a disease cannot be cured.
 	var/list/antigen = list()
-	//set to 1 once appropriate antibodies are applied to their carrier. curing the disease, removing it from the carrier
-	var/dead = 0
 
 	//logging
 	var/log = ""
-	var/logged_virusfood=0
+	var/logged_virusfood = 0
+	var/fever_warning = 0
 
 	//cosmetic
 	var/color
 	var/pattern = 1
 	var/pattern_color
 
-	var/fever_warning = 0
 
 /datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
 	form = "Bacteria"
@@ -99,7 +105,7 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
-	antigen = pick(all_antigens)
+	antigen = list(pick(all_antigens))
 	antigen |= pick(all_antigens)
 
 
@@ -175,7 +181,7 @@ var/global/list/disease2_list = list()
 	if(!D.infectionchance || D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
 	//pick random antigens for the disease to have
-	D.antigen = pick(all_antigens)
+	D.antigen = list(pick(all_antigens))
 	D.antigen |= pick(all_antigens)
 	D.spread = 0
 	if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be very hard to cure!)",,"Yes","No") == "Yes")
@@ -328,7 +334,7 @@ var/global/list/disease2_list = list()
 	log_debug("[form] [uniqueID] has major mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
 	if (prob(5))
-		antigen = pick(all_antigens)
+		antigen = list(pick(all_antigens))
 		antigen |= pick(all_antigens)
 
 /datum/disease2/disease/proc/getcopy()//called by infect_virus2()
@@ -338,7 +344,7 @@ var/global/list/disease2_list = list()
 	disease.infectionchance = infectionchance
 	disease.spread = spread
 	disease.stageprob = stageprob
-	disease.antigen   = antigen
+	disease.antigen   = antigen.Copy()
 	disease.uniqueID = uniqueID
 	disease.speed = speed
 	disease.stage = stage
@@ -391,9 +397,25 @@ var/global/list/virusDB = list()
 		var/datum/data/record/V = virusDB["[uniqueID]"]
 		.= V.fields["name"]
 
+/datum/disease2/disease/proc/get_subdivisions_string()
+	var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
+	var/dat = "("
+	for (var/i = 1 to max_stage)
+		dat += "[round(strength - i * subdivision)]"
+		if (i < max_stage)
+			dat += ", "
+	dat += ")"
+	return dat
+
+/datum/disease2/disease/proc/get_antigen_string()
+	var/dat = ""
+	for (var/A in antigen)
+		dat += "[A]"
+	return dat
+
 /datum/disease2/disease/proc/get_info()
 	var/r = "GNAv3 [name()]"
-	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b>"
+	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b> - [get_subdivisions_string()]"
 	r += "<BR>Infectability : <b>[infectionchance]%</b>"
 	r += "<BR>Spread forms : <b>[get_spread_string()]</b>"
 	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
@@ -402,7 +424,7 @@ var/global/list/virusDB = list()
 		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurence: <b>[e.chance]%</b>.</dt>"
 		r += "<dd>[e.desc]</dd>"
 	r += "</dl>"
-	r += "<BR>Antigen pattern: [antigen]"
+	r += "<BR>Antigen pattern: [get_antigen_string()]"
 	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
 	return r
 

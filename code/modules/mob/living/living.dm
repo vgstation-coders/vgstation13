@@ -1963,11 +1963,12 @@ Thanks.
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
 	if (!check_airborne_sterility())//checking for sterile mouth protections
 		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
-			if (cloud.source != src && Adjacent(cloud))
-				for (var/ID in cloud.viruses)
-					var/datum/disease2/disease/V = cloud.viruses[ID]
-					//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
-					infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+			if (!cloud.sourceIsCarrier || cloud.source != src)
+				if (Adjacent(cloud))
+					for (var/ID in cloud.viruses)
+						var/datum/disease2/disease/V = cloud.viruses[ID]
+						//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+						infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
 
 		var/turf/T = get_turf(src)
 		var/list/breathable_cleanable_types = list(

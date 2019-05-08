@@ -11,17 +11,19 @@ var/list/pathogen_clouds = list()
 	anchored = 0
 	density = 0
 	var/mob/source = null
+	var/sourceIsCarrier = TRUE
 	var/list/viruses = list()
 	var/lifetime = 10 SECONDS//how long until we naturally disappear, humans breath about every 8 seconds, so it has to survive at least this long to have a chance to infect
 	var/turf/target = null//when created, we'll slowly move toward this turf
 	var/image/pathogen
 
-/obj/effect/effect/pathogen_cloud/New(var/turf/loc, var/mob/sourcemob, var/list/virus)
+/obj/effect/effect/pathogen_cloud/New(var/turf/loc, var/mob/sourcemob, var/list/virus, var/isCarrier = TRUE)
 	..()
 	if (!loc || !virus || virus.len <= 0)
 		qdel(src)
 		return
 
+	sourceIsCarrier = isCarrier
 	pathogen_clouds += src
 
 	pathogen = image('icons/effects/96x96.dmi',src,"pathogen_airborne")
@@ -65,7 +67,7 @@ var/list/pathogen_clouds = list()
 		sleep (1 SECONDS)
 		while (src && src.loc)
 			if (src.loc != target)
-				getFromPool(/obj/effect/effect/pathogen_cloud,src.loc,source,viruses)
+				getFromPool(/obj/effect/effect/pathogen_cloud,src.loc,source,viruses,sourceIsCarrier)
 			if (prob(75))
 				step_towards(src,target)
 			else

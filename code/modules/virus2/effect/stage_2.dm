@@ -191,7 +191,7 @@
 	if (prob(30))
 		if (ishuman(mob))
 			var/mob/living/carbon/human/H = mob
-			if (!(species.anatomy_flags & NO_BLOOD))
+			if (!(H.species.anatomy_flags & NO_BLOOD))
 				H.drip(1)
 		else
 			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)

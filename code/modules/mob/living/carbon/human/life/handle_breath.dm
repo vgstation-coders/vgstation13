@@ -87,8 +87,7 @@
 							break //If they breathe in the nasty stuff once, no need to continue checking
 
 					//airborne viral spread/breathing
-					if (!block)
-						breath_airborne_diseases()
+					breath_airborne_diseases()
 
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))

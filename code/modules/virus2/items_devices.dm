@@ -109,7 +109,7 @@
 		last_cloud_time = world.time
 		var/list/L = list()
 		L["[contained_virus.uniqueID]"] = contained_virus
-		getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), last_openner, virus_copylist(L))
+		getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), last_openner, virus_copylist(L), FALSE)
 		return 1
 	return 0
 
@@ -165,7 +165,7 @@
 			var/list/L = list()
 			L["[contained_virus.uniqueID]"] = contained_virus
 			while (strength > 0)
-				getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), user, virus_copylist(L))
+				getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), user, virus_copylist(L), FALSE)
 				strength -= 40
 	qdel(src)
 

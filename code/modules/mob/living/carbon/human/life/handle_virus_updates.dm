@@ -6,10 +6,10 @@
 
 	src.find_nearby_disease()
 
-	var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
-	for(var/ID in virus2)
-		var/datum/disease2/disease/V = virus2[ID]
-		if(istype(V))
-			V.activate(src, active_disease != ID)
-
+	if (virus2.len)
+		var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
+		for(var/ID in virus2)
+			var/datum/disease2/disease/V = virus2[ID]
+			if(istype(V))
+				V.activate(src, active_disease != ID)
 
