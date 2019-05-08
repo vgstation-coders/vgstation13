@@ -227,7 +227,7 @@
 
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
-	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE and JELLY etched onto its sides."
+	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
 	icon_state = "helmet_sec"
 	item_state = "helmet"
 	flags = HEAR | FPRINT
