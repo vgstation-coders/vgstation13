@@ -168,7 +168,7 @@
 	draining = target
 
 	var/mob/assailant = antag.current
-
+	var/targetref = "\ref[target]"
 	var/blood = 0
 	var/blood_total_before = blood_total
 	var/blood_usable_before = blood_usable
@@ -199,11 +199,11 @@
 		if(!target.vessel.get_reagent_amount(BLOOD))
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
-		if (!(target in feeders))
-			feeders[target] = 0
+		if (!(targetref in feeders))
+			feeders[targetref] = 0
 		if(target.stat < DEAD) //alive
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
-			if (feeders[target] < 100)
+			if (feeders[targetref] < 100)
 				blood_total += blood
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
@@ -213,11 +213,11 @@
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
-			if (feeders[target] < 100)
+			if (feeders[targetref] < 100)
 				blood_total += blood
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
-		feeders[target] += blood
+		feeders[targetref] += blood
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
@@ -366,7 +366,7 @@
 
 	smitecounter = max(0, (smitecounter + smitetemp))
 
-	// At any rate 
+	// At any rate
 	if (smitecounter && H.real_name != initial_appearance.name)
 		H.switch_appearance(initial_appearance) // Reveal us as who we are
 		H.real_name = initial_appearance.name
