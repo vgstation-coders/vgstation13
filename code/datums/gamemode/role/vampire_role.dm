@@ -2,6 +2,8 @@
  -- Vampires --
  */
 
+#define MAX_BLOOD_PER_TARGET 400
+
 /datum/role/vampire
 	id = VAMPIRE
 	name = VAMPIRE
@@ -203,7 +205,7 @@
 			feeders[targetref] = 0
 		if(target.stat < DEAD) //alive
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
-			if (feeders[targetref] < 100)
+			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
@@ -213,7 +215,7 @@
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
-			if (feeders[targetref] < 100)
+			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
