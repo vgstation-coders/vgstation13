@@ -131,6 +131,31 @@ proc/get_cardinal_dir(atom/A, atom/B)
 		steps--
 	return dirs
 
+/proc/back2back(var/atom/A, var/atom/B)
+	if (A.x > B.x) // <- B A ->
+		return (A.dir == EAST && B.dir == WEST)
+	if (B.x > A.x) // <- A B ->
+		return (B.dir == EAST && A.dir == WEST)
+	/*
+	^
+	A
+	B
+	v
+	*/
+	if (A.y > B.y)
+		return (A.dir == NORTH && B.dir == SOUTH)
+	/*
+	^
+	B
+	A
+	v
+	*/
+	if (B.y > A.y)
+		return (B.dir == NORTH && A.dir == SOUTH)
+
+
+
+
 // smoothing dirs - now you can tell the difference between a tile being surrounded by north and west and a tile being surrounded by northwest.
 // used for 3x3/diagonal smoothers - not suitable for cardinal smoothing.
 // because for some reason it seems that north and south and east and west byond variables are actually capped to 15 when adding other flags, we need to redefine those too.
