@@ -512,6 +512,12 @@
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
 	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
+	
+/mob/living/carbon/teleport_to(var/atom/A)
+	var/last_slip_value = src.unslippable
+	src.unslippable = 1
+	forceMove(get_turf(A))
+	src.unslippable = last_slip_value
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
 	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
