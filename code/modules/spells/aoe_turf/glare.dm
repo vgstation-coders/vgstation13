@@ -34,6 +34,8 @@
 	for(var/mob/living/carbon/C in oview(inner_radius))
 		if(!C.vampire_affected(user.mind))
 			continue
+		if (C.dir == user.dir)
+			continue
 		targets += C
 
 	if (!targets.len)
