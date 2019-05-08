@@ -194,7 +194,7 @@
 				if(src.health <= 0)
 					src.explode()
 
-			M.delayNextAttack(10)
+		M.delayNextAttack(10)
 	..()
 
 /obj/machinery/bot/chefbot/kick_act()
