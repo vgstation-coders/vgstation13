@@ -113,7 +113,7 @@ var/list/lawgiver_modes = list(
 )
 
 /obj/item/weapon/gun/lawgiver
-	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. You can see the words STUN, LASER, RAPID, FLARE and RICOCHET, written in small print on its barreling."
+	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. You can see the words STUN, LASER, RAPID, FLARE and RICOCHET written in small print on its barreling."
 	name = "lawgiver"
 	icon_state = "lawgiver"
 	item_state = "lawgiver"
