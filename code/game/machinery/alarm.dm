@@ -9,10 +9,6 @@
 #define AALARM_MODE_FILL		5 //emergency fill
 #define AALARM_MODE_OFF			6 //Shuts it all down.
 
-#define AALARM_PRESET_HUMAN     1 // Default
-#define AALARM_PRESET_VOX       2 // Support Vox
-#define AALARM_PRESET_SERVER    3 // Server Coldroom
-
 #define AALARM_SCREEN_MAIN		1
 #define AALARM_SCREEN_VENT		2
 #define AALARM_SCREEN_SCRUB		3
@@ -42,6 +38,99 @@
 	var/list/air_vent_info = list()
 	var/list/air_scrub_info = list()
 
+//These are the system presets that define things like gas concentrations and pressures
+/datum/airalarm_preset //this one is a blank preset that checks for NOTHING
+	var/list/oxygen = list(-1, -1, -1, -1) // Partial pressure, kpa
+	var/list/nitrogen = list(-1, -1, -1, -1) // Partial pressure, kpa
+	var/list/carbon_dioxide = list(-1, -1, -1, -1) // Partial pressure, kpa
+	var/list/plasma = list(-1, -1, -1, -1) // Partial pressure, kpa
+	var/list/n2o = list(-1, -1, -1, -1) // Partial pressure, kpa
+	var/list/other = list(-1, -1, -1, -1) // Partial pressure, kpa
+	var/list/pressure = list(-1, -1, -1, -1) // kpa
+	var/list/temperature = list(-1, -1, -1, -1) // Kelvin
+	var/target_temperature = T0C+20 // Kelvin
+
+/datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/list/oxygen, var/list/nitrogen, var/list/carbon_dioxide,
+							var/list/plasma, var/list/n2o, var/list/other, var/list/pressure, var/list/temperature, var/list/target_temperature)
+	if(P)
+		src.oxygen = P.oxygen.Copy()
+		src.nitrogen = P.nitrogen.Copy()
+		src.carbon_dioxide = P.carbon_dioxide.Copy()
+		src.plasma = P.plasma.Copy()
+		src.n2o = P.n2o.Copy()
+		src.other = P.other.Copy()
+		src.pressure = P.pressure.Copy()
+		src.temperature = P.temperature.Copy()
+		src.target_temperature = P.target_temperature
+	if(oxygen)
+		src.oxygen = oxygen
+	if(nitrogen)
+		src.nitrogen = nitrogen
+	if(plasma)
+		src.plasma = plasma
+	if(n2o)
+		src.n2o = n2o
+	if(other)
+		src.other = other
+	if(pressure)
+		src.pressure = pressure
+	if(temperature)
+		src.temperature = temperature
+	if(target_temperature)
+		src.target_temperature = target_temperature
+
+/datum/airalarm_preset/human //For humans
+	oxygen = list(16, 18, 135, 140)
+	nitrogen = list(-1, -1,  -1,  -1)
+	carbon_dioxide = list(-1, -1, 5, 10)
+	plasma = list(-1, -1, 0.2, 0.5)
+	n2o = list(-1, -1, 0.5, 1)
+	other = list(-1, -1, 0.5, 1)
+	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
+	target_temperature = T0C+20
+
+/datum/airalarm_preset/vox //For vox
+	oxygen = list(-1, -1, 0.5, 1)
+	nitrogen = list(16, 18, 135,  140)
+	carbon_dioxide = list(-1, -1, 5, 10)
+	plasma = list(-1, -1, 0.2, 0.5)
+	n2o = list(-1, -1, 0.5, 1)
+	other = list(-1, -1, 0.5, 1)
+	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
+	target_temperature = T0C+20
+
+/datum/airalarm_preset/server //Server rooms
+	oxygen = list(-1, -1, -1, -1)
+	nitrogen = list(-1, -1, -1, -1)
+	carbon_dioxide = list(-1, -1, 5, 10)
+	plasma = list(-1, -1, 0.2, 0.5)
+	n2o = list(-1, -1, 0.5, 1)
+	other = list(-1, -1, 0.5, 1)
+	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.40, ONE_ATMOSPHERE*1.60)
+	temperature = list(20, 40, 140, 160)
+	target_temperature = 90
+
+/datum/airalarm_preset/plasmaman //HONK
+	oxygen = list(-1, -1, 0.5, 1)
+	nitrogen = list(-1, -1, -1, -1)
+	carbon_dioxide = list(-1, -1, 5, 10)
+	plasma = list(16, 18, 135, 140)
+	n2o = list(-1, -1, 0.5, 1)
+	other = list(-1, -1, 0.5, 1)
+	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
+	target_temperature = T0C+20
+
+//these are used for the UIs and new ones can be added and existing ones edited at the CAC
+var/global/list/airalarm_presets = list(
+	"Human" = new /datum/airalarm_preset/human,
+	"Vox" = new /datum/airalarm_preset/vox,
+	"Server" = new /datum/airalarm_preset/server,
+	"Plasmaman" = new /datum/airalarm_preset/plasmaman,
+)
+
 /obj/machinery/alarm
 	desc = "An alarm used to control the area's atmospherics systems."
 	icon = 'icons/obj/monitors.dmi'
@@ -66,7 +155,7 @@
 	var/shorted = 0
 
 	var/mode = AALARM_MODE_SCRUBBING
-	var/preset = AALARM_PRESET_HUMAN
+	var/datum/airalarm_preset/preset = "Human"
 	var/screen = AALARM_SCREEN_MAIN
 	var/area_uid
 	var/local_danger_level = 0
@@ -87,17 +176,16 @@
 	return TRUE
 
 /obj/machinery/alarm/xenobio
-	preset = AALARM_PRESET_HUMAN
 	req_one_access = list(access_rd, access_atmospherics, access_engine_equip, access_xenobiology)
 	req_access = list()
 
 /obj/machinery/alarm/server
-	preset = AALARM_PRESET_SERVER
+	preset = "Server"
 	req_one_access = list(access_rd, access_atmospherics, access_engine_equip)
 	req_access = list()
 
 /obj/machinery/alarm/vox
-	preset = AALARM_PRESET_VOX
+	preset = "Vox"
 	req_one_access = list()
 	req_access = list(access_trade)
 
@@ -107,30 +195,20 @@
 	for (var/obj/machinery/alarm/AA in this_area)
 		if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted && AA.preset != src.preset)
 			AA.preset=preset
-			apply_preset(1) // Only this air alarm should send a cycle.
-
-	TLV["oxygen"] =			list(16, 19, 135, 140) // Partial pressure, kpa
-	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
-	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
-	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
-	TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
-	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
-	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
-	TLV["temperature"] =	list(T0C-30, T0C, T0C+40, T0C+70) // K
-	target_temperature = T0C+20
-	switch(preset)
-		if(AALARM_PRESET_VOX) // Same as usual, s/nitrogen/oxygen
-			TLV["nitrogen"] = 		list(16, 19, 135, 140) // Vox use same partial pressure values for N2 as humans do for O2.
-			TLV["oxygen"] =			list(-1.0, -1.0, 0.5, 1.0) // Under 1 kPa (PP), vox don't notice squat (vox_oxygen_max)
-		if(AALARM_PRESET_SERVER) // Cold as fuck.
-			TLV["oxygen"] =			list(-1.0, -1.0,-1.0,-1.0)
-			TLV["carbon_dioxide"] = list(-1.0, -1.0,   5,  10) // Partial pressure, kpa
-			TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
-			TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
-			TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
-			TLV["pressure"] =		list(0,ONE_ATMOSPHERE*0.10,ONE_ATMOSPHERE*1.40,ONE_ATMOSPHERE*1.60) /* kpa */
-			TLV["temperature"] =	list(20, 40, 140, 160) // K
-			target_temperature = 90
+			AA.apply_preset(1) // Only this air alarm should send a cycle.
+	var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
+	if(!presetdata)
+		//TODO: print an error or something
+		return
+	TLV["oxygen"] =			presetdata.oxygen
+	TLV["nitrogen"] =		presetdata.nitrogen
+	TLV["carbon_dioxide"] = presetdata.carbon_dioxide
+	TLV["plasma"] =			presetdata.plasma
+	TLV["n2o"] =			presetdata.n2o
+	TLV["other"] =			presetdata.other
+	TLV["pressure"] =		presetdata.pressure
+	TLV["temperature"] =	presetdata.temperature
+	target_temperature =	presetdata.target_temperature
 	if(!no_cycle_after)
 		mode = AALARM_MODE_CYCLE
 		apply_mode()
@@ -433,8 +511,8 @@
 	var/area/this_area = get_area(src)
 	switch(mode)
 		if(AALARM_MODE_SCRUBBING)
-			for(var/device_id in this_area.air_scrub_names)
-				send_signal(device_id, list("power"= 1, "co2_scrub"= 1, "o2_scrub"=(preset==AALARM_PRESET_VOX), "n2_scrub"=0, "scrubbing"= 1, "panic_siphon"= 0) )
+			for(var/device_id in this_area.air_scrub_names) //TODO: configuratize this
+				send_signal(device_id, list("power"= 1, "co2_scrub"= 1, "o2_scrub"=0, "n2_scrub"=0, "scrubbing"= 1, "panic_siphon"= 0) )
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
@@ -622,9 +700,11 @@
 		AALARM_MODE_OFF         = list("name"="Off",         "desc"="Shuts off vents and scrubbers"))
 	data["mode"]=mode
 	data["presets"]=list(
-		AALARM_PRESET_HUMAN		= list("name"="Human",    "desc"="Checks for Oxygen and Nitrogen"),\
-		AALARM_PRESET_VOX 		= list("name"="Vox",      "desc"="Checks for Nitrogen only"),\
-		AALARM_PRESET_SERVER 	= list("name"="Coldroom", "desc"="For server rooms and freezers"))
+		list("name"="Human",    "desc"="Permits Oxygen and Nitrogen"),
+		list("name"="Vox",      "desc"="Permits Nitrogen only"),
+		list("name"="Coldroom", "desc"="For server rooms and freezers"),
+		list("name"="Plasmaman", "desc"="Permits Plasma and Nitrogen only")
+		)
 	data["preset"]=preset
 	data["screen"]=screen
 
@@ -663,7 +743,7 @@
 
 	if (!ui)
 		// The ui does not exist, so we'll create a new one.
-		ui = new(user, src, ui_key, "air_alarm.tmpl", name, 550, 410)
+		ui = new(user, src, ui_key, "air_alarm.tmpl", name, 580, 410)
 		// When the UI is first opened this is the data it will use.
 		ui.set_initial_data(data)
 		// Open the new ui window.
@@ -795,8 +875,9 @@
 		return 1
 
 	if(href_list["preset"])
-		preset = text2num(href_list["preset"])
-		apply_preset()
+		if(href_list["preset"] in airalarm_presets)
+			preset = href_list["preset"]
+			apply_preset()
 		return 1
 
 	if(href_list["temperature"])
