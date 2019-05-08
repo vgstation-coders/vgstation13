@@ -99,6 +99,9 @@
 			MouseDropTo(W,user)
 		else
 			user.delayNextAttack(8)
+			user.do_attack_animation(src, W)
+			if (W.hitsound)
+				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
 				playsound(get_turf(src), sound_damaged, 75, 1)
 			takeDamage(W.force)
