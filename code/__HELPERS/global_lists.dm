@@ -58,6 +58,9 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 		var/datum/emote/E = new path()
 		E.emote_list[E.key] = E
 
+	for(var/path in subtypesof(/datum/rogan_sound))
+		var/datum/rogan_sound/S = new path()
+		number2rogansound[S.number] = S
 
 /* // Uncomment to debug chemical reaction list.
 /client/verb/debug_chemical_list()
