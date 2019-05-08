@@ -93,102 +93,103 @@ proc/is_banned_type(typepath)
 datum/hSB
 	var/owner = null
 	var/admin = 0
-	proc
-		update()
-			var/hsbpanel = "<center><b>h_Sandbox Panel</b></center><hr>"
-			if(admin)
+	
+datum/hSB/proc/update()
+	var/hsbpanel = "<center><b>h_Sandbox Panel</b></center><hr>"
+	if(admin)
 
-				hsbpanel += {"<b>Administration Tools:</b><br>
-					- <a href=\"?\ref[src];hsb=hsbtobj\">Toggle Object Spawning</a><br><br>"}
-			hsbpanel += "<b>Regular Tools:</b><br>"
-			for(var/T in hrefs)
-				hsbpanel += "- <a href=\"?\ref[src];hsb=[T]\">[hrefs[T]]</a><br>"
-			if(hsboxspawn)
-				hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
-			usr << browse(hsbpanel, "window=hsbpanel")
-	Topic(href, href_list)
-		if(!(src.owner == usr.ckey))
-			return
-		if(!usr)
-			return //I guess this is possible if they log out or die with the panel open? It happened.
-		if(href_list["hsb"])
-			switch(href_list["hsb"])
-				if("revive")
-					if(istype(usr,/mob/living))
-						var/mob/living/M = usr
-						M.revive()
-				if("hsbtobj")
-					if(!admin)
-						return
-					if(hsboxspawn)
-						to_chat(world, "<b>Sandbox:  [usr.key] has disabled object spawning!</b>")
-						hsboxspawn = 0
-						return
-					if(!hsboxspawn)
-						to_chat(world, "<b>Sandbox:  [usr.key] has enabled object spawning!</b>")
-						hsboxspawn = 1
-						return
-				if("hsbsuit")
-					var/mob/living/carbon/human/P = usr
-					//There really should be a drop_old_and_equip_to_slot() proc.
-					if(P.wear_suit)
-						P.wear_suit.forceMove(P.loc)
-						P.wear_suit.layer = initial(P.wear_suit.layer)
-						P.wear_suit = null
-					P.wear_suit = new/obj/item/clothing/suit/space/nasavoid(P)
-					P.wear_suit.hud_layerise()
-					if(P.head)
-						P.head.forceMove(P.loc)
-						P.head.layer = initial(P.head.layer)
-						P.head = null
-					P.head = new/obj/item/clothing/head/helmet/space/nasavoid(P)
-					P.head.hud_layerise()
-					if(P.wear_mask)
-						P.wear_mask.forceMove(P.loc)
-						P.wear_mask.layer = initial(P.wear_mask.layer)
-						P.wear_mask = null
-					P.wear_mask = new/obj/item/clothing/mask/gas(P)
-					P.wear_mask.hud_layerise()
-					if(P.back)
-						P.back.forceMove(P.loc)
-						P.back.layer = initial(P.back.layer)
-						P.back = null
-					P.back = new/obj/item/weapon/tank/jetpack/void(P)
-					P.back.hud_layerise()
+		hsbpanel += {"<b>Administration Tools:</b><br>
+			- <a href=\"?\ref[src];hsb=hsbtobj\">Toggle Object Spawning</a><br><br>"}
+	hsbpanel += "<b>Regular Tools:</b><br>"
+	for(var/T in hrefs)
+		hsbpanel += "- <a href=\"?\ref[src];hsb=[T]\">[hrefs[T]]</a><br>"
+	if(hsboxspawn)
+		hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
+	usr << browse(hsbpanel, "window=hsbpanel")
 
-					P.regenerate_icons()
-				if("hsbmetal")
-					var/obj/item/stack/sheet/hsb = getFromPool(/obj/item/stack/sheet/metal,get_turf(usr))
-					hsb.amount = 50
-					hsb.forceMove(usr.loc)
-				if("hsbglass")
-					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/glass/glass
-					hsb.amount = 50
-					hsb.forceMove(usr.loc)
-				if("hsbplasma")
-					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/plasma
-					hsb.amount = 50
-					hsb.forceMove(usr.loc)
-				if("phazon")
-					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/phazon
-					hsb.amount = 50
-					hsb.forceMove(usr.loc)
-				if("hsbcanister")
-					var/list/hsbcanisters = typesof(/obj/machinery/portable_atmospherics/canister/) - /obj/machinery/portable_atmospherics/canister/
+datum/hSB/Topic(href, href_list)
+	if(!(src.owner == usr.ckey))
+		return
+	if(!usr)
+		return //I guess this is possible if they log out or die with the panel open? It happened.
+	if(href_list["hsb"])
+		switch(href_list["hsb"])
+			if("revive")
+				if(istype(usr,/mob/living))
+					var/mob/living/M = usr
+					M.revive()
+			if("hsbtobj")
+				if(!admin)
+					return
+				if(hsboxspawn)
+					to_chat(world, "<b>Sandbox:  [usr.key] has disabled object spawning!</b>")
+					hsboxspawn = 0
+					return
+				if(!hsboxspawn)
+					to_chat(world, "<b>Sandbox:  [usr.key] has enabled object spawning!</b>")
+					hsboxspawn = 1
+					return
+			if("hsbsuit")
+				var/mob/living/carbon/human/P = usr
+				//There really should be a drop_old_and_equip_to_slot() proc.
+				if(P.wear_suit)
+					P.wear_suit.forceMove(P.loc)
+					P.wear_suit.layer = initial(P.wear_suit.layer)
+					P.wear_suit = null
+				P.wear_suit = new/obj/item/clothing/suit/space/nasavoid(P)
+				P.wear_suit.hud_layerise()
+				if(P.head)
+					P.head.forceMove(P.loc)
+					P.head.layer = initial(P.head.layer)
+					P.head = null
+				P.head = new/obj/item/clothing/head/helmet/space/nasavoid(P)
+				P.head.hud_layerise()
+				if(P.wear_mask)
+					P.wear_mask.forceMove(P.loc)
+					P.wear_mask.layer = initial(P.wear_mask.layer)
+					P.wear_mask = null
+				P.wear_mask = new/obj/item/clothing/mask/gas(P)
+				P.wear_mask.hud_layerise()
+				if(P.back)
+					P.back.forceMove(P.loc)
+					P.back.layer = initial(P.back.layer)
+					P.back = null
+				P.back = new/obj/item/weapon/tank/jetpack/void(P)
+				P.back.hud_layerise()
+
+				P.regenerate_icons()
+			if("hsbmetal")
+				var/obj/item/stack/sheet/hsb = getFromPool(/obj/item/stack/sheet/metal,get_turf(usr))
+				hsb.amount = 50
+				hsb.forceMove(usr.loc)
+			if("hsbglass")
+				var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/glass/glass
+				hsb.amount = 50
+				hsb.forceMove(usr.loc)
+			if("hsbplasma")
+				var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/plasma
+				hsb.amount = 50
+				hsb.forceMove(usr.loc)
+			if("phazon")
+				var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/phazon
+				hsb.amount = 50
+				hsb.forceMove(usr.loc)
+			if("hsbcanister")
+				var/list/hsbcanisters = typesof(/obj/machinery/portable_atmospherics/canister/) - /obj/machinery/portable_atmospherics/canister/
 //					hsbcanisters -= /obj/machinery/portable_atmospherics/canister/sleeping
-					var/hsbcanister = input(usr, "Choose a canister to spawn.", "Sandbox:") in hsbcanisters + "Cancel"
-					if(!(hsbcanister == "Cancel"))
-						new hsbcanister(usr.loc)
-				if("hsbfueltank")
-					new /obj/structure/reagent_dispensers/fueltank(usr.loc)
-				if("hsbwatertank")
-					new /obj/structure/reagent_dispensers/watertank(usr.loc)
-				if("hsbtoolbox")
-					var/obj/item/weapon/storage/hsb = new/obj/item/weapon/storage/toolbox/mechanical
-					for(var/obj/item/device/radio/T in hsb)
-						qdel(T)
-					new/obj/item/weapon/crowbar (hsb)
-					hsb.forceMove(usr.loc)
-				if("hsbmedkit")
-					var/obj/item/weapon/storage/firstaid/hsb = new/obj/item/weapon/storage/firstaid/regular
-					hsb.forceMove(usr.loc)
+				var/hsbcanister = input(usr, "Choose a canister to spawn.", "Sandbox:") in hsbcanisters + "Cancel"
+				if(!(hsbcanister == "Cancel"))
+					new hsbcanister(usr.loc)
+			if("hsbfueltank")
+				new /obj/structure/reagent_dispensers/fueltank(usr.loc)
+			if("hsbwatertank")
+				new /obj/structure/reagent_dispensers/watertank(usr.loc)
+			if("hsbtoolbox")
+				var/obj/item/weapon/storage/hsb = new/obj/item/weapon/storage/toolbox/mechanical
+				for(var/obj/item/device/radio/T in hsb)
+					qdel(T)
+				new/obj/item/weapon/crowbar (hsb)
+				hsb.forceMove(usr.loc)
+			if("hsbmedkit")
+				var/obj/item/weapon/storage/firstaid/hsb = new/obj/item/weapon/storage/firstaid/regular
+				hsb.forceMove(usr.loc)

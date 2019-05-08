@@ -192,7 +192,7 @@ var/list/uplink_items = list()
 	name = "Fully Loaded Revolver"
 	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmored target with two shots."
 	item = /obj/item/weapon/gun/projectile
-	cost = 13
+	cost = 12
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"

@@ -54,6 +54,25 @@ proc/arctan(x)
 	var/y = (1/PI)*ToRadians(arctan((x-x0)/s)) + 1/2
 	return y
 
+// -- Returns an exponentially-distributed number.
+// -- The probability density function has mean lambda
+
+/proc/exp_distribution(var/lambda)
+	if (lambda <= 0)
+		lambda = 1 // Let's not allow that to happen
+	var/x = rand()
+	while (x == 1)
+		x = rand()
+	var/y = -(1/lambda)*log(1-x)
+	return y
+	
+// -- Returns the Lorentz cummulative distribution of the real x, with mean lambda
+
+/proc/exp_cummulative_distribution(var/x, var/lambda)
+	var/y = 1 - E**(lambda*x)
+	return y
+
+
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
 /proc/Clamp(const/val, const/min, const/max)
@@ -215,11 +234,11 @@ proc/arctan(x)
 
 
 /proc/ToDegrees(const/radians)
-					// 180 / Pi
+	// 180 / Pi
 	return radians * 57.2957795
 
 /proc/ToRadians(const/degrees)
-					// Pi / 180
+	// Pi / 180
 	return degrees * 0.0174532925
 
 // min is inclusive, max is exclusive

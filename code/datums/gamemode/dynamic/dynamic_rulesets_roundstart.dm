@@ -14,6 +14,8 @@
 	required_candidates = 1
 	weight = 5
 	cost = 10
+	var/traitor_threshold = 3
+	var/additional_cost = 5 
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
@@ -28,6 +30,11 @@
 		var/datum/role/traitor/newTraitor = new
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
+		// Above 3 traitors, we start to cost a bit more.
+		if (i > traitor_threshold && (mode.threat > additional_cost))
+			mode.spend_threat(additional_cost)
+		else
+			break
 	return 1
 
 /datum/dynamic_ruleset/roundstart/traitor/process()
@@ -84,7 +91,7 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 2
-	cost = 25
+	cost = 15
 	requirements = list(80,60,50,30,20,10,10,10,10,10)
 	high_population_requirement = 30
 
@@ -98,6 +105,11 @@
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
+		// Above 2 vampires, we start to cost a bit more.
+		if (i >= 2 && (mode.threat > cost))
+			mode.spend_threat(cost)
+		else
+			break
 	update_faction_icons()
 	return 1
 
@@ -213,6 +225,7 @@
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
@@ -354,6 +367,7 @@
 	cost = 40
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
 	high_population_requirement = 65
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
@@ -411,6 +425,7 @@
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
@@ -474,6 +489,7 @@
 	high_population_requirement = 50
 	delay = 5 MINUTES
 	var/required_heads = 3
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
 	if (forced)
@@ -524,6 +540,7 @@
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
+	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)

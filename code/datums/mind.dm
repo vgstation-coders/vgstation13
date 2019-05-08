@@ -79,6 +79,9 @@
 	if(!istype(new_character))
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
+	new_character.attack_log += current.attack_log
+	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
+
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PreMindTransfer(current)
@@ -146,8 +149,10 @@
 
 	var/out = {"<TITLE>Role Panel</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""] - key=<b>[key]</b> [active?"(synced)":"(not synced)"]<br>
 		Assigned job: [assigned_role] - <a href='?src=\ref[src];job_edit=1'>(edit)</a><hr>"}
-	if(current.client)
+	if(current && current.client)
 		out += "Desires roles: [current.client.GetRolePrefs()]<BR>"
+	else
+		out += "Body destroyed or logged out."
 	out += "<font size='5'><b>Roles and Factions</b></font><br>"
 
 	if(!antag_roles.len)
@@ -302,11 +307,14 @@
 			return
 		var/obj_type = available_objectives[new_obj]
 
-		var/datum/objective/new_objective = new obj_type(null,FALSE, usr)
+		var/datum/objective/new_objective = new obj_type(usr, obj_holder.faction)
 
 		if (new_objective.flags & FACTION_OBJECTIVE)
 			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
 			fac.handleNewObjective(new_objective)
+			message_admins("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			role_panel()
 			return TRUE // It's a faction objective, let's not move any further.
 
 		if (obj_holder.owner)//so objectives won't target their owners.
@@ -324,9 +332,15 @@
 
 		if (obj_holder.owner)
 			obj_holder.AddObjective(new_objective, src)
+			message_admins("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
 			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
-		else if (obj_holder.faction)
+		else if (new_objective.faction && istype(new_objective, /datum/objective/custom)) //is it a custom objective with a faction modifier?
+			new_objective.faction.AppendObjective(new_objective)
+			message_admins("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction) //or is it just an explicit faction obj? 
 			obj_holder.faction.AppendObjective(new_objective)
+			message_admins("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 
 	else if (href_list["obj_delete"])
@@ -338,6 +352,7 @@
 		if (obj_holder.owner)
 			log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
 		else if (obj_holder.faction)
+			message_admins("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 			objective.faction.handleRemovedObjective(objective)
 
@@ -353,17 +368,31 @@
 		else
 			objective.force_success = !objective.force_success
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
-		message_admins("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 
 
 	else if(href_list["obj_gen"])
 		var/owner = locate(href_list["obj_owner"])
 		if(istype(owner, /datum/role))
 			var/datum/role/R = owner
+			var/list/prev_objectives = R.objectives.objectives.Copy()
 			R.ForgeObjectives()
+			var/list/unique_objectives_role = find_unique_objectives(R.objectives.objectives, prev_objectives)
+			if (!unique_objectives_role.len)
+				alert(usr, "No new objectives generated.", "Alert", "OK")
+			else
+				for (var/datum/objective/objective in unique_objectives_role)
+					log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [objective.explanation_text]")
 		else if(istype(owner, /datum/faction))
 			var/datum/faction/F = owner
+			var/list/prev_objectives = F.GetObjectives().Copy()
 			F.forgeObjectives()
+			var/list/unique_objectives_faction = find_unique_objectives(F.GetObjectives(), prev_objectives)
+			if (!unique_objectives_faction.len)
+				alert(usr, "No new objectives generated.", "Alert", "OK")
+			else 
+				for (var/datum/objective/objective in unique_objectives_faction)
+					message_admins("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
+					log_admin("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
 
 	else if(href_list["role"]) //Something role specific
 		var/datum/role/R = locate(href_list["role"])

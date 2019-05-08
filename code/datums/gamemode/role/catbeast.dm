@@ -49,6 +49,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 /obj/item/clothing/shoes/sandal/catbeast
 	desc = "Strange sandals designed with claws in mind. They look uncomfortable if you're not a cat."
 	species_restricted = list("Tajaran")
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
 
 /datum/role/catbeast/ForgeObjectives()
 	AppendObjective(/datum/objective/catbeast/survive5)

@@ -600,7 +600,11 @@
 									return
 								else
 									var/turf/T = get_turf(O.sacrifice_target)
-									if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
+									var/datum/shuttle/S = is_on_shuttle(T)
+									if ((T.z == CENTCOMM_Z) && (emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S)))
+										to_chat(user,"<b>\The [O.sacrifice_target] has fled the station along with the rest of the crew. Unless we can bring them back in time with a Path rune or sacrifice him where he stands, it's over.</b>")
+										return
+									else if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
 										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
 										if (choice == "Yes")
 											replace_target(user)
@@ -687,6 +691,7 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
+		var/M_ckey = usr.ckey
 		if(!isobserver(M) || !iscultist(M))
 			return
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
@@ -704,8 +709,7 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
-		/*
-		shadeMob.ckey = usr.ckey
+		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
 			shadeMob.real_name = pick(shade_names)
@@ -727,6 +731,9 @@
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
 		cult_risk()//risk of exposing the cult early if too many soul blades created
+
+		spawn(1)
+			shadeMob.ckey = M_ckey
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual

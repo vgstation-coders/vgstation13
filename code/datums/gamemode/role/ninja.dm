@@ -47,6 +47,8 @@
 		AppendObjective(/datum/objective/silence)
 	else
 		AppendObjective(/datum/objective/survive)
+	if(prob(15))
+		AppendObjective(/datum/objective/stealsake)
 
 /datum/role/ninja/extraPanelButtons()
 	var/dat = ""
@@ -73,7 +75,7 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>[custom]</span>")
 		if(GREET_WEEB)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Crazed Weeaboo.<br>The crew has insulted glorious Space Nippon. Equipped with your authentic Space Kimono, your Space Katana that was folded over a million times, and your honobru bushido code, you must implore them to reconsider!</span>")
-			to_chat(antag.current, "<span class='danger'>Remember that guns are not honobru, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
+			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
 
@@ -228,6 +230,7 @@
 	var/cooldown = 0
 	var/reservoir = 0
 	var/shuriken_icon = "radial_print"
+	actions_types = list(/datum/action/item_action/make_shuriken, /datum/action/item_action/charge_sword)
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
@@ -285,6 +288,33 @@
 
 #define MAKE_SHURIKEN_COST 1000
 #define CHARGE_COST_MULTIPLIER 4
+
+/datum/action/item_action/make_shuriken
+	name = "Make Shuriken"
+	desc = "Fabricate a new shuriken."
+	icon_icon = 'icons/obj/weapons.dmi'
+	button_icon_state = "shuriken"
+
+/datum/action/item_action/make_shuriken/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.make_shuriken(owner)
+
+/datum/action/item_action/charge_sword
+	name = "Charge Sword"
+	desc = "Reset the cooldown on your blade's teleport."
+	icon_icon = 'icons/obj/weapons.dmi'
+	button_icon_state = "katana"
+
+/datum/action/item_action/charge_sword/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.charge_sword(owner)
+
 /obj/item/clothing/gloves/ninja/AltClick(mob/user)
 	if(!user.Adjacent(src) || user.stat)
 		return

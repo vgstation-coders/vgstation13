@@ -93,6 +93,10 @@
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -244,26 +248,6 @@
 	pr_inertial_movement = new /datum/global_iterator/mecha_intertial_movement(null,0)
 	pr_give_air = new /datum/global_iterator/mecha_tank_give_air(list(src))
 	pr_internal_damage = new /datum/global_iterator/mecha_internal_damage(list(src),0)
-
-/obj/mecha/proc/do_after(delay as num)
-	sleep(delay)
-	if(src)
-		return 1
-	return 0
-
-/obj/mecha/proc/enter_after(delay as num, var/mob/user as mob, var/numticks = 5)
-	var/delayfraction = delay/numticks
-
-	var/turf/T = user.loc
-
-	for(var/i = 0, i<numticks, i++)
-		sleep(delayfraction)
-		if(!src || !user || !user.canmove || !(user.loc == T))
-			return 0
-
-	return 1
-
-
 
 /obj/mecha/proc/check_for_support()
 	if(locate(/obj/structure/grille, orange(1, src)) || locate(/obj/structure/lattice, orange(1, src)) || locate(/turf/simulated, orange(1, src)) || locate(/turf/unsimulated, orange(1, src)))
@@ -422,8 +406,10 @@
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
-		if(do_after(step_in))
-			can_move = 1
+		sleep(step_in)
+		if(!src)
+			return
+		can_move = 1
 		return 1
 	return 0
 
@@ -699,9 +685,9 @@
 	return
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
-	if(prob(src.deflect_chance))
+	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))
 		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		src.visible_message("The [src.name] armor deflects the projectile")
+		src.visible_message("<span class='warning'>\The [src.name] armor deflects the projectile.</span>")
 		src.log_append_to_last("Armor saved.")
 		return
 	var/ignore_threshold
@@ -1193,7 +1179,7 @@
 	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 
-	if(enter_after(40,usr))
+	if(do_after(usr, src, 40))
 		if(!src.occupant)
 			moved_inside(usr)
 			refresh_spells()
@@ -1259,7 +1245,7 @@
 
 	visible_message("<span class='notice'>\The [user] starts to insert \the [mmi_as_oc] into \the [src].</span>")
 
-	if(enter_after(40,user))
+	if(do_after(user, src, 40))
 		if(!occupant)
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
@@ -1346,13 +1332,22 @@
 	lock_dir = !lock_dir
 
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(usr != src.occupant || usr.incapacitated())
-		return
-	if(istype(occupant, /mob/living/carbon/brain))
+	if(!Adjacent(over_location))
 		return
 	if(!istype(over_location) || over_location.density)
 		return
-	if(!Adjacent(over_location))
+	if(istype(occupant, /mob/living/carbon/brain))
+		return
+	if(usr.incapacitated())
+		return
+	if(usr != occupant && occupant.isUnconscious())
+		visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
+		if(do_after(usr, src, 30 SECONDS))
+			if(!occupant.isUnconscious())
+				visible_message("<span class='notice'>[occupant.name] woke up and pushed [usr] away.</span>")
+				return
+			go_out(over_location)
+			add_fingerprint(usr)
 		return
 	for(var/atom/movable/A in over_location.contents)
 		if(A.density)
@@ -1948,14 +1943,16 @@
 		src.occupant_message("Recalibrating coordination system.")
 		src.log_message("Recalibration of coordination system started.")
 		var/T = src.loc
-		if(do_after(100))
-			if(T == src.loc)
-				src.clearInternalDamage(MECHA_INT_CONTROL_LOST)
-				src.occupant_message("<font color='blue'>Recalibration successful.</font>")
-				src.log_message("Recalibration of coordination system finished with 0 errors.")
-			else
-				src.occupant_message("<font color='red'>Recalibration failed.</font>")
-				src.log_message("Recalibration of coordination system failed with 1 error.",1)
+		sleep(100)
+		if(!src)
+			return
+		if(T == src.loc)
+			src.clearInternalDamage(MECHA_INT_CONTROL_LOST)
+			src.occupant_message("<font color='blue'>Recalibration successful.</font>")
+			src.log_message("Recalibration of coordination system finished with 0 errors.")
+		else
+			src.occupant_message("<font color='red'>Recalibration failed.</font>")
+			src.log_message("Recalibration of coordination system failed with 1 error.",1)
 
 	//debug
 	/*

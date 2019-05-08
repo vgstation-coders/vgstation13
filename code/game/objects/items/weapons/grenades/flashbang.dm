@@ -5,7 +5,10 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	var/banglet = 0
 
-/obj/item/weapon/grenade/flashbang/prime()
+/obj/item/weapon/grenade/flashbang/prime(banglet)
+	flashbangprime(delsrc = TRUE, isbanglet = banglet)
+	
+atom/proc/flashbangprime(var/delsrc = FALSE, var/ignore_protection = FALSE, isbanglet = FALSE)
 	var/turf/flashbang_turf = get_turf(src)
 	if(!flashbang_turf)
 		return
@@ -14,23 +17,26 @@
 
 	var/mob/living/holder = get_holder_of_type(src, /mob/living)
 	if(holder) //Holding a flashbang while it goes off is a bad idea.
-		bang(flashbang_turf, holder, TRUE)
+		flashbang(flashbang_turf, holder, TRUE)
 		mobs_to_flash_and_bang -= holder
-	update_mob()
+		if(ismob(loc))
+			var/mob/M = loc
+			M.drop_from_inventory(src)
 
 	for(var/mob/living/M in mobs_to_flash_and_bang)
 		if(M.isVentCrawling()) //possibly more exceptions to be added in the future
 			continue
-		bang(flashbang_turf, M)
+		flashbang(flashbang_turf, M, ignore_protection, isbanglet)
 
 	for(var/obj/effect/blob/B in get_hear(8,flashbang_turf))     		//Blob damage here
 		var/damage = round(15/(get_dist(B,get_turf(src))+1))
 		B.health -= damage
 		B.update_health()
 		B.update_icon()
-	qdel(src)
+	if(delsrc)
+		qdel(src)
 
-/obj/item/weapon/grenade/flashbang/proc/bang(var/turf/T, var/mob/living/M, var/ignore_protection = 0)
+atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var/isbanglet = FALSE)
 	if (locate(/obj/item/weapon/cloaking_device, M))			// Called during the loop that bangs people in lockers/containers and when banging
 		for(var/obj/item/weapon/cloaking_device/S in M)			// people in normal view.  Could theroetically be called during other explosions.
 			S.active = 0										// -- Polymorph
@@ -139,12 +145,12 @@
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if (E && E.damage >= E.min_bruised_damage)
 			to_chat(M, "<span class='warning'>Your eyes start to burn badly!</span>")
-			if(!banglet && !(istype(src , /obj/item/weapon/grenade/flashbang/clusterbang)))
+			if(!isbanglet && !(istype(src , /obj/item/weapon/grenade/flashbang/clusterbang)))
 				if (E.damage >= E.min_broken_damage)
 					to_chat(M, "<span class='warning'>You can't see anything!</span>")
 	if (M.ear_damage >= 15)
 		to_chat(M, "<span class='warning'>Your ears start to ring badly!</span>")
-		if(!banglet && !(istype(src , /obj/item/weapon/grenade/flashbang/clusterbang)))
+		if(!isbanglet && !(istype(src , /obj/item/weapon/grenade/flashbang/clusterbang)))
 			if (prob(M.ear_damage - 10 + 5))
 				to_chat(M, "<span class='warning'>You can't hear anything!</span>")
 				M.sdisabilities |= DEAF
