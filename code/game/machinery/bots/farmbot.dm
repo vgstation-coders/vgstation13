@@ -56,7 +56,7 @@
 	var/frustration
 
 /obj/machinery/bot/farmbot/vox_garden_farmbot
-	name = "Special vox trader farmbot"
+	name = "Special Vox Trader Farmbot"
 	req_access = list()
 	req_one_access =  list(access_hydroponics, access_trade)
 
