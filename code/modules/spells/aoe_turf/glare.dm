@@ -34,7 +34,7 @@
 	for(var/mob/living/carbon/C in oview(inner_radius))
 		if(!C.vampire_affected(user.mind))
 			continue
-		if (C.dir == user.dir)
+		if (C.dir == user.dir || turn(user.dir, 180) == C.dir) // Facing away from the lad
 			continue
 		targets += C
 

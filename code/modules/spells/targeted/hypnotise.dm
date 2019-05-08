@@ -41,7 +41,7 @@
 
 	if (!M.vampire_affected(user.mind))
 		return FALSE
-	if (M.dir == user.dir)
+	if (M.dir == user.dir || turn(user.dir, 180) == C.dir)
 		to_chat(user, "<span class='warning'>We need to look at them in the eyes!</span>")
 		return FALSE
 	
