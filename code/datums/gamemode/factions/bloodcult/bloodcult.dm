@@ -219,7 +219,7 @@ var/veil_thickness = CULT_PROLOGUE
 
 
 /datum/faction/bloodcult/minorVictoryText()
-	return "The cult did not manage to summon Nar-Sie, but could achieve most of its objectives and sacrifice the designated victim."
+	return "The cult completed its sacrificial ritual, but not in time to summon Nar-Sie."
 
 /*
 /datum/faction/bloodcult/process()
@@ -380,7 +380,7 @@ var/veil_thickness = CULT_PROLOGUE
 	for(var/datum/role/cultist/C in members)
 		var/mob/M = C.antag.current
 		if (M && iscultist(M))
-			to_chat(M,"<span class='sinister'>While the sacrifice was correctly completed, we were not fast enough to prevent our ennemies from feeling.</span>")
+			to_chat(M,"<span class='sinister'>While the sacrifice was correctly completed, we were not fast enough to prevent our ennemies from fleeing.</span>")
 			to_chat(M, "<span class='sinister'>This changes nothing. We will find another way.</span>")
 			for (var/datum/objective/O in objective_holder.objectives)
 				O.force_success = TRUE
