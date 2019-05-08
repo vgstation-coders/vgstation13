@@ -43,7 +43,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z) //all z-levels which should not be mapped but should still be scanned for people
+	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
 		"Captain" = 00,
 		"Head of Personnel" = 50,

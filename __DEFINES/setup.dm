@@ -1023,6 +1023,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define TELECOMM_Z 3
 #define DERELICT_Z 4
 #define ASTEROID_Z 5
+#define SPACEPIRATE_Z 6
 
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
