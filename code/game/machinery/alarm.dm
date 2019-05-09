@@ -24,8 +24,13 @@
 //1000 joules equates to about 1 degree every 2 seconds for a single tile of air.
 #define MAX_ENERGY_CHANGE 1000
 
+//min and max temperature that we can heat or cool to, does not affect target temperature
 #define MAX_TEMPERATURE 90
 #define MIN_TEMPERATURE -40
+//maximum target temperature, we can't actually heat up/cool down to these but if things go above/below we'll start cooling/heating.
+//copied from the freezer and the heater for now
+#define MAX_TARGET_TEMPERATURE T20C + 280
+#define MIN_TARGET_TEMPERATURE T0C - 200
 
 //All gases that do not fall under "other"
 #define CHECKED_GAS GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING
@@ -101,7 +106,7 @@
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 
-/datum/airalarm_preset/server //Server rooms
+/datum/airalarm_preset/coldroom //Server rooms etc.
 	oxygen = list(-1, -1, -1, -1)
 	nitrogen = list(-1, -1, -1, -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -127,7 +132,7 @@
 var/global/list/airalarm_presets = list(
 	"Human" = new /datum/airalarm_preset/human,
 	"Vox" = new /datum/airalarm_preset/vox,
-	"Server" = new /datum/airalarm_preset/server,
+	"Coldroom" = new /datum/airalarm_preset/coldroom,
 	"Plasmaman" = new /datum/airalarm_preset/plasmaman,
 )
 
@@ -162,6 +167,7 @@ var/global/list/airalarm_presets = list(
 	var/alarmActivated = 0 // Manually activated (independent from danger level)
 	var/danger_averted_confidence=0
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
+	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
 
 	var/target_temperature = T0C+20
 	var/regulating_temperature = 0
@@ -180,7 +186,7 @@ var/global/list/airalarm_presets = list(
 	req_access = list()
 
 /obj/machinery/alarm/server
-	preset = "Server"
+	preset = "Coldroom"
 	req_one_access = list(access_rd, access_atmospherics, access_engine_equip)
 	req_access = list()
 
@@ -199,7 +205,9 @@ var/global/list/airalarm_presets = list(
 	var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
 	if(!presetdata)
 		//TODO: print an error or something
+		to_chat(world, "DEBUG: presetdata was false-y")
 		return
+	to_chat(world, "DEBUG: setting presets")
 	TLV["oxygen"] =			presetdata.oxygen
 	TLV["nitrogen"] =		presetdata.nitrogen
 	TLV["carbon_dioxide"] = presetdata.carbon_dioxide
@@ -294,28 +302,25 @@ var/global/list/airalarm_presets = list(
 			visible_message("\The [src] clicks as it starts [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
 			"You hear a click and a faint electronic hum.")
 
-		if(target_temperature > T0C + MAX_TEMPERATURE)
-			target_temperature = T0C + MAX_TEMPERATURE
-
-		if(target_temperature < T0C + MIN_TEMPERATURE)
-			target_temperature = T0C + MIN_TEMPERATURE
-
 		var/datum/gas_mixture/gas = environment.remove_volume(0.25 * CELL_VOLUME)
 		if(gas)
 			var/heat_capacity = gas.heat_capacity()
 			var/energy_used = min(abs(heat_capacity * (gas.temperature - target_temperature)), MAX_ENERGY_CHANGE)
+			var/cooled = 0 //1 means we cooled this tick, 0 means we warmed. Used for the message below.
 
-			// We need to cool ourselves.
-			if (environment.temperature > target_temperature)
+			// We need to cool ourselves, but only if the gas isn't already colder than what we can do.
+			if (environment.temperature > target_temperature && gas.temperature >= MIN_TEMPERATURE)
 				gas.temperature -= energy_used / heat_capacity
-			else
+				cooled = 1
+			// We need to warm ourselves, but only if the gas isn't already hotter than what we can do.
+			else if (environment.temperature < target_temperature && gas.temperature <= MAX_TEMPERATURE)
 				gas.temperature += energy_used / heat_capacity
 
 			environment.merge(gas)
 
 			if (abs(environment.temperature - target_temperature) <= 0.5)
 				regulating_temperature = 0
-				visible_message("\The [src] clicks quietly as it stops [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
+				visible_message("\The [src] clicks quietly as it stops [cooled ? "cooling" : "heating"] the room.",\
 				"You hear a click as a faint electronic humming stops.")
 
 	var/old_level = local_danger_level
@@ -504,6 +509,15 @@ var/global/list/airalarm_presets = list(
 //			to_chat(world, text("Signal [] Broadcasted to []", command, target))
 
 	return 1
+
+/obj/machinery/alarm/proc/set_temperature(var/temp, var/propagate=1)
+	target_temperature = temp
+	//propagate to other air alarms in the area
+	var/area/this_area = get_area(src)
+	if(propagate)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+				AA.target_temperature = temp
 
 /obj/machinery/alarm/proc/apply_mode()
 	var/list/current_pressures = TLV["pressure"]
@@ -707,6 +721,8 @@ var/global/list/airalarm_presets = list(
 		)
 	data["preset"]=preset
 	data["screen"]=screen
+	data["cycle_after_preset"] = cycle_after_preset
+	data["firedoor_override"] = this_area.doors_overridden
 
 	var/list/vents=list()
 	if(this_area.air_vent_names.len)
@@ -850,6 +866,10 @@ var/global/list/airalarm_presets = list(
 
 				apply_mode()
 				return 1
+	if(href_list["reset_thresholds"])
+		to_chat(world, "DEBUG: Resetting thresholds.")
+		apply_preset(1) //just apply the preset without cycling
+		return 1
 
 	if(href_list["screen"])
 		screen = text2num(href_list["screen"])
@@ -868,29 +888,54 @@ var/global/list/airalarm_presets = list(
 		this_area.updateDangerLevel()
 		update_icon()
 		return 1
+	
+	if(href_list["enable_override"])
+		var/area/this_area = get_area(src)
+		this_area.doors_overridden = 1
+		this_area.UpdateFirelocks()
+		update_icon()
+		return 1
+	
+	if(href_list["disable_override"])
+		var/area/this_area = get_area(src)
+		this_area.doors_overridden = 0
+		this_area.UpdateFirelocks()
+		update_icon()
+		return 1
 
 	if(href_list["mode"])
 		mode = text2num(href_list["mode"])
 		apply_mode()
 		return 1
 
+	if(href_list["toggle_cycle_after_preset"])
+		cycle_after_preset = !cycle_after_preset
+		return 1
+
 	if(href_list["preset"])
 		if(href_list["preset"] in airalarm_presets)
 			preset = href_list["preset"]
-			apply_preset()
+			apply_preset(!cycle_after_preset)
 		return 1
 
 	if(href_list["temperature"])
 		var/list/selected = TLV["temperature"]
-		var/max_temperature = selected[3] - T0C
-		var/min_temperature = selected[2] - T0C
-		var/input_temperature = input("What temperature (in C) would you like the system to maintain? (Capped between [min_temperature]C and [max_temperature]C)", "Thermostat Controls") as num|null
+		var/max_temperature
+		var/min_temperature
+		if(!locked)
+			max_temperature = MAX_TARGET_TEMPERATURE - T0C
+			min_temperature = MIN_TARGET_TEMPERATURE - T0C
+		else
+			max_temperature = selected[3] - T0C
+			min_temperature = selected[2] - T0C
+		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
 		if(input_temperature==null)
 			return
-		if(!input_temperature || input_temperature > max_temperature || input_temperature < min_temperature)
+		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
 			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
 		else
-			target_temperature = input_temperature + T0C
+			input_temperature = input_temperature + T0C
+		set_temperature(input_temperature)
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
