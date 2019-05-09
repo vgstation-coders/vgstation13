@@ -1,0 +1,59 @@
+<!-- 
+Title: Crew Monitor Textview
+Used In File(s): \code\modules\cmc\crew.dm
+ -->
+
+<html>
+    <head>
+        <title>Crew Monitor</title>
+    </head>
+    <body>
+        <kbd>
+            <a style='margin-right: 10px;' href='?src=\ref[src];toggle=1' id='update_btn'>{{if data.update}}Disable {{else}}Enable {{/if}}Updating</a>
+            <a href='?src=\ref[src];holo=1' id='holo_btn'>{{if data.holo}}Disable {{else}}Enable {{/if}}Holomap</a>
+            <hr><br>
+            <table align='center'>
+                <tr>
+                    <th><u>Name</u></th>
+                    <th><u>Vitals</u></th>
+                    <th><u>Position</u></th>
+                </tr>
+                <span id='contents'><td colspan="3">Loading...</td></span>
+            </table>
+        </kbd>
+        <script>
+        function populateTable(entries_string){
+            var entries = JSON.parse(entries_string);
+            var string = "";
+            for(entry in entries){
+                string = "<td><span class='name "+entry.role+"'>"+entry.name+"</span> ("entry.job")</td>";
+                string += "<td><img src='cmc_"+entry.icon+".png' height='11' width='11'/>";
+                if(entry.damage){
+                    string +=  "(<span class='oxygen'>"+entry.role.oxygen+"</span>/<span class='toxin'>"+entry.role.toxin+"</span>/<span class='fire'>"+entry.role.fire+"</span>/<span class='brute'>"+entry.role.brute+"</span>)";
+                } else {
+                    string += "Not Available";
+                }
+                string += "</td><td>";
+                if(entry.see){
+                    string += entry.area+" ("+entry.see.x+","+entry.see.y+")";
+                } else {
+                    string += "Not Available";
+                }
+                string += "</td>";
+            }
+
+            document.getElementByID("contents").innerHTML = string;
+        }
+
+        function toggleHolobtn(){
+            var btn = document.getElementByID("holo_btn");
+            btn.innerHTML = (btn.innerHTML == "Disable Holomap") ? "Enable Holomap" : "Disable Holomap";
+        }
+
+        function toggleUpdatebtn(){
+            var btn = document.getElementByID("update_btn");
+            btn.innerHTML = (btn.innerHTML == "Disable Updating") ? "Enable Updating" : "Disable Updating";
+        }
+        </script>
+    </body>
+</html>

@@ -116,11 +116,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		deactivate(user)
 		return
 
+	var/uid = "\ref[user]"
 	if(action == "text")
-		openTextview(user)
+		updateTextView(user)
+		textview_updatequeued[uid] = 1
 		return
 
-	var/uid = "\ref[user]"
 	if(action == "holo")
 		holomap[uid] = !holomap[uid]
 	else if(text2num(action) != null)
@@ -521,44 +522,37 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		return
 	if(href_list["toggle"])
 		textview_updatequeued[uid] = !textview_updatequeued[uid]
+		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
+		if(ui)
+			ui.send_message("toggleUpdatebtn")
 		updateTextView(usr)
 		return
 	if(href_list["holo"])
 		holomap[uid] = !holomap[uid]
+		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
+		if(ui)
+			ui.send_message("toggleHolobtn")
 		processUser(usr) //to remove/add the holomap and update the textview
 		return
-
-//initializes textview, only called once
-/obj/machinery/computer/crew/proc/openTextview(var/mob/user)
-	var/uid = "\ref[user]"
-	textview_updatequeued[uid] = 1
-	if(user.client)
-		var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
-		send_asset_list(user.client, C.assets)
-	textview_popup[uid] = new /datum/browser(user, "cmc_textview", "Crew Monitoring", 900, 600, src)
-	textview_popup[uid].add_stylesheet("cmc", 'html/browser/cmc.css')
-	textview_popup[uid].open()
-	onclose(user, "cmc_textview", src)
-	updateTextView(user)
 
 //updates the textview, called every process() when enabled
 /obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
 	var/uid = "\ref[user]"
-	//styles
-	var/list/t = "<html><head><title>Crew Monitor</title></head><body><kbd><a style='margin-right: 10px;' href='?src=\ref[src];toggle=1'>" + (textview_updatequeued[uid] ? "Disable Updating" : "Enable Updating") + "</a><a href='?src=\ref[src];holo=1'>" + (holomap[uid] ? "Disable Holomap" : "Enable Holomap") + "</a><hr><br><table align='center'><tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>"
 
 	//adding table rows
+	var/list/all_data = list()
 	for(var/entry in entries[holomap_z[uid]])
-		var/see_x = entry[ENTRY_SEE_X]
-		var/see_y = entry[ENTRY_SEE_Y]
-		var/mob/living/carbon/H = entry[ENTRY_MOB]
-		var/name = entry[ENTRY_NAME]
-		var/job = entry[ENTRY_ASSIGNMENT]
-		var/stat = entry[ENTRY_STAT]
-		var/list/damage = entry[ENTRY_DAMAGE]
-		var/player_area = entry[ENTRY_AREA]
-		var/ijob = entry[ENTRY_IJOB]
+		var/list/data = list()
+		data["see"] = list()
+		data["see"]["x"] = entry[ENTRY_SEE_X]
+		data["see"]["y"] = entry[ENTRY_SEE_Y]
+		data["name"] = entry[ENTRY_NAME]
+		data["job"] = entry[ENTRY_ASSIGNMENT]
+		data["damage"] = list()
+		data["damage"]["oxygen"] = entry[ENTRY_DAMAGE]
+		data["area"] = entry[ENTRY_AREA]
 
+		var/ijob = entry[ENTRY_IJOB]
 		var/role
 		switch(ijob)
 			if(0)	role = "cap" // captain
@@ -570,38 +564,44 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			if(60 to 69) role = "silicon" //silicon
 			if(200 to 229) role = "cent"
 			else role = "unk"
+		data["role"] = role
 
+		var/mob/living/carbon/H = entry[ENTRY_MOB]
+		var/stat = entry[ENTRY_STAT]
 		var/icon
 		if(istype(H, /mob/living/carbon/human))
 			if(stat != 2)
-				if(damage)
-					icon = getLifeIcon(damage)
+				if(data["damage"])
+					icon = getLifeIcon(data["damage"])
 				else
 					icon = "0"
 			else
 				icon = "6"
 		else
 			icon = "7"
+		data["icon"] = icon
 
-		var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
-		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[DAMAGE_OXYGEN]]</span>/<span class='toxin'>[damage[DAMAGE_TOXIN]]</span>/<span class='fire'>[damage[DAMAGE_FIRE]]</span>/<span class='brute'>[damage[DAMAGE_BRUTE]]</span>)" : "Not Available")
-		string += (see_x && see_y) ? "[player_area] ([see_x],[see_y])" : "Not Available"
-		var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
+		all_data[++all_data.len] = data
 
-		t += "<tr>[actualstring]</tr>"
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	if (!ui)
+		if(user.client)
+			var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
+			send_asset_list(user.client, C.assets)
+		
+		ui = new(user, src, "textview", "cmc.tmpl", "Crew Monitoring", 900, 600)
+		ui.add_stylesheet('html/browser/cmc.css')
+		var/list/i_data = list()
+		i_data["update"] = textview_updatequeued[uid]
+		i_data["holo"] = holomap[uid]
+		ui.set_initial_data(i_data)
+		ui.open()
 
-	t += "</table></kbd></body></html>"
-
-	textview_popup[uid].set_content(jointext(t, ""))
-	textview_popup[uid].open()
+	ui.send_message("populateTable", list(json_encode(all_data)))
 
 //taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
 /obj/machinery/computer/crew/proc/closeTextview(var/mob/user)
-	var/uid = "\ref[user]"
-	textview_updatequeued[uid] = 0
-	if(textview_popup[uid])
-		textview_popup[uid].close()
-		textview_popup[uid] = null
+	textview_updatequeued["\ref[user]"] = 0
 
 #undef ENTRY_SEE_X
 #undef ENTRY_SEE_Y

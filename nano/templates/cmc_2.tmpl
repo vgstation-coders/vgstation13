@@ -1,0 +1,47 @@
+<!-- 
+Title: Crew Monitor Textview
+Used In File(s): \code\modules\cmc\crew.dm
+ -->
+
+<html>
+    <head>
+        <title>Crew Monitor</title>
+    </head>
+    <body>
+        <kbd>
+            <a style='margin-right: 10px;' href='?src=\ref[src];toggle=1'>{{if data.update}}Disable {{else}}Enable {{/if}}Updating</a>
+            <a href='?src=\ref[src];holo=1'>{{if data.holo}}Disable {{else}}Enable {{/if}}Holomap</a>
+            <hr><br>
+            {{if data.entries}}
+            <table align='center'>
+                <tr>
+                    <th><u>Name</u></th>
+                    <th><u>Vitals</u></th>
+                    <th><u>Position</u></th>
+                </tr>
+                {{for data.entries}}
+                <tr>
+                    <td><span class='name {{:value.role}}'>{{:value.name}}</span> ({{:value.job}})</td>
+                    <td>
+                        <img src='cmc_[icon].png' height='11' width='11'/>
+                        {{if :value.damage}}
+                        <span class='oxygen'>{{:value.damage.oxygen}}</span>/
+                        <span class='toxin'>{{:value.damage.toxin}}</span>/
+                        <span class='fire'>{{:value.damage.fire}}</span>/
+                        <span class='brute'>{{:value.damage.oxygen}}</span>
+                        {{else}}
+                        Not Available
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{if :value.see}}[{{:value.area}}] ({{:value.see.x}},[{{:value.see.y}}]){{else}}Not Available{{/if}}
+                    </td>
+                </tr>
+                {{/for}}
+            </table>
+            {{else}}
+            No Entries available
+            {{/if}}
+        </kbd>
+    </body>
+</html>
