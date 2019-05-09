@@ -18,8 +18,8 @@
 #define AALARM_REPORT_TIMEOUT 100
 
 #define RCON_NO		1
-#define RCON_AUTO	2
-#define RCON_YES	3
+#define RCON_YES	2
+#define RCON_AUTO	3 //unused
 
 //1000 joules equates to about 1 degree every 2 seconds for a single tile of air.
 #define MAX_ENERGY_CHANGE 1000
@@ -149,8 +149,8 @@ var/global/list/airalarm_presets = list(
 	var/frequency = 1439
 	//var/skipprocess = 0 //Experimenting
 	var/alarm_frequency = 1437
-	var/remote_control = 0
-	var/rcon_setting = 2
+	var/remote_control = 1
+	var/rcon_setting = RCON_YES
 	var/rcon_time = 0
 	var/locked = 1
 	var/datum/wires/alarm/wires = null
@@ -347,11 +347,13 @@ var/global/list/airalarm_presets = list(
 	switch(rcon_setting)
 		if(RCON_NO)
 			remote_control = 0
+		/*
 		if(RCON_AUTO)
 			if(local_danger_level == 2)
 				remote_control = 1
 			else
 				remote_control = 0
+		*/
 		if(RCON_YES)
 			remote_control = 1
 	return
@@ -569,6 +571,16 @@ var/global/list/airalarm_presets = list(
 			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
 				AA.set_threshold(env, index, value, 0)
 
+/obj/machinery/alarm/proc/set_alarm(var/alarm, var/propagate=1)
+	alarmActivated = alarm
+	update_icon()
+	if(propagate)
+		var/area/this_area = get_area(src)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+				AA.set_alarm(alarm, 0)
+		this_area.updateDangerLevel()
+
 /obj/machinery/alarm/proc/apply_mode()
 	var/list/current_pressures = TLV["pressure"]
 	var/target_pressure = (current_pressures[2] + current_pressures[3])/2
@@ -753,6 +765,7 @@ var/global/list/airalarm_presets = list(
 	data["locked"]=!fromAtmosConsole && (!(istype(user, /mob/living/silicon)) && locked) && !isAdminGhost(user)
 
 	data["rcon"]=rcon_setting
+	data["rcon_enabled"] = remote_control
 	data["target_temp"] = target_temperature - T0C
 	data["atmos_alarm"] = this_area.atmosalm
 	data["modes"] = list(
@@ -856,7 +869,7 @@ var/global/list/airalarm_presets = list(
 				else
 					var/newval = input("Enter new value") as num|null
 					if(isnull(newval))
-						return
+						return 1
 					if(href_list["command"]=="set_external_pressure")
 						if(newval>1000+ONE_ATMOSPHERE)
 							newval = 1000+ONE_ATMOSPHERE
@@ -865,6 +878,7 @@ var/global/list/airalarm_presets = list(
 					val = newval
 
 				send_signal(device_id, list(href_list["command"] = val ) )
+				return 1
 
 			if("set_threshold")
 				var/env = href_list["env"]
@@ -885,17 +899,11 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["atmos_alarm"])
-		alarmActivated=1
-		var/area/this_area = get_area(src)
-		this_area.updateDangerLevel()
-		update_icon()
+		set_alarm(1)
 		return 1
 
 	if(href_list["atmos_reset"])
-		alarmActivated=0
-		var/area/this_area = get_area(src)
-		this_area.updateDangerLevel()
-		update_icon()
+		set_alarm(0)
 		return 1
 	
 	if(href_list["enable_override"])

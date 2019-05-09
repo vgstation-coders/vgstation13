@@ -122,7 +122,7 @@ var/global/list/atmos_controllers = list()
 		ui.add_template("mapContent", "atmos_control_map_content.tmpl")
 		// adding a template with the key "mapHeader" replaces the map header content
 		ui.add_template("mapHeader", "atmos_control_map_header.tmpl")
-		ui.set_show_map(TRUE)
+		ui.set_show_map(FALSE)
 		ui.set_initial_data(data)
 		ui.open()
 	ui.set_auto_update(!!current)
@@ -152,9 +152,9 @@ var/global/list/atmos_controllers = list()
 		if(href_list["command"])
 			var/device_id = href_list["id_tag"]
 			switch(href_list["command"])
-				if(
-					"power",
+				if( "power",
 					"adjust_external_pressure",
+					"set_external_pressure",
 					"checks",
 					"co2_scrub",
 					"tox_scrub",
@@ -162,114 +162,94 @@ var/global/list/atmos_controllers = list()
 					"o2_scrub",
 					"n2_scrub",
 					"panic_siphon",
-					"scrubbing"
-				)
+					"scrubbing")
 					var/val
 					if(href_list["val"])
 						val=text2num(href_list["val"])
 					else
 						var/newval = input("Enter new value") as num|null
 						if(isnull(newval))
-							return 1
+							return
+						if(href_list["command"]=="set_external_pressure")
+							if(newval>1000+ONE_ATMOSPHERE)
+								newval = 1000+ONE_ATMOSPHERE
+							if(newval<0)
+								newval = 0
 						val = newval
-					current.send_signal(device_id, list (href_list["command"] = val))
-					return TRUE
-				//if("adjust_threshold") //was a good idea but required very wide window
+
+					current.send_signal(device_id, list(href_list["command"] = val ) )
+
 				if("set_threshold")
 					var/env = href_list["env"]
 					var/threshold = text2num(href_list["var"])
 					var/list/selected = current.TLV[env]
 					var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
 					var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
-					if (isnull(newval) || ..() || (current.locked && issilicon(usr)))
+					if (isnull(newval) || ..() || (current.locked && !issilicon(usr)))
 						return 1
-					if (newval<0)
-						selected[threshold] = -1.0
-					else if (env=="temperature" && newval>5000)
-						selected[threshold] = 5000
-					else if (env=="pressure" && newval>50*ONE_ATMOSPHERE)
-						selected[threshold] = 50*ONE_ATMOSPHERE
-					else if (env!="temperature" && env!="pressure" && newval>200)
-						selected[threshold] = 200
-					else
-						newval = round(newval,0.01)
-						selected[threshold] = newval
-					if(threshold == 1)
-						if(selected[1] > selected[2])
-							selected[2] = selected[1]
-						if(selected[1] > selected[3])
-							selected[3] = selected[1]
-						if(selected[1] > selected[4])
-							selected[4] = selected[1]
-					if(threshold == 2)
-						if(selected[1] > selected[2])
-							selected[1] = selected[2]
-						if(selected[2] > selected[3])
-							selected[3] = selected[2]
-						if(selected[2] > selected[4])
-							selected[4] = selected[2]
-					if(threshold == 3)
-						if(selected[1] > selected[3])
-							selected[1] = selected[3]
-						if(selected[2] > selected[3])
-							selected[2] = selected[3]
-						if(selected[3] > selected[4])
-							selected[4] = selected[3]
-					if(threshold == 4)
-						if(selected[1] > selected[4])
-							selected[1] = selected[4]
-						if(selected[2] > selected[4])
-							selected[2] = selected[4]
-						if(selected[3] > selected[4])
-							selected[3] = selected[4]
+					current.set_threshold(env, threshold, newval, 1)
+					return 1
+		if(href_list["reset_thresholds"])
+			current.apply_preset(1) //just apply the preset without cycling
+			return 1
 
-					//Sets the temperature the built-in heater/cooler tries to maintain.
-					if(env == "temperature")
-						if(current.target_temperature < selected[2])
-							current.target_temperature = selected[2]
-						if(current.target_temperature > selected[3])
-							current.target_temperature = selected[3]
-					return TRUE
 		if(href_list["screen"])
 			current.screen = text2num(href_list["screen"])
-			return TRUE
+			return 1
 
-		if(href_list["atmos_unlock"])
-			switch(href_list["atmos_unlock"])
-				if("0")
-					current.air_doors_close(1)
-				if("1")
-					current.air_doors_open(1)
-			return TRUE
 		if(href_list["atmos_alarm"])
-			current.alarmActivated=1
-			var/area/current_area = get_area(current)
-			current_area.updateDangerLevel()
-			current.update_icon()
-			return TRUE
+			current.set_alarm(1)
+			return 1
+
 		if(href_list["atmos_reset"])
-			current.alarmActivated=0
-			var/area/current_area = get_area(current)
-			current_area.updateDangerLevel()
+			current.set_alarm(0)
+			return 1
+		
+		if(href_list["enable_override"])
+			var/area/this_area = get_area(current)
+			this_area.doors_overridden = 1
+			this_area.UpdateFirelocks()
 			current.update_icon()
-			return TRUE
+			return 1
+		
+		if(href_list["disable_override"])
+			var/area/this_area = get_area(current)
+			this_area.doors_overridden = 0
+			this_area.UpdateFirelocks()
+			current.update_icon()
+			return 1
+
 		if(href_list["mode"])
 			current.mode = text2num(href_list["mode"])
 			current.apply_mode()
-			return TRUE
+			return 1
+
+		if(href_list["toggle_cycle_after_preset"])
+			current.cycle_after_preset = !current.cycle_after_preset
+			return 1
+
 		if(href_list["preset"])
-			current.preset = text2num(href_list["preset"])
-			current.apply_preset()
-			return TRUE
+			if(href_list["preset"] in airalarm_presets)
+				current.preset = href_list["preset"]
+				current.apply_preset(!current.cycle_after_preset)
+			return 1
+
 		if(href_list["temperature"])
 			var/list/selected = current.TLV["temperature"]
-			var/max_temperature = min(selected[3] - T0C, MAX_TEMPERATURE)
-			var/min_temperature = max(selected[2] - T0C, MIN_TEMPERATURE)
-			var/input_temperature = input("What temperature would you like the system to maintain? (Capped between [min_temperature]C and [max_temperature]C)", "Thermostat Controls") as num|null
+			var/max_temperature
+			var/min_temperature
+			if(!current.locked)
+				max_temperature = MAX_TARGET_TEMPERATURE - T0C //these defines should come from code\game\machinery\alarm.dm
+				min_temperature = MIN_TARGET_TEMPERATURE - T0C
+			else
+				max_temperature = selected[3] - T0C
+				min_temperature = selected[2] - T0C
+			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return
-			if(input_temperature > max_temperature || input_temperature < min_temperature)
-				to_chat(usr, "Temperature must be between [min_temperature]C and [max_temperature]C")
+			if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
+				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
 			else
-				current.target_temperature = input_temperature + T0C
-			return TRUE
+				input_temperature = input_temperature + T0C
+			current.set_temperature(input_temperature)
+			return 1

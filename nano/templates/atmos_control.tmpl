@@ -40,7 +40,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 				<div class="statusLabel">Pressure:</div>
 				{{:helper.string("<div class='statusValue {0}'>{1} kPa</div>",helper.dangerToClass(data.air.danger.pressure),helper.precisionRound(data.air.pressure,4))}}
 				<div class="statusValue" style="margin-left:5px;">
-				{{if !data.locked}}
+				{{if !data.locked && data.rcon_enabled}}
 					{{if data.mode == 3}}
 						{{:helper.link("DEACTIVATE PANIC SYPHON",null,{"mode" : 1},null,'linkOn')}}
 					{{else}}
@@ -91,23 +91,27 @@ Used In File(s): /code/game/machinery/alarm.dm
 				<div class="statusLabel">Local Status:</div>
 				{{if data.air.danger.overall == 0}}
 					{{if data.atmos_alarm}}
-						<div class="average">Caution: Atmos alert in area
+						<div class="average">Caution: Atmos alert in area</div>
 					{{else}}
-						<div class="good">Optimal
+						<div class="good">Optimal</div>
 					{{/if}}
 				{{else data.air.danger.overall == 1}}
-					<div class="average">Caution
+					<div class="average">Caution</div>
 				{{else}}
-					<div class="notice">DANGER: Internals Required
+					<div class="notice">DANGER: Internals Required</div>
 				{{/if}}
-				{{if !data.locked}}
+				{{if !data.locked && data.rcon_enabled}}
 					{{if data.alarmActivated}}
 						{{:helper.link('Reset Alarm',null,{'atmos_reset':1},null,'linkOn')}}
 					{{else}}
 						{{:helper.link('Activate Alarm',null,{'atmos_alarm':1},null,'red')}}
 					{{/if}}
+					{{if data.firedoor_override}}
+						{{:helper.link('Manual override enabled', null, {'disable_override':1}, null, 'linkOn')}}
+					{{else}}
+						{{:helper.link('Manual override disabled', null, {'enable_override':1}, null, 'red')}}
+					{{/if}}
 				{{/if}}
-				</div>
 			</div>
 			<div class="line">
 				<!--
@@ -116,21 +120,21 @@ Used In File(s): /code/game/machinery/alarm.dm
 				#define RCON_YES	3
 				-->
 				<div class="statusLabel">Remote Control:</div>
-				{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'disabled')}}
-				{{:helper.link('Auto', null, {'rcon' : 2}, (data.rcon != 2) ? null : 'disabled')}}
-				{{:helper.link('On',   null, {'rcon' : 3}, (data.rcon != 3) ? null : 'disabled')}}
+				{{if data.rcon_enabled}}
+					<div class="good">Enabled</div>
+				{{else}}
+					<div class="bad">Enabled</div>
+				{{/if}}
 			</div>
 			<div class="line">
 				<div class="statusLabel">Thermostat:</div>
-				{{:helper.link(data.target_temp+" C", 'carat-2-n-s', {'temperature': 1})}}
+				{{:helper.link(data.target_temp+" C", 'carat-2-n-s', {'temperature': 1}, null, (data.rcon_enabled) ? null : 'disabled')}}
 			</div>
 		</div>
 	{{/if}}
-
-	{{if data.locked}}
-		<div class="notice">Swipe card to unlock.</div>
+	{{if !data.rcon_enabled}}
+		<div class="notice">Remote control disabled.</div>
 	{{else}}
-		<div class="notice">Remember to lock with ID card after use.</div>
 		<div class="item">
 			<div class="itemLabel">Screen:</div>
 			<div class="itemContents">
@@ -147,7 +151,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 			{{for data.vents}}
 				<div class="statusDisplay">
 					<div class="line">
-						<b>{{>value.name}}:</b> {{:value.state}}
+						<b>{{>value.name}}:</b>
 					</div>
 					<div class="line">
 						<div class="statusLabel">Operating:</div>
@@ -185,7 +189,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 			{{for data.scrubbers}}
 				<div class="statusDisplay">
 					<div class="line">
-						<b>{{>value.name}}:</b> {{:value.state}}
+						<b>{{>value.name}}:</b>
 					</div>
 					<div class="line">
 						<div class="statusLabel">Operating:</div>
@@ -233,11 +237,18 @@ Used In File(s): /code/game/machinery/alarm.dm
 				{{/for}}
 			</div>
 			<h3>System Preset</h3>
-			<div class="notice">After making a selection, the system will automatically cycle in order to remove contaminants.</div>
+			<div class="line">
+				Cycle after changing preset 
+				{{if data.cycle_after_preset}}
+					{{:helper.link('Yes', null, {'toggle_cycle_after_preset':1}, null, 'greenBackground')}}
+				{{else}}
+					{{:helper.link('No', null, {'toggle_cycle_after_preset':1}, null, 'redBackground')}}
+				{{/if}}
+			</div>
 			<div class="statusDisplay">
 				{{for data.presets}}
 				<div class="line">
-					<div class="statusLabel">{{:helper.link(value.name,'gear',{'preset':index+1},null,(index+1==value.preset?'linkOn':''))}}</div>
+					<div class="statusLabel">{{:helper.link(value.name,'gear',{'preset':value.name},null,(value.name==data.preset?'linkOn':''))}}</div>
 					<div class="statusValue">
 						{{:value.desc}}
 					</div>
@@ -247,6 +258,9 @@ Used In File(s): /code/game/machinery/alarm.dm
 		<!-- SENSORS -->
 		{{else data.screen == 5}}
 			<h3>Sensor Thresholds</h3>
+			<div class="line">
+				{{:helper.link("Reset", "arrowreturn-1-w", {'reset_thresholds':1})}}
+			</div>
 			<div class="statusDisplay">
 				<table>
 					<thead>

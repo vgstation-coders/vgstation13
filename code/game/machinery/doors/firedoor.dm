@@ -396,6 +396,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(needs_to_close)
 		spawn(50)
+			alarmed = A.doors_down || A.fire
 			if(alarmed && !density)
 				close()
 

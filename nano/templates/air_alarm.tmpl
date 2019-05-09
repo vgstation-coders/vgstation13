@@ -104,9 +104,9 @@ Used In File(s): /code/game/machinery/alarm.dm
 			#define RCON_YES	3
 			-->
 			<div class="statusLabel">Remote Control:</div>
-			{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'disabled')}}
-			{{:helper.link('Auto', null, {'rcon' : 2}, (data.rcon != 2) ? null : 'disabled')}}
-			{{:helper.link('On',   null, {'rcon' : 3}, (data.rcon != 3) ? null : 'disabled')}}
+			{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'disabled linkOn')}}
+			{{:helper.link('Auto', null, {'rcon' : 2}, (data.rcon != 2) ? null : 'disabled linkOn')}}
+			{{:helper.link('On',   null, {'rcon' : 3}, (data.rcon != 3) ? null : 'disabled linkOn')}}
 		</div>
 		<div class="line">
 			<div class="statusLabel">Thermostat:</div>
@@ -151,8 +151,8 @@ Used In File(s): /code/game/machinery/alarm.dm
 				<div class="line">
 					<div class="statusLabel">Pressure checks:</div>
 					<div class="statusValue">
-						{{:helper.link('External','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,1)},null,(value.checks == 1 ?'linkOn':'red'))}}
-						{{:helper.link('Internal','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,2)},null,(value.checks == 2 ?'linkOn':'red'))}}
+						{{:helper.link('External','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,1)},null,(value.checks & 1 ?'linkOn':'red'))}}
+						{{:helper.link('Internal','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,2)},null,(value.checks & 2 ?'linkOn':'red'))}}
 					</div>
 				</div>
 				<div class="line">
