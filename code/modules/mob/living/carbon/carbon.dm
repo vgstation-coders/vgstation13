@@ -683,7 +683,7 @@
 	if (!..())
 		return FALSE
 
-	if (src.unslippable) //if unslippable, don't even bother making checks fam just don't slip me ok
+	if (unslippable) //if unslippable, don't even bother making checks
 		return FALSE
 
 	switch(P.wet)
