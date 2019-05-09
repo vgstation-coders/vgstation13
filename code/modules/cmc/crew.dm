@@ -582,7 +582,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			icon = "7"
 		data["icon"] = icon
 
-		all_data[++all_data.len] = data
+		all_data["[all_data.len+1]"] = data
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
 	if (!ui)
