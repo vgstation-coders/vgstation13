@@ -6,6 +6,9 @@
 	anchored = TRUE
 	density = TRUE
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
+	light_color = "#6496FA"
+	light_range = 2
+	light_power = 1
 
 	var/process_time = 5
 	var/minimum_growth = 100
@@ -90,7 +93,7 @@
 		return
 
 	if (!dish)
-		to_chat(user, "<span class='notice'>Place an open petri dish first to analyse its pathogen.</span>")
+		to_chat(user, "<span class='notice'>Place an open growth dish first to analyse its pathogen.</span>")
 		return
 
 	if (dish.growth < minimum_growth)
@@ -115,7 +118,7 @@
 		overlays += I
 
 	use_power(1000)
-
+	set_light(2,2)
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)
 
 	if(do_after(user, src, 5 SECONDS))
@@ -124,7 +127,7 @@
 		alert_noise()
 		dish.info = dish.contained_virus.get_info()
 		last_scan_name = "[dish.contained_virus.form] #[dish.contained_virus.uniqueID]"
-		dish.name = "Petri Dish ([last_scan_name])"
+		dish.name = "growth dish ([last_scan_name])"
 		last_scan_info = dish.info
 		var/datum/browser/popup = new(user, "\ref[dish]", dish.name, 600, 500, src)
 		popup.set_content(dish.info)
@@ -151,6 +154,11 @@
 
 	if (stat & (BROKEN))
 		icon_state = "analyserb"
+
+	if(stat & (BROKEN|NOPOWER))
+		set_light(0)
+	else
+		set_light(2,1)
 
 	if (dish)
 		overlays += "smalldish-outline"

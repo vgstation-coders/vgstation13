@@ -82,7 +82,7 @@
 		var/datum/disease2/disease/disease = body.virus2[ID]
 		for (var/A in disease.antigen)
 			var/tally = 0.5
-			if (isturf(body.loc) && body.lying && body.resting)
+			if (isturf(body.loc) && body.lying)
 				tally += 0.5
 				var/obj/structure/bed/B = locate() in body.loc
 				if (B && B.lock_type == /datum/locking_category/buckle/bed)//fucking chairs n stuff
