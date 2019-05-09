@@ -683,7 +683,7 @@
 	if (!..())
 		return FALSE
 
-	if (src.unslippable) //if the user teleports in the middle of a slippable surface, he will not slip when he lands on the surface, rather than stepping, but not getting a knockdown
+	if (src.unslippable) //if unslippable, don't even bother making checks fam just don't slip me ok
 		return FALSE
 
 	switch(P.wet)
