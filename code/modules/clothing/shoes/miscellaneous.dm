@@ -297,6 +297,12 @@
 	item_state = "nr_boots"
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
+obj/item/clothing/shoes/jackboots/cowboy
+	name = "cowboy boots"
+	desc = "Yeehaw."
+	icon_state = "cowboy"
+	item_state = "cowboy"
+
 /obj/item/clothing/shoes/cult_legacy
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
