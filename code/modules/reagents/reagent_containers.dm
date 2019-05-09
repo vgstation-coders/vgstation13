@@ -306,7 +306,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/proc/is_full()
 	if(!reagents)
-		return 0
+		return FALSE
 	return reagents.total_volume >= reagents.maximum_volume
 
 /obj/item/weapon/reagent_containers/proc/can_transfer_an_APTFT()
