@@ -591,7 +591,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			send_asset_list(user.client, C.assets)
 		
 		ui = new(user, src, "textview", "cmc.tmpl", "Crew Monitoring", 900, 600)
-		ui.add_stylesheet('html/browser/cmc.css')
+		ui.add_stylesheet('cmc.css')
 		var/list/i_data = list()
 		i_data["update"] = textview_updatequeued[uid]
 		i_data["holo"] = holomap[uid]
