@@ -683,6 +683,9 @@
 	if (!..())
 		return FALSE
 
+	if (src.unslippable) //if the user teleports in the middle of a slippable surface, he will not slip when he lands on the surface, rather than stepping, but not getting a knockdown
+		return false
+
 	switch(P.wet)
 		if(TURF_WET_WATER)
 			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
