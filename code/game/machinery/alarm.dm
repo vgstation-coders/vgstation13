@@ -845,6 +845,12 @@ var/global/list/airalarm_presets = list(
 		return 1
 	if(href_list["rcon"])
 		rcon_setting = text2num(href_list["rcon"])
+		//propagate to other AAs in the area
+		var/area/this_area = get_area(src)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+				AA.rcon_setting = rcon_setting
+		return 1
 
 	add_fingerprint(usr)
 
@@ -862,7 +868,8 @@ var/global/list/airalarm_presets = list(
 				"o2_scrub",
 				"n2_scrub",
 				"panic_siphon",
-				"scrubbing")
+				"scrubbing",
+				"direction")
 				var/val
 				if(href_list["val"])
 					val=text2num(href_list["val"])
@@ -878,7 +885,6 @@ var/global/list/airalarm_presets = list(
 					val = newval
 
 				send_signal(device_id, list(href_list["command"] = val ) )
-				return 1
 
 			if("set_threshold")
 				var/env = href_list["env"]
@@ -889,7 +895,7 @@ var/global/list/airalarm_presets = list(
 				if (isnull(newval) || ..() || (locked && !issilicon(usr)))
 					return 1
 				set_threshold(env, threshold, newval, 1)
-				return 1
+		return 1
 	if(href_list["reset_thresholds"])
 		apply_preset(1) //just apply the preset without cycling
 		return 1
@@ -984,6 +990,7 @@ var/global/list/airalarm_presets = list(
 					if(allowed(user) && !wires.IsIndexCut(AALARM_WIRE_IDSCAN))
 						locked = !locked
 						to_chat(user, "<span class='notice'>You [ locked ? "lock" : "unlock"] the Air Alarm interface.</span>")
+						nanomanager.update_uis(src)
 					else
 						to_chat(user, "<span class='warning'>Access denied.</span>")
 			return ..() //Sanity

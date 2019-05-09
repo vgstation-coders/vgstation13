@@ -123,12 +123,12 @@ Used In File(s): /code/game/machinery/alarm.dm
 				{{if data.rcon_enabled}}
 					<div class="good">Enabled</div>
 				{{else}}
-					<div class="bad">Enabled</div>
+					<div class="bad">Disabled</div>
 				{{/if}}
 			</div>
 			<div class="line">
 				<div class="statusLabel">Thermostat:</div>
-				{{:helper.link(data.target_temp+" C", 'carat-2-n-s', {'temperature': 1}, null, (data.rcon_enabled) ? null : 'disabled')}}
+				{{:helper.link(data.target_temp+" C", 'carat-2-n-s', {'temperature': 1}, (data.rcon_enabled) ? null : 'disabled')}}
 			</div>
 		</div>
 	{{/if}}
@@ -157,10 +157,10 @@ Used In File(s): /code/game/machinery/alarm.dm
 						<div class="statusLabel">Operating:</div>
 						<div class="statusValue">
 							{{:helper.link(value.power ? 'On':'Off','power',{'id_tag':value.id_tag,'command':'power','val':value.power?0:1},null,(value.power?'linkOn':'red'))}}
-							{{if value.direction=="siphon"}}
-								{{:helper.link('Siphoning','arrowthickstop-1-s',{'id_tag':value.id_tag,'command':'set_dir','dir':'release'})}}
+							{{if value.direction==0}}
+								{{:helper.link('Siphoning','arrowthickstop-1-s',{'id_tag':value.id_tag,'command':'direction','val':'1'})}}
 							{{else}}
-								{{:helper.link('Blowing','arrowthick-1-n',{'id_tag':value.id_tag,'command':'set_dir','dir':'siphon'})}}
+								{{:helper.link('Releasing','arrowthick-1-n',{'id_tag':value.id_tag,'command':'direction','val':'0'})}}
 							{{/if}}
 						</div>
 					</div>

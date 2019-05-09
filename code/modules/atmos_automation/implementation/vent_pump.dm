@@ -2,9 +2,9 @@
 	name = "Vent Pump: Mode"
 
 	var/vent_pump = null
-	var/mode = "stabilize"
+	var/mode = "release"
 	var/vent_type = 0//0 for unary vents, 1 for DP vents
-	var/list/modes = list("stabilize", "purge")
+	var/list/modes = list("siphon", "release")
 
 /datum/automation/set_vent_pump_mode/Export()
 	var/list/json = ..()
@@ -21,7 +21,7 @@
 
 /datum/automation/set_vent_pump_mode/process()
 	if(vent_pump)
-		parent.send_signal(list ("tag" = vent_pump, mode), filter = (vent_type ? RADIO_ATMOSIA : RADIO_FROM_AIRALARM))
+		parent.send_signal(list ("tag" = vent_pump, "direction" = (mode == "release" ? "1" : "0")), filter = (vent_type ? RADIO_ATMOSIA : RADIO_FROM_AIRALARM))
 	return 0
 
 /datum/automation/set_vent_pump_mode/GetText()

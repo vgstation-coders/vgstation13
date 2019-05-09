@@ -104,9 +104,8 @@ Used In File(s): /code/game/machinery/alarm.dm
 			#define RCON_YES	3
 			-->
 			<div class="statusLabel">Remote Control:</div>
-			{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'disabled linkOn')}}
-			{{:helper.link('Auto', null, {'rcon' : 2}, (data.rcon != 2) ? null : 'disabled linkOn')}}
-			{{:helper.link('On',   null, {'rcon' : 3}, (data.rcon != 3) ? null : 'disabled linkOn')}}
+			{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'selected')}}
+			{{:helper.link('On',   null, {'rcon' : 2}, (data.rcon != 2) ? null : 'selected')}}
 		</div>
 		<div class="line">
 			<div class="statusLabel">Thermostat:</div>
@@ -141,10 +140,10 @@ Used In File(s): /code/game/machinery/alarm.dm
 					<div class="statusLabel">Operating:</div>
 					<div class="statusValue">
 						{{:helper.link(value.power ? 'On':'Off','power',{'id_tag':value.id_tag,'command':'power','val':value.power?0:1},null,(value.power?'linkOn':'red'))}}
-						{{if value.direction=="siphon"}}
-							{{:helper.link('Siphoning','arrowthickstop-1-s',{'id_tag':value.id_tag,'command':'set_dir','dir':'release'})}}
+						{{if value.direction==0}}
+							{{:helper.link('Siphoning','arrowthickstop-1-s',{'id_tag':value.id_tag,'command':'direction','val':'1'})}}
 						{{else}}
-							{{:helper.link('Blowing','arrowthick-1-n',{'id_tag':value.id_tag,'command':'set_dir','dir':'siphon'})}}
+							{{:helper.link('Releasing','arrowthick-1-n',{'id_tag':value.id_tag,'command':'direction','val':'0'})}}
 						{{/if}}
 					</div>
 				</div>
