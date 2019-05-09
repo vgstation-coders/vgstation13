@@ -39,7 +39,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/ui_tooltips = list() //list of lists of the buttons
 	var/list/freeze = list() //list of _using set freeze
 	var/list/entries = list() //list of all crew, which has sensors >= 1
-	var/list/textview_popup = list()//holds all the textview popups people are looking at rn
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
@@ -306,7 +305,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	holomap_z[uid] = null
 	textview_updatequeued[uid] = null
 	holomap[uid] = null
-	textview_popup[uid] = null //incase something is fucky
 
 /obj/machinery/computer/crew/proc/initializeHolomap(var/mob/user)
 	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
@@ -358,7 +356,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		holomap_z[uid] = STATION_Z
 		textview_updatequeued[uid] = 1
 		holomap[uid] = 1
-		textview_popup[uid] = null
 		scanCrew() //else the first user has to wait for process to fire
 		processUser(user)
 		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
@@ -376,13 +373,13 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/processUser(var/mob/user)
 	var/uid = "\ref[user]"
-	if(!textview_popup[uid] && (holomap[uid] == 0))
+	if(!nanomanager.get_open_ui(user, src, "textview") && (holomap[uid] == 0))
 		deactivate(user)
 		return
 
 	updateVisuals(user)
 
-	if(textview_updatequeued[uid] && textview_popup[uid])
+	if(textview_updatequeued[uid])
 		updateTextView(user)
 
 //ahhh
@@ -502,7 +499,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
 	if(CMC)
-		var/uid = "\ref[user]"	
+		var/uid = "\ref[user]"
 		CMC.freeze[uid] = 1
 	..()
 
@@ -548,8 +545,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		data["see"]["y"] = entry[ENTRY_SEE_Y]
 		data["name"] = entry[ENTRY_NAME]
 		data["job"] = entry[ENTRY_ASSIGNMENT]
-		data["damage"] = list()
-		data["damage"]["oxygen"] = entry[ENTRY_DAMAGE]
+		if(entry[ENTRY_DAMAGE])
+			data["damage"] = list()
+			data["damage"]["oxygen"] = entry[ENTRY_DAMAGE][DAMAGE_OXYGEN]
+			data["damage"]["toxin"] = entry[ENTRY_DAMAGE][DAMAGE_TOXIN]
+			data["damage"]["fire"] = entry[ENTRY_DAMAGE][DAMAGE_FIRE]
+			data["damage"]["brute"] = entry[ENTRY_DAMAGE][DAMAGE_BRUTE]
 		data["area"] = entry[ENTRY_AREA]
 
 		var/ijob = entry[ENTRY_IJOB]
@@ -571,8 +572,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		var/icon
 		if(istype(H, /mob/living/carbon/human))
 			if(stat != 2)
-				if(data["damage"])
-					icon = getLifeIcon(data["damage"])
+				if(entry[ENTRY_DAMAGE])
+					icon = getLifeIcon(entry[ENTRY_DAMAGE])
 				else
 					icon = "0"
 			else
@@ -597,7 +598,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		ui.set_initial_data(i_data)
 		ui.open()
 
-	ui.send_message("populateTable", list(json_encode(all_data)))
+	ui.send_message("populateTable", list2params(list(json_encode(all_data))))
 
 //taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
 /obj/machinery/computer/crew/proc/closeTextview(var/mob/user)

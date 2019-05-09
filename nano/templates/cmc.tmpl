@@ -23,10 +23,10 @@ Used In File(s): \code\modules\cmc\crew.dm
         </kbd>
         <script>
         function populateTable(entries_string){
-            var entries = JSON.parse(entries_string);
+            var entries = $.parseJSON(entries_string);
             var string = "";
             for(entry in entries){
-                string = "<td><span class='name "+entry.role+"'>"+entry.name+"</span> ("entry.job")</td>";
+                string = "<td><span class='name "+entry.role+"'>"+entry.name+"</span> ("+entry.job+")</td>";
                 string += "<td><img src='cmc_"+entry.icon+".png' height='11' width='11'/>";
                 if(entry.damage){
                     string +=  "(<span class='oxygen'>"+entry.role.oxygen+"</span>/<span class='toxin'>"+entry.role.toxin+"</span>/<span class='fire'>"+entry.role.fire+"</span>/<span class='brute'>"+entry.role.brute+"</span>)";
@@ -42,16 +42,16 @@ Used In File(s): \code\modules\cmc\crew.dm
                 string += "</td>";
             }
 
-            document.getElementByID("contents").innerHTML = string;
+            $("#contents").innerHTML = string;
         }
 
         function toggleHolobtn(){
-            var btn = document.getElementByID("holo_btn");
+            var btn = $("#holo_btn");
             btn.innerHTML = (btn.innerHTML == "Disable Holomap") ? "Enable Holomap" : "Disable Holomap";
         }
 
         function toggleUpdatebtn(){
-            var btn = document.getElementByID("update_btn");
+            var btn = $("#update_btn");
             btn.innerHTML = (btn.innerHTML == "Disable Updating") ? "Enable Updating" : "Disable Updating";
         }
         </script>
