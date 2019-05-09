@@ -514,7 +514,7 @@
 */
 /obj/item/toy/snappop/smokebomb
 	flags = FPRINT | NO_THROW_MSG
-	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1";
+	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
 
 /obj/item/toy/snappop/smokebomb/pop()
 	spark(src, 2, FALSE)
