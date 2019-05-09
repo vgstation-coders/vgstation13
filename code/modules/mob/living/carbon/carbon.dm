@@ -684,7 +684,7 @@
 		return FALSE
 
 	if (src.unslippable) //if the user teleports in the middle of a slippable surface, he will not slip when he lands on the surface, rather than stepping, but not getting a knockdown
-		return false
+		return FALSE
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
