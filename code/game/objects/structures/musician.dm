@@ -117,6 +117,7 @@
 						else
 							cur_oct[cur_note] = text2num(ni)
 					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
+					//hook here, cause we need that index
 				if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
 				else
@@ -125,6 +126,8 @@
 	playing = 0
 	repeat = 0
 	updateDialog(user)
+
+//convert this to nanoui
 /datum/song/proc/interact(mob/user)
 	var/dat = ""
 	if(lines.len > 0)
