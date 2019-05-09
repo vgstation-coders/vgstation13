@@ -149,8 +149,9 @@
 		H.adjustToxLoss(15*multiplier)
 
 /datum/disease2/effect/organs/vampire
+	name = "Shutdown Syndrome"
 	stage = 1 //For use with vampires?
-	badness = 3
+	badness = 6
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))

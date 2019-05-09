@@ -45,6 +45,10 @@
 	if (targets.len > 1)
 		return FALSE
 
+	var/datum/role/vampire/V = isvampire(user)
+	if(!V)
+		return FALSE
+
 	var/mob/living/carbon/target = targets[1]
 
 	log_admin("[key_name(user)] has death-touched [key_name(target)]. The latter will die in moments.")
@@ -64,9 +68,7 @@
 	shutdown.ticks = 185
 	target.infect_disease2(shutdown, notes="(Spell, from [key_name(user)])")
 
-	var/datum/role/vampire/V = isvampire(user)
-	if(V)
-		V.remove_blood(blood_cost)
+	V.remove_blood(blood_cost)
 
 /spell/targeted/disease/critfail(var/list/targets, var/mob/user)
 	to_chat(user, "<span class='danger'>It feels like your dead blood met with molten silver.</span>")
