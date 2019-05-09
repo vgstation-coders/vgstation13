@@ -1,0 +1,48 @@
+{{if data.linecount > 0}}
+<H3>Playback</H3>
+{{if data.playing}}
+<A href='?src=\ref[src];play=1'>Play</A><SPAN CLASS='linkOn'>Stop</SPAN>
+<BR><BR>
+Repeat Song:
+{{if data.repeat > 0}}<A href='?src=\ref[src];repeat=-10'>-</A><A href='?src=\ref[src];repeat=-1'>-</A>{{else}}<SPAN CLASS='linkOff'>-</SPAN><SPAN CLASS='linkOff'>-</SPAN>{{/if}}{{data.repeat}}
+ times
+{{if data.repeat < data.maxrepeats}}<A href='?src=\ref[src];repeat=1'>+</A><A href='?src=\ref[src];repeat=10'>+</A>{{else}}<SPAN CLASS='linkOff'>+</SPAN><SPAN CLASS='linkOff'>+</SPAN>{{endif}}
+<BR>
+{{else}}
+<SPAN CLASS='linkOn'>Play</SPAN> <A href='?src=\ref[src];stop=1'>Stop</A><BR>
+Repeats left: <B>{{data.repeat}}</B><BR>
+{{/if}}
+if(!edit)
+    dat += "<BR><B><A href='?src=\ref[src];edit=2'>Show Editor</A></B><BR>"
+else
+    var/bpm = round(600 / tempo)
+    dat += {"<H3>Editing</H3>
+        <B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>
+            <A href='?src=\ref[src];newsong=1'>Start a New Song</A>
+            <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>
+        Tempo: <A href='?src=\ref[src];tempo=[world.tick_lag]'>-</A> [bpm] BPM <A href='?src=\ref[src];tempo=-[world.tick_lag]'>+</A><BR><BR>"}
+    var/linecount = 0
+    for(var/line in lines)
+        linecount += 1
+        dat += "Line [linecount]: <A href='?src=\ref[src];modifyline=[linecount]'>Edit</A> <A href='?src=\ref[src];deleteline=[linecount]'>X</A> [line]<BR>"
+    dat += "<A href='?src=\ref[src];newline=1'>Add Line</A><BR><BR>"
+    if(help)
+        dat += {"<B><A href='?src=\ref[src];help=1'>Hide Help</A></B><BR>
+                Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
+                Every note in a chord will play together, with chord timed by the tempo.<br>
+                <br>
+                Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
+                By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
+                Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
+                After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
+                Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
+                A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
+                To make a chord be a different time, end it with /x, where the chord length will be length<br>
+                defined by tempo / x: <i>C,G/2,E/4</i><br>
+                Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
+                <br>
+                Lines may be up to 50 characters.<br>
+                A song may only contain up to 50 lines.<br>
+                "}
+    else
+        dat += "<B><A href='?src=\ref[src];help=2'>Show Help</A></B><BR>"
