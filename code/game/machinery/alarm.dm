@@ -195,27 +195,26 @@ var/global/list/airalarm_presets = list(
 	req_one_access = list()
 	req_access = list(access_trade)
 
-/obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0)
+/obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
 	// Propogate settings.
-	var/area/this_area = get_area(src)
-	for (var/obj/machinery/alarm/AA in this_area)
-		if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted && AA.preset != src.preset)
-			AA.preset=preset
-			AA.apply_preset(1) // Only this air alarm should send a cycle.
+	if(propagate)
+		var/area/this_area = get_area(src)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+				AA.preset=preset
+				AA.apply_preset(1, 0) // Only this air alarm should send a cycle.
 	var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
 	if(!presetdata)
 		//TODO: print an error or something
-		to_chat(world, "DEBUG: presetdata was false-y")
 		return
-	to_chat(world, "DEBUG: setting presets")
-	TLV["oxygen"] =			presetdata.oxygen
-	TLV["nitrogen"] =		presetdata.nitrogen
-	TLV["carbon_dioxide"] = presetdata.carbon_dioxide
-	TLV["plasma"] =			presetdata.plasma
-	TLV["n2o"] =			presetdata.n2o
-	TLV["other"] =			presetdata.other
-	TLV["pressure"] =		presetdata.pressure
-	TLV["temperature"] =	presetdata.temperature
+	TLV["oxygen"] =			presetdata.oxygen.Copy()
+	TLV["nitrogen"] =		presetdata.nitrogen.Copy()
+	TLV["carbon_dioxide"] = presetdata.carbon_dioxide.Copy()
+	TLV["plasma"] =			presetdata.plasma.Copy()
+	TLV["n2o"] =			presetdata.n2o.Copy()
+	TLV["other"] =			presetdata.other.Copy()
+	TLV["pressure"] =		presetdata.pressure.Copy()
+	TLV["temperature"] =	presetdata.temperature.Copy()
 	target_temperature =	presetdata.target_temperature
 	if(!no_cycle_after)
 		mode = AALARM_MODE_CYCLE
@@ -270,7 +269,7 @@ var/global/list/airalarm_presets = list(
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
 	TLV["temperature"] =	list(T0C-26, T0C, T0C+40, T0C+66) // K
 	*/
-	apply_preset(1) // Don't cycle.
+	apply_preset(1, 0) // Don't cycle and don't propagate.
 
 
 /obj/machinery/alarm/initialize()
@@ -513,11 +512,62 @@ var/global/list/airalarm_presets = list(
 /obj/machinery/alarm/proc/set_temperature(var/temp, var/propagate=1)
 	target_temperature = temp
 	//propagate to other air alarms in the area
-	var/area/this_area = get_area(src)
 	if(propagate)
+		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
 			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
 				AA.target_temperature = temp
+
+/obj/machinery/alarm/proc/set_threshold(var/env, var/index, var/value, var/propagate=1)
+	var/list/selected = TLV[env]
+	if (value<0)
+		selected[index] = -1.0
+	else if (env=="temperature" && value>5000)
+		selected[index] = 5000
+	else if (env=="pressure" && value>50*ONE_ATMOSPHERE)
+		selected[index] = 50*ONE_ATMOSPHERE
+	else if (env!="temperature" && env!="pressure" && value>200)
+		selected[index] = 200
+	else
+		value = round(value,0.01)
+		selected[index] = value
+	//blegh
+	if(index == 1)
+		if(selected[1] > selected[2])
+			selected[2] = selected[1]
+		if(selected[1] > selected[3])
+			selected[3] = selected[1]
+		if(selected[1] > selected[4])
+			selected[4] = selected[1]
+	if(index == 2)
+		if(selected[1] > selected[2])
+			selected[1] = selected[2]
+		if(selected[2] > selected[3])
+			selected[3] = selected[2]
+		if(selected[2] > selected[4])
+			selected[4] = selected[2]
+	if(index == 3)
+		if(selected[1] > selected[3])
+			selected[1] = selected[3]
+		if(selected[2] > selected[3])
+			selected[2] = selected[3]
+		if(selected[3] > selected[4])
+			selected[4] = selected[3]
+	if(index == 4)
+		if(selected[1] > selected[4])
+			selected[1] = selected[4]
+		if(selected[2] > selected[4])
+			selected[2] = selected[4]
+		if(selected[3] > selected[4])
+			selected[3] = selected[4]
+	
+	//propagate to other air alarms in the area
+	if(propagate)
+		apply_mode()
+		var/area/this_area = get_area(src)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+				AA.set_threshold(env, index, value, 0)
 
 /obj/machinery/alarm/proc/apply_mode()
 	var/list/current_pressures = TLV["pressure"]
@@ -823,51 +873,10 @@ var/global/list/airalarm_presets = list(
 				var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
 				var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
 				if (isnull(newval) || ..() || (locked && !issilicon(usr)))
-					return
-				if (newval<0)
-					selected[threshold] = -1.0
-				else if (env=="temperature" && newval>5000)
-					selected[threshold] = 5000
-				else if (env=="pressure" && newval>50*ONE_ATMOSPHERE)
-					selected[threshold] = 50*ONE_ATMOSPHERE
-				else if (env!="temperature" && env!="pressure" && newval>200)
-					selected[threshold] = 200
-				else
-					newval = round(newval,0.01)
-					selected[threshold] = newval
-				if(threshold == 1)
-					if(selected[1] > selected[2])
-						selected[2] = selected[1]
-					if(selected[1] > selected[3])
-						selected[3] = selected[1]
-					if(selected[1] > selected[4])
-						selected[4] = selected[1]
-				if(threshold == 2)
-					if(selected[1] > selected[2])
-						selected[1] = selected[2]
-					if(selected[2] > selected[3])
-						selected[3] = selected[2]
-					if(selected[2] > selected[4])
-						selected[4] = selected[2]
-				if(threshold == 3)
-					if(selected[1] > selected[3])
-						selected[1] = selected[3]
-					if(selected[2] > selected[3])
-						selected[2] = selected[3]
-					if(selected[3] > selected[4])
-						selected[4] = selected[3]
-				if(threshold == 4)
-					if(selected[1] > selected[4])
-						selected[1] = selected[4]
-					if(selected[2] > selected[4])
-						selected[2] = selected[4]
-					if(selected[3] > selected[4])
-						selected[3] = selected[4]
-
-				apply_mode()
+					return 1
+				set_threshold(env, threshold, newval, 1)
 				return 1
 	if(href_list["reset_thresholds"])
-		to_chat(world, "DEBUG: Resetting thresholds.")
 		apply_preset(1) //just apply the preset without cycling
 		return 1
 
