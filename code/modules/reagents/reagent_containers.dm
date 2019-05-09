@@ -301,7 +301,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/proc/is_empty()
 	if(!reagents)
-		return 1
+		return TRUE
 	return reagents.total_volume <= 0
 
 /obj/item/weapon/reagent_containers/proc/is_full()
