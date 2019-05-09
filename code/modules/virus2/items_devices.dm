@@ -1,8 +1,8 @@
-///////////////ANTIBODY SCANNER///////////////
+///////////////IMMUNITY SCANNER///////////////
 
 /obj/item/device/antibody_scanner
-	name = "antibody scanner"
-	desc = "Used to scan living beings for antibodies in their blood."
+	name = "immunity scanner"
+	desc = "A hand-held body scanner able to evaluate the immune system of the subject."
 	icon_state = "antibody"
 	w_class = W_CLASS_SMALL
 	item_state = "electronic"
@@ -10,10 +10,47 @@
 	siemens_coefficient = 1
 
 
-/obj/item/device/antibody_scanner/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(!istype(M))
+/obj/item/device/antibody_scanner/attack(var/mob/living/L, var/mob/user)
+	if(!istype(L))
 		to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
 		return
+
+	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
+
+	if (L.immune_system)
+		var/i = 0
+		for (var/antibody in L.immune_system.antibodies)
+			var/rgb = "#80DEFF"
+			switch (i)
+				if (4 to 6)
+					rgb = "#81FF9F"
+				if (7 to 9)
+					rgb = "#E6FF81"
+				if (10 to 12)
+					rgb = "#FF9681"
+			scan.DrawBox(rgb,i*43+11,6,i*43+32,6+L.immune_system.antibodies[antibody]*3)
+			i++
+
+	var/info = "<img src='data:image/png;base64,[icon2base64(scan)]'/>"
+	info += "<br>"
+	info += "<table style='table-layout:fixed;width:560px'>"
+	//info += "<tr><th>O</th><th>A</th><th>B</th><th>Rh</th><th>Q</th><th>U</th><th>V</th><th>M</th><th>N</th><th>P</th><th>X</th><th>Y</th><th>Z</th></tr>"
+	info += "<tr>"
+	if (L.immune_system)
+		for (var/antibody in L.immune_system.antibodies)
+			info += "<th>[antibody]</th>"
+	info += "</tr>"
+	info += "<tr>"
+	if (L.immune_system)
+		for (var/antibody in L.immune_system.antibodies)
+			info += "<th>[round(L.immune_system.antibodies[antibody])]%</th>"
+	info += "</tr>"
+	info += "</table>"
+
+	var/datum/browser/popup = new(user, "\ref[src]", name, 600, 600, src)
+	popup.set_content(info)
+	popup.open()
+
 	/* var/mob/living/carbon/C = M
 	TODO: VIRO REWRITE PART 2
 	if(!C.antibodies)
@@ -26,7 +63,8 @@
 ///////////////VIRUS DISH///////////////
 
 /obj/item/weapon/virusdish
-	name = "virus containment/growth dish"
+	name = "growth dish"
+	desc = "A petri dish fit to contain viral, bacteriologic, parasitic, or any other kind of pathogenic culture."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "virusdish"
 	w_class = W_CLASS_SMALL
@@ -50,6 +88,7 @@
 	..()
 	if (open)
 		contained_virus = null
+		growth = 0
 		update_icon()
 
 /obj/item/weapon/virusdish/update_icon()
@@ -176,11 +215,15 @@
 	else
 		to_chat(user, "<span class='notice'>Its lid is closed!</span>")
 	if(info)
-		to_chat(user, "<span class='info'>There is a sticker with some printed information on it.</span>")
-		var/datum/browser/popup = new(user, "\ref[src]", name, 600, 300, src)
+		to_chat(user, "<span class='info'>There is a sticker with some printed information on it. <a href ='?src=\ref[src];examine=1'>(Read it)</a></span>")
+
+/obj/item/weapon/virusdish/Topic(href, href_list)
+	if(..())
+		return TRUE
+	if(href_list["examine"])
+		var/datum/browser/popup = new(usr, "\ref[src]", name, 600, 300, src)
 		popup.set_content(info)
 		popup.open()
-
 
 /obj/item/weapon/virusdish/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D)
 	if (open)//If the dish is open, we may get infected by the disease inside on top of those that might be stuck on it.
