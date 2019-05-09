@@ -15,9 +15,12 @@
 		to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
 		return
 
-	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
-
+		var/info = ""
 	if (L.immune_system)
+		info += "Immune System Status: <b>[round(L.immune_system.strength*100)]%</b>"
+		info += "<br>Antibody Concentrations:"
+		var/icon/scan = icon('icons/virology.dmi',"immunitybg")
+
 		var/i = 0
 		for (var/antibody in L.immune_system.antibodies)
 			var/rgb = "#80DEFF"
@@ -28,13 +31,28 @@
 					rgb = "#E6FF81"
 				if (10 to 12)
 					rgb = "#FF9681"
-			scan.DrawBox(rgb,i*43+11,6,i*43+32,6+L.immune_system.antibodies[antibody]*3)
+			scan.DrawBox(rgb,i*43+11,6,i*43+31,6+L.immune_system.antibodies[antibody]*3)
 			i++
 
-	var/info = "<img src='data:image/png;base64,[icon2base64(scan)]'/>"
+	if (L.virus2.len)
+		for (var/ID in L.virus2)
+			var/datum/disease2/disease/D = L.virus2[ID]
+			scan.DrawBox("#FF0000",5,6+D.strength*3,564,6+D.strength*3)
+			if(ID in virusDB)
+				var/subdivision = (D.strength - ((D.robustness * D.strength) / 100)) / D.max_stage
+				var/i = 0
+				for (var/antigen in all_antigens)
+					if (antigen in D.antigen)
+						scan.DrawBox("#FF0000",18+43*i,6+D.strength*3-3,24+43*i,6+D.strength*3+3)
+						scan.DrawBox("#FF0000",21+43*i,6+D.strength*3,21+43*i,6+round(D.strength - D.max_stage * subdivision)*3)
+						for (var/j = 1 to D.max_stage)
+							var/alt = round(D.strength - j * subdivision)
+							scan.DrawBox("#FF0000",5+43*i,6+alt*3,38+43*i,6+alt*3)
+					i++
+
+	info += "<br><img src='data:image/png;base64,[icon2base64(scan)]'/>"
 	info += "<br>"
-	info += "<table style='table-layout:fixed;width:560px'>"
-	//info += "<tr><th>O</th><th>A</th><th>B</th><th>Rh</th><th>Q</th><th>U</th><th>V</th><th>M</th><th>N</th><th>P</th><th>X</th><th>Y</th><th>Z</th></tr>"
+	info += "<table style='table-layout:fixed;width:560px;text-align:center'>"
 	info += "<tr>"
 	if (L.immune_system)
 		for (var/antibody in L.immune_system.antibodies)
@@ -43,22 +61,13 @@
 	info += "<tr>"
 	if (L.immune_system)
 		for (var/antibody in L.immune_system.antibodies)
-			info += "<th>[round(L.immune_system.antibodies[antibody])]%</th>"
+			info += "<td>[round(L.immune_system.antibodies[antibody])]%</th>"
 	info += "</tr>"
 	info += "</table>"
 
 	var/datum/browser/popup = new(user, "\ref[src]", name, 600, 600, src)
 	popup.set_content(info)
 	popup.open()
-
-	/* var/mob/living/carbon/C = M
-	TODO: VIRO REWRITE PART 2
-	if(!C.antibodies)
-		to_chat(user, "<span class='notice'>Unable to detect antibodies.</span>")
-		return
-	var/code = antigens2string(M.antibodies)
-	to_chat(user, "<span class='notice'>[bicon(src)] \The [src] displays a cryptic set of data: [code]</span>")
-	*/
 
 ///////////////VIRUS DISH///////////////
 
