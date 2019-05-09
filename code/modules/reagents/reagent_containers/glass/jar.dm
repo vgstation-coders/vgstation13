@@ -13,7 +13,8 @@
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
 	var/obj/held_item = null
-	var/list/forbidden_items = list(/obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/syringe, /obj/item/weapon/reagent_containers/glass/jar)
+	var/list/forbidden_items = list(/obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/syringe, \
+		/obj/item/weapon/reagent_containers/glass/jar, /obj/item/weapon/reagent_containers/pill)
 
 /obj/item/weapon/reagent_containers/glass/jar/New()
 	..()
