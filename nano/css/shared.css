@@ -305,6 +305,13 @@ div.notice {
     color: #98B0C3;
 }
 
+.statusLabelWide {
+    width: 170px;
+    float: left;
+    overflow: hidden;
+    color: #98B0C3;
+}
+
 .statusValue {
     float: left;
 }

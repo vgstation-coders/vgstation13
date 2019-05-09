@@ -859,8 +859,8 @@ var/global/list/airalarm_presets = list(
 		var/device_id = href_list["id_tag"]
 		switch(href_list["command"])
 			if( "power",
-				"adjust_external_pressure",
 				"set_external_pressure",
+				"set_internal_pressure",
 				"checks",
 				"co2_scrub",
 				"tox_scrub",
