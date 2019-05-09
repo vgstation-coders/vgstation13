@@ -113,7 +113,7 @@ var/list/lawgiver_modes = list(
 )
 
 /obj/item/weapon/gun/lawgiver
-	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition."
+	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. You can see the words STUN, LASER, RAPID, FLARE and RICOCHET written in small print on its barreling."
 	name = "lawgiver"
 	icon_state = "lawgiver"
 	item_state = "lawgiver"
@@ -519,7 +519,7 @@ var/list/lawgiver_modes = list(
 	return "reports, [message]"
 
 /obj/item/weapon/gun/lawgiver/demolition
-	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. This model is equipped to handle firing high-explosive rounds."
+	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. You can see the words STUN, LASER, RAPID, FLARE and RICOCHET written in small print on the barreling, alongside HI EX and DOUBLE WHAMMY."
 	magazine_type = /obj/item/ammo_storage/magazine/lawgiver/demolition
 
 /obj/item/weapon/gun/lawgiver/demolition/check_mag_type(obj/item/I, mob/user)
