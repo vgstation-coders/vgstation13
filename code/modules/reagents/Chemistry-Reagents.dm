@@ -722,11 +722,11 @@
 
 		switch(volume)
 			if(60 to 75)
-				H.dizziness = max(M.dizziness, 10)
+				H.dizziness = max(H.dizziness, 10)
 				if(prob(5))
 					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
 			if(75 to INFINITY)
-				H.dizziness = max(M.dizziness, 30)
+				H.dizziness = max(H.dizziness, 20)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
 
