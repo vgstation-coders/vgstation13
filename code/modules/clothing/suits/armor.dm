@@ -233,7 +233,7 @@
 		src.add_fingerprint(user)
 	return
 
-/obj/item/clothing/suit/armor/reactive/on_block(damage, atom/blocked)
+/obj/item/clothing/suit/armor/reactive/on_block(damage, atom/movable/blocked)
 	if (blocked.ignore_blocking) // They have a "blocking rating" of 1
 		return FALSE
 	if(!prob(35))
