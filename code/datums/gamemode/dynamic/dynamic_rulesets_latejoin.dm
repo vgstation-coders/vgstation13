@@ -113,37 +113,6 @@
 
 //////////////////////////////////////////////
 //                                          //
-//               SPACE NINJA                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                          //
-//////////////////////////////////////////////
-
-/datum/dynamic_ruleset/latejoin/ninja
-	name = "Space Ninja Attack"
-	role_category = /datum/role/ninja
-	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
-	required_candidates = 1
-	weight = 4
-	cost = 10
-	requirements = list(90,90,60,20,10,10,10,10,10,10)
-	high_population_requirement = 20
-	logo = "ninja-logo"
-
-	repeatable = TRUE
-
-/datum/dynamic_ruleset/latejoin/ninja/execute()
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	var/datum/role/ninja/newninja = new
-	newninja.AssignToRole(M.mind,1)
-	newninja.Greet(GREET_DEFAULT)
-	newninja.OnPostSetup()
-	newninja.AnnounceObjectives()
-	return 1
-
-//////////////////////////////////////////////
-//                                          //
 //       REVOLUTIONARY PROVOCATEUR          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////

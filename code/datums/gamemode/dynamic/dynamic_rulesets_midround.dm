@@ -427,39 +427,6 @@
 
 //////////////////////////////////////////////
 //                                          //
-//         SPACE NINJA (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                          //
-//////////////////////////////////////////////
-
-/datum/dynamic_ruleset/midround/from_ghosts/ninja
-	name = "Space Ninja Attack"
-	role_category = /datum/role/ninja
-	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
-	required_candidates = 1
-	weight = 4
-	cost = 10
-	requirements = list(90,90,60,20,10,10,10,10,10,10)
-	high_population_requirement = 20
-	logo = "ninja-logo"
-	repeatable = TRUE
-
-/datum/dynamic_ruleset/midround/from_ghosts/ninja/acceptable(var/population=0,var/threat=0)
-	var/player_count = mode.living_players.len
-	var/antag_count = mode.living_antags.len
-	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))
-		return ..()
-	else
-		return 0
-
-/datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
-	return ..()
-
-//////////////////////////////////////////////
-//                                          //
 //         RAMBLER       (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -494,7 +461,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
 	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
 	var/gender = pick(MALE, FEMALE)
-	new_frank.randomise_appearance_for(gender)			
+	new_frank.randomise_appearance_for(gender)
 	new_frank.key = applicant.key
 	new_frank.dna.ready_dna(new_frank)
 	new_frank.setGender(gender)

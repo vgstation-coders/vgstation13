@@ -365,72 +365,6 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
-/proc/equip_ninja(var/mob/living/carbon/human/H)
-	if(!istype(H))
-		return 0
-	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/ninja)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
-
-#define GREET_WEEB "weebgreet"
-/proc/equip_weeaboo(var/mob/living/carbon/human/H)
-	if(!istype(H))
-		return 0
-	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
-
-	var/datum/role/R = H.mind.GetRole(NINJA)
-	if(R)
-		R.Greet(GREET_WEEB)
-
-/proc/name_ninja(var/mob/living/carbon/human/H)
-	if(!isjusthuman(H))
-		H.set_species("Human", 1)
-	var/ninja_title = pick(ninja_titles)
-	var/ninja_name = pick(ninja_names)
-	var/randomname = "[ninja_title] [ninja_name]"
-	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		H.fully_replace_character_name(H.real_name, newname)
-
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
 		return 0
@@ -458,4 +392,3 @@
 
 	to_chat(agent,words)
 	return 1
-
