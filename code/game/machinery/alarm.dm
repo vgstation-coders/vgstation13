@@ -45,6 +45,8 @@
 
 //These are the system presets that define things like gas concentrations and pressures
 /datum/airalarm_preset //this one is a blank preset that checks for NOTHING
+	var/name = null
+	var/desc = null
 	var/list/oxygen = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/nitrogen = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/carbon_dioxide = list(-1, -1, -1, -1) // Partial pressure, kpa
@@ -52,14 +54,17 @@
 	var/list/n2o = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/other = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/pressure = list(-1, -1, -1, -1) // kpa
+	var/target_pressure = ONE_ATMOSPHERE
 	var/list/temperature = list(-1, -1, -1, -1) // Kelvin
 	var/target_temperature = T0C+20 // Kelvin
 	var/list/scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 0, "plasma" = 0, "n2o" = 0)
 
-/datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/list/oxygen, var/list/nitrogen, var/list/carbon_dioxide,
+/datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/name, var/desc, var/list/oxygen, var/list/nitrogen, var/list/carbon_dioxide,
 							var/list/plasma, var/list/n2o, var/list/other, var/list/pressure, var/list/temperature,
 							var/list/target_temperature, var/list/scrubbers_gases)
 	if(P)
+		src.name = P.name
+		src.desc = P.desc
 		src.oxygen = P.oxygen.Copy()
 		src.nitrogen = P.nitrogen.Copy()
 		src.carbon_dioxide = P.carbon_dioxide.Copy()
@@ -69,6 +74,11 @@
 		src.pressure = P.pressure.Copy()
 		src.temperature = P.temperature.Copy()
 		src.target_temperature = P.target_temperature
+		src.scrubbers_gases = P.scrubbers_gases.Copy()
+	if(name)
+		src.name = name
+	if(desc)
+		src.desc = desc
 	if(oxygen)
 		src.oxygen = oxygen
 	if(nitrogen)
@@ -89,6 +99,8 @@
 		src.scrubbers_gases = scrubbers_gases
 
 /datum/airalarm_preset/human //For humans
+	name = "Human"
+	desc = "Permits Oxygen and Nitrogen"
 	oxygen = list(16, 18, 135, 140)
 	nitrogen = list(-1, -1,  -1,  -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -96,11 +108,14 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	target_pressure = ONE_ATMOSPHERE
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/vox //For vox
+	name = "Vox"
+	desc = "Permits Nitrogen only"
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(16, 18, 135,  140)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -108,11 +123,14 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	target_pressure = ONE_ATMOSPHERE
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/coldroom //Server rooms etc.
+	name = "Coldroom"
+	desc = "For server rooms and freezers"
 	oxygen = list(-1, -1, -1, -1)
 	nitrogen = list(-1, -1, -1, -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -120,11 +138,14 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.40, ONE_ATMOSPHERE*1.60)
+	target_pressure = ONE_ATMOSPHERE
 	temperature = list(20, 40, 140, 160)
 	target_temperature = 90
 	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/plasmaman //HONK
+	name = "Plasmaman"
+	desc = "Permits Plasma and Nitrogen only"
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, -1, -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -132,6 +153,7 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	target_pressure = ONE_ATMOSPHERE
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 0, "n2o" = 0)
@@ -791,12 +813,11 @@ var/global/list/airalarm_presets = list(
 		AALARM_MODE_FILL        = list("name"="Fill",        "desc"="Shuts off scrubbers and opens vents"),\
 		AALARM_MODE_OFF         = list("name"="Off",         "desc"="Shuts off vents and scrubbers"))
 	data["mode"]=mode
-	data["presets"]=list(
-		list("name"="Human",    "desc"="Permits Oxygen and Nitrogen"),
-		list("name"="Vox",      "desc"="Permits Nitrogen only"),
-		list("name"="Coldroom", "desc"="For server rooms and freezers"),
-		list("name"="Plasmaman", "desc"="Permits Plasma and Nitrogen only")
-		)
+
+	var/list/tmplist = new/list()
+	for(var/preset in airalarm_presets)
+		tmplist[++tmplist.len] = list("name" = airalarm_presets[preset].name, "desc" = airalarm_presets[preset].desc)
+	data["presets"] = tmplist
 	data["preset"]=preset
 	data["screen"]=screen
 	data["cycle_after_preset"] = cycle_after_preset
@@ -988,7 +1009,7 @@ var/global/list/airalarm_presets = list(
 			min_temperature = selected[2] - T0C
 		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
 		if(input_temperature==null)
-			return
+			return 1
 		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
 			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
 		else
