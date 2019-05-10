@@ -36,11 +36,7 @@
 	// Show messages
 	if (tx_amount > 0)
 		user.visible_message("<span class='warning'>[user] puts something into \the [target], filling it.</span>")
-		if (src.is_empty())
-			to_chat(user, "<span class='notice'>You [target_was_empty ? "crush" : "dissolve"] the pill into \the [target].</span>")
-			qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You [target_was_empty ? "crush partially" : "partially dissolve"] the pill into \the [target], filling it.</span>")
+		to_chat(user, "<span class='notice'>You [target_was_empty ? "crush" : "dissolve"] the pill into \the [target], filling it.</span>")
 	else
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 
