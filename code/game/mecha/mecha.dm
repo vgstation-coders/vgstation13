@@ -1338,7 +1338,7 @@
 		return
 	if(istype(occupant, /mob/living/carbon/brain))
 		return
-	if(usr.incapacitated())
+	if(usr.incapacitated() || !occupant)
 		return
 	if(usr != occupant && occupant.isUnconscious())
 		visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
