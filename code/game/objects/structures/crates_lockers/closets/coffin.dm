@@ -26,7 +26,7 @@
 /datum/locking_category/buckle/closet/coffin
 	flags = LOCKED_SHOULD_LIE
 
-/obj/structure/closet/coffin/attack_hand(mob/user as mob)
+/obj/structure/closet/coffin/attack_hand(mob/user)
 	..()
 	handle_user_visibility()
 
@@ -34,10 +34,7 @@
 	if (!get_locked(mob_lock_type).len)
 		return FALSE
 	var/mob/locked = get_locked(mob_lock_type)[1]
-	if (locked) //no need to try to move if you are strapped in
-		return TRUE
-	else 
-		return FALSE
+	return locked //no need to try to move if you are strapped in
 
 /obj/structure/closet/coffin/verb/verb_togglebuckle()
 	set src in oview(1)
@@ -46,14 +43,14 @@
 
  	handle_buckle(usr)
 
-/obj/structure/closet/coffin/proc/handle_buckle() //needs src.opened otherwise bugs might occur because closet eats the items when its closed
+/obj/structure/closet/coffin/proc/handle_buckle(var/mob/user) //needs src.opened otherwise bugs might occur because closet eats the items when its closed
 	if (src.opened && is_locking(mob_lock_type)) //only unbuckle if you are buckled in in the first place
-		manual_unbuckle(usr)
+		manual_unbuckle(user)
 		setDensity(FALSE) //this is needed for some reason 
 		return
 	var/mob/closet_dweller = locate() in src.loc
 	if (src.opened && closet_dweller) //buckle only the mob inside the closet
-		buckle_mob(closet_dweller, usr)
+		buckle_mob(closet_dweller, user)
 
 /obj/structure/closet/coffin/proc/handle_user_visibility() //after each open/close action assert the correct user visibility
 	if (!get_locked(mob_lock_type).len)
@@ -66,7 +63,7 @@
 		locked.alphas["coffin_invis"] = 1
 		locked.handle_alpha()
 
-/obj/structure/closet/coffin/relaymove(mob/user as mob)
+/obj/structure/closet/coffin/relaymove(mob/user)
 	if (has_locked_mobs())
 		return
 	..()
@@ -103,7 +100,7 @@
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 		return TRUE
 
-/obj/structure/closet/coffin/proc/buckle_mob(mob/M as mob, mob/user as mob)
+/obj/structure/closet/coffin/proc/buckle_mob(mob/M, mob/user)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
 		return
 
@@ -127,14 +124,15 @@
 		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
 		return
 
-	if(M == usr)
+	if(M == user)
+		user.stop_pulling() // stop pulling whatever you are pulling if you buckle yourself in
 		M.visible_message(\
-			"<span class='notice'>[M.name] buckles in!</span>",\
+			"<span class='notice'>\The [M] buckles in!</span>",\
 			"You buckle yourself to [src].",\
 			"You hear metal clanking.")
 	else
 		M.visible_message(\
-			"<span class='notice'>[M.name] is buckled in to [src] by [user.name]!</span>",\
+			"<span class='notice'>\The [M] is buckled in to [src] by [user.name]!</span>",\
 			"You are buckled in to [src] by [user.name].",\
 			"You hear metal clanking.")
 
@@ -146,3 +144,5 @@
 		M.alphas["coffin_invis"] = 255
 
 	lock_atom(M, mob_lock_type)
+	if(M.pulledby) //start pulling the coffin if somebody was pulling the person inside before
+		M.pulledby.start_pulling(src)
