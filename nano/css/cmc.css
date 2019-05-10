@@ -4,9 +4,6 @@ Used In File(s): \code\modules\cmc\crew.dm
 */
 
 body {
-  background-image: url("cmc_background.png");
-  color: white;
-  text-align: center;
   font-size: 15px;
 }
 
@@ -19,13 +16,8 @@ td, th {
 }
 
 .cmc_btn {
-  background-color: #999999;
-  color: black;
-  text-decoration: none;
-  margin-right: 10px;
-  border-radius: 5px;
-  padding: 2px;
-  box-shadow: 0px 0px 5px 1px grey;
+  display: inline-block;
+  margin: 20px;
 }
 
 .fire {

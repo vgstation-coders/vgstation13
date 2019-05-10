@@ -22,7 +22,7 @@ Used In File(s): \code\modules\cmc\crew.dm
             {{for data.levels}}
                 {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
             {{/for}}
-            <br><hr><br>
+            <br><br><br><hr><br>
             <table align='center' id='contents'>Loading...</table>
         </kbd>
         <script>
@@ -69,10 +69,10 @@ Used In File(s): \code\modules\cmc\crew.dm
         function levelSet(level){
             if(prevlevel != level){
                 var prevbtn = $("#"+prevlevel);
-                prevbtn.removeClass("linkOff").addClass("linkOn");
+                prevbtn.removeClass("linkOff");
             }
             var btn = $("#"+level);
-            btn.removeClass("linkOn").addClass("linkOff");
+            btn.addClass("linkOff");
             prevlevel = level;
         }
 
