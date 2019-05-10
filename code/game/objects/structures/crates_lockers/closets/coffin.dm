@@ -7,6 +7,8 @@
 
 	starting_materials = list(MAT_WOOD = 5*CC_PER_SHEET_MISC)
 
+	mob_lock_type = /datum/locking_category/buckle/closet/coffin
+
 /obj/structure/closet/coffin/Destroy()
 	new /obj/item/stack/sheet/wood(loc,3) //This will result in 3 dropped if destroyed, or 5 if deconstructed
 	..()
@@ -16,3 +18,6 @@
 		icon_state = icon_closed
 	else
 		icon_state = icon_opened
+
+/datum/locking_category/buckle/closet/coffin
+	flags = LOCKED_SHOULD_LIE

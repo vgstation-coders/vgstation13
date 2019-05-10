@@ -31,6 +31,8 @@
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 
+	var/mob_lock_type = /datum/locking_category/buckle/closet
+
 /obj/structure/closet/New()
 	..()
 	if (has_lock_type)
@@ -419,6 +421,7 @@
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
+	handle_user_visibility()
 
 // this should probably use dump_contents()
 /obj/structure/closet/blob_act()
@@ -498,7 +501,18 @@
 	src.add_fingerprint(user)
 	return 1
 
+/obj/structure/closet/proc/has_locked_mobs()
+	if (!get_locked(mob_lock_type).len)
+		return FALSE
+	var/mob/locked = get_locked(mob_lock_type)[1]
+	if (locked) //no need to try to move if you are strapped in
+		return TRUE
+	else 
+		return FALSE
+
 /obj/structure/closet/relaymove(mob/user as mob)
+	if (has_locked_mobs())
+		return
 	if(user.stat || !isturf(src.loc))
 		return
 
@@ -562,6 +576,8 @@
 
 	if(!src.toggle(user))
 		to_chat(usr, "<span class='notice'>It won't budge!</span>")
+
+	handle_user_visibility()
 
 // tk grab then use on self
 /obj/structure/closet/attack_self_tk(mob/user as mob)
@@ -649,3 +665,110 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+/datum/locking_category/buckle/closet
+	flags = LOCKED_CAN_LIE_AND_STAND
+
+/obj/structure/closet/verb/verb_togglebuckle()
+	set src in oview(1)
+	set category = "Object"
+	set name = "Toggle Buckle"
+
+	handle_buckle(usr)
+
+/obj/structure/closet/proc/handle_buckle() //needs src.opened otherwise bugs might occur because closet eats the items when its closed
+	if (src.opened && is_locking(mob_lock_type)) //only unbuckle if you are buckled in in the first place
+		manual_unbuckle(usr)
+		setDensity(FALSE) //this is needed for some reason 
+		return
+	var/mob/closet_dweller = locate() in src.loc
+	if (src.opened && closet_dweller) //buckle only the mob inside the closet
+		buckle_mob(closet_dweller, usr)
+
+/obj/structure/closet/proc/handle_user_visibility() //after each open/close action assert the correct user visibility
+	if (!get_locked(mob_lock_type).len)
+		return
+	var/mob/locked = get_locked(mob_lock_type)[1]	
+	if (src.opened)  
+		locked.alphas["closet_invis"] = 255
+		locked.handle_alpha()
+	else 
+		locked.alphas["closet_invis"] = 1
+		locked.handle_alpha()
+
+/obj/structure/closet/proc/manual_unbuckle(var/mob/user)
+	if(user.size <= SIZE_TINY)
+		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
+		return FALSE
+
+	if(is_locking(mob_lock_type))
+		var/mob/M = get_locked(mob_lock_type)[1]
+		var/success = unlock_atom(M)
+
+		if(M != user)
+			if(!success)
+				user.delayNextAttack(8)
+				M.visible_message("<span class='warning'>[user] struggles in vain trying to pull [M] off \the [src].</span>")
+				return FALSE
+			M.visible_message(
+				"<span class='notice'>[M] was unbuckled by [user]!</span>",
+				"You were unbuckled from \the [src] by [user].",
+				"You hear metal clanking.")
+		else
+			if(!success)
+				user.delayNextAttack(8)
+				M.visible_message("<span class='warning'>[user] struggles in vain trying to pull themselves off \the [src].</span>")
+				return FALSE
+			M.visible_message(
+				"<span class='notice'>[M] unbuckled \himself!</span>",
+				"You unbuckle yourself from \the [src].",
+				"You hear metal clanking.")
+		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
+		return TRUE
+
+/obj/structure/closet/proc/buckle_mob(mob/M as mob, mob/user as mob)
+	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
+		return
+
+	if(!ismob(M) || M.locked_to)
+		return
+
+	if (M != usr && !src.opened) //only you can buckle yourself from the inside
+		to_chat(user, "<span class='warning'>You need to open \the [src] first!</span>")
+		return
+
+	for(var/mob/living/L in get_locked(mob_lock_type))
+		to_chat(user, "<span class='warning'>Somebody else is already buckled into \the [src]!</span>")
+		return
+
+	if(user.size <= SIZE_TINY) //Fuck off mice
+		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
+		return
+
+	if(isanimal(M))
+		if(M.size <= SIZE_TINY) //Fuck off mice
+			to_chat(user, "<span class='warning'>The [M] is too small to buckle in.</span>")
+			return
+
+	if(istype(M, /mob/living/carbon/slime))
+		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
+		return
+
+	if(M == usr)
+		M.visible_message(\
+			"<span class='notice'>[M.name] buckles in!</span>",\
+			"You buckle yourself to [src].",\
+			"You hear metal clanking.")
+	else
+		M.visible_message(\
+			"<span class='notice'>[M.name] is buckled in to [src] by [user.name]!</span>",\
+			"You are buckled in to [src] by [user.name].",\
+			"You hear metal clanking.")
+
+	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
+	add_fingerprint(user)
+
+	if (!M.alphas["closet_invis"])
+		M.alphas.Add("closet_invis")
+		M.alphas["closet_invis"] = 255
+	lock_atom(M, mob_lock_type)

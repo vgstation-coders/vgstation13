@@ -103,6 +103,9 @@
 			togglelock(user)
 
 /obj/structure/closet/secure_closet/relaymove(mob/user as mob)
+	if (has_locked_mobs())
+		return
+
 	if(user.stat || !isturf(src.loc))
 		return
 
@@ -136,6 +139,7 @@
 
 	if(!src.toggle())
 		return src.attackby(null, user)
+	handle_user_visibility()
 
 /obj/structure/closet/secure_closet/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
