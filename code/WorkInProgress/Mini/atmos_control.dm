@@ -155,6 +155,7 @@ var/global/list/atmos_controllers = list()
 				if( "power",
 					"adjust_external_pressure",
 					"set_external_pressure",
+					"set_internal_pressure",
 					"checks",
 					"co2_scrub",
 					"tox_scrub",
@@ -203,20 +204,6 @@ var/global/list/atmos_controllers = list()
 
 		if(href_list["atmos_reset"])
 			current.set_alarm(0)
-			return 1
-		
-		if(href_list["enable_override"])
-			var/area/this_area = get_area(current)
-			this_area.doors_overridden = 1
-			this_area.UpdateFirelocks()
-			current.update_icon()
-			return 1
-		
-		if(href_list["disable_override"])
-			var/area/this_area = get_area(current)
-			this_area.doors_overridden = 0
-			this_area.UpdateFirelocks()
-			current.update_icon()
 			return 1
 
 		if(href_list["mode"])

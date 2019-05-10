@@ -16,7 +16,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 #define AALARM_SCREEN_MODE		4
 #define AALARM_SCREEN_SENSORS	5
 -->
-{{:helper.link('Show Tracker Map', 'pin-s', {'showMap' : 1})}}
+{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
 {{if !data.alarm}}
 	<h3>Atmospherics Control</h3>
 	<div class="statusDisplay">
@@ -107,9 +107,9 @@ Used In File(s): /code/game/machinery/alarm.dm
 						{{:helper.link('Activate Alarm',null,{'atmos_alarm':1},null,'red')}}
 					{{/if}}
 					{{if data.firedoor_override}}
-						{{:helper.link('Manual override enabled', null, {'disable_override':1}, null, 'linkOn')}}
+						{{:helper.link('Manual override enabled', null, {'disable_override':1}, 'disabled', 'linkOn')}}
 					{{else}}
-						{{:helper.link('Manual override disabled', null, {'enable_override':1}, null, 'red')}}
+						{{:helper.link('Manual override disabled', null, {'enable_override':1}, 'disabled', 'red')}}
 					{{/if}}
 				{{/if}}
 			</div>
@@ -154,30 +154,38 @@ Used In File(s): /code/game/machinery/alarm.dm
 						<b>{{>value.name}}:</b>
 					</div>
 					<div class="line">
-						<div class="statusLabel">Operating:</div>
+						<div class="statusLabelWide">Operating:</div>
 						<div class="statusValue">
 							{{:helper.link(value.power ? 'On':'Off','power',{'id_tag':value.id_tag,'command':'power','val':value.power?0:1},null,(value.power?'linkOn':'red'))}}
 							{{if value.direction==0}}
 								{{:helper.link('Siphoning','arrowthickstop-1-s',{'id_tag':value.id_tag,'command':'direction','val':'1'})}}
 							{{else}}
-								{{:helper.link('Releasing','arrowthick-1-n',{'id_tag':value.id_tag,'command':'direction','val':'0'})}}
+								{{:helper.link('Blowing','arrowthick-1-n',{'id_tag':value.id_tag,'command':'direction','val':'0'})}}
 							{{/if}}
 						</div>
 					</div>
 					<div class="line">
-						<div class="statusLabel">Pressure checks:</div>
+						<div class="statusLabelWide">Pressure checks:</div>
 						<div class="statusValue">
 							{{:helper.link('External','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,1)},null,(value.checks & 1 ?'linkOn':'red'))}}
 							{{:helper.link('Internal','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,2)},null,(value.checks & 2 ?'linkOn':'red'))}}
 						</div>
 					</div>
 					<div class="line">
-						<div class="statusLabel">External pressure target:</div>
+						<div class="statusLabelWide">External pressure target:</div>
 						<div class="statusValue">
 							{{:helper.precisionRound(value.external,4)}} kPa
 						</div>
 						{{:helper.link('Set','gear',{'id_tag':value.id_tag,'command':'set_external_pressure'})}}
 						{{:helper.link('Reset','arrowrefresh-1-n',{'id_tag':value.id_tag,'command':'set_external_pressure','val':101.325},null,'linkOn')}}
+					</div>
+					<div class="line">
+						<div class="statusLabelWide">Internal pressure target:</div>
+						<div class="statusValue">
+							{{:helper.precisionRound(value.internal,4)}} kPa
+						</div>
+						{{:helper.link('Set','gear',{'id_tag':value.id_tag,'command':'set_internal_pressure'})}}
+						{{:helper.link('Reset','arrowrefresh-1-n',{'id_tag':value.id_tag,'command':'set_internal_pressure','val':0},null,'linkOn')}}
 					</div>
 				</div>
 			{{empty}}

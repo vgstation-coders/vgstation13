@@ -104,8 +104,13 @@ Used In File(s): /code/game/machinery/alarm.dm
 			#define RCON_YES	3
 			-->
 			<div class="statusLabel">Remote Control:</div>
-			{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'selected')}}
-			{{:helper.link('On',   null, {'rcon' : 2}, (data.rcon != 2) ? null : 'selected')}}
+			{{if !data.locked}}
+				{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'selected')}}
+				{{:helper.link('On',   null, {'rcon' : 2}, (data.rcon != 2) ? null : 'selected')}}
+			{{else}}
+				{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? 'disabled' : 'selected')}}
+				{{:helper.link('On',   null, {'rcon' : 2}, (data.rcon != 2) ? 'disabled' : 'selected')}}
+			{{/if}}
 		</div>
 		<div class="line">
 			<div class="statusLabel">Thermostat:</div>

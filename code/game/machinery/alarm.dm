@@ -54,9 +54,11 @@
 	var/list/pressure = list(-1, -1, -1, -1) // kpa
 	var/list/temperature = list(-1, -1, -1, -1) // Kelvin
 	var/target_temperature = T0C+20 // Kelvin
+	var/list/scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 0, "plasma" = 0, "n2o" = 0)
 
 /datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/list/oxygen, var/list/nitrogen, var/list/carbon_dioxide,
-							var/list/plasma, var/list/n2o, var/list/other, var/list/pressure, var/list/temperature, var/list/target_temperature)
+							var/list/plasma, var/list/n2o, var/list/other, var/list/pressure, var/list/temperature,
+							var/list/target_temperature, var/list/scrubbers_gases)
 	if(P)
 		src.oxygen = P.oxygen.Copy()
 		src.nitrogen = P.nitrogen.Copy()
@@ -83,6 +85,8 @@
 		src.temperature = temperature
 	if(target_temperature)
 		src.target_temperature = target_temperature
+	if(scrubbers_gases)
+		src.scrubbers_gases = scrubbers_gases
 
 /datum/airalarm_preset/human //For humans
 	oxygen = list(16, 18, 135, 140)
@@ -94,6 +98,7 @@
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
+	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/vox //For vox
 	oxygen = list(-1, -1, 0.5, 1)
@@ -105,6 +110,7 @@
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
+	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/coldroom //Server rooms etc.
 	oxygen = list(-1, -1, -1, -1)
@@ -116,6 +122,7 @@
 	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.40, ONE_ATMOSPHERE*1.60)
 	temperature = list(20, 40, 140, 160)
 	target_temperature = 90
+	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/plasmaman //HONK
 	oxygen = list(-1, -1, 0.5, 1)
@@ -127,6 +134,7 @@
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
+	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 0, "n2o" = 0)
 
 //these are used for the UIs and new ones can be added and existing ones edited at the CAC
 var/global/list/airalarm_presets = list(
@@ -196,17 +204,9 @@ var/global/list/airalarm_presets = list(
 	req_access = list(access_trade)
 
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
-	// Propogate settings.
-	if(propagate)
-		var/area/this_area = get_area(src)
-		for (var/obj/machinery/alarm/AA in this_area)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
-				AA.preset=preset
-				AA.apply_preset(1, 0) // Only this air alarm should send a cycle.
 	var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
 	if(!presetdata)
-		//TODO: print an error or something
-		return
+		presetdata = new /datum/airalarm_preset/human()
 	TLV["oxygen"] =			presetdata.oxygen.Copy()
 	TLV["nitrogen"] =		presetdata.nitrogen.Copy()
 	TLV["carbon_dioxide"] = presetdata.carbon_dioxide.Copy()
@@ -215,10 +215,17 @@ var/global/list/airalarm_presets = list(
 	TLV["other"] =			presetdata.other.Copy()
 	TLV["pressure"] =		presetdata.pressure.Copy()
 	TLV["temperature"] =	presetdata.temperature.Copy()
-	target_temperature =	presetdata.target_temperature
+	target_temperature =	presetdata.target_temperature	
 	if(!no_cycle_after)
 		mode = AALARM_MODE_CYCLE
-		apply_mode()
+	// Propagate settings.
+	if(propagate)
+		var/area/this_area = get_area(src)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+				AA.preset=preset
+				AA.apply_preset(1, 0) // Only this air alarm should send a cycle.
+		apply_mode() //reapply this to update scrubbers and other things
 
 
 /obj/machinery/alarm/New(var/loc, var/dir, var/building = 0)
@@ -587,8 +594,16 @@ var/global/list/airalarm_presets = list(
 	var/area/this_area = get_area(src)
 	switch(mode)
 		if(AALARM_MODE_SCRUBBING)
-			for(var/device_id in this_area.air_scrub_names) //TODO: configuratize this
-				send_signal(device_id, list("power"= 1, "co2_scrub"= 1, "o2_scrub"=0, "n2_scrub"=0, "scrubbing"= 1, "panic_siphon"= 0) )
+			for(var/device_id in this_area.air_scrub_names)
+				var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
+				if(!presetdata)
+					presetdata = new /datum/airalarm_preset/human()
+				var/o2 = presetdata.scrubbers_gases["oxygen"]
+				var/n2 = presetdata.scrubbers_gases["nitrogen"]
+				var/co2 = presetdata.scrubbers_gases["carbon_dioxide"]
+				var/n2o = presetdata.scrubbers_gases["n2o"]
+				var/plasma = presetdata.scrubbers_gases["plasma"]
+				send_signal(device_id, list("power"= 1, "co2_scrub"= co2, "o2_scrub" = o2, "n2_scrub" = n2, "tox_scrub" = plasma, "n2o_scrub" = n2o, "scrubbing"= 1, "panic_siphon"= 0) )
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
@@ -844,6 +859,8 @@ var/global/list/airalarm_presets = list(
 	if(..())
 		return 1
 	if(href_list["rcon"])
+		if(locked)
+			return 1
 		rcon_setting = text2num(href_list["rcon"])
 		//propagate to other AAs in the area
 		var/area/this_area = get_area(src)
@@ -856,6 +873,8 @@ var/global/list/airalarm_presets = list(
 
 	//testing(href)
 	if(href_list["command"])
+		if(locked)
+			return 1
 		var/device_id = href_list["id_tag"]
 		switch(href_list["command"])
 			if( "power",
@@ -897,6 +916,8 @@ var/global/list/airalarm_presets = list(
 				set_threshold(env, threshold, newval, 1)
 		return 1
 	if(href_list["reset_thresholds"])
+		if(locked)
+			return 1
 		apply_preset(1) //just apply the preset without cycling
 		return 1
 
@@ -905,14 +926,20 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["atmos_alarm"])
+		if(locked)
+			return 1
 		set_alarm(1)
 		return 1
 
 	if(href_list["atmos_reset"])
+		if(locked)
+			return 1
 		set_alarm(0)
 		return 1
 	
 	if(href_list["enable_override"])
+		if(locked)
+			return 1
 		var/area/this_area = get_area(src)
 		this_area.doors_overridden = 1
 		this_area.UpdateFirelocks()
@@ -920,6 +947,8 @@ var/global/list/airalarm_presets = list(
 		return 1
 	
 	if(href_list["disable_override"])
+		if(locked)
+			return 1
 		var/area/this_area = get_area(src)
 		this_area.doors_overridden = 0
 		this_area.UpdateFirelocks()
@@ -927,15 +956,21 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["mode"])
+		if(locked)
+			return 1
 		mode = text2num(href_list["mode"])
 		apply_mode()
 		return 1
 
 	if(href_list["toggle_cycle_after_preset"])
+		if(locked)
+			return 1
 		cycle_after_preset = !cycle_after_preset
 		return 1
 
 	if(href_list["preset"])
+		if(locked)
+			return 1
 		if(href_list["preset"] in airalarm_presets)
 			preset = href_list["preset"]
 			apply_preset(!cycle_after_preset)
