@@ -105,8 +105,7 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
-	antigen = list(pick(all_antigens))
-	antigen |= pick(all_antigens)
+	roll_antigen()
 
 
 	//cosmetic petri dish stuff
@@ -181,8 +180,7 @@ var/global/list/disease2_list = list()
 	if(!D.infectionchance || D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
 	//pick random antigens for the disease to have
-	D.antigen = list(pick(all_antigens))
-	D.antigen |= pick(all_antigens)
+	D.roll_antigen()
 	D.spread = 0
 	if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be very hard to cure!)",,"Yes","No") == "Yes")
 		D.spread |= SPREAD_BLOOD
@@ -270,6 +268,10 @@ var/global/list/disease2_list = list()
 
 	ticks += speed
 
+
+/datum/disease2/disease/proc/incubate(var/mob/living/mob,var/efficiency=1)
+
+
 /datum/disease2/disease/proc/GetImmuneData(var/mob/living/mob)
 	var/lowest_stage = stage
 	var/highest_concentration = 0
@@ -325,6 +327,10 @@ var/global/list/disease2_list = list()
 		return pick(effects)
 	return effects[Clamp(index,0,effects.len)]
 
+/datum/disease2/disease/proc/roll_antigen()
+	antigen = list(pick(all_antigens))
+	antigen |= pick(all_antigens)
+
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)
 	var/i = rand(1, effects.len)
@@ -334,8 +340,7 @@ var/global/list/disease2_list = list()
 	log_debug("[form] [uniqueID] has major mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
 	if (prob(5))
-		antigen = list(pick(all_antigens))
-		antigen |= pick(all_antigens)
+		roll_antigen()
 
 /datum/disease2/disease/proc/getcopy()//called by infect_virus2()
 	var/datum/disease2/disease/disease = new /datum/disease2/disease("")

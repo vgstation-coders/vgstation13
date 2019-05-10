@@ -15,11 +15,11 @@
 		to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
 		return
 
-		var/info = ""
+	var/info = ""
+	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
 	if (L.immune_system)
 		info += "Immune System Status: <b>[round(L.immune_system.strength*100)]%</b>"
 		info += "<br>Antibody Concentrations:"
-		var/icon/scan = icon('icons/virology.dmi',"immunitybg")
 
 		var/i = 0
 		for (var/antibody in L.immune_system.antibodies)
@@ -31,7 +31,7 @@
 					rgb = "#E6FF81"
 				if (10 to 12)
 					rgb = "#FF9681"
-			scan.DrawBox(rgb,i*43+11,6,i*43+31,6+L.immune_system.antibodies[antibody]*3)
+			scan.DrawBox(rgb,i*43+11,6,i*43+31,6+L.immune_system.antibodies[antibody]*3*L.immune_system.strength)
 			i++
 
 	if (L.virus2.len)
@@ -61,9 +61,18 @@
 	info += "<tr>"
 	if (L.immune_system)
 		for (var/antibody in L.immune_system.antibodies)
-			info += "<td>[round(L.immune_system.antibodies[antibody])]%</th>"
+			info += "<td>[round(L.immune_system.antibodies[antibody]*L.immune_system.strength)]%</th>"
 	info += "</tr>"
 	info += "</table>"
+
+	if (L.virus2.len)
+		for (var/ID in L.virus2)
+			var/datum/disease2/disease/D = L.virus2[ID]
+			if(ID in virusDB)
+				var/datum/data/record/V = virusDB[ID]
+				info += "<br><i>[V.fields["name"]] detected. Strength: [D.strength]. Robustness: [D.robustness]. Antigen: [D.get_antigen_string()]</i>"
+			else
+				info += "<br><i>Unknown [D.form] detected. Strength: [D.strength]</i>"
 
 	var/datum/browser/popup = new(user, "\ref[src]", name, 600, 600, src)
 	popup.set_content(info)
@@ -82,11 +91,15 @@
 	var/analysed = FALSE
 	var/datum/disease2/disease/contained_virus
 	var/open = FALSE
-
 	var/cloud_delay = 8 SECONDS//similar to a mob's breathing
 	var/last_cloud_time = 0
 	var/mob/last_openner
 
+
+/obj/item/weapon/virusdish/New(loc)
+	..()
+	reagents = new(10)
+	reagents.my_atom = src
 
 /obj/item/weapon/virusdish/Destroy()
 	contained_virus = null
@@ -149,6 +162,35 @@
 		processing_objects.Remove(src)
 	infection_attempt(user)
 
+/obj/item/weapon/virusdish/attackby(var/obj/item/weapon/W as obj,var/mob/living/carbon/user as mob)
+	..()
+	if(istype(W,/obj/item/weapon/hand_labeler))
+		return
+	if(user.a_intent == I_HURT && W.force)
+		visible_message("<span class='danger'>The virus dish is smashed to bits!</span>")
+		shatter(user)
+
+/obj/item/weapon/virusdish/is_open_container()
+	return open
+
+/obj/item/weapon/virusdish/afterattack(var/atom/A, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if (A.Adjacent(user))
+		if (istype(A,/obj/structure/toilet))
+			var/obj/structure/toilet/T = A
+			if (T.open)
+				empty(user,A)
+		if (istype(A,/obj/structure/urinal)||istype(A,/obj/structure/sink))
+			empty(user,A)
+
+/obj/item/weapon/virusdish/proc/empty(var/mob/user,var/atom/A)
+	if (user && A)
+		to_chat(user,"<span class='notice'>You empty \the [src]'s reagents into \the [A].</span>")
+	reagents.clear_reagents()
+
 /obj/item/weapon/virusdish/process()
 	if (!contained_virus || !(contained_virus.spread & SPREAD_AIRBORNE))
 		processing_objects.Remove(src)
@@ -161,6 +203,7 @@
 		return 1
 	return 0
 
+
 /obj/item/weapon/virusdish/random
 	name = "virus sample"
 
@@ -172,13 +215,6 @@
 	growth = rand(5, 50)
 	update_icon()
 
-/obj/item/weapon/virusdish/attackby(var/obj/item/weapon/W as obj,var/mob/living/carbon/user as mob)
-	..()
-	if(istype(W,/obj/item/weapon/hand_labeler) || istype(W,/obj/item/weapon/reagent_containers/syringe))
-		return
-	if(user.a_intent == I_HURT)
-		visible_message("<span class='danger'>The virus dish is smashed to bits!</span>")
-		shatter(user)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
