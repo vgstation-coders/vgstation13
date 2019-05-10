@@ -28,7 +28,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 	{{if data.aca_screen == "2"}}
 		<div class="line">
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
-			{{:helper.link('Show Detail List', 'gear', {'set_screen': 1})}}
+			{{:helper.link('Show Detail List', 'script', {'set_screen': 1})}}
 		</div>
 		
 		<div class="line">
@@ -141,13 +141,18 @@ Used In File(s): /code/game/machinery/alarm.dm
 					{{:helper.link('Edit Name/Desc.', 'gear', {'rename_preset': 1})}}
 					{{:helper.link('Delete', 'trash', {'delete_preset': 1})}}
 				{{/if}}
+				{{if data.admin_access}}
+					{{:helper.link('Batch Apply', 'arrowthick-1-n', {'apply_preset_batch': 1})}}
+				{{/if}}
 			</div>
 		{{/if}}
 	<!-- Detail list. -->
 	{{else data.aca_screen == "1"}}
 		<div class="line">
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
-			{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
+			{{if data.admin_access}}
+				{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
+			{{/if}}
 		</div>
 		{{if !data.alarm}}
 			<h3>Atmospherics Control</h3>

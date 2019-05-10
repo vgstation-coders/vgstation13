@@ -150,10 +150,10 @@ var/global/list/atmos_controllers = list()
 		done_areas += alarm_area
 
 //switches all air alarms from old preset to new preset
-/obj/machinery/computer/atmoscontrol/proc/switch_preset(var/oldpreset, var/newpreset)
+/obj/machinery/computer/atmoscontrol/proc/switch_preset(var/oldpreset, var/newpreset, var/no_cycle_after=1)
 	if(!(newpreset in airalarm_presets))
 		return
-		
+	
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
 	for(var/obj/machinery/alarm/alarm in machines)
 		if(alarm.preset != oldpreset)
@@ -170,7 +170,7 @@ var/global/list/atmos_controllers = list()
 		if(alarm_area in done_areas)
 			continue
 		alarm.preset = newpreset
-		alarm.apply_preset(1, 1) //no cycle, propagate
+		alarm.apply_preset(no_cycle_after, 1) //optionally cycle, propagate
 		done_areas += alarm_area
 
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -180,7 +180,6 @@ var/global/list/atmos_controllers = list()
 
 	var/list/data[0]
 	data["alarm"]=null
-	data["aca_screen"] = screen //aca_screen so we don't conflict with air alarms, which already use screen
 
 	if(log_in_id)
 		data["logged_in"] = TRUE
@@ -260,7 +259,14 @@ var/global/list/atmos_controllers = list()
 	else
 		data["selected_preset"] = null
 		data["selected_preset_name"] = null
+	
+	if(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || user.hasFullAccess())
+		data["admin_access"] = TRUE
+	else
+		data["admin_access"] = FALSE
+		screen = ACA_SCREEN_DETAILSVIEW //this dumb hack stops unauthorized cards from seeing shit they shouldn't
 
+	data["aca_screen"] = screen //aca_screen so we don't conflict with air alarms, which already use screen
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "atmos_control.tmpl", name, 900, 800)
@@ -315,10 +321,14 @@ var/global/list/atmos_controllers = list()
 		return TRUE
 
 	if(href_list["select_preset"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		selected_preset = new(airalarm_presets[href_list["select_preset"]]) //copy the existing preset for editing
 		return 1
 	
 	if(href_list["add_preset"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		var/name = trimcenter(trim(stripped_input(usr,"Enter the name for the preset (max 12 characters).", "Preset name",""),1,12))
 		if(!name || name == "")
 			to_chat(usr, "<span class='warning'>Invalid name.</span>")
@@ -336,14 +346,18 @@ var/global/list/atmos_controllers = list()
 		return 1
 		
 	if(href_list["save_preset_setting"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		var/name = selected_preset.name
 		airalarm_presets[name] = new /datum/airalarm_preset(selected_preset) //make a copy
 		//re-apply preset on all air alarms that have it enabled
 		apply_preset(name)
-		to_chat(usr, "<span class='notice'>Preset saved and applied.</span>")
+		to_chat(usr, "<span class='notice'>Preset saved and reapplied to alarms.</span>")
 		return 1
 	
 	if(href_list["rename_preset"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		//renames the currently selected preset
 		if(selected_preset.core)
 			to_chat(usr, "<span class='warning'>This preset cannot be renamed.</span>")
@@ -367,6 +381,8 @@ var/global/list/atmos_controllers = list()
 		return 1
 	
 	if(href_list["delete_preset"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		//deletes the currently selected preset if possible
 		if(selected_preset.core)
 			to_chat(usr, "<span class='warning'>This preset cannot be deleted.</span>")
@@ -379,6 +395,8 @@ var/global/list/atmos_controllers = list()
 		return 1
 	
 	if(href_list["reset_preset"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		//resets the currently selected core preset
 		if(!selected_preset.core)
 			to_chat(usr, "<span class='warning'>This preset cannot be reset.</span>")
@@ -395,8 +413,24 @@ var/global/list/atmos_controllers = list()
 			if("Plasmaman")
 				selected_preset = new /datum/airalarm_preset/plasmaman
 		return 1
+	
+	if(href_list["apply_preset_batch"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
+		//save preset
+		var/newname = selected_preset.name
+		airalarm_presets[newname] = new /datum/airalarm_preset(selected_preset) //make a copy
+		var/oldname = input("Select the preset you want to switch over from.\n\nAll air alarms currently on this preset will be switched over to the [newname] preset.", "Select preset", newname) in airalarm_presets
+		if(!oldname)
+			to_chat(usr, "<span class='warning'>Invalid selection!</span>")
+		var/no_cycle_after = alert(usr, "Cycle (remove air then refill) after switching?",,"Yes", "No") == "Yes" ? 0 : 1
+		switch_preset(oldname, newname, no_cycle_after)
+		to_chat(usr, "<span class='notice'>Preset batch applied.</span>")
+		return 1
 
 	if(href_list["set_preset_setting"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
 		switch(href_list["set_preset_setting"])
 			if("oxygen", "nitrogen", "carbon_dioxide", "plasma", "n2o", "other", "pressure", "temperature")
 				//this could be better...
@@ -447,7 +481,15 @@ var/global/list/atmos_controllers = list()
 				return 1
 
 	if(current)
+		if(log_in_id)
+			if(!emagged && !usr.hasFullAccess() && !current.check_access(log_in_id))
+				return 1 //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
+		else
+			if(!emagged && !usr.hasFullAccess())
+				return 1
 		if(href_list["command"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			var/device_id = href_list["id_tag"]
 			switch(href_list["command"])
 				if( "power",
@@ -484,11 +526,13 @@ var/global/list/atmos_controllers = list()
 					var/list/selected = current.TLV[env]
 					var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
 					var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
-					if (isnull(newval) || ..() || (current.locked && !issilicon(usr)))
+					if (isnull(newval))
 						return 1
 					current.set_threshold(env, threshold, newval, 1)
 					return 1
 		if(href_list["reset_thresholds"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			current.apply_preset(1) //just apply the preset without cycling
 			return 1
 
@@ -497,29 +541,41 @@ var/global/list/atmos_controllers = list()
 			return 1
 
 		if(href_list["atmos_alarm"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			current.set_alarm(1)
 			return 1
 
 		if(href_list["atmos_reset"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			current.set_alarm(0)
 			return 1
 
 		if(href_list["mode"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			current.mode = text2num(href_list["mode"])
 			current.apply_mode()
 			return 1
 
 		if(href_list["toggle_cycle_after_preset"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			current.cycle_after_preset = !current.cycle_after_preset
 			return 1
 
 		if(href_list["preset"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			if(href_list["preset"] in airalarm_presets)
 				current.preset = href_list["preset"]
 				current.apply_preset(!current.cycle_after_preset)
 			return 1
 
 		if(href_list["temperature"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
 			var/list/selected = current.TLV["temperature"]
 			var/max_temperature
 			var/min_temperature
