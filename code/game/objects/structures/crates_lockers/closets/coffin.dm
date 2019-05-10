@@ -36,12 +36,8 @@
 	var/mob/locked = get_locked(mob_lock_type)[1]
 	return locked //no need to try to move if you are strapped in
 
-/obj/structure/closet/coffin/verb/verb_togglebuckle()
-	set src in oview(1)
-	set category = "Object"
-	set name = "Toggle Buckle"
-
- 	handle_buckle(usr)
+/obj/structure/closet/coffin/AltClick(mob/user)
+	handle_buckle(user)
 
 /obj/structure/closet/coffin/proc/handle_buckle(var/mob/user) //needs src.opened otherwise bugs might occur because closet eats the items when its closed
 	if (src.opened && is_locking(mob_lock_type)) //only unbuckle if you are buckled in in the first place
