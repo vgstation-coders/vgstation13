@@ -424,7 +424,7 @@
 
 	var/datum/reagent/self = src
 	if(..())
-		return 1
+		return TRUE
 
 	if(volume < 3) //Hardcoded
 		return
@@ -453,7 +453,7 @@
 		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
 		if(B)
 			B.blood_DNA["UNKNOWN DNA STRUCTURE"] = "X*"
-
+	T.had_blood = TRUE
 	if(volume >= 5 && !istype(T.loc, /area/chapel)) //Blood desanctifies non-chapel tiles
 		T.holy = 0
 	return
@@ -7185,6 +7185,27 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin
 
+/datum/reagent/luminol
+	name = "Luminol"
+	id = LUMINOL
+	description = "A chemical that exhibits chemiluminescence in the presence of blood due to the iron and copper in the hemoglobin."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/luminol/reaction_mob(var/mob/living/M, var/method = TOUCH)
+	if(ishuman(M) && (method == TOUCH))
+		var/mob/living/carbon/human/H = M
+		H.apply_luminol()
+
+/datum/reagent/luminol/reaction_turf(var/turf/simulated/T)
+	if(..())
+		return TRUE
+	T.apply_luminol()
+
+/datum/reagent/luminol/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return TRUE
+	O.apply_luminol()
 
 //////////////////////
 //					//

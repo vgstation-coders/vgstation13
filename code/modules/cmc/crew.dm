@@ -1,4 +1,19 @@
 var/list/cmc_holomap_cache = list()
+#define ENTRY_SEE_X 1
+#define ENTRY_SEE_Y 2
+#define ENTRY_MOB 3
+#define ENTRY_NAME 4
+#define ENTRY_ASSIGNMENT 5
+#define ENTRY_STAT 6
+#define ENTRY_DAMAGE 7
+#define ENTRY_AREA 8
+#define ENTRY_IJOB 9
+#define ENTRY_POS 10
+
+#define DAMAGE_OXYGEN 1
+#define DAMAGE_TOXIN 2
+#define DAMAGE_FIRE 3
+#define DAMAGE_BRUTE 4
 
 /*
 Crew Monitor by Paul, based on the holomaps by Deity
@@ -28,7 +43,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z) //all z-levels which should not be mapped but should still be scanned for people
+	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
 		"Captain" = 00,
 		"Head of Personnel" = 50,
@@ -194,12 +209,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/user_uid = "\ref[user]"
 
 	//creating the title with name | job - Dead/Alive
-	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == 2) ? " - DEAD" : " - ALIVE")
+	var/title = "[name]" + ((job != "") ? " ([job])" : "") + ((stat == DEAD) ? " - DEAD" : " - ALIVE")
 
 	//creating the content with damage and some css coloring
 	var/content = "Not Available"
 	if(damage)
-		content = "(<span style='color: #0080ff'>[damage[1]]</span>/<span style='color: #00CD00'>[damage[2]]</span>/<span style='color: #ffa500'>[damage[3]]</span>/<span style='color: #ff0000'>[damage[4]]</span>)"
+		content = "(<span style='color: #0080ff'>[damage[DAMAGE_OXYGEN]]</span>/<span style='color: #00CD00'>[damage[DAMAGE_TOXIN]]</span>/<span style='color: #ffa500'>[damage[DAMAGE_FIRE]]</span>/<span style='color: #ff0000'>[damage[DAMAGE_BRUTE]]</span>)"
 
 	content += "<br>[player_area]"
 
@@ -211,7 +226,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	var/icon
 	if(istype(H, /mob/living/carbon/human))
-		if(stat != 2)
+		if(stat != DEAD)
 			icon = getLifeIcon(damage)
 		else
 			icon = "6"
@@ -219,10 +234,16 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		icon = "7"
 	I.icon_state = "sensor_health[icon]"
 
+	var/posx = TU.x
+	var/posy = TU.y
+	if(map.holomap_offset_x.len >= TU.z) // eg. z3 is centered on derelict
+		posx = min(posx+map.holomap_offset_x[TU.z],((2 * world.view + 1)*WORLD_ICON_SIZE))
+		posy = min(posy+map.holomap_offset_y[TU.z],((2 * world.view + 1)*WORLD_ICON_SIZE))
+
 	//modulo magic for position
-	var/nomod_x = round(TU.x / 32)
-	var/nomod_y = round(TU.y / 32)
-	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
+	var/nomod_x = round(posx / 32)
+	var/nomod_y = round(posy / 32)
+	I.screen_loc = "WEST+[nomod_x]:[posx%32 - 8],SOUTH+[nomod_y]:[posy%32 - 8]" //- 8 cause the icon is 16px wide
 
 	I.setInfo(title, content, "Coords: [see_x]|[see_y]")
 	I.setCMC(src)
@@ -322,9 +343,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 //initializes the holomap
 /obj/machinery/computer/crew/proc/togglemap(var/mob/user)
-	if(user.isUnconscious())
-		return
-
 	if(user in _using)
 		deactivate(user)
 		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
@@ -369,7 +387,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
 	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
 		return FALSE
 	return TRUE
 
@@ -400,8 +418,9 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[1]) addCrewMarker(user, entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], entry[10])
-
+			if(entry[ENTRY_POS])
+				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
+        
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
 	else if(!holomap[uid])
@@ -530,15 +549,15 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//adding table rows
 	for(var/entry in entries[holomap_z[uid]])
-		var/see_x = entry[1]
-		var/see_y = entry[2]
-		var/mob/living/carbon/H = entry[3]
-		var/name = entry[4]
-		var/job = entry[5]
-		var/stat = entry[6]
-		var/list/damage = entry[7]
-		var/player_area = entry[8]
-		var/ijob = entry[9]
+		var/see_x = entry[ENTRY_SEE_X]
+		var/see_y = entry[ENTRY_SEE_Y]
+		var/mob/living/carbon/H = entry[ENTRY_MOB]
+		var/name = entry[ENTRY_NAME]
+		var/job = entry[ENTRY_ASSIGNMENT]
+		var/stat = entry[ENTRY_STAT]
+		var/list/damage = entry[ENTRY_DAMAGE]
+		var/player_area = entry[ENTRY_AREA]
+		var/ijob = entry[ENTRY_IJOB]
 
 		var/role
 		switch(ijob)
@@ -565,7 +584,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			icon = "7"
 
 		var/list/string = list("<span class='name [role]'>[name]</span> ([job])")
-		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[1]]</span>/<span class='toxin'>[damage[2]]</span>/<span class='fire'>[damage[3]]</span>/<span class='brute'>[damage[4]]</span>)" : "Not Available")
+		string += "<img src='cmc_[icon].png' height='11' width='11'/>" + (damage ? "(<span class='oxygen'>[damage[DAMAGE_OXYGEN]]</span>/<span class='toxin'>[damage[DAMAGE_TOXIN]]</span>/<span class='fire'>[damage[DAMAGE_FIRE]]</span>/<span class='brute'>[damage[DAMAGE_BRUTE]]</span>)" : "Not Available")
 		string += (see_x && see_y) ? "[player_area] ([see_x],[see_y])" : "Not Available"
 		var/actualstring = "<td>" + string.Join("</td><td>") + "</td>"
 
@@ -583,3 +602,18 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(textview_popup[uid])
 		textview_popup[uid].close()
 		textview_popup[uid] = null
+
+#undef ENTRY_SEE_X
+#undef ENTRY_SEE_Y
+#undef ENTRY_MOB
+#undef ENTRY_NAME
+#undef ENTRY_ASSIGNMENT
+#undef ENTRY_STAT
+#undef ENTRY_DAMAGE
+#undef ENTRY_AREA
+#undef ENTRY_IJOB
+#undef ENTRY_POS
+#undef DAMAGE_OXYGEN
+#undef DAMAGE_TOXIN
+#undef DAMAGE_FIRE
+#undef DAMAGE_BRUTE

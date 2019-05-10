@@ -377,7 +377,7 @@
 			L += name
 			L[name] = S
 
-		var/choice = input(usr,"Select a shuttle to link this computer to", "Shuttle control console") in L as text|null
+		var/choice = input(usr,"Select a shuttle to link this computer to", "Shuttle control console") as null|anything in L
 		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
 			return
 		if(L[choice] && istype(L[choice],/datum/shuttle))
@@ -456,7 +456,7 @@
 			L += name
 			L[name] = S
 
-		var/choice = input(usr,"Select a shuttle to link this computer to", "Admin abuse") in L as text|null
+		var/choice = input(usr,"Select a shuttle to link this computer to", "Admin abuse") as null|anything in L
 		if(L[choice] && istype(L[choice],/datum/shuttle))
 			shuttle = L[choice]
 

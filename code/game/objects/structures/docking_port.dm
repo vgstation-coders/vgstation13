@@ -239,7 +239,7 @@ var/global/list/all_docking_ports = list()
 		choices += name
 		choices[name] = D
 
-	var/choice = input(user,message,title) in choices as text|null
+	var/choice = input(user,message,title) as null|anything in choices
 
 	var/obj/docking_port/destination/D = choices[choice]
 	if(istype(D))

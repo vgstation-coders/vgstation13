@@ -54,7 +54,7 @@
 	..()
 
 /obj/item/weapon/implant/tracking
-	name = "tracking"
+	name = "tracking implant"
 	desc = "Track with this."
 	var/id = 1.0
 
@@ -204,7 +204,7 @@ Implant Specifics:<BR>"}
 
 
 /obj/item/weapon/implant/chem
-	name = "chem"
+	name = "chem implant"
 	desc = "Injects things."
 	allow_reagents = 1
 
@@ -273,7 +273,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	create_reagents(50)
 
 /obj/item/weapon/implant/loyalty
-	name = "loyalty"
+	name = "loyalty implant"
 	desc = "Makes you loyal or such."
 
 	get_data()
@@ -315,7 +315,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 /obj/item/weapon/implant/traitor
-	name = "Greytide Implant"
+	name = "greytide implant"
 	desc = "Greytide Station wide"
 	icon_state = "implant_evil"
 
@@ -375,7 +375,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return 1
 
 /obj/item/weapon/implant/adrenalin
-	name = "adrenalin"
+	name = "adrenalin implant"
 	desc = "Removes all stuns and knockdowns."
 	var/uses
 
@@ -448,7 +448,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/death_alarm/activate(var/cause)
 	var/mob/M = imp_in
 	var/area/t = get_area(M)
-	src.name = "\improper [mobname]'s Death Alarm"
+	src.name = "\improper [mobname]'s death alarm"
 	var/datum/speech/speech = create_speech("[mobname] has died in",1459,src)
 	speech.name="[mobname]'s Death Alarm"
 	speech.job="Death Alarm"
