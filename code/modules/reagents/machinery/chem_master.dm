@@ -236,9 +236,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(isnull(amount) || amount < 0)
 				return
 			if(slurpmode)
-				O.reagents.trans_to(beaker, amount)
+				O.reagents.trans_to(beaker, amount, log_transfer = TRUE, whodunnit = usr)
 			else
-				O.reagents.trans_to(src, amount)
+				O.reagents.trans_to(src, amount, log_transfer = TRUE, whodunnit = usr)
 
 			src.updateUsrDialog()
 			return 1
