@@ -130,6 +130,49 @@ var/global/list/atmos_controllers = list()
 		if(thresholds[3] > thresholds[4])
 			thresholds[3] = thresholds[4]
 
+/obj/machinery/computer/atmoscontrol/proc/apply_preset(var/presetname)
+	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
+	for(var/obj/machinery/alarm/alarm in machines)
+		if(alarm.preset != presetname)
+			continue
+		if(alarm.rcon_setting == RCON_NO)
+			continue //no messing with alarms with no remote control
+		if(log_in_id)
+			if(!emagged && !usr.hasFullAccess() && !alarm.check_access(log_in_id))
+				continue //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
+		else
+			if(!emagged && !usr.hasFullAccess())
+				continue
+		var/area/alarm_area = get_area(alarm)
+		if(alarm_area in done_areas)
+			continue
+		alarm.apply_preset(1, 1) //no cycle, propagate
+		done_areas += alarm_area
+
+//switches all air alarms from old preset to new preset
+/obj/machinery/computer/atmoscontrol/proc/switch_preset(var/oldpreset, var/newpreset)
+	if(!(newpreset in airalarm_presets))
+		return
+		
+	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
+	for(var/obj/machinery/alarm/alarm in machines)
+		if(alarm.preset != oldpreset)
+			continue
+		if(alarm.rcon_setting == RCON_NO)
+			continue //no messing with alarms with no remote control
+		if(log_in_id)
+			if(!emagged && !usr.hasFullAccess() && !alarm.check_access(log_in_id))
+				continue //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
+		else
+			if(!emagged && !usr.hasFullAccess())
+				continue
+		var/area/alarm_area = get_area(alarm)
+		if(alarm_area in done_areas)
+			continue
+		alarm.preset = newpreset
+		alarm.apply_preset(1, 1) //no cycle, propagate
+		done_areas += alarm_area
+
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(user.client)
 		var/datum/asset/simple/nanoui_maps/asset_datum = new
@@ -183,6 +226,7 @@ var/global/list/atmos_controllers = list()
 		tmplist[++tmplist.len] = list(
 			"name" = airalarm_presets[preset].name,
 			"desc" = airalarm_presets[preset].desc,
+			"core" = airalarm_presets[preset].core,
 			"oxygen" = airalarm_presets[preset].oxygen,
 			"nitrogen" = airalarm_presets[preset].nitrogen,
 			"carbon_dioxide" = airalarm_presets[preset].carbon_dioxide,
@@ -200,6 +244,7 @@ var/global/list/atmos_controllers = list()
 		data["selected_preset"] = list(
 			"name" = selected_preset.name,
 			"desc" = selected_preset.desc,
+			"core" = selected_preset.core,
 			"oxygen" = selected_preset.oxygen,
 			"nitrogen" = selected_preset.nitrogen,
 			"carbon_dioxide" = selected_preset.carbon_dioxide,
@@ -278,17 +323,79 @@ var/global/list/atmos_controllers = list()
 		if(!name || name == "")
 			to_chat(usr, "<span class='warning'>Invalid name.</span>")
 			return 1
+		if(name in airalarm_presets)
+			to_chat(usr, "<span class='warning'>Preset with that name already exists.</span>")
+			return 1
 		var/desc = trimcenter(trim(stripped_input(usr,"Enter the description for the preset (max 50 characters).", "Preset name",""),1,50))
 		if(!desc || desc == "")
 			to_chat(usr, "<span class='warning'>Invalid description.</span>")
 			return 1
-		if(name in airalarm_presets)
-			to_chat(usr, "<span class='warning'>Preset with that name already exists.</span>")
-			return 1
-		selected_preset = new(selected_preset, name, desc) //use the settings from whatever was previously selected to add this new one
+		//use the settings from whatever was previously selected to add this new one, but make sure it's not core (ie. can be deleted)
+		selected_preset = new(selected_preset, name, desc, FALSE)
 		airalarm_presets[name] = new /datum/airalarm_preset(selected_preset) //we'll put a copy of 'er in instead of the real deal
 		return 1
+		
+	if(href_list["save_preset_setting"])
+		var/name = selected_preset.name
+		airalarm_presets[name] = new /datum/airalarm_preset(selected_preset) //make a copy
+		//re-apply preset on all air alarms that have it enabled
+		apply_preset(name)
+		to_chat(usr, "<span class='notice'>Preset saved and applied.</span>")
+		return 1
 	
+	if(href_list["rename_preset"])
+		//renames the currently selected preset
+		if(selected_preset.core)
+			to_chat(usr, "<span class='warning'>This preset cannot be renamed.</span>")
+			return 1
+		var/newname = trimcenter(trim(stripped_input(usr,"Enter the name for the preset (max 12 characters).", "Preset name",""),1,12))
+		if(!newname || newname == "")
+			to_chat(usr, "<span class='warning'>Invalid name.</span>")
+			return 1
+		var/newdesc = trimcenter(trim(stripped_input(usr,"Enter the description for the preset (max 50 characters).", "Preset name",""),1,50))
+		if(!newdesc || newdesc == "")
+			to_chat(usr, "<span class='warning'>Invalid description.</span>")
+			return 1
+		//add the fresh preset to the list first
+		airalarm_presets[newname] = new /datum/airalarm_preset(selected_preset, newname, newdesc)
+		//transfer all the alarms from old preset to new preset
+		var/oldname = selected_preset.name
+		switch_preset(oldname, newname)
+		//delete the old preset and set the new one as selected
+		selected_preset = new /datum/airalarm_preset(selected_preset, newname, newdesc)
+		airalarm_presets.Remove(oldname)
+		return 1
+	
+	if(href_list["delete_preset"])
+		//deletes the currently selected preset if possible
+		if(selected_preset.core)
+			to_chat(usr, "<span class='warning'>This preset cannot be deleted.</span>")
+			return 1
+		//put every alarm that used to be on this preset to the Human preset
+		var/oldname = selected_preset.name
+		switch_preset(oldname, "Human")
+		selected_preset = new /datum/airalarm_preset(airalarm_presets["Human"]) //set the current Human preset as active
+		airalarm_presets.Remove(oldname)
+		return 1
+	
+	if(href_list["reset_preset"])
+		//resets the currently selected core preset
+		if(!selected_preset.core)
+			to_chat(usr, "<span class='warning'>This preset cannot be reset.</span>")
+			return 1
+		//this is some shitcode
+		var/name = selected_preset.name
+		switch(name)
+			if("Human")
+				selected_preset = new /datum/airalarm_preset/human
+			if("Vox")
+				selected_preset = new /datum/airalarm_preset/vox
+			if("Coldroom")
+				selected_preset = new /datum/airalarm_preset/coldroom
+			if("Plasmaman")
+				selected_preset = new /datum/airalarm_preset/plasmaman
+		return 1
+
 	if(href_list["set_preset_setting"])
 		switch(href_list["set_preset_setting"])
 			if("oxygen", "nitrogen", "carbon_dioxide", "plasma", "n2o", "other", "pressure", "temperature")

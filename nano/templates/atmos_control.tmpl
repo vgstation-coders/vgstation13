@@ -41,6 +41,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 					<div class="statusValue">
 						{{:value.desc}}
 					</div>
+
 				</div>
 			{{/for}}
 			<div class="line">
@@ -119,7 +120,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 				</table>
 				<div class="line">
 					<div class="statusLabel">Target temperature:</div>
-					<div class="statusValue">{{:helper.link((data.selected_preset.target_temperature - 273.15)+" C", 'carat-2-n-s', {'set_preset_setting': 'target_temperature'})}}</div>
+					<div class="statusValue">{{:helper.link((helper.precisionRound(data.selected_preset.target_temperature - 273.15, 4))+" C", 'carat-2-n-s', {'set_preset_setting': 'target_temperature'})}}</div>
 				</div>
 				<div class="line">
 					<div class="statusLabel">Scrubbed gases:</div>
@@ -131,6 +132,15 @@ Used In File(s): /code/game/machinery/alarm.dm
 						{{:helper.link('O<sub>2</sub>', null, {'set_preset_setting': 'scrubbers_gases', 'gas': 'oxygen'}, null, (data.selected_preset.scrubbers_gases.oxygen?'linkOn':''))}}
 					</div>
 				</div>
+			</div>
+			<div class="line">
+				{{:helper.link('Save', 'disk', {'save_preset_setting': 1})}}
+				{{if data.selected_preset.core}}
+					{{:helper.link('Reset', 'arrowreturn-1-w', {'reset_preset' : 1})}}
+				{{else}}
+					{{:helper.link('Edit Name/Desc.', 'gear', {'rename_preset': 1})}}
+					{{:helper.link('Delete', 'trash', {'delete_preset': 1})}}
+				{{/if}}
 			</div>
 		{{/if}}
 	<!-- Detail list. -->

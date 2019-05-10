@@ -47,6 +47,7 @@
 /datum/airalarm_preset //this one is a blank preset that checks for NOTHING
 	var/name = null
 	var/desc = null
+	var/core = FALSE //whether this is a stock preset that cannot be deleted
 	var/list/oxygen = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/nitrogen = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/carbon_dioxide = list(-1, -1, -1, -1) // Partial pressure, kpa
@@ -58,12 +59,13 @@
 	var/target_temperature = T0C+20 // Kelvin
 	var/list/scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 0, "plasma" = 0, "n2o" = 0)
 
-/datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/name, var/desc, var/list/oxygen, var/list/nitrogen, var/list/carbon_dioxide,
-							var/list/plasma, var/list/n2o, var/list/other, var/list/pressure, var/list/temperature,
-							var/list/target_temperature, var/list/scrubbers_gases)
+/datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/name, var/desc, var/core, var/list/oxygen, var/list/nitrogen,
+							var/list/carbon_dioxide, var/list/plasma, var/list/n2o, var/list/other, var/list/pressure,
+							var/list/temperature, var/list/target_temperature, var/list/scrubbers_gases)
 	if(P)
 		src.name = P.name
 		src.desc = P.desc
+		src.core = P.core
 		src.oxygen = P.oxygen.Copy()
 		src.nitrogen = P.nitrogen.Copy()
 		src.carbon_dioxide = P.carbon_dioxide.Copy()
@@ -78,6 +80,8 @@
 		src.name = name
 	if(desc)
 		src.desc = desc
+	if(core != null)
+		src.core = core
 	if(oxygen)
 		src.oxygen = oxygen
 	if(nitrogen)
@@ -100,6 +104,7 @@
 /datum/airalarm_preset/human //For humans
 	name = "Human"
 	desc = "Permits Oxygen and Nitrogen"
+	core = TRUE
 	oxygen = list(16, 18, 135, 140)
 	nitrogen = list(-1, -1,  -1,  -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -114,6 +119,7 @@
 /datum/airalarm_preset/vox //For vox
 	name = "Vox"
 	desc = "Permits Nitrogen only"
+	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(16, 18, 135,  140)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -128,6 +134,7 @@
 /datum/airalarm_preset/coldroom //Server rooms etc.
 	name = "Coldroom"
 	desc = "For server rooms and freezers"
+	core = TRUE
 	oxygen = list(-1, -1, -1, -1)
 	nitrogen = list(-1, -1, -1, -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
@@ -142,6 +149,7 @@
 /datum/airalarm_preset/plasmaman //HONK
 	name = "Plasmaman"
 	desc = "Permits Plasma and Nitrogen only"
+	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, -1, -1)
 	carbon_dioxide = list(-1, -1, 5, 10)
