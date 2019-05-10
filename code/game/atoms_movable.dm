@@ -53,6 +53,8 @@
 	var/list/current_tethers
 	var/obj/shadow/shadow
 
+	var/ignore_blocking = 0
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))

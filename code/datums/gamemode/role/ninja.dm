@@ -151,7 +151,7 @@
 	var/activate_message = "Too slow."
 
 /obj/item/weapon/substitutionhologram/IsShield()
-	return TRUE
+	return SHIELD_ADVANCED
 
 /obj/item/weapon/substitutionhologram/on_block(damage, atom/blocked)
 	if(ishuman(loc))
