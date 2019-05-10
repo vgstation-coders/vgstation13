@@ -2,7 +2,7 @@
 	name = "Vent Pump: Mode"
 
 	var/vent_pump = null
-	var/mode = "release"
+	var/mode = "blow"
 	var/vent_type = 0//0 for unary vents, 1 for DP vents
 	var/list/modes = list("siphon", "blow")
 

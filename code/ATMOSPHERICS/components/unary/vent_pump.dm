@@ -11,7 +11,7 @@
 	var/id_tag = null
 
 	var/on = 0
-	var/pump_direction = 1 //0 = siphoning, 1 = releasing
+	var/pump_direction = 1 //0 = siphoning, 1 = blowing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
 	var/internal_pressure_bound = 0
