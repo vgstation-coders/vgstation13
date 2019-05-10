@@ -9,13 +9,25 @@ Used In File(s): \code\modules\cmc\crew.dm
     </head>
     <body>
         <kbd>
-            <a style='margin-right: 10px;' href='?src=\ref[src];toggle=1' id='update_btn'>{{if data.update}}Disable {{else}}Enable {{/if}}Updating</a>
-            <a href='?src=\ref[src];holo=1' id='holo_btn'>{{if data.holo}}Disable {{else}}Enable {{/if}}Holomap</a>
-            <hr><br>
-            <table align='center' id='contents'>
-            </table>
+            {{if data.update}}
+                {{:helper.link('Disable Updating', '', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn')}}
+            {{else}}
+                {{:helper.link('Enable Updating', '', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn')}}
+            {{/if}}
+            {{if data.holo}}
+                {{:helper.link('Disable Holomap', '', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
+            {{else}}
+                {{:helper.link('Enable Holomap', '', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
+            {{/if}}
+            {{for data.levels}}
+                {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
+            {{/for}}
+            <br><hr><br>
+            <table align='center' id='contents'>Loading...</table>
         </kbd>
         <script>
+        var prevlevel = 1;
+
         function populateTable(entries_string){
             var entries = $.parseJSON(entries_string);
             var string = "<tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>";
@@ -40,15 +52,31 @@ Used In File(s): \code\modules\cmc\crew.dm
             $("#contents").html(string);
         }
 
+        function noData(){
+            $("#contents").html("<tr><td>No data currently available</td></tr>");
+        }
+
         function toggleHolobtn(){
             var btn = $("#holo_btn");
-            btn.innerHTML = (btn.innerHTML == "Disable Holomap") ? "Enable Holomap" : "Disable Holomap";
+            btn.text((btn.text() == "Disable Holomap") ? "Enable Holomap" : "Disable Holomap");
         }
 
         function toggleUpdatebtn(){
             var btn = $("#update_btn");
-            btn.innerHTML = (btn.innerHTML == "Disable Updating") ? "Enable Updating" : "Disable Updating";
+            btn.text((btn.text() == "Disable Updating") ? "Enable Updating" : "Disable Updating");
         }
+
+        function levelSet(level){
+            if(prevlevel != level){
+                var prevbtn = $("#"+prevlevel);
+                prevbtn.removeClass("linkOff").addClass("linkOn");
+            }
+            var btn = $("#"+level);
+            btn.removeClass("linkOn").addClass("linkOff");
+            prevlevel = level;
+        }
+
+        levelSet(prevlevel);
         </script>
     </body>
 </html>

@@ -295,9 +295,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/uid = "\ref[user]"
 	if(user && user.client) //incase something is fucky
 		closeHolomap(user)
-		var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
-		if(ui)
-			ui.close()
+		closeTextview(user)
 		user.client.screen -= ui_tooltips[uid] //remove ui
 	_using -= user
 	holomap_images[uid].len = 0 //incase something is fucky
@@ -533,6 +531,18 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			ui.send_message("toggleHolobtn")
 		processUser(usr) //to remove/add the holomap and update the textview
 		return
+	if(href_list["setZ"])
+		var/num = href_list["setZ"]
+		if(!isnum(num))
+			num = text2num(num)
+			if(!num)
+				return //something fucked up
+		
+		holomap_z[uid] = num
+		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
+		if(ui)
+			ui.send_message("levelSet", list2params(list(num))) //feedback
+		processUser(usr) //we need to update both the holomap AND the textview
 
 //updates the textview, called every process() when enabled
 /obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
@@ -542,9 +552,10 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/all_data = list()
 	for(var/entry in entries[holomap_z[uid]])
 		var/list/data = list()
-		data["see"] = list()
-		data["see"]["x"] = entry[ENTRY_SEE_X]
-		data["see"]["y"] = entry[ENTRY_SEE_Y]
+		if(entry[ENTRY_SEE_X] && entry[ENTRY_SEE_Y])
+			data["see"] = list()
+			data["see"]["x"] = entry[ENTRY_SEE_X]
+			data["see"]["y"] = entry[ENTRY_SEE_Y]
 		data["name"] = entry[ENTRY_NAME]
 		data["job"] = entry[ENTRY_ASSIGNMENT]
 		if(entry[ENTRY_DAMAGE])
@@ -597,14 +608,21 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		var/list/i_data = list()
 		i_data["update"] = textview_updatequeued[uid]
 		i_data["holo"] = holomap[uid]
+		i_data["levels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
 		ui.set_initial_data(i_data)
 		ui.open()
 
-	ui.send_message("populateTable", list2params(list(json_encode(all_data))))
+	if(all_data.len) //sending an empty list seems to create some fuckery
+		ui.send_message("populateTable", list2params(list(json_encode(all_data))))
+	else
+		ui.send_message("noData")
 
 //taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
 /obj/machinery/computer/crew/proc/closeTextview(var/mob/user)
 	textview_updatequeued["\ref[user]"] = 0
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	if(ui)
+		ui.close()
 
 #undef ENTRY_SEE_X
 #undef ENTRY_SEE_Y
