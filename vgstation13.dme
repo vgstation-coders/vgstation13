@@ -406,7 +406,6 @@
 #include "code\datums\gamemode\role\grinch.dm"
 #include "code\datums\gamemode\role\legacy_cultist.dm"
 #include "code\datums\gamemode\role\madmonkey.dm"
-#include "code\datums\gamemode\role\ninja.dm"
 #include "code\datums\gamemode\role\rambler.dm"
 #include "code\datums\gamemode\role\rev.dm"
 #include "code\datums\gamemode\role\role.dm"
