@@ -218,6 +218,10 @@ var/global/list/airalarm_presets = list(
 	req_one_access = list(access_rd, access_atmospherics, access_engine_equip, access_xenobiology)
 	req_access = list()
 
+/obj/machinery/alarm/execution
+	req_one_access = list(access_atmospherics, access_engine_equip, access_brig)
+	req_access = list()
+
 /obj/machinery/alarm/server
 	preset = "Coldroom"
 	req_one_access = list(access_rd, access_atmospherics, access_engine_equip)
