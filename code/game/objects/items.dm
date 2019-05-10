@@ -930,6 +930,7 @@
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
 /obj/item/proc/on_block(damage, atom/blocked)
 	if(ismob(loc))
+	
 		if(prob(50 - round(damage / 3)))
 			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
 			if(isatommovable(blocked))

@@ -197,6 +197,7 @@
 	breakouttime = 50 //10 seconds
 	throw_speed = 1
 	throw_range = 10
+	alwayspass = TRUE // Hit or miss? I guess they never miss
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
 	var/trip_prob = 90

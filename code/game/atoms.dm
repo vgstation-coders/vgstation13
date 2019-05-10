@@ -43,6 +43,7 @@ var/global/list/ghdel_profiling = list()
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
 	var/timestopped
+	var/alwayspass = FALSE
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE
 

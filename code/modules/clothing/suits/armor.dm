@@ -234,6 +234,8 @@
 	return
 
 /obj/item/clothing/suit/armor/reactive/on_block(damage, atom/blocked)
+	if (blocked.alwayspass)
+		return TRUE
 	if(!prob(35))
 		return 0 //35% chance
 
