@@ -18,11 +18,11 @@ td, th {
   font-size: 15px;
 }
 
-a {
+.cmc_btn {
   background-color: #999999;
   color: black;
   text-decoration: none;
-  margin-right: inherit;
+  margin-right: 10px;
   border-radius: 5px;
   padding: 2px;
   box-shadow: 0px 0px 5px 1px grey;
