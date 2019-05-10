@@ -299,7 +299,7 @@
 
 obj/item/clothing/shoes/jackboots/cowboy
 	name = "cowboy boots"
-	desc = "Yeehaw."
+	desc = "No snake in these boots."
 	icon_state = "cowboy"
 	item_state = "cowboy"
 
