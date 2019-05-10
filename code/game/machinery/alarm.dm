@@ -54,7 +54,6 @@
 	var/list/n2o = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/other = list(-1, -1, -1, -1) // Partial pressure, kpa
 	var/list/pressure = list(-1, -1, -1, -1) // kpa
-	var/target_pressure = ONE_ATMOSPHERE
 	var/list/temperature = list(-1, -1, -1, -1) // Kelvin
 	var/target_temperature = T0C+20 // Kelvin
 	var/list/scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 0, "plasma" = 0, "n2o" = 0)
@@ -108,7 +107,6 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
-	target_pressure = ONE_ATMOSPHERE
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
@@ -123,7 +121,6 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
-	target_pressure = ONE_ATMOSPHERE
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
@@ -138,7 +135,6 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.40, ONE_ATMOSPHERE*1.60)
-	target_pressure = ONE_ATMOSPHERE
 	temperature = list(20, 40, 140, 160)
 	target_temperature = 90
 	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
@@ -153,7 +149,6 @@
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
 	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
-	target_pressure = ONE_ATMOSPHERE
 	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 0, "n2o" = 0)
