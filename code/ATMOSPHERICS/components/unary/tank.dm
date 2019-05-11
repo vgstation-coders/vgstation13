@@ -7,7 +7,6 @@
 	dir = SOUTH
 	initialize_directions = SOUTH
 	density = 1
-	default_colour = "#b77900"
 	anchored = 1
 	machine_flags = WRENCHMOVE
 
@@ -61,7 +60,6 @@
 /obj/machinery/atmospherics/unary/tank/oxygen
 	icon_state = "o2"
 	name = "Pressure Tank (Oxygen)"
-	default_colour = "#00b8b8"
 
 /obj/machinery/atmospherics/unary/tank/oxygen/New()
 	..()
@@ -71,7 +69,6 @@
 /obj/machinery/atmospherics/unary/tank/nitrogen
 	icon_state = "n2"
 	name = "Pressure Tank (Nitrogen)"
-	default_colour = "#00b8b8"
 
 /obj/machinery/atmospherics/unary/tank/nitrogen/New()
 	..()
@@ -81,7 +78,6 @@
 /obj/machinery/atmospherics/unary/tank/air
 	icon_state = "air"
 	name = "Pressure Tank (Air)"
-	default_colour = "#0000b7"
 
 /obj/machinery/atmospherics/unary/tank/air/New()
 	..()
@@ -93,7 +89,6 @@
 /obj/machinery/atmospherics/unary/tank/empty
 	icon_state = "air"
 	name = "Pressure Tank"
-	default_colour = "#0000b7"
 
 /obj/machinery/atmospherics/unary/tank/empty/unanchored
 	anchored = 0
@@ -150,8 +145,6 @@
 		update_icon()
 
 /obj/machinery/atmospherics/unary/tank/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
-		return // Coloring pipes.
 	if (istype(W, /obj/item/device/analyzer) && get_dist(user, src) <= 1)
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
