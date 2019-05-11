@@ -2956,6 +2956,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/eucharist = 7,
 		/obj/item/weapon/storage/fancy/incensebox/harebells = 3,
 		/obj/item/incense_oilbox/harebells = 2,
+		/obj/item/weapon/storage/fancy/collection_plate = 1,
 		)
 	contraband = list(
 		/obj/item/clothing/head/clockwork_hood = 2,
