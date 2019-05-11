@@ -3,7 +3,7 @@
 	icon_state = "co2"
 	name = "Pressure Tank"
 	desc = "A large vessel containing pressurized gas."
-	starting_volume = 2000 //in liters, 1 meters by 1 meters by 2 meters
+	starting_volume = 2500 //in liters, 1x1x2.5m to match our standard cell size (volume of one tile)
 	dir = SOUTH
 	initialize_directions = SOUTH
 	density = 1
@@ -90,6 +90,12 @@
 		GAS_OXYGEN, (25*ONE_ATMOSPHERE*O2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature),
 		GAS_NITROGEN, (25*ONE_ATMOSPHERE*N2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
+/obj/machinery/atmospherics/unary/tank/empty
+	icon_state = "air"
+	name = "Pressure Tank"
+	default_colour = "#0000b7"
+	anchored = 0
+
 /obj/machinery/atmospherics/unary/tank/update_icon()
 	..()
 
@@ -146,10 +152,25 @@
 	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
 		return // Coloring pipes.
 	if (istype(W, /obj/item/device/analyzer) && get_dist(user, src) <= 1)
-		user.visible_message("<span class='attack'>[user] has used [W] on [bicon(icon)] [src]</span>", "<span class='attack'>You use \the [W] on [bicon(icon)] [src]</span>")
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
 	
+	//deconstruction
+	if(iswelder(W) && !anchored)
+		var/obj/item/weapon/weldingtool/WT = W
+		if(!WT.remove_fuel(0,user))
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
+							"<span class='notice'>You start disassembling \the [src].</span>")
+		if(do_after(user, src, 40))
+			user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
+			"<span class='notice'>You dissasemble \the [src].</span>")
+			getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+			qdel(src) //the air contents just get deleted
+		return
+
 	return ..()
 
 /obj/machinery/atmospherics/unary/tank/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
