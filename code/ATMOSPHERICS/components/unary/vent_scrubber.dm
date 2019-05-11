@@ -204,9 +204,6 @@
 				network.update = 1
 
 	else //Just siphoning all air
-		if (air_contents.return_pressure()>=50*ONE_ATMOSPHERE)
-			return
-
 		var/transfer_moles = environment.total_moles()*(volume_rate/environment.volume)
 
 		var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
