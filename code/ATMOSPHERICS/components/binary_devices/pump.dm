@@ -51,23 +51,20 @@ Thus, the two variables affect pump operation are set in New():
 		return
 
 	var/output_starting_pressure = air2.return_pressure()
+	var/pressure_delta = target_pressure - output_starting_pressure
 
-	if( (target_pressure - output_starting_pressure) < 0.01)
-		//No need to pump gas if target is already reached!
-		return
+	if(pressure_delta > 0.01 && (air1.temperature > 0 || air2.temperature > 0))
+		//Figure out how much gas to transfer to meet the target pressure.
+		var/air_temperature = (air2.temperature > 0) ? air2.temperature : air1.temperature
+		var/output_volume = air2.volume + (network2 ? network2.volume : 0)
+		//get the number of moles that would have to be transfered to bring sink to the target pressure
+		var/transfer_moles = (pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
 
-	//Calculate necessary moles to transfer using PV=nRT
-	if((air1.total_moles() > 0) && (air1.temperature>0))
-		var/pressure_delta = target_pressure - output_starting_pressure
-		var/transfer_moles = pressure_delta * air2.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
-
-		//Actually transfer the gas
 		var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 		air2.merge(removed)
 
 		if(network1)
 			network1.update = 1
-
 		if(network2)
 			network2.update = 1
 
