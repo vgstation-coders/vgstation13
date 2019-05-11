@@ -55,4 +55,4 @@
 /proc/getAllUtilitySpells()
 	return getAllWizSpellsBySpecialization(UTILITY)
 /proc/getAllMiscSpells()
-	return getAllWizSpellsBySpecialization(DEFAULT)
+	return getAllWizSpellsBySpecialization(SPELL_SPECIALIZATION_DEFAULT)

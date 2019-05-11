@@ -3,7 +3,6 @@ spell/targeted/parrotmorph
 	desc = "This spell turns the victim into a harmless and near-invincible parrot for a short amount of time."
 	abbreviation = "PM"
 	user_type = USER_TYPE_SPELLBOOK
-	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_type = Sp_RECHARGE

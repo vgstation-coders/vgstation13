@@ -25,4 +25,3 @@
 		for(var/obj/machinery/light/L in T)
 			L.broken()
 			sleep(1)
-

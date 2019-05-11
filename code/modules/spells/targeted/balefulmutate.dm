@@ -2,7 +2,6 @@
 	name = "Baleful Mutation"
 	desc = "A spell that gives its victm random limbs from different species."
 	user_type = USER_TYPE_SPELLBOOK
-	specialization = OFFENSIVE
 	school = "transmutation"
 	charge_max = 600
 	invocation = "MAHNSTUR MACH!"

@@ -2,7 +2,6 @@
 	name = "Ice Barrage"
 	desc = "Freezes the target in a block of ice. Also inflicts psychological damage."
 	user_type = USER_TYPE_ARTIFACT
-	specialization = OFFENSIVE
 
 	school = "abjuration"
 	charge_max = 300

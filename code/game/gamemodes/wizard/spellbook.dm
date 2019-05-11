@@ -149,7 +149,7 @@
 	dat += "<h1>A Wizard's Catalogue Of Spells And Artifacts</h1><br>"
 	dat += "<h2>[uses] point\s remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
 	dat += "<em>This book contains a list of many useful things that you'll need in your journey.</em><br>"
-	dat += "<strong>KNOWN SPELLS:</strong><br><br>"
+	dat += "<span style=\"color:blue\"><strong>KNOWN SPELLS:</strong></span><br><br>"
 
 	var/list/shown_spells = get_all_wizard_spells()
 	var/list/shown_offensive_spells = get_available_offensive_spells()
@@ -203,56 +203,59 @@
 //<i>(Description)</i>
 //Requires robes to cast
 
-	dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
-	for(var/spell_path in shown_offensive_spells)
-		var/spell/abstract_spell = spell_path
-		var/spell_name = initial(abstract_spell.name)
-		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-		var/spell_price = get_spell_price(abstract_spell)
-		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-		var/flags = initial(abstract_spell.spell_flags)
-		var/list/properties = get_spell_properties(flags, user)
-		var/property_data
-		for(var/P in properties)
-			property_data += "[P] "
-		if(property_data)
-			dat += "<span style=\"color:blue\">[property_data]</span><br>"
-		dat += "<br>"
+	if(shown_offensive_spells.len)
+		dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
+		for(var/spell_path in shown_offensive_spells)
+			var/spell/abstract_spell = spell_path
+			var/spell_name = initial(abstract_spell.name)
+			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+			var/spell_price = get_spell_price(abstract_spell)
+			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+			var/flags = initial(abstract_spell.spell_flags)
+			var/list/properties = get_spell_properties(flags, user)
+			var/property_data
+			for(var/P in properties)
+				property_data += "[P] "
+			if(property_data)
+				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+			dat += "<br>"
 
-	dat += "<span style=\"color:blue\"><strong>DEFENSIVE SPELLS:</strong></span><br><br>"
-	for(var/spell_path in shown_defensive_spells)
-		var/spell/abstract_spell = spell_path
-		var/spell_name = initial(abstract_spell.name)
-		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-		var/spell_price = get_spell_price(abstract_spell)
-		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-		var/flags = initial(abstract_spell.spell_flags)
-		var/list/properties = get_spell_properties(flags, user)
-		var/property_data
-		for(var/P in properties)
-			property_data += "[P] "
-		if(property_data)
-			dat += "<span style=\"color:blue\">[property_data]</span><br>"
-		dat += "<br>"
+	if(shown_defensive_spells.len)
+		dat += "<span style=\"color:blue\"><strong>DEFENSIVE SPELLS:</strong></span><br><br>"
+		for(var/spell_path in shown_defensive_spells)
+			var/spell/abstract_spell = spell_path
+			var/spell_name = initial(abstract_spell.name)
+			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+			var/spell_price = get_spell_price(abstract_spell)
+			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+			var/flags = initial(abstract_spell.spell_flags)
+			var/list/properties = get_spell_properties(flags, user)
+			var/property_data
+			for(var/P in properties)
+				property_data += "[P] "
+			if(property_data)
+				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+			dat += "<br>"
 
-	dat += "<span style=\"color:green\"><strong>UTILITY SPELLS:</strong></span><br><br>"
-	for(var/spell_path in shown_utility_spells)
-		var/spell/abstract_spell = spell_path
-		var/spell_name = initial(abstract_spell.name)
-		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-		var/spell_price = get_spell_price(abstract_spell)
-		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-		var/flags = initial(abstract_spell.spell_flags)
-		var/list/properties = get_spell_properties(flags, user)
-		var/property_data
-		for(var/P in properties)
-			property_data += "[P] "
-		if(property_data)
-			dat += "<span style=\"color:blue\">[property_data]</span><br>"
-		dat += "<br>"
+	if(shown_utility_spells.len)
+		dat += "<span style=\"color:green\"><strong>UTILITY SPELLS:</strong></span><br><br>"
+		for(var/spell_path in shown_utility_spells)
+			var/spell/abstract_spell = spell_path
+			var/spell_name = initial(abstract_spell.name)
+			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+			var/spell_price = get_spell_price(abstract_spell)
+			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+			var/flags = initial(abstract_spell.spell_flags)
+			var/list/properties = get_spell_properties(flags, user)
+			var/property_data
+			for(var/P in properties)
+				property_data += "[P] "
+			if(property_data)
+				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+			dat += "<br>"
 
 	if(shown_misc_spells.len)
 		dat += "<span style=\"color:orange\"><strong>MISCELLANEOUS SPELLS:</strong></span><br><br>"
@@ -272,7 +275,7 @@
 				dat += "<span style=\"color:blue\">[property_data]</span><br>"
 			dat += "<br><br>"
 
-	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+	dat += "<hr><span style=\"color:purple\"><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong></span><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
 		if(!A.can_buy(user))
@@ -289,7 +292,7 @@
 		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
 
-	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+	dat += "<hr><span style=\"color:green\"><strong>POTIONS<sup>*</sup></strong></span><br><small>* Non-refundable</small><br><br>"
 
 	for(var/P in get_available_potions())
 		var/obj/item/potion/potion = P

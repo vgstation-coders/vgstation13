@@ -2,7 +2,6 @@
 	name = "Summon Spares"
 	desc = "this spell summons spare IDs in the nearby vicinity."
 	user_type = USER_TYPE_SPELLBOOK
-	specialization = UTILITY
 	summon_type = list(/obj/item/weapon/card/id/captains_spare)
 	summon_amt = 5
 

@@ -2,7 +2,6 @@
 	name = "Spark"
 	desc = "Creates a spark in the targeted location."
 	abbreviation = "SP"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "M'tch st'ck"
@@ -22,7 +21,6 @@
 	name = "Clean item"
 	desc = "Applies magic soap to a piece of clothing."
 	abbreviation = "CI"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "s'ap s'ds"
@@ -44,7 +42,6 @@
 	name = "Bloody item"
 	desc = "Drops an item into the realm of blood for just a moment, covering it in ichor."
 	abbreviation = "BI"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "bl'odso'k"
@@ -62,7 +59,6 @@
 	name = "Create mundane temporary trinket"
 	desc = "Creates a small trinket for a duration."
 	abbreviation = "CT"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "Id'e h'nds m'k' l'ght w'rk"
@@ -87,7 +83,6 @@
 	name = "Warm object"
 	desc = "Warms an object."
 	abbreviation = "WO"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "sp'cy k'ych'in"
@@ -116,7 +111,6 @@
 	name = "Cool object"
 	desc = "Cools an object."
 	abbreviation = "WO"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "I'ce c'ld!"
@@ -145,7 +139,6 @@
 	name = "Extinguish"
 	desc = "Extinguishes an object."
 	abbreviation = "EO"
-	specialization = UTILITY
 
 	school = "evocation"
 	invocation = "Splash"
