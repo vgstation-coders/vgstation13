@@ -116,7 +116,6 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 
 	var/pressure_delta = get_pressure_delta(environment)
-	visible_message("Pressure delta is [pressure_delta]")
 	if((environment.temperature || air_contents.temperature) && pressure_delta > 0.5)
 		if(pump_direction) //internal -> external
 			var/air_temperature = environment.temperature > 0 ? environment.temperature : air_contents.temperature
