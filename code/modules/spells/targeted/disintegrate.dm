@@ -3,6 +3,7 @@
 	desc = "This spell instantly kills somebody adjacent to you with the vilest of magick."
 	abbreviation = "DG"
 	user_type = USER_TYPE_SPELLBOOK
+	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_max = 600

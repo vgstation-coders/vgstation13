@@ -2,6 +2,7 @@
 	name = "Break Lightbulbs"
 	desc = "This spell breaks lightbulbs within 7 tiles of you."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 	abbreviation = "LB"
 
 	charge_max = 150

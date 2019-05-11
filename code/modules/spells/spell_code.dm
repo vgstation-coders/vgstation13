@@ -117,8 +117,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	holder = new_holder
 
 /spell/proc/process()
-	if(charge_type == Sp_PASSIVE) //The process will happen in the passive spell's "children"
-		return
 	spawn while(charge_counter < charge_max)
 		if(holder && !holder.timestopped)
 			if(gradual_casting)
@@ -415,7 +413,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 1
 
 	if(charge_type == Sp_PASSIVE)
-		return 1 //Passive spells are not supposed to have a cast cooldown!
+		return 1
+
 	if(!skipcharge)
 		if(charge_type & Sp_RECHARGE)
 			if(charge_counter < charge_max)

@@ -197,7 +197,7 @@
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
-			dat+= "<br><br>"
+			dat+= "<br>"
 //FORMATTING
 //<b>Fireball</b> - 10 seconds (buy for 1 spell point)
 //<i>(Description)</i>
@@ -254,22 +254,23 @@
 			dat += "<span style=\"color:blue\">[property_data]</span><br>"
 		dat += "<br>"
 
-	dat += "<span style=\"color:orange\"><strong>MISCELLANEOUS SPELLS:</strong></span><br><br>"
-	for(var/spell_path in shown_misc_spells)
-		var/spell/abstract_spell = spell_path
-		var/spell_name = initial(abstract_spell.name)
-		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-		var/spell_price = get_spell_price(abstract_spell)
-		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-		var/flags = initial(abstract_spell.spell_flags)
-		var/list/properties = get_spell_properties(flags, user)
-		var/property_data
-		for(var/P in properties)
-			property_data += "[P] "
-		if(property_data)
-			dat += "<span style=\"color:blue\">[property_data]</span><br>"
-		dat += "<br><br>"
+	if(shown_misc_spells.len)
+		dat += "<span style=\"color:orange\"><strong>MISCELLANEOUS SPELLS:</strong></span><br><br>"
+		for(var/spell_path in shown_misc_spells)
+			var/spell/abstract_spell = spell_path
+			var/spell_name = initial(abstract_spell.name)
+			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+			var/spell_price = get_spell_price(abstract_spell)
+			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+			var/flags = initial(abstract_spell.spell_flags)
+			var/list/properties = get_spell_properties(flags, user)
+			var/property_data
+			for(var/P in properties)
+				property_data += "[P] "
+			if(property_data)
+				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+			dat += "<br><br>"
 
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
