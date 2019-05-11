@@ -89,7 +89,6 @@
 		if(network)
 			qdel(network)
 			network = null
-		initialize_directions = 0 //this prevents things from attaching to us when we're unanchored
 		update_icon()
 
 

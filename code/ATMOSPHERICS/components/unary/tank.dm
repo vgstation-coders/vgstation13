@@ -94,6 +94,8 @@
 	icon_state = "air"
 	name = "Pressure Tank"
 	default_colour = "#0000b7"
+
+/obj/machinery/atmospherics/unary/tank/empty/unanchored
 	anchored = 0
 
 /obj/machinery/atmospherics/unary/tank/update_icon()
@@ -145,7 +147,6 @@
 		if(network)
 			qdel(network)
 			network = null
-		initialize_directions = 0 //this prevents things from attaching to us when we're unanchored
 		update_icon()
 
 /obj/machinery/atmospherics/unary/tank/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
