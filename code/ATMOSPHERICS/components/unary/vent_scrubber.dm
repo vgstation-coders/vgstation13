@@ -162,6 +162,8 @@
 			(scrub_N2O && environment[GAS_SLEEPING] > 0) ||\
 			(scrub_O2 && environment[GAS_OXYGEN] > 0) ||\
 			(scrub_N2 && environment[GAS_NITROGEN] > 0))
+			if (air_contents.return_pressure()>=50*ONE_ATMOSPHERE)
+				return
 			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 
 			//Take a gas sample
