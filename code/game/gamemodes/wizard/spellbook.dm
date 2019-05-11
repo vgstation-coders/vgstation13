@@ -12,7 +12,11 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/list/available_spells = list()
+	var/list/all_spells = list()
+	var/list/offensive_spells = list()
+	var/list/defensive_spells = list()
+	var/list/utility_spells = list()
+	var/list/misc_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
 	var/static/list/available_artifacts = list()
@@ -57,20 +61,58 @@
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
 
+
+//I tried turning this into a proc and all it did was give me a headache and waste half an hour of my life, so here you go
 	for(var/type_S in getAllWizSpells())
-		var/spell/S = new type_S // Because initial doesn't work with lists
+		var/spell/S = new type_S
 		if (!S.holiday_required.len)
-			available_spells += type_S // We're giving types
-		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
-			available_spells += type_S // We're giving types
+			all_spells += type_S
+		else if (Holiday in S.holiday_required)
+			all_spells += type_S
+	for(var/type_O in getAllOffensiveSpells())
+		var/spell/S = new type_O
+		if (!S.holiday_required.len)
+			offensive_spells += type_O
+		else if (Holiday in S.holiday_required)
+			offensive_spells += type_O
+	for(var/type_D in getAllDefensiveSpells())
+		var/spell/S = new type_D
+		if (!S.holiday_required.len)
+			defensive_spells += type_D
+		else if (Holiday in S.holiday_required)
+			defensive_spells += type_D
+	for(var/type_U in getAllUtilitySpells())
+		var/spell/S = new type_U
+		if (!S.holiday_required.len)
+			utility_spells += type_U
+		else if (Holiday in S.holiday_required)
+			utility_spells += type_U
+	for(var/type_M in getAllMiscSpells())
+		var/spell/S = new type_M
+		if (!S.holiday_required.len)
+			misc_spells += type_M
+		else if (Holiday in S.holiday_required)
+			misc_spells += type_M
 
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
 		available_artifacts.Remove(T) //Remove the path from the list
 	//Result is a list full of /datum/spellbook_artifact objects
 
-/obj/item/weapon/spellbook/proc/get_available_spells()
-	return available_spells.Copy()
+/obj/item/weapon/spellbook/proc/get_all_wizard_spells()
+	return all_spells.Copy()
+
+/obj/item/weapon/spellbook/proc/get_available_offensive_spells()
+	return offensive_spells.Copy()
+
+/obj/item/weapon/spellbook/proc/get_available_defensive_spells()
+	return defensive_spells.Copy()
+
+/obj/item/weapon/spellbook/proc/get_available_utility_spells()
+	return utility_spells.Copy()
+
+/obj/item/weapon/spellbook/proc/get_available_misc_spells()
+	return misc_spells.Copy()
 
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
@@ -109,7 +151,11 @@
 	dat += "<em>This book contains a list of many useful things that you'll need in your journey.</em><br>"
 	dat += "<strong>KNOWN SPELLS:</strong><br><br>"
 
-	var/list/shown_spells = get_available_spells()
+	var/list/shown_spells = get_all_wizard_spells()
+	var/list/shown_offensive_spells = get_available_offensive_spells()
+	var/list/shown_defensive_spells = get_available_defensive_spells()
+	var/list/shown_utility_spells = get_available_utility_spells()
+	var/list/shown_misc_spells = get_available_misc_spells()
 
 	//Draw known spells first
 	for(var/spell/spell in user.spell_list)
@@ -151,35 +197,79 @@
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
+			dat+= "<br><br>"
+//FORMATTING
+//<b>Fireball</b> - 10 seconds (buy for 1 spell point)
+//<i>(Description)</i>
+//Requires robes to cast
 
-	dat += "<strong>UNKNOWN SPELLS:</strong><br><br>"
-
-	//Then draw the unknown spells
-	for(var/spell_path in shown_spells)
+	dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
+	for(var/spell_path in shown_offensive_spells)
 		var/spell/abstract_spell = spell_path
-
-		//FORMATTING
-
-		//<b>Fireball</b> - 10 seconds (buy for 1 spell point)
-		//<i>(Description)</i>
-		//Requires robes to cast
-
 		var/spell_name = initial(abstract_spell.name)
 		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
 		var/spell_price = get_spell_price(abstract_spell)
-
 		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
 		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
 		var/flags = initial(abstract_spell.spell_flags)
 		var/list/properties = get_spell_properties(flags, user)
 		var/property_data
-
 		for(var/P in properties)
 			property_data += "[P] "
 		if(property_data)
 			dat += "<span style=\"color:blue\">[property_data]</span><br>"
-
 		dat += "<br>"
+
+	dat += "<span style=\"color:blue\"><strong>DEFENSIVE SPELLS:</strong></span><br><br>"
+	for(var/spell_path in shown_defensive_spells)
+		var/spell/abstract_spell = spell_path
+		var/spell_name = initial(abstract_spell.name)
+		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+		var/spell_price = get_spell_price(abstract_spell)
+		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+		var/flags = initial(abstract_spell.spell_flags)
+		var/list/properties = get_spell_properties(flags, user)
+		var/property_data
+		for(var/P in properties)
+			property_data += "[P] "
+		if(property_data)
+			dat += "<span style=\"color:blue\">[property_data]</span><br>"
+		dat += "<br>"
+
+	dat += "<span style=\"color:green\"><strong>UTILITY SPELLS:</strong></span><br><br>"
+	for(var/spell_path in shown_utility_spells)
+		var/spell/abstract_spell = spell_path
+		var/spell_name = initial(abstract_spell.name)
+		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+		var/spell_price = get_spell_price(abstract_spell)
+		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+		var/flags = initial(abstract_spell.spell_flags)
+		var/list/properties = get_spell_properties(flags, user)
+		var/property_data
+		for(var/P in properties)
+			property_data += "[P] "
+		if(property_data)
+			dat += "<span style=\"color:blue\">[property_data]</span><br>"
+		dat += "<br>"
+
+	dat += "<span style=\"color:orange\"><strong>MISCELLANEOUS SPELLS:</strong></span><br><br>"
+	for(var/spell_path in shown_misc_spells)
+		var/spell/abstract_spell = spell_path
+		var/spell_name = initial(abstract_spell.name)
+		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+		var/spell_price = get_spell_price(abstract_spell)
+		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+		var/flags = initial(abstract_spell.spell_flags)
+		var/list/properties = get_spell_properties(flags, user)
+		var/property_data
+		for(var/P in properties)
+			property_data += "[P] "
+		if(property_data)
+			dat += "<span style=\"color:blue\">[property_data]</span><br>"
+		dat += "<br><br>"
 
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
@@ -222,7 +312,7 @@
 
 		//If user has the robeless spell, strike the text out
 		if(user)
-			var/is_robeless = locate(/spell/noclothes) in user.spell_list
+			var/is_robeless = locate(/spell/passive/noclothes) in user.spell_list
 			if(is_robeless)
 				new_prop = "<s>[new_prop]</s>"
 
@@ -296,7 +386,7 @@
 			if(locate(buy_type) in usr.spell_list)
 				to_chat(usr, "<span class='notice'>You already know that spell. Perhaps you'd like to upgrade it instead?</span>")
 
-			else if(buy_type in get_available_spells())
+			else if(buy_type in get_all_wizard_spells())
 				var/spell/S = buy_type
 				if(use(initial(S.price)))
 					var/spell/added = new buy_type
