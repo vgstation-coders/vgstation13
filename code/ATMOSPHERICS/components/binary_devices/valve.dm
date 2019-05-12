@@ -81,9 +81,6 @@
 /obj/machinery/atmospherics/binary/valve/attack_ai(mob/user as mob)
 	return
 
-/obj/machinery/atmospherics/binary/valve/attack_robot(mob/user as mob)
-	toggle_status(user)
-
 /obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
 	toggle_status(user)
 
@@ -211,8 +208,6 @@
 	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(L)]")
 
 /obj/machinery/atmospherics/binary/valve/toggle_status(var/mob/user)
-	if(!Adjacent(user))
-		return //these are mechanical so you can't use them at range as a borg etc.
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
