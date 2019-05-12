@@ -15,9 +15,16 @@ td, th {
   font-size: 15px;
 }
 
+#cmc_controls {
+  float: left;
+  max-width: 10%;
+  background: url(uiMaskBackground.png);
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .cmc_btn {
-  display: inline-block;
-  margin: 20px;
+  margin: 4px 10px;
 }
 
 .fire {

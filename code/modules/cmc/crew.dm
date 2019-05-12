@@ -524,9 +524,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		updateTextView(usr)
 	else if(href_list["holo"])
 		holomap[uid] = !holomap[uid]
-		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
-		if(ui)
-			ui.send_message("toggleHolobtn")
 		processUser(usr) //to remove/add the holomap and update the textview
 	else if(href_list["setZ"])
 		var/num = href_list["setZ"]

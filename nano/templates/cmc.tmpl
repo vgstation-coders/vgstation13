@@ -8,16 +8,15 @@ Used In File(s): \code\modules\cmc\crew.dm
         <title>Crew Monitor</title>
     </head>
     <body>
-        <kbd>
+            <div id="cmc_controls">
             {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_sync')}}
             {{:helper.link('', 'stop', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_freeze')}}
             {{:helper.link('', 'image', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
             {{for data.levels}}
                 {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
             {{/for}}
-            <br><br><br><hr><br>
-            <table align='center' id='contents'>Loading...</table>
-        </kbd>
+            </div>
+            <div id="cmc_main"><table align='center' id='contents'>Loading...</table></div>
         <script>
         var prevlevel = 1;
 
@@ -47,11 +46,6 @@ Used In File(s): \code\modules\cmc\crew.dm
 
         function noData(){
             $("#contents").html("<tr><td>No data currently available</td></tr>");
-        }
-
-        function toggleHolobtn(){
-            var btn = $("#holo_btn");
-            btn.text((btn.text() == "Disable Holomap") ? "Enable Holomap" : "Disable Holomap");
         }
 
         function toggleUpdatebtn(num){
