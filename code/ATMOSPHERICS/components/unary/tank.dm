@@ -87,8 +87,10 @@
 		GAS_NITROGEN, (25*ONE_ATMOSPHERE*N2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/empty
-	icon_state = "air"
+	icon_state = "grey"
 	name = "Pressure Tank"
+	can_be_coloured = 1
+	color = "#b4b4b4"
 
 /obj/machinery/atmospherics/unary/tank/empty/unanchored
 	anchored = 0
