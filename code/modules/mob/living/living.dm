@@ -978,7 +978,7 @@ Thanks.
 								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
 					else
 						C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
-						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
+						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around one minute, and you need to stay still).</span>",
 						                   self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
 						spawn(0)
 							if(do_after(usr, usr, 1 MINUTES))
