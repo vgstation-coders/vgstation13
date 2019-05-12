@@ -1,5 +1,3 @@
-#define MAX_PRESSURE 4500 //kPa
-
 /obj/machinery/atmospherics/binary/passive_gate
 	//Essentially a one-way check valve.
 	//If input is higher pressure than output, works to equalize the pressure. If output is higher pressure than input, does nothing.
@@ -9,21 +7,35 @@
 	name = "Passive gate"
 	desc = "A one-way gas valve that does not require power"
 
+	var/open = FALSE
+	var/openDuringInit = 0
+
 	var/frequency = 0
 	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
+	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/atmospherics/binary/passive_gate/update_icon()
-	if(stat & NOPOWER)
-		icon_state = "intact_off"
-	else if(node1 && node2)
-		icon_state = "intact_[on?("on"):("off")]"
+	icon_state = "intact_[open?("on"):("off")]"
 	..()
-	return
+
+/obj/machinery/atmospherics/binary/passive_gate/proc/open()
+	if(open)
+		return 0
+	open = TRUE
+	update_icon()
+	return 1
+
+/obj/machinery/atmospherics/binary/passive_gate/proc/close()
+	if(!open)
+		return 0
+	open = FALSE
+	update_icon()
+	return 1
 
 /obj/machinery/atmospherics/binary/passive_gate/process()
 	. = ..()
-	if(!on)
+	if(!open)
 		return
 
 	var/output_starting_pressure = air2.return_pressure()
@@ -68,7 +80,7 @@
 	signal.data = list(
 		"tag" = id_tag,
 		"device" = "AGP",
-		"power" = on,
+		"power" = open,
 		"sigtype" = "status"
 	)
 
@@ -76,73 +88,116 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/passive_gate/interact(mob/user as mob)
-	var/dat = {"<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"}
-
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
-	onclose(user, "atmo_pump")
-
 /obj/machinery/atmospherics/binary/passive_gate/initialize()
 	..()
 	if(frequency)
 		set_frequency(frequency)
 
 /obj/machinery/atmospherics/binary/passive_gate/receive_signal(datum/signal/signal)
-	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
+	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
 		return 0
 
-	var/old_on=on
-	if("power" in signal.data)
-		on = text2num(signal.data["power"])
+	var/state_changed = 0
+	switch(signal.data["command"])
+		if("gate_open")
+			if(!open)
+				open()
+				state_changed = 1
 
-	if("power_toggle" in signal.data)
-		on = !on
+		if("gate_close")
+			if(open)
+				close()
+				state_changed = 1
 
-	if("status" in signal.data)
-		spawn(2)
-			broadcast_status()
-		return //do not update_icon
+		if("gate_set")
+			if(signal.data["state"])
+				if(!open)
+					open()
+					state_changed = 1
+			else
+				if(open)
+					close()
+					state_changed = 1
 
-	spawn(2)
-		broadcast_status()
-	update_icon()
-	if(old_on!=on)
-		investigation_log(I_ATMOS,"was powered [on ? "on" : "off"] by a remote signal")
-	return
+		if("gate_toggle")
+			if(open)
+				close()
+			else
+				open()
+			state_changed = 1
 
+		if("status")
+			spawn(2)
+				broadcast_status()
 
+	if(state_changed)
+		investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by a signal")
 
-/obj/machinery/atmospherics/binary/passive_gate/attack_hand(user as mob)
-	if(..())
-		return
-	src.add_fingerprint(usr)
+/obj/machinery/atmospherics/binary/passive_gate/attack_ai(mob/user as mob)
+	src.add_hiddenprint(user)
+	return src.attack_hand(user)
+
+/obj/machinery/atmospherics/binary/passive_gate/attack_hand(mob/user as mob)
 	if(!src.allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
-	usr.set_machine(src)
-	interact(user)
-	return
-
-/obj/machinery/atmospherics/binary/passive_gate/Topic(href,href_list)
-	if(..())
+	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
+		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
-	if(href_list["power"])
-		on = !on
-		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
-	usr.set_machine(src)
-	src.update_icon()
-	src.updateUsrDialog()
-	return
+	src.add_fingerprint(usr)
+	update_icon()
+	if (src.open)
+		src.close()
+	else
+		src.open()
+
+	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
 
 /obj/machinery/atmospherics/binary/passive_gate/power_change()
 	..()
 	update_icon()
 
 /obj/machinery/atmospherics/binary/passive_gate/npc_tamper_act(mob/living/L)
-	on = !on
-	investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(L)]")
+	if (src.open)
+		src.close()
+	else
+		src.open()
+	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(L)]")
 
 	src.update_icon()
-	src.updateUsrDialog()
 
-#undef MAX_PRESSURE
+/obj/machinery/atmospherics/binary/passive_gate/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+	return {"
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag","set_id")]</a></li>
+	</ul>
+	"}
+
+/obj/machinery/atmospherics/binary/passive_gate/Topic(href, href_list)
+	if(..())
+		return
+
+	if(!issilicon(usr))
+		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
+			return
+
+	if("set_id" in href_list)
+		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text),1,MAX_MESSAGE_LEN)
+		if(newid)
+			id_tag = newid
+			initialize()
+	if("set_freq" in href_list)
+		var/newfreq=frequency
+		if(href_list["set_freq"]!="-1")
+			newfreq=text2num(href_list["set_freq"])
+		else
+			newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
+		if(newfreq)
+			if(findtext(num2text(newfreq), "."))
+				newfreq *= 10 // shift the decimal one place
+			if(newfreq < 10000)
+				frequency = newfreq
+				initialize()
+
+	update_multitool_menu(usr)
