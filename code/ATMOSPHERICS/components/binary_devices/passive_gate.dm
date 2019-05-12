@@ -1,15 +1,13 @@
 #define MAX_PRESSURE 4500 //kPa
 
 /obj/machinery/atmospherics/binary/passive_gate
-	//Tries to achieve target pressure at output (like a normal pump) except
-	//	Uses no power but can not transfer gases from a low pressure area to a high pressure area
+	//Essentially a one-way check valve.
+	//If input is higher pressure than output, works to equalize the pressure. If output is higher pressure than input, does nothing.
 	icon = 'icons/obj/atmospherics/passive_gate.dmi'
 	icon_state = "intact_off"
 
 	name = "Passive gate"
 	desc = "A one-way air valve that does not require power"
-
-	var/target_pressure = ONE_ATMOSPHERE
 
 	var/frequency = 0
 	var/id_tag = null
@@ -30,10 +28,11 @@
 
 	var/output_starting_pressure = air2.return_pressure()
 	var/input_starting_pressure = air1.return_pressure()
-	var/pressure_delta = min(target_pressure - output_starting_pressure, (input_starting_pressure - output_starting_pressure)/2)
+	//var/pressure_delta = min(10000, abs(environment_pressure - air_contents.return_pressure()))
+	var/pressure_delta = min(10000, input_starting_pressure - output_starting_pressure)
 
-	if(output_starting_pressure < min(target_pressure, input_starting_pressure - 10) && (air1.temperature > 0 || air2.temperature > 0))
-		//Figure out how much gas to transfer to meet the target pressure.
+	if((air1.temperature > 0 || air2.temperature > 0) && pressure_delta > 0.5)
+		//Figure out how much gas to transfer to equalize the pressure.
 		var/air_temperature = (air2.temperature > 0) ? air2.temperature : air1.temperature
 		var/output_volume = air2.volume + (network2 ? network2.volume : 0)
 		//get the number of moles that would have to be transfered to bring sink to the target pressure
@@ -70,7 +69,6 @@
 		"tag" = id_tag,
 		"device" = "AGP",
 		"power" = on,
-		"target_output" = target_pressure,
 		"sigtype" = "status"
 	)
 
@@ -79,10 +77,7 @@
 	return 1
 
 /obj/machinery/atmospherics/binary/passive_gate/interact(mob/user as mob)
-	var/dat = {"<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"On":"Off"]</a><br>
-				<b>Desirable output pressure: </b>
-				[round(target_pressure,0.1)]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
-				"}
+	var/dat = {"<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"}
 
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
@@ -102,9 +97,6 @@
 
 	if("power_toggle" in signal.data)
 		on = !on
-
-	if("set_output_pressure" in signal.data)
-		target_pressure = Clamp(text2num(signal.data["set_output_pressure"]), 0, MAX_PRESSURE)
 
 	if("status" in signal.data)
 		spawn(2)
@@ -137,10 +129,6 @@
 	if(href_list["power"])
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
-	if(href_list["set_press"])
-		var/new_pressure = input(usr,"Enter new output pressure (0-[MAX_PRESSURE]kPa)","Pressure control",src.target_pressure) as num
-		src.target_pressure = max(0, min(MAX_PRESSURE, new_pressure))
-		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(usr)]")
 	usr.set_machine(src)
 	src.update_icon()
 	src.updateUsrDialog()
@@ -151,12 +139,8 @@
 	update_icon()
 
 /obj/machinery/atmospherics/binary/passive_gate/npc_tamper_act(mob/living/L)
-	if(prob(50)) //Turn on/off
-		on = !on
-		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(L)]")
-	else //Change pressure
-		src.target_pressure = rand(0, MAX_PRESSURE)
-		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(L)]")
+	on = !on
+	investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(L)]")
 
 	src.update_icon()
 	src.updateUsrDialog()
