@@ -516,33 +516,31 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/uid = "\ref[usr]"
 	if(href_list["close"])
 		closeTextview(usr)
-		return
-	if(href_list["toggle"])
+	else if(href_list["toggle"])
 		textview_updatequeued[uid] = !textview_updatequeued[uid]
 		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
 		if(ui)
-			ui.send_message("toggleUpdatebtn")
+			ui.send_message("toggleUpdatebtn", list2params(list(json_encode(textview_updatequeued[uid])))) //using the actual setting sorts out any btn icon sync issues
 		updateTextView(usr)
-		return
-	if(href_list["holo"])
+	else if(href_list["holo"])
 		holomap[uid] = !holomap[uid]
 		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
 		if(ui)
 			ui.send_message("toggleHolobtn")
 		processUser(usr) //to remove/add the holomap and update the textview
-		return
-	if(href_list["setZ"])
+	else if(href_list["setZ"])
 		var/num = href_list["setZ"]
 		if(!isnum(num))
 			num = text2num(num)
 			if(!num)
-				return //something fucked up
+				return 1//something fucked up
 		
 		holomap_z[uid] = num
 		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
 		if(ui)
 			ui.send_message("levelSet", list2params(list(num))) //feedback
 		processUser(usr) //we need to update both the holomap AND the textview
+	return 1
 
 //updates the textview, called every process() when enabled
 /obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
@@ -607,7 +605,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		ui.add_stylesheet("cmc.css")
 		var/list/i_data = list()
 		i_data["update"] = textview_updatequeued[uid]
-		i_data["holo"] = holomap[uid]
 		i_data["levels"] = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc)
 		ui.set_initial_data(i_data)
 		ui.open()

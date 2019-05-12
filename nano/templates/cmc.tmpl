@@ -9,16 +9,9 @@ Used In File(s): \code\modules\cmc\crew.dm
     </head>
     <body>
         <kbd>
-            {{if data.update}}
-                {{:helper.link('Disable Updating', '', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn')}}
-            {{else}}
-                {{:helper.link('Enable Updating', '', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn')}}
-            {{/if}}
-            {{if data.holo}}
-                {{:helper.link('Disable Holomap', '', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
-            {{else}}
-                {{:helper.link('Enable Holomap', '', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
-            {{/if}}
+            {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_sync')}}
+            {{:helper.link('', 'stop', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_freeze')}}
+            {{:helper.link('', 'image', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
             {{for data.levels}}
                 {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
             {{/for}}
@@ -61,9 +54,14 @@ Used In File(s): \code\modules\cmc\crew.dm
             btn.text((btn.text() == "Disable Holomap") ? "Enable Holomap" : "Disable Holomap");
         }
 
-        function toggleUpdatebtn(){
-            var btn = $("#update_btn");
-            btn.text((btn.text() == "Disable Updating") ? "Enable Updating" : "Disable Updating");
+        function toggleUpdatebtn(num){
+            if(num){
+                $("#update_btn_sync").show();
+                $("#update_btn_freeze").hide();
+            }else{
+                $("#update_btn_sync").hide();
+                $("#update_btn_freeze").show();
+            }
         }
 
         function levelSet(level){
@@ -77,6 +75,7 @@ Used In File(s): \code\modules\cmc\crew.dm
         }
 
         levelSet(prevlevel);
+        toggleUpdatebtn({{:data.update}});
         </script>
     </body>
 </html>
