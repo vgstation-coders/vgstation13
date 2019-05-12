@@ -42,7 +42,7 @@
 	var/environment_pressure = environment.return_pressure()
 	var/pressure_delta = min(10000, abs(environment_pressure - air_contents.return_pressure()))
 
-	if(pressure_delta > 0.5)
+	if((environment.temperature || air_contents.temperature) && pressure_delta > 0.5)
 		if(environment_pressure < air_contents.pressure) //move air out
 			var/air_temperature = (environment.temperature > 0) ? environment.temperature : air_contents.temperature
 			var/transfer_moles = (pressure_delta * environment.volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
