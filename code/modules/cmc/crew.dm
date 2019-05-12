@@ -31,18 +31,17 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	light_range_on = 2
 	_using = new()
 
-	//for the holomap
+	/*
+	Holomap stuff
+	*/
+	//DONT touch, integral to the inner workings
 	var/list/holomap_images = list() //list of lists of images for the people using the console
-	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
 	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
 	var/list/freeze = list() //list of _using set freeze
 	var/list/entries = list() //list of all crew, which has sensors >= 1
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
-	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
-	var/defaultZ = STATION_Z
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
 		"Captain" = 00,
 		"Head of Personnel" = 50,
@@ -83,6 +82,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		"Medical Response Officer" = 223,
 		"Assistant" = 999 //Unknowns/custom jobs should appear after civilians, and before assistants
 	)
+	
+	//DO touch, for mappers to varedit
+	var/holomap_filter //can make the cmc display syndie/vox hideout
+	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
+	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
+	var/defaultZ = STATION_Z //the z_level which everyone looks at when opening the console for the first time
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
@@ -110,6 +115,75 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			icon_state = initial(icon_state)
 			stat &= ~NOPOWER
 
+/*
+GENERAL PROCS
+*/
+//initializes all important vars for a new user
+/obj/machinery/computer/crew/proc/initializeUser(var/mob/user)
+	var/uid = "\ref[user]"
+	_using += user
+	holomap_images[uid] = list()
+	holomap_tooltips[uid] = list()
+	freeze[uid] = 0
+	holomap_z[uid] = defaultZ
+	textview_updatequeued[uid] = 1
+	holomap[uid] = 0
+	scanCrew() //else the first user has to wait for process to fire
+	updateTextView(user)
+
+//ticks to update holomap/textview
+/obj/machinery/computer/crew/process()
+	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
+		deactivateAll()
+		return
+
+	scanCrew()
+
+	for(var/mob/user in _using)
+		processUser(user)
+
+/obj/machinery/computer/crew/proc/processUser(var/mob/user)
+	var/uid = "\ref[user]"
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	if(!ui)
+		deactivate(user)
+		return
+
+	if(!(holomap_z[uid] in (holomap_z_levels_mapped | holomap_z_levels_unmapped))) //catching some more unwanted behaviours
+		if((holomap_z_levels_mapped | holomap_z_levels_unmapped).len > 0)
+			holomap_z[uid] = (holomap_z_levels_mapped | holomap_z_levels_unmapped)[1]
+		else
+			deactivate(user)
+
+	//apparently STATUS_INTERACTIVE is undefined, so we are gonna use 2
+	if(ui.status < 2) //we are not updating YOUR window
+		return
+
+	if(textview_updatequeued[uid])
+		updateTextView(user)
+
+	if(!freeze[uid])
+		updateVisuals(user)
+
+//kicks out all users
+/obj/machinery/computer/crew/proc/deactivateAll()
+	for(var/mob/user in _using)
+		deactivate(user)
+
+//disables both the textview and the holomap
+/obj/machinery/computer/crew/proc/deactivate(var/mob/user)
+	var/uid = "\ref[user]"
+	closeHolomap(user)
+	closeTextview(user)
+	_using -= user
+	holomap_images[uid].len = 0 //incase something is fucky
+	holomap_tooltips[uid].len = 0 //incase something is fucky
+	freeze[uid] = null //incase something is fucky
+	holomap_z[uid] = null
+	textview_updatequeued[uid] = null
+	holomap[uid] = null
+
+//scans every crewmember/mmi and puts them into their respective entrylist
 /obj/machinery/computer/crew/proc/scanCrew()
 	//clearing all z-level entries
 	var/list/all_tracked_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_dsc) //z-levels sorted by num
@@ -182,7 +256,128 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			var/see_y = pos.y - WORLD_Y_OFFSET[pos.z]
 			entries[pos.z][++entries[pos.z].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos)
 
-//create actual marker for crew with sensors on 3
+//helper to get healthstate, used in both holomap and textview
+/obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
+	var/health = 0
+	for(var/dam in damage)
+		health += dam
+	health = round(100 - health)
+	switch (health)
+		if(80 to 99)
+			return "1"
+		if(60 to 79)
+			return "2"
+		if(40 to 59)
+			return "3"
+		if(20 to 39)
+			return "4"
+		else if(health != 100)
+			return "5"
+		else
+			return "0"
+
+/*
+HOLOMAP PROCS
+*/
+//initializes the holomap
+/obj/machinery/computer/crew/proc/openHolomap(var/mob/user)
+	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
+	for(var/z_level in all_ui_z_levels)
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z_level]"
+		if(!(holomap_bgmap in holomap_cache))
+			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+			if(z_level in holomap_z_levels_mapped)
+				if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
+					var/image/station_outline = image(holoMiniMaps[z_level])
+					station_outline.color = "#DEE7FF"
+					station_outline.alpha = 200
+					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
+					station_areas.alpha = 150
+					background.overlays += station_areas
+					background.overlays += station_outline
+			background.alpha = 0
+			background.plane = HUD_PLANE
+			background.layer = HUD_BASE_LAYER
+			holomap_cache[holomap_bgmap] = background
+
+	//z2 override if nukeops or voxraider
+	if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_2"
+		var/image/background = image('icons/480x480.dmi', "stationmap_blue")
+		var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
+		station_outline.color = "#DEE7FF"
+		station_outline.alpha = 200
+		background.overlays += station_outline
+		background.alpha = 0
+		background.plane = HUD_PLANE
+		background.layer = HUD_BASE_LAYER
+		holomap_cache[holomap_bgmap] = background
+		holomap_z_levels_unmapped |= CENTCOMM_Z
+	
+	holomap[uid] = 1
+
+//closes the holomap
+/obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
+	var/uid = "\ref[user]"
+	var/z = holomap_z["\ref[user]"]
+	var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
+	if(holomap_bgmap in holomap_cache)
+		var/image/bgmap = holomap_cache[holomap_bgmap]
+		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
+
+	user.client.images -= holomap_images[uid]
+	user.client.screen -= holomap_tooltips[uid]
+
+	holomap_images[uid].len = 0
+	holomap_tooltips[uid].len = 0
+	freeze[uid] = 0
+
+//sanity for the holomap
+/obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
+	var/uid = "\ref[user]"
+	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+		return FALSE
+	return TRUE
+
+//updates crewmarkers and map
+/obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
+	var/uid = "\ref[user]"
+	if(!handle_sanity(user))
+		closeHolomap(user)
+		return
+
+	//updating holomap
+	if(holomap[uid]) // we only repopulate user.client.images if holomap is enabled
+		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
+		holomap_images[uid].len = 0
+		holomap_tooltips[uid].len = 0
+
+		var/image/bgmap
+		var/z = holomap_z[uid]
+		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
+
+		bgmap = holomap_cache[holomap_bgmap]
+		bgmap.loc = user.hud_used.holomap_obj
+
+		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
+
+		holomap_images[uid] |= bgmap
+
+		for(var/entry in entries[holomap_z[uid]])
+			//can only be our z, so i'm not checking that, only if we have a pos
+			if(entry[ENTRY_POS])
+				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
+        
+		user.client.images |= holomap_images[uid]
+		user.client.screen |= holomap_tooltips[uid]
+	else
+		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
+		holomap_images[uid].len = 0
+		holomap_tooltips[uid].len = 0
+
+//create actual marker for crew
 /obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/see_x, var/see_y, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/turf/TU)
 	if(!TU || !H || !see_x || !see_y)
 		return
@@ -233,236 +428,8 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	holomap_tooltips[user_uid] |= I
 
-//helper to get healthstate
-/obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
-	var/health = 0
-	for(var/dam in damage)
-		health += dam
-	health = round(100 - health)
-	switch (health)
-		if(80 to 99)
-			return "1"
-		if(60 to 79)
-			return "2"
-		if(40 to 59)
-			return "3"
-		if(20 to 39)
-			return "4"
-		else if(health != 100)
-			return "5"
-		else
-			return "0"
-
-/obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
-	var/uid = "\ref[user]"
-	var/z = holomap_z["\ref[user]"]
-	var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
-	if(holomap_bgmap in holomap_cache)
-		var/image/bgmap = holomap_cache[holomap_bgmap]
-		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
-
-	user.client.images -= holomap_images[uid]
-	user.client.screen -= holomap_tooltips[uid]
-
-	holomap_images[uid].len = 0
-	holomap_tooltips[uid].len = 0
-	freeze[uid] = 0
-
-/obj/machinery/computer/crew/proc/deactivateAll()
-	for(var/mob/user in _using)
-		deactivate(user)
-
-// called whenever activator leaves, disables both holomap and textview
-/obj/machinery/computer/crew/proc/deactivate(var/mob/user)
-	var/uid = "\ref[user]"
-	closeHolomap(user)
-	closeTextview(user)
-	_using -= user
-	holomap_images[uid].len = 0 //incase something is fucky
-	holomap_tooltips[uid].len = 0 //incase something is fucky
-	freeze[uid] = null //incase something is fucky
-	holomap_z[uid] = null
-	textview_updatequeued[uid] = null
-	holomap[uid] = null
-
-/obj/machinery/computer/crew/proc/openHolomap(var/mob/user)
-	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
-	for(var/z_level in all_ui_z_levels)
-		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z_level]"
-		if(!(holomap_bgmap in holomap_cache))
-			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-			if(z_level in holomap_z_levels_mapped)
-				if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
-					var/image/station_outline = image(holoMiniMaps[z_level])
-					station_outline.color = "#DEE7FF"
-					station_outline.alpha = 200
-					var/image/station_areas = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[z_level]"])
-					station_areas.alpha = 150
-					background.overlays += station_areas
-					background.overlays += station_outline
-			background.alpha = 0
-			background.plane = HUD_PLANE
-			background.layer = HUD_BASE_LAYER
-			holomap_cache[holomap_bgmap] = background
-
-	//z2 override if nukeops or voxraider
-	if(holomap_filter & (HOLOMAP_FILTER_VOX | HOLOMAP_FILTER_NUKEOPS))
-		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_2"
-		var/image/background = image('icons/480x480.dmi', "stationmap_blue")
-		var/image/station_outline = image(centcommMiniMaps["[holomap_filter]"])
-		station_outline.color = "#DEE7FF"
-		station_outline.alpha = 200
-		background.overlays += station_outline
-		background.alpha = 0
-		background.plane = HUD_PLANE
-		background.layer = HUD_BASE_LAYER
-		holomap_cache[holomap_bgmap] = background
-		holomap_z_levels_unmapped |= CENTCOMM_Z
-	
-	holomap[uid] = 1
-
-
-/obj/machinery/computer/crew/proc/initializeUser(var/mob/user)
-	var/uid = "\ref[user]"
-	_using += user
-	holomap_images[uid] = list()
-	holomap_tooltips[uid] = list()
-	freeze[uid] = 0
-	holomap_z[uid] = defaultZ
-	textview_updatequeued[uid] = 1
-	holomap[uid] = 0
-	scanCrew() //else the first user has to wait for process to fire
-	updateTextView(user)
-
-//ticks to update holomap/textview
-/obj/machinery/computer/crew/process()
-	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
-		deactivateAll()
-		return
-
-	scanCrew()
-
-	for(var/mob/user in _using)
-		processUser(user)
-
-/obj/machinery/computer/crew/proc/processUser(var/mob/user)
-	var/uid = "\ref[user]"
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
-	if(!ui)
-		deactivate(user)
-		return
-
-	if(!(holomap_z[uid] in (holomap_z_levels_mapped | holomap_z_levels_unmapped))) //catching some more unwanted behaviours
-		if((holomap_z_levels_mapped | holomap_z_levels_unmapped).len > 0)
-			holomap_z[uid] = (holomap_z_levels_mapped | holomap_z_levels_unmapped)[1]
-		else
-			deactivate(user)
-
-	//apparently STATUS_INTERACTIVE is undefined, so we are gonna use 2
-	if(ui.status < 2) //we are not updating YOUR window
-		return
-
-	if(textview_updatequeued[uid])
-		updateTextView(user)
-
-	if(!freeze[uid])
-		updateVisuals(user)
-
-//ahhh
-/obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
-	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
-		return FALSE
-	return TRUE
-
-//updates textview list as well as crewmarkers
-/obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
-	var/uid = "\ref[user]"
-	if(!handle_sanity(user))
-		closeHolomap(user)
-		return
-
-	//updating holomap
-	if(holomap[uid]) // we only repopulate user.client.images if holomap is enabled
-		user.client.images -= holomap_images[uid]
-		user.client.screen -= holomap_tooltips[uid]
-		holomap_images[uid].len = 0
-		holomap_tooltips[uid].len = 0
-
-		var/image/bgmap
-		var/z = holomap_z[uid]
-		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z]"
-
-		bgmap = holomap_cache[holomap_bgmap]
-		bgmap.loc = user.hud_used.holomap_obj
-
-		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
-
-		holomap_images[uid] |= bgmap
-
-		for(var/entry in entries[holomap_z[uid]])
-			//can only be our z, so i'm not checking that, only if we have a pos
-			if(entry[ENTRY_POS])
-				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
-        
-		user.client.images |= holomap_images[uid]
-		user.client.screen |= holomap_tooltips[uid]
-	else
-		user.client.images -= holomap_images[uid]
-		user.client.screen -= holomap_tooltips[uid]
-		holomap_images[uid].len = 0
-		holomap_tooltips[uid].len = 0
-
 /*
-	Tooltip interface
-*/
-/obj/abstract/screen/interface/tooltip
-	var/title
-	var/content
-	var/parseAdd //Additional stuff to parse to chat
-
-/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A = "")
-	title = T
-	content = C
-	parseAdd = A
-
-/obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
-	openToolTip(user, src, params, title = title, content = content)
-
-/obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
-	closeToolTip(user)
-
-/obj/abstract/screen/interface/tooltip/Click(location,control,params)
-	..()
-	parseToChat()
-
-/obj/abstract/screen/interface/tooltip/proc/parseToChat()
-	to_chat(user, parseAdd)
-
-//subclass to do some cmc-specific stuff like setting freeze and parsing to chat without supercall
-/obj/abstract/screen/interface/tooltip/CrewIcon
-	var/obj/machinery/computer/crew/CMC
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/proc/setCMC(var/obj/machinery/computer/crew/CM)
-	CMC = CM
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/Click(location,control,params)
-	parseToChat() //no supercall so we don't trigger interface_act (we don't want that)
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
-	if(CMC)
-		var/uid = "\ref[user]"
-		CMC.freeze[uid] = 1
-	..()
-
-/obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
-	if(CMC)
-		var/uid = "\ref[user]"
-		CMC.freeze[uid] = 0
-	..()
-
-/*
-	Textview procs
+TEXTVIEW PROCS
 */
 /obj/machinery/computer/crew/Topic(href, href_list)
 	var/uid = "\ref[usr]"
@@ -496,7 +463,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	return 1
 
-//updates the textview, called every process() when enabled
+//updates/opens the textview
 /obj/machinery/computer/crew/proc/updateTextView(var/mob/user)
 	var/uid = "\ref[user]"
 
@@ -568,12 +535,63 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	else
 		ui.send_message("noData")
 
-//taking care of some closing stuff, triggered by onclose() sending close=1 to Topic(), since we gave it our ref as 3rd param
+//makes sure everything is set for us to have a closed window and keep it that way
 /obj/machinery/computer/crew/proc/closeTextview(var/mob/user)
 	textview_updatequeued["\ref[user]"] = 0
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
 	if(ui)
 		ui.close()
+
+/*
+Tooltip interface
+*/
+//BASE TOOLTIP
+/obj/abstract/screen/interface/tooltip
+	var/title //tooltip title
+	var/content //tooltip content
+	var/parseAdd //Additional stuff to parse to chat
+
+/obj/abstract/screen/interface/tooltip/proc/setInfo(var/T, var/C, var/A = "")
+	title = T
+	content = C
+	parseAdd = A
+
+/obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
+	openToolTip(user, src, params, title = title, content = content)
+
+/obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
+	closeToolTip(user)
+
+/obj/abstract/screen/interface/tooltip/Click(location,control,params)
+	..()
+	parseToChat()
+
+/obj/abstract/screen/interface/tooltip/proc/parseToChat()
+	to_chat(user, parseAdd)
+
+//CMC TOOLTIP
+//subclass to do some cmc-specific stuff like setting freeze and parsing to chat without supercall
+/obj/abstract/screen/interface/tooltip/CrewIcon
+	var/obj/machinery/computer/crew/CMC
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/proc/setCMC(var/obj/machinery/computer/crew/CM)
+	CMC = CM
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/Click(location,control,params)
+	parseToChat() //no supercall so we don't trigger interface_act (we don't want that)
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/MouseEntered(location,control,params)
+	if(CMC)
+		var/uid = "\ref[user]"
+		CMC.freeze[uid] = 1
+	..()
+
+/obj/abstract/screen/interface/tooltip/CrewIcon/MouseExited(location,control,params)
+	if(CMC)
+		var/uid = "\ref[user]"
+		CMC.freeze[uid] = 0
+	..()
+
 
 #undef ENTRY_SEE_X
 #undef ENTRY_SEE_Y
