@@ -138,24 +138,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/atmospherics/binary/passive_gate/attack_hand(mob/user as mob)
-	if(!src.allowed(user))
-		to_chat(user, "<span class='warning'>Access denied.</span>")
-		return
-	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
-		to_chat(user, "<span class='warning'>Nope.</span>")
-		return
-	src.add_fingerprint(usr)
-	update_icon()
-	if (src.open)
-		src.close()
-	else
-		src.open()
-
-	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
-
-/obj/machinery/atmospherics/binary/passive_gate/power_change()
-	..()
-	update_icon()
+	toggle_status(user)
 
 /obj/machinery/atmospherics/binary/passive_gate/npc_tamper_act(mob/living/L)
 	if (src.open)
@@ -201,3 +184,16 @@
 				initialize()
 
 	update_multitool_menu(usr)
+
+/obj/machinery/atmospherics/binary/passive_gate/toggle_status(var/mob/user)
+	if(!src.allowed(user))
+		to_chat(user, "<span class='warning'>Access denied.</span>")
+		return
+	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
+		to_chat(user, "<span class='warning'>Nope.</span>")
+		return
+	src.add_fingerprint(usr)
+	if (src.open)
+		src.close()
+	else
+		src.open()
