@@ -36,13 +36,13 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z = list() //list of _using selected z_levels
 	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
-	var/list/ui_tooltips = list() //list of lists of the buttons
 	var/list/freeze = list() //list of _using set freeze
 	var/list/entries = list() //list of all crew, which has sensors >= 1
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
 	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
+	var/defaultZ = STATION_Z
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
 		"Captain" = 00,
 		"Head of Personnel" = 50,
@@ -97,7 +97,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		return
 	if(stat & (BROKEN|NOPOWER))
 		return
-	togglemap(user)
+	initializeUser(user)
 
 /obj/machinery/computer/crew/update_icon()
 	if(stat & BROKEN)
@@ -109,24 +109,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		else
 			icon_state = initial(icon_state)
 			stat &= ~NOPOWER
-
-/obj/machinery/computer/crew/interface_act(mob/user, action)
-	if(action == "exit")
-		deactivate(user)
-		return
-
-	var/uid = "\ref[user]"
-	if(action == "text")
-		updateTextView(user)
-		textview_updatequeued[uid] = 1
-		return
-
-	if(action == "holo")
-		holomap[uid] = !holomap[uid]
-	else if(text2num(action) != null)
-		holomap_z[uid] = text2num(action)
-	
-	processUser(user) //for that nice ui feedback uhhhh
 
 /obj/machinery/computer/crew/proc/scanCrew()
 	//clearing all z-level entries
@@ -293,20 +275,17 @@ Crew Monitor by Paul, based on the holomaps by Deity
 // called whenever activator leaves, disables both holomap and textview
 /obj/machinery/computer/crew/proc/deactivate(var/mob/user)
 	var/uid = "\ref[user]"
-	if(user && user.client) //incase something is fucky
-		closeHolomap(user)
-		closeTextview(user)
-		user.client.screen -= ui_tooltips[uid] //remove ui
+	closeHolomap(user)
+	closeTextview(user)
 	_using -= user
 	holomap_images[uid].len = 0 //incase something is fucky
 	holomap_tooltips[uid].len = 0 //incase something is fucky
-	ui_tooltips[uid].len = 0
 	freeze[uid] = null //incase something is fucky
 	holomap_z[uid] = null
 	textview_updatequeued[uid] = null
 	holomap[uid] = null
 
-/obj/machinery/computer/crew/proc/initializeHolomap(var/mob/user)
+/obj/machinery/computer/crew/proc/openHolomap(var/mob/user)
 	var/list/all_ui_z_levels = holomap_z_levels_mapped | holomap_z_levels_unmapped
 	for(var/z_level in all_ui_z_levels)
 		var/holomap_bgmap = "cmc_\ref[src]_\ref[user]_[z_level]"
@@ -339,26 +318,21 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		background.layer = HUD_BASE_LAYER
 		holomap_cache[holomap_bgmap] = background
 		holomap_z_levels_unmapped |= CENTCOMM_Z
+	
+	holomap[uid] = 1
 
-//initializes the holomap
-/obj/machinery/computer/crew/proc/togglemap(var/mob/user)
-	if(user in _using)
-		deactivate(user)
-		to_chat(user, "<span class='notice'>You disable the holomap.</span>")
-	else
-		_using += user
-		var/uid = "\ref[user]"
-		initializeHolomap(user)
-		holomap_images[uid] = list()
-		holomap_tooltips[uid] = list()
-		ui_tooltips[uid] = list()
-		freeze[uid] = 0
-		holomap_z[uid] = STATION_Z
-		textview_updatequeued[uid] = 1
-		holomap[uid] = 1
-		scanCrew() //else the first user has to wait for process to fire
-		processUser(user)
-		to_chat(user, "<span class='notice'>You enable the holomap.</span>")
+
+/obj/machinery/computer/crew/proc/initializeUser(var/mob/user)
+	var/uid = "\ref[user]"
+	_using += user
+	holomap_images[uid] = list()
+	holomap_tooltips[uid] = list()
+	freeze[uid] = 0
+	holomap_z[uid] = defaultZ
+	textview_updatequeued[uid] = 1
+	holomap[uid] = 0
+	scanCrew() //else the first user has to wait for process to fire
+	updateTextView(user)
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
@@ -373,14 +347,26 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 /obj/machinery/computer/crew/proc/processUser(var/mob/user)
 	var/uid = "\ref[user]"
-	if(!nanomanager.get_open_ui(user, src, "textview") && (holomap[uid] == 0))
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	if(!ui)
 		deactivate(user)
 		return
 
-	updateVisuals(user)
+	if(!(holomap_z[uid] in (holomap_z_levels_mapped | holomap_z_levels_unmapped))) //catching some more unwanted behaviours
+		if((holomap_z_levels_mapped | holomap_z_levels_unmapped).len > 0)
+			holomap_z[uid] = (holomap_z_levels_mapped | holomap_z_levels_unmapped)[1]
+		else
+			deactivate(user)
+
+	//apparently STATUS_INTERACTIVE is undefined, so we are gonna use 2
+	if(ui.status < 2) //we are not updating YOUR window
+		return
 
 	if(textview_updatequeued[uid])
 		updateTextView(user)
+
+	if(!freeze[uid])
+		updateVisuals(user)
 
 //ahhh
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
@@ -393,11 +379,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 /obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
 	var/uid = "\ref[user]"
 	if(!handle_sanity(user))
-		deactivate(user)
+		closeHolomap(user)
 		return
 
 	//updating holomap
-	if(holomap[uid] && !freeze[uid]) // we only repopulate user.client.images if holomap is enabled
+	if(holomap[uid]) // we only repopulate user.client.images if holomap is enabled
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
 		holomap_images[uid].len = 0
@@ -421,45 +407,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
         
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
-	else if(!holomap[uid])
+	else
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
 		holomap_images[uid].len = 0
 		holomap_tooltips[uid].len = 0
-
-	//updating ui
-	user.client.screen -= ui_tooltips[uid]
-	ui_tooltips[uid].len = 0
-
-	updateUI(user)
-	user.client.screen |= ui_tooltips[uid]
-
-//updates the ui-btns
-/obj/machinery/computer/crew/proc/updateUI(var/mob/user)
-	var/uid = "ui_btns_\ref[user]_\ref[src]"
-	var/user_uid = "\ref[user]"
-	if(!cmc_holomap_cache[uid])
-		var/list/all_ui_z_levels = sortList(holomap_z_levels_mapped | holomap_z_levels_unmapped, cmp=/proc/cmp_numeric_asc) //z-levels sorted by num
-		var/ui_offset = 11-all_ui_z_levels.len
-		var/list/ui_btns = list()
-
-		//holomap btn
-		var/obj/abstract/screen/interface/holo_btn = new /obj/abstract/screen/interface(null,user,src,"holo",'icons/cmc/buttons.dmi',"blank","WEST+[ui_offset],SOUTH+13")
-		holo_btn.overlays += image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_1"])
-		ui_btns += holo_btn
-
-		//textview btn
-		ui_offset += 1
-		ui_btns += new /obj/abstract/screen/interface(null,user,src,"text",'icons/cmc/buttons.dmi',"button_text","WEST+[ui_offset],SOUTH+13")
-
-		//z-levels btn
-		for (var/z_level in all_ui_z_levels)
-			ui_offset += 1
-			ui_btns += new /obj/abstract/screen/interface(null,user,src,"[z_level]",'icons/cmc/buttons.dmi',"button_[z_level]","WEST+[ui_offset],SOUTH+13")
-		ui_btns += new /obj/abstract/screen/interface(null,user,src,"exit",'icons/cmc/buttons.dmi',"button_cross","WEST+13,SOUTH+13")
-		cmc_holomap_cache[uid] = ui_btns
-
-	ui_tooltips[user_uid] |= cmc_holomap_cache[uid]
 
 /*
 	Tooltip interface
@@ -515,7 +467,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 /obj/machinery/computer/crew/Topic(href, href_list)
 	var/uid = "\ref[usr]"
 	if(href_list["close"])
-		closeTextview(usr)
+		deactivate(usr)
 	else if(href_list["toggle"])
 		textview_updatequeued[uid] = !textview_updatequeued[uid]
 		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
@@ -523,8 +475,12 @@ Crew Monitor by Paul, based on the holomaps by Deity
 			ui.send_message("toggleUpdatebtn", list2params(list(json_encode(textview_updatequeued[uid])))) //using the actual setting sorts out any btn icon sync issues
 		updateTextView(usr)
 	else if(href_list["holo"])
-		holomap[uid] = !holomap[uid]
-		processUser(usr) //to remove/add the holomap and update the textview
+		if(holomap[uid])
+			closeHolomap(user)
+			holomap[uid] = 0
+		else
+			openHolomap(user)
+			processUser(user)
 	else if(href_list["setZ"])
 		var/num = href_list["setZ"]
 		if(!isnum(num))
@@ -537,6 +493,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		if(ui)
 			ui.send_message("levelSet", list2params(list(num))) //feedback
 		processUser(usr) //we need to update both the holomap AND the textview
+
 	return 1
 
 //updates the textview, called every process() when enabled
