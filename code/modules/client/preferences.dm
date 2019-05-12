@@ -1345,6 +1345,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
 				if("lobby_music")
+					if(config.no_lobby_music)
+						to_chat(user, "DEBUG: Lobby music is globally disabled via server config.")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
 						if(istype(user,/mob/new_player))
@@ -1356,6 +1358,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					user.client.set_new_volume()
 
 				if("ambience")
+					if(config.no_ambience)
+						to_chat(user, "DEBUG: Ambience is globally disabled via server config.")
 					toggles ^= SOUND_AMBIENCE
 					if(!(toggles & SOUND_AMBIENCE))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)

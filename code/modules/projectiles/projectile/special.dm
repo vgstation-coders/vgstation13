@@ -219,7 +219,7 @@ obj/item/projectile/kinetic/New()
 	var/pressure = environment.return_pressure()
 	if(pressure < 50)
 		name = "full strength kinetic force"
-		damage = 30
+		damage += 15
 	..()
 
 /* wat - N3X

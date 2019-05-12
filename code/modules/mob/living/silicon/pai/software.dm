@@ -116,7 +116,7 @@
 
 
 /mob/living/silicon/pai/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
 		return

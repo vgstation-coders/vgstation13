@@ -43,7 +43,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z) //all z-levels which should not be mapped but should still be scanned for people
+	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
 		"Captain" = 00,
 		"Head of Personnel" = 50,
@@ -234,10 +234,16 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		icon = "7"
 	I.icon_state = "sensor_health[icon]"
 
+	var/posx = TU.x
+	var/posy = TU.y
+	if(map.holomap_offset_x.len >= TU.z) // eg. z3 is centered on derelict
+		posx = min(posx+map.holomap_offset_x[TU.z],((2 * world.view + 1)*WORLD_ICON_SIZE))
+		posy = min(posy+map.holomap_offset_y[TU.z],((2 * world.view + 1)*WORLD_ICON_SIZE))
+
 	//modulo magic for position
-	var/nomod_x = round(TU.x / 32)
-	var/nomod_y = round(TU.y / 32)
-	I.screen_loc = "WEST+[nomod_x]:[TU.x%32 - 8],SOUTH+[nomod_y]:[TU.y%32 - 8]" //- 8 cause the icon is 16px wide
+	var/nomod_x = round(posx / 32)
+	var/nomod_y = round(posy / 32)
+	I.screen_loc = "WEST+[nomod_x]:[posx%32 - 8],SOUTH+[nomod_y]:[posy%32 - 8]" //- 8 cause the icon is 16px wide
 
 	I.setInfo(title, content, "Coords: [see_x]|[see_y]")
 	I.setCMC(src)

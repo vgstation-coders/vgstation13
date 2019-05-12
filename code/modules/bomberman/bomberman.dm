@@ -168,7 +168,6 @@ var/global/list/bombermangear = list()
 	if((!parent || !parent.arena) && bomberman_destroy)
 		destroy_environnement = 1
 
-
 	if(line_dir)
 		var/turf/T1 = get_turf(src)
 		step(src,line_dir)
@@ -968,7 +967,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		message_admins("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[center.x];Y=[center.y];Z=[center.z]'>JMP</A>)")
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
 
-		for(var/mob/dead/observer/O in observers)
+		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
 
 	else
@@ -976,8 +975,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 
 
-/datum/bomberman_arena/proc/spawn_player(var/turf/T)
-	var/mob/living/carbon/human/M = new(T)
+/datum/bomberman_arena/proc/spawn_player(var/turf/T, var/mob/M)
+	M.forceMove(T)
 	M.name = "Bomberman #[rand(1,999)]"
 	M.real_name = M.name
 	var/list/randomhexes = list(
@@ -1046,18 +1045,15 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(!isobserver(client_mob))
 			continue
 
-		var/mob/living/carbon/human/M = spawn_player(S.spawnpoint)
-		M.ckey = C.ckey
-		dress_player(M)
-		M.stunned = 3
-		gladiators += M
+		var/mob/bomber = client_mob.transmogrify(/mob/living/carbon/human/, TRUE)
+		spawn_player(S.spawnpoint, bomber)
+		dress_player(bomber)
+		bomber.stunned = 3
+		gladiators += bomber
 
-		if(S.player_mob)
-			qdel(S.player_mob)
+		S.player_mob = bomber
 
-		S.player_mob = M
-
-		if(S.player_mob.ckey)
+		if(bomber.ckey)
 			readied++
 
 	if(readied < min_number_of_players)
@@ -1067,6 +1063,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			to_chat(M, "<span class='danger'>Not enough players. Round canceled.</span>")
 
 		for(var/mob/M in gladiators)
+			M.completely_untransmogrify()
 			qdel(M)
 
 		gladiators = list()
@@ -1153,6 +1150,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/mob/living/M in gladiators)
 		if(M)
+			M.completely_untransmogrify()
 			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
@@ -1304,6 +1302,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 /datum/bomberman_arena/proc/planner(var/size,mob/user)
 	var/choice = 0
+	if (!user)
+		return TRUE
 	switch(size)
 		if("15x13 (2 players)")
 			var/obj/structure/planner/pencil = new(center, src)

@@ -194,7 +194,7 @@
 
 			if(istype(A, /obj/structure/bed/chair/vehicle))
 				var/obj/structure/bed/chair/vehicle/B = A
-				if(B.is_locking(B.lock_type))
+				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
@@ -441,6 +441,12 @@
 		overlays -= decal
 
 	turfdecals.len = 0
+
+/turf/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!(locate(/obj/effect/decal/cleanable/blueglow) in src))
+		new /obj/effect/decal/cleanable/blueglow(src)
 
 /turf/proc/get_underlying_turf()
 	var/area/A = loc

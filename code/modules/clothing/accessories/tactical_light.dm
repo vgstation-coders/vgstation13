@@ -2,7 +2,7 @@
 	name = "tactical light"
 	desc = "This is attached to something."
 	icon_state = "taclight"
-	accessory_exclusion = LIGHT
+	accessory_exclusion = ACCESSORY_LIGHT
 	var/obj/item/device/flashlight/tactical/source_light
 	ignoreinteract = TRUE
 	

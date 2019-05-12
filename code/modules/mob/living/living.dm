@@ -565,6 +565,7 @@ Thanks.
 	ear_deaf = 0
 	ear_damage = 0
 	say_mute = 0
+	said_last_words = 0
 	mutations &= ~M_HUSK
 	if(!reagents)
 		create_reagents(1000)
@@ -1634,6 +1635,9 @@ Thanks.
 #define THREW_NOTHING -1
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
+	if (src.throw_delayer.blocked())
+		return FAILED_THROW
+	src.delayNextThrow(3)
 	src.throw_mode_off()
 	if(src.stat || !target)
 		return FAILED_THROW
