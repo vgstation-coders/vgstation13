@@ -5010,6 +5010,20 @@
 
 	M.Jitter(5)
 
+/datum/reagent/drink/cold/diy_soda
+	name = "Dr. Pecker's DIY Soda"
+	description = "Tastes like a science fair experiment."
+	id = DIY_SODA
+	color = "#7566FF" //rgb: 117, 102, 255
+	adj_temp = -2
+	adj_drowsy = -6
+
+/datum/reagent/drink/cold/diy_soda/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.Jitter(5)
+
 /datum/reagent/hippies_delight
 	name = "Hippie's Delight"
 	id = HIPPIESDELIGHT
