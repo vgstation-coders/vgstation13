@@ -9,11 +9,11 @@ Used In File(s): \code\modules\cmc\crew.dm
     </head>
     <body>
             <div id="cmc_controls">
-            {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn noTime', 'update_btn_sync')}}
-            {{:helper.link('', 'stop', { 'toggle' : 1 }, null, 'cmc_btn noTime', 'update_btn_freeze')}}
-            {{:helper.link('', 'image', { 'holo' : 1 }, null, 'cmc_btn noTime', 'holo_btn')}}
+            {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_sync')}}
+            {{:helper.link('', 'stop', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_freeze')}}
+            {{:helper.link('', 'image', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
             {{for data.levels}}
-                {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn noTime', value)}}
+                {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
             {{/for}}
             </div>
             <div id="cmc_main"><table align='center' id='contents'>Loading...</table></div>

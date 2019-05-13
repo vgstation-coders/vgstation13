@@ -47,7 +47,7 @@ NanoBaseCallbacks = function ()
 						$('body').oneTime(300, 'enableClick', function () {
 							_canClick = true;
 						});
-						if (updateData['config']['status'] == 2 && !$(this).hasClass("noTime"))
+						if (updateData['config']['status'] == 2)
 						{
 							$(this).oneTime(300, 'linkPending', function () {
 								$(this).addClass('linkPending');
