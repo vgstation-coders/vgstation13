@@ -1,0 +1,53 @@
+html, body {
+	color: #a4bad6;
+}
+body {
+	background: #171717;
+	scrollbar-face-color:#1A1A1A;
+	scrollbar-track-color:#171717;
+	scrollbar-highlight-color:#171717;
+}
+
+a {color: #397ea5;}
+a:visited {color: #7c00e6;}
+
+#ping {background: #202020;}
+.motd {color: #a4bad6;}
+.motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #a4bad6;}
+.motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #a4bad6;}
+
+h1, h2, h3, h4, h5, h6 {color: #a4bad6;}
+h1.alert, h2.alert {color: #a4bad6;}
+
+.ooc {color: #cca300;}
+.adminooc {color: #3d5bc3;}
+.admin {color: #5975da;}
+.deadsay {color: #e2c1ff}
+
+.radio{color: #1ecc43;}
+.comradio{color: #5177ff;}
+.syndradio{color: #8f4a4b;}
+.aiprivradio{color: #d65d95;}
+.secradio{color: #dd3535;}
+.engradio{color: #f37746;}
+.medradio{color: #57b8f0;}
+.sciradio{color: #c68cfa;}
+
+.alert {color: #d82020;}
+
+.attack{color: #e01c1c;}
+.disarm{color: #b42525;}
+.passive{color: #a00f0f;}
+
+.userdanger{color: #c51e1e}
+.danger{color: #c51e1e;}
+.warning{color: #c51e1e}
+
+.info{color: #6685f5;}
+.notice{color: #6685f5;}
+.bnotice{color: #6685f5;}
+
+.cult {color: #aa1c1c;}
+
+.newscaster {color: #c05d5d;}
+.interface{color: #330033;}
