@@ -11,7 +11,7 @@
 	var/id_tag = null
 
 	var/on = 0
-	var/pump_direction = 1 //0 = siphoning, 1 = releasing
+	var/pump_direction = 1 //0 = siphoning, 1 = blowing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
 	var/internal_pressure_bound = 0
@@ -186,7 +186,7 @@
 		"tag" = src.id_tag,
 		"device" = "AVP",
 		"power" = on,
-		"direction" = pump_direction?("release"):("siphon"),
+		"direction" = pump_direction,
 		"checks" = pressure_checks,
 		"internal" = internal_pressure_bound,
 		"external" = external_pressure_bound,
@@ -222,14 +222,6 @@
 	//log_admin("DEBUG \[[world.timeofday]\]: /obj/machinery/atmospherics/unary/vent_pump/receive_signal([signal.debug_print()])")
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "vent"))
 		return 0
-
-	if("purge" in signal.data)
-		pressure_checks &= ~1
-		pump_direction = 0
-
-	if("stabilize" in signal.data)
-		pressure_checks |= 1
-		pump_direction = 1
 
 	if("power" in signal.data)
 		on = text2num(signal.data["power"])

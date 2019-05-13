@@ -10,7 +10,7 @@
 
 	level = 1
 
-	var/pump_direction = 1 //0 = siphoning, 1 = releasing
+	var/pump_direction = 1 //0 = siphoning, 1 = blowing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
 	var/input_pressure_min = 0
@@ -136,7 +136,7 @@
 		"tag" = id_tag,
 		"device" = "ADVP",
 		"power" = on,
-		"direction" = pump_direction?("release"):("siphon"),
+		"direction" = pump_direction,
 		"checks" = pressure_checks,
 		"input" = input_pressure_min,
 		"output" = output_pressure_max,
@@ -168,14 +168,6 @@
 
 	if("checks" in signal.data)
 		pressure_checks = text2num(signal.data["checks"])
-
-	if("purge" in signal.data)
-		pressure_checks &= ~1
-		pump_direction = 0
-
-	if("stabilize" in signal.data)
-		pressure_checks |= 1
-		pump_direction = 1
 
 	if("set_input_pressure" in signal.data)
 		input_pressure_min = Clamp(text2num(signal.data["set_input_pressure"]), 0, ONE_ATMOSPHERE * 50)
