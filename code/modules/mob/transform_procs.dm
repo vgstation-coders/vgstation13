@@ -26,17 +26,19 @@
 	dropBorers()
 	return ..()
 
-/mob/proc/Postmorph(var/mob/new_mob = null, var/namepick = FALSE)
+/mob/proc/Postmorph(var/mob/new_mob = null, var/namepick = FALSE, var/namepick_message = null)
 	if(!new_mob)
 		return
 	if(mind)
 		mind.transfer_to(new_mob)
 		//namepick
 		if(namepick)
+			if(!namepick_message)
+				namepick_message = "You have been transformed! You can pick a new name, or leave this empty to keep your current one."
 			spawn(10)
 				var/newname
 				for(var/i = 1 to 3)
-					newname = reject_bad_name(stripped_input(new_mob,"You have been transformed! You can pick a new name, or leave this empty to keep your current one.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
+					newname = reject_bad_name(stripped_input(new_mob, namepick_message, "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 					if(!newname || newname == "")
 						if(alert(new_mob,"Are you sure you want to keep your current name?",,"Yes","No") == "Yes")
 							break
@@ -90,7 +92,7 @@
 			D.affected_mob = Mo
 			L.viruses -= D //But why?
 	Mo.delayNextAttack(0)
-	Postmorph(Mo, TRUE)
+	Postmorph(Mo, TRUE, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
