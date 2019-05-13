@@ -214,7 +214,7 @@
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
 
 	//Set map label to correct map name
-	winset(src, "rpane.map", "text=\"[map.nameLong]\"")
+	winset(src, "rpane.mapb", "text=\"[map.nameLong]\"")
 
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
