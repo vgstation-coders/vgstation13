@@ -306,6 +306,7 @@ var/global/list/airalarm_presets = list(
 	TLV["temperature"] =	list(T0C-26, T0C, T0C+40, T0C+66) // K
 	*/
 	apply_preset(1, 0) // Don't cycle and don't propagate.
+	apply_mode() //apply mode to scrubbers and vents
 
 
 /obj/machinery/alarm/initialize()
