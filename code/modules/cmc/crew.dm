@@ -443,11 +443,11 @@ TEXTVIEW PROCS
 		updateTextView(usr)
 	else if(href_list["holo"])
 		if(holomap[uid])
-			closeHolomap(user)
+			closeHolomap(usr)
 			holomap[uid] = 0
 		else
-			openHolomap(user)
-			processUser(user)
+			openHolomap(usr)
+			processUser(usr)
 	else if(href_list["setZ"])
 		var/num = href_list["setZ"]
 		if(!isnum(num))
