@@ -27,6 +27,9 @@
 	flags = LOCKED_SHOULD_LIE
 
 /obj/structure/closet/coffin/attack_hand(mob/user)
+	if (src.opened && has_locked_mobs())
+		to_chat(user, "<span class='warning'>You cannot close the lid while somebody is buckled into the coffin.</span>")
+		return
 	..()
 	handle_user_visibility()
 
