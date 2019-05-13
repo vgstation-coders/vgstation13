@@ -1,3 +1,5 @@
+#define MAX_PRESSURE 50*ONE_ATMOSPHERE //about 5066 kPa
+
 /obj/machinery/atmospherics/unary/vent_scrubber
 	icon = 'icons/obj/atmospherics/vent_scrubber.dmi'
 	icon_state = "hoff"
@@ -162,7 +164,7 @@
 			(scrub_N2O && environment[GAS_SLEEPING] > 0) ||\
 			(scrub_O2 && environment[GAS_OXYGEN] > 0) ||\
 			(scrub_N2 && environment[GAS_NITROGEN] > 0))
-			if (air_contents.return_pressure()>=50*ONE_ATMOSPHERE)
+			if (air_contents.return_pressure()>=MAX_PRESSURE)
 				return
 			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 
@@ -206,7 +208,7 @@
 				network.update = 1
 
 	else //Just siphoning all air
-		if (air_contents.return_pressure()>=50*ONE_ATMOSPHERE)
+		if (air_contents.return_pressure()>=MAX_PRESSURE)
 			return
 
 		var/transfer_moles = environment.total_moles()*(volume_rate/environment.volume)
@@ -385,3 +387,5 @@
 
 	set_frequency(O.frequency)
 	return 1
+
+#undef MAX_PRESSURE
