@@ -583,18 +583,18 @@ Suit and assorted
 	can_take_pai = 1
 	
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
-	if(!isninja(H))
+	/*if(!isninja(H))
 		if(equipped_slot != slot_wear_suit)
 			to_chat(H, "<span class='danger'>\The [src] beeps menacingly.</span>")
 		else
 			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
 			explosion(H.loc, 0, 0, 1)
 			H.u_equip(src, 1)
-			qdel(src)
-	else 
-		if(equipped_slot == slot_wear_suit)
-			icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
-			H.update_inv_wear_suit()
+			qdel(src)*/ 
+	//else //Maybe when there's more functionality to warrant the suit exploding.
+	if(equipped_slot == slot_wear_suit)
+		icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
+		H.update_inv_wear_suit()
 	
 /obj/item/clothing/shoes/ninja
 	name = "ninja shoes"
