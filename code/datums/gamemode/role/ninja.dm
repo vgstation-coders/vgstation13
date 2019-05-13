@@ -566,8 +566,7 @@ Suit and assorted
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 25)
 	species_fit = list("Human")
 	species_restricted = list("Human")
-	eyeprot = 3
-	cold_breath_protection = 300
+	eyeprot = 0
 	body_parts_covered = FULL_HEAD|BEARD
 
 /obj/item/clothing/suit/space/ninja
@@ -603,8 +602,9 @@ Suit and assorted
 	icon_state = "s-ninja"
 	item_state = "s-ninja"
 	permeability_coefficient = 0.01
-	flags = NOSLIP
+	//flags = NOSLIP too powerful
 
+///obj/item/clothing/mask/gas/voice/ninja
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"
 	desc = "A close-fitting mask that acts both as an air filter and a post-modern fashion statement."
