@@ -18,6 +18,7 @@ var/global/list/atmos_controllers = list()
 	var/obj/item/weapon/card/id/log_in_id = null //the ID that's currently logged in
 	var/screen = ACA_SCREEN_DETAILSVIEW //the current screen in the UI
 	var/datum/airalarm_preset/selected_preset = null //stores the preset settings while they're being edited
+	machine_flags = EMAGGABLE
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -57,23 +58,22 @@ var/global/list/atmos_controllers = list()
 		return
 	return interact(user)
 
+/obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
+	if(istype(I, /obj/item/weapon/card/emag))
+		return //lazy hackfix for the UI opening and not updating when using an emag with the UI closed
+	return ..()
+
 /obj/machinery/computer/atmoscontrol/interact(mob/user)
 	return ui_interact(user)
 
-
-/obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/card/emag))
-		emag(user)
-	return ..()
-
-/obj/machinery/computer/atmoscontrol/emag(var/obj/item/emag as obj, var/mob/user as mob)
+/obj/machinery/computer/atmoscontrol/emag_act(var/mob/user as mob, var/obj/item/weapon/card/E as obj)
 	if(!emagged)
 		emagged = 1
 		spark(src, 1, FALSE)
-		user.visible_message("<span class='warning'>\The [user] swipes \a [emag] through \the [src], causing the screen to flash!</span>",\
-			"<span class='warning'>You swipe \the [emag] through \the [src], the screen flashing as you gain full control.</span>",\
+		user.visible_message("<span class='warning'>\The [user] swipes \a [E] through \the [src], causing the screen to flash!</span>",\
+			"<span class='warning'>You swipe \the [E] through \the [src], the screen flashing as you gain full control.</span>",\
 			"You hear the swipe of a card through a reader, and an electronic warble.")
-		return 1
+		nanomanager.update_uis(src)
 	return 1
 
 //largely copypasted from air alarms
@@ -286,7 +286,7 @@ var/global/list/atmos_controllers = list()
 			var/obj/item/device/pda/pda = I
 			I = pda.id
 		if (istype(I,/obj/item/weapon/card/emag))
-			emag(I, usr)
+			emag_act(I, usr)
 		if (I && istype(I))
 			log_in_id = I
 		return 1
