@@ -576,6 +576,17 @@ nanoui is used to open and update nano browser uis
 /datum/nanoui/proc/update(var/force_open = 0)
 	src_object.ui_interact(user, ui_key, src, force_open)
 
+ /**
+  * Sends a message to the client-side JS.
+  *
+  * @param js_function string The name of the JS function to execute.
+  * @param data string URL-encoded list of args as made by list2params.
+  *
+  * @return nothing
+  */
+/datum/nanoui/proc/send_message(js_function, data)
+    user << output(data, "[window_id].browser:[js_function]")
+
 /mob/verb/fix_nanoui()
 	set name = "Fix NanoUI"
 	set category = "OOC"
