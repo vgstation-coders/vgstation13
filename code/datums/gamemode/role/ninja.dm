@@ -7,7 +7,7 @@
 	refund_value = BASE_SOLO_REFUND
 	wikiroute = NINJA
 	disallow_job = TRUE
-	restricted_jobs = list("Trader") //Spawns in space
+	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
 
 /datum/role/ninja/OnPostSetup()
@@ -16,6 +16,34 @@
 		antag.current << sound('sound/effects/gong.ogg')
 		equip_ninja(antag.current)
 		name_ninja(antag.current)
+		
+/datum/role/ninja/proc/ThrowAtStation(var/mob/living/carbon/human/spaceninja) //copypasted from rodcode
+	var/startx = 0
+	var/starty = 0
+	var/endy = 0
+	var/endx = 0
+	var/startside = pick(cardinal)
+
+	switch(startside)
+		if(NORTH)
+			starty = world.maxy-TRANSITIONEDGE-5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(EAST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = world.maxx-TRANSITIONEDGE-5
+		if(SOUTH)
+			starty = TRANSITIONEDGE+5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(WEST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = TRANSITIONEDGE+5
+
+//One of the turfs in the 30x30 square in the center of the zlevel
+	endx = rand((world.maxx/2)-15,(world.maxx/2)+15)
+	endy = rand((world.maxy/2)-15,(world.maxy/2)+15)
+		
+	spaceninja.forceMove(locate(startx, starty, 1))
+	spaceninja.throw_at(locate(endx, endy, 1))
 
 /datum/role/ninja/ForgeObjectives()
 
@@ -78,6 +106,8 @@
 			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
+			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station. Find a way inside.</span>")
+			ThrowAtStation(antag.current)
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -220,7 +250,7 @@
 //The mighty power glove. Not to be confused with engineering power gloves, of course.
 /obj/item/clothing/gloves/ninja
 	name = "ninja power glove"
-	desc = "A special sort of gloved that can be used to drain some technologies of power."
+	desc = "A special sort of glove that can be used to drain some technologies of power."
 	icon_state = "powerfist"
 	item_state = "black"
 	siemens_coefficient = 0
@@ -523,6 +553,68 @@ Helpers For Both Variants
 	else
 		return ..()
 
+		
+/*=======
+Suit and assorted
+=======*/
+
+/obj/item/clothing/head/helmet/space/ninja
+	name = "ninja hood"
+	desc = "What may appear to be a simple black garment is in fact a highly sophisticated nano-weave helmet. Standard issue ninja gear."
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 25)
+	species_fit = list("Human")
+	species_restricted = list("Human")
+	eyeprot = 3
+	cold_breath_protection = 300
+	body_parts_covered = FULL_HEAD|BEARD
+
+/obj/item/clothing/suit/space/ninja
+	name = "ninja suit"
+	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for Spider Clan assassins."
+	icon_state = "s-ninja"
+	item_state = "s-ninja_suit"
+	slowdown = NO_SLOWDOWN
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/cell,/obj/item/weapon/melee/energy/sword,/obj/item/stack/shuriken,/obj/item/weapon/storage/box/syndie_kit/smokebombs,/obj/item/toy/snappop/smokebomb,/obj/item/weapon/substitutionhologram,/obj/item/mounted/poster/stealth)
+	species_fit = list("Human")
+	species_restricted = list("Human") //spider clan is humans-only
+	can_take_pai = 1
+	
+/obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
+	if(!isninja(H))
+		if(equipped_slot != slot_wear_suit)
+			to_chat(H, "<span class='danger'>\The [src] beeps menacingly.</span>")
+		else
+			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
+			explosion(H.loc, 0, 0, 1)
+			H.u_equip(src, 1)
+			qdel(src)
+	else 
+		if(equipped_slot == slot_wear_suit)
+			icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
+			H.update_inv_wear_suit()
+	
+/obj/item/clothing/shoes/ninja
+	name = "ninja shoes"
+	desc = "A pair of running shoes, excellent for running and even better for smashing skulls."
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	permeability_coefficient = 0.01
+	flags = NOSLIP
+
+/obj/item/clothing/mask/gas/voice/ninja
+	name = "ninja mask"
+	desc = "A close-fitting mask that acts both as an air filter and a post-modern fashion statement."
+	icon_state = "s-ninja"
+	mode = 2 //Does this even do anything?
+	canstage = 0
+	actions_types = list()
+	species_fit = list("Human")
+	species_restricted = list("Human")
+		
 /*******************************************
 ****          WEEABOO VARIANTS          ****
 ********************************************/

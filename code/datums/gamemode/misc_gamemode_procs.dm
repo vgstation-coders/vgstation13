@@ -365,28 +365,38 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
-/proc/equip_ninja(var/mob/living/carbon/human/H)
-	if(!istype(H))
+/proc/equip_ninja(var/mob/living/carbon/human/spaceninja)
+	if(!istype(spaceninja))
 		return 0
-	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/ninja)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
+	if(!isjusthuman(spaceninja))
+		spaceninja = spaceninja.Humanize("Human")
+	spaceninja.delete_all_equipped_items()
+	if(spaceninja.gender == FEMALE)
+		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/blackf, slot_w_uniform)
+	else
+		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensors(spaceninja)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja, slot_head)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja, slot_wear_suit)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja, slot_shoes)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen/double(spaceninja), slot_r_store)
+	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
+	if (spaceninja.internals)
+		spaceninja.internals.icon_state = "internal1"
+	
+	spaceninja.see_in_dark_override = 8
 
 #define GREET_WEEB "weebgreet"
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
