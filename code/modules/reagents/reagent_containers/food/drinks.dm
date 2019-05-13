@@ -764,6 +764,20 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola
+	name = "Gunka-Cola Family Sized"
+	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
+	icon_state = "gunka_cola"
+	volume = 100
+	possible_transfer_amounts = list(5,10,15,25,30,50,100)
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
+	..()
+	reagents.add_reagent(COLA, 60)
+	reagents.add_reagent(SUGAR, 20)
+	reagents.add_reagent(SODIUM, 10)
+	reagents.add_reagent(COCAINE, 5)
+	reagents.add_reagent(BLACKCOLOR, 5)
+
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "Vial of Food Coloring"
 	icon = 'icons/obj/chemical.dmi'
