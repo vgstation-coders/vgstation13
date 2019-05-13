@@ -26,13 +26,13 @@
 	dropBorers()
 	return ..()
 
-/mob/proc/Postmorph(var/mob/new_mob = null)
+/mob/proc/Postmorph(var/mob/new_mob = null, var/namepick = FALSE)
 	if(!new_mob)
 		return
 	if(mind)
 		mind.transfer_to(new_mob)
 		//namepick
-		if(ismonkey)
+		if(namepick)
 			spawn(10)
 				var/newname
 				for(var/i = 1 to 3)
@@ -90,7 +90,7 @@
 			D.affected_mob = Mo
 			L.viruses -= D //But why?
 	Mo.delayNextAttack(0)
-	Postmorph(Mo)
+	Postmorph(Mo, TRUE)
 	return Mo
 
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
