@@ -135,21 +135,29 @@
 		"repeat" = repeat,
 		"ticklag" = world.tick_lag,
 		"bpm" = round(600 / tempo),
-		"lines" = lines
+		"lines" = json_encode(lines)
 	)
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, instrumentObj.name)
 	if (!ui)
-		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 700, 500)
+		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 700, 500, nstatus_proc = /proc/nanoui_instrument_status_proc)
 		ui.set_initial_data(data)
 		ui.open()
 	else
 		ui.push_data(data)
 
+//to get the statuscheck to take the actual instrument, not the datum
+/proc/nanoui_instrument_status_proc(var/datum/nanoui/ui)
+	var/datum/song/temp = ui.src_object
+	ui.src_object = temp.instrumentObj
+	. = nanoui_default_status_proc(ui)
+	ui.src_object = temp
+
 /datum/song/Topic(href, href_list)
 	if(!instrumentObj.Adjacent(usr) || usr.stat || href_list["close"])
-		usr << browse(null, "window=instrument")
-		usr.unset_machine()
+		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, instrumentObj.name)
+		if (ui)
+			ui.close()
 		return
 	nanomanager.send_message(src, instrumentObj.name, "messageReceived", null, usr)
 	instrumentObj.add_fingerprint(usr)

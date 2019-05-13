@@ -12,7 +12,6 @@
     <BR>
 </span>
 <H3>Editing</H3>
-{{:helper.link('Disable Play Feedback', '', { 'feedbackToggle' : 1 })}}
 {{:helper.link('New Song', '', { 'newsong' : 1 })}}
 {{:helper.link('Import Song', '', { 'import' : 1 })}}
 <BR><BR>
@@ -81,7 +80,7 @@ function activeChord(lineIndex, chordIndex){
         prevChord = id;
 }
 
-function helpVisiblity(num){
+function helpVisibility(num){
     if(num == 1){
         $("#help").show();
         $("#help_btn").text("Hide Help");
@@ -100,5 +99,8 @@ function messageReceived(){
     $('.buttonActive').removeClass('linkPending');
 }
 
-renderLines($.parseJSON({{data.lines}}));
+alert(data.lines);
+var lines = $.parseJSON(data.lines);
+alert(lines);
+renderLines(lines);
 </script>
