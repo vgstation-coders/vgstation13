@@ -170,8 +170,8 @@ var/list/uplink_items = list()
 	cost = 8
 
 /datum/uplink_item/nukeprice/syndigaloshes
-	name = "No-Slip Syndicate Shoes"
-	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
+	name = "No-Slip Chameleon Shoes"
+	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
 	category = "Stealth and Camouflage Items"
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 4
@@ -317,8 +317,8 @@ var/list/uplink_items = list()
 	cost = 2
 
 /datum/uplink_item/stealthy_tools/syndigaloshes
-	name = "No-Slip Syndicate Shoes"
-	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
+	name = "No-Slip Chameleon Shoes"
+	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
 	jobs_excluded = list("Nuclear Operative")
