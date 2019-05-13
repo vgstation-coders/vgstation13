@@ -1,48 +1,104 @@
-{{if data.linecount > 0}}
-<H3>Playback</H3>
-{{if data.playing}}
-<A href='?src=\ref[src];play=1'>Play</A><SPAN CLASS='linkOn'>Stop</SPAN>
+<span id="controls">
+    <H3>Playback</H3>
+    {{:helper.link('Play', '', { 'play' : 1 })}}
+    {{:helper.link('Stop', '', { 'stop' : 1 })}}
+    <BR><BR>
+    Repeat Song:
+    {{:helper.link('--', '', { 'repeat' : -10 })}}
+    {{:helper.link('-', '', { 'repeat' : -1 })}}
+    {{:data.repeat}} times
+    {{:helper.link('+', '', { 'repeat' : 1 })}}
+    {{:helper.link('++', '', { 'repeat' : 10 })}}
+    <BR>
+</span>
+<H3>Editing</H3>
+{{:helper.link('Disable Play Feedback', '', { 'feedbackToggle' : 1 })}}
+{{:helper.link('New Song', '', { 'newsong' : 1 })}}
+{{:helper.link('Import Song', '', { 'import' : 1 })}}
 <BR><BR>
-Repeat Song:
-{{if data.repeat > 0}}<A href='?src=\ref[src];repeat=-10'>-</A><A href='?src=\ref[src];repeat=-1'>-</A>{{else}}<SPAN CLASS='linkOff'>-</SPAN><SPAN CLASS='linkOff'>-</SPAN>{{/if}}{{data.repeat}}
- times
-{{if data.repeat < data.maxrepeats}}<A href='?src=\ref[src];repeat=1'>+</A><A href='?src=\ref[src];repeat=10'>+</A>{{else}}<SPAN CLASS='linkOff'>+</SPAN><SPAN CLASS='linkOff'>+</SPAN>{{endif}}
+Tempo: {{:helper.link('-', '', { 'tempo' : data.ticklag })}} {{:data.bpm}} BPM {{:helper.link('+', '', { 'tempo' : -data.ticklag })}}
+<BR><BR>
+<span id="lines">
+</span>
+{{:helper.link('Add Line', '', { 'newline' : 1 })}}
+<BR><BR>
+<B><button id="help_btn" onclick="helpVisibility(this.value)" value=0 >Hide Help</button></B>
+<span id="help">
 <BR>
-{{else}}
-<SPAN CLASS='linkOn'>Play</SPAN> <A href='?src=\ref[src];stop=1'>Stop</A><BR>
-Repeats left: <B>{{data.repeat}}</B><BR>
-{{/if}}
-if(!edit)
-    dat += "<BR><B><A href='?src=\ref[src];edit=2'>Show Editor</A></B><BR>"
-else
-    var/bpm = round(600 / tempo)
-    dat += {"<H3>Editing</H3>
-        <B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>
-            <A href='?src=\ref[src];newsong=1'>Start a New Song</A>
-            <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>
-        Tempo: <A href='?src=\ref[src];tempo=[world.tick_lag]'>-</A> [bpm] BPM <A href='?src=\ref[src];tempo=-[world.tick_lag]'>+</A><BR><BR>"}
-    var/linecount = 0
-    for(var/line in lines)
-        linecount += 1
-        dat += "Line [linecount]: <A href='?src=\ref[src];modifyline=[linecount]'>Edit</A> <A href='?src=\ref[src];deleteline=[linecount]'>X</A> [line]<BR>"
-    dat += "<A href='?src=\ref[src];newline=1'>Add Line</A><BR><BR>"
-    if(help)
-        dat += {"<B><A href='?src=\ref[src];help=1'>Hide Help</A></B><BR>
-                Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
-                Every note in a chord will play together, with chord timed by the tempo.<br>
-                <br>
-                Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
-                By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
-                Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
-                After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
-                Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
-                A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
-                To make a chord be a different time, end it with /x, where the chord length will be length<br>
-                defined by tempo / x: <i>C,G/2,E/4</i><br>
-                Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
-                <br>
-                Lines may be up to 50 characters.<br>
-                A song may only contain up to 50 lines.<br>
-                "}
-    else
-        dat += "<B><A href='?src=\ref[src];help=2'>Show Help</A></B><BR>"
+Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
+Every note in a chord will play together, with chord timed by the tempo.<br>
+<br>
+Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
+By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
+Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
+After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
+Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
+A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
+To make a chord be a different time, end it with /x, where the chord length will be length<br>
+defined by tempo / x: <i>C,G/2,E/4</i><br>
+Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
+<br>
+Lines may be up to 50 characters.<br>
+A song may only contain up to 50 lines.<br>
+</span>
+
+<script>
+var prevChord = "";
+var highlightClass = "linkOn";
+
+function controlVisibility(num){
+    if(num == 1){
+        $("#controls").show();
+    }else{
+        $("#controls").hide();
+    }
+}
+
+function renderLines(lines){
+    var result = "";
+    for (i = 0; i < lines; i++) { 
+        var curLine = lines.split(",");
+        var htmlLine = [];
+        for(j = 0; j < curLine; j++){
+            htmlLine.push("<div class='chord' id='chord_"+i+"_"+j+"'>"+chords[i]+"</div>");
+        }
+        result += "Line "+i+": "+htmlLine.join(",")+"<BR>";
+    }
+    $("#lines").html(result);
+}
+
+//highlights the chord currently being played
+function activeChord(lineIndex, chordIndex){
+    var id = "#chord_"+lineIndex+"_"+chordIndex;
+    if(prevChord == ""){
+        prevChord = id;
+        $(id).addClass(highlightClass);
+    }
+
+    if(prevChord != id)
+        $(prevChord).removeClass(highlightClass);
+        $(id).addClass(highlightClass);
+        prevChord = id;
+}
+
+function helpVisiblity(num){
+    if(num == 1){
+        $("#help").show();
+        $("#help_btn").text("Hide Help");
+        $("#help_btn").val(0)
+    }else{
+        $("#help").hide();
+        $("#help_btn").text("Show Help");
+        $("#help_btn").val(1)
+    }
+}
+
+function messageReceived(){
+    $('.linkActive').stopTime('linkPending');
+    $('.linkActive').removeClass('linkPending');
+    $('.buttonActive').stopTime('linkPending');
+    $('.buttonActive').removeClass('linkPending');
+}
+
+renderLines($.parseJSON({{data.lines}}));
+</script>
