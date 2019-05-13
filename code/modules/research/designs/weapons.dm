@@ -94,6 +94,18 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
+/datum/design/ioncarbine
+	name = "Ion Carbine"
+	desc = "A stopgap ion weapon designed to disable mechanical threats."
+	id = "ioncarbine"
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_MAGNETS = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 1000, MAT_URANIUM = 8000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/energy/ionrifle/ioncarbine
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 /datum/design/xcomar
 	name = "Assault Rifle"
 	desc = "An Assault Rifle."
