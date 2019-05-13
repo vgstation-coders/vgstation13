@@ -85,7 +85,10 @@
 	..()
 
 
-/obj/item/weapon/storage/secure/attack_self(mob/user as mob)
+/obj/item/weapon/storage/secure/attack_self(mob/user)
+	showInterface(user)
+
+/obj/item/weapon/storage/secure/proc/showInterface(mob/user)
 	user.set_machine(src)
 	var/dat = text("<TT><B>[]</B><BR>\n\nLock Status: []",src, (src.locked ? "LOCKED" : "UNLOCKED"))
 	var/message = "Code"
@@ -128,7 +131,7 @@
 				if (length(src.code) > 5)
 					src.code = "ERROR"
 		src.add_fingerprint(usr)
-		updateUsrDialog()
+		showInterface(usr) //refresh!
 
 // -----------------------------
 //        Secure Briefcase
@@ -146,6 +149,9 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_LARGE
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 16
+	hitsound = "swing_hit"
 
 /obj/item/weapon/storage/secure/briefcase/paperpen/New()
 	..()
@@ -154,7 +160,7 @@
 
 /obj/item/weapon/storage/secure/briefcase/attack_hand(mob/user as mob)
 	if ((src.loc == user) && (src.locked == 1))
-		to_chat(usr, "<span class='warning'>[src] is locked and cannot be opened!</span>")
+		to_chat(user, "<span class='warning'>[src] is locked and cannot be opened!</span>")
 	else if ((src.loc == user) && (!src.locked))
 		playsound(src, "rustle", 50, 1, -5)
 		if (user.s_active)
@@ -167,7 +173,6 @@
 				src.close(M)
 		src.orient2hud(user)
 	src.add_fingerprint(user)
-	return
 
 /obj/item/weapon/storage/secure/briefcase/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
@@ -258,7 +263,11 @@
 	new /obj/item/weapon/pen(src)
 
 /obj/item/weapon/storage/secure/safe/attack_hand(mob/user as mob)
-	return attack_self(user)
+	if(!locked)
+		if(user.s_active)
+			user.s_active.close(user) //Close and re-open
+		show_to(user)
+	showInterface(user)
 
 // Clown planet WMD storage
 /obj/item/weapon/storage/secure/safe/clown

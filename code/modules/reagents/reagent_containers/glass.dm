@@ -279,8 +279,27 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
-
 	reagents.add_reagent(URANIUM, 25)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon/New()
+	..()
+	reagents.add_reagent(CARBON, 10)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater/New()
+	..()
+	reagents.add_reagent(WATER, 10)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox/New()
+	..()
+	reagents.add_reagent(ANTI_TOXIN, 10)
+
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
+	..()
+	reagents.add_reagent(LEMON_LIME, 30)
+
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
+	..()
+	reagents.add_reagent(SODAWATER, 30)
 
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
 	..()

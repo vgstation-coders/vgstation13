@@ -500,6 +500,12 @@ Helpers For Both Variants
 	else
 		cant_drop = FALSE
 
+/obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
+	if(istype(W,/obj/item/weapon/melee/energy/sword))
+		return
+	else
+		return ..()
+		
 /obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
