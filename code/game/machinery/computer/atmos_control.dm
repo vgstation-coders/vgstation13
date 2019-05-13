@@ -69,8 +69,7 @@ var/global/list/atmos_controllers = list()
 /obj/machinery/computer/atmoscontrol/emag(var/obj/item/emag as obj, var/mob/user as mob)
 	if(!emagged)
 		emagged = 1
-		new/obj/effect/effect/sparks(get_turf(src))
-		playsound(loc,"sparks",50,1)
+		spark(src, 1, FALSE)
 		user.visible_message("<span class='warning'>\The [user] swipes \a [emag] through \the [src], causing the screen to flash!</span>",\
 			"<span class='warning'>You swipe \the [emag] through \the [src], the screen flashing as you gain full control.</span>",\
 			"You hear the swipe of a card through a reader, and an electronic warble.")
@@ -304,11 +303,11 @@ var/global/list/atmos_controllers = list()
 
 	if(href_list["reset"])
 		current = null
-		return TRUE
+		return 1
 
 	if(href_list["alarm"])
 		current = locate(href_list["alarm"])
-		return TRUE
+		return 1
 
 	if(href_list["select_preset"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
