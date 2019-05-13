@@ -190,9 +190,9 @@ var/global/list/alert_overlays_global = list()
 		if(dir_alerts[index] & (FIREDOOR_ALERT_HOT|FIREDOOR_ALERT_COLD))
 			o += "<span class='warning'>"
 		else
-			o += "<span style='color:blue'>"
+			o += "<span class='notice'>"
 		o += "[celsius]°C</span> "
-		o += "<span style='color:blue'>"
+		o += "<span class='notice'>"
 		o += "[pressure]kPa</span></li>"
 		to_chat(user, o)
 

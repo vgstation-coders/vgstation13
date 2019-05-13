@@ -151,7 +151,7 @@ var/list/factions_with_hud_icons = list()
 		for (var/datum/objective/objective in objective_holder.GetObjectives())
 			var/successful = objective.IsFulfilled()
 			objective.extraInfo()
-			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"
 			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
 			count++
 			if (count <= objective_holder.objectives.len)
@@ -164,7 +164,7 @@ var/list/factions_with_hud_icons = list()
 			score_results += "<br><font color='green'><B>\The [name] has achieved a minor victory.</B> [minorVictoryText()]</font>"
 			feedback_add_details("[ID]_success","MINOR_VICTORY")
 		else
-			score_results += "<br><font color='red'><B>\The [name] has failed.</B></font>"
+			score_results += "<br><span class='red'><B>\The [name] has failed.</B></span>"
 			feedback_add_details("[ID]_success","FAIL")
 
 	if(objective_holder.objectives.len > 0)
@@ -407,7 +407,7 @@ var/list/factions_with_hud_icons = list()
 	var/datum/objective/custom/c = new /datum/objective/custom
 	c.explanation_text = mission
 	AppendObjective(c)
-	
+
 //________________________________________________
 
 /datum/faction/strike_team/ert
@@ -417,7 +417,7 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/emergency_responder
 	logo_state = "ert-logo"
 	hud_icons = list("ert-logo")
-	
+
 //________________________________________________
 
 /datum/faction/strike_team/deathsquad
@@ -436,9 +436,9 @@ var/list/factions_with_hud_icons = list()
 	initroletype = /datum/role/syndicate_elite_commando
 	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
-	
+
 //________________________________________________
-	
+
 /datum/faction/strike_team/custom
 	name = "Custom Strike Team"
 

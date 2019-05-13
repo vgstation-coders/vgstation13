@@ -140,7 +140,7 @@ var/stacking_limit = 90
 	usr << browse(out, "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
-	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
+	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <span class='red'>[threat_level]%</span></h2>"
 	var/rules = list()
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
@@ -646,10 +646,10 @@ var/stacking_limit = 90
 					break
 			if (skip_ruleset)
 				message_admins("The rule was not added, because we already have a round-ender.")
-			else 
+			else
 				message_admins("The rule was accepted.")
 				rules_to_simulate += to_test
-		else 
+		else
 			message_admins("The rule was accepted (no-stacking not active.)")
 			rules_to_simulate += to_test
 
@@ -693,7 +693,7 @@ var/stacking_limit = 90
 			if (skip_ruleset)
 				message_admins("[to_test] was refused because we already have a round-ender ruleset.")
 				return
-	
+
 	message_admins("The rule was accepted.")
 
 /datum/gamemode/dynamic/proc/simulate_latejoin_injection(var/mob/user = usr)
@@ -737,5 +737,5 @@ var/stacking_limit = 90
 		if (skip_ruleset)
 			message_admins("[to_test] was refused because we already have a round-ender ruleset.")
 			return
-	
+
 	message_admins("The rule was accepted.")

@@ -48,7 +48,7 @@
 	if(!istype(target))
 		return
 
-	user.attack_log += "\[[time_stamp()]\] <font color='blue'>Has used [src.name] on \ref[target]</font>"
+	user.attack_log += "\[[time_stamp()]\] <span class='notice'>Has used [src.name] on \ref[target]</span>"
 	target.add_fingerprint(user)
 	src.add_fingerprint(user)
 

@@ -13,7 +13,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 
 	//handle muting and automuting
 	if(prefs.muted & MUTE_ADMINHELP)
-		to_chat(src, "<font color='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</font>")
+		to_chat(src, "<span class='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</span>")
 		return
 	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
@@ -110,7 +110,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(src.prefs.special_popup)
 		src << output("\[[time_stamp()]] <span class='info'>PM to - <b>Admins</b>: [original_msg]</span>", "window1.msay_output")
 	else
-		to_chat(src, "<font color='blue'>PM to-<b>Admins</b>: [original_msg]</font>")
+		to_chat(src, "<span class='notice'>PM to-<b>Admins</b>: [original_msg]</span>")
 
 	var/admin_number_present = admins.len - admin_number_afk
 	log_admin("HELP: [key_name(src)]: [original_msg] - heard by [admin_number_present] non-AFK admins.")
