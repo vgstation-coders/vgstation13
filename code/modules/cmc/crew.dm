@@ -176,9 +176,9 @@ GENERAL PROCS
 	closeHolomap(user)
 	closeTextview(user)
 	_using -= user
-	holomap_images[uid].len = 0 //incase something is fucky
-	holomap_tooltips[uid].len = 0 //incase something is fucky
-	freeze[uid] = null //incase something is fucky
+	holomap_images[uid] = null
+	holomap_tooltips[uid] = null
+	freeze[uid] = null
 	holomap_z[uid] = null
 	textview_updatequeued[uid] = null
 	holomap[uid] = null
@@ -325,8 +325,9 @@ HOLOMAP PROCS
 		var/image/bgmap = holomap_cache[holomap_bgmap]
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
 
-	user.client.images -= holomap_images[uid]
-	user.client.screen -= holomap_tooltips[uid]
+	if(user && user.client)
+		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
 
 	holomap_images[uid].len = 0
 	holomap_tooltips[uid].len = 0

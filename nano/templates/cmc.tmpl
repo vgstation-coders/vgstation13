@@ -48,10 +48,10 @@ Used In File(s): \code\modules\cmc\crew.dm
         }
 
         function toggleUpdatebtn(num){
-            if(num){
-                $("update_btn").css('background-color', 'green');
+            if(num == 1){
+                $("#update_btn").css('background-color', 'green');
             }else{
-                $("update_btn").css('background-color', 'red');
+                $("#update_btn").css('background-color', 'red');
             }
         }
 
