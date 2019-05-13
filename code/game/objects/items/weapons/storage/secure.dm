@@ -149,6 +149,9 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_LARGE
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 16
+	hitsound = "swing_hit"
 
 /obj/item/weapon/storage/secure/briefcase/paperpen/New()
 	..()
