@@ -8,46 +8,64 @@ body {
 	scrollbar-highlight-color:#171717;
 }
 
+h1, h2, h3, h4, h5, h6 {color: #a4bad6;}
+h1.alert, h2.alert {color: #a4bad6;}
+
 a {color: #397ea5;}
 a:visited {color: #7c00e6;}
 
-#ping {background: #202020;}
+#newMessages {background: #222222; color: #cccccc;}
+#ping {background: #222222;}
+#options a {background: #333333; color: #cccccc;}
+#options a:hover, #options .toggle {background: #222222; color: #cccccc;}
+.popup {background: #222222;}
+.popup .close {background: #555555; color: #cccccc;}
+.popup .head {background: #666666; color: #222222;}
+
 .motd {color: #a4bad6;}
 .motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #a4bad6;}
 .motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #a4bad6;}
 
-h1, h2, h3, h4, h5, h6 {color: #a4bad6;}
-h1.alert, h2.alert {color: #a4bad6;}
 
 .ooc {color: #cca300;}
 .adminooc {color: #3d5bc3;}
 .admin {color: #5975da;}
-.deadsay {color: #e2c1ff}
+.adminmod {color: #8f5e2e;}
+.modooc {color: #ffffff;}
 
-.radio{color: #1ecc43;}
-.comradio{color: #5177ff;}
-.syndradio{color: #8f4a4b;}
-.aiprivradio{color: #d65d95;}
-.secradio{color: #dd3535;}
-.engradio{color: #f37746;}
-.medradio{color: #57b8f0;}
-.sciradio{color: #c68cfa;}
+.deadsay {color: #e2c1ff;}
+.cult {color: #aa1c1c;}
+.sinister {color: #ab0067;}
+.grey, .skeleton {color: #817e7e;}
+.mushroom {color: #6500af;}
+.alien {color: #754c75;}
 
+.radio {color: #1ecc43;}
+.comradio {color: #5177ff;}
+.syndradio {color: #8f4a4b;}
+.aiprivradio {color: #d65d95;}
+.secradio {color: #dd3535;}
+.engradio {color: #f37746;}
+.medradio {color: #57b8f0;}
+.sciradio {color: #c68cfa;}
+
+.attack {color: #e01c1c;}
+.disarm {color: #b42525;}
+.passive {color: #9f0f0f;}
+.userdanger {color: #c51e1e}
+.danger {color: #c51e1e;}
+.warning {color: #c51e1e}
 .alert {color: #d82020;}
 
-.attack{color: #e01c1c;}
-.disarm{color: #b42525;}
-.passive{color: #a00f0f;}
+.info {color: #6685f5;}
+.notice {color: #6685f5;}
+.bnotice {color: #6685f5;}
+.darknotice {color: #ffffff;}
+.interface {color: #7759da;}
+.gamenotice {color: #ffff22;}
 
-.userdanger{color: #c51e1e}
-.danger{color: #c51e1e;}
-.warning{color: #c51e1e}
-
-.info{color: #6685f5;}
-.notice{color: #6685f5;}
-.bnotice{color: #6685f5;}
-
-.cult {color: #aa1c1c;}
+.whisper {color:#cccccc;}
 
 .newscaster {color: #c05d5d;}
-.interface{color: #330033;}
+
+.internal.boldnshit {color: #6685f5}
