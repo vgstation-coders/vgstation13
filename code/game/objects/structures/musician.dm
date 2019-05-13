@@ -115,11 +115,8 @@
 								cur_acc[cur_note] = "#" // so shift is never required
 						else
 							cur_oct[cur_note] = text2num(ni)
-					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
-				
-				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
-				if(ui)
-					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
+					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)				
+				nanomanager.send_message(src, instrumentObj.name, "activeChord", list(lineCount, chordCount))
 				if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
 				else
@@ -141,7 +138,7 @@
 		"lines" = lines
 	)
 
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "textview")
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, instrumentObj.name)
 	if (!ui)
 		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 700, 500)
 		ui.set_initial_data(data)
@@ -154,6 +151,7 @@
 		usr << browse(null, "window=instrument")
 		usr.unset_machine()
 		return
+	nanomanager.send_message(src, instrumentObj.name, "messageReceived", null, usr)
 	instrumentObj.add_fingerprint(usr)
 	if(href_list["newsong"])
 		lines = new()
@@ -234,6 +232,7 @@
 	else if(href_list["stop"])
 		playing = 0
 	interact(usr)
+	
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
 	new_tempo = abs(new_tempo)
