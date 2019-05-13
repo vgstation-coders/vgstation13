@@ -36,9 +36,9 @@
 			spawn(10)
 				var/newname
 				for(var/i = 1 to 3)
-					newname = reject_bad_name(stripped_input(new_mob,"You have been turned into a monkey! Pick a monkey name for your new monkey self.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
+					newname = reject_bad_name(stripped_input(new_mob,"You have been transformed! You can pick a new name, or leave this empty to keep your current one.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 					if(!newname || newname == "")
-						if(alert(new_mob,"Are you sure you want to keep the default name?",,"Yes","No") == "Yes")
+						if(alert(new_mob,"Are you sure you want to keep [newname] as your name?",,"Yes","No") == "Yes")
 							break
 					else
 						if(alert(new_mob,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
