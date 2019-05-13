@@ -460,7 +460,9 @@ TEXTVIEW PROCS
 		if(ui)
 			ui.send_message("levelSet", list2params(list(num))) //feedback
 		processUser(usr) //we need to update both the holomap AND the textview
-
+	var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
+	if(ui)
+		ui.send_message("messageReceived") //to stop that loading button shit
 	return 1
 
 //updates/opens the textview

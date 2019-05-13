@@ -9,8 +9,7 @@ Used In File(s): \code\modules\cmc\crew.dm
     </head>
     <body>
             <div id="cmc_controls">
-            {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_sync')}}
-            {{:helper.link('', 'stop', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn_freeze')}}
+            {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn')}}
             {{:helper.link('', 'image', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
             {{for data.levels}}
                 {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
@@ -50,12 +49,17 @@ Used In File(s): \code\modules\cmc\crew.dm
 
         function toggleUpdatebtn(num){
             if(num){
-                $("#update_btn_sync").show();
-                $("#update_btn_freeze").hide();
+                $("update_btn").css('background-color', 'green');
             }else{
-                $("#update_btn_sync").hide();
-                $("#update_btn_freeze").show();
+                $("update_btn").css('background-color', 'red');
             }
+        }
+
+        function messageReceived(){
+            $('.linkActive').stopTime('linkPending');
+            $('.linkActive').removeClass('linkPending');
+            $('.buttonActive').stopTime('linkPending');
+            $('.buttonActive').removeClass('linkPending');
         }
 
         function levelSet(level){
