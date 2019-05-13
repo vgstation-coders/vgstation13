@@ -314,7 +314,7 @@ HOLOMAP PROCS
 		holomap_cache[holomap_bgmap] = background
 		holomap_z_levels_unmapped |= CENTCOMM_Z
 	
-	holomap[uid] = 1
+	holomap["\ref[user]"] = 1
 
 //closes the holomap
 /obj/machinery/computer/crew/proc/closeHolomap(var/mob/user)
@@ -331,6 +331,7 @@ HOLOMAP PROCS
 	holomap_images[uid].len = 0
 	holomap_tooltips[uid].len = 0
 	freeze[uid] = 0
+	holomap[uid] = 0
 
 //sanity for the holomap
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
@@ -444,7 +445,6 @@ TEXTVIEW PROCS
 	else if(href_list["holo"])
 		if(holomap[uid])
 			closeHolomap(usr)
-			holomap[uid] = 0
 		else
 			openHolomap(usr)
 			processUser(usr)
