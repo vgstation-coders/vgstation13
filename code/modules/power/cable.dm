@@ -194,7 +194,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(W.sharpness >= 1)
 		if(shock(user, 50, W.siemens_coefficient))
 			return
-		cut(user, T)
+		if(do_after(user, src, 0.2 SECONDS, 2))
+			cut(user, T)
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/coil = W
