@@ -376,9 +376,9 @@
 	else
 		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
 	disable_suit_sensors(spaceninja)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja, slot_head)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja/apprentice, slot_head)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja, slot_wear_suit)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja, slot_shoes)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
