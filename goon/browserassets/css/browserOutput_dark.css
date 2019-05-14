@@ -22,9 +22,9 @@ a:visited {color: #7c00e6;}
 .popup .close {background: #555555; color: #cccccc;}
 .popup .head {background: #666666; color: #222222;}
 
-.motd {color: #a4bad6;}
-.motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #a4bad6;}
-.motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #a4bad6;}
+.motd {color: #98971a;}
+.motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #98971a;}
+.motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #98971a;}
 
 
 .ooc {color: #cca300;}
@@ -35,10 +35,10 @@ a:visited {color: #7c00e6;}
 
 .deadsay {color: #e2c1ff;}
 .cult {color: #aa1c1c;}
-.sinister {color: #ab0067;}
+.sinister {color: #9662b1;}
 .grey, .skeleton {color: #817e7e;}
-.mushroom {color: #6500af;}
-.alien {color: #754c75;}
+.mushroom {color: #ab62b1;}
+.alien {color: #b162a9;}
 
 .radio {color: #1ecc43;}
 .comradio {color: #5177ff;}
@@ -62,7 +62,7 @@ a:visited {color: #7c00e6;}
 .bnotice {color: #6685f5;}
 .darknotice {color: #ffffff;}
 .interface {color: #7759da;}
-.gamenotice {color: #ffff22;}
+.gamenotice {color: #d79921;}
 
 .whisper {color:#cccccc;}
 
