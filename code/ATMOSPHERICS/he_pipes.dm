@@ -9,8 +9,9 @@
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 
-	var/RADIATION_CAPACITY = 32000       // Radiation isn't particularly effective (TODO BALANCE)
+	var/RADIATION_CAPACITY = 30000       // Radiation isn't particularly effective (TODO BALANCE)
 	                                     //  Plate value is 30000, increased it a bit because of additional surface area. - N3X
+										 // Screw you N3X15, 30000 is a perfectly fine number. - bur
 	var/const/ENERGY_MULT        = 6.4   // Not sure what this is, keeping it the same as plates.
 
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
