@@ -2561,6 +2561,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,
+		/obj/item/clothing/head/widehat_red =1,
 		)
 
 	pack = /obj/structure/vendomatpack/hatdispenser
@@ -2618,6 +2619,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
+		/obj/item/clothing/suit/red_suit = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
