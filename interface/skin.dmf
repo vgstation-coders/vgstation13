@@ -822,6 +822,7 @@ window "rpane"
 		size = 1x1
 		anchor1 = none
 		anchor2 = none
+		is-visible = false
 		saved-params = ""
 	elem "rulesb"
 		type = BUTTON
