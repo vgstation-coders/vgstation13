@@ -69,7 +69,7 @@
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [myrod] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[myrod]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
 	original = end
 	starting = loc
 	current = loc
@@ -147,9 +147,10 @@
 
 /obj/item/projectile/immovablerod/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	..()
-	if(z != starting.z)
-		qdel(src)
-		return
+	if(starting)
+		if(z != starting.z)
+			qdel(src)
+			return
 
 	break_stuff()
 
