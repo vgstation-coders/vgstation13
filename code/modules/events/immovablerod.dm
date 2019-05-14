@@ -17,39 +17,17 @@
 /datum/event/immovable_rod/hyper/start()
 	immovablerod(2)
 
-/proc/immovablerod(var/hyperRod = 0)
-	var/startx = 0
-	var/starty = 0
-	var/endy = 0
-	var/endx = 0
-	var/startside = pick(cardinal)
-
-//Starts near the transition edge of the zlevel at a random point on one of the four cardinal dirs
-	switch(startside)
-		if(NORTH)
-			starty = world.maxy-TRANSITIONEDGE-5
-			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
-		if(EAST)
-			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
-			startx = world.maxx-TRANSITIONEDGE-5
-		if(SOUTH)
-			starty = TRANSITIONEDGE+5
-			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
-		if(WEST)
-			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
-			startx = TRANSITIONEDGE+5
-
-//One of the turfs in the 60x60 square in the center of the zlevel
-	endx = rand((world.maxx/2)-30,(world.maxx/2)+30)
-	endy = rand((world.maxy/2)-30,(world.maxy/2)+30)
-
-	switch(hyperRod)
+/proc/immovablerod(var/rodlevel = 0)
+	var/obj/item/projectile/immovablerod/myrod
+	switch(rodlevel)
 		if(0)
-			new /obj/item/projectile/immovablerod(locate(startx, starty, 1), locate(endx, endy, 1))
+			myrod = new /obj/item/projectile/immovablerod(locate(1,1,1))
 		if(1)
-			new /obj/item/projectile/immovablerod/big(locate(startx, starty, 1), locate(endx, endy, 1))
+			myrod = new /obj/item/projectile/immovablerod/big(locate(1,1,1))
 		if(2)
-			new /obj/item/projectile/immovablerod/hyper(locate(startx, starty, 1), locate(endx, endy, 1))
+			myrod = new /obj/item/projectile/immovablerod/hyper(locate(1,1,1))
+		
+	myrod.ThrowAtStation()
 
 /obj/item/projectile/immovablerod
 	name = "\improper Immovable Rod"
@@ -64,10 +42,8 @@
 	projectile_speed = 1.33
 	var/clongSound = 'sound/effects/bang.ogg'
 
-/obj/item/projectile/immovablerod/New(atom/start, atom/end)
+/obj/item/projectile/immovablerod/New(atom/start)
 	..()
-	if(end)
-		throw_at(end)
 
 /obj/item/projectile/immovablerod/big
 	name = "\improper Immovable Pillar"
@@ -93,7 +69,7 @@
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [myrod] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[myrod]'>Follow it</a></span>")
 	original = end
 	starting = loc
 	current = loc
