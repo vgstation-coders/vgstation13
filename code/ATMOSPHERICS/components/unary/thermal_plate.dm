@@ -1,4 +1,5 @@
 #define RADIATION_CAPACITY 30000 //Radiation isn't particularly effective (TODO BALANCE)
+#define ENERGY_MULT 6.4
 
 
 /obj/machinery/atmospherics/unary/thermal_plate
@@ -71,7 +72,7 @@
 		return
 
 	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
-	var/combined_energy = internal_removed.thermal_energy() + (RADIATION_CAPACITY * 6.4)
+	var/combined_energy = internal_removed.thermal_energy() + (RADIATION_CAPACITY * ENERGY_MULT)
 
 	var/final_temperature = combined_energy / combined_heat_capacity
 
@@ -86,3 +87,6 @@
 
 /obj/machinery/atmospherics/unary/thermal_plate/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	update_icon()
+
+#undef RADIATION_CAPACITY
+#undef ENERGY_MULT
