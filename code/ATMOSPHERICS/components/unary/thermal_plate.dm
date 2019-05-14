@@ -1,5 +1,5 @@
-#define RADIATION_CAPACITY 35000 //Radiation isn't particularly effective (TODO BALANCE)
-								 //H/E pipe value is 32000. This is higher because otherwise these are useless.
+#define RADIATION_CAPACITY 32000 //Radiation isn't particularly effective (TODO BALANCE)
+								 //H/E pipe value is 32000 so this is the same now. Textbook powercreep.
 
 
 /obj/machinery/atmospherics/unary/thermal_plate
