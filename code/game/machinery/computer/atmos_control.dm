@@ -471,10 +471,10 @@ var/global/list/atmos_controllers = list()
 
 	if(current)
 		if(log_in_id)
-			if(!emagged && !usr.hasFullAccess() && !current.check_access(log_in_id))
+			if(!emagged && !usr.hasFullAccess() && !current.check_access(log_in_id) && !issilicon(usr))
 				return 1 //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
 		else
-			if(!emagged && !usr.hasFullAccess())
+			if(!emagged && !usr.hasFullAccess() && !issilicon(usr))
 				return 1
 		if(href_list["command"])
 			if(current.rcon_setting == RCON_NO)
