@@ -26,7 +26,8 @@
 			myrod = new /obj/item/projectile/immovablerod/big(locate(1,1,1))
 		if(2)
 			myrod = new /obj/item/projectile/immovablerod/hyper(locate(1,1,1))
-		
+	
+	myrod.starting = myrod.loc
 	myrod.ThrowAtStation()
 
 /obj/item/projectile/immovablerod
@@ -147,10 +148,9 @@
 
 /obj/item/projectile/immovablerod/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	..()
-	if(starting)
-		if(z != starting.z)
-			qdel(src)
-			return
+	if(z != starting.z)
+		qdel(src)
+		return
 
 	break_stuff()
 
