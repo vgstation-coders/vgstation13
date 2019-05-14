@@ -888,7 +888,7 @@ var/global/list/airalarm_presets = list(
 	if(..())
 		return 1
 	if(href_list["rcon"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		rcon_setting = text2num(href_list["rcon"])
 		//propagate to other AAs in the area
@@ -902,7 +902,7 @@ var/global/list/airalarm_presets = list(
 
 	//testing(href)
 	if(href_list["command"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		var/device_id = href_list["id_tag"]
 		switch(href_list["command"])
@@ -945,7 +945,7 @@ var/global/list/airalarm_presets = list(
 				set_threshold(env, threshold, newval, 1)
 		return 1
 	if(href_list["reset_thresholds"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		apply_preset(1) //just apply the preset without cycling
 		return 1
@@ -955,19 +955,19 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["atmos_alarm"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		set_alarm(1)
 		return 1
 
 	if(href_list["atmos_reset"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		set_alarm(0)
 		return 1
 	
 	if(href_list["enable_override"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		var/area/this_area = get_area(src)
 		this_area.doors_overridden = 1
@@ -976,7 +976,7 @@ var/global/list/airalarm_presets = list(
 		return 1
 	
 	if(href_list["disable_override"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		var/area/this_area = get_area(src)
 		this_area.doors_overridden = 0
@@ -985,20 +985,20 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["mode"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		mode = text2num(href_list["mode"])
 		apply_mode()
 		return 1
 
 	if(href_list["toggle_cycle_after_preset"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		cycle_after_preset = !cycle_after_preset
 		return 1
 
 	if(href_list["preset"])
-		if(locked)
+		if(locked && !issilicon(usr))
 			return 1
 		if(href_list["preset"] in airalarm_presets)
 			preset = href_list["preset"]
@@ -1009,7 +1009,7 @@ var/global/list/airalarm_presets = list(
 		var/list/selected = TLV["temperature"]
 		var/max_temperature
 		var/min_temperature
-		if(!locked)
+		if(!locked || issilicon(usr))
 			max_temperature = MAX_TARGET_TEMPERATURE - T0C
 			min_temperature = MIN_TARGET_TEMPERATURE - T0C
 		else
