@@ -43,9 +43,6 @@
 	projectile_speed = 1.33
 	var/clongSound = 'sound/effects/bang.ogg'
 
-/obj/item/projectile/immovablerod/New(atom/start)
-	..()
-
 /obj/item/projectile/immovablerod/big
 	name = "\improper Immovable Pillar"
 	icon = 'icons/obj/objects_64x64.dmi'
