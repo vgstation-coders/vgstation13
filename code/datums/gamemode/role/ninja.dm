@@ -16,34 +16,6 @@
 		antag.current << sound('sound/effects/gong.ogg')
 		equip_ninja(antag.current)
 		name_ninja(antag.current)
-		
-/datum/role/ninja/proc/ThrowAtStation(var/mob/living/carbon/human/spaceninja) //copypasted from rodcode
-	var/startx = 0
-	var/starty = 0
-	var/endy = 0
-	var/endx = 0
-	var/startside = pick(cardinal)
-
-	switch(startside)
-		if(NORTH)
-			starty = world.maxy-TRANSITIONEDGE-5
-			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
-		if(EAST)
-			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
-			startx = world.maxx-TRANSITIONEDGE-5
-		if(SOUTH)
-			starty = TRANSITIONEDGE+5
-			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
-		if(WEST)
-			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
-			startx = TRANSITIONEDGE+5
-
-//One of the turfs in the 30x30 square in the center of the zlevel
-	endx = rand((world.maxx/2)-15,(world.maxx/2)+15)
-	endy = rand((world.maxy/2)-15,(world.maxy/2)+15)
-		
-	spaceninja.forceMove(locate(startx, starty, 1))
-	spaceninja.throw_at(locate(endx, endy, 1))
 
 /datum/role/ninja/ForgeObjectives()
 
@@ -107,7 +79,7 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
 			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station. Find a way inside before your suit's life support systems give out.</span>")
-			ThrowAtStation(antag.current)
+			antag.current.ThrowAtStation()
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
