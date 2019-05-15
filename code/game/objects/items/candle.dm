@@ -124,5 +124,5 @@
 		set_light(0)
 	visible_message(flavor_text)
 
-/obj/item/candle/Crossed()
+/obj/item/candle/holo/Crossed()
 	return
