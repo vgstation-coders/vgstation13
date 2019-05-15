@@ -8,7 +8,6 @@
 	desc = "A one-way gas valve that does not require power"
 
 	var/open = FALSE
-	var/openDuringInit = 0
 
 	var/frequency = 0
 	var/id_tag = null
