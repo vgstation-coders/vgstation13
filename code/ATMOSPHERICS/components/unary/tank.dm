@@ -1,3 +1,6 @@
+#define STARTING_PRESSURE 45*ONE_ATMOSPHERE
+#define MAX_EXPLOSION_PRESSURE 45*ONE_ATMOSPHERE
+
 /obj/machinery/atmospherics/unary/tank
 	icon = 'icons/obj/atmospherics/pipe_tank.dmi'
 	icon_state = "co2"
@@ -23,6 +26,30 @@
 	if(anchored)
 		verbs -= rotate_verbs
 
+/obj/machinery/atmospherics/unary/tank/Destroy()
+	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+	..()
+
+/obj/machinery/atmospherics/unary/tank/ex_act()
+	punctured()
+
+/obj/machinery/atmospherics/unary/tank/proc/punctured(var/mob/user as mob)
+	var/internal_pressure = air_contents.return_pressure()
+	var/datum/gas_mixture/environment = loc.return_air()
+	var/external_pressure = environment.return_pressure()
+	var/pressure_delta = internal_pressure - external_pressure
+	if(pressure_delta >= 500) //only explode if there's this much pressure differential
+		if(user)
+			to_chat(user, "<span class='warning'>Air violently rushes out of the punctured tank!</span>")
+		environment.merge(air_contents) //this actually dupes gas, but that's fine because air_contents will be deleted soon
+		var/explosion_pressure = min(pressure_delta, MAX_EXPLOSION_PRESSURE)
+		var/light_range = round(explosion_pressure / 1000, 1)
+		explosion(src.loc, -1, -1, light_range)
+	else
+		environment.merge(air_contents)
+	if(src)
+		qdel(src)
+
 /obj/machinery/atmospherics/unary/tank/process()
 	if(!network) //this apparently cuts down on build_network calls or something?? pipes do it too
 		. = ..() //all I know is that removing it breaks the tank.
@@ -34,7 +61,7 @@
 /obj/machinery/atmospherics/unary/tank/carbon_dioxide/New()
 	..()
 
-	air_contents.adjust_gas(GAS_CARBON, (45*ONE_ATMOSPHERE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	air_contents.adjust_gas(GAS_CARBON, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 
 /obj/machinery/atmospherics/unary/tank/toxins
@@ -44,7 +71,7 @@
 /obj/machinery/atmospherics/unary/tank/toxins/New()
 	..()
 
-	air_contents.adjust_gas(GAS_PLASMA, (45*ONE_ATMOSPHERE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	air_contents.adjust_gas(GAS_PLASMA, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 
 /obj/machinery/atmospherics/unary/tank/oxygen_agent_b
@@ -54,7 +81,7 @@
 /obj/machinery/atmospherics/unary/tank/oxygen_agent_b/New()
 	..()
 
-	air_contents.adjust_gas(GAS_OXAGENT, (45*ONE_ATMOSPHERE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	air_contents.adjust_gas(GAS_OXAGENT, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 
 /obj/machinery/atmospherics/unary/tank/oxygen
@@ -64,7 +91,7 @@
 /obj/machinery/atmospherics/unary/tank/oxygen/New()
 	..()
 
-	air_contents.adjust_gas(GAS_OXYGEN, (45*ONE_ATMOSPHERE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	air_contents.adjust_gas(GAS_OXYGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/nitrogen
 	icon_state = "n2"
@@ -73,7 +100,7 @@
 /obj/machinery/atmospherics/unary/tank/nitrogen/New()
 	..()
 
-	air_contents.adjust_gas(GAS_NITROGEN, (45*ONE_ATMOSPHERE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/air
 	icon_state = "air"
@@ -83,8 +110,8 @@
 	..()
 
 	air_contents.adjust_multi(
-		GAS_OXYGEN, (45*ONE_ATMOSPHERE*O2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature),
-		GAS_NITROGEN, (45*ONE_ATMOSPHERE*N2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+		GAS_OXYGEN, (STARTING_PRESSURE*O2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature),
+		GAS_NITROGEN, (STARTING_PRESSURE*N2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/empty
 	icon_state = "grey"
@@ -163,8 +190,8 @@
 		if(do_after(user, src, 40))
 			user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 			"<span class='notice'>You dissasemble \the [src].</span>")
-			getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
-			qdel(src) //the air contents just get deleted
+			//getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+			punctured(user)
 		return
 
 	return ..()
@@ -176,3 +203,6 @@
 
 /obj/machinery/atmospherics/unary/tank/hide(var/i)
 	update_icon()
+
+#undef STARTING_PRESSURE
+#undef MAX_EXPLOSION_PRESSURE
