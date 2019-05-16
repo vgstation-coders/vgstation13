@@ -23,6 +23,13 @@ var/list/camera_names=list()
 	var/invuln = null
 	var/bugged = 0
 	var/failure_chance = 10
+	var/list/protectedareas = list(
+		/area/bridge,
+		/area/turret_protected/ai,
+		/area/crew_quarters/captain,
+		/area/turret_protected/ai_upload,
+		/area/security/armory
+		)
 	var/obj/item/weapon/camera_assembly/assembly = null
 	var/light_on = 0
 
@@ -42,11 +49,11 @@ var/list/camera_names=list()
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 	var/health = CAMERA_MAX_HEALTH
 
-/obj/machinery/camera/flawless
-	failure_chance = 0
-
 /obj/machinery/camera/initialize()
 	..()
+	if(get_area(src)?.type in protectedareas)
+		failure_chance = 0
+
 	if(prob(failure_chance))
 		deactivate()
 
