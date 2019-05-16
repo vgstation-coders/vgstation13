@@ -321,6 +321,11 @@
 		abort()
 		return
 
+	if (R.active_spell)
+		to_chat(user, "<span class='rose'>A structure is already being raised from that rune, so you contribute to that instead.</span>")
+		R.active_spell.midcast(user)
+		return
+
 	switch(structure)
 		if("Altar")
 			spawntype = /obj/structure/cult/altar
