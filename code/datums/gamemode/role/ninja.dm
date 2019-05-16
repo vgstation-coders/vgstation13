@@ -493,8 +493,8 @@ Helpers For Both Variants
 	if(isninja(user))
 		..()
 	else
-		to_chat(user,"<span class='warning'>You can't locate the off button.</span>")
-		..(user,"on")
+		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
+		return
 	if(active)
 		cant_drop = TRUE
 	else
@@ -522,6 +522,10 @@ Helpers For Both Variants
 		return 1
 	else
 		return ..()
+		
+/obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
+	if(active)
+		toggleActive(user,togglestate = "off")
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****
