@@ -1,5 +1,9 @@
 #define NO_GAS 0.01
 #define SOME_GAS 1
+#define RADIATION_CAPACITY 30000// Radiation isn't particularly effective (TODO BALANCE)
+								//  Plate value is 30000, increased it a bit because of additional surface area. - N3X
+								// Screw you N3X15, 30000 is a perfectly fine number. - bur
+#define ENERGY_MULT 6.4   // Not sure what this is, keeping it the same as plates.
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging
 	icon = 'icons/obj/pipes/heat.dmi'
@@ -8,11 +12,6 @@
 
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
-
-	var/RADIATION_CAPACITY = 30000       // Radiation isn't particularly effective (TODO BALANCE)
-	                                     //  Plate value is 30000, increased it a bit because of additional surface area. - N3X
-										 // Screw you N3X15, 30000 is a perfectly fine number. - bur
-	var/const/ENERGY_MULT        = 6.4   // Not sure what this is, keeping it the same as plates.
 
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
 
@@ -300,3 +299,8 @@
 
 	if(!suppress_icon_check)
 		update_icon()
+
+#undef NO_GAS
+#undef SOME_GAS
+#undef RADIATION_CAPACITY
+#undef ENERGY_MULT

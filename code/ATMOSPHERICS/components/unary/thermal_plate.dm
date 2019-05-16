@@ -1,3 +1,5 @@
+#define NO_GAS 0.01
+#define SOME_GAS 1
 #define RADIATION_CAPACITY 30000 //Radiation isn't particularly effective (TODO BALANCE)
 #define ENERGY_MULT 6.4
 
@@ -88,5 +90,7 @@
 /obj/machinery/atmospherics/unary/thermal_plate/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	update_icon()
 
+#undef NO_GAS
+#undef SOME_GAS
 #undef RADIATION_CAPACITY
 #undef ENERGY_MULT
