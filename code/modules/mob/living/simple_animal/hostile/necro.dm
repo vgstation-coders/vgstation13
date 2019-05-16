@@ -419,7 +419,10 @@
 	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
-			zombify(target)
+			var/master = creator ? creator : src
+			target.make_zombie(master)
+
+/*
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
 	//Make the target drop their stuff, move them into the contents of the zombie so the ghost can at least see how its zombie self is doing
@@ -430,6 +433,8 @@
 	new_zombie.host = target
 	target.ghostize()
 	target.loc = null
+
+*/
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
 	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34
