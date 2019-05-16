@@ -1247,6 +1247,7 @@
 #include "code\modules\atmos_automation\implementation\emitters.dm"
 #include "code\modules\atmos_automation\implementation\gas_pumps.dm"
 #include "code\modules\atmos_automation\implementation\injectors.dm"
+#include "code\modules\atmos_automation\implementation\passive_gates.dm"
 #include "code\modules\atmos_automation\implementation\registers.dm"
 #include "code\modules\atmos_automation\implementation\scrubbers.dm"
 #include "code\modules\atmos_automation\implementation\sensors.dm"
