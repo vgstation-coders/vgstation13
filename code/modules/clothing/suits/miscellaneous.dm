@@ -621,3 +621,16 @@
 	allowed = list(/obj/item/weapon/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
+
+/obj/item/clothing/suit/red_suit
+	name = "red suit"
+	desc = "A sleazy looking red suit"
+	icon_state = "red_suit"
+	item_state = "red_suit"
+	body_parts_covered = 0
+
+obj/item/clothing/suit/poncho
+	name = "poncho"
+	desc = "A wooly poncho. Smells of beans."
+	icon_state = "poncho"
+	item_state = "poncho"

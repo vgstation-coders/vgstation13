@@ -505,3 +505,9 @@
 	item_state = "brim-hat"
 	wizard_garb = TRUE
 	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/head/widehat_red
+	name = "red wide-brimmed hat"
+	desc = "A red fancy looking wide-brimmed hat. It's even got a feather in it."
+	icon_state = "widehat_red"
+	item_state = "widehat_red"
