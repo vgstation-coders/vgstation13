@@ -46,7 +46,7 @@
 	desc = "Blueprints of the station, designed for the passive aggressive spider bots aboard."
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
-	can_delete_areas = list()
+	can_delete_areas = list(AREA_BLUEPRINTS)
 
 	header = "<small>These blueprints are for the creation of new rooms only; you cannot change existing rooms.</small>"
 
@@ -61,7 +61,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	w_class = W_CLASS_TINY
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
-	can_delete_areas = list()
+	can_delete_areas = list(AREA_BLUEPRINTS)
 
 	header = "<small>This permit is for the creation of new rooms only; you cannot change existing rooms.</small>"
 
