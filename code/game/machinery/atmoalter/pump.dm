@@ -63,7 +63,7 @@
 
 			if(air_contents.temperature > 0)
 				var/required_moles = pressure_delta * environment.volume / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
-				//cap flow rate at 200 litres (at our internal air pressure) per tick
+				//cap flow rate at our throughput litres (at our internal air pressure) per tick
 				var/max_transferred_moles = air_contents.pressure * throughput / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 				var/transfer_moles = min(required_moles, max_transferred_moles)
 
