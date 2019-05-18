@@ -237,6 +237,11 @@
 /obj/machinery/portable_atmospherics/scrubber/mech
 	volume = 50000
 	volume_rate = 20000
+	var/obj/mecha/mech //the mech associated with this scrubber
+
+/obj/machinery/portable_atmospherics/scrubber/mech/New(var/location)
+	..()
+	src.mech = location
 
 /obj/machinery/portable_atmospherics/scrubber/mech/get_environment()
 	var/turf/T = get_turf(src)
@@ -249,5 +254,16 @@
 /obj/machinery/portable_atmospherics/scrubber/mech/return_sample(var/environment, var/removed)
 	var/turf/T = get_turf(src)
 	T.assume_air(removed)
+
+//required to allow the pilot to use the scrubber UI
+/obj/machinery/portable_atmospherics/scrubber/mech/is_on_same_z(var/mob/user)
+	if(user == mech.occupant)
+		return TRUE
+	return FALSE
+
+/obj/machinery/portable_atmospherics/scrubber/mech/is_in_range(var/mob/user)
+	if(user == mech.occupant)
+		return TRUE
+	return FALSE
 
 #undef MAX_PRESSURE

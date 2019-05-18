@@ -57,7 +57,7 @@
 	var/output = {"<div class='wr'>
 						<div class='header'>Special</div>
 						<div class='links'>
-						<a href='?src=\ref[src];scrubbing=1'><span id="scrubbing_command">[scrubber.on?"Deactivate":"Activate"] scrubber</span></a>
+						<a href='?src=\ref[src];scrubber_interface=1'>Scrubber interface</a>
 						</div>
 						</div>
 						"}
@@ -66,8 +66,6 @@
 
 /obj/mecha/working/clarke/Topic(href, href_list)
 	..()
-	if (href_list["scrubbing"])
-		scrubber.on = !scrubber.on
-		send_byjax(src.occupant,"exosuit.browser","scrubbing_command","[scrubber.on?"Deactivate":"Activate"] scrubber")
-		src.occupant_message("<font color=\"[scrubber.on?"#00f\">Activated":"#f00\">Deactivated"] scrubber.</font>")
+	if (href_list["scrubber_interface"])
+		scrubber.ui_interact(occupant)
 	return
