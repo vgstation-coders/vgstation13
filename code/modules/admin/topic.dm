@@ -3143,6 +3143,8 @@
 					if (T)
 						T.AppendObjective(new_objective)
 						T.Greet(GREET_AUTOTATOR) // Mission specifications etc
+						T.OnPostSetup()
+						T.AnnounceObjectives()
 				for(var/mob/living/silicon/A in player_list)
 					if(A.isDead() || !A.client || !A.mind)
 						continue
@@ -3152,6 +3154,8 @@
 					if (T)
 						T.AppendObjective(new_objective)
 						T.Greet(GREET_AUTOTATOR)
+						T.OnPostSetup()
+						T.AnnounceObjectives()
 
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")

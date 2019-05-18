@@ -305,6 +305,13 @@ div.notice {
     color: #98B0C3;
 }
 
+.statusLabelWide {
+    width: 170px;
+    float: left;
+    overflow: hidden;
+    color: #98B0C3;
+}
+
 .statusValue {
     float: left;
 }
@@ -544,32 +551,6 @@ th.misc {
     background: #666666;
     font-weight: bold;
     color: #ffffff;
-}
-
-/* Damage colors for crew monitoring computer */
-
-.burn {
-    color: orange;
-}
-
-.brute {
-    color: red;
-}
-
-.toxin {
-    color: green;
-}
-
-.toxin_light {
-    color: #3ADF00;
-}
-
-.oxyloss {
-    color: blue;
-}
-
-.oxyloss_light {
-    color: #6698FF;
 }
 
 /* Comms console alert colors */

@@ -201,7 +201,7 @@ var/area/space_area
 
 
 /area/proc/UpdateFirelocks()
-	if(door_alerts != 0)
+	if(door_alerts != 0 && !doors_overridden)
 		CloseFirelocks()
 	else
 		OpenFirelocks()
