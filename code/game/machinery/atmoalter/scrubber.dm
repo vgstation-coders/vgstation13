@@ -6,12 +6,9 @@
 	density = 1
 
 	var/on = 0
-	var/volume_rate = 800
+	var/volume_rate = 5000 //litres / tick
 
-	volume = 750
-
-	var/minrate = 0//probably useless, but whatever
-	var/maxrate = 10 * ONE_ATMOSPHERE
+	volume = 1000
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
@@ -30,7 +27,7 @@
 	icon_state = "scrubber:0"
 	anchored = 1
 	volume = 50000
-	volume_rate = 5000
+	volume_rate = 20000
 
 	var/global/gid = 1
 	var/id = 0
@@ -99,35 +96,24 @@
 	else
 		return loc.return_air()
 
-/obj/machinery/portable_atmospherics/scrubber/proc/remove_sample(var/datum/gas_mixture/environment, var/transfer_moles)
-	if(holding)
-		return environment.remove(transfer_moles)
-	else
-		return loc.remove_air(transfer_moles)
+/obj/machinery/portable_atmospherics/scrubber/proc/remove_sample(var/datum/gas_mixture/environment, var/amount)
+	return environment.remove_volume(amount)
 
 /obj/machinery/portable_atmospherics/scrubber/proc/return_sample(var/datum/gas_mixture/environment, var/datum/gas_mixture/removed)
-	if(holding)
-		environment.merge(removed)
-	else
-		loc.assume_air(removed)
+	environment.merge(removed)
 
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
 	if(on)
 		var/datum/gas_mixture/environment = get_environment()
-		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
-
 		//Take a gas sample
-		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
+		var/datum/gas_mixture/removed = remove_sample(environment, volume_rate)
 
 		//Filter it
 		if (removed)
 			var/datum/gas_mixture/filtered_out = new
-
 			filtered_out.temperature = removed.temperature
-
-
 			filtered_out.adjust_multi(
 				GAS_PLASMA, removed[GAS_PLASMA],
 				GAS_CARBON, removed[GAS_CARBON],
@@ -135,9 +121,8 @@
 				GAS_OXAGENT, removed[GAS_OXAGENT])
 			removed.subtract(filtered_out)
 
-		//Remix the resulting gases
+			//Remix the resulting gases
 			air_contents.merge(filtered_out)
-
 			return_sample(environment, removed)
 		//src.update_icon()
 		nanomanager.update_uis(src)
@@ -163,8 +148,8 @@
 	data["portConnected"] = connected_port ? 1 : 0
 	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
 	data["rate"] = round(volume_rate)
-	data["minrate"] = round(minrate)
-	data["maxrate"] = round(maxrate)
+	data["minrate"] = 1
+	data["maxrate"] = 2
 	data["on"] = on ? 1 : 0
 
 	data["hasHoldingTank"] = holding ? 1 : 0
@@ -199,7 +184,7 @@
 
 	if(href_list["volume_adj"])
 		var/diff = text2num(href_list["volume_adj"])
-		volume_rate = Clamp(volume_rate+diff, minrate, maxrate)
+		volume_rate = Clamp(volume_rate+diff, 1, 2)
 
 	src.add_fingerprint(usr)
 	return 1
@@ -218,10 +203,7 @@
 	var/turf/T = get_turf(src)
 	return T.return_air()
 
-/obj/machinery/portable_atmospherics/scrubber/mech/remove_sample(var/environment, var/transfer_moles)
+/obj/machinery/portable_atmospherics/scrubber/mech/remove_sample(var/environment, var/amount)
 	var/turf/T = get_turf(src)
-	return T.remove_air(transfer_moles)
+	return T.return_air().remove_volume(amount)
 
-/obj/machinery/portable_atmospherics/scrubber/mech/return_sample(var/environment, var/removed)
-	var/turf/T = get_turf(src)
-	T.assume_air(removed)
