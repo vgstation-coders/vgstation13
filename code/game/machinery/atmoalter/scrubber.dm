@@ -266,4 +266,24 @@
 		return TRUE
 	return FALSE
 
+//Have to override this to let it connect from the mech
+/obj/machinery/portable_atmospherics/connect(obj/machinery/atmospherics/unary/portables_connector/new_port)
+	//Make sure not already connected to something else
+	if(connected_port || !new_port || new_port.connected_device)
+		return 0
+
+	//Perform the connection
+	connected_port = new_port
+	connected_port.connected_device = src
+
+	anchored = 1 //Prevent movement
+
+	//Actually enforce the air sharing
+	var/datum/pipe_network/network = connected_port.return_network(src)
+	if(network && !network.gases.Find(air_contents))
+		network.gases += air_contents
+		network.update = 1
+	update_icon()
+	return 1
+
 #undef MAX_PRESSURE

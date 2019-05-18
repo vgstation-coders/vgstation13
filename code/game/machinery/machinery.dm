@@ -370,8 +370,8 @@ Class Procs:
 
 /obj/machinery/proc/is_in_range(var/mob/user)
 	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		return TRUE
-	return FALSE
+		return FALSE
+	return TRUE
 
 /obj/machinery/Topic(href, href_list)
 	..()
