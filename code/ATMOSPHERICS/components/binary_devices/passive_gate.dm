@@ -17,7 +17,6 @@
 /obj/machinery/atmospherics/binary/passive_gate/New()
 	..()
 	air1.volume = 1000
-	air2.volume = 1000
 
 /obj/machinery/atmospherics/binary/passive_gate/update_icon()
 	icon_state = "intact_[open?("on"):("off")]"
