@@ -1180,7 +1180,7 @@
 				current_organ.open = 0
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
-		src.see_in_dark = E.see_in_dark //species.darksight
+		src.see_in_dark = E.see_in_dark
 	if(src.see_in_dark > 2)
 		src.see_invisible = SEE_INVISIBLE_LEVEL_ONE
 	else
@@ -1709,8 +1709,6 @@ mob/living/carbon/human/isincrit()
 	species.cold_level_2 = round(species.cold_level_1 / 1.3)
 	species.cold_level_3 = round(species.cold_level_2 / 1.66)
 
-	if(prob(30))
-		species.darksight = rand(0,8)
 	species.hazard_high_pressure *= rand(5,20)/10
 	species.warning_high_pressure = round(species.hazard_high_pressure / 1.69)
 	species.hazard_low_pressure *= rand(5,20)/10
