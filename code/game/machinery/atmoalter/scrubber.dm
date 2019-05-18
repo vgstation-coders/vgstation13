@@ -1,3 +1,5 @@
+#define MAX_PRESSURE 50*ONE_ATMOSPHERE
+
 /obj/machinery/portable_atmospherics/scrubber
 	name = "Portable Air Scrubber"
 
@@ -111,7 +113,7 @@
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
-	if(on)
+	if(on && air_contents.return_pressure() < MAX_PRESSURE)
 		var/datum/gas_mixture/environment = get_environment()
 		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
 
@@ -212,3 +214,5 @@
 /obj/machinery/portable_atmospherics/scrubber/mech/return_sample(var/environment, var/removed)
 	var/turf/T = get_turf(src)
 	T.assume_air(removed)
+
+#undef MAX_PRESSURE
