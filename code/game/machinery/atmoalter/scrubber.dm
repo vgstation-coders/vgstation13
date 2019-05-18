@@ -96,19 +96,27 @@
 	else
 		return loc.return_air()
 
-/obj/machinery/portable_atmospherics/scrubber/proc/remove_sample(var/datum/gas_mixture/environment, var/amount)
-	return environment.remove_volume(amount)
+/obj/machinery/portable_atmospherics/scrubber/proc/remove_sample(var/datum/gas_mixture/environment, var/transfer_moles)
+	if(holding)
+		return environment.remove(transfer_moles)
+	else
+		return loc.remove_air(transfer_moles)
 
 /obj/machinery/portable_atmospherics/scrubber/proc/return_sample(var/datum/gas_mixture/environment, var/datum/gas_mixture/removed)
-	environment.merge(removed)
+	if(holding)
+		environment.merge(removed)
+	else
+		loc.assume_air(removed)
 
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
 	if(on)
 		var/datum/gas_mixture/environment = get_environment()
+		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
+
 		//Take a gas sample
-		var/datum/gas_mixture/removed = remove_sample(environment, volume_rate)
+		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
 
 		//Filter it
 		if (removed)
@@ -148,8 +156,6 @@
 	data["portConnected"] = connected_port ? 1 : 0
 	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
 	data["rate"] = round(volume_rate)
-	data["minrate"] = 1
-	data["maxrate"] = 2
 	data["on"] = on ? 1 : 0
 
 	data["hasHoldingTank"] = holding ? 1 : 0
@@ -182,10 +188,6 @@
 		if(holding)
 			eject_holding()
 
-	if(href_list["volume_adj"])
-		var/diff = text2num(href_list["volume_adj"])
-		volume_rate = Clamp(volume_rate+diff, 1, 2)
-
 	src.add_fingerprint(usr)
 	return 1
 
@@ -203,7 +205,10 @@
 	var/turf/T = get_turf(src)
 	return T.return_air()
 
-/obj/machinery/portable_atmospherics/scrubber/mech/remove_sample(var/environment, var/amount)
+/obj/machinery/portable_atmospherics/scrubber/mech/remove_sample(var/environment, var/transfer_moles)
 	var/turf/T = get_turf(src)
-	return T.return_air().remove_volume(amount)
+	return T.remove_air(transfer_moles)
 
+/obj/machinery/portable_atmospherics/scrubber/mech/return_sample(var/environment, var/removed)
+	var/turf/T = get_turf(src)
+	T.assume_air(removed)

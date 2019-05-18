@@ -45,26 +45,6 @@
 <h3>Power Regulator Status</h3>
 <div class="item">
 	<div class="itemLabel">
-		Volume Rate:
-	</div>
-	<div class="itemContent">
-		{{:helper.displayBar(data.rate, data.minrate, data.maxrate)}}
-		<div style="clear: both; padding-top: 4px;">
-			{{:helper.link('-', null, {'volume_adj' : -1000}, (data.rate > data.minrate) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'volume_adj' : -100}, (data.rate > data.minrate) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'volume_adj' : -10}, (data.rate > data.minrate) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'volume_adj' : -1}, (data.rate > data.minrate) ? null : 'disabled')}}
-			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:data.rate}} kPa&nbsp;</div>
-			{{:helper.link('+', null, {'volume_adj' : 1}, (data.rate < data.maxrate) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'volume_adj' : 10}, (data.rate < data.maxrate) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'volume_adj' : 100}, (data.rate < data.maxrate) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'volume_adj' : 1000}, (data.rate < data.maxrate) ? null : 'disabled')}}
-		</div>
-	</div>
-</div>
-
-<div class="item">
-	<div class="itemLabel">
 		Power Switch:
 	</div>
 	<div class="itemContent">
