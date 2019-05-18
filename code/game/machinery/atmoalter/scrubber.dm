@@ -10,6 +10,12 @@
 	var/on = 0
 	var/volume_rate = 5000 //litres / tick
 
+	var/scrub_o2 = FALSE
+	var/scrub_n2 = FALSE
+	var/scrub_n2o = TRUE
+	var/scrub_co2 = TRUE
+	var/scrub_plasma = TRUE
+
 	volume = 1000
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
@@ -121,14 +127,24 @@
 		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
 
 		//Filter it
+		//copypasted from scrubber code pretty much
 		if (removed)
 			var/datum/gas_mixture/filtered_out = new
 			filtered_out.temperature = removed.temperature
-			filtered_out.adjust_multi(
-				GAS_PLASMA, removed[GAS_PLASMA],
-				GAS_CARBON, removed[GAS_CARBON],
-				GAS_SLEEPING, removed[GAS_SLEEPING],
-				GAS_OXAGENT, removed[GAS_OXAGENT])
+			#define FILTER(g) filtered_out.adjust_gas((g), removed[g], FALSE)
+			if(scrub_plasma)
+				FILTER(GAS_PLASMA)
+			if(scrub_co2)
+				FILTER(GAS_CARBON)
+			if(scrub_n2o)
+				FILTER(GAS_SLEEPING)
+			if(scrub_n2)
+				FILTER(GAS_NITROGEN)
+			if(scrub_o2)
+				FILTER(GAS_OXYGEN)
+			FILTER(GAS_OXAGENT)
+			#undef FILTER
+			filtered_out.update_values()
 			removed.subtract(filtered_out)
 
 			//Remix the resulting gases
@@ -159,6 +175,11 @@
 	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
 	data["rate"] = round(volume_rate)
 	data["on"] = on ? 1 : 0
+	data["scrub_plasma"] = scrub_plasma
+	data["scrub_co2"] = scrub_co2
+	data["scrub_n2o"] = scrub_n2o
+	data["scrub_n2"] = scrub_n2
+	data["scrub_o2"] = scrub_o2
 
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
@@ -189,6 +210,20 @@
 	if(href_list["remove_tank"])
 		if(holding)
 			eject_holding()
+
+	if(href_list["scrub_toggle"])
+		switch(href_list["scrub_toggle"])
+			if("plasma")
+				scrub_plasma = !scrub_plasma
+			if("co2")
+				scrub_co2 = !scrub_co2
+			if("n2o")
+				scrub_n2o = !scrub_n2o
+			if("n2")
+				scrub_n2 = !scrub_n2
+			if("o2")
+				scrub_o2 = !scrub_o2
+		return 1
 
 	src.add_fingerprint(usr)
 	return 1
