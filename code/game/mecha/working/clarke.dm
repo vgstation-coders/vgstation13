@@ -63,7 +63,7 @@
 /obj/mecha/working/clarke/connect()
 	if(scrubber_port)
 		return 0
-	..()
+	return ..()
 
 /obj/mecha/working/clarke/proc/connect_scrubber(obj/machinery/atmospherics/unary/portables_connector/new_port)
 	//Make sure not already connected to something else
@@ -97,7 +97,7 @@
 						<div class='links'>
 						<a href='?src=\ref[src];scrubber_interface=1'>Scrubber interface</a>
 						<br>
-						[src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber to Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>"]
+						<span id="scrubbing_port">[src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber to Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>"]</span>
 						</div>
 						</div>
 						"}
@@ -118,6 +118,7 @@
 		if(possible_port)
 			if(connect_scrubber(possible_port))
 				src.occupant_message("<span class='notice'>[name] connects to the port.</span>")
+				send_byjax(src.occupant, "exosuit.browser", "scrubbing_port", src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber from Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>")
 			else
 				src.occupant_message("<span class='warning'>[name] failed to connect to the port.</span>")
 		else
@@ -128,6 +129,7 @@
 			return
 		if(disconnect_scrubber())
 			src.occupant_message("<span class='notice'>[name] disconnects from the port.</span>")
+			send_byjax(src.occupant, "exosuit.browser", "scrubbing_port", src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber from Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>")
 		else
 			src.occupant_message("<span class='warning'>[name] is not connected to the port at the moment.</span>")
 		return
