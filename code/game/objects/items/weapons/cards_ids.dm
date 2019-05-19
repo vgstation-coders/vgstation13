@@ -166,8 +166,6 @@
 //only trigger if target is human thus having prosthetic limbs to sabotage
 //allowing this method to continue ensures attacked_by is called in human_defense.dm
 /obj/item/weapon/card/emag/attack(var/mob/living/target)
-	to_chat(world, "170 attack target: [target]")
-	return
 	if (!istype(target, /mob/living/carbon/human))
 		return
 	..()
