@@ -150,7 +150,7 @@
 			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
 			var/filter_moles = min(1, scrubbing_rate / volume_rate) * removed.total_moles()
 			var/datum/gas_mixture/filtered_out = total_to_filter.remove(filter_moles)
-			visible_message("DEBUG: Filtered [filtered_out.total_moles()] moles.")
+
 			removed.subtract(filtered_out)
 
 			//Remix the resulting gases
