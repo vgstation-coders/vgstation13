@@ -50,7 +50,7 @@
 //               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-/*
+
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = CHANGELING
@@ -60,7 +60,9 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 30
+	cost = 25
+	var/ling_threshold = 1
+	var/additional_cost = 25
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
 
@@ -73,9 +75,12 @@
 		var/datum/role/changeling/newChangeling = new
 		newChangeling.AssignToRole(M.mind,1)
 		newChangeling.Greet(GREET_ROUNDSTART)
+		if (i > ling_threshold && (mode.threat > additional_cost))
+			mode.spend_threat(additional_cost)
+		else
+			break
 	return 1
 
-*/
 //////////////////////////////////////////////
 //                                          //
 //               VAMPIRES                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
