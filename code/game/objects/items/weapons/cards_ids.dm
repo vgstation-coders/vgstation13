@@ -163,11 +163,21 @@
 	if(recharge_rate && recharge_ticks)
 		to_chat(user, "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>")
 
-/obj/item/weapon/card/emag/attack()
+//only trigger if target is human thus having prosthetic limbs to sabotage
+//allowing this method to continue ensures attacked_by is called in human_defense.dm
+/obj/item/weapon/card/emag/attack(var/mob/living/target)
+	to_chat(world, "170 attack target: [target]")
 	return
+	if (!istype(target, /mob/living/carbon/human))
+		return
+	..()
 
+//this method gets called from held_item.afterattack as it should, but in the case of somebody with emag clicking on a human we don't want this method to trigger,
+//since the logic for emag attack on humans is handled in attacked_by in human_defense.dm
 /obj/item/weapon/card/emag/afterattack(atom/target, mob/user, proximity)
 	var/atom/A = target
+	if (istype(target, /mob/living/carbon/human)) 
+		return
 	if(!proximity)
 		return
 	A.emag_act(user)
