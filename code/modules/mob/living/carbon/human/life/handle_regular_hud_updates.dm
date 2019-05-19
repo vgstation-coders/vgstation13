@@ -105,10 +105,7 @@
 			change_sight(removing = SEE_TURFS|SEE_OBJS)
 			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 			if(E)
-				see_in_dark = E.see_in_dark //species.darksight
-			else
-				see_in_dark = species.darksight
-			// You should really be blind but w/e.
+				see_in_dark = E.see_in_dark
 
 			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
