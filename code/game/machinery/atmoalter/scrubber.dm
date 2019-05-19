@@ -1,4 +1,4 @@
-#define MAX_PRESSURE 9000
+#define MAX_PRESSURE 50*ONE_ATMOSPHERE
 
 /obj/machinery/portable_atmospherics/scrubber
 	name = "Portable Air Scrubber"
@@ -17,7 +17,7 @@
 	var/scrub_co2 = TRUE
 	var/scrub_plasma = TRUE
 
-	volume = 1000
+	volume = 2000
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
