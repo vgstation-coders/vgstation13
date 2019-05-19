@@ -1296,10 +1296,10 @@ var/list/WALLITEMS = list(
 	return 0
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
-	var icon/base = icon(file, state)
+	var/icon/base = icon(file, state)
 
 	var/w
-	var/h,
+	var/h
 	var/w2
 	var/h2
 
@@ -1620,6 +1620,18 @@ Game Mode config tags:
 /proc/find_active_faction_by_typeandmember(var/fac_type, var/datum/role/R, var/datum/mind/M)
 	var/list/found_factions = find_active_factions_by_member(R, M)
 	return locate(fac_type) in found_factions
+
+/proc/find_unique_objectives(list/new_objectives, list/old_objectives)
+	var/list/uniques = list()
+	for (var/datum/objective/new_objective in new_objectives)
+		var/is_unique = TRUE
+		for (var/datum/objective/old_objective in old_objectives)
+			if (old_objective.name == new_objective.name)
+				is_unique = FALSE
+		if (is_unique)
+			uniques.Add(new_objective)
+	return uniques
+
 
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()

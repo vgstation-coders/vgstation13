@@ -1,14 +1,15 @@
+#define IVDRIP_INJECTING 1
+#define IVDRIP_DRAWING 0
+
 /obj/machinery/iv_drip
 	name = "\improper IV drip"
 	icon = 'icons/obj/iv_drip.dmi'
 	icon_state = "unhooked_inject"
 	anchored = 0
 	density = 0 //Tired of these blocking up the station
-
-
-/obj/machinery/iv_drip/var/mob/living/carbon/human/attached = null
-/obj/machinery/iv_drip/var/mode = 1 // 1 is injecting, 0 is taking blood.
-/obj/machinery/iv_drip/var/obj/item/weapon/reagent_containers/beaker = null
+	var/mode = IVDRIP_INJECTING
+	var/obj/item/weapon/reagent_containers/beaker = null
+	var/mob/living/carbon/human/attached = null
 
 /obj/machinery/iv_drip/update_icon()
 	if(src.attached)
@@ -78,8 +79,7 @@
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
-			src.beaker.forceMove(get_turf(src))
-			src.beaker = null
+			src.remove_container()
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
@@ -162,11 +162,14 @@
 		src.attached = null
 		src.update_icon()
 	else if(src.beaker)
-		src.beaker.forceMove(get_turf(src))
-		src.beaker = null
-		update_icon()
+		remove_container()
 	else
 		return ..()
+
+/obj/machinery/iv_drip/proc/remove_container()
+	src.beaker.forceMove(get_turf(src))
+	src.beaker = null
+	update_icon()
 
 /obj/machinery/iv_drip/attack_ai(mob/living/user)
 	attack_hand(user)
@@ -176,11 +179,15 @@
 	set category = "Object"
 	set src in view(1)
 
+	if(usr.isUnconscious())
+		return
+
 	if(!istype(usr, /mob/living) || istype(usr, /mob/living/simple_animal))
 		to_chat(usr, "<span class='warning'>You can't do that.</span>")
 		return
 
-	if(usr.isUnconscious())
+	if(locked_to) //attached to rollerbed? probably?
+		to_chat(usr, "<span class='warning'>You can't do that while \the [src] is fastened to something.</span>")
 		return
 
 	mode = !mode

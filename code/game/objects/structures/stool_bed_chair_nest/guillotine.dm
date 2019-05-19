@@ -6,7 +6,7 @@
 	density = 1
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
-	lock_type = /datum/locking_category/buckle/guillotine
+	mob_lock_type = /datum/locking_category/buckle/guillotine
 	var/open = TRUE
 	var/bladedown = FALSE
 	var/mob/living/carbon/human/victim
@@ -61,19 +61,20 @@
 	flags = CANT_BE_MOVED_BY_LOCKED_MOBS
 
 /obj/structure/bed/guillotine/manual_unbuckle(mob/user)
-	if(!is_locking(lock_type))
+	if(!is_locking(mob_lock_type))
 		return
 
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
-	var/mob/M = get_locked(lock_type)[1]
+	var/mob/M = get_locked(mob_lock_type)[1]
 	if(M != user)
 		if(!open)
 			to_chat(user, "<span class='warning'>You can't pull \the [M] out of \the [src] while its stocks are closed.</span>")
 			return
 		else
+			add_attacklogs(user, M, "unbuckled from a guillotine. (@[user.x], [user.y], [user.z])", src, admin_warn = FALSE)
 			M.visible_message("<span class='notice'>\The [user] pulls [M] out of \the [src]!</span>",\
 								"[user] pulls you out of \the [src].")
 	else
@@ -109,7 +110,7 @@
 			to_chat(user, "<span class='warning'>You can't place \the [M] into \the [src] while its stocks are closed.</span>")
 		return
 
-	for(var/mob/living/L in get_locked(lock_type))
+	for(var/mob/living/L in get_locked(mob_lock_type))
 		if(L.stat)
 			to_chat(user, "<span class='warning'>There is still a body inside \the [src].</span>")
 		else
@@ -127,7 +128,9 @@
 		M.visible_message("<span class='notice'>\The [M] climbs into \the [src]!</span>",\
 							"You climb into \the [src].")
 	else
+		add_attacklogs(user, M, "dragged to a guillotine. (@[user.x], [user.y], [user.z])", src, admin_warn = FALSE)
 		if(do_after_done)
+			add_attacklogs(user, M, "SUCCESFULLY dragged and bucked to a guillotine. (@[user.x], [user.y], [user.z])", src, admin_warn = TRUE)
 			M.visible_message("<span class='warning'>\The [M] is placed in \the [src] by \the [user]!</span>",\
 								"<span class='danger'>You are placed in \the [src] by \the [user].</span>")
 		else
@@ -142,7 +145,7 @@
 				return
 	add_fingerprint(user)
 
-	lock_atom(M, lock_type)
+	lock_atom(M, mob_lock_type)
 
 /obj/structure/bed/guillotine/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
 	. = ..()
@@ -194,6 +197,9 @@
 	update_icon()
 
 /obj/structure/bed/guillotine/proc/untie_blade(mob/user)
+	user.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
+	victim.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
+	message_admins("\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]. @[formatJumpTo(src)]")
 	user.visible_message("<span class='danger'>\The [user] begins untying the rope holding \the [src]'s blade!</span>",\
 							"You begin untying the rope holding \the [src]'s blade.")
 	if(do_after(user, src, 100))
@@ -203,6 +209,7 @@
 		flick("[current_icon_state]_dropping_1", src)
 		spawn(4)
 			if(victim)
+				add_attacklogs(user, victim, "executed with a guillotine.", src, admin_warn = TRUE)
 				if(victim.organs_by_name)
 					var/datum/organ/external/head/H = victim.get_organ(LIMB_HEAD)
 					if(istype(H) && ~H.status & ORGAN_DESTROYED)

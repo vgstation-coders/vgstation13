@@ -151,7 +151,7 @@
 	var/activate_message = "Too slow."
 
 /obj/item/weapon/substitutionhologram/IsShield()
-	return TRUE
+	return SHIELD_ADVANCED
 
 /obj/item/weapon/substitutionhologram/on_block(damage, atom/blocked)
 	if(ishuman(loc))
@@ -493,13 +493,19 @@ Helpers For Both Variants
 	if(isninja(user))
 		..()
 	else
-		to_chat(user,"<span class='warning'>You can't locate the off button.</span>")
-		..(user,"on")
+		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
+		return
 	if(active)
 		cant_drop = TRUE
 	else
 		cant_drop = FALSE
 
+/obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
+	if(istype(W,/obj/item/weapon/melee/energy/sword))
+		return
+	else
+		return ..()
+		
 /obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
@@ -516,6 +522,10 @@ Helpers For Both Variants
 		return 1
 	else
 		return ..()
+		
+/obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
+	if(active)
+		toggleActive(user,togglestate = "off")
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****

@@ -588,6 +588,11 @@
 		/obj/item/weapon/switchtool/swiss_army_knife
 		)
 
+/obj/abstract/map/spawner/maint/lowchance
+	name = "low-chance maint spawner"
+	amount = 1
+	chance = 10
+
 /obj/abstract/map/spawner/highrisk
 	name = "high risk spawner"
 	icon_state = "maint"
@@ -606,6 +611,17 @@
 		/obj/item/clothing/shoes/magboots/magnificent,
 		/obj/item/weapon/gun/projectile/russian,
 	)
+
+/obj/abstract/map/spawner/floorpill
+	name = "floor pill spawner"
+	icon_state = "maint_pills"
+	chance = 20
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/random/maintenance
+	)
+
+/obj/abstract/map/spawner/floorpill/guaranteed
+	chance = 100
 
 // Space ///////////////////////////////////////////////////////
 

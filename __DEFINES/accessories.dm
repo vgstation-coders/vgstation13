@@ -7,4 +7,4 @@
 #define TIE			8
 #define HOLOMAP		16
 #define LASERTAG	32
-#define LIGHT		64
+#define ACCESSORY_LIGHT		64

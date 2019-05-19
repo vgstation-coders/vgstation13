@@ -18,6 +18,7 @@
 		"Weapons"=list(
 		new /obj/item/weapon/gun/projectile/sec/lockbox(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
+		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
 		"Single_ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/flare(), \
@@ -25,6 +26,10 @@
 		new /obj/item/ammo_casing/shotgun/stunshell(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
+		new /obj/item/ammo_casing/rocket_rpg/lowyield(),\
+		new /obj/item/ammo_casing/rocket_rpg/blank(),\
+		new /obj/item/ammo_casing/rocket_rpg/emp(),\
+		new /obj/item/ammo_casing/rocket_rpg/stun(),\
 		),
 		"Box_ammunition"=list(
 		new /obj/item/ammo_storage/box/b380auto(), \

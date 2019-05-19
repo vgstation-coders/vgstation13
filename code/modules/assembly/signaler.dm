@@ -220,7 +220,7 @@
 	set name = "Threaten to push the button!"
 	set desc = "BOOOOM!"
 
-	if(usr)
+	if(usr && !usr.incapacitated())
 		var/mob/user = usr
 		deadman = 1
 		processing_objects.Add(src)

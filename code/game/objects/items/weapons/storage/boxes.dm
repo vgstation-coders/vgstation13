@@ -847,3 +847,19 @@
 							/obj/item/toy/prize/odysseus,
 							/obj/item/toy/prize/phazon)
 		new randomFigurine(src)
+
+/obj/item/weapon/storage/box/diy_soda
+	name = "Dr. Pecker's DIY soda kit"
+	desc = "A trendy and expensive 'DIY' soda that you have to mix yourself. Tastes like a science fair experiment."
+	icon_state = "box_DIY_soda"
+	vending_cat = "carbonated drinks"
+
+/obj/item/weapon/storage/box/diy_soda/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer(src)
+	new /obj/item/weapon/paper/diy_soda(src)

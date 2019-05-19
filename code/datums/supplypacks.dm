@@ -327,6 +327,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_mining)
 	group = "Supplies"
 
+/datum/supply_packs/firefighting
+	name = "Firefighting equipment"
+	contains = list(/obj/item/clothing/suit/fire/firefighter,
+					/obj/item/clothing/suit/fire/firefighter,
+					/obj/item/clothing/mask/gas,
+					/obj/item/clothing/mask/gas,
+					/obj/item/clothing/head/hardhat/red,
+					/obj/item/clothing/head/hardhat/red,
+					/obj/item/weapon/extinguisher,
+					/obj/item/weapon/extinguisher,)
+	cost = 20
+	containertype = /obj/structure/closet/crate/basic
+	containername = "firefighting equipment crate"
+	group = "Supplies"
+
 /datum/supply_packs/artscrafts
 	name = "Arts and Crafts supplies"
 	contains = list(/obj/item/weapon/storage/fancy/crayons,
@@ -1018,6 +1033,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_security)
 	group = "Security"
 
+/datum/supply_packs/secbiosuits
+	name = "Biohazard Emergency Biosuits"
+	contains = list(/obj/item/clothing/head/bio_hood/security,
+					/obj/item/clothing/head/bio_hood/security,
+					/obj/item/clothing/head/bio_hood/security,
+					/obj/item/clothing/suit/bio_suit/security,
+					/obj/item/clothing/suit/bio_suit/security,
+					/obj/item/clothing/suit/bio_suit/security)
+	cost = 85
+	containertype = /obj/structure/closet/crate/secure/gear
+	containername = "Security Biosuits"
+	group = "Security"
+
 //////HOSPITALITY//////
 
 /datum/supply_packs/food
@@ -1548,6 +1576,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "inflatable structures crate"
 	group = "Engineering"
 
+/datum/supply_packs/firefighting_advanced
+	name = "Advanced firefighting equipment"
+	contains = list (/obj/item/weapon/fireaxe,
+					/obj/item/weapon/extinguisher/foam,
+					/obj/item/weapon/extinguisher/foam)
+	cost = 25
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "advanced firefighting equipment crate"
+	access = list(access_atmospherics)
+	group = "Engineering"
+
 /datum/supply_packs/radiation_suit
 	name = "Radiation suit"
 	contains = list()
@@ -1711,6 +1750,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/largecrate/skele_stand
 	containername = "hanging skeleton model crate"
+	group = "Medical"
+
+/datum/supply_packs/biosuits
+	name = "Biosuits"
+	contains = list(/obj/item/clothing/head/bio_hood,
+					/obj/item/clothing/head/bio_hood,
+					/obj/item/clothing/head/bio_hood,
+					/obj/item/clothing/suit/bio_suit,
+					/obj/item/clothing/suit/bio_suit,
+					/obj/item/clothing/suit/bio_suit)
+	cost = 85
+	containertype = /obj/structure/closet/crate/medical
+	containername = "Regular Biosuits"
 	group = "Medical"
 
 //////SCIENCE//////

@@ -321,6 +321,11 @@
 		abort()
 		return
 
+	if (R.active_spell)
+		to_chat(user, "<span class='rose'>A structure is already being raised from that rune, so you contribute to that instead.</span>")
+		R.active_spell.midcast(user)
+		return
+
 	switch(structure)
 		if("Altar")
 			spawntype = /obj/structure/cult/altar
@@ -467,6 +472,8 @@
 	if (!istype(user)) // Ghosts
 		return
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
+	if (!reminder)
+		return
 	reminder = utf8_sanitize(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
@@ -2387,13 +2394,16 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
-	page = "This rune triggers a short-range EMP that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
+	page = "This rune triggers a series of short-range EMPs that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
 	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
 	T.hotspot_expose(700,125,surfaces=1)
-	empulse(T, 1, 3)
+	spawn(0)
+		for(var/i = 0; i < 3; i++)
+			empulse(T, 1, 3)
+			sleep(20)
 	qdel(spell_holder)
 
 //RUNE XIX
@@ -2454,6 +2464,8 @@ var/list/bloodcult_exitportals = list()
 
 	step(astral,NORTH)
 	astral.dir = SOUTH
+	astral.movespeed = 0.375//twice the default ghost move speed
+	astral.see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 	if (astral.client)
 		for (var/image/I in antag_icons)

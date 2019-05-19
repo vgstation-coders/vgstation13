@@ -131,7 +131,7 @@
 		if(R.amount < 2) //Do a first check BEFORE the user begins, in case he's using a single rod
 			to_chat(user, "<span class='warning'>You need more rods to finish the support struts.</span>")
 			return
-		user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src.]</span>", \
+		user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src].</span>", \
 		"<span class='notice'>You start inserting internal support struts into \the [src].</span>")
 		if(do_after(user, src,construction_length))
 			var/obj/item/stack/rods/O = W
