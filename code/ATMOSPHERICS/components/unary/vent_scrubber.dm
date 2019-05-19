@@ -211,7 +211,7 @@
 		if (air_contents.return_pressure()>=MAX_PRESSURE)
 			return
 
-		var/transfer_moles = environment.total_moles()*(volume_rate/environment.volume)
+		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 
 		var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
 
