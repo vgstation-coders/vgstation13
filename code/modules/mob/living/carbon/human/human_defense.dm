@@ -208,9 +208,6 @@ emp_act
 		return FALSE
 	var/hit_area = affecting.display_name
 
-	if(istype(I,/obj/item/weapon/card/emag))
-		return src.emag_act(user, affecting, I)
-
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
 			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
