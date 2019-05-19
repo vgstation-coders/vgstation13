@@ -9,6 +9,7 @@
 
 	var/on = 0
 	var/volume_rate = 5000 //litres / tick
+	var/scrubbing_rate = 300 //litres / tick, max amount of gas put in internal tank per tick
 
 	var/scrub_o2 = FALSE
 	var/scrub_n2 = FALSE
@@ -36,6 +37,7 @@
 	anchored = 1
 	volume = 50000
 	volume_rate = 20000
+	scrubbing_rate = 1200
 
 	var/global/gid = 1
 	var/id = 0
@@ -127,11 +129,11 @@
 		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
 
 		//Filter it
-		//copypasted from scrubber code pretty much
+		//copypasted from scrubber code with modifications to add the scrubbing rate limit
 		if (removed)
-			var/datum/gas_mixture/filtered_out = new
-			filtered_out.temperature = removed.temperature
-			#define FILTER(g) filtered_out.adjust_gas((g), removed[g], FALSE)
+			var/datum/gas_mixture/total_to_filter = new
+			total_to_filter.temperature = removed.temperature
+			#define FILTER(g) total_to_filter.adjust_gas((g), removed[g], FALSE)
 			if(scrub_plasma)
 				FILTER(GAS_PLASMA)
 			if(scrub_co2)
@@ -144,7 +146,11 @@
 				FILTER(GAS_OXYGEN)
 			FILTER(GAS_OXAGENT)
 			#undef FILTER
-			filtered_out.update_values()
+			total_to_filter.update_values() //since the FILTER macro doesn't update to save perf, we need to update here
+			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
+			var/filter_moles = min(1, scrubbing_rate / volume_rate) * removed.total_moles()
+			var/datum/gas_mixture/filtered_out = total_to_filter.remove(filter_moles)
+			visible_message("DEBUG: Filtered [filtered_out.total_moles()] moles.")
 			removed.subtract(filtered_out)
 
 			//Remix the resulting gases
@@ -237,6 +243,7 @@
 /obj/machinery/portable_atmospherics/scrubber/mech
 	volume = 50000
 	volume_rate = 20000
+	scrubbing_rate = 1200
 	var/obj/mecha/mech //the mech associated with this scrubber
 
 /obj/machinery/portable_atmospherics/scrubber/mech/New(var/location)
