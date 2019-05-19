@@ -75,7 +75,7 @@
 	//	del(T)
 
 	O.forceMove(M.loc)
-	Mo.dropBorers(O) //safer to just drop these like I originally did
+	Mo.dropBorers() //safer to just drop these like I originally did
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 
