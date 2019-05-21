@@ -1340,14 +1340,15 @@
 		return
 	if(usr.incapacitated() || !occupant)
 		return
-	if(usr != occupant && occupant.isUnconscious())
-		visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
-		if(do_after(usr, src, 30 SECONDS))
-			if(!occupant.isUnconscious())
-				visible_message("<span class='notice'>[occupant.name] woke up and pushed [usr] away.</span>")
-				return
-			go_out(over_location)
-			add_fingerprint(usr)
+	if(usr != occupant)
+		if(occupant.isUnconscious())
+			visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
+			if(do_after(usr, src, 30 SECONDS))
+				if(!occupant.isUnconscious())
+					visible_message("<span class='notice'>[occupant.name] woke up and pushed [usr] away.</span>")
+					return
+				go_out(over_location)
+				add_fingerprint(usr)
 		return
 	for(var/atom/movable/A in over_location.contents)
 		if(A.density)
