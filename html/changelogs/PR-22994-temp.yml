@@ -1,5 +1,0 @@
----
-author: Kurfursten
-changes:
-  - bugfix: Fixed a bug in which a mecha could be forcibly ejected using mousedrop if the target was conscious.
-delete-after: true

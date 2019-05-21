@@ -1,5 +1,0 @@
----
-author: plosky1
-changes:
-  - rscadd: "Added two missing distro pipes to make vent work in maint above detective's office."
-delete-after: true

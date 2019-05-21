@@ -1,5 +1,0 @@
----
-author: brndd
-changes:
-  - tweak: passive gates now have a dramatically greater flow rate.
-delete-after: true

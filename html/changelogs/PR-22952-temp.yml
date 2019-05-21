@@ -1,5 +1,0 @@
----
-author: Allspice
-changes:
-  - bugfix: Exanimis potions and anything that uses default make_zombie can now produce player zombies.
-delete-after: true
