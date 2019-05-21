@@ -79,7 +79,6 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
 			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station. Find a way inside before your suit's life support systems give out.</span>")
-			antag.current.ThrowAtStation()
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 

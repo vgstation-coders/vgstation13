@@ -368,6 +368,7 @@
 /proc/equip_ninja(var/mob/living/carbon/human/spaceninja)
 	if(!istype(spaceninja))
 		return 0
+	sleep(1) //so non-humans don't runtime
 	if(!isjusthuman(spaceninja))
 		spaceninja = spaceninja.Humanize("Human")
 	spaceninja.delete_all_equipped_items()
