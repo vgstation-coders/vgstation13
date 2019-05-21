@@ -552,6 +552,7 @@ Suit and assorted
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
+	..()
 	spawn(60 SECONDS)
 		pressure_resistance = 0
 		src.visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
@@ -576,10 +577,10 @@ Suit and assorted
 	pressure_resistance = ONE_ATMOSPHERE
 	
 /obj/item/clothing/suit/space/ninja/apprentice/New()
+	..()
 	spawn(60 SECONDS)
 		pressure_resistance = 0
 		src.visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
-		
 	
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
 	/*if(!isninja(H))
