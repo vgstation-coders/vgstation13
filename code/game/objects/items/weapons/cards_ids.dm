@@ -163,11 +163,11 @@
 	if(recharge_rate && recharge_ticks)
 		to_chat(user, "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>")
 
-//dont perform emag stuff in this method
+//don't perform emag_act() stuff in this method
 /obj/item/weapon/card/emag/attack()
 	return
 
-//perform individual emag_act stuff on children overriding the method here 
+//perform individual emag_act() stuff on children overriding the method here 
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
