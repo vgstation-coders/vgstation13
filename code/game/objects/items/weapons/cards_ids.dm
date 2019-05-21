@@ -163,25 +163,22 @@
 	if(recharge_rate && recharge_ticks)
 		to_chat(user, "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>")
 
-//only trigger if target is human thus having prosthetic limbs to sabotage
-/obj/item/weapon/card/emag/attack(var/mob/living/target, var/mob/living/attacker)
-	if (!istype(target, /mob/living/carbon/human))
-		return
-	//get target zone with 0% chance of missing
-	var/zone = ran_zone(attacker.zone_sel.selecting, 100)
-	var/datum/organ/external/organ = target.get_organ(zone)
-	target.emag_act(attacker, organ, src)
+//dont perform emag stuff in this method
+/obj/item/weapon/card/emag/attack()
 	return
 
-//this method gets called from held_item.afterattack as it should, but in the case of somebody with emag clicking on a human we don't want this method to trigger,
-//since the logic for emag attack is in emag/attack
-/obj/item/weapon/card/emag/afterattack(atom/target, mob/user, proximity)
-	var/atom/A = target
-	if (istype(target, /mob/living/carbon/human)) 
-		return
+//perform individual emag_act stuff on children overriding the method here 
+/obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
-	A.emag_act(user)
+	if (istype(target, /mob/living/carbon/human)) 
+		var/mob/living/carbon/target_living = target
+		//get target zone with 0% chance of missing
+		var/zone = ran_zone(user.zone_sel.selecting, 100)
+		var/datum/organ/external/organ = target_living.get_organ(zone)
+		target_living.emag_act(user, organ, src)
+		return
+	target.emag_act(user)
 
 /obj/item/weapon/card/id
 	name = "identification card"
