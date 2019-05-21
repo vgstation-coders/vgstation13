@@ -1544,13 +1544,17 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Prison Wing"
 	icon_state = "sec_prison"
 
+/area/security/confession
+	name = "\improper Confession room"
+	icon_state = "sec_conf"
+
 /area/security/perma
 	name = "\improper Permanent Confinement"
 	icon_state = "sec_perma"
 
 /area/security/gas_chamber
 	name = "\improper Execution Chamber"
-	icon_state = "bar" // Because it's all parties from here on.
+	icon_state = "sec_exec"
 	jammed=1
 
 /area/security/medical
