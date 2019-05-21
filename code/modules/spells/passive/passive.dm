@@ -7,4 +7,4 @@
     charge_max = 0 //Redundancy
 
 /spell/passive/process()
-    return
+    return //Does nothing, add processes to children instead
