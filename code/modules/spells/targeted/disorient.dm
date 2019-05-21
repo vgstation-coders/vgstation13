@@ -21,11 +21,10 @@
 	spell_flags = WAIT_FOR_CLICK
 
 	hud_state = "wiz_disorient"
-	var/empowered = 0
 
 /spell/targeted/disorient/cast(var/list/targets)
 	..()
-	if(empowered)
+	if(spell_levels[Sp_POWER] >= 1)
 		for(var/mob/target in targets)
 			var/angle = pick(90, 180, 270)
 			var/client/C = target.client
@@ -37,7 +36,6 @@
 
 /spell/targeted/disorient/empower_spell()
 	spell_levels[Sp_POWER]++
-	empowered++
 	name = "Empowered Disorient"
 	desc = "This spell will very thoroughly disorient a target for 30 seconds."
 	return "You have upgraded the spell to turn the target's perception in another direction, further debilitating them."
