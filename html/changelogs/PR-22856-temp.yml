@@ -1,0 +1,5 @@
+---
+author: DDihanov
+changes:
+  - tweak: "Made slip zone(water, lube etc..) shimmer brighter."
+delete-after: true

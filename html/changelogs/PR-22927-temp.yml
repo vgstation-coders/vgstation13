@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - tweak: HE pipes and thermal plates are now equally effective in radiating heat.
+delete-after: true

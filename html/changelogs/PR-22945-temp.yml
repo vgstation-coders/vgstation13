@@ -1,0 +1,6 @@
+---
+author: jknpj
+changes:
+  - rscadd: Radiation large artifacts now emit a small(really small) amount of harvestable radiation
+  - rscdel: Pulse and aura large artifacts now emit external radiation instead of internal(so you can actually protect yourself by using a radiation suit).
+delete-after: true

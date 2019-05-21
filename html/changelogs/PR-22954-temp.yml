@@ -1,0 +1,5 @@
+---
+author: Allspice
+changes:
+  - tweak: Glutton zombies can now create player zombies instead of NPC zombies.
+delete-after: true
