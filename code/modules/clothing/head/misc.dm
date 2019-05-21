@@ -99,6 +99,15 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
+	
+/obj/item/clothing/head/spaceninjafake
+	name = "ninja hood replica"
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	desc = "A plastic replica of a space ninja's hood, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|BEARD
+	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"

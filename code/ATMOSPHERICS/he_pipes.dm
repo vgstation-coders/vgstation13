@@ -1,5 +1,6 @@
 #define NO_GAS 0.01
 #define SOME_GAS 1
+#define ENERGY_MULT 6.4   // Not sure what this is, keeping it the same as plates.
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging
 	icon = 'icons/obj/pipes/heat.dmi'
@@ -8,10 +9,9 @@
 
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
-
-	var/RADIATION_CAPACITY = 32000       // Radiation isn't particularly effective (TODO BALANCE)
-	                                     //  Plate value is 30000, increased it a bit because of additional surface area. - N3X
-	var/const/ENERGY_MULT        = 6.4   // Not sure what this is, keeping it the same as plates.
+	var/radiation_capacity = 30000  // Radiation isn't particularly effective (TODO BALANCE)
+									//  Plate value is 30000, increased it a bit because of additional surface area. - N3X
+									// Screw you N3X15, 30000 is a perfectly fine number. - bur
 
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
 
@@ -112,8 +112,8 @@
 	if (!internal_removed)
 		return
 
-	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
-	var/combined_energy = internal_removed.thermal_energy() + (RADIATION_CAPACITY * ENERGY_MULT)
+	var/combined_heat_capacity = internal_removed.heat_capacity() + radiation_capacity
+	var/combined_energy = internal_removed.thermal_energy() + (radiation_capacity * ENERGY_MULT)
 
 	var/final_temperature = combined_energy / combined_heat_capacity
 
@@ -204,7 +204,7 @@
 	icon = 'icons/obj/pipe-item.dmi'
 	icon_state = "he_manifold"
 	var/obj/machinery/atmospherics/node3
-	RADIATION_CAPACITY = 24000
+	radiation_capacity = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/New()
 	.. ()
@@ -258,7 +258,7 @@
 	icon_state = "he_manifold4w"
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
-	RADIATION_CAPACITY = 24000
+	radiation_capacity = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/New()
 	.. ()
@@ -299,3 +299,7 @@
 
 	if(!suppress_icon_check)
 		update_icon()
+
+#undef NO_GAS
+#undef SOME_GAS
+#undef ENERGY_MULT
