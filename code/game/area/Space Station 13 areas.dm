@@ -62,6 +62,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/door_alerts=0
 
 	var/doors_down=0
+	var/doors_overridden=0 //manual override to force firedoors up
 
 	// /vg/: No teleporting for you. 2 = SUPER JAMMED, inaccessible even to telecrystals.
 	var/jammed = 0

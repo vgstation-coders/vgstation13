@@ -55,6 +55,11 @@
 	var/path[] = new() // used for pathing
 	var/frustration
 
+/obj/machinery/bot/farmbot/vox_garden_farmbot
+	name = "Special Vox Trader Farmbot"
+	req_access = list()
+	req_one_access =  list(access_hydroponics, access_trade)
+
 /obj/machinery/bot/farmbot/New()
 	..()
 	src.icon_state = "[src.icon_initial][src.on]"

@@ -123,8 +123,8 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 4
-	cost = 10
+	weight = 3
+	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
 	logo = "ninja-logo"
@@ -140,7 +140,11 @@
 	newninja.Greet(GREET_DEFAULT)
 	newninja.OnPostSetup()
 	newninja.AnnounceObjectives()
+	spawn(5)
+		newninja.antag.current.ThrowAtStation()
 	return 1
+	
+
 
 //////////////////////////////////////////////
 //                                          //

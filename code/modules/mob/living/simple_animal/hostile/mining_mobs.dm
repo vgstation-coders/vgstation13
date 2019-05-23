@@ -517,8 +517,8 @@ obj/item/asteroid/basilisk_hide/New()
 			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
-			if(current_armor.["melee"] < 90)
-				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
+			if(current_armor["melee"] < 90)
+				current_armor["melee"] = min(current_armor["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else

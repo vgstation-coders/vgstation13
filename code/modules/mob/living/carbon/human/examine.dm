@@ -416,7 +416,7 @@
 
 		if(distance <= 3)
 			if(!has_brain())
-				msg += "<font color='blue'><b>[t_He] [t_has] had [t_his] brain removed.</b></font>\n"
+				msg += "<span class='notice'><b>[t_He] [t_has] had [t_his] brain removed.</b></span>\n"
 
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 	if(butchering_drops && butchering_drops.len)

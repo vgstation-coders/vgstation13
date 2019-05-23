@@ -614,9 +614,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		else
 			to_chat(src, "<span class='info'>You begin disconnecting from \the [host]'s nerve endings and prodding at the surface of their skin.</span>")
 
-	var/leave_time = 200
+	var/leave_time = 5 SECONDS
 	if(severed)
-		leave_time = 20
+		leave_time = 2 SECONDS
 
 	spawn(leave_time)
 
@@ -866,10 +866,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "This host's [limb_to_name(region)] is already infested!")
 		return
 
-	if(limb_covered(M, region))
-		to_chat(src, "You cannot get through the protective gear on that host's [limb_to_name(region)].")
-		return
-
 	switch(region)
 		if(LIMB_HEAD)
 			to_chat(src, "You slither up [M] and begin probing at their ear canal...")
@@ -1045,7 +1041,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	else
 		to_chat(src, "You do not have enough chemicals stored to reproduce.")
-		return()
+		return
 
 //Procs for grabbing players.
 /mob/living/simple_animal/borer/proc/request_player()

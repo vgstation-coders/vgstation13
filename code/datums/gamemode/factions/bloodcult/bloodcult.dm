@@ -217,6 +217,10 @@ var/veil_thickness = CULT_PROLOGUE
 	initialize_cultwords()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
+
+/datum/faction/bloodcult/minorVictoryText()
+	return "The cult completed its sacrificial ritual, but not in time to summon Nar-Sie."
+
 /*
 /datum/faction/bloodcult/process()
 	..()
@@ -286,6 +290,7 @@ var/veil_thickness = CULT_PROLOGUE
 							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
+			minor_victory = TRUE // At any rate, we achieve a minor win.
 			if (O)
 				O.target_sacrificed = TRUE
 				veil_thickness = CULT_ACT_III
@@ -371,6 +376,16 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Cult reminder: [reminder].")
 
+/datum/faction/bloodcult/proc/minor_victory()
+	for(var/datum/role/cultist/C in members)
+		var/mob/M = C.antag.current
+		if (M && iscultist(M))
+			to_chat(M,"<span class='sinister'>While the sacrifice was correctly completed, we were not fast enough to prevent our ennemies from fleeing.</span>")
+			to_chat(M, "<span class='sinister'>This changes nothing. We will find another way.</span>")
+			for (var/datum/objective/O in objective_holder.objectives)
+				O.force_success = TRUE
+	minor_victory = TRUE
+  
 /datum/faction/bloodcult/GetScoreboard()
 	.=..()
 	if(veil_thickness == CULT_EPILOGUE)

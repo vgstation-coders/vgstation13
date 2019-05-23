@@ -19,8 +19,8 @@
 	build_path = /obj/item/weapon/pickaxe/drill
 
 /datum/design/plasmacutter
-	name = "Plasma Cutter"
-	desc = "You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	name = "Plasma Torch"
+	desc = "A rock cutter that uses bursts of hot plasma"
 	id = "plasmacutter"
 	req_tech = list(Tc_MATERIALS = 4, Tc_PLASMATECH = 3, Tc_ENGINEERING = 3)
 	build_type = PROTOLATHE
@@ -28,6 +28,17 @@
 	reliability_base = 79
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/plasmacutter
+
+/datum/design/plasmacutterkit
+	name = "Plasma Cutter Conversion kit"
+	desc = "A set of tools that enables conversion of a mining diamond drill into a plasma cutter. Needs to be loaded with the parts of a proto-kinetic accelerator first."
+	id = "plasmacutterkit"
+	req_tech = list(Tc_MATERIALS = 4, Tc_PLASMATECH = 3, Tc_ENGINEERING = 3, Tc_NANOTRASEN = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1500, MAT_GLASS = 500, MAT_GOLD = 500, MAT_PLASMA = 1000)
+	reliability_base = 79
+	category = "Mining"
+	build_path = /obj/item/device/modkit/plasmacutter
 
 /datum/design/pick_diamond
 	name = "Diamond Pickaxe"

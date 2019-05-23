@@ -235,7 +235,7 @@ var/global/list/rnd_machines = list()
 		icon_state = "[base_state]"
 		use_power(max(1000, (3750*amount/10)))
 		stack.use(amount)
-		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src.].</span>")
+		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src].</span>")
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)

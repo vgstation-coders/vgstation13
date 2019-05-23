@@ -208,18 +208,6 @@ emp_act
 		return FALSE
 	var/hit_area = affecting.display_name
 
-	if(istype(I,/obj/item/weapon/card/emag))
-		if(!(affecting.status & ORGAN_ROBOT))
-			to_chat(user, "<span class='warning'>That limb isn't robotic.</span>")
-			return FALSE
-		if(affecting.sabotaged)
-			to_chat(user, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
-		else
-			to_chat(user, "<span class='warning'>You sneakily slide [I] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
-			affecting.sabotaged = TRUE
-		return FALSE
-
-
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
 			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
@@ -342,6 +330,14 @@ emp_act
 		update_inv_wear_suit(update)
 	if(w_uniform)
 		w_uniform.add_blood(source)
+		update_inv_w_uniform(update)
+
+/mob/living/carbon/human/apply_luminol(var/update = FALSE) //Despite what you might think with FALSE this will update things as normal.
+	if(wear_suit)
+		wear_suit.apply_luminol()
+		update_inv_wear_suit(update)
+	if(w_uniform)
+		w_uniform.apply_luminol()
 		update_inv_w_uniform(update)
 
 /mob/living/carbon/human/ex_act(var/severity, var/noblind = FALSE)

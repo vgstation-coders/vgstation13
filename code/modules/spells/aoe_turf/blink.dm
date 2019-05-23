@@ -23,7 +23,7 @@
 	var/turf/starting = get_turf(user)
 	if(T)
 		user.unlock_from()
-		user.forceMove(T)
+		user.teleport_to(T)
 
 		makeAnimation(T, starting)
 	return

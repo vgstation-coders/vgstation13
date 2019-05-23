@@ -15,21 +15,26 @@ NanoBaseCallbacks = function ()
 			{
 				uiStatusClass = 'icon24 uiStatusGood';
 				$('.linkActive').removeClass('inactive');
+				$('.buttonActive').removeClass('inactive');
 			}
 			else if (updateData['config']['status'] == 1)
 			{
 				uiStatusClass = 'icon24 uiStatusAverage';
 				$('.linkActive').addClass('inactive');
+				$('.buttonActive').addClass('inactive');
 			}
 			else
 			{
 				uiStatusClass = 'icon24 uiStatusBad'
 				$('.linkActive').addClass('inactive');
+				$('.buttonActive').addClass('inactive');
 			}
 			$('#uiStatusIcon').attr('class', uiStatusClass);
 
 			$('.linkActive').stopTime('linkPending');
 			$('.linkActive').removeClass('linkPending');
+			$('.buttonActive').stopTime('linkPending');
+			$('.buttonActive').removeClass('linkPending');
 
 			$('.linkActive')
 				.off('click')
@@ -49,6 +54,27 @@ NanoBaseCallbacks = function ()
 							});
 						}
 						window.location.href = href;
+					}
+				});
+			
+			$('.buttonActive')
+				.off('click')
+				.on('click', function (event) {
+					event.preventDefault();
+					var form = document.getElementById($(this).data('formid'));
+					if (form != null && _canClick)
+					{
+						_canClick = false;
+						$('body').oneTime(300, 'enableClick', function () {
+							_canClick = true;
+						});
+						if (updateData['config']['status'] == 2)
+						{
+							$(this).oneTime(300, 'linkPending', function () {
+								$(this).addClass('linkPending');
+							});
+						}
+						form.submit();
 					}
 				});
 

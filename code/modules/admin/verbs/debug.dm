@@ -68,7 +68,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			return
 
 		if(target && !hascall(target, procname))
-			to_chat(usr, "<span style='color: red;'>Error: callproc(): target has no such call [procname].</span>")
+			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -86,7 +86,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		if(targetselected)
 			if(!target)
-				to_chat(usr, "<font color='red'>Error: callproc(): owner of proc no longer exists.</font>")
+				to_chat(usr, "<span class='red'>Error: callproc(): owner of proc no longer exists.</span>")
 				return
 
 			log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
@@ -100,7 +100,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
+		to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
@@ -120,7 +120,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			return
 
 		if(!hascall(target, procname))
-			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
+			to_chat(usr, "<span class='red'>Error: callatomproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -143,7 +143,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
+		to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -1138,9 +1138,9 @@ client/proc/check_bomb()
 
 /client/proc/set_teleport_pref()
 	set name = "Set Teleport-Here Preferences"
-	set category = "Debug"
+	set category = "Fun"
 
-	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discret way?","Teleport-Here Preferences", "Flashy","Stealthy")
+	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discreet way?","Teleport-Here Preferences", "Flashy","Stealthy")
 
 	switch(teleport_here_pref)
 		if("Flashy")
