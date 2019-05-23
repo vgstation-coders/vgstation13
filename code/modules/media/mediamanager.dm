@@ -33,7 +33,7 @@ function SetMusic(url, time, volume) {
 	vlc.playlist.playItem(id);
 
 	vlc.input.time = time*1000; // VLC takes milliseconds.
-	vlc.audio.volume = volume*100; // \[0-200]
+	vlc.audio.volume = +volume; // \[0-200]
 }
 	</script>
 "}
