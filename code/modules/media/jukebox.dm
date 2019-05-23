@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
+	for(var/playlist_id in list("bar", "bomberman", "depresso", "echoes","electronica", "emagged", "endgame", "filk", "folk", "malf_delta", "medbay", "metal", "muzak_jazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeat_hype_dance_jam", "SCOTLAND_FOREVER"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -765,12 +765,17 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
-		"jazz" = "Jazz",
+		"depresso" ="Depresso",
+		"electronica" = "Electronica",
+		"filk" = "Filk",
+		"folk" = "Folk",
+		"medbay" = "Medbay",
+		"metal" = "Heavy Metal",
+		"muzak_jazz" = "Muzak & Jazz",
+		"rap" = "Rap",
 		"rock" = "Rock",
-		"vidyaone" = "Vidya Pt.1",
-		"vidyatwo" = "Vidya Pt.2",
-		"vidyathree" = "Vidya Pt.3",
-		"vidyafour" = "Vidya Pt.4",
+		"security" = "Security",
+		"upbeat_hype_dance_jam" = "Dance"
 	)
 
 // Relaxing elevator music~
@@ -785,14 +790,18 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
-		"jazz" = "Jazz",
+		"depresso" ="Depresso",
+		"electronica" = "Electronica",
+		"filk" = "Filk",
+		"folk" = "Folk",
+		"medbay" = "Medbay",
+		"metal" = "Heavy Metal",
+		"muzak_jazz" = "Muzak & Jazz",
+		"rap" = "Rap",
 		"rock" = "Rock",
-		"muzak" = "Muzak",
-		"thunderdome" = "Thunderdome", // For thunderdome I guess
-		"vidyaone" = "Vidya Pt.1",
-		"vidyatwo" = "Vidya Pt.2",
-		"vidyathree" = "Vidya Pt.3",
-		"vidyafour" = "Vidya Pt.4",
+		"security" = "Security",
+		"upbeat_hype_dance_jam" = "Dance",
+		"thunderdome" = "Thunderdome"
 	)
 
 // So I don't have to do all this shit manually every time someone sacrifices pun-pun.
@@ -810,22 +819,29 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
-		"jazz" = "Jazz",
+		"depresso" ="Depresso",
+		"electronica" = "Electronica",
+		"filk" = "Filk",
+		"folk" = "Folk",
+		"medbay" = "Medbay",
+		"metal" = "Heavy Metal",
+		"muzak_jazz" = "Muzak & Jazz",
+		"rap" = "Rap",
 		"rock" = "Rock",
-		"muzak" = "Muzak",
-
-
 		"emagged" = "Syndie Mix",
 		"shuttle" = "Shuttle",
-
+		"security" = "Security",
+		"upbeat_hype_dance_jam" = "Dance",
+		"thunderdome" = "Thunderdome"
+		"emagged" ="Syndicate Mix",
 		"endgame" = "Apocalypse",
-		"clockwork" = "Clockwork", // Unfinished new cult stuff
-		"thunderdome" = "Thunderdome", // For thunderdome I guess
-//Vidya musak
-		"vidyaone" = "Vidya Pt.1",
-		"vidyatwo" = "Vidya Pt.2",
-		"vidyathree" = "Vidya Pt.3",
-		"vidyafour" = "Vidya Pt.4",
+		"scotland"= "Highlander",
+		"shuttle"= "Shuttle",
+		"nukesquad" = "Syndicate Assault",
+		"malfdelta"= "Silicon Assault",
+		"bomberman" = "Bomberman",
+		"echos" = "Echos"
+	)
 	)
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
@@ -950,62 +966,87 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - [formatted]"
 
 //Premades
-/obj/item/weapon/vinyl/vidyaone
-	name = "nanovinyl - video games, volume one"
-	unformatted = "vidyaone"
-	formatted = "Vidya Pt.1"
-
-/obj/item/weapon/vinyl/vidyatwo
-	name = "nanovinyl - video games, volume two"
-	unformatted = "vidyatwo"
-	formatted = "Vidya Pt.2"
-
-/obj/item/weapon/vinyl/vidyathree
-	name = "nanovinyl - video games, volume three"
-	unformatted = "vidyathree"
-	formatted = "Vidya Pt.3"
-
-/obj/item/weapon/vinyl/vidyafour
-	name = "nanovinyl - video games, volume four"
-	unformatted = "vidyafour"
-	formatted = "Vidya Pt.4"
-
-/obj/item/weapon/vinyl/jazz
-	name = "nanovinyl - jazz"
-	unformatted = "jazz"
-	formatted = "Jazz"
-
+/obj/item/weapon/vinyl/bar
+	name = "nanovinyl - bar"
+	unformatted = "bar"
+	formatted = "Bar"
+/obj/item/weapon/vinyl/bomberman
+	name = "nanovinyl - bomberman"
+	unformatted = "bomberman"
+	formatted = "Bomberman"
+/obj/item/weapon/vinyl/depresso
+	name = "nanovinyl - depresso"
+	unformatted = "depresso"
+	formatted = "Depresso"
+/obj/item/weapon/vinyl/echoes
+	name = "nanovinyl - echoes"
+	unformatted = "echoes"
+	formatted = "Echoes"
+/obj/item/weapon/vinyl/electronica
+	name = "nanovinyl - electronic"
+	unformatted = "electronica"
+	formatted = "Electronic"
+/obj/item/weapon/vinyl/emagged
+	name = "nanovinyl - syndicate"
+	unformatted = "emagged"
+	formatted = "Syndicate Mix"
+/obj/item/weapon/vinyl/endgame
+	name = "nanovinyl - apocalypse"
+	unformatted = "endgame"
+	formatted = "Apocalypse"
+/obj/item/weapon/vinyl/filk
+	name = "nanovinyl - filk"
+	unformatted = "filk"
+	formatted = "Filk"
+/obj/item/weapon/vinyl/folk
+	name = "nanovinyl - folk"
+	unformatted = "folk"
+	formatted = "Folk"
+/obj/item/weapon/vinyl/malf
+	name = "nanovinyl - silicon assault"
+	unformatted = "malf_delta"
+	formatted = "Silicon Assault"
+/obj/item/weapon/vinyl/medbay
+	name = "nanovinyl - medbay"
+	unformatted = "medbay"
+	formatted = "Medbay"
+/obj/item/weapon/vinyl/metal
+	name = "nanovinyl - heavy metal"
+	unformatted = "metal"
+	formatted = "Heavy Metal"
+/obj/item/weapon/vinyl/muzakjazz
+	name = "nanovinyl - muzak & jazz"
+	unformatted = "muzak_jazz"
+	formatted = "Muzak & Jazz"
+/obj/item/weapon/vinyl/syndie_assault
+	name = "nanovinyl - syndicate assault"
+	unformatted = "nukesquad"
+	formatted = "Syndicate Assault"
+/obj/item/weapon/vinyl/rap
+	name = "nanovinyl - rap"
+	unformatted = "rap"
+	formatted = "Rap"
 /obj/item/weapon/vinyl/rock
 	name = "nanovinyl - rock"
 	unformatted = "rock"
 	formatted = "Rock"
-
-/obj/item/weapon/vinyl/muzak
-	name = "nanovinyl - muzak"
-	unformatted = "muzak"
-	formatted = "Muzak"
-
+	/obj/item/weapon/vinyl/security
+	name = "nanovinyl - security"
+	unformatted = "security"
+	formatted = "Security"
 /obj/item/weapon/vinyl/shuttle
 	name = "nanovinyl - shuttle"
 	unformatted = "shuttle"
 	formatted = "Shuttle"
-
-/obj/item/weapon/vinyl/syndie
-	name = "nanovinyl - syndicate"
-	unformatted = "emagged"
-	formatted = "Syndie Mix"
-
-/obj/item/weapon/vinyl/endgame
-	name = "nanovinyl - apocalypse"
-	unformatted = "endgame"
-	formatted =	"Apocalypse"
-
-/obj/item/weapon/vinyl/clockwork
-	name = "nanovinyl - clockwork"
-	unformatted = "clockwork"
-	formatted =	"Clockwork"
-
-/obj/item/weapon/vinyl/thunderdome
+	/obj/item/weapon/vinyl/thunderdome
 	name = "nanovinyl - thunderdome"
 	unformatted = "thunderdome"
 	formatted =	"Thunderdome"
+/obj/item/weapon/vinyl/upbeat_dance
+	name = "nanovinyl - dance"
+	unformatted = "upbeat_hype_dance_jam"
+	formatted = "Dance"
+/obj/item/weapon/vinyl/scotland
+	name = "nanovinyl - highlander"
+	unformatted = "SCOTLAND_FOREVER"
+	formatted = "Highlander"

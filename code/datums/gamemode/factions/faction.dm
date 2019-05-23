@@ -235,8 +235,7 @@ var/list/factions_with_hud_icons = list()
 			OnPostDefeat()
 			set_security_level("blue")
 			ticker.StopThematic()
-		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
-			ticker.StartThematic("endgame")
+		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert (As of music update, StartThematic is now handled in individual endgame toggles)
 			sleep(2 SECONDS)
 			set_security_level("red")
 
