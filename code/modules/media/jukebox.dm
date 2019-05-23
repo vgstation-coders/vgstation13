@@ -842,7 +842,6 @@ var/global/list/loopModeNames=list(
 		"bomberman" = "Bomberman",
 		"echos" = "Echos"
 	)
-	)
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
