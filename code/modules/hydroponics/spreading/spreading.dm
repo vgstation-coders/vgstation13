@@ -67,6 +67,7 @@
 	max_health = round(seed.endurance/2)
 	if(seed.spread == 1)
 		limited_growth = 1
+		plane = CREEPER_LAYER
 	mature_time = Ceiling(seed.maturation/2)
 	spread_chance = round(40 + triangular_seq(seed.potency*2, 30)) // Diminishing returns formula, see maths.dm
 	spread_distance_limit = limited_growth ? (CREEPER_GROWTH_DISTANCE) : 0
