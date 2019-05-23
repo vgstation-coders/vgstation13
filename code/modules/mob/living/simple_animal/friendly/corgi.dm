@@ -260,6 +260,8 @@
 		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
 			name = "Captain [real_name]"
 			desc = "Probably better than the last captain."
+			emote_hear = list("secures the spare.", "hides the nuke disk.", "assures the crew he is NOT a comdom.")
+			valid = 1
 
 		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/kitty/collectable)
 			name = "Runtime"
@@ -290,7 +292,7 @@
 
 		if(/obj/item/clothing/head/nursehat)
 			name = "Nurse [real_name]"
-			desc = "[name] needs 100cc of beef jerky...STAT!"
+			desc = "[name] needs 100cc of beef jerky... STAT!"
 			valid = 1
 
 		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate)
@@ -302,20 +304,21 @@
 			valid = 1
 
 		if(/obj/item/clothing/head/ushanka)
-			name = "[pick("товарищ","Vladimir","Chairman")] [real_name]"
+			name = "[pick("Tzar","Vladimir","Chairman")] [real_name]"
 			desc = "A follower of Karl Barx."
-			emote_see = list("contemplates the failings of the capitalist economic model.", "ponders the pros and cons of vangaurdism.", "plans out methods to equally redistribute capital.", "articulates an argument for the primacy of the bourgeoisie.")
+			emote_see = list("contemplates the failings of the capitalist economic model.", "ponders the pros and cons of vangaurdism.", "plans out methods to equally redistribute capital.", "articulates an argument for the primacy of the bourgeoisie.", "develops an economic plan to industrialize the vast rural landscape.")
 			valid = 1
 
 		if(/obj/item/clothing/head/collectable/police)
 			name = "Officer [real_name]"
-			emote_see = list("drools","looks for donuts")
-			desc = "Stop right there criminal scum!"
+			emote_see = list("drools.","looks for donuts.")
+			desc = "Stop right there, criminal scum!"
 			valid = 1
 
 		if(/obj/item/clothing/head/wizard/fake,	/obj/item/clothing/head/wizard,	/obj/item/clothing/head/collectable/wizard)
 			name = "Grandwizard [real_name]"
-			speak = list("Woof!", "Bark!", "AUUUUUU", "EI NATH", "FORTI GY AMA")
+			speak = list("Woof!", "Bark!", "EI NATH", "FORTI GY AMA")
+			emote_see = list("casts a dastardly spell!", "curses you with a bark!", "summons a steak into his stomach.")
 			valid = 1
 
 		if(/obj/item/clothing/head/cardborg)
@@ -327,7 +330,7 @@
 
 		if(/obj/item/weapon/bedsheet)
 			name = "\improper Ghost"
-			speak = list("WoooOOOooo~","AUUUUUUUUUUUUUUUUUU")
+			speak = list("WoooOOOooo~","AuuuuuUuUuUuUuUuUuu~")
 			emote_see = list("stumbles around.", "shivers.")
 			emote_hear = list("howls.","groans.")
 			desc = "Spooky!"
@@ -362,7 +365,7 @@
 
 		if(/obj/item/clothing/head/helmet/space/rig)
 			name = "Station Engineer [real_name]"
-			desc = "Ian want a cracker! ...wait."
+			desc = "Ian want a cracker!"
 			valid = 1
 			min_oxy = 0
 			minbodytemp = 0
@@ -371,7 +374,7 @@
 		/*
 		if(/obj/item/clothing/head/hardhat/reindeer)
 			name = "[real_name] the red-nosed Corgi"
-			emote_hear = list("lights the way.", "illuminates.", "yaps.")
+			emote_hear = list("lights the way.", "illuminates the night sky.", "is bullied by the other reindogs. Poor Ian.")
 			desc = "He has a very shiny nose."
 			SetLuminosity(1)
 			valid = 1
@@ -436,9 +439,9 @@
 				name = real_name
 				desc = initial(desc)
 				speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-				speak_emote = list("barks", "woofs")
-				emote_hear = list("barks", "woofs", "yaps")
-				emote_see = list("shakes its head", "shivers", "pants")
+				speak_emote = list("barks.", "woofs.")
+				emote_hear = list("barks.", "woofs.", "yaps.")
+				emote_see = list("shakes its head.", "shivers.", "pants.")
 				emote_sound = list("sound/voice/corgibark.ogg")
 				min_oxy = initial(min_oxy)
 				minbodytemp = initial(minbodytemp)
@@ -523,21 +526,14 @@
 						failedsteps++
 					sleep(6)
 					
+				emote("me", 1, "B")	
 				if(movement_target)		
-					if (movement_target.loc.x < src.x)
-						dir = WEST
-					else if (movement_target.loc.x > src.x)
-						dir = EAST
-					else if (movement_target.loc.y > src.y)
-						dir = NORTH
-					else
-						dir = SOUTH
-
+					emote("me", 1, "C")	
 					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
 						movement_target.attack_animal(src)
 					else if(ishuman(movement_target.loc))
 						if(prob(20))
-							emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")	
+							emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")
 				ian_status = IDLE
 				movement_target = null
 							
@@ -555,14 +551,6 @@
 						sleep(6)
 						
 					if(movement_target)		
-						if (movement_target.loc.x < src.x)
-							dir = WEST
-						else if (movement_target.loc.x > src.x)
-							dir = EAST
-						else if (movement_target.loc.y > src.y)
-							dir = NORTH
-						else
-							dir = SOUTH
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
