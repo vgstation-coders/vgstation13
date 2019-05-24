@@ -840,7 +840,7 @@ var/global/list/loopModeNames=list(
 		"nukesquad" = "Syndicate Assault",
 		"malfdelta"= "Silicon Assault",
 		"bomberman" = "Bomberman",
-		"echos" = "Echos"
+		"echoes" = "Echoes"
 	)
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
