@@ -767,7 +767,6 @@ var/global/list/loopModeNames=list(
 		"bar"  = "Bar Mix",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
-		"filk" = "Filk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
