@@ -11,6 +11,7 @@
 	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
+	var playlist = "nukesquad"
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -127,7 +128,6 @@
 			if(revs_percentage >= threshold)
 				stage(FACTION_ENDGAME)
 				command_alert(/datum/command_alert/revolution)
-				ticker.StartThematic("nukesquad")
 
 	switch(remaining_targets)
 		if(0)
@@ -138,7 +138,6 @@
 			if(stage < FACTION_ENDGAME)
 				stage(FACTION_ENDGAME)
 				command_alert(/datum/command_alert/revolution)
-				ticker.StartThematic("nukesquad")
 
 /datum/faction/revolution/process()
 	..()

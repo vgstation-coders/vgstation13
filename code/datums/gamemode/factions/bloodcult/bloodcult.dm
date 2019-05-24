@@ -299,7 +299,6 @@ var/veil_thickness = CULT_PROLOGUE
 				..()
 				command_alert(/datum/command_alert/bloodstones_raised)
 				new_obj = new /datum/objective/bloodcult_bloodbath
-				ticker.StartThematic("endgame")
 		if (CULT_ACT_IV)
 			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
 			if (O)
