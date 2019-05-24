@@ -43,7 +43,7 @@ var/list/factions_with_hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
 	var/stage = FACTION_DORMANT //role_datums_defines.dm
-	var playlist
+	var/playlist
 
 	var/minor_victory = FALSE
 
