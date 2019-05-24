@@ -237,7 +237,7 @@ var/list/factions_with_hud_icons = list()
 			set_security_level("blue")
 			ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
-			if(playlist != null)
+			if(playlist)
  			ticker.StartThematic(playlist)
 			else
  			ticker.StartThematic("endgame")
