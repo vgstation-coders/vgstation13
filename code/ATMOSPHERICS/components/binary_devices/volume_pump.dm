@@ -45,12 +45,12 @@ Thus, the two variables affect pump operation are set in New():
 	if((stat & (NOPOWER|BROKEN)) || !on || transfer_rate < 1)
 		return
 
-// Pump mechanism just won't do anything if the pressure is too high/too low
+// Pump mechanism just won't do anything if the input pressure is too low
 
 	var/input_starting_pressure = air1.return_pressure()
 	var/output_starting_pressure = air2.return_pressure()
 
-	if((input_starting_pressure < 0.01) || (output_starting_pressure > 9000))
+	if(input_starting_pressure < 0.01)
 		return
 
 	var/transfer_ratio = max(1, transfer_rate/air1.volume)
