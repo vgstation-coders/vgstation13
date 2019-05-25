@@ -25,7 +25,7 @@
 		stage = FACTION_ENDGAME
 		command_alert(/datum/command_alert/malf_announce)
 		set_security_level("delta")
-		ticker.StartThematic("malfdelta")
+		ticker.StartThematic(playlist)
 	else
 		..()
 
