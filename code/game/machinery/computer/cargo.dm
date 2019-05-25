@@ -155,7 +155,10 @@ For vending packs, see vending_packs.dm*/
 		if(3)
 			result = pin_query(user)
 	if(!result) //This saves a lot of pasted to_chat everywhere else
-		to_chat(user, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
+		if(can_order_contraband)
+			result = TRUE
+		else
+			to_chat(user, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 	return result
 
 /obj/machinery/computer/supplycomp/proc/pin_query(mob/user)
@@ -210,6 +213,7 @@ For vending packs, see vending_packs.dm*/
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				if(can_order_contraband)
 					M.contraband_enabled = 1
+					req_access = list()
 				for (var/obj/C in src)
 					C.forceMove(loc)
 				A.circuit = M
@@ -275,6 +279,7 @@ For vending packs, see vending_packs.dm*/
 	data["restriction"] = SSsupply_shuttle.restriction
 	data["requisition"] = SSsupply_shuttle.requisition
 
+	data["hacked"] = can_order_contraband
 	data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
