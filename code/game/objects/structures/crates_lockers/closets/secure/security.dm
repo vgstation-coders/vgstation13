@@ -107,6 +107,7 @@
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
 			/obj/item/clothing/suit/armor/hos/sundowner),
+		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/weapon/cartridge/hos,
 		/obj/item/device/detective_scanner,
