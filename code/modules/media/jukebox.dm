@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("bar", "bomberman", "depresso", "echoes","electronica", "emagged", "endgame", "filk", "folk", "malf_delta", "medbay", "metal", "muzak_jazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeat_hype_dance_jam", "SCOTLAND_FOREVER"))
+	for(var/playlist_id in list("bar", "bomberman", "depresso", "echoes","electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -773,13 +773,13 @@ var/global/list/loopModeNames=list(
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"security" = "Security",
-		"upbeat_hype_dance_jam" = "Dance"
+		"upbeathypedancejam" = "Dance"
 	)
 
 // Relaxing elevator music~
 /obj/machinery/media/jukebox/dj
 
-	playlist_id="muzak_jazz"
+	playlist_id="muzakjazz"
 	autoplay = 1
 	change_cost = 0
 
@@ -794,11 +794,11 @@ var/global/list/loopModeNames=list(
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzak_jazz" = "Jazzy Muzak",
+		"muzakjazz" = "Jazzy Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"security" = "Security",
-		"upbeat_hype_dance_jam" = "Dance",
+		"upbeathypedancejam" = "Dance",
 		"thunderdome" = "Thunderdome"
 	)
 
@@ -823,19 +823,19 @@ var/global/list/loopModeNames=list(
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzak_jazz" = "Jazzy Muzak",
+		"muzakjazz" = "Jazzy Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"shuttle" = "Shuttle",
 		"security" = "Security",
-		"upbeat_hype_dance_jam" = "Dance",
+		"upbeathypedancejam" = "Dance",
 		"thunderdome" = "Thunderdome",
 		"emagged" ="Syndicate Mix",
 		"endgame" = "Apocalypse",
-		"SCOTLAND_FOREVER"= "Highlander",
+		"SCOTLANDFOREVER"= "Highlander",
 		"shuttle"= "Shuttle",
 		"nukesquad" = "Syndicate Assault",
-		"malf_delta"= "Silicon Assault",
+		"malfdelta"= "Silicon Assault",
 		"bomberman" = "Bomberman",
 		"echoes" = "Echoes"
 	)
@@ -1000,7 +1000,7 @@ var/global/list/loopModeNames=list(
 	formatted = "Folk"
 /obj/item/weapon/vinyl/malf
 	name = "nanovinyl - silicon assault"
-	unformatted = "malf_delta"
+	unformatted = "malfdelta"
 	formatted = "Silicon Assault"
 /obj/item/weapon/vinyl/medbay
 	name = "nanovinyl - medbay"
@@ -1011,9 +1011,9 @@ var/global/list/loopModeNames=list(
 	unformatted = "metal"
 	formatted = "Heavy Metal"
 /obj/item/weapon/vinyl/muzakjazz
-	name = "nanovinyl - muzak & jazz"
-	unformatted = "muzak_jazz"
-	formatted = "Muzak & Jazz"
+	name = "nanovinyl - jazzy muzak"
+	unformatted = "muzakjazz"
+	formatted = "Jazzy Muzak
 /obj/item/weapon/vinyl/syndie_assault
 	name = "nanovinyl - syndicate assault"
 	unformatted = "nukesquad"
@@ -1040,9 +1040,9 @@ var/global/list/loopModeNames=list(
 	formatted =	"Thunderdome"
 /obj/item/weapon/vinyl/upbeat_dance
 	name = "nanovinyl - dance"
-	unformatted = "upbeat_hype_dance_jam"
+	unformatted = "upbeathypedancejam"
 	formatted = "Dance"
 /obj/item/weapon/vinyl/scotland
 	name = "nanovinyl - highlander"
-	unformatted = "SCOTLAND_FOREVER"
+	unformatted = "SCOTLANDFOREVER"
 	formatted = "Highlander"

@@ -10,7 +10,7 @@
 	logo_state = "malf-logo"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
-	playlist = "malf_delta"
+	playlist = "malfdelta"
 
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
