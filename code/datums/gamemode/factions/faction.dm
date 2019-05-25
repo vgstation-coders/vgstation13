@@ -43,6 +43,7 @@ var/list/factions_with_hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
 	var/stage = FACTION_DORMANT //role_datums_defines.dm
+	var/playlist
 
 	var/minor_victory = FALSE
 
@@ -236,7 +237,10 @@ var/list/factions_with_hud_icons = list()
 			set_security_level("blue")
 			ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
-			ticker.StartThematic("endgame")
+			if(playlist)
+				ticker.StartThematic(playlist)
+			else
+				ticker.StartThematic("endgame")
 			sleep(2 SECONDS)
 			set_security_level("red")
 

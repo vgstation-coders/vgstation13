@@ -385,7 +385,7 @@ var/veil_thickness = CULT_PROLOGUE
 			for (var/datum/objective/O in objective_holder.objectives)
 				O.force_success = TRUE
 	minor_victory = TRUE
-  
+
 /datum/faction/bloodcult/GetScoreboard()
 	.=..()
 	if(veil_thickness == CULT_EPILOGUE)
