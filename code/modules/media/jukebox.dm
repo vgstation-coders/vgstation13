@@ -1013,7 +1013,7 @@ var/global/list/loopModeNames=list(
 /obj/item/weapon/vinyl/muzakjazz
 	name = "nanovinyl - jazzy muzak"
 	unformatted = "muzakjazz"
-	formatted = "Jazzy Muzak
+	formatted = "Jazzy Muzak"
 /obj/item/weapon/vinyl/syndie_assault
 	name = "nanovinyl - syndicate assault"
 	unformatted = "nukesquad"
