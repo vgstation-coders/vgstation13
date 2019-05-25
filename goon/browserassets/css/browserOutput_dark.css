@@ -1,3 +1,7 @@
+/* IF YOU UPDATE ANY OF THESE YOU HAVE TO UPDATE STYLESHEET.DM TOO */
+/* IF YOU UPDATE ANY OF THESE YOU HAVE TO UPDATE STYLESHEET.DM TOO */
+/* IF YOU UPDATE ANY OF THESE YOU HAVE TO UPDATE STYLESHEET.DM TOO */
+
 html, body {
 	color: #a4bad6;
 }
@@ -14,18 +18,9 @@ h1.alert, h2.alert {color: #a4bad6;}
 a {color: #397ea5;}
 a:visited {color: #7c00e6;}
 
-#newMessages {background: #222222; color: #cccccc;}
-#ping {background: #222222;}
-#options a {background: #333333; color: #cccccc;}
-#options a:hover, #options .toggle {background: #222222; color: #cccccc;}
-.popup {background: #222222;}
-.popup .close {background: #555555; color: #cccccc;}
-.popup .head {background: #666666; color: #222222;}
-
 .motd {color: #98971a;}
 .motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #98971a;}
 .motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #98971a;}
-
 
 .ooc {color: #cca300;}
 .adminooc {color: #3d5bc3;}
@@ -48,6 +43,8 @@ a:visited {color: #7c00e6;}
 .engradio {color: #f37746;}
 .medradio {color: #57b8f0;}
 .sciradio {color: #c68cfa;}
+.binaryradio {color: #bdbdbd}
+.mommiradio {color: #9c9fc9;}
 
 .attack {color: #e01c1c;}
 .disarm {color: #b42525;}
@@ -62,10 +59,17 @@ a:visited {color: #7c00e6;}
 .bnotice {color: #6685f5;}
 .darknotice {color: #ffffff;}
 .interface {color: #8d6ad6;}
-.gamenotice {color: #d79921;}
 
 .whisper {color:#cccccc;}
 
 .newscaster {color: #c05d5d;}
+
+#newMessages {background: #222222; color: #cccccc;}
+#ping {background: #222222;}
+#options a {background: #333333; color: #cccccc;}
+#options a:hover, #options .toggle {background: #222222; color: #cccccc;}
+.popup {background: #222222;}
+.popup .close {background: #555555; color: #cccccc;}
+.popup .head {background: #666666; color: #222222;}
 
 .internal.boldnshit {color: #6685f5}
