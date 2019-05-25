@@ -2979,6 +2979,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator/red = 2,
+		/obj/item/clothing/head/inquisitor = 2,
+		/obj/item/clothing/suit/inquisitor = 2,
+		/obj/item/clothing/under/inquisitor = 2,
+		/obj/item/clothing/shoes/jackboots/inquisitor = 2,
 		/obj/item/weapon/thurible = 1,
 		/obj/item/weapon/storage/fancy/candle_box/holo = 5,
 		)
