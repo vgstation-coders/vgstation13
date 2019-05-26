@@ -138,20 +138,20 @@
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
-/obj/item/clothing/shoes/magboots/vox/toggle()
+/obj/item/clothing/shoes/magboots/vox/togglemagpulse()
 	//set name = "Toggle Floor Grip"
 	if(usr.isUnconscious())
 		return
-	if(src.magpulse)
-		src.clothing_flags &= ~NOSLIP
-		src.magpulse = 0
-		src.slowdown = NO_SLOWDOWN
+	if(clothing_flags & MAGPULSE)
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
 		to_chat(usr, "You retract the razor-sharp talons of your boots.")
+		return 0
 	else
-		src.clothing_flags |= NOSLIP
-		src.magpulse = 1
-		src.slowdown = mag_slow
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
 		to_chat(usr, "You extend the razor-sharp talons of your boots.")
+		return 1
 
 
 // Vox Trader -- Same stats as civ gear, but looks like raiders. ///////////////////////////////

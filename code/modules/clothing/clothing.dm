@@ -448,6 +448,7 @@
 	var/chaintype = null // Type of chain.
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
+	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
 
 	siemens_coefficient = 0.9
 	body_parts_covered = FEET
@@ -477,6 +478,18 @@
 	. = ..()
 	track_blood = 0
 
+/obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr)
+	if(user.isUnconscious())
+		return
+	if((clothing_flags & MAGPULSE))
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
+		return 0
+	else
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
+		return 1
+	
 //Suit
 /obj/item/clothing/suit
 	icon = 'icons/obj/clothing/suits.dmi'
