@@ -218,8 +218,8 @@ var/global/list/ghdel_profiling = list()
 	for (var/obj/effect/beam/B in loc)
 		B.Crossed(src)
 
-/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	return Bumped(W)
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	return Bumped(F)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
