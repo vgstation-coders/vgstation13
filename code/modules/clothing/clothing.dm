@@ -478,9 +478,10 @@
 	. = ..()
 	track_blood = 0
 
-/obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr)
-	if(user.isUnconscious())
-		return
+/obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr, var/override = FALSE)
+	if(!override)
+		if(user.isUnconscious())
+			return
 	if((clothing_flags & MAGPULSE))
 		clothing_flags &= ~(NOSLIP | MAGPULSE)
 		slowdown = NO_SLOWDOWN
