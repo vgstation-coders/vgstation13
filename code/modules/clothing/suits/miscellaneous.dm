@@ -157,7 +157,7 @@
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	
+
 /obj/item/clothing/suit/spaceninjafake
 	name = "space ninja suit replica"
 	icon_state = "s-ninja-old"
@@ -216,6 +216,13 @@
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
 
+/obj/item/clothing/suit/highlanderkilt
+	name = "highlander's kilt"
+	desc = "There can be only one."
+	icon_state = "highlanderkilt"
+	item_state = "highlanderkilt"
+	clothing_flags = ONESIZEFITSALL
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg
 	name = "cardborg suit"
