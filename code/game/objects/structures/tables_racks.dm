@@ -315,7 +315,7 @@
 			return 1
 	return 0
 
-/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/firebird/F)
 	destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
@@ -758,7 +758,7 @@
 		return 1
 	return !density
 
-/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/firebird/F)
 	destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
