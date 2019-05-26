@@ -1170,6 +1170,13 @@
 /obj/abstract/map/spawner/safe/any/bagel
 	name = "safe any spawner (bagel)"
 
+/obj/abstract/map/spawner/safe/any/castle
+	name = "safe any spawner (castle)"
+
+/obj/abstract/map/spawner/safe/any/snow
+	name = "safe any spawner (snow)"
+
+
 /obj/abstract/map/spawner/safe/medical
 	name = "safe medical spawner"
 	to_spawn = list(/obj/item/weapon/storage/pill_bottle/creatine,
@@ -1205,6 +1212,14 @@
 /obj/abstract/map/spawner/safe/medical/bagel
 	name = "safe medical spawner (bagel)"
 
+/obj/abstract/map/spawner/safe/medical/castle
+	name = "safe medical spawner (castle)"
+	chance = 75
+
+/obj/abstract/map/spawner/safe/medical/snow
+	name = "safe medical spawner (snow)"
+	chance = 75
+
 
 /obj/abstract/map/spawner/safe/food
 	name = "safe food spawner"
@@ -1238,6 +1253,12 @@
 
 /obj/abstract/map/spawner/safe/food/bagel
 	name = "safe food spawner (bagel)"
+
+/obj/abstract/map/spawner/safe/food/castle
+	name = "safe food spawner (castle)"
+
+/obj/abstract/map/spawner/safe/food/snow
+	name = "safe food spawner (snow)"
 
 
 /obj/abstract/map/spawner/safe/weapon
@@ -1278,6 +1299,14 @@
 /obj/abstract/map/spawner/safe/weapon/bagel
 	name = "safe weapon spawner (bagel)"
 
+/obj/abstract/map/spawner/safe/weapon/castle
+	name = "safe weapon spawner (castle)"
+	chance = 50
+
+/obj/abstract/map/spawner/safe/weapon/snow
+	name = "safe weapon spawner (snow)"
+	chance = 50
+
 
 /obj/abstract/map/spawner/safe/clothing
 	name = "safe clothing spawner"
@@ -1315,6 +1344,12 @@
 /obj/abstract/map/spawner/safe/clothing/bagel
 	name = "safe clothing spawner (bagel)"
 
+/obj/abstract/map/spawner/safe/clothing/castle
+	name = "safe clothing spawner (castle)"
+
+/obj/abstract/map/spawner/safe/clothing/snow
+	name = "safe clothing spawner (snow)"
+
 
 /obj/abstract/map/spawner/safe/medal
 	name = "safe medal spawner"
@@ -1347,6 +1382,12 @@
 
 /obj/abstract/map/spawner/safe/medal/bagel
 	name = "safe medal spawner (bagel)"
+
+/obj/abstract/map/spawner/safe/medal/castle
+	name = "safe medal spawner (castle)"
+
+/obj/abstract/map/spawner/safe/medal/snow
+	name = "safe medal spawner (snow)"
 
 
 //Food spawners////////////////////////////////////
