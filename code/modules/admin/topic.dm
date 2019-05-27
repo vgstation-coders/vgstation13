@@ -5140,16 +5140,17 @@
 			if("newdisclaimer")
 				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
 				if(newdisclaimer)
+					newdisclaimer += "<br>"
 					end_credits.disclaimers.Insert(1,newdisclaimer)
-					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
-					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
 			if("editdisclaimer")
 				var/i = text2num(href_list["disclaimerindex"])
 				var/olddisclaimer = end_credits.disclaimers[i]
 				var/newdisclaimer = input(usr,"Write a new rolling disclaimer.","Edit Disclaimer",olddisclaimer) as message|null
 				if(newdisclaimer)
-					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
-					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
 					end_credits.disclaimers[i] = newdisclaimer
 			if("disclaimerup")
 				var/i = text2num(href_list["disclaimerindex"])
