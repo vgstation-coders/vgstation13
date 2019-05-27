@@ -113,7 +113,7 @@ h1.alert, h2.alert		{color: #000000;}
 .say_quote				{font-family: Georgia, Verdana, sans-serif;}
 .cult					{color: #800080; font-weight: bold; font-style: italic;}
 .interface				{color: #330033;}
-.big					{font-size: 150%;}
+.big, .megaphone		{font-size: 150%;}
 .bold					{font-weight: bold;}
 .center					{text-align: center;}
 .red					{color: #FF0000;}

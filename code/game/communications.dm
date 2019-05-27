@@ -120,20 +120,20 @@ On the map:
 */
 
 var/list/radiochannels = list(
-	"Common" = 1459,
-	"AI Private" = 1447,
-	"Deathsquad" = 1441,
-	"Security" = 1359,
-	"Engineering" = 1357,
-	"Command" = 1353,
-	"Medical" = 1355,
-	"Science" = 1351,
-	"Service" = 1349,
-	"Supply" = 1347,
-	"Response Team" = 1345,
-	"Raider" = 1215,
-	"Syndicate" = 1213,
-	"DJ" = 1201
+	"Common" = COMMON_FREQ,
+	"AI Private" = AIPRIV_FREQ,
+	"Deathsquad" = DSQUAD_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SERV_FREQ,
+	"Supply" = SUPP_FREQ,
+	"Response Team" = RESTEAM_FREQ,
+	"Raider" = RAID_FREQ,
+	"Syndicate" = SYND_FREQ,
+	"DJ" = DJ_FREQ
 )
 
 var/list/radiochannelsreverse = list(
@@ -151,6 +151,18 @@ var/list/radiochannelsreverse = list(
 	"1441" = "Deathsquad",
 	"1447" = "AI Private",
 	"1459" = "Common"
+)
+
+//Only the channels that someone in the main station should have access to normally.
+var/list/stationchannels = list(
+	"Common" = COMMON_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SERV_FREQ,
+	"Supply" = SUPP_FREQ
 )
 
 

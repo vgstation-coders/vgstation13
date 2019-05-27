@@ -477,6 +477,14 @@ var/list/uplink_items = list()
 	cost = 6
 	jobs_exclusive = list("Nuclear Operative")
 
+/datum/uplink_item/device_tools/megaphone
+	name = "Mad Scientist Megaphone"
+	desc = "For making your demands known. On top of making your speech loud, it can broadcast into (but not receive from) station radio frequencies, including Security and Command. Can also optionally scramble your voice, for ominous-anonymous threats."
+	item = /obj/item/device/megaphone/madscientist
+	cost = 1
+	discounted_cost = 0
+	jobs_with_discount = SCIENCE_POSITIONS
+
 /datum/uplink_item/device_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
 	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."

@@ -218,7 +218,7 @@
 	canstage = 0
 	var/muted = 0
 
-/obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/gas/mime/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.muted)
 		speech.message=""
 
