@@ -16,13 +16,12 @@
 	response_help = "pokes"
 	response_disarm = "shoves"
 	response_harm = "strikes"
-	status_flags = 0
 	size = SIZE_BIG
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
 	held_items = list()
-	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|PACIFIABLE
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()
@@ -772,7 +771,7 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_lower = 35
 	melee_damage_upper = 50
 	ranged = 1
-	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 	var/charging = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()

@@ -12,7 +12,7 @@
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
-	status_flags = GODMODE|CANPUSH
+	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
 
 /mob/living/carbon/human/manifested
 	real_name = "Manifested Ghost"

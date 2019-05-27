@@ -25,7 +25,7 @@
 
 /mob/living/carbon/human/krampus
 	real_name = "Krampus"
-	status_flags = GODMODE|CANPUSH
+	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
 
 /mob/living/carbon/human/krampus/New(var/new_loc)
   ..(new_loc, "Krampus")
