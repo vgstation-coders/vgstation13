@@ -139,17 +139,21 @@
 /obj/item/device/flash/rev/make_rev_flash()
 	return 0
 
+/obj/item/device/flash/synthetic/make_rev_flash()
+	return 0
+
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
 		return
-	
-	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
-		if (make_rev_flash(user))
-			return
 
 	if(broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
+
+	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
+		if (make_rev_flash(user))
+			return
+
 
 	flash_recharge()
 
