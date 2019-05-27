@@ -881,6 +881,8 @@
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
 			human.set_species("Evolved Slime")
 
+			human.regenerate_icons()
+
 			//Let the player choose their new appearance
 			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (human.species.name || null))
 			if(human.my_appearance.f_style && species_hair.len)		
@@ -894,7 +896,7 @@
 				if(new_fstyle)
 					human.my_appearance.f_style = new_fstyle
 
-			//Slime hair color is just darkened slime skin color for now
+			//Slime hair color is just darkened slime skin color (for now)
 			human.my_appearance.r_hair = round(human.multicolor_skin_r * 0.8)
 			human.my_appearance.g_hair = round(human.multicolor_skin_g * 0.8)
 			human.my_appearance.b_hair = round(human.multicolor_skin_b * 0.8)
