@@ -339,7 +339,7 @@
 				var/shoecount = 0
 				for(var/obj/item/clothing/shoes/S in shuttle) //they gotta be on the floor
 					shoecount++
-				if(shoecount > 5 || score["shoeshatches"] > 10)
+				if(shoecount > 5 || score["shoesnatches"] > 10)
 					episode_names += new /datum/episode_name/rare("THE SOLE SURVIVOR", "There was only one survivor in the shuttle, and they didn't forget their shoes.", 2500) //I'm not sorry
 
 				var/headcount = 0
