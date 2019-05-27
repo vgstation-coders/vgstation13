@@ -569,19 +569,19 @@
 			
 /mob/living/simple_animal/corgi/Ian/proc/get_target()
 	var/vision_range = 5
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in oview(src,vision_range))
+	var/list/can_see = view(src, vision_range))
+	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
 		if(isturf(S.loc) || ishuman(S.loc))
 			movement_target = S
 			ian_status = BEGIN_FOOD_HUNTING
 			return
-	for(var/mob/living/carbon/M in oview(src, vision_range))
+	for(var/mob/living/carbon/M in can_see)
 		for(var/obj/item/H in M.held_items)
 			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
 				movement_target = H
 				ian_status = BEGIN_FOOD_HUNTING
 				return
 		
-	var/list/can_see = view(src, vision_range)
 	for(var/obj/effect/decal/point/pointer in can_see)
 		var/atom/pointer_target = pointer.target
 		if(pointer_target == src)
