@@ -11,7 +11,7 @@
 
 // Open up VLC and play musique.
 // Converted to VLC for cross-platform and ogg support. - N3X
-var/const/PLAYER_HTML={"
+var/const/PLAYER_HTML=@{"
 <object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab" id="player"></object>
 <script>
 function noErrorMessages () { return true; }
@@ -33,7 +33,7 @@ function SetMusic(url, time, volume) {
 	// volume is in the range [0-200]
 	vlc.audio.volume = +volume;
 	setTimeout(function(){ // If we don't do this it might not set the volume to the right value SOMETIMES
-		vlc.audio.volume = +volume; 
+		vlc.audio.volume = +volume;
 	}, 2000);
 }
 </script>
