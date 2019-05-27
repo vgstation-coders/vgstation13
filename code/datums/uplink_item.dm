@@ -44,7 +44,7 @@ var/list/uplink_items = list()
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
-	var/static/times_bought = 0
+	var/times_bought = 0
 	var/refundable = FALSE
 	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
@@ -481,6 +481,7 @@ var/list/uplink_items = list()
 	name = "Mad Scientist Megaphone"
 	desc = "For making your demands known. On top of making your speech loud, it can broadcast into (but not receive from) station radio frequencies, including Security and Command. Can also optionally scramble your voice, for ominous-anonymous threats."
 	item = /obj/item/device/megaphone/madscientist
+	num_in_stock = 3
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
