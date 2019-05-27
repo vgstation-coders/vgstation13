@@ -569,7 +569,7 @@
 			
 /mob/living/simple_animal/corgi/Ian/proc/get_target()
 	var/vision_range = 5
-	var/list/can_see = view(src, vision_range))
+	var/list/can_see = view(src, vision_range)
 	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
 		if(isturf(S.loc) || ishuman(S.loc))
 			movement_target = S
