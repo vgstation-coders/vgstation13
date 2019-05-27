@@ -129,9 +129,24 @@
 
 	return !flashfail
 
+/obj/item/device/flash/proc/make_rev_flash(var/mob/living/carbon/human/user)
+	to_chat(user, "<span class='warning'>You prepare the flash for the brainwashing sequence.</span>")
+	var/obj/item/device/flash/rev/R = new(get_turf(src))
+	qdel(src)
+	user.put_in_hands(R)
+	return 1
+
+/obj/item/device/flash/rev/make_rev_flash()
+	return 0
+
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
 		return
+	
+	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
+		if (make_rev_flash(user))
+			return
+
 	if(broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
@@ -246,7 +261,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	var/limited_conversions = -1
 
-/obj/item/device/flash/rev/attack(mob/living/M,mob/user)
+/obj/item/device/flash/rev/attack(mob/living/M, mob/user)
 	.=..()
 	if(!.)
 		return
