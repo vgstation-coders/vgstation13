@@ -1,4 +1,2 @@
 author: Pomf123
-changes:
- - bugfix: Admin's stop all media verb now properly stops admin music from the local or global sound verb.
- - rscadd: Players now have again the verb in OOC tab Stop Admin Music to stop any admin music playing.
+changes: []
