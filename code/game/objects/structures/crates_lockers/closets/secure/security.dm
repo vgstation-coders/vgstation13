@@ -86,7 +86,7 @@
 
 
 //The securitygear box can be found at 'code/game/objects/items/weapons/storage/boxes' and it contains one of each:
-//sec belt, sec headset, sps, flash, flashbang, boot knife holster, tactical flashlight, sechud, black gloves, stunbaton, taser, cuffs, pepperspray, sec tape, and hailer.
+//sec belt, sec headset, sps, flash, flashbang, boot knife holster, tactical flashlight, sechud, black gloves, stunbaton, taser, pepperspray, sec tape, and hailer.
 /obj/structure/closet/secure_closet/hos
 	name = "Head of Security's Locker"
 	req_access = list(access_hos)
@@ -208,7 +208,7 @@
 
 
 //The detectivegear box can be found at at the same location as the securitygear box and it contains:
-//sec headset, sec hud, black gloves, tactical flashlight, sps, sec tape, 2x .38 ammoboxes, speedloader, evidence bag box, scanner, binoculars, and a hand TV set.
+//sec headset, sec hud, black gloves, sps, 2x .38 ammoboxes, speedloader, evidence bag box, scanner, binoculars, and a hand TV set.
 /obj/structure/closet/secure_closet/detective
 	name = "Detective's Cabinet"
 	req_access = list(access_forensics_lockers)
