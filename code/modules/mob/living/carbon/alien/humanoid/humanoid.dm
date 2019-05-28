@@ -153,7 +153,7 @@
 /mob/living/carbon/alien/humanoid/restrained()
 	if(timestopped)
 		return TRUE //under effects of time magick
-	if (handcuffed)
+	if (check_handcuffs())
 		return TRUE
 	return FALSE
 

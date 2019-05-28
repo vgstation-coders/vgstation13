@@ -673,7 +673,7 @@ Thanks.
 	var/t7 = 1 //What the FUCK is this variable?
 	if (restrained())
 		for(var/mob/living/M in range(src, 1))
-			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
+			if ((M.pulling == src && M.stat == 0 && !( M.restrained())))
 				t7 = null
 	if (t7 && pulling && (Adjacent(pulling) || pulling.loc == loc))
 		. = ..()
@@ -700,7 +700,10 @@ Thanks.
 				diag = null
 			if ((get_dist(src, pulling) > 1 || diag))
 				if(!istype(pulling) || !pulling)
-					WARNING("Pulling disappeared! pulling = [pulling] old pulling = [M]")
+					if (iscarbon(src))
+						var/mob/living/carbon/carbon = src
+						if (!carbon.mutual_handcuffed_to)
+							WARNING("Pulling disappeared! pulling = [pulling] old pulling = [M]")
 				else if(isturf(pulling.loc))
 					if (isliving(pulling))
 						M = pulling

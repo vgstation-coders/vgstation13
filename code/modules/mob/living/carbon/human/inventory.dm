@@ -428,7 +428,8 @@
 			src.wear_mask = W
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
-			src.handcuffed = W
+			var/obj/item/weapon/handcuffs/cuffs = W
+			src.handcuffed = cuffs
 			update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
 			src.legcuffed = W

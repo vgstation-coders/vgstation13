@@ -341,7 +341,7 @@
 /mob/living/carbon/restrained()
 	if(timestopped)
 		return 1 //under effects of time magick
-	if (handcuffed)
+	if (check_handcuffs())
 		return 1
 	return
 
@@ -607,6 +607,14 @@
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_touch(src, toucher, touched, touch_type)
+
+/mob/living/carbon/proc/check_handcuffs()
+	//if handcuffed to somebody else(both arms are still usable) we are not restrained
+	if (mutual_handcuffed_to)
+		return FALSE
+	if (handcuffed)
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)

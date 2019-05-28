@@ -292,7 +292,7 @@
 /mob/living/carbon/human/restrained()
 	if (timestopped)
 		return 1 //under effects of time magick
-	if (handcuffed)
+	if (check_handcuffs())
 		return 1
 	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
 		return 1
