@@ -201,6 +201,14 @@
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
 
+// -- Injection delays (in ticks, ie, you need the /2 to get the real result)
+
+#define LATEJOIN_DELAY_MIN (5 MINUTES)/2
+#define LATEJOIN_DELAY_MAX (30 MINUTES)/2
+
+#define MIDROUND_DELAY_MIN (15 MINUTES)/2
+#define MIDROUND_DELAY_MAX (50 MINUTES)/2
+
 // -- Rulesets flags
 
 #define HIGHLANDER_RULESET 1

@@ -57,9 +57,10 @@ proc/arctan(x)
 // -- Returns an exponentially-distributed number.
 // -- The probability density function has mean lambda
 
-/proc/exp_distribution(var/lambda)
-	if (lambda <= 0)
-		lambda = 1 // Let's not allow that to happen
+/proc/exp_distribution(var/desired_mean)
+	if (desired_mean <= 0)
+		desired_mean = 1 // Let's not allow that to happen
+	var/lambda = 1/desired_mean
 	var/x = rand()
 	while (x == 1)
 		x = rand()
