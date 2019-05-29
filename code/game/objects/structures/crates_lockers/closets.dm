@@ -171,6 +171,15 @@
 	if(!src.can_close())
 		return 0
 
+	for(var/atom/movable/AM in src.loc)
+		if (iscarbon(AM))
+			var/mob/living/carbon/carbon = AM
+			if (carbon.mutual_handcuffs)
+				if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
+					if (user)
+						to_chat(user, "<span class='danger'>You cannot close \the [src] while \the [carbon.mutual_handcuffed_to] is cuffed to \the [carbon].</span>")
+					return 0
+
 	take_contents()
 
 	/* /vg/: Delete if there's no code in here we need.

@@ -308,8 +308,9 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	var/obj/item/weapon/handcuffs/handcuffs = locate() in user.held_items
-	if (handcuffs && (src != user) && user.Adjacent(src))
+	var/obj/item/to_be_handcuffs = user.get_active_hand()
+	if (to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
+		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
 		handcuffs.apply_mutual_cuffs(src, user)
 		return
 	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))

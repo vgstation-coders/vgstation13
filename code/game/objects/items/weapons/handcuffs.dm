@@ -24,7 +24,7 @@
 
 /obj/item/weapon/handcuffs/Destroy()
 	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
-		src.on_restraint_removal(cuffed_mob)
+		src.remove_mutual_cuff_events(cuffed_mob)
 	. = ..()
 	
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)

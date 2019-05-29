@@ -529,6 +529,9 @@ Thanks.
 		if(C.handcuffed)
 			C.drop_from_inventory(C.handcuffed)
 
+		if (C.mutual_handcuffs)
+			C.drop_from_inventory(C.mutual_handcuffs)
+
 		if (C.legcuffed)
 			C.drop_from_inventory(C.legcuffed)
 	hud_updateflag |= 1 << HEALTH_HUD

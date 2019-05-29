@@ -955,7 +955,7 @@ var/list/slot_equipment_priority = list( \
 						return 1
 				return 0
 			if(slot_handcuffed)
-				if(H.handcuffed)
+				if(H.handcuffed || H.mutual_handcuffs)
 					return 0
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return 0
