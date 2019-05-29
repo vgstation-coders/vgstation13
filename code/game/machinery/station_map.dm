@@ -67,11 +67,9 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/initialize()
 	. = ..()
-	if(SS_READY(SSmore_init))
-		snowflake_initialize()
+	snowflake_initialize()
 
 /obj/machinery/station_map/proc/snowflake_initialize()
-	. = ..()
 	bogus = 0
 	var/turf/T = get_turf(src)
 	original_zLevel = T.z
@@ -160,8 +158,6 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/update_icon()
-	if(!SS_READY(SSmore_init))
-		return
 	overlays.len = 0
 	if(stat & BROKEN)
 		icon_state = "station_mapb"
