@@ -46,10 +46,8 @@
 		generateStationMinimap(map.zDerelict)
 	//If they were built on another Z-Level, they will display an error screen.
 
-	holomaps_initialized = 1
-
 	for (var/obj/machinery/station_map/S in station_holomaps)
-		S.initialize()
+		S.snowflake_initialize()
 
 	for (var/obj/structure/deathsquad_gravpult/G in station_holomaps)
 		G.initialize_holomaps()

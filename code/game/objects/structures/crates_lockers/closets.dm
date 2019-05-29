@@ -59,19 +59,13 @@
 /obj/structure/closet/proc/canweld()
 	return 1
 
-/obj/structure/closet/initialize()
-	..()
+/obj/structure/closet/initialize(var/mapload)
+	. = ..()
 	spawn_contents()
-	if(!opened)		// if closed, any item at the crate's loc is put in the contents
-		if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
-			take_contents()
+	if(!opened && mapload)		// if closed, any item at the crate's loc is put in the contents
+		take_contents()
 	else
 		setDensity(FALSE)
-
-/obj/structure/closet/spawned_by_map_element()
-	..()
-
-	initialize()
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()

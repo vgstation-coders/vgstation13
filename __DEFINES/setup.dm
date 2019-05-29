@@ -204,6 +204,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define	NOREACT 		16384 // Reagents don't react inside this container.
 
 #define TIMELESS		32768 // Immune to time manipulation.
+#define INITIALIZED		65536 // set by initialize()
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
 

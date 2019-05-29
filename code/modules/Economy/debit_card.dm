@@ -99,6 +99,7 @@
 		set_department_account(desired_department)
 
 /obj/item/weapon/card/debit/preferred/department/initialize()
+	. = ..()
 	if(department)
 		set_department_account(department)
 

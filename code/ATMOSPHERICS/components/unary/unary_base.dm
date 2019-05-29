@@ -36,10 +36,10 @@
 	var/turf/T = loc
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
-	initialize()
+	atmos_init()
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	return 1
 
@@ -73,7 +73,7 @@
 	node1 = null
 	..()
 
-/obj/machinery/atmospherics/unary/initialize()
+/obj/machinery/atmospherics/unary/atmos_init()
 	if(node1)
 		return
 	findAllConnections(initialize_directions)

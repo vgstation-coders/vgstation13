@@ -123,8 +123,7 @@
 		damage += sharpness
 		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 
-	if(target.BrainContainer)
-		target.BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=src,"damage"=damage_done))
+	SEND_SIGNAL(target, COMSIG_ATTACKEDBY, src, damage_done)
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 

@@ -39,8 +39,6 @@ var/list/station_holomaps = list()
 	station_holomaps += src
 	flow_flags |= ON_BORDER
 	component_parts = 0
-	if(ticker && holomaps_initialized)
-		initialize()
 
 /obj/machinery/station_map/Destroy()
 	station_holomaps -= src
@@ -68,6 +66,12 @@ var/list/station_holomaps = list()
 	return -1
 
 /obj/machinery/station_map/initialize()
+	. = ..()
+	if(SS_READY(SSmore_init))
+		snowflake_initialize()
+
+/obj/machinery/station_map/proc/snowflake_initialize()
+	. = ..()
 	bogus = 0
 	var/turf/T = get_turf(src)
 	original_zLevel = T.z
@@ -156,6 +160,8 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/update_icon()
+	if(!SS_READY(SSmore_init))
+		return
 	overlays.len = 0
 	if(stat & BROKEN)
 		icon_state = "station_mapb"
@@ -388,10 +394,8 @@ var/list/station_holomaps = list()
 	..()
 	holomap_datum = new /datum/station_holomap/strategic()
 	original_zLevel = map.zMainStation
-	if(ticker && holomaps_initialized)
-		initialize()
 
-/obj/machinery/station_map/strategic/initialize()
+/obj/machinery/station_map/strategic/snowflake_initialize()
 	holomap_datum.initialize_holomap()
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])

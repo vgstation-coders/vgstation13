@@ -79,7 +79,7 @@
 
 	underlays += bezel
 
-/obj/machinery/atmospherics/unary/vent/initialize()
+/obj/machinery/atmospherics/unary/vent/atmos_init()
 	..()
 	update_icon()
 

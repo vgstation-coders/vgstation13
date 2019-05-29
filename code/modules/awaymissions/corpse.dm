@@ -38,15 +38,11 @@
 	var/burn_dmg = 0
 	var/toxin_dmg = 0
 
-/obj/effect/landmark/corpse/New()
-	AddToProfiler()
-	if(ticker)
-		initialize()
-
 /obj/effect/landmark/corpse/initialize()
+	..()
 	var/mob/living/carbon/human/H = createCorpse()
 	equipCorpse(H)
-
+	return INITIALIZE_HINT_QDEL
 
 /obj/effect/landmark/corpse/proc/createCorpse() //Creates a mob and checks for gear in each slot before attempting to equip it.
 	var/mob/living/carbon/human/M = new /mob/living/carbon/human(loc, mutantrace)
@@ -91,7 +87,6 @@
 	if(husk)
 		M.ChangeToHusk()
 
-	qdel(src)
 	return M
 
 /obj/effect/landmark/corpse/proc/equipCorpse(mob/living/carbon/human/M)

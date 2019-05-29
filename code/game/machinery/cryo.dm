@@ -50,13 +50,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	RefreshParts()
 
 	initialize_directions = dir
-	initialize()
+	atmos_init()
 	build_network()
 	if (node1)
 		node1.initialize()
 		node1.build_network()
 
-/obj/machinery/atmospherics/unary/cryo_cell/initialize()
+/obj/machinery/atmospherics/unary/cryo_cell/atmos_init()
 	if(node1)
 		return
 	for(var/cdir in cardinal)

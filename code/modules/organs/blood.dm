@@ -407,7 +407,6 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	B = locate(decal_type) in T
 	if(!B || (decal_type == /obj/effect/decal/cleanable/blood/drip))
 		B = getFromPool(decal_type,T)
-		B.New(T)
 		if(decal_type == /obj/effect/decal/cleanable/blood/drip)
 			B.icon_state = pick(drip_icons)
 

@@ -60,7 +60,7 @@
 
 	return null
 
-/obj/machinery/atmospherics/trinary/tvalve/initialize()
+/obj/machinery/atmospherics/trinary/tvalve/atmos_init()
 	..()
 
 	//force build the networks.
@@ -200,9 +200,9 @@
 		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
 		if(newid)
 			id_tag = newid
-			initialize()
+			atmos_init()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")
@@ -214,7 +214,7 @@
 				newfreq *= 10 // shift the decimal one place
 			if(newfreq < 10000)
 				frequency = newfreq
-				initialize()
+				atmos_init()
 		return MT_UPDATE
 
 	return ..()
@@ -237,7 +237,7 @@
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
-/obj/machinery/atmospherics/trinary/tvalve/digital/initialize()
+/obj/machinery/atmospherics/trinary/tvalve/digital/atmos_init()
 	..()
 	if(frequency)
 		set_frequency(frequency)

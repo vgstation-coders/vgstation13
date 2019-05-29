@@ -8,7 +8,12 @@
 	anchored = 1
 	var/notices = 0
 
-/obj/structure/noticeboard/initialize()
+/obj/structure/noticeboard/initialize(var/mapload)
+	. = ..()
+	if(mapload)
+		. = INITIALIZE_HINT_LATELOAD
+
+/obj/structure/noticeboard/late_initialize()
 	for(var/obj/item/I in loc)
 		if(notices > 4)
 			break

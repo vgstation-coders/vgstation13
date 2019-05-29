@@ -179,6 +179,10 @@
 	return 0
 
 /obj/machinery/embedded_controller/radio/initialize()
+	. = ..()
+	initialize_radio_and_program()
+
+/obj/machinery/embedded_controller/radio/proc/initialize_radio_and_program()
 	set_frequency(frequency)
 	var/datum/computer/file/embedded_program/new_prog = new
 
@@ -297,7 +301,7 @@
 			re_init=1
 
 		if(re_init)
-			initialize()
+			initialize_radio_and_program()
 		if(update_mt_menu)
 			//usr.set_machine(src)
 			update_multitool_menu(usr)

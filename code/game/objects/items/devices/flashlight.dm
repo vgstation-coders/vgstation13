@@ -20,7 +20,7 @@
 	var/sound_off = 'sound/items/flashlight_off.ogg'
 
 /obj/item/device/flashlight/initialize()
-	..()
+	. = ..()
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_on)

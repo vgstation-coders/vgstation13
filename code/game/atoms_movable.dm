@@ -411,6 +411,8 @@
 		src.throw_impact(Obstacle)
 		src.throwing = 0
 
+	SEND_SIGNAL(src, COMSIG_BUMP, Obstacle)
+
 	if (Obstacle)
 		Obstacle.Bumped(src)
 

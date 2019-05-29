@@ -178,8 +178,10 @@ var/global/list/crate_mimic_disguises = list(\
 	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/initialize()
-	..()
-	//Put all loot inside us!
+	. = ..()
+	put_loot_inside()
+
+/mob/living/simple_animal/hostile/mimic/crate/proc/put_loot_inside()
 	for(var/obj/item/I in loc)
 		if(I.anchored || I.density)
 			continue
@@ -408,8 +410,8 @@ var/global/list/item_mimic_disguises = list(
 
 	var/icon/mouth_overlay = icon('icons/mob/mob.dmi', icon_state = "mimic_mouth")
 
-/mob/living/simple_animal/hostile/mimic/crate/item/initialize()
-	return //Don't take any items!
+/mob/living/simple_animal/hostile/mimic/crate/item/put_loot_inside()
+	return
 
 /mob/living/simple_animal/hostile/mimic/crate/item/examine(mob/user) //Total override to make the mimics look EXACTLY like items!
 	var/s_size = "normal-sized"

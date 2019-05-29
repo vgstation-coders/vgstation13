@@ -50,14 +50,11 @@ var/list/smes_list = list()
 /obj/machinery/power/battery/smes/initialize()
 	..()
 	connect_to_network()
-	spawn(5)
-		if(!terminal)
-			stat |= BROKEN
+	return INITIALIZE_HINT_LATELOAD
 
-/obj/machinery/power/battery/smes/spawned_by_map_element()
-	..()
-
-	initialize()
+/obj/machinery/power/battery/smes/late_initialize()
+	if(!terminal)
+		stat |= BROKEN
 
 /obj/machinery/power/battery/smes/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob) //these can only be moved by being reconstructed, solves having to remake the powernet.
 	if(iscrowbar(W) && panel_open && terminal)

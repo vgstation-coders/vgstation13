@@ -32,10 +32,10 @@
 	initialize_directions = dir
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
-	initialize()
+	atmos_init()
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/attackby(var/obj/item/weapon/W, var/mob/user)

@@ -130,6 +130,7 @@ For vending packs, see vending_packs.dm*/
 	reconnect_database()
 
 /obj/machinery/computer/supplycomp/initialize()
+	. = ..()
 	reconnect_database()
 
 /obj/machinery/computer/supplycomp/Destroy()
@@ -469,6 +470,7 @@ For vending packs, see vending_packs.dm*/
 	reconnect_database()
 
 /obj/machinery/computer/ordercomp/initialize()
+	. = ..()
 	reconnect_database()
 
 /obj/machinery/computer/ordercomp/attack_ai(var/mob/user as mob)

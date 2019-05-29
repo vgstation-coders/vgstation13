@@ -28,7 +28,7 @@
 	light_power_on = 2
 
 /obj/machinery/power/solar/control/initialize()
-	..()
+	. = ..()
 
 	if(get_powernet())
 		set_panels(cdir)

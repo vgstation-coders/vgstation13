@@ -109,7 +109,7 @@ air2.volume
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
-/obj/machinery/atmospherics/binary/pump/initialize()
+/obj/machinery/atmospherics/binary/pump/atmos_init()
 	..()
 	if(frequency)
 		set_frequency(frequency)
@@ -178,7 +178,7 @@ air2.volume
 		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
 		if(newid)
 			id_tag = newid
-			initialize()
+			atmos_init()
 		return MT_UPDATE
 
 	if("set_freq" in href_list)
@@ -192,7 +192,7 @@ air2.volume
 				newfreq *= 10 // shift the decimal one place
 			if(newfreq < 10000)
 				frequency = newfreq
-				initialize()
+				atmos_init()
 		return MT_UPDATE
 
 	return ..()

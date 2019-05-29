@@ -1,6 +1,14 @@
 // Subsystem defines.
 // All in one file so it's easier to see what everything is relative to.
 
+#define INITIALIZATION_INSSATOMS     0 // New should not call Initialize
+#define INITIALIZATION_INNEW_REGULAR 1 // New should call Initialize(FALSE)
+#define INITIALIZATION_INNEW_MAPLOAD 2 // New should call Initialize(TRUE)
+
+#define INITIALIZE_HINT_NORMAL   0 // Nothing happens
+#define INITIALIZE_HINT_LATELOAD 1 // Call LateInitialize
+#define INITIALIZE_HINT_QDEL     2 // Call qdel on the atom
+
 #define SS_INIT_TICKER_SPAWN       999
 #define SS_INIT_RUST               26
 #define SS_INIT_SUPPLY_SHUTTLE     25
@@ -12,7 +20,7 @@
 #define SS_INIT_MAP                20
 #define SS_INIT_COMPONENT          19.5
 #define SS_INIT_POWER              19
-#define SS_INIT_OBJECT             18
+#define SS_INIT_ATOMS              18
 #define SS_INIT_PIPENET            17.5
 #define SS_INIT_XENOARCH           17
 #define SS_INIT_MORE_INIT          16
@@ -60,6 +68,7 @@
 #define SS_DISPLAY_MOB            -70
 #define SS_DISPLAY_COMPONENT      -69
 #define SS_DISPLAY_FAST_OBJECTS   -65
+#define SS_DISPLAY_ATOMS          -63
 #define SS_DISPLAY_OBJECTS        -60
 #define SS_DISPLAY_MACHINERY      -50
 #define SS_DISPLAY_PIPENET        -40

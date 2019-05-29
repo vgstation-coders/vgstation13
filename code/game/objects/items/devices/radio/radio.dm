@@ -50,9 +50,7 @@
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
-	..(loc)
-	if(radio_controller)
-		initialize()
+	..()
 
 /obj/item/device/radio/Destroy()
 	wires = null
@@ -61,7 +59,7 @@
 
 
 /obj/item/device/radio/initialize()
-
+	. = ..()
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)

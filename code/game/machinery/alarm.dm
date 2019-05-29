@@ -310,6 +310,7 @@ var/global/list/airalarm_presets = list(
 
 
 /obj/machinery/alarm/initialize()
+	. = ..()
 	add_self_to_holomap()
 	set_frequency(frequency)
 	if (!master_is_operating())
@@ -1154,7 +1155,7 @@ FIRE ALARM
 	return TRUE
 
 /obj/machinery/firealarm/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 /obj/machinery/firealarm/update_icon()

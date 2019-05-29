@@ -41,19 +41,19 @@
 	initialize_directions_he = pipe.get_pipe_dir()
 	//var/turf/T = loc
 	//level = T.intact ? 2 : 1
-	if(!initialize(1))
+	if(!atmos_init(1))
 		to_chat(usr, "Unable to build pipe here;  It must be connected to a machine, or another pipe that has a connection.")
 		return 0
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	return 1
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/initialize(var/suppress_icon_check=0)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/atmos_init(var/suppress_icon_check=0)
 	normalize_dir()
 
 	findAllConnections(initialize_directions_he)
@@ -161,15 +161,15 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pdir()
 	initialize_directions_he = pipe.get_hdir()
-	if (!initialize(1))
+	if (!atmos_init(1))
 		to_chat(usr, "There's nothing to connect this junction to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)")
 		return 0
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	return 1
 
@@ -184,7 +184,7 @@
 	if(!node1&&!node2)
 		qdel(src)
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/initialize(var/suppress_icon_check=0)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/atmos_init(var/suppress_icon_check=0)
 	node1 = findConnecting(initialize_directions)
 	node2 = findConnectingHE(initialize_directions_he)
 
@@ -221,19 +221,19 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions_he = pipe.get_hdir()
-	initialize(1)
+	atmos_init(1)
 	if (!node1 && !node2 && !node3)
 		to_chat(usr, "There's nothing to connect this manifold to!")
 		return 0
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	if (node3)
-		node3.initialize()
+		node3.atmos_init()
 		node3.build_network()
 	return 1
 
@@ -244,7 +244,7 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/pipeline_expansion()
 	return list(node1, node2, node3)
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/initialize(var/suppress_icon_check=0)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/atmos_init(var/suppress_icon_check=0)
 	findAllConnections(initialize_directions_he)
 
 	if(!suppress_icon_check)
@@ -267,22 +267,22 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions_he = pipe.get_hdir()
-	initialize(1)
+	atmos_init(1)
 	if (!node1 && !node2 && !node3 && !node4)
 		to_chat(usr, "There's nothing to connect this manifold to!")
 		return 0
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	if (node3)
-		node3.initialize()
+		node3.atmos_init()
 		node3.build_network()
 	if (node4)
-		node4.initialize()
+		node4.atmos_init()
 		node4.build_network()
 	return 1
 
@@ -294,7 +294,7 @@
 	return list(node1, node2, node3, node4)
 
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/initialize(var/suppress_icon_check=0)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/atmos_init(var/suppress_icon_check=0)
 	findAllConnections(initialize_directions_he)
 
 	if(!suppress_icon_check)

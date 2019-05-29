@@ -24,7 +24,7 @@
 	var/last_call = 0
 
 /obj/machinery/door_timer/initialize()
-	..()
+	. = ..()
 
 	pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE))
 	pixel_y = ((src.dir & 3)? (src.dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : (0))

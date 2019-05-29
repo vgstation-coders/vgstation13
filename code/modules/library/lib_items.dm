@@ -32,7 +32,10 @@
 /obj/structure/bookcase/cultify()
 	return
 
-/obj/structure/bookcase/initialize()
+/obj/structure/bookcase/initialize(var/mapload)
+	. = ..()
+	if(!mapload)
+		return
 	for(var/obj/item/I in loc)
 		if(is_type_in_list(I, valid_types))
 			I.forceMove(src)

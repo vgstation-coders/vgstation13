@@ -382,14 +382,12 @@
 				qdel(src)
 			else
 				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-					O.New(O.loc)
+					getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
 					toner = 0
 		else
 			if(prob(50))
 				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-					O.New(O.loc)
+					getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
 					toner = 0
 	return
 
@@ -398,8 +396,7 @@
 		qdel(src)
 	else
 		if(toner > 0)
-			var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-			O.New(O.loc)
+			getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
 			toner = 0
 	return
 

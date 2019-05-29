@@ -131,11 +131,8 @@
 	w_class = W_CLASS_TINY
 	species = null
 
-/obj/item/queen_bee/chill/New()
-	..()
-	initialize()
-
 /obj/item/queen_bee/chill/initialize()
+	. = ..()
 	species = bees_species[BEESPECIES_VOX]
 
 /////////////////BUG CORPSES
@@ -149,20 +146,15 @@
 	icon_state = "chill_queen_bee_dead"
 
 /////////////////TYPES FOR CASUAL SPAWNS
-/mob/living/simple_animal/bee/adminSpawned_chill/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
 
 /mob/living/simple_animal/bee/adminSpawned_chill/initialize()
+	. = ..()
 	var/datum/bee/chill/B = new()
 	addBee(B)
 	update_icon()
 
-/mob/living/simple_animal/bee/adminSpawnedQueen_chill/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
 /mob/living/simple_animal/bee/adminSpawnedQueen_chill/initialize()
+	. = ..()
 	var/datum/bee/queen_bee/chill/B = new()
 	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
 	addBee(B)
@@ -224,11 +216,8 @@
 	w_class = W_CLASS_TINY
 	species = null
 
-/obj/item/queen_bee/hornet/New()
-	..()
-	initialize()
-
 /obj/item/queen_bee/hornet/initialize()
+	. = ..()
 	species = bees_species[BEESPECIES_HORNET]
 
 /////////////////BUG CORPSES
@@ -242,20 +231,14 @@
 	icon_state = "hornet_queen_bee_dead"
 
 /////////////////TYPES FOR CASUAL SPAWNS
-/mob/living/simple_animal/bee/adminSpawned_hornet/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
 /mob/living/simple_animal/bee/adminSpawned_hornet/initialize()
+	. = ..()
 	var/datum/bee/hornet/B = new()
 	addBee(B)
 	update_icon()
 
-/mob/living/simple_animal/bee/adminSpawnedQueen_hornet/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
 /mob/living/simple_animal/bee/adminSpawnedQueen_hornet/initialize()
+	. = ..()
 	var/datum/bee/queen_bee/hornet/B = new()
 	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
 	addBee(B)

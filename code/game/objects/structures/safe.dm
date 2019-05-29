@@ -29,7 +29,12 @@ FLOOR SAFES
 	tumbler_2_pos = rand(0, 71)
 	tumbler_2_open = rand(0, 71)
 
-/obj/structure/safe/initialize()
+/obj/structure/safe/initialize(var/mapload)
+	. = ..()
+	if(mapload)
+		. = INITIALIZE_HINT_LATELOAD
+
+/obj/structure/safe/late_initialize()
 	for(var/obj/item/I in loc)
 		if(space >= maxspace)
 			return

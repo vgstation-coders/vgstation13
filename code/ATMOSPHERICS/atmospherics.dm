@@ -337,7 +337,6 @@ Pipelines + Other Objects -> Pipe network
 			"You hear a ratchet.")
 		getFromPool(/obj/item/pipe, loc, null, null, src)
 		investigation_log(I_ATMOS,"was removed by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		//P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		qdel(src)
 	return 1
 
@@ -405,3 +404,12 @@ Pipelines + Other Objects -> Pipe network
 // Only needs to be overridden if a pipe can connect on different layers
 /obj/machinery/atmospherics/proc/get_layer_of_dir(var/direction)
 	return piping_layer
+
+/obj/machinery/atmospherics/proc/atmos_init()
+	return
+
+/obj/machinery/atmospherics/initialize(var/mapload)
+	. = ..()
+	if(!mapload)
+		return
+	atmos_init()

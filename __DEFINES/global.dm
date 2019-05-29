@@ -360,8 +360,6 @@ var/list/extraMiniMaps = list()
 
 var/list/holomap_markers = list()
 
-var/holomaps_initialized = 0
-
 //Staff of change
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 #define SOC_MONKEY "Primate"
@@ -469,3 +467,6 @@ var/list/variables_not_to_be_copied = list(
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
+// Literally just a datum
+// Used by components to register global signals
+var/datum/signal_handler = new

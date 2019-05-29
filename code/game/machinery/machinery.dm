@@ -170,6 +170,7 @@ Class Procs:
 	return ..()
 
 /obj/machinery/initialize()
+	. = ..()
 	if(machine_flags & PURCHASER)
 		reconnect_database()
 		linked_account = vendor_account

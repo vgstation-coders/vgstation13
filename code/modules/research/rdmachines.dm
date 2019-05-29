@@ -49,7 +49,7 @@ var/global/list/rnd_machines = list()
 
 // Define initial output.
 /obj/machinery/r_n_d/initialize()
-	..()
+	. = ..()
 	if(research_flags &HASOUTPUT)
 		for(var/direction in cardinal)
 			if(locate(/obj/machinery/mineral/output, get_step(get_turf(src), direction)))

@@ -209,7 +209,6 @@ var/global/list/blood_list = list()
 			sleep(3)
 			if (i > 0)
 				var/obj/effect/decal/cleanable/blood/b = getFromPool(/obj/effect/decal/cleanable/blood/splatter, src.loc)
-				b.New(src.loc)
 				b.basecolor = src.basecolor
 				b.update_icon()
 				for(var/datum/disease/D in src.viruses)

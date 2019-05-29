@@ -212,7 +212,7 @@
 				new /obj/item/device/maracas/cubanpete(holder.loc)
 				message_admins("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
 				log_game("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
-				holder.New()
+				holder.update_game()
 				emagged = 0
 
 			else

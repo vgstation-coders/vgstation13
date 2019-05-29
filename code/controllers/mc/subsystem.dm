@@ -161,9 +161,8 @@
 
 //hook for printing stats to the "MC" statuspanel for admins to see performance and related stats etc.
 /datum/subsystem/proc/stat_entry(msg)
-	if (flags & SS_NO_FIRE)
-		// Prevent init-only subsystems from cluttering everything.
-		return
+	//if (flags & SS_NO_FIRE)
+	//	return // Prevent init-only subsystems from cluttering everything.
 
 	if(!statclick)
 		statclick = new/obj/effect/statclick/debug("Initializing...", src)

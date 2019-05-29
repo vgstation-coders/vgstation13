@@ -87,10 +87,6 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc)
-	initialize_basic_NPC_components()
-
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
 
@@ -1246,7 +1242,6 @@
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
 
 		var/obj/effect/decal/cleanable/blood/writing/W = getFromPool(/obj/effect/decal/cleanable/blood/writing, T)
-		W.New(T)
 		W.basecolor = (hand_blood_color) ? hand_blood_color : DEFAULT_BLOOD
 		W.update_icon()
 		W.message = message
@@ -1795,6 +1790,18 @@ mob/living/carbon/human/isincrit()
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
+/mob/living/carbon/human/NPC/ComponentInitialize()
+	AddComponent(/datum/component/controller/mob)
+	AddComponent(/datum/component/ai/hand_control)
+	AddComponent(/datum/component/controller/movement/astar)
+	AddComponent(/datum/component/ai/human_brain)
+	AddComponent(/datum/component/ai/target_finder/human)
+	AddComponent(/datum/component/ai/target_holder/prioritizing)
+	AddComponent(/datum/component/ai/melee/attack_human)
+	AddComponent(/datum/component/ai/melee/throw_attack)
+	AddComponent(/datum/component/ai/crowd_attack)
+	AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
+/*
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
 	BrainContainer = new (src)
 	BrainContainer.AddComponent(/datum/component/controller/mob)
@@ -1811,7 +1818,7 @@ mob/living/carbon/human/isincrit()
 	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
 	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
 	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
-
+*/
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
 	if(wear_mask && wear_mask.is_hidden_identity())

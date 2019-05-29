@@ -150,6 +150,7 @@ var/global/list/ghdel_profiling = list()
 	..()
 
 /atom/Destroy()
+	flags &= ~INITIALIZED
 	if(reagents)
 		qdel(reagents)
 		reagents = null
@@ -178,12 +179,29 @@ var/global/list/ghdel_profiling = list()
 		beams.len = 0
 	*/
 
-/atom/New()
+/atom/New(var/loc, ...)
+	//atom creation method that preloads variables at creation
+	if(global.use_preloader && (src.type == global._preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+		global._preloader.load(src)
 	on_destroyed = new("owner"=src)
 	on_density_change = new("owner"=src)
 	on_z_transition = new("owner"=src)
 	. = ..()
 	AddToProfiler()
+
+	var/datum/subsystem/atoms/SSatoms = global.SSatoms
+	if(!SSatoms)
+		return
+	var/do_initialize = SSatoms.initialized
+	if(do_initialize != INITIALIZATION_INSSATOMS)
+		args[1] = do_initialize == INITIALIZATION_INNEW_MAPLOAD
+		if(SSatoms.InitAtom(src, args))
+			//we were deleted
+			return
+
+	var/list/created = SSatoms.created_atoms
+	if(created)
+		created += src
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
@@ -205,8 +223,8 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/on_reagent_change()
 	return
 
-/atom/proc/Bumped(AM as mob|obj)
-	return
+/atom/proc/Bumped(var/atom/movable/AM)
+	SEND_SIGNAL(src, COMSIG_BUMPED, AM)
 
 /atom/proc/setDensity(var/density)
 	if (density == src.density)
@@ -938,6 +956,17 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
+	if(flags & INITIALIZED)
+		stack_trace("Warning: [src] ([type]) initialized multiple times!")
+	flags |= INITIALIZED
+	ComponentInitialize()
+	return INITIALIZE_HINT_NORMAL
+
+/atom/proc/late_initialize()
+	return
+
+// Put your AddComponent() calls here
+/atom/proc/ComponentInitialize()
 	return
 
 /atom/proc/get_cell()

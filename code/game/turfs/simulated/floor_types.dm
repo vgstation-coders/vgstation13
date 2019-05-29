@@ -60,7 +60,6 @@
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/light, null)
-	floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
 	var/n = name //just in case commands rename it in the ..() call
 	..()
 	spawn(4)
@@ -285,7 +284,6 @@
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/grass, null)
-	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
 	icon_state = "grass[pick("1","2","3","4")]"
 	..()
 	spawn(4)
@@ -307,7 +305,6 @@
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/carpet, null)
-	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
 	if(!icon_state)
 		icon_state = initial(icon_state)
 	..()

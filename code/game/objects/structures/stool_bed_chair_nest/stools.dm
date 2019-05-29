@@ -26,7 +26,7 @@
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/stool/piano/initialize()
-	..()
+	. = ..()
 	handle_layer()
 
 //So they don't get picked up.

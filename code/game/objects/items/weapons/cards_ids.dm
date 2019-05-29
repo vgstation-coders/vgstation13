@@ -94,11 +94,8 @@
 	if(disable_tuning)
 		return
 
-	if(ticker)
-		initialize()
-		return
-
 /obj/item/weapon/card/emag/initialize()
+	. = ..()
 	// Tuning tools.
 	//////////////////
 	if(config.emag_energy != -1)
