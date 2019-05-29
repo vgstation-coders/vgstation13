@@ -5,7 +5,7 @@
 	if (src.handcuffed &&  handcuffed.is_visible())
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
 
-	if (src.mutual_handcuffed_to && mutual_handcuffed_to.is_visible())
+	if (src.mutual_handcuffs && mutual_handcuffs.is_visible())
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
 
 	for(var/obj/item/I in held_items)

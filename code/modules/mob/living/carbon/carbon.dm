@@ -609,9 +609,7 @@
 					E.on_touch(src, toucher, touched, touch_type)
 
 /mob/living/carbon/proc/check_handcuffs()
-	if (handcuffed)
-		return TRUE
-	return FALSE
+	return handcuffed
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)
