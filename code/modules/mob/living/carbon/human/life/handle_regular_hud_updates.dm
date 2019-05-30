@@ -99,6 +99,24 @@
 		// Rewrite idea : divide life() into organs (Eyes...) and have flags in the roles if they overwrite the functions of those organs.
 		// Basically, the problem here is that abstract things (HUD icons) are handled as the same time as "organs" things (seeing in the dark.)
 		var/datum/role/vampire/V = isvampire(src)
+		if (V)
+			var/i = 1
+			for (var/image/I in V.cached_images)
+				I.loc = null
+				src.client.images -= I
+			for (var/mob/living/carbon/C in view(7,src))
+				var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(C)
+				if (N)
+					if (i > V.cached_images.len)
+						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
+						I.plane = VAMP_ANTAG_HUD_PLANE
+						V.cached_images += I
+						src.client.images += I
+					else
+						V.cached_images[i].loc = C
+						src.client.images += V.cached_images[i]
+					i++
+
 		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers))) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
 		if (!V || !(VAMP_MATURE in V.powers))
