@@ -1099,7 +1099,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_name)
 						real_name = new_name
 					else
-						to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+						to_chat(user, "<span class='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</span>")
 				if("next_hair_style")
 					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("previous_hair_style")
@@ -1345,6 +1345,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
 				if("lobby_music")
+					if(config.no_lobby_music)
+						to_chat(user, "DEBUG: Lobby music is globally disabled via server config.")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
 						if(istype(user,/mob/new_player))
@@ -1356,6 +1358,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					user.client.set_new_volume()
 
 				if("ambience")
+					if(config.no_ambience)
+						to_chat(user, "DEBUG: Ambience is globally disabled via server config.")
 					toggles ^= SOUND_AMBIENCE
 					if(!(toggles & SOUND_AMBIENCE))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)

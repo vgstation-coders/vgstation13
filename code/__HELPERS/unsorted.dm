@@ -1296,10 +1296,10 @@ var/list/WALLITEMS = list(
 	return 0
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
-	var icon/base = icon(file, state)
+	var/icon/base = icon(file, state)
 
 	var/w
-	var/h,
+	var/h
 	var/w2
 	var/h2
 

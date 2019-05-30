@@ -4,7 +4,7 @@
 
 //clothing flags
 #define MASKINTERNALS		1 // mask allows internals
-#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
+#define NOSLIP				2 //prevents from slipping on wet floors, etc
 #define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
 #define ONESIZEFITSALL		8
 #define PLASMAGUARD 		16 //Does not get contaminated by plasma.
@@ -13,3 +13,4 @@
 #define CANEXTINGUISH 		128
 #define CONTAINPLASMAMAN 	256
 #define IGNORE_LUBE			512
+#define MAGPULSE			1024 //prevents slipping in space, singulo pulling, etc

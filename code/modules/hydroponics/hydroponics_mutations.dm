@@ -19,7 +19,7 @@
 
 	//Is the plant still a sapling? If so, try to mutate species, otherwise do something bad.
 	if(age < 3)
-		if(seed.mutants. && seed.mutants.len)
+		if(seed.mutants && seed.mutants.len)
 			if(prob(30))
 				mutate_species()
 				return

@@ -17,6 +17,7 @@ var/global/list/ghdel_profiling = list()
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
+	var/had_blood //Something was bloody at some point.
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 
@@ -220,8 +221,8 @@ var/global/list/ghdel_profiling = list()
 	for (var/obj/effect/beam/B in loc)
 		B.Crossed(src)
 
-/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	return Bumped(W)
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	return Bumped(F)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
@@ -753,6 +754,13 @@ its easier to just keep the beam vertical.
 	if(fingerprintshidden && istype(fingerprintshidden))
 		A.fingerprintshidden |= fingerprintshidden.Copy()    //admin	A.fingerprintslast = fingerprintslast
 
+//Atomic level procs to be used elsewhere.
+/atom/proc/apply_luminol(var/atom/A)
+	return had_blood
+
+/atom/proc/clear_luminol(var/atom/A)
+	return had_blood
+
 
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(mob/living/carbon/human/M as mob)
@@ -761,15 +769,16 @@ its easier to just keep the beam vertical.
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
 		blood_color = DEFAULT_BLOOD
-		return 1
+		had_blood = TRUE
+		return TRUE
 	if (!( istype(M, /mob/living/carbon/human) ))
-		return 0
+		return FALSE
 	if (!istype(M.dna, /datum/dna))
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
 	M.check_dna()
 	if (!( src.flags ) & FPRINT)
-		return 0
+		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 	blood_color = DEFAULT_BLOOD
@@ -780,10 +789,11 @@ its easier to just keep the beam vertical.
 		var/mob/living/carbon/human/H = src
 		//if this blood isn't already in the list, add it
 		if(blood_DNA[H.dna.unique_enzymes])
-			return 0 //already bloodied with this blood. Cannot add more.
+			return FALSE //already bloodied with this blood. Cannot add more.
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 		H.update_inv_gloves()	//handles bloody hands overlays and updating
-		return 1 //we applied blood to the item
+		had_blood = TRUE
+		return TRUE //we applied blood to the item
 	return
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
@@ -808,6 +818,8 @@ its easier to just keep the beam vertical.
 		//del(blood_DNA)
 		blood_DNA.len = 0
 		return 1
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		clear_luminol()
 
 
 /atom/proc/get_global_map_pos()

@@ -99,6 +99,15 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
+	
+/obj/item/clothing/head/spaceninjafake
+	name = "ninja hood replica"
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	desc = "A plastic replica of a space ninja's hood, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|BEARD
+	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
@@ -505,3 +514,9 @@
 	item_state = "brim-hat"
 	wizard_garb = TRUE
 	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/head/widehat_red
+	name = "red wide-brimmed hat"
+	desc = "A red fancy looking wide-brimmed hat. It's even got a feather in it."
+	icon_state = "widehat_red"
+	item_state = "widehat_red"

@@ -517,8 +517,8 @@ obj/item/asteroid/basilisk_hide/New()
 			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
-			if(current_armor.["melee"] < 90)
-				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
+			if(current_armor["melee"] < 90)
+				current_armor["melee"] = min(current_armor["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
@@ -787,7 +787,7 @@ obj/item/asteroid/basilisk_hide/New()
 		for(var/i = 0 to rand(24,46))
 			new possessed_ore(src.loc)
 
-	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+	new /obj/item/weapon/vinyl/filk(src.loc) //The music of the asteroid~
 
 	for(var/i = 0 to rand(5,13))
 		new /obj/item/weapon/strangerock(src.loc, get_random_find())

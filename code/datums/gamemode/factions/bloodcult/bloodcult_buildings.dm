@@ -99,6 +99,9 @@
 			MouseDropTo(W,user)
 		else
 			user.delayNextAttack(8)
+			user.do_attack_animation(src, W)
+			if (W.hitsound)
+				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
 				playsound(get_turf(src), sound_damaged, 75, 1)
 			takeDamage(W.force)
@@ -765,7 +768,10 @@
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.stage(CULT_ACT_III,T)
+			if (emergency_shuttle.direction == 2) // Going to centcomm
+				cult.minor_victory()
+			else
+				cult.stage(CULT_ACT_III,T)
 		else
 			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 		qdel(src)

@@ -177,7 +177,7 @@ var/global/Holiday = null
 // Run at the  start of a round
 /proc/Holiday_Game_Start()
 	if(Holiday)
-		to_chat(world, "<font color='blue'>and...</font>")
+		to_chat(world, "<span class='notice'>and...</span>")
 		to_chat(world, "<h4>Happy [Holiday] Everybody!</h4>")
 		if(Holiday == XMAS_EVE || Holiday == XMAS)
 			Christmas_Game_Start()

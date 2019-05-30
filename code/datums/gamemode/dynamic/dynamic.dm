@@ -140,7 +140,7 @@ var/stacking_limit = 90
 	usr << browse(out, "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
-	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
+	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <span class='red'>[threat_level]%</span></h2>"
 	var/rules = list()
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
@@ -180,9 +180,14 @@ var/stacking_limit = 90
 	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")
 
 	generate_threat()
+	
 
-	latejoin_injection_cooldown = rand(330,510)
-	midround_injection_cooldown = rand(600,1050)
+	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
+	latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
+	
+	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
+	midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
+
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
 
@@ -646,10 +651,10 @@ var/stacking_limit = 90
 					break
 			if (skip_ruleset)
 				message_admins("The rule was not added, because we already have a round-ender.")
-			else 
+			else
 				message_admins("The rule was accepted.")
 				rules_to_simulate += to_test
-		else 
+		else
 			message_admins("The rule was accepted (no-stacking not active.)")
 			rules_to_simulate += to_test
 
@@ -693,7 +698,7 @@ var/stacking_limit = 90
 			if (skip_ruleset)
 				message_admins("[to_test] was refused because we already have a round-ender ruleset.")
 				return
-	
+
 	message_admins("The rule was accepted.")
 
 /datum/gamemode/dynamic/proc/simulate_latejoin_injection(var/mob/user = usr)
@@ -737,5 +742,5 @@ var/stacking_limit = 90
 		if (skip_ruleset)
 			message_admins("[to_test] was refused because we already have a round-ender ruleset.")
 			return
-	
+
 	message_admins("The rule was accepted.")

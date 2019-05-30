@@ -61,7 +61,7 @@ var/global/list/alert_overlays_global = list()
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
 	icon = 'icons/obj/doors/DoorHazard.dmi'
 	icon_state = "door_open"
-	req_one_access = list(access_atmospherics, access_engine_equip)
+	req_one_access = list(access_atmospherics, access_engine_equip, access_paramedic)
 	opacity = 0
 	density = 0
 	layer = BELOW_TABLE_LAYER
@@ -190,9 +190,9 @@ var/global/list/alert_overlays_global = list()
 		if(dir_alerts[index] & (FIREDOOR_ALERT_HOT|FIREDOOR_ALERT_COLD))
 			o += "<span class='warning'>"
 		else
-			o += "<span style='color:blue'>"
+			o += "<span class='notice'>"
 		o += "[celsius]°C</span> "
-		o += "<span style='color:blue'>"
+		o += "<span class='notice'>"
 		o += "[pressure]kPa</span></li>"
 		to_chat(user, o)
 
@@ -396,6 +396,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(needs_to_close)
 		spawn(50)
+			alarmed = A.doors_down || A.fire
 			if(alarmed && !density)
 				close()
 

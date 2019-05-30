@@ -154,13 +154,16 @@
 				C.absorbed_chems.Add(id)
 				to_chat(M, "<span class = 'notice'>We have learned [src].</span>")
 
-	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
+	if(is_overdosing())
 		on_overdose(M)
 
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
+
+/datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
+	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -424,7 +427,7 @@
 
 	var/datum/reagent/self = src
 	if(..())
-		return 1
+		return TRUE
 
 	if(volume < 3) //Hardcoded
 		return
@@ -453,7 +456,7 @@
 		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
 		if(B)
 			B.blood_DNA["UNKNOWN DNA STRUCTURE"] = "X*"
-
+	T.had_blood = TRUE
 	if(volume >= 5 && !istype(T.loc, /area/chapel)) //Blood desanctifies non-chapel tiles
 		T.holy = 0
 	return
@@ -676,6 +679,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.49033
 	specheatcap = 0.55536
+	overdose_am = 60
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 
@@ -708,6 +712,23 @@
 	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
 	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
+
+/datum/reagent/anti_toxin/on_overdose(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+
+		if(prob(min(tick / 10, 35)))
+			H.vomit()
+
+		switch(volume)
+			if(60 to 75)
+				H.dizziness = max(H.dizziness, 10)
+				if(prob(5))
+					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
+			if(75 to INFINITY)
+				H.dizziness = max(H.dizziness, 20)
+				if(prob(10))
+					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
 
 /datum/reagent/phalanximine
 	name = "Phalanximine"
@@ -5010,6 +5031,20 @@
 
 	M.Jitter(5)
 
+/datum/reagent/drink/cold/diy_soda
+	name = "Dr. Pecker's DIY Soda"
+	description = "Tastes like a science fair experiment."
+	id = DIY_SODA
+	color = "#7566FF" //rgb: 117, 102, 255
+	adj_temp = -2
+	adj_drowsy = -6
+
+/datum/reagent/drink/cold/diy_soda/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.Jitter(5)
+
 /datum/reagent/hippies_delight
 	name = "Hippie's Delight"
 	id = HIPPIESDELIGHT
@@ -7185,6 +7220,27 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin
 
+/datum/reagent/luminol
+	name = "Luminol"
+	id = LUMINOL
+	description = "A chemical that exhibits chemiluminescence in the presence of blood due to the iron and copper in the hemoglobin."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/luminol/reaction_mob(var/mob/living/M, var/method = TOUCH)
+	if(ishuman(M) && (method == TOUCH))
+		var/mob/living/carbon/human/H = M
+		H.apply_luminol()
+
+/datum/reagent/luminol/reaction_turf(var/turf/simulated/T)
+	if(..())
+		return TRUE
+	T.apply_luminol()
+
+/datum/reagent/luminol/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return TRUE
+	O.apply_luminol()
 
 //////////////////////
 //					//

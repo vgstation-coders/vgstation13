@@ -200,6 +200,7 @@
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
 	var/trip_prob = 90
+	ignore_blocking = IGNORE_SOME_SHIELDS
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.throw_item(target)

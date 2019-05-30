@@ -10,6 +10,7 @@
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 	logo_state = "nuke-logo"
 	hud_icons = list("nuke-logo","nuke-logo-leader")
+	playlist = "nukesquad"
 
 /datum/faction/syndicate/nuke_op/forgeObjectives()
 	AppendObjective(/datum/objective/nuclear)

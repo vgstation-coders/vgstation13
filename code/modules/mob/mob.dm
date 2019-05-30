@@ -68,6 +68,7 @@
 	click_delayer = null
 	attack_delayer = null
 	special_delayer = null
+	throw_delayer = null
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
@@ -371,9 +372,7 @@
 	else
 		to_chat(src, msg)
 
-/mob/proc/show_message(msg, type, alt, alt_type)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf)
-
-
+/mob/proc/show_message(msg, type, alt, alt_type, var/mob/speaker)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 
 	if(!client) //We dun goof
@@ -408,8 +407,10 @@
 
 				return //And we're good
 		else //This is not an emote
-			to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//The sweet silence of death
-
+			if (speaker && (src.ckey == speaker.ckey) && speaker.isincrit() && speaker.said_last_words) //if user is in crit, if user has said_last_words, and whisperer of the final words IS the user himself)
+				to_chat(src, msg)//Send it
+			else
+				to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//The sweet silence of death
 			return //All we ever needed to hear
 	else //We're fine
 		to_chat(src, msg)//Send it

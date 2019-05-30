@@ -321,6 +321,11 @@
 		abort()
 		return
 
+	if (R.active_spell)
+		to_chat(user, "<span class='rose'>A structure is already being raised from that rune, so you contribute to that instead.</span>")
+		R.active_spell.midcast(user)
+		return
+
 	switch(structure)
 		if("Altar")
 			spawntype = /obj/structure/cult/altar
@@ -2389,13 +2394,16 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
-	page = "This rune triggers a short-range EMP that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
+	page = "This rune triggers a series of short-range EMPs that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
 	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
 	T.hotspot_expose(700,125,surfaces=1)
-	empulse(T, 1, 3)
+	spawn(0)
+		for(var/i = 0; i < 3; i++)
+			empulse(T, 1, 3)
+			sleep(20)
 	qdel(spell_holder)
 
 //RUNE XIX

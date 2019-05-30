@@ -407,7 +407,7 @@ var/list/admin_verbs_mod = list(
 		ghost.reenter_corpse()
 		feedback_add_details("admin_verb","P") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else if(istype(mob,/mob/new_player))
-		to_chat(src, "<font color='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</font>")
+		to_chat(src, "<span class='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</span>")
 	else
 		//ghostize
 		var/mob/body = mob
@@ -550,7 +550,7 @@ var/list/admin_verbs_mod = list(
 		D = preferences_datums[warned_ckey]
 
 	if(!D)
-		to_chat(src, "<font color='red'>Error: warn(): No such ckey found.</font>")
+		to_chat(src, "<span class='red'>Error: warn(): No such ckey found.</span>")
 		return
 
 	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
@@ -590,7 +590,7 @@ var/list/admin_verbs_mod = list(
 	if(!warned_ckey || !istext(warned_ckey))
 		return
 	/*if(warned_ckey in admin_datums)
-		to_chat(usr, "<font color='red'>Error: warn(): You can't warn admins.</font>")
+		to_chat(usr, "<span class='red'>Error: warn(): You can't warn admins.</span>")
 		return*/
 
 	var/datum/preferences/D
@@ -601,17 +601,17 @@ var/list/admin_verbs_mod = list(
 		D = preferences_datums[warned_ckey]
 
 	if(!D)
-		to_chat(src, "<font color='red'>Error: unwarn(): No such ckey found.</font>")
+		to_chat(src, "<span class='red'>Error: unwarn(): No such ckey found.</span>")
 		return
 
 	if(D.warns == 0)
-		to_chat(src, "<font color='red'>Error: unwarn(): You can't unwarn someone with 0 warnings, you big dummy.</font>")
+		to_chat(src, "<span class='red'>Error: unwarn(): You can't unwarn someone with 0 warnings, you big dummy.</span>")
 		return
 
 	D.warns-=1
 	var/strikesleft = MAX_WARNS-D.warns
 	if(C)
-		to_chat(C, "<font color='red'><BIG><B>One of your warnings has been removed.</B></BIG><br>You currently have [strikesleft] strike\s left</font>")
+		to_chat(C, "<span class='red'><BIG><B>One of your warnings has been removed.</B></BIG><br>You currently have [strikesleft] strike\s left</span>")
 		message_admins("[key_name_admin(src)] has unwarned [key_name_admin(C)]. They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
 	else
 		message_admins("[key_name_admin(src)] has unwarned [warned_ckey] (DC). They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
@@ -1019,8 +1019,8 @@ var/list/admin_verbs_mod = list(
 	message_admins("<span class='notice'>[key_name_admin(src)] set all blobs to use the \"[chosen]\" look.</span>")
 
 /datum/admins/proc/media_stop_all()
-	set name = "Stop All Media"
-	set desc = "Stops all music and video."
+	set name = "Stop all Media"
+	set desc = "Stops all music, video and admin sounds."
 	set category = "Fun"
 
 	if(!check_rights(R_FUN))
