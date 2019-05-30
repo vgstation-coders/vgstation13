@@ -68,7 +68,9 @@
 		"target" = A
 	))
 	if(modifiers["middle"])
-		if(modifiers["shift"])
+		if (modifiers["shift"] && modifiers["alt"])
+			AltShiftClickOn(A)
+		else if(modifiers["shift"])
 			MiddleShiftClickOn(A)
 		else if (modifiers["alt"])
 			MiddleAltClickOn(A)
@@ -189,9 +191,7 @@
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
-	//ClickOn(A,params)
 	return
-
 
 /*
 	Translates into attack_hand, etc.
@@ -295,6 +295,24 @@
 /*
 	Alt click
 */
+
+/mob/proc/AltShiftClickOn(var/atom/A)
+	A.AltShiftClick(src)
+	return
+
+/atom/proc/AltShiftClick(var/mob/user)
+	return
+
+/mob/living/carbon/AltShiftClick(var/mob/user)
+	var/obj/item/to_be_handcuffs = user.get_active_hand()
+	if (iscarbon(user) && to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
+		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
+		var/mob/living/carbon/cuffer = user
+		cuffer.mutual_cuff_other_players.apply_mutual_cuffs_from_third_player(src, cuffer, handcuffs)
+		return
+	..()
+
+//  ----------------
 
 /mob/proc/MiddleAltClickOn(var/atom/A)
 	A.MiddleAltClick(src)

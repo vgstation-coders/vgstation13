@@ -14,6 +14,7 @@
 	var/mutual_handcuffed_to_event_key = null
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
 	var/obj/item/weapon/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
+	var/datum/mutual_cuff_other_players/mutual_cuff_other_players = new() // used when a third player tries to restrain two others
 	var/obj/item/legcuffed = null  //Same as handcuffs but for legs. Bear traps use this.
 	//Surgery info
 	var/datum/surgery_status/op_stage = new/datum/surgery_status
