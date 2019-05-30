@@ -69,7 +69,7 @@
 	))
 	if(modifiers["middle"])
 		if (modifiers["shift"] && modifiers["alt"])
-			AltShiftClickOn(A)
+			MiddleAltShiftClickOn(A)
 		else if(modifiers["shift"])
 			MiddleShiftClickOn(A)
 		else if (modifiers["alt"])
@@ -296,14 +296,14 @@
 	Alt click
 */
 
-/mob/proc/AltShiftClickOn(var/atom/A)
-	A.AltShiftClick(src)
+/mob/proc/MiddleAltShiftClickOn(var/atom/A)
+	A.MiddleAltShiftClick(src)
 	return
 
-/atom/proc/AltShiftClick(var/mob/user)
+/atom/proc/MiddleAltShiftClick(var/mob/user)
 	return
 
-/mob/living/carbon/AltShiftClick(var/mob/user)
+/mob/living/carbon/MiddleAltShiftClick(var/mob/user)
 	var/obj/item/to_be_handcuffs = user.get_active_hand()
 	if (iscarbon(user) && to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
 		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
