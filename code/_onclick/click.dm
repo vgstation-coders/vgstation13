@@ -70,6 +70,8 @@
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
+		else if (modifiers["alt"])
+			MiddleAltClickOn(A)
 		else
 			MiddleClickOn(A)
 		return
@@ -292,8 +294,23 @@
 
 /*
 	Alt click
-	Unused except for AI
 */
+
+/mob/proc/MiddleAltClickOn(var/atom/A)
+	A.MiddleAltClick(src)
+	return
+
+/atom/proc/MiddleAltClick(var/mob/user)
+	return
+
+/mob/living/carbon/MiddleAltClick(var/mob/user)
+	var/obj/item/to_be_handcuffs = user.get_active_hand()
+	if (to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
+		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
+		handcuffs.apply_mutual_cuffs(src, user)
+		return
+	..()
+
 /mob/proc/AltClickOn(var/atom/A)
 	A.AltClick(src)
 	return
@@ -308,11 +325,6 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	var/obj/item/to_be_handcuffs = user.get_active_hand()
-	if (to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
-		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
-		handcuffs.apply_mutual_cuffs(src, user)
-		return
 	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
 		src.give_item(user)
 		return
