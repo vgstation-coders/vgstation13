@@ -489,7 +489,7 @@
 		clothing_flags |= (NOSLIP | MAGPULSE)
 		slowdown = mag_slow
 		return 1
-	
+
 //Suit
 /obj/item/clothing/suit
 	icon = 'icons/obj/clothing/suits.dmi'
@@ -581,6 +581,9 @@
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
+/obj/item/clothing/under/emp_act(severity)
+	..()
+	sensor_mode = 0
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
