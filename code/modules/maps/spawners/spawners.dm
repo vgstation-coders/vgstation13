@@ -632,7 +632,7 @@
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/harpoon,
 		/obj/item/weapon/melee/classic_baton,
-		/obj/item/weapon/pickaxe/plasmacutter,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator,
 		/obj/item/weapon/shield/energy,
 		)
 

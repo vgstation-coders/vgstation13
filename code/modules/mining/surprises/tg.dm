@@ -132,7 +132,7 @@
 		/turf/simulated/floor/bluegrid=1
 	)
 	spawntypes = list(
-		/obj/item/weapon/pickaxe/plasmacutter=1,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator=1,
 		/obj/machinery/shieldgen=1,
 		/obj/item/weapon/cell/hyper=1
 	)
