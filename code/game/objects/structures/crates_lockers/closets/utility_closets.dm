@@ -173,10 +173,10 @@
 
 /obj/structure/closet/bombcloset/atoms_to_spawn()
 	return list(
-		/obj/item/clothing/suit/bomb_suit,
+		/obj/item/clothing/suit/space/bomb_suit,
 		/obj/item/clothing/under/color/black,
 		/obj/item/clothing/shoes/black,
-		/obj/item/clothing/head/bomb_hood,
+		/obj/item/clothing/head/helmet/space/bomb_hood,
 	)
 
 
@@ -189,10 +189,10 @@
 
 /obj/structure/closet/bombclosetsecurity/atoms_to_spawn()
 	return list(
-		/obj/item/clothing/suit/bomb_suit/security,
+		/obj/item/clothing/suit/space/bomb_suit/security,
 		/obj/item/clothing/under/rank/security,
 		/obj/item/clothing/shoes/brown,
-		/obj/item/clothing/head/bomb_hood/security,
+		/obj/item/clothing/head/helmet/space/bomb_hood/security,
 	)
 
 /*

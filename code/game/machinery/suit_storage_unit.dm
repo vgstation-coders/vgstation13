@@ -122,8 +122,8 @@
 
 /obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
 	name = "Bomb Suit Storage Unit"
-	suit_type = /obj/item/clothing/suit/bomb_suit
-	helmet_type = /obj/item/clothing/head/bomb_hood
+	suit_type = /obj/item/clothing/suit/space/bomb_suit
+	helmet_type = /obj/item/clothing/head/helmet/space/bomb_hood
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/jackboots
 

@@ -117,3 +117,68 @@
 	icon_state = "syndicate-orange"
 	item_state = "syndicate-orange"
 	desc = "A Orange Space Suit meant to provide minimal space protection."
+
+/*
+ * Bomb protection
+ */
+/obj/item/clothing/head/helmet/space/bomb_hood
+	name = "bomb hood"
+	desc = "Use in case of bomb."
+	icon_state = "bombsuit"
+	flags = FPRINT
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
+	body_parts_covered = FULL_HEAD|BEARD
+	siemens_coefficient = 0
+	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/suit/space/bomb_suit
+	name = "bomb suit"
+	desc = "A suit designed for safety when handling explosives."
+	icon_state = "bombsuit"
+	item_state = "bombsuit"
+	w_class = W_CLASS_LARGE //Bulky item
+	gas_transfer_coefficient = 0.01
+	permeability_coefficient = 0.01
+	flags = FPRINT
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
+	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	siemens_coefficient = 0
+	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/head/helmet/space/bomb_hood/security
+	icon_state = "bombsuitsec"
+	item_state = "bombsuitsec"
+
+/obj/item/clothing/suit/space/bomb_suit/security
+	icon_state = "bombsuitsec"
+	item_state = "bombsuitsec"
+	allowed = list(/obj/item/weapon/gun/energy,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs)
+
+/obj/item/clothing/head/helmet/space/advancedeod_helmet
+	name = "Advanced EOD Helmet"
+	desc = "Use in case of very large bomb."
+	icon_state = "advancedeod_helmet"
+	item_state = "advancedeod_helmet"
+	flags = FPRINT
+	armor = list(melee = 40, bullet = 40, laser = 20,energy = 20, bomb = 100, bio = 0, rad = 0)
+	body_parts_covered = FULL_HEAD|BEARD
+	species_restricted = list("exclude",VOX_SHAPED)
+	siemens_coefficient = 0
+
+
+/obj/item/clothing/suit/space/advancedeod
+	name = "Advanced EOD Suit"
+	desc = "A heavy suit designed for heavy protection."
+	icon_state = "advancedeod"
+	item_state = "advancedeod"
+	w_class = W_CLASS_LARGE//bulky item
+	gas_transfer_coefficient = 0.01
+	permeability_coefficient = 0.01
+	flags = FPRINT
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	slowdown = HARDSUIT_SLOWDOWN_MED
+	armor = list(melee = 40, bullet = 40, laser = 20,energy = 20, bomb = 100, bio = 0, rad = 0)
+	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_restricted = list("exclude",VOX_SHAPED)
+	siemens_coefficient = 0

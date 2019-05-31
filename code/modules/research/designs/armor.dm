@@ -63,7 +63,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 2500, MAT_GOLD = 3750, MAT_SILVER = 1000)
 	category = "Armor"
-	build_path = /obj/item/clothing/suit/advancedeod
+	build_path = /obj/item/clothing/suit/space/advancedeod
 
 /datum/design/advancedeod_helmet
 	name = "Advanced EOD Helmet"
@@ -73,7 +73,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 3750, MAT_GLASS = 2500, MAT_GOLD = 3750, MAT_SILVER = 1000)
 	category = "Armor"
-	build_path = /obj/item/clothing/head/advancedeod_helmet
+	build_path = /obj/item/clothing/head/helmet/space/advancedeod_helmet
 
 /datum/design/reactive_teleport_armor
 	name = "Reactive Teleport Armor"
