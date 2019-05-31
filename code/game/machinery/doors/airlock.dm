@@ -1256,6 +1256,7 @@ About the new airlock wires panel:
 		src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag))
 		if (!operating)
+			locked = 0
 			operating = -1
 			if(density)
 				door_animate("spark")
