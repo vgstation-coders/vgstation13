@@ -8013,7 +8013,7 @@
 "cYe" = (/obj/machinery/door/poddoor{id_tag = "QMLoaddoor2"; name = "Supply Shuttle Loading Door"},/obj/machinery/conveyor{dir = 4; id_tag = "QMLoad2"},/turf/simulated/shuttle/plating,/area/shuttle/supply)
 "cYf" = (/obj/machinery/conveyor{dir = 4; id_tag = "anosample"},/turf/unsimulated/floor{name = "plating"},/area/centcom/suppy)
 "cYg" = (/obj/machinery/conveyor{dir = 4; id_tag = "anosample"},/obj/structure/plasticflaps/mining,/turf/unsimulated/floor{name = "plating"},/area/centcom/suppy)
-"cYh" = (/obj/structure/closet/bombcloset,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/effect/spawner/newbomb/timer,/obj/item/clothing/head/advancedeod_helmet,/obj/item/clothing/suit/advancedeod,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
+"cYh" = (/obj/structure/closet/bombcloset,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/obj/effect/spawner/newbomb/timer,/obj/item/clothing/head/helmet/space/advancedeod_helmet,/obj/item/clothing/suit/space/advancedeod,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "cYi" = (/obj/effect/decal{alpha = 150; icon = 'icons/logos.dmi'; icon_state = "nano-logo"; pixel_x = 0; pixel_y = 0},/turf/unsimulated/floor{icon_state = "floor"},/area/centcom/evac)
 "cYj" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
 "cYk" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "8"},/turf/simulated/shuttle/floor,/area/shuttle/supply)
