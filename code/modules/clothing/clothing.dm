@@ -583,7 +583,7 @@
 
 /obj/item/clothing/under/emp_act(severity)
 	..()
-	sensor_mode = 0
+	sensor_mode = pick(0,1,2,3)
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
