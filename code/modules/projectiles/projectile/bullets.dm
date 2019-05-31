@@ -94,25 +94,17 @@
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
-	stun = 5
-	weaken = 5
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 
 /obj/item/projectile/bullet/midbullet/lawgiver
 	damage = 10
-	stun = 0
-	weaken = 0
 	projectile_speed = 0.66
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
-	stun = 0
-	weaken = 0
 
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
-	stun = 0
-	weaken = 0
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
@@ -120,8 +112,6 @@
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
 	damage = 30
-	stun = 0
-	weaken = 0
 
 /obj/item/projectile/bullet/fourtyfive
 	damage = 35 //buffed up for antag usage
