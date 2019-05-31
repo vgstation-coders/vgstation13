@@ -466,8 +466,7 @@
 		var/mob/living/carbon/human/H = loc
 		switch(H.m_intent)
 			if("run")
-				if(stepstaken % 2 == 1)
-					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
+				playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 			if("walk")
 				playsound(H, step_sound, 20, 1)
 
@@ -489,7 +488,7 @@
 		clothing_flags |= (NOSLIP | MAGPULSE)
 		slowdown = mag_slow
 		return 1
-	
+
 //Suit
 /obj/item/clothing/suit
 	icon = 'icons/obj/clothing/suits.dmi'
