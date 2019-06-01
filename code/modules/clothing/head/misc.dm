@@ -99,7 +99,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
-	
+
 /obj/item/clothing/head/spaceninjafake
 	name = "ninja hood replica"
 	icon_state = "s-ninja"
@@ -123,6 +123,13 @@
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
 	flags = FPRINT
+
+/obj/item/clothing/head/beret/highlander
+	name = "highlander's beret"
+	desc = "Don't lose your head!"
+	icon_state = "highlanderberet"
+	item_state = "highlanderberet"
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
