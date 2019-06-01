@@ -63,7 +63,7 @@
 
 		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
-		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
+		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
 			to_chat(S, "<b>Your new laws are as follows:</b>")
 			S.laws.show_laws(S)
@@ -226,14 +226,14 @@
 			if(!new_ckey)
 				return
 			if(new_ckey in admin_datums)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': [new_ckey] is already an admin</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': [new_ckey] is already an admin</span>")
 				return
 			adm_ckey = new_ckey
 			task = "rank"
 		else if(task != "show")
 			adm_ckey = ckey(href_list["ckey"])
 			if(!adm_ckey)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': No valid ckey</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': No valid ckey</span>")
 				return
 
 		var/datum/admins/D = admin_datums[adm_ckey]
@@ -268,7 +268,7 @@
 					if(config.admin_legacy_system)
 						new_rank = ckeyEx(new_rank)
 					if(!new_rank)
-						to_chat(usr, "<font color='red'>Error: Topic 'editrights': Invalid rank</font>")
+						to_chat(usr, "<span class='red'>Error: Topic 'editrights': Invalid rank</span>")
 						return
 					if(config.admin_legacy_system)
 						if(admin_ranks.len)
@@ -1616,7 +1616,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		dynamic_forced_extended = !dynamic_forced_extended
 		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
 		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
@@ -1628,7 +1628,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		dynamic_no_stacking = !dynamic_no_stacking
 		log_admin("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
 		message_admins("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
@@ -1640,7 +1640,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		dynamic_classic_secret = !dynamic_classic_secret
 		log_admin("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
 		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
@@ -1652,11 +1652,11 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-		
+
 		stacking_limit = input(usr,"Change the threat limit at which round-endings rulesets will start to stack.", "Change stacking limit", null) as num
 		log_admin("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
 		message_admins("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
-		dynamic_mode_options(usr)	
+		dynamic_mode_options(usr)
 
 	else if(href_list["high_pop_limit"])
 		if(!check_rights(R_ADMIN))
@@ -1667,7 +1667,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		var/new_value = input(usr, "Enter the high-pop override threshold for dynamic mode.", "High pop override") as num
 		if (new_value < 0)
 			return alert(usr, "Only positive values allowed!", null, null, null, null)
@@ -1675,7 +1675,7 @@
 
 		log_admin("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
 		message_admins("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
-		dynamic_mode_options(usr)	
+		dynamic_mode_options(usr)
 
 	else if(href_list["change_distrib"])
 		if(!check_rights(R_ADMIN))
@@ -1686,7 +1686,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		var/list/possible_choices = list(
 			"[LORENTZ]",
 			"[GAUSS]",
@@ -1708,7 +1708,7 @@
 			dynamic_curve_centre = 0
 		log_admin("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
 		message_admins("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
-		dynamic_mode_options(usr)	
+		dynamic_mode_options(usr)
 
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
@@ -2502,7 +2502,7 @@
 
 		/*Job + antagonist
 		if(M.mind)
-			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <font color='red'><b>[M.mind.special_role]</b></font>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
+			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <span class='red'><b>[M.mind.special_role]</b></span>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
 		else
 			special_role_description = "Role: <i>Mind datum missing</i> Antagonist: <i>Mind datum missing</i>; Has been rev: <i>Mind datum missing</i>;"
 		*/
@@ -3716,7 +3716,7 @@
 						command_alert(/datum/command_alert/malf_announce)
 					to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
-					to_chat(world, "<font color='red'>[config.alert_desc_delta]</font>")
+					to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
 
 					message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
@@ -4976,7 +4976,7 @@
 			new_objective.faction.AppendObjective(new_objective)
 			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
-		else if (obj_holder.faction) //or is it just an explicit faction obj? 
+		else if (obj_holder.faction) //or is it just an explicit faction obj?
 			obj_holder.faction.AppendObjective(new_objective)
 			message_admins("[key_name_admin(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[key_name(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
@@ -5031,11 +5031,11 @@
 		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
 		if (!unique_objectives.len)
 			alert(usr, "No new objectives generated.", "", "OK")
-		else 
+		else
 			for (var/datum/objective/objective in unique_objectives)
 				message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
 				log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
-		check_antagonists()	
+		check_antagonists()
 
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))
@@ -5140,16 +5140,17 @@
 			if("newdisclaimer")
 				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
 				if(newdisclaimer)
+					newdisclaimer += "<br>"
 					end_credits.disclaimers.Insert(1,newdisclaimer)
-					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
-					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
 			if("editdisclaimer")
 				var/i = text2num(href_list["disclaimerindex"])
 				var/olddisclaimer = end_credits.disclaimers[i]
 				var/newdisclaimer = input(usr,"Write a new rolling disclaimer.","Edit Disclaimer",olddisclaimer) as message|null
 				if(newdisclaimer)
-					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
-					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
 					end_credits.disclaimers[i] = newdisclaimer
 			if("disclaimerup")
 				var/i = text2num(href_list["disclaimerindex"])

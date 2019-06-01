@@ -591,3 +591,16 @@
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
 	. = ..()
+
+////////////////////
+//COLLECTION PLATE//
+////////////////////
+/obj/item/weapon/storage/fancy/collection_plate
+	icon = 'icons/obj/tithe.dmi'
+	icon_state = "donationbox0"
+	icon_type = "donation"
+	name = "collection plate"
+	foldable = 0
+	box_type = "plate"
+	storage_slots = 10
+	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")

@@ -140,7 +140,11 @@
 	newninja.Greet(GREET_DEFAULT)
 	newninja.OnPostSetup()
 	newninja.AnnounceObjectives()
+	spawn(5)
+		newninja.antag.current.ThrowAtStation()
 	return 1
+	
+
 
 //////////////////////////////////////////////
 //                                          //

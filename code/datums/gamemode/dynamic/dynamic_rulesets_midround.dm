@@ -457,7 +457,16 @@
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
-
+	
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
+	newninja.OnPostSetup()
+	newninja.Greet(GREET_MIDROUND)
+	newninja.ForgeObjectives()
+	newninja.AnnounceObjectives()
+	spawn(5)
+		newninja.antag.current.ThrowAtStation()
+	return 1
+	
 //////////////////////////////////////////////
 //                                          //
 //         RAMBLER       (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

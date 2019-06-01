@@ -15,6 +15,7 @@
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
 	mob_property_flags = MOB_SUPERNATURAL|MOB_CONSTRUCT
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"

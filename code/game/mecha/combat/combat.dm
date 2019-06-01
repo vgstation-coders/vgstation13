@@ -82,7 +82,7 @@
 						return
 				M.updatehealth()
 			src.occupant_message("You hit [target].")
-			src.visible_message("<font color='red'><b>[src.name] hits [target].</b></font>")
+			src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
 			message_admins("[key_name_and_info(src.occupant)] mech punched [target] with [src.name] ([formatJumpTo(src)])",0,1)
 			log_attack("[key_name(src.occupant)] mech punched [target] with [src.name] ([formatLocation(src)])")
 		else
@@ -100,7 +100,7 @@
 			for(var/target_type in src.destroyable_obj)
 				if(istype(target, target_type) && hascall(target, "attackby"))
 					src.occupant_message("You hit [target].")
-					src.visible_message("<font color='red'><b>[src.name] hits [target]</b></font>")
+					src.visible_message("<span class='red'><b>[src.name] hits [target]</b></span>")
 					if(!istype(target, /turf/simulated/wall))
 						target:attackby(src,src.occupant)
 					else if(prob(5))
