@@ -434,9 +434,6 @@
 /obj/item/clothing/mask/attack_self()
 	togglemask()
 
-/obj/item/clothing/mask/proc/treat_mask_speech(var/datum/speech/speech)
-	return
-
 //Shoes
 /obj/item/clothing/shoes
 	name = "shoes"

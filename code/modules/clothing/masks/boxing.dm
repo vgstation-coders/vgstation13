@@ -9,7 +9,7 @@
 	siemens_coefficient = 3.0
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
-/obj/item/clothing/mask/luchador/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/luchador/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	var/message=speech.message
 	message = replacetext(message, "captain", "CAPITÁN")
 	message = replacetext(message, "station", "ESTACIÓN")
