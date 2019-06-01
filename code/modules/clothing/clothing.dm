@@ -466,7 +466,8 @@
 		var/mob/living/carbon/human/H = loc
 		switch(H.m_intent)
 			if("run")
-				playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
+				if(stepstaken % 2 == 1)
+					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 			if("walk")
 				playsound(H, step_sound, 20, 1)
 
