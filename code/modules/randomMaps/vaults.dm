@@ -28,14 +28,15 @@
 
 //List of spawnable vaults is in code/modules/randomMaps/vault_definitions.dm
 
+//This a random vault spawns somewhere in this area. Then this area is replaced with space!
 /area/random_vault
 	name = "random vault area"
 	desc = "Spawn a vault in there somewhere"
 	icon_state = "random_vault"
-	flags = NO_PERSISTENCE
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
-//This a random vault spawns somewhere in this area. Then this area is replaced with space!
-/area/random_vault
+/area/vault
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
 /proc/get_map_element_objects(base_type = /datum/map_element/vault)
 	var/list/list_of_vaults = typesof(base_type) - base_type
