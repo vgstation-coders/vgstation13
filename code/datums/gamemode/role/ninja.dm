@@ -78,7 +78,9 @@
 			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
-			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station. Find a way inside before your suit's life support systems give out.</span>")
+			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station.</span>")
+			to_chat(antag.current, "<span class='userdanger'>Your suit will lose pressure in approximately two minutes.</span>")
+			to_chat(antag.current, "<span class='danger'>Find a way inside before your suit's life support systems give out!</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -553,9 +555,9 @@ Suit and assorted
 	
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
-	spawn(60 SECONDS)
+	spawn(120 SECONDS)
 		pressure_resistance = 0
-		src.visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
+		visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
 	
 /obj/item/clothing/suit/space/ninja
 	name = "elite ninja suit"
@@ -578,9 +580,9 @@ Suit and assorted
 	
 /obj/item/clothing/suit/space/ninja/apprentice/New()
 	..()
-	spawn(60 SECONDS)
+	spawn(150 SECONDS)
 		pressure_resistance = 0
-		src.visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
+		visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
 	
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
 	/*if(!isninja(H))
@@ -598,11 +600,22 @@ Suit and assorted
 	
 /obj/item/clothing/shoes/ninja
 	name = "ninja shoes"
-	desc = "A pair of running shoes, excellent for running and even better for smashing skulls."
+	desc = "A pair of ninja shoes, excellent for running and even better for smashing skulls."
 	icon_state = "s-ninja"
 	item_state = "s-ninja"
 	permeability_coefficient = 0.01
-	//flags = NOSLIP too powerful
+	mag_slow = NO_SLOWDOWN
+	clothing_flags = NOSLIP | MAGPULSE
+	
+/obj/item/clothing/shoes/ninja/apprentice
+	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
+	
+/obj/item/clothing/shoes/ninja/apprentice/New()
+	..()
+	spawn(130 SECONDS)
+		togglemagpulse(override = TRUE)
+		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
+		
 
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"
