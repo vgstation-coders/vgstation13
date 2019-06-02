@@ -370,7 +370,7 @@
 /obj/item/weapon/coin/is_screwdriver(var/mob/user)
 	return user.a_intent == I_HURT
 
-/obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+/obj/item/weapon/coin/proc/coinflip(mob/user as mob, thrown, rigged = FALSE)
 	var/matrix/flipit = matrix()
 	flipit.Scale(0.2,1)
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
@@ -391,7 +391,7 @@
 		flipit.Invert()
 		flipit.Turn(rand(1,359))
 		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
-	if (rand(1000) == 1000 || rigged)
+	if (prob(0.1) || rigged)
 		flipit.Scale(0.2,1)
 		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
 		sideup = "on the side!"
