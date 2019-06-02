@@ -344,7 +344,7 @@
 
 /obj/item/weapon/coin
 	icon = 'icons/obj/items.dmi'
-	name = "Coin"
+	name = "coin"
 	icon_state = "coin"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -371,67 +371,67 @@
 
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
-	name = "Gold coin"
+	name = "gold coin"
 	icon_state = "coin_gold"
 	credits = 5
 	melt_temperature=1064+T0C
 
 /obj/item/weapon/coin/silver
 	material=MAT_SILVER
-	name = "Silver coin"
+	name = "silver coin"
 	icon_state = "coin_silver"
 	credits = 1
 	melt_temperature=961+T0C
 
 /obj/item/weapon/coin/diamond
 	material=MAT_DIAMOND
-	name = "Diamond coin"
+	name = "diamond coin"
 	icon_state = "coin_diamond"
 	credits = 25
 
 /obj/item/weapon/coin/iron
 	material=MAT_IRON
-	name = "Iron coin"
+	name = "iron coin"
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
 
 /obj/item/weapon/coin/plasma
 	material=MAT_PLASMA
-	name = "Solid plasma coin"
+	name = "solid plasma coin"
 	icon_state = "coin_plasma"
 	credits = 0.1
 	melt_temperature=MELTPOINT_STEEL+500
 
 /obj/item/weapon/coin/uranium
 	material=MAT_URANIUM
-	name = "Uranium coin"
+	name = "uranium coin"
 	icon_state = "coin_uranium"
 	credits = 25
 	melt_temperature=1070+T0C
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
-	name = "Bananaium coin"
+	name = "bananaium coin"
 	icon_state = "coin_clown"
 	credits = 1000
 	melt_temperature=MELTPOINT_GLASS
 
 /obj/item/weapon/coin/phazon
 	material=MAT_PHAZON
-	name = "Phazon coin"
+	name = "phazon coin"
 	icon_state = "coin_phazon"
 	credits = 2000
 	melt_temperature=MELTPOINT_GLASS
 
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
-	name = "Adamantine coin"
+	name = "adamantine coin"
 	icon_state = "coin_adamantine"
 
 /obj/item/weapon/coin/mythril
 	material="mythril"
-	name = "Mythril coin"
+	name = "mythril coin"
 	icon_state = "coin_mythril"
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
