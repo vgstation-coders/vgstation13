@@ -320,16 +320,18 @@
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
-	if(!flipped || get_dir(loc, from) != dir) // It needs to be flipped and the direction needs to be right
-		return 1
-	if(get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
-		return 1
+	var/shooting_at_the_table_directly = P.original == src
 	var/chance = 60
-	if(ismob(P.original))
-		var/mob/M = P.original
-		if(M.lying)
-			chance += 20 //Lying down lets you catch less bullets
-	if(P.original == src || prob(chance))
+	if(!shooting_at_the_table_directly)
+		if(!flipped || get_dir(loc, from) != dir) // It needs to be flipped and the direction needs to be right
+			return 1
+		if(get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
+			return 1
+		if(ismob(P.original))
+			var/mob/M = P.original
+			if(M.lying)
+				chance += 20 //Lying down lets you catch less bullets
+	if(shooting_at_the_table_directly || prob(chance))
 		health -= P.damage/2
 		if (health > 0)
 			visible_message("<span class='warning'>[P] hits \the [src]!</span>")
