@@ -15,15 +15,78 @@
 
 	var/results = "The Shoal didn't return yet."
 
+	var/list/dept_objective = list()
+	var/list/bonus_items_of_the_day = list()
+
+	var/got_personnel = 0
+	var/got_items = 0
+
 	var/total_points = 0
 	var/list/our_bounty_lockers = list()
 
+var/list/low_score_items = list(
+
+)
+
+var/list/medium_score_items = list(
+
+)
+
+var/list/high_score_items = list(
+
+)
+
+var/list/potential_bonus_items = list(
+
+)
+
 /datum/faction/vox_shoal/forgeObjectives()
+	var/list/dept_of_choice = pick(
+		engineering_positions,
+		medical_positions,
+		science_positions,
+		civilian_positions,
+		cargo_positions,
+		security_positions,
+	)
+	var/dept = "None"
+	if (dept_of_choice == engineering_positions)
+		dept = "Engineering"
+	else if (dept_of_choice == medical_positions)
+		dept = "Medbay"
+	else if (dept_of_choice == science_positions)
+		dept = "Science"
+	else if (dept_of_choice == civilian_positions)
+		dept = "Service"
+	else if (cargo_positions)
+		dept = "Cargo"
+	else if (dept_of_choice == security_positions)
+		dept = "Security"
+
+	var/datum/objective/abduct/A = new(dept)
+	AppendObjective(A)
+	dept_objective = dept_of_choice.Copy()
+
+	var/list/potential_bonus_items_temp = potential_bonus_items.Copy()
+
+	for (var/i = 1 to 4)
+		var/chosen_one = pick(potential_bonus_items_temp)
+		potential_bonus_items_temp =- chosen_one
+		bonus_items_of_the_day += chosen_one
+
+	AppendObjective(/datum/objective/steal_priority)
 
 /datum/faction/vox_shoal/GetScoreboard()
+	. = ..()
+	. += "<br/> Time left: <b>[(time_left / 2*60) % 60]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	if (time_left < 0)
+		. += "<br/> <span class='danger'>The raid took too long.</span>"
+	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
+	. += "<br/> The raiders secured <b>[got_items]</b> priority items."
 
 /datum/faction/vox_shoal/AdminPanelEntry()
 	. = ..()
+	. += "<br/> Time left: <b>[(time_left / 2*60) % 60]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
 
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
@@ -32,6 +95,12 @@
 	for(var/obj/effect/landmark/A in landmarks_list)
 		if(A.name == "voxstart")
 			vox_spawn += get_turf(A)
+			qdel(A)
+			A = null
+			continue
+		if (A.name == "vox_locker")
+			var/obj/structure/closet/loot/L = new(get_turf(A))
+			our_bounty_lockers += L
 			qdel(A)
 			A = null
 			continue
@@ -44,11 +113,9 @@
 		var/datum/mind/synd_mind = V.antag
 		synd_mind.current.forceMove(vox_spawn[spawn_count])
 		spawn_count++
-		if (istype(V, /datum/role/vox_raider/chief_vox))
-			equip_raider(synd_mind.current)
-		equip_raider(synd_mind.current)
+		equip_raider(synd_mind.current, spawn_count)
 
-/datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox)
+/datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
 	vox.age = rand(12,20)
 	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 		vox.overeatduration = 0 //Fat-B-Gone
@@ -74,13 +141,14 @@
 	vox.my_appearance.f_style = "Shaved"
 	for(var/datum/organ/external/limb in vox.organs)
 		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
-	vox.equip_vox_raider()
+	vox.equip_vox_raider(index)
 	vox.regenerate_icons()
+	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
 
 /datum/faction/vox_shoal/process()
 	if (completed)
 		return
-	..()
+	. = ..()
 	time_left -= 2
 	if (vox_shuttle.returned_home)
 		completed =  TRUE
@@ -88,7 +156,7 @@
 		// -- First, are we late ? -100 points for every minute over the clock.
 		if (time_left < 0)
 			for (var/datum/role/R in members)
-				to_chat(R.antag.current, "<span class='warning'>The raid took too long.</span>")
+				to_chat(R.antag.current, "<span class='warning'>The raid took too long. This will draw Nanotrasen attention on us.</span>")
 			total_points -= RULE_OF_THREE(-60, 100, time_left)
 
 		// -- Secondly, add points if everyone is alive and well, and send back our prisonners to the mainstation in a shelter.
@@ -102,30 +170,58 @@
 					total_points += 500
 				qdel(H) // They get deleted and go back as ghosts.
 			else
-				H.count_score(src)
-				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is far from ideal still, however.")
+				count_score(H)
+				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.")
 				H.send_back_to_main_station()
 
-		for (var/obj/structure/closet/loot in our_bounty_lockers)
-			for (var/obj/O in loot)
+		for (var/obj/structure/closet/loot/L in our_bounty_lockers)
+			for (var/obj/O in L)
 				count_score(O)
 
 		// -- Thirdly : announce and save score.
 		// To finish...
 
 
-/datum/faction/vox_shoal/proc/count_score(var/obj/item/O)
-	// To finish...
+/datum/faction/vox_shoal/proc/count_score(var/atom/O)
+	if (ishuman(O))
+		count_human_score(O)
+	else
+		if (is_type_in_list(O, low_score_items))
+			total_points += 50
+		if (is_type_in_list(O, medium_score_items))
+			total_points += 200
+		if (is_type_in_list(O, high_score_items))
+			total_points += 400
+		
+		if (is_type_in_list(O, bonus_items_of_the_day))
+			total_points += 100
+			got_items++
+
+
+/datum/faction/vox_shoal/proc/count_human_score(var/mob/living/carbon/human/H)
+	if (H.mind.assigned_role in command_positions)
+		total_points += 300
+	if (H.mind.assigned_role in dept_objective)
+		total_points += 200
+		got_personnel++
 
 // -- Mobs procs --
-
-/mob/living/proc/count_score()
-	// To finish...
 			
 /mob/living/proc/send_back_to_main_station()
-	// To finish...
+	delete_all_equipped_items()
+	if (ishuman(src))
+		var/obj/item/clothing/under/color/grey/G = new(src)
+		equip_to_appropriate_slot(G)
+		var/obj/item/clothing/shoes/black/B = new(src)
+		equip_to_appropriate_slot(B)
+		var/obj/item/device/radio/R = new(src)
+		put_in_hands(R)
+	var/obj/structure/inflatable/shelter/S = new(src)
+	forceMove(S)
+	S.ThrowAtStation()
+	
 		
-/mob/living/carbon/human/proc/equip_vox_raider()
+/mob/living/carbon/human/proc/equip_vox_raider(var/index)
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
 	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
 	equip_to_slot_or_del(R, slot_ears)
@@ -137,7 +233,6 @@
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
 	equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
 
-	var/index = 1
 
 	switch(index)
 		if(1) // Vox raider!
@@ -200,9 +295,5 @@
 	W.handle_item_insertion(C)
 	// NO. /vg/ spawn_money(rand(50,150)*10,W)
 	equip_to_slot_or_del(W, slot_wear_id)
-
-	index++
-	if (index > 4)
-		index = 1
 
 	return 1
