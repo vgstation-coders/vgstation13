@@ -100,10 +100,10 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			return 0
+			return R
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
-		return 0
+		return (M.GetRole(late_role))
 	var/datum/role/R = new roletype(null,src,late_role) // Add him to our roles
 	if(!R.AssignToRole(M, override))
 		R.Drop()
