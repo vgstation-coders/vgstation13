@@ -77,7 +77,7 @@
 	name = "\improper Uzi"
 	desc = "A lightweight, fast firing gun for when you definitely want someone dead. Uses .45 rounds."
 	icon_state = "mini-uzi"
-	item_state = null
+	item_state = "mini-uzi"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
 	max_shells = 10
@@ -89,6 +89,19 @@
 
 /obj/item/weapon/gun/projectile/automatic/uzi/isHandgun()
 	return TRUE
+
+/obj/item/weapon/gun/projectile/automatic/uzi/update_icon()
+	..()
+	if(chambered && !stored_magazine)
+		icon_state = "mini-uzi"
+	else if(chambered && stored_magazine)
+		(stored_magazine.max_ammo > 16) ? (icon_state = "mini-uzi-ext-[(getAmmo() > 9) ? round(getAmmo(),4) : "0"]") : (icon_state = "mini-uzi-S-16")//avoiding duplicate sprites.
+	else if(!chambered && stored_magazine)
+		(stored_magazine.max_ammo > 16) ? (icon_state = "mini-uzi-ext-e") : (icon_state = "mini-uzi-S-e")
+	else if(!chambered && !stored_magazine)
+		icon_state = "mini-uzi-e"
+	return
+
 
 /obj/item/weapon/gun/projectile/automatic/uzi/micro
 	name = "\improper Micro Uzi"
