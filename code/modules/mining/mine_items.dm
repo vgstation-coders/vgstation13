@@ -311,6 +311,13 @@ proc/move_mining_shuttle()
 		if(A.mat_type == MAT_PLASMA)
 			if(current_ammo < max_ammo)
 				var/loading_ammo = max_ammo - current_ammo
+				if(A.amount <= loading_ammo)
+					loading_ammo = A.amount
+					current_ammo += loading_ammo
+					A.amount -= loading_ammo
+					user.u_equip(A)
+					qdel(A)
+					return
 				A.amount -= loading_ammo
 				current_ammo += loading_ammo
 				to_chat(user, "<span class='notice'>You load [src].</span>")
