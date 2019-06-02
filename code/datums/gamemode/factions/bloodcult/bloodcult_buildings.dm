@@ -735,9 +735,6 @@
 		newCultist.conversion.Add("altar")
 		cult_risk()//risk of exposing the cult early if too many soul blades created
 
-		spawn(1)
-			shadeMob.ckey = M_ckey
-
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
 	//var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
