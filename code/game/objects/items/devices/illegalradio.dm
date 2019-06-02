@@ -155,6 +155,17 @@
 		explosion(user, -1, 0, 2)
 		to_chat(user, "<span class='notice'>You hear a faint laughter in your head.<span>")	
 		qdel(src)
+	else if(istype(W, /obj/item/organ/external))
+		visible_message("<span class='info'>The black market uplink buzzes: \"We take organs, not limbs, dummy.\"</span>")
+	else if(istype(W, /obj/item/organ/internal))
+		var/obj/item/organ/internal/organ = W
+		if(organ.had_mind && !organ.is_printed && !organ.robotic) //We want da real stuff
+			var/price = rand(200,300)
+			visible_message("<span class='info'>The black market uplink buzzes: \"You have been paid [price] credits. Thank you for your business!\"</span>")
+			money_stored += price
+			qdel(W)
+		else
+			visible_message("<span class='info'>The black market uplink buzzes: \"Sorry, pal. That organ ain't real. Our buyers want natural ones.\"</span>")
 	
 /obj/item/device/illegalradio/proc/insert_cash(var/obj/item/weapon/spacecash/C, mob/user)
 	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")

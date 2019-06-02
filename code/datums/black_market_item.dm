@@ -145,7 +145,7 @@ var/list/black_market_items = list()
 	cost_deviation = 50 //Like stock above, cost will be anywhere from 450 to 550.
 	display_chance = 100 //Odds out of 100 that the item will be displayed. Randomized every round. 
 	
-/datum/black_market_item/example_category/example_item/on_item_spawned(var/obj/I, var/mob/user) //This is called right after spawning the item. Can override since there are no delegates in BYOND (tm)
+/datum/black_market_item/example_category/example_item/on_item_spawned(var/obj/I, var/mob/user) //This is called right after spawning the item. Override it since there are no delegates in BYOND (tm)
 	I/ownerEngraving = user.name
 	
 Note by GlassEclipse:
@@ -159,16 +159,16 @@ item should be dangerous. It wouldn't be on the illegal market if it wasn't. A g
 Of course, that's not to mean you can't add ANY plain ol' guns. But try to find a good balance.
 */
 
-/datum/black_market_item/weapons
-	category = "Weapons and Warfare" 
+/datum/black_market_item/gear
+	category = "Tools and Gear" 
 	
-/datum/black_market_item/weapons
-	name = "Paralysis Pen" 
-	desc = "Pokey, pokey. This pen will incapacitate anybody who gets poked by it for a long time. Contrary to popular belief, chloral hydrate is NOT better than this pen."
-	item = /obj/item/weapon/pen/paralysis
+/datum/black_market_item/gear
+	name = "Modified Organ Extractor" 
+	desc = "This baby, she's our bread and butter. She can extract any organ out of an unconscious body in the blink of an eye - except the heart, that is. Why do we want organs from real people instead of growing them? Beats me."
+	item = /obj/item/weapon/organ_remover/traitor
 	num_in_stock = 4
-	stock_deviation = 1
-	cost = 300
-	cost_deviation = 50
+	stock_deviation = 2
+	cost = 1000
+	cost_deviation = 200
 	display_chance = 100 
 
