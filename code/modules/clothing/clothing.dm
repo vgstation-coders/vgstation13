@@ -458,16 +458,18 @@
 
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
-	var/stepstaken = 1
+	var/step_sound_counter = 0 //Used to determine how many steps left until a sound is played
+	var/step_sound_threshold = 2 //Doesn't work if it's 0 or negative
 
 /obj/item/clothing/shoes/proc/step_action()
-	stepstaken++
 	if(step_sound != "" && ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		switch(H.m_intent)
 			if("run")
-				if(stepstaken % 2 == 1)
+				step_sound_counter++
+				if(step_sound_counter == step_sound_threshold)
 					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
+					step_sound_counter = 0
 			if("walk")
 				playsound(H, step_sound, 20, 1)
 

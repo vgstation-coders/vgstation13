@@ -153,7 +153,7 @@
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
-	step_sound_cooldown = 0.5
+	step_sound_threshold = 1
 
 /obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -180,6 +180,7 @@
 	icon_state = "superclown"
 	item_state = "superclown"
 	clothing_flags = NOSLIP
+	step_sound_threshold = 2
 	var/list/sound_list = list(
 		"Clown squeak" = "clownstep",
 		"Bike horn" = 'sound/items/bikehorn.ogg',
