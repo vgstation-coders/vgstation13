@@ -11,25 +11,27 @@ Originally coded by N3X15, improved by TG, ported back to /vg/.
 
 1. `COMPONENT_INCOMPATIBLE` Return this from `/datum/component/Initialize` or `datum/component/OnTransfer` to have the component be deleted if it's applied to an incorrect type. `parent` must not be modified if this is to be returned. This will be noted in the runtime logs
 
-### Vars
+### Datum vars
 
 1. `/datum/var/list/datum_components` (private)
     * Lazy associated list of type -> component/list of components.
-1. `/datum/component/var/enabled` (protected, boolean)
-    * If the component is enabled. If not, it will not react to signals
+1. `/datum/var/list/comp_lookup` (private)
+	* Lazy associated list of signal -> registree/list of registrees
+1. `/datum/var/list/signal_procs` (private)
+    * Associated lazy list of signals -> `/datum/callback`s that will be run when the parent datum receives that signal
+1. `/datum/var/signal_enabled` (protected, boolean)
+    * If the datum is signal enabled. If not, it will not react to signals
     * `FALSE` by default, set to `TRUE` when a signal is registered
+
+### Component vars
+
 1. `/datum/component/var/dupe_mode` (protected, enum)
-    * How duplicate component types are handled when added to the datum.
-        * `COMPONENT_DUPE_HIGHLANDER` (default): Old component will be deleted, new component will first have `/datum/component/proc/InheritComponent(datum/component/old, FALSE)` on it
+        * `COMPONENT_DUPE_UNIQUE_PASSARGS` (default): New component will never exist and instead its initialization arguments will be passed on to the old component.
         * `COMPONENT_DUPE_ALLOWED`: The components will be treated as separate, `GetComponent()` will return the first added
-        * `COMPONENT_DUPE_UNIQUE`: New component will be deleted, old component will first have `/datum/component/proc/InheritComponent(datum/component/new, TRUE)` on it
-        * `COMPONENT_DUPE_UNIQUE_PASSARGS`: New component will never exist and instead its initialization arguments will be passed on to the old component.
 1. `/datum/component/var/dupe_type` (protected, type)
     * Definition of a duplicate component type
         * `null` means exact match on `type` (default)
         * Any other type means that and all subtypes
-1. `/datum/component/var/list/signal_procs` (private)
-    * Associated lazy list of signals -> `/datum/callback`s that will be run when the parent datum receives that signal
 1. `/datum/component/var/datum/parent` (protected, read-only)
     * The datum this component belongs to
     * Never `null` in child procs
@@ -37,20 +39,21 @@ Originally coded by N3X15, improved by TG, ported back to /vg/.
 ### Procs
 
 1. `/datum/proc/GetComponent(component_type(type)) -> datum/component?` (public, final)
-    * Returns a reference to a component of component_type if it exists in the datum, null otherwise
+    * Returns a reference to a component of `component_type` if it exists in the datum, null otherwise
 1. `/datum/proc/GetComponentsOfType(component_type(type)) -> list` (public, final)
-    * Returns a list of references to all components of component_type that exist in the datum
+    * Returns a list of references to all components of `component_type` that exist in the datum
 1. `/datum/proc/GetExactComponent(component_type(type)) -> datum/component?` (public, final)
-    * Returns a reference to a component whose type MATCHES component_type if that component exists in the datum, null otherwise
+    * Returns a reference to a component whose type MATCHES `component_type` if that component exists in the datum, null otherwise
 1. `GET_COMPONENT(varname, component_type)` OR `GET_COMPONENT_FROM(varname, component_type, src)`
     * Shorthand for `var/component_type/varname = src.GetComponent(component_type)`
 1. `SEND_SIGNAL(target, sigtype, ...)` (public, final)
     * Use to send signals to target datum
     * Extra arguments are to be specified in the signal definition
     * Returns a bitflag with signal specific information assembled from all activated components
-    * Arguments are packaged in a list and handed off to _SendSignal()
+    * Arguments are packaged in a list and handed off to `_SendSignal()`
 1. `/datum/proc/AddComponent(component_type(type), ...) -> datum/component`  (public, final)
     * Creates an instance of `component_type` in the datum and passes `...` to its `Initialize()` call
+    * Alternatively adds an existing instance of a component to the datum.
     * Sends the `COMSIG_COMPONENT_ADDED` signal to the datum
     * All components a datum owns are deleted with the datum
     * Returns the component that was created. Or the old component in a dupe situation where `COMPONENT_DUPE_UNIQUE` was set

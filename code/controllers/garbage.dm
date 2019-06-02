@@ -189,6 +189,9 @@ world/loop_checks = 0
 /datum/proc/Destroy(var/force = FALSE, ...)
 	weak_reference = null
 
+	//BEGIN: ECS SHIT
+	signal_enabled = FALSE
+
 	var/list/dc = datum_components
 	if(dc)
 		var/all_components = dc[/datum/component]
@@ -213,6 +216,10 @@ world/loop_checks = 0
 				var/datum/component/comp = comps
 				comp.UnregisterSignal(src, sig)
 		comp_lookup = lookup = null
+
+	for(var/target in signal_procs)
+		UnregisterSignal(target, signal_procs[target])
+	//END: ECS SHIT
 	qdel(src, TRUE, TRUE)
 
 #ifdef GC_FINDREF

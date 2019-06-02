@@ -1,15 +1,20 @@
 /datum/component
-	var/enabled = FALSE
-	var/dupe_mode = COMPONENT_DUPE_HIGHLANDER
+	/// (protected, enum) How duplicate component types are handled when added to the datum.
+	/// `COMPONENT_DUPE_UNIQUE_PASSARGS` (default): New component will never exist and instead its initialization arguments will be passed on to the old component.
+    /// `COMPONENT_DUPE_ALLOWED`: The components will be treated as separate, `GetComponent()` will return the first added
+	var/dupe_mode = COMPONENT_DUPE_UNIQUE_PASSARGS
+	/// (protected, type) Definition of a duplicate component type
+    /// `null` means exact match on `type` (default)
+    /// Any other type means that and all subtypes
 	var/dupe_type
-	var/list/signal_procs
+	/// (private) Associated lazy list of signals -> `/datum/callback`s that will be run when the parent datum receives that signal
 	var/datum/parent
 
 /datum/component/New(var/datum/P, ...)
 	parent = P
 	var/list/arguments = args.Copy(2)
 	if(Initialize(arglist(arguments)) == COMPONENT_INCOMPATIBLE)
-		qdel(src)
+		qdel(src, TRUE, TRUE)
 		CRASH("Incompatible [type] assigned to a [P.type]!")
 
 	_JoinParent(P)
@@ -46,20 +51,21 @@
 				components_of_type += src
 		else	//only component of this type, no list
 			dc[I] = src
+	RegisterWithParent()
+
+// If you want/expect to be moving the component around between parents, use this to register on the parent for signals
+/datum/component/proc/RegisterWithParent()
+	return
 
 /datum/component/proc/Initialize(...)
 	return
 
 /datum/component/Destroy(var/force = FALSE, var/silent = FALSE)
-	enabled = FALSE
-	var/datum/P = parent
-	if(!force)
+	if(!force && parent)
 		_RemoveFromParent()
 	if(!silent)
-		SEND_SIGNAL(P, COMSIG_COMPONENT_REMOVING, src)
+		SEND_SIGNAL(parent, COMSIG_COMPONENT_REMOVING, src)
 	parent = null
-	for(var/target in signal_procs)
-		UnregisterSignal(target, signal_procs[target])
 	..()
 
 /datum/component/proc/_RemoveFromParent()
@@ -67,7 +73,7 @@
 	var/list/dc = P.datum_components
 	for(var/I in _GetInverseTypeList())
 		var/list/components_of_type = dc[I]
-		if(length(components_of_type))	//
+		if(length(components_of_type))
 			var/list/subtracted = components_of_type - src
 			if(subtracted.len == 1)	//only 1 guy left
 				dc[I] = subtracted[1]	//make him special
@@ -77,8 +83,13 @@
 			dc -= I
 	if(!dc.len)
 		P.datum_components = null
+	
+	UnregisterFromParent()
 
-/datum/component/proc/RegisterSignal(var/datum/target, var/sig_type_or_types, var/proc_or_callback, var/override = FALSE)
+/datum/component/proc/UnregisterFromParent()
+	return
+
+/datum/proc/RegisterSignal(var/datum/target, var/sig_type_or_types, var/proc_or_callback, var/override = FALSE)
 	if(gcDestroyed || !target || target.gcDestroyed)
 		return
 
@@ -142,9 +153,6 @@
 	if(!signal_procs[target].len)
 		signal_procs -= target
 
-/datum/component/proc/InheritComponent(var/datum/component/C, var/i_am_original)
-	return
-
 /datum/component/proc/PreTransfer()
 	return
 
@@ -163,49 +171,65 @@
 /datum/proc/_SendSignal(var/sigtype, var/list/arguments)
 	var/target = comp_lookup[sigtype]
 	if(!length(target))
-		var/datum/component/C = target
-		if(!C.enabled)
+		var/datum/C = target
+		if(!C.signal_enabled)
 			return NONE
 		var/datum/callback/CB = C.signal_procs[src][sigtype]
 		return CB.InvokeAsync(arglist(arguments))
 	. = NONE
 	for(var/I in target)
-		var/datum/component/C = I
-		if(!C.enabled)
+		var/datum/C = I
+		if(!C.signal_enabled)
 			continue
 		var/datum/callback/CB = C.signal_procs[src][sigtype]
 		. |= CB.InvokeAsync(arglist(arguments))
 
-/datum/proc/GetComponent(var/c_type)
+
+/// (public, final)
+/// Returns a reference to a component of `component_type` if it exists in the datum, null otherwise
+/datum/proc/GetComponent(var/component_type)
 	var/list/dc = datum_components
 	if(!dc)
 		return null
-	. = dc[c_type]
+	. = dc[component_type]
 	if(length(.))
 		return .[1]
 
-/datum/proc/GetExactComponent(var/c_type)
+/// (public, final)
+/// Returns a list of references to all components of `component_type` that exist in the datum
+/datum/proc/GetComponentsOfType(var/component_type)
 	var/list/dc = datum_components
 	if(!dc)
 		return null
-	var/datum/component/C = dc[c_type]
-	if(C)
-		if(length(C))
-			C = C[1]
-		if(C.type == c_type)
-			return C
-	return null
-
-/datum/proc/GetComponentsOfType(var/c_type)
-	var/list/dc = datum_components
-	if(!dc)
-		return null
-	. = dc[c_type]
+	. = dc[component_type]
 	if(!length(.))
 		return list(.)
 
-/datum/proc/AddComponent(var/new_type, ...)
-	var/datum/component/nt = new_type
+/// (public, final)
+/// Returns a reference to a component whose type MATCHES `component_type` if that component exists in the datum, null otherwise
+/datum/proc/GetExactComponent(var/component_type)
+	var/list/dc = datum_components
+	if(!dc)
+		return null
+	var/datum/component/C = dc[component_type]
+	if(C)
+		if(length(C))
+			C = C[1]
+		if(C.type == component_type)
+			return C
+	return null
+
+
+/// (public, final)
+/// Creates an instance of `component_type` in the datum and passes `...` to its `Initialize()` call
+/// Alternatively adds an existing instance of a component to the datum.
+/// Sends the `COMSIG_COMPONENT_ADDED` signal to the datum
+/// All components a datum owns are deleted with the datum
+/// Returns the component that was created. Or the old component in a dupe situation where `COMPONENT_DUPE_UNIQUE_PASSARGS` was set
+/// If this tries to add an component to an incompatible type, the component will be deleted and the result will be `null`. This is very unperformant, try not to do it
+/// Properly handles duplicate situations based on the `dupe_mode` var
+/datum/proc/AddComponent(var/type_or_instance, ...)
+	var/datum/component/nt = type_or_instance
 	var/dm = initial(nt.dupe_mode)
 	var/dt = initial(nt.dupe_type)
 
@@ -215,12 +239,9 @@
 	if(ispath(nt))
 		if(nt == /datum/component)
 			CRASH("[nt] attempted instantiation!")
-		if(!isnum(dm))
-			CRASH("[nt]: Invalid dupe_mode ([dm])!")
-		if(dt && !ispath(dt))
-			CRASH("[nt]: Invalid dupe_type ([dt])!")
 	else
 		new_comp = nt
+		nt = new_comp.type
 
 	args[1] = src
 
@@ -231,20 +252,6 @@
 			old_comp = GetComponent(dt)
 		if(old_comp)
 			switch(dm)
-				if(COMPONENT_DUPE_UNIQUE)
-					if(!new_comp)
-						new_comp = new nt(arglist(args))
-					if(!new_comp || new_comp.gcDestroyed)
-						old_comp.InheritComponent(new_comp, TRUE)
-						qdel(new_comp)
-						new_comp = null
-				if(COMPONENT_DUPE_HIGHLANDER)
-					if(!new_comp)
-						new_comp = new nt(arglist(args))
-					if(!new_comp || new_comp.gcDestroyed)
-						new_comp.InheritComponent(old_comp, FALSE)
-						qdel(new_comp)
-						new_comp = null
 				if(COMPONENT_DUPE_UNIQUE_PASSARGS)
 					if(!new_comp)
 						var/list/arguments = args.Copy(2)
@@ -256,26 +263,31 @@
 	else if(!new_comp)
 		new_comp = new nt(arglist(args)) // Dupes are allowed, act like normal
 
-	if(!old_comp && new_comp && !new_comp.gcDestroyed) // Nothing related to duplicate components happened and the new component is healthy
+	if(!old_comp && !QDELETED(new_comp)) // Nothing related to duplicate components happened and the new component is healthy
 		SEND_SIGNAL(src, COMSIG_COMPONENT_ADDED, new_comp)
 		return new_comp
 	return old_comp
 
+/// (public, final)
+/// Equivalent to calling `GetComponent(component_type)` where, if the result would be `null`, returns `AddComponent(component_type, ...)` instead
 /datum/proc/LoadComponent(var/component_type, ...)
 	. = GetComponent(component_type)
 	if(!.)
 		return AddComponent(arglist(args))
 
+/// (public, final)
+/// Removes the component from the parent.
 /datum/component/proc/RemoveComponent()
 	if(!parent)
 		return
 	var/datum/old_parent = parent
 	PreTransfer()
 	_RemoveFromParent()
+	parent = null
 	SEND_SIGNAL(old_parent, COMSIG_COMPONENT_REMOVING, src)
 
 /datum/proc/TakeComponent(var/datum/component/target)
-	if(!target)
+	if(!target || target.parent == src)
 		return
 	if(target.parent)
 		target.RemoveComponent()
@@ -293,9 +305,12 @@
 		return
 	var/comps = dc[/datum/component]
 	if(islist(comps))
-		for(var/I in comps)
-			target.TakeComponent(I)
+		for(var/datum/component/I in comps)
+			if(I.can_transfer)
+				target.TakeComponent(I)
 	else
-		target.TakeComponent(comps)
+		var/datum/component/C = comps
+		if(C.can_transfer)
+			target.TakeComponent(comps)
 
 
