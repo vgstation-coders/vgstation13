@@ -1,6 +1,6 @@
 /obj/item/candle
 	name = "red candle"
-	desc = "A candle made out of wax, used for moody lighting and solar flares"
+	desc = "A candle made out of wax, used for moody lighting and solar flares."
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle1"
 	item_state = "candle1"
@@ -24,7 +24,7 @@
 
 /obj/item/candle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
+	if(source_temperature && (W.is_hot() || W.sharpness_flags & (HOT_EDGE)))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 
 /obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
@@ -79,3 +79,50 @@
 		var/obj/item/projectile/beam/P = Proj
 		if(P.damage != 0)
 			light("", 1)
+
+
+/obj/item/candle/holo
+	name = "holo candle"
+	desc = "A small disk projecting the image of a candle, used for futuristic lighting. It has a multitool port on it for changing colors."
+	icon_state = "holocandle_red"
+	//item_state = "candle1"
+	heat_production = 0
+	source_temperature = 0
+	light_color = LIGHT_COLOR_FIRE
+	wax = "red" //Repurposed var for the "wax" color.
+
+/obj/item/candle/holo/update_icon()
+	switch(wax)
+		if("red")
+			light_color = LIGHT_COLOR_FIRE
+		if("blue")
+			light_color = LIGHT_COLOR_BLUE
+		if("purple")
+			light_color = LIGHT_COLOR_PURPLE
+		if("green")
+			light_color = LIGHT_COLOR_GREEN
+		if("yellow")
+			light_color = LIGHT_COLOR_YELLOW
+	icon_state = "holocandle_[wax][lit ? "_lit" : ""]"
+
+/obj/item/candle/holo/attack_self(mob/user)
+	lit = !lit
+	update_icon()
+	light("<span class='notice'>[user] flips \the [src]'s switch.</span>")
+
+/obj/item/candle/attackby(obj/item/weapon/W, mob/user)
+	var/list/choices = list("red","blue","purple","green","yellow")
+	if(ismultitool(W))
+		wax = input("What color would do you want?","Color Selection") as anything in choices
+		update_icon()
+	..()
+
+/obj/item/candle/holo/light(flavor_text = "<span class='notice'>\the [src] flickers on.</span>")
+	if(lit)
+		set_light(CANDLE_LUM,2,light_color)
+	else
+		set_light(0)
+	visible_message(flavor_text)
+
+/obj/item/candle/holo/Crossed()
+	return

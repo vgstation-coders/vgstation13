@@ -568,6 +568,9 @@ Class Procs:
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
+
+	add_fingerprint(user)
+
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
@@ -702,12 +705,12 @@ Class Procs:
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
+		if(shouldplaysound)
+			W.play_rped_sound()
 		else
 			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
 			for(var/var/obj/item/C in component_parts)
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
-		if(shouldplaysound)
-			W.play_rped_sound()
 		return 1
 	return 0
 

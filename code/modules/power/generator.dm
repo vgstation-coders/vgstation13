@@ -15,7 +15,7 @@
 
 	var/tmp/last_gen    = 0
 	var/tmp/lastgenlev  = 0 // Used in update_icon()
-	var/const/max_power = 500000 // Amount of W produced at which point the meter caps.
+	var/const/max_power = 3000000 // Amount of W produced at which point the meter caps.
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
@@ -281,7 +281,7 @@
 		if(delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
 			var/energy_transfer = delta_temperature * air2_heat_capacity * air1_heat_capacity / (air2_heat_capacity + air1_heat_capacity)
 			var/heat = energy_transfer * (1 - thermal_efficiency)
-			last_gen = energy_transfer * thermal_efficiency * 0.05
+			last_gen = energy_transfer * thermal_efficiency * 0.3
 
 			//If our circulators are lubed get extra power
 			if(circ1.reagents.get_reagent_amount(LUBE)>=1)

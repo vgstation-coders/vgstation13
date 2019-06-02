@@ -154,6 +154,8 @@ Pipelines + Other Objects -> Pipe network
 		update_icon_ready = 1
 	else
 		underlays.Cut()
+	if(!anchored)
+		return //the rest isn't needed for unanchored things
 	var/list/missing_nodes = icon_directions()
 	for (var/obj/machinery/atmospherics/connected_node in node_list)
 		var/con_dir = get_dir(src, connected_node)

@@ -22,6 +22,8 @@
 	var/list/alarm_types_show = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 
+	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
+
 /mob/living/silicon/hasFullAccess()
 	return 1
 
@@ -355,3 +357,16 @@
 
 /mob/living/silicon/get_survive_objective()
 	return new /datum/objective/siliconsurvive
+
+/mob/living/silicon/Topic(href, href_list)
+	. = ..()
+	if(usr && (src != usr))
+		return
+	if(href_list["ui_key"] == "state_laws")
+		return state_laws_Topic(href, href_list) //state_laws.dm
+
+/mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
+	if(..())
+		return
+	if(ui_key == "state_laws")
+		return state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm

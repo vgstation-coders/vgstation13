@@ -17,7 +17,7 @@
 			            access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers,
 			            access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
-	minimal_player_age = 14
+	minimal_player_age = 30
 
 	species_whitelist = list("Human")
 
@@ -103,6 +103,7 @@
 	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses/sechud(H), slot_glasses)
 //		H.equip_or_collect(new /obj/item/clothing/mask/gas(H), slot_wear_mask) //Grab one from the armory you donk
 	H.equip_or_collect(new /obj/item/device/flash(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/weapon/gun/energy/taser(H), slot_in_backpack)
 	if(H.backbag == 1)
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/weapon/handcuffs(H))

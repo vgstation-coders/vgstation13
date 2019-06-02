@@ -75,6 +75,7 @@
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_GUTTER, 1)
 
+	src.verbs.Remove(/mob/living/silicon/verb/state_laws)
 	..()
 
 /mob/living/silicon/pai/Login()

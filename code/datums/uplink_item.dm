@@ -44,7 +44,7 @@ var/list/uplink_items = list()
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
-	var/static/times_bought = 0
+	var/times_bought = 0
 	var/refundable = FALSE
 	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
@@ -170,8 +170,8 @@ var/list/uplink_items = list()
 	cost = 8
 
 /datum/uplink_item/nukeprice/syndigaloshes
-	name = "No-Slip Syndicate Shoes"
-	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
+	name = "No-Slip Chameleon Shoes"
+	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
 	category = "Stealth and Camouflage Items"
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 4
@@ -192,7 +192,7 @@ var/list/uplink_items = list()
 	name = "Fully Loaded Revolver"
 	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmored target with two shots."
 	item = /obj/item/weapon/gun/projectile
-	cost = 13
+	cost = 12
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
@@ -223,7 +223,7 @@ var/list/uplink_items = list()
 	name = "5 EMP Grenades"
 	desc = "A box that contains 5 EMP grenades. Useful to disrupt communication and silicon lifeforms."
 	item = /obj/item/weapon/storage/box/emps
-	cost = 6
+	cost = 4
 
 /datum/uplink_item/dangerous/viscerator
 	name = "Viscerator Grenade"
@@ -317,8 +317,8 @@ var/list/uplink_items = list()
 	cost = 2
 
 /datum/uplink_item/stealthy_tools/syndigaloshes
-	name = "No-Slip Syndicate Shoes"
-	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
+	name = "No-Slip Chameleon Shoes"
+	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
 	jobs_excluded = list("Nuclear Operative")
@@ -352,7 +352,7 @@ var/list/uplink_items = list()
 	name = "Instant Smoke Bombs"
 	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
-	cost = 3
+	cost = 2
 
 /datum/uplink_item/stealthy_tools/decoy_balloon
 	name = "Decoy Balloon"
@@ -389,7 +389,7 @@ var/list/uplink_items = list()
 	name = "Bug Detector & Camera Disabler"
 	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. Activating it will disable cameras nearby, plus the ones far away randomly, causing massive disruptions to the AI and anyone using them."
 	item = /obj/item/device/multitool/ai_detect
-	cost = 5
+	cost = 3
 
 /datum/uplink_item/device_tools/space_suit
 	name = "Space Suit"
@@ -443,7 +443,7 @@ var/list/uplink_items = list()
 	name = "Explosive Chewing Gum"
 	desc = "A single stick of explosive chewing gum, detonates five seconds after you start chewing. Can be stuck to walls and objects."
 	item = /obj/item/gum/explosive
-	cost = 8
+	cost = 6
 
 /datum/uplink_item/device_tools/powersink
 	name = "Power Sink"
@@ -477,6 +477,15 @@ var/list/uplink_items = list()
 	cost = 6
 	jobs_exclusive = list("Nuclear Operative")
 
+/datum/uplink_item/device_tools/megaphone
+	name = "Mad Scientist Megaphone"
+	desc = "For making your demands known. On top of making your speech loud, it can broadcast into (but not receive from) station radio frequencies, including Security and Command. Can also optionally scramble your voice, for ominous-anonymous threats."
+	item = /obj/item/device/megaphone/madscientist
+	num_in_stock = 3
+	cost = 1
+	discounted_cost = 0
+	jobs_with_discount = SCIENCE_POSITIONS
+
 /datum/uplink_item/device_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
 	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
@@ -499,7 +508,7 @@ var/list/uplink_items = list()
 	name = "Uplink Implant"
 	desc = "An implant usable after injection into the body. Activated using a bodily gesture to open an uplink with 10 telecrystals. The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
-	cost = 18
+	cost = 16
 
 /datum/uplink_item/implants/explosive
 	name = "Explosive Implant"
@@ -511,7 +520,7 @@ var/list/uplink_items = list()
 	name = "Compressed Matter Implant"
 	desc = "An implant usable after injection into the body. Activated using a bodily gesture to retrieve an item that was earlier compressed."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_compress
-	cost = 8
+	cost = 6
 
 
 // POINTLESS BADASSERY
@@ -596,8 +605,8 @@ var/list/uplink_items = list()
 	name = "Evidence Forger"
 	desc = "An evidence scanner that allows you to forge evidence by setting the output before scanning the item."
 	item = /obj/item/device/detective_scanner/forger
-	cost = 8
-	discounted_cost = 6
+	cost = 6
+	discounted_cost = 4
 	jobs_with_discount = list("Detective")
 
 /datum/uplink_item/jobspecific/conversionkit
@@ -613,15 +622,15 @@ var/list/uplink_items = list()
 	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications. Distinguishable upon close examination due to the added weight."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 14
-	discounted_cost = 12
+	discounted_cost = 10
 	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/knifeboot
 	name = "Concealed knife shoes"
 	desc = "Shoes with a knife concealed in the toecap. Tap your heels together to reveal the knife. Kick the target to stab them."
 	item = /obj/item/clothing/shoes/knifeboot
-	cost = 5
-	discounted_cost = 4
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/ambrosiacruciatus
@@ -836,15 +845,15 @@ var/list/uplink_items = list()
 	desc = "Insulated gloves that can utilize the power of the station to deliver a short arc of electricity at a target. Must be standing on a powered cable to use."
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 14
-	discounted_cost = 10
+	discounted_cost = 8
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/syndietape_engineering
 	name = "Syndicate Engineering Tape"
 	desc = "A length of engineering tape charged with a powerful electric potential. Will spark and shock people who attempt to remove it, creating fires. Can be used 3 times."
 	item = /obj/item/taperoll/syndie/engineering
-	cost = 5
-	discounted_cost = 4
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/contortionist
@@ -859,8 +868,8 @@ var/list/uplink_items = list()
 	name = "Syndicate Atmospherics Tape"
 	desc = "A length of atmospherics tape made of an extremely sharp material that will cuts the hands of trespassers. Very difficult to remove. Can be used 3 times."
 	item = /obj/item/taperoll/syndie/atmos
-	cost = 5
-	discounted_cost = 4
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/radgun
@@ -875,8 +884,8 @@ var/list/uplink_items = list()
 	name = "Modified Flaregun"
 	desc = "A modified flaregun, identical in most appearances to the regular kind, as well as 7 rounds of flare ammunition. Capable of firing flares at lethal velocity, as well as firing shotgun ammunition."
 	item = /obj/item/weapon/storage/box/syndie_kit/flaregun
-	cost = 8
-	discounted_cost = 6
+	cost = 6
+	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/dev_analyser

@@ -445,47 +445,51 @@
 	name = "spellbook of [spellname]" //Note, desc doesn't change by design
 	..()
 
-/obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
-	..()
-	if(stored_swap in dead_mob_list)
-		stored_swap = null
-	if(!stored_swap)
-		stored_swap = user
-		to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
-		return
-	if(stored_swap == user)
-		to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
-		return
+/obj/item/weapon/spellbook/oneuse/mindswap/recoil(var/mob/user)
+	qdel(src)
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs -= V
+///obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
+	// ..()
+	// if(stored_swap in dead_mob_list)
+	// 	stored_swap = null
+	// if(!stored_swap)
+	// 	stored_swap = user
+	// 	to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
+	// 	return
+	// if(stored_swap == user)
+	// 	to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
+	// 	return
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in stored_swap.mind.special_verbs)
-			stored_swap.verbs -= V
+	// if(user.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs -= V
 
-	var/mob/dead/observer/ghost = stored_swap.ghostize(0)
-	ghost.spell_list = stored_swap.spell_list
+	// if(stored_swap.mind.special_verbs.len)
+	// 	for(var/V in stored_swap.mind.special_verbs)
+	// 		stored_swap.verbs -= V
 
-	user.mind.transfer_to(stored_swap)
-	stored_swap.spell_list = user.spell_list
+	// var/mob/dead/observer/ghost = stored_swap.ghostize(0)
+	// ghost.spell_list = stored_swap.spell_list
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs += V
+	// user.mind.transfer_to(stored_swap)
+	// stored_swap.spell_list = user.spell_list
 
-	ghost.mind.transfer_to(user)
-	user.key = ghost.key
-	user.spell_list = ghost.spell_list
+	// if(stored_swap.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs += V
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs += V
+	// ghost.mind.transfer_to(user)
+	// user.key = ghost.key
+	// user.spell_list = ghost.spell_list
 
-	to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
-	to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
-	stored_swap = null
+	// if(user.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs += V
+
+	// to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
+	// to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
+	// stored_swap = null
+
 
 /obj/item/weapon/spellbook/oneuse/forcewall
 	spell = /spell/aoe_turf/conjure/forcewall
@@ -645,6 +649,12 @@
 		user.update_mutations()
 		to_chat(user, "<span class = 'warning'>You feel like you've been pushing yourself too hard! </span>")
 		qdel(src)
+
+/obj/item/weapon/spellbook/oneuse/mutate/highlander //for highlander uplink bundle
+	spell =/spell/targeted/genetic/mutate/highlander
+	spellname  = "highlander power"
+	icon_state = "bookhighlander"
+	desc = "You can hear the bagpipes playing already."
 
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient

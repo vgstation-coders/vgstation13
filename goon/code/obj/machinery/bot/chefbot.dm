@@ -193,7 +193,8 @@
 					visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
 				if(src.health <= 0)
 					src.explode()
-			M.delayNextAttack(10)
+
+		M.delayNextAttack(10)
 	..()
 
 /obj/machinery/bot/chefbot/kick_act()

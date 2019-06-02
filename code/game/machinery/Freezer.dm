@@ -89,6 +89,7 @@
 		if(network)
 			qdel(network)
 			network = null
+		update_icon()
 
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)

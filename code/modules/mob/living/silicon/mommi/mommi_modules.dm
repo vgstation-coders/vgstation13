@@ -1,7 +1,7 @@
 
 /obj/item/weapon/robot_module/mommi
 	name = "mobile mmi robot module"
-	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	languages = list()
 	sprites = list("Basic" = "mommi")
 	respawnables = list (/obj/item/stack/cable_coil)
@@ -71,7 +71,6 @@
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
 
-	quirk_flags |= MODULE_CAN_HANDLE_FOOD //Let them be able to handle bartending machinery.
 
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)

@@ -313,6 +313,10 @@ SKIP_VAULT_GENERATION
 ## Uncomment to never play lobby music. Useful if you use guest keys to multiaccount-test stuff, since you can't use client preferences for those.
 #NO_LOBBY_MUSIC
 
+## NO_AMBIENCE
+## Same as above.
+#NO_AMBIENCE
+
 ## ENABLE_ROUNDSTART_AWAY_MISSIONS
 ## Uncomment to genereate an away mission at the beginning of each round
 #ENABLE_ROUNDSTART_AWAY_MISSIONS

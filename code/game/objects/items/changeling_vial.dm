@@ -24,7 +24,7 @@
 				if(C)
 					C.geneticpoints = Clamp(genomes_to_give, 0, 100)
 					C.OnPostSetup()
-				to_chat(H, "<B><font color='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</font></B>")
+				to_chat(H, "<B><span class='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</span></B>")
 				var/wikiroute = role_wiki[CHANGELING]
 				to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 				log_admin("[H] has become a changeling using a changeling vial.")

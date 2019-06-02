@@ -11,6 +11,7 @@
 	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
+	playlist = "nukesquad"
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -109,6 +110,24 @@
 	for(var/datum/objective/objective in objective_holder.GetObjectives())
 		if(objective.IsFulfilled())
 			remaining_targets--
+
+	if(stage < FACTION_ENDGAME)
+		var/living_revs = 0
+		var/total_valid_living = 0
+		for (var/mob/living/L in player_list)
+			if (issilicon(L)||isborer(L))
+				continue
+			if (L.stat == DEAD)
+				continue
+			if (isrev(L))
+				living_revs++
+			total_valid_living++
+		var/threshold = 40 //the percentage of living revs at which point the announcement is triggered
+		if(living_revs > 0 && total_valid_living > 0)
+			var/revs_percentage = round((living_revs * 100)/total_valid_living)
+			if(revs_percentage >= threshold)
+				stage(FACTION_ENDGAME)
+				command_alert(/datum/command_alert/revolution)
 
 	switch(remaining_targets)
 		if(0)

@@ -393,12 +393,17 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += image(icon = O.icon, icon_state = "lasereyes_s")
 				add_image = 1
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
-		//standing.underlays	-= "cold[fat]_s"
-		//standing.underlays	-= "fire[fat]_s"
-		//standing.underlays	+= "coldfire[fat]_s"
-		O.underlays	-= "cold[fat]_s"
-		O.underlays	-= "fire[fat]_s"
-		O.underlays	+= "coldfire[fat]_s"
+		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))	
+			//standing.underlays	-= "cold[fat]_s"
+			//standing.underlays	-= "fire[fat]_s"
+			//standing.underlays	+= "coldfire[fat]_s"
+			O.underlays	-= "cold[fat]_s"
+			O.underlays	-= "fire[fat]_s"
+			O.underlays	+= "coldfire[fat]_s"
+		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))	
+			O.underlays -= "coldvox_s"
+			O.underlays	-= "firevox_s"
+			O.underlays	+= "coldfirevox_s"
 
 	//Cultist tattoos
 	if (mind && mind.GetRole(CULTIST))
