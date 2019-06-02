@@ -320,29 +320,24 @@
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
-	var/turf/cover = flipped ? get_turf(src) : get_step(loc, get_dir(from, loc))
-	if (get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
+	if(!flipped || get_dir(loc, from) != dir) // It needs to be flipped and the direction needs to be right
 		return 1
-	if (get_turf(P.original) == cover)
-		var/chance = 20
-		if (ismob(P.original))
-			var/mob/M = P.original
-			if (M.lying)
-				chance += 20				//Lying down lets you catch less bullets
-		if(flipped)
-			if(get_dir(loc, from) == dir)	//Flipped tables catch mroe bullets
-				chance += 20
-			else
-				return 1					//But only from one side
-		if(prob(chance))
-			health -= P.damage/2
-			if (health > 0)
-				visible_message("<span class='warning'>[P] hits \the [src]!</span>")
-				return 0
-			else
-				visible_message("<span class='warning'>[src] breaks down!</span>")
-				destroy()
-				return 1
+	if(get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
+		return 1
+	var/chance = 60
+	if(ismob(P.original))
+		var/mob/M = P.original
+		if(M.lying)
+			chance += 20 //Lying down lets you catch less bullets
+	if(P.original == src || prob(chance))
+		health -= P.damage/2
+		if (health > 0)
+			visible_message("<span class='warning'>[P] hits \the [src]!</span>")
+			return 0
+		else
+			visible_message("<span class='warning'>[src] breaks down!</span>")
+			destroy()
+			return 1
 	return 1
 
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
