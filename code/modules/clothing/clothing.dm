@@ -467,7 +467,7 @@
 		switch(H.m_intent)
 			if("run")
 				step_sound_counter++
-				if(step_sound_counter == step_sound_threshold)
+				if(step_sound_counter >= step_sound_threshold)
 					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 					step_sound_counter = 0
 			if("walk")
