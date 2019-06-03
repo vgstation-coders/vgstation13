@@ -7,8 +7,11 @@
     /// `null` means exact match on `type` (default)
     /// Any other type means that and all subtypes
 	var/dupe_type
-	/// (private) Associated lazy list of signals -> `/datum/callback`s that will be run when the parent datum receives that signal
 	var/datum/parent
+	//only set to true if you are able to properly transfer this component
+	//At a minimum RegisterWithParent and UnregisterFromParent should be used
+	//Make sure you also implement PostTransfer for any post transfer handling
+	var/can_transfer = FALSE
 
 /datum/component/New(var/datum/P, ...)
 	parent = P
@@ -58,7 +61,7 @@
 	return
 
 /datum/component/proc/Initialize(...)
-	return
+	return LoadData(arglist(args))
 
 /datum/component/Destroy(var/force = FALSE, var/silent = FALSE)
 	if(!force && parent)
@@ -122,9 +125,9 @@
 		else // Many other things have registered here
 			lookup[sig_type][src] = TRUE
 
-	enabled = TRUE
+	signal_enabled = TRUE
 
-/datum/component/proc/UnregisterSignal(var/datum/target, var/sig_type_or_types)
+/datum/proc/UnregisterSignal(var/datum/target, var/sig_type_or_types)
 	var/list/lookup = target.comp_lookup
 	if(!signal_procs || !signal_procs[target] || !lookup)
 		return
@@ -236,6 +239,8 @@
 	var/datum/component/old_comp
 	var/datum/component/new_comp
 
+	if(istext(nt))
+		CRASH("[nt] is a string but should be a type path")
 	if(ispath(nt))
 		if(nt == /datum/component)
 			CRASH("[nt] attempted instantiation!")
@@ -255,18 +260,27 @@
 				if(COMPONENT_DUPE_UNIQUE_PASSARGS)
 					if(!new_comp)
 						var/list/arguments = args.Copy(2)
-						old_comp.InheritComponent(null, TRUE, arguments)
+						old_comp.LoadData(arglist(arguments))
 					else
-						old_comp.InheritComponent(new_comp, TRUE)
+						old_comp.InheritComponent(new_comp)
+						qdel(new_comp)
+						new_comp = null
+
 		else if(!new_comp)
 			new_comp = new nt(arglist(args)) // There's a valid dupe mode but there's no old component, act like normal
 	else if(!new_comp)
 		new_comp = new nt(arglist(args)) // Dupes are allowed, act like normal
 
-	if(!old_comp && !QDELETED(new_comp)) // Nothing related to duplicate components happened and the new component is healthy
+	if(!old_comp && new_comp && !new_comp.gcDestroyed) // Nothing related to duplicate components happened and the new component is healthy
 		SEND_SIGNAL(src, COMSIG_COMPONENT_ADDED, new_comp)
 		return new_comp
 	return old_comp
+
+/// (abstract, no-sleep)
+/// Called on a component when a component of the same type was added to the same parent.
+/// Use it to extract the data from `C`, which will then be deleted.
+/datum/component/proc/InheritComponent(datum/component/C)
+	return
 
 /// (public, final)
 /// Equivalent to calling `GetComponent(component_type)` where, if the result would be `null`, returns `AddComponent(component_type, ...)` instead
@@ -313,4 +327,7 @@
 		if(C.can_transfer)
 			target.TakeComponent(comps)
 
-
+/// (abstract, no-sleep)
+/// Called by `Initialize` or `AddComponent`, when creating a new component or handling an attempted duplicate creation, respectively.
+/datum/proc/LoadData(var/list/arguments)
+	return
