@@ -103,13 +103,25 @@
 	return
 
 
-/obj/item/weapon/gun/projectile/automatic/uzi/micro
+/obj/item/weapon/gun/projectile/automatic/microuzi
+	//micro uzi is 9mm :)
 	name = "\improper Micro Uzi"
-	desc = "A concealable rapid-fire machine pistol for filling a target with lead. Chambered for .45 rounds. Has mounting for a silencer."
-	icon_state = "microsmg"
-	item_state = "microuzi"
+	desc = "A concealable rapid-fire machine pistol for filling a target with lead. Chambered for 9mm rounds. Has mounting for a silencer."
+	icon_state = "micro-uzi"
+	item_state = "micro-uzi"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	gun_flags = EMPTYCASINGS | SILENCECOMP
 	w_class = W_CLASS_SMALL
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/microuzi9"
+
+/obj/item/weapon/gun/projectile/automatic/microuzi/isHandgun()
+	return TRUE
+
+/obj/item/weapon/gun/projectile/automatic/microuzi/update_icon()
+	..()
+	icon_state = "micro-uzi[silenced ? "-silencer" : ""][stored_magazine ? "" : "-e"]"
 
 
 /obj/item/weapon/gun/projectile/automatic/c20r

@@ -234,6 +234,20 @@
 	multiple_sprites = 1
 	sprite_modulo = 4
 
+/obj/item/ammo_storage/magazine/microuzi9 //microuzi mag
+	name = "magazine (9mm)"
+	icon_state = "uzi45"//sprites are identical.
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	max_ammo = 20
+
+/obj/item/ammo_storage/magazine/microuzi9/update_icon()
+	..()
+	icon_state = (ammo_count() > 0) ? ("uzi45") : ("uzi45-0")
+
+/obj/item/ammo_storage/magazine/microuzi9/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/lawgiver
 	name = "lawgiver magazine"
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types."

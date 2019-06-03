@@ -104,7 +104,7 @@
 		if("uzi")
 			new /obj/item/weapon/gun/projectile/automatic/uzi(get_turf(src))
 		if("microuzi")
-			new /obj/item/weapon/gun/projectile/automatic/uzi/micro(get_turf(src))
+			new /obj/item/weapon/gun/projectile/automatic/microuzi(get_turf(src))
 		if("crossbow")
 			new /obj/item/weapon/gun/energy/crossbow(get_turf(src))
 		if("saw")
