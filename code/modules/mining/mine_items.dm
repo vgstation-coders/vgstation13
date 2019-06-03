@@ -310,7 +310,7 @@ proc/move_mining_shuttle()
 		var/obj/item/stack/sheet/A = target
 		if(A.mat_type == MAT_PLASMA)
 			if(current_ammo < max_ammo)
-				var/loading_ammo = max_ammo - current_ammo
+				var/loading_ammo = min(max_ammo - current_ammo, A.amount)
 				if(A.amount <= loading_ammo)
 					loading_ammo = A.amount
 					current_ammo += loading_ammo
@@ -318,7 +318,7 @@ proc/move_mining_shuttle()
 					user.u_equip(A)
 					qdel(A)
 					return
-				A.amount -= loading_ammo
+				A.use(loading_ammo)
 				current_ammo += loading_ammo
 				to_chat(user, "<span class='notice'>You load [src].</span>")
 			else
