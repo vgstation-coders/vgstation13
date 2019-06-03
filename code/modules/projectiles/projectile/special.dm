@@ -279,7 +279,6 @@ obj/item/projectile/kinetic/New()
 		returnToPool(src)
 
 /obj/item/projectile/kinetic/cutter
-	sharpness = 3
 
 /obj/item/projectile/kinetic/cutter/to_bump(atom/A)
 	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
