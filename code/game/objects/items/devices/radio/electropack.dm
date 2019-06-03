@@ -14,15 +14,6 @@
 	var/code = 2
 	var/datum/radio_frequency/radio_connection
 
-/obj/item/device/radio/electropack/New()
-	..()
-	if(radio_controller)
-		initialize()
-	else
-		spawn(50)
-			if(radio_controller)
-				initialize()
-
 /obj/item/device/radio/electropack/initialize()
 	. = ..()
 	if(frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)

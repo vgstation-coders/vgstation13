@@ -37,9 +37,6 @@
 	if(pixel_y)
 		src.pixel_y = pixel_y
 
-	if(ticker)
-		initialize()
-
 	..(loc)
 
 	blood_list += src
