@@ -1,4 +1,4 @@
-/obj/item/tk_grab is missing left hand icon called "2".
+/obj/item/tk_grab is missing left hand icon called "2"
 /obj/item/tk_grab is missing right hand icon called "2".
 /obj/item/clothing/under/contortionist is missing left hand icon called "darkholme".
 /obj/item/clothing/under/contortionist is missing right hand icon called "darkholme".
