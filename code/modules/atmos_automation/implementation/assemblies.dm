@@ -22,7 +22,7 @@
 /datum/automation/pulse_assembly/GetText()
 	var/T = null
 
-	if(assembly_num in (1 to parent.max_linked_assembly_amount))
+	if(assembly_num in 1 to parent.max_linked_assembly_amount)
 		var/obj/item/device/assembly/A = parent.linked_assemblies[assembly_num]
 
 		if(istype(A))
