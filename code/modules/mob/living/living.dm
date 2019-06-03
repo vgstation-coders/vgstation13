@@ -992,8 +992,8 @@ Thanks.
 								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
 									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
 
-			else
-				B.manual_unbuckle(L)
+				else
+					B.manual_unbuckle(L)
 		//release from kudzu
 		/*else if(istype(L.locked_to, /obj/effect/plantsegment))
 			var/obj/effect/plantsegment/K = L.locked_to
