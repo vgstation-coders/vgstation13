@@ -337,7 +337,7 @@ var/global/ports_open = TRUE
 			if (I || isAdminGhost(usr))
 				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
-						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems") as null|text
+						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
 						if(!reason || !(usr in view(1,src)))
 							return
 						log_game("[key_name(usr)] closed the port to traders for [reason].")

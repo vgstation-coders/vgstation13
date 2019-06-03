@@ -57,7 +57,6 @@
 			L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
 			L.updatehealth()
 		return
-	return ..(gibbed)
 
 //This proc should be used when you're restoring a guy to life. It will remove him from the dead mob list, and add him to the living mob list. It will also remove any verbs
 //that his dead body has
