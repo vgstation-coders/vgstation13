@@ -240,6 +240,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	max_ammo = 20
+	multiple_sprites = 1
 	sprite_modulo = 4
 
 /obj/item/ammo_storage/magazine/microuzi9/empty
