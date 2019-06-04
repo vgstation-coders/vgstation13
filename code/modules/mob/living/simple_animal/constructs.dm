@@ -183,8 +183,8 @@
 	health = 250
 	response_harm   = "harmlessly punches"
 	harm_intent_damage = 0
-	melee_damage_lower = 30
-	melee_damage_upper = 30
+	melee_damage_lower = 20
+	melee_damage_upper = 20
 	attacktext = "smashes their armoured gauntlet into"
 	speed = 4
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
