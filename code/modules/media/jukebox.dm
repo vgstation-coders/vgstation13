@@ -382,7 +382,8 @@ var/global/list/loopModeNames=list(
 	return dat
 
 /obj/machinery/media/jukebox/proc/generate_name()
-	return "[get_area(src).name] [name]"
+	var/area/this_area = get_area(src)
+	return "[this_area.name] [name]"
 
 /obj/machinery/media/jukebox/scan_card(var/obj/item/weapon/card/C)
 	var/remaining_credits_needed = credits_needed - credits_held

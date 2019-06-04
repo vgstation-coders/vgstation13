@@ -1,5 +1,5 @@
 /datum/hud/proc/robot_hud()
-
+	var/mob/living/silicon/robot/mommi/myrobot = mymob
 	src.adding = list()
 	src.other = list()
 
@@ -74,11 +74,11 @@
 	action_intent = using
 
 //Cell
-	mymob:cells = getFromPool(/obj/abstract/screen)
-	mymob:cells.icon = 'icons/mob/screen1_robot.dmi'
-	mymob:cells.icon_state = "charge-empty"
-	mymob:cells.name = "cell"
-	mymob:cells.screen_loc = ui_toxin
+	myrobot.cells = getFromPool(/obj/abstract/screen)
+	myrobot.cells.icon = 'icons/mob/screen1_robot.dmi'
+	myrobot.cells.icon_state = "charge-empty"
+	myrobot.cells.name = "cell"
+	myrobot.cells.screen_loc = ui_toxin
 
 //Health
 	mymob.healths = getFromPool(/obj/abstract/screen)

@@ -11,7 +11,7 @@
 
 /obj/structure/closet/coffin/Destroy()
 	new /obj/item/stack/sheet/wood(loc,3) //This will result in 3 dropped if destroyed, or 5 if deconstructed
-	if (get_locked(mob_lock_type).len) //if someone is strapped in and this gets destroyed make them visible again
+	if (is_locking(mob_lock_type)) //if someone is strapped in and this gets destroyed make them visible again
 		var/mob/locked = get_locked(mob_lock_type)[1]	
 		locked.alphas["coffin_invis"] = 255
 		locked.handle_alpha()
@@ -34,7 +34,7 @@
 	handle_user_visibility()
 
 /obj/structure/closet/coffin/proc/has_locked_mobs()
-	if (!get_locked(mob_lock_type).len)
+	if (!is_locking(mob_lock_type))
 		return FALSE
 	var/mob/locked = get_locked(mob_lock_type)[1]
 	return locked //no need to try to move if you are strapped in
@@ -52,7 +52,7 @@
 		buckle_mob(closet_dweller, user)
 
 /obj/structure/closet/coffin/proc/handle_user_visibility() //after each open/close action assert the correct user visibility
-	if (!get_locked(mob_lock_type).len)
+	if (!is_locking(mob_lock_type))
 		return
 	var/mob/locked = get_locked(mob_lock_type)[1]	
 	if (src.opened)  

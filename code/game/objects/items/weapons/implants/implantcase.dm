@@ -20,23 +20,24 @@
 	if (istype(I, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'")
 	else if (istype(I, /obj/item/weapon/implanter))
-		if (I:imp)
-			if ((src.imp || I:imp.implanted))
+		var/obj/item/weapon/implanter/the_implanter
+		if (the_implanter.imp)
+			if (src.imp || the_implanter.imp.implanted)
 				return
-			I:imp.forceMove(src)
-			src.imp = I:imp
-			I:imp = null
+			the_implanter.imp.forceMove(src)
+			src.imp = the_implanter.imp
+			the_implanter.imp = null
 			src.update()
-			I:update()
+			the_implanter.update()
 		else
 			if (src.imp)
-				if (I:imp)
+				if (the_implanter.imp)
 					return
 				src.imp.forceMove(I)
-				I:imp = src.imp
+				the_implanter.imp = src.imp
 				src.imp = null
 				update()
-			I:update()
+			the_implanter.update()
 	return
 
 /obj/item/weapon/implantcase/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
