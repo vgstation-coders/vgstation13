@@ -143,13 +143,6 @@
     //
 	// 		antag_objectives.Add(AO)
 
-
-/datum/stat/population_stat/New(pop as num)
-	if(ticker.current_state != GAME_STATE_PLAYING) return
-
-	time = time2text(world.realtime, STAT_TIMESTAMP_FORMAT)
-	popcount = pop
-
 /datum/stat_collector/proc/doPostRoundChecks()
 	round_start_time = time2text(round_start_time, STAT_TIMESTAMP_FORMAT)
 	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)
@@ -168,18 +161,5 @@
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")
-
-// Global stuff
-/proc/population_poll()
-	var/playercount = 0
-	for(var/mob/M in player_list)
-		if(M.client)
-			playercount++
-	stat_collection.population_polls.Add(new /datum/stat/population_stat(playercount))
-
-/proc/population_poll_loop()
-	while(1)
-		population_poll()
-		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine
 
 #undef STAT_TIMESTAMP_FORMAT

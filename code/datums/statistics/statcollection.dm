@@ -76,7 +76,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/list/uplink_purchases = list()
 	var/list/badass_bundles = list()
 	var/list/antag_objectives = list()
-	var/list/population_polls = list()
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
@@ -132,10 +131,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/list/mixed_gamemodes = list()
 	var/tech_total = 0
 	var/stationname = null
-
-/datum/stat/population_stat
-	var/time
-	var/popcount = 0
 
 /datum/stat/death_stat
 	var/mob_typepath = null
