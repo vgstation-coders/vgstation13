@@ -92,15 +92,15 @@
 
 /obj/item/weapon/gun/projectile/automatic/uzi/update_icon()
 	..()
-	if(chambered && !stored_magazine)
-		icon_state = "mini-uzi"
-	else if(chambered && stored_magazine)
-		(stored_magazine.max_ammo > 16) ? (icon_state = "mini-uzi-ext-[(getAmmo() > 9) ? round(getAmmo(),4) : "0"]") : (icon_state = "mini-uzi-S-16")//avoiding duplicate sprites.
-	else if(!chambered && stored_magazine)
-		(stored_magazine.max_ammo > 16) ? (icon_state = "mini-uzi-ext-e") : (icon_state = "mini-uzi-S-e")
-	else if(!chambered && !stored_magazine)
-		icon_state = "mini-uzi-e"
-	return
+	var/MS = FALSE
+	if(stored_magazine)
+		if(stored_magazine.max_ammo > 16)
+			MS = "ext"
+		else
+			MS = "S"
+		icon_state = chambered ? "[initial(icon_state)]["-[MS]-"][round(getAmmo(), 4)]" : "[initial(icon_state)]["-[MS]-e"]"
+	else
+		icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
 
 /obj/item/weapon/gun/projectile/automatic/microuzi
