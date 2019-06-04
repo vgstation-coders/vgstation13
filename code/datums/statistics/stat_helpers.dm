@@ -151,8 +151,11 @@
 	tech_total = get_research_score()
 	station_name = station_name()
 
-	for(var/datum/dynamic_ruleset/ruleset/R in mode.executed_rules)
-		dynamic_stats.ruleset_data = R.generate_statistics()
+	for(var/datum/faction/F in ticker.mode.factions)
+		dynamic_stats += F.generate_statistics()
+
+	for(var/datum/role/R in ticker.mode.orphaned_roles)
+		dynamic_stats += R.generate_statistics()
 
 	for(var/datum/mind/M in ticker.minds)
 		add_objectives(M)
