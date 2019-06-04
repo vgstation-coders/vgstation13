@@ -140,10 +140,11 @@
 	var/oldhealth = health
 	health = Clamp(health-damage,0, maxHealth)
 	var/percentage = (health / initial(health)) * 100
-	if(get_pilot() && oldhealth > health && percentage <= 25 && percentage > 0)
-		get_pilot().playsound_local(get_pilot(), 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
-	if(get_pilot() && oldhealth > health && !health)
-		var/mob/living/L = get_pilot()
+	var/mob/pilot = get_pilot()
+	if(pilot && oldhealth > health && percentage <= 25 && percentage > 0)
+		pilot.playsound_local(pilot, 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
+	if(pilot && oldhealth > health && !health)
+		var/mob/living/L = pilot
 		L.playsound_local(L, 'sound/effects/engine_alert1.ogg', 50, 0, 0, 0, 0)
 	if(health <= 0)
 		spawn(0)
@@ -407,9 +408,10 @@
 		return
 	var/turf/T = get_turf(over)
 	if(!occupants.Find(usr))
-		visible_message("<span class='notice'>[usr] start pulling [get_pilot().name] out of \the [src].</span>")
+		var/mob/pilot = get_pilot()
+		visible_message("<span class='notice'>[usr] start pulling [pilot.name] out of \the [src].</span>")
 		if(do_after(usr, src, 4 SECONDS))
-			move_outside(get_pilot(), T)
+			move_outside(pilot, T)
 			add_fingerprint(usr)
 		return
 	if(!Adjacent(T) || T.density)
@@ -453,7 +455,8 @@
 	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 	if(do_after(usr, src, 4 SECONDS))
-		if(!get_pilot() || get_passengers().len < passenger_limit)
+		var/list/passengers = get_passengers()
+		if(!get_pilot() || passengers.len < passenger_limit)
 			move_into_pod(usr)
 		else
 			to_chat(usr, "<span class = 'warning'>Not enough room inside \the [src].</span>")

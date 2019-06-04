@@ -59,11 +59,11 @@
 	action_intent = using
 
 	// Cell
-	mymob:cells = getFromPool(/obj/abstract/screen)
-	mymob:cells.icon = 'icons/mob/screen1_robot.dmi'
-	mymob:cells.icon_state = "charge-empty"
-	mymob:cells.name = "cell"
-	mymob:cells.screen_loc = ui_toxin
+	M.cells = getFromPool(/obj/abstract/screen)
+	M.cells.icon = 'icons/mob/screen1_robot.dmi'
+	M.cells.icon_state = "charge-empty"
+	M.cells.name = "cell"
+	M.cells.screen_loc = ui_toxin
 
 	// Health
 	mymob.healths = getFromPool(/obj/abstract/screen)
