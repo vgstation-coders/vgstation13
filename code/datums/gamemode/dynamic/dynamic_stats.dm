@@ -10,6 +10,7 @@
 	var/round_start_pop = 0
 
 	var/list/successful_injections = list()//midround/latejoin rulesets should appear here
+	var/list/ruleset_data = list() // per-faction or per-antag data from rulesets
 
 /datum/stat/dynamic_mode/proc/update_population(var/datum/gamemode/dynamic/mode)
 	var/datum/stat/pop_level/new_pop_level = new

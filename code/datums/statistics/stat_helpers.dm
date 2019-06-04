@@ -34,17 +34,17 @@
 	explosions.Add(e)
 
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
-	if(!istype(M, /mob/living)) return 0
 	if(M.iscorpse) return 0 // only ever 1 if they are a corpse landmark spawned mob
-	if(ticker.current_state != GAME_STATE_PLAYING)
-		return 0 // We don't care about pre-round or post-round deaths. 3 is TICKERSTATE_PLAYING which is undefined I guess
+	if(ticker.current_state != GAME_STATE_PLAYING) return 0 // We don't care about pre-round or post-round deaths. 3 is TICKERSTATE_PLAYING which is undefined I guess
+	if(!istype(M, /mob/living) || istype(/mob/living/carbon/human/manifested)) return 0
+
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
 	d.death_x = M.x
 	d.death_y = M.y
 	d.death_z = M.z
 	d.mob_typepath = M.type
-	d.real_name = M.name
+	d.mind_name = M.name
 
 	d.damage["BRUTE"] = M.bruteloss
 	d.damage["FIRE"]  = M.fireloss
@@ -61,7 +61,7 @@
 		if(M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			d.real_name = M.mind.name
+			d.mind_name = M.mind.name
 	deaths.Add(d)
 
 /datum/stat_collector/proc/add_survivor_stat(var/mob/living/M)
@@ -69,7 +69,7 @@
 
 	var/datum/stat/survivor/s = new
 	s.mob_typepath = M.type
-	s.real_name = M.name
+	s.mind_name = M.name
 
 	s.damage["BRUTE"] = M.bruteloss
 	s.damage["FIRE"]  = M.fireloss
@@ -96,7 +96,7 @@
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			s.real_name = M.mind.name
+			s.mind_name = M.mind.name
 	survivors.Add(s)
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
@@ -132,7 +132,7 @@
 	// 	for(var/datum/objective/O in M.objectives)
 	// 		var/datum/stat/antag_objective/AO = new
 	// 		AO.key = ckey(M.key)
-	// 		AO.real_name = STRIP_NEWLINE(M.name)
+	// 		AO.mind_name = STRIP_NEWLINE(M.name)
 	// 		AO.special_role = M.special_role
 	// 		AO.objective_type = O.type
 	// 		AO.objective_desc = O.explanation_text
@@ -150,6 +150,9 @@
 	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
 	station_name = station_name()
+
+	for(var/datum/dynamic_ruleset/ruleset/R in mode.executed_rules)
+		dynamic_stats.ruleset_data = R.generate_statistics()
 
 	for(var/datum/mind/M in ticker.minds)
 		add_objectives(M)

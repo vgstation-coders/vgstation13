@@ -78,10 +78,10 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/crates_ordered = 0
 	var/artifacts_discovered = 0
 	var/narsie_corpses_fed = 0
-	var/crewscore = 0
+	var/crew_score = 0
 	var/nuked = FALSE
-	var/borgs_at_roundend = 0
-	var/heads_at_roundend = 0
+	var/borgs_at_round_end = 0
+	var/heads_at_round_end = 0
 
 
 	// GAMEMODE-SPECIFIC STATS START HERE
@@ -130,7 +130,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/special_role = null
 	var/assigned_role = null
 	var/key = null
-	var/real_name = null
+	var/mind_name = null
 	var/list/damage_values = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
@@ -145,7 +145,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/special_role = null
 	var/assigned_role = null
 	var/key = null
-	var/real_name = null
+	var/mind_name = null
 	var/escaped = FALSE
 	var/list/damage_values = list(
 		"BRUTE" = 0,
@@ -156,7 +156,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 		"BRAIN" = 0)
 
 /datum/stat/antag_objective
-	var/real_name = null
+	var/mind_name = null
 	var/key = null
 	var/special_role = null
 	var/objective_type = null
