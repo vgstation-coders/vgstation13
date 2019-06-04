@@ -297,7 +297,7 @@
 			else
 				new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(src))
 		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
-			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded/New, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
+			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
 	var/datum/role/survivor/crusader/S = R
 	if(istype(S))
