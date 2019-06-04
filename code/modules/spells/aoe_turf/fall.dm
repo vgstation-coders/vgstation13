@@ -236,5 +236,25 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+		fall.perform(caster, skipcharge = 1, ignore_timeless)
+		qdel(caster)
+		
+/proc/timestopignore(atom/A, var/duration, var/range, var/ignore_path, var/ignore_timeless = FALSE) //This was created so that a chrono-grenade that allows carbons through could be made.
+	if(!A || !duration)
+		return
+	var/mob/caster = new
+	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
+	caster.invisibility = 101
+	caster.setDensity(FALSE)
+	caster.anchored = 1
+	caster.flags = INVULNERABLE
+	caster.add_spell(fall)
+	fall.spell_flags = 0
+	fall.invocation_type = SpI_NONE
+	fall.the_world_chance = 0
+	fall.range = range ? range : 7		//how big
+	fall.sleeptime = duration			//for how long
+	caster.forceMove(get_turf(A))
+	spawn()
+		fall.perform(caster, skipcharge = 1, ignore_timeless)
 		qdel(caster)
