@@ -1434,6 +1434,7 @@ var/list/bloodstone_list = list()
 						user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
 				contributors.Add(user)
 				if (user.client)
+					update_progbar()
 					user.client.images |= progbar
 			else if(user.hud_used && user.hud_used.holomap_obj)
 				if(!("\ref[user]" in watcher_maps))

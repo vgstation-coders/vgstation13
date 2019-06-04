@@ -121,6 +121,8 @@
 #define BLOODCOST_TOTAL		"total"
 #define BLOODCOST_RESULT	"result"
 #define BLOODCOST_FAILURE	"failure"
+#define BLOODCOST_TRIBUTE	"tribute"
+#define BLOODCOST_USER	"user"
 
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"

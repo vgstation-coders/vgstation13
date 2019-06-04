@@ -743,7 +743,7 @@ var/list/arcane_tomes = list()
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 
-			if (shade)
+			if (shade && shade.hud_used && shade.gui_icons && shade.gui_icons.soulblade_bloodbar)
 				var/matrix/MAT = matrix()
 				MAT.Scale(1,blood/maxblood)
 				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
