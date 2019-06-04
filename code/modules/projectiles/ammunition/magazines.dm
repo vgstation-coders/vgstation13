@@ -222,7 +222,7 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	max_ammo = 16
 	multiple_sprites = 1
-	sprite_modulo = 16
+	sprite_modulo = 4
 
 /obj/item/ammo_storage/magazine/uzi45/empty
 	starting_ammo = 0
@@ -233,6 +233,18 @@
 	max_ammo = 24
 	multiple_sprites = 1
 	sprite_modulo = 4
+
+/obj/item/ammo_storage/magazine/microuzi9 //microuzi mag
+	name = "magazine (9mm)"
+	icon_state = "uzi45"//sprites are identical. this should probably be fixed in the future by a gunspriter to avoid confusion
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	max_ammo = 20
+	multiple_sprites = 1
+	sprite_modulo = 4
+
+/obj/item/ammo_storage/magazine/microuzi9/empty
+	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/lawgiver
 	name = "lawgiver magazine"
