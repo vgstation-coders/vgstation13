@@ -256,5 +256,5 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1, ignore_timeless)
+		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
 		qdel(caster)
