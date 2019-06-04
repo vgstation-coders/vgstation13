@@ -157,6 +157,16 @@
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	
+/obj/item/clothing/suit/spaceninjafake
+	name = "space ninja suit replica"
+	icon_state = "s-ninja-old"
+	item_state = "s-ninja_suit"
+	desc = "A plastic replica of a ninja suit, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
@@ -621,3 +631,16 @@
 	allowed = list(/obj/item/weapon/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
+
+/obj/item/clothing/suit/red_suit
+	name = "red suit"
+	desc = "A sleazy looking red suit"
+	icon_state = "red_suit"
+	item_state = "red_suit"
+	body_parts_covered = 0
+
+obj/item/clothing/suit/poncho
+	name = "poncho"
+	desc = "A wooly poncho. Smells of beans."
+	icon_state = "poncho"
+	item_state = "poncho"

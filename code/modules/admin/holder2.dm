@@ -85,13 +85,13 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 					return 1
 				else
 					if(show_msg)
-						to_chat(usr, "<font color='red'>Error: You do not have sufficient rights to do that. You require one of the following flags:[rights2text(rights_required," ")].</font>")
+						to_chat(usr, "<span class='red'>Error: You do not have sufficient rights to do that. You require one of the following flags:[rights2text(rights_required," ")].</span>")
 		else
 			if(usr.client.holder)
 				return 1
 			else
 				if(show_msg)
-					to_chat(usr, "<font color='red'>Error: You are not an admin.</font>")
+					to_chat(usr, "<span class='red'>Error: You are not an admin.</span>")
 	return 0
 
 // Making this a bit less of a roaring asspain. - N3X
@@ -115,7 +115,7 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 			if(usr.client.holder.rights != other.holder.rights)
 				if( (usr.client.holder.rights & other.holder.rights) == other.holder.rights )
 					return 1	//we have all the rights they have and more
-		to_chat(usr, "<font color='red'>Error: Cannot proceed. They have more or equal rights to us.</font>")
+		to_chat(usr, "<span class='red'>Error: Cannot proceed. They have more or equal rights to us.</span>")
 	return 0
 
 

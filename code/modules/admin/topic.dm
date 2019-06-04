@@ -63,7 +63,7 @@
 
 		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
-		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
+		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
 			to_chat(S, "<b>Your new laws are as follows:</b>")
 			S.laws.show_laws(S)
@@ -226,14 +226,14 @@
 			if(!new_ckey)
 				return
 			if(new_ckey in admin_datums)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': [new_ckey] is already an admin</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': [new_ckey] is already an admin</span>")
 				return
 			adm_ckey = new_ckey
 			task = "rank"
 		else if(task != "show")
 			adm_ckey = ckey(href_list["ckey"])
 			if(!adm_ckey)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': No valid ckey</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': No valid ckey</span>")
 				return
 
 		var/datum/admins/D = admin_datums[adm_ckey]
@@ -268,7 +268,7 @@
 					if(config.admin_legacy_system)
 						new_rank = ckeyEx(new_rank)
 					if(!new_rank)
-						to_chat(usr, "<font color='red'>Error: Topic 'editrights': Invalid rank</font>")
+						to_chat(usr, "<span class='red'>Error: Topic 'editrights': Invalid rank</span>")
 						return
 					if(config.admin_legacy_system)
 						if(admin_ranks.len)
@@ -1551,6 +1551,17 @@
 			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
 			mode.picking_specific_rule(midround_rules[added_rule],1)
 
+	// -- Opens up the option window --
+	else if (href_list["f_dynamic_options"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_mode_options(usr)
 
 	else if(href_list["f_dynamic_roundstart_centre"])
 		if(!check_rights(R_ADMIN))
@@ -1561,13 +1572,25 @@
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
 
-		var/new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A negative value will give a more peaceful round ; a positive value, a round with higher threat. Any number between -5 and +5 is allowed.", "Change curve centre", null) as num
-		if (new_centre < -5 || new_centre > 5)
-			return alert(usr, "Only values between -5 and +5 are allowed.", null, null, null, null)
+		var/new_centre
+
+		if (dynamic_chosen_mode == DIRAC)
+			new_centre = input(usr,"Change the threat level this round will have.", "Change threat level.", null) as num
+			if (new_centre <= 0 || new_centre >= 100)
+				return alert(usr, "Only values between 0 and 100 are allowed.", null, null, null, null)
+		else if (dynamic_chosen_mode == EXPONENTIAL)
+			new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A lower value will give a more peaceful round ; a higher value, a round with higher threat. Any number between 0 and +5 is allowed.", "Change curve centre", null) as num
+			if (new_centre < 0 || new_centre > 5)
+				return alert(usr, "Only values between 0 and +5 are allowed.", null, null, null, null)
+		else
+			new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A negative value will give a more peaceful round ; a positive value, a round with higher threat. Any number between -5 and +5 is allowed.", "Change curve centre", null) as num
+			if (new_centre < -5 || new_centre > 5)
+				return alert(usr, "Only values between -5 and +5 are allowed.", null, null, null, null)
 
 		log_admin("[key_name(usr)] changed the distribution curve center to [new_centre].")
 		message_admins("[key_name(usr)] changed the distribution curve center to [new_centre]", 1)
 		dynamic_curve_centre = new_centre
+		dynamic_mode_options(usr)
 
 	else if(href_list["f_dynamic_roundstart_width"])
 		if(!check_rights(R_ADMIN))
@@ -1585,6 +1608,107 @@
 		log_admin("[key_name(usr)] changed the distribution curve width to [new_width].")
 		message_admins("[key_name(usr)] changed the distribution curve width to [new_width]", 1)
 		dynamic_curve_width = new_width
+		dynamic_mode_options(usr)
+
+	else if(href_list["force_extended"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_forced_extended = !dynamic_forced_extended
+		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
+		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["no_stacking"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_no_stacking = !dynamic_no_stacking
+		log_admin("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
+		message_admins("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["classic_secret"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_classic_secret = !dynamic_classic_secret
+		log_admin("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
+		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["stacking_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		stacking_limit = input(usr,"Change the threat limit at which round-endings rulesets will start to stack.", "Change stacking limit", null) as num
+		log_admin("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		message_admins("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["high_pop_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/new_value = input(usr, "Enter the high-pop override threshold for dynamic mode.", "High pop override") as num
+		if (new_value < 0)
+			return alert(usr, "Only positive values allowed!", null, null, null, null)
+		dynamic_high_pop_limit = new_value
+
+		log_admin("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
+		message_admins("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["change_distrib"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/list/possible_choices = list(
+			"[LORENTZ]",
+			"[GAUSS]",
+			"[DIRAC]",
+			"[EXPONENTIAL]",
+			"[UNIFORM]",
+		)
+
+		var/new_mode = input("Select a new distribution mode. BE SURE TO READ THE GLOSSARY BEFORE.") as null|anything in possible_choices
+		if (!new_mode)
+			return
+		dynamic_chosen_mode = new_mode
+		if (new_mode == DIRAC) // Rigged threat mode.
+			dynamic_curve_centre = 50
+			to_chat(usr, "<span class='notice'>You've chosen to rig the starting threat level. Remember to set the 'curve center' to the desire threat level. The default value is 50.</span>")
+		else if (new_mode == EXPONENTIAL)
+			dynamic_curve_centre = 1
+		else
+			dynamic_curve_centre = 0
+		log_admin("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
+		message_admins("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
+		dynamic_mode_options(usr)
 
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
@@ -2378,7 +2502,7 @@
 
 		/*Job + antagonist
 		if(M.mind)
-			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <font color='red'><b>[M.mind.special_role]</b></font>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
+			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <span class='red'><b>[M.mind.special_role]</b></span>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
 		else
 			special_role_description = "Role: <i>Mind datum missing</i> Antagonist: <i>Mind datum missing</i>; Has been rev: <i>Mind datum missing</i>;"
 		*/
@@ -2998,7 +3122,7 @@
 				log_admin("[key_name(usr)] created a link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] created a link with central command</span>", 1)
 				link_to_centcomm()
-			/*if("traitor_all")
+			if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
 					return
@@ -3008,31 +3132,33 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TA([objective])")
 				for(var/mob/living/carbon/human/H in player_list)
-					if(H.stat == 2 || !H.client || !H.mind)
+					if(H.isDead() || !H.client || !H.mind)
 						continue
 					if(is_special_character(H))
 						continue
 					//traitorize(H, objective, 0)
-					ticker.mode.traitors += H.mind
-					H.mind.special_role = "traitor"
 					var/datum/objective/new_objective = new
-					new_objective.owner = H
 					new_objective.explanation_text = objective
-					H.mind.objectives += new_objective
-					ticker.mode.greet_traitor(H.mind)
-					//ticker.mode.forge_traitor_objectives(H.mind)
-					ticker.mode.finalize_traitor(H.mind)
+					var/datum/role/traitor/T = new(H.mind, override = TRUE)
+					if (T)
+						T.AppendObjective(new_objective)
+						T.Greet(GREET_AUTOTATOR) // Mission specifications etc
+						T.OnPostSetup()
+						T.AnnounceObjectives()
 				for(var/mob/living/silicon/A in player_list)
-					ticker.mode.traitors += A.mind
-					A.mind.special_role = "traitor"
+					if(A.isDead() || !A.client || !A.mind)
+						continue
 					var/datum/objective/new_objective = new
-					new_objective.owner = A
 					new_objective.explanation_text = objective
-					A.mind.objectives += new_objective
-					ticker.mode.greet_traitor(A.mind)
-					ticker.mode.finalize_traitor(A.mind)
+					var/datum/role/traitor/T = new(A.mind, override = TRUE)
+					if (T)
+						T.AppendObjective(new_objective)
+						T.Greet(GREET_AUTOTATOR)
+						T.OnPostSetup()
+						T.AnnounceObjectives()
+
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
-				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")*/
+				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
 			if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
@@ -3590,7 +3716,7 @@
 						command_alert(/datum/command_alert/malf_announce)
 					to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
-					to_chat(world, "<font color='red'>[config.alert_desc_delta]</font>")
+					to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
 
 					message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
@@ -4820,11 +4946,14 @@
 		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
 		var/obj_type = available_objectives[new_obj]
 
-		var/datum/objective/new_objective = new obj_type(null,FALSE)
+		var/datum/objective/new_objective = new obj_type(usr, obj_holder.faction)
 
 		if (new_objective.flags & FACTION_OBJECTIVE)
 			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
 			fac.handleNewObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			check_antagonists()
 			return TRUE // It's a faction objective, let's not move any further.
 
 		if (obj_holder.owner)//so objectives won't target their owners.
@@ -4843,23 +4972,27 @@
 			alert("Couldn't set-up a proper target.", "New Objective")
 			return
 
-		if (obj_holder.faction)
+		if (new_objective.faction && istype(new_objective, /datum/objective/custom)) //is it a custom objective with a faction modifier?
+			new_objective.faction.AppendObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction) //or is it just an explicit faction obj?
 			obj_holder.faction.AppendObjective(new_objective)
-			check_antagonists()
-			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+			message_admins("[key_name_admin(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+		check_antagonists()
 
 	if (href_list["obj_delete"])
 		var/datum/objective/objective = locate(href_list["obj_delete"])
 		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
 
 		ASSERT(istype(objective) && istype(obj_holder))
-
-		check_antagonists()
 		if (obj_holder.faction)
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 			objective.faction.handleRemovedObjective(objective)
 
 		obj_holder.objectives.Remove(objective)
+		check_antagonists()
 
 	if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
@@ -4872,7 +5005,37 @@
 
 		objective.force_success = !objective.force_success
 		check_antagonists()
+		message_admins("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 		log_admin("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+	if (href_list["obj_announce"])
+		var/text = ""
+		var/owner = locate(href_list["obj_owner"])
+		if (istype(owner, /datum/faction))
+			var/datum/faction/F = owner
+			for (var/datum/role/member in F.members)
+				to_chat(member.antag.current, "<span class='notice'>Your faction objectives are:</span>")
+				if (member.faction.objective_holder.GetObjectives().len)
+					var/obj_count = 1
+					for(var/datum/objective/O in member.faction.GetObjectives())
+						text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
+					text += "</ul>"
+				to_chat(member.antag.current, text)
+
+
+	if(href_list["obj_gen"])
+		var/owner = locate(href_list["obj_owner"])
+		var/datum/faction/F = owner
+		var/list/prev_objectives = F.GetObjectives().Copy()
+		F.forgeObjectives()
+		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
+		if (!unique_objectives.len)
+			alert(usr, "No new objectives generated.", "", "OK")
+		else
+			for (var/datum/objective/objective in unique_objectives)
+				message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+				log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+		check_antagonists()
 
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))

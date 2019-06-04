@@ -29,14 +29,14 @@
 			if(absorb_text)
 				show_message("[absorb_text]")
 			else
-				show_message("<span class='warning'>Your armor absorbs the blow!</span>")
+				show_message("<span class='borange'>Your armor ABSORBS the blow!</span>")
 		return 2
 	if(absorb == 1)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)
 			else
-				show_message("<span class='warning'>Your armor softens the blow!</span>")
+				show_message("<span class='borange'>Your armor SOFTENS the blow!</span>")
 		return 1
 	return 0
 
@@ -58,7 +58,7 @@
 
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
-	var/obj/item/weapon/cloaking_device/C = locate((/obj/item/weapon/cloaking_device) in src)
+	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
 	if(C && C.active)
 		C.attack_self(src)//Should shut it off
 		update_icons()
@@ -193,7 +193,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
+		visible_message("<span class='borange'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
@@ -233,7 +233,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] attempts to kick \the [src]!</span>")
+		visible_message("<span class='borange'>\The [M] attempts to kick \the [src]!</span>")
 		return 0
 
 	//Handle shoes

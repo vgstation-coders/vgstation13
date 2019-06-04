@@ -1413,6 +1413,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 2,
+		/obj/item/weapon/storage/box/diy_soda = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5,
@@ -1426,6 +1428,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 50,
+		/obj/item/weapon/storage/box/diy_soda = 95,
 		)
 
 	pack = /obj/structure/vendomatpack/cola
@@ -1883,6 +1887,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,
 		/obj/item/weapon/storage/box/evidence = 6,
 		/obj/item/weapon/legcuffs/bolas = 8,
+		/obj/item/taperoll/police = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses/security = 2,
@@ -2238,6 +2243,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
+		/obj/item/taperoll/engineering = 5,
+		/obj/item/taperoll/atmos = 5,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2486,7 +2493,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/franksuit = 3,
 		/obj/item/clothing/gloves/frankgloves = 3,
 		/obj/item/clothing/shoes/frankshoes =3,
-		/obj/item/clothing/suit/kimono/sakura = 3
+		/obj/item/clothing/suit/kimono/sakura = 3,
+		/obj/item/clothing/head/widehat_red = 3,
+		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/suit/poncho = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
@@ -2555,6 +2565,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,
+		/obj/item/clothing/head/widehat_red =1,
 		)
 
 	pack = /obj/structure/vendomatpack/hatdispenser
@@ -2612,6 +2623,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
+		/obj/item/clothing/suit/red_suit = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
@@ -2968,6 +2980,7 @@ var/global/num_vending_terminals = 1
  		/obj/item/clothing/suit/armor/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator/red = 2,
 		/obj/item/weapon/thurible = 1,
+		/obj/item/weapon/storage/fancy/candle_box/holo = 5,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
 

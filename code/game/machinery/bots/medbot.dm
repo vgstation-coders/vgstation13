@@ -84,11 +84,11 @@
 	var/skin = null //Same as medbot, set to tox or ointment for the respective kits.
 	w_class = W_CLASS_MEDIUM
 
-	New()
-		..()
-		spawn(5)
-			if(skin)
-				overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
+/obj/item/weapon/firstaid_arm_assembly/New()
+	..()
+	spawn(5)
+		if(skin)
+			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
 
 /obj/machinery/bot/medbot/New()

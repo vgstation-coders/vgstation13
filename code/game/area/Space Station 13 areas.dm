@@ -62,6 +62,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/door_alerts=0
 
 	var/doors_down=0
+	var/doors_overridden=0 //manual override to force firedoors up
 
 	// /vg/: No teleporting for you. 2 = SUPER JAMMED, inaccessible even to telecrystals.
 	var/jammed = 0
@@ -1620,20 +1621,20 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "firingrange"
 
 /*
-	New()
-		..()
+/area/security/range/New()
+	..()
 
-		spawn(10) //let objects set up first
-			for(var/turf/turfToGrayscale in src)
-				if(turfToGrayscale.icon)
-					var/icon/newIcon = icon(turfToGrayscale.icon)
+	spawn(10) //let objects set up first
+		for(var/turf/turfToGrayscale in src)
+			if(turfToGrayscale.icon)
+				var/icon/newIcon = icon(turfToGrayscale.icon)
+				newIcon.GrayScale()
+				turfToGrayscale.icon = newIcon
+			for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
+				if(objectToGrayscale.icon)
+					var/icon/newIcon = icon(objectToGrayscale.icon)
 					newIcon.GrayScale()
-					turfToGrayscale.icon = newIcon
-				for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
-					if(objectToGrayscale.icon)
-						var/icon/newIcon = icon(objectToGrayscale.icon)
-						newIcon.GrayScale()
-						objectToGrayscale.icon = newIcon
+					objectToGrayscale.icon = newIcon
 */
 
 /area/security/checkpoint

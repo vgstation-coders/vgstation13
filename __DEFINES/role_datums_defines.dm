@@ -29,6 +29,7 @@
 #define ROGUE "rogue agent"//double agents
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
+#define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
 #define LEGACY_CULTIST "legacy cultist"
@@ -37,7 +38,7 @@
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
-#define NINJA "space ninja"
+#define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"
@@ -199,3 +200,17 @@
 
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
+
+// -- Rulesets flags
+
+#define HIGHLANDER_RULESET 1
+#define TRAITOR_RULESET 2
+#define MINOR_RULESET 4
+
+// -- Distribution "modes"
+
+#define LORENTZ "Lorentz distribution"
+#define GAUSS "Normal distribution"
+#define DIRAC "Rigged threat number"
+#define EXPONENTIAL "Peaceful bias"
+#define UNIFORM "Uniform distribution"

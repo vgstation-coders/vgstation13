@@ -93,13 +93,13 @@
 
 
 	if(!isUnconscious())
-		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
+		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
 
 		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
-		if(!(food_target in can_see))
+		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
 			step_towards(src, food_target)

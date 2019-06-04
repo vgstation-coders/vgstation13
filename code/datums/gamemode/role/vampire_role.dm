@@ -2,6 +2,8 @@
  -- Vampires --
  */
 
+#define MAX_BLOOD_PER_TARGET 200
+
 /datum/role/vampire
 	id = VAMPIRE
 	name = VAMPIRE
@@ -21,10 +23,15 @@
 	var/nullified = 0
 	var/smitecounter = 0
 
+	var/list/saved_appearances = list()
+	var/datum/human_appearance/initial_appearance
+
 	var/reviving = FALSE
 	var/draining = FALSE
 	var/blood_usable = STARTING_BLOOD
 	var/blood_total = STARTING_BLOOD
+
+	var/list/feeders = list()
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
@@ -68,6 +75,10 @@
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
 		V.name_clan(src)
+
+	var/mob/living/carbon/human/H = antag.current
+	initial_appearance = H.my_appearance.Copy()
+	initial_appearance.name = H.real_name
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
@@ -159,7 +170,7 @@
 	draining = target
 
 	var/mob/assailant = antag.current
-
+	var/targetref = "\ref[target]"
 	var/blood = 0
 	var/blood_total_before = blood_total
 	var/blood_usable_before = blood_usable
@@ -190,18 +201,29 @@
 		if(!target.vessel.get_reagent_amount(BLOOD))
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
+		if (!(targetref in feeders))
+			feeders[targetref] = 0
 		if(target.stat < DEAD) //alive
-			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
-			blood_total += blood
+			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
+				blood_total += blood
+			else
+				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
 			blood_usable += blood
-			target.adjustCloneLoss(10) // beep boop 10 damage
+			target.adjustBruteLoss(1)
+			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
+			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
-			blood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
-			blood_total += blood
+			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
+			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
+				blood_total += blood
+			else
+				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
+		feeders[targetref] += blood
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,25)
+		target.vessel.remove_reagent(BLOOD,30)
 		update_vamp_hud()
 
 	draining = null
@@ -286,7 +308,7 @@
 			H.alphas["vampire_cloak"] = round((255 * 0.80))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
-	if(H.stat != DEAD)
+	if(H.stat == DEAD)
 		ismenacing = FALSE
 	if(!ismenacing)
 		return FALSE
@@ -303,7 +325,10 @@
 	for(var/mob/living/carbon/C in oviewers(radius, M))
 		if(prob(35))
 			continue //to prevent fearspam
-		if(!C.vampire_affected(antag))
+		var/datum/role/thrall/role_thrall = isthrall(C)
+		if (role_thrall && role_thrall.master == src)
+			continue // We don't terrify our underlings
+		if (!C.vampire_affected(antag))
 			continue
 		C.stuttering += 20
 		C.Jitter(20)
@@ -342,6 +367,11 @@
 		smitetemp = -1
 
 	smitecounter = max(0, (smitecounter + smitetemp))
+
+	// At any rate
+	if (smitecounter && H.real_name != initial_appearance.name)
+		H.switch_appearance(initial_appearance) // Reveal us as who we are
+		H.real_name = initial_appearance.name
 
 	switch(smitecounter)
 		if(1 to 30) //just dizziness
@@ -518,8 +548,6 @@
 /*
  -- Thralls --
  */
-
-#define THRALL "thrall" // Should be moved somewhere else
 
 /datum/role/thrall
 	id = THRALL

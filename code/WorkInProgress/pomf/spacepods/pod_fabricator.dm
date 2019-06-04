@@ -8,6 +8,7 @@
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "fab"
 	build_number = PODFAB
+	build_time = 1
 	nano_file = "podfab.tmpl"
 	research_flags = NANOTOUCH | HASOUTPUT | HASMAT_OVER | TAKESMATIN | ACCESS_EMAG | LOCKBOXES
 

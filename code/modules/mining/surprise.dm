@@ -11,16 +11,16 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 	var/list/adjacents
 	var/turf_type=TURF_FLOOR
 
-	New()
-		adjacents=list(
-			"[NORTH]"=list(),
-			"[SOUTH]"=list(),
-			"[EAST]"=list(),
-			"[WEST]"=list()
-		)
+/surprise_turf_info/New()
+	adjacents=list(
+		"[NORTH]"=list(),
+		"[SOUTH]"=list(),
+		"[EAST]"=list(),
+		"[WEST]"=list()
+	)
 
-	proc/GetAdjacentTypes(var/dir)
-		return adjacents["[dir]"]
+/surprise_turf_info/proc/GetAdjacentTypes(var/dir)
+	return adjacents["[dir]"]
 
 /surprise_room
 	var/list/turfs[0]
@@ -130,9 +130,9 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 
 	var/flags = 0
 
-	New(var/mining_surprise/_root,var/surprise_room/_room)
-		root=_root
-		room=_room
+/layout_rule/New(var/mining_surprise/_root,var/surprise_room/_room)
+	root=_root
+	room=_room
 
 	// Called in Evaluate
 /layout_rule/proc/Plop(var/turf/T)

@@ -222,7 +222,17 @@ var/list/department_radio_keys = list(
 	var/atom/movable/AM = speech.speaker.GetSource()
 	if(!say_understands((istype(AM) ? AM : speech.speaker),speech.language)|| force_compose) //force_compose is so AIs don't end up without their hrefs.
 		rendered_message = render_speech(speech)
-	show_message(rendered_message, type, deaf_message, deaf_type)
+	
+	//checking for syndie codephrases if person is a tator
+	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
+		//is tator
+		for(var/T in syndicate_code_phrase)
+			rendered_message = replacetext(rendered_message, T, "<b style='color: red;'>[T]</b>")
+
+		for(var/T in syndicate_code_response)
+			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
+
+	show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
@@ -347,7 +357,7 @@ var/list/department_radio_keys = list(
 							handle_render(M,themessage,src)
 					return 1
 		if(MODE_MUSHROOM)
-			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.name, html_encode(speech.message))
+			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.real_name, html_encode(speech.message))
 			var/turf/T = get_turf(src)
 			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Spore chat: [html_encode(speech.message)]")
 			for(var/mob/M in player_list)
@@ -532,12 +542,10 @@ var/list/department_radio_keys = list(
 		said_last_words = src.stat
 	treat_speech(speech)
 
-
 	var/listeners = get_hearers_in_view(1, src) | observers
 	var/eavesdroppers = get_hearers_in_view(2, src) - listeners
 	var/watchers = hearers(5, src) - listeners - eavesdroppers
 	var/rendered = render_speech(speech)
-
 	for (var/atom/movable/listener in listeners)
 		listener.Hear(speech, rendered)
 
