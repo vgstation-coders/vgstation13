@@ -8,10 +8,10 @@
 	icon_state = "flatpack"
 	density = 1
 	anchored = 0
+	pass_flags = PASSTABLE
 	var/obj/machinery/machine = null
 //	var/datum/construction/flatpack_unpack/unpacking
 	var/assembling = 0
-
 	var/list/image/stacked = list() //assoc ref list
 
 /obj/structure/closet/crate/flatpack/examine(mob/user)

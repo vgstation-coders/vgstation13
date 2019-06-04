@@ -43,6 +43,7 @@ var/list/factions_with_hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
 	var/stage = FACTION_DORMANT //role_datums_defines.dm
+	var/playlist
 
 	var/minor_victory = FALSE
 
@@ -99,10 +100,10 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			return 0
+			return R
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
-		return 0
+		return (M.GetRole(late_role))
 	var/datum/role/R = new roletype(null,src,late_role) // Add him to our roles
 	if(!R.AssignToRole(M, override))
 		R.Drop()
@@ -236,7 +237,10 @@ var/list/factions_with_hud_icons = list()
 			set_security_level("blue")
 			ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
-			ticker.StartThematic("endgame")
+			if(playlist)
+				ticker.StartThematic(playlist)
+			else
+				ticker.StartThematic("endgame")
 			sleep(2 SECONDS)
 			set_security_level("red")
 

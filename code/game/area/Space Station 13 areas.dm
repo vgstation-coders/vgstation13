@@ -2272,6 +2272,7 @@ proc/process_adminbus_teleport_locs()
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	flags = NO_PACIFICATION
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -2333,6 +2334,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "ai_upload"
 	jammed=2
 	anti_ethereal=1
+	flags = NO_PACIFICATION
 
 
 
@@ -2341,7 +2343,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Strange Location"
 	icon_state = "away"
 	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
 /area/awaymission/example
 	name = "\improper Strange Station"

@@ -180,9 +180,14 @@ var/stacking_limit = 90
 	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")
 
 	generate_threat()
+	
 
-	latejoin_injection_cooldown = rand(330,510)
-	midround_injection_cooldown = rand(600,1050)
+	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
+	latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
+	
+	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
+	midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
+
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
 

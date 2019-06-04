@@ -36,9 +36,14 @@
 			var/mob/living/carbon/human/H = C
 			if(H.earprot())
 				continue
-			if(!C.vampire_affected(user.mind))
-				continue
-			targets += C
+			var/success = C.vampire_affected(user.mind)
+			switch (success)
+				if (TRUE)
+					targets += C
+				if (FALSE)
+					continue
+				if (VAMP_FAILURE)
+					critfail(targets, user)
 
 	if (!targets.len)
 		to_chat(user, "<span class='warning'>There are no targets.</span>")
@@ -63,6 +68,15 @@
 	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	var/datum/role/vampire/V = isvampire(user)
-	if (!V)
-		return FALSE
-	V.remove_blood(blood_cost)
+	if (V)
+		V.remove_blood(blood_cost)
+
+/spell/aoe_turf/screech/critfail(var/list/targets, var/mob/user)
+	user.visible_message("<span class='danger'>\The [user] emits a pathetic shriek and then falls over.</span>", "<span class='danger'>It's like a thousand needles pierce your skull.</span>")
+	user.ear_deaf = 20
+	user.stuttering = 30
+	user.Stun(5)
+	user.Jitter(150)
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		V.remove_blood(3*blood_cost)

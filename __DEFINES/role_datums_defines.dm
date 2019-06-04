@@ -121,6 +121,8 @@
 #define BLOODCOST_TOTAL		"total"
 #define BLOODCOST_RESULT	"result"
 #define BLOODCOST_FAILURE	"failure"
+#define BLOODCOST_TRIBUTE	"tribute"
+#define BLOODCOST_USER	"user"
 
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"
@@ -200,6 +202,14 @@
 
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
+
+// -- Injection delays (in ticks, ie, you need the /20 to get the real result)
+
+#define LATEJOIN_DELAY_MIN (5 MINUTES)/20
+#define LATEJOIN_DELAY_MAX (30 MINUTES)/20
+
+#define MIDROUND_DELAY_MIN (15 MINUTES)/20
+#define MIDROUND_DELAY_MAX (50 MINUTES)/20
 
 // -- Rulesets flags
 

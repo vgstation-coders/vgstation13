@@ -1019,8 +1019,8 @@ var/list/admin_verbs_mod = list(
 	message_admins("<span class='notice'>[key_name_admin(src)] set all blobs to use the \"[chosen]\" look.</span>")
 
 /datum/admins/proc/media_stop_all()
-	set name = "Stop All Media"
-	set desc = "Stops all music and video."
+	set name = "Stop all Media"
+	set desc = "Stops all music, video and admin sounds."
 	set category = "Fun"
 
 	if(!check_rights(R_FUN))

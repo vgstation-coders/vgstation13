@@ -138,20 +138,20 @@
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
-/obj/item/clothing/shoes/magboots/vox/toggle()
+/obj/item/clothing/shoes/magboots/vox/togglemagpulse()
 	//set name = "Toggle Floor Grip"
 	if(usr.isUnconscious())
 		return
-	if(src.magpulse)
-		src.clothing_flags &= ~NOSLIP
-		src.magpulse = 0
-		src.slowdown = NO_SLOWDOWN
+	if(clothing_flags & MAGPULSE)
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
 		to_chat(usr, "You retract the razor-sharp talons of your boots.")
+		return 0
 	else
-		src.clothing_flags |= NOSLIP
-		src.magpulse = 1
-		src.slowdown = mag_slow
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
 		to_chat(usr, "You extend the razor-sharp talons of your boots.")
+		return 1
 
 
 // Vox Trader -- Same stats as civ gear, but looks like raiders. ///////////////////////////////
@@ -249,7 +249,7 @@
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers."
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 
@@ -433,7 +433,7 @@
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for medical personnel."
 	icon_state = "vox-civ-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical
@@ -478,7 +478,7 @@
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
@@ -489,7 +489,7 @@
 	name = "vox cmo pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 	name = "vox cmo pressure helmet"
@@ -503,7 +503,7 @@
 	icon_state = "vox-civ-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/security
@@ -521,7 +521,7 @@
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team."
 	icon_state = "vox-pressure-normal"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 10)
 	species_restricted = list(VOX_SHAPED)
 
@@ -562,7 +562,7 @@
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team.  This one's for medical personnel."
 	icon_state = "vox-pressure-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/medical
 	name = "vox medical pressure helmet"
@@ -576,7 +576,7 @@
 	icon_state = "vox-pressure-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/security
 	name = "vox security pressure helmet"

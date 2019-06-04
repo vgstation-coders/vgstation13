@@ -225,6 +225,8 @@
 	if(carved)
 		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
 		return
+	if (!isobserver(user))
+		playsound(user, "pageturn", 50, 1, -5)
 	if(src.dat)
 		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
 		if(!isobserver(user))

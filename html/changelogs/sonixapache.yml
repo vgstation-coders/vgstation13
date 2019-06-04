@@ -1,8 +1,0 @@
-author: SonixApache
-delete-after: True
-changes: 
-- rscadd: Added a space suit, helmet, mask and shoes for the space ninja. The space suit has a pAI slot and the mask works like a voice changer.
-- tweak: Space ninjas now spawn with a headset.
-- experiment: Space ninjas now spawn in space, and get thrown at the station!
-- experiment: They only get a minute of space-proofing, though!
-- tweak: There should be less ninjas appearing in general.

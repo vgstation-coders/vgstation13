@@ -50,7 +50,7 @@
 				if (RESULT_MAGBOOTS)
 					var/obj/item/clothing/shoes/magboots/M = new
 					H.equip_or_collect(M, slot_shoes)
-					M.toggle(H)
+					M.togglemagpulse(H)
 			H.Move(T_test, NORTH)
 			if (H.isStunned() != items_and_result_humans[type][i])
 				fail("Slipping test failed at [type], step [i] ; expected [items_and_result_humans[type][i]], got [H.isStunned()]")
@@ -74,7 +74,7 @@
 				if (RESULT_MAGBOOTS)
 					var/obj/item/clothing/shoes/magboots/M = new
 					H.equip_or_collect(M, slot_shoes)
-					M.toggle(H)
+					M.togglemagpulse(H)
 			H.Move(T_test, NORTH)
 			if (H.isStunned() != overlays_and_results[wetness][j])
 				fail("Slipping test failed at [wetness], step [j] ; expected [overlays_and_results[wetness][j]], got [H.isStunned()]")
