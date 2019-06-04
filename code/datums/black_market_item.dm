@@ -162,7 +162,7 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 /datum/black_market_item/gear
 	category = "Tools and Gear" 
 	
-/datum/black_market_item/gear
+/datum/black_market_item/gear/organextractor
 	name = "Modified Organ Extractor" 
 	desc = "This baby, she's our bread and butter. She can extract any organ out of an unconscious body in the blink of an eye - except the heart, that is. Why do we want organs from real people instead of growing them? Beats me."
 	item = /obj/item/weapon/organ_remover/traitor
@@ -170,5 +170,27 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	stock_deviation = 2
 	cost = 1000
 	cost_deviation = 200
-	display_chance = 100 
+	display_chance = 100
+
+/*/datum/black_market_item/gear/reflectionvest
+	name = "Vest of Reflection" 
+	desc = "Somehow, this vest manages to make you entirely immune to energy-based weapons. Tasers will bounce off and lasers will reflect elsewhere. It's like a mirror, except a hundred times better."
+	item = /obj/item/clothing/suit/armor/laserproof/advanced
+	num_in_stock = 1
+	stock_deviation = 0
+	cost = 8000
+	cost_deviation = 1000
+	display_chance = 20*/
+	
+/datum/black_market_item/guns
+	category = "Guns and Projectiles" 	
+
+/datum/black_market_item/guns/portalgun
+	name = "Portal Gun"
+	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare."
+	item = /obj/item/weapon/gun/portalgun
+	num_in_stock = 1
+	cost = 2000
+	cost_deviation = 300
+	display_chance = 80
 

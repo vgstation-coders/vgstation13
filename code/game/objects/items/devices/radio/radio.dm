@@ -524,7 +524,7 @@
 		user.show_message("<span class = 'info'>\The [src] can not be modified or attached!</span>")
 
 		
-/obj/item/device/radio/attack_self(mob/user as mob)
+/obj/item/device/radio/attack_self(mob/user)
 	if(illegalradio_construction == 0)
 		user.set_machine(src)
 		interact(user)
