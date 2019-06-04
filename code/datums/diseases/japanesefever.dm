@@ -9,7 +9,7 @@
 	affected_species = list("Human")
 	permeability_mod = 1
 
-/datum/disease/rhumba_beat/stage_act()
+/datum/disease/japanesefever/stage_act()
 	..()
 	switch(stage)
 		if(1)
@@ -48,4 +48,8 @@
 			if(prob(50))
 				affected_mob.gib()
 		else
+<<<<<<< HEAD
 			return
+=======
+			return 
+>>>>>>> glasseclipse-temp

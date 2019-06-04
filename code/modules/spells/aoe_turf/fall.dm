@@ -94,6 +94,31 @@ var/global/list/falltempoverlays = list()
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
+/spell/aoe_turf/fall/proc/performignore(mob/user = usr, skipcharge = 0, var/ignore_path) //G U N K
+	if(!holder)
+		set_holder(user) //just in case
+	if(!cast_check(skipcharge, user))
+		return
+	if(cast_delay && !spell_do_after(user, cast_delay))
+		return
+	var/list/targets = choose_targets(user, ignore_path)
+	if(targets && targets.len)
+		if(prob(the_world_chance))
+			invocation = "ZA WARUDO"
+		invocation(user, targets)
+		take_charge(user, skipcharge)
+
+		targets = before_cast(targets, user)
+		if(!targets.len)
+			return
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+		if(prob(critfailchance))
+			critfail(targets, user)
+		else
+			cast(targets, user, FALSE)
+		after_cast(targets) //generates the sparks, smoke, target messages etc.
+		invocation = initial(invocation)
+
 /spell/aoe_turf/fall/cast(list/targets, mob/user, var/ignore_timeless = FALSE)
 	var/turf/ourturf = get_turf(user)
 
@@ -257,4 +282,24 @@ var/global/list/falltempoverlays = list()
 	caster.forceMove(get_turf(A))
 	spawn()
 		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+		qdel(caster)
+		
+/proc/timestopignore(atom/A, var/duration, var/range, var/ignore_path) //Ignores any objects that follow the given path
+	if(!A || !duration)
+		return
+	var/mob/caster = new
+	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
+	caster.invisibility = 101
+	caster.setDensity(FALSE)
+	caster.anchored = 1
+	caster.flags = INVULNERABLE
+	caster.add_spell(fall)
+	fall.spell_flags = 0
+	fall.invocation_type = SpI_NONE
+	fall.the_world_chance = 0
+	fall.range = range ? range : 7		//how big
+	fall.sleeptime = duration			//for how long
+	caster.forceMove(get_turf(A))
+	spawn()
+		fall.perform(caster, skipcharge = 1, FALSE)
 		qdel(caster)

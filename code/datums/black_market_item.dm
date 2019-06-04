@@ -133,8 +133,8 @@ var/list/black_market_items = list()
 /*  
 Note by GlassEclipse:
 The idea of the black market is to have a place to spend excess cash to get items that are both rare and dangerous.
-Since having the black market radio makes you valid to everybody (unless you use the captain's legal version), your 
-item should be dangerous or highly unique. It wouldn't be on the illegal market if it wasn't. A good item has the following qualities:
+Since having the black market radio is contraband (unless you use the captain's legal version), your item should be 
+dangerous or highly unique. It wouldn't be on the illegal market if it wasn't. A good item has the following qualities:
 - Can be used for more than murder. I would grab a toolbox if I wanted to just kill someone.
 - Usable in many situations; flexible. 
 - Fun. A cyborg board that turns them into a peaceful cultist is fun. 15dev bombcap-breaking bomb that announces its location and can be defused is "fun". 
@@ -154,7 +154,7 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	cost_min = 800
 	cost_max = 1200
 	display_chance = 100
-	
+
 /datum/black_market_item/gear/chronogenerator
 	name = "Chrono-Carbon Grenade" 
 	desc = "What a beauty. This grenade explodes into a field of frozen time that has no effect on carbon-based lifeforms. Try not to walk in the path of frozen bullets."
