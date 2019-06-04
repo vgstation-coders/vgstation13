@@ -435,9 +435,16 @@ var/veil_thickness = CULT_PROLOGUE
 		BLOODCOST_AMOUNT_USER = 0,
 		BLOODCOST_RESULT = "",
 		BLOODCOST_TOTAL = 0,
+		BLOODCOST_USER = null,
 		)
 	var/turf/T = get_turf(user)
 	var/amount_gathered = 0
+
+	data[BLOODCOST_RESULT] = user
+
+	if (amount_needed == 0)//the cost was probably 1u, and already paid for by blood communion from another cultist
+		data[BLOODCOST_RESULT] = BLOODCOST_TRIBUTE
+		return data
 
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
@@ -572,6 +579,7 @@ var/veil_thickness = CULT_PROLOGUE
 /proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0)
 	//Blood Communion
 	var/communion = 0
+	var/communion_data = null
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
@@ -594,6 +602,7 @@ var/veil_thickness = CULT_PROLOGUE
 				if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 					total_accumulated += data[BLOODCOST_TOTAL]
 				if (total_accumulated >= amount_needed - total_per_tribute)//could happen if the cost is less than 1 per tribute
+					communion_data = data//in which case, the blood will carry the data that paid for it
 					break
 
 	//Getting nearby blood sources
@@ -603,6 +612,49 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Flavour text and blood data transfer
 	switch (data[BLOODCOST_RESULT])
+		if (BLOODCOST_TRIBUTE)//if the drop of blood was paid for through blood communion, let's get the reference to the blood they used because we can
+			blood = new()
+			blood.data["blood_colour"] = DEFAULT_BLOOD
+			if (communion_data && communion_data[BLOODCOST_RESULT])
+				switch(communion_data[BLOODCOST_RESULT])
+					if (BLOODCOST_TARGET_HANDS)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
+						blood.data["blood_colour"] = HU.hand_blood_color
+						if (HU.blood_DNA && HU.blood_DNA.len)
+							var/blood_DNA = pick(HU.blood_DNA)
+							blood.data["blood_DNA"] = blood_DNA
+							blood.data["blood_type"] = HU.blood_DNA[blood_DNA]
+					if (BLOODCOST_TARGET_SPLATTER)
+						var/obj/effect/decal/cleanable/blood/B = communion_data[BLOODCOST_TARGET_SPLATTER]
+						blood = new()
+						blood.data["blood_colour"] = B.basecolor
+						if (B.blood_DNA.len)
+							var/blood_DNA = pick(B.blood_DNA)
+							blood.data["blood_DNA"] = blood_DNA
+							blood.data["blood_type"] = B.blood_DNA[blood_DNA]
+						blood.data["virus2"] = B.virus2
+					if (BLOODCOST_TARGET_GRAB)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
+						blood = get_blood(HU.vessel)
+					if (BLOODCOST_TARGET_BLEEDER)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
+						blood = get_blood(HU.vessel)
+					if (BLOODCOST_TARGET_HELD)
+						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
+						blood = locate() in G.reagents.reagent_list
+					if (BLOODCOST_TARGET_BLOODPACK)
+						var/obj/item/weapon/reagent_containers/blood/B = communion_data[BLOODCOST_TARGET_BLOODPACK]
+						blood = locate() in B.reagents.reagent_list
+					if (BLOODCOST_TARGET_CONTAINER)
+						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_CONTAINER]
+						blood = locate() in G.reagents.reagent_list
+					if (BLOODCOST_TARGET_USER)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
+						blood = get_blood(HU.vessel)
+			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
+				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
+									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
+									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_HANDS)
 			var/mob/living/carbon/human/H = user
 			blood = new()
