@@ -16,7 +16,8 @@ var/list/black_market_items = list()
 			if(I.only_on_day)
 				if(time2text(world.realtime,"DD") != I.only_on_day)
 					continue
-
+			if(!I.is_active())
+				continue
 			if(!black_market_items[I.category])
 				black_market_items[I.category] = list()
 
@@ -32,21 +33,21 @@ var/list/black_market_items = list()
 	var/category = "item category"
 	var/desc = "item description"
 	var/item = null
-	var/num_in_stock = 0	// The stock avaliable. -1 is infinite if stock_deviation is 0.
-	var/stock_deviation = 0   //The range of stock RNG. 2 deviation with stock 5 will be anywhere from 3-7.
-	var/cost = 0
-	var/cost_deviation        //Same as stock deviation, but for cost.
-	var/display_chance = 0
-	var/abstract = 0 //Indicates if datum is to actually be displayed
+	var/stock_min	// The stock min and max. Setting stock_min to -1 will make it infinite, regardless of max.
+	var/stock_max  
+	var/cost_min    //Same as stock
+	var/cost_max
+	var/display_chance = 0   //Out of 100
 
+	var/round_stock                         //God I love if statements
+	var/round_stock_calculated = 0          //Allows for round-to-round variance instead of changing every time you open it
+	var/round_cost
+	var/round_cost_calculated = 0
+	var/active_this_round = 0
+	var/active_this_round_calculated = 0
+	
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
-	var/static/round_stock                         //God I love if statements
-	var/static/round_stock_calculated = 0          //Allows for round-to-round variance instead of changing every time you open it
-	var/static/round_cost
-	var/static/round_cost_calculated = 0
-	var/static/active_this_round = 0
-	var/static/active_this_round_calculated = 0
 	
 /datum/black_market_item/proc/is_active()
 	if(!active_this_round_calculated)
@@ -57,13 +58,13 @@ var/list/black_market_items = list()
 	
 /datum/black_market_item/proc/get_cost(var/cost_modifier = 1)
 	if(!round_cost_calculated)
-		round_cost = rand(cost-cost_deviation,cost+cost_deviation)
+		round_cost = rand(cost_min, cost_max)
 		round_cost_calculated = 1
 	. = Ceiling(round_cost * cost_modifier)
 
 /datum/black_market_item/proc/get_stock()
 	if(!round_stock_calculated)
-		round_stock = rand(num_in_stock-stock_deviation,num_in_stock+stock_deviation)
+		round_stock = rand(stock_min, stock_max)
 		round_stock_calculated = 1
 	. = round_stock
 
@@ -129,32 +130,16 @@ var/list/black_market_items = list()
 //
 */
 
-/*   Examples
-/datum/black_market_item/example_category
-	category = "Pomf's Collection" //Header of category
-	only_on_month = "05" //Month and day as 2-digit string, this item can only be bought on May 15th. Can use one or both fields. Leaving it blank makes it avaliable always.
-	only_on_day = "15"
-	
-/datum/black_market_item/example_category/example_item
-	name = "Pomf's Feather Drawing Tool" //As a child of example_category, it is only shown when example_category is shown (May 15th)
-	desc = "Yeah, this stuff's the real shit. You'll be the best chicken around town - just be sure not to poke yourself with it." //Thematically, descriptions should be written in the persona of a shady drug dealer.
-	item = /obj/item/weapon/pen/paralysis/pomf //Path to item.
-	num_in_stock = 6       //With these two variables there will be anywhere from 4-6 avaliable in stock.
-	stock_deviation = 2 
-	cost = 500 //Pomf ain't cheap. Items should be overpriced.
-	cost_deviation = 50 //Like stock above, cost will be anywhere from 450 to 550.
-	display_chance = 100 //Odds out of 100 that the item will be displayed. Randomized every round. 
-	
-/datum/black_market_item/example_category/example_item/on_item_spawned(var/obj/I, var/mob/user) //This is called right after spawning the item. Override it since there are no delegates in BYOND (tm)
-	I/ownerEngraving = user.name
-	
+/*  
 Note by GlassEclipse:
 The idea of the black market is to have a place to spend excess cash to get items that are both rare and dangerous.
 Since having the black market radio makes you valid to everybody (unless you use the captain's legal version), your 
 item should be dangerous. It wouldn't be on the illegal market if it wasn't. A good item has the following qualities:
+item should be dangerous or highly unique. It wouldn't be on the illegal market if it wasn't. A good item has the following qualities:
 - Can be used for more than murder. I would grab a toolbox if I wanted to just kill someone.
 - Usable in many situations; flexible. 
 - Fun. A remote controlled robot that can carry and use items is fun. 15dev bombcap-breaking bomb is "fun". 
+- Fun. A cyborg board that turns them into a peaceful cultist is fun. 15dev bombcap-breaking bomb that announces its location and can be defused is "fun". 
   A rifle that shoots bullets that do an extra 50 damage is not fun.
 Of course, that's not to mean you can't add ANY plain ol' guns. But try to find a good balance.
 */
@@ -166,21 +151,21 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	name = "Modified Organ Extractor" 
 	desc = "This baby, she's our bread and butter. She can extract any organ out of an unconscious body in the blink of an eye - except the heart, that is. Why do we want organs from real people instead of growing them? Beats me."
 	item = /obj/item/weapon/organ_remover/traitor
-	num_in_stock = 4
-	stock_deviation = 2
-	cost = 1000
-	cost_deviation = 200
+	stock_min = 3
+	stock_max = 4
+	cost_min = 800
+	cost_max = 1200
 	display_chance = 100
 
-/*/datum/black_market_item/gear/reflectionvest
-	name = "Vest of Reflection" 
-	desc = "Somehow, this vest manages to make you entirely immune to energy-based weapons. Tasers will bounce off and lasers will reflect elsewhere. It's like a mirror, except a hundred times better."
-	item = /obj/item/clothing/suit/armor/laserproof/advanced
-	num_in_stock = 1
-	stock_deviation = 0
-	cost = 8000
-	cost_deviation = 1000
-	display_chance = 20*/
+/datum/black_market_item/gear/chronogenerator
+	name = "Chrono-Carbon Grenade" 
+	desc = "What a beauty. This grenade explodes into a field of frozen time that has no effect on carbon-based lifeforms. Try not to walk in the path of frozen bullets."
+	item = /obj/item/weapon/grenade/chronogrenade/carbon
+	stock_min = 3
+	stock_max = 5
+	cost_min = 400
+	cost_max = 500
+	display_chance = 60
 	
 /datum/black_market_item/guns
 	category = "Guns and Projectiles" 	
@@ -189,8 +174,9 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	name = "Portal Gun"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare."
 	item = /obj/item/weapon/gun/portalgun
-	num_in_stock = 1
-	cost = 2000
-	cost_deviation = 300
+	stock_min = 1
+	stock_max = 1
+	cost_min = 1800
+	cost_max = 2200
 	display_chance = 80
 

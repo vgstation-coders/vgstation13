@@ -12,7 +12,16 @@
 /obj/item/weapon/grenade/chronogrenade/prime()
 	timestop(src, duration, radius)
 	qdel(src)
+	
+/obj/item/weapon/grenade/chronogrenade/carbon
+	name = "chrono-carbon grenade"
+	desc = "This experimental weapon will halt the progression of time in the local area for ten seconds. Carbon lifeforms are not unaffected by the field."
+	icon_state = "past_grenade"
 
+/obj/item/weapon/grenade/chronogrenade/carbon/prime()
+	timestopignore(src, duration, radius, /mob/living/carbon/)
+	qdel(src)	
+	
 /obj/item/weapon/grenade/chronogrenade/future
 	desc = "This experimental weapon will send all entities in the local area ten seconds into the future."
 	icon_state = "future_grenade"
