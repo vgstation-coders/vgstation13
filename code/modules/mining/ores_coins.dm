@@ -412,7 +412,7 @@
 	sideup = "heads-up."
 	transform = null
 	
-/obj/item/weapon/coin/attack_self(mob/user as mob)
+/obj/item/weapon/coin/attack_self(var/mob/user)
 	coinflip(user, 0)
 
 /obj/item/weapon/coin/throw_impact(atom/hit_atom, speed, user)
