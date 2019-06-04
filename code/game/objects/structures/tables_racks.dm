@@ -668,6 +668,12 @@
 	else
 		..()
 
+/obj/structure/table/glass/plasma
+	name = "plasma glass table"
+	desc = "A standard table with a reinforced plasma glass finish."
+	icon_state = "plasma_table"
+	parts = /obj/item/weapon/table_parts/glass/plasma
+	health = 150
 
 /*
  * Brass
