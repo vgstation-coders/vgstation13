@@ -5,6 +5,7 @@
 # Ranks can be anything defined in admin_ranks.txt           ~Carn   #
 ######################################################################
 
+GlassEclipse - Game Admin
 abi79 - Game Master
 arcalane - Game Admin
 asanadas - Game Admin
