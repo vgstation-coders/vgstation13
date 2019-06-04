@@ -49,7 +49,7 @@
 		to_chat(usr, "\The [src] cannot run in this state.")
 		return
 
-	if( locate(/mob,contents) )
+	if( locate(/mob,contents))
 		wash_state = 8
 	else
 		wash_state = 5
@@ -222,7 +222,7 @@
 		crayon = null
 
 
-	if( locate(/mob,contents) )
+	if( locate(/mob,contents))
 		wash_state = 7
 		gibs_ready = 1
 	else
@@ -265,6 +265,12 @@
 				qdel(G)
 				G = null
 				wash_state = 3
+	else if(istype(W,/obj/item/weapon/holder/animal/corgi)) //Poor Ian.
+		if((wash_state == 1) && hacked)
+			if(user.drop_item(W, src))
+				wash_state = 3
+				contents.Add(locate(/obj/item/weapon/holder/animal/corgi,contents).stored_mob)
+				qdel(locate(contents,/obj/item/weapon/holder/animal/corgi))
 	else if(istype(W,/obj/item/stack/sheet/hairlesshide) || \
 		istype(W,/obj/item/clothing/under) || \
 		istype(W,/obj/item/clothing/mask) || \
