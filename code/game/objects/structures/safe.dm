@@ -38,7 +38,8 @@ FLOOR SAFES
 			I.forceMove(src)
 
 	//Trying to track down issue #18719
-	log_debug("[get_area(src).name] safe has starting tumbler positions [tumbler_1_pos]-[tumbler_2_pos] and opening positions [tumbler_1_open]-[tumbler_2_open].")
+	var/area/this_area = get_area(src)
+	log_debug("[this_area.name] safe has starting tumbler positions [tumbler_1_pos]-[tumbler_2_pos] and opening positions [tumbler_1_open]-[tumbler_2_open].")
 
 
 /obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)

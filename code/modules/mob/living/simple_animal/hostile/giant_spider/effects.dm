@@ -103,14 +103,16 @@
 	desc = "They seem to pulse slightly with an inner life."
 	icon_state = "eggs"
 	var/amount_grown = 0
-	New()
-		..()
-		pixel_x = rand(3,-3) * PIXEL_MULTIPLIER
-		pixel_y = rand(3,-3) * PIXEL_MULTIPLIER
-		processing_objects.Add(src)
-	Destroy()
-		processing_objects.Remove(src)
-		..()
+
+/obj/effect/spider/eggcluster/New()
+	..()
+	pixel_x = rand(3,-3) * PIXEL_MULTIPLIER
+	pixel_y = rand(3,-3) * PIXEL_MULTIPLIER
+	processing_objects.Add(src)
+	
+/obj/effect/spider/eggcluster/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 /obj/effect/spider/eggcluster/process()
 	amount_grown += rand(0,2)
@@ -131,14 +133,15 @@
 	var/amount_grown = 0
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
 	var/travelling_in_vent = 0
-	New()
-		..()
-		pixel_x = rand(6,-6)
-		pixel_y = rand(6,-6)
-		processing_objects.Add(src)
-		//50% chance to grow up
-		if(prob(50))
-			amount_grown = 1
+
+/obj/effect/spider/spiderling/New()
+	..()
+	pixel_x = rand(6,-6)
+	pixel_y = rand(6,-6)
+	processing_objects.Add(src)
+	//50% chance to grow up
+	if(prob(50))
+		amount_grown = 1
 
 /obj/effect/spider/spiderling/to_bump(atom/user)
 	if(istype(user, /obj/structure/table))
@@ -167,9 +170,9 @@
 	icon_state = "cocoon1"
 	health = 30
 
-	New()
-		..()
-		icon_state = pick("cocoon1","cocoon2","cocoon3")
+/obj/effect/spider/cocoon/New()
+	..()
+	icon_state = pick("cocoon1","cocoon2","cocoon3")
 
 /obj/effect/spider/cocoon/Destroy()
 	src.visible_message("<span class='warning'>\the [src] splits open.</span>")

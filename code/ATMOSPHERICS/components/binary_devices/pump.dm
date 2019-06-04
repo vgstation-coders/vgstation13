@@ -1,17 +1,18 @@
 #define MAX_PRESSURE 4500
 
 /*
-Every cycle, the pump uses the air in air_in to try and make air_out the perfect pressure.
+This pump takes air from its input to bring its output to the target pressure.
 
-node1, air1, network1 correspond to input
-node2, air2, network2 correspond to output
+node1, air1, network1 correspond to the input
+node2, air2, network2 correspond to the output
 
-Thus, the two variables affect pump operation are set in New():
-	air1.volume
-		This is the volume of gas available to the pump that may be transfered to the output
-	air2.volume
-		Higher quantities of this cause more air to be perfected later
-			but overall network volume is also increased as this increases...
+The pump has two buffers on the output and input side, air1 and air2 respectively.
+air1.volume
+	this is the maximum volume of gas the pump will move per tick. It's 200 litres for the basic pump type.
+air2.volume
+	this is legacy shit that now basically only serves to muddle up the calculation. It also has a volume of 200.
+	used to be this was the only thing considered in the pressure calculation, but now the pump considers the
+	entire output side pipe network.
 */
 
 /obj/machinery/atmospherics/binary/pump
@@ -51,23 +52,20 @@ Thus, the two variables affect pump operation are set in New():
 		return
 
 	var/output_starting_pressure = air2.return_pressure()
+	var/pressure_delta = target_pressure - output_starting_pressure
 
-	if( (target_pressure - output_starting_pressure) < 0.01)
-		//No need to pump gas if target is already reached!
-		return
+	if(pressure_delta > 0.01 && (air1.temperature > 0 || air2.temperature > 0))
+		//Figure out how much gas to transfer to meet the target pressure.
+		var/air_temperature = (air1.temperature > 0) ? air1.temperature : air2.temperature
+		var/output_volume = air2.volume + (network2 ? network2.volume : 0)
+		//get the number of moles that would have to be transfered to bring sink to the target pressure
+		var/transfer_moles = (pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
 
-	//Calculate necessary moles to transfer using PV=nRT
-	if((air1.total_moles() > 0) && (air1.temperature>0))
-		var/pressure_delta = target_pressure - output_starting_pressure
-		var/transfer_moles = pressure_delta * air2.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
-
-		//Actually transfer the gas
 		var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 		air2.merge(removed)
 
 		if(network1)
 			network1.update = 1
-
 		if(network2)
 			network2.update = 1
 

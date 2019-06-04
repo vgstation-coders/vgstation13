@@ -88,6 +88,7 @@
 				tome.icon_state = "tome-open"
 				tome.item_state = "tome-open"
 				flick("tome-flickopen",tome)
+				playsound(user, "pageturn", 50, 1, -5)
 				tome.state = TOME_OPEN
 			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
 			spell = available_runes[spell_name]
@@ -238,6 +239,7 @@
 			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0,-2)
 
+var/list/arcane_pockets = list()
 //SPELL IV
 /spell/cult/arcane_dimension
 	name = "Arcane Dimension (empty)"
@@ -255,6 +257,14 @@
 	cast_delay = 0
 
 	var/obj/item/weapon/tome/stored_tome = null
+
+/spell/cult/arcane_dimension/New()
+	..()
+	arcane_pockets.Add(src)
+
+/spell/cult/arcane_dimension/Destroy()
+	arcane_pockets.Remove(src)
+	..()
 
 /spell/cult/arcane_dimension/choose_targets(var/mob/user = usr)
 	return list(user)

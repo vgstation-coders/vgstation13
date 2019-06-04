@@ -163,9 +163,10 @@
 
 /datum/disease2/effect/elvis/deactivate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
-		if(mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/sunglasses/virus))
-			mob:glasses.canremove = 1
-			mob.u_equip(mob:glasses,1)
+		var/mob/living/carbon/human/dude = mob
+		if(istype(dude.glasses, /obj/item/clothing/glasses/sunglasses/virus))
+			dude.glasses.canremove = 1
+			dude.u_equip(dude.glasses,1)
 
 
 /datum/disease2/effect/pthroat

@@ -217,7 +217,7 @@
 	var/mob/living/carbon/LAssailant = null
 
 //Wizard mode, but can be used in other modes thanks to the brand new "Give Spell" badmin button
-	var/spell/list/spell_list = list()
+	var/list/spell/spell_list = list()
 
 //Changlings, but can be used in other modes
 //	var/obj/effect/proc_holder/changpower/list/power_list = list()
@@ -296,7 +296,7 @@
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
-	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "special_delayer", \
+	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "throw_delayer", "special_delayer", \
 	"clong_delayer", args)
 
 	callOnFace = list()
@@ -325,3 +325,4 @@
 	attack_delayer  = new (1,ARBITRARILY_LARGE_NUMBER)
 	special_delayer = new (1,ARBITRARILY_LARGE_NUMBER)
 	clong_delayer   = new (10,ARBITRARILY_LARGE_NUMBER)
+	throw_delayer = new (3, ARBITRARILY_LARGE_NUMBER)

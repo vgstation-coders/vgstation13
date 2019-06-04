@@ -183,7 +183,7 @@
 	..()
 
 	if((M != src) && check_shields(0, M))
-		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
+		visible_message("<span class='borange'>[M] attempts to touch [src]!</span>")
 		return 0
 
 

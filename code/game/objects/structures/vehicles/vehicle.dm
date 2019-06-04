@@ -45,7 +45,7 @@
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
-	lock_type = /datum/locking_category/buckle/chair/vehicle
+	mob_lock_type = /datum/locking_category/buckle/chair/vehicle
 	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
 	var/last_warn
 

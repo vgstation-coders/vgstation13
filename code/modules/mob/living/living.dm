@@ -565,6 +565,7 @@ Thanks.
 	ear_deaf = 0
 	ear_damage = 0
 	say_mute = 0
+	said_last_words = 0
 	mutations &= ~M_HUSK
 	if(!reagents)
 		create_reagents(1000)
@@ -977,10 +978,10 @@ Thanks.
 								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
 					else
 						C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
-						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
+						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around one minute, and you need to stay still).</span>",
 						                   self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
 						spawn(0)
-							if(do_after(usr, usr, 1200))
+							if(do_after(usr, usr, 1 MINUTES))
 								if(!C.locked_to)
 									return
 								C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
@@ -991,8 +992,8 @@ Thanks.
 								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
 									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
 
-			else
-				B.manual_unbuckle(L)
+				else
+					B.manual_unbuckle(L)
 		//release from kudzu
 		/*else if(istype(L.locked_to, /obj/effect/plantsegment))
 			var/obj/effect/plantsegment/K = L.locked_to
@@ -1634,6 +1635,9 @@ Thanks.
 #define THREW_NOTHING -1
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
+	if (src.throw_delayer.blocked())
+		return FAILED_THROW
+	src.delayNextThrow(3)
 	src.throw_mode_off()
 	if(src.stat || !target)
 		return FAILED_THROW

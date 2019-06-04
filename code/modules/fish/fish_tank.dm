@@ -153,7 +153,7 @@
 		set_light(0)
 
 //////////////////////////////
-//		NEW() PROCS			//
+//		/NEW() PROCS			//
 //////////////////////////////
 
 /obj/machinery/fishtank/New()
@@ -363,7 +363,7 @@
 	update_icon()
 
 /obj/machinery/fishtank/proc/seadevil_eat()
-	var/tmp/list/fish_to_eat = fish_list.Copy()
+	var/list/fish_to_eat = fish_list.Copy()
 	fish_to_eat.Remove("sea devil")
 	var/eat_target = pick(fish_to_eat)
 	visible_message("<span class='notice'>The sea devil devours \an [eat_target].</span>")
@@ -393,7 +393,7 @@
 /obj/machinery/fishtank/proc/recursive_valid_egg(var/list/pick_egg_from)
 	var/fish = pick(pick_egg_from)
 	if(!fish || nonhatching_types.Find(fish))
-		var/tmp/list/new_list = pick_egg_from.Copy()
+		var/list/new_list = pick_egg_from.Copy()
 		return recursive_valid_egg(new_list.Remove(fish))
 		//If it's a nonvalid type, let's try again without it.
 	else

@@ -12,6 +12,7 @@
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
+	var/ignoreinteract = FALSE //for accessories that should not come off when attached to object is touched
 
 /obj/item/clothing/accessory/New()
 	..()
@@ -41,6 +42,7 @@
 /obj/item/clothing/accessory/proc/on_removed(mob/user as mob)
 	if(!attached_to)
 		return
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to.overlays -= inv_overlay
 	attached_to = null
 	forceMove(get_turf(user || src))

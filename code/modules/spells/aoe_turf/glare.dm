@@ -32,9 +32,14 @@
 /spell/aoe_turf/glare/choose_targets(var/mob/user = usr)
 	var/list/targets = list()
 	for(var/mob/living/carbon/C in oview(inner_radius))
-		if(!C.vampire_affected(user.mind))
-			continue
-		targets += C
+		var/success = C.vampire_affected(user.mind)
+		switch (success)
+			if (TRUE)
+				targets += C
+			if (FALSE)
+				continue
+			if (VAMP_FAILURE)
+				return critfail(targets, user)
 
 	if (!targets.len)
 		to_chat(user, "<span class='warning'>There are no targets.</span>")
@@ -66,5 +71,14 @@
 				if(!C.blinded)
 					C.blinded = 1
 				C.blinded += max(1, distance_value)
-		to_chat(C, "<span class='warning'>You are blinded by [user]'s glare</span>")
+		to_chat(C, "<span class='warning'>You are blinded by [user]'s glare.</span>")
 	V.remove_blood(blood_cost)
+
+/spell/aoe_turf/glare/critfail(var/list/targets, var/mob/user)
+	user.visible_message("<span class='danger'>\The [user]'s eyes glow weakly, and they fall over...</span>", "<span class='danger'>A burning white light knocks you over!</span>")
+	user.Stun(4)
+	user.Knockdown(4)
+	user.stuttering += 15
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		V.remove_blood(3*blood_cost)

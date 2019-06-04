@@ -14,7 +14,7 @@
 			to_chat(src, "<span class='warning'>You fail to catch \the [I]!")
 	return ..()
 
-/mob/living/carbon/proc/can_catch(var/item/I, var/speed)
+/mob/living/carbon/proc/can_catch(var/obj/item/I, var/speed)
 	if(restrained() || get_active_hand())
 		return FALSE
 	if(speed > EMBED_THROWING_SPEED) //Can't catch things going too fast unless you're a special boy
@@ -41,7 +41,7 @@
 	if(user == src) // Attacking yourself can't miss
 		target_zone = user.zone_sel.selecting
 	if(!target_zone && !src.stat)
-		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
+		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		return FALSE
 
 	if((user != src) && check_shields(I.force, I))

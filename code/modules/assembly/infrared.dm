@@ -1,5 +1,3 @@
-
-
 /obj/item/device/assembly/infra
 	name = "infrared emitter"
 	short_name = "IR emitter"
@@ -23,9 +21,8 @@
 		"On" = "on;number"
 	)
 
-	New()
-		qdel(src) // Why is this even
-
+/obj/item/device/assembly/infra/New()
+	qdel(src) // Why is this even
 
 ///obj/item/device/assembly/infra/describe()
 //	return "The infrared trigger is [on?"on":"off"]."

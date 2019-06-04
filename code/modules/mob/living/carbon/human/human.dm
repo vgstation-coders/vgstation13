@@ -12,7 +12,7 @@
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
-	status_flags = GODMODE|CANPUSH
+	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
 
 /mob/living/carbon/human/manifested
 	real_name = "Manifested Ghost"
@@ -23,56 +23,69 @@
 	..(new_loc, "Manifested")
 
 /mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Skrell Male Tentacles"
 	..(new_loc, "Skrell")
+	my_appearance.h_style = "Skrell Male Tentacles"
+	regenerate_icons()
 
 /mob/living/carbon/human/tajaran/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Tajaran Ears"
 	..(new_loc, "Tajaran")
+	my_appearance.h_style = "Tajaran Ears"
+	regenerate_icons()
 
 /mob/living/carbon/human/unathi/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Unathi Horns"
 	..(new_loc, "Unathi")
+	my_appearance.h_style = "Unathi Horns"
+	regenerate_icons()
 
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Short Vox Quills"
 	..(new_loc, "Vox")
+	my_appearance.h_style = "Short Vox Quills"
+	regenerate_icons()
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Diona")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Skellington", delay_ready_dna)
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Plasmaman")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Muton")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Grey")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Golem")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Grue")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Slime")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
@@ -94,12 +107,14 @@
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Mushroom")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
-	my_appearance.h_style = "Bald"
 	..(new_loc, "Undead")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
 
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
@@ -190,7 +205,7 @@
 	prev_gender = gender // Debug for plural genders
 	make_blood()
 	init_butchering_list() // While animals only generate list of their teeth/skins on death, humans generate it when they're born.
-
+	my_appearance.name = real_name
 	// Set up DNA.
 	if(!delay_ready_dna)
 		dna.ready_dna(src)
@@ -1165,7 +1180,7 @@
 				current_organ.open = 0
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
-		src.see_in_dark = E.see_in_dark //species.darksight
+		src.see_in_dark = E.see_in_dark
 	if(src.see_in_dark > 2)
 		src.see_invisible = SEE_INVISIBLE_LEVEL_ONE
 	else
@@ -1256,9 +1271,7 @@
 /mob/living/carbon/human/canSingulothPull(var/obj/machinery/singularity/singulo)
 	if(!..())
 		return 0
-	if(istype(shoes,/obj/item/clothing/shoes/magboots))
-		var/obj/item/clothing/shoes/magboots/M = shoes
-		if(M.magpulse && singulo.current_size <= STAGE_FOUR)
+		if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
 			return 0
 	return 1
 // Get ALL accesses available.
@@ -1694,8 +1707,6 @@ mob/living/carbon/human/isincrit()
 	species.cold_level_2 = round(species.cold_level_1 / 1.3)
 	species.cold_level_3 = round(species.cold_level_2 / 1.66)
 
-	if(prob(30))
-		species.darksight = rand(0,8)
 	species.hazard_high_pressure *= rand(5,20)/10
 	species.warning_high_pressure = round(species.hazard_high_pressure / 1.69)
 	species.hazard_low_pressure *= rand(5,20)/10
@@ -1819,8 +1830,7 @@ mob/living/carbon/human/isincrit()
 	return TRUE
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
-	ghostize()
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? mind : null))
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src

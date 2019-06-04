@@ -31,9 +31,15 @@
 
 	var/mob/M = target
 
-	if (!M.vampire_affected(user.mind))
-		return FALSE
-	return ..()
+	var/success = M.vampire_affected(user.mind)
+	switch (success)
+		if (TRUE)
+			return ..()
+		if (FALSE)
+			return FALSE
+		if (VAMP_FAILURE)
+			critfail(target, user)
+			return FALSE
 
 /spell/targeted/disease/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
@@ -58,6 +64,14 @@
 	infect_virus2(target,shutdown,0)
 
 	var/datum/role/vampire/V = isvampire(user)
-	if(!V)
-		return FALSE
-	V.remove_blood(blood_cost)
+	if(V)
+		V.remove_blood(blood_cost)
+
+/spell/targeted/disease/critfail(var/list/targets, var/mob/user)
+	to_chat(user, "<span class='danger'>It feels like your dead blood met with molten silver.</span>")
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		H.drip(50) // Coughing up quite some blood.
+	var/datum/role/vampire/V = isvampire(user)
+	if(V)
+		V.remove_blood(3*blood_cost)

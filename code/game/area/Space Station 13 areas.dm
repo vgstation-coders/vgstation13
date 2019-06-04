@@ -62,6 +62,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/door_alerts=0
 
 	var/doors_down=0
+	var/doors_overridden=0 //manual override to force firedoors up
 
 	// /vg/: No teleporting for you. 2 = SUPER JAMMED, inaccessible even to telecrystals.
 	var/jammed = 0
@@ -1620,20 +1621,20 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "firingrange"
 
 /*
-	New()
-		..()
+/area/security/range/New()
+	..()
 
-		spawn(10) //let objects set up first
-			for(var/turf/turfToGrayscale in src)
-				if(turfToGrayscale.icon)
-					var/icon/newIcon = icon(turfToGrayscale.icon)
+	spawn(10) //let objects set up first
+		for(var/turf/turfToGrayscale in src)
+			if(turfToGrayscale.icon)
+				var/icon/newIcon = icon(turfToGrayscale.icon)
+				newIcon.GrayScale()
+				turfToGrayscale.icon = newIcon
+			for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
+				if(objectToGrayscale.icon)
+					var/icon/newIcon = icon(objectToGrayscale.icon)
 					newIcon.GrayScale()
-					turfToGrayscale.icon = newIcon
-				for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
-					if(objectToGrayscale.icon)
-						var/icon/newIcon = icon(objectToGrayscale.icon)
-						newIcon.GrayScale()
-						objectToGrayscale.icon = newIcon
+					objectToGrayscale.icon = newIcon
 */
 
 /area/security/checkpoint
@@ -2271,6 +2272,7 @@ proc/process_adminbus_teleport_locs()
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	flags = NO_PACIFICATION
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -2332,6 +2334,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "ai_upload"
 	jammed=2
 	anti_ethereal=1
+	flags = NO_PACIFICATION
 
 
 
@@ -2340,7 +2343,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Strange Location"
 	icon_state = "away"
 	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
 /area/awaymission/example
 	name = "\improper Strange Station"

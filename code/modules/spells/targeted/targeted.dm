@@ -24,7 +24,6 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/amt_dam_brute = 0
 	var/amt_dam_oxy = 0
 	var/amt_dam_tox = 0
-	var/amt_dam_brain = 0
 
 	var/amt_eye_blind = 0
 	var/amt_eye_blurry = 0
@@ -38,6 +37,8 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 		return 0
 	if(!(range == GLOBALCAST) && !(range == SELFCAST && target == user) && (options && !(target in options))) //Shouldn't be necessary but a good check in case of overrides
 		return 0
+	if(mind_affecting && !user.can_mind_interact(target))
+		return 0
 	return !compatible_mobs.len || is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/choose_targets(mob/user = usr)
@@ -45,7 +46,6 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 		to_chat(user, "<span class='warning'>Something is interfering with your ability to target minds.</span>")
 		return
 	var/list/targets = list()
-
 	if(max_targets == 0) //unlimited
 		if(range == -2)
 			targets = living_mob_list
@@ -158,7 +158,6 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.adjustFireLoss(amt_dam_fire)
 	target.adjustToxLoss(amt_dam_tox)
 	target.adjustOxyLoss(amt_dam_oxy)
-	target.adjustBrainLoss(amt_dam_brain)
 	//disabling
 	target.Knockdown(amt_knockdown)
 	target.Paralyse(amt_paralysis)

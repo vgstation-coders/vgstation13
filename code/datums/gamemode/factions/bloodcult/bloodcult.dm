@@ -36,50 +36,17 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/j = 10; j > 0; j--)
 			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
 			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
-				places_to_spawn += T
-				break
-	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space
-	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
+				//Adding some blacklisted areas, specifically solars
+				if (!istype(T.loc,/area/solar))
+					places_to_spawn += T
+					break
+	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
+	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && !is_on_shuttle(source) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
 		places_to_spawn.Add(source)
 	for (var/T in places_to_spawn)
 		new /obj/structure/cult/bloodstone(T)
 
 	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
-
-	/* --moved to bloodstone/New()
-	var/i = 1
-	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		var/datum/holomap_marker/newMarker = new()
-		newMarker.id = HOLOMAP_MARKER_BLOODSTONE
-		newMarker.filter = HOLOMAP_FILTER_CULT
-		newMarker.x = B.x
-		newMarker.y = B.y
-		newMarker.z = B.z
-		holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = newMarker
-		i++
-	*/
-
-	/*	--moved to code\modules\html_interface\map\station_map.dm
-	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
-	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
-	map_base.Blend("#E30000",ICON_MULTIPLY)
-	canvas.Blend(map_base,ICON_OVERLAY)
-	*/
-
-	/*	--the markers now instead get added as overlays every time the map is show to the players
-	for(var/marker in holomap_markers)
-		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
-			if(map.holomap_offset_x.len >= map.zMainStation)
-				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
-			else
-				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
-	*/
-
-	/*	--moved to code\modules\html_interface\map\station_map.dm
-	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
-	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
-	*/
 
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		if (!B.loc)
@@ -217,6 +184,10 @@ var/veil_thickness = CULT_PROLOGUE
 	initialize_cultwords()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
+
+/datum/faction/bloodcult/minorVictoryText()
+	return "The cult completed its sacrificial ritual, but not in time to summon Nar-Sie."
+
 /*
 /datum/faction/bloodcult/process()
 	..()
@@ -286,6 +257,7 @@ var/veil_thickness = CULT_PROLOGUE
 							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
+			minor_victory = TRUE // At any rate, we achieve a minor win.
 			if (O)
 				O.target_sacrificed = TRUE
 				veil_thickness = CULT_ACT_III
@@ -371,6 +343,16 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Cult reminder: [reminder].")
 
+/datum/faction/bloodcult/proc/minor_victory()
+	for(var/datum/role/cultist/C in members)
+		var/mob/M = C.antag.current
+		if (M && iscultist(M))
+			to_chat(M,"<span class='sinister'>While the sacrifice was correctly completed, we were not fast enough to prevent our ennemies from fleeing.</span>")
+			to_chat(M, "<span class='sinister'>This changes nothing. We will find another way.</span>")
+			for (var/datum/objective/O in objective_holder.objectives)
+				O.force_success = TRUE
+	minor_victory = TRUE
+
 /datum/faction/bloodcult/GetScoreboard()
 	.=..()
 	if(veil_thickness == CULT_EPILOGUE)
@@ -420,9 +402,16 @@ var/veil_thickness = CULT_PROLOGUE
 		BLOODCOST_AMOUNT_USER = 0,
 		BLOODCOST_RESULT = "",
 		BLOODCOST_TOTAL = 0,
+		BLOODCOST_USER = null,
 		)
 	var/turf/T = get_turf(user)
 	var/amount_gathered = 0
+
+	data[BLOODCOST_RESULT] = user
+
+	if (amount_needed == 0)//the cost was probably 1u, and already paid for by blood communion from another cultist
+		data[BLOODCOST_RESULT] = BLOODCOST_TRIBUTE
+		return data
 
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
@@ -557,6 +546,7 @@ var/veil_thickness = CULT_PROLOGUE
 /proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0)
 	//Blood Communion
 	var/communion = 0
+	var/communion_data = null
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
@@ -579,6 +569,7 @@ var/veil_thickness = CULT_PROLOGUE
 				if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 					total_accumulated += data[BLOODCOST_TOTAL]
 				if (total_accumulated >= amount_needed - total_per_tribute)//could happen if the cost is less than 1 per tribute
+					communion_data = data//in which case, the blood will carry the data that paid for it
 					break
 
 	//Getting nearby blood sources
@@ -588,6 +579,49 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Flavour text and blood data transfer
 	switch (data[BLOODCOST_RESULT])
+		if (BLOODCOST_TRIBUTE)//if the drop of blood was paid for through blood communion, let's get the reference to the blood they used because we can
+			blood = new()
+			blood.data["blood_colour"] = DEFAULT_BLOOD
+			if (communion_data && communion_data[BLOODCOST_RESULT])
+				switch(communion_data[BLOODCOST_RESULT])
+					if (BLOODCOST_TARGET_HANDS)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
+						blood.data["blood_colour"] = HU.hand_blood_color
+						if (HU.blood_DNA && HU.blood_DNA.len)
+							var/blood_DNA = pick(HU.blood_DNA)
+							blood.data["blood_DNA"] = blood_DNA
+							blood.data["blood_type"] = HU.blood_DNA[blood_DNA]
+					if (BLOODCOST_TARGET_SPLATTER)
+						var/obj/effect/decal/cleanable/blood/B = communion_data[BLOODCOST_TARGET_SPLATTER]
+						blood = new()
+						blood.data["blood_colour"] = B.basecolor
+						if (B.blood_DNA.len)
+							var/blood_DNA = pick(B.blood_DNA)
+							blood.data["blood_DNA"] = blood_DNA
+							blood.data["blood_type"] = B.blood_DNA[blood_DNA]
+						blood.data["virus2"] = B.virus2
+					if (BLOODCOST_TARGET_GRAB)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
+						blood = get_blood(HU.vessel)
+					if (BLOODCOST_TARGET_BLEEDER)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
+						blood = get_blood(HU.vessel)
+					if (BLOODCOST_TARGET_HELD)
+						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
+						blood = locate() in G.reagents.reagent_list
+					if (BLOODCOST_TARGET_BLOODPACK)
+						var/obj/item/weapon/reagent_containers/blood/B = communion_data[BLOODCOST_TARGET_BLOODPACK]
+						blood = locate() in B.reagents.reagent_list
+					if (BLOODCOST_TARGET_CONTAINER)
+						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_CONTAINER]
+						blood = locate() in G.reagents.reagent_list
+					if (BLOODCOST_TARGET_USER)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
+						blood = get_blood(HU.vessel)
+			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
+				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
+									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
+									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_HANDS)
 			var/mob/living/carbon/human/H = user
 			blood = new()

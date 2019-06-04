@@ -14,6 +14,7 @@
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)
+	rustle_sound = "pageturn"
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2

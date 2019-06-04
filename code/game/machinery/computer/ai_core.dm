@@ -97,24 +97,21 @@
 						state = GLASS_PANELED
 
 			if(istype(P, /obj/item/device/mmi))
-				if(!P:brainmob)
+				var/obj/item/device/mmi/prison = P
+				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
-				if(P:brainmob.stat == 2)
+				if(prison.brainmob.stat == DEAD)
 					to_chat(user, "<span class='warning'>Sticking a dead [P] into the frame would sort of defeat the purpose.</span>")
 					return
 
-				if(jobban_isbanned(P:brainmob, "AI"))
+				if(jobban_isbanned(prison.brainmob, "AI"))
 					to_chat(user, "<span class='warning'>This [P] does not seem to fit.</span>")
 					return
 
 				if(!user.drop_item(P, src))
 					user << "<span class='warning'>You can't let go of \the [P]!</span>"
 					return
-
-				/*if(P:brainmob.mind)
-					ticker.mode.remove_cultist(P:brainmob.mind, 1)
-					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)*/
 
 				if (!brain)
 					if (user.drop_item(P, src))

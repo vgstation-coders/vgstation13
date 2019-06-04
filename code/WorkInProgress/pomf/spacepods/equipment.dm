@@ -53,7 +53,7 @@
 
 /datum/spacepod/equipment
 	var/obj/spacepod/my_atom
-	var/movement_charge = 3
+	var/movement_charge = 2
 	var/weapons_allowed = 1
 	var/obj/item/device/spacepod_equipment/weaponry/weapon_system // weapons system
 	//var/obj/item/device/spacepod_equipment/engine/engine_system // engine system
@@ -122,7 +122,8 @@
 	//set desc = SPE.verb_desc
 	set src = usr.loc
 
-	if(S.get_passengers().Find(usr) && !S.passenger_fire)
+	var/list/passengers = S.get_passengers()
+	if(passengers.Find(usr) && !S.passenger_fire)
 		to_chat(usr, "<span class = 'warning'>Passenger gunner system disabled.</span>")
 		return
 	SPE.fire_weapons()

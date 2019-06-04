@@ -130,24 +130,32 @@
 	item_state = "candlebox5"
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
+	w_type = RECYK_MISC
 	storage_slots = 5
 	throwforce = 2
-	flags = 0
+	flags = null
 	slot_flags = SLOT_BELT
+	var/obj/item/candle/waxtype = /obj/item/candle
 
 /obj/item/weapon/storage/fancy/candle_box/empty
-	empty = 1
+	empty = TRUE
 	icon_state = "candlebox0"
 	item_state = "candlebox0" //i don't know what this does but it seems like this should go here
 
 /obj/item/weapon/storage/fancy/candle_box/New()
 	..()
-	if (empty)
+	if(empty)
 		return
 	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/candle(src)
-	return
+		new waxtype(src)
+
+/obj/item/weapon/storage/fancy/candle_box/holo
+	name = "Holo candle pack"
+	desc = "A pack of holo candles."
+	icon_state = "holocandlebox5"
+	icon_type = "holocandle"
+	//item_state = "candlebox5"
+	waxtype = /obj/item/candle/holo
 
 /*
  * Crayon Box
@@ -583,3 +591,16 @@
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
 	. = ..()
+
+////////////////////
+//COLLECTION PLATE//
+////////////////////
+/obj/item/weapon/storage/fancy/collection_plate
+	icon = 'icons/obj/tithe.dmi'
+	icon_state = "donationbox0"
+	icon_type = "donation"
+	name = "collection plate"
+	foldable = 0
+	box_type = "plate"
+	storage_slots = 10
+	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")

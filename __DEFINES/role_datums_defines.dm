@@ -29,6 +29,7 @@
 #define ROGUE "rogue agent"//double agents
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
+#define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
 #define LEGACY_CULTIST "legacy cultist"
@@ -37,7 +38,7 @@
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
-#define NINJA "space ninja"
+#define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"
@@ -120,6 +121,8 @@
 #define BLOODCOST_TOTAL		"total"
 #define BLOODCOST_RESULT	"result"
 #define BLOODCOST_FAILURE	"failure"
+#define BLOODCOST_TRIBUTE	"tribute"
+#define BLOODCOST_USER	"user"
 
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"
@@ -202,3 +205,25 @@
 
 #define GRACE_PERIOD_DESTROY_LOW 9 MINUTES
 #define GRACE_PERIOD_DESTROY_HIGH 14 MINUTES
+
+// -- Injection delays (in ticks, ie, you need the /20 to get the real result)
+
+#define LATEJOIN_DELAY_MIN (5 MINUTES)/20
+#define LATEJOIN_DELAY_MAX (30 MINUTES)/20
+
+#define MIDROUND_DELAY_MIN (15 MINUTES)/20
+#define MIDROUND_DELAY_MAX (50 MINUTES)/20
+
+// -- Rulesets flags
+
+#define HIGHLANDER_RULESET 1
+#define TRAITOR_RULESET 2
+#define MINOR_RULESET 4
+
+// -- Distribution "modes"
+
+#define LORENTZ "Lorentz distribution"
+#define GAUSS "Normal distribution"
+#define DIRAC "Rigged threat number"
+#define EXPONENTIAL "Peaceful bias"
+#define UNIFORM "Uniform distribution"

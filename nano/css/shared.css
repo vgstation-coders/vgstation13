@@ -30,7 +30,7 @@ hr {
     height: 1px;
 }
 
-.link, .linkOn, .linkOff, .selected, .disabled {
+.link, .linkOn, .linkOff, .selected, .disabled, .button {
     float: left;
     min-width: 15px;
     height: 16px;
@@ -49,7 +49,7 @@ hr {
     padding: 0px 4px 4px 0px;
 }
 
-a:hover, .zoomLink:hover, .linkActive:hover {
+a:hover, .zoomLink:hover, .linkActive:hover, .buttonActive:hover {
     background: #507aac;
 }
 
@@ -181,6 +181,10 @@ h4 {
     background: #cacc00;
 }
 
+.greenBackground {
+    background: #2f943c;
+}
+
 .highlight {
     color: #8BA5C4;
 }
@@ -296,6 +300,13 @@ div.notice {
 
 .statusLabel {
     width: 138px;
+    float: left;
+    overflow: hidden;
+    color: #98B0C3;
+}
+
+.statusLabelWide {
+    width: 170px;
     float: left;
     overflow: hidden;
     color: #98B0C3;
@@ -540,32 +551,6 @@ th.misc {
     background: #666666;
     font-weight: bold;
     color: #ffffff;
-}
-
-/* Damage colors for crew monitoring computer */
-
-.burn {
-    color: orange;
-}
-
-.brute {
-    color: red;
-}
-
-.toxin {
-    color: green;
-}
-
-.toxin_light {
-    color: #3ADF00;
-}
-
-.oxyloss {
-    color: blue;
-}
-
-.oxyloss_light {
-    color: #6698FF;
 }
 
 /* Comms console alert colors */

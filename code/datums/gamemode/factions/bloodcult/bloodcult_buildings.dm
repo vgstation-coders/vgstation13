@@ -99,6 +99,9 @@
 			MouseDropTo(W,user)
 		else
 			user.delayNextAttack(8)
+			user.do_attack_animation(src, W)
+			if (W.hitsound)
+				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
 				playsound(get_turf(src), sound_damaged, 75, 1)
 			takeDamage(W.force)
@@ -600,7 +603,11 @@
 									return
 								else
 									var/turf/T = get_turf(O.sacrifice_target)
-									if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
+									var/datum/shuttle/S = is_on_shuttle(T)
+									if ((T.z == CENTCOMM_Z) && (emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S)))
+										to_chat(user,"<b>\The [O.sacrifice_target] has fled the station along with the rest of the crew. Unless we can bring them back in time with a Path rune or sacrifice him where he stands, it's over.</b>")
+										return
+									else if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
 										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
 										if (choice == "Yes")
 											replace_target(user)
@@ -704,8 +711,7 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
-		/*
-		shadeMob.ckey = usr.ckey
+		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
 			shadeMob.real_name = pick(shade_names)
@@ -758,7 +764,10 @@
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.stage(CULT_ACT_III,T)
+			if (emergency_shuttle.direction == 2) // Going to centcomm
+				cult.minor_victory()
+			else
+				cult.stage(CULT_ACT_III,T)
 		else
 			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 		qdel(src)
@@ -1421,6 +1430,7 @@ var/list/bloodstone_list = list()
 						user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
 				contributors.Add(user)
 				if (user.client)
+					update_progbar()
 					user.client.images |= progbar
 			else if(user.hud_used && user.hud_used.holomap_obj)
 				if(!("\ref[user]" in watcher_maps))
