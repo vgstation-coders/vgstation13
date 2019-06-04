@@ -14,14 +14,14 @@
 	starting_materials = list(MAT_IRON = 75, MAT_GLASS = 25)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	
+
 	var/money_stored		        // Money placed in the buffer
 	// List of items not to shove in their hands.
 	var/list/purchase_log = list()
 	var/show_description = null
 	var/active = 0
 	var/job = null
-	
+
 /obj/item/device/illegalradio/New()
 	..()
 	if(ticker)
@@ -31,7 +31,7 @@
 /obj/item/device/illegalradio/initialize()
 	if(ticker.mode)
 		money_stored = 0
-		
+
 /obj/item/device/illegalradio/interact(mob/user as mob)
 	var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 	dat += src.generate_menu(user)
@@ -41,11 +41,11 @@
 
 /obj/item/device/illegalradio/attack_self(mob/user as mob)
 	user.set_machine(src)
-	interact(user)	
-	
+	interact(user)
+
 /obj/item/device/illegalradio/Topic(href, href_list)
 	..()
-		
+
 	if (href_list["buy_item"])
 		var/item = href_list["buy_item"]
 		var/list/split = splittext(item, ":") // throw away variable
@@ -67,18 +67,18 @@
 				var/textalt = "[key_name(usr)] tried to purchase a black market item that doesn't exist: [item]."
 				message_admins(text)
 				log_game(textalt)
-				admin_log.Add(textalt)
+				log_admin(textalt)
 
 	else if(href_list["show_desc"])
 		show_description = text2num(href_list["show_desc"])
 		interact(usr)
-		
+
 	else if (href_list["dispense_change"])
 		dispense_change()
 
-		
+
 /obj/item/device/illegalradio/proc/generate_menu(mob/user as mob)
-	
+
 	var/welcome = pick("Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.")
 
 	var/dat = list()
@@ -120,7 +120,7 @@
 			final_text += "<BR>"
 			merchandise_list += final_text
 
-		for(var/text in merchandise_list) 
+		for(var/text in merchandise_list)
 			dat += text
 
 		// Break up the categories, if it isn't the last.
@@ -130,13 +130,13 @@
 	dat += "<HR>"
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
-	
+
 /obj/item/device/illegalradio/proc/dispense_change()
 	if(money_stored > 0)
 		dispense_cash(money_stored,get_turf(src))
 		money_stored = 0
 	interact(usr)
-	
+
 /obj/item/device/illegalradio/afterattack(atom/A as mob|obj, mob/user as mob)
 	if(istype(A, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/cash = A
@@ -144,17 +144,12 @@
 		qdel(cash)
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
-			
+
 /obj/item/device/illegalradio/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		insert_cash(C, user)
 		interact(user)
-	else if(istype(W, /obj/item/weapon/card/emag))
-		visible_message("<span class='warning'>[usr] swipes a card through [src], and it explodes!</warning>")
-		explosion(user, -1, 0, 2)
-		to_chat(user, "<span class='notice'>You hear a faint laughter in your head.<span>")	
-		qdel(src)
 	else if(istype(W, /obj/item/organ/external))
 		visible_message("<span class='info'>The black market uplink buzzes: \"We take organs, not limbs, dummy.\"</span>")
 	else if(istype(W, /obj/item/organ/internal))
@@ -166,12 +161,18 @@
 			qdel(W)
 		else
 			visible_message("<span class='info'>The black market uplink buzzes: \"Sorry, pal. That organ ain't real. Our buyers want natural ones.\"</span>")
-	
+
+/obj/item/device/illegalradio/emag_act(mob/user)
+	visible_message("<span class='warning'>[usr] swipes a card through [src], and it explodes!</warning>")
+	explosion(user, -1, 0, 2)
+	to_chat(user, "<span class='notice'>You hear a faint laughter in your head.<span>")
+	qdel(src)
+
 /obj/item/device/illegalradio/proc/insert_cash(var/obj/item/weapon/spacecash/C, mob/user)
 	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 	money_stored += C.get_total()
 	qdel(C)
-		
+
 /obj/item/device/illegalradio/Destroy()
 	..()
 	money_stored = 0
