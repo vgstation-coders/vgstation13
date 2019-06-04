@@ -44,14 +44,14 @@
 	d.death_y = M.y
 	d.death_z = M.z
 	d.mob_typepath = M.type
-	d.realname = M.name
+	d.real_name = M.name
 
-	d.damagevalues["BRUTE"] = M.bruteloss
-	d.damagevalues["FIRE"]  = M.fireloss
-	d.damagevalues["TOXIN"] = M.toxloss
-	d.damagevalues["OXY"]   = M.oxyloss
-	d.damagevalues["CLONE"] = M.cloneloss
-	d.damagevalues["BRAIN"] = M.brainloss
+	d.damage["BRUTE"] = M.bruteloss
+	d.damage["FIRE"]  = M.fireloss
+	d.damage["TOXIN"] = M.toxloss
+	d.damage["OXY"]   = M.oxyloss
+	d.damage["CLONE"] = M.cloneloss
+	d.damage["BRAIN"] = M.brainloss
 
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
@@ -61,7 +61,7 @@
 		if(M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			d.realname = M.mind.name
+			d.real_name = M.mind.name
 	deaths.Add(d)
 
 /datum/stat_collector/proc/add_survivor_stat(var/mob/living/M)
@@ -69,14 +69,14 @@
 
 	var/datum/stat/survivor/s = new
 	s.mob_typepath = M.type
-	s.realname = M.name
+	s.real_name = M.name
 
-	s.damagevalues["BRUTE"] = M.bruteloss
-	s.damagevalues["FIRE"]  = M.fireloss
-	s.damagevalues["TOXIN"] = M.toxloss
-	s.damagevalues["OXY"]   = M.oxyloss
-	s.damagevalues["CLONE"] = M.cloneloss
-	s.damagevalues["BRAIN"] = M.brainloss
+	s.damage["BRUTE"] = M.bruteloss
+	s.damage["FIRE"]  = M.fireloss
+	s.damage["TOXIN"] = M.toxloss
+	s.damage["OXY"]   = M.oxyloss
+	s.damage["CLONE"] = M.cloneloss
+	s.damage["BRAIN"] = M.brainloss
 
 	if(istype(M, /mob/living/silicon/robot))
 		borgs_at_roundend++
@@ -96,7 +96,7 @@
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			s.realname = M.mind.name
+			s.real_name = M.mind.name
 	survivors.Add(s)
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
@@ -132,7 +132,7 @@
 	// 	for(var/datum/objective/O in M.objectives)
 	// 		var/datum/stat/antag_objective/AO = new
 	// 		AO.key = ckey(M.key)
-	// 		AO.realname = STRIP_NEWLINE(M.name)
+	// 		AO.real_name = STRIP_NEWLINE(M.name)
 	// 		AO.special_role = M.special_role
 	// 		AO.objective_type = O.type
 	// 		AO.objective_desc = O.explanation_text
@@ -146,17 +146,16 @@
 /datum/stat_collector/proc/doPostRoundChecks()
 	round_start_time = time2text(round_start_time, STAT_TIMESTAMP_FORMAT)
 	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)
-	mapname = map.nameLong
-	mastermode = master_mode // this is stored as a string in game
-	tickermode = ticker.mode.name
+	map_name = map.nameLong
 	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
-	stationname = station_name()
+	station_name = station_name()
 
 	for(var/datum/mind/M in ticker.minds)
 		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
+
 
 
 /proc/stats_server_alert_new_file()

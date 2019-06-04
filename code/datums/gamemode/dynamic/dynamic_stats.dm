@@ -6,8 +6,8 @@
 	var/starting_threat_level = 0
 	var/list/threat = list()
 
-	var/list/roundstart_rulesets = list()
-	var/roundstart_pop = 0
+	var/list/round_start_rulesets = list()
+	var/round_start_pop = 0
 
 	var/list/successful_injections = list()//midround/latejoin rulesets should appear here
 

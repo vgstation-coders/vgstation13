@@ -9,15 +9,12 @@
 
 	stat_collector is the nerve center, everything else is just there to store data until
 	round end.
+	gameticker.declare_completion() calls stat_collection.Process(), which is where we gather all our end-of-round inforamtion.
 */
-
-// Important things to store stats on that aren't located here:
-// ticker.mode, actual gamemode
-// master_mode, i.e. secret, mixed
 
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
-#define STAT_OUTPUT_VERSION "1.2"
+#define STAT_OUTPUT_VERSION "1.3"
 #define STAT_OUTPUT_DIR "data/statfiles/"
 
 var/list/datum_donotcopy = list("tag", "type", "parent_type", "vars", "gcDestroyed", "being_sent_to_past", "disposed")
@@ -117,20 +114,12 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/malf_shunted = FALSE
 	var/list/malf_modules = list() // TODO change the stats server model for this
 
-	// revsquad
-	var/revsquad_won = FALSE
-	var/list/revsquad_items = list()
-
-
 	// THESE MUST BE SET IN POSTROUNDCHECKS OR SOMEWHERE ELSE BEFORE THAT IS CALLED
 	var/round_start_time = null
 	var/round_end_time = null
-	var/mapname = null
-	var/mastermode = null
-	var/tickermode = null
-	var/list/mixed_gamemodes = list()
+	var/map_name = null
 	var/tech_total = 0
-	var/stationname = null
+	var/station_name = null
 
 /datum/stat/death_stat
 	var/mob_typepath = null
@@ -141,8 +130,8 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/special_role = null
 	var/assigned_role = null
 	var/key = null
-	var/realname = null
-	var/list/damagevalues = list(
+	var/real_name = null
+	var/list/damage_values = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
 		"TOXIN" = 0,
@@ -156,9 +145,9 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/special_role = null
 	var/assigned_role = null
 	var/key = null
-	var/realname = null
+	var/real_name = null
 	var/escaped = FALSE
-	var/list/damagevalues = list(
+	var/list/damage_values = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
 		"TOXIN" = 0,
@@ -167,7 +156,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 		"BRAIN" = 0)
 
 /datum/stat/antag_objective
-	var/realname = null
+	var/real_name = null
 	var/key = null
 	var/special_role = null
 	var/objective_type = null
@@ -205,22 +194,22 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 		uniquefilename = "[uniquefilename].dupe"
 	return file("[STAT_OUTPUT_DIR]statistics-[filename_date].[uniquefilename].[extension]")
 
-// new shiny JSON export
+
 /datum/stat_collector/proc/Process()
+	var/statfile = get_valid_file("json")
+
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		var/datum/gamemode/dynamic/mode = ticker.mode
 		dynamic_stats = mode.dynamic_stats
-	var/statfile = get_valid_file("json")
+
 	doPostRoundChecks()
 
 	to_chat(world, "Writing statistics to file")
 	var/start_time = world.realtime
-
 	var/jsonout = datum2json(src)
 	statfile << jsonout
-	world.log << "Statistics written to file in [(start_time - world.realtime)/10] seconds." // I think that's right?
+	world.log << "Statistics written to file in [(start_time - world.realtime)/10] seconds."
+
 	stats_server_alert_new_file()
 	spawn(10 SECONDS)
 		to_chat(world, "<span class='info center'>Statistics for this round available at http://stats.ss13.moe/match/latest</span>")
-
-// TODO write all living mobs to DB
