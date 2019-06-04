@@ -1106,5 +1106,7 @@ var/creating_arena = FALSE
 	if (!creating_arena)
 		creating_arena = TRUE
 		new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
+		if (!arenas.len) // Someone hit the cancel option
+			creating_arena = FALSE
 		return
 	to_chat(src, "<span class='notice'>There were unfortunatly no available arenas.</span>")
