@@ -71,7 +71,6 @@ var/list/uplink_items = list()
 	return new item(loc,user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
-	..()
 	if(!istype(U))
 		return 0
 
