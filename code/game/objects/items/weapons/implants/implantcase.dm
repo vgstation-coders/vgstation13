@@ -15,30 +15,28 @@
 		src.icon_state = "implantcase-0"
 	return
 
-/obj/item/weapon/implantcase/attackby(obj/item/weapon/I as obj, mob/user as mob)
+/obj/item/weapon/implantcase/attackby(obj/item/I as obj, mob/user as mob)
 	..()
 	if (istype(I, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'")
 	else if (istype(I, /obj/item/weapon/implanter))
-		var/obj/item/weapon/implanter/the_implanter
+		var/obj/item/weapon/implanter/the_implanter = I
 		if (the_implanter.imp)
 			if (src.imp || the_implanter.imp.implanted)
 				return
 			the_implanter.imp.forceMove(src)
 			src.imp = the_implanter.imp
 			the_implanter.imp = null
+
 			src.update()
 			the_implanter.update()
-		else
-			if (src.imp)
-				if (the_implanter.imp)
-					return
-				src.imp.forceMove(I)
-				the_implanter.imp = src.imp
-				src.imp = null
-				update()
+		else if (src.imp)
+			src.imp.forceMove(I)
+			the_implanter.imp = src.imp
+			src.imp = null
+
+			src.update()
 			the_implanter.update()
-	return
 
 /obj/item/weapon/implantcase/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
 	if(!src.imp || !src.imp.allow_reagents)
