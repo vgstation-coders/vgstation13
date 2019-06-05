@@ -378,6 +378,8 @@
 	access = list(access_mime, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_mime, access_theatre)
 
+	species_blacklist = list("Grey")
+
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/mime
 

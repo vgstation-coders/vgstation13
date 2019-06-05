@@ -1162,8 +1162,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 								F &= ~job.flag //Disable that job in our preferences
 								SetDepartmentFlags(job, i, F)
 
-							to_chat(usr, "<span class='info'>Your new species ([species]) is blacklisted from [job.title].</span>")
-
 						if(job.species_whitelist.len) //If the job has a species whitelist
 							if(!job.species_whitelist.Find(species)) //And it doesn't include our new species
 								for(var/i = 1 to 3)
