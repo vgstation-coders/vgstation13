@@ -150,7 +150,7 @@ GENERAL PROCS
 		return
 
 	if(!(holomap_z[uid] in (holomap_z_levels_mapped | holomap_z_levels_unmapped))) //catching some more unwanted behaviours
-		if(length(holomap_z_levels_mapped | holomap_z_levels_unmapped) > 0)
+		if((holomap_z_levels_mapped | holomap_z_levels_unmapped).len > 0)
 			holomap_z[uid] = (holomap_z_levels_mapped | holomap_z_levels_unmapped)[1]
 		else
 			deactivate(user)
@@ -234,20 +234,18 @@ GENERAL PROCS
 					damage = list(round(H.getOxyLoss(),1), round(H.getToxLoss(),1), round(H.getFireLoss(),1), round(H.getBruteLoss(),1))
 
 				if(pos)
-					var/area/H_area = get_area(H)
-					player_area = format_text(H_area.name)
+					player_area = format_text(get_area(H).name)
 					see_x = pos.x - WORLD_X_OFFSET[pos.z]
 					see_y = pos.y - WORLD_Y_OFFSET[pos.z]
 
 				//incase we dont get a pos
 				var/turf/entry_z = get_turf(H)
 				if(entry_z.z in all_tracked_z_levels)
-					entries[entry_z.z][length(++entries[entry_z.z])] = list(see_x, see_y, H, name, assignment, life_status, damage, player_area, ijob, pos)
+					entries[entry_z.z][++entries[entry_z.z].len] = list(see_x, see_y, H, name, assignment, life_status, damage, player_area, ijob, pos)
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		var/area/B_area = get_area(B)
-		var/parea = format_text(B_area.name)
+		var/parea = format_text(get_area(B).name)
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
@@ -256,7 +254,7 @@ GENERAL PROCS
 		if((pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
 			var/see_x = pos.x - WORLD_X_OFFSET[pos.z]
 			var/see_y = pos.y - WORLD_Y_OFFSET[pos.z]
-			entries[pos.z][length(++entries[pos.z])] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos)
+			entries[pos.z][++entries[pos.z].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos)
 
 //helper to get healthstate, used in both holomap and textview
 /obj/machinery/computer/crew/proc/getLifeIcon(var/list/damage)
@@ -327,14 +325,12 @@ HOLOMAP PROCS
 		var/image/bgmap = holomap_cache[holomap_bgmap]
 		animate(bgmap , alpha = 0, time = 5, easing = LINEAR_EASING)
 
-	var/list/this_holomap_images = holomap_images[uid]
-	var/list/this_holomap_tooltips = holomap_tooltips[uid]
 	if(user && user.client)
-		user.client.images -= this_holomap_images
-		user.client.screen -= this_holomap_tooltips
+		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
 
-	this_holomap_images.len = 0
-	this_holomap_tooltips.len = 0
+	holomap_images[uid].len = 0
+	holomap_tooltips[uid].len = 0
 	freeze[uid] = 0
 	holomap[uid] = 0
 
@@ -348,19 +344,16 @@ HOLOMAP PROCS
 //updates crewmarkers and map
 /obj/machinery/computer/crew/proc/updateVisuals(var/mob/user)
 	var/uid = "\ref[user]"
-	var/list/this_holomap_images = holomap_images[uid]
-	var/list/this_holomap_tooltips = holomap_tooltips[uid]
 	if(!handle_sanity(user))
 		closeHolomap(user)
 		return
 
 	//updating holomap
 	if(holomap[uid]) // we only repopulate user.client.images if holomap is enabled
-		user.client.images -= this_holomap_images
-		user.client.screen -= this_holomap_tooltips
-		
-		this_holomap_images.len = 0
-		this_holomap_tooltips.len = 0
+		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
+		holomap_images[uid].len = 0
+		holomap_tooltips[uid].len = 0
 
 		var/image/bgmap
 		var/z = holomap_z[uid]
@@ -371,21 +364,20 @@ HOLOMAP PROCS
 
 		animate(bgmap, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		this_holomap_images |= bgmap
+		holomap_images[uid] |= bgmap
 
 		for(var/entry in entries[holomap_z[uid]])
 			//can only be our z, so i'm not checking that, only if we have a pos
 			if(entry[ENTRY_POS])
 				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
         
-		user.client.images |= this_holomap_images
-		user.client.screen |= this_holomap_tooltips
+		user.client.images |= holomap_images[uid]
+		user.client.screen |= holomap_tooltips[uid]
 	else
-		user.client.images -= this_holomap_images
-		user.client.screen -= this_holomap_tooltips
-		
-		this_holomap_images.len = 0
-		this_holomap_tooltips.len = 0
+		user.client.images -= holomap_images[uid]
+		user.client.screen -= holomap_tooltips[uid]
+		holomap_images[uid].len = 0
+		holomap_tooltips[uid].len = 0
 
 //create actual marker for crew
 /obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/see_x, var/see_y, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/turf/TU)
@@ -406,9 +398,8 @@ HOLOMAP PROCS
 	content += "<br>[player_area]"
 
 	if(!istype(cmc_holomap_cache[uid], /obj/abstract/screen/interface/tooltip/CrewIcon))
-		var/obj/abstract/screen/interface/tooltip/CrewIcon/crew_icon = new (null,user,src,null,'icons/cmc/sensor_markers.dmi')
-		crew_icon.plane = ABOVE_HUD_PLANE
-		cmc_holomap_cache[uid] = crew_icon
+		cmc_holomap_cache[uid] = new /obj/abstract/screen/interface/tooltip/CrewIcon(null,user,src,null,'icons/cmc/sensor_markers.dmi')
+		cmc_holomap_cache[uid].plane = ABOVE_HUD_PLANE
 
 	var/obj/abstract/screen/interface/tooltip/CrewIcon/I = cmc_holomap_cache[uid]
 
