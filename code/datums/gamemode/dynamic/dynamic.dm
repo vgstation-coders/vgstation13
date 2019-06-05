@@ -151,8 +151,8 @@ var/stacking_limit = 90
 				ruletype = "latejoin"
 			if (istype (DR, /datum/dynamic_ruleset/midround))
 				ruletype = "midround"
-			dat += "([ruletype]) - <b>[DR.name]</b><br>"
-			rules += "[ruletype] - **[DR.name]**"
+			dat += "([ruletype]) - <b>[DR.name]</b>[DR.calledBy ? " (called by [DR.calledBy])" : ""]<br>"
+			rules += "[ruletype] - **[DR.name]** [DR.calledBy ? " (called by [DR.calledBy])" : ""]"
 	else
 		dat += "(extended)"
 	dat += "<HR>"
