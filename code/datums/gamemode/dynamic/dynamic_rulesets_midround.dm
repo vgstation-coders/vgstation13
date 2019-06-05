@@ -73,6 +73,11 @@
 			return 0
 	return 1
 
+/datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/execute()
 	var/list/possible_candidates = list()
 	possible_candidates.Add(dead_players)
@@ -292,8 +297,6 @@
 		return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
 	if(wizardstart.len == 0)
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
@@ -331,11 +334,6 @@
 		return 0//unavailable if nuke ops were already sent at roundstart
 	var/indice_pop = min(10,round(living_players.len/5)+1)
 	required_candidates = operative_cap[indice_pop]
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
@@ -412,8 +410,6 @@
 		required_heads = 1
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return FALSE
 	if(!..())
 		return FALSE
 	var/head_check = 0
@@ -453,11 +449,6 @@
 	else
 		return 0
 
-/datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
-	return ..()
-	
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
 	newninja.OnPostSetup()
 	newninja.Greet(GREET_MIDROUND)
@@ -466,7 +457,7 @@
 	spawn(5)
 		newninja.antag.current.ThrowAtStation()
 	return 1
-	
+
 //////////////////////////////////////////////
 //                                          //
 //         RAMBLER       (MIDROUND)         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -495,15 +486,10 @@
 		//We don't cotton to freaks in 20+pop
 	return ..()
 
-/datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
-	return ..()
-
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
 	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
 	var/gender = pick(MALE, FEMALE)
-	new_frank.randomise_appearance_for(gender)			
+	new_frank.randomise_appearance_for(gender)
 	new_frank.key = applicant.key
 	new_frank.dna.ready_dna(new_frank)
 	new_frank.setGender(gender)
