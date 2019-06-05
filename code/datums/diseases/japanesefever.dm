@@ -33,7 +33,9 @@
 			
 /datum/disease/japanesefever/AffectSpeech(var/datum/speech/speech)
 	var/message = speech.message
-	message = replacetext(message, "cute|adorable|cuddly", "kawaii~")
+	var/listA = list("cute","adorable","cuddly")
+	for(var/word in listA)
+		message = replacetext(message, word, "kawaii~")
 	message = replacetext(message, "idiot|dumbass|dummy|retard|faggot|nigger|spic|motherfucker|fucker|dumbshit|dipshit|dumbfuck|autist|savant|troglodyte", pick("BAKA","meanie"))
 	message = replacetext(message, "heya|hi|hello|greetings", "hai~")
 	message = replacetext(message, "sorry", "gomen")

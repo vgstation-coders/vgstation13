@@ -268,7 +268,6 @@ var/global/list/falltempoverlays = list()
 	caster.forceMove(get_turf(A))
 	spawn()
 		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
-		qdel(caster)
 		
 /proc/timestopignore(atom/A, var/duration, var/range, var/ignore_path) //Ignores any objects that follow the given path
 	if(!A || !duration)
