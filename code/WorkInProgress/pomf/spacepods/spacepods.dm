@@ -301,7 +301,7 @@
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		*/
 
-/obj/spacepod/emag_act(var/mob/user, var/obj/item/card/emag/E)
+/obj/spacepod/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
 	locked = FALSE
 	visible_message("<span class = 'warning'>\The [src] beeps twice.</span>")
 
