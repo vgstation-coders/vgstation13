@@ -124,11 +124,6 @@
 			G.update_icon()
 
 //Middle click cycles through selected modules.
-/mob/living/silicon/robot/MiddleClickOn(var/atom/A)
-	cycle_modules()
-	return
-
-//Middle click cycles through selected modules.
 /mob/living/silicon/robot/AltClickOn(var/atom/A)
 	//Borgs dont need a quick shock hotkey, just in case
 	/*

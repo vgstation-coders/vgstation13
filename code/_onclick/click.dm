@@ -245,12 +245,11 @@
 
 /*
 	Middle click
-	Only used for swapping hands
+	Used to bring up an atoms radial menus
 */
 /mob/proc/MiddleClickOn(var/atom/A)
+	A.doRadialMenu(src)
 	return
-/mob/living/carbon/MiddleClickOn(var/atom/A)
-	swap_hand()
 
 // In case of use break glass
 /*

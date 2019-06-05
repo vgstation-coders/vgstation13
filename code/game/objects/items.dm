@@ -66,6 +66,14 @@
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
+	//radial menu options
+	radial_menu = list(
+		list("Examine", "radial_examine2", "Examine the object."),
+		list("Pick up", "radial_pickup", "Pick the object up."),
+		list("Pull", "radial_pull", "Pull the object."),
+		list("Point", "radial_point", "Point at the object")
+	)
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -1375,3 +1383,14 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
+
+/obj/item/doRadialChoice(var/choice, var/mob/user)
+	if(..())
+		return 1
+
+	switch(choice)
+		if("Pick up")
+			user.put_in_active_hand(src)
+			return 1
+	return 0
+	

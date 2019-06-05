@@ -53,6 +53,13 @@
 	var/list/current_tethers
 	var/obj/shadow/shadow
 
+	//radial menu options
+	var/list/radial_menu = list(
+		list("Examine", "radial_examine2", "Examine the object."),
+		list("Pull", "radial_pull", "Pull the object."),
+		list("Point", "radial_point", "Point at the object")
+	)
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -1019,3 +1026,20 @@
 
 /atom/movable/proc/can_be_pushed(mob/user)
 	return 1
+
+/atom/movable/doRadialMenu(var/mob/user)
+	return doRadialChoice(show_radial_menu(user, src, radial_menu), user)
+
+/atom/movable/doRadialChoice(var/choice, var/mob/user)
+	switch(choice)
+		if("Examine")
+			examine(user)
+			return 1
+		if("Pull")
+			if(Adjacent(user))
+				user.start_pulling(src)
+			return 1
+		if("Point")
+			user.pointed(src)
+			return 1
+	return 0

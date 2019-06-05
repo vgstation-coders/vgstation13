@@ -980,3 +980,9 @@ its easier to just keep the beam vertical.
 	return 1
 /atom/proc/setPersistenceAge()
 	return
+
+//overridable for atom/movable
+/atom/proc/doRadialMenu(var/mob/user)
+	return
+/atom/proc/doRadialChoice(var/choice, var/mob/user)
+	return
