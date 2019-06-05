@@ -1646,6 +1646,23 @@
 		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
 		dynamic_mode_options(usr)
 
+	else if(href_list["classic_secret_prob"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/temp_prob = input(usr,"Change the probability of having the mode roll 'classic secret'.", "Change 'secret' mode probability", null) as num
+		if (temp_prob < 0)
+			to_chat(usr, "<span class='warning'>Negative values not allowed.</span>")
+			return
+		dynamic_prob_secret = temp_prob
+		log_admin("[key_name(usr)] set 'dynamic_prob_secret' to [dynamic_prob_secret].")
+		message_admins("[key_name(usr)] set 'dynamic_prob_secret' to [dynamic_prob_secret].")
+		dynamic_mode_options(usr)
+
+
 	else if(href_list["stacking_limit"])
 		if(!check_rights(R_ADMIN))
 			return

@@ -19,6 +19,7 @@ var/dynamic_no_stacking = 1 // NO STACKING : only one "round-ender", except if w
 var/dynamic_classic_secret = 0 // Only one roundstart ruleset, and only autotraitor + minor rules allowed
 var/dynamic_high_pop_limit = 45 // Will switch to "high pop override" if the roundstart population is above this
 var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
+var/dynamic_prob_secret = 50
 
 var/stacking_limit = 90
 
@@ -60,6 +61,7 @@ var/stacking_limit = 90
 	var/relative_threat = 0 // Relative threat, Lorentz-distributed.
 	var/curve_centre_of_round = 0
 	var/curve_width_of_round = 1.8
+	var/prob_secret = 50
 
 	var/peaceful_percentage = 50
 
@@ -141,6 +143,8 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/GetScoreboard()
 	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <span class='red'>[threat_level]%</span></h2>"
+	if (classic_secret)
+		dat += "<b>Classic secret</b> mode was picked.<br/>"
 	var/rules = list()
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
@@ -174,7 +178,7 @@ var/stacking_limit = 90
 	no_stacking = dynamic_no_stacking
 	if (no_stacking)
 		message_admins("Round-ending rulesets won't stack, unless the threat is above stacking_limit ([stacking_limit]).")
-	classic_secret = dynamic_classic_secret
+	classic_secret = dynamic_classic_secret || (prob(prob_secret))
 	if (classic_secret)
 		message_admins("Classic secret mode active: only autotraitors will spawn, and we will only have one roundstart ruleset.")
 	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")

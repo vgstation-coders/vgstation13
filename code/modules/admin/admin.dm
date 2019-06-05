@@ -752,6 +752,9 @@ var/global/floorIsLava = 0
 		<br/>
 		<b>Stacking threeshold:</b> Current value : <a href='?src=\ref[src];stacking_limit=1'><b>[stacking_limit]</b></a>.
 		<br/>The threshold at which "round-ender" rulesets will stack. A value higher than 100 ensure this never happens. <br/>
+		<br/>
+		<b>"Classic secret probability":</b> Current value : <a href='?src=\ref[src];classic_secret_prob=1'><b>[dynamic_prob_secret]</b></a>.
+		<br/>The probability of the game to roll the "classic secret" mode.<br/>
 		<h3>Advanced parameters</h3>
 		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
 		Glossary : <br/>
