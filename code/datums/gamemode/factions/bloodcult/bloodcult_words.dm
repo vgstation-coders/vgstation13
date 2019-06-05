@@ -5,6 +5,11 @@ var/list/cultwords_english = list("travel", "blood", "join", "hell", "destroy", 
 var/list/cultwords_rune = list("ire","ego","nahlizet","certum","veri","jatkaa","mgar","balaq", "karazet", "geeri")
 var/list/cultwords_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","rune-32","rune-64","rune-128", "rune-256", "rune-512")
 
+var/list/friendly_cultwords = list()
+var/list/friendly_cultwords_english = list("friend","love","hug")
+var/list/friendly_cultwords_rune = list("mogar","nohlizot","jotkoo")
+var/list/friendly_cultwords_icons = list("rune-1","rune-2","rune-4")
+
 /datum/cultword
 	var/english		= "word"//don't change those
 	var/rune		= "zek'kon"
@@ -12,12 +17,22 @@ var/list/cultwords_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","r
 	var/icon_state	= ""
 	var/color//used by path rune markers
 
+/datum/friendly_cultword
+	var/english		= "word"
+	var/rune		= "zek'kon"
+	var/icon		= 'icons/effects/uristrunes.dmi'
+	var/icon_state	= ""
+	var/color//used by path rune markers
+	
 /proc/initialize_cultwords()
 	if (cultwords_initialized)
 		return
 	for(var/subtype in subtypesof(/datum/cultword))
 		var/datum/cultword/new_word = new subtype()
 		cultwords[new_word.english] = new_word
+	for(var/subtype in subtypesof(/datum/friendly_cultword))
+		var/datum/friendly_cultword/new_word = new subtype()
+		friendly_cultwords[new_word.english] = new_word
 	cultwords_initialized = 1
 
 //for now we're not calling it anywhere, but should we want to randomize words again later, that's what that proc is for.
@@ -34,7 +49,7 @@ var/list/cultwords_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","r
 
 	for (var/obj/effect/rune/rune in rune_list)
 		rune.update_icon()
-
+	
 /datum/cultword/travel
 	english		= "travel"
 	rune		= "ire"

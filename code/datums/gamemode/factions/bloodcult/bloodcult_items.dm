@@ -1232,11 +1232,25 @@ var/list/arcane_tomes = list()
 	volume = 60
 	force = 5
 	throwforce = 7
-
+	
+/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg
+	name = "tempting goblet"
+	desc = "A large obsidian cup in the shape of a skull. Supposedly used by followers of Nar-Sie to hold blood from sacrifices, but this version has a label reading \"NO HUMAN HARM\"."
+	icon_state = "cult"
+	item_state = "cult"
+	isGlass = 0
+	amount_per_transfer_from_this = 10
+	volume = 150
+	force = 5
+	throwforce = 7
+	
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
 	if (iscultist(user))
-		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
+		if(issilicon(user))
+			to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish the vessels of cultists, regardless of blood type. It's a shame you're a robot.</span>")
+		else
+			to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
 	else if (get_blood(reagents))
 		to_chat(user, "<span class='sinister'>Its contents look delicious though. Surely a sip won't hurt...</span>")
 

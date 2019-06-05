@@ -826,8 +826,8 @@
 	var/list/targets = list()
 
 	//first lets check for a victim above
-	if (Holiday == APRIL_FOOLS_DAY)
-		for (var/mob/living/silicon/S in T) // Has science gone too far????
+	for (var/mob/living/silicon/S in T) // Has science gone too far????
+		if (S.cult_permitted || Holiday == APRIL_FOOLS_DAY)
 			if (!iscultist(S))
 				targets.Add(S)
 
@@ -2743,5 +2743,4 @@ var/list/bloodcult_exitportals = list()
 	else
 		return null
 */
-
 #undef RUNE_STAND
