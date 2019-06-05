@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/box/syndicate/New()
 	..()
-	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100))
+	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
 
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -155,6 +155,15 @@
 			new /obj/item/weapon/gun/grenadelauncher(src)
 			new /obj/item/clothing/glasses/sunglasses(src)
 			new /obj/item/device/radio/headset/headset_earmuffs(src)
+
+		if("highlander")//SCOTLAND
+			new /obj/item/clothing/head/beret/highlander(src)
+			new /obj/item/clothing/suit/highlanderkilt(src)
+			new /obj/item/clothing/shoes/jackboots/highlander(src)
+			new /obj/item/weapon/claymore(src)
+			new /obj/item/weapon/glue(src)
+			new /obj/item/weapon/vinyl/scotland(src)
+			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
 	tag = tagname
 

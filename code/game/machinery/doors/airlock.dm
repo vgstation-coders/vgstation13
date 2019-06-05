@@ -1264,7 +1264,7 @@ About the new airlock wires panel:
 			operating = -1
 	else
 		..(I, user)
-
+	add_fingerprint(user)
 	return
 
 /obj/machinery/door/airlock/proc/bashed_in(var/mob/user)

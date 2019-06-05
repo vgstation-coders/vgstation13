@@ -79,6 +79,10 @@
 	if(!istype(new_character))
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
+	if (!current)
+		transfer_to_without_current(new_character)
+		return
+
 	new_character.attack_log += current.attack_log
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 
@@ -103,6 +107,23 @@
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
+
+	if (hasFactionsWithHUDIcons())
+		update_faction_icons()
+
+/datum/mind/proc/transfer_to_without_current(var/mob/living/new_character)
+	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
+
+	if(new_character.mind)		//remove any mind currently in our new body's mind variable
+		new_character.mind.current = null
+
+	if(active)
+		new_character.key = key		//now transfer the key to link the client to our new body
+
+	current = new_character		//link ourself to our new body
+	new_character.mind = src	//and link our new body to ourself
+
+	//If the original body was fully destroyed there is no way for the roles to check for any spells it had, so store that shit in roles.
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
@@ -203,6 +224,8 @@
 
 			if ((chosen_greeting && chosen_greeting != GREET_CUSTOM) || (chosen_greeting == GREET_CUSTOM && custom_greeting))
 				R.Greet(chosen_greeting,custom_greeting)
+			
+			
 
 	if (href_list["add_role"])
 		var/list/available_roles = list()
@@ -211,7 +234,6 @@
 			if (initial(R.id) && !(initial(R.id) in antag_roles))
 				available_roles.Add(initial(R.id))
 				available_roles[initial(R.id)] = R
-
 
 		if(!available_roles.len)
 			alert("This mob already has every available roles! Geez, calm down!", "Assigned role")
@@ -256,6 +278,10 @@
 				var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[joined_faction], null, 1)
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
+
+		if (isninja(current))
+			if ((alert("Throw the ninja into the station from space?", "Alert", "Yes", "No") == "Yes"))
+				current.ThrowAtStation()
 
 		newRole.OnPostSetup(FALSE)
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
@@ -338,7 +364,7 @@
 			new_objective.faction.AppendObjective(new_objective)
 			message_admins("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[usr.key]/([usr.name]) gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
-		else if (obj_holder.faction) //or is it just an explicit faction obj? 
+		else if (obj_holder.faction) //or is it just an explicit faction obj?
 			obj_holder.faction.AppendObjective(new_objective)
 			message_admins("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
@@ -384,12 +410,13 @@
 					log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [objective.explanation_text]")
 		else if(istype(owner, /datum/faction))
 			var/datum/faction/F = owner
-			var/list/prev_objectives = F.GetObjectives().Copy()
+			var/list/faction_objectives = F.GetObjectives()
+			var/list/prev_objectives = faction_objectives.Copy()
 			F.forgeObjectives()
 			var/list/unique_objectives_faction = find_unique_objectives(F.GetObjectives(), prev_objectives)
 			if (!unique_objectives_faction.len)
 				alert(usr, "No new objectives generated.", "Alert", "OK")
-			else 
+			else
 				for (var/datum/objective/objective in unique_objectives_faction)
 					message_admins("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")
 					log_admin("[usr.key]/([usr.name]) gave \the [F.ID] the objective: [objective.explanation_text]")

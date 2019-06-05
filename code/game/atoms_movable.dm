@@ -53,7 +53,9 @@
 	var/list/current_tethers
 	var/obj/shadow/shadow
 
-	//radial menu options
+  var/ignore_blocking = 0
+
+  //radial menu options
 	var/list/radial_menu = list(
 		list("Examine", "radial_examine2", "Examine the object."),
 		list("Pull", "radial_pull", "Pull the object."),
@@ -1026,6 +1028,38 @@
 
 /atom/movable/proc/can_be_pushed(mob/user)
 	return 1
+
+/atom/movable/proc/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null) //throws a thing at the station from the edges
+	var/startx = 0
+	var/starty = 0
+	var/endy = 0
+	var/endx = 0
+	if (!startside)
+		startside = pick(cardinal)
+
+	switch(startside)
+		if(NORTH)
+			starty = world.maxy-TRANSITIONEDGE-5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(EAST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = world.maxx-TRANSITIONEDGE-5
+		if(SOUTH)
+			starty = TRANSITIONEDGE+5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(WEST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = TRANSITIONEDGE+5
+
+	//grabs a turf in the center of the z-level
+	//range of turfs determined by radius var
+	endx = rand((world.maxx/2)-radius,(world.maxx/2)+radius)
+	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
+	var/turf/startzone = locate(startx, starty, 1)
+	var/turf/endzone = locate(endx, endy, 1)
+	
+	forceMove(startzone)
+	throw_at(endzone, null, throwspeed)
 
 /atom/movable/doRadialMenu(var/mob/user)
 	return doRadialChoice(show_radial_menu(user, src, radial_menu), user)

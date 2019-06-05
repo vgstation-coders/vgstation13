@@ -316,7 +316,7 @@
 	if(user.stat)
 		return
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+		occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 		return
 	if(!get_charge())
 		return
@@ -363,7 +363,7 @@
 	if(throwing)
 		return 0
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>", TRUE)
+		occupant_message("<span class='red'>Maintenance protocols in effect.</span>", TRUE)
 		return
 	return domove(direction)
 
@@ -557,12 +557,12 @@
 	internal_damage &= ~int_dam_flag
 	switch(int_dam_flag)
 		if(MECHA_INT_TEMP_CONTROL)
-			occupant_message("<font color='blue'><b>Life support system reactivated.</b></font>")
+			occupant_message("<span class='notice'><b>Life support system reactivated.</b></span>")
 			pr_int_temp_processor.start()
 		if(MECHA_INT_FIRE)
-			occupant_message("<font color='blue'><b>Internal fire extinquished.</b></font>")
+			occupant_message("<span class='notice'><b>Internal fire extinquished.</b></span>")
 		if(MECHA_INT_TANK_BREACH)
-			occupant_message("<font color='blue'><b>Damaged internal tank has been sealed.</b></font>")
+			occupant_message("<span class='notice'><b>Damaged internal tank has been sealed.</b></span>")
 	return
 
 
@@ -600,9 +600,9 @@
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		user.visible_message("<font color='red'><b>[user] hits [src.name], doing some damage.</b></font>", "<font color='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></font>")
+		user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
 	else
-		user.visible_message("<font color='red'><b>[user] hits [src.name]. Nothing happens</b></font>","<font color='red'><b>You hit [src.name] with no visible effect.</b></font>")
+		user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
 		src.log_append_to_last("Armor saved.")
 
 	user.delayNextAttack(10)
@@ -777,8 +777,8 @@
 				V.show_message("The [W] bounces off [src.name] armor.", 1)
 */
 	else
-		src.occupant_message("<font color='red'><b>[user] hits [src] with [W].</b></font>")
-		user.visible_message("<font color='red'><b>[user] hits [src] with [W].</b></font>", "<font color='red'><b>You hit [src] with [W].</b></font>")
+		src.occupant_message("<span class='red'><b>[user] hits [src] with [W].</b></span>")
+		user.visible_message("<span class='red'><b>[user] hits [src] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
 		src.take_damage(W.force,W.damtype)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
@@ -942,8 +942,8 @@
 					V.show_message("The [W] bounces off [src.name] armor.", 1)
 */
 		else
-			src.occupant_message("<font color='red'><b>[user] hits [src] with [W].</b></font>")
-			user.visible_message("<font color='red'><b>[user] hits [src] with [W].</b></font>", "<font color='red'><b>You hit [src] with [W].</b></font>")
+			src.occupant_message("<span class='red'><b>[user] hits [src] with [W].</b></span>")
+			user.visible_message("<span class='red'><b>[user] hits [src] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
 			src.take_damage(W.force,W.damtype)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 */
@@ -1340,14 +1340,15 @@
 		return
 	if(usr.incapacitated() || !occupant)
 		return
-	if(usr != occupant && occupant.isUnconscious())
-		visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
-		if(do_after(usr, src, 30 SECONDS))
-			if(!occupant.isUnconscious())
-				visible_message("<span class='notice'>[occupant.name] woke up and pushed [usr] away.</span>")
-				return
-			go_out(over_location)
-			add_fingerprint(usr)
+	if(usr != occupant)
+		if(occupant.isUnconscious())
+			visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
+			if(do_after(usr, src, 30 SECONDS))
+				if(!occupant.isUnconscious())
+					visible_message("<span class='notice'>[occupant.name] woke up and pushed [usr] away.</span>")
+					return
+				go_out(over_location)
+				add_fingerprint(usr)
 		return
 	for(var/atom/movable/A in over_location.contents)
 		if(A.density)
@@ -1467,7 +1468,7 @@
 	if (occupant)
 		occupant << sound('sound/machines/warning.ogg',wait=0)
 		log_message("Emergency ejection.",1)
-		occupant_message("<font color='red'>Emergency ejection protocol engaged.</font>")
+		occupant_message("<span class='red'>Emergency ejection protocol engaged.</span>")
 		spawn(10)
 		if (occupant)
 			go_out()
@@ -1865,7 +1866,7 @@
 		if(usr != src.occupant)
 			return
 		if(state)
-			occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+			occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 			return
 		maint_access = !maint_access
 		send_byjax(src.occupant,"exosuit.browser","t_maint_access","[maint_access?"Forbid":"Permit"] maintenance protocols")
@@ -1885,7 +1886,7 @@
 				to_chat(user, "The securing bolts are now exposed.")
 				log_message("Maintenance protocols engaged.")
 				if(occupant)
-					occupant_message("<font color='red'>Maintenance protocols engaged.</font>")
+					occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
 					occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
 			else if(state==STATE_BOLTSEXPOSED)
 				state = STATE_BOLTSHIDDEN
@@ -1948,10 +1949,10 @@
 			return
 		if(T == src.loc)
 			src.clearInternalDamage(MECHA_INT_CONTROL_LOST)
-			src.occupant_message("<font color='blue'>Recalibration successful.</font>")
+			src.occupant_message("<span class='notice'>Recalibration successful.</span>")
 			src.log_message("Recalibration of coordination system finished with 0 errors.")
 		else
-			src.occupant_message("<font color='red'>Recalibration failed.</font>")
+			src.occupant_message("<span class='red'>Recalibration failed.</span>")
 			src.log_message("Recalibration of coordination system failed with 1 error.",1)
 
 	//debug

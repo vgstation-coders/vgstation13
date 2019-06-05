@@ -13,13 +13,13 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED)
 
 // desc replacement block
-/obj/item/clothing/shoes/syndigaloshes/examine(mob/user) 
+/obj/item/clothing/shoes/syndigaloshes/examine(mob/user)
 	..()
-	if(is_holder_of(user, src)) // are the noslips on your person or on the floor? 
+	if(is_holder_of(user, src)) // are the noslips on your person or on the floor?
 		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> they are apparently modified with complex electronics and extra-grip soles.</span>") // these are no-slips yes hello sir
 		to_chat(user, "<span class='info'>They are rated to fit all known species able to wear footgear.</span>") // catbeasts/unathi/golems btfo, how will they ever recover
 		return
-	if(isturf(loc) && user.Adjacent(src)) // so there's degrees of identification. above is blatant, this is less so 
+	if(isturf(loc) && user.Adjacent(src)) // so there's degrees of identification. above is blatant, this is less so
 		to_chat(user, "Something's a little off...")
 
 /obj/item/clothing/shoes/syndigaloshes/New()
@@ -64,7 +64,7 @@
 
 /obj/item/clothing/shoes/syndigaloshes/proc/change()
 	var/obj/item/clothing/shoes/A
-	A = input("Pick a color:", "BOOYEA", A) as null|anything in clothing_choices 
+	A = input("Pick a color:", "BOOYEA", A) as null|anything in clothing_choices
 	if(!A || usr.incapacitated() || !Adjacent(usr) || isturf(src.loc))
 		return
 
@@ -74,7 +74,7 @@
 	item_state = A.item_state
 	_color = A._color
 	step_sound = A.step_sound
-	usr.update_inv_shoes()	
+	usr.update_inv_shoes()
 
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"
@@ -502,3 +502,10 @@ obj/item/clothing/shoes/jackboots/cowboy
 	icon_state = "noble-boots"
 	item_state = "noble-boots"
 	wizard_garb = TRUE
+
+/obj/item/clothing/shoes/jackboots/highlander
+	name = "highlander's boots"
+	desc = "A quality pair of boots, essential for any highlander."
+	icon_state = "highlanderboots"
+	item_state = "highlanderboots"
+	wizard_garb = 1

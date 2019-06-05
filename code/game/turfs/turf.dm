@@ -472,9 +472,12 @@
 			M.take_damage(100, "brute")
 
 /turf/bless()
+	if (holy)
+		return
 	holy = 1
 	..()
-
+	new /obj/effect/overlay/holywaterpuddle(src)
+	
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
 // Used for A-star pathfinding

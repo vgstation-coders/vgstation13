@@ -22,11 +22,11 @@
 	..()
 
 /obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
-	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
-	A.clean_blood()
 	for(var/obj/effect/O in A)
 		if(iscleanaway(O))
 			qdel(O)
+	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
+	A.clean_blood()
 	playsound(src, get_sfx("mop"), 25, 1)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)

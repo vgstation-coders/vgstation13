@@ -329,7 +329,7 @@ font-weight:bold;
 	if(istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter))
 		return O:id_tag in sensors
 
-/obj/machinery/computer/general_air_control/linkWith(var/mob/user, var/obj/O, var/link/context)
+/obj/machinery/computer/general_air_control/linkWith(var/mob/user, var/obj/O, var/list/context)
 	sensors[O:id_tag] = reject_bad_name(input(user, "Choose a sensor label:", "Sensor Label") as text|null, allow_numbers=1)
 	return 1
 

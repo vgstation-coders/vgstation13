@@ -1,6 +1,9 @@
 var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
+
+#define HOLYWATER_DURATION 8 MINUTES 
+
 /atom
 
 	var/ghost_read  = 1 // All ghosts can read
@@ -218,8 +221,8 @@ var/global/list/ghdel_profiling = list()
 	for (var/obj/effect/beam/B in loc)
 		B.Crossed(src)
 
-/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	return Bumped(W)
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	return Bumped(F)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open

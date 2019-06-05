@@ -223,7 +223,7 @@ var/global/datum/controller/vote/vote = new()
 						master_mode = .
 				if(!going)
 					going = 1
-					to_chat(world, "<font color='red'><b>The round will start soon.</b></font>")
+					to_chat(world, "<span class='red'><b>The round will start soon.</b></span>")
 			if("crew_transfer")
 				if(. == "Initiate Crew Transfer")
 					init_shift_change(null, 1)
@@ -352,7 +352,7 @@ var/global/datum/controller/vote/vote = new()
 				world << sound('sound/misc/rockthevote.ogg')
 		if(mode == "gamemode" && going)
 			going = 0
-			to_chat(world, "<font color='red'><b>Round start has been delayed.</b></font>")
+			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
 
 		time_remaining = (ismapvote && ismapvote.len ? 60 : round(config.vote_period/10))
 		return 1
