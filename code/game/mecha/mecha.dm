@@ -471,10 +471,12 @@
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
 			if (L.flags & INVULNERABLE)
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
 				//can't be knocked down? you'll still take the damage.
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 				L.take_overall_damage(5,0)
@@ -491,6 +493,7 @@
 				playsound(src, pick(hit_sound), 50, 0, 0)
 				breakthrough = 1
 		else
+			stopMechWalking()
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
 
