@@ -177,4 +177,16 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	cost_min = 1800
 	cost_max = 2200
 	display_chance = 80
+	
+/datum/black_market_item/other
+	category = "Miscellaneous Goods" 	
 
+/datum/black_market_item/other/japanese_nanites
+	name = "Package of Japanese Nanites"
+	desc = "Uh. So, these little nanites turn you into an anime girl in both body and mind. Only a single unit is needed to begin transformation. The black market doesn't judge people's interests..."
+	item = /obj/item/weapon/storage/japanese_nanites
+	stock_min = 1
+	stock_max = 2
+	cost_min = 700
+	cost_max = 1100
+	display_chance = 65

@@ -94,14 +94,14 @@ var/global/list/falltempoverlays = list()
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/proc/performignore(mob/user = usr, skipcharge = 0, var/ignore_path) //G U N K
+/spell/aoe_turf/fall/proc/performignore(mob/user = usr, skipcharge = 1, ignore_path) //G U N K
 	if(!holder)
 		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		return
-	var/list/targets = choose_targets(user, ignore_path)
+	var/list/targets = choose_targets(user)
 	if(targets && targets.len)
 		if(prob(the_world_chance))
 			invocation = "ZA WARUDO"
@@ -115,11 +115,11 @@ var/global/list/falltempoverlays = list()
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
-			cast(targets, user, FALSE)
+			cast(targets, user, FALSE, ignore_path)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/cast(list/targets, mob/user, var/ignore_timeless = FALSE)
+/spell/aoe_turf/fall/cast(list/targets, mob/user, var/ignore_timeless = FALSE, var/ignore_path)
 	var/turf/ourturf = get_turf(user)
 
 	var/list/potentials = circlerangeturfs(user, range)
@@ -145,10 +145,13 @@ var/global/list/falltempoverlays = list()
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
-		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, user.mind, src, invocation == "ZA WARUDO")
+		
+		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, user.mind, src, invocation == "ZA WARUDO", ignore_path)
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything
+				if(ignore_path && istype(everything,ignore_path))
+					continue
 				if(L == holder)
 					continue
 				if(!ignore_timeless && L.flags & TIMELESS)
@@ -158,6 +161,8 @@ var/global/list/falltempoverlays = list()
 				spawn() recursive_timestop(L)
 				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 			else
+				if(ignore_path && istype(everything,ignore_path))
+					continue
 				if(!ignore_timeless && everything.flags & TIMELESS)
 					continue
 				spawn() recursive_timestop(everything)
@@ -171,6 +176,7 @@ var/global/list/falltempoverlays = list()
 
 		affected += T
 	return
+	
 /spell/aoe_turf/fall/proc/recursive_timestop(var/atom/O, var/ignore_timeless = FALSE)
 	var/list/processing_list = list(O)
 	var/list/processed_list = new/list()
@@ -261,26 +267,6 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1, ignore_timeless)
-		qdel(caster)
-		
-/proc/timestopignore(atom/A, var/duration, var/range, var/ignore_path, var/ignore_timeless = FALSE) //This was created so that a chrono-grenade that allows carbons through could be made.
-	if(!A || !duration)
-		return
-	var/mob/caster = new
-	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
-	caster.invisibility = 101
-	caster.setDensity(FALSE)
-	caster.anchored = 1
-	caster.flags = INVULNERABLE
-	caster.add_spell(fall)
-	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
-	fall.the_world_chance = 0
-	fall.range = range ? range : 7		//how big
-	fall.sleeptime = duration			//for how long
-	caster.forceMove(get_turf(A))
-	spawn()
 		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
 		qdel(caster)
 		
@@ -301,5 +287,5 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1, FALSE)
+		fall.performignore(caster, 1, ignore_path)
 		qdel(caster)

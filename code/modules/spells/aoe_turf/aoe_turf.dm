@@ -10,7 +10,7 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 	var/inner_radius = -1 //for all your ring spell needs
 	var/center	//in case it's not supposed to center on the caster
 
-/spell/aoe_turf/choose_targets(mob/user = usr, var/ignore_path = "")
+/spell/aoe_turf/choose_targets(mob/user = usr)
 	var/list/targets = list()
 	var/spell_center = holder
 	if(center)
@@ -21,15 +21,13 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 				continue
 			if(istype(target, /turf/space) && (spell_flags & IGNORESPACE))
 				continue
-			if(ignore_path && istype(target,ignore_path))
-				continue
 			targets += target
 
 	if(!targets.len) //doesn't waste the spell
 		return
 
 	return targets
-
+	
 /spell/aoe_turf/is_valid_target(var/target, mob/user, options)
 	var/spell_center = user
 	if(center)

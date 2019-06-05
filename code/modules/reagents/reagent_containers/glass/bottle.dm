@@ -471,6 +471,15 @@
 	..()
 	reagents.add_reagent(PERIDAXON, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/japanese_nanites
+	name = "Japanese Nanite Bottle"
+	desc = "The liquid smells suspicious, but you can't put your finger on it."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/japanese_nanites/New()
+	..()
+	reagents.add_reagent(JAPANESENANITES, 30)
+	
 /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall
 	name = "Nanobots Bottle"
 	desc = "A small bottle. You hear beeps and boops."

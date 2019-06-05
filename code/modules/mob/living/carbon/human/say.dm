@@ -64,6 +64,8 @@
 		for(var/mob/O in hearers())
 			if(!O.is_deaf() && O.client)
 				O.client.handle_hear_voice(src)
+	for(var/datum/disease/disease in viruses)
+		disease.AffectSpeech(speech)
 
 
 /mob/living/carbon/human/GetVoice()

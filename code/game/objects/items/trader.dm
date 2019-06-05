@@ -37,7 +37,7 @@
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
-	desc = "Hmmm... it smells like tomato"
+	desc = "Hmmm... it smells like tomato."
 	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
