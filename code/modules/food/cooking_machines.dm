@@ -429,7 +429,7 @@ var/global/ingredientLimit = 10
 	..()
 	empty_icon()
 
-/obj/machinery/cooking/deepfryer/makeFood(var/item/I)
+/obj/machinery/cooking/deepfryer/makeFood(var/obj/item/I)
 	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			src.transfer_reagents_to_food(src.ingredient)
@@ -543,7 +543,7 @@ var/global/ingredientLimit = 10
 	else
 		return ..()
 
-/obj/machinery/cooking/deepfryer/confectionator/makeFood(var/item/I)
+/obj/machinery/cooking/deepfryer/confectionator/makeFood(var/obj/item/I)
 
 	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 	if(cooks_in_reagents)
