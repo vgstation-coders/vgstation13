@@ -131,9 +131,15 @@
 	var/mob/living/carbon/handcuffed_to = C.mutual_handcuffed_to
 
 	if (C && handcuffed_to)
+		//remove from the list
+		mutual_handcuffed_mobs.Remove(C)
+		mutual_handcuffed_mobs.Remove(handcuffed_to)
+
+		//remove from the event
 		C.on_moved.Remove(C.mutual_handcuffed_to_event_key)
 		handcuffed_to.on_moved.Remove(handcuffed_to.mutual_handcuffed_to_event_key)
 
+		//reset the mob's vars
 		handcuffed_to.mutual_handcuffed_to = null
 		C.mutual_handcuffed_to = null
 
