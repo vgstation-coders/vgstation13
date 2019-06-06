@@ -53,9 +53,9 @@
 	var/list/current_tethers
 	var/obj/shadow/shadow
 
-  var/ignore_blocking = 0
+	var/ignore_blocking = 0
 
-  //radial menu options
+	//radial menu options
 	var/list/radial_menu = list(
 		list("Examine", "radial_examine2", "Examine the object."),
 		list("Pull", "radial_pull", "Pull the object."),
