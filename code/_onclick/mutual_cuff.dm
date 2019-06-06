@@ -2,6 +2,7 @@
 	var/is_selecting_other_player = FALSE
 	var/mob/living/carbon/first_player_to_cuff = null
 	var/mob/living/carbon/second_player_to_cuff = null
+	var/last_call = 0
 
 /obj/item/weapon/handcuffs/proc/apply_mutual_cuffs(mob/target, mob/user)
 	if (restraint_resist_time > 0)
@@ -12,6 +13,7 @@
 	is_selecting_other_player = FALSE
 	first_player_to_cuff = null
 	second_player_to_cuff = null
+	last_call = 0
 
 /datum/mutual_cuff_other_players/proc/apply_mutual_cuffs_from_third_player(var/mob/target, var/mob/user, var/obj/item/weapon/handcuffs/handcuffs)
 	//2. this gets executed on the second cycle
@@ -20,7 +22,7 @@
 		second_player_to_cuff = target
 		if (!first_player_to_cuff || !user.Adjacent(first_player_to_cuff))
 			reset_vars()
-			to_chat(user, "\The [first_player_to_cuff] is too far away.")
+			to_chat(user, "<span class='warning'>\The [first_player_to_cuff] is too far away.</span>")
 			return
 		if (handcuffs.restraint_resist_time > 0)
 			//2. if all is well the first player gets cuffed to the second one
@@ -41,7 +43,7 @@
 		//1. if second player has been selected don't do anything
 		if (second_player_to_cuff)
 			return
-		to_chat(user, "<span class='notice'>No other target selected.</span>")
+		to_chat(user, "<span class='warning'>No other target selected.</span>")
 		reset_vars()
 		return
 
@@ -57,10 +59,10 @@
 	if(do_after(third, second, restraint_apply_time))
 		//2. another range check just to be sure
 		if (!first || !third.Adjacent(first))
-			to_chat(third, "\The [first] is too far away.")
+			to_chat(third, "<span class='warning'>\The [first] is too far away.</span>")
 			return
 		if(first.handcuffed || first.mutual_handcuffs || second.handcuffed || second.mutual_handcuffs)
-			to_chat(third, "<span class='notice'>One of the them is already handcuffed.</span>")
+			to_chat(third, "<span class='warning'>One of the them is already handcuffed.</span>")
 			return FALSE
 		feedback_add_details("handcuffs", "[name]")
 
@@ -68,17 +70,11 @@
 		third.attack_log += text("\[[time_stamp()]\] <font color='red'>Has restrained [first.name] ([first.ckey]) and the \the [second.name] ([second.key]) with \the [src](mutual cuff).</font>")
 		first.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [third.name] ([third.ckey])(mutual cuff)</font>")
 		second.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [third.name] ([third.ckey])(mutual cuff)</font>")
-		log_attack("[third.name] ([third.ckey]) has restrained [first.name] ([third.ckey]) and [second.name] ([second.ckey]) with \the [src] (mutual cuff)")
+		log_attack("key_name(third) has restrained key_name(first) and key_name(second) with \the [src] (mutual cuff)")
 
 		var/obj/item/weapon/handcuffs/cuffs = src
-		if(istype(src, /obj/item/weapon/handcuffs/cyborg))
-			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(third))
-		else
-			third.drop_from_inventory(cuffs)
 
-		//2. the third player must unequip the cuffs so the other players get them
-		third.u_equip(cuffs)
-
+		third.drop_from_inventory(cuffs)
 		handle_mutual_cuff_event_logic(first, second, cuffs)
 	
 		return TRUE
@@ -101,13 +97,11 @@
 		user.visible_message("<span class='danger'>\The [user] has restrained \the [C] together with \the [src]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has restrained [C.name] ([C.ckey]) with \the [src](mutual cuff).</font>")
 		C.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [user.name] ([user.ckey])(mutual cuff)</font>")
-		log_attack("[user.name] ([user.ckey]) has restrained [C.name] ([C.ckey]) with \the [src] (mutual cuff)")
+		log_attack("key_name(user) has restrained [C.name] ([C.ckey]) with \the [src] (mutual cuff)")
 
 		var/obj/item/weapon/handcuffs/cuffs = src
-		if(istype(src, /obj/item/weapon/handcuffs/cyborg))
-			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(user))
-		else
-			user.drop_from_inventory(cuffs)
+
+		user.drop_from_inventory(cuffs)
 
 		handle_mutual_cuff_event_logic(C, user, cuffs)
 		return TRUE
@@ -148,11 +142,11 @@
 		handcuffed_to.u_equip(src)
 
 /mob/living/carbon/proc/on_mutual_cuffed_move()
-	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src)) 
+	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src) && (world.time > mutual_cuff_other_players.last_call + 2)) 
 		mutual_handcuffed_to.Slip(2, 3)
 		src.Slip(2, 3)
 		src.forceMove(mutual_handcuffed_to.loc)
-		sleep(2) //sleep as not to get too many nested calls
-
+		//last_call as not to get too many nested calls
+		mutual_cuff_other_players.last_call = world.time
 
 	

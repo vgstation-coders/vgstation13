@@ -95,6 +95,11 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
+	
+	for(var/mob/living/carbon/carbon in src.loc)
+		if (carbon.mutual_handcuffs)
+			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
+				return 0
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
@@ -170,15 +175,6 @@
 		return 0
 	if(!src.can_close())
 		return 0
-
-	for(var/atom/movable/AM in src.loc)
-		if (iscarbon(AM))
-			var/mob/living/carbon/carbon = AM
-			if (carbon.mutual_handcuffs)
-				if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
-					if (user)
-						to_chat(user, "<span class='danger'>You cannot close \the [src] while \the [carbon.mutual_handcuffed_to] is cuffed to \the [carbon].</span>")
-					return 0
 
 	take_contents()
 
