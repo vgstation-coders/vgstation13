@@ -269,9 +269,10 @@ For vending packs, see vending_packs.dm*/
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
-	data["name_of_source_account"] = current_acct["account"].owner_name
+	var/datum/money_account/account = current_acct["account"]
+	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = current_acct["account"].fmtBalance()
+	data["money"] = account.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = SSsupply_shuttle.moving
 	data["at_station"] = SSsupply_shuttle.at_station
@@ -526,9 +527,10 @@ For vending packs, see vending_packs.dm*/
 			if(I && SO.orderedby == I.registered_name)
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
-	data["name_of_source_account"] = current_acct["account"].owner_name
+	var/datum/money_account/account = current_acct["account"]
+	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = current_acct["account"].fmtBalance()
+	data["money"] = account.fmtBalance()
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)

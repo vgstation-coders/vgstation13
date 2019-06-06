@@ -694,7 +694,6 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
-		var/M_ckey = usr.ckey
 		if(!isobserver(M) || !iscultist(M))
 			return
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src

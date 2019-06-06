@@ -497,7 +497,7 @@
 
 	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
 	regenerate_icons()
-	
+
 /mob/living/simple_animal/corgi/Ian/Destroy()
 	..()
 	master = null
@@ -508,12 +508,12 @@
 		return 0 //under effects of time magick
 
 	..()
-	
+
 	if(!stat && !resting && !locked_to && (ckey == null)) //Behavior mechanisms (om nom :3)
 		if(ian_status == IDLE)
 			get_target()
-			stop_automated_movement = 0		
-			
+			stop_automated_movement = 0
+
 		else if(ian_status == BEGIN_FOOD_HUNTING)
 			ian_status = FOOD_HUNTING
 			spawn(0) // Separate process
@@ -525,10 +525,8 @@
 					if(!step_towards(src,movement_target,1))
 						failedsteps++
 					sleep(6)
-					
-				emote("me", 1, "B")	
-				if(movement_target)		
-					emote("me", 1, "C")	
+
+				if(movement_target)
 					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
 						movement_target.attack_animal(src)
 					else if(ishuman(movement_target.loc))
@@ -536,7 +534,7 @@
 							emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")
 				ian_status = IDLE
 				movement_target = null
-							
+
 		else if(ian_status == BEGIN_POINTER_FOLLOWING)
 			ian_status = POINTER_FOLLOWING
 			if(prob(35) || (master != null && pointer_caller == master))
@@ -549,24 +547,24 @@
 						if(!step_towards(src,movement_target,1))
 							failedsteps++
 						sleep(6)
-						
-					if(movement_target)		
+
+					if(movement_target)
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")	
+							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
 							ian_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags his tail.")	
+							emote("me", 1, "barks at [movement_target] and wags his tail.")
 							ian_status = IDLE
 						else
 							emote("me", 1, "barks with an attitude!")
 							ian_status = IDLE
-								
+
 			else
 				emote("me", 1, "stares into space with a blank expression.")
 				ian_status = IDLE
-			
+
 /mob/living/simple_animal/corgi/Ian/proc/get_target()
 	var/vision_range = 5
 	var/list/can_see = view(src, vision_range)
@@ -581,18 +579,18 @@
 				movement_target = H
 				ian_status = BEGIN_FOOD_HUNTING
 				return
-		
+
 	for(var/obj/effect/decal/point/pointer in can_see)
 		var/atom/pointer_target = pointer.target
 		if(pointer_target == src)
-			return 
+			return
 		ian_status = BEGIN_POINTER_FOLLOWING
 		pointer_caller = pointer.pointer
 		movement_target = pointer_target
 		return
-			
-			
-			
+
+
+
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()
 
@@ -684,7 +682,7 @@
 
 /mob/living/simple_animal/corgi/Ian/react_to_touch(mob/M)
 	..()
-	
+
 	if(M && !isUnconscious() && M.a_intent == I_HELP && prob(5))
 		master = M
 		to_chat(M, "Ian seems closer to you now. At least until somebody else gives him attention, anyway.")
