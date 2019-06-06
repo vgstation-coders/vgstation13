@@ -70,8 +70,8 @@
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
-		else
-			MiddleClickOn(A)
+		else if(modifiers["alt"]) // alt and alt-gr (rightalt)
+			MiddleAltClickOn(A)
 		return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
@@ -248,14 +248,14 @@
 	Used to bring up an atoms radial menus
 */
 /mob/proc/MiddleClickOn(var/atom/A)
+	return
+/mob/living/carbon/MiddleClickOn(var/atom/A)
+	swap_hand()
+
+/mob/proc/MiddleAltClickOn(var/atom/A)
 	A.doRadialMenu(src)
 	return
 
-// In case of use break glass
-/*
-/atom/proc/MiddleClick(var/mob/M as mob)
-	return
-*/
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
 	pointed(A)
