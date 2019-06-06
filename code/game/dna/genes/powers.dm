@@ -143,6 +143,10 @@
 	if(!user || !istype(user))
 		return
 
+	if(user.mind.miming)
+		to_chat(user, "<span class = 'warning'>You find yourself unable to project your mind outward.</span>")
+		return
+
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
 
 	if(!say)
@@ -206,9 +210,9 @@
 		return 1
 
 /datum/dna/gene/basic/heat_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(isvox(M) || isskelevox(M))	
+	if(isvox(M) || isskelevox(M))
 		return "coldvox_s"
-	else	
+	else
 		return "cold[fat]_s"
 
 /datum/dna/gene/basic/cold_resist
@@ -303,7 +307,7 @@
 	block = TELEBLOCK
 
 /datum/dna/gene/basic/tk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(isvox(M) || isskelevox(M))	
+	if(isvox(M) || isskelevox(M))
 		return "telekinesisheadvox_s"
-	else	
+	else
 		return "telekinesishead[fat]_s"
