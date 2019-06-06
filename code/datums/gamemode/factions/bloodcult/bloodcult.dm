@@ -527,8 +527,8 @@ var/veil_thickness = CULT_PROLOGUE
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
-	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
+	//Does the user have blood? (the user can pay in blood without having to bleed first) 
+	if((istype(H_user) && !(H_user.species.flags & NO_BLOOD)))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user
@@ -537,8 +537,8 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
-		return data
-
+		return data	
+	
 	data[BLOODCOST_RESULT] = BLOODCOST_FAILURE
 	return data
 

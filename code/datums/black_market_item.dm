@@ -157,10 +157,10 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 
 /datum/black_market_item/gear/chronogenerator
 	name = "Chrono-Carbon Grenade" 
-	desc = "What a beauty. This grenade explodes into a field of frozen time that has no effect on carbon-based lifeforms. Try not to walk in the path of frozen bullets."
+	desc = "You ever want to become a master of time? This is the closest thing we got. This grenade explodes into a field of frozen time that has no effect on carbon-based lifeforms. Try not to walk in the path of frozen bullets, they'll hurt once they unfreeze."
 	item = /obj/item/weapon/grenade/chronogrenade/carbon
-	stock_min = 3
-	stock_max = 5
+	stock_min = 5
+	stock_max = 7
 	cost_min = 400
 	cost_max = 500
 	display_chance = 60
@@ -170,7 +170,7 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 
 /datum/black_market_item/guns/portalgun
 	name = "Portal Gun"
-	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare."
+	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
 	item = /obj/item/weapon/gun/portalgun
 	stock_min = 1
 	stock_max = 1
@@ -183,7 +183,7 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 
 /datum/black_market_item/other/cultist_module
 	name = "Cyborg Cultist Module"
-	desc = "Some poor cultist found out a way to peacefully spread the religion of Nar-sie - by mass producing cyborg modules. Unfortunately, he got lynched and burned at the stake. We managed to secure a bunch of his boards beforehand, though. Rumors say real cultists can convert cyborgs with this installed..."
+	desc = "Apparently some follower of the Geometer of Blood found out a way to peacefully spread the religion of Nar-sie by mass producing cyborg modules. Unfortunately, as you would expect, he got lynched and burned at the stake. Rumors say real cultists can convert cyborgs with this installed..."
 	item = /obj/item/borg/upgrade/cult
 	stock_min = 2
 	stock_max = 4

@@ -1,9 +1,9 @@
 /datum/disease/japanesefever
 	name = "Japanese Fever"
+	desc = "Oh. Oh no. Oh no no no."
 	max_stages = 5
 	spread = "On contact"
 	spread_type = CONTACT_GENERAL
-	cure = "Flushing the body with the most powerful cleaning solvent."
 	cure_id = BLEACH
 	agent = "Unknown"
 	affected_species = list("Human")
@@ -17,6 +17,8 @@
 			to_chat(affected_mob, "<span class='warning'>You feel very, VERY cute!</span>")
 			stage = 5
 		if(5)
+			if(revelation_had != 1 && affected_mob.reagents.has_reagent(cure_id))
+				cure()
 			if(revelation_had != 1 && prob(2))
 				if(prob(50))
 					to_chat(affected_mob, "<span class='notice'>You feel like meeting some new friends~</span>")
@@ -49,7 +51,7 @@
 	for(var/word in listB)
 		message = replacetext(message, word, pick("BAKA","meanie"))
 		
-	var/listC = list("heya","hi","hello","greetings")
+	var/listC = list("heya","hello","greetings")
 	for(var/word in listC)
 		message = replacetext(message, word, "ohaiyo~")
 
@@ -70,6 +72,11 @@
 		message = replacetext(message, word, pick("sempai", "senpai"))
 		
 	message = replacetext(message, "sorry", "gomen")
+	message = replacetext(message, "traitor", "real big meanie")
+	message = replacetext(message, "syndicate", "super big meanies")
+	message = replacetext(message, "vampire", "b-blood s-sucker")
+	message = replacetext(message, "changeling", "b-body ab-bsorber a-ack")
+	message = replacetext(message, "cult", "super magical group")
 	message = replacetext(message, "apologies", "gomenasai")
 	message = replacetext(message, "sexual", "l-lewd...")
 	message = replacetext(message, "r", "w")
