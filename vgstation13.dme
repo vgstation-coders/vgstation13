@@ -427,6 +427,7 @@
 #include "code\datums\research\research_tree.dm"
 #include "code\datums\research\unlockable.dm"
 #include "code\datums\saycode\speech.dm"
+#include "code\datums\statistics\json_helpers.dm"
 #include "code\datums\statistics\stat_helpers.dm"
 #include "code\datums\statistics\statcollection.dm"
 #include "code\datums\wires\airlock.dm"

@@ -1,67 +1,34 @@
-/* THE GREAT BIG STATISTICS COLLECTION project
-	The objective of all this shitcode is to collect important/interesting events in a round
-	and write it to a really dumb text file, which will then be processed by an external server,
-	whichi will generate a pretty, web-viewable version (if I get my shit together)
-	by the public.
+/* Sood's Statistics Collection Project
+	For the web side of this project, go to
+	https://github.com/gbasood/vgstation-statistics-viewer
 
-	Gamemode-specific stat collection is separated off into its own files because why not
+	What this part of the code does is take a bunch of data stored as datums and
+	exports it to a JSON file so the statistics viewer can read it.
+
+	The function that handles the JSONification is datum2json, which live in json_helpers.dm
+
+	File structure:
+		documentation/: Contains Markdown documentation for the code in this directory.
+		statcollection.dm: Data definitions for non-gamemode related data that we collect, as well as core statistics logic.
+		stat_helpers.dm: Contains procs which help with processing game data into statistics data for export.
+		json_helpers.dm: Contains the logic that outputs all our data to valid JSON, since BYOND's built-in JSON methods do not output valid JSON.
 
 
-	stat_collector is the nerve center, everything else is just there to store data until
-	round end.
-	gameticker.declare_completion() calls stat_collection.Process(), which is where we gather all our end-of-round inforamtion.
+	If you feel that there is some data that aught to be collected, feel free to make a PR to change
+	this code. Be aware, however, that if the web server is not updated to handle new data formats,
+	it will not properly use this information, or may cause the data to be discarded as invalid.
+	In short, please ensure the web server is updated before merging changes to these files.
+
+	When making additions, changes or removals to any of the data that is exported here, please change
+	STAT_OUTPUT_VERSION. This allows me to easily handle new versions of data on the web server side.
+
 */
 
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
+// please increment this version whenever making changes
 #define STAT_OUTPUT_VERSION "1.3"
 #define STAT_OUTPUT_DIR "data/statfiles/"
-
-var/list/datum_donotcopy = list("tag", "type", "parent_type", "vars", "gcDestroyed", "being_sent_to_past", "disposed")
-
-// NOTE: datum2list and datum2json are pretty snowflakey and won't recurse properly in some cases
-// specfically it checks for infinite recursion only one level down, so if you have:
-// thing1
-// 		thing2
-//			thing3 referencing thing1
-// you'll end up in an infinite loop
-// don't use it for that that's bad
-proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy, parent_datum=null)
-	var/list/L = list()
-	for(var/I in D.vars)
-		if(I in do_not_copy)
-			continue
-		L.Add(I)
-		if(istype(D.vars[I], /list))
-			var/list/item = D.vars[I]
-			item = item.Copy() // so we get a copy of the list from vars instead
-
-			var/iter = 0 // i'm running out of variables names
-			// this next loop is gonna assume non-iterative
-			for(var/X in item)
-				iter++
-				if(istype(X, /datum))
-					if(X == parent_datum)
-						item[iter] = "parentRecursionPrevention"
-					else
-						item[iter] = datum2list(X, do_not_copy, parent_datum)
-			L[I] = item
-		else
-			L[I] = D.vars[I]
-	return L
-
-// converts a datum (including atoms!) to a JSON object
-// do_not_copy is a list of vars to not include in the JSON output
-proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
-	ASSERT(istype(D))
-
-	var/list/L = datum2list(D, do_not_copy)
-	for(var/I in L)
-		if(istype(L[I], /datum))
-			L[I] = datum2list(L[I], do_not_copy, D)
-		else
-			L[I] = L[I]
-	return json_encode(L)
 
 /datum/stat_collector
 	var/const/data_revision = STAT_OUTPUT_VERSION
@@ -73,6 +40,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/list/uplink_purchases = list()
 	var/list/badass_bundles = list()
 	var/list/antag_objectives = list()
+	var/list/manifest_entries = list()
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
@@ -109,11 +77,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/blob_spores_spawned = 0
 	var/blob_res_generated = 0
 
-	// malf
-	var/malf_won = FALSE
-	var/malf_shunted = FALSE
-	var/list/malf_modules = list() // TODO change the stats server model for this
-
 	// THESE MUST BE SET IN POSTROUNDCHECKS OR SOMEWHERE ELSE BEFORE THAT IS CALLED
 	var/round_start_time = null
 	var/round_end_time = null
@@ -131,7 +94,8 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/assigned_role = null
 	var/key = null
 	var/mind_name = null
-	var/list/damage_values = list(
+	var/from_suicide = 0
+	var/list/damage = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
 		"TOXIN" = 0,
@@ -147,13 +111,16 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/key = null
 	var/mind_name = null
 	var/escaped = FALSE
-	var/list/damage_values = list(
+	var/list/damage = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
 		"TOXIN" = 0,
 		"OXY" = 0,
 		"CLONE" = 0,
 		"BRAIN" = 0)
+	var/loc_x = 0
+	var/loc_y = 0
+	var/loc_z = 0
 
 /datum/stat/antag_objective
 	var/mind_name = null
@@ -185,6 +152,16 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/devastation_range = 0
 	var/heavy_impact_range = 0
 	var/light_impact_range = 0
+
+/datum/stat/manifest_entry
+	var/key = null
+	var/name = null
+	var/assignment = null
+
+// redo using mind list instead so we can get non-human players in its output
+/datum/stat/manifest_entry/New(/var/mob/living/carbon/human/M))
+	key = M.mind.key
+	name = M.mind.name
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")

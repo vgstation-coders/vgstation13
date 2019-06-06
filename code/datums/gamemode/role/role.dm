@@ -514,6 +514,10 @@
 /datum/role/proc/can_wear(var/obj/item/clothing/C)
 	return TRUE
 
+
+/datum/role/proc/generate_statistics()
+	return new /datum/stat/role(src)
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 

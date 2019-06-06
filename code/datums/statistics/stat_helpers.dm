@@ -1,3 +1,5 @@
+// the main file for statistics is statcollection.dm, look there first
+
 // functions related to handling/collecting data, and not writing data specifically
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
 // so I can't get timestamp info so unfortunately I can't do anything like ISO standards
@@ -40,11 +42,15 @@
 
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
-	d.death_x = M.x
-	d.death_y = M.y
-	d.death_z = M.z
+
+	var/spot = get_turf(M)
+	d.death_x = spot.x
+	d.death_y = spot.y
+	d.death_z = spot.z
+
 	d.mob_typepath = M.type
 	d.mind_name = M.name
+	d.from_suicide = M.suiciding
 
 	d.damage["BRUTE"] = M.bruteloss
 	d.damage["FIRE"]  = M.fireloss
@@ -70,6 +76,11 @@
 	var/datum/stat/survivor/s = new
 	s.mob_typepath = M.type
 	s.mind_name = M.name
+
+	var/spot = get_turf(M)
+	s.loc_x = spot.x
+	s.loc_y = spot.y
+	s.loc_z = spot.z
 
 	s.damage["BRUTE"] = M.bruteloss
 	s.damage["FIRE"]  = M.fireloss
@@ -157,8 +168,12 @@
 	for(var/datum/role/R in ticker.mode.orphaned_roles)
 		dynamic_stats += R.generate_statistics()
 
+	for(var/living/carbon/human/M in mob_List)
+
+
 	for(var/datum/mind/M in ticker.minds)
-		add_objectives(M)
+		// add_objectives(M)
+		manifest_entries.Add(new /datum/stat_collector(M))
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
 

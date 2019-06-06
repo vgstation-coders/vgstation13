@@ -52,3 +52,43 @@
 /datum/stat/threat_measure
 	var/time = ""
 	var/threat = 0
+
+
+// General role-related stats
+/datum/stat/role
+	var/name = null
+	var/faction_name = null
+	var/faction_desc = null
+	var/faction_id = null
+	var/mind_name = null
+	var/mind_key = null
+
+/datum/stat/role/New(var/datum/role/R)
+	name = R.name
+	faction_name = R.faction.name
+	faction_desc = R.faction.desc
+	faction_id = R.faction.ID
+	mind_name = R.antag.name
+	mind_key = R.antag.key
+
+/datum/stat/role_objective
+	var/obj_type = null
+	var/name = null
+	var/desc = null
+	var/belongs_to_faction = null
+	var/target = null
+
+/datum/stat/role_objective/New(var/datum/objective/D)
+	obj_type = D.type
+	name = D.name
+	desc = D.explanation_text
+	belongs_to_faction = D.faction.ID
+	if(istype(D, /datum/objective/target))
+		target = D.target.name
+
+
+// Faction related stats
+/datum/stat/faction
+	var/name = null
+	var/id = null
+	var/
