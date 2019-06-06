@@ -144,7 +144,7 @@
 		return
 
 	if(user.mind.miming)
-		to_chat(user, "<span class = 'warning'>You find yourself unable to project your mind outward.</span>")
+		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
 		return
 
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
