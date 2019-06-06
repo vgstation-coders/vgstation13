@@ -17,18 +17,13 @@
 	var/datum/friendly_cultword/word = null
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
-	var/remember = 0
 	var/blood_cost = 1
 	
 /spell/cult/friendly_trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
 	
 /spell/cult/friendly_trace_rune/before_channel(mob/user)
-	if (remember)
-		remember = 0
-	else
-		spell = null//so we're not stuck trying to write the same spell over and over again
-
+	spell = null
 	return 1
 	
 /spell/cult/friendly_trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
@@ -111,7 +106,6 @@
 		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 		return
 	if (write_rune_word(get_turf(user) ,data["blood"] ,word = friendly_cultwords[word]) > 1)
-		remember = 1
 		perform(user)
 
 

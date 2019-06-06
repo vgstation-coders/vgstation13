@@ -181,6 +181,16 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 /datum/black_market_item/other
 	category = "Miscellaneous Goods" 	
 
+/datum/black_market_item/other/cultist_module
+	name = "Cyborg Cultist Module"
+	desc = "Some poor cultist found out a way to peacefully spread the religion of Nar-sie - by mass producing cyborg modules. Unfortunately, he got lynched and burned at the stake. We managed to secure a bunch of his boards beforehand, though. Rumors say real cultists can convert cyborgs with this installed..."
+	item = /obj/item/borg/upgrade/cult
+	stock_min = 2
+	stock_max = 4
+	cost_min = 1400
+	cost_max = 2000
+	display_chance = 90
+	
 /datum/black_market_item/other/japanese_nanites
 	name = "Package of Japanese Nanites"
 	desc = "Uh. So, these little nanites turn you into an anime girl in both body and mind. Only a single unit is needed to begin transformation. The black market doesn't judge people's interests..."
