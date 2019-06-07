@@ -26,13 +26,14 @@ var/list/black_market_sellables = list()
 /datum/black_market_sellable
 	var/name = "item name"
 	var/category = "item category"
-	var/list/desc_list = list() //Not mandatory. Leave blank if you don't want one. Message is shown as "Cited reason: " + pick(desc_list)
+	var/desc = "" //Not mandatory. Should be used to give info on extra criteria (E.g. double payout if blood is type O+, or does not accept blood type A+ if buying bloodbags)
 	var/item = null
 	var/no_children = 0 //If 1, will only allow that specific given path
 	var/demand_min	// The demand min and max. Setting demand_min and demand_max to -1 will make it infinite. Demand is how many items are wanted, once it hits 0 you can't sell anymore.
 	var/demand_max  
 	var/price_min
 	var/price_max
+	var/sps_chance = 0
 	var/display_chance = 0   //Base out of 100.
 
 	var/round_demand
@@ -66,25 +67,48 @@ var/list/black_market_sellables = list()
 		. = 999
 	else
 		. = round_demand
-		
-/datum/black_market_sellable/proc/get_desc()
-	if(!desc_list.len)
-		return ""
-	return "Cited reason: " + pick(desc_list)
-		
-/datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
-	return
+
+/datum/black_market_sellable/proc/purchase_check(var/obj/input, var/mob/user) //Returns "VALID" if the purchase is valid, otherwise will give an error message with what is returned.
+	return "VALID"
+	
+/datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user, var/payout) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
+	return 0
+
 
 /datum/black_market_sellable/weapons
 	category = "Firearms and Weaponry"
 	
 /datum/black_market_sellable/weapons/ion_rifle
 	name = "Ion Rifle"
-	desc_list = list("Robot uprising.","Keeping silicons in check.","Disassembly - flux capacitor parts.","Delicious food.")
 	item = /obj/item/weapon/gun/energy/ionrifle
 	no_children = 1
 	demand_min = 1
 	demand_max = 3
 	price_min = 100
 	price_max = 200
-	display_chance = 80
+	display_chance = 100
+
+/datum/black_market_sellable/weapons/energy_gun
+	name = "Energy Gun"
+	item = /obj/item/weapon/gun/energy/
+	desc = "Paying double for fully charged weapons."
+	demand_min = 1
+	demand_max = 3
+	price_min = 100
+	price_max = 200
+	sps_chance = 100
+	display_chance = 100
+	
+/datum/black_market_sellable/weapons/energy_gun/purchase_check(var/obj/input, var/mob/user)
+	if(istype(input,/obj/item/weapon/gun/energy/))
+		var/obj/item/weapon/gun/energy/gun = input
+		if(gun.power_supply.charge > 0)
+			return "VALID"
+	return "The energy gun does not have any charge."
+	
+/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user, var/payout)
+	if(istype(input,/obj/item/weapon/gun/energy/))
+		var/obj/item/weapon/gun/energy/gun = input
+		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
+			return payout //Doubles payout, since return value is added onto current payout
+	return 0

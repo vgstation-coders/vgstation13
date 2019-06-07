@@ -36,6 +36,7 @@ var/list/black_market_items = list()
 	var/stock_max  
 	var/cost_min    //Same as stock
 	var/cost_max
+	var/sps_chance = 30
 	var/display_chance = 0   //Out of 100
 
 	var/round_stock                         //God I love if statements
@@ -75,6 +76,9 @@ var/list/black_market_items = list()
 	U.money_stored -= get_cost()
 	feedback_add_details("traitor_black_market_items_bought", name)
 	message_admins("[key_name(user)] just purchased the [src.name] from the black market. ([formatJumpTo(get_turf(U))])")
+	var/text = "[key_name(user)] just purchased the [src.name] from the black market."
+	log_game(text)
+	log_admin(text)
 	return new item(loc,user)
 
 /datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/U, var/mob/user)
@@ -121,7 +125,7 @@ var/list/black_market_items = list()
 
 		return 1
 	return 0
-
+	
 /datum/black_market_item/proc/after_spawn(var/obj/spawned, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
 	return
 
@@ -145,22 +149,11 @@ dangerous or highly unique. It wouldn't be on the illegal market if it wasn't. A
 Of course, that's not to mean you can't add ANY plain ol' guns. But try to find a good balance.
 */
 
+
 /datum/black_market_item/tech
 	category = "Advanced Technology" 
-	
-/*
-/datum/black_market_item/tech/organextractor //Organ harvesting scrapped.
-	name = "Modified Organ Extractor" 
-	desc = "This baby, she's our bread and butter. She can extract any organ out of an unconscious body in the blink of an eye - except the heart, that is. Why do we want organs from real people instead of growing them? Beats me."
-	item = /obj/item/weapon/organ_remover/traitor
-	stock_min = 3
-	stock_max = 4
-	cost_min = 800
-	cost_max = 1200
-	display_chance = 100
-*/
 
-/datum/black_market_item/tech/chronogenerator
+/datum/black_market_item/tech/chronocarbon
 	name = "Chrono-Carbon Grenade" 
 	desc = "You ever dream of becoming a master of time? This is the closest thing we got. This grenade explodes into a field of frozen time that has no effect on carbon-based lifeforms. Try not to walk in the path of frozen bullets, they'll hurt once they unfreeze."
 	item = /obj/item/weapon/grenade/chronogrenade/carbon
@@ -218,7 +211,7 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 		spawned = /obj/item/potion/healing
 	
 /*
-/datum/black_market_item/arcane/cultist_module
+/datum/black_market_item/arcane/cultist_module //Unfinished
 	name = "Cyborg Cultist Module"
 	desc = "Apparently some follower of the Geometer of Blood found out a way to peacefully spread the religion of Nar-sie by mass producing cyborg modules. Unfortunately, as you would expect, he got lynched and burned at the stake. Rumors say real cultists can convert cyborgs with this installed."
 	item = /obj/item/borg/upgrade/cult
@@ -231,8 +224,8 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 
 /datum/black_market_item/other
 	category = "Miscellaneous Goods" 	
-	
-/*/datum/black_market_item/other/japanese_nanites
+
+/datum/black_market_item/other/japanese_nanites
 	name = "Package of Japanese Nanites"
 	desc = "Uh. So, these little nanites turn you into an anime girl in both body and mind. Only a single unit is needed to begin transformation. The black market doesn't judge people's interests..."
 	item = /obj/item/weapon/storage/japanese_nanites
@@ -240,5 +233,6 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	stock_max = 2
 	cost_min = 700
 	cost_max = 1100
+	sps_chance = 70
 	display_chance = 65
-*/
+

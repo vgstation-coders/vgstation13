@@ -555,12 +555,16 @@
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/device/illegalradio/I = new (get_turf(user))
 				user.put_in_hands(I)
+				message_admins("[key_name(user)] just built a ghetto radio. ([formatJumpTo(get_turf(user))])")
+				var/text = "[key_name(user)] just built a ghetto radio."
+				log_game(text)
+				log_admin(text)
 			else
 				new /obj/item/device/illegalradio(get_turf(src.loc))
 			qdel(src)
 		else
 			to_chat(user, "You can't close the cover with the ansible inside!")
-	else if(istype(W, /obj/item/weapon/ghetto_ansible) && illegalradio_construction == 0 && b_stat)
+	else if(istype(W, /obj/item/weapon/ghetto_ansible) && illegalradio_construction == 0 && b_stat && 0) //Remove && false to enable construction
 		to_chat(user, "You wedge \the [W] in the back of \the [src].")
 		illegalradio_construction = 1
 		qdel(W)

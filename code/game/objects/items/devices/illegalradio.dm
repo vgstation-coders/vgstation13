@@ -15,11 +15,15 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 
+	var/list/cached_sellables
 	var/list/purchase_log = list()
 	var/show_description = null
 	
 	var/money_stored
 	var/nanotrasen_variant = 0
+	var/scan_time = 20
+	var/teleport_time = 100
+	var/advanced_teleport_time = 50
 
 /obj/item/device/illegalradio/nanotrasen
 	name = "advanced black market uplink"
@@ -30,13 +34,8 @@
 	
 /obj/item/device/illegalradio/New()
 	..()
-	if(ticker)
-		initialize()
-		return
-
-/obj/item/device/illegalradio/initialize()
-	if(ticker.mode)
-		money_stored = 0
+	money_stored = 0
+	cached_sellables = get_black_market_sellables()
 
 /obj/item/device/illegalradio/interact(mob/user as mob)
 	var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
@@ -68,7 +67,7 @@
 				var/datum/black_market_item/I = black_market[number]
 				if(I)
 					I.buy(src, usr)
-					if(!nanotrasen_variant && prob(30))
+					if(!nanotrasen_variant && prob(I.sps_chance))
 						SPS_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [I.name]")
 			else
 				var/text = "[key_name(usr)] tried to purchase a black market item that doesn't exist."
@@ -157,7 +156,7 @@
 	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
 	dat += "<B>[welcome]</B><BR>"
 	dat += {"Cash stored: [src.money_stored]<BR>"}
-	dat += {"<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a><A href='byond://?src=\ref[src];open_main=1'>Return</a>
+	dat += {"<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a> <A href='byond://?src=\ref[src];open_main=1'>Return</a>
 		<HR>
 		<B>Available Buyers:</B><BR>
 		<I>Following is a list of requests from anonymous buyers. To fulfill an item request, use the uplink on the item that is being requested.</I><br><BR>"}
@@ -174,13 +173,12 @@
 		for(var/datum/black_market_sellable/item in sellable_items[category])
 			var/demand = item.get_demand()
 			var/final_text = ""
-			var/desc = item.get_desc()
 			if(demand > 0)
-				final_text += "[item.name] - [item.get_demand()] wanted."
+				final_text += "[item.name] - [item.get_demand()] wanted for [item.get_price()] credits."
 			else
 				final_text += "<font color='grey'><i>[item.name] - [demand] wanted for [item.get_price()] credits.]</i></font>"
-			if(desc)
-				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2> \[?\]</font></A>"
+			if(item.desc)
+				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(item.desc)]'><font size=2> \[?\]</font></A>"
 			final_text += "<BR>"
 			merchandise_list += final_text
 		if(!sellable_items[category].len)
@@ -209,7 +207,39 @@
 		qdel(cash)
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
-
+	else
+		if(istype(A, /obj))
+			attempt_sell(A,usr)
+		
+/obj/item/device/illegalradio/proc/attempt_sell(var/obj/input, mob/user)	//If statements galore
+	visible_message("The uplink beeps: <span class='warning'>Scanning item...</span>")
+	if(do_after(user, input, scan_time))
+		for(var/category in cached_sellables)
+			for(var/datum/black_market_sellable/sellable in cached_sellables[category])
+				if((sellable.no_children && input.type == sellable.item) || (!sellable.no_children && istype(input,sellable.item)))
+					var/check = sellable.purchase_check(input, user)
+					if(check == "VALID")
+						visible_message("The uplink beeps: <span class='warning'>Input validated. Please wait for the teleportation process to finish.</warning>")
+						if(do_after(user, input, (nanotrasen_variant ? teleport_time : advanced_teleport_time)))
+							var/payout = sellable.get_price()
+							payout += sellable.determine_payout(input, src, payout)
+							qdel(input)
+							visible_message("The uplink beeps: <span class='warning'> Teleporation successful. A total of [payout] credits has been added to your balance.</span>")
+							money_stored += payout
+							interact(usr)
+							if(!nanotrasen_variant && prob(sellable.sps_chance))
+								SPS_alert(src, "The SPS decryption complex has detected an illegal black market selling of item [sellable.name]")
+							return
+						else
+							visible_message("The uplink beeps: <span class='warning'>Teleportation process canceled. Please try again.</span>")
+							return
+					else
+						visible_message("The uplink beeps: <span class='warning'>Error! Given reason: [check]</span>")	
+						return
+				else
+		visible_message("The uplink beeps: <span class='warning'>No buyers are currently looking for this item.</span>")
+		return
+	
 /obj/item/device/illegalradio/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
