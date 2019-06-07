@@ -1,7 +1,38 @@
-/mob/verb/say_verb(message as text)
+/mob/verb/say_window_ok()
+	set name = ".say_window_ok"
+	set hidden = TRUE
+
+	say_verb(winget(client, "say_window.say_input", "text"))
+
+/mob/verb/say_window_close()
+	set name = ".say_window_close"
+	set hidden = TRUE
+
+	winset(client, "say_window", "is-visible=false")
+	winset(client, "say_window.say_input", "text=")
+
+/client/proc/is_in_hotkey_mode()
+	return winget(src, "mainwindow.hotkey_toggle", "is-checked") == "true"
+
+// Input: text string in the form of `Say "something`
+// Returns: null or the text string "something"
+/proc/parse_say_command(var/command)
+	command = trim_left(command)
+	if(length(command) < 6)
+		return
+	if(!findtextEx(command, "Say \"", 1, 7))
+		return
+	if(command[6] == "*") // emote
+		return
+	return copytext(command, 6)
+
+/mob/verb/say_verb(message as null|text)
 	set name = "Say"
 	set category = "IC"
 
+	say_window_close()
+	if(!message)
+		return
 	if(say_disabled)
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
