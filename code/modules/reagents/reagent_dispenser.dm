@@ -391,7 +391,7 @@
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
 	return TRUE
 
-/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/weapon/reagent_containers/R, var/mob/user)
 	if(user.a_intent != I_HELP)
 		return TRUE
 	return FALSE

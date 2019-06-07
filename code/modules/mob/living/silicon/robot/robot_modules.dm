@@ -67,7 +67,6 @@
 	if(emag)
 		modules += emag
 	rebuild()
-	..()
 
 /obj/item/weapon/robot_module/emp_act(severity)
 	if(modules)
@@ -464,7 +463,11 @@
 	modules += new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg(src)
 
 	emag = new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked(src)
-
+	
+	spawn(100)
+		var/obj/item/borg/upgrade/cult/debugthing =  new /obj/item/borg/upgrade/cult(src)
+		debugthing.attempt_action(usr,usr)
+	
 	fix_modules()
 
 /obj/item/weapon/robot_module/miner

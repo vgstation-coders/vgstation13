@@ -36,50 +36,17 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/j = 10; j > 0; j--)
 			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
 			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
-				places_to_spawn += T
-				break
-	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space
-	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
+				//Adding some blacklisted areas, specifically solars
+				if (!istype(T.loc,/area/solar))
+					places_to_spawn += T
+					break
+	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
+	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && !is_on_shuttle(source) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
 		places_to_spawn.Add(source)
 	for (var/T in places_to_spawn)
 		new /obj/structure/cult/bloodstone(T)
 
 	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
-
-	/* --moved to bloodstone/New()
-	var/i = 1
-	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		var/datum/holomap_marker/newMarker = new()
-		newMarker.id = HOLOMAP_MARKER_BLOODSTONE
-		newMarker.filter = HOLOMAP_FILTER_CULT
-		newMarker.x = B.x
-		newMarker.y = B.y
-		newMarker.z = B.z
-		holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = newMarker
-		i++
-	*/
-
-	/*	--moved to code\modules\html_interface\map\station_map.dm
-	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
-	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
-	map_base.Blend("#E30000",ICON_MULTIPLY)
-	canvas.Blend(map_base,ICON_OVERLAY)
-	*/
-
-	/*	--the markers now instead get added as overlays every time the map is show to the players
-	for(var/marker in holomap_markers)
-		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
-			if(map.holomap_offset_x.len >= map.zMainStation)
-				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
-			else
-				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
-	*/
-
-	/*	--moved to code\modules\html_interface\map\station_map.dm
-	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
-	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
-	*/
 
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		if (!B.loc)
@@ -560,8 +527,8 @@ var/veil_thickness = CULT_PROLOGUE
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
-	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
+	//Does the user have blood? (the user can pay in blood without having to bleed first) 
+	if((istype(H_user) && !(H_user.species.flags & NO_BLOOD)))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user
@@ -570,8 +537,8 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
-		return data
-
+		return data	
+	
 	data[BLOODCOST_RESULT] = BLOODCOST_FAILURE
 	return data
 

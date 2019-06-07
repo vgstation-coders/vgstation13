@@ -17,6 +17,7 @@
 	name = "chrono-carbon grenade"
 	desc = "This experimental weapon will halt the progression of time in the local area for ten seconds. Carbon lifeforms are not unaffected by the field."
 	icon_state = "past_grenade"
+	duration = 15 SECONDS
 
 /obj/item/weapon/grenade/chronogrenade/carbon/prime()
 	timestopignore(src, duration, radius, /mob/living/carbon/)

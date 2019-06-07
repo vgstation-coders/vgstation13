@@ -34,10 +34,6 @@
 								/obj/item/weapon/reagent_containers/blood,
 								/obj/item/weapon/light,
 								/obj/item/weapon/fossil/egg)
-								
-/obj/item/weapon/reagent_containers/syringe/cultist //For cultist cyborgs
-	name = "consensual blood donation syringe"
-	desc = "If they don't say yes, then it's human harm!"
 
 /obj/item/weapon/reagent_containers/syringe/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
@@ -421,3 +417,6 @@
 	reagents.add_reagent(ANTI_TOXIN, 8)
 	mode = SYRINGE_INJECT
 	update_icon()
+/obj/item/weapon/reagent_containers/syringe/robot/cultist //For cultist cyborgs
+	name = "consensual blood donation syringe"
+	desc = "If the human doesn't say yes, taking blood is human harm!"

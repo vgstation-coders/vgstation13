@@ -429,7 +429,10 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 /obj/effect/rune/attack_hand(var/mob/living/user)
 	trigger(user)
-
+	
+/obj/effect/rune/attack_robot(var/mob/living/user)
+	trigger(user)
+	
 /obj/effect/rune/proc/trigger(var/mob/living/user,var/talisman_trigger=0)
 	user.delayNextAttack(5)
 

@@ -363,6 +363,9 @@ var/list/friendly_rune_list = list()//all peaceful runes currently in the world
 
 /obj/effect/friendly_rune/attack_hand(var/mob/living/user)
 	trigger(user)
+	
+/obj/effect/friendly_rune/attack_robot(var/mob/living/user)
+	trigger(user)
 
 /obj/effect/friendly_rune/proc/trigger(var/mob/living/user,var/talisman_trigger=0)
 	user.delayNextAttack(5)

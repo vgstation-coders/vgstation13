@@ -327,7 +327,7 @@
 	desc = "Used to allow a service cyborg to assist in peaceful following of occult religion. The silicon \"conversion\" ritual affects the controlling mind directly and is non-reversible."
 	icon_state = "cyborg_upgrade2"
 	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg, /obj/item/weapon/reagent_containers/syringe/cultist)
+	modules_to_add = list(/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg, /obj/item/weapon/reagent_containers/syringe/robot/cultist)
 
 /obj/item/borg/upgrade/cult/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())

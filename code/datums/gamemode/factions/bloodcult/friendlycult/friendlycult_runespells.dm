@@ -187,4 +187,18 @@
 	word2 = /datum/friendly_cultword/love
 	word3 = /datum/friendly_cultword/hug
 	
+/datum/friendly_rune_spell/consensual_conversion/pre_cast()
+	var/mob/living/user = activator
+	if(istype(spell_holder,/obj/effect/friendly_rune))
+		invoke(user,invocation)
+		cast()
+		
+/datum/friendly_rune_spell/consensual_conversion/cast()
+	var/obj/effect/friendly_rune/R = spell_holder
+	R.one_pulse()
+
+	new/obj/effect/cult_ritual/stun(R.loc)
+
+	qdel(R)
+
 #undef RUNE_STAND

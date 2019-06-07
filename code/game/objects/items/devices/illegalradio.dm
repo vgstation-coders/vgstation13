@@ -15,13 +15,18 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 
-	var/money_stored		        // Money placed in the buffer
+	var/money_stored
 	// List of items not to shove in their hands.
 	var/list/purchase_log = list()
 	var/show_description = null
-	var/active = 0
-	var/job = null
 
+
+/obj/item/device/illegalradio/nanotrasen
+	name = "nanotrasen-regulated black market uplink"
+	icon_state = "illegalradio_nt"
+	item_state = "illegalradio_nt"
+	desc = "A highly regulated uplink that uses encrypted Centcomm channels to communicate with the black market. Has a built-in tracker and transaction logger."
+	
 /obj/item/device/illegalradio/New()
 	..()
 	if(ticker)
@@ -75,6 +80,8 @@
 
 	else if (href_list["dispense_change"])
 		dispense_change()
+		
+	..()
 
 
 /obj/item/device/illegalradio/proc/generate_menu(mob/user as mob)

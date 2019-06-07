@@ -269,7 +269,8 @@
 		if((wash_state == 1) && hacked)
 			if(user.drop_item(W, src))
 				wash_state = 3
-				contents.Add(locate(/obj/item/weapon/holder/animal/corgi,contents).stored_mob)
+				var/obj/item/weapon/holder/animal/corgi/dog = locate(/obj/item/weapon/holder/animal/corgi, contents)
+				contents.Add(dog.stored_mob)
 				qdel(locate(contents,/obj/item/weapon/holder/animal/corgi))
 	else if(istype(W,/obj/item/stack/sheet/hairlesshide) || \
 		istype(W,/obj/item/clothing/under) || \

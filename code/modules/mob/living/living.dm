@@ -632,7 +632,6 @@ Thanks.
 	// make the icons look correct
 	regenerate_icons()
 	update_canmove()
-	..()
 
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD

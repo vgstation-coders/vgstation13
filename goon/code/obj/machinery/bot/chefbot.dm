@@ -147,7 +147,7 @@
 		update_icon()
 		walk(src,0)
 
-/obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/card/emag/E)
+/obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
 	if(!src.emagged)
 		spark(src, 1)
 		src.emagged = 1
