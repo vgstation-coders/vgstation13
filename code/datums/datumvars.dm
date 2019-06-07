@@ -158,7 +158,8 @@
 			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
 			<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>
-			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>"}
+			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>
+			<option value='?_src_=vars;make_invisible=\ref[D]'>Make invisible</option>"}
 		if(ishuman(D))
 
 			body += {"<option value>---</option>
@@ -587,6 +588,18 @@ function loadPage(list) {
 
 		src.give_spell(M)
 		href_list["datumrefresh"] = href_list["give_spell"]
+
+	else if(href_list["make_invisible"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/M = locate(href_list["make_invisible"])
+		if(!istype(M))
+			to_chat(usr, "This can only be used on instances of type /mob")
+			return
+
+		src.make_invisible(M)
+		href_list["datumrefresh"] = href_list["make_invisible"]
 
 	else if(href_list["give_disease"])
 		if(!check_rights(R_ADMIN|R_FUN))
