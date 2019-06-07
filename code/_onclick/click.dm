@@ -32,6 +32,18 @@
 /atom/DblClick(location,control,params)
 	usr.DblClickOn(src,params)
 
+//MouseDrop
+/mob/living/carbon/MouseDrop(var/mob/living/carbon/first, var/second_turf, over_location, src_control, over_control, params)
+	var/mob/living/carbon/second = locate() in second_turf
+	if (!istype(first) || !second || (first == usr && second == usr))
+		return
+	var/obj/item/to_be_handcuffs = usr.get_active_hand()
+	if (first.Adjacent(usr) && second.Adjacent(usr) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
+		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
+		handcuffs.apply_mutual_cuffs(first, second, usr)
+		return
+	..()
+
 /*
 	Standard mob ClickOn()
 	Handles exceptions: Buildmode, middle click, modified clicks, mech actions
@@ -68,12 +80,8 @@
 		"target" = A
 	))
 	if(modifiers["middle"])
-		if (modifiers["shift"] && modifiers["alt"])
-			MiddleAltShiftClickOn(A)
-		else if(modifiers["shift"])
+		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
-		else if (modifiers["alt"])
-			MiddleAltClickOn(A)
 		else
 			MiddleClickOn(A)
 		return
@@ -296,38 +304,12 @@
 	Alt click
 */
 
-/mob/proc/MiddleAltShiftClickOn(var/atom/A)
-	A.MiddleAltShiftClick(src)
-	return
-
-/atom/proc/MiddleAltShiftClick(var/mob/user)
-	return
-
-/mob/living/carbon/MiddleAltShiftClick(var/mob/user)
-	var/obj/item/to_be_handcuffs = user.get_active_hand()
-	if (iscarbon(user) && to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
-		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
-		var/mob/living/carbon/cuffer = user
-		cuffer.mutual_cuff_other_players.apply_mutual_cuffs_from_third_player(src, cuffer, handcuffs)
-		return
-	..()
-
-//  ----------------
-
 /mob/proc/MiddleAltClickOn(var/atom/A)
 	A.MiddleAltClick(src)
 	return
 
 /atom/proc/MiddleAltClick(var/mob/user)
 	return
-
-/mob/living/carbon/MiddleAltClick(var/mob/user)
-	var/obj/item/to_be_handcuffs = user.get_active_hand()
-	if (to_be_handcuffs && (src != user) && user.Adjacent(src) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
-		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
-		handcuffs.apply_mutual_cuffs(src, user)
-		return
-	..()
 
 /mob/proc/AltClickOn(var/atom/A)
 	A.AltClick(src)
