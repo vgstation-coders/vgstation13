@@ -208,8 +208,39 @@ var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'soun
 	else if(isturf(loc))
 		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
 
-
+/proc/SPS_alert(var/mob/target, var/reason)
+	var/channel_index = 0
+	for(var/E in SPS_list)
+		var/obj/item/device/gps/secure/S = E
+		S.custom_announce(target, reason, DEATHSOUND_CHANNEL + channel_index)
+		channel_index++
+		
+/obj/item/device/gps/secure/proc/custom_announce(var/target, var/reason, var/sound_channel) 
+	var/turf/pos = get_turf(target)
+	blackmarket_message(pos,sound_channel)
+	var/mob/living/L = get_holder_of_type(src, /mob/living/)
+	if(L)
+		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! [reason] at [get_area(target)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
+	else if(isturf(loc))
+		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! [reason] at [get_area(target)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
+		
 var/const/DEATHSOUND_CHANNEL = 300
+
+/obj/item/device/gps/secure/proc/blackmarket_message(var/turf/pos,var/sound_channel)
+	playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	if(prob(50))
+		playsound(src, 'sound/items/attention.wav',100, 0,channel = sound_channel,wait = TRUE)
+		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playsound(src, 'sound/items/investigateandreport.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
+	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
+	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playnum(pos.z,sound_channel,src)
+	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	playsound(src, 'sound/items/off2.wav',100, 0,channel = sound_channel,wait = TRUE)
 
 /obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num,var/sound_channel)
 	if(dead)
