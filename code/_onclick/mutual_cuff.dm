@@ -64,7 +64,7 @@
 	var/mob/living/carbon/handcuffed_to = C.mutual_handcuffed_to
 
 	if (C && handcuffed_to)
-		//remove from the list
+		//remove from the list of cuffed mobs in the handcuff datum
 		mutual_handcuffed_mobs.Remove(C)
 		mutual_handcuffed_mobs.Remove(handcuffed_to)
 

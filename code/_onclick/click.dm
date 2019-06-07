@@ -35,7 +35,7 @@
 //MouseDrop
 /mob/living/carbon/MouseDrop(var/mob/living/carbon/first, var/second_turf, over_location, src_control, over_control, params)
 	var/mob/living/carbon/second = locate() in second_turf
-	if (!istype(first) || !second || (first == usr && second == usr))
+	if (!istype(first) || !second || (first == usr && second == usr)) //if user is dragging on himself
 		return
 	var/obj/item/to_be_handcuffs = usr.get_active_hand()
 	if (first.Adjacent(usr) && second.Adjacent(usr) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
