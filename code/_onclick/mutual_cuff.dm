@@ -29,8 +29,8 @@
 
 		third.visible_message("<span class='danger'>\The [third] has restrained \the [first] and \the [second] together with \the [src]!</span>")
 		third.attack_log += text("\[[time_stamp()]\] <font color='red'>Has restrained \the [key_name_first] and the \the [key_name_second] with \the [src](mutual cuff).</font>")
-		first.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [key_name_third](mutual cuff)</font>")
-		second.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [key_name_third](mutual cuff)</font>")
+		first.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by \the [key_name_third] (mutual cuff)</font>")
+		second.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by \the [key_name_third] (mutual cuff)</font>")
 		log_attack("\The [key_name_third] has restrained \the [key_name_first] and \the [key_name_second] with \the [src] (mutual cuff)")
 
 		var/obj/item/weapon/handcuffs/cuffs = src
