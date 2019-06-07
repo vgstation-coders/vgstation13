@@ -1,3 +1,6 @@
+
+
+
 /spell/cult/friendly_trace_rune //For cyborg module
 	name = "Trace Rune"
 	desc = "(1 BLOOD) Use available blood to write down words. Three words form a friendly rune."

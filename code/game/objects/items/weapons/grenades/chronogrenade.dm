@@ -20,7 +20,7 @@
 	duration = 15 SECONDS
 
 /obj/item/weapon/grenade/chronogrenade/carbon/prime()
-	timestopignore(src, duration, radius, /mob/living/carbon/)
+	timestop(src, duration, radius, 0, /mob/living/carbon/)
 	qdel(src)	
 	
 /obj/item/weapon/grenade/chronogrenade/future

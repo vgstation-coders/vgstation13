@@ -69,7 +69,7 @@ var/global/list/falltempoverlays = list()
 		for(i = -x, i <= x, i++)
 			. += "[x],[y]"
 
-/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE) //if recharge is started is important for the trigger spells
+/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE, var/ignore_path = null) //if recharge is started is important for the trigger spells
 	if(!holder)
 		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
@@ -90,32 +90,7 @@ var/global/list/falltempoverlays = list()
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
-			cast(targets, user, ignore_timeless)
-		after_cast(targets) //generates the sparks, smoke, target messages etc.
-		invocation = initial(invocation)
-
-/spell/aoe_turf/fall/proc/performignore(mob/user = usr, skipcharge = 1, ignore_path) //G U N K
-	if(!holder)
-		set_holder(user) //just in case
-	if(!cast_check(skipcharge, user))
-		return
-	if(cast_delay && !spell_do_after(user, cast_delay))
-		return
-	var/list/targets = choose_targets(user)
-	if(targets && targets.len)
-		if(prob(the_world_chance))
-			invocation = "ZA WARUDO"
-		invocation(user, targets)
-		take_charge(user, skipcharge)
-
-		targets = before_cast(targets, user)
-		if(!targets.len)
-			return
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		if(prob(critfailchance))
-			critfail(targets, user)
-		else
-			cast(targets, user, FALSE, ignore_path)
+			cast(targets, user, ignore_timeless, ignore_path)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
@@ -250,7 +225,7 @@ var/global/list/falltempoverlays = list()
 						0,0,-1,
 						1,1,1)
 
-/proc/timestop(atom/A, var/duration, var/range, var/ignore_timeless = FALSE)
+/proc/timestop(atom/A, var/duration, var/range, var/ignore_timeless = FALSE, var/ignore_path = null)
 	if(!A || !duration)
 		return
 	var/mob/caster = new
@@ -267,24 +242,8 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+		if(ignore_path)
+			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
+		else
+			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
 		
-/proc/timestopignore(atom/A, var/duration, var/range, var/ignore_path) //Ignores any objects that follow the given path
-	if(!A || !duration)
-		return
-	var/mob/caster = new
-	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
-	caster.invisibility = 101
-	caster.setDensity(FALSE)
-	caster.anchored = 1
-	caster.flags = INVULNERABLE
-	caster.add_spell(fall)
-	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
-	fall.the_world_chance = 0
-	fall.range = range ? range : 7		//how big
-	fall.sleeptime = duration			//for how long
-	caster.forceMove(get_turf(A))
-	spawn()
-		fall.performignore(caster, 1, ignore_path)
-		qdel(caster)
