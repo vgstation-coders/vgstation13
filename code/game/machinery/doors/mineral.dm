@@ -307,6 +307,10 @@
 
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
 	if (!density && !operating && !(locate(/mob/living) in loc))
+		if (ismob(mover))
+			var/mob/M = mover
+			if (M.pulling && loc)
+				M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
 		close()
 
 /obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
@@ -331,7 +335,8 @@
 
 /obj/machinery/door/mineral/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/card))
-		to_chat(user, "You swipe your card at \the [src], petulantly expecting a result.")
+		user.visible_message("\The [user] swipes their card at \the [src], petulantly expecting a result.</span>",
+							"You swipe your card at \the [src], petulantly expecting a result.")
 	else
 		health -= W.force
 		to_chat(user, "You hit \the [src] with your [W.name]!")

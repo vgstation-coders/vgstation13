@@ -23,6 +23,13 @@ var/global/list/blood_list = list()
 	transfers_dna = 1
 	absorbs_types=list(/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/writing)
 
+	persistence_type = SS_BLOOD
+
+/obj/effect/decal/cleanable/blood/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor)
+	if(basecolor)
+		src.basecolor = basecolor
+	..()
+
 /obj/effect/decal/cleanable/blood/Destroy()
 	..()
 	blood_DNA = null
@@ -32,17 +39,39 @@ var/global/list/blood_list = list()
 	return
 
 /obj/effect/decal/cleanable/blood/update_icon()
-	if(basecolor == "rainbow")
-		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
-	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
+	update_plane()
+
+/obj/effect/decal/cleanable/blood/proc/update_plane()
+	if(basecolor == "#FF0000" || basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE
-	var/icon/blood = icon(base_icon,icon_state,dir)
-	blood.Blend(basecolor,ICON_MULTIPLY)
 
-	icon = blood
+/obj/effect/decal/cleanable/blood/atom2mapsave()
+	. = ..()
+	.["basecolor"] = adjust_brightness(basecolor, -100/(age*2))
+
+/obj/effect/decal/cleanable/blood/setPersistenceAge(var/nu)
+	. = ..()
+	dry(nu)
+
+/obj/effect/decal/cleanable/blood/dry(var/drying_age = 1)
+	amount = 0
+	name = "dried [replacetext(initial(src.name), "wet ", "")]"
+	desc = "It's dry and crusty. Someone is not doing their job."
+	switch(drying_age)
+		if(3)
+			desc = "This looks like it's been sitting there a good while."
+		if(4)
+			alpha = 220
+			name = "old [replacetext(initial(src.name), "wet ", "")]"
+			desc = "It's dry, dark, flakey, and crackled throughout. Perhaps it's the chef's cooking?"
+		if(5)
+			alpha = 200
+			name = "crusty old [replacetext(initial(src.name), "wet ", "")]"
+			desc = "Probably too late to put it back in."
+	update_icon()
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("mgibbl1", "mgibbl2", "mgibbl3", "mgibbl4", "mgibbl5")
@@ -89,26 +118,50 @@ var/global/list/blood_list = list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "gibbl5"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
-	var/fleshcolor = "#FFFFFF"
+	persistence_type = SS_GIBS
+	var/fleshcolor = DEFAULT_FLESH
+
+/obj/effect/decal/cleanable/blood/gibs/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/fleshcolor)
+	if(fleshcolor)
+		src.fleshcolor = fleshcolor
+	..()
+
+/obj/effect/decal/cleanable/blood/gibs/atom2mapsave()
+	. = ..()
+	.["fleshcolor"] = adjust_RGB(fleshcolor, red = -10, green = 10)
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
-	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
-		plane = NOIR_BLOOD_PLANE
-	else
-		plane = ABOVE_TURF_PLANE
+	color = basecolor
+
 	var/image/giblets = new(base_icon, "[icon_state]_flesh", dir)
-	if(!fleshcolor || fleshcolor == "rainbow")
-		fleshcolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
+	giblets.appearance_flags = RESET_COLOR
+	giblets.layer = GIBS_OVERLAY_LAYER
 	giblets.color = fleshcolor
 
-	var/icon/blood = new(base_icon,"[icon_state]",dir)
-	if(basecolor == "rainbow")
-		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
-	blood.Blend(basecolor,ICON_MULTIPLY)
-
-	icon = blood
 	overlays.len = 0
 	overlays += giblets
+
+	update_plane()
+
+/obj/effect/decal/cleanable/blood/gibs/dry(var/drying_age = 1)
+	if(drying_age > 1)
+		amount = 0
+	switch(drying_age)
+		if(2)
+			name = "old [initial(src.name)]"
+			desc = "Looks bloated and in decay. Smells as bad as it looks."
+		if(3)
+			name = "rotting [initial(src.name)]"
+			desc = "Looks congealed, gruesome, and positively nasty."
+		if(4)
+			name = "rotten [initial(src.name)]"
+			desc = "Looks putrid, wet, and... deflated."
+			alpha = 220
+		if(5)
+			name = "decomposing [initial(src.name)]"
+			desc = "Looks... runny. Eugh."
+			alpha = 200
+	update_icon()
 
 /obj/effect/decal/cleanable/blood/gibs/up
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6","gibup1","gibup1","gibup1")

@@ -511,7 +511,7 @@
 		/obj/item/weapon/bucket_sensor,
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
-		/obj/item/weapon/cigbutt/cigarbutt,
+		/obj/item/trash/cigbutt/cigarbutt,
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
@@ -588,6 +588,11 @@
 		/obj/item/weapon/switchtool/swiss_army_knife
 		)
 
+/obj/abstract/map/spawner/maint/lowchance
+	name = "low-chance maint spawner"
+	amount = 1
+	chance = 10
+
 /obj/abstract/map/spawner/highrisk
 	name = "high risk spawner"
 	icon_state = "maint"
@@ -606,6 +611,17 @@
 		/obj/item/clothing/shoes/magboots/magnificent,
 		/obj/item/weapon/gun/projectile/russian,
 	)
+
+/obj/abstract/map/spawner/floorpill
+	name = "floor pill spawner"
+	icon_state = "maint_pills"
+	chance = 20
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/random/maintenance
+	)
+
+/obj/abstract/map/spawner/floorpill/guaranteed
+	chance = 100
 
 // Space ///////////////////////////////////////////////////////
 
@@ -632,7 +648,7 @@
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/harpoon,
 		/obj/item/weapon/melee/classic_baton,
-		/obj/item/weapon/pickaxe/plasmacutter,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator,
 		/obj/item/weapon/shield/energy,
 		)
 

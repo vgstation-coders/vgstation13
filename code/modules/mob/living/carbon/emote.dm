@@ -168,7 +168,6 @@
 	message_mime = "laughs silently!"
 	emote_type = EMOTE_AUDIBLE
 
-
 /datum/emote/living/carbon/gag
 	key = "gag"
 	key_third_person = "gags"
@@ -229,6 +228,7 @@
 	message = "blushes."
 
 /datum/emote/living/carbon/sound
+	var/list/science_sounds = null
 	var/list/male_sounds = null
 	var/list/female_sounds = null
 	var/list/birb_sounds = null
@@ -240,6 +240,7 @@
 	message = "screams!"
 	message_mime = "acts out a scream!"
 	emote_type = EMOTE_AUDIBLE
+	science_sounds = list('sound/misc/science_scream1.ogg', 'sound/misc/science_scream2.ogg', 'sound/misc/science_scream3.ogg', 'sound/misc/science_scream4.ogg', 'sound/misc/science_scream5.ogg', 'sound/misc/science_scream6.ogg')
 	male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 	female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 	sound_message = "screams in agony!"
@@ -281,11 +282,14 @@
 					sound = pick(birb_sounds)
 
 				else
-					switch(H.gender)
-						if (MALE)
-							sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-						if (FEMALE)
-							sound = pick(female_sounds)
+					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions && H.gender == MALE)
+						sound = pick(science_sounds) //ACK
+					else
+						switch(H.gender)
+							if (MALE)
+								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+							if (FEMALE)
+								sound = pick(female_sounds)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
 

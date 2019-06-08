@@ -35,7 +35,7 @@
 		stage = 2
 	if(istype(W,/obj/item/clothing/head/hardhat/red) && stage == 2)
 		to_chat(user,"<span class='notice'>You finish the ghetto helmet.</span>")
-		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/rig/ghettorig (src.loc)
+		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/ghetto (src.loc)
 		qdel(src)
 		qdel(W)
 		user.put_in_hands(ghetto)
@@ -218,7 +218,7 @@
 	canstage = 0
 	var/muted = 0
 
-/obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/gas/mime/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.muted)
 		speech.message=""
 

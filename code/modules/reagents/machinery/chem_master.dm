@@ -1,7 +1,9 @@
-#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+#define MAX_PILL_SPRITE 40 //Max icon state of the pill sprites
 var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white", "oblong cyan", "oblong darkred", "oblong orange-striped", "oblong lightblue-drab", \
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
-"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
+"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green","oblong green-yellow","oblong grey-purple","oblong black-red", \
+"oblong yellow-grey","oblong green-purple","oblong blue-red","oblong green-brown","oblong yellow-cyan","oblong purple-cyan","oblong yellow-red","round pink", \
+"round purple-red","round black","round green-blue","round orange","round blue-beige","round blue","round beige-yellow","round red-green","round darkpink")
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
@@ -11,11 +13,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "mixer"
 	use_power = 1
 	idle_power_usage = 20
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/weapon/reagent_containers/container = null
+	var/list/accepted_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks)
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
-	var/mode = 1 //1 = from buffer to beaker. 0 = from buffer to disposals.
-	var/slurpmode = 0 //1 = from obj to beaker. 0 = from obj to buffer.
-	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
+	var/mode = 1 //1 = from buffer to container. 0 = from buffer to disposals.
+	var/slurpmode = 0 //1 = from obj to container. 0 = from obj to buffer.
+	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket,
+		/obj/item/weapon/reagent_containers/glass/jar, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
@@ -31,6 +35,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
+	var/pill_display_number = MAX_PILL_SPRITE/2
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -46,7 +51,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(300)
+	create_reagents(1000)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
@@ -96,9 +101,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(..())
 		return 1
 
-	else if(istype(B, /obj/item/weapon/reagent_containers/glass))
-		if(src.beaker)
-			to_chat(user, "<span class='warning'>There already is a beaker loaded in the machine.</span>")
+	else if(is_type_in_list(B, accepted_containers))
+		if(src.container)
+			to_chat(user, "<span class='warning'>There already is \a [container] loaded in the machine.</span>")
 			return
 		if(B.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
@@ -107,9 +112,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
 			return
 
-		src.beaker = B
+		src.container = B
 
-		to_chat(user, "<span class='notice'>You add the beaker into \the [src]!</span>")
+		to_chat(user, "<span class='notice'>You add \the [container] into \the [src]!</span>")
 
 		src.updateUsrDialog()
 		update_icon()
@@ -166,8 +171,16 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		src.updateUsrDialog()
 		return 1
 
-	if(beaker)
-		var/datum/reagents/R = beaker.reagents
+	else if(href_list["pill_icon_toggle"])
+		if (pill_display_number == MAX_PILL_SPRITE/2)
+			pill_display_number = MAX_PILL_SPRITE
+		else
+			pill_display_number = MAX_PILL_SPRITE/2
+		src.updateUsrDialog()
+		return 1
+
+	if(container)
+		var/datum/reagents/R = container.reagents
 		if(href_list["analyze"])
 			var/datum/reagent/reagent = locate(href_list["analyze"])
 			var/dat = list()
@@ -224,9 +237,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(isnull(amount) || amount < 0)
 				return
 			if(slurpmode)
-				O.reagents.trans_to(beaker, amount)
+				O.reagents.trans_to(container, amount, log_transfer = TRUE, whodunnit = usr)
 			else
-				O.reagents.trans_to(src, amount)
+				O.reagents.trans_to(src, amount, log_transfer = TRUE, whodunnit = usr)
 
 			src.updateUsrDialog()
 			return 1
@@ -241,7 +254,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(isnull(amount) || amount < 0)
 				return
 			if(mode)
-				reagents.trans_id_to(beaker, id, amount)
+				reagents.trans_id_to(container, id, amount)
 			else
 				reagents.remove_reagent(id, amount)
 			src.updateUsrDialog()
@@ -256,7 +269,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(isnull(amount) || amount < 0)
 				return
 			if(mode)
-				reagents.trans_to(beaker, amount)
+				reagents.trans_to(container, amount)
 			else
 				reagents.remove_all(amount)
 			src.updateUsrDialog()
@@ -306,7 +319,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		else if(href_list["eject"])
-			if(beaker)
+			if(container)
 				detach()
 			return 1
 
@@ -402,17 +415,17 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				return 1
 
 /obj/machinery/chem_master/proc/detach()
-	if(beaker)
-		beaker.forceMove(src.loc)
-		beaker.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
-		beaker.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
-		beaker = null
+	if(container)
+		container.forceMove(src.loc)
+		container.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
+		container.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
+		container = null
 		reagents.clear_reagents()
 		update_icon()
 		updateUsrDialog()
 
 /obj/machinery/chem_master/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
@@ -429,18 +442,20 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	for(var/i = 1 to MAX_PILL_SPRITE)
 		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
 
-/obj/machinery/chem_master/proc/generate_pill_icon_div()
+/obj/machinery/chem_master/proc/generate_pill_icon_div(pill_display_number)
 	var/dat = list()
 	dat += "<HR>"
+	dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a><br>"
 	dat += "<div class='pillIconsContainer'>"
-	for(var/i = 1 to MAX_PILL_SPRITE)
+	for(var/i = 1 to pill_display_number)
 		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 					<div class="pillIcon">
 						[pill_icon_cache[i]]
 					</div>
 				</a>"}
 		if (i%10 == 0)
-			dat +="<br>"
+			dat += "<br>"
+
 	dat += "</div>"
 	return dat
 
@@ -452,16 +467,17 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	user.set_machine(src)
 
 	var/dat = list()
-	if(!beaker)
+
+	if(!container)
 		dat += "Please insert a beaker.<BR>"
 		if(!condi)
 			if(src.loaded_pill_bottle)
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
-			dat += generate_pill_icon_div()
+			dat += generate_pill_icon_div(pill_display_number)
 	else
-		var/datum/reagents/R = beaker.reagents
+		var/datum/reagents/R = container.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
 
 		if(src.loaded_pill_bottle)
@@ -519,7 +535,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				continue
 			if(!found_valid_disp)
 				dat += "<HR>"
-				dat += "<table><td class='column1'>Transfer to <A href='?src=\ref[src];toggle_disp=1'>[(!slurpmode ? "buffer" : "beaker")]:</A></td></table>"
+				dat += "<table><td class='column1'>Transfer to <A href='?src=\ref[src];toggle_disp=1'>[(!slurpmode ? "buffer" : "container")]:</A></td></table>"
 				found_valid_disp = TRUE
 			dat += {"
 				<table>
@@ -582,7 +598,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// PILL ICONS
 			//
-			dat += generate_pill_icon_div()
+
+			dat += generate_pill_icon_div(pill_display_number)
+
+
+
 
 			//
 			// BUTTONS
@@ -616,18 +636,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 /obj/machinery/chem_master/kick_act(mob/living/H)
 	..()
-	if(beaker)
+	if(container)
 		detach()
 
 /obj/machinery/chem_master/update_icon()
 
 	overlays.len = 0
 
-	if(beaker)
-		beaker.pixel_x = -9 * PIXEL_MULTIPLIER//Move it far to the left
-		beaker.pixel_y = 5 * PIXEL_MULTIPLIER//Move it up
-		beaker.update_icon() //Forcefully update the beaker
-		overlays += beaker //Set it as an overlay
+	if(container)
+		container.pixel_x = -9 * PIXEL_MULTIPLIER//Move it far to the left
+		container.pixel_y = 5 * PIXEL_MULTIPLIER//Move it up
+		container.update_icon() //Forcefully update the beaker
+		overlays += container //Set it as an overlay
 
 	if(reagents.total_volume && !(stat & (BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")

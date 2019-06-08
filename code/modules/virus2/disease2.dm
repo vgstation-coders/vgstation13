@@ -53,7 +53,7 @@ var/global/list/disease2_list = list()
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
-	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
+	spreadtype = prob(40) ? "Airborne" : prob(40) ? "Blood" :"Contact" //Try for airborne then try for blood.
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -157,12 +157,25 @@ var/global/list/disease2_list = list()
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
 
-/datum/disease2/disease/proc/minormutate()
+/datum/disease2/disease/proc/minormutate(var/index)
 	//uniqueID = rand(0,10000)
-	var/datum/disease2/effect/e = pick(effects)
+	var/datum/disease2/effect/e = get_effect(index)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
+
+/datum/disease2/disease/proc/minorstrength(var/index)
+	var/datum/disease2/effect/e = get_effect(index)
+	e.multiplier_tweak(0.1)
+
+/datum/disease2/disease/proc/minorweak(var/index)
+	var/datum/disease2/effect/e = get_effect(index)
+	e.multiplier_tweak(-0.1)
+
+/datum/disease2/disease/proc/get_effect(var/index)
+	if(!index)
+		return pick(effects)
+	return effects[Clamp(index,0,effects.len)]
 
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)
@@ -226,18 +239,19 @@ var/global/list/disease2_list = list()
 var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/name()
-	.= "stamm #[add_zero("[uniqueID]", 4)]"
+	.= "[form] #[add_zero("[uniqueID]", 4)]"
 	if ("[uniqueID]" in virusDB)
 		var/datum/data/record/V = virusDB["[uniqueID]"]
 		.= V.fields["name"]
 
 /datum/disease2/disease/proc/get_info()
-	var/r = "GNAv2 [form] [name()]"
+	var/r = "GNAv2 [name()]"
 	r += "<BR>Infection rate : [infectionchance]"
 	r += "<BR>Spread form : [spreadtype]"
 	r += "<BR>Progress Speed : [stageprob]"
 	for(var/datum/disease2/effect/e in effects)
 		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
+		r += "<BR>[e.desc]"
 
 	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
 	return r
@@ -293,3 +307,9 @@ proc/virus2_greater_infection()
 	infectionchance = 50
 	stageprob = 10
 	stage_variance = 0
+
+/datum/disease2/disease/prion
+	form = "Prion"
+	infectionchance = 10
+	stageprob = 80
+	stage_variance = -10

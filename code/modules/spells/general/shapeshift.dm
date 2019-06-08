@@ -1,6 +1,6 @@
 /spell/shapeshift
 	name = "Shapeshift (1)"
-	desc = "Changes your name and appearance and has a cooldown of 3 minutes."
+	desc = "Changes your name and appearance, either to someone in view or randomly. Has a cooldown of 3 minutes."
 	abbreviation = "SS"
 
 	school = "vampire"
@@ -28,13 +28,29 @@
 /spell/shapeshift/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
 
-/spell/shapeshift/cast(var/list/targets, var/mob/user)
-	if (!user.client)
+/spell/shapeshift/cast(var/list/targets, var/mob/living/carbon/human/user)
+	if (!istype(user))
 		return FALSE
-	user.visible_message("<span class='sinister'>\The [user] transforms!</span>")
-	user.client.prefs.real_name = user.generate_name() //random_name(M.current.gender)
-	user.client.prefs.randomize_appearance_for(user)
-	user.regenerate_icons()
+	var/list/choices = list()
 	var/datum/role/vampire/V = isvampire(user)
-	if (V)
-		V.remove_blood(blood_cost)
+	choices[V.initial_appearance.name] = V.initial_appearance
+	for (var/mob/living/carbon/human/H in view(user) - user)
+		choices[H.real_name] = H.my_appearance.Copy()
+	for (var/datum/human_appearance/looks in V.saved_appearances)
+		choices[looks.name] = looks
+	choices["Random"] = ""
+
+	var/choice = input(user, "Which appearance shall we adopt?", "Shapeshift", "Random") as null|anything in choices
+
+	if (!choice)
+		return
+	else if (choice == "Random")
+		var/name = user.generate_name() //random_name(M.current.gender)
+		var/datum/human_appearance/new_looks = user.randomise_appearance_for(user.gender)
+		new_looks.name = name
+		V.saved_appearances += new_looks
+	else
+		user.switch_appearance(choices[choice])
+		user.real_name = choice
+
+	V.remove_blood(blood_cost)

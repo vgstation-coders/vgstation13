@@ -72,13 +72,13 @@
 		M.GetDrilled()
 		if(OB)
 			var/count = 0
-			for(var/obj/item/weapon/ore/ore in range(src,1))
+			for(var/obj/item/stack/ore/ore in range(src,1))
 				if(get_dir(src,ore)&dir && ore.material)
-					OB.materials.addAmount(ore.material,1)
+					OB.materials.addAmount(ore.material,ore.amount)
 					returnToPool(ore)
 					count++
 			if(count)
-				to_chat(occupant,"<font color='blue'>[count] ore successfully loaded into cargo compartment.</font>")
+				to_chat(occupant,"<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 
 /obj/structure/bed/chair/vehicle/gigadrill/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	..()

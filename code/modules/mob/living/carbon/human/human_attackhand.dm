@@ -81,7 +81,9 @@
 
 	if((src == M) || (M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Knockdown(rand(1,10))
+		var/incapacitation_duration = rand(1,10)
+		M.Knockdown(incapacitation_duration)
+		M.Stun(incapacitation_duration)
 		return
 
 	var/stomping = 0
@@ -140,6 +142,9 @@
 		visible_message("<span class='danger'>[M] weakens [src]!</span>")
 		apply_effect(3, WEAKEN, armorblock)
 
+	if(isrambler(src) && !(M == src)) //Redundant check for kicking a soul rambler. Punching is in carbon/human/combat.dm
+		M.say(pick("Take that!", "Taste the pain!"))
+
 	apply_damage(damage, BRUTE, affecting)
 
 	if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying
@@ -177,8 +182,8 @@
 
 	..()
 
-	if((M != src) && check_shields(0, M.name))
-		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
+	if((M != src) && check_shields(0, M))
+		visible_message("<span class='borange'>[M] attempts to touch [src]!</span>")
 		return 0
 
 

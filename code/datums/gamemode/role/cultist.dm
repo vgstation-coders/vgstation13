@@ -1,16 +1,18 @@
 /datum/role/cultist
 	id = CULTIST
 	name = "Cultist"
+	required_pref = CULTIST
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
+	var/second_chance = 1
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
-	wikiroute = role_wiki[ROLE_CULTIST]
+	wikiroute = role_wiki[CULTIST]
 
 /datum/role/cultist/OnPostSetup()
 	. = ..()
@@ -24,6 +26,12 @@
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
+	antag.store_memory("A couple of runes appear clearly in your mind:")
+	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
+	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
+	antag.store_memory("<B>Summon Tome:</B> SEE, BLOOD, HELL.")
+	antag.store_memory("<hr>")
+
 /datum/role/cultist/RemoveFromRole(var/datum/mind/M)
 	antag.current.remove_language(LANGUAGE_CULT)
 	for(var/spell/cult/spell_to_remove in antag.current.spell_list)
@@ -35,21 +43,25 @@
 /datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
 	. = ..()
 	if (issilicon(new_character))
-		antag.antag_roles -= CULTIST
-		antag.current.remove_language(LANGUAGE_CULT)
-		for(var/spell/cult/spell_to_remove in antag.current.spell_list)
-			antag.current.remove_spell(spell_to_remove)
-		if (src in blood_communion)
-			blood_communion.Remove(src)
-		update_faction_icons()
-		return
+		antag.decult()
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
+/datum/mind/proc/decult()
+	antag_roles -= CULTIST
+	current.remove_language(LANGUAGE_CULT)
+	for(var/spell/cult/spell_to_remove in current.spell_list)
+		current.remove_spell(spell_to_remove)
+	var/datum/role/cultist/C = GetRole(CULTIST)
+	if (C in blood_communion)
+		blood_communion.Remove(C)
+	update_faction_icons()
+
 /datum/role/cultist/process()
+	..()
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
 
@@ -111,7 +123,8 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>[custom]</span>")
 		if (GREET_CONVERTED)
 			to_chat(antag.current, "<span class='sinister'>You feel like you've broken past the veil of reality, your mind has seen worlds from beyond this plane, you've listened to the words of the Geometer of Blood for what felt like both an instant and ages, and now share both his knowledge and his ambition.</span>")
-			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you. You remember the last three words that Nar-Sie spoke to you: <span class='danger'>See Blood Hell</span></span>")
+			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you.</span>")
+			to_chat(antag.current,"<b>The first thing you might want to do is to summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
 		if (GREET_PAMPHLET)
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		if (GREET_SOULSTONE)
@@ -128,6 +141,8 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
+	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
+
 
 	spawn(1)
 		if (faction)
@@ -208,112 +223,146 @@
 	return dat
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
-	switch (reagent_id)
-		if (HOLYWATER)
-			var/mob/living/carbon/human/H = antag.current
-			if (!istype(H))
-				return
-			var/unholy = H.checkTattoo(TATTOO_HOLY)
-			var/current_act = max(-1,min(5,veil_thickness))
-			if (holywarning_cooldown <= 0)
-				holywarning_cooldown = 5
-				if (unholy)
-					to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
-				else
-					switch (current_act)
-						if (CULT_MENDED)
-							to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
-						if (CULT_PROLOGUE)
-							to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
-						if (CULT_ACT_I)
-							to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
-						if (CULT_ACT_II)
-							to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
-						if (CULT_ACT_III)
-							to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
-						if (CULT_ACT_IV)
-							to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
-						if (CULT_EPILOGUE)
-							to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
+	var/mob/living/carbon/human/H = antag.current
+	if (!istype(H))
+		return
+	var/unholy = H.checkTattoo(TATTOO_HOLY)
+	var/current_act = Clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
+	if (reagent_id == INCENSE_HAREBELLS)
+		if (unholy)
+			H.eye_blurry = max(H.eye_blurry, 3)
+			return
+		else
+			switch (current_act)
+				if (CULT_MENDED)
+					H.dust()
+					return
+				if (CULT_PROLOGUE)
+					H.eye_blurry = max(H.eye_blurry, 3)
+					H.Dizzy(3)
+				if (CULT_ACT_I)
+					H.eye_blurry = max(H.eye_blurry, 6)
+					H.Dizzy(6)
+					H.stuttering = max(H.stuttering, 6)
+				if (CULT_ACT_II)
+					H.eye_blurry = max(H.eye_blurry, 12)
+					H.Dizzy(12)
+					H.stuttering = max(H.stuttering, 12)
+					H.Jitter(12)
+				if (CULT_ACT_III)
+					H.eye_blurry = max(H.eye_blurry, 16)
+					H.Dizzy(16)
+					H.stuttering = max(H.stuttering, 16)
+					H.Jitter(16)
+					if (prob(50))
+						H.Knockdown(1)
+					else if (prob(50))
+						H.confused = 2
+					H.adjustOxyLoss(5)
+				if (CULT_ACT_IV)
+					H.eye_blurry = max(H.eye_blurry, 20)
+					H.Dizzy(20)
+					H.stuttering = max(H.stuttering, 20)
+					H.Jitter(20)
+					if (prob(60))
+						H.Knockdown(2)
+					else if (prob(60))
+						H.confused = 4
+					H.adjustOxyLoss(10)
+					H.adjustToxLoss(5)
+				if (CULT_EPILOGUE)
+					H.eye_blurry = max(H.eye_blurry, 30)
+					H.Dizzy(30)
+					H.stuttering = max(H.stuttering, 30)
+					H.Jitter(30)
+					if (prob(70))
+						H.Knockdown(4)
+					else if (prob(70))
+						H.confused = 6
+					H.adjustOxyLoss(20)
+					H.adjustToxLoss(10)
 
+/datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
+	var/mob/living/carbon/human/H = antag.current
+	if (!istype(H))
+		return
+	var/unholy = H.checkTattoo(TATTOO_HOLY)
+	var/current_act = max(-1,min(5,veil_thickness))
+	if (reagent_id == HOLYWATER)
+		if (holywarning_cooldown <= 0)
+			holywarning_cooldown = 5
 			if (unholy)
-				H.eye_blurry = max(H.eye_blurry, 3)
-				return
+				to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
 			else
 				switch (current_act)
 					if (CULT_MENDED)
-						H.dust()
-						return
+						to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
 					if (CULT_PROLOGUE)
-						H.eye_blurry = max(H.eye_blurry, 3)
-						H.Dizzy(3)
+						to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
 					if (CULT_ACT_I)
-						H.eye_blurry = max(H.eye_blurry, 6)
-						H.Dizzy(6)
-						H.stuttering = max(H.stuttering, 6)
+						to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
 					if (CULT_ACT_II)
-						H.eye_blurry = max(H.eye_blurry, 12)
-						H.Dizzy(12)
-						H.stuttering = max(H.stuttering, 12)
-						H.Jitter(12)
+						to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
 					if (CULT_ACT_III)
-						H.eye_blurry = max(H.eye_blurry, 16)
-						H.Dizzy(16)
-						H.stuttering = max(H.stuttering, 16)
-						H.Jitter(16)
-						if (prob(50))
-							H.Knockdown(1)
-						else if (prob(50))
-							H.confused = 2
-						H.adjustOxyLoss(5)
+						to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
 					if (CULT_ACT_IV)
-						H.eye_blurry = max(H.eye_blurry, 20)
-						H.Dizzy(20)
-						H.stuttering = max(H.stuttering, 20)
-						H.Jitter(20)
-						if (prob(60))
-							H.Knockdown(2)
-						else if (prob(60))
-							H.confused = 4
-						H.adjustOxyLoss(10)
-						H.adjustToxLoss(5)
+						to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
 					if (CULT_EPILOGUE)
-						H.eye_blurry = max(H.eye_blurry, 30)
-						H.Dizzy(30)
-						H.stuttering = max(H.stuttering, 30)
-						H.Jitter(30)
-						if (prob(70))
-							H.Knockdown(4)
-						else if (prob(70))
-							H.confused = 6
-						H.adjustOxyLoss(20)
-						H.adjustToxLoss(10)
+						to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
 
-/datum/role/cultist/handle_splashed_reagent(var/reagent_id)
-	switch (reagent_id)
-		if (HOLYWATER)
-			var/mob/living/carbon/human/H = antag.current
-			if (!istype(H))
-				return
-			var/current_act = max(-1,min(5,veil_thickness))
+	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
+		if (unholy)
+			H.eye_blurry = max(H.eye_blurry, 3)
+			return
+		else
 			switch (current_act)
-				if (CULT_PROLOGUE)
+				if (CULT_MENDED)
+					H.dust()
 					return
+				if (CULT_PROLOGUE)
+					H.eye_blurry = max(H.eye_blurry, 3)
+					H.Dizzy(3)
 				if (CULT_ACT_I)
-					H.Dizzy(4)
-					H.Jitter(8)
 					H.eye_blurry = max(H.eye_blurry, 6)
+					H.Dizzy(6)
+					H.stuttering = max(H.stuttering, 6)
 				if (CULT_ACT_II)
-					H.Dizzy(8)
-					H.Jitter(16)
-					H.confused = 1
 					H.eye_blurry = max(H.eye_blurry, 12)
-				else // Other acts, mended, etc...
+					H.Dizzy(12)
+					H.stuttering = max(H.stuttering, 12)
+					H.Jitter(12)
+				if (CULT_ACT_III)
+					H.eye_blurry = max(H.eye_blurry, 16)
 					H.Dizzy(16)
-					H.Jitter(24)
-					H.Knockdown(3)
-					H.eye_blurry = max(H.eye_blurry, 12)
-					H.confused = 3
+					H.stuttering = max(H.stuttering, 16)
+					H.Jitter(16)
+					if (prob(50))
+						H.Knockdown(1)
+					else if (prob(50))
+						H.confused = 2
+					H.adjustOxyLoss(5)
+				if (CULT_ACT_IV)
+					H.eye_blurry = max(H.eye_blurry, 20)
+					H.Dizzy(20)
+					H.stuttering = max(H.stuttering, 20)
+					H.Jitter(20)
+					if (prob(60))
+						H.Knockdown(2)
+					else if (prob(60))
+						H.confused = 4
+					H.adjustOxyLoss(10)
+					H.adjustToxLoss(5)
+				if (CULT_EPILOGUE)
+					H.eye_blurry = max(H.eye_blurry, 30)
+					H.Dizzy(30)
+					H.stuttering = max(H.stuttering, 30)
+					H.Jitter(30)
+					if (prob(70))
+						H.Knockdown(4)
+					else if (prob(70))
+						H.confused = 6
+					H.adjustOxyLoss(20)
+					H.adjustToxLoss(10)
 
 /datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	if (href_list["cult_privatespeak"])

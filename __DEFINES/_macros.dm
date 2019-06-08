@@ -12,6 +12,8 @@
 
 #define ishigherbeing(A) (ishuman(A) || ismartian(A) || (ismonkey(A) && A.dexterity_check()))
 
+#define ismanifested(A) (ishuman(A) && istype(A:species, /datum/species/manifested))
+
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
@@ -58,6 +60,8 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
+
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
@@ -85,6 +89,8 @@
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
+
+#define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
@@ -145,8 +151,6 @@
 #define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
-
-#define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
 
 #define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
 
@@ -216,6 +220,10 @@
 
 #define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
+#define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
+
+#define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
+
 //Macros for roles/antags
 #define isfaction(A) (istype(A, /datum/faction))
 
@@ -245,6 +253,8 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
+#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
@@ -261,7 +271,15 @@
 
 #define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
 
-#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+#define issurvivor(H) (H.mind && H.mind.GetRole(SURVIVOR))
+
+#define iscrusader(H) (H.mind && H.mind.GetRole(CRUSADER))
+
+#define ismagician(H) (H.mind && H.mind.GetRole(MAGICIAN))
+
+#define isninja(H) (H.mind && H.mind.GetRole(NINJA))
+
+#define isrambler(H) (H.mind && H.mind.GetRole(RAMBLER))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
@@ -304,7 +322,7 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
+#define Clamp(x, y, z) 	min(max(x, y), z)
 //x is the number you want to clamp
 //y is the minimum
 //z is the maximum
@@ -359,4 +377,5 @@ proc/get_space_area()
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits
+#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
+//Starts 0 credits, not sourced from any database, earns 0 credits, hidden

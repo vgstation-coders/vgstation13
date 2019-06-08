@@ -226,6 +226,10 @@
 		qdel(src)
 
 
+/obj/item/device/transfer_valve/blob_act()
+	toggle_valve()
+	qdel(src)
+
 // this doesn't do anything but the timer etc. expects it to be here
 // eventually maybe have it update icon to show state (timer, prox etc.) like old bombs
 /obj/item/device/transfer_valve/proc/c_state()

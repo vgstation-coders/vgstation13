@@ -42,6 +42,11 @@
 	if (home)
 		state = BEE_HEADING_HOME
 		mob.updateState = 1
+	else
+		fatigue = 0
+		bored = 0
+		state = BEE_ROAMING
+		mob.updateState = 1
 
 /datum/bee/proc/death(var/gibbed = FALSE)
 	if (mob)

@@ -324,15 +324,15 @@
 	var/mob/living/carbon/human/H = target
 	if(istype(H))
 		eye_colour = list(
-			H.r_eyes ? H.r_eyes : 0,
-			H.g_eyes ? H.g_eyes : 0,
-			H.b_eyes ? H.b_eyes : 0
+			H.my_appearance.r_eyes ? H.my_appearance.r_eyes : 0,
+			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
+			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
 
 		// Leave bloody red pits behind!
-		H.r_eyes = 128
-		H.g_eyes = 0
-		H.b_eyes = 0
+		H.my_appearance.r_eyes = 128
+		H.my_appearance.g_eyes = 0
+		H.my_appearance.b_eyes = 0
 		H.update_body()
 
 /obj/item/organ/internal/proc/replaced(var/mob/living/target)
@@ -343,9 +343,9 @@
 	// Apply our eye colour to the target.
 	var/mob/living/carbon/human/H = target
 	if(istype(H) && eye_colour)
-		H.r_eyes = eye_colour[1]
-		H.g_eyes = eye_colour[2]
-		H.b_eyes = eye_colour[3]
+		H.my_appearance.r_eyes = eye_colour[1]
+		H.my_appearance.g_eyes = eye_colour[2]
+		H.my_appearance.b_eyes = eye_colour[3]
 		H.update_body()
 
 /obj/item/organ/internal/proc/bitten(mob/user)

@@ -24,6 +24,8 @@
 	if (viewing)
 		viewing.mob.on_logout.Remove("\ref[src]:mob_logout")
 
+	..()
+
 /obj/item/device/holomap/examine(var/mob/M)
 	..()
 	if (panel)
@@ -80,7 +82,7 @@
 	to_chat(user, "You reset the holomap data.")
 
 /obj/item/device/holomap/attackby(obj/item/W, mob/user)
-	if (isscrewdriver(W))
+	if (W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)

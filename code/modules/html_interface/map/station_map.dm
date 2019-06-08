@@ -10,6 +10,7 @@
 	var/filter
 	var/id
 	var/icon = 'icons/holomap_markers.dmi'
+	var/color//used by path rune markers
 
 /proc/generateHoloMinimaps()
 	var/list/filters = list(
@@ -27,6 +28,15 @@
 		holoMiniMaps |= z
 		generateMarkers(z)
 		generateHoloMinimap(z)
+
+	//------------Cult Map start--------
+	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
+	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
+	map_base.Blend("#E30000",ICON_MULTIPLY)
+	canvas.Blend(map_base,ICON_OVERLAY)
+	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
+	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
+	//-------------Cult Map end---------
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)
@@ -76,7 +86,7 @@
 				newMarker.x = T.x
 				newMarker.y = T.y
 				newMarker.z = ZLevel
-				holomap_markers[newMarker.id] = newMarker
+				holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)

@@ -10,6 +10,7 @@ var/list/cultwords_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","r
 	var/rune		= "zek'kon"
 	var/icon		= 'icons/effects/uristrunes.dmi'
 	var/icon_state	= ""
+	var/color//used by path rune markers
 
 /proc/initialize_cultwords()
 	if (cultwords_initialized)
@@ -38,48 +39,58 @@ var/list/cultwords_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","r
 	english		= "travel"
 	rune		= "ire"
 	icon_state	= "rune-1"
+	color = "yellow"
 
 /datum/cultword/blood
 	english		= "blood"
 	rune		= "ego"
 	icon_state	= "rune-2"
+	color = "maroon"
 
 /datum/cultword/join
 	english		= "join"
 	rune		= "nahlizet"
 	icon_state	= "rune-4"
+	color = "green"
 
 /datum/cultword/hell
 	english		= "hell"
 	rune		= "certum"
 	icon_state	= "rune-8"
+	color = "red"
 
 /datum/cultword/destroy
 	english		= "destroy"
 	rune		= "veri"
 	icon_state	= "rune-16"
+	color = "purple"
 
 /datum/cultword/technology
 	english		= "technology"
 	rune		= "jatkaa"
 	icon_state	= "rune-32"
+	color = "blue"
 
 /datum/cultword/self
 	english		= "self"
 	rune		= "mgar"
 	icon_state	= "rune-64"
+	color = null
 
 /datum/cultword/see
 	english		= "see"
 	rune		= "balaq"
 	icon_state	= "rune-128"
+	color = "fuchsia"
 
 /datum/cultword/other
 	english		= "other"
 	rune		= "karazet"
 	icon_state	= "rune-256"
+	color = "teal"
 
 /datum/cultword/hide
 	english		= "hide"
 	rune		= "geeri"
 	icon_state	= "rune-512"
+	color = "silver"

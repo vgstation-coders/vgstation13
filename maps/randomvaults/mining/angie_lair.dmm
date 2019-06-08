@@ -1,36 +1,38 @@
-"a" = (/turf/unsimulated/wall/rock,/area/mine/explored)
-"b" = (/turf/unsimulated/mineral/random/high_chance,/area/mine/explored)
-"c" = (/turf/unsimulated/mineral/telecrystal,/area/mine/explored)
-"d" = (/turf/unsimulated/floor/asteroid,/area/mine/explored)
-"e" = (/turf/unsimulated/mineral/random,/area/mine/explored)
-"f" = (/turf/unsimulated/mineral/gibtonite,/area/mine/explored)
-"g" = (/turf/unsimulated/mineral/random/high_chance_clown{rockernaut = 2},/area/mine/explored)
-"h" = (/turf/unsimulated/mineral/mythril,/area/mine/explored)
+"a" = (/turf/unsimulated/mineral/dense,/area/asteroid)
+"b" = (/turf/unsimulated/mineral/random/high_chance,/area/asteroid)
+"c" = (/turf/unsimulated/mineral/mythril,/area/asteroid)
+"d" = (/turf/unsimulated/mineral/telecrystal,/area/asteroid)
+"e" = (/turf/unsimulated/floor/asteroid,/area/asteroid)
+"f" = (/turf/unsimulated/mineral/random,/area/asteroid)
+"g" = (/turf/unsimulated/mineral/gibtonite,/area/asteroid)
+"h" = (/turf/unsimulated/mineral/random/high_chance_clown{rockernaut = 2},/area/asteroid)
+"i" = (/turf/unsimulated/mineral/hyperdense,/area/asteroid)
+"j" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/asteroid)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaa
-abbbbbbbbbbbbbbbbbbbbbbba
-aabbbhhhbbbbbbbbbccbbbbaa
-aabbbhddbbbbbbbbbddcbbbaa
-aabbbbddddbbbbbddddbbbbaa
-abbbbddddddbbbddddddbbbba
-abbbbdddddddbdddddddbbbba
-abbbbdddddddddddddddbbbba
-aabbbdddddddddddddddbbbaa
-aaaaaadddddddddddddaaaaaa
-aeeeeaaaadddddddaaaaeeeea
-aeefeeeeaadddddaaeeeeeeea
-aefffdddeaadddaaedddeeeea
-aefddddddeeagaeeddddddeea
-aeedddddddadddadddddddeea
-aeeedddddddddddddddddeeea
-aeeeedddddddddddddddeeeea
-aeeeeedddddddddddddeeeeea
-aeeeeedddddddddddddeeeeea
-aeeeedddddddddddddddeeeea
-aeedddddddddddddddddddeea
-aeedddddddddddddddddddeea
-aeeedddddddddddddddddeeea
-aaeeeeedddddddddddeeeeeaa
-aaaaeeeeeeeeeeeeeeeeeaaaa
+iiiiiiiiiiiiiiiiiiiiiiiii
+ibbbbbbbbbbbbbbbbbbbbbbbi
+iibbbcccbbbbbbbbbddbbbbii
+iibbbceebbbbbbbbbeedbbbii
+iibbbbeeeebbbbbeeeebbbbii
+ibbbbeeeeeejjjeeeeeebbbbi
+ibbbbeeeeeeejeeeeeeebbbbi
+ibbbbeeeeeeeeeeeeeeebbbbi
+iibbbeeeeeeeeeeeeeeebbbii
+iiiiiieeeeeeeeeeeeeiiiiii
+affffiiiieeeeeeeiiiiffffi
+affgffffaieeeeeiafffffffi
+afgggeeefaieeeiafeeeffffi
+afgeeeeeeffihiffeeeeeeffa
+affeeeeeeeaeeeaeeeeeeeffa
+afffeeeeeeeeeeeeeeeeefffa
+affffeeeeeeeeeeeeeeeffffa
+afffffeeeeeeeeeeeeefffffa
+afffffeeeeeeeeeeeeefffffa
+affffeeeeeeeeeeeeeeeffffa
+affeeeeeeeeeeeeeeeeeeeffa
+affeeeeeeeeeeeeeeeeeeeffa
+afffeeeeeeeeeeeeeeeeefffa
+aafffffeeeeeeeeeeefffffaa
+aaaafffffffffffffffffaaaa
 "}

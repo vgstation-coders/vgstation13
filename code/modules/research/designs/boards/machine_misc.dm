@@ -140,3 +140,32 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/holopad
+
+/datum/design/ammolathe
+	name = "Circuit Design (Ammolathe)"
+	desc = "Allows for the construction of circuit boards used to build ammolathes."
+	id = "ammolathe"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2, Tc_COMBAT = 4, Tc_NANOTRASEN = 5)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/ammolathe
+
+/datum/design/chem_dispenser/brewer
+	name = "Circuit Design (Brewer)"
+	desc = "Allows for the construction of circuit boards used to build a brewer."
+	id = "brewer"
+	build_path = /obj/item/weapon/circuitboard/chem_dispenser/brewer
+
+/datum/design/chem_dispenser/soda_dispenser
+	name = "Circuit Design (Soda Dispenser)"
+	desc = "Allows for the construction of circuit boards used to build a soda dispenser."
+	id = "soda_dispenser"
+	build_path = /obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser
+
+/datum/design/chem_dispenser/booze_dispenser
+	name = "Circuit Design (Booze Dispenser)"
+	desc = "Allows for the construction of circuit boards used to build a booze dispenser."
+	id = "booze_dispenser"
+	build_path = /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser
+

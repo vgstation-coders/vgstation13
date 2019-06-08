@@ -113,7 +113,13 @@ CREATE TABLE client (
     parallax_speed INTEGER,
     stumble        INTEGER,
     attack_animation INTEGER,
-    pulltoggle     INTEGER
+    pulltoggle     INTEGER,
+    credits        TEXT,
+    jingle         TEXT,
+    hear_voicesound INTEGER,
+    hear_instruments INTEGER,
+    ambience_volume INTEGER,
+    credits_volume INTEGER
 );
 
 

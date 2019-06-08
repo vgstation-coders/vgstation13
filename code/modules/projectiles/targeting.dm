@@ -130,11 +130,10 @@ proc/GunTrace(X1,Y1,X2,Y2,Z=1,exc_obj,PX1=16,PY1=16,PX2=16,PY2=16)
 					return M
 				Y1+=s
 	else
-		var
-			m=(WORLD_ICON_SIZE*(Y2-Y1)+(PY2-PY1))/(WORLD_ICON_SIZE*(X2-X1)+(PX2-PX1))
-			b=(Y1+PY1/WORLD_ICON_SIZE-0.015625)-m*(X1+PX1/WORLD_ICON_SIZE-0.015625) //In tiles
-			signX = SIGN(X2-X1)
-			signY = SIGN(Y2-Y1)
+		var/m=(WORLD_ICON_SIZE*(Y2-Y1)+(PY2-PY1))/(WORLD_ICON_SIZE*(X2-X1)+(PX2-PX1))
+		var/b=(Y1+PY1/WORLD_ICON_SIZE-0.015625)-m*(X1+PX1/WORLD_ICON_SIZE-0.015625) //In tiles
+		var/signX = SIGN(X2-X1)
+		var/signY = SIGN(Y2-Y1)
 		if(X1<X2)
 			b+=m
 		while(1)

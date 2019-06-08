@@ -32,7 +32,7 @@
 			loaded.preattack(W,user,1)
 		update_icon()
 		to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(!loaded)
 			return
 		to_chat(user, "<span class='notice'>You loosen the securing screws on the side, allowing you to lower the guiding edge and retrieve the wires.</span>")

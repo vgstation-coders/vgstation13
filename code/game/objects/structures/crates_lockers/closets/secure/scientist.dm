@@ -10,6 +10,10 @@
 
 /obj/structure/closet/secure_closet/scientist/atoms_to_spawn()
 	return list(
+		pick(
+			/obj/item/weapon/storage/backpack/satchel_tox,
+			/obj/item/weapon/storage/backpack/messenger/tox,
+			),
 		/obj/item/clothing/under/rank/scientist,
 		/obj/item/clothing/suit/storage/labcoat/science,
 		/obj/item/clothing/shoes/white,

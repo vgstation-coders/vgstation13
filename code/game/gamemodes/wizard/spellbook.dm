@@ -5,6 +5,8 @@
 	desc = "The legendary book of spells of the wizard."
 	icon = 'icons/obj/library.dmi'
 	icon_state ="spellbook"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
+	item_state = "book"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
@@ -24,7 +26,7 @@
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
@@ -443,47 +445,51 @@
 	name = "spellbook of [spellname]" //Note, desc doesn't change by design
 	..()
 
-/obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
-	..()
-	if(stored_swap in dead_mob_list)
-		stored_swap = null
-	if(!stored_swap)
-		stored_swap = user
-		to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
-		return
-	if(stored_swap == user)
-		to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
-		return
+/obj/item/weapon/spellbook/oneuse/mindswap/recoil(var/mob/user)
+	qdel(src)
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs -= V
+///obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
+	// ..()
+	// if(stored_swap in dead_mob_list)
+	// 	stored_swap = null
+	// if(!stored_swap)
+	// 	stored_swap = user
+	// 	to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
+	// 	return
+	// if(stored_swap == user)
+	// 	to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
+	// 	return
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in stored_swap.mind.special_verbs)
-			stored_swap.verbs -= V
+	// if(user.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs -= V
 
-	var/mob/dead/observer/ghost = stored_swap.ghostize(0)
-	ghost.spell_list = stored_swap.spell_list
+	// if(stored_swap.mind.special_verbs.len)
+	// 	for(var/V in stored_swap.mind.special_verbs)
+	// 		stored_swap.verbs -= V
 
-	user.mind.transfer_to(stored_swap)
-	stored_swap.spell_list = user.spell_list
+	// var/mob/dead/observer/ghost = stored_swap.ghostize(0)
+	// ghost.spell_list = stored_swap.spell_list
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs += V
+	// user.mind.transfer_to(stored_swap)
+	// stored_swap.spell_list = user.spell_list
 
-	ghost.mind.transfer_to(user)
-	user.key = ghost.key
-	user.spell_list = ghost.spell_list
+	// if(stored_swap.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs += V
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
-			user.verbs += V
+	// ghost.mind.transfer_to(user)
+	// user.key = ghost.key
+	// user.spell_list = ghost.spell_list
 
-	to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
-	to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
-	stored_swap = null
+	// if(user.mind.special_verbs.len)
+	// 	for(var/V in user.mind.special_verbs)
+	// 		user.verbs += V
+
+	// to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
+	// to_chat(user, "<span class='warning'>Suddenly you're staring at [src] again... where are you, who are you?!</span>")
+	// stored_swap = null
+
 
 /obj/item/weapon/spellbook/oneuse/forcewall
 	spell = /spell/aoe_turf/conjure/forcewall
@@ -644,6 +650,12 @@
 		to_chat(user, "<span class = 'warning'>You feel like you've been pushing yourself too hard! </span>")
 		qdel(src)
 
+/obj/item/weapon/spellbook/oneuse/mutate/highlander //for highlander uplink bundle
+	spell =/spell/targeted/genetic/mutate/highlander
+	spellname  = "highlander power"
+	icon_state = "bookhighlander"
+	desc = "You can hear the bagpipes playing already."
+
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
 	spellname = "disorient"
@@ -710,6 +722,11 @@
 		user.apply_damage(25, BURN, LIMB_RIGHT_HAND)
 		to_chat(user, "<span class = 'warning'>The book heats up and burns your hands!</span>")
 		qdel(src)
+
+/obj/item/weapon/spellbook/oneuse/lightning/sith
+	spell = /spell/lightning/sith
+	spellname = "sith lightning"
+	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
@@ -856,6 +873,17 @@
 	var/obj/pie = new pie_to_spawn(T)
 	spawn()
 		pie.throw_at(user, get_dist(pie,user),rand(40,90))
+
+/obj/item/weapon/spellbook/oneuse/ice_barrage
+	spell = /spell/targeted/ice_barrage
+	spellname = "Ice Barrage"
+	desc = "Cold to the touch."
+	icon_state = "bookAncient"
+
+/obj/item/weapon/spellbook/oneuse/ice_barrage/recoil(mob/living/carbon/user)
+	..()
+	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
+	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
 
 
 ///// ANCIENT SPELLBOOK /////

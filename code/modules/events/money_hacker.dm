@@ -32,7 +32,7 @@
 	without intervention this attack will succeed in [time_duration / 600] minutes. Required intervention: complete shutdown of affected accounts databases until the attack has ceased. \
 	Notifications will be sent as updates occur.<br>"
 	var/my_department = "[station_name()] firewall subroutines"
-	var/sending = message + "<font color='blue'><b>Message dispatched by [my_department].</b></font>"
+	var/sending = message + "<span class='notice'><b>Message dispatched by [my_department].</b></span>"
 
 	var/pass = 0
 	for(var/obj/machinery/message_server/MS in message_servers)
@@ -89,7 +89,7 @@
 			message = "The attack has ceased, the affected databases can now be brought online."
 
 		var/my_department = "[station_name()] firewall subroutines"
-		var/sending = message + "<font color='blue'><b>Message dispatched by [my_department].</b></font>"
+		var/sending = message + "<span class='notice'><b>Message dispatched by [my_department].</b></span>"
 
 		var/pass = 0
 		for(var/obj/machinery/message_server/MS in message_servers)

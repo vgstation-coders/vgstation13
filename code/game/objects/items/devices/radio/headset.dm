@@ -37,6 +37,14 @@
 	syndie = 1
 	recalculateChannels()
 
+/obj/item/device/radio/headset/revsquad/New()
+	..()
+	keyslot2 = new /obj/item/device/encryptionkey/rev
+	syndie = 1 //prevents broadcast without key
+
+/obj/item/device/radio/headset/revsquad/emp_act()
+	return
+
 /obj/item/device/radio/headset/syndicate/commando/New()
 	..()
 	set_frequency(SYND_FREQ)
@@ -279,10 +287,10 @@
 /obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
 	user.set_machine(src)
-	if (!( isscrewdriver(W) || (istype(W, /obj/item/device/encryptionkey/ ))))
+	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(keyslot1 || keyslot2)
 
 

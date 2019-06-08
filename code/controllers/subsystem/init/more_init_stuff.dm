@@ -26,7 +26,7 @@ var/datum/subsystem/more_init/SSmore_init
 		generateHoloMinimaps()
 		log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
 	else
-		holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap
+		//holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap - NO IT'S NOT YOU DUMBFUCK, THOSE VARS EXIST FOR A REASON
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
 	..()
 
@@ -70,7 +70,7 @@ var/datum/subsystem/more_init/SSmore_init
 
 /datum/subsystem/more_init/proc/cachedamageicons()
 	var/mob/living/carbon/human/H = new(locate(1,1,2))
-	var/datum/species/list/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
+	var/list/datum/species/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
 	var/icon/DI
 	var/species_blood
 	for(var/datum/species/S in slist)

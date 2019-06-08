@@ -85,6 +85,10 @@
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
+/obj/item/clothing/head/helmet/space/plasmaman/atmostech/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
+
 /obj/item/clothing/suit/space/plasmaman/engineer
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
@@ -100,6 +104,10 @@
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 1
+
+/obj/item/clothing/head/helmet/space/plasmaman/engineer/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
 
 /obj/item/clothing/suit/space/plasmaman/engineer/ce
 	name = "plasmaman chief engineer suit"

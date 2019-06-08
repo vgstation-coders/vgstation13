@@ -50,6 +50,7 @@
 			spark(src, 5)
 			playsound(src,'sound/items/defib.ogg',50,1)
 			user.Knockdown(5)
+			user.Stun(5)
 			var/mob/living/carbon/human/H = user
 			if(ishuman(user))
 				H.apply_damage(20, BURN)
@@ -108,7 +109,9 @@
 	if(heart)
 		heart.damage += rand(5,60)
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
-	target.Knockdown(rand(6,12))
+	var/incapacitation_duration = rand(6, 12)
+	target.Knockdown(incapacitation_duration)
+	target.Stun(incapacitation_duration)
 	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
 	target.audible_scream() //If we're going this route, it kinda hurts
 	target.updatehealth()

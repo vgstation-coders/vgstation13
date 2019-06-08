@@ -145,20 +145,6 @@
 	A.RobotAltClick(src)
 	return
 
-/mob/living/silicon/robot/ShiftClickOn(var/atom/A)
-	//Borgs can into doors as well
-	if(istype(A, /obj/machinery/door/airlock))
-		A.AIShiftClick(src)
-		return
-	..()
-
-/mob/living/silicon/robot/CtrlClickOn(var/atom/A)
-	//Borgs can into doors as well
-	if(istype(A, /obj/machinery/door/airlock))
-		A.AICtrlClick(src)
-		return
-	..()
-
 /*
 	As with AI, these are not used in click code,
 	because the code for robots is specific, not generic.

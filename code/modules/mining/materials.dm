@@ -112,7 +112,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		var/amount = getAmount(id)
 		if(amount)
 			var/datum/material/mat = getMaterial(id)
-			getFromPool(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
+			drop_stack(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
+
+/datum/materials/proc/makeOre(var/atom/loc)
+	for(var/id in storage)
+		var/amount = getAmount(id)
+		if(amount)
+			var/datum/material/mat = getMaterial(id)
+			drop_stack(mat.oretype, loc, amount)
+
+/datum/materials/proc/makeAndRemoveOre(var/atom/loc)
+	makeOre(loc)
+	for(var/id in storage)
+		removeAmount(id, storage[id])
 
 //HOOKS//
 /atom/proc/onMaterialChange(matID, amount)
@@ -155,7 +167,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_IRON
 	value=1
 	cc_per_sheet=CC_PER_SHEET_METAL
-	oretype=/obj/item/weapon/ore/iron
+	oretype=/obj/item/stack/ore/iron
 	sheettype=/obj/item/stack/sheet/metal
 	cointype=/obj/item/weapon/coin/iron
 	color = "#666666" //rgb: 102, 102, 102
@@ -170,7 +182,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_GLASS
 	value=1
 	cc_per_sheet=CC_PER_SHEET_GLASS
-	oretype=/obj/item/weapon/ore/glass
+	oretype=/obj/item/stack/ore/glass
 	sheettype=/obj/item/stack/sheet/glass/glass
 	color = "#6E8DA2" //rgb: 110, 141, 162
 	alpha = 122
@@ -192,7 +204,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_DIAMOND
 	value=40
 	cc_per_sheet = 1750
-	oretype=/obj/item/weapon/ore/diamond
+	oretype=/obj/item/stack/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
 	color = "#74C6C6" //rgb: 116, 198, 198
@@ -206,7 +218,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Plasma"
 	id=MAT_PLASMA
 	value=40
-	oretype=/obj/item/weapon/ore/plasma
+	oretype=/obj/item/stack/ore/plasma
 	sheettype=/obj/item/stack/sheet/mineral/plasma
 	cointype=/obj/item/weapon/coin/plasma
 	color = "#500064" //rgb: 80, 0, 100
@@ -225,7 +237,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Gold"
 	id=MAT_GOLD
 	value=20
-	oretype=/obj/item/weapon/ore/gold
+	oretype=/obj/item/stack/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
 	color = "#F7C430" //rgb: 247, 196, 48
@@ -238,7 +250,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Silver"
 	id=MAT_SILVER
 	value=20
-	oretype=/obj/item/weapon/ore/silver
+	oretype=/obj/item/stack/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
 	color = "#D0D0D0" //rgb: 208, 208, 208
@@ -252,7 +264,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Uranium"
 	id=MAT_URANIUM
 	value=20
-	oretype=/obj/item/weapon/ore/uranium
+	oretype=/obj/item/stack/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
 	color = "#247124" //rgb: 36, 113, 36
@@ -273,7 +285,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Bananium"
 	id=MAT_CLOWN
 	value=100
-	oretype=/obj/item/weapon/ore/clown
+	oretype=/obj/item/stack/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
 	melt_temperature = MELTPOINT_POTASSIUM
@@ -302,7 +314,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id=MAT_PHAZON
 	value=200
 	cc_per_sheet = 1500
-	oretype=/obj/item/weapon/ore/phazon
+	oretype=/obj/item/stack/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
 	cointype=/obj/item/weapon/coin/phazon
 	color = "#5E02F8" //rgb: 94, 2, 248
@@ -381,19 +393,11 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value = 0
 	oretype = /obj/item/ice_crystal
 
-/datum/material/telecrystal
-	name="Telecrystal"
-	id="telecrystal"
-	value=30
-	oretype=/obj/item/weapon/ore/telecrystal
-	sheettype=null
-	cointype=null
-
 /datum/material/mythril
 	name="mythril"
 	id=MAT_MYTHRIL
 	value=50
-	oretype=/obj/item/weapon/ore/mythril
+	oretype=/obj/item/stack/ore/mythril
 	sheettype=/obj/item/stack/sheet/mineral/mythril
 	cointype=/obj/item/weapon/coin/mythril
 	color = "#FFEDD2" //rgb: 255,237,238
@@ -402,12 +406,21 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	quality_mod = 1.5
 	armor_mod = 1.75
 
+/datum/material/telecrystal
+	name="telecrystal"
+	id=MAT_TELECRYSTAL
+	value=200
+	oretype=/obj/item/stack/ore/telecrystal
+	sheettype=/obj/item/bluespace_crystal
+	cointype=null
+
+
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"
 	id="pharosium"
 	value=10
-	oretype=/obj/item/weapon/ore/pharosium
+	oretype=/obj/item/stack/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	cointype=null
 
@@ -415,7 +428,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Char"
 	id="char"
 	value=5
-	oretype=/obj/item/weapon/ore/char
+	oretype=/obj/item/stack/ore/char
 	sheettype=/obj/item/stack/sheet/mineral/char
 	cointype=null
 
@@ -424,7 +437,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Claretine"
 	id="claretine"
 	value=50
-	oretype=/obj/item/weapon/ore/claretine
+	oretype=/obj/item/stack/ore/claretine
 	sheettype=/obj/item/stack/sheet/mineral/claretine
 	cointype=null
 
@@ -433,7 +446,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Bohrum"
 	id="bohrum"
 	value=50
-	oretype=/obj/item/weapon/ore/bohrum
+	oretype=/obj/item/stack/ore/bohrum
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
 	cointype=null
 
@@ -442,7 +455,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Syreline"
 	id="syreline"
 	value=70
-	oretype=/obj/item/weapon/ore/syreline
+	oretype=/obj/item/stack/ore/syreline
 	sheettype=/obj/item/stack/sheet/mineral/syreline
 	cointype=null
 
@@ -451,7 +464,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Erebite"
 	id="erebite"
 	value=50
-	oretype=/obj/item/weapon/ore/erebite
+	oretype=/obj/item/stack/ore/erebite
 	sheettype=/obj/item/stack/sheet/mineral/erebite
 	cointype=null
 
@@ -460,7 +473,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Cytine"
 	id="cytine"
 	value=30
-	oretype=/obj/item/weapon/ore/cytine
+	oretype=/obj/item/stack/ore/cytine
 	sheettype=/obj/item/stack/sheet/mineral/cytine
 	cointype=null
 
@@ -469,17 +482,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Uqill"
 	id="uqill"
 	value=90
-	oretype=/obj/item/weapon/ore/uqill
+	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
-	cointype=null
-
-
-/datum/material/telecrystal
-	name="Telecrystal"
-	id="telecrystal"
-	value=30
-	oretype=/obj/item/weapon/ore/telecrystal
-	sheettype=/obj/item/stack/sheet/mineral/telecrystal
 	cointype=null
 
 
@@ -487,7 +491,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Mauxite"
 	id="mauxite"
 	value=5
-	oretype=/obj/item/weapon/ore/mauxite
+	oretype=/obj/item/stack/ore/mauxite
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
 	cointype=null
 
@@ -496,7 +500,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Cobryl"
 	id="cobryl"
 	value=30
-	oretype=/obj/item/weapon/ore/cobryl
+	oretype=/obj/item/stack/ore/cobryl
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
 	cointype=null
 
@@ -505,7 +509,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Cerenkite"
 	id="cerenkite"
 	value=50
-	oretype=/obj/item/weapon/ore/cerenkite
+	oretype=/obj/item/stack/ore/cerenkite
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
 	cointype=null
 
@@ -513,7 +517,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Molitz"
 	id="molitz"
 	value=10
-	oretype=/obj/item/weapon/ore/molitz
+	oretype=/obj/item/stack/ore/molitz
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	cointype=null
 */

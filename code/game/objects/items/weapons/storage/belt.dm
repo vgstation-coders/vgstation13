@@ -179,6 +179,15 @@
 	icon_state = "greybelt"
 	item_state = "grey"
 
+/obj/item/weapon/storage/belt/slim/pro/New()
+	..()
+	new /obj/item/weapon/screwdriver(src)
+	new /obj/item/weapon/wrench(src)
+	new /obj/item/weapon/weldingtool(src)
+	new /obj/item/weapon/crowbar(src)
+	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/device/multitool(src)
+
 /obj/item/weapon/storage/belt/security
 	name = "security belt"
 	desc = "Can hold security gear like handcuffs and flashes."
@@ -210,6 +219,7 @@
 		"/obj/item/taperoll/police",
 		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/gun/energy/stunrevolver",
 		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
@@ -217,7 +227,7 @@
 		"/obj/item/device/gps/secure",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
-		"/obj/item/weapon/depocket_wand"
+		"/obj/item/weapon/depocket_wand",
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
@@ -271,6 +281,44 @@
  		"/obj/item/organ/external/head"
  	)
 
+/obj/item/weapon/storage/belt/silicon
+	name = "cyber trophy belt"
+	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
+	icon_state = "securitybelt"
+	item_state = "security"
+	fits_max_w_class = 4
+	max_combined_w_class = 28
+	can_only_hold = list(
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi",
+		"/obj/item/organ/external/head"
+ 	)
+
+/obj/item/weapon/storage/belt/silicon/New()
+	..()
+	new /obj/item/device/aicard(src) //One freebie card
+
+/obj/item/weapon/storage/belt/silicon/proc/GetCyberbeltMobs()
+	var/list/mobs = list()
+	for(var/obj/item/device/mmi/M in contents)
+		if(M.brainmob)
+			mobs += M.brainmob
+	for(var/obj/item/device/aicard/A in contents)
+		for(var/mob/living/silicon/ai/AI in A)
+			mobs += AI
+	return mobs
+
+/proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
+	var/list/listeners = observers
+	if(istype(B.loc,/mob))
+		var/mob/M = B.loc
+		listeners += M
+	listeners += B.GetCyberbeltMobs()
+	listeners = uniquelist(listeners)
+	var/turf/T = get_turf(B)
+	log_say("[key_name(C)] (@[T.x],[T.y],[T.z]) Trophy Belt: [message]")
+	for(var/mob/L in listeners)
+		to_chat(L,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
 
 /obj/item/weapon/storage/belt/mining
 	name = "mining gear belt"
@@ -334,7 +382,7 @@
 	if(amount != contents.len)
 		update_icon()
 
-/obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	update_icon()
 

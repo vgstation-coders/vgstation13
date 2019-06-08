@@ -16,9 +16,10 @@
 /datum/action/spacepod/fire_weapons/Trigger()
 	..()
 	var/obj/spacepod/S = target
-	if(S.equipment_system && S.equipment_system.weapon_system)
-		var/obj/item/device/spacepod_equipment/weaponry/W = S.equipment_system.weapon_system
-		if(S.get_passengers().Find(owner) && !S.passenger_fire)
+	if(S.ES && S.ES.weapon_system)
+		var/obj/item/device/spacepod_equipment/weaponry/W = S.ES.weapon_system
+		var/list/passengers = S.get_passengers()
+		if(passengers.Find(owner) && !S.passenger_fire)
 			to_chat(owner, "<span class = 'warning'>Passenger gunner system disabled.</span>")
 			return
 		W.fire_weapons()
@@ -71,3 +72,12 @@
 	..()
 	var/obj/spacepod/S = target
 	S.change_speed()
+
+/datum/action/spacepod/pilot/toggle_lights
+	name = "Toggle lights"
+	button_icon_state = "toggle_lights"
+
+/datum/action/spacepod/pilot/toggle_lights/Trigger()
+	..()
+	var/obj/spacepod/S = target
+	S.toggle_lights()

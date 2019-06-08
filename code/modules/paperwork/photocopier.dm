@@ -112,6 +112,7 @@
 					p.scribble = photocopy.scribble
 					p.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 					p.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+					p.photo_size = photocopy.photo_size
 					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 					p.info = photocopy.info
 
@@ -343,7 +344,7 @@
 				copy.forceMove(src.loc)
 				copy = null
 			updateUsrDialog()
-	else if(isscrewdriver(O))
+	else if(O.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "[src] needs to be unanchored.")
 			return

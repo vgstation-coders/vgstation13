@@ -61,7 +61,7 @@ var/global/list/alert_overlays_global = list()
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
 	icon = 'icons/obj/doors/DoorHazard.dmi'
 	icon_state = "door_open"
-	req_one_access = list(access_atmospherics, access_engine_equip)
+	req_one_access = list(access_atmospherics, access_engine_equip, access_paramedic)
 	opacity = 0
 	density = 0
 	layer = BELOW_TABLE_LAYER
@@ -82,6 +82,7 @@ var/global/list/alert_overlays_global = list()
 	var/list/users_to_open
 	var/list/tile_info[4]
 	var/list/dir_alerts[4] // 4 dirs, bitflags
+	var/obj/machinery/door/firedoor/twin = null // The twin will open alongside the firedoor when opened without an active atmos hazard
 
 	// MUST be in same order as FIREDOOR_ALERT_*
 	var/list/ALERT_STATES=list(
@@ -132,9 +133,32 @@ var/global/list/alert_overlays_global = list()
 				areas_added |= A
 
 
+/obj/machinery/door/firedoor/initialize()
+	if (twin) // Already paired with something
+		return
+	for (var/i = 1 to 3) // Try to find a firelock up to 3 tiles ahead
+		switch (dir)
+			if (NORTH, SOUTH) // North south, going by the y axis
+				var/turf/T = locate(x, y + i, z)
+				var/obj/machinery/door/firedoor/DF = locate() in T
+				if (DF)
+					twin = DF
+					DF.twin = src
+					return
+			if (EAST, WEST)
+				var/turf/T = locate(x + i, y, z)
+				var/obj/machinery/door/firedoor/DF = locate() in T
+				if (DF)
+					twin = DF
+					DF.twin = src
+					return
+
 /obj/machinery/door/firedoor/Destroy()
 	for(var/area/A in areas_added)
 		A.all_doors.Remove(src)
+	if (istype(twin))
+		twin.twin = null
+		twin = null
 	. = ..()
 
 /obj/machinery/door/firedoor/proc/is_fulltile()
@@ -166,9 +190,9 @@ var/global/list/alert_overlays_global = list()
 		if(dir_alerts[index] & (FIREDOOR_ALERT_HOT|FIREDOOR_ALERT_COLD))
 			o += "<span class='warning'>"
 		else
-			o += "<span style='color:blue'>"
+			o += "<span class='notice'>"
 		o += "[celsius]°C</span> "
-		o += "<span style='color:blue'>"
+		o += "<span class='notice'>"
 		o += "[pressure]kPa</span></li>"
 		to_chat(user, o)
 
@@ -241,7 +265,7 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
+/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
@@ -258,6 +282,31 @@ var/global/list/alert_overlays_global = list()
 	if( iscrowbar(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
 		force_open(user, C)
 		return
+
+	if(C && (C.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT)
+		if(!density)
+			return
+		if(blocked)
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+								"<span class='notice'>You begin slicing through \the [src].</span>", \
+								"<span class='warning'>You hear slicing noises.</span>")
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			if(do_after(user, src, 50))
+				if(!istype(src))
+					return
+				user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+									"<span class='notice'>You slice through \the [src].</span>", \
+									"<span class='warning'>You hear slicing noises.</span>")
+				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+				blocked = !blocked
+				open()
+			return
+		else
+			user.visible_message("<span class='warning'>[user] swiftly slices \the [src] open!</span>",\
+								"You slice \the [src] open in one clean cut!",\
+								"You hear the sound of a swift, sharp slice.")
+			open()
+			return
 
 	if(istype(C, /obj/item/weapon/wrench))
 		if(blocked)
@@ -294,13 +343,13 @@ var/global/list/alert_overlays_global = list()
 
 	var/access_granted = 0
 	var/users_name
-	if(!istype(C, /obj)) //If someone hit it with their hand.  We need to see if they are allowed.
-		if(allowed(user))
-			access_granted = 1
-		if(ishuman(user))
-			users_name = FindNameFromID(user)
-		else
-			users_name = "Unknown"
+
+	if(allowed(user))
+		access_granted = 1
+	if(ishuman(user))
+		users_name = FindNameFromID(user)
+	else
+		users_name = "Unknown"
 
 	if( ishuman(user) &&  !stat && ( istype(C, /obj/item/weapon/card/id) || istype(C, /obj/item/device/pda) ) )
 		var/obj/item/weapon/card/id/ID = C
@@ -332,6 +381,8 @@ var/global/list/alert_overlays_global = list()
 		if(!users_to_open)
 			users_to_open = list()
 		users_to_open += users_name
+		if (twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
+			twin.attackby(C, user, TRUE)
 	var/needs_to_close = 0
 	if(density)
 		if(alarmed)
@@ -345,6 +396,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(needs_to_close)
 		spawn(50)
+			alarmed = A.doors_down || A.fire
 			if(alarmed && !density)
 				close()
 

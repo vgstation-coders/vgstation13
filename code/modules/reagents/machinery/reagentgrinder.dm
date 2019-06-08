@@ -1,6 +1,8 @@
 var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/grapes = list(GRAPEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes = list(GGRAPEJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),
@@ -11,6 +13,7 @@ var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = list(PLUMPHJUICE = 0),
 	)
 
 /obj/machinery/reagentgrinder
@@ -60,7 +63,7 @@ var/global/list/juice_items = list (
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/weapon/reagent_containers/pill = list(),
 		/obj/item/weapon/reagent_containers/food = list(),
-		/obj/item/ice_crystal                = list(ICE, 10),
+		/obj/item/ice_crystal                = list(ICE = 10),
 	)
 
 

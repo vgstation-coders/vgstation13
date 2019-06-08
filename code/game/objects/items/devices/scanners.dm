@@ -130,8 +130,8 @@ proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, va
 			"<span class='warning'>You analyze the floor's vitals!</span>")
 			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			to_chat(user, {"<span class='notice'>Analyzing Results for the floor:<br>Overall Status: Healthy</span>
-Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>
-Damage Specifics: <font color='blue'>0</font> - <font color='green'>0</font> - <font color='#FFA500'>0</font> - <font color='red'>0</font>
+Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>
+Damage Specifics: <span class='notice'>0</span> - <font color='green'>0</font> - <font color='#FFA500'>0</font> - <span class='red'>0</span>
 [(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: ???&deg;C (???&deg;F)</span>
 <span class='notice'>Localized Damage, Brute/Burn:</span>
 <span class='notice'>No limb damage detected.</span>
@@ -151,8 +151,8 @@ Subject's pulse: ??? BPM"})
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
-	message += "<br>Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>"
-	message += "<br>Damage Specifics: <font color='blue'>[OX]</font> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>"
+	message += "<br>Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>"
+	message += "<br>Damage Specifics: <span class='notice'>[OX]</span> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <span class='red'>[BR]</span>"
 	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
 	if(M.tod && M.isDead())
 		message += "<br><span class='notice'>Time of Death: [M.tod]</span>"
@@ -165,7 +165,7 @@ Subject's pulse: ??? BPM"})
 				var/organ_msg = "<br>"
 				organ_msg += capitalize(org.display_name)
 				organ_msg += ": "
-				organ_msg += "<font color='red'>[org.brute_dam ? org.brute_dam : 0]</font>"
+				organ_msg += "<span class='red'>[org.brute_dam ? org.brute_dam : 0]</span>"
 				organ_msg += "/<font color='#FFA500'>[org.burn_dam ? org.burn_dam : 0]</font>"
 				if(org.status & ORGAN_BLEEDING)
 					organ_msg += "<span class='danger'>\[BLEEDING\]</span>"
@@ -178,7 +178,7 @@ Subject's pulse: ??? BPM"})
 			message += "<br><span class='notice'>No limb damage detected.</span>"
 
 	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<font color='blue'><b>Severe oxygen deprivation detected</b></font>" : "Subject bloodstream oxygen level normal"
+		OX = fake_oxy > 50 ? "<span class='notice'><b>Severe oxygen deprivation detected</b></span>" : "Subject bloodstream oxygen level normal"
 
 	if(hardcore_mode_on && ishuman(M) && eligible_for_hardcore_mode(M))
 		var/mob/living/carbon/human/H = M
@@ -191,7 +191,7 @@ Subject's pulse: ??? BPM"})
 			for(var/ID in C.virus2)
 				if(ID in virusDB)
 					var/datum/data/record/V = virusDB[ID]
-					message += "<br><span class='warning'>Warning: [V.fields["form"]] [V.fields["name"]] detected in subject's blood. Known antigen : [V.fields["antigen"]]</span>"
+					message += "<br><span class='warning'>Warning: [V.fields["name"]] detected in subject's blood. Known antigen : [V.fields["antigen"]]</span>"
 
 	for(var/datum/disease/D in M.viruses)
 		if(!D.hidden[SCANNER])

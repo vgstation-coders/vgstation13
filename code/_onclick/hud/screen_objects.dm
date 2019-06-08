@@ -21,6 +21,10 @@
 	master = null
 	..()
 
+/obj/abstract/screen/resetVariables()
+	..("icon","icon_state","name","master", "screen_loc", args)
+	animate(src)
+
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
@@ -496,7 +500,7 @@
 		if("State Laws")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.checklaws()
+				AI.state_laws()
 
 		if("PDA - Send Message")
 			if(isAI(usr))

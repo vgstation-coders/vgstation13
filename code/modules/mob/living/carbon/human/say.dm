@@ -22,9 +22,9 @@
 	return "says, [text]";
 
 /mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
-	if(wear_mask && istype(wear_mask))
-		if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
-			wear_mask.treat_mask_speech(speech)
+	if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
+		for(var/obj/item/I in get_all_slots() + held_items)
+			I.affect_speech(speech, src)
 
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
 		speech.message = "[uppertext(replacetext(speech.message, ".", "!"))]!!" //because I don't know how to code properly in getting vars from other files -Bro
@@ -59,9 +59,19 @@
 	..(speech)
 	if(dna)
 		species.handle_speech(speech,src)
+	if(config.voice_noises && world.time>time_last_speech+5 SECONDS)
+		time_last_speech = world.time
+		for(var/mob/O in hearers())
+			if(!O.is_deaf() && O.client)
+				O.client.handle_hear_voice(src)
 
 
 /mob/living/carbon/human/GetVoice()
+	if(find_held_item_by_type(/obj/item/device/megaphone))
+		var/obj/item/device/megaphone/M = locate() in held_items
+		if(istype(M) && M.mask_voice)
+			return "Unknown"
+
 	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice))
 		var/obj/item/clothing/mask/gas/voice/V = wear_mask
 		if(V.vchange && V.is_flipped == 1) //the mask works and we are wearing it on the face instead of on the head
@@ -72,6 +82,7 @@
 				return "Unknown"
 		else
 			return real_name
+
 	if(mind) // monkeyhumans exist, don't descriminate
 		var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
 		if(changeling && changeling.mimicing)

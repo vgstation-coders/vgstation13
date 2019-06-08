@@ -120,7 +120,7 @@
 				return
 
 		if(WALLCOVEREXPOSED)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				user.visible_message("<span class='warning'>[user] begins unsecuring \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
@@ -161,7 +161,7 @@
 
 				return
 			//Re-secure external cover, unsurprisingly exact same step as above
-			else if(isscrewdriver(W))
+			else if(W.is_screwdriver(user))
 				user.visible_message("<span class='notice'>[user] begins securing \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin securing \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)

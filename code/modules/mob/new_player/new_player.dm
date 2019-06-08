@@ -136,35 +136,7 @@
 			if(!client)
 				return 1
 			sleep(1)
-			var/mob/dead/observer/observer = new()
-
-			spawning = 1
-			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
-
-
-			observer.started_as_observer = 1
-			close_spawn_windows()
-			var/obj/O = locate("landmark*Observer-Start")
-			to_chat(src, "<span class='notice'>Now teleporting.</span>")
-			observer.forceMove(O.loc)
-			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
-
-			// Has to be done here so we can get our random icon.
-			if(client.prefs.be_random_body)
-				client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
-			client.prefs.update_preview_icon(1)
-			observer.icon = client.prefs.preview_icon
-			observer.alpha = 127
-
-			if(client.prefs.be_random_name)
-				client.prefs.real_name = random_name(client.prefs.gender,client.prefs.species)
-			observer.real_name = client.prefs.real_name
-			observer.name = observer.real_name
-			if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
-				observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
-			observer.key = key
-			mob_list -= src
-			qdel(src)
+			create_observer()
 
 			return 1
 
@@ -278,34 +250,44 @@
 	var/datum/job/job = job_master.GetJob(rank)
 	if(!job)
 		return 0
-	if((job.current_positions >= job.total_positions) && job.total_positions != -1)
+	if(job.current_positions >= job.get_total_positions())
 		return 0
 	if(jobban_isbanned(src,rank))
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
-	if(job.species_whitelist.len)
-		if(!job.species_whitelist.Find(client.prefs.species))
-			return 0
-	// assistant limits
-	if(config.assistantlimit)
-		if(job.title == "Assistant")
-			var/count = 0
-			var/datum/job/officer = job_master.GetJob("Security Officer")
-			var/datum/job/warden = job_master.GetJob("Warden")
-			var/datum/job/hos = job_master.GetJob("Head of Security")
-			count += (officer.current_positions + warden.current_positions + hos.current_positions)
-			if(job.current_positions > (config.assistantratio * count))
-				if(count >= 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
-					. = 1
-				else
-					return 0
-	if(job.title == "Assistant" && job.current_positions > 5)
-		var/datum/job/officer = job_master.GetJob("Security Officer")
-		if(officer.current_positions >= officer.total_positions)
-			officer.total_positions++
 	. = 1
 	return
+
+/mob/new_player/proc/create_observer()
+	var/mob/dead/observer/observer = new()
+	spawning = 1
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
+
+
+	observer.started_as_observer = 1
+	close_spawn_windows()
+	var/obj/O = locate("landmark*Observer-Start")
+	to_chat(src, "<span class='notice'>Now teleporting.</span>")
+	observer.forceMove(O.loc)
+	observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
+
+	// Has to be done here so we can get our random icon.
+	if(client.prefs.be_random_body)
+		client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
+	client.prefs.update_preview_icon(1)
+	observer.icon = client.prefs.preview_icon
+	observer.alpha = 127
+
+	if(client.prefs.be_random_name)
+		client.prefs.real_name = random_name(client.prefs.gender,client.prefs.species)
+	observer.real_name = client.prefs.real_name
+	observer.name = observer.real_name
+	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
+		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
+	observer.key = key
+	mob_list -= src
+	qdel(src)
 
 /mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
 	// 20% of players have bad genetic mutations.
@@ -326,6 +308,11 @@
 	if(!IsJobAvailable(rank))
 		to_chat(src, alert("[rank] is not available. Please try another."))
 		return 0
+	var/datum/job/job = job_master.GetJob(rank)
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
@@ -338,6 +325,8 @@
 	if(character.mind.assigned_role != "MODE")
 		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
 
+	job_master.CheckPriorityFulfilled(rank)
+
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
@@ -345,9 +334,8 @@
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 
-	var/datum/job/J = job_master.GetJob(rank)
-	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
-		J.current_positions--
+	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+		//Removal of job slot is in role/role.dm
 		character.store_position()
 		qdel(src)
 		return
@@ -357,6 +345,7 @@
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
+	var/datum/job/J = job_master.GetJob(rank)
 	if(J.spawns_from_edge)
 		Meteortype_Latejoin(what_to_move, rank)
 	else
@@ -455,16 +444,24 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
 	dat += "Choose from the following open positions:<br>"
-	for(var/datum/job/job in job_master.occupations)
+	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
-			dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					continue
+
+			if(job.priority)
+				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
+			else
+				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
 
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=300x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
 
 
 /mob/new_player/proc/create_character()
@@ -543,6 +540,48 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.key = key		//Manually transfer the key to log them in
 
+	for(var/datum/religion/R in ticker.religions)
+		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
+			R.convert(new_character,null,TRUE,TRUE)
+			break //Only autoconvert them once, and only if they aren't leading their own faith.
+
+	return new_character
+
+//Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
+/mob/new_player/proc/create_roundstart_cyborg()
+	//End lobby
+	spawning = 1
+	close_spawn_windows()
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
+
+	//Find a spawnloc
+	var/turf/spawn_loc
+	for(var/obj/effect/landmark/start/sloc in landmarks_list)
+		if (sloc.name != "Cyborg")
+			continue
+		if (locate(/mob/living) in sloc.loc)
+			if(!spawn_loc)
+				spawn_loc = sloc.loc //Occupied is better than nothing
+			continue
+		spawn_loc = sloc.loc
+		break
+	if(!spawn_loc)
+		spawn_loc = pick(latejoin) //If we absolutely can't find spawns
+		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn at the arrival shuttle.")
+
+	//Create the robot and move over prefs
+	var/mob/living/silicon/robot/new_character = new(spawn_loc)
+	new_character.mmi = new /obj/item/device/mmi(new_character)
+	new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+
+	//Handles transferring the mind and key manually.
+	if (mind)
+		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
+		mind.original = new_character
+		mind.transfer_to(new_character)
+	new_character.key = key //Do this after. For reasons known only to oldcoders.
+	spawn()
+		new_character.Namepick()
 	return new_character
 
 /mob/new_player/proc/ViewManifest()

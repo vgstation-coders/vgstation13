@@ -23,7 +23,7 @@
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
 	var/reloadsound = 'sound/items/Deconstruct.ogg'
-	var/casingsound = null
+	var/casingsound = 'sound/weapons/casing_drop.ogg'
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types

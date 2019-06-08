@@ -38,7 +38,8 @@
 	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50",
 	"YEET" = "selected_sound=sound/effects/yeet.ogg&shiftpitch=1&volume=50",
 	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
-	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80"
+	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80",
+	"SPS" = "selected_sound=sound/items/fake_SPS.ogg&shiftpitch=0&volume=100"
 	)
 
 /obj/item/device/soundsynth/verb/pick_sound()
@@ -65,3 +66,9 @@
 		M.playsound_local(get_turf(src), selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 		//to_chat(M, selected_sound) //this doesn't actually go to their chat very much at all.
+
+/obj/item/device/soundsynth/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr))
+		pick_sound()
+		return
+	return ..()

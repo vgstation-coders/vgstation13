@@ -19,7 +19,7 @@
 		to_chat(user, "<span class='notice'>Unable to detect antibodies.</span>")
 		return
 	var/code = antigens2string(M.antibodies)
-	to_chat(user, "<span class='notice'>[src] The antibody scanner displays a cryptic set of data: [code]</span>")
+	to_chat(user, "<span class='notice'>[bicon(src)] \The [src] displays a cryptic set of data: [code]</span>")
 
 ///////////////VIRUS DISH///////////////
 
@@ -72,13 +72,19 @@
 
 ///////////////GNA DISK///////////////
 
-/obj/item/weapon/diseasedisk
+/obj/item/weapon/disk/disease
 	name = "blank GNA disk"
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk0"
+	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk_virus"
 	var/datum/disease2/effect/effect = null
 	var/stage = 1
 
-/obj/item/weapon/diseasedisk/premade/New()
+/obj/item/weapon/disk/disease/premade/New()
 	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
+
+/obj/item/weapon/disk/disease/zombie
+	name = "\improper Stubborn Brain Syndrome (Stage 4)"
+	effect = new /datum/disease2/effect/zombie
+	stage = 4

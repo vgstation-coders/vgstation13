@@ -81,7 +81,7 @@
 					build_state--
 					icon_state = "box_glass"
 					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
-				if(isscrewdriver(P) && C)
+				if(P.is_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
 					C.forceMove(new_display_case)
@@ -171,7 +171,7 @@
 					req_components = null
 					components = null
 				else
-					if(isscrewdriver(P))
+					if(P.is_screwdriver(user))
 						if(istype(get_turf(src), /turf/simulated/shuttle))
 							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
 							return
@@ -298,7 +298,8 @@ to destroy them and players will be able to make replacements.
 	"cell charger"=/obj/item/weapon/circuitboard/cell_charger,
 	"recharger"=/obj/item/weapon/circuitboard/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
-	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
+	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
+	"electric oven"=/obj/item/weapon/circuitboard/oven,)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -368,6 +369,17 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/manipulator = 1,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/ammolathe
+	name = "Circuit Board (Ammolathe)"
+	desc = "A circuit board used to run a machine that fabricates guns, ammunition, and firearm accessories."
+	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
+	board_type = MACHINE
+	//origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
+	req_components = list(
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
+
 /obj/item/weapon/circuitboard/protolathe
 	name = "Circuit board (Protolathe)"
 	desc = "A circuit board used to run a machine that fabricates various cutting-edge gadgets and tools."
@@ -376,7 +388,8 @@ to destroy them and players will be able to make replacements.
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 2,
-							/obj/item/weapon/stock_parts/manipulator = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/circuit_imprinter
 	name = "Circuit board (Circuit Imprinter)"
@@ -1375,6 +1388,16 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/scanning_module = 1,
 						/obj/item/weapon/stock_parts/micro_laser = 1)
 
+/obj/item/weapon/circuitboard/oven
+	name = "circuit board (oven)"
+	desc = "A circuit board for an electric oven."
+	board_type = MACHINE
+	build_path = /obj/machinery/oven
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/capacitor = 2,
+						/obj/item/weapon/stock_parts/micro_laser = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1)
 
 
 /*

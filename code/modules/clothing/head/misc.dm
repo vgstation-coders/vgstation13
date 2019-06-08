@@ -22,15 +22,38 @@
 	item_state = "pwig"
 
 /obj/item/clothing/head/that
-	name = "top-hat"
+	name = "top hat"
 	desc = "It's an amish looking hat."
 	icon_state = "tophat"
 	item_state = "that"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
+	var/timer
+
+/obj/item/clothing/head/that/New()
+	..()
+	if(prob(wizard_garb))
+		desc = "It's a magic looking hat."
+		wizard_garb = TRUE
+	else
+		wizard_garb = FALSE
+
+/obj/item/clothing/head/that/attackby(obj/item/W, mob/user)
+	if(wizard_garb)
+		var/static/list/allowed_wands = list(/obj/item/item_handle, /obj/item/weapon/cane, /obj/item/weapon/nullrod, /obj/item/weapon/staff)
+		if(is_type_in_list(W, allowed_wands))
+			if(world.time - timer >= 20 SECONDS)
+				timer = world.time
+				user.visible_message("<span class='notice'>[user] taps \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>","<span class='notice'>You tap \the [name] with \the [W] and a rabbit pops out of \the [name]!</span>")
+				new/mob/living/simple_animal/rabbit(get_turf(src))
+	..()
+
+/obj/item/clothing/head/that/magic
+	wizard_garb = 100
 
 /obj/item/clothing/head/that/armored
-	name = "armored top-hat"
+	name = "armored top hat"
 	desc = "It's an amish looking top hat. This one looks sturdier."
 	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
 
@@ -77,6 +100,15 @@
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/head/spaceninjafake
+	name = "ninja hood replica"
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	desc = "A plastic replica of a space ninja's hood, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|BEARD
+	siemens_coefficient = 2.0
+
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
@@ -91,6 +123,13 @@
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
 	flags = FPRINT
+
+/obj/item/clothing/head/beret/highlander
+	name = "highlander's beret"
+	desc = "Don't lose your head!"
+	icon_state = "highlanderberet"
+	item_state = "highlanderberet"
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -156,6 +195,13 @@
 	desc = "Yarr."
 	icon_state = "bandana"
 	item_state = "bandana"
+
+/obj/item/clothing/head/sith
+	name = "Sith Cowl"
+	desc = "UNLIMITED POWER!"
+	icon_state = "sith"
+	item_state = "sith"
+	wizard_garb = 1 //Allows lightning to be used
 
 //stylish bs12 hats
 
@@ -475,3 +521,9 @@
 	item_state = "brim-hat"
 	wizard_garb = TRUE
 	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/head/widehat_red
+	name = "red wide-brimmed hat"
+	desc = "A red fancy looking wide-brimmed hat. It's even got a feather in it."
+	icon_state = "widehat_red"
+	item_state = "widehat_red"

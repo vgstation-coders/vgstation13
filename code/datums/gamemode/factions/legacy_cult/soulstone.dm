@@ -24,8 +24,8 @@
 /obj/item/device/soulstone/attack(var/mob/living/M, mob/user as mob)
 	if(!istype(M, /mob/living/carbon) && !istype(M, /mob/living/simple_animal))
 		return ..()
-	if(istype(M, /mob/living/carbon/human/manifested))
-		to_chat(user, "The soul stone shard seems unable to pull the soul out of that poor manifested ghost back onto our plane.")
+	if(ismanifested(M))
+		to_chat(user, "\The [src] seems unable to pull the soul out of that powerful body.")
 		return
 	add_logs(user, M, "captured [M.name]'s soul", object=src)
 
@@ -243,6 +243,7 @@
 		return
 
 	var/mob/living/carbon/human/body = null
+	var/datum/mind/mind = null
 
 	if(istype(target,/mob/living/carbon/human))
 		body = target
@@ -252,6 +253,8 @@
 	var/true_name = "Unknown"
 
 	if(body)
+		if(body.mind)
+			mind = body.mind
 		true_name = body.real_name
 
 		for(var/obj/item/W in body)
@@ -275,26 +278,26 @@
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
 		if(body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
-			target.invisibility = 101
 			new /obj/item/weapon/skull(get_turf(target))
-	else
-		target.invisibility = 101
 
-		if(ismob(target))
-			var/mob/M = target
-			true_name = M.real_name
-			new /obj/effect/decal/cleanable/ash(get_turf(target))
-		else if(istype(target,/obj/item/organ/external/head))
-			var/obj/item/organ/external/head/H = target
-			var/mob/living/carbon/brain/BM = H.brainmob
-			true_name = BM.real_name
-			new /obj/item/weapon/skull(get_turf(target))
+	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet
+
+	if(ismob(target))
+		var/mob/M = target
+		true_name = M.real_name
+		new /obj/effect/decal/cleanable/ash(get_turf(target))
+	else if(istype(target,/obj/item/organ/external/head))
+		var/obj/item/organ/external/head/H = target
+		var/mob/living/carbon/brain/BM = H.brainmob
+		mind = BM.mind
+		true_name = BM.real_name
+		new /obj/item/weapon/skull(get_turf(target))
 
 	//Scary sound
 	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
 
 	//Are we capturing a cult-banned player as a cultist? Sucks for them!
-	if (iscultist(user) && (jobban_isbanned(body, ROLE_CULTIST) || isantagbanned(body)))
+	if (iscultist(user) && (jobban_isbanned(body, CULTIST) || isantagbanned(body)))
 		to_chat(body, "<span class='danger'>A cultist tried to capture your soul, but due to past behaviour you have been banned from the role. Your body will instead dust away.</span>")
 		to_chat(user, "<span class='notice'>Their soul wasn't fit for our cult, and wasn't accepted by \the [src].</span>")
 
@@ -304,8 +307,8 @@
 			qdel(add_target)
 		return
 
-	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)].")
-	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)].")
+	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
+	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
 
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob = new(src)//put shade in stone
@@ -313,7 +316,7 @@
 	shadeMob.canmove = 0//Can't move out of the soul stone
 	shadeMob.name = "[true_name] the Shade"
 	shadeMob.real_name = "[true_name]"
-	body.mind.transfer_to(shadeMob)
+	mind.transfer_to(shadeMob)
 	shadeMob.cancel_camera()
 
 	//Changing the soulstone's icon and description
@@ -326,9 +329,8 @@
 		dir = NORTH
 		update_icon()
 	user.update_inv_hands()
-	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
+	to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them succeed in their goals at all costs.</span>")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
-
 
 	//Is our user a cultist? Then you're a cultist too now!
 	if (iscultist(user))
@@ -342,6 +344,12 @@
 		newCultist.Greet(GREET_SOULSTONE)
 		newCultist.conversion["soulstone"] = user
 		cult_risk(user)//risk of exposing the cult early if too many soul trappings
+
+	else
+		if (iscultist(shadeMob))
+			to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
+			to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
+			shadeMob.mind.decult()
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)

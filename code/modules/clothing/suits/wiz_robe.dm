@@ -62,14 +62,15 @@
 /obj/item/clothing/head/wizard/necro/fake
 	desc = "An elegant hood woven with child labor somewhere in Space China."
 	wizard_garb = 0
-
+/*
+//No longer required due to /obj/item/clothing/head/that/magic
 /obj/item/clothing/head/wizard/magician
 	name = "Magical Tophat"
 	desc = "A magical tophat perfect for any magical performance."
 	icon_state = "tophat"
 	item_state = "tophat"
 	siemens_coefficient = 0.8
-
+*/
 /obj/item/clothing/head/wizard/lich
 	name = "crown of the Lich"
 	desc = "Get the Lich a crown, Liches love crowns."
@@ -83,7 +84,7 @@
 	icon_state = "lichcrown"
 	item_state = "lichcrown"
 	siemens_coefficient = 0.8
-	
+
 /obj/item/clothing/head/wizard/hallowiz
 	name = "orange wizard hat"
 	desc = "Pumpkins scream in the dead of night!"

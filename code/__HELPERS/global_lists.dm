@@ -58,6 +58,9 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 		var/datum/emote/E = new path()
 		E.emote_list[E.key] = E
 
+	for(var/path in subtypesof(/datum/rogan_sound))
+		var/datum/rogan_sound/S = new path()
+		number2rogansound[S.number] = S
 
 /* // Uncomment to debug chemical reaction list.
 /client/verb/debug_chemical_list()
@@ -88,6 +91,8 @@ var/list/mech_tracking_beacons = list()
 var/list/mop_list = list()
 var/list/mopbucket_list = list()
 var/list/cleanbot_list = list()
+var/list/janicart_list = list()
+var/list/janikeys_list = list()
 var/list/vehicle_list = list()
 var/list/paicard_list = list()
 var/list/effects_list = list()

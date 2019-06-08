@@ -24,8 +24,8 @@
 	..()
 
 /obj/item/mounted/frame/trophy_mount/update_icon()
+	overlays.Cut()
 	if(!held_item)
-		overlays.len = 0
 		name = initial(name)
 		desc = initial(desc)
 	else
@@ -66,13 +66,22 @@
 		mount_item(I, user)
 
 /obj/item/mounted/frame/trophy_mount/proc/mount_item(obj/item/weapon/W, mob/user)
-	if(held_item)
-		to_chat(user, "This [initial(name)] already has \a [held_item] mounted on it.")
+	if(!isturf(loc))
+		if(user)
+			to_chat(user, "<span class = 'warning'>You can't quite mount \the [W] onto \the [src]. Try placing it down on something.</span>")
 		return
-	if(user.drop_item(W, src))
-		user.visible_message("\The [user] mounts \the [W] onto \the [src].", "You mount \the [W] onto \the [src].")
-		held_item = W
-		update_icon()
+	if(held_item)
+		if(user)
+			to_chat(user, "This [initial(name)] already has \a [held_item] mounted on it.")
+		return
+	if(user)
+		if(user.drop_item(W, src))
+			user.visible_message("\The [user] mounts \the [W] onto \the [src].", "You mount \the [W] onto \the [src].")
+		else
+			return
+	held_item = W
+	w_class = max(initial(w_class),held_item.w_class)
+	update_icon()
 
 
 /obj/item/mounted/frame/trophy_mount/attack_self(mob/user)
@@ -81,6 +90,7 @@
 		held_item.forceMove(get_turf(src))
 		user.put_in_hands(held_item)
 		held_item = null
+		w_class = initial(w_class)
 		params_list = list()
 		update_icon()
 		user.visible_message("\The [user] removes \the [I] from \the [src].", "You remove \the [I] from \the [src].")
@@ -136,15 +146,15 @@
 			var/obj/item/mounted/frame/trophy_mount/T = new(get_turf(user))
 			if(held_item)
 				held_item.forceMove(T)
-				T.held_item = held_item
+				T.mount_item(held_item)
 				held_item = null
 				T.params_list = params_list
-			T.update_icon()
 			transfer_fingerprints(src, T)
 			qdel(src)
 
 /obj/structure/trophy_mount/Destroy()
 	if(held_item)
+		to_chat(world, "held item destroyed.")
 		qdel(held_item)
 		held_item = null
 	..()

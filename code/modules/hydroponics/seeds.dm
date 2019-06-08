@@ -466,6 +466,18 @@
 		return
 	icon_state = "avocado_pit"
 
+/obj/item/seeds/pearseed
+	name = "packet of pear seeds"
+	seed_type = "pear"
+	vending_cat = "fruits"
+
+/obj/item/seeds/silverpearseed
+	name = "packet of pear seeds"
+	seed_type = "silverpear"
+	vending_cat = "fruits"
+
+
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -489,8 +501,8 @@
 
 /datum/seed/chili/ice
 	name = "icechili"
-	seed_name = "ice pepper"
-	display_name = "ice-pepper plants"
+	seed_name = "chilly pepper"
+	display_name = "chilly pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper)
 	chems = list(FROSTOIL = list(3,5), NUTRIMENT = list(1,50))
@@ -1380,7 +1392,7 @@
 	maturation = 6
 	production = 6
 	yield = 3
-	potency = 1
+	potency = 10
 	water_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8
@@ -1670,6 +1682,42 @@
 	potency = 10
 	ideal_light = 8
 	large = 0
+
+
+/datum/seed/pear
+	name = "pear"
+	seed_name = "pear"
+	display_name = "pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pear)
+	mutants = list("silverpear")
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-pear"
+	plant_icon = "pear"
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
+	potency = 10
+	ideal_light = 6
+	large = 0
+
+/datum/seed/pear/silver
+	name = "silverpear"
+	seed_name = "silver pear"
+	display_name = "silver pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear)
+	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-silverpear"
+	plant_icon = "silverpear"
+	chems = list(NUTRIMENT = list(1,10), SILVER = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
 
 // Vox Food
 

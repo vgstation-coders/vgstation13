@@ -16,6 +16,7 @@
 	melee_damage_lower = 8
 	melee_damage_upper = 8
 	attacktext = "torments"
+	attack_sound = 'sound/hallucinations/growl1.ogg'
 	minbodytemp = 0
 	maxbodytemp = 4000
 	min_oxy = 0
@@ -23,7 +24,6 @@
 	max_tox = 0
 	speed = 1
 	stop_automated_movement = TRUE
-	status_flags = 0
 	faction = "cult"
 	status_flags = CANPUSH
 	supernatural = TRUE
@@ -31,9 +31,15 @@
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 
-/mob/living/simple_animal/construct/New()
+/mob/living/simple_animal/shade/New()
 	..()
 	add_language(LANGUAGE_CULT)
+
+/mob/living/simple_animal/shade/death(var/gibbed = FALSE)
+	var/turf/T = get_turf(src)
+	if (T)
+		playsound(T, get_sfx("soulstone"), 50,1)
+	..(gibbed)
 
 /mob/living/simple_animal/shade/Login()
 	..()

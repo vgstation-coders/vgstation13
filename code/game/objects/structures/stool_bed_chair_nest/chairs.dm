@@ -7,7 +7,7 @@
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/noghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
 
-	lock_type = /datum/locking_category/buckle/chair
+	mob_lock_type = /datum/locking_category/buckle/chair
 
 /obj/structure/bed/chair/New()
 	..()
@@ -28,7 +28,7 @@
 
 /obj/structure/bed/chair/update_icon()
 	..()
-	if(is_locking(lock_type))
+	if(is_locking(mob_lock_type))
 		if (buckle_overlay)
 			overlays += buckle_overlay
 		if (secondary_buckle_overlay)
@@ -179,6 +179,7 @@
 					"You hear metal clanking.")
 
 			M.Knockdown(5)
+			M.Stun(5)
 		else
 			to_chat(user, "You can't buckle [M.name] to [src], They just fell out!")
 
@@ -296,7 +297,7 @@
 	return ..()
 
 /obj/structure/bed/chair/comfy/attack_hand(var/mob/user, params, proximity)
-	if(is_locking(lock_type))
+	if(is_locking(mob_lock_type))
 		return ..()
 	if(proximity)
 		for (var/obj/item/I in src)
@@ -333,7 +334,7 @@
 
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north
-	if(dir == NORTH && !is_locking(lock_type))
+	if(dir == NORTH && !is_locking(mob_lock_type))
 		layer = CHAIR_ARMREST_LAYER
 		plane = ABOVE_HUMAN_PLANE
 	else
@@ -556,6 +557,7 @@
 	desc = "A collapsed folding chair that can be carried around."
 	icon = 'icons/obj/stools-chairs-beds.dmi'
 	icon_state = "folded_chair"
+	force = 13
 	w_class = W_CLASS_LARGE
 	var/obj/structure/bed/chair/folding/unfolded
 
@@ -587,7 +589,7 @@
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(is_locking(lock_type))
+		if(is_locking(mob_lock_type))
 			return 0
 
 		visible_message("[usr] folds up \the [src].")

@@ -1,7 +1,7 @@
 /datum/role/changeling
 	name = "Changeling"
 	id = CHANGELING
-	required_pref = ROLE_CHANGELING
+	required_pref = CHANGELING
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	protected_traitor_prob = PROB_PROTECTED_RARE
 	logo_state = "change-logoa"
@@ -90,6 +90,7 @@
 
 /datum/role/changeling/process()
 	changelingRegen()
+	..()
 
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
 

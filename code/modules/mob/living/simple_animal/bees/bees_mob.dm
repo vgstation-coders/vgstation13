@@ -563,7 +563,13 @@
 
 			if(target_turf)//got a target? let's move toward them now.
 				if (bee_species.slow)
+					var/turf/loc_old = loc
 					step_to(src, target_turf)//1 step per Life()
+					if (loc == loc_old)//our path is blocked for whatever reason
+						for (var/datum/bee/B in bees)
+							B.bored++
+							if (B.bored > BOREDOM_TO_RETURN)
+								B.homeCall()
 				else
 					start_walk_to(target, 0, 2)
 
@@ -591,8 +597,13 @@
 							B.homeCall()
 			if(target_turf)
 				if (calmed <= 0)
+					var/turf/loc_old = loc
 					step_to(src, target_turf)
-
+					if (loc == loc_old)//our path is blocked for whatever reason
+						for (var/datum/bee/B in bees)
+							B.fatigue++
+							if (B.fatigue > FATIGUE_TO_RETURN)
+								B.homeCall()
 				if(src.loc == target_turf)
 					visited_plants.Add(target_plant)
 					pollinating = TIME_TO_POLLINATE
@@ -666,7 +677,7 @@
 
 					for (var/datum/bee/queen_bee/QB in queen_list)
 						QB.searching++
-						if (QB.searching>20)
+						if (QB.searching>60)
 							//and if there isn't any decent home nearby (after searching for a while)...let's build one!
 							var/list/available_turfs = list()
 							for (var/turf/simulated/floor/T in range(src,2))

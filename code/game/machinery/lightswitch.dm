@@ -55,7 +55,7 @@
 /obj/machinery/light_switch/attackby(obj/item/W as obj, mob/user as mob)
 	switch(buildstage)
 		if(2)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You begin unscrewing \the [src].")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src,10) && buildstage == 2)
@@ -65,7 +65,7 @@
 					on = this_area.lightswitch
 			return
 		if(1)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You begin screwing closed \the [src].")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src,10) && buildstage == 1)

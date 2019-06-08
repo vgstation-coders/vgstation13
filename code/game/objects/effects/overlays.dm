@@ -1,4 +1,3 @@
-
 /obj/effect/overlay
 	name = "overlay"
 	w_type=NOT_RECYCLABLE
@@ -82,57 +81,29 @@
 		qdel(src)
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
-	//Check what can slip
-	if(isliving(AM))
-		var/mob/living/M = AM
-		if(!M.on_foot()) //Checks lying, flying and locked.to
-			return ..()
 
-
-	if(isslime(AM)) //Slimes just don't slip, end of story. Hard to slip when you're a living puddle.
+	if (!isliving(AM))
+		return ..()
+	var/mob/living/L = AM
+	if (!L.ApplySlip(src))
 		return ..()
 
-	if(iscarbon(AM))
-		var/mob/living/carbon/M = AM
-		switch(src.wet)
-			if(1) //Water
-				if (M.Slip(5, 3))
-					step(M, M.dir)
-					M.visible_message("<span class='warning'>[M] slips on the wet floor!</span>", \
-					"<span class='warning'>You slip on the wet floor!</span>")
+/obj/effect/overlay/holywaterpuddle
+	name = "Puddle"
+	icon = 'icons/effects/water.dmi'
+	icon_state = "holy_floor"
+	anchored = 1
+	mouse_opacity = 0
+	var/lifespan
 
-			if(2) //Lube
-				step(M, M.dir)
-				spawn(1)
-					if(!M.locked_to)
-						step(M, M.dir)
-				spawn(2)
-					if(!M.locked_to)
-						step(M, M.dir)
-				spawn(3)
-					if(!M.locked_to)
-						step(M, M.dir)
-				spawn(4)
-					if(!M.locked_to)
-						step(M, M.dir)
-				M.take_organ_damage(2) // Was 5 -- TLE
-				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
-				"<span class='warning'>You slip on the floor!</span>")
-				playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-				M.Knockdown(10)
+/obj/effect/overlay/holywaterpuddle/New(var/turf/T)
+	. = ..()
+	lifespan = world.time + HOLYWATER_DURATION
+	processing_objects.Add(src)
 
-			if(3) // Ice
-				if(prob(30) && M.Slip(4, 3))
-					step(M, M.dir)
-					M.visible_message("<span class='warning'>[M] slips on the icy floor!</span>", \
-					"<span class='warning'>You slip on the icy floor!</span>")
-
-	if(isrobot(AM) && wet == 1) //Only exactly water makes borgs glitch
-		var/mob/living/silicon/robot/R = AM
-		if(R.Slip(5,3))
-			//Don't step forward as a robot, we're not slipping just glitching.
-			R.visible_message("<span class='warning'>[R] short circuits on the water!</span>", \
-					"<span class='warning'>You short circuit on the water!</span>")
+/obj/effect/overlay/holywaterpuddle/process()
+	if(world.time >= lifespan)
+		qdel(src)
 
 /obj/effect/overlay/wallrot
 	name = "Wallrot"

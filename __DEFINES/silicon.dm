@@ -69,6 +69,8 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define MODULE_IS_A_CLOWN 1024			//Can handle clown-only items/machinery
 #define MODULE_IS_DEFINITIVE 2048		//Can't get a module reset
 #define MODULE_HAS_PROJ_RES 4096		//Doesn't slow down from being hit by boolets
+#define MODULE_HAS_FLASH_RES 8192		//Recovers from being flashed twice as fast.
+#define MODULE_IS_FLASHPROOF 16384		//Flashes do nothing.
 
 #define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 

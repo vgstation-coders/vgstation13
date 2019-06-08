@@ -103,6 +103,9 @@
 		for(var/T in load_map_elements)
 			load_dungeon(T)
 
+/datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
+	return TRUE //If false, fails Ready()
+
 /datum/map/proc/loadZLevels(list/levelPaths)
 
 

@@ -24,6 +24,9 @@
 /obj/item/weapon/robot_spawner/attack_self(mob/user)
 	request_borg(user)
 
+/obj/item/weapon/robot_spawner/check_uplink_validity()
+	return charge > 0 ? TRUE : FALSE
+
 /obj/item/weapon/robot_spawner/attack_ghost(var/mob/dead/observer/O)
 	if(last_ping_time + ping_cooldown <= world.time)
 		last_ping_time = world.time
@@ -96,12 +99,9 @@
 	name = "syndicate robot teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot on the field."
 	borg_type = /mob/living/silicon/robot/syndie
-	role = ROLE_OPERATIVE
+	role = NUKE_OP
 	jobban_roles = list("Syndicate", "AI", "Cyborg", "Mobile MMI")
 	faction = "syndicate"
-
-/obj/item/weapon/robot_spawner/syndicate/check_uplink_validity()
-	return charge
 
 /obj/item/weapon/robot_spawner/syndicate/post_recruited(mob/living/silicon/robot/R)
 	..()

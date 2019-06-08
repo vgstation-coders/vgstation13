@@ -28,11 +28,14 @@
 
 			if(m_intent == "run")
 				burn_calories(HUNGER_FACTOR / 20)
-		update_minimap()
+		//update_minimap()
+		if (displayed_holomap)
+			displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)
 
+/* Old Station Map Stuff
 /mob/living/carbon/proc/update_minimap()
 	var/obj/item/device/pda/pda_device = machine
 	if(machine && istype(pda_device))
@@ -44,6 +47,7 @@
 		else
 			unset_machine()
 			src << browse(null, "window=pda")
+*/
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)
@@ -505,22 +509,20 @@
 				return 1
 	return 0
 
-/mob/living/carbon/CheckSlip()
-	return !locked_to && !lying && !unslippable
+/mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
+	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
+	
+/mob/living/carbon/teleport_to(var/atom/A)
+	var/last_slip_value = src.unslippable
+	src.unslippable = 1
+	forceMove(get_turf(A))
+	src.unslippable = last_slip_value
 
-/mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
-	stop_pulling()
-	Stun(stun_amount)
-	Knockdown(weaken_amount)
-	score["slips"]++
-	return 1
-
-/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
-	if(!slip_on_walking && m_intent == "walk")
+/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
+	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
-	if (CheckSlip() < 1 || !on_foot())
-		return 0
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		return 1
@@ -636,7 +638,7 @@
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
 	if(!istype(loc, /turf/space))
-		for(var/obj/item/I in get_clothing_items())
+		for(var/obj/item/I in get_all_slots())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
@@ -663,40 +665,6 @@
 		if(health_deficiency >= (maxHealth * 0.4))
 			. += (health_deficiency / (maxHealth * 0.25))
 
-
-/mob/living/carbon/proc/can_mind_interact(var/mob/M)
-	//	to_chat(world, "Starting can interact on [M]")
-	if(!iscarbon(M))
-		return 0 //Can't see non humans with your fancy human mind.
-//	to_chat(world, "[M] is a human")
-	var/turf/temp_turf = get_turf(M)
-	var/turf/our_turf = get_turf(src)
-	if(!temp_turf)
-//		to_chat(world, "[M] is in null space")
-		return 0
-	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
-//		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
-		if(temp_turf.z != map.zCentcomm)
-			to_chat(src, "The target mind is too faint...")//Prevent "The mind of Admin is too faint..."
-
-		return 0
-	if(M_PSY_RESIST in M.mutations)
-//		to_chat(world, "[M] has psy resist")
-		to_chat(src, "The target mind is resisting!")
-		return 0
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
-	if(ismartian(M))
-		var/mob/living/carbon/complex/martian/MR = M
-		if(MR.head)
-			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
-				to_chat(src, "Interference is disrupting the connection with the target mind.")
-				return 0
-	return 1
-
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(invisibility || alpha <= 1 || !source_define)
 		return
@@ -709,3 +677,38 @@
 			if(src)
 				body_alphas.Remove(source_define)
 				regenerate_icons()
+
+
+/mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
+	if (!..())
+		return FALSE
+
+	if (unslippable) //if unslippable, don't even bother making checks
+		return FALSE
+
+	switch(P.wet)
+		if(TURF_WET_WATER)
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+				return FALSE
+			step(src, dir)
+			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
+			"<span class='warning'>You slip on the wet floor!</span>")
+
+		if(TURF_WET_LUBE)
+			step(src, dir)
+			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+				return FALSE
+			for (var/i = 1 to 4)
+				spawn(i)
+					if(!locked_to)
+						step(src, dir)
+			take_organ_damage(2) // Was 5 -- TLE
+			visible_message("<span class='warning'>[src] slips on the floor!</span>", \
+			"<span class='warning'>You slip on the floor!</span>")
+
+		if(TURF_WET_ICE)
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE))
+				step(src, dir)
+				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
+				"<span class='warning'>You slip on the icy floor!</span>")
+	return TRUE

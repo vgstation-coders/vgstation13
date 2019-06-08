@@ -70,11 +70,12 @@
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelevoxsuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
-	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
+	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
-	/obj/item/clothing/mask/necklace/xeno_claw
+	/obj/item/clothing/mask/necklace/xeno_claw,
+	/obj/item/clothing/under/newclothes
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
@@ -226,7 +227,7 @@
 
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
-	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections."
+	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
 	icon_state = "helmet_sec"
 	item_state = "helmet"
 	flags = HEAR | FPRINT
@@ -251,6 +252,8 @@
 		to_chat(usr, "<span class='warning'>Your DNA does not match the stored DNA sample.</span>")
 		return CANNOT_EQUIP
 	else
+		if(!H.head)
+			return CAN_EQUIP
 		if(H.head.canremove)
 			return CAN_EQUIP_BUT_SLOT_TAKEN
 		return CAN_EQUIP
@@ -726,3 +729,21 @@
 		return TRUE
 	else
 		return FALSE
+
+/obj/item/weapon/card/id/vox/extra
+	name = "Spare trader ID"
+	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
+	assignment = "Trader"
+	var/canSet = TRUE
+
+/obj/item/weapon/card/id/vox/extra/attack_self(mob/user as mob)
+	if(canSet)
+		var t = reject_bad_name(input(user, "What name would you like to put on this card?", "Trader ID Card Name", ishuman(user) ? user.real_name : user.name))
+		if(!t) //Same as mob/new_player/prefrences.dm
+			alert("Invalid name.")
+			return
+		src.registered_name = t
+		canSet = FALSE
+		name = "[t]'s ID card ([assignment])"
+	else
+		return

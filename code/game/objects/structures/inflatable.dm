@@ -83,6 +83,25 @@
 	icon_state = "folded"
 	deploy_path = /obj/structure/inflatable/shelter
 
+/obj/item/inflatable/floor
+	name = "inflatable floor"
+	desc = "A folded membrane, which rapidly expands along the horizontal plane until it runs out of room to inflate, or air to inflate with."
+	icon_state = "folded_floor"
+	deploy_path = /turf/simulated/floor/inflatable
+
+/obj/item/inflatable/floor/can_inflate(var/location)
+	var/turf/T = get_turf(src)
+	if(!istype(T, get_base_turf(T.z)))
+		return FALSE
+	return ..()
+
+/obj/item/inflatable/floor/inflate(mob/user)
+	playsound(loc, 'sound/items/zip.ogg', 75, 1)
+	visible_message("<span class='notice'>\The [src] inflates.</span>")
+	var/turf/T = get_turf(src)
+	T.ChangeTurf(/turf/simulated/floor/inflatable)
+	qdel(src)
+
 /*/obj/item/inflatable/shelter/attack_self(mob/user)
 	user.anchored = 1 Previously, this would anchor the user in place until it inflated and put them inside
 	..()
@@ -475,3 +494,7 @@
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
 		if(do_after_many(user,list(target,src),20)) //Twice the normal time
 			enter_shelter(target)
+
+/obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
+	update_icon()
+	return ..()

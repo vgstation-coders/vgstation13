@@ -187,6 +187,8 @@ var/global/list/thing_storm_types = list(
 
 /datum/event/thing_storm/blob_storm
 	var/cores_spawned = 0
+	var/list/candidates = list()
+	var/started = FALSE
 
 /datum/event/thing_storm/blob_storm/setup()
 	endWhen = rand(60, 90) + 10
@@ -200,8 +202,18 @@ var/global/list/thing_storm_types = list(
 			if(M.stat == CONSCIOUS)
 				living++
 		cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
-		for(var/i = 0 to cores_spawned)
-			spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+
+
+	if (!(candidates.len) && !started)
+		candidates = get_candidates(BLOBOVERMIND)
+
+	for(var/i = 0 to cores_spawned)
+		if (!candidates.len)
+			return
+		var/obj/item/projectile/meteor/blob/core/C = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+		var/client/candidate = pick(candidates)
+		candidates =- candidate
+		C.AssignMob(candidate.mob)
 
 /datum/event/thing_storm/blob_storm/announce()
 	command_alert(/datum/command_alert/blob_storm/overminds)

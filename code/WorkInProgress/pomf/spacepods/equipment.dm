@@ -6,7 +6,7 @@
 		return
 	var/turf/firstloc
 	var/turf/secondloc
-	if(!my_atom.equipment_system || !my_atom.equipment_system.weapon_system)
+	if(!my_atom.ES || !my_atom.ES.weapon_system)
 		to_chat(usr, "<span class='warning'>Missing equipment or weapons.</span>")
 		my_atom.verbs -= /obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system
 		return
@@ -53,10 +53,12 @@
 
 /datum/spacepod/equipment
 	var/obj/spacepod/my_atom
+	var/movement_charge = 2
 	var/weapons_allowed = 1
 	var/obj/item/device/spacepod_equipment/weaponry/weapon_system // weapons system
 	//var/obj/item/device/spacepod_equipment/engine/engine_system // engine system
 	//var/obj/item/device/spacepod_equipment/shield/shield_system // shielding system
+	var/obj/item/device/spacepod_equipment/locking/locking_system // locking system
 
 /datum/spacepod/equipment/New(var/obj/spacepod/SP)
 	..()
@@ -114,13 +116,84 @@
 
 /obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system()
 	var/obj/spacepod/S = src
-	var/obj/item/device/spacepod_equipment/weaponry/SPE = S.equipment_system.weapon_system
+	var/obj/item/device/spacepod_equipment/weaponry/SPE = S.ES.weapon_system
 	set category = "Spacepod"
 	//set name = SPE.verb_name
 	//set desc = SPE.verb_desc
 	set src = usr.loc
 
-	if(S.get_passengers().Find(usr) && !S.passenger_fire)
+	var/list/passengers = S.get_passengers()
+	if(passengers.Find(usr) && !S.passenger_fire)
 		to_chat(usr, "<span class = 'warning'>Passenger gunner system disabled.</span>")
 		return
 	SPE.fire_weapons()
+
+/obj/item/device/spacepod_equipment/locking
+	icon = 'icons/pods/ship.dmi'
+	icon_state = "locking"
+
+/obj/item/device/spacepod_equipment/locking/proc/toggle_lock()
+	my_atom.locked = !my_atom.locked
+	my_atom.visible_message("<span class = 'notice'>\The [my_atom] beeps!</span>")
+
+/obj/item/device/spacepod_equipment/locking/lock
+	name = "spacepod physical lock system"
+	desc = "Use a remote key to lock and unlock the pod."
+	var/code
+
+/obj/item/device/spacepod_equipment/locking/lock/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/device/pod_key))
+		var/obj/item/device/pod_key/P = I
+		if(!P.code)
+			if(!code)
+				code = rand(11111,99999)
+			to_chat(user, "<span class = 'notice'>You pair \the [P] with \the [src].</span>")
+			P.code = code
+		else
+			to_chat(user, "<span class = 'warning'>\The [P] is already codelocked.</span>")
+		return
+	..()
+
+/obj/item/device/pod_key
+	name = "pod key"
+	desc = "Used in tandem with a pod locking system. Authenticate the key with the lock via colliding the two."
+	icon = 'icons/pods/ship.dmi'
+	icon_state = "key"
+	w_class = W_CLASS_SMALL
+	var/code
+
+/obj/item/device/pod_key/attack_self(mob/user)
+	for(var/obj/spacepod/P in view(7, user))
+		if(P.ES.locking_system && istype(P.ES.locking_system, /obj/item/device/spacepod_equipment/locking/lock))
+			var/obj/item/device/spacepod_equipment/locking/lock/L = P.ES.locking_system
+			if(L.code == code)
+				L.toggle_lock()
+
+/obj/item/device/pod_key/attackby(var/obj/O, mob/user)
+	if(ismultitool(O))
+		code = input(user,"Enter a number:","Key Code",code) as num
+		return
+	.=..()
+
+/obj/item/device/pod_key/afterattack(var/atom/A, mob/user, proximity_flag)
+	if(!proximity_flag)
+		return
+
+	if(istype(A, /obj/spacepod))
+		var/obj/spacepod/SP = A
+		if(SP.ES.locking_system && istype(SP.ES.locking_system, /obj/item/device/spacepod_equipment/locking/lock))
+			var/obj/item/device/spacepod_equipment/locking/lock/L = SP.ES.locking_system
+			if(code == L.code)
+				L.toggle_lock()
+				return
+			var/list/our_code = string2charlist(num2text(code))
+			var/list/their_code = string2charlist(num2text(L.code))
+			var/found_values = 0
+			var/correct_positions = 0
+			for(var/i=1 to our_code.len)
+				var/char = our_code[i]
+				if(their_code.Find(char))
+					found_values++
+				if(i < their_code.len && char == their_code[i])
+					correct_positions++
+			to_chat(user, "<span class = 'notice'>[found_values] correct values, [correct_positions] correct positions.</span>")

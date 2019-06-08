@@ -8,7 +8,7 @@
 	var/genomes_to_give = 10 //seeing as the new changeling won't have had a whole round to prepare, they get some genomes free
 
 /obj/item/changeling_vial/attack_self(mob/user as mob)
-	if(ishuman(user) && !(isantagbanned(user) || jobban_isbanned(user, ROLE_CHANGELING)))
+	if(ishuman(user) && !(isantagbanned(user) || jobban_isbanned(user, CHANGELING)))
 		var/mob/living/carbon/human/H = user
 		if(H.mind)
 			var/datum/mind/M = H.mind
@@ -24,8 +24,8 @@
 				if(C)
 					C.geneticpoints = Clamp(genomes_to_give, 0, 100)
 					C.OnPostSetup()
-				to_chat(H, "<B><font color='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</font></B>")
-				var/wikiroute = role_wiki[ROLE_CHANGELING]
+				to_chat(H, "<B><span class='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</span></B>")
+				var/wikiroute = role_wiki[CHANGELING]
 				to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 				log_admin("[H] has become a changeling using a changeling vial.")
 			else

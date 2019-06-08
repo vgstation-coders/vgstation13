@@ -226,6 +226,7 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -242,8 +243,6 @@ var/savefile/panicfile
 		..()
 		return
 
-	for(var/datum/html_interface/D in html_interfaces)
-		D.closeAll()
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
@@ -266,16 +265,26 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
+	pre_shutdown()
+
+	..()
+
+/world/proc/pre_shutdown()
+	for(var/datum/html_interface/D in html_interfaces)
+		D.closeAll()
+
 	Master.Shutdown()
 	paperwork_stop()
 
 	stop_all_media()
 
-	if(!end_credits.generated)
-		end_credits.on_roundend()
-	end_credits.rollem()
+	end_credits.on_world_reboot_start()
+	testing("[time_stamp()] - World reboot is now sleeping.")
 
-	sleep(end_credits.starting_delay + end_credits.post_delay)
+	sleep(max(10, end_credits.audio_post_delay))
+
+	testing("[time_stamp()] - World reboot is done sleeping.")
+	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -283,10 +292,6 @@ var/savefile/panicfile
 
 		else
 			C << link("byond://[world.address]:[world.port]")
-
-
-	..()
-
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()

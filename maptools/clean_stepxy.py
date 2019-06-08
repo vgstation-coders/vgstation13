@@ -1,10 +1,10 @@
 import re
 import fileinput
-import tkFileDialog
+from tkinter import filedialog
 print("This program replaces all instances of step_x and step_y with their corresponding pixel_x and pixel_y equivalents.")
 print("Navigate to the 'maps' folder and select the .dmm file to clean up...")
 print("(Backing up your file before running this script is recommended!)")
-for line in fileinput.input(tkFileDialog.askopenfilename(), inplace = 1):
+for line in fileinput.input(filedialog.askopenfilename(), inplace = 1):
     #"q" = (/obj/structure/table,/obj/machinery/pos{name = "Chemistry Point of Sale"; step_x = -1; step_y = 1; department = "Medical"},/turf/simulated/floor{dir = 4; icon_state = "whiteyellow"},/area/medical/chemistry)
     for item in re.findall('\{(.*?)\}',line):
         #name = "Chemistry Point of Sale"; step_x = -1; step_y = 1; department = "Medical"
@@ -34,4 +34,4 @@ for line in fileinput.input(tkFileDialog.askopenfilename(), inplace = 1):
             for var in var_dict:
                 tmp.append(var + " = " + var_dict[var])
             line = line.replace(item, "; ".join(tmp))
-    print line,
+    print(line, end="")

@@ -169,7 +169,7 @@
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
-		for(var/atom/Obj as mob|obj|turf|area in range(1))
+		for(var/atom/Obj in range(1, src))
 			if(objects > loopsanity)
 				break
 			objects++
@@ -194,7 +194,7 @@
 
 			if(istype(A, /obj/structure/bed/chair/vehicle))
 				var/obj/structure/bed/chair/vehicle/B = A
-				if(B.is_locking(B.lock_type))
+				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
@@ -442,6 +442,12 @@
 
 	turfdecals.len = 0
 
+/turf/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!(locate(/obj/effect/decal/cleanable/blueglow) in src))
+		new /obj/effect/decal/cleanable/blueglow(src)
+
 /turf/proc/get_underlying_turf()
 	var/area/A = loc
 	if(A.base_turf_type)
@@ -466,9 +472,12 @@
 			M.take_damage(100, "brute")
 
 /turf/bless()
+	if (holy)
+		return
 	holy = 1
 	..()
-
+	new /obj/effect/overlay/holywaterpuddle(src)
+	
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
 // Used for A-star pathfinding
@@ -592,6 +601,7 @@
 			if(O.invisibility == 101)
 				O.singularity_act()
 	ChangeTurf(get_underlying_turf())
+	score["turfssingulod"]++
 	return(2)
 
 //Return a lattice to allow catwalk building
@@ -666,7 +676,7 @@
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)
-	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+	if(istype(M) && M.CheckSlip() == SLIP_HAS_MAGBOOTS) //Wearing magboots - good enough
 		return 1
 
 	var/area/A = loc

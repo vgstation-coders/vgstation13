@@ -235,7 +235,6 @@ var/list/score=list(
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
 	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
-	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -247,7 +246,10 @@ var/list/score=list(
 	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
 	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
 	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
-	"shoeshatches"  = 0, //Amount of shoes magically snatched.
+	"shoesnatches"  = 0, //Amount of shoes magically snatched.
+	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
+	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
+	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
 	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
@@ -260,6 +262,13 @@ var/list/score=list(
 	"explosions"	= 0, //How many explosions happened total
 	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
+	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
+	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
+	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
+	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
+	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
+	"lawchanges"	 = 0, //Amount of AI modules used.
+
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
@@ -340,8 +349,8 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 
 // ECONOMY
 // Account default values
-#define DEPARTMENT_START_FUNDS 5000
-#define DEPARTMENT_START_WAGE 500
+#define DEPARTMENT_START_FUNDS 500
+#define DEPARTMENT_START_WAGE 50
 #define PLAYER_START_WAGE 50
 
 //HUD MINIMAPS

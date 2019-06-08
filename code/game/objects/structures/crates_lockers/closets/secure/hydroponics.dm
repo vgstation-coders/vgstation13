@@ -16,6 +16,10 @@
 			/obj/item/clothing/suit/apron/overalls),
 		/obj/item/weapon/storage/bag/plants,
 		pick(
+			/obj/item/weapon/storage/backpack/satchel_hyd,
+			/obj/item/weapon/storage/backpack/messenger/hyd,
+			),
+		pick(
 			/obj/item/clothing/under/rank/hydroponics,
 			/obj/item/clothing/under/rank/botany,
 		),

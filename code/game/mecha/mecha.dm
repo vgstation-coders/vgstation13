@@ -93,6 +93,10 @@
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -146,13 +150,16 @@
 			WR.crowbar_salvage += cell
 			cell.forceMove(WR)
 			cell.charge = rand(0, cell.charge)
+			cell = null
 		if(internal_tank)
 			WR.crowbar_salvage += internal_tank
 			internal_tank.forceMove(WR)
+			internal_tank = null
 	else
 		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
 			E.forceMove(T)
 			qdel(E)
+	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -185,9 +192,6 @@
 	if(pr_internal_damage)
 		qdel(pr_internal_damage)
 		pr_internal_damage = null
-	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
-		qdel(eq)
-	equipment = null
 	selected = null
 	..()
 
@@ -244,26 +248,6 @@
 	pr_inertial_movement = new /datum/global_iterator/mecha_intertial_movement(null,0)
 	pr_give_air = new /datum/global_iterator/mecha_tank_give_air(list(src))
 	pr_internal_damage = new /datum/global_iterator/mecha_internal_damage(list(src),0)
-
-/obj/mecha/proc/do_after(delay as num)
-	sleep(delay)
-	if(src)
-		return 1
-	return 0
-
-/obj/mecha/proc/enter_after(delay as num, var/mob/user as mob, var/numticks = 5)
-	var/delayfraction = delay/numticks
-
-	var/turf/T = user.loc
-
-	for(var/i = 0, i<numticks, i++)
-		sleep(delayfraction)
-		if(!src || !user || !user.canmove || !(user.loc == T))
-			return 0
-
-	return 1
-
-
 
 /obj/mecha/proc/check_for_support()
 	if(locate(/obj/structure/grille, orange(1, src)) || locate(/obj/structure/lattice, orange(1, src)) || locate(/turf/simulated, orange(1, src)) || locate(/turf/unsimulated, orange(1, src)))
@@ -332,7 +316,7 @@
 	if(user.stat)
 		return
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+		occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 		return
 	if(!get_charge())
 		return
@@ -379,7 +363,7 @@
 	if(throwing)
 		return 0
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>", TRUE)
+		occupant_message("<span class='red'>Maintenance protocols in effect.</span>", TRUE)
 		return
 	return domove(direction)
 
@@ -422,8 +406,10 @@
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
-		if(do_after(step_in))
-			can_move = 1
+		sleep(step_in)
+		if(!src)
+			return
+		can_move = 1
 		return 1
 	return 0
 
@@ -485,10 +471,12 @@
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
 			if (L.flags & INVULNERABLE)
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
 				//can't be knocked down? you'll still take the damage.
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 				L.take_overall_damage(5,0)
@@ -505,6 +493,7 @@
 				playsound(src, pick(hit_sound), 50, 0, 0)
 				breakthrough = 1
 		else
+			stopMechWalking()
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
 
@@ -571,12 +560,12 @@
 	internal_damage &= ~int_dam_flag
 	switch(int_dam_flag)
 		if(MECHA_INT_TEMP_CONTROL)
-			occupant_message("<font color='blue'><b>Life support system reactivated.</b></font>")
+			occupant_message("<span class='notice'><b>Life support system reactivated.</b></span>")
 			pr_int_temp_processor.start()
 		if(MECHA_INT_FIRE)
-			occupant_message("<font color='blue'><b>Internal fire extinquished.</b></font>")
+			occupant_message("<span class='notice'><b>Internal fire extinquished.</b></span>")
 		if(MECHA_INT_TANK_BREACH)
-			occupant_message("<font color='blue'><b>Damaged internal tank has been sealed.</b></font>")
+			occupant_message("<span class='notice'><b>Damaged internal tank has been sealed.</b></span>")
 	return
 
 
@@ -614,9 +603,9 @@
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		user.visible_message("<font color='red'><b>[user] hits [src.name], doing some damage.</b></font>", "<font color='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></font>")
+		user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
 	else
-		user.visible_message("<font color='red'><b>[user] hits [src.name]. Nothing happens</b></font>","<font color='red'><b>You hit [src.name] with no visible effect.</b></font>")
+		user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
 		src.log_append_to_last("Armor saved.")
 
 	user.delayNextAttack(10)
@@ -699,9 +688,9 @@
 	return
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
-	if(prob(src.deflect_chance))
+	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))
 		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		src.visible_message("The [src.name] armor deflects the projectile")
+		src.visible_message("<span class='warning'>\The [src.name] armor deflects the projectile.</span>")
 		src.log_append_to_last("Armor saved.")
 		return
 	var/ignore_threshold
@@ -791,8 +780,8 @@
 				V.show_message("The [W] bounces off [src.name] armor.", 1)
 */
 	else
-		src.occupant_message("<font color='red'><b>[user] hits [src] with [W].</b></font>")
-		user.visible_message("<font color='red'><b>[user] hits [src] with [W].</b></font>", "<font color='red'><b>You hit [src] with [W].</b></font>")
+		src.occupant_message("<span class='red'><b>[user] hits [src] with [W].</b></span>")
+		user.visible_message("<span class='red'><b>[user] hits [src] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
 		src.take_damage(W.force,W.damtype)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
@@ -892,7 +881,7 @@
 			else
 				to_chat(user, "There's not enough wire to finish the task.")
 		return
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(hasInternalDamage(MECHA_INT_TEMP_CONTROL))
 			clearInternalDamage(MECHA_INT_TEMP_CONTROL)
 			to_chat(user, "You repair the damaged temperature controller.")
@@ -956,8 +945,8 @@
 					V.show_message("The [W] bounces off [src.name] armor.", 1)
 */
 		else
-			src.occupant_message("<font color='red'><b>[user] hits [src] with [W].</b></font>")
-			user.visible_message("<font color='red'><b>[user] hits [src] with [W].</b></font>", "<font color='red'><b>You hit [src] with [W].</b></font>")
+			src.occupant_message("<span class='red'><b>[user] hits [src] with [W].</b></span>")
+			user.visible_message("<span class='red'><b>[user] hits [src] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
 			src.take_damage(W.force,W.damtype)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 */
@@ -1193,7 +1182,7 @@
 	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 
-	if(enter_after(40,usr))
+	if(do_after(usr, src, 40))
 		if(!src.occupant)
 			moved_inside(usr)
 			refresh_spells()
@@ -1259,7 +1248,7 @@
 
 	visible_message("<span class='notice'>\The [user] starts to insert \the [mmi_as_oc] into \the [src].</span>")
 
-	if(enter_after(40,user))
+	if(do_after(user, src, 40))
 		if(!occupant)
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
@@ -1329,7 +1318,8 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+
+	if(usr != occupant)
 		return
 	src.go_out()
 	add_fingerprint(usr)
@@ -1345,13 +1335,23 @@
 	lock_dir = !lock_dir
 
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(usr != src.occupant || usr.incapacitated())
-		return
-	if(istype(occupant, /mob/living/carbon/brain))
+	if(!Adjacent(over_location))
 		return
 	if(!istype(over_location) || over_location.density)
 		return
-	if(!Adjacent(over_location))
+	if(istype(occupant, /mob/living/carbon/brain))
+		return
+	if(usr.incapacitated() || !occupant)
+		return
+	if(usr != occupant)
+		if(occupant.isUnconscious())
+			visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
+			if(do_after(usr, src, 30 SECONDS))
+				if(!occupant.isUnconscious())
+					visible_message("<span class='notice'>[occupant.name] woke up and pushed [usr] away.</span>")
+					return
+				go_out(over_location)
+				add_fingerprint(usr)
 		return
 	for(var/atom/movable/A in over_location.contents)
 		if(A.density)
@@ -1463,6 +1463,7 @@
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
 		occupant.Knockdown(10)
+		occupant.Stun(10)
 		spawn(10)
 		emergency_eject()
 
@@ -1470,7 +1471,7 @@
 	if (occupant)
 		occupant << sound('sound/machines/warning.ogg',wait=0)
 		log_message("Emergency ejection.",1)
-		occupant_message("<font color='red'>Emergency ejection protocol engaged.</font>")
+		occupant_message("<span class='red'>Emergency ejection protocol engaged.</span>")
 		spawn(10)
 		if (occupant)
 			go_out()
@@ -1722,7 +1723,8 @@
 						<body>
 						[add_req_access?"<a href='?src=\ref[src];req_access=1;id_card=\ref[id_card];user=\ref[user]'>Edit operation keycodes</a>":null]
 						[maint_access?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>[state ? "Terminate" : "Initiate"] maintenance protocol</a>":null]
-						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>":null]
+						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>\
+						<a href='?src=\ref[src];eject=1'>Eject Occupant</a>":null]
 						</body>
 						</html>"}
 	user << browse(output, "window=exosuit_maint_console")
@@ -1787,10 +1789,9 @@
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 		return
 	if(href_list["eject"])
-		if(usr != src.occupant)
+		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
 			return
-		src.eject()
-		return
+		go_out()
 	if(href_list["toggle_lights"])
 		if(usr != src.occupant)
 			return
@@ -1868,7 +1869,7 @@
 		if(usr != src.occupant)
 			return
 		if(state)
-			occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+			occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 			return
 		maint_access = !maint_access
 		send_byjax(src.occupant,"exosuit.browser","t_maint_access","[maint_access?"Forbid":"Permit"] maintenance protocols")
@@ -1888,7 +1889,7 @@
 				to_chat(user, "The securing bolts are now exposed.")
 				log_message("Maintenance protocols engaged.")
 				if(occupant)
-					occupant_message("<font color='red'>Maintenance protocols engaged.</font>")
+					occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
 					occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
 			else if(state==STATE_BOLTSEXPOSED)
 				state = STATE_BOLTSHIDDEN
@@ -1946,14 +1947,16 @@
 		src.occupant_message("Recalibrating coordination system.")
 		src.log_message("Recalibration of coordination system started.")
 		var/T = src.loc
-		if(do_after(100))
-			if(T == src.loc)
-				src.clearInternalDamage(MECHA_INT_CONTROL_LOST)
-				src.occupant_message("<font color='blue'>Recalibration successful.</font>")
-				src.log_message("Recalibration of coordination system finished with 0 errors.")
-			else
-				src.occupant_message("<font color='red'>Recalibration failed.</font>")
-				src.log_message("Recalibration of coordination system failed with 1 error.",1)
+		sleep(100)
+		if(!src)
+			return
+		if(T == src.loc)
+			src.clearInternalDamage(MECHA_INT_CONTROL_LOST)
+			src.occupant_message("<span class='notice'>Recalibration successful.</span>")
+			src.log_message("Recalibration of coordination system finished with 0 errors.")
+		else
+			src.occupant_message("<span class='red'>Recalibration failed.</span>")
+			src.log_message("Recalibration of coordination system failed with 1 error.",1)
 
 	//debug
 	/*

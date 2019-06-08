@@ -46,6 +46,9 @@
 	max_ammo = 2
 	starting_ammo = 0
 
+/obj/item/ammo_storage/speedloader/shotgun/loaded
+	starting_ammo = 2
+
 /obj/item/ammo_storage/speedloader/shotgun/update_icon()
 	overlays.Cut()
 	if(stored_ammo.len)

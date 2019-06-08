@@ -38,7 +38,11 @@
 	var/threatcount = 0 //If threat >= PERP_LEVEL_ARREST at the end, they get arrested
 	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
 		return -1
-
+	var/list/to_evaluate = list()
+	if(ishuman(perp))
+		to_evaluate = list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null)
+	if(ismonkey(perp))
+		to_evaluate = list(perp.back)
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest
 
 		if(!wpermit(perp))
@@ -46,7 +50,7 @@
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST
 
-			for(var/obj/item/I in list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null))
+			for(var/obj/item/I in to_evaluate)
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST/2
 
@@ -89,7 +93,7 @@
 		passperpname = perpname
 		if(E.fields["name"] == perpname)
 			for (var/datum/data/record/R in data_core.security)
-				if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
+				if((R.fields["id"] == E.fields["id"]) && ((R.fields["criminal"] == "*Arrest*") || R.fields["criminal"] == "*High Threat*"))
 					threatcount = PERP_LEVEL_ARREST
 					break
 
@@ -183,51 +187,43 @@
 
 	var/maxthreat = 0
 	var/sndstr = ""
-	for(var/mob/living/O in view(src, range))
+	var/list/threat_carbons = list()
+	var/list/clear_carbons = list()
+	var/list/mildly_threatening_carbons = list()
+	for(var/mob/living/carbon/O in view(src, range))
 		var/list/ourretlist = src.assess_perp(O)
 		if(!islist(ourretlist) || !ourretlist.len)
 			continue
 		var/dudesthreat = ourretlist[1]
 		var/dudesname = ourretlist[2]
 
-
-
 		if(dudesthreat >= PERP_LEVEL_ARREST)
-
 			if(maxthreat < 2)
 				sndstr = "sound/machines/alert.ogg"
 				maxthreat = 2
-
-
-
 			src.last_read = world.time
 			use_power(1000)
-			say("Threat Detected! Subject: [dudesname]")////
-
-
+			threat_carbons += dudesname
 		else if(dudesthreat && senset)
-
 			if(maxthreat < 1)
 				sndstr = "sound/machines/domore.ogg"
 				maxthreat = 1
-
-
 			src.last_read = world.time
 			use_power(1000)
-			say("Additional screening required! Subject: [dudesname]")
-
-
+			mildly_threatening_carbons += dudesname
 		else
-
 			if(maxthreat == 0)
 				sndstr = "sound/machines/info.ogg"
-
-
-
 			src.last_read = world.time
 			use_power(1000)
-			say("Subject: [dudesname] clear.")
+			clear_carbons += dudesname
 
+	if(threat_carbons.len)
+		say("Threat detected! Subject[threat_carbons.len > 1 ? "s" : ""]: [threat_carbons.Join(", ")].")
+	if(clear_carbons.len)
+		say("Clear. Subject[clear_carbons.len > 1 ? "s" : ""]: [clear_carbons.Join(", ")].")
+	if(mildly_threatening_carbons.len)
+		say("Additional screening required! Subject[threat_carbons.len > 1 ? "s" : ""]: [mildly_threatening_carbons.Join(", ")].")
 
 	flick("[base_state]_flash", src)
 	playsound(src, sndstr, 100, 1)

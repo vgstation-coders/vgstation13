@@ -32,6 +32,7 @@
 	desc = "A tank of oxygen, this one is red."
 	icon_state = "oxygen_fr"
 
+
 /*
  * Anesthetic
  */
@@ -125,6 +126,11 @@
 	name = "double emergency oxygen tank"
 	icon_state = "emergency_double"
 	volume = 10
+
+/obj/item/weapon/tank/emergency_oxygen/double/wizard
+	name = "gem-encrusted double emergency oxygen tank"
+	icon_state = "oxygen_wiz"
+	desc = "A gem-encrusted tank of oxygen. This one is purple and arcane."
 
 /obj/item/weapon/tank/emergency_nitrogen
 	name = "emergency nitrogen tank"

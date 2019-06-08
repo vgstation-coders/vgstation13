@@ -108,6 +108,16 @@
 	icon_state = "knight_grey"
 	item_state = "knight_grey"
 
+/obj/item/clothing/suit/armor/knight/interrogator
+	name = "interrogator armour"
+	desc = "A fancy suit of plate armour, marked by the oath of the dark angels."
+	icon_state = "interrogator-green"
+	item_state = "interrogator-green"
+
+/obj/item/clothing/suit/armor/knight/interrogator/red
+	icon_state = "interrogator-red"
+	item_state = "interrogator-red"
+
 /obj/item/clothing/suit/armor/xcomsquaddie
 	name = "Squaddie Armor"
 	desc = "A suit of armor with heavy padding to protect against projectile attacks. Distributed to shadow organization squaddies."
@@ -201,7 +211,6 @@
 	icon_state = "reactiveoff"
 	item_state = "reactiveoff"
 	blood_overlay_type = "armor"
-	slowdown = HARDSUIT_SLOWDOWN_LOW
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
@@ -223,7 +232,9 @@
 		src.add_fingerprint(user)
 	return
 
-/obj/item/clothing/suit/armor/reactive/on_block(damage, attack_text)
+/obj/item/clothing/suit/armor/reactive/on_block(damage, atom/movable/blocked)
+	if (blocked.ignore_blocking) // They have a "blocking rating" of 1
+		return FALSE
 	if(!prob(35))
 		return 0 //35% chance
 
@@ -251,7 +262,7 @@
 	if(!isturf(picked))
 		return
 
-	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of [attack_text]!</span>", "<span class='notice'>The reactive teleport system flings you clear of [attack_text].</span>")
+	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of \the [blocked]!</span>", "<span class='notice'>The reactive teleport system flings you clear of \the [blocked].</span>")
 
 	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
 

@@ -236,7 +236,7 @@ mob/living/carbon/proc/handle_hallucinations()
 			if(77) //Sillycone
 				if(prob(5))
 					to_chat(src, "<font size=4 color='red'>Attention! Delta security level reached!</font>")
-					to_chat(src, "<font color='red'>[config.alert_desc_delta]</font>")
+					to_chat(src, "<span class='red'>[config.alert_desc_delta]</span>")
 					src << sound('sound/AI/aimalf.ogg')
 
 					if(src.client)
@@ -272,6 +272,7 @@ mob/living/carbon/proc/handle_hallucinations()
 
 				if(prob(20))
 					src.Knockdown(10)
+					src.Stun(10)
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))

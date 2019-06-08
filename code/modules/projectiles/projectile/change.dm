@@ -16,13 +16,16 @@
 
 /obj/item/projectile/change/proc/wabbajack(var/mob/living/M,var/type) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
-		if(istype(M, /mob/living/carbon/human/manifested)) // DEEEEEEEEEEEEEEITY
+		if(ismanifested(M))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
 		var/mob/living/new_mob
 		// Random chance of fucking up
 		if(type!=null && prob(10))
 			type = null
+
+		if(ishuman(M) && type == null)
+			score["random_soc"]++ //Just for scorekeeping. Humans that were hit by a random-type bolt.
 
 		var/randomize = type == null? pick(available_staff_transforms):type
 
@@ -51,4 +54,3 @@
 			var/mob/living/carbon/human/H = new_mob
 			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
 			return new_mob
-

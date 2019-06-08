@@ -12,7 +12,7 @@ var/const/BLOOD_VOLUME_BAD = 224
 var/const/BLOOD_VOLUME_SURVIVE = 122
 
 /mob/living/carbon/human/var/datum/reagents/vessel/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
-/mob/living/carbon/human/var/var/pale = 0			//Should affect how mob sprite is drawn, but currently doesn't.
+/mob/living/carbon/human/var/pale = 0			//Should affect how mob sprite is drawn, but currently doesn't.
 
 /datum/reagents/vessel/update_total() //Version of this that doesn't call del_reagent
 	total_volume = 0
@@ -80,11 +80,19 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
-					B.volume += 0.6
-					reagents.remove_reagent(NUTRIMENT, 0.5)
+					if(M_REGEN in mutations)
+						B.volume += 1.2
+						reagents.remove_reagent(NUTRIMENT, 1.0)
+					else
+						B.volume += 0.6
+						reagents.remove_reagent(NUTRIMENT, 0.5)
 				if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
-					B.volume += 1.2
-					reagents.remove_reagent(IRON, 0.5)
+					if(M_REGEN in mutations)
+						B.volume += 2.4
+						reagents.remove_reagent(IRON, 1.0)
+					else
+						B.volume += 1.2
+						reagents.remove_reagent(IRON, 0.5)
 
 		// Damaged heart virtually reduces the blood volume, as the blood isn't
 		// being pumped properly anymore.
@@ -297,12 +305,29 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (!injected || !our)
 		return
-	if(blood_incompatible(injected.data["blood_type"],our.data["blood_type"]) )
-		reagents.add_reagent(TOXIN,amount * 0.5)
-		reagents.update_total()
-	else
-		vessel.add_reagent(BLOOD, amount, injected.data)
-		vessel.update_total()
+
+	var/toxic = 0
+	if (istype(container,/obj/item/weapon/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
+		if (!iscultist(src))
+			toxic = 2
+	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]))
+		toxic = 1
+
+	switch (toxic)
+		if (2)
+			new /obj/effect/cult_ritual/confusion(src,100,25,src)
+			reagents.add_reagent(TOXIN,amount * 0.5)
+			reagents.add_reagent(INCENSE_MOONFLOWERS,amount * 0.5)
+			hallucination = max(30,hallucination)
+			Dizzy(10)
+			Jitter(10)
+			reagents.update_total()
+		if (1)
+			reagents.add_reagent(TOXIN,amount * 0.5)
+			reagents.update_total()
+		else
+			vessel.add_reagent(BLOOD, amount, injected.data)
+			vessel.update_total()
 	..()
 
 //Gets human's own blood.
@@ -318,11 +343,12 @@ proc/get_blood(datum/reagents/container)
 proc/blood_incompatible(donor,receiver)
 	if(!donor || !receiver)
 		return 0
-	var
-		donor_antigen = copytext(donor,1,lentext(donor))
-		receiver_antigen = copytext(receiver,1,lentext(receiver))
-		donor_rh = (findtext(donor,"+")>0)
-		receiver_rh = (findtext(receiver,"+")>0)
+
+	var/donor_antigen = copytext(donor,1,lentext(donor))
+	var/receiver_antigen = copytext(receiver,1,lentext(receiver))
+	var/donor_rh = (findtext(donor,"+")>0)
+	var/receiver_rh = (findtext(receiver,"+")>0)
+
 	if(donor_rh && !receiver_rh)
 		return 1
 	switch(receiver_antigen)

@@ -66,9 +66,12 @@
 
 /obj/machinery/singularity/blob_act(severity)
 	return
-
+	
+/obj/machinery/singularity/supermatter_act(atom/source, severity)
+	return
+	
 /obj/machinery/singularity/ex_act(severity)
-	if(current_size == 11) //IT'S UNSTOPPABLE
+	if(current_size > 10) //IT'S UNSTOPPABLE
 		return
 	switch(severity)
 		if(1.0)
@@ -160,7 +163,7 @@
 		dissipate_track++
 
 /obj/machinery/singularity/proc/expand(var/force_size = 0, var/growing = 1)
-	if(current_size == 11) //If this is happening, this is an error
+	if(current_size > 10 && !force_size) //If this is happening, this is an error
 		message_admins("expand() was called on a super singulo. This should not happen.")
 		return
 	var/temp_allowed_size = allowed_size
@@ -299,11 +302,28 @@
 			if(chained)
 				overlays += image(icon = icon, icon_state = "chain_s9")
 			visible_message("<span class='sinister'><font size='3'>You witness the creation of a destructive force that cannot possibly be stopped by human hands.</font></span>")
+		
+		if(STAGE_SSGSS) //SUPER SINGULO GOD SUPER SINGULO
+			name = "[name] god [name]" //it gets worse
+			desc = "The true final form of Lord Singuloth. <b>It has the power to destroy galaxies.</b> It can most likely still be used to power arcades too, <b>if you dare.</b>"
+			current_size = 13
+			icon = 'icons/effects/384x384.dmi'
+			icon_state = "singularity_s13" //black holes being black is so 2525
+			pixel_x = -192 * PIXEL_MULTIPLIER
+			pixel_y = -192 * PIXEL_MULTIPLIER
+			bound_width = 13 * WORLD_ICON_SIZE
+			bound_x = -6 * WORLD_ICON_SIZE
+			bound_height = 13 * WORLD_ICON_SIZE
+			bound_y = -6 * WORLD_ICON_SIZE
+			grav_pull = 24
+			consume_range = 5
+			plane = 21
+			visible_message("<span class='sinister'><font size='3'>You witness the creation of a destructive force that challenges that of the very gods.</font></span>")
 
 	if(current_size == allowed_size)
 		investigation_log(I_SINGULO,"<font color='red'>grew to size [current_size].</font>")
 		return 1
-	else if(current_size < (--temp_allowed_size) && current_size != 11)
+	else if(current_size < (--temp_allowed_size) && current_size < 11)
 		expand(temp_allowed_size)
 	else
 		return 0
@@ -326,7 +346,7 @@
 		if(2000 to INFINITY)
 			allowed_size = 9
 
-	if(current_size != allowed_size && current_size != 11)
+	if(current_size != allowed_size && current_size < 11)
 		if(current_size > allowed_size)
 			expand(null, 0)
 		else
@@ -340,6 +360,8 @@
 	//var/ngrabbed=0
 	for(var/atom/X in orange(grav_pull, src))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		if (current_size > 11 && X.type == /turf/unsimulated/wall/supermatter) // galaxy end ongoing
 			continue
 		// Caps grabbing shit at 100 items.
 		//if(ngrabbed==100)
@@ -381,6 +403,17 @@
 
 	return 0
 
+/obj/machinery/singularity/proc/isGodSingulo()
+	if(current_size == STAGE_SSGSS)
+		return 1
+	return 0
+	
+/obj/machinery/singularity/proc/makeSuperMatterSea(atom/A)
+	if(isturf(A.loc))
+		var/turf/newsea = A.loc
+		if(!istype(newsea, /turf/unsimulated/wall/supermatter))
+			newsea.ChangeTurf(/turf/unsimulated/wall/supermatter)
+	
 /obj/machinery/singularity/proc/consume(const/atom/A)
 	var/gain = A.singularity_act(current_size,src)
 	src.energy += gain
@@ -414,12 +447,16 @@
 			step(src, movement_dir)
 		spawn(SS_WAIT_MACHINERY/2)
 			step(src, movement_dir)
+		if(isGodSingulo())
+			makeSuperMatterSea(src)
 		return 1
 	else if(check_turfs_in(movement_dir))
 		last_failed_movement = 0 //Reset this because we moved
 		spawn(0)
 			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY), min = 0)
 			step(src, movement_dir)
+		if(isGodSingulo())
+			makeSuperMatterSea(src)
 		return 1
 	else
 		last_failed_movement = movement_dir
@@ -527,7 +564,7 @@
 			mezzer()
 		else
 			return 0
-	if(current_size == 11)
+	if(current_size > 9)
 		smwave()
 	return 1
 
@@ -554,17 +591,17 @@
 		if(M.stat == CONSCIOUS)
 			if(istype(M,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
-				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson) && current_size != 11)
+				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson) && current_size < 11)
 					to_chat(H, "<span class='notice'>You stare directly into \the [src], good thing you had your protective eyewear on!</span>")
 					return
 				else
 					to_chat(H, "<span class='warning'>You stare directly into \the [src] but your eyewear does absolutely nothing to protect you from it!</span>")
 				M.visible_message("<span class='danger'>[M] stares blankly at \the [src]!</span>", \
-				"<span class='danger'>You stare directly into \the [src] and feel [current_size == 11 ? "helpless" : "weak"].</span>")
+				"<span class='danger'>You stare directly into \the [src] and feel [current_size > 9 ? "helpless" : "weak"].</span>")
 				M.apply_effect(3, STUN)
 
 /obj/machinery/singularity/proc/emp_area()
-	if(current_size != 11)
+	if(current_size < 11)
 		empulse(src, 8, 10)
 	else
 		empulse(src, 12, 16)

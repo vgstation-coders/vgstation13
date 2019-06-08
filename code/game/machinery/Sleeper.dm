@@ -641,10 +641,10 @@
 			if(ishuman(occupant))
 				var/mob/living/carbon/human/H = occupant
 				if(isdiona(H))
-					if(H.h_style != "Popped Hair")
+					if(H.my_appearance.h_style != "Popped Hair")
 						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
-						H.h_style = "Popped Hair"
+						H.my_appearance.h_style = "Popped Hair"
 						H.update_hair()
 				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
 					H.GALize()

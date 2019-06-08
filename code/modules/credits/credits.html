@@ -57,57 +57,101 @@
 	</style>
 </head>
 <body>
-	<div id="soundplayer" style="display: none;">
-		<audio autoplay><source src="http://ss13.moe:3000/Pomf/vgstation-media/raw/master/shuttle/Frolic%20-%20Luciano%20Michelini.mp3" type="audio/mpeg"></audio>
+	<div id="sounddiv">
+		<!-- the soundplayer gets added here via javascript! !-->
 	</div>
 	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
 		<tr>
 			<td class="letterboxer"></td>
 			<td id="splash">
 				IF YOU CAN SEE THIS, TELL A CODER WHAT HAPPENED!
+				HELPFUL DETAILS INCLUDE:
+				WAS THE ROUNDEND DELAYED?
+				WAS THE SERVER MANUALLY REBOOTED?
+				DID YOU PLAY MORE THAN ONE ROUND IN A ROW WITHOUT CLOSING THE GAME?
+				DID CREDITS FAIL TO DISPLAY FOR YOU LAST ROUND?
+				DID THE CREDITS AUDIO FAIL TO PLAY FOR YOU?
+				IS YOUR CONNECTION SLOW/WERE YOU TORRENTING DOLPHIN PORN JUST NOW?
+				DID THIS TEXT DISPLAY FOR ANYONE ELSE?
+				WHAT ARE YOUR CREDITS AND JINGLE PREFERENCES SET TO?
 			</td>
 			<td class="letterboxer"></td>
 		</tr>
 		<tr>
 			<td class="letterboxer"></td>
 			<td id="marquee">
-				IF YOU CAN SEE THIS, REALLY TELL A CODER WHAT HAPPENED!
+				IF YOU CAN SEE THIS, THE TEXT HAS STARTED SCROLLING,
+				SO REALLY TELL A CODER WHAT HAPPENED!
 			</td>
 			<td class="letterboxer"></td>
 		</tr>
 	</table>
 
 	<script type="text/javascript">
-	var producers = [];
-	var lastinterval;
+
+	//Runs a route within byond, client or server side. Consider this "ehjax" for byond.
+	function runByond(uri) {
+		window.location = uri;
+	}
+
+	var splashyText = [];
+	var lastinterval; //just for the auto-suicide failsafe
+	var scrollSpeed = 25; //miliseconds between each pixel we go up
+	var splashTime = 2000; //in miliseconds
+	var started = 0;
+	var initialized = 0;
 
 	function setScrollingText(text){
 		document.getElementById("marquee").innerHTML = text;
 	}
-	function setProducers(text){
-		producers = text.split("%n");
-		producers = producers.slice(0, -1); //get rid of the last %n
+	function setSplashyText(text){
+		splashyText = text.split("%<splashbreak>");
+		splashyText = splashyText.slice(0, -1); //get rid of the last %<splashbreak>
 	}
-	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime, startingDelay, songLink){
-		if (splashTime === undefined) {
-			splashTime = 2000;
+	function setAudio(link, autoplay){
+		var sound = document.getElementById("sounddiv");
+		if(autoplay == 1){
+			sound.innerHTML = "<audio id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
 		}
-		splashTime = parseInt(splashTime); //Just in case
+		else{
+			sound.innerHTML = "<audio id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
+		}
+	}
 
-		if (scrollSpeed === undefined) {
-			scrollSpeed = 25;
-		}
-		scrollSpeed = parseInt(scrollSpeed); //Just in case
+	function setupCredits(scrollyString, splashyString, theme, newScrollSpeed, newSplashTime){
+		if(newSplashTime !== undefined) {splashTime = parseInt(newSplashTime)}
+		if(newScrollSpeed !== undefined) {scrollSpeed = parseInt(newScrollSpeed)}
 
 		setScrollingText(scrollyString);
-		setProducers(producersString);
-
-		splashLoop(producers, 0, splashTime);
-		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
+		setSplashyText(splashyString);
+		applyTheme(theme);
+		initialized = 1;
 	}
 
-	function splashLoop(arr, index, time) {
-		if (index === arr.length){
+	function startAudio(){
+		var sound = document.getElementById("soundplayer");
+		sound.play();
+	}
+
+	function setVolume(newVolume){
+		var volume = 75;
+		if(newVolume !== undefined) {volume = parseInt(newVolume)}
+
+		var sound = document.getElementById("soundplayer");
+		sound.volume = volume/100; //HTML takes a value from 0 to 1.
+	}
+
+	function startCredits(){
+		if(started == 1 || initialized == 0)
+			return;
+		started = 1;
+		runByond('byond://winset?id=mapwindow.credits;is-visible=true');
+		splashLoop(splashyText, 0, splashTime);
+		setTimeout(rollMarquee, splashyText.length*splashTime, scrollSpeed);
+	}
+
+	function splashLoop(arr, index, time){
+		if(index === arr.length){
 			return;
 		}
 		document.getElementById("splash").innerHTML = arr[index];
@@ -120,19 +164,41 @@
 		lastinterval = setInterval(function () {
 			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
-				//document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</textarea>"; clearInterval(lastinterval); return; //debugging
+			if(bottom > 6000){ //RUNAWAY CREDIT ALART - no seriously this might keep going if the server doesn't start back up
+				//debugMe()
 				clearInterval(lastinterval);
-				stopItNow();
+				commitSuicide();
 				return;
 			}
 		}, speed);
 	}
 
-	function stopItNow(){
-		var sound = document.getElementById("soundplayer");
-		sound.parentNode.removeChild(sound);
-		window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
+	function applyTheme(theme){
+		if(!theme)
+			return
+		switch(theme){
+			case "clown":
+				var crayons = ['red', 'orange', 'yellow', 'green', 'cyan', 'purple'];
+				var divs = document.getElementsByTagName('*');
+				for(var i=0; i<divs.length; i++) {
+					divs[i].style.color = crayons[Math.floor(Math.random() * crayons.length)]
+					divs[i].style.fontFamily = "Comic Sans MS, cursive, sans-serif";
+				}
+				break;
+			case "cooks":
+				document.getElementsByTagName("style")[0].innerHTML += ".actorname, .actorrole, #splash, #episodename {color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; text-shadow: rgb(123, 96, 38) 1px 1px 0px, rgb(123, 96, 38) 1px 1px 0.1px; overflow: visible !important;} #episodename {font-size: 175%;}"
+				break;
+		}
+	}
+
+	function debugMe(){
+		document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</" + "textarea>";
+		runByond('byond://winset?id=mapwindow.credits;is-visible=true');
+	};
+
+	function commitSuicide(){
+		document.documentElement.innerHTML = '';
+		runByond('byond://winset?id=mapwindow.credits;is-visible=false');
 	};
 	</script>
 </body>

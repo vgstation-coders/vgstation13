@@ -1,4 +1,4 @@
-proc/display_roundstart_logout_report()
+/proc/display_roundstart_logout_report()
 	var/msg = "<span class='notice'><b>Roundstart logout report\n\n</span>"
 	for(var/mob/living/L in mob_list)
 
@@ -18,7 +18,7 @@ proc/display_roundstart_logout_report()
 				continue //AFK client
 			if(L.stat)
 				if(L.suiciding)	//Suicider
-					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 					continue //Disconnected client
 				if(L.stat == UNCONSCIOUS)
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (Dying)\n"
@@ -32,17 +32,17 @@ proc/display_roundstart_logout_report()
 			if(D.mind && (D.mind.original == L || D.mind.current == L))
 				if(L.stat == DEAD)
 					if(L.suiciding)	//Suicider
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 						continue //Disconnected client
 					else
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (Dead)\n"
 						continue //Dead mob, ghost abandoned
 				else
 					if(D.can_reenter_corpse)
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>This shouldn't appear.</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>This shouldn't appear.</b></span>)\n"
 						continue //Lolwhat
 					else
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Ghosted</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Ghosted</b></span>)\n"
 						continue //Ghosted while alive
 
 
@@ -52,20 +52,106 @@ proc/display_roundstart_logout_report()
 			to_chat(M, msg)
 
 
-proc/get_nt_opposed()
+/proc/get_nt_opposed()
 	var/list/dudes = list()
 	for(var/mob/living/carbon/human/man in player_list)
-		if(man.client)
-			if(man.client.prefs.nanotrasen_relation == "Opposed")
-				dudes += man
-			else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
-				dudes += man
-	if(dudes.len == 0)
-		return null
-	return pick(dudes)
+		if (!man.client || !man.mind)
+			continue
 
+		if (man.mind.assigned_role == "MODE") // Wiz, nukies, ...
+			continue
 
-proc/equip_wizard(mob/living/carbon/human/wizard_mob)
+		if(man.client.prefs.nanotrasen_relation == "Opposed")
+			dudes += man
+		else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
+			dudes += man
+
+		else if( (man.mind.antag_roles[CULTIST] && prob(40)) || \
+				 (man.mind.antag_roles[CHANGELING] && prob(50)) || \
+				 (man.mind.antag_roles[TRAITOR] && prob(30)) || \
+				 (man.mind.antag_roles[HEADREV] && prob(30)) \
+				 )
+			dudes += man
+
+		else if(prob(10))
+			dudes += man
+
+	return dudes
+
+/datum/gamemode/proc/send_intercept()
+	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
+<B> In case you have misplaced your copy, attached is a list of personnel whom reliable sources&trade; suspect may be affiliated with the Syndicate:</B><br> <I>Reminder: Acting upon this information without solid evidence will result in termination of your working contract with Nanotrasen.</I></br>"}
+
+	var/list/suspects = get_nt_opposed()
+
+	for(var/mob/M in suspects)
+		switch(rand(1, 100))
+			if(1 to 50)
+				intercepttext += "Someone with the job of <b>[M.mind.assigned_role]</b> <br>"
+			else
+				intercepttext += "<b>[M.name]</b>, the <b>[M.mind.assigned_role]</b> <br>"
+
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- '[command_name()] Status Summary'"
+			intercept.info = intercepttext
+
+			comm.messagetitle.Add("[command_name()] Status Summary")
+			comm.messagetext.Add(intercepttext)
+
+	command_alert(/datum/command_alert/enemy_comms_interception)
+
+/datum/gamemode/dynamic/send_intercept()
+	var/intercepttext = {"<html><style>
+						body {color: #000000; background: #EDD6B6;}
+						h1 {color: #000000; font-size:30px;}
+						</style><FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR></br>
+						<body>
+						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"><BR>"}
+
+	var/list/threat_detected = round(starting_threat)
+
+	switch(threat_detected)
+		if(0 to 19)
+			update_playercounts()
+			if(!living_antags.len)
+				intercepttext += "<b>Peaceful Waypoint</b></center><BR>"
+				intercepttext += "Your station orbits deep within controlled, core-sector systems and serves as a waypoint for routine traffic through Nanotrasen's trade empire. Due to the combination of high security, interstellar traffic, and low strategic value, it makes any direct threat of violence unlikely. Your primary enemies will be incompetence and bored crewmen: try to organize team-building events to keep staffers interested and productive."
+			else
+				intercepttext += "<b>Core Territory</b></center><BR>"
+				intercepttext += "Your station orbits within reliably mundane, secure space. Although Nanotrasen has a firm grip on security in your region, the valuable resources and strategic position aboard your station make it a potential target for infiltrations. Monitor crew for non-loyal behavior, but expect a relatively tame shift free of large-scale destruction. We expect great things from your station."
+		if(20 to 39)
+			intercepttext += "<b>Anomalous Exogeology</b></center><BR>"
+			intercepttext += "Although your station lies within what is generally considered Nanotrasen-controlled space, the course of its orbit has caused it to cross unusually close to exogeological features with anomalous readings. Although these features offer opportunities for our research department, it is known that these little understood readings are often correlated with increased activity from competing interstellar organizations and individuals, among them the Wizard Federation, Cult of the Geometer of Blood, and the remaining Vampire Lords - all known competitors for Anomaly Type B sites. Exercise elevated caution."
+		if(40 to 65)
+			intercepttext += "<b>Contested System</b></center><BR>"
+			intercepttext += "Your station's orbit passes along the edge of Nanotrasen's sphere of influence. While subversive elements remain the most likely threat against your station, hostile organizations are bolder here, where our grip is weaker. Exercise increased caution against elite Syndicate strike forces, or Executives forbid, some kind of ill-conceived unionizing attempt."
+		if(66 to 79)
+			intercepttext += "<b>Uncharted Space</b></center><BR>"
+			intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
+		if(80 to 100)
+			intercepttext += "<b>Black Orbit</b></center><BR>"
+			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
+
+	intercepttext += "</body></html>"
+
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- '[command_name()] Status Summary'"
+			intercept.info = intercepttext
+
+			comm.messagetitle.Add("[command_name()] Status Summary")
+			comm.messagetext.Add(intercepttext)
+
+	command_alert(/datum/command_alert/enemy_comms_interception)
+
+/proc/disable_suit_sensors(mob/living/carbon/human/H)
+	var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
+	U.sensor_mode = 0
+
+/proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 	if (!istype(wizard_mob))
 		return
 
@@ -81,6 +167,7 @@ proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 
 	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
+	disable_suit_sensors(wizard_mob)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
@@ -106,7 +193,7 @@ proc/equip_wizard(mob/living/carbon/human/wizard_mob)
 	wizard_mob.update_icons()
 	return 1
 
-proc/name_wizard(mob/living/carbon/human/wizard_mob)
+/proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
@@ -247,7 +334,6 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
 
-
 /datum/mind/proc/find_syndicate_uplink()
 	var/uplink = null
 
@@ -261,43 +347,95 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 /datum/mind/proc/take_uplink()
 	var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
 	if(H)
+		message_admins("Found and deleted [H] for [src].")
 		qdel(H)
+	else
+		message_admins("The uplink for [src] could not be located for deletion.")
 
-/proc/add_law_zero(mob/living/silicon/ai/killer)
+/proc/add_law_zero(mob/living/silicon/killer)
 	var/law = "Accomplish your objectives at all costs."
-	var/law_borg = "Accomplish your AI's objectives at all costs."
+	if(isAI(killer))
+		var/mob/living/silicon/ai/KAI = killer
+		KAI.set_zeroth_law(law, "Accomplish your AI's objectives at all costs.")
+		KAI.notify_slaved()
+	else
+		var/mob/living/silicon/robot/KR = killer
+		KR.set_zeroth_law(law)
 	to_chat(killer, "<b>Your laws have been changed!</b>")
-	killer.set_zeroth_law(law, law_borg)
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
+/proc/equip_ninja(var/mob/living/carbon/human/spaceninja)
+	if(!istype(spaceninja))
+		return 0
+	sleep(1) //so non-humans don't runtime
+	if(!isjusthuman(spaceninja))
+		spaceninja = spaceninja.Humanize("Human")
+	spaceninja.delete_all_equipped_items()
+	if(spaceninja.gender == FEMALE)
+		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/blackf, slot_w_uniform)
+	else
+		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensors(spaceninja)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja/apprentice, slot_head)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(spaceninja), slot_r_store)
+	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
+	if (spaceninja.internals)
+		spaceninja.internals.icon_state = "internal1"
+	
+	spaceninja.see_in_dark_override = 8
 
-
+#define GREET_WEEB "weebgreet"
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
 		return 0
 	H.delete_all_equipped_items()
-	var/obj/item/weapon/katana/hesfast/hayai = new /obj/item/weapon/katana/hesfast
-	hayai.cant_drop = 1
-	H.put_in_hands(hayai)
+	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
+	disable_suit_sensors(H)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
 
+	H.see_in_dark_override = 8
 
-/proc/name_weeaboo(var/mob/living/carbon/human/H)
-	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
+	var/datum/role/R = H.mind.GetRole(NINJA)
+	if(R)
+		R.Greet(GREET_WEEB)
+
+/proc/name_ninja(var/mob/living/carbon/human/H)
 	if(!isjusthuman(H))
 		H.set_species("Human", 1)
-	var/weeaboo_title = pick(ninja_titles)
-	var/weeaboo_name = pick(ninja_names)
-	var/randomname = "[weeaboo_title] [weeaboo_name]"
+	var/ninja_title = pick(ninja_titles)
+	var/ninja_name = pick(ninja_names)
+	var/randomname = "[ninja_title] [ninja_name]"
 	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space Weeaboo. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
+		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
 
 		if (!newname)
 			newname = randomname
@@ -312,13 +450,15 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 		return 0
 	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
 	if (syndicate_code_phrase)
-		words += "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]<br>"
-		agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
+		var/phrases = syndicate_code_phrase.Join(", ")
+		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
+		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
-		words += "<span class='warning'>Code Response: </span>[syndicate_code_response]<br>"
-		agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
+		var/response = syndicate_code_response.Join(", ")
+		words += "<span class='warning'>Code Response: </span>[response].<br>"
+		agent.mind.store_memory("<b>Code Response</b>: [response].")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 
@@ -329,4 +469,3 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 
 	to_chat(agent,words)
 	return 1
-

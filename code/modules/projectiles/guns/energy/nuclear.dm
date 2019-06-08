@@ -22,7 +22,7 @@
 			mode = 1
 			charge_cost = 100
 			fire_sound = 'sound/weapons/Laser.ogg'
-			to_chat(user, "<span class='warning'>[src.name] is now set to kill.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is now set to kill.</span>")
 			projectile_type = "/obj/item/projectile/beam"
 			modifystate = "energykill"
 			if (power_supply.charge > 0)
@@ -33,7 +33,7 @@
 			mode = 0
 			charge_cost = 100
 			fire_sound = 'sound/weapons/Taser.ogg'
-			to_chat(user, "<span class='warning'>[src.name] is now set to stun.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is now set to stun.</span>")
 			projectile_type = "/obj/item/projectile/energy/electrode"
 			modifystate = "energystun"
 			if (power_supply.charge > 0)

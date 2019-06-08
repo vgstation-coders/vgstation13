@@ -48,26 +48,14 @@
 
 		var/datum/role/vampire/V = isvampire(H)
 
-		if(V && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
+		if(V && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
 			if(VAMP_MATURE in V.powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
-					V.nullified = max(5, V.nullified + 2)
-				V.smitecounter += 30 //Smithe the shit out of him. Four strikes and he's out
+					V.nullified = min(5, V.nullified + 2)
+				V.smitecounter += 30 //Smite the shit out of him. Four strikes and he's out
 
-
-	//A 25% chance to de-cult per hit that bypasses all protections? Is this some kind of joke? The last thing cult needs right now is that kind of nerfs. Jesus dylan.
-	/*
-	if(iscult(M) && user.mind && (user.mind.assigned_role == "Chaplain")) //Much higher chance of deconverting cultists per hit if Chaplain
-		if(prob(25))
-			to_chat(M, "<span class='notice'>\The [src]'s intense field suddenly clears your mind of heresy. Your allegiance to Nar'Sie wanes!</span>")
-			to_chat(user, "<span class='notice'>You see [M]'s eyes become clear. Nar'Sie no longer controls his mind, \the [src] saved him!</span>")
-			ticker.mode.remove_cultist(M.mind)
-		else //We aren't deconverting him this time, give the Cultist a fair warning
-			to_chat(M, "<span class='warning'>\The [src]'s intense field is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
-	*/
-
-	..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
+	. = ..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
 
 /obj/item/weapon/nullrod/afterattack(var/atom/A, var/mob/user, var/prox_flag, var/params)
 	if(!prox_flag)
@@ -95,7 +83,7 @@
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
-		if(user.mind.assigned_role == "Chaplain")
+		if(isReligiousLeader(user))
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
@@ -106,7 +94,7 @@
 /obj/item/weapon/nullrod/attack_self(mob/user)
 	if(reskinned)
 		return
-	if(user.mind && (user.mind.assigned_role == "Chaplain"))
+	if(isReligiousLeader(user))
 		reskin_holy_weapon(user)
 
 /obj/item/weapon/nullrod/proc/reskin_holy_weapon(mob/living/M)
@@ -140,7 +128,7 @@
 		M.drop_item(src, force_drop = TRUE)
 		M.put_in_active_hand(holy_weapon)
 		qdel(src)
-
+		
 /obj/item/weapon/nullrod/sword
 	name = "holy avenger"
 	desc = "DEUS VULT!"
@@ -181,6 +169,15 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	w_class = W_CLASS_LARGE
 	fluff_pickup = "robust"
+
+/obj/item/weapon/nullrod/crozius //The Imperial Creed
+	name = "\improper Crozius Arcanum"
+	desc = "Repent! For tomorrow you die!"
+	icon_state = "crozius"
+	item_state = "crozius"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	attack_verb = list("mauls", "batters", "bashes")
+	w_class = W_CLASS_LARGE
 
 /obj/item/weapon/nullrod/spear //Ratvar? How!
 	name = "divine brass spear"
@@ -300,10 +297,10 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
 /obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
-    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter)) 
-        return 
-    else 
-        return ..() 
+    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+        return
+    else
+        return ..()
 
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos

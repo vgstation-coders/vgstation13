@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = " "
-	var/base_name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
@@ -56,7 +55,6 @@
 
 /obj/item/weapon/reagent_containers/glass/New()
 	..()
-	base_name = name
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
 /obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
@@ -176,7 +174,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(!opaque && reagents.total_volume)
+	if(!opaque && reagents && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -204,6 +202,16 @@
 	if(!is_open_container())
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
+
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
+	name = "small erlenmeyer flask"
+	desc = "It's like a cute little snub-nosed beaker. Can hold up to 50 units."
+	icon_state = "erlenmeyersmall"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer
+	name = "erlenmeyer flask"
+	desc = "Colloquially known as the 'long beaker'. Can hold up to 100 units."
+	icon_state = "erlenmeyerlarge"
 
 /obj/item/weapon/reagent_containers/glass/beaker/large
 	name = "large beaker"
@@ -271,26 +279,39 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
-
 	reagents.add_reagent(URANIUM, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon/New()
+	..()
+	reagents.add_reagent(CARBON, 10)
 
-	New()
-		..()
-		reagents.add_reagent(CRYOXADONE, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater/New()
+	..()
+	reagents.add_reagent(WATER, 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox/New()
+	..()
+	reagents.add_reagent(ANTI_TOXIN, 10)
 
-	New()
-		..()
-		reagents.add_reagent(SACID, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
+	..()
+	reagents.add_reagent(LEMON_LIME, 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/slime
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
+	..()
+	reagents.add_reagent(SODAWATER, 30)
 
-	New()
-		..()
-		reagents.add_reagent(SLIMEJELLY, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
+	..()
+	reagents.add_reagent(CRYOXADONE, 30)
+
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
+	..()
+	reagents.add_reagent(SACID, 50)
+
+/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
@@ -360,7 +381,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
 	update_icon()
-	
+
 /obj/item/weapon/reagent_containers/glass/bucket/update_icon()
 	overlays.len = 0
 
@@ -371,7 +392,7 @@
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
-	
+
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)
@@ -421,9 +442,9 @@
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
 
-	New()
-		..()
-		reagents.add_reagent(FLUOROSURFACTANT, 20)
+/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
+	..()
+	reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 

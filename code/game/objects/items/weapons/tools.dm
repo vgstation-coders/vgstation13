@@ -69,6 +69,8 @@
 	desc = "A wrench intended to be wrenchier than other wrenches. It's the wrenchiest."
 	icon_state = "socket_wrench"
 	w_class = W_CLASS_LARGE //big shit, to balance its power
+	force = 15.0
+	throwforce = 12.0
 
 /*
  * Screwdriver
@@ -161,6 +163,9 @@
 			to_chat(usr, "<span class='warning'>You cannot do that.</span>")
 	else
 		..()
+
+/obj/item/weapon/screwdriver/is_screwdriver(var/mob/user)
+	return TRUE
 /*
  * Wirecutters
  */
@@ -193,7 +198,7 @@
 		item_state = "cutters_yellow"
 
 /obj/item/weapon/wirecutters/attack(mob/living/carbon/C as mob, mob/user as mob)
-	if((iscarbon(C)) && (C.handcuffed) && (istype(C.handcuffed, /obj/item/weapon/handcuffs/cable)))
+	if((iscarbon(C)) && (C.handcuffed) && (istype(C.handcuffed, /obj/item/weapon/handcuffs/cable)) && user.a_intent!=I_HURT)
 		usr.visible_message("\The [user] cuts \the [C]'s [C.handcuffed.name] with \the [src]!",\
 		"You cut \the [C]'s [C.handcuffed.name] with \the [src]!",\
 		"You hear cable being cut.")
@@ -681,17 +686,17 @@
 	origin_tech = Tc_COMBAT + "=2"
 	var/open = 0
 
-	New()
-		..()
-		update_icon()
-
+/obj/item/weapon/conversion_kit/New()
+	..()
 	update_icon()
-		icon_state = "[initial(icon_state)]_[open]"
 
-	attack_self(mob/user as mob)
-		open = !open
-		to_chat(user, "<span class='notice'>You [open?"open" : "close"] the conversion kit.</span>")
-		update_icon()
+/obj/item/weapon/conversion_kit/update_icon()
+	icon_state = "[initial(icon_state)]_[open]"
+
+/obj/item/weapon/conversion_kit/attack_self(mob/user as mob)
+	open = !open
+	to_chat(user, "<span class='notice'>You [open?"open" : "close"] the conversion kit.</span>")
+	update_icon()
 
 /*
  * Soldering Iron

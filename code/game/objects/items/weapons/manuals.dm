@@ -491,6 +491,7 @@
 	name = "Space Law"
 	desc = "A set of Nanotrasen guidelines for keeping law and order on their space stations."
 	icon_state = "bookSpaceLaw"
+	item_state = "bookSpaceLaw"
 	author = "Nanotrasen"
 	title = "Space Law"
 	wiki_page = "Space_Law"
@@ -506,6 +507,7 @@
 /obj/item/weapon/book/manual/chef_recipes
 	name = "Chef Recipes"
 	icon_state = "cooked_book"
+	item_state = "cooked_bookold"
 	author = "Lord Frenrir Cageth"
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
@@ -513,6 +515,7 @@
 /obj/item/weapon/book/manual/barman_recipes
 	name = "Barman Recipes"
 	icon_state = "barbook"
+	item_state = "barbook"
 	author = "Sir John Rose"
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"

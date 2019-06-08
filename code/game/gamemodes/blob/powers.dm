@@ -48,6 +48,11 @@
 		to_chat(src, "There is no blob here!")
 		return
 
+	if(istype(B, /obj/effect/blob/core))
+		if(B.overmind == src)
+			restrain_blob()
+			return
+
 	if(!istype(B, /obj/effect/blob/normal))
 		to_chat(src, "Unable to use this blob, find a normal one.")
 		return
@@ -130,7 +135,7 @@
 		return
 
 
-	B.change_to(/obj/effect/blob/core, src)
+	B.change_to(/obj/effect/blob/core, src, TRUE)
 
 	return
 
@@ -278,9 +283,14 @@
 		to_chat(src, "There is no blob adjacent to you.")
 		return
 
+	if(attack_delayer.blocked())
+		return
+
 	if(!can_buy(BLOBATTCOST))
 		return
-	OB.expand(T, 0)
+
+	delayNextAttack(5)
+	OB.expand(T, 0) //Doesn't give source because we don't care about passive restraint
 	return
 
 
@@ -329,3 +339,7 @@
 	to_chat(current_zlevel, "<span class='blob'>[message]</span>") //Only sends messages to things on its own z level
 	add_gamelogs(src, "used blob telepathy to convey \"[message]\"", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")
+
+/mob/camera/blob/proc/restrain_blob()
+	restrain_blob = !restrain_blob
+	to_chat(src,"<span class='notice'>You will [restrain_blob ? "now" : "not"] restrain your blobs from passively spreading into walls.</span>")

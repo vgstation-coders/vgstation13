@@ -130,24 +130,32 @@
 	item_state = "candlebox5"
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
+	w_type = RECYK_MISC
 	storage_slots = 5
 	throwforce = 2
-	flags = 0
+	flags = null
 	slot_flags = SLOT_BELT
+	var/obj/item/candle/waxtype = /obj/item/candle
 
 /obj/item/weapon/storage/fancy/candle_box/empty
-	empty = 1
+	empty = TRUE
 	icon_state = "candlebox0"
 	item_state = "candlebox0" //i don't know what this does but it seems like this should go here
 
 /obj/item/weapon/storage/fancy/candle_box/New()
 	..()
-	if (empty)
+	if(empty)
 		return
 	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/candle(src)
-	return
+		new waxtype(src)
+
+/obj/item/weapon/storage/fancy/candle_box/holo
+	name = "Holo candle pack"
+	desc = "A pack of holo candles."
+	icon_state = "holocandlebox5"
+	icon_type = "holocandle"
+	//item_state = "candlebox5"
+	waxtype = /obj/item/candle/holo
 
 /*
  * Crayon Box
@@ -216,9 +224,11 @@
 	storage_slots = 21 //3 rows of 7 items
 	max_combined_w_class = 21
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_PAPER
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
-	can_only_hold = list("/obj/item/weapon/match") // Strict type check.
+	can_only_hold = list("/obj/item/weapon/match", "/obj/item/weapon/p_folded/note_small", "/obj/item/weapon/coin", \
+		"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin", "/obj/item/weapon/reagent_containers/food/snacks/chococoin")
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/storage/fancy/matchbox/empty
@@ -252,9 +262,20 @@
 
 /obj/item/weapon/storage/fancy/matchbox/attackby(obj/item/weapon/match/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/match) && !W.lit)
-		W.lit = 1
-		W.update_brightness()
-	return
+		W.light()
+		return
+	return ..()
+
+/obj/item/weapon/storage/fancy/matchbox/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	. = ..()
+	if(.)
+		if(W.is_hot() >= src.autoignition_temperature)
+			ignite(W.is_hot())
+
+/obj/item/weapon/storage/fancy/matchbox/ignite(temperature)
+	for(var/obj/item/weapon/match/ohno in src)
+		ohno.light()
+	. = ..()
 
 /obj/item/weapon/storage/fancy/matchbox/strike_anywhere
 	name = "strike-anywhere matchbox"
@@ -279,7 +300,7 @@
 	flags = 0
 	slot_flags = SLOT_BELT
 	storage_slots = 6
-	can_only_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter") // Strict type check.
+	can_only_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter", "/obj/item/weapon/p_folded/note_small")
 	icon_type = "cigarette"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
@@ -303,7 +324,7 @@
 	desc = "There are [contents.len] cig\s left!"
 	return
 
-/obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	var/obj/item/clothing/mask/cigarette/C = W
 	if(!istype(C))
 		return ..() // what
@@ -447,7 +468,7 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick(src)
 	return
 
-/obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
@@ -565,8 +586,21 @@
 /obj/item/weapon/storage/fancy/cigarettes/gum/update_icon()
 	return
 
-/obj/item/weapon/storage/fancy/cigarettes/gum/remove_from_storage(obj/item/gum/G, atom/new_location)
+/obj/item/weapon/storage/fancy/cigarettes/gum/remove_from_storage(obj/item/gum/G, atom/new_location, var/force = 0, var/refresh = 1)
 	if(istype(G))
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
 	. = ..()
+
+////////////////////
+//COLLECTION PLATE//
+////////////////////
+/obj/item/weapon/storage/fancy/collection_plate
+	icon = 'icons/obj/tithe.dmi'
+	icon_state = "donationbox0"
+	icon_type = "donation"
+	name = "collection plate"
+	foldable = 0
+	box_type = "plate"
+	storage_slots = 10
+	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")

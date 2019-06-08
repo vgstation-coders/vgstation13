@@ -44,8 +44,9 @@ var/list/uplink_items = list()
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
-	var/static/times_bought = 0
+	var/times_bought = 0
 	var/refundable = FALSE
+	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
 /datum/uplink_item/proc/get_cost(var/user_job, var/cost_modifier = 1)
@@ -53,21 +54,23 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
-	. = round(. * cost_modifier, 1) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
+	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
+/datum/uplink_item/proc/available_for_job(var/user_job)
+	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	if((jobs_exclusive.len && !jobs_exclusive.Find(U.job)) || (jobs_excluded.len && jobs_excluded.Find(U.job)))
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! ([formatJumpTo(get_turf(U))])")
+	if(!available_for_job(U.job))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new item(loc,user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
-	..()
 	if(!istype(U))
 		return 0
 
@@ -110,9 +113,17 @@ var/list/uplink_items = list()
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
+
 			if(user.mind)
-				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				user.mind.spent_TC += get_cost(U.job)
+				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
+				var/datum/role/R = user.mind.GetRole(NUKE_OP)
+				if(R)
+					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+				else
+					R = user.mind.GetRole(TRAITOR)
+					if(R)
+						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
@@ -158,8 +169,8 @@ var/list/uplink_items = list()
 	cost = 8
 
 /datum/uplink_item/nukeprice/syndigaloshes
-	name = "No-Slip Syndicate Shoes"
-	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
+	name = "No-Slip Chameleon Shoes"
+	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
 	category = "Stealth and Camouflage Items"
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 4
@@ -180,7 +191,7 @@ var/list/uplink_items = list()
 	name = "Fully Loaded Revolver"
 	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmored target with two shots."
 	item = /obj/item/weapon/gun/projectile
-	cost = 13
+	cost = 12
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
@@ -211,7 +222,7 @@ var/list/uplink_items = list()
 	name = "5 EMP Grenades"
 	desc = "A box that contains 5 EMP grenades. Useful to disrupt communication and silicon lifeforms."
 	item = /obj/item/weapon/storage/box/emps
-	cost = 6
+	cost = 4
 
 /datum/uplink_item/dangerous/viscerator
 	name = "Viscerator Grenade"
@@ -230,6 +241,31 @@ var/list/uplink_items = list()
 	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."
 	item = /obj/item/weapon/gun/gatling
 	cost = 40
+	jobs_exclusive = list("Nuclear Operative")
+
+/datum/uplink_item/dangerous/dude_bombs_lmao
+	name = "Modified Tank Transfer Valve"
+	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
+	item = /obj/effect/spawner/newbomb
+	refund_path = /obj/item/device/transfer_valve/mediumsize
+	cost = 100
+	refund_amount = 15
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/robot
+	name = "Syndicate-modded Combat Robot Teleporter"
+	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
+	item = /obj/item/weapon/robot_spawner/syndicate
+	cost = 100
+	jobs_exclusive = list("Nuclear Operative")
+	refundable = TRUE
+
+/datum/uplink_item/dangerous/mecha
+	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
+	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
+	item = /obj/effect/spawner/mecha/mauler
+	cost = 140
 	jobs_exclusive = list("Nuclear Operative")
 
 // STEALTHY WEAPONS
@@ -251,7 +287,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/detomatix
 	name = "Detomatix PDA Cartridge"
-	desc = "When inserted into a Personal Data Assistant, this cartridge gives you five opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
+	desc = "When inserted into a Personal Data Assistant, this cartridge gives you four opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
@@ -280,8 +316,8 @@ var/list/uplink_items = list()
 	cost = 2
 
 /datum/uplink_item/stealthy_tools/syndigaloshes
-	name = "No-Slip Syndicate Shoes"
-	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
+	name = "No-Slip Chameleon Shoes"
+	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
 	jobs_excluded = list("Nuclear Operative")
@@ -315,13 +351,19 @@ var/list/uplink_items = list()
 	name = "Instant Smoke Bombs"
 	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
-	cost = 3
+	cost = 2
 
 /datum/uplink_item/stealthy_tools/decoy_balloon
 	name = "Decoy Balloon"
 	desc = "A balloon that looks just like you when inflated."
 	item = /obj/item/toy/balloon/decoy
 	cost = 1
+
+/datum/uplink_item/stealthy_tools/flashlightemp
+	name = "EMP Flashlight"
+	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoever you use it on. Up to 4 charges that recover every 30 seconds, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine."
+	item = /obj/item/device/flashlight/emp
+	cost = 4
 
 
 // DEVICE AND TOOLS
@@ -346,7 +388,7 @@ var/list/uplink_items = list()
 	name = "Bug Detector & Camera Disabler"
 	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. Activating it will disable cameras nearby, plus the ones far away randomly, causing massive disruptions to the AI and anyone using them."
 	item = /obj/item/device/multitool/ai_detect
-	cost = 5
+	cost = 3
 
 /datum/uplink_item/device_tools/space_suit
 	name = "Space Suit"
@@ -400,7 +442,7 @@ var/list/uplink_items = list()
 	name = "Explosive Chewing Gum"
 	desc = "A single stick of explosive chewing gum, detonates five seconds after you start chewing. Can be stuck to walls and objects."
 	item = /obj/item/gum/explosive
-	cost = 8
+	cost = 6
 
 /datum/uplink_item/device_tools/powersink
 	name = "Power Sink"
@@ -434,20 +476,21 @@ var/list/uplink_items = list()
 	cost = 6
 	jobs_exclusive = list("Nuclear Operative")
 
+/datum/uplink_item/device_tools/megaphone
+	name = "Mad Scientist Megaphone"
+	desc = "For making your demands known. On top of making your speech loud, it can broadcast into (but not receive from) station radio frequencies, including Security and Command. Can also optionally scramble your voice, for ominous-anonymous threats."
+	item = /obj/item/device/megaphone/madscientist
+	num_in_stock = 3
+	cost = 1
+	discounted_cost = 0
+	jobs_with_discount = SCIENCE_POSITIONS
+
 /datum/uplink_item/device_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
 	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
-
-//datum/uplink_item/dangerous/robot
-//	name = "Syndicate Robot Teleporter"
-//	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
-//	item = /obj/item/weapon/robot_spawner/syndicate
-//	cost = 40
-//	jobs_exclusive = list("Nuclear Operative")
-//	refundable = TRUE
 
 // IMPLANTS
 
@@ -464,7 +507,7 @@ var/list/uplink_items = list()
 	name = "Uplink Implant"
 	desc = "An implant usable after injection into the body. Activated using a bodily gesture to open an uplink with 10 telecrystals. The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
-	cost = 18
+	cost = 16
 
 /datum/uplink_item/implants/explosive
 	name = "Explosive Implant"
@@ -476,7 +519,7 @@ var/list/uplink_items = list()
 	name = "Compressed Matter Implant"
 	desc = "An implant usable after injection into the body. Activated using a bodily gesture to retrieve an item that was earlier compressed."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_compress
-	cost = 8
+	cost = 6
 
 
 // POINTLESS BADASSERY
@@ -486,9 +529,9 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/bundle
 	name = "Syndicate Bundle"
-	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth more than 20 telecrystals, but you do not know which bundle you will receive."
+	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive."
 	item = /obj/item/weapon/storage/box/syndicate
-	cost = 20
+	cost = 14
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
@@ -510,7 +553,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
-	desc = "Picking this choice will send you a random item from the list. Useful for when you cannot think of a strategy to finish your objectives with."
+	desc = "Picking this choice will send you a random item from the list for half the cost. Useful for when you cannot think of a strategy to finish your objectives with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
@@ -523,13 +566,15 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(I.get_cost() > U.uses)
+			if(!I.available_for_job(U.job))
+				continue
+			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.get_cost())
+		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new I.item(loc)
 
@@ -559,8 +604,8 @@ var/list/uplink_items = list()
 	name = "Evidence Forger"
 	desc = "An evidence scanner that allows you to forge evidence by setting the output before scanning the item."
 	item = /obj/item/device/detective_scanner/forger
-	cost = 8
-	discounted_cost = 6
+	cost = 6
+	discounted_cost = 4
 	jobs_with_discount = list("Detective")
 
 /datum/uplink_item/jobspecific/conversionkit
@@ -576,15 +621,15 @@ var/list/uplink_items = list()
 	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications. Distinguishable upon close examination due to the added weight."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 14
-	discounted_cost = 12
+	discounted_cost = 10
 	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/knifeboot
 	name = "Concealed knife shoes"
 	desc = "Shoes with a knife concealed in the toecap. Tap your heels together to reveal the knife. Kick the target to stab them."
 	item = /obj/item/clothing/shoes/knifeboot
-	cost = 5
-	discounted_cost = 4
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/ambrosiacruciatus
@@ -644,25 +689,22 @@ var/list/uplink_items = list()
 	name = "Energized Bananium Sword"
 	desc = "When concealed a simple banana, when active a deadly means of executing swift justice. Highly regarded for their utility on away missions from the Clown Planet. WARNING: Extremely dangerous if two Bananium Swords are combined! Only those trained in the clownish arts should attempt!"
 	item = /obj/item/weapon/melee/energy/sword/bsword
-	cost = 12
-	discounted_cost = 8
-	jobs_with_discount = list("Clown")
+	cost = 8
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/banannon
 	name = "Banannon"
 	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard. WARNING: Only those trained in the clownish arts can use this weapon effectively!"
 	item = /obj/item/weapon/gun/banannon
-	cost = 24
-	discounted_cost = 18
-	jobs_with_discount = list("Clown")
+	cost = 18
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/livingballoons
 	name = "Box of Living Long Balloons"
 	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them. Needless to say, using these is a bad idea for those not trained in the clownish arts."
 	item = /obj/item/weapon/storage/box/balloons/long/living
-	cost = 10
-	discounted_cost = 6
-	jobs_with_discount = list("Clown")
+	cost = 6
+	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/bananagun
 	name = "Banana Gun"
@@ -682,19 +724,24 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
+	desc = "Spray something to render it invisible for five minutes! One-time use. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/invisible_spray/permanent
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
 	name = "Advanced Mime Gloves"
 	desc = "Grants the user the ability to periodically fire an invisible gun from their white gloves. Only real Mimes are trained in the art of firing this artefact silently."
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
-	discounted_cost = 16
-	jobs_with_discount = list("Mime")
+	jobs_exclusive = list("Mime")
 
 /datum/uplink_item/jobspecific/specialsauce
 	name = "Chef Excellence's Special Sauce"
@@ -776,6 +823,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
+/datum/uplink_item/jobspecific/zombievirus
+	name = "Zombie Virus Syndrome"
+	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a disk."
+	item = /obj/item/weapon/disk/disease/zombie
+	cost = 20
+	discounted_cost = 12
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
 /datum/uplink_item/jobspecific/organ_remover
 	name = "Modified Organics Extractor"
 	desc = "A tool used by vox raiders to extract organs from unconscious victims has been reverse-engineered by syndicate scientists to be used by anyone, but it cannot extract hearts. It works twice as fast as the vox-only variant. Click on it to select the type of organ to extract, and then select the appropiate body zone."
@@ -789,15 +844,15 @@ var/list/uplink_items = list()
 	desc = "Insulated gloves that can utilize the power of the station to deliver a short arc of electricity at a target. Must be standing on a powered cable to use."
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 14
-	discounted_cost = 10
+	discounted_cost = 8
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/syndietape_engineering
 	name = "Syndicate Engineering Tape"
 	desc = "A length of engineering tape charged with a powerful electric potential. Will spark and shock people who attempt to remove it, creating fires. Can be used 3 times."
 	item = /obj/item/taperoll/syndie/engineering
-	cost = 5
-	discounted_cost = 4
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/contortionist
@@ -812,8 +867,8 @@ var/list/uplink_items = list()
 	name = "Syndicate Atmospherics Tape"
 	desc = "A length of atmospherics tape made of an extremely sharp material that will cuts the hands of trespassers. Very difficult to remove. Can be used 3 times."
 	item = /obj/item/taperoll/syndie/atmos
-	cost = 5
-	discounted_cost = 4
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/radgun
@@ -828,8 +883,8 @@ var/list/uplink_items = list()
 	name = "Modified Flaregun"
 	desc = "A modified flaregun, identical in most appearances to the regular kind, as well as 7 rounds of flare ammunition. Capable of firing flares at lethal velocity, as well as firing shotgun ammunition."
 	item = /obj/item/weapon/storage/box/syndie_kit/flaregun
-	cost = 8
-	discounted_cost = 6
+	cost = 6
+	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/dev_analyser
@@ -844,6 +899,21 @@ var/list/uplink_items = list()
 	name = "The E20"
 	desc = "A seemingly innocent die. Those who are not afraid to roll for attack will find its effects quite explosive. Has a four second timer."
 	item = /obj/item/weapon/dice/d20/e20
-	cost = 16
-	discounted_cost = 6
-	jobs_with_discount = list("Librarian")
+	cost = 6
+	jobs_exclusive = list("Librarian")
+
+/datum/uplink_item/jobspecific/traitor_bible
+	name = "Feldbischof's Bible"
+	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions. 88 rapid, eight in the gun, eight in the extra mag."
+	item = /obj/item/weapon/storage/bible/traitor_gun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chaplain")
+
+/datum/uplink_item/jobspecific/occultbook
+	name = "Occult Book"
+	desc = "A reproduction of a forbidden and occult book. Causes brain damage, eye damage and hallucinations to anyone unfortunate enough to attempt to read it. Use a pen to change its title."
+	item = /obj/item/weapon/book/occult
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Librarian", "Chaplain")

@@ -29,14 +29,14 @@
 			if(absorb_text)
 				show_message("[absorb_text]")
 			else
-				show_message("<span class='warning'>Your armor absorbs the blow!</span>")
+				show_message("<span class='borange'>Your armor ABSORBS the blow!</span>")
 		return 2
 	if(absorb == 1)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)
 			else
-				show_message("<span class='warning'>Your armor softens the blow!</span>")
+				show_message("<span class='borange'>Your armor SOFTENS the blow!</span>")
 		return 1
 	return 0
 
@@ -58,7 +58,7 @@
 
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
-	var/obj/item/weapon/cloaking_device/C = locate((/obj/item/weapon/cloaking_device) in src)
+	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
 	if(C && C.active)
 		C.attack_self(src)//Should shut it off
 		update_icons()
@@ -193,7 +193,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
+		visible_message("<span class='borange'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
@@ -211,7 +211,9 @@
 
 	if((M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Knockdown(rand(1,10))
+		var/incapacitation_duration = rand(1, 10)
+		M.Knockdown(incapacitation_duration)
+		M.Stun(incapacitation_duration)
 		return
 
 	var/stomping = 0
@@ -231,7 +233,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] attempts to kick \the [src]!</span>")
+		visible_message("<span class='borange'>\The [M] attempts to kick \the [src]!</span>")
 		return 0
 
 	//Handle shoes
@@ -318,3 +320,9 @@
 	IgniteMob()
 
 //Mobs on Fire end
+
+//Return true if thrown object misses
+/mob/living/PreImpact(atom/movable/A, speed)
+	if(lying)
+		return TRUE
+	return FALSE

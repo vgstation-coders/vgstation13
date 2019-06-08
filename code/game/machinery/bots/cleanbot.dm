@@ -45,6 +45,11 @@
 	var/next_dest
 	var/next_dest_loc
 
+	var/coolingdown = FALSE
+	var/attack_cooldown = 30 // set this to 0 to unleash the horror
+
+	can_take_pai = TRUE
+
 /obj/machinery/bot/cleanbot/New()
 	..()
 	cleanbot_list.Add(src)
@@ -177,7 +182,8 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 /obj/machinery/bot/cleanbot/process()
 	//set background = 1
-
+	if(integratedpai)
+		return
 	if(!src.on)
 		return
 	if(src.cleaning)
@@ -347,6 +353,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		new /obj/item/robot_parts/l_arm(Tsec)
 
 	spark(src)
+	eject_integratedpai_if_present()
 	qdel(src)
 	return
 
@@ -374,11 +381,18 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		. = ..()
 
 /obj/machinery/bot/cleanbot/roomba/Crossed(atom/A)
+	if(coolingdown)
+		return
 	if(isliving(A))
 		var/mob/living/L = A
-		if(prob(30))
+		if(prob(10))
 			annoy(L)
-	..()
+		..()
+
+/obj/machinery/bot/cleanbot/proc/attack_cooldown()
+	coolingdown = TRUE
+	spawn(attack_cooldown)
+		coolingdown = FALSE
 
 /obj/machinery/bot/cleanbot/roomba/proc/annoy(var/mob/living/L)
 	switch(armed)
@@ -391,6 +405,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			var/damage = rand(3,12)
 			L.adjustBruteLoss(damage)
 			L.adjustFireLoss(damage/2)
+	attack_cooldown()
 
 /obj/item/weapon/bucket_sensor/attackby(var/obj/item/W, mob/user as mob)
 	..()
@@ -423,3 +438,65 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		if (!in_range(src, usr) && src.loc != usr)
 			return
 		src.created_name = t
+
+/*
+ *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
+*/
+
+/obj/machinery/bot/cleanbot/getpAIMovementDelay()
+	return 1
+
+/obj/machinery/bot/cleanbot/pAImove(mob/living/silicon/pai/user, dir)
+	if(!on)
+		return
+	if(!..())
+		return
+	if(!isturf(loc))
+		return
+	step(src, dir)
+
+/obj/machinery/bot/cleanbot/on_integrated_pai_click(mob/living/silicon/pai/user, atom/target)
+	if(!Adjacent(target))
+		return
+	if(istype(target,/obj/effect/decal/cleanable))
+		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
+			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
+		returnToPool(target)
+
+	else if(istype(target,/turf/simulated))
+		var/turf/simulated/T = target
+		var/list/cleanables = list()
+
+		for(var/obj/effect/decal/cleanable/CC in T)
+			if(!istype(CC) || !CC)
+				continue
+			cleanables += CC
+
+		for(var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
+			if(CC.on_wall == target)
+				cleanables += CC
+
+		if(!cleanables.len)
+			user.simple_message("<span class='notice'>You fail to clean anything.</span>",
+				"<span class='notice'>There is nothing for you to vandalize.</span>")
+			return
+		cleanables = shuffle(cleanables)
+		var/obj/effect/decal/cleanable/C
+		for(var/obj/effect/decal/cleanable/d in cleanables)
+			if(d && istype(d))
+				C = d
+				break
+		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
+			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
+		returnToPool(C)
+	else
+		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
+			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")
+		target.clean_blood()
+	return
+
+/obj/machinery/bot/cleanbot/state_controls_pai(obj/item/device/paicard/P)
+	if(..())
+		to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a cleanbot, so get cleaning.</b></span>")
+		to_chat(P.pai, "<span class='info'>- Click on something: Scrub it clean.</span>")
+		to_chat(P.pai, "<span class='info'>If you want to exit the cleanbot, somebody has to right-click you and press 'Remove pAI'.</span>")

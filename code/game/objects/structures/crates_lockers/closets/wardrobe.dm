@@ -223,6 +223,8 @@
 		/obj/item/clothing/under/rank/pharma = 2,
 		/obj/item/clothing/shoes/white = 2,
 		/obj/item/clothing/suit/storage/labcoat/chemist = 2,
+		/obj/item/weapon/storage/backpack/messenger/chem,
+		/obj/item/weapon/storage/backpack/satchel_chem,
 	)
 
 
@@ -248,6 +250,7 @@
 		/obj/item/clothing/under/rank/geneticist = 2,
 		/obj/item/clothing/shoes/white = 2,
 		/obj/item/clothing/suit/storage/labcoat/genetics = 2,
+		/obj/item/weapon/storage/backpack/satchel_gen,
 	)
 
 
@@ -262,6 +265,8 @@
 		/obj/item/clothing/shoes/white = 2,
 		/obj/item/clothing/suit/storage/labcoat/virologist = 2,
 		/obj/item/clothing/mask/surgical = 2,
+		/obj/item/weapon/storage/backpack/messenger/viro,
+		/obj/item/weapon/storage/backpack/satchel_vir,
 	)
 
 

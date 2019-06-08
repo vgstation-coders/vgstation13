@@ -157,8 +157,8 @@ var/runedec = 0 // Rune cap ?
 /obj/item/weapon/tome_legacy
 	name = "arcane tome"
 	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
-	icon = 'icons/obj/cult.dmi'
-	icon_state ="tome"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state ="tomeold"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL

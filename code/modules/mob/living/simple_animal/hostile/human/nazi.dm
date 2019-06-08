@@ -332,6 +332,7 @@
 	casingtype = null
 	ranged_cooldown_cap = 1
 
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_RWALLS
 
 	min_oxy = 0

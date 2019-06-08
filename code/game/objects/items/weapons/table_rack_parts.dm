@@ -22,7 +22,7 @@
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 	var/table_type = /obj/structure/table
 	sheet_type = /obj/item/stack/sheet/metal
-	var/sheet_amount = 1
+	var/sheet_amount = 2
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)

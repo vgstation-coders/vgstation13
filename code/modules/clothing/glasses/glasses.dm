@@ -258,10 +258,10 @@ BLIND     // can't see anything
 	var/obj/item/clothing/glasses/hud/security/hud = null
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
-	New()
-		..()
-		src.hud = new/obj/item/clothing/glasses/hud/security(src)
-		return
+/obj/item/clothing/glasses/sunglasses/sechud/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
 
 /obj/item/clothing/glasses/sunglasses/sechud/become_defective()
 	if(!defective)
@@ -324,15 +324,15 @@ BLIND     // can't see anything
 	T.change()
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
-	var/obj/item/clothing/glasses/A
-	A = input("Select style to change it to", "Style Selector", A) as null|anything in clothing_choices
-	if(src.gcDestroyed || !A || usr.incapacitated() || !Adjacent(usr))
+	var/choice = input("Select style to change it to", "Style Selector") as null|anything in clothing_choices
+	if(src.gcDestroyed || !choice || usr.incapacitated() || !Adjacent(usr))
 		return
-	desc = initial(clothing_choices[A].desc)
-	name = initial(clothing_choices[A].name)
-	icon_state = initial(clothing_choices[A].icon_state)
-	item_state = initial(clothing_choices[A].item_state)
-	_color = initial(clothing_choices[A]._color)
+	var/obj/item/clothing/glasses/glass_type = clothing_choices[choice]
+	desc = initial(glass_type.desc)
+	name = initial(glass_type.name)
+	icon_state = initial(glass_type.icon_state)
+	item_state = initial(glass_type.item_state)
+	_color = initial(glass_type._color)
 	usr.update_inv_glasses()
 
 /obj/item/clothing/glasses/thermal

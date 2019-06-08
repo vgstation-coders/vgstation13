@@ -5,12 +5,14 @@
 	user_type = USER_TYPE_WIZARD
 
 	school = "abjuration"
-	charge_max = 600
 	spell_flags = NEEDSCLOTHES
 	autocast_flags = AUTOCAST_NOTARGET
 	invocation = "SCYAR NILA"
 	invocation_type = SpI_SHOUT
-	cooldown_min = 200 //100 deciseconds reduction per rank
+
+	charge_max = 45 SECONDS
+	cooldown_min = 5 SECONDS
+	cooldown_reduc = 10 SECONDS
 
 	smoke_spread = 1
 	smoke_amt = 5

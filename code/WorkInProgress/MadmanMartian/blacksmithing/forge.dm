@@ -40,14 +40,14 @@
 				current_temp = TEMPERATURE_PLASMA
 			fuel_time+= 60 SECONDS
 			return
-	else if(istype(I, /obj/item/weapon/ore/plasma))
+	else if(istype(I, /obj/item/stack/ore/plasma))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
-		user.drop_item(I)
-		qdel(I)
-		if(current_temp < MELTPOINT_STEEL)
-			current_temp = MELTPOINT_STEEL
-		fuel_time += 20 SECONDS
-		return
+		var/obj/item/stack/ore/plasma/P = I
+		if(P.use(1))
+			if(current_temp < MELTPOINT_STEEL)
+				current_temp = MELTPOINT_STEEL
+			fuel_time += 20 SECONDS
+			return
 	else if(istype(I, /obj/item/stack/sheet/wood))
 		var/obj/item/stack/sheet/wood/W = I
 		if(W.use(1))
@@ -102,6 +102,11 @@
 		user.put_in_hands(heating)
 		heating = null
 
+/obj/structure/forge/attack_robot(var/mob/user as mob)
+	if(isMoMMI(user) && Adjacent(user))
+		return attack_hand(user)
+	else
+		return attack_ai(user)
 
 /obj/structure/forge/examine(mob/user)
 	..()

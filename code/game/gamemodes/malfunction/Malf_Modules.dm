@@ -139,6 +139,9 @@ rcd light flash thingy on matter drain
 	hud_state = "autoborger"
 	override_base = "grey"
 
+/spell/aoe_turf/conjure/place_transformer/New()
+	..()
+
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
 	if(!istype(A))
@@ -168,6 +171,7 @@ rcd light flash thingy on matter drain
 	if(!C.visibleTurfs[middle])
 		alert(holder, "We cannot get camera vision of this location.")
 		return 0
+	newVars = list("belongstomalf" = holder)
 	return 1
 
 /spell/aoe_turf/conjure/place_transformer/cast(var/list/targets,mob/user)
@@ -453,7 +457,7 @@ rcd light flash thingy on matter drain
 	if(!M)
 		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
 		return 1
-	if (M.malf_mode_declared)
+	if (M.stage > FACTION_ENDGAME)
 		to_chat(usr, "<span class='warning'>You've already begun your takeover.</span>")
 		return 1
 	if (M.apcs < 3)
@@ -464,13 +468,11 @@ rcd light flash thingy on matter drain
 		return 1
 
 /spell/aoe_turf/takeover/cast(var/list/targets, mob/user)
-	command_alert(/datum/command_alert/malf_announce)
-	set_security_level("delta")
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
 	if(!M)
 		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
 		return 0
-	M.malf_mode_declared = 1
+	M.stage(FACTION_ENDGAME)
 	for(var/datum/role/R in M.members)
 		var/datum/mind/AI_mind = R.antag
 		for(var/spell/S in AI_mind.current.spell_list)
@@ -491,7 +493,7 @@ rcd light flash thingy on matter drain
 	if(!M)
 		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
 		return 1
-	if(!M.station_captured)
+	if(M.stage<MALF_CHOOSING_NUKE)
 		to_chat(usr, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
 		return 1
 
@@ -499,7 +501,7 @@ rcd light flash thingy on matter drain
 		to_chat(usr, "<span class='notice'>The self-destruct countdown was already triggered!</span>")
 		return 1
 
-	if(!M.to_nuke_or_not_to_nuke) //Takeover IS completed, but 60s timer passed.
+	if(!M.stage>=FACTION_VICTORY) //Takeover IS completed, but 60s timer passed.
 		to_chat(usr, "<span class='warning'>Cannot interface, it seems a neutralization signal was sent!</span>")
 		return 1
 
@@ -510,7 +512,6 @@ rcd light flash thingy on matter drain
 	if(!M)
 		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
 		return 0
-	M.to_nuke_or_not_to_nuke = 0
 	for(var/datum/role/AI in M.members)
 		for(var/spell/S in AI.antag.current.spell_list)
 			if(istype(S,/spell/aoe_turf/ai_win))
@@ -529,5 +530,6 @@ rcd light flash thingy on matter drain
 		ticker.station_explosion_cinematic(0,null)
 		ticker.station_was_nuked = 1
 		ticker.explosion_in_progress = 0
-	return
+		SSpersistence_map.setSavingFilth(FALSE)
+	M.stage(FACTION_VICTORY)
 

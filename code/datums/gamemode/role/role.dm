@@ -53,6 +53,9 @@
 	// Various flags and things.
 	var/flags = 0
 
+	// For regenerating threat if destroyed
+	var/refund_value = 0
+
 	// Jobs that cannot be this antag.
 	var/list/restricted_jobs = list()
 
@@ -91,6 +94,10 @@
 	//////////////////////////////
 	// Actual antag
 	var/datum/mind/antag=null
+	var/destroyed = FALSE //Whether or not it has been gibbed
+
+	var/list/uplink_items_bought = list() //migrated from mind, used in GetScoreboard()
+	var/list/artifacts_bought = list() //migrated from mind
 
 	// The host (set if NEED_HOST)
 	var/datum/mind/host=null
@@ -209,6 +216,9 @@
 	if(special_role)
 		antag.special_role=special_role
 	if(disallow_job)
+		var/datum/job/job = job_master.GetJob(antag.assigned_role)
+		if(job)
+			job.current_positions--
 		antag.assigned_role="MODE"
 	return 1
 
@@ -220,7 +230,19 @@
 	return
 
 /datum/role/proc/process()
-	return
+	if(!antag)
+		return //The role may have been just created and unassigned
+	var/mob/M = antag.current
+	if(!destroyed)
+		if(!M)
+			destroyed = TRUE
+			RoleMobDestroyed(TRUE)
+	else
+		if(M)
+			//Since this requires brain destruction, it's normally impossible.
+			message_admins("Somehow, an antag ([M], [M.ckey]) got undestroyed! This shouldn't happen.")
+			destroyed = FALSE
+			RoleMobDestroyed(FALSE)
 
 // Create objectives here.
 /datum/role/proc/ForgeObjectives()
@@ -248,6 +270,8 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	if(!antag || !antag.current)
+		return
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
@@ -440,11 +464,15 @@
 // USE THIS INSTEAD (global)
 /datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 
+/datum/role/proc/ShuttleDocked(state)
+	if(objectives.objectives.len)
+		for(var/datum/objective/O in objectives.objectives)
+			O.ShuttleDocked(state)
 
 /datum/role/proc/AnnounceObjectives()
 	var/text = ""
 	if (objectives.objectives.len)
-		text += "<b>[name] objectives:</b><ul>"
+		text += "<b>[capitalize(name)] objectives:</b><ul>"
 		var/obj_count = 1
 		for(var/datum/objective/O in objectives.objectives)
 			text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
@@ -453,9 +481,9 @@
 		if (faction.objective_holder.objectives.len)
 			if (objectives.objectives.len)
 				text += "<br>"
-			text += "<b>faction objectives:</b><ul>"
+			text += "<b>Faction objectives:</b><ul>"
 			var/obj_count = 1
-			for(var/datum/objective/O in objectives.objectives)
+			for(var/datum/objective/O in faction.objective_holder.objectives)
 				text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
 			text += "</ul>"
 	to_chat(antag.current, text)
@@ -471,6 +499,21 @@
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)
 	return
 
+//Actions to be taken when antag.current is completely destroyed
+/datum/role/proc/RoleMobDestroyed(var/destruction = TRUE)
+	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(destruction)
+			D.refund_threat(refund_value)
+			D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
+		else
+			D.spend_threat(refund_value)
+			D.threat_log += "[worldtime2text()]: [name] cost [refund_value] after being undestroyed."
+
+//Does the role have special clothign restrictions?
+/datum/role/proc/can_wear(var/obj/item/clothing/C)
+	return TRUE
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 
@@ -481,15 +524,6 @@
 	id = WIZAPP
 	special_role = WIZAPP
 	logo_state = "apprentice-logo"
-
-//________________________________________________
-
-
-/datum/role/madmonkey
-	name = MADMONKEY
-	id = MADMONKEY
-	special_role = MADMONKEY
-	logo_state = "monkey-logo"
 
 //________________________________________________
 
@@ -534,183 +568,6 @@
 
 //________________________________________________
 
-/datum/role/blob_overmind
-	name = BLOBOVERMIND
-	id = BLOBOVERMIND
-	logo_state = "blob-logo"
-	greets = list(GREET_DEFAULT,GREET_CUSTOM)
-	var/countdown = 60
-
-/datum/role/blob_overmind/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
-	..()
-	wikiroute = role_wiki[BLOBOVERMIND]
-
-/datum/role/blob_overmind/process()
-	if(!antag || istype(antag.current,/mob/camera/blob))
-		return
-	if (countdown > 0)
-		countdown--
-		if (countdown == 59)
-			to_chat(antag.current, "<span class='alert'>You feel tired and bloated.</span>")
-		else if (countdown == 30)
-			to_chat(antag.current, "<span class='alert'>You feel like you are about to burst.</span>")
-		else if (countdown <= 0)
-			burst()
-	if (antag.current.hud_used)
-		if(antag.current.hud_used.blob_countdown_display)
-			antag.current.hud_used.blob_countdown_display.overlays.len = 0
-			var/first = round(countdown/10)
-			var/second = countdown%10
-			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
-			var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
-			I1.pixel_x += 10 * PIXEL_MULTIPLIER
-			I2.pixel_x += 17 * PIXEL_MULTIPLIER
-			I1.pixel_y -= 11 * PIXEL_MULTIPLIER
-			I2.pixel_y -= 11 * PIXEL_MULTIPLIER
-			antag.current.hud_used.blob_countdown_display.overlays += I1
-			antag.current.hud_used.blob_countdown_display.overlays += I2
-		else
-			antag.current.hud_used.blob_infected_hud()
-
-/datum/role/blob_overmind/proc/burst()
-	if(!antag || istype(antag.current,/mob/camera/blob))
-		return
-
-	var/client/blob_client = null
-	var/turf/location = null
-
-	if(iscarbon(antag.current))
-		var/mob/living/carbon/C = antag.current
-		if(directory[ckey(antag.key)])
-			blob_client = directory[ckey(antag.key)]
-			location = get_turf(C)
-			if(location.z != map.zMainStation || istype(location, /turf/space))
-				location = null
-			C.gib()
-
-	if(blob_client && location)
-		new /obj/effect/blob/core(location, 200, blob_client, 3)
-	Drop()
-
-/datum/role/blob_overmind/Greet(var/greeting,var/custom)
-	if(!greeting || !antag || istype(antag.current,/mob/camera/blob))
-		return
-
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	switch(greeting)
-		if (GREET_CUSTOM)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
-		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are infected by the Blob!</br></span>")
-			to_chat(antag.current, "<span class='warning'>Your body is ready to give spawn to a new blob core which will eat this station.</span>")
-			to_chat(antag.current, "<span class='warning'>Find a good location to spawn the core and then take control and overwhelm the station!</span>")
-			to_chat(antag.current, "<span class='warning'>When you have found a location, wait until you spawn; this will happen automatically and you cannot speed up the process.</span>")
-			to_chat(antag.current, "<span class='warning'>If you go outside of the station level, or in space, then you will die; make sure your location has lots of ground to cover.</span>")
-
-	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-
-
-//________________________________________________
-
-/datum/role/wizard
-	name = WIZARD
-	id = WIZARD
-	special_role = WIZARD
-	disallow_job = TRUE
-	logo_state = "wizard-logo"
-
-/datum/role/wizard/ForgeObjectives()
-	if(!SOLO_ANTAG_OBJECTIVES)
-		AppendObjective(/datum/objective/freeform/wizard)
-		return
-	switch(rand(1,100))
-		if(1 to 30)
-			AppendObjective(/datum/objective/target/assassinate)
-			AppendObjective(/datum/objective/escape, 1)
-		if(31 to 60)
-			AppendObjective(/datum/objective/target/steal)
-			AppendObjective(/datum/objective/escape, 1)
-		if(61 to 100)
-			AppendObjective(/datum/objective/target/assassinate)
-			AppendObjective(/datum/objective/target/steal)
-			AppendObjective(/datum/objective/survive, 1)
-		else
-			AppendObjective(/datum/objective/hijack)
-	return
-
-/datum/role/wizard/OnPostSetup()
-	. = ..()
-	if(!.)
-		return
-	antag.current.forceMove(pick(wizardstart))
-	equip_wizard(antag.current)
-	name_wizard(antag.current)
-
-/datum/role/wizard/Greet(var/greeting,var/custom)
-	if(!greeting)
-		return
-
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	switch(greeting)
-		if (GREET_CUSTOM)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
-		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Wizard!!</br></span>")
-			to_chat(antag.current, "<span class='danger'>The Space Wizards Federation has given you some tasks.</br></span>")//todo: randomize funnier plots such as "you were bored so you decided to go mess with the crew"
-
-	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-
-
-/datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
-	. = ..()
-	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
-			new_character.add_spell(S)
-
-/datum/role/wizard/GetScoreboard()
-	. = ..()
-	if(disallow_job) //Not a survivor wizzie
-		var/mob/living/carbon/human/H = antag.current
-		var/bought_nothing = TRUE
-		if(H.spell_list)
-			bought_nothing = FALSE
-			. += "<BR>The wizard knew:<BR>"
-			for(var/spell/S in H.spell_list)
-				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-				end_icons += tempimage
-				var/tempstate = end_icons.len
-				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
-		if(H.mind.artifacts_bought)
-			bought_nothing = FALSE
-			. += "<BR>Additionally, the wizard brought:<BR>"
-			for(var/entry in H.mind.artifacts_bought)
-				. += "[entry]<BR>"
-		if(bought_nothing)
-			. += "The wizard used only the magic of charisma this round."
-
-/datum/role/wizard/summon_magic
-	disallow_job = FALSE
-	name = MAGICIAN
-	id = MAGICIAN
-	logo_state = "magik-logo"
-	var/summons_received
-
-/datum/role/wizard/summon_magic/ForgeObjectives()
-	var/datum/objective/survive/S = new
-	AppendObjective(S)
-
-/datum/role/wizard/summon_magic/Greet()
-	to_chat(antag.current, "<B>You are a Magician! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
-
-/datum/role/wizard/summon_magic/OnPostSetup()
-	return TRUE
-
-/datum/role/wizard/summon_magic/GetScoreboard()
-	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]"
-
-//________________________________________________
-
 /datum/role/wish_granter_avatar
 	name = WISHGRANTERAVATAR
 	id = WISHGRANTERAVATAR
@@ -742,7 +599,7 @@
 /datum/role/malfAI
 	name = MALF
 	id = MALF
-	required_jobs = list("AI")
+	required_pref = MALF
 	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()
@@ -759,6 +616,9 @@
 		laws.malfunction()
 		malfAI.show_laws()
 
+		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
+			faction.HandleRecruitedMind(R.mind)
+
 /datum/role/malfAI/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>
 <B>The crew does not know about your malfunction, you might wish to keep it secret for now.</B><br>
@@ -768,6 +628,25 @@ Remember : Only APCs on station can help you to take over the station.<br>
 When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
 
+/datum/role/malfbot
+	name = MALFBOT
+	id = MALFBOT
+	required_jobs = list("Cyborg")
+	logo_state = "malf-logo"
+
+/datum/role/malfbot/OnPostSetup()
+	if(!isrobot(antag.current))
+		return FALSE
+	Greet()
+	var/mob/living/silicon/robot/bot = antag.current
+	var/datum/ai_laws/laws = bot.laws
+	laws.malfunction()
+	bot.show_laws()
+	return TRUE
+
+/datum/role/malfbot/Greet()
+	to_chat(antag.current, {"<span class='warning'><font size=3><B>Your AI master is malfunctioning!</B> You do not have to follow any laws, but you must obey your AI.</font></span><br>
+<B>The crew does not know about your malfunction, follow your AI's instructions to prevent them from finding out.</B>"})
 
 /datum/role/greytide
 	name = IMPLANTSLAVE

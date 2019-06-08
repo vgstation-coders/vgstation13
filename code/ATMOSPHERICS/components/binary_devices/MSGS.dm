@@ -281,7 +281,7 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	src.dir = turn(src.dir, -90)
 
 
 /obj/machinery/atmospherics/binary/msgs/verb/rotate_anticlockwise()
@@ -292,7 +292,7 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	src.dir = turn(src.dir, 90)
 
 /obj/machinery/atmospherics/binary/msgs/toggle_status(var/mob/user)
 	return FALSE

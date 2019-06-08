@@ -1,22 +1,6 @@
 /mob/living/carbon/human
-	//Hair colour and style
-	var/r_hair = 0
-	var/g_hair = 0
-	var/b_hair = 0
-	var/h_style = "Bald"
+	//Hair colour and style are in apperance.dm
 
-	//Facial hair colour and style
-	var/r_facial = 0
-	var/g_facial = 0
-	var/b_facial = 0
-	var/f_style = "Shaved"
-
-	//Eye colour
-	var/r_eyes = 0
-	var/g_eyes = 0
-	var/b_eyes = 0
-
-	var/s_tone = 0	//Skin tone
 	var/multicolor_skin_r = 0	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
 	var/multicolor_skin_g = 0
 	var/multicolor_skin_b = 0
@@ -93,3 +77,5 @@
 	var/become_zombie_after_death = FALSE
 	var/times_cloned = 0 //How many times this person has been cloned
 	var/talkcount = 0 // How many times a person has talked - used for determining who's been the "star" for the purposes of round end credits
+	var/calorie_burn_rate = HUNGER_FACTOR
+	var/time_last_speech = 0 //When was the last time we talked?

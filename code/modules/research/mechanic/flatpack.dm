@@ -8,10 +8,10 @@
 	icon_state = "flatpack"
 	density = 1
 	anchored = 0
+	pass_flags = PASSTABLE
 	var/obj/machinery/machine = null
 //	var/datum/construction/flatpack_unpack/unpacking
 	var/assembling = 0
-
 	var/list/image/stacked = list() //assoc ref list
 
 /obj/structure/closet/crate/flatpack/examine(mob/user)
@@ -264,3 +264,21 @@
 
 #undef Fl_ACTION
 */
+
+
+/obj/structure/closet/crate/flatpack/suit_modifier/New()
+	..()
+	machine = new /obj/machinery/suit_modifier(src)
+	new /obj/item/rig_module/health_readout(src)
+	
+/obj/structure/closet/crate/flatpack/soda_dispenser/New()
+	..()
+	machine = new /obj/machinery/chem_dispenser/soda_dispenser(src)
+	
+/obj/structure/closet/crate/flatpack/booze_dispenser/New()
+	..()
+	machine = new /obj/machinery/chem_dispenser/booze_dispenser(src)
+
+/obj/structure/closet/crate/flatpack/brewer/New()
+	..()
+	machine = new /obj/machinery/chem_dispenser/brewer(src)

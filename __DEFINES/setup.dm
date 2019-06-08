@@ -46,6 +46,8 @@ var/global/disable_vents     = 0
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
+#define DEFAULT_LOBBY_TIME 5 MINUTES
+
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
 #define WARNING_HIGH_PRESSURE 325 	//This determins when the orange pressure icon is displayed (it is 0.7 * HAZARD_HIGH_PRESSURE)
@@ -203,6 +205,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define TIMELESS		32768 // Immune to time manipulation.
 
+#define SILENTCONTAINER	65536 //reactions inside make no noise
+
 #define ALL ~0
 #define NONE 0
 
@@ -213,12 +217,14 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 //sharpness flags
-#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
-#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
-#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
-#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
-#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
-#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define SHARP_TIP 		 1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		 2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	 4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
+#define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -299,22 +305,22 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
-#define FACE			EYES|MOUTH|BEARD
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
 #define BEARD			32768
-#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
-#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
-#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
-#define ARMS			ARM_LEFT|ARM_RIGHT		//384
-#define HANDS			HAND_LEFT|HAND_RIGHT //1536
-#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -322,7 +328,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEFACE			FACE
 #define HIDEHEADHAIR 		EARS|HEAD
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
@@ -573,7 +579,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
-#define PACIFIABLE 16		//Should a mob have this flag in their status_flags, they will be able to run is_pacified(), not all mobs call is_pacified however.
+#define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
@@ -588,10 +594,11 @@ var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons
 #define GRAB_KILL		5
 
 //Security levels
-#define SEC_LEVEL_GREEN	0
-#define SEC_LEVEL_BLUE	1
-#define SEC_LEVEL_RED	2
-#define SEC_LEVEL_DELTA	3
+#define SEC_LEVEL_RAINBOW	-1
+#define SEC_LEVEL_GREEN		0
+#define SEC_LEVEL_BLUE		1
+#define SEC_LEVEL_RED		2
+#define SEC_LEVEL_DELTA		3
 
 #define TRANSITIONEDGE	7 //Distance from edge to move to another z-level
 /*
@@ -785,6 +792,7 @@ SEE_PIXELS	256
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
 #define MAT_MYTHRIL		"$mythril"
+#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -852,27 +860,13 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      	"alien"
-#define ROLE_BLOB       	"blob"      // New!
-#define ROLE_BORER      	"borer"     // New!
-#define ROLE_CHANGELING 	"changeling"
-#define ROLE_COMMANDO   	"commando"  // New!
-#define ROLE_CULTIST    	"cultist"
-#define ROLE_LEGACY_CULTIST "legacy_cultist"
-#define ROLE_MALF       	"malf AI"
-#define ROLE_NINJA      	"ninja"
-#define ROLE_OPERATIVE  	"operative" // New!
+#define ROLE_BORER      	"borer"
 #define ROLE_PAI        	"pAI"
 #define ROLE_PLANT      	"Dionaea"
 #define ROLE_POSIBRAIN  	"posibrain"
-#define ROLE_REV        	"revolutionary"
-#define ROLE_STRIKE     	"Strike Team"
-#define ROLE_TRAITOR    	"traitor"
-#define ROLE_VAMPIRE    	"vampire"
-#define ROLE_VOXRAIDER  	"vox raider"
-#define ROLE_WIZARD     	"wizard"
-#define ROLE_GRINCH			"Grinch"
-#define ROLE_WEEABOO		"crazed weeaboo"
+#define ROLE_MINOR			"minor roles"
+#define ROLE_ALIEN			"xenomorph"
+#define ROLE_STRIKE			"striketeam"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -962,6 +956,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_BONES 512
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
+#define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1022,11 +1017,15 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CAPE	  18
 #define STARTING_BLOOD 10
 
+#define VAMP_FAILURE -1
+
 // Moved from machine_interactions.dm
 #define STATION_Z  1
 #define CENTCOMM_Z 2
 #define TELECOMM_Z 3
+#define DERELICT_Z 4
 #define ASTEROID_Z 5
+#define SPACEPIRATE_Z 6
 
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
@@ -1170,7 +1169,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define DELAY_MOVE    1
 #define DELAY_ATTACK  2
 #define DELAY_SPECIAL 4
-#define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL)
+#define DELAY_THROW 8
+#define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL|DELAY_THROW)
 
 //singularity defines
 #define STAGE_ONE 	1
@@ -1179,6 +1179,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_FOUR	7
 #define STAGE_FIVE	9
 #define STAGE_SUPER	11
+#define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
@@ -1471,14 +1472,13 @@ var/proccalls = 1
 #define EVENT_OBJECT_INDEX "o"
 #define EVENT_PROC_INDEX "p"
 
-#define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
 #define HONORABLE_HIGHLANDER 2
-#define HONORABLE_WEEABOO      4
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_WEEABOO
+#define HONORABLE_NINJA      4
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
@@ -1524,9 +1524,16 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
 #define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
 #define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
+#define HOLOMAP_MARKER_CULT_FORGE		"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
 
 #define DEFAULT_BLOOD "#A10808"
+#define DEFAULT_FLESH "#FFC896"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1537,6 +1544,13 @@ var/proccalls = 1
 #define ITEM_ANIMATION 1
 #define PERSON_ANIMATION 2
 
+//For client preferences.
+#define CREDITS_NEVER "Never"
+#define CREDITS_ALWAYS "Always"
+#define CREDITS_NO_RERUNS "No Reruns"
+#define JINGLE_NEVER "Never"
+#define JINGLE_CLASSIC "Classics"
+#define JINGLE_ALL "All"
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 

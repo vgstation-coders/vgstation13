@@ -8,6 +8,7 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
+	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
 	var/w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
@@ -63,6 +64,8 @@
 	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
+	var/datum/daemon/daemon
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -192,6 +195,8 @@
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(daemon && daemon.flags & DAEMON_EXAMINE)
+		daemon.examine(user)
 
 
 /obj/item/attack_ai(mob/user as mob)
@@ -332,8 +337,12 @@
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
 	return 1
+
 // called after an item is unequipped or stripped
 /obj/item/proc/unequipped(mob/user, var/from_slot = null)
+	for(var/x in actions)
+		var/datum/action/A = x
+		A.Remove(user)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
@@ -823,6 +832,8 @@
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
+	if(prepickup(user))
+		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
 	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) && !isgrinch(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
@@ -917,10 +928,15 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, attack_text = "the attack")
+/obj/item/proc/on_block(damage, atom/movable/blocked)
 	if(ismob(loc))
-		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>")
+		if (IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if (prob(50 - round(damage / 3)))
+			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
+			if(isatommovable(blocked))
+				var/atom/movable/M = blocked
+				M.throwing = FALSE
 			return TRUE
 
 	return FALSE
@@ -994,6 +1010,7 @@
 				M.eye_blurry += 10
 				M.Paralyse(1)
 				M.Knockdown(4)
+				M.Stun(4)
 			if (eyes.damage >= eyes.min_broken_damage)
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You go blind!</span>")
@@ -1009,6 +1026,8 @@
 	. = ..()
 	if(blood_overlay)
 		overlays.Remove(blood_overlay)
+	if(had_blood)
+		clear_luminol()
 	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
@@ -1032,14 +1051,13 @@
 	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
 	blood_overlay.color = blood_color
 	overlays += blood_overlay
-
 	//if this blood isn't already in the list, add it
-
 	if(!M)
 		return
 	if(blood_DNA[M.dna.unique_enzymes])
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
 var/global/list/image/blood_overlays = list()
@@ -1053,6 +1071,34 @@ var/global/list/image/blood_overlays = list()
 
 	blood_overlays[type] = image(I)
 
+/obj/item/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!blood_overlays[type]) //Blood overlay generation if it lacks one.
+		generate_blood_overlay()
+	if(blood_overlay)
+		overlays.Remove(blood_overlay)
+	else
+		blood_overlay = blood_overlays[type]
+	var/image/luminol_overlay = blood_overlay
+	luminol_overlay.color = LIGHT_COLOR_CYAN
+	overlays += luminol_overlay
+	var/obj/effect/decal/cleanable/blueglow/BG
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		BG = had_blood
+		BG.set_light(1,2,LIGHT_COLOR_BLUE)
+	else
+		had_blood = null
+		BG = new /obj/effect/decal/cleanable/blueglow(src)
+		had_blood = BG
+
+/obj/item/clear_luminol()
+	if(!..())
+		return FALSE
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		var/obj/effect/decal/cleanable/blueglow/BG
+		BG = had_blood
+		BG.set_light(0)
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)
@@ -1327,4 +1373,11 @@ var/global/list/image/blood_overlays = list()
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
+	return
+
+/obj/item/proc/is_screwdriver(var/mob/user)
+	return FALSE
+
+//This proc will be called when the person holding or equipping it talks.
+/obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return

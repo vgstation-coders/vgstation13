@@ -393,11 +393,14 @@ var/list/telesci_warnings = list(
 
 	if(href_list["eject_cell"])
 		if(cell)
-			usr.put_in_hands(cell)
+			if (usr.put_in_hands(cell))
+				usr.visible_message("<span class='notice'>[usr] removes the cell from \the [src].</span>", "<span class='notice'>You remove the cell from \the [src].</span>")
+			else 
+				visible_message("<span class='notice'>\The [src] beeps as its cell is removed.</span>")
+				cell.forceMove(get_turf(src))
 			cell.add_fingerprint(usr)
 			cell.updateicon()
 			src.cell = null
-			usr.visible_message("[usr] removes the cell from \the [name].", "You remove the cell from \the [name].")
 			update_icon()
 		return TRUE
 

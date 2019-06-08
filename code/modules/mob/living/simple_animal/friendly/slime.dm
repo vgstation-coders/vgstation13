@@ -13,10 +13,10 @@
 	response_harm   = "stomps on"
 	emote_see = list("jiggles", "bounces in place")
 	holder_type = /obj/item/weapon/holder/animal/slime
-	var/colour = "grey"
+	colour = "grey"
 	var/paralyzed = 0
-	can_butcher = 0
-	meat_type = null
+	can_butcher = FALSE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
 	mob_bump_flag = SLIME
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
@@ -130,3 +130,6 @@
 			overlay_fullscreen("brute", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")
+
+/mob/living/simple_animal/slime/ApplySlip(var/obj/effect/overlay/puddle/P)
+	return FALSE

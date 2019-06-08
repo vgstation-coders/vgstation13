@@ -49,3 +49,4 @@
 		if(user.has_spell_with_flag(SPELL_FIRE))
 			s.carried_reagents.Add(FUEL)
 		s.start()
+	score["greasewiz"]++

@@ -22,11 +22,12 @@
 	..()
 
 /obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
-	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
-	A.clean_blood()
 	for(var/obj/effect/O in A)
 		if(iscleanaway(O))
 			qdel(O)
+	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
+	A.clean_blood()
+	playsound(src, get_sfx("mop"), 25, 1)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/mop))
@@ -48,9 +49,7 @@
 		if(reagents.total_volume < 1)
 			to_chat(user, "<span class='notice'>Your mop is dry!</span>")
 			return
-		user.visible_message("<span class='warning'>[user] begins to clean \the [get_turf(A)].</span>")
-		if(do_after(user,A, 30))
-			if(A)
-				clean(get_turf(A))
-				reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it
-				to_chat(user, "<span class='notice'>You have finished mopping \the [get_turf(A)]!</span>")
+		user.visible_message("<span class='warning'>[user] cleans \the [get_turf(A)].</span>", "<span class='notice'>You clean \the [get_turf(A)].</span>")
+		user.delayNextAttack(10)
+		clean(get_turf(A))
+		reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it

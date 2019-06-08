@@ -595,6 +595,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		heal_amt = heal_amt * wound_update_accuracy
 		//Configurable regen speed woo, no-regen hardcore or instaheal hugbox, choose your destiny
 		heal_amt = heal_amt * config.organ_regeneration_multiplier
+		if(M_REGEN in owner.mutations)
+			heal_amt = heal_amt * 2 // The heal rate is twice as much if you have regeneration
 		//Amount of healing is spread over all the wounds
 		heal_amt = heal_amt / (wounds.len + 1)
 		//Making it look prettier on scanners
@@ -1125,7 +1127,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
-	return (is_robotic() && ((status & ORGAN_MALFUNCTIONING) || prob(brute_dam + burn_dam)))
+	return (is_robotic() && (status & (ORGAN_MALFUNCTIONING) || (brute_dam + burn_dam > min_broken_damage/2 && prob(brute_dam + burn_dam))))
 
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
@@ -1618,10 +1620,10 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H)
 		//Changing limb's skin tone to match owner
 		if(H)
 			if(!H.species || H.species.anatomy_flags & HAS_SKIN_TONE)
-				if(H.s_tone >= 0)
-					base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
+				if(H.my_appearance.s_tone >= 0)
+					base.Blend(rgb(H.my_appearance.s_tone, H.my_appearance.s_tone, H.my_appearance.s_tone), ICON_ADD)
 				else
-					base.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
+					base.Blend(rgb(-H.my_appearance.s_tone,  -H.my_appearance.s_tone,  -H.my_appearance.s_tone), ICON_SUBTRACT)
 
 		icon = base
 		dir = SOUTH
@@ -1755,21 +1757,21 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 		qdel(src)
 		return
 	//Add (facial) hair.
-	if(H && H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
-		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
+	if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
+		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
 		if(facial_hair_style)
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
 			if(facial_hair_style.do_colouration)
-				facial.Blend(rgb(H.r_facial, H.g_facial, H.b_facial), ICON_ADD)
+				facial.Blend(rgb(H.my_appearance.r_facial, H.my_appearance.g_facial, H.my_appearance.b_facial), ICON_ADD)
 
 			overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
 
-	if(H && H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
-		var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
+	if(H && H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+		var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
 		if(hair_style)
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			if(hair_style.do_colouration)
-				hair.Blend(rgb(H.r_hair, H.g_hair, H.b_hair), ICON_ADD)
+				hair.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)
 			if(hair_style.additional_accessories)
 				hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
@@ -1926,6 +1928,12 @@ obj/item/organ/external/head/Destroy()
 		if(OE.grasp_id == index && OE.can_grasp)
 			return OE
 	return null
+
+/mob/living/carbon/human/has_hand_check()
+	for(var/datum/organ/external/OE in grasp_organs)
+		if(OE.can_grasp())
+			return TRUE
+	return FALSE
 
 /datum/organ/external/send_to_past(var/duration)
 	..()

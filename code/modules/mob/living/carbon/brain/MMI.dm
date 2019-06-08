@@ -151,7 +151,7 @@ obj/item/device/mmi/Destroy()
 		icon_state = "mmi_full"
 
 		if (isrev(brainmob))
-			var/datum/role/revolutionary/R = brainmob.mind.GetRole(ROLE_REV)
+			var/datum/role/revolutionary/R = brainmob.mind.GetRole(REV)
 			R.Drop(TRUE)
 
 		locked = 1
@@ -201,6 +201,18 @@ obj/item/device/mmi/Destroy()
 	icon_state = "mmi_full"
 	locked = 1
 	return
+
+/obj/item/device/mmi/proc/create_identity(var/datum/preferences/P)
+	brainmob = new(src)
+	brainmob.dna = new()
+	brainmob.dna.ResetUI()
+	brainmob.dna.ResetSE()
+	brainmob.name = P.real_name
+	brainmob.real_name = P.real_name
+	brainmob.container = src
+	name = "Man-Machine Interface: [brainmob.real_name]"
+	icon_state = "mmi_full"
+	locked = 1
 
 /obj/item/device/mmi/radio_enabled
 	name = "Radio-enabled Man-Machine Interface"

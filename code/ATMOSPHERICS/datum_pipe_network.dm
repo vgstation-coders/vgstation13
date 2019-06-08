@@ -1,5 +1,6 @@
 /datum/pipe_network
 	var/list/datum/gas_mixture/gases = list() //All of the gas_mixtures continuously connected in this network
+	var/volume = 0	//caches the total volume for atmos machines to use in gas calculations
 
 	var/list/obj/machinery/atmospherics/normal_members = list()
 	var/list/datum/pipeline/line_members = list()
@@ -86,6 +87,7 @@
 	//Go through membership roster and make sure gases is up to date
 
 	gases = list()
+	volume = 0
 
 	for(var/obj/machinery/atmospherics/normal_member in normal_members)
 		var/result = normal_member.return_network_air(src)
@@ -94,6 +96,9 @@
 
 	for(var/datum/pipeline/line_member in line_members)
 		gases += line_member.air
+
+	for(var/datum/gas_mixture/air in gases)
+		volume += air.volume
 
 /datum/pipe_network/proc/reconcile_air()
 	//Perfectly equalize all gases members instantly
@@ -117,7 +122,7 @@
 
 	return 1
 
-/proc/equalize_gases(datum/gas_mixture/list/gases)
+/proc/equalize_gases(list/datum/gas_mixture/gases)
 	//Perfectly equalize all gases members instantly
 
 	var/datum/gas_mixture/temp = new()
