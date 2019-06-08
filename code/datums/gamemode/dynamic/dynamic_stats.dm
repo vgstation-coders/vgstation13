@@ -62,14 +62,22 @@
 	var/faction_id = null
 	var/mind_name = null
 	var/mind_key = null
+	var/list/objectives = list()
+	var/victory = FALSE
+	var/scoreboard_text = null
 
-/datum/stat/role/New(var/datum/role/R)
+/datum/stat/role/New(var/datum/role/R, var/victorious, var/text)
 	name = R.name
 	faction_name = R.faction.name
 	faction_desc = R.faction.desc
 	faction_id = R.faction.ID
 	mind_name = R.antag.name
 	mind_key = R.antag.key
+	victory = victorious
+	scoreboard_text = text
+
+	for(var/datum/objective/O in R.objectives.GetObjectives())
+		objectives.Add(new /datum/stat/role_objective)
 
 /datum/stat/role_objective
 	var/obj_type = null
@@ -77,18 +85,36 @@
 	var/desc = null
 	var/belongs_to_faction = null
 	var/target = null
+	var/is_fulfilled = FALSE
 
-/datum/stat/role_objective/New(var/datum/objective/D)
-	obj_type = D.type
-	name = D.name
-	desc = D.explanation_text
-	belongs_to_faction = D.faction.ID
-	if(istype(D, /datum/objective/target))
-		target = D.target.name
-
+/datum/stat/role_objective/New(var/datum/objective/O)
+	obj_type = O.type
+	name = O.name
+	desc = O.explanation_text
+	belongs_to_faction = O.faction.ID
+	is_fulfilled = O.IsFulfilled()
+	if(istype(O, /datum/objective/target))
+		var/datum/objective/target/TO = O
+		target = TO.target.name
 
 // Faction related stats
 /datum/stat/faction
-	var/name = null
 	var/id = null
-	var/
+	var/name = null
+	var/desc = null
+	var/faction_type = null // typepath
+	var/stage = null
+	var/minor_victory = FALSE
+	var/data = null
+
+/datum/stat/faction/New(var/datum/faction/F)
+	id = F.ID
+	name = F.name
+	desc = F.desc
+	faction_type = F.type
+	stage = F.stage
+	// I could combine these victory values, but I'd rather have future-proofing
+	minor_victory = F.minor_victory
+	victory = F.check_win()
+
+/datum/stat/faction/vampire(var/datum/faction/vampire/VF)

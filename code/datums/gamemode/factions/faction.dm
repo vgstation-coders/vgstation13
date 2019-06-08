@@ -181,7 +181,16 @@ var/list/factions_with_hud_icons = list()
 			if (i < members.len)
 				score_results += "<br>"
 		i++
+
+	stat_collection.add_faction(generate_statistics(text))
+
 	return score_results
+
+
+// For statistics viewer data. Override when faction-specific data is desired.
+// Use a faction-specific datum (i.e. /datum/stat/faction/malf) when doing so.
+/datum/faction/proc/generate_statistics()
+	return new /datum/stat/faction(src)
 
 /datum/faction/Topic(href, href_list)
 	..()

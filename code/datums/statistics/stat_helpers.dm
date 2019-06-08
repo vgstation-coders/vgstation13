@@ -43,7 +43,7 @@
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
 
-	var/spot = get_turf(M)
+	var/turf/spot = get_turf(M)
 	d.death_x = spot.x
 	d.death_y = spot.y
 	d.death_z = spot.z
@@ -77,7 +77,7 @@
 	s.mob_typepath = M.type
 	s.mind_name = M.name
 
-	var/spot = get_turf(M)
+	var/turf/spot = get_turf(M)
 	s.loc_x = spot.x
 	s.loc_y = spot.y
 	s.loc_z = spot.z
@@ -107,7 +107,7 @@
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			s.mind_name = M.mind.name
+			s.mind_name = STRIP_NEWLINE(M.mind.name)
 	survivors.Add(s)
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
@@ -138,23 +138,11 @@
 		PUR.purchaser_is_traitor = was_traitor
 		uplink_purchases.Add(PUR)
 
-/datum/stat_collector/proc/add_objectives(var/datum/mind/M)
-	// if(M.objectives.len)
-	// 	for(var/datum/objective/O in M.objectives)
-	// 		var/datum/stat/antag_objective/AO = new
-	// 		AO.key = ckey(M.key)
-	// 		AO.mind_name = STRIP_NEWLINE(M.name)
-	// 		AO.special_role = M.special_role
-	// 		AO.objective_type = O.type
-	// 		AO.objective_desc = O.explanation_text
-	// 		AO.objective_succeeded = O.check_completion()
-	// 		if(O.target)
-	// 			AO.target_name = STRIP_NEWLINE(O.target.name)
-	// 			AO.target_role = O.target.assigned_role
-    //
-	// 		antag_objectives.Add(AO)
+/datum/stat_collector/proc/add_role(var/datum/role/R, var/victorious)
+	roles.add(new /var/datum/stat/role(R, victorious, text))
 
 /datum/stat_collector/proc/doPostRoundChecks()
+	// grab some variables
 	round_start_time = time2text(round_start_time, STAT_TIMESTAMP_FORMAT)
 	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)
 	map_name = map.nameLong
@@ -162,21 +150,12 @@
 	tech_total = get_research_score()
 	station_name = station_name()
 
-	for(var/datum/faction/F in ticker.mode.factions)
-		dynamic_stats += F.generate_statistics()
-
-	for(var/datum/role/R in ticker.mode.orphaned_roles)
-		dynamic_stats += R.generate_statistics()
-
-	for(var/living/carbon/human/M in mob_List)
-
-
+	// check for survivors
 	for(var/datum/mind/M in ticker.minds)
 		// add_objectives(M)
 		manifest_entries.Add(new /datum/stat_collector(M))
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
-
 
 
 /proc/stats_server_alert_new_file()

@@ -41,6 +41,9 @@
 	var/list/badass_bundles = list()
 	var/list/antag_objectives = list()
 	var/list/manifest_entries = list()
+	var/list/roles = list()
+	var/list/factions = list()
+
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
@@ -159,9 +162,10 @@
 	var/assignment = null
 
 // redo using mind list instead so we can get non-human players in its output
-/datum/stat/manifest_entry/New(/var/mob/living/carbon/human/M))
-	key = M.mind.key
-	name = M.mind.name
+/datum/stat/manifest_entry/New(/var/mob/living/carbon/human/M)
+	key = ckey(M.mind.key)
+	name = STRIP_NEWLINE(M.mind.name)
+	assignment = STRIP_NEWLINE(M.mind.assigned_job)
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")
