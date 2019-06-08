@@ -50,8 +50,8 @@
 	used = 1
 	return 1
 
-/obj/item/device/reportintercom/attackby(obj/item/I, mob/user) //Please don't do this
-	if(istype(I, /obj/item/weapon/card/emag) && !used)
+/obj/item/device/reportintercom/emag_act(mob/user) //Please don't do this
+	if(!used)
 		to_chat(user, "<span class='warning'>You overload the [src] and hear an unearthly noise.</span>")
 
 		world << sound('sound/items/AirHorn.ogg')
