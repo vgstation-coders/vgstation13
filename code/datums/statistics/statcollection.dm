@@ -58,28 +58,6 @@
 	// GAMEMODE-SPECIFIC STATS START HERE
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 
-	// cult stuff
-	var/cult_runes_written = 0
-	var/cult_runes_nulled = 0
-	var/cult_runes_fumbled = 0
-	var/cult_converted = 0
-	var/cult_tomes_created = 0
-	var/cult_narsie_summoned = FALSE
-	var/cult_narsie_corpses_fed = 0
-	var/cult_surviving_cultists = 0
-	var/cult_deconverted = 0
-
-	// xenos (yes they aren't a gamemode shut up)
-	var/xeno_eggs_laid = 0
-	var/xeno_faces_hugged = 0
-	var/xeno_faces_protected = 0
-
-	// blob
-	var/blob_wins = FALSE
-	var/blob_spawned_blob_players = 0
-	var/blob_spores_spawned = 0
-	var/blob_res_generated = 0
-
 	// THESE MUST BE SET IN POSTROUNDCHECKS OR SOMEWHERE ELSE BEFORE THAT IS CALLED
 	var/round_start_time = null
 	var/round_end_time = null
