@@ -208,7 +208,7 @@
 /datum/faction/syndicate/nuke_op/process()
 	var/livingmembers
 	var/mob/living/M
-	if(members)
+	if(members.len > 0)
 		for (var/datum/role/R in members)
 			if(R.antag.current)
 				M = R.antag.current
