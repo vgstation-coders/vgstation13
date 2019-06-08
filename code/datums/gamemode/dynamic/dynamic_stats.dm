@@ -122,7 +122,7 @@
 
 /datum/stat/faction/malf/New(var/datum/faction/malf/MF)
 	..(MF)
-	modules.Copy(MF.purchased_modules)
+	modules = MF.purchased_modules
 	return src
 
 /datum/stat/malf_module_purchase
@@ -134,3 +134,30 @@
 	typepath = M.type
 	module_name = M.module_name
 	cost = M.cost
+
+/datum/stat/faction/blob
+	// count of all blob tiles grown, includes structures built on top of blob tiles
+	var/blobs_grown_total = 0
+	// same as above, but only living blob tiles
+	var/blobs_round_end = 0
+	// count of all built structures
+	var/datum/stat/blob/structure_countsbuilt_structures = null
+
+/datum/stat/faction/blob/New(/var/datum/faction/blob_conglomerate/BF)
+	blobs_grown_total = blob_tiles_grown_total
+	blobs_round_end = blobs.len
+	built_structures = BF.built_structure_counts
+
+/datum/stat/blob/structure_counts
+	var/factories = 0
+	var/nodes = 0
+	var/resgens = 0
+	var/shields = 0
+	var/cores = 0
+
+/datum/stat/role/wizard
+	var/list/spellbook_purchases = list()
+
+/datum/stat/role/wizard/New(var/datum/role/wizard/W)
+	..(W)
+	spellbook_purchases = W.spellbook_purchases

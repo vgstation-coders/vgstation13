@@ -272,6 +272,12 @@
 		user.remove_spell(S)
 		uses += S.refund_price
 
+		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
+		if(istype(W))
+			W.spellbook_purchases.Add("REFUND-" + S.name)
+
+		return 1
+
 /obj/item/weapon/spellbook/Topic(href, href_list)
 	if(..())
 		return
@@ -304,12 +310,18 @@
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
+					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
+					if(istype(W))
+						W.spellbook_purchases.Add(added.name)
 
 		else if(ispath(buy_type, /obj/item/potion))
 			if(buy_type in get_available_potions())
 				if(use(available_potions[buy_type]))
-					new buy_type(get_turf(usr))
+					var/atom/item = new buy_type(get_turf(usr))
 					feedback_add_details("wizard_spell_learned", "PT")
+					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
+					if(istype(W))
+						W.spellbook_purchases.Add(item.name)
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
@@ -320,6 +332,9 @@
 					if(SA.one_use)
 						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
+					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
+					if(istype(W))
+						W.spellbook_purchases.Add(SA.name)
 
 		attack_self(usr)
 

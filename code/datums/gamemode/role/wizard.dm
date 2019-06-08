@@ -8,6 +8,8 @@
 	refund_value = BASE_SOLO_REFUND * 2
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
+	var/list/spellbook_purchases = list()
+
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/wizard)

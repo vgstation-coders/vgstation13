@@ -31,6 +31,11 @@
 	var/prelude_announcement
 	var/outbreak_announcement
 
+	// statistics
+	var/remaining_structures_count = list()
+
+	var/datum/stat/blob/structure_counts/built_structure_counts = new()
+
 // -- Victory procs --
 
 /datum/faction/blob_conglomerate/check_win()
@@ -340,3 +345,7 @@ Message ends."}
 	output += (grille / max(start.grille,1))
 	output += (mach / max(start.mach,1))
 	return (output/7)
+
+
+/datum/faction/blob/generate_statistics()
+	..()
