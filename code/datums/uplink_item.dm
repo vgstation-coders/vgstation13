@@ -485,6 +485,15 @@ var/list/uplink_items = list()
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
 
+/datum/uplink_item/device_tools/reportintercom
+	name = "NTT Report Falsifier"
+	desc = "An intercom stolen from Nanotrasen Command that allows a single fake Galactic Update to be sent. Single-Use only. Let the crew know about the upcoming disk inspection."
+	item = /obj/item/device/reportintercom
+	num_in_stock = 3
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Nuclear Operative")
+
 /datum/uplink_item/device_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
 	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
@@ -917,3 +926,4 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Librarian", "Chaplain")
+
