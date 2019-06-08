@@ -98,12 +98,18 @@
 /obj/item/projectile/energy/plasma
 	name = "plasma bolt"
 	icon_state = "plasma"
+	var/knockdown_chance = 0
 	fire_sound = 'sound/weapons/elecfire.ogg'
 
 /obj/item/projectile/energy/plasma/on_hit(var/atom/target, var/blocked = 0)
 	if (..(target, blocked))
 		var/mob/living/L = target
 		L.contaminate()
+		if(prob(knockdown_chance))
+			if(istype(target, /mob/living/carbon))
+				shake_camera(L,3,2)
+				L.apply_effect(2,WEAKEN)
+				to_chat(L, "<span class = 'alert'> The force of the bolt knocks you off your feet!")
 		return 1
 	return 0
 
