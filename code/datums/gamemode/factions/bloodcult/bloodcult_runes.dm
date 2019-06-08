@@ -1,7 +1,3 @@
-var/list/rune_list = list()//all runes currently in the world
-var/list/uristrune_cache = list()//icon cache, so the whole blending process is only done once per rune.
-
-
 /obj/effect/rune
 	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
@@ -13,10 +9,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	//Whether the rune is pulsating
 	var/animated = 0
 
-	//A rune is made of up to 3 words
-	var/datum/cultword/word1
-	var/datum/cultword/word2
-	var/datum/cultword/word3
+	//A rune is made of up to 3 words. 
+	var/datum/runetype/rune_type
+	var/datum/runetype/word1
+	var/datum/runetype/word2
+	var/datum/runetype/word3
 
 	//An image we'll show to the AI instead of the rune
 	var/image/blood_image
@@ -45,8 +42,10 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		if(AI.client)
 			AI.client.images += blood_image
 
-	rune_list.Add(src)
+	rune_type.rune_list.Add(src)
 
+	
+	/* //Add to blood cult rune
 	var/datum/holomap_marker/holomarker = new()
 	holomarker.id = HOLOMAP_MARKER_CULT_RUNE
 	holomarker.filter = HOLOMAP_FILTER_CULT
@@ -54,6 +53,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	holomarker.y = src.y
 	holomarker.z = src.z
 	holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"] = holomarker
+	*/
 
 /obj/effect/rune/Destroy()
 	for(var/mob/living/silicon/ai/AI in player_list)
@@ -74,19 +74,19 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		active_spell.abort()
 		active_spell = null
 
-	rune_list.Remove(src)
+	rune_type.rune_list.Remove(src)
 
-	holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"
+	//holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]" //Add to blood cult rune
 	..()
 
 /obj/effect/rune/examine(var/mob/user)
 	..()
 	var/datum/rune_spell/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
 
-	//cultists can read the words, and be informed if it calls a spell
-	if (iscultist(user))
-		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""] [word2 ? "[word2.rune]" : ""] [word3 ? "[word3.rune]" : ""]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
-		if (rune_name)
+	//By default everyone can read a rune, so add extra functionality in child classes if that is not wanted.
+	if(can_read_rune(user) || isobserver(user))
+		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""][word2 ? " [word2.rune]" : ""][word3 ? " [word3.rune]" : ""]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
+		/*if (rune_name) //Add to bloodcult
 			if (initial(rune_name.Act_restriction) <= veil_thickness)
 				to_chat(user, initial(rune_name.desc))
 				if (istype(active_spell,/datum/rune_spell/portalentrance))
@@ -99,22 +99,10 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 						to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 			else
 				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
-
-	//so do observers
-	else if (isobserver(user))
-		to_chat(user, "<span class='info'>[rune_name ? "That's \a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spell."]</span>")
-		if (rune_name)
-			if (istype(active_spell,/datum/rune_spell/portalentrance))
-				var/datum/rune_spell/portalentrance/PE = active_spell
-				if (PE.network)
-					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
-			if (istype(active_spell,/datum/rune_spell/portalexit))
-				var/datum/rune_spell/portalexit/PE = active_spell
-				if (PE.network)
-					to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
+		*/
 
 	//"cult" chaplains can read the words, but not understand the meaning (though they can always check it up). Also has a chance to trigger a taunt from Nar-Sie.
-	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
+	/*else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain")) //Add to blood cult
 		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
 		if (religion_name in cult_blood_chaplain)
@@ -134,6 +122,10 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 				spawn(50)
 					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
 							"Oh just fuck off",)].</span></span>")
+	*/				
+	
+/obj/effect/rune/proc/can_read_rune(var/mob/user) //Overload for specific criteria.
+	return 1
 
 /obj/effect/rune/cultify()
 	return
@@ -155,12 +147,12 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 /obj/effect/rune/update_icon()
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if(spell && initial(spell.Act_restriction) <= veil_thickness)
+	if(spell) // && initial(spell.Act_restriction) <= veil_thickness) Add to bloodcult
 		animated = 1
 	else
 		animated = 0
 
-	var/lookup = ""
+	var/lookup = "" 
 	if (word1)
 		lookup += "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]"
 	if (word2)
@@ -168,25 +160,25 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if (word3)
 		lookup += "-[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
 
-	if (lookup in uristrune_cache)
+	if (lookup in rune_type/uristrune_cache)
 		icon = uristrune_cache[lookup]
 	else
 		var/icon/I1 = icon('icons/effects/uristrunes.dmi', "")
 		if (word1)
-			I1 = make_uristword(word1,blood1,animated)
+			I1 = make_iconcache(word1,blood1,animated)
 		var/icon/I2 = icon('icons/effects/uristrunes.dmi', "")
 		if (word2)
-			I2 = make_uristword(word2,blood2,animated)
+			I2 = make_iconcache(word2,blood2,animated)
 		var/icon/I3 = icon('icons/effects/uristrunes.dmi', "")
 		if (word3)
-			I3 = make_uristword(word3,blood3,animated)
+			I3 = make_iconcache(word3,blood3,animated)
 
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 		I.Blend(I1, ICON_OVERLAY)
 		I.Blend(I2, ICON_OVERLAY)
 		I.Blend(I3, ICON_OVERLAY)
 		icon = I
-		uristrune_cache[lookup] = I
+		rune_tyep/uristrune_cache[lookup] = I
 
 	if(animated)
 		idle_pulse()
@@ -194,7 +186,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		animate(src)
 
 /obj/effect/rune/proc/idle_pulse()
-	//This masterpiece of a color matrix stack produces a nice animation no matter which color was the blood used for the rune.
+	//This masterpiece of a color matrix stack produces a nice animation no matter which color the rune is. 
 	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
 	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
@@ -232,7 +224,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			animate(src)
 
 
-/obj/effect/rune/proc/make_uristword(var/datum/cultword/word, var/datum/reagent/blood/blood, var/animated)
+/obj/effect/rune/proc/make_iconcache(var/datum/cultword/word, var/datum/reagent/blood/blood, var/animated) //Sets up a word in the cache of runes.
 	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 	if (!blood)
 		blood = new

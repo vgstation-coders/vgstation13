@@ -1,8 +1,8 @@
 
 
 
-/spell/cult/friendly_trace_rune //For cyborg module
-	name = "Trace Rune"
+/spell/cult/trace_rune/friendly_trace_rune //For cyborg module
+	name = "Trace Friendly Rune"
 	desc = "(1 BLOOD) Use available blood to write down words. Three words form a friendly rune."
 	hud_state = "cult_word"
 	override_base = "grey"
@@ -16,24 +16,19 @@
 
 	cast_delay = 15
 
-	var/list/data = list()
-	var/datum/friendly_cultword/word = null
-	var/obj/effect/friendly_rune/rune = null
-	var/datum/friendly_rune_spell/spell = null
-	var/remember = 0
-	var/blood_cost = 1
+	datum/friendly_cultword/word = null
+	obj/effect/friendly_rune/rune = null
+	datum/friendly_rune_spell/spell = null
+	blood_cost = 1
 	
-/spell/cult/friendly_trace_rune/choose_targets(var/mob/user = usr)
-	return list(user)
-	
-/spell/cult/friendly_trace_rune/before_channel(mob/user)
-	if(remember)
-		remember = 0
+/*/spell/cult/trace_rune/friendly_trace_rune/before_channel(mob/user)
+	if(continue_drawing)
+		continue_drawing = 0
 	else
 		spell = null
 	return 0
-	
-/spell/cult/friendly_trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
+*/
+/spell/cult/trace_rune/friendly_trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3) //Overriden and rewritten to only allow friendly runes. Also, you always get to select a spell instead of doing individual words.
 	if(!istype(user.loc, /turf))
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 		return 0
@@ -101,17 +96,17 @@
 	
 	return ..()
 
-/spell/cult/friendly_trace_rune/cast(var/list/targets, var/mob/user)
+/spell/cult/trace_rune/friendly_trace_rune/cast(var/list/targets, var/mob/user)
 	..()
 	if (rune && rune.word1 && rune.word2 && rune.word3)
 		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 		return
 	if (friendly_write_rune_word(get_turf(user) ,data["blood"] ,word = friendly_cultwords[word]) > 1)
-		remember = 1
+		continue_drawing = 1
 		perform(user) //Recursion
 
 
-/spell/cult/friendly_erase_rune
+/spell/cult/trace_rune/friendly_erase_rune
 	name = "Erase Rune"
 	desc = "Remove the last word written of the friendly rune you're standing above."
 	hud_state = "cult_erase"
@@ -127,10 +122,10 @@
 
 	cast_delay = 0
 
-/spell/cult/friendly_erase_rune/choose_targets(var/mob/user = usr)
+/spell/cult/trace_rune/friendly_erase_rune/choose_targets(var/mob/user = usr)
 	return list(user)
 
-/spell/cult/friendly_erase_rune/cast(var/list/targets, var/mob/living/carbon/user)
+/spell/cult/trace_rune/friendly_erase_rune/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
 	var/removed_word = friendly_erase_rune_word(get_turf(user))
 	if (removed_word)

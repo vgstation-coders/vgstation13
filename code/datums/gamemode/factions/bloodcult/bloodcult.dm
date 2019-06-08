@@ -181,7 +181,7 @@ var/veil_thickness = CULT_PROLOGUE
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
-	initialize_cultwords()
+	initialize_runewords()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
 

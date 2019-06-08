@@ -1155,13 +1155,56 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 
 
+///////////////////////////////////////OTHER ITEMS////////////////////////////////////////////////
 
-
+/obj/item/weapon/cyborg_pamphlet
+	name = "cult of Nar-Sie pamphlet"
+	desc = "Looks like a page torn from a tome. One glimpse at it surely can't hurt you."
+	icon = 'icons/obj/cult.dmi'
+	icon_state ="pamphlet"
+	throwforce = 0
+	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	throw_range = 1
+	throw_speed = 1
+	layer = ABOVE_DOOR_LAYER
+	pressure_resistance = 1
+	attack_verb = list("slaps")
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
+	
+/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg
+	name = "tempting goblet"
+	desc = "A large obsidian cup in the shape of a skull. Supposedly used by followers of Nar-Sie to hold blood from sacrifices, but this version has a label reading \"NO HUMAN HARM\"."
+	icon_state = "cult"
+	item_state = "cult"
+	isGlass = 0
+	amount_per_transfer_from_this = 10
+	volume = 150
+	force = 5
+	throwforce = 7
+	
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult
+	name = "Nar-Sie cookie basket"
+	desc = "Filled with sugar-rich blood. Delicious!"	
+	var/list/possible_messages = list("You get an urge to begin going to Nar-Sie church every sunday.","You think you understand why blood is so cool.","For a second, you think you were able to see through the veil. Woah.","You get an urge to eat more Nar-Sie cookies.","")
+	
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	..()
+	if(prob(25))
+		var/message = pick(possible_messages)
+		to_chat(user,"<span class='sinister'>[message]</span>")	
+		
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/New()
+	..()
+	reagents.add_reagent(BLOOD, 5, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"="O+","resistances"=null,"trace_chem"=null, "virus2"=list()))
+	bitesize = 2
+	
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
 /obj/item/weapon/bloodcult_pamphlet
 	name = "cult of Nar-Sie pamphlet"
-	desc = "Looks like a page torn from a tome. One glimpse at it surely can't hurt you."
+	desc = "Looks like a page torn from one of those cultist tomes. It is titled \"Ten reasons why Nar-Sie can improve your life!\""
 	icon = 'icons/obj/cult.dmi'
 	icon_state ="pamphlet"
 	throwforce = 0
@@ -1230,17 +1273,6 @@ var/list/arcane_tomes = list()
 	isGlass = 0
 	amount_per_transfer_from_this = 10
 	volume = 60
-	force = 5
-	throwforce = 7
-	
-/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg
-	name = "tempting goblet"
-	desc = "A large obsidian cup in the shape of a skull. Supposedly used by followers of Nar-Sie to hold blood from sacrifices, but this version has a label reading \"NO HUMAN HARM\"."
-	icon_state = "cult"
-	item_state = "cult"
-	isGlass = 0
-	amount_per_transfer_from_this = 10
-	volume = 150
 	force = 5
 	throwforce = 7
 	
