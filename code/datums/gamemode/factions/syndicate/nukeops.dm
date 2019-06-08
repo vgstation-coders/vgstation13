@@ -208,14 +208,15 @@
 /datum/faction/syndicate/nuke_op/process()
 	var/livingmembers
 	var/mob/living/M
-	for (var/datum/role/R in members)
-		if(R.antag.current)
-			M = R.antag.current
-			if(M.stat != DEAD)
-				livingmembers++
-	if(livingmembers > 0)
-		return
-	else
-		if (src.stage != FACTION_DORMANT)
-			stage(FACTION_DORMANT)
-			ticker.StopThematic()
+	if(members)
+		for (var/datum/role/R in members)
+			if(R.antag.current)
+				M = R.antag.current
+				if(M.stat != DEAD)
+					livingmembers++
+		if(livingmembers > 0)
+			return
+		else
+			if (src.stage != FACTION_DORMANT)
+				stage(FACTION_DORMANT)
+				ticker.StopThematic()
