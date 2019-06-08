@@ -204,3 +204,15 @@
 	else
 		nuke_code = "code will be provided later"
 	return
+
+/datum/faction/syndicate/nuke_op/process()
+	var/livingmembers
+	var/mob/M
+	for (var/datum/role/R in members)
+		M = R.antag.current
+		if(M.stat != DEAD)
+			livingmembers++
+	if(livingmembers > 0)
+		return
+	else
+		stage(FACTION_DEFEATED)
