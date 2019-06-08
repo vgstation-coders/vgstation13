@@ -1,7 +1,6 @@
 // the main file for statistics is statcollection.dm, look there first
 
 // functions related to handling/collecting data, and not writing data specifically
-#define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
 // so I can't get timestamp info so unfortunately I can't do anything like ISO standards
 // at least I can keep the format consistent though
 #define STAT_TIMESTAMP_FORMAT "YYYY-MM-DD hh:mm:ss"
@@ -139,9 +138,12 @@
 		uplink_purchases.Add(PUR)
 
 /datum/stat_collector/proc/add_role(var/datum/role/R, var/victorious)
-	roles.add(new /var/datum/stat/role(R, victorious, text))
+	roles.Add(new /datum/stat/role(R, victorious))
 
-/datum/stat_collector/proc/doPostRoundChecks()
+/datum/stat_collector/proc/add_faction(var/datum/faction/F)
+	factions.Add(F.generate_statistics())
+
+/datum/stat_collector/proc/do_post_round_checks()
 	// grab some variables
 	round_start_time = time2text(round_start_time, STAT_TIMESTAMP_FORMAT)
 	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)

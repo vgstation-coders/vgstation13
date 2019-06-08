@@ -34,15 +34,15 @@
 	var/const/data_revision = STAT_OUTPUT_VERSION
 	// UNUSED
 	// var/enabled = 1
-	var/list/deaths = list()
-	var/list/explosions = list()
+	var/list/datum/stat/death_stat/deaths = list()
+	var/list/datum/stat/explosion_stat/explosions = list()
 	var/list/survivors = list()
 	var/list/uplink_purchases = list()
 	var/list/badass_bundles = list()
 	var/list/antag_objectives = list()
 	var/list/manifest_entries = list()
-	var/list/roles = list()
-	var/list/factions = list()
+	var/list/datum/stat/role/roles = list()
+	var/list/datum/stat/faction/factions = list()
 
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
@@ -86,6 +86,9 @@
 	var/map_name = null
 	var/tech_total = 0
 	var/station_name = null
+
+/datum/stat
+	// Hello. Nothing to see here.
 
 /datum/stat/death_stat
 	var/mob_typepath = null
@@ -183,7 +186,7 @@
 		var/datum/gamemode/dynamic/mode = ticker.mode
 		dynamic_stats = mode.dynamic_stats
 
-	doPostRoundChecks()
+	do_post_round_checks()
 
 	to_chat(world, "Writing statistics to file")
 	var/start_time = world.realtime

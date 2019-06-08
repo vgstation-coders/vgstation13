@@ -363,7 +363,7 @@
 	if(objectives.objectives.len > 0)
 		text += "</ul>"
 
-	stat_collection.add_role(src, win, text)
+	stat_collection.add_role(src, win)
 
 	return text
 

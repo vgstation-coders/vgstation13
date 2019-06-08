@@ -1004,7 +1004,10 @@
 		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 			point.target = src //the pinpointer will detect the shunted AI
 
-	stat_collection.malf_shunted = TRUE
+	// record that the malf shunted, for statistics
+	if(istype(malf.mind) && istype(malf.mind.faction, /datum/faction/malf))
+		var/datum/faction/malf/mf = malf.mind.faction
+		mf.shunted = TRUE
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)

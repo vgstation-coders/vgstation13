@@ -38,6 +38,11 @@ rcd light flash thingy on matter drain
 				return
 		user.add_spell(new power_type, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 
+	// statistics collection - record module purchase
+	if(user.mind && istype(user.mind.faction, /datum/faction/malf))
+		var/datum/faction/malf/mf = user.mind.faction // can never be too careful, in BYOND land
+		mf.purchased_modules.Add(new /datum/stat/malf_module_purchase(src))
+
 /datum/AI_Module/large/fireproof_core
 	module_name = "Core upgrade"
 	mod_pick_name = "coreup"
@@ -434,7 +439,6 @@ rcd light flash thingy on matter drain
 		src.processing_time -= AM.cost
 		if(AM.one_time)
 			possible_modules -= AM
-		stat_collection.malf_modules += AM.module_name
 
 	if(href_list["desc"])
 		var/datum/AI_Module/AM = locate(href_list["module"])

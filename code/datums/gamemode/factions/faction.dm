@@ -182,7 +182,7 @@ var/list/factions_with_hud_icons = list()
 				score_results += "<br>"
 		i++
 
-	stat_collection.add_faction(generate_statistics(text))
+	stat_collection.add_faction(generate_statistics())
 
 	return score_results
 

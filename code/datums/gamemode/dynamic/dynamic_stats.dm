@@ -64,17 +64,15 @@
 	var/mind_key = null
 	var/list/objectives = list()
 	var/victory = FALSE
-	var/scoreboard_text = null
 
-/datum/stat/role/New(var/datum/role/R, var/victorious, var/text)
+/datum/stat/role/New(var/datum/role/R, var/victorious)
 	name = R.name
 	faction_name = R.faction.name
 	faction_desc = R.faction.desc
 	faction_id = R.faction.ID
-	mind_name = R.antag.name
-	mind_key = R.antag.key
+	mind_name = STRIP_NEWLINE(R.antag.name)
+	mind_key = ckey(R.antag.key)
 	victory = victorious
-	scoreboard_text = text
 
 	for(var/datum/objective/O in R.objectives.GetObjectives())
 		objectives.Add(new /datum/stat/role_objective)
@@ -104,6 +102,7 @@
 	var/desc = null
 	var/faction_type = null // typepath
 	var/stage = null
+	var/victory = FALSE
 	var/minor_victory = FALSE
 	var/data = null
 
@@ -117,4 +116,21 @@
 	minor_victory = F.minor_victory
 	victory = F.check_win()
 
-/datum/stat/faction/vampire(var/datum/faction/vampire/VF)
+/datum/stat/faction/malf
+	var/list/datum/stat/malf_module_purchase/modules = list()
+	var/shunted = FALSE
+
+/datum/stat/faction/malf/New(var/datum/faction/malf/MF)
+	..(MF)
+	modules.Copy(MF.purchased_modules)
+	return src
+
+/datum/stat/malf_module_purchase
+	var/typepath = null
+	var/module_name = null
+	var/cost = null
+
+/datum/stat/malf_module_purchase/New(var/datum/AI_Module/M)
+	typepath = M.type
+	module_name = M.module_name
+	cost = M.cost
