@@ -48,7 +48,7 @@
 	mutations = list(M_CLUMSY)
 
 
-/mob/living/simple_animal/hostile/retaliate/faguette/to_bump(atom/movable/AM as mob|obj)
+	/mob/living/simple_animal/hostile/retaliate/faguette/to_bump(atom/movable/AM as mob|obj)
 	if(now_pushing)
 		return
 	if(ismob(AM))
@@ -59,15 +59,14 @@
 	..()
 
 
-/mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
+	/mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/faguette/emote(var/act, var/type, var/message, var/auto)
+	/mob/living/simple_animal/hostile/retaliate/faguette/emote(var/act, var/type, var/message, var/auto)
 	if(timestopped)
 		return //under effects of time magick
 
 	var/msg = pick("drools through its stitched mouth","silently cries into [gender==MALE?"his":"her"] baguette","sloppily mimes tieing an invisible noose around its neck")
 	return ..("me", type, "[msg].")
-
