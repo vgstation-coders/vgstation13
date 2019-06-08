@@ -217,6 +217,5 @@
 		if(livingmembers > 0)
 			return
 		else
-			if (src.stage != FACTION_DORMANT)
-				stage(FACTION_DORMANT)
-				ticker.StopThematic()
+			if (src.stage != (FACTION_DORMANT || FACTION_DEFEATED))
+				stage(FACTION_DEFEATED)
