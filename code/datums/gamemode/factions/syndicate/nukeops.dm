@@ -207,12 +207,14 @@
 
 /datum/faction/syndicate/nuke_op/process()
 	var/livingmembers
-	var/mob/M
+	var/mob/living/M
 	for (var/datum/role/R in members)
-		M = R.antag.current
+		if(R.antag.current)
+			M = R.antag.current
 		if(M.stat != DEAD)
 			livingmembers++
 	if(livingmembers > 0)
 		return
 	else
-		stage(FACTION_DEFEATED)
+		stage(FACTION_DORMANT)
+		ticker.StopThematic()
