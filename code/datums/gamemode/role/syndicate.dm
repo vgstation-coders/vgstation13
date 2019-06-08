@@ -197,4 +197,32 @@
 	logo_state = "nuke-logo"
 
 /datum/role/nuclear_operative/leader
+	name = NUKE_OP_LEADER
+	id = NUKE_OP_LEADER
+	required_pref = NUKE_OP
+	disallow_job = TRUE
 	logo_state = "nuke-logo-leader"
+
+/datum/role/nuclear_operative/leader/OnPostSetup()
+	if(antag)
+		var/datum/action/play_ops_music/go_loud = new /datum/action/play_ops_music(antag)
+		go_loud.Grant(antag.current)
+	..()
+	
+/datum/action/play_ops_music
+	name = "Go Loud"
+	desc = "For the operative who prefers style over subtlety."
+	icon_icon = 'icons/obj/device.dmi'
+	button_icon_state = "megaphone"
+
+/datum/action/play_ops_music/Trigger()
+	var/mob/living/M = owner
+	var/datum/faction/F
+	var/confirm = alert(M, "Are you sure you want to announce your presence? Doing so will display a command announcement and start the Nuclear Assault playlist.", "Are you sure?", "No", "Yes")
+	if (confirm == "Yes")
+		command_alert(/datum/command_alert/nuclear_operatives)
+		F = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+		F.stage(FACTION_ENDGAME)
+		Destroy()
+	else
+		return

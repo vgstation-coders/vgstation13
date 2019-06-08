@@ -34,6 +34,7 @@
 #define CULTIST "cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
+#define NUKE_OP_LEADER "nuclear operative leader"
 #define HEADREV "head revolutionary"
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
