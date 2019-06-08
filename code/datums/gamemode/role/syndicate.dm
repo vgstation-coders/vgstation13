@@ -217,10 +217,10 @@
 
 /datum/action/play_ops_music/Trigger()
 	var/mob/living/M = owner
-	var/datum/faction/F
+	var/datum/role/R = new /datum/role/nuclear_operative/leader
+	var/datum/faction/F = find_active_faction_by_member(R, owner.mind)
 	var/confirm = alert(M, "Are you sure you want to announce your presence? Doing so will display a command announcement and start the Nuclear Assault playlist.", "Are you sure?", "No", "Yes")
-	if (confirm == "Yes" && stage != FACTION_ENDGAME && M.stat == CONSCIOUS)
+	if (confirm == "Yes" && F.stage != FACTION_ENDGAME && M.stat == CONSCIOUS)
 		command_alert(/datum/command_alert/nuclear_operatives)
-		F = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 		F.stage(FACTION_ENDGAME)
 		qdel(src)
