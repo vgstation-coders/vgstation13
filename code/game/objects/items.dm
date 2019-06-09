@@ -928,9 +928,11 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, atom/blocked)
+/obj/item/proc/on_block(damage, atom/movable/blocked)
 	if(ismob(loc))
-		if(prob(50 - round(damage / 3)))
+		if (IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if (prob(50 - round(damage / 3)))
 			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
 			if(isatommovable(blocked))
 				var/atom/movable/M = blocked
@@ -1375,3 +1377,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
+
+//This proc will be called when the person holding or equipping it talks.
+/obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	return

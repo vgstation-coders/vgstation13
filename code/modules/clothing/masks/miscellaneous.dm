@@ -113,7 +113,7 @@
 	var/voicechange = 0
 	siemens_coefficient = 0.9
 
-/obj/item/clothing/mask/horsehead/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/horsehead/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.voicechange)
 		speech.message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
 

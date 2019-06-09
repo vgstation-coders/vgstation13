@@ -344,6 +344,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/brewer/
 	name = "Space-Brewery"
 	icon_state = "brewer"
+	pass_flags = PASSTABLE
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(
 		TEA,
@@ -381,6 +382,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/soda_dispenser/
 	name = "Soda Dispenser"
 	icon_state = "soda_dispenser"
+	pass_flags = PASSTABLE
 	beaker_height = -5
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
@@ -407,6 +409,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
 	icon_state = "booze_dispenser"
+	pass_flags = PASSTABLE
 	beaker_height = -6
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(

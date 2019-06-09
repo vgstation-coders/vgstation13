@@ -113,6 +113,7 @@ var/list/arcane_tomes = list()
 	if(href_list["page"])
 		current_page = text2num(href_list["page"])
 		flick("tome-flick",src)
+		playsound(usr, "pageturn", 50, 1, -5)
 
 	if(href_list["talisman"])
 		var/obj/item/weapon/talisman/T = locate(href_list["talisman"])
@@ -195,6 +196,7 @@ var/list/arcane_tomes = list()
 			icon_state = "tome-open"
 			item_state = "tome-open"
 			flick("tome-flickopen",src)
+			playsound(user, "pageturn", 50, 1, -5)
 			state = TOME_OPEN
 			usr << browse_rsc('icons/tomebg.png', "tomebg.png")
 			usr << browse(tome_text(), "window=arcanetome;size=537x375")
@@ -215,6 +217,7 @@ var/list/arcane_tomes = list()
 		if (Adjacent(user))
 			to_chat(user, "You flick a page.")
 			flick("tome-flick",src)
+			playsound(user, "pageturn", 50, 1, -3)
 			can_flick = 0
 			spawn(5)
 				can_flick = 1
@@ -251,6 +254,7 @@ var/list/arcane_tomes = list()
 		icon_state = "tome-open"
 		item_state = "tome-open"
 		flick("tome-flickopen",src)
+		playsound(user, "pageturn", 50, 1, -5)
 		state = TOME_OPEN
 	var/choice = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi', "radial-cult2")
 	if(!choice_to_talisman[choice])
@@ -739,7 +743,7 @@ var/list/arcane_tomes = list()
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 
-			if (shade)
+			if (shade && shade.hud_used && shade.gui_icons && shade.gui_icons.soulblade_bloodbar)
 				var/matrix/MAT = matrix()
 				MAT.Scale(1,blood/maxblood)
 				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER

@@ -461,7 +461,7 @@ Class Procs:
 		if(prob(destroy_chance))
 			qdel(I)
 		else
-			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)
+			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src.reagents && src.reagents.total_volume)
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
@@ -568,6 +568,9 @@ Class Procs:
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
+
+	add_fingerprint(user)
+
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
@@ -706,7 +709,7 @@ Class Procs:
 			W.play_rped_sound()
 		else
 			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
-			for(var/var/obj/item/C in component_parts)
+			for(var/obj/item/C in component_parts)
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0

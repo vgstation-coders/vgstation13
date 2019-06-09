@@ -76,7 +76,7 @@
 	if(!istype(IV) || (IV.loc != src.loc) || IV.locked_to)
 		return
 
-	if(get_locked(iv_lock_type).len)
+	if(is_locking(iv_lock_type))
 		to_chat(user, "<span class='warning'>There's already \a [IV] attached to \the [src]!</span>")
 		return
 

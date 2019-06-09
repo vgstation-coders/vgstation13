@@ -252,7 +252,7 @@ proc/move_mining_shuttle()
 	desc = "This makes no metallurgic sense."
 
 /obj/item/weapon/pickaxe/plasmacutter
-	name = "plasma cutter"
+	name = "plasma torch"
 	icon_state = "plasmacutter"
 	item_state = "gun"
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
@@ -263,10 +263,59 @@ proc/move_mining_shuttle()
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
-	desc = "A rock cutter that uses bursts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	desc = "A rock cutter that uses bursts of hot plasma"
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator
+	name = "plasma cutter"
+	desc = "A rock cutter that fires bolts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	digspeed = 5
+	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
+	var/max_ammo = 15
+	var/current_ammo = 15
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+	if(proximity_flag)
+		return
+	if(user.is_pacified(VIOLENCE_SILENT,A,src))
+		return
+	if(current_ammo >0)
+		current_ammo--
+		var/turf/starting = get_turf(user)
+		var/turf/target = get_turf(A)
+		var/obj/item/projectile/kinetic/cutter/BS = new (starting)
+		BS.firer = user
+		BS.original = target
+		BS.target = target
+		BS.current = starting
+		BS.starting = starting
+		BS.yo = target.y - starting.y
+		BS.xo = target.x - starting.x
+		user.delayNextAttack(4)
+		if(user.zone_sel)
+			BS.def_zone = user.zone_sel.selecting
+		else
+			BS.def_zone = LIMB_CHEST
+		BS.OnFired()
+		playsound(starting, 'sound/weapons/Taser.ogg', 50, 1)
+		BS.process()
+	else
+		src.visible_message("*click click*")
+		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
+	if(proximity_flag && istype(target, /obj/item/stack/sheet))
+		var/obj/item/stack/sheet/A = target
+		if(A.mat_type == MAT_PLASMA)
+			if(current_ammo < max_ammo)
+				var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+				A.use(loading_ammo)
+				current_ammo += loading_ammo
+				to_chat(user, "<span class='notice'>You load [src].</span>")
+			else
+				to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"

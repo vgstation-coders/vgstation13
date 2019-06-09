@@ -321,6 +321,11 @@
 		abort()
 		return
 
+	if (R.active_spell)
+		to_chat(user, "<span class='rose'>A structure is already being raised from that rune, so you contribute to that instead.</span>")
+		R.active_spell.midcast(user)
+		return
+
 	switch(structure)
 		if("Altar")
 			spawntype = /obj/structure/cult/altar
@@ -1516,9 +1521,9 @@ var/list/blind_victims = list()
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/hide
 	page = "This rune (whose words are the same as the Conceal rune in reverse) lets you reveal every rune and structures in a circular 7 tile range around it. Each revealed rune will stun non-cultists in a 3 tile range around them, stunning and muting them for 2 seconds, up to a total of 10 seconds. Affects through walls. The stun ends if the victims are moved away from where they stand, unless they get knockdown first, so you might want to follow up with a Stun talisman. "
-	
+
 	walk_effect = TRUE
-	
+
 	var/effect_range=7
 	var/shock_range=3
 	var/shock_per_obj=2
@@ -1921,8 +1926,9 @@ var/list/blind_victims = list()
 					H.pain_shock_stage = 0
 				L.update_canmove()
 				L.stat = CONSCIOUS
-				L.reagents.del_reagent(HOLYWATER)
-				L.reagents.add_reagent(HYPERZINE,1)
+				if (L.reagents)
+					L.reagents.del_reagent(HOLYWATER)
+					L.reagents.add_reagent(HYPERZINE,1)
 		qdel(spell_holder)
 	qdel(src)
 

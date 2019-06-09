@@ -109,9 +109,18 @@ function SetMusic(url, time, volume) {
 		client.media.update_music()
 
 /mob/proc/stop_all_music()
-	if (client && client.media)
-		client.media.push_music("",0,1)
+	if (client)
+		src << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
+		if(client.media)
+			client.media.push_music("",0,1)
 
+/mob/verb/stop_admin_music()
+	set name = "Stop Admin Music"
+	set desc = "Stops all playing admin sounds."
+	set category = "OOC"
+	
+	src << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
+			
 /mob/proc/force_music(var/url,var/start,var/volume=1)
 	if (client && client.media)
 		client.media.forced=(url!="")

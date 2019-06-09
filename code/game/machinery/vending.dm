@@ -2493,7 +2493,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/franksuit = 3,
 		/obj/item/clothing/gloves/frankgloves = 3,
 		/obj/item/clothing/shoes/frankshoes =3,
-		/obj/item/clothing/suit/kimono/sakura = 3
+		/obj/item/clothing/suit/kimono/sakura = 3,
+		/obj/item/clothing/head/widehat_red = 3,
+		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/suit/poncho = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
@@ -2562,6 +2565,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,
+		/obj/item/clothing/head/widehat_red =1,
 		)
 
 	pack = /obj/structure/vendomatpack/hatdispenser
@@ -2619,6 +2623,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
+		/obj/item/clothing/suit/red_suit = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
@@ -2960,6 +2965,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/eucharist = 7,
 		/obj/item/weapon/storage/fancy/incensebox/harebells = 3,
 		/obj/item/incense_oilbox/harebells = 2,
+		/obj/item/weapon/storage/fancy/collection_plate = 1,
 		)
 	contraband = list(
 		/obj/item/clothing/head/clockwork_hood = 2,
@@ -2974,7 +2980,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator/red = 2,
+		/obj/item/clothing/head/inquisitor = 2,
+		/obj/item/clothing/suit/inquisitor = 2,
+		/obj/item/clothing/under/inquisitor = 2,
+		/obj/item/clothing/shoes/jackboots/inquisitor = 2,
 		/obj/item/weapon/thurible = 1,
+		/obj/item/weapon/storage/fancy/candle_box/holo = 5,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
 
@@ -3016,7 +3027,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
 		/obj/item/weapon/boxofsnow = 3,
-		/obj/item/weapon/vinyl/clockwork = 1,
+		/obj/item/weapon/vinyl/echoes = 1,
 		/obj/item/stack/sheet/brass/bigstack = 3,
 		/obj/item/stack/sheet/ralloy/bigstack = 3,
 		/obj/item/device/vampirehead = 1,
@@ -3046,7 +3057,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/largecrate/secure/frankenstein = 100,
 		/obj/item/weapon/boxofsnow = 50,
 		/obj/item/crackerbox = 200,
-		/obj/item/weapon/vinyl/clockwork = 50,
+		/obj/item/weapon/vinyl/echoes = 50,
 		/obj/item/stack/sheet/brass/bigstack = 50,
 		/obj/item/stack/sheet/ralloy/bigstack = 50,
 		/obj/item/device/vampirehead = 150,

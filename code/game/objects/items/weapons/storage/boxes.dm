@@ -12,7 +12,7 @@
  *		Condiment bottle and silly cup boxes,
  *		Donkpocket and monkeycube boxes,
  *		ID and security PDA cart boxes,
- *		Handcuff, mousetrap, and pillbottle boxes,
+ *		Handcuff, sec/detective gear, mousetrap, and pillbottle boxes,
  *		Snap-pops and matchboxes,
  *		Replacement light boxes.
  *
@@ -464,6 +464,50 @@
 	for(var/i=0,i<7,i++)
 		new /obj/item/weapon/handcuffs(src)
 
+/obj/item/weapon/storage/box/large/securitygear
+	name = "security essentials"
+	desc = "A box containing essential security officer equipment. It has a piece of paper with the letters SEC written on it taped to one side."
+	icon_state = "largebox_sec"
+
+/obj/item/weapon/storage/box/large/securitygear/New()
+	..()
+	new /obj/item/device/radio/headset/headset_sec(src)
+	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
+	new glasses(src)
+	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/weapon/storage/belt/security(src)
+	new /obj/item/device/flashlight/tactical(src)
+	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
+	new /obj/item/device/gps/secure(src)
+	new /obj/item/device/flash(src)
+	new /obj/item/weapon/grenade/flashbang(src)
+	new /obj/item/weapon/melee/baton/loaded(src)
+	new /obj/item/weapon/gun/energy/taser(src)
+	new /obj/item/weapon/reagent_containers/spray/pepper(src)
+	new /obj/item/taperoll/police(src)
+	new /obj/item/device/hailer(src)
+
+/obj/item/weapon/storage/box/large/detectivegear
+	name = "detective essentials"
+	desc = "A box containing essential detective officer equipment. It has a piece of paper with the letters DET written on it taped to one side."
+	icon_state = "largebox_det"
+
+/obj/item/weapon/storage/box/large/detectivegear/New()
+	..()
+	new /obj/item/device/radio/headset/headset_sec(src)
+	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
+	new glasses(src)
+	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/device/gps/secure(src)
+	new /obj/item/ammo_storage/box/c38(src)
+	new /obj/item/ammo_storage/box/c38(src)
+	new /obj/item/ammo_storage/speedloader/c38(src)
+	new /obj/item/weapon/storage/box/evidence(src)
+	new /obj/item/device/detective_scanner(src)
+	new /obj/item/binoculars(src)
+	new /obj/item/weapon/storage/box/surveillance(src)
+	new /obj/item/device/handtv(src)
+
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
 	desc = "<span class='userdanger'>WARNING: Keep out of reach of children.</span>"
@@ -594,6 +638,15 @@
 	..()
 	new /obj/item/clothing/suit/syndicatefake(src)
 	new /obj/item/clothing/head/syndicatefake(src)
+
+/obj/item/weapon/storage/box/syndicatefake/ninja
+	name = "Ninja Suit and Hood Replica"
+	icon_state = "box_of_doom"
+
+/obj/item/weapon/storage/box/syndicatefake/ninja/New()
+	..()
+	new /obj/item/clothing/suit/spaceninjafake(src)
+	new /obj/item/clothing/head/spaceninjafake(src)
 
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"

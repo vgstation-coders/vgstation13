@@ -579,7 +579,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
-#define PACIFIABLE 16		//Should a mob have this flag in their status_flags, they will be able to run is_pacified(), not all mobs call is_pacified however.
+#define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
@@ -1016,6 +1016,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_UNDYING  17
 #define VAMP_CAPE	  18
 #define STARTING_BLOOD 10
+
+#define VAMP_FAILURE -1
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1

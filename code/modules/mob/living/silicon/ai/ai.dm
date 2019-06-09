@@ -343,7 +343,9 @@ var/list/ai_list = list()
 		return
 	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "Cancel")
 	if(confirm == "Yes")
-		call_shuttle_proc(src, justification)
+		if(call_shuttle_proc(src, justification))
+			if(!isobserver(usr))
+				shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
 
 	// hack to display shuttle timer
 	if(emergency_shuttle.online)

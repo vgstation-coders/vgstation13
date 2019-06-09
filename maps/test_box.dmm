@@ -2454,7 +2454,7 @@
 "aVj" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/chapel/main)
 "aVk" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/shuttle/arrival/station)
 "aVl" = (/obj/structure/bed/chair/shuttle{dir = 8},/obj/effect/landmark/corpse/captain/rig,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
-"aVm" = (/obj/structure/bed/chair/vehicle/wizmobile{dir = 8},/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
+"aVm" = (/obj/structure/bed/chair/vehicle/firebird{dir = 8},/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "aVn" = (/obj/structure/table,/obj/item/weapon/spellbook,/obj/item/weapon/spellbook,/obj/item/weapon/spellbook,/obj/item/weapon/spellbook,/obj/item/weapon/spellbook,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "aVo" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/device/mass_spectrometer/adv,/obj/item/device/healthanalyzer,/obj/item/device/flashlight,/obj/item/weapon/hand_tele,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "aVp" = (/obj/structure/table,/obj/item/clothing/gloves/yellow,/obj/item/clothing/gloves/yellow,/obj/item/weapon/storage/backpack/holding/miniblackhole,/obj/item/weapon/storage/backpack/holding/miniblackhole,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
