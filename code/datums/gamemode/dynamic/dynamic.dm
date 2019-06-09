@@ -146,7 +146,7 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/GetScoreboard()
 
-  dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
+	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
 
 	var/rules = list()
 	if (executed_rules.len > 0)
