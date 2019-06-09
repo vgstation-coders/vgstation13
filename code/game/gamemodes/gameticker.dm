@@ -722,7 +722,15 @@ var/datum/controller/gameticker/ticker
 				R.connect_AI(select_active_ai_with_fewest_borgs())
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
-
+	//Give the captain's spare ID to the highest-ranking head of staff
+	var/mob/highest_ranking_head_of_staff = find_highest_ranking_head_of_staff()
+	if(!highest_ranking_head_of_staff)
+		return
+	for(var/atom/movable/ID in captain_ids)
+		if(ID.z != STATION_Z)
+			continue
+		highest_ranking_head_of_staff.put_in_hands(ID)
+		break
 
 /world/proc/has_round_started()
 	return ticker && ticker.current_state >= GAME_STATE_PLAYING

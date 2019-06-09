@@ -1802,3 +1802,22 @@ Game Mode config tags:
     if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
+
+
+/proc/find_highest_ranking_head_of_staff()
+	var/highest_rank_found = 0
+	var/list/people_with_the_highest_rank = list()
+
+	for(var/mob/living/player in player_list)
+		if(!player.mind)
+			continue
+		var/current_rank = chain_of_command[player.mind.assigned_role]
+		if(current_rank && current_rank > highest_rank_found)
+			highest_rank_found = current_rank
+			people_with_the_highest_rank = list(player)
+		else if(current_rank && current_rank == highest_rank_found)
+			people_with_the_highest_rank += player
+	
+	if(!people_with_the_highest_rank.len)
+		return
+	return pick(people_with_the_highest_rank)

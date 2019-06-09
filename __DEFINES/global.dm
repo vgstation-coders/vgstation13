@@ -469,3 +469,13 @@ var/list/variables_not_to_be_copied = list(
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
+
+// http://ss13.moe/wiki/index.php/Chain_of_Command
+var/list/chain_of_command = list(
+	"Captain" = 1,
+	"Head of Personnel" = 2,
+	"Head of Security" = 3,
+	"Chief Engineer" = 4,
+	"Research Director" = 4,
+	"Chief Medical Officer" = 4,
+)

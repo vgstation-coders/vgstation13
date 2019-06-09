@@ -572,6 +572,11 @@
 	var/datum/job/captain/J = new/datum/job/captain
 	access = J.get_access()
 	..()
+	captain_ids += src
+
+/obj/item/weapon/card/id/captains_spare/Destroy()
+	captain_ids -= src
+	..()
 
 /obj/item/weapon/card/id/admin
 	name = "Admin ID"
