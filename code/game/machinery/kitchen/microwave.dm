@@ -125,7 +125,7 @@
 				if(istype(R))
 					R.reagents.remove_reagent(CLEANER,5)
 				user.visible_message( \
-					"<span class='notice'>[user]  has cleaned  the microwave.</span>", \
+					"<span class='notice'>[user] has cleaned the microwave.</span>", \
 					"<span class='notice'>You have cleaned the microwave.</span>" \
 				)
 				src.dirty = 0 // It's clean!
