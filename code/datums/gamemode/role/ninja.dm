@@ -505,11 +505,7 @@ Helpers For Both Variants
 		return
 
 /obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
-	if(active)
-		cant_drop = TRUE
-	else
-		cant_drop = FALSE
-	return cant_drop
+	return cant_drop = active //they should be the same value every time
 
 /obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W,/obj/item/weapon/melee/energy/sword))
