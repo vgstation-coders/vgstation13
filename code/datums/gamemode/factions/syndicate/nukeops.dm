@@ -214,8 +214,5 @@
 				M = R.antag.current
 				if(M.stat != DEAD)
 					livingmembers++
-		if(livingmembers > 0)
-			return
-		else
-			if (src.stage != FACTION_DEFEATED)
-				stage(FACTION_DEFEATED)
+		if(ticker.theme.playing && !livingmembers && ticker.theme.playlist_id == "nukesquad")
+			ticker.StopThematic()

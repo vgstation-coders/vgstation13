@@ -223,7 +223,7 @@
 		qdel(src)
 		return
 	var/confirm = alert(M, "Are you sure you want to announce your presence? Doing so will display a command announcement and start the Nuclear Assault playlist.", "Are you sure?", "No", "Yes")
-	if (confirm == "Yes" && linkedfaction.stage != FACTION_ENDGAME && M.stat == CONSCIOUS)
-		linkedfaction.stage(FACTION_ENDGAME)
+	if (confirm == "Yes" && !ticker.theme.playing && M.stat == CONSCIOUS)
+		ticker.StartThematic(linkedfaction.playlist)
 		command_alert(/datum/command_alert/nuclear_operatives)
 		qdel(src)
