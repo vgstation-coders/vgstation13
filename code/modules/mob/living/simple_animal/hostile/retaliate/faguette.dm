@@ -68,5 +68,5 @@
 	if(timestopped)
 		return //under effects of time magick
 
-	var/msg = pick("drools through its stitched mouth","silently cries into [gender==MALE?"his":"her"] baguette","sloppily mimes tieing an invisible noose around its neck") 
+	var/msg = pick("drools through its stitched mouth","silently cries into its baguette","sloppily mimes tieing an invisible noose around its neck") 
 	return ..("me", type, "[msg].")
