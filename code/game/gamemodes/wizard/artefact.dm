@@ -88,6 +88,9 @@
 	hitsound = 'sound/items/welder2.ogg'
 
 /obj/item/weapon/scrying/attack_self(mob/user as mob)
+	if(!isspellcaster(user))
+		to_chat(user, "<span class='notice'>You have no idea how to use this.</span>")
+		return
 	to_chat(user, "<span class='notice'>You can see...everything!</span>")
 	visible_message("<span class='danger'>[usr] stares into [src], their eyes glazing over.</span>")
 	user.ghostize(1)

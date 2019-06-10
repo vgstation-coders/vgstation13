@@ -283,6 +283,8 @@
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
+#define isspellcaster(H) (ismagician(H) || iswizard(H) || isapprentice(H))
+
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 

@@ -93,6 +93,10 @@
 	processing_objects.Remove(src)
 	..()
 
+/obj/item/weapon/gun/energy/staff/preattack(atom/target, mob/living/user, proximity_flag, click_parameters)
+	if(!isspellcaster(user))
+		to_chat(user, "<span class='notice'>You have no idea how to use this.</span>")
+		return 1
 
 /obj/item/weapon/gun/energy/staff/process()
 	charge_tick++
@@ -120,6 +124,9 @@
 	return 1
 
 /obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
+	if(!isspellcaster(user))
+		to_chat(user, "<span class='notice'>You have no idea how to use this.</span>")
+		return
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -181,6 +188,9 @@
 	return 1
 
 /obj/item/weapon/gun/energy/staff/necro/attack_self(mob/user)
+	if(!isspellcaster(user))
+		to_chat(user, "<span class='notice'>You have no idea how to use this.</span>")
+		return
 	if(next_change > world.timeofday)
 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
 		return
@@ -349,6 +359,9 @@
 	flags = FPRINT | TWOHANDABLE
 
 /obj/item/weapon/gun/energy/staff/swapper/update_wield(mob/user)
+	if(!isspellcaster(user))
+		to_chat(user, "<span class='notice'>You have no idea how to use this.</span>")
+		return
 	..()
 	to_chat(user, "<span class = 'notice'>[wielded?"Holding \the [src] in both hands grants it more power!":"As you hold \the [src] in one hand, it sighs."]</span>")
 	if(wielded)
@@ -517,6 +530,9 @@ obj/item/weapon/gun/energy/staff/focus
 	charge_cost = 100
 
 obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
+	if(!isspellcaster(user))
+		to_chat(user, "<span class='notice'>You have no idea how to use this.</span>")
+		return
 	if(projectile_type == "/obj/item/projectile/forcebolt")
 		charge_cost = 250
 		to_chat(user, "<span class='warning'>The [src.name] will now strike a small area.</span>")
