@@ -315,7 +315,7 @@ macro "hotkeymode"
 		command = "MoveKey 2 0"
 	elem "T"
 		name = "T"
-		command = "say"
+		command = ".winset \"say_window.is-visible=true say_input.focus=true\""
 	elem "W"
 		name = "W"
 		command = "MoveKey 1 1"
@@ -354,7 +354,7 @@ macro "hotkeymode"
 		command = ".screenshot"
 	elem "F3"
 		name = "F3"
-		command = "say"
+		command = ".winset \"say_window.is-visible=true say_input.focus=true\""
 	elem "F4"
 		name = "F4"
 		command = "me"
@@ -386,32 +386,32 @@ menu "menu"
 		name = "&Client"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Reconnect"
 		command = ".reconnect"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quit"
 		command = ".quit"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Icons"
 		command = ""
 		saved-params = "is-checked"
@@ -444,7 +444,7 @@ menu "menu"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Icons"
@@ -455,16 +455,16 @@ menu "menu"
 		category = "&Icons"
 		can-check = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Help"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Admin help\tF1"
 		command = "adminhelp"
 		category = "&Help"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Hotkeys"
 		command = "hotkeys-help"
 		category = "&Help"
@@ -473,12 +473,12 @@ menu "menu"
 		name = "Settings"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "General Settings"
 		command = "modifypreferences 1"
 		category = "Settings"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Special Roles"
 		command = "modifypreferences 2"
 		category = "Settings"
@@ -487,7 +487,7 @@ menu "menu"
 		name = "Skin"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Swap Sides"
 		command = "swapsides"
 		category = "Skin"
@@ -497,12 +497,12 @@ menu "menu"
 		command = ""
 		is-disabled = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Profiler"
 		command = ".profile"
 		category = "Server"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "Server"
@@ -594,7 +594,6 @@ window "Telecomms IDE"
 		command = "cancel"
 		multi-line = true
 		no-command = true
-
 
 window "mainwindow"
 	elem "mainwindow"
@@ -947,6 +946,49 @@ window "infowindow"
 		on-show = ".winset\"rpane.infob.is-visible=true;rpane.browseb.is-visible=true?rpane.infob.pos=130,0:rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.browseb.is-visible=true?rpane.browseb.is-checked=true rpane.rpanewindow.left=browserwindow:rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
 
+window "say_window"
+	elem "say_window"
+		type = MAIN
+		pos = 800,600
+		size = 303x80
+		anchor1 = none
+		anchor2 = none
+		is-visible = false
+		saved-params = "pos;size;is-minimized;is-maximized"
+		title = "say"
+		statusbar = false
+		can-minimize = false
+		can-resize = false
+	elem "say_cancel"
+		type = BUTTON
+		pos = 180,48
+		size = 60x20
+		anchor1 = none
+		anchor2 = none
+		border = line
+		saved-params = "is-checked"
+		text = "Cancel"
+		command = ".say_window_close"
+	elem "say_ok"
+		type = BUTTON
+		pos = 48,48
+		size = 60x20
+		anchor1 = none
+		anchor2 = none
+		border = line
+		saved-params = "is-checked"
+		text = "OK"
+		command = ".say_window_ok"
+	elem "say_input"
+		type = INPUT
+		pos = 8,16
+		size = 288x20
+		anchor1 = none
+		anchor2 = none
+		border = line
+		saved-params = ""
+		command = "say"
+
 window "window1"
 	elem "window1"
 		type = MAIN
@@ -973,3 +1015,4 @@ window "window1"
 		background-color = #fffdd0
 		border = sunken
 		saved-params = "max-lines"
+
