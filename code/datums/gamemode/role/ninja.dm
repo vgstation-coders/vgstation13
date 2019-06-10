@@ -530,6 +530,12 @@ Helpers For Both Variants
 	if(active)
 		toggleActive(user,togglestate = "off")
 
+/obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
+	if(!isninja(user) && active)
+		toggleActive(user,togglestate = "off")
+		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+		return
+
 		
 /*=======
 Suit and assorted
