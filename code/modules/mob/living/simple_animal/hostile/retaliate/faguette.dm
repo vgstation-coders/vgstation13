@@ -56,7 +56,7 @@
 		to_chat(src, "<span class='danger'>You are too depressed to push [M] out of \the way.</span>")
 		M.LAssailant = src
 		return
-..()
+	..()
 
 
 /mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
