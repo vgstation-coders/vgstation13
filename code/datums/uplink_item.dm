@@ -489,7 +489,6 @@ var/list/uplink_items = list()
 	name = "NTT Report Falsifier"
 	desc = "An intercom stolen from Nanotrasen Command that allows a single fake Galactic Update to be sent. Single-Use only. Let the crew know about the upcoming disk inspection."
 	item = /obj/item/device/reportintercom
-	num_in_stock = 3
 	cost = 6
 	discounted_cost = 4
 	jobs_with_discount = list("Nuclear Operative")
