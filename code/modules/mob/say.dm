@@ -183,3 +183,18 @@
 	if(stat == DEAD || universal_understand)
 		return TRUE
 	return FALSE
+
+/mob/proc/forcesay(list/append)
+	if(stat != CONSCIOUS || !client)
+		return
+	var/temp
+	if(client.is_in_hotkey_mode())
+		temp = winget(client, "say_window.say_input", "text")
+		say_window_close()
+	else
+		temp = parse_say_command(winget(client, "input", "text"))
+		winset(client, "input", "text=")
+	if(!length(temp))
+		return
+	temp += pick(append)
+	say(temp)

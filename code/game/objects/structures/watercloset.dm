@@ -116,11 +116,11 @@
 					GM.visible_message("<span class='danger'>[user] starts to place [GM.name]'s head inside \the [src].</span>", "<span class='userdanger'>[user] is placing your head inside \the [src]!</span>")
 					swirlie = GM
 					if(do_after(user, src, 3 SECONDS, needhand = FALSE))
+						GM.forcesay(list("-BLERGH", "-BLURBL", "-HURGBL"))
 						playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
 						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
-
 						watersource.reagents.reaction(GM, TOUCH)
 
 						if(!GM.internal && GM.losebreath <= 30)
