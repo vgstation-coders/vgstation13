@@ -1,14 +1,5 @@
 var/list/forced_roundstart_ruleset = list()
 
-var/list/threat_by_job = list(
-	"Captain" = 12,
-	"Head of Security" = 10,
-	"Head of Personnel" = 8,
-	"Warden" = 8,
-	"Security Officer" = 4,
-	"Detective" = 3,
-)
-
 // -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
 var/dynamic_curve_width = 1.8
@@ -602,13 +593,6 @@ var/stacking_limit = 90
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
-
-	// -- No injection, we'll just update the threat
-	else
-		var/jobthreat = threat_by_job[newPlayer.mind.assigned_role]
-		if(jobthreat)
-			refund_threat(jobthreat)
-			threat_log += "[worldtime2text()]: [newPlayer] refunded [jobthreat] by joining as [newPlayer.mind.assigned_role]."
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
