@@ -4,7 +4,6 @@
 	required_pref = NINJA
 	special_role = NINJA
 	logo_state = "ninja-logo"
-	refund_value = BASE_SOLO_REFUND
 	wikiroute = NINJA
 	disallow_job = TRUE
 	restricted_jobs = list()

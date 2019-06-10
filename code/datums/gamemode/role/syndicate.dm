@@ -4,7 +4,6 @@
 	required_pref = TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = TRAITOR
-	refund_value = BASE_SOLO_REFUND
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
@@ -135,7 +134,6 @@
 	name = ROGUE
 	id = ROGUE
 	logo_state = "synd-logo"
-	refund_value = BASE_SOLO_REFUND/2
 
 /datum/role/traitor/rogue/ForgeObjectives()
 	var/datum/role/traitor/rogue/rival
