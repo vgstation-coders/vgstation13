@@ -1,38 +1,7 @@
-/mob/verb/say_window_ok()
-	set name = ".say_window_ok"
-	set hidden = TRUE
-
-	say_verb(winget(client, "say_window.say_input", "text"))
-
-/mob/verb/say_window_close()
-	set name = ".say_window_close"
-	set hidden = TRUE
-
-	winset(client, "say_window", "is-visible=false")
-	winset(client, "say_window.say_input", "text=")
-
-/client/proc/is_in_hotkey_mode()
-	return winget(src, "mainwindow.hotkey_toggle", "is-checked") == "true"
-
-// Input: text string in the form of `Say "something`
-// Returns: null or the text string "something"
-/proc/parse_say_command(var/command)
-	command = trim_left(command)
-	if(length(command) < 6)
-		return
-	if(!findtextEx(command, "Say \"", 1, 7))
-		return
-	if(command[6] == "*") // emote
-		return
-	return copytext(command, 6)
-
-/mob/verb/say_verb(message as null|text)
+/mob/verb/say_verb(message as text)
 	set name = "Say"
 	set category = "IC"
 
-	say_window_close()
-	if(!message)
-		return
 	if(say_disabled)
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
@@ -185,16 +154,32 @@
 	return FALSE
 
 /mob/proc/forcesay(list/append)
-	if(stat != CONSCIOUS || !client)
-		return
-	var/temp
-	if(client.is_in_hotkey_mode())
-		temp = winget(client, "say_window.say_input", "text")
-		say_window_close()
-	else
-		temp = parse_say_command(winget(client, "input", "text"))
-		winset(client, "input", "text=")
-	if(!length(temp))
-		return
-	temp += pick(append)
-	say(temp)
+	if(stat == CONSCIOUS)
+		if(client)
+			var/virgin = 1	//has the text been modified yet?
+			var/temp = winget(client, "input", "text")
+			if(findtextEx(temp, "Say \"", 1, 7) && length(temp) > 5)	//case sensitive means
+
+				temp = replacetext(temp, ";", "")	//general radio
+
+				if(findtext(trim_left(temp), ":", 6, 7))	//dept radio
+					temp = copytext(trim_left(temp), 8)
+					virgin = 0
+
+				if(virgin)
+					temp = copytext(trim_left(temp), 6)	//normal speech
+					virgin = 0
+
+				while(findtext(trim_left(temp), ":", 1, 2))	//dept radio again (necessary)
+					temp = copytext(trim_left(temp), 3)
+
+				if(findtext(temp, "*", 1, 2))	//emotes
+					return
+
+				var/trimmed = trim_left(temp)
+				if(length(trimmed))
+					if(append)
+						temp += pick(append)
+
+					say(temp)
+				winset(client, "input", "text=[null]")
