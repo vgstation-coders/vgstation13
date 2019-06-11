@@ -204,3 +204,15 @@
 	else
 		nuke_code = "code will be provided later"
 	return
+
+/datum/faction/syndicate/nuke_op/process()
+	var/livingmembers
+	var/mob/living/M
+	if(members.len > 0)
+		for (var/datum/role/R in members)
+			if(R.antag.current)
+				M = R.antag.current
+				if(M.stat != DEAD)
+					livingmembers++
+		if(ticker.theme.playing && !livingmembers && ticker.theme.playlist_id == "nukesquad")
+			ticker.StopThematic()
