@@ -335,8 +335,8 @@
 	
 	R.cult_permitted = 1
 	playsound(R, 'sound/effects/convert_success.ogg', 75, 0, -4)
-	R.add_spell(new /spell/cult/trace_rune/friendly_trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	R.add_spell(new /spell/cult/trace_rune/friendly_erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	//R.add_spell(new /spell/cult/trace_rune/friendly_trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	//R.add_spell(new /spell/cult/trace_rune/friendly_erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	R.add_language(LANGUAGE_CULT)
 	R.module.quirk_flags |= MODULE_IS_DEFINITIVE
 	

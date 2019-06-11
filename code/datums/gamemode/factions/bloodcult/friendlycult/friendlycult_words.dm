@@ -1,5 +1,10 @@
 //Initialized in bloodcult_words
 
+/datum/runetype/friendly_cult //Friendly cultists, intended for silicons
+	list/words_english = list("friend","love","hug")
+	list/words_rune = list("mgor","nohlizot","jotkoo")
+	list/words_icons = list("rune-1","rune-2","rune-4")
+	
 /datum/runetype/friendly_cult/friend
 	english		= "friend"
 	rune		= "mgor"
