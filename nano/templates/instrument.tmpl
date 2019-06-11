@@ -1,3 +1,7 @@
+<!--
+Title: instrument view
+Used In File(s): /code/game/objects/structures/musician.dm
+ -->
 <span id="controls">
     <H3>Playback</H3>
     {{:helper.link('Play', '', { 'play' : 1 })}}
@@ -18,6 +22,7 @@
 Tempo: {{:helper.link('-', '', { 'tempo' : data.ticklag })}} {{:data.bpm}} BPM {{:helper.link('+', '', { 'tempo' : -data.ticklag })}}
 <BR><BR>
 <span id="lines">
+{{:data.lines}}
 </span>
 {{:helper.link('Add Line', '', { 'newline' : 1 })}}
 <BR><BR>
@@ -40,10 +45,9 @@ Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
 Lines may be up to 50 characters.<br>
 A song may only contain up to 50 lines.<br>
 </span>
-
 <script>
 var prevChord = "";
-var highlightClass = "linkOn";
+var highlightClass = "activeChord";
 
 function controlVisibility(num){
     if(num == 1){
@@ -55,29 +59,31 @@ function controlVisibility(num){
 
 function renderLines(lines){
     var result = "";
-    for (i = 0; i < lines; i++) { 
-        var curLine = lines.split(",");
+    for (i = 0; i < lines.length; i++) { 
+        var curLine = lines[i].split(",");
         var htmlLine = [];
-        for(j = 0; j < curLine; j++){
-            htmlLine.push("<div class='chord' id='chord_"+i+"_"+j+"'>"+chords[i]+"</div>");
+        for(j = 0; j < curLine.length; j++){
+            htmlLine.push("<div class='chord' id='chord_"+i+"_"+j+"'>"+curLine[j]+"</div>");
         }
         result += "Line "+i+": "+htmlLine.join(",")+"<BR>";
     }
     $("#lines").html(result);
 }
 
-//highlights the chord currently being played
 function activeChord(lineIndex, chordIndex){
+    alert("called");
     var id = "#chord_"+lineIndex+"_"+chordIndex;
+    alert("playing chord "+$(id).text());
     if(prevChord == ""){
         prevChord = id;
         $(id).addClass(highlightClass);
     }
 
-    if(prevChord != id)
+    if(prevChord != id){
         $(prevChord).removeClass(highlightClass);
         $(id).addClass(highlightClass);
         prevChord = id;
+    }
 }
 
 function helpVisibility(num){
@@ -99,8 +105,6 @@ function messageReceived(){
     $('.buttonActive').removeClass('linkPending');
 }
 
-alert(data.lines);
-var lines = $.parseJSON(data.lines);
-alert(lines);
+var lines = $.parseJSON($("#lines").text());
 renderLines(lines);
 </script>
