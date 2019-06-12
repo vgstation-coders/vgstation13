@@ -204,7 +204,7 @@
 	logo_state = "nuke-logo-leader"
 
 /datum/role/nuclear_operative/leader/OnPostSetup()
-	if(antag && src.faction.stage)
+	if(antag)
 		var/datum/action/play_ops_music/go_loud = new /datum/action/play_ops_music(antag)
 		go_loud.linkedfaction = faction
 		go_loud.Grant(antag.current)
