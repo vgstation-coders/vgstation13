@@ -387,7 +387,7 @@
 	else
 		to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((T.cooldown - world.time)/10)] seconds.</span>")
 
-	var/role/ninja/N = user.mind.GetRole(NINJA)
+	var/datum/role/ninja/N = user.mind.GetRole(NINJA)
 	N.times_charged_sword++
 
 

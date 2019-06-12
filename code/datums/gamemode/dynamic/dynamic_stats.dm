@@ -182,7 +182,7 @@
 /datum/stat/role/revolutionary/leader
 	var/flashes_created = 0
 
-/datum/stat/role/revolutionary/leader/New(var/datum/role/revolutionary/head/R)
+/datum/stat/role/revolutionary/leader/New(var/datum/role/revolutionary/leader/R)
 	..(R)
 	flashes_created = R.flashes_created
 
@@ -203,7 +203,7 @@
 	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 
-/datum/stat/role/catbeast/New(/datum/role/catbeast/C)
+/datum/stat/role/catbeast/New(var/datum/role/catbeast/C)
 	..(C)
 	ticks_survived = C.ticks_survived
 	threat_generated = C.threat_generated

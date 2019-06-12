@@ -15,6 +15,8 @@
 	var/list/datum/stat/malf_module_purchase/purchased_modules = list()
 	var/shunted = 0
 
+	stat_datum = /datum/stat/faction/malf
+
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Free Silicon Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}

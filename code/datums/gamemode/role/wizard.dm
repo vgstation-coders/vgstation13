@@ -10,6 +10,8 @@
 
 	var/list/spellbook_purchases = list()
 
+	stat_datum = /datum/stat/role/wizard
+
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/wizard)

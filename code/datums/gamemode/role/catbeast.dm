@@ -10,6 +10,8 @@
 	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 
+	stat_datum = /datum/stat/faction/catbeast
+
 /datum/role/catbeast/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a mangy catbeast!</span></B>")
 	to_chat(antag.current, "The longer you avoid the crew, the greater danger the station will attract! You will generate threat for each new room you enter and for being alive (up to 5 minutes).")
