@@ -141,14 +141,14 @@
 	// same as above, but only living blob tiles
 	var/blobs_round_end = 0
 	// count of all built structures
-	var/datum/stat/blob/structure_countsbuilt_structures = null
+	var/datum/stat/faction_data/blob/structure_counts/built_structures = null
 
 /datum/stat/faction/blob/New(/var/datum/faction/blob_conglomerate/BF)
 	blobs_grown_total = blob_tiles_grown_total
 	blobs_round_end = blobs.len
 	built_structures = BF.built_structure_counts
 
-/datum/stat/blob/structure_counts
+/datum/stat/faction_data/blob/structure_counts
 	var/factories = 0
 	var/nodes = 0
 	var/resgens = 0
@@ -161,3 +161,27 @@
 /datum/stat/role/wizard/New(var/datum/role/wizard/W)
 	..(W)
 	spellbook_purchases = W.spellbook_purchases
+
+/datum/stat/role/vampire
+	var/list/powers = list()
+	var/blood_total = 0
+
+/datum/stat/role/vampire/New(var/datum/role/vampire/V)
+	..(V)
+	for(var/datum/power/P in V.powers)
+		powers.Add(P.type)
+	blood_total = V.blood_total
+
+/datum/stat/role/revolutionary
+	var/recruits_converted = 0
+
+/datum/stat/role/revolutionary/New(var/datum/role/revolutionary/R)
+	..(R)
+	recruits_converted = R.recruits_converted
+
+/datum/stat/role/revolutionary/leader
+	var/flashes_created = 0
+
+/datum/stat/role/revolutionary/New(var/datum/role/revolutionary/head/R)
+	..(R)
+	flashes_created = R.flashes_created

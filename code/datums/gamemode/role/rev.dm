@@ -6,6 +6,9 @@
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND,GREET_LATEJOIN,GREET_CONVERTED,GREET_PROVOC_CONVERTED,GREET_REVSQUAD_CONVERTED,GREET_ADMINTOGGLE)
 
+	//statistics stuff
+	var/recruits_converted = 0
+
 // The ticker current state check is because revs are created, at roundstart, in the cuck cube.
 // Which is outside the z-level of the main station.
 
@@ -54,6 +57,9 @@
 	name = HEADREV
 	id = HEADREV
 	logo_state = "rev_head-logo"
+
+	//statistics
+	var/flashes_created = 0
 
 /datum/role/revolutionary/leader/OnPostSetup()
 	.=..()

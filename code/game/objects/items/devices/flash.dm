@@ -152,6 +152,8 @@
 
 	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
 		if (make_rev_flash(user))
+			var/datum/role/revolutionary/leader/R = user.mind.GetRole(HEADREV)
+			R.flashes_created++
 			return
 
 
@@ -283,6 +285,10 @@
 							to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 							broken = 1
 							icon_state = "flashburnt"
+
+						// log the recruitment
+						var/datum/role/revolutionary/R = user.mind.GetRoleByType(/datum/role/revolutionary)
+						R.recruits_converted++
 					else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND)
 						to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
 					else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned
