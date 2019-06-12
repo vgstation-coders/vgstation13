@@ -111,6 +111,9 @@
 
 	var/wikiroute
 
+	// What stat datum is associated with this role, used in generate_statistics() at round end.
+	var/stat_datum = /datum/stat/role
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
 	faction=fac
@@ -518,7 +521,7 @@
 
 
 /datum/role/proc/generate_statistics()
-	return new /datum/stat/role(src)
+	return new stat_datum(src)
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

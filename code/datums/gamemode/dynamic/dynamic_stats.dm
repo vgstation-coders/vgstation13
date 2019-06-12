@@ -182,7 +182,7 @@
 /datum/stat/role/revolutionary/leader
 	var/flashes_created = 0
 
-/datum/stat/role/revolutionary/New(var/datum/role/revolutionary/head/R)
+/datum/stat/role/revolutionary/leader/New(var/datum/role/revolutionary/head/R)
 	..(R)
 	flashes_created = R.flashes_created
 

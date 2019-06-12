@@ -9,6 +9,7 @@
 	disallow_job = TRUE
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
+	stat_datum = /datum/stat/role/ninja
 
 	//statistics
 	var/shuriken_thrown = 0

@@ -1580,7 +1580,6 @@ var/list/bloodstone_list = list()
 		qdel(TW)
 	if (!gcDestroyed && loc)
 		new /obj/machinery/singularity/narsie/large(src.loc)
-		stat_collection.cult_narsie_summoned = TRUE
 		SSpersistence_map.setSavingFilth(FALSE)
 	return 1
 

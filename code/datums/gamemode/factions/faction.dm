@@ -47,6 +47,8 @@ var/list/factions_with_hud_icons = list()
 
 	var/minor_victory = FALSE
 
+	var/datum/stat/faction/stat_datum = /datum/stat/faction
+
 /datum/faction/New()
 	..()
 	objective_holder = new
@@ -187,10 +189,10 @@ var/list/factions_with_hud_icons = list()
 	return score_results
 
 
-// For statistics viewer data. Override when faction-specific data is desired.
-// Use a faction-specific datum (i.e. /datum/stat/faction/malf) when doing so.
+// For statistics viewer data. Override when necessary.score_results
+
 /datum/faction/proc/generate_statistics()
-	return new /datum/stat/faction(src)
+	return new stat_datum(src)
 
 /datum/faction/Topic(href, href_list)
 	..()

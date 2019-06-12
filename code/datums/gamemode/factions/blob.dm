@@ -34,7 +34,7 @@
 	// statistics
 	var/remaining_structures_count = list()
 
-	var/datum/stat/blob/structure_counts/built_structure_counts = new()
+	var/datum/stat/faction_data/blob/structure_counts/built_structure_counts = new
 
 // -- Victory procs --
 

@@ -204,6 +204,7 @@
 	else
 		nuke_code = "code will be provided later"
 	return
+<<<<<<< HEAD
 
 /datum/faction/syndicate/nuke_op/process()
 	var/livingmembers
@@ -216,3 +217,5 @@
 					livingmembers++
 		if(ticker.theme.playing && !livingmembers && ticker.theme.playlist_id == "nukesquad")
 			ticker.StopThematic()
+=======
+>>>>>>> Remove some errors, some other minor changes
