@@ -10,6 +10,11 @@
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
 
+	//statistics
+	var/shuriken_thrown = 0
+	var/times_charged_sword = 0
+	var/stealth_posters_posted = 0
+
 /datum/role/ninja/OnPostSetup()
 	. =..()
 	if(ishuman(antag.current))
@@ -111,12 +116,14 @@
 /obj/item/stack/shuriken/throw_at(var/atom/A, throw_range, throw_speed)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
-		if(H.mind.GetRole(NINJA))
+		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
+		if(N)
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
 				S.throw_at(A,throw_range,throw_speed*2)
 				H.put_in_hands(src)
+				N.shuriken_thrown++
 			else
 				..(A,throw_range,throw_speed*2)
 		else
@@ -379,6 +386,10 @@
 	else
 		to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((T.cooldown - world.time)/10)] seconds.</span>")
 
+	var/role/ninja/N = user.mind.GetRole(NINJA)
+	N.times_charged_sword++
+
+
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
 	desc = "The nanofilaments can mimic the color of walls and space station infastructure, but the edges remain a giveaway."
@@ -395,9 +406,11 @@
 	var/obj/structure/sign/poster/stealth/P = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.mind.GetRole(NINJA) && P)
+		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
+		if(N && P)
 			P.entry_turf = get_turf(user)
 			user.forceMove(P)
+			N.stealth_posters_posted++
 	return P
 
 /obj/item/mounted/poster/stealth/poster_animation(obj/D,mob/user)
@@ -508,7 +521,7 @@ Helpers For Both Variants
 		return
 	else
 		return ..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
@@ -525,12 +538,12 @@ Helpers For Both Variants
 		return 1
 	else
 		return ..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
 
-		
+
 /*=======
 Suit and assorted
 =======*/
@@ -545,20 +558,20 @@ Suit and assorted
 	species_restricted = list("Human")
 	eyeprot = 3
 	body_parts_covered = FULL_HEAD|BEARD
-	
+
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
 	desc = "What may appear to be a simple black garment is in fact a sophisticated nano-weave helmet. Standard issue ninja apprentice gear."
 	eyeprot = 0
 	pressure_resistance = ONE_ATMOSPHERE
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	
+
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
 	spawn(120 SECONDS)
 		pressure_resistance = 0
 		visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
-	
+
 /obj/item/clothing/suit/space/ninja
 	name = "elite ninja suit"
 	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for elite Spider Clan assassins."
@@ -571,19 +584,19 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human") //only have human sprites :/
 	can_take_pai = 1
-	
+
 /obj/item/clothing/suit/space/ninja/apprentice
 	name = "ninja suit"
 	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	pressure_resistance = ONE_ATMOSPHERE
-	
+
 /obj/item/clothing/suit/space/ninja/apprentice/New()
 	..()
 	spawn(150 SECONDS)
 		pressure_resistance = 0
 		visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
-	
+
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
 	/*if(!isninja(H))
 		if(equipped_slot != slot_wear_suit)
@@ -592,12 +605,12 @@ Suit and assorted
 			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
 			explosion(H.loc, 0, 0, 1)
 			H.u_equip(src, 1)
-			qdel(src)*/ 
+			qdel(src)*/
 	//else //Maybe when there's more functionality to warrant the suit exploding.
 	if(equipped_slot == slot_wear_suit)
 		icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
 		H.update_inv_wear_suit()
-	
+
 /obj/item/clothing/shoes/ninja
 	name = "ninja shoes"
 	desc = "A pair of ninja shoes, excellent for running and even better for smashing skulls."
@@ -606,16 +619,16 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
-	
+
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
-	
+
 /obj/item/clothing/shoes/ninja/apprentice/New()
 	..()
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)
 		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
-		
+
 
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"
@@ -626,7 +639,7 @@ Suit and assorted
 	actions_types = list()
 	species_fit = list("Human")
 	species_restricted = list("Human")
-		
+
 /*******************************************
 ****          WEEABOO VARIANTS          ****
 ********************************************/

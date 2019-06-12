@@ -185,3 +185,27 @@
 /datum/stat/role/revolutionary/New(var/datum/role/revolutionary/head/R)
 	..(R)
 	flashes_created = R.flashes_created
+
+/datum/stat/role/ninja
+	var/shuriken_thrown = 0
+	var/times_charged_sword = 0
+	var/stealth_posters_posted = 0
+
+/datum/stat/role/ninja/New(var/datum/role/ninja/N)
+	..(N)
+	shuriken_thrown = N.shuriken_thrown
+	times_charged_sword = N.times_charged_sword
+	stealth_posters_posted = N.stealth_posters_posted
+
+/datum/stat/role/catbeast
+	var/ticks_survived = 0
+	var/threat_generated = 0
+	var/threat_level_inflated = 0
+	var/list/areas_defiled = list()
+
+/datum/stat/role/catbeast/New(/datum/role/catbeast/C)
+	..(C)
+	ticks_survived = C.ticks_survived
+	threat_generated = C.threat_generated
+	threat_level_inflated = C.threat_level_inflated
+	areas_defiled = C.areas_defiled
