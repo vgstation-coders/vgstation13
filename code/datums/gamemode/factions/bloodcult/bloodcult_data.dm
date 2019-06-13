@@ -10,21 +10,20 @@ var/list/global_runesets = list()
 	var/list/words_icons = list()
 	
 /proc/initialize_runesets()
-	spawn(200)
-		if(runesets_initialized)
-			return
-		for(var/runeset_cast in subtypesof(/datum/runeset))
-			var/datum/runeset/rune_set = new runeset_cast()
-			for(var/wordset_cast in subtypesof(/datum/runeword))
-				var/datum/runeword/word_set = new wordset_cast()
-				if(rune_set.identifier == word_set.identifier)
-					global_runesets[rune_set.identifier] = rune_set
-					for(var/word_info in subtypesof(word_set))
-						var/datum/runeword/new_word = new word_info()
-						if(new_word.english)
-							rune_set.words[new_word.english] = new_word	
-					global_runesets[rune_set.identifier] = rune_set
-		runesets_initialized = 1
+	if(runesets_initialized)
+		return
+	for(var/runeset_cast in subtypesof(/datum/runeset))
+		var/datum/runeset/rune_set = new runeset_cast()
+		for(var/wordset_cast in subtypesof(/datum/runeword))
+			var/datum/runeword/word_set = new wordset_cast()
+			if(rune_set.identifier == word_set.identifier)
+				global_runesets[rune_set.identifier] = rune_set
+				for(var/word_info in subtypesof(word_set))
+					var/datum/runeword/new_word = new word_info()
+					if(new_word.english)
+						rune_set.words[new_word.english] = new_word	
+				global_runesets[rune_set.identifier] = rune_set
+	runesets_initialized = 1
 
 /datum/runeset/blood_cult //Real cultists
 	identifier = "blood_cult"
