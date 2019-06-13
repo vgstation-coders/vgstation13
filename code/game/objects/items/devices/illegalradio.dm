@@ -68,7 +68,7 @@
 				if(I)
 					I.buy(src, usr)
 					if(!nanotrasen_variant && prob(I.sps_chance))
-						SPS_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [I.name]")
+						SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [I.name]")
 			else
 				var/text = "[key_name(usr)] tried to purchase a black market item that doesn't exist."
 				var/textalt = "[key_name(usr)] tried to purchase a black market item that doesn't exist: [item]."
@@ -228,7 +228,7 @@
 							money_stored += payout
 							interact(usr)
 							if(!nanotrasen_variant && prob(sellable.sps_chance))
-								SPS_alert(src, "The SPS decryption complex has detected an illegal black market selling of item [sellable.name]")
+								SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market selling of item [sellable.name]")
 							return
 						else
 							visible_message("The uplink beeps: <span class='warning'>Teleportation process canceled. Please try again.</span>")
