@@ -547,6 +547,10 @@ var/global/list/paper_folding_results = list ( \
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
 
+/obj/item/weapon/paper/japanese_nanite_bundle
+	name = "Kajuaru kon'nichiwa!"
+	info = "<B>~Hewwo, and thank you for buywing a Bewnto Box of the monwth!~</B>"
+	
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
 
