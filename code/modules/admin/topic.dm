@@ -1549,10 +1549,9 @@
 		var/added_rule = input(usr,"What ruleset do you want to force right now? This will bypass threat level and population restrictions.", "Execute Ruleset", null) as null|anything in midround_rules
 		if (added_rule)
 			var/datum/gamemode/dynamic/mode = ticker.mode
-			midround_rules[added_rule].calledBy = "[key_name(usr)]"
 			log_admin("[key_name(usr)] executed the [added_rule] ruleset.")
 			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
-			mode.picking_specific_rule(midround_rules[added_rule],1)
+			mode.picking_specific_rule(midround_rules[added_rule],1,"[key_name(usr)]")
 
 	// -- Opens up the option window --
 	else if (href_list["f_dynamic_options"])
