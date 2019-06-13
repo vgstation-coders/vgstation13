@@ -86,4 +86,4 @@
 	sprites = list(
 		"Gravekeeper" = "cogspider"
 		)
-law_type = "Gravekeeper"
+	law_type = "Gravekeeper"
