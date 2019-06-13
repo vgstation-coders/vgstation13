@@ -239,7 +239,21 @@ var/list/uplink_items = list()
 /datum/uplink_item/dangerous/gatling
 	name = "Gatling Gun"
 	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."
-	item = /obj/item/weapon/gun/gatling
+	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
+	cost = 40
+	jobs_exclusive = list("Nuclear Operative")
+
+/datum/uplink_item/dangerous/nikita
+	name = "Nikita RC Missile Launcher"
+	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, this one might actually not blow up in your face. Comes with four rockets"
+	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
+	cost = 40
+	jobs_exclusive = list("Nuclear Operative")
+
+/datum/uplink_item/dangerous/hecate
+	name = "PMG Hecate II Anti-Material Rifle"
+	desc = "A .50 BMG anti-material sniper rifle. Anything between the barrel and the next three solid walls should be tenderized in short order. Comes with eight individual rounds, thermals and earmuffs."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/hecate
 	cost = 40
 	jobs_exclusive = list("Nuclear Operative")
 
@@ -247,9 +261,7 @@ var/list/uplink_items = list()
 	name = "Modified Tank Transfer Valve"
 	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
 	item = /obj/effect/spawner/newbomb
-	refund_path = /obj/item/device/transfer_valve/mediumsize
-	cost = 100
-	refund_amount = 15
+	cost = 15
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
@@ -257,7 +269,7 @@ var/list/uplink_items = list()
 	name = "Syndicate-modded Combat Robot Teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
 	item = /obj/item/weapon/robot_spawner/syndicate
-	cost = 100
+	cost = 40
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
@@ -265,7 +277,7 @@ var/list/uplink_items = list()
 	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
 	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
 	item = /obj/effect/spawner/mecha/mauler
-	cost = 140
+	cost = 60
 	jobs_exclusive = list("Nuclear Operative")
 
 // STEALTHY WEAPONS

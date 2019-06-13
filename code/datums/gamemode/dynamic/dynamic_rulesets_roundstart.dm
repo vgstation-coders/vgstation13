@@ -15,7 +15,7 @@
 	weight = 5
 	cost = 10
 	var/traitor_threshold = 3
-	var/additional_cost = 5 
+	var/additional_cost = 5
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
@@ -302,29 +302,28 @@
 /datum/dynamic_ruleset/roundstart/nuclear
 	name = "Nuclear Emergency"
 	role_category = /datum/role/nuclear_operative
-	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
+	restricted_from_jobs = list("Head of Security", "Captain") //Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
-	required_candidates = 5
+	required_enemies = list(3, 3, 3, 3, 3, 2, 1, 1, 0, 0)
+	required_candidates = 5 //This value is useless, see operative_cap
 	weight = 3
 	cost = 40
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 60
-	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
-
+	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
-	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	required_candidates = operative_cap[indice_pop]
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
-	//if ready() did its job, candidates should have 5 or more members in it
+	//If ready() did its job, candidates should have 5 or more members in it
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	if (!nuclear)
+	if(!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 
-	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	var/operatives = operative_cap[indice_pop]
 	var/leader = 1
 	for(var/operatives_number = 1 to operatives)
@@ -333,21 +332,20 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		if (leader)
+		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
-			newCop.AssignToRole(M.mind,1)
+			newCop.AssignToRole(M.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
 		else
 			var/datum/role/nuclear_operative/newCop = new
-			newCop.AssignToRole(M.mind,1)
+			newCop.AssignToRole(M.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
-	for (var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
+	for(var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
 		bomb.spawnbomb()
 	return 1
-
 
 //////////////////////////////////////////////
 //                                          //

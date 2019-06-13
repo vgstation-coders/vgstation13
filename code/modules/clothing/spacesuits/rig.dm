@@ -266,7 +266,7 @@
 	icon_state = "rig0-syndicate_elite"
 	item_state = "syndicate-helm-black"
 	_color = "syndicate_elite"
-	armor = list(melee = 62, bullet = 52, laser = 32,energy = 17, bomb = 37, bio = 100, rad = 60)
+	armor = list(melee = 65, bullet = 55, laser = 35,energy = 20, bomb = 40, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.4
 	clothing_flags = PLASMAGUARD
@@ -279,8 +279,8 @@
 	desc = "The result of reverse-engineered deathsquad technology combined with nuclear operative hardsuit."
 	item_state = "syndicate-black"
 	w_class = W_CLASS_MEDIUM
-	armor = list(melee = 70, bullet = 55, laser = 40, energy = 20, bomb = 47, bio = 100, rad = 60)
-	allowed = list(/obj/item/weapon/gun/osipr,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
+	armor = list(melee = 70, bullet = 60, laser = 40, energy = 25, bomb = 50, bio = 100, rad = 60)
+	allowed = list(/obj/item/weapon/gun/osipr, /obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/gun, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton, /obj/item/weapon/melee/energy/sword, /obj/item/weapon/handcuffs)
 	siemens_coefficient = 0.5
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD

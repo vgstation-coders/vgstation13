@@ -981,6 +981,7 @@
 #include "code\game\objects\items\weapons\grenades\inflatable.dm"
 #include "code\game\objects\items\weapons\grenades\smokebomb.dm"
 #include "code\game\objects\items\weapons\grenades\spawnergrenade.dm"
+#include "code\game\objects\items\weapons\grenades\syndigrenade.dm"
 #include "code\game\objects\items\weapons\implants\exile2.dm"
 #include "code\game\objects\items\weapons\implants\implant.dm"
 #include "code\game\objects\items\weapons\implants\implantcase.dm"
