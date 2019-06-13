@@ -6,6 +6,7 @@
 
 	var/flashed = 0
 	var/syndicate = 0
+	var/cult_permitted = 0 //For use in some special items to allow silicons to be converted
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()

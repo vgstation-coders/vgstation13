@@ -24,7 +24,7 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/spire/S in cult_spires)
 		S.upgrade()
 
-	for (var/obj/effect/rune/R in rune_list)
+	for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
 		R.update_icon()
 
 /proc/spawn_bloodstones(var/turf/source = null)
@@ -107,11 +107,11 @@ var/veil_thickness = CULT_PROLOGUE
 				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring us unwanted attention. You should focus on the objective with your current force.</span>")
 
 
-//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
+//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled.
 //CULT_ACT_I		Altar raised. cultists can now convert.
-//CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
-//CULT_ACT_III		Sacrifice complete. cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them
-//CULT_ACT_IV		Bloodspill threshold reached. bloodstones become indestructible, rift opens above one of them. cultists must open it, crew must close it.
+//CULT_ACT_II		Cultist amount reached. Cultists are now looking for the sacrifice.
+//CULT_ACT_III		Sacrifice complete. Cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them.
+//CULT_ACT_IV		Bloodspill threshold reached. A bloodstone becomes the anchor stone. Cultists must summon Nar-Sie here, whereas crew members must destroy it.
 //CULT_EPILOGUE		The cult succeeded. The station is no longer reachable from space or through teleportation, and is now part of hell. Nar-Sie hunts the survivors.
 //CULT_MENDED		The cult failed (bloodstones all destroyed or rift closed). cult magic permanently disabled, living cultists progressively die by themselves.
 
@@ -133,15 +133,15 @@ var/veil_thickness = CULT_PROLOGUE
 	var/warning = FALSE
 
 	var/list/cult_reminders = list()
-
+	
 /datum/faction/bloodcult/check_win()
 	return cult_win
-
+	
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
 
 /datum/faction/bloodcult/proc/fail()
-	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
+	if(veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
 	stage(CULT_MENDED)
 
@@ -181,7 +181,7 @@ var/veil_thickness = CULT_PROLOGUE
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
-	initialize_cultwords()
+	initialize_runesets()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
 
@@ -224,7 +224,7 @@ var/veil_thickness = CULT_PROLOGUE
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
-		for (var/obj/effect/rune/R in rune_list)
+		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
 			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
@@ -305,7 +305,7 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in rune_list)//runes now available will start pulsing
+		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))
@@ -523,12 +523,48 @@ var/veil_thickness = CULT_PROLOGUE
 			else
 				data[BLOODCOST_LID_CONTAINER] = 1
 
+	var/mob/living/silicon/robot/robot_user = user
+	if(istype(robot_user)) 
+		var/module_items = list(robot_user.module_state_1,robot_user.module_state_2,robot_user.module_state_3) //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
+		for(var/obj/item/weapon/reagent_containers/G_held in module_items)
+			if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
+				continue
+			if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
+				var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
+				var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
+					if (blood_pack.holes)
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_BLOODPACK] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_HOLES_BLOODPACK] = 1
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLOODPACK
+					return data
+
+			else
+				var/blood_volume = round(G_held.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_HELD] = G_held
+					if (G_held.is_open_container())
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_LID_HELD] = 1
+
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+					return data
+	
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
-	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
+	//Does the user have blood? (the user can pay in blood without having to bleed first) 
+	if((istype(H_user) && !(H_user.species.flags & NO_BLOOD)))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user
@@ -537,8 +573,8 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
-		return data
-
+		return data	
+	
 	data[BLOODCOST_RESULT] = BLOODCOST_FAILURE
 	return data
 
