@@ -696,6 +696,7 @@
 		var/mob/M = usr
 		if(!isobserver(M) || !iscultist(M))
 			return
+		var/mob/dead/observer/O = M
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
 			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
@@ -711,8 +712,8 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
-		M.can_reenter_corpse = 1
-		M.reenter_corpse()
+		O.can_reenter_corpse = 1
+		O.reenter_corpse()
 
 		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
