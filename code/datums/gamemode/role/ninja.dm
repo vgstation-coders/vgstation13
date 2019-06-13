@@ -4,7 +4,6 @@
 	required_pref = NINJA
 	special_role = NINJA
 	logo_state = "ninja-logo"
-	refund_value = BASE_SOLO_REFUND
 	wikiroute = NINJA
 	disallow_job = TRUE
 	restricted_jobs = list()
@@ -493,15 +492,19 @@ Helpers For Both Variants
 	daemon = new /datum/daemon/teleport(src,"Weakness",null)
 
 /obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
+	if(togglestate) //override
+		..()
+		checkdroppable()
+		return
 	if(isninja(user))
 		..()
+		checkdroppable()
 	else
 		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
 		return
-	if(active)
-		cant_drop = TRUE
-	else
-		cant_drop = FALSE
+
+/obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
+	return cant_drop = active //they should be the same value every time
 
 /obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W,/obj/item/weapon/melee/energy/sword))
@@ -529,7 +532,12 @@ Helpers For Both Variants
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
-
+		
+/obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
+	if(!isninja(user) && active)
+		toggleActive(user,togglestate = "off")
+		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+		return
 		
 /*=======
 Suit and assorted

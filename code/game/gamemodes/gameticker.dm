@@ -52,6 +52,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/space_oddity.ogg",
 		"sound/music/title1.ogg",
 		"sound/music/title2.ogg",
+		"sound/music/title3.ogg",
 		"sound/music/clown.ogg",
 		"sound/music/robocop.ogg",
 		"sound/music/gaytony.ogg",

@@ -1,14 +1,5 @@
 var/list/forced_roundstart_ruleset = list()
 
-var/list/threat_by_job = list(
-	"Captain" = 12,
-	"Head of Security" = 10,
-	"Head of Personnel" = 8,
-	"Warden" = 8,
-	"Security Officer" = 4,
-	"Detective" = 3,
-)
-
 // -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
 var/dynamic_curve_width = 1.8
@@ -104,7 +95,12 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/Topic(href, href_list)
 	if (..()) // Sanity, maybe ?
 		return
-	if(!usr.client || !usr.check_rights(R_ADMIN))
+	if(!usr || !usr.client)
+		return
+	if(href_list["threatlog"]) //don't need admin for this
+		show_threatlog(usr)
+		return
+	if(!usr.check_rights(R_ADMIN))
 		return
 	if (href_list["forced_extended"])
 		forced_extended =! forced_extended
@@ -123,7 +119,7 @@ var/stacking_limit = 90
 		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
 		return
 
-	if(!admin.check_rights(R_ADMIN))
+	if(!admin.check_rights(R_ADMIN) && (ticker.current_state != GAME_STATE_FINISHED))
 		return
 
 	var/out = "<TITLE>Threat Log</TITLE><B><font size='3'>Threat Log</font></B><br><B>Starting Threat:</B> [starting_threat]<BR>"
@@ -140,7 +136,9 @@ var/stacking_limit = 90
 	usr << browse(out, "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
-	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <span class='red'>[threat_level]%</span></h2>"
+
+	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
+
 	var/rules = list()
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
@@ -151,8 +149,8 @@ var/stacking_limit = 90
 				ruletype = "latejoin"
 			if (istype (DR, /datum/dynamic_ruleset/midround))
 				ruletype = "midround"
-			dat += "([ruletype]) - <b>[DR.name]</b><br>"
-			rules += "[ruletype] - **[DR.name]**"
+			dat += "([ruletype]) - <b>[DR.name]</b>[DR.calledBy ? " (called by [DR.calledBy])" : ""]<br>"
+			rules += "[ruletype] - **[DR.name]** [DR.calledBy ? " (called by [DR.calledBy])" : ""]"
 	else
 		dat += "(extended)"
 	dat += "<HR>"
@@ -602,13 +600,6 @@ var/stacking_limit = 90
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
-
-	// -- No injection, we'll just update the threat
-	else
-		var/jobthreat = threat_by_job[newPlayer.mind.assigned_role]
-		if(jobthreat)
-			refund_threat(jobthreat)
-			threat_log += "[worldtime2text()]: [newPlayer] refunded [jobthreat] by joining as [newPlayer.mind.assigned_role]."
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
