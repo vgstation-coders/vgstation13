@@ -711,6 +711,9 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
+		M.can_reenter_corpse = 1
+		M.reenter_corpse()
+
 		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
