@@ -85,6 +85,10 @@
 		mutual_handcuffed_to.Slip(2, 3)
 		src.Slip(2, 3)
 		src.forceMove(mutual_handcuffed_to.loc)
+		//if pulling somebody who is buckled force them out of the buckled structure
+		var/obj/structure/bed/locked_to = src.locked_to
+		if (locked_to && istype(locked_to))
+			locked_to.manual_unbuckle(src)
 		//last_call as not to get too many nested calls
 		mutual_handcuff_forcemove_time = world.time
 
