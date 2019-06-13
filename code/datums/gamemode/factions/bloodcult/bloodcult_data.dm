@@ -12,14 +12,15 @@ var/list/global_runesets = list()
 /proc/initialize_runesets()
 	if(runesets_initialized)
 		return
-	for(var/datum/runeset/rune_set in subtypesof(/datum/runeset))
-		for(var/datum/runeword/word_set in subtypesof(/datum/runeword))
+	for(var/runeset_cast in subtypesof(/datum/runeset))
+		var/datum/runeset/rune_set = new runeset_cast()
+		for(var/wordset_cast in subtypesof(/datum/runeword))
+			var/datum/runeword/word_set = new wordset_cast()
 			if(rune_set.identifier == word_set.identifier)
-				var/datum/runeset/new_runeset = new rune_set()
-				global_runesets[new_runeset.identifier] = new_runeset
+				global_runesets[rune_set.identifier] = rune_set
 				for(var/word_info in subtypesof(word_set))
 					var/datum/runeword/new_word = new word_info()
-					new_runeset.words[new_word.english] = new_word	
+					rune_set.words[new_word.english] = new_word	
 				global_runesets[rune_set.identifier] = rune_set
 	runesets_initialized = 1
 

@@ -320,12 +320,12 @@
 	var/list/choices = list(
 		list("Altar", "radial_altar", "The nexus of a cult base. Has many uses. More runes will also become usable after the first altar has been raised."),
 		list("Spire (locked)", "radial_locked1", "Reach Act 1 to unlock the Spire."),
-		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge."),
+		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge.")
 	)
 	if(veil_thickness >= CULT_ACT_I)
-		choices[1] = list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act.")
-	else if(veil_thickness >= CULT_ACT_II)
-		choices[2] = list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
+		choices[2] = list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act.")
+	if(veil_thickness >= CULT_ACT_II)
+		choices[3] = list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
 
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 	

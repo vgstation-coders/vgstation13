@@ -133,7 +133,10 @@ var/veil_thickness = CULT_PROLOGUE
 	var/warning = FALSE
 
 	var/list/cult_reminders = list()
-
+	
+/datum/faction/bloodcult/check_win()
+	return cult_win
+	
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
 

@@ -39,29 +39,11 @@ var/list/uristrune_cache = list()
 	return 0
 	
 /spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
-	if(block)     //Part of class spell, gets reset back to 0 after done casting. Prevents spamming.
-		return 0
-	block = 1
-
-	if(!istype(user.loc, /turf))
-		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
-		return 0
-
-	var/turf/T = get_turf(user)
-	rune = locate() in T 
-
-	if(rune)
-		if (rune.invisibility == INVISIBILITY_OBSERVER)
-			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here. You have to reveal it before you can add more words to it.</span>")
-			return 0
-		else if (rune.word1 && rune.word2 && rune.word3)
-			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
-			return 0
-			
-	..() //Each variant of rune is handled in their respective class.
+	return ..()
+	//Each variant of rune is handled in their respective class.
 	
 /spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
-	..()
+	message_admins("welp")
 	if(rune)
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
@@ -99,8 +81,26 @@ var/list/uristrune_cache = list()
 	return muted
 
 /spell/cult/trace_rune/blood_cult/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
-	..()
-	
+
+	if(block)     //Part of class spell, gets reset back to 0 after done casting. Prevents spamming.
+		return 0
+	block = 1
+
+	if(!istype(user.loc, /turf))
+		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
+		return 0
+
+	var/turf/T = get_turf(user)
+	rune = locate() in T 
+
+	if(rune)
+		if (rune.invisibility == INVISIBILITY_OBSERVER)
+			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here. You have to reveal it before you can add more words to it.</span>")
+			return 0
+		else if (rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return 0
+			
 	var/obj/item/weapon/tome/tome = locate() in user.held_items
 
 	if(spell) //If player already begun drawing a rune with help of a tome
@@ -109,10 +109,11 @@ var/list/uristrune_cache = list()
 			return 0		
 		else
 			var/datum/runeword/blood_cult/instance
-			if (!rune)
+			if(!rune)
 				instance = initial(spell.word1)
 			else if (rune.word1.type != initial(spell.word1))
 				to_chat(user, "<span class='warning'>This rune's first word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+				to_chat(user, "<span class='warning'>[rune.word1.type] --- [spell.word1.type]</span>")
 				return 0
 			else if (!rune.word2)
 				instance = initial(spell.word2)
@@ -141,10 +142,29 @@ var/list/uristrune_cache = list()
 			playsound(user, "pageturn", 50, 1, -5)
 			tome.state = TOME_OPEN
 		var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
-		spell = available_runes[spell_name]		
+		spell = available_runes[spell_name]	
+		var/datum/runeword/blood_cult/instance
+		if(!rune)
+			instance = initial(spell.word1)
+		else if (rune.word1.type != initial(spell.word1))
+			to_chat(user, "<span class='warning'>This rune's first word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+			to_chat(user, "<span class='warning'>[rune.word1.type] --- [spell.word1.type]</span>")
+			return 0
+		else if (!rune.word2)
+			instance = initial(spell.word2)
+		else if (rune.word2.type != initial(spell.word2))
+			to_chat(user, "<span class='warning'>This rune's second word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+			return 0
+		else if (!rune.word3)
+			instance = initial(spell.word3)
+		else
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return 0
+		word = initial(instance.english)		
+
+		
 	else //Otherwise they want to begin drawing each word manually
 		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in global_runesets[runeset_identifier].words
-
 	if (!word)
 		return 0
 
@@ -162,11 +182,10 @@ var/list/uristrune_cache = list()
 				"<span class='warning'>You hear some chanting.</span>")
 
 	if(!user.checkTattoo(TATTOO_SILENT))
-		user.whisper("...[word.rune]...")
+		user.whisper("...[global_runesets[runeset_identifier].words[word].rune]...")
 	return ..()
 
 /spell/cult/trace_rune/blood_cult/cast(var/list/targets, var/mob/living/carbon/user)
-	..()
 	if(rune)
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")

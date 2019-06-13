@@ -1,6 +1,7 @@
 
 
 /obj/effect/rune //Abstract, currently only supports blood as a reagent without some serious overriding.
+	name = "rune"
 	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
 	icon = 'icons/effects/uristrunes.dmi'
@@ -12,7 +13,7 @@
 	var/animated = 0
 
 	//A rune is made of up to 3 words. 
-	var/runeset_identifier
+	var/runeset_identifier = "base"
 	var/datum/runeword/word1
 	var/datum/runeword/word2
 	var/datum/runeword/word3
@@ -78,7 +79,7 @@
 
 	//By default everyone can read a rune, so add extra functionality in child classes if that is not wanted.
 	if(can_read_rune(user) || isobserver(user))
-		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""][word2 ? " [word2.rune]" : ""][word3 ? " [word3.rune]" : ""]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
+		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""][word2 ? " [word2.rune]" : ""][word3 ? " [word3.rune]" : ""]</i>. [rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
 
 	
 /obj/effect/rune/proc/can_read_rune(var/mob/user) //Overload for specific criteria.
@@ -358,6 +359,7 @@
 	if(istype(I, /obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = I
 		T.imbue(user,src)
+	return
 		
 /obj/effect/rune/blood_cult/trigger(var/mob/living/user, var/talisman_trigger=0)
 	user.delayNextAttack(5)
@@ -456,8 +458,10 @@
 	//Returns 0 if failure, 1 if finished a rune, 2 if success but rune still has room for words.
 		
 	var/obj/effect/rune/rune = locate() in T
-	if( !rune)
-		rune = new/obj/effect/rune(T)
+	if(!rune)
+		var/datum/runeword/rune_typecast = word
+		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.
+			rune = new /obj/effect/rune/blood_cult(T) 
 
 	if (rune.word1 && rune.word2 && rune.word3)
 		return 0
@@ -561,3 +565,4 @@
 		qdel(rune)
 		return null
 	return word_erased
+	
