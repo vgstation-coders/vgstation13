@@ -1,3 +1,0 @@
-//Test out casting runes while muted
-//All spells
-//Cult holomap

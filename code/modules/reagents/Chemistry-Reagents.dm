@@ -3283,13 +3283,6 @@
 	id = AUTISTNANITES
 	diseasetype = /datum/disease/robotic_transformation/mommi
 
-/datum/reagent/nanites/japanese
-	name = "Japanese nanites"
-	id = JAPANESENANITES
-	description = "The magnum opus of a deranged roboticist, plagued with an unequivocal obsession for Japanese-animated television shows."
-	diseasetype = /datum/disease/japanesefever
-	color = "#FF99CC"
-
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
 	id = XENOMICROBES

@@ -916,25 +916,3 @@
 	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer(src)
 	new /obj/item/weapon/paper/diy_soda(src)
-
-/obj/item/weapon/storage/japanese_nanites
-	name = "kawaii anime bento box of the month"
-	desc = "On the back of the box a picture of a scantily dressed female is depicted along with several indecipherable Japanese moon runes."
-	icon = 'icons/obj/storage/smallboxes.dmi'
-	icon_state = "anime_box"
-	item_state = "anime_box"
-
-/obj/item/weapon/storage/japanese_nanites/New() //Having this bundle ought to make you valid. It really should.
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/reagent_containers/glass/bottle/japanese_nanites(src)
-	var/randomFigurine = pick(/obj/item/toy/gasha/mimiga/sue,
-								/obj/item/toy/gasha/mimiga/toroko,
-								/obj/item/toy/gasha/mimiga/chaco,
-								/obj/item/toy/gasha/cattoy,
-								/obj/item/toy/gasha/corgitoy,
-								/obj/item/toy/gasha/femsec)
-	new randomFigurine(src)
-	new /obj/item/clothing/head/kitty(src)
-	new /obj/item/clothing/under/schoolgirl(src)
-	new /obj/item/weapon/paper/japanese_nanite_bundle(src)

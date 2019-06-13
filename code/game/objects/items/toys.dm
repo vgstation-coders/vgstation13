@@ -929,7 +929,7 @@
 
 /obj/item/toy/gasha/harvester
 	name = "toy harvester"
-	desc = "Harvesters tend to have a bad habit of violently stabbing anyone they meet."
+	desc = "Harvesters tend to have a bad habit of violently stabbing anyone they meet"
 	icon_state = "harvester"
 
 /obj/item/toy/gasha/narnar
@@ -939,7 +939,7 @@
 
 /obj/item/toy/gasha/quote
 	name = "Robot"
-	desc = "It's a small robot toy."
+	desc = "It's a small robot toy"
 	icon_state = "quote"
 
 /obj/item/toy/gasha/quote/curly
@@ -953,11 +953,11 @@
 
 /obj/item/toy/gasha/mimiga/
 	name = "toy mimiga"
-	desc = "It looks like some sort of rabbit-thing."
+	desc = "It looks like some sort of rabbit-thing"
 	icon_state = ""
 
 /obj/item/toy/gasha/mimiga/sue
-	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'best girl.'"
+	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl.'"
 	icon_state = "sue"
 
 /obj/item/toy/gasha/mimiga/toroko
@@ -967,7 +967,7 @@
 	icon_state = "king"
 
 /obj/item/toy/gasha/mimiga/chaco
-	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'worst girl.'"
+	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl.'"
 	icon_state = "chaco"
 
 /obj/item/toy/gasha/mario
@@ -1115,12 +1115,12 @@
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
-	desc = "They say female security officers are highly robust. Bodybag accessory not included."
+	desc = "bodybag accessory not included"
 	
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
-	desc = "Uhhhhhhhh..."
+	desc = "uhhhhhhhh"
 
 	//I couldn't think of anywhere else to put this
 /obj/item/toy/canary

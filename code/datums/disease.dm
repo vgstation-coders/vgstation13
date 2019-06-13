@@ -209,12 +209,9 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 		return 1
 	return 0
 
-/datum/disease/proc/AffectSpeech(var/datum/speech/speech)
-	return
-	
 /datum/disease/proc/Copy(var/process = 0)
 	return new type(process, src)
-	
+
 /*
 /datum/disease/Destroy()
 	active_diseases.Remove(src)

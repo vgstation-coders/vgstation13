@@ -56,13 +56,13 @@ var/list/arcane_tomes = list()
 
 	var i = 1
 	for(var/subtype in subtypesof(/datum/rune_spell))
-		var/datum/rune_spell/blood_cult/instance = subtype
+		var/datum/rune_spell/instance = subtype
 		if (initial(instance.Act_restriction) <= veil_thickness)
 			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
 			if (i == current_page)
-				var/datum/runeword/word1 = initial(instance.word1)
-				var/datum/runeword/word2 = initial(instance.word2)
-				var/datum/runeword/word3 = initial(instance.word3)
+				var/datum/cultword/word1 = initial(instance.word1)
+				var/datum/cultword/word2 = initial(instance.word2)
+				var/datum/cultword/word3 = initial(instance.word3)
 				page_data = {"<div align="center"><b>\Roman[i]<br>[initial(instance.name)]</b><br><i>[initial(word1.english)], [initial(word2.english)], [word3 ? "[initial(word3.english)]" : "<any>"]</i></div><br>"}
 				page_data += initial(instance.page)
 		else
@@ -241,7 +241,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/AltClick(var/mob/user)
 	var/list/choices = list()
-	var/datum/rune_spell/blood_cult/instance
+	var/datum/rune_spell/instance
 	var/list/choice_to_talisman = list()
 	var/image/talisman_image
 	for(var/obj/item/weapon/talisman/T in talismans)
@@ -302,7 +302,7 @@ var/list/arcane_tomes = list()
 	pixel_y=0
 
 /obj/item/weapon/talisman/proc/talisman_name()
-	var/datum/rune_spell/blood_cult/instance = spell_type
+	var/datum/rune_spell/instance = spell_type
 	if (blood_text)
 		return "\[blood message\]"
 	if (instance)
@@ -322,7 +322,7 @@ var/list/arcane_tomes = list()
 		to_chat(user, "<span class='info'>This one however seems pretty unremarkable.</span>")
 		return
 
-	var/datum/rune_spell/blood_cult/instance = spell_type
+	var/datum/rune_spell/instance = spell_type
 
 	if (iscultist(user) || isobserver(user))
 		if (attuned_rune)
@@ -347,7 +347,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/talisman/attack(var/mob/living/target, var/mob/living/user)
 	if(iscultist(user) && spell_type)
-		var/datum/rune_spell/blood_cult/instance = spell_type
+		var/datum/rune_spell/instance = spell_type
 		if (initial(instance.touch_cast))
 			new spell_type(user, src, "touch", target)
 			qdel(src)
@@ -392,7 +392,7 @@ var/list/arcane_tomes = list()
 		T.talismans.Remove(src)
 	qdel(src)
 
-/obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/blood_cult/R)
+/obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/R)
 	if (!user || !R)
 		return
 
@@ -400,7 +400,7 @@ var/list/arcane_tomes = list()
 		to_chat(user, "<span class='warning'>Cannot imbue a talisman that has been written on.</span>")
 		return
 
-	var/datum/rune_spell/blood_cult/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
+	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
 	if(initial(spell.talisman_absorb) == RUNE_CANNOT)//placing a talisman on a Conjure Talisman rune to try and fax it
 		user.drop_item(src)
 		src.forceMove(get_turf(R))
@@ -434,19 +434,16 @@ var/list/arcane_tomes = list()
 		uses = initial(spell.talisman_uses)
 
 		var/talisman_interaction = initial(spell.talisman_absorb)
-		var/datum/rune_spell/blood_cult/active_spell = R.active_spell
-		if(!istype(R))
-			return
-		if (active_spell)//some runes may change their interaction type dynamically (ie: Path Exit runes)
-			talisman_interaction = active_spell.talisman_absorb
-			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
-				var/datum/rune_spell/blood_cult/portalentrance/entrance = active_spell
+		if (R.active_spell)//some runes may change their interaction type dynamically (ie: Path Exit runes)
+			talisman_interaction = R.active_spell.talisman_absorb
+			if (istype(R.active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/entrance = R.active_spell
 				if (entrance.network)
-					word_pulse(global_runesets["blood_cult"].words[entrance.network])
-			else if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
-				var/datum/rune_spell/blood_cult/portalentrance/exit = active_spell
+					word_pulse(cultwords[entrance.network])
+			else if (istype(R.active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalentrance/exit = R.active_spell
 				if (exit.network)
-					word_pulse(global_runesets["blood_cult"].words[exit.network])
+					word_pulse(cultwords[exit.network])
 
 		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)
@@ -461,7 +458,7 @@ var/list/arcane_tomes = list()
 				message_admins("Error! ([key_name(user)]) managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
-/obj/item/weapon/talisman/proc/word_pulse(var/datum/runeword/W)
+/obj/item/weapon/talisman/proc/word_pulse(var/datum/cultword/W)
 	var/image/I1 = image(icon,"talisman-[W.icon_state]a")
 	animate(I1, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)
 	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
@@ -1158,56 +1155,13 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 
 
-///////////////////////////////////////OTHER ITEMS////////////////////////////////////////////////
 
-/obj/item/weapon/cyborg_pamphlet
-	name = "cult of Nar-Sie pamphlet"
-	desc = "Looks like a page torn from a tome. One glimpse at it surely can't hurt you."
-	icon = 'icons/obj/cult.dmi'
-	icon_state ="pamphlet"
-	throwforce = 0
-	w_class = W_CLASS_TINY
-	w_type = RECYK_WOOD
-	throw_range = 1
-	throw_speed = 1
-	layer = ABOVE_DOOR_LAYER
-	pressure_resistance = 1
-	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
-	
-/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg
-	name = "tempting goblet"
-	desc = "A large obsidian cup in the shape of a skull. Supposedly used by followers of Nar-Sie to hold blood from sacrifices, but this version has a label reading \"NO HUMAN HARM\"."
-	icon_state = "cult"
-	item_state = "cult"
-	isGlass = 0
-	amount_per_transfer_from_this = 10
-	volume = 150
-	force = 5
-	throwforce = 7
-	
-/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult
-	name = "Nar-Sie cookie basket"
-	desc = "Filled with sugar-rich blood. Delicious!"	
-	var/list/possible_messages = list("You get an urge to begin going to Nar-Sie church every sunday.","You think you understand why blood is so cool.","For a second, you think you were able to see through the veil. Woah.","You get an urge to eat more Nar-Sie cookies.","")
-	
-/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult/after_consume(var/mob/user, var/datum/reagents/reagentreference)
-	..()
-	if(prob(25))
-		var/message = pick(possible_messages)
-		to_chat(user,"<span class='sinister'>[message]</span>")	
-		
-/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/New()
-	..()
-	reagents.add_reagent(BLOOD, 5, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"="O+","resistances"=null,"trace_chem"=null, "virus2"=list()))
-	bitesize = 2
-	
+
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
 /obj/item/weapon/bloodcult_pamphlet
 	name = "cult of Nar-Sie pamphlet"
-	desc = "Looks like a page torn from one of those cultist tomes. It is titled \"Ten reasons why Nar-Sie can improve your life!\""
+	desc = "Looks like a page torn from a tome. One glimpse at it surely can't hurt you."
 	icon = 'icons/obj/cult.dmi'
 	icon_state ="pamphlet"
 	throwforce = 0
@@ -1278,14 +1232,11 @@ var/list/arcane_tomes = list()
 	volume = 60
 	force = 5
 	throwforce = 7
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
 	if (iscultist(user))
-		if(issilicon(user))
-			to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish the vessels of cultists, regardless of blood type. It's a shame you're a robot.</span>")
-		else
-			to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
+		to_chat(user, "<span class='info'>Drinking blood from this cup will always safely replenish your own vessels, regardless of blood types. The opposite is true to non-cultists. Throwing this cup at them may force them to swallow some of its content if their face isn't covered.</span>")
 	else if (get_blood(reagents))
 		to_chat(user, "<span class='sinister'>Its contents look delicious though. Surely a sip won't hurt...</span>")
 
