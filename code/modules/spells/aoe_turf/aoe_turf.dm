@@ -27,7 +27,7 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 		return
 
 	return targets
-	
+
 /spell/aoe_turf/is_valid_target(var/target, mob/user, options)
 	var/spell_center = user
 	if(center)

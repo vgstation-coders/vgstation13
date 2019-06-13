@@ -85,7 +85,8 @@
 					I.forceMove(old_loc)
 
 		qdel(src) //Remove the item, we consumed it
-	..()
+
+	return
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/make_poisonous()
 	return
@@ -1402,7 +1403,6 @@
 		bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/after_consume()
-	..()
 	if(prob(unpopped))	//lol ...what's the point? << AINT SO POINTLESS NO MORE
 		to_chat(usr, "<span class='warning'>You bite down on an un-popped kernel, and it hurts your teeth!</span>")
 		unpopped = max(0, unpopped-1)
