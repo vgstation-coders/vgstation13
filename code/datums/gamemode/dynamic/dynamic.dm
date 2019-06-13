@@ -391,7 +391,7 @@ var/stacking_limit = 90
 			return 1
 	return 0
 
-/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
+/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0,var/caller)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
 	var/datum/dynamic_ruleset/midround/new_rule
 	if(ispath(ruletype))
 		new_rule = new ruletype()//you should only use it to call midround rules though.
@@ -400,6 +400,8 @@ var/stacking_limit = 90
 	else
 		message_admins("The specific ruleset failed beacuse a type other than a path or rule was sent.")
 		return
+	if(caller)
+		new_rule.calledBy = caller
 	update_playercounts()
 	var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
