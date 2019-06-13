@@ -142,6 +142,8 @@
 		overlays += I4
 	if (analysed)
 		overlays += "virusdish-label"
+	else if (info != "" && copytext(info, 1, 9) == "OUTDATED")
+		overlays += "virusdish-outdated"
 
 /obj/item/weapon/virusdish/attack_hand(var/mob/user)
 	..()
@@ -173,12 +175,34 @@
 /obj/item/weapon/virusdish/is_open_container()
 	return open
 
-/obj/item/weapon/virusdish/afterattack(var/atom/A, var/mob/user)
+/obj/item/weapon/virusdish/afterattack(var/atom/A, var/mob/user, var/adjacency_flag, var/click_params)
 	. = ..()
 	if(.)
 		return
 
-	if (A.Adjacent(user))
+	if (!adjacency_flag)
+		return
+
+	if (open)
+		if (istype(A,/obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/S = A
+			if(S.can_transfer(src, user))
+				var/tx_amount = transfer_sub(A, src, S.amount_per_transfer_from_this, user)
+				if (tx_amount > 0)
+					to_chat(user, "<span class='notice'>You fill \the [src] with [tx_amount] units of the contents of \the [A].</span>")
+					return tx_amount
+		if (istype(A,/obj/item/weapon/reagent_containers))
+			var/success = 0
+			var/obj/container = A
+			if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
+				return
+
+			if(A.is_open_container())
+				success = transfer_sub(src, A, 10, user, log_transfer = TRUE)
+
+			if (success > 0)
+				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [A].</span>")
+
 		if (istype(A,/obj/structure/toilet))
 			var/obj/structure/toilet/T = A
 			if (T.open)
@@ -221,6 +245,12 @@
 	if(isturf(hit_atom))
 		visible_message("<span class='danger'>The virus dish shatters on impact!</span>")
 		shatter(user)
+
+/obj/item/weapon/virusdish/proc/incubate(var/mutatechance=5,var/growthrate=3)
+	if (contained_virus)
+		if(!reagents.remove_reagent(VIRUSFOOD,0.2))
+			growth = min(growth + growthrate, 100)
+		contained_virus.incubate(src,mutatechance)
 
 /obj/item/weapon/virusdish/proc/shatter(var/mob/user)
 	var/obj/effect/decal/cleanable/virusdish/dish = new(get_turf(src))

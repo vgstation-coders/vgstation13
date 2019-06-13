@@ -269,7 +269,31 @@ var/global/list/disease2_list = list()
 	ticks += speed
 
 
-/datum/disease2/disease/proc/incubate(var/mob/living/mob,var/efficiency=1)
+/datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
+	if ((ismob(incubator) || isobj(incubator)) && incubator.reagents)
+		if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
+			log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
+			effectmutate()
+			if (istype(incubator,/obj/item/weapon/virusdish))
+				var/obj/item/weapon/virusdish/dish = incubator
+				if(dish.info && dish.analysed)
+					dish.info = "OUTDATED : [dish.info]"
+					dish.analysed = 0
+				dish.update_icon()
+				if (istype(dish.loc,/obj/machinery/disease2/incubator))
+					var/obj/machinery/disease2/incubator/machine = dish.loc
+					machine.update_effect(dish)
+		if(!incubator.reagents.remove_reagent(RADIUM,0.02) && prob(mutatechance/20))
+			log += "<br />[timestamp()] Antigen Mutation (Radium in [incubator])"
+			antigenmutate()
+			if (istype(incubator,/obj/item/weapon/virusdish))
+				var/obj/item/weapon/virusdish/dish = incubator
+				if(dish.info && dish.analysed)
+					dish.info = "OUTDATED : [dish.info]"
+					dish.analysed = 0
+				if (istype(dish.loc,/obj/machinery/disease2/incubator))
+					var/obj/machinery/disease2/incubator/machine = dish.loc
+					machine.update_antigen(dish)
 
 
 /datum/disease2/disease/proc/GetImmuneData(var/mob/living/mob)
@@ -331,16 +355,23 @@ var/global/list/disease2_list = list()
 	antigen = list(pick(all_antigens))
 	antigen |= pick(all_antigens)
 
-/datum/disease2/disease/proc/majormutate()
+/datum/disease2/disease/proc/effectmutate()
 	uniqueID = rand(0,10000)
+	var/list/randomhexes = list("7","8","9","a","b","c","d","e")
+	var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	color = BlendRGB(color,colormix,0.25)
 	var/i = rand(1, effects.len)
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f = new_random_effect(2, e.stage, e.type)
 	effects[i] = f
-	log_debug("[form] [uniqueID] has major mutated [e.name] into [f.name].")
+	log_debug("[form] [uniqueID] has mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
-	if (prob(5))
-		roll_antigen()
+
+/datum/disease2/disease/proc/antigenmutate()
+	var/old_dat = get_antigen_string()
+	roll_antigen()
+	log_debug("[form] [uniqueID] has mutated its antigen from [old_dat] to [get_antigen_string()].")
+	log += "<br />[timestamp()] Mutated antigen [old_dat] into [get_antigen_string()]."
 
 /datum/disease2/disease/proc/getcopy()//called by infect_virus2()
 	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
