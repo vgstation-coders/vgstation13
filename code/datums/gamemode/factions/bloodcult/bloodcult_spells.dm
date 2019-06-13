@@ -43,7 +43,6 @@ var/list/uristrune_cache = list()
 	//Each variant of rune is handled in their respective class.
 	
 /spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
-	message_admins("welp")
 	if(rune)
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
