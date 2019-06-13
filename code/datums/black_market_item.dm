@@ -153,16 +153,6 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 /datum/black_market_item/tech
 	category = "Advanced Technology" 
 
-/datum/black_market_item/tech/chronocarbon
-	name = "Chrono-Carbon Grenade" 
-	desc = "You ever dream of becoming a master of time? This is the closest thing we got. This grenade explodes into a field of frozen time that has no effect on carbon-based lifeforms. Try not to walk in the path of frozen bullets, they'll hurt once they unfreeze."
-	item = /obj/item/weapon/grenade/chronogrenade/carbon
-	stock_min = 5
-	stock_max = 7
-	cost_min = 400
-	cost_max = 500
-	display_chance = 60
-
 /datum/black_market_item/tech/portalgun
 	name = "Portal Gun"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
@@ -172,16 +162,6 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	cost_min = 1800
 	cost_max = 2200
 	display_chance = 80
-
-/datum/black_market_item/tech/lightcycle
-	name = "Light Cycle"
-	desc = "Fueled by raw energy, this motorbike transcends the boundaries between reality and the virtual world so that you can look cool as shit. We highly suggest to never hit anything that isn't a door. It doesn't end well. They key you receive can be broken to summon the bike, then broken again to dismount."
-	item = /obj/item/key/lightcycle/black_market
-	stock_min = 1
-	stock_max = 1
-	cost_min = 3000
-	cost_max = 4000
-	display_chance = 50
 	
 /datum/black_market_item/arcane
 	category = "Supernatural and Arcane Objects" 
@@ -209,30 +189,6 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 /datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
 	if(prob(25))
 		spawned = /obj/item/potion/healing
-	
-/*
-/datum/black_market_item/arcane/cultist_module //Unfinished
-	name = "Cyborg Cultist Module"
-	desc = "Apparently some follower of the Geometer of Blood found out a way to peacefully spread the religion of Nar-sie by mass producing cyborg modules. Unfortunately, as you would expect, he got lynched and burned at the stake. Rumors say real cultists can convert cyborgs with this installed."
-	item = /obj/item/borg/upgrade/cult
-	stock_min = 1
-	stock_max = 3
-	cost_min = 1400
-	cost_max = 2000
-	display_chance = 100	
-*/
 
 /datum/black_market_item/other
 	category = "Miscellaneous Goods" 	
-
-/datum/black_market_item/other/japanese_nanites
-	name = "Package of Japanese Nanites"
-	desc = "Uh. So, these little nanites turn you into an anime girl in both body and mind. Only a single unit is needed to begin transformation. The black market doesn't judge people's interests..."
-	item = /obj/item/weapon/storage/japanese_nanites
-	stock_min = 1
-	stock_max = 2
-	cost_min = 700
-	cost_max = 1100
-	sps_chance = 70
-	display_chance = 65
-
