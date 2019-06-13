@@ -5,6 +5,7 @@
 	icon_state = "lightcycle_keys_inactive"
 	w_class = W_CLASS_TINY
 	var/cycle_active = FALSE
+	var/delete_ribbons_on_dismount = 0
 	var/obj/structure/bed/chair/vehicle/lightcycle/summoned_cycle = null
 	var/l_color = "#FFFFFF"
 
@@ -65,14 +66,16 @@
 	can_spacemove = 1
 	keytype = /obj/item/key/lightcycle
 	layer = FLY_LAYER
+	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/lightcycle
+	var/obj/effect/lightribbon/last_ribbon
 	var/obj/item/key/lightcycle/summoning_rod = null
 	var/delay_ribbon = 0
 	var/l_color = "#FFFFFF"
 	var/lastdir = null
 	var/lastLASTdir = null
-
+	
 /obj/structure/bed/chair/vehicle/lightcycle/Destroy()
 	if(summoning_rod)
 		summoning_rod.icon_state = initial(summoning_rod.icon_state)
@@ -81,6 +84,8 @@
 		summoning_rod.update_icon()
 		summoning_rod.paired_to = null
 		summoning_rod = null
+	if(last_ribbon)
+		last_ribbon = null
 	..()
 
 /obj/structure/bed/chair/vehicle/lightcycle/update_icon()
@@ -109,7 +114,7 @@
 
 /obj/structure/bed/chair/vehicle/lightcycle/unlock_atom(var/atom/movable/AM)
 	to_chat(occupant, "<span class='notice'>You begin dismounting \the [src]...")
-	spawn(5)	//to prevent riders from just getting off the cycle to avoid hitting obstacles
+	spawn(8)	//to prevent riders from just getting off the cycle to avoid hitting obstacles
 		if(!gcDestroyed)
 			..()
 			update_icon()
@@ -117,7 +122,13 @@
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/dismount(mob/user)
 	to_chat(user, "<span class='notice'>As you dismount \the [src], it dissolves into nothing.</span>")
+	if(last_ribbon)
+		last_ribbon.erase()
+	spawn(2)
+		if(last_ribbon)
+			last_ribbon.erase()
 	qdel(src)
+	
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/trigger_movement()
 	while(occupant)
@@ -166,7 +177,7 @@
 		if(delay_ribbon)
 			delay_ribbon--
 		else
-			new /obj/effect/lightribbon(T,l_color,lastdir,lastLASTdir)
+			last_ribbon = new /obj/effect/lightribbon(T,l_color,lastdir,lastLASTdir)
 			lastLASTdir = lastdir
 			lastdir = dir
 
@@ -194,6 +205,11 @@
 
 	if(occupant)
 		occupant.gib()
+	if(last_ribbon)
+		last_ribbon.erase()
+	spawn(2)
+		if(last_ribbon)
+			last_ribbon.erase()
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/lightcycle/handle_layer()
@@ -243,15 +259,22 @@
 /obj/effect/lightribbon/attackby(obj/item/weapon/W, mob/user)
 	if(!(user.locked_to && istype(user.locked_to, /obj/structure/bed/chair/vehicle/lightcycle)))
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
-		qdel(src)
+		erase(src)
 
-/obj/effect/lightribbon/proc/erase()	//can be called by admins to erase the whole line of ribbon
+/obj/effect/lightribbon/proc/erase() //Originally coded for admemes, black market version calls this whenever a ribbon is destroyed
 	erasing = TRUE
 	for(var/obj/effect/lightribbon/L in orange(1,src))
 		if(L.l_color == l_color)
 			if(!L.erasing)
 				spawn(1)
 					L.erase()
+	var/obj/effect/overlay/pulse = new/obj/effect/overlay( src.loc )
+	pulse.icon = 'icons/effects/effects.dmi'
+	pulse.icon_state = "empdisable"
+	pulse.name = "light ribbon sparks"
+	pulse.anchored = 1
+	spawn(3)
+		qdel(pulse)
 	qdel(src)
 
 /obj/effect/decal/mecha_wreckage/vehicle/lightcycle
@@ -260,3 +283,9 @@
 	//icon_state = "lightcycle_wreck"
 	name = "light cycle wreckage"
 	desc = "Awaiting garbage collection."
+
+	
+/obj/item/key/lightcycle/black_market //Less dangerous version for the black market.
+	desc = "A strange-looking glowing rod. According to black market vendors, you're supposed to snap it in half."
+	delete_ribbons_on_dismount = 1
+	
