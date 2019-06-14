@@ -417,6 +417,3 @@
 	reagents.add_reagent(ANTI_TOXIN, 8)
 	mode = SYRINGE_INJECT
 	update_icon()
-/obj/item/weapon/reagent_containers/syringe/robot/cultist //For cultist cyborgs
-	name = "consensual blood donation syringe"
-	desc = "If the human doesn't say yes, taking blood is human harm!"

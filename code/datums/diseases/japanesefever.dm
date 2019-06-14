@@ -47,7 +47,7 @@
 	for(var/word in listA)
 		message = replacetext(message, word, "kawaii~")
 
-	var/listB = list("idiot","dumbass","dummy","retard","faggot","nigger","spic","motherfucker","fucker","dumbshit","dipshit","dumbfuck","autist","savant","troglodyte")
+	var/listB = list("idiot","dumbass","dummy","retard","faggot","nigger","spic","motherfucker","fucker","dumbshit","dipshit","dumbfuck","autist","savant","troglodyte","comdom","clown","greyshit","albino","shitter")
 	for(var/word in listB)
 		message = replacetext(message, word, pick("BAKA","meanie"))
 		
@@ -75,16 +75,13 @@
 	message = replacetext(message, "traitor", "real big meanie")
 	message = replacetext(message, "syndicate", "super big meanies")
 	message = replacetext(message, "vampire", "b-blood s-sucker")
-	message = replacetext(message, "changeling", "b-body ab-bsorber a-ack")
-	message = replacetext(message, "cult", "super magical group")
+	message = replacetext(message, "changeling", "b-body ab-bsorber")
+	message = replacetext(message, "cult", "super magical girls and boys")
 	message = replacetext(message, "apologies", "gomenasai")
-	message = replacetext(message, "sexual", "l-lewd...")
+	message = replacetext(message, "sexual",pick("l-lewd","lewd"))
 	message = replacetext(message, "r", "w")
 	
-	if(prob(50))
-		message += " Nya~"
-	else
-		message += " Ugu~"
+	message += pick(" nya~"," ugu~"," desu~")
 	speech.message = message
 	
 /datum/disease/japanesefever/cure()
