@@ -71,7 +71,39 @@
 /atom/proc/requires_dexterity(mob/user)
 	return 0
 
+//Yeah, I know, it doesn't look pretty, but just calling UnarmedAttack ends badly, it's better to make sure it only calls what it needs to to not create exploits
+//Also, this adds an extra exception, you can't kick or bite people while restrained AND dragged. None of THAT shittlery. It will also take twice as long to wind down from a restrained kick
 /mob/living/carbon/human/RestrainedClickOn(var/atom/A)
+	if(!is_pacified() && a_intent == "hurt" && A.loc != src && !grabbed_by.len && !pulledby)
+		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
+		if(attack_type == ATTACK_KICK)
+			if(can_kick(A))
+
+				delayNextAttack(20)
+
+				special_attack_result = A.kick_act(src)
+				if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
+					after_special_attack(A, attack_type, special_attack_result)
+					return
+
+				delayNextAttack(-20) //This is only called when the kick fails
+			else
+				set_attack_type() //Reset attack type
+			return
+		else if(attack_type == ATTACK_BITE)
+			if(can_bite(A))
+
+				delayNextAttack(20)
+
+				special_attack_result = A.bite_act(src)
+				if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
+					after_special_attack(A, attack_type, special_attack_result)
+					return
+
+				delayNextAttack(-20) //This is only called when the bite fails
+			else
+				set_attack_type() //Reset attack type
+			return
 	..()
 
 /mob/living/carbon/human/RangedAttack(var/atom/A)

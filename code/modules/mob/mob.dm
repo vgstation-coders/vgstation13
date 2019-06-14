@@ -1547,7 +1547,7 @@ var/list/slot_equipment_priority = list( \
 	sleep(world.tick_lag * 2)
 
 
-// facing verbs
+//Facing verbs
 /mob/proc/canface()
 	if(!canmove)
 		return 0
@@ -1555,14 +1555,21 @@ var/list/slot_equipment_priority = list( \
 		return 0
 	if(client.move_delayer.blocked())
 		return 0
-	if(stat==2)
+	if(stat == DEAD)
 		return 0
 	if(anchored)
 		return 0
 	if(monkeyizing)
 		return 0
-	if(restrained())
+	if(timestopped)
 		return 0
+	if(locked_to)
+		return 0
+	if(restrained()) //Don't allow manual facing if restrained AND being actively grabbed or pulled
+		if(grabbed_by.len)
+			return 0
+		if(pulledby)
+			return 0
 	return 1
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.

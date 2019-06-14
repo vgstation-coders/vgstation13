@@ -153,7 +153,7 @@
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
 	if(!config.ghost_interaction || !can_spook())
-		if(user.isUnconscious() || user.restrained())
+		if(user.isStunned() || user.timestopped)
 			return
 	change_dir(direction)
 	return 1
@@ -342,7 +342,7 @@
 		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
-	if(user.incapacitated() || !user.has_limbs)
+	if(user.isStunned() || user.timestopped || !user.has_limbs) //Do not use incapacitated() to allow movement when cuffed. Your legs are still free
 		return 0
 	//If we're in space or our area has no gravity...
 	var/turf/T = get_turf(loc)
