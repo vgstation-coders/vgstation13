@@ -92,13 +92,13 @@
 
 	update_faction_icons()
 
-/datum/faction/syndicate/nuke_op/proc/nuke_name_assign(var/list/syndicates)
+/datum/faction/syndicate/nuke_op/proc/nuke_name_assign(var/last_name, var/title, var/list/syndicates)
 	for(var/datum/role/R in syndicates)
 		switch(R.antag.current.gender)
 			if(MALE)
-				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[pick(first_names_male)] [pick(last_names)]")
+				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[title ? "[title] ":""][pick(first_names_male)] [last_name ? "[last_name]":"[pick(last_names)]"]")
 			if(FEMALE)
-				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[pick(first_names_female)] [pick(last_names)]")
+				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[title ? "[title] ":""][pick(first_names_female)] [last_name ? "[last_name]":"[pick(last_names)]"]")
 
 /datum/faction/syndicate/nuke_op/proc/equip_nuke_op(mob/living/carbon/human/synd_mob)
 	var/radio_freq = SYND_FREQ
@@ -234,10 +234,12 @@
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/circuitboard/teleporter(synd_mob), slot_l_store)
 
 /datum/faction/syndicate/nuke_op/proc/prepare_syndicate_leader(var/datum/mind/synd_mind, var/nuke_code)
-	spawn(1)
-		nuke_name_assign(members) //Allows time for the rest of the syndies to be chosen
-	synd_mind.current.real_name = "[syndicate_name()] Leader"
+
 	leader = synd_mind
+	var/title = copytext(sanitize(input(synd_mind.current, "Pick a glorious title for yourself. Leave blank to tolerate equality with your teammates and avoid giving yourself away when talking undercover", "Honorifics", "")), 1, MAX_NAME_LEN)
+	spawn(1)
+		nuke_name_assign(nuke_last_name(synd_mind.current), title, members) //Allows time for the rest of the syndies to be chosen
+
 	if(nuke_code)
 		synd_mind.store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", 0, 0)
 		to_chat(synd_mind.current, "The nuclear authorization code is: <B>[nuke_code]</B><br>Make sure to share it with your subordinates.")
@@ -250,6 +252,12 @@
 		H.update_icons()
 	else
 		nuke_code = "Code will be provided later, complain to Syndicate Command"
+
+/datum/faction/syndicate/nuke_op/proc/nuke_last_name(var/mob/M as mob)
+
+	var/newname = copytext(sanitize(input(M, "Pick a static last name for all the members of your team. Leave blank to preserve everyone's unique last names", "Family Name", "")), 1, MAX_NAME_LEN)
+
+	return newname
 
 /datum/faction/syndicate/nuke_op/process()
 	var/livingmembers

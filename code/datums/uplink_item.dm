@@ -261,7 +261,7 @@ var/list/uplink_items = list()
 	name = "Modified Tank Transfer Valve"
 	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
 	item = /obj/effect/spawner/newbomb
-	cost = 15
+	cost = 25
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
@@ -269,7 +269,7 @@ var/list/uplink_items = list()
 	name = "Syndicate-modded Combat Robot Teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
 	item = /obj/item/weapon/robot_spawner/syndicate
-	cost = 40
+	cost = 60
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
@@ -277,7 +277,7 @@ var/list/uplink_items = list()
 	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
 	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
 	item = /obj/effect/spawner/mecha/mauler
-	cost = 60
+	cost = 80
 	jobs_exclusive = list("Nuclear Operative")
 
 // STEALTHY WEAPONS
