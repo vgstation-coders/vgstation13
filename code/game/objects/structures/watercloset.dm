@@ -559,7 +559,8 @@
 			C.reagents.add_reagent(WATER, C.fill_amount)
 		else
 			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
-		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill \the [RG] using \the [src].</span>")
+		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>", \
+		"<span class='notice'>You fill \the [RG] using \the [src].</span>")
 		return
 
 	else if(istype(O, /obj/item/weapon/melee/baton))
