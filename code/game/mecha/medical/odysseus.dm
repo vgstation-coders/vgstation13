@@ -2,7 +2,6 @@
 	desc = "These exosuits are developed and produced by Vey-Med. (&copy; All rights reserved)."
 	name = "Odysseus"
 	icon_state = "odysseus"
-	initial_icon = "odysseus"
 	step_in = 2
 	max_temperature = 15000
 	health = 120

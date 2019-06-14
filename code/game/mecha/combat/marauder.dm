@@ -2,7 +2,6 @@
 	desc = "Heavy-duty, combat exosuit, developed after the Durand model. Rarely found among civilian populations."
 	name = "Marauder"
 	icon_state = "marauder"
-	initial_icon = "marauder"
 	step_in = 5
 	health = 500
 	deflect_chance = 25
@@ -29,7 +28,6 @@
 	desc = "Heavy-duty, command-type exosuit. This is a custom model, utilized only by high-ranking military personnel."
 	name = "Seraph"
 	icon_state = "seraph"
-	initial_icon = "seraph"
 	operation_req_access = list(access_cent_creed)
 	step_in = 3
 	health = 550
@@ -42,7 +40,6 @@
 	desc = "Heavy-duty, combat exosuit, developed off of the existing Marauder model."
 	name = "Mauler"
 	icon_state = "mauler"
-	initial_icon = "mauler"
 	operation_req_access = list(access_syndicate)
 	wreckage = /obj/effect/decal/mecha_wreckage/mauler
 
@@ -58,7 +55,7 @@
 	ME.attach(src)
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
-	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
+	rockets = image('icons/effects/160x160.dmi', icon_state= initial(icon_state) + "_burst")
 	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
 	rockets.plane = LIGHTING_PLANE
@@ -142,32 +139,32 @@
 /obj/mecha/combat/marauder/stopMechWalking()
 	overlays -= rockets
 	if(throwing)
-		icon_state = initial_icon + "-dash"
+		icon_state = initial(icon_state) + "-dash"
 		overlays |= rockets
 	else
-		icon_state = initial_icon
+		icon_state = initial(icon_state)
 
 /obj/mecha/combat/marauder/to_bump(var/atom/obstacle)
 	..()
 	overlays -= rockets
 	if(throwing)
-		icon_state = initial_icon + "-dash"
+		icon_state = initial(icon_state) + "-dash"
 		overlays |= rockets
 	else
-		icon_state = initial_icon
+		icon_state = initial(icon_state)
 
 /obj/mecha/combat/marauder/throw_at(var/atom/obstacle)
 	if (!throwing)
-		icon_state = initial_icon + "-dash"
+		icon_state = initial(icon_state) + "-dash"
 		overlays |= rockets
 		playsound(src, 'sound/weapons/rocket.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
 	..()
 	overlays -= rockets
 	if(throwing)
-		icon_state = initial_icon + "-dash"
+		icon_state = initial(icon_state) + "-dash"
 		overlays |= rockets
 	else
-		icon_state = initial_icon
+		icon_state = initial(icon_state)
 
 /spell/mech/marauder
 	hud_state = "marauder"
@@ -198,7 +195,7 @@
 
 /spell/mech/marauder/dash/New()
 	..()
-	hud_state = "[linked_mech.initial_icon]-dash"
+	hud_state = initial(linked_mech.icon_state) + "-dash"
 
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
 	if(linked_mech.lock_controls)

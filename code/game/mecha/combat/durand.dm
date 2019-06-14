@@ -2,7 +2,6 @@
 	desc = "It's time to light some fires and kick some tires."
 	name = "Durand Mk. II"
 	icon_state = "durand"
-	initial_icon = "durand"
 	step_in = 4
 	dir_in = 1 //Facing North.
 	health = 400
@@ -67,7 +66,6 @@
 	desc = "A retired, third-generation combat exosuit utilized by the Nanotrasen corporation. Originally developed to combat hostile alien lifeforms."
 	name = "Durand"
 	icon_state = "old_durand"
-	initial_icon = "old_durand"
 	step_in = 4
 	dir_in = 1 //Facing North.
 	health = 400

@@ -2,7 +2,6 @@
 	desc = "Combining man and machine for a better, stronger engineer."
 	name = "Clarke"
 	icon_state = "clarke"
-	initial_icon = "clarke"
 	step_in = 1
 	step_energy_drain = 2
 	max_temperature = 100000
@@ -51,7 +50,7 @@
 	return TRUE
 
 /obj/mecha/working/clarke/startMechWalking()
-	icon_state = initial_icon + "-move"
+	icon_state = initial(icon_state) + "-move"
 
 /obj/mecha/working/clarke/get_commands()
 	var/output = {"<div class='wr'>
