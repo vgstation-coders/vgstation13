@@ -453,7 +453,12 @@
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
 	anchored = 1
-	var/busy = 0 	//Something's being washed at the moment
+	var/busy = 0 //Something's being washed at the moment
+	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null //The liquid dispensed by the sink, normally water, lifted from the shower
+
+/obj/structure/sink/New() //Our showers actually wet people and floors now
+	..()
+	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
 
 /obj/structure/sink/verb/empty_container_into()
 	set name = "Empty container into"
@@ -477,7 +482,7 @@
 	if(isrobot(M) || isAI(M))
 		return
 
-	if(!Adjacent(M))
+	if(M.incapacitated() || !Adjacent(M))
 		return
 
 	if(anchored == 0)
@@ -487,25 +492,34 @@
 		to_chat(M, "<span class='warning'>Someone's already washing here.</span>")
 		return
 
-	to_chat(usr, "<span class='notice'>You start washing your hands.</span>")
+	to_chat(M, "<span class='notice'>You start washing your hands.</span>")
+
+	//React to the liquid that is now draining all over our hands. Greys beware
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		watersource.reagents.reaction(C, TOUCH)
 
 	busy = 1
 	sleep(40)
 	busy = 0
 
-	if(!Adjacent(M))
-		return		//Person has moved away from the sink
+	if(M.incapacitated() || !Adjacent(M))
+		return
 
 	M.clean_blood()
 	if(ishuman(M))
-		M:update_inv_gloves()
-	for(var/mob/V in viewers(src, null))
-		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
+		var/mob/living/carbon/human/H = M
+		if(H.gloves)
+			if(H.gloves.clean_blood())
+				H.update_inv_gloves(0)
+	M.visible_message("<span class='notice'>[M] washes their hands using \the [src].</span>", \
+	"<span class='notice'>You wash your hands using \the [src].</span>")
 
 /obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy)
 		return 1
-	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.","<span class='notice'>You put \the [M] underneath the running water.</span>")
+	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.", \
+	"<span class='notice'>You put \the [M] underneath the running water.</span>")
 	busy = 1
 	sleep(40)
 	busy = 0
@@ -513,9 +527,11 @@
 	if(M.reagents.maximum_volume > M.reagents.total_volume)
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
-		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
+		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>", \
+		"<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 	else
-		user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+		user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>", \
+		"<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
 	return 1
 
 /obj/structure/sink/attackby(obj/item/O as obj, mob/user as mob)
@@ -526,28 +542,29 @@
 	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
+
 	if(anchored == 0)
 		return
 
 	if(istype(O, /obj/item/weapon/mop))
 		return
 
-	if (istype(O, /obj/item/weapon/reagent_containers))
+	if(istype(O, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/RG = O
 		if(RG.reagents.total_volume >= RG.reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>\The [RG] is full.</span>")
 			return
-		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
+		if(istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
 			C.reagents.add_reagent(WATER, C.fill_amount)
 		else
 			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
-		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
+		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill \the [RG] using \the [src].</span>")
 		return
 
-	else if (istype(O, /obj/item/weapon/melee/baton))
+	else if(istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O
-		if (B.bcell && B.bcell.charge > 0 && B.status == 1)
+		if(B.bcell && B.bcell.charge > 0 && B.status == 1)
 			flick("baton_active", src)
 			user.Stun(10)
 			user.stuttering = 10
@@ -557,23 +574,21 @@
 				R.cell.charge -= 20
 			else
 				B.deductcharge(1)
-			user.visible_message( \
-				"<span class='warning'>[user] was stunned by \his wet [O.name]!</span>", \
-				"<span class='warning'>You have wet \the [O.name], it shocks you!</span>")
+			user.visible_message("<span class='warning'>[user] was stunned by \his wet [O.name]!</span>", \
+			"<span class='warning'>You have wet \the [O.name], it shocks you!</span>")
 			return
 
-	if (!isturf(user.loc))
+	if(!isturf(user.loc))
 		return
 
-	if (isitem(O))
+	if(isitem(O))
 		to_chat(user, "<span class='notice'>You start washing \the [O].</span>")
 		busy = TRUE
 
-		if (do_after(user,src, 40))
+		if(do_after(user, src, 40))
 			O.clean_blood()
-			user.visible_message( \
-				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
-				"<span class='notice'>You wash \a [O] using \the [src].</span>")
+			user.visible_message("<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
+			"<span class='notice'>You wash \a [O] using \the [src].</span>")
 
 		busy = FALSE
 
@@ -589,7 +604,6 @@
 /obj/structure/sink/kitchen
 	name = "kitchen sink"
 	icon_state = "sink_alt"
-
 
 /obj/structure/sink/puddle	//splishy splashy ^_^
 	name = "puddle"
