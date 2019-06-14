@@ -602,7 +602,6 @@ a {
 //Called when a mob in our locked atoms list kicks another object. Return 1 if successful, to abort the rest of the kicking action.
 /obj/proc/onBuckledUserKick(var/mob/living/user, var/atom/A)
 	if(!anchored && !user.isStunned() && !user.timestopped && user.has_limbs) //If you're buckled onto a non-anchored object (like office chairs) you harmlessly push yourself away with your legs.
-		world << "BUCKLED KICK"
 		spawn() //Return 1 first thing
 			var/movementdirection = turn(get_dir(src, A), 180)
 			if(user.get_strength() > 1) //Hulk KICK!
