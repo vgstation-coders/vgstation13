@@ -62,7 +62,7 @@
 	"thermo-electric engines", "arcades", "hydroponics trays", "gas miners", "traitor equipments", "power sinks", "transit shuttles", "communication consoles", "electronic systems", "fire alarms", "airlocks", "status screens", "cyborgs", \
 	"telecommunication machines", "medical machines", "research machines", "kitchen machines", "dispensers", "medibots", "buttbots", "chemistry machines", "incinerators", "MoMMIs", "AIs", "remote signalling devices", "disposal bins")
 
-	var/list/il_mach_desc = list("unpowered", "powered", "broken", "unusued", "used", "critical", "emagged", "hacked", "overloaded", "harmful", "safe", "electrified", "anchored", "deanchored", "wall-mounted", "highly unstable", "stable", \
+	var/list/il_mach_desc = list("unpowered", "powered", "broken", "unused", "used", "critical", "emagged", "hacked", "overloaded", "harmful", "safe", "electrified", "anchored", "deanchored", "wall-mounted", "highly unstable", "stable", \
 	"metastable", "traitorous", "human", "non-human", "invisible", "visible", "virtual", "loose", "contained", "radioactive", "real", "four-dimensional", "alien", "burning", "fire-proof", "highly inflammable", "rouge", "explosive", \
 	"superflous", "useless", "wasteful", "off-station", "functional", "subverted", "malfunctioning")
 
