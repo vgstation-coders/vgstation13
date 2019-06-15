@@ -193,11 +193,10 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/teleport/hub
-	name = "teleporter hub"
-	desc = "It's the hub of a teleporting machine."
+	name = "teleporter horizon generator"
+	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
 	var/accurate = 0
-	var/opened = 0.0
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
@@ -284,10 +283,9 @@
 
 
 /obj/machinery/teleport/station
-	name = "station"
-	desc = "It's the station thingy of a teleport thingy." //seriously, wtf.
+	name = "teleporter controller"
+	desc = "This co-ordinates nearby teleporter horizon generators."
 	icon_state = "controller"
-	var/opened = 0.0
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
