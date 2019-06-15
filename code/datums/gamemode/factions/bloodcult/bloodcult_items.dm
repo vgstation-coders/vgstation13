@@ -1424,3 +1424,39 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/syringe/robot/cultist
 	name = "consensual blood donation syringe"
 	desc = "Remember - if the human doesn't consent, then you're committing human harm!"
+	
+/obj/item/weapon/light/tube/cultist
+	name = "cultist light tube"
+	brightness_color = "#C94C4C"
+	brightness_range = 7
+	brightness_power = 2
+	
+/obj/item/weapon/light/tube/cultist/update()
+	switch(status)
+		if(LIGHT_OK)
+			icon_state = base_state
+			desc = "A cultist light tube. Seems to emit a crimson light instead of normal light."
+		if(LIGHT_BURNED)
+			icon_state = "[base_state]-burned"
+			desc = "A burnt-out cultist light tube."
+		if(LIGHT_BROKEN)
+			icon_state = "[base_state]-broken"
+			desc = "A broken cultist light tube."
+			
+/obj/item/weapon/light/bulb/cultist
+	name = "cultist light bulb"
+	brightness_color = "#C94C4C"
+	brightness_range = 5
+	brightness_power = 2
+
+/obj/item/weapon/light/bulb/cultist/update()
+	switch(status)
+		if(LIGHT_OK)
+			icon_state = base_state
+			desc = "A cultist light bulb. Seems to emit a crimson light instead of normal light."
+		if(LIGHT_BURNED)
+			icon_state = "[base_state]-burned"
+			desc = "A burnt-out cultist light bulb."
+		if(LIGHT_BROKEN)
+			icon_state = "[base_state]-broken"
+			desc = "A broken cultist light bulb."
