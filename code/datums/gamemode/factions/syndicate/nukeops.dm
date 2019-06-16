@@ -236,7 +236,7 @@
 
 /datum/faction/syndicate/nuke_op/proc/prepare_syndicate_leader(var/datum/mind/synd_mind, var/nuke_code)
 
-	leader = synd_mind
+	leader = synd_mind.GetRole(NUCLEAR_OPERATIVE)
 	spawn()
 		var/title = copytext(sanitize(input(synd_mind.current, "Pick a glorious title for yourself. Leave blank to tolerate equality with your teammates and avoid giving yourself away when talking undercover", "Honorifics", "")), 1, MAX_NAME_LEN)
 		nuke_name_assign(nuke_last_name(synd_mind.current), title, members) //Allows time for the rest of the syndies to be chosen
