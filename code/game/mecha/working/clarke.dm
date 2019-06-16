@@ -17,7 +17,7 @@
 
 /obj/mecha/working/clarke/New()
 	..()
-	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial(icon_state)]-thruster_overlay")
+	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial_icon]-thruster_overlay")
 	scrubber = new(src)
 
 /obj/mecha/working/clarke/Destroy()
