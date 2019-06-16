@@ -322,4 +322,5 @@
 		/obj/item/clothing/shoes/purple,
 		/obj/item/clothing/shoes/leather,
 		/obj/item/clothing/under/casualwear,
+		/obj/item/clothing/under/tourist,
 	)
