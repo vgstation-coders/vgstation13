@@ -22,7 +22,7 @@ var/list/camera_names=list()
 	anchored = 1.0
 	var/invuln = null
 	var/bugged = 0
-	var/failure_chance = 10
+	var/failure_chance = 15
 	var/obj/item/weapon/camera_assembly/assembly = null
 	var/light_on = 0
 
@@ -44,11 +44,6 @@ var/list/camera_names=list()
 
 /obj/machinery/camera/flawless
 	failure_chance = 0
-
-/obj/machinery/camera/initialize()
-	..()
-	if(prob(failure_chance))
-		deactivate()
 
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED

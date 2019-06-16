@@ -1415,6 +1415,7 @@
 #include "code\modules\events\alien_infestation.dm"
 #include "code\modules\events\bluespaceanomaly.dm"
 #include "code\modules\events\brand_intelligence.dm"
+#include "code\modules\events\camera_failure.dm"
 #include "code\modules\events\carp_migration.dm"
 #include "code\modules\events\centcomm_order.dm"
 #include "code\modules\events\comms_blackout.dm"
