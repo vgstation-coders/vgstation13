@@ -2,6 +2,7 @@
 	desc = "Autonomous Power Loader Unit. The workhorse of the exosuit world."
 	name = "APLU \"Ripley\""
 	icon_state = "ripley"
+	initial_icon = "ripley"
 	step_in = 4
 	max_temperature = 20000
 	health = 200
@@ -17,6 +18,7 @@
 	desc = "Standard APLU chassis, refitted with additional thermal protection and cistern."
 	name = "APLU \"Firefighter\""
 	icon_state = "firefighter"
+	initial_icon = "firefighter"
 	max_temperature = 65000
 	health = 250
 	light_range_on = 10
@@ -28,6 +30,7 @@
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"
+	initial_icon = "deathripley"
 	step_in = 2
 	opacity = 0
 	light_range_on = 12

@@ -2,6 +2,7 @@
 	desc = "It's time to light some fires and kick some tires."
 	name = "Durand Mk. II"
 	icon_state = "durand"
+	initial_icon = "durand"
 	step_in = 4
 	dir_in = 1 //Facing North.
 	health = 400
@@ -45,7 +46,7 @@
 		Durand.icon_state = 0
 		if(!istype(Durand,/obj/mecha/combat/durand/old))
 			flick("durand-lockdown-a",Durand)
-			Durand.icon_state = "durand-lockdown"
+			Durand.icon_state = initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
 		Durand.occupant_message("<span class='notice'>You enable [Durand] defence mode.</span>")
 		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)
@@ -66,6 +67,7 @@
 	desc = "A retired, third-generation combat exosuit utilized by the Nanotrasen corporation. Originally developed to combat hostile alien lifeforms."
 	name = "Durand"
 	icon_state = "old_durand"
+	initial_icon = "old_durand"
 	step_in = 4
 	dir_in = 1 //Facing North.
 	health = 400

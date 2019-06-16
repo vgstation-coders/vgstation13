@@ -2,6 +2,7 @@
 	desc = "A lightweight, security exosuit. Popular among private and corporate security."
 	name = "Gygax"
 	icon_state = "gygax"
+	initial_icon = "gygax"
 	step_in = 3
 	dir_in = 1 //Facing North.
 	health = 300
@@ -19,6 +20,7 @@
 	desc = "A lightweight exosuit used by Nanotrasen Death Squads. A significantly upgraded Gygax security mech."
 	name = "Dark Gygax"
 	icon_state = "darkgygax"
+	initial_icon = "darkgygax"
 	health = 400
 	deflect_chance = 25
 	damage_absorption = list("brute"=0.6,"fire"=0.8,"bullet"=0.6,"laser"=0.5,"energy"=0.65,"bomb"=0.8)
@@ -78,26 +80,26 @@
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
 		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
 			flick("gygax-gofast-aon",Gygax)
-			Gygax.icon_state = "gygax-gofast"
+			Gygax.icon_state = initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")
 	return
 
 /*
 /obj/mecha/combat/gygax/startMechWalking()
 	if(overload)
-		icon_state = initial(icon_state) + "-gofast-move"
+		icon_state = initial_icon + "-gofast-move"
 	else
-		icon_state = initial(icon_state) + "-move"
+		icon_state = initial_icon + "-move"
 */
 
 /obj/mecha/combat/gygax/stopMechWalking()
 	if(overload)
-		icon_state = initial(icon_state) + "-gofast"
+		icon_state = initial_icon + "-gofast"
 	else
-		icon_state = initial(icon_state)
+		icon_state = initial_icon
 
 /obj/mecha/combat/gygax/dark/stopMechWalking()
-	icon_state = initial(icon_state)
+	icon_state = initial_icon
 
 /obj/mecha/combat/gygax/dyndomove(direction)
 	if(!..())

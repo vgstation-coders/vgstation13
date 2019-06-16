@@ -22,6 +22,7 @@
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged. This is supposedly infrared brightness. Lower for combat mechs.
 	var/list/hud_list = list()
+	var/initial_icon
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
@@ -415,7 +416,7 @@
 /obj/mecha/proc/startMechWalking()
 
 /obj/mecha/proc/stopMechWalking()
-	icon_state = initial(icon_state)
+	icon_state = initial_icon
 
 /obj/mecha/proc/mechturn(direction)
 	dir = direction
@@ -2118,7 +2119,7 @@
 	return 0
 
 /obj/mecha/proc/reset_icon()
-	icon_state = initial(icon_state)
+	icon_state = initial_icon
 	return icon_state
 
 /obj/mecha/acidable()

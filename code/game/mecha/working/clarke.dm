@@ -2,6 +2,7 @@
 	desc = "Combining man and machine for a better, stronger engineer."
 	name = "Clarke"
 	icon_state = "clarke"
+	initial_icon = "clarke"
 	step_in = 1
 	step_energy_drain = 2
 	max_temperature = 100000
@@ -16,7 +17,7 @@
 
 /obj/mecha/working/clarke/New()
 	..()
-	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial(icon_state)]-thruster_overlay")
+	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial_icon]-thruster_overlay")
 	scrubber = new(src)
 
 /obj/mecha/working/clarke/Destroy()
@@ -50,7 +51,7 @@
 	return TRUE
 
 /obj/mecha/working/clarke/startMechWalking()
-	icon_state = initial(icon_state) + "-move"
+	icon_state = initial_icon + "-move"
 
 /obj/mecha/working/clarke/get_commands()
 	var/output = {"<div class='wr'>
