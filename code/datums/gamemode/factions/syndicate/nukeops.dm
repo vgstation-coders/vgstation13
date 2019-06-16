@@ -81,7 +81,8 @@
 			agent_number++
 		spawnpos++
 
-		equip_nuke_loadout(synd_mind.current)
+		spawn()
+			equip_nuke_loadout(synd_mind.current)
 
 	if(uplinklocker)
 		new /obj/structure/closet/syndicate/nuclear(uplinklocker.loc)
@@ -92,13 +93,13 @@
 
 	update_faction_icons()
 
-/datum/faction/syndicate/nuke_op/proc/nuke_name_assign(var/last_name, var/title, var/list/syndicates)
+/datum/faction/syndicate/nuke_op/proc/nuke_name_assign(var/last_name, var/title = "", var/list/syndicates)
 	for(var/datum/role/R in syndicates)
 		switch(R.antag.current.gender)
 			if(MALE)
-				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[title ? "[title] ":""][pick(first_names_male)] [last_name ? "[last_name]":"[pick(last_names)]"]")
+				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[leader == R ? "[title] ":""][pick(first_names_male)] [last_name ? "[last_name]":"[pick(last_names)]"]")
 			if(FEMALE)
-				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[title ? "[title] ":""][pick(first_names_female)] [last_name ? "[last_name]":"[pick(last_names)]"]")
+				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[leader == R ? "[title] ":""][pick(first_names_female)] [last_name ? "[last_name]":"[pick(last_names)]"]")
 
 /datum/faction/syndicate/nuke_op/proc/equip_nuke_op(mob/living/carbon/human/synd_mob)
 	var/radio_freq = SYND_FREQ
@@ -139,7 +140,7 @@
 
 		var/obj/item/weapon/tank/nitrogen/TN = new(synd_mob)
 		synd_mob.put_in_hands(TN)
-		to_chat(synd_mob, "<span class='notice'>You are now running on nitrogen internals from the [TN] in your hand. Your species finds oxygen toxic, so you must breathe nitrogen (AKA N<sub>2</sub>) only.</span>")
+		to_chat(synd_mob, "<span class='notice'>You are now running on nitrogen internals from \the [TN] in your hand. Your species finds oxygen toxic, so you must breathe nitrogen (AKA N<sub>2</sub>) only.</span>")
 		synd_mob.internal = TN
 
 		if(synd_mob.internals)
@@ -235,9 +236,9 @@
 
 /datum/faction/syndicate/nuke_op/proc/prepare_syndicate_leader(var/datum/mind/synd_mind, var/nuke_code)
 
-	leader = synd_mind
-	var/title = copytext(sanitize(input(synd_mind.current, "Pick a glorious title for yourself. Leave blank to tolerate equality with your teammates and avoid giving yourself away when talking undercover", "Honorifics", "")), 1, MAX_NAME_LEN)
-	spawn(1)
+	leader = synd_mind.GetRole(NUKE_OP_LEADER)
+	spawn()
+		var/title = copytext(sanitize(input(synd_mind.current, "Pick a glorious title for yourself. Leave blank to tolerate equality with your teammates and avoid giving yourself away when talking undercover", "Honorifics", "")), 1, MAX_NAME_LEN)
 		nuke_name_assign(nuke_last_name(synd_mind.current), title, members) //Allows time for the rest of the syndies to be chosen
 
 	if(nuke_code)
