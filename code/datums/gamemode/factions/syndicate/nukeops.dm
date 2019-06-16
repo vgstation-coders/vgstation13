@@ -97,9 +97,9 @@
 	for(var/datum/role/R in syndicates)
 		switch(R.antag.current.gender)
 			if(MALE)
-				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[leader == R.antag ? "[title] ":""][pick(first_names_male)] [last_name ? "[last_name]":"[pick(last_names)]"]")
+				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[leader == R ? "[title] ":""][pick(first_names_male)] [last_name ? "[last_name]":"[pick(last_names)]"]")
 			if(FEMALE)
-				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[leader == R.antag ? "[title] ":""][pick(first_names_female)] [last_name ? "[last_name]":"[pick(last_names)]"]")
+				R.antag.current.fully_replace_character_name(R.antag.current.real_name, "[leader == R ? "[title] ":""][pick(first_names_female)] [last_name ? "[last_name]":"[pick(last_names)]"]")
 
 /datum/faction/syndicate/nuke_op/proc/equip_nuke_op(mob/living/carbon/human/synd_mob)
 	var/radio_freq = SYND_FREQ
