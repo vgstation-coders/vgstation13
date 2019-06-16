@@ -2,6 +2,7 @@
 /obj/mecha/working/hoverpod
 	name = "hover pod"
 	icon_state = "engineering_pod"
+	initial_icon = "engineering_pod"
 	desc = "Stubby and round, it has a human sized access hatch on the top."
 	step_energy_drain = 2
 	step_in = 1

@@ -198,7 +198,7 @@
 
 /spell/mech/marauder/dash/New()
 	..()
-	hud_state = initial(linked_mech.icon_state) + "-dash"
+	hud_state = linked_mech.initial_icon + "-dash"
 
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
 	if(linked_mech.lock_controls)

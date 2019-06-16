@@ -153,7 +153,7 @@ var/list/gravpults = list()
 		return
 
 	if (istype(mech,/obj/mecha/combat/marauder))
-		mech.icon_state = initial(mech.icon_state) + "-dash"
+		mech.icon_state = mech.initial_icon + "-dash"
 
 	//turning off the mech's controls temporarily so the user can't mess up the launch, voluntarily or not
 	mech.set_control_lock(1)
