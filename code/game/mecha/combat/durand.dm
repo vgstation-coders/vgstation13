@@ -53,7 +53,7 @@
 	else
 		Durand.deflect_chance = initial(Durand.deflect_chance)
 		if(!istype(Durand,/obj/mecha/combat/durand/old))
-			Durand.icon_state = Durand.reset_icon()
+			Durand.icon_state = Durand.initial_icon
 		Durand.occupant_message("<span class='red'>You disable [Durand] defence mode.</span>")
 	Durand.log_message("Toggled defence mode.")
 	return

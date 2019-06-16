@@ -117,7 +117,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
-	reset_icon()
+	icon_state = initial_icon
 	icon_state += "-open"
 	return
 
@@ -1201,7 +1201,7 @@
 		src.add_fingerprint(H)
 		src.forceMove(src.loc)
 		src.log_append_to_last("[H] moved in as pilot.")
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		dir = dir_in
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
@@ -1276,7 +1276,7 @@
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1449,7 +1449,7 @@
 		*/
 
 		src.occupant = null
-		src.icon_state = src.reset_icon()+"-open"
+		src.icon_state = src.initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
 			set_light(0)
 		src.dir = dir_in
@@ -2117,10 +2117,6 @@
 		cell.give(amount)
 		return 1
 	return 0
-
-/obj/mecha/proc/reset_icon()
-	icon_state = initial_icon
-	return icon_state
 
 /obj/mecha/acidable()
 	return 0
