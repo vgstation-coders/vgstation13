@@ -46,7 +46,7 @@
 		Durand.icon_state = 0
 		if(!istype(Durand,/obj/mecha/combat/durand/old))
 			flick("durand-lockdown-a",Durand)
-			Durand.icon_state = initial_icon + "-lockdown"
+			Durand.icon_state = Durand.initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
 		Durand.occupant_message("<span class='notice'>You enable [Durand] defence mode.</span>")
 		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)

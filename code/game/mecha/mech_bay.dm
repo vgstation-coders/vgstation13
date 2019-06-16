@@ -205,21 +205,21 @@
 
 /obj/machinery/computer/mech_bay_power_console/power_change()
 	if(stat & BROKEN)
-		icon_state = initial_icon+"_broken"
+		icon_state = initial(icon_state) +"_broken"
 		if(recharge_port)
 			recharge_port.stop_charge()
 	else if(powered())
-		icon_state = initial_icon
+		icon_state = initial(icon_state)
 		stat &= ~NOPOWER
 	else
 		spawn(rand(0, 15))
-			icon_state = initial_icon+"_nopower"
+			icon_state = initial(icon_state)+"_nopower"
 			stat |= NOPOWER
 			if(recharge_port)
 				recharge_port.stop_charge()
 
 /obj/machinery/computer/mech_bay_power_console/set_broken()
-	icon_state = initial_icon+"_broken"
+	icon_state = initial(icon_state)+"_broken"
 	stat |= BROKEN
 	if(recharge_port)
 		recharge_port.stop_charge()

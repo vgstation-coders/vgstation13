@@ -80,7 +80,7 @@
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
 		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
 			flick("gygax-gofast-aon",Gygax)
-			Gygax.icon_state = initial_icon + "-gofast"
+			Gygax.icon_state = Gygax.initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")
 	return
 
