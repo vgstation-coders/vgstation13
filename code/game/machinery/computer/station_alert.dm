@@ -6,7 +6,7 @@
 	circuit = "/obj/item/weapon/circuitboard/stationalert"
 	light_color = LIGHT_COLOR_CYAN
 
-	var/alarms = list("Fire"=list(), "Atmosphere"=list(), "Power"=list())
+	var/alarms = list("Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
 
 	var/list/covered_areas = list()
 

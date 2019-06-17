@@ -49,6 +49,7 @@ var/list/camera_names=list()
 	..()
 	if(prob(failure_chance))
 		deactivate()
+		triggerCameraAlarm()
 
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
@@ -394,6 +395,8 @@ var/list/camera_messages = list()
 	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
 		S.triggerAlarm("Camera", this_area, list(src), src)
+	for(var/var/obj/machinery/computer/station_alert/a)
+		a.triggerAlarm("Camera", this_area, list(src), src)
 	adv_camera.update(z, TRUE, list(src))
 
 
