@@ -111,6 +111,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 
 	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
+	message_admins("huh")
 	if(put_mob(L))
 		if(L == user)
 			visible_message("[user] climbs into \the [src].")

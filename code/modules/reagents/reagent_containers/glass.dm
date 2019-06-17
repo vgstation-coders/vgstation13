@@ -78,15 +78,11 @@
 /obj/item/weapon/reagent_containers/glass/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
 	if (!adjacency_flag)
 		return
-
 	if (is_type_in_list(target, can_be_placed_into))
 		return
-
 	if(ishuman(target)) //Splashing handled in attack now
 		return
-
 	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside
-
 	if((transfer_result > 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
 		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 

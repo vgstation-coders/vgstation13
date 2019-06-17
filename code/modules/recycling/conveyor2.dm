@@ -4,6 +4,8 @@
 // May need to be increased.
 #define CONVEYOR_CONTROL_RANGE 30
 
+var/mob/living/carbon/human/conveyor_overmind
+
 /obj/machinery/conveyor
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "conveyor0"
@@ -12,6 +14,8 @@
 	<br><span class='info'>It can be pried into a different direction using a crowbar, but cannot be moved without welding it apart.</span>"
 	layer = BELOW_TABLE_LAYER
 	anchored = 1
+	
+	var/mob/living/carbon/fakeMob //Used for automatic insertion into machines.
 
 	var/operating = 0	// 1 if running forward, -1 if backwards, 0 if off
 	var/operable = 1	// true if can operate (no broken segments in this belt run)
@@ -107,6 +111,10 @@
 		copy_radio_from_neighbors()
 
 	update_nearby_conveyors() //smooth with diagonals
+	if(!conveyor_overmind)
+		conveyor_overmind = new /mob/living/carbon/human/conveyor_overmind(get_turf(src))
+		conveyor_overmind.invisibility = 0
+	fakeMob = conveyor_overmind
 
 /obj/machinery/conveyor/Destroy()
 	var/turf/T = loc
@@ -240,17 +248,45 @@
 	use_power(100)
 
 	affecting = loc.contents - src		// moved items will be all in loc
-	spawn(1)	// slight delay to prevent infinite propagation due to map order	//TODO: please no spawn() in process(). It's a very bad idea
+	spawn(1)
 		var/items_moved = 0
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
-				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+				if(A.loc == src.loc)
 					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
-					step(A,movedir)
+					if(!step(A,movedir))
+						var/obj/machinery/next_tile = locate() in get_step(A, movedir)
+						if(istype(next_tile) && !istype(next_tile, /obj/machinery/conveyor))
+							attemptInsert(next_tile,A)
 					items_moved++
 			if(items_moved >= max_moved)
 				break
 
+//Conveyors all use a singular, hidden mob that inserts items. See end of the file for the define.
+				
+/obj/machinery/conveyor/proc/attemptInsert(var/obj/machinery/target,var/atom/movable/input)
+	if(!conveyor_overmind)
+		conveyor_overmind = new /mob/living/carbon/human/conveyor_overmind(get_turf(src))
+		fakeMob = conveyor_overmind
+	conveyor_overmind.forceMove(get_turf(src),TRUE)
+	if(istype(input,/obj/item))
+		message_admins("A")
+		var/obj/item/itemInput = input
+		target.attackby(itemInput,fakeMob)
+		if(itemInput.loc == src.loc)
+			itemInput.afterattack(target, fakeMob, 1)
+			if(itemInput.loc == src.loc)
+				target.MouseDropTo(itemInput,fakeMob)
+	else if(istype(input,/obj))
+		message_admins("B")
+		var/obj/objInput = input
+		target.attackby(objInput,fakeMob)
+		if(objInput.loc == src.loc)
+			target.MouseDropTo(objInput,fakeMob)
+	else
+		message_admins("C")
+		target.MouseDropTo(input,fakeMob)
+	
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
 
@@ -570,3 +606,15 @@
 
 /obj/machinery/conveyor_switch/npc_tamper_act(mob/living/L)
 	attack_hand(L)
+
+//Special conveyor mob used to insert items into machines
+	
+/mob/living/carbon/human/conveyor_overmind
+	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
+	invisibility = INVISIBILITY_MAXIMUM
+
+/mob/living/carbon/human/conveyor_overmind/Adjacent(var/atom/neighbor)
+	return 1
+	
+/mob/living/carbon/human/conveyor_overmind/Adjacent(var/atom/neighbor, var/recurse = 1)
+	return 1
