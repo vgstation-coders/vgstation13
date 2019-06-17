@@ -3117,7 +3117,7 @@
 		"antigen" = list(),
 		)
 
-/datum/reagent/vaccine/reaction_mob(var/mob/living/M)
+/datum/reagent/vaccine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	M.immune_system.ApplyVaccine(data["antigen"])

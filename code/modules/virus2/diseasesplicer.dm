@@ -155,9 +155,9 @@
 			return
 		if(spliced)
 			//Here we generate a new ID so the spliced pathogen gets it's own entry in the database instead of being shown as the old one.
-			dish.virus2.uniqueID = rand(0, 10000)
-			dish.info = dish.virus2.get_info()
+			dish.virus2.subID = rand(0, 9999)
 			dish.virus2.addToDB()
+			dish.info = dish.virus2.get_info()
 			spliced = FALSE
 		dish.forceMove(loc)
 		dish = null

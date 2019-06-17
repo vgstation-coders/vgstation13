@@ -47,7 +47,7 @@
 
 
 /datum/immune_system/proc/GetImmunity()
-	return list(strength, antibodies)
+	return list(strength, antibodies.Copy())
 
 /datum/immune_system/proc/Overload()
 	body.adjustToxLoss(100)
