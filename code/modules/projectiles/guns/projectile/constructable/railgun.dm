@@ -260,77 +260,14 @@
 /obj/item/weapon/gun/projectile/railgun/proc/calculate_strength(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(!loadedcapacitor || !loadedammo)
 		return
-
+	
 	var/shot_charge = round(loadedcapacitor.stored_charge)
-/*
-	30 000 000	// capacitor
-	200 000 000 // advanced capacitor
-	1 000 000 000 // super capacitor
-	5 000 000 000 // ultra capacitor
-	
-	1 000 000 // MEGAWATT
-	10 000 000 // TEN_MEGAWATTS (math)
-	100 000 000 // HUNDRED_MEGAWATTS (maath)
-	1 000 000 000 // GIGAWATT (maaath)
-*/
-	
 	strength = shot_charge / 5000000
 	
 	loadedcapacitor.stored_charge -= shot_charge
 	if(shot_charge < TEN_MEGAWATTS)
 		strength = 0
 		throw_ammo(A,user)
-		
-	
-	
-/*
-	max damage b4:
-	30
-	60
-	200
-	200
-	
-	max damage after:
-	6
-	40
-	200
-	1000
-	
-	else if(shot_charge >= MEGAWATT && shot_charge < (MEGAWATT * 5))
-		strength = 10
-	else if(shot_charge >= (MEGAWATT * 5) && shot_charge < (TEN_MEGAWATTS))
-		strength = 20
-	else if(shot_charge >= (TEN_MEGAWATTS) && shot_charge < (TEN_MEGAWATTS * 2.5))
-		strength = 25
-	else if(shot_charge >= (TEN_MEGAWATTS * 2.5) && shot_charge < (TEN_MEGAWATTS * 5))
-		strength = 30
-	else if(shot_charge >= (TEN_MEGAWATTS * 5) && shot_charge < (TEN_MEGAWATTS * 7))
-		strength = 35
-	else if(shot_charge >= (TEN_MEGAWATTS * 7) && shot_charge < (TEN_MEGAWATTS * 8.5))
-		strength = 40
-	else if(shot_charge >= (TEN_MEGAWATTS * 8.5) && shot_charge < (HUNDRED_MEGAWATTS))
-		strength = 45
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 1) && shot_charge < (HUNDRED_MEGAWATTS * 2))
-		strength = 50
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 2) && shot_charge < (HUNDRED_MEGAWATTS * 3))
-		strength = 60
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 3) && shot_charge < (HUNDRED_MEGAWATTS * 4))
-		strength = 75
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 4) && shot_charge < (HUNDRED_MEGAWATTS * 5))
-		strength = 90
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 5) && shot_charge < (HUNDRED_MEGAWATTS * 6))
-		strength = 101
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 6) && shot_charge < (HUNDRED_MEGAWATTS * 7))
-		strength = 110
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 7) && shot_charge < (HUNDRED_MEGAWATTS * 8))
-		strength = 120
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 8) && shot_charge < (HUNDRED_MEGAWATTS * 9))
-		strength = 135
-	else if(shot_charge >= (HUNDRED_MEGAWATTS * 9) && shot_charge < (GIGAWATT))
-		strength = 150
-	else if(shot_charge >= GIGAWATT)
-		strength = 200
-*/
 	
 	if(strength)
 		var/obj/item/projectile/bullet/APS/B = new(null)
