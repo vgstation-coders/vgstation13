@@ -516,7 +516,7 @@
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
 	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
-	
+
 /mob/living/carbon/teleport_to(var/atom/A)
 	var/last_slip_value = src.unslippable
 	src.unslippable = 1
@@ -695,7 +695,7 @@
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+			if (!Slip(stun_amount = 3, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
 				return FALSE
 			step(src, dir)
 			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
@@ -703,7 +703,7 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
 			for (var/i = 1 to 4)
 				spawn(i)
