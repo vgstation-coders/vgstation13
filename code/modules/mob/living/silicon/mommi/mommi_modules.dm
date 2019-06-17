@@ -72,7 +72,11 @@
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
 
-
+	var/atom/A = locate(/obj/item/device/material_synth/robot/mommi) in src
+	if(A)
+		modules.Remove(A)
+		qdel(A)
+	modules += new /obj/item/device/material_synth/robot/soviet(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/device/rcd/borg/rsf/soviet(src)
