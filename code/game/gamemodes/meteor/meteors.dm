@@ -7,7 +7,7 @@
 /var/chosen_dir = 1
 
 //Call above constants to change
-/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types = null, var/offset_origin = 150, var/offset_dest = 230)
+/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types = null, var/offset_origin = 0, var/offset_dest = 0)
 
 	if(!ticker || meteor_wave_active)
 		return
