@@ -1,16 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
-
-//Added spess ghoasts/cameras to this so they don't add to the lag. - N3X.
-
-//Added a singuloCanEat proc to atoms. This list is now kinda obsolete.
-//Removed singuloCanEat proc from the repo.  This is now here ironically - Probe 4/30/16
-//var/global/list/uneatable = list(
-//	/obj/effect/overlay,
-//	/mob/dead,
-//	/mob/camera,
-//	/mob/new_player,
-//	)
-
+var/list/global_singularity_pool
 
 /obj/machinery/singularity
 	name = "gravitational singularity" //Lower case
@@ -59,7 +47,10 @@
 		if(singubeacon.active)
 			target = singubeacon
 			break
-
+	if(!global_singularity_pool)
+		global_singularity_pool = list()
+	global_singularity_pool += src
+	
 /obj/machinery/singularity/attack_hand(mob/user as mob)
 	consume(user)
 	return 1
@@ -425,7 +416,7 @@
  * In general, it's last movement has a 3/4th chance of being the next
  */
 /obj/machinery/singularity/proc/move(var/force_move = 0)
-	if(!move_self)
+	if(!move_self && !force_move)
 		return 0
 
 	var/movement_dir = pick(alldirs - last_failed_movement)
@@ -668,6 +659,7 @@
 /obj/machinery/singularity/Destroy()
 	..()
 	power_machines -= src
+	global_singularity_pool -= src
 
 /obj/machinery/singularity/bite_act(mob/user)
 	consume(user)
@@ -682,3 +674,92 @@
 	if(timestopped)
 		return 0
 	return forceMove(get_step(src,Dir))
+
+
+////////////This singularity is upgraded to be controlled by deadchat. God save us all.
+
+/datum/deadchat_listener/singulo_listener
+	name = "deadchat-controlled singularity listener"
+	var/obj/machinery/singularity/deadchat_controlled/parent
+
+/datum/deadchat_listener/singulo_listener/deadchat_event(var/ckey, var/message) 
+	parent.process_deadchat(ckey,message)
+	
+/obj/machinery/singularity/deadchat_controlled
+	desc = "The destructive, murderous Lord Singuloth, patron saint of Engineering. This one seems... hungry."
+	var/list/ckey_to_cooldown = list()
+	var/datum/deadchat_listener/singulo_listener/listener
+	move_self = 0
+	
+	var/input_cooldown = 60 //In deca-seconds
+
+/obj/machinery/singularity/deadchat_controlled/New(loc, var/starting_energy = 50, var/temp = 0)
+	..()
+	listener = new /datum/deadchat_listener/singulo_listener
+	listener.parent = src
+	global_deadchat_listeners += listener
+	global_singularity_pool -= src
+	
+/obj/machinery/singularity/deadchat_controlled/Destroy()
+	..()
+	global_deadchat_listeners -= listener	
+	global_singularity_pool -= src
+	
+/obj/machinery/singularity/deadchat_controlled/proc/process_deadchat(var/ckey, var/message)
+	var/cooldown = ckey_to_cooldown[ckey]
+	if(!cooldown)
+		ckey_to_cooldown[ckey] = 0
+		cooldown = 0
+	if(cooldown > 0)
+		return
+	var/direction
+	message = uppertext(message)
+	switch(message) //*shrug
+		if("UP")
+			direction = NORTH
+		if("DOWN")
+			direction = SOUTH
+		if("LEFT")
+			direction = WEST
+		if("RIGHT")
+			direction = EAST
+	if(direction)
+		move(direction)
+		ckey_to_cooldown[ckey] = 1
+		spawn(input_cooldown)
+			ckey_to_cooldown[ckey] = 0
+	
+/client/proc/deadchat_singularity()
+	set category = "Fun"
+	set name = "Spawn Deadchat-Controlled Singularity"
+	if(!src.holder)
+		return 0
+	if(!global_singularity_pool.len)
+		return 0
+	var/list/organized_list = list()
+	for(var/obj/machinery/singularity/singularity in global_singularity_pool)
+		var/organized_hash = "[singularity] - [singularity.x], [singularity.y], [singularity.z]"
+		organized_list[organized_hash] = singularity
+	var/singulo_name = input(src,"Select a singularity.", "Confirm", null) as null|anything in organized_list
+	var/obj/machinery/singularity/target_singulo = organized_list[singulo_name]
+	if(target_singulo)
+		//Spawn new singulo
+		var/obj/machinery/singularity/deadchat_controlled/new_singulo = new /obj/machinery/singularity/deadchat_controlled(get_turf(target_singulo))
+		new_singulo.energy = target_singulo.energy
+		new_singulo.allowed_size = target_singulo.allowed_size
+		new_singulo.expand(null, 0)
+		qdel(target_singulo)
+		//Send message to deadchat
+		var/message = "<span class='recruit'>An admin has created a DEADCHAT-CONTROLLED SINGULARITY!<br>Simply type UP, DOWN, LEFT, or RIGHT to move the singularity.<br>Cooldown per person is currently [new_singulo.input_cooldown/10] seconds.<br>[formatJumpTo(new_singulo)]"
+		for(var/mob/M in player_list)
+			if(istype(M, /mob/new_player) || !M.client)
+				continue
+			if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+				to_chat(M, message)
+			else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+				to_chat(M, message)
+			else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+				var/mob/living/carbon/brain/B = M
+				if(B.brain_dead_chat())
+					to_chat(M, message)	
+	
