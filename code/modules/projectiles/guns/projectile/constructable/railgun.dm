@@ -38,16 +38,19 @@
 	..()
 
 /obj/item/weapon/gun/projectile/railgun/attack_self(mob/user as mob)
-	if(!loadedcapacitor)
+	if(usr.isUnconscious())
+		to_chat(usr, "You can't do that while unconscious.")
 		return
-
-	loadedcapacitor.forceMove(user.loc)
-	user.put_in_hands(loadedcapacitor)
-	to_chat(user, "You remove \the [loadedcapacitor] from the capacitor bank of \the [src].")
-	loadedcapacitor = null
-
-	update_icon()
-	update_verbs()
+	if(loadedammo)
+		remove_ammunition()
+		return
+	if(loadedcapacitor)
+		remove_capacitor()
+		return
+	if(loadedassembly && !rails_secure)
+		remove_rails()
+		return
+	return
 
 /obj/item/weapon/gun/projectile/railgun/update_icon()
 	overlays.len = 0
@@ -72,31 +75,7 @@
 			var/image/capacitor = image('icons/obj/weaponsmithing.dmi', src, "railgun_capacitor_overlay")
 			overlays += capacitor
 
-/obj/item/weapon/gun/projectile/railgun/proc/update_verbs()
-	if(loadedammo)
-		verbs += /obj/item/weapon/gun/projectile/railgun/verb/remove_ammunition
-	else
-		verbs -= /obj/item/weapon/gun/projectile/railgun/verb/remove_ammunition
-
-	if(loadedcapacitor)
-		verbs += /obj/item/weapon/gun/projectile/railgun/verb/remove_capacitor
-	else
-		verbs -= /obj/item/weapon/gun/projectile/railgun/verb/remove_capacitor
-
-	if(loadedassembly && !rails_secure)
-		verbs += /obj/item/weapon/gun/projectile/railgun/verb/remove_rails
-	else
-		verbs -= /obj/item/weapon/gun/projectile/railgun/verb/remove_rails
-
-/obj/item/weapon/gun/projectile/railgun/verb/remove_ammunition()
-	set name = "Unload railgun"
-	set category = "Object"
-	set src in range(0)
-
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
-		return
-
+/obj/item/weapon/gun/projectile/railgun/proc/remove_ammunition()
 	if(!loadedammo)
 		return
 	loadedammo.forceMove(usr.loc)
@@ -105,17 +84,8 @@
 	loadedammo = null
 
 	update_icon()
-	update_verbs()
 
-/obj/item/weapon/gun/projectile/railgun/verb/remove_capacitor()
-	set name = "Unload capacitor bank"
-	set category = "Object"
-	set src in range(0)
-
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
-		return
-
+/obj/item/weapon/gun/projectile/railgun/proc/remove_capacitor()
 	if(!loadedcapacitor)
 		return
 
@@ -125,17 +95,8 @@
 	loadedcapacitor = null
 
 	update_icon()
-	update_verbs()
 
-/obj/item/weapon/gun/projectile/railgun/verb/remove_rails()
-	set name = "Remove rail assembly"
-	set category = "Object"
-	set src in range(0)
-
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
-		return
-
+/obj/item/weapon/gun/projectile/railgun/proc/remove_rails()
 	if(!loadedassembly)
 		return
 
@@ -143,48 +104,45 @@
 	usr.put_in_hands(loadedassembly)
 	to_chat(usr, "You remove \the [loadedassembly] from the barrel of \the [src].")
 	loadedassembly = null
-
 	update_icon()
-	update_verbs()
+
 
 /obj/item/weapon/gun/projectile/railgun/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/rail_assembly))
 		if(loadedassembly)
 			to_chat(user, "There is already a set of rails in \the [src].")
 			return
+		to_chat(user, "You insert \the [W] into the barrel of \the [src].")
 		if(!user.drop_item(W, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return 1
-		to_chat(user, "You insert \the [W] into the barrel of \the [src].")
 		W.forceMove(src)
 		loadedassembly = W
-
-	else if(W.is_screwdriver(user))
-		if(loadedassembly)
-			if(rails_secure)
-				to_chat(user, "You loosen the rail assembly within \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			else
-				to_chat(user, "You tighten the rail assembly inside \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			rails_secure = !rails_secure
-
-	else if(istype(W, /obj/item/stack/rods) || istype(W, /obj/item/weapon/coin) ||  istype(W, /obj/item/weapon/nullrod))
-		var/rod_or_coin = ""
-		if (istype(W, /obj/item/weapon/coin))
-			rod_or_coin = "coin"
-		else
-			rod_or_coin = "rod"
-		if(!loadedassembly)
-			to_chat(user, "\The [src] needs a set of rails before it can hold a [rod_or_coin].")
+		return
+	if(istype(W, /obj/item/weapon/stock_parts/capacitor))
+		if(loadedcapacitor)
+			to_chat(user, "There is already a capacitor in the capacitor bank of \the [src].")
 			return
-		if(!rails_secure)
-			to_chat(user, "\The [src]'s rails need to be secured before they can hold a [rod_or_coin].")
+		if(!user.drop_item(W, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			return 1
+		to_chat(user, "You insert \the [W] into the capacitor bank of \the [src].")
+		W.forceMove(src)
+		loadedcapacitor = W
+		update_icon()
+		return
+
+	if(rails_secure && (istype(W, /obj/item/stack/rods) || istype(W, /obj/item/weapon/coin) ||  istype(W, /obj/item/weapon/nullrod)))
+		if(!loadedassembly)
+			to_chat(user, "\The [src] needs a set of rails before it can hold \a [W].")
 			return
 		if(loadedammo)
-			to_chat(user, "There is already a [rod_or_coin] in the barrel of \the [src].")
+			to_chat(user, "There is already something in the barrel of \the [src].")
 			return
-		to_chat(user, "You load a [rod_or_coin] into the barrel of \the [src].")
+		if(!user.drop_item(W, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			return 1
+		to_chat(user, "You load \a [W] into the barrel of \the [src].")
 		if(istype(W, /obj/item/stack/rods))
 			var/obj/item/stack/rods/R = W
 			R.use(1)
@@ -200,19 +158,16 @@
 			else
 				C.forceMove(src)
 				loadedammo = C
-	else if(istype(W, /obj/item/weapon/stock_parts/capacitor))
-		if(loadedcapacitor)
-			to_chat(user, "There is already a capacitor in the capacitor bank of \the [src].")
-			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
-			return 1
-		to_chat(user, "You insert \the [W] into the capacitor bank of \the [src].")
-		W.forceMove(src)
-		loadedcapacitor = W
+		update_icon()
 
-	update_icon()
-	update_verbs()
+	else if(W.is_screwdriver(user))
+		if(rails_secure)
+			to_chat(user, "You loosen the rail assembly within \the [src].")
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		else
+			to_chat(user, "You tighten the rail assembly inside \the [src].")
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		rails_secure = !rails_secure
 
 /obj/item/weapon/gun/projectile/railgun/examine(mob/user)
 	..()
@@ -314,7 +269,6 @@
 			in_chamber = null
 
 		update_icon()
-		update_verbs()
 
 /obj/item/weapon/gun/projectile/railgun/proc/throw_ammo(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 	add_fingerprint(user)
