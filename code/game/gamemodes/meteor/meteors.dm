@@ -78,29 +78,25 @@
 		switch(chosen_dir)
 
 			if(1) //North, along the y = max edge
-				starty = world.maxy - (TRANSITIONEDGE + 2)
-				startx = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxx - (TRANSITIONEDGE + 2 + offset_origin))
-				endy = TRANSITIONEDGE
-				endx = rand(TRANSITIONEDGE + offset_dest, world.maxx - TRANSITIONEDGE - offset_dest)
+				starty = world.maxy - (TRANSITIONEDGE + 5)
+				startx = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxx - (TRANSITIONEDGE + 5 + offset_origin))
 
 			if(2) //South, along the y = 0 edge
-				starty = (TRANSITIONEDGE + 2)
-				startx = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxx - (TRANSITIONEDGE + 2 + offset_origin))
-				endy = world.maxy - (TRANSITIONEDGE + 2)
-				endx = rand(TRANSITIONEDGE + offset_dest, world.maxx - TRANSITIONEDGE - offset_dest)
+				starty = (TRANSITIONEDGE + 5)
+				startx = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxx - (TRANSITIONEDGE + 5 + offset_origin))
 
 			if(4) //East, along the x = max edge
-				starty = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxy - (TRANSITIONEDGE + 2 + offset_origin))
-				startx = world.maxx - (TRANSITIONEDGE + 2)
-				endy = rand(TRANSITIONEDGE + offset_dest, world.maxy - TRANSITIONEDGE - offset_dest)
-				endx = (TRANSITIONEDGE + 2)
+				starty = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxy - (TRANSITIONEDGE + 5 + offset_origin))
+				startx = world.maxx - (TRANSITIONEDGE + 5)
 
 			if(8) //West, along the x = 0 edge
-				starty = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxy - (TRANSITIONEDGE + 2 + offset_origin))
-				startx = (TRANSITIONEDGE + 2)
-				endy = rand(TRANSITIONEDGE + offset_dest, world.maxy - TRANSITIONEDGE - offset_dest)
-				endx = world.maxx - (TRANSITIONEDGE + 2)
+				starty = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxy - (TRANSITIONEDGE + 5 + offset_origin))
+				startx = (TRANSITIONEDGE + 5)
 
+		//Grabs a turf in the center of the z-level
+		//Offset by 50 in every direction, bit more innacurate than a rod but won't miss wide like current
+		endx = rand((world.maxx/2) - 50,(world.maxx/2) + 50)
+		endy = rand((world.maxy/2) - 50,(world.maxy/2) + 50)
 		pickedstart = locate(startx, starty, 1)
 		pickedgoal = locate(endx, endy, 1)
 		max_i--
