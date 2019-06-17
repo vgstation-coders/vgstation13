@@ -7,7 +7,7 @@
 /var/chosen_dir = 1
 
 //Call above constants to change
-/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types = null, var/offset_origin = 0, var/offset_dest = 0)
+/proc/meteor_wave(var/number = meteors_in_wave, var/max_size = 0, var/list/types = null, var/offset_origin = 150, var/offset_dest = 230)
 
 	if(!ticker || meteor_wave_active)
 		return
@@ -78,25 +78,29 @@
 		switch(chosen_dir)
 
 			if(1) //North, along the y = max edge
-				starty = world.maxy - (TRANSITIONEDGE + 5)
-				startx = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxx - (TRANSITIONEDGE + 5 + offset_origin))
+				starty = world.maxy - (TRANSITIONEDGE + 2)
+				startx = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxx - (TRANSITIONEDGE + 2 + offset_origin))
+				endy = TRANSITIONEDGE
+				endx = rand(TRANSITIONEDGE + offset_dest, world.maxx - TRANSITIONEDGE - offset_dest)
 
 			if(2) //South, along the y = 0 edge
-				starty = (TRANSITIONEDGE + 5)
-				startx = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxx - (TRANSITIONEDGE + 5 + offset_origin))
+				starty = (TRANSITIONEDGE + 2)
+				startx = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxx - (TRANSITIONEDGE + 2 + offset_origin))
+				endy = world.maxy - (TRANSITIONEDGE + 2)
+				endx = rand(TRANSITIONEDGE + offset_dest, world.maxx - TRANSITIONEDGE - offset_dest)
 
 			if(4) //East, along the x = max edge
-				starty = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxy - (TRANSITIONEDGE + 5 + offset_origin))
-				startx = world.maxx - (TRANSITIONEDGE + 5)
+				starty = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxy - (TRANSITIONEDGE + 2 + offset_origin))
+				startx = world.maxx - (TRANSITIONEDGE + 2)
+				endy = rand(TRANSITIONEDGE + offset_dest, world.maxy - TRANSITIONEDGE - offset_dest)
+				endx = (TRANSITIONEDGE + 2)
 
 			if(8) //West, along the x = 0 edge
-				starty = rand((TRANSITIONEDGE + 5 + offset_origin), world.maxy - (TRANSITIONEDGE + 5 + offset_origin))
-				startx = (TRANSITIONEDGE + 5)
+				starty = rand((TRANSITIONEDGE + 2 + offset_origin), world.maxy - (TRANSITIONEDGE + 2 + offset_origin))
+				startx = (TRANSITIONEDGE + 2)
+				endy = rand(TRANSITIONEDGE + offset_dest, world.maxy - TRANSITIONEDGE - offset_dest)
+				endx = world.maxx - (TRANSITIONEDGE + 2)
 
-		//Grabs a turf in the center of the z-level
-		//Offset by 50 in every direction, bit more innacurate than a rod but won't miss wide like current
-		endx = rand((world.maxx/2) - 50,(world.maxx/2) + 50)
-		endy = rand((world.maxy/2) - 50,(world.maxy/2) + 50)
 		pickedstart = locate(startx, starty, 1)
 		pickedgoal = locate(endx, endy, 1)
 		max_i--
