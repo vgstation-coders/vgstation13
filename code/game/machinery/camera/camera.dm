@@ -405,6 +405,8 @@ var/list/camera_messages = list()
 	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
 		S.cancelAlarm("Camera", this_area, src)
+	for(var/var/obj/machinery/computer/station_alert/a)
+		a.cancelAlarm("Camera", this_area, src)
 	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/can_use()
