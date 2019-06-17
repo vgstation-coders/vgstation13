@@ -3116,7 +3116,7 @@
 		"trace_chem" = null,
 		"virus2" = list()
 	)
-	blood_data["virus2"]["[new_virus.uniqueID]"] = new_virus
+	blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
 	reagents.add_reagent(BLOOD, original_total_volume, blood_data)
 
 /obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice

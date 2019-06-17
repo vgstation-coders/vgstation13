@@ -141,7 +141,7 @@ var/list/infected_contact_mobs = list()
 		return 0
 	if(!can_be_infected())//humans, monkeys, mouse, for now
 		return 0
-	if ("[disease.uniqueID]" in virus2)
+	if ("[disease.uniqueID]-[disease.subID]" in virus2)
 		return 0
 	if(!immune_system.CanInfect(disease))
 		return 0
@@ -151,7 +151,7 @@ var/list/infected_contact_mobs = list()
 			D.infectionchance -= 10//The virus gets weaker as it jumps from people to people
 		D.stage = Clamp(D.stage+D.stage_variance, 1, D.max_stage)
 		D.log += "<br />[timestamp()] Infected [key_name(src)] [notes]. Infection chance now [D.infectionchance]%"
-		virus2["[D.uniqueID]"] = D
+		virus2["[D.uniqueID]-[D.subID]"] = D
 
 		if (disease.spread & SPREAD_CONTACT)
 			infected_contact_mobs |= src
@@ -177,12 +177,12 @@ var/list/infected_items = list()
 		return 0
 	if (prob(sterility))
 		return 0
-	if ("[disease.uniqueID]" in virus2)
+	if ("[disease.uniqueID]-[disease.subID]" in virus2)
 		return 0
 	if(prob(disease.infectionchance) || forced)
 		var/datum/disease2/disease/D = disease.getcopy()
 		D.log += "<br />[timestamp()] Infected \a [src] [notes]"
-		virus2["[D.uniqueID]"] = D
+		virus2["[D.uniqueID]-[D.subID]"] = D
 
 		infected_items |= src
 		if (!pathogen)
@@ -196,7 +196,7 @@ var/list/infected_items = list()
 
 		if (decay)
 			spawn((disease.infectionchance/10) MINUTES)
-				remove_disease2("[D.uniqueID]")
+				remove_disease2("[D.uniqueID]-[D.subID]")
 		return 1
 	return 0
 

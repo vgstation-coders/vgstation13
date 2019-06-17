@@ -102,6 +102,11 @@
 			if(istype(V))
 				V.activate(src,active_disease!=ID)
 
+				if (prob(radiation))//radiation turns your body into an inefficient pathogenic incubator.
+					V.incubate(src,rad_tick/10)
+					//effect mutations won't occur unless the mob also has ingested mutagen
+					//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.
+
 	if(!isUnconscious())
 		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
 

@@ -3,7 +3,9 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease
 	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
 	var/spread = SPREAD_BLOOD //if set to 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
-	var/uniqueID = 0
+	var/uniqueID = 0// 0000 to 9999, set when the pathogen gets initially created
+	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
+	var/childID = 0// 01 to 99, incremented as the pathogen gets analyzed after a mutation
 	var/list/datum/disease2/effect/effects = list()
 
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
@@ -67,24 +69,25 @@ var/global/list/disease2_list = list()
 	stage_variance = -10
 
 /datum/disease2/disease/New(var/notes="No notes.")
-	uniqueID = rand(0,10000)
-	log_debug("[form] [uniqueID] created with notes: [notes]")
+	uniqueID = rand(0,9999)
+	subID = rand(0,9999)
+	log_debug("[form] [uniqueID]-[subID] created with notes: [notes]")
 	log += "<br />[timestamp()] CREATED - [notes]<br>"
-	disease2_list["[uniqueID]"] = src
+	disease2_list["[uniqueID]-[subID]"] = src
 	var/list/randomhexes = list("8","9","a","b","c","d","e")
 	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	pattern = rand(1,6)
 	pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	..()
 
-/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0, var/old_effect)
+/datum/disease2/disease/proc/new_random_effect(var/max_badness = 5, var/min_badness = 0, var/stage = 0, var/old_effect)
 	var/list/datum/disease2/effect/list = list()
 	var/list/to_choose = subtypesof(/datum/disease2/effect)
 	if(old_effect) //So it doesn't just evolve right back into the previous virus type
 		to_choose.Remove(old_effect)
 	for(var/e in to_choose)
 		var/datum/disease2/effect/f = new e
-		if(f.stage == stage && f.badness <= max_badness)
+		if(f.stage == stage && f.badness <= max_badness && f.badness >= min_badness)
 			list += f
 	var/datum/disease2/effect/e = pick(list)
 	e.chance = rand(1, e.max_chance)
@@ -94,19 +97,20 @@ var/global/list/disease2_list = list()
 	log_debug("Randomizing [form][uniqueID] with greater=[greater]")
 	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
-			var/datum/disease2/effect/e = new_random_effect(2, i)
+			var/datum/disease2/effect/e = new_random_effect(5, 2, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
 		else
-			var/datum/disease2/effect/e = new_random_effect(1, i)
+			var/datum/disease2/effect/e = new_random_effect(3, 0, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
-	uniqueID = rand(0,10000)
+	uniqueID = rand(0,9999)
+	subID = rand(0,9999)
+	childID = 0
 	disease2_list["[uniqueID]"] = src
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	roll_antigen()
-
 
 	//cosmetic petri dish stuff
 	var/list/randomhexes = list("8","9","a","b","c","d","e")
@@ -126,9 +130,6 @@ var/global/list/disease2_list = list()
 	else if (prob(60))		//34,2% chance of spreading through contact only.
 		spread |= SPREAD_CONTACT
 							//22,8% chance of staying in blood
-
-	//spread = prob(40) ? "Airborne" : prob(40) ? "Blood" :"Contact" //Try for airborne then try for blood.
-
 
 /datum/disease2/disease/proc/get_spread_string()
 	var/dat = ""
@@ -173,9 +174,11 @@ var/global/list/disease2_list = list()
 		D.log += "Added [e.name] at [e.chance]% chance<br>"
 		D.effects += e
 
-	disease2_list -= D.uniqueID
-	D.uniqueID = rand(0, 10000)
-	disease2_list["[D.uniqueID]"] = D
+	disease2_list -= "[D.uniqueID]-[D.subID]"
+	D.uniqueID = rand(0, 9999)
+	D.subID = rand(0,9999)
+	D.childID = 0
+	disease2_list["[D.uniqueID]-[D.subID]"] = D
 	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as null | num
 	if(!D.infectionchance || D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
@@ -188,9 +191,9 @@ var/global/list/disease2_list = list()
 		D.spread |= SPREAD_CONTACT
 	if (alert("Can this virus spread by the air?",,"Yes","No") == "Yes")
 		D.spread |= SPREAD_AIRBORNE
-	infectedMob.virus2["[D.uniqueID]"] = D // assign the disease datum to the infectedMob/ selected user.
-	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
-	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
+	infectedMob.virus2["[D.uniqueID]-[D.subID]"] = D // assign the disease datum to the infectedMob/ selected user.
+	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID]-[D.subID] by [C.ckey]")
+	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID]-[D.subID] by [C.ckey]")
 	return 1
 
 /datum/disease2/disease/proc/activate(var/mob/living/mob,var/starved = FALSE)
@@ -205,13 +208,6 @@ var/global/list/disease2_list = list()
 	if(!mob.immune_system.CanInfect(src))
 		cure(mob)
 		return
-
-/*	TODO: readd in a non-retarded way
-	if(mob.radiation > 50)
-		if(prob(1))
-			majormutate()
-			log += "<br />[timestamp()] MAJORMUTATE (rads)!"
-*/
 
 	//Freezing body temperatures halt diseases completely
 	if(mob.bodytemperature < min_bodytemperature)
@@ -270,30 +266,72 @@ var/global/list/disease2_list = list()
 
 
 /datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
-	if ((ismob(incubator) || isobj(incubator)) && incubator.reagents)
-		if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
-			log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
-			effectmutate()
-			if (istype(incubator,/obj/item/weapon/virusdish))
-				var/obj/item/weapon/virusdish/dish = incubator
-				if(dish.info && dish.analysed)
-					dish.info = "OUTDATED : [dish.info]"
-					dish.analysed = 0
-				dish.update_icon()
-				if (istype(dish.loc,/obj/machinery/disease2/incubator))
-					var/obj/machinery/disease2/incubator/machine = dish.loc
-					machine.update_effect(dish)
-		if(!incubator.reagents.remove_reagent(RADIUM,0.02) && prob(mutatechance/20))
+	var/mob/living/body = null
+	var/obj/item/weapon/virusdish/dish = null
+	var/obj/machinery/disease2/incubator/machine = null
+
+	if (isliving(incubator))
+		body = incubator
+	else if (istype(incubator,/obj/item/weapon/virusdish))
+		dish = incubator
+		if (istype(dish.loc,/obj/machinery/disease2/incubator))
+			machine = dish.loc
+
+	if ((body || dish) && incubator.reagents)
+		if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(CREATINE,0.5))
+			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(CREATINE,0.5))
+				log += "<br />[timestamp()] Robustness Strengthening (Mutagen and Creatine in [incubator])"
+				var/change = rand(1,5)
+				robustness = min(100,robustness + change)
+				for(var/datum/disease2/effect/e in effects)
+					e.multiplier_tweak(0.1)
+				if (dish)
+					if (machine)
+						machine.update_minor(dish,0,change,0.1)
+		else if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(SPACEACILLIN,0.5))
+			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(SPACEACILLIN,0.5))
+				log += "<br />[timestamp()] Robustness Weakening (Mutagen and Spaceacillin in [incubator])"
+				var/change = rand(1,5)
+				robustness = max(0,robustness - change)
+				for(var/datum/disease2/effect/e in effects)
+					e.multiplier_tweak(-0.1)
+				if (dish)
+					if (machine)
+						machine.update_minor(dish,0,-change,-0.1)
+		else
+			if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
+				log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
+				effectmutate(body != null)
+				if (dish)
+					if(dish.info && dish.analysed)
+						dish.info = "OUTDATED : [dish.info]"
+						dish.analysed = 0
+					dish.update_icon()
+					if (machine)
+						machine.update_major(dish)
+			if(!incubator.reagents.remove_reagent(CREATINE,0.05) && prob(mutatechance))
+				log += "<br />[timestamp()] Strengthening (Creatine in [incubator])"
+				var/change = rand(1,5)
+				strength = min(100,strength + change)
+				if (dish)
+					if (machine)
+						machine.update_minor(dish,change)
+			if(!incubator.reagents.remove_reagent(SPACEACILLIN,0.05) && prob(mutatechance))
+				log += "<br />[timestamp()] Weakening (Spaceacillin in [incubator])"
+				var/change = rand(1,5)
+				strength = max(0,strength - change)
+				if (dish)
+					if (machine)
+						machine.update_minor(dish,-change)
+		if(!incubator.reagents.remove_reagent(RADIUM,0.02) && prob(mutatechance/8))
 			log += "<br />[timestamp()] Antigen Mutation (Radium in [incubator])"
 			antigenmutate()
-			if (istype(incubator,/obj/item/weapon/virusdish))
-				var/obj/item/weapon/virusdish/dish = incubator
+			if (dish)
 				if(dish.info && dish.analysed)
 					dish.info = "OUTDATED : [dish.info]"
 					dish.analysed = 0
-				if (istype(dish.loc,/obj/machinery/disease2/incubator))
-					var/obj/machinery/disease2/incubator/machine = dish.loc
-					machine.update_antigen(dish)
+				if (machine)
+					machine.update_major(dish)
 
 
 /datum/disease2/disease/proc/GetImmuneData(var/mob/living/mob)
@@ -318,21 +356,55 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob,var/condition=0)
 	switch (condition)
 		if (0)
-			log_debug("[form] [uniqueID] in [key_name(mob)] has been cured, and is being removed from their body.")
+			log_debug("[form] [uniqueID]-[subID] in [key_name(mob)] has been cured, and is being removed from their body.")
 		if (1)
-			log_debug("[form] [uniqueID] in [key_name(mob)] has died from extreme temperature inside their host, and is being removed from their body.")
+			log_debug("[form] [uniqueID]-[subID] in [key_name(mob)] has died from extreme temperature inside their host, and is being removed from their body.")
 		if (2)
-			log_debug("[form] [uniqueID] in [key_name(mob)] has been wiped out by an immunity overload.")
+			log_debug("[form] [uniqueID]-[subID] in [key_name(mob)] has been wiped out by an immunity overload.")
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
-	mob.virus2.Remove("[uniqueID]")
+	mob.virus2.Remove("[uniqueID]-[subID]")
 	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
 	if (V && V.len <= 0)
 		infected_contact_mobs -= src
 
+/datum/disease2/disease/proc/get_effect(var/index)
+	if(!index)
+		return pick(effects)
+	return effects[Clamp(index,0,effects.len)]
 
+/datum/disease2/disease/proc/roll_antigen()
+	antigen = list(pick(all_antigens))
+	antigen |= pick(all_antigens)
+
+
+//Major Mutations
+/datum/disease2/disease/proc/effectmutate(var/inBody=FALSE)
+	subID = rand(0,9999)
+	var/list/randomhexes = list("7","8","9","a","b","c","d","e")
+	var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	color = BlendRGB(color,colormix,0.25)
+	var/i = rand(1, effects.len)
+	var/datum/disease2/effect/e = effects[i]
+	var/datum/disease2/effect/f
+	if (inBody)//mutations that occur directly in a body don't cause helpful symptoms to become deadly instantly.
+		f = new_random_effect(min(5,e.badness+1), max(0,e.badness-1), e.stage, e.type)
+	else
+		f = new_random_effect(5, 0, e.stage, e.type)
+	effects[i] = f
+	log_debug("[form] [uniqueID]-[subID] has mutated [e.name] into [f.name].")
+	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
+
+/datum/disease2/disease/proc/antigenmutate()
+	subID = rand(0,9999)
+	var/old_dat = get_antigen_string()
+	roll_antigen()
+	log_debug("[form] [uniqueID]-[subID] has mutated its antigen from [old_dat] to [get_antigen_string()].")
+	log += "<br />[timestamp()] Mutated antigen [old_dat] into [get_antigen_string()]."
+
+
+//Minor Mutations
 /datum/disease2/disease/proc/minormutate(var/index)
-	//uniqueID = rand(0,10000)
 	var/datum/disease2/effect/e = get_effect(index)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
@@ -346,34 +418,8 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = get_effect(index)
 	e.multiplier_tweak(-0.1)
 
-/datum/disease2/disease/proc/get_effect(var/index)
-	if(!index)
-		return pick(effects)
-	return effects[Clamp(index,0,effects.len)]
 
-/datum/disease2/disease/proc/roll_antigen()
-	antigen = list(pick(all_antigens))
-	antigen |= pick(all_antigens)
-
-/datum/disease2/disease/proc/effectmutate()
-	uniqueID = rand(0,10000)
-	var/list/randomhexes = list("7","8","9","a","b","c","d","e")
-	var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
-	color = BlendRGB(color,colormix,0.25)
-	var/i = rand(1, effects.len)
-	var/datum/disease2/effect/e = effects[i]
-	var/datum/disease2/effect/f = new_random_effect(2, e.stage, e.type)
-	effects[i] = f
-	log_debug("[form] [uniqueID] has mutated [e.name] into [f.name].")
-	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
-
-/datum/disease2/disease/proc/antigenmutate()
-	var/old_dat = get_antigen_string()
-	roll_antigen()
-	log_debug("[form] [uniqueID] has mutated its antigen from [old_dat] to [get_antigen_string()].")
-	log += "<br />[timestamp()] Mutated antigen [old_dat] into [get_antigen_string()]."
-
-/datum/disease2/disease/proc/getcopy()//called by infect_virus2()
+/datum/disease2/disease/proc/getcopy()
 	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
 	disease.form=form
 	disease.log=log
@@ -382,6 +428,8 @@ var/global/list/disease2_list = list()
 	disease.stageprob = stageprob
 	disease.antigen   = antigen.Copy()
 	disease.uniqueID = uniqueID
+	disease.subID = subID
+	disease.childID = childID
 	disease.speed = speed
 	disease.stage = stage
 	disease.strength = strength
@@ -396,32 +444,13 @@ var/global/list/disease2_list = list()
 		disease.effects += e.getcopy(disease)
 	return disease
 
-/* candidate for deletion of obsolete procs
-/datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
-	var/list/types = list()
-	var/list/types2 = list()
-	for(var/datum/disease2/effect/e in effects)
-		types += e.type
-	var/equal = 1
-
-	for(var/datum/disease2/effect/e in disease.effects)
-		types2 += e.type
-
-	for(var/type in types)
-		if(!(type in types2))
-			equal = 0
-
-	if (antigen != disease.antigen)
-		equal = 0
-	return equal
-*/
 
 /proc/virus_copylist(var/list/datum/disease2/disease/viruses)
 	var/list/res = list()
 	for (var/ID in viruses)
 		var/datum/disease2/disease/V = viruses[ID]
 		if(istype(V))
-			res["[V.uniqueID]"] = V.getcopy()
+			res["[V.uniqueID]-[V.subID]"] = V.getcopy()
 		else
 			testing("Got a NULL disease2 in virus_copylist ([V] is [V.type])!")
 	return res
@@ -429,10 +458,10 @@ var/global/list/disease2_list = list()
 
 var/global/list/virusDB = list()
 
-/datum/disease2/disease/proc/name()
-	.= "[form] #[add_zero("[uniqueID]", 4)]"
-	if ("[uniqueID]" in virusDB)
-		var/datum/data/record/V = virusDB["[uniqueID]"]
+/datum/disease2/disease/proc/name(var/override=FALSE)
+	.= "[form] #[add_zero("[uniqueID]", 4)][childID ? "-[add_zero("[childID]", 2)]" : ""]"
+	if (!override && ("[uniqueID]-[subID]" in virusDB))
+		var/datum/data/record/V = virusDB["[uniqueID]-[subID]"]
 		.= V.fields["name"]
 
 /datum/disease2/disease/proc/get_subdivisions_string()
@@ -467,14 +496,21 @@ var/global/list/virusDB = list()
 	return r
 
 /datum/disease2/disease/proc/addToDB()
-	if ("[uniqueID]" in virusDB)
+	if ("[uniqueID]-[subID]" in virusDB)
 		return 0
+	childID = 0
+	for (var/virus_file in virusDB)
+		var/datum/data/record/v = virusDB[virus_file]
+		if (v.fields["id"] == uniqueID)
+			childID++
 	var/datum/data/record/v = new()
 	v.fields["id"] = uniqueID
+	v.fields["sub"] = subID
+	v.fields["child"] = childID
 	v.fields["form"] = form
 	v.fields["name"] = name()
 	v.fields["description"] = get_info()
 	v.fields["antigen"] = antigen
 	v.fields["spread type"] = get_spread_string()
-	virusDB["[uniqueID]"] = v
+	virusDB["[uniqueID]-[subID]"] = v
 	return 1

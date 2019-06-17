@@ -222,7 +222,7 @@
 	if(world.time - last_cloud_time >= cloud_delay)
 		last_cloud_time = world.time
 		var/list/L = list()
-		L["[contained_virus.uniqueID]"] = contained_virus
+		L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
 		getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), last_openner, virus_copylist(L), FALSE)
 		return 1
 	return 0
@@ -250,7 +250,18 @@
 	if (contained_virus)
 		if(!reagents.remove_reagent(VIRUSFOOD,0.2))
 			growth = min(growth + growthrate, 100)
+		if(!reagents.remove_reagent(WATER,0.2))
+			growth = max(growth - growthrate, 0)
 		contained_virus.incubate(src,mutatechance)
+
+/obj/item/weapon/virusdish/on_reagent_change()
+	if (contained_virus)
+		var/datum/reagent/blood/blood = locate() in reagents.reagent_list
+		if (blood)
+			var/list/L = list()
+			L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
+			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(L),required = SPREAD_BLOOD)
+	..()
 
 /obj/item/weapon/virusdish/proc/shatter(var/mob/user)
 	var/obj/effect/decal/cleanable/virusdish/dish = new(get_turf(src))
@@ -277,7 +288,7 @@
 		if (contained_virus.spread & SPREAD_AIRBORNE)
 			var/strength = contained_virus.infectionchance
 			var/list/L = list()
-			L["[contained_virus.uniqueID]"] = contained_virus
+			L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
 			while (strength > 0)
 				getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), user, virus_copylist(L), FALSE)
 				strength -= 40

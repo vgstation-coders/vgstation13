@@ -11,7 +11,13 @@
 		// Diseases start at stage 1. They slowly and cumulatively proceed their way up.
 		// Try to keep more severe effects in the later stages.
 	var/badness = 1
-		// How damaging the virus is. Higher values are worse.
+		// How dangerous the symptom is.
+		// 0 = generally helpful (ex: full glass syndrome)
+		// 1 = neutral, just flavor text (ex: headache)
+		// 2 = minor inconvenience (ex: tourettes)
+		// 3 = severe inconvenience (ex: random tripping)
+		// 4 = likely to indirectly lead to death (ex: Harlequin Ichthyosis)
+		// 5 = will definitely kill you (ex: gibbingtons/necrosis)
 
 	var/chance = 3
 		// Under normal conditions, the percentage chance per tick to activate.

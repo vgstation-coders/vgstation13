@@ -10,6 +10,9 @@
 	light_range = 2
 	light_power = 1
 
+	idle_power_usage = 100
+	active_power_usage = 100//1000 extra power once per analysis
+
 	var/process_time = 5
 	var/minimum_growth = 100
 	var/obj/item/weapon/virusdish/dish = null
@@ -125,8 +128,10 @@
 		if(stat & (BROKEN|NOPOWER))
 			return
 		alert_noise()
+		if (dish.contained_virus.addToDB())
+			say("Added new pathogen to database.")
 		dish.info = dish.contained_virus.get_info()
-		last_scan_name = "[dish.contained_virus.form] #[dish.contained_virus.uniqueID]"
+		last_scan_name = dish.contained_virus.name(TRUE)
 		dish.name = "growth dish ([last_scan_name])"
 		last_scan_info = dish.info
 		var/datum/browser/popup = new(user, "\ref[dish]", dish.name, 600, 500, src)
@@ -134,8 +139,6 @@
 		popup.open()
 		dish.analysed = TRUE
 		dish.update_icon()
-		if (dish.contained_virus.addToDB())
-			say("Added new pathogen to database.")
 		dish.forceMove(loc)
 		dish = null
 	else
@@ -205,17 +208,12 @@
 		scanner = null
 		return
 
-	use_power(100)
-
 	if (scanner && !(scanner in range(src,1)))
 		alert_noise("buzz")
 		update_icon()
 		flick("analyser_turnoff",src)
 		scanner = null
 
-/obj/machinery/disease2/diseaseanalyser/power_change()
-	..()
-	update_icon()
 
 /obj/machinery/disease2/diseaseanalyser/AltClick()
 	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
@@ -227,15 +225,22 @@
 		dish = null
 		update_icon()
 
-/obj/machinery/disease2/diseaseanalyser/proc/breakdown()
-	stat |= BROKEN
+/obj/machinery/disease2/diseaseanalyser/breakdown()
 	if (dish)
 		dish.forceMove(loc)
 	dish = null
 	scanner = null
+	..()
+
+/obj/machinery/disease2/power_change()
+	..()
 	update_icon()
 
-/obj/machinery/disease2/diseaseanalyser/ex_act(var/severity)
+/obj/machinery/disease2/proc/breakdown()
+	stat |= BROKEN
+	update_icon()
+
+/obj/machinery/disease2/ex_act(var/severity)
 	switch(severity)
 		if(1)
 			qdel(src)
@@ -248,8 +253,8 @@
 			if(prob(35))
 				breakdown()
 
-/obj/machinery/disease2/diseaseanalyser/emp_act(var/severity)
-	if(stat & (BROKEN|NOPOWER))
+/obj/machinery/disease2/emp_act(var/severity)
+	if(stat & (BROKEN))
 		return
 	switch(severity)
 		if(1)
@@ -259,8 +264,8 @@
 			if(prob(35))
 				breakdown()
 
-/obj/machinery/disease2/diseaseanalyser/attack_construct(var/mob/user)
-	if(stat & (BROKEN|NOPOWER))
+/obj/machinery/disease2/attack_construct(var/mob/user)
+	if(stat & (BROKEN))
 		return
 	if (!Adjacent(user))
 		return 0
@@ -272,17 +277,17 @@
 		return 1
 	return 0
 
-/obj/machinery/disease2/diseaseanalyser/kick_act(var/mob/living/carbon/human/user)
+/obj/machinery/disease2/kick_act(var/mob/living/carbon/human/user)
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN))
 		return
 	if (prob(5))
 		breakdown()
 
-/obj/machinery/disease2/diseaseanalyser/attack_paw(var/mob/living/carbon/alien/humanoid/user)
+/obj/machinery/disease2/attack_paw(var/mob/living/carbon/alien/humanoid/user)
 	if(!istype(user))
 		return
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN))
 		return
 	breakdown()
 	user.do_attack_animation(src, user)

@@ -1179,7 +1179,7 @@ obj/item/weapon/circuitboard/rdserver
 /obj/item/weapon/circuitboard/centrifuge
 	name = "Circuit Board (Isolation Centrifuge)"
 	desc = "A circuit board used to run a machine that isolates pathogens and antibodies."
-	build_path = /obj/machinery/centrifuge
+	build_path = /obj/machinery/disease2/centrifuge
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
 	req_components = list(

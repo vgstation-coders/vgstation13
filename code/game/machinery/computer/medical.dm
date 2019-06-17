@@ -39,7 +39,7 @@
 <A href='?src=\ref[src];search=1'>Search Records</A>
 <BR><A href='?src=\ref[src];screen=2'>List Records</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=5'>Virus Database</A>
+<BR><A href='?src=\ref[src];screen=5'>Pathogen Database</A>
 <BR><A href='?src=\ref[src];screen=6'>Medbot Tracking</A>
 <BR>
 <BR><A href='?src=\ref[src];screen=3'>Record Maintenance</A>
@@ -84,7 +84,7 @@
 						dat += text("<A href='?src=\ref[src];new=1'>New Record</A><BR><BR>")
 					dat += text("\n<A href='?src=\ref[];print_p=1'>Print Record</A><BR>\n<A href='?src=\ref[];screen=2'>Back</A><BR>", src, src)
 				if(5.0)
-					dat += "<CENTER><B>Virus Database</B></CENTER>"
+					dat += "<CENTER><B>Pathogen Database</B></CENTER>"
 					/*	Advanced diseases is weak! Feeble! Glory to virus2!
 					for(var/Dt in typesof(/datum/disease/))
 						var/datum/disease/Dis = new Dt(0)
