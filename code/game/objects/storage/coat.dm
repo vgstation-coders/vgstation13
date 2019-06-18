@@ -54,3 +54,4 @@
 		return hold.attack_hand(usr)
 	else
 		return ..()
+		
