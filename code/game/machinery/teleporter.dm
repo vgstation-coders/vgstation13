@@ -343,22 +343,26 @@
 /obj/machinery/teleport/station/proc/engage()
 	if(stat & (BROKEN|NOPOWER))
 		return
-	for(var/obj/machinery/teleport/hub/hub in orange(1))
+	var/count = 0
+	for(var/obj/machinery/teleport/hub/hub in orange(1, src))
 		if(hub.stat & (BROKEN|NOPOWER))
 			continue
+		count++
 		hub.engaged = 1
 		hub.update_icon()
 		use_power(5000)
-	visible_message("<span class='notice'>Teleporter engaged!</span>", range = 2)
+	visible_message("<span class='notice'>[count] teleporters engaged!</span>", range = 2)
 	src.add_fingerprint(usr)
 	src.engaged = 1
 	return
 
 /obj/machinery/teleport/station/proc/disengage(mob/user)
-	for(var/obj/machinery/teleport/hub/hub in orange(1))
+	var/count = 0
+	for(var/obj/machinery/teleport/hub/hub in orange(1, src))
+		count++
 		hub.engaged = 0
 		hub.update_icon()
-	visible_message("<span class='notice'>Teleporter disengaged!</span>", range = 2)
+	visible_message("<span class='notice'>[count] teleporters disengaged!</span>", range = 2)
 	if(user)
 		src.add_fingerprint(user)
 	src.engaged = 0
