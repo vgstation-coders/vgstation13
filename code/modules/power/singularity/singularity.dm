@@ -704,6 +704,7 @@ var/list/global_singularity_pool
 	..()
 	global_deadchat_listeners -= listener	
 	global_singularity_pool -= src
+	qdel(listener)
 	
 /obj/machinery/singularity/deadchat_controlled/proc/process_deadchat(var/ckey, var/message)
 	var/cooldown = ckey_to_cooldown[ckey]
@@ -736,6 +737,9 @@ var/list/global_singularity_pool
 		return 0
 	if(!global_singularity_pool.len)
 		return 0
+	if(!holder.rights || !check_rights(R_FUN,0))
+		to_chat(holder, "They (you) do it for free, yet they (you) still don't have R_FUN perms... sad!")
+		return 0
 	var/list/organized_list = list()
 	for(var/obj/machinery/singularity/singularity in global_singularity_pool)
 		var/organized_hash = "[singularity] - [singularity.x], [singularity.y], [singularity.z]"
@@ -743,6 +747,9 @@ var/list/global_singularity_pool
 	var/singulo_name = input(src,"Select a singularity.", "Confirm", null) as null|anything in organized_list
 	var/obj/machinery/singularity/target_singulo = organized_list[singulo_name]
 	if(target_singulo)
+		log_admin("[src] just turned the [singulo_name] into a deadchat-controlled one.")
+		message_admins("[src] just turned the [singulo_name] into a deadchat-controlled one.")
+		target_singulo.investigation_log(I_SINGULO,"<font color='red'>[src] just turned the [singulo_name] into a deadchat-controlled one. If you're reading this, god save the deadmin.</font>.")
 		//Spawn new singulo
 		var/obj/machinery/singularity/deadchat_controlled/new_singulo = new /obj/machinery/singularity/deadchat_controlled(get_turf(target_singulo))
 		new_singulo.energy = target_singulo.energy
