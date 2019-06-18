@@ -201,7 +201,6 @@
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000
-	var/inprecision = 2
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/telehub,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
@@ -229,11 +228,6 @@
 		T += C.rating-3
 	teleport_power_usage = initial(teleport_power_usage)/T
 
-	T=0
-	for(var/obj/item/weapon/stock_parts/scanning_module/S in component_parts)
-		T+= S.rating-3
-
-	inprecision = max(0, inprecision-T)
 
 /obj/machinery/teleport/hub/power_change()
 	..()
@@ -277,7 +271,7 @@
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
 			do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
 		else
-			do_teleport(M, com.locked, inprecision)
+			do_teleport(M, com.locked) //dead-on precision
 
 		if(com.one_time_use) //Make one-time-use cards only usable one time!
 			com.one_time_use = 0
