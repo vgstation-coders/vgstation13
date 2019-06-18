@@ -46,21 +46,24 @@
 		"burning" = burning
 	)
 
-	if(dish && dish.virus2)
-		data["dish_name"] = dish.virus2.name()
+	if(dish && dish.contained_virus)
+		if (dish.analysed)
+			data["dish_name"] = dish.contained_virus.name()
+		else
+			data["dish_name"] = "Unknown [dish.contained_virus.form]"
 
 	if(memorybank)
 		data["memorybank"] = "[analysed ? memorybank.name : "Unknown DNA strand"] (Stage [memorybank.stage])"
 
 	if(!dish)
 		data["dish_error"] = "no dish inserted"
-	else if(!dish.virus2)
-		data["dish_error"] = "no virus in dish"
+	else if(!dish.contained_virus)
+		data["dish_error"] = "no pathogen in dish"
 	else if(dish.growth < 50)
 		data["dish_error"] = "not enough cells"
 	else
 		var/list/effects_list = list()
-		for(var/datum/disease2/effect/_effect in dish.virus2.effects)
+		for(var/datum/disease2/effect/_effect in dish.contained_virus.effects)
 			var/list/effect_data = list(
 				"name" = dish.analysed ? _effect.name : "Unknown DNA strand",
 				"stage" = _effect.stage
@@ -75,7 +78,15 @@
 		ui.open()
 
 /obj/machinery/computer/diseasesplicer/attack_hand(var/mob/user)
-	if(..())
+	. = ..()
+
+	if(stat & (NOPOWER|BROKEN))
+		if (dish)
+
+			dish = null
+		return
+
+	if(.)
 		return
 
 	ui_interact(user)
@@ -109,25 +120,25 @@
 			alert_noise("ping")
 
 /obj/machinery/computer/diseasesplicer/proc/buffer2dish()
-	if(!memorybank || !dish || !dish.virus2)
+	if(!memorybank || !dish || !dish.contained_virus)
 		return
 
-	var/list/effects = dish.virus2.effects
+	var/list/effects = dish.contained_virus.effects
 	for(var/x = 1 to effects.len)
 		var/datum/disease2/effect/e = effects[x]
 		if(e.stage == memorybank.stage)
-			effects[x] = memorybank.getcopy(dish.virus2)
-			log_debug("[dish.virus2.form] [dish.virus2.uniqueID] had [memorybank.name] spliced into to replace [e.name] by [key_name(usr)].")
-			dish.virus2.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
+			effects[x] = memorybank.getcopy(dish.contained_virus)
+			log_debug("[dish.contained_virus.form] #[add_zero("[dish.contained_virus.uniqueID]", 4)][dish.contained_virus.childID ? "-[add_zero("[dish.contained_virus.childID]", 2)]" : ""] had [memorybank.name] spliced into to replace [e.name] by [key_name(usr)].")
+			dish.contained_virus.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
 			break
 
 	splicing = DISEASE_SPLICER_SPLICING_TICKS
 	spliced = TRUE
 
 /obj/machinery/computer/diseasesplicer/proc/dish2buffer(var/target_stage)
-	if(!dish || !dish.virus2)
+	if(!dish || !dish.contained_virus)
 		return
-	var/list/effects = dish.virus2.effects
+	var/list/effects = dish.contained_virus.effects
 	for(var/x = 1 to effects.len)
 		var/datum/disease2/effect/e = effects[x]
 		if(e.stage == target_stage)
@@ -155,9 +166,14 @@
 			return
 		if(spliced)
 			//Here we generate a new ID so the spliced pathogen gets it's own entry in the database instead of being shown as the old one.
-			dish.virus2.subID = rand(0, 9999)
-			dish.virus2.addToDB()
-			dish.info = dish.virus2.get_info()
+			dish.contained_virus.subID = rand(0, 9999)
+			var/list/randomhexes = list("7","8","9","a","b","c","d","e")
+			var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+			dish.contained_virus.color = BlendRGB(dish.contained_virus.color,colormix,0.25)
+			dish.contained_virus.addToDB()
+			say("Updated pathogen database with new spliced entry.")
+			dish.info = dish.contained_virus.get_info()
+			dish.name = "growth dish ([dish.contained_virus.name(TRUE)])"
 			spliced = FALSE
 		dish.forceMove(loc)
 		dish = null

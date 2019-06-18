@@ -86,6 +86,7 @@
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "virusdish"
 	w_class = W_CLASS_SMALL
+	sterility = 100//the outside of the dish is sterile.
 	var/growth = 0
 	var/info = ""
 	var/analysed = FALSE
@@ -229,7 +230,7 @@
 
 
 /obj/item/weapon/virusdish/random
-	name = "virus sample"
+	name = "growth dish"
 
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
@@ -237,6 +238,7 @@
 	contained_virus = new virus_choice
 	contained_virus.makerandom()
 	growth = rand(5, 50)
+	name = "growth dish (Unknown [contained_virus.form])"
 	update_icon()
 
 
