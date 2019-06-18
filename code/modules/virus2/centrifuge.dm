@@ -8,6 +8,8 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
+	var/datum/browser/popup = null
+
 	var/on = 0
 
 	var/list/vials = list(null,null,null,null)
@@ -225,7 +227,7 @@
 			dat += "<BR>"
 	dat += "<hr>"
 
-	var/datum/browser/popup = new(user, "\ref[src]", "Isolation Centrifuge", 666, 189, src)
+	popup = new(user, "\ref[src]", "Isolation Centrifuge", 666, 189, src)
 	popup.set_content(dat)
 	popup.open()
 
@@ -266,7 +268,7 @@
 		use_power = 1
 
 	update_icon()
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/disease2/centrifuge/proc/centrifuge_act(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/list/vial_task = list(0,0,0,0,0))
 	var/list/result = list(0,0,0,0,0)
@@ -303,7 +305,6 @@
 
 	if(href_list["close"])
 		usr << browse(null, "\ref[src]")
-		usr.unset_machine()
 		return 1
 
 	usr.set_machine(src)
@@ -388,6 +389,8 @@
 					var/datum/data/record/rec = virusDB[ID]
 					pathogen_name = rec.fields["name"]
 				pathogen_list[pathogen_name] = ID
+
+			popup.close()
 			var/choice = input(user, "Choose a pathogen to isolate on a growth dish.", "Isolate to dish") as null|anything in pathogen_list
 			if (!choice)
 				return result
@@ -435,6 +438,7 @@
 				to_chat(user,"<span class='warning'>Impossible to create a vaccine from this blood sample. Antibody levels too low. Minimal level = 30%. The higher the concentration, the faster the vaccine is synthesized.</span>")
 				return result
 
+			popup.close()
 			var/choice = input(user, "Choose an antibody to develop into a vaccine. This will destroy the blood sample. The higher the concentration, the faster the vaccine is synthesized.", "Synthesize Vaccine") as null|anything in antibody_choices
 			if (!choice)
 				return result
@@ -449,12 +453,20 @@
 	return result
 
 /obj/machinery/disease2/centrifuge/proc/print_dish(var/datum/disease2/disease/D)
-	var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
-	dish.contained_virus = D.getcopy()
-	dish.update_icon()
-
 	special = 1
 	alert_noise("ping")
+	anim(target = src, a_icon = icon, flick_anim = "centrifuge_print", sleeptime = 10)
+	anim(target = src, a_icon = icon, flick_anim = "centrifuge_print_color", sleeptime = 10, col = D.color)
+	visible_message("\The [src] prints a growth dish.")
+	spawn(10)
+		var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
+		dish.contained_virus = D.getcopy()
+		dish.update_icon()
+		dish.name = "growth dish (Unknown [dish.contained_virus.form])"
+		if ("[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]" in virusDB)
+			var/datum/data/record/v = virusDB["[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]"]
+			dish.name = "growth dish ([v.fields["name"]])"
+
 
 /obj/machinery/disease2/centrifuge/breakdown()
 	for (var/i = 1 to vials.len)
