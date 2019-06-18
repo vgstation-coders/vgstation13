@@ -113,7 +113,10 @@ var/mob/living/carbon/human/conveyor_overmind
 	update_nearby_conveyors() //smooth with diagonals
 	if(!conveyor_overmind)
 		conveyor_overmind = new /mob/living/carbon/human/conveyor_overmind(get_turf(src))
-		conveyor_overmind.invisibility = 0
+		conveyor_overmind.invisibility = 100
+		conveyor_overmind.x = 10 //Get it back to a place where nothing can fuck with it.
+		conveyor_overmind.y = 10
+		conveyor_overmind.z = 2
 	fakeMob = conveyor_overmind
 
 /obj/machinery/conveyor/Destroy()
@@ -254,10 +257,13 @@ var/mob/living/carbon/human/conveyor_overmind
 			if(!A.anchored)
 				if(A.loc == src.loc)
 					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
-					if(!step(A,movedir))
+					if(!step(A,movedir) && A != fakeMob)
 						var/obj/machinery/next_tile = locate() in get_step(A, movedir)
 						if(istype(next_tile) && !istype(next_tile, /obj/machinery/conveyor))
-							attemptInsert(next_tile,A)
+							for(var/obj/machinery/machine in get_step(A, movedir))
+								if(A.loc != src.loc)
+									break
+								attemptInsert(machine,A)
 					items_moved++
 			if(items_moved >= max_moved)
 				break
@@ -268,9 +274,9 @@ var/mob/living/carbon/human/conveyor_overmind
 	if(!conveyor_overmind)
 		conveyor_overmind = new /mob/living/carbon/human/conveyor_overmind(get_turf(src))
 		fakeMob = conveyor_overmind
-	conveyor_overmind.forceMove(get_turf(src),TRUE)
+	fakeMob.forceMove(get_turf(src),TRUE)
+	usr = fakeMob
 	if(istype(input,/obj/item))
-		message_admins("A")
 		var/obj/item/itemInput = input
 		target.attackby(itemInput,fakeMob)
 		if(itemInput.loc == src.loc)
@@ -278,14 +284,15 @@ var/mob/living/carbon/human/conveyor_overmind
 			if(itemInput.loc == src.loc)
 				target.MouseDropTo(itemInput,fakeMob)
 	else if(istype(input,/obj))
-		message_admins("B")
 		var/obj/objInput = input
 		target.attackby(objInput,fakeMob)
 		if(objInput.loc == src.loc)
 			target.MouseDropTo(objInput,fakeMob)
 	else
-		message_admins("C")
 		target.MouseDropTo(input,fakeMob)
+	fakeMob.x = 10 //Get it back to a place where nothing can fuck with it.
+	fakeMob.y = 10
+	fakeMob.z = 2
 	
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
@@ -612,6 +619,7 @@ var/mob/living/carbon/human/conveyor_overmind
 /mob/living/carbon/human/conveyor_overmind
 	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
 	invisibility = INVISIBILITY_MAXIMUM
+	name = "conveyor belt"
 
 /mob/living/carbon/human/conveyor_overmind/Adjacent(var/atom/neighbor)
 	return 1
