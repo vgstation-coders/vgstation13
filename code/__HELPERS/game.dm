@@ -14,6 +14,12 @@
 	if(T)
 		return T.loc
 
+/proc/get_area_by_name(N) //get area by its name
+	for(var/area/A in areas)
+		if(A.name == N)
+			return A
+	return 0
+
 /proc/get_area_name(atom/X, format_text = FALSE)
 	var/area/A = isarea(X) ? X : get_area(X)
 	if(!A)
