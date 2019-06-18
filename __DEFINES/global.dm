@@ -327,7 +327,7 @@ var/nanocoins_lastchange = 0
 
 var/minimapinit = 0
 
-var/bees_species = list()
+var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
