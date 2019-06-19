@@ -381,6 +381,7 @@
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
+	spaceninja.get_item_by_slot(slot_shoes).activateMagnets()
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)

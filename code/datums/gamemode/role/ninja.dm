@@ -617,9 +617,10 @@ Suit and assorted
 	
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
+	clothing_flags = NOSLIP
 	
-/obj/item/clothing/shoes/ninja/apprentice/New()
-	..()
+/obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
+	togglemagpulse(override = TRUE)
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)
 		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
