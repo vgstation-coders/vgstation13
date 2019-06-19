@@ -24,7 +24,8 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/spire/S in cult_spires)
 		S.upgrade()
 
-	for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
+	var/datum/runeset/bloodcult_runeset = global_runesets["blood_cult"]
+	for (var/obj/effect/rune/R in bloodcult_runeset.rune_list)
 		R.update_icon()
 
 /proc/spawn_bloodstones(var/turf/source = null)
