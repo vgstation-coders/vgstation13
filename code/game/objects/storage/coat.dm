@@ -49,9 +49,9 @@
 		return hold.MouseDropFrom(over_object)
 	return ..()
 
-/obj/item/clothing/suit/storage/AltClick()
-	if(usr == src.loc)
-		return hold.attack_hand(usr)
+/obj/item/clothing/suit/storage/AltClick(mob/user as mob)
+	if(user == src.loc)
+		return hold.attack_hand(user)
 	else
 		return ..()
-		
+	
