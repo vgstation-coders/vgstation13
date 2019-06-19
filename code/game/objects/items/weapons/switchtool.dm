@@ -144,13 +144,15 @@
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
-	if(doedit) //Makes the deployed item take on the features of the switchtool. This is for attack animations and attack text.
+	if(doedit) //Makes the deployed item take on the features of the switchtool for attack animations and text. Other bandaid fixes for snowflake issues can go here.
+		sharpness = deployed.sharpness
 		deployed.name = name
 		deployed.icon = icon
 		deployed.icon_state = icon_state
 		deployed.overlays = overlays
 		deployed.cant_drop = TRUE
 	else //Revert the changes to the deployed item.
+		sharpness = initial(sharpness)
 		deployed.name = initial(deployed.name)
 		deployed.icon = initial(deployed.icon)
 		deployed.icon_state = initial(deployed.icon_state)
@@ -415,7 +417,7 @@
 	if(istype(deployed, /obj/item/weapon/shield/energy))
 		return TRUE
 	else
-		return 0
+		return FALSE
 
 //All modules make small amounts of light, flashlight making more.
 /obj/item/weapon/switchtool/holo/deploy(var/module)
