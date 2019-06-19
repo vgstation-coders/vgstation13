@@ -21,7 +21,7 @@
 	..()
 	
 /obj/item/clothing/CtrlClick(var/mob/user)
-	if(accessories.len)
+	if(isliving(user) && user.incapacitated() && user.Adjacent(src) && accessories.len)
 		remove_accessory(user, pick(accessories))
 
 /obj/item/clothing/examine(mob/user)
