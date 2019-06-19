@@ -4,7 +4,6 @@
 	required_pref = NINJA
 	special_role = NINJA
 	logo_state = "ninja-logo"
-	refund_value = BASE_SOLO_REFUND
 	wikiroute = NINJA
 	disallow_job = TRUE
 	restricted_jobs = list()
@@ -78,8 +77,9 @@
 			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
-			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station. Find a way inside before your suit's life support systems give out.</span>")
-			antag.current.ThrowAtStation()
+			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station.</span>")
+			to_chat(antag.current, "<span class='userdanger'>Your suit will lose pressure in approximately two minutes.</span>")
+			to_chat(antag.current, "<span class='danger'>Find a way inside before your suit's life support systems give out!</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -492,15 +492,19 @@ Helpers For Both Variants
 	daemon = new /datum/daemon/teleport(src,"Weakness",null)
 
 /obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
+	if(togglestate) //override
+		..()
+		checkdroppable()
+		return
 	if(isninja(user))
 		..()
+		checkdroppable()
 	else
 		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
 		return
-	if(active)
-		cant_drop = TRUE
-	else
-		cant_drop = FALSE
+
+/obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
+	return cant_drop = active //they should be the same value every time
 
 /obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W,/obj/item/weapon/melee/energy/sword))
@@ -528,7 +532,12 @@ Helpers For Both Variants
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
-
+		
+/obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
+	if(!isninja(user) && active)
+		toggleActive(user,togglestate = "off")
+		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+		return
 		
 /*=======
 Suit and assorted
@@ -553,9 +562,10 @@ Suit and assorted
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
-	spawn(60 SECONDS)
+	..()
+	spawn(120 SECONDS)
 		pressure_resistance = 0
-		src.visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
+		visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
 	
 /obj/item/clothing/suit/space/ninja
 	name = "elite ninja suit"
@@ -577,10 +587,10 @@ Suit and assorted
 	pressure_resistance = ONE_ATMOSPHERE
 	
 /obj/item/clothing/suit/space/ninja/apprentice/New()
-	spawn(60 SECONDS)
+	..()
+	spawn(150 SECONDS)
 		pressure_resistance = 0
-		src.visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
-		
+		visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
 	
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
 	/*if(!isninja(H))
@@ -598,11 +608,22 @@ Suit and assorted
 	
 /obj/item/clothing/shoes/ninja
 	name = "ninja shoes"
-	desc = "A pair of running shoes, excellent for running and even better for smashing skulls."
+	desc = "A pair of ninja shoes, excellent for running and even better for smashing skulls."
 	icon_state = "s-ninja"
 	item_state = "s-ninja"
 	permeability_coefficient = 0.01
-	//flags = NOSLIP too powerful
+	mag_slow = NO_SLOWDOWN
+	clothing_flags = NOSLIP | MAGPULSE
+	
+/obj/item/clothing/shoes/ninja/apprentice
+	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
+	
+/obj/item/clothing/shoes/ninja/apprentice/New()
+	..()
+	spawn(130 SECONDS)
+		togglemagpulse(override = TRUE)
+		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
+		
 
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"

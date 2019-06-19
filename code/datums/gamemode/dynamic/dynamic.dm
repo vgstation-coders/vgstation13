@@ -1,14 +1,5 @@
 var/list/forced_roundstart_ruleset = list()
 
-var/list/threat_by_job = list(
-	"Captain" = 12,
-	"Head of Security" = 10,
-	"Head of Personnel" = 8,
-	"Warden" = 8,
-	"Security Officer" = 4,
-	"Detective" = 3,
-)
-
 // -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
 var/dynamic_curve_width = 1.8
@@ -104,7 +95,12 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/Topic(href, href_list)
 	if (..()) // Sanity, maybe ?
 		return
-	if(!usr.client || !usr.check_rights(R_ADMIN))
+	if(!usr || !usr.client)
+		return
+	if(href_list["threatlog"]) //don't need admin for this
+		show_threatlog(usr)
+		return
+	if(!usr.check_rights(R_ADMIN))
 		return
 	if (href_list["forced_extended"])
 		forced_extended =! forced_extended
@@ -123,7 +119,7 @@ var/stacking_limit = 90
 		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
 		return
 
-	if(!admin.check_rights(R_ADMIN))
+	if(!admin.check_rights(R_ADMIN) && (ticker.current_state != GAME_STATE_FINISHED))
 		return
 
 	var/out = "<TITLE>Threat Log</TITLE><B><font size='3'>Threat Log</font></B><br><B>Starting Threat:</B> [starting_threat]<BR>"
@@ -140,7 +136,9 @@ var/stacking_limit = 90
 	usr << browse(out, "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
-	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
+
+	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
+
 	var/rules = list()
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
@@ -151,8 +149,8 @@ var/stacking_limit = 90
 				ruletype = "latejoin"
 			if (istype (DR, /datum/dynamic_ruleset/midround))
 				ruletype = "midround"
-			dat += "([ruletype]) - <b>[DR.name]</b><br>"
-			rules += "[ruletype] - **[DR.name]**"
+			dat += "([ruletype]) - <b>[DR.name]</b>[DR.calledBy ? " (called by [DR.calledBy])" : ""]<br>"
+			rules += "[ruletype] - **[DR.name]** [DR.calledBy ? " (called by [DR.calledBy])" : ""]"
 	else
 		dat += "(extended)"
 	dat += "<HR>"
@@ -180,9 +178,14 @@ var/stacking_limit = 90
 	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")
 
 	generate_threat()
+	
 
-	latejoin_injection_cooldown = rand(330,510)
-	midround_injection_cooldown = rand(600,1050)
+	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
+	latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
+	
+	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
+	midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
+
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
 
@@ -388,7 +391,7 @@ var/stacking_limit = 90
 			return 1
 	return 0
 
-/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
+/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0,var/caller)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
 	var/datum/dynamic_ruleset/midround/new_rule
 	if(ispath(ruletype))
 		new_rule = new ruletype()//you should only use it to call midround rules though.
@@ -397,6 +400,8 @@ var/stacking_limit = 90
 	else
 		message_admins("The specific ruleset failed beacuse a type other than a path or rule was sent.")
 		return
+	if(caller)
+		new_rule.calledBy = caller
 	update_playercounts()
 	var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
@@ -598,13 +603,6 @@ var/stacking_limit = 90
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
 
-	// -- No injection, we'll just update the threat
-	else
-		var/jobthreat = threat_by_job[newPlayer.mind.assigned_role]
-		if(jobthreat)
-			refund_threat(jobthreat)
-			threat_log += "[worldtime2text()]: [newPlayer] refunded [jobthreat] by joining as [newPlayer.mind.assigned_role]."
-
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
 		DR.applicants -= M
@@ -646,10 +644,10 @@ var/stacking_limit = 90
 					break
 			if (skip_ruleset)
 				message_admins("The rule was not added, because we already have a round-ender.")
-			else 
+			else
 				message_admins("The rule was accepted.")
 				rules_to_simulate += to_test
-		else 
+		else
 			message_admins("The rule was accepted (no-stacking not active.)")
 			rules_to_simulate += to_test
 
@@ -693,7 +691,7 @@ var/stacking_limit = 90
 			if (skip_ruleset)
 				message_admins("[to_test] was refused because we already have a round-ender ruleset.")
 				return
-	
+
 	message_admins("The rule was accepted.")
 
 /datum/gamemode/dynamic/proc/simulate_latejoin_injection(var/mob/user = usr)
@@ -737,5 +735,5 @@ var/stacking_limit = 90
 		if (skip_ruleset)
 			message_admins("[to_test] was refused because we already have a round-ender ruleset.")
 			return
-	
+
 	message_admins("The rule was accepted.")

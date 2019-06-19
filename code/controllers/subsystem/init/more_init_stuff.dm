@@ -70,7 +70,7 @@ var/datum/subsystem/more_init/SSmore_init
 
 /datum/subsystem/more_init/proc/cachedamageicons()
 	var/mob/living/carbon/human/H = new(locate(1,1,2))
-	var/datum/species/list/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
+	var/list/datum/species/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
 	var/icon/DI
 	var/species_blood
 	for(var/datum/species/S in slist)

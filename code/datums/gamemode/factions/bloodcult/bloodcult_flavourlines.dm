@@ -261,7 +261,8 @@ var/list/all_depts_list = list(
 			valid_lines += failure_lines_by_specific_role[role]
 	// The race
 	if (ishuman(victim))
-		valid_lines += failure_lines_by_specific_race[victim:species.type]
+		var/mob/living/carbon/human/dude = victim
+		valid_lines += failure_lines_by_specific_race[dude.species.type]
 
 	// -- Dynamic context
 	// Cultist count
@@ -323,7 +324,8 @@ var/list/all_depts_list = list(
 			valid_lines += acceptance_lines_by_specific_role[role]
 	// The race
 	if (ishuman(victim))
-		valid_lines += acceptance_lines_by_specific_race[victim:species.type]
+		var/mob/living/carbon/human/dude = victim
+		valid_lines += acceptance_lines_by_specific_race[dude.species.type]
 
 	// -- Dynamic context
 	// Cultist count

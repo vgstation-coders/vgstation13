@@ -762,7 +762,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		return
 	center = a_center
 	name += " #[rand(1,999)]"
-	open(size,user)
+	if (!open(size,user))
+		return // We didn't open, so let's leave there
 	arenas += src
 	status = ARENA_AVAILABLE
 
@@ -773,7 +774,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		planners += P
 
 /datum/bomberman_arena/Destroy()
-	..()
+	. = ..()
+	close()
 	arena = null
 	under = null
 	center = null
@@ -969,9 +971,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
-
+		return 1
 	else
 		qdel(src)
+		return 0
 
 
 
@@ -1082,7 +1085,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		to_chat(M, "<b>READY?</b>")
 
 	for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
-		E.visible_message("<span style='color:grey'>[bicon(E)] \The [E] brightens as it appears that a round is starting in [name].</span>")
+		E.visible_message("<span class='notice'>[bicon(E)] \The [E] brightens as it appears that a round is starting in [name].</span>")
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)
@@ -1365,7 +1368,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 					choice = 1
 	for (var/obj/structure/planner/P in planners)
 		qdel(P)
-	return	choice
+	return choice
 
 /obj/structure/planner
 	name = "arena planner"

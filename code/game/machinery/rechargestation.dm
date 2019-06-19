@@ -7,10 +7,10 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 1000
-	var/mob/occupant = null
+	var/mob/living/silicon/robot/occupant = null
 	var/list/acceptable_upgradeables = list(/obj/item/weapon/cell) // battery for now
 	var/list/upgrade_holder = list()
-	var/upgrading = 0 // are we upgrading a nigga?
+	var/obj/upgrading = 0 // are we upgrading a nigga?
 	var/upgrade_finished = -1 // time the upgrade should finish
 	var/manipulator_coeff = 1 // better manipulator swaps parts faster
 	var/transfer_rate_coeff = 1 // transfer rate bonuses
@@ -93,13 +93,13 @@
 		return
 	if(world.timeofday >= upgrade_finished && upgrade_finished != -1)
 		if(istype(upgrading, /obj/item/weapon/cell))
-			if(occupant:cell)
-				occupant:cell.updateicon()
-				occupant:cell.forceMove(get_turf(src))
+			if(occupant.cell)
+				occupant.cell.updateicon()
+				occupant.cell.forceMove(get_turf(src))
 			upgrade_holder -= upgrading
-			upgrading:forceMove(occupant)
-			occupant:cell = upgrading
-			occupant:cell:charge = occupant:cell.maxcharge // its been in a recharger so it makes sense
+			upgrading.forceMove(occupant)
+			occupant.cell = upgrading
+			occupant.cell.charge = occupant.cell.maxcharge // its been in a recharger so it makes sense
 			upgrading = 0
 			upgrade_finished = -1
 			to_chat(occupant, "<span class='notice'>Upgrade completed.</span>")
@@ -309,10 +309,11 @@
 	src.use_power = 2
 	for(var/obj/O in upgrade_holder)
 		if(istype(O, /obj/item/weapon/cell))
+			var/obj/item/weapon/cell/some_cell = O
 			if(!R.cell)
 				to_chat(usr, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 			else
-				if(O:maxcharge > R.cell.maxcharge)
+				if(some_cell.maxcharge > R.cell.maxcharge)
 					to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 
 /obj/machinery/recharge_station/togglePanelOpen(var/obj/toggleitem, mob/user)

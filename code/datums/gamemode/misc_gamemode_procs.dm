@@ -18,7 +18,7 @@
 				continue //AFK client
 			if(L.stat)
 				if(L.suiciding)	//Suicider
-					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 					continue //Disconnected client
 				if(L.stat == UNCONSCIOUS)
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (Dying)\n"
@@ -32,17 +32,17 @@
 			if(D.mind && (D.mind.original == L || D.mind.current == L))
 				if(L.stat == DEAD)
 					if(L.suiciding)	//Suicider
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 						continue //Disconnected client
 					else
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (Dead)\n"
 						continue //Dead mob, ghost abandoned
 				else
 					if(D.can_reenter_corpse)
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>This shouldn't appear.</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>This shouldn't appear.</b></span>)\n"
 						continue //Lolwhat
 					else
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Ghosted</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Ghosted</b></span>)\n"
 						continue //Ghosted while alive
 
 
@@ -368,6 +368,7 @@
 /proc/equip_ninja(var/mob/living/carbon/human/spaceninja)
 	if(!istype(spaceninja))
 		return 0
+	sleep(1) //so non-humans don't runtime
 	if(!isjusthuman(spaceninja))
 		spaceninja = spaceninja.Humanize("Human")
 	spaceninja.delete_all_equipped_items()
@@ -379,7 +380,7 @@
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja/apprentice, slot_head)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja, slot_shoes)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
@@ -468,4 +469,3 @@
 
 	to_chat(agent,words)
 	return 1
-

@@ -224,6 +224,8 @@
 
 			if ((chosen_greeting && chosen_greeting != GREET_CUSTOM) || (chosen_greeting == GREET_CUSTOM && custom_greeting))
 				R.Greet(chosen_greeting,custom_greeting)
+			
+			
 
 	if (href_list["add_role"])
 		var/list/available_roles = list()
@@ -232,7 +234,6 @@
 			if (initial(R.id) && !(initial(R.id) in antag_roles))
 				available_roles.Add(initial(R.id))
 				available_roles[initial(R.id)] = R
-
 
 		if(!available_roles.len)
 			alert("This mob already has every available roles! Geez, calm down!", "Assigned role")
@@ -277,6 +278,10 @@
 				var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[joined_faction], null, 1)
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
+
+		if (isninja(current))
+			if ((alert("Throw the ninja into the station from space?", "Alert", "Yes", "No") == "Yes"))
+				current.ThrowAtStation()
 
 		newRole.OnPostSetup(FALSE)
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
@@ -405,7 +410,8 @@
 					log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [objective.explanation_text]")
 		else if(istype(owner, /datum/faction))
 			var/datum/faction/F = owner
-			var/list/prev_objectives = F.GetObjectives().Copy()
+			var/list/faction_objectives = F.GetObjectives()
+			var/list/prev_objectives = faction_objectives.Copy()
 			F.forgeObjectives()
 			var/list/unique_objectives_faction = find_unique_objectives(F.GetObjectives(), prev_objectives)
 			if (!unique_objectives_faction.len)

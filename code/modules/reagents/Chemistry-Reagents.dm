@@ -874,12 +874,36 @@
 		M.reagents.del_reagent("mutationtoxin")
 
 	if(ishuman(M))
+
 		var/mob/living/carbon/human/human = M
 		if(!isslimeperson(human))
+
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
 			human.set_species("Evolved Slime")
+
+			human.regenerate_icons()
+
+			//Let the player choose their new appearance
+			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (human.species.name || null))
+			if(human.my_appearance.f_style && species_hair.len)		
+				var/new_hstyle = input(M, "Select an ooze style", "Grooming")  as null|anything in species_hair
+				if(new_hstyle)
+					human.my_appearance.h_style = new_hstyle
+
+			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, (human.species.name || null))
+			if(human.my_appearance.f_style && species_facial_hair.len)		
+				var/new_fstyle = input(M, "Select a facial ooze style", "Grooming")  as null|anything in species_facial_hair
+				if(new_fstyle)
+					human.my_appearance.f_style = new_fstyle
+
+			//Slime hair color is just darkened slime skin color (for now)
+			human.my_appearance.r_hair = round(human.multicolor_skin_r * 0.8)
+			human.my_appearance.g_hair = round(human.multicolor_skin_g * 0.8)
+			human.my_appearance.b_hair = round(human.multicolor_skin_b * 0.8)
+
 			human.regenerate_icons()
 			M.setCloneLoss(0)
+
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"
@@ -1407,7 +1431,7 @@
 		H.druggy = max(H.druggy, 5)
 		H.Dizzy(2)
 		if(prob(10))
-			H.emote(pick("stare", "giggle"))
+			H.emote(pick("stare", "giggle"), null, null, TRUE)
 		if(prob(5))
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
 		if(prob(2))
@@ -7285,7 +7309,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			H.druggy = max(H.druggy, 5)
 			H.Dizzy(2)
 			if(prob(5))
-				H.emote(pick("stare", "giggle"))
+				H.emote(pick("stare", "giggle"), null, null, TRUE)
 			if(prob(5))
 				to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
 			if(prob(2))

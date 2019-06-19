@@ -26,8 +26,13 @@
 			src.wear_mask = W
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
-			src.handcuffed = W
-			update_inv_handcuffed(redraw_mob)
+			var/obj/item/weapon/handcuffs/cuffs = W
+			if (cuffs.mutual_handcuffed_mobs.len) //if there are mobs cuffed to each other, then do the mutual handcuff logic
+				src.mutual_handcuffs = cuffs
+				update_inv_mutual_handcuffed(redraw_mob)
+			else 
+				src.handcuffed = W
+				update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
 			src.legcuffed = W
 			update_inv_legcuffed(redraw_mob)
@@ -57,7 +62,7 @@
 		if(slot_glasses)
 			return glasses
 		if(slot_handcuffed)
-			return handcuffed
+			return handcuffed || mutual_handcuffs
 		if(slot_legcuffed)
 			return legcuffed
 	return null

@@ -162,7 +162,7 @@ var/global/list/all_docking_ports = list()
 
 	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
-	if(src.z in (1 to map.zLevels.len))
+	if(src.z in 1 to map.zLevels.len)
 		base_turf_type = get_base_turf(src.z)
 
 	var/datum/zLevel/L = get_z_level(src)

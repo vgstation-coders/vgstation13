@@ -955,7 +955,7 @@ var/list/slot_equipment_priority = list( \
 						return 1
 				return 0
 			if(slot_handcuffed)
-				if(H.handcuffed)
+				if(H.handcuffed || H.mutual_handcuffs)
 					return 0
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return 0
@@ -2182,30 +2182,34 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
-	if(!(status_flags & PACIFIABLE))
-		return 0
+	if(status_flags & UNPACIFIABLE)
+		return FALSE
+
+	var/area/A = get_area(src)
+	if(A && A.flags & NO_PACIFICATION)
+		return FALSE
+
 	if (reagents && (reagents.has_reagent(CHILLWAX) || (reagents.has_reagent(INCENSE_POPPIES) && prob(50))))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
 				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
 			if (VIOLENCE_GUN)//gun, projectile weapon
 				to_chat(src, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [weapon] at \the [target].","Peace, my [gender == FEMALE ? "girl" : "man"]...")]</span>")
-		return 1
+		return TRUE
 
 	for (var/obj/item/weapon/implant/peace/target_implant in src.contents)
 		if (!target_implant.malfunction && target_implant.imp_alive && target_implant.imp_in == src)
 			if (message != VIOLENCE_SILENT)
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
-			return 1
+			return TRUE
 
 	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
 		if(P.isDead())
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
-		return 1
+		return TRUE
 
-
-	return 0
+	return FALSE
 
 /mob/proc/handle_regular_hud_updates()
 	return

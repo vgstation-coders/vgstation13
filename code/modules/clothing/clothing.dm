@@ -434,9 +434,6 @@
 /obj/item/clothing/mask/attack_self()
 	togglemask()
 
-/obj/item/clothing/mask/proc/treat_mask_speech(var/datum/speech/speech)
-	return
-
 //Shoes
 /obj/item/clothing/shoes
 	name = "shoes"
@@ -448,6 +445,7 @@
 	var/chaintype = null // Type of chain.
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
+	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
 
 	siemens_coefficient = 0.9
 	body_parts_covered = FEET
@@ -476,6 +474,19 @@
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
 	track_blood = 0
+
+/obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr, var/override = FALSE)
+	if(!override)
+		if(user.isUnconscious())
+			return
+	if((clothing_flags & MAGPULSE))
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
+		return 0
+	else
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
+		return 1
 
 //Suit
 /obj/item/clothing/suit
@@ -568,6 +579,9 @@
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
+/obj/item/clothing/under/emp_act(severity)
+	..()
+	sensor_mode = pick(0,1,2,3)
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
@@ -615,7 +629,6 @@
 	set category = "Object"
 	set src in usr
 	set_sensors(usr)
-	..()
 
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))

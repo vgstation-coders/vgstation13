@@ -324,7 +324,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
-			if(!href_list["createempty"] && reagents.total_volume == 0)
+			if(reagents.total_volume == 0)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
 				if(last_sound_time + 1 SECONDS < world.time)
 					playsound(src, 'sound/machines/chime.ogg', 50)
@@ -342,8 +342,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			var/amount_per_pill = reagents.total_volume/count
 			if(amount_per_pill > max_pill_size)
 				amount_per_pill = max_pill_size
-			if(href_list["createempty"])
-				amount_per_pill = 0 //If "createempty" is 1, pills are empty and no reagents are used.
 
 			var/name = stripped_input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)")
 			if(!name)
@@ -353,7 +351,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
 			while(count--)
-				if((amount_per_pill == 0 || reagents.total_volume == 0) && !href_list["createempty"])
+				if(amount_per_pill == 0 || reagents.total_volume == 0)
 					break
 
 				var/obj/item/weapon/reagent_containers/pill/P = new/obj/item/weapon/reagent_containers/pill(src.loc)
@@ -376,7 +374,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		else if (href_list["createbottle"] || href_list["createbottle_multiple"])
-			if(!href_list["createempty"] && reagents.total_volume == 0)
+			if(reagents.total_volume == 0)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
 				return
 			if(!condi)
@@ -388,8 +386,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 				var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
 				amount_per_bottle = min(amount_per_bottle,max_bottle_size)
-				if(href_list["createempty"])
-					amount_per_bottle = 0 //If "createempty" is 1, bottles are empty and no reagents are used.
 
 				var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
 				if(!name)
@@ -397,7 +393,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					return
 
 				while(count--)
-					if((amount_per_bottle == 0 || reagents.total_volume == 0) && !href_list["createempty"])
+					if(amount_per_bottle == 0 || reagents.total_volume == 0)
 						break
 
 					var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
@@ -609,10 +605,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>
-					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
 					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
-					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>
-					<A href='?src=\ref[src];createbottle_multiple=1;createempty=1'>Create empty bottles</A><BR>"}
+					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
 
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 475, 500, src)

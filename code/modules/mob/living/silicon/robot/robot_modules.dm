@@ -67,7 +67,6 @@
 	if(emag)
 		modules += emag
 	rebuild()
-	..()
 
 /obj/item/weapon/robot_module/emp_act(severity)
 	if(modules)

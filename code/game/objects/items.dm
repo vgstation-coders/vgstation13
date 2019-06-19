@@ -681,6 +681,8 @@
 			if(slot_handcuffed)
 				if(H.handcuffed)
 					return CANNOT_EQUIP
+				if (H.mutual_handcuffs)
+					return CANNOT_EQUIP
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
@@ -1270,7 +1272,7 @@ var/global/list/image/blood_overlays = list()
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
-		if(C.handcuffed)
+		if(C.handcuffed || C.mutual_handcuffs)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
 			return FALSE
 		feedback_add_details("handcuffs", "[name]")
@@ -1377,3 +1379,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
+
+//This proc will be called when the person holding or equipping it talks.
+/obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	return

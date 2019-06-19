@@ -75,6 +75,14 @@ code\game\\dna\genes\goon_powers.dm
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD
 
+/spell/targeted/genetic/mutate/highlander
+	name = "Become Highlander"
+	desc = "Temporarily turn into a mighty highlander who cannot be stunned."
+	invocation = "SCOTLAND FOREVER!"
+	mutations = list(M_HULK)
+	message = "<span class='notice'>You feel powerful! Nobody can take you down! It's time to take some heads!</span>"
+	user_type = USER_TYPE_OTHER
+
 /spell/targeted/genetic/eat_weed
 	name = "Eat Weeds"
 	desc = "Devour weeds from soil or a hydroponics tray, gaining nutriment."

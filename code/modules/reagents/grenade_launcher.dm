@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/gun/grenadelauncher
 	name = "grenade launcher"
 	icon = 'icons/obj/gun.dmi'
@@ -60,8 +58,12 @@
 	F.throw_at(target, 30, 2)
 	message_admins("[key_name_admin(user)] fired [F.name] from [src.name].")
 	log_game("[key_name_admin(user)] launched [F.name] from [src.name].")
-	F.active = 1
-	F.icon_state = initial(icon_state) + "_active"
 	playsound(user.loc, 'sound/weapons/grenadelauncher.ogg', 50, 1, -3)
-	spawn(15)
-		F.prime()
+	F.activate()
+
+/obj/item/weapon/gun/grenadelauncher/syndicate
+	name = "C32R multiple grenade launcher"
+	desc = "A six-shot revolver-type grenade launcher. Not exactly the biggest revolution in terms of tech, but it can fire grenades just fine. Or at least Syndicate Command said so. Try to aim far away from face."
+	icon_state = "syndie_mgl"
+	item_state = "riotgun"
+	max_grenades = 6

@@ -14,7 +14,6 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
-	refund_value = BASE_SOLO_REFUND
 
 	var/list/powers = list()
 	var/ismenacing = FALSE
@@ -34,6 +33,8 @@
 	var/list/feeders = list()
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
+
+	var/list/image/cached_images = list()
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
@@ -62,6 +63,7 @@
 			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
 			to_chat(antag.current, "You are weak to holy things and starlight.")
 			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
+			to_chat(antag.current, "You will easily recognise the wearers of holy artifacts. Your powers will stop working against them as you go stronger.")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
@@ -328,7 +330,7 @@
 		var/datum/role/thrall/role_thrall = isthrall(C)
 		if (role_thrall && role_thrall.master == src)
 			continue // We don't terrify our underlings
-		if (!C.vampire_affected(antag))
+		if (C.vampire_affected(antag) < 0)
 			continue
 		C.stuttering += 20
 		C.Jitter(20)
