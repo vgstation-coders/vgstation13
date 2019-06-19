@@ -270,7 +270,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"
-	desc = "A rock cutter that, ingeniously, is powered by putting plasma directly into it. It's even powerful enough that you could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	desc = "A rock cutter that, ingeniously, is powered by inserting solid plasma directly into it. It's powerful enough to cut through rocks and xenos with ease."
 	digspeed = 5
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
 	var/max_ammo = 15
