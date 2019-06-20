@@ -68,7 +68,7 @@
 		P.on_hit(src,2)
 		return 2
 	if(!P.nodamage)
-		var/damage = run_armor_absorb(def_zone, P.flag, (P.damage/(absorb+1)))
+		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
 		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
 		regenerate_icons()
 	P.on_hit(src, absorb)
