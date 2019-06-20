@@ -15,7 +15,7 @@
 	
 /obj/item/weapon/grenade/chronogrenade/carbon
 	name = "chrono-carbon grenade"
-	desc = "This experimental weapon will halt the progression of time in the local area for ten seconds. Carbon lifeforms are not unaffected by the field."
+	desc = "This experimental weapon will halt the progression of time in the local area for ten seconds. Carbon lifeforms are not affected by the field."
 	icon_state = "past_grenade"
 	duration = 15 SECONDS
 
