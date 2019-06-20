@@ -1310,7 +1310,19 @@ client/proc/check_convertables()
 		holder.emergency_shuttle_panel()
 		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
 	feedback_add_details("admin_verb","ESP")
-	return
+
+/client/proc/bee_count()
+	set category = "Debug"
+	set name = "Check Bee Count"
+	set desc = "Check how many bee datums or mobs currently exist in the world."
+
+	var/contained_bees = 0
+	for (var/obj/machinery/apiary/A in apiaries_list)
+		contained_bees += A.worker_bees_inside
+		contained_bees += A.queen_bees_inside
+	to_chat(usr, "<span class='notice'>There are currently [bees_count] bee datums, spread between [bee_mobs_count] swarms (or possibly held in bug nets).</span>")
+	to_chat(usr, "<span class='notice'>Additionally, there are [contained_bees] bees currently contained within apiaries.</span>")
+
 
 /client/proc/start_line_profiling()
 	set category = "Profile"
