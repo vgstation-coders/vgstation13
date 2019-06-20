@@ -283,24 +283,8 @@ proc/move_mining_shuttle()
 		return
 	if(current_ammo >0)
 		current_ammo--
-		var/turf/starting = get_turf(user)
-		var/turf/target = get_turf(A)
-		var/obj/item/projectile/kinetic/cutter/BS = new (starting)
-		BS.firer = user
-		BS.original = A
-		BS.target = target
-		BS.current = starting
-		BS.starting = starting
-		BS.yo = target.y - starting.y
-		BS.xo = target.x - starting.x
+		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg')
 		user.delayNextAttack(4)
-		if(user.zone_sel)
-			BS.def_zone = user.zone_sel.selecting
-		else
-			BS.def_zone = LIMB_CHEST
-		BS.OnFired()
-		playsound(starting, 'sound/weapons/Taser.ogg', 50, 1)
-		BS.process()
 	else
 		src.visible_message("*click click*")
 		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
