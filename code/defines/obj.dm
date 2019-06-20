@@ -437,38 +437,42 @@ var/global/list/PDA_Manifest = list()
 	icon_state = "empty"
 	name = "Sleepy time"
 	var/datum/mind/owner
+	var/ignored_type
 	var/spell/aoe_turf/fall/ourspell
 	invisibility = 100
 	var/theworld
 	ignoreinvert = 1
 
-/obj/effect/stop/sleeping/New(loc, ourtime, mind, var/spell/aoe_turf/fall/F, theworld)
+/obj/effect/stop/sleeping/New(loc, ourtime, mind, var/spell/aoe_turf/fall/F, theworld, var/ignored)
 	..()
 	sleeptime = ourtime
 	owner = mind
 	ourspell = F
 	src.theworld = theworld
+	if(ignored)
+		ignored_type = ignored
 
 /obj/effect/stop/sleeping/Crossed(atom/movable/A)
 	if(!(A.flags & TIMELESS) && sleeptime > world.time)
-		if(ismob(A))
-			var/mob/living/L = A
-			if(L.mind != owner)
-				if(L.client)
-					L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
-				if(!L.stat)
-					L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
-				//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
-				//L.update_canmove()
-				if(!(L in ourspell.affected))
-					invertcolor(L)
-					ourspell.affected += L
-					ourspell.recursive_timestop(L)
-		else
-			if(!(A in ourspell.affected))
-				invertcolor(A)
-				ourspell.affected += A
-				ourspell.recursive_timestop(A)
+		if(!ignored_type || !istype(A,ignored_type))
+			if(ismob(A))
+				var/mob/living/L = A
+				if(L.mind != owner)
+					if(L.client)
+						L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
+					if(!L.stat)
+						L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+					//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
+					//L.update_canmove()
+					if(!(L in ourspell.affected))
+						invertcolor(L)
+						ourspell.affected += L
+						ourspell.recursive_timestop(L)
+			else
+				if(!(A in ourspell.affected))
+					invertcolor(A)
+					ourspell.affected += A
+					ourspell.recursive_timestop(A)
 
 
 /obj/effect/spawner
