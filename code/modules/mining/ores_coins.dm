@@ -425,6 +425,7 @@
 	icon_state = "coin_gold"
 	credits = 5
 	melt_temperature=1064+T0C
+	siemens_coefficient = 0.95
 
 /obj/item/weapon/coin/silver
 	material=MAT_SILVER
@@ -432,12 +433,14 @@
 	icon_state = "coin_silver"
 	credits = 1
 	melt_temperature=961+T0C
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/diamond
 	material=MAT_DIAMOND
 	name = "diamond coin"
 	icon_state = "coin_diamond"
 	credits = 25
+	siemens_coefficient = 0.1
 
 /obj/item/weapon/coin/iron
 	material=MAT_IRON
@@ -445,6 +448,7 @@
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
+	siemens_coefficient = 0.9
 
 /obj/item/weapon/coin/plasma
 	material=MAT_PLASMA
@@ -452,6 +456,7 @@
 	icon_state = "coin_plasma"
 	credits = 0.1
 	melt_temperature=MELTPOINT_STEEL+500
+	siemens_coefficient = 0.7
 
 /obj/item/weapon/coin/uranium
 	material=MAT_URANIUM
@@ -459,6 +464,7 @@
 	icon_state = "coin_uranium"
 	credits = 25
 	melt_temperature=1070+T0C
+	siemens_coefficient = 0.9
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
@@ -466,6 +472,7 @@
 	icon_state = "coin_clown"
 	credits = 1000
 	melt_temperature=MELTPOINT_GLASS
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/phazon
 	material=MAT_PHAZON
@@ -473,16 +480,22 @@
 	icon_state = "coin_phazon"
 	credits = 2000
 	melt_temperature=MELTPOINT_GLASS
+	siemens_coefficient = 0.5
+	
+/obj/item/weapon/coin/phazon/New()
+	siemens_coefficient = rand(0,100) / 100
 
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
 	name = "adamantine coin"
 	icon_state = "coin_adamantine"
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/mythril
 	material="mythril"
 	name = "mythril coin"
 	icon_state = "coin_mythril"
+	siemens_coefficient = 0
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/cable_coil) )
