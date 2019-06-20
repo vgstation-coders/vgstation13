@@ -38,17 +38,17 @@
 	..()
 
 /obj/item/weapon/gun/projectile/railgun/attack_self(mob/user as mob)
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
+	if(user.isUnconscious())
+		to_chat(user, "You can't do that while unconscious.")
 		return
 	if(loadedammo)
-		remove_ammunition()
+		remove_ammunition(user)
 		return
 	if(loadedcapacitor)
-		remove_capacitor()
+		remove_capacitor(user)
 		return
 	if(loadedassembly && !rails_secure)
-		remove_rails()
+		remove_rails(user)
 		return
 	return
 
@@ -75,34 +75,34 @@
 			var/image/capacitor = image('icons/obj/weaponsmithing.dmi', src, "railgun_capacitor_overlay")
 			overlays += capacitor
 
-/obj/item/weapon/gun/projectile/railgun/proc/remove_ammunition()
+/obj/item/weapon/gun/projectile/railgun/proc/remove_ammunition(var/mob/user)
 	if(!loadedammo)
 		return
-	loadedammo.forceMove(usr.loc)
-	usr.put_in_hands(loadedammo)
-	to_chat(usr, "You remove \the [loadedammo] from the barrel of \the [src].")
+	loadedammo.forceMove(user.loc)
+	user.put_in_hands(loadedammo)
+	to_chat(user, "You remove \the [loadedammo] from the barrel of \the [src].")
 	loadedammo = null
 
 	update_icon()
 
-/obj/item/weapon/gun/projectile/railgun/proc/remove_capacitor()
+/obj/item/weapon/gun/projectile/railgun/proc/remove_capacitor(var/mob/user)
 	if(!loadedcapacitor)
 		return
 
-	loadedcapacitor.forceMove(usr.loc)
-	usr.put_in_hands(loadedcapacitor)
-	to_chat(usr, "You remove \the [loadedcapacitor] from the capacitor bank of \the [src].")
+	loadedcapacitor.forceMove(user.loc)
+	user.put_in_hands(loadedcapacitor)
+	to_chat(user, "You remove \the [loadedcapacitor] from the capacitor bank of \the [src].")
 	loadedcapacitor = null
 
 	update_icon()
 
-/obj/item/weapon/gun/projectile/railgun/proc/remove_rails()
+/obj/item/weapon/gun/projectile/railgun/proc/remove_rails(var/mob/user)
 	if(!loadedassembly)
 		return
 
-	loadedassembly.forceMove(usr.loc)
-	usr.put_in_hands(loadedassembly)
-	to_chat(usr, "You remove \the [loadedassembly] from the barrel of \the [src].")
+	loadedassembly.forceMove(user.loc)
+	user.put_in_hands(loadedassembly)
+	to_chat(user, "You remove \the [loadedassembly] from the barrel of \the [src].")
 	loadedassembly = null
 	update_icon()
 
