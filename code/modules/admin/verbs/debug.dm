@@ -1251,8 +1251,7 @@ client/proc/check_convertables()
 
 	lst.len = argnum // Expand to right length
 
-	var/i
-	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+	for(var/i = 1 to argnum) // Lists indexed from 1 forwards in byond
 		lst[i] = variable_set(src)
 
 	holder.marked_datum = new chosen(arglist(lst))
