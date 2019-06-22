@@ -305,6 +305,7 @@
 
 	if(href_list["close"])
 		usr << browse(null, "\ref[src]")
+		usr.unset_machine()
 		return 1
 
 	usr.set_machine(src)
@@ -391,7 +392,9 @@
 				pathogen_list[pathogen_name] = ID
 
 			popup.close()
+			user.unset_machine()
 			var/choice = input(user, "Choose a pathogen to isolate on a growth dish.", "Isolate to dish") as null|anything in pathogen_list
+			user.set_machine()
 			if (!choice)
 				return result
 			var/ID = pathogen_list[choice]
@@ -439,7 +442,9 @@
 				return result
 
 			popup.close()
+			user.unset_machine()
 			var/choice = input(user, "Choose an antibody to develop into a vaccine. This will destroy the blood sample. The higher the concentration, the faster the vaccine is synthesized.", "Synthesize Vaccine") as null|anything in antibody_choices
+			user.set_machine()
 			if (!choice)
 				return result
 

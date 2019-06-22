@@ -87,28 +87,46 @@
 		if(prob(5))
 			to_chat(src, "<span class = 'warning'>You are getting hungry!</span>")
 
-	find_nearby_disease()//getting diseases from
+	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
-	if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
-		breath_airborne_diseases()
+	//------------------------DISEASE STUFF--------------------------------------------------------
+	if(!locked_to || !istype(locked_to,/obj/item/mouse_cage))//cages isolate from diseases
+		find_nearby_disease()//getting diseases from
 
-	for (var/mob/living/simple_animal/mouse/M in range(1,src))
-		share_contact_diseases(M)
+		if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
+			breath_airborne_diseases()
 
-	if (virus2.len)
-		var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
-		for (var/ID in virus2)
-			var/datum/disease2/disease/V = virus2[ID]
-			if(istype(V))
-				V.activate(src,active_disease!=ID)
+		for (var/mob/living/simple_animal/mouse/M in range(1,src))
+			share_contact_diseases(M)
 
-				if (prob(radiation))//radiation turns your body into an inefficient pathogenic incubator.
-					V.incubate(src,rad_tick/10)
-					//effect mutations won't occur unless the mob also has ingested mutagen
-					//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.
+		if (virus2.len)
+			var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
+			for (var/ID in virus2)
+				var/datum/disease2/disease/V = virus2[ID]
+				if(istype(V))
+					V.activate(src,active_disease!=ID)
+
+					if (prob(radiation))//radiation turns your body into an inefficient pathogenic incubator.
+						V.incubate(src,rad_tick/10)
+						//effect mutations won't occur unless the mob also has ingested mutagen
+						//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.
+	//---------------------------------------------------------------------------------------------
 
 	if(!isUnconscious())
 		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
+
+		if(locked_to && istype(locked_to,/obj/item/mouse_cage))
+			var/obj/item/mouse_cage/cage = locked_to
+			//if there's some reagent in the bottle, let's drink it at once
+			if(cage.reagents.total_volume)
+				dir = EAST
+				cage.reagents.reaction(src, INGEST)
+				spawn(5)
+					if(cage.reagents)
+						cage.reagents.trans_to(src, 1)
+			//otherwise let's just look around like a dumb mouse
+			else if (prob(25))
+				dir = pick(cardinal - dir)
 
 		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
@@ -152,12 +170,26 @@
 		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
 
+
+/mob/living/simple_animal/mouse/revive()
+	for (var/ID in virus2)
+		var/datum/disease2/disease/V = virus2[ID]
+		V.cure(src)
+	..()
+
 /mob/living/simple_animal/mouse/attack_hand(var/mob/living/carbon/human/M)
 	. = ..()
 	if (ishuman(M)||ismonkey(M))
 		var/block = M.check_contact_sterility(HANDS)
 		var/bleeding = M.check_bodypart_bleeding(HANDS)
 		share_contact_diseases(M,block,bleeding)
+
+	if(stat == UNCONSCIOUS && prob(33))
+		stat = CONSCIOUS
+		icon_state = "mouse_[_color]"
+		wander = 1
+		speak_chance = initial(speak_chance)
+		visible_message("\The [src] wakes up.")
 
 /mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
 	if(!..())
@@ -319,6 +351,18 @@
 /mob/living/simple_animal/mouse/white
 	_color = "white"
 	icon_state = "mouse_white"
+
+/mob/living/simple_animal/mouse/white/balbc
+	name = "Pinky"
+	desc = "A lab mouse of the BALB/c strain. Very docile, though anxious."
+	_color = "balbc"
+	icon_state = "mouse_balbc"
+	namenumbers = FALSE
+
+/mob/living/simple_animal/mouse/white/balbc/New()
+	..()
+	if (prob(50))
+		name = "\improper Brain"
 
 /mob/living/simple_animal/mouse/gray
 	_color = "gray"

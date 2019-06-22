@@ -57,9 +57,8 @@
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
 	O.chance = 10
 	shutdown.infectionchance = 100
-	//TODO: VIRO REWRITE PART 2
-	//shutdown.antigen |= text2num(pick(ANTIGENS))
-	//shutdown.antigen |= text2num(pick(ANTIGENS))
+	shutdown.antigen = list(pick(all_antigens))
+	shutdown.antigen |= pick(all_antigens)
 	shutdown.spread = 0//cannot be extracted
 	shutdown.uniqueID = rand(0,10000)
 	shutdown.effects += O
