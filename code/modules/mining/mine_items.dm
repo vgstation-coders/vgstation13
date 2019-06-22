@@ -298,7 +298,7 @@ proc/move_mining_shuttle()
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
 		else
-			to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
+			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
 
 	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
 		var/obj/item/stack/sheet/mineral/plasma/A = target
@@ -308,7 +308,7 @@ proc/move_mining_shuttle()
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
 		else
-			to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
+			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
