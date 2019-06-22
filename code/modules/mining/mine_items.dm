@@ -296,7 +296,7 @@ proc/move_mining_shuttle()
 			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
-			to_chat(user, "<span class='notice'>You load [src].</span>")
+			to_chat(user, "<span class='notice'>You load \the [src].</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
 
@@ -306,7 +306,7 @@ proc/move_mining_shuttle()
 			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
-			to_chat(user, "<span class='notice'>You load [src].</span>")
+			to_chat(user, "<span class='notice'>You load \the [src].</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
 
