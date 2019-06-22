@@ -378,6 +378,17 @@
 	mode = SYRINGE_INJECT
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/syndi
+	name = "syringe (syndicate mix)"
+	desc = "Contains cyanide, chloral hydrate and lexorin. Something tells you it might be lethal on arrival."
+/obj/item/weapon/reagent_containers/syringe/syndi/New()
+	..()
+	reagents.add_reagent(CYANIDE, 5)
+	reagents.add_reagent(CHLORALHYDRATE, 5)
+	reagents.add_reagent(LEXORIN, 5)
+	mode = SYRINGE_INJECT
+	update_icon()
+
 
 //Robot syringes
 //Not special in any way, code wise. They don't have added variables or procs.

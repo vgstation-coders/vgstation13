@@ -529,6 +529,9 @@ Thanks.
 		if(C.handcuffed)
 			C.drop_from_inventory(C.handcuffed)
 
+		if (C.mutual_handcuffs)
+			C.drop_from_inventory(C.mutual_handcuffs)
+
 		if (C.legcuffed)
 			C.drop_from_inventory(C.legcuffed)
 	hud_updateflag |= 1 << HEALTH_HUD
@@ -632,7 +635,6 @@ Thanks.
 	// make the icons look correct
 	regenerate_icons()
 	update_canmove()
-	..()
 
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
@@ -673,7 +675,7 @@ Thanks.
 	var/t7 = 1 //What the FUCK is this variable?
 	if (restrained())
 		for(var/mob/living/M in range(src, 1))
-			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
+			if ((M.pulling == src && M.stat == 0 && !( M.restrained())))
 				t7 = null
 	if (t7 && pulling && (Adjacent(pulling) || pulling.loc == loc))
 		. = ..()
@@ -700,7 +702,10 @@ Thanks.
 				diag = null
 			if ((get_dist(src, pulling) > 1 || diag))
 				if(!istype(pulling) || !pulling)
-					WARNING("Pulling disappeared! pulling = [pulling] old pulling = [M]")
+					if (iscarbon(src))
+						var/mob/living/carbon/carbon = src
+						if (!carbon.mutual_handcuffed_to)
+							WARNING("Pulling disappeared! pulling = [pulling] old pulling = [M]")
 				else if(isturf(pulling.loc))
 					if (isliving(pulling))
 						M = pulling
@@ -1182,6 +1187,43 @@ Thanks.
 						CM.update_inv_legcuffed()
 					else
 						to_chat(CM, "<span class='warning'>Your unlegcuffing attempt was interrupted.</span>")
+		else if(CM.mutual_handcuffs && CM.canmove && CM.special_delayer.blocked())
+			CM.delayNext(DELAY_ALL,100)
+			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
+				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
+								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
+				spawn(0)
+					if(do_after(CM, CM, 50))
+						if(!CM.mutual_handcuffs || CM.locked_to)
+							return
+						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.mutual_handcuffs]!</span>",
+										   "<span class='notice'>You successfully break \the [CM.mutual_handcuffs].</span>")
+						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						var/obj/item/cuffs = CM.mutual_handcuffs
+						CM.drop_from_inventory(cuffs)
+						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
+							qdel(cuffs)
+					else
+						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
+
+
+			else
+				var/obj/item/HC = CM.mutual_handcuffs
+				var/resist_time = 1 MINUTES // 1 minute since it's only one cuff
+				CM.visible_message("<span class='danger'>[CM] attempts to remove \the [HC]!</span>",
+								   "<span class='warning'>You attempt to remove \the [HC] (this will take around [(resist_time)/600] minutes and you need to stand still).</span>",
+								   self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
+				spawn(0)
+					if(do_after(CM,CM, resist_time))
+						if(!CM.mutual_handcuffs || CM.locked_to)
+							return // time leniency for lag which also might make this whole thing pointless but the server
+						CM.visible_message("<span class='danger'>[CM] manages to remove \the [HC]!</span>",
+										   "<span class='notice'>You successfully remove \the [HC].</span>",
+										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
+						CM.drop_from_inventory(HC)
+					else
+						CM.simple_message("<span class='warning'>Your attempt to remove \the [HC] was interrupted.</span>",
+							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
 /mob/living/verb/lay_down()
 	set name = "Rest"

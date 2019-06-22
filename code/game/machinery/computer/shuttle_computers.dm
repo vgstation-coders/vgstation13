@@ -364,11 +364,12 @@
 			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
 		var/list/L = list()
+		var/area/this_area = get_area(src)
 		for(var/datum/shuttle/S in shuttles)
 			var/name
 			if(S.can_link_to_computer == LINK_FORBIDDEN)
 				continue
-			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+			else if(S.can_link_to_computer == LINK_FREE || this_area.get_shuttle() == S)
 				name = S.name
 			else if(S.password)
 				name = "[S.name] (requires password)"
@@ -443,11 +444,12 @@
 			return
 
 		var/list/L = list()
+		var/area/this_area = get_area(src)
 		for(var/datum/shuttle/S in shuttles)
 			var/name
 			if(S.can_link_to_computer == LINK_FORBIDDEN)
 				continue
-			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+			else if(S.can_link_to_computer == LINK_FREE || this_area.get_shuttle() == S)
 				name = S.name
 			else if(S.password)
 				name = "[S.name] (requires password)"

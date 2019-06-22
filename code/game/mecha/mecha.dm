@@ -22,7 +22,7 @@
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged. This is supposedly infrared brightness. Lower for combat mechs.
 	var/list/hud_list = list()
-	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
+	var/initial_icon
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
@@ -117,7 +117,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
-	reset_icon()
+	icon_state = initial_icon
 	icon_state += "-open"
 	return
 
@@ -471,10 +471,12 @@
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
 			if (L.flags & INVULNERABLE)
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
 				//can't be knocked down? you'll still take the damage.
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 				L.take_overall_damage(5,0)
@@ -491,6 +493,7 @@
 				playsound(src, pick(hit_sound), 50, 0, 0)
 				breakthrough = 1
 		else
+			stopMechWalking()
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
 
@@ -1198,7 +1201,7 @@
 		src.add_fingerprint(H)
 		src.forceMove(src.loc)
 		src.log_append_to_last("[H] moved in as pilot.")
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		dir = dir_in
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
@@ -1273,7 +1276,7 @@
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1446,7 +1449,7 @@
 		*/
 
 		src.occupant = null
-		src.icon_state = src.reset_icon()+"-open"
+		src.icon_state = src.initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
 			set_light(0)
 		src.dir = dir_in
@@ -2115,13 +2118,6 @@
 		return 1
 	return 0
 
-/obj/mecha/proc/reset_icon()
-	if (initial_icon)
-		icon_state = initial_icon
-	else
-		icon_state = initial(icon_state)
-	return icon_state
-
 /obj/mecha/acidable()
 	return 0
 
@@ -2291,5 +2287,6 @@
 	return
 */
 
+#undef STATE_BOLTSHIDDEN
 #undef STATE_BOLTSEXPOSED
 #undef STATE_BOLTSOPENED

@@ -1475,6 +1475,7 @@
 			roundstart_rules[newrule.name] = newrule
 		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
 		if (added_rule)
+			roundstart_rules[added_rule].calledBy = "[key_name(usr)]"
 			forced_roundstart_ruleset += roundstart_rules[added_rule]
 			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
 			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
@@ -1516,6 +1517,7 @@
 		var/added_rule = input(usr,"What ruleset do you want to force upon the next latejoiner? This will bypass threat level and population restrictions.", "Rigging Latejoin", null) as null|anything in latejoin_rules
 		if (added_rule)
 			var/datum/gamemode/dynamic/mode = ticker.mode
+			latejoin_rules[added_rule].calledBy = "[key_name(usr)]"
 			mode.forced_latejoin_rule = latejoin_rules[added_rule]
 			log_admin("[key_name(usr)] set [added_rule] to proc on the next latejoin.")
 			message_admins("[key_name(usr)] set [added_rule] to proc on the next latejoin.", 1)
@@ -1549,7 +1551,7 @@
 			var/datum/gamemode/dynamic/mode = ticker.mode
 			log_admin("[key_name(usr)] executed the [added_rule] ruleset.")
 			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
-			mode.picking_specific_rule(midround_rules[added_rule],1)
+			mode.picking_specific_rule(midround_rules[added_rule],1,"[key_name(usr)]")
 
 	// -- Opens up the option window --
 	else if (href_list["f_dynamic_options"])
@@ -5015,7 +5017,7 @@
 			var/datum/faction/F = owner
 			for (var/datum/role/member in F.members)
 				to_chat(member.antag.current, "<span class='notice'>Your faction objectives are:</span>")
-				if (member.faction.objective_holder.GetObjectives().len)
+				if (length(member.faction.objective_holder.GetObjectives()))
 					var/obj_count = 1
 					for(var/datum/objective/O in member.faction.GetObjectives())
 						text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
@@ -5026,7 +5028,8 @@
 	if(href_list["obj_gen"])
 		var/owner = locate(href_list["obj_owner"])
 		var/datum/faction/F = owner
-		var/list/prev_objectives = F.GetObjectives().Copy()
+		var/list/faction_objectives = F.GetObjectives()
+		var/list/prev_objectives = faction_objectives.Copy()
 		F.forgeObjectives()
 		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
 		if (!unique_objectives.len)

@@ -288,7 +288,7 @@
 	var/datum/preferences/A = new()	//Randomize appearance for the human
 	A.randomize_appearance_for(new_human)
 	if(!new_species || !(new_species in all_species))
-		var/list/restricted = list("Krampus", "Horror")
+		var/list/restricted = list("Krampus", "Horror", "Manifested")
 		new_species = pick(all_species - restricted)
 	new_human.set_species(new_species)
 	if(isliving(src))

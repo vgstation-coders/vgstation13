@@ -694,9 +694,9 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
-		var/M_ckey = usr.ckey
 		if(!isobserver(M) || !iscultist(M))
 			return
+		var/mob/dead/observer/O = M
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
 			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
@@ -712,6 +712,9 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
+		O.can_reenter_corpse = 1
+		O.reenter_corpse()
+
 		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")

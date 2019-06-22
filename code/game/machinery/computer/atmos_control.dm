@@ -211,20 +211,21 @@ var/global/list/atmos_controllers = list()
 
 	var/list/tmplist = list()
 	for(var/preset in airalarm_presets) //this is a global list defined in alarm.dm
+		var/datum/airalarm_preset/preset_datum = airalarm_presets[preset]
 		tmplist[++tmplist.len] = list(
-			"name" = airalarm_presets[preset].name,
-			"desc" = airalarm_presets[preset].desc,
-			"core" = airalarm_presets[preset].core,
-			"oxygen" = airalarm_presets[preset].oxygen,
-			"nitrogen" = airalarm_presets[preset].nitrogen,
-			"carbon_dioxide" = airalarm_presets[preset].carbon_dioxide,
-			"plasma" = airalarm_presets[preset].plasma,
-			"n2o" = airalarm_presets[preset].n2o,
-			"other" = airalarm_presets[preset].other,
-			"pressure" = airalarm_presets[preset].pressure,
-			"temperature" = airalarm_presets[preset].temperature,
-			"target_temperature" = airalarm_presets[preset].target_temperature,
-			"scrubbers_gases" = airalarm_presets[preset].scrubbers_gases
+			"name" = preset_datum.name,
+			"desc" = preset_datum.desc,
+			"core" = preset_datum.core,
+			"oxygen" = preset_datum.oxygen,
+			"nitrogen" = preset_datum.nitrogen,
+			"carbon_dioxide" = preset_datum.carbon_dioxide,
+			"plasma" = preset_datum.plasma,
+			"n2o" = preset_datum.n2o,
+			"other" = preset_datum.other,
+			"pressure" = preset_datum.pressure,
+			"temperature" = preset_datum.temperature,
+			"target_temperature" = preset_datum.target_temperature,
+			"scrubbers_gases" = preset_datum.scrubbers_gases
 		)
 	data["presets"] = tmplist
 

@@ -15,6 +15,7 @@
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
+	var/calledBy //who dunnit, for round end scoreboard
 
 	var/flags = 0
 

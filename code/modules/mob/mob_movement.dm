@@ -134,63 +134,63 @@
 					if(!R.module_state_3)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3 +a"
-						R:module_active = R:module_state_3
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3 +a"
+						R.module_active = R.module_state_3
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2 +a"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_2
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2 +a"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_2
 			else
-				R:inv1.icon_state = "inv1 +a"
-				R:inv2.icon_state = "inv2"
-				R:inv3.icon_state = "inv3"
-				R:module_active = R:module_state_1
+				R.inv1.icon_state = "inv1 +a"
+				R.inv2.icon_state = "inv2"
+				R.inv3.icon_state = "inv3"
+				R.module_active = R.module_state_1
 		else
 			if(R.module_active == R.module_state_1)
 				if(!R.module_state_2)
 					if(!R.module_state_3)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3 +a"
-						R:module_active = R:module_state_3
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3 +a"
+						R.module_active = R.module_state_3
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2 +a"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_2
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2 +a"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_2
 			else if(R.module_active == R.module_state_2)
 				if(!R.module_state_3)
 					if(!R.module_state_1)
 						return
 					else
-						R:inv1.icon_state = "inv1 +a"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3"
-						R:module_active = R:module_state_1
+						R.inv1.icon_state = "inv1 +a"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3"
+						R.module_active = R.module_state_1
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2"
-					R:inv3.icon_state = "inv3 +a"
-					R:module_active = R:module_state_3
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2"
+					R.inv3.icon_state = "inv3 +a"
+					R.module_active = R.module_state_3
 			else if(R.module_active == R.module_state_3)
 				if(!R.module_state_1)
 					if(!R.module_state_2)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2 +a"
-						R:inv3.icon_state = "inv3"
-						R:module_active = R:module_state_2
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2 +a"
+						R.inv3.icon_state = "inv3"
+						R.module_active = R.module_state_2
 				else
-					R:inv1.icon_state = "inv1 +a"
-					R:inv2.icon_state = "inv2"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_1
+					R.inv1.icon_state = "inv1 +a"
+					R.inv2.icon_state = "inv2"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_1
 			else
 				return
 	mob.swap_hand()

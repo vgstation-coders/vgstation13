@@ -824,7 +824,8 @@ var/global/list/airalarm_presets = list(
 
 	var/list/tmplist = new/list()
 	for(var/preset in airalarm_presets)
-		tmplist[++tmplist.len] = list("name" = airalarm_presets[preset].name, "desc" = airalarm_presets[preset].desc)
+		var/datum/airalarm_preset/preset_datum = airalarm_presets[preset]
+		tmplist[++tmplist.len] = list("name" = preset_datum.name, "desc" = preset_datum.desc)
 	data["presets"] = tmplist
 	data["preset"]=preset
 	data["screen"]=screen

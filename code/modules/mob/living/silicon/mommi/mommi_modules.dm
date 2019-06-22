@@ -55,7 +55,8 @@
 		"Prime Alt" = "mommiprime-alt",
 		"Replicator" = "replicator",
 		"RepairBot" = "repairbot",
-		"Hover" = "hovermommi"
+		"Hover" = "hovermommi",
+		"Junkheap" = "junkmommi"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 
