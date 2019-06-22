@@ -356,6 +356,12 @@ obj/item/clothing/shoes/jackboots/cowboy
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
 	species_fit = list(VOX_SHAPED)
+	
+/obj/item/clothing/shoes/purplepumps
+	name = "purple pumps"
+	desc = "Makes you seem slightly taller."
+	icon_state = "purplepumps"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/shoes/roman
 	name = "roman sandals"
