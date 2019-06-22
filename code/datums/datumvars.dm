@@ -598,7 +598,7 @@ function loadPage(list) {
 			to_chat(usr, "This can only be used on instances of type /mob")
 			return
 
-		src.make_invisible(M)
+		src.toggle_invisible(M)
 		href_list["datumrefresh"] = href_list["make_invisible"]
 
 	else if(href_list["give_disease"])
