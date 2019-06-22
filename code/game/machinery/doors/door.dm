@@ -69,6 +69,8 @@ var/list/all_doors = list()
 		return FALSE
 	if(operating || !density)
 		return FALSE
+	if(!length(thing.GetAccess()))
+		return FALSE
 	if(!check_access(thing))
 		denied()
 		return FALSE
