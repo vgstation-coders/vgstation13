@@ -3034,6 +3034,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/key/security/spare = 1,
 		/obj/item/weapon/depocket_wand = 4,
 		/obj/item/weapon/ram_kit = 1,
+		/obj/item/borg/upgrade/cult = 2
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3064,6 +3065,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/key/security/spare = 50,
 		/obj/item/weapon/depocket_wand = 100,
 		/obj/item/weapon/ram_kit = 200,
+		/obj/item/borg/upgrade/cult = 250,
 		)
 
 /obj/machinery/vending/trader/New()

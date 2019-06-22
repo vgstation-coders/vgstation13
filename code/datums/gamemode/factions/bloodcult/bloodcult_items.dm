@@ -1389,8 +1389,8 @@ var/list/arcane_tomes = list()
 	
 /obj/item/weapon/friendly_pamphlet/attack_self(var/mob/user)
 	if(index == (reasons.len)+1)
-		to_chat(user,"<span class='sinister'>You go back to the top.</span>")	
-	to_chat(user,"<span class='sinister'>[reasons[index]]</span>")	
+		to_chat(user,"<span class='info'>You go back to the top.</span>")	
+	to_chat(user,"<span class='info'>[reasons[index]]</span>")	
 	index++
 		
 	
