@@ -699,7 +699,7 @@ var/list/admin_verbs_mod = list(
 		T.forced_density = 0
 		T.alphas -= "admin_invis"
 	else	
-		T.alphas["admin_invis"] == 0
+		T.alphas["admin_invis"] = 0
 		T.density = 0
 		T.forced_density = 1
 
