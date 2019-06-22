@@ -111,10 +111,13 @@ var/global/list/all_graffitis = list(
 		return
 
 	if(istype(target, /turf/simulated))
-		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
+		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") as null|anything in list("graffiti","rune","letter","text")
 		var/preference
 		var/alignment = "center" //For text
 		var/drawtime = 50
+
+		if(!drawtype)
+			return
 
 		switch(drawtype)
 			if("letter")

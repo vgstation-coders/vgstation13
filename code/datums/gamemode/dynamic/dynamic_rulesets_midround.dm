@@ -320,29 +320,29 @@
 	role_category = /datum/role/nuclear_operative
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_enemies = list(3, 3, 3, 3, 3, 2, 1, 1, 0, 0)
 	required_candidates = 5
 	weight = 5
 	cost = 35
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 60
-	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
+	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
 	flags = HIGHLANDER_RULESET
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
-	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
-		return 0//unavailable if nuke ops were already sent at roundstart
-	var/indice_pop = min(10,round(living_players.len/5)+1)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population = 0,var/threat = 0)
+	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
+		return 0 //Unavailable if nuke ops were already sent at roundstart
+	var/indice_pop = min(10,round(living_players.len/5) + 1)
 	required_candidates = operative_cap[indice_pop]
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	nuclear.forgeObjectives()
-	if (index == 1) // Our first guy is the leader
+	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
-		new_role.AssignToRole(new_character.mind,1)
+		new_role.AssignToRole(new_character.mind, 1)
 		setup_role(new_role)
 	else
 		return ..()

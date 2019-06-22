@@ -72,7 +72,7 @@
 		icon_state = "[base_state]1"
 		to_chat(user, "You enable the mag-pulse traction system.")
 	user.update_inv_shoes()	//so our mob-overlays update
-	
+
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	..()
 	var/state = " disabled."
@@ -116,6 +116,14 @@
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/shoes/magboots/syndie/elite
+	name = "advanced blood-red magboots"
+	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. These ones include brand new magnet technology stolen from NT. A tag on it says \"Property of Gorlex Marauders\"."
+	icon_state = "syndiemag0"
+	base_state = "syndiemag"
+	species_fit = list(VOX_SHAPED)
+	mag_slow = MAGBOOTS_SLOWDOWN_LOW
 
 //Captain
 /obj/item/clothing/shoes/magboots/captain

@@ -341,7 +341,7 @@
 /mob/living/carbon/restrained()
 	if(timestopped)
 		return 1 //under effects of time magick
-	if (handcuffed)
+	if (check_handcuffs())
 		return 1
 	return
 
@@ -454,6 +454,10 @@
 		B.host_brain.name = "host brain"
 		B.host_brain.real_name = "host brain"
 
+	//reset name if the borer changed it
+	if(name != real_name)
+		name = real_name
+
 	verbs -= /mob/living/carbon/proc/release_control
 	verbs -= /mob/living/carbon/proc/punish_host
 
@@ -512,7 +516,7 @@
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
 	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
-	
+
 /mob/living/carbon/teleport_to(var/atom/A)
 	var/last_slip_value = src.unslippable
 	src.unslippable = 1
@@ -608,6 +612,9 @@
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_touch(src, toucher, touched, touch_type)
 
+/mob/living/carbon/proc/check_handcuffs()
+	return handcuffed
+
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)
 		return 255
@@ -688,7 +695,7 @@
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+			if (!Slip(stun_amount = 3, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
 				return FALSE
 			step(src, dir)
 			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
@@ -696,7 +703,7 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
 			for (var/i = 1 to 4)
 				spawn(i)

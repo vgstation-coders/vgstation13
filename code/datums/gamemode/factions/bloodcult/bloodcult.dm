@@ -24,7 +24,8 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/spire/S in cult_spires)
 		S.upgrade()
 
-	for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
+	var/datum/runeset/bloodcult_runeset = global_runesets["blood_cult"]
+	for (var/obj/effect/rune/R in bloodcult_runeset.rune_list)
 		R.update_icon()
 
 /proc/spawn_bloodstones(var/turf/source = null)
@@ -525,10 +526,30 @@ var/veil_thickness = CULT_PROLOGUE
 
 	var/mob/living/silicon/robot/robot_user = user
 	if(istype(robot_user)) 
-		var/module_items = list(robot_user.module_state_1,robot_user.module_state_2,robot_user.module_state_3) //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
+		var/module_items = robot_user.get_equipped_items() //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
+		for(var/obj/item/weapon/gripper/G_held in module_items)
+			if (!istype(G_held) || !G_held.wrapped || !istype(G_held.wrapped,/obj/item/weapon/reagent_containers))
+				continue
+			var/obj/item/weapon/reagent_containers/gripper_item = G_held.wrapped
+			if(round(gripper_item.reagents.get_reagent_amount(BLOOD)))
+				var/blood_volume = round(gripper_item.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_HELD] = gripper_item
+					if (gripper_item.is_open_container())
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_LID_HELD] = 1
+
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+					return data
+				
 		for(var/obj/item/weapon/reagent_containers/G_held in module_items)
 			if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
 				continue
+			
 			if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
 				var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
 				var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
@@ -564,7 +585,7 @@ var/veil_thickness = CULT_PROLOGUE
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first) 
-	if((istype(H_user) && !(H_user.species.flags & NO_BLOOD)))
+	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user

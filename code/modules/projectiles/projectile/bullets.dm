@@ -64,7 +64,7 @@
 	name = "weak bullet"
 	icon_state = "bbshell"
 	damage = 10
-	stun = 5
+	stun = 3
 	weaken = 5
 	embed = 0
 /obj/item/projectile/bullet/weakbullet/booze
@@ -183,9 +183,9 @@
 	name = "stunshot"
 	icon_state = "sshell"
 	damage = 5
-	stun = 10
-	weaken = 10
-	stutter = 10
+	stun = 5
+	weaken = 5
+	stutter = 5
 
 /obj/item/projectile/bullet/a762
 	damage = 25
@@ -426,10 +426,10 @@
 	penetration = 0 //By default. Higher-power shots will have penetration.
 
 /obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
-	if(istype(atarget, /mob/living) && damage == 200)
+	if(istype(atarget, /mob/living) && damage >= 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage == 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
+	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
 		if(!N.wounded)
 			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
@@ -448,13 +448,6 @@
 				var/turf/M_turf = get_turf(M)
 				if(M_turf && (M_turf.z == starting.z))
 					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
-
-/obj/item/projectile/bullet/APS/OnDeath()
-	var/turf/T = get_turf(src)
-	if(blessed)
-		new /obj/item/weapon/nullrod(T)
-	else
-		new /obj/item/stack/rods(T)
 
 /obj/item/projectile/bullet/APS/cultify()
 	return

@@ -1323,7 +1323,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						"}
 					switch(app.game_state)
 						if(0)	//First Statup
-							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="pda_snake_arrow_west.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="pda_snake_arrow_east.png"></a>"}
+							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="spesspets_arrow_left.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="spesspets_arrow_right.png"></a>"}
 
 							dat += {"<a href='byond://?src=\ref[src];choice=eggChose'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
 							dat += {"</div>"}
@@ -2505,7 +2505,7 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(8, 5, 1))
+		if (M.Slip(5, 5, 1))
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
 
 			if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))

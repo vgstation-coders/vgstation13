@@ -1397,6 +1397,7 @@ var/proccalls = 1
 #define MODE_CULTCHAT "cultchat"
 #define MODE_ANCIENT "ancientchat"
 #define MODE_MUSHROOM "sporechat"
+#define MODE_BORER "borerchat"
 
 //Hardcore mode stuff
 
