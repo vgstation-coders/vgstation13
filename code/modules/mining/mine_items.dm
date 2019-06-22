@@ -270,7 +270,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"
-	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it, for those miners on the go."
+	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it - even plasma ore, for those miners on the go."
 	digspeed = 5
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
 	var/max_ammo = 15
@@ -290,16 +290,25 @@ proc/move_mining_shuttle()
 		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && istype(target, /obj/item/stack/sheet))
-		var/obj/item/stack/sheet/A = target
-		if(A.mat_type == MAT_PLASMA)
-			if(current_ammo < max_ammo)
-				var/loading_ammo = min(max_ammo - current_ammo, A.amount)
-				A.use(loading_ammo)
-				current_ammo += loading_ammo
-				to_chat(user, "<span class='notice'>You load [src].</span>")
-			else
-				to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
+	if(proximity_flag && istype(target, /obj/item/stack/ore/plasma))
+		var/obj/item/stack/ore/plasma/A = target
+		if(current_ammo < max_ammo)
+			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+			A.use(loading_ammo)
+			current_ammo += loading_ammo
+			to_chat(user, "<span class='notice'>You load [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
+
+	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
+		var/obj/item/stack/sheet/mineral/plasma/A = target
+		if(current_ammo < max_ammo)
+			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+			A.use(loading_ammo)
+			current_ammo += loading_ammo
+			to_chat(user, "<span class='notice'>You load [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
