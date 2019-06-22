@@ -871,7 +871,7 @@
 			to_chat(activator, "<span class='warning'>Their willpower is amazing, the ritual will be exhausting.</span>")
 
 	for(var/obj/item/weapon/implant/loyalty/I in victim)
-		if(I.implanted)
+		if(I.is_implanted())
 			to_chat(victim, "<span class='warning'>Your loyalty implants drastically slows down the ritual's progression.</span>")
 			to_chat(activator, "<span class='warning'>Their mind seems to reject the ritual by reflex. The ritual will take much longer.</span>")
 			break
@@ -913,7 +913,7 @@
 				progress += activator.get_cult_power()//down to 1-2 seconds when wearing cult gear
 				var/delay = 0
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
-					if(I.implanted)
+					if(I.is_implanted())
 						delay = 1
 						progress = progress/4
 						break
@@ -1024,7 +1024,7 @@
 				//and their loyalty implants are removed, so they can't mislead security
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					I.forceMove(T)
-					I.implanted = 0
+					I.implant_status = 0
 					spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [victim]'s head.</span>")
 				convert(victim, converter)
 				conversion.icon_state = ""
@@ -1076,7 +1076,7 @@
 			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a green radioactive liquid.</span>")
 
 		for(var/obj/item/weapon/implant/loyalty/I in victim)
-			I.implanted = 0
+			I.implant_status = 0
 		for(var/obj/item/I in victim)
 			victim.u_equip(I)
 			if(I)

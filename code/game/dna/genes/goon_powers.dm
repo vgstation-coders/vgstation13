@@ -246,7 +246,7 @@
 				continue
 			if(istype(target, /obj/item/weapon/implant))
 				var/obj/item/weapon/implant/implant = target
-				if(implant.imp_in) //Implanted implant, don't eat that
+				if(implant.implanted_mob) //Implanted implant, don't eat that
 					continue
 			targets += target
 	else if(max_targets == 1) //single target can be picked
@@ -262,7 +262,7 @@
 					continue
 				if(istype(M, /obj/item/weapon/implant))
 					var/obj/item/weapon/implant/implant = M
-					if(implant.imp_in) //Implanted implant, don't eat that
+					if(implant.implanted_mob) //Implanted implant, don't eat that
 						continue
 				possible_targets += M
 
@@ -282,7 +282,7 @@
 		for(var/atom/movable/target in view_or_range(range, user, selection_type))
 			if(istype(target, /obj/item/weapon/implant))
 				var/obj/item/weapon/implant/implant = target
-				if(implant.imp_in) //Implanted implant, don't eat that
+				if(implant.implanted_mob) //Implanted implant, don't eat that
 					continue
 			possible_targets += target
 

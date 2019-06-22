@@ -249,7 +249,7 @@ obj/machinery/gateway/centerstation/process()
 		return
 	if(istype(M, /mob/living/carbon))
 		for(var/obj/item/weapon/implant/exile/E in M)//Checking that there is an exile implant in the contents
-			if(E.imp_in == M)//Checking that it's actually implanted vs just in their pocket
+			if(E.implanted_mob == M)//Checking that it's actually implanted vs just in their pocket
 				to_chat(M, "\black The station gate has detected your exile implant and is blocking your entry.")
 				return
 	M.forceMove(get_step(stationgate.loc, SOUTH))

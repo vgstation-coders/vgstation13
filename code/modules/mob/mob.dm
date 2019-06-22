@@ -2198,7 +2198,7 @@ mob/proc/on_foot()
 		return TRUE
 
 	for (var/obj/item/weapon/implant/peace/target_implant in src.contents)
-		if (!target_implant.malfunction && target_implant.imp_alive && target_implant.imp_in == src)
+		if (!target_implant.malfunction && !target_implant.implanted_mob.isDead() && target_implant.implanted_mob == src)
 			if (message != VIOLENCE_SILENT)
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return TRUE

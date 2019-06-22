@@ -105,16 +105,16 @@
 
 
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)//Here you go Deuryn
-	L.imp_in = src
-	L.implanted = 1
+	L.implanted_mob = src
+	L.implant_status = 1
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(src)
-	E.imp_in = src
-	E.implanted = 1
+	E.implanted_mob = src
+	E.implant_status = 1
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 	affected.implants += E
-	E.part = affected
+	E.implanted_bodypart = affected
 	src.update_icons()
 
 

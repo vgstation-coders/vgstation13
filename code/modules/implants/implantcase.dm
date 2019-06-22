@@ -1,42 +1,47 @@
 /obj/item/weapon/implantcase
 	name = "Glass Case"
-	desc = "A case containing an implant."
-	icon_state = "implantcase-0"
+	desc = "A hardened case containing an implant."
+	icon_state = "implantcase-blue"
 	item_state = "implantcase"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
 	var/obj/item/weapon/implant/held_implant = null
-
-/obj/item/weapon/implantcase/proc/update()
-	if (src.held_implant)
-		src.icon_state = text("implantcase-[]", src.held_implant._color)
-	else
-		src.icon_state = "implantcase-0"
-	return
-
-/obj/item/weapon/implantcase/attackby(obj/item/I as obj, mob/user as mob)
+	var/implant_path = null
+	
+/obj/item/weapon/implantcase/New()
 	..()
-	if (istype(I, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
-	else if (istype(I, /obj/item/weapon/implanter))
-		var/obj/item/weapon/implanter/the_implanter = I
-		if (the_implanter.held_implant)
-			if (src.held_implant || the_implanter.held_implant.implanted)
-				return
-			the_implanter.held_implant.forceMove(src)
-			src.held_implant = the_implanter.held_implant
-			the_implanter.held_implant = null
+	src.held_implant = new implant_path(src)
+	
+/obj/item/weapon/implantcase/update_icon()
+	if(held_implant)
+		icon_state = text("implantcase-[held_implant.case_color]")
+	else
+		icon_state = "implantcase-empty"
 
-			src.update()
-			the_implanter.update()
-		else if (src.held_implant)
-			src.held_implant.forceMove(I)
-			the_implanter.held_implant = src.held_implant
+/obj/item/weapon/implantcase/attackby(obj/item/item, mob/user)
+	..()
+	if(istype(item, /obj/item/weapon/pen))
+		set_tiny_label(user, " - '", "'")
+	else if(istype(item, /obj/item/weapon/implanter))
+		var/obj/item/weapon/implanter/implanter = item
+		if(implanter.held_implant)
+			if(src.held_implant || implanter.held_implant.implant_status)
+				return
+
+			implanter.held_implant.forceMove(src) //If the implanter is full and the case is empty, put the implant back in the case.
+			src.held_implant = implanter.held_implant
+			implanter.held_implant = null
+
+			src.update_icon()
+			implanter.update_icon()
+		else if(src.held_implant)
+			src.held_implant.forceMove(implanter) //If the implanter is empty and the case is full, put the implant into the implanter.
+			implanter.held_implant = src.held_implant
 			src.held_implant = null
 
-			src.update()
-			the_implanter.update()
+			src.update_icon()
+			implanter.update_icon()
 
 /obj/item/weapon/implantcase/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
 	if(!src.held_implant || !src.held_implant.allow_reagents)
@@ -53,67 +58,46 @@
 	name = "Glass Case- 'Tracking'"
 	desc = "A case containing a tracking implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-b"
-
-/obj/item/weapon/implantcase/tracking/New()
-		src.held_implant = new /obj/item/weapon/implant/tracking( src )
-		..()
-		return
+	icon_state = "implantcase-blue"
+	implant_path = /obj/item/weapon/implant/tracking
 
 /obj/item/weapon/implantcase/explosive
 	name = "Glass Case- 'Explosive'"
 	desc = "A case containing an explosive implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-r"
-
-/obj/item/weapon/implantcase/explosive/New()
-		src.held_implant = new /obj/item/weapon/implant/explosive( src )
-		..()
-		return
-
+	icon_state = "implantcase-red"
+	implant_path = /obj/item/weapon/implant/explosive
 
 /obj/item/weapon/implantcase/chem
 	name = "Glass Case- 'Chem'"
 	desc = "A case containing a chemical implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-b"
-
-/obj/item/weapon/implantcase/chem/New()
-	src.held_implant = new /obj/item/weapon/implant/chem( src )
-	..()
-	return
-
+	icon_state = "implantcase-blue"
+	implant_path = /obj/item/weapon/implant/chem
 
 /obj/item/weapon/implantcase/loyalty
 	name = "Glass Case- 'Loyalty'"
 	desc = "A case containing a loyalty implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-r"
-
-
-/obj/item/weapon/implantcase/loyalty/New()
-	src.held_implant = new /obj/item/weapon/implant/loyalty( src )
-	..()
-	return
-
+	icon_state = "implantcase-red"
+	implant_path = /obj/item/weapon/implant/loyalty
 
 /obj/item/weapon/implantcase/death_alarm
 	name = "Glass Case- 'Death Alarm'"
 	desc = "A case containing a death alarm implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-b"
-
-/obj/item/weapon/implantcase/death_alarm/New()
-	src.held_implant = new /obj/item/weapon/implant/death_alarm( src )
-	..()
-	return
+	implant_path = /obj/item/weapon/implant/death_alarm
 
 /obj/item/weapon/implantcase/peace
 	name = "glass case- 'Pax'"
-	desc = "A case containing a peace-inducing implant."
+	desc = "A case containing a Pax implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-b"
-
-/obj/item/weapon/implantcase/peace/New()
-	src.held_implant = new /obj/item/weapon/implant/peace(src)
-	..()
+	icon_state = "implantcase-blue"
+	implant_path = /obj/item/weapon/implant/peace
+	
+/obj/item/weapon/implantcase/adrenalin
+	name = "glass case- 'Adrenalin'"
+	desc = "A case containing an Adrenalin implant."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "implantcase-blue"
+	implant_path = /obj/item/weapon/implant/adrenalin

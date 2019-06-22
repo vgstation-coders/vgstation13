@@ -148,7 +148,7 @@
 		L[tmpname] = R
 
 	for (var/obj/item/weapon/implant/tracking/I in tracking_implants)
-		if (!I.implanted || !ismob(I.loc))
+		if (!I.is_implanted() || !ismob(I.loc))
 			continue
 		else
 			var/mob/M = I.loc

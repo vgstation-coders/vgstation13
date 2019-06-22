@@ -534,14 +534,14 @@
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
 		I.forceMove(newmob)
-		I.implanted = 1
-		I.imp_in = newmob
+		I.implant_status = 1
+		I.implanted_mob = newmob
 		if(istype(newmob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = newmob
-			if(!I.part) //implanted as a nonhuman, won't have one.
-				I.part = /datum/organ/external/chest
+			if(!I.implanted_bodypart) //implanted as a nonhuman, won't have one.
+				I.implanted_bodypart = /datum/organ/external/chest
 			for (var/datum/organ/external/affected in H.organs)
-				if(!istype(affected, I.part))
+				if(!istype(affected, I.implanted_bodypart))
 					continue
 				affected.implants += I
 

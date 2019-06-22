@@ -158,11 +158,11 @@
 	synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/storage/box/survival/nuke(synd_mob), slot_in_backpack) //The cyanide pills are in there, for people wondering
 
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(synd_mob)
-	E.imp_in = synd_mob
-	E.implanted = 1
+	E.implanted_mob = synd_mob
+	E.implant_status = 1
 	var/datum/organ/external/affected = synd_mob.get_organ(LIMB_HEAD)
 	affected.implants += E
-	E.part = affected
+	E.implanted_bodypart = affected
 	synd_mob.update_icons()
 	return 1
 

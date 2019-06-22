@@ -45,12 +45,12 @@
 		H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_in_backpack)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
+	L.implanted_mob = H
+	L.implant_status = 1
 	to_chat(world, "<b>[H.real_name] is the captain!</b>")
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 	return 1
 
 /datum/job/captain/get_access()
@@ -114,9 +114,9 @@
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-		L.imp_in = H
-		L.implanted = 1
+		L.implanted_mob = H
+		L.implant_status = 1
 		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
-		L.part = affected
+		L.implanted_bodypart = affected
 		return 1

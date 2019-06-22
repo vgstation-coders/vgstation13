@@ -4,7 +4,7 @@
 	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))
 		return 0
 	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
-		if(L && (L.imp_in == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
+		if(L && (L.implanted_mob == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
 			return 0
 	return 1
 

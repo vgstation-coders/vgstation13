@@ -156,7 +156,7 @@
 
 	if(istype(tool, /obj/item/weapon/implant))
 		var/obj/item/weapon/implant/disobj = tool
-		disobj.part = affected
+		disobj.implanted_bodypart = affected
 		affected.implants += disobj
 	affected.cavity = 0
 
@@ -228,8 +228,8 @@
 			obj.forceMove(get_turf(target))
 			if(istype(obj,/obj/item/weapon/implant))
 				var/obj/item/weapon/implant/imp = obj
-				imp.imp_in = null
-				imp.implanted = 0
+				imp.implanted_mob = null
+				imp.implant_status = 0
 				affected.implants -= imp
 				target.contents -= imp
 		else

@@ -7,26 +7,19 @@
 */
 /obj/item/weapon/implanter/exile
 	name = "implanter-exile"
-
-/obj/item/weapon/implanter/exile/New()
-	src.imp = new /obj/item/weapon/implant/exile( src )
-	..()
-	update()
-	return
-
+	implant_path = /obj/item/weapon/implant/exile
 
 /obj/item/weapon/implant/exile
 	name = "exile"
 	desc = "Prevents you from returning from the asteroid"
 
 /obj/item/weapon/implant/exile/get_data()
-	var/dat = {"
-<b>Implant Specifications:</b><BR>
-<b>Name:</b> Nanotrasen Employee Exile Implant<BR>
-<b>Implant Details:</b> The host of this implant will be prevented from returning to the station."}
+	var/dat = {"<b>Implant Specifications:</b><BR>
+				<b>Name:</b> Nanotrasen Employee Exile Implant<BR>
+				<b>Implant Details:</b> The host of this implant will be prevented from returning to the station."}
 	return dat
 
-/obj/item/weapon/implant/exile/implanted(mob/M)
+/obj/item/weapon/implant/exile/attempt_implant(mob/M)
 	if(!istype(M, /mob/living/carbon))
 		return 0
 	var/mob/living/carbon/I = M
@@ -38,14 +31,8 @@
 	name = "Glass Case- 'Exile'"
 	desc = "A case containing an exile implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-r"
-
-
-/obj/item/weapon/implantcase/exile/New()
-	src.imp = new /obj/item/weapon/implant/exile( src )
-	..()
-	return
-
+	icon_state = "implantcase-red"
+	implant_path = /obj/item/weapon/implant/exile
 
 /obj/structure/closet/secure_closet/exile
 	name = "Exile Implants"

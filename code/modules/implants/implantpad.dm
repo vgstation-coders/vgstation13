@@ -51,13 +51,13 @@
 	user.set_machine(src)
 	var/dat = "<B>Implant Mini-Computer:</B><HR>"
 	if (src.case)
-		if(src.case.imp)
-			if(istype(src.case.imp, /obj/item/weapon/implant))
-				dat += src.case.imp.get_data()
-				if(istype(src.case.imp, /obj/item/weapon/implant/tracking))
+		if(src.case.held_implant)
+			if(istype(src.case.held_implant, /obj/item/weapon/implant))
+				dat += src.case.held_implant.get_data()
+				if(istype(src.case.held_implant, /obj/item/weapon/implant/tracking))
 					dat += {"ID (1-100):
 					<A href='byond://?src=\ref[src];tracking_id=-10'>-</A>
-					<A href='byond://?src=\ref[src];tracking_id=-1'>-</A> [case.imp:id]
+					<A href='byond://?src=\ref[src];tracking_id=-1'>-</A> [case.held_implant:id]
 					<A href='byond://?src=\ref[src];tracking_id=1'>+</A>
 					<A href='byond://?src=\ref[src];tracking_id=10'>+</A><BR>"}
 		else
@@ -76,7 +76,7 @@
 	if ((usr.contents.Find(src)) || ((in_range(src, usr) && istype(src.loc, /turf))))
 		usr.set_machine(src)
 		if (href_list["tracking_id"])
-			var/obj/item/weapon/implant/tracking/T = src.case.imp
+			var/obj/item/weapon/implant/tracking/T = src.case.held_implant
 			T.id += text2num(href_list["tracking_id"])
 			T.id = min(100, T.id)
 			T.id = max(1, T.id)

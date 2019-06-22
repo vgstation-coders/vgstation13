@@ -105,11 +105,11 @@
 	equip_to_slot_or_del(W, slot_wear_id)
 
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(src) //no loyalty implant because you're already syndicate scum
-	E.imp_in = src
-	E.implanted = 1
+	E.implanted_mob = src
+	E.implant_status = 1
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += E
-	E.part = affected
+	E.implanted_bodypart = affected
 	src.update_icons()
 
 	return 1

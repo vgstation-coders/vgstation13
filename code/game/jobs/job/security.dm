@@ -52,11 +52,11 @@
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_in_backpack)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
+	L.implanted_mob = H
+	L.implant_status = 1
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 	return 1
 
 /datum/job/hos/reject_new_slots()
@@ -111,11 +111,11 @@
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_in_backpack)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
+	L.implanted_mob = H
+	L.implant_status = 1
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 	return 1
 
 
@@ -188,11 +188,11 @@
 		H.equip_or_collect(new /obj/item/weapon/storage/box/evidence(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/device/detective_scanner(H), slot_in_backpack)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
+	L.implanted_mob = H
+	L.implant_status = 1
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
@@ -244,11 +244,11 @@
 	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses/sechud(H), slot_glasses)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
+	L.implanted_mob = H
+	L.implant_status = 1
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 	return 1
 
 /datum/job/officer/get_total_positions()

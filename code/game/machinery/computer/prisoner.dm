@@ -38,10 +38,10 @@
 				Tr = get_turf(C)
 				if((Tr) && (Tr.z != src.z))
 					continue//Out of range
-				if(!C.implanted)
+				if(!C.is_implanted())
 					continue
 
-				dat += {"[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject:
+				dat += {"[C.implanted_mob.name] | Remaining Units: [C.reagents.total_volume] | Inject:
 					<A href='?src=\ref[src];inject1=\ref[C]'>(<font color=red>(1)</font>)</A>
 					<A href='?src=\ref[src];inject5=\ref[C]'>(<font color=red>(5)</font>)</A>
 					<A href='?src=\ref[src];inject10=\ref[C]'>(<font color=red>(10)</font>)</A><BR>
@@ -51,10 +51,10 @@
 				Tr = get_turf(T)
 				if((Tr) && (Tr.z != src.z))
 					continue//Out of range
-				if(!T.implanted)
+				if(!T.is_implanted())
 					continue
 				var/loc_display = "Unknown"
-				var/mob/living/carbon/M = T.imp_in
+				var/mob/living/carbon/M = T.implanted_mob
 				if(!M)
 					continue //Changeling monkeys break the console, bad monkeys.
 				if(M.z == map.zMainStation && !istype(M.loc, /turf/space))
@@ -111,8 +111,8 @@
 				if(!warning)
 					return
 				var/obj/item/weapon/implant/I = locate(href_list["warn"])
-				if((I)&&(I.imp_in))
-					var/mob/living/carbon/R = I.imp_in
+				if((I)&&(I.implanted_mob))
+					var/mob/living/carbon/R = I.implanted_mob
 					to_chat(R, "<span class='good'>You hear a voice in your head saying: '[warning]'</span>")
 
 			src.add_fingerprint(usr)

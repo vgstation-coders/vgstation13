@@ -26,7 +26,7 @@
 /obj/item/weapon/virusdish
 	name = "virus containment/growth dish"
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-b"
+	icon_state = "implantcase-blue"
 	var/datum/disease2/disease/virus2 = null
 	var/growth = 0
 	var/info = 0

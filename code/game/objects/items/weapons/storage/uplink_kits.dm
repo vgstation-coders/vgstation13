@@ -40,12 +40,12 @@
 
 		if("freedom")//18+5=23
 			var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
-			O.imp = new /obj/item/weapon/implant/freedom(O)
-			O.update()
+			O.held_implant = new /obj/item/weapon/implant/freedom(O)
+			O.update_icon()
 			O.name= "Freedom"
 			var/obj/item/weapon/implanter/U = new /obj/item/weapon/implanter(src)
-			U.imp = new /obj/item/weapon/implant/uplink(U)
-			U.update()
+			U.held_implant = new /obj/item/weapon/implant/uplink(U)
+			U.update_icon()
 			U.name = "Uplink"
 
 		if("hacker")//14+6+5+3=28
@@ -179,8 +179,8 @@
 /obj/item/weapon/storage/box/syndie_kit/imp_freedom/New()
 	..()
 	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/freedom(O)
-	O.update()
+	O.held_implant = new /obj/item/weapon/implant/freedom(O)
+	O.update_icon()
 	return
 
 /obj/item/weapon/storage/box/syndie_kit/imp_compress
@@ -205,8 +205,8 @@
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink/New()
 	..()
 	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/uplink(O)
-	O.update()
+	O.held_implant = new /obj/item/weapon/implant/uplink(O)
+	O.update_icon()
 	return
 
 /obj/item/weapon/storage/box/syndie_kit/space

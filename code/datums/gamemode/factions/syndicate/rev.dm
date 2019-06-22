@@ -23,7 +23,7 @@
 		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
 
 	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
-		if(L.imp_in == H) // a check if it's actually implanted
+		if(L.implanted_mob == H) // a check if it's actually implanted
 			return ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED
 
 	if(isrev(H)) //HOW DO YOU FUCK UP THIS BADLY.

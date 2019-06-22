@@ -187,11 +187,11 @@ var/list/response_team_members = list()
 		W.icon_state = "ERT_leader"
 	equip_to_slot_or_del(W, slot_wear_id)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)
-	L.imp_in = src
-	L.implanted = 1
+	L.implanted_mob = src
+	L.implant_status = 1
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
-	L.part = affected
+	L.implanted_bodypart = affected
 
 	return 1
 

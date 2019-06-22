@@ -45,7 +45,7 @@
 		return 0
 	if(!(VAMP_CHARISMA in V.powers)) //Charisma allows implanted targets to be enthralled.
 		for(var/obj/item/weapon/implant/loyalty/L in H)
-			if(L && L.implanted)
+			if(L && L.is_implanted())
 				implanted = TRUE
 				break
 		/* Greytide implantes - to fix

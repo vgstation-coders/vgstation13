@@ -154,22 +154,7 @@
 	..()
 	to_chat(user, "The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
 
-//Health Tracker Implant
-
-/obj/item/weapon/implant/health
-	name = "health implant"
-	var/healthstring = ""
-
-/obj/item/weapon/implant/health/proc/sensehealth()
-	if (!implanted)
-		return "ERROR"
-	else
-		if(isliving(implanted))
-			var/mob/living/L = implanted
-			healthstring = "[round(L.getOxyLoss())] - [round(L.getFireLoss())] - [round(L.getToxLoss())] - [round(L.getBruteLoss())]"
-		if (!healthstring)
-			healthstring = "ERROR"
-		return healthstring
+//Clonepod
 
 /obj/machinery/cloning/clonepod/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
@@ -183,8 +168,6 @@
 		var/completion = (100 * ((occupant.health + 100) / (heal_level + 100)))
 		to_chat(user, "Current clone cycle is [round(completion)]% complete.")
 	return
-
-//Clonepod
 
 //Start growing a human clone in the pod!
 /obj/machinery/cloning/clonepod/proc/growclone(var/datum/dna2/record/R)
