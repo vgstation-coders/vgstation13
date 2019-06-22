@@ -203,9 +203,10 @@
 			else if(fixture.fitting == "bulb") 
 				fixture.current_bulb = new /obj/item/weapon/light/bulb/cultist
 			fixture.update()
+		spawn(30)
+			if(spell_holder)
+				qdel(spell_holder)
 	spawn(30)
-		if(spell_holder)
-			qdel(spell_holder)
 		qdel(src)
 	
 /datum/rune_spell/friendly_cult/cultify_lights/Destroy()
