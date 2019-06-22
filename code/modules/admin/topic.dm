@@ -4089,15 +4089,6 @@
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
-
-			if ("standardcommandreport")
-				var/list/possible_reports = list()
-				for (var/report_type in subtypesof(/datum/command_alert/))
-					var/datum/command_alert/alert = report_type
-					possible_reports[initial(alert.name)] = report_type
-				var/datum/command_alert/choice = input(usr,"Which report to send in?","Standard Command Report",null) as null|anything in possible_reports
-				command_alert(choice)
-				log_admin("[key_name(usr)] sent the command report: [choice], [initial(choice.name)]")
 		
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
