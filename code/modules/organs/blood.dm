@@ -287,8 +287,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		for (var/ID in blood_viruses)
 			var/datum/disease2/disease/D = blood_viruses[ID]
 			infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
-	//TODO: VIROLOGY REWRITE PART 2
-	//if (injected.data["antibodies"] && prob(5))
+	//if (injected.data["antibodies"] && prob(5)) maybe I'll readd that somewhere in the future
 	//	antibodies |= injected.data["antibodies"]
 	var/list/chems = list()
 	chems = params2list(injected.data["trace_chem"])

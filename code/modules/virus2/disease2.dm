@@ -104,10 +104,6 @@ var/global/list/disease2_list = list()
 			var/datum/disease2/effect/e = new_random_effect(3, 0, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
-	uniqueID = rand(0,9999)
-	subID = rand(0,9999)
-	childID = 0
-	disease2_list["[uniqueID]"] = src
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	roll_antigen()
@@ -230,19 +226,30 @@ var/global/list/disease2_list = list()
 		ticks = 0
 
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
-	if(!starved)
+	if(starved)
 		return
 
 	var/list/immune_data = GetImmuneData(mob)
 
 	for(var/datum/disease2/effect/e in effects)
-		if (e.can_run_effect(immune_data[0]))
+		if (e.can_run_effect(immune_data[1]))
 			e.run_effect(mob)
 
 	//fever is a reaction of the body's immune system to the infection. The higher the antibody concentration (and the disease still not cured), the higher the fever
 	if (mob.bodytemperature < BODYTEMP_HEAT_DAMAGE_LIMIT)//but we won't go all the way to burning up just because of a fever, probably
-		var/fever = round((robustness / 100) * (immune_data[1] / 10) * (stage / max_stage))
-		mob.bodytemperature += fever
+		var/fever = round((robustness / 100) * (immune_data[2] / 10) * (stage / max_stage))
+		switch (mob.size)
+			if (SIZE_TINY)
+				mob.bodytemperature += fever*0.2
+			if (SIZE_SMALL)
+				mob.bodytemperature += fever*0.5
+			if (SIZE_NORMAL)
+				mob.bodytemperature += fever
+			if (SIZE_BIG)
+				mob.bodytemperature += fever*1.5
+			if (SIZE_HUGE)
+				mob.bodytemperature += fever*2
+
 		if (fever > 0  && prob(3))
 			switch (fever_warning)
 				if (0)
@@ -366,7 +373,11 @@ var/global/list/disease2_list = list()
 	mob.virus2.Remove("[uniqueID]-[subID]")
 	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
 	if (V && V.len <= 0)
-		infected_contact_mobs -= src
+		infected_contact_mobs -= mob
+		if (mob.pathogen)
+			for (var/mob/living/L in science_goggles_wearers)
+				if (L.client)
+					L.client.images -= mob.pathogen
 
 /datum/disease2/disease/proc/get_effect(var/index)
 	if(!index)

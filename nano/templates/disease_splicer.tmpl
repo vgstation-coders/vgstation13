@@ -60,9 +60,11 @@
 		{{if data.dish_error == "no dish inserted"}}
 			No dish inserted.
 		{{else data.dish_error == "no virus in dish"}}
-			No virus found in containment dish.
+			No virus found in the containment dish.
+		{{else data.dish_error == "dish not analysed"}}
+			The containment dish has no analysis data.<br>It has to be analysed before the pathogen's genes can be manipulated.
 		{{else data.dish_error == "not enough cells"}}
-			Dish growth insufficient, incubate the dish with some virus food until reaching at least 50% growth.
+			Dish growth insufficient for gene manipulation.<br>Incubate the dish with some virus food until reaching at least 50% growth.
 		{{else}}
 			Unknown error!
 		{{/if}}

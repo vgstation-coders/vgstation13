@@ -620,6 +620,9 @@ Thanks.
 		H.updatehealth()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
+	for (var/ID in virus2)
+		var/datum/disease2/disease/V = virus2[ID]
+		V.cure(src)
 	if(stat == DEAD)
 		resurrect()
 		tod = null
@@ -637,7 +640,6 @@ Thanks.
 
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
-	return
 
 /mob/living/proc/UpdateDamageIcon()
 	return

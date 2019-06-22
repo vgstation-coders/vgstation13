@@ -24,8 +24,18 @@
 /obj/machinery/computer/med_data/attack_paw(user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/computer/med_data/attack_hand(mob/user as mob)
-	if(..())
+/obj/machinery/computer/med_data/attack_hand(var/mob/user)
+	. = ..()
+
+	if(stat & (BROKEN|NOPOWER))
+		if (scan)
+			scan.forceMove(loc)
+			if(!user.get_active_hand())
+				user.put_in_hands(scan)
+			scan = null
+
+
+	if(.)
 		return
 	var/dat
 	if (src.temp)

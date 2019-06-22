@@ -377,6 +377,7 @@
 	if(..())
 		return 1
 
+	//--------------OLD DISEASE CODE----------------------
 	if(self.data && self.data["viruses"])
 		for(var/datum/disease/D in self.data["viruses"])
 			//var/datum/disease/virus = new D.type(0, D, 1)
@@ -386,8 +387,9 @@
 				M.contract_disease(D)
 			else //Injected
 				M.contract_disease(D, 1, 0)
+	//----------------------------------------------------
 
-	if(iscarbon(M) || ismouse(M))
+	if(iscarbon(M))
 		var/mob/living/L = M
 		if(self.data && self.data["virus2"]) //Infecting
 			var/list/blood_viruses = self.data["virus2"]
@@ -404,9 +406,43 @@
 								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
-		//TODO: VIROLOGY REWRITE PART 2
-		//if(self.data && self.data["antibodies"]) //And curing
-		//	L.antibodies |= self.data["antibodies"]
+
+		if(ishuman(L) && (method == TOUCH))
+			var/mob/living/carbon/human/H = L
+			H.bloody_body(self.data["donor"])
+			if(self.data["donor"])
+				H.bloody_hands(self.data["donor"])
+			spawn() //Bloody feet, result of the blood that fell on the floor
+				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
+
+				if(B)
+					B.Crossed(H)
+
+			H.update_icons()
+
+/datum/reagent/blood/reaction_animal(var/mob/living/simple_animal/M, var/method = TOUCH, var/volume)
+
+	var/datum/reagent/blood/self = src
+	if(..())
+		return 1
+
+	if(ismouse(M))//for now, only mice can be infected.
+		var/mob/living/L = M
+		if(self.data && self.data["virus2"]) //Infecting
+			var/list/blood_viruses = self.data["virus2"]
+			if (istype(blood_viruses) && blood_viruses.len > 0)
+				for (var/ID in blood_viruses)
+					var/datum/disease2/disease/D = blood_viruses[ID]
+					if(method == TOUCH)
+						var/block = L.check_contact_sterility(FULL_TORSO)
+						var/bleeding = L.check_bodypart_bleeding(FULL_TORSO)
+						if (!block)
+							if (D.spread & SPREAD_CONTACT)
+								L.infect_disease2(D, notes="(Contact, splashed with infected blood)")
+							else if (bleeding && (D.spread & SPREAD_BLOOD))
+								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
+					else
+						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 
 		if(ishuman(L) && (method == TOUCH))
 			var/mob/living/carbon/human/H = L
