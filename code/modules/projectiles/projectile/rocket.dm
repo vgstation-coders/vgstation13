@@ -9,7 +9,7 @@
 	flag = "bullet"
 	var/embed = 1
 	var/explosive = 1
-	var/picked_up_speed = 5
+	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/process_step()

@@ -97,7 +97,7 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
-	initialize_cultwords()
+	initialize_runesets()
 
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()

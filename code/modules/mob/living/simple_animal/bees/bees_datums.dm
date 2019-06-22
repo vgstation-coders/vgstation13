@@ -1,4 +1,6 @@
 
+var/bees_count = 0
+
 /datum/bee
 	var/mob/living/simple_animal/bee/mob = null
 	var/obj/machinery/apiary/home = null
@@ -20,6 +22,7 @@
 	..()
 	if(!bees_species[BEESPECIES_NORMAL])
 		initialize_beespecies()
+	bees_count++
 	species = bees_species[BEESPECIES_NORMAL]
 	if (spawner)
 		home = spawner
@@ -56,6 +59,7 @@
 	qdel(src)
 
 /datum/bee/Destroy()
+	bees_count--
 	if (mob)
 		mob.bees.Remove(src)
 		mob = null
