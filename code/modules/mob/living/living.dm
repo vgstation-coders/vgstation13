@@ -1231,7 +1231,7 @@ Thanks.
 
 	if(client.move_delayer.blocked())
 		return
-	delayNextMove(10)
+	delayNextMove(3)
 	resting = !resting
 	update_canmove()
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
