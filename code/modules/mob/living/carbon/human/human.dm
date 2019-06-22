@@ -1888,9 +1888,17 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
 		return FALSE
-	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
+	var/crawldelay = 0.2 SECONDS
+	if (crawlcounter >= max_crawls_before_fatigue)
+		if (prob(10))
+			to_chat(src, "<span class='warning'>You get tired from all this crawling around.</span>")
+		crawldelay = round(1 + base_movement_tally()/10) * 3 SECONDS
+		crawlcounter = 1
+	else
+		crawlcounter++
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
-	delayNextMove(crawldelay, additive=1)
+	delayNextMove(crawldelay, additive = 1)
+
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
