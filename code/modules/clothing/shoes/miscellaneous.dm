@@ -359,7 +359,7 @@ obj/item/clothing/shoes/jackboots/cowboy
 	
 /obj/item/clothing/shoes/purplepumps
 	name = "purple pumps"
-	desc = "Makes you seem slightly taller."
+	desc = "Make you seem slightly taller."
 	icon_state = "purplepumps"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 

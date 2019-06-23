@@ -18,7 +18,7 @@
 	
 /obj/item/clothing/under/rank/btc_bartender
 	desc = "Sanctioned by the BTC. Including the tights."
-	name = "bartender's uniform"
+	name = "BTC bartender's uniform"
 	icon_state = "btc_bartender"
 	item_state = "btc_bartender"
 	_color = "btc_bartender"
