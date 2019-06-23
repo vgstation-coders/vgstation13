@@ -362,6 +362,17 @@ Class Procs:
 			update_multitool_menu(usr)
 			return 1
 
+/obj/machinery/proc/is_on_same_z(var/mob/user)
+	var/turf/T = get_turf(user)
+	if(!isAI(user) && T.z != z && user.z != map.zCentcomm)
+		return FALSE
+	return TRUE
+
+/obj/machinery/proc/is_in_range(var/mob/user)
+	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		return FALSE
+	return TRUE
+
 /obj/machinery/Topic(href, href_list)
 	..()
 	if(stat & (NOPOWER|BROKEN))
@@ -377,12 +388,10 @@ Class Procs:
 		if (!usr.dexterity_check())
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return 1
-		var/turf/T = get_turf(usr)
-		if(!isAI(usr) && T.z != z)
-			if(usr.z != map.zCentcomm)
-				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
-				return 1
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 1
+		if(!is_in_range(usr))
 			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
