@@ -49,8 +49,8 @@
 
 	component_parts = newlist(
 		board_path,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/subspace/transmitter,
 		/obj/item/weapon/stock_parts/subspace/crystal,
 		/obj/item/weapon/stock_parts/subspace/amplifier,
