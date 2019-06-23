@@ -20,7 +20,7 @@
 	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
 
-/obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
+/obj/item/projectile/proc/apply_taser_effect(var/mob/living/X, var/blocked)
 	if (ismanifested(X))
 		X.visible_message("<span class='danger'>\The [X] seems to completely ignore \the [src] that hit them.</span>","<span class='warning'>You can barely feel at all \the [src]'s electrical discharge.</span>")
 		return
@@ -35,6 +35,9 @@
 	X.tazed = 1
 	spawn(30)
 		X.tazed = 0
+
+/obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
+	apply_taser_effect(X, blocked)
 
 
 /*/vg/ EDIT

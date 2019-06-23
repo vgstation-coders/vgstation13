@@ -182,10 +182,16 @@
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
 	icon_state = "sshell"
-	damage = 5
+	nodamage = 1
 	stun = 5
 	weaken = 5
 	stutter = 5
+	jittery = 5
+	agony = 10
+	hitsound = 'sound/weapons/taserhit.ogg'
+
+/obj/item/projectile/bullet/stunshot/hit_apply(var/mob/living/X, var/blocked)
+	apply_taser_effect(X, blocked)
 
 /obj/item/projectile/bullet/a762
 	damage = 25
