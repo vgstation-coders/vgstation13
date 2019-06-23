@@ -356,9 +356,8 @@
 	if(isnull(occupant))
 		return
 	if(user)
-		to_chat(user, "You force an emergency ejection.")
-	locked = FALSE
-	go_out()
+		to_chat(user, "You scramble the cloning pod's genetic data, turning the occupant into mush.")
+	malfunction()
 	return
 
 /obj/machinery/cloning/clonepod/crowbarDestroy(mob/user)
