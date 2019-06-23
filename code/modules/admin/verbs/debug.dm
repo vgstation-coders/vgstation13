@@ -1244,7 +1244,17 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen
+	var/list/lst = list()
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+	if(!argnum && (argnum!=0))
+		return
+
+	lst.len = argnum // Expand to right length
+
+	for(var/i = 1 to argnum) // Lists indexed from 1 forwards in byond
+		lst[i] = variable_set(src)
+
+	holder.marked_datum = new chosen(arglist(lst))
 
 	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
