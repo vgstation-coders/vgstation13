@@ -26,7 +26,6 @@
 	modules += new /obj/item/device/rcd/rpd(src)
 	modules += new /obj/item/device/rcd/tile_painter(src)
 	modules += new /obj/item/blueprints/mommiprints(src)
-	modules += new /obj/item/device/material_synth/robot/mommi(src)
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
@@ -60,6 +59,13 @@
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 
+/obj/item/weapon/robot_module/mommi/nt/New(var/mob/living/silicon/robot/R)
+	..()
+
+	modules += new /obj/item/device/material_synth/robot/mommi(src)
+
+	fix_modules()
+
 //Derelict MoMMI
 /obj/item/weapon/robot_module/mommi/soviet
 	name = "russian remont robot module"
@@ -72,10 +78,6 @@
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
 
-	var/atom/A = locate(/obj/item/device/material_synth/robot/mommi) in src
-	if(A)
-		modules.Remove(A)
-		qdel(A)
 	modules += new /obj/item/device/material_synth/robot/soviet(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
@@ -83,6 +85,8 @@
 	modules += new /obj/item/weapon/soap/syndie(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
+
+	fix_modules()
 
 /obj/item/weapon/robot_module/mommi/cogspider
 	name = "Gravekeeper belt of holding."
