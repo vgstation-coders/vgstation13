@@ -384,6 +384,7 @@
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M
+			flick("mouse_[N._color]_eat", N)
 			if(prob(25)) //We are noticed
 				N.visible_message("[N] nibbles away at \the [src].", "<span class='notice'>You nibble away at \the [src].</span>")
 			else

@@ -48,6 +48,8 @@ var/global/list/disease2_list = list()
 	var/pattern = 1
 	var/pattern_color
 
+	//pathogenic warfare
+	var/list/can_kill = list("Bacteria")
 
 /datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
 	form = "Bacteria"
@@ -55,18 +57,21 @@ var/global/list/disease2_list = list()
 	infectionchance = 90
 	stageprob = 30
 	stage_variance = -4
+	can_kill = list("Parasite")
 
 /datum/disease2/disease/parasite//slower spread. stage preserved on spread
 	form = "Parasite"
 	infectionchance = 50
 	stageprob = 10
 	stage_variance = 0
+	can_kill = list("Virus")
 
 /datum/disease2/disease/prion//very fast progression, but very slow spread and resets to stage 1.
 	form = "Prion"
 	infectionchance = 10
 	stageprob = 80
 	stage_variance = -10
+	can_kill = list()
 
 /datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,9999)
@@ -224,6 +229,15 @@ var/global/list/disease2_list = list()
 		stage++
 		log += "<br />[timestamp()] NEXT STAGE ([stage])"
 		ticks = 0
+
+	//Pathogen killing each others
+	for (var/ID in mob.virus2)
+		if (ID == "[uniqueID]-[subID]")
+			continue
+		var/datum/disease2/disease/enemy_pathogen = mob.virus2[ID]
+		if ((enemy_pathogen.form in can_kill) && strength > enemy_pathogen.strength)
+			log += "<br />[timestamp()] destroyed enemy [enemy_pathogen.form] #[ID] ([strength] > [enemy_pathogen.strength])"
+			enemy_pathogen.cure(mob)
 
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(starved)
@@ -451,6 +465,7 @@ var/global/list/disease2_list = list()
 	disease.color = color
 	disease.pattern = pattern
 	disease.pattern_color = pattern_color
+	disease.can_kill = can_kill.Copy()
 	for(var/datum/disease2/effect/e in effects)
 		disease.effects += e.getcopy(disease)
 	return disease
@@ -520,8 +535,10 @@ var/global/list/virusDB = list()
 	v.fields["child"] = childID
 	v.fields["form"] = form
 	v.fields["name"] = name()
+	v.fields["nickname"] = ""
 	v.fields["description"] = get_info()
-	v.fields["antigen"] = antigen
+	v.fields["antigen"] = get_antigen_string()
 	v.fields["spread type"] = get_spread_string()
+	v.fields["danger"] = "Undetermined"
 	virusDB["[uniqueID]-[subID]"] = v
 	return 1

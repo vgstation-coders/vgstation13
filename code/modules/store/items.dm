@@ -129,6 +129,12 @@
 	typepath = /obj/item/mounted/frame/painting
 	cost = 700
 
+/datum/storeitem/critter_cage
+	name = "small cage"
+	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
+	typepath = /obj/item/critter_cage
+	cost = 60
+
 /////////////////////////////
 // Holiday Special Items!
 /////////////////////////////

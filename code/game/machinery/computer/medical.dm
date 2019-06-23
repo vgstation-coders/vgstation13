@@ -106,7 +106,7 @@
 					*/
 					for (var/ID in virusDB)
 						var/datum/data/record/v = virusDB[ID]
-						dat += "<br><a href='?src=\ref[src];vir=\ref[v]'>[v.fields["name"]]</a>"
+						dat += "<br><a href='?src=\ref[src];vir=\ref[v]'>[v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</a>"
 
 					dat += "<br><a href='?src=\ref[src];screen=1'>Back</a>"
 				if(6.0)
@@ -137,6 +137,17 @@
 	user << browse(text("<HEAD><TITLE>Medical Records</TITLE></HEAD><TT>[]</TT>", dat), "window=med_rec")
 	onclose(user, "med_rec")
 	return
+
+/obj/machinery/computer/med_data/proc/pathogen_dat(var/datum/data/record/v)
+	var/dat = "<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>"
+	//src.temp += "<br><b>Name:</b> <A href='?src=\ref[src];field=vir_name;edit_vir=\ref[v]'>[v.fields["name"]]</A>"
+	dat += "<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>"
+	dat += "<br><b>Dangerosity:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>"
+	dat += "<br><b>Antigen:</b> [v.fields["antigen"]]"
+	dat += "<br><b>Spread:</b> [v.fields["spread type"]] "
+	dat += "<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
+	dat += "<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"
+	return dat
 
 /obj/machinery/computer/med_data/Topic(href, href_list)
 	if(..())
@@ -217,12 +228,7 @@
 
 			if(href_list["vir"])
 				var/datum/data/record/v = locate(href_list["vir"])
-				src.temp = "<center>GNAv2 [v.fields["form"]] V-[v.fields["id"]]</center>"
-				src.temp += "<br><b>Name:</b> <A href='?src=\ref[src];field=vir_name;edit_vir=\ref[v]'>[v.fields["name"]]</A>"
-				src.temp += "<br><b>Antigen:</b> [v.fields["antigen"]]"
-				src.temp += "<br><b>Spread:</b> [v.fields["spread type"]] "
-				src.temp += "<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
-				temp += "<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"
+				temp = pathogen_dat(v)
 
 			if (href_list["del_all"])
 				src.temp = text("Are you sure you wish to delete all records?<br>\n\t<A href='?src=\ref[];temp=1;del_all2=1'>Yes</A><br>\n\t<A href='?src=\ref[];temp=1'>No</A><br>", src, src)
@@ -325,6 +331,7 @@
 							if ((!( t1 ) || !( src.authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || src.active1 != a1))
 								return
 							src.active1.fields["dna"] = t1
+					/*
 					if("vir_name")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
 						if (v)
@@ -332,6 +339,15 @@
 							if ((!( t1 ) || !( src.authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || src.active1 != a1))
 								return
 							v.fields["name"] = t1
+					*/
+					if("vir_nickname")
+						var/datum/data/record/v = locate(href_list["edit_vir"])
+						if (v)
+							var/t1 = copytext(sanitize(input("Please input pathogen nickname:", "VirusDB", v.fields["nickname"], null)  as text),1,MAX_MESSAGE_LEN)
+							if ((!( t1 ) || !( src.authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || src.active1 != a1))
+								return
+							v.fields["nickname"] = t1
+							temp = pathogen_dat(v)
 					if("vir_desc")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
 						if (v)
@@ -339,6 +355,11 @@
 							if ((!( t1 ) || !( src.authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || src.active1 != a1))
 								return
 							v.fields["description"] = t1
+							temp = pathogen_dat(v)
+					if("danger_vir")
+						var/datum/data/record/v = locate(href_list["edit_vir"])
+						if (v)
+							src.temp = text("<B>Pathogen Dangerosity:</B><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=dangerous;edit_vir=\ref[v]'>*DANGEROUS*</A><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=undetermined;edit_vir=\ref[v]'>Undetermined</A><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=safe;edit_vir=\ref[v]'>Safe</A><BR>", src, src, src)
 					if("del_vir")
 						var/datum/data/record/V = locate(href_list["del_vir"])
 						if(V)
@@ -395,6 +416,17 @@
 						if("op")
 							src.active2.fields["b_type"] = "O+"
 
+			if (href_list["danger_vir"])
+				var/datum/data/record/v = locate(href_list["edit_vir"])
+				if (v)
+					switch(href_list["danger_vir"])
+						if("dangerous")
+							v.fields["danger"] = "*DANGEROUS*"
+						if("undetermined")
+							v.fields["danger"] = "Undetermined"
+						if("safe")
+							v.fields["danger"] = "Safe"
+					temp = pathogen_dat(v)
 
 			if (href_list["del_r"])
 				if (src.active2)

@@ -182,7 +182,7 @@
 		else
 			if(blood.data && blood.data["virus2"])
 				var/list/blood_diseases = blood.data["virus2"]
-				if (blood_diseases.len > 0)
+				if (blood_diseases && blood_diseases.len > 0)
 					dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (pathogen detected)</a> <A href='?src=\ref[src];isolate=[slot]'>ISOLATE TO DISH</a> [valid ? "<A href='?src=\ref[src];synthvaccine=[slot]'>SYNTHESIZE VACCINE</a>" : "(not enough antibodies for a vaccine)"]"
 				else
 					dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (no pathogen detected)</a> [valid ? "<A href='?src=\ref[src];synthvaccine=[slot]'>SYNTHESIZE VACCINE</a>" : "(not enough antibodies for a vaccine)"]"
