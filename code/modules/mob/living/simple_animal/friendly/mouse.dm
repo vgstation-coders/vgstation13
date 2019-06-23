@@ -90,7 +90,7 @@
 	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
 	//------------------------DISEASE STUFF--------------------------------------------------------
-	if(!locked_to || !istype(locked_to,/obj/item/mouse_cage))//cages isolate from diseases
+	if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from diseases
 		find_nearby_disease()//getting diseases from
 
 		if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
@@ -115,14 +115,17 @@
 	if(!isUnconscious())
 		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
 
-		if(locked_to && istype(locked_to,/obj/item/mouse_cage))
-			var/obj/item/mouse_cage/cage = locked_to
+		var/caged = 0
+		if(locked_to && istype(locked_to,/obj/item/critter_cage))
+			var/obj/item/critter_cage/cage = locked_to
+			caged = 1
 			//if there's some reagent in the bottle, let's drink it at once
 			if(cage.reagents.total_volume)
 				dir = EAST
 				cage.reagents.reaction(src, INGEST)
 				spawn(5)
 					if(cage.reagents)
+						flick("mouse_[_color]_eat", src)
 						cage.reagents.trans_to(src, 1)
 			//otherwise let's just look around like a dumb mouse
 			else if (prob(25))
@@ -135,8 +138,13 @@
 		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
-			step_towards(src, food_target)
+			if (!locked_to)
+				step_towards(src, food_target)
+			else
+				dir = get_dir(src, food_target)
 			if(Adjacent(food_target))
+				if (caged && food_target.loc == loc)
+					dir = SOUTH
 				food_target.attack_animal(src)
 
 		if(prob(10))
@@ -354,15 +362,18 @@
 
 /mob/living/simple_animal/mouse/white/balbc
 	name = "Pinky"
-	desc = "A lab mouse of the BALB/c strain. Very docile, though anxious."
+	desc = "A lab mouse of the BALB/c strain (Mus Musculus). Very docile, though they become easily anxious."
 	_color = "balbc"
 	icon_state = "mouse_balbc"
 	namenumbers = FALSE
 
 /mob/living/simple_animal/mouse/white/balbc/New()
 	..()
-	if (prob(50))
-		name = "\improper Brain"
+	name = pick(
+		"Pinky",
+		"\improper Brain",
+		"Nibbles",
+		)
 
 /mob/living/simple_animal/mouse/gray
 	_color = "gray"

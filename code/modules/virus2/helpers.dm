@@ -278,10 +278,20 @@ proc/virus2_greater_infection()
 // Returns 1 if patient has virus2 that medHUDs would pick up.
 // Otherwise returns 0
 /proc/has_recorded_virus2(var/mob/living/carbon/patient)
+	var/highest_danger = 0
 	for (var/ID in patient.virus2)
 		if (ID in virusDB)
-			return 1
-	return 0
+			highest_danger = max(highest_danger,1)
+			var/datum/data/record/v = virusDB[ID]
+			if (v.fields["danger"])
+				switch (v.fields["danger"])
+					if ("*DANGEROUS*")
+						highest_danger = max(highest_danger,3)
+					if ("Undetermined")
+						highest_danger = max(highest_danger,1)
+					if ("Safe")
+						highest_danger = max(highest_danger,2)
+	return highest_danger
 
 // This one doesn't really belong here, but old disease code has no helpers, so
 // Returns 1 if patient has old-style disease that medHUDs would pick up.

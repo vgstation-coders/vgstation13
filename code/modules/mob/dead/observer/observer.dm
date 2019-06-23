@@ -275,7 +275,7 @@ Works together with spawning an observer, noted above.
 		if(patient && patient.virus2 && patient.virus2.len)
 			foundVirus = 1
 		else if (patient && patient.viruses && patient.viruses.len)
-			foundVirus = 1
+			foundVirus = 2
 		if(!C)
 			return
 		holder = patient.hud_list[HEALTH_HUD]
@@ -293,7 +293,10 @@ Works together with spawning an observer, noted above.
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(foundVirus)
-				holder.icon_state = "hudill"
+				if (foundVirus > 1)
+					holder.icon_state = "hudill_old"
+				else
+					holder.icon_state = "hudill"
 			else if(patient.has_brain_worms())
 				var/mob/living/simple_animal/borer/B = patient.has_brain_worms()
 				if(B.controlling)

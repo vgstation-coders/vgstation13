@@ -1,5 +1,5 @@
 
-/obj/item/mouse_cage
+/obj/item/critter_cage
 	name = "small cage"
 	desc = "A safe place where to keep tiny animals safe. Fit with a drinking bottle that can be refilled."
 	icon = 'icons/obj/virology.dmi'
@@ -11,71 +11,82 @@
 
 	var/lock_type = /datum/locking_category/buckle/cage
 
-	var/mob/living/simple_animal/mouse/mouse = null
+	var/mob/living/simple_animal/critter = null
 
 
-/obj/item/mouse_cage/New()
+/obj/item/critter_cage/New()
 	..()
 	create_reagents(10)
 
-/obj/item/mouse_cage/Destroy()
-	if (mouse)
-		unlock_atom(mouse)
-		mouse.pixel_x = 0
-		mouse.pixel_y = 0
-		mouse = null
+/obj/item/critter_cage/Destroy()
+	if (critter)
+		unlock_atom(critter)
+		critter.pixel_x = 0
+		critter.pixel_y = 0
+		critter = null
 	..()
 
 /datum/locking_category/buckle/cage
 
-/obj/item/mouse_cage/attack_paw(var/mob/user)
+/obj/item/critter_cage/attack_paw(var/mob/user)
 	return attack_hand(user)
 
-/obj/item/mouse_cage/attack_hand(var/mob/user)
-	if (mouse)
+/obj/item/critter_cage/attack_hand(var/mob/user)
+	if (critter)
 		if( !user.get_active_hand() )
-			unlock_atom(mouse)
-			mouse.pixel_x = 0
-			mouse.pixel_y = 0
-			mouse.scoop_up(user)
-			user.visible_message("<span class='notice'>[user] picks up \the [mouse].</span>", "<span class='notice'>You pick up \the [mouse].</span>")
-			mouse = null
+			unlock_atom(critter)
+			critter.pixel_x = 0
+			critter.pixel_y = 0
+			critter.scoop_up(user)
+			user.visible_message("<span class='notice'>[user] picks up \the [critter].</span>", "<span class='notice'>You pick up \the [critter].</span>")
+			critter = null
 	else
 		MouseDropFrom(user)
 
-/obj/item/mouse_cage/attackby(var/obj/O,var/mob/user)
+/obj/item/critter_cage/attackby(var/obj/O,var/mob/user)
 	. = ..()
 
-	if (!mouse && istype (O,/obj/item/weapon/holder/animal/mouse))
-		var/obj/item/weapon/holder/animal/mouse/store = O
-		var/mob/living/simple_animal/mouse/inside = store.stored_mob
+	if (!critter && istype (O,/obj/item/weapon/holder/animal))
+		var/obj/item/weapon/holder/animal/store = O
+		var/mob/living/simple_animal/inside = store.stored_mob
+		if (inside.size > SIZE_TINY)
+			to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
+			return
 		if(!user.drop_item(O, loc))
 			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
 			return
-		mouse = inside
+		critter = inside
 		qdel(store)
-		mouse.forceMove(loc)
-		mouse.pixel_x = pixel_x
-		mouse.pixel_y = pixel_y+5
-		lock_atom(mouse,lock_type)
+		critter.forceMove(loc)
+		critter.pixel_x = pixel_x
+		critter.pixel_y = pixel_y+5
+		lock_atom(critter,lock_type)
 
-/obj/item/mouse_cage/pickup(mob/user)
-	if (mouse)
-		mouse.forceMove(src)
-		var/image/I = image(mouse.icon, src, mouse.icon_state, layer+1, mouse.dir)
+	if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
+		if(!user.drop_item(O, loc))
+			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+			return
+		O.forceMove(loc)
+		O.pixel_x = pixel_x
+		O.pixel_y = pixel_y-9
+
+/obj/item/critter_cage/pickup(var/mob/user)
+	if (critter)
+		critter.forceMove(src)
+		var/image/I = image(critter.icon, src, critter.icon_state, layer+1, critter.dir)
 		I.pixel_y = 5
 		overlays += I
 
-/obj/item/mouse_cage/dropped(mob/user)
+/obj/item/critter_cage/dropped(var/mob/user)
 	overlays.len = 0
 	spawn(1)
-		if (mouse)
-			mouse.forceMove(loc)
-			mouse.pixel_x = pixel_x
-			mouse.pixel_y = pixel_y+5
+		if (critter)
+			critter.forceMove(loc)
+			critter.pixel_x = pixel_x
+			critter.pixel_y = pixel_y+5
 
 
-/obj/item/mouse_cage/MouseDropFrom(var/over_object)
+/obj/item/critter_cage/MouseDropFrom(var/over_object)
 	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
 		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
 			if(istype(over_object,/obj/abstract/screen/inventory))
