@@ -555,6 +555,12 @@ var/global/datum/controller/occupations/job_master
 		else
 			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
 
+	if (H.client.IsByondMember())
+		to_chat(world, "Thank you for supporting BYOND!")
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/weapon/thermometer(H))
+		else
+			H.equip_or_collect(new /obj/item/weapon/thermometer(H), slot_in_backpack)
 	return 1
 
 
