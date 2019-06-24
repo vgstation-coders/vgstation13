@@ -18,6 +18,7 @@
 	var/enteranim = "liquify"
 	var/exitanim = "reappear"
 	var/mist = 1
+	var/movement_tally = 1 //The lower the value the faster the movement
 
 /image/jaunter
 
@@ -28,9 +29,9 @@
 	if(targets.len > 1)
 		mass_jaunt(targets, duration, enteranim, exitanim, mist)
 	else
-		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist)
+		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist, movement_tally)
 
-/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1)
+/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, movement_tally)
 	var/mobloc = get_turf(target)
 	var/previncorp = target.incorporeal_move //This shouldn't ever matter under usual circumstances
 	if(target.incorporeal_move == INCORPOREAL_ETHEREAL) //they're already jaunting, we have another fix for this but this is sane
@@ -45,7 +46,7 @@
 		steam.start()
 
 	//Turn on jaunt incorporeal movement, make him invincible and invisible
-	target.incorporeal_move = INCORPOREAL_ETHEREAL
+	target.incorporeal_move = movement_tally
 	target.invisibility = INVISIBILITY_MAXIMUM
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
@@ -138,6 +139,7 @@
 	enteranim = "phase_shift"
 	exitanim = "phase_shift2"
 	mist = 0
+	movement_tally = 2
 
 /spell/targeted/ethereal_jaunt/shift/alt
 	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
@@ -146,6 +148,7 @@
 	enteranim = "wraith2_phaseenter"
 	exitanim = "wraith2_phaseexit"
 	override_base = "cult"
+	movement_tally = 2
 
 /spell/targeted/ethereal_jaunt/vamp
 	name = "Mist Form (20)"
@@ -165,6 +168,7 @@
 	enteranim = "batify"
 	exitanim = "debatify"
 	mist = TRUE
+	movement_tally = 2
 
 	var/blood_cost = 20
 
