@@ -34,7 +34,7 @@
 /proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, movement_tally)
 	var/mobloc = get_turf(target)
 	var/previncorp = target.incorporeal_move //This shouldn't ever matter under usual circumstances
-	if(target.incorporeal_move == INCORPOREAL_ETHEREAL) //they're already jaunting, we have another fix for this but this is sane
+	if(target.incorporeal_move == movement_tally) //they're already jaunting, we have another fix for this but this is sane
 		return
 	target.unlock_from()
 	//Begin jaunting with an animation
