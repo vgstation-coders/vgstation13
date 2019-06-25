@@ -79,11 +79,14 @@
 
 /obj/item/critter_cage/dropped(var/mob/user)
 	overlays.len = 0
-	spawn(1)
-		if (critter)
-			critter.forceMove(loc)
-			critter.pixel_x = pixel_x
-			critter.pixel_y = pixel_y+5
+
+/obj/item/critter_cage/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
+	. = ..()
+
+	if (. && critter)
+		critter.forceMove(loc)
+		critter.pixel_x = pixel_x
+		critter.pixel_y = pixel_y+5
 
 
 /obj/item/critter_cage/MouseDropFrom(var/over_object)
