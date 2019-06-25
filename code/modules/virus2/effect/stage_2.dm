@@ -1,6 +1,7 @@
 /datum/disease2/effect/scream
 	name = "Loudness Syndrome"
 	desc = "Causes the infected to scream at random."
+	encyclopedia = ""
 	stage = 2
 	badness = 2
 
@@ -11,6 +12,7 @@
 /datum/disease2/effect/drowsness
 	name = "Automated Sleeping Syndrome"
 	desc = "Makes the infected feel more drowsy."
+	encyclopedia = "This may cause the infected to randomly fall asleep at times."
 	stage = 2
 	badness = 2
 
@@ -21,6 +23,7 @@
 /datum/disease2/effect/sleepy
 	name = "Resting Syndrome"
 	desc = "Causes the infected to collapse in random fits of narcolepsy"
+	encyclopedia = ""
 	stage = 2
 	badness = 3
 
@@ -31,6 +34,7 @@
 /datum/disease2/effect/blind
 	name = "Blackout Syndrome"
 	desc = "Inhibits the infected's ability to see."
+	encyclopedia = "Turning them blind for about 5 seconds."
 	stage = 2
 	badness = 3
 
@@ -40,7 +44,8 @@
 
 /datum/disease2/effect/cough//creates pathogenic clouds that may contain even non-airborne viruses.
 	name = "Anima Syndrome"
-	desc = "Causes the infected to cough rapidly, infecting people in their surroundings."
+	desc = "Causes the infected to cough rapidly, releasing pathogenic clouds."
+	encyclopedia = "This symptom enables even diseases that lack the Airborne vector to spread through the air."
 	stage = 2
 	badness = 2
 
@@ -105,6 +110,7 @@
 	name = "Refridgerator Syndrome"
 	desc = "Causes the infected to shiver at random."
 	stage = 2
+	badness = 1
 
 /datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
 	mob.say("*shiver")
@@ -113,6 +119,7 @@
 /datum/disease2/effect/hair
 	name = "Hair Loss"
 	desc = "Causes rapid hairloss in the infected."
+	encyclopedia = "Nothing that a trip in front of a mirror can't fix."
 	stage = 2
 	badness = 1
 
@@ -129,6 +136,7 @@
 /datum/disease2/effect/stimulant
 	name = "Adrenaline Extra"
 	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
+	encyclopedia = "Thankfully the pathogen keeps the production bellow overdose levels."
 	stage = 2
 	badness = 0
 
@@ -143,6 +151,7 @@
 /datum/disease2/effect/drunk
 	name = "Glasgow Syndrome"
 	desc = "Causes the infected to synthesize pure ethanol."
+	encyclopedia = "Without a cure, the infected's liver is sure to die, also effect strength increases the rate at which ethanol is synthesized."
 	stage = 2
 	badness = 4
 
@@ -184,6 +193,7 @@
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
 	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed, potentially carrying the pathogen."
+	encyclopedia = "People lingering on top of the dropped blood may accidentally become infected if they're not properly protected."
 	stage = 2
 	badness = 2
 
@@ -203,6 +213,7 @@
 /datum/disease2/effect/viralsputum
 	name = "Respiratory Putrification"
 	desc = "Causes the infected to cough up viral sputum over the floor, which acts as a pathogen carrier."
+	encyclopedia = "People lingering on top of the dropped blood may accidentally become infected if they're not properly protected."
 	stage = 2
 	badness = 2
 
@@ -219,6 +230,7 @@
 /datum/disease2/effect/lantern
 	name = "Lantern Syndrome"
 	desc = "Causes the infected to glow."
+	encyclopedia = "While useful at first glance, this also hinders the infected's capacity at hiding."
 	stage = 2
 	badness = 0
 
@@ -230,6 +242,7 @@
 /datum/disease2/effect/hangman
 	name = "Hanging Man's Syndrome"
 	desc = "Inhibits a portion of the infected's brain that controls speech, removing the infected's ability to speak vowels."
+	encyclopedia = "Highly irritating."
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
@@ -261,6 +274,7 @@
 /datum/disease2/effect/vitreous
 	name = "Vitreous resonance"
 	desc = "Causes the infected to shake uncontrollably, at the same frequency that is required to break glass."
+	encyclopedia = "They may accidentally break syringes, beakers, bottles and other glass containers they try to hold, which may harm or mysteriously heal your hand."
 	stage = 2
 	chance = 25
 	max_chance = 75
@@ -348,6 +362,7 @@
 /datum/disease2/effect/spiky_skin
 	name = "Porokeratosis Acanthus"
 	desc = "Causes the infected to generate keratin spines along their skin."
+	encyclopedia = "Touching or bumping into people may now severly injure them."
 	stage = 2
 	max_count = 1
 	badness = 3
@@ -415,6 +430,8 @@
 
 /datum/disease2/effect/vegan
 	name = "Vegan Syndrome"
+	desc = "Infected people will fall ill if they try to eat meat."
+	encyclopedia = ""
 	stage = 2
 	badness = 3
 
@@ -426,6 +443,7 @@
 /datum/disease2/effect/famine
 	name = "Faminous Potation"
 	desc = "The infected emanates a field that kills off plantlife. Lethal to species descended from plants."
+	encyclopedia = "Do not linger near Hydroponics or you will become the sworn enemy of all botanists."
 	stage = 2
 	max_multiplier = 3
 	badness = 3
@@ -466,6 +484,7 @@
 /datum/disease2/effect/calorieburn
 	name = "Caloric expenditure overefficiency"
 	desc = "Causes the infected to burn calories at a higher rate."
+	encyclopedia = "Higher Strength means accelerated metabolism."
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
@@ -488,6 +507,7 @@
 /datum/disease2/effect/calorieconserve
 	name = "Caloric expenditure defficiency"
 	desc = "Causes the infected to burn calories at a lower rate."
+	encyclopedia = "Higher Strength means decelerated metabolism."
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4

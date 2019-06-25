@@ -215,62 +215,6 @@ var/list/infected_items = list()
 				if (L.client)
 					L.client.images -= pathogen
 
-/*
-///////////////////////////////////////////
-//                                       //
-//          CREATING A VIRUS             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                       //
-///////////////////////////////////////////
-
-proc/virus2_lesser_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_lesser(candidates[1])
-
-//Infects mob M with random lesser disease, if he doesn't have one
-/proc/infect_mob_random_lesser(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D
-	if(prob(70))
-		D = new /datum/disease2/disease/bacteria("infect_mob_random_lesser")
-	else
-		D = new /datum/disease2/disease("infect_mob_random_lesser")
-	D.makerandom(FALSE, TRUE)
-	D.infectionchance = 1
-	M.virus2["[D.uniqueID]"] = D
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-proc/virus2_greater_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_greater(candidates[1])
-
-//Infects mob M with random greated disease, if he doesn't have one
-/proc/infect_mob_random_greater(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D
-	if(prob(30))
-		D = new /datum/disease2/disease/parasite("infect_mob_random_greater")
-	else
-		D = new /datum/disease2/disease("infect_mob_random_greater")
-	D.makerandom(TRUE, TRUE)
-	M.virus2["[D.uniqueID]"] = D
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //MEDHUD STUFF
