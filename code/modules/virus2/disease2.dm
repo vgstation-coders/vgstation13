@@ -93,6 +93,27 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]-[subID]"] = getcopy()
 
 
+/datum/disease2/disease/proc/clean_global_log()
+	var/ID = "[uniqueID]-[subID]"
+	if (ID in virusDB)
+		return
+	for (var/mob/living/L in mob_list)
+		if (ID in L.virus2)
+			return
+	for (var/obj/item/I in infected_items)
+		if (ID in I.virus2)
+			return
+	var/dishes = 0
+	for (var/obj/item/weapon/virusdish/dish in virusdishes)
+		if (dish.contained_virus)
+			if (ID == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
+				dishes++
+				if (dishes > 1)//counting the dish we're in currently
+					return
+	//If a pathogen that isn't in the database mutates, we check whether it infected anything, and remove it from the disease list if it didn't
+	//so we don't clog up the Diseases Panel with irrelevant mutations
+	disease2_list -= ID
+
 /datum/disease2/disease/proc/makerandom(var/list/bad = list(),var/list/str = list(), var/list/rob = list(), var/atom/source = null)
 	uniqueID = rand(0,9999)
 	subID = rand(0,9999)
@@ -532,6 +553,7 @@ var/global/list/disease2_list = list()
 
 //Major Mutations
 /datum/disease2/disease/proc/effectmutate(var/inBody=FALSE)
+	clean_global_log()
 	subID = rand(0,9999)
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e")
 	var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
@@ -549,6 +571,7 @@ var/global/list/disease2_list = list()
 	update_global_log()
 
 /datum/disease2/disease/proc/antigenmutate()
+	clean_global_log()
 	subID = rand(0,9999)
 	var/old_dat = get_antigen_string()
 	roll_antigen()
