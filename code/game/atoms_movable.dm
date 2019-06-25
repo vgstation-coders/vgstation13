@@ -1005,9 +1005,9 @@
 
 /atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
 	if(anchored)
-		return
+		return 0
 	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
-		return
+		return 0
 	var/list/params_list = params2list(params)
 	if(clamp)
 		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
@@ -1015,6 +1015,7 @@
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+	return 1
 
 //Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
 /atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)

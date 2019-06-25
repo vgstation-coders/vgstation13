@@ -444,19 +444,6 @@
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 
-		if(ishuman(L) && (method == TOUCH))
-			var/mob/living/carbon/human/H = L
-			H.bloody_body(self.data["donor"])
-			if(self.data["donor"])
-				H.bloody_hands(self.data["donor"])
-			spawn() //Bloody feet, result of the blood that fell on the floor
-				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
-
-				if(B)
-					B.Crossed(H)
-
-			H.update_icons()
-
 /datum/reagent/blood/on_merge(var/data)
 	if(data["blood_colour"])
 		color = data["blood_colour"]
