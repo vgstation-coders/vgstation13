@@ -142,7 +142,7 @@
 	var/dat = "<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>"
 	//src.temp += "<br><b>Name:</b> <A href='?src=\ref[src];field=vir_name;edit_vir=\ref[v]'>[v.fields["name"]]</A>"
 	dat += "<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>"
-	dat += "<br><b>Dangerosity:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>"
+	dat += "<br><b>Dangerousness:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>"
 	dat += "<br><b>Antigen:</b> [v.fields["antigen"]]"
 	dat += "<br><b>Spread:</b> [v.fields["spread type"]] "
 	dat += "<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
@@ -359,7 +359,7 @@
 					if("danger_vir")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
 						if (v)
-							src.temp = text("<B>Pathogen Dangerosity:</B><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=dangerous;edit_vir=\ref[v]'>*DANGEROUS*</A><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=undetermined;edit_vir=\ref[v]'>Undetermined</A><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=safe;edit_vir=\ref[v]'>Safe</A><BR>", src, src, src)
+							src.temp = text("<B>Pathogen Dangerousness:</B><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=dangerous;edit_vir=\ref[v]'>*DANGEROUS*</A><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=undetermined;edit_vir=\ref[v]'>Undetermined</A><BR>\n\t<A href='?src=\ref[];temp=1;danger_vir=safe;edit_vir=\ref[v]'>Safe</A><BR>", src, src, src)
 					if("del_vir")
 						var/datum/data/record/V = locate(href_list["del_vir"])
 						if(V)
