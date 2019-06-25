@@ -645,7 +645,7 @@ var/global/list/virusDB = list()
 	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
 	r += "<dl>"
 	for(var/datum/disease2/effect/e in effects)
-		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurence: <b>[e.chance]%</b>.</dt>"
+		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
 		r += "<dd>[e.desc]</dd>"
 	r += "</dl>"
 	r += "<BR>Antigen pattern: [get_antigen_string()]"
