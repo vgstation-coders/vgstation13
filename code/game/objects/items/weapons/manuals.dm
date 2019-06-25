@@ -737,8 +737,8 @@
 				<p>Simply place it on the Analyser and operate it. The process is very quick, but requires you to remain adjacent. After the process is done, the following occurs:</p>
 				<ul>
 				<li>a sticker appears on the dish that you can examine and that lets you check what is the disease's information, such as quick descriptions of its effects or its antigens
-				<li>this information is also added to the Pathogen Database which you can edit, and also give the disease a Nickname or set it's dangerosity.
-				<li>diseases analysed this way will now show up on medical HUDs, the icon will depend on the dangerosity set in the database.
+				<li>this information is also added to the Pathogen Database which you can edit, and also give the disease a Nickname or set it's dangerousness.
+				<li>diseases analysed this way will now show up on medical HUDs, the icon will depend on the dangerousness set in the database.
 				<li>their ID and name will appear in the results of scans from Health Analyzer, Immunity Scanner, and they will be recognized by other virology machines.
 				</ul>
 				<p>If a dish that was already analyzed had a major mutation, and you analyze it again, it will register in the Database under a separate entry, with a child ID.</p>
