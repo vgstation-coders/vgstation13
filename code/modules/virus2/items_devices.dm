@@ -360,6 +360,12 @@ var/list/virusdishes = list()
 	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
 
+/obj/item/weapon/disk/disease/examine()
+	..()
+	if(effect)
+		to_chat(user, "<span class='info'>Strength: [effect.multiplier]</span>")
+		to_chat(user, "<span class='info'>Occurrence: [effect.chance]</span>")
+
 /obj/item/weapon/disk/disease/zombie
 	name = "\improper Stubborn Brain Syndrome (Stage 4)"
 	effect = new /datum/disease2/effect/zombie
