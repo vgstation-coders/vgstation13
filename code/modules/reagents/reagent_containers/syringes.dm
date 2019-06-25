@@ -353,7 +353,7 @@
 
 /obj/item/weapon/reagent_containers/syringe/antiviral
 	name = "syringe (spaceacillin)"
-	desc = "Contains antiviral agents."
+	desc = "Contains a generic antipathogenic - used to reinforce the immune system and eliminate diseases."
 /obj/item/weapon/reagent_containers/syringe/antiviral/New()
 	..()
 	reagents.add_reagent(SPACEACILLIN, 15)

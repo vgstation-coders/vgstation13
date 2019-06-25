@@ -3106,7 +3106,7 @@
 	reagents.clear_reagents()
 
 	var/datum/disease2/disease/new_virus = new /datum/disease2/disease
-	new_virus.makerandom()
+	new_virus.makerandom(list(2,4),list(40,60),list(20,90),src)
 
 	var/list/blood_data = list(
 		"donor" = null,

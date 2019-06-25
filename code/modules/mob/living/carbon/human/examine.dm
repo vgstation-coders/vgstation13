@@ -449,6 +449,10 @@
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
 			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+		for (var/ID in virus2)
+			if (ID in virusDB)
+				var/datum/data/record/v = virusDB[ID]
+				msg += "<br><span class='warning'>[v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""] detected in subject.</span>\n"
 		if(!isjustobserver(user))
 			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 

@@ -1312,6 +1312,15 @@ client/proc/check_convertables()
 	feedback_add_details("admin_verb","ESP")
 	return
 
+/client/proc/diseases_panel()
+	set name = "Diseases Panel"
+	set category = "Debug"
+	if(holder)
+		holder.diseases_panel()
+		log_admin("[key_name(usr)] checked the Diseases Panel.")
+	feedback_add_details("admin_verb","DIS")
+	return
+
 /client/proc/start_line_profiling()
 	set category = "Profile"
 	set name = "Start line profiling"

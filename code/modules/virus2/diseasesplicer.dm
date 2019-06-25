@@ -230,6 +230,7 @@
 		dish.info = dish.contained_virus.get_info()
 		dish.name = "growth dish ([dish.contained_virus.name(TRUE)])"
 		spliced = FALSE
+		dish.contained_virus.update_global_log()
 	dish.forceMove(loc)
 	if (Adjacent(usr))
 		dish.forceMove(usr.loc)

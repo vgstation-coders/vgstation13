@@ -466,11 +466,12 @@
 	spawn(10)
 		var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
 		dish.contained_virus = D.getcopy()
+		dish.contained_virus.infectionchance = dish.contained_virus.infectionchance_base
 		dish.update_icon()
 		dish.name = "growth dish (Unknown [dish.contained_virus.form])"
 		if ("[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]" in virusDB)
 			var/datum/data/record/v = virusDB["[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]"]
-			dish.name = "growth dish ([v.fields["name"]])"
+			dish.name = "growth dish ([v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""])"
 
 
 /obj/machinery/disease2/centrifuge/breakdown()

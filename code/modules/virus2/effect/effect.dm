@@ -7,6 +7,7 @@
 		// Try to have a self-descriptive name, eg. "Hearing Loss", "Toxin Sublimation".
 		// Failing that, call it "X syndrome". It's important that effect names are consistent.
 	var/desc = "This symptom is currently undocumented."
+	var/encyclopedia = ""
 	var/stage = -1
 		// Diseases start at stage 1. They slowly and cumulatively proceed their way up.
 		// Try to keep more severe effects in the later stages.
@@ -69,11 +70,8 @@
 		deactivate(mob)
 
 /datum/disease2/effect/proc/minormutate()
-	switch(pick(1,2,3,4,5))
-		if(1)
-			chance = rand(initial(chance), max_chance)
-		if(2)
-			multiplier = rand(1, max_multiplier)
+	if (prob(20))
+		chance = rand(initial(chance), max_chance)
 
 /datum/disease2/effect/proc/multiplier_tweak(var/tweak)
 	multiplier = Clamp(multiplier+tweak,1,max_multiplier)
@@ -82,4 +80,5 @@
 	var/datum/disease2/effect/new_e = new type(disease)
 	new_e.chance = chance
 	new_e.multiplier = multiplier
+	new_e.stage = stage
 	return new_e

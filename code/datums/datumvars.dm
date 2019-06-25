@@ -149,7 +149,8 @@
 	if(ismob(D))
 
 		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
-			<option value='?_src_=vars;give_disease=\ref[D]'>Give Disease</option>
+			<option value='?_src_=vars;give_disease=\ref[D]'>Give Old Disease</option>
+			<option value='?_src_=vars;give_disease2=\ref[D]'>Give New Disease</option>
 			<option value='?_src_=vars;addcancer=\ref[D]'>Inflict Cancer</option>
 			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
@@ -598,7 +599,19 @@ function loadPage(list) {
 			return
 
 		src.give_disease(M)
-		href_list["datumrefresh"] = href_list["give_spell"]
+		href_list["datumrefresh"] = href_list["give_disease"]
+
+	else if(href_list["give_disease2"])
+		if(!check_rights(R_ADMIN|R_FUN|R_DEBUG))
+			return
+
+		var/mob/living/M = locate(href_list["give_disease2"])
+		if(!istype(M))
+			to_chat(usr, "This can only be used on instances of type /mob/living")
+			return
+
+		virus2_make_custom(src,M)
+		href_list["datumrefresh"] = href_list["give_disease2"]
 
 	else if(href_list["addcancer"])
 		if(!check_rights(R_FUN))
@@ -772,10 +785,10 @@ function loadPage(list) {
 		if(!istype(A))
 			to_chat(usr, "This can only be done to instances of movable atoms.")
 			return
-		
+
 		var/turf/origin = get_turf(A)
 		var/turf/T = get_turf(usr)
-		
+
 		if(istype(A,/mob))
 			var/mob/M = A
 			M.teleport_to(T)

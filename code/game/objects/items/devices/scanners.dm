@@ -124,7 +124,7 @@ BREATHALYZER
 				var/datum/disease2/disease/D = I.virus2[ID]
 				if(ID in virusDB)
 					var/datum/data/record/V = virusDB[ID]
-					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
 				else
 					to_chat(user,"<span class='warning'>Warning: Unknown [D.form] detected on \the [src].</span>")
 		else
@@ -211,7 +211,7 @@ Subject's pulse: ??? BPM"})
 			var/datum/disease2/disease/D = M.virus2[ID]
 			if(ID in virusDB)
 				var/datum/data/record/V = virusDB[ID]
-				message += "<br><span class='warning'>[V.fields["name"]] detected in subject's blood. Strength: [D.strength]. Antigen: [D.get_antigen_string()]</span>"
+				message += "<br><span class='warning'>[V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected in subject's blood. Strength: [D.strength]. Antigen: [D.get_antigen_string()]</span>"
 			else
 				message += "<br><span class='warning'>Unknown [D.form] detected in subject's blood. Strength: [D.strength]</span>"
 	else

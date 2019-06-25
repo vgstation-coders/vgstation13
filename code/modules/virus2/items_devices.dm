@@ -70,7 +70,7 @@
 			var/datum/disease2/disease/D = L.virus2[ID]
 			if(ID in virusDB)
 				var/datum/data/record/V = virusDB[ID]
-				info += "<br><i>[V.fields["name"]] detected. Strength: [D.strength]. Robustness: [D.robustness]. Antigen: [D.get_antigen_string()]</i>"
+				info += "<br><i>[V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected. Strength: [D.strength]. Robustness: [D.robustness]. Antigen: [D.get_antigen_string()]</i>"
 			else
 				info += "<br><i>Unknown [D.form] detected. Strength: [D.strength]</i>"
 
@@ -79,6 +79,8 @@
 	popup.open()
 
 ///////////////VIRUS DISH///////////////
+
+var/list/virusdishes = list()
 
 /obj/item/weapon/virusdish
 	name = "growth dish"
@@ -101,10 +103,12 @@
 	..()
 	reagents = new(10)
 	reagents.my_atom = src
+	virusdishes.Add(src)
 
 /obj/item/weapon/virusdish/Destroy()
 	contained_virus = null
 	processing_objects.Remove(src)
+	virusdishes.Remove(src)
 	..()
 
 /obj/item/weapon/virusdish/clean_blood()
@@ -234,12 +238,15 @@
 
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
-	var/virus_choice = pick(typesof(/datum/disease2/disease))
-	contained_virus = new virus_choice
-	contained_virus.makerandom()
-	growth = rand(5, 50)
-	name = "growth dish (Unknown [contained_virus.form])"
-	update_icon()
+	if (loc)//because fuck you /datum/subsystem/supply_shuttle/Initialize()
+		var/virus_choice = pick(typesof(/datum/disease2/disease))
+		contained_virus = new virus_choice
+		contained_virus.makerandom(list(0,4),list(50,90),list(0,100),src)
+		growth = rand(5, 50)
+		name = "growth dish (Unknown [contained_virus.form])"
+		update_icon()
+	else
+		virusdishes.Remove(src)
 
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
