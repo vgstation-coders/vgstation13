@@ -360,7 +360,7 @@ var/list/virusdishes = list()
 	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
 
-/obj/item/weapon/disk/disease/examine()
+/obj/item/weapon/disk/disease/examine(var/mob/user)
 	..()
 	if(effect)
 		to_chat(user, "<span class='info'>Strength: [effect.multiplier]</span>")
