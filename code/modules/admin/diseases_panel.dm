@@ -65,4 +65,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=diseasespanel;size=1000x450")
+	usr << browse(dat, "window=diseasespanel;size=705x450")
