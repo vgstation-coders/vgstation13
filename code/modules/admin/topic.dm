@@ -3694,50 +3694,64 @@
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Return")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs", "Bloodstones raised", "Bloodstones destroyed")
 				//Big fat lists of effects, not very modular but at least there's less buttons
-				if(choice == "Return") //Actually fuck this
-					return //Duh
-				if(choice == "Biohazard") //GUISE WE HAVE A BLOB
-					var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
-					if(!levelchoice || levelchoice > 7 || levelchoice < 0)
-						to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+				switch (choice)
+					if("Biohazard") //GUISE WE HAVE A BLOB
+						var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
+						if(!levelchoice || levelchoice > 7 || levelchoice < 0)
+							to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+							return
+						biohazard_alert(level = levelchoice)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						return
-					biohazard_alert(level = levelchoice)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
-					return
-				if(choice == "Lifesigns") //MUH ALIUMS
-					command_alert(/datum/command_alert/xenomorphs)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
-					return
-				if(choice == "Malfunction") //BLOW EVERYTHING
-					var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
-					if(salertchoice == "Yes")
-						command_alert(/datum/command_alert/malf_announce)
-					to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
+					if("Lifesigns") //MUH ALIUMS
+						command_alert(/datum/command_alert/xenomorphs)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+						return
+					if("Malfunction") //BLOW EVERYTHING
+						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
+						if(salertchoice == "Yes")
+							command_alert(/datum/command_alert/malf_announce)
+						to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
-					to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
+						to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
 
-					message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
-					return
-				if(choice == "Ion")
-					command_alert(/datum/command_alert/ion_storm)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
-					return
-				if(choice == "Meteor Wave")
-					command_alert(/datum/command_alert/meteor_wave)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
-					return
-				if(choice == "Carp Migration")
-					command_alert(/datum/command_alert/carp)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					return
+						message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+						return
+					if("Ion")
+						command_alert(/datum/command_alert/ion_storm)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+						return
+					if("Meteor Wave")
+						command_alert(/datum/command_alert/meteor_wave)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+						return
+					if("Carp Migration")
+						command_alert(/datum/command_alert/carp)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+						return
+					if("Revs")
+						command_alert(/datum/command_alert/revolution)
+						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
+						return
+					if("Bloodstones raised")
+						command_alert(/datum/command_alert/bloodstones_raised)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						return
+					if("Bloodstones destroyed")
+						command_alert(/datum/command_alert/bloodstones_broken)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodsontes Alert (destroyed).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodsontes Aler (destroyed).")
+						return
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -4075,6 +4089,7 @@
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
+		
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
 

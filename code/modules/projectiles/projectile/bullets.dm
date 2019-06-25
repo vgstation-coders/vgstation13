@@ -64,7 +64,7 @@
 	name = "weak bullet"
 	icon_state = "bbshell"
 	damage = 10
-	stun = 3
+	stun = 5
 	weaken = 5
 	embed = 0
 /obj/item/projectile/bullet/weakbullet/booze
@@ -183,10 +183,10 @@
 	name = "stunshot"
 	icon_state = "sshell"
 	nodamage = 1
-	stun = 5
-	weaken = 5
-	stutter = 5
-	jittery = 5
+	stun = 10
+	weaken = 10
+	stutter = 10
+	jittery = 10
 	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
 

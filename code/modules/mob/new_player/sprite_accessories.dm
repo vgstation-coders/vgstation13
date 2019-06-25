@@ -394,11 +394,11 @@
 	icon_state = "hair_twincurl"
 	gender = FEMALE
 
-/datum/sprite_accessory/hair/minidrills
-	name = "Twincurls 2"
-	icon_state = "hair_twincurl2"
+/datum/sprite_accessory/hair/twintails
+	name = "Twintails"
+	icon_state = "hair_twintail"
 	gender = FEMALE
-
+	
 /datum/sprite_accessory/hair/cia
 	name = "CIA"
 	icon_state = "hair_cia"

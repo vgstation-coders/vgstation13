@@ -13,10 +13,10 @@
 	name = "electrode"
 	icon_state = "spark"
 	nodamage = 1
-	stun = 5
-	weaken = 5
-	stutter = 5
-	jittery = 5
+	stun = 10
+	weaken = 10
+	stutter = 10
+	jittery = 20
 	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
 
@@ -89,10 +89,11 @@
 	icon_state = "cbbolt"
 	damage = 10
 	damage_type = TOX
-	stun = 5
+	stun = 10
 	nodamage = 0
-	weaken = 5
-	stutter = 5
+	weaken = 10
+	stutter = 10
+
 
 /obj/item/projectile/energy/bolt/large
 	name = "large bolt"
@@ -109,9 +110,9 @@
 		var/mob/living/L = target
 		L.contaminate()
 		if(prob(knockdown_chance))
-			if(istype(target, /mob/living/carbon))
-				shake_camera(L,3,2)
-				L.apply_effect(2,WEAKEN)
+			if(istype(target, /mob/living/carbon/))
+				shake_camera(L, 3, 2)
+				L.apply_effect(2, WEAKEN)
 				to_chat(L, "<span class = 'alert'> The force of the bolt knocks you off your feet!")
 		return 1
 	return 0
@@ -125,16 +126,19 @@
 	damage = 35
 	icon_state = "plasma2"
 	irradiate = 20
+	knockdown_chance = 30
 
 /obj/item/projectile/energy/plasma/rifle
 	damage = 50
 	icon_state = "plasma3"
 	irradiate = 35
+	knockdown_chance = 50
 
 /obj/item/projectile/energy/plasma/MP40k
 	damage = 35
 	eyeblur = 4
 	irradiate = 25
+	knockdown_chance = 40
 	icon_state = "plasma3"
 
 /obj/item/projectile/energy/neurotoxin
