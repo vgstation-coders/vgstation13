@@ -310,6 +310,10 @@ proc/move_mining_shuttle()
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
 
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>Has [current_ammo] round\s remaining.</span>")
+
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
 	icon_state = "dpickaxe"
