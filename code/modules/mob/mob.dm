@@ -22,10 +22,6 @@
 /mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
-	for(var/datum/mind/mind in heard_by)
-		for(var/M in mind.heard_before)
-			if(mind.heard_before[M] == src)
-				mind.heard_before[M] = null
 	if(on_spellcast)
 		on_spellcast.holder = null
 	if(on_uattack)
@@ -1969,13 +1965,13 @@ mob/proc/on_foot()
 /mob/proc/AdjustPlasma()
 	return
 
-/mob/living/carbon/heard(var/mob/living/carbon/human/M)
+/mob/heard(var/mob/M)
 	if(M == src || !istype(M))
 		return
 	if(!ear_deaf && !stat)
-		if(!(mind.heard_before[M.name]))
-			mind.heard_before[M.name] = M
-			M.heard_by |= mind
+		if(M.mind)
+			mind.heard_before[M.name] = M.mind
+			M.mind.heard_by |= mind
 
 /mob/acidable()
 	return 1

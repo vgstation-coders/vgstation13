@@ -198,7 +198,6 @@
 
 	var/movement_speed_modifier = 1 //To allow on-the-fly editing of a human mob's base move speed
 	var/has_penalized_speed = 0 //does nothing, merely for checking
-	var/list/heard_by = list()
 
 //Generic list for proc holders. Only way I can see to enable certain verbs/procs. Should be modified if needed.
 	var/proc_holder_list[] = list()//Right now unused.
@@ -296,7 +295,7 @@
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
-	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "throw_delayer", "special_delayer", \
+	"attack_log", "speak_emote", "alphas", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "throw_delayer", "special_delayer", \
 	"clong_delayer", args)
 
 	callOnFace = list()
@@ -315,7 +314,6 @@
 	attack_log = list()
 	speak_emote = list()
 	alphas = list()
-	heard_by = list()
 	control_object = list()
 	orient_object = list()
 	actions = list()

@@ -58,7 +58,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			if(!user || !user.mind || !user.mind.heard_before.len)
 				return
 			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") in user.mind.heard_before
-			var/mob/temp_target = user.mind.heard_before[target_name]
+			var/datum/mind/temp_target = user.mind.heard_before[target_name]
 			believed_name = target_name
 			targets += temp_target
 		else if((range == 0 || range == SELFCAST) && (spell_flags & INCLUDEUSER))

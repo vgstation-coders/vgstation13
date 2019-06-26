@@ -77,15 +77,16 @@
 /obj/item/clothing/mask/necklace/crystal/attack_self(mob/user)
 	if(!isrambler(user))
 		return
-	var/mob/potential = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") as null|mob in get_list_of_elements(user.mind.heard_before)
+	var/target_name = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") in user.mind.heard_before
+	var/datum/mind/M = user.mind.heard_before[target_name]
+	if(!M.current)
+		return
+	var/mob/living/potential = M.current
 	if(!isliving(potential))
 		to_chat(user,"<span class='warning'>That is some kind of ghost or something!</span>")
 		return
 	if(potential == suspect)
 		to_chat(user,"<span class='warning'>It is just as you suspected. The suspect is the suspicious suspect you have already suspected!</span>")
-		return
-	if(!potential.mind)
-		to_chat(user,"<span class='warning'>To accuse the mindless? The scrawling of a madman!</span>")
 		return
 	if(potential == user)
 		to_chat(user,"<span class='warning'>You already know the crime was arson!</span>")

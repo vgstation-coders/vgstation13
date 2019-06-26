@@ -65,7 +65,8 @@
 
 	//fix scrying raging mages issue.
 	var/isScrying = 0
-	var/list/heard_before = list()
+	var/list/heard_before = list() //list of mind we have heard before in some way or the other, indexed by the mobs name we heard it from
+	var/list/heard_by = list() //list of minds that we have been heard by, also indexed by mob names
 
 	var/nospells = 0 //Can't cast spells.
 	var/hasbeensacrificed = FALSE
@@ -74,6 +75,12 @@
 
 /datum/mind/New(var/key)
 	src.key = key
+
+/datum/mind/Destroy()
+	for(var/M in heard_by){
+		heard_by[M].heard_before[M] = null
+	}
+	. = ..()
 
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	if(!istype(new_character))
