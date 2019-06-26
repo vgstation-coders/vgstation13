@@ -45,6 +45,13 @@
 				if (antibody == ANTIGEN_RH && findtext(body.dna.b_type,"+"))
 					antibodies[antibody] += rand(12,15)
 
+/datum/immune_system/proc/transfer_to(var/mob/living/L)
+	if (!L.immune_system)
+		L.immune_system = new (L)
+
+	L.immune_system.strength = strength
+	L.immune_system.overloaded = overloaded
+	L.immune_system.antibodies = antibodies.Copy()
 
 /datum/immune_system/proc/GetImmunity()
 	return list(strength, antibodies.Copy())
