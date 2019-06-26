@@ -78,7 +78,10 @@
 
 /datum/mind/Destroy()
 	for(var/M in heard_by){
-		heard_by[M].heard_before[M] = null
+		for(var/N in heard_by[M].heard_before)
+			if(heard_by[M].heard_before[N] == src)
+				heard_by[M].heard_before[N] = null
+		heard_by = null
 	}
 	. = ..()
 
