@@ -46,29 +46,32 @@
 /obj/item/critter_cage/attackby(var/obj/O,var/mob/user)
 	. = ..()
 
-	if (!critter && istype (O,/obj/item/weapon/holder/animal))
-		var/obj/item/weapon/holder/animal/store = O
-		var/mob/living/simple_animal/inside = store.stored_mob
-		if (inside.size > SIZE_TINY)
-			to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
-			return
-		if(!user.drop_item(O, loc))
-			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
-			return
-		critter = inside
-		qdel(store)
-		critter.forceMove(loc)
-		critter.pixel_x = pixel_x
-		critter.pixel_y = pixel_y+5
-		lock_atom(critter,lock_type)
+	if (isturf(loc))
+		if (!critter && istype (O,/obj/item/weapon/holder/animal))
+			var/obj/item/weapon/holder/animal/store = O
+			var/mob/living/simple_animal/inside = store.stored_mob
+			if (inside.size > SIZE_TINY)
+				to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
+				return
+			if(!user.drop_item(O, loc))
+				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+				return
+			critter = inside
+			qdel(store)
+			critter.forceMove(loc)
+			critter.pixel_x = pixel_x
+			critter.pixel_y = pixel_y+5
+			lock_atom(critter,lock_type)
 
-	if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!user.drop_item(O, loc))
-			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
-			return
-		O.forceMove(loc)
-		O.pixel_x = pixel_x
-		O.pixel_y = pixel_y-9
+		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
+			if(!user.drop_item(O, loc))
+				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+				return
+			O.forceMove(loc)
+			O.pixel_x = pixel_x
+			O.pixel_y = pixel_y-9
+	else
+		to_chat(user, "<span class='warning'>Put the cage down before placing anything inside.</span>")
 
 /obj/item/critter_cage/pickup(var/mob/user)
 	if (critter)
