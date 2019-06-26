@@ -166,15 +166,16 @@
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			if (E.status & ORGAN_BROKEN && prob(30))
-				E.status ^= ORGAN_BROKEN
+				to_chat(user, "<span class = 'notice'>You feel the bones in your [E.display_name] set back into place.</span>")
+				E.status &= ~ORGAN_BROKEN
 	var/heal_amt = -5*multiplier
 	mob.apply_damages(heal_amt,heal_amt,heal_amt,heal_amt)
 
 /datum/disease2/effect/immortal/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		to_chat(H, "<span class='notice'>You suddenly feel hurt and old...</span>")
-		H.age += 8
+		to_chat(H, "<span class='warning'>You suddenly feel hurt and old...</span>")
+		H.age += 4*multiplier
 	var/backlash_amt = 5*multiplier
 	mob.apply_damages(backlash_amt,backlash_amt,backlash_amt,backlash_amt)
 
