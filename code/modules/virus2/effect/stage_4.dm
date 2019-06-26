@@ -166,7 +166,7 @@
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			if (E.status & ORGAN_BROKEN && prob(30))
-				to_chat(user, "<span class = 'notice'>You feel the bones in your [E.display_name] set back into place.</span>")
+				to_chat(H, "<span class = 'notice'>You feel the bones in your [E.display_name] set back into place.</span>")
 				E.status &= ~ORGAN_BROKEN
 	var/heal_amt = -5*multiplier
 	mob.apply_damages(heal_amt,heal_amt,heal_amt,heal_amt)
