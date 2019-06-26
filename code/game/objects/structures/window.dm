@@ -39,6 +39,8 @@ var/list/one_way_windows
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
 
+	mob_flags = MOBATTACK
+
 /obj/structure/window/New(loc)
 
 	..(loc)

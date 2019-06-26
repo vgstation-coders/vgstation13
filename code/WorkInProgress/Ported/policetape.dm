@@ -18,6 +18,7 @@
 	density = 1
 	var/icon_base
 	var/robot_compatibility
+	mob_flags = MOBATTACK
 
 /obj/item/taperoll/police
 	name = "police tape"

@@ -13,6 +13,7 @@
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
 	var/grille_material = /obj/item/stack/rods
+	mob_flags = MOBATTACK
 
 /obj/structure/grille/examine(mob/user)
 

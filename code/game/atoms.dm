@@ -2,7 +2,7 @@ var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
 
-#define HOLYWATER_DURATION 8 MINUTES 
+#define HOLYWATER_DURATION 8 MINUTES
 
 /atom
 

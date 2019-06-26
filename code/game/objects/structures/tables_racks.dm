@@ -23,6 +23,7 @@
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
 	var/health = 100
+	mob_flags = MOBATTACK
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
@@ -705,6 +706,7 @@
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
 	var/health = 20
+	mob_flags = MOBATTACK
 
 /obj/structure/rack/proc/destroy(var/dropParts = TRUE)
 	if(parts && dropParts)

@@ -31,6 +31,8 @@
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 
+	mob_flags = MOBATTACK
+
 /obj/structure/closet/New()
 	..()
 	if (has_lock_type)
@@ -95,7 +97,7 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
-	
+
 	for(var/mob/living/carbon/carbon in src.loc)
 		if (carbon.mutual_handcuffs)
 			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)

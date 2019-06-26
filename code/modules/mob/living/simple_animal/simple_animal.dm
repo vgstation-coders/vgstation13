@@ -122,6 +122,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
+
 /mob/living/simple_animal/New()
 	..()
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
@@ -546,50 +547,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	..(gibbed)
 
 
-/mob/living/simple_animal/ex_act(severity)
-	if(flags & INVULNERABLE)
-		return
-	..()
-	switch (severity)
-		if (1.0)
-			adjustBruteLoss(500)
-			gib()
-			return
-
-		if (2.0)
-			adjustBruteLoss(60)
-
-
-		if(3.0)
-			adjustBruteLoss(30)
-
-/mob/living/simple_animal/adjustBruteLoss(damage)
-
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
-		return 0
-	if(skinned())
-		damage = damage * 2
-	if(purge)
-		damage = damage * 2
-
-	health = Clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
-		death()
-
-/mob/living/simple_animal/adjustFireLoss(damage)
-	if(status_flags & GODMODE)
-		return 0
-	if(mutations.Find(M_RESIST_HEAT))
-		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
-		return 0
-	if(skinned())
-		damage = damage * 2
-	if(purge)
-		damage = damage * 2
-	health = Clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
-		death()
 
 /mob/living/simple_animal/proc/skinned()
 	if(butchering_drops)
@@ -726,18 +683,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 1
 	return ..()
 
-/mob/living/simple_animal/proc/reagent_act(id, method, volume)
-	if(isDead())
-		return
-
-	switch(id)
-		if(SACID)
-			if(!supernatural)
-				adjustBruteLoss(volume * 0.5)
-		if(PACID)
-			if(!supernatural)
-				adjustBruteLoss(volume * 0.5)
-
 /mob/living/simple_animal/proc/delayedRegen()
 	set waitfor = 0
 	isRegenerating = 1
@@ -758,12 +703,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		if(!istype(T, /turf/space))
 			spaced = 0
 			break
-		for(var/atom/A in T.contents)
-			if(istype(A,/obj/structure/lattice) \
-				|| istype(A, /obj/structure/window) \
-				|| istype(A, /obj/structure/grille))
-				spaced = 0
-				break
+		if(T.has_dense_content())
+			spaced = 0
+			break
 	if(spaced)
 		walk(src,0)
 	return !spaced

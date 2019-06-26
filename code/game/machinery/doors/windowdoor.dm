@@ -25,6 +25,7 @@
 	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
 	var/id_tag = null
+	mob_flags = MOBATTACK
 
 /obj/machinery/door/window/New()
 	..()

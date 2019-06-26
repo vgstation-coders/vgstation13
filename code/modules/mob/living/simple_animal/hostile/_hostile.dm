@@ -112,14 +112,13 @@
 	var/Target
 	for(var/atom/A in ListTargets())
 		if(Found(A))//Just in case people want to override targetting
-			var/list/FoundTarget = list()
-			FoundTarget += A
-			Targets = FoundTarget
+			Target = A
 			break
 		if(CanAttack(A))//Can we attack it?
 			Targets += A
 			continue
-	Target = PickTarget(Targets)
+	if(!Target) //No default target selected
+		Target = PickTarget(Targets)
 	if(Target)
 		return Target //We now have a target
 
@@ -353,27 +352,7 @@
 		returnToPool(fC)
 	//Friendly Fire check - End
 
-	var/obj/item/projectile/A = create_projectile(user)
-
-	if(!A)
-		return 0
-
-	if(projectilesound)
-		playsound(user, projectilesound, 100, 1)
-
-	A.current = target
-
-	var/turf/T = get_turf(src)
-	var/turf/U = get_turf(target)
-	A.original = target
-	A.target = U
-	A.current = T
-	A.starting = T
-	A.yo = target.y - start.y
-	A.xo = target.x - start.x
-	spawn()
-		A.OnFired()
-		A.process()
+	generic_projectile_fire(target, user, projectiletype, projectilesound)
 
 	return 1
 
@@ -393,22 +372,16 @@
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
 				UnarmedAttack(T, Adjacent(T))
-			for(var/atom/A in T)
-				var/static/list/destructible_objects = list(/obj/structure/window,
-					 /obj/structure/closet,
-					 /obj/structure/table,
-					 /obj/structure/grille,
-					 /obj/structure/rack,
-					 /obj/machinery/door/window,
-					 /obj/item/tape,
-					 /obj/item/toy/balloon/inflated/decoy,
-					 /obj/machinery/door/airlock)
-				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
-					if(istype(A, /obj/machinery/door/airlock))
-						var/obj/machinery/door/airlock/AIR = A
+			for(var/obj/O in T)
+				if(O.mob_flags & MOBATTACK)
+					var/adjacent = Adjacent(O)
+					if(!adjacent)
+						continue
+					if(istype(O, /obj/machinery/door/airlock))
+						var/obj/machinery/door/airlock/AIR = O
 						if(!AIR.density || AIR.locked || AIR.welded || AIR.operating)
 							continue
-					UnarmedAttack(A, Adjacent(A))
+					UnarmedAttack(O, adjacent)
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
@@ -437,7 +410,6 @@
 /mob/living/simple_animal/hostile/RangedAttack(atom/A, params)
 	if(ranged && ranged_cooldown <= 0)
 		OpenFire(A)
-
 	return ..()
 
 /mob/living/simple_animal/hostile/get_armor_modifier(mob/living/target)

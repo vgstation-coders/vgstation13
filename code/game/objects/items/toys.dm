@@ -1106,17 +1106,17 @@
 	name = "fingerbox"
 	desc = "A high quality fingerbox."
 	icon_state = "fingerbox"
-	
+
 /obj/item/toy/gasha/bangerboy
 	name = "toy Bangerboy"
 	icon_state = "bangerboy"
 	desc = "<B>BANG</B>"
-	
+
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
 	desc = "bodybag accessory not included"
-	
+
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
@@ -1375,6 +1375,7 @@
 	var/decoy_phrase = null
 	var/list/hit_sounds = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg',\
 	'sound/weapons/punch1.ogg', 'sound/weapons/punch2.ogg', 'sound/weapons/punch3.ogg', 'sound/weapons/punch4.ogg')
+	mob_flags = MOBATTACK
 
 /obj/item/toy/balloon/inflated/decoy/examine(mob/user, var/size = "")
 	if(desc)
@@ -1776,4 +1777,3 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
-	

@@ -45,6 +45,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/has_been_invisible_sprayed = FALSE
 	var/impactsound
 
+	//Mob interaction flags
+	var/mob_flags = 0
+
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
 	return FALSE
