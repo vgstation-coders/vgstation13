@@ -75,6 +75,9 @@
 			Mo.viruses += D
 			D.affected_mob = Mo
 			L.viruses -= D //But why?
+		Mo.virus2 = virus_copylist(L.virus2)
+		if (L.immune_system)
+			L.immune_system.transfer_to(Mo)
 	Mo.delayNextAttack(0)
 	Postmorph(Mo)
 	return Mo
