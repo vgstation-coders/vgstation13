@@ -159,7 +159,7 @@
 			if(isslimeperson(owner))
 				var/chance_multiplier = 1
 				if(istype(src, /datum/organ/external/head))
-					chance_multiplier = 0.5
+					chance_multiplier = 0
 				if(prob(brute * sharp * chance_multiplier))
 					droplimb(1)
 					return
