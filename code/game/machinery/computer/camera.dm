@@ -126,6 +126,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	icon_state = "security_det"
 
 	light_color = null
+	pass_flags = PASSTABLE
 
 /obj/machinery/computer/security/mining
 	name = "Outpost Cameras"
