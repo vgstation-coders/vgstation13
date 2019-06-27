@@ -217,7 +217,7 @@ var/global/list/disease2_list = list()
 		return
 
 	if (chosen_form == "custom")
-		var/form_name = copytext(sanitize(input(C, "Give your custom form a name", "Name your form", "Pathogen")  as null | text),1,MAX_MESSAGE_LEN)
+		var/form_name = copytext(sanitize(input(C, "Give your custom form a name", "Name your form", "Pathogen")  as null | text),1,MAX_NAME_LEN)
 		if (!form_name)
 			qdel(D)
 			return
