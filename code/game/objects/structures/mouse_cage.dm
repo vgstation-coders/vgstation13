@@ -21,8 +21,7 @@
 /obj/item/critter_cage/Destroy()
 	if (critter)
 		unlock_atom(critter)
-		critter.pixel_x = 0
-		critter.pixel_y = 0
+		critter.forceMove(get_turf(src))
 		critter = null
 	..()
 
@@ -35,8 +34,6 @@
 	if (critter)
 		if( !user.get_active_hand() )
 			unlock_atom(critter)
-			critter.pixel_x = 0
-			critter.pixel_y = 0
 			critter.scoop_up(user)
 			user.visible_message("<span class='notice'>[user] picks up \the [critter].</span>", "<span class='notice'>You pick up \the [critter].</span>")
 			critter = null
@@ -73,18 +70,33 @@
 	else
 		to_chat(user, "<span class='warning'>Put the cage down before placing anything inside.</span>")
 
-/obj/item/critter_cage/pickup(var/mob/user)
+/obj/item/critter_cage/lock_atom(var/atom/movable/AM)
+	. = ..()
+	AM.pixel_x = pixel_x
+	AM.pixel_y = pixel_y+5
+
+/obj/item/critter_cage/unlock_atom(var/atom/movable/AM)
+	. = ..()
+	AM.pixel_x = initial(AM.pixel_x)
+	AM.pixel_y = initial(AM.pixel_y)
+
+/obj/item/critter_cage/pickup(var/mob/user)//When we pick up the cage, let's move the critter inside
 	if (critter)
 		critter.forceMove(src)
 		var/image/I = image(critter.icon, src, critter.icon_state, layer+1, critter.dir)
 		I.pixel_y = 5
 		overlays += I
 
-/obj/item/critter_cage/dropped(var/mob/user)
+/obj/item/critter_cage/dropped(var/mob/user)//When we drop the cage, let's place the mouse back on top of it
 	overlays.len = 0
 
+	if (critter)
+		critter.forceMove(loc)
+		critter.pixel_x = pixel_x
+		critter.pixel_y = pixel_y+5
+
 /obj/item/critter_cage/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
-	. = ..()
+	. = ..()//If we're placing the cage on a table, let's make sure that their offset gets properly updated
 
 	if (. && critter)
 		critter.forceMove(loc)
