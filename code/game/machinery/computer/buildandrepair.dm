@@ -47,6 +47,9 @@
 	name = "Circuit board (Security Cameras)"
 	desc = "A circuit board for running a computer used for viewing security cameras."
 	build_path = /obj/machinery/computer/security
+/obj/item/weapon/circuitboard/security/wooden_tv
+	name = "Circuit board (Security Cameras TV)"
+	build_path = /obj/machinery/computer/security/wooden_tv
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
