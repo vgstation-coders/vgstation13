@@ -326,6 +326,7 @@
 	health = 50
 	universal_speak = 1
 	can_chew_wires = 1
+	mutations = list(M_NO_SHOCK)
 
 /mob/living/simple_animal/mouse/mouse_op/New()
 	..()
