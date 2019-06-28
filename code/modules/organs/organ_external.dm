@@ -1447,9 +1447,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_peg())
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	if(is_robotic())
-		to_chat(world, "robotic")
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
-	to_chat(world, "[baseicon]")
 	return new /icon(baseicon, "[icon_name]_[gender]")
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
@@ -1523,7 +1521,7 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
-	src.species = source.species
+	src.species = source.species || H.species
 	w_class = source.w_class
 	cancer_stage = source.cancer_stage
 	wounds = source.wounds.Copy()
