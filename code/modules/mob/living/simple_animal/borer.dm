@@ -364,7 +364,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set category = "Alien"
 	set name = "Assume Control"
 	set desc = "Fully connect to the brain of your host."
-
 	var/mob/living/simple_animal/borer/B=loc
 	if(!istype(B))
 		return
@@ -387,7 +386,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	to_chat(src, "You begin delicately adjusting your connection to the host brain...")
-
 	var/mod = max(300 - host.brainloss, 0) //braindamaged hosts are overwhelmed faster
 	spawn(mod)
 		if(!host || !src || controlling)
@@ -396,7 +394,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			do_bonding(rptext=1)
 
 /mob/living/simple_animal/borer/proc/do_bonding(var/rptext=0)
-	if(!host || host.stat==DEAD || !src || controlling || research.unlocking)
+	if(!host || host.stat==DEAD || !src || research.unlocking)
 		return
 	
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey)) //check again just to be sure
@@ -419,11 +417,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				break
 	if(newname)
 		host.name = newname
-
-	host_brain.ckey = host.ckey
-	host_brain.name = host.real_name
-	host.ckey = src.ckey
-	controlling = 1
+	if(controlling == 0)
+		host_brain.ckey = host.ckey
+		host_brain.name = host.real_name
+		host.ckey = src.ckey
+		controlling = 1
 
 	host.verbs += /mob/living/carbon/proc/release_control
 	/* Broken
