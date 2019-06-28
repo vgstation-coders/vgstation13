@@ -508,11 +508,14 @@ var/global/list/disease2_list = list()
 	var/highest_concentration = 0
 
 	if (mob.immune_system)
+		var/immune_system = mob.immune_system.GetImmunity()
+		var/immune_str = immune_system[1]
+		var/list/antibodies = immune_system[2]
 		var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
 		//for each antigen, we measure the corresponding antibody concentration in the carrier's immune system
 		//the less robust the pathogen, the more likely that further stages' effects won't activate at a given concentration
 		for (var/A in antigen)
-			var/concentration = mob.immune_system.antibodies[A]
+			var/concentration = immune_str * antibodies[A]
 			highest_concentration = max(highest_concentration,concentration)
 			var/i = lowest_stage
 			while (i > 0)
