@@ -18,7 +18,11 @@
 	var/info = ""
 	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
 	if (L.immune_system)
-		info += "Immune System Status: <b>[round(L.immune_system.strength*100)]%</b>"
+		var/immune_system = L.immune_system.GetImmunity()
+		var/immune_str = immune_system[1]
+		var/list/antibodies = immune_system[2]
+
+		info += "Immune System Status: <b>[round(immune_str*100)]%</b>"
 		info += "<br>Antibody Concentrations:"
 
 		var/i = 0
@@ -31,7 +35,7 @@
 					rgb = "#E6FF81"
 				if (10 to 12)
 					rgb = "#FF9681"
-			scan.DrawBox(rgb,i*43+11,6,i*43+31,6+L.immune_system.antibodies[antibody]*3*L.immune_system.strength)
+			scan.DrawBox(rgb,i*43+11,6,i*43+31,6+antibodies[antibody]*3*immune_str)
 			i++
 
 	if (L.virus2.len)

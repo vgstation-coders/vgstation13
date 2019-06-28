@@ -606,7 +606,7 @@ function loadPage(list) {
 			return
 
 		var/mob/living/M = locate(href_list["give_disease2"])
-		if(!can_be_infected(M))
+		if(!M.can_be_infected())
 			to_chat(usr, "This mob cannot be infected.")
 			return
 

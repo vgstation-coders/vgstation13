@@ -391,7 +391,7 @@
 
 	if(iscarbon(M))
 		var/mob/living/L = M
-		if(can_be_infected(L) && self.data && self.data["virus2"]) //Infecting
+		if(L.can_be_infected() && self.data && self.data["virus2"]) //Infecting
 			var/list/blood_viruses = self.data["virus2"]
 			if (istype(blood_viruses) && blood_viruses.len > 0)
 				for (var/ID in blood_viruses)
@@ -426,7 +426,7 @@
 	if(..())
 		return 1
 
-	if(can_be_infected(M))//for now, only mice can be infected among simple_animals.
+	if(M.can_be_infected())//for now, only mice can be infected among simple_animals.
 		var/mob/living/L = M
 		if(self.data && self.data["virus2"]) //Infecting
 			var/list/blood_viruses = self.data["virus2"]
