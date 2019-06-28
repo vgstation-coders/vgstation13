@@ -90,26 +90,18 @@
 	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
 	//------------------------DISEASE STUFF--------------------------------------------------------
-	if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from diseases
-		find_nearby_disease()//getting diseases from
+	if(!(status_flags & GODMODE))
+		if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from contact and airborne diseases
+			find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
 
-		if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
-			breath_airborne_diseases()
+			if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
+				breath_airborne_diseases()
 
-		for (var/mob/living/simple_animal/mouse/M in range(1,src))
-			share_contact_diseases(M)
+			for (var/mob/living/simple_animal/mouse/M in range(1,src))
+				if(Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
+					share_contact_diseases(M)
 
-		if (virus2.len)
-			var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
-			for (var/ID in virus2)
-				var/datum/disease2/disease/V = virus2[ID]
-				if(istype(V))
-					V.activate(src,active_disease!=ID)
-
-					if (prob(radiation))//radiation turns your body into an inefficient pathogenic incubator.
-						V.incubate(src,rad_tick/10)
-						//effect mutations won't occur unless the mob also has ingested mutagen
-						//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.
+		activate_diseases()//however cages don't prevent diseases from activating
 	//---------------------------------------------------------------------------------------------
 
 	if(!isUnconscious())

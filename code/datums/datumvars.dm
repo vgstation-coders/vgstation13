@@ -606,8 +606,8 @@ function loadPage(list) {
 			return
 
 		var/mob/living/M = locate(href_list["give_disease2"])
-		if(!istype(M))
-			to_chat(usr, "This can only be used on instances of type /mob/living")
+		if(!can_be_infected(M))
+			to_chat(usr, "This mob cannot be infected.")
 			return
 
 		virus2_make_custom(src,M)

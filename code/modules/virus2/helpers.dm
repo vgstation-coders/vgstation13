@@ -164,6 +164,21 @@ var/list/infected_contact_mobs = list()
 				if (L.client)
 					L.client.images |= pathogen
 
+		for (var/obj/item/device/pda/p in contents)
+			if (p.scanmode == (SCANMODE_MEDICAL))
+				playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
+				if("[disease.uniqueID]-[disease.subID]" in virusDB)
+					var/datum/data/record/V = virusDB["[disease.uniqueID]-[disease.subID]"]
+					var/risk = "warning"
+					switch (V.fields["danger"])
+						if ("*DANGEROUS*")
+							risk = "danger"
+						if ("Safe")
+							risk = "notice"
+					to_chat(src, "[bicon(src)]<span class='[risk]'>Infection Detected! [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] has entered your body.</span>")
+				else
+					to_chat(src, "[bicon(src)]<span class='danger'>Infection Detected! Unknown [D.form] has entered your body.</span>")
+
 		return 1
 	return 0
 
