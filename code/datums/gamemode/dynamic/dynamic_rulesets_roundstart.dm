@@ -361,10 +361,10 @@
 	job_priority = list("AI","Cyborg")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
-	weight = 2
+	weight = 3
 	cost = 40
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
-	high_population_requirement = 65
+	high_population_requirement = 60
 	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
