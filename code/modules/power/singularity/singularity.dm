@@ -349,6 +349,7 @@ var/list/global_singularity_pool
 	// Specifically, eat() builds up in the background from taking too long and eventually crashes the singo.
 	//set background = BACKGROUND_ENABLED
 	//var/ngrabbed=0
+	//Note on June 27, 2019. Apparently it IS being used, so... go wild!
 	for(var/atom/X in orange(grav_pull, src))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
@@ -686,13 +687,32 @@ var/list/global_singularity_pool
 	parent.process_deadchat(ckey,message)
 	
 /obj/machinery/singularity/deadchat_controlled
-	desc = "The destructive, murderous Lord Singuloth, patron saint of Engineering. This one seems... hungry."
+	desc = "The destructive, murderous Lord Singuloth, patron saint of Engineering. This one seems... unstable. Oh god."
+	var/deadchat_mode = "Anarchy"
 	var/list/ckey_to_cooldown = list()
 	var/datum/deadchat_listener/singulo_listener/listener
 	move_self = 0
 	
 	var/input_cooldown = 60 //In deca-seconds
+	var/democracy_cooldown = 120 
+	var/list/inputs = list("UP","DOWN","LEFT","RIGHT")
+	appearance_flags = 0
 
+/obj/machinery/singularity/deadchat_controlled/Destroy()
+	..()
+	var/message = "<span class='recruit'>The deadchat-played singularity has been destroyed. Good going, Tex."
+	for(var/mob/M in player_list)
+		if(istype(M, /mob/new_player) || !M.client)
+			continue
+		if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD))
+			to_chat(M, message)
+		else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+			to_chat(M, message)
+		else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+			var/mob/living/carbon/brain/B = M
+			if(B.brain_dead_chat())
+				to_chat(M, message)		
+	
 /obj/machinery/singularity/deadchat_controlled/New(loc, var/starting_energy = 50, var/temp = 0)
 	..()
 	listener = new /datum/deadchat_listener/singulo_listener
@@ -706,30 +726,115 @@ var/list/global_singularity_pool
 	global_singularity_pool -= src
 	qdel(listener)
 	
-/obj/machinery/singularity/deadchat_controlled/proc/process_deadchat(var/ckey, var/message)
-	var/cooldown = ckey_to_cooldown[ckey]
-	if(!cooldown)
-		ckey_to_cooldown[ckey] = 0
-		cooldown = 0
-	if(cooldown > 0)
-		return
-	var/direction
-	message = uppertext(message)
-	switch(message) //*shrug
-		if("UP")
-			direction = NORTH
-		if("DOWN")
-			direction = SOUTH
-		if("LEFT")
-			direction = WEST
-		if("RIGHT")
-			direction = EAST
-	if(direction)
-		move(direction)
-		ckey_to_cooldown[ckey] = 1
-		spawn(input_cooldown)
-			ckey_to_cooldown[ckey] = 0
 	
+	
+/obj/machinery/singularity/deadchat_controlled/proc/process_deadchat(var/ckey, var/message)
+	if(deadchat_mode == "Anarchy")
+		var/cooldown = ckey_to_cooldown[ckey]
+		if(!cooldown)
+			ckey_to_cooldown[ckey] = 0
+			cooldown = 0
+		if(cooldown > 0)
+			return
+		var/direction
+		message = uppertext(message)
+		switch(message) //*shrug
+			if("UP")
+				direction = NORTH
+			if("DOWN")
+				direction = SOUTH
+			if("LEFT")
+				direction = WEST
+			if("RIGHT")
+				direction = EAST
+		if(direction)
+			set_glide_size(DELAY2GLIDESIZE(0.1 SECONDS))
+			forceMove(get_step(src,direction))
+			eat()
+			ckey_to_cooldown[ckey] = 1
+			spawn(input_cooldown)
+				ckey_to_cooldown[ckey] = 0
+	else if(deadchat_mode == "Democracy")
+		var/vote = ckey_to_cooldown[ckey]
+		if(!vote)
+			ckey_to_cooldown[ckey] = 0
+			vote = -1
+		message = uppertext(message)
+		if(inputs.Find(message))
+			ckey_to_cooldown[ckey] = message
+			
+			
+/obj/machinery/singularity/deadchat_controlled/proc/begin_democracy_loop()
+	spawn(democracy_cooldown)
+		if(src)
+			var/result = count_democracy_votes()
+			if(result != 5)
+				set_glide_size(DELAY2GLIDESIZE(0.1 SECONDS))
+				forceMove(get_step(src,result))
+				eat()
+				var/direction_name = "up"
+				switch(result)
+					if(2)
+						direction_name = "down"
+					if(3)
+						direction_name = "left"
+					if(4)
+						direction_name = "right"
+				var/message = "<span class='recruit'>The singularity moved [direction_name]!.<br>New vote started. It will end in [democracy_cooldown/10] seconds." //There should really be a proc for sending messages to deadchat but I'm too lazy to copy/paste it
+				for(var/mob/M in player_list)
+					if(istype(M, /mob/new_player) || !M.client)
+						continue
+					if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+						to_chat(M, message)
+					else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+						to_chat(M, message)
+					else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+						var/mob/living/carbon/brain/B = M
+						if(B.brain_dead_chat())
+							to_chat(M, message)		
+			else
+				var/message = "<span class='recruit'>No votes were cast this cycle. Remember, type UP, DOWN, LEFT, or RIGHT to cast a vote!"
+				for(var/mob/M in player_list)
+					if(istype(M, /mob/new_player) || !M.client)
+						continue
+					if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+						to_chat(M, message)
+					else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+						to_chat(M, message)
+					else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+						var/mob/living/carbon/brain/B = M
+						if(B.brain_dead_chat())
+							to_chat(M, message)
+			begin_democracy_loop()
+			
+/obj/machinery/singularity/deadchat_controlled/proc/count_democracy_votes()	//Will return 5 if empty list
+	var/list/votes = list(0,0,0,0)
+	var/found_vote = 0
+	for(var/vote in ckey_to_cooldown)
+		switch(ckey_to_cooldown[vote])
+			if("UP")
+				votes[1]++
+			if("DOWN")
+				votes[2]++
+			if("LEFT")
+				votes[3]++
+			if("RIGHT")
+				votes[4]++
+		if(ckey_to_cooldown[vote] != -1)
+			found_vote = 1
+		ckey_to_cooldown[vote] = -1
+	if(!found_vote)
+		return 5
+	if(votes[1] >= votes[2] && votes[1] >= votes[3] && votes[1] >= votes[4])
+		return NORTH
+	else if(votes[2] >= votes[3] && votes[2] >= votes[4])
+		return SOUTH
+	else if(votes[3] >= votes[4])
+		return WEST
+	else
+		return EAST
+	
+				
 /client/proc/deadchat_singularity()
 	set category = "Fun"
 	set name = "Spawn Deadchat-Controlled Singularity"
@@ -744,29 +849,69 @@ var/list/global_singularity_pool
 	for(var/obj/machinery/singularity/singularity in global_singularity_pool)
 		var/organized_hash = "[singularity] - [singularity.x], [singularity.y], [singularity.z]"
 		organized_list[organized_hash] = singularity
+	if(!global_singularity_pool.len)
+		to_chat(holder, "There are no singularities to be transformed into a deadchat-controlled one. Spawn one first... if you dare.")
+		return 0		
 	var/singulo_name = input(src,"Select a singularity.", "Confirm", null) as null|anything in organized_list
 	var/obj/machinery/singularity/target_singulo = organized_list[singulo_name]
 	if(target_singulo)
-		log_admin("[src] just turned the [singulo_name] into a deadchat-controlled one.")
-		message_admins("[src] just turned the [singulo_name] into a deadchat-controlled one.")
-		target_singulo.investigation_log(I_SINGULO,"<font color='red'>[src] just turned the [singulo_name] into a deadchat-controlled one. If you're reading this, god save the deadmin.</font>.")
-		//Spawn new singulo
-		var/obj/machinery/singularity/deadchat_controlled/new_singulo = new /obj/machinery/singularity/deadchat_controlled(get_turf(target_singulo))
-		new_singulo.energy = target_singulo.energy
-		new_singulo.allowed_size = target_singulo.allowed_size
-		new_singulo.expand(null, 0)
-		qdel(target_singulo)
-		//Send message to deadchat
-		var/message = "<span class='recruit'>An admin has created a DEADCHAT-CONTROLLED SINGULARITY!<br>Simply type UP, DOWN, LEFT, or RIGHT to move the singularity.<br>Cooldown per person is currently [new_singulo.input_cooldown/10] seconds.<br>[formatJumpTo(new_singulo)]"
-		for(var/mob/M in player_list)
-			if(istype(M, /mob/new_player) || !M.client)
-				continue
-			if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
-				to_chat(M, message)
-			else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
-				to_chat(M, message)
-			else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
-				var/mob/living/carbon/brain/B = M
-				if(B.brain_dead_chat())
-					to_chat(M, message)	
-	
+		var/list/singulo_options = list("Democracy","Anarchy")
+		var/option_chosen = input(src,"Choose a mode.", "Confirm", null) as null|anything in singulo_options
+		if(option_chosen == "Anarchy")
+			var/cooldown = input("Please enter the cooldown each player has in seconds.", "Cooldown") as num
+			if(!cooldown)
+				return 0
+			cooldown *= 10 //Decasecond conversion
+			log_admin("[src] just turned the [singulo_name] into a deadchat-controlled one.")
+			message_admins("[src] just turned the [singulo_name] into a deadchat-controlled one.")
+			target_singulo.investigation_log(I_SINGULO,"<font color='red'>[src] just turned the [singulo_name] into a deadchat-controlled one. It is on anarchy mode, cooldown [cooldown] decaseconds. If you're reading this, god save the deadmin.</font>.")
+
+			var/obj/machinery/singularity/deadchat_controlled/new_singulo = new /obj/machinery/singularity/deadchat_controlled(get_turf(target_singulo))
+			new_singulo.energy = target_singulo.energy
+			new_singulo.allowed_size = target_singulo.allowed_size
+			new_singulo.expand(null, 0)
+			new_singulo.input_cooldown = cooldown
+			qdel(target_singulo)
+
+			var/message = "<span class='recruit'>An admin has begun DEADCHAT-CONTROLLED SINGULARITY!<br>It is on <b>ANARCHY</b> mode.<br>Simply type UP, DOWN, LEFT, or RIGHT to move the singularity.<br>Cooldown per person is currently [new_singulo.input_cooldown/10] seconds.<br>"
+			for(var/mob/M in player_list)
+				if(istype(M, /mob/new_player) || !M.client)
+					continue
+				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
+				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
+				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+					var/mob/living/carbon/brain/B = M
+					if(B.brain_dead_chat())
+						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")	
+		else if(option_chosen == "Democracy")
+			var/interval = input("Please enter the interval that the singulo makes a move in seconds.", "Interval") as num
+			if(!interval)
+				return 0
+			interval *= 10 //Decasecond conversion
+			log_admin("[src] just turned the [singulo_name] into a deadchat-controlled one.")
+			message_admins("[src] just turned the [singulo_name] into a deadchat-controlled one.")
+			target_singulo.investigation_log(I_SINGULO,"<font color='red'>[src] just turned the [singulo_name] into a deadchat-controlled one. It is on democracy mode, cooldown [interval] decaseconds. If you're reading this, god save the deadmin.</font>.")
+
+			var/obj/machinery/singularity/deadchat_controlled/new_singulo = new /obj/machinery/singularity/deadchat_controlled(get_turf(target_singulo))
+			new_singulo.energy = target_singulo.energy
+			new_singulo.allowed_size = target_singulo.allowed_size
+			new_singulo.expand(null, 0)
+			new_singulo.democracy_cooldown = interval
+			new_singulo.deadchat_mode = "Democracy"
+			new_singulo.begin_democracy_loop()
+			qdel(target_singulo)
+
+			var/message = "<span class='recruit'>An admin has begun DEADCHAT-CONTROLLED SINGULARITY!<br>It is on <b>DEMOCRACY</b> mode.<br>Simply type UP, DOWN, LEFT, or RIGHT to cast a vote on which direction it should move. Your vote will be your latest message.<br>The singulo will move every [new_singulo.democracy_cooldown/10] seconds. Votes start now!<br>"
+			for(var/mob/M in player_list)
+				if(istype(M, /mob/new_player) || !M.client)
+					continue
+				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD))
+					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
+				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
+				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+					var/mob/living/carbon/brain/B = M
+					if(B.brain_dead_chat())
+						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")	
