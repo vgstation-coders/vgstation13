@@ -11,7 +11,7 @@ var/global/borer_chem_types_chest = typesof(/datum/borer_chem/chest) - /datum/bo
 var/global/borer_chem_types_arm = typesof(/datum/borer_chem/arm) - /datum/borer_chem - /datum/borer_chem/arm
 var/global/borer_chem_types_leg = typesof(/datum/borer_chem/leg) - /datum/borer_chem - /datum/borer_chem/leg
 var/global/borer_unlock_types_head = typesof(/datum/unlockable/borer/head) - /datum/unlockable/borer - /datum/unlockable/borer/head - /datum/unlockable/borer/head/chem_unlock - /datum/unlockable/borer/head/verb_unlock
-var/global/borer_unlock_types_chest = typesof(/datum/unlockable/borer/chest) "- /datum/unlockable/borer - /datum/unlockable/borer/chest - /datum/unlockable/borer/chest/chem_unlock - /datum/unlockable/borer/chest/verb_unlock
+var/global/borer_unlock_types_chest = typesof(/datum/unlockable/borer/chest) - /datum/unlockable/borer - /datum/unlockable/borer/chest - /datum/unlockable/borer/chest/chem_unlock - /datum/unlockable/borer/chest/verb_unlock
 var/global/borer_unlock_types_arm = typesof(/datum/unlockable/borer/arm) - /datum/unlockable/borer - /datum/unlockable/borer/arm - /datum/unlockable/borer/arm/chem_unlock - /datum/unlockable/borer/arm/verb_unlock
 var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datum/unlockable/borer - /datum/unlockable/borer/leg - /datum/unlockable/borer/leg/chem_unlock - /datum/unlockable/borer/leg/verb_unlock
 
@@ -364,7 +364,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set category = "Alien"
 	set name = "Assume Control"
 	set desc = "Fully connect to the brain of your host."
-	
+
 	var/mob/living/simple_animal/borer/B=loc
 	if(!istype(B))
 		return
@@ -387,7 +387,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	to_chat(src, "You begin delicately adjusting your connection to the host brain...")
-	
+
 	var/mod = max(300 - host.brainloss, 0) //braindamaged hosts are overwhelmed faster
 	spawn(mod)
 		if(!host || !src || controlling)
