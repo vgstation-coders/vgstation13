@@ -8,7 +8,13 @@
 			return									// seems legit.
 
 	// Things you might plausibly want to follow
-	if((ismob(A) && A != src) || istype(A,/obj/machinery/bot) || istype(A,/obj/machinery/singularity))
+	var/static/list/things_that_can_be_followed = list(
+		/mob,
+		/obj/machinery/bot,
+		/obj/machinery/singularity,
+		/obj/mecha,
+	)
+	if(A != src && is_type_in_list(A, things_that_can_be_followed))
 		manual_follow(A)
 
 	// Otherwise jump

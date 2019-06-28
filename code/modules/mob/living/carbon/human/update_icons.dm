@@ -519,6 +519,7 @@ var/global/list/damage_icon_parts = list()
 	update_inv_wear_id(0)
 	update_inv_hands(0)
 	update_inv_handcuffed(0)
+	update_inv_mutual_handcuffed(0)
 	update_inv_legcuffed(0)
 	update_inv_pockets(0)
 	QueueUpdateDamageIcon(1)
@@ -567,9 +568,8 @@ var/global/list/damage_icon_parts = list()
 			standing = image("icon" = w_uniform.wear_override)
 
 		var/obj/item/clothing/under/under_uniform = w_uniform
-
 		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
-			if(species.wear_suit_icons && has_icon(species.wear_suit_icons, w_uniform.icon_state))
+			if(species.uniform_icons && has_icon(species.uniform_icons, "[w_uniform.icon_state]_s"))
 				standing.icon = species.uniform_icons
 
 		if(w_uniform.icon_override)
@@ -1115,6 +1115,20 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HANDCUFF_LAYER)
 
+	if(update_icons)
+		update_icons()
+
+/mob/living/carbon/human/update_inv_mutual_handcuffed(var/update_icons = TRUE)
+	overlays -= obj_overlays[HANDCUFF_LAYER]
+	if (mutual_handcuffs && mutual_handcuffs.is_visible())
+		stop_pulling()	//TODO: should be handled elsewhere
+		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
+		O.icon = 'icons/mob/mob.dmi'
+		O.icon_state = "singlecuff1"
+		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
+		obj_to_plane_overlay(O,HANDCUFF_LAYER)
+		
 	if(update_icons)
 		update_icons()
 

@@ -36,6 +36,7 @@
 	update_inv_hat(0)
 	update_inv_hands(0)
 	update_inv_handcuffed(0)
+	update_inv_mutual_handcuffed(0)
 	update_fire()
 	update_icons()
 	//Hud Stuff
@@ -291,6 +292,14 @@
 	if(update_icons)
 		update_icons()
 
+/mob/living/carbon/monkey/update_inv_mutual_handcuffed(var/update_icons = TRUE)
+	if(mutual_handcuffs)
+		stop_pulling()
+		overlays_standing[M_HANDCUFF_LAYER]	= image(icon = 'icons/mob/monkey.dmi', icon_state = "singlecuff1")
+	else
+		overlays_standing[M_HANDCUFF_LAYER]	= null
+	if(update_icons)
+		update_icons()
 
 /mob/living/carbon/monkey/update_hud()
 	if(client)

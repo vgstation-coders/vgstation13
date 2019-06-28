@@ -34,6 +34,7 @@
 #define CULTIST "cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
+#define NUKE_OP_LEADER "nuclear operative leader"
 #define HEADREV "head revolutionary"
 #define REV "revolutionary"
 #define WIZAPP "wizard's apprentice"
@@ -121,6 +122,8 @@
 #define BLOODCOST_TOTAL		"total"
 #define BLOODCOST_RESULT	"result"
 #define BLOODCOST_FAILURE	"failure"
+#define BLOODCOST_TRIBUTE	"tribute"
+#define BLOODCOST_USER	"user"
 
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"

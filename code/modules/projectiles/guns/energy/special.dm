@@ -545,7 +545,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 		recent_reload = 0
 	..()
 */
-/obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user/L)
+/obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user)
 	if(overheat || recent_reload)
 		return
 	power_supply.give(500)

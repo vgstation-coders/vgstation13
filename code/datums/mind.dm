@@ -410,7 +410,8 @@
 					log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [objective.explanation_text]")
 		else if(istype(owner, /datum/faction))
 			var/datum/faction/F = owner
-			var/list/prev_objectives = F.GetObjectives().Copy()
+			var/list/faction_objectives = F.GetObjectives()
+			var/list/prev_objectives = faction_objectives.Copy()
 			F.forgeObjectives()
 			var/list/unique_objectives_faction = find_unique_objectives(F.GetObjectives(), prev_objectives)
 			if (!unique_objectives_faction.len)

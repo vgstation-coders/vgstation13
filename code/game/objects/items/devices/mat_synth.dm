@@ -52,6 +52,19 @@
 							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
 							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass)
 
+/obj/item/device/material_synth/robot/soviet
+	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
+							"glass" = /obj/item/stack/sheet/glass/glass,
+							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
+							 "plasteel" = /obj/item/stack/sheet/plasteel,
+							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
+							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
+							 "silver" = /obj/item/stack/sheet/mineral/silver,
+							 "gold" = /obj/item/stack/sheet/mineral/gold,
+							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
+							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
+							 "uranium" = /obj/item/stack/sheet/mineral/uranium)
+
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
 

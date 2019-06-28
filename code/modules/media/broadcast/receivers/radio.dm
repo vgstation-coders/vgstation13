@@ -96,7 +96,7 @@
 	icon='icons/obj/radio.dmi'
 	icon_state="wallradio"
 	anchored=1
-	volume=0.25 // 25% of user's set volume.
+	volume=1 // applies a % of the user's media volume pref
 	var/buildstage = 0
 
 /obj/machinery/media/receiver/boombox/wallmount/supports_holomap()
