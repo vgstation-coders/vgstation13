@@ -45,7 +45,7 @@
 	name = "Monkism Syndrome"
 	desc = "Causes the infected to rapidly devolve to a lower form of life."
 	stage = 4
-	badness = 4
+	badness = 5
 
 /datum/disease2/effect/monkey/activate(var/mob/living/carbon/mob)
 	if(istype(mob,/mob/living/carbon/human))
@@ -82,7 +82,7 @@
 	name = "Vox Pox"
 	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Vox."
 	stage = 4
-	badness = 4
+	badness = 5
 
 /datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob)
 	if(istype(mob,/mob/living/carbon/human))

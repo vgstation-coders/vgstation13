@@ -54,7 +54,15 @@
 	L.immune_system.antibodies = antibodies.Copy()
 
 /datum/immune_system/proc/GetImmunity()
-	return list(strength, antibodies.Copy())
+	var/effective_strength = strength
+
+	if (body)
+		if (ismartian(body))
+			effective_strength *= 0.5
+		if (M_HULK in body.mutations)
+			effective_strength *= 2
+
+	return list(effective_strength, antibodies.Copy())
 
 /datum/immune_system/proc/Overload()
 	body.adjustToxLoss(100)
