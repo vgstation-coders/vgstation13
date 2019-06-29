@@ -115,6 +115,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
 	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
+	var/show_round_end_info = 1			//Whether, on round end, we automatically show the round end screen
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -406,6 +407,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
+	<b>Show round end information straight away</b>
+	<a href='?_src_=prefs;preference=show_round_end_info'><b>[(show_round_end_info) ? "Yes":"No"]</b></a><br>
   </div>
 </div>"}
 
@@ -1490,6 +1493,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("window_flashing")
 					window_flashing = !window_flashing
+
+				if("show_round_end_info")
+					show_round_end_info = !show_round_end_info
 
 			if(user.client.holder)
 				switch(href_list["preference"])

@@ -358,7 +358,7 @@
 	to_chat(world, "<b><font size='4'>[score["crewscore"]]</font></b>")
 
 	for(var/mob/E in player_list)
-		if(E.client)
+		if(E.client && E.client.prefs.show_round_end_info)
 			E.scorestats(completions)
 			winset(E.client, "rpane.round_end", "is-visible=true")
 	return
