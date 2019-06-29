@@ -136,7 +136,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 			A.lights = mended
 			A.update_icon()
 
-	playsound(user, 'sound/items/wirecutter.ogg', 20, 1)
+	playsound(A, 'sound/items/wirecutter.ogg', 20, 1)
 
 /datum/wires/airlock/UpdatePulsed(var/index, mob/user)
 
@@ -219,5 +219,5 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 		if(AIRLOCK_WIRE_ONOPEN)
 			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
 
-	playsound(user, 'sound/machines/airlock_beep.ogg', 15, 1)
+	playsound(A, 'sound/machines/airlock_beep.ogg', 15, 1)
 
