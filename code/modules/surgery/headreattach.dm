@@ -194,17 +194,13 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [target]'s head to the body.</span>",	\
 	"<span class='notice'>You have attached [target]'s head to the body.</span>")
-	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
 
 	var/obj/item/organ/external/O = tool
 	if(istype(O))
-		affected.species = O.species
+		affected.attach(O)
 
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
 	var/obj/item/organ/external/head/B = tool
 	if (B.brainmob.mind)
 		B.brainmob.mind.transfer_to(target)
@@ -222,20 +218,6 @@
 			target.butchering_drops.Add(BP) //Transfer
 			B.butchering_drops.Remove(BP)
 
-	affected.cancer_stage = B.cancer_stage
-
-	if(B.organ_data)
-		var/datum/organ/internal/brain/copied
-		var/datum/organ/internal/I = B.organ_data
-		copied = I.Copy()
-		copied.owner = target
-		target.internal_organs_by_name["brain"] = copied
-		target.internal_organs += copied
-		affected.internal_organs += copied
-
-	target.decapitated = null
-
-	user.u_equip(B,1)
 	qdel(B)
 
 
@@ -268,11 +250,11 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached \the [tool] to the body.</span>",	\
 	"<span class='notice'>You have attached \the [tool] to the bodies reshaped neck.</span>")
-	affected.attach(tool)
-	target.decapitated = null
 	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
+	affected.attach(tool)
+	target.decapitated = null
 
 /datum/surgery_step/head/attach_robot/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
