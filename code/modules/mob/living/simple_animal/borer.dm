@@ -419,7 +419,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				break
 	if(newname)
 		host.name = newname
-	if(controlling == 0)
+	if(!controlling)
 		host_brain.ckey = host.ckey
 		host_brain.name = host.real_name
 		host.ckey = src.ckey
