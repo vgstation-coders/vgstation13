@@ -1457,6 +1457,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
@@ -1469,6 +1470,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear = 20,
 		)
 
 	pack = /obj/structure/vendomatpack/offlicence

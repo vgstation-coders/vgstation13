@@ -895,6 +895,14 @@
 	..()
 	reagents.add_reagent(CAFE_LATTE, 50)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
+	name = "bear arms beer"
+	desc = "Crack open a bear at the end of a long shift."
+	icon_state = "bearbeer"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/New()
+	..()
+	reagents.add_reagent(BEER, 30)
+	reagents.add_reagent(HYPERZINE, rand(3,5))
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
