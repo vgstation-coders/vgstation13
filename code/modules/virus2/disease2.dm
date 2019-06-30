@@ -259,7 +259,7 @@ var/global/list/disease2_list = list()
 	D.childID = 0
 
 	for(var/i = 1; i <= D.max_stage; i++)  // run through this loop until everything is set
-		var/datum/disease2/effect/symptom = input(C, "Choose a symptom for your disease's stage [i] out of [D.max_stage])", "Choose a Symptom") as null | anything in (subtypesof(/datum/disease2/effect))
+		var/datum/disease2/effect/symptom = input(C, "Choose a symptom for your disease's stage [i] (out of [D.max_stage])", "Choose a Symptom") as null | anything in (subtypesof(/datum/disease2/effect))
 		if (!symptom)
 			return 0
 
