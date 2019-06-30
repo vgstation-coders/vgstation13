@@ -218,6 +218,18 @@
 			target.butchering_drops.Add(BP) //Transfer
 			B.butchering_drops.Remove(BP)
 
+
+	if(B.organ_data) //There is a brain in this head
+		var/datum/organ/internal/brain/copied
+		var/datum/organ/internal/I = B.organ_data
+		copied = I.Copy()
+		copied.owner = target
+		target.internal_organs_by_name["brain"] = copied
+		target.internal_organs += copied
+		affected.internal_organs += copied
+
+	target.decapitated = null
+
 	qdel(B)
 
 
