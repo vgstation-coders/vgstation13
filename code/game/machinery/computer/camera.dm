@@ -126,6 +126,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	icon_state = "security_det"
 	circuit = /obj/item/weapon/circuitboard/security/wooden_tv
 	light_color = null
+	pass_flags = PASSTABLE
 
 /obj/machinery/computer/security/mining
 	name = "Outpost Cameras"

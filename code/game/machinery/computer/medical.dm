@@ -530,7 +530,7 @@
 	name = "Medical Laptop"
 	desc = "A cheap laptop connected to the medical records."
 	icon_state = "medlaptop"
-
+	pass_flags = PASSTABLE
 	machine_flags = 0
 
 	anchored = 0
