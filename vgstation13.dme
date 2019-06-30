@@ -2386,6 +2386,7 @@
 #include "code\modules\spells\targeted\pumpkinhead.dm"
 #include "code\modules\spells\targeted\push.dm"
 #include "code\modules\spells\targeted\recall.dm"
+#include "code\modules\spells\targeted\retard.dm"
 #include "code\modules\spells\targeted\shoesnatch.dm"
 #include "code\modules\spells\targeted\targeted.dm"
 #include "code\modules\spells\targeted\wrap.dm"
