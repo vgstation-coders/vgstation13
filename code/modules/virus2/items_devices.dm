@@ -12,9 +12,10 @@
 
 /obj/item/device/antibody_scanner/attack(var/mob/living/L, var/mob/user)
 	if(!istype(L))
-		to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
+		//to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
 		return
 
+	playsound(user, 'sound/items/detscan.ogg', 50, 1)
 	var/info = ""
 	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
 	if (L.immune_system)
@@ -81,6 +82,24 @@
 	var/datum/browser/popup = new(user, "\ref[src]", name, 600, 600, src)
 	popup.set_content(info)
 	popup.open()
+
+/obj/item/device/antibody_scanner/afterattack(var/atom/A, var/mob/user)
+	if (A.Adjacent(user) && isitem(A))
+		var/obj/item/I = A
+		playsound(user, 'sound/items/detscan.ogg', 50, 1)
+		var/span = "warning"
+		if(I.sterility <= 0)
+			span = "danger"
+		else if (I.sterility >= 100)
+			span = "notice"
+		to_chat(user,"<span class='[span]'>Scanning \the [I]...sterility level = [I.sterility]%</span>")
+		if (istype(I,/obj/item/weapon/virusdish))
+			var/obj/item/weapon/virusdish/dish = I
+			if (dish.open && dish.contained_virus)
+				to_chat(user,"<span class='danger'>Although as its lid has been openned, unprotected contact with the dish can result in infection.</span>")
+
+	. = ..()
+
 
 ///////////////VIRUS DISH///////////////
 
