@@ -634,6 +634,9 @@ var/list/crushed_cans = list()
 		return ..()
 	else if (user.a_intent == I_HURT && !crushed)
 		crushed = TRUE
+		throwforce++
+		throw_range++
+		throw_speed++
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
 		overlays.len = 0
 		if (!(icon_state in crushed_cans))
