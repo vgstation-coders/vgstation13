@@ -315,3 +315,26 @@
 
 /mob/living/simple_animal/mouse/plague
 	disease_carrier = 1
+
+/mob/living/simple_animal/mouse/mouse_op
+	name = "mouse operative"
+	namenumbers = FALSE
+	min_oxy = 0
+	minbodytemp = 0
+	maxbodytemp = 5000
+	maxHealth = 50
+	health = 50
+	universal_speak = 1
+	can_chew_wires = 1
+	mutations = list(M_NO_SHOCK)
+
+/mob/living/simple_animal/mouse/mouse_op/New()
+	..()
+	desc = "Oh no..."
+	icon_state = "mouse_operative"
+	universal_understand = 1
+
+/mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
+	. = ..()
+	if(gibbed == FALSE)
+		src.gib()
