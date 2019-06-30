@@ -407,7 +407,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
 		to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
 
-	//Let borers namepick when assuming control
+	if(!controlling)
+		host_brain.ckey = host.ckey
+		host_brain.name = host.real_name
+		host.ckey = src.ckey
+		controlling = 1
 	var/newname
 	for(var/i = 1 to 3)
 		newname = reject_bad_name(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
@@ -419,12 +423,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				break
 	if(newname)
 		host.name = newname
-	if(!controlling)
-		host_brain.ckey = host.ckey
-		host_brain.name = host.real_name
-		host.ckey = src.ckey
-		controlling = 1
-
 	host.verbs += /mob/living/carbon/proc/release_control
 	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
