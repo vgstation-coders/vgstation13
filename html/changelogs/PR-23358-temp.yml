@@ -1,0 +1,5 @@
+---
+author: F-OS
+changes:
+  - bugfix: Adds a check to see if someone already has control within Assume Control for borers.
+delete-after: true

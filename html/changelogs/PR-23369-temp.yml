@@ -1,0 +1,5 @@
+---
+author: Kharkov72
+changes:
+  - rscadd: Cutting or pulsing an airlocks wires now makes a sound
+delete-after: true

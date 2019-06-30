@@ -1,0 +1,5 @@
+---
+author: jknpj
+changes:
+  - bugfix: Fixes traitor emagged robots not being selfdestructproof
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: Kurfursten
+changes:
+  - tweak: The values of minerals at the smelter have been dramatically reduced. Mining vendor prices have all dropped.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: Arthurdentist
+changes:
+  - rscadd: Re-added the previously removed brain damage spell and made it Bundle exclusive.
+delete-after: true

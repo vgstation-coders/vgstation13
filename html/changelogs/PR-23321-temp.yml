@@ -1,0 +1,5 @@
+---
+author: Emilc4h
+changes:
+  - tweak: "Starscreen Shield Generators can now be built with Micro Manipulators rather than Pico Manipulators, as initially intended."
+delete-after: true

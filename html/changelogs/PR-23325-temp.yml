@@ -1,0 +1,6 @@
+---
+author: Sauberstaub
+changes:
+  - tweak: Alt clicking a chair/bed now buckles you into it.
+  - tweak: You can now buckle yourself into a chair/bed from an adjacent tile.
+delete-after: true
