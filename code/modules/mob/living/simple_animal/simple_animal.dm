@@ -380,7 +380,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
-	// FUCK mice. - N3X
+	// mice are pretty cool guys
 	if(ismouse(src) && (Proj.stun+Proj.weaken+Proj.paralyze+Proj.agony)>5)
 		var/mob/living/simple_animal/mouse/M=src
 		to_chat(M, "<span class='warning'>What would probably not kill a human completely overwhelms your tiny body.</span>")

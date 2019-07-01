@@ -3352,7 +3352,7 @@
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/mouse(location)
+		new /mob/living/simple_animal/mouse/common(location)
 
 /datum/chemical_reaction/aminocyprinidol
 	name = "Aminocyprinidol"
