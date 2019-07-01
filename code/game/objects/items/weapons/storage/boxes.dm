@@ -147,6 +147,22 @@
 			25;/obj/item/weapon/reagent_containers/food/drinks/thermos/full
 		)
 		new toSpawn(src)
+		
+/obj/item/weapon/storage/box/byond
+	name = "\improper BYOND support package"
+	desc = "A small box containing a branded trinket that the BYOND corporation sends to people that actually send them money."
+	icon_state = "byond"
+	storage_slots = 1 //not very useful for storage
+	foldable = /obj/item/trash/byond_box //no free cardboard
+
+/obj/item/weapon/storage/box/byond/New()
+	..()
+	var/obj/item/gibsmedat = pick(
+		/obj/item/weapon/thermometer/byond,
+		/obj/item/clothing/accessory/medal/byond,
+		/obj/item/toy/syndicateballoon/byondballoon,
+	)
+	new gibsmedat(src)
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"

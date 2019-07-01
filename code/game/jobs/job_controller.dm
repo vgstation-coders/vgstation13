@@ -558,9 +558,9 @@ var/global/datum/controller/occupations/job_master
 	if (H.client.IsByondMember())
 		to_chat(H, "Thank you for supporting BYOND!")
 		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/thermometer(H))
+			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
 		else
-			H.equip_or_collect(new /obj/item/weapon/thermometer(H), slot_in_backpack)
+			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
 	return 1
 
 
