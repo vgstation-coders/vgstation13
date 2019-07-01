@@ -1026,6 +1026,13 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			OE.attach(attached)
 
+		if(organ.organ_data && !owner.internal_organs_by_name[organ.organ_data.organ_type])
+			owner.internal_organs_by_name[organ.organ_data.organ_type] = organ.organ_data.Copy()
+			owner.internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type]
+			internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type]
+			owner.internal_organs_by_name[organ.organ_data.organ_type].owner = owner
+
+
 	else if(istype(I, /obj/item/weapon/peglimb)) //Attaching a peg limb
 		src.peggify()
 
