@@ -5,9 +5,13 @@
 	item_state = "radio"
 	w_class = W_CLASS_TINY
 	flags = HEAR | FPRINT
+	var/speak_cooldown = 0.6 SECONDS
+	var/tmp/last_speak
 
 /obj/item/device/roganbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Should be queued after the original speech completes
+	if(last_speak + speak_cooldown >= world.timeofday)
+		return
 	for(var/index in number2rogansound)
 		if(speech.message == "[index]" || dd_hasprefix(speech.message, "[index] "))
 			playtaunt(number2rogansound[index])
@@ -18,6 +22,7 @@
 		say(S.transcript)
 	else if(S.emote)
 		src.visible_message("<b>\The [src]</b> [S.emote]") //simplified from emotes.dm which is only for mobs
+	last_speak = world.timeofday
 
 var/global/list/number2rogansound = list() //populated by /proc/make_datum_references_lists()
 

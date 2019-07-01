@@ -62,6 +62,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/door_alerts=0
 
 	var/doors_down=0
+	var/doors_overridden=0 //manual override to force firedoors up
 
 	// /vg/: No teleporting for you. 2 = SUPER JAMMED, inaccessible even to telecrystals.
 	var/jammed = 0
@@ -1543,13 +1544,17 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Prison Wing"
 	icon_state = "sec_prison"
 
+/area/security/confession
+	name = "\improper Confession room"
+	icon_state = "sec_conf"
+
 /area/security/perma
 	name = "\improper Permanent Confinement"
 	icon_state = "sec_perma"
 
 /area/security/gas_chamber
 	name = "\improper Execution Chamber"
-	icon_state = "bar" // Because it's all parties from here on.
+	icon_state = "sec_exec" // Because it's all parties from here on.
 	jammed=1
 
 /area/security/medical
@@ -2271,6 +2276,7 @@ proc/process_adminbus_teleport_locs()
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	flags = NO_PACIFICATION
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -2332,6 +2338,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "ai_upload"
 	jammed=2
 	anti_ethereal=1
+	flags = NO_PACIFICATION
 
 
 
@@ -2340,7 +2347,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Strange Location"
 	icon_state = "away"
 	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
 /area/awaymission/example
 	name = "\improper Strange Station"

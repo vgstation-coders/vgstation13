@@ -300,7 +300,7 @@
 			to_chat(usr, "<span class = 'warning'>No shuttle detected.</span>")
 			return
 		if(!allowed(usr))
-			to_chat(usr, "<font color='red'>Access denied.</font>")
+			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
 
 		if(!selected_port && shuttle.docking_ports.len >= 2)
@@ -328,7 +328,7 @@
 		if(!shuttle.linked_area)
 			return
 		if(!allowed(usr))
-			to_chat(usr, "<font color='red'>Access denied.</font>")
+			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
 
 		var/list/ports = list()
@@ -351,7 +351,7 @@
 
 	if(href_list["select"])
 		if(!allowed(usr))
-			to_chat(usr, "<font color='red'>Access denied.</font>")
+			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
 		var/obj/docking_port/A = locate(href_list["select"]) in all_docking_ports
 		if(!A)
@@ -361,14 +361,15 @@
 		src.updateUsrDialog()
 	if(href_list["link_to_shuttle"])
 		if(!allowed(usr))
-			to_chat(usr, "<font color='red'>Access denied.</font>")
+			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
 		var/list/L = list()
+		var/area/this_area = get_area(src)
 		for(var/datum/shuttle/S in shuttles)
 			var/name
 			if(S.can_link_to_computer == LINK_FORBIDDEN)
 				continue
-			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+			else if(S.can_link_to_computer == LINK_FREE || this_area.get_shuttle() == S)
 				name = S.name
 			else if(S.password)
 				name = "[S.name] (requires password)"
@@ -443,11 +444,12 @@
 			return
 
 		var/list/L = list()
+		var/area/this_area = get_area(src)
 		for(var/datum/shuttle/S in shuttles)
 			var/name
 			if(S.can_link_to_computer == LINK_FORBIDDEN)
 				continue
-			else if(S.can_link_to_computer == LINK_FREE || get_area(src).get_shuttle() == S)
+			else if(S.can_link_to_computer == LINK_FREE || this_area.get_shuttle() == S)
 				name = S.name
 			else if(S.password)
 				name = "[S.name] (requires password)"

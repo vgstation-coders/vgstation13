@@ -14,7 +14,7 @@
 			to_chat(src, "<span class='warning'>You fail to catch \the [I]!")
 	return ..()
 
-/mob/living/carbon/proc/can_catch(var/item/I, var/speed)
+/mob/living/carbon/proc/can_catch(var/obj/item/I, var/speed)
 	if(restrained() || get_active_hand())
 		return FALSE
 	if(speed > EMBED_THROWING_SPEED) //Can't catch things going too fast unless you're a special boy
@@ -54,7 +54,7 @@
 	if(affecting)
 		var/hit_area = affecting.display_name
 		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
-		if(armor >= 2)
+		if(armor >= 100)
 			return TRUE //We still connected
 		if(!I.force)
 			return TRUE

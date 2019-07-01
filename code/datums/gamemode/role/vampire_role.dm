@@ -2,6 +2,8 @@
  -- Vampires --
  */
 
+#define MAX_BLOOD_PER_TARGET 200
+
 /datum/role/vampire
 	id = VAMPIRE
 	name = VAMPIRE
@@ -12,7 +14,6 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
-	refund_value = BASE_SOLO_REFUND
 
 	var/list/powers = list()
 	var/ismenacing = FALSE
@@ -32,6 +33,8 @@
 	var/list/feeders = list()
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
+
+	var/list/image/cached_images = list()
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
@@ -60,6 +63,7 @@
 			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
 			to_chat(antag.current, "You are weak to holy things and starlight.")
 			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
+			to_chat(antag.current, "You will easily recognise the wearers of holy artifacts. Your powers will stop working against them as you go stronger.")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
@@ -203,7 +207,7 @@
 			feeders[targetref] = 0
 		if(target.stat < DEAD) //alive
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
-			if (feeders[targetref] < 100)
+			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
@@ -213,7 +217,7 @@
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
-			if (feeders[targetref] < 100)
+			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
@@ -326,7 +330,7 @@
 		var/datum/role/thrall/role_thrall = isthrall(C)
 		if (role_thrall && role_thrall.master == src)
 			continue // We don't terrify our underlings
-		if (!C.vampire_affected(antag))
+		if (C.vampire_affected(antag) < 0)
 			continue
 		C.stuttering += 20
 		C.Jitter(20)

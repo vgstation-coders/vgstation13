@@ -23,7 +23,7 @@
 
 	var/move_delay_add = 0 // movement delay to add
 
-	status_flags = CANPARALYSE|CANPUSH
+	status_flags = CANPARALYSE|CANPUSH|UNPACIFIABLE
 	var/heal_rate = 2.5
 	var/plasma_rate = 5
 
@@ -117,7 +117,8 @@ In all, this is a lot like the monkey code. /N
 		var/turf/heat_turf = get_turf(src)
 		loc_temp = heat_turf.temperature
 	else if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
-		loc_temp = loc:air_contents.temperature
+		var/obj/machinery/atmospherics/unary/cryo_cell/tube = loc
+		loc_temp = tube.air_contents.temperature
 	else
 		loc_temp = environment.temperature
 

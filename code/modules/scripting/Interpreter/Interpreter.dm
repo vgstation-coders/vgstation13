@@ -57,7 +57,6 @@
 	Set ourselves to Garbage Collect
 */
 /datum/n_Interpreter/proc/GC()
-	..()
 	container = null
 
 /*

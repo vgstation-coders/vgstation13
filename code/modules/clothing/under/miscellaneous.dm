@@ -746,3 +746,11 @@
 	icon_state = "newclothes"
 	_color = "newclothes"
 	item_state = "r_suit"
+
+/obj/item/clothing/under/tourist
+	name = "tourist uniform"
+	desc = "A bright cyan shirt and a pair of brown shorts. Looks old."
+	icon_state = "tourist"
+	item_state = "g_suit"
+	_color = "tourist"
+	species_fit = list(GREY_SHAPED)

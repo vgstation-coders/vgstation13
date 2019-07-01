@@ -24,7 +24,8 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/structure/cult/spire/S in cult_spires)
 		S.upgrade()
 
-	for (var/obj/effect/rune/R in rune_list)
+	var/datum/runeset/bloodcult_runeset = global_runesets["blood_cult"]
+	for (var/obj/effect/rune/R in bloodcult_runeset.rune_list)
 		R.update_icon()
 
 /proc/spawn_bloodstones(var/turf/source = null)
@@ -36,50 +37,17 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/j = 10; j > 0; j--)
 			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
 			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
-				places_to_spawn += T
-				break
-	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space
-	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
+				//Adding some blacklisted areas, specifically solars
+				if (!istype(T.loc,/area/solar))
+					places_to_spawn += T
+					break
+	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
+	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && !is_on_shuttle(source) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
 		places_to_spawn.Add(source)
 	for (var/T in places_to_spawn)
 		new /obj/structure/cult/bloodstone(T)
 
 	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
-
-	/* --moved to bloodstone/New()
-	var/i = 1
-	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		var/datum/holomap_marker/newMarker = new()
-		newMarker.id = HOLOMAP_MARKER_BLOODSTONE
-		newMarker.filter = HOLOMAP_FILTER_CULT
-		newMarker.x = B.x
-		newMarker.y = B.y
-		newMarker.z = B.z
-		holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_\ref[src]"] = newMarker
-		i++
-	*/
-
-	/*	--moved to code\modules\html_interface\map\station_map.dm
-	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
-	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
-	map_base.Blend("#E30000",ICON_MULTIPLY)
-	canvas.Blend(map_base,ICON_OVERLAY)
-	*/
-
-	/*	--the markers now instead get added as overlays every time the map is show to the players
-	for(var/marker in holomap_markers)
-		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
-			if(map.holomap_offset_x.len >= map.zMainStation)
-				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
-			else
-				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
-	*/
-
-	/*	--moved to code\modules\html_interface\map\station_map.dm
-	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
-	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
-	*/
 
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		if (!B.loc)
@@ -140,11 +108,11 @@ var/veil_thickness = CULT_PROLOGUE
 				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring us unwanted attention. You should focus on the objective with your current force.</span>")
 
 
-//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
+//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled.
 //CULT_ACT_I		Altar raised. cultists can now convert.
-//CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
-//CULT_ACT_III		Sacrifice complete. cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them
-//CULT_ACT_IV		Bloodspill threshold reached. bloodstones become indestructible, rift opens above one of them. cultists must open it, crew must close it.
+//CULT_ACT_II		Cultist amount reached. Cultists are now looking for the sacrifice.
+//CULT_ACT_III		Sacrifice complete. Cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them.
+//CULT_ACT_IV		Bloodspill threshold reached. A bloodstone becomes the anchor stone. Cultists must summon Nar-Sie here, whereas crew members must destroy it.
 //CULT_EPILOGUE		The cult succeeded. The station is no longer reachable from space or through teleportation, and is now part of hell. Nar-Sie hunts the survivors.
 //CULT_MENDED		The cult failed (bloodstones all destroyed or rift closed). cult magic permanently disabled, living cultists progressively die by themselves.
 
@@ -166,15 +134,15 @@ var/veil_thickness = CULT_PROLOGUE
 	var/warning = FALSE
 
 	var/list/cult_reminders = list()
-
+	
 /datum/faction/bloodcult/check_win()
 	return cult_win
-
+	
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
 
 /datum/faction/bloodcult/proc/fail()
-	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
+	if(veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
 	stage(CULT_MENDED)
 
@@ -214,8 +182,12 @@ var/veil_thickness = CULT_PROLOGUE
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
-	initialize_cultwords()
+	initialize_runesets()
 	AppendObjective(/datum/objective/bloodcult_reunion)
+
+
+/datum/faction/bloodcult/minorVictoryText()
+	return "The cult completed its sacrificial ritual, but not in time to summon Nar-Sie."
 
 /*
 /datum/faction/bloodcult/process()
@@ -253,7 +225,7 @@ var/veil_thickness = CULT_PROLOGUE
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
-		for (var/obj/effect/rune/R in rune_list)
+		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
 			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
@@ -286,6 +258,7 @@ var/veil_thickness = CULT_PROLOGUE
 							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
+			minor_victory = TRUE // At any rate, we achieve a minor win.
 			if (O)
 				O.target_sacrificed = TRUE
 				veil_thickness = CULT_ACT_III
@@ -333,7 +306,7 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in rune_list)//runes now available will start pulsing
+		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))
@@ -370,6 +343,16 @@ var/veil_thickness = CULT_PROLOGUE
 		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Cult reminder: [reminder].")
+
+/datum/faction/bloodcult/proc/minor_victory()
+	for(var/datum/role/cultist/C in members)
+		var/mob/M = C.antag.current
+		if (M && iscultist(M))
+			to_chat(M,"<span class='sinister'>While the sacrifice was correctly completed, we were not fast enough to prevent our ennemies from fleeing.</span>")
+			to_chat(M, "<span class='sinister'>This changes nothing. We will find another way.</span>")
+			for (var/datum/objective/O in objective_holder.objectives)
+				O.force_success = TRUE
+	minor_victory = TRUE
 
 /datum/faction/bloodcult/GetScoreboard()
 	.=..()
@@ -420,9 +403,16 @@ var/veil_thickness = CULT_PROLOGUE
 		BLOODCOST_AMOUNT_USER = 0,
 		BLOODCOST_RESULT = "",
 		BLOODCOST_TOTAL = 0,
+		BLOODCOST_USER = null,
 		)
 	var/turf/T = get_turf(user)
 	var/amount_gathered = 0
+
+	data[BLOODCOST_RESULT] = user
+
+	if (amount_needed == 0)//the cost was probably 1u, and already paid for by blood communion from another cultist
+		data[BLOODCOST_RESULT] = BLOODCOST_TRIBUTE
+		return data
 
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
@@ -534,11 +524,67 @@ var/veil_thickness = CULT_PROLOGUE
 			else
 				data[BLOODCOST_LID_CONTAINER] = 1
 
+	var/mob/living/silicon/robot/robot_user = user
+	if(istype(robot_user)) 
+		var/module_items = robot_user.get_equipped_items() //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
+		for(var/obj/item/weapon/gripper/G_held in module_items)
+			if (!istype(G_held) || !G_held.wrapped || !istype(G_held.wrapped,/obj/item/weapon/reagent_containers))
+				continue
+			var/obj/item/weapon/reagent_containers/gripper_item = G_held.wrapped
+			if(round(gripper_item.reagents.get_reagent_amount(BLOOD)))
+				var/blood_volume = round(gripper_item.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_HELD] = gripper_item
+					if (gripper_item.is_open_container())
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_LID_HELD] = 1
+
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+					return data
+				
+		for(var/obj/item/weapon/reagent_containers/G_held in module_items)
+			if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
+				continue
+			
+			if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
+				var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
+				var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
+					if (blood_pack.holes)
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_BLOODPACK] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_HOLES_BLOODPACK] = 1
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLOODPACK
+					return data
+
+			else
+				var/blood_volume = round(G_held.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_HELD] = G_held
+					if (G_held.is_open_container())
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_LID_HELD] = 1
+
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+					return data
+	
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
-	//Does the user have blood? (the user can pay in blood without having to bleed first)
+	//Does the user have blood? (the user can pay in blood without having to bleed first) 
 	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
@@ -548,8 +594,8 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
-		return data
-
+		return data	
+	
 	data[BLOODCOST_RESULT] = BLOODCOST_FAILURE
 	return data
 
@@ -557,6 +603,7 @@ var/veil_thickness = CULT_PROLOGUE
 /proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0)
 	//Blood Communion
 	var/communion = 0
+	var/communion_data = null
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
@@ -579,6 +626,7 @@ var/veil_thickness = CULT_PROLOGUE
 				if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 					total_accumulated += data[BLOODCOST_TOTAL]
 				if (total_accumulated >= amount_needed - total_per_tribute)//could happen if the cost is less than 1 per tribute
+					communion_data = data//in which case, the blood will carry the data that paid for it
 					break
 
 	//Getting nearby blood sources
@@ -588,6 +636,49 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Flavour text and blood data transfer
 	switch (data[BLOODCOST_RESULT])
+		if (BLOODCOST_TRIBUTE)//if the drop of blood was paid for through blood communion, let's get the reference to the blood they used because we can
+			blood = new()
+			blood.data["blood_colour"] = DEFAULT_BLOOD
+			if (communion_data && communion_data[BLOODCOST_RESULT])
+				switch(communion_data[BLOODCOST_RESULT])
+					if (BLOODCOST_TARGET_HANDS)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
+						blood.data["blood_colour"] = HU.hand_blood_color
+						if (HU.blood_DNA && HU.blood_DNA.len)
+							var/blood_DNA = pick(HU.blood_DNA)
+							blood.data["blood_DNA"] = blood_DNA
+							blood.data["blood_type"] = HU.blood_DNA[blood_DNA]
+					if (BLOODCOST_TARGET_SPLATTER)
+						var/obj/effect/decal/cleanable/blood/B = communion_data[BLOODCOST_TARGET_SPLATTER]
+						blood = new()
+						blood.data["blood_colour"] = B.basecolor
+						if (B.blood_DNA.len)
+							var/blood_DNA = pick(B.blood_DNA)
+							blood.data["blood_DNA"] = blood_DNA
+							blood.data["blood_type"] = B.blood_DNA[blood_DNA]
+						blood.data["virus2"] = B.virus2
+					if (BLOODCOST_TARGET_GRAB)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
+						blood = get_blood(HU.vessel)
+					if (BLOODCOST_TARGET_BLEEDER)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
+						blood = get_blood(HU.vessel)
+					if (BLOODCOST_TARGET_HELD)
+						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
+						blood = locate() in G.reagents.reagent_list
+					if (BLOODCOST_TARGET_BLOODPACK)
+						var/obj/item/weapon/reagent_containers/blood/B = communion_data[BLOODCOST_TARGET_BLOODPACK]
+						blood = locate() in B.reagents.reagent_list
+					if (BLOODCOST_TARGET_CONTAINER)
+						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_CONTAINER]
+						blood = locate() in G.reagents.reagent_list
+					if (BLOODCOST_TARGET_USER)
+						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
+						blood = get_blood(HU.vessel)
+			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
+				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
+									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
+									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_HANDS)
 			var/mob/living/carbon/human/H = user
 			blood = new()

@@ -53,9 +53,6 @@
 	// Various flags and things.
 	var/flags = 0
 
-	// For regenerating threat if destroyed
-	var/refund_value = 0
-
 	// Jobs that cannot be this antag.
 	var/list/restricted_jobs = list()
 
@@ -230,19 +227,7 @@
 	return
 
 /datum/role/proc/process()
-	if(!antag)
-		return //The role may have been just created and unassigned
-	var/mob/M = antag.current
-	if(!destroyed)
-		if(!M)
-			destroyed = TRUE
-			RoleMobDestroyed(TRUE)
-	else
-		if(M)
-			//Since this requires brain destruction, it's normally impossible.
-			message_admins("Somehow, an antag ([M], [M.ckey]) got undestroyed! This shouldn't happen.")
-			destroyed = FALSE
-			RoleMobDestroyed(FALSE)
+	return
 
 // Create objectives here.
 /datum/role/proc/ForgeObjectives()
@@ -498,17 +483,6 @@
 
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)
 	return
-
-//Actions to be taken when antag.current is completely destroyed
-/datum/role/proc/RoleMobDestroyed(var/destruction = TRUE)
-	if(refund_value && istype(ticker.mode, /datum/gamemode/dynamic)) //Mode check for sanity
-		var/datum/gamemode/dynamic/D = ticker.mode
-		if(destruction)
-			D.refund_threat(refund_value)
-			D.threat_log += "[worldtime2text()]: [name] refunded [refund_value] upon destruction."
-		else
-			D.spend_threat(refund_value)
-			D.threat_log += "[worldtime2text()]: [name] cost [refund_value] after being undestroyed."
 
 //Does the role have special clothign restrictions?
 /datum/role/proc/can_wear(var/obj/item/clothing/C)

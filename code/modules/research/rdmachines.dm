@@ -109,7 +109,7 @@ var/global/list/rnd_machines = list()
 /obj/machinery/r_n_d/proc/update_hacked()
 	return
 
-/obj/machinery/r_n_d/togglePanelOpen(var/item/toggleitem, mob/user)
+/obj/machinery/r_n_d/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(..())
 		if (panel_open && linked_console)
 			linked_console.linked_machines -= src

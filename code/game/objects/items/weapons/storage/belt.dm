@@ -284,13 +284,14 @@
 /obj/item/weapon/storage/belt/silicon
 	name = "cyber trophy belt"
 	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
-	icon_state = "utilitybelt"
-	item_state = "utility"
+	icon_state = "securitybelt"
+	item_state = "security"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
  		"/obj/item/device/aicard",
- 		"/obj/item/device/mmi"
+ 		"/obj/item/device/mmi",
+		"/obj/item/organ/external/head"
  	)
 
 /obj/item/weapon/storage/belt/silicon/New()

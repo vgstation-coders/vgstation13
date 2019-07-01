@@ -353,7 +353,7 @@
 	else
 		M.LAssailant = user
 
-	var/t = user:zone_sel.selecting
+	var/t = user.zone_sel.selecting
 	if (t == LIMB_HEAD)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M

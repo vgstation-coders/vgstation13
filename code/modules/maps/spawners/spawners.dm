@@ -588,6 +588,11 @@
 		/obj/item/weapon/switchtool/swiss_army_knife
 		)
 
+/obj/abstract/map/spawner/maint/lowchance
+	name = "low-chance maint spawner"
+	amount = 1
+	chance = 10
+
 /obj/abstract/map/spawner/highrisk
 	name = "high risk spawner"
 	icon_state = "maint"
@@ -643,7 +648,7 @@
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/harpoon,
 		/obj/item/weapon/melee/classic_baton,
-		/obj/item/weapon/pickaxe/plasmacutter,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator,
 		/obj/item/weapon/shield/energy,
 		)
 

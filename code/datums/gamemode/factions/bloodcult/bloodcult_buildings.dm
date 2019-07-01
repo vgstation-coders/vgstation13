@@ -99,6 +99,9 @@
 			MouseDropTo(W,user)
 		else
 			user.delayNextAttack(8)
+			user.do_attack_animation(src, W)
+			if (W.hitsound)
+				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
 				playsound(get_turf(src), sound_damaged, 75, 1)
 			takeDamage(W.force)
@@ -691,9 +694,9 @@
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
 		var/mob/M = usr
-		var/M_ckey = usr.ckey
 		if(!isobserver(M) || !iscultist(M))
 			return
+		var/mob/dead/observer/O = M
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
 			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
@@ -709,6 +712,9 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
+		O.can_reenter_corpse = 1
+		O.reenter_corpse()
+
 		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
@@ -731,9 +737,6 @@
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
 		cult_risk()//risk of exposing the cult early if too many soul blades created
-
-		spawn(1)
-			shadeMob.ckey = M_ckey
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
@@ -765,7 +768,10 @@
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
-			cult.stage(CULT_ACT_III,T)
+			if (emergency_shuttle.direction == 2) // Going to centcomm
+				cult.minor_victory()
+			else
+				cult.stage(CULT_ACT_III,T)
 		else
 			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 		qdel(src)
@@ -1428,6 +1434,7 @@ var/list/bloodstone_list = list()
 						user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
 				contributors.Add(user)
 				if (user.client)
+					update_progbar()
 					user.client.images |= progbar
 			else if(user.hud_used && user.hud_used.holomap_obj)
 				if(!("\ref[user]" in watcher_maps))

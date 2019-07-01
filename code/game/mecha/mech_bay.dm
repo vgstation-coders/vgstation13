@@ -205,7 +205,7 @@
 
 /obj/machinery/computer/mech_bay_power_console/power_change()
 	if(stat & BROKEN)
-		icon_state = initial(icon_state)+"_broken"
+		icon_state = initial(icon_state) +"_broken"
 		if(recharge_port)
 			recharge_port.stop_charge()
 	else if(powered())

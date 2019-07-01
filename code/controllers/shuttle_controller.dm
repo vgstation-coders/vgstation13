@@ -38,6 +38,8 @@ datum/emergency_shuttle
 
 	var/warmup_sound = 0
 
+	var/was_early_launched = FALSE //had timer shortened to 10 seconds
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming

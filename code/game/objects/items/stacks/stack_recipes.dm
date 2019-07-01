@@ -291,6 +291,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 /*		new/datum/stack_recipe("multi-tile airlock assembly",    /obj/structure/door_assembly/multi_tile,                 4, time = 50, one_per_turf = 1, on_floor = 1), */
 		), 4),
 	null,
+	new/datum/stack_recipe("gas tank",        /obj/machinery/atmospherics/unary/tank/empty/unanchored, 5, time = 15, one_per_turf = 1),
 	new/datum/stack_recipe("canister",        /obj/machinery/portable_atmospherics/canister, 10, time = 15, one_per_turf = 1			  ),
 	new/datum/stack_recipe("cauldron",        /obj/structure/reagent_dispensers/cauldron,                       20, time = 5 SECONDS, one_per_turf = 1,	  ),
 	new/datum/stack_recipe("iv drip",         /obj/machinery/iv_drip,                         2, time = 25, one_per_turf = 1			  ),
@@ -421,6 +422,7 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/bullwhip,					10,	time = 100,),
 	new/datum/stack_recipe/leather("Cowboy hat",	/obj/item/clothing/head/cowboy,				4,	time = 70,),
+	new/datum/stack_recipe/leather("Cowboy boots",	/obj/item/clothing/shoes/jackboots/cowboy,	4, 	time = 80,),
 	new/datum/stack_recipe/leather("Leather gloves",/obj/item/clothing/gloves/botanic_leather,	2,	time = 90,),
 	new/datum/stack_recipe/leather("Leather shoes",	/obj/item/clothing/shoes/leather,			4,	time = 80,),
 	new/datum/stack_recipe/leather("Leather satchel",/obj/item/weapon/storage/backpack/satchel,	12,	time = 130,),

@@ -52,6 +52,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/space_oddity.ogg",
 		"sound/music/title1.ogg",
 		"sound/music/title2.ogg",
+		"sound/music/title3.ogg",
 		"sound/music/clown.ogg",
 		"sound/music/robocop.ogg",
 		"sound/music/gaytony.ogg",
@@ -85,7 +86,7 @@ var/datum/controller/gameticker/ticker
 		var/delay_timetotal = DEFAULT_LOBBY_TIME
 #endif
 		pregame_timeleft = world.timeofday + delay_timetotal
-		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
+		to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
@@ -220,7 +221,7 @@ var/datum/controller/gameticker/ticker
 				if(istype(obj, /obj/effect/landmark/spacepod/random))
 					qdel(obj)
 
-		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
+		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 
 		send2maindiscord("**The game has started**")
 

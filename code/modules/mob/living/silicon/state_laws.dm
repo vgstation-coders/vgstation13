@@ -45,12 +45,13 @@
 	for(var/datum/ai_laws/law in law_datums) //again having to deal with nanoui shitcode
 		var/list/tmplist = list()
 		tmplist["name"] = law.name
-		tmplist["laws"] = list()
+		var/list/laws_list = list()
 		for(var/i = 1; i <= law.inherent.len; i++)
 			var/clause = law.inherent[i]
-			tmplist["laws"].Add("[i]. [clause]")
+			laws_list.Add("[i]. [clause]")
 		if(istype(law, /datum/ai_laws/syndicate_override)) //shitcode
-			tmplist["laws"].Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
+			laws_list.Insert(1, "0. Only (Name of Agent) and people they designate as being such are Syndicate Agents.")
+		tmplist["laws"] = laws_list
 		preset_laws[++preset_laws.len] = tmplist
 
 /datum/state_laws_ui/proc/compute_hash(var/datum/ai_laws/laws)

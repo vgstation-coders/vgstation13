@@ -82,7 +82,7 @@
 			armor_block = H.run_armor_check(affecting, "melee") // For normal attack damage
 
 			//If they have a hat/helmet and the user is targeting their head.
-			if(istype(H.head, /obj/item/clothing/head) && affecting == LIMB_HEAD)
+			if(istype(H.head, /obj/item) && affecting == LIMB_HEAD)
 
 				// If their head has an armour value, assign headarmor to it, else give it 0.
 				if(H.head.armor["melee"])
@@ -125,7 +125,7 @@
 				if(M != user)
 					O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
 				else
-					O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
+					O.show_message(text("<span class='danger'>[M] has attacked \himself with a [smashtext][src.name]!</span>"), 1)
 
 		//Attack logs
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
@@ -763,6 +763,20 @@
 	reagents.add_reagent(SPORTDRINK, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola
+	name = "Gunka-Cola Family Sized"
+	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
+	icon_state = "gunka_cola"
+	volume = 100
+	possible_transfer_amounts = list(5,10,15,25,30,50,100)
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
+	..()
+	reagents.add_reagent(COLA, 60)
+	reagents.add_reagent(SUGAR, 20)
+	reagents.add_reagent(SODIUM, 10)
+	reagents.add_reagent(COCAINE, 5)
+	reagents.add_reagent(BLACKCOLOR, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "Vial of Food Coloring"

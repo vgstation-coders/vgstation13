@@ -3291,6 +3291,19 @@
 	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/diy_soda
+	name = "Dr. Pecker's DIY Soda"
+	id = DIY_SODA
+	result = DIY_SODA
+	required_reagents = list(LEMON_LIME = 1, SODAWATER = 1, INACUSIATE = 1) //this soda tastes like ear medicine!
+	result_amount = 3
+
+/datum/chemical_reaction/diy_soda/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(holder.get_reagent_amount(DIY_SODA) == 90) //apparently this gets called AFTER the reaction is done reacting
+		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(holder.my_atom))
+		S.time_to_live = 5 //unusually short smoke
+		//We don't need to start up the system because we only want to smoke one tile.
+
 /datum/chemical_reaction/colorful_reagent
 	name = "Colorful Reagent"
 	id = COLORFUL_REAGENT

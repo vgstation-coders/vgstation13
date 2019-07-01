@@ -171,7 +171,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 			to_chat(usr, "<span class='info'>Value #1 set to be [check_this]</span>")
 		else if(choice == "Constant string")
-			var/new_txt = stripped_input(usr, "Please type in a string that will be used as value #1.", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
+			var/new_txt = stripped_input(usr, "Please type in a string that will be used as value #1.", "\The [src]", max_length = MAX_TEXT_VALUE_LEN)
 
 			if(isnull(new_txt)) return
 			if(..()) return
@@ -237,7 +237,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 			to_chat(usr, "<span class='info'>Value #2 set to be [check_against]</span>")
 		else if(choice == "Constant string")
-			var/new_txt = stripped_input(usr, "Please type in a string that will be used as value #2.", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
+			var/new_txt = stripped_input(usr, "Please type in a string that will be used as value #2.", "\The [src]", max_length = MAX_TEXT_VALUE_LEN)
 
 			if(isnull(new_txt)) return
 			if(..()) return

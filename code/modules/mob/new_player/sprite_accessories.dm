@@ -62,7 +62,7 @@
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Evolved Slime")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -276,6 +276,7 @@
 	name = "Spiky"
 	icon_state = "hair_spikey"
 	species_allowed = list("Human","Manifested","Unathi")
+
 /datum/sprite_accessory/hair/kusangi
 	name = "Kusanagi Hair"
 	icon_state = "hair_kusanagi"
@@ -393,11 +394,11 @@
 	icon_state = "hair_twincurl"
 	gender = FEMALE
 
-/datum/sprite_accessory/hair/minidrills
-	name = "Twincurls 2"
-	icon_state = "hair_twincurl2"
+/datum/sprite_accessory/hair/twintails
+	name = "Twintails"
+	icon_state = "hair_twintail"
 	gender = FEMALE
-
+	
 /datum/sprite_accessory/hair/cia
 	name = "CIA"
 	icon_state = "hair_cia"
@@ -522,7 +523,7 @@
 	name = "Shaved"
 	icon_state = "bald"
 	gender = NEUTER
-	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom", "Evolved Slime")
 
 /datum/sprite_accessory/facial_hair/watson
 	name = "Watson Mustache"
@@ -809,6 +810,27 @@
 	name = "Popped Hair"
 	icon_state = "hair_popcorn"
 	species_allowed = list("Diona")
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/slime_tendrils
+	name = "Long Tendrils"
+	icon_state = "slime_tendrils"
+	species_allowed = list("Evolved Slime")
+
+/datum/sprite_accessory/hair/slime_spikes
+	name = "Spikes"
+	icon_state = "slime_spikes"
+	species_allowed = list("Evolved Slime")
+
+/datum/sprite_accessory/hair/slime_droplet
+	name = "Droplet"
+	icon_state = "slime_droplet"
+	species_allowed = list("Evolved Slime")
+
+/datum/sprite_accessory/hair/slime_suu
+	name = "Wiggly"
+	icon_state = "slime_suu"
+	species_allowed = list("Evolved Slime")
 	do_colouration = 0
 
 /datum/sprite_accessory/facial_hair/taj_sideburns

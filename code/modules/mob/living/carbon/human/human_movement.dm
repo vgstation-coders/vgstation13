@@ -1,3 +1,7 @@
+/mob/living/carbon/human
+	var/crawlcounter = 1
+	var/max_crawls_before_fatigue = 6
+
 /mob/living/carbon/human/movement_delay()
 	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F
@@ -155,7 +159,7 @@
 		else
 			shoes_slip_factor = TRUE // Shoes are of no interest for this.
 
-	var/magboots_slip_factor = (!slip_on_magbooties && shoes_slip_factor && istype(shoes, /obj/item/clothing/shoes/magboots))
+	var/magboots_slip_factor = (!slip_on_magbooties && shoes_slip_factor && (shoes.clothing_flags & MAGPULSE))
 	. = ..()
 
 	// We have magboots, and magboots can protect us

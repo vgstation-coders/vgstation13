@@ -817,6 +817,10 @@
 				var/obj/item/weapon/stock_parts/capacitor/adv/super/I = new (get_turf(src.loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
+			if("ultra capacitor")
+				var/obj/item/weapon/stock_parts/capacitor/adv/super/ultra/I = new (get_turf(src.loc))
+				I.stored_charge = charge
+				I.maximum_charge = maxcharge
 		qdel(src)
 
 /obj/machinery/power/secured_capacitor/verb/flush_charge()

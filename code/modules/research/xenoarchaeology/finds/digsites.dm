@@ -21,6 +21,7 @@
 
 /datum/digsite/animal
 	digsite_ID = DIGSITE_ANIMAL
+	gen_large_artifacts = FALSE
 	find_types = list(
 			ARCHAEO_FOSSIL=100,
 			ARCHAEO_EGG=100,
@@ -32,7 +33,6 @@
 
 /datum/digsite/house
 	digsite_ID = DIGSITE_HOUSE
-	gen_large_artifacts = FALSE
 	find_types = list(
 			ARCHAEO_BOWL=100,
 			ARCHAEO_URN=100,

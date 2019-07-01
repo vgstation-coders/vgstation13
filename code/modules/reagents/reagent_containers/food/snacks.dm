@@ -91,6 +91,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/make_poisonous()
 	return
 
+/obj/item/weapon/reagent_containers/food/snacks/should_qdel_if_empty()
+	return TRUE
+
 /obj/item/weapon/reagent_containers/food/snacks/attack_self(mob/user)
 	if(can_consume(user, user))
 		consume(user, 1)
@@ -212,10 +215,11 @@
 		return
 	if(!eater.hasmouth)
 		return
-	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
+	if(is_empty())	//Are we done eating (determined by the amount of reagents left, here 0)
 		//This is mostly caused either by "persistent" food items or spamming
 		to_chat(user, "<span class='notice'>There's nothing left of \the [src].</span>")
-		qdel(src)
+		if(should_qdel_if_empty())
+			qdel(src)
 		return
 	if(wrapped)
 		to_chat(user, "<span class='notice'>\The [src] is still wrapped.</span>")
@@ -1498,7 +1502,7 @@
 	reagents.add_reagent(DISCOUNT, 4)
 	reagents.add_reagent(MOONROCKS, 4)
 	reagents.add_reagent(TOXICWASTE, 8)
-	reagents.add_reagent(URANIUM, 4)
+	reagents.add_reagent(URANIUM, 8)
 	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
 	bitesize = 2
 

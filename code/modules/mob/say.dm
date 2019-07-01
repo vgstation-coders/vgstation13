@@ -35,6 +35,14 @@
 	else if(message)
 		usr.emote("me",usr.emote_type,message)
 
+/datum/deadchat_listener //This datum allows you to read the currently funky deadchat. Simply make a child, instantiate an instance, and add functions to add/remove it from the global_deadchat_listeners.
+	var/name = "default"
+
+/datum/deadchat_listener/proc/deadchat_event(var/ckey, var/message)
+	return
+		
+var/list/global_deadchat_listeners
+		
 /mob/proc/say_dead(var/message)
 	var/name = src.real_name
 	var/alt_name = ""
@@ -56,25 +64,28 @@
 
 
 	var/turf/T = get_turf(src)
+	var/ckey = "[key_name(src)]"
+	for(var/datum/deadchat_listener/listener in global_deadchat_listeners)
+		listener.deadchat_event(ckey,message)
 	message = src.say_quote("\"[html_encode(message)]\"")
 	var/location_text = loc ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_say("[name]/[key_name(src)] (@[location_text]) Deadsay: [message]")
-	//var/rendered = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
-	var/rendered2 = null//edited
+	
+	var/rendered = null
 	for(var/mob/M in player_list)
-		rendered2 = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='prefix'> DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"//edited
+		rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='prefix'> DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"//edited
 		if(istype(M, /mob/new_player) || !M.client)
 			continue
 		if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
-			to_chat(M, rendered2)//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
+			to_chat(M, rendered)//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
 
 		else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
-			//M.show_message(rendered2, 2) //Takes into account blindness and such.
-			to_chat(M, rendered2)
+			//M.show_message(rendered, 2) //Takes into account blindness and such.
+			to_chat(M, rendered)
 		else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
-				to_chat(M, rendered2)
+				to_chat(M, rendered)
 
 /*
 /mob/proc/emote(var/act, var/type, var/message, var/auto)
@@ -152,3 +163,34 @@
 	if(stat == DEAD || universal_understand)
 		return TRUE
 	return FALSE
+
+/mob/proc/forcesay(list/append)
+	if(stat == CONSCIOUS)
+		if(client)
+			var/virgin = 1	//has the text been modified yet?
+			var/temp = winget(client, "input", "text")
+			if(findtextEx(temp, "Say \"", 1, 7) && length(temp) > 5)	//case sensitive means
+
+				temp = replacetext(temp, ";", "")	//general radio
+
+				if(findtext(trim_left(temp), ":", 6, 7))	//dept radio
+					temp = copytext(trim_left(temp), 8)
+					virgin = 0
+
+				if(virgin)
+					temp = copytext(trim_left(temp), 6)	//normal speech
+					virgin = 0
+
+				while(findtext(trim_left(temp), ":", 1, 2))	//dept radio again (necessary)
+					temp = copytext(trim_left(temp), 3)
+
+				if(findtext(temp, "*", 1, 2))	//emotes
+					return
+
+				var/trimmed = trim_left(temp)
+				if(length(trimmed))
+					if(append)
+						temp += pick(append)
+
+					say(temp)
+				winset(client, "input", "text=[null]")

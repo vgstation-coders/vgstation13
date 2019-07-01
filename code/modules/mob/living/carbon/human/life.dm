@@ -124,6 +124,8 @@ var/global/list/organ_damage_overlays = list(
 	//TODO: seperate this out
 	//Update the current life tick, can be used to e.g. only do something every 4 ticks
 	life_tick++
+	if (life_tick % 2)
+		crawlcounter = 1
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	in_stasis = istype(loc, /obj/structure/closet/body_bag/cryobag) && loc:opened == 0 //Nice runtime operator

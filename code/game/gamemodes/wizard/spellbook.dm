@@ -744,6 +744,12 @@
 		to_chat(user, "<span class = 'warning'>You feel like you've been pushing yourself too hard! </span>")
 		qdel(src)
 
+/obj/item/weapon/spellbook/oneuse/mutate/highlander //for highlander uplink bundle
+	spell =/spell/targeted/genetic/mutate/highlander
+	spellname  = "highlander power"
+	icon_state = "bookhighlander"
+	desc = "You can hear the bagpipes playing already."
+
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
 	spellname = "disorient"
@@ -977,7 +983,7 @@
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle
-	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate, /spell/targeted/retard)
 	spell = null
 	icon_state = "book"
 	desc = "A book of lost and forgotten knowledge"

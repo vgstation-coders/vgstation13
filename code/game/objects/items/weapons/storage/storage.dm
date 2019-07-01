@@ -30,12 +30,13 @@
 	var/foldable_amount = 1 // Number of foldables to produce, if any - N3X
 	var/internal_store = 0
 	var/list/no_storage_slot = new/list()//if the item is equipped in a slot that is contained in this list, the item will act purely as a clothing item and not a storage item (ie plastic bags over head)
+	var/rustle_sound = "rustle"
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
 
 /obj/item/weapon/storage/on_mousedrop_to_inventory_slot()
-	playsound(src, "rustle", 50, 1, -5)
+	playsound(src, rustle_sound, 50, 1, -5)
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
 	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
@@ -438,7 +439,7 @@
 	..()
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	playsound(src, "rustle", 50, 1, -5)
+	playsound(src, rustle_sound, 50, 1, -5)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user

@@ -345,7 +345,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 
 /obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
-	return 0
+	return FALSE
+
+/obj/item/weapon/reagent_containers/proc/should_qdel_if_empty()
+	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")

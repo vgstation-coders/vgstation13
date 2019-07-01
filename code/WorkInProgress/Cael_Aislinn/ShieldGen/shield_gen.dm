@@ -63,9 +63,9 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
-		energy_conversion_rate = (initial(energy_conversion_rate)+(T * 0.01))	
-		max_strengthen_rate = (initial(max_strengthen_rate)+(T))	
-	
+		energy_conversion_rate = (initial(energy_conversion_rate)+(T * 0.01))
+		max_strengthen_rate = (initial(max_strengthen_rate)+(T))
+
 /obj/machinery/shield_gen/Destroy()
 	..()
 	owned_capacitor = null
@@ -265,7 +265,7 @@
 		return
 	if(prob(50))
 		active = !active
-	
+
 /obj/machinery/shield_gen/npc_tamper_act(var/mob/living/L)
 	field_radius = rand(MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	strengthen_rate = rand(MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)

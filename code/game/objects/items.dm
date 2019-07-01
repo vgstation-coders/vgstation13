@@ -681,6 +681,8 @@
 			if(slot_handcuffed)
 				if(H.handcuffed)
 					return CANNOT_EQUIP
+				if (H.mutual_handcuffs)
+					return CANNOT_EQUIP
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
@@ -928,9 +930,11 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, atom/blocked)
+/obj/item/proc/on_block(damage, atom/movable/blocked)
 	if(ismob(loc))
-		if(prob(50 - round(damage / 3)))
+		if (IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if (prob(50 - round(damage / 3)))
 			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
 			if(isatommovable(blocked))
 				var/atom/movable/M = blocked
@@ -1268,7 +1272,7 @@ var/global/list/image/blood_overlays = list()
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
-		if(C.handcuffed)
+		if(C.handcuffed || C.mutual_handcuffs)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
 			return FALSE
 		feedback_add_details("handcuffs", "[name]")
@@ -1375,3 +1379,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
+
+//This proc will be called when the person holding or equipping it talks.
+/obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	return

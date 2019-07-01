@@ -36,6 +36,8 @@
 	if(open)
 		return 0
 
+	update_icon(0,1) //animate
+	sleep(10)
 	open = TRUE
 	update_icon()
 
@@ -54,6 +56,8 @@
 	if(!open)
 		return 0
 
+	update_icon(0,1) //animate
+	sleep(10)
 	open = FALSE
 	update_icon()
 
@@ -77,19 +81,13 @@
 /obj/machinery/atmospherics/binary/valve/attack_ai(mob/user as mob)
 	return
 
-/obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
-	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
-		to_chat(user, "<span class='warning'>Nope.</span>")
-		return
-	src.add_fingerprint(usr)
-	update_icon(0,1)
-	sleep(10)
-	if (src.open)
-		src.close()
-	else
-		src.open()
+/obj/machinery/atmospherics/binary/valve/attack_robot(mob/user as mob)
+	if(isMoMMI(user))
+		attack_hand(user)
+	return
 
-	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
+/obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
+	toggle_status(user)
 
 /obj/machinery/atmospherics/binary/valve/investigation_log(var/subject, var/message)
 	activity_log += ..()
@@ -122,12 +120,6 @@
 /obj/machinery/atmospherics/binary/valve/digital/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
-
-/obj/machinery/atmospherics/binary/valve/digital/attack_hand(mob/user as mob)
-	if(!src.allowed(user))
-		to_chat(user, "<span class='warning'>Access denied.</span>")
-		return
-	..()
 
 //Radio remote control
 
@@ -221,15 +213,29 @@
 	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(L)]")
 
 /obj/machinery/atmospherics/binary/valve/toggle_status(var/mob/user)
-	if(!allowed(user))
-		to_chat(user, "<span class='warning'>Access denied.</span>")
-		return FALSE
-	if(!user.dexterity_check())
-		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return FALSE
-	if(open)
-		close()
+	if(!Adjacent(user))
+		return
+	if(issilicon(user) && !isMoMMI(user))
+		return //these are robotproof
+	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
+		to_chat(user, "<span class='warning'>Nope.</span>")
+		return
+	src.add_fingerprint(usr)
+	if (src.open)
+		src.close()
 	else
-		open()
-	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(user)]")
+		src.open()
+	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
+	return TRUE
+
+/obj/machinery/atmospherics/binary/valve/digital/toggle_status(var/mob/user)
+	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
+		to_chat(user, "<span class='warning'>Nope.</span>")
+		return
+	src.add_fingerprint(usr)
+	if (src.open)
+		src.close()
+	else
+		src.open()
+	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
 	return TRUE

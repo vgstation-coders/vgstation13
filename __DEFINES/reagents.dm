@@ -319,6 +319,7 @@
 #define DR_GIBB			"dr_gibb"
 #define SPACE_UP		"space_up"
 #define LEMON_LIME		"lemon_lime"
+#define DIY_SODA		"diy_soda"
 #define B52				"b52"
 #define MANHATTAN_PROJ	"manhattan_proj"
 #define BAHAMA_MAMA		"bahama_mama"

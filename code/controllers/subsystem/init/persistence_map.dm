@@ -42,7 +42,6 @@ var/datum/subsystem/persistence_map/SSpersistence_map
 /datum/subsystem/persistence_map/proc/onRoundEnd()
 	if(!finished)
 		finish()
-	..()
 
 /datum/subsystem/persistence_map/proc/finish()
 	if(finished)

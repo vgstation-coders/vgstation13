@@ -11,6 +11,7 @@
 	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
+	playlist = "nukesquad"
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)

@@ -69,6 +69,8 @@ var/list/all_doors = list()
 		return FALSE
 	if(operating || !density)
 		return FALSE
+	if(!length(thing.GetAccess()))
+		return FALSE
 	if(!check_access(thing))
 		denied()
 		return FALSE
@@ -106,7 +108,7 @@ var/list/all_doors = list()
 
 		if (density)
 			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-				if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
+				if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
 			else if(!operating)
@@ -343,7 +345,7 @@ var/list/all_doors = list()
 	return !density
 
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
-	if(istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
 	return ..()
 

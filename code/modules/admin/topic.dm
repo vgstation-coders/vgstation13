@@ -63,7 +63,7 @@
 
 		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
-		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
+		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
 			to_chat(S, "<b>Your new laws are as follows:</b>")
 			S.laws.show_laws(S)
@@ -226,14 +226,14 @@
 			if(!new_ckey)
 				return
 			if(new_ckey in admin_datums)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': [new_ckey] is already an admin</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': [new_ckey] is already an admin</span>")
 				return
 			adm_ckey = new_ckey
 			task = "rank"
 		else if(task != "show")
 			adm_ckey = ckey(href_list["ckey"])
 			if(!adm_ckey)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': No valid ckey</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': No valid ckey</span>")
 				return
 
 		var/datum/admins/D = admin_datums[adm_ckey]
@@ -268,7 +268,7 @@
 					if(config.admin_legacy_system)
 						new_rank = ckeyEx(new_rank)
 					if(!new_rank)
-						to_chat(usr, "<font color='red'>Error: Topic 'editrights': Invalid rank</font>")
+						to_chat(usr, "<span class='red'>Error: Topic 'editrights': Invalid rank</span>")
 						return
 					if(config.admin_legacy_system)
 						if(admin_ranks.len)
@@ -328,7 +328,7 @@
 			if("1")
 				if ((!( ticker ) || emergency_shuttle.location))
 					return
-				var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification") as text|null
+				var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification")
 				emergency_shuttle.incall()
 				captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
 				log_admin("[key_name(usr)] called the Emergency Shuttle")
@@ -1475,6 +1475,7 @@
 			roundstart_rules[newrule.name] = newrule
 		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
 		if (added_rule)
+			roundstart_rules[added_rule].calledBy = "[key_name(usr)]"
 			forced_roundstart_ruleset += roundstart_rules[added_rule]
 			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
 			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
@@ -1516,6 +1517,7 @@
 		var/added_rule = input(usr,"What ruleset do you want to force upon the next latejoiner? This will bypass threat level and population restrictions.", "Rigging Latejoin", null) as null|anything in latejoin_rules
 		if (added_rule)
 			var/datum/gamemode/dynamic/mode = ticker.mode
+			latejoin_rules[added_rule].calledBy = "[key_name(usr)]"
 			mode.forced_latejoin_rule = latejoin_rules[added_rule]
 			log_admin("[key_name(usr)] set [added_rule] to proc on the next latejoin.")
 			message_admins("[key_name(usr)] set [added_rule] to proc on the next latejoin.", 1)
@@ -1549,7 +1551,7 @@
 			var/datum/gamemode/dynamic/mode = ticker.mode
 			log_admin("[key_name(usr)] executed the [added_rule] ruleset.")
 			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
-			mode.picking_specific_rule(midround_rules[added_rule],1)
+			mode.picking_specific_rule(midround_rules[added_rule],1,"[key_name(usr)]")
 
 	// -- Opens up the option window --
 	else if (href_list["f_dynamic_options"])
@@ -1616,7 +1618,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		dynamic_forced_extended = !dynamic_forced_extended
 		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
 		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
@@ -1628,7 +1630,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		dynamic_no_stacking = !dynamic_no_stacking
 		log_admin("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
 		message_admins("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
@@ -1640,7 +1642,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		dynamic_classic_secret = !dynamic_classic_secret
 		log_admin("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
 		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
@@ -1652,11 +1654,11 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-		
+
 		stacking_limit = input(usr,"Change the threat limit at which round-endings rulesets will start to stack.", "Change stacking limit", null) as num
 		log_admin("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
 		message_admins("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
-		dynamic_mode_options(usr)	
+		dynamic_mode_options(usr)
 
 	else if(href_list["high_pop_limit"])
 		if(!check_rights(R_ADMIN))
@@ -1667,7 +1669,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		var/new_value = input(usr, "Enter the high-pop override threshold for dynamic mode.", "High pop override") as num
 		if (new_value < 0)
 			return alert(usr, "Only positive values allowed!", null, null, null, null)
@@ -1675,7 +1677,7 @@
 
 		log_admin("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
 		message_admins("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
-		dynamic_mode_options(usr)	
+		dynamic_mode_options(usr)
 
 	else if(href_list["change_distrib"])
 		if(!check_rights(R_ADMIN))
@@ -1686,7 +1688,7 @@
 
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-				
+
 		var/list/possible_choices = list(
 			"[LORENTZ]",
 			"[GAUSS]",
@@ -1708,7 +1710,7 @@
 			dynamic_curve_centre = 0
 		log_admin("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
 		message_admins("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
-		dynamic_mode_options(usr)	
+		dynamic_mode_options(usr)
 
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
@@ -2502,7 +2504,7 @@
 
 		/*Job + antagonist
 		if(M.mind)
-			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <font color='red'><b>[M.mind.special_role]</b></font>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
+			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <span class='red'><b>[M.mind.special_role]</b></span>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
 		else
 			special_role_description = "Role: <i>Mind datum missing</i> Antagonist: <i>Mind datum missing</i>; Has been rev: <i>Mind datum missing</i>;"
 		*/
@@ -3143,6 +3145,8 @@
 					if (T)
 						T.AppendObjective(new_objective)
 						T.Greet(GREET_AUTOTATOR) // Mission specifications etc
+						T.OnPostSetup()
+						T.AnnounceObjectives()
 				for(var/mob/living/silicon/A in player_list)
 					if(A.isDead() || !A.client || !A.mind)
 						continue
@@ -3152,6 +3156,8 @@
 					if (T)
 						T.AppendObjective(new_objective)
 						T.Greet(GREET_AUTOTATOR)
+						T.OnPostSetup()
+						T.AnnounceObjectives()
 
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
@@ -3688,50 +3694,64 @@
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Return")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs", "Bloodstones raised", "Bloodstones destroyed")
 				//Big fat lists of effects, not very modular but at least there's less buttons
-				if(choice == "Return") //Actually fuck this
-					return //Duh
-				if(choice == "Biohazard") //GUISE WE HAVE A BLOB
-					var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
-					if(!levelchoice || levelchoice > 7 || levelchoice < 0)
-						to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+				switch (choice)
+					if("Biohazard") //GUISE WE HAVE A BLOB
+						var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
+						if(!levelchoice || levelchoice > 7 || levelchoice < 0)
+							to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+							return
+						biohazard_alert(level = levelchoice)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						return
-					biohazard_alert(level = levelchoice)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
-					return
-				if(choice == "Lifesigns") //MUH ALIUMS
-					command_alert(/datum/command_alert/xenomorphs)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
-					return
-				if(choice == "Malfunction") //BLOW EVERYTHING
-					var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
-					if(salertchoice == "Yes")
-						command_alert(/datum/command_alert/malf_announce)
-					to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
+					if("Lifesigns") //MUH ALIUMS
+						command_alert(/datum/command_alert/xenomorphs)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+						return
+					if("Malfunction") //BLOW EVERYTHING
+						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
+						if(salertchoice == "Yes")
+							command_alert(/datum/command_alert/malf_announce)
+						to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
-					to_chat(world, "<font color='red'>[config.alert_desc_delta]</font>")
+						to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
 
-					message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
-					return
-				if(choice == "Ion")
-					command_alert(/datum/command_alert/ion_storm)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
-					return
-				if(choice == "Meteor Wave")
-					command_alert(/datum/command_alert/meteor_wave)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
-					return
-				if(choice == "Carp Migration")
-					command_alert(/datum/command_alert/carp)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					return
+						message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+						return
+					if("Ion")
+						command_alert(/datum/command_alert/ion_storm)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+						return
+					if("Meteor Wave")
+						command_alert(/datum/command_alert/meteor_wave)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+						return
+					if("Carp Migration")
+						command_alert(/datum/command_alert/carp)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+						return
+					if("Revs")
+						command_alert(/datum/command_alert/revolution)
+						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
+						return
+					if("Bloodstones raised")
+						command_alert(/datum/command_alert/bloodstones_raised)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						return
+					if("Bloodstones destroyed")
+						command_alert(/datum/command_alert/bloodstones_broken)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodsontes Alert (destroyed).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodsontes Aler (destroyed).")
+						return
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -4069,6 +4089,7 @@
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
+		
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
 
@@ -4972,7 +4993,7 @@
 			new_objective.faction.AppendObjective(new_objective)
 			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
-		else if (obj_holder.faction) //or is it just an explicit faction obj? 
+		else if (obj_holder.faction) //or is it just an explicit faction obj?
 			obj_holder.faction.AppendObjective(new_objective)
 			message_admins("[key_name_admin(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 			log_admin("[key_name(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
@@ -5011,7 +5032,7 @@
 			var/datum/faction/F = owner
 			for (var/datum/role/member in F.members)
 				to_chat(member.antag.current, "<span class='notice'>Your faction objectives are:</span>")
-				if (member.faction.objective_holder.GetObjectives().len)
+				if (length(member.faction.objective_holder.GetObjectives()))
 					var/obj_count = 1
 					for(var/datum/objective/O in member.faction.GetObjectives())
 						text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
@@ -5022,16 +5043,17 @@
 	if(href_list["obj_gen"])
 		var/owner = locate(href_list["obj_owner"])
 		var/datum/faction/F = owner
-		var/list/prev_objectives = F.GetObjectives().Copy()
+		var/list/faction_objectives = F.GetObjectives()
+		var/list/prev_objectives = faction_objectives.Copy()
 		F.forgeObjectives()
 		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
 		if (!unique_objectives.len)
 			alert(usr, "No new objectives generated.", "", "OK")
-		else 
+		else
 			for (var/datum/objective/objective in unique_objectives)
 				message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
 				log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
-		check_antagonists()	
+		check_antagonists()
 
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))
@@ -5136,16 +5158,17 @@
 			if("newdisclaimer")
 				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
 				if(newdisclaimer)
+					newdisclaimer += "<br>"
 					end_credits.disclaimers.Insert(1,newdisclaimer)
-					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
-					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")
+					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
 			if("editdisclaimer")
 				var/i = text2num(href_list["disclaimerindex"])
 				var/olddisclaimer = end_credits.disclaimers[i]
 				var/newdisclaimer = input(usr,"Write a new rolling disclaimer.","Edit Disclaimer",olddisclaimer) as message|null
 				if(newdisclaimer)
-					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
-					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[newdisclaimer]'")
+					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
 					end_credits.disclaimers[i] = newdisclaimer
 			if("disclaimerup")
 				var/i = text2num(href_list["disclaimerindex"])
