@@ -253,6 +253,12 @@
 		to_chat(user, "<span class = 'warning'>You feel like you've been pushing yourself too hard! </span>")
 		qdel(src)
 
+/obj/item/weapon/spellbook/oneuse/mutate/highlander //for highlander uplink bundle
+	spell =/spell/targeted/genetic/mutate/highlander
+	spellname  = "highlander power"
+	icon_state = "bookhighlander"
+	desc = "You can hear the bagpipes playing already."
+
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
 	spellname = "disorient"
