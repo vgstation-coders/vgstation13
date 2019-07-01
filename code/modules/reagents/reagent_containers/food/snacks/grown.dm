@@ -564,6 +564,9 @@ var/list/special_fruits = list()
 	plantname = "banana"
 	fragrance = INCENSE_BANANA
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
+	return TRUE
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"
 	desc = "It's an excellent prop for a comedy."

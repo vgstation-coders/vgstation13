@@ -154,6 +154,10 @@
 
 #define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
 
+#define isbanana(A) istype(A, /obj/item/weapon/reagent_containers/food/snacks/grown/banana)
+
+#define isgun(A) istype(A, /obj/item/weapon/gun)
+
 #define ispowercell(A) istype(A, /obj/item/weapon/cell)
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
