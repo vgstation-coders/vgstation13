@@ -16,6 +16,8 @@
 	if(can_butcher && !meat_amount)
 		meat_amount = size
 
+	immune_system = new (src)
+
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -622,6 +624,9 @@ Thanks.
 		H.updatehealth()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
+	for (var/ID in virus2)
+		var/datum/disease2/disease/V = virus2[ID]
+		V.cure(src)
 	if(stat == DEAD)
 		resurrect()
 		tod = null
@@ -638,7 +643,6 @@ Thanks.
 
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
-	return
 
 /mob/living/proc/UpdateDamageIcon()
 	return
@@ -1961,11 +1965,12 @@ Thanks.
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
 	if (!check_airborne_sterility())//checking for sterile mouth protections
 		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
-			if (cloud.source != src && Adjacent(cloud))
-				for (var/ID in cloud.viruses)
-					var/datum/disease2/disease/V = cloud.viruses[ID]
-					//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
-					infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+			if (!cloud.sourceIsCarrier || cloud.source != src)
+				if (Adjacent(cloud))
+					for (var/ID in cloud.viruses)
+						var/datum/disease2/disease/V = cloud.viruses[ID]
+						//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+						infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
 
 		var/turf/T = get_turf(src)
 		var/list/breathable_cleanable_types = list(
@@ -2001,3 +2006,24 @@ Thanks.
 				while (strength > 0)//stronger viruses create more clouds at once
 					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
 					strength -= 40
+
+/mob/living/proc/handle_virus_updates()
+	if(status_flags & GODMODE)
+		return 0
+
+	src.find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
+
+	activate_diseases()
+
+/mob/living/proc/activate_diseases()
+	if (virus2.len)
+		var/active_disease = pick(virus2)//only one disease will activate its effects at a time.
+		for (var/ID in virus2)
+			var/datum/disease2/disease/V = virus2[ID]
+			if(istype(V))
+				V.activate(src,active_disease!=ID)
+
+				if (prob(radiation))//radiation turns your body into an inefficient pathogenic incubator.
+					V.incubate(src,rad_tick/10)
+					//effect mutations won't occur unless the mob also has ingested mutagen
+					//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.

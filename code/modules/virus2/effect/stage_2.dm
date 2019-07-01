@@ -1,7 +1,9 @@
 /datum/disease2/effect/scream
 	name = "Loudness Syndrome"
 	desc = "Causes the infected to scream at random."
+	encyclopedia = ""
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
 	mob.audible_scream()
@@ -10,7 +12,9 @@
 /datum/disease2/effect/drowsness
 	name = "Automated Sleeping Syndrome"
 	desc = "Makes the infected feel more drowsy."
+	encyclopedia = "This may cause the infected to randomly fall asleep at times."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
 	mob.drowsyness += 10
@@ -19,7 +23,9 @@
 /datum/disease2/effect/sleepy
 	name = "Resting Syndrome"
 	desc = "Causes the infected to collapse in random fits of narcolepsy"
+	encyclopedia = ""
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
 	mob.say("*collapse")
@@ -28,7 +34,9 @@
 /datum/disease2/effect/blind
 	name = "Blackout Syndrome"
 	desc = "Inhibits the infected's ability to see."
+	encyclopedia = "Turning them blind for about 5 seconds."
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
 	mob.eye_blind = max(mob.eye_blind, 4)
@@ -36,8 +44,10 @@
 
 /datum/disease2/effect/cough//creates pathogenic clouds that may contain even non-airborne viruses.
 	name = "Anima Syndrome"
-	desc = "Causes the infected to cough rapidly, infecting people in their surroundings."
+	desc = "Causes the infected to cough rapidly, releasing pathogenic clouds."
+	encyclopedia = "This symptom enables even diseases that lack the Airborne vector to spread through the air."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
 	mob.say("*cough")
@@ -90,6 +100,7 @@
 	name = "Appetiser Effect"
 	desc = "Starves the infected."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
 	mob.nutrition = max(0, mob.nutrition - 200)
@@ -99,6 +110,7 @@
 	name = "Refridgerator Syndrome"
 	desc = "Causes the infected to shiver at random."
 	stage = 2
+	badness = 1
 
 /datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
 	mob.say("*shiver")
@@ -107,7 +119,9 @@
 /datum/disease2/effect/hair
 	name = "Hair Loss"
 	desc = "Causes rapid hairloss in the infected."
+	encyclopedia = "Nothing that a trip in front of a mirror can't fix."
 	stage = 2
+	badness = 1
 
 /datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -122,7 +136,9 @@
 /datum/disease2/effect/stimulant
 	name = "Adrenaline Extra"
 	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
+	encyclopedia = "Thankfully the pathogen keeps the production bellow overdose levels."
 	stage = 2
+	badness = 0
 
 /datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
@@ -135,7 +151,9 @@
 /datum/disease2/effect/drunk
 	name = "Glasgow Syndrome"
 	desc = "Causes the infected to synthesize pure ethanol."
+	encyclopedia = "Without a cure, the infected's liver is sure to die, also effect strength increases the rate at which ethanol is synthesized."
 	stage = 2
+	badness = 4
 
 /datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
@@ -147,6 +165,7 @@
 	name = "Gaben Syndrome"
 	desc = "Makes the infected incredibly fat."
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
@@ -159,6 +178,7 @@
 	name = "Bearding"
 	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
+	badness = 1
 
 /datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -172,14 +192,17 @@
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
-	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed that acts as a valid pathogen carrier. (Note: Does not affect the users blood pressure.)"
+	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed, potentially carrying the pathogen."
+	encyclopedia = "People lingering on top of the dropped blood may accidentally become infected if they're not properly protected."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
 	if (prob(30))
 		if (ishuman(mob))
 			var/mob/living/carbon/human/H = mob
-			H.drip(1)
+			if (!(H.species.anatomy_flags & NO_BLOOD))
+				H.drip(1)
 		else
 			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 			if(D==null)
@@ -189,8 +212,10 @@
 
 /datum/disease2/effect/viralsputum
 	name = "Respiratory Putrification"
-	desc = "Causes the infected to cough up viral sputum, which acts as a valid pathogen carrier."
+	desc = "Causes the infected to cough up viral sputum over the floor, which acts as a pathogen carrier."
+	encyclopedia = "People lingering on top of the dropped blood may accidentally become infected if they're not properly protected."
 	stage = 2
+	badness = 2
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
 	if (prob(30))
@@ -205,7 +230,9 @@
 /datum/disease2/effect/lantern
 	name = "Lantern Syndrome"
 	desc = "Causes the infected to glow."
+	encyclopedia = "While useful at first glance, this also hinders the infected's capacity at hiding."
 	stage = 2
+	badness = 0
 
 /datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
 	mob.set_light(4)
@@ -215,9 +242,11 @@
 /datum/disease2/effect/hangman
 	name = "Hanging Man's Syndrome"
 	desc = "Inhibits a portion of the infected's brain that controls speech, removing the infected's ability to speak vowels."
+	encyclopedia = "Highly irritating."
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
+	badness = 3
 
 /datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob)
 //Add filters to change a,A,e,E,i,I,o,O,u,U to _
@@ -245,10 +274,12 @@
 /datum/disease2/effect/vitreous
 	name = "Vitreous resonance"
 	desc = "Causes the infected to shake uncontrollably, at the same frequency that is required to break glass."
+	encyclopedia = "They may accidentally break syringes, beakers, bottles and other glass containers they try to hold, which may harm or mysteriously heal your hand."
 	stage = 2
 	chance = 25
 	max_chance = 75
 	max_multiplier = 2
+	badness = 2
 
 /datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
 	if(istype(H))
@@ -280,6 +311,7 @@
 	stage = 2
 	affect_voice = 1
 	max_count = 1
+	badness = 3
 	var/list/virus_opposite_word_list
 
 /datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -330,8 +362,10 @@
 /datum/disease2/effect/spiky_skin
 	name = "Porokeratosis Acanthus"
 	desc = "Causes the infected to generate keratin spines along their skin."
+	encyclopedia = "Touching or bumping into people may now severly injure them."
 	stage = 2
 	max_count = 1
+	badness = 3
 	var/skip = FALSE
 
 /datum/disease2/effect/spiky_skin/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -396,7 +430,10 @@
 
 /datum/disease2/effect/vegan
 	name = "Vegan Syndrome"
+	desc = "Infected people will fall ill if they try to eat meat."
+	encyclopedia = ""
 	stage = 2
+	badness = 3
 
 /datum/disease2/effect/vegan/activate(var/mob/living/carbon/mob)
 	mob.dna.check_integrity()
@@ -406,8 +443,10 @@
 /datum/disease2/effect/famine
 	name = "Faminous Potation"
 	desc = "The infected emanates a field that kills off plantlife. Lethal to species descended from plants."
+	encyclopedia = "Do not linger near Hydroponics or you will become the sworn enemy of all botanists."
 	stage = 2
 	max_multiplier = 3
+	badness = 3
 
 /datum/disease2/effect/famine/activate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
@@ -445,10 +484,12 @@
 /datum/disease2/effect/calorieburn
 	name = "Caloric expenditure overefficiency"
 	desc = "Causes the infected to burn calories at a higher rate."
+	encyclopedia = "Higher Strength means accelerated metabolism."
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
 	var/activated = FALSE
+	badness = 3
 
 /datum/disease2/effect/calorieburn/activate(var/mob/living/carbon/mob)
 	if(!activated)
@@ -466,9 +507,11 @@
 /datum/disease2/effect/calorieconserve
 	name = "Caloric expenditure defficiency"
 	desc = "Causes the infected to burn calories at a lower rate."
+	encyclopedia = "Higher Strength means decelerated metabolism."
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
+	badness = 3
 	var/activated = FALSE
 
 /datum/disease2/effect/calorieconserve/activate(var/mob/living/carbon/mob)
@@ -491,6 +534,7 @@
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
+	badness = 2
 
 /datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
 	if(!triggered)

@@ -58,7 +58,16 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(has_any_recorded_disease(patient))
-				holder.icon_state = "hudill"
+				if (has_recorded_disease(patient))
+					holder.icon_state = "hudill_old"
+				else
+					holder.icon_state = "hudill"
+					var/dangerosity = has_recorded_virus2(patient)
+					switch (dangerosity)
+						if (2)
+							holder.icon_state = "hudill_safe"
+						if (3)
+							holder.icon_state = "hudill_danger"
 			else
 				holder.icon_state = "hudhealthy"
 			C.images += holder
@@ -89,7 +98,16 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(has_any_recorded_disease(patient))
-				holder.icon_state = "hudill"
+				if (has_recorded_disease(patient))
+					holder.icon_state = "hudill_old"
+				else
+					holder.icon_state = "hudill"
+					var/dangerosity = has_recorded_virus2(patient)
+					switch (dangerosity)
+						if (2)
+							holder.icon_state = "hudill_safe"
+						if (3)
+							holder.icon_state = "hudill_danger"
 			else
 				holder.icon_state = "hudhealthy"
 			C.images += holder

@@ -1,7 +1,9 @@
 /datum/disease2/effect/invisible
 	name = "Waiting Syndrome"
 	desc = "A self-defeating symptom that doesn't seem to do anything in particular."
+	encyclopedia = "Useful as placeholder in a beneficial pathogen, or when aiming to give time for the pathogen to spread before an outbreak is declared."
 	stage = 1
+	badness = 0
 
 /datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
 	return
@@ -9,8 +11,10 @@
 
 /datum/disease2/effect/sneeze
 	name = "Coldingtons Effect"
-	desc = "Makes the infected sneeze every so often."
+	desc = "Makes the infected sneeze every so often, leaving some infected mucus on the floor."
+	encyclopedia = "Said mucus carries every pathogen held by the infected, potentially infecting other people who stand on top."
 	stage = 1
+	badness = 2
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
 	mob.say("*sneeze")
@@ -27,7 +31,9 @@
 /datum/disease2/effect/gunck
 	name = "Flemmingtons"
 	desc = "Causes a sensation of mucous running down the infected's throat."
+	encyclopedia = "Beside that, it doesn't do much harm."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
@@ -36,7 +42,9 @@
 /datum/disease2/effect/drool
 	name = "Saliva Effect"
 	desc = "Causes the infected to drool."
+	encyclopedia = "Potentially leading people to believe in a case of brain damage."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
 	mob.say("*drool")
@@ -45,7 +53,9 @@
 /datum/disease2/effect/twitch
 	name = "Twitcher"
 	desc = "Causes the infected to twitch."
+	encyclopedia = "Potentially leading people to believe in a case of space drug abuse."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
 	mob.say("*twitch")
@@ -53,8 +63,10 @@
 
 /datum/disease2/effect/headache
 	name = "Headache"
-	desc = "Gives the infected a headache."
+	desc = "Gives the infected a light headache."
+	encyclopedia = "It won't actually cause any damage to the infected's organs.."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
@@ -62,7 +74,10 @@
 
 /datum/disease2/effect/itching
 	name = "Itching"
+	desc = "Causes itching from the infected's skin all the way to their bones."
+	encyclopedia = "Itching, while annoying, is completely harmless."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
 	var/mob/living/carbon/human/H = mob
@@ -75,7 +90,9 @@
 /datum/disease2/effect/drained
 	name = "Drained Feeling"
 	desc = "Gives the infected a drained sensation."
+	encyclopedia = "It's all in their imagination however."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='warning'>You feel drained.</span>")
@@ -84,7 +101,9 @@
 /datum/disease2/effect/eyewater
 	name = "Watery Eyes"
 	desc = "Causes the infected's tear ducts to overact."
+	encyclopedia = "Essentially causing them to cry."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<SPAN CLASS='warning'>Your eyes sting and water!</SPAN>")
@@ -93,7 +112,9 @@
 /datum/disease2/effect/wheeze
 	name = "Wheezing"
 	desc = "Inhibits the infected's ability to breathe slightly, causing them to wheeze."
+	encyclopedia = "Doesn't actually reduce their air intake."
 	stage = 1
+	badness = 1
 
 /datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
 	mob.emote("me",1,"wheezes.")
@@ -102,7 +123,9 @@
 /datum/disease2/effect/optimistic
 	name = "Full Glass Syndrome"
 	desc = "Gives a feeling of optimism to the infected."
+	encyclopedia = "With the added bonus of keeping them supplied with tricordrazine."
 	stage = 1
+	badness = 0
 
 /datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
@@ -113,7 +136,9 @@
 /datum/disease2/effect/spyndrome
 	name = "Gyroscopic Manipulation Syndrome"
 	desc = "Makes the infected spin at random."
+	encyclopedia = "Although it impaires movement, it appears to favor healing in the infected's legs."
 	stage = 1
+	badness = 3
 
 /datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
 	if (mob.reagents.get_reagent_amount(GYRO) < 1)
@@ -122,7 +147,9 @@
 /datum/disease2/effect/bee_vomit
 	name = "Melisso-Emeto Syndrome"
 	desc = "Converts the lungs of the infected into a bee-hive, giving the infected a steady drip of honey in exchange of vomiting up a bee every so often."
+	encyclopedia = "The higher the symptom strength, the more honey can be accumulated before risking vomiting bees. While Honey is a great healing reagent, it is also high on nutrients. Expect to become fat quickly.."
 	stage = 1
+	badness = 2
 	max_multiplier = 10
 
 /datum/disease2/effect/bee_vomit/activate(var/mob/living/carbon/mob)
@@ -145,13 +172,15 @@
 /datum/disease2/effect/radresist
 	name = "Hyronalinism"
 	desc = "Causes the infected to synthesize Hyronalin."
+	encyclopedia = "The effect can trigger up to 10 times in total, and only when radiations are detected in the infected."
 	stage = 1
 	chance = 10
 	max_chance = 40
 	max_count = 10
+	badness = 0
 
 /datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
-	if(mob.reagents.get_reagent_amount(HYRONALIN) < 15)
+	if(mob.radiation && mob.reagents.get_reagent_amount(HYRONALIN) < 15)
 		mob.reagents.add_reagent(HYRONALIN, 1)
 		to_chat(mob, "<span class = 'notice'>Your body feels more resistant to radiation.</span>")
 
@@ -159,9 +188,11 @@
 /datum/disease2/effect/soreness
 	name = "Myalgia Syndrome"
 	desc = "Makes the infected more perceptive of their aches and pains."
+	encyclopedia = "Which just means that they will be feeling sore all the time."
 	stage = 1
 	chance = 5
 	max_chance = 60
+	badness = 1
 
 /datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel a little sore.</span>")
@@ -170,9 +201,11 @@
 /datum/disease2/effect/socialconfusion
 	name = "Clashing Syndrome"
 	desc = "Befuddles the infected, making them greet and bid farewell to people in their surroundings."
+	encyclopedia = "Quite hilarious when infecting monkeys and mice."
 	stage = 1
 	chance = 5
 	max_chance = 25
+	badness = 1
 
 /datum/disease2/effect/socialconfusion/activate(var/mob/living/carbon/mob)
 	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)

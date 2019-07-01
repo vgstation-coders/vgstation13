@@ -183,34 +183,6 @@
 					emote("gasp")
 				updatehealth()
 
-/mob/living/carbon/monkey/proc/handle_virus_updates()
-	if(status_flags & GODMODE)
-		return 0	//godmode
-	if(bodytemperature > 406)
-		for(var/datum/disease/D in viruses)
-			D.cure()
-		for (var/ID in virus2)
-			var/datum/disease2/disease/V = virus2[ID]
-			V.cure(src)
-
-	src.find_nearby_disease()
-
-	for (var/ID in virus2)
-		var/datum/disease2/disease/V = virus2[ID]
-		if(isnull(V)) // Trying to figure out a runtime error that keeps repeating
-			CRASH("virus2 nulled before calling activate()")
-		else
-			V.activate(src)
-		// activate may have deleted the virus
-		if(!V)
-			continue
-
-		// check if we're immune
-		if(V.antigen & src.antibodies)
-			V.dead = 1
-
-	return
-
 /mob/living/carbon/monkey/proc/breathe()
 	if(flags & INVULNERABLE)
 		return

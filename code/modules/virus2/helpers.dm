@@ -141,17 +141,17 @@ var/list/infected_contact_mobs = list()
 		return 0
 	if(!can_be_infected())//humans, monkeys, mouse, for now
 		return 0
-	if ("[disease.uniqueID]" in virus2)
+	if ("[disease.uniqueID]-[disease.subID]" in virus2)
 		return 0
-	if((antibodies & disease.antigen) != 0)
+	if(!immune_system.CanInfect(disease))
 		return 0
 	if(prob(disease.infectionchance) || forced)
 		var/datum/disease2/disease/D = disease.getcopy()
 		if (D.infectionchance > 10)
-			D.infectionchance -= 10//The virus gets weaker as it jumps from people to people
+			D.infectionchance = max(10, D.infectionchance - 10)//The virus gets weaker as it jumps from people to people
 		D.stage = Clamp(D.stage+D.stage_variance, 1, D.max_stage)
 		D.log += "<br />[timestamp()] Infected [key_name(src)] [notes]. Infection chance now [D.infectionchance]%"
-		virus2["[D.uniqueID]"] = D
+		virus2["[D.uniqueID]-[D.subID]"] = D
 
 		if (disease.spread & SPREAD_CONTACT)
 			infected_contact_mobs |= src
@@ -163,6 +163,21 @@ var/list/infected_contact_mobs = list()
 			for (var/mob/living/L in science_goggles_wearers)
 				if (L.client)
 					L.client.images |= pathogen
+
+		for (var/obj/item/device/pda/p in contents)
+			if (p.scanmode == (SCANMODE_MEDICAL))
+				playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
+				if("[disease.uniqueID]-[disease.subID]" in virusDB)
+					var/datum/data/record/V = virusDB["[disease.uniqueID]-[disease.subID]"]
+					var/risk = "warning"
+					switch (V.fields["danger"])
+						if ("*DANGEROUS*")
+							risk = "danger"
+						if ("Safe")
+							risk = "notice"
+					to_chat(src, "[bicon(src)]<span class='[risk]'>Infection Detected! [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] has entered your body.</span>")
+				else
+					to_chat(src, "[bicon(src)]<span class='danger'>Infection Detected! Unknown [D.form] has entered your body.</span>")
 
 		return 1
 	return 0
@@ -177,12 +192,12 @@ var/list/infected_items = list()
 		return 0
 	if (prob(sterility))
 		return 0
-	if ("[disease.uniqueID]" in virus2)
+	if ("[disease.uniqueID]-[disease.subID]" in virus2)
 		return 0
 	if(prob(disease.infectionchance) || forced)
 		var/datum/disease2/disease/D = disease.getcopy()
 		D.log += "<br />[timestamp()] Infected \a [src] [notes]"
-		virus2["[D.uniqueID]"] = D
+		virus2["[D.uniqueID]-[D.subID]"] = D
 
 		infected_items |= src
 		if (!pathogen)
@@ -196,7 +211,7 @@ var/list/infected_items = list()
 
 		if (decay)
 			spawn((disease.infectionchance/10) MINUTES)
-				remove_disease2("[D.uniqueID]")
+				remove_disease2("[D.uniqueID]-[D.subID]")
 		return 1
 	return 0
 
@@ -215,62 +230,6 @@ var/list/infected_items = list()
 				if (L.client)
 					L.client.images -= pathogen
 
-/*
-///////////////////////////////////////////
-//                                       //
-//          CREATING A VIRUS             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                       //
-///////////////////////////////////////////
-
-proc/virus2_lesser_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_lesser(candidates[1])
-
-//Infects mob M with random lesser disease, if he doesn't have one
-/proc/infect_mob_random_lesser(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D
-	if(prob(70))
-		D = new /datum/disease2/disease/bacteria("infect_mob_random_lesser")
-	else
-		D = new /datum/disease2/disease("infect_mob_random_lesser")
-	D.makerandom(FALSE, TRUE)
-	D.infectionchance = 1
-	M.virus2["[D.uniqueID]"] = D
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-proc/virus2_greater_infection()
-	var/list/candidates = list()	//list of candidate keys
-
-	for(var/mob/living/carbon/human/G in player_list)
-		if(G.client && G.stat != DEAD)
-			candidates += G
-	if(!candidates.len)
-		return
-
-	candidates = shuffle(candidates)
-
-	infect_mob_random_greater(candidates[1])
-
-//Infects mob M with random greated disease, if he doesn't have one
-/proc/infect_mob_random_greater(var/mob/living/carbon/M)
-	var/datum/disease2/disease/D
-	if(prob(30))
-		D = new /datum/disease2/disease/parasite("infect_mob_random_greater")
-	else
-		D = new /datum/disease2/disease("infect_mob_random_greater")
-	D.makerandom(TRUE, TRUE)
-	M.virus2["[D.uniqueID]"] = D
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //MEDHUD STUFF
@@ -278,10 +237,20 @@ proc/virus2_greater_infection()
 // Returns 1 if patient has virus2 that medHUDs would pick up.
 // Otherwise returns 0
 /proc/has_recorded_virus2(var/mob/living/carbon/patient)
+	var/highest_danger = 0
 	for (var/ID in patient.virus2)
 		if (ID in virusDB)
-			return 1
-	return 0
+			highest_danger = max(highest_danger,1)
+			var/datum/data/record/v = virusDB[ID]
+			if (v.fields["danger"])
+				switch (v.fields["danger"])
+					if ("*DANGEROUS*")
+						highest_danger = max(highest_danger,3)
+					if ("Undetermined")
+						highest_danger = max(highest_danger,1)
+					if ("Safe")
+						highest_danger = max(highest_danger,2)
+	return highest_danger
 
 // This one doesn't really belong here, but old disease code has no helpers, so
 // Returns 1 if patient has old-style disease that medHUDs would pick up.

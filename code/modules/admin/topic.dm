@@ -463,6 +463,129 @@
 			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.name]</a> from [D.areaname] to [href_list["move_destination"]]</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
+
+
+
+	else if(href_list["diseasepanel_examine"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_examine"])
+
+		var/datum/browser/popup = new(usr, "\ref[D]", "[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]", 600, 300, src)
+		popup.set_content(D.get_info())
+		popup.open()
+
+	else if(href_list["diseasepanel_toggledb"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_toggledb"])
+
+		if ("[D.uniqueID]-[D.subID]" in virusDB)
+			virusDB -= "[D.uniqueID]-[D.subID]"
+		else
+			D.addToDB()
+
+		var/client/C = usr.client
+		if(C.holder)
+			C.holder.diseases_panel()
+
+	else if(href_list["diseasepanel_infectedmobs"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_infectedmobs"])
+
+		var/list/infctd_mobs = list()
+		for (var/mob/living/L in mob_list)
+			if ("[D.uniqueID]-[D.subID]" in L.virus2)
+				infctd_mobs.Add(L)
+
+		if (!infctd_mobs)
+			return
+
+		var/mob/living/L = input(usr, "Choose an infected mob to check", "Disease Panel") as null | anything in infctd_mobs
+		if (!L)
+			return
+		if (!L.loc)
+			to_chat(usr,"<span class='warning'>Mob is in nullspace!</span>")
+			return
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		if(C)
+			C.jumptomob(L)
+
+	else if(href_list["diseasepanel_infecteditems"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_infecteditems"])
+
+		var/list/infctd_items = list()
+		for (var/obj/item/I in infected_items)
+			if ("[D.uniqueID]-[D.subID]" in I.virus2)
+				infctd_items.Add(I)
+
+		if (!infctd_items)
+			return
+
+		var/obj/item/I = input(usr, "Choose an infected item to check", "Disease Panel") as null | anything in infctd_items
+		if (!I)
+			return
+		if (!I.loc)
+			to_chat(usr,"<span class='warning'>Item is in nullspace!</span>")
+			return
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(get_turf(I))
+
+	else if(href_list["diseasepanel_dishes"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_dishes"])
+
+		var/list/dishes = list()
+		for (var/obj/item/weapon/virusdish/dish in virusdishes)
+			if (dish.contained_virus)
+				if ("[D.uniqueID]-[D.subID]" == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
+					dishes.Add(dish)
+
+		if (!dishes)
+			return
+
+		var/obj/item/weapon/virusdish/dish = input(usr, "Choose a growth dish to check", "Disease Panel") as null | anything in dishes
+		if (!dish)
+			return
+		if (!dish.loc)
+			to_chat(usr,"<span class='warning'>Dish is in nullspace!</span>")
+			return
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(get_turf(dish))
+
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
 			return
@@ -3865,6 +3988,11 @@
 				var/emag = input("Emag the turret?") in list("No", "Yes")
 				if(emag=="Yes")
 					Turret.emag(usr)
+			if("virusdish")
+				virus2_make_custom(usr.client,null)
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","VIR")
+
 			if("hardcore_mode")
 				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
 
@@ -3993,10 +4121,6 @@
 				J.set_total_positions(99)
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
-			if("virus_custom")
-				if(virus2_make_custom(usr.client))
-					feedback_add_details("admin_secrets_fun_used", "V_C")
-					message_admins("[key_name_admin(usr)] has trigger a custom virus outbreak.", 1)
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 

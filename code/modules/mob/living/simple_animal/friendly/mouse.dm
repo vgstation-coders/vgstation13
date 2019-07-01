@@ -87,16 +87,41 @@
 		if(prob(5))
 			to_chat(src, "<span class = 'warning'>You are getting hungry!</span>")
 
-	find_nearby_disease()//getting diseases from
+	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
-	if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
-		breath_airborne_diseases()
+	//------------------------DISEASE STUFF--------------------------------------------------------
+	if(!(status_flags & GODMODE))
+		if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from contact and airborne diseases
+			find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
 
-	for (var/mob/living/simple_animal/mouse/M in range(1,src))
-		share_contact_diseases(M)
+			if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
+				breath_airborne_diseases()
+
+			for (var/mob/living/simple_animal/mouse/M in range(1,src))
+				if(Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
+					share_contact_diseases(M)
+
+		activate_diseases()//however cages don't prevent diseases from activating
+	//---------------------------------------------------------------------------------------------
 
 	if(!isUnconscious())
 		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
+
+		var/caged = 0
+		if(locked_to && istype(locked_to,/obj/item/critter_cage))
+			var/obj/item/critter_cage/cage = locked_to
+			caged = 1
+			//if there's some reagent in the bottle, let's drink it at once
+			if(cage.reagents.total_volume)
+				dir = EAST
+				cage.reagents.reaction(src, INGEST)
+				spawn(5)
+					if(cage.reagents)
+						flick("mouse_[_color]_eat", src)
+						cage.reagents.trans_to(src, 1)
+			//otherwise let's just look around like a dumb mouse
+			else if (prob(25))
+				dir = pick(cardinal - dir)
 
 		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
@@ -105,8 +130,13 @@
 		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
-			step_towards(src, food_target)
+			if (!locked_to)
+				step_towards(src, food_target)
+			else
+				dir = get_dir(src, food_target)
 			if(Adjacent(food_target))
+				if (caged && food_target.loc == loc)
+					dir = SOUTH
 				food_target.attack_animal(src)
 
 		if(prob(10))
@@ -140,12 +170,26 @@
 		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
 
+
+/mob/living/simple_animal/mouse/revive()
+	for (var/ID in virus2)
+		var/datum/disease2/disease/V = virus2[ID]
+		V.cure(src)
+	..()
+
 /mob/living/simple_animal/mouse/attack_hand(var/mob/living/carbon/human/M)
 	. = ..()
 	if (ishuman(M)||ismonkey(M))
 		var/block = M.check_contact_sterility(HANDS)
 		var/bleeding = M.check_bodypart_bleeding(HANDS)
 		share_contact_diseases(M,block,bleeding)
+
+	if(stat == UNCONSCIOUS && prob(33))
+		stat = CONSCIOUS
+		icon_state = "mouse_[_color]"
+		wander = 1
+		speak_chance = initial(speak_chance)
+		visible_message("\The [src] wakes up.")
 
 /mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
 	if(!..())
@@ -307,6 +351,21 @@
 /mob/living/simple_animal/mouse/white
 	_color = "white"
 	icon_state = "mouse_white"
+
+/mob/living/simple_animal/mouse/white/balbc
+	name = "Pinky"
+	desc = "A lab mouse of the BALB/c strain (Mus Musculus). Very docile, though they become easily anxious."
+	_color = "balbc"
+	icon_state = "mouse_balbc"
+	namenumbers = FALSE
+
+/mob/living/simple_animal/mouse/white/balbc/New()
+	..()
+	name = pick(
+		"Pinky",
+		"\improper Brain",
+		"Nibbles",
+		)
 
 /mob/living/simple_animal/mouse/gray
 	_color = "gray"

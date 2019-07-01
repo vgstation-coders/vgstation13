@@ -53,7 +53,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				"resistances"=null,
 				"trace_chem"=null,
 				"virus2" = null,
-				"antibodies" = null,
+				"immunity" = null,
 				)
 			B.color = B.data["blood_colour"]
 
@@ -231,7 +231,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		B.data["virus2"] = list()
 
 	B.data["virus2"] |= filter_disease_by_spread(virus_copylist(src.virus2),required = SPREAD_BLOOD)
-	B.data["antibodies"] = src.antibodies
+	B.data["immunity"] = src.immune_system.GetImmunity()
 	B.data["blood_DNA"] = copytext(src.dna.unique_enzymes,1,0)
 	if(src.resistances && src.resistances.len)
 		if(B.data["resistances"])
@@ -287,8 +287,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		for (var/ID in blood_viruses)
 			var/datum/disease2/disease/D = blood_viruses[ID]
 			infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
-	if (injected.data["antibodies"] && prob(5))
-		antibodies |= injected.data["antibodies"]
+	//if (injected.data["antibodies"] && prob(5)) maybe I'll readd that somewhere in the future
+	//	antibodies |= injected.data["antibodies"]
 	var/list/chems = list()
 	chems = params2list(injected.data["trace_chem"])
 	for(var/C in chems)

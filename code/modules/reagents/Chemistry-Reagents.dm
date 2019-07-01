@@ -371,7 +371,7 @@
 		"resistances" = null,
 		"trace_chem" = null,
 		"virus2" = null,
-		"antibodies" = null,
+		"immunity" = null,
 		)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -380,6 +380,7 @@
 	if(..())
 		return 1
 
+	//--------------OLD DISEASE CODE----------------------
 	if(self.data && self.data["viruses"])
 		for(var/datum/disease/D in self.data["viruses"])
 			//var/datum/disease/virus = new D.type(0, D, 1)
@@ -389,8 +390,46 @@
 				M.contract_disease(D)
 			else //Injected
 				M.contract_disease(D, 1, 0)
+	//----------------------------------------------------
 
-	if(iscarbon(M) || ismouse(M))
+	if(iscarbon(M))
+		var/mob/living/L = M
+		if(L.can_be_infected() && self.data && self.data["virus2"]) //Infecting
+			var/list/blood_viruses = self.data["virus2"]
+			if (istype(blood_viruses) && blood_viruses.len > 0)
+				for (var/ID in blood_viruses)
+					var/datum/disease2/disease/D = blood_viruses[ID]
+					if(method == TOUCH)
+						var/block = L.check_contact_sterility(FULL_TORSO)
+						var/bleeding = L.check_bodypart_bleeding(FULL_TORSO)
+						if (!block)
+							if (D.spread & SPREAD_CONTACT)
+								L.infect_disease2(D, notes="(Contact, splashed with infected blood)")
+							else if (bleeding && (D.spread & SPREAD_BLOOD))
+								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
+					else
+						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
+
+		if(ishuman(L) && (method == TOUCH))
+			var/mob/living/carbon/human/H = L
+			H.bloody_body(self.data["donor"])
+			if(self.data["donor"])
+				H.bloody_hands(self.data["donor"])
+			spawn() //Bloody feet, result of the blood that fell on the floor
+				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
+
+				if(B)
+					B.Crossed(H)
+
+			H.update_icons()
+
+/datum/reagent/blood/reaction_animal(var/mob/living/simple_animal/M, var/method = TOUCH, var/volume)
+
+	var/datum/reagent/blood/self = src
+	if(..())
+		return 1
+
+	if(M.can_be_infected())//for now, only mice can be infected among simple_animals.
 		var/mob/living/L = M
 		if(self.data && self.data["virus2"]) //Infecting
 			var/list/blood_viruses = self.data["virus2"]
@@ -407,21 +446,6 @@
 								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
-		if(self.data && self.data["antibodies"]) //And curing
-			L.antibodies |= self.data["antibodies"]
-
-		if(ishuman(L) && (method == TOUCH))
-			var/mob/living/carbon/human/H = L
-			H.bloody_body(self.data["donor"])
-			if(self.data["donor"])
-				H.bloody_hands(self.data["donor"])
-			spawn() //Bloody feet, result of the blood that fell on the floor
-				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
-
-				if(B)
-					B.Crossed(H)
-
-			H.update_icons()
 
 /datum/reagent/blood/on_merge(var/data)
 	if(data["blood_colour"])
@@ -487,33 +511,6 @@
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
-
-//Data must contain virus type
-/datum/reagent/vaccine
-	name = "Vaccine"
-	id = VACCINE
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C81040" //rgb: 200, 16, 64
-	density = 1.05
-	specheatcap = 3.49
-
-/datum/reagent/vaccine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
-
-	var/datum/reagent/vaccine/self = src
-	if(..())
-		return 1
-
-	if(self.data && method == INGEST)
-		for(var/datum/disease/D in M.viruses)
-			if(istype(D, /datum/disease/advance))
-				var/datum/disease/advance/A = D
-				if(A.GetDiseaseID() == self.data)
-					D.cure()
-			else
-				if(D.type == self.data)
-					D.cure()
-
-		M.resistances += self.data
 
 /datum/reagent/water
 	name = "Water"
@@ -1674,17 +1671,13 @@
 		return 1
 
 	M.apply_radiation(2 * REM, RAD_INTERNAL)
-	//Radium may increase your chances to cure a disease
-	if(iscarbon(M)) //Make sure to only use it on carbon mobs
-		var/mob/living/carbon/C = M
-		if(C.virus2.len)
-			for(var/ID in C.virus2)
-				var/datum/disease2/disease/V = C.virus2[ID]
-				if(prob(5))
-					if(prob(50))
-						C.apply_radiation(50, RAD_INTERNAL) //Curing it that way may kill you instead
-						C.adjustToxLoss(100)
-					C.antibodies |= V.antigen
+
+	if (!M.immune_system.overloaded && M.virus2.len)
+		for(var/ID in M.virus2)
+			var/datum/disease2/disease/V = M.virus2[ID]
+			if (prob(V.strength / 2))//the stronger the virus, the better higher the chance to trigger
+				M.immune_system.Overload()
+				return
 
 /datum/reagent/radium/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -3063,16 +3056,96 @@
 	M.Dizzy(5)
 	M.Jitter(5)
 
-/datum/reagent/spaceacillin
-	name = "Spaceacillin"
-	id = SPACEACILLIN
-	description = "An all-purpose antiviral agent."
+
+
+//lol homeopathy, surely I'll find somewhere to spawn these
+/datum/reagent/antipathogenic
+	name = "Placebo"
+	id = PLACEBO
+	description = "Highly ineffective, don't bet on those to keep you healthy."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#006600" //rgb: 000, 102, 000
 	custom_metabolism = 0.01
-	overdose_am = REAGENTS_OVERDOSE
+	overdose_am = 0
 	density = 1.44
 	specheatcap = 0.68
+	data = list(
+		"threshold" = 0,
+		)
+
+/datum/reagent/antipathogenic/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.immune_system.ApplyAntipathogenics(data["threshold"])
+
+//natural antipathogenic, found in garlic and kudzu
+/datum/reagent/antipathogenic/allicin
+	name = "Allicin"
+	id = ALLICIN
+	description = "A natural antipathogenic."
+	color = "#F1DEB4" //rgb: 241, 222, 180
+	overdose_am = REAGENTS_OVERDOSE//30u
+	data = list(
+		"threshold" = 30,
+		)
+
+/datum/reagent/antipathogenic/allicin/on_overdose(var/mob/living/M)
+	if (prob(30))
+		M.say("*cough")
+	M.Dizzy(5)
+
+//brewed from cryptobiolins and inaprovaline, wards off from most diseases
+/datum/reagent/antipathogenic/spaceacillin
+	name = "Spaceacillin"
+	description = "A generic antipathogenic agent."
+	id = SPACEACILLIN
+	color = "#C81040" //rgb: 200, 16, 64
+	overdose_am = REAGENTS_OVERDOSE / 2//15u
+	data = list(
+		"threshold" = 50,
+		)
+
+/datum/reagent/antipathogenic/spaceacillin/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(0.2)
+	M.Dizzy(5)
+
+//brewed from spaceacillin and nanobots, can cure any diseases given enough time, but has to be taken in very low quantities.
+/datum/reagent/antipathogenic/nanofloxacin
+	name = "Nanofloxacin"
+	description = "An extremely powerful antipathogenic. To take in equally extremely small doses, or face a variety of adverse effects."
+	id = NANOFLOXACIN
+	color = "#969696" //rgb: 189, 189, 189
+	overdose_am = REAGENTS_OVERDOSE / 10//3u
+	data = list(
+		"threshold" = 95,
+		)
+
+/datum/reagent/antipathogenic/nanofloxacin/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	M.adjustBrainLoss(5)
+	M.hallucination += 100
+	M.dizziness += 100
+
+/datum/reagent/vaccine
+	name = "Vaccine"
+	description = "A subunit vaccine. Introduces antigens without pathogenic particles to the body, allowing the immune system to produce enough antibodies to prevent any current or future infection."
+	id = VACCINE
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A6A6A6" //rgb: 166, 166, 166
+	alpha = 128
+	density = 1.05
+	specheatcap = 3.49
+	custom_metabolism = 1
+	data = list(
+		"antigen" = list(),
+		)
+
+/datum/reagent/vaccine/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.immune_system.ApplyVaccine(data["antigen"])
+
+
 
 /datum/reagent/carpotoxin
 	name = "Carpotoxin"
@@ -6815,12 +6888,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = VALERENIC_ACID
 	description = "An herbal sedative used to treat insomnia."
 	color = "#EAB160" //rgb: 234, 177, 96
-
-/datum/reagent/anti_toxin/allicin
-	name = "Allicin"
-	id = ALLICIN
-	description = "Allicin is a natural broad-spectrum antitoxin."
-	color = "#F1DEB4" //rgb: 241, 222, 180
 
 /datum/reagent/sacid/formic_acid
 	name = "Formic acid"

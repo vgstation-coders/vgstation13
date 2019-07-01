@@ -206,6 +206,9 @@
 	var/runestun = 0	//Does it have a stun talisman in it?
 	var/occult = 0 //Does this book contain forbidden and occult writings?
 
+	var/book_width = 400
+	var/book_height = 400
+
 /obj/item/weapon/book/New()
 	..()
 	if(wiki_page)
@@ -228,7 +231,7 @@
 	if (!isobserver(user))
 		playsound(user, "pageturn", 50, 1, -5)
 	if(src.dat)
-		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
+		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=[name];size=[book_width]x[book_height]")
 		if(!isobserver(user))
 			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
 		onclose(user, "book")

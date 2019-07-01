@@ -1,33 +1,42 @@
 
-// reserving some numbers for later special antigens
-var/const/ANTIGEN_A  = 1
-var/const/ANTIGEN_B  = 2
-var/const/ANTIGEN_RH = 4
-var/const/ANTIGEN_Q  = 8
-var/const/ANTIGEN_U  = 16
-var/const/ANTIGEN_V  = 32
-var/const/ANTIGEN_X  = 64
-var/const/ANTIGEN_Y  = 128
-var/const/ANTIGEN_Z  = 256
-var/const/ANTIGEN_M  = 512
-var/const/ANTIGEN_N  = 1024
-var/const/ANTIGEN_P  = 2048
-var/const/ANTIGEN_O  = 4096
-
-var/list/ANTIGENS = list(
-"[ANTIGEN_A]" = "A",
-"[ANTIGEN_B]" = "B",
-"[ANTIGEN_RH]" = "RH",
-"[ANTIGEN_Q]" = "Q",
-"[ANTIGEN_U]" = "U",
-"[ANTIGEN_V]" = "V",
-"[ANTIGEN_Z]" = "Z",
-"[ANTIGEN_M]" = "M",
-"[ANTIGEN_N]" = "N",
-"[ANTIGEN_P]" = "P",
-"[ANTIGEN_O]" = "O"
+var/list/all_antigens = list(
+	ANTIGEN_O,
+	ANTIGEN_A,
+	ANTIGEN_B,
+	ANTIGEN_RH,
+	ANTIGEN_Q,
+	ANTIGEN_U,
+	ANTIGEN_V,
+	ANTIGEN_M,
+	ANTIGEN_N,
+	ANTIGEN_P,
+	ANTIGEN_X,
+	ANTIGEN_Y,
+	ANTIGEN_Z,
+)
+var/list/blood_antigens = list(
+	ANTIGEN_O,
+	ANTIGEN_A,
+	ANTIGEN_B,
+	ANTIGEN_RH,
+)
+var/list/common_antigens = list(
+	ANTIGEN_Q,
+	ANTIGEN_U,
+	ANTIGEN_V,
+)
+var/list/rare_antigens = list(
+	ANTIGEN_M,
+	ANTIGEN_N,
+	ANTIGEN_P,
+)
+var/list/alien_antigens = list(
+	ANTIGEN_X,
+	ANTIGEN_Y,
+	ANTIGEN_Z,
 )
 
+/*
 // pure concentrated antibodies
 datum/reagent/antibodies
 	data = list("antibodies"=0)
@@ -51,3 +60,4 @@ datum/reagent/antibodies
 	var/code = ""
 	for(var/V in ANTIGENS) if(text2num(V) & antigens) code += ANTIGENS[V]
 	return code
+*/
