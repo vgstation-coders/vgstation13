@@ -637,6 +637,8 @@ var/list/crushed_cans = list()
 		throwforce++
 		throw_range++
 		throw_speed++
+		qdel(reagents)
+		reagents = null
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
 		overlays.len = 0
 		if (!(icon_state in crushed_cans))
