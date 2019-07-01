@@ -637,6 +637,7 @@ var/list/crushed_cans = list()
 		throwforce++
 		throw_range++
 		throw_speed++
+		flags &= ~OPENCONTAINER
 		qdel(reagents)
 		reagents = null
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
