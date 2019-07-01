@@ -20,6 +20,14 @@
 			spellList += S
 	return spellList
 
+/proc/getAllWizSpellsBySpecialization(var/specialization)
+	var/list/spell/spellList = list()
+	for(var/type_S in typesof(/spell))
+		var/spell/S = type_S
+		if((initial(S.specialization) == specialization) && (initial(S.user_type) == USER_TYPE_WIZARD)) //This is for wizard spells only!
+			spellList += S
+	return spellList
+
 /proc/getAllWizSpells()
 	return getAllSpellsByType(USER_TYPE_WIZARD)
 /proc/getAllCultSpells()
@@ -38,3 +46,13 @@
 		if(S.spell_aspect_flags & spell_flag)
 			return S
 	return 0
+
+//For the spellbook
+/proc/getAllOffensiveSpells()
+	return getAllWizSpellsBySpecialization(OFFENSIVE)
+/proc/getAllDefensiveSpells()
+	return getAllWizSpellsBySpecialization(DEFENSIVE)
+/proc/getAllUtilitySpells()
+	return getAllWizSpellsBySpecialization(UTILITY)
+/proc/getAllMiscSpells()
+	return getAllWizSpellsBySpecialization(SPELL_SPECIALIZATION_DEFAULT)
