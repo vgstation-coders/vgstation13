@@ -41,10 +41,7 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
 	var/is_fat = 0
 	var/can_chew_wires = 0
-	var/disease_carrier = 0
-
-	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
-	var/antibodies = 0
+	var/splat = 0
 
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
@@ -90,10 +87,41 @@
 		if(prob(5))
 			to_chat(src, "<span class = 'warning'>You are getting hungry!</span>")
 
+	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
+	//------------------------DISEASE STUFF--------------------------------------------------------
+	if(!(status_flags & GODMODE))
+		if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from contact and airborne diseases
+			find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
+
+			if(SSair.current_cycle%4==2)//Only try to breath diseases every 4 seconds
+				breath_airborne_diseases()
+
+			for (var/mob/living/simple_animal/mouse/M in range(1,src))
+				if(Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
+					share_contact_diseases(M)
+
+		activate_diseases()//however cages don't prevent diseases from activating
+	//---------------------------------------------------------------------------------------------
 
 	if(!isUnconscious())
 		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
+
+		var/caged = 0
+		if(locked_to && istype(locked_to,/obj/item/critter_cage))
+			var/obj/item/critter_cage/cage = locked_to
+			caged = 1
+			//if there's some reagent in the bottle, let's drink it at once
+			if(cage.reagents.total_volume)
+				dir = EAST
+				cage.reagents.reaction(src, INGEST)
+				spawn(5)
+					if(cage.reagents)
+						flick("mouse_[_color]_eat", src)
+						cage.reagents.trans_to(src, 1)
+			//otherwise let's just look around like a dumb mouse
+			else if (prob(25))
+				dir = pick(cardinal - dir)
 
 		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
@@ -102,8 +130,13 @@
 		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
 		if(food_target)
-			step_towards(src, food_target)
+			if (!locked_to)
+				step_towards(src, food_target)
+			else
+				dir = get_dir(src, food_target)
 			if(Adjacent(food_target))
+				if (caged && food_target.loc == loc)
+					dir = SOUTH
 				food_target.attack_animal(src)
 
 		if(prob(10))
@@ -117,22 +150,51 @@
 						else
 							step_towards(src, C)
 							break
-				if(disease_carrier && virus2.len)
+				/*
+				if(virus2.len > 0)
 					for(var/mob/living/carbon/human/H in can_see)
 						if(Adjacent(H))
-//							visible_message("[src] bites [H]")
+							visible_message("[src] bites [H]")
 							H.attack_animal(src)
 							break
 						else
 							step_towards(src, H)
 							break
-			if(disease_carrier && virus2.len)
+				*/
+/*
+			if(virus2.len > 0)
 				for(var/mob/living/M in view(1,src))
-//					visible_message("[src] breaths on [M]")
-					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
+					//spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
-
+*/
 		nutrition = max(0, nutrition - MOUSESTANDCOST)
+
+
+
+/mob/living/simple_animal/mouse/revive()
+	for (var/ID in virus2)
+		var/datum/disease2/disease/V = virus2[ID]
+		V.cure(src)
+	..()
+
+/mob/living/simple_animal/mouse/attack_hand(var/mob/living/carbon/human/M)
+	. = ..()
+	if (ishuman(M)||ismonkey(M))
+		var/block = M.check_contact_sterility(HANDS)
+		var/bleeding = M.check_bodypart_bleeding(HANDS)
+		share_contact_diseases(M,block,bleeding)
+
+	if(stat == UNCONSCIOUS && prob(33))
+		stat = CONSCIOUS
+		icon_state = "mouse_[_color]"
+		wander = 1
+		speak_chance = initial(speak_chance)
+		visible_message("\The [src] wakes up.")
+
+/mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
+	if(!..())
+		return
+	O.disease_contact(src,FULL_TORSO)
 
 /mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
@@ -157,12 +219,13 @@
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
-
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+/*
 /mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
 	..()
-	if(can_be_infected(target))
-		spread_disease_to(src, target, "Contact")
-
+	if(target.can_be_infected())
+		//spread_disease_to(src, target, "Contact")
+*/
 /mob/living/simple_animal/mouse/proc/nutrstats()
 	stat(null, "Nutrition level - [nutrition]")
 
@@ -178,13 +241,14 @@
 			to_chat(user, "<span class='info'>It seems well fed.</span>")
 		if(can_chew_wires)
 			to_chat(user, "<span class='notice'>It seems a bit frazzled.</span>")
-		if(disease_carrier && virus2.len)
-			to_chat(user, "<span class='blob'>It seems unwell.</span>") //Blob class is snot green
+		if(virus2.len > 0)
+			to_chat(user, "<span class='blob'>It seems unwell.</span>")
 		if(nutrition <= MOUSEHUNGRY)
 			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 
 /mob/living/simple_animal/mouse/proc/splat()
 	death()
+	splat = 1
 	src.icon_dead = "mouse_[_color]_splat"
 	src.icon_state = "mouse_[_color]_splat"
 	if(client)
@@ -249,12 +313,30 @@
 ///mob/living/simple_animal/mouse/restrained() //Hotfix to stop mice from doing things with MouseDrop
 //	return 1
 
+/mob/living/simple_animal/mouse/scoop_up(var/mob/living/M)
+	if (..())
+		var/block = M.check_contact_sterility(HANDS)
+		var/bleeding = M.check_bodypart_bleeding(HANDS)
+		share_contact_diseases(M,block,bleeding)
+
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
+		var/mob/living/carbon/human/M = AM
 		if(!stat)
-			var/mob/M = AM
 			to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
 			M << 'sound/effects/mousesqueek.ogg'
+
+		var/block = 0
+		var/bleeding = 0
+		if (lying)
+			block = M.check_contact_sterility(FULL_TORSO)
+			bleeding = M.check_bodypart_bleeding(FULL_TORSO)
+		else
+			block = M.check_contact_sterility(FEET)
+			bleeding = M.check_bodypart_bleeding(FEET)
+
+		//sharing diseases with people stepping on us
+		share_contact_diseases(M,block,bleeding)
 	..()
 
 /mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
@@ -269,6 +351,21 @@
 /mob/living/simple_animal/mouse/white
 	_color = "white"
 	icon_state = "mouse_white"
+
+/mob/living/simple_animal/mouse/white/balbc
+	name = "Pinky"
+	desc = "A lab mouse of the BALB/c strain (Mus Musculus). Very docile, though they become easily anxious."
+	_color = "balbc"
+	icon_state = "mouse_balbc"
+	namenumbers = FALSE
+
+/mob/living/simple_animal/mouse/white/balbc/New()
+	..()
+	name = pick(
+		"Pinky",
+		"\improper Brain",
+		"Nibbles",
+		)
 
 /mob/living/simple_animal/mouse/gray
 	_color = "gray"
@@ -313,9 +410,6 @@
 /mob/living/simple_animal/mouse/wire_biter
 	can_chew_wires = 1
 
-/mob/living/simple_animal/mouse/plague
-	disease_carrier = 1
-
 /mob/living/simple_animal/mouse/mouse_op
 	name = "mouse operative"
 	namenumbers = FALSE
@@ -338,3 +432,9 @@
 	. = ..()
 	if(gibbed == FALSE)
 		src.gib()
+
+/mob/living/simple_animal/mouse/can_be_infected()
+	return 1
+
+/mob/living/simple_animal/mouse/mouse_op/can_be_infected()
+	return 0

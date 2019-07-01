@@ -191,6 +191,10 @@
 	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if (virus2?.len)
+			for (var/ID in virus2)
+				var/datum/disease2/disease/D = virus2[ID]
+				eater.infect_disease2(D, 1, notes="(Ate an infected [src])")//eating infected food means 100% chance of infection.
 		if(reagentreference.total_volume)
 			reagentreference.reaction(eater, INGEST)
 			spawn() //WHY IS THIS SPAWN() HERE
@@ -384,6 +388,7 @@
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M
+			flick("mouse_[N._color]_eat", N)
 			if(prob(25)) //We are noticed
 				N.visible_message("[N] nibbles away at \the [src].", "<span class='notice'>You nibble away at \the [src].</span>")
 			else
@@ -3108,7 +3113,7 @@
 	reagents.clear_reagents()
 
 	var/datum/disease2/disease/new_virus = new /datum/disease2/disease
-	new_virus.makerandom()
+	new_virus.makerandom(list(2,4),list(40,60),list(20,90),src)
 
 	var/list/blood_data = list(
 		"donor" = null,
@@ -3119,7 +3124,7 @@
 		"trace_chem" = null,
 		"virus2" = list()
 	)
-	blood_data["virus2"]["[new_virus.uniqueID]"] = new_virus
+	blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
 	reagents.add_reagent(BLOOD, original_total_volume, blood_data)
 
 /obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice

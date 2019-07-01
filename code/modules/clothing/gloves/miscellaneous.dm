@@ -60,6 +60,7 @@
 	permeability_coefficient = 0.01
 	_color = "medical"				//matches cmo stamp
 	species_fit = list(VOX_SHAPED)
+	sterility = 100
 
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
