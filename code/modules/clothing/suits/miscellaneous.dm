@@ -437,6 +437,7 @@
 	icon_state = "raincoat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV //transparent
 	allowed = list (/obj/item/weapon/fireaxe)
+	sterility = 100
 
 /obj/item/clothing/suit/kefkarobe
 	name = "Crazed Jester's Robe"
