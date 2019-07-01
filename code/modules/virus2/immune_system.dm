@@ -100,7 +100,7 @@
 			if (isturf(body.loc) && body.lying)
 				tally += 0.5
 				var/obj/structure/bed/B = locate() in body.loc
-				if (B && B.lock_type == /datum/locking_category/buckle/bed)//fucking chairs n stuff
+				if (B && B.mob_lock_type == /datum/locking_category/buckle/bed)//fucking chairs n stuff
 					tally += 1
 				if (body.sleeping)
 					if (tally < 2)
