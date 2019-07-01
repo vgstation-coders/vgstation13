@@ -3,8 +3,6 @@
 	name = "Brain Damage"
 	desc = "Give an unlucky person brain damage."
 	abbreviation = "BD"
-	user_type = USER_TYPE_WIZARD //So that it appears in the spellbook
-	specialization = OFFENSIVE //So it appears in the offensive section of the spellbook
 	user_type = USER_TYPE_SPELLBOOK //Whereas previously this was a normal spell, it is now found only in the ancient spellbook.
 	school = "evocation"
 	charge_max = 200 // 20 seconds
