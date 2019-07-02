@@ -143,7 +143,7 @@
 	else
 		if(user.head && istype(user.head, head_type))
 			var/obj/I = user.head
-			to_chat(user, "<span class = 'notice'\The [I] retracts into \the [src].</span>")
+			to_chat(user, "<span class = 'notice'>\The [I] retracts into \the [src].</span>")
 			user.u_equip(I,0)
 			I.forceMove(src)
 			H = I
