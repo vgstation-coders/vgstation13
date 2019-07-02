@@ -1590,11 +1590,12 @@ var/list/slot_equipment_priority = list( \
 		canmove = has_limbs
 
 	reset_layer() //Handles layer setting in hiding
-	if(lying)
-		setDensity(FALSE)
-		drop_hands()
-	else
-		setDensity(TRUE)
+	if (!forced_density)
+		if(lying)
+			setDensity(FALSE)
+			drop_hands()
+		else
+			setDensity(TRUE)
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
