@@ -278,9 +278,9 @@ var/global/list/disease2_list = list()
 		D.effects += e
 
 	if (alert("Do you want to specify which antigen are selected?","Choose your Antigen","Yes","No") == "Yes")
-		D.antigen = input(C, "Choose your first antigen", "Choose your Antigen") as null | anything in all_antigens
+		D.antigen = list(input(C, "Choose your first antigen", "Choose your Antigen") as null | anything in all_antigens)
 		if (!D.antigen)
-			D.antigen = input(C, "Choose your second antigen", "Choose your Antigen") as null | anything in all_antigens
+			D.antigen = list(input(C, "Choose your second antigen", "Choose your Antigen") as null | anything in all_antigens)
 		else
 			D.antigen |= input(C, "Choose your second antigen", "Choose your Antigen") as null | anything in all_antigens
 		if (!D.antigen)
