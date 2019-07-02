@@ -105,6 +105,13 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+	
+/obj/item/toy/syndicateballoon/byondballoon
+    name = "\improper BYOND balloon"
+    desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
+    icon_state = "byondballoon"
+    item_state = "byondballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */

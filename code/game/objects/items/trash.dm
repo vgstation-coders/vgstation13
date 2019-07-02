@@ -188,3 +188,9 @@
 	name = "cyber mannequin pedestale"
 	icon_state = "mannequin_cyber_empty"
 
+/obj/item/trash/byond_box
+	name = "discarded BYOND support package"
+	icon_state = "byond"
+	starting_materials = list(MAT_CARDBOARD = 370)
+	autoignition_temperature = 522
+	w_type=RECYK_MISC
