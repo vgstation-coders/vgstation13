@@ -175,9 +175,9 @@ var/list/infected_contact_mobs = list()
 							risk = "danger"
 						if ("Safe")
 							risk = "notice"
-					to_chat(src, "[bicon(src)]<span class='[risk]'>Infection Detected! [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] has entered your body.</span>")
+					to_chat(src, "[bicon(p)]<span class='[risk]'>Infection Detected! [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] has entered your body.</span>")
 				else
-					to_chat(src, "[bicon(src)]<span class='danger'>Infection Detected! Unknown [D.form] has entered your body.</span>")
+					to_chat(src, "[bicon(p)]<span class='danger'>Infection Detected! Unknown [D.form] has entered your body.</span>")
 
 		return 1
 	return 0
