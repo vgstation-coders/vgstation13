@@ -1500,7 +1500,7 @@ var/list/slot_equipment_priority = list( \
 /mob/Stat()
 	..()
 
-	if(client && client.holder && client.inactivity < 1200)
+	if(client && client.holder && (world.timeofday - client.connection_timeofday > 5 SECONDS) && client.inactivity < 1200)
 		if(statpanel("MC"))
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
