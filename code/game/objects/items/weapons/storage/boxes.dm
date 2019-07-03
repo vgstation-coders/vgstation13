@@ -544,6 +544,9 @@
 	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
 	new glasses(src)
 	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/weapon/storage/belt/security/detective(src)
+	new /obj/item/device/flashlight/tactical(src)
+	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
 	new /obj/item/device/gps/secure(src)
 	new /obj/item/ammo_storage/box/c38(src)
 	new /obj/item/ammo_storage/box/c38(src)
@@ -553,6 +556,8 @@
 	new /obj/item/binoculars(src)
 	new /obj/item/weapon/storage/box/surveillance(src)
 	new /obj/item/device/handtv(src)
+	new /obj/item/weapon/reagent_containers/spray/luminol(src)
+	new /obj/item/taperoll/police(src)
 
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
