@@ -222,13 +222,18 @@
 	dat += " - <a href='?src=\ref[src]&mind=\ref[antag]&cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
 	return dat
 
-/datum/role/cultist/handle_reagent(var/reagent_id)
+/datum/role/cultist/handle_reagent(var/datum/reagent/agent)
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
 	var/unholy = H.checkTattoo(TATTOO_HOLY)
 	var/current_act = Clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
-	if (reagent_id == INCENSE_HAREBELLS)
+	if (agent.id == HOLYWATER || agent.id == INCENSE_HAREBELLS)
+		if (agent.volume > 15 && agent.tick > 5 && tattoos.len < 3) // Less than three tattoos, more than 5 ticks more than 15u : deconvert
+			H.Stun(8)
+			H.Jitter(30)
+			Drop()
+			return
 		if (unholy)
 			H.eye_blurry = max(H.eye_blurry, 3)
 			return
@@ -378,3 +383,14 @@
 
 			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")
+
+/datum/role/cultist/Drop()
+	stat_collection.cult_deconverted++
+	. = ..()
+	if (!antag)
+		return .
+	antag.current.remove_language(LANGUAGE_CULT)
+	to_chat(antag.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
+	to_chat(antag.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
+	antag.current.visible_message("<span class='big danger'>It looks like [antag.current] just reverted to their old faith!</span>")
+	log_admin("[key_name(antag.current)] has been deconverted from the cult.")

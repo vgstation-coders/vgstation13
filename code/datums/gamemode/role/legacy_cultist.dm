@@ -84,8 +84,8 @@
 	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [C.deity_name]</a><br/>"
 	return dat
 
-/datum/role/legacy_cultist/handle_reagent(var/reagent_id)
-	switch (reagent_id)
+/datum/role/legacy_cultist/handle_reagent(var/datum/reagent/agent)
+	switch (agent.id)
 		if (HOLYWATER)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))

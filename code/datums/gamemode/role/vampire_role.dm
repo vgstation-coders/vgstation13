@@ -428,8 +428,8 @@
 		logo_state = initial(logo_state)
 		check_vampire_upgrade()
 
-/datum/role/vampire/handle_reagent(var/reagent_id)
-	switch(reagent_id)
+/datum/role/vampire/handle_reagent(var/datum/reagent/agent)
+	switch(agent.id)
 		if (HOLYWATER,INCENSE_HAREBELLS)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
@@ -596,8 +596,8 @@
 	update_faction_icons()
 	return ..()
 
-/datum/role/thrall/handle_reagent(var/reagent_id)
-	switch (reagent_id)
+/datum/role/thrall/handle_reagent(var/datum/reagent/agent)
+	switch (agent.id)
 		if (HOLYWATER)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))

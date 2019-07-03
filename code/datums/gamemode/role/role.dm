@@ -478,7 +478,7 @@
 
 // -- Custom reagent reaction for your antag - now in a (somewhat) maintable fashion
 
-/datum/role/proc/handle_reagent(var/reagent_id)
+/datum/role/proc/handle_reagent(var/datum/reagent/agent)
 	return
 
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)

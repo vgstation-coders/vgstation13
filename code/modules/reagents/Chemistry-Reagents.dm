@@ -160,7 +160,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_reagent(id)
+			R.handle_reagent(src)
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
