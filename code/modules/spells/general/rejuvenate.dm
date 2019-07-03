@@ -37,7 +37,7 @@
 	H.reagents.clear_reagents()
 	to_chat(H, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
 	spawn() // sleep() causes issues with cooldown.
-		if(V.blood_total >= 200)
+		if(VAMP_HEAL in V.powers)
 			for(var/i = 0 to 5)
 				H.adjustBruteLoss(-2)
 				H.adjustOxyLoss(-5)

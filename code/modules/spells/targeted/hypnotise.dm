@@ -56,7 +56,7 @@
 	if(target.is_blind())
 		to_chat(user, "<span class='warning'>\the [target] is blind!</span>")
 		return FALSE
-	user.visible_message("<span class='warning'>[user] and gazes into \the [target]'s eyes!</span>", "<span class='warning'>You gaze into \the [target]'s eyes, molding their mind like clay to serve you.</span>")
+	user.visible_message("<span class='warning'>[user] gazes into \the [target]'s eyes!</span>", "<span class='warning'>You gaze into \the [target]'s eyes, molding their mind like clay to serve you.</span>")
 	to_chat(target, "<span class='sinister'>You feel the tendrils of evil [(VAMP_CHARISMA in V.powers) ? "aggressively" : "slowly"] invade your mind.</span>")
 
 	if(do_mob(user, target, (VAMP_CHARISMA in V.powers) ? 150 : 300))

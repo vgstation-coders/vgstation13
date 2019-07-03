@@ -155,18 +155,9 @@
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
 
-	if(H.check_body_part_coverage(MOUTH))
-		to_chat(M, "<span class='warning'>Remove their mask!</span>")
-		return FALSE
-
 	if(ishuman(M))
-		var/mob/living/carbon/human/vamp_H = M
 		if(H.check_body_part_coverage(MOUTH))
-			if(vamp_H.species.breath_type == GAS_OXYGEN)
-				to_chat(H, "<span class='warning'>Remove your mask!</span>")
-				return FALSE
-			else
-				to_chat(H, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+			to_chat(H, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 	return TRUE
 
 /datum/role/vampire/proc/handle_bloodsucking(var/mob/living/carbon/human/target)
@@ -233,6 +224,8 @@
 
 	draining = null
 	to_chat(assailant, "<span class='notice'>You stop draining \the [target] of blood.</span>")
+	to_chat(assailant, "<span class='notice'>You take a brief moment to remove your fangs from \the [target]'s body.")
+	assailant.Stun(1)
 	if(target.stat < DEAD && target.mind)
 		to_chat(target, "<span class='good'>You feel dizzy, and can't remember that you were being sucked of your blood.</span>")
 	return TRUE
