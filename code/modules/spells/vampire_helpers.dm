@@ -90,10 +90,10 @@
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (VAMP_UNDYING in V.powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact has turned our powers against us!</span>")
+				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
 				return VAMP_FAILURE
 			if (VAMP_JAUNT in V.powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+				to_chat(M.current, "<span class='warning'>A holy artifact protects [src]!</span>")
 				return 0
 		return 1
 

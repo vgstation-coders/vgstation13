@@ -32,7 +32,7 @@
 
 	var/list/feeders = list()
 
-	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
+	var/static/list/roundstart_powers = list(/datum/power/vampire/rejuvenate)
 
 	var/list/image/cached_images = list()
 
@@ -60,6 +60,7 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!<br/></span>")
 			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).")
+			to_chat(antag.current, "Biting down is enough to render your prey helpless, but if you decide to be merciful, they won't remember a thing.")
 			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
 			to_chat(antag.current, "You are weak to holy things and starlight.")
 			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
@@ -181,7 +182,8 @@
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
 
 	to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
-	target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	target.show_message("<span class='warning'>\The [assailant] latches on to your neck, and you feel paralyzed and dizzy...</span>")
+	target.Stun(3) //Stuns the target.
 
 	if(!iscarbon(assailant))
 		target.LAssailant = null
@@ -207,6 +209,7 @@
 			feeders[targetref] = 0
 		if(target.stat < DEAD) //alive
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+			target.Stun(3) //Stun them for 6 seconds per suck.
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -230,6 +233,8 @@
 
 	draining = null
 	to_chat(assailant, "<span class='notice'>You stop draining \the [target] of blood.</span>")
+	if(target.stat < DEAD && target.mind)
+		to_chat(target, "<span class='good'>You feel dizzy, and can't remember that you were being sucked of your blood.</span>")
 	return TRUE
 
 /datum/role/vampire/proc/check_vampire_upgrade()

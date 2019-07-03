@@ -7,7 +7,7 @@
 		return //Can't bite yourself
 
 	//Vampire code
-	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD && src != M)
+	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD)
 		var/datum/role/vampire/V = isvampire(M)
 		if(V)
 			if (V.draining)

@@ -41,17 +41,7 @@
 	blood_threeshold = 0
 	id = VAMP_REJUV
 	spell_path = /spell/rejuvenate
-	helptext = "You have gained the ability to rejuvnate your body and clean yourself of all incapacitating effects."
-
-/datum/power/vampire/glare
-	blood_threeshold = 0
-	id = VAMP_GLARE
-	spell_path = /spell/aoe_turf/glare
-
-/datum/power/vampire/hypnotise
-	blood_threeshold = 0
-	id = VAMP_HYPNO
-	spell_path = /spell/targeted/hypnotise
+	helptext = "You have gained the ability to rejuvenate your body and clean yourself of all incapacitating effects."
 
 /* Tier 1 */
 /datum/power/vampire/shape
@@ -96,7 +86,7 @@
 /datum/power/vampire/heal
 	blood_threeshold = 200
 	id = VAMP_HEAL
-	helptext = "Your rejuvination abilities have improved and will now heal you over time when used."
+	helptext = "Your rejuvenation abilities have improved and will now heal you over time when used."
 	store_in_memory = TRUE
 
 /* Tier 3.5 (/vg/) */
@@ -110,8 +100,8 @@
 /datum/power/vampire/slave
 	blood_threeshold = 300
 	id = VAMP_SLAVE
-	spell_path = /spell/targeted/enthrall
-	helptext = "You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other, forever."
+	spell_path = /spell/targeted/hypnotize
+	helptext = "You have gained the Hypnotize ability which at a heavy blood cost allows you to brainwash a human that is not loyal to any other, indefinitely."
 
 /datum/power/vampire/blink
 	blood_threeshold = 300
@@ -137,7 +127,7 @@
 /datum/power/vampire/charisma // Passive
 	blood_threeshold = 500
 	id = VAMP_CHARISMA
-	helptext = "You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotise and Enthrall take less time to perform, and Enthrall works on implanted targets."
+	helptext = "You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotize takes less time to perform, and works on implanted targets."
 	store_in_memory = TRUE
 
 /* Tier 666 (/vg/) */
