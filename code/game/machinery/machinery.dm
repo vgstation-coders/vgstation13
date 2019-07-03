@@ -600,7 +600,7 @@ Class Procs:
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
 
-	if(istype(O) && O.is_screwdriver(user) && machine_flags & SCREWTOGGLE)
+	if(O.is_screwdriver(user) && machine_flags & SCREWTOGGLE)
 		if(machine_flags & SECUREDPANEL)
 			return toggleSecuredPanelOpen(O, user)
 		return togglePanelOpen(O, user)
