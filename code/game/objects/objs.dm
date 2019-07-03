@@ -97,7 +97,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(W)
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
-	if(W)
+	if(istype(W))
 		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 		if(W.material_type)
 			W.material_type.on_use(W, src, user)

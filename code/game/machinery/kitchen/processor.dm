@@ -107,7 +107,7 @@
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey
 	output = null
-			
+
 /datum/food_processor_process/mob/monkey/process(loc, what)
 	var/mob/living/carbon/monkey/O = what
 	if (O.client) //grief-proof
@@ -183,7 +183,7 @@
 		return -1
 	return ..()
 
-/obj/machinery/processor/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/processor/attackby(var/obj/item/O, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
 		return 1
