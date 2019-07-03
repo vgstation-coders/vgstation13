@@ -508,6 +508,10 @@
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
+		var/req_access = list(access_security)
+		if(!can_access(usr.GetAccess(),req_access))
+			to_chat(usr, "<span class='warning'>Access denied.</span>")
+			return
 		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*High Threat*", "*Arrest*", "Incarcerated", "Parolled", "Released")
 		if(!setcriminal || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_SECURITY))
 			return
@@ -534,6 +538,10 @@
 	else if (href_list["secrecordadd"])
 		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
 			return
+		var/req_access = list(access_security)
+		if(!can_access(usr.GetAccess(),req_access))
+			to_chat(usr, "<span class='warning'>Access denied.</span>")
+			return
 		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
@@ -550,6 +558,10 @@
 		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
+			return
+		var/req_access = list(access_medical)
+		if(!can_access(usr.GetAccess(),req_access))
+			to_chat(usr, "<span class='warning'>Access denied.</span>")
 			return
 		var/setmedical = input(usr, "Specify a new medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
 		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
@@ -596,6 +608,10 @@
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
+			return
+		var/req_access = list(access_medical)
+		if(!can_access(usr.GetAccess(),req_access))
+			to_chat(usr, "<span class='warning'>Access denied.</span>")
 			return
 		var/t1 = copytext(sanitize(input(usr, "Add comment:", "Medical records") as message|null),1,MAX_MESSAGE_LEN)
 		if (!t1 || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
