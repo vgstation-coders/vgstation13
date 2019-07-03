@@ -148,6 +148,9 @@
 		C.last_pm_received = world.time
 		C.ckey_last_pm = ckey*/
 
+	//Makes Dreamseeker flash on Windows, regardless of window flashing preference.
+	window_flash(C, 1)
+
 	//play the recieving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
 	if(C.prefs.toggles & SOUND_ADMINHELP)

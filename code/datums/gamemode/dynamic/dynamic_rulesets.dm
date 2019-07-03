@@ -107,6 +107,8 @@
 			continue
 
 		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		var/client/C = M.client
+		window_flash(C)
 
 	spawn(1 MINUTES)
 		searching = 0
