@@ -202,6 +202,7 @@
 			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			target.Stun(3) //Stun them for 6 seconds per suck.
 			playsound(assailant, 'sound/misc/heartbeat_deep.ogg', 50, 0, 1)
+			assailant.visible_message("<span class='warning'>[assailant] is biting down [target]'s neck!</span>")
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
