@@ -337,7 +337,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/manifested/OnCrit(var/mob/living/carbon/human/H)
 	H.overlays |= image('icons/mob/human.dmi',src,"CritPale")
 	anim(target = H, a_icon = 'icons/effects/96x96.dmi', flick_anim = "rune_blind", offX = -WORLD_ICON_SIZE)
-	take_overall_damage(1, 0)
+	H.take_overall_damage(1, 0)
 	if (H.health < -50)
 		H.dust()
 
