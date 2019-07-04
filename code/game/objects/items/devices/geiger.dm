@@ -1,4 +1,5 @@
 #define COOLDOWN 1 SECONDS
+#define SOUND_COOLDOWN 4 SECONDS
 
 /obj/item/device/geiger_counter
 	name = "geiger counter"
@@ -8,6 +9,7 @@
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=4"
 	var/on = 0
 	var/last_call = 0
+	var/last_sound = 0
 	var/event_key
 
 /obj/item/device/geiger_counter/New()
@@ -28,9 +30,13 @@
 	if(on && world.time > last_call + COOLDOWN)
 		to_chat(user, "<span class = 'notice'>Radiation detected.</span>")
 		last_call = world.time
+		last_sound = world.time
 		spawn(5)
 			if(user && on)
 				to_chat(user, "<span class = 'soghun'>Radiation dosage: [rads] rads.</span>")
+				if(world.time > last_sound + SOUND_COOLDOWN)
+					playsound(user, "sound/item/geiger_strong.ogg", 50, 0, 1)
+
 
 
 /obj/item/device/geiger_counter/attack_self(mob/user)
