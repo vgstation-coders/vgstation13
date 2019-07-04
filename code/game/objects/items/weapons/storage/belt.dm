@@ -235,6 +235,7 @@
 	max_combined_w_class = 200
 
 /obj/item/weapon/storage/belt/security/detective/New()
+	..()
 	can_only_hold += list(
 		"/obj/item/weapon/reagent_containers/spray",
 		"/obj/item/weapon/storage/evidencebag",
