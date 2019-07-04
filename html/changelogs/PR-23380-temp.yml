@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - tweak: "Armor is now a straight divider of damage, rather than the double diceroll it was previously."
-delete-after: true

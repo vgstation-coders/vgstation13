@@ -1,8 +1,0 @@
----
-author: Kharkov72
-changes:
-  - rscadd: "Plasma Cutter description now says how to load it, and displays remaining ammo"
-  - bugfix: "Plasma Cutters can now hit people lying down, and the conversion kit will no longer eat multiple accelerators"
-  - rscadd: Plasma Cutters can now be loaded with plasma ore
-  - bugfix: "Plasma Cutters now go through the normal weapon checks (Looking at you, mommis)"
-delete-after: true

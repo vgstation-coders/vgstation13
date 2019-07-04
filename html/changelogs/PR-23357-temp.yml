@@ -1,5 +1,0 @@
----
-author: plosky1
-changes:
-  - tweak: "Malf AI's weight has been increased, making it more likely to roll at roundstart."
-delete-after: true
