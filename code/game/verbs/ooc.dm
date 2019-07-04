@@ -143,7 +143,7 @@
 	log_ooc("(LOCAL) [mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 	var/list/heard
 	var/mob/living/silicon/ai/AI
-	var/mob/name = src.mob.name
+	var/name = src.mob.name
 	if(!isAI(src.mob))
 		heard = get_hearers_in_view(7, src.mob)
 	else
