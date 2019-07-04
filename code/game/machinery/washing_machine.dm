@@ -15,12 +15,19 @@
 	//8 = blood, running
 	//0 = closed
 	//1 = open
-	var/hacked = 1 //Bleh, screw hacking, let's have it hacked by default.
+	var/hacked = TRUE //Bleh, screw hacking, let's have it hacked by default.
 	//0 = not hacked
 	//1 = hacked
 	var/gibs_ready = 0
 	var/obj/crayon
 	var/speed_coefficient = 1
+	var/listlevel = 1 //Sanity var.
+	var/list/whitelist = list(
+
+		)
+	var/list/blacklist = list(
+
+		)
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
 
@@ -28,17 +35,43 @@
 	..()
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/washing_machine,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/matter_bin
 	)
 	RefreshParts()
 
 /obj/machinery/washing_machine/RefreshParts()
-	var/manipcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
-			manipcount += SP.rating
-	speed_coefficient = 1/manipcount
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating
+	speed_coefficient = 1/T
+	T = 0
+	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
+		T += MB.rating
+	if(T < listlevel) //Just in case someone downgrades the matterbin or a matterbin with a T0 comes up.
+		whitelist = initial(whitelist)
+		blacklist = initial(blacklist)
+	if((T >= 2) && (listlevel < 2))
+		var/list/leveltwolist = list(
+
+			)
+		whitelist += leveltwolist
+		blacklist -= leveltwolist
+		listlevel = 2
+	if((T >= 3) && (listlevel < 3))
+		var/list/levelthreelist = list(
+
+			)
+		whitelist += levelthreelist
+		blacklist -= levelthreelist
+		listlevel = 3
+	if((T >= 4) && (listlevel < 4))
+		var/list/levelfourlist = list(
+
+			)
+		whitelist += levelfourlist
+		blacklist -= levelfourlist
+		listlevel = 5
 
 /obj/machinery/washing_machine/verb/start()
 	set name = "Start Washing"
@@ -289,9 +322,6 @@
 		if ( istype(W,/obj/item/clothing/suit/syndicatefake ) )
 			to_chat(user, "This item does not fit.")
 			return
-//		if ( istype(W,/obj/item/clothing/suit/powered ) )
-//			to_chat(user, "This item does not fit.")
-//			return
 		if ( istype(W,/obj/item/clothing/suit/cyborg_suit ) )
 			to_chat(user, "This item does not fit.")
 			return
@@ -313,9 +343,6 @@
 		if ( istype(W,/obj/item/clothing/head/syndicatefake ) )
 			to_chat(user, "This item does not fit.")
 			return
-//		if ( istype(W,/obj/item/clothing/head/powered ) )
-//			to_chat(user, "This item does not fit.")
-//			return
 		if ( istype(W,/obj/item/clothing/head/helmet ) )
 			to_chat(user, "This item does not fit.")
 			return
@@ -363,6 +390,4 @@
 				O.forceMove(src.loc)
 			crayon = null
 			wash_state = 1
-
-
 	update_icon()
