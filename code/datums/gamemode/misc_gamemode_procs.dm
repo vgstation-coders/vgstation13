@@ -135,7 +135,7 @@
 			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
 		if(100)
 			intercepttext += "<b>Impending Doom</b></center><BR>"
-			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station."
+			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
 			intercepttext += "Good luck."
 
 	intercepttext += "</body></html>"
@@ -401,7 +401,7 @@
 	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
 	if (spaceninja.internals)
 		spaceninja.internals.icon_state = "internal1"
-	
+
 	spaceninja.see_in_dark_override = 8
 
 #define GREET_WEEB "weebgreet"
