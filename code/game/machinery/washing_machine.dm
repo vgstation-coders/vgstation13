@@ -21,28 +21,22 @@
 	var/gibs_ready = 0
 	var/obj/crayon
 	var/speed_coefficient = 1
-	var/sizelevel = 1 //Sanity var.
-	var/list/whitelist = list(
-		/obj/item/stack/sheet/hairlesshide,\
-		/obj/item/clothing/under,\
-		/obj/item/clothing/mask,\
-		/obj/item/clothing/head,\
-		/obj/item/clothing/gloves,\
-		/obj/item/clothing/shoes,\
-		/obj/item/clothing/suit,\
-		/obj/item/stack/cable_coil,\
-		/obj/item/weapon/bedsheet
+	var/size_coefficient = 1
+	//Lists for each bin tier in order T1, T2, T3, T4. Whitelist doesn't change but its there for future proofing.
+	var/list/whitelist_list = list(
+		list(/obj/item/stack/sheet/hairlesshide, /obj/item/clothing/under, /obj/item/clothing/mask, /obj/item/clothing/head, /obj/item/clothing/gloves, /obj/item/clothing/shoes, /obj/item/clothing/suit, /obj/item/stack/cable_coil, /obj/item/weapon/bedsheet),\
+		list(/obj/item/stack/sheet/hairlesshide, /obj/item/clothing/under, /obj/item/clothing/mask, /obj/item/clothing/head, /obj/item/clothing/gloves, /obj/item/clothing/shoes, /obj/item/clothing/suit, /obj/item/stack/cable_coil, /obj/item/weapon/bedsheet),\
+		list(/obj/item/stack/sheet/hairlesshide, /obj/item/clothing/under, /obj/item/clothing/mask, /obj/item/clothing/head, /obj/item/clothing/gloves, /obj/item/clothing/shoes, /obj/item/clothing/suit, /obj/item/stack/cable_coil, /obj/item/weapon/bedsheet),\
+		list(/obj/item/stack/sheet/hairlesshide, /obj/item/clothing/under, /obj/item/clothing/mask, /obj/item/clothing/head, /obj/item/clothing/gloves, /obj/item/clothing/shoes, /obj/item/clothing/suit, /obj/item/stack/cable_coil, /obj/item/weapon/bedsheet)\
 		)
-	var/list/blacklist = list(
-		/obj/item/clothing/head/helmet,\
-		/obj/item/clothing/suit/space,\
-		/obj/item/clothing/head/syndicatefake,\
-		/obj/item/clothing/suit/syndicatefake,\
-		/obj/item/clothing/suit/cyborg_suit,\
-		/obj/item/clothing/suit/bomb_suit,\
-		/obj/item/clothing/suit/armor,\
-		/obj/item/clothing/mask/cigarette
+	var/list/whitelist
+	var/list/blacklist_list = list(
+		list(/mob/living/carbon, /obj/item/clothing/head/helmet, /obj/item/clothing/suit/space, /obj/item/clothing/head/syndicatefake, /obj/item/clothing/suit/syndicatefake, /obj/item/clothing/suit/cyborg_suit, /obj/item/clothing/head/bomb_hood, /obj/item/clothing/suit/bomb_suit, /obj/item/clothing/suit/armor, /obj/item/clothing/mask/cigarette),\
+		list(/mob/living/carbon, /obj/item/clothing/suit/space, /obj/item/clothing/suit/syndicatefake, /obj/item/clothing/suit/cyborg_suit, /obj/item/clothing/suit/bomb_suit, /obj/item/clothing/suit/armor, /obj/item/clothing/mask/cigarette),\
+		list(/mob/living/carbon/human, /obj/item/clothing/mask/cigarette),\
+		list(/obj/item/clothing/mask/cigarette)\
 		)
+	var/list/blacklist
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
 
@@ -63,36 +57,9 @@
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
 		T += MB.rating
-	if(T < sizelevel) //Just in case someone downgrades the matterbin or a matterbin with a T0 comes up.
-		whitelist = initial(whitelist)
-		blacklist = initial(blacklist)
-		sizelevel = 1
-	if((T >= 2) && (sizelevel < 2))
-		var/list/leveltwolist = list(
-			/obj/item/clothing/head/helmet,\
-			/obj/item/clothing/head/syndicatefake \
-			)
-		whitelist += leveltwolist
-		blacklist -= leveltwolist
-		sizelevel = 2
-	if((T >= 3) && (sizelevel < 3))
-		var/list/levelthreelist = list(
-			/obj/item/clothing/suit/space,\
-			/obj/item/clothing/suit/syndicatefake,\
-			/obj/item/clothing/suit/bomb_suit,\
-			/obj/item/clothing/suit/armor,\
-			/obj/item/clothing/suit/cyborg_suit\
-			)
-		whitelist += levelthreelist
-		blacklist -= levelthreelist
-		sizelevel = 3
-	if((T >= 4) && (sizelevel < 4))
-		var/list/levelfourlist = list(
-			/obj/item/clothing/mask/cigarette \
-			)
-		whitelist += levelfourlist
-		blacklist -= levelfourlist
-		sizelevel = 5
+	size_coefficient = T
+	whitelist = whitelist_list[T]
+	blacklist = blacklist_list[T]
 
 /obj/machinery/washing_machine/verb/start()
 	set name = "Start Washing"
@@ -111,7 +78,6 @@
 	sleep(20 SECONDS * speed_coefficient)
 	for(var/atom/A in contents)
 		A.clean_blood()
-
 	for(var/obj/item/I in contents)
 		I.decontaminate()
 
@@ -261,8 +227,8 @@
 		wash_state = 4
 	update_icon()
 
-/obj/machinery/washing_machine/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+/obj/machinery/washing_machine/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
 		start()
 		return
 	return ..()
@@ -281,36 +247,40 @@
 	icon_state = "wm_[wash_state][panel_open]"
 
 /obj/machinery/washing_machine/attackby(obj/item/weapon/W, mob/user)
-	var/list/blacklist_copy = blacklist //These copy lists are used because "is_type_in_list()" adds every child to the lists it uses and that causes issues with the list updating with upgrades.
-	var/list/whitelist_copy = whitelist
 	if(..())
 		update_icon()
 		return 1
+	else if(is_type_in_list(W, blacklist))
+		to_chat(user, "This item does not fit.")
+		return
 	else if(istype(W,/obj/item/toy/crayon) ||istype(W,/obj/item/weapon/stamp))
-		if( wash_state in list(	1, 3, 6 ) )
+		if(wash_state in list(	1, 3, 6 ))
 			if(!crayon)
 				if(user.drop_item(W, src))
 					crayon = W
 	else if(istype(W,/obj/item/weapon/grab))
-		if( (wash_state == 1) && hacked)
-			var/obj/item/weapon/grab/G = W
-			if(ishuman(G.assailant) && iscorgi(G.affecting))
-				G.affecting.forceMove(src)
-				qdel(G)
-				G = null
-				wash_state = 3
-	else if(istype(W,/obj/item/weapon/holder/animal/corgi)) //Poor Ian.
-		if((wash_state == 1) && hacked)
-			if(user.drop_item(W, src))
-				wash_state = 3
-				var/obj/item/weapon/holder/animal/corgi/dog = locate(/obj/item/weapon/holder/animal/corgi, contents)
-				contents.Add(dog.stored_mob)
-				qdel(locate(contents,/obj/item/weapon/holder/animal/corgi))
-	else if(is_type_in_list(W, blacklist_copy))
-		to_chat(user, "This item does not fit.")
-		return
-	else if(is_type_in_list(W, whitelist_copy))
-		if(contents.len < (5 * sizelevel))
+		if(contents.len < (5 * size_coefficient))
+			if((wash_state == 1) && hacked)
+				var/obj/item/weapon/grab/G = W
+				if(ishuman(G.assailant) && isliving(G.affecting) && !is_type_in_list(G.affecting, blacklist))
+						G.affecting.forceMove(src)
+						qdel(G)
+						G = null
+						wash_state = 3
+		else
+			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
+	else if(istype(W,/obj/item/weapon/holder/animal))
+		if(contents.len < (5 * size_coefficient))
+			if((wash_state == 1) && hacked)
+				if(user.drop_item(W, src))
+					wash_state = 3
+					var/obj/item/weapon/holder/animal/A = locate(/obj/item/weapon/holder/animal, contents)
+					contents.Add(A.stored_mob)
+					qdel(locate(contents,/obj/item/weapon/holder/animal))
+		else
+			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
+	else if(is_type_in_list(W, whitelist))
+		if(contents.len < (5 * size_coefficient))
 			if(wash_state in list(1, 3))
 				if(user.drop_item(W, src))
 					wash_state = 3
@@ -323,7 +293,6 @@
 /obj/machinery/washing_machine/attack_hand(mob/user)
 	if(..())
 		return 1
-
 	switch(wash_state)
 		if(1)
 			wash_state = 2
