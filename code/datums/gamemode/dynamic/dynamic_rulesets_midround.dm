@@ -111,7 +111,7 @@
 			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
 
-		var/mob/living/carbon/human/new_character = applicant
+		var/mob/new_character = applicant
 
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
@@ -574,50 +574,11 @@
 	my_fac = /datum/faction/plague_mice
 	logo = "plague-logo"
 
-
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/review_applications()
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/generate_ruleset_body(var/mob/applicant)
 	var/datum/faction/plague_mice/active_fac = find_active_faction_by_type(my_fac)
-	if (!active_fac)
-		active_fac = ticker.mode.CreateFaction(my_fac, null, 1)
-		active_fac.SetupDisease()
-		active_fac.forgeObjectives()
-		created_a_faction = 1
-
-	my_fac = active_fac
-
-	message_admins("Applicant list: [english_list(applicants)]")
-	for (var/i = max_candidates, i > 0, i--)
-		if(applicants.len <= 0)
-			if(i == required_candidates)
-				//We have found no candidates so far and we are out of applicants.
-				mode.refund_threat(cost)
-				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
-				mode.executed_rules -= src
-			break
-		var/mob/applicant = pick(applicants)
-		applicants -= applicant
-		if(!isobserver(applicant))
-			if(applicant.stat == DEAD) //Not an observer? If they're dead, make them one.
-				applicant = applicant.ghostize(FALSE)
-			else //Not dead? Disregard them, pick a new applicant
-				message_admins("[name]: Rule could not use [applicant], not dead.")
-				i++
-				continue
-
-		if(!applicant)
-			message_admins("[name]: Applicant was null. This may be caused if the mind changed bodies after applying.")
-			i++
-			continue
-		message_admins("DEBUG: Selected [applicant] for rule.")
-
-		var/mob/living/simple_animal/mouse/plague/new_mouse = new (active_fac.invasion)
-		new_mouse.key = applicant.key
-		finish_setup(new_mouse, i)
-
-	applicants.Cut()
-
-	return my_fac
+	var/mob/living/simple_animal/mouse/plague/new_mouse = new (active_fac.invasion)
+	new_mouse.key = applicant.key
+	return new_mouse
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)

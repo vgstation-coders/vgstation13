@@ -15,6 +15,12 @@
 	var/datum/disease2/disease/bacteria/plague
 	var/turf/invasion
 
+
+/datum/faction/plague_mice/New()
+	..()
+	SetupDisease()
+	forgeObjectives()
+
 /datum/faction/plague_mice/HandleRecruitedRole(var/datum/role/R)
 	. = ..()
 	if (!plague)
