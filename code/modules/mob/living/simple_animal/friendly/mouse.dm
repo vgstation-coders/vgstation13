@@ -271,7 +271,7 @@
 	var/part = "toes"
 	switch (contact_target)
 		if (EARS)
-			part = "ear lobs"
+			part = "ear lobes"
 		if (HANDS)
 			part = "fingers"
 	visible_message("\The [src] [pick("nibbles on","tickles")] \the [target]'s [part][block ? ", but their clothing prevents direct contact." : "!"]")

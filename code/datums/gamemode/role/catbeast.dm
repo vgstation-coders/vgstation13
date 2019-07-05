@@ -62,6 +62,16 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	D2.makerandom(list(60,90),list(50,90),anti,bad,null)
 	H.infect_disease2(D2,1, "Loose Catbeast")
 
+	to_chat(H, "<span class='warning'>You are also carrying some diseases. Check your notes to see their specs.</span>")
+
+	to_chat(H, "<span class='warning'>You can accelerate their progression by drinking some milk along with some water, so go find some.</span>")
+
+	antag.store_memory("<hr>")
+	antag.store_memory(D1.get_info())
+	antag.store_memory("<hr>")
+	antag.store_memory(D2.get_info())
+	antag.store_memory("<hr>")
+
 /proc/equip_catbeast(var/mob/living/carbon/human/H)
 	var/list/shirts = list(/obj/item/clothing/under/overalls,/obj/item/clothing/under/schoolgirl,/obj/item/clothing/under/darkholme,/obj/item/clothing/under/maid,
 							/obj/item/clothing/under/rottensuit,/obj/item/clothing/under/rank/mailman,/obj/item/clothing/under/color/prisoner,/obj/item/clothing/under/psyche,

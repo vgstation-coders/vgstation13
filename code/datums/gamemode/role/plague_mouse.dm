@@ -4,6 +4,7 @@
 	id = PLAGUEMOUSE
 	special_role = PLAGUEMOUSE
 	required_pref = ROLE_MINOR
+	wikiroute = ROLE_MINOR
 	logo_state = "plague-logo"
 	greets = list(GREET_DEFAULT)
 
