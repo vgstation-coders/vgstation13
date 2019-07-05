@@ -77,17 +77,17 @@
 				newMarker.z = nukedisk.z
 				holomap_markers[HOLOMAP_MARKER_DISK] = newMarker
 	//generating area markers
-	for(var/area/A in areas)
-		if(A.holomap_marker)
-			var/turf/T = A.getAreaCenter(ZLevel)
-			if(T)
-				var/datum/holomap_marker/newMarker = new()
-				newMarker.id = A.holomap_marker
-				newMarker.filter = A.holomap_filter
-				newMarker.x = T.x
-				newMarker.y = T.y
-				newMarker.z = ZLevel
-				holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
+		for(var/area/A in areas)
+			if(A.holomap_marker)
+				var/turf/T = A.getAreaCenter(ZLevel)
+				if(T)
+					var/datum/holomap_marker/newMarker = new()
+					newMarker.id = A.holomap_marker
+					newMarker.filter = A.holomap_filter
+					newMarker.x = T.x
+					newMarker.y = T.y
+					newMarker.z = ZLevel
+					holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
