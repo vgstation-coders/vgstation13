@@ -469,3 +469,6 @@ var/list/variables_not_to_be_copied = list(
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
+
+//Item lists
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
