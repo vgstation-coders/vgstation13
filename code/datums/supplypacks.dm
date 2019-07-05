@@ -1474,22 +1474,34 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine)
 
 /datum/supply_packs/shield_gen
-	contains = list(/obj/item/weapon/circuitboard/shield_gen)
-	name = "Starscreen generator board"
-	cost = 30
-	containertype = /obj/structure/closet/crate/secure/engisec
+	contains = list(/obj/structure/closet/crate/flatpack/starscreen_generator,
+					/obj/structure/closet/crate/flatpack/starscreen_capacitor)
+	name = "Starscreen shield generator"
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/large/reinforced
 	containername = "Starscreen shield generator crate"
 	group = "Engineering"
 	access = list(access_engine)
-
-/datum/supply_packs/shield_cap
-	contains = list(/obj/item/weapon/circuitboard/shield_cap)
-	name = "Starscreen capacitor board"
-	cost = 30
-	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "Starscreen shield capacitor crate"
+	
+/datum/supply_packs/shield_gen/post_creation(var/atom/movable/container)
+	var/obj/structure/closet/crate/flatpack/flatpack1 = locate(/obj/structure/closet/crate/flatpack/starscreen_generator/) in container
+	var/obj/structure/closet/crate/flatpack/flatpack2 = locate(/obj/structure/closet/crate/flatpack/starscreen_capacitor/) in container
+	flatpack1.add_stack(flatpack2)
+	
+/datum/supply_packs/shield_gen_ex
+	contains = list(/obj/structure/closet/crate/flatpack/starscreen_ex_generator,
+					/obj/structure/closet/crate/flatpack/starscreen_capacitor)
+	name = "Starscreen-EX shield generator"
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/large/reinforced
+	containername = "Starscreen-EX shield generator crate"
 	group = "Engineering"
 	access = list(access_engine)
+	
+/datum/supply_packs/shield_gen_ex/post_creation(var/atom/movable/container)
+	var/obj/structure/closet/crate/flatpack/flatpack1 = locate(/obj/structure/closet/crate/flatpack/starscreen_ex_generator/) in container
+	var/obj/structure/closet/crate/flatpack/flatpack2 = locate(/obj/structure/closet/crate/flatpack/starscreen_capacitor/) in container
+	flatpack1.add_stack(flatpack2)
 
 /datum/supply_packs/teg
 	contains = list(/obj/machinery/power/generator)
