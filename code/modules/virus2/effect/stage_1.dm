@@ -3,7 +3,7 @@
 	desc = "A self-defeating symptom that doesn't seem to do anything in particular."
 	encyclopedia = "Useful as placeholder in a beneficial pathogen, or when aiming to give time for the pathogen to spread before an outbreak is declared."
 	stage = 1
-	badness = 0
+	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
 	return
@@ -14,7 +14,7 @@
 	desc = "Makes the infected sneeze every so often, leaving some infected mucus on the floor."
 	encyclopedia = "Said mucus carries every pathogen held by the infected, potentially infecting other people who stand on top."
 	stage = 1
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
 	mob.say("*sneeze")
@@ -33,7 +33,7 @@
 	desc = "Causes a sensation of mucous running down the infected's throat."
 	encyclopedia = "Beside that, it doesn't do much harm."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
@@ -44,7 +44,7 @@
 	desc = "Causes the infected to drool."
 	encyclopedia = "Potentially leading people to believe in a case of brain damage."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
 	mob.say("*drool")
@@ -55,7 +55,7 @@
 	desc = "Causes the infected to twitch."
 	encyclopedia = "Potentially leading people to believe in a case of space drug abuse."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
 	mob.say("*twitch")
@@ -66,7 +66,7 @@
 	desc = "Gives the infected a light headache."
 	encyclopedia = "It won't actually cause any damage to the infected's organs.."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
@@ -77,7 +77,7 @@
 	desc = "Causes itching from the infected's skin all the way to their bones."
 	encyclopedia = "Itching, while annoying, is completely harmless."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
 	var/mob/living/carbon/human/H = mob
@@ -92,7 +92,7 @@
 	desc = "Gives the infected a drained sensation."
 	encyclopedia = "It's all in their imagination however."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='warning'>You feel drained.</span>")
@@ -103,7 +103,7 @@
 	desc = "Causes the infected's tear ducts to overact."
 	encyclopedia = "Essentially causing them to cry."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<SPAN CLASS='warning'>Your eyes sting and water!</SPAN>")
@@ -114,7 +114,7 @@
 	desc = "Inhibits the infected's ability to breathe slightly, causing them to wheeze."
 	encyclopedia = "Doesn't actually reduce their air intake."
 	stage = 1
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
 	mob.emote("me",1,"wheezes.")
@@ -125,7 +125,7 @@
 	desc = "Gives a feeling of optimism to the infected."
 	encyclopedia = "With the added bonus of keeping them supplied with tricordrazine."
 	stage = 1
-	badness = 0
+	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
@@ -138,7 +138,7 @@
 	desc = "Makes the infected spin at random."
 	encyclopedia = "Although it impaires movement, it appears to favor healing in the infected's legs."
 	stage = 1
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
 	if (mob.reagents.get_reagent_amount(GYRO) < 1)
@@ -149,7 +149,7 @@
 	desc = "Converts the lungs of the infected into a bee-hive, giving the infected a steady drip of honey in exchange of vomiting up a bee every so often."
 	encyclopedia = "The higher the symptom strength, the more honey can be accumulated before risking vomiting bees. While Honey is a great healing reagent, it is also high on nutrients. Expect to become fat quickly.."
 	stage = 1
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 	max_multiplier = 10
 
 /datum/disease2/effect/bee_vomit/activate(var/mob/living/carbon/mob)
@@ -177,7 +177,7 @@
 	chance = 10
 	max_chance = 40
 	max_count = 10
-	badness = 0
+	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
 	if(mob.radiation && mob.reagents.get_reagent_amount(HYRONALIN) < 15)
@@ -192,7 +192,7 @@
 	stage = 1
 	chance = 5
 	max_chance = 60
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel a little sore.</span>")
@@ -205,7 +205,7 @@
 	stage = 1
 	chance = 5
 	max_chance = 25
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/socialconfusion/activate(var/mob/living/carbon/mob)
 	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)

@@ -2,7 +2,7 @@
 var/global/list/disease2_list = list()
 /datum/disease2/disease
 	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
-	var/spread = SPREAD_BLOOD //if set to 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
+	var/spread = 0 //if it remains at 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
 	var/uniqueID = 0// 0000 to 9999, set when the pathogen gets initially created
 	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
 	var/childID = 0// 01 to 99, incremented as the pathogen gets analyzed after a mutation
@@ -12,6 +12,9 @@ var/global/list/disease2_list = list()
 	//Ignored if infected materials are ingested (injected with infected blood, eating infected meat)
 	var/infectionchance = 70
 	var/infectionchance_base = 70
+
+	//alters a pathogen's propensity to mutate. Set to 0 to forbid a pathogen from ever mutating.
+	var/mutation_modifier = 1
 
 	//ticks increases by [speed] every time the disease activates. Drinking Virus Food also accelerates the process by 10.
 	var/ticks = 0
@@ -114,44 +117,77 @@ var/global/list/disease2_list = list()
 	//so we don't clog up the Diseases Panel with irrelevant mutations
 	disease2_list -= ID
 
-/datum/disease2/disease/proc/makerandom(var/list/bad = list(),var/list/str = list(), var/list/rob = list(), var/atom/source = null)
+/datum/disease2/disease/proc/makerandom(var/list/str = list(), var/list/rob = list(), var/list/anti = list(), var/list/bad = list(), var/atom/source = null)
+	//ID
 	uniqueID = rand(0,9999)
 	subID = rand(0,9999)
+
+	//base stats
 	strength = rand(str[1],str[2])
 	robustness = rand(rob[1],rob[2])
+	roll_antigen(anti)
 
-	if (istype(source,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza))
-		origin = "Poisoned Pizza"
-	else if (istype(source,/obj/item/weapon/virusdish))
-		if (istype(source.loc,/obj/structure/closet/crate/secure/medsec))
-			origin = "Cargo Order"
-		else if (isturf(source.loc))
-			var/turf/T = source.loc
-			if (istype(T.loc,/area/centcom))
-				origin = "Centcom"
-			else if (istype(T.loc,/area/medical/virology))
-				origin = "Virology"
-
-	log_debug("Creating and Randomizing [form] #[uniqueID]-[subID] with effect badness from [bad[1]] to [bad[2]].")
-	log += "<br />[timestamp()] Created and Randomized<br>"
+	//effects
 	for(var/i = 1; i <= max_stage; i++)
-		var/datum/disease2/effect/e = new_random_effect(bad[2], bad[1], i)
+		var/selected_badness = pick(
+			bad[EFFECT_DANGER_HELPFUL];EFFECT_DANGER_HELPFUL,
+			bad[EFFECT_DANGER_FLAVOR];EFFECT_DANGER_FLAVOR,
+			bad[EFFECT_DANGER_ANNOYING];EFFECT_DANGER_ANNOYING,
+			bad[EFFECT_DANGER_HINDRANCE];EFFECT_DANGER_HINDRANCE,
+			bad[EFFECT_DANGER_HARMFUL];EFFECT_DANGER_HARMFUL,
+			bad[EFFECT_DANGER_DEADLY];EFFECT_DANGER_DEADLY,
+			)
+		var/datum/disease2/effect/e = new_effect(text2num(selected_badness), i)
 		effects += e
-		log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
+		log += "<br />[timestamp()] Added effect [e.name] ([e.chance]% Occurence)."
+
+	//slightly randomized infection chance
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
 	infectionchance_base = infectionchance
-	roll_antigen()
 
-	//cosmetic petri dish stuff
-	var/list/randomhexes = list("8","9","a","b","c","d","e")
-	color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
-	pattern = rand(1,6)
-	pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
-	randomize_spread()
+	//cosmetic petri dish stuff - if set beforehand, will not be randomized
+	if (!color)
+		var/list/randomhexes = list("8","9","a","b","c","d","e")
+		color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+		pattern = rand(1,6)
+		pattern_color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 
+	//spreading vectors - if set beforehand, will not be randomized
+	if (!spread)
+		randomize_spread()
+
+	//logging
+	log_debug("Creating and Randomizing [form] #[uniqueID]-[subID].")
+	log += "<br />[timestamp()] Created and Randomized<br>"
+
+	//admin panel
+	if (origin == "Unknown")
+		if (istype(source,/obj/item/weapon/virusdish))
+			if (istype(source.loc,/obj/structure/closet/crate/secure/medsec))
+				origin = "Cargo Order"
+			else if (isturf(source.loc))
+				var/turf/T = source.loc
+				if (istype(T.loc,/area/centcom))
+					origin = "Centcom"
+				else if (istype(T.loc,/area/medical/virology))
+					origin = "Virology"
 	update_global_log()
 
+
+/datum/disease2/disease/proc/new_effect(var/badness = 2, var/stage = 0)
+	var/list/datum/disease2/effect/list = list()
+	var/list/to_choose = subtypesof(/datum/disease2/effect)
+	for(var/e in to_choose)
+		var/datum/disease2/effect/f = new e
+		if(!f.restricted && f.stage == stage && text2num(f.badness) == badness)
+			list += f
+	if (list.len <= 0)
+		return new_random_effect(badness+1,badness-1,stage)
+	else
+		var/datum/disease2/effect/e = pick(list)
+		e.chance = rand(1, e.max_chance)
+		return e
 
 /datum/disease2/disease/proc/new_random_effect(var/max_badness = 5, var/min_badness = 0, var/stage = 0, var/old_effect)
 	var/list/datum/disease2/effect/list = list()
@@ -160,11 +196,14 @@ var/global/list/disease2_list = list()
 		to_choose.Remove(old_effect)
 	for(var/e in to_choose)
 		var/datum/disease2/effect/f = new e
-		if(f.stage == stage && f.badness <= max_badness && f.badness >= min_badness)
+		if(!f.restricted && f.stage == stage && text2num(f.badness) <= max_badness && text2num(f.badness) >= min_badness)
 			list += f
-	var/datum/disease2/effect/e = pick(list)
-	e.chance = rand(1, e.max_chance)
-	return e
+	if (list.len <= 0)
+		return new_random_effect(min(max_badness+1,5),max(0,min_badness-1),stage)
+	else
+		var/datum/disease2/effect/e = pick(list)
+		e.chance = rand(1, e.max_chance)
+		return e
 
 /datum/disease2/disease/proc/randomize_spread()
 	spread = SPREAD_BLOOD	//without blood spread, the disease cannot be extracted or cured, we don't want that for regular diseases
@@ -278,9 +317,9 @@ var/global/list/disease2_list = list()
 		D.effects += e
 
 	if (alert("Do you want to specify which antigen are selected?","Choose your Antigen","Yes","No") == "Yes")
-		D.antigen = input(C, "Choose your first antigen", "Choose your Antigen") as null | anything in all_antigens
+		D.antigen = list(input(C, "Choose your first antigen", "Choose your Antigen") as null | anything in all_antigens)
 		if (!D.antigen)
-			D.antigen = input(C, "Choose your second antigen", "Choose your Antigen") as null | anything in all_antigens
+			D.antigen = list(input(C, "Choose your second antigen", "Choose your Antigen") as null | anything in all_antigens)
 		else
 			D.antigen |= input(C, "Choose your second antigen", "Choose your Antigen") as null | anything in all_antigens
 		if (!D.antigen)
@@ -322,16 +361,7 @@ var/global/list/disease2_list = list()
 		infectedMob.virus2["[D.uniqueID]-[D.subID]"] = D
 		log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID]-[D.subID] by [C.ckey]")
 		message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID]-[D.subID] by [C.ckey]")
-		if (D.spread & SPREAD_CONTACT)
-			infected_contact_mobs |= infectedMob
-			if (!infectedMob.pathogen)
-				infectedMob.pathogen = image('icons/effects/effects.dmi',infectedMob,"pathogen_contact")
-				infectedMob.pathogen.plane = HUD_PLANE
-				infectedMob.pathogen.layer = UNDER_HUD_LAYER
-				infectedMob.pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-			for (var/mob/living/L in science_goggles_wearers)
-				if (L.client)
-					L.client.images |= infectedMob.pathogen
+		D.AddToGoggleView(infectedMob)
 	else
 		var/obj/item/weapon/virusdish/dish = new(C.mob.loc)
 		dish.contained_virus = D
@@ -342,6 +372,18 @@ var/global/list/disease2_list = list()
 		dish.update_icon()
 
 	return 1
+
+/datum/disease2/disease/proc/AddToGoggleView(var/mob/living/infectedMob)
+	if (spread & SPREAD_CONTACT)
+		infected_contact_mobs |= infectedMob
+		if (!infectedMob.pathogen)
+			infectedMob.pathogen = image('icons/effects/effects.dmi',infectedMob,"pathogen_contact")
+			infectedMob.pathogen.plane = HUD_PLANE
+			infectedMob.pathogen.layer = UNDER_HUD_LAYER
+			infectedMob.pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
+		for (var/mob/living/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images |= infectedMob.pathogen
 
 /datum/disease2/disease/proc/activate(var/mob/living/mob,var/starved = FALSE)
 	if(mob.stat == DEAD)
@@ -433,6 +475,8 @@ var/global/list/disease2_list = list()
 
 
 /datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
+	mutatechance *= mutation_modifier
+
 	var/mob/living/body = null
 	var/obj/item/weapon/virusdish/dish = null
 	var/obj/machinery/disease2/incubator/machine = null
@@ -444,7 +488,7 @@ var/global/list/disease2_list = list()
 		if (istype(dish.loc,/obj/machinery/disease2/incubator))
 			machine = dish.loc
 
-	if ((body || dish) && incubator.reagents)
+	if (mutatechance > 0 && (body || dish) && incubator.reagents)
 		if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(CREATINE,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(CREATINE,0.5))
 				log += "<br />[timestamp()] Robustness Strengthening (Mutagen and Creatine in [incubator])"
@@ -536,6 +580,11 @@ var/global/list/disease2_list = list()
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]-[subID]")
+	//--Plague Stuff--
+	var/datum/faction/plague_mice/plague = find_active_faction_by_type(/datum/faction/plague_mice)
+	if (plague && ("[uniqueID]-[subID]" == plague.diseaseID))
+		plague.update_hud_icons()
+	//----------------
 	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
 	if (V && V.len <= 0)
 		infected_contact_mobs -= mob
@@ -549,9 +598,28 @@ var/global/list/disease2_list = list()
 		return pick(effects)
 	return effects[Clamp(index,0,effects.len)]
 
-/datum/disease2/disease/proc/roll_antigen()
-	antigen = list(pick(all_antigens))
-	antigen |= pick(all_antigens)
+/datum/disease2/disease/proc/roll_antigen(var/list/factors = list())
+	if (factors.len <= 0)
+		antigen = list(pick(all_antigens))
+		antigen |= pick(all_antigens)
+	else
+		var/selected_first_antigen = pick(
+			factors[ANTIGEN_BLOOD];ANTIGEN_BLOOD,
+			factors[ANTIGEN_COMMON];ANTIGEN_COMMON,
+			factors[ANTIGEN_RARE];ANTIGEN_RARE,
+			factors[ANTIGEN_ALIEN];ANTIGEN_ALIEN,
+			)
+
+		antigen = list(pick(antigen_family(selected_first_antigen)))
+
+		var/selected_second_antigen = pick(
+			factors[ANTIGEN_BLOOD];ANTIGEN_BLOOD,
+			factors[ANTIGEN_COMMON];ANTIGEN_COMMON,
+			factors[ANTIGEN_RARE];ANTIGEN_RARE,
+			factors[ANTIGEN_ALIEN];ANTIGEN_ALIEN,
+			)
+
+		antigen |= pick(antigen_family(selected_second_antigen))
 
 
 //Major Mutations
@@ -565,9 +633,9 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f
 	if (inBody)//mutations that occur directly in a body don't cause helpful symptoms to become deadly instantly.
-		f = new_random_effect(min(5,e.badness+1), max(0,e.badness-1), e.stage, e.type)
+		f = new_random_effect(min(5,text2num(e.badness)+1), max(0,text2num(e.badness)-1), e.stage, e.type)
 	else
-		f = new_random_effect(5, 0, e.stage, e.type)
+		f = new_random_effect(min(5,text2num(e.badness)+2), max(0,text2num(e.badness)-3), e.stage, e.type)//badness is slightly more likely to go down than up.
 	effects[i] = f
 	log_debug("[form] [uniqueID]-[subID] has mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
@@ -623,6 +691,7 @@ var/global/list/disease2_list = list()
 	disease.pattern = pattern
 	disease.pattern_color = pattern_color
 	disease.can_kill = can_kill.Copy()
+	disease.mutation_modifier = mutation_modifier
 	for(var/datum/disease2/effect/e in effects)
 		disease.effects += e.getcopy(disease)
 	return disease

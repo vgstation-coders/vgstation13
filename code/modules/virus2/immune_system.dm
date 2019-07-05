@@ -31,6 +31,8 @@
 	for (var/antibody in antibodies)
 		if (antibody in rare_antigens)
 			antibodies[antibody] = rand(1,15)
+			if (prob(5))
+				antibodies[antibody] += 10
 		if (antibody in common_antigens)
 			antibodies[antibody] = rand(10,30)
 		if (antibody in blood_antigens)

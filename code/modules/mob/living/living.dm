@@ -1963,7 +1963,7 @@ Thanks.
 
 //Called in Life() by humans (in handle_breath.dm), monkeys and mice
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
-	if (!check_airborne_sterility())//checking for sterile mouth protections
+	if (!check_airborne_sterility() && isturf(loc))//checking for sterile mouth protections
 		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
 			if (!cloud.sourceIsCarrier || cloud.source != src)
 				if (Adjacent(cloud))
@@ -2027,3 +2027,30 @@ Thanks.
 					V.incubate(src,rad_tick/10)
 					//effect mutations won't occur unless the mob also has ingested mutagen
 					//and even if they occur, the new effect will have a badness similar to the old one, so helpful pathogen won't instantly become deadly ones.
+
+/mob/living/blob_act(destroy = 0,var/obj/effect/blob/source = null)
+	if(flags & INVULNERABLE)
+		return
+	if(!isDead(src) && source)
+		if (!(source.looks in blob_diseases))
+			CreateBlobDisease(source.looks)
+		var/datum/disease2/disease/D = blob_diseases[source.looks]
+
+		var/chance_to_infect = 100
+		if (check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
+			chance_to_infect = 10//Even with perfect protection, those spores might get to you.
+		if (check_bodypart_bleeding(FULL_TORSO))
+			chance_to_infect = min(100, chance_to_infect + 10)
+
+		if (prob(chance_to_infect))
+			infect_disease2(D, notes="(Blob, from [source])")//still 5% chance to fail infection
+
+	..()
+
+/mob/living/proc/handle_symptom_on_death()
+	if(virus2?.len)
+		for(var/I in virus2)
+			var/datum/disease2/disease/D = virus2[I]
+			if(D.effects.len)
+				for(var/datum/disease2/effect/E in D.effects)
+					E.on_death(src)
