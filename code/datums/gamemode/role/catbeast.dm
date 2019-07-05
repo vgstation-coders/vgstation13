@@ -20,6 +20,7 @@
 	H.my_appearance.s_tone = CATBEASTBLACK
 	H.dna.ResetUI()
 	equip_catbeast(H)
+	infect_catbeast(H)
 	H.regenerate_icons()
 	var/datum/gamemode/dynamic/D = ticker.mode
 	if(istype(D))
@@ -33,6 +34,33 @@
 var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a","Nyanners","Thing From Below","Airlock Scratcher","Flees-Like-Fleas",
 						"Lurks-In-Shadows","Eartha Kitt","Target Practice","Fresh Meat","Ca'thulu","Furry Fury","Vore-Strikes-Back","Killing Machine","Uncle Tom",
 						"Nine Lives", "Bad Luck", "Siamese Sam", "Tom Tabby", "Hairball", "Throws-Dice-Poorly", "Wizard Apprentice", "Lynch Lynx", "Felix")
+
+/datum/role/catbeast/proc/infect_catbeast(var/mob/living/carbon/human/H)
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 0,
+		ANTIGEN_COMMON	= 1,
+		ANTIGEN_RARE	= 2,
+		ANTIGEN_ALIEN	= 0,
+		)
+	var/list/bad = list(
+		EFFECT_DANGER_HELPFUL	= 0,
+		EFFECT_DANGER_FLAVOR	= 1,
+		EFFECT_DANGER_ANNOYING	= 2,
+		EFFECT_DANGER_HINDRANCE	= 3,
+		EFFECT_DANGER_HARMFUL	= 3,
+		EFFECT_DANGER_DEADLY	= 1,
+		)
+
+	var/first_virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/datum/disease2/disease/D1 = new first_virus_choice
+	D1.origin = "Loose Catbeast"
+	D1.makerandom(list(60,90),list(50,90),anti,bad,null)
+	H.infect_disease2(D1,1, "Loose Catbeast")
+	var/second_virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/datum/disease2/disease/D2 = new second_virus_choice
+	D2.origin = "Loose Catbeast"
+	D2.makerandom(list(60,90),list(50,90),anti,bad,null)
+	H.infect_disease2(D2,1, "Loose Catbeast")
 
 /proc/equip_catbeast(var/mob/living/carbon/human/H)
 	var/list/shirts = list(/obj/item/clothing/under/overalls,/obj/item/clothing/under/schoolgirl,/obj/item/clothing/under/darkholme,/obj/item/clothing/under/maid,

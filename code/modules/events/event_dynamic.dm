@@ -64,9 +64,9 @@ var/list/event_last_fired = list()
 
 	possibleEvents[/datum/event/radiation_storm] = 50
 	if(active_with_role["Medical"] > 1)
-		//possibleEvents[/datum/event/viral_infection] = 30
+		possibleEvents[/datum/event/viral_infection] = 40
 		possibleEvents[/datum/event/spontaneous_appendicitis] = 50
-		//possibleEvents[/datum/event/viral_outbreak] = 20
+		possibleEvents[/datum/event/viral_outbreak] = 25
 		possibleEvents[/datum/event/organ_failure] = 30
 
 	possibleEvents[/datum/event/prison_break] = 25

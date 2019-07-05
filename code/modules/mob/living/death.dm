@@ -7,6 +7,8 @@
 	init_butchering_list()
 
 	clear_fullscreens()
+
+	handle_symptom_on_death()
 	..()
 
 /mob/living/gib()

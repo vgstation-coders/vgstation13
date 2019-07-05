@@ -451,8 +451,9 @@
 		reagent_id = TOXIN
 
 	var/virus = 0
-	for(var/datum/disease/D in C.viruses)
-		virus = 1
+	for(var/ID in C.virus2)
+		if (ID in virusDB)
+			virus = 1
 
 	if (!reagent_id && (virus))
 		if(!C.reagents.has_reagent(treatment_virus))

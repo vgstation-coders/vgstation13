@@ -153,16 +153,16 @@ var/list/infected_contact_mobs = list()
 		D.log += "<br />[timestamp()] Infected [key_name(src)] [notes]. Infection chance now [D.infectionchance]%"
 		virus2["[D.uniqueID]-[D.subID]"] = D
 
-		if (disease.spread & SPREAD_CONTACT)
-			infected_contact_mobs |= src
-			if (!pathogen)
-				pathogen = image('icons/effects/effects.dmi',src,"pathogen_contact")
-				pathogen.plane = HUD_PLANE
-				pathogen.layer = UNDER_HUD_LAYER
-				pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-			for (var/mob/living/L in science_goggles_wearers)
-				if (L.client)
-					L.client.images |= pathogen
+		D.AddToGoggleView(src)
+
+		//--Plague Stuff--
+		var/datum/faction/plague_mice/plague = find_active_faction_by_type(/datum/faction/plague_mice)
+		if (plague && ("[D.uniqueID]-[D.subID]" == plague.diseaseID))
+			var/datum/objective/plague/O = locate() in plague.objective_holder.objectives
+			if (O && !istype(src, /mob/living/simple_animal/mouse/plague))
+				O.total_infections++
+			plague.update_hud_icons()
+		//----------------
 
 		for (var/obj/item/device/pda/p in contents)
 			if (p.scanmode == (SCANMODE_MEDICAL))
