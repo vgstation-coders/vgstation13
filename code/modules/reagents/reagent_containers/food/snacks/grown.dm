@@ -576,6 +576,9 @@ var/list/special_fruits = list()
 	filling_color = "#FCF695"
 	plantname = "bluespacebanana"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/isHandgun()
+	return TRUE
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	var/obj/item/weapon/bananapeel/bluespace/peel = new
 	peel.potency = potency

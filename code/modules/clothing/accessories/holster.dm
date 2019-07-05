@@ -124,7 +124,7 @@
 	holster_verb_name = "Holster (Handgun)"
 
 /obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/W)
-	if(!isgun(W) && !isbanana(W))
+	if(!isgun(W) && !isbanana(W) && !istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana))
 		return
 	return W.isHandgun()
 
