@@ -634,7 +634,7 @@
 		user.drop_item(src, T, 1)
 		var/obj/item/trash/soda_cans/crushed_can = new (T, icon_state = icon_state)
 		crushed_can.name = "crushed [name]"
-		crushed_can.attack_hand(user)
+		user.put_in_active_hand(crushed_can)
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
 		qdel(src)
 

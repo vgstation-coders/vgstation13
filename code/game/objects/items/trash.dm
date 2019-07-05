@@ -194,7 +194,7 @@
 	starting_materials = list(MAT_CARDBOARD = 370)
 	autoignition_temperature = 522
 	w_type=RECYK_MISC
-	
+
 var/list/crushed_cans_cache = list()
 
 /obj/item/trash/soda_cans
@@ -209,7 +209,7 @@ var/list/crushed_cans_cache = list()
 	throw_range = 8
 	throw_speed = 3
 
-/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+/obj/item/trash/soda_cans/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	..()
 	if(icon_state)
 		if (!(icon_state in crushed_cans_cache))
