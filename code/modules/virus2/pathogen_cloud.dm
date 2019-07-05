@@ -54,6 +54,9 @@ var/list/pathogen_clouds = list()
 
 /obj/effect/effect/pathogen_cloud/core/New(var/turf/loc, var/mob/sourcemob, var/list/virus)
 	..()
+	if (!loc || !virus || virus.len <= 0)
+		return
+
 	var/strength = 0
 	for (var/ID in viruses)
 		var/datum/disease2/disease/V = viruses[ID]

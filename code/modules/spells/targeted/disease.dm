@@ -53,18 +53,19 @@
 
 	log_admin("[key_name(user)] has death-touched [key_name(target)]. The latter will die in moments.")
 	message_admins("[key_name(user)] has death-touched [key_name(target)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>JMP</A>). The latter will die in moments.")
-	var/datum/disease2/disease/shutdown = new /datum/disease2/disease("Created by vamp [key_name(target)].")
+	var/datum/disease2/disease/shutdown = new /datum/disease2/disease()
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
 	O.chance = 10
 	shutdown.infectionchance = 100
 	shutdown.antigen = list(pick(all_antigens))
 	shutdown.antigen |= pick(all_antigens)
-	shutdown.spread = 0//cannot be extracted
-	shutdown.uniqueID = rand(0,10000)
+	shutdown.spread = SPREAD_BLOOD
+	shutdown.uniqueID = rand(0,9999)
+	shutdown.subID = rand(0,9999)
 	shutdown.effects += O
 	shutdown.speed = 1
-	shutdown.stage = 2
-	shutdown.ticks = 185
+	shutdown.max_stage = 1
+	shutdown.mutation_modifier = 0
 	target.infect_disease2(shutdown, notes="(Spell, from [key_name(user)])")
 
 	V.remove_blood(blood_cost)

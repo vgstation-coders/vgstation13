@@ -3112,8 +3112,27 @@
 	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 
-	var/datum/disease2/disease/new_virus = new /datum/disease2/disease
-	new_virus.makerandom(list(2,4),list(40,60),list(20,90),src)
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/datum/disease2/disease/new_virus = new virus_choice
+
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 0,
+		ANTIGEN_COMMON	= 1,
+		ANTIGEN_RARE	= 2,
+		ANTIGEN_ALIEN	= 0,
+		)
+	var/list/bad = list(
+		EFFECT_DANGER_HELPFUL	= 0,
+		EFFECT_DANGER_FLAVOR	= 0,
+		EFFECT_DANGER_ANNOYING	= 1,
+		EFFECT_DANGER_HINDRANCE	= 2,
+		EFFECT_DANGER_HARMFUL	= 4,
+		EFFECT_DANGER_DEADLY	= 0,
+		)
+
+	new_virus.origin = "Poisoned Pizza"
+
+	new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
 
 	var/list/blood_data = list(
 		"donor" = null,

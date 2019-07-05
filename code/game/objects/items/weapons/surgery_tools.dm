@@ -95,6 +95,7 @@
 	surgery_speed = 0.6
 	heat_production = 1500
 	source_temperature = TEMPERATURE_PLASMA
+	sterility = 100
 
 /*
 /obj/item/weapon/cautery/laser/old //unused laser cautery. For the laser scalpel
@@ -184,6 +185,7 @@
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
 	surgery_speed = 0.6
+	sterility = 100
 	var/cauterymode = 0 //1 = cautery enabled
 	var/obj/item/weapon/cautery/laser/held
 

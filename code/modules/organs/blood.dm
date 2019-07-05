@@ -217,7 +217,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 ****************************************************/
 
 //Gets blood from mob to the container, preserving all data in it.
-/mob/living/carbon/proc/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/proc/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 	var/datum/reagent/B = (container ? get_blood(container.reagents) : null)
 	if(!B)
 		B = new /datum/reagent/blood
@@ -231,14 +231,16 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		B.data["virus2"] = list()
 
 	B.data["virus2"] |= filter_disease_by_spread(virus_copylist(src.virus2),required = SPREAD_BLOOD)
-	B.data["immunity"] = src.immune_system.GetImmunity()
-	B.data["blood_DNA"] = copytext(src.dna.unique_enzymes,1,0)
+	if (immune_system)
+		B.data["immunity"] = src.immune_system.GetImmunity()
+	if (dna)
+		B.data["blood_DNA"] = copytext(src.dna.unique_enzymes,1,0)
+		B.data["blood_type"] = copytext(src.dna.b_type,1,0)
 	if(src.resistances && src.resistances.len)
 		if(B.data["resistances"])
 			B.data["resistances"] |= src.resistances.Copy()
 		else
 			B.data["resistances"] = src.resistances.Copy()
-	B.data["blood_type"] = copytext(src.dna.b_type,1,0)
 
 	// Putting this here due to return shenanigans.
 	if(istype(src,/mob/living/carbon/human))
@@ -273,6 +275,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	vessel.remove_reagent(BLOOD,amount) // Removes blood if human
 
 /mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+	if(!isDead())
+		adjustOxyLoss(amount)
+	. = ..()
+
+/mob/living/simple_animal/mouse/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 	if(!isDead())
 		adjustOxyLoss(amount)
 	. = ..()
