@@ -892,13 +892,13 @@
 
 			//Let the player choose their new appearance
 			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (human.species.name || null))
-			if(human.my_appearance.f_style && species_hair.len)		
+			if(human.my_appearance.f_style && species_hair.len)
 				var/new_hstyle = input(M, "Select an ooze style", "Grooming")  as null|anything in species_hair
 				if(new_hstyle)
 					human.my_appearance.h_style = new_hstyle
 
 			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, (human.species.name || null))
-			if(human.my_appearance.f_style && species_facial_hair.len)		
+			if(human.my_appearance.f_style && species_facial_hair.len)
 				var/new_fstyle = input(M, "Select a facial ooze style", "Grooming")  as null|anything in species_facial_hair
 				if(new_fstyle)
 					human.my_appearance.f_style = new_fstyle
@@ -1895,6 +1895,20 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.83
 	specheatcap = 1.83
+
+/datum/reagent/sterilizine/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if (isitem(O))
+		var/obj/item/I = O
+		I.sterility = min(100,initial(I.sterility)+30)
+	O.clean_blood()
+	if(istype(O, /obj/effect/decal/cleanable))
+		qdel(O)
+	else if(O.color && istype(O, /obj/item/weapon/paper))
+		O.color = null
 
 /datum/reagent/vaporsalt
 	name = "Vapor Salts"
