@@ -23,58 +23,61 @@
 	var/mob/living/simple_animal/mouse/plague/M = R.antag.current
 	M.infect_disease2(plague,1, "Plague Mice")
 
-	if (invasion)
-		M.forceMove(invasion)
-
 /datum/faction/plague_mice/OnPostSetup()
-	if (!plague)
+	if (!plague || !invasion)
 		SetupDisease()
 
+	if (invasion)
+		for(var/datum/role/plague_mouse/M in members)
+			var/datum/mind/mouse_mind = M.antag
+			mouse_mind.current.forceMove(invasion)
+
 /datum/faction/plague_mice/proc/SetupDisease()
-	plague = new
+	if (!plague)
+		plague = new
 
-	var/list/anti = list(
-		ANTIGEN_BLOOD	= 0,
-		ANTIGEN_COMMON	= 1,
-		ANTIGEN_RARE	= 2,
-		ANTIGEN_ALIEN	= 0,
-		)
-	var/list/bad = list(
-		EFFECT_DANGER_HELPFUL	= 0,
-		EFFECT_DANGER_FLAVOR	= 0,
-		EFFECT_DANGER_ANNOYING	= 1,
-		EFFECT_DANGER_HINDRANCE	= 1,
-		EFFECT_DANGER_HARMFUL	= 2,
-		EFFECT_DANGER_DEADLY	= 3,
-		)
-	plague.origin = "Plague Mice"
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 0,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 2,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 0,
+			EFFECT_DANGER_FLAVOR	= 0,
+			EFFECT_DANGER_ANNOYING	= 1,
+			EFFECT_DANGER_HINDRANCE	= 1,
+			EFFECT_DANGER_HARMFUL	= 2,
+			EFFECT_DANGER_DEADLY	= 3,
+			)
+		plague.origin = "Plague Mice"
 
-	plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE//gotta ensure that our mice can spread that disease
+		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE//gotta ensure that our mice can spread that disease
 
-	plague.color = "#ADAEAA"
-	plague.pattern = 3
-	plague.pattern_color = "#EE9A9C"
+		plague.color = "#ADAEAA"
+		plague.pattern = 3
+		plague.pattern_color = "#EE9A9C"
 
-	plague.makerandom(list(80,100),list(25,50),anti,bad,null)
+		plague.makerandom(list(80,100),list(25,50),anti,bad,null)
 
-	diseaseID = "[plague.uniqueID]-[plague.subID]"
+		diseaseID = "[plague.uniqueID]-[plague.subID]"
 
-
-	var/list/found_vents = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
-		if(!v.welded && v.z == STATION_Z && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
-			found_vents.Add(v)
-	if(found_vents.len)
-		invasion = get_turf(pick(found_vents))
-	else
-		var/area/kitchen = locate(/area/crew_quarters/kitchen)
-		var/list/turf/simulated/floor/floors = list()
-		for(var/turf/simulated/floor/F in kitchen)
-			floors += F
-			if(!F.has_dense_content())
-				invasion = F//if by some crazy chance there's no available vent where to spawn at, let's just pick the first empty floor in the kitchen
-				return
-		invasion = pick(floors)//or any floor really. And if your station has no kitchen then you don't deserve those mice.
+	if (!invasion)
+		var/list/found_vents = list()
+		for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
+			if(!v.welded && v.z == STATION_Z && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
+				found_vents.Add(v)
+		if(found_vents.len)
+			invasion = get_turf(pick(found_vents))
+		else
+			var/area/kitchen = locate(/area/crew_quarters/kitchen)
+			var/list/turf/simulated/floor/floors = list()
+			for(var/turf/simulated/floor/F in kitchen)
+				floors += F
+				if(!F.has_dense_content())
+					invasion = F//if by some crazy chance there's no available vent where to spawn at, let's just pick the first empty floor in the kitchen
+					return
+			invasion = pick(floors)//or any floor really. And if your station has no kitchen then you don't deserve those mice.
 
 /datum/faction/plague_mice/forgeObjectives()
 	if (!plague)
