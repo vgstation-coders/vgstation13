@@ -1422,7 +1422,10 @@ Thanks.
 	meat_taken++
 
 	if (virus2?.len)
-		M.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
+		for (var/ID in virus2)
+			var/datum/disease2/disease/D = virus2[ID]
+			if (D.spread & SPREAD_BLOOD)
+				M.infect_disease2(D,1,"(Butchered, from [src])")
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
