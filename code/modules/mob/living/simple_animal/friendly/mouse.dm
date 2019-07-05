@@ -13,6 +13,8 @@
 	icon_state = "mouse_gray"
 	icon_living = "mouse_gray"
 	icon_dead = "mouse_gray_dead"
+	var/icon_sleep = "mouse_gray_sleep"
+	var/icon_splat = "mouse_gray_splat"
 	speak = list("Squeek!","SQUEEK!","Squeek?")
 	speak_emote = list("squeeks","squeeks","squiks")
 	emote_hear = list("squeeks","squeaks","squiks")
@@ -56,14 +58,14 @@
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5))
 		stat = UNCONSCIOUS
-		icon_state = "mouse_[_color]_sleep"
+		icon_state = icon_sleep
 		wander = 0
 		speak_chance = 0
 		//snuffles
 	else if(stat == UNCONSCIOUS)
 		if(ckey || prob(1))
 			stat = CONSCIOUS
-			icon_state = "mouse_[_color]"
+			icon_state = icon_living
 			wander = 1
 			speak_chance = initial(speak_chance)
 		else if(prob(5))
@@ -89,8 +91,6 @@
 		speed = 3
 		if(prob(5))
 			to_chat(src, "<span class = 'warning'>You are getting hungry!</span>")
-
-
 
 	if(!isUnconscious())
 		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
@@ -141,23 +141,6 @@
 		multiplier = 2.5
 	nutrition = max(0, nutrition - MOUSEMOVECOST*multiplier)
 
-/mob/living/simple_animal/mouse/New()
-	..()
-	if(config && config.uneducated_mice)
-		universal_understand = 0
-	// Mice IDs
-	if(namenumbers)
-		name = "[name] ([rand(1, 1000)])"
-	real_name = name
-	if(!_color)
-		_color = pick( list("brown","gray","white") )
-	icon_state = "mouse_[_color]"
-	icon_living = "mouse_[_color]"
-	icon_dead = "mouse_[_color]_dead"
-	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
-	add_language(LANGUAGE_MOUSE)
-	default_language = all_languages[LANGUAGE_MOUSE]
-
 /mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
 	..()
 	if(can_be_infected(target))
@@ -185,8 +168,8 @@
 
 /mob/living/simple_animal/mouse/proc/splat()
 	death()
-	src.icon_dead = "mouse_[_color]_splat"
-	src.icon_state = "mouse_[_color]_splat"
+	src.icon_dead = icon_splat
+	src.icon_state = icon_splat
 	if(client)
 		client.time_died_as_mouse = world.time
 
@@ -262,43 +245,6 @@
 		client.time_died_as_mouse = world.time
 	..(gibbed)
 
-/*
- * Mouse types
- */
-
-/mob/living/simple_animal/mouse/white
-	_color = "white"
-	icon_state = "mouse_white"
-
-/mob/living/simple_animal/mouse/gray
-	_color = "gray"
-	icon_state = "mouse_gray"
-
-/mob/living/simple_animal/mouse/brown
-	_color = "brown"
-	icon_state = "mouse_brown"
-
-/mob/living/simple_animal/mouse/black
-	_color = "black"
-	icon_state = "mouse_black"
-
-//TOM IS ALIVE! SQUEEEEEEEE~K :)
-/mob/living/simple_animal/mouse/brown/Tom
-	name = "Tom"
-	namenumbers = FALSE
-	desc = "Jerry the cat is not amused."
-	response_help  = "pets"
-	response_disarm = "gently pushes aside"
-	response_harm   = "splats"
-
-/mob/living/simple_animal/mouse/black/dessert
-	name = "Dessert"
-	namenumbers = FALSE
-	desc = "Crunchy!"
-	response_help  = "pets"
-	response_disarm = "gently pushes aside"
-	response_harm   = "tenderizes"
-
 /mob/living/simple_animal/mouse/say_quote(text)
 	if(!text)
 		return "squeaks, \"...\"";	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
@@ -310,14 +256,99 @@
 		gib()
 		return 0
 
-/mob/living/simple_animal/mouse/wire_biter
+/mob/living/simple_animal/mouse/bullet_act(var/obj/item/projectile/Proj)
+	..()
+	if(!Proj)
+		return
+	var/mob/living/simple_animal/mouse/M = src
+	if((Proj.stun + Proj.weaken + Proj.paralyze + Proj.agony) > M.maxHealth)
+		to_chat(M, "<span class='warning'>The force of the projectile completely overwhelms your tiny body...</span>")
+		M.splat()
+		return 0
+
+/*
+ * MOUSE TYPES BELOW
+ */
+
+//Common mice - these are the kind that spawn from mouse spawners and that ghosts can respawn as.
+
+/mob/living/simple_animal/mouse/common
+
+
+/mob/living/simple_animal/mouse/common/white
+	_color = "white"
+	icon_state = "mouse_white"
+
+/mob/living/simple_animal/mouse/common/gray
+	_color = "gray"
+	icon_state = "mouse_gray"
+
+/mob/living/simple_animal/mouse/common/brown
+	_color = "brown"
+	icon_state = "mouse_brown"
+
+/mob/living/simple_animal/mouse/common/black
+	_color = "black"
+	icon_state = "mouse_black"
+
+/mob/living/simple_animal/mouse/common/New()
+	..()
+	if(config && config.uneducated_mice)
+		universal_understand = 0
+	// Mice IDs
+	if(namenumbers)
+		name = "[name] ([rand(1, 1000)])"
+	real_name = name
+	if(!_color)
+		_color = pick( list("brown","gray","white") )
+	icon_state = "mouse_[_color]"
+	icon_living = "mouse_[_color]"
+	icon_dead = "mouse_[_color]_dead"
+	icon_sleep = "mouse_[_color]_sleep"
+	icon_splat = "mouse_[_color]_splat"
+	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
+	add_language(LANGUAGE_MOUSE)
+	default_language = all_languages[LANGUAGE_MOUSE]
+
+/*
+* Unique Mice
+*/
+
+//TOM IS ALIVE! SQUEEEEEEEE~K :)
+/mob/living/simple_animal/mouse/common/brown/Tom
+	name = "Tom"
+	namenumbers = FALSE
+	desc = "Jerry the cat is not amused."
+	response_help  = "pets"
+	response_disarm = "gently pushes aside"
+	response_harm   = "splats"
+
+/mob/living/simple_animal/mouse/common/black/dessert
+	name = "Dessert"
+	namenumbers = FALSE
+	desc = "Crunchy!"
+	response_help  = "pets"
+	response_disarm = "gently pushes aside"
+	response_harm   = "tenderizes"
+
+/mob/living/simple_animal/mouse/common/wire_biter
 	can_chew_wires = 1
 
-/mob/living/simple_animal/mouse/plague
+/mob/living/simple_animal/mouse/common/plague
 	disease_carrier = 1
+
+/*
+* MOUSE OPS
+*/
 
 /mob/living/simple_animal/mouse/mouse_op
 	name = "mouse operative"
+	desc = "Oh no..."
+	icon_state = "mouse_operative"
+	icon_living = "mouse_operative"
+	icon_sleep = "mouse_operative_sleep"
+	icon_dead = "mouse_operative_dead"
+	icon_splat = "mouse_operative_splat"
 	namenumbers = FALSE
 	min_oxy = 0
 	minbodytemp = 0
@@ -327,14 +358,14 @@
 	universal_speak = 1
 	can_chew_wires = 1
 	mutations = list(M_NO_SHOCK)
+	universal_understand = 1
 
 /mob/living/simple_animal/mouse/mouse_op/New()
 	..()
-	desc = "Oh no..."
-	icon_state = "mouse_operative"
-	universal_understand = 1
+	add_language(LANGUAGE_MOUSE)
+	default_language = all_languages[LANGUAGE_MOUSE]
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
-	. = ..()
+	..()
 	if(gibbed == FALSE)
 		src.gib()
