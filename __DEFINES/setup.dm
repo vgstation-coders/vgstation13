@@ -981,10 +981,17 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define	SPREAD_CONTACT	2//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
 #define	SPREAD_AIRBORNE	4//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
 
-#define	ANTIGEN_BLOOD	1
-#define	ANTIGEN_COMMON	2
-#define	ANTIGEN_RARE	4
-#define	ANTIGEN_ALIEN	8
+#define EFFECT_DANGER_HELPFUL	"0"
+#define EFFECT_DANGER_FLAVOR	"1"
+#define EFFECT_DANGER_ANNOYING	"2"
+#define EFFECT_DANGER_HINDRANCE	"3"
+#define EFFECT_DANGER_HARMFUL	"4"
+#define EFFECT_DANGER_DEADLY	"5"
+
+#define	ANTIGEN_BLOOD	"blood"
+#define	ANTIGEN_COMMON	"common"
+#define	ANTIGEN_RARE	"rare"
+#define	ANTIGEN_ALIEN	"alien"
 
 //blood antigens
 #define	ANTIGEN_O	"O"

@@ -891,7 +891,7 @@ var/virology_encyclopedia = ""
 			var/list/to_choose = subtypesof(/datum/disease2/effect)
 			for(var/e_type in to_choose)
 				var/datum/disease2/effect/e = e_type
-				if(initial(e.stage) == i && initial(e.badness) < 6)
+				if(initial(e.stage) == i && initial(e.restricted) < 2)
 					virology_encyclopedia += {"<tr>
 					    <td>[initial(e.name)]</td>
 					    <td>[initial(e.desc)] [initial(e.encyclopedia)]</td>

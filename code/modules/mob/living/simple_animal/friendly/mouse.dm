@@ -220,12 +220,58 @@
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
-/*
-/mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
+	var/turf/T = get_turf(src)
+	if (istype(T.loc,/area/maintenance) && prob(20))
+		MaintInfection()
+
+/mob/living/simple_animal/mouse/proc/MaintInfection()
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/datum/disease2/disease/D = new virus_choice
+
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 1,
+		ANTIGEN_COMMON	= 2,
+		ANTIGEN_RARE	= 2,
+		ANTIGEN_ALIEN	= 0,
+		)
+	var/list/bad = list(
+		EFFECT_DANGER_HELPFUL	= 0,
+		EFFECT_DANGER_FLAVOR	= 1,
+		EFFECT_DANGER_ANNOYING	= 1,
+		EFFECT_DANGER_HINDRANCE	= 3,
+		EFFECT_DANGER_HARMFUL	= 1,
+		EFFECT_DANGER_DEADLY	= 0,
+		)
+	D.origin = "Maintenance Mouse"
+
+	D.makerandom(list(40,60),list(10,80),anti,bad,null)
+
+	infect_disease2(D,1, "Maintenance Mouse")
+
+/mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
-	if(target.can_be_infected())
-		//spread_disease_to(src, target, "Contact")
-*/
+	var/block = 0
+	var/bleeding = 0
+
+	var/contact_target = FEET
+
+	if (target.lying)//if our target is lying down, maybe we can reach more than just their toes.
+		contact_target = pick(FEET,EARS,HANDS)
+
+	if (check_contact_sterility(MOUTH) || target.check_contact_sterility(contact_target))//only one side has to wear protective clothing to prevent contact infection
+		block = 1
+	if (check_bodypart_bleeding(MOUTH) && target.check_bodypart_bleeding(contact_target))//both sides have to be bleeding to allow for blood infections
+		bleeding = 1
+	share_contact_diseases(target,block,bleeding)
+
+	var/part = "toes"
+	switch (contact_target)
+		if (EARS)
+			part = "ear lobs"
+		if (HANDS)
+			part = "fingers"
+	visible_message("\The [src] [pick("nibbles on","tickles")] \the [target]'s [part][block ? ", but their clothing prevents direct contact." : "!"]")
+
 /mob/living/simple_animal/mouse/proc/nutrstats()
 	stat(null, "Nutrition level - [nutrition]")
 
@@ -242,7 +288,7 @@
 		if(can_chew_wires)
 			to_chat(user, "<span class='notice'>It seems a bit frazzled.</span>")
 		if(virus2.len > 0)
-			to_chat(user, "<span class='blob'>It seems unwell.</span>")
+			to_chat(user, "<span class='blob'>It looks a bit sickly.</span>")
 		if(nutrition <= MOUSEHUNGRY)
 			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 
@@ -378,6 +424,10 @@
 /mob/living/simple_animal/mouse/black
 	_color = "black"
 	icon_state = "mouse_black"
+
+/mob/living/simple_animal/mouse/plague
+	_color = "plague"
+	icon_state = "mouse_plague"
 
 //TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/brown/Tom

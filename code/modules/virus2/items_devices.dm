@@ -262,9 +262,23 @@ var/list/virusdishes = list()
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
 	if (loc)//because fuck you /datum/subsystem/supply_shuttle/Initialize()
-		var/virus_choice = pick(typesof(/datum/disease2/disease))
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
 		contained_virus = new virus_choice
-		contained_virus.makerandom(list(0,4),list(50,90),list(0,100),src)
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 2,
+			ANTIGEN_COMMON	= 2,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 1,
+			EFFECT_DANGER_FLAVOR	= 2,
+			EFFECT_DANGER_ANNOYING	= 2,
+			EFFECT_DANGER_HINDRANCE	= 2,
+			EFFECT_DANGER_HARMFUL	= 2,
+			EFFECT_DANGER_DEADLY	= 0,
+			)
+		contained_virus.makerandom(list(50,90),list(10,100),anti,bad,src)
 		growth = rand(5, 50)
 		name = "growth dish (Unknown [contained_virus.form])"
 		update_icon()

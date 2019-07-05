@@ -485,3 +485,47 @@ var/list/blob_looks_player = list(//Options available to players
 	else
 		if(health <= 15)
 			icon_state = "blob_damaged"
+
+///////////////////////BLOB SPORE DISEASE//////////////////////////////////
+var/list/blob_diseases = list()
+
+/proc/CreateBlobDisease(var/looks)
+	var/datum/disease2/disease/S = new
+	S.form = "Spores"
+	S.infectionchance = 95
+	S.infectionchance_base = 95
+	S.stageprob = 0//single-stage
+	S.stage_variance = 0
+	S.max_stage = 1
+	S.can_kill = list()
+
+	var/datum/disease2/effect/blob_spores/E = new /datum/disease2/effect/blob_spores
+	E.looks = looks
+	S.effects += E
+
+	S.antigen = list(pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN))))
+	S.antigen |= pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN)))
+
+	S.spread = SPREAD_BLOOD
+	S.uniqueID = rand(0,9999)
+	S.subID = rand(0,9999)
+
+	S.strength = rand(70,100)
+	S.robustness = 100
+
+	S.color = "#99CB99"
+	S.pattern = 2
+	S.pattern_color = "#FFC977"
+
+	log_debug("Creating Spores #[S.uniqueID]-[S.subID].")
+	S.log += "<br />[timestamp()] Created<br>"
+
+	S.origin = "Blob ([looks])"
+
+	S.mutation_modifier = 0
+
+	S.update_global_log()
+
+	blob_diseases[looks] = S
+
+///////////////////////////////////////////////////////////////////////////

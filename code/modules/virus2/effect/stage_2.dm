@@ -3,7 +3,7 @@
 	desc = "Causes the infected to scream at random."
 	encyclopedia = ""
 	stage = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
 	mob.audible_scream()
@@ -14,7 +14,7 @@
 	desc = "Makes the infected feel more drowsy."
 	encyclopedia = "This may cause the infected to randomly fall asleep at times."
 	stage = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
 	mob.drowsyness += 10
@@ -25,7 +25,7 @@
 	desc = "Causes the infected to collapse in random fits of narcolepsy"
 	encyclopedia = ""
 	stage = 2
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
 	mob.say("*collapse")
@@ -36,7 +36,7 @@
 	desc = "Inhibits the infected's ability to see."
 	encyclopedia = "Turning them blind for about 5 seconds."
 	stage = 2
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
 	mob.eye_blind = max(mob.eye_blind, 4)
@@ -47,7 +47,7 @@
 	desc = "Causes the infected to cough rapidly, releasing pathogenic clouds."
 	encyclopedia = "This symptom enables even diseases that lack the Airborne vector to spread through the air."
 	stage = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
 	mob.say("*cough")
@@ -100,7 +100,7 @@
 	name = "Appetiser Effect"
 	desc = "Starves the infected."
 	stage = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
 	mob.nutrition = max(0, mob.nutrition - 200)
@@ -110,7 +110,7 @@
 	name = "Refridgerator Syndrome"
 	desc = "Causes the infected to shiver at random."
 	stage = 2
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
 	mob.say("*shiver")
@@ -121,7 +121,7 @@
 	desc = "Causes rapid hairloss in the infected."
 	encyclopedia = "Nothing that a trip in front of a mirror can't fix."
 	stage = 2
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -138,7 +138,7 @@
 	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
 	encyclopedia = "Thankfully the pathogen keeps the production bellow overdose levels."
 	stage = 2
-	badness = 0
+	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
@@ -153,7 +153,7 @@
 	desc = "Causes the infected to synthesize pure ethanol."
 	encyclopedia = "Without a cure, the infected's liver is sure to die, also effect strength increases the rate at which ethanol is synthesized."
 	stage = 2
-	badness = 4
+	badness = EFFECT_DANGER_HARMFUL
 
 /datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
@@ -165,7 +165,7 @@
 	name = "Gaben Syndrome"
 	desc = "Makes the infected incredibly fat."
 	stage = 2
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
 	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
@@ -178,7 +178,7 @@
 	name = "Bearding"
 	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
-	badness = 1
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -195,7 +195,7 @@
 	desc = "Causes the infected's nasal pathways to hemorrhage, causing a nosebleed, potentially carrying the pathogen."
 	encyclopedia = "People lingering on top of the dropped blood may accidentally become infected if they're not properly protected."
 	stage = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
 	if (prob(30))
@@ -215,7 +215,7 @@
 	desc = "Causes the infected to cough up viral sputum over the floor, which acts as a pathogen carrier."
 	encyclopedia = "People lingering on top of the dropped blood may accidentally become infected if they're not properly protected."
 	stage = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
 	if (prob(30))
@@ -232,7 +232,7 @@
 	desc = "Causes the infected to glow."
 	encyclopedia = "While useful at first glance, this also hinders the infected's capacity at hiding."
 	stage = 2
-	badness = 0
+	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
 	mob.set_light(4)
@@ -246,7 +246,7 @@
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob)
 //Add filters to change a,A,e,E,i,I,o,O,u,U to _
@@ -279,7 +279,7 @@
 	chance = 25
 	max_chance = 75
 	max_multiplier = 2
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
 	if(istype(H))
@@ -311,7 +311,7 @@
 	stage = 2
 	affect_voice = 1
 	max_count = 1
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 	var/list/virus_opposite_word_list
 
 /datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -365,7 +365,7 @@
 	encyclopedia = "Touching or bumping into people may now severly injure them."
 	stage = 2
 	max_count = 1
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 	var/skip = FALSE
 
 /datum/disease2/effect/spiky_skin/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -433,7 +433,7 @@
 	desc = "Infected people will fall ill if they try to eat meat."
 	encyclopedia = ""
 	stage = 2
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/vegan/activate(var/mob/living/carbon/mob)
 	mob.dna.check_integrity()
@@ -446,7 +446,7 @@
 	encyclopedia = "Do not linger near Hydroponics or you will become the sworn enemy of all botanists."
 	stage = 2
 	max_multiplier = 3
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/famine/activate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
@@ -489,7 +489,7 @@
 	multiplier = 1.5
 	max_multiplier = 4
 	var/activated = FALSE
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/calorieburn/activate(var/mob/living/carbon/mob)
 	if(!activated)
@@ -511,7 +511,7 @@
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
-	badness = 3
+	badness = EFFECT_DANGER_HINDRANCE
 	var/activated = FALSE
 
 /datum/disease2/effect/calorieconserve/activate(var/mob/living/carbon/mob)
@@ -534,7 +534,7 @@
 	stage = 2
 	var/triggered = 0
 	affect_voice = 1
-	badness = 2
+	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
 	if(!triggered)
