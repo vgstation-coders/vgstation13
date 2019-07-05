@@ -26,9 +26,9 @@
 		EFFECT_DANGER_DEADLY	= 1,
 		)
 
-	new_virus.origin = "Xenoarch Artifact"
+	pathogen.origin = "Xenoarch Artifact"
 
-	new_virus.makerandom(list(60,100),list(75,100),anti,bad,null)
+	pathogen.makerandom(list(60,100),list(75,100),anti,bad,null)
 
 /datum/artifact_effect/pathogen/DoEffectPulse()
 	if(holder)

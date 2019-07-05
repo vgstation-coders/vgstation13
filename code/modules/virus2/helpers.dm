@@ -143,7 +143,7 @@ var/list/infected_contact_mobs = list()
 		return 0
 	if ("[disease.uniqueID]-[disease.subID]" in virus2)
 		return 0
-	if(!immune_system.CanInfect(disease))
+	if(immune_system && !immune_system.CanInfect(disease))
 		return 0
 	if(prob(disease.infectionchance) || forced)
 		var/datum/disease2/disease/D = disease.getcopy()

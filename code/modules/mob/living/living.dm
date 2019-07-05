@@ -2033,7 +2033,7 @@ Thanks.
 		return
 	if(!isDead(src) && source)
 		if (!(source.looks in blob_diseases))
-			source.CreateBlobDisease(source.looks)
+			CreateBlobDisease(source.looks)
 		var/datum/disease2/disease/D = blob_diseases[source.looks]
 
 		var/chance_to_infect = 100
@@ -2048,7 +2048,7 @@ Thanks.
 	..()
 
 /mob/living/proc/handle_symptom_on_death()
-	if(virus2.len)
+	if(virus2?.len)
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
