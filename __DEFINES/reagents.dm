@@ -459,3 +459,4 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"
+#define INCENSE_CORNOIL 	"cornoil"
