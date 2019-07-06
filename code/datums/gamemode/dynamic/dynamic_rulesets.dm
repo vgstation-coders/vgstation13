@@ -80,7 +80,7 @@
 		return 0
 	return 1
 
-// Returns TRUE if there is there are sufficient enemies to execute this ruleset
+// Returns TRUE if there are sufficient enemies to execute this ruleset
 /datum/dynamic_ruleset/proc/check_enemy_jobs()
 	if (!enemy_jobs.len)
 		return TRUE
