@@ -6,7 +6,7 @@
 	chance = 10
 	max_chance = 25
 
-/datum/disease2/effect/spaceadapt/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/spaceadapt/activate(var/mob/living/mob)
 	var/datum/gas_mixture/environment = mob.loc.return_air()
 	var/pressure = environment.return_pressure()
 	var/adjusted_pressure = mob.calculate_affecting_pressure(pressure)
@@ -32,7 +32,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HARMFUL
 
-/datum/disease2/effect/minttoxin/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/minttoxin/activate(var/mob/living/mob)
 	if(istype(mob) && mob.reagents.get_reagent_amount(MINTTOXIN) < 5)
 		to_chat(mob, "<span class='notice'>You feel a minty freshness</span>")
 		mob.reagents.add_reagent(MINTTOXIN, 5)
@@ -41,11 +41,18 @@
 /datum/disease2/effect/gibbingtons
 	name = "Gibbingtons Syndrome"
 	desc = "Causes the infected to spontaneously explode in a shower of gore."
+	encyclopedia = "The individual will feel more and more bloated as the limits of his body are reached."
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
+	var/gibchance = 20
 
-/datum/disease2/effect/gibbingtons/activate(var/mob/living/carbon/mob)
-	mob.gib()
+/datum/disease2/effect/gibbingtons/activate(var/mob/living/mob)
+	if (prob(gibchance))
+		to_chat(mob, "<span class = 'danger'>You explode in a shower of gore.</span>")
+		mob.gib()
+	else
+		to_chat(mob, "<span class = 'danger'>You get a foreboding feeling as your limbs and chest feel more and more bloated.</span>")
+		gibchance += rand(9,15)
 
 
 /datum/disease2/effect/radian
@@ -55,7 +62,7 @@
 	max_multiplier = 3
 	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/radian/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/radian/activate(var/mob/living/mob)
 	mob.radiation += (2*multiplier)
 
 
@@ -65,7 +72,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/deaf/activate(var/mob/living/mob)
 	mob.ear_deaf += 20
 
 
@@ -74,11 +81,23 @@
 	desc = "Causes the infected to rapidly devolve to a lower form of life."
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
+	var/transformed = FALSE
 
-/datum/disease2/effect/monkey/activate(var/mob/living/carbon/mob)
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/h = mob
-		h.monkeyize()
+/datum/disease2/effect/monkey/getcopy(var/datum/disease2/disease/disease)
+	var/datum/disease2/effect/monkey/new_e = ..(disease)
+	new_e.transformed = transformed
+	return new_e
+
+/datum/disease2/effect/monkey/activate(var/mob/living/carbon/human/mob)
+	if(istype(mob))
+		transformed = TRUE
+		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
+		gene.activate(mob, null, null)
+
+/datum/disease2/effect/monkey/deactivate(var/mob/living/carbon/monkey/mob)
+	if(istype(mob) && transformed)
+		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
+		gene.deactivate(mob, null, null)
 
 
 /datum/disease2/effect/catbeast
@@ -86,12 +105,21 @@
 	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Tajaran."
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
+	var/old_species = "Human"
 
-/datum/disease2/effect/catbeast/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/catbeast/activate(var/mob/living/mob)
 	if(istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
-		if(h.species.name != "Tajaran")
+		old_species = h.species.name
+		if(old_species != "Tajaran")
 			if(h.set_species("Tajaran"))
+				h.regenerate_icons()
+
+/datum/disease2/effect/catbeast/deactivate(var/mob/living/mob)
+	if(istype(mob,/mob/living/carbon/human))
+		var/mob/living/carbon/human/h = mob
+		if(h.species.name == "Tajaran" && old_species != "Tajaran")
+			if(h.set_species(old_species))
 				h.regenerate_icons()
 
 /datum/disease2/effect/zombie
@@ -100,7 +128,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/zombie/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/zombie/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/h = mob
 		h.become_zombie_after_death = 1
@@ -111,12 +139,21 @@
 	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Vox."
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
+	var/old_species = "Human"
 
-/datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/voxpox/activate(var/mob/living/mob)
 	if(istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
-		if(h.species.name != "Vox")
+		old_species = h.species.name
+		if(old_species != "Vox")
 			if(h.set_species("Vox"))
+				h.regenerate_icons()
+
+/datum/disease2/effect/voxpox/deactivate(var/mob/living/mob)
+	if(istype(mob,/mob/living/carbon/human))
+		var/mob/living/carbon/human/h = mob
+		if(h.species.name == "Vox" && old_species != "Vox")
+			if(h.set_species(old_species))
 				h.regenerate_icons()
 
 
@@ -126,7 +163,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/suicide/activate(var/mob/living/mob)
 
 	if(mob.stat != CONSCIOUS || !mob.canmove || mob.restrained()) //Try as we might, we still can't snap our neck when we are KO or restrained, even if forced.
 		return
@@ -138,9 +175,11 @@
 	desc = "A more advanced version of Hyperacidity, causing the infected to rapidly generate toxins."
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
+	multiplier = 3
+	max_multiplier = 5
 
-/datum/disease2/effect/killertoxins/activate(var/mob/living/carbon/mob)
-	mob.adjustToxLoss(15*multiplier)
+/datum/disease2/effect/killertoxins/activate(var/mob/living/mob)
+	mob.adjustToxLoss(5*multiplier)
 
 
 /datum/disease2/effect/dna
@@ -149,7 +188,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/dna/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/dna/activate(var/mob/living/mob)
 	mob.bodytemperature = max(mob.bodytemperature, 350)
 	scramble(0,mob,10)
 	mob.apply_damage(10, CLONE)
@@ -161,7 +200,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/organs/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/organs/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		var/organ = pick(list(LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_RIGHT_LEG))
@@ -176,7 +215,7 @@
 			multiplier = 1
 		H.adjustToxLoss(15*multiplier)
 
-/datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/organs/deactivate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
@@ -192,7 +231,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/immortal/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/immortal/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
@@ -202,7 +241,7 @@
 	var/heal_amt = -5*multiplier
 	mob.apply_damages(heal_amt,heal_amt,heal_amt,heal_amt)
 
-/datum/disease2/effect/immortal/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/immortal/deactivate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		to_chat(H, "<span class='warning'>You suddenly feel hurt and old...</span>")
@@ -217,13 +256,13 @@
 	stage = 4
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/bones/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/bones/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			E.min_broken_damage = max(5, E.min_broken_damage - 30)
 
-/datum/disease2/effect/bones/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/bones/deactivate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
@@ -234,9 +273,9 @@
 	name = "Spontaneous Cellular Collapse"
 	desc = "Converts the infected's internal toxin treatment to synthesize Polyacid, as well as cause the infected's skin to break, and their bones to fracture."
 	stage = 4
-	badness = EFFECT_DANGER_HARMFUL
+	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/scc/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/scc/activate(var/mob/living/mob)
 	//
 	if(!ishuman(mob))
 		return 0
@@ -258,7 +297,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/necrosis/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/necrosis/activate(var/mob/living/mob)
 
 	if(ishuman(mob)) //Only works on humans properly since it needs to do organ work
 		var/mob/living/carbon/human/H = mob
@@ -321,7 +360,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/fizzle/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/fizzle/activate(var/mob/living/mob)
 	mob.emote("me",1,pick("sniffles...", "clears their throat..."))
 
 
@@ -331,7 +370,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/delightful/activate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You feel delightful!</span>")
 	if (mob.reagents.get_reagent_amount(DOCTORSDELIGHT) < 1)
 		mob.reagents.add_reagent(DOCTORSDELIGHT, 1)
@@ -345,7 +384,7 @@
 	var/spawn_type=/mob/living/simple_animal/hostile/giant_spider/spiderling
 	var/spawn_name="spiderling"
 
-/datum/disease2/effect/spawn/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/spawn/activate(var/mob/living/mob)
 	playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 
 	new spawn_type(get_turf(mob))
@@ -366,7 +405,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/orbweapon/activate(var/mob/living/mob)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
 	virus.virus2 = virus_copylist(mob.virus2)
 	mob.put_in_hands(virus)
@@ -378,7 +417,7 @@
 	stage = 4
 	badness = EFFECT_DANGER_HARMFUL
 
-/datum/disease2/effect/plasma/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/plasma/activate(var/mob/living/mob)
 	//var/src = mob
 	var/hack = mob.loc
 	var/turf/simulated/T = get_turf(hack)
@@ -406,7 +445,7 @@
 
 	var/list/original_languages = list()
 
-/datum/disease2/effect/babel/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/babel/activate(var/mob/living/mob)
 	if(mob.languages.len <= 1)
 		to_chat(mob, "Your knowledge of language is just fine.")
 		return
@@ -427,7 +466,7 @@
 
 	to_chat(mob, "You can't seem to remember any language but [picked_lang]. Odd.")
 
-/datum/disease2/effect/babel/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/babel/deactivate(var/mob/living/mob)
 	if(original_languages.len)
 		for(var/forgotten in original_languages)
 			mob.add_language(forgotten)
@@ -443,7 +482,7 @@
 	max_chance = 25
 	max_multiplier = 4
 
-/datum/disease2/effect/gregarious/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/gregarious/activate(var/mob/living/mob)
 	var/others_count = 0
 	for(var/mob/living/carbon/m in oview(5, mob))
 		if (airborne_can_reach(mob.loc, m.loc, 9)) // Apparently mobs physically block airborne viruses
@@ -476,7 +515,7 @@
 	var/therm_loss_mod_subtracted = 0
 	var/cal_heat_mod_added = 0
 
-/datum/disease2/effect/thick_skin/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/thick_skin/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have thick skin if you don't have skin at all.
@@ -554,7 +593,7 @@
 	mob.cap_calorie_burning_bodytemp = FALSE
 	multiplier = min(multiplier + 10, max_multiplier)
 
-/datum/disease2/effect/thick_skin/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/thick_skin/deactivate(var/mob/living/mob)
 	if(!skip)
 		mob.brute_damage_modifier += brute_mod_subtracted
 		mob.thermal_loss_multiplier += therm_loss_mod_subtracted
@@ -574,7 +613,7 @@
 	badness = EFFECT_DANGER_DEADLY
 	max_count = 1
 
-/datum/disease2/effect/heart_attack/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/heart_attack/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		if(H.get_heart())

@@ -5,7 +5,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/invisible/activate(var/mob/living/mob)
 	return
 
 
@@ -16,7 +16,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/sneeze/activate(var/mob/living/mob)
 	mob.say("*sneeze")
 	if (prob(50))
 		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
@@ -35,7 +35,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/gunck/activate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
 
 
@@ -46,7 +46,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/drool/activate(var/mob/living/mob)
 	mob.say("*drool")
 
 
@@ -57,7 +57,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/twitch/activate(var/mob/living/mob)
 	mob.say("*twitch")
 
 
@@ -68,7 +68,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/headache/activate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
 
 
@@ -79,7 +79,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/itching/activate(var/mob/living/mob)
 	var/mob/living/carbon/human/H = mob
 	if (istype(H) && H.species && H.species.anatomy_flags & NO_SKIN)
 		to_chat(mob, "<span class='warning'>Your bones itch!</span>")
@@ -94,7 +94,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/drained/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='warning'>You feel drained.</span>")
 
 
@@ -105,7 +105,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/eyewater/activate(var/mob/living/mob)
 	to_chat(mob, "<SPAN CLASS='warning'>Your eyes sting and water!</SPAN>")
 
 
@@ -116,7 +116,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/wheeze/activate(var/mob/living/mob)
 	mob.emote("me",1,"wheezes.")
 
 
@@ -127,7 +127,7 @@
 	stage = 1
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/optimistic/activate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
 	if (mob.reagents.get_reagent_amount(TRICORDRAZINE) < 1)
 		mob.reagents.add_reagent(TRICORDRAZINE, 1)
@@ -138,35 +138,44 @@
 	desc = "Makes the infected spin at random."
 	encyclopedia = "Although it impaires movement, it appears to favor healing in the infected's legs."
 	stage = 1
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_ANNOYING
+	max_multiplier = 4
 
-/datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
-	if (mob.reagents.get_reagent_amount(GYRO) < 1)
-		mob.reagents.add_reagent(GYRO, 1)
+/datum/disease2/effect/spyndrome/activate(var/mob/living/mob)
+	if (mob.reagents.get_reagent_amount(GYRO) < 3*multiplier)
+		mob.reagents.add_reagent(GYRO, 3*multiplier)
 
 /datum/disease2/effect/bee_vomit
 	name = "Melisso-Emeto Syndrome"
 	desc = "Converts the lungs of the infected into a bee-hive, giving the infected a steady drip of honey in exchange of vomiting up a bee every so often."
-	encyclopedia = "The higher the symptom strength, the more honey can be accumulated before risking vomiting bees. While Honey is a great healing reagent, it is also high on nutrients. Expect to become fat quickly.."
+	encyclopedia = "The higher the symptom strength, the more honey can be accumulated. While Honey is a great healing reagent, it is also high on nutrients. Expect to become fat quickly.."
 	stage = 1
 	badness = EFFECT_DANGER_ANNOYING
 	max_multiplier = 10
 
-/datum/disease2/effect/bee_vomit/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/bee_vomit/activate(var/mob/living/mob)
 	if (mob.reagents.get_reagent_amount(HONEY) < 10+multiplier*2)
-		mob.reagents.add_reagent(HONEY, 1)
+		mob.reagents.add_reagent(HONEY, multiplier)
 
-	if((mob.reagents.get_reagent_amount(HONEY)>= 10+multiplier*2) && prob(10))
-		if(prob(25))
-			to_chat(mob, "<span class='warning'>You feel a buzzing in your throat</span>")
+	if((mob.reagents.get_reagent_amount(HONEY)> 10) && prob(multiplier*4))
+		to_chat(mob, "<span class='warning'>You feel a buzzing in your throat</span>")
+
+
 		spawn(5 SECONDS)
 			var/turf/simulated/T = get_turf(mob)
-			if(prob(30))
+			if(prob(50))
 				playsound(T, 'sound/effects/splat.ogg', 50, 1)
 				mob.visible_message("<span class='warning'>[mob] spits out a bee!</span>","<span class='danger'>You throw up a bee!</span>")
 				T.add_vomit_floor(mob, 1, 1, 1)
 			for(var/i = 0 to multiplier)
-				new/mob/living/simple_animal/bee(get_turf(mob))
+				var/bee_type = pick(
+					100;/mob/living/simple_animal/bee/adminSpawned,
+					10;/mob/living/simple_animal/bee/adminSpawnedQueen,
+					5;/mob/living/simple_animal/bee/angry,
+					1;/mob/living/simple_animal/bee/swarm,
+					1;/mob/living/simple_animal/bee/adminSpawned_hornet,
+					)
+				new bee_type(get_turf(mob))
 
 
 /datum/disease2/effect/radresist
@@ -176,13 +185,13 @@
 	stage = 1
 	chance = 10
 	max_chance = 40
-	max_count = 10
 	badness = EFFECT_DANGER_HELPFUL
+	max_multiplier = 5
 
-/datum/disease2/effect/radresist/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/radresist/activate(var/mob/living/mob)
 	if(mob.radiation && mob.reagents.get_reagent_amount(HYRONALIN) < 15)
-		mob.reagents.add_reagent(HYRONALIN, 1)
-		to_chat(mob, "<span class = 'notice'>Your body feels more resistant to radiation.</span>")
+		mob.reagents.add_reagent(HYRONALIN, multiplier)
+		to_chat(mob,"<span class='notice'>You feel your skin is thicker.</span>")
 
 
 /datum/disease2/effect/soreness
@@ -194,7 +203,7 @@
 	max_chance = 60
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/soreness/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/soreness/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel a little sore.</span>")
 
 
@@ -207,7 +216,7 @@
 	max_chance = 25
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/socialconfusion/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/socialconfusion/activate(var/mob/living/mob)
 	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)
 		return 1
 
@@ -225,6 +234,7 @@
 								"Greetings, [other_mob_name].",
 								"Good day to you, [other_mob_name]",
 								"'Sup, [other_mob_name]?'",
+								"Bonsoir, [other_mob_name]?",
 								"What it do, [other_mob_name]?",
 								"What's good, [other_mob_name]?",
 								"Yo, [other_mob_name].",
@@ -237,6 +247,8 @@
 								"Goodbye, [other_mob_name].",
 								"Sayonara, [other_mob_name].",
 								"Peace out, [other_mob_name].",
+								"Ciao, [other_mob_name].",
+								"Au revoir, [other_mob_name].",
 								"Later, [other_mob_name]."
 								)
 	mob.say(pick(greets_farewells))

@@ -235,6 +235,9 @@
 	scanner = null
 	..()
 
+
+//////////////////////////////////////////////////////GENERAL DISEASE2 MACHINE PROCS/////////////////////////////////
+
 /obj/machinery/disease2/power_change()
 	..()
 	update_icon()
@@ -287,13 +290,16 @@
 	if (prob(5))
 		breakdown()
 
-/obj/machinery/disease2/attack_paw(var/mob/living/carbon/alien/humanoid/user)
-	if(!istype(user))
-		return
-	if(stat & (BROKEN))
-		return
-	breakdown()
-	user.do_attack_animation(src, user)
-	visible_message("<span class='warning'>\The [user] slashes at \the [src]!</span>")
-	playsound(src, 'sound/weapons/slash.ogg', 100, 1)
-	add_hiddenprint(user)
+/obj/machinery/disease2/attack_paw(var/mob/user)
+	if(istype(user,/mob/living/carbon/alien/humanoid))
+		if(stat & (BROKEN))
+			return
+		breakdown()
+		user.do_attack_animation(src, user)
+		visible_message("<span class='warning'>\The [user] slashes at \the [src]!</span>")
+		playsound(src, 'sound/weapons/slash.ogg', 100, 1)
+		add_hiddenprint(user)
+	else if (!usr.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+	else
+		attack_hand(user)

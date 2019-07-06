@@ -3146,7 +3146,7 @@
 	id = VACCINE
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A6A6A6" //rgb: 166, 166, 166
-	alpha = 128
+	alpha = 200
 	density = 1.05
 	specheatcap = 3.49
 	custom_metabolism = 1
