@@ -7436,7 +7436,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/incense/cornoil
 	name = "Corn Oil Incense"
 	id = INCENSE_CORNOIL
-	description = "This fragrance reminds you of a nice home-cooked meal, and sometimes even feels like it fills you up.."
+	description = "This fragrance reminds you of a nice home-cooked meal, and sometimes even feels like it fills you up."
 
 /datum/reagent/incense/cornoil/on_mob_life(var/mob/living/M)
 	if(..())
