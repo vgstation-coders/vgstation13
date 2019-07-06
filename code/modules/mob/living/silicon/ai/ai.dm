@@ -145,7 +145,10 @@ var/list/ai_list = list()
 			job = "AI"
 	ai_list += src
 	..()
-	playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
+	if(prob(25))
+		playsound(src, get_sfx("windows error"), 75, FALSE)
+	else
+		playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"
@@ -209,61 +212,61 @@ var/list/ai_list = list()
 	if(stat || aiRestorePowerRoutine)
 		return
 	var/static/list/possible_icon_states = list(
-		"Blue" = "ai",
-		"Clown" = "ai-clown2",
-		"Monochrome" = "ai-mono",
-		"Inverted" = "ai-u",
-		"Firewall" = "ai-magma",
-		"Green" = "ai-wierd",
-		"Red" = "ai-malf",
-		"Broken Output" = "ai-static",
-		"Text" = "ai-text",
-		"Smiley" = "ai-smiley",
-		"Matrix" = "ai-matrix",
+		"Alien" = "ai-alien",
+		"Angel" = "ai-angel",
 		"Angry" = "ai-angryface",
-		"Dorf" = "ai-dorf",
 		"Bliss" = "ai-bliss",
-		"Triumvirate" = "ai-triumvirate",
-		"Triumvirate Static" = "ai-triumvirate-malf",
-		"Searif" = "ai-searif",
-		"Ravensdale" = "ai-ravensdale",
-		"Serithi" = "ai-serithi",
-		"Static" = "ai-fuzz",
-		"Wasp" = "ai-wasp",
-		"Robert House" = "ai-president",
-		"Red October" = "ai-soviet",
-		"Girl" = "ai-girl",
-		"Girl Malf" = "ai-girl-malf",
-		"Boy" = "ai-boy",
+		"Blue" = "ai",
 		"Boy Malf" = "ai-boy-malf",
+		"Boy" = "ai-boy",
+		"Broken Output" = "ai-static",
+		"Clown" = "ai-clown2",
+		"Dancing Hotdog" = "ai-hotdog",
+		"Database" = "ai-database",
+		"Diagnosis" = "ai-atlantiscze",
+		"Dorf" = "ai-dorf",
+		"Drink It!" = "ai-silveryferret",
 		"Fabulous" = "ai-fabulous",
+		"Firewall" = "ai-magma",
+		"Fort" = "ai-boxfort",
 		"Four-Leaf" = "ai-4chan",
-		"Yes Man" = "yes-man",
+		"Gentoo" = "ai-gentoo",
+		"Girl Malf" = "ai-girl-malf",
+		"Girl" = "ai-girl",
+		"Glitchman" = "ai-glitchman",
+		"Goon" = "ai-goon",
+		"Green" = "ai-wierd",
+		"Hades" = "ai-hades",
+		"Heartline" = "ai-heartline",
+		"Helios" = "ai-helios",
 		"Hourglass" = "ai-hourglass",
+		"Inverted" = "ai-u",
+		"Jack Frost" = "ai-jack",
+		"Matrix" = "ai-matrix",
+		"Metaclub" = "ai-terminal",
+		"Monochrome" = "ai-mono",
+		"Mothman" = "ai-mothman",
+		"Murica" = "ai-murica",
+		"Nanotrasen" = "ai-nanotrasen",
 		"Patriot" = "ai-patriot",
 		"Pirate" = "ai-pirate",
-		"Royal" = "ai-royal",
-		"Heartline" = "ai-heartline",
-		"Hades" = "ai-hades",
-		"Helios" = "ai-helios",
-		"Syndicat" = "ai-syndicatmeow",
-		"Too Deep" = "ai-toodeep",
-		"Goon" = "ai-goon",
-		"Database" = "ai-database",
-		"Glitchman" = "ai-glitchman",
-		"Alien" = "ai-alien",
-		"Nanotrasen" = "ai-nanotrasen",
-		"Angel" = "ai-angel",
-		"Gentoo" = "ai-gentoo",
-		"Murica" = "ai-murica",
 		"President" = "ai-pres",
-		"Fort" = "ai-boxfort",
-		"Mothman" = "ai-mothman",
-		"Dancing Hotdog" = "ai-hotdog",
-		"Diagnosis" = "ai-atlantiscze",
-		"Drink It!" = "ai-silveryferret",
-		"Metaclub" = "ai-terminal",
-		"Jack Frost" = "ai-jack",
+		"Ravensdale" = "ai-ravensdale",
+		"Red October" = "ai-soviet",
+		"Red" = "ai-malf",
+		"Robert House" = "ai-president",
+		"Royal" = "ai-royal",
+		"Searif" = "ai-searif",
+		"Serithi" = "ai-serithi",
+		"Smiley" = "ai-smiley",
+		"Static" = "ai-fuzz",
+		"Syndicat" = "ai-syndicatmeow",
+		"Text" = "ai-text",
+		"Too Deep" = "ai-toodeep",
+		"Triumvirate Static" = "ai-triumvirate-malf",
+		"Triumvirate" = "ai-triumvirate",
+		"Wasp" = "ai-wasp",
+		"Yes Man" = "yes-man",
 	)
 	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
 	if(!selected)
@@ -340,7 +343,9 @@ var/list/ai_list = list()
 		return
 	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "Cancel")
 	if(confirm == "Yes")
-		call_shuttle_proc(src, justification)
+		if(call_shuttle_proc(src, justification))
+			if(!isobserver(usr))
+				shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
 
 	// hack to display shuttle timer
 	if(emergency_shuttle.online)
@@ -425,7 +430,7 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/Topic(href, href_list)
 	if(usr != src)
 		return
-	..()
+	. = ..()
 	if(href_list["mach_close"])
 		if(href_list["mach_close"] == "aialerts")
 			viewalerts = FALSE
@@ -452,27 +457,6 @@ var/list/ai_list = list()
 	if(href_list["say_word"])
 		play_vox_word(href_list["say_word"], null, src)
 		return
-
-	if(href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawc"])
-		switch(lawcheck[L+1])
-			if("Yes")
-				lawcheck[L+1] = "No"
-			if("No")
-				lawcheck[L+1] = "Yes"
-		checklaws()
-
-	if(href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawi"])
-		switch(ioncheck[L])
-			if("Yes")
-				ioncheck[L] = "No"
-			if("No")
-				ioncheck[L] = "Yes"
-		checklaws()
-
-	if(href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
-		statelaws()
 
 	if(href_list["track"])
 		var/mob/target = locate(href_list["track"]) in mob_list
@@ -504,8 +488,6 @@ var/list/ai_list = list()
 		if(A && target)
 			A.open_nearest_door(target)
 		return
-
-	return
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
@@ -703,18 +685,18 @@ var/list/ai_list = list()
 	else
 		var/icon_list[] = list(
 		"Default",
-		"Floating face",
-		"Cortano",
-		"Spoopy",
 		"343",
 		"Auto",
-		"Four-Leaf",
-		"Yotsuba",
-		"Girl",
 		"Boy",
-		"SHODAN",
 		"Corgi",
-		"Mothman"
+		"Cortano",
+		"Floating face",
+		"Four-Leaf",
+		"Girl",
+		"Mothman",
+		"SHODAN",
+		"Spoopy",
+		"Yotsuba",
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)

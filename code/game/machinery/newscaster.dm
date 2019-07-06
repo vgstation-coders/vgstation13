@@ -263,7 +263,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						if(CHANNEL.is_admin_channel)
 							dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen '><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 						else
-							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
+							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR></B>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
@@ -354,7 +354,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							dat+="-[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '180'></a><BR><BR>"
+
+								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
@@ -369,7 +370,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<I>No feed channels found active...</I><BR>"
 				else
 					for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-						dat+="<A href='?src=\ref[src];pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+						dat+="<A href='?src=\ref[src];pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR>"
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"
 			if(NEWSCASTER_D_NOTICE_MENU)
 
@@ -381,7 +382,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<I>No feed channels found active...</I><BR>"
 				else
 					for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-						dat+="<A href='?src=\ref[src];pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+						dat+="<A href='?src=\ref[src];pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"
 			if(NEWSCASTER_CENSORSHIP_CHANNEL)
@@ -891,13 +892,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					qdel(src)
 					return
 
-			if(isscrewdriver(I) && !(stat & BROKEN))
+			if(I.is_screwdriver(user) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] screws in the [src]!</span>", "<span class='notice'>You screw in the [src]</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				buildstage = 1
 
 		if(1)
-			if(isscrewdriver(I) && !(stat & BROKEN))
+			if(I.is_screwdriver(user) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] unscrews the [src]!</span>", "<span class='notice'>You unscrew the [src]</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				buildstage = 0
@@ -1136,7 +1137,7 @@ obj/item/weapon/newspaper/Topic(href, href_list)
 obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen))
 		if(scribble_page == curr_page)
-			to_chat(user, "<FONT COLOR='blue'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</FONT>")
+			to_chat(user, "<span class='notice'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</span>")
 		else
 			var/s = stripped_input(user, "Write something", "Newspaper", "")
 			s = copytext(sanitize(s), 1, MAX_MESSAGE_LEN)

@@ -33,6 +33,7 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 					{{:helper.link('Call Shuttle','arrowthickstop-1-s',{'operation':'callshuttle'})}}
 				{{/if}}
 			{{/if}}
+			{{:helper.link('Show logs', 'note', {'operation': 'ViewShuttleLog'})}}
 		</div>
 	</div>
 
@@ -160,6 +161,22 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 				<div class="itemContents {{:data.str_security_level}}">{{>data.str_security_level}}</div>
 			</div>
 			{{:helper.link('Request Emergency Response Team','comment',{'operation':'request_emergency_team'},null,(data.ert_sent==1?'linkOff':''))}}
+		</div>
+	{{else data.screen == 6}}
+		<!-- SHUTTLE LOG -->
+		<h3>Emergency shuttle log</h3>
+		{{:helper.link('Back', 'home', {'operation': 'main'})}}
+		<div class="item">
+			<div class="line">
+				<div class="itemLabel">
+					History:
+				</div>
+				<div class="itemContents">
+					{{for data.shuttle_log}}
+						<br>{{>value.text}}
+					{{/for}}
+				</div>
+			</div>
 		</div>
 	{{/if}}<!-- SCREEN -->
 {{/if}}<!-- AUTHENTICATED -->

@@ -17,6 +17,7 @@
 /datum/role/catbeast/OnPostSetup()
 	var/mob/living/carbon/human/H = antag.current
 	H.set_species("Tajaran", force_organs=1)
+	H.my_appearance.s_tone = CATBEASTBLACK
 	H.dna.ResetUI()
 	equip_catbeast(H)
 	H.regenerate_icons()
@@ -48,6 +49,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 /obj/item/clothing/shoes/sandal/catbeast
 	desc = "Strange sandals designed with claws in mind. They look uncomfortable if you're not a cat."
 	species_restricted = list("Tajaran")
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
 
 /datum/role/catbeast/ForgeObjectives()
 	AppendObjective(/datum/objective/catbeast/survive5)

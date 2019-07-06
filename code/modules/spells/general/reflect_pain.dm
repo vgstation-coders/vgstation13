@@ -3,6 +3,7 @@
 	name = "Pain Mirror"
 	desc = "An unholy charm that lasts for 5 seconds. While active, it redirects all incoming damage to everybody around you, leaving you unharmed."
 	user_type = USER_TYPE_WIZARD
+	specialization = DEFENSIVE
 
 	school = "necromancy"
 	charge_max = 90 SECONDS

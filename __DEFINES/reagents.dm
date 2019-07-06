@@ -224,6 +224,7 @@
 #define WHISKEYCOLA 			"whiskeycola"
 #define MARTINI 			"martini"
 #define VODKAMARTINI 			"vodkamartini"
+#define SAKEMARTINI         "sakemartini"
 #define WHITERUSSIAN 			"whiterussian"
 #define SCREWDRIVERCOCKTAIL 			"screwdrivercocktail"
 #define BOOGER 			"booger"
@@ -318,6 +319,7 @@
 #define DR_GIBB			"dr_gibb"
 #define SPACE_UP		"space_up"
 #define LEMON_LIME		"lemon_lime"
+#define DIY_SODA		"diy_soda"
 #define B52				"b52"
 #define MANHATTAN_PROJ	"manhattan_proj"
 #define BAHAMA_MAMA		"bahama_mama"
@@ -401,6 +403,7 @@
 #define AMINOMICIN		"aminomicin"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define TOMATO_SOUP		"tomato_soup"
+#define LUMINOL			"luminol"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

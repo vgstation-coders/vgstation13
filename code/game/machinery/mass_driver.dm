@@ -40,7 +40,7 @@ var/list/mass_drivers = list()
 	if(.)
 		return .
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		to_chat(user, "You begin to unscrew the bolts off the [src]...")
 		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -220,7 +220,7 @@ var/list/mass_drivers = list()
 					build--
 					update_icon()
 				return 1
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You finalize the Mass Driver...")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				var/obj/machinery/mass_driver/M = new(get_turf(src))

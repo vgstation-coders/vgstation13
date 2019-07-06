@@ -143,6 +143,10 @@
 	if(!user || !istype(user))
 		return
 
+	if(user.mind.miming)
+		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
+		return
+
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
 
 	if(!say)
@@ -206,7 +210,10 @@
 		return 1
 
 /datum/dna/gene/basic/heat_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	return "cold[fat]_s"
+	if(isvox(M) || isskelevox(M))
+		return "coldvox_s"
+	else
+		return "cold[fat]_s"
 
 /datum/dna/gene/basic/cold_resist
 	name = "Cold Resistance"
@@ -232,7 +239,10 @@
 		return 1
 
 /datum/dna/gene/basic/cold_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	return "fire[fat]_s"
+	if(isvox(M) || isskelevox(M))
+		return "firevox_s"
+	else
+		return "fire[fat]_s"
 
 /datum/dna/gene/basic/noprints
 	name = "No Prints"
@@ -283,7 +293,7 @@
 	block = XRAYBLOCK
 
 /datum/dna/gene/basic/tk
-	name = "Telekenesis"
+	name = "Telekinesis"
 	activation_messages = list("You feel smarter.")
 	deactivation_messages = list("You feel less smart.")
 
@@ -297,4 +307,7 @@
 	block = TELEBLOCK
 
 /datum/dna/gene/basic/tk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	return "telekinesishead[fat]_s"
+	if(isvox(M) || isskelevox(M))
+		return "telekinesisheadvox_s"
+	else
+		return "telekinesishead[fat]_s"

@@ -36,7 +36,7 @@
 	times_used = max(0,round(times_used)) //sanity
 
 
-/obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob)
+/obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob) //flash_act when?
 	var/length
 	if(!user || !M) //sanity
 		return
@@ -103,17 +103,24 @@
 				Subject.Stun(Subject.eyecheck() * 5 * -1 +10)
 
 	else if(issilicon(M))
-		var/mob/living/silicon/R = M
+		var/mob/living/silicon/S = M
+		var/mob/living/silicon/robot/R = null //This is stupid and i hate it but i'm not going to fix this whole mess now.
+		if(isrobot(S))
+			R = S
+		if(R && (HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF)))
+			flashfail = TRUE
 		if(flashfail)
-			user.visible_message("<span class='notice'>[user] fails to overload [R]'s sensors with the flash!</span>")
+			user.visible_message("<span class='notice'>[user] fails to overload [S]'s sensors with the flash!</span>")
 		else
 			length = rand(5,10)
-			R.Knockdown(length)
-			R.flashed = 1
-			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
+			if(R && (HAS_MODULE_QUIRK(R, MODULE_HAS_FLASH_RES)))
+				length = length/2
+			S.Knockdown(length)
+			S.flashed = 1
+			user.visible_message("<span class='warning'>[user] overloads [S]'s sensors with the flash!</span>")
 			spawn(length SECONDS)
-				if (R.flashed)
-					R.flashed = 0
+				if (S.flashed)
+					S.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		return
@@ -122,12 +129,31 @@
 
 	return !flashfail
 
+/obj/item/device/flash/proc/make_rev_flash(var/mob/living/carbon/human/user)
+	to_chat(user, "<span class='warning'>You prepare the flash for the brainwashing sequence.</span>")
+	var/obj/item/device/flash/rev/R = new(get_turf(src))
+	qdel(src)
+	user.put_in_hands(R)
+	return 1
+
+/obj/item/device/flash/rev/make_rev_flash()
+	return 0
+
+/obj/item/device/flash/synthetic/make_rev_flash()
+	return 0
+
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
 		return
+
 	if(broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
+
+	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
+		if (make_rev_flash(user))
+			return
+
 
 	flash_recharge()
 
@@ -239,7 +265,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	var/limited_conversions = -1
 
-/obj/item/device/flash/rev/attack(mob/living/M,mob/user)
+/obj/item/device/flash/rev/attack(mob/living/M, mob/user)
 	.=..()
 	if(!.)
 		return
@@ -250,7 +276,7 @@
 				if(rev)
 					var/result = rev.HandleRecruitedMind(M.mind)
 
-					if(result == 1)
+					if(istype(result, /datum/role)) //We got a role, this is considered a success
 						log_admin("[key_name(user)] has converted [key_name(M)] to the revolution at [formatLocation(M.loc)]")
 						limited_conversions--
 						if(limited_conversions == 0)

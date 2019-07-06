@@ -349,12 +349,21 @@
 	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
 /datum/job/clown/reject_new_slots()
+	if(Holiday == APRIL_FOOLS_DAY)
+		return FALSE
 	if(!xtra_positions)
 		return FALSE
 	if(security_level == SEC_LEVEL_RAINBOW)
 		return FALSE
 	else
 		return "Rainbow Alert"
+
+/datum/job/clown/get_total_positions()
+	if(Holiday == APRIL_FOOLS_DAY)
+		spawn_positions = -1
+		return 99
+	else
+		return ..()
 
 /datum/job/mime
 	title = "Mime"
@@ -482,6 +491,10 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	// Now spawns on the janikart.  H.equip_or_collect(new /obj/item/key(H), slot_l_store)
+
+	H.add_language(LANGUAGE_MOUSE)
+	to_chat(H, "<span class = 'notice'>Decades of roaming maintenance tunnels and interacting with its denizens have granted you the ability to understand the speech of mice and rats.</span>")
+
 	return 1
 
 /datum/job/janitor/priority_reward_equip(var/mob/living/carbon/human/H)

@@ -13,6 +13,7 @@
 	var/rechargerate = 2
 	var/amount = 30
 	var/obj/item/weapon/reagent_containers/container = null
+	var/beaker_height
 	var/recharged = 0
 	var/custom = 0
 	var/useramount = 30 // Last used amount
@@ -324,14 +325,17 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	overlays.len = 0
 
 	if(container)
-	
+
 		var/image/overlay
 
 		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
-			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay2")
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_bluesp")
+		else if(istype(container, /obj/item/weapon/reagent_containers/food/drinks/soda_cans))
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_soda")
 		else
-			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay1")
+			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_glassb")
 
+		overlay.pixel_y = beaker_height * PIXEL_MULTIPLIER //used for children
 		overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
 		overlays += overlay
 
@@ -340,6 +344,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/brewer/
 	name = "Space-Brewery"
 	icon_state = "brewer"
+	pass_flags = PASSTABLE
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(
 		TEA,
@@ -377,6 +382,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/soda_dispenser/
 	name = "Soda Dispenser"
 	icon_state = "soda_dispenser"
+	pass_flags = PASSTABLE
+	beaker_height = -5
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
 
@@ -402,6 +409,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
 	icon_state = "booze_dispenser"
+	pass_flags = PASSTABLE
+	beaker_height = -6
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(
 		BEER,
@@ -412,6 +421,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		RUM,
 		COGNAC,
 		WINE,
+		SAKE,
 		KAHLUA,
 		ALE,
 		ICE = T0C,

@@ -25,7 +25,8 @@
 	if(blob_nodes.len)
 		var/list/nodes = list()
 		for(var/i = 1; i <= blob_nodes.len; i++)
-			nodes["Blob Node #[i]"] = blob_nodes[i]
+			var/obj/effect/blob/node/B = blob_nodes[i]
+			nodes["Blob Node #[i] ([get_area_name(B)])"] = B
 		var/node_name = input(src, "Choose a node to jump to.", "Node Jump") in nodes
 		var/obj/effect/blob/node/chosen_node = nodes[node_name]
 		if(chosen_node)
@@ -135,7 +136,7 @@
 		return
 
 
-	B.change_to(/obj/effect/blob/core, src)
+	B.change_to(/obj/effect/blob/core, src, TRUE)
 
 	return
 

@@ -333,13 +333,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/link/context)
+/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
-/obj/proc/canLink(var/obj/O, var/link/context)
+/obj/proc/canLink(var/obj/O, var/list/context)
 	return 0
 
 /obj/proc/isLinkedWith(var/obj/O)
@@ -567,6 +567,9 @@ a {
 
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
 		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA)
 	return 0
 
@@ -697,4 +700,10 @@ a {
 		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
+	return TRUE
+
+//Return true if thrown object misses
+/obj/PreImpact(atom/movable/A, speed)
+	if(density && !throwpass)
+		return FALSE
 	return TRUE

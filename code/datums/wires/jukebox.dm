@@ -94,7 +94,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 		if(JUKE_TRANSMIT)
 			J.shock(user, 50, get_conductivity(I))
 			if(IsIndexCut(JUKE_TRANSMIT))
-				J.machine_flags &= !MULTITOOL_MENU
+				J.machine_flags &= ~MULTITOOL_MENU
 			else
 				J.machine_flags |= MULTITOOL_MENU
 		if(JUKE_CONFIG)

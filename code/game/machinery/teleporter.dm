@@ -156,7 +156,7 @@
 				if (M.timeofdeath + 6000 < world.time)
 					continue
 			var/turf/T = get_turf(M)
-			if(T)
+			if(!T)
 				continue
 			if(T.z == map.zCentcomm)
 				continue
@@ -190,43 +190,17 @@
 	var/engaged = 0
 	ghost_read=0 // #519
 	ghost_write=0
-
-
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/teleport/hub
-	name = "teleporter hub"
-	desc = "It's the hub of a teleporting machine."
+	name = "teleporter horizon generator"
+	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
 	var/accurate = 0
-	var/opened = 0.0
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
-	density = 0
-
-	machine_flags = SCREWTOGGLE | CROWDESTROY
-
-/obj/machinery/teleport/hub/power_change()
-	..()
-	if(stat & (BROKEN|NOPOWER))
-		engaged = 0
-	update_icon()
-
-/obj/machinery/teleport/hub/update_icon()
-	if(stat & (BROKEN|NOPOWER) || !engaged)
-		icon_state = "tele0"
-	else
-		icon_state = "tele1"
-
-/obj/machinery/teleport/hub/attackby(obj/item/weapon/O as obj, mob/user as mob)
-	return(..())
-
-/********************************************************************
-**   Adding Stock Parts to VV so preconstructed shit has its candy **
-********************************************************************/
-/obj/machinery/teleport/hub/New()
-	. = ..()
-
+	var/teleport_power_usage = 5000
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/telehub,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
@@ -246,8 +220,27 @@
 		/obj/item/weapon/stock_parts/subspace/transmitter,
 		/obj/item/weapon/stock_parts/subspace/transmitter
 	)
+	density = 0
 
-	RefreshParts()
+/obj/machinery/teleport/hub/RefreshParts()
+	var/T = 1
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating-3
+	teleport_power_usage = initial(teleport_power_usage)/T
+
+
+/obj/machinery/teleport/hub/power_change()
+	..()
+	if(stat & (BROKEN|NOPOWER))
+		engaged = 0
+	update_icon()
+
+/obj/machinery/teleport/hub/update_icon()
+	if(stat & (BROKEN|NOPOWER) || !engaged)
+		icon_state = "tele0"
+	else
+		icon_state = "tele1"
+
 
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
 	if(AM == src)
@@ -259,20 +252,21 @@
 		src.to_bump(AM)
 		return
 	spawn()
-		if (src.engaged)
-			teleport(AM)
-			use_power(5000)
+		if (src.engaged && teleport(AM))
+			use_power(teleport_power_usage)
 
 /obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
-	var/atom/l = src.loc
-	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(l.x - 2, l.y, l.z))
+	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1))
+	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, orange(1, st))
 	if (!com)
-		return
+		return 0
 	if (!com.locked || com.locked.gcDestroyed)
 		com.locked = null
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
-		return
+		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+		return 0
+	if(get_turf(com.locked) == get_turf(src))
+		to_chat(M, "<span class = 'notice'>The act of teleportation was so smooth, it feels like you didn't move at all.</span>")
+		return 0
 	if (istype(M, /atom/movable))
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
 			do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
@@ -285,36 +279,17 @@
 	else
 		spark(src, 5)
 
+	return 1
+
 
 /obj/machinery/teleport/station
-	name = "station"
-	desc = "It's the station thingy of a teleport thingy." //seriously, wtf.
+	name = "teleporter controller"
+	desc = "This co-ordinates nearby teleporter horizon generators."
 	icon_state = "controller"
-	var/opened = 0.0
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
-
-	machine_flags = SCREWTOGGLE | CROWDESTROY
-
-/obj/machinery/teleport/station/power_change()
-	..()
-	if(stat & (BROKEN|NOPOWER))
-		disengage()
-	update_icon()
-
-/obj/machinery/teleport/station/update_icon()
-	if(stat & NOPOWER)
-		icon_state = "controller-p"
-	else
-		icon_state = "controller"
-
-/********************************************************************
-**   Adding Stock Parts to VV so preconstructed shit has its candy **
-********************************************************************/
-obj/machinery/teleport/station/New()
-	. = ..()
-
+	var/teleport_power_usage = 5000
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/telestation,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
@@ -329,7 +304,25 @@ obj/machinery/teleport/station/New()
 		/obj/item/weapon/stock_parts/subspace/analyzer
 	)
 
-	RefreshParts()
+/obj/machinery/teleport/station/RefreshParts()
+	var/T = 1
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating-3
+	teleport_power_usage = initial(teleport_power_usage)/T
+
+/obj/machinery/teleport/station/power_change()
+	..()
+	if(stat & (BROKEN|NOPOWER))
+		disengage()
+	update_icon()
+
+/obj/machinery/teleport/station/update_icon()
+	if(stat & NOPOWER)
+		icon_state = "controller-p"
+	else
+		icon_state = "controller"
+
+
 
 /obj/machinery/teleport/station/attackby(var/obj/item/weapon/W, var/mob/user as mob)
 	if (..())
@@ -352,27 +345,26 @@ obj/machinery/teleport/station/New()
 /obj/machinery/teleport/station/proc/engage()
 	if(stat & (BROKEN|NOPOWER))
 		return
-
-	var/atom/l = src.loc
-	var/obj/machinery/teleport/hub/hub = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
-	if (hub)
+	var/count = 0
+	for(var/obj/machinery/teleport/hub/hub in orange(1, src))
+		if(hub.stat & (BROKEN|NOPOWER))
+			continue
+		count++
 		hub.engaged = 1
 		hub.update_icon()
-		use_power(5000)
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='notice'>Teleporter engaged!</span>", 2)
+		use_power(teleport_power_usage)
+	visible_message("<span class='notice'>[count] teleporter[count>1?"s":""] engaged!</span>", range = 2)
 	src.add_fingerprint(usr)
 	src.engaged = 1
 	return
 
 /obj/machinery/teleport/station/proc/disengage(mob/user)
-	var/atom/l = src.loc
-	var/obj/machinery/teleport/hub/hub = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
-	if (hub)
+	var/count = 0
+	for(var/obj/machinery/teleport/hub/hub in orange(1, src))
+		count++
 		hub.engaged = 0
 		hub.update_icon()
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='notice'>Teleporter disengaged!</span>", 2)
+	visible_message("<span class='notice'>[count] teleporter[count>1?"s":""] disengaged!</span>", range = 2)
 	if(user)
 		src.add_fingerprint(user)
 	src.engaged = 0
@@ -386,35 +378,19 @@ obj/machinery/teleport/station/New()
 	if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
 		return
 
-	var/atom/l = src.loc
-	var/obj/machinery/teleport/hub/hub = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
-	if (hub)
+
+	for(var/obj/machinery/teleport/hub/hub in orange(1))
 		engaged = 1
 		var/wasaccurate = hub.accurate //let's make sure if you have a mapped in accurate tele that it stays that way
 		hub.accurate = 1
 		hub.engaged = 1
 		hub.update_icon()
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", 2)
+		visible_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", range = 2)
 		hub.teleport()
-		use_power(5000)
-
+		use_power(teleport_power_usage)
 		spawn(30)
 			hub.accurate = wasaccurate
-			for(var/mob/B in hearers(src, null))
-				B.show_message("<span class='notice'>Test fire completed.</span>", 2)
+			visible_message("<span class='notice'>Test fire completed.</span>", range = 2)
 
 	src.add_fingerprint(usr)
 	return
-
-
-/obj/effect/laser/to_bump()
-	src.range--
-	return
-
-/obj/effect/laser/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	src.range--
-	return
-
-/atom/proc/laserhit(L as obj)
-	return 1

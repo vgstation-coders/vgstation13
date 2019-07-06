@@ -151,21 +151,22 @@
 
 	if(istype(H))
 
-		if(H.species.name == "Human" && !(H.f_style == "Pompadour"))
+		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Pompadour"))
 			spawn(50)
-				H.h_style = "Pompadour"
+				H.my_appearance.h_style = "Pompadour"
 				H.update_hair()
 
-		if(H.species.name == "Human" && !(H.f_style == "Elvis Sideburns"))
+		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Elvis Sideburns"))
 			spawn(50)
-				H.f_style = "Elvis Sideburns"
+				H.my_appearance.f_style = "Elvis Sideburns"
 				H.update_hair()
 
 /datum/disease2/effect/elvis/deactivate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
-		if(mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/sunglasses/virus))
-			mob:glasses.canremove = 1
-			mob.u_equip(mob:glasses,1)
+		var/mob/living/carbon/human/dude = mob
+		if(istype(dude.glasses, /obj/item/clothing/glasses/sunglasses/virus))
+			dude.glasses.canremove = 1
+			dude.u_equip(dude.glasses,1)
 
 
 /datum/disease2/effect/pthroat
@@ -226,25 +227,25 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 			switch(hair_color)
 				if("pink")
-					affected.b_hair = 153
-					affected.g_hair = 102
-					affected.r_hair = 255
+					affected.my_appearance.b_hair = 153
+					affected.my_appearance.g_hair = 102
+					affected.my_appearance.r_hair = 255
 				if("red")
-					affected.b_hair = 0
-					affected.g_hair = 0
-					affected.r_hair = 255
+					affected.my_appearance.b_hair = 0
+					affected.my_appearance.g_hair = 0
+					affected.my_appearance.r_hair = 255
 				if("green")
-					affected.b_hair = 0
-					affected.g_hair = 255
-					affected.r_hair = 0
+					affected.my_appearance.b_hair = 0
+					affected.my_appearance.g_hair = 255
+					affected.my_appearance.r_hair = 0
 				if("blue")
-					affected.b_hair = 255
-					affected.g_hair = 0
-					affected.r_hair = 0
+					affected.my_appearance.b_hair = 255
+					affected.my_appearance.g_hair = 0
+					affected.my_appearance.r_hair = 0
 				if("purple")
-					affected.b_hair = 102
-					affected.g_hair = 0
-					affected.r_hair = 102
+					affected.my_appearance.b_hair = 102
+					affected.my_appearance.g_hair = 0
+					affected.my_appearance.r_hair = 102
 			affected.update_hair()
 			triggered = 1
 

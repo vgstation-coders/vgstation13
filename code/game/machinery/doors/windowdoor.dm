@@ -22,8 +22,9 @@
 	penetration_dampening = 2
 	animation_delay = 7
 	var/obj/machinery/smartglass_electronics/smartwindow
-	var/window_is_opaque = TRUE //The var that helps darken the glass when the door opens/closes
+	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
+	var/id_tag = null
 
 /obj/machinery/door/window/New()
 	..()
@@ -31,21 +32,27 @@
 		icon_state = "[icon_state]"
 		base_state = icon_state
 	set_electronics()
+	if(smartwindow && window_is_opaque)
+		set_opacity(1)
+		update_nearby_tiles()
 
 /obj/machinery/door/window/Destroy()
 	setDensity(FALSE)
 	..()
 
 /obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
-	animate(src, color="[window_is_opaque ? "#FFFFFF":"#222222"]", time=5) //Start with coloring the windoor. Always.
+	// var/color = window_is_opaque ? "#FFFFFF" : "#222222" //these are backwards because we're changing window_is_opaque later
+	// animate(src, color=color, time=5)
 
 	if(density) //window is CLOSED
 		if(window_is_opaque) //Is it dark?
 			set_opacity(0) //Make it light.
-			window_is_opaque = TRUE
+			window_is_opaque = FALSE
+			animate(src, color="#FFFFFF", time=5)
 		else
 			set_opacity(1) // Else, make it dark.
-			window_is_opaque = FALSE
+			window_is_opaque = TRUE
+			animate(src, color="#222222", time=5)
 	else //Window is OPEN!
 		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
 	return opacity
@@ -53,9 +60,9 @@
 /obj/machinery/door/window/examine(mob/user)
 	..()
 	if(smartwindow)
-		to_chat(user, "It's NT-15925 SmartGlass™ compliant.")
+		to_chat(user, "It is NT-15925 SmartGlass™ compliant.")
 	if(secure)
-		to_chat(user, "It is a secure windoor, it is stronger and closes more quickly.")
+		to_chat(user, "It is a secure windoor. It's stronger and closes more quickly.")
 
 /obj/machinery/door/window/Bumped(atom/movable/AM)
 	if(!ismob(AM))
@@ -76,7 +83,7 @@
 			var/obj/structure/bed/chair/vehicle/vehicle = AM
 			if(density)
 				if(vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-					if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
+					if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 						vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 					open()
 					sleep(50)
@@ -133,6 +140,11 @@
 		return FALSE
 	if(!operating) //in case of emag
 		operating = 1
+
+	// Dark windows look silly when open
+	if(smartwindow && window_is_opaque)
+		animate(src, color="#FFFFFF", time=10)
+
 	door_animate("opening")
 	playsound(src, soundeffect, 100, 1)
 	icon_state = "[base_state]open"
@@ -140,8 +152,7 @@
 
 	explosion_resistance = 0
 	setDensity(FALSE)
-	if(smartwindow && window_is_opaque)
-		set_opacity(0) //You can see through open windows
+	set_opacity(0) //You can see through open windoors even if the glass is opaque
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -152,17 +163,22 @@
 	if(operating)
 		return FALSE
 	operating = 1
+
+	// Re-darken the window when closed
+	if(smartwindow && window_is_opaque)
+		animate(src, color="#222222", time=10)
+
 	door_animate("closing")
 	playsound(src, soundeffect, 100, 1)
 	icon_state = base_state
 
 	setDensity(TRUE)
 	explosion_resistance = initial(explosion_resistance)
-	if(smartwindow && window_is_opaque)
-		set_opacity(1)
 	update_nearby_tiles()
 
 	sleep(animation_delay)
+	if(window_is_opaque) //you can't see through closed opaque windoors
+		set_opacity(1)
 
 	operating = 0
 	return TRUE
@@ -355,7 +371,6 @@
 	base_state = "leftsecure"
 	req_access = list(access_security)
 	secure = TRUE
-	var/id_tag = null
 	health = 100
 	assembly_type = /obj/structure/windoor_assembly/secure
 	penetration_dampening = 4
@@ -379,6 +394,7 @@
 	penetration_dampening = 8
 
 // Used on Packed ; smartglassified roundstart
+// TODO: Remove this snowflake stuff.
 /obj/machinery/door/window/plasma/secure/interogation_room/initialize()
 	smartwindow = new(src)
 	smartwindow.id_tag = "InterogationRoomIDTag"
@@ -398,3 +414,38 @@
 
 /obj/machinery/door/window/clockwork/clockworkify()
 	return
+
+// Smartglass for mappers, smartglassified on roundstart.
+// the frequency and id_tag (shared by the windoor itself) get passed on to the smartglass electronics
+// sharing the id_tag is alright because airlocks don't use radio frequency mechanics like smartglass
+/obj/machinery/door/window/smartglass
+	var/frequency = 1449
+
+/obj/machinery/door/window/smartglass/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/machinery/door/window/brigdoor/smartglass
+	var/frequency = 1449
+
+/obj/machinery/door/window/brigdoor/smartglass/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/machinery/door/window/plasma/smartglass
+	var/frequency = 1449
+
+/obj/machinery/door/window/plasma/smartglass/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency
+
+/obj/machinery/door/window/plasma/secure/smartglass
+	var/frequency = 1449
+
+/obj/machinery/door/window/plasma/secure/smartglass/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = id_tag
+	smartwindow.frequency = frequency

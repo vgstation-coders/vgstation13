@@ -95,6 +95,11 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
+	
+	for(var/mob/living/carbon/carbon in src.loc)
+		if (carbon.mutual_handcuffs)
+			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
+				return 0
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
@@ -552,6 +557,7 @@
 			L << sound('sound/machines/click.ogg')
 			L << sound('sound/hallucinations/scary.ogg')
 			L.Knockdown(5)
+			L.Stun(5)
 
 			sleep(50)
 

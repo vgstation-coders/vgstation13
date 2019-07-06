@@ -164,3 +164,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/supermatter
+
+/datum/design/atmoscontrol
+	name = "Circuit Design (Central Atmosherics Computer)"
+	desc = "Allows for the construction of circuit boards used to build an Atmos Control Console."
+	id = "atmoscontrol"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/atmoscontrol

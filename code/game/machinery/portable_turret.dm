@@ -734,7 +734,7 @@ Status: []<BR>"},
 			// attack_hand() removes the gun
 
 		if(5)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
@@ -753,7 +753,7 @@ Status: []<BR>"},
 					to_chat(user, "<span class='warning'>You need at least 2 [stack] to add external armor.</span>")
 					return
 
-			else if(isscrewdriver(W))
+			else if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
@@ -846,6 +846,6 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/stationary
 	emagged = 1
 
-	New()
-		installed = new/obj/item/weapon/gun/energy/laser(src)
-		..()
+/obj/machinery/porta_turret/stationary/New()
+	installed = new/obj/item/weapon/gun/energy/laser(src)
+	..()

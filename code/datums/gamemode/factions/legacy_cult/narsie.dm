@@ -17,6 +17,7 @@ var/global/list/narsie_list = list()
 	dissipate = 0 // Do we lose energy over time?
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
+	var/wounded = FALSE
 
 
 /obj/machinery/singularity/narsie/New()

@@ -46,9 +46,6 @@
 		animation.master = null
 		qdel(animation)
 
-	for (var/mob/living/simple_animal/borer/borer in Mo)
-		if (borer.controlling)
-			Mo.do_release_control(0)
 
 	var/mob/living/carbon/human/O = new(src)
 	if(Mo.greaterform)
@@ -78,7 +75,7 @@
 	//	del(T)
 
 	O.forceMove(M.loc)
-	Mo.transferBorers(O)
+	Mo.dropBorers() //safer to just drop these like I originally did
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 
@@ -100,8 +97,8 @@
 			O.real_name = randomname
 			i++
 	O.UpdateAppearance()
-	O.h_style = random_hair_style(O.gender,O.species.name)
-	O.f_style = random_facial_hair_style(O.gender,O.species.name)
+	O.my_appearance.h_style = random_hair_style(O.gender,O.species.name)
+	O.my_appearance.f_style = random_facial_hair_style(O.gender,O.species.name)
 	O.update_hair()
 	O.take_overall_damage(M.getBruteLoss(), M.getFireLoss())
 	O.adjustToxLoss(M.getToxLoss())

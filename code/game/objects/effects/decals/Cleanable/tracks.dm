@@ -58,19 +58,11 @@
 	)
 
 	/** DO NOT FUCKING REMOVE THIS. **/
-	process()
-		return PROCESS_KILL
+/obj/effect/decal/cleanable/blood/tracks/process()
+	return PROCESS_KILL
 
-	/**
-	* Add tracks to an existing trail.
-	*
-	* @param DNA bloodDNA to add to collection.
-	* @param comingdir Direction tracks come from, or 0.
-	* @param goingdir Direction tracks are going to (or 0).
-	* @param bloodcolor Color of the blood when wet.
-	*/
 /obj/effect/decal/cleanable/blood/tracks/resetVariables()
-	..("setdirs")
+	..("setdirs", "steps_to_remake")
 	setdirs=list(
 		"1"=0,
 		"2"=0,
@@ -81,6 +73,7 @@
 		"64"=0,
 		"128"=0
 	)
+	steps_to_remake = list()
 
 /obj/effect/decal/cleanable/blood/tracks/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/list/steps_to_remake)
 	if(steps_to_remake && steps_to_remake.len)
@@ -96,6 +89,14 @@
 	. = ..()
 	.["steps_to_remake"] = steps_to_remake
 
+/**
+* Add tracks to an existing trail.
+*
+* @param DNA bloodDNA to add to collection.
+* @param comingdir Direction tracks come from, or 0.
+* @param goingdir Direction tracks are going to (or 0).
+* @param bloodcolor Color of the blood when wet.
+*/
 /obj/effect/decal/cleanable/blood/tracks/proc/AddTracks(var/list/DNA, var/comingdir, var/goingdir, var/bloodcolor=DEFAULT_BLOOD)
 	steps_to_remake += list(list(comingdir, goingdir, bloodcolor)) //list in list because DM eats one list
 	if (!counts_as_blood)
@@ -225,7 +226,7 @@
 	coming_state = "boots1"
 	going_state  = "boots2"
 
-/obj/effect/decal/cleanable/blood/tracks/footprints/clown //Fun Fact: This footprint is way longer than the regular one and thus is spaced differently, making it the only evenly-spaced footprint type.
+/obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	coming_state = "clown1"
 	going_state  = "clown2"
 

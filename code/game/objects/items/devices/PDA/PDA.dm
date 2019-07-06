@@ -1323,7 +1323,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						"}
 					switch(app.game_state)
 						if(0)	//First Statup
-							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="pda_snake_arrow_west.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="pda_snake_arrow_east.png"></a>"}
+							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="spesspets_arrow_left.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="spesspets_arrow_right.png"></a>"}
 
 							dat += {"<a href='byond://?src=\ref[src];choice=eggChose'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
 							dat += {"</div>"}
@@ -2369,7 +2369,7 @@ obj/item/device/pda/AltClick()
 					if(!isnull(C:gloves))
 						to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
 				else
-					to_chat(user, text("<span class='notice'>[C]'s Fingerprints: [md5(C:dna.uni_identity)]</span>"))
+					to_chat(user, text("<span class='notice'>[C]'s Fingerprints: [md5(C.dna.uni_identity)]</span>"))
 				if ( !(C:blood_DNA) )
 					to_chat(user, "<span class='notice'>No blood found on [C]</span>")
 					if(C:blood_DNA)
@@ -2505,7 +2505,7 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(8, 5))
+		if (M.Slip(8, 5, 1))
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
 
 			if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))
@@ -2551,20 +2551,20 @@ obj/item/device/pda/AltClick()
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pdabox"
 
-	New()
-		..()
-		new /obj/item/device/pda(src)
-		new /obj/item/device/pda(src)
-		new /obj/item/device/pda(src)
-		new /obj/item/device/pda(src)
-		new /obj/item/weapon/cartridge/head(src)
+/obj/item/weapon/storage/box/PDAs/New()
+	..()
+	new /obj/item/device/pda(src)
+	new /obj/item/device/pda(src)
+	new /obj/item/device/pda(src)
+	new /obj/item/device/pda(src)
+	new /obj/item/weapon/cartridge/head(src)
 
-		var/newcart = pick(	/obj/item/weapon/cartridge/engineering,
-							/obj/item/weapon/cartridge/security,
-							/obj/item/weapon/cartridge/medical,
-							/obj/item/weapon/cartridge/signal/toxins,
-							/obj/item/weapon/cartridge/quartermaster)
-		new newcart(src)
+	var/newcart = pick(	/obj/item/weapon/cartridge/engineering,
+						/obj/item/weapon/cartridge/security,
+						/obj/item/weapon/cartridge/medical,
+						/obj/item/weapon/cartridge/signal/toxins,
+						/obj/item/weapon/cartridge/quartermaster)
+	new newcart(src)
 
 // Pass along the pulse to atoms in contents, largely added so pAIs are vulnerable to EMP
 /obj/item/device/pda/emp_act(severity)

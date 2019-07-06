@@ -54,6 +54,9 @@
 
 //////////////////////BEE MOB///////////////////////////////////////
 
+
+var/bee_mobs_count = 0
+
 /mob/living/simple_animal/bee
 	name = "swarm of bees"
 	icon = 'icons/obj/apiary_bees_etc.dmi'
@@ -103,10 +106,12 @@
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
 	..()
+	bee_mobs_count++
 	home = new_home
 
 
 /mob/living/simple_animal/bee/Destroy()
+	bee_mobs_count--
 	if(home)
 		for (var/datum/bee/B in bees)
 			home.bees_outside_hive -= B

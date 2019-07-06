@@ -133,6 +133,7 @@
 	name = "glass tile"
 	desc = "A relatively clear reinforced glass tile."
 	icon_state = "tile_rglass"
+	max_amount = 60
 
 /obj/item/stack/glass_tile/rglass/proc/build(turf/S as turf)
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)

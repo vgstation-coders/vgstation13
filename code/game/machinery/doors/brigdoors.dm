@@ -17,11 +17,11 @@
 	anchored = 1.0    		// can't pick it up
 	density = 0       		// can walk through it.
 	var/id_tag = null     	// id of door it controls.
-	var/releasetime = 0		// when world.time reaches it - release the prisoneer
+	var/releasetime = 0		// when world.timeofday reaches it - release the prisoneer
 	var/timing = 1    		// boolean, true/1 timer is on, false/0 means it's not timing
 	var/picture_state		// icon_state of alert picture, if not displaying text/numbers
 	var/list/obj/machinery/targets = list()
-
+	var/last_call = 0
 
 /obj/machinery/door_timer/initialize()
 	..()
@@ -52,7 +52,7 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(src.timing)
-		if(world.time > src.releasetime)
+		if(timeleft() == 0)
 			src.timer_end() // open doors, reset timer, clear status screen
 			src.timing = 0
 		src.updateUsrDialog()
@@ -108,13 +108,18 @@
 
 	return 1
 
-
 /obj/machinery/door_timer/proc/timeleft()
-	. = max((releasetime-world.time)/10, 0)
+	if(timing)
+		. = max((releasetime-world.timeofday)/10, 0)
+	else
+		. = max((releasetime-last_call)/10, 0)
+
+	if(. < 0) . = 0
+	last_call = world.timeofday
 
 /obj/machinery/door_timer/proc/timeset(var/seconds)
-	releasetime=world.time+seconds*10
-
+	releasetime=world.timeofday+seconds*10
+	last_call = world.timeofday
 
 //Allows AIs to use door_timer, see human attack_hand function below
 /obj/machinery/door_timer/attack_ai(var/mob/user as mob)
@@ -145,7 +150,7 @@
 	dat += {"Time Left: [(minute ? text("[minute]:") : null)][second] <br/>
 			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
 	for(var/obj/machinery/flasher/F in targets)
-		if(F.last_flash && (F.last_flash + 150) > world.time)
+		if(F.last_flash && (F.last_flash + 150) > world.timeofday)
 			dat += "<br/><A href='?src=\ref[src];fc=1'>Flash Charging</A>"
 		else
 			dat += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"

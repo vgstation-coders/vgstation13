@@ -47,7 +47,7 @@
 				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 					"<span class='notice'>You dissasemble \the [src].</span>")
-					getFromPool(material, get_turf(src))
+					getFromPool(material, get_turf(src), 2)
 					qdel(src)
 			else if(!anchored) //Unanchored, anchor it
 				if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
@@ -89,7 +89,7 @@
 			getFromPool(material, get_turf(src))
 			qdel(src)
 
-	else if(isscrewdriver(W) && state == 2) //Unsecuring support struts, stage 2 to 1
+	else if(W.is_screwdriver(user) && state == 2) //Unsecuring support struts, stage 2 to 1
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
@@ -101,7 +101,7 @@
 			state = 1
 			update_icon()
 
-	else if(isscrewdriver(W) && state == 1) //Securing support struts, stage 1 to 2
+	else if(W.is_screwdriver(user) && state == 1) //Securing support struts, stage 1 to 2
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
@@ -131,7 +131,7 @@
 		if(R.amount < 2) //Do a first check BEFORE the user begins, in case he's using a single rod
 			to_chat(user, "<span class='warning'>You need more rods to finish the support struts.</span>")
 			return
-		user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src.]</span>", \
+		user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src].</span>", \
 		"<span class='notice'>You start inserting internal support struts into \the [src].</span>")
 		if(do_after(user, src,construction_length))
 			var/obj/item/stack/rods/O = W

@@ -4,7 +4,6 @@
 	required_pref = TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = TRAITOR
-	refund_value = BASE_SOLO_REFUND
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
@@ -41,7 +40,7 @@
 		AppendObjective(/datum/objective/freeform/syndicate)
 		return
 	if(istype(antag.current, /mob/living/silicon))
-		AppendObjective(/datum/objective/target/assassinate)
+		AppendObjective(/datum/objective/target/delayed/assassinate)
 
 		AppendObjective(/datum/objective/survive)
 
@@ -49,7 +48,7 @@
 			AppendObjective(/datum/objective/block)
 
 	else
-		AppendObjective(/datum/objective/target/assassinate)
+		AppendObjective(/datum/objective/target/delayed/assassinate)
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
@@ -135,7 +134,6 @@
 	name = ROGUE
 	id = ROGUE
 	logo_state = "synd-logo"
-	refund_value = BASE_SOLO_REFUND/2
 
 /datum/role/traitor/rogue/ForgeObjectives()
 	var/datum/role/traitor/rogue/rival
@@ -197,4 +195,33 @@
 	logo_state = "nuke-logo"
 
 /datum/role/nuclear_operative/leader
+	name = NUKE_OP_LEADER
+	id = NUKE_OP_LEADER
+	required_pref = NUKE_OP
+	disallow_job = TRUE
 	logo_state = "nuke-logo-leader"
+
+/datum/role/nuclear_operative/leader/OnPostSetup()
+	if(antag)
+		var/datum/action/play_ops_music/go_loud = new /datum/action/play_ops_music(antag)
+		go_loud.linkedfaction = faction
+		go_loud.Grant(antag.current)
+	..()
+	
+/datum/action/play_ops_music
+	name = "Go Loud"
+	desc = "For the operative who prefers style over subtlety."
+	icon_icon = 'icons/obj/device.dmi'
+	button_icon_state = "megaphone"
+	var/datum/faction/linkedfaction
+
+/datum/action/play_ops_music/Trigger()
+	var/mob/living/M = owner
+	if(!linkedfaction)
+		qdel(src)
+		return
+	var/confirm = alert(M, "Are you sure you want to announce your presence? Doing so will display a command announcement and start the Nuclear Assault playlist.", "Are you sure?", "No", "Yes")
+	if (confirm == "Yes" && M.stat == CONSCIOUS)
+		ticker.StartThematic(linkedfaction.playlist)
+		command_alert(/datum/command_alert/nuclear_operatives)
+		qdel(src)

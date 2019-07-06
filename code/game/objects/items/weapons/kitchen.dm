@@ -353,7 +353,7 @@
 	else
 		M.LAssailant = user
 
-	var/t = user:zone_sel.selecting
+	var/t = user.zone_sel.selecting
 	if (t == LIMB_HEAD)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
@@ -414,6 +414,7 @@
 	if(clumsy_check(user) && prob(50))              //What if he's a clown?
 		to_chat(M, "<span class='warning'>You accidentally slam yourself with the [src]!</span>")
 		M.Knockdown(1)
+		M.Stun(1)
 		user.take_organ_damage(2)
 		if(prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
@@ -443,6 +444,7 @@
 
 		if(prob(15))
 			M.Knockdown(3)
+			M.Stun(3)
 			M.take_organ_damage(3)
 		else
 			M.take_organ_damage(5)
@@ -514,6 +516,7 @@
 			M.take_organ_damage(8)
 			if(prob(30))
 				M.Knockdown(2)
+				M.Stun(2)
 				return
 			return
 /*

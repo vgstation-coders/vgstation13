@@ -2,6 +2,7 @@
 	name = "Ring of Fire"
 	desc = "Summon a stationary ring of flames around your current location for 10 seconds. While the ring is active, you are fully immune to fire and burns."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 	school = "conjuration"
 	charge_max = 300
 	cooldown_min = 100

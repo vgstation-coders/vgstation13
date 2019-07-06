@@ -23,22 +23,19 @@ mineral
 	///Path to the resultant ore.
 	var/ore
 
-	New()
-		. = ..()
-		if(!display_name)
-			display_name = name
+mineral/New()
+	. = ..()
+	if(!display_name)
+		display_name = name
 
-	proc/UpdateTurf(var/turf/unsimulated/mineral/T)
-		T.UpdateMineral()
+mineral/proc/UpdateTurf(var/turf/unsimulated/mineral/T)
+	T.UpdateMineral()
 
 mineral/proc/DropMineral(var/turf/unsimulated/mineral/T)
-	var/obj/item/O
-	if(ispath(O,/obj/item/stack))
-		O = drop_stack(ore, T, 1)
-	else
-		O = new ore(T)
-	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
-	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
+	var/obj/item/O = drop_stack(ore, T, result_amount)
+	if(O.pixel_x != 0 && O.pixel_y != 0) //give it a little jiggle
+		O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
+		O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O, /obj/item/stack/ore))
 		var/obj/item/stack/ore/OR = O
 		if(!T.geologic_data)
@@ -205,20 +202,22 @@ mineral/cave
 	result_amount = 1
 	spread = 1
 	ore = null
-	UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
-			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
-		else
-			..()
+
+mineral/cave/UpdateTurf(var/turf/T)
+	if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
+		T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
+	else
+		..()
 
 mineral/cave/ice
 	display_name = "Ice Cave"
 	name = "Ice Cave"
-	UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/floor/asteroid/cave/permafrost))
-			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/permafrost)
-		else
-			..()
+
+mineral/cave/ice/UpdateTurf(var/turf/T)
+	if(!istype(T,/turf/unsimulated/floor/asteroid/cave/permafrost))
+		T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/permafrost)
+	else
+		..()
 
 mineral/mythril
 	display_name = "Silver"

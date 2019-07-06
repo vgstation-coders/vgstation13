@@ -36,7 +36,6 @@
 	..()
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 	Ourwindow = loc
-	Ourwindow.smart_toggle()
 
 /obj/machinery/smartglass_electronics/Destroy()
 	radio_controller.remove_object(src, frequency)

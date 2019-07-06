@@ -71,29 +71,29 @@
 		if(istype(our_legs))
 			icon_state = "[icon_dead][(our_legs.amount<8) ? our_legs.amount : ""]"
 
-// Checks pressure here vs. around us.
-/mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/loc)
-	var/turf/simulated/lT=loc
-	if(!istype(lT) || !lT.zone)
+// Checks pressure here vs. around us. Intended to make sure the spider doesn't breach to space while comfortable, or breach into a high pressure area
+/mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/curturf)
+	if(!istype(curturf))
 		return 0
-	var/datum/gas_mixture/myenv=lT.return_air()
+	var/datum/gas_mixture/myenv=curturf.return_air()
 	var/pressure=myenv.return_pressure()
 
-	for(var/dir in cardinal)
-		var/turf/simulated/T = get_step(loc, dir)
-		if(T && istype(T) && T.zone)
+	for(var/checkdir in cardinal)
+		var/turf/T = get_step(curturf, checkdir)
+		if(T && istype(T))
 			var/datum/gas_mixture/environment = T.return_air()
 			var/pdiff = abs(pressure - environment.return_pressure())
 			if(pdiff > SPIDER_MAX_PRESSURE_DIFF)
 				return pdiff
 	return 0
 
+/mob/living/simple_animal/hostile/giant_spider/UnarmedAttack(var/atom/A, var/proximity_flag, var/params)
+	if(istype(A,/obj/structure/window) && proximity_flag && (!target || !ismob(target)) && performPressureCheck(get_turf(A)))
+		return
+	.=..()
+
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)
-	if(istype(the_target,/mob/living/simple_animal/hostile/giant_spider))
-		return 0
-	if(istype(the_target,/obj/effect))
-		return 0
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
 		// Not empty or broken
@@ -101,16 +101,6 @@
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/giant_spider/AttackingTarget()
-	if(istype(target,/obj/structure/window))
-		var/obj/structure/window/W=target
-		if(get_dist(src, target) > 1)
-			return // keep movin'.
-
-		var/turf/T = get_turf(W)
-
-		// Don't kill ourselves
-		if(performPressureCheck(T))
-			return
 	..()
 	if(isliving(target))
 		var/mob/living/L = target

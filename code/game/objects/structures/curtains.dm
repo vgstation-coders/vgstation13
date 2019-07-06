@@ -58,7 +58,7 @@
 				getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 4)
 			qdel(src)
 		return 1
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		user.visible_message("[user] [anchored? "unsecures" : "secures"] \the [src].", "You [anchored? "unsecure" : "secure"] \the [src].")
 		anchored = !anchored

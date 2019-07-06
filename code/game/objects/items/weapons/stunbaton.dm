@@ -89,7 +89,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] already has a cell.</span>")
 
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(bcell)
 			bcell.updateicon()
 			bcell.forceMove(get_turf(src.loc))
@@ -126,6 +126,7 @@
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
 		user.Knockdown(stunforce)
+		user.Stun(stunforce)
 		playsound(loc, "sparks", 75, 1, -1)
 		deductcharge(hitcost)
 		return
@@ -151,6 +152,7 @@
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
 		user.Knockdown(stunforce)
+		user.Stun(stunforce)
 		deductcharge(hitcost)
 		return
 
@@ -187,9 +189,7 @@
 
 		deductcharge(hitcost)
 
-		if(ishuman(L))
-			var/mob/living/carbon/human/H = L
-			H.forcesay(hit_appends)
+		L.forcesay(hit_appends)
 
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
@@ -220,9 +220,7 @@
 
 	deductcharge(hitcost)
 
-	if(ishuman(L))
-		var/mob/living/carbon/human/H = L
-		H.forcesay(hit_appends)
+	L.forcesay(hit_appends)
 
 	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"

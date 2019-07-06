@@ -281,6 +281,44 @@
  		"/obj/item/organ/external/head"
  	)
 
+/obj/item/weapon/storage/belt/silicon
+	name = "cyber trophy belt"
+	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
+	icon_state = "securitybelt"
+	item_state = "security"
+	fits_max_w_class = 4
+	max_combined_w_class = 28
+	can_only_hold = list(
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi",
+		"/obj/item/organ/external/head"
+ 	)
+
+/obj/item/weapon/storage/belt/silicon/New()
+	..()
+	new /obj/item/device/aicard(src) //One freebie card
+
+/obj/item/weapon/storage/belt/silicon/proc/GetCyberbeltMobs()
+	var/list/mobs = list()
+	for(var/obj/item/device/mmi/M in contents)
+		if(M.brainmob)
+			mobs += M.brainmob
+	for(var/obj/item/device/aicard/A in contents)
+		for(var/mob/living/silicon/ai/AI in A)
+			mobs += AI
+	return mobs
+
+/proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
+	var/list/listeners = observers
+	if(istype(B.loc,/mob))
+		var/mob/M = B.loc
+		listeners += M
+	listeners += B.GetCyberbeltMobs()
+	listeners = uniquelist(listeners)
+	var/turf/T = get_turf(B)
+	log_say("[key_name(C)] (@[T.x],[T.y],[T.z]) Trophy Belt: [message]")
+	for(var/mob/L in listeners)
+		to_chat(L,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
 
 /obj/item/weapon/storage/belt/mining
 	name = "mining gear belt"

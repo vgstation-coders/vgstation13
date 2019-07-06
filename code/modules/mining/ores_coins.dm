@@ -44,9 +44,11 @@
 
 /obj/item/stack/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
+	var/turf/T //turf to extinguish
 	if(isturf(hit_atom))
 		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
 			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
+		T = hit_atom
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
@@ -59,6 +61,16 @@
 			H.eye_blind = max(H.eye_blind, rand(1,3))
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[hit_atom] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
+	else
+		T = get_turf(hit_atom)
+
+	if(T)
+		for(var/atom/atm in T) //extinguishing things
+			if(isliving(atm)) // For extinguishing mobs on fire
+				var/mob/living/M = atm
+				M.ExtinguishMob()
+			if(atm.on_fire) // For extinguishing objects on fire
+				atm.extinguish()
 
 /obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
@@ -332,7 +344,7 @@
 
 /obj/item/weapon/coin
 	icon = 'icons/obj/items.dmi'
-	name = "Coin"
+	name = "coin"
 	icon_state = "coin"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -342,6 +354,7 @@
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
+	var/sideup = "heads." //heads, tails or on its side?
 
 /obj/item/weapon/coin/New()
 	. = ..()
@@ -354,70 +367,135 @@
 	rec.addAmount(material, 0.2) // 5 coins per sheet.
 	return w_type
 
+/obj/item/weapon/coin/is_screwdriver(var/mob/user)
+	return user.a_intent == I_HURT
+
+/obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+	var/matrix/flipit = matrix()
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	flipit.Scale(5,1)
+	flipit.Invert()
+	flipit.Turn(rand(1,359))
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	if (pick(0,1))
+		sideup = "heads-up."
+		flipit.Scale(5,1)
+		flipit.Turn(rand(1,359))
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	else
+		sideup = "tails-up."
+		flipit.Scale(5,1)
+		flipit.Invert()
+		flipit.Turn(rand(1,359))
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	if (prob(0.1) || rigged)
+		flipit.Scale(0.2,1)
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+		sideup = "on the side!"
+	if(!thrown)
+		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You hear [src] landing.</span>")
+	else 
+		if(!throwing) //coin was thrown and is coming to rest
+			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
+	
+/obj/item/weapon/coin/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
+	
+/obj/item/weapon/coin/equipped(var/mob/user)
+	..()
+	sideup = "heads-up."
+	transform = null
+	
+/obj/item/weapon/coin/attack_self(var/mob/user)
+	coinflip(user, 0)
+
+/obj/item/weapon/coin/throw_impact(atom/hit_atom, speed, user)
+	..()
+	coinflip(user, 1)
+
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
-	name = "Gold coin"
+	name = "gold coin"
 	icon_state = "coin_gold"
 	credits = 5
 	melt_temperature=1064+T0C
+	siemens_coefficient = 0.95
 
 /obj/item/weapon/coin/silver
 	material=MAT_SILVER
-	name = "Silver coin"
+	name = "silver coin"
 	icon_state = "coin_silver"
 	credits = 1
 	melt_temperature=961+T0C
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/diamond
 	material=MAT_DIAMOND
-	name = "Diamond coin"
+	name = "diamond coin"
 	icon_state = "coin_diamond"
 	credits = 25
+	siemens_coefficient = 0.1
 
 /obj/item/weapon/coin/iron
 	material=MAT_IRON
-	name = "Iron coin"
+	name = "iron coin"
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
+	siemens_coefficient = 0.9
 
 /obj/item/weapon/coin/plasma
 	material=MAT_PLASMA
-	name = "Solid plasma coin"
+	name = "solid plasma coin"
 	icon_state = "coin_plasma"
 	credits = 0.1
 	melt_temperature=MELTPOINT_STEEL+500
+	siemens_coefficient = 0.7
 
 /obj/item/weapon/coin/uranium
 	material=MAT_URANIUM
-	name = "Uranium coin"
+	name = "uranium coin"
 	icon_state = "coin_uranium"
 	credits = 25
 	melt_temperature=1070+T0C
+	siemens_coefficient = 0.9
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
-	name = "Bananaium coin"
+	name = "bananaium coin"
 	icon_state = "coin_clown"
 	credits = 1000
 	melt_temperature=MELTPOINT_GLASS
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/phazon
 	material=MAT_PHAZON
-	name = "Phazon coin"
+	name = "phazon coin"
 	icon_state = "coin_phazon"
 	credits = 2000
 	melt_temperature=MELTPOINT_GLASS
+	siemens_coefficient = 0.5
+	
+/obj/item/weapon/coin/phazon/New()
+	siemens_coefficient = rand(0,100) / 100
 
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
-	name = "Adamantine coin"
+	name = "adamantine coin"
 	icon_state = "coin_adamantine"
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/mythril
 	material="mythril"
-	name = "Mythril coin"
+	name = "mythril coin"
 	icon_state = "coin_mythril"
+	siemens_coefficient = 0
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/cable_coil) )

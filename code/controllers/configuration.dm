@@ -113,6 +113,7 @@
 	var/health_threshold_softcrit = 0
 	var/health_threshold_crit = 0
 	var/health_threshold_dead = -100
+	var/burn_damage_ash = 0
 
 	var/organ_health_multiplier = 1
 	var/organ_regeneration_multiplier = 1
@@ -172,6 +173,7 @@
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
+	var/no_ambience = 0 //If 1, don't play ambience, regardless of client preferences.
 
 	var/enable_roundstart_away_missions = 0
 
@@ -187,6 +189,9 @@
 
 	// Weighted Votes
 	var/weighted_votes = 0
+
+	// Dynamic Mode
+	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
 /datum/configuration/New()
 	. = ..()
@@ -567,6 +572,8 @@
 					shut_up_automatic_diagnostic_and_announcement_system = 1
 				if("no_lobby_music")
 					no_lobby_music = 1
+				if("no_ambience")
+					no_ambience = 1
 				if("enable_roundstart_away_missions")
 					enable_roundstart_away_missions = 1
 				if("enable_wages")
@@ -603,6 +610,8 @@
 					config.health_threshold_softcrit = value
 				if("health_threshold_dead")
 					config.health_threshold_dead = value
+				if("burn_damage_ash")
+					config.burn_damage_ash = value
 				if("revival_pod_plants")
 					config.revival_pod_plants = value
 				if("revival_cloning")

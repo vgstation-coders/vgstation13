@@ -4,10 +4,9 @@
 	required_pref = NINJA
 	special_role = NINJA
 	logo_state = "ninja-logo"
-	refund_value = BASE_SOLO_REFUND
 	wikiroute = NINJA
 	disallow_job = TRUE
-	restricted_jobs = list("Trader") //Spawns in space
+	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
 
 /datum/role/ninja/OnPostSetup()
@@ -18,10 +17,52 @@
 		name_ninja(antag.current)
 
 /datum/role/ninja/ForgeObjectives()
-	AppendObjective(/datum/objective/target/steal)
-	AppendObjective(/datum/objective/target/assassinate)
-	AppendObjective(/datum/objective/target/skulls)
-	AppendObjective(/datum/objective/escape)
+
+	if(cyborg_list.len)
+		AppendObjective(/datum/objective/target/killsilicons)
+	else
+		if(prob(70))
+			AppendObjective(/datum/objective/target/delayed/assassinate)
+		else
+			AppendObjective(/datum/objective/target/skulls)
+
+	if(ai_list.len)
+		AppendObjective(/datum/objective/killorstealAI)
+	else
+		AppendObjective(/datum/objective/target/steal)
+
+	var/living = 0
+	for(var/mob/living/M in player_list)
+		if(!M.client)
+			continue
+		if(!iscarbon(M) && !issilicon(M))
+			continue
+		var/turf/T = get_turf(M)
+		if(T.z != STATION_Z)
+			continue
+		if(M.stat != DEAD)
+			living++
+	if(living<=16 && prob(25))
+		AppendObjective(/datum/objective/silence)
+	else
+		AppendObjective(/datum/objective/survive)
+	if(prob(15))
+		AppendObjective(/datum/objective/stealsake)
+
+/datum/role/ninja/extraPanelButtons()
+	var/dat = ""
+	if(istype(GetNinjaWeapon(antag.current),/obj/item/weapon/katana/hesfast))
+		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];toggleweeb=ninja;'>(Make ninja)</a><br>"
+	else
+		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];toggleweeb=weeb;'>(Make weeaboo)</a><br>"
+	return dat
+
+/datum/role/ninja/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	if(href_list["toggleweeb"])
+		if(href_list["toggleweeb"]=="ninja")
+			equip_ninja(antag.current)
+		else
+			equip_weeaboo(antag.current)
 
 /datum/role/ninja/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -33,9 +74,12 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>[custom]</span>")
 		if(GREET_WEEB)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Crazed Weeaboo.<br>The crew has insulted glorious Space Nippon. Equipped with your authentic Space Kimono, your Space Katana that was folded over a million times, and your honobru bushido code, you must implore them to reconsider!</span>")
-			to_chat(antag.current, "<span class='danger'>Remember that guns are not honobru, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
+			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
+			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station.</span>")
+			to_chat(antag.current, "<span class='userdanger'>Your suit will lose pressure in approximately two minutes.</span>")
+			to_chat(antag.current, "<span class='danger'>Find a way inside before your suit's life support systems give out!</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -82,17 +126,21 @@
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 		//Sometimes things are thrown by objects like vending machines or pneumatic cannons
 
-//Eat, or throw for massive damage
-/obj/item/stack/shuriken/attack_self(mob/user)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = usr
-		if(H.mind.GetRole(NINJA))
-			playsound(H, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			H.reagents.add_reagent(NUTRIMENT,8)
-			to_chat(user,"<span class='notice'>You quickly stuff \the [src] down your throat!")
-			//Absolutely no sanity here. A weeb can eat all his pizza rolls if he likes, instantly.
+/obj/item/stack/shuriken/Crossed(atom/movable/A)
+	if(!ishuman(A))
+		return
+	var/mob/living/carbon/human/H = A
+	if(!isninja(H))
+		return
+	var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in H.held_items
+	if(S)
+		to_chat(H,"<span class='notice'>You add the shuriken to the stack.</span>")
+		S.amount += amount
+		qdel(src)
+
 	else
-		return ..()
+		to_chat(H,"<span class='notice'>You pick up the shuriken!</span>")
+		H.put_in_hands(src)
 
 //Shield
 /obj/item/weapon/substitutionhologram
@@ -105,9 +153,9 @@
 	var/activate_message = "Too slow."
 
 /obj/item/weapon/substitutionhologram/IsShield()
-	return TRUE
+	return SHIELD_ADVANCED
 
-/obj/item/weapon/substitutionhologram/on_block(damage, attack_text = "the_attack")
+/obj/item/weapon/substitutionhologram/on_block(damage, atom/blocked)
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(H.mind.GetRole(NINJA))
@@ -173,8 +221,8 @@
 
 //The mighty power glove. Not to be confused with engineering power gloves, of course.
 /obj/item/clothing/gloves/ninja
-	name = "Ninja power glove"
-	desc = "A special sort of gloved that can be used to drain some technologies of power."
+	name = "ninja power glove"
+	desc = "A special sort of glove that can be used to drain some technologies of power."
 	icon_state = "powerfist"
 	item_state = "black"
 	siemens_coefficient = 0
@@ -183,6 +231,8 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
 	var/reservoir = 0
+	var/shuriken_icon = "radial_print"
+	actions_types = list(/datum/action/item_action/make_shuriken, /datum/action/item_action/charge_sword)
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
@@ -191,9 +241,9 @@
 		if(H.mind.GetRole(NINJA))
 			to_chat(H,"<span class='info'>Alt-Click to use drained power. It currently holds [round(reservoir)] energy units.</span>")
 			if(cooldown-world.time>0)
-				to_chat(H,"<span class='warning'>It will be ready to drain an APC in [round((cooldown-world.time)/10)] seconds.</span>")
+				to_chat(H,"<span class='warning'>It will be ready to drain a cell in [round((cooldown-world.time)/10)] seconds.</span>")
 			else
-				to_chat(H,"<span class='good'>It is ready to drain an APC!</span>")
+				to_chat(H,"<span class='good'>It is ready to drain a cell!</span>")
 
 /obj/item/clothing/gloves/ninja/Touch(atom/A, mob/living/user, prox)
 	if(!prox)
@@ -201,22 +251,31 @@
 	if(world.time > cooldown)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
-			if(H.mind.GetRole(NINJA))
-				if(istype(A,/obj/machinery/power/apc))
-					var/obj/machinery/power/apc/APC = A
-					if(APC.cell.charge>10)
-						reservoir += APC.cell.charge
-					APC.cell.use(APC.cell.charge)
-					var/turf/simulated/floor/T = get_turf(APC)
+			if(H.mind.GetRole(NINJA) && A.get_cell())
+				if(draincell(A.get_cell()))
+					if(istype(A,/obj/machinery/power/apc))
+						var/obj/machinery/power/apc/APC = A
+						APC.charging = 0
+						APC.chargecount = 0
+					else if(istype(A,/obj/item/weapon/melee/baton))
+						var/obj/item/weapon/melee/baton/B = A
+						B.status = 0
+					var/turf/simulated/floor/T = get_turf(A)
 					if(istype(T))
 						T.break_tile()
-					//APC.terminal.Destroy()
-					playsound(APC, pick(lightning_sound), 100, 1, "vary" = 0)
-					APC.charging = 0
-					APC.chargecount = 0
-					cooldown = world.time + 10 SECONDS
+					A.update_icon()
+					return TRUE //Will not perform the normal interaction if drained the cell
 	else
 		..()
+
+/obj/item/clothing/gloves/ninja/proc/draincell(var/obj/item/weapon/cell/C,mob/user)
+	if(C.charge<100)
+		return FALSE
+	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
+	reservoir += C.charge
+	C.use(C.charge)
+	cooldown = world.time + 10 SECONDS
+	return TRUE
 
 /obj/item/clothing/gloves/ninja/proc/radial_check_handler(list/arguments)
 	var/event/E = arguments["event"]
@@ -229,8 +288,37 @@
 		return FALSE
 	return TRUE
 
+#define MAKE_SHURIKEN_COST 1000
+#define CHARGE_COST_MULTIPLIER 4
+
+/datum/action/item_action/make_shuriken
+	name = "Make Shuriken"
+	desc = "Fabricate a new shuriken."
+	icon_icon = 'icons/obj/weapons.dmi'
+	button_icon_state = "shuriken"
+
+/datum/action/item_action/make_shuriken/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.make_shuriken(owner)
+
+/datum/action/item_action/charge_sword
+	name = "Charge Sword"
+	desc = "Reset the cooldown on your blade's teleport."
+	icon_icon = 'icons/obj/weapons.dmi'
+	button_icon_state = "katana"
+
+/datum/action/item_action/charge_sword/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.charge_sword(owner)
+
 /obj/item/clothing/gloves/ninja/AltClick(mob/user)
-	if(!user.Adjacent(src) || user.incapacitated())
+	if(!user.Adjacent(src) || user.stat)
 		return
 
 	if(ishuman(user))
@@ -238,8 +326,8 @@
 		if(H.mind.GetRole(NINJA))
 
 			var/list/choices = list(
-				list("Make Shuriken", "radial_cook", "Fabricate a new shuriken. Cost: 1000."),
-				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: 40 per second."),
+				list("Make Shuriken", shuriken_icon, "Fabricate a new shuriken. Cost: [MAKE_SHURIKEN_COST]."),
+				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
 			var/event/menu_event = new(owner = user)
 			menu_event.Add(src, "radial_check_handler")
@@ -255,8 +343,6 @@
 
 	..()
 
-#define MAKE_SHURIKEN_COST 1000
-#define CHARGE_COST_MULTIPLIER 4
 /obj/item/clothing/gloves/ninja/proc/make_shuriken(mob/user)
 	if(reservoir>=MAKE_SHURIKEN_COST)
 		var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in user.held_items
@@ -272,20 +358,25 @@
 		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] to make that!</span>")
 
 /obj/item/clothing/gloves/ninja/proc/charge_sword(mob/user)
-	var/obj/item/weapon/katana/hesfast/oursword = locate(/obj/item/weapon/katana/hesfast) in user.held_items
-	if(oursword)
-		var/difference = (oursword.teleportcooldown-world.time)*CHARGE_COST_MULTIPLIER
-		if(difference<=0)
-			to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
-			return
-		var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
-		oursword.teleportcooldown -= to_subtract
-		reservoir -= to_subtract
-		if(oursword.teleportcooldown < world.time)
-			to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
-		else
-			to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((oursword.teleportcooldown - world.time)/10)] seconds.</span>")
-
+	var/obj/item/weapon/oursword = GetNinjaWeapon(user)
+	if(!oursword)
+		to_chat(user,"<span class='warning'>You need to hold the sword to channel power into it!</span>")
+		return
+	var/datum/daemon/teleport/T = oursword.daemon
+	if(!istype(T))
+		to_chat(user,"<span class='warning'>No power dwells within that blade!</span>")
+		return
+	var/difference = (T.cooldown-world.time)*CHARGE_COST_MULTIPLIER
+	if(difference<=0)
+		to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
+		return
+	var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
+	T.cooldown -= to_subtract/CHARGE_COST_MULTIPLIER
+	reservoir -= to_subtract
+	if(T.cooldown < world.time)
+		to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
+	else
+		to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((T.cooldown - world.time)/10)] seconds.</span>")
 
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
@@ -358,63 +449,193 @@
 		new poster_path(get_turf(src), serial_number)
 	qdel(src)
 
+/*=======
+Ninja Esword
+&
+Helpers For Both Variants
+=======*/
+/proc/GetNinjaWeapon(mob/M)
+	if(!istype(M))
+		return
+	else
+		var/obj/item/weapon/W = locate(/obj/item/weapon/melee/energy/sword/ninja) in M.held_items
+		if(W)
+			return W
+		else
+			return locate(/obj/item/weapon/katana/hesfast) in M.held_items
 
-//Special Katana. Main katana in weaponry.dm
-/obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
-	var/teleportcooldown = 600 //one minute cooldown
-	var/active = FALSE
-	var/activate_message = "Weakness."
+/datum/action/item_action/toggle_teleport
+	name = "Toggle Teleport"
 
-/obj/item/weapon/katana/hesfast/IsShield()
-	return TRUE
+/datum/action/item_action/toggle_teleport/Trigger()
+	var/obj/item/weapon/W = GetNinjaWeapon(owner)
+	if(!istype(W))
+		return
+	if(!ismob(owner) || !isninja(owner))
+		return
+	if(W.daemon && istype(W.daemon,/datum/daemon/teleport))
+		W.daemon.activate()
+		to_chat(owner,"<span class='notice'>Teleportation is now [W.daemon.active ? "active" : "inactive"].</span>")
+		if(!W.daemon.active && istype(W,/obj/item/weapon/katana/hesfast))
+			owner.whisper("Not today, katana-san.")
 
-/obj/item/weapon/katana/hesfast/examine(mob/user)
+/obj/item/weapon/melee/energy/sword/ninja
+	name = "energy katana"
+	desc = "It makes you a little nervous even when it's off."
+	activeforce = 40
+	siemens_coefficient = 0
+	onsound = null
+	actions_types = list(/datum/action/item_action/toggle_teleport)
+
+/obj/item/weapon/melee/energy/sword/ninja/New()
+	..()
+	daemon = new /datum/daemon/teleport(src,"Weakness",null)
+
+/obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
+	if(togglestate) //override
+		..()
+		checkdroppable()
+		return
+	if(isninja(user))
+		..()
+		checkdroppable()
+	else
+		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
+		return
+
+/obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
+	return cant_drop = active //they should be the same value every time
+
+/obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
+	if(istype(W,/obj/item/weapon/melee/energy/sword))
+		return
+	else
+		return ..()
+		
+/obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
 		return
-	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
-	var/message = "<span class='notice'>"
-	if(teleportcooldown < world.time)
-		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
+	if(!daemon)
+		return
+	var/cc = max(round((daemon.cooldown - world.time)/10),0)
+	to_chat(user,"<span class='notice'>The hilt displays its status in the form of a cryptic readout.</span>")
+	to_chat(user,"<span class='notice'>TP: </span>[daemon.active ? "<span class='good'>I":"<span class='warning'>O"]</span><span class='notice'>; CD: [cc ? "[cc]s ([cc*10*CHARGE_COST_MULTIPLIER]J)</span>" : "</span><span class='warning'><B>X</B></span>"]")
+
+/obj/item/weapon/melee/energy/sword/ninja/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(target == user)
+		examine(user)
+		return 1
 	else
-		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
-		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+		return ..()
+		
+/obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
-		message += " Alt-click it to stop teleporting, just in case you enter a no-warp trap room like the ones in Aincrad.</span>"
-	else
-		message += " Alt-click it to enable your teleportation, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
-	to_chat(user, "[message]")
+		toggleActive(user,togglestate = "off")
+		
+/obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
+	if(!isninja(user) && active)
+		toggleActive(user,togglestate = "off")
+		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+		return
+		
+/*=======
+Suit and assorted
+=======*/
 
-/obj/item/weapon/katana/hesfast/AltClick(mob/user)
-	if(!isninja(user))
-		return
-	if(!active)
-		active = TRUE
-		to_chat(user, "<span class='notice'>You will teleport on attacks if you can.</span>")
-	else//i could return on the above but this is much more readable or something
-		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
-		active = FALSE
-
-/obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
-	if(!active || !isninja(user) || !ismob(A) || (A == user)) //sanity
-		return
-	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
-		return
-	var/mob/living/L = A
-	var/turf/SHHHHIIIING = get_step(L.loc, turn(L.dir, 180))
-	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm
-		return
-	teleportcooldown = initial(teleportcooldown) + world.time
-	playsound(src, "sound/weapons/shing.ogg",50,1)
-	user.forceMove(SHHHHIIIING)
-	user.dir = L.dir
-	user.say("[activate_message]")
+/obj/item/clothing/head/helmet/space/ninja
+	name = "elite ninja hood"
+	desc = "What may appear to be a simple black garment is in fact a highly sophisticated nano-weave helmet. Standard issue ninja gear."
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 25)
+	species_fit = list("Human")
+	species_restricted = list("Human")
+	eyeprot = 3
+	body_parts_covered = FULL_HEAD|BEARD
+	
+/obj/item/clothing/head/helmet/space/ninja/apprentice
+	name = "ninja hood"
+	desc = "What may appear to be a simple black garment is in fact a sophisticated nano-weave helmet. Standard issue ninja apprentice gear."
+	eyeprot = 0
+	pressure_resistance = ONE_ATMOSPHERE
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	
+/obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
+	spawn(120 SECONDS)
+		pressure_resistance = 0
+		visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
+	
+/obj/item/clothing/suit/space/ninja
+	name = "elite ninja suit"
+	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for elite Spider Clan assassins."
+	icon_state = "s-ninja"
+	item_state = "s-ninja_suit"
+	slowdown = NO_SLOWDOWN
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/cell,/obj/item/weapon/melee/energy/sword,/obj/item/stack/shuriken,/obj/item/weapon/storage/box/syndie_kit/smokebombs,/obj/item/toy/snappop/smokebomb,/obj/item/weapon/substitutionhologram,/obj/item/mounted/poster/stealth)
+	species_fit = list("Human")
+	species_restricted = list("Human") //only have human sprites :/
+	can_take_pai = 1
+	
+/obj/item/clothing/suit/space/ninja/apprentice
+	name = "ninja suit"
+	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	pressure_resistance = ONE_ATMOSPHERE
+	
+/obj/item/clothing/suit/space/ninja/apprentice/New()
+	..()
+	spawn(150 SECONDS)
+		pressure_resistance = 0
+		visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
+	
+/obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
+	/*if(!isninja(H))
+		if(equipped_slot != slot_wear_suit)
+			to_chat(H, "<span class='danger'>\The [src] beeps menacingly.</span>")
+		else
+			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
+			explosion(H.loc, 0, 0, 1)
+			H.u_equip(src, 1)
+			qdel(src)*/ 
+	//else //Maybe when there's more functionality to warrant the suit exploding.
+	if(equipped_slot == slot_wear_suit)
+		icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
+		H.update_inv_wear_suit()
+	
+/obj/item/clothing/shoes/ninja
+	name = "ninja shoes"
+	desc = "A pair of ninja shoes, excellent for running and even better for smashing skulls."
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	permeability_coefficient = 0.01
+	mag_slow = NO_SLOWDOWN
+	clothing_flags = NOSLIP | MAGPULSE
+	
+/obj/item/clothing/shoes/ninja/apprentice
+	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
+	clothing_flags = NOSLIP
+	
+/obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
+	togglemagpulse(override = TRUE)
+	spawn(130 SECONDS)
+		togglemagpulse(override = TRUE)
+		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
+		
 
-/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
+/obj/item/clothing/mask/gas/voice/ninja
+	name = "ninja mask"
+	desc = "A close-fitting mask that acts both as an air filter and a post-modern fashion statement."
+	icon_state = "s-ninja"
+	mode = 2 //Does this even do anything?
+	canstage = 0
+	actions_types = list()
+	species_fit = list("Human")
+	species_restricted = list("Human")
+		
 /*******************************************
 ****          WEEABOO VARIANTS          ****
 ********************************************/
@@ -425,9 +646,21 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "donkpocket"
 
+/obj/item/stack/shuriken/pizza/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = usr
+		if(H.mind.GetRole(NINJA))
+			playsound(H, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			H.reagents.add_reagent(NUTRIMENT,8)
+			to_chat(user,"<span class='notice'>You quickly stuff \the [src] down your throat!")
+			//Absolutely no sanity here. A weeb can eat all his pizza rolls if he likes, instantly.
+	else
+		return ..()
+
 /obj/item/clothing/gloves/ninja/nentendiepower
 	name = "Nen/tendie power glove"
 	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use on an APC to unleash your hacker skills from community college."
+	shuriken_icon = "radial_cook"
 
 /obj/item/weapon/substitutionhologram/dakimakura
 	name = "dakimakura"
@@ -436,9 +669,6 @@
 	icon_state = "dakimakura"
 	activate_message = "Substitution no jutsu!"
 	reject_message = "You really, really don't want to pick that up."
-
-/obj/item/weapon/katana/hesfast/weeb
-	activate_message = "Pshh... nothing personnel... kid..."
 
 /obj/item/mounted/poster/stealth/anime
 	name = "rolled-up anime poster"
@@ -465,3 +695,43 @@
 			name = "EVA poster"
 		if("animeposter6")
 			name = "Mob Psycho poster"
+
+//Special Katana. Main katana in weaponry.dm
+/obj/item/weapon/katana/hesfast
+	siemens_coefficient = 0
+	cant_drop = TRUE
+	actions_types = list(/datum/action/item_action/toggle_teleport)
+
+/obj/item/weapon/katana/hesfast/New()
+	..()
+	daemon = new /datum/daemon/teleport(src,"sound/weapons/shing.ogg", "Pshh... nothing personnel... kid...")
+
+/obj/item/weapon/katana/hesfast/examine(mob/user)
+	..()
+	if(!isninja(user))
+		return
+	if(!daemon)
+		return
+	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
+	var/message = "<span class='notice'>"
+	if(daemon.cooldown < world.time)
+		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
+	else
+		var/cooldowncalculated = round((daemon.cooldown - world.time)/10)
+		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+	if(daemon.active)
+		message += " Your teleport is active, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
+	else
+		message += " Your teleport is inactive, just like a no-warp trap room in Aincrad.</span>"
+	to_chat(user, "[message]")
+
+/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
+	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
+
+/obj/item/weapon/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(target == user)
+		examine(user)
+		return 1
+	else
+		return ..()

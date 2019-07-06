@@ -17,9 +17,11 @@
 
 	for(var/mob/living/carbon/human/H in player_list)
 
-		if (prob(65) || iswizard(H))
+		if(H.stat == DEAD || !(H.client) || iswizard(H))
 			continue
-		if(H.stat == DEAD || !(H.client))
+
+		if (prob(65))
+			H.equip_survivor(survivor_type)
 			continue
 
 		var/datum/role/R = new survivor_type()
@@ -34,8 +36,15 @@
 
 
 
-/mob/living/carbon/human/proc/equip_survivor(var/datum/role/R)
-	var/summon_type = R.type
+/mob/living/carbon/human/proc/equip_survivor(var/R)
+	var/summon_type
+	if(istype(R,/datum/role))
+		var/datum/role/surv = R
+		summon_type = surv.type
+	else if(ispath(R))
+		summon_type = R
+	else
+		return
 	switch (summon_type)
 		if (/datum/role/survivor/crusader)
 			return equip_swords(R)
@@ -45,7 +54,7 @@
 			return equip_guns(R)
 
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -95,7 +104,7 @@
 		if("uzi")
 			new /obj/item/weapon/gun/projectile/automatic/uzi(get_turf(src))
 		if("microuzi")
-			new /obj/item/weapon/gun/projectile/automatic/uzi/micro(get_turf(src))
+			new /obj/item/weapon/gun/projectile/automatic/microuzi(get_turf(src))
 		if("crossbow")
 			new /obj/item/weapon/gun/energy/crossbow(get_turf(src))
 		if("saw")
@@ -133,8 +142,10 @@
 			new /obj/item/weapon/gun/projectile/colt(get_turf(src))
 		if("lawgiver")
 			new /obj/item/weapon/gun/lawgiver(get_turf(src))
-		if("ion")
-			new /obj/item/weapon/gun/energy/ionrifle/ionpistol(get_turf(src))
+		if("ionpistol")
+			new /obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol(get_turf(src))
+		if("ioncarbine")
+			new /obj/item/weapon/gun/energy/ionrifle/ioncarbine(get_turf(src))
 		if("combustioncannon")
 			new /obj/item/weapon/gun/energy/laser/captain/combustion(get_turf(src))
 		if("laserpistol")
@@ -148,7 +159,7 @@
 		if ("automag")
 			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
 	var/datum/role/survivor/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizeguns
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 	score["gunsspawned"]++
@@ -286,15 +297,15 @@
 			else
 				new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(src))
 		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
-			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded/New, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
+			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
 	var/datum/role/survivor/crusader/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
-	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
+	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
@@ -354,8 +365,6 @@
 			new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(src))
 		if("blind")
 			new /obj/item/weapon/spellbook/oneuse/blind(get_turf(src))
-		if("mindswap")
-			new /obj/item/weapon/spellbook/oneuse/mindswap(get_turf(src))
 		if("forcewall")
 			new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(src))
 		if("knock")
@@ -405,5 +414,5 @@
 		if("ice_barrage")
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 	var/datum/role/wizard/summon_magic/S = R
-	if(S)
+	if(istype(S))
 		S.summons_received = randomizemagic

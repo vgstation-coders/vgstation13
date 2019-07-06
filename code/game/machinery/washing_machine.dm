@@ -49,7 +49,7 @@
 		to_chat(usr, "\The [src] cannot run in this state.")
 		return
 
-	if( locate(/mob,contents) )
+	if( locate(/mob,contents))
 		wash_state = 8
 	else
 		wash_state = 5
@@ -169,7 +169,7 @@
 				qdel(test)
 				test = null
 
-			if(new_jumpsuit_icon_state && new_jumpsuit_item_state && new_jumpsuit_name)
+			if(new_jumpsuit_icon_state && new_jumpsuit_name)
 				for(var/obj/item/clothing/under/J in contents)
 //					to_chat(world, "DEBUG: YUP! FOUND IT!")
 					J.item_state = new_jumpsuit_item_state
@@ -177,7 +177,7 @@
 					J._color = color
 					J.name = new_jumpsuit_name
 					J.desc = new_desc
-			if(new_glove_icon_state && new_glove_item_state && new_glove_name)
+			if(new_glove_icon_state && new_glove_name)
 				for(var/obj/item/clothing/gloves/G in contents)
 //					to_chat(world, "DEBUG: YUP! FOUND IT!")
 					G.item_state = new_glove_item_state
@@ -222,7 +222,7 @@
 		crayon = null
 
 
-	if( locate(/mob,contents) )
+	if( locate(/mob,contents))
 		wash_state = 7
 		gibs_ready = 1
 	else
@@ -265,6 +265,13 @@
 				qdel(G)
 				G = null
 				wash_state = 3
+	else if(istype(W,/obj/item/weapon/holder/animal/corgi)) //Poor Ian.
+		if((wash_state == 1) && hacked)
+			if(user.drop_item(W, src))
+				wash_state = 3
+				var/obj/item/weapon/holder/animal/corgi/dog = locate(/obj/item/weapon/holder/animal/corgi, contents)
+				contents.Add(dog.stored_mob)
+				qdel(locate(contents,/obj/item/weapon/holder/animal/corgi))
 	else if(istype(W,/obj/item/stack/sheet/hairlesshide) || \
 		istype(W,/obj/item/clothing/under) || \
 		istype(W,/obj/item/clothing/mask) || \

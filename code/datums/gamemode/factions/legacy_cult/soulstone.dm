@@ -24,8 +24,8 @@
 /obj/item/device/soulstone/attack(var/mob/living/M, mob/user as mob)
 	if(!istype(M, /mob/living/carbon) && !istype(M, /mob/living/simple_animal))
 		return ..()
-	if(istype(M, /mob/living/carbon/human/manifested))
-		to_chat(user, "The soul stone shard seems unable to pull the soul out of that poor manifested ghost back onto our plane.")
+	if(ismanifested(M))
+		to_chat(user, "\The [src] seems unable to pull the soul out of that powerful body.")
 		return
 	add_logs(user, M, "captured [M.name]'s soul", object=src)
 
@@ -350,7 +350,7 @@
 			to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
 			to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
 			shadeMob.mind.decult()
-	
+
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
 	var/turf/T2 = null

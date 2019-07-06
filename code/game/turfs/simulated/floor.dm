@@ -69,7 +69,7 @@ var/list/wood_icons = list("wood","wood-broken")
 		if(1.0)
 			src.ChangeTurf(get_underlying_turf())
 		if(2.0)
-			switch(pick(1,2;75,3))
+			switch(pick(1,75;2,3))
 				if (1)
 					src.ReplaceWithLattice()
 					if(prob(33))
@@ -540,7 +540,7 @@ turf/simulated/floor/update_icon()
 		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 
 		return
-	else if(isscrewdriver(C))
+	else if(C.is_screwdriver(user))
 		if(is_wood_floor())
 			if(broken || burnt)
 				return

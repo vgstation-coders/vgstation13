@@ -3,8 +3,6 @@
 	name = "magboots"
 	icon_state = "magboots0"
 	var/base_state = "magboots"
-	var/magpulse = 0
-	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH
 //	clothing_flags = NOSLIP //disabled by default
 	actions_types = list(/datum/action/item_action/toggle_magboots)
 	species_fit = list(VOX_SHAPED)
@@ -16,6 +14,14 @@
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
 
+/obj/item/clothing/shoes/magboots/verb/toggle_magboots()
+	set src in usr
+	set name = "Toggle Magboots"
+	set category = "Object"
+	if (!usr || loc != usr)
+		return
+	return togglemagpulse(usr) // Sanity is handled there.
+
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
 	if(!stomp_attack_power)
 		return
@@ -23,14 +29,14 @@
 	var/turf/T = get_turf(src)
 	var/datum/organ/external/affecting = victim.get_organ(user.get_unarmed_damage_zone(victim))
 
-	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
+	if((clothing_flags & MAGPULSE) && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
 		user.visible_message("<span class='danger'>\The [user] slowly raises \his [stomp_boot] above the lying [victim.name], preparing to stomp on \him.</span>")
-		toggle(user)
+		togglemagpulse(user)
 
 		if(do_after(user, src, stomp_delay))
-			if(magpulse)
+			if((clothing_flags & MAGPULSE))
 				return //Magboots enabled
 			if(!victim.lying || (victim.loc != T))
 				return //Victim moved
@@ -44,35 +50,33 @@
 		else
 			return
 
-		toggle(user)
+		togglemagpulse(user)
 		playsound(victim, 'sound/mecha/mechstep.ogg', 100, 1)
 
-/obj/item/clothing/shoes/magboots/proc/toggle(var/mob/user = usr)
+/obj/item/clothing/shoes/magboots/attack_self()
+	src.togglemagpulse()
+	..()
+	return
+
+/obj/item/clothing/shoes/magboots/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())
 		return
-	if(src.magpulse)
-		src.clothing_flags &= ~NOSLIP
-		src.slowdown = NO_SLOWDOWN
-		src.magpulse = 0
+	if(clothing_flags & MAGPULSE)
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
 		icon_state = "[base_state]0"
 		to_chat(user, "You disable the mag-pulse traction system.")
 	else
-		src.clothing_flags |= NOSLIP
-		src.slowdown = mag_slow
-		src.magpulse = 1
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
 		icon_state = "[base_state]1"
 		to_chat(user, "You enable the mag-pulse traction system.")
 	user.update_inv_shoes()	//so our mob-overlays update
 
-/obj/item/clothing/shoes/magboots/attack_self()
-	src.toggle()
-	..()
-	return
-
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	..()
 	var/state = " disabled."
-	if(src.clothing_flags&NOSLIP)
+	if(src.clothing_flags&MAGPULSE)
 		state = " enabled."
 	to_chat(user, "<span class='info'>[anchoring_system_examine][state]</span>")
 
@@ -113,6 +117,14 @@
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)
 
+/obj/item/clothing/shoes/magboots/syndie/elite
+	name = "advanced blood-red magboots"
+	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. These ones include brand new magnet technology stolen from NT. A tag on it says \"Property of Gorlex Marauders\"."
+	icon_state = "syndiemag0"
+	base_state = "syndiemag"
+	species_fit = list(VOX_SHAPED)
+	mag_slow = MAGBOOTS_SLOWDOWN_LOW
+
 //Captain
 /obj/item/clothing/shoes/magboots/captain
 	desc = "A relic predating magboots, these ornate greaves have retractable spikes in the soles to maintain grip."
@@ -128,22 +140,22 @@
 	icon_state = "MAGNIFICENTboots0"
 	base_state = "MAGNIFICENTboots"
 
-/obj/item/clothing/shoes/magboots/captain/toggle(var/mob/user = usr)
+/obj/item/clothing/shoes/magboots/captain/togglemagpulse(var/mob/user = usr)
 	//set name = "Toggle Floor Grip"
 	if(user.isUnconscious())
 		return
-	if(src.magpulse)
-		src.clothing_flags &= ~NOSLIP
-		src.slowdown = NO_SLOWDOWN
-		src.magpulse = 0
+	if((clothing_flags & MAGPULSE))
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
 		icon_state = "[base_state]0"
 		to_chat(user, "You stop ruining the carpet.")
+		return 0
 	else
-		src.clothing_flags |= NOSLIP
-		src.slowdown = mag_slow
-		src.magpulse = 1
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
 		icon_state = "[base_state]1"
 		to_chat(user, "Small spikes shoot from your shoes and dig into the flooring, bracing you.")
+		return 1
 
 
 /obj/item/clothing/shoes/magboots/funk
@@ -154,7 +166,7 @@
 	var/funk_level = 0
 	canremove = 0
 
-/obj/item/clothing/shoes/magboots/funk/toggle(var/mob/user = usr)
+/obj/item/clothing/shoes/magboots/funk/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())
 		return
 	if(funk_level >= 11) //WE HAVE GONE TOO FAR, COMRADE
@@ -162,8 +174,7 @@
 	user.visible_message("<span class = 'warning'>[usr] dials up \the [src]'s funk level to [funk_level+1]</span>")
 	funk_level++
 	if(funk_level >= 2)
-		clothing_flags |= NOSLIP
-		magpulse = 1
+		clothing_flags |= (NOSLIP | MAGPULSE)
 
 /obj/item/clothing/shoes/magboots/funk/step_action()
 	..()
@@ -206,12 +217,11 @@
 		explosion(get_turf(src), round(((1*funk_level)+russian)*0.25), round(((1*funk_level)+russian)*0.5), round((1*funk_level)+russian))
 
 	if(prob((funk_level/russian)*2)) //IT WAS ALWAYS TOO LATE
-		toggle(H)
+		togglemagpulse(H)
 
 /obj/item/clothing/shoes/magboots/funk/OnMobDeath(var/mob/living/carbon/human/wearer)
 	var/mob/living/carbon/human/W = wearer
 	W.drop_from_inventory(src)
 	funk_level = 0
 	canremove = 1
-	clothing_flags &= ~NOSLIP
-	magpulse = 0
+	clothing_flags &= ~(NOSLIP | MAGPULSE)

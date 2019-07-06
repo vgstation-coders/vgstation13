@@ -25,14 +25,12 @@
 
 /mob/living/carbon/human/krampus
 	real_name = "Krampus"
-	status_flags = GODMODE|CANPUSH
+	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
 
-	New(var/new_loc)
-		h_style = "Bald"
-		..(new_loc, "Krampus")
-		maxHealth=999999
-		health=999999
-
+/mob/living/carbon/human/krampus/New(var/new_loc)
+  ..(new_loc, "Krampus")
+  maxHealth=999999
+  health=999999
 
 // I'M THE KRAMPUS, BITCH
 /mob/living/carbon/human/krampus/Stun(amount)

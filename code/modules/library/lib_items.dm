@@ -45,13 +45,13 @@
 		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 3)
 		qdel(src)
 
-/obj/structure/bookcase/attackby(obj/O as obj, mob/user as mob)
+/obj/structure/bookcase/attackby(obj/item/O as obj, mob/user as mob)
 	if(busy) //So that you can't mess with it while deconstructing
 		return
 	if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
 		update_icon()
-	else if(isscrewdriver(O) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
+	else if(O.is_screwdriver(user) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
 		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
 		return
 	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent
@@ -148,32 +148,32 @@
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/medical_cloning(src)
-		update_icon()
+/obj/structure/bookcase/manuals/medical/New()
+	..()
+	new /obj/item/weapon/book/manual/medical_cloning(src)
+	update_icon()
 
 
 /obj/structure/bookcase/manuals/engineering
 	name = "Engineering Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/engineering_construction(src)
-		new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-		new /obj/item/weapon/book/manual/engineering_hacking(src)
-		new /obj/item/weapon/book/manual/engineering_guide(src)
-		new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-		new /obj/item/weapon/book/manual/robotics_cyborgs(src)
-		update_icon()
+/obj/structure/bookcase/manuals/engineering/New()
+	..()
+	new /obj/item/weapon/book/manual/engineering_construction(src)
+	new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
+	new /obj/item/weapon/book/manual/engineering_hacking(src)
+	new /obj/item/weapon/book/manual/engineering_guide(src)
+	new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
+	new /obj/item/weapon/book/manual/robotics_cyborgs(src)
+	update_icon()
 
 /obj/structure/bookcase/manuals/research_and_development
 	name = "R&D Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/research_and_development(src)
-		update_icon()
+/obj/structure/bookcase/manuals/research_and_development/New()
+	..()
+	new /obj/item/weapon/book/manual/research_and_development(src)
+	update_icon()
 
 
 /*
@@ -225,6 +225,8 @@
 	if(carved)
 		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
 		return
+	if (!isobserver(user))
+		playsound(user, "pageturn", 50, 1, -5)
 	if(src.dat)
 		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
 		if(!isobserver(user))

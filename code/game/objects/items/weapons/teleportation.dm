@@ -169,6 +169,7 @@ Frequency:
 /obj/item/weapon/hand_tele/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Alt-Click the hand tele to set portal destination. Defaults to your last choice.</span>")
+	to_chat(user, "<span class='notice'>Charge: [charge]/[HANDTELE_MAX_CHARGE] ([charge/HANDTELE_PORTAL_COST]/[HANDTELE_MAX_CHARGE/HANDTELE_PORTAL_COST])</span>")
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
@@ -213,12 +214,13 @@ Frequency:
 /obj/item/weapon/hand_tele/proc/choose_destination(var/mob/user)
 	var/list/L = list(  )
 	for(var/obj/machinery/computer/teleporter/R in machines)
-		for(var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
-			if(R.locked && !R.one_time_use)
-				if(com.engaged)
-					L["[R.id] (Active)"] = R.locked
-				else
-					L["[R.id] (Inactive)"] = R.locked
+		for(var/obj/machinery/teleport/station/S in orange(1,R))
+			for(var/obj/machinery/teleport/hub/com in orange(1,S))
+				if(R.locked && !R.one_time_use)
+					if(com.engaged)
+						L["[R.id] (Active)"] = R.locked
+					else
+						L["[R.id] (Inactive)"] = R.locked
 
 	var/list/turfs = new/list()
 

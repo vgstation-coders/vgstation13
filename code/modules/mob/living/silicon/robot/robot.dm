@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/list/hud_list = list()
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
@@ -291,7 +290,7 @@ var/list/cyborg_list = list()
 		braintype = "Robot"
 	else
 		if(istype(mmi, /obj/item/device/mmi/posibrain))
-			braintype = "Android"
+			braintype = "Droid"
 		else
 			braintype = "Cyborg"
 
@@ -758,14 +757,14 @@ var/list/cyborg_list = list()
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(isscrewdriver(W) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
-	else if(isscrewdriver(W) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 			if(can_diagnose())
@@ -819,6 +818,25 @@ var/list/cyborg_list = list()
 	else
 		if(W.force > 0)
 			spark(src, 5, FALSE)
+		if(stat == DEAD && W.force > 15)
+			visible_message("<span class='danger'>[user] begins ripping [src] apart with \the [W]!")
+			if(do_after(user, src, 3 SECONDS))
+				playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
+				if(prob(max((W.force/7.5)**3,25))) //15-21f - 25% chance, 22f - 27%, 30f - 64%, 35f - 99%
+					visible_message("<span class='danger'>[user] tore [src] apart with \the [W]!")
+					if(prob(25))
+						new /obj/item/robot_parts/l_leg(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/r_leg(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/l_arm(loc)
+					if(prob(25))
+						new /obj/item/robot_parts/r_arm(loc)
+					gib()
+				else
+					visible_message("<span class='danger'>[src] groans under the force of \the [W]!")
+					shake(1, 3)
+				return
 		return ..()
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
@@ -1050,7 +1068,7 @@ var/list/cyborg_list = list()
 
 
 /mob/living/silicon/robot/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(usr && (src != usr))
 		return
@@ -1095,27 +1113,6 @@ var/list/cyborg_list = list()
 			to_chat(src, "Module isn't activated")
 		installed_modules()
 
-	if(href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawc"])
-		switch(lawcheck[L+1])
-			if("Yes")
-				lawcheck[L+1] = "No"
-			if("No")
-				lawcheck[L+1] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-
-	if(href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawi"])
-		switch(ioncheck[L])
-			if("Yes")
-				ioncheck[L] = "No"
-			if("No")
-				ioncheck[L] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-	if(href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
-		statelaws()
 	if(href_list["vision"])
 		sensor_mode()
 		installed_modules()
@@ -1177,7 +1174,7 @@ var/list/cyborg_list = list()
 		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
-	if(mind && mind.special_role && emagged)
+	if(istraitor(src) && emagged)
 		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE

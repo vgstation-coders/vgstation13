@@ -4,6 +4,7 @@
 #define COMM_SCREEN_MESSAGES	3
 #define COMM_SCREEN_SECLEVEL	4
 #define COMM_SCREEN_ERT			5
+#define COMM_SCREEN_SHUTTLE_LOG 6
 
 #define UNAUTH 0
 #define AUTH_HEAD 1
@@ -15,6 +16,8 @@ var/global/ports_open = TRUE
 #define SHUTTLE_RECALL  -1
 #define SHUTTLE_CALL     1
 #define SHUTTLE_TRANSFER 2
+
+var/list/shuttle_log = list()
 
 /shuttle_call
 	var/direction=0
@@ -218,7 +221,9 @@ var/global/ports_open = TRUE
 					return
 				var/response = alert("Are you sure you wish to call the shuttle?", "Confirm", "Yes", "Cancel")
 				if(response == "Yes")
-					call_shuttle_proc(usr, justification)
+					if(call_shuttle_proc(usr, justification))
+						if(!isobserver(usr))
+							shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -232,6 +237,8 @@ var/global/ports_open = TRUE
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
 					recall_shuttle(usr)
+					if(!isobserver(usr))
+						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)]."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -337,7 +344,7 @@ var/global/ports_open = TRUE
 			if (I || isAdminGhost(usr))
 				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
-						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems") as null|text
+						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
 						if(!reason || !(usr in view(1,src)))
 							return
 						log_game("[key_name(usr)] closed the port to traders for [reason].")
@@ -364,7 +371,8 @@ var/global/ports_open = TRUE
 					to_chat(usr, "<span class='warning'>This action requires either a red alert or head of security authorization.</span>")
 			else
 				to_chat(usr, "<span class='warning'>You must wear an ID for this function.</span>")
-
+		if("ViewShuttleLog")
+			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
 	return 1
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
@@ -397,7 +405,12 @@ var/global/ports_open = TRUE
 	data["menu_state"] = data["is_ai"] ? ai_menu_state : menu_state
 	data["emagged"] = emagged
 	data["authenticated"] = (isAdminGhost(user) ? AUTH_CAPT : authenticated)
-	data["screen"] = getMenuState(usr)
+	var/current_screen = getMenuState(usr)
+	if(current_screen == COMM_SCREEN_SHUTTLE_LOG)
+		data["shuttle_log"] = list()
+		for(var/entry in shuttle_log)
+			data["shuttle_log"] += list(list("text" = entry))
+	data["screen"] = current_screen
 
 	data["stat_display"] = list(
 		"type"=display_type,
@@ -552,7 +565,7 @@ var/global/ports_open = TRUE
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
 	world << sound('sound/AI/shuttlecalled.ogg')
 
-	return
+	return 1
 
 /proc/init_shift_change(var/mob/user, var/force = 0)
 	if ((!( ticker ) || emergency_shuttle.location))

@@ -109,7 +109,7 @@
 		hud_list[IMPLOYAL_HUD] = holder2
 		hud_list[IMPCHEM_HUD] = holder3
 
-	if(hud_updateflag & 1 << SPECIALROLE_HUD)
+	/*if(hud_updateflag & 1 << SPECIALROLE_HUD)
 		var/image/holder = hud_list[SPECIALROLE_HUD]
 		holder.icon_state = "hudblank"
 
@@ -132,5 +132,5 @@
 				if("Vampire") // TODO: Check this
 					holder.icon_state = "hudvampire"
 
-			hud_list[SPECIALROLE_HUD] = holder
+			hud_list[SPECIALROLE_HUD] = holder*/
 	hud_updateflag = 0

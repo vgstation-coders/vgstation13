@@ -22,7 +22,7 @@
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 	var/table_type = /obj/structure/table
 	sheet_type = /obj/item/stack/sheet/metal
-	var/sheet_amount = 1
+	var/sheet_amount = 2
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
@@ -50,6 +50,13 @@
 			new /obj/item/weapon/table_parts/glass(user.loc)
 			to_chat(user, "<span class='notice'>You add glass panes to \the [name].</span>")
 			glass.use(1)
+			qdel(src)
+	if (istype(W, /obj/item/stack/sheet/glass/plasmaglass))
+		var/obj/item/stack/sheet/glass/plasma = W
+		if (plasma.amount >= 1)
+			new /obj/item/weapon/table_parts/glass/plasma(user.loc)
+			to_chat(user, "<span class='notice'>You add plasma glass panes to \the [name].</span>")
+			plasma.use(1)
 			qdel(src)
 /obj/item/weapon/table_parts/attack_self(mob/user)
 	if(locate(/obj/structure/table) in get_turf(user))
@@ -134,6 +141,24 @@
 /obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
 		drop_stack(/obj/item/stack/sheet/glass/glass, loc, 1, user)
+		drop_stack(sheet_type, loc, 1, user)
+		qdel(src)
+
+/obj/item/weapon/table_parts/glass/plasma
+	name = "glass table parts"
+	desc = "Glass table parts in solid plasma. As stylish as they are sturdy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "plasma_tableparts"
+	starting_materials = list(MAT_PLASMA = 3750)
+	w_type = RECYK_GLASS
+	melt_temperature=MELTPOINT_PLASMA
+	flags = FPRINT
+	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
+	table_type = /obj/structure/table/glass/plasma
+
+/obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
+	if (iswrench(W))
+		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, 1, user)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 

@@ -55,6 +55,11 @@
 	var/path[] = new() // used for pathing
 	var/frustration
 
+/obj/machinery/bot/farmbot/vox_garden_farmbot
+	name = "Special Vox Trader Farmbot"
+	req_access = list()
+	req_one_access =  list(access_hydroponics, access_trade)
+
 /obj/machinery/bot/farmbot/New()
 	..()
 	src.icon_state = "[src.icon_initial][src.on]"
@@ -524,12 +529,12 @@
 	var/created_name = "Farmbot" //To preserve the name if it's a unique farmbot I guess
 	w_class = W_CLASS_MEDIUM
 
-	New()
-		..()
-		spawn(4) // If an admin spawned it, it won't have a watertank it, so lets make one for em!
-			var tank = locate(/obj/structure/reagent_dispensers/watertank) in contents
-			if( !tank )
-				new /obj/structure/reagent_dispensers/watertank(src)
+/obj/item/weapon/farmbot_arm_assembly/New()
+	..()
+	spawn(4) // If an admin spawned it, it won't have a watertank it, so lets make one for em!
+		var tank = locate(/obj/structure/reagent_dispensers/watertank) in contents
+		if( !tank )
+			new /obj/structure/reagent_dispensers/watertank(src)
 
 
 /obj/structure/reagent_dispensers/watertank/attackby(var/obj/item/robot_parts/S, mob/user as mob)

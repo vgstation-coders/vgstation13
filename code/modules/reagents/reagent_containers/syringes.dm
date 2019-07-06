@@ -254,7 +254,7 @@
 			return
 
 		var/hit_area = affecting.display_name
-		if((user != target) && H.check_shields(7, "the [src.name]"))
+		if((user != target) && H.check_shields(7, src))
 			return
 
 		// Check for protection on the targeted area and show messages
@@ -375,6 +375,17 @@
 /obj/item/weapon/reagent_containers/syringe/giant/chloral/New()
 	..()
 	reagents.add_reagent(CHLORALHYDRATE, 50)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/syndi
+	name = "syringe (syndicate mix)"
+	desc = "Contains cyanide, chloral hydrate and lexorin. Something tells you it might be lethal on arrival."
+/obj/item/weapon/reagent_containers/syringe/syndi/New()
+	..()
+	reagents.add_reagent(CYANIDE, 5)
+	reagents.add_reagent(CHLORALHYDRATE, 5)
+	reagents.add_reagent(LEXORIN, 5)
 	mode = SYRINGE_INJECT
 	update_icon()
 

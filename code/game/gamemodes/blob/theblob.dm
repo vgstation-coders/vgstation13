@@ -67,7 +67,6 @@ var/list/blob_overminds = list()
 	var/mob/camera/blob/overmind = null
 	var/destroy_sound = "sound/effects/blobsplat.ogg"
 
-	//var/looks = "new" HALLOWEEN
 	var/looks = "new"
 
 	// A note to the beam processing shit.
@@ -326,11 +325,8 @@ var/list/blob_looks_player = list(//Options available to players
 	for(var/obj/effect/blob/B in orange(src,1))
 		B.update_icon()
 
-/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0, var/mob/camera/blob/source = null)//Todo: Fix spaceblob expand
-	/*
-	if(time_since_last_pulse >= world.time)
-		return
-	*/
+/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0, var/mob/camera/blob/source = null)
+
 	time_since_last_pulse = world.time
 
 	//set background = 1
@@ -421,10 +417,10 @@ var/list/blob_looks_player = list(//Options available to players
 	return 1
 
 
-/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)
+/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null, var/special = FALSE)
 	if(!ispath(type))
 		error("[type] is an invalid type for the blob.")
-	if("[type]" == "/obj/effect/blob/core")
+	if(special) //Send additional information to the New()
 		new type(src.loc, 200, null, 1, M, newlook = looks)
 	else
 		var/obj/effect/blob/B = new type(src.loc, newlook = looks)

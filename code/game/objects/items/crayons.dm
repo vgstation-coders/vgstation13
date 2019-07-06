@@ -66,7 +66,7 @@ var/global/list/all_graffitis = list(
 	colour = "#DA00FF"
 	shadeColour = "#810CFF"
 	colourName = "purple"
-	
+
 /obj/item/toy/crayon/black
 	icon_state = "crayonblack"
 	colour = "#222222"
@@ -111,10 +111,13 @@ var/global/list/all_graffitis = list(
 		return
 
 	if(istype(target, /turf/simulated))
-		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
+		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") as null|anything in list("graffiti","rune","letter","text")
 		var/preference
 		var/alignment = "center" //For text
 		var/drawtime = 50
+
+		if(!drawtype)
+			return
 
 		switch(drawtype)
 			if("letter")
@@ -192,7 +195,7 @@ var/global/list/all_graffitis = list(
 				C.maptext = "[maptext_start][preference][maptext_end]"
 
 			else
-				C = new /obj/effect/decal/cleanable/crayon(target,colour,shadeColour,drawtype)
+				C = new /obj/effect/decal/cleanable/crayon(target, main = colour, shade = shadeColour, type = drawtype)
 
 			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
 				C.forceMove(get_turf(user))

@@ -47,6 +47,9 @@
 	name = "Circuit board (Security Cameras)"
 	desc = "A circuit board for running a computer used for viewing security cameras."
 	build_path = /obj/machinery/computer/security
+/obj/item/weapon/circuitboard/security/wooden_tv
+	name = "Circuit board (Security Cameras TV)"
+	build_path = /obj/machinery/computer/security/wooden_tv
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
@@ -414,7 +417,7 @@
 				else
 					to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				return 1
-			if(isscrewdriver(P) && circuit)
+			if(P.is_screwdriver(user) && circuit)
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				user.visible_message("[user] screws the circuit board into place.", "You screw the circuit board into place.", "You hear metallic sounds.")
 				src.state = 2
@@ -429,7 +432,7 @@
 				src.circuit = null
 				return 1
 		if(2)
-			if(isscrewdriver(P) && circuit)
+			if(P.is_screwdriver(user) && circuit)
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				user.visible_message("[user] unfastens the circuit board.", "You unfasten the circuit board.", "You hear metallic sounds.")
 				src.state = 1
@@ -480,7 +483,7 @@
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
-			if(isscrewdriver(P))
+			if(P.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(!circuit.build_path) // the board has been soldered away!
 					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")

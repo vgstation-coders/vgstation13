@@ -362,6 +362,17 @@ Class Procs:
 			update_multitool_menu(usr)
 			return 1
 
+/obj/machinery/proc/is_on_same_z(var/mob/user)
+	var/turf/T = get_turf(user)
+	if(!isAI(user) && T.z != z && user.z != map.zCentcomm)
+		return FALSE
+	return TRUE
+
+/obj/machinery/proc/is_in_range(var/mob/user)
+	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		return FALSE
+	return TRUE
+
 /obj/machinery/Topic(href, href_list)
 	..()
 	if(stat & (NOPOWER|BROKEN))
@@ -377,12 +388,10 @@ Class Procs:
 		if (!usr.dexterity_check())
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return 1
-		var/turf/T = get_turf(usr)
-		if(!isAI(usr) && T.z != z)
-			if(usr.z != map.zCentcomm)
-				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
-				return 1
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 1
+		if(!is_in_range(usr))
 			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
@@ -461,7 +470,7 @@ Class Procs:
 		if(prob(destroy_chance))
 			qdel(I)
 		else
-			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)
+			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src.reagents && src.reagents.total_volume)
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
@@ -490,7 +499,7 @@ Class Procs:
 	spillContents(destroy_chance)
 	qdel(src)
 
-/obj/machinery/proc/togglePanelOpen(var/obj/toggleitem, var/mob/user)
+/obj/machinery/proc/togglePanelOpen(var/obj/item/toggleitem, var/mob/user)
 	panel_open = !panel_open
 	if(panel_open)
 		if(icon_state_open)
@@ -499,7 +508,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(isscrewdriver(toggleitem))
+	if(toggleitem.is_screwdriver(user))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 	update_icon()
 	return 1
@@ -566,8 +575,11 @@ Class Procs:
 /obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
 	return emag_cost
 
-/obj/machinery/attackby(var/obj/O, var/mob/user)
+/obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
+
+	add_fingerprint(user)
+
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
@@ -588,7 +600,7 @@ Class Procs:
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
 
-	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
+	if(O.is_screwdriver(user) && machine_flags & SCREWTOGGLE)
 		if(machine_flags & SECUREDPANEL)
 			return toggleSecuredPanelOpen(O, user)
 		return togglePanelOpen(O, user)
@@ -702,12 +714,12 @@ Class Procs:
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
-		else
-			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
-			for(var/var/obj/item/C in component_parts)
-				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		if(shouldplaysound)
 			W.play_rped_sound()
+		else
+			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
+			for(var/obj/item/C in component_parts)
+				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0
 

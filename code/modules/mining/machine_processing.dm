@@ -415,7 +415,7 @@
 
 		credits += mat.value*O.amount //Dosh.
 
-		qdel(O)
+		returnToPool(O)
 
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (NOPOWER | BROKEN))
@@ -442,7 +442,7 @@
 				ore.removeAmount(ore_id, 1)
 				score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
-			getFromPool(R.yieldtype, out_T)
+			drop_stack(R.yieldtype, out_T)
 
 			sheets_this_tick++
 			if(sheets_this_tick >= sheets_per_tick)

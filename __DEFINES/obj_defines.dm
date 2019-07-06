@@ -20,3 +20,14 @@ var/list/qualityByString = list(
 		EXCELLENT = "Excellent",
 		MASTERWORK = "Masterwork",
 		LEGENDARY = "Legendary")
+
+//Daemons
+#define DAEMON_EXAMINE 	1
+#define DAEMON_AFTATT	2
+
+// Shields
+// SHIELD_xxx is to be given to shields
+// IGNORE_xxx is to be given to thrown items
+// If "IGNORE" is higher than "SHIELD", then the thrown item will always pass.
+#define IGNORE_SOME_SHIELDS 1
+#define SHIELD_ADVANCED 2

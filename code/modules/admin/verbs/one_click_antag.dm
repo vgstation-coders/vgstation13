@@ -17,9 +17,8 @@ client/proc/one_click_antag()
 		<a href='?src=\ref[src];makeAntag=4'>Make Cult</a><br>
 		<a href='?src=\ref[src];makeAntag=5'>Make Malf AI</a><br>
 		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=8'>Make Vampires</a><br>
-		<a href='?src=\ref[src];makeAntag=9'>Make Aliens (Requires Ghosts)</a><br>
+		<a href='?src=\ref[src];makeAntag=7'>Make Vampires</a><br>
+		<a href='?src=\ref[src];makeAntag=8'>Make Aliens (Requires Ghosts)</a><br>
 		"}
 
 	usr << browse(dat, "window=oneclickantag;size=400x400")
@@ -223,8 +222,7 @@ client/proc/one_click_antag()
 
 	new_character.gender = pick(MALE,FEMALE)
 
-	var/datum/preferences/A = new()
-	A.randomize_appearance_for(new_character)
+	new_character.randomise_appearance_for(new_character.gender)
 	new_character.generate_name()
 	new_character.age = rand(17,45)
 
@@ -241,8 +239,7 @@ client/proc/one_click_antag()
 
 	new_syndicate_commando.gender = pick(MALE, FEMALE)
 
-	var/datum/preferences/A = new()//Randomize appearance for the commando.
-	A.randomize_appearance_for(new_syndicate_commando)
+	new_syndicate_commando.randomise_appearance_for(new_syndicate_commando.gender)
 
 	new_syndicate_commando.real_name = "[!syndicate_leader_selected ? syndicate_commando_rank : syndicate_commando_leader_rank] [syndicate_commando_name]"
 	new_syndicate_commando.name = new_syndicate_commando.real_name
@@ -267,7 +264,7 @@ client/proc/one_click_antag()
 	var/mob/living/carbon/human/new_vox = new(spawn_location.loc)
 
 	new_vox.setGender(pick(MALE, FEMALE))
-	new_vox.h_style = "Short Vox Quills"
+	new_vox.my_appearance.h_style = "Short Vox Quills"
 	new_vox.regenerate_icons()
 
 	new_vox.age = rand(12,20)

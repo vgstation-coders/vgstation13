@@ -78,7 +78,7 @@
 		if(istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
 			var/max_multiplier = round(src.amount / R.req_amount)
-			var/title as text
+			var/title
 			var/can_build = 1
 			can_build = can_build && (max_multiplier>0)
 
@@ -163,6 +163,10 @@
 
 /obj/item/stack/proc/use(var/amount)
 	ASSERT(isnum(src.amount))
+
+	if (src.amount <= 0)
+		qdel(src) // We don't have anything left
+		return
 
 	if(src.amount>=amount)
 		src.amount-=amount
@@ -254,7 +258,7 @@
 		if (amount >= max_amount)
 			to_chat(user, "\The [src] cannot hold anymore [CORRECT_STACK_NAME(src)].")
 			return 1
-		var/to_transfer as num
+		var/to_transfer
 		if (user.get_inactive_hand()==S)
 			to_transfer = 1
 		else
@@ -309,6 +313,8 @@
  */
 
 /proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
+	if(!ispath(new_stack_type, /obj/item/stack))
+		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
 		if(S.can_stack_with(new_stack_type))
 			if(S.max_amount >= S.amount + add_amount)
@@ -316,9 +322,13 @@
 				if(user)
 					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
 				return S
-
-	var/obj/item/stack/S = new new_stack_type(loc)
-	S.amount = add_amount
+	var/obj/item/stack/S = new_stack_type
+	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
+		if (add_amount <= 0)
+			continue
+		S = new new_stack_type(loc)
+		S.amount = min(add_amount, S.max_amount)
+		add_amount -= S.amount
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

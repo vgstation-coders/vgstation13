@@ -85,7 +85,7 @@
 ********************/
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
-		if(src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
+		if(src.broken == 2 && O.is_screwdriver(user)) // If it's broken and they're using a screwdriver
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -115,23 +115,24 @@
 			return 1
 	else if(src.dirty==100) // The microwave is all dirty so can't be used!
 		var/obj/item/weapon/reagent_containers/R = O
-		if(istype(R)) // If they're trying to clean it then let them
-			if(R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))
-				user.visible_message( \
-					"<span class='notice'>[user] starts to clean the microwave.</span>", \
-					"<span class='notice'>You start to clean the microwave.</span>" \
-				)
-				if (do_after(user, src,20))
+		var/obj/item/weapon/soap/S = O
+		if((istype(R) && (R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))) || istype(S)) // If they're trying to clean it then let them
+			user.visible_message( \
+				"<span class='notice'>[user] starts to clean the microwave.</span>", \
+				"<span class='notice'>You start to clean the microwave.</span>" \
+			)
+			if (do_after(user, src,20))
+				if(istype(R))
 					R.reagents.remove_reagent(CLEANER,5)
-					user.visible_message( \
-						"<span class='notice'>[user]  has cleaned  the microwave.</span>", \
-						"<span class='notice'>You have cleaned the microwave.</span>" \
-					)
-					src.dirty = 0 // It's clean!
-					src.broken = 0 // just to be sure
-					src.icon_state = "mw"
-					src.flags |= OPENCONTAINER
-					return 1
+				user.visible_message( \
+					"<span class='notice'>[user] has cleaned the microwave.</span>", \
+					"<span class='notice'>You have cleaned the microwave.</span>" \
+				)
+				src.dirty = 0 // It's clean!
+				src.broken = 0 // just to be sure
+				src.icon_state = "mw"
+				src.flags |= OPENCONTAINER
+				return 1
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
 			return 1

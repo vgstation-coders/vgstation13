@@ -62,7 +62,7 @@
 ///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
 //	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
-/obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/link/context)
+/obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/list/context)
 	if(istype(O, /obj/machinery/cloning/clonepod))
 		pod1 = O
 		pod1.connected = src
@@ -410,7 +410,7 @@
 	if(istype(subject, /mob/living/slime_pile))
 		var/mob/living/slime_pile/S = subject
 		subject = S.slime_person
-	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
+	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
 	if(!subject.has_brain())

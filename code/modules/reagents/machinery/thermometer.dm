@@ -136,3 +136,19 @@
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	
+/obj/item/weapon/thermometer/byond
+	desc = "A device that measures temperature using the expansion of blood when exposed to heat. There's an imprint on the glass that says \"Made in BYOND\"."
+	icon_state = "therm_byond"
+
+/obj/item/weapon/thermometer/byond/initial_thermometer()
+	create_reagents(5)
+	reagents.add_reagent(BLOOD, 5)
+
+/obj/item/weapon/thermometer/byond/update_icon()
+	if(last_temperature >= 373.15)
+		icon_state = "therm_byond_high"
+	else if(last_temperature <= 273.15)
+		icon_state = "therm_byond_low"
+	else
+		icon_state = "therm_byond"

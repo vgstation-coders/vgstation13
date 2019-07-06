@@ -242,17 +242,19 @@
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
 		else
 			if(get_held_item_by_index(hand_index))
-				user.drop_from_inventory(item_in_hand)
-				item_in_hand.forceMove(src)
-				var/obj/item/I = held_items[hand_index]
-				user.put_in_hands(I)
-				held_items[hand_index] = item_in_hand
-				to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+				if(user.drop_item(item_in_hand,src))
+					var/obj/item/I = held_items[hand_index]
+					user.put_in_hands(I)
+					held_items[hand_index] = item_in_hand
+					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+				else
+					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 			else
-				user.drop_from_inventory(item_in_hand)
-				item_in_hand.forceMove(src)
-				held_items[hand_index] = item_in_hand
-				to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+				if(user.drop_item(item_in_hand,src))
+					held_items[hand_index] = item_in_hand
+					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+				else
+					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 
 	else if(href_list["item"])
 		if(trapped_strip)
@@ -271,22 +273,24 @@
 		else
 			if(clothing[item_slot])
 				if(canEquip(user, item_slot,item_in_hand))
-					user.drop_from_inventory(item_in_hand)
-					item_in_hand.forceMove(src)
-					var/obj/item/I = clothing[item_slot]
-					user.put_in_hands(I)
-					clothing[item_slot] = item_in_hand
-					add_fingerprint(user)
-					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+					if(user.drop_item(item_in_hand,src))
+						var/obj/item/I = clothing[item_slot]
+						user.put_in_hands(I)
+						clothing[item_slot] = item_in_hand
+						add_fingerprint(user)
+						to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+					else
+						to_chat(user, "<span class='warning'>You can't drop that!</span>")
 				else
 					return
 			else
 				if(canEquip(user, item_slot,item_in_hand))
-					user.drop_from_inventory(item_in_hand)
-					item_in_hand.forceMove(src)
-					clothing[item_slot] = item_in_hand
-					add_fingerprint(user)
-					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+					if(user.drop_item(item_in_hand,src))
+						clothing[item_slot] = item_in_hand
+						add_fingerprint(user)
+						to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+					else
+						to_chat(user, "<span class='warning'>You can't drop that!</span>")
 				else
 					return
 

@@ -305,22 +305,22 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
-#define FACE			EYES|MOUTH|BEARD
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
 #define BEARD			32768
-#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
-#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
-#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
-#define ARMS			ARM_LEFT|ARM_RIGHT		//384
-#define HANDS			HAND_LEFT|HAND_RIGHT //1536
-#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		ARMS|LEGS|FULL_TORSO
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -328,7 +328,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEFACE			FACE
 #define HIDEHEADHAIR 		EARS|HEAD
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			HIDEHEADHAIR|HIDEBEARDHAIR
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
@@ -579,7 +579,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
-#define PACIFIABLE 16		//Should a mob have this flag in their status_flags, they will be able to run is_pacified(), not all mobs call is_pacified however.
+#define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
@@ -1017,11 +1017,15 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CAPE	  18
 #define STARTING_BLOOD 10
 
+#define VAMP_FAILURE -1
+
 // Moved from machine_interactions.dm
 #define STATION_Z  1
 #define CENTCOMM_Z 2
 #define TELECOMM_Z 3
+#define DERELICT_Z 4
 #define ASTEROID_Z 5
+#define SPACEPIRATE_Z 6
 
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
@@ -1165,7 +1169,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define DELAY_MOVE    1
 #define DELAY_ATTACK  2
 #define DELAY_SPECIAL 4
-#define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL)
+#define DELAY_THROW 8
+#define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL|DELAY_THROW)
 
 //singularity defines
 #define STAGE_ONE 	1
@@ -1392,6 +1397,7 @@ var/proccalls = 1
 #define MODE_CULTCHAT "cultchat"
 #define MODE_ANCIENT "ancientchat"
 #define MODE_MUSHROOM "sporechat"
+#define MODE_BORER "borerchat"
 
 //Hardcore mode stuff
 
@@ -1467,7 +1473,6 @@ var/proccalls = 1
 #define EVENT_OBJECT_INDEX "o"
 #define EVENT_PROC_INDEX "p"
 
-#define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.

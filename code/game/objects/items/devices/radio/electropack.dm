@@ -141,6 +141,7 @@
 		spark(M)
 
 		M.Knockdown(10)
+		M.Stun(10)
 
 	if(master && isWireCut(1))
 		master.receive_signal()

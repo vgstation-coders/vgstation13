@@ -200,6 +200,7 @@
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
 	var/trip_prob = 90
+	ignore_blocking = IGNORE_SOME_SHIELDS
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.throw_item(target)
@@ -457,7 +458,7 @@
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(IED)
 			IED.forceMove(get_turf(src.loc))
 			IED = null
@@ -872,35 +873,34 @@
 //	to_chat(world, "[angle] [(get_dist(user, A) - 1)]")
 	user.Beam(A, "lightning", 'icons/obj/zap.dmi', 50, 15)
 /*Testing
-proc
     //  creates an /icon object with 360 states of rotation
-    rotate_icon(file, state, step = 1, aa = FALSE)
-        var icon/base = icon(file, state)
+proc/rotate_icon(file, state, step = 1, aa = FALSE)
+	var icon/base = icon(file, state)
 
-        var w, h, w2, h2
-        if(aa)
-            aa ++
-            w = base.Width()
-            w2 = w * aa
-            h = base.Height()
-            h2 = h * aa
+	var w, h, w2, h2
+	if(aa)
+		aa ++
+		w = base.Width()
+		w2 = w * aa
+		h = base.Height()
+		h2 = h * aa
 
-        var icon{result = icon(base); temp}
+	var icon{result = icon(base); temp}
 
-        for(var/angle in 0 to 360 step step)
-            if(angle == 0  )
-            	continue
-            if(angle == 360)
-            	continue
+	for(var/angle in 0 to 360 step step)
+		if(angle == 0  )
+			continue
+		if(angle == 360)
+			continue
 
-            temp = icon(base)
+		temp = icon(base)
 
-            if(aa)
-            	temp.Scale(w2, h2)
-            temp.Turn(angle)
-            if(aa)
-            	temp.Scale(w,   h)
+		if(aa)
+			temp.Scale(w2, h2)
+		temp.Turn(angle)
+		if(aa)
+			temp.Scale(w,   h)
 
-            result.Insert(temp, "[angle]")
+		result.Insert(temp, "[angle]")
 
-        return result*/
+	return result*/

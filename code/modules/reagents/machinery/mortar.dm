@@ -25,6 +25,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list(RICE,5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list(CHERRYJELLY,1),
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans        = list(ALUMINUM,10),
+		/obj/item/trash/soda_cans										 = list(ALUMINUM,10),
 		/obj/item/seeds	                      = list(BLACKPEPPER,5),
 		/obj/item/device/flashlight/flare     = list(SULFUR,10),
 		/obj/item/stack/cable_coil            = list(COPPER, 10),
@@ -47,7 +48,7 @@
 	. = ..()
 
 /obj/item/weapon/reagent_containers/glass/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (isscrewdriver(O))
+	if (O.is_screwdriver(user))
 		if(crushable)
 			crushable.forceMove(user.loc)
 		new /obj/item/stack/sheet/metal(user.loc)

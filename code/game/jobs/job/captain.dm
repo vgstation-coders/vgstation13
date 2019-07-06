@@ -11,7 +11,7 @@
 	req_admin_notify = 1
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
-	minimal_player_age = 14
+	minimal_player_age = 30
 
 	species_whitelist = list("Human")
 
@@ -73,7 +73,7 @@
 	selection_color = "#ddddff"
 	idtype = /obj/item/weapon/card/id/silver
 	req_admin_notify = 1
-	minimal_player_age = 10
+	minimal_player_age = 20
 
 	species_whitelist = list("Human")
 

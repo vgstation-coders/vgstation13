@@ -80,15 +80,8 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
-		holder.del_reagent(POTASSIUM)
-		holder.del_reagent(WATER)
-		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
-		holder.add_reagent(HYDROGEN, created_volume * REM)
-	else
-		holder.clear_reagents()
-		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
-		holder.add_reagent(HYDROGEN, created_volume * REM)
+	holder.clear_reagents()
+	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
@@ -510,12 +503,7 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
-		holder.del_reagent(GLYCEROL)
-		holder.del_reagent(PACID)
-		holder.del_reagent(SACID)
-	else
-		holder.clear_reagents()
+	holder.clear_reagents()
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
@@ -549,6 +537,7 @@
 				if(eye_safety < 1)
 					M.flash_eyes(visual = 1)
 					M.Knockdown(15)
+					M.Stun(15)
 			else if(get_dist(M, location) <= 5)
 				if(eye_safety < 1)
 					M.flash_eyes(visual = 1)
@@ -783,7 +772,7 @@
 	name = "Plastic"
 	id = "solidplastic"
 	result = null
-	required_reagents = list(PACIDS = 10, PLASTICIDE = 20)
+	required_reagents = list(PLASTICIDE = 20, PACIDS = 10)
 	result_amount = 10
 
 /datum/chemical_reaction/solidification/plastic/product_to_spawn()
@@ -960,7 +949,7 @@
 	required_reagents = list(LITHIUM = 1, HYDROGEN = 1)
 	result_amount = 1
 
-//Synthesizing these three chemicals is pretty complex in real life, but fuck it, it's just a game!
+//Synthesizing these three(+) chemicals is pretty complex in real life, but fuck it, it's just a game!
 /datum/chemical_reaction/ammonia
 	name = "Ammonia"
 	id = AMMONIA
@@ -988,6 +977,17 @@
 	result = BLEACH
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
 	result_amount = 1
+
+//This one isn't even close the the real life reaction but will have to do to avoid conflicts with the above reactions.
+/datum/chemical_reaction/luminol
+	name = "Luminol"
+	id = LUMINOL
+	result = LUMINOL
+	required_reagents = list(CLEANER = 3, CARBON = 8)
+	result_amount = 10
+	//"Realistic" results.
+	//result_amount = 3
+	//secondary_results = list(WATER = 1, HYDROGEN = 6)
 
 //Botany chemicals
 
@@ -2515,6 +2515,13 @@
 	required_reagents = list(VODKA = 2, VERMOUTH = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/sakemartini
+	name = "Sake Martini"
+	id = SAKEMARTINI
+	result = SAKEMARTINI
+	required_reagents = list(SAKE = 1, GIN = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/white_russian
 	name = "White Russian"
 	id = WHITERUSSIAN
@@ -3039,7 +3046,7 @@
 	result_amount = 10
 
 /datum/chemical_reaction/seccoffee
-	name = "Wake up call"
+	name = "Wake-Up Call"
 	id = SECCOFFEE
 	result = SECCOFFEE
 	required_reagents = list(COFFEE = 5, SPRINKLES = 1, BEEPSKYSMASH = 5)
@@ -3284,6 +3291,19 @@
 	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/diy_soda
+	name = "Dr. Pecker's DIY Soda"
+	id = DIY_SODA
+	result = DIY_SODA
+	required_reagents = list(LEMON_LIME = 1, SODAWATER = 1, INACUSIATE = 1) //this soda tastes like ear medicine!
+	result_amount = 3
+
+/datum/chemical_reaction/diy_soda/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(holder.get_reagent_amount(DIY_SODA) == 90) //apparently this gets called AFTER the reaction is done reacting
+		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(holder.my_atom))
+		S.time_to_live = 5 //unusually short smoke
+		//We don't need to start up the system because we only want to smoke one tile.
+
 /datum/chemical_reaction/colorful_reagent
 	name = "Colorful Reagent"
 	id = COLORFUL_REAGENT
@@ -3332,7 +3352,7 @@
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/mouse(location)
+		new /mob/living/simple_animal/mouse/common(location)
 
 /datum/chemical_reaction/aminocyprinidol
 	name = "Aminocyprinidol"
@@ -3385,6 +3405,19 @@
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/hostile/carp/baby(location)
+
+/datum/chemical_reaction/synthparrot
+	name = "Synthparrot"
+	id = "synthparrot"
+	result = null
+	required_reagents = list(NUTRIMENT = 1, AMINOMICIN = 1)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/food/snacks/cracker
+
+/datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /mob/living/simple_animal/parrot(location)
+	qdel(holder.my_atom)
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

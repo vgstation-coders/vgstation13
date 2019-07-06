@@ -4,7 +4,8 @@
 */
 
 /obj/item/clothing/suit/armor/plate_carrier
-	name = "tactical plate armor"
+	name = "tactical plate carrier"
+	desc = "A vest designed to comfortably hold interchangable armor plates."
 	icon_state = "tactical_armor"
 	item_state = "tactical_armor"
 	var/event_key
@@ -68,6 +69,7 @@
 
 /obj/item/clothing/suit/armor/plate_carrier/security
 	name = "security plate armor"
+	desc = "A robust vest designed to comfortably hold interchangable armor plates."
 	icon_state = "security_armor"
 	item_state = "security_armor"
 	armor = list(melee = 10, bullet = 15, laser = 25, energy = 15, bomb = 5, bio = 0, rad = 0)
@@ -76,6 +78,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "plate_1"
 	name = "ceramic armor plate"
+	desc = "A generic armor plate for use in plate carriers."
 	health = 20
 	armor = list(melee = 25, bullet = 7, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 20, laser = 20, energy = -5, bomb = 0, bio = 0, rad = 0)
@@ -108,13 +111,15 @@
 
 /obj/item/weapon/armor_plate/bullet_resistant
 	name = "plasteel armor plate"
+	desc = "An armor plate for use in plate carriers. This one is optimized for impact negation."
 	icon_state = "plate_2"
 	health = 30
 	armor = list(melee = 50, bullet = 50, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 40, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate/laser_resistant
-	name = "ceramite armor plate"
+	name = "ablated ceramite armor plate"
+	desc = "An armor plate for use in plate carriers. This one is optimized for heat dissipation."
 	icon_state = "plate_3"
 	health = 30
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)

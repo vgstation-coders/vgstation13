@@ -40,16 +40,7 @@
 	hud_used.blob_hud()
 	update_specialblobs()
 
-	to_chat(src, "<span class='blob'>You are the overmind!</span>")
-	//Old Explanation: too wordy to take in fast. This much explanation is better on the wiki.
-	/*to_chat(src, "You are the overmind and can control the blob! You can expand, which will attack people, and place special blob types.")
-	to_chat(src, "The location of your thoughts (eye), nodes, and core can power your buildings and expand the blob much further, use them well!")
-	to_chat(src, "<b>Normal Blobs</b> will expand your reach and can be upgraded into other special blobs that perform certain functions.")
-	to_chat(src, "<b>Shield Blob</b> is a strong and expensive blob which can take more damage. It is fireproof and can block air, use this to protect yourself from station fires. It can also begin to repair itself when powered.")
-	to_chat(src, "<b>Resource Blob</b> is a blob which will collect more resources for you, try to build these earlier to get a strong income. It will benefit from being near your core or multiple nodes, by having an increased resource rate; put it alone and it won't create resources at all.")
-	to_chat(src, "<b>Node Blob</b> is a blob which will grow, like the core. It will not provide income, but will power all the other special nodes and expand your blob by itself.")
-	to_chat(src, "<b>Factory Blob</b> is a blob which will spawn blob spores which will attack nearby food. You must make sure it is powered to operate properly!")
-	to_chat(src, "<b>Shortcuts:</b> CTRL Click = Expand Blob, Middle Mouse Click = Rally Spores, Alt Click = Create Shield, Double Click: Teleport to Blob")*/
+	to_chat(src, "<span class='blob'>You are the blob!</span>")
 	to_chat(src, "The location of your thoughts (eye), nodes, and core power your spore factories, resources, and passive expansion.")
 	to_chat(src, "<b>CTRL Click:</b> Active expand/attack. Expensive, use sparingly.")
 	to_chat(src, "<b>ALT Click:</b> (On Blob) Upgrade to healthier, fire immune Strong Blob. (On Core) Toggle passive wall smashing - stealthier and leaves cover up!")

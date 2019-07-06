@@ -5,7 +5,6 @@
 	required_pref = WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
-	refund_value = BASE_SOLO_REFUND * 2
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
 /datum/role/wizard/ForgeObjectives()
@@ -14,13 +13,13 @@
 		return
 	switch(rand(1,100))
 		if(1 to 30)
-			AppendObjective(/datum/objective/target/assassinate)
+			AppendObjective(/datum/objective/target/delayed/assassinate)
 			AppendObjective(/datum/objective/escape, 1)
 		if(31 to 60)
 			AppendObjective(/datum/objective/target/steal)
 			AppendObjective(/datum/objective/escape, 1)
 		if(61 to 100)
-			AppendObjective(/datum/objective/target/assassinate)
+			AppendObjective(/datum/objective/target/delayed/assassinate)
 			AppendObjective(/datum/objective/target/steal)
 			AppendObjective(/datum/objective/survive, 1)
 		else

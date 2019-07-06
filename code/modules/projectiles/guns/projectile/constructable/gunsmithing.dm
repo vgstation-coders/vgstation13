@@ -459,7 +459,7 @@
 				update_assembly()
 				qdel(W)
 		if("blunderbuss_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(src.loc == user)
@@ -473,7 +473,7 @@
 
 //RAILGUN BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_capacitorbank_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_capacitorbank"
@@ -491,7 +491,7 @@
 				state = "stock_capacitorbank_barrel_assembly"
 				update_assembly()
 				qdel(W)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_capacitorbank_assembly"
@@ -511,7 +511,7 @@
 				update_assembly()
 				qdel(W)
 		if("railgun_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(src.loc == user)
@@ -581,7 +581,7 @@
 				update_assembly()
 				qdel(W)
 		if("stock_ansible_amplifier_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_ansible_amplifier"
@@ -593,7 +593,7 @@
 				update_assembly()
 				qdel(W)
 		if("stock_ansible_amplifier_transmitter_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "subspacetunneler_assembly"
@@ -815,6 +815,10 @@
 				I.maximum_charge = maxcharge
 			if("super capacitor")
 				var/obj/item/weapon/stock_parts/capacitor/adv/super/I = new (get_turf(src.loc))
+				I.stored_charge = charge
+				I.maximum_charge = maxcharge
+			if("ultra capacitor")
+				var/obj/item/weapon/stock_parts/capacitor/adv/super/ultra/I = new (get_turf(src.loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
 		qdel(src)

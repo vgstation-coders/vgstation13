@@ -56,6 +56,8 @@
 	return ..()
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/spin_web(var/turf/T)
+	if(!T.has_gravity(src))
+		return 0
 	if(!locate(/obj/effect/spider/stickyweb) in T)
 		new /obj/effect/spider/stickyweb(T)
 	return 1

@@ -107,13 +107,13 @@
 //This stops files larger than UPLOAD_LIMIT being sent from client to server via input(), client.Import() etc.
 /client/AllowUpload(filename, filelength)
 	if(filelength > UPLOAD_LIMIT)
-		to_chat(src, "<font color='red'>Error: AllowUpload(): File Upload too large. Upload Limit: [UPLOAD_LIMIT/1024]KiB.</font>")
+		to_chat(src, "<span class='red'>Error: AllowUpload(): File Upload too large. Upload Limit: [UPLOAD_LIMIT/1024]KiB.</span>")
 		return 0
 /*	//Don't need this at the moment. But it's here if it's needed later.
 	//Helps prevent multiple files being uploaded at once. Or right after eachother.
 	var/time_to_wait = fileaccess_timer - world.time
 	if(time_to_wait > 0)
-		to_chat(src, "<font color='red'>Error: AllowUpload(): Spam prevention. Please wait [round(time_to_wait/10)] seconds.</font>")
+		to_chat(src, "<span class='red'>Error: AllowUpload(): Spam prevention. Please wait [round(time_to_wait/10)] seconds.</span>")
 		return 0
 	fileaccess_timer = world.time + FTPDELAY	*/
 	return 1
@@ -214,7 +214,7 @@
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
 
 	//Set map label to correct map name
-	winset(src, "rpane.map", "text=\"[map.nameLong]\"")
+	winset(src, "rpane.mapb", "text=\"[map.nameLong]\"")
 
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
@@ -373,16 +373,17 @@
 
 	// Preload the crew monitor. This needs to be done due to BYOND bug http://www.byond.com/forum/?post=1487244
 	//The above bug report thing doesn't exist anymore so uh, whatever.
-	spawn
-		send_html_resources()
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			send_html_resources()
 
 	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
+	spawn()
+		if(src in clients) //Did we log out before we reached this part of the function?
+			nanomanager.send_resources(src)
 
 
 /client/proc/send_html_resources()
-	if(crewmonitor && minimapinit)
-		crewmonitor.sendResources(src)
 	if(adv_camera && minimapinit)
 		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
@@ -400,6 +401,15 @@
 		if(ROLEPREF_ALWAYS)
 			return "Always"
 	return "???"
+
+/client/proc/GetRolePrefs()
+	var/list/roleprefs = list()
+	for(var/role_id in antag_roles)
+		if(desires_role(role_id,FALSE))
+			roleprefs += role_id
+	if(!roleprefs.len)
+		return "none"
+	return english_list(roleprefs)
 
 /client/proc/desires_role(var/role_id, var/display_to_user=0)
 	var/role_desired = prefs.roles[role_id]

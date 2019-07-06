@@ -26,9 +26,9 @@ var/intercom_range_display_status = 0
 	icon = 'icons/480x480.dmi'
 	icon_state = "25percent"
 
-	New()
-		src.pixel_x = -224 * PIXEL_MULTIPLIER
-		src.pixel_y = -224 * PIXEL_MULTIPLIER
+/obj/effect/debugging/camera_range/New()
+	src.pixel_x = -224 * PIXEL_MULTIPLIER
+	src.pixel_y = -224 * PIXEL_MULTIPLIER
 
 /obj/effect/debugging/marker
 	icon = 'icons/turf/areas.dmi'
@@ -40,8 +40,6 @@ var/intercom_range_display_status = 0
 /client/proc/do_not_use_these()
 	set category = "Mapping"
 	set name = "-None of these are for ingame use!!"
-
-	..()
 
 /client/proc/camera_view()
 	set category = "Mapping"

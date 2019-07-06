@@ -94,6 +94,7 @@
 				"<span class='userdanger'>Please, just end the pain!</span>")
 			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 			M.Knockdown(10)
+			M.Stun(10)
 			M.take_overall_damage(0, burned)
 
 /obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)

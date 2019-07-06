@@ -122,7 +122,7 @@
 		msg += "<span class='warning'>[t_He] [t_has] blood-stained hands!</span>\n"
 
 	//handcuffed?
-	if(handcuffed && handcuffed.is_visible())
+	if((handcuffed && handcuffed.is_visible()) || (mutual_handcuffs && mutual_handcuffs.is_visible()))
 		if(istype(handcuffed, /obj/item/weapon/handcuffs/cable))
 			msg += "<span class='warning'>[t_He] [t_is] [bicon(handcuffed)] restrained with cable!</span>\n"
 		else
@@ -236,7 +236,7 @@
 				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
 
 	// Religions
-	if (ismob(user) && user.mind && user.mind.faith && user.mind.faith.isReligiousLeader(user) && mind)
+	if (ismob(user) && user.mind && user.mind.faith && user.mind.faith.leadsThisReligion(user) && mind)
 		if (src.mind.faith == user.mind.faith)
 			msg += "<span class='notice'>You recognise [t_him] as a follower of [user.mind.faith.name].</span><br/>"
 
@@ -416,7 +416,7 @@
 
 		if(distance <= 3)
 			if(!has_brain())
-				msg += "<font color='blue'><b>[t_He] [t_has] had [t_his] brain removed.</b></font>\n"
+				msg += "<span class='notice'><b>[t_He] [t_has] had [t_his] brain removed.</b></span>\n"
 
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 	if(butchering_drops && butchering_drops.len)

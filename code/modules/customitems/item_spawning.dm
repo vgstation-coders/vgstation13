@@ -59,11 +59,13 @@
 				ok = M.equip_if_possible(I, slot_wear_id, 0)	//if 1, last argument deletes on fail
 				break
 //			testing("Replaced ID!")
-		else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
-			Item.forceMove(M.back)
-			ok = 1
-//			testing("Added to [M.back.name]!")
-			to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [M.back.name].</span>")
+		else if(istype(M.back, /obj/item/weapon/storage)) // Try to place it in something on the mob's back
+			var/obj/item/weapon/storage/backpack = M.back
+			if(backpack.contents.len < backpack.storage_slots)
+				Item.forceMove(M.back)
+				ok = 1
+	//			testing("Added to [M.back.name]!")
+				to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [M.back.name].</span>")
 		else
 			for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
 				if (S.contents.len < S.storage_slots)

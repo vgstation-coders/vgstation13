@@ -37,7 +37,7 @@
 	if(type==/obj/machinery/embedded_controller)
 		switch(build)
 			if(0) // Empty hull
-				if(isscrewdriver(W))
+				if(W.is_screwdriver(user))
 					to_chat(usr, "You begin removing screws from \the [src] backplate...")
 					if(do_after(user, src, 50))
 						to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
@@ -99,7 +99,7 @@
 						build--
 						update_icon()
 					return 1
-				if(isscrewdriver(W))
+				if(W.is_screwdriver(user))
 					to_chat(user, "You begin to complete \the [src]...")
 					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 					if(do_after(user, src, 20))

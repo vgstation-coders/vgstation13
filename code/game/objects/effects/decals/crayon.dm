@@ -5,14 +5,13 @@
 
 	persistence_type = null //todo
 
-/obj/effect/decal/cleanable/crayon/New(location,main = "#FFFFFF",shade = "#000000",var/type = "rune")
+/obj/effect/decal/cleanable/crayon/New(loc,age,icon_state,color,dir,pixel_x,pixel_y,main = "#FFFFFF",shade = "#000000",var/type = "rune")
 	..()
-	loc = location
 
 	name = type
 	desc = "A [type] drawn in crayon."
 
-	switch(type)
+	switch(type) //For generics
 		if("rune")
 			type = "rune[rand(1,6)]"
 		if("graffiti")
@@ -34,5 +33,5 @@
 /obj/effect/decal/cleanable/crayon/fuckyou
 	icon_state = "fuckyou"
 
-/obj/effect/decal/cleanable/crayon/fuckyou/New(location, main = "#007F0E", shade = "#02560B", type = "fuckyou")
-	..()
+/obj/effect/decal/cleanable/crayon/fuckyou/New()
+	..(main = "#007F0E", shade = "#02560B", type = "fuckyou")

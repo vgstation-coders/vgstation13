@@ -458,7 +458,7 @@ var/global/floorIsLava = 0
 					if(CHANNEL.is_admin_channel)
 						dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen'><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 					else
-						dat+="<B><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
+						dat+="<B><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR></B>"
 			dat+={"<BR><HR><A href='?src=\ref[src];ac_refresh=1'>Refresh</A>
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>
 			"}
@@ -542,7 +542,7 @@ var/global/floorIsLava = 0
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					dat+="<A href='?src=\ref[src];ac_pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+					dat+="<A href='?src=\ref[src];ac_pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A>"
 		if(11)
 			dat+={"
@@ -555,7 +555,7 @@ var/global/floorIsLava = 0
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					dat+="<A href='?src=\ref[src];ac_pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+					dat+="<A href='?src=\ref[src];ac_pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR>"
 
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>"
 		if(12)
@@ -683,10 +683,12 @@ var/global/floorIsLava = 0
 	if(master_mode == "Dynamic Mode")
 		if(ticker.current_state == GAME_STATE_PREGAME)
 			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
+			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>(Dynamic mode options)</A><br>"
 			if (forced_roundstart_ruleset.len > 0)
 				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
 					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
 				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
+			dat += "<A href='?src=\ref[src];f_dynamic_options=1>Dynamic mode options</a><br/>"
 		else
 			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
 			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
@@ -694,7 +696,7 @@ var/global/floorIsLava = 0
 				if (mode.forced_latejoin_rule)
 					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
 			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
-
+		dat += "<hr/>"
 
 	dat += {"
 		<hr />
@@ -728,6 +730,44 @@ var/global/floorIsLava = 0
 
 	usr << browse(dat, "window=admin2;size=280x370")
 	return
+
+/datum/admins/proc/dynamic_mode_options(mob/user)
+	var/dat = {"
+		<center><B><h2>Dynamic Mode Options</h2></B></center><hr>
+		<br/>
+		<h3>Common options</h3>
+		<i>All these options can be changed midround.</i> <br/>
+		<br/>
+		<b>Force extended:</b> - Option is <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "ON" : "OFF"]</a></b>.
+		<br/>This will force the round to be extended. No rulesets will be drafted. <br/>
+		<br/>
+		<b>No stacking:</b> - Option is <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "ON" : "OFF"]</b></a>.
+		<br/>Unless the threat goes above [stacking_limit], only one "round-ender" ruleset will be drafted. <br/>
+		<br/>
+		<b>Classic secret mode:</b> - Option is <a href='?src=\ref[src];classic_secret=1'> <b>[dynamic_classic_secret ? "ON" : "OFF"]</b></a>.
+		<br/>Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. <br/>
+		<br/>
+		<b>High population limit:</b> Current value : <a href='?src=\ref[src];high_pop_limit=1'><b>[dynamic_high_pop_limit]</b></a>.
+		<br/>The threshold at which "high population override" will be in effect. <br/>
+		<br/>
+		<b>Stacking threeshold:</b> Current value : <a href='?src=\ref[src];stacking_limit=1'><b>[stacking_limit]</b></a>.
+		<br/>The threshold at which "round-ender" rulesets will stack. A value higher than 100 ensure this never happens. <br/>
+		<h3>Advanced parameters</h3>
+		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
+		Glossary : <br/>
+		<ul>
+			<li> <b>Lorentz distribution</b> : default mode. Heavily weighted towards the chosen centre, but still allows extreme to happen. A wider curve means extreme are more likely.</li>
+			<li> <b>Normal distribution</b> : similar to Lorentz, but extremes are much less likely to happen. </li>
+			<li> <b>Rigged threat number</b> : the threat level will be the chosen centre.</li>
+			<li> <b>Peaceful bias</b> : heavily weighted towards more peaceful rounds. </li>
+			<li> <b>Uniform distribution</b> : a random uniformally distributed number between 1 and 100.</li>
+		</ul>
+		<A href='?src=\ref[src];change_distrib=1'>Change distribution mode</a> <br/>
+		Curve centre: <A href='?src=\ref[src];f_dynamic_roundstart_centre=1'>-> [dynamic_curve_centre] <-</A><br>
+		Curve width: <A href='?src=\ref[src];f_dynamic_roundstart_width=1'>-> [dynamic_curve_width] <-</A><br>
+		"}
+
+	user << browse(dat, "window=dyn_mode_options;size=900x650")
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))
@@ -862,7 +902,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
-			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
@@ -1063,11 +1102,11 @@ var/global/floorIsLava = 0
 	if(ticker.current_state == GAME_STATE_PREGAME)
 		ticker.current_state = GAME_STATE_SETTING_UP
 		log_admin("[usr.key] has started the game.")
-		message_admins("<font color='blue'>[usr.key] has started the game.</font>")
+		message_admins("<span class='notice'>[usr.key] has started the game.</span>")
 		feedback_add_details("admin_verb","SN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		return 1
 	else
-		to_chat(usr, "<font color='red'>Error: Start Now: Game has already started.</font>")
+		to_chat(usr, "<span class='red'>Error: Start Now: Game has already started.</span>")
 		return 0
 
 /datum/admins/proc/toggleenter()

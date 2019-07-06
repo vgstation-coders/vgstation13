@@ -1,59 +1,46 @@
-//THE SPELLS PROC'D BY THE RUNES
 
 #define RUNE_STAND	1
 
-/datum/rune_spell
-	//essential
-	var/name = "default name"		//appears in the arcane tome, or to cultists that examine a rune
-	var/desc = "default description"//appears to cultists that examine a rune
-	var/desc_talisman = "default talisman description"//appears to cultists that examine a talisman
-	var/Act_restriction = CULT_PROLOGUE		//locks the rune to the cult's progression
-	var/obj/spell_holder = null				//the rune or talisman calling the spell. If using a talisman calling an attuned rune, the holder is the rune.
-	var/mob/activator = null				//the original mob that cast the spell
-	var/datum/cultword/word1 = null			//a spell needs all 3 words (see bloodcult_words.dm). The order is important. By convention, do not use the same word twice.
-	var/datum/cultword/word2 = null
-	var/datum/cultword/word3 = null
-	var/invocation = "Lo'Rem Ip'Sum"		//spoken (or whispered if using a talisman) by the cultist when the spell is cast
-	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
-			 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\
-			  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\
-			   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in\
-			    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\
-			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."//the arcane tome's page about the spell
-	var/talisman_absorb = RUNE_CAN_IMBUE //whether the rune is absorbed into the talisman (and thus deleted), or linked to the talisman (RUNE_CAN_ATTUNE)
-	var/talisman_uses = 1//How many times can a spell be cast from a single talisman. The talisman disappears upon the last use.
-	var/touch_cast = 0//if set to 1, will proc cast_touch() when touching someone with an imbued talisman (example: Stun)
-	var/can_conceal = 0//if set to 1, concealing the rune will not abort the spell. (example: Path Exit)
-	var/rune_flags = null //if set to RUNE_STAND (or 1), the user will need to stand right above the rune to use cast the spell
-	var/destroying_self = 0//some sanity var to prevent abort loops, ignore
+/datum/rune_spell //Abstract base. Includes channeled and instant use runes.
+	var/name = "Cult Rune"		      //To be used for various purposes, in blood cult for tome entry.
+	var/desc = "Does magical things."   //This one is used by blood cult for the tome as well.
+	var/obj/spell_holder = null				//The rune or talisman calling the spell. If using a talisman calling an attuned rune, the holder is the rune.
+	var/mob/activator = null				//The original mob that cast the spell
+	var/runeset_identifier
+	var/datum/runeword/word1 = null			
+	var/datum/runeword/word2 = null
+	var/datum/runeword/word3 = null
+	var/invocation = "Lo'Rem Ip'Sum"		//Spoken whenever cast.
+	var/touch_cast = 0			//If set to 1, will proc cast_touch() when touching someone with an imbued talisman (example: Stun)
+	var/can_conceal = 0			//If set to 1, concealing the rune will not abort the spell. (example: Path Exit)
+	var/rune_flags = null 		//If set to RUNE_STAND (or 1), the user will need to stand right above the rune to use cast the spell
+	var/walk_effect = 0 //If set to 1, procs Added() when step over
 
-	//optional (those var aren't used by default rune code, but many runes make use of them, so set them up as you need, the comments below are suggestions)
-	var/cost_invoke = 0//blood cost upon cast
-	var/cost_upkeep = 0//blood cost upon upkeep proc
-	var/list/contributors = list()//list of cultists currently participating in the ritual
-	var/image/progbar = null//progress bar
-	var/remaining_cost = 0//how much blood to gather for the ritual to succeed
-	var/accumulated_blood = 0//how much blood has been gathered so far
-	var/cancelling = 3//check to abort the ritual due to blood flow being interrupted
-	var/list/ingredients = list()//items that should be on the rune for it to work
-	var/list/ingredients_found = list()//items that should be on the rune for it to work
-	var/constructs_can_use = 1
+	//Optional (These vars aren't used by default rune code, but many runes make use of them, so set them up as you need, the comments below are suggestions)
+	var/cost_invoke = 0						//Blood cost upon cast
+	var/cost_upkeep = 0						//Blood cost upon upkeep proc
+	var/list/contributors = list()			//List of people currently participating in the ritual
+	var/remaining_cost = 0					//How much blood to gather for the ritual to succeed
+	var/accumulated_blood = 0				//How much blood has been gathered so far
+	var/cancelling = 3						//Check this variable to abort the ritual due to blood flow being interrupted
+	var/list/ingredients = list()			//Items that should be on the rune for it to work
+	var/list/ingredients_found = list()		//Items that are found on the rune
 
+	var/destroying_self = 0		//Sanity var to prevent abort loops, ignore
+	var/image/progbar = null	//Bar for channeling spells			 
+				 
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
 	activator = user
 
-	switch (use)
-		if ("ritual")
-			pre_cast()
-		if ("touch")
-			if (target)
-				cast_touch(target)//skipping regular precast
+	if(use == "ritual")
+		pre_cast()
+
 
 /datum/rune_spell/Destroy()
 	destroying_self = 1
-	if (spell_holder)
-		if (istype(spell_holder, /obj/effect/rune))
+	if(spell_holder)
+		if(istype(spell_holder, /obj/effect/rune))
 			var/obj/effect/rune/rune_holder = spell_holder
 			rune_holder.active_spell = null
 		spell_holder = null
@@ -64,60 +51,45 @@
 	..()
 
 /datum/rune_spell/proc/invoke(var/mob/user, var/text="", var/whisper=0)
-	if (user.checkTattoo(TATTOO_SILENT))
+	if(user.checkTattoo(TATTOO_SILENT))
 		return
-	if (!whisper)
+	if(!whisper)
 		user.say(text,"C")
 	else
 		user.whisper(text)
 
-/datum/rune_spell/proc/pre_cast()
-	//checking whether we're in the proper Act
-	if (Act_restriction > veil_thickness)
-		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
-		return
-	//checking whether we're casting from a rune or a talisman.
-	if (istype (spell_holder,/obj/effect/rune))
-		if ((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
+/datum/rune_spell/proc/pre_cast() //Override for pre-cast checks.
+	if(istype(spell_holder,/obj/effect/rune))
+		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else
 			invoke(activator,invocation)
 			cast()
-	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		invoke(activator,invocation,1)//talisman incantations are whispered
-		cast_talisman()
-
-/datum/rune_spell/proc/midcast(var/mob/add_cultist)
-	return
-
-/datum/rune_spell/proc/midcast_talisman(var/mob/add_cultist)
-	return
-
-/datum/rune_spell/proc/blood_pay()
+	
+/datum/rune_spell/proc/pay_blood()
 	var/data = use_available_blood(activator, cost_invoke)
-	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+	if(data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		to_chat(activator, "<span class='warning'>This ritual requires more blood than you can offer.</span>")
 		return 0
 	else
 		return 1
 
+/datum/rune_spell/proc/Added(var/mob/M)
+
 /datum/rune_spell/proc/Removed(var/mob/M)
 
-/datum/rune_spell/proc/cast_talisman()
-	cast()//by default, talismans work just like runes, but may be set to work differently.
-
-/datum/rune_spell/proc/cast_touch(var/mob/M)
+/datum/rune_spell/proc/midcast(var/mob/add_cultist)
 	return
-
-/datum/rune_spell/proc/cast()
+	
+/datum/rune_spell/proc/cast() //Override for your spell functionality.
 	spell_holder.visible_message("<span class='warning'>This rune wasn't properly set up, tell a coder.</span>")
 	qdel(src)
 
-/datum/rune_spell/proc/abort(var/cause)//ritals can fail for a plethora of reasons
-	if (destroying_self)
+/datum/rune_spell/proc/abort(var/cause) //The error message for aborting, usable by any runeset.
+	if(destroying_self)
 		return
 	destroying_self = 1
-	switch (cause)
+	switch(cause)
 		if (RITUALABORT_ERASED)
 			if (istype (spell_holder,/obj/effect/rune))
 				spell_holder.visible_message("<span class='warning'>The rune's destruction ended the ritual.</span>")
@@ -129,7 +101,7 @@
 				to_chat(activator, "<span class='warning'>The ritual ends as you move away from the rune.</span>")
 		if (RITUALABORT_BLOCKED)
 			if (activator)
-				to_chat(activator, "<span class='warning'>There is already building blocking the ritual..</span>")
+				to_chat(activator, "<span class='warning'>There is a building blocking the ritual..</span>")
 		if (RITUALABORT_BLOOD)
 			spell_holder.visible_message("<span class='warning'>Deprived of blood, the channeling is disrupted.</span>")
 		if (RITUALABORT_TOOLS)
@@ -152,6 +124,7 @@
 		if (RITUALABORT_OUTPOST)
 			if (activator)
 				to_chat(activator, "<span class='sinister'>The veil here is still too dense to allow raising structures from the realm of Nar-Sie. We must raise our structure in the heart of the station.</span>")
+	..()
 
 
 	for(var/mob/living/L in contributors)
@@ -204,7 +177,7 @@
 	return 0
 
 /datum/rune_spell/proc/update_progbar()
-	if (!progbar)
+	if(!progbar)
 		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = spell_holder, "icon_state" = "prog_bar_0")
 		progbar.pixel_z = WORLD_ICON_SIZE
 		progbar.plane = HUD_PLANE
@@ -212,33 +185,102 @@
 		progbar.appearance_flags = RESET_COLOR
 	progbar.icon_state = "prog_bar_[round((min(1, accumulated_blood / remaining_cost) * 100), 10)]"
 	return
-
-//Called whenever a rune gets activated or examined
-/proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/cultword/word1, var/datum/cultword/word2, var/datum/cultword/word3)
-	if (!word1 || !word2 || !word3)
+	
+//Returns a rune spell based on the given 3 words.
+/proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/runeset/word1, var/datum/runeset/word2, var/datum/runeset/word3)
+	if(!word1 || !word2 || !word3)
 		return
-	for(var/subtype in subtypesof(/datum/rune_spell))
-		var/datum/rune_spell/instance = subtype
-		if (word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
-			switch (use)
-				if ("ritual")
-					return new subtype(user, spell_holder, use)
-				if ("examine")
-					return instance
-				if ("imbue")
-					return subtype
-			return new subtype(user, spell_holder, use)
-	return null
+	for(var/runeset in subtypesof(/datum/rune_spell))
+		for(var/runespell in subtypesof(runeset))
+			var/datum/rune_spell/instance = runespell
+			if(word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
+				switch (use)
+					if ("ritual")
+						return new runespell(user, spell_holder, use)
+					if ("examine")
+						return instance
+					if ("walk")
+						if (initial(instance.walk_effect))
+							return new runespell(user, spell_holder, use)
+						else
+							return null
+					if ("imbue")
+						return runespell
+				return new runespell(user, spell_holder, use)
+	return null	
+	
+////////////////////Blood Cult Runespells
+	
+/datum/rune_spell/blood_cult
+	name = "Blood Cult Rune"
+	desc = "Spooky."
+	invocation = "Lo'Rem Ip'Sum"
+	
+	runeset_identifier = "blood_cult"
+	
+	var/desc_talisman = "It's a talisman."  //Talisman description. Non-cultists don't see this.
+	var/talisman_absorb = RUNE_CAN_IMBUE	//Whether the rune is absorbed into the talisman (and thus deleted), or linked to the talisman (RUNE_CAN_ATTUNE)
+	var/talisman_uses = 1					//How many times can a spell be cast from a single talisman. The talisman disappears upon the last use.
+	
+	var/Act_restriction = CULT_PROLOGUE		//locks the rune to the cult's progression
+	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
+			 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\
+			  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\
+			   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in\
+			    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\
+			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." //Arcane tome page description.
+	var/constructs_can_use = 1
+	
+/datum/rune_spell/blood_cult/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
+	spell_holder = holder
+	activator = user
+
+	if(use == "ritual")
+		pre_cast()
+	else if(use == "touch" && target)
+		cast_touch(target) //Skips pre_cast() for talismans
+		
+/datum/rune_spell/blood_cult/pre_cast() 
+	if(Act_restriction > veil_thickness)
+		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+		switch(veil_thickness)
+			if(CULT_PROLOGUE)
+				to_chat(activator, "<span class='danger'>Raise an Altar.</span>")
+			if(CULT_ACT_I)
+				to_chat(activator, "<span class='danger'>Perform more conversions.</span>")
+			if(CULT_ACT_II)
+				to_chat(activator, "<span class='danger'>Perform the Sacrifice.</span>")
+		return
+	if(istype(spell_holder,/obj/effect/rune))
+		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
+			abort(RITUALABORT_STAND)
+		else
+			invoke(activator,invocation)
+			cast()
+	else if(istype (spell_holder,/obj/item/weapon/talisman))
+		invoke(activator,invocation,1)//talisman incantations are whispered
+		cast_talisman()
+		
+/datum/rune_spell/blood_cult/proc/cast_talisman() //Override for unique talisman behavior.
+	cast()
+	
+/datum/rune_spell/blood_cult/proc/cast_touch(var/mob/M) //Behavior on using the talisman on somebody. See - stun talisman.
+	return	
+	
+/datum/rune_spell/blood_cult/proc/midcast_talisman(var/mob/add_cultist)
+	return
+	
+
 
 //RUNE I
-/datum/rune_spell/raisestructure
+/datum/rune_spell/blood_cult/raisestructure
 	name = "Raise Structure"
 	desc = "Drag-in eldritch structures from the realm of Nar-Sie."
 	desc_talisman = "Use to begin raising a structure where you stand."
 	Act_restriction = CULT_PROLOGUE
-	word1 = /datum/cultword/blood
-	word2 = /datum/cultword/technology
-	word3 = /datum/cultword/join
+	word1 = /datum/runeword/blood_cult/blood
+	word2 = /datum/runeword/blood_cult/technology
+	word3 = /datum/runeword/blood_cult/join
 	cost_upkeep = 1
 	remaining_cost = 300
 	accumulated_blood = 0
@@ -251,7 +293,7 @@
 	var/turf/loc_memory = null
 	var/spawntype = /obj/structure/cult/altar
 
-/datum/rune_spell/raisestructure/proc/proximity_check()
+/datum/rune_spell/blood_cult/raisestructure/proc/proximity_check()
 	var/obj/effect/rune/R = spell_holder
 	if (locate(/obj/structure/cult) in range(R.loc,1))
 		abort(RITUALABORT_BLOCKED)
@@ -263,49 +305,72 @@
 
 	else return TRUE
 
-/datum/rune_spell/raisestructure/cast()
+/datum/rune_spell/blood_cult/raisestructure/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	if (!proximity_check())
-		return
-
 	var/mob/living/user = activator
-
+	
+	proximity_check() //See above
+		
 	if (veil_thickness < CULT_ACT_III && user.z != map.zMainStation)
 		abort(RITUALABORT_OUTPOST)
 		return FALSE
 
-	if (veil_thickness == CULT_ACT_I)
-		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Spire")
-		if (spawnchoice == "Spire")
-			spawntype = /obj/structure/cult/spire
+	var/list/choices = list(
+		list("Altar", "radial_altar", "The nexus of a cult base. Has many uses. More runes will also become usable after the first altar has been raised."),
+		list("Spire (locked)", "radial_locked1", "Reach Act 1 to unlock the Spire."),
+		list("Forge (locked)", "radial_locked2", "Reach Act 2 to unlock the Forge.")
+	)
+	if(veil_thickness >= CULT_ACT_I)
+		choices[2] = list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act.")
+	if(veil_thickness >= CULT_ACT_II)
+		choices[3] = list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
 
-	else if (veil_thickness >= CULT_ACT_II)
-		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Forge","Spire")
-		switch (spawnchoice)
-			if ("Forge")
-				spawntype = /obj/structure/cult/forge
-			if ("Spire")
-				spawntype = /obj/structure/cult/spire
+	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
+	
+	if(!R.Adjacent(user) || !structure )
+		abort()
+		return
+
+	if(R.active_spell)
+		to_chat(user, "<span class='rose'>A structure is already being raised from this rune, so you contribute to that instead.</span>")
+		R.active_spell.midcast(user)
+		return
+
+	switch(structure)
+		if("Altar")
+			spawntype = /obj/structure/cult/altar
+		if("Spire")
+			spawntype = /obj/structure/cult/spire
+		if("Forge")
+			spawntype = /obj/structure/cult/forge
+		if("Spire (locked)")
+			to_chat(user,"Reach Act 1 to unlock the Spire. It allows human cultists to acquire Arcane Tattoos, providing various buffs.")
+			abort()
+			return
+		if("Forge (locked)")
+			to_chat(user,"Reach Act 2 to unlock the Forge. It enables the forging of cult blades and armor, as well as new construct shells.")
+			abort()
+			return
 
 	loc_memory = spell_holder.loc
 	contributors.Add(user)
 	update_progbar()
-	if (user.client)
+	if(user.client)
 		user.client.images |= progbar
 	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
-	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it, or wearing cult attire.</span>")
+	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it or by wearing cult attire.</span>")
 	spawn()
 		payment()
 
-/datum/rune_spell/raisestructure/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+/datum/rune_spell/blood_cult/raisestructure/cast_talisman() //Raise structure talismans create an invisible summoning rune beneath the caster's feet.
 	var/obj/effect/rune/R = new(get_turf(activator))
 	R.icon_state = "temp"
 	R.active_spell = new type(activator,R)
 	qdel(src)
 
-/datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/raisestructure/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
 	invoke(add_cultist, invocation)
@@ -313,11 +378,11 @@
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
 
-/datum/rune_spell/raisestructure/abort(var/cause)
+/datum/rune_spell/blood_cult/raisestructure/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
 	..()
 
-/datum/rune_spell/raisestructure/proc/payment()
+/datum/rune_spell/blood_cult/raisestructure/proc/payment()
 	var/failsafe = 0
 	while(failsafe < 1000)
 		failsafe++
@@ -326,12 +391,11 @@
 		for(var/mob/living/L in contributors)
 			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
 				summoners++
-				summoners += round(L.get_cult_power()/30)//for every 30 cult power, you count as one additional cultist. So with Robes and Shoes, you already count as 3 cultists.
-			else										//This makes using the rune alone hard at roundstart, but fairly easy later on.
+				summoners += round(L.get_cult_power()/30)	//For every 30 cult power, you count as one additional cultist. So with Robes and Shoes, you already count as 3 cultists.
+			else											//This makes using the rune alone hard at roundstart, but fairly easy later on.
 				if (L.client)
 					L.client.images -= progbar
 				contributors.Remove(L)
-		//alright then, time to pay in blood
 		var/amount_paid = 0
 		for(var/mob/living/L in contributors)
 			var/data = use_available_blood(L, cost_upkeep,contributors[L])
@@ -344,8 +408,7 @@
 
 		accumulated_blood += amount_paid
 
-		//if there's no blood for over 3 seconds, the channeling fails
-		if (amount_paid)
+		if(amount_paid) //3 seconds without blood and the ritual fails.
 			cancelling = 3
 		else
 			cancelling--
@@ -356,7 +419,6 @@
 				abort(RITUALABORT_BLOOD)
 				return
 
-		//do we have multiple cultists? let's reward their cooperation
 		switch(summoners)
 			if (1)
 				remaining_cost = 300
@@ -367,10 +429,8 @@
 			if (4 to INFINITY)
 				remaining_cost = 0
 
-
-		if (accumulated_blood >= remaining_cost )
-			if (!proximity_check())
-				return
+		if(accumulated_blood >= remaining_cost )
+			proximity_check()
 			success()
 			return
 
@@ -379,46 +439,48 @@
 		sleep(10)
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
-/datum/rune_spell/raisestructure/proc/success()
+/datum/rune_spell/blood_cult/raisestructure/proc/success()
 	new spawntype(spell_holder.loc)
 	if (spawntype == /obj/structure/cult/altar)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
+		if(cult)
 			cult.stage(CULT_ACT_I)
 		else
-			message_admins("Blood Cult: An altar was raised...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
-	qdel(spell_holder)//this will cause this datum to del as well
+			message_admins("Blood Cult: An altar was raised... but we cannot find the cult faction. Excellent bus.")
+	qdel(spell_holder) //Deletes the datum as well.
 
 //RUNE II
-/datum/rune_spell/communication
+/datum/rune_spell/blood_cult/communication
 	name = "Communication"
 	desc = "Speak so that every cultists may hear your voice."
-	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it to transmit a message that will be remembered by all."
+	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it again to transmit a message that will be remembered by all."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
 	rune_flags = RUNE_STAND
 	talisman_uses = 5
 	var/obj/effect/cult_ritual/cult_communication/comms = null
-	word1 = /datum/cultword/self
-	word2 = /datum/cultword/other
-	word3 = /datum/cultword/technology
+	word1 = /datum/runeword/blood_cult/self
+	word2 = /datum/runeword/blood_cult/other
+	word3 = /datum/runeword/blood_cult/technology
 	page = "You are not alone. Never forget it. The cult's true strength lies in its numbers, and how well each individual cooperates with the rest. \
 		This rune is your main mean of cooperation. Its ritual lets you open a communication channel straight into the mind of every other cultists, \
 		including constructs and soul blades. Just speak, and your words will instantly reach their minds. Keep the cult updated on your activities."
 
-/datum/rune_spell/communication/cast()
+/datum/rune_spell/blood_cult/communication/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 	var/mob/living/user = activator
 	comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
 
-/datum/rune_spell/communication/midcast(var/mob/living/user)
+/datum/rune_spell/blood_cult/communication/midcast(var/mob/living/user)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!istype(cult))
 		return
 	if (!istype(user)) // Ghosts
 		return
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
+	if (!reminder)
+		return
 	reminder = utf8_sanitize(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
@@ -435,7 +497,7 @@
 
 	log_cultspeak("[key_name(user)] Cult reminder: [reminder]")
 
-/datum/rune_spell/communication/cast_talisman()//we write our message on the talisman, like in previous versions.
+/datum/rune_spell/blood_cult/communication/cast_talisman()//we write our message on the talisman, like in previous versions.
 	var/message = sanitize(input("Write a message to send to your acolytes.", "Blood Letter", "") as null|message, MAX_MESSAGE_LEN)
 	if(!message)
 		return
@@ -453,7 +515,7 @@
 
 	qdel(src)
 
-/datum/rune_spell/communication/Destroy()
+/datum/rune_spell/blood_cult/communication/Destroy()
 	destroying_self = 1
 	if (comms)
 		qdel(comms)
@@ -471,10 +533,10 @@
 	mouse_opacity = 0
 	flags = HEAR|PROXMOVE
 	var/mob/living/caster = null
-	var/datum/rune_spell/communication/source = null
+	var/datum/rune_spell/blood_cult/communication/source = null
 
 
-/obj/effect/cult_ritual/cult_communication/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/communication/runespell)
+/obj/effect/cult_ritual/cult_communication/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/communication/runespell)
 	..()
 	caster = user
 	source = runespell
@@ -515,26 +577,26 @@
 		qdel(src)
 
 //RUNE III
-/datum/rune_spell/summontome
+/datum/rune_spell/blood_cult/summontome
 	name = "Summon Tome"
 	desc = "Bring forth an arcane tome filled with Nar-Sie's knowledge."
 	desc_talisman = "Turns into an arcane tome upon use."
 	Act_restriction = CULT_ACT_I
 	invocation = "N'ath reth sh'yro eth d'raggathnor!"
-	word1 = /datum/cultword/see
-	word2 = /datum/cultword/blood
-	word3 = /datum/cultword/hell
+	word1 = /datum/runeword/blood_cult/see
+	word2 = /datum/runeword/blood_cult/blood
+	word3 = /datum/runeword/blood_cult/hell
 	cost_invoke = 4
 	page = "Knowledge is of the essence. Becoming useful to the cult isn't simple, but having a desire to learn and improve is the first step. \
 		This rune is the first step on this journey, you don't have to study all the runes right away but the answer to your current conundrum could be in one of them. \
 		The tome in your hands is the produce of this ritual, by having it open in your hands, the meaning of every rune can freely flow into your mind, \
 		which means that you can trace them more easily. Be mindful though, if anyone spots this tome in your hand, your devotion to Nar-Sie will be immediately exposed."
 
-/datum/rune_spell/summontome/cast()
+/datum/rune_spell/blood_cult/summontome/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	if (blood_pay())
+	if (pay_blood())
 		spell_holder.visible_message("<span class='rose'>The rune's symbols merge into each others, and an Arcane Tome takes form in their place</span>")
 		var/turf/T = get_turf(spell_holder)
 		var/obj/item/weapon/tome/AT = new (T)
@@ -543,7 +605,7 @@
 	else
 		qdel(src)
 
-/datum/rune_spell/summontome/cast_talisman()//The talisman simply turns into a tome.
+/datum/rune_spell/blood_cult/summontome/cast_talisman()//The talisman simply turns into a tome.
 	var/turf/T = get_turf(spell_holder)
 	var/obj/item/weapon/tome/AT = new (T)
 	if (spell_holder == activator.get_active_hand())
@@ -555,15 +617,15 @@
 	qdel(src)
 
 //RUNE IV
-/datum/rune_spell/conjuretalisman
+/datum/rune_spell/blood_cult/conjuretalisman
 	name = "Conjure Talisman"
 	desc = "Can turn some runes into talismans."
 	desc_talisman = "LIKE, HOW, NO SERIOUSLY CALL AN ADMIN."
 	invocation = "H'drak v'loso, mir'kanas verbot!"
 	Act_restriction = CULT_ACT_I
-	word1 = /datum/cultword/hell
-	word2 = /datum/cultword/technology
-	word3 = /datum/cultword/join
+	word1 = /datum/runeword/blood_cult/hell
+	word2 = /datum/runeword/blood_cult/technology
+	word3 = /datum/runeword/blood_cult/join
 	cost_invoke = 2
 	cost_upkeep = 1
 	remaining_cost = 5
@@ -579,7 +641,7 @@
 		inside an arcane tome carried by a fellow cultist. The ritual takes a bit of time and blood, but can save your acolyte some precious time."
 
 
-/datum/rune_spell/conjuretalisman/cast()
+/datum/rune_spell/blood_cult/conjuretalisman/cast()
 	var/obj/effect/rune/R = spell_holder
 	var/obj/item/weapon/talisman/AT = locate() in get_turf(spell_holder)
 	if (AT)
@@ -588,17 +650,15 @@
 			var/list/valid_tomes = list()
 			var/i = 0
 			for (var/obj/item/weapon/tome/T in arcane_tomes)
-				i++
-				var/mob/M = T.loc
-				if (!M)	continue
-				if (!istype(M))
-					M = M.loc
-				if (!istype(M))
-					M = M.loc
-				if (!istype(M))
-					continue
-				else
+				var/mob/M = get_holder_of_type(T,/mob/living)
+				if (M && iscultist(M))
+					i++
 					valid_tomes["[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = T
+			for (var/spell/cult/arcane_dimension/A in arcane_pockets)
+				if (A.holder && A.holder.loc && ismob(A.holder) && A.stored_tome)
+					i++
+					var/mob/M = A.holder
+					valid_tomes["[i] - Tome in [M.real_name]'s arcane dimension ([A.stored_tome.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = A.stored_tome
 			if (valid_tomes.len <= 0)
 				to_chat(user, "<span class='warning'>No cultists are currently carrying a tome.</span>")
 				qdel(src)
@@ -630,7 +690,7 @@
 			to_chat(activator, "<span class='warning'>You may only transfer an imbued or attuned talisman.</span>")
 			qdel(src)
 	else
-		if (blood_pay())
+		if (pay_blood())
 			R.one_pulse()
 			spell_holder.visible_message("<span class='rose'>The blood drops merge into each others, and a talisman takes form in their place</span>")
 			var/turf/T = get_turf(spell_holder)
@@ -638,16 +698,16 @@
 			anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
 		qdel(src)
 
-/datum/rune_spell/conjuretalisman/abort(var/cause)
+/datum/rune_spell/blood_cult/conjuretalisman/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
 	..()
 
 
-/datum/rune_spell/conjuretalisman/cast_talisman()//there should be no ways for this to ever proc
+/datum/rune_spell/blood_cult/conjuretalisman/cast_talisman()//there should be no ways for this to ever proc
 	return
 
 
-/datum/rune_spell/conjuretalisman/proc/payment()
+/datum/rune_spell/blood_cult/conjuretalisman/proc/payment()
 	var/failsafe = 0
 	while(failsafe < 1000)
 		failsafe++
@@ -693,7 +753,7 @@
 		sleep(10)
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
-/datum/rune_spell/conjuretalisman/proc/success()
+/datum/rune_spell/blood_cult/conjuretalisman/proc/success()
 	for(var/mob/living/L in contributors)
 		if (L.client)
 			L.client.images -= progbar
@@ -715,15 +775,15 @@
 	qdel(src)
 
 //RUNE V
-/datum/rune_spell/conversion
+/datum/rune_spell/blood_cult/conversion
 	name = "Conversion"
 	desc = "The unenlightened will be made humble before Nar-Sie, or their lives will come to a fantastic end."
 	desc_talisman = "Use to remotely trigger the rune and incapacitate someone on top."
 	Act_restriction = CULT_ACT_I
 	invocation = "Mah'weyh pleggh at e'ntrath!"
-	word1 = /datum/cultword/join
-	word2 = /datum/cultword/blood
-	word3 = /datum/cultword/self
+	word1 = /datum/runeword/blood_cult/join
+	word2 = /datum/runeword/blood_cult/blood
+	word3 = /datum/runeword/blood_cult/self
 	talisman_absorb = RUNE_CAN_ATTUNE
 	page = "The cult needs many followers to properly thrive, but the teachings of Nar-Sie are extensive, and most cultists learned them over the course of many years. \
 		You won't always have that sort of time however, this is what the Conversion ritual is for. By making an unbeliever appear before Nar-Sie, their eyes will open \
@@ -749,12 +809,12 @@
 	var/obj/effect/cult_ritual/conversion/conversion = null
 
 
-/datum/rune_spell/conversion/Destroy()
+/datum/rune_spell/blood_cult/conversion/Destroy()
 	if(conversion)
 		conversion.Die()
 	..()
 
-/datum/rune_spell/conversion/update_progbar()//progbar tracks conversion progress instead of paid blood
+/datum/rune_spell/blood_cult/conversion/update_progbar()//progbar tracks conversion progress instead of paid blood
 	if (!progbar)
 		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = spell_holder, "icon_state" = "prog_bar_0")
 		progbar.pixel_z = WORLD_ICON_SIZE
@@ -764,7 +824,7 @@
 	progbar.icon_state = "prog_bar_[min(100,round((100-remaining), 10))]"
 	return
 
-/datum/rune_spell/conversion/cast()
+/datum/rune_spell/blood_cult/conversion/cast()
 	var/obj/effect/rune/R = spell_holder
 	var/mob/converter = activator//trying to fix logs showing the converter as *null*
 
@@ -773,6 +833,11 @@
 	var/list/targets = list()
 
 	//first lets check for a victim above
+	for (var/mob/living/silicon/S in T) // Has science gone too far????
+		if (S.cult_permitted || Holiday == APRIL_FOOLS_DAY)
+			if (!iscultist(S))
+				targets.Add(S)
+
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
 			targets.Add(C)
@@ -788,7 +853,7 @@
 		activator.client.images |= progbar
 
 	//secondly, let's stun our victim and begin the ritual
-	to_chat(victim, "<span class='danger'>Occult energies surge from below your feet and seep into your body.</span>")
+	to_chat(victim, "<span class='danger'>Occult energies surge from below your [issilicon(victim) ? "actuators" : "feet"] and seep into your [issilicon(victim) ? "chassis" : "body"].</span>")
 	victim.Silent(5)
 	victim.Knockdown(5)
 	victim.Stun(5)
@@ -974,6 +1039,14 @@
 				abort(RITUALABORT_CONVERT)
 				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
 				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
+				if (issilicon(victim))
+					var/mob/living/silicon/S = victim
+					S.laws = new /datum/ai_laws/cultimov
+					to_chat(S, "<span class='sinister'>Laws updated.</span>")
+					S << sound('sound/machines/lawsync.ogg')
+					if (isrobot(S))
+						var/mob/living/silicon/robot/robit = S
+						robit.disconnect_AI()
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -984,7 +1057,7 @@
 						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
 					if ("Banned")
 						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
-					
+
 		cult.send_flavour_text_refuse(victim, converter)
 		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
 		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
@@ -1022,7 +1095,7 @@
 		qdel(victim)
 		abort(RITUALABORT_SACRIFICE)
 
-/datum/rune_spell/conversion/proc/convert(var/mob/M, var/mob/converter)
+/datum/rune_spell/blood_cult/conversion/proc/convert(var/mob/M, var/mob/converter)
 	var/datum/role/cultist/newCultist = new
 	newCultist.AssignToRole(M.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -1034,17 +1107,17 @@
 	cult.send_flavour_text_accept(victim, converter)
 	newCultist.conversion["converted"] = activator
 
-/datum/rune_spell/conversion/Removed(var/mob/M)
+/datum/rune_spell/blood_cult/conversion/Removed(var/mob/M)
 	if (victim == M)
 		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
 		abort(RITUALABORT_REMOVED)
 
-/datum/rune_spell/conversion/cast_talisman()//handled by /obj/item/weapon/talisman/proc/trigger instead
+/datum/rune_spell/blood_cult/conversion/cast_talisman()//handled by /obj/item/weapon/talisman/proc/trigger instead
 	return
 
-/datum/rune_spell/conversion/abort(var/cause)
+/datum/rune_spell/blood_cult/conversion/abort(var/cause)
 	if (victim)
 		victim.clear_fullscreen("conversionred", 10)
 		victim.clear_fullscreen("conversionborder", 10)
@@ -1066,16 +1139,16 @@
 		qdel(src)
 
 //RUNE VI
-/datum/rune_spell/stun
+/datum/rune_spell/blood_cult/stun
 	name = "Stun"
 	desc = "Overwhelm everyone's senses with a blast of pure chaotic energy. Cultists will recover their senses a bit faster."
 	desc_talisman = "Use to produce a smaller radius blast, or touch someone with it to focus the entire power of the spell on their person."
 	Act_restriction = CULT_ACT_I
 	invocation = "Fuu ma'jin!"
 	touch_cast = 1
-	word1 = /datum/cultword/join
-	word2 = /datum/cultword/hide
-	word3 = /datum/cultword/technology
+	word1 = /datum/runeword/blood_cult/join
+	word2 = /datum/runeword/blood_cult/hide
+	word3 = /datum/runeword/blood_cult/technology
 	page = "Many fear the cult for their powers. Some seek refuge in religion, but no one will be spared from the chaotic energies at work in this ritual. Yourself included. \
 		By itself, it is a very unstable and dangerous rune that cultists should only ever use when in a pinch, or to create a state of chaos, but other runes already fit \
 		that purpose better, namely, the Blind and Deaf-Mute runes. Unlike those runes, cultists will also be affected by the energy released, although they will recover their senses faster. \
@@ -1083,7 +1156,7 @@
 		person, paralyzing them for almost half a minute, and muting them for half that duration."
 
 
-/datum/rune_spell/stun/pre_cast()
+/datum/rune_spell/blood_cult/stun/pre_cast()
 	if (Act_restriction > veil_thickness)
 		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 		return
@@ -1097,7 +1170,7 @@
 		invoke(user,invocation,1)
 		cast_talisman()
 
-/datum/rune_spell/stun/cast()
+/datum/rune_spell/blood_cult/stun/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
@@ -1105,12 +1178,12 @@
 
 	qdel(R)
 
-/datum/rune_spell/stun/cast_talisman()
+/datum/rune_spell/blood_cult/stun/cast_talisman()
 	var/turf/T = get_turf(spell_holder)
 	new/obj/effect/cult_ritual/stun(T,2)
 	qdel(src)
 
-/datum/rune_spell/stun/cast_touch(var/mob/M)
+/datum/rune_spell/blood_cult/stun/cast_touch(var/mob/M)
 	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
@@ -1186,15 +1259,15 @@
 var/list/blind_victims = list()
 
 //RUNE VII
-/datum/rune_spell/blind
+/datum/rune_spell/blood_cult/blind
 	name = "Confusion"//Can't just call it "blind" anymore, can we?
 	desc = "Sow panic in the mind of your enemies, and obscure cameras."
 	desc_talisman = "Sow panic in the mind of your enemies, and obscure cameras. The effect is shorter than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliesin!"
-	word1 = /datum/cultword/destroy
-	word2 = /datum/cultword/see
-	word3 = /datum/cultword/other
+	word1 = /datum/runeword/blood_cult/destroy
+	word2 = /datum/runeword/blood_cult/see
+	word3 = /datum/runeword/blood_cult/other
 	page = "This ritual projects the thoughts of Nar-Sie onto any visible enemy, giving them a taste of the future, and making them unable to differentiate \
 		their allies from our believers. The effects of surprise is especially powerful in the first few seconds. The confusion expires after half a minute, \
 		a bit less when cast from a talisman. A side effect of the ritual appears to obscure the screens of cameras in range, and until anyone repairs them. \
@@ -1203,31 +1276,59 @@ var/list/blind_victims = list()
 	var/talisman_duration=200
 	var/hallucination_radius=25
 
-/datum/rune_spell/blind/cast(var/duration = rune_duration)
+/datum/rune_spell/blood_cult/blind/cast(var/duration = rune_duration)
+	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius)
+	qdel(spell_holder)
+
+/datum/rune_spell/blood_cult/blind/cast_talisman()//talismans have the same range, but the effect lasts shorter.
+	cast(talisman_duration)
+
+/obj/effect/cult_ritual/confusion
+	anchored = 1
+	icon = 'icons/effects/64x64.dmi'
+	icon_state = ""
+	pixel_x = -WORLD_ICON_SIZE/2
+	pixel_y = -WORLD_ICON_SIZE/2
+	layer = NARSIE_GLOW
+	plane = LIGHTING_PLANE
+	mouse_opacity = 0
+	var/duration = 5
+	var/hallucination_radius=25
+
+/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null)
+	..()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
-	var/turf/T = get_turf(spell_holder)
+	var/turf/T = get_turf(src)
 	var/list/hallucinated_turfs = list()
 	playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
-	for(var/turf/U in range(T,hallucination_radius))
+	for(var/turf/U in range(T,radius))
 		if (istype(U,/area/chapel))//the chapel is protected against such illusions, the mobs in it will still be affected however.
 			continue
 		var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
-		if (dist < 15 || prob((hallucination_radius-dist)*4))
+		if (dist < 15 || prob((radius-dist)*4))
 			var/image/I_turf
 			if (U.density)
 				I_turf = image(icon = 'icons/turf/walls.dmi', loc = U, icon_state = "cult[U.junction]")//will preserve wall smoothing
 			else
 				I_turf = image(icon = 'icons/turf/floors.dmi', loc = U, icon_state = "cult")
 				//if it's a floor, give it a chance to have some runes written on top
-				if (prob(7))
+				if (uristrune_cache.len > 0 && prob(7))
 					var/lookup = pick(uristrune_cache)//finally a good use for that cache
 					var/icon/I = uristrune_cache[lookup]
 					I_turf.overlays.Add(I)
 			hallucinated_turfs.Add(I_turf)
 
 	//now let's round up our victims: any non-cultist with an unobstructed line of sight to the rune/talisman will be affected
+	var/list/potential_victims = list()
 	var/list/victims = list()
-	for(var/mob/living/M in viewers(T))
+
+	if (specific_victim)
+		potential_victims.Add(specific_victim)
+	else
+		for(var/mob/living/M in viewers(T))
+			potential_victims.Add(M)
+
+	for(var/mob/living/M in potential_victims)
 		if (iscarbon(M))//mite do something with silicons later
 			var/mob/living/carbon/C = M
 			if (iscultist(C))
@@ -1250,15 +1351,15 @@ var/list/blind_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
-
-	for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
-		shadow(C,T)
-		var/col = C.color
-		animate(C, color = col, time = 4)
-		animate(color = "black", time = 5)
-		animate(color = col, time = 5)
-		C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
-		C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
+	if (!specific_victim)
+		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+			shadow(C,T)
+			var/col = C.color
+			animate(C, color = col, time = 4)
+			animate(color = "black", time = 5)
+			animate(color = col, time = 5)
+			C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
+			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
 	spawn(10)
 		for(var/mob/living/carbon/C in victims)
@@ -1299,11 +1400,7 @@ var/list/blind_victims = list()
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
-
-	qdel(spell_holder)
-
-/datum/rune_spell/blind/cast_talisman()//talismans have the same range, but the effect lasts shorter.
-	cast(talisman_duration)
+		qdel(src)
 
 /proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")//based on the holopad rays I made a few months ago
 	var/disty = C.y - T.y
@@ -1325,15 +1422,15 @@ var/list/blind_victims = list()
 	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE, trans = M2)
 
 //RUNE VIII
-/datum/rune_spell/deafmute
+/datum/rune_spell/blood_cult/deafmute
 	name = "Deaf-Mute"
 	desc = "Silence and deafen nearby enemies. Including robots."
 	desc_talisman = "Silence and deafen nearby enemies. Including robots. The effect is shorter than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliedir!"
-	word1 = /datum/cultword/hide
-	word2 = /datum/cultword/other
-	word3 = /datum/cultword/see
+	word1 = /datum/runeword/blood_cult/hide
+	word2 = /datum/runeword/blood_cult/other
+	word3 = /datum/runeword/blood_cult/see
 	page = "Hear no evil, Speak no evil, what your enemies will see remains for you to decide. This ritual inspire its victims with fright, making them unable to hear or speak for around half a minute. \
 		Note that their speech will come back a bit sooner than their hearing, and that this ritual won't prevent them from writing down messages or using non-vocal means of communication. \
 		Still, it appears to affect robots the same way it affects humans. Furthermore, the ritual isn't flashy, and affects people in range even behind obstacles, so cultists may abuse this spell \
@@ -1344,7 +1441,7 @@ var/list/blind_victims = list()
 	var/mute_talisman_duration=15
 	var/effect_range=7
 
-/datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
+/datum/rune_spell/blood_cult/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
@@ -1366,24 +1463,24 @@ var/list/blind_victims = list()
 
 	qdel(spell_holder)
 
-/datum/rune_spell/deafmute/cast_talisman()
+/datum/rune_spell/blood_cult/deafmute/cast_talisman()
 	cast(deaf_talisman_duration, mute_talisman_duration)
 
 //RUNE IX
-/datum/rune_spell/hide
+/datum/rune_spell/blood_cult/hide
 	name = "Conceal"
 	desc = "Hide runes and cult structures. Some runes can still be used when concealed, but using them might reveal them."
 	desc_talisman = "Hide runes and cult structures. Covers a smaller range than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Kla'atu barada nikt'o!"
-	word1 = /datum/cultword/hide
-	word2 = /datum/cultword/see
-	word3 = /datum/cultword/blood
+	word1 = /datum/runeword/blood_cult/hide
+	word2 = /datum/runeword/blood_cult/see
+	word3 = /datum/runeword/blood_cult/blood
 	page = "This rune allows you to hide every rune and structures in a circular 7 tile range around it. You cannot hide a rune or structure that got revealed less than 10 seconds ago. Affects through walls. The talisman version has a 5 tile radius. "
 	var/rune_effect_range=7
 	var/talisman_effect_range=5
 
-/datum/rune_spell/hide/cast(var/effect_range = rune_effect_range,var/size='icons/effects/480x480.dmi')
+/datum/rune_spell/blood_cult/hide/cast(var/effect_range = rune_effect_range,var/size='icons/effects/480x480.dmi')
 	var/turf/T = get_turf(spell_holder)
 	var/atom/movable/overlay/animation = anim(target = T, a_icon = size, a_icon_state = "rune_conceal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*effect_range, offY = -WORLD_ICON_SIZE*effect_range, plane = LIGHTING_PLANE)
 	animation.alpha = 0
@@ -1417,26 +1514,31 @@ var/list/blind_victims = list()
 			animate(alpha = 0, time = 3)
 	qdel(spell_holder)
 
-/datum/rune_spell/hide/cast_talisman()
+/datum/rune_spell/blood_cult/hide/cast_talisman()
 	cast(talisman_effect_range,'icons/effects/352x352.dmi')
 
 //RUNE X
-/datum/rune_spell/reveal
+/datum/rune_spell/blood_cult/reveal
 	name = "Reveal"
 	desc = "Reveal what you have previously hidden, terrifying enemies in the process."
 	desc_talisman = "Reveal what you have previously hidden, terrifying enemies in the process. The effect is shorter than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Nikt'o barada kla'atu!"
-	word1 = /datum/cultword/blood
-	word2 = /datum/cultword/see
-	word3 = /datum/cultword/hide
+	word1 = /datum/runeword/blood_cult/blood
+	word2 = /datum/runeword/blood_cult/see
+	word3 = /datum/runeword/blood_cult/hide
 	page = "This rune (whose words are the same as the Conceal rune in reverse) lets you reveal every rune and structures in a circular 7 tile range around it. Each revealed rune will stun non-cultists in a 3 tile range around them, stunning and muting them for 2 seconds, up to a total of 10 seconds. Affects through walls. The stun ends if the victims are moved away from where they stand, unless they get knockdown first, so you might want to follow up with a Stun talisman. "
+
+	walk_effect = TRUE
+
 	var/effect_range=7
 	var/shock_range=3
 	var/shock_per_obj=2
 	var/max_shock=10
+	var/last_threshold = -1
+	var/total_uses = 5
 
-/datum/rune_spell/reveal/cast()
+/datum/rune_spell/blood_cult/reveal/cast()
 	var/turf/T = get_turf(spell_holder)
 	//for(var/turf/U in range(effect_range,T))//DEBUG
 	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
@@ -1492,7 +1594,48 @@ var/list/blind_victims = list()
 
 	qdel(spell_holder)
 
-/datum/rune_spell/reveal/cast_talisman()
+/datum/rune_spell/blood_cult/reveal/Added(var/mob/mover)
+	if (total_uses <= 0)
+		return
+	if (!isliving(mover))
+		return
+	var/mob/living/L = mover
+	if (last_threshold + 20 SECONDS > world.time)
+		return
+	if (!iscultist(L))
+		total_uses--
+		last_threshold = world.time
+		var/list/seers = list()
+		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
+			if (iscultist(seer) && seer.client && seer.client.screen)
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				seers += seer
+				seer << image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				spawn(3)
+					del image_intruder
+		var/count = 10 SECONDS
+		do
+			for (var/mob/living/seer in seers)
+				if (seer.gcDestroyed)
+					seers -= seer
+					continue
+				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
+				var/delta_x = (L.x - seer.x)
+				var/delta_y = (L.y - seer.y)
+				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
+				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
+				seer << image_intruder
+				spawn(3)
+					del image_intruder
+			count--
+		while (count && seers.len)
+
+/datum/rune_spell/blood_cult/reveal/cast_talisman()
 	shock_per_obj = 1.5
 	max_shock = 8
 	cast()
@@ -1549,7 +1692,7 @@ var/list/blind_victims = list()
 		qdel(src)
 
 //RUNE XI
-/datum/rune_spell/seer
+/datum/rune_spell/blood_cult/seer
 	name = "Seer"
 	desc = "See the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
 	desc_talisman = "For a few seconds, you may see the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
@@ -1557,31 +1700,31 @@ var/list/blind_victims = list()
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
 	rune_flags = RUNE_STAND
 	talisman_uses = 5
-	word1 = /datum/cultword/see
-	word2 = /datum/cultword/hell
-	word3 = /datum/cultword/join
+	word1 = /datum/runeword/blood_cult/see
+	word2 = /datum/runeword/blood_cult/hell
+	word3 = /datum/runeword/blood_cult/join
 	page = "This rune grants you the ability to see the invisible, including observers and concealed runes and structures. The talisman version has 5 uses, which grant you the ability for 8 seconds each. Remember that runes can still be activated while they are concealed! "
 	cost_invoke = 5
 	var/obj/effect/cult_ritual/seer/seer_ritual = null
 	var/talisman_duration = 80 //tenths of a second
 
-/datum/rune_spell/seer/Destroy()
+/datum/rune_spell/blood_cult/seer/Destroy()
 	destroying_self = 1
 	if (seer_ritual)
 		qdel(seer_ritual)
 	seer_ritual = null
 	..()
 
-/datum/rune_spell/seer/cast()
+/datum/rune_spell/blood_cult/seer/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	if (blood_pay())
+	if (pay_blood())
 		seer_ritual = new /obj/effect/cult_ritual/seer(R.loc,activator,src)
 	else
 		qdel(src)
 
-/datum/rune_spell/seer/cast_talisman()
+/datum/rune_spell/blood_cult/seer/cast_talisman()
 	var/mob/living/M = activator
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
@@ -1606,10 +1749,10 @@ var/list/blind_victims = list()
 	mouse_opacity = 0
 	flags = PROXMOVE
 	var/mob/living/caster = null
-	var/datum/rune_spell/seer/source = null
+	var/datum/rune_spell/blood_cult/seer/source = null
 
 
-/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/seer/runespell)
+/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell)
 	..()
 	caster = user
 	source = runespell
@@ -1639,15 +1782,15 @@ var/list/blind_victims = list()
 
 
 //RUNE XII
-/datum/rune_spell/summonrobes
+/datum/rune_spell/blood_cult/summonrobes
 	name = "Summon Robes"
 	desc = "Swap your clothes for the robes of Nar-Sie's followers. Significantly improves the efficiency of some rituals. Provides a tesseract to instantly swap back to your old clothes."
 	desc_talisman = "Swap your clothes for the robes of Nar-Sie's followers. Significantly improves the efficiency of some rituals. Provides a tesseract to instantly swap back to your old clothes. Using the tesseract will also give you the talisman back, granted it has some uses left."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sa tatha najin"
-	word1 = /datum/cultword/hell
-	word2 = /datum/cultword/destroy
-	word3 = /datum/cultword/other
+	word1 = /datum/runeword/blood_cult/hell
+	word2 = /datum/runeword/blood_cult/destroy
+	word3 = /datum/runeword/blood_cult/other
 	rune_flags = RUNE_STAND
 	talisman_uses = 3
 	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section bellow) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
@@ -1659,7 +1802,7 @@ var/list/blind_victims = list()
 		slot_s_store,
 		)
 
-/datum/rune_spell/summonrobes/cast()
+/datum/rune_spell/blood_cult/summonrobes/cast()
 	var/obj/effect/rune/R = spell_holder
 	if (istype(R))
 		R.one_pulse()
@@ -1721,25 +1864,25 @@ var/list/blind_victims = list()
 
 
 //RUNE XIII
-/datum/rune_spell/door
+/datum/rune_spell/blood_cult/door
 	name = "Door"
 	desc = "Raise a door to impede your enemies. It automatically opens and closes behind you, but the others may eventually break it down."
 	desc_talisman = "Use to remotely trigger the rune and have it spawn a door to block your enemies."
 	Act_restriction = CULT_ACT_II
 	invocation = "Khari'd! Eske'te tannin!"
-	word1 = /datum/cultword/destroy
-	word2 = /datum/cultword/travel
-	word3 = /datum/cultword/self
+	word1 = /datum/runeword/blood_cult/destroy
+	word2 = /datum/runeword/blood_cult/travel
+	word3 = /datum/runeword/blood_cult/self
 	talisman_absorb = RUNE_CAN_ATTUNE
 	page = "This rune spawns a Cult Door immediately upon use, for a cost of 10u of blood. This rune cannot be activated if there's another cult door currently adjacent to it. Cult doors can be broken down relatively quickly with weapons, but let cultist move through them with barely any slowdown, making them great to retreat. Spawning them in maintenance will exasperate the crew. Lastly, they can be remotely activated using a talisman. "
 	cost_invoke = 10
 
-/datum/rune_spell/door/cast()
+/datum/rune_spell/blood_cult/door/cast()
 	var/obj/effect/rune/R = spell_holder
 	if (istype(R))
 		R.one_pulse()
 
-	if (blood_pay())
+	if (pay_blood())
 		if (locate(/obj/machinery/door/mineral/cult) in range(spell_holder,1))
 			abort(RITUALABORT_NEAR)
 		else
@@ -1748,25 +1891,25 @@ var/list/blind_victims = list()
 	qdel(src)
 
 //RUNE XIV
-/datum/rune_spell/fervor
+/datum/rune_spell/blood_cult/fervor
 	name = "Fervor"
 	desc = "Inspire nearby cultists to purge their stuns and raise their movement speed."
 	desc_talisman = "Use to inspire nearby cultists to purge their stuns and raise their movement speed."
 	Act_restriction = CULT_ACT_II
 	invocation = "Khari'd! Gual'te nikka!"
-	word1 = /datum/cultword/travel
-	word2 = /datum/cultword/technology
-	word3 = /datum/cultword/other
+	word1 = /datum/runeword/blood_cult/travel
+	word2 = /datum/runeword/blood_cult/technology
+	word3 = /datum/runeword/blood_cult/other
 	page = "For a 20u blood cost, this rune immediately buffs all cultists in a 7 tile range by immediately removing any stuns, oxygen loss damage, holy water, and various other bad conditions. Additionally, it injects them with 1u of hyperzine, negating slowdown from low health or clothing. This makes it a very potent rune in a fight, especially as a follow up to a flash bang, or prior to a fight. Best used as a talisman. "
 	cost_invoke = 20
 	var/effect_range = 7
 
-/datum/rune_spell/fervor/cast()
+/datum/rune_spell/blood_cult/fervor/cast()
 	var/obj/effect/rune/R = spell_holder
 	if (istype(R))
 		R.one_pulse()
 
-	if (blood_pay())
+	if (pay_blood())
 		for(var/mob/living/L in range(effect_range,get_turf(spell_holder)))
 			if(L.stat != DEAD && iscultist(L))
 				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)
@@ -1790,21 +1933,22 @@ var/list/blind_victims = list()
 					H.pain_shock_stage = 0
 				L.update_canmove()
 				L.stat = CONSCIOUS
-				L.reagents.del_reagent(HOLYWATER)
-				L.reagents.add_reagent(HYPERZINE,1)
+				if (L.reagents)
+					L.reagents.del_reagent(HOLYWATER)
+					L.reagents.add_reagent(HYPERZINE,1)
 		qdel(spell_holder)
 	qdel(src)
 
 //RUNE XV
-/datum/rune_spell/summoncultist
+/datum/rune_spell/blood_cult/summoncultist
 	name = "Blood Magnetism"
 	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
 	desc_talisman = "Use to begin the Blood Magnetism ritual where you stand."
 	Act_restriction = CULT_ACT_II
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
-	word1 = /datum/cultword/join
-	word2 = /datum/cultword/other
-	word3 = /datum/cultword/self
+	word1 = /datum/runeword/blood_cult/join
+	word2 = /datum/runeword/blood_cult/other
+	word3 = /datum/runeword/blood_cult/self
 	page = "This rune actually has two different rituals, which you can choose between upon casting, both rituals have a 10 seconds base cast time. The first one, Summon Cultist, lets you summon a cultist from anywhere in the world whether they're alive or dead, for a cost of 50u of blood, which can be split by having other cultists participate in the ritual. The second ritual, Rejoin Cultist, lets you summon yourself next to the target cultist instead for a cost of 15u of blood. Other cultists can participate in the second ritual to accompany you, but the cost will remain 15u for every participating cultist."
 	remaining_cost = 10
 	cost_upkeep = 1
@@ -1814,7 +1958,7 @@ var/list/blind_victims = list()
 	var/cost_summon = 50//you probably don't want to pay that up alone
 	var/cost_rejoin = 15//static cost for every contributor
 
-/datum/rune_spell/summoncultist/Destroy()
+/datum/rune_spell/blood_cult/summoncultist/Destroy()
 	target = null
 	for (var/guy in feet_portals)
 		var/obj/O = feet_portals[guy]
@@ -1826,13 +1970,13 @@ var/list/blind_victims = list()
 	..()
 
 
-/datum/rune_spell/summoncultist/abort()
+/datum/rune_spell/blood_cult/summoncultist/abort()
 	for (var/guy in feet_portals)
 		var/obj/O = feet_portals[guy]
 		qdel(O)
 	..()
 
-/datum/rune_spell/summoncultist/cast()
+/datum/rune_spell/blood_cult/summoncultist/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
@@ -1882,13 +2026,13 @@ var/list/blind_victims = list()
 	spawn()
 		payment()
 
-/datum/rune_spell/summoncultist/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+/datum/rune_spell/blood_cult/summoncultist/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
 	var/obj/effect/rune/R = new(get_turf(activator))
 	R.icon_state = "temp"
 	R.active_spell = new type(activator,R)
 	qdel(src)
 
-/datum/rune_spell/summoncultist/midcast(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/summoncultist/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
 	invoke(add_cultist, invocation)
@@ -1900,12 +2044,12 @@ var/list/blind_victims = list()
 		var/obj/effect/cult_ritual/feet_portal/P = new (add_cultist.loc, add_cultist, src)
 		feet_portals[add_cultist] = P
 
-/datum/rune_spell/summoncultist/abort(var/cause)
+/datum/rune_spell/blood_cult/summoncultist/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
 	spell_holder.overlays -= image('icons/effects/effects.dmi',"rune_summon")
 	..()
 
-/datum/rune_spell/summoncultist/proc/payment()//an extra payment is spent at the end of the channeling, and shared between contributors
+/datum/rune_spell/blood_cult/summoncultist/proc/payment()//an extra payment is spent at the end of the channeling, and shared between contributors
 	var/failsafe = 0
 	while(failsafe < 1000)
 		failsafe++
@@ -1955,7 +2099,7 @@ var/list/blind_victims = list()
 		sleep(10)
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
-/datum/rune_spell/summoncultist/proc/success()
+/datum/rune_spell/blood_cult/summoncultist/proc/success()
 	if (rejoin)
 		var/list/valid_turfs = list()
 		for(var/turf/T in orange(target,1))
@@ -2017,7 +2161,7 @@ var/list/blind_victims = list()
 	var/mob/living/caster = null
 	var/turf/source = null
 
-/obj/effect/cult_ritual/feet_portal/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/seer/runespell)
+/obj/effect/cult_ritual/feet_portal/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell)
 	..()
 	caster = user
 	source = get_turf(runespell.spell_holder)
@@ -2035,32 +2179,32 @@ var/list/blind_victims = list()
 		forceMove(get_turf(caster))
 
 //RUNE XVI
-/datum/rune_spell/portalentrance
+/datum/rune_spell/blood_cult/portalentrance
 	name = "Path Entrance"
 	desc = "Take a shortcut through the veil between this world and the other one."
 	desc_talisman = "Use to remotely trigger the rune and force objects and creatures on top through the Path."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sas'so c'arta forbici!"
-	word1 = /datum/cultword/travel
-	word2 = /datum/cultword/self
-	word3 = /datum/cultword/other
+	word1 = /datum/runeword/blood_cult/travel
+	word2 = /datum/runeword/blood_cult/self
+	word3 = /datum/runeword/blood_cult/other
 	talisman_absorb = RUNE_CAN_ATTUNE
 	can_conceal = 1
 	page = "This rune lets you set free teleports between any two tiles in the worlds, when used in combination with the Path Exit rune. Upon its first use, the rune asks you to set a path for it to attune to. There are 10 possible paths, each corresponding to a cult word. Upon subsequent uses the rune will, after a 1 second delay, teleport everything not anchored above it to the Path Exit attuned to the same word (if there aren't any, no teleportation will occur). Talismans will remotely activate this rune. You can deactivate a Path Entrance by simply using the Erase Word spell on it, and rewriting it afterwards. "
 	var/network = ""
 
-/datum/rune_spell/portalentrance/cast()
+/datum/rune_spell/blood_cult/portalentrance/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	var/list/available_networks = cultwords_english.Copy()
+	var/list/available_networks = global_runesets["blood_cult"].words_english.Copy()
 
 	network = input(activator, "Choose an available Path, you may change paths later by erasing the rune.", "Path Entrance") as null|anything in available_networks
 	if (!network)
 		qdel(src)
 		return
 
-	var/datum/cultword/W = cultwords[network]
+	var/datum/runeword/blood_cult/W = global_runesets["blood_cult"].words[network]
 
 	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_pad")
@@ -2078,7 +2222,7 @@ var/list/blind_victims = list()
 		I_network = image(I)
 	else
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-		I = R.make_uristword(W,null,0)
+		I = R.make_iconcache(W,null,0)
 		I_network = image(I)
 	I_network.plane = ABOVE_TURF_PLANE
 	I_network.layer = BLOOD_LAYER
@@ -2101,14 +2245,14 @@ var/list/blind_victims = list()
 
 	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
 
-/datum/rune_spell/portalentrance/midcast(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/portalentrance/midcast(var/mob/add_cultist)
 	if (istype(spell_holder, /obj/item/weapon/talisman))
 		invoke(add_cultist,invocation,1)
 	else
 		invoke(add_cultist,invocation)
 
 	var/turf/destination = null
-	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
+	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
 		if (P.network == network)
 			destination = get_turf(P.spell_holder)
 			break
@@ -2125,40 +2269,40 @@ var/list/blind_victims = list()
 		new /obj/effect/bloodcult_jaunt(T,null,destination,T)
 		flick("cult_jaunt_land",landing_animation)
 
-/datum/rune_spell/portalentrance/midcast_talisman(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/portalentrance/midcast_talisman(var/mob/add_cultist)
 	midcast(add_cultist)
 
 //RUNE XVII
 var/list/bloodcult_exitportals = list()
 
-/datum/rune_spell/portalexit
+/datum/rune_spell/blood_cult/portalexit
 	name = "Path Exit"
 	desc = "We hope you enjoyed your flight with Air Nar-Sie"//might change it later or not.
 	desc_talisman = "Use to immediately jaunt through the Path."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sas'so c'arta forbici!"
-	word1 = /datum/cultword/travel
-	word2 = /datum/cultword/other
-	word3 = /datum/cultword/self
+	word1 = /datum/runeword/blood_cult/travel
+	word2 = /datum/runeword/blood_cult/other
+	word3 = /datum/runeword/blood_cult/self
 	talisman_absorb = RUNE_CAN_IMBUE
 	can_conceal = 1
 	page = "This rune lets you set free teleports between any two tiles in the worlds, when used in combination with the Path Entrance rune. Upon its first use, the rune asks you to set a path for it to attune to. There are 10 possible paths, each corresponding to a cult word. Unlike for entrances, there may only exist 1 exit for each path. By using a talisman on an attuned rune, the talisman will teleport you to that rune immediately upon use. By using a talisman on a non-attuned rune, the rune will be absorbed instead, and you'll be able to set a destination path on the talisman, allowing you to check which path exits currently exist. You can deactivate a Path Exit by simply using the Erase Word spell on it, and rewriting it afterwards. "
 	var/network = ""
 
-/datum/rune_spell/portalexit/New()
+/datum/rune_spell/blood_cult/portalexit/New()
 	..()
 	bloodcult_exitportals.Add(src)
 
-/datum/rune_spell/portalexit/Destroy()
+/datum/rune_spell/blood_cult/portalexit/Destroy()
 	bloodcult_exitportals.Remove(src)
 	..()
 
-/datum/rune_spell/portalexit/cast()
+/datum/rune_spell/blood_cult/portalexit/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	var/list/available_networks = cultwords_english.Copy()
-	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
+	var/list/available_networks = global_runesets["blood_cult"].words_english.Copy()
+	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
 		if (P.network)
 			available_networks -= P.network
 
@@ -2172,7 +2316,7 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	var/datum/cultword/W = cultwords[network]
+	var/datum/runeword/blood_cult/W = global_runesets["blood_cult"].words[network]
 
 	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
@@ -2190,7 +2334,7 @@ var/list/bloodcult_exitportals = list()
 		I_network = image(I)
 	else
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-		I = R.make_uristword(W,null,0)
+		I = R.make_iconcache(W,null,0)
 		I_network = image(I)
 	I_network.plane = ABOVE_TURF_PLANE
 	I_network.layer = BLOOD_LAYER
@@ -2213,20 +2357,20 @@ var/list/bloodcult_exitportals = list()
 
 	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
 
-/datum/rune_spell/portalexit/midcast(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/portalexit/midcast(var/mob/add_cultist)
 	to_chat(add_cultist, "<span class='notice'>You may teleport to this rune by using a Path Entrance, or a talisman attuned to it.</span>")
 
-/datum/rune_spell/portalexit/midcast_talisman(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/portalexit/midcast_talisman(var/mob/add_cultist)
 	var/turf/T = get_turf(add_cultist)
 	invoke(add_cultist,invocation,1)
 	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
 	new /obj/effect/bloodcult_jaunt (T, add_cultist, get_turf(spell_holder))
 
-/datum/rune_spell/portalexit/cast_talisman()
+/datum/rune_spell/blood_cult/portalexit/cast_talisman()
 	var/obj/item/weapon/talisman/T = spell_holder
 	T.uses++//so the talisman isn't deleted when setting the network
 	var/list/valid_choices = list()
-	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
+	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
 		if (P.network)
 			valid_choices.Add(P.network)
 			valid_choices[P.network] = P
@@ -2239,51 +2383,54 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	invoke(activator,"[cultwords_rune[cultwords_english.Find(network)]]!",1)
+	invoke(activator,"[global_runesets["blood_cult"].words_english[network]]!",1)
 
 	to_chat(activator, "<span class='notice'>This talisman will now serve as a key to the \"[network]\" Path.</span>")
 
-	var/datum/rune_spell/portalexit/PE = valid_choices[network]
+	var/datum/rune_spell/blood_cult/portalexit/PE = valid_choices[network]
 
 	T.attuned_rune = PE.spell_holder
-	T.word_pulse(cultwords[network])
+	T.word_pulse(global_runesets["blood_cult"].words[network])
 
 //RUNE XVIII
-/datum/rune_spell/pulse
+/datum/rune_spell/blood_cult/pulse
 	name = "Pulse"
 	desc = "Scramble the circuits of nearby devices"
 	desc_talisman = "Use to scramble the circuits of nearby devices."
 	Act_restriction = CULT_ACT_II
 	invocation = "Ta'gh fara'qha fel d'amar det!"
-	word1 = /datum/cultword/destroy
-	word2 = /datum/cultword/see
-	word3 = /datum/cultword/technology
-	page = "This rune triggers a short-range EMP that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
+	word1 = /datum/runeword/blood_cult/destroy
+	word2 = /datum/runeword/blood_cult/see
+	word3 = /datum/runeword/blood_cult/technology
+	page = "This rune triggers a series of short-range EMPs that messes with electronic machinery, devices, and silicons. Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP. Best used as a talisman. "
 
-/datum/rune_spell/pulse/cast()
+/datum/rune_spell/blood_cult/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
 	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
 	T.hotspot_expose(700,125,surfaces=1)
-	empulse(T, 1, 3)
+	spawn(0)
+		for(var/i = 0; i < 3; i++)
+			empulse(T, 1, 3)
+			sleep(20)
 	qdel(spell_holder)
 
 //RUNE XIX
-/datum/rune_spell/astraljourney
+/datum/rune_spell/blood_cult/astraljourney
 	name = "Astral Journey"
 	desc = "Leave your body so you can go spy on your enemies."
 	desc_talisman = "Leave your body so you can go spy on your enemies."
 	Act_restriction = CULT_ACT_II
 	invocation = "Fwe'sh mah erl nyag r'ya!"
-	word1 = /datum/cultword/hell
-	word2 = /datum/cultword/travel
-	word3 = /datum/cultword/self
+	word1 = /datum/runeword/blood_cult/hell
+	word2 = /datum/runeword/blood_cult/travel
+	word3 = /datum/runeword/blood_cult/self
 	page = "Upon use, you will fall asleep, and your soul will float above your body, allowing you to freely move around the Z-Level like a ghost would. However, you cannot talk with other ghosts, or listen to them, or use any of the usual ghost verbs beside re-entering your body. Re-entering your body, or it being moved away from the rune will end the ritual, and you'll wake up after a second or so. You might have to use the rest verb to get back up. As it can be used for any period of time, it's a great, though limited, spying tool. Should your body be destroyed while you were using the rune, attempting to re-enter it will grant you the rest of the ghost verbs and abilities back. "
 	rune_flags = RUNE_STAND
 	var/mob/dead/observer/deafmute/astral = null
 	var/cultist_key = ""
 	var/list/restricted_verbs = list()
 
-/datum/rune_spell/astraljourney/cast()
+/datum/rune_spell/blood_cult/astraljourney/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
@@ -2325,6 +2472,8 @@ var/list/bloodcult_exitportals = list()
 
 	step(astral,NORTH)
 	astral.dir = SOUTH
+	astral.movespeed = 0.375//twice the default ghost move speed
+	astral.see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 	if (astral.client)
 		for (var/image/I in antag_icons)
@@ -2333,14 +2482,14 @@ var/list/bloodcult_exitportals = list()
 	spawn()
 		handle_astral()
 
-/datum/rune_spell/astraljourney/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+/datum/rune_spell/blood_cult/astraljourney/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
 	var/obj/effect/rune/R = new(get_turf(activator))
 	R.icon_state = "temp"
 	R.active_spell = new type(activator,R)
 	qdel(src)
 
 
-/datum/rune_spell/astraljourney/abort(var/cause)
+/datum/rune_spell/blood_cult/astraljourney/abort(var/cause)
 	if (activator && activator.loc && cultist_key)
 		activator.key = cultist_key
 		to_chat(activator, "<span class='notice'>You reconnect with your body.</span>")
@@ -2351,26 +2500,26 @@ var/list/bloodcult_exitportals = list()
 				astral.verbs += V
 	..()
 
-/datum/rune_spell/astraljourney/proc/handle_astral()
+/datum/rune_spell/blood_cult/astraljourney/proc/handle_astral()
 	while(!destroying_self && activator && astral && astral.loc && activator.stat == UNCONSCIOUS && activator.loc == spell_holder.loc)
 		activator.sleeping = max(activator.sleeping,2)
 		sleep(10)
 	abort()
 
-/datum/rune_spell/astraljourney/Removed(var/mob/M)
+/datum/rune_spell/blood_cult/astraljourney/Removed(var/mob/M)
 	if (M == activator)
 		abort(RITUALABORT_GONE)
 
 //RUNE XX
-/datum/rune_spell/resurrect
+/datum/rune_spell/blood_cult/resurrect
 	name = "Resurrect"
 	desc = "Create a strong body for your fallen allies to inhabit."
 	desc_talisman = "Create a strong body for your fallen allies to inhabit."
 	Act_restriction = CULT_ACT_III
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
-	word1 = /datum/cultword/blood
-	word2 = /datum/cultword/join
-	word3 = /datum/cultword/hell
+	word1 = /datum/runeword/blood_cult/blood
+	word2 = /datum/runeword/blood_cult/join
+	word3 = /datum/runeword/blood_cult/hell
 	page = "This final rune lets you bring back any dead player into the cult, by creating them a new body. Unlike other runes, this one requires a few ingredients:\
 	    a Skull (obtainable from failed Conversions and Soul Stone victims)\
 	    some Ashes (obtainable by burning some paper or talisman, which you can do by using them on a cult blade)\
@@ -2387,7 +2536,7 @@ var/list/bloodcult_exitportals = list()
 	var/obj/effect/cult_ritual/resurrect/husk = null
 	var/mob/dead/ghost = null
 
-/datum/rune_spell/resurrect/cast()
+/datum/rune_spell/blood_cult/resurrect/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
@@ -2425,13 +2574,13 @@ var/list/bloodcult_exitportals = list()
 	spawn()
 		payment()
 
-/datum/rune_spell/resurrect/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+/datum/rune_spell/blood_cult/resurrect/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
 	var/obj/effect/rune/R = new(get_turf(activator))
 	R.icon_state = "temp"
 	R.active_spell = new type(activator,R)
 	qdel(src)
 
-/datum/rune_spell/resurrect/midcast(var/mob/add_cultist)
+/datum/rune_spell/blood_cult/resurrect/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
 	invoke(add_cultist, invocation)
@@ -2439,7 +2588,7 @@ var/list/bloodcult_exitportals = list()
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
 
-/datum/rune_spell/resurrect/abort(var/cause)
+/datum/rune_spell/blood_cult/resurrect/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
 	if (ghost)
 		ghost.incorporeal_move = 1
@@ -2451,7 +2600,7 @@ var/list/bloodcult_exitportals = list()
 		new /obj/effect/gibspawner/human(spell_holder.loc)
 	..()
 
-/datum/rune_spell/resurrect/proc/payment()
+/datum/rune_spell/blood_cult/resurrect/proc/payment()
 	var/failsafe = 0
 	while(failsafe < 1000)
 		failsafe++
@@ -2492,7 +2641,7 @@ var/list/bloodcult_exitportals = list()
 		sleep(10)
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
-/datum/rune_spell/resurrect/proc/success()
+/datum/rune_spell/blood_cult/resurrect/proc/success()
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
 	if (ghost && husk)
 		var/mob/living/carbon/human/manifested/vessel = new (spell_holder.loc)
@@ -2501,15 +2650,15 @@ var/list/bloodcult_exitportals = list()
 		vessel.ckey = ghost.ckey
 		qdel(husk)
 
-		vessel.r_hair = 90
-		vessel.g_hair = 90
-		vessel.b_hair = 90
-		vessel.r_facial = 90
-		vessel.g_facial = 90
-		vessel.b_facial = 90
-		vessel.r_eyes = 255
-		vessel.g_eyes = 0
-		vessel.b_eyes = 0
+		vessel.my_appearance.r_hair = 90
+		vessel.my_appearance.g_hair = 90
+		vessel.my_appearance.b_hair = 90
+		vessel.my_appearance.r_facial = 90
+		vessel.my_appearance.g_facial = 90
+		vessel.my_appearance.b_facial = 90
+		vessel.my_appearance.r_eyes = 255
+		vessel.my_appearance.g_eyes = 0
+		vessel.my_appearance.b_eyes = 0
 		vessel.status_flags &= ~GODMODE
 		vessel.regenerate_icons()
 		//Let's not forget to make them cultists as well
@@ -2552,55 +2701,5 @@ var/list/bloodcult_exitportals = list()
 	mouse_opacity = 0
 
 
-/*
-	if((word1 == cultwords["travel"] && word2 == cultwords["self"]))
-		return "Travel Self"
-	else if((word1 == cultwords["join"] && word2 == cultwords["blood"] && word3 == cultwords["self"]))
-		return "Convert"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["join"] && word3 == cultwords["self"]))
-		return "Tear Reality"
-	else if((word1 == cultwords["see"] && word2 == cultwords["blood"] && word3 == cultwords["hell"]))
-		return "Summon Tome"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["destroy"] && word3 == cultwords["other"]))
-		return "Armor"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["technology"]))
-		return "EMP"
-	else if((word1 == cultwords["travel"] && word2 == cultwords["blood"] && word3 == cultwords["self"]))
-		return "Drain"
-	else if((word1 == cultwords["see"] && word2 == cultwords["hell"] && word3 == cultwords["join"]))
-		return "See Invisible"
-	else if((word1 == cultwords["blood"] && word2 == cultwords["join"] && word3 == cultwords["hell"]))
-		return "Raise Dead"
-	else if((word1 == cultwords["hide"] && word2 == cultwords["see"] && word3 == cultwords["blood"]))
-		return "Hide Runes"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["travel"] && word3 == cultwords["self"]))
-		return "Astral Journey"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["technology"] && word3 == cultwords["join"]))
-		return "Imbue Talisman"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["blood"] && word3 == cultwords["join"]))
-		return "Sacrifice"
-	else if((word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["hide"]))
-		return "Reveal Runes"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["travel"] && word3 == cultwords["self"]))
-		return "Wall"
-	else if((word1 == cultwords["travel"] && word2 == cultwords["technology"] && word3 == cultwords["other"]))
-		return "Free Cultist"
-	else if((word1 == cultwords["join"] && word2 == cultwords["other"] && word3 == cultwords["self"]))
-		return "Summon Cultist"
-	else if((word1 == cultwords["hide"] && word2 == cultwords["other"] && word3 == cultwords["see"]))
-		return "Deafen"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["other"]))
-		return "Blind"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["blood"]))
-		return "Blood Boil"
-	else if((word1 == cultwords["self"] && word2 == cultwords["other"] && word3 == cultwords["technology"]))
-		return "Communicate"
-	else if((word1 == cultwords["travel"] && word2 == cultwords["other"]))
-		return "Travel Other"
-	else if((word1 == cultwords["join"] && word2 == cultwords["hide"] && word3 == cultwords["technology"]))
-		return "Stun"
-	else
-		return null
-*/
-
+	
 #undef RUNE_STAND

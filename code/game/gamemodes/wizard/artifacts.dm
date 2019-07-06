@@ -54,9 +54,10 @@
 	abbreviation = "HS"
 	spawned_items = list(
 	/obj/item/clothing/shoes/sandal,\
-	/obj/item/clothing/gloves/purple,\
+	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard)
+	/obj/item/clothing/head/helmet/space/rig/wizard,\
+	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
@@ -253,7 +254,7 @@
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
 	H.nutrition += 1000
 
-	H.add_spell(new/spell/noclothes)
+	H.add_spell(new/spell/passive/noclothes)
 	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
 	H.add_spell(new/spell/targeted/wrapping_paper)
 	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman)

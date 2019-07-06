@@ -113,6 +113,34 @@
 	force_report = 1
 	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
 
+//Jungle Fever
+
+/datum/command_alert/jungle_fever
+	name = "Jungle Fever"
+	alert_title = "Jungle Fever Outbreak"
+	force_report = 1
+	message = "Early symptoms of a Jungle Fever outbreak have been detected aboard your station. SHOOT MONKEYS ON SIGHT. Weld ducting and ventilation. Avoid contact with disease carriers at any personal cost. Command staff should secure nuclear authentication disk and nuclear fission explosive."
+
+/datum/command_alert/jungle_endgame
+	name = "Jungle Fever Outbreak Escalated"
+	alert_title = "Jungle Fever Outbreak Escalated"
+	force_report = 1
+	message = "ERROR"
+
+/datum/command_alert/jungle_endgame/announce()
+	var/nukecode = "ERROR"
+	for(var/obj/machinery/nuclearbomb/bomb in machines)
+		if(bomb && bomb.r_code && bomb.z == STATION_Z)
+			nukecode = bomb.r_code
+	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
+	..()
+
+/datum/command_alert/jungle_purified
+	name = "Jungle Fever Crew Win"
+	alert_title = "Jungle Fever Contained"
+	force_report = 1
+	message = "We have received confirmation that, as of this time, the Jungle Fever outbreak has been contained. Incinerate all simian corpses and salvage equipment for evacuation."
+
 /////////ERT
 
 /datum/command_alert/ert_fail
@@ -535,3 +563,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Wall Fungi"
 	alert_title = "Biohazard Alert"
 	message = "Harmful fungi detected on station. Station structures may be contaminated."
+
+/datum/command_alert/nuclear_operatives
+	name = "Nuclear Operatives"
+	alert_title = "Imminent Assault"
+
+/datum/command_alert/nuclear_operatives/announce()
+	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
+	..()
