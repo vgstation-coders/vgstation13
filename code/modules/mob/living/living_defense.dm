@@ -14,7 +14,7 @@
 	percent damage reduction
 */
 /mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0, var/armor_penetration = 0)
-	var/armor = (getarmor(def_zone, attack_flag)-armor_penetration)*modifier
+	var/armor = max(0, (getarmor(def_zone, attack_flag)-armor_penetration)*modifier)
 
 	if(armor >= 100) //Absolutely no damage
 		if(!quiet)
