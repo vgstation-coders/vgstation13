@@ -93,7 +93,12 @@
 		var/turf/player_turf = get_turf(player)
 		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
 			continue
-		if (iscultist(player)) // If there are only cultists left on the station, we'll have to sacrifice one of them
+		var/is_implanted = FALSE
+		for(var/obj/item/weapon/implant/loyalty/loyalty_implant in player)
+			if(loyalty_implant.implanted)
+				is_implanted = TRUE
+				break
+		if (is_implanted) // If there are only non-implanted players left on the station, we'll have to sacrifice one of them
 			backup_targets += player
 		else
 			//They may be dead, but we only need their flesh
