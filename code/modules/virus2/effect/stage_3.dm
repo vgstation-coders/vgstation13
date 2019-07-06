@@ -5,7 +5,7 @@
 	max_multiplier = 3
 	badness = EFFECT_DANGER_HARMFUL
 
-/datum/disease2/effect/toxins/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/toxins/activate(var/mob/living/mob)
 	mob.adjustToxLoss((2*multiplier))
 
 
@@ -16,7 +16,7 @@
 	max_multiplier = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/shakey/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/shakey/activate(var/mob/living/mob)
 	shake_camera(mob,5*multiplier)
 
 
@@ -26,7 +26,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/telepathic/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/telepathic/activate(var/mob/living/mob)
 	mob.dna.check_integrity()
 	mob.dna.SetSEState(REMOTETALKBLOCK,1)
 	domutcheck(mob, null)
@@ -37,7 +37,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HARMFUL
 
-/datum/disease2/effect/mind/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/mind/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		var/datum/organ/internal/brain/B = H.internal_organs_by_name["brain"]
@@ -53,7 +53,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/hallucinations/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/hallucinations/activate(var/mob/living/mob)
 	mob.hallucination += 25
 
 
@@ -63,7 +63,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/deaf/activate(var/mob/living/mob)
 	mob.ear_deaf = 5
 
 
@@ -73,7 +73,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/giggle/activate(var/mob/living/mob)
 	mob.say("*giggle")
 
 
@@ -83,7 +83,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/chickenpox/activate(var/mob/living/mob)
 	if (prob(30))
 		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
 	if (prob(15))
@@ -98,7 +98,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/confusion/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/confusion/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You have trouble telling right and left apart all of a sudden.</span>")
 	mob.confused += 10
 
@@ -109,7 +109,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_DEADLY
 
-/datum/disease2/effect/mutation/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/mutation/activate(var/mob/living/mob)
 	mob.apply_damage(2, CLONE)
 
 
@@ -119,7 +119,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/groan/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/groan/activate(var/mob/living/mob)
 	mob.say("*groan")
 
 
@@ -129,7 +129,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/sweat/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/sweat/activate(var/mob/living/mob)
 	if(prob(30))
 		mob.emote("me",1,"is sweating profusely!")
 
@@ -144,7 +144,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/elvis/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/elvis/activate(var/mob/living/mob)
 	if(!istype(mob))
 		return
 
@@ -174,7 +174,7 @@
 				H.my_appearance.f_style = "Elvis Sideburns"
 				H.update_hair()
 
-/datum/disease2/effect/elvis/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/elvis/deactivate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/dude = mob
 		if(istype(dude.glasses, /obj/item/clothing/glasses/sunglasses/virus))
@@ -188,7 +188,7 @@
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/pthroat/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/pthroat/activate(var/mob/living/mob)
 	//
 	var/obj/item/clothing/mask/gas/clown_hat/virus/virusclown_hat = new /obj/item/clothing/mask/gas/clown_hat/virus
 	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/clown_hat/virus))
@@ -208,7 +208,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/horsethroat/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/horsethroat/activate(var/mob/living/mob)
 
 
 	if(!(mob.type in compatible_mobs))
@@ -233,13 +233,20 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	affect_voice = 1
 	max_multiplier = 4
 	badness = EFFECT_DANGER_ANNOYING
+	var/old_r = 0
+	var/old_g = 0
+	var/old_b = 0
 
-/datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/anime_hair/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 		if(!triggered)
 			var/list/hair_colors = list("pink","red","green","blue","purple")
 			var/hair_color = pick(hair_colors)
+
+			old_r = affected.my_appearance.b_hair
+			old_g = affected.my_appearance.g_hair
+			old_b = affected.my_appearance.r_hair
 
 			switch(hair_color)
 				if("pink")
@@ -315,13 +322,18 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 					affected.put_in_hands(fake_katana)
 				given_katana = 1
 
-datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
+datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
-	var/mob/living/carbon/human/affected = mob
-	if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
-		affected.shoes.canremove = 1
-	if(affected.w_uniform && istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
-		affected.w_uniform.canremove = 1
+	if (ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+		if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
+			affected.shoes.canremove = 1
+		if(affected.w_uniform && istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
+			affected.w_uniform.canremove = 1
+
+		affected.my_appearance.b_hair = old_r
+		affected.my_appearance.g_hair = old_g
+		affected.my_appearance.r_hair = old_b
 
 /datum/disease2/effect/anime_hair/affect_mob_voice(var/datum/speech/speech)
 	var/message=speech.message
@@ -340,7 +352,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
 	badness = EFFECT_DANGER_HARMFUL
 	var/triggered
 
-/datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/lubefoot/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 		if(multiplier > 1.5 && !triggered)
@@ -364,7 +376,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
 	if(prob(15))
 		to_chat(mob, "Your feet feel slippy!")
 
-datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
+datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 
@@ -383,7 +395,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = EFFECT_DANGER_HARMFUL
 	var/skip = FALSE
 
-/datum/disease2/effect/butterfly_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+/datum/disease2/effect/butterfly_skin/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have fragile skin if you don't have skin at all.
@@ -391,12 +403,12 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			return
 	to_chat(mob, "<span class='warning'>Your skin feels a little fragile.</span>")
 
-/datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/mob)
 	if(!skip)
 		to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!</span>")
 	..()
 
-/datum/disease2/effect/butterfly_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+/datum/disease2/effect/butterfly_skin/on_touch(var/mob/living/mob, var/toucher, var/touched, var/touch_type)
 	if(count && !skip)
 		var/datum/organ/external/E
 		if(ishuman(mob))
@@ -428,7 +440,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = EFFECT_DANGER_HELPFUL
 	var/skip = FALSE
 
-/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/thick_blood/activate(var/mob/living/mob)
 	if(skip)
 		return
 	var/mob/living/carbon/human/H = mob
@@ -451,7 +463,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	stage = 3
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/teratoma/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/teratoma/activate(var/mob/living/mob)
 	var/organ_type = pick(existing_typesof(/obj/item/organ/internal) + /obj/item/stack/teeth)
 	var/obj/item/spawned_organ = new organ_type(get_turf(mob))
 	mob.visible_message("<span class='warning'>\A [spawned_organ.name] is extruded from \the [mob]'s body and falls to the ground!</span>","<span class='warning'>\A [spawned_organ.name] is extruded from your body and falls to the ground!</span>")
@@ -464,7 +476,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = EFFECT_DANGER_HELPFUL
 	var/activated = FALSE
 
-/datum/disease2/effect/multiarm/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/multiarm/activate(var/mob/living/mob)
 	if(activated)
 		return
 	var/hand_amount = round(multiplier)
@@ -473,7 +485,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	blood_splatter(mob.loc,mob,TRUE)
 	activated = TRUE
 
-/datum/disease2/effect/multiarm/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/multiarm/deactivate(var/mob/living/mob)
 	if(!activated)
 		return
 	var/hand_amount = round(multiplier)
@@ -504,7 +516,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = EFFECT_DANGER_HELPFUL
 	var/night_vision_strength = 0
 
-/datum/disease2/effect/catvision/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/catvision/activate(var/mob/living/mob)
 	night_vision_strength = mob.see_in_dark
 
 	if (mob.see_in_dark_override < 9)

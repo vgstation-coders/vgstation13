@@ -13,6 +13,9 @@
 /datum/role/catbeast/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a mangy catbeast!</span></B>")
 	to_chat(antag.current, "The longer you avoid the crew, the greater danger the station will attract! You will generate threat for each new room you enter and for being alive (up to 5 minutes).")
+	to_chat(antag.current, "<span class='warning'>You are also carrying some nasty diseases. Check your notes to see their specs.</span>")
+	to_chat(antag.current, "<span class='notice'>You can accelerate their progression by drinking some milk along with some water, so go find some.</span>")
+
 
 /datum/role/catbeast/OnPostSetup()
 	var/mob/living/carbon/human/H = antag.current
@@ -61,11 +64,6 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	D2.origin = "Loose Catbeast"
 	D2.makerandom(list(60,90),list(50,90),anti,bad,null)
 	H.infect_disease2(D2,1, "Loose Catbeast")
-
-	to_chat(H, "<span class='warning'>You are also carrying some diseases. Check your notes to see their specs.</span>")
-
-	to_chat(H, "<span class='warning'>You can accelerate their progression by drinking some milk along with some water, so go find some.</span>")
-
 	antag.store_memory("<hr>")
 	antag.store_memory(D1.get_info())
 	antag.store_memory("<hr>")

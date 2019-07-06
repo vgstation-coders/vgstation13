@@ -395,6 +395,10 @@
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
 			N.nutrition += 5
+			if (virus2?.len)
+				for (var/ID in virus2)
+					var/datum/disease2/disease/D = virus2[ID]
+					N.infect_disease2(D, 1, notes="(Ate an infected [src])")//eating infected food means 100% chance of infection.
 			reagents.trans_to(N, 0.25)
 			bitecount+= 0.25
 			after_consume(M,src.reagents)

@@ -83,8 +83,10 @@
 	popup.set_content(info)
 	popup.open()
 
-/obj/item/device/antibody_scanner/afterattack(var/atom/A, var/mob/user)
-	if (A.Adjacent(user) && isitem(A))
+/obj/item/device/antibody_scanner/preattack(var/atom/A, var/mob/user, proximity_flag)
+	if(proximity_flag != 1)
+		return
+	if (isitem(A))
 		var/obj/item/I = A
 		playsound(user, 'sound/items/detscan.ogg', 50, 1)
 		var/span = "warning"
