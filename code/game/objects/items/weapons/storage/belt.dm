@@ -206,8 +206,6 @@
 		"/obj/item/ammo_storage",
 		"/obj/item/weapon/reagent_containers/food/snacks/donut",
 		"/obj/item/weapon/storage/fancy/cigarettes",
-		"/obj/item/weapon/melee/baton",
-		"/obj/item/weapon/gun/energy/taser",
 		"/obj/item/weapon/lighter",
 		"/obj/item/weapon/cigpacket",
 		"/obj/item/device/flashlight",
@@ -228,15 +226,27 @@
 		"/obj/item/weapon/depocket_wand",
 		)
 
-/obj/item/weapon/storage/belt/security/detective
+/obj/item/weapon/storage/belt/detective
 	name = "hard-worn belt"
-	desc = "There's a lot you can tell about a man from his clothes - sometimes it's all he can afford, or maybe he chooses to wear something as a message... this belt, then, is a statement. Classy, but not too drab. Fashionable, but still useful. People look at this belt and think, 'My god. That belt is frighteningly well placed. The shades of black that seem to flood over themselves, splayed across every notch... I fear many things, but I fear most the man who possesses such an incredible belt.'"
-	//fits_max_w_class = 3
-	max_combined_w_class = 200
-
-/obj/item/weapon/storage/belt/security/detective/New()
-	..()
-	can_only_hold += list(
+	desc = "There's a lot you can tell about a man from his clothes - sometimes it's all he can afford, or maybe he chooses to wear something as a message... this belt, then, is a statement. Classy, but not too drab. Fashionable, but still useful. People look at this belt and think, 'My god. That belt is frighteningly well placed. The shades of beige that seem to flood over themselves, splayed across every notch... I fear many things, but I fear most the man who possesses such an incredible belt.'"
+	max_combined_w_class = 200 //Some of their stuff is pretty large and they have a lot of crap so lets just be safe.
+	can_only_hold = list(
+		"/obj/item/clothing/glasses",
+		"/obj/item/ammo_storage",
+		"/obj/item/weapon/reagent_containers/food/snacks/donut",
+		"/obj/item/weapon/storage/fancy/cigarettes",
+		"/obj/item/weapon/lighter",
+		"/obj/item/weapon/cigpacket",
+		"/obj/item/device/flashlight",
+		"/obj/item/device/pda",
+		"/obj/item/device/radio/headset",
+		"/obj/item/weapon/handcuffs",
+		"/obj/item/device/flash",
+		"/obj/item/taperoll/police",
+		"/obj/item/taperoll/syndie/police",
+		"/obj/item/device/hailer",
+		"/obj/item/device/gps/secure",
+		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/reagent_containers/spray",
 		"/obj/item/weapon/storage/evidencebag",
 		"/obj/item/device/detective_scanner",
@@ -249,6 +259,8 @@
 		"/obj/item/device/camera",
 		"/obj/item/weapon/folder",
 		"/obj/item/weapon/f_card",
+		"/obj/item/device/vampirehead",
+		"/obj/item/weapon/switchtool/switchblade",
 		)
 
 /obj/item/weapon/storage/belt/security/batmanbelt

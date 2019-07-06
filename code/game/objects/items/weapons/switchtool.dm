@@ -260,6 +260,13 @@
 		lighter.lit = 1
 		..()
 
+/obj/item/weapon/switchtool/switchblade
+	name = "switchblade"
+	icon_state = "switchblade"
+	desc = "Half switch. Half blade. Half comb."
+	stored_modules = list("/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/pocket_mirror/comb:comb" = null)
+
 #define BT 1
 #define ENGI 2
 #define CB 4
