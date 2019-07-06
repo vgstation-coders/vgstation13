@@ -5,7 +5,7 @@
 	stage = 2
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/scream/activate(var/mob/living/mob)
 	mob.audible_scream()
 
 
@@ -15,9 +15,11 @@
 	encyclopedia = "This may cause the infected to randomly fall asleep at times."
 	stage = 2
 	badness = EFFECT_DANGER_ANNOYING
+	multiplier = 5
+	max_multiplier = 10
 
-/datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
-	mob.drowsyness += 10
+/datum/disease2/effect/drowsness/activate(var/mob/living/mob)
+	mob.drowsyness += multiplier
 
 
 /datum/disease2/effect/sleepy
@@ -27,19 +29,22 @@
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/sleepy/activate(var/mob/living/mob)
 	mob.say("*collapse")
 
 
 /datum/disease2/effect/blind
 	name = "Blackout Syndrome"
 	desc = "Inhibits the infected's ability to see."
-	encyclopedia = "Turning them blind for about 5 seconds."
+	encyclopedia = "Turning them blind for a few seconds."
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
+	multiplier = 4
+	max_multiplier = 10
+	max_chance = 8
 
-/datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
-	mob.eye_blind = max(mob.eye_blind, 4)
+/datum/disease2/effect/blind/activate(var/mob/living/mob)
+	mob.eye_blind = max(mob.eye_blind, multiplier)
 
 
 /datum/disease2/effect/cough//creates pathogenic clouds that may contain even non-airborne viruses.
@@ -48,8 +53,9 @@
 	encyclopedia = "This symptom enables even diseases that lack the Airborne vector to spread through the air."
 	stage = 2
 	badness = EFFECT_DANGER_ANNOYING
+	max_chance = 10
 
-/datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/cough/activate(var/mob/living/mob)
 	mob.say("*cough")
 
 	var/datum/gas_mixture/breath
@@ -99,20 +105,24 @@
 /datum/disease2/effect/hungry
 	name = "Appetiser Effect"
 	desc = "Starves the infected."
+	encyclopedia = "Symptom strength determines how quickly one becomes hungry."
 	stage = 2
 	badness = EFFECT_DANGER_ANNOYING
+	multiplier = 10
+	max_multiplier = 20
 
-/datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
-	mob.nutrition = max(0, mob.nutrition - 200)
+/datum/disease2/effect/hungry/activate(var/mob/living/mob)
+	mob.nutrition = max(0, mob.nutrition - 20*multiplier)
 
 
 /datum/disease2/effect/fridge
 	name = "Refridgerator Syndrome"
 	desc = "Causes the infected to shiver at random."
+	encyclopedia = "No matter whether the room is cold or hot. This has no effect on their body temperature."
 	stage = 2
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/fridge/activate(var/mob/living/mob)
 	mob.say("*shiver")
 
 
@@ -122,15 +132,23 @@
 	encyclopedia = "Nothing that a trip in front of a mirror can't fix."
 	stage = 2
 	badness = EFFECT_DANGER_FLAVOR
+	multiplier = 1
+	max_multiplier = 5
 
-/datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/hair/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.my_appearance.h_style == "Bald") && !(H.my_appearance.h_style == "Balding Hair"))
-			to_chat(H, "<span class='danger'>Your hair starts to fall out in clumps...</span>")
-			spawn(50)
-				H.my_appearance.h_style = "Balding Hair"
-				H.update_hair()
+		if(H.species.name == "Human" && H.my_appearance.h_style != "Bald")
+			if (H.my_appearance.h_style != "Balding Hair")
+				to_chat(H, "<span class='danger'>Your hair starts to fall out in clumps...</span>")
+				if (prob(multiplier*20))
+					H.my_appearance.h_style = "Balding Hair"
+					H.update_hair()
+			else
+				to_chat(H, "<span class='danger'>You have almost no hair left...</span>")
+				if (prob(multiplier*20))
+					H.my_appearance.h_style = "Bald"
+					H.update_hair()
 
 
 /datum/disease2/effect/stimulant
@@ -140,7 +158,7 @@
 	stage = 2
 	badness = EFFECT_DANGER_HELPFUL
 
-/datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/stimulant/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
 	if (mob.reagents.get_reagent_amount(HYPERZINE) < 10)
 		mob.reagents.add_reagent(HYPERZINE, 4)
@@ -154,11 +172,13 @@
 	encyclopedia = "Without a cure, the infected's liver is sure to die, also effect strength increases the rate at which ethanol is synthesized."
 	stage = 2
 	badness = EFFECT_DANGER_HARMFUL
+	multiplier = 3
+	max_multiplier = 7
 
-/datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/drunk/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
 	if (mob.reagents.get_reagent_amount(ETHANOL) < 325)
-		mob.reagents.add_reagent(ETHANOL, 5*multiplier)
+		mob.reagents.add_reagent(ETHANOL, multiplier)
 
 
 /datum/disease2/effect/gaben
@@ -167,7 +187,7 @@
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/gaben/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
 	if (prob(10))
 		mob.reagents.add_reagent(NUTRIMENT, 1000)
@@ -180,7 +200,7 @@
 	stage = 2
 	badness = EFFECT_DANGER_FLAVOR
 
-/datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/beard/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Full Beard"))
@@ -197,7 +217,7 @@
 	stage = 2
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/bloodynose/activate(var/mob/living/mob)
 	if (prob(30))
 		if (ishuman(mob))
 			var/mob/living/carbon/human/H = mob
@@ -217,7 +237,7 @@
 	stage = 2
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/viralsputum/activate(var/mob/living/mob)
 	if (prob(30))
 		mob.say("*cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
@@ -233,9 +253,11 @@
 	encyclopedia = "While useful at first glance, this also hinders the infected's capacity at hiding."
 	stage = 2
 	badness = EFFECT_DANGER_HELPFUL
+	multiplier = 4
+	max_multiplier = 10
 
-/datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
-	mob.set_light(4)
+/datum/disease2/effect/lantern/activate(var/mob/living/mob)
+	mob.set_light(multiplier)
 	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
 
 
@@ -248,7 +270,7 @@
 	affect_voice = 1
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/hangman/activate(var/mob/living/mob)
 //Add filters to change a,A,e,E,i,I,o,O,u,U to _
 	if(!triggered)
 		to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
@@ -314,7 +336,7 @@
 	badness = EFFECT_DANGER_HINDRANCE
 	var/list/virus_opposite_word_list
 
-/datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
+/datum/disease2/effect/opposite/activate(var/mob/living/mob,var/multiplier)
 	to_chat(mob, "<span class='warning'>You feel completely fine.</span>")
 	affect_voice_active = 1
 	if(!virus_opposite_word_list)
@@ -353,7 +375,7 @@
 
 	speech.message = message
 
-/datum/disease2/effect/opposite/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/opposite/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class='warning'>You feel terrible.</span>")
 	affect_voice_active = 0
 	..()
@@ -367,8 +389,10 @@
 	max_count = 1
 	badness = EFFECT_DANGER_HINDRANCE
 	var/skip = FALSE
+	multiplier = 4
+	max_multiplier = 8
 
-/datum/disease2/effect/spiky_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+/datum/disease2/effect/spiky_skin/activate(var/mob/living/mob,var/multiplier)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have spiky skin if you don't have skin at all.
@@ -376,12 +400,12 @@
 			return
 	to_chat(mob, "<span class='warning'>Your skin feels a little prickly.</span>")
 
-/datum/disease2/effect/spiky_skin/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/spiky_skin/deactivate(var/mob/living/mob)
 	if(!skip)
 		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
 	..()
 
-/datum/disease2/effect/spiky_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+/datum/disease2/effect/spiky_skin/on_touch(var/mob/living/mob, var/toucher, var/touched, var/touch_type)
 	if(!count || skip)
 		return
 	if(!istype(toucher, /mob) || !istype(touched, /mob))
@@ -406,25 +430,25 @@
 	if(toucher == mob)
 		if(E)
 			to_chat(mob, "<span class='warning'>As you bump into \the [touched], your spines dig into \his [E.display_name]!</span>")
-			E.take_damage(5)
+			E.take_damage(multiplier)
 		else
 			to_chat(mob, "<span class='warning'>As you bump into \the [touched], your spines dig into \him!</span>")
 			var/mob/living/L = touched
 			if(istype(L) && !istype(L, /mob/living/silicon))
-				L.apply_damage(5)
+				L.apply_damage(multiplier)
 		var/mob/M = touched
 		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([mob] bumped into [M])", admin_warn = FALSE)
 	else
 		if(E)
 			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \his [E.display_name]!</span>")
 			to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], \his spines dig into your [E.display_name]!</span>")
-			E.take_damage(5)
+			E.take_damage(multiplier)
 		else
 			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \him!</span>")
 			to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], \his spines dig into you!</span>")
 			var/mob/living/L = toucher
 			if(istype(L) && !istype(L, /mob/living/silicon))
-				L.apply_damage(5)
+				L.apply_damage(multiplier)
 		var/mob/M = touched
 		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([M] bumped into [mob])", admin_warn = FALSE)
 
@@ -435,10 +459,11 @@
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/vegan/activate(var/mob/living/carbon/mob)
-	mob.dna.check_integrity()
-	mob.dna.SetSEState(VEGANBLOCK,1)
-	domutcheck(mob, null)
+/datum/disease2/effect/vegan/activate(var/mob/living/mob)
+	if (mob.dna)
+		mob.dna.check_integrity()
+		mob.dna.SetSEState(VEGANBLOCK,1)
+		domutcheck(mob, null)
 
 /datum/disease2/effect/famine
 	name = "Faminous Potation"
@@ -448,7 +473,7 @@
 	max_multiplier = 3
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/famine/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/famine/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		if(H.dna)
@@ -491,14 +516,14 @@
 	var/activated = FALSE
 	badness = EFFECT_DANGER_HINDRANCE
 
-/datum/disease2/effect/calorieburn/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/calorieburn/activate(var/mob/living/mob)
 	if(!activated)
 		if(ishuman(mob))
 			var/mob/living/carbon/human/H
 			H.calorie_burn_rate *= multiplier
 		activated = TRUE
 
-/datum/disease2/effect/calorieburn/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/calorieburn/deactivate(var/mob/living/mob)
 	if(activated)
 		if(ishuman(mob))
 			var/mob/living/carbon/human/H
@@ -514,14 +539,14 @@
 	badness = EFFECT_DANGER_HINDRANCE
 	var/activated = FALSE
 
-/datum/disease2/effect/calorieconserve/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/calorieconserve/activate(var/mob/living/mob)
 	if(!activated)
 		if(ishuman(mob))
 			var/mob/living/carbon/human/H
 			H.calorie_burn_rate /= multiplier
 		activated = TRUE
 
-/datum/disease2/effect/calorieconserve/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/calorieconserve/deactivate(var/mob/living/mob)
 	if(activated)
 		if(ishuman(mob))
 			var/mob/living/carbon/human/H
@@ -536,7 +561,7 @@
 	affect_voice = 1
 	badness = EFFECT_DANGER_ANNOYING
 
-/datum/disease2/effect/yelling/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/yelling/activate(var/mob/living/mob)
 	if(!triggered)
 		to_chat(mob, "<span class='notice'>You feel like what you have to say is more important.</span>")
 		affect_voice_active = 1
