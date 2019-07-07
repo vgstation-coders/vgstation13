@@ -38,8 +38,8 @@
 /area/vault
 	flags = NO_PERSISTENCE|NO_PACIFICATION
 
-/proc/get_map_element_objects(base_type = /datum/map_element/vault)
-	var/list/list_of_vaults = typesof(base_type) - base_type
+/proc/get_map_element_objects(base_type = /datum/map_element/vault, exclude_type)
+	var/list/list_of_vaults = typesof(base_type) - base_type - typesof(exclude_type)
 
 	for(var/V in list_of_vaults) //Turn list of paths into list of objects
 		list_of_vaults.Add(new V)
@@ -67,7 +67,7 @@
 /proc/generate_vaults()
 	var/area/space = get_space_area()
 
-	var/list/list_of_vaults = get_map_element_objects()
+	var/list/list_of_vaults = get_map_element_objects(exclude_type = /datum/map_element/vault/mining_surprise)
 
 	var/vault_number = rand(MINIMUM_VAULT_AMOUNT, min(list_of_vaults.len, MAXIMUM_VAULT_AMOUNT))
 
@@ -87,7 +87,7 @@
 	message_admins("<span class='info'>Loaded [result] out of [vault_number] vaults.</span>")
 
 /proc/generate_asteroid_secrets()
-	var/list/list_of_surprises = get_map_element_objects(/datum/map_element/mining_surprise)
+	var/list/list_of_surprises = get_map_element_objects(/datum/map_element/vault/mining_surprise)
 
 	var/surprise_number = rand(1, min(list_of_surprises.len, max_secret_rooms))
 
@@ -119,7 +119,7 @@
 	ASSERT(area_turfs)
 
 	if(!map_element_objects)
-		map_element_objects = get_map_element_objects()
+		map_element_objects = get_map_element_objects(exclude_type = /datum/map_element/vault/mining_surprise)
 
 	message_admins("<span class='info'>Starting populating [isarea(A) ? "an area ([A])" : "a list of [area_turfs.len] turfs"] with vaults.")
 

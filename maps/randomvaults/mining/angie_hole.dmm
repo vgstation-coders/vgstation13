@@ -1,0 +1,15 @@
+"a" = (/turf/unsimulated/mineral/random,/area/mine/explored)
+"b" = (/turf/simulated/floor/asteroid,/area/mine/explored)
+"c" = (/obj/effect/landmark/angie_exit,/turf/simulated/floor/asteroid,/area/mine/explored)
+"d" = (/obj/effect/hole/angie,/turf/simulated/floor/asteroid,/area/mine/explored)
+
+(1,1,1) = {"
+aaaaaaaa
+aacbbaaa
+abbddbaa
+abddddba
+abddddba
+abbbdbba
+abaaaaba
+aaaaaaaa
+"}

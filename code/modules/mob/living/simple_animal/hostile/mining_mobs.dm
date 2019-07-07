@@ -808,8 +808,8 @@ obj/item/asteroid/basilisk_hide/New()
 	if(charging)
 		return
 	walk(src, 0)
-	var/distance = get_dist(src, target)+rand(1,4)
-	var/turf/T = get_ranged_target_turf(target, get_dir(src, target), distance)
+	var/distance = get_dist(src, target)
+	var/turf/T = get_turf(target)
 	var/frustration = 0
 	ranged_cooldown = ranged_cooldown_cap
 	visible_message("<span class = 'warning'>\The [src] charges at \the [target]!</span>")
@@ -822,7 +822,7 @@ obj/item/asteroid/basilisk_hide/New()
 				continue
 			var/int_distance = get_dist(M, src)
 			shake_camera(M, 5, 2/int_distance)
-		step_towards(src, T, 3)
+		step_towards(src, T)
 		frustration++
 		sleep(move_to_delay)
 
@@ -830,16 +830,13 @@ obj/item/asteroid/basilisk_hide/New()
 	move_to_delay = initial(move_to_delay)
 	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
 
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/A)
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/movable/A)
 	..()
-	if(charging && istype(A, /mob/living))
-		var/mob/living/M = A
-		UnarmedAttack(M)
-		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
-		var/turf/T = get_ranged_target_turf(M, get_dir(src,M), size)
-		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
-			T = get_edge_target_turf(M, dir)
-		M.throw_at(T,100,move_to_delay)
+	if(charging && istype(A) && A.density == TRUE)
+		UnarmedAttack(A)
+		visible_message("<span class = 'warning'>\The [src] swats [A] aside!</span>")
+		var/turf/T = pick(view(get_turf(src), size))
+		A.throw_at(T,100,move_to_delay)
 
 
 /mob/living/simple_animal/hostile/asteroid/pillow

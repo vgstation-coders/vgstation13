@@ -1,0 +1,50 @@
+"a" = (/turf/unsimulated/wall/rock,/area/vault/angies_lair)
+"b" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/angies_lair)
+"c" = (/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"d" = (/turf/unsimulated/mineral/hyperdense,/area/vault/angies_lair)
+"e" = (/turf/unsimulated/mineral/random/high_chance,/area/vault/angies_lair)
+"f" = (/obj/effect/glowshroom,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"g" = (/obj/item/weapon/pickaxe/drill,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"h" = (/obj/item/clothing/head/helmet/space/rig/mining,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"i" = (/obj/structure/ore_box,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"j" = (/obj/item/ammo_storage/magazine/mc9mm/empty,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"k" = (/obj/item/weapon/gun/projectile/pistol/empty,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"l" = (/obj/item/clothing/suit/space/rig/mining,/obj/effect/gibspawner/human,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"m" = (/mob/living/simple_animal/hostile/asteroid/hivelord,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"n" = (/obj/machinery/bot/medbot/mysterious,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"o" = (/obj/item/weapon/storage/bag/ore,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"p" = (/obj/item/device/mobcapsule,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"q" = (/obj/effect/glowshroom,/turf/unsimulated/mineral/random/high_chance,/area/vault/angies_lair)
+"r" = (/obj/structure/closet/crate/chest,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"s" = (/turf/unsimulated/mineral/destroy_surrounding,/area/vault/angies_lair)
+"t" = (/turf/unsimulated/mineral/destroy_surrounding{rockernaut = 2},/area/vault/angies_lair)
+"u" = (/turf/unsimulated/mineral/destroyed_by_boss,/area/vault/angies_lair)
+"v" = (/obj/effect/landmark/angie_enter,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaa
+abbbbbbcccrcccccccbbbbbba
+abbbbbbcccccccccccbbbbbba
+abbbbbbcccccccccccbbbbbba
+abbddddddduuuuudddddddbba
+abdsssssssssssssssssssdba
+adsssssssssssssssssssssda
+adsssssssssstssssssssssda
+adsssssssssssssssssssssda
+adsssssssssssssssssssssda
+adsssssssssssssssssssssda
+adsssssssssssssssssssssda
+adsssssssssssssssssssssda
+aedsssssssssssssssssssdea
+aeedddddsssssssssdddddeea
+aeeeeeeedsssssssdeeeeeeea
+aeeeeeeeedsssssdeeeeeeeea
+aeeeeeeeeedsssdeeeeeeeeea
+aeeeeeeeeccccccceeeeeeeea
+aefghieeecfccccceeejkeeea
+aeclmcceecccvccceeecneeea
+aeoccpeeeccccccceeecfeeea
+aeeeeeeeqccccccceeeeeeeea
+aeeeeeeeeecccccqeeeeeeeea
+aaaaaaaaaaaaaaaaaaaaaaaaa
+"}

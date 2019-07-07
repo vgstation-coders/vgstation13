@@ -939,3 +939,37 @@
 		/obj/item/weapon/stock_parts/console_screen\
 	)
 
+
+/area/vault/angies_lair
+	name = "asteroid internals"
+	flags = NO_PACIFICATION|NO_PERSISTENCE|NO_MESONS|NO_TELEPORT|NO_PORTALS
+
+/turf/unsimulated/mineral/destroy_surrounding/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
+	..()
+	spawn(1 SECONDS)
+	for(var/dir in cardinal)
+		var/turf/unsimulated/mineral/destroy_surrounding/TT = get_step(src, dir)
+		if(istype(TT, /turf/unsimulated/mineral/destroy_surrounding))
+			TT.GetDrilled(artifact_fail, safety_override, driller)
+
+/turf/unsimulated/mineral/light
+	mining_difficulty = 0
+
+/turf/unsimulated/mineral/destroyed_by_boss
+	mining_difficulty = 9
+	minimum_mine_time = 99 SECONDS
+
+/obj/effect/landmark/angie_exit
+	name = "angie exit point"
+
+/obj/effect/landmark/angie_enter
+	name = "Angie's lair entry point"
+
+/obj/structure/ladder/angie_lair/New()
+	..()
+	up = get_turf(locate(/obj/effect/landmark/angie_exit) in landmarks_list)
+
+/obj/effect/hole/angie/Crossed()
+	if(!target_loc)
+		target_loc = get_turf(locate(/obj/effect/landmark/angie_enter) in landmarks_list)
+	..()

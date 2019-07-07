@@ -84,11 +84,11 @@
 	to_chat(C, "You turn \the [src] off.")
 	if(iscarbon(loc))
 		if(istype(loc, /mob/living/carbon/monkey))
-			var/mob/living/carbon/monkey/M = C
+			var/mob/living/carbon/monkey/M = loc
 			if(M.glasses && (M.glasses == src))
 				remove_color(M)
 		else if(istype(loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = C
+			var/mob/living/carbon/human/H = loc
 			if(H.glasses && (H.glasses == src))
 				remove_color(H)
 
@@ -151,7 +151,7 @@
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
 		visible_message("<span class = 'warning'>\The [src] sputter out.</span>")
-		disable()
+		disable(loc)
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"

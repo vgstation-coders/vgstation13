@@ -133,8 +133,16 @@
 				new /obj/effect/alien/egg(egg_turf)
 
 
-/datum/map_element/mining_surprise/angie
+/datum/map_element/vault/mining_surprise/angie
 	name = "Angie's lair"
 	desc = "From within this rich soil, the stone gathers moss."
 
-	file_path = "maps/randomvaults/mining/angie_lair.dmm"
+	file_path = "maps/randomvaults/mining/angie_hole.dmm"
+
+/datum/map_element/vault/mining_surprise/angie/initialize(list/objects)
+	..()
+
+	load_dungeon(/datum/map_element/dungeon/angie_lair)
+
+/datum/map_element/dungeon/angie_lair
+	file_path = "maps/randomvaults/dungeons/angie_lair.dmm"
