@@ -12,7 +12,7 @@
 		return
 	if(isliving(C))
 		var/mob/living/L = C
-		if(L.size >= SIZE_LARGE)
+		if(L.size >= SIZE_HUGE)
 			return
 
 	load(C)
