@@ -139,7 +139,9 @@
 		/obj/item/weapon/wrench,
 		/obj/item/weapon/tank/emergency_oxygen,
 		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/weapon/wrench/socket,
 		/obj/item/device/device_analyser,
+		/obj/item/device/rcd/rpd,
 		/obj/item/device/rcd)
 	species_fit = list(VOX_SHAPED)
 
