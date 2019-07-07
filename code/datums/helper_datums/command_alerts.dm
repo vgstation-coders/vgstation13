@@ -563,3 +563,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Wall Fungi"
 	alert_title = "Biohazard Alert"
 	message = "Harmful fungi detected on station. Station structures may be contaminated."
+
+/datum/command_alert/nuclear_operatives
+	name = "Nuclear Operatives"
+	alert_title = "Imminent Assault"
+
+/datum/command_alert/nuclear_operatives/announce()
+	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
+	..()

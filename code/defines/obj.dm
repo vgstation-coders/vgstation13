@@ -99,6 +99,17 @@
 	"}
 	var/even = 0
 	// sort mobs
+	if(OOC)
+		for(var/mob/living/silicon/ai/dooropener in mob_list)
+			bot[dooropener.name] = "AI"
+			isactive[dooropener.name] = (dooropener.client && dooropener.client.inactivity <= 10 * 60 * 10) ? "Active" : "Inactive"
+		for(var/mob/living/silicon/robot/tincan in mob_list)
+			if(isMoMMI(tincan))
+				continue
+			if(tincan.syndicate)
+				continue
+			bot[tincan.name] = tincan.braintype
+			isactive[tincan.name] = (tincan.client && tincan.client.inactivity <= 10 * 60 * 10) ? "Active" : "Inactive"
 	for(var/datum/data/record/t in sortRecord(data_core.general))
 		var/name = t.fields["name"]
 		var/rank = t.fields["rank"]
@@ -140,7 +151,7 @@
 		if((real_rank in civilian_positions) || (t.fields["override_dept"] == "Civilian"))
 			civ[name] = rank
 			department = 1
-		if(real_rank in nonhuman_positions)
+		if(!OOC && (real_rank in nonhuman_positions))
 			bot[name] = rank
 			department = 1
 		if(!department && !(name in heads))
@@ -187,18 +198,17 @@
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[civ[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	// in case somebody is insane and added them to the manifest, why not
-	if(bot.len > 0)
-		dat += "<tr><th colspan=3>Silicon</th></tr>"
-		for(name in bot)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[bot[name]]</td><td>[isactive[name]]</td></tr>"
-			even = !even
-
 	// misc guys
 	if(misc.len > 0)
 		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
 		for(name in misc)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[misc[name]]</td><td>[isactive[name]]</td></tr>"
+			even = !even
+
+	if(bot.len > 0)
+		dat += "<tr><th colspan=3>Silicon</th></tr>"
+		for(name in bot)
+			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[bot[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
 	dat += "</table>"
@@ -360,16 +370,6 @@ var/global/list/PDA_Manifest = list()
 		)
 	return PDA_Manifest
 
-
-
-/obj/effect/laser
-	name = "laser"
-	desc = "IT BURNS!!!"
-	icon = 'icons/obj/projectiles.dmi'
-	var/damage = 0.0
-	var/range = 10.0
-
-
 /obj/effect/list_container
 	name = "list container"
 
@@ -437,38 +437,42 @@ var/global/list/PDA_Manifest = list()
 	icon_state = "empty"
 	name = "Sleepy time"
 	var/datum/mind/owner
+	var/ignored_type
 	var/spell/aoe_turf/fall/ourspell
 	invisibility = 100
 	var/theworld
 	ignoreinvert = 1
 
-/obj/effect/stop/sleeping/New(loc, ourtime, mind, var/spell/aoe_turf/fall/F, theworld)
+/obj/effect/stop/sleeping/New(loc, ourtime, mind, var/spell/aoe_turf/fall/F, theworld, var/ignored)
 	..()
 	sleeptime = ourtime
 	owner = mind
 	ourspell = F
 	src.theworld = theworld
+	if(ignored)
+		ignored_type = ignored
 
 /obj/effect/stop/sleeping/Crossed(atom/movable/A)
 	if(!(A.flags & TIMELESS) && sleeptime > world.time)
-		if(ismob(A))
-			var/mob/living/L = A
-			if(L.mind != owner)
-				if(L.client)
-					L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
-				if(!L.stat)
-					L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
-				//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
-				//L.update_canmove()
-				if(!(L in ourspell.affected))
-					invertcolor(L)
-					ourspell.affected += L
-					ourspell.recursive_timestop(L)
-		else
-			if(!(A in ourspell.affected))
-				invertcolor(A)
-				ourspell.affected += A
-				ourspell.recursive_timestop(A)
+		if(!ignored_type || !istype(A,ignored_type))
+			if(ismob(A))
+				var/mob/living/L = A
+				if(L.mind != owner)
+					if(L.client)
+						L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
+					if(!L.stat)
+						L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+					//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
+					//L.update_canmove()
+					if(!(L in ourspell.affected))
+						invertcolor(L)
+						ourspell.affected += L
+						ourspell.recursive_timestop(L)
+			else
+				if(!(A in ourspell.affected))
+					invertcolor(A)
+					ourspell.affected += A
+					ourspell.recursive_timestop(A)
 
 
 /obj/effect/spawner

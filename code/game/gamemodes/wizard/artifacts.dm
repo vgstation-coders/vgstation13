@@ -254,7 +254,7 @@
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
 	H.nutrition += 1000
 
-	H.add_spell(new/spell/noclothes)
+	H.add_spell(new/spell/passive/noclothes)
 	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
 	H.add_spell(new/spell/targeted/wrapping_paper)
 	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman)

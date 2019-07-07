@@ -91,6 +91,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/make_poisonous()
 	return
 
+/obj/item/weapon/reagent_containers/food/snacks/should_qdel_if_empty()
+	return TRUE
+
 /obj/item/weapon/reagent_containers/food/snacks/attack_self(mob/user)
 	if(can_consume(user, user))
 		consume(user, 1)
@@ -212,10 +215,11 @@
 		return
 	if(!eater.hasmouth)
 		return
-	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
+	if(is_empty())	//Are we done eating (determined by the amount of reagents left, here 0)
 		//This is mostly caused either by "persistent" food items or spamming
 		to_chat(user, "<span class='notice'>There's nothing left of \the [src].</span>")
-		qdel(src)
+		if(should_qdel_if_empty())
+			qdel(src)
 		return
 	if(wrapped)
 		to_chat(user, "<span class='notice'>\The [src] is still wrapped.</span>")
@@ -430,11 +434,11 @@
 //	icon_state = "xburger"												//Refers to an icon in food.dmi
 //	food_flags = FOOD_MEAT												//For flavour, not that important. Flags are: FOOD_MEAT, FOOD_ANIMAL (for things that vegans don't eat), FOOD_SWEET, FOOD_LIQUID (soups). You can have multiple flags in here by doing this: food_flags = FOOD_MEAT | FOOD_SWEET
 //
-//	New()																//Don't mess with this.
-//		..()															//Same here.
-//		reagents.add_reagent(XENOMICROBES, 10)						//This is what is in the food item. you may copy/paste
-//		reagents.add_reagent(NUTRIMENT, 2)							//	this line of code for all the contents.
-//		bitesize = 3													//This is the amount each bite consumes.
+///obj/item/weapon/reagent_containers/food/snacks/xenoburger/New()																//Don't mess with this.
+//	..()															//Same here.
+//	reagents.add_reagent(XENOMICROBES, 10)						//This is what is in the food item. you may copy/paste
+//	reagents.add_reagent(NUTRIMENT, 2)							//	this line of code for all the contents.
+//	bitesize = 3													//This is the amount each bite consumes.
 
 
 
@@ -1498,7 +1502,7 @@
 	reagents.add_reagent(DISCOUNT, 4)
 	reagents.add_reagent(MOONROCKS, 4)
 	reagents.add_reagent(TOXICWASTE, 8)
-	reagents.add_reagent(URANIUM, 4)
+	reagents.add_reagent(URANIUM, 8)
 	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
 	bitesize = 2
 
@@ -1915,14 +1919,16 @@
 	icon_state = "bacon"
 	var/obj/item/beacon/bacon/baconbeacon
 	bitesize = 2
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 4)
-		baconbeacon = new /obj/item/beacon/bacon(src)
-	after_consume()
-		if(!reagents.total_volume)
-			baconbeacon.forceMove(usr)
-			baconbeacon.digest_delay()
+
+/obj/item/weapon/reagent_containers/food/snacks/telebacon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	baconbeacon = new /obj/item/beacon/bacon(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/telebacon/after_consume()
+	if(!reagents.total_volume)
+		baconbeacon.forceMove(usr)
+		baconbeacon.digest_delay()
 */
 
 /obj/item/weapon/reagent_containers/food/snacks/spellburger
@@ -2423,10 +2429,11 @@
 	name = "Boiled slime Core"
 	desc = "A boiled red thing."
 	icon_state = "boiledslimecore"
-	New()
-		..()
-		reagents.add_reagent(SLIMEJELLY, 5)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/boiledslimecore/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 5)
+	bitesize = 3
 */
 /obj/item/weapon/reagent_containers/food/snacks/mint
 	name = "mint"

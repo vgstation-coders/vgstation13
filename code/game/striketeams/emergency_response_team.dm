@@ -23,7 +23,9 @@ var/list/response_team_members = list()
 		to_chat(H, "<span class='notice'>You are [H.real_name], the Commander of the Emergency Response Team, in the service of Nanotrasen.</span>")
 	else
 		to_chat(H, "<span class='notice'>You are [H.real_name], an Emergency Responder, in the service of Nanotrasen.</span>")
-	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /datum/striketeam/ert/create_commando(obj/spawn_location, leader_selected = 0, key = "")
 	var/mob/living/carbon/human/M = new(spawn_location)
@@ -131,6 +133,7 @@ var/list/response_team_members = list()
 		ert.HandleRecruitedMind(M.mind)
 	else
 		ert = ticker.mode.CreateFaction(/datum/faction/strike_team/ert)
+		ert.forgeObjectives(mission)
 		if(ert)
 			ert.HandleNewMind(M.mind) //First come, first served
 	M.equip_response_team(leader_selected)

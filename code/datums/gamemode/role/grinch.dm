@@ -4,7 +4,6 @@
     required_pref = GRINCH
     logo_state = "synd-logo"
     disallow_job = TRUE
-    refund_value = BASE_SOLO_REFUND
 
     // -- Our bag
     var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null

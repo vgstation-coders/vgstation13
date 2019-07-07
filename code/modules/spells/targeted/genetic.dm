@@ -32,6 +32,7 @@ code\game\\dna\genes\goon_powers.dm
 	name = "Blind"
 	desc = "Temporarily blind a single person."
 	abbreviation = "BD"
+	specialization = OFFENSIVE
 	disabilities = 1
 	duration = 300
 
@@ -58,6 +59,7 @@ code\game\\dna\genes\goon_powers.dm
 	name = "Mutate"
 	desc = "This spell causes you to turn into a hulk and gain laser vision for a short while."
 	abbreviation = "MU"
+	specialization = UTILITY
 
 	school = "transmutation"
 	charge_max = 400
@@ -74,6 +76,14 @@ code\game\\dna\genes\goon_powers.dm
 
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD
+
+/spell/targeted/genetic/mutate/highlander
+	name = "Become Highlander"
+	desc = "Temporarily turn into a mighty highlander who cannot be stunned."
+	invocation = "SCOTLAND FOREVER!"
+	mutations = list(M_HULK)
+	message = "<span class='notice'>You feel powerful! Nobody can take you down! It's time to take some heads!</span>"
+	user_type = USER_TYPE_OTHER
 
 /spell/targeted/genetic/eat_weed
 	name = "Eat Weeds"

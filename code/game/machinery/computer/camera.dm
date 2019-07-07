@@ -83,7 +83,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	if (current) // Did we find a camera
 		for (var/datum/action/camera/action in our_actions)
 			if (action.owner && action.owner != user)
-				action.owner.cancel_camera()
+				action.Remove(action.owner)
 			action.Grant(user)
 	else
 		to_chat(user, "<span class='warning'>No active cameras found.</span>")
@@ -124,8 +124,9 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	name = "Security Cameras"
 	desc = "An old TV hooked into the stations camera network."
 	icon_state = "security_det"
-
+	circuit = /obj/item/weapon/circuitboard/security/wooden_tv
 	light_color = null
+	pass_flags = PASSTABLE
 
 /obj/machinery/computer/security/mining
 	name = "Outpost Cameras"

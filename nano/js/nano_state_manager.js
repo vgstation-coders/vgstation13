@@ -28,6 +28,11 @@ NanoStateManager = function ()
 		// We store initialData and templateData in the body tag, it's as good a place as any
 		_data = $('body').data('initialData');
 
+		if (typeof _data === 'string') //If the initial data isn't QUITE valid JSON, jQuery won't parse it automatically
+		{
+			_data = JSON_parseMore(_data); //If it's still invalid, something is very wrong and it SHOULD error
+		}
+
 		if (_data == null || !_data.hasOwnProperty('config') || !_data.hasOwnProperty('data'))
 		{
 			alert('Error: Initial data did not load correctly.');
@@ -55,11 +60,11 @@ NanoStateManager = function ()
 		try
 		{
 			// parse the JSON string from the server into a JSON object
-			updateData = jQuery.parseJSON(jsonString);
+			updateData = JSON_parseMore(jsonString); //To support infinities and NaN so that the whole UI doesn't just crash
 		}
 		catch (error)
 		{
-			alert(error.Message);
+			alert(error.name + ": " + error.Message + " at: " + error.at + " (" + error.text + ")");
 			return;
 		}
 

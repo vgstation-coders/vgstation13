@@ -10,6 +10,7 @@
 	logo_state = "malf-logo"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
+	playlist = "malfdelta"
 
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
@@ -24,7 +25,7 @@
 		stage = FACTION_ENDGAME
 		command_alert(/datum/command_alert/malf_announce)
 		set_security_level("delta")
-		ticker.StartThematic("endgame")
+		ticker.StartThematic(playlist)
 	else
 		..()
 

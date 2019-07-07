@@ -53,6 +53,42 @@
 			return(SUICIDE_ACT_BRUTELOSS)
 	return
 
+/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen
+	name = "rocket launcher"
+	desc = "Watch the backblast, you idiot."
+	fire_sound = 'sound/weapons/rocket.ogg'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	icon_state = "rpg_nt"
+	item_state = "rpg_nt"
+	max_shells = 1
+	w_class = W_CLASS_LARGE
+	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
+	w_type = RECYK_METAL
+	force = 10
+	recoil = 5
+	throw_speed = 4
+	throw_range = 3
+	fire_delay = 5
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BACK
+	caliber = list(ROCKETGRENADE = 1)
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;"
+	ammo_type = "/obj/item/ammo_casing/rocket_rpg/blank"
+	attack_verb = list("strikes", "hits", "bashes")
+	gun_flags = 0
+
+/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/update_icon()
+	if(!getAmmo())
+		icon_state = "rpg_nt_e"
+		item_state = "rpg_nt_e"
+	else
+		icon_state = "rpg_nt"
+		item_state = "rpg_nt"
+
+/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
+	spawn_mag = TRUE
+
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita
 	name = "\improper Nikita"
 	desc = "A miniature cruise missile launcher. Using a pulsed rocket engine and sophisticated TV guidance system."
@@ -88,7 +124,7 @@
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, -1, 1, 4, 8)
+			explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
 			return(SUICIDE_ACT_BRUTELOSS)
 	return
 

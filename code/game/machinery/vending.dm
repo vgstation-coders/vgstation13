@@ -1413,6 +1413,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 2,
+		/obj/item/weapon/storage/box/diy_soda = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5,
@@ -1426,6 +1428,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 50,
+		/obj/item/weapon/storage/box/diy_soda = 95,
 		)
 
 	pack = /obj/structure/vendomatpack/cola
@@ -1453,6 +1457,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
@@ -1465,6 +1470,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear = 20,
 		)
 
 	pack = /obj/structure/vendomatpack/offlicence
@@ -1883,6 +1889,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,
 		/obj/item/weapon/storage/box/evidence = 6,
 		/obj/item/weapon/legcuffs/bolas = 8,
+		/obj/item/taperoll/police = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses/security = 2,
@@ -2238,6 +2245,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
+		/obj/item/taperoll/engineering = 5,
+		/obj/item/taperoll/atmos = 5,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2486,7 +2495,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/franksuit = 3,
 		/obj/item/clothing/gloves/frankgloves = 3,
 		/obj/item/clothing/shoes/frankshoes =3,
-		/obj/item/clothing/suit/kimono/sakura = 3
+		/obj/item/clothing/suit/kimono/sakura = 3,
+		/obj/item/clothing/head/widehat_red = 3,
+		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/suit/poncho = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
@@ -2555,6 +2567,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,
+		/obj/item/clothing/head/widehat_red =1,
 		)
 
 	pack = /obj/structure/vendomatpack/hatdispenser
@@ -2612,6 +2625,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
+		/obj/item/clothing/suit/red_suit = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
@@ -2953,6 +2967,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/eucharist = 7,
 		/obj/item/weapon/storage/fancy/incensebox/harebells = 3,
 		/obj/item/incense_oilbox/harebells = 2,
+		/obj/item/weapon/storage/fancy/collection_plate = 1,
 		)
 	contraband = list(
 		/obj/item/clothing/head/clockwork_hood = 2,
@@ -2967,7 +2982,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator = 2,
  		/obj/item/clothing/suit/armor/knight/interrogator/red = 2,
+		/obj/item/clothing/head/inquisitor = 2,
+		/obj/item/clothing/suit/inquisitor = 2,
+		/obj/item/clothing/under/inquisitor = 2,
+		/obj/item/clothing/shoes/jackboots/inquisitor = 2,
 		/obj/item/weapon/thurible = 1,
+		/obj/item/weapon/storage/fancy/candle_box/holo = 5,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
 
@@ -3009,7 +3029,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
 		/obj/item/weapon/boxofsnow = 3,
-		/obj/item/weapon/vinyl/clockwork = 1,
+		/obj/item/weapon/vinyl/echoes = 1,
 		/obj/item/stack/sheet/brass/bigstack = 3,
 		/obj/item/stack/sheet/ralloy/bigstack = 3,
 		/obj/item/device/vampirehead = 1,
@@ -3039,7 +3059,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/largecrate/secure/frankenstein = 100,
 		/obj/item/weapon/boxofsnow = 50,
 		/obj/item/crackerbox = 200,
-		/obj/item/weapon/vinyl/clockwork = 50,
+		/obj/item/weapon/vinyl/echoes = 50,
 		/obj/item/stack/sheet/brass/bigstack = 50,
 		/obj/item/stack/sheet/ralloy/bigstack = 50,
 		/obj/item/device/vampirehead = 150,
@@ -3248,29 +3268,29 @@ var/global/num_vending_terminals = 1
 		/obj/item/borg/upgrade/hook = 1,
 		)
 	prices = list(
-		/obj/item/toy/canary = 100,
-		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 100,
-		/obj/item/clothing/mask/cigarette/cigar/havana = 100,
-		/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning = 150,
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 150,
-		/obj/item/weapon/soap/nanotrasen = 150,
-		/obj/item/clothing/mask/facehugger/toy = 250,
-		/obj/item/weapon/storage/belt/lazarus = 500,
-		/obj/item/device/mobcapsule = 250,
-		/obj/item/weapon/lazarus_injector = 1000,
-		/obj/item/weapon/pickaxe/jackhammer = 500,
-		/obj/item/weapon/mining_drone_cube = 500,
-		/obj/item/device/wormhole_jaunter = 250,
-		/obj/item/weapon/resonator = 750,
-		/obj/item/weapon/storage/bag/money = 1000,
-		/obj/item/weapon/gun/energy/kinetic_accelerator = 1000,
-		/obj/item/weapon/pickaxe/silver = 1000,
-		/obj/item/weapon/pickaxe/gold = 2000,
-		/obj/item/weapon/tank/jetpack/carbondioxide = 2000,
-		/obj/item/weapon/gun/hookshot = 3000,
-		/obj/item/weapon/lazarus_injector/advanced = 3000,
-		/obj/item/weapon/pickaxe/diamond = 3000,
-		/obj/item/borg/upgrade/hook = 3000,
+		/obj/item/toy/canary = 20,
+		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 20,
+		/obj/item/clothing/mask/cigarette/cigar/havana = 20,
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 15,
+		/obj/item/weapon/soap/nanotrasen = 15,
+		/obj/item/clothing/mask/facehugger/toy = 25,
+		/obj/item/weapon/storage/belt/lazarus = 50,
+		/obj/item/device/mobcapsule = 25,
+		/obj/item/weapon/lazarus_injector = 50,
+		/obj/item/weapon/pickaxe/jackhammer = 50,
+		/obj/item/weapon/mining_drone_cube = 50,
+		/obj/item/device/wormhole_jaunter = 25,
+		/obj/item/weapon/resonator = 75,
+		/obj/item/weapon/storage/bag/money = 10,
+		/obj/item/weapon/gun/energy/kinetic_accelerator = 300,
+		/obj/item/weapon/pickaxe/silver = 100,
+		/obj/item/weapon/pickaxe/gold = 200,
+		/obj/item/weapon/tank/jetpack/carbondioxide = 300,
+		/obj/item/weapon/gun/hookshot = 300,
+		/obj/item/weapon/lazarus_injector/advanced = 150,
+		/obj/item/weapon/pickaxe/diamond = 300,
+		/obj/item/borg/upgrade/hook = 300,
 		)
 
 	pack = /obj/structure/vendomatpack/mining

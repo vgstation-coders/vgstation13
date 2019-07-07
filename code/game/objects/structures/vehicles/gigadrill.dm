@@ -78,7 +78,7 @@
 					returnToPool(ore)
 					count++
 			if(count)
-				to_chat(occupant,"<font color='blue'>[count] ore successfully loaded into cargo compartment.</font>")
+				to_chat(occupant,"<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 
 /obj/structure/bed/chair/vehicle/gigadrill/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	..()

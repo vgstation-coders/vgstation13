@@ -147,3 +147,26 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/energy/gun
 	finished[1] = /obj/item/weapon/gun/energy/gun/nuclear
+
+/obj/item/device/modkit/plasmacutter
+	name = "plasma cutter conversion kit"
+	desc = "A set of tools that enables conversion of a mining diamond drill into a plasma cutter. Needs to be loaded with the parts of a proto-kinetic accelerator first."
+
+/obj/item/device/modkit/plasmacutter/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	0
+	original[1] = /obj/item/weapon/pickaxe/drill/diamond
+	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
+
+/obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)
+	if(proximity_flag && parts[1] == 1 && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+		to_chat(user, "<span class='warning'>\The [src] is already loaded!</span>")
+		return
+
+	else if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+		parts[1] = 1
+		qdel(target)

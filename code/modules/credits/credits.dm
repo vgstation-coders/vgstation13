@@ -31,24 +31,24 @@ var/global/datum/credits/end_credits = new
 	var/finalized = FALSE
 	var/js_args = list()
 
-	var/audio_link = "http://ss13.moe/media/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
+	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
-		"http://ss13.moe/media/source/roundend/jingleclassic/bangindonk.mp3",
-		"http://ss13.moe/media/source/roundend/jingleclassic/apcdestroyed.mp3"
+		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jingleclassic/apcdestroyed.mp3"
 		)
 	var/list/new_roundend_jingles = list(
-		"http://ss13.moe/media/source/roundend/jinglenew/FTLvictory.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/bayojingle.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/calamitytrigger.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/castlevania.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/duckgame.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/gameoveryeah.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/marioworld.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/megamanX.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/rayman.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/slugmissioncomplete.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/soniclevelcomplete.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/tfvictory.mp3"
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/FTLvictory.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/bayojingle.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/calamitytrigger.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/castlevania.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/duckgame.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/gameoveryeah.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/marioworld.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/megamanX.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/rayman.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/slugmissioncomplete.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/soniclevelcomplete.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/tfvictory.mp3"
 		)
 
 /datum/credits/proc/is_rerun()

@@ -681,6 +681,8 @@
 			if(slot_handcuffed)
 				if(H.handcuffed)
 					return CANNOT_EQUIP
+				if (H.mutual_handcuffs)
+					return CANNOT_EQUIP
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
@@ -928,10 +930,12 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, atom/blocked)
+/obj/item/proc/on_block(damage, atom/movable/blocked)
 	if(ismob(loc))
-		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks \the [blocked] with \the [src]!</span>")
+		if (IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if (prob(50 - round(damage / 3)))
+			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
 			if(isatommovable(blocked))
 				var/atom/movable/M = blocked
 				M.throwing = FALSE
@@ -1024,6 +1028,8 @@
 	. = ..()
 	if(blood_overlay)
 		overlays.Remove(blood_overlay)
+	if(had_blood)
+		clear_luminol()
 	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
@@ -1047,14 +1053,13 @@
 	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
 	blood_overlay.color = blood_color
 	overlays += blood_overlay
-
 	//if this blood isn't already in the list, add it
-
 	if(!M)
 		return
 	if(blood_DNA[M.dna.unique_enzymes])
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
 var/global/list/image/blood_overlays = list()
@@ -1068,6 +1073,34 @@ var/global/list/image/blood_overlays = list()
 
 	blood_overlays[type] = image(I)
 
+/obj/item/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!blood_overlays[type]) //Blood overlay generation if it lacks one.
+		generate_blood_overlay()
+	if(blood_overlay)
+		overlays.Remove(blood_overlay)
+	else
+		blood_overlay = blood_overlays[type]
+	var/image/luminol_overlay = blood_overlay
+	luminol_overlay.color = LIGHT_COLOR_CYAN
+	overlays += luminol_overlay
+	var/obj/effect/decal/cleanable/blueglow/BG
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		BG = had_blood
+		BG.set_light(1,2,LIGHT_COLOR_BLUE)
+	else
+		had_blood = null
+		BG = new /obj/effect/decal/cleanable/blueglow(src)
+		had_blood = BG
+
+/obj/item/clear_luminol()
+	if(!..())
+		return FALSE
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		var/obj/effect/decal/cleanable/blueglow/BG
+		BG = had_blood
+		BG.set_light(0)
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)
@@ -1239,7 +1272,7 @@ var/global/list/image/blood_overlays = list()
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
-		if(C.handcuffed)
+		if(C.handcuffed || C.mutual_handcuffs)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
 			return FALSE
 		feedback_add_details("handcuffs", "[name]")
@@ -1346,3 +1379,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
+
+//This proc will be called when the person holding or equipping it talks.
+/obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	return

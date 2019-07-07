@@ -15,6 +15,9 @@
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
+	var/calledBy //who dunnit, for round end scoreboard
+
+	var/flags = 0
 
 	//for midround polling
 	var/list/applicants = list()
@@ -58,7 +61,7 @@
 	if (!map.map_ruleset(src))
 		return 0
 
-	if (config.high_population_override)
+	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
 		var/indice_pop = min(10,round(population/5)+1)

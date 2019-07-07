@@ -132,11 +132,7 @@
 	var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 
 	var/armorblock = run_armor_check(affecting, modifier = armor_modifier) //Bites are easy to stop, hence the modifier value
-	switch(armorblock)
-		if(1) //Partial block
-			damage = max(0, damage - rand(1,5))
-		if(2) //Full block
-			damage = max(0, damage - rand(1,10))
+	damage = max(0, (damage/100)*(100-armorblock))
 	damage = run_armor_absorb(affecting, "melee", damage)
 	if(knockout >= 7 && prob(33))
 		visible_message("<span class='danger'>[M] weakens [src]!</span>")
@@ -183,7 +179,7 @@
 	..()
 
 	if((M != src) && check_shields(0, M))
-		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
+		visible_message("<span class='borange'>[M] attempts to touch [src]!</span>")
 		return 0
 
 

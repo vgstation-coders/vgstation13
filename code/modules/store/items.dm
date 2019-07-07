@@ -6,6 +6,7 @@
 	var/desc="It's a thing."
 	var/typepath=/obj/item/weapon/storage/box
 	var/cost=0
+	var/stock = -1 //-1 = unlimited stock. Any other value means the item will become unavailable at 0.
 	var/category = "misc"
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
@@ -93,6 +94,14 @@
 	desc = "A deck of une playing cards."
 	typepath = /obj/item/toy/cards/une
 	cost = 35
+
+/datum/storeitem/roganbot
+	name = "ROGANbot"
+	desc = "Your own personalized assistant to speed up your workplace communication skills! Ages 550 and up."
+	typepath = /obj/item/device/roganbot
+	cost = 100
+	stock = 1
+
 /////////////////////////////
 // Clothing
 /////////////////////////////

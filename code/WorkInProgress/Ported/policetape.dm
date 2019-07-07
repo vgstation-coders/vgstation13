@@ -369,7 +369,8 @@
 			var/mob/living/L = user
 			if(ishuman(L))
 				to_chat(L, "<span class='danger'>You cut your hand on the tape!")
-				L.get_active_hand_organ().droplimb(1)
+				var/datum/organ/external/active_hand = L.get_active_hand_organ()
+				active_hand.droplimb(1)
 			else
 				to_chat(L, "<span class='danger'>You cut yourself on the tape!")
 			L.audible_scream()

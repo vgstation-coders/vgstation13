@@ -3,6 +3,7 @@
 	desc = "This spell allows you to steal somebody's shoes right off of their feet!"
 	abbreviation = "SS"
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_type = Sp_RECHARGE
@@ -33,7 +34,7 @@
 			target.visible_message(	"<span class='danger'>[target]'s shoes suddenly vanish!</span>", \
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
 			user.put_in_active_hand(old_shoes)
-			score["shoeshatches"]++
+			score["shoesnatches"]++
 
 		else if(spawn_shards) //Spawn shards if the target isn't wearing shoes
 			to_chat(user, "<span class='danger'>You conjure several glass shards around \the [target].</span>")

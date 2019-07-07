@@ -1,3 +1,7 @@
+/mob/living/carbon/human
+	var/crawlcounter = 1
+	var/max_crawls_before_fatigue = 6
+
 /mob/living/carbon/human/movement_delay()
 	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F
@@ -127,18 +131,12 @@
 	return(prob_slip)
 
 /mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	var/old_z = src.z
-
 	. = ..()
 
 	/*if(status_flags & FAKEDEATH)
 		return 0*/
 
 	if(.)
-		if (old_z != src.z)
-			crewmonitor.queueUpdate(old_z)
-		crewmonitor.queueUpdate(src.z)
-
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
@@ -161,7 +159,7 @@
 		else
 			shoes_slip_factor = TRUE // Shoes are of no interest for this.
 
-	var/magboots_slip_factor = (!slip_on_magbooties && shoes_slip_factor && istype(shoes, /obj/item/clothing/shoes/magboots))
+	var/magboots_slip_factor = (!slip_on_magbooties && shoes_slip_factor && (shoes.clothing_flags & MAGPULSE))
 	. = ..()
 
 	// We have magboots, and magboots can protect us

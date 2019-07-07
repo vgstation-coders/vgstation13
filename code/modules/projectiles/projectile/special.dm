@@ -219,7 +219,7 @@ obj/item/projectile/kinetic/New()
 	var/pressure = environment.return_pressure()
 	if(pressure < 50)
 		name = "full strength kinetic force"
-		damage = 30
+		damage += 15
 	..()
 
 /* wat - N3X
@@ -277,6 +277,13 @@ obj/item/projectile/kinetic/New()
 	..()
 	spawn(4)
 		returnToPool(src)
+
+/obj/item/projectile/kinetic/cutter
+
+/obj/item/projectile/kinetic/cutter/to_bump(atom/A)
+	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
+		damage += 15
+	..()
 
 /obj/item/projectile/stickybomb
 	icon = 'icons/obj/projectiles_experimental.dmi'
