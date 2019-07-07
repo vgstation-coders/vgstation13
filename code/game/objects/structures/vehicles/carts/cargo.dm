@@ -10,6 +10,10 @@
 		return
 	if (load || istype(C, /obj/machinery/cart/))
 		return
+	if(isliving(C))
+		var/mob/living/L = C
+		if(L.size >= SIZE_LARGE)
+			return
 
 	load(C)
 
