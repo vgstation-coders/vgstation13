@@ -196,13 +196,16 @@
 			if(cover_state == C_OPENED)
 				toggle_cover() //Close the cover, too
 
-			door_state = C_CLOSED
-			setDensity(TRUE)
-
 			for(var/mob/living/L in get_turf(src))
+				if(L.size >= SIZE_HUGE)
+					continue
 				add_mob(L)
 				log_admin("[key_name(usr)] has trapped \the [L] in a cage at [formatJumpTo(src)]")
 				message_admins("[key_name(usr)] has trapped \the [L] in a cage at [formatJumpTo(src)]")
+
+
+			door_state = C_CLOSED
+			setDensity(TRUE)
 
 		if(C_CLOSED) //Open the door
 			if(cover_state == C_CLOSED)
