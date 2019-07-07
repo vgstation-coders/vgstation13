@@ -20,11 +20,12 @@
 "t" = (/turf/unsimulated/mineral/destroy_surrounding{rockernaut = 2},/area/vault/angies_lair)
 "u" = (/turf/unsimulated/mineral/destroyed_by_boss,/area/vault/angies_lair)
 "v" = (/obj/effect/landmark/angie_enter,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
+"w" = (/obj/structure/ladder/angie_lair,/turf/unsimulated/floor/asteroid,/area/vault/angies_lair)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaa
 abbbbbbcccrcccccccbbbbbba
-abbbbbbcccccccccccbbbbbba
+abbbbbbcccccwcccccbbbbbba
 abbbbbbcccccccccccbbbbbba
 abbddddddduuuuudddddddbba
 abdsssssssssssssssssssdba
