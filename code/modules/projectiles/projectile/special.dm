@@ -237,7 +237,8 @@ obj/item/projectile/kinetic/New()
 	//testing("Hit [target.type], on [target_turf.type].")
 	if(istype(target_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target_turf
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	new /obj/item/effect/kinetic_blast(target_turf)
 	..(target,blocked)
 
@@ -255,7 +256,8 @@ obj/item/projectile/kinetic/New()
 			//testing("Bumped [A.type], on [target_turf.type].")
 			if(istype(target_turf, /turf/unsimulated/mineral))
 				var/turf/unsimulated/mineral/M = target_turf
-				M.GetDrilled()
+				if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+					M.GetDrilled()
 			// Now we bump as a bullet, if the atom is a non-turf.
 			if(!isturf(A))
 				..(A)
