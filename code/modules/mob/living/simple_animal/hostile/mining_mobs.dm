@@ -773,6 +773,7 @@ obj/item/asteroid/basilisk_hide/New()
 	ranged = 1
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 	var/charging = 0
+	var/stomping = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
 	..()
@@ -837,6 +838,12 @@ obj/item/asteroid/basilisk_hide/New()
 		visible_message("<span class = 'warning'>\The [src] swats [A] aside!</span>")
 		var/turf/T = pick(view(get_turf(src), size))
 		A.throw_at(T,100,move_to_delay)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/death()
+	var/area/A = get_area(src)
+	for(var/turf/unsimulated/mineral/destroyed_by_boss/DB in A)
+		DB.GetDrilled()
+	..()
 
 
 /mob/living/simple_animal/hostile/asteroid/pillow
