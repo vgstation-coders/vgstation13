@@ -287,7 +287,7 @@
 				I.status &= ~ORGAN_BROKEN
 				I.status &= ~ORGAN_SPLINTED
 				I.status &= ~ORGAN_BLEEDING
-		for(var/datum/organ/external/O in organs)
+		for(var/datum/organ/external/O in H.organs)
 			if(O)
 				O.status &= ~ORGAN_BROKEN
 				O.status &= ~ORGAN_SPLINTED
