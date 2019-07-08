@@ -1312,6 +1312,7 @@ client/proc/check_convertables()
 		return
 
 	error_cache.show_to(src)
+	error_cache.send_to_webhook();
 
 /client/proc/emergency_shuttle_panel()
 	set name = "Emergency Shuttle Panel"

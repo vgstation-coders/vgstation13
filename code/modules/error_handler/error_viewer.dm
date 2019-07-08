@@ -124,6 +124,12 @@
 			err_msg_delay = initial(config.error_msg_delay)
 		error_source.next_message_at = world.time + err_msg_delay
 
+/datum/error_viewer/error_cache/proc/send_to_webhook()
+	var/list/data = list()
+	for (var/datum/error_viewer/error_entry/error_entry in errors)
+		data += error_entry.name;
+	world.Export("WEBHOOK URL", text2file("{ \"username\":\"Runtime Cache\", \"content\":\"[data.Join("\\n")]\" }","test"));
+
 /datum/error_viewer/error_source
 	var/list/errors = list()
 	var/next_message_at = 0
@@ -186,7 +192,7 @@
 		html += " <a href='?_src_=holder;adminplayerobservefollow=[usr_ref]'>Follow</a>"
 		if (istype(usr_loc))
 			html += "<br><b>usr.loc</b>: <a href='?_src_=vars;Vars=\ref[usr_loc]'>VV</a>"
-			html += " <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[usr_loc.x];Y=[usr_loc.y];Z=[usr_loc.z]'>JMP</a>"
+			html += " <a href='?_src_=holder;adminplayerobservecoodjump=;X=[usr_loc.x];Y=[usr_loc.y];Z=[usr_loc.z]'>JMP</a>"
 
 	browse_to(user, html)
 
