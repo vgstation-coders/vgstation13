@@ -26,6 +26,15 @@ Used In File(s): \code\modules\telesci\gps.dm
 			{{:helper.link(data.autorefresh ? 'On' : 'Off', 'refresh', {'toggle_refresh' : '1'}, null)}}
 		</div>
 	</div>
+	
+	{{if data.is_sps}}
+		<div class="item">
+			<div class="itemLabel">Toggle Sound</div>
+			<div class="itemContent">
+				{{:helper.link(data.sound ? 'On' : 'Off', data.sound ? 'volume-on' : 'volume-off', {'toggle_sound' : '1'})}}
+			</div>
+		</div>
+	{{/if}}
 
 	<h3>Detected signals</h3>
 	<div class="item">
