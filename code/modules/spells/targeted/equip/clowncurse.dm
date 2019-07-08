@@ -47,7 +47,10 @@
 
 /spell/targeted/equip_item/clowncurse/empower_spell()
 	spell_levels[Sp_POWER]++
-	equipped_summons[slot_shoes] = /obj/item/clothing/shoes/clown_shoes/slippy
+	//equipped_summons[slot_shoes] didn't work, copypasting is the only option.
+	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/clown_hat/stickymagic,
+	"[slot_w_uniform]" = /obj/item/clothing/under/rank/clown,
+	"[slot_shoes]" = /obj/item/clothing/shoes/clown_shoes/slippy)
 	name = "Empowered Clown Curse"
 	desc = "A curse that will turn a victim into a miserable clown that spills lube there and there."
 
