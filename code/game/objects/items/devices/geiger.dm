@@ -30,12 +30,12 @@
 	if(on && world.time > last_call + COOLDOWN)
 		to_chat(user, "<span class = 'notice'>Radiation detected.</span>")
 		last_call = world.time
-		last_sound = world.time
 		spawn(5)
 			if(user && on)
 				to_chat(user, "<span class = 'soghun'>Radiation dosage: [rads] rads.</span>")
 				if(world.time > last_sound + SOUND_COOLDOWN)
-					playsound(user, "sound/item/geiger_strong.ogg", 50, 0, 1)
+					playsound(user, 'sound/items/geiger_strong.ogg', 50)
+					last_sound = world.time
 
 
 
