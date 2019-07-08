@@ -473,9 +473,8 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	if(population>=20)
-		return FALSE
-		//We don't cotton to freaks in 20+pop
+	weight = Clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	//We don't cotton to freaks in highpop
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
