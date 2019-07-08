@@ -1,5 +1,5 @@
 #define COOLDOWN 1 SECONDS
-#define SOUND_COOLDOWN 4 SECONDS
+#define SOUND_COOLDOWN 5 SECONDS
 
 /obj/item/device/geiger_counter
 	name = "geiger counter"
@@ -34,7 +34,7 @@
 			if(user && on)
 				to_chat(user, "<span class = 'soghun'>Radiation dosage: [rads] rads.</span>")
 				if(world.time > last_sound + SOUND_COOLDOWN)
-					playsound(user, 'sound/items/geiger_strong.ogg', 50)
+					playsound(src, 'sound/items/geiger_strong.ogg', 50)
 					last_sound = world.time
 
 
