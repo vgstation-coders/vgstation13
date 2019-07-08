@@ -699,6 +699,22 @@ var/list/slot_equipment_priority = list( \
 		slot_r_store\
 	)
 
+/*Equips accessories. 
+A is the mob
+B is the accessory. 
+C is what item the accessory will look to be attached to, important.
+D will look how many accessories the item already has, and will move on if its attachment would go above the amount of accessories
+E will stop the proc if a candidate had the accessory attached to it and it is toggled on
+Use this proc preferably at the end of an equipment loadout
+*/
+/proc/equip_accessory(var/mob/living/carbon/human/mob, var/obj/item/accessory, var/what_it_looks_for, var/accessory_limit = 1, var/stop_upon_finding_candidate = 0)
+	for(var/obj/item/clothing/I in get_contents_in_object(mob))
+		if(!istype(I, what_it_looks_for) || (I.accessories.len >= accessory_limit))
+			continue
+		I.attach_accessory(new accessory)
+		if(stop_upon_finding_candidate)
+			break
+
 //puts the item "W" into an appropriate slot in a human's inventory
 //returns 0 if it cannot, 1 if successful
 /mob/proc/equip_to_appropriate_slot(obj/item/W, var/override = FALSE)
