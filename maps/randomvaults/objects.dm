@@ -946,11 +946,11 @@
 
 /turf/unsimulated/mineral/destroy_surrounding/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	..()
-	spawn(1 SECONDS)
-	for(var/dir in cardinal)
-		var/turf/unsimulated/mineral/destroy_surrounding/TT = get_step(src, dir)
-		if(istype(TT, /turf/unsimulated/mineral/destroy_surrounding))
-			TT.GetDrilled(artifact_fail, safety_override, driller)
+	spawn(0.5 SECONDS)
+		for(var/dir in cardinal)
+			var/turf/unsimulated/mineral/destroy_surrounding/TT = get_step(src, dir)
+			if(istype(TT, /turf/unsimulated/mineral/destroy_surrounding))
+				TT.GetDrilled(artifact_fail, safety_override, driller)
 
 /turf/unsimulated/mineral/light
 	mining_difficulty = 0
