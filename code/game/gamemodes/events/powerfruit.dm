@@ -1,7 +1,6 @@
 //the actual powerfruit obj
-#define POWER_PER_FRUIT 1000
+#define POWER_PER_FRUIT 500
 #define SPREAD_CHANCE 15
-#define MAX_SPREAD 7
 #define ATTACK_CHANCE 15
 
 /obj/structure/cable/powerfruit
