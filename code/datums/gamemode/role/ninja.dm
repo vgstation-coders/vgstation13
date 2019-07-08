@@ -538,8 +538,6 @@ Helpers For Both Variants
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
 		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
-		..()
-		return
 	..()
 		
 /*=======
