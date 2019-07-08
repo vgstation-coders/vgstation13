@@ -5,7 +5,7 @@
 
 /obj/structure/cable/powerfruit
 	name = "powerfruit"
-	desc = "A strange alien fruit somehow creating power. How curious! It looks dangerous, better not touch it"
+	desc = "A strange alien fruit that generates electricity passively. Best not to touch it."
 	icon = 'icons/obj/lighting.dmi' //TODO
 	icon_state = "glowshroomf" //TODO
 	level = LEVEL_ABOVE_FLOOR
