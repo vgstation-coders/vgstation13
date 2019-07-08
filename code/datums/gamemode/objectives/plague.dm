@@ -17,6 +17,8 @@
 
 	if (total_infections > 1)
 		for (var/mob/living/L in mob_list)
+			if (L.locked_to && istype(L.locked_to, /obj/item/critter_cage))//mice in cages are "safe"
+				continue
 			if (diseaseID in L.virus2)
 				return TRUE//if we infected at least one individual, and there is still an infected individual alive, that's good enough.
 

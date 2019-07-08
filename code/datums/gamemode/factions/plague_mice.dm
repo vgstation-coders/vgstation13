@@ -38,6 +38,11 @@
 			var/datum/mind/mouse_mind = M.antag
 			mouse_mind.current.forceMove(invasion)
 
+	spawn(1 MINUTES)
+		if(members.len > 0)
+			command_alert("A horde of black mice carriers of a dangerous bacteria have invaded the station. It is not clear how they got onboard, but they need to be either captured into small cages or exterminated, and any contaminated invividual is to cooperate with the medical staff for the preparation of a cure.", "The Black Plague is upon us!",1)
+
+
 /datum/faction/plague_mice/proc/SetupDisease()
 	if (!plague)
 		plague = new
@@ -56,7 +61,7 @@
 			EFFECT_DANGER_HARMFUL	= 2,
 			EFFECT_DANGER_DEADLY	= 3,
 			)
-		plague.origin = "Plague Mice"
+		plague.origin = "Black Plague"
 
 		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE//gotta ensure that our mice can spread that disease
 

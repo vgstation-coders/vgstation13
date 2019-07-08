@@ -147,7 +147,7 @@
 			25;/obj/item/weapon/reagent_containers/food/drinks/thermos/full
 		)
 		new toSpawn(src)
-		
+
 /obj/item/weapon/storage/box/byond
 	name = "\improper BYOND support package"
 	desc = "A small box containing a branded trinket that the BYOND corporation sends to people that actually send them money."
@@ -478,6 +478,15 @@
 	..()
 	for(var/i = 1; i <= 5; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube(src)
+
+/obj/item/weapon/storage/box/monkeycubes/mousecubes
+	name = "lab mouse cube box"
+	desc = "Drymate brand laboratory mouse cubes, shipped from Yensid. Just add water!"
+
+/obj/item/weapon/storage/box/monkeycubes/mousecubes/New()
+	..()
+	for(var/i = 1; i <= 5; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube(src)
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"

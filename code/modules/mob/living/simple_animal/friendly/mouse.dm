@@ -457,16 +457,27 @@
  */
 
 /mob/living/simple_animal/mouse/balbc
-	name = "Pinky"
+	name = "laboratory mouse"
 	namenumbers = FALSE
 	desc = "A lab mouse of the BALB/c strain (Mus Musculus). Very docile, though they become easily anxious."
 	_color = "balbc"
 	icon_state = "mouse_balbc"
+	universal_understand = 1
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "splats"
 
 /mob/living/simple_animal/mouse/balbc/New()
+	..()
+	if(namenumbers)
+		name = "[name] ([rand(1, 1000)])"
+		real_name = name
+
+/mob/living/simple_animal/mouse/balbc/named
+	name = "Pinky"
+	namenumbers = FALSE
+
+/mob/living/simple_animal/mouse/balbc/named/New()
 	..()
 	name = pick(
 		"Pinky",
@@ -479,6 +490,7 @@
 /mob/living/simple_animal/mouse/plague
 	name = "plague mouse"
 	namenumbers = FALSE
+	universal_understand = 1
 	_color = "plague"
 	desc = "It's a small, disease-ridden rodent."
 	icon_state = "mouse_plague"

@@ -93,12 +93,12 @@
 		transformed = TRUE
 		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
 		gene.activate(mob, null, null)
-
+/*
 /datum/disease2/effect/monkey/deactivate(var/mob/living/carbon/monkey/mob)
 	if(istype(mob) && transformed)
 		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
 		gene.deactivate(mob, null, null)
-
+*/
 
 /datum/disease2/effect/catbeast
 	name = "Kingston Syndrome"
@@ -114,14 +114,14 @@
 		if(old_species != "Tajaran")
 			if(h.set_species("Tajaran"))
 				h.regenerate_icons()
-
+/*
 /datum/disease2/effect/catbeast/deactivate(var/mob/living/mob)
 	if(istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
 		if(h.species.name == "Tajaran" && old_species != "Tajaran")
 			if(h.set_species(old_species))
 				h.regenerate_icons()
-
+*/
 /datum/disease2/effect/zombie
 	name = "Stubborn brain syndrome"
 	desc = "UNKNOWN"
@@ -148,14 +148,14 @@
 		if(old_species != "Vox")
 			if(h.set_species("Vox"))
 				h.regenerate_icons()
-
+/*
 /datum/disease2/effect/voxpox/deactivate(var/mob/living/mob)
 	if(istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
 		if(h.species.name == "Vox" && old_species != "Vox")
 			if(h.set_species(old_species))
 				h.regenerate_icons()
-
+*/
 
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"

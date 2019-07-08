@@ -56,8 +56,6 @@
 			critter = inside
 			qdel(store)
 			critter.forceMove(loc)
-			critter.pixel_x = pixel_x
-			critter.pixel_y = pixel_y+5
 			lock_atom(critter,lock_type)
 
 		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
@@ -128,7 +126,5 @@
 	..()
 	icon_state = "cage"
 	if (loc)
-		critter = new /mob/living/simple_animal/mouse/balbc(loc)
-		critter.pixel_x = pixel_x
-		critter.pixel_y = pixel_y+5
+		critter = new /mob/living/simple_animal/mousen/balbc/named(loc)
 		lock_atom(critter,lock_type)
