@@ -33,12 +33,10 @@
 
 	//spread - copypasta from spreading_growth.dm
 	if(prob(SPREAD_CHANCE))
-		var/list/neighbors = getViableNeighbours()
 		sleep(rand(3,5))
 		if(!(gcDestroyed || !neighbors.len))
-			var/turf/target_turf = pick(neighbors)
+			var/turf/target_turf = pick(getViableNeighbours())
 			var/obj/structure/cable/powerfruit/child = new(get_turf(src))
-			neighbors -= target_turf
 			spawn(1) // This should do a little bit of animation.
 				child.forceMove(target_turf)
 
@@ -62,7 +60,7 @@
 		T = get_step(src, dir)
 		if(locate(/obj/structure/cable/powerfruit) in T)
 			continue
-		if(istype(T, /turf/simulated/wall))
+		if(!Adjacent(T))
 			continue
 	
 		. += T

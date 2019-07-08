@@ -13,7 +13,6 @@
 			var/turf/simulated/floor/T = pick(turfs)
 
 			var/obj/structure/cable/powerfruit/PF = new(T)
-			PF.process()
 
 			message_admins("<span class='notice'>Event: Powerfruit spawned at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a></span>")
 			return
