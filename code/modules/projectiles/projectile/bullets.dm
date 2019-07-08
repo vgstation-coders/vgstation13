@@ -289,7 +289,8 @@
 
 	if(istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	if(istype(A, /obj/structure/boulder))
 		returnToPool(A)
 

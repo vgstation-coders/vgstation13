@@ -535,7 +535,8 @@ proc/move_mining_shuttle()
 	if(istype(proj_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = proj_turf
 		playsound(src, 'sound/effects/sparks4.ogg',50,1)
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_DENSE)
+			M.GetDrilled()
 		spawn(5)
 			qdel(src)
 	else

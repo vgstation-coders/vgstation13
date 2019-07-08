@@ -168,7 +168,7 @@
 	else if(istype(target, /turf/unsimulated/mineral))
 		if(do_after_cooldown(target, 1/MECHDRILL_ROCK_SPEED) && C == chassis.loc && src == chassis.selected)
 			for(var/turf/unsimulated/mineral/M in range(chassis,1))
-				if(get_dir(chassis,M)&chassis.dir)
+				if(get_dir(chassis,M)&chassis.dir && M.mining_difficulty < MINE_DIFFICULTY_DENSE)
 					M.GetDrilled(safety_override = TRUE, driller = src)
 			log_message("Drilled through [target]")
 			if(istype(chassis, /obj/mecha/working))
