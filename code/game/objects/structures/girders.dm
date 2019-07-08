@@ -290,13 +290,13 @@
 
 		add_hiddenprint(usr)
 
-	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
+	else if(W.sharpness_flags & (CUT_WALL))
 		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
 		"<span class='notice'>You begin slicing through \the [src].</span>", \
 		"<span class='warning'>You hear slicing noises.</span>")
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 
-		if(do_after(user, src, 60))
+		if(do_after(user, src, 30))
 			if(!istype(src))
 				return
 			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \

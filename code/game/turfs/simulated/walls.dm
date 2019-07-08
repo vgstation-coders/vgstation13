@@ -254,7 +254,7 @@
 		"<span class='warning'>You hear slicing noises.</span>")
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 
-		if(do_after(user, src, 100))
+		if(do_after(user, src, 50))
 			if(!istype(src))
 				return
 			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
