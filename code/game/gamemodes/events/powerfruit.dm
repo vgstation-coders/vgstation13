@@ -5,7 +5,7 @@
 
 /obj/structure/cable/powerfruit
 	name = "powerfruit"
-	desc = "A strange alien fruit that generates electricity passively. Best not to touch it."
+	desc = "A strange alien fruit that passively generates electricity. Best not to touch it."
 	icon = 'icons/obj/lighting.dmi' //TODO
 	icon_state = "glowshroomf" //TODO
 	level = LEVEL_ABOVE_FLOOR
@@ -32,8 +32,8 @@
 	add_avail(POWER_PER_FRUIT)
 
 	//spread - copypasta from spreading_growth.dm
-	var/list/neighbors = getViableNeighbours()
 	if(prob(SPREAD_CHANCE))
+		var/list/neighbors = getViableNeighbours()
 		sleep(rand(3,5))
 		if(!(gcDestroyed || !neighbors.len))
 			var/turf/target_turf = pick(neighbors)
@@ -84,6 +84,7 @@
 	if(W.is_hot())
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
+		qdel(src)
 
 #undef POWER_PER_FRUIT
 #undef SPREAD_CHANCE
