@@ -514,6 +514,7 @@
 #include "code\game\gamemodes\events\dust.dm"
 #include "code\game\gamemodes\events\miniblob.dm"
 #include "code\game\gamemodes\events\power_failure.dm"
+#include "code\game\gamemodes\events\powerfruit.dm"
 #include "code\game\gamemodes\events\spacevines.dm"
 #include "code\game\gamemodes\events\wormholes.dm"
 #include "code\game\gamemodes\events\holidays\Christmas.dm"

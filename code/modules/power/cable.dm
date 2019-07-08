@@ -508,3 +508,6 @@ By design, d1 is the smallest direction and d2 is the highest
 		return
 
 	rebuild_from()
+
+/obj/structure/cable/proc/hasDir(var/dir)
+	return (d1 == dir || d2 == dir)

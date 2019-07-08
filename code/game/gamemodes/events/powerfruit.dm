@@ -1,95 +1,91 @@
 //the actual powerfruit obj
+#define POWER_PER_FRUIT 1000
+#define SPREAD_CHANCE 15
+#define MAX_SPREAD 7
+#define ATTACK_CHANCE 15
 
-/datum/seed/powerfruit
+/obj/structure/cable/powerfruit
 	name = "powerfruit"
-	seed_name = "powerfruit"
-	display_name = "powerfruit vines"
-	packet_icon = "seed-powerfruit"
-	products = list()
-	plant_icon = "powerfruit"
-	chems = list()
-
-	lifespan = 20
-	maturation = 6
-	production = 6
-	yield = 4
-	potency = 20
-	growth_stages = 4
-	spread = 2
-	water_consumption = 0.5
-
-/obj/effect/plantsegment/powerfruit
-	name = "powerfruit"
-	desc = "A strange alien fruit somehow creating. How curious! It looks dangerous, better not touch it"
+	desc = "A strange alien fruit somehow creating power. How curious! It looks dangerous, better not touch it"
 	icon = 'icons/obj/lighting.dmi' //TODO
 	icon_state = "glowshroomf" //TODO
-	var/datum/powerfruit_hive/hive = null
-	var/rebuild = 1
+	level = LEVEL_ABOVE_FLOOR
+	plane = ABOVE_HUMAN_PLANE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 
-/obj/effect/plantsegment/powerfruit/Destroy()
-	if(importantToHive())
-		hive.rebuild()
-	hive.removeFruit(src)
+/obj/structure/cable/powerfruit/New(loc)
+	var/datum/powernet/PN = getFromPool(/datum/powernet)
+	PN.add_cable(src)
+
+	for(var/dir in cardinal)
+		mergeConnectedNetworks(dir)   //Merge the powernet with adjacents powernets
+	mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
+
+	processing_objects += src
+	. = ..()
+
+/obj/structure/cable/powerfruit/Destroy()
+	processing_objects -= src
 	..()
 
-/obj/effect/plantsegment/powerfruit/proc/importantToHive() //*might, just to boost performance a bit
-	if(!hive) return
-	//find some way to check if two of my neighbours are next to each other, if not, return true
+/obj/structure/cable/powerfruit/process()
+	//add power to powernet
+	add_avail(POWER_PER_FRUIT)
 
-/obj/effect/plantsegment/powerfruit/process()
-	..()
-	if(rebuild)
-		for(var/turf/N in get_cardinal_neighbors())
-
-
-		if(!hive)
-			hive = new /datum/powerfruit_hive()
-		//search for adjacent powerfruits, adapt their hive.
-		//if there are multiple hive, connect them
-		//if none are available, make own hive
-		rebuild = 0
-
-	//if there is a cable underneath and the hive has no connector yet, make this a connector, no need to rebuild, we just replace this obj with the connector one
+	//spread - copypasta from spreading_growth.dm
+	var/list/neighbors = getViableNeighbours()
+	if(prob(SPREAD_CHANCE))
+		sleep(rand(3,5))
+		if(!(gcDestroyed || !neighbors.len))
+			var/turf/target_turf = pick(neighbors)
+			var/obj/structure/cable/powerfruit/child = new(get_turf(src))
+			neighbors -= target_turf
+			spawn(1) // This should do a little bit of animation.
+				child.forceMove(target_turf)
 
 	//if there is a person caught in the vines, burn em a bit
+	//electrocute people who aren't insulated
+	for(var/mob/living/M in range(1, get_turf(src)))
+		if(prob(ATTACK_CHANCE))
+			if(!electrocute_mob(M, powernet, src))
+				M.apply_damage(10, BURN)
 
-//electrocute people who aren't insulated
+/obj/structure/cable/powerfruit/update_icon()
+	return
 
-//connector, a subclass of the powerfruit which connects to the powernet
-/obj/effect/plantsegment/powerfruit/connector
-	name = "Connector"
-	desc = "The vines intersect with the cable on the ground. This must be where all the power is fed into the network."
-	icon = 'icons/obj/lighting.dmi' //TODO
-	icon_state = "glowshroomf" //TODO
+/obj/structure/cable/powerfruit/hide(i)
+	return
 
-/obj/effect/plantsegment/powerfruit/connector/devolve()
-	//devolve back into a powerfruit
-	//create powerfruit at pos and qdel myself
+/obj/structure/cable/powerfruit/proc/getViableNeighbours()
+	. = list()
+	var/turf/T
+	for(var/dir in cardinal)
+		T = get_step(src, dir)
+		if(locate(/obj/structure/cable/powerfruit) in T)
+			continue
+		if(istype(T, /turf/simulated/wall))
+			continue
+	
+		. += T
 
-//the powerfruit hivemind datum, handling all the connected powerfruit
-/datum/powerfruit_hive/
-	var/list/powerfruits
-	var/obj/effect/plantsegment/powerfruit/connector/connection
+/obj/structure/cable/powerfruit/get_connections(powernetless_only = 0)
+	. = list()
+	var/turf/T
 
-/datum/powerfruit_hive/addFruit(var/obj/effect/plantsegment/powerfruit/F)
+	for(var/dir in cardinal) //only connects to cardinal directions
+		T = get_step(src, dir)
+		if(T)
+			. += power_list(T, src, turn(dir, 180), powernetless_only)
 
+/obj/structure/cable/powerfruit/hasDir(var/dir)
+	return (dir in cardinal)
 
-/datum/powerfruit_hive/removeFruit(var/obj/effect/plantsegment/powerfruit/F)
+/obj/structure/cable/powerfruit/attackby(obj/item/W, mob/user)
+	. = ..()
+	if(W.is_hot())
+		to_chat(user, "<span class='warning'>You burn away \the [src]")
+		visible_message("[user] burns away \the [src]", "You hear some burning")
 
-/datum/powerfruit_hive/proc/getPower()
-	return powerfruits.len * 100 //prone to change, maybe take plant quality into account
-
-/datum/powerfruit_hive/proc/rebuild()
-	if(connection) connection.devolve()
-
-	for(var/obj/effect/plantsegment/powerfruit/F in powerfruits)
-		F.rebuild = 1
-
-/datum/powerfruit_hive/proc/absorb(var/datum/powerfruit_hive/H)
-	for(var/obj/effect/plantsegment/powerfruit/F in H.powerfruits)
-		F.hive = src
-		powerfruits += F
-
-	if(H.connection) connection.devolve()
-
-	qdel(H)
+#undef POWER_PER_FRUIT
+#undef SPREAD_CHANCE
+#undef MAX_SPREAD
