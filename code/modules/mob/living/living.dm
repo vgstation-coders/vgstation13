@@ -2051,7 +2051,7 @@ Thanks.
 	..()
 
 /mob/living/proc/handle_symptom_on_death()
-	if(virus2?.len)
+	if(islist(virus2) && virus2.len > 0)
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
