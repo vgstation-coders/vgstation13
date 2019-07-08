@@ -43,6 +43,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	return 1
 
 /datum/job/scientist
@@ -99,6 +100,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	return 1
 
 /datum/job/roboticist
@@ -146,6 +148,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	return 1
 
 /datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)
