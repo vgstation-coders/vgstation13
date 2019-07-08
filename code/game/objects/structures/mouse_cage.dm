@@ -103,7 +103,6 @@
 		critter.pixel_x = pixel_x
 		critter.pixel_y = pixel_y+5
 
-
 /obj/item/critter_cage/MouseDropFrom(var/over_object)
 	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
 		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
@@ -121,3 +120,15 @@
 						usr.put_in_hands(src)
 						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
 	return ..()
+
+/obj/item/critter_cage/with_mouse
+	icon_state = "cage_map"
+
+/obj/item/critter_cage/with_mouse/New()
+	..()
+	icon_state = "cage"
+	if (loc)
+		critter = new /mob/living/simple_animal/mouse/balbc(loc)
+		critter.pixel_x = pixel_x
+		critter.pixel_y = pixel_y+5
+		lock_atom(critter,lock_type)
