@@ -47,3 +47,4 @@
 	icon_state = initial(icon_state)+"[on]"
 
 #undef COOLDOWN
+#undef SOUND_COOLDOWN
