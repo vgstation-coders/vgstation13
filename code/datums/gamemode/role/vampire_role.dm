@@ -287,6 +287,11 @@
 				I.status &= ~ORGAN_BROKEN
 				I.status &= ~ORGAN_SPLINTED
 				I.status &= ~ORGAN_BLEEDING
+		for(var/datum/organ/external/O in organs)
+			if(O)
+				O.status &= ~ORGAN_BROKEN
+				O.status &= ~ORGAN_SPLINTED
+				O.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
