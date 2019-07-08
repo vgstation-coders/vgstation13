@@ -1159,7 +1159,7 @@ About the new airlock wires panel:
 		"<span class='warning'>You hear slicing noises.</span>")
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 
-		if(do_after(user, src, 100))
+		if(do_after(user, src, 10 SECONDS))
 			if(!istype(src))
 				return
 			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
