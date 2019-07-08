@@ -60,7 +60,7 @@
 		T = get_step(src, dir)
 		if(locate(/obj/structure/cable/powerfruit) in T)
 			continue
-		if(!Adjacent(T))
+		if((T.density == 1) || T.has_dense_content())
 			continue
 	
 		. += T
