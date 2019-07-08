@@ -112,6 +112,11 @@ For the main html chat area
 			else if (encoding == "_autodetect")
 				owner.encoding = "1252"
 
+			// This is the result of that Windows 10 beta thing where Microsoft has UTF-8 as a code page.
+			// It doesn't work in BYOND and *seems* to fall back to 1252?
+			else if (encoding == "utf-8")
+				owner.encoding = "1252"
+
 			else
 				stack_trace("Unknown encoding received from client: \"[sanitize(encoding)]\". Please report this as a bug.")
 
