@@ -758,7 +758,7 @@
 				</ul>
 				<a href="#menu">Table of Contents</a>
 				<h3 id="chapter4">Chapter 4: Pathogen Modification</h3>
-				<p>As explained in the previous chapter, you with a few chemicals and an incubator, you can alter a pathogen to some degree. Keep in mind though that there is currently no way to change a pathogen's form (a Virus won't magically become a Bacteria) or their spread vectors. Here are the following default characteristics of each forms:</p>
+				<p>As explained in the previous chapter, with a few chemicals and an incubator, you can alter a pathogen to some degree. Keep in mind though that there is currently no way to change a pathogen's form (a Virus won't magically become a Bacteria) or their spread vectors. Here are the following default characteristics of each forms:</p>
 				<ul>
 				<li><b>Virus</b>: 4 stages, High infection chance, Very Low Progress Speed, stage reduced by 1 after an infection, can kill weaker Bacteria
 				<li><b>Bacteria</b>: 3 stages, Very High infection chance, Low Progress Speed, stage reduced back to 1 after an infection, can kill weaker Parasite
