@@ -10,6 +10,7 @@ var/list/pathogen_clouds = list()
 	opacity = 0
 	anchored = 0
 	density = 0
+	invisibility = 101
 	var/mob/source = null
 	var/sourceIsCarrier = TRUE
 	var/list/viruses = list()
