@@ -884,7 +884,7 @@ var/virology_encyclopedia = ""
 				<th style="width:60%">Description</th>
 				<th style="width:5%">Danger</th>
 				<th style="width:5%">Strength (Default/Max)</th>
-				<th style="width:5%">Occurence (Default/Max)</th>
+				<th style="width:5%">Occurrence (Default/Max)</th>
 				</tr>
 				"}
 
