@@ -754,7 +754,7 @@
 				<li><b>Stage</b>: This is the stage from which the effect may trigger.
 				<li><b>Danger</b>: A value from 0 (helpful) to 5 (deadly) indicating how much of a boon or an inconvenience a symptom can be.
 				<li><b>Strength</b>: Specific to each effect, check the Symptom Encyclopedia for more details.
-				<li><b>Occurence</b>: The percentage chance that the effect will occur at every second when the stage has been reached. Some effects can have this value altered randomly following a Robustness alteration reaction during incubation.
+				<li><b>Occurrence</b>: The percentage chance that the effect will occur at every second when the stage has been reached. Some effects can have this value altered randomly following a Robustness alteration reaction during incubation.
 				</ul>
 				<a href="#menu">Table of Contents</a>
 				<h3 id="chapter4">Chapter 4: Pathogen Modification</h3>
