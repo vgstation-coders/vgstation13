@@ -48,14 +48,19 @@
 	//electrocute people who aren't insulated
 	for(var/mob/living/M in range(1, get_turf(src)))
 		if(prob(ATTACK_CHANCE))
-			if(!electrocute_mob(M, powernet, src))
-				M.apply_damage(10, BURN)
+			try_electrocution(M)
 
 /obj/structure/cable/powercreeper/update_icon()
 	return
 
 /obj/structure/cable/powercreeper/hide(i)
 	return
+
+/obj/structure/cable/powercreeper/try_electrocution(var/mob/M)
+	if(!electrocute_mob(M, powernet, src))
+		M.apply_damage(10, BURN)
+		return 0
+	return 1
 
 /obj/structure/cable/powercreeper/proc/getViableNeighbours()
 	. = list()
@@ -87,8 +92,13 @@
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
 		qdel(src)
-	if(W.is_sharp())
-		//cut it away, also try to shock the user
+	if(W.is_sharp()) //cut it away, also try to shock the user
+		if(!try_electrocution())
+			to_chat(user, "<span class='warning'>You cut away \the [src]")
+			visible_message("[user] cuts away \the [src]", "You hear a cutting sound")
+			qdel(src)
 
 #undef POWER_PER_FRUIT
-#undef SPREAD_CHANCE
+#undef MIN_SPREAD_CHANCE
+#undef MAX_SPREAD_CHANCE
+#undef ATTACK_CHANCE
