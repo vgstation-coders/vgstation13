@@ -1,6 +1,6 @@
 #define POWER_PER_FRUIT 500
 #define SPREAD_CHANCE 15
-#define ATTACK_CHANCE 15
+#define ATTACK_CHANCE 35
 
 //the actual powercreeper obj
 /obj/structure/cable/powercreeper
@@ -83,6 +83,8 @@
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
 		qdel(src)
+	if(W.is_sharp())
+		//cut it away, also try to shock the user
 
 #undef POWER_PER_FRUIT
 #undef SPREAD_CHANCE
