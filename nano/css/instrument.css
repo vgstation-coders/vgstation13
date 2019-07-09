@@ -1,0 +1,12 @@
+#lines {
+    display: inline;
+}
+
+.chord {
+    display: inline;
+}
+
+.chord.activeChord {
+    background-color: chartreuse;
+    color: black;
+}
