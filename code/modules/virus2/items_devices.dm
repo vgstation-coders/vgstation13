@@ -254,8 +254,6 @@ var/list/virusdishes = list()
 		var/list/L = list()
 		L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
 		getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), last_openner, virus_copylist(L), FALSE)
-		return 1
-	return 0
 
 
 /obj/item/weapon/virusdish/random
