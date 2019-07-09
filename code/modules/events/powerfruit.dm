@@ -12,7 +12,7 @@
 		if(turfs.len) //Pick a turf to spawn at if we can
 			var/turf/simulated/floor/T = pick(turfs)
 
-			new obj/structure/cable/powercreeper(T)
+			new /obj/structure/cable/powercreeper(T)
 
 			message_admins("<span class='notice'>Event: powercreeper spawned at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a></span>")
 			return

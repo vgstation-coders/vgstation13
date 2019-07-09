@@ -77,7 +77,7 @@
 /obj/structure/cable/powercreeper/hasDir(var/dir)
 	return (dir in cardinal)
 
-/obj/structure/cable/powerfruit/attackby(obj/item/W, mob/user)
+/obj/structure/cable/powercreeper/attackby(obj/item/W, mob/user)
 	. = ..()
 	if(W.is_hot())
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
