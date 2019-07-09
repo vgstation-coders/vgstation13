@@ -53,19 +53,31 @@
 
 	log_admin("[key_name(user)] has death-touched [key_name(target)]. The latter will die in moments.")
 	message_admins("[key_name(user)] has death-touched [key_name(target)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>JMP</A>). The latter will die in moments.")
-	var/datum/disease2/disease/shutdown = new /datum/disease2/disease()
+	var/datum/disease2/disease/shutdown = new ()
+	shutdown.form = "Virus"//Because the form is given away by the Health Analyser and we don't want to out the vampire right away.
+	shutdown.infectionchance = 100
+	shutdown.infectionchance_base = 100
+	shutdown.stageprob = 0//single-stage
+	shutdown.stage_variance = 0
+	shutdown.max_stage = 1
+	shutdown.can_kill = list()
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
 	O.chance = 10
-	shutdown.infectionchance = 100
+	O.max_chance = 10
+	shutdown.strength = rand(70,100)
+	shutdown.robustness = 100
 	shutdown.antigen = list(pick(all_antigens))
 	shutdown.antigen |= pick(all_antigens)
 	shutdown.spread = SPREAD_BLOOD
 	shutdown.uniqueID = rand(0,9999)
 	shutdown.subID = rand(0,9999)
 	shutdown.effects += O
-	shutdown.speed = 1
-	shutdown.max_stage = 1
+	shutdown.origin = "Vampire Touch"
 	shutdown.mutation_modifier = 0
+	shutdown.color = "#777777"
+	shutdown.pattern = 5
+	shutdown.pattern_color = "#555555"
+	shutdown.update_global_log()
 	target.infect_disease2(shutdown, notes="(Spell, from [key_name(user)])")
 
 	V.remove_blood(blood_cost)
