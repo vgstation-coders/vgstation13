@@ -13,12 +13,23 @@
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	slowdown_modifier = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
+	var/grown = 0
 
-/obj/structure/cable/powercreeper/New(loc, growdir)
-	//are we growing from another powercreeper?
-	if(growdir)
-		dir = growdir
-		flick("growing", src)
+/obj/structure/cable/powercreeper/New(loc, growdir, packet_override)
+	//did we get created by a packet?
+	if(packet_override)
+		flick("creation_packet", src)
+	else
+		//are we growing from another powercreeper?
+		if(growdir)
+			dir = growdir
+			flick("growing", src)
+		else
+			//we just kinda spawned i guess
+			flick("creation", src)
+	spawn(3 SECONDS) //should be enough for our animation to finish
+		grown = 1
 
 	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
 	var/datum/powernet/PN = getFromPool(/datum/powernet)
@@ -39,28 +50,36 @@
 	..()
 
 /obj/structure/cable/powercreeper/process()
-	//check if our tile is burning, if so die TODO
+	if(!gcDestroyed)
+		return
 
-	//add power to powernet
-	add_avail(POWER_PER_FRUIT)
+	//check if our tile is burning, if so die
+	if(on_fire || loc.on_fire)
+		die()
+		return
 
-	//spread - copypasta from spreading_growth.dm
-	var/chance = MIN_SPREAD_CHANCE + (powernet.avail / 1000) //two powercreeper plants raise chance by 1
-	chance = chance > MAX_SPREAD_CHANCE ? MAX_SPREAD_CHANCE : chance
-	if(prob(chance))
-		sleep(rand(3,5))
-		if(!gcDestroyed)
-			var/list/neighbours = getViableNeighbours()
-			if(neighbours.len)
-				var/turf/target_turf = pick(neighbours)
-				new /obj/structure/cable/powercreeper(get_turf(target_turf), get_dir(src, target_turf))
+	//we only want to interact with stuff as soon as our growing animation finishes
+	if(grown)
+		//add power to powernet
+		add_avail(POWER_PER_FRUIT)
 
-	//if there is a person caught in the vines, burn em a bit
-	//electrocute people who aren't insulated
-	if(prob(ATTACK_CHANCE))
-		flick("attacking",src)
-		for(var/mob/living/M in range(1, get_turf(src)))
-			try_electrocution(M)
+		//spread - copypasta from spreading_growth.dm
+		var/chance = MIN_SPREAD_CHANCE + (powernet.avail / 1000) //two powercreeper plants raise chance by 1
+		chance = chance > MAX_SPREAD_CHANCE ? MAX_SPREAD_CHANCE : chance
+		if(prob(chance))
+			sleep(rand(3,5))
+			if(!gcDestroyed)
+				var/list/neighbours = getViableNeighbours()
+				if(neighbours.len)
+					var/turf/target_turf = pick(neighbours)
+					new /obj/structure/cable/powercreeper(get_turf(target_turf), get_dir(src, target_turf))
+
+		//if there is a person caught in the vines, burn em a bit
+		//electrocute people who aren't insulated
+		if(prob(ATTACK_CHANCE))
+			flick("attacking",src)
+			for(var/mob/living/M in range(1, get_turf(src)))
+				try_electrocution(M)
 
 /obj/structure/cable/powercreeper/update_icon()
 	return

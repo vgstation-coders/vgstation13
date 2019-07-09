@@ -792,6 +792,7 @@
 #include "code\game\objects\items\misc_items.dm"
 #include "code\game\objects\items\ornaments.dm"
 #include "code\game\objects\items\potions.dm"
+#include "code\game\objects\items\powercreeper_packet.dm"
 #include "code\game\objects\items\shooting_range.dm"
 #include "code\game\objects\items\slime_heart.dm"
 #include "code\game\objects\items\toys.dm"
