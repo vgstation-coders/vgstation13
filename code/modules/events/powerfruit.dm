@@ -1,6 +1,6 @@
-/datum/event/powerfruit
+/datum/event/powercreeper
 
-/datum/event/powerfruit/start()
+/datum/event/powercreeper/start()
 	spawn()
 		var/list/turf/simulated/floor/turfs = list() //list of all the empty floor turfs in the hallway areas
 		for(var/areapath in typesof(/area/hallway))
@@ -12,8 +12,8 @@
 		if(turfs.len) //Pick a turf to spawn at if we can
 			var/turf/simulated/floor/T = pick(turfs)
 
-			var/obj/structure/cable/powerfruit/PF = new(T)
+			new obj/structure/cable/powercreeper(T)
 
-			message_admins("<span class='notice'>Event: Powerfruit spawned at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a></span>")
+			message_admins("<span class='notice'>Event: powercreeper spawned at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a></span>")
 			return
-		message_admins("<span class='notice'>Event: Powerfruit failed to find a viable turf.</span>")
+		message_admins("<span class='notice'>Event: powercreeper failed to find a viable turf.</span>")

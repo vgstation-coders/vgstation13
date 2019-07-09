@@ -2,9 +2,9 @@
 #define SPREAD_CHANCE 15
 #define ATTACK_CHANCE 15
 
-//the actual powerfruit obj
-/obj/structure/cable/powerfruit
-	name = "powerfruit"
+//the actual powercreeper obj
+/obj/structure/cable/powercreeper
+	name = "powercreeper"
 	desc = "A strange alien fruit that passively generates electricity. Best not to touch it."
 	icon = 'icons/obj/lighting.dmi' //TODO
 	icon_state = "glowshroomf" //TODO
@@ -12,7 +12,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 
-/obj/structure/cable/powerfruit/New(loc)
+/obj/structure/cable/powercreeper/New(loc)
 	var/datum/powernet/PN = getFromPool(/datum/powernet)
 	PN.add_cable(src)
 
@@ -23,20 +23,20 @@
 	processing_objects += src
 	. = ..()
 
-/obj/structure/cable/powerfruit/Destroy()
+/obj/structure/cable/powercreeper/Destroy()
 	processing_objects -= src
 	..()
 
-/obj/structure/cable/powerfruit/process()
+/obj/structure/cable/powercreeper/process()
 	//add power to powernet
 	add_avail(POWER_PER_FRUIT)
 
 	//spread - copypasta from spreading_growth.dm
 	if(prob(SPREAD_CHANCE))
 		sleep(rand(3,5))
-		if(!(gcDestroyed || !neighbors.len))
+		if(!gcDestroyed)
 			var/turf/target_turf = pick(getViableNeighbours())
-			var/obj/structure/cable/powerfruit/child = new(get_turf(src))
+			var/obj/structure/cable/powercreeper/child = new(get_turf(src))
 			spawn(1) // This should do a little bit of animation.
 				child.forceMove(target_turf)
 
@@ -47,25 +47,25 @@
 			if(!electrocute_mob(M, powernet, src))
 				M.apply_damage(10, BURN)
 
-/obj/structure/cable/powerfruit/update_icon()
+/obj/structure/cable/powercreeper/update_icon()
 	return
 
-/obj/structure/cable/powerfruit/hide(i)
+/obj/structure/cable/powercreeper/hide(i)
 	return
 
-/obj/structure/cable/powerfruit/proc/getViableNeighbours()
+/obj/structure/cable/powercreeper/proc/getViableNeighbours()
 	. = list()
 	var/turf/T
 	for(var/dir in cardinal)
 		T = get_step(src, dir)
-		if(locate(/obj/structure/cable/powerfruit) in T)
+		if(locate(/obj/structure/cable/powercreeper) in T)
 			continue
 		if((T.density == 1) || T.has_dense_content())
 			continue
 	
 		. += T
 
-/obj/structure/cable/powerfruit/get_connections(powernetless_only = 0)
+/obj/structure/cable/powercreeper/get_connections(powernetless_only = 0)
 	. = list()
 	var/turf/T
 
@@ -74,7 +74,7 @@
 		if(T)
 			. += power_list(T, src, turn(dir, 180), powernetless_only)
 
-/obj/structure/cable/powerfruit/hasDir(var/dir)
+/obj/structure/cable/powercreeper/hasDir(var/dir)
 	return (dir in cardinal)
 
 /obj/structure/cable/powerfruit/attackby(obj/item/W, mob/user)
