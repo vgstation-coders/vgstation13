@@ -55,7 +55,7 @@
 		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
-		"blood_type" = "AB+",
+		"blood_type" = "O-",
 		"resistances" = null,
 		"trace_chem" = null,
 		"virus2" = list()
