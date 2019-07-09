@@ -253,7 +253,7 @@
 	return
 
 /obj/machinery/recharge_station/proc/restock_modules()
-	if(istype(occupant, /mob/living/silicon/robot))
+	if(isrobot(occupant))
 		var/mob/living/silicon/robot/R = occupant
 		if(R.module && R.module.modules)
 			var/list/um = R.contents|R.module.modules
