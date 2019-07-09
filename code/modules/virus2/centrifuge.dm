@@ -1,3 +1,9 @@
+
+#define CENTRIFUGE_LIGHTSPECIAL_OFF			0
+#define CENTRIFUGE_LIGHTSPECIAL_BLINKING	1
+#define CENTRIFUGE_LIGHTSPECIAL_ON			2
+
+
 /obj/machinery/disease2/centrifuge
 	name = "isolation centrifuge"
 	desc = "Used to isolate pathogen and antibodies in blood. Make sure to keep the vials balanced when spinning for optimal efficiency."
@@ -33,7 +39,7 @@
 
 	var/efficiency = 1
 
-	var/special = 0
+	var/special = CENTRIFUGE_LIGHTSPECIAL_OFF
 
 /obj/machinery/disease2/centrifuge/New()
 	. = ..()
@@ -64,7 +70,7 @@
 		return
 
 	if (istype(I,/obj/item/weapon/reagent_containers/glass/beaker/vial))
-		special = 0
+		special = CENTRIFUGE_LIGHTSPECIAL_OFF
 		if (on)
 			to_chat(user,"<span class='warning'>You cannot add or remove vials while the centrifuge is active. Turn it Off first.</span>")
 			return
@@ -127,17 +133,18 @@
 		else
 			set_light(2,1)
 
-		if (special == 1)
-			var/image/centrifuge_light = image(icon,"centrifuge_special_update")
-			centrifuge_light.plane = LIGHTING_PLANE
-			centrifuge_light.layer = ABOVE_LIGHTING_LAYER
-			overlays += centrifuge_light
-			special++
-		if (special == 2)
-			var/image/centrifuge_light = image(icon,"centrifuge_special")
-			centrifuge_light.plane = LIGHTING_PLANE
-			centrifuge_light.layer = ABOVE_LIGHTING_LAYER
-			overlays += centrifuge_light
+		switch (special)
+			if (CENTRIFUGE_LIGHTSPECIAL_BLINKING)
+				var/image/centrifuge_light = image(icon,"centrifuge_special_update")
+				centrifuge_light.plane = LIGHTING_PLANE
+				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
+				overlays += centrifuge_light
+				special = CENTRIFUGE_LIGHTSPECIAL_ON
+			if (CENTRIFUGE_LIGHTSPECIAL_ON)
+				var/image/centrifuge_light = image(icon,"centrifuge_special")
+				centrifuge_light.plane = LIGHTING_PLANE
+				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
+				overlays += centrifuge_light
 
 	for (var/i = 1 to vials.len)
 		if(vials[i])
@@ -213,7 +220,7 @@
 
 	user.set_machine(src)
 
-	special = 0
+	special = CENTRIFUGE_LIGHTSPECIAL_OFF
 
 	var/dat = ""
 	dat += "Power status: <A href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"
@@ -289,7 +296,7 @@
 			else
 				result[3] += (efficiency * 2)
 			if (result[3] >= 100)
-				special = 1
+				special = CENTRIFUGE_LIGHTSPECIAL_BLINKING
 				var/amt= vial.reagents.get_reagent_amount(BLOOD)
 				vial.reagents.remove_reagent(BLOOD,amt)
 				var/data = list("antigen" = list(result[2]))
@@ -310,7 +317,7 @@
 
 	usr.set_machine(src)
 
-	special = 0
+	special = CENTRIFUGE_LIGHTSPECIAL_OFF
 
 	if (href_list["power"])
 		on = !on
@@ -458,7 +465,7 @@
 	return result
 
 /obj/machinery/disease2/centrifuge/proc/print_dish(var/datum/disease2/disease/D)
-	special = 1
+	special = CENTRIFUGE_LIGHTSPECIAL_BLINKING
 	alert_noise("ping")
 	anim(target = src, a_icon = icon, flick_anim = "centrifuge_print", sleeptime = 10)
 	anim(target = src, a_icon = icon, flick_anim = "centrifuge_print_color", sleeptime = 10, col = D.color)
@@ -487,5 +494,9 @@
 		list(0,0,0,0,0,),
 		list(0,0,0,0,0,),
 		)
-	special = 0
+	special = CENTRIFUGE_LIGHTSPECIAL_OFF
 	..()
+
+#undef CENTRIFUGE_LIGHTSPECIAL_OFF
+#undef CENTRIFUGE_LIGHTSPECIAL_BLINKING
+#undef CENTRIFUGE_LIGHTSPECIAL_ON
