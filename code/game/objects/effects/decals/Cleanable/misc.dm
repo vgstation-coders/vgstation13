@@ -280,8 +280,8 @@
 
 /obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
 	..()
-	FeetStab(perp)
-	infection_attempt(perp,damage = 10,knockdown = 0)
+	FeetStab(perp,damage = 10,knockdown = 0)
+	infection_attempt(perp)
 
 /obj/effect/decal/cleanable/virusdish/proc/infection_attempt(var/mob/living/perp)
 	//Now if your feet aren't well protected, or are bleeding, you might get infected.
