@@ -1,31 +1,40 @@
 #define POWER_PER_FRUIT 500
 #define MIN_SPREAD_CHANCE 15
-#define MAX_SPREAD_CHANCE 50
+#define MAX_SPREAD_CHANCE 40
 #define ATTACK_CHANCE 35
 
 //the actual powercreeper obj
 /obj/structure/cable/powercreeper
 	name = "powercreeper"
 	desc = "A strange alien fruit that passively generates electricity. Best not to touch it."
-	icon = 'icons/obj/lighting.dmi' //TODO
-	icon_state = "glowshroomf" //TODO
+	icon = 'icons/obj/structures/powercreeper.dmi'
+	icon_state = "neutral"
 	level = LEVEL_ABOVE_FLOOR
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 
-/obj/structure/cable/powercreeper/New(loc)
+/obj/structure/cable/powercreeper/New(loc, growdir)
+	//are we growing from another powercreeper?
+	if(growdir)
+		dir = growdir
+		flick("growing", src)
+
+	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
 	var/datum/powernet/PN = getFromPool(/datum/powernet)
 	PN.add_cable(src)
-
 	for(var/dir in cardinal)
 		mergeConnectedNetworks(dir)   //Merge the powernet with adjacents powernets
 	mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 
+	//we are processing
 	processing_objects += src
+
 	. = ..()
 
 /obj/structure/cable/powercreeper/Destroy()
+	//no longer processing
 	processing_objects -= src
+
 	..()
 
 /obj/structure/cable/powercreeper/process()
@@ -43,14 +52,13 @@
 			var/list/neighbours = getViableNeighbours()
 			if(neighbours.len)
 				var/turf/target_turf = pick(neighbours)
-				var/obj/structure/cable/powercreeper/child = new(get_turf(src))
-				spawn(1) // This should do a little bit of animation.
-					child.forceMove(target_turf)
+				new /obj/structure/cable/powercreeper(get_turf(target_turf), get_dir(src, target_turf))
 
 	//if there is a person caught in the vines, burn em a bit
 	//electrocute people who aren't insulated
-	for(var/mob/living/M in range(1, get_turf(src)))
-		if(prob(ATTACK_CHANCE))
+	if(prob(ATTACK_CHANCE))
+		flick("attacking",src)
+		for(var/mob/living/M in range(1, get_turf(src)))
 			try_electrocution(M)
 
 /obj/structure/cable/powercreeper/update_icon()
@@ -70,7 +78,7 @@
 	if(!istype(M))
 		return 0
 	if(!electrocute_mob(M, powernet, src))
-		M.apply_damage(10, BURN)
+		M.apply_damage((powernet.avail / 1000), BURN) //one burn damage per 2 plants
 		return 0
 	return 1
 
