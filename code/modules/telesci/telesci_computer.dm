@@ -347,7 +347,7 @@ var/list/telesci_warnings = list(
 		return TRUE
 
 	if(href_list["setPOffsetY"])
-		var/new_y = input("Please input desired Y offset.", name, y_player_off) as num
+		var/new_y = input("Please input desired X offset.", name, y_player_off) as num
 		if(new_y < -MAX_POFFSET || new_y > MAX_POFFSET)
 			to_chat(usr, "<span class='caution'>Error: Invalid Y offset (-10 to 10)</span>")
 		else
@@ -395,7 +395,7 @@ var/list/telesci_warnings = list(
 		if(cell)
 			if (usr.put_in_hands(cell))
 				usr.visible_message("<span class='notice'>[usr] removes the cell from \the [src].</span>", "<span class='notice'>You remove the cell from \the [src].</span>")
-			else
+			else 
 				visible_message("<span class='notice'>\The [src] beeps as its cell is removed.</span>")
 				cell.forceMove(get_turf(src))
 			cell.add_fingerprint(usr)

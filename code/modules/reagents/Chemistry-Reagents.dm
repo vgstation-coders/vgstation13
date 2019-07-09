@@ -885,13 +885,13 @@
 
 			//Let the player choose their new appearance
 			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (human.species.name || null))
-			if(human.my_appearance.f_style && species_hair.len)		
+			if(human.my_appearance.f_style && species_hair.len)
 				var/new_hstyle = input(M, "Select an ooze style", "Grooming")  as null|anything in species_hair
 				if(new_hstyle)
 					human.my_appearance.h_style = new_hstyle
 
 			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, (human.species.name || null))
-			if(human.my_appearance.f_style && species_facial_hair.len)		
+			if(human.my_appearance.f_style && species_facial_hair.len)
 				var/new_fstyle = input(M, "Select a facial ooze style", "Grooming")  as null|anything in species_facial_hair
 				if(new_fstyle)
 					human.my_appearance.f_style = new_fstyle
@@ -7432,3 +7432,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "This has what you crave. Electrolytes."
 	sport = 5
 	custom_metabolism = 0.15
+
+/datum/reagent/incense/cornoil
+	name = "Corn Oil Incense"
+	id = INCENSE_CORNOIL
+	description = "This fragrance reminds you of a nice home-cooked meal, and sometimes even feels like it fills you up."
+
+/datum/reagent/incense/cornoil/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5))
+		to_chat(M,"<span class='warning'>[pick("You feel fuller.", "You no longer feel snackish.")]</span>")
+		M.reagents.add_reagent(NUTRIMENT, 2)
+
