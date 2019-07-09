@@ -2,6 +2,7 @@
 #define MIN_SPREAD_CHANCE 15
 #define MAX_SPREAD_CHANCE 40
 #define ATTACK_CHANCE 35
+#define LEAVES_CHANCE 20
 
 //the actual powercreeper obj
 /obj/structure/cable/powercreeper
@@ -14,21 +15,31 @@
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	slowdown_modifier = 2
 	autoignition_temperature = AUTOIGNITION_PAPER
+	var/add_state = "_bare"
 	var/grown = 0
 
 /obj/structure/cable/powercreeper/New(loc, growdir, packet_override)
 	//did we get created by a packet?
+	var/anim_length = 0
 	if(packet_override)
 		flick("creation_packet", src)
+		anim_length = 39
+		add_state = ""
 	else
 		//are we growing from another powercreeper?
 		if(growdir)
+			if(prob(LEAVES_CHANCE))
+				add_state = ""
+			icon_state = initial(icon_state) + add_state
 			dir = growdir
-			flick("growing", src)
+			flick("growing[add_state]", src)
+			anim_length = 18
 		else
 			//we just kinda spawned i guess
 			flick("creation", src)
-	spawn(3 SECONDS) //should be enough for our animation to finish
+			add_state = ""
+			anim_length = 20
+	spawn(anim_length)
 		grown = 1
 
 	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
@@ -50,7 +61,7 @@
 	..()
 
 /obj/structure/cable/powercreeper/process()
-	if(!gcDestroyed)
+	if(gcDestroyed)
 		return
 
 	//check if our tile is burning, if so die
@@ -77,7 +88,7 @@
 		//if there is a person caught in the vines, burn em a bit
 		//electrocute people who aren't insulated
 		if(prob(ATTACK_CHANCE))
-			flick("attacking",src)
+			flick("attacking[add_state]",src)
 			for(var/mob/living/M in range(1, get_turf(src)))
 				try_electrocution(M)
 
@@ -91,7 +102,7 @@
 	die()
 
 /obj/structure/cable/powercreeper/proc/die()
-	//maybe some animation here later on idunno TODO
+	do_flick(src, "death[add_state]", 13)
 	qdel(src)
 
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
