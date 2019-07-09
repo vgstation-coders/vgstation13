@@ -355,7 +355,7 @@
 					if("del_vir")
 						var/datum/data/record/V = locate(href_list["del_vir"])
 						if(V)
-							virusDB.Remove("[V.fields["id"]]")
+							virusDB.Remove("[V.fields["id"]]-[V.fields["sub"]]")
 							qdel(V)
 							temp = "Record Deleted."
 							screen = 5

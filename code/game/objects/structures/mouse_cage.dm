@@ -70,13 +70,15 @@
 
 /obj/item/critter_cage/lock_atom(var/atom/movable/AM)
 	. = ..()
-	AM.pixel_x = pixel_x
-	AM.pixel_y = pixel_y+5
+	if (.)
+		AM.pixel_x = pixel_x
+		AM.pixel_y = pixel_y+5
 
 /obj/item/critter_cage/unlock_atom(var/atom/movable/AM)
 	. = ..()
-	AM.pixel_x = initial(AM.pixel_x)
-	AM.pixel_y = initial(AM.pixel_y)
+	if (.)
+		AM.pixel_x = initial(AM.pixel_x)
+		AM.pixel_y = initial(AM.pixel_y)
 
 /obj/item/critter_cage/pickup(var/mob/user)//When we pick up the cage, let's move the critter inside
 	if (critter)

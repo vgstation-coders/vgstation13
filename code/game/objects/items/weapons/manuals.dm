@@ -665,7 +665,7 @@
 				  <li><a href="#chapter6">Afterword: On your Purpose as Virologist</a></li>
 				</ul>
 				<h3 id="chapter0">Preamble: Quick, how do I cure a disease?</h3>
-				<p>Because lets be honest, unless you are a diplomed Pathologist, this is most likely the reason why you openned this manual. Now keep calm, put on a sterile mask and some latex gloves, and follow these steps:</p>
+				<p>Because let's be honest, unless you are a diplomed Pathologist, this is most likely the reason why you openned this manual. Now keep calm, put on a sterile mask and some latex gloves, and follow these steps:</p>
 				<dl>
 				  <dt>1- Inject patient with 5u of spaceacillin</dt>
 				  <dd>Easily found in any Nanomed, or at Chemistry. This will slowly reinforce the patient's immune system to help it combat the pathogen, and allow for a vaccine to be isolated afterwards.</dd>
@@ -783,7 +783,7 @@
 				<p>A last resort to cure a body is to simple create a clone. But keep in mind that newly cloned individuals will have a temporarily weakend immune system. It'll take about two minutes for their immune system to be again at full strength.</p>
 				<a href="#menu">Table of Contents</a>
 				<h3 id="chapter6">Afterword: On your Purpose as Virologist</h3>
-				<p>As a Virologist, a Microbiologist, or a Pathologist, your job remains mostly the same. Your priorities are as follow:</p>
+				<p>As a Virologist, a Microbiologist, or a Pathologist, your work priorities are as follow by order of importance:</p>
 				<ol>
 				<li>Curing any ongoing outbreaks
 				<li>Isolating and analyzing any disease that you can get your hands on
