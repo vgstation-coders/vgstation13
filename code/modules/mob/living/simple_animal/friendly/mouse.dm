@@ -2,8 +2,8 @@
 #define MOUSEFAT 600
 #define MOUSESTARVE 25
 #define MOUSEHUNGRY 100
-#define MOUSEMOVECOST 1
-#define MOUSESTANDCOST 0.5
+#define MOUSEMOVECOST 0.5
+#define MOUSESTANDCOST 0.2
 
 /mob/living/simple_animal/mouse
 	name = "mouse"

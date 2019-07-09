@@ -394,7 +394,7 @@
 			else
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
-			N.nutrition += 5
+			N.nutrition += 10
 			if (virus2?.len)
 				for (var/ID in virus2)
 					var/datum/disease2/disease/D = virus2[ID]
