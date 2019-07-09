@@ -29,6 +29,8 @@
 	..()
 
 /obj/structure/cable/powercreeper/process()
+	//check if our tile is burning, if so die TODO
+
 	//add power to powernet
 	add_avail(POWER_PER_FRUIT)
 
@@ -56,6 +58,13 @@
 
 /obj/structure/cable/powercreeper/hide(i)
 	return
+
+/obj/structure/cable/powercreeper/emp_act(severity)
+	die()
+
+/obj/structure/cable/powercreeper/proc/die()
+	//maybe some animation here later on idunno TODO
+	qdel(src)
 
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M))
@@ -94,12 +103,12 @@
 	if(W.is_hot())
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
-		qdel(src)
+		die()
 	else if(W.is_sharp()) //cut it away, also try to shock the user
 		if(!try_electrocution(user))
 			to_chat(user, "<span class='warning'>You cut away \the [src]")
 			visible_message("[user] cuts away \the [src]", "You hear a cutting sound")
-			qdel(src)
+			die()
 
 #undef POWER_PER_FRUIT
 #undef MIN_SPREAD_CHANCE
