@@ -30,7 +30,7 @@
 	response_disarm = "gently pushes aside the"
 	response_harm   = "stamps on the"
 	density = 0
-	var/_color //brown, gray and white, leave blank for random
+	var/_color = "gray" //brown, gray and white, leave blank for random
 	min_oxy = 16 //Require atleast 16kPA oxygen
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
@@ -450,6 +450,7 @@
 		name = "[name] ([rand(1, 1000)])"
 	if(!_color)
 		_color = pick( list("brown","gray","white") )
+		initIcons()
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
 
 /*
