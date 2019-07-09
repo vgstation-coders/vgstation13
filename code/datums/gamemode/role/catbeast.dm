@@ -13,8 +13,7 @@
 /datum/role/catbeast/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a mangy catbeast!</span></B>")
 	to_chat(antag.current, "The longer you avoid the crew, the greater danger the station will attract! You will generate threat for each new room you enter and for being alive (up to 5 minutes).")
-	to_chat(antag.current, "<span class='warning'>You are also carrying some nasty diseases. Check your notes to see their specs.</span>")
-	to_chat(antag.current, "<span class='notice'>You can accelerate their progression by drinking some milk along with some water, so go find some.</span>")
+	to_chat(antag.current, "<span class='danger'>The diseases you are carrying were added to your notes.</span>")
 
 
 /datum/role/catbeast/OnPostSetup()
