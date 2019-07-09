@@ -1,5 +1,6 @@
 #define POWER_PER_FRUIT 500
-#define SPREAD_CHANCE 15
+#define MIN_SPREAD_CHANCE 15
+#define MAX_SPREAD_CHANCE 50
 #define ATTACK_CHANCE 35
 
 //the actual powercreeper obj
@@ -32,7 +33,10 @@
 	add_avail(POWER_PER_FRUIT)
 
 	//spread - copypasta from spreading_growth.dm
-	if(prob(SPREAD_CHANCE))
+	var/chance = MIN_SPREAD_CHANCE + (powernet.avail / 1000) //two powercreeper plants raise chance by 1
+	chance = chance > MAX_SPREAD_CHANCE ? MAX_SPREAD_CHANCE : chance
+	message_admins("chance at [chance]%")
+	if(prob(chance))
 		sleep(rand(3,5))
 		if(!gcDestroyed)
 			var/turf/target_turf = pick(getViableNeighbours())
