@@ -71,9 +71,7 @@ function renderLines(lines){
 }
 
 function activeChord(lineIndex, chordIndex){
-    alert("called");
     var id = "#chord_"+lineIndex+"_"+chordIndex;
-    alert("playing chord "+$(id).text());
     if(prevChord == ""){
         prevChord = id;
         $(id).addClass(highlightClass);

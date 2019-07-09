@@ -116,9 +116,9 @@
 						else
 							cur_oct[cur_note] = text2num(ni)
 					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)		
-				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, instrumentObj.name)
+				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 				if (ui)
-					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
+					ui.send_message("activeChord", list2params(list((lineCount-1), (chordCount-1))))
 				//nanomanager.send_message(src, instrumentObj.name, "activeChord", list(lineCount, chordCount))
 				if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
@@ -141,7 +141,7 @@
 		"lines" = json_encode(lines)
 	)
 
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, instrumentObj.name)
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 	if (!ui)
 		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 700, 500, nstatus_proc = /proc/nanoui_instrument_status_proc)
 		ui.add_stylesheet("instrument.css")
@@ -153,6 +153,12 @@
 //copypaste but the src_object is the instrument
 //constants dont work for some reason
 /proc/nanoui_instrument_status_proc(var/datum/nanoui/nano)
+	var/datum/song/src_song = nano.src_object
+	if(!istype(src_song))
+		return 0
+	var/obj/instrumentObj = src_song.instrumentObj
+	if(!istype(instrumentObj))
+		return 0
 	var/can_interactive = 0
 	if(nano.user.mutations && nano.user.mutations.len)
 		if(M_TK in nano.user.mutations)
@@ -177,7 +183,7 @@
 				if(canGhostWrite(O,A,"",ghost_flags) || isAdminGhost(O))
 					return 2 // interactive (green visibility)
 				else if(canGhostRead(O,A,ghost_flags))
-					return 1
+					return 1 // update only (orange visibility)
 			dist = get_dist(instrumentObj, nano.user)
 
 		if (dist > 4)
@@ -200,11 +206,11 @@
 
 /datum/song/Topic(href, href_list)
 	if(!instrumentObj.Adjacent(usr) || usr.stat || href_list["close"])
-		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, instrumentObj.name)
+		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "instrument")
 		if (ui)
 			ui.close()
 		return
-	nanomanager.send_message(src, instrumentObj.name, "messageReceived", null, usr)
+	//nanomanager.send_message(src, "instrument", "messageReceived", null, usr)
 	instrumentObj.add_fingerprint(usr)
 	if(href_list["newsong"])
 		lines = new()
