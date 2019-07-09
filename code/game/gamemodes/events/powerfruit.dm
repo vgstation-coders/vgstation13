@@ -35,14 +35,15 @@
 	//spread - copypasta from spreading_growth.dm
 	var/chance = MIN_SPREAD_CHANCE + (powernet.avail / 1000) //two powercreeper plants raise chance by 1
 	chance = chance > MAX_SPREAD_CHANCE ? MAX_SPREAD_CHANCE : chance
-	message_admins("chance at [chance]%")
 	if(prob(chance))
 		sleep(rand(3,5))
 		if(!gcDestroyed)
-			var/turf/target_turf = pick(getViableNeighbours())
-			var/obj/structure/cable/powercreeper/child = new(get_turf(src))
-			spawn(1) // This should do a little bit of animation.
-				child.forceMove(target_turf)
+			var/list/neighbours = getViableNeighbours()
+			if(neighbours.len)
+				var/turf/target_turf = pick(neighbours)
+				var/obj/structure/cable/powercreeper/child = new(get_turf(src))
+				spawn(1) // This should do a little bit of animation.
+					child.forceMove(target_turf)
 
 	//if there is a person caught in the vines, burn em a bit
 	//electrocute people who aren't insulated
@@ -56,7 +57,9 @@
 /obj/structure/cable/powercreeper/hide(i)
 	return
 
-/obj/structure/cable/powercreeper/try_electrocution(var/mob/M)
+/obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
+	if(!istype(M))
+		return 0
 	if(!electrocute_mob(M, powernet, src))
 		M.apply_damage(10, BURN)
 		return 0
@@ -92,8 +95,8 @@
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
 		qdel(src)
-	if(W.is_sharp()) //cut it away, also try to shock the user
-		if(!try_electrocution())
+	else if(W.is_sharp()) //cut it away, also try to shock the user
+		if(!try_electrocution(user))
 			to_chat(user, "<span class='warning'>You cut away \the [src]")
 			visible_message("[user] cuts away \the [src]", "You hear a cutting sound")
 			qdel(src)
