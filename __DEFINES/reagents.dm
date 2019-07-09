@@ -96,7 +96,9 @@
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
+#define PLACEBO 			"placebo"
 #define SPACEACILLIN 			"spaceacillin"
+#define NANOFLOXACIN 			"nanofloxacin"
 #define CARPOTOXIN 			"carpotoxin"
 #define ZOMBIEPOWDER 			"zombiepowder"
 #define MINDBREAKER 			"mindbreaker"
@@ -319,6 +321,7 @@
 #define DR_GIBB			"dr_gibb"
 #define SPACE_UP		"space_up"
 #define LEMON_LIME		"lemon_lime"
+#define DIY_SODA		"diy_soda"
 #define B52				"b52"
 #define MANHATTAN_PROJ	"manhattan_proj"
 #define BAHAMA_MAMA		"bahama_mama"
@@ -402,6 +405,7 @@
 #define AMINOMICIN		"aminomicin"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define TOMATO_SOUP		"tomato_soup"
+#define LUMINOL			"luminol"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -457,3 +461,4 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"
+#define INCENSE_CORNOIL 	"cornoil"

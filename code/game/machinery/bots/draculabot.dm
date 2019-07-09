@@ -242,6 +242,8 @@
 	else //Blah! Splash blood on the floor and drink like crazy!
 		if(!Adjacent(H))
 			return
+		if(!H.vessel.has_reagent(BLOOD))
+			return
 		H.vessel.remove_reagent(BLOOD,DANGER_DRINK_RATE)
 		getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
 		playsound(src, 'sound/effects/splat.ogg', 50, 1)

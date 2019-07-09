@@ -15,6 +15,16 @@
 	_color = "ba_suit"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	
+/obj/item/clothing/under/rank/btc_bartender
+	desc = "Sanctioned by the BTC. Including the tights."
+	name = "BTC bartender's uniform"
+	icon_state = "btc_bartender"
+	item_state = "btc_bartender"
+	_color = "btc_bartender"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 
 
 /obj/item/clothing/under/rank/captain //Alright, technically not a 'civilian' but its better then giving a .dm file for a single define.

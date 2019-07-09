@@ -271,11 +271,11 @@ Works together with spawning an observer, noted above.
 	var/client/C = M.client
 	var/image/holder
 	for(var/mob/living/carbon/human/patient in oview(M))
-		var/foundVirus = 0
+		var/foundVirus = 0//no disease
 		if(patient && patient.virus2 && patient.virus2.len)
-			foundVirus = 1
+			foundVirus = 1//new diseases appear in priority
 		else if (patient && patient.viruses && patient.viruses.len)
-			foundVirus = 1
+			foundVirus = 2//old disease
 		if(!C)
 			return
 		holder = patient.hud_list[HEALTH_HUD]
@@ -293,7 +293,10 @@ Works together with spawning an observer, noted above.
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(foundVirus)
-				holder.icon_state = "hudill"
+				if (foundVirus > 1)
+					holder.icon_state = "hudill_old"
+				else
+					holder.icon_state = "hudill"
 			else if(patient.has_brain_worms())
 				var/mob/living/simple_animal/borer/B = patient.has_brain_worms()
 				if(B.controlling)
@@ -344,6 +347,7 @@ Works together with spawning an observer, noted above.
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
+		ghost.attack_log += src.attack_log // Keep our attack logs.
 		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
@@ -753,7 +757,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 
 	//find a viable mouse candidate
-	var/mob/living/simple_animal/mouse/host
+	var/mob/living/simple_animal/mouse/common/host
 	var/obj/machinery/atmospherics/unary/vent_pump/vent_found
 	var/list/found_vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
@@ -761,7 +765,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			found_vents.Add(v)
 	if(found_vents.len)
 		vent_found = pick(found_vents)
-		host = new /mob/living/simple_animal/mouse(vent_found.loc)
+		host = new /mob/living/simple_animal/mouse/common(vent_found.loc)
 	else
 		to_chat(src, "<span class='warning'>Unable to find any unwelded vents to spawn mice at.</span>")
 
@@ -1082,3 +1086,30 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	paiController.recruitWindow(src)
+
+// -- Require at least 2 players to start.
+
+// Global variable on whether an arena is being created or not
+var/creating_arena = FALSE
+
+/mob/dead/observer/verb/request_bomberman()
+	set name = "Request a bomberman arena"
+	set category = "Ghost"
+	set desc = "Create a bomberman arena for other observers and dead players."
+
+	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
+		return
+
+	if (arenas.len)
+		to_chat(src, "<span class ='notice'>There are already bomberman arenas! Use the Find Arenas verb to jump to them.</span>")
+		return
+
+	to_chat(src, "<span class='notice'>Pooling other ghosts for a bomberman arena...</span>")
+	if (!creating_arena)
+		creating_arena = TRUE
+		new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
+		if (!arenas.len) // Someone hit the cancel option
+			creating_arena = FALSE
+		return
+	to_chat(src, "<span class='notice'>There were unfortunatly no available arenas.</span>")

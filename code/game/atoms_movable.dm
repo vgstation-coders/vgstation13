@@ -53,6 +53,8 @@
 	var/list/current_tethers
 	var/obj/shadow/shadow
 
+	var/ignore_blocking = 0
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -1000,9 +1002,9 @@
 
 /atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
 	if(anchored)
-		return
+		return 0
 	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
-		return
+		return 0
 	var/list/params_list = params2list(params)
 	if(clamp)
 		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
@@ -1010,6 +1012,7 @@
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+	return 1
 
 //Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
 /atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
@@ -1019,3 +1022,35 @@
 
 /atom/movable/proc/can_be_pushed(mob/user)
 	return 1
+
+/atom/movable/proc/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null) //throws a thing at the station from the edges
+	var/startx = 0
+	var/starty = 0
+	var/endy = 0
+	var/endx = 0
+	if (!startside)
+		startside = pick(cardinal)
+
+	switch(startside)
+		if(NORTH)
+			starty = world.maxy-TRANSITIONEDGE-5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(EAST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = world.maxx-TRANSITIONEDGE-5
+		if(SOUTH)
+			starty = TRANSITIONEDGE+5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(WEST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = TRANSITIONEDGE+5
+
+	//grabs a turf in the center of the z-level
+	//range of turfs determined by radius var
+	endx = rand((world.maxx/2)-radius,(world.maxx/2)+radius)
+	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
+	var/turf/startzone = locate(startx, starty, 1)
+	var/turf/endzone = locate(endx, endy, 1)
+	
+	forceMove(startzone)
+	throw_at(endzone, null, throwspeed)

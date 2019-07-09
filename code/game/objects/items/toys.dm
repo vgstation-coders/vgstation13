@@ -105,6 +105,13 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+	
+/obj/item/toy/syndicateballoon/byondballoon
+    name = "\improper BYOND balloon"
+    desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
+    icon_state = "byondballoon"
+    item_state = "byondballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */
@@ -495,8 +502,8 @@
 /obj/item/toy/snappop/virus
 	name = "unstable goo"
 	desc = "Your palm is oozing this stuff!"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "red slime extract"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "unstable_goo"
 	throwforce = 30.0
 	throw_speed = 10
 	throw_range = 30
@@ -511,10 +518,10 @@
 
 /*
  * Syndie stealthy smokebombs!
- */
- /obj/item/toy/snappop/smokebomb
- 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
+*/
+/obj/item/toy/snappop/smokebomb
 	flags = FPRINT | NO_THROW_MSG
+	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
 
 /obj/item/toy/snappop/smokebomb/pop()
 	spark(src, 2, FALSE)
@@ -1106,17 +1113,17 @@
 	name = "fingerbox"
 	desc = "A high quality fingerbox."
 	icon_state = "fingerbox"
-	
+
 /obj/item/toy/gasha/bangerboy
 	name = "toy Bangerboy"
 	icon_state = "bangerboy"
 	desc = "<B>BANG</B>"
-	
+
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
 	desc = "bodybag accessory not included"
-	
+
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
@@ -1776,4 +1783,3 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
-	

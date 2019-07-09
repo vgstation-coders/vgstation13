@@ -28,16 +28,7 @@
 
 /datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
 	if (!forced)
-		var/job_check = 0
-		if (enemy_jobs.len > 0)
-			for (var/mob/M in mode.living_players)
-				if (M.stat == DEAD)
-					continue//dead players cannot count as opponents
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
-		var/threat = round(mode.threat_level/10)
-		if (job_check < required_enemies[threat])
+		if(!check_enemy_jobs())
 			return 0
 	return ..()
 
@@ -59,6 +50,7 @@
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	repeatable = TRUE
+	flags = TRAITOR_RULESET
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(candidates)
@@ -122,8 +114,8 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 4
-	cost = 10
+	weight = 3
+	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
 	logo = "ninja-logo"
@@ -139,7 +131,11 @@
 	newninja.Greet(GREET_DEFAULT)
 	newninja.OnPostSetup()
 	newninja.AnnounceObjectives()
+	spawn(5)
+		newninja.antag.current.ThrowAtStation()
 	return 1
+
+
 
 //////////////////////////////////////////////
 //                                          //
@@ -159,6 +155,7 @@
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)
 	high_population_requirement = 50
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/latejoin/provocateur/ready(var/forced=FALSE)
 	if (forced)

@@ -1296,9 +1296,12 @@ var/list/WALLITEMS = list(
 	return 0
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
-	var icon/base = icon(file, state)
+	var/icon/base = icon(file, state)
 
-	var w, h, w2, h2
+	var/w
+	var/h
+	var/w2
+	var/h2
 
 	if(aa)
 		aa ++
@@ -1307,7 +1310,8 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 		h = base.Height()
 		h2 = h * aa
 
-	var icon{result = icon(base); temp}
+	var/icon/result = icon(base)
+	var/icon/temp
 
 	for(var/angle in 0 to 360 step step)
 		if(angle == 0  )
@@ -1617,6 +1621,18 @@ Game Mode config tags:
 	var/list/found_factions = find_active_factions_by_member(R, M)
 	return locate(fac_type) in found_factions
 
+/proc/find_unique_objectives(list/new_objectives, list/old_objectives)
+	var/list/uniques = list()
+	for (var/datum/objective/new_objective in new_objectives)
+		var/is_unique = TRUE
+		for (var/datum/objective/old_objective in old_objectives)
+			if (old_objective.name == new_objective.name)
+				is_unique = FALSE
+		if (is_unique)
+			uniques.Add(new_objective)
+	return uniques
+
+
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()
 	for(var/mob/M in mobs)
@@ -1776,3 +1792,13 @@ Game Mode config tags:
 		return M.mind.key
 	else
 		return null
+
+//Ported from TG
+/proc/window_flash(client/C, ignorepref = FALSE)
+    if(ismob(C))
+        var/mob/M = C
+        if(M.client)
+            C = M.client
+    if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
+        return
+    winset(C, "mainwindow", "flash=5")

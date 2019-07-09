@@ -463,8 +463,11 @@
 				if (41 to 50)
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
+		handle_hair(H)
 
-		//handle normal hair
+/obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
 		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
 		//gender intentionally left null so speshul snowflakes can cross-hairdress
 		if (species_hair.len)
@@ -493,6 +496,20 @@
 		return
 	if (prob(25))
 		shatter()
+
+/obj/item/weapon/pocket_mirror/comb
+	name = "hair comb"
+	desc = "Despite the name honey is not included nor recommended for use with this."
+	icon_state = "comb"
+
+/obj/item/weapon/pocket_mirror/comb/shatter()
+	return
+
+/obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
+	if(M == user)
+		handle_hair(user)
+	else
+		..()
 
 /obj/item/weapon/nanitecontacts
 	name = "nanite contacts"

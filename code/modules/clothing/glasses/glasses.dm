@@ -57,12 +57,91 @@ BLIND     // can't see anything
 	desc = "A Security HUD with prescription lenses."
 	prescription = 1
 
+////////////////////////////////////////////////PATHOGEN HUD///////////////////////////////////////////////////
+var/list/science_goggles_wearers = list()
+
 /obj/item/clothing/glasses/science
 	name = "science goggles"
-	desc = "nothing."
+	desc = "almost nothing."
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
+	var/on = FALSE
+
+/obj/item/clothing/glasses/science/prescription
+	name = "prescription science goggles"
+	prescription = 1
+
+/obj/item/clothing/glasses/science/attack_self(var/mob/user)
+	toggle(user)
+
+/obj/item/clothing/glasses/science/proc/toggle(var/mob/user)
+	if (user.incapacitated())
+		return
+	if (on)
+		on = FALSE
+		to_chat(user, "You turn the pathogen scanner off.")
+		disable(user)
+	else
+		on = TRUE
+		to_chat(user, "You turn the pathogen scanner on.")
+		enable(user)
+	user.handle_regular_hud_updates()
+
+/obj/item/clothing/glasses/science/equipped(var/mob/M, var/slot)
+	..()
+	if (!M.client)
+		return
+	if(slot == slot_glasses)
+		if (on)
+			enable(M)
+
+/obj/item/clothing/glasses/science/unequipped(var/mob/M, var/from_slot)
+	..()
+	if (!M.client)
+		return
+	if(from_slot == slot_glasses)
+		disable(M)
+
+/obj/item/clothing/glasses/science/proc/enable(var/mob/M)
+	var/toggle = 0
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.glasses == src)
+			toggle = 1
+	if (ismonkey(M))
+		var/mob/living/carbon/monkey/H = M
+		if (H.glasses == src)
+			toggle = 1
+	if (toggle)
+		playsound(M,'sound/weapons/egun_toggle_laser.ogg',70,0,-5)
+		science_goggles_wearers.Add(M)
+		for (var/obj/item/I in infected_items)
+			if (I.pathogen)
+				M.client.images |= I.pathogen
+		for (var/mob/living/L in infected_contact_mobs)
+			if (L.pathogen)
+				M.client.images |= L.pathogen
+		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			if (C.pathogen)
+				M.client.images |= C.pathogen
+		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+			if (C.pathogen)
+				M.client.images |= C.pathogen
+
+/obj/item/clothing/glasses/science/proc/disable(var/mob/M)
+	playsound(M,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
+	science_goggles_wearers.Remove(M)
+	for (var/obj/item/I in infected_items)
+		M.client.images -= I.pathogen
+	for (var/mob/living/L in infected_contact_mobs)
+		M.client.images -= L.pathogen
+	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+		M.client.images -= C.pathogen
+	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+		M.client.images -= C.pathogen
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
@@ -258,10 +337,10 @@ BLIND     // can't see anything
 	var/obj/item/clothing/glasses/hud/security/hud = null
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
-	New()
-		..()
-		src.hud = new/obj/item/clothing/glasses/hud/security(src)
-		return
+/obj/item/clothing/glasses/sunglasses/sechud/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
 
 /obj/item/clothing/glasses/sunglasses/sechud/become_defective()
 	if(!defective)
@@ -324,15 +403,15 @@ BLIND     // can't see anything
 	T.change()
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
-	var/obj/item/clothing/glasses/A
-	A = input("Select style to change it to", "Style Selector", A) as null|anything in clothing_choices
-	if(src.gcDestroyed || !A || usr.incapacitated() || !Adjacent(usr))
+	var/choice = input("Select style to change it to", "Style Selector") as null|anything in clothing_choices
+	if(src.gcDestroyed || !choice || usr.incapacitated() || !Adjacent(usr))
 		return
-	desc = initial(clothing_choices[A].desc)
-	name = initial(clothing_choices[A].name)
-	icon_state = initial(clothing_choices[A].icon_state)
-	item_state = initial(clothing_choices[A].item_state)
-	_color = initial(clothing_choices[A]._color)
+	var/obj/item/clothing/glasses/glass_type = clothing_choices[choice]
+	desc = initial(glass_type.desc)
+	name = initial(glass_type.name)
+	icon_state = initial(glass_type.icon_state)
+	item_state = initial(glass_type.item_state)
+	_color = initial(glass_type._color)
 	usr.update_inv_glasses()
 
 /obj/item/clothing/glasses/thermal

@@ -18,7 +18,7 @@
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
-	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
+	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
@@ -45,6 +45,13 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
+	infected_contact_mobs -= src
+	if (pathogen)
+		for (var/mob/living/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
 		var/turf/T = get_turf(src)
 		if (T)

@@ -3,6 +3,7 @@
 	abbreviation = "LS"
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 	charge_max = 100
 	cooldown_min = 40
 	cooldown_reduc = 30

@@ -92,3 +92,6 @@
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
+
+/obj/machinery/chem_dispenser/scp_294/update_icon()
+	return

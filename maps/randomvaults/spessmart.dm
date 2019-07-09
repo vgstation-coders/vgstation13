@@ -76,7 +76,6 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/assembly_frame = 50,
 
 /obj/item/device/camera = 30,
-/obj/item/device/camera/big_photos = 300,
 
 /obj/item/device/flash = 20,
 /obj/item/device/flash/synthetic = 1,

@@ -68,9 +68,6 @@
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
 
-/datum/song/proc/updateDialog(mob/user)
-	instrumentObj.updateDialog()		// assumes it's an object in world, override if otherwise
-
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
 		if(!instrumentObj.Adjacent(user) || user.stat)
@@ -91,8 +88,10 @@
 			cur_oct[i] = 3
 			cur_acc[i] = "n"
 
+		var/lineCount = 1;
 		for(var/line in lines)
 			//world << line
+			var/chordCount = 1;
 			for(var/beat in splittext(lowertext(line), ","))
 				//world << "beat: [beat]"
 				var/list/notes = splittext(beat, "/")
@@ -116,72 +115,102 @@
 								cur_acc[cur_note] = "#" // so shift is never required
 						else
 							cur_oct[cur_note] = text2num(ni)
-					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
+					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)		
+				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
+				if (ui)
+					ui.send_message("activeChord", list2params(list((lineCount-1), (chordCount-1))))
+				//nanomanager.send_message(src, instrumentObj.name, "activeChord", list(lineCount, chordCount))
 				if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
 				else
 					sleep(tempo)
+				chordCount++
+				
+			lineCount++
 		repeat--
 	playing = 0
 	repeat = 0
-	updateDialog(user)
+	interact(user)
+
+//convert this to nanoui
 /datum/song/proc/interact(mob/user)
-	var/dat = ""
-	if(lines.len > 0)
-		dat += "<H3>Playback</H3>"
-		if(!playing)
-			dat += {"<A href='?src=\ref[src];play=1'>Play</A> <SPAN CLASS='linkOn'>Stop</SPAN><BR><BR>
-				Repeat Song:
-				[repeat > 0 ? "<A href='?src=\ref[src];repeat=-10'>-</A><A href='?src=\ref[src];repeat=-1'>-</A>" : "<SPAN CLASS='linkOff'>-</SPAN><SPAN CLASS='linkOff'>-</SPAN>"]
-				 [repeat] times
-				[repeat < max_repeats ? "<A href='?src=\ref[src];repeat=1'>+</A><A href='?src=\ref[src];repeat=10'>+</A>" : "<SPAN CLASS='linkOff'>+</SPAN><SPAN CLASS='linkOff'>+</SPAN>"]
-				<BR>"}
-		else
-			dat += {"<SPAN CLASS='linkOn'>Play</SPAN> <A href='?src=\ref[src];stop=1'>Stop</A><BR>
-				Repeats left: <B>[repeat]</B><BR>"}
-	if(!edit)
-		dat += "<BR><B><A href='?src=\ref[src];edit=2'>Show Editor</A></B><BR>"
+	var/data = list(
+		"repeat" = repeat,
+		"ticklag" = world.tick_lag,
+		"bpm" = round(600 / tempo),
+		"lines" = json_encode(lines)
+	)
+
+	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
+	if (!ui)
+		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 700, 500, nstatus_proc = /proc/nanoui_instrument_status_proc)
+		ui.add_stylesheet("instrument.css")
+		ui.set_initial_data(data)
+		ui.open()
 	else
-		var/bpm = round(600 / tempo)
-		dat += {"<H3>Editing</H3>
-			<B><A href='?src=\ref[src];edit=1'>Hide Editor</A></B>
-			 <A href='?src=\ref[src];newsong=1'>Start a New Song</A>
-			 <A href='?src=\ref[src];import=1'>Import a Song</A><BR><BR>
-			Tempo: <A href='?src=\ref[src];tempo=[world.tick_lag]'>-</A> [bpm] BPM <A href='?src=\ref[src];tempo=-[world.tick_lag]'>+</A><BR><BR>"}
-		var/linecount = 0
-		for(var/line in lines)
-			linecount += 1
-			dat += "Line [linecount]: <A href='?src=\ref[src];modifyline=[linecount]'>Edit</A> <A href='?src=\ref[src];deleteline=[linecount]'>X</A> [line]<BR>"
-		dat += "<A href='?src=\ref[src];newline=1'>Add Line</A><BR><BR>"
-		if(help)
-			dat += {"<B><A href='?src=\ref[src];help=1'>Hide Help</A></B><BR>
-					Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
-					Every note in a chord will play together, with chord timed by the tempo.<br>
-					<br>
-					Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
-					By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
-					Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
-					After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
-					Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
-					A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
-					To make a chord be a different time, end it with /x, where the chord length will be length<br>
-					defined by tempo / x: <i>C,G/2,E/4</i><br>
-					Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
-					<br>
-					Lines may be up to 50 characters.<br>
-					A song may only contain up to 50 lines.<br>
-					"}
-		else
-			dat += "<B><A href='?src=\ref[src];help=2'>Show Help</A></B><BR>"
-	var/datum/browser/popup = new(user, "instrument", instrumentObj.name, 700, 500)
-	popup.set_content(dat)
-	popup.set_title_image(user.browse_rsc_icon(instrumentObj.icon, instrumentObj.icon_state))
-	popup.open()
+		ui.push_data(data)
+
+//copypaste but the src_object is the instrument
+//constants dont work for some reason
+/proc/nanoui_instrument_status_proc(var/datum/nanoui/nano)
+	var/datum/song/src_song = nano.src_object
+	if(!istype(src_song))
+		return 0
+	var/obj/instrumentObj = src_song.instrumentObj
+	if(!istype(instrumentObj))
+		return 0
+	var/can_interactive = 0
+	if(nano.user.mutations && nano.user.mutations.len)
+		if(M_TK in nano.user.mutations)
+			can_interactive = 1
+	else if(isrobot(nano.user))
+		if(instrumentObj in view(7, nano.user))
+			can_interactive = 1
+	else
+		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user))
+
+	if (can_interactive)
+		return 2 // interactive (green visibility)
+	else
+		var/dist = 0
+		if(istype(instrumentObj, /atom))
+			var/atom/A = instrumentObj
+			if(isobserver(nano.user))
+				var/mob/dead/observer/O = nano.user
+				var/ghost_flags = 0
+				if(A.ghost_write)
+					ghost_flags |= PERMIT_ALL
+				if(canGhostWrite(O,A,"",ghost_flags) || isAdminGhost(O))
+					return 2 // interactive (green visibility)
+				else if(canGhostRead(O,A,ghost_flags))
+					return 1 // update only (orange visibility)
+			dist = get_dist(instrumentObj, nano.user)
+
+		if (dist > 4)
+			return -1
+
+		if ((nano.allowed_user_stat > -1) && (nano.user.stat > nano.allowed_user_stat))
+			return 0 // no updates, completely disabled (red visibility)
+		else if (nano.user.restrained() || nano.user.lying)
+			return 1 // update only (orange visibility)
+		else if (istype(instrumentObj, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
+			return 2 // Will build in distance checks on the topics for sanity.
+		else if (!(instrumentObj in view(4, nano.user))) // If the src object is not in visable, set status to 0
+			return 0 // no updates, completely disabled (red visibility)
+		else if (dist <= 1)
+			return 2 // interactive (green visibility)
+		else if (dist <= 2)
+			return 1 // update only (orange visibility)
+		else if (dist <= 4)
+			return 0 // no updates, completely disabled (red visibility)
+
 /datum/song/Topic(href, href_list)
-	if(!instrumentObj.Adjacent(usr) || usr.stat)
-		usr << browse(null, "window=instrument")
-		usr.unset_machine()
+	if(!instrumentObj.Adjacent(usr) || usr.stat || href_list["close"])
+		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "instrument")
+		if (ui)
+			ui.close()
 		return
+	//nanomanager.send_message(src, "instrument", "messageReceived", null, usr)
 	instrumentObj.add_fingerprint(usr)
 	if(href_list["newsong"])
 		lines = new()
@@ -216,7 +245,7 @@
 					lines.Remove(l)
 				else
 					linenum++
-			updateDialog(usr)		// make sure updates when complete
+			interact(usr)		// make sure updates when complete
 	else if(href_list["help"])
 		help = text2num(href_list["help"]) - 1
 	else if(href_list["edit"])
@@ -261,15 +290,14 @@
 		lines[num] = content
 	else if(href_list["stop"])
 		playing = 0
-	updateDialog(usr)
+	interact(usr)
+	
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
 	new_tempo = abs(new_tempo)
 	return max(round(new_tempo, world.tick_lag), world.tick_lag)
 // subclass for handheld instruments, like violin
 /datum/song/handheld
-/datum/song/handheld/updateDialog(mob/user)
-	instrumentObj.interact(user)
 /datum/song/handheld/shouldStopPlaying()
 	if(instrumentObj)
 		return !isliving(instrumentObj.loc)

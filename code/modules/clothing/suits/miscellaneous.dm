@@ -158,6 +158,16 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
+/obj/item/clothing/suit/spaceninjafake
+	name = "space ninja suit replica"
+	icon_state = "s-ninja-old"
+	item_state = "s-ninja_suit"
+	desc = "A plastic replica of a ninja suit, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
 	desc = "It's treason then."
@@ -206,6 +216,13 @@
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
 
+/obj/item/clothing/suit/highlanderkilt
+	name = "highlander's kilt"
+	desc = "There can be only one."
+	icon_state = "highlanderkilt"
+	item_state = "highlanderkilt"
+	clothing_flags = ONESIZEFITSALL
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg
 	name = "cardborg suit"
@@ -420,6 +437,7 @@
 	icon_state = "raincoat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV //transparent
 	allowed = list (/obj/item/weapon/fireaxe)
+	sterility = 100
 
 /obj/item/clothing/suit/kefkarobe
 	name = "Crazed Jester's Robe"
@@ -621,3 +639,16 @@
 	allowed = list(/obj/item/weapon/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
+
+/obj/item/clothing/suit/red_suit
+	name = "red suit"
+	desc = "A sleazy looking red suit"
+	icon_state = "red_suit"
+	item_state = "red_suit"
+	body_parts_covered = 0
+
+obj/item/clothing/suit/poncho
+	name = "poncho"
+	desc = "A wooly poncho. Smells of beans."
+	icon_state = "poncho"
+	item_state = "poncho"

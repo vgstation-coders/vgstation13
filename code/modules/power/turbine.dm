@@ -110,13 +110,13 @@
 #define TURBGENG 0.8
 
 /obj/machinery/power/turbine/process()
+	if(!compressor)
+		stat |= BROKEN
+		return
 	if(!compressor.starter)
 		return
 	overlays.len = 0
 	if(stat & BROKEN)
-		return
-	if(!compressor)
-		stat |= BROKEN
 		return
 	lastgen = ((compressor.rpm / TURBGENQ)**TURBGENG) *TURBGENQ
 

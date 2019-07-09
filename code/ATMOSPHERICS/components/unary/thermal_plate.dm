@@ -1,4 +1,6 @@
-#define RADIATION_CAPACITY 30000 //Radiation isn't particularly effective (TODO BALANCE)
+#define NO_GAS 0.01
+#define SOME_GAS 1
+#define ENERGY_MULT 6.4
 
 
 /obj/machinery/atmospherics/unary/thermal_plate
@@ -8,7 +10,7 @@
 	icon = 'icons/obj/atmospherics/cold_sink.dmi'
 	icon_state = "off"
 	level = 1
-
+	var/radiation_capacity = 30000 //Radiation isn't particularly effective (TODO BALANCE)
 	name = "Thermal Transfer Plate"
 	desc = "Transfers heat to and from an area."
 
@@ -70,8 +72,8 @@
 	if (!internal_removed)
 		return
 
-	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
-	var/combined_energy = internal_removed.thermal_energy() + (RADIATION_CAPACITY * 6.4)
+	var/combined_heat_capacity = internal_removed.heat_capacity() + radiation_capacity
+	var/combined_energy = internal_removed.thermal_energy() + (radiation_capacity * ENERGY_MULT)
 
 	var/final_temperature = combined_energy / combined_heat_capacity
 
@@ -86,3 +88,7 @@
 
 /obj/machinery/atmospherics/unary/thermal_plate/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	update_icon()
+
+#undef NO_GAS
+#undef SOME_GAS
+#undef ENERGY_MULT

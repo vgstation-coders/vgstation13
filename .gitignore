@@ -72,3 +72,6 @@ cfg
 
 # Thumbs.db (windows image caching)
 Thumbs.db
+
+# Linux users can compile this themselves
+libvg.so

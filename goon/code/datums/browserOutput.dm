@@ -12,6 +12,7 @@ For the main html chat area
 	"goon/browserassets/css/fonts/fontawesome-webfont.woff",
 	"goon/browserassets/css/font-awesome.css",
 	"goon/browserassets/css/browserOutput.css",
+	"goon/browserassets/css/browserOutput_dark.css",
 	"goon/browserassets/css/browserOutput_colorblindv1.css"
 )
 
@@ -111,8 +112,20 @@ For the main html chat area
 			else if (encoding == "_autodetect")
 				owner.encoding = "1252"
 
+			// This is the result of that Windows 10 beta thing where Microsoft has UTF-8 as a code page.
+			// It doesn't work in BYOND and *seems* to fall back to 1252?
+			else if (encoding == "utf-8")
+				owner.encoding = "1252"
+
 			else
 				stack_trace("Unknown encoding received from client: \"[sanitize(encoding)]\". Please report this as a bug.")
+
+		if("colorPresetPost") //User just swapped color presets in their goonchat preferences. Do we do anything else?
+			switch(href_list["preset"])
+				if("normal","colorblindv1")
+					owner.white_theme()
+				if("dark")
+					owner.dark_theme()
 
 	if(data)
 		ehjax_send(data = data)

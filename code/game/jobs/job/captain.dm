@@ -11,7 +11,7 @@
 	req_admin_notify = 1
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
-	minimal_player_age = 14
+	minimal_player_age = 30
 
 	species_whitelist = list("Human")
 
@@ -32,9 +32,7 @@
 		if(5)
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/com(H), slot_back)
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/captain(H)
-	U.attach_accessory(new /obj/item/clothing/accessory/medal/gold/captain)
-	H.equip_or_collect(U, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/captain(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 	H.equip_or_collect(new /obj/item/clothing/head/caphat(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
@@ -44,6 +42,7 @@
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/gun/energy/gun(H), slot_in_backpack)
+	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 	L.imp_in = H
 	L.implanted = 1
@@ -73,7 +72,7 @@
 	selection_color = "#ddddff"
 	idtype = /obj/item/weapon/card/id/silver
 	req_admin_notify = 1
-	minimal_player_age = 10
+	minimal_player_age = 20
 
 	species_whitelist = list("Human")
 

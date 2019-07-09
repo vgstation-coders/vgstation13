@@ -1068,7 +1068,7 @@ var/list/cyborg_list = list()
 
 
 /mob/living/silicon/robot/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(usr && (src != usr))
 		return
@@ -1113,27 +1113,6 @@ var/list/cyborg_list = list()
 			to_chat(src, "Module isn't activated")
 		installed_modules()
 
-	if(href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawc"])
-		switch(lawcheck[L+1])
-			if("Yes")
-				lawcheck[L+1] = "No"
-			if("No")
-				lawcheck[L+1] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-
-	if(href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawi"])
-		switch(ioncheck[L])
-			if("Yes")
-				ioncheck[L] = "No"
-			if("No")
-				ioncheck[L] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-	if(href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
-		statelaws()
 	if(href_list["vision"])
 		sensor_mode()
 		installed_modules()
@@ -1195,7 +1174,7 @@ var/list/cyborg_list = list()
 		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
-	if(mind && mind.special_role && emagged)
+	if(istraitor(src) && emagged)
 		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE

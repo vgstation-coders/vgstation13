@@ -15,6 +15,9 @@
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
+	var/calledBy //who dunnit, for round end scoreboard
+
+	var/flags = 0
 
 	//for midround polling
 	var/list/applicants = list()
@@ -58,7 +61,7 @@
 	if (!map.map_ruleset(src))
 		return 0
 
-	if (config.high_population_override)
+	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
 		var/indice_pop = min(10,round(population/5)+1)
@@ -76,6 +79,23 @@
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
 		return 0
 	return 1
+
+// Returns TRUE if there are sufficient enemies to execute this ruleset
+/datum/dynamic_ruleset/proc/check_enemy_jobs()
+	if (!enemy_jobs.len)
+		return TRUE
+
+	var/enemies_count = 0
+	for (var/mob/M in mode.living_players)
+		if (M.stat == DEAD)
+			continue//dead players cannot count as opponents
+		if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+			enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+	var/threat = round(mode.threat_level/10)
+	if (enemies_count >= required_enemies[threat])
+		return TRUE
+	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
 	if(repeatable && weight > 1)
@@ -104,6 +124,7 @@
 			continue
 
 		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		window_flash(M.client)
 
 	spawn(1 MINUTES)
 		searching = 0
@@ -216,13 +237,6 @@
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)
-		var/job_check = 0
-		if (enemy_jobs.len > 0)
-			for (var/mob/M in mode.candidates)
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
-		var/threat = round(mode.threat_level/10)
-		if (job_check < required_enemies[threat])
+		if(!check_enemy_jobs())
 			return 0
 	return ..()

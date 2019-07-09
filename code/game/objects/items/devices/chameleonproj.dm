@@ -145,12 +145,12 @@
 
 /obj/effect/dummy/chameleon/ex_act(severity)
 	for(var/mob/M in src)
-		ex_act(severity)
+		M.ex_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/emp_act(severity)
 	for(var/mob/M in src)
-		emp_act(severity)
+		M.emp_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/blob_act()

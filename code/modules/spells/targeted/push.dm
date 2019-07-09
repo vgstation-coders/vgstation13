@@ -3,6 +3,7 @@
 	desc = "This spell takes the thing you're touching, and pushes it somewhere else."
 	abbreviation = "DP"
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_max = 300

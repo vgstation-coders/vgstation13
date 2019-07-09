@@ -289,7 +289,8 @@
 
 	if(istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	if(istype(A, /obj/structure/boulder))
 		returnToPool(A)
 
@@ -426,10 +427,10 @@
 	penetration = 0 //By default. Higher-power shots will have penetration.
 
 /obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
-	if(istype(atarget, /mob/living) && damage == 200)
+	if(istype(atarget, /mob/living) && damage >= 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage == 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
+	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
 		if(!N.wounded)
 			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
@@ -448,13 +449,6 @@
 				var/turf/M_turf = get_turf(M)
 				if(M_turf && (M_turf.z == starting.z))
 					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
-
-/obj/item/projectile/bullet/APS/OnDeath()
-	var/turf/T = get_turf(src)
-	if(blessed)
-		new /obj/item/weapon/nullrod(T)
-	else
-		new /obj/item/stack/rods(T)
 
 /obj/item/projectile/bullet/APS/cultify()
 	return

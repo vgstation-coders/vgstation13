@@ -5,6 +5,7 @@
 	desc = "This spell summons a glorious, flaming chariot that can move in space."
 	abbreviation = "WM"
 	user_type = USER_TYPE_WIZARD
+	specialization = UTILITY
 
 	charge_type = Sp_CHARGES
 	charge_max = 1
@@ -14,7 +15,7 @@
 	invocation_type = SpI_SHOUT
 	range = 0
 
-	summon_type = list(/obj/structure/bed/chair/vehicle/wizmobile)
+	summon_type = list(/obj/structure/bed/chair/vehicle/firebird)
 	duration = 0
 
 	hud_state = "wiz_mobile"

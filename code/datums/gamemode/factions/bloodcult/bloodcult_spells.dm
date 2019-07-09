@@ -1,11 +1,11 @@
+var/list/uristrune_cache = list() 
+
 /spell/cult
 	panel = "Cult"
 	override_base = "cult"
 	user_type = USER_TYPE_CULT
 
-
-//SPELL I
-/spell/cult/trace_rune
+/spell/cult/trace_rune //Abstract, base for all blood-based rune systems
 	name = "Trace Rune"
 	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
 	hud_state = "cult_word"
@@ -21,21 +21,54 @@
 	cast_delay = 15
 
 	var/list/data = list()
-	var/datum/cultword/word = null
+	var/runeset_identifier = null
+	var/datum/runeword/word = null
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
-	var/remember = 0
-	var/blood_cost = 1
+	var/continue_drawing = 0
+	var/blood_cost = 1	
 
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
-
-
+	
 /spell/cult/trace_rune/before_channel(mob/user)
-	if (remember)
-		remember = 0
+	if(continue_drawing) //Resets the current spell (tome selection) if continue_drawing is not 1.
+		continue_drawing = 0
 	else
-		spell = null//so we're not stuck trying to write the same spell over and over again
+		spell = null
+	return 0
+	
+/spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
+	return ..()
+	//Each variant of rune is handled in their respective class.
+	
+/spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
+	if(rune)
+		if(rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return
+		else if(rune.runeset_identifier != runeset_identifier)
+			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
+			return
+	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word]) > 1)
+		continue_drawing = 1
+		perform(user) //Recursion for drawing runes in a row with tome. 
+			
+////////////////////BLOOD CULT DRAW RUNE////////////////////////
+
+/spell/cult/trace_rune/blood_cult
+	name = "Trace Rune"
+	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+
+	cast_delay = 15
+
+	runeset_identifier = "blood_cult"
+	
+/spell/cult/trace_rune/blood_cult/before_channel(mob/user)
+	if(continue_drawing) //Resets the current spell (tome selection) if continue_drawing is not 1.
+		continue_drawing = 0
+	else
+		spell = null
 
 	if (user.checkTattoo(TATTOO_FAST))
 		cast_delay = 5
@@ -46,57 +79,75 @@
 		to_chat(user,"<span class='danger'>You find yourself unable to focus your mind on the words of Nar-Sie.</span>")
 	return muted
 
-/spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
+/spell/cult/trace_rune/blood_cult/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
 
-	if(block)
+	if(block)     //Part of class spell, gets reset back to 0 after done casting. Prevents spamming.
 		return 0
-
 	block = 1
 
 	if(!istype(user.loc, /turf))
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 		return 0
 
-	var/obj/item/weapon/tome/tome = locate() in user.held_items
 	var/turf/T = get_turf(user)
-	rune = locate() in T
+	rune = locate() in T 
 
-	if (rune)
+	if(rune)
 		if (rune.invisibility == INVISIBILITY_OBSERVER)
-			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here, you have to reveal it before you can add more words to it.</span>")
+			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here. You have to reveal it before you can add more words to it.</span>")
 			return 0
 		else if (rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return 0
+			
+	var/obj/item/weapon/tome/tome = locate() in user.held_items
 
-
-	if (spell || tome)
-		if (spell)
-			if (!tome)
-				to_chat(user, "<span class='warning'>Without reading the tome, you have trouble remembering the arcane words.</span>")
-				return 0
+	if(spell) //If player already begun drawing a rune with help of a tome
+		if(!tome)
+			to_chat(user, "<span class='warning'>Without reading the tome, you have trouble continuing to draw the arcane words.</span>")
+			return 0		
 		else
-			var/list/available_runes = list()
-			var/i = 1
-			for(var/subtype in subtypesof(/datum/rune_spell))
-				var/datum/rune_spell/instance = subtype
-				if (initial(instance.Act_restriction) <= veil_thickness)
-					available_runes.Add("\Roman[i]-[initial(instance.name)]")
-					available_runes["\Roman[i]-[initial(instance.name)]"] = instance
-				i++
-			if (tome.state == TOME_CLOSED)
-				tome.icon_state = "tome-open"
-				tome.item_state = "tome-open"
-				flick("tome-flickopen",tome)
-				tome.state = TOME_OPEN
-			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
-			spell = available_runes[spell_name]
-
-		var/datum/cultword/instance
-		if (!rune)
+			var/datum/runeword/blood_cult/instance
+			if(!rune)
+				instance = initial(spell.word1)
+			else if (rune.word1.type != initial(spell.word1))
+				to_chat(user, "<span class='warning'>This rune's first word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+				to_chat(user, "<span class='warning'>[rune.word1.type] --- [spell.word1.type]</span>")
+				return 0
+			else if (!rune.word2)
+				instance = initial(spell.word2)
+			else if (rune.word2.type != initial(spell.word2))
+				to_chat(user, "<span class='warning'>This rune's second word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+				return 0
+			else if (!rune.word3)
+				instance = initial(spell.word3)
+			else
+				to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+				return 0
+			word = initial(instance.english)
+	else if(tome) //Else if they want to begin starting to draw with the help of a tome, grab all the available runes they can draw
+		var/list/available_runes = list()
+		var/i = 1
+		for(var/blood_spell in subtypesof(/datum/rune_spell/blood_cult))
+			var/datum/rune_spell/blood_cult/instance = blood_spell
+			if(initial(instance.Act_restriction) <= veil_thickness)
+				available_runes.Add("\Roman[i]-[initial(instance.name)]")
+				available_runes["\Roman[i]-[initial(instance.name)]"] = instance
+			i++
+		if(tome.state == TOME_CLOSED)
+			tome.icon_state = "tome-open"
+			tome.item_state = "tome-open"
+			flick("tome-flickopen",tome)
+			playsound(user, "pageturn", 50, 1, -5)
+			tome.state = TOME_OPEN
+		var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
+		spell = available_runes[spell_name]	
+		var/datum/runeword/blood_cult/instance
+		if(!rune)
 			instance = initial(spell.word1)
 		else if (rune.word1.type != initial(spell.word1))
 			to_chat(user, "<span class='warning'>This rune's first word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+			to_chat(user, "<span class='warning'>[rune.word1.type] --- [spell.word1.type]</span>")
 			return 0
 		else if (!rune.word2)
 			instance = initial(spell.word2)
@@ -105,23 +156,22 @@
 			return 0
 		else if (!rune.word3)
 			instance = initial(spell.word3)
-		else//wtf?
+		else
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return 0
+		word = initial(instance.english)		
 
-		word = initial(instance.english)
-	else
-
-		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in cultwords
-
+		
+	else //Otherwise they want to begin drawing each word manually
+		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in global_runesets[runeset_identifier].words
 	if (!word)
 		return 0
 
-	data = use_available_blood(user, blood_cost)
+	data = use_available_blood(user, blood_cost) 
 	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		return 0
 
-	if (rune)
+	if(rune)
 		user.visible_message("<span class='warning'>\The [user] chants and paints more symbols on the floor.</span>",\
 				"<span class='warning'>You add another word to the rune.</span>",\
 				"<span class='warning'>You hear chanting.</span>")
@@ -130,32 +180,31 @@
 				"<span class='warning'>You begin drawing a rune on the floor.</span>",\
 				"<span class='warning'>You hear some chanting.</span>")
 
-	var/datum/cultword/r_word = cultwords[word]
-
-	if (user.checkTattoo(TATTOO_SILENT))
-		return ..()
-
-	user.whisper("...[r_word.rune]...")
+	if(!user.checkTattoo(TATTOO_SILENT))
+		user.whisper("...[global_runesets[runeset_identifier].words[word].rune]...")
 	return ..()
 
-/spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
-	..()
-	if (rune && rune.word1 && rune.word2 && rune.word3)
-		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
-		return
-	if (write_rune_word(get_turf(user) ,data["blood"] ,word = cultwords[word]) > 1)
-		remember = 1
-		perform(user)//imediately try writing another word
+/spell/cult/trace_rune/blood_cult/cast(var/list/targets, var/mob/living/carbon/user)
+	if(rune)
+		if(rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return
+		else if(rune.runeset_identifier != runeset_identifier)
+			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
+			return
+	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word]) > 1)
+		continue_drawing = 1
+		perform(user) //Recursion for drawing runes in a row with tome. 
 	else
 		var/obj/item/weapon/tome/tome = locate() in user.held_items
-		if (tome && tome.state == TOME_OPEN)
+		if(tome && tome.state == TOME_OPEN)
 			tome.icon_state = "tome"
 			tome.item_state = "tome"
 			flick("tome-stun",tome)
 			tome.state = TOME_CLOSED
 
 //SPELL II
-/spell/cult/erase_rune
+/spell/cult/erase_rune //Works on all types of runes unless specified otherwise.
 	name = "Erase Rune"
 	desc = "Remove the last word written of the rune you're standing above."
 	hud_state = "cult_erase"
@@ -238,6 +287,7 @@
 			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0,-2)
 
+var/list/arcane_pockets = list()
 //SPELL IV
 /spell/cult/arcane_dimension
 	name = "Arcane Dimension (empty)"
@@ -255,6 +305,14 @@
 	cast_delay = 0
 
 	var/obj/item/weapon/tome/stored_tome = null
+
+/spell/cult/arcane_dimension/New()
+	..()
+	arcane_pockets.Add(src)
+
+/spell/cult/arcane_dimension/Destroy()
+	arcane_pockets.Remove(src)
+	..()
 
 /spell/cult/arcane_dimension/choose_targets(var/mob/user = usr)
 	return list(user)
