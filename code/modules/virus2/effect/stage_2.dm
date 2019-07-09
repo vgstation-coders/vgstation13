@@ -58,6 +58,9 @@
 /datum/disease2/effect/cough/activate(var/mob/living/mob)
 	mob.say("*cough")
 
+	if (mob.locked_to && istype(mob.locked_to, /obj/item/critter_cage))
+		return
+
 	var/datum/gas_mixture/breath
 	if (ishuman(mob))
 		var/mob/living/carbon/human/H = mob

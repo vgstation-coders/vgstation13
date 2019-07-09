@@ -482,6 +482,7 @@
 /obj/item/weapon/storage/box/monkeycubes/mousecubes
 	name = "lab mouse cube box"
 	desc = "Drymate brand laboratory mouse cubes, shipped from Yensid. Just add water!"
+	icon_state = "mousecubebox"
 
 /obj/item/weapon/storage/box/monkeycubes/mousecubes/New()
 	..()

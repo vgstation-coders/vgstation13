@@ -151,6 +151,9 @@
 /obj/structure/bookcase/manuals/medical/New()
 	..()
 	new /obj/item/weapon/book/manual/medical_cloning(src)
+	new /obj/item/weapon/book/manual/chemistry_manual(src)
+	new /obj/item/weapon/book/manual/virology_guide(src)
+	new /obj/item/weapon/book/manual/virology_encyclopedia(src)
 	update_icon()
 
 

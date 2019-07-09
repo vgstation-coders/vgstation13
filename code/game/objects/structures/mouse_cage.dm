@@ -126,5 +126,5 @@
 	..()
 	icon_state = "cage"
 	if (loc)
-		critter = new /mob/living/simple_animal/mousen/balbc/named(loc)
+		critter = new /mob/living/simple_animal/mouse/balbc/named(loc)
 		lock_atom(critter,lock_type)

@@ -636,3 +636,221 @@
 			heart_attack.stat_attack = 1
 			score["heartattacks"]++
 			qdel(blown_heart)
+
+/datum/disease2/effect/wizarditis
+	name = "Wizarditis"
+	desc = "Subjects affected show the signs of mental retardation, yelling obscure sentences or total gibberish."
+	encyclopedia = "Some may express the feelings of inner power, and, cite, 'the ability to control the forces of cosmos themselves!'. This led to speculations that this symptom is the cause of Wizard Federation's existance."
+	stage = 4
+	badness = EFFECT_DANGER_HARMFUL
+	chance = 10
+	max_chance = 20
+	var/old_r_hair = 0
+	var/old_g_hair = 0
+	var/old_b_hair = 0
+	var/old_f_style = "Bald"
+	var/old_h_style = "Shaved"
+	var/old_r_facial = 0
+	var/old_g_facial = 0
+	var/old_b_facial = 0
+	var/old_r_eyes = 0
+	var/old_g_eyes = 0
+	var/old_b_eyes = 0
+
+/datum/disease2/effect/wizarditis/proc/backup_appearance(var/mob/living/carbon/human/affected)
+	old_r_hair = affected.my_appearance.r_hair
+	old_g_hair = affected.my_appearance.g_hair
+	old_b_hair = affected.my_appearance.b_hair
+	old_f_style = affected.my_appearance.f_style
+	old_h_style = affected.my_appearance.h_style
+	old_r_facial = affected.my_appearance.r_facial
+	old_g_facial = affected.my_appearance.g_facial
+	old_b_facial = affected.my_appearance.b_facial
+	old_r_eyes = affected.my_appearance.r_eyes
+	old_g_eyes = affected.my_appearance.g_eyes
+	old_b_eyes = affected.my_appearance.b_eyes
+
+/datum/disease2/effect/wizarditis/proc/spawn_wizard_clothes(var/mob/living/mob)
+	if (ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(prob(50))
+			if(!istype(H.head, /obj/item/clothing/head/wizard))
+				if(H.head)
+					H.drop_from_inventory(H.head)
+				H.head = new /obj/item/clothing/head/wizard(H)
+				H.head.hud_layerise()
+		if(prob(50))
+			if(!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe))
+				if(H.wear_suit)
+					H.drop_from_inventory(H.wear_suit)
+				H.wear_suit = new /obj/item/clothing/suit/wizrobe(H)
+				H.wear_suit.hud_layerise()
+		if(prob(50))
+			if(!istype(H.shoes, /obj/item/clothing/shoes/sandal))
+				if(H.shoes)
+					H.drop_from_inventory(H.shoes)
+				H.shoes = new /obj/item/clothing/shoes/sandal(H)
+				H.hud_layerise()
+	if (iscarbon(mob))
+		var/mob/living/carbon/C = mob
+		if(prob(50))
+			if(!istype(C.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/staff))
+				if(C.drop_item(C.get_held_item_by_index(GRASP_RIGHT_HAND)))
+					C.put_in_r_hand( new /obj/item/weapon/staff(C) )
+
+/datum/disease2/effect/wizarditis/activate(var/mob/living/mob)
+	if (count == 0)
+		to_chat(mob, "<span class='warning'>You feel an ancient wisdom take root in your mind.</span>")
+	if (ishuman(mob))
+		if (count == 0)
+			backup_appearance(mob)
+		var/mob/living/carbon/human/affected = mob
+		affected.my_appearance.r_hair = 178
+		affected.my_appearance.g_hair = 178
+		affected.my_appearance.b_hair = 178
+		affected.my_appearance.r_eyes = 102
+		affected.my_appearance.g_eyes = 51
+		affected.my_appearance.b_eyes = 0
+		affected.my_appearance.r_facial = 178
+		affected.my_appearance.g_facial = 178
+		affected.my_appearance.b_facial = 178
+		affected.my_appearance.f_style = "Dwarf Beard"
+		affected.my_appearance.h_style = "Shoulder-length Hair Alt"
+		affected.update_body(0)
+		affected.update_hair()
+
+	switch(count)
+		if (10 to 30)
+			if(prob(3))
+				mob.say(pick("You shall not pass!", "Expeliarmus!", "By Merlins beard!", "Feel the power of the Dark Side!"))
+			if(prob(5))
+				to_chat(mob, "<span class='warning'>You feel [pick("that you don't have enough mana.", "that the winds of magic are gone.", "an urge to summon familiar.")]</span>")
+		if (30 to INFINITY)
+			if(prob(3))
+				var/list/possible_invocations = list(
+					"By Merlins beard!",
+					"Feel the power of the Dark Side!",
+					"NEC CANTIO!",
+					"AULIE OXIN FIERA!",
+					"STI KALY!",
+					"TARCOL MINTI ZHERI!")
+
+				if (count >= 40)
+					possible_invocations += "SCYAR NILA!"
+
+				if (count >= 60)
+					possible_invocations += "EI NATH!"//may the gods forgive me
+
+				var/spell_to_cast = pick(possible_invocations)
+
+				mob.say(spell_to_cast)
+
+				switch (spell_to_cast)
+					if ("NEC CANTIO!")
+						empulse(get_turf(mob), 6, 10)
+					if ("AULIE OXIN FIERA!")
+						for(var/turf/T in range(3, get_turf(mob)))
+							for(var/obj/machinery/door/door in T.contents)
+								spawn(1)
+									if(istype(door,/obj/machinery/door/airlock))
+										var/obj/machinery/door/airlock/AL = door //casting is important
+										AL.locked = 0
+									door.open()
+							for(var/obj/structure/closet/C in T.contents)
+								spawn(1)
+									if(istype(C,/obj/structure/closet))
+										var/obj/structure/closet/LC = C
+										LC.locked = 0
+										LC.welded = 0
+									C.open()
+							for(var/obj/structure/safe/S in T.contents)
+								spawn(1)
+									if(istype(S,/obj/structure/safe))
+										var/obj/structure/safe/SA = S
+										SA.open = 1
+									S.update_icon()
+							for(var/obj/item/weapon/storage/lockbox/L in T.contents)
+								spawn(1)
+									if(istype(L,/obj/item/weapon/storage/lockbox))
+										var/obj/item/weapon/storage/lockbox/LL = L
+										LL.locked = 0
+									L.update_icon()
+					if ("STI KALY!")
+						for(var/mob/living/target in range(7, get_turf(mob)))
+							if (target == mob)
+								continue
+							target.eye_blind += 10
+							target.eye_blurry += 20
+							target.disabilities |= DISABILITY_FLAG_NEARSIGHTED
+							spawn(300)
+								target.disabilities &= ~DISABILITY_FLAG_NEARSIGHTED
+					if ("TARCOL MINTI ZHERI!")
+						var/obj/effect/forcefield/wizard/wall = new(get_turf(mob))
+						spawn(300)
+						if(wall)
+							qdel(wall)
+					if ("SCYAR NILA!")
+						var/list/theareas = new/list()
+						for(var/area/AR in orange(80, mob))
+							if(theareas.Find(AR) || isspace(AR))
+								continue
+							theareas += AR
+						if(theareas)
+							var/area/thearea = pick(theareas)
+							var/list/L = list()
+							for(var/turf/T in get_area_turfs(thearea.type))
+								if(T.z != mob.z)
+									continue
+								if(T.name == "space")
+									continue
+								if(!T.density)
+									var/clear = 1
+									for(var/obj/O in T)
+										if(O.density)
+											clear = 0
+											break
+									if(clear)
+										L+=T
+							if(L?.len)
+								mob.forceMove(pick(L))
+					if ("EI NATH!")//at least it's 1 out of 7, in a 2% chance to happen of an effect with a 10% (max 20%) to proc.
+						var/list/targets = list()
+						for(var/mob/living/L in range(1, get_turf(mob)))
+							if (L != mob)
+								targets += L
+						var/mob/living/target = pick(targets)
+						if (target)
+							if (!mob.is_pacified(VIOLENCE_DEFAULT,target))
+								if(ishuman(target) || ismonkey(target))
+									var/mob/living/carbon/C = target
+									if(!C.has_brain()) // Their brain is already taken out
+										var/obj/item/organ/internal/brain/B = new(C.loc)
+										B.transfer_identity(C)
+								target.gib()
+
+			if(prob(3) && count >= 60)
+				spawn_wizard_clothes(mob)
+
+			if(prob(5))
+				if (count < 60)
+					to_chat(mob, "<span class='warning'>You feel [pick("the magic bubbling in your veins","that this location gives you a +1 to INT","an urge to summon familiar.")].</span>")
+				else
+					to_chat(mob, "<span class='warning'>You feel [pick("the tidal wave of raw power building inside","that this location gives you a +2 to INT and +1 to WIS","an urge to teleport")].</span>")
+
+
+/datum/disease2/effect/wizarditis/deactivate(var/mob/living/mob)
+	if (ishuman(mob) && count > 0)
+		var/mob/living/carbon/human/affected = mob
+		affected.my_appearance.r_hair = old_r_hair
+		affected.my_appearance.g_hair = old_g_hair
+		affected.my_appearance.b_hair = old_b_hair
+		affected.my_appearance.r_eyes = old_r_eyes
+		affected.my_appearance.g_eyes = old_g_eyes
+		affected.my_appearance.b_eyes = old_b_eyes
+		affected.my_appearance.r_facial = old_r_facial
+		affected.my_appearance.g_facial = old_g_facial
+		affected.my_appearance.b_facial = old_b_facial
+		affected.my_appearance.f_style = old_f_style
+		affected.my_appearance.h_style = old_h_style
+		affected.update_body(0)
+		affected.update_hair()

@@ -78,11 +78,11 @@
 	name = "Circuit board (Medical Records)"
 	desc = "A circuit board for running a computer used for viewing medical records."
 	build_path = /obj/machinery/computer/med_data
-/obj/item/weapon/circuitboard/pandemic
-	name = "Circuit board (PanD.E.M.I.C. 2200)"
-	desc = "A circuit board for running a computer used in Virology."
-	build_path = /obj/machinery/computer/pandemic
-	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
+///obj/item/weapon/circuitboard/pandemic
+//	name = "Circuit board (PanD.E.M.I.C. 2200)"
+//	desc = "A circuit board for running a computer used in Virology."
+//	build_path = /obj/machinery/computer/pandemic
+//	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/scan_consolenew
 	name = "Circuit board (DNA Machine)"
 	desc = "A circuit board for running a computer used in Genetics."

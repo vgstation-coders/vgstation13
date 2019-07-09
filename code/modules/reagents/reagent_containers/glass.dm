@@ -32,7 +32,6 @@
 		/obj/item/weapon/grenade/chem_grenade,
 		/obj/item/weapon/electrolyzer,
 		/obj/machinery/bot/medbot,
-		/obj/machinery/computer/pandemic,
 		/obj/item/weapon/storage/secure/safe,
 		/obj/machinery/iv_drip,
 		/obj/machinery/disease2/incubator,

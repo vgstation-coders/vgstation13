@@ -20,11 +20,12 @@
 
 //Vampire Diseased Touch
 /datum/disease2/effect/organs/vampire
-	name = "Shutdown Syndrome"
 	stage = 1
-	badness = EFFECT_DANGER_DEADLY
-	restricted = 2
+	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
 
+/datum/disease2/effect/wizarditis/single
+	stage = 1
+	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
 
 /datum/disease2/effect/blob_spores
 	name = "Blob Spores"
@@ -32,7 +33,7 @@
 	encyclopedia = "They will cause their carrier to spawn blob upon their death. Potentially more the longer the pathogen persists in the host's body. At some point it may even spawn a Node."
 	stage = 1
 	badness = EFFECT_DANGER_HINDRANCE
-	restricted = 1
+	restricted = 1//symptoms won't randomly mutate into this one
 	chance = 100
 	max_chance = 100
 	var/looks = "new"
@@ -67,3 +68,4 @@
 				sleep(2)
 
 	virus.cure(mob)//finally let's remove the spores now that they've matured
+
