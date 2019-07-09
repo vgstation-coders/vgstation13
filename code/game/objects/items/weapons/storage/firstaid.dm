@@ -309,3 +309,12 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
+
+/obj/item/weapon/storage/pill_bottle/nanofloxacin
+	name = "pill bottle (nanofloxacin)"
+	desc = "Contains pills used to exterminate pathogen. May also exterminate yourself if taken in larger doses."
+
+/obj/item/weapon/storage/pill_bottle/nanofloxacin/New()
+	..()
+	for (var/i = 1 to 12)
+		new /obj/item/weapon/reagent_containers/pill/nanofloxacin(src)

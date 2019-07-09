@@ -384,6 +384,7 @@
 	item_state = "syringe_kit"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
 	fits_max_w_class = 3
+	w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_one_access = list(access_virology) //Obj was inheriting from obj/storage/lockbox which requires armory access.  This behavior is overridden here.
