@@ -125,10 +125,8 @@
 		error_source.next_message_at = world.time + err_msg_delay
 
 /datum/error_viewer/error_cache/proc/send_to_webhook()
-	var/list/data = list()
 	for (var/datum/error_viewer/error_entry/error_entry in errors)
-		data += error_entry.name;
-	world.Export("WEBHOOK URL", text2file("{ \"username\":\"Runtime Cache\", \"content\":\"[data.Join("\\n")]\" }","test"));
+		send2runtimediscord(error_entry.name)
 
 /datum/error_viewer/error_source
 	var/list/errors = list()

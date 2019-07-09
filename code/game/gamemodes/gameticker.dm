@@ -447,6 +447,7 @@ var/datum/controller/gameticker/ticker
 	var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1) || force_round_end
 	if(!explosion_in_progress && mode_finished)
 		current_state = GAME_STATE_FINISHED
+		error_cache.send_to_webhook()
 
 		spawn
 			declare_completion()
