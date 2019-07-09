@@ -102,7 +102,7 @@
 			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
 
-		var/mob/living/carbon/human/new_character = applicant
+		var/mob/new_character = applicant
 
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
@@ -542,3 +542,35 @@
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
 		return FALSE
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//             PLAGUE MICE                  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice
+	name = "Plague Mice Invasion"
+	role_category = /datum/role/plague_mouse
+	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
+	required_candidates = 1
+	var/max_candidates = 5
+	weight = 5
+	cost = 25
+	requirements = list(90,70,50,40,30,20,10,10,10,10)
+	high_population_requirement = 40
+	flags = MINOR_RULESET
+	my_fac = /datum/faction/plague_mice
+	logo = "plague-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/generate_ruleset_body(var/mob/applicant)
+	var/datum/faction/plague_mice/active_fac = find_active_faction_by_type(my_fac)
+	var/mob/living/simple_animal/mouse/plague/new_mouse = new (active_fac.invasion)
+	new_mouse.key = applicant.key
+	return new_mouse
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()

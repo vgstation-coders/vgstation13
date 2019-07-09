@@ -110,6 +110,27 @@ BREATHALYZER
 			to_chat(user, "<span class='notice'>\The [src] glows [pick("red", "green", "blue", "pink")]! You wonder what that would mean.</span>")
 	src.add_fingerprint(user)
 
+
+/obj/item/device/healthanalyzer/afterattack(var/atom/A, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if (A.Adjacent(user) && isitem(A))
+		var/obj/item/I = A
+		if(I.virus2 && I.virus2.len > 0)
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+			for(var/ID in I.virus2)
+				var/datum/disease2/disease/D = I.virus2[ID]
+				if(ID in virusDB)
+					var/datum/data/record/V = virusDB[ID]
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
+				else
+					to_chat(user,"<span class='warning'>Warning: Unknown [D.form] detected on \the [src].</span>")
+		else
+			to_chat(user,"<span class='notice'>No pathogen detected on \the [src].</span>")
+
+
 /obj/item/device/healthanalyzer/attack_self(mob/living/user as mob)
 	. = ..()
 	if(.)
@@ -185,13 +206,16 @@ Subject's pulse: ??? BPM"})
 		if(H.nutrition < STARVATION_MIN)
 			message += "<br><span class='danger'>Warning: Subject starving.</span>"
 
-	if(iscarbon(M))
-		var/mob/living/carbon/C = M
-		if(C.virus2.len)
-			for(var/ID in C.virus2)
-				if(ID in virusDB)
-					var/datum/data/record/V = virusDB[ID]
-					message += "<br><span class='warning'>Warning: [V.fields["name"]] detected in subject's blood. Known antigen : [V.fields["antigen"]]</span>"
+	if(M.virus2.len)
+		for(var/ID in M.virus2)
+			var/datum/disease2/disease/D = M.virus2[ID]
+			if(ID in virusDB)
+				var/datum/data/record/V = virusDB[ID]
+				message += "<br><span class='warning'>[V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected in subject's blood. Strength: [D.strength]. Antigen: [D.get_antigen_string()]</span>"
+			else
+				message += "<br><span class='warning'>Unknown [D.form] detected in subject's blood. Strength: [D.strength]</span>"
+	else
+		message += "<br><span class='notice'>No pathogen detected in subject's blood.</span>"
 
 	for(var/datum/disease/D in M.viruses)
 		if(!D.hidden[SCANNER])

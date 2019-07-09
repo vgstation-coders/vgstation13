@@ -17,6 +17,7 @@
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
+#define PLAGUEMICE "plague mice invasion"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -59,6 +60,7 @@
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
 #define RAMBLER "soul rambler"
+#define PLAGUEMOUSE "plague mouse"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

@@ -907,9 +907,6 @@
 
 	for (var/datum/disease/virus in viruses)
 		virus.cure()
-	for (var/ID in virus2)
-		var/datum/disease2/disease/V = virus2[ID]
-		V.cure(src)
 
 	..()
 
@@ -1914,3 +1911,6 @@ mob/living/carbon/human/isincrit()
 			confused = max(0,confused-rand(8,10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
+
+/mob/living/carbon/human/can_be_infected()
+	return 1

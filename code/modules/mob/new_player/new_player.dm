@@ -296,6 +296,35 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
+/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
+	// 10% of players are joining the station with some minor disease
+	if(prob(10))
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+		var/datum/disease2/disease/D = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 1,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 0,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 1,
+			EFFECT_DANGER_FLAVOR	= 4,
+			EFFECT_DANGER_ANNOYING	= 4,
+			EFFECT_DANGER_HINDRANCE	= 0,
+			EFFECT_DANGER_HARMFUL	= 0,
+			EFFECT_DANGER_DEADLY	= 0,
+			)
+		D.origin = "New Player"
+
+		D.makerandom(list(30,55),list(0,50),anti,bad,null)
+
+		D.log += "<br />[timestamp()] Infected [key_name(H)]"
+		H.virus2["[D.uniqueID]-[D.subID]"] = D
+
+		D.AddToGoggleView(H)
+
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -393,6 +422,7 @@
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
 			FuckUpGenes(character)
+			DiseaseCarrierCheck(character)
 		else
 			character.Robotize()
 	qdel(src)

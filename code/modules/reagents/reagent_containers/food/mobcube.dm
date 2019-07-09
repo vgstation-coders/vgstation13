@@ -127,3 +127,11 @@
 	name = "humanoid cube"
 	desc = "Freshly compressed. Add water to release the creature within."
 	contained_mob = null
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mousecube
+	name = "lab mouse cube"
+	contained_mob = /mob/living/simple_animal/mouse/balbc
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube
+	name = "lab mouse cube"
+	contained_mob = /mob/living/simple_animal/mouse/balbc

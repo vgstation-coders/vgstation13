@@ -707,3 +707,30 @@ a {
 	if(density && !throwpass)
 		return FALSE
 	return TRUE
+
+/obj/proc/FeetStab(mob/living/AM,var/soundplay = 'sound/effects/glass_step.ogg',var/damage = 5,var/knockdown = 3)
+	if(istype(AM))
+		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			return
+		if(AM.flying)
+			return
+		else //Stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			if(ishuman(AM))
+				var/mob/living/carbon/human/H = AM
+				var/danger = FALSE
+
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
+						danger = TRUE
+
+						if(!H.lying && H.feels_pain())
+							H.Knockdown(knockdown)
+							H.Stun(knockdown)
+						if(foot.take_damage(damage, 0))
+							H.UpdateDamageIcon()
+						H.updatehealth()
+
+				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")

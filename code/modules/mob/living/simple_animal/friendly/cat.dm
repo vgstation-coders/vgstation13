@@ -77,7 +77,7 @@
 	if((src.loc) && isturf(src.loc))
 		if(!stat && !resting && !locked_to)
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
-				if(!M.stat && Adjacent(M))
+				if(!M.stat && Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
 					M.splat()
 					visible_message("<span class='warning'>\The [name] [pick(kill_verbs)] \the [M]!</span>")
 					movement_target = null

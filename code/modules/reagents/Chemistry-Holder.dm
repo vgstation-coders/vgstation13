@@ -85,10 +85,19 @@ var/const/INGEST = 2
 /datum/reagents/proc/get_master_reagent_name()
 	var/the_name = null
 	var/the_volume = 0
-	for(var/datum/reagent/A in reagent_list)
-		if(A.volume > the_volume)
-			the_volume = A.volume
-			the_name = A.name
+	for(var/datum/reagent/R in reagent_list)
+		if(R.volume > the_volume)
+			var/reg_name = R.name
+			if (istype(R,/datum/reagent/vaccine))
+				var/datum/reagent/vaccine/vaccine = R
+				var/vaccines = ""
+				for (var/A in vaccine.data["antigen"])
+					vaccines += "[A]"
+				if (vaccines == "")
+					vaccines = "blank"
+				reg_name = "[reg_name] ([vaccines])"
+			the_volume = R.volume
+			the_name = reg_name
 
 	return the_name
 
@@ -450,8 +459,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(C.result)
 						feedback_add_details("chemical_reaction","[C.result][created_volume]")
 						multiplier = max(multiplier, 1) //this shouldnt happen ...
-						add_reagent(C.result, created_volume, null, chem_temp)
-						set_data(C.result, preserved_data)
+						add_reagent(C.result, created_volume, C.data, chem_temp)
+						if (preserved_data)
+							set_data(C.result, preserved_data)
 
 						//add secondary products
 						for(var/S in C.secondary_results)
@@ -586,6 +596,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				//right now we don't support blood mixing or something similar at all.
 					if(R.data["virus2"] && data["virus2"])
 						R.data["virus2"] |= virus_copylist(data["virus2"])
+				else if (reagent == VACCINE)
+					R.data["antigen"] |= data["antigen"]
 				else
 					R.data = data //just in case someone adds a new reagent with a data var
 

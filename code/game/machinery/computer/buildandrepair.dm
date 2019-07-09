@@ -78,11 +78,11 @@
 	name = "Circuit board (Medical Records)"
 	desc = "A circuit board for running a computer used for viewing medical records."
 	build_path = /obj/machinery/computer/med_data
-/obj/item/weapon/circuitboard/pandemic
-	name = "Circuit board (PanD.E.M.I.C. 2200)"
-	desc = "A circuit board for running a computer used in Virology."
-	build_path = /obj/machinery/computer/pandemic
-	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
+///obj/item/weapon/circuitboard/pandemic
+//	name = "Circuit board (PanD.E.M.I.C. 2200)"
+//	desc = "A circuit board for running a computer used in Virology."
+//	build_path = /obj/machinery/computer/pandemic
+//	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/scan_consolenew
 	name = "Circuit board (DNA Machine)"
 	desc = "A circuit board for running a computer used in Genetics."
@@ -273,11 +273,10 @@
 	desc = "A circuit board for running a computer used to manipulate telecommunications traffic."
 	build_path = /obj/machinery/computer/telecomms/traffic
 	origin_tech = Tc_PROGRAMMING + "=3"
-
-/obj/item/weapon/circuitboard/curefab
+/*/obj/item/weapon/circuitboard/curefab
 	name = "Circuit board (Cure fab)"
 	desc = "A circuit board for running a computer used to fabricate cures for virusses."
-	build_path = /obj/machinery/computer/curer
+	build_path = /obj/machinery/computer/curer*/
 /obj/item/weapon/circuitboard/splicer
 	name = "Circuit board (Disease Splicer)"
 	desc = "A circuit board for running a computer used to splice DNA strands in virusses."
