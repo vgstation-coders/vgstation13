@@ -12,6 +12,7 @@
 	level = LEVEL_ABOVE_FLOOR
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
+	slowdown_modifier = 2
 
 /obj/structure/cable/powercreeper/New(loc, growdir)
 	//are we growing from another powercreeper?
@@ -78,7 +79,7 @@
 	if(!istype(M))
 		return 0
 	if(!electrocute_mob(M, powernet, src))
-		M.apply_damage((powernet.avail / 1000), BURN) //one burn damage per 2 plants
+		M.apply_damage((powernet.avail / 3000), BURN) //one burn damage per 6 plants (keep in mind, this will also take the power from any connected powernet)
 		return 0
 	return 1
 

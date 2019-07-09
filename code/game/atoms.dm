@@ -46,6 +46,8 @@ var/global/list/ghdel_profiling = list()
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE
 
+	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()

@@ -664,6 +664,9 @@
 // Return a high number to make the mob move slower.
 // Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
+	for(var/atom/A in src)
+		if(A.slowdown_modifier)
+			base_slowdown *= A.slowdown_modifier
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)
