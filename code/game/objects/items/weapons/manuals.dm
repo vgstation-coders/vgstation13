@@ -765,7 +765,7 @@
 				<li><b>Parasite</b>: 4 stages, Average infection chance, Very Low Progress Speed, stage is not reduced after an infection, can kill weaker Virus
 				<li><b>Prion</b>: 4 stages, Very Low infection chance, Very High Progress Speed, stage reduced back to 1 after an infection, cannot kill any pathogen
 				</ul>
-				<p>However, as a virologist, you will want to shape a pathogen with very specific effects and values in mind. That's where the Disease Splicer comes in. This computer can scan (and destroy in the process) dishes to extract GNA disks, containing the gene data of an effect, including its current strength and occurence. This disks can then be swipped anytime on the Disease Splicer to re-add it to the computer's buffer.</p>
+				<p>However, as a virologist, you will want to shape a pathogen with very specific effects and values in mind. That's where the Disease Splicer comes in. This computer can scan (and destroy in the process) dishes to extract GNA disks, containing the gene data of an effect, including its current strength and occurrence. These disks can then be swiped anytime on the Disease Splicer to re-add it to the computer's buffer.</p>
 				<p>You may then splice the buffered effect into any other dish, letting you create the desired pathogen, one effect at a time.</p>
 				<p>When removing a modified dish from the computer, it will be automatically and instantly re-analysed, adding the new modified pathogen to the database.</p>
 				<a href="#menu">Table of Contents</a>
