@@ -42,6 +42,8 @@ A daemon can be used to give behaviors to two items that are very different
 		playsound(src, telesound,50,1)
 	user.forceMove(SHHHHIIIING)
 	user.dir = L.dir
+	var/obj/item/weapon/melee/energy/sword/ninja/ninjasword = my_atom
+	ninjasword.attack(L, user, LIMB_HEAD)
 	if(message)
 		user.say("[message]")
 
