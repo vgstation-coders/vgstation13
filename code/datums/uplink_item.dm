@@ -909,3 +909,11 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Librarian", "Chaplain")
+
+/datum/uplink_item/jobspecific/powercreeper_packet
+	name = "Powercreep Packet"
+	desc = "A packet that creates a dangerous mutated version of kudzu. The vines shock people and connect themselves to any cables near them."
+	item = /obj/item/powercreeper_packet
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
