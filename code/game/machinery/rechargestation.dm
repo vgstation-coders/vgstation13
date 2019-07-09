@@ -205,7 +205,7 @@
 
 /obj/machinery/recharge_station/proc/process_occupant()
 	if(src.occupant)
-		if (istype(occupant, /mob/living/silicon/robot))
+		if(isrobot(occupant))
 			var/mob/living/silicon/robot/R = occupant
 			if((R.stat) || (!R.client))//no more borgs suiciding in recharge stations to ruin them.
 				go_out()
