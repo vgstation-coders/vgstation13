@@ -101,9 +101,11 @@
 						var/datum/disease2/disease/V = mob.virus2[ID]
 						strength += V.infectionchance
 					strength = round(strength/mob.virus2.len)
-					while (strength > 0)//stronger viruses create more clouds at once
+					var/i = 1
+					while (strength > 0 && i < 10) //stronger viruses create more clouds at once, max limit of 10 clouds
 						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), mob, virus_copylist(mob.virus2))
 						strength -= 30
+						i++
 
 /datum/disease2/effect/hungry
 	name = "Appetiser Effect"
@@ -192,7 +194,7 @@
 
 /datum/disease2/effect/gaben/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
-	if (prob(10))
+	if (mob.reagents && prob(10))
 		mob.reagents.add_reagent(NUTRIMENT, 1000)
 		mob.overeatduration = 1000
 
@@ -269,8 +271,8 @@
 	desc = "Inhibits a portion of the infected's brain that controls speech, removing the infected's ability to speak vowels."
 	encyclopedia = "Highly irritating."
 	stage = 2
-	var/triggered = 0
 	affect_voice = 1
+	max_count = 1
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/hangman/activate(var/mob/living/mob)
@@ -278,7 +280,6 @@
 	if(!triggered)
 		to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
 		affect_voice_active = 1
-		triggered = 1
 
 /datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech)
 	var/message=speech.message
@@ -311,7 +312,7 @@
 		var/hand_to_use = rand(1, H.held_items.len)
 		var/obj/item/weapon/reagent_containers/glass_to_shatter = H.get_held_item_by_index(hand_to_use)
 		var/datum/organ/external/glass_hand = H.find_organ_by_grasp_index(hand_to_use)
-		if (istype(glass_to_shatter, /obj/item/weapon/reagent_containers/glass/) || istype(glass_to_shatter, /obj/item/weapon/reagent_containers/syringe))
+		if (is_type_in_list(glass_to_shatter, list(/obj/item/weapon/reagent_containers/glass/, /obj/item/weapon/reagent_containers/syringe))
 			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in \the [glass_to_shatter], shattering it to bits!</span>")
 			glass_to_shatter.reagents.reaction(H.loc, TOUCH)
 			new/obj/effect/decal/cleanable/generic(get_turf(H))
@@ -408,10 +409,10 @@
 		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
 	..()
 
-/datum/disease2/effect/spiky_skin/on_touch(var/mob/living/mob, var/toucher, var/touched, var/touch_type)
+/datum/disease2/effect/spiky_skin/on_touch(var/mob/living/mob, var/mob/living/toucher, var/mob/living/touched, var/touch_type)
 	if(!count || skip)
 		return
-	if(!istype(toucher, /mob) || !istype(touched, /mob))
+	if(!istype(toucher) || !istype(touched))
 		return
 	var/datum/organ/external/E
 	var/mob/living/carbon/human/H
@@ -460,6 +461,7 @@
 	desc = "Infected people will fall ill if they try to eat meat."
 	encyclopedia = ""
 	stage = 2
+	max_count = 1
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/vegan/activate(var/mob/living/mob)
@@ -556,15 +558,14 @@
 	name = "Plankton's Syndrome"
 	desc = "Attacks a portion of the infected's brain that controls speech, causing them to be more dramatic."
 	stage = 2
-	var/triggered = 0
+	max_count = 1
 	affect_voice = 1
 	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/yelling/activate(var/mob/living/mob)
-	if(!triggered)
-		to_chat(mob, "<span class='notice'>You feel like what you have to say is more important.</span>")
-		affect_voice_active = 1
-		triggered = 1
+	to_chat(mob, "<span class='notice'>You feel like what you have to say is more important.</span>")
+	affect_voice_active = 1
+	triggered = 1
 
 /datum/disease2/effect/yelling/affect_mob_voice(var/datum/speech/speech)
 	var/message=speech.message
