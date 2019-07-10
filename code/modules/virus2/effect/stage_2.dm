@@ -312,7 +312,7 @@
 		var/hand_to_use = rand(1, H.held_items.len)
 		var/obj/item/weapon/reagent_containers/glass_to_shatter = H.get_held_item_by_index(hand_to_use)
 		var/datum/organ/external/glass_hand = H.find_organ_by_grasp_index(hand_to_use)
-		if (is_type_in_list(glass_to_shatter, list(/obj/item/weapon/reagent_containers/glass/, /obj/item/weapon/reagent_containers/syringe))
+		if (is_type_in_list(glass_to_shatter, list(/obj/item/weapon/reagent_containers/glass/, /obj/item/weapon/reagent_containers/syringe)))
 			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in \the [glass_to_shatter], shattering it to bits!</span>")
 			glass_to_shatter.reagents.reaction(H.loc, TOUCH)
 			new/obj/effect/decal/cleanable/generic(get_turf(H))

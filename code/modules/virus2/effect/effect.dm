@@ -44,9 +44,6 @@
 
 	var/restricted = 0
 	// If 1, will never appear randomly in a disease, requiring instead to be manually set in the code. If 2, will not either appear in the encyclopedia.
-
-	var/passive_effect = 0 // The effect is passive and won't activate more than once.
-
 // The actual guts of the effect. Has a prob(chance)% to get called per tick.
 /datum/disease2/effect/proc/activate(var/mob/living/carbon/mob)
 
