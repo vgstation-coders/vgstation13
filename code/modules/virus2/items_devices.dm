@@ -285,6 +285,16 @@ var/list/virusdishes = list()
 	else
 		virusdishes.Remove(src)
 
+/obj/item/weapon/virusdish/open/New(loc)
+	..()
+	open = TRUE
+	update_icon()
+
+/obj/item/weapon/virusdish/random/open/New(loc)
+	..()
+	open = TRUE
+	update_icon()
+	processing_objects.Add(src)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()

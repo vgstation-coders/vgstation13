@@ -40,6 +40,7 @@
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 	var/lastchairspin
+	var/pathogenHUD = FALSE
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -577,6 +578,46 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	else
 		M.antagHUD = 1
 		to_chat(src, "<span class='notice'><B>AntagHUD Enabled</B></span>")
+
+
+
+/mob/dead/observer/verb/toggle_pathogenHUD()
+	set category = "Ghost"
+	set name = "Toggle PathogenHUD"
+	set desc = "Toggles Pathogen HUD allowing you to see airborne pathogenic clouds, and infected items and splatters"
+	if(!client)
+		return
+	if(pathogenHUD)
+		pathogenHUD = FALSE
+		to_chat(src, "<span class='notice'><B>Pathogen HUD disabled.</B></span>")
+		science_goggles_wearers.Remove(src)
+		if (client)
+			for (var/obj/item/I in infected_items)
+				client.images -= I.pathogen
+			for (var/mob/living/L in infected_contact_mobs)
+				client.images -= L.pathogen
+			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+				client.images -= C.pathogen
+			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+				client.images -= C.pathogen
+	else
+		pathogenHUD = TRUE
+		to_chat(src, "<span class='notice'><B>Pathogen HUD enabled.</B></span>")
+		science_goggles_wearers.Add(src)
+		if (client)
+			for (var/obj/item/I in infected_items)
+				if (I.pathogen)
+					client.images |= I.pathogen
+			for (var/mob/living/L in infected_contact_mobs)
+				if (L.pathogen)
+					client.images |= L.pathogen
+			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+				if (C.pathogen)
+					client.images |= C.pathogen
+			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+				if (C.pathogen)
+					client.images |= C.pathogen
+
 
 /mob/dead/observer/proc/dead_tele()
 	set category = "Ghost"

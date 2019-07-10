@@ -329,6 +329,9 @@
 	if(isUnconscious())
 		return
 
+	if (locked_to && istype(locked_to, /obj/item/critter_cage))
+		return
+
 	if (plane != HIDING_MOB_PLANE)
 		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))

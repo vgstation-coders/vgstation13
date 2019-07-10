@@ -243,7 +243,7 @@
 	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/mob)
-	if (prob(30))
+	if (prob(30) && isturf(mob.loc))
 		mob.emote("cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
