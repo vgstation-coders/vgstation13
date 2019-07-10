@@ -17,7 +17,7 @@
 	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/mob)
-	mob.say("*sneeze")
+	mob.emote("sneeze")
 	if (prob(50))
 		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
 		if(M==null)
@@ -47,7 +47,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/drool/activate(var/mob/living/mob)
-	mob.say("*drool")
+	mob.emote("drool")
 
 
 /datum/disease2/effect/twitch
@@ -58,7 +58,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/twitch/activate(var/mob/living/mob)
-	mob.say("*twitch")
+	mob.emote("twitch")
 
 
 /datum/disease2/effect/headache

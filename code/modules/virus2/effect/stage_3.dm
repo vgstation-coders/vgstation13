@@ -75,7 +75,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/giggle/activate(var/mob/living/mob)
-	mob.say("*giggle")
+	mob.emote("giggle")
 
 
 /datum/disease2/effect/chickenpox
@@ -121,7 +121,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/groan/activate(var/mob/living/mob)
-	mob.say("*groan")
+	mob.emote("groan")
 
 
 /datum/disease2/effect/sweat

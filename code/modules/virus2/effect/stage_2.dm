@@ -30,7 +30,7 @@
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/sleepy/activate(var/mob/living/mob)
-	mob.say("*collapse")
+	mob.emote("collapse")
 
 
 /datum/disease2/effect/blind
@@ -56,7 +56,7 @@
 	max_chance = 10
 
 /datum/disease2/effect/cough/activate(var/mob/living/mob)
-	mob.say("*cough")
+	mob.emote("cough")
 
 	if (mob.locked_to && istype(mob.locked_to, /obj/item/critter_cage))
 		return
@@ -126,7 +126,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/fridge/activate(var/mob/living/mob)
-	mob.say("*shiver")
+	mob.emote("shiver")
 
 
 /datum/disease2/effect/hair
@@ -242,7 +242,7 @@
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/mob)
 	if (prob(30))
-		mob.say("*cough")
+		mob.emote("cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
 			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
