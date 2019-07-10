@@ -108,9 +108,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Janitorial supplies"
 	contains = list(/obj/item/weapon/reagent_containers/glass/bucket,
 					/obj/item/weapon/reagent_containers/glass/bucket,
-					/obj/item/weapon/reagent_containers/glass/bucket,
 					/obj/item/weapon/mop,
-					/obj/item/weapon/caution,
 					/obj/item/weapon/caution,
 					/obj/item/weapon/caution,
 					/obj/item/weapon/storage/bag/trash,
@@ -119,6 +117,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
+					/obj/item/weapon/storage/box/mousetraps,
 					/obj/structure/mopbucket)
 	cost = 10
 	containertype = /obj/structure/closet/crate/basic
