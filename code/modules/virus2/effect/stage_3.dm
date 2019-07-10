@@ -240,36 +240,35 @@
 /datum/disease2/effect/anime_hair/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
-		if(!triggered)
-			var/list/hair_colors = list("pink","red","green","blue","purple")
-			var/hair_color = pick(hair_colors)
+		var/list/hair_colors = list("pink","red","green","blue","purple")
+		var/hair_color = pick(hair_colors)
 
-			old_r = affected.my_appearance.b_hair
-			old_g = affected.my_appearance.g_hair
-			old_b = affected.my_appearance.r_hair
+		old_r = affected.my_appearance.b_hair
+		old_g = affected.my_appearance.g_hair
+		old_b = affected.my_appearance.r_hair
 
-			switch(hair_color)
-				if("pink")
-					affected.my_appearance.b_hair = 153
-					affected.my_appearance.g_hair = 102
-					affected.my_appearance.r_hair = 255
-				if("red")
-					affected.my_appearance.b_hair = 0
-					affected.my_appearance.g_hair = 0
-					affected.my_appearance.r_hair = 255
-				if("green")
-					affected.my_appearance.b_hair = 0
-					affected.my_appearance.g_hair = 255
-					affected.my_appearance.r_hair = 0
-				if("blue")
-					affected.my_appearance.b_hair = 255
-					affected.my_appearance.g_hair = 0
-					affected.my_appearance.r_hair = 0
-				if("purple")
-					affected.my_appearance.b_hair = 102
-					affected.my_appearance.g_hair = 0
-					affected.my_appearance.r_hair = 102
-			affected.update_hair()
+		switch(hair_color)
+			if("pink")
+				affected.my_appearance.b_hair = 153
+				affected.my_appearance.g_hair = 102
+				affected.my_appearance.r_hair = 255
+			if("red")
+				affected.my_appearance.b_hair = 0
+				affected.my_appearance.g_hair = 0
+				affected.my_appearance.r_hair = 255
+			if("green")
+				affected.my_appearance.b_hair = 0
+				affected.my_appearance.g_hair = 255
+				affected.my_appearance.r_hair = 0
+			if("blue")
+				affected.my_appearance.b_hair = 255
+				affected.my_appearance.g_hair = 0
+				affected.my_appearance.r_hair = 0
+			if("purple")
+				affected.my_appearance.b_hair = 102
+				affected.my_appearance.g_hair = 0
+				affected.my_appearance.r_hair = 102
+		affected.update_hair()
 
 		if(multiplier)
 			if(multiplier >= 1.5)
@@ -354,12 +353,11 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 /datum/disease2/effect/lubefoot/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
-		if(multiplier > 1.5 && !triggered)
+		if(multiplier > 1.5 && !count)
 			to_chat(affected, "You feel slightly more inept than usual.")
 			affected.dna.check_integrity()
 			affected.dna.SetSEState(CLUMSYBLOCK,1)
 			domutcheck(mob, null)
-			triggered = 1
 		var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = new /obj/item/clothing/shoes/clown_shoes/slippy
 		if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))//Clown shoes may save you
 			affected.u_equip(affected.shoes,1)

@@ -277,9 +277,8 @@
 
 /datum/disease2/effect/hangman/activate(var/mob/living/mob)
 //Add filters to change a,A,e,E,i,I,o,O,u,U to _
-	if(!triggered)
-		to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
-		affect_voice_active = 1
+	to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
+	affect_voice_active = 1
 
 /datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech)
 	var/message=speech.message
@@ -565,7 +564,6 @@
 /datum/disease2/effect/yelling/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel like what you have to say is more important.</span>")
 	affect_voice_active = 1
-	triggered = 1
 
 /datum/disease2/effect/yelling/affect_mob_voice(var/datum/speech/speech)
 	var/message=speech.message
