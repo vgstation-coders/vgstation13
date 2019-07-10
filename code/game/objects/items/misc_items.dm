@@ -77,7 +77,6 @@
 //Namely the Gemino Curse. God help anyone who spawns this.
 /obj/item/weapon/bikehorn/rubberducky/dupeduck
 	desc = "Oh God. Oh Duck."
-	var/willdupe = FALSE
 
 /obj/item/weapon/bikehorn/rubberducky/dupeduck/New()
 	..()
@@ -87,7 +86,6 @@
 /obj/item/weapon/bikehorn/rubberducky/dupeduck/honk()
 	. = ..()
 	var/obj/item/weapon/bikehorn/rubberducky/dupeduck/newduck = new /obj/item/weapon/bikehorn/rubberducky/dupeduck(src)
-	newduck.willdupe = TRUE
 	var/atom/target
 	var/atom/curloc = get_turf(src)
 	var/list/possible_targets= trange(7, curloc)
