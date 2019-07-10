@@ -71,3 +71,27 @@
 	transfer_fingerprints_to(bag)
 	user.put_in_hands(bag)
 	qdel(src)
+
+//////////Cursed items//////////
+
+//Namely the Gemino Curse. God help anyone who spawns this.
+/obj/item/weapon/bikehorn/rubberducky/dupeduck
+	desc = "Oh God. Oh Duck."
+	var/willdupe = FALSE
+
+/obj/item/weapon/bikehorn/rubberducky/dupeduck/New()
+	..()
+	pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8,8) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/bikehorn/rubberducky/dupeduck/honk()
+	. = ..()
+	var/obj/item/weapon/bikehorn/rubberducky/dupeduck/newduck = new /obj/item/weapon/bikehorn/rubberducky/dupeduck(src)
+	newduck.willdupe = TRUE
+	var/atom/target
+	var/atom/curloc = get_turf(src)
+	var/list/possible_targets= trange(7, curloc)
+	target=pick(possible_targets)
+	newduck.forceMove(curloc)
+	newduck.throw_at(target,9,3)
+	newduck.honk()
