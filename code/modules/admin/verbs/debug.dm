@@ -1336,7 +1336,7 @@ client/proc/check_convertables()
 
 /client/proc/diseases_panel()
 	set name = "Diseases Panel"
-	set category = "Debug"
+	set category = "Admin"
 	if(holder)
 		holder.diseases_panel()
 		log_admin("[key_name(usr)] checked the Diseases Panel.")
