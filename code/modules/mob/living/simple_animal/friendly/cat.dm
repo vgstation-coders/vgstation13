@@ -75,7 +75,7 @@
 
 	if (!isUnconscious())
 		//MICE!
-		if((src.loc) && isturf(src.loc))
+		if(isturf(loc))
 			if(!stat && !resting && !locked_to)
 				for(var/mob/living/simple_animal/mouse/M in view(1,src))
 					if(!M.stat && Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
