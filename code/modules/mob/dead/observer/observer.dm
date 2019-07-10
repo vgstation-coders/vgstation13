@@ -271,16 +271,13 @@ Works together with spawning an observer, noted above.
 	var/client/C = M.client
 	var/image/holder
 	for(var/mob/living/carbon/patient in oview(M))
-		var/foundVirus = 0//no disease
-		if(patient && patient.virus2 && patient.virus2.len)
-			foundVirus = 1//new diseases appear in priority
-		else if (patient && patient.viruses && patient.viruses.len)
-			foundVirus = 2//old disease
+		if(!check_HUD_visibility(patient, M))
+			continue
 		if(!C)
 			return
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
 			else
 				holder.icon_state = "hud[RoundHealth(patient.health)]"
@@ -288,15 +285,24 @@ Works together with spawning an observer, noted above.
 
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(foundVirus)
-				if (foundVirus > 1)
-					holder.icon_state = "hudill_old"
-				else
-					holder.icon_state = "hudill"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
+			/*
 			else if(patient.has_brain_worms())
 				var/mob/living/simple_animal/borer/B = patient.has_brain_worms()
 				if(B.controlling)
@@ -305,7 +311,34 @@ Works together with spawning an observer, noted above.
 					holder.icon_state = "hudhealthy"
 			else
 				holder.icon_state = "hudhealthy"
+			*/
 
+			C.images += holder
+
+	for(var/mob/living/simple_animal/mouse/patient in oview(M))
+		if(!check_HUD_visibility(patient, M))
+			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if(holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else if(patient.status_flags & XENO_HOST)
+				holder.icon_state = "hudxeno"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
 			C.images += holder
 
 /mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
