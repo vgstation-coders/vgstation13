@@ -305,7 +305,7 @@
 
 		switch(inst)
 
-			if(1)
+			if(1) // Losing flesh
 				to_chat(H, "<span class='warning'>A chunk of meat falls off of you!</span>")
 				var/totalslabs = 1
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
@@ -332,12 +332,12 @@
 						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
 						D.New(Tx,i)
 
-			if(2)
+			if(2) // Losing a limb
 				for(var/datum/organ/external/E in H.organs)
 					if(pick(1, 0))
 						E.droplimb(1)
 
-			if(3)
+			if(3) // Losing your skin
 				if(H.species.name != "Skellington")
 					to_chat(H, "<span class='warning'>Your necrotic skin ruptures!</span>")
 
@@ -346,19 +346,16 @@
 							E.createwound(CUT, pick(2, 4, 6, 8, 10))
 
 					if(prob(30))
-						if(H.species.name != "Skellington")
-							if(H.set_species("Skellington"))
-								to_chat(mob, "<span class='warning'>A massive amount of flesh sloughs off your bones!</span>")
-								H.regenerate_icons()
-				else
-					return
+						if(H.set_species("Skellington"))
+							to_chat(mob, "<span class='warning'>A massive amount of flesh sloughs off your bones!</span>")
+							H.regenerate_icons()
 
 
 /datum/disease2/effect/fizzle
 	name = "Fizzle Effect"
 	desc = "Causes an ill, though harmless, sensation in the infected's throat."
 	stage = 4
-	badness = EFFECT_DANGER_HELPFUL
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/fizzle/activate(var/mob/living/mob)
 	mob.emote("me",1,pick("sniffles...", "clears their throat..."))
@@ -419,8 +416,7 @@
 
 /datum/disease2/effect/plasma/activate(var/mob/living/mob)
 	//var/src = mob
-	var/hack = mob.loc
-	var/turf/simulated/T = get_turf(hack)
+	var/turf/simulated/T = get_turf(mob)
 	if(!T)
 		return
 	var/datum/gas_mixture/GM = new
