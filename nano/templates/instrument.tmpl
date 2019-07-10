@@ -69,6 +69,12 @@ function renderLines(lines){
 
         buttons = "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";modifyline="+(i+1)+"\">Modify</div>";
         buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";deleteline="+(i+1)+"\">Delete</div>";
+        if(i != 0){
+            buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";moveline="+(i+1)+";dir=-1\">Up</div>";
+        }
+        if(i < lines.length-1){
+            buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";moveline="+(i+1)+";dir=1\">Down</div>";
+        }
 
         result += "<tr><td>Line "+(i+1)+": </td><td>"+htmlLine.join("")+"</td><td>"+buttons+"</td></tr>";
     }

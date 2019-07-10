@@ -142,7 +142,7 @@
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 	if (!ui)
-		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 700, 500, nstatus_proc = /proc/nanoui_instrument_status_proc)
+		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 800, 600, nstatus_proc = /proc/nanoui_instrument_status_proc)
 		ui.add_stylesheet("instrument.css")
 		ui.set_initial_data(data)
 		ui.open()
@@ -288,6 +288,24 @@
 		lines[num] = content
 	else if(href_list["stop"])
 		playing = 0
+	else if(href_list["moveline"] && href_list["dir"])
+		var/index = href_list["moveline"]
+		if(!isnum(index))
+			index = text2num(index)
+			if(!isnum(index))
+				message_admins("index [index] isn't a number")
+				return
+		var/dir = href_list["dir"]
+		if(!isnum(dir))
+			dir = text2num(dir)
+			if(!isnum(dir))
+				message_admins("dir [dir] isn't a number")
+				return
+
+		if(index > lines.len)
+			return
+
+		lines.Swap(index, index+dir)
 	interact(usr)
 	
 	return
