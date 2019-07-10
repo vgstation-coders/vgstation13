@@ -2,60 +2,61 @@
 Title: instrument view
 Used In File(s): /code/game/objects/structures/musician.dm
  -->
-<span id="controls">
+<div class="item">
     <H3>Playback</H3>
-    {{:helper.link('Play', '', { 'play' : 1 })}}
-    {{:helper.link('Stop', '', { 'stop' : 1 })}}
-    <BR><BR>
-    Repeat Song:
-    {{:helper.link('--', '', { 'repeat' : -10 })}}
-    {{:helper.link('-', '', { 'repeat' : -1 })}}
-    {{:data.repeat}} times
-    {{:helper.link('+', '', { 'repeat' : 1 })}}
-    {{:helper.link('++', '', { 'repeat' : 10 })}}
+    <div class="item">
+        {{:helper.link('Play', '', { 'play' : 1 })}}
+        {{:helper.link('Stop', '', { 'stop' : 1 })}}
+    </div>
+    <div class="item">
+        Repeat Song:
+        {{:helper.link('--', '', { 'repeat' : -10 })}}
+        {{:helper.link('-', '', { 'repeat' : -1 })}}
+        {{:data.repeat}} times
+        {{:helper.link('+', '', { 'repeat' : 1 })}}
+        {{:helper.link('++', '', { 'repeat' : 10 })}}
+    </div>
+    <div class="item">
+        Tempo: {{:helper.link('-', '', { 'tempo' : data.ticklag })}} {{:data.bpm}} BPM {{:helper.link('+', '', { 'tempo' : -data.ticklag })}}
+    </div>
+</div>
+<div class="item">
+    <H3>Editing</H3>
+    <div class="item">
+        {{:helper.link('New Song', '', { 'newsong' : 1 })}}
+        {{:helper.link('Import Song', '', { 'import' : 1 })}}
+    </div>
+    <div class="item" id="lines">
+    {{:data.lines}}
+    </div>
+    {{:helper.link('Add Line', '', { 'newline' : 1 })}}
+</div>
+<div class="item">
+    <B><button id="help_btn" onclick="helpVisibility()">Hide Help</button></B>
+    <span id="help">
     <BR>
-</span>
-<H3>Editing</H3>
-{{:helper.link('New Song', '', { 'newsong' : 1 })}}
-{{:helper.link('Import Song', '', { 'import' : 1 })}}
-<BR><BR>
-Tempo: {{:helper.link('-', '', { 'tempo' : data.ticklag })}} {{:data.bpm}} BPM {{:helper.link('+', '', { 'tempo' : -data.ticklag })}}
-<BR><BR><BR>
-<span id="lines">
-{{:data.lines}}
-</span>
-{{:helper.link('Add Line', '', { 'newline' : 1 })}}
-<BR><BR>
-<B><button id="help_btn" onclick="helpVisibility(this.value)" value=0 >Hide Help</button></B>
-<span id="help">
-<BR>
-Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
-Every note in a chord will play together, with chord timed by the tempo.<br>
-<br>
-Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
-By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
-Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
-After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
-Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
-A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
-To make a chord be a different time, end it with /x, where the chord length will be length<br>
-defined by tempo / x: <i>C,G/2,E/4</i><br>
-Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
-<br>
-Lines may be up to 50 characters.<br>
-A song may only contain up to 50 lines.<br>
-</span>
+    Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
+    Every note in a chord will play together, with chord timed by the tempo.<br>
+    <br>
+    Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
+    By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
+    Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
+    After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
+    Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
+    A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
+    To make a chord be a different time, end it with /x, where the chord length will be length<br>
+    defined by tempo / x: <i>C,G/2,E/4</i><br>
+    Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
+    <br>
+    Lines may be up to 50 characters.<br>
+    A song may only contain up to 50 lines.<br>
+    </span>
+</div>
 <script>
 var prevChord = "";
 var highlightClass = "activeChord";
-
-function controlVisibility(num){
-    if(num == 1){
-        $("#controls").show();
-    }else{
-        $("#controls").hide();
-    }
-}
+var helpvis = 0;
+var src_ref = "{{:data.src}}";
 
 function renderLines(lines){
     var result = "<table>";
@@ -63,9 +64,13 @@ function renderLines(lines){
         var curLine = lines[i].split(",");
         var htmlLine = [];
         for(j = 0; j < curLine.length; j++){
-            htmlLine.push("<div class='chord' id='chord_"+i+"_"+j+"'>"+curLine[j]+"</div>");
+            htmlLine.push("<div class='chord' id='chord_"+(i+1)+"_"+(j+1)+"'>"+curLine[j]+"</div>");
         }
-        result += "<tr><td>Line "+i+": </td><td>"+htmlLine.join("")+"</td></tr>";
+
+        buttons = "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";modifyline="+(i+1)+"\">Modify</div>";
+        buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";deleteline="+(i+1)+"\">Delete</div>";
+
+        result += "<tr><td>Line "+(i+1)+": </td><td>"+htmlLine.join("")+"</td><td>"+buttons+"</td></tr>";
     }
     result += "</table>";
     $("#lines").html(result);
@@ -85,15 +90,15 @@ function activeChord(lineIndex, chordIndex){
     }
 }
 
-function helpVisibility(num){
-    if(num == 1){
+function helpVisibility(){
+    if(helpvis == 1){
         $("#help").show();
         $("#help_btn").text("Hide Help");
-        $("#help_btn").val(0)
+        helpvis = 0;
     }else{
         $("#help").hide();
         $("#help_btn").text("Show Help");
-        $("#help_btn").val(1)
+        helpvis = 1;
     }
 }
 

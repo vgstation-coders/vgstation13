@@ -7,8 +7,6 @@
 	var/tempo = 5			// delay between notes
 
 	var/playing = 0			// if we're playing
-	var/help = 0			// if help is open
-	var/edit = 1			// if we're in editing mode
 	var/repeat = 0			// number of times remaining to repeat
 	var/max_repeats = 10	// maximum times we can repeat
 
@@ -118,7 +116,7 @@
 					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)		
 				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 				if (ui)
-					ui.send_message("activeChord", list2params(list((lineCount-1), (chordCount-1))))
+					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
 				//nanomanager.send_message(src, instrumentObj.name, "activeChord", list(lineCount, chordCount))
 				if(notes.len >= 2 && text2num(notes[2]))
 					sleep(sanitize_tempo(tempo / text2num(notes[2])))
@@ -138,7 +136,8 @@
 		"repeat" = repeat,
 		"ticklag" = world.tick_lag,
 		"bpm" = round(600 / tempo),
-		"lines" = json_encode(lines)
+		"lines" = json_encode(lines),
+		"src" = "\ref[src]" //needed to create buttons in the js
 	)
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
@@ -236,20 +235,16 @@
 			else
 				tempo = sanitize_tempo(5) // default 120 BPM
 			if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
-				usr << "Too many lines!"
+				alert(usr, "Too many lines! Cutting down...")
 				lines.Cut(INSTRUMENT_MAX_LINE_NUMBER+1)
 			var/linenum = 1
 			for(var/l in lines)
 				if(lentext(l) > INSTRUMENT_MAX_LINE_LENGTH)
-					usr << "Line [linenum] too long!"
+					alert(usr, "Line [linenum] too long! Removing...")
 					lines.Remove(l)
 				else
 					linenum++
 			interact(usr)		// make sure updates when complete
-	else if(href_list["help"])
-		help = text2num(href_list["help"]) - 1
-	else if(href_list["edit"])
-		edit = text2num(href_list["edit"]) - 1
 	if(href_list["repeat"]) //Changing this from a toggle to a number of repeats to avoid infinite loops.
 		if(playing)
 			return //So that people cant keep adding to repeat. If the do it intentionally, it could result in the server crashing.
@@ -264,6 +259,7 @@
 		playing = 1
 		spawn()
 			playsong(usr)
+		return //no need to reload the window
 	else if(href_list["newline"])
 		var/newline = html_encode(input("Enter your line: ", instrumentObj.name) as text|null)
 		if(!newline || !in_range(instrumentObj, usr))
@@ -274,6 +270,8 @@
 			newline = copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		lines.Add(newline)
 	else if(href_list["deleteline"])
+		if(alert(usr, "Are you sure you want to delete Line [href_list["deleteline"]]?",  "Delete Line" , "Yes" , "No") != "Yes")
+			return
 		var/num = round(text2num(href_list["deleteline"]))
 		if(num > lines.len || num < 1)
 			return
