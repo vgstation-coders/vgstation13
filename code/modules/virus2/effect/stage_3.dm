@@ -24,6 +24,7 @@
 	name = "Telepathy Syndrome"
 	desc = "Unlocks a portion of the infected's brain that allows for telepathic communication."
 	stage = 3
+	max_count = 1
 	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/telepathic/activate(var/mob/living/mob)
@@ -474,19 +475,16 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	stage = 3
 	max_multiplier = 3
 	badness = EFFECT_DANGER_HELPFUL
-	var/activated = FALSE
+	max_count = 1
 
 /datum/disease2/effect/multiarm/activate(var/mob/living/mob)
-	if(activated)
-		return
 	var/hand_amount = round(multiplier)
 	mob.visible_message("<span class='warning'>[mob.take_blood(null, rand(4,12)) ? "With a spray of blood, " : ""][hand_amount > 1 ? "[hand_amount] more arms sprout" : "a new arm sprouts"] from \the [mob]!</span>","<span class='notice'>[hand_amount] more arms burst forth from your back!</span>")
 	mob.set_hand_amount(mob.held_items.len + hand_amount)
 	blood_splatter(mob.loc,mob,TRUE)
-	activated = TRUE
 
 /datum/disease2/effect/multiarm/deactivate(var/mob/living/mob)
-	if(!activated)
+	if(!count)
 		return
 	var/hand_amount = round(multiplier)
 	mob.visible_message("<span class='notice'>The arms sticking out of \the [mob]'s back shrivel up and fall off!</span>", "<span class='warning'>Your new arms begin to die off, as the virus can no longer support them.</span>")

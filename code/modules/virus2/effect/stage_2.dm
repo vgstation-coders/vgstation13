@@ -516,18 +516,16 @@
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
-	var/activated = FALSE
+	max_count = 1
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/calorieburn/activate(var/mob/living/mob)
-	if(!activated)
-		if(ishuman(mob))
-			var/mob/living/carbon/human/H
-			H.calorie_burn_rate *= multiplier
-		activated = TRUE
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H
+		H.calorie_burn_rate *= multiplier
 
 /datum/disease2/effect/calorieburn/deactivate(var/mob/living/mob)
-	if(activated)
+	if (count)
 		if(ishuman(mob))
 			var/mob/living/carbon/human/H
 			H.calorie_burn_rate /= multiplier
@@ -539,18 +537,16 @@
 	stage = 2
 	multiplier = 1.5
 	max_multiplier = 4
+	max_count = 1
 	badness = EFFECT_DANGER_HINDRANCE
-	var/activated = FALSE
 
 /datum/disease2/effect/calorieconserve/activate(var/mob/living/mob)
-	if(!activated)
-		if(ishuman(mob))
-			var/mob/living/carbon/human/H
-			H.calorie_burn_rate /= multiplier
-		activated = TRUE
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H
+		H.calorie_burn_rate /= multiplier
 
 /datum/disease2/effect/calorieconserve/deactivate(var/mob/living/mob)
-	if(activated)
+	if(count)
 		if(ishuman(mob))
 			var/mob/living/carbon/human/H
 			H.calorie_burn_rate *= multiplier
