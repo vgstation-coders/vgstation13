@@ -11,14 +11,14 @@
 	var/stage = -1
 		// Diseases start at stage 1. They slowly and cumulatively proceed their way up.
 		// Try to keep more severe effects in the later stages.
-	var/badness = 1
+	var/badness = EFFECT_DANGER_ANNOYING
 		// How dangerous the symptom is.
-		// 0 = generally helpful (ex: full glass syndrome)
-		// 1 = neutral, just flavor text (ex: headache)
-		// 2 = minor inconvenience (ex: tourettes)
-		// 3 = severe inconvenience (ex: random tripping)
-		// 4 = likely to indirectly lead to death (ex: Harlequin Ichthyosis)
-		// 5 = will definitely kill you (ex: gibbingtons/necrosis)
+		// EFFECT_DANGER_HELPFUL = generally helpful (ex: full glass syndrome)
+		// EFFECT_DANGER_FLAVOR = neutral, just flavor text (ex: headache)
+		// EFFECT_DANGER_ANNOYING = minor inconvenience (ex: tourettes)
+		// EFFECT_DANGER_HINDRANCE = severe inconvenience (ex: random tripping)
+		// EFFECT_DANGER_HARMFUL = likely to indirectly lead to death (ex: Harlequin Ichthyosis)
+		// EFFECT_DANGER_DEADLY = will definitely kill you (ex: gibbingtons/necrosis)
 
 	var/chance = 3
 		// Under normal conditions, the percentage chance per tick to activate.
