@@ -20,7 +20,7 @@ Used In File(s): /code/game/objects/structures/musician.dm
 {{:helper.link('Import Song', '', { 'import' : 1 })}}
 <BR><BR>
 Tempo: {{:helper.link('-', '', { 'tempo' : data.ticklag })}} {{:data.bpm}} BPM {{:helper.link('+', '', { 'tempo' : -data.ticklag })}}
-<BR><BR>
+<BR><BR><BR>
 <span id="lines">
 {{:data.lines}}
 </span>
@@ -58,15 +58,16 @@ function controlVisibility(num){
 }
 
 function renderLines(lines){
-    var result = "";
+    var result = "<table>";
     for (i = 0; i < lines.length; i++) { 
         var curLine = lines[i].split(",");
         var htmlLine = [];
         for(j = 0; j < curLine.length; j++){
             htmlLine.push("<div class='chord' id='chord_"+i+"_"+j+"'>"+curLine[j]+"</div>");
         }
-        result += "Line "+i+": "+htmlLine.join(",")+"<BR>";
+        result += "<tr><td>Line "+i+": </td><td>"+htmlLine.join("")+"</td></tr>";
     }
+    result += "</table>";
     $("#lines").html(result);
 }
 
