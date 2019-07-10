@@ -28,9 +28,10 @@
 	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/telepathic/activate(var/mob/living/mob)
-	mob.dna.check_integrity()
-	mob.dna.SetSEState(REMOTETALKBLOCK,1)
-	domutcheck(mob, null)
+	if (mob.dna)
+		mob.dna.check_integrity()
+		mob.dna.SetSEState(REMOTETALKBLOCK,1)
+		domutcheck(mob, null)
 
 /datum/disease2/effect/mind
 	name = "Lazy Mind Syndrome"
@@ -158,7 +159,7 @@
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	mob.confused += 10
 
-	if(pick(0,1))
+	if(prob(50))
 		mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
 	else
 		mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
@@ -200,14 +201,12 @@
 	mob.reagents.add_reagent(PSILOCYBIN, 20)
 	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
 
-
-var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
-
 /datum/disease2/effect/horsethroat
 	name = "Horse Throat"
 	desc = "Inhibits communication from the infected through spontaneous generation of a horse mask."
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
+	var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /datum/disease2/effect/horsethroat/activate(var/mob/living/mob)
 
@@ -229,7 +228,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Pro-tagonista Syndrome"
 	desc = "Causes the infected to believe they are the center of the universe. Outcome may vary depending on symptom strength."
 	stage = 3
-	var/triggered = 0
+	max_count = 1
 	var/given_katana = 0
 	affect_voice = 1
 	max_multiplier = 4
@@ -271,7 +270,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 					affected.my_appearance.g_hair = 0
 					affected.my_appearance.r_hair = 102
 			affected.update_hair()
-			triggered = 1
 
 		if(multiplier)
 			if(multiplier >= 1.5)
@@ -351,7 +349,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	stage = 3
 	max_multiplier = 9.5 //Potential for 95% lube chance per step
 	badness = EFFECT_DANGER_HARMFUL
-	var/triggered
+	max_count = 1
 
 /datum/disease2/effect/lubefoot/activate(var/mob/living/mob)
 	if(ishuman(mob))
