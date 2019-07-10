@@ -270,7 +270,7 @@ Works together with spawning an observer, noted above.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
 	var/image/holder
-	for(var/mob/living/carbon/human/patient in oview(M))
+	for(var/mob/living/carbon/patient in oview(M))
 		var/foundVirus = 0//no disease
 		if(patient && patient.virus2 && patient.virus2.len)
 			foundVirus = 1//new diseases appear in priority

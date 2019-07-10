@@ -1828,6 +1828,7 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
 	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+	T.virus2 = virus_copylist(virus2)
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src

@@ -111,6 +111,8 @@
 						tally += 2//if we're sleeping in a bed, we get up to 4
 			else if(istype(body.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				tally += 1.5
+			else if(body.locked_to && istype(body.locked_to, /obj/item/critter_cage))
+				tally += 2
 
 			if (antibodies[A] < threshold)
 				antibodies[A] = min(antibodies[A] + tally, threshold)//no overshooting here

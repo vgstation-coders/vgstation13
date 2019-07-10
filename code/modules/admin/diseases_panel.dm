@@ -50,8 +50,12 @@
 			if (dish.contained_virus)
 				if (ID == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
 					dishes++
+		var/nickname = ""
+		if (ID in virusDB)
+			var/datum/data/record/v = virusDB[ID]
+			nickname = v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
 		dat += {"<tr>
-			<td><a href='?src=\ref[src];diseasepanel_examine=\ref[D]'>[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]</a></td>
+			<td><a href='?src=\ref[src];diseasepanel_examine=\ref[D]'>[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)][nickname]</a></td>
 			<td>[D.origin]</td>
 			<td><a href='?src=\ref[src];diseasepanel_toggledb=\ref[D]'>[(ID in virusDB) ? "Yes" : "No"]</a></td>
 			<td><a href='?src=\ref[src];diseasepanel_infectedmobs=\ref[D]'>[infctd_mobs][infctd_mobs_dead ? " (including [infctd_mobs_dead] dead)" : "" ]</a></td>
