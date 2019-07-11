@@ -56,6 +56,9 @@
     if(n1 == n2)
         return n1
 
+    if(n1.type != n2.type)
+        return null
+
     if(n2.get_size() > n1.get_size())
         return n2.absorb_net(n1)
 
