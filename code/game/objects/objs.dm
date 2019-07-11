@@ -97,10 +97,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(W)
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+			return
 	if(W)
 		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 		if(W.material_type)
 			W.material_type.on_use(W, src, user)
+			return
+	..()
 
 /obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
 	if(P.pai)

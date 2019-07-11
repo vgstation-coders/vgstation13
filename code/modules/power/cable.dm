@@ -216,6 +216,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			shock(user, 50, W.siemens_coefficient)
 
 	src.add_fingerprint(user)
+	..()
 
 /obj/structure/cable/attack_animal(mob/M)
 	if(isanimal(M))

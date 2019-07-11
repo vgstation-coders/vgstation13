@@ -94,6 +94,9 @@
 		if(prob(ATTACK_CHANCE))
 			flick("attacking[add_state]",src)
 			for(var/mob/living/M in range(1, get_turf(src)))
+				visible_message("<span class='danger'>\The [src] zaps [M]</span>")
+				spawn
+					Beam(M, "lightning", 'icons/obj/zap.dmi', 10, 2)
 				try_electrocution(M)
 
 /obj/structure/cable/powercreeper/update_icon()
@@ -142,16 +145,16 @@
 	return (dir in cardinal)
 
 /obj/structure/cable/powercreeper/attackby(obj/item/W, mob/user)
-	. = ..()
 	if(W.is_hot())
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
 		die()
-	else if(W.is_sharp()) //cut it away, also try to shock the user
-		if(!try_electrocution(user))
+	else if(!try_electrocution(user)) //cut it away, also try to shock the user
+		if(W.is_sharp())		
 			to_chat(user, "<span class='warning'>You cut away \the [src]")
 			visible_message("[user] cuts away \the [src]", "You hear a cutting sound")
 			die()
+	..()
 
 #undef POWER_PER_FRUIT
 #undef MIN_SPREAD_CHANCE
