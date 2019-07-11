@@ -3,6 +3,10 @@
     var/list/node_types = list() //node types that we accept
     var/list/nodes = list() //nodes currently connected to the network
 
+/datum/net/Destroy()
+    . = ..()
+    nodes = null
+
 // ******************
 // PROCS TO OVERRIDE (and maybe supercall)
 // ******************
@@ -32,6 +36,8 @@
 
     for(var/datum/net_node/node in other_net.nodes)
         add_node(node)
+
+    qdel(other_net)
 
 //used in merge_nets proc to determine which network needs to be absorbed (the smaller one)
 //this returns a number
