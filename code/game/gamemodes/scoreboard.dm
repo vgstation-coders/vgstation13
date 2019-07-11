@@ -532,7 +532,7 @@
 			var/datum/data/record/v = virusDB[score["disease_most"]]
 			nickname = v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
 			dis_name = v.fields["name"]
-		dat += "<B>Most Spread Disease:</B> [dis_name ? "[dis_name]":"[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]"][nickname] (Strength [D.strength], spread in [score["disease_most_count"]] mobs)<BR>"
+		dat += "<B>Most Spread Disease:</B> [dis_name ? "[dis_name]":"[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]"][nickname] (Origin: [D.origin], Strength: [D.strength]%, spread among [score["disease_most_count"]] mobs)<BR>"
 		for(var/datum/disease2/effect/e in D.effects)
 			dat += "&#x25CF; Stage [e.stage] - <b>[e.name]</b><BR>"
 
