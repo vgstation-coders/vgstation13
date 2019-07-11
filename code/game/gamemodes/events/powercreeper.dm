@@ -109,12 +109,14 @@
 	die()
 
 /obj/structure/cable/powercreeper/proc/die()
+	grown = 0 //we can't attack or spread anymore
 	do_flick(src, "death[add_state]", 13)
 	qdel(src)
 
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M))
 		return 0
+	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
 	if(!electrocute_mob(M, powernet, src))
 		M.apply_damage((powernet.avail / 3000), BURN) //one burn damage per 6 plants (keep in mind, this will also take the power from any connected powernet)
 		return 0
@@ -146,13 +148,11 @@
 
 /obj/structure/cable/powercreeper/attackby(obj/item/W, mob/user)
 	if(W.is_hot())
-		user.do_attack_animation(src, W)
 		to_chat(user, "<span class='warning'>You burn away \the [src]")
 		visible_message("[user] burns away \the [src]", "You hear some burning")
 		die()
 	else if(!try_electrocution(user)) //cut it away, also try to shock the user
 		if(W.is_sharp())
-			user.do_attack_animation(src, W)
 			to_chat(user, "<span class='warning'>You cut away \the [src]")
 			visible_message("[user] cuts away \the [src]", "You hear a cutting sound")
 			die()
