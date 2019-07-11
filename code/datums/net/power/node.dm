@@ -1,7 +1,7 @@
 /datum/net_node/power
     netType = /datum/net/power
 
-/datum/net_node/power/proc/get_connections()
+/datum/net_node/power/get_connections()
     . = list()
     for(var/atom/A in get_turf(src))
         if(!A.net_nodes)
