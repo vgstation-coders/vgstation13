@@ -52,6 +52,10 @@
 	//we are processing
 	processing_objects += src
 
+	//lighting
+	spawn
+		set_light(1, 15, LIGHT_COLOR_RED)
+
 	. = ..()
 
 /obj/structure/cable/powercreeper/Destroy()
