@@ -38,6 +38,7 @@
 
     for(var/datum/net_node/node in other_net.nodes)
         add_node(node)
+    other_net.nodes = null
     return 1
 
 //used in merge_nets proc to determine which network needs to be absorbed (the smaller one)
