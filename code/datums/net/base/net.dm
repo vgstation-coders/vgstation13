@@ -5,6 +5,8 @@
 
 /datum/net/Destroy()
     . = ..()
+    for(var/datum/net_node/node in nodes)
+        node.net = null
     nodes = null
 
 // ******************
@@ -36,8 +38,7 @@
 
     for(var/datum/net_node/node in other_net.nodes)
         add_node(node)
-
-    qdel(other_net)
+    return 1
 
 //used in merge_nets proc to determine which network needs to be absorbed (the smaller one)
 //this returns a number
