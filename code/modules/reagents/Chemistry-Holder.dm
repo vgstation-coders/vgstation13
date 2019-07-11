@@ -459,7 +459,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(C.result)
 						feedback_add_details("chemical_reaction","[C.result][created_volume]")
 						multiplier = max(multiplier, 1) //this shouldnt happen ...
-						add_reagent(C.result, created_volume, C.data, chem_temp)
+						add_reagent(C.result, created_volume, null, chem_temp)
 						if (preserved_data)
 							set_data(C.result, preserved_data)
 
@@ -619,8 +619,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.data["virus2"] |= virus_copylist(data["virus2"])
 				if(data["blood_colour"])
 					R.color = data["blood_colour"]
+			else if (reagent == VACCINE)
+				R.data = data.Copy()
 			else
 				R.data = data
+		else if (reagent == VACCINE)
+			R.data = list("antigen" = list())
+
 		R.on_introduced()
 
 		update_total()
