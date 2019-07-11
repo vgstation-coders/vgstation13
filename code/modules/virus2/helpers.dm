@@ -205,7 +205,7 @@ var/list/infected_items = list()
 			pathogen.plane = HUD_PLANE
 			pathogen.layer = HUD_ABOVE_ITEM_LAYER
 			pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-		for (var/mob/living/L in science_goggles_wearers)
+		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
 				L.client.images |= pathogen
 
@@ -226,7 +226,7 @@ var/list/infected_items = list()
 	if (virus2 && virus2.len <= 0)
 		infected_items -= src
 		if (pathogen)
-			for (var/mob/living/L in science_goggles_wearers)
+			for (var/mob/L in science_goggles_wearers)
 				if (L.client)
 					L.client.images -= pathogen
 

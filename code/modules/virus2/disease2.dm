@@ -381,7 +381,7 @@ var/global/list/disease2_list = list()
 			infectedMob.pathogen.plane = HUD_PLANE
 			infectedMob.pathogen.layer = UNDER_HUD_LAYER
 			infectedMob.pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-		for (var/mob/living/L in science_goggles_wearers)
+		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
 				L.client.images |= infectedMob.pathogen
 
@@ -589,7 +589,7 @@ var/global/list/disease2_list = list()
 	if (V && V.len <= 0)
 		infected_contact_mobs -= mob
 		if (mob.pathogen)
-			for (var/mob/living/L in science_goggles_wearers)
+			for (var/mob/L in science_goggles_wearers)
 				if (L.client)
 					L.client.images -= mob.pathogen
 
