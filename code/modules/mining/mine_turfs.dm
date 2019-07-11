@@ -1,10 +1,4 @@
 /**********************Mineral deposits**************************/
-#define MINE_DIFFICULTY_NORM 1
-#define MINE_DIFFICULTY_TOUGH 3
-#define MINE_DIFFICULTY_DENSE 5
-#define MINE_DIFFICULTY_GLHF 9
-
-
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'

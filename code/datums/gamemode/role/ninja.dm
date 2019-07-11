@@ -532,12 +532,13 @@ Helpers For Both Variants
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
+	..()
 		
 /obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
 		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
-		return
+	..()
 		
 /*=======
 Suit and assorted
@@ -617,9 +618,10 @@ Suit and assorted
 	
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
+	clothing_flags = NOSLIP
 	
-/obj/item/clothing/shoes/ninja/apprentice/New()
-	..()
+/obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
+	togglemagpulse(override = TRUE)
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)
 		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")

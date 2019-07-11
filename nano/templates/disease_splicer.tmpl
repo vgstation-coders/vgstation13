@@ -60,9 +60,11 @@
 		{{if data.dish_error == "no dish inserted"}}
 			No dish inserted.
 		{{else data.dish_error == "no virus in dish"}}
-			No virus found in containment dish.
+			No virus found in the containment dish.
+		{{else data.dish_error == "dish not analysed"}}
+			The containment dish has no analysis data.<br>It has to be analysed before the pathogen's genes can be manipulated.
 		{{else data.dish_error == "not enough cells"}}
-			Insufficient cells to attempt gene extraction.
+			Dish growth insufficient for gene manipulation.<br>Incubate the dish with some virus food until reaching at least 50% growth.
 		{{else}}
 			Unknown error!
 		{{/if}}
@@ -72,6 +74,9 @@
 {{/if}}
 
 {{if data.dish_effects}}
+	<div class="item">
+		Choose a symptom to isolate its gene data. This will destroy the dish, so be sure to have a backup.
+	</div>
 	{{for data.dish_effects}}
 	<div class="item">
 		<div class="itemLabelNarrow">

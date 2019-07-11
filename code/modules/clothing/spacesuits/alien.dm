@@ -486,13 +486,13 @@
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for paramedics."
 
 /obj/item/clothing/suit/space/vox/civ/medical/cmo
-	name = "vox cmo pressure suit"
+	name = "vox CMO pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
 	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-	name = "vox cmo pressure helmet"
+	name = "vox CMO pressure helmet"
 	icon_state = "vox-civ-cmo"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for the CMO."
 

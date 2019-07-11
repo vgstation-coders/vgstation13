@@ -82,7 +82,7 @@
 			armor_block = H.run_armor_check(affecting, "melee") // For normal attack damage
 
 			//If they have a hat/helmet and the user is targeting their head.
-			if(istype(H.head, /obj/item/clothing/head) && affecting == LIMB_HEAD)
+			if(istype(H.head, /obj/item) && affecting == LIMB_HEAD)
 
 				// If their head has an armour value, assign headarmor to it, else give it 0.
 				if(H.head.armor["melee"])
@@ -619,7 +619,7 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
 		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
 		flags |= OPENCONTAINER
@@ -627,7 +627,17 @@
 		playsound(user, pick(open_sounds), 50, 1)
 		overlays += image(icon = icon, icon_state = "soda_open")
 		return
-	return ..()
+	if (reagents.total_volume > 0)
+		return ..()
+	else if (user.a_intent == I_HURT)
+		var/turf/T = get_turf(user)
+		user.drop_item(src, T, 1)
+		var/obj/item/trash/soda_cans/crushed_can = new (T, icon_state = icon_state)
+		crushed_can.name = "crushed [name]"
+		user.put_in_active_hand(crushed_can)
+		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
+		qdel(src)
+
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -895,6 +905,14 @@
 	..()
 	reagents.add_reagent(CAFE_LATTE, 50)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
+	name = "bear arms beer"
+	desc = "Crack open a bear at the end of a long shift."
+	icon_state = "bearbeer"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/New()
+	..()
+	reagents.add_reagent(BEER, 30)
+	reagents.add_reagent(HYPERZINE, rand(3,5))
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink

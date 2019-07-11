@@ -91,6 +91,8 @@
 	var/received_credits = FALSE
 	var/received_roundend_audio = FALSE
 
+	var/connection_timeofday = 0
+
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

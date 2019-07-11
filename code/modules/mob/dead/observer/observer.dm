@@ -270,17 +270,14 @@ Works together with spawning an observer, noted above.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
 	var/image/holder
-	for(var/mob/living/carbon/human/patient in oview(M))
-		var/foundVirus = 0
-		if(patient && patient.virus2 && patient.virus2.len)
-			foundVirus = 1
-		else if (patient && patient.viruses && patient.viruses.len)
-			foundVirus = 1
+	for(var/mob/living/carbon/patient in oview(M))
+		if(!check_HUD_visibility(patient, M))
+			continue
 		if(!C)
 			return
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
 			else
 				holder.icon_state = "hud[RoundHealth(patient.health)]"
@@ -288,12 +285,24 @@ Works together with spawning an observer, noted above.
 
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(foundVirus)
-				holder.icon_state = "hudill"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
+			/*
 			else if(patient.has_brain_worms())
 				var/mob/living/simple_animal/borer/B = patient.has_brain_worms()
 				if(B.controlling)
@@ -302,7 +311,34 @@ Works together with spawning an observer, noted above.
 					holder.icon_state = "hudhealthy"
 			else
 				holder.icon_state = "hudhealthy"
+			*/
 
+			C.images += holder
+
+	for(var/mob/living/simple_animal/mouse/patient in oview(M))
+		if(!check_HUD_visibility(patient, M))
+			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if(holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else if(patient.status_flags & XENO_HOST)
+				holder.icon_state = "hudxeno"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
 			C.images += holder
 
 /mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
@@ -754,7 +790,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 
 	//find a viable mouse candidate
-	var/mob/living/simple_animal/mouse/host
+	var/mob/living/simple_animal/mouse/common/host
 	var/obj/machinery/atmospherics/unary/vent_pump/vent_found
 	var/list/found_vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
@@ -762,7 +798,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			found_vents.Add(v)
 	if(found_vents.len)
 		vent_found = pick(found_vents)
-		host = new /mob/living/simple_animal/mouse(vent_found.loc)
+		host = new /mob/living/simple_animal/mouse/common(vent_found.loc)
 	else
 		to_chat(src, "<span class='warning'>Unable to find any unwelded vents to spawn mice at.</span>")
 

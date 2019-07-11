@@ -3,6 +3,7 @@
 	desc = "This spell spawns a cloud of choking smoke at your location and does not require wizard garb."
 	abbreviation = "SM"
 	user_type = USER_TYPE_WIZARD
+	specialization = DEFENSIVE //Provides cover
 
 	school = "conjuration"
 	charge_max = 120

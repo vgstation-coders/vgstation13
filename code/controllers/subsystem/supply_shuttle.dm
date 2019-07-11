@@ -140,7 +140,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			if(P.redeemed)
 				continue
 			var/datum/material/mat = materials_list.getMaterial(P.recyck_mat)
-			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
+			cargo_acct.money += (mat.value * 10) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
 		// Must be in a crate!
 		else if(istype(MA,/obj/structure/closet/crate))
 			cargo_acct.money += credits_per_crate

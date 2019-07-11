@@ -270,6 +270,7 @@ var/list/special_fruits = list()
 	potency = 40
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
+	fragrance = INCENSE_CORNOIL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
@@ -564,6 +565,9 @@ var/list/special_fruits = list()
 	plantname = "banana"
 	fragrance = INCENSE_BANANA
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
+	return TRUE
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"
 	desc = "It's an excellent prop for a comedy."
@@ -572,6 +576,9 @@ var/list/special_fruits = list()
 	item_state = "bluespacebanana"
 	filling_color = "#FCF695"
 	plantname = "bluespacebanana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/isHandgun()
+	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	var/obj/item/weapon/bananapeel/bluespace/peel = new

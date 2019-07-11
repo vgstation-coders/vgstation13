@@ -60,16 +60,7 @@
 // (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
-		var/job_check = 0
-		if (enemy_jobs.len > 0)
-			for (var/mob/M in living_players)
-				if (M.stat == DEAD)
-					continue//dead players cannot count as opponents
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
-		var/threat = round(mode.threat_level/10)
-		if (job_check < required_enemies[threat])
+		if(!check_enemy_jobs())
 			return 0
 	return 1
 
@@ -111,7 +102,7 @@
 			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
 
-		var/mob/living/carbon/human/new_character = applicant
+		var/mob/new_character = applicant
 
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
@@ -320,29 +311,29 @@
 	role_category = /datum/role/nuclear_operative
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_enemies = list(3, 3, 3, 3, 3, 2, 1, 1, 0, 0)
 	required_candidates = 5
 	weight = 5
 	cost = 35
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 60
-	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
+	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
 	flags = HIGHLANDER_RULESET
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population=0,var/threat=0)
-	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
-		return 0//unavailable if nuke ops were already sent at roundstart
-	var/indice_pop = min(10,round(living_players.len/5)+1)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population = 0,var/threat = 0)
+	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
+		return 0 //Unavailable if nuke ops were already sent at roundstart
+	var/indice_pop = min(10,round(living_players.len/5) + 1)
 	required_candidates = operative_cap[indice_pop]
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	nuclear.forgeObjectives()
-	if (index == 1) // Our first guy is the leader
+	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
-		new_role.AssignToRole(new_character.mind,1)
+		new_role.AssignToRole(new_character.mind, 1)
 		setup_role(new_role)
 	else
 		return ..()
@@ -482,9 +473,8 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	if(population>=20)
-		return FALSE
-		//We don't cotton to freaks in 20+pop
+	weight = Clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	//We don't cotton to freaks in highpop
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
@@ -552,3 +542,35 @@
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
 		return FALSE
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//             PLAGUE MICE                  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice
+	name = "Plague Mice Invasion"
+	role_category = /datum/role/plague_mouse
+	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
+	required_candidates = 1
+	var/max_candidates = 5
+	weight = 5
+	cost = 25
+	requirements = list(90,70,50,40,30,20,10,10,10,10)
+	high_population_requirement = 40
+	flags = MINOR_RULESET
+	my_fac = /datum/faction/plague_mice
+	logo = "plague-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/generate_ruleset_body(var/mob/applicant)
+	var/datum/faction/plague_mice/active_fac = find_active_faction_by_type(my_fac)
+	var/mob/living/simple_animal/mouse/plague/new_mouse = new (active_fac.invasion)
+	new_mouse.key = applicant.key
+	return new_mouse
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()

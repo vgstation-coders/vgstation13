@@ -65,11 +65,32 @@
 
 	//Score Calculation and Display
 
+
+	for (var/ID in disease2_list)
+		var/datum/disease2/disease/D = disease2_list[ID]
+		var/disease_score = 0
+		for (var/datum/disease2/effect/E in D.effects)
+			disease_score += text2num(E.badness)
+
+		//diseases only count if the mob is still alive
+		if (disease_score <3)
+			for (var/mob/living/L in mob_list)
+				if (L.stat != DEAD)
+					if (ID in L.virus2)
+						score["disease_good"]++
+		else
+			for (var/mob/living/L in mob_list)
+				if (L.stat != DEAD)
+					if (ID in L.virus2)
+						score["disease_bad"]++
+
 	//Run through humans for diseases, also the Clown
 	for(var/mob/living/carbon/human/I in mob_list)
+		/*
 		if(I.viruses) //Do this guy have any viruses ?
 			for(var/datum/disease/D in I.viruses) //Alright, start looping through those viruses
 				score["disease"]++ //One point for every disease
+		*/
 
 		if(I.job == "Clown")
 			for(var/thing in I.attack_log)
@@ -249,7 +270,8 @@
 		messpoints = score["mess"] //If there are any messes, let's count them
 	//if(score["airloss"] != 0)
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
-	var/plaguepoints = score["disease"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
+	var/beneficialpoints = score["disease_good"] * 20
+	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	/*//Mode Specific
 	if(ticker.mode.config_tag == "nuclear")
@@ -280,6 +302,7 @@
 	score["crewscore"] += escapoints
 	score["crewscore"] += meals
 	score["crewscore"] += time
+	score["crewscore"] += beneficialpoints
 
 	if(!power) //No APCs with bad power
 		score["crewscore"] += 2500 //Give the Engineers a pat on the back for bothering
@@ -456,6 +479,7 @@
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR><BR>
+	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
 	<B>Dead Crewmen:</B> [score["deadcrew"]] (-[score["deadcrew"] * 250] Points)<BR>
@@ -464,7 +488,7 @@
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
 	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
-	<B>Unique Disease Vectors:</B> [score["disease"]] (-[score["disease"] * 50] Points)<BR><BR>
+	<B>Bad diseases in living mobs:</B> [score["disease_bad"]] (-[score["disease_bad"] * 50] Points)<BR><BR>
 
 	<U>THE WEIRD</U><BR>"}
 /*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"}

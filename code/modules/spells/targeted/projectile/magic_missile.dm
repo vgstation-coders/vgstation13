@@ -3,6 +3,7 @@
 	abbreviation = "MM"
 	desc = "This spell fires several, slow moving, magic projectiles at nearby targets."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_max = 150

@@ -179,3 +179,6 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/asteroidfield
 	file_path = "maps/randomvaults/asteroidfield.dmm"
 
+/datum/map_element/vault/clownroid
+	file_path = "maps/randomvaults/clownroid.dmm"
+

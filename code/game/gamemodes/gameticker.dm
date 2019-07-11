@@ -111,6 +111,14 @@ var/datum/controller/gameticker/ticker
 	while (!setup())
 #undef LOBBY_TICKING
 #undef LOBBY_TICKING_RESTARTED
+
+/datum/controller/gameticker/proc/IsThematic(var/playlist)
+	if(!theme)
+		return 0
+	if(theme.playlist_id == playlist)
+		return 1
+	return 0
+
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
 		theme = new(locate(1,1,CENTCOMM_Z))
@@ -391,6 +399,7 @@ var/datum/controller/gameticker/ticker
 					else
 						data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
+				player.DiseaseCarrierCheck(new_character)
 				qdel(player)
 
 

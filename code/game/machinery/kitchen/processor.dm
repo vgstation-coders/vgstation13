@@ -107,7 +107,7 @@
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey
 	output = null
-			
+
 /datum/food_processor_process/mob/monkey/process(loc, what)
 	var/mob/living/carbon/monkey/O = what
 	if (O.client) //grief-proof
@@ -158,7 +158,7 @@
 		for(var/obj/I in target.contents)
 			I.forceMove(loc)
 			I.throw_at(pick(throwzone),rand(2,5),0)
-		hgibs(loc, target.viruses, target.dna, target.species.flesh_color, target.species.blood_color)
+		hgibs(loc, target.virus2, target.dna, target.species.flesh_color, target.species.blood_color)
 		qdel(target)
 		target = null
 		for(var/i = 1;i<=6;i++)
@@ -183,33 +183,34 @@
 		return -1
 	return ..()
 
-/obj/machinery/processor/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/processor/attackby(var/obj/item/O, var/mob/user)
+	if(..())
+		return 1
+	return add_to(O, user)
+
+/obj/machinery/processor/proc/add_to(var/atom/movable/A, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
-		return 1
-
-	if(..())
 		return 1
 	if(src.contents.len > 0) //TODO: several items at once? several different items?
 		to_chat(user, "<span class='warning'>Something is already in [src]</span>.")
 		return 1
-	var/atom/movable/what = O
-	if (istype(O, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = O
-		what = G.affecting
+	if (istype(A, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = A
+		A = G.affecting
 
-	var/datum/food_processor_process/P = select_recipe(what)
+	var/datum/food_processor_process/P = select_recipe(A)
 	if (!P)
 		to_chat(user, "<span class='warning'>This probably won't blend.</span>")
 		return 1
-	user.visible_message("<span class='notice'>[user] puts [what] into [src].</span>", \
-		"You put [what] into the [src].")
-	if(what == user.get_active_hand())
-		user.drop_item(what, src)
+	user.visible_message("<span class='notice'>[user] puts [A] into [src].</span>", \
+		"You put [A] into the [src].")
+	if(A == user.get_active_hand())
+		user.drop_item(A, src)
 	else
-		if(O.loc == user)
-			user.drop_item(O)
-		what.forceMove(src)
+		if(A.loc == user)
+			user.drop_item(A)
+		A.forceMove(src)
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)
@@ -253,4 +254,4 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
-	attackby(O,user)
+	add_to(O,user)

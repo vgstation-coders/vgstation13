@@ -956,8 +956,8 @@ obj/item/weapon/circuitboard/rdserver
 
 //Teleporter
 /obj/item/weapon/circuitboard/telehub
-	name = "Circuit Board (Teleporter Hub)"
-	desc = "A circuit board used to run a machine that works as the base for a teleporter."
+	name = "Circuit Board (Teleporter Generator)"
+	desc = "A circuit board used to run a machine that generates a teleporter horizon."
 	build_path = /obj/machinery/teleport/hub
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
@@ -971,8 +971,8 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
 
 /obj/item/weapon/circuitboard/telestation
-	name = "Circuit Board (Teleporter Station)"
-	desc = "A circuit board used to run a machine that generates an active teleportation field."
+	name = "Circuit Board (Teleporter Controller)"
+	desc = "A circuit board used to co-ordinate teleporter generators."
 	build_path = /obj/machinery/teleport/station
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
@@ -1180,7 +1180,7 @@ obj/item/weapon/circuitboard/rdserver
 /obj/item/weapon/circuitboard/centrifuge
 	name = "Circuit Board (Isolation Centrifuge)"
 	desc = "A circuit board used to run a machine that isolates pathogens and antibodies."
-	build_path = /obj/machinery/centrifuge
+	build_path = /obj/machinery/disease2/centrifuge
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
 	req_components = list(
