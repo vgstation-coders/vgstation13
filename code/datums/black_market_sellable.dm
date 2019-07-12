@@ -140,5 +140,6 @@ var/list/black_market_sellables = list()
 		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
 			return payout //Doubles payout, since return value is added onto current payout
 	return 0
-	
+*/
+
 #undef VALID
