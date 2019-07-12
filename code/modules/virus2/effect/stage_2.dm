@@ -244,12 +244,13 @@
 
 /datum/disease2/effect/viralsputum/activate(var/mob/living/mob)
 	if (prob(30) && isturf(mob.loc))
-		mob.emote("cough")
-		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
-		if(!D)
-			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
-			D.New(D.loc)
-		D.virus2 |= virus_copylist(mob.virus2)
+		if (!mob.check_airborne_sterility())
+			mob.emote("cough")
+			var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
+			if(!D)
+				D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
+				D.New(D.loc)
+			D.virus2 |= virus_copylist(mob.virus2)
 
 
 /datum/disease2/effect/lantern

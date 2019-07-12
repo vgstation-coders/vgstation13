@@ -19,13 +19,14 @@
 /datum/disease2/effect/sneeze/activate(var/mob/living/mob)
 	mob.emote("sneeze")
 	if (prob(50) && isturf(mob.loc))
-		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
-		if(!M)
-			M = new(get_turf(mob))
-		else
-			if(M.dry)
-				M.dry=0
-		M.virus2 |= virus_copylist(mob.virus2)
+		if (!mob.check_airborne_sterility())
+			var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
+			if(!M)
+				M = new(get_turf(mob))
+			else
+				if(M.dry)
+					M.dry=0
+			M.virus2 |= virus_copylist(mob.virus2)
 
 
 /datum/disease2/effect/gunck
@@ -228,7 +229,7 @@
 			continue
 		else
 			nearest_mob = other_mob
-	
+
 	if (!nearest_mob)
 		return 1
 
