@@ -490,7 +490,6 @@
 	icon_state = "coin_phazon"
 	desc = "You're not sure how much this is worth, considering the constantly warping engravings."
 	melt_temperature=MELTPOINT_GLASS
-	siemens_coefficient = 0.5
 	
 /obj/item/weapon/coin/phazon/New()
 	siemens_coefficient = rand(0,200) / 100
