@@ -1,4 +1,4 @@
-/obj/machinery/cart/mining_cart
+/obj/structure/bed/chair/vehicle/cart/mining_cart
 	name = "mining cart"
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "mining_cart"

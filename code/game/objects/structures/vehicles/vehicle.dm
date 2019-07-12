@@ -41,7 +41,7 @@
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/movement_delay = 1 //Speed of the vehicle decreases as this value increases. Do NOT set to 0 holy shit.
 
-	var/obj/machinery/cart/next_cart = null
+	var/obj/structure/bed/chair/vehicle/cart/next_cart = null
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
@@ -249,10 +249,10 @@
 	if (user.incapacitated() || !in_range(user, src) || !in_range(src, C) || !can_have_carts)
 		return
 
-	if (istype(C, /obj/machinery/cart))
+	if (istype(C, /obj/structure/bed/chair/vehicle/cart))
 
 		if (!next_cart)
-			var/obj/machinery/cart/connecting = C
+			var/obj/structure/bed/chair/vehicle/cart/connecting = C
 			if(connecting.previous_cart)
 				to_chat(user, "\The [connecting] already has a cart connected to it!", "red")
 				return
@@ -379,9 +379,9 @@
 	. = ..()
 	if(!.)
 		return
-
-	AM.pixel_x -= offsets["[dir]"]["x"]
-	AM.pixel_y -= offsets["[dir]"]["y"]
+	var/list/L = offsets["[dir]"]
+	AM.pixel_x -= L["x"]
+	AM.pixel_y -= L["y"]
 
 	last_dir = null
 
@@ -392,9 +392,8 @@
 	. = ..()
 	if(!.)
 		return
-
-	occupant = AM
-
+	if(ismob(AM))
+		occupant = AM
 	update_mob()
 
 /obj/structure/bed/chair/vehicle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)

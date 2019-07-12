@@ -86,28 +86,28 @@
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
-		return
+		return 0
 
 	//if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
 	if(!ismob(M) || M.locked_to)
-		return
+		return 0
 
 	for(var/mob/living/L in get_locked(mob_lock_type))
 		to_chat(user, "<span class='warning'>Somebody else is already buckled into \the [src]!</span>")
-		return
+		return 0
 
 	if(user.size <= SIZE_TINY) //Fuck off mice
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
-		return
+		return 0
 
 	if(isanimal(M))
 		if(M.size <= SIZE_TINY) //Fuck off mice
 			to_chat(user, "<span class='warning'>The [M] is too small to buckle in.</span>")
-			return
+			return 0
 
 	if(istype(M, /mob/living/carbon/slime))
 		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
-		return
+		return 0
 
 	if(M == usr)
 		M.visible_message(\
@@ -127,6 +127,7 @@
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
+	return 1
 
 /obj/structure/bed/unlock_atom(var/atom/movable/AM)
 	if(glued && ismob(AM))

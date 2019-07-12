@@ -23,7 +23,7 @@ list("category" = "machinery", "name" = "air pump", "path" = /obj/machinery/port
 list("category" = "machinery", "name" = "portable scrubber", "path" = /obj/machinery/portable_atmospherics/scrubber, "cost" = 500),
 list("category" = "machinery", "name" = "space heater", "path" = /obj/machinery/space_heater, "cost" = 500),
 list("category" = "machinery", "name" = "air conditioner", "path" = /obj/machinery/space_heater/air_conditioner, "cost" = 500),
-list("category" = "machinery", "name" = "cart", "path" = /obj/machinery/cart/cargo, "cost" = 200),
+list("category" = "machinery", "name" = "cart", "path" = /obj/structure/bed/chair/vehicle/cart/cargo, "cost" = 200),
 list("category" = "machinery", "name" = "tractor", "path" = /obj/structure/bed/chair/vehicle/tractor, "cost" = 2000),
 list("category" = "machinery", "name" = "rad collector", "path" = /obj/machinery/power/rad_collector, "cost" = 1000),
 list("category" = "machinery", "name" = "emitter", "path" = /obj/machinery/power/emitter, "cost" = 1000),

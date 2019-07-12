@@ -1,82 +1,48 @@
-/obj/machinery/cart/cargo
+/obj/structure/bed/chair/vehicle/cart/cargo
 	name = "cargo cart"
-	var/atom/movable/load = null
 
-/obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
-	..()
+/obj/structure/bed/chair/vehicle/cart/cargo/MouseDropTo(var/atom/movable/AM, var/mob/user)
 	if(user.incapacitated() || user.lying)
-		return
-	if(!Adjacent(user) || !user.Adjacent(src) || !src.Adjacent(C))
-		return
-	if (load || istype(C, /obj/machinery/cart/))
-		return
-	if(isliving(C))
-		var/mob/living/L = C
-		if(L.size >= SIZE_HUGE)
+		return ..()
+	if(!Adjacent(user) || !user.Adjacent(src) || !src.Adjacent(AM))
+		return ..()
+	if(isitem(AM))
+		var/obj/item/I = AM
+		if(I.w_class >= W_CLASS_LARGE)
+			return ..()
+	if(isobj(AM))
+		var/obj/O = AM
+		if(O.anchored)
+			return ..()
+	if(ismob(AM))
+		var/mob/M = AM
+		if(M.size >= SIZE_BIG)
 			return
+		return ..()
+	.=..()
+	to_chat(user, "[.]")
+	if(!.)
+		return buckle(AM, user)
 
-	load(C)
-
-/obj/machinery/cart/cargo/MouseDropFrom(obj/over_object as obj, src_location, over_location)
-	..()
-	var/mob/user = usr
-	if (user.incapacitated() || !in_range(user, src) || !in_range(src, over_object))
+/obj/structure/bed/chair/vehicle/cart/cargo/proc/buckle(var/atom/movable/AM, var/mob/user)
+	if(user.size <= SIZE_SMALL) //Begone, mice
 		return
-	if (!load)
+	if(!user.has_hand_check()) //look ma, no hands!
 		return
-	unload(over_object)
-
-
-/obj/machinery/cart/cargo/proc/load(var/atom/movable/C)
-
-	if (istype(C, /obj/abstract/screen) || C.anchored)
+	if(AM.locked_to)
+		to_chat(user, "<span class='warning'>\The [AM] is already locked to something.</span>")
 		return
-	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
+	if(AM.get_locked().len)
+		to_chat(user, "<span class='warning'>Something is buckled into \the [AM].</span>")
 		return
-
-	if(get_dist(C, src) > 1)
+	if(get_locked().len)
+		to_chat(user, "<span class='warning'>Something else is already buckled into \the [src]!</span>")
 		return
 
-	var/obj/structure/closet/crate/crate = C
-	if(istype(crate))
-		crate.close()
+	visible_message(\
+		"<span class='notice'>\The [AM] is buckled in to \the [src] by \the [user]!</span>")
 
-	C.forceMove(src)
-	load = C
+	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
+	add_fingerprint(user)
 
-	C.pixel_y += 9 * PIXEL_MULTIPLIER
-	if(C.layer < layer)
-		C.layer = layer + 0.1
-	C.plane = plane
-	overlays += C
-
-	/*if(ismob(C))
-		var/mob/M = C
-		if(M.client)
-			M.client.perspective = EYE_PERSPECTIVE
-			M.client.eye = src*/
-
-/obj/machinery/cart/cargo/proc/unload(var/dirn = 0)
-	if(!load)
-		return
-
-	overlays.len = 0
-
-	load.forceMove(src.loc)
-	load.pixel_y -= 9 * PIXEL_MULTIPLIER
-	load.reset_plane_and_layer()
-
-	if(dirn)
-		var/turf/T = src.loc
-		T = get_step(T,dirn)
-		if(Cross(load,T))
-			step(load, dirn)
-		else
-			load.forceMove(src.loc)
-
-	load = null
-
-	for(var/atom/movable/AM in src)
-		AM.forceMove(src.loc)
-		AM.reset_plane_and_layer()
-		AM.pixel_y = initial(AM.pixel_y)
+	lock_atom(AM, mob_lock_type)
