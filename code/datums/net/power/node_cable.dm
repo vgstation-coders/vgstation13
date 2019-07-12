@@ -10,29 +10,34 @@
     . = list()
     
     //d1
-    for(var/atom/A in get_step(src, d1))
-        if(!A.net_nodes)
-            continue
-
-        for(var/datum/net_node/node in A.net_nodes)
-            var/datum/net_node/power/cable/C = node
-            if(!istype(node))
-                continue
-            
-            var/inv_d1 = turn(d1, 180)
-            if(C.d1 == inv_d1 || C.d2 == inv_d1)
-                . += node
+    . += get_connections_in_dir(d1)
     
     //d2
-    for(var/atom/A in get_step(src, d2))
+    . += get_connections_in_dir(d2)
+
+/datum/net_node/power/cable/proc/get_connections_in_dir(var/dir)
+    . = list()
+    if(!dir)
+        return .
+    //on our tile
+    . += get_cables_on_turf(get_turf(src), dir)
+
+    //on the adjacent tile
+    . += get_cables_on_turf(get_step(src, dir), turn(dir, 180))
+
+/proc/get_cables_on_turf(var/turf/T, var/dir)
+    . = list()
+    if(!isturf(T) || !isnum(dir))
+        return .
+
+    for(var/atom/A in T)
         if(!A.net_nodes)
             continue
 
         for(var/datum/net_node/node in A.net_nodes)
             var/datum/net_node/power/cable/C = node
-            if(!istype(node))
+            if(!istype(C))
                 continue
-            
-            var/inv_d2 = turn(d2, 180)
-            if(C.d1 == inv_d2 || C.d2 == inv_d2)
+
+            if(C.d1 == dir || C.d2 == dir)
                 . += node
