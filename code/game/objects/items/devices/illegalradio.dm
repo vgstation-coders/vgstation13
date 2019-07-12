@@ -210,33 +210,37 @@
 	else
 		if(istype(A, /obj))
 			attempt_sell(A,usr)
-		
+			
 /obj/item/device/illegalradio/proc/attempt_sell(var/obj/input, mob/user)	//If statements galore
 	visible_message("The uplink beeps: <span class='warning'>Scanning item...</span>")
 	if(do_after(user, input, scan_time))
 		for(var/category in cached_sellables)
 			for(var/datum/black_market_sellable/sellable in cached_sellables[category])
 				if((sellable.no_children && input.type == sellable.item) || (!sellable.no_children && istype(input,sellable.item)))
+					if(!sellable.get_demand())
+						visible_message("The uplink beeps: <span class='warning'>Demand for one buyer has been met. Scanning for other buyers...</span>")
+						continue
 					var/check = sellable.purchase_check(input, user)
 					if(check == "VALID")
 						visible_message("The uplink beeps: <span class='warning'>Input validated. Please wait for the teleportation process to finish.</warning>")
 						if(do_after(user, input, (nanotrasen_variant ? teleport_time : advanced_teleport_time)))
-							var/payout = sellable.get_price()
-							payout += sellable.determine_payout(input, src, payout)
-							qdel(input)
-							visible_message("The uplink beeps: <span class='warning'> Teleporation successful. A total of [payout] credits has been added to your balance.</span>")
-							money_stored += payout
-							interact(usr)
-							if(!nanotrasen_variant && prob(sellable.sps_chance))
-								SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market selling of item [sellable.name]")
-							return
+							if(sellable.get_demand())
+								var/payout = sellable.get_price()
+								payout += sellable.determine_payout(input, src, payout)
+								qdel(input)
+								playsound(src, 'sound/effects/coins.ogg',100, 0)
+								visible_message("The uplink beeps: <span class='warning'> Teleportation successful. A total of [payout] credits has been added to your balance.</span>")
+								money_stored += payout
+								interact(usr)
+								if(!nanotrasen_variant && prob(sellable.sps_chance))
+									SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market selling of item [sellable.name]")
+								return
 						else
 							visible_message("The uplink beeps: <span class='warning'>Teleportation process canceled. Please try again.</span>")
 							return
 					else
 						visible_message("The uplink beeps: <span class='warning'>Error! Given reason: [check]</span>")	
 						return
-				else
 		visible_message("The uplink beeps: <span class='warning'>No buyers are currently looking for this item.</span>")
 		return
 	

@@ -51,7 +51,7 @@ var/list/black_market_items = list()
 	
 /datum/black_market_item/proc/is_active()
 	if(!active_this_round_calculated)
-		if(rand(0,100) <= display_chance)
+		if(prob(display_chance))
 			active_this_round = 1
 		active_this_round_calculated = 1
 	. = active_this_round
@@ -98,7 +98,6 @@ var/list/black_market_items = list()
 
 	// If the black_market's holder is in the user's content
 	if((U.loc in user.contents) || (in_range(U.loc, user) && istype(U.loc.loc, /turf)))
-		user.set_machine(U)
 		if(get_cost() > U.money_stored)
 			return 0
 
@@ -121,6 +120,8 @@ var/list/black_market_items = list()
 			if(get_stock() != 0)
 				round_stock -= 1
 
+				
+		user.set_machine(U)
 		U.interact(user)
 
 		return 1
@@ -144,9 +145,10 @@ dangerous or highly unique. It wouldn't be on the illegal market if it wasn't. A
 - Can be used for more than murder. I would grab a toolbox if I wanted to just kill someone.
 - Usable in many situations; flexible. 
 - Fun. A cyborg board that turns them into a peaceful cultist is fun. 
-  A 15dev bombcap-breaking bomb that announces its location and can be defused is "fun", as in, it better have one hell of a drawback. 
+  A 15dev bombcap-breaking bomb that announces its location and can be defused is "fun", as in, it better have one hell of a drawback and be used once every 30 rounds at best.
   A rifle that shoots bullets that do an extra 50 damage is not fun.
-Of course, that's not to mean you can't add ANY plain ol' guns. But try to find a good balance.
+Of course, that's not to mean you can't add ANY plain guns. But try to find a good balance. Most items shouldn't be for murderboning, it just isn't fun
+for anyone but the person committing mass murder. 
 */
 
 
@@ -168,17 +170,17 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	
 /datum/black_market_item/arcane/levitation
 	name = "Potion of Levitation"
-	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool."
+	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
 	item = /obj/item/potion/levitation
 	stock_min = 2
 	stock_max = 4
-	cost_min = 600
-	cost_max = 800
+	cost_min = 400
+	cost_max = 500
 	display_chance = 50
 	
 /datum/black_market_item/arcane/health_potion
-	name = "Potion of Health?"
-	desc = "Unfortunately, some idiot managed to mix together the shipment of health potions and fake death potions. He's dead now. Test out your luck!"
+	name = "Potion of Health? Death?"
+	desc = "Unfortunately, some idiot managed to mix together the shipment of identical-looking health potions and death potions. He's dead now. Test out your luck!"
 	item = /obj/item/potion/deception
 	stock_min = 2
 	stock_max = 4
@@ -190,5 +192,4 @@ Of course, that's not to mean you can't add ANY plain ol' guns. But try to find 
 	if(prob(25))
 		spawned = /obj/item/potion/healing
 
-/datum/black_market_item/other
-	category = "Miscellaneous Goods" 	
+	
