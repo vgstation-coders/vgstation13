@@ -195,7 +195,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
-	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified protolathe."
+	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified autolathe."
 	item = /obj/item/weapon/storage/box/syndie_kit/ammo
 	cost = 4
 
