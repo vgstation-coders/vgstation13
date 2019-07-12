@@ -155,6 +155,9 @@
 			if (C.string_attached)
 				to_chat(user, "Remove the string from \the [C] first.")
 				return
+			if (C.siemens_coefficient == 0)
+				to_chat(user, "That [C] won't work.")
+				return
 			else
 				C.forceMove(src)
 				loadedammo = C
