@@ -88,7 +88,7 @@
 	else if(href_list["show_desc"])
 		show_description = text2num(href_list["show_desc"])
 		interact(usr)
-
+		
 	else if (href_list["dispense_change"])
 		dispense_change()
 		
@@ -228,7 +228,7 @@
 								var/payout = sellable.get_price()
 								payout += sellable.determine_payout(input, src, payout)
 								qdel(input)
-								playsound(src, 'sound/effects/coins.ogg',100, 0)
+								playsound(src, 'sound/effects/coins.ogg',60, 0)
 								visible_message("The uplink beeps: <span class='warning'> Teleportation successful. A total of [payout] credits has been added to your balance.</span>")
 								money_stored += payout
 								interact(usr)
