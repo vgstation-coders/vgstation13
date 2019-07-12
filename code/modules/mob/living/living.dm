@@ -1967,7 +1967,7 @@ Thanks.
 //Called in Life() by humans (in handle_breath.dm), monkeys and mice
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
 	if (!check_airborne_sterility() && isturf(loc))//checking for sterile mouth protections
-		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
+		for(var/obj/effect/effect/pathogen_cloud/cloud in range(1, src))
 			if (!cloud.sourceIsCarrier || cloud.source != src)
 				if (Adjacent(cloud))
 					for (var/ID in cloud.viruses)
