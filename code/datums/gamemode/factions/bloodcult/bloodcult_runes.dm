@@ -462,7 +462,9 @@
 		var/datum/runeword/rune_typecast = word
 		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.
 			rune = new /obj/effect/rune/blood_cult(T) 
-
+		else if(rune_typecast.identifier == "friendly_cult")
+			rune = new /obj/effect/rune/friendly_cult(T) 
+			
 	if (rune.word1 && rune.word2 && rune.word3)
 		return 0
 	
