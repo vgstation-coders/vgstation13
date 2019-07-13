@@ -4431,6 +4431,17 @@
 	if(!(locate(/obj/effect/decal/cleanable/flour) in T))
 		new /obj/effect/decal/cleanable/flour(T)
 
+/datum/reagent/flour/nova_flour
+	name = "nova flour"
+	id = NOVAFLOUR
+	description = "This is what you rub all over yourself to set on fire."
+	color = "#B22222" //rgb: 178, 34, 34
+
+/datum/reagent/flour/nova_flour/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
+
 /datum/reagent/rice
 	name = "Rice"
 	id = RICE

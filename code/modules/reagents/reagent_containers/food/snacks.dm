@@ -2944,7 +2944,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "Bread"
-	icon_state = "Some plain old Earthen bread."
+	desc = "Some plain old Earthen bread."
 	icon_state = "bread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice
 	slices_num = 5
@@ -2956,12 +2956,29 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
+	name = "Nova bread"
+	desc = "Some plain old destabilizing star bread."
+	icon_state = "novabread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova/New()
+	..()
+	reagents.add_reagent(HELL_RAMEN, 3)
+	reagents.add_reagent(NOVAFLOUR, 1)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/breadslice
 	name = "Bread slice"
 	desc = "A slice of home."
 	icon_state = "breadslice"
 	trash = /obj/item/trash/plate
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
+	name = "Nova bread slice"
+	desc = "A slice of sol"
+	icon_state = "novabreadslice"
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread

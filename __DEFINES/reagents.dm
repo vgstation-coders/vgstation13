@@ -146,6 +146,7 @@
 #define CORNOIL 			"cornoil"
 #define ENZYME 			"enzyme"
 #define FLOUR 			"flour"
+#define NOVAFLOUR		"novaflour"
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
