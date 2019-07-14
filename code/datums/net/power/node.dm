@@ -9,10 +9,13 @@
         if(!A.net_nodes)
             continue
 
-        for(var/datum/net_node/node in A.net_nodes)
-            if(!istype(node, src.type))
+        for(var/datum/net_node/power/cable/node in A.net_nodes)
+            if(!istype(node))
                 continue
-            
+
+            if(node.d2 == 0)
+                continue
+
             . += node
 
 //called every powertick, should be used to reset stuff like NOPOWER flags

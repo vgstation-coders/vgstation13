@@ -4,9 +4,19 @@
 
 /datum/net_node/power/cable/New(dir1, dir2) //dir2 is optional
     . = ..()
-    d1 = dir1
-    d2 = dir2
+    setDirs(dir1, dir2)
     cable_nodes += src
+
+/datum/net_node/power/cable/proc/setDirs(dir1, dir2)
+    if(dir1 > dir2)
+        d1 = dir2
+        d2 = dir1
+        return 1
+    else if(dir1 < dir2)
+        d1 = dir1
+        d2 = dir2
+        return 1
+    return 0
 
 /datum/net_node/power/cable/Destroy()
     . = ..()
