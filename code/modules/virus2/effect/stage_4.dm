@@ -377,7 +377,7 @@
 	name = "Arachnogenesis Effect"
 	desc = "Converts the infected's stomach to begin producing creatures of the arachnid variety."
 	stage = 4
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_HARMFUL
 	var/spawn_type=/mob/living/simple_animal/hostile/giant_spider/spiderling
 	var/spawn_name="spiderling"
 
