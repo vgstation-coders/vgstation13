@@ -412,7 +412,7 @@
 	name = "Toxin Sublimation"
 	desc = "Converts the infected's pores and respiratory organs to synthesize Plasma gas."
 	stage = 4
-	badness = EFFECT_DANGER_HARMFUL
+	badness = EFFECT_DANGER_DEADLY
 
 /datum/disease2/effect/plasma/activate(var/mob/living/mob)
 	//var/src = mob
