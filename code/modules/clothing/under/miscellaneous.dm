@@ -756,7 +756,7 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/varsity
-	name = "Varsity Jacket"
+	name = "varsity jacket"
 	desc = "A jacket that belongs to either a high school student or an ancient german tyrant."
 	icon_state = "varsity"
 	item_state = "varsity"
