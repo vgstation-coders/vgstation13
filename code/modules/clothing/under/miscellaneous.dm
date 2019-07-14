@@ -754,3 +754,10 @@
 	item_state = "g_suit"
 	_color = "tourist"
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/under/varsity
+	name = "Varsity Jacket"
+	desc = "A jacket that belongs to either a high school student or an ancient german tyrant."
+	icon_state = "varsity"
+	_color = "varsity"
+	item_state = "varsity"
