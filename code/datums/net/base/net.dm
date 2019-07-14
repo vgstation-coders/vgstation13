@@ -28,18 +28,18 @@
 //merges with another net
 /datum/net/proc/absorb_net(var/datum/net/other_net)
     if(!istype(other_net, src.type))
-        return 0
+        return
 
     if(!other_net)
-        return 0
+        return
 
     if(src == other_net)
-        return 1
+        return src
 
     for(var/datum/net_node/node in other_net.nodes)
         add_node(node)
     other_net.nodes = null
-    return 1
+    return src
 
 //used in merge_nets proc to determine which network needs to be absorbed (the smaller one)
 //this returns a number
@@ -49,7 +49,7 @@
 //returns one net
 /proc/merge_nets(var/datum/net/n1, var/datum/net/n2)
     if(!n1)
-        return n2 ? n2 : null
+        return n2
     if(!n2)
         return n1
 
