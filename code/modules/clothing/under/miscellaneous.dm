@@ -759,5 +759,5 @@
 	name = "Varsity Jacket"
 	desc = "A jacket that belongs to either a high school student or an ancient german tyrant."
 	icon_state = "varsity"
-	_color = "varsity"
 	item_state = "varsity"
+	_color = "varsity"
