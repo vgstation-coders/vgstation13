@@ -463,7 +463,7 @@
 	modules += new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg(src)
 
 	emag = new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked(src)
-	
+
 	fix_modules()
 
 /obj/item/weapon/robot_module/miner
