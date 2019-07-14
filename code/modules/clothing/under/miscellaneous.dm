@@ -757,7 +757,7 @@
 
 /obj/item/clothing/under/varsity
 	name = "varsity jacket"
-	desc = "A jacket that belongs to either a high school student or an ancient german tyrant."
+	desc = "A jacket that belongs to either a high school student or an ancient German tyrant."
 	icon_state = "varsity"
 	item_state = "varsity"
 	_color = "varsity"
