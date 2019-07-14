@@ -265,9 +265,9 @@ var/list/virusdishes = list()
 		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
 		contained_virus = new virus_choice
 		var/list/anti = list(
-			ANTIGEN_BLOOD	= 2,
-			ANTIGEN_COMMON	= 2,
-			ANTIGEN_RARE	= 1,
+			ANTIGEN_BLOOD	= 1,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 0,
 			ANTIGEN_ALIEN	= 0,
 			)
 		var/list/bad = list(

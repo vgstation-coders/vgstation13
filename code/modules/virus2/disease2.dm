@@ -645,7 +645,13 @@ var/global/list/disease2_list = list()
 	clean_global_log()
 	subID = rand(0,9999)
 	var/old_dat = get_antigen_string()
-	roll_antigen()
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 2,
+		ANTIGEN_COMMON	= 2,
+		ANTIGEN_RARE	= 1,
+		ANTIGEN_ALIEN	= 0,
+		)
+	roll_antigen(anti)
 	log_debug("[form] [uniqueID]-[subID] has mutated its antigen from [old_dat] to [get_antigen_string()].")
 	log += "<br />[timestamp()] Mutated antigen [old_dat] into [get_antigen_string()]."
 	update_global_log()
