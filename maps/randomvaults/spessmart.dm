@@ -70,9 +70,9 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/glue = 400,
 /obj/item/weapon/chisel = 20,
 /obj/item/weapon/scythe = 50,
-/obj/item/bluespace_crystal/flawless = 500,
-/obj/item/bluespace_crystal/artificial = 75,
-/obj/item/bluespace_crystal = 150,
+/obj/item/bluespace_crystal/flawless = 900,
+/obj/item/bluespace_crystal/artificial = 100,
+/obj/item/bluespace_crystal = 300,
 /obj/item/device/assembly_frame = 40,
 
 /obj/item/device/camera = 30,
