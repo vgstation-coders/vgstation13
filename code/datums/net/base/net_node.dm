@@ -4,8 +4,11 @@
     var/datum/net/net //our net
     var/active = 1
     var/netType = /datum/net //our nettype, needed for the propagation in Destroy
+    var/atom/parent //our parent
 
-/datum/net_node/New()
+/datum/net_node/New(var/atom/papa)
+    parent = papa
+
     net = new netType()
     for(var/datum/net_node/neighbour in get_connections())
         net = merge_nets(net, neighbour.net)

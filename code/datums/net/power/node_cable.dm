@@ -3,8 +3,14 @@
     var/d2
 
 /datum/net_node/power/cable/New(dir1, dir2) //dir2 is optional
+    . = ..()
     d1 = dir1
     d2 = dir2
+    cable_nodes += src
+
+/datum/net_node/power/cable/Destroy()
+    . = ..()
+    cable_nodes -= src
 
 /datum/net_node/power/cable/get_connections()
     . = list()

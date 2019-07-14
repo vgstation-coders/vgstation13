@@ -1,3 +1,5 @@
+//TODO REMOVE
+
 //Powernets
 /datum/powernet
 	var/list/obj/structure/cable/cables = list()	// all cables & junctions
@@ -299,85 +301,4 @@ var/global/powernets_broke = 0
 
 	return net1
 
-// determines how strong could be shock, deals damage to mob, uses power.
-// M is a mob who touched wire/whatever
-// power_source is a source of electricity, can be powercell, area, apc, cable, powernet or null
-// source is an object caused electrocuting (airlock, grille, etc)
-// no animations will be performed by this proc.
-/proc/electrocute_mob(mob/living/M, power_source, obj/source, siemens_coeff = 1.0)
-	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
-		return 0
 
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
-
-		if(H.gloves)
-			var/obj/item/clothing/gloves/G = H.gloves
-
-			if(G.siemens_coefficient == 0)									// to avoid spamming with insulated glvoes on
-				return 0
-
-	var/area/source_area
-
-	if(isarea(power_source))
-		source_area = power_source
-		power_source = source_area.areaapc
-
-	if(istype(power_source, /obj/structure/cable))
-		var/obj/structure/cable/Cable = power_source
-		power_source = Cable.get_powernet()
-
-	var/datum/powernet/PN
-	var/obj/item/weapon/cell/cell
-
-	if(istype(power_source, /datum/powernet))
-		PN = power_source
-	else if(istype(power_source, /obj/item/weapon/cell))
-		cell = power_source
-	else if(istype(power_source, /obj/machinery/power/apc))
-		var/obj/machinery/power/apc/apc = power_source
-		cell = apc.get_cell()
-
-		if(apc.terminal)
-			PN = apc.terminal.powernet
-	else if(!power_source)
-		return 0
-	else
-		log_admin("ERROR: /proc/electrocute_mob([M], [power_source], [source]): wrong power_source")
-		return 0
-
-	if(!cell && !PN)
-		return 0
-
-	var/PN_damage = 0
-	var/cell_damage = 0
-
-	if(PN)
-		PN_damage = PN.get_electrocute_damage()
-
-	if(cell)
-		if(cell.charge == 0)
-			return 0
-		cell_damage = cell.get_electrocute_damage()
-
-	var/shock_damage = 0
-
-	if(PN_damage >= cell_damage)
-		power_source = PN
-		shock_damage = PN_damage
-	else
-		power_source = cell
-		shock_damage = cell_damage
-
-	var/drained_hp = M.electrocute_act(shock_damage, source, siemens_coeff)	//zzzzzzap!
-	var/drained_energy = drained_hp * 20
-
-	if(source_area)
-		source_area.use_power(drained_energy / CELLRATE)
-	else if(istype(power_source, /datum/powernet))
-		var/drained_power = drained_energy / CELLRATE						// convert from "joules" to "watts"
-		PN.load += drained_power
-	else if(istype(power_source, /obj/item/weapon/cell))
-		cell.use(drained_energy)
-
-	return drained_energy
