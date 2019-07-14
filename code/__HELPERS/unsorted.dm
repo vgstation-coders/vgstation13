@@ -1639,15 +1639,21 @@ Game Mode config tags:
 		if(M.client)
 			. += M.client
 
+/client/proc/output_to_special_tab(msg, force_focus = FALSE)
+	if(prefs.special_popup)
+		src << output("\[[time_stamp()]] [msg]", "window1.msay_output")
+		if(!holder) //Force normal players to see the admin message when it gets sent to them
+			winset(src, "rpane.special_button", "is-checked=true")
+			winset(src, null, "rpanewindow.left=window1")
+	if(prefs.special_popup == SPECIAL_POPUP_EXCLUSIVE)
+		return
+	to_chat(src, msg)
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
 	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		if(C.prefs.special_popup)
-			C << output("\[[time_stamp()]] [sane_msg]", "window1.msay_output")
-		else
-			to_chat(C, msg)
+		C.output_to_special_tab(sane_msg)
 
 /proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
 	var/turf/T = get_turf(source)
