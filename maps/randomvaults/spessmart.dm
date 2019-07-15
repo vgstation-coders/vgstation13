@@ -70,7 +70,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/glue = 400,
 /obj/item/weapon/chisel = 20,
 /obj/item/weapon/scythe = 50,
-/obj/item/bluespace_crystal/flawless = 1500,
+/obj/item/bluespace_crystal/flawless = 1800,
 /obj/item/bluespace_crystal/artificial = 100,
 /obj/item/bluespace_crystal = 300,
 /obj/item/device/assembly_frame = 40,
@@ -82,7 +82,7 @@ var/list/shop_prices = list( //Cost in space credits
 
 /obj/item/device/robotanalyzer = 5,
 /obj/item/device/soundsynth = 20,
-/obj/item/device/transfer_valve = 300, //What could go wrong
+/obj/item/device/transfer_valve = 400, //What could go wrong
 /obj/item/device/instrument/violin = 50,
 /obj/item/device/maracas = 5,
 /obj/item/device/aicard = 50,
@@ -144,11 +144,11 @@ var/list/shop_prices = list( //Cost in space credits
 
 //mischievous items
 /obj/item/device/powersink = 500,
-/obj/item/weapon/card/emag = 900,
+/obj/item/weapon/card/emag = 1000,
 /obj/item/weapon/cloakingcloak = 750,
-/obj/item/weapon/pen/sleepypen = 1000,
+/obj/item/weapon/pen/sleepypen = 1200,
 /obj/item/weapon/reagent_containers/spray/chemsprayer = 150,
-/obj/item/device/device_analyser/syndicate = 1500,
+/obj/item/device/device_analyser/syndicate = 1800,
 
 //No guns sorry
 )
