@@ -217,7 +217,7 @@ for anyone but the person committing mass murder.
 	name = "Portal Gun"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
 	item = /obj/item/weapon/gun/portalgun
-	sps_chances = list(0,20,30)
+	sps_chances = list(0,20,35)
 	stock_min = 1
 	stock_max = 1
 	cost_min = 1800
@@ -232,11 +232,12 @@ for anyone but the person committing mass murder.
 	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
 	item = /obj/item/potion/levitation
 	sps_chances = list(0,0,5)
+	delivery_available = list(0, 1, 1)
 	stock_min = 2
 	stock_max = 4
 	cost_min = 400
 	cost_max = 500
-	display_chance = 60
+	display_chance = 70
 	
 /datum/black_market_item/arcane/health_potion
 	name = "Potion of Health? Death?"
