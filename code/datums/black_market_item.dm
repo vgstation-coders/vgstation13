@@ -36,8 +36,10 @@ var/list/black_market_items = list()
 	var/stock_max  
 	var/cost_min    //Same as stock
 	var/cost_max
-	var/sps_chance = 30
 	var/display_chance = 0   //Out of 100
+	var/list/sps_chances = list(5, 10, 30) //Chance for SPS alert for each delivery method out of 100. Cheap, Normal, Expensive.
+	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. expensive will be base + 0.6*base. Cheap, Normal, Expensive.
+	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. Cheap, Normal, Expensive
 
 	var/round_stock                         //God I love if statements
 	var/round_stock_calculated = 0          //Allows for round-to-round variance instead of changing every time you open it
@@ -72,62 +74,118 @@ var/list/black_market_items = list()
 		. = round_stock
 
 	
-/datum/black_market_item/proc/spawn_item(var/turf/loc, var/obj/item/device/illegalradio/U, mob/user)
-	U.money_stored -= get_cost()
-	feedback_add_details("traitor_black_market_items_bought", name)
-	message_admins("[key_name(user)] just purchased the [src.name] from the black market. ([formatJumpTo(get_turf(U))])")
+/datum/black_market_item/proc/spawn_item(var/turf/loc, var/obj/item/device/illegalradio/radio, mob/user)
+	radio.money_stored -= get_cost()
+	return new item(loc,user)
+
+/datum/black_market_item/proc/log_transaction(var/delivery_method, var/mob/user)
+	feedback_add_details("black_market_items_bought", name)
+	message_admins("[key_name(user)] just purchased the [src.name] from the black market. [delivery_method] ([formatJumpTo(get_turf(user))])")
 	var/text = "[key_name(user)] just purchased the [src.name] from the black market."
 	log_game(text)
 	log_admin(text)
-	return new item(loc,user)
-
-/datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/U, var/mob/user)
+	
+/datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/radio, var/delivery_method, var/mob/user)
 	..()
-	if(!istype(U)) 
+	if(!istype(radio)) 
 		return 0
-
 	if(user.stat || user.restrained())
 		return 0
-
 	if(!(istype(user,/mob/living/carbon/human)))
 		return 0
-
 	if(get_stock() <= 0)
 		to_chat(user, "<span class='warning'>This item is out of stock. Scram.</span>")
 		return 0
+	if(!((radio.loc in user.contents) || (in_range(radio.loc, user) && istype(radio.loc.loc, /turf))))
+		return 0
+	if(get_cost() > radio.money_stored)
+		return 0
 
-	// If the black_market's holder is in the user's content
-	if((U.loc in user.contents) || (in_range(U.loc, user) && istype(U.loc.loc, /turf)))
-		if(get_cost() > U.money_stored)
+	if(delivery_method == 1)
+		spawn_cheap(radio,user)
+	else if(delivery_method == 2)
+		spawn_normal(radio,user)
+	else
+		spawn_expensive(radio,user)
+
+/datum/black_market_item/proc/spawn_cheap(var/obj/item/device/illegalradio/radio, var/mob/user)
+	var/direction = pick(list(NORTH,EAST,SOUTH,WEST))
+	var/direction_string
+	if(direction == NORTH) //Look, I'm not sure why directions are 1/2/4/8 and why arrays start at 1 and why I can't just do direction/2+1 to get the index of an array because integer division is fucked or something with nonstatic typing, just let it be beautiful gunk :)
+		direction_string = "north"
+	else if(direction == EAST)
+		direction_string = "east"
+	else if(direction == SOUTH)
+		direction_string = "south"
+	else if(direction == WEST)
+		direction_string = "west"
+	log_transaction("The item was launched at the station from the [direction_string].", user)
+	radio.visible_message("The uplink beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
+	spawn(rand(150,450))
+		var/obj/item = spawn_item(get_turf(user), radio, user)
+		if(!item)
 			return 0
-
-		var/obj/I = spawn_item(get_turf(user), U, user)
-		if(!I)
-			return 0
-		after_spawn(I,user)
-		var/icon/tempimage = icon(I.icon, I.icon_state)
-		end_icons += tempimage
-		var/tempstate = end_icons.len
-
-		if(ishuman(user))
-			var/mob/living/carbon/human/A = user
-
-			if(istype(I, /obj/item))
-				A.put_in_any_hand_if_possible(I)
-
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost()]."}
-			//stat_collection.black_market_purchase(src, I, user)
-			if(get_stock() != 0)
-				round_stock -= 1
-
-				
-		user.set_machine(U)
-		U.interact(user)
-
-		return 1
-	return 0
+		after_spawn(item,1,user)
+		item.ThrowAtStation(30,2,direction)
+		if(get_stock() != 0)
+			round_stock -= 1	
+		spawn(rand(300,600))
+			if(!radio.nanotrasen_variant && prob(sps_chances[1]))
+				SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was launched at the station recently.")
 	
-/datum/black_market_item/proc/after_spawn(var/obj/spawned, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
+/datum/black_market_item/proc/spawn_normal(var/obj/item/device/illegalradio/radio, var/mob/user)
+	var/list/potential_locations = list()
+	var/turf/spawnloc = null
+	for(var/area/maintenance/A in areas)
+		if(A != /area/maintenance/atmos)
+			potential_locations.Add(A)
+	var/area/selected_area 
+	while(potential_locations.len)
+		selected_area = pick(potential_locations)
+		potential_locations.Remove(selected_area)
+		for(var/turf/simulated/floor/floor in selected_area.contents)
+			if(!floor.has_dense_content())
+				spawnloc = floor
+				break	
+	if(!spawnloc)
+		return
+	var/time_to_spawn = rand(300,600)
+	log_transaction("The item was teleported to the [selected_area.name].", user)
+	radio.visible_message("The uplink beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
+	spawn(time_to_spawn)
+		var/obj/item = spawn_item(spawnloc, radio, user)
+		after_spawn(item,2,user)
+		if(get_stock() != 0)
+			round_stock -= 1
+		spawn(rand(300,600))
+			if(!radio.nanotrasen_variant && prob(sps_chances[2]))
+				SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported to your station's maintenance recently.")
+		
+/datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
+	var/obj/item = spawn_item(get_turf(user), radio, user)
+	if(!item)
+		return 0
+	after_spawn(item,3,user)
+
+	if(ishuman(user))
+		var/mob/living/carbon/human/A = user
+		if(istype(item, /obj/item))
+			A.put_in_any_hand_if_possible(item)
+		if(get_stock() != 0)
+			round_stock -= 1
+	log_transaction("The item was teleported directly to him.", user)
+	if(prob(99))
+		radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase!</span>")	
+	else
+		radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase! Heh. Fucking scammed that loser. He <i>actually</i> thinks telecrystals are expensive... oh, fuck.</span>")
+	user.set_machine(radio)
+	radio.interact(user)
+	spawn(rand(300,600))
+		if(!radio.nanotrasen_variant && prob(sps_chances[3]))
+			SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported directly to the buyer recently.")
+
+	
+/datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
 	return
 
 	
@@ -159,6 +217,7 @@ for anyone but the person committing mass murder.
 	name = "Portal Gun"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
 	item = /obj/item/weapon/gun/portalgun
+	sps_chances = list(0,20,30)
 	stock_min = 1
 	stock_max = 1
 	cost_min = 1800
@@ -172,16 +231,19 @@ for anyone but the person committing mass murder.
 	name = "Potion of Levitation"
 	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
 	item = /obj/item/potion/levitation
+	sps_chances = list(0,0,5)
 	stock_min = 2
 	stock_max = 4
 	cost_min = 400
 	cost_max = 500
-	display_chance = 50
+	display_chance = 60
 	
 /datum/black_market_item/arcane/health_potion
 	name = "Potion of Health? Death?"
 	desc = "Unfortunately, some idiot managed to mix together the shipment of identical-looking health potions and death potions. He's dead now. Test out your luck!"
 	item = /obj/item/potion/deception
+	sps_chances = list(0, 10, 30)
+	delivery_available = list(0, 1, 1) //Would shatter on impact
 	stock_min = 2
 	stock_max = 4
 	cost_min = 600

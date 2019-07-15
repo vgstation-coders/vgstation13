@@ -18,12 +18,14 @@
 	var/list/cached_sellables
 	var/list/purchase_log = list()
 	var/show_description = null
+	var/datum/black_market_item/selected_item = null
 	
 	var/money_stored
 	var/nanotrasen_variant = 0
 	var/scan_time = 20
-	var/teleport_time = 100
-	var/advanced_teleport_time = 50
+	var/teleport_time = 200
+	var/advanced_teleport_time = 100
+	var/scanning = 0
 
 /obj/item/device/illegalradio/nanotrasen
 	name = "advanced black market uplink"
@@ -37,9 +39,10 @@
 	money_stored = 0
 	cached_sellables = get_black_market_sellables()
 
-/obj/item/device/illegalradio/interact(mob/user as mob)
+/obj/item/device/illegalradio/interact(mob/user as mob) //Whenever called, return to main menu.
+	selected_item = null
 	var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
-	dat += src.generate_menu(user)
+	dat += src.generate_main_menu(user)
 	user << browse(dat, "window=hidden")
 	onclose(user, "hidden")
 	return
@@ -48,34 +51,43 @@
 	user.set_machine(src)
 	interact(user)
 
+	
+
 /obj/item/device/illegalradio/Topic(href, href_list)
 	..()
 
 	if (href_list["buy_item"])
-		var/item = href_list["buy_item"]
-		var/list/split = splittext(item, ":") // throw away variable
+		var/delivery_method = href_list["buy_item"]
+		delivery_method = text2num(delivery_method)
+		
+		if(!selected_item)
+			return 0
+
+		selected_item.buy(src, delivery_method, usr)
+		selected_item = null
+		interact(usr)
+				
+	else if(href_list["open_delivery_menu"])
+		var/input = href_list["open_delivery_menu"]
+		var/list/split = splittext(input, ":")
 
 		if(split.len == 2)
-			// Collect category and number
 			var/category = split[1]
 			var/number = text2num(split[2])
 
 			var/list/buyable_items = get_black_market_items()
-
-			var/list/black_market = buyable_items[category]
-			if(black_market && black_market.len >= number)
-				var/datum/black_market_item/I = black_market[number]
-				if(I)
-					I.buy(src, usr)
-					if(!nanotrasen_variant && prob(I.sps_chance))
-						SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [I.name]")
-			else
-				var/text = "[key_name(usr)] tried to purchase a black market item that doesn't exist."
-				var/textalt = "[key_name(usr)] tried to purchase a black market item that doesn't exist: [item]."
-				message_admins(text)
-				log_game(textalt)
-				log_admin(textalt)
-
+			var/list/category_items = buyable_items[category]
+			
+			if(category_items && category_items.len >= number)
+				var/datum/black_market_item/item = category_items[number]
+				if(item)
+					selected_item = item
+					var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
+					dat += generate_delivery_menu(usr,item)
+					usr << browse(dat, "window=hidden")
+					onclose(usr, "hidden")
+					return
+				
 	else if (href_list["open_buyers"])
 		var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 		dat += src.generate_buyer_menu(usr)
@@ -95,9 +107,8 @@
 	..()
 
 
-/obj/item/device/illegalradio/proc/generate_menu(mob/user)
-
-	var/welcome = pick("Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.")
+/obj/item/device/illegalradio/proc/generate_main_menu(mob/user)
+	var/welcome = pick("Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","B-but I d-didn't get to upgrade my uplink yet! Don't make me leave, nooooo!")
 
 	var/dat = list()
 	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
@@ -128,7 +139,7 @@
 			var/final_text = ""
 			cost_text = "([itemcost])"
 			if(itemcost <= money_stored && (stock > 0 || stock == -1))
-				final_text += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
+				final_text += "<A href='byond://?src=\ref[src];open_delivery_menu=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
 				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(stock != -1)
@@ -148,15 +159,42 @@
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
 
-/obj/item/device/illegalradio/proc/generate_buyer_menu(mob/user)
+	
+	
+/obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/black_market_item/item)
+	var/dat = list()
+	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
+	dat += "<B>Please pay for an available delivery option.</B><BR>"
+	dat += "<B>You are purchasing the [item.name].</B><BR>"
+	dat += {"Cash stored: [src.money_stored]<BR><BR>"}
+	var/list/delivery_titles = list("Thrifty","Normal","Express")
+	var/list/delivery_description = list("The item is launched at the station from space. We'll give you some clues to where it hit, cheapass.","The item is teleported somewhere in your station's maintenance. You'll get a 60 second headstart and a location.","The item is teleported straight to you via telecrystal.")
+	for(var/i = 1;i < 4;i++)
+		var/fee = item.get_cost()*item.delivery_fees[i]
+		var/final_cost = item.get_cost() + fee
+		if(item.delivery_available[i])
+			if(final_cost <= money_stored)
+				dat += "<A href='byond://?src=\ref[src];buy_item=[i]'>[delivery_titles[i]] : [fee] credits.</A>      [final_cost] total."
+			else
+				dat += "<font color='grey'><i>[delivery_titles[i]] : [fee] credits.</A>     [final_cost] total.</i></font>"
+		else
+			dat += "<font color='grey'><i>[delivery_titles[i]] : Not available for this product.</i></font>"
+		dat += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(delivery_description[i])]'><font size=2> \[?\]</font></A><br>"	
 
-	var/welcome = pick("These payouts are the highest you'll find anywhere!","We do NOT pay in Vox or Human slaves.","Not accepting Nanotrasen requests.")
+	dat += "<br><HR><font size=3><A href='byond://?src=\ref[src];open_main=1'>Return</a></font>"
+	dat = jointext(dat,"") 
+	return dat	
+
+	
+	
+/obj/item/device/illegalradio/proc/generate_buyer_menu(mob/user)
+	var/welcome = pick("These payouts are the highest you'll find anywhere!","We do NOT pay in Vox or Human slaves.","Not accepting Nanotrasen requests.","Anonymous has mysterious interests...","Job-bees are not permitted to sell.")
 
 	var/dat = list()
 	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
 	dat += "<B>[welcome]</B><BR>"
 	dat += {"Cash stored: [src.money_stored]<BR>"}
-	dat += {"<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a> <A href='byond://?src=\ref[src];open_main=1'>Return</a>
+	dat += {"<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a>   <A href='byond://?src=\ref[src];open_main=1'>Return</a>
 		<HR>
 		<B>Available Buyers:</B><BR>
 		<I>Following is a list of requests from anonymous buyers. To fulfill an item request, use the uplink on the item that is being requested.</I><br><BR>"}
@@ -194,6 +232,9 @@
 	dat = jointext(dat,"") 
 	return dat	
 
+
+	
+	
 /obj/item/device/illegalradio/proc/dispense_change()
 	if(money_stored > 0)
 		dispense_cash(money_stored,get_turf(src))
@@ -201,15 +242,16 @@
 	interact(usr)
 
 /obj/item/device/illegalradio/afterattack(atom/A as mob|obj, mob/user as mob)
-	if(istype(A, /obj/item/weapon/spacecash))
+	if(istype(A, /obj/item/weapon/spacecash) && A.Adjacent(user))
 		var/obj/item/weapon/spacecash/cash = A
 		money_stored += cash.get_total()
 		qdel(cash)
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
-	else
-		if(istype(A, /obj))
-			attempt_sell(A,usr)
+	else if(istype(A, /obj) && A.Adjacent(user) && !scanning)
+		scanning = 1
+		attempt_sell(A,usr)
+		scanning = 0
 			
 /obj/item/device/illegalradio/proc/attempt_sell(var/obj/input, mob/user)	//If statements galore
 	visible_message("The uplink beeps: <span class='warning'>Scanning item...</span>")
@@ -234,34 +276,21 @@
 								interact(usr)
 								if(!nanotrasen_variant && prob(sellable.sps_chance))
 									SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market selling of item [sellable.name]")
-								return
+								return 1
 						else
 							visible_message("The uplink beeps: <span class='warning'>Teleportation process canceled. Please try again.</span>")
-							return
+							return 0
 					else
 						visible_message("The uplink beeps: <span class='warning'>Error! Given reason: [check]</span>")	
-						return
+						return 0
 		visible_message("The uplink beeps: <span class='warning'>No buyers are currently looking for this item.</span>")
-		return
+		return 0
 	
 /obj/item/device/illegalradio/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		insert_cash(C, user)
 		interact(user)
-	/*
-	else if(istype(W, /obj/item/organ/external)) //Organ harvesting scrapped.
-		visible_message("<span class='info'>The black market uplink buzzes: \"We take organs, not limbs, dummy.\"</span>")
-	else if(istype(W, /obj/item/organ/internal))
-		var/obj/item/organ/internal/organ = W
-		if(organ.had_mind && !organ.is_printed && !organ.robotic) //We want da real stuff
-			var/price = rand(200,300)
-			visible_message("<span class='info'>The black market uplink buzzes: \"You have been paid [price] credits. Thank you for your business!\"</span>")
-			money_stored += price
-			qdel(W)
-		else
-			visible_message("<span class='info'>The black market uplink buzzes: \"Sorry, pal. That organ ain't real. Our buyers want natural ones.\"</span>")
-	*/
 	
 /obj/item/device/illegalradio/emag_act(mob/user)
 	visible_message("<span class='warning'>[usr] swipes a card through [src], and it explodes!</warning>")
