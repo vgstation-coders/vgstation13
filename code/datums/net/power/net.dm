@@ -2,7 +2,7 @@
     note_types = list(/datum/net_node/power)
     var/load = 0				// the current load on the powernet, updated in powertick
     var/avail = 0				// the current produced power in the powernet, updated in powertick
-    var/netexcess = 0			// excess power on the powernet, updated in powertick
+    var/excess = 0			// excess power on the powernet, updated in powertick
 
 /datum/net/power/New()
     . = ..()
@@ -58,16 +58,21 @@
 
     if(power < 0) //we fucked now
         for(var/datum/net_node/power/node in nodes)
-            node.power_off()
+            node.powered = FALSE
+            node.power_change()
+    else
+        for(var/datum/net_node/power/node in nodes)
+            node.powered = TRUE
+            node.power_change()
 
     //excess will show missing power, this could also be in an else to the if above, but i dunno, why make it hard for the guys
-    netexcess = power
+    excess = power
 
 /datum/net/power/proc/get_electrocute_damage()
-	// cube root of power times 1,5 to 2 in increments of 10^-1
-	// for instance, gives an average of 38 damage for 10k W, 81 damage for 100k W and 175 for 1M W
-	// best you're getting with BYOND's mathematical funcs. Not even a fucking exponential or neperian logarithm
-	return round(avail ** (1 / 3) * (rand(100, 125) / 100))
+    // cube root of power times 1,5 to 2 in increments of 10^-1
+    // for instance, gives an average of 38 damage for 10k W, 81 damage for 100k W and 175 for 1M W
+    // best you're getting with BYOND's mathematical funcs. Not even a fucking exponential or neperian logarithm
+    return round(avail ** (1 / 3) * (rand(100, 125) / 100))
 
 // *************
 // GLOBAL PROCS
@@ -76,7 +81,7 @@
 // rebuild all power networks from scratch - only called at world creation or by the admin verb
 /proc/makepowernets()
     var/list/new_nets = list()
-    for(var/datum/net_node/cable/cable in cable_nodes)
+    for(var/datum/net_node/power/cable/cable in cable_nodes)
         if(!istype(cable))
             continue
         if(!(cable.net in new_nets)) //have we already propagated over this node?
@@ -91,79 +96,79 @@
 // source is an object caused electrocuting (airlock, grille, etc)
 // no animations will be performed by this proc.
 /proc/electrocute_mob(mob/living/M, power_source, obj/source, siemens_coeff = 1.0)
-	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
-		return 0
+    if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
+        return 0
 
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
+    if(istype(M, /mob/living/carbon/human))
+        var/mob/living/carbon/human/H = M
 
-		if(H.gloves)
-			var/obj/item/clothing/gloves/G = H.gloves
+        if(H.gloves)
+            var/obj/item/clothing/gloves/G = H.gloves
 
-			if(G.siemens_coefficient == 0)									// to avoid spamming with insulated glvoes on
-				return 0
+            if(G.siemens_coefficient == 0)									// to avoid spamming with insulated glvoes on
+                return 0
 
-	var/area/source_area
+    var/area/source_area
 
-	if(isarea(power_source))
-		source_area = power_source
-		power_source = source_area.areaapc
+    if(isarea(power_source))
+        source_area = power_source
+        power_source = source_area.areaapc
 
-	if(istype(power_source, /obj/structure/cable))
-		var/obj/structure/cable/Cable = power_source
-		power_source = Cable.get_powernet()
+    if(istype(power_source, /obj/structure/cable))
+        var/obj/structure/cable/Cable = power_source
+        power_source = Cable.get_powernet()
 
-	var/datum/powernet/PN
-	var/obj/item/weapon/cell/cell
+    var/datum/powernet/PN
+    var/obj/item/weapon/cell/cell
 
-	if(istype(power_source, /datum/powernet))
-		PN = power_source
-	else if(istype(power_source, /obj/item/weapon/cell))
-		cell = power_source
-	else if(istype(power_source, /obj/machinery/power/apc))
-		var/obj/machinery/power/apc/apc = power_source
-		cell = apc.get_cell()
+    if(istype(power_source, /datum/powernet))
+        PN = power_source
+    else if(istype(power_source, /obj/item/weapon/cell))
+        cell = power_source
+    else if(istype(power_source, /obj/machinery/power/apc))
+        var/obj/machinery/power/apc/apc = power_source
+        cell = apc.get_cell()
 
-		if(apc.terminal)
-			PN = apc.terminal.powernet
-	else if(!power_source)
-		return 0
-	else
-		log_admin("ERROR: /proc/electrocute_mob([M], [power_source], [source]): wrong power_source")
-		return 0
+        if(apc.terminal)
+            PN = apc.terminal.powernet
+    else if(!power_source)
+        return 0
+    else
+        log_admin("ERROR: /proc/electrocute_mob([M], [power_source], [source]): wrong power_source")
+        return 0
 
-	if(!cell && !PN)
-		return 0
+    if(!cell && !PN)
+        return 0
 
-	var/PN_damage = 0
-	var/cell_damage = 0
+    var/PN_damage = 0
+    var/cell_damage = 0
 
-	if(PN)
-		PN_damage = PN.get_electrocute_damage()
+    if(PN)
+        PN_damage = PN.get_electrocute_damage()
 
-	if(cell)
-		if(cell.charge == 0)
-			return 0
-		cell_damage = cell.get_electrocute_damage()
+    if(cell)
+        if(cell.charge == 0)
+            return 0
+        cell_damage = cell.get_electrocute_damage()
 
-	var/shock_damage = 0
+    var/shock_damage = 0
 
-	if(PN_damage >= cell_damage)
-		power_source = PN
-		shock_damage = PN_damage
-	else
-		power_source = cell
-		shock_damage = cell_damage
+    if(PN_damage >= cell_damage)
+        power_source = PN
+        shock_damage = PN_damage
+    else
+        power_source = cell
+        shock_damage = cell_damage
 
-	var/drained_hp = M.electrocute_act(shock_damage, source, siemens_coeff)	//zzzzzzap!
-	var/drained_energy = drained_hp * 20
+    var/drained_hp = M.electrocute_act(shock_damage, source, siemens_coeff)	//zzzzzzap!
+    var/drained_energy = drained_hp * 20
 
-	if(source_area)
-		source_area.use_power(drained_energy / CELLRATE)
-	else if(istype(power_source, /datum/powernet))
-		var/drained_power = drained_energy / CELLRATE						// convert from "joules" to "watts"
-		PN.load += drained_power
-	else if(istype(power_source, /obj/item/weapon/cell))
-		cell.use(drained_energy)
+    if(source_area)
+        source_area.use_power(drained_energy / CELLRATE)
+    else if(istype(power_source, /datum/powernet))
+        var/drained_power = drained_energy / CELLRATE						// convert from "joules" to "watts"
+        PN.load += drained_power
+    else if(istype(power_source, /obj/item/weapon/cell))
+        cell.use(drained_energy)
 
-	return drained_energy
+    return drained_energy

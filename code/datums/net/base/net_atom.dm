@@ -11,3 +11,18 @@
 	var/datum/net_node/node = new nodetype(arglist(B))
 	if(istype(node))
 		net_nodes += node
+
+	return node
+
+/atom/proc/getNode(var/nodetype)
+	TODO
+
+/atom/proc/getNodes(var/nodetype)
+	TODO
+
+/atom/proc/get_power_node()
+	var/list/nodes = getNode(/datum/net_node/power/machinery)
+	if(!nodes.len)
+		return addNode(/datum/net_node/power/machinery)
+	else
+		return nodes[1]

@@ -157,24 +157,12 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 			to_chat(user, "<span class='warning'>There already is a cable at that position.</span>")
 			return
 
-	var/obj/structure/cable/C = getFromPool(/obj/structure/cable, F)
+	var/obj/structure/cable/C = getFromPool(/obj/structure/cable, F, 0, dirn)
 	C.cableColor(_color)
 
 	//Set up the new cable
-	C.d1 = 0 //It's a O-X node cable
-	C.d2 = dirn
 	C.add_fingerprint(user)
 	C.update_icon()
-
-	//Create a new powernet with the cable, if needed it will be merged later
-	var/datum/powernet/PN = getFromPool(/datum/powernet)
-	PN.add_cable(C)
-
-	C.mergeConnectedNetworks(C.d2)   //Merge the powernet with adjacents powernets
-	C.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
-
-	if(C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
-		C.mergeDiagonalsNetworks(C.d2)
 
 	use(1)
 
@@ -240,21 +228,11 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 		C.cableColor(_color)
 
-		C.d1 = nd1
-		C.d2 = nd2
+		var/datum/net_node/power/cable/node = C.getNodeCableNode()
+		node.setDirs(nd1, nd2)
 
 		C.add_fingerprint()
 		C.update_icon()
-
-		C.mergeConnectedNetworks(C.d1) //Merge the powernets
-		C.mergeConnectedNetworks(C.d2) //In the two new cable directions
-		C.mergeConnectedNetworksOnTurf()
-
-		if(C.d1 & (C.d1 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
-			C.mergeDiagonalsNetworks(C.d1)
-
-		if(C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
-			C.mergeDiagonalsNetworks(C.d2)
 
 		use(1)
 
@@ -263,8 +241,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 				getFromPool(/obj/item/stack/cable_coil, C.loc, 1, C.light_color)
 				returnToPool(C)
 				return
-
-		C.denode() //This call may have disconnected some cables that terminated on the centre of the turf, if so split the powernets.
 
 //////////////////////////////
 // Misc.

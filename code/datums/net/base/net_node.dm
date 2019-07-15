@@ -8,7 +8,9 @@
 
 /datum/net_node/New(var/atom/papa)
     parent = papa
+    connections_changed()
 
+/datum/net_node/proc/connections_changed()
     net = new netType()
     for(var/datum/net_node/neighbour in get_connections())
         net = merge_nets(net, neighbour.net)

@@ -25,7 +25,7 @@
 	. = ..()
 	machines -= src
 	power_machines |= src
-	return .
+	addNode(/datum/net_node/power)
 
 /obj/machinery/power/initialize()
 	..()
@@ -67,46 +67,47 @@
 
 // common helper procs for all power machines
 /obj/machinery/power/proc/add_avail(var/amount)
-	if(get_powernet())
-		powernet.newavail += amount
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(istype(node))
+		node.powerNeeded += amount
 
 /obj/machinery/power/proc/add_load(var/amount)
-	if(get_powernet())
-		powernet.load += amount
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(istype(node))
+		node.powerNeeded -= amount
 
 /obj/machinery/power/proc/surplus()
-	if(get_powernet())
-		return powernet.avail-powernet.load
-	else
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(!istype(node))
 		return 0
+
+	var/datum/net/power/net = node.net
+	if(!istype(net))
+		return 0
+	
+	return net.excess
 
 /obj/machinery/power/proc/avail()
-	if(get_powernet())
-		return powernet.avail
-	else
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(!istype(node))
 		return 0
+
+	var/datum/net/power/net = node.net
+	if(!istype(net))
+		return 0
+	
+	return net.avail
 
 /obj/machinery/power/proc/load()
-	if(get_powernet())
-		return powernet.load
-	else
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(!istype(node))
 		return 0
 
-/obj/machinery/power/proc/get_powernet()
-	check_rebuild()
-	return powernet
-
-/obj/machinery/power/check_rebuild()
-	if(!build_status)
+	var/datum/net/power/net = node.net
+	if(!istype(net))
 		return 0
-	for(var/obj/structure/cable/C in src.loc)
-		if(C.check_rebuild())
-			return 1
-
-/obj/machinery/power/proc/getPowernetNodes()
-	if(!get_powernet())
-		return list()
-	return powernet.nodes
+	
+	return net.load
 
 /obj/machinery/power/proc/disconnect_terminal() // machines without a terminal will just return, no harm no fowl.
 	return
@@ -158,93 +159,15 @@
 			return
 		set_light(0)
 
-
-// connect the machine to a powernet if a node cable is present on the turf
-/obj/machinery/power/proc/connect_to_network()
-	var/turf/T = get_turf(src)
-
-	var/obj/structure/cable/C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
-
-	if(!C || !C.get_powernet())
-		return 0
-
-	C.powernet.add_machine(src)
-	return 1
-
-// remove and disconnect the machine from its current powernet
-/obj/machinery/power/proc/disconnect_from_network()
-	if(!get_powernet())
-		build_status = 0
-		return 0
-
-	powernet.remove_machine(src)
-	return 1
-
 ///////////////////////////////////////////
-// Powernet handling helpers
+// Static power
 //////////////////////////////////////////
-
-// returns all the cables WITHOUT a powernet in neighbors turfs,
-// pointing towards the turf the machine is located at
-/obj/machinery/power/proc/get_connections()
-	. = list()
-
-	var/cdir
-	var/turf/T
-
-	for(var/card in cardinal)
-		T = get_step(loc, card)
-		cdir = get_dir(T, loc)
-
-		for(var/obj/structure/cable/C in T)
-			if(C.get_powernet())
-				continue
-
-			if(C.d1 == cdir || C.d2 == cdir)
-				. += C
-
-// returns all the cables in neighbors turfs,
-// pointing towards the turf the machine is located at
-/obj/machinery/power/proc/get_marked_connections()
-	. = list()
-
-	var/cdir
-	var/turf/T
-
-	for(var/card in cardinal)
-		T = get_step(loc, card)
-		cdir = get_dir(T, loc)
-
-		for(var/obj/structure/cable/C in T)
-			if(C.d1 == cdir || C.d2 == cdir)
-				. += C
-
-// returns all the NODES (O-X) cables WITHOUT a powernet in the turf the machine is located at
-/obj/machinery/power/proc/get_indirect_connections()
-	. = list()
-
-	for(var/obj/structure/cable/C in loc)
-		if(C.get_powernet())
-			continue
-
-		if(C.d1 == 0) // the cable is a node cable
-			. += C
-
-////////////////////////////////////////////////
-// Misc.
-///////////////////////////////////////////////
-
-// return a knot cable (O-X) if one is present in the turf
-// null if there's none
-/turf/proc/get_cable_node()
-	for(var/obj/structure/cable/C in src)
-		if(C.d1 == 0)
-			return C
 
 /obj/machinery/proc/addStaticPower(value, powerchannel)
 	var/area/this_area = get_area(src)
 	if(!this_area)
 		return
 	this_area.addStaticPower(value, powerchannel)
+
 /obj/machinery/proc/removeStaticPower(value, powerchannel)
 	addStaticPower(-value, powerchannel)

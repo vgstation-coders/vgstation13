@@ -1,7 +1,7 @@
 /datum/net_node/power
     netType = /datum/net/power
     var/powerNeeded //positive for production, negative for consumption
-    var/powered = TRUE //maybe flags
+    var/powered = FALSE
 
 /datum/net_node/power/get_connections()
     . = list()
@@ -18,10 +18,12 @@
 
             . += node
 
-//called every powertick, should be used to reset stuff like NOPOWER flags
+//called every powertick
+//this is because of how old powernets worked
+//static power is can be achieved by overriding this
 /datum/net_node/power/proc/reset()
-    powered = TRUE
+    powerNeeded = 0
 
 //called every powertick when this node isn't receiving power
-/datum/net_node/power/proc/power_off()
-    powered = FALSE
+/datum/net_node/power/proc/power_change()
+    return

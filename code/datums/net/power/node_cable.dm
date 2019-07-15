@@ -11,12 +11,13 @@
     if(dir1 > dir2)
         d1 = dir2
         d2 = dir1
-        return 1
+        . = 1
     else if(dir1 < dir2)
         d1 = dir1
         d2 = dir2
-        return 1
-    return 0
+        . = 1
+    if(.)
+        connections_changed()
 
 /datum/net_node/power/cable/Destroy()
     . = ..()
