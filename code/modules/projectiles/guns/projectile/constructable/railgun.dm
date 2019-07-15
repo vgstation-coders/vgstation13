@@ -156,7 +156,7 @@
 				to_chat(user, "Remove the string from \the [C] first.")
 				return
 			if (C.siemens_coefficient == 0)
-				to_chat(user, "That \improper [C] won't work.")
+				to_chat(user, "That \proper [C] won't work.")
 				return
 			else
 				C.forceMove(src)
