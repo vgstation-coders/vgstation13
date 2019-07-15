@@ -77,10 +77,68 @@ var/list/black_market_sellables = list()
 	return 0
 
 	
+/datum/black_market_sellable/weapons
+	category = "Firearms and War Implements"
 	
+/datum/black_market_sellable/weapons/ion_rifle
+	name = "Ion Rifle"
+	item = /obj/item/weapon/gun/energy/ionrifle
+	no_children = 1
+	demand_min = 1
+	demand_max = 3
+	price_min = 100
+	price_max = 200
+	sps_chance = 10
+	display_chance = 40
 	
+/datum/black_market_sellable/weapons/railgun
+	name = "Railgun"
+	item =
+	no_children = 1
+	desc = "We'll pay triple for a railgun loaded with a capacitor of 1 GW charge or greater."
+	demand_min = 1
+	demand_max = 1
+	price_min = 200
+	price_max = 300
+	sps_chance = 15
+	display_chance = 35
 	
+/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user, var/payout)
+	if(istype(input,))
+		var = input
+		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
+			return payout*2
+	return 0
 	
+/datum/black_market_sellable/weapons/transfer_valve
+	name = "Primed Tank Transfer Valve"
+	item = /obj/item/device/transfer_valve/
+	no_children = 0
+	desc = "Only accepting bombs of six tiles or greater."
+	demand_min = 1
+	demand_max = 2
+	price_min = 700
+	price_max = 1200
+	sps_chance = 90
+	display_chance = 50
+
+/datum/black_market_sellable/weapons/ied
+	name = "Improvised Explosive Device"
+	item = 
+	no_children = 1
+	desc = "Looking for cheap explosives made from soda cans or something."
+	demand_min = 3
+	demand_max = 7
+	price_min = 50
+	price_max = 120
+	sps_chance = 5
+	display_chance = 80
+	
+/datum/black_market_sellable/weapons/transfer_valve/purchase_check(var/obj/input, var/mob/user)
+	if(istype(input,/obj/item/device/transfer_valve/))
+		var/obj/item/device/transfer_valve/bomb = input
+		return VALID
+	return "This bomb is not powerful enough. What a disappointment."	
 	
 	
 	
