@@ -164,8 +164,10 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	if(!..())
 		return
 	if(anchored)
-		connect_to_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = TRUE
 	else
-		disconnect_from_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = FALSE
 	power_change()
 	update_icon()

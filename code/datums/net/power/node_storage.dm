@@ -12,4 +12,7 @@
     else if(power > 0)
         powerStored += power
         power = 0
+
+    parent.update_icon()
+
     return power

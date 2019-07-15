@@ -1,6 +1,11 @@
 /atom
 	var/list/net_nodes = list() //list of nodes
 
+/atom/Destroy()
+	. = ..()
+	for(var/node in net_nodes)
+		qdel(node)
+
 /atom/proc/addNode(var/nodetype, ...) //add any args for new after the first
 	if(!ispath(nodetype))
 		world.log << "[src.type] called addNode with invalid nodetype: [nodetype]"
@@ -15,14 +20,20 @@
 	return node
 
 /atom/proc/getNode(var/nodetype)
-	TODO
+	PAULTODO
 
 /atom/proc/getNodes(var/nodetype)
-	TODO
+	PAULTODO
 
+//change this to getNode(/datum/net_node/power) (almost) everywhere
 /atom/proc/get_power_node()
 	var/list/nodes = getNode(/datum/net_node/power/machinery)
 	if(!nodes.len)
 		return addNode(/datum/net_node/power/machinery)
 	else
 		return nodes[1]
+	
+/atom/proc/get_powernet()
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(!istype(node))
+		return 0

@@ -17,7 +17,10 @@
 
 //we tell our connected things to propagate new nets
 /datum/net_node/Destroy()
-    active = 0 //so we don't get propagated over
+    active = FALSE //so we don't get propagated over
+    rebuild_connections()
+
+/datum/net_node/proc/rebuild_connections()
     var/list/new_nets = list()
     for(var/datum/net_node/neighbour in get_connections())
         if(!(neighbour.net in new_nets)) //have we already propagated over this node?

@@ -605,7 +605,6 @@ Pressure: [env.pressure]"}
 
 	for(var/obj/machinery/power/battery/smes/SMES in power_machines)
 		if(SMES.anchored)
-			SMES.connect_to_network() //Just in case.
 			SMES.chargemode = 1
 			SMES.online = 1
 

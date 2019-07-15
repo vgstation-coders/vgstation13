@@ -479,12 +479,10 @@
 		cell.forceMove(get_turf(src))
 		cell = null
 	if(istype(the_target, /obj/structure/cable))
-		var/obj/structure/cable/C = the_target
-		if(C.powernet && C.powernet.avail > 0)
-			if(latched && locked_to && locked_to == C)
-				return 1
-			if(!latched)
-				return 1
+		if(latched && locked_to && locked_to == C)
+			return 1
+		if(!latched)
+			return 1
 		else if((!C.powernet || C.powernet.avail <= 0) && locked_to == C)
 			unlatch()
 
@@ -494,10 +492,11 @@
 	if(istype(target, /obj/structure/cable))
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
-			var/datum/powernet/PN = C.get_powernet()
-			if(PN && PN.avail > 0 && cell.percent() < 100)
-				var/drained = min (rand(500,1500), PN.avail )
-				PN.load += drained
+			var/datum/net/power/net = C.get_powernet()
+			if(istype(net) && cell.percent() < 100)
+				var/drained = min(rand(500,1500), PN.excess)
+				var/datum/net_node/power/node = get_power_node()
+				node.powerNeeded += drained
 				cell.give(drained/10)
 			else
 				visible_message("<span class = 'notice'>\The [src] detaches from \the [C]</span>")

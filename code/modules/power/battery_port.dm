@@ -25,9 +25,6 @@
 
 	RefreshParts()
 
-	connect_to_network()
-
-
 /obj/machinery/power/battery_port/Destroy()
 	disconnect_battery()
 	..()

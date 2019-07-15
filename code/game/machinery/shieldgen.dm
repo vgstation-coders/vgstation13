@@ -329,6 +329,10 @@
 
 		machine_flags = WRENCHMOVE | FIXED2WORK
 
+/obj/machinery/shieldwallgen/New()
+	. = ..()
+	addNode(/datum/net_node/power)
+
 /obj/machinery/shieldwallgen/free_access
 	req_access = null
 
@@ -340,25 +344,21 @@
 
 	if(!T)
 		return
-	var/obj/structure/cable/C = T.get_cable_node()
-	var/datum/powernet/PN
-	if(C)
-		PN = C.powernet		// find the powernet of the connected cable
-
-	if(!PN)
+	var/datum/net_node/power/node = get_power_node()
+	var/datum/net/power/net = get_powernet()
+	if(!istype(node) ||!istype(net))
 		power = 0
 		return 0
 
-	var/surplus = max(PN.avail-PN.load, 0)
+	var/surplus = max(net.excess, 0)
 	var/shieldload = min(rand(50,200), surplus)
 	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
 		power = 0
 		return 0
 	else
 		power = 1	// IVE GOT THE POWER!
-		if(PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
-			storedpower += shieldload
-			PN.load += shieldload //uses powernet power.
+		storedpower += shieldload
+		node.powerNeeded += shieldload //uses powernet power.
 //		message_admins("[PN.load]", 1)
 //		use_power(250) //uses APC power
 

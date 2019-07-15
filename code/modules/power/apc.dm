@@ -73,7 +73,6 @@
 	var/lastused_total = 0
 	var/main_status = 0
 	var/wiresexposed = 0
-	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
 	var/malflocked = 0 //used for malfs locking down APCs

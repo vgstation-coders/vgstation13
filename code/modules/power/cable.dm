@@ -98,8 +98,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(level == LEVEL_BELOW_FLOOR)
 		hide(T.intact)
 
-	cable_list += src		//add it to the global cable list
-
 	addNode(/datum/net_node/power/cable, d1, d2)
 
 /obj/structure/cable/initialize()
@@ -107,11 +105,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	add_self_to_holomap()
 
 /obj/structure/cable/Destroy()			// called when a cable is deleted
-	if(powernet)
-		powernet.set_to_build()	// update the powernets
-
-	cable_list -= src
-
 	if(istype(attached))
 		attached.set_light(0)
 		attached.icon_state = "powersink0"
@@ -126,8 +119,9 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	.=..()
 
-	if(powernet)
-		powernet.set_to_build() // update the powernets
+	var/datum/net_node/power/node = get_power_node()
+	node.rebuild_connections()
+	node.connections_changed()
 
 /obj/structure/cable/shuttle_rotate(angle)
 	if(d1)
@@ -200,8 +194,8 @@ By design, d1 is the smallest direction and d2 is the highest
 			R.loaded.cable_join(src, user)
 			R.is_empty()
 	else if(istype(W, /obj/item/device/multitool))
-		if((powernet) && (powernet.avail > 0))		// is it powered?
-			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
+		if(avail() > 0)		// is it powered?
+			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(load())] - Available: [format_watts(avail())].</SPAN>")
 		else
 			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
@@ -260,11 +254,11 @@ By design, d1 is the smallest direction and d2 is the highest
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)
-	if((get_powernet()) && (powernet.avail > 1000))
+	if(avail() > 1000)
 		if(!prob(prb))
 			return 0
 
-		if(electrocute_mob(user, powernet, src, siemens_coeff))
+		if(electrocute_mob(user, get_powernet(), src, siemens_coeff))
 			spark(src, 5)
 			return 1
 
@@ -296,6 +290,17 @@ By design, d1 is the smallest direction and d2 is the highest
 		else
 			color = colorC
 
+/obj/structure/cable/proc/setDirs(dir1, dir2)
+	var/datum/net_node/power/cable/node = C.getNodeCableNode()
+	node.setDirs(dir1, dir2)
+	if(dir1 > dir2)
+		d1 = dir2
+		d2 = dir1
+	else
+		d1 = dir1
+		d2 = dir2
+	update_icon()
+
 ////////////////////////////////////////////
 // Power related
 ///////////////////////////////////////////
@@ -310,23 +315,22 @@ By design, d1 is the smallest direction and d2 is the highest
 		node.powerNeeded -= amount
 
 /obj/structure/cable/proc/surplus()
-	var/datum/net_node/power/machinery/node = get_power_node()
-	if(!istype(node))
-		return 0
-
-	var/datum/net/power/net = node.net
+	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0
 	
 	return net.excess
 
 /obj/structure/cable/proc/avail()
-	var/datum/net_node/power/machinery/node = get_power_node()
-	if(!istype(node))
-		return 0
-
-	var/datum/net/power/net = node.net
+	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0
 	
 	return net.avail
+
+/obj/structure/cable/proc/load()
+	var/datum/net/power/net = get_powernet()
+	if(!istype(net))
+		return 0
+	
+	return net.load

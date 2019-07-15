@@ -1,5 +1,5 @@
 /datum/net/power
-    note_types = list(/datum/net_node/power)
+    node_types = list(/datum/net_node/power)
     var/load = 0				// the current load on the powernet, updated in powertick
     var/avail = 0				// the current produced power in the powernet, updated in powertick
     var/excess = 0			// excess power on the powernet, updated in powertick
@@ -19,7 +19,7 @@
     
     load += other_net.load
     avail += other_net.avail
-    netexcess += other_net.netexcess
+    excess += other_net.excess
 
 /datum/net/power/proc/powertick()
     var/list/battery_nodes = list() //saving batteries for last to either gather up the excess or fill the missing power
@@ -27,7 +27,7 @@
     var/power = 0
     load = 0
     avail = 0
-    netexcess = 0
+    excess = 0
     for(var/datum/net_node/power/node in nodes)
         node.reset()
         if(istype(node, /datum/net_node/power/storage))
@@ -89,7 +89,7 @@
             cable.propagate(new_net)
             new_nets += new_net
 
-// TODO
+PAULTODO
 // determines how strong could be shock, deals damage to mob, uses power.
 // M is a mob who touched wire/whatever
 // power_source is a source of electricity, can be powercell, area, apc, cable, powernet or null
@@ -116,13 +116,14 @@
 
     if(istype(power_source, /obj/structure/cable))
         var/obj/structure/cable/Cable = power_source
-        power_source = Cable.get_powernet()
+        var/datum/net_node/power/cable/node = Cable.get_power_node()
+        power_source = node.net
 
-    var/datum/powernet/PN
+    var/datum/net/power/net
     var/obj/item/weapon/cell/cell
 
-    if(istype(power_source, /datum/powernet))
-        PN = power_source
+    if(istype(power_source, /datum/net/power))
+        net = power_source
     else if(istype(power_source, /obj/item/weapon/cell))
         cell = power_source
     else if(istype(power_source, /obj/machinery/power/apc))
@@ -130,7 +131,7 @@
         cell = apc.get_cell()
 
         if(apc.terminal)
-            PN = apc.terminal.powernet
+            net = apc.terminal.get_powernet()
     else if(!power_source)
         return 0
     else
@@ -154,21 +155,8 @@
     var/shock_damage = 0
 
     if(PN_damage >= cell_damage)
-        power_source = PN
         shock_damage = PN_damage
     else
-        power_source = cell
         shock_damage = cell_damage
 
-    var/drained_hp = M.electrocute_act(shock_damage, source, siemens_coeff)	//zzzzzzap!
-    var/drained_energy = drained_hp * 20
-
-    if(source_area)
-        source_area.use_power(drained_energy / CELLRATE)
-    else if(istype(power_source, /datum/powernet))
-        var/drained_power = drained_energy / CELLRATE						// convert from "joules" to "watts"
-        PN.load += drained_power
-    else if(istype(power_source, /obj/item/weapon/cell))
-        cell.use(drained_energy)
-
-    return drained_energy
+    M.electrocute_act(shock_damage, source, siemens_coeff)	//zzzzzzap!

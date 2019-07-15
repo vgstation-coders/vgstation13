@@ -48,9 +48,11 @@ var/list/obj/machinery/power/photocollector/photocollector_list = list()
 	if(!.)
 		return
 	if(anchored)
-		connect_to_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = TRUE
 	else
-		disconnect_from_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = TRUE
 
 /obj/machinery/power/photocollector/attackby(obj/item/W, mob/user)
 	if(..())

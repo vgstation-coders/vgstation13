@@ -228,8 +228,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 		C.cableColor(_color)
 
-		var/datum/net_node/power/cable/node = C.getNodeCableNode()
-		node.setDirs(nd1, nd2)
+		C.setDirs(nd1, nd2)
 
 		C.add_fingerprint()
 		C.update_icon()

@@ -10,7 +10,6 @@
 	name = null
 	icon = 'icons/obj/power.dmi'
 	anchored = 1.0
-	var/datum/powernet/powernet = null
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
@@ -25,6 +24,9 @@
 	. = ..()
 	machines -= src
 	power_machines |= src
+	add_power_node()
+
+/obj/machinery/power/proc/add_power_node()
 	addNode(/datum/net_node/power)
 
 /obj/machinery/power/initialize()
@@ -77,33 +79,21 @@
 		node.powerNeeded -= amount
 
 /obj/machinery/power/proc/surplus()
-	var/datum/net_node/power/machinery/node = get_power_node()
-	if(!istype(node))
-		return 0
-
-	var/datum/net/power/net = node.net
+	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0
 	
 	return net.excess
 
 /obj/machinery/power/proc/avail()
-	var/datum/net_node/power/machinery/node = get_power_node()
-	if(!istype(node))
-		return 0
-
-	var/datum/net/power/net = node.net
+	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0
 	
 	return net.avail
 
 /obj/machinery/power/proc/load()
-	var/datum/net_node/power/machinery/node = get_power_node()
-	if(!istype(node))
-		return 0
-
-	var/datum/net/power/net = node.net
+	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0
 	
@@ -111,6 +101,13 @@
 
 /obj/machinery/power/proc/disconnect_terminal() // machines without a terminal will just return, no harm no fowl.
 	return
+
+/obj/machinery/power/proc/get_powernet()
+	var/datum/net_node/power/machinery/node = get_power_node()
+	if(!istype(node))
+		return 0
+
+	return node.net
 
 // returns true if the area has power on given channel (or doesn't require power)
 // defaults to power_channel
@@ -141,6 +138,7 @@
 
 	this_area.use_power(amount, chan)
 
+
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
 // can override if needed
@@ -158,6 +156,7 @@
 		if(!use_auto_lights)
 			return
 		set_light(0)
+
 
 ///////////////////////////////////////////
 // Static power

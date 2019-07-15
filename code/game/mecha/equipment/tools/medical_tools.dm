@@ -372,24 +372,12 @@
 		return reset()
 	var/obj/structure/cable/NC = getFromPool(/obj/structure/cable, new_turf)
 	NC.cableColor("red")
-	NC.d1 = 0
-	NC.d2 = fdirn
+	NC.setDirs(0, fdirn)
 	NC.update_icon()
 
-	var/datum/powernet/PN
 	if(last_piece && last_piece.d2 != chassis.dir)
-		last_piece.d1 = min(last_piece.d2, chassis.dir)
-		last_piece.d2 = max(last_piece.d2, chassis.dir)
-		last_piece.update_icon()
-		PN = last_piece.powernet
+		last_piece.setDirs(min(last_piece.d2, chassis.dir), max(last_piece.d2, chassis.dir))
 
-	if(!PN)
-		PN = new()
-	NC.powernet = PN
-	PN.cables += NC
-	NC.mergeConnectedNetworks(NC.d2)
-
-	//NC.mergeConnectedNetworksOnTurf()
 	last_piece = NC
 	return 1
 

@@ -78,6 +78,9 @@ var/global/list/battery_online =	list(
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
+/obj/machinery/power/battery/add_power_node()
+	addNode(/datum/net_node/power/storage)
+
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
 	var/lasercount = 0
@@ -150,33 +153,6 @@ var/global/list/battery_online =	list(
 /obj/machinery/power/battery/proc/chargedisplay()
 	return Clamp(round(5.5*charge/(capacity ? capacity : 5e6)), 0, battery_charge.len)
 
-/*
- * Called after all power processes are finished
- * Restores charge level to smes if there was excess this ptick
- */
-/obj/machinery/power/battery/proc/restore()
-	if (stat & BROKEN)
-		return
-
-	var/_chargedisplay = chargedisplay()
-
-	var/excess = powernet.netexcess // This was how much wasn't used on the network last ptick, minus any removed by other SMESes
-
-	excess = min(lastout, excess) // Clamp it to how much was actually output by this SMES last ptick
-
-	excess = min((capacity - charge) / SMESRATE, excess) // For safety, also limit recharge by space capacity of SMES (shouldn't happen)
-
-	// Now recharge this amount
-
-	charge += excess * SMESRATE // Restore unused power
-
-	powernet.netexcess -= excess // Remove the excess from the powernet, so later SMESes don't try to use it
-
-	loaddemand = lastout - excess
-
-	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
-		update_icon()
-
 /obj/machinery/power/battery/attack_ai(mob/user)
 	src.add_hiddenprint(user)
 	add_fingerprint(user)
@@ -205,7 +181,7 @@ var/global/list/battery_online =	list(
 	data["outputMax"] = max_output
 	data["outputLoad"] = round(loaddemand)
 	data["hasInput"] = get_terminal() ? 1 : 0;
-	data["hasOutput"] = powernet ? 1 : 0;
+	data["hasOutput"] = powernet ? 1 : 0; PAULTODO
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

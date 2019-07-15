@@ -775,7 +775,8 @@
 /obj/machinery/power/conduction_plate/New()
 	..()
 	if(anchored)
-		connect_to_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = TRUE
 	RefreshParts()
 
 /obj/machinery/power/conduction_plate/RefreshParts()
@@ -812,6 +813,8 @@
 		return
 	attached_tank = null
 	if(anchored)
-		connect_to_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = TRUE
 	else
-		disconnect_from_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = FALSE

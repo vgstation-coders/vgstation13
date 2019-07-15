@@ -54,12 +54,6 @@
 
 	src.interface = new/datum/html_interface/nanotrasen(src, "Power Monitoring", 420, 600, head)
 
-	var/obj/structure/cable/attached = null
-	var/turf/T = loc
-	if(isturf(T))
-		attached = locate() in T
-	if(attached)
-		powernet = attached.get_powernet()
 	html_machines += src
 
 	init_ui()
