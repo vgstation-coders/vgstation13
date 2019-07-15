@@ -30,7 +30,7 @@
 		D.threat_log += src //The actual reporting on threat it made comes from this entry
 	spawn(1.5 MINUTES)
 		if(antag.current.stat!=DEAD && OnStation())
-			command_alert("An escaped catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station.", "Catbeast Detected",1)
+			command_alert("An escaped disease-ridden catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station. Remember to get a medical checkup afterward in case of infection.", "Catbeast Detected",1)
 	return TRUE
 
 var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a","Nyanners","Thing From Below","Airlock Scratcher","Flees-Like-Fleas",
@@ -46,10 +46,10 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 		)
 	var/list/bad = list(
 		EFFECT_DANGER_HELPFUL	= 0,
-		EFFECT_DANGER_FLAVOR	= 1,
-		EFFECT_DANGER_ANNOYING	= 2,
-		EFFECT_DANGER_HINDRANCE	= 3,
-		EFFECT_DANGER_HARMFUL	= 3,
+		EFFECT_DANGER_FLAVOR	= 2,
+		EFFECT_DANGER_ANNOYING	= 4,
+		EFFECT_DANGER_HINDRANCE	= 6,
+		EFFECT_DANGER_HARMFUL	= 6,
 		EFFECT_DANGER_DEADLY	= 1,
 		)
 
