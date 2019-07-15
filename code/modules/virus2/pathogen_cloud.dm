@@ -31,7 +31,7 @@ var/list/pathogen_clouds = list()
 	pathogen.plane = HUD_PLANE
 	pathogen.layer = UNDER_HUD_LAYER
 	pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-	for (var/mob/living/L in science_goggles_wearers)
+	for (var/mob/L in science_goggles_wearers)
 		if (L.client)
 			L.client.images |= pathogen
 
@@ -42,7 +42,7 @@ var/list/pathogen_clouds = list()
 
 /obj/effect/effect/pathogen_cloud/Destroy()
 	if (pathogen)
-		for (var/mob/living/L in science_goggles_wearers)
+		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
 				L.client.images -= pathogen
 		pathogen = null

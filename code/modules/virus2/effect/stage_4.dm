@@ -365,7 +365,7 @@
 	name = "Delightful Effect"
 	desc = "A more powerful version of Full Glass. Makes the infected feel delightful."
 	stage = 4
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/delightful/activate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You feel delightful!</span>")
@@ -377,7 +377,7 @@
 	name = "Arachnogenesis Effect"
 	desc = "Converts the infected's stomach to begin producing creatures of the arachnid variety."
 	stage = 4
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_HARMFUL
 	var/spawn_type=/mob/living/simple_animal/hostile/giant_spider/spiderling
 	var/spawn_name="spiderling"
 
@@ -412,7 +412,7 @@
 	name = "Toxin Sublimation"
 	desc = "Converts the infected's pores and respiratory organs to synthesize Plasma gas."
 	stage = 4
-	badness = EFFECT_DANGER_HARMFUL
+	badness = EFFECT_DANGER_DEADLY
 
 /datum/disease2/effect/plasma/activate(var/mob/living/mob)
 	//var/src = mob

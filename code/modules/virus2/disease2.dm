@@ -381,7 +381,7 @@ var/global/list/disease2_list = list()
 			infectedMob.pathogen.plane = HUD_PLANE
 			infectedMob.pathogen.layer = UNDER_HUD_LAYER
 			infectedMob.pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-		for (var/mob/living/L in science_goggles_wearers)
+		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
 				L.client.images |= infectedMob.pathogen
 
@@ -589,7 +589,7 @@ var/global/list/disease2_list = list()
 	if (V && V.len <= 0)
 		infected_contact_mobs -= mob
 		if (mob.pathogen)
-			for (var/mob/living/L in science_goggles_wearers)
+			for (var/mob/L in science_goggles_wearers)
 				if (L.client)
 					L.client.images -= mob.pathogen
 
@@ -645,7 +645,13 @@ var/global/list/disease2_list = list()
 	clean_global_log()
 	subID = rand(0,9999)
 	var/old_dat = get_antigen_string()
-	roll_antigen()
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 2,
+		ANTIGEN_COMMON	= 2,
+		ANTIGEN_RARE	= 1,
+		ANTIGEN_ALIEN	= 0,
+		)
+	roll_antigen(anti)
 	log_debug("[form] [uniqueID]-[subID] has mutated its antigen from [old_dat] to [get_antigen_string()].")
 	log += "<br />[timestamp()] Mutated antigen [old_dat] into [get_antigen_string()]."
 	update_global_log()

@@ -71,12 +71,14 @@
 /obj/item/critter_cage/lock_atom(var/atom/movable/AM)
 	. = ..()
 	if (.)
+		AM.plane = MOB_PLANE
 		AM.pixel_x = pixel_x
 		AM.pixel_y = pixel_y+5
 
 /obj/item/critter_cage/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	if (.)
+		AM.plane = initial(AM.plane)
 		AM.pixel_x = initial(AM.pixel_x)
 		AM.pixel_y = initial(AM.pixel_y)
 

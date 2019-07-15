@@ -236,6 +236,8 @@ var/list/score=list(
 	"meals"          = 0, //How much food was actively cooked that day
 	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
 	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
+	"disease_most"        = null, //Most spread disease
+	"disease_most_count"        = 0, //Most spread disease
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus

@@ -86,6 +86,62 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2019.07.14</h2>
+			<h3 class="author">bathosbathtime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">reverted "friendly Cultist Cyborgs"</li>
+			</ul>
+
+			<h2 class="date">2019.07.13</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed speech disabilities not working if other genes were activated or the dude was a plasmaman.</li>
+			</ul>
+			<h3 class="author">GlassEclipse updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added friendly cultist cyborg boards to the trader vendor. They can only be used on service borgs.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Under the hood roid tweaks, but the teleporter looks a bit different...</li>
+			</ul>
+
+			<h2 class="date">2019.07.12</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed Tech Storage on all maps having two Disease Analyser boards instead of one, and missing a Disease Splicer board.</li>
+			</ul>
+			<h3 class="author">GlassEclipse updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Less than legitimate forces in your sector have learned how to build black market uplinks. They don't offer any goods for sale yet.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixed a typo!</li>
+			</ul>
+
+			<h2 class="date">2019.07.11</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed mobs like cockroach being invisible in cages because they appear bellow them. Mobs placed in cages have their plane changed to the default mob plane.</li>
+				<li class="bugfix">Mice can no longer use the Hide verb when in a cage.</li>
+				<li class="rscadd">Added some open growth dishes for mappers, both empty and containing a random disease</li>
+				<li class="rscadd">The round end scoreboard now indicates which disease was spread the most, as well as its symptoms.</li>
+				<li class="rscadd">Ghosts can now use the pathogen HUD</li>
+				<li class="rscadd">Cats no longer chase mice while dead or uncounscious. Let them rest in peace.</li>
+				<li class="rscadd">Mucus or Sputum caused by Coldingtons and Respiratory Putrefaction now only spawn if the mob is on top of a turf (so mice in vents won't spawn any). That should curb the amount of mucus spawning all around the station.</li>
+				<li class="rscadd">Nanomed plus now has 8 vials to dispense. With the 6 in virology and the 6 in Chemistry that's 20 vials in medbay.</li>
+				<li class="bugfix">Fixed blank vaccines sometimes mysteriously already containing antigen brewed in other vaccines someplace else.</li>
+				<li class="bugfix">Fixed Observer Pathogen HUD not properly updating when disease is getting removed from items and mobs.</li>
+				<li class="bugfix">Fixed Plague Mice Invasion ruleset only spawning one mouse instead of up to five.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Darkholme no longer goes full retard.</li>
+				<li class="rscadd">Corn Oil exists again</li>
+				<li class="rscadd">The Janitor Cargo Crate has mousetraps now.</li>
+			</ul>
+
 			<h2 class="date">2019.07.10</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -2183,119 +2239,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Ian the corgi can no longer wear flat pieces of paper as a hat; the paper has to be folded into a hat first.</li>
-			</ul>
-
-			<h2 class="date">2019.02.22</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">you may now use a pen to write labels on syringes.</li>
-				<li class="rscadd">syringes fired from syringe guns get to keep their label. (Unknown is hit by the syringe (Healing)!)</li>
-				<li class="rscadd">if a syringe fired from a syringe gun decays from traveling over 6 tiles, a broken syringe spawns in its place.</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Slime related beings now have a proper type of meat in the form of gelatin [slabs]. You can use it as a meat or as a gelatin in cooking but be aware that it contains slime jelly. Throw your local xenobiologist into the gibber today!</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Catbeast scoreboard logo should now be fixed</li>
-				<li class="tweak">In Blob, the AI is only required to enforce quarantine until all overminds are destroyed. The scoreboard will reflect this success or failure.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Can now delete viruses from the database.</li>
-			</ul>
-			<h3 class="author">Sauberstaub updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Tweaked spread type variance in disease2.dm to yield airborne spread type less often.</li>
-				<li class="rscadd">Added "Prion" disease form. Prion has extreme stage variance and stage probability.</li>
-				<li class="rscadd">Added new Stage 1 effect: "Hyronalinism". Causes infected to produce Hyronalin over time, increasing radiation resistance.</li>
-				<li class="rscadd">Added new Stage 1 effect: "Mygalia Syndrome". [FILLER]Causes the infected to feel minor soreness with no serious effect.</li>
-				<li class="rscadd">Added new Stage 1 effect: "Clashing Syndrome" Causes the infected to randomly and uncontrollably greet everyone they meet, or bid them farewell. Impairs communication.</li>
-				<li class="rscadd">Added new Stage 2 effect: "Plankton's Syndrome" Causes the infected to yell everything they say, greatly increasing vocalization range.</li>
-				<li class="rscadd">Added new Stage 3 effect: "Cattulism Syndrome". Slowly increases the infected's "cat-like" night vision ability.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Full-tile windows and grilles can now be alt-clicked to show the contents of the turf they're standing on.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds the Sith Bundle to the possible traitor bundle list! Contains two e-swords, unique clothing (thanks to RealestEstate), a bind spell, a lightning spell (deals 25 burn damage and requires you to wear the entire clothing set), a telekinesis injector, and a jump mutation injector. Shouldn't mean you should try your luck at it by playing roulette with the bundle though!</li>
-			</ul>
-
-			<h2 class="date">2019.02.21</h2>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The wizard zombie potion now has a 100% chance to create a zombie instead of 50% if the target is human.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now pry the lid off the cistern of a toilet with a chisel</li>
-				<li class="rscadd">The antaghud now has a catbeast icon</li>
-				<li class="bugfix">Crazed weebs, catbeasts, and wizards all start with sensors turned off now.</li>
-				<li class="bugfix">Fixed an oversight that caused autotraitor to check for new traitors every 30 minutes instead of 15</li>
-				<li class="bugfix">Fixed a bug where station integrity was inverted on the blob score screen (e.g.: it would show 103% instead of 97%)</li>
-				<li class="bugfix">Fixed an oversight where blobs did not burn tiles, therefore scoring no station damage when expanding over floors.</li>
-				<li class="bugfix">Fixed the Blob scoreboard not displaying any data</li>
-				<li class="bugfix">Fixed a bug in which the Invade objective had an inverted check, causing instant victory</li>
-				<li class="bugfix">Fixed a bug where the Blob lacked a required_pref, meaning it could not fire</li>
-				<li class="bugfix">Fixed a bug where the blob was given a role, then recruited to its own faction, causing it to drop and regain its role.</li>
-				<li class="rscadd">Reformed Malf AI candidacy to prioritize the AI, then Cyborgs, but then anyone who has Malf enabled.</li>
-				<li class="rscadd">Malf preferences now actually work, allowing the mode to fire.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added the Prototype Bluespace Rapid Part Exchange Device to the Protolathe. It requires Engineering research of 5, Material research of 6, Data research of 3, and Bluespace research of 5. It can hold twice as much as a regular RPED and does not require a machinery's panel to be open to exchange parts. This one costs slightly more than a regular RPED but with diamond cost thrown into the mix.</li>
-				<li class="rscdel">The scientist screams are ONLY AVAILABLE FOR APRIL FOOLS. Sorry about that!</li>
-			</ul>
-
-			<h2 class="date">2019.02.20</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Nanotrasen now properly faxes reports on Merchants that include mugshots of the trader in question rather than you, the reader.</li>
-				<li class="bugfix">Fixed a detection issue that prevented regaining threat when an antagonist was destroyed. Note that they need to be entirely destroyed, cremate that head!</li>
-				<li class="tweak">The weeaboo sword's examine text is now more clear about what alt clicking does (it toggles your teleport attack on/off)</li>
-				<li class="bugfix">Latejoin weeaboos should no longer get double objectives</li>
-				<li class="bugfix">When a latejoin role that refunds threat joins, it is now properly logged.</li>
-				<li class="tweak">Latejoin roles will not refund threat over the threat_level</li>
-				<li class="rscdel">Traders can no longer quality for the Crazed Weeaboo role, to prevent latejoining in space.</li>
-				<li class="bugfix">Vampires no longer cloak or menace while dead.</li>
-				<li class="rscadd">A mode can refund its threat now if none of the applicants were valid.</li>
-				<li class="bugfix">Fixed a bug where a dead but not ghosted player would be ignored for from_ghosts antag roles even after submitting an application.</li>
-				<li class="bugfix">Fixed a bug where later ragin' mages would not spawn in the wizard den, get a book, robes, name, etc.</li>
-				<li class="bugfix">Fixed a bug where forced ragin' mages would not calculate threat properly.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added tomato soup as premium item for coffee machines</li>
-				<li class="tweak">tomato soup, the food, now contains tomato soup, rather than tomato juice.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Scientists now have Half-Life screams.</li>
-				<li class="bugfix">AI can now ctrl+click the fire alarms.</li>
-			</ul>
-
-			<h2 class="date">2019.02.19</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">The wizard's Feint spell's enchanted sword finally has its own sprites, courtesy of Fury.</li>
-				<li class="bugfix">You can no longer bork your inventory slots by trying to store the enchanted blade.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a new midround mode, RevSquad.</li>
-				<li class="rscadd">Added a new latejoin mode, Provocateur.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a generic casing drop sound, for guns such as the NT Glock</li>
-				<li class="tweak">Lasers going through windows have their damage affected by passing through the window. Should the laser damage reach 1 or below, the laser disperses entirely.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The protolathe and circuit imprinter can now fit 50 objects in their queues instead of 30.</li>
 			</ul>
 		</div>
 		<!--

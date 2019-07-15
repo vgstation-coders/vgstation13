@@ -78,7 +78,7 @@ var/list/infected_cleanables = list()
 				pathogen.plane = HUD_PLANE
 				pathogen.layer = UNDER_HUD_LAYER
 				pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-			for (var/mob/living/L in science_goggles_wearers)
+			for (var/mob/L in science_goggles_wearers)
 				if (L.client)
 					L.client.images |= pathogen
 
@@ -113,7 +113,7 @@ var/list/infected_cleanables = list()
 /obj/effect/decal/cleanable/Destroy()
 	infected_cleanables -= src
 	if (pathogen)
-		for (var/mob/living/L in science_goggles_wearers)
+		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
 				L.client.images -= pathogen
 		pathogen = null

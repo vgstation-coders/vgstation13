@@ -265,9 +265,9 @@ var/list/virusdishes = list()
 		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
 		contained_virus = new virus_choice
 		var/list/anti = list(
-			ANTIGEN_BLOOD	= 2,
-			ANTIGEN_COMMON	= 2,
-			ANTIGEN_RARE	= 1,
+			ANTIGEN_BLOOD	= 1,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 0,
 			ANTIGEN_ALIEN	= 0,
 			)
 		var/list/bad = list(
@@ -285,6 +285,22 @@ var/list/virusdishes = list()
 	else
 		virusdishes.Remove(src)
 
+/obj/item/weapon/virusdish/open
+	icon_state = "virusdish1"
+
+/obj/item/weapon/virusdish/open/New(loc)
+	..()
+	open = TRUE
+	update_icon()
+
+/obj/item/weapon/virusdish/random/open
+	icon_state = "virusdish1"
+
+/obj/item/weapon/virusdish/random/open/New(loc)
+	..()
+	open = TRUE
+	update_icon()
+	processing_objects.Add(src)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()

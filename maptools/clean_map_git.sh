@@ -7,7 +7,7 @@ MAPFILES=(
 #	$MAPROOT"vgstation.dmm"
 	$MAPROOT"defficiency.dmm"
 	$MAPROOT"metaclub.dmm"
-	$MAPROOT"bagelstation.dmm"
+#	$MAPROOT"bagelstation.dmm"
 	$MAPROOT"packedstation.dmm"
 )
 for MAPFILE in "${MAPFILES[@]}"

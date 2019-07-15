@@ -18,7 +18,7 @@
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/mob)
 	mob.emote("sneeze")
-	if (prob(50))
+	if (prob(50) && isturf(mob.loc))
 		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
 		if(!M)
 			M = new(get_turf(mob))
