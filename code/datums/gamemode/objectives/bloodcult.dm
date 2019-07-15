@@ -99,7 +99,7 @@
 			if(loyalty_implant.implanted)
 				is_implanted = TRUE
 				break
-		if(is_implanted || isReligiousLeader(user) || isantagbanned(user) || jobban_isbanned(user, CULTIST))
+		if(is_implanted || isReligiousLeader(player) || isantagbanned(player) || jobban_isbanned(player, CULTIST))
 			possible_targets += player
 		else
 			backup_targets += player
