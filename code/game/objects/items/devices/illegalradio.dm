@@ -26,6 +26,7 @@
 	var/teleport_time = 200
 	var/advanced_teleport_time = 100
 	var/scanning = 0
+	
 
 /obj/item/device/illegalradio/nanotrasen
 	name = "advanced black market uplink"
