@@ -302,7 +302,17 @@ var/stacking_limit = 90
 	return 1
 
 /datum/gamemode/dynamic/proc/picking_roundstart_rule(var/list/drafted_rules = list())
-	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
+	var/datum/dynamic_ruleset/roundstart/starting_rule
+
+	while(!starting_rule && drafted_rules.len > 0)
+		starting_rule = pickweight(drafted_rules)
+		if (threat < stacking_limit && no_stacking)
+			for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
+				if ((DR.flags & HIGHLANDER_RULESET) && (starting_rule.flags & HIGHLANDER_RULESET))
+					message_admins("Ruleset [starting_rule.name] refused as we already have a round-ending ruleset.")
+					log_admin("Ruleset [starting_rule.name] refused as we already have a round-ending ruleset.")
+					drafted_rules -= starting_rule
+					starting_rule = null
 
 	if (starting_rule)
 		message_admins("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
@@ -310,13 +320,6 @@ var/stacking_limit = 90
 
 		roundstart_rules -= starting_rule
 		drafted_rules -= starting_rule
-
-		if (threat < stacking_limit && no_stacking)
-			for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
-				if ((DR.flags & HIGHLANDER_RULESET) && (starting_rule.flags & HIGHLANDER_RULESET))
-					message_admins("Ruleset refused as we already have a round-ending ruleset.")
-					log_admin("Ruleset refused as we already have a round-ending ruleset.")
-					return FALSE
 
 		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
 			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
