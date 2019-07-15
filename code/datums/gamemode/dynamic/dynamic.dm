@@ -311,11 +311,12 @@ var/stacking_limit = 90
 		roundstart_rules -= starting_rule
 		drafted_rules -= starting_rule
 
-		for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
-			if ((DR.flags & HIGHLANDER_RULESET) && (starting_rule.flags & HIGHLANDER_RULESET))
-				message_admins("Ruleset refused as we already have a round-ending ruleset.")
-				log_admin("Ruleset refused as we already have a round-ending ruleset.")
-				return FALSE
+		if (threat < stacking_limit && no_stacking)
+			for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
+				if ((DR.flags & HIGHLANDER_RULESET) && (starting_rule.flags & HIGHLANDER_RULESET))
+					message_admins("Ruleset refused as we already have a round-ending ruleset.")
+					log_admin("Ruleset refused as we already have a round-ending ruleset.")
+					return FALSE
 
 		if (istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/))
 			message_admins("Delayed ruleset, with a delay of [starting_rule:delay/10] seconds.")
