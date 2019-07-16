@@ -255,13 +255,6 @@ var/stacking_limit = 90
 	var/list/drafted_rules = list()
 	var/i = 0
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		var/skip_ruleset = 0
-		for (var/datum/dynamic_ruleset/roundstart/DR in drafted_rules)
-			if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
-				skip_ruleset = 1
-				break
-		if (skip_ruleset)
-			continue
 		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
 			i++																			//we check whether we've got elligible players
 			rule.candidates = candidates.Copy()
@@ -309,7 +302,17 @@ var/stacking_limit = 90
 	return 1
 
 /datum/gamemode/dynamic/proc/picking_roundstart_rule(var/list/drafted_rules = list())
-	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
+	var/datum/dynamic_ruleset/roundstart/starting_rule
+
+	while(!starting_rule && drafted_rules.len > 0)
+		starting_rule = pickweight(drafted_rules)
+		if (threat < stacking_limit && no_stacking)
+			for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
+				if ((DR.flags & HIGHLANDER_RULESET) && (starting_rule.flags & HIGHLANDER_RULESET))
+					message_admins("Ruleset [starting_rule.name] refused as we already have a round-ending ruleset.")
+					log_admin("Ruleset [starting_rule.name] refused as we already have a round-ending ruleset.")
+					drafted_rules -= starting_rule
+					starting_rule = null
 
 	if (starting_rule)
 		message_admins("Picking a [istype(starting_rule, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[starting_rule.name]</font>!")
