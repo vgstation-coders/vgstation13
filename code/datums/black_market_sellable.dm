@@ -76,7 +76,8 @@ var/list/black_market_sellables = list()
 /datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user, var/payout) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
 	return get_price()
 
-	
+/datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user) 
+	return
 	
 	
 	

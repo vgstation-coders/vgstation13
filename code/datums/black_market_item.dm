@@ -76,13 +76,13 @@ var/list/black_market_items = list()
 		. = 999
 	else
 		. = round_stock
-
 	
-/datum/black_market_item/proc/spawn_item(var/turf/loc, var/obj/item/device/illegalradio/radio, mob/user, var/delivery_method)
+/datum/black_market_item/proc/process_transaction(var/obj/item/device/illegalradio/radio, var/delivery_method)
 	radio.money_stored -= get_cost()
 	radio.money_stored -= get_cost()*delivery_fees[delivery_method]
-	return new item(loc,user)
-
+	if(get_stock() && round_stock != -1)
+		round_stock -= 1
+		
 /datum/black_market_item/proc/log_transaction(var/delivery_method, var/mob/user)
 	feedback_add_details("black_market_items_bought", name)
 	message_admins("[key_name(user)] just purchased the [src.name] from the black market. [delivery_method] ([formatJumpTo(get_turf(user))])")
@@ -126,26 +126,33 @@ var/list/black_market_items = list()
 			direction_string = "south"
 		if(WEST)
 			direction_string = "west"
+			
 	log_transaction("The item was launched at the station from the [direction_string].", user)
 	radio.visible_message("The uplink beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
-	spawn(rand(150,450))
-		var/obj/item = spawn_item(get_turf(user), radio, user, CHEAP)
-		if(!item)
+	process_transaction(radio, CHEAP)
+	radio.interact(user)
+	
+	spawn(rand(15 SECONDS, 45 SECONDS))
+		var/obj/spawned_item = new item(get_turf(user),user)	
+		if(!spawned_item)
 			return 0
-		after_spawn(item,CHEAP,user)
-		item.ThrowAtStation(30,0.4,direction)
-		if(get_stock() != 0)
-			round_stock -= 1	
-		spawn(rand(300,600))
+		after_spawn(spawned_item,CHEAP,user)
+		spawned_item.ThrowAtStation(30,0.4,direction)	
+		spawn(rand(30 SECONDS, 60 SECONDS))
 			if(!radio.nanotrasen_variant && prob(sps_chances[CHEAP]))
 				SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was launched at the station recently.")
-	
+
+
+var/list/potential_locations
+var/locations_calculated = 0
+				
 /datum/black_market_item/proc/spawn_normal(var/obj/item/device/illegalradio/radio, var/mob/user)
-	var/list/potential_locations = list()
-	var/turf/spawnloc = null
-	for(var/area/maintenance/A in areas)
-		if(A != /area/maintenance/atmos)
-			potential_locations.Add(A)
+	var/turf/spawnloc
+	if(!locations_calculated)
+		for(var/area/maintenance/A in areas)
+			if(!istype(A,/area/maintenance/atmos) && A.z == map.zMainStation)
+				potential_locations.Add(A)
+		locations_calculated = 1
 	var/area/selected_area 
 	while(potential_locations.len)
 		selected_area = pick(potential_locations)
@@ -156,39 +163,38 @@ var/list/black_market_items = list()
 				break	
 	if(!spawnloc)
 		return
-	var/time_to_spawn = rand(300,600)
+		
+	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
 	log_transaction("The item was teleported to the [selected_area.name].", user)
 	radio.visible_message("The uplink beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
+	process_transaction(radio, NORMAL)
+	radio.interact(user)
+	
 	spawn(time_to_spawn)
-		var/obj/item = spawn_item(spawnloc, radio, user, NORMAL)
-		after_spawn(item,NORMAL,user)
-		if(get_stock() != 0)
-			round_stock -= 1
-		spawn(rand(300,600))
+		var/obj/spawned_item = new item(get_turf(user),user)
+		after_spawn(spawned_item,NORMAL,user)
+		spawn(rand(30 SECONDS, 60 SECONDS))
 			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
 				SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported to your station's maintenance recently.")
 		
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
-	var/obj/item = spawn_item(get_turf(user), radio, user, EXPENSIVE)
-	if(!item)
+	process_transaction(radio, EXPENSIVE)
+	var/obj/spawned_item = new item(get_turf(user),user)
+	if(!spawned_item)
 		return 0
-	after_spawn(item,EXPENSIVE,user)
-
+	after_spawn(spawned_item,EXPENSIVE,user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
-		if(istype(item, /obj/item))
-			A.put_in_any_hand_if_possible(item)
-		if(get_stock() != 0)
-			round_stock -= 1
+		if(istype(spawned_item, /obj/item))
+			A.put_in_any_hand_if_possible(spawned_item)
+			
 	log_transaction("The item was teleported directly to him.", user)
-	if(prob(99))
-		radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase!</span>")	
-	else
-		radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase! Heh. Fucking scammed that loser. He <i>actually</i> thinks telecrystals are expensive... oh, fuck.</span>")
+	radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase!</span>")	
 	radio.interact(user)
-	spawn(rand(300,600))
+	
+	spawn(rand(30 SECONDS, 60 SECONDS))
 		if(!radio.nanotrasen_variant && prob(sps_chances[EXPENSIVE]))
-			SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported directly to the buyer recently.")
+			SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported directly to the buyer in the past minute.")
 
 	
 /datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.

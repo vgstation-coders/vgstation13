@@ -269,6 +269,7 @@
 						if(do_after(user, input, (nanotrasen_variant ? teleport_time : advanced_teleport_time)))
 							if(sellable.get_demand())
 								var/payout = sellable.determine_payout(input, src)
+								sellable.after_sell(input, user)
 								qdel(input)
 								playsound(src, 'sound/effects/coins.ogg',60, 0)
 								visible_message("The uplink beeps: <span class='warning'> Teleportation successful. A total of [payout] credits has been added to your balance.</span>")
