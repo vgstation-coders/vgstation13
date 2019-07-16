@@ -167,10 +167,10 @@
 	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
 	dat += "<B>Please pay for an available delivery option.</B><BR>"
 	dat += "<B>You are purchasing the [item.name].</B><BR>"
-	dat += {"Cash stored: [src.money_stored]<BR><BR>"}
+	dat += "Cash stored: [src.money_stored]<BR><BR>"
 	var/list/delivery_titles = list("Thrifty","Normal","Express")
 	var/list/delivery_description = list("The item is launched at the station from space. We'll give you some clues to where it hit, cheapass.","The item is teleported somewhere in your station's maintenance. You'll get a 60 second headstart and a location.","The item is teleported straight to you via telecrystal.")
-	for(var/i = 1;i < 4;i++)
+	for(var/i = 1 to 3)
 		var/fee = item.get_cost()*item.delivery_fees[i]
 		var/final_cost = item.get_cost() + fee
 		if(item.delivery_available[i])

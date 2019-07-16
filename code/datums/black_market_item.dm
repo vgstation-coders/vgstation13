@@ -1,5 +1,9 @@
 var/list/black_market_items = list()
 
+#define CHEAP 1
+#define NORMAL 2
+#define EXPENSIVE 3
+
 /proc/get_black_market_items()
 	if(!black_market_items.len)
 
@@ -74,8 +78,9 @@ var/list/black_market_items = list()
 		. = round_stock
 
 	
-/datum/black_market_item/proc/spawn_item(var/turf/loc, var/obj/item/device/illegalradio/radio, mob/user)
+/datum/black_market_item/proc/spawn_item(var/turf/loc, var/obj/item/device/illegalradio/radio, mob/user, var/delivery_method)
 	radio.money_stored -= get_cost()
+	radio.money_stored -= get_cost()*delivery_fees[delivery_method]
 	return new item(loc,user)
 
 /datum/black_market_item/proc/log_transaction(var/delivery_method, var/mob/user)
@@ -88,49 +93,51 @@ var/list/black_market_items = list()
 /datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/radio, var/delivery_method, var/mob/user)
 	..()
 	if(!istype(radio)) 
-		return 0
+		return FALSE
 	if(user.stat || user.restrained())
-		return 0
+		return FALSE
 	if(!(istype(user,/mob/living/carbon/human)))
-		return 0
+		return FALSE
 	if(get_stock() <= 0)
 		to_chat(user, "<span class='warning'>This item is out of stock. Scram.</span>")
-		return 0
+		return FALSE
 	if(!((radio.loc in user.contents) || (in_range(radio.loc, user) && istype(radio.loc.loc, /turf))))
-		return 0
+		return FALSE
 	if(get_cost() > radio.money_stored)
-		return 0
+		return FALSE
 
-	if(delivery_method == 1)
-		spawn_cheap(radio,user)
-	else if(delivery_method == 2)
-		spawn_normal(radio,user)
-	else
-		spawn_expensive(radio,user)
+	switch(delivery_method)
+		if(CHEAP)
+			spawn_cheap(radio,user)
+		if(NORMAL)
+			spawn_normal(radio,user)
+		if(EXPENSIVE)
+			spawn_expensive(radio,user)
 
 /datum/black_market_item/proc/spawn_cheap(var/obj/item/device/illegalradio/radio, var/mob/user)
 	var/direction = pick(list(NORTH,EAST,SOUTH,WEST))
 	var/direction_string
-	if(direction == NORTH) //Look, I'm not sure why directions are 1/2/4/8 and why arrays start at 1 and why I can't just do direction/2+1 to get the index of an array because integer division is fucked or something with nonstatic typing, just let it be beautiful gunk :)
-		direction_string = "north"
-	else if(direction == EAST)
-		direction_string = "east"
-	else if(direction == SOUTH)
-		direction_string = "south"
-	else if(direction == WEST)
-		direction_string = "west"
+	switch(direction)
+		if(NORTH)
+			direction_string = "north"
+		if(EAST)
+			direction_string = "east"
+		if(SOUTH)
+			direction_string = "south"
+		if(WEST)
+			direction_string = "west"
 	log_transaction("The item was launched at the station from the [direction_string].", user)
 	radio.visible_message("The uplink beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
 	spawn(rand(150,450))
-		var/obj/item = spawn_item(get_turf(user), radio, user)
+		var/obj/item = spawn_item(get_turf(user), radio, user, CHEAP)
 		if(!item)
 			return 0
-		after_spawn(item,1,user)
-		item.ThrowAtStation(30,2,direction)
+		after_spawn(item,CHEAP,user)
+		item.ThrowAtStation(30,0.4,direction)
 		if(get_stock() != 0)
 			round_stock -= 1	
 		spawn(rand(300,600))
-			if(!radio.nanotrasen_variant && prob(sps_chances[1]))
+			if(!radio.nanotrasen_variant && prob(sps_chances[CHEAP]))
 				SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was launched at the station recently.")
 	
 /datum/black_market_item/proc/spawn_normal(var/obj/item/device/illegalradio/radio, var/mob/user)
@@ -153,19 +160,19 @@ var/list/black_market_items = list()
 	log_transaction("The item was teleported to the [selected_area.name].", user)
 	radio.visible_message("The uplink beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
 	spawn(time_to_spawn)
-		var/obj/item = spawn_item(spawnloc, radio, user)
-		after_spawn(item,2,user)
+		var/obj/item = spawn_item(spawnloc, radio, user, NORMAL)
+		after_spawn(item,NORMAL,user)
 		if(get_stock() != 0)
 			round_stock -= 1
 		spawn(rand(300,600))
-			if(!radio.nanotrasen_variant && prob(sps_chances[2]))
+			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
 				SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported to your station's maintenance recently.")
 		
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
-	var/obj/item = spawn_item(get_turf(user), radio, user)
+	var/obj/item = spawn_item(get_turf(user), radio, user, EXPENSIVE)
 	if(!item)
 		return 0
-	after_spawn(item,3,user)
+	after_spawn(item,EXPENSIVE,user)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
@@ -178,10 +185,9 @@ var/list/black_market_items = list()
 		radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase!</span>")	
 	else
 		radio.visible_message("The uplink beeps: <span class='warning'>Thank you for your purchase! Heh. Fucking scammed that loser. He <i>actually</i> thinks telecrystals are expensive... oh, fuck.</span>")
-	user.set_machine(radio)
 	radio.interact(user)
 	spawn(rand(300,600))
-		if(!radio.nanotrasen_variant && prob(sps_chances[3]))
+		if(!radio.nanotrasen_variant && prob(sps_chances[EXPENSIVE]))
 			SPS_black_market_alert(src, "The SPS decryption complex has detected an illegal black market purchase of item [name]. It was teleported directly to the buyer recently.")
 
 	
@@ -255,4 +261,6 @@ for anyone but the person committing mass murder.
 	if(prob(25))
 		spawned = /obj/item/potion/healing
 
-	
+#undef CHEAP
+#undef NORMAL
+#undef EXPENSIVE
