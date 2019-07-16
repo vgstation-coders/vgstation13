@@ -157,7 +157,7 @@ var/list/science_goggles_wearers = list()
 		icon_state = "eyepatch2"
 		item_state = "eyepatch2"
 		to_chat(usr, "You flip the [src] to your left eye.")
-	if(flipped)
+	else
 		flipped = FALSE
 		icon_state = "eyepatch"
 		item_state = "eyepatch"
