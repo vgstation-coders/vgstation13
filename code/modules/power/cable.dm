@@ -291,7 +291,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			color = colorC
 
 /obj/structure/cable/proc/setDirs(dir1, dir2)
-	var/datum/net_node/power/cable/node = C.getNodeCableNode()
+	var/datum/net_node/power/cable/node = C.getNode(/datum/net_node/power/cable)
 	node.setDirs(dir1, dir2)
 	if(dir1 > dir2)
 		d1 = dir2

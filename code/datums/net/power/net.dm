@@ -29,7 +29,6 @@
     avail = 0
     excess = 0
     for(var/datum/net_node/power/node in nodes)
-        node.reset()
         if(istype(node, /datum/net_node/power/storage))
             battery_nodes += node
             continue
@@ -56,14 +55,10 @@
 
             power = S.try_remove_power(power)
 
-    if(power < 0) //we fucked now
-        for(var/datum/net_node/power/node in nodes)
-            node.powered = FALSE
-            node.power_change()
-    else
-        for(var/datum/net_node/power/node in nodes)
-            node.powered = TRUE
-            node.power_change()
+    for(var/datum/net_node/power/node in nodes)
+        node.reset()
+        node.powered = (power >= 0)
+        node.power_change()
 
     //excess will show missing power, this could also be in an else to the if above, but i dunno, why make it hard for the guys
     excess = power

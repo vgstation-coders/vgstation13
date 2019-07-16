@@ -39,7 +39,6 @@
 
 		if(make_terminal(user))
 			CC.use(10)
-			terminal.connect_to_network()
 
 			user.visible_message(\
 				"<span class='warning'>[user.name] has added cables to the SMES!</span>",\

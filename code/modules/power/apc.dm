@@ -522,7 +522,6 @@
 
 		if(make_terminal(user))
 			C.use(10)
-			terminal.connect_to_network()
 
 	else if (iswirecutter(W) && opened && terminal && has_electronics!=2)
 		var/turf/T = get_turf(src)
@@ -1060,7 +1059,7 @@
 
 /obj/machinery/power/apc/add_load(var/amount)
 	if(terminal && terminal.get_powernet())
-		terminal.powernet.load += amount
+		terminal.add_load(amount)
 
 /obj/machinery/power/apc/avail()
 	if(terminal)

@@ -75,7 +75,6 @@ var/list/smes_list = list()
 
 			if(make_terminal(user))
 				CC.use(10)
-				terminal.connect_to_network()
 
 				user.visible_message(\
 					"<span class='warning'>[user.name] made a terminal for the SMES.</span>",\
