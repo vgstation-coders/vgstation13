@@ -151,17 +151,11 @@ var/list/science_goggles_wearers = list()
 	min_harm_label = 0
 	var/flipped = FALSE
 
-/obj/item/clothing/glasses/eyepatch/attack_self()
-	if(!flipped)
-		flipped = TRUE
-		icon_state = "eyepatch2"
-		item_state = "eyepatch2"
-		to_chat(usr, "You flip the [src] to your left eye.")
-	else
-		flipped = FALSE
-		icon_state = "eyepatch"
-		item_state = "eyepatch"
-		to_chat(usr, "You flip the [src] to your right eye.")
+/obj/item/clothing/glasses/eyepatch/attack_self(mob/user)
+	flipped = !flipped
+	icon_state = "eyepatch[flipped]"
+	item_state = "eyepatch[flipped]"
+	to_chat(user, "You flip \the [src] to your [flipped ? "left" : "right"] eye.")
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
